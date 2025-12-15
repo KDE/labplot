@@ -61,6 +61,7 @@ public:
 	enum class RangeType { Free, Last, First };
 	Q_ENUM(RangeType)
 	enum class RangeBreakStyle { Simple, Vertical, Sloped };
+	enum class PlotColorMode {Theme, ColorMap};
 
 	struct RangeBreak {
 		RangeBreak()
@@ -108,8 +109,8 @@ public:
 	MouseMode mouseMode() const;
 	BASIC_D_ACCESSOR_DECL(bool, isInteractive, Interactive)
 	void navigate(int cSystemIndex, NavigationOperation);
-	const QList<QColor>& themeColorPalette() const;
-	const QColor themeColorPalette(int index) const;
+	const QList<QColor>& plotColors() const;
+	const QColor plotColor(int index) const;
 	void processDropEvent(const QVector<quintptr>&) override;
 	bool isPanningActive() const;
 	bool isPrinted() const;
@@ -137,6 +138,9 @@ public:
 	void mouseReleaseZoomSelectionMode(int cSystemIndex);
 	void mouseHoverZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mouseHoverOutsideDataRect();
+
+	BASIC_D_ACCESSOR_DECL(PlotColorMode, plotColorMode, PlotColorMode)
+	BASIC_D_ACCESSOR_DECL(QString, plotColorMap, PlotColorMap)
 
 	const QString rangeDateTimeFormat(const Dimension) const;
 	const QString rangeDateTimeFormat(const Dimension, const int index) const;
@@ -217,7 +221,6 @@ private:
 	void init(bool loading);
 	void initActions();
 	void initMenus();
-	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
 	void zoom(int index, const Dimension, bool in, const double relPosSceneRange);
 	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, WorksheetElement::Orientation);
@@ -226,7 +229,6 @@ private:
 
 	CartesianPlotLegend* m_legend{nullptr};
 	double m_zoomFactor{1.2};
-	QList<QColor> m_themeColorPalette;
 	bool m_menusInitialized{false};
 
 	// analysis curves actions
@@ -352,6 +354,9 @@ protected:
 	CartesianPlot(const QString& name, CartesianPlotPrivate* dd);
 
 Q_SIGNALS:
+	void plotColorModeChanged(PlotColorMode);
+	void plotColorMapChanged(const QString&);
+
 	void rangeTypeChanged(CartesianPlot::RangeType);
 	void niceExtendChanged(bool);
 	void rangeFormatChanged(const Dimension, int rangeIndex, RangeT::Format);

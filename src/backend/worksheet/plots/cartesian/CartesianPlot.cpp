@@ -33,6 +33,7 @@
 #include "backend/worksheet/plots/cartesian/plots.h"
 #include "frontend/ThemeHandler.h"
 #include "frontend/widgets/ThemesWidget.h"
+#include "tools/ColorMapsManager.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -180,7 +181,7 @@ void CartesianPlot::init(bool loading) {
 	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 
 	// theme is not set at this point, initialize the color palette with default colors
-	this->setColorPalette(KConfig());
+	d->updatePlotColorPalette();
 }
 
 /*!
@@ -1095,7 +1096,10 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, yRangeBrea
 
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor0Enable, cursor0Enable)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor1Enable, cursor1Enable)
+
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::PlotColorMode, plotColorMode, plotColorMode)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, QString, theme, theme)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, QString, plotColorMap, plotColorMap)
 
 Line* CartesianPlot::cursorLine() const {
 	Q_D(const CartesianPlot);
@@ -1772,7 +1776,14 @@ void CartesianPlot::setCursor1Enable(const bool& enable) {
 	}
 }
 
-// theme
+// theme and plot colors
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetPlotColorMode, CartesianPlot::PlotColorMode, plotColorMode, updatePlotColorPalette)
+void CartesianPlot::setPlotColorMode(PlotColorMode mode) {
+	Q_D(CartesianPlot);
+	if (mode != d->plotColorMode)
+		exec(new CartesianPlotSetPlotColorModeCmd(d, mode, ki18n("%1: set plot color mode")));
+}
+
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetTheme, QString, theme)
 void CartesianPlot::setTheme(const QString& theme) {
@@ -1786,6 +1797,13 @@ void CartesianPlot::setTheme(const QString& theme) {
 	exec(new CartesianPlotSetThemeCmd(d, theme, ki18n("%1: set theme")));
 	loadTheme(theme);
 	endMacro();
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetPlotColorMap, QString, plotColorMap, updatePlotColorPalette)
+void CartesianPlot::setPlotColorMap(QString colorMap) {
+	Q_D(CartesianPlot);
+	if (colorMap != d->plotColorMap)
+		exec(new CartesianPlotSetPlotColorMapCmd(d, colorMap, ki18n("%1: set plot color map")));
 }
 
 void CartesianPlot::retransform() {
@@ -5477,15 +5495,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	if (preview)
 		return true;
 
-	// if a theme was used, initialize the color palette
-	if (!d->theme.isEmpty()) {
-		// TODO: check whether the theme config really exists
-		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-		this->setColorPalette(config);
-	} else {
-		// initialize the color palette with default colors
-		this->setColorPalette(KConfig());
-	}
+	d->updatePlotColorPalette();
 
 	return true;
 }
@@ -5524,7 +5534,8 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 		exec(new CartesianPlotSetThemeCmd(d, theme, ki18n("%1: set theme")));
 
 	// load the color palettes for the curves
-	this->setColorPalette(config);
+	if (d->plotColorMode == CartesianPlot::PlotColorMode::Theme)
+		d->updatePlotColorPalette();
 
 	// load the theme for all the children
 	const auto& elements = children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
@@ -5551,37 +5562,77 @@ void CartesianPlot::saveTheme(KConfig& config) {
 }
 
 // Generating colors from 5-color theme palette
+/*
 void CartesianPlot::setColorPalette(const KConfig& config) {
+	Q_D(CartesianPlot);
 	if (config.hasGroup(QStringLiteral("Theme"))) {
 		KConfigGroup group = config.group(QStringLiteral("Theme"));
 
 		// read the five colors defining the palette
-		m_themeColorPalette.clear();
-		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor1"), QColor()));
-		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor2"), QColor()));
-		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor3"), QColor()));
-		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor4"), QColor()));
-		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
+		d->plotColors.clear();
+		d->plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor1"), QColor()));
+		d->plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor2"), QColor()));
+		d->plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor3"), QColor()));
+		d->plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor4"), QColor()));
+		d->plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
 	} else {
 		// no theme is available, provide "default colors"
-		m_themeColorPalette = defaultColorPalette;
+		d->plotColors = defaultColorPalette;
 	}
 
 	// use the color of the axis lines as the color for the different mouse cursor lines
-	Q_D(CartesianPlot);
 	const KConfigGroup& group = config.group(QStringLiteral("Axis"));
 	const QColor& color = group.readEntry(QStringLiteral("LineColor"), QColor(Qt::black));
 	d->zoomSelectPen.setColor(color);
 	d->crossHairPen.setColor(color);
 }
+*/
+void CartesianPlotPrivate::updatePlotColorPalette() {
+	if (plotColorMode == CartesianPlot::PlotColorMode::Theme) {
+		// initialize colors from the current theme
+		// if a theme was used, initialize the color palette
+		if (!theme.isEmpty()) {
+			KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
+			if (config.hasGroup(QStringLiteral("Theme"))) {
+				KConfigGroup group = config.group(QStringLiteral("Theme"));
 
-const QList<QColor>& CartesianPlot::themeColorPalette() const {
-	return m_themeColorPalette;
+				// read the five colors defining the palette
+				plotColors.clear();
+				plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor1"), QColor()));
+				plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor2"), QColor()));
+				plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor3"), QColor()));
+				plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor4"), QColor()));
+				plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
+			} else
+				plotColors = defaultColorPalette; // initialize with default colors
+		} else
+			plotColors = defaultColorPalette; // initialize with default colors
+	} else {
+		// initialize colors from the current color map
+		plotColors = ColorMapsManager::instance()->colors(plotColorMap);
+	}
+
+	const auto& plots = q->children<Plot>();
+	if (!theme.isEmpty()) {
+		KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
+		for (auto* plot : plots)
+			plot->loadThemeConfig(config);
+	} else {
+		KConfig config;
+		for (auto* plot : plots)
+			plot->loadThemeConfig(config);
+	}
 }
 
-const QColor CartesianPlot::themeColorPalette(int index) const {
-	const int i = index % m_themeColorPalette.count();
-	return m_themeColorPalette.at(i);
+const QList<QColor>& CartesianPlot::plotColors() const {
+	Q_D(const CartesianPlot);
+	return d->plotColors;
+}
+
+const QColor CartesianPlot::plotColor(int index) const {
+	Q_D(const CartesianPlot);
+	const int i = index % d->plotColors.count();
+	return d->plotColors.at(i);
 }
 
 void CartesianPlot::setXRange(int index, const Range<double>& range) {

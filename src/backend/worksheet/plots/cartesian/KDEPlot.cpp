@@ -566,14 +566,14 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(KDEPlot);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const QColor color = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
-	d->estimationCurve->line()->loadThemeConfig(group, themeColor);
-	d->estimationCurve->background()->loadThemeConfig(group, themeColor);
+	d->estimationCurve->line()->loadThemeConfig(group, color);
+	d->estimationCurve->background()->loadThemeConfig(group, color);
 
-	d->rugCurve->symbol()->loadThemeConfig(group, themeColor);
+	d->rugCurve->symbol()->loadThemeConfig(group, color);
 	d->rugCurve->line()->setStyle(Qt::NoPen);
 	d->rugCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 

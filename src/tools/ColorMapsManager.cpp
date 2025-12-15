@@ -1,9 +1,9 @@
 /*
 	File                 : ColorMapsManager.h
 	Project              : LabPlot
-	Description          : widget showing the available color maps
+	Description          : color maps manager
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -86,6 +86,33 @@ QStringList ColorMapsManager::colorMapNames(const QString& collectionName) {
 	}
 
 	return m_colorMaps[collectionName];
+}
+
+/*!
+ * returns the list of colors for the color map \c name.
+ */
+QVector<QColor> ColorMapsManager::colors(const QString& name) {
+	QVector<QColor> colors;
+
+	if (!m_colors.contains(name)) {
+		for (const auto& name : collectionNames())
+			colorMapNames(name);
+	}
+
+	// convert from the string RGB representation to QColor
+	for (auto& rgb : m_colors[name]) {
+		QStringList rgbValues = rgb.split(QLatin1Char(','));
+		if (rgbValues.count() == 3)
+			colors << QColor(rgbValues.at(0).toInt(), rgbValues.at(1).toInt(), rgbValues.at(2).toInt());
+		else if (rgbValues.count() == 4)
+			colors << QColor(rgbValues.at(1).toInt(), rgbValues.at(2).toInt(), rgbValues.at(3).toInt());
+	}
+
+	return colors;
+}
+
+QPixmap ColorMapsManager::previewPixmap(const QString& colorMapNname) const {
+	return QPixmap();
 }
 
 QVector<QColor> ColorMapsManager::colors() const {

@@ -23,6 +23,9 @@
 #include "frontend/widgets/LineWidget.h"
 #include "frontend/widgets/TimedLineEdit.h"
 
+#include "frontend/colormaps/ColorMapsDialog.h"
+#include "tools/ColorMapsManager.h"
+
 #include <KIconLoader>
 #include <KMessageBox>
 
@@ -117,6 +120,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	ui.bRemoveYBreak->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 	ui.cbYBreak->addItem(QStringLiteral("1"));
 
+	ui.bColorMap->setIcon(QIcon::fromTheme(QLatin1String("color-management")));
+	ui.lColorMapPreview->setMaximumHeight(ui.bColorMap->height());
+
 	//"Background"-tab
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabPlotArea->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabPlotArea);
@@ -181,6 +187,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::rangeTypeChanged);
 	connect(ui.cbNiceExtend, &QCheckBox::clicked, this, &CartesianPlotDock::niceExtendChanged);
 	connect(ui.leRangePoints, &QLineEdit::textChanged, this, &CartesianPlotDock::rangePointsChanged);
+	connect(ui.cbPlotColorMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::plotColorModeChanged);
+	connect(ui.bColorMap, &QPushButton::clicked, this, &CartesianPlotDock::selectColorMap);
 
 	// Layout
 	connect(ui.sbLeft, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
@@ -420,6 +428,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	}
 
 	// SIGNALs/SLOTs
+	connect(m_plot, &CartesianPlot::plotColorModeChanged, this, &CartesianPlotDock::plotPlotColorModeChanged);
+	connect(m_plot, &CartesianPlot::plotColorMapChanged, this, &CartesianPlotDock::plotPlotColorMapChanged);
 	connect(m_plot, &CartesianPlot::rectChanged, this, &CartesianPlotDock::plotRectChanged);
 	connect(m_plot, &CartesianPlot::rangeTypeChanged, this, &CartesianPlotDock::plotRangeTypeChanged);
 	connect(m_plot, &CartesianPlot::rangeFirstValuesChanged, this, &CartesianPlotDock::plotRangeFirstValuesChanged);
@@ -910,6 +920,10 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbYBreakStyle->addItem(i18n("Vertical"));
 	ui.cbYBreakStyle->addItem(i18n("Sloped"));
 
+	ui.cbPlotColorMode->clear();
+	ui.cbPlotColorMode->addItem(i18n("Theme"));
+	ui.cbPlotColorMode->addItem(i18n("Color Map"));
+
 	// tooltip texts
 	QString msg = i18n(
 		"Data Range:"
@@ -924,12 +938,45 @@ void CartesianPlotDock::retranslateUi() {
 	msg = i18n("If checked, automatically extend the plot range to nice values");
 	ui.lNiceExtend->setToolTip(msg);
 	ui.cbNiceExtend->setToolTip(msg);
+
+	msg = i18n(
+		"Defines which colors to use for plots:"
+		"<ul>"
+		"<li>Theme - colors are taken from the current theme apply to plot area</li>"
+		"<li>Color Map - colors are taken from the specified color map</li>"
+		"</ul>");
+	ui.lPlotColorMode->setToolTip(msg);
+	ui.cbPlotColorMode->setToolTip(msg);
 }
 
 //************************************************************
 //**** SLOTs for changes triggered in CartesianPlotDock ******
 //************************************************************
 // "General"-tab
+void CartesianPlotDock::plotColorModeChanged(int index) {
+	const auto mode = static_cast<CartesianPlot::PlotColorMode>(index);
+	const bool visible = (mode == CartesianPlot::PlotColorMode::ColorMap);
+	ui.lColorMap->setVisible(visible);
+	ui.frameColorMap->setVisible(visible);
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plotList)
+		plot->setPlotColorMode(mode);
+}
+
+void CartesianPlotDock::selectColorMap() {
+	auto* dlg = new ColorMapsDialog(this);
+	if (dlg->exec() == QDialog::Accepted) {
+		ui.lColorMapPreview->setPixmap(dlg->previewPixmap());
+		auto name = dlg->name();
+
+		CONDITIONAL_LOCK_RETURN;
+		for (auto* plot : m_plotList)
+			plot->setPlotColorMap(name);
+	}
+	delete dlg;
+}
+
 void CartesianPlotDock::rangeTypeChanged(int index) {
 	auto type = static_cast<CartesianPlot::RangeType>(index);
 	if (type == CartesianPlot::RangeType::Free) {
@@ -938,19 +985,14 @@ void CartesianPlotDock::rangeTypeChanged(int index) {
 	} else {
 		ui.lRangePoints->show();
 		ui.leRangePoints->show();
+
+		if (type == CartesianPlot::RangeType::First)
+			ui.leRangePoints->setText(QLocale().toString(m_plot->rangeFirstValues()));
+		else
+			ui.leRangePoints->setText(QLocale().toString(m_plot->rangeLastValues()));
 	}
 
 	CONDITIONAL_LOCK_RETURN;
-
-	if (type != CartesianPlot::RangeType::Free) {
-		const auto numberLocale = QLocale();
-		;
-		if (type == CartesianPlot::RangeType::First)
-			ui.leRangePoints->setText(numberLocale.toString(m_plot->rangeFirstValues()));
-		else
-			ui.leRangePoints->setText(numberLocale.toString(m_plot->rangeLastValues()));
-	}
-
 	for (auto* plot : m_plotList)
 		plot->setRangeType(type);
 }
@@ -1673,6 +1715,14 @@ void CartesianPlotDock::exportPlotTemplate() {
 //****** SLOTs for changes triggered in CartesianPlot *********
 //*************************************************************
 // general
+void CartesianPlotDock::plotPlotColorModeChanged(CartesianPlot::PlotColorMode mode) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbPlotColorMode->setCurrentIndex(static_cast<int>(mode));
+}
+void CartesianPlotDock::plotPlotColorMapChanged(const QString& name) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
+}
 void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(type));
@@ -1861,6 +1911,11 @@ void CartesianPlotDock::load() {
 	m_updateUI = true;
 	updateRangeList(Dimension::Y);
 
+	index = static_cast<int>(m_plot->plotColorMode());
+	ui.cbPlotColorMode->setCurrentIndex(index);
+	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(m_plot->plotColorMap()));
+	plotColorModeChanged(index);
+
 	// Title
 	labelWidget->load();
 
@@ -1969,8 +2024,9 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
 
 	// General
-	// we don't load/save the settings in the general-tab, since they are not style related.
-	// It doesn't make sense to load/save them in the template.
+	// we don't load/save the any settings in the general-tab that are not style/appearance related.
+	group.writeEntry(QStringLiteral("PlotColorMode"), static_cast<int>(m_plot->plotColorMode()));
+	group.writeEntry(QStringLiteral("PlotColorMap"), m_plot->plotColorMap());
 
 	// Title
 	KConfigGroup plotTitleGroup = config.group(QStringLiteral("CartesianPlotTitle"));

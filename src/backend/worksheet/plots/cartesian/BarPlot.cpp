@@ -541,10 +541,10 @@ void BarPlotPrivate::recalc() {
 			auto* errorBar = addErrorBar(group);
 
 			if (plot) {
-				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
-				background->setFirstColor(themeColor);
-				line->setColor(themeColor);
-				errorBar->line()->setColor(themeColor);
+				const auto& color = plot->plotColor(backgrounds.count() - 1);
+				background->setFirstColor(color);
+				line->setColor(color);
+				errorBar->line()->setColor(color);
 			}
 		}
 	} else if (diff < 0) {
@@ -1555,12 +1555,12 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(BarPlot);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = d->m_plot->themeColorPalette(index);
+	const QColor themeColor = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {
-		const auto& color = plot->themeColorPalette(i);
+		const auto& color = plot->plotColor(i);
 
 		// box filling
 		auto* background = d->backgrounds.at(i);

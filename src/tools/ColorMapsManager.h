@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : color maps manager
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -20,9 +20,14 @@ class ColorMapsManager {
 public:
 	static ColorMapsManager* instance();
 	QStringList collectionNames() const;
+
 	QString collectionInfo(const QString& collectionName) const;
 	QStringList colorMapNames(const QString& collectionName);
+
 	QVector<QColor> colors() const;
+	QVector<QColor> colors(const QString& colorMapNname);
+	QPixmap previewPixmap(const QString& colorMapNname) const;
+
 	void render(QPixmap&, const QString& name);
 
 private:
