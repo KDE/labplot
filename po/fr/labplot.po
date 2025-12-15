@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-08 00:39+0000\n"
+"POT-Creation-Date: 2025-12-15 00:38+0000\n"
 "PO-Revision-Date: 2025-12-09 18:43+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -184,7 +184,7 @@ msgstr "Jours"
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:274
 #: src/frontend/dockwidgets/AxisDock.cpp:290
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:282
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:214
 #: src/frontend/dockwidgets/XYCurveDock.cpp:479 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
@@ -848,7 +848,7 @@ msgstr "élément de donnée « %1 » inconnu"
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:352
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:371
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:379
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:223
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:213
 #: src/frontend/ui/dockwidgets/columndock.ui:200
 #: src/frontend/ui/dockwidgets/livedatadock.ui:308
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:81
@@ -3769,7 +3769,7 @@ msgstr "Moyenne arithmétique"
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:535
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:525
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:108
 #: src/frontend/ui/mqttwillsettingswidget.ui:97
 #, kde-format
@@ -7616,11 +7616,11 @@ msgstr "Écart type médian"
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsNumber)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:171
-#: src/frontend/ui/dockwidgets/barplotdock.ui:300
-#: src/frontend/ui/dockwidgets/barplotdock.ui:460
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:380
-#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:298
-#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:367
+#: src/frontend/ui/dockwidgets/barplotdock.ui:290
+#: src/frontend/ui/dockwidgets/barplotdock.ui:450
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:370
+#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:288
+#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:357
 #, kde-format
 msgid "Column"
 msgstr "Colonne"
@@ -7752,7 +7752,7 @@ msgstr "La taille de chaque échantillon doit être égale."
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:136
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:525
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:515
 #, kde-format
 msgid "Mean"
 msgstr "Moyenne"
@@ -8588,7 +8588,7 @@ msgstr "Étiquette"
 #: src/backend/worksheet/InfoElement.cpp:309
 #: src/frontend/ui/dockwidgets/custompointdock.ui:333
 #: src/frontend/ui/dockwidgets/histogramdock.ui:415
-#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:322
+#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:312
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:220
 #: src/frontend/ui/symbolwidget.ui:38
 #, kde-format
@@ -8666,10 +8666,10 @@ msgstr "%1 : définir le remplissage du bas"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:98
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:119
 #: src/frontend/dockwidgets/AxisDock.cpp:253
-#: src/frontend/dockwidgets/BarPlotDock.cpp:265
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:278
+#: src/frontend/dockwidgets/BarPlotDock.cpp:181
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:210
 #: src/frontend/dockwidgets/HistogramDock.cpp:262
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:245
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:157
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:90
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
 #: src/frontend/dockwidgets/XYCurveDock.cpp:518
@@ -8684,12 +8684,12 @@ msgstr "Horizontal"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:101
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:122
 #: src/frontend/dockwidgets/AxisDock.cpp:254
-#: src/frontend/dockwidgets/BarPlotDock.cpp:266
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:279
+#: src/frontend/dockwidgets/BarPlotDock.cpp:182
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:211
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:906
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:910
 #: src/frontend/dockwidgets/HistogramDock.cpp:261
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:158
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
 #: src/frontend/dockwidgets/XYCurveDock.cpp:517
@@ -8719,10 +8719,10 @@ msgstr "Orientation"
 #: src/frontend/dockwidgets/XYCurveDock.cpp:480
 #: src/frontend/ui/dockwidgets/axisdock.ui:492
 #: src/frontend/ui/dockwidgets/axisdock.ui:632
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:684
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:674
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1440
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:237
-#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:237
+#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:227
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:298
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:250
 #: src/frontend/ui/dockwidgets/runchartdock.ui:174
@@ -9320,11 +9320,11 @@ msgstr "Fonction d'erreur"
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:526
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2192
-#: src/frontend/ui/dockwidgets/barplotdock.ui:239
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:251
+#: src/frontend/ui/dockwidgets/barplotdock.ui:229
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:241
 #: src/frontend/ui/dockwidgets/histogramdock.ui:387
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:206
-#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:229
+#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:219
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:156
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:172
 #: src/frontend/ui/dockwidgets/runchartdock.ui:63
@@ -11116,7 +11116,7 @@ msgstr "%1 : déverrouiller"
 #: src/frontend/ui/datapickercurvewidget.ui:178
 #: src/frontend/ui/datapickerimagewidget.ui:826
 #: src/frontend/ui/dockwidgets/axisdock.ui:58
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:244
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:234
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:538
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:296
 #: src/frontend/ui/dockwidgets/custompointdock.ui:260
@@ -13869,9 +13869,9 @@ msgstr "Disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabValues)
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
-#: src/frontend/ui/dockwidgets/barplotdock.ui:433
+#: src/frontend/ui/dockwidgets/barplotdock.ui:423
 #: src/frontend/ui/dockwidgets/histogramdock.ui:420
-#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:407
+#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:397
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:225
 #, kde-format
 msgid "Values"
@@ -14212,14 +14212,14 @@ msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 axes : modèle « %2 » chargé"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:2035
-#: src/frontend/dockwidgets/BarPlotDock.cpp:503
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:730
+#: src/frontend/dockwidgets/BarPlotDock.cpp:403
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:634
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1843
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:801
 #: src/frontend/dockwidgets/CustomPointDock.cpp:385
 #: src/frontend/dockwidgets/HistogramDock.cpp:573
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:332
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:806
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
@@ -14233,31 +14233,31 @@ msgstr "%1 axes : modèle « %2 » chargé"
 msgid "%1: template \"%2\" loaded"
 msgstr "%1 : modèle « %2 » chargé"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:65
+#: src/frontend/dockwidgets/BarPlotDock.cpp:61
 #: src/frontend/dockwidgets/HistogramDock.cpp:76
 #: src/frontend/dockwidgets/XYCurveDock.cpp:76
 #, kde-format
 msgid "Uncertainty Bars"
 msgstr "Barres d'incertitude"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:260
+#: src/frontend/dockwidgets/BarPlotDock.cpp:176
 #, kde-format
 msgid "Grouped"
 msgstr "Regroupé"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:261
+#: src/frontend/dockwidgets/BarPlotDock.cpp:177
 #, kde-format
 msgid "Stacked"
 msgstr "Empilé"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:262
+#: src/frontend/dockwidgets/BarPlotDock.cpp:178
 #, kde-format
 msgid "Stacked 100%"
 msgstr "Empilé à 100 %"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:269
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:302
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:248
+#: src/frontend/dockwidgets/BarPlotDock.cpp:185
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:234
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:160
 #, kde-format
 msgid ""
 "Select the data column for which the properties should be shown and edited"
@@ -14265,7 +14265,7 @@ msgstr ""
 "Sélectionnez la colonne de données dont les propriétés devraient être "
 "affichées et modifiées"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:275
+#: src/frontend/dockwidgets/BarPlotDock.cpp:191
 #, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
@@ -14275,16 +14275,144 @@ msgstr ""
 "barre, relativement à sa valeur par défaut, devant s'appliquer à toutes les "
 "barres."
 
+#: src/frontend/dockwidgets/BarPlotDock.cpp:401
+#, kde-format
+msgid "%1 bar plots: template \"%2\" loaded"
+msgstr "%1 tracés en barre : modèle « %2 » chargé"
+
+#: src/frontend/dockwidgets/BaseDock.cpp:206
+#, kde-format
+msgid "Please choose another name, because this is already in use."
+msgstr "Veuillez sélectionner un autre nom car celui-ci est déjà utilisé."
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:205
+#, kde-format
+msgid "10/90 percentiles"
+msgstr "Percentiles 10 / 90"
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:206
+#, kde-format
+msgid "5/95 percentiles"
+msgstr "Percentiles 5 / 95"
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:207
+#, kde-format
+msgid "1/99 percentiles"
+msgstr "Percentiles 1 / 99"
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:215
+#, kde-format
+msgid "By Median, Ascending"
+msgstr "Par médiane croissante"
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:216
+#, kde-format
+msgid "By Median, Descending"
+msgstr "Par médiane décroissante"
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:217
+#, kde-format
+msgid "By Mean, Ascending"
+msgstr "Par moyenne croissante"
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:218
+#, kde-format
+msgid "By Mean, Descending"
+msgstr "Par moyenne décroissante"
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:221
+#, kde-format
+msgid ""
+"If multiple data sets are provided, define how they should be ordered or use "
+"'None' to keep the original order."
+msgstr ""
+"Si plusieurs ensembles de données sont fournis, définissez comment ils "
+"doivent être ordonnés ou utilisez « Aucun » pour conserver l'ordre original."
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:225
+#, kde-format
+msgid ""
+"If checked, the box width is made proportional to the square root of the "
+"number of data points."
+msgstr ""
+"Si cette option est sélectionnée, la largeur de la boite est rendue "
+"proportionnelle à la racine carrée du nombre de points de données."
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:229
+#, kde-format
+msgid "Parameter controlling the range of the inner fences of the box plot."
+msgstr ""
+"Paramètre contrôlant l'intervalle des barrières intérieures du tracé de la "
+"boite."
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:238
+#, kde-format
+msgid ""
+"Specify the factor in percent to control the width of the box relative to "
+"its default value."
+msgstr ""
+"Spécifier le facteur en pourcentage pour le contrôle de la largeur de la "
+"boite, concernant sa valeur par défaut."
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:242
+#, kde-format
+msgid "Select to modify the properties of the symbol for the mean value."
+msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour la valeur moyenne."
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:245
+#, kde-format
+msgid "Select to modify the properties of the symbol for the median value."
+msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour la valeur médiane."
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:248
+#, kde-format
+msgid "Select to modify the properties of the symbol for the outlier values."
+msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour les valeurs "
+"aberrantes."
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:251
+#, kde-format
+msgid ""
+"Select to modify the properties of the symbol for the \"far out\" values."
+msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour les valeurs « trop "
+"distantes »."
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:254
+#, kde-format
+msgid ""
+"Select to modify the properties of the symbol for all data values excluding "
+"the outlier and \"far out\" values."
+msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour toutes les valeurs "
+"de données à l'exclusion des valeurs aberrantes et « trop distantes »."
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:257
+#, kde-format
+msgid ""
+"Select to modify the properties of the symbol for the ends of the whiskers."
+msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour les extrémités des "
+"moustaches."
+
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:260
+#, kde-format
+msgid ""
+"Activate to randomize the positions of the symbols (\"jittering\"), helpful "
+"for dense and overlapping data points."
+msgstr ""
+"Activez pour générer de façon aléatoire les positions des symboles "
+"(« scintillement »), ce qui est utile pour les points de données denses et "
+"qui se chevauchent."
+
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #. i18n: ectx: property (text), widget (QLabel, lVariables)
-#: src/frontend/dockwidgets/BarPlotDock.cpp:333
-#: src/frontend/dockwidgets/BarPlotDock.cpp:359
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:364
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:389
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:269
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:352
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:382
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:321
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:347
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:423
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:441
 #: src/frontend/ui/dockwidgets/matrixdock.ui:117
@@ -14299,155 +14427,20 @@ msgstr "Colonnes :"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/frontend/dockwidgets/BarPlotDock.cpp:361
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:393
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:273
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:354
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:384
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:349
 #: src/frontend/spreadsheet/GoToDialog.cpp:49
 #: src/frontend/ui/dockwidgets/axisdock.ui:808
 #: src/frontend/ui/dockwidgets/axisdock.ui:1116
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:179
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:169
 #: src/frontend/ui/dockwidgets/valuewidget.ui:81
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:231
 #, kde-format
 msgid "Column:"
 msgstr "Colonne"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:501
-#, kde-format
-msgid "%1 bar plots: template \"%2\" loaded"
-msgstr "%1 tracés en barre : modèle « %2 » chargé"
-
-#: src/frontend/dockwidgets/BaseDock.cpp:206
-#, kde-format
-msgid "Please choose another name, because this is already in use."
-msgstr "Veuillez sélectionner un autre nom car celui-ci est déjà utilisé."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:273
-#, kde-format
-msgid "10/90 percentiles"
-msgstr "Percentiles 10 / 90"
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:274
-#, kde-format
-msgid "5/95 percentiles"
-msgstr "Percentiles 5 / 95"
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:275
-#, kde-format
-msgid "1/99 percentiles"
-msgstr "Percentiles 1 / 99"
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:283
-#, kde-format
-msgid "By Median, Ascending"
-msgstr "Par médiane croissante"
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:284
-#, kde-format
-msgid "By Median, Descending"
-msgstr "Par médiane décroissante"
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:285
-#, kde-format
-msgid "By Mean, Ascending"
-msgstr "Par moyenne croissante"
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:286
-#, kde-format
-msgid "By Mean, Descending"
-msgstr "Par moyenne décroissante"
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:289
-#, kde-format
-msgid ""
-"If multiple data sets are provided, define how they should be ordered or use "
-"'None' to keep the original order."
-msgstr ""
-"Si plusieurs ensembles de données sont fournis, définissez comment ils "
-"doivent être ordonnés ou utilisez « Aucun » pour conserver l'ordre original."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:293
-#, kde-format
-msgid ""
-"If checked, the box width is made proportional to the square root of the "
-"number of data points."
-msgstr ""
-"Si cette option est sélectionnée, la largeur de la boite est rendue "
-"proportionnelle à la racine carrée du nombre de points de données."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:297
-#, kde-format
-msgid "Parameter controlling the range of the inner fences of the box plot."
-msgstr ""
-"Paramètre contrôlant l'intervalle des barrières intérieures du tracé de la "
-"boite."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:306
-#, kde-format
-msgid ""
-"Specify the factor in percent to control the width of the box relative to "
-"its default value."
-msgstr ""
-"Spécifier le facteur en pourcentage pour le contrôle de la largeur de la "
-"boite, concernant sa valeur par défaut."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:310
-#, kde-format
-msgid "Select to modify the properties of the symbol for the mean value."
-msgstr ""
-"Sélectionnez pour modifier les propriétés du symbole pour la valeur moyenne."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:313
-#, kde-format
-msgid "Select to modify the properties of the symbol for the median value."
-msgstr ""
-"Sélectionnez pour modifier les propriétés du symbole pour la valeur médiane."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:316
-#, kde-format
-msgid "Select to modify the properties of the symbol for the outlier values."
-msgstr ""
-"Sélectionnez pour modifier les propriétés du symbole pour les valeurs "
-"aberrantes."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:319
-#, kde-format
-msgid ""
-"Select to modify the properties of the symbol for the \"far out\" values."
-msgstr ""
-"Sélectionnez pour modifier les propriétés du symbole pour les valeurs « trop "
-"distantes »."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:322
-#, kde-format
-msgid ""
-"Select to modify the properties of the symbol for all data values excluding "
-"the outlier and \"far out\" values."
-msgstr ""
-"Sélectionnez pour modifier les propriétés du symbole pour toutes les valeurs "
-"de données à l'exclusion des valeurs aberrantes et « trop distantes »."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:325
-#, kde-format
-msgid ""
-"Select to modify the properties of the symbol for the ends of the whiskers."
-msgstr ""
-"Sélectionnez pour modifier les propriétés du symbole pour les extrémités des "
-"moustaches."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:328
-#, kde-format
-msgid ""
-"Activate to randomize the positions of the symbols (\"jittering\"), helpful "
-"for dense and overlapping data points."
-msgstr ""
-"Activez pour générer de façon aléatoire les positions des symboles "
-"(« scintillement »), ce qui est utile pour les points de données denses et "
-"qui se chevauchent."
-
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:728
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:632
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr "%1 tracés en boite : modèle « %2 » chargé"
@@ -14483,12 +14476,12 @@ msgstr "Intervalles du tracé :"
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:800
 #: src/frontend/ui/dockwidgets/axisdock.ui:262
-#: src/frontend/ui/dockwidgets/barplotdock.ui:186
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:94
+#: src/frontend/ui/dockwidgets/barplotdock.ui:176
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:84
 #: src/frontend/ui/dockwidgets/custompointdock.ui:158
 #: src/frontend/ui/dockwidgets/histogramdock.ui:128
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:197
-#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:192
+#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:182
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:235
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:262
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:234
@@ -15024,7 +15017,7 @@ msgstr ""
 "Impossible de s'abonner à tous les sujets disponibles. Quelque chose s'est "
 "mal passé !"
 
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:450
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:330
 #, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
 msgstr "%1 tracés en guimauve : modèle « %2 » chargé"
@@ -16675,8 +16668,8 @@ msgstr ""
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
-#: src/frontend/ui/dockwidgets/barplotdock.ui:157
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:189
+#: src/frontend/ui/dockwidgets/barplotdock.ui:147
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:179
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:442
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:283
 #: src/frontend/ui/dockwidgets/columndock.ui:17
@@ -18759,7 +18752,7 @@ msgstr "Aplatir de %1"
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:182
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:24
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:500
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:490
 #, kde-format
 msgid "Category"
 msgstr "Catégorie"
@@ -20251,7 +20244,7 @@ msgstr "Type d'erreur en Y :"
 #: src/frontend/ui/dockwidgets/aspectdock.ui:17
 #: src/frontend/ui/dockwidgets/axisdock.ui:345
 #: src/frontend/ui/dockwidgets/barplotdock.ui:101
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:71
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:61
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:452
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:452
 #: src/frontend/ui/dockwidgets/columndock.ui:53
@@ -20316,7 +20309,7 @@ msgstr "Symboles"
 #. i18n: ectx: attribute (title), widget (QWidget, tabErrorBars_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabErrorBars)
 #: src/frontend/ui/datapickercurvewidget.ui:191
-#: src/frontend/ui/dockwidgets/barplotdock.ui:438
+#: src/frontend/ui/dockwidgets/barplotdock.ui:428
 #: src/frontend/ui/dockwidgets/histogramdock.ui:445
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:586
 #, kde-format
@@ -20377,7 +20370,7 @@ msgstr "Couleur : "
 #. i18n: ectx: property (text), widget (QLabel, lSizeType)
 #: src/frontend/ui/datapickercurvewidget.ui:253
 #: src/frontend/ui/dockwidgets/axisdock.ui:543
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:691
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:681
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:183
 #: src/frontend/ui/labelwidget.ui:339 src/frontend/ui/symbolwidget.ui:78
 #, kde-format
@@ -20482,10 +20475,10 @@ msgstr "Taille : "
 #: src/frontend/ui/dockwidgets/axisdock.ui:979
 #: src/frontend/ui/dockwidgets/axisdock.ui:1139
 #: src/frontend/ui/dockwidgets/axisdock.ui:1563
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:707
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:869
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:891
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:916
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:697
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:859
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:881
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:906
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:580
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:614
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:669
@@ -20588,10 +20581,10 @@ msgstr "Boîte à cocher pour les nombres."
 #: src/frontend/ui/dockwidgets/axisdock.ui:982
 #: src/frontend/ui/dockwidgets/axisdock.ui:1142
 #: src/frontend/ui/dockwidgets/axisdock.ui:1566
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:710
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:872
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:894
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:919
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:700
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:862
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:884
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:909
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:200
 #: src/frontend/ui/dockwidgets/histogramdock.ui:551
 #: src/frontend/ui/dockwidgets/histogramdock.ui:576
@@ -21945,9 +21938,9 @@ msgstr "Intervalle :"
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
 #. i18n: ectx: property (text), widget (QLabel, lRugOrientation)
 #: src/frontend/ui/dockwidgets/axisdock.ui:390
-#: src/frontend/ui/dockwidgets/barplotdock.ui:209
+#: src/frontend/ui/dockwidgets/barplotdock.ui:199
 #: src/frontend/ui/dockwidgets/histogramdock.ui:102
-#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:222
+#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:212
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:160
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:173
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:107
@@ -22053,7 +22046,7 @@ msgstr "Colonne d'étiquette :"
 #: src/frontend/ui/dockwidgets/axisdock.ui:850
 #: src/frontend/ui/dockwidgets/axisdock.ui:1079
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:35
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:134
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:124
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:124
 #, kde-format
 msgid "Direction:"
@@ -22084,7 +22077,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksLength)
 #: src/frontend/ui/dockwidgets/axisdock.ui:963
 #: src/frontend/ui/dockwidgets/axisdock.ui:1011
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:826
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:816
 #: src/frontend/ui/dockwidgets/histogramdock.ui:457
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:372
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:634
@@ -22186,7 +22179,7 @@ msgstr "Suffixe : "
 #. i18n: ectx: property (text), widget (QLabel, lRugOffset)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOffset)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1333
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:840
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:830
 #: src/frontend/ui/dockwidgets/histogramdock.ui:519
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:436
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:641
@@ -22289,7 +22282,7 @@ msgstr "Grille principale"
 #. i18n: ectx: property (text), widget (QLabel, lRugEnabled)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsEnabled)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:42
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:790
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:780
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1038
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1045
 #: src/frontend/ui/dockwidgets/histogramdock.ui:493
@@ -22318,7 +22311,7 @@ msgstr "Seconde couleur :"
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:61
 #: src/frontend/ui/dockwidgets/histogramdock.ui:301
-#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:215
+#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:205
 #, kde-format
 msgid "visible"
 msgstr "visible"
@@ -22377,7 +22370,7 @@ msgid "y:"
 msgstr "y :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabBars)
-#: src/frontend/ui/dockwidgets/barplotdock.ui:247
+#: src/frontend/ui/dockwidgets/barplotdock.ui:237
 #: src/frontend/widgets/ErrorBarWidget.cpp:86
 #: src/frontend/widgets/LineWidget.cpp:48
 #, kde-format
@@ -22387,8 +22380,8 @@ msgstr "Barres"
 #. i18n: ectx: property (text), widget (QLabel, lBorder)
 #. i18n: ectx: attribute (title), widget (QWidget, tabBorder)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorder)
-#: src/frontend/ui/dockwidgets/barplotdock.ui:268
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:449
+#: src/frontend/ui/dockwidgets/barplotdock.ui:258
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:439
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1332
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:599
 #: src/frontend/ui/dockwidgets/imagedock.ui:559
@@ -22403,8 +22396,8 @@ msgstr "Bordure"
 #. i18n: ectx: property (text), widget (QLabel, lFilling)
 #. i18n: ectx: property (text), widget (QLabel, lEstimationFilling)
 #. i18n: ectx: attribute (title), widget (QWidget, tabAreaFilling)
-#: src/frontend/ui/dockwidgets/barplotdock.ui:280
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:392
+#: src/frontend/ui/dockwidgets/barplotdock.ui:270
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:382
 #: src/frontend/ui/dockwidgets/histogramdock.ui:425
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:281
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:566
@@ -22414,15 +22407,15 @@ msgid "Filling"
 msgstr "Remplissage"
 
 #. i18n: ectx: property (text), widget (QLabel, lWidthFactor)
-#: src/frontend/ui/dockwidgets/barplotdock.ui:307
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:399
+#: src/frontend/ui/dockwidgets/barplotdock.ui:297
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:389
 #, kde-format
 msgid "Width"
 msgstr "Largeur"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbWidthFactor)
-#: src/frontend/ui/dockwidgets/barplotdock.ui:352
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:412
+#: src/frontend/ui/dockwidgets/barplotdock.ui:342
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:402
 #, no-c-format, kde-format
 msgid "%"
 msgstr "%"
@@ -22440,79 +22433,79 @@ msgid "Ordering:"
 msgstr "Tri :"
 
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersType)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:117
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:107
 #, kde-format
 msgid "Whiskers:"
 msgstr "Moustaches :"
 
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersRangeParameter)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:124
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:114
 #, kde-format
 msgid "k:"
 msgstr "k :"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariableWidth)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:230
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:220
 #, kde-format
 msgid "Variable Width:"
 msgstr "Largeur de la variable :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabBox)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:259
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:249
 #, kde-format
 msgid "Box"
 msgstr "Boîte"
 
 #. i18n: ectx: property (text), widget (QLabel, lMedianLine)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:350
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:340
 #, kde-format
 msgid "Median Line"
 msgstr "Ligne médiane"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:489
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:479
 #, kde-format
 msgid "Markers"
 msgstr "Marqueurs"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbOutlier)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:542
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:532
 #, kde-format
 msgid "Outlier"
 msgstr "Aberrantes"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbFarOut)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:549
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:539
 #, kde-format
 msgid "Far Out"
 msgstr "Loin"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbData)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:556
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:546
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
 msgstr "Données (Sauf les valeurs aberrantes et trop éloignées)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:563
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:553
 #, kde-format
 msgid "Whisker End"
 msgstr "Fin de moustaches"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkJitteringEnabled)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:586
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:576
 #, kde-format
 msgid "Jitter"
 msgstr "Fluctuation"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabWhiskers)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:629
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:619
 #, kde-format
 msgid "Whiskers"
 msgstr "Moustaches"
 
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersCap)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:656
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:646
 #, kde-format
 msgid "Cap"
 msgstr "Pointe"
@@ -22521,7 +22514,7 @@ msgstr "Pointe"
 #. i18n: ectx: attribute (title), widget (QWidget, tabMarginalPlots)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (text), widget (QLabel, lMargin)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:772
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:762
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:650
 #: src/frontend/ui/dockwidgets/histogramdock.ui:451
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:318
@@ -22532,7 +22525,7 @@ msgid "Margins"
 msgstr "Marges"
 
 #. i18n: ectx: property (text), widget (QLabel, lRug)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:783
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:773
 #: src/frontend/ui/dockwidgets/histogramdock.ui:512
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:329
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:668
@@ -22544,7 +22537,7 @@ msgstr "Tracé de la couverture"
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
 #. i18n: ectx: property (text), widget (QLabel, lRugWidth)
 #. i18n: ectx: property (text), widget (QLabel, lWidth)
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:833
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:823
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:557
 #: src/frontend/ui/dockwidgets/histogramdock.ui:500
 #: src/frontend/ui/dockwidgets/imagedock.ui:73
