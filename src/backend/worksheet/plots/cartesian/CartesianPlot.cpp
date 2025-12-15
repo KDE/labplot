@@ -1790,7 +1790,6 @@ void CartesianPlot::setPlotColorMode(PlotColorMode mode) {
 		exec(new CartesianPlotSetPlotColorModeCmd(d, mode, ki18n("%1: set plot color mode")));
 }
 
-
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetTheme, QString, theme)
 void CartesianPlot::setTheme(const QString& theme) {
 	Q_D(CartesianPlot);
