@@ -1790,7 +1790,6 @@ void CartesianPlot::setPlotColorMode(PlotColorMode mode) {
 		exec(new CartesianPlotSetPlotColorModeCmd(d, mode, ki18n("%1: set plot color mode")));
 }
 
-
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetTheme, QString, theme)
 void CartesianPlot::setTheme(const QString& theme) {
 	Q_D(CartesianPlot);
@@ -5567,32 +5566,6 @@ void CartesianPlot::saveTheme(KConfig& config) {
 		child->saveThemeConfig(config);
 }
 
-// Generating colors from 5-color theme palette
-/*
-void CartesianPlot::setColorPalette(const KConfig& config) {
-	Q_D(CartesianPlot);
-	if (config.hasGroup(QStringLiteral("Theme"))) {
-		KConfigGroup group = config.group(QStringLiteral("Theme"));
-
-		// read the five colors defining the palette
-		d->plotColors.clear();
-		d->plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor1"), QColor()));
-		d->plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor2"), QColor()));
-		d->plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor3"), QColor()));
-		d->plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor4"), QColor()));
-		d->plotColors.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
-	} else {
-		// no theme is available, provide "default colors"
-		d->plotColors = defaultColorPalette;
-	}
-
-	// use the color of the axis lines as the color for the different mouse cursor lines
-	const KConfigGroup& group = config.group(QStringLiteral("Axis"));
-	const QColor& color = group.readEntry(QStringLiteral("LineColor"), QColor(Qt::black));
-	d->zoomSelectPen.setColor(color);
-	d->crossHairPen.setColor(color);
-}
-*/
 void CartesianPlotPrivate::updatePlotColorPalette() {
 	if (plotColorMode == CartesianPlot::PlotColorMode::Theme) {
 		// initialize colors from the current theme

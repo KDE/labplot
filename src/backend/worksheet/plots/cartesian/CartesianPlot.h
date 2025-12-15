@@ -61,7 +61,7 @@ public:
 	enum class RangeType { Free, Last, First };
 	Q_ENUM(RangeType)
 	enum class RangeBreakStyle { Simple, Vertical, Sloped };
-	enum class PlotColorMode {Theme, ColorMap};
+	enum class PlotColorMode { Theme, ColorMap };
 
 	struct RangeBreak {
 		RangeBreak()
