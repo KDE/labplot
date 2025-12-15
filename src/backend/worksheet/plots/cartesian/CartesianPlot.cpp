@@ -4733,12 +4733,12 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	// applied theme
-	if (!d->theme.isEmpty()) {
-		writer->writeStartElement(QStringLiteral("theme"));
-		writer->writeAttribute(QStringLiteral("name"), d->theme);
-		writer->writeEndElement();
-	}
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("plotColorMode"), QString::number(static_cast<int>(d->plotColorMode)));
+	writer->writeAttribute(QStringLiteral("plotColorMap"), d->plotColorMap);
+	if (!d->theme.isEmpty())
+		writer->writeAttribute(QStringLiteral("theme"), d->theme);
+	writer->writeEndElement();
 
 	// cursor
 	d->cursorLine->save(writer);
@@ -4862,7 +4862,12 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == QLatin1String("theme")) {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
+			attribs = reader->attributes();
+			READ_INT_VALUE("plotColorMode", plotColorMode, PlotColorMode);
+			READ_STRING_VALUE("theme", theme);
+			READ_STRING_VALUE("plotColorMap", plotColorMap);
+		} else if (!preview && Project::xmlVersion() < 17 && reader->name() == QLatin1String("theme")) {
 			attribs = reader->attributes();
 			d->theme = attribs.value(QStringLiteral("name")).toString();
 		} else if (!preview && reader->name() == QLatin1String("cursor")) {
