@@ -969,6 +969,7 @@ void CartesianPlotDock::selectColorMap() {
 	if (dlg->exec() == QDialog::Accepted) {
 		auto name = dlg->name();
 		ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
+		ui.lColorMapPreview->setToolTip(name);
 
 		CONDITIONAL_LOCK_RETURN;
 		for (auto* plot : m_plotList)
@@ -1722,6 +1723,7 @@ void CartesianPlotDock::plotPlotColorModeChanged(CartesianPlot::PlotColorMode mo
 void CartesianPlotDock::plotPlotColorMapChanged(const QString& name) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
+	ui.lColorMapPreview->setToolTip(name);
 }
 void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1913,7 +1915,9 @@ void CartesianPlotDock::load() {
 
 	index = static_cast<int>(m_plot->plotColorMode());
 	ui.cbPlotColorMode->setCurrentIndex(index);
+	plotColorModeChanged(index);
 	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(m_plot->plotColorMap()));
+	ui.lColorMapPreview->setToolTip(m_plot->plotColorMap());
 
 	// Title
 	labelWidget->load();
@@ -1988,8 +1992,10 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	// This data is read in CartesianPlotDock::setPlots().
 	auto index = group.readEntry(QStringLiteral("PlotColorMode"), static_cast<int>(m_plot->plotColorMode()));
 	ui.cbPlotColorMode->setCurrentIndex(index);
+	plotColorModeChanged(index);
 	auto colorMap = group.readEntry(QStringLiteral("PlotColorMap"), m_plot->plotColorMap());
 	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(colorMap));
+	ui.lColorMapPreview->setToolTip(m_plot->plotColorMap());
 
 	// Title
 	KConfigGroup plotTitleGroup = config.group(QStringLiteral("CartesianPlotTitle"));

@@ -123,6 +123,7 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 	}
 
 	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(m_name));
+	ui.lColorMapPreview->setToolTip(m_name);
 
 	if (hasNumeric) {
 		ui.leMinimum->setText(qIsFinite(min) ? QString::number(min) : QString());
@@ -161,6 +162,7 @@ void FormattingHeatmapDialog::selectColorMap() {
 		m_name = dlg->name();
 		auto* manager = ColorMapsManager::instance();
 		ui.lColorMapPreview->setPixmap(manager->previewPixmap(m_name));
+		ui.lColorMapPreview->setToolTip(m_name);
 		m_colors = manager->colors(m_name);
 		ui.lColorMapPreview->setFocus();
 	}
