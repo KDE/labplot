@@ -1914,7 +1914,6 @@ void CartesianPlotDock::load() {
 	index = static_cast<int>(m_plot->plotColorMode());
 	ui.cbPlotColorMode->setCurrentIndex(index);
 	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(m_plot->plotColorMap()));
-	plotColorModeChanged(index);
 
 	// Title
 	labelWidget->load();
@@ -1986,8 +1985,11 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 
 	// General
 	// we don't load/save the settings in the general-tab, since they are not style related.
-	// It doesn't make sense to load/save them in the template.
 	// This data is read in CartesianPlotDock::setPlots().
+	auto index = group.readEntry(QStringLiteral("PlotColorMode"), static_cast<int>(m_plot->plotColorMode()));
+	ui.cbPlotColorMode->setCurrentIndex(index);
+	auto colorMap = group.readEntry(QStringLiteral("PlotColorMap"), m_plot->plotColorMap());
+	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(colorMap));
 
 	// Title
 	KConfigGroup plotTitleGroup = config.group(QStringLiteral("CartesianPlotTitle"));
@@ -2026,6 +2028,7 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	// General
 	// we don't load/save the any settings in the general-tab that are not style/appearance related.
 	group.writeEntry(QStringLiteral("PlotColorMode"), static_cast<int>(m_plot->plotColorMode()));
+	group.writeEntry(QStringLiteral("Theme"), m_plot->theme());
 	group.writeEntry(QStringLiteral("PlotColorMap"), m_plot->plotColorMap());
 
 	// Title
