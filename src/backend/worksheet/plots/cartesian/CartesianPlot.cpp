@@ -1783,11 +1783,15 @@ void CartesianPlot::setCursor1Enable(const bool& enable) {
 }
 
 // theme and plot colors
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetPlotColorMode, CartesianPlot::PlotColorMode, plotColorMode, updatePlotColorPalette)
+STD_SETTER_CMD_IMPL_S(CartesianPlot, SetPlotColorMode, CartesianPlot::PlotColorMode, plotColorMode)
 void CartesianPlot::setPlotColorMode(PlotColorMode mode) {
 	Q_D(CartesianPlot);
-	if (mode != d->plotColorMode)
+	if (mode != d->plotColorMode) {
+		beginMacro(i18n("%1: set plot color mode", name()));
 		exec(new CartesianPlotSetPlotColorModeCmd(d, mode, ki18n("%1: set plot color mode")));
+		d->updatePlotColorPalette();
+		endMacro();
+	}
 }
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetTheme, QString, theme)
@@ -1804,11 +1808,15 @@ void CartesianPlot::setTheme(const QString& theme) {
 	endMacro();
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetPlotColorMap, QString, plotColorMap, updatePlotColorPalette)
+STD_SETTER_CMD_IMPL_S(CartesianPlot, SetPlotColorMap, QString, plotColorMap)
 void CartesianPlot::setPlotColorMap(QString colorMap) {
 	Q_D(CartesianPlot);
-	if (colorMap != d->plotColorMap)
+	if (colorMap != d->plotColorMap) {
+		beginMacro(i18n("%1: set plot color map", name()));
 		exec(new CartesianPlotSetPlotColorMapCmd(d, colorMap, ki18n("%1: set plot color map")));
+		d->updatePlotColorPalette();
+		endMacro();
+	}
 }
 
 void CartesianPlot::retransform() {
