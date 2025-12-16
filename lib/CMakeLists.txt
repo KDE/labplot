@@ -229,6 +229,7 @@ set(SDK_INTERNAL_SOURCES
     ${FRONTEND_DIR}/widgets/TextPreview.cpp
     ${FRONTEND_DIR}/GuiTools.cpp
     ${FRONTEND_DIR}/ThemeHandler.cpp
+    ${TOOLS_DIR}/ColorMapsManager.cpp
     ${TOOLS_DIR}/ImageTools.cpp
     ${TOOLS_DIR}/TeXRenderer.cpp
     ${BACKEND_DIR}/core/abstractcolumncommands.cpp
