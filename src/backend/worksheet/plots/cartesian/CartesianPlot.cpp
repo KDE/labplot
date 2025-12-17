@@ -5604,15 +5604,17 @@ void CartesianPlotPrivate::updatePlotColorPalette() {
 		plotColors = ColorMapsManager::instance()->colors(plotColorMap);
 	}
 
-	const auto& plots = q->children<Plot>();
-	if (!theme.isEmpty()) {
-		KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
-		for (auto* plot : plots)
-			plot->loadThemeConfig(config);
-	} else {
-		KConfig config;
-		for (auto* plot : plots)
-			plot->loadThemeConfig(config);
+	if (!q->isLoading()) {
+		const auto& plots = q->children<Plot>();
+		if (!theme.isEmpty()) {
+			KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
+			for (auto* plot : plots)
+				plot->loadThemeConfig(config);
+		} else {
+			KConfig config;
+			for (auto* plot : plots)
+				plot->loadThemeConfig(config);
+		}
 	}
 }
 
