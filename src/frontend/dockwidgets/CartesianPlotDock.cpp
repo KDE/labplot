@@ -959,6 +959,12 @@ void CartesianPlotDock::plotColorModeChanged(int index) {
 	ui.lColorMap->setVisible(visible);
 	ui.frameColorMap->setVisible(visible);
 
+	if (visible) {
+		const auto& name = m_plot->plotColorMap();
+		ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
+		ui.lColorMapPreview->setToolTip(name);
+	}
+
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plotList)
 		plot->setPlotColorMode(mode);
@@ -966,16 +972,20 @@ void CartesianPlotDock::plotColorModeChanged(int index) {
 
 void CartesianPlotDock::selectColorMap() {
 	auto* dlg = new ColorMapsDialog(this);
-	if (dlg->exec() == QDialog::Accepted) {
-		auto name = dlg->name();
+	if (dlg->exec() == QDialog::Accepted)
+		plotColorMapChanged(dlg->name());
+	delete dlg;
+}
+
+void CartesianPlotDock::plotColorMapChanged(const QString& name) {
+	if (m_plot->plotColorMode() == CartesianPlot::PlotColorMode::ColorMap) {
 		ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
 		ui.lColorMapPreview->setToolTip(name);
-
-		CONDITIONAL_LOCK_RETURN;
-		for (auto* plot : m_plotList)
-			plot->setPlotColorMap(name);
 	}
-	delete dlg;
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plotList)
+		plot->setPlotColorMap(name);
 }
 
 void CartesianPlotDock::rangeTypeChanged(int index) {
@@ -1916,8 +1926,7 @@ void CartesianPlotDock::load() {
 	index = static_cast<int>(m_plot->plotColorMode());
 	ui.cbPlotColorMode->setCurrentIndex(index);
 	plotColorModeChanged(index);
-	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(m_plot->plotColorMap()));
-	ui.lColorMapPreview->setToolTip(m_plot->plotColorMap());
+	plotColorMapChanged(m_plot->plotColorMap());
 
 	// Title
 	labelWidget->load();
@@ -1993,9 +2002,7 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	auto index = group.readEntry(QStringLiteral("PlotColorMode"), static_cast<int>(m_plot->plotColorMode()));
 	ui.cbPlotColorMode->setCurrentIndex(index);
 	plotColorModeChanged(index);
-	auto colorMap = group.readEntry(QStringLiteral("PlotColorMap"), m_plot->plotColorMap());
-	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(colorMap));
-	ui.lColorMapPreview->setToolTip(m_plot->plotColorMap());
+	plotColorMapChanged(group.readEntry(QStringLiteral("PlotColorMap"), m_plot->plotColorMap()));
 
 	// Title
 	KConfigGroup plotTitleGroup = config.group(QStringLiteral("CartesianPlotTitle"));

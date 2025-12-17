@@ -64,6 +64,7 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in CartesianPlotDock
 	//"General"-tab
 	void plotColorModeChanged(int);
+	void plotColorMapChanged(const QString&);
 	void selectColorMap();
 	void rangeTypeChanged(int);
 	void niceExtendChanged(bool);
