@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all plots like scatter plot, box plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -57,7 +57,8 @@ public:
 
 		// continuous improvement plots
 		ProcessBehaviorChart,
-		RunChart
+		RunChart,
+		ParetoChart
 	};
 
 	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)

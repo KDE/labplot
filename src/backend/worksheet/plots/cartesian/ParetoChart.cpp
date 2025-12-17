@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Run Chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -20,21 +20,16 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
-extern "C" {
-#include "backend/nsl/nsl_pcm.h"
-}
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-#include <QMenu>
-#include <QPainter>
+#include <QIcon>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <gsl/gsl_statistics.h>
 
@@ -341,10 +336,6 @@ void ParetoChartPrivate::recalc() {
 		xData[row] = 0.5 + row;
 		++row;
 	}
-
-	qDebug()<<"sorted data " << data;
-	qDebug()<<"x data " << xData;
-	qDebug()<<"y data " << yData;
 
 	dataSortedColumn->setValues(data);
 	xColumn->setValues(xData);

@@ -799,6 +799,10 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 	action->setData(static_cast<int>(Plot::PlotType::ProcessBehaviorChart));
 	addNewCIPlotsMenu->addAction(action);
 
+	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Pareto Chart"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::ParetoChart));
+	addNewCIPlotsMenu->addAction(action);
+
 	addNewPlotMenu->addMenu(addNewCIPlotsMenu);
 }
 
@@ -887,6 +891,7 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::QQPlot,
 							  AspectType::RunChart,
 							  AspectType::ProcessBehaviorChart,
+							  AspectType::ParetoChart,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
 							  AspectType::XYFunctionCurve,
@@ -1926,6 +1931,9 @@ void CartesianPlot::addPlot(QAction* action) {
 		break;
 	case Plot::PlotType::RunChart:
 		addChild(new RunChart(i18n("Run Chart")));
+		break;
+	case Plot::PlotType::ParetoChart:
+		addChild(new ParetoChart(i18n("Pareto Chart")));
 		break;
 	}
 }
