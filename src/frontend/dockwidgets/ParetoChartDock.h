@@ -31,6 +31,7 @@ public:
 
 	void setPlots(QList<ParetoChart*>);
 	void updateLocale() override;
+	void retranslateUi() override;
 
 private:
 	TreeViewComboBox* cbDataColumn;
@@ -50,8 +51,6 @@ protected:
 	virtual void setModel();
 
 private Q_SLOTS:
-	void retranslateUi();
-
 	// SLOTs for changes triggered in ParetoChartDock
 	void dataColumnChanged(const QModelIndex&);
 

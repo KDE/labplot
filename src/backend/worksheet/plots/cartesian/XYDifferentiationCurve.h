@@ -19,12 +19,17 @@ extern "C" {
 
 class XYDifferentiationCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYDifferentiationCurve : public XYAnalysisCurve {
+#else
 class XYDifferentiationCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
 	struct DifferentiationData {
-		DifferentiationData(){};
+		DifferentiationData() { };
 
 		nsl_diff_deriv_order_type derivOrder{nsl_diff_deriv_order_first}; // order of differentiation
 		int accOrder{2}; // order of accuracy
@@ -36,7 +41,6 @@ public:
 	explicit XYDifferentiationCurve(const QString& name);
 	~XYDifferentiationCurve() override;
 
-	void recalculate() override;
 	virtual const Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

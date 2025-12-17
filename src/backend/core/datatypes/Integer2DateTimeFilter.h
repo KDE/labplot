@@ -15,6 +15,7 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
+#include <QTimeZone>
 
 //! Conversion filter int -> QDateTime, interpreting the input as seconds since epoch
 class Integer2DateTimeFilter : public AbstractSimpleFilter {
@@ -23,7 +24,7 @@ class Integer2DateTimeFilter : public AbstractSimpleFilter {
 public:
 	QDateTime dateTimeAt(int row) const override {
 		DEBUG(Q_FUNC_INFO)
-		QDateTime dt = QDateTime::fromSecsSinceEpoch(0, Qt::UTC);
+		QDateTime dt = QDateTime::fromSecsSinceEpoch(0, QTimeZone::UTC);
 		int inputValue = m_inputs.value(0)->integerAt(row);
 		return dt.addMSecs(inputValue); // TODO: select unit (ms, s, min, hour, days)
 	}

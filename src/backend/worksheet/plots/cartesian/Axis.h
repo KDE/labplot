@@ -4,7 +4,7 @@
 	Description          : Axis for cartesian coordinate systems.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,20 +13,21 @@
 #ifndef AXISNEW_H
 #define AXISNEW_H
 
-#include "backend/lib/Range.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
-class CartesianPlot;
+class AbstractColumn;
+class AxisPrivate;
 class Line;
 class TextLabel;
-class AxisPrivate;
-class AbstractColumn;
 class QActionGroup;
 
-using Dimension = CartesianCoordinateSystem::Dimension;
-
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Axis : public WorksheetElement {
+#else
 class Axis : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
@@ -110,7 +111,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
 	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range)
-	BASIC_D_ACCESSOR_DECL(bool, rangeScale, RangeScale) // if true, the scale of the range will be used
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, scale, Scale)
 	void setStart(const double);
 	void setEnd(const double);
@@ -135,7 +135,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
 	BASIC_D_ACCESSOR_DECL(bool, majorTicksAutoNumber, MajorTicksAutoNumber)
 	int majorTicksNumber() const;
-	void setMajorTicksNumber(const int number, bool automatic = false);
+	void setMajorTicksNumber(const int number);
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
 	BASIC_D_ACCESSOR_DECL(TicksStartType, majorTicksStartType, MajorTicksStartType)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
@@ -189,6 +189,7 @@ public:
 	void retransform() override;
 	void retransformTickLabelStrings();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void updateLocale() override;
 
 protected:
 	Axis(const QString&, Orientation, AxisPrivate*);
@@ -199,6 +200,7 @@ private:
 	void init(Orientation, bool loading = false);
 	void initActions();
 	void initMenus();
+	BASIC_D_ACCESSOR_DECL(bool, rangeScale, RangeScale) // if true, the scale of the range will be used. Deprecated, just for compatibility
 
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
@@ -290,8 +292,8 @@ Q_SIGNALS:
 
 	friend class RetransformTest;
 	friend class AxisTest;
-	friend class AxisTest2;
-	friend class AxisTest3;
+	friend class AxisDock; // To be able to access range scale
+	friend class Project; // To be able to access range scale
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

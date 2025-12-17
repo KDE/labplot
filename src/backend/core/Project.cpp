@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -12,9 +12,14 @@
 */
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#ifndef SDK
+#include "backend/statistics/HypothesisTest.h"
+#endif
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
@@ -71,9 +76,9 @@
 namespace {
 // xmlVersion of this labplot version
 // the project version will be compared with this.
-// if you make any imcompatible changes to the xmlfile
+// if you make any incompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 14;
+int buildXmlVersion = 17;
 }
 
 /**
@@ -164,6 +169,8 @@ public:
 	static int mXmlVersion;
 	static QString versionString;
 
+	bool saveData{true}; // Save column and matrix data in the file. If false, the data gets not stored in the saved file
+	bool fileCompression{true};
 	QDateTime modificationTime;
 	Project* const q;
 	QString fileName;
@@ -182,6 +189,10 @@ int ProjectPrivate::mXmlVersion = buildXmlVersion;
 Project::Project()
 	: Folder(i18n("Project"), AspectType::Project)
 	, d_ptr(new ProjectPrivate(this)) {
+#ifdef SDK
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+#endif
 	Q_D(Project);
 
 	QString user = qEnvironmentVariable("USER"); // !Windows
@@ -257,15 +268,8 @@ QUndoStack* Project::undoStack() const {
 }
 
 QMenu* Project::createContextMenu() {
-	QMenu* menu = AbstractAspect::createContextMenu();
-
-	// add close action
-	menu->addSeparator();
-	menu->addAction(QIcon::fromTheme(QLatin1String("document-close")), i18n("Close"), this, SIGNAL(closeRequested()));
-
-	// add the actions from MainWin
-	Q_EMIT requestProjectContextMenu(menu);
-
+	QMenu* menu = AbstractAspect::createContextMenu(); // add default actions from Aspect
+	Q_EMIT requestProjectContextMenu(menu); // add the actions from MainWin
 	return menu;
 }
 
@@ -293,6 +297,8 @@ CLASS_D_ACCESSOR_IMPL(Project, QString, dockWidgetState, DockWidgetState, dockWi
 BASIC_D_READER_IMPL(Project, bool, saveDefaultDockWidgetState, saveDefaultDockWidgetState)
 CLASS_D_ACCESSOR_IMPL(Project, QString, defaultDockWidgetState, DefaultDockWidgetState, defaultDockWidgetState)
 BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
+BASIC_D_READER_IMPL(Project, bool, fileCompression, fileCompression)
+BASIC_D_READER_IMPL(Project, bool, saveData, saveData)
 
 STD_SETTER_CMD_IMPL_S(Project, SetAuthor, QString, author)
 void Project::setAuthor(const QString& author) {
@@ -313,6 +319,20 @@ void Project::setSaveCalculations(bool save) {
 	Q_D(Project);
 	if (save != d->saveCalculations)
 		exec(new ProjectSetSaveCalculationsCmd(d, save, ki18n("%1: save calculation changed")));
+}
+
+void Project::setFileCompression(bool compression) {
+	Q_D(Project);
+	// No Undo command, because we don't have this on the stack since it could be changed easily unintentionally
+	d->fileCompression = compression;
+	setProjectChanged(true);
+}
+
+void Project::setSaveData(bool save) {
+	Q_D(Project);
+	// No Undo command, because we don't have this on the stack since it could be changed easily unintentionally
+	d->saveData = save;
+	setProjectChanged(true);
 }
 
 void Project::setChanged(const bool value) {
@@ -351,7 +371,7 @@ bool Project::hasChanged() const {
 template<typename T>
 void Project::updateDependencies(const QVector<const AbstractAspect*> changedAspects) {
 	if (!changedAspects.isEmpty()) {
-		// if a new aspect was addded, check whether the aspect names match the missing
+		// if a new aspect was added, check whether the aspect names match the missing
 		// names in the other aspects and update the dependencies
 		const auto& children = this->children<T>(ChildIndexFlag::Recursive);
 
@@ -398,10 +418,8 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	updateDependencies<WorksheetElement>({aspect});
 	updateDependencies<Spreadsheet>({aspect});
 
-	if (aspect->inherits(AspectType::Spreadsheet)) {
-		const auto* spreadsheet = static_cast<const Spreadsheet*>(aspect);
-
-		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
+	if (const auto* spreadsheet = aspect->castTo<const Spreadsheet>()) {
+		// if a new spreadsheet was added, check whether the spreadsheet name match the missing
 		// name in a linked spreadsheet, etc. and update the dependencies
 		connect(spreadsheet, &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
@@ -426,7 +444,7 @@ void Project::navigateTo(const QString& path) {
 }
 
 /*!
- * returns \c true if the project file \fileName has a supported format and can be openned in LabPlot directly,
+ * returns \c true if the project file \fileName has a supported format and can be opened in LabPlot directly,
  * returns \c false otherwise.
  */
 bool Project::isSupportedProject(const QString& fileName) {
@@ -490,6 +508,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("xmlVersion"), QString::number(buildXmlVersion));
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
+	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
 
 	// save the state of the content dock widgets
 	writer->writeAttribute(QStringLiteral("dockWidgetState"), d->dockWidgetState);
@@ -498,9 +517,6 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("saveDefaultDockWidgetState"), QString::number(d->saveDefaultDockWidgetState));
 	if (d->saveDefaultDockWidgetState)
 		writer->writeAttribute(QStringLiteral("defaultDockWidgetState"), d->defaultDockWidgetState);
-
-	if (d->saveCalculations)
-		writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
 
 	QString image;
 	if (!thumbnail.isNull()) {
@@ -728,6 +744,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
+#ifndef SDK
 bool Project::loadNotebook(const QString& filename) {
 	bool rc = false;
 #ifdef HAVE_CANTOR_LIBS
@@ -837,6 +854,7 @@ bool Project::loadNotebook(const QString& filename) {
 
 	return rc;
 }
+#endif
 
 void Project::retransformElements(AbstractAspect* aspect) {
 	bool hasChildren = aspect->childCount<AbstractAspect>();
@@ -870,9 +888,9 @@ void Project::retransformElements(AbstractAspect* aspect) {
 		}
 	} else {
 		QVector<CartesianPlot*> plots;
-		if (aspect->type() == AspectType::CartesianPlot)
-			plots << static_cast<CartesianPlot*>(aspect);
-		else if (dynamic_cast<Plot*>(aspect))
+		if (auto* plot = aspect->castTo<CartesianPlot>())
+			plots << plot;
+		else if (aspect->inherits<Plot>())
 			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
 
 		if (!plots.isEmpty()) {
@@ -881,8 +899,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 		} else {
 			// worksheet element is being copied alone without its parent plot object
 			// so the plot retransform is not called above. we need to call it for the aspect.
-			auto* e = dynamic_cast<WorksheetElement*>(aspect);
-			if (e)
+			if (auto* e = aspect->castTo<WorksheetElement>())
 				e->retransform();
 		}
 	}
@@ -934,9 +951,11 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	// wait until all columns are decoded from base64-encoded data
 	QThreadPool::globalInstance()->waitForDone();
 
-	bool hasChildren = aspect->childCount<AbstractAspect>();
-	const auto& columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
-	const auto& histograms = aspect->project()->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only. why a better implementation?
+	// when restoring pointers for an aspect having children, for example a Folder, we need to recursively traverse
+	// all its children and restore the pointers for all of them. Analysis curves, for example XYFitCurve, can also
+	// children (residuals column, note) but there is no need to check the children, the pointers need to be restored
+	// for the analysis curve itself.
+	bool hasChildren = (aspect->childCount<AbstractAspect>() > 0 && !aspect->inherits<XYAnalysisCurve>());
 
 #ifndef SDK
 	// LiveDataSource:
@@ -949,19 +968,26 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	}
 #endif
 
+	// aspects in the project that can be used as sources/references:
+	auto* project = aspect->project();
+	const auto& columns = project->children<Column>(ChildIndexFlag::Recursive);
+	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only.
+	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
+
 	// xy-curves
 	//  cannot be removed by the column observer, because it does not react
 	//  on curve changes
 	QVector<XYCurve*> curves;
 	if (hasChildren)
 		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
-	else if (aspect->inherits(AspectType::XYCurve) || aspect->inherits(AspectType::XYAnalysisCurve))
+	else if (auto* curve = aspect->castTo<XYCurve>()) {
 		// the object doesn't have any children -> one single aspect is being pasted.
 		// check whether the object being pasted is a XYCurve and add it to the
 		// list of curves to be retransformed
-		curves << static_cast<XYCurve*>(aspect);
+		curves << curve;
+	}
 
-	for (auto* curve : qAsConst(curves)) {
+	for (auto* curve : std::as_const(curves)) {
 		if (!curve)
 			continue;
 		curve->setSuppressRetransform(true);
@@ -975,7 +1001,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			if (fitCurve) {
 				RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
 				RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
-				RESTORE_POINTER(fitCurve, dataSourceHistogram, DataSourceHistogram, Histogram, histograms);
+				RESTORE_POINTER(fitCurve, dataSourceHistogram, DataSourceHistogram, Histogram, histogramsAll);
 			}
 		} else {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
@@ -988,15 +1014,15 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		}
 
 		if (analysisCurve)
-			RESTORE_POINTER(analysisCurve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
+			RESTORE_POINTER(analysisCurve, dataSourceCurve, DataSourceCurve, XYCurve, curvesAll);
 
 		curve->setSuppressRetransform(false);
 	}
 
 	// assign to all markers the curves they need
 	QVector<InfoElement*> elements;
-	if (aspect->type() == AspectType::InfoElement) // check for the type first. InfoElement has children, but they are not relevant here
-		elements << static_cast<InfoElement*>(aspect);
+	if (auto* infoElement = aspect->castTo<InfoElement>()) // check for the type first. InfoElement has children, but they are not relevant here
+		elements << infoElement;
 	else if (hasChildren)
 		elements = aspect->children<InfoElement>(ChildIndexFlag::Recursive);
 
@@ -1004,13 +1030,13 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		element->assignCurve(curves);
 
 	QVector<XYFunctionCurve*> functionCurves;
-	if (aspect->type() == AspectType::XYFunctionCurve) // check for the type first. InfoElement has children, but they are not relevant here
-		functionCurves << static_cast<XYFunctionCurve*>(aspect);
+	if (auto* curve = aspect->castTo<XYFunctionCurve>()) // check for the type first. InfoElement has children, but they are not relevant here
+		functionCurves << curve;
 	else if (hasChildren)
 		functionCurves = aspect->children<XYFunctionCurve>(ChildIndexFlag::Recursive);
 
 	for (auto* functionCurve : functionCurves) {
-		for (const auto* curve : qAsConst(curves))
+		for (const auto* curve : std::as_const(curves))
 			functionCurve->setFunctionVariableCurve(curve);
 	}
 
@@ -1018,8 +1044,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<Axis*> axes;
 	if (hasChildren)
 		axes = aspect->children<Axis>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::Axis)
-		axes << static_cast<Axis*>(aspect);
+	else if (auto* axis = aspect->castTo<Axis>())
+		axes << axis;
 
 	for (auto* axis : axes) {
 		if (!axis)
@@ -1033,8 +1059,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<Histogram*> hists;
 	if (hasChildren)
 		hists = aspect->children<Histogram>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::Histogram)
-		hists << static_cast<Histogram*>(aspect);
+	else if (auto* histogram = aspect->castTo<Histogram>())
+		hists << histogram;
 
 	for (auto* hist : hists) {
 		if (!hist)
@@ -1050,8 +1076,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<QQPlot*> qqPlots;
 	if (hasChildren)
 		qqPlots = aspect->children<QQPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::QQPlot)
-		qqPlots << static_cast<QQPlot*>(aspect);
+	else if (auto* qqPlot = aspect->castTo<QQPlot>())
+		qqPlots << qqPlot;
 
 	for (auto* plot : qqPlots) {
 		if (!plot)
@@ -1063,8 +1089,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<KDEPlot*> kdePlots;
 	if (hasChildren)
 		kdePlots = aspect->children<KDEPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::KDEPlot)
-		kdePlots << static_cast<KDEPlot*>(aspect);
+	else if (auto* kdePlot = aspect->castTo<KDEPlot>())
+		kdePlots << kdePlot;
 
 	for (auto* plot : kdePlots) {
 		if (!plot)
@@ -1076,23 +1102,24 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<BoxPlot*> boxPlots;
 	if (hasChildren)
 		boxPlots = aspect->children<BoxPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::BoxPlot)
-		boxPlots << static_cast<BoxPlot*>(aspect);
+	else if (auto* boxPlot = aspect->castTo<BoxPlot>())
+		boxPlots << boxPlot;
 
 	for (auto* boxPlot : boxPlots) {
 		if (!boxPlot)
 			continue;
 
 		// initialize the array for the column pointers
-		int count = boxPlot->dataColumnPaths().count();
+		const auto& paths = boxPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
 			dataColumns[i] = nullptr;
-			const auto& path = boxPlot->dataColumnPaths().at(i);
-			for (Column* column : columns) {
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
 				if (!column)
 					continue;
 				if (column->path() == path) {
@@ -1109,15 +1136,16 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<BarPlot*> barPlots;
 	if (hasChildren)
 		barPlots = aspect->children<BarPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::BarPlot)
-		barPlots << static_cast<BarPlot*>(aspect);
+	else if (auto* barPlot = aspect->castTo<BarPlot>())
+		barPlots << barPlot;
 
 	for (auto* barPlot : barPlots) {
 		if (!barPlot)
 			continue;
 
 		// initialize the array for the column pointers
-		int count = barPlot->dataColumnPaths().count();
+		const auto& paths = barPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
@@ -1125,8 +1153,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		for (int i = 0; i < count; ++i) {
 			// data columns
 			dataColumns[i] = nullptr;
-			const auto path = barPlot->dataColumnPaths().at(i);
-			for (Column* column : columns) {
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
 				if (!column)
 					continue;
 				if (column->path() == path) {
@@ -1153,22 +1181,23 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<LollipopPlot*> lollipopPlots;
 	if (hasChildren)
 		lollipopPlots = aspect->children<LollipopPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::BoxPlot)
-		lollipopPlots << static_cast<LollipopPlot*>(aspect);
+	else if (auto* lollipopPlot = aspect->castTo<LollipopPlot>())
+		lollipopPlots << lollipopPlot;
 
 	for (auto* lollipopPlot : lollipopPlots) {
 		if (!lollipopPlot)
 			continue;
 
 		// initialize the array for the column pointers
-		int count = lollipopPlot->dataColumnPaths().count();
+		const auto& paths = lollipopPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
 			dataColumns[i] = nullptr;
-			const auto& path = lollipopPlot->dataColumnPaths().at(i);
+			const auto& path = paths.at(i);
 			for (Column* column : columns) {
 				if (!column)
 					continue;
@@ -1188,47 +1217,28 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<ProcessBehaviorChart*> pbPlots;
 	if (hasChildren)
 		pbPlots = aspect->children<ProcessBehaviorChart>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::ProcessBehaviorChart)
-		pbPlots << static_cast<ProcessBehaviorChart*>(aspect);
+	else if (auto* pbPlot = aspect->castTo<ProcessBehaviorChart>())
+		pbPlots << pbPlot;
 
 	for (auto* plot : pbPlots) {
 		if (!plot)
 			continue;
 		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
+		RESTORE_COLUMN_POINTER(plot, data2Column, Data2Column);
 	}
 
 	// run charts/plots
 	QVector<RunChart*> runPlots;
 	if (hasChildren)
 		runPlots = aspect->children<RunChart>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::RunChart)
-		runPlots << static_cast<RunChart*>(aspect);
+	else if (auto* runPlot = aspect->castTo<RunChart>())
+		runPlots << runPlot;
 
 	for (auto* plot : runPlots) {
 		if (!plot)
 			continue;
 		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
 	}
-
-	// data picker curves
-#ifndef SDK
-	QVector<DatapickerCurve*> dataPickerCurves;
-	if (hasChildren)
-		dataPickerCurves = aspect->children<DatapickerCurve>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::DatapickerCurve)
-		dataPickerCurves << static_cast<DatapickerCurve*>(aspect);
-
-	for (auto* dataPickerCurve : dataPickerCurves) {
-		if (!dataPickerCurve)
-			continue;
-		RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
-		RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
-		RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
-		RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
-		RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
-		RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
-	}
-#endif
 
 	// spreadsheet
 	QVector<Spreadsheet*> spreadsheets;
@@ -1242,6 +1252,56 @@ void Project::restorePointers(AbstractAspect* aspect) {
 				linkingSpreadsheet->setLinkedSpreadsheet(toLinkedSpreadsheet, true);
 			}
 		}
+	}
+
+#ifndef SDK
+	// hypothesis tests
+	QVector<HypothesisTest*> tests;
+	if (hasChildren)
+		tests = aspect->children<HypothesisTest>(ChildIndexFlag::Recursive);
+	else if (auto* hypTest = aspect->castTo<HypothesisTest>())
+		tests << hypTest;
+
+	for (auto* test : tests) {
+		if (!test)
+			continue;
+
+		// initialize the array for the column pointers
+		const auto& paths = test->dataColumnPaths();
+		int count = paths.count();
+		QVector<const AbstractColumn*> dataColumns;
+		dataColumns.resize(count);
+
+		// restore the pointers
+		for (int i = 0; i < count; ++i) {
+			dataColumns[i] = nullptr;
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
+				if (!column)
+					continue;
+				if (column->path() == path) {
+					dataColumns[i] = column;
+					break;
+				}
+			}
+		}
+
+		test->setDataColumns(std::move(dataColumns));
+	}
+#endif
+
+	// seasonal decompositions
+	QVector<SeasonalDecomposition*> decompositions;
+	if (hasChildren)
+		decompositions = aspect->children<SeasonalDecomposition>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::SeasonalDecomposition)
+		decompositions << static_cast<SeasonalDecomposition*>(aspect);
+
+	for (auto* decomposition : decompositions) {
+		if (!decomposition)
+			continue;
+		RESTORE_COLUMN_POINTER(decomposition, xColumn, XColumn);
+		RESTORE_COLUMN_POINTER(decomposition, yColumn, YColumn);
 	}
 
 	// if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
@@ -1308,4 +1368,22 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 		d->saveCalculations = str.toInt();
 
 	return true;
+}
+
+/*!
+ * This static member variable will hold a pointer to the current project.
+ * It starts out as nullptr but is updated in various places in MainWin.
+ */
+Project* Project::currentProject = nullptr;
+
+/*!
+ * This free function will return a pointer to the current project.
+ * It was created for our scripting runtimes which need access to the current project.
+ * So, our scripting runtimes can do something like:
+ * 		project = project()
+ * Having a singular function is less error prone than our former approach of manually
+ * injecting the project variable into the scripting runtime.
+ */
+Project* project() {
+	return Project::currentProject;
 }

@@ -121,8 +121,8 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_interpolationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_interpolationCurve->dataSourceCurve());
-	cbXDataColumn->setColumn(m_interpolationCurve->xDataColumn(), m_interpolationCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_interpolationCurve->yDataColumn(), m_interpolationCurve->yDataColumnPath());
+	cbXDataColumn->setAspect(m_interpolationCurve->xDataColumn(), m_interpolationCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_interpolationCurve->yDataColumn(), m_interpolationCurve->yDataColumnPath());
 
 	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_interpolationCurve->parentAspect());
@@ -531,14 +531,11 @@ void XYInterpolationCurveDock::numberOfPointsChanged() {
 }
 
 void XYInterpolationCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Interpolation status: %1", m_interpolationCurve->result().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

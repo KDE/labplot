@@ -4,7 +4,7 @@
 	Description          : View class for Notebook
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,17 +13,17 @@
 #include "backend/notebook/Notebook.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
 #include "frontend/spreadsheet/StatisticsDialog.h"
+#include "backend/statistics/HypothesisTest.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <QActionGroup>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMenu>
 #include <QTimer>
-#include <QToolBar>
 
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
-#include <KToggleAction>
 
 NotebookView::NotebookView(Notebook* worksheet)
 	: QWidget()
@@ -50,27 +50,27 @@ void NotebookView::initActions() {
 	m_actionGroup->setExclusive(false);
 
 	// general notebook specific actions
-	m_zoomIn = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), m_actionGroup);
-	m_zoomIn->setData(QStringLiteral("view_zoom_in"));
-	m_zoomIn->setShortcut(Qt::CTRL | Qt::Key_Plus);
+	m_zoomInAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), m_actionGroup);
+	m_zoomInAction->setData(QStringLiteral("view_zoom_in"));
+	m_zoomInAction->setShortcut(Qt::CTRL | Qt::Key_Plus);
 
-	m_zoomOut = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), m_actionGroup);
-	m_zoomOut->setData(QStringLiteral("view_zoom_out"));
-	m_zoomOut->setShortcut(Qt::CTRL | Qt::Key_Minus);
+	m_zoomOutAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), m_actionGroup);
+	m_zoomOutAction->setData(QStringLiteral("view_zoom_out"));
+	m_zoomOutAction->setShortcut(Qt::CTRL | Qt::Key_Minus);
 
-	m_find = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), m_actionGroup);
-	m_find->setData(QStringLiteral("edit_find"));
-	m_find->setShortcut(Qt::CTRL | Qt::Key_F);
+	m_findAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), m_actionGroup);
+	m_findAction->setData(QStringLiteral("edit_find"));
+	m_findAction->setShortcut(Qt::CTRL | Qt::Key_F);
 
-	m_replace = new QAction(QIcon::fromTheme(QLatin1String("edit-find-replace")), i18n("Replace"), m_actionGroup);
-	m_replace->setData(QStringLiteral("edit_replace"));
-	m_replace->setShortcut(Qt::CTRL | Qt::Key_R);
+	m_replaceAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find-replace")), i18n("Replace"), m_actionGroup);
+	m_replaceAction->setData(QStringLiteral("edit_replace"));
+	m_replaceAction->setShortcut(Qt::CTRL | Qt::Key_R);
 
-	m_restartBackendAction = new QAction(QIcon::fromTheme(QLatin1String("system-reboot")), i18n("Restart Backend"), m_actionGroup);
-	m_restartBackendAction->setData(QStringLiteral("restart_backend"));
+	m_restartAction = new QAction(QIcon::fromTheme(QLatin1String("system-reboot")), i18n("Restart"), m_actionGroup);
+	m_restartAction->setData(QStringLiteral("restart_backend"));
 
-	m_evaluateWorsheetAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("Evaluate Notebook"), m_actionGroup);
-	m_evaluateWorsheetAction->setData(QStringLiteral("evaluate_worksheet"));
+	m_evaluateAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("Evaluate Notebook"), m_actionGroup);
+	m_evaluateAction->setData(QStringLiteral("evaluate_worksheet"));
 
 	// all other actions are initialized in initMenus() since they are only required for the main and context menu
 
@@ -234,7 +234,7 @@ void NotebookView::createContextMenu(QMenu* menu) {
 	if (!m_addNewMenu)
 		initMenus();
 
-	menu->insertAction(firstAction, m_evaluateWorsheetAction);
+	menu->insertAction(firstAction, m_evaluateAction);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_evaluateEntryAction);
 	menu->addSeparator();
@@ -262,59 +262,70 @@ void NotebookView::createContextMenu(QMenu* menu) {
 	}
 
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, m_zoomIn);
-	menu->insertAction(firstAction, m_zoomOut);
+	menu->insertAction(firstAction, m_zoomInAction);
+	menu->insertAction(firstAction, m_zoomOutAction);
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, m_find);
-	menu->insertAction(firstAction, m_replace);
+	menu->insertAction(firstAction, m_findAction);
+	menu->insertAction(firstAction, m_replaceAction);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_settingsMenu);
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, m_restartBackendAction);
+	menu->insertAction(firstAction, m_restartAction);
 	menu->insertSeparator(firstAction);
 }
 
 /*!
  * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer.
  */
-void NotebookView::fillColumnContextMenu(QMenu* menu, Column* column) {
-	if (!column)
-		return; // should never happen, since the sender is always a Column
-
-	m_contextMenuColumn = column;
+void NotebookView::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& columns) {
+	m_contextMenuColumns = columns;
 
 	if (!m_plotDataMenu) {
 		auto* plotDataActionGroup = new QActionGroup(this);
 		connect(plotDataActionGroup, &QActionGroup::triggered, this, &NotebookView::plotData);
 		m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
-		PlotDataDialog::fillMenu(m_plotDataMenu, plotDataActionGroup);
+		CartesianPlot::fillAddNewPlotMenu(m_plotDataMenu, plotDataActionGroup);
+
+		// statistical analysis
+		m_statisticalAnalysisMenu = new QMenu(i18n("Statistical Analysis"), this);
+		auto* hypothesisTestMenu = new QMenu(i18n("Hypothesis Test"), this);
+		auto* hypothesisTestActionGroup = new QActionGroup(this);
+		connect(hypothesisTestActionGroup, &QActionGroup::triggered, this, &NotebookView::hypothesisTest);
+		HypothesisTest::fillAddNewHypothesisTest(hypothesisTestMenu, hypothesisTestActionGroup);
+		m_statisticalAnalysisMenu->addMenu(hypothesisTestMenu);
 
 		m_statisticsAction = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Variable Statistics..."), this);
 		connect(m_statisticsAction, &QAction::triggered, this, &NotebookView::showStatistics);
 	}
 
-	const bool hasValues = column->hasValues();
-	const bool plottable = column->isPlottable();
+	QAction* firstAction = nullptr;
+	if (!menu->actions().isEmpty())
+		firstAction = menu->actions().at(1); // called for a menu that has already actions, prepend notebook's actions here
 
-	QAction* firstAction = menu->actions().at(1);
+	bool plottable = false;
+	for (const auto* col : columns) {
+		if (col->isPlottable()) {
+			plottable = true;
+			break;
+		}
+	}
+
+	bool hasValues = false;
+	for (const auto* col : columns) {
+		if (col->hasValues()) {
+			hasValues = true;
+			break;
+		}
+	}
+
 	menu->insertMenu(firstAction, m_plotDataMenu);
+	menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
 	menu->insertSeparator(firstAction);
 	m_plotDataMenu->setEnabled(plottable && hasValues);
 
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_statisticsAction);
 	m_statisticsAction->setEnabled(hasValues);
-}
-
-void NotebookView::fillToolBar(QToolBar* toolbar) {
-	if (!m_part)
-		return;
-	toolbar->addAction(m_evaluateWorsheetAction);
-	toolbar->addAction(m_find);
-	toolbar->addAction(m_zoomIn);
-	toolbar->addAction(m_zoomOut);
-	toolbar->addSeparator();
-	toolbar->addAction(m_restartBackendAction);
 }
 
 /*!
@@ -336,36 +347,71 @@ NotebookView::~NotebookView() {
 
 void NotebookView::statusChanged(Cantor::Session::Status status) {
 	if (status == Cantor::Session::Running) {
-		m_evaluateWorsheetAction->setText(i18n("Interrupt"));
-		m_evaluateWorsheetAction->setIcon(QIcon::fromTheme(QLatin1String("dialog-close")));
+		m_evaluateAction->setText(i18n("Interrupt"));
+		m_evaluateAction->setIcon(QIcon::fromTheme(QLatin1String("dialog-close")));
 		Q_EMIT m_notebook->statusInfo(i18n("Calculating..."));
 	} else {
-		m_evaluateWorsheetAction->setText(i18n("Evaluate Notebook"));
-		m_evaluateWorsheetAction->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
+		m_evaluateAction->setText(i18n("Evaluate Notebook"));
+		m_evaluateAction->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
 		Q_EMIT m_notebook->statusInfo(i18n("Ready"));
 	}
 }
 
 void NotebookView::plotData(QAction* action) {
-	if (!m_contextMenuColumn)
+	if (m_contextMenuColumns.isEmpty())
 		return;
 
-	auto type = static_cast<PlotDataDialog::PlotType>(action->data().toInt());
+	auto type = static_cast<Plot::PlotType>(action->data().toInt());
 	auto* dlg = new PlotDataDialog(m_notebook, type);
-	dlg->setSelectedColumns(QVector<Column*>({m_contextMenuColumn}));
+	dlg->setSelectedColumns(m_contextMenuColumns);
 	dlg->exec();
 }
 
-void NotebookView::showStatistics() {
-	if (!m_contextMenuColumn)
+void NotebookView::hypothesisTest(QAction* action) {
+	if (m_contextMenuColumns.isEmpty())
 		return;
 
-	QString dlgTitle(i18n("%1: variable statistics", m_contextMenuColumn->name()));
-	auto* dlg = new StatisticsDialog(dlgTitle, QVector<Column*>({m_contextMenuColumn}));
+	QString name = (m_contextMenuColumns.size() == 1) ? m_contextMenuColumns.constFirst()->name() : m_notebook->name();
+	auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", name));
+	test->setTest(static_cast<HypothesisTest::Test>(action->data().toInt()));
+	QVector<const AbstractColumn*> dataColumns;
+	for (const auto* column : m_contextMenuColumns)
+		dataColumns << column;
+	test->setDataColumns(dataColumns);
+	test->recalculate();
+	m_notebook->parentAspect()->addChild(test);
+}
+
+void NotebookView::showStatistics() {
+	if (m_contextMenuColumns.isEmpty())
+		return;
+
+	QString dlgTitle(i18n("%1: variable statistics", m_notebook->name()));
+	auto* dlg = new StatisticsDialog(dlgTitle, m_contextMenuColumns);
 	dlg->setModal(true);
 	dlg->show();
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	QTimer::singleShot(0, this, [=]() {
 		dlg->showStatistics();
 	});
+}
+
+void NotebookView::evaluate() {
+	m_part->action(QStringLiteral("evaluate_worksheet"))->trigger();
+}
+
+void NotebookView::restart() {
+	m_part->action(QStringLiteral("restart_backend"))->trigger();
+}
+
+void NotebookView::zoomIn() {
+	m_part->action(QStringLiteral("view_zoom_in"))->trigger();
+}
+
+void NotebookView::zoomOut() {
+	m_part->action(QStringLiteral("view_zoom_out"))->trigger();
+}
+
+void NotebookView::find() {
+	m_part->action(QStringLiteral("edit_find"))->trigger();
 }

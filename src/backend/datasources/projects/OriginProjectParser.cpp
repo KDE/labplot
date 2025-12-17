@@ -266,15 +266,22 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	project->setIsLoading(true);
 	if (projectIt.node) { // only opj files from version >= 6.0 have a project tree
 		DEBUG(Q_FUNC_INFO << ", project tree found");
-		QString name(QString::fromLatin1(projectIt->name.c_str()));
-		project->setName(name);
+		auto rootName = QString::fromLatin1(projectIt->name.c_str());
+		if (rootName == QLatin1String("UNTITLED")) {
+			// set project name from project file name
+			QFileInfo fi(m_projectFileName);
+			project->setName(fi.completeBaseName());
+		} else
+			project->setName(rootName);
 		project->setCreationTime(creationTime(projectIt));
 		loadFolder(project, projectIt, preview);
 	} else { // for older versions put all windows on rootfolder
-		DEBUG(Q_FUNC_INFO << ", no project tree");
-		int pos = m_projectFileName.lastIndexOf(QLatin1Char('/')) + 1;
-		project->setName(m_projectFileName.mid(pos));
+		// set project name from project file name
+		QFileInfo fi(m_projectFileName);
+		project->setName(fi.completeBaseName());
 	}
+	DEBUG(Q_FUNC_INFO << ", set project name: " << project->name().toStdString())
+
 	// imports all loose windows (like prior version 6 which has no project tree)
 	handleLooseWindows(project, preview);
 
@@ -1237,7 +1244,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	worksheet->setComment(QLatin1String(graph.label.c_str()));
 
 	// TODO: width, height, view mode (print view, page view, window view, draft view)
-	// Origin allows to freely resize the window and ajusts the size of the plot (layer) automatically
+	// Origin allows to freely resize the window and adjusts the size of the plot (layer) automatically
 	// by keeping a certain width-to-height ratio. It's not clear what the actual size of the plot/layer is and how to handle this.
 	// For now we simply create a new worksheet here with it's default size and make it using the whole view size.
 	// Later we can decide to use one of the following properties:
@@ -1250,20 +1257,24 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// 	worksheet->setPageRect(size);
 	graphSize.rwidth() = graph.width;
 	graphSize.rheight() = graph.height;
-	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (px) = " << graphSize.width() << "/" << graphSize.height())
+	WARN(Q_FUNC_INFO << ", GRAPH width/height (px) = " << graphSize.width() << "/" << graphSize.height())
 	// Graphic elements in Origin are scaled relative to the dimensions of the page (Format->Page) with 600 DPI (>=9.6), 300 DPI (<9.6)
 	double dpi = 600.;
 	if (m_originFile->version() < 9.6)
 		dpi = 300.;
-	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
+	WARN(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
 	// Origin scales text and plots with the size of the layer when no fixed size is used (Layer properties->Size)
-	// so we scale all text and plots with a scaling factor to the whole view height (29.5 cm) used as default
+	// so we scale all text and plots with a scaling factor to the whole view height used as default
+#if defined(HAVE_WINDOWS)
+	const double fixedHeight = 14.75; // full height/2 [cm]
+#else
 	const double fixedHeight = 29.5; // full height [cm]
+#endif
 	elementScalingFactor = fixedHeight / (graph.height * GSL_CONST_CGS_INCH / dpi);
 	// not using the full value for scaling text is better in most cases
 	textScalingFactor = 1. + (elementScalingFactor - 1.) / 2.;
-	DEBUG(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
-	DEBUG(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
+	WARN(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
+	WARN(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
 	// default values (1000/1000)
 	//	DEBUG(Q_FUNC_INFO << ", WORKSHEET width/height = " << worksheet->pageRect().width() << "/" << worksheet->pageRect().height())
 
@@ -1332,9 +1343,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	if (plot) {
 		plot->setSymmetricPadding(false);
 		int numberOfLayer = layerIndex + 1;
-		DEBUG(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
+		WARN(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
 		if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
-			DEBUG(Q_FUNC_INFO << ", using layer rect for padding")
+			WARN(Q_FUNC_INFO << ", using layer rect for padding")
 			double aspectRatio = (double)graphSize.width() / graphSize.height();
 
 			const double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
@@ -1346,13 +1357,27 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
 			plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
 		} else {
-			plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
-			plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
-			plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
-			plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
+			WARN(Q_FUNC_INFO << ", using fixed padding")
+#if defined(HAVE_WINDOWS)
+			// TODO: test if min instead of max is relevant
+			plot->setHorizontalPadding(150. + 1.5 * plot->horizontalPadding() * std::min(elementScalingFactor, 1.));
+			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::min(elementScalingFactor, 1.));
+			plot->setRightPadding(150. + 1.5 * plot->rightPadding() * std::min(elementScalingFactor, 1.));
+			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::min(elementScalingFactor, 1.));
+#else
+			plot->setHorizontalPadding(200. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setVerticalPadding(150. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setRightPadding(200. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
+			plot->setBottomPadding(150. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
+#endif
 		}
-		DEBUG(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
-		DEBUG(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
+
+		WARN(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
+		WARN(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
+
+		// if padding is symmetric, we set it
+		if (plot->horizontalPadding() == plot->rightPadding() && plot->verticalPadding() == plot->bottomPadding())
+			plot->setSymmetricPadding(true);
 	}
 
 	if (!preview) {
@@ -1371,7 +1396,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			position.point.setY(ratios.height());
 			position.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
 			position.verticalPosition = WorksheetElement::VerticalPosition::Relative;
-			// achor depending on rotation
+			// anchor depending on rotation
 			auto rotation = label->rotationAngle();
 			auto hAlign = WorksheetElement::HorizontalAlignment::Left;
 			auto vAlign = WorksheetElement::VerticalAlignment::Top;
@@ -1529,7 +1554,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		DEBUG(Q_FUNC_INFO << ", page size = " << graphSize.width() << "/" << graphSize.height())
 		CartesianPlotLegend::PositionWrapper position;
 		QSizeF relativePosition(legendRect.left / (double)graphSize.width(), legendRect.top / (double)graphSize.height());
-		// achor depending on rotation
+		// anchor depending on rotation
 		auto rotation = originLegend.rotation;
 		if (rotation > 45 && rotation <= 135) // left/bottom
 			relativePosition.setHeight(legendRect.bottom / (double)graphSize.height());
@@ -1543,7 +1568,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 		position.point.setX(relativePosition.width());
 		position.point.setY(relativePosition.height());
-		// achor depending on rotation
+		// anchor depending on rotation
 		position.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
 		position.verticalPosition = WorksheetElement::VerticalPosition::Relative;
 		auto hAlign = WorksheetElement::HorizontalAlignment::Left;
@@ -1611,7 +1636,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		// position
 		// determine the relative position to the graph
 		QSizeF relativePosition(t.clientRect.left / (double)graphSize.width(), t.clientRect.top / (double)graphSize.height());
-		// achor depending on rotation
+		// anchor depending on rotation
 		if (t.rotation > 45 && t.rotation <= 135) // left/bottom
 			relativePosition.setHeight(t.clientRect.bottom / (double)graphSize.height());
 		else if (t.rotation > 135 && t.rotation <= 225) { // right/bottom
@@ -1633,16 +1658,22 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	}
 
 	// axes
-	DEBUG(Q_FUNC_INFO << ", layer.curves.size() = " << layer.curves.size())
+	DEBUG(Q_FUNC_INFO << ", number of curves in layer = " << layer.curves.size())
 	if (layer.curves.empty()) // no curves, just axes
 		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
 	else {
 		const auto& originCurve = layer.curves.at(0);
 		// see loadCurves()
 		QString dataName(QString::fromStdString(originCurve.dataName));
-		DEBUG(Q_FUNC_INFO << ", curve data name " << STDSTRING(dataName))
+		DEBUG(Q_FUNC_INFO << ", curve data name: " << STDSTRING(dataName))
 		QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
 		auto sheet = getSpreadsheetByName(containerName);
+
+		DEBUG("number of columns = " << sheet.columns.size())
+		if (sheet.columns.size() == 0) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: no columns in sheet")
+			return;
+		}
 
 		QString xColumnName;
 		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
@@ -1696,10 +1727,11 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	}
 
 	// TODO: range breaks
+	DEBUG(Q_FUNC_INFO << ", DONE")
 }
 
 void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, bool preview) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << "layer " << layerIndex)
 
 	int curveIndex = 1;
 	for (const auto& originCurve : layer.curves) {
@@ -1833,7 +1865,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 						DEBUG(Q_FUNC_INFO << ", legend curve string final = \"" << legendCurveString.toStdString() << "\"")
 
-						legendCurveString = legendCurveString.trimmed(); // remove leading and trailing whitspaces for curve name
+						legendCurveString = legendCurveString.trimmed(); // remove leading and trailing whitespaces for curve name
 						legendCurveString.remove(QRegularExpression(QStringLiteral("\\\\l\\(\\d+\\)"))); // remove left over "\l(X)" (TO)
 						if (!legendCurveString.isEmpty())
 							curveName = legendCurveString;
@@ -1845,6 +1877,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				DEBUG(Q_FUNC_INFO << ", curve name = \"" << curveName.toStdString() << "\", in legend = " << enableCurveInLegend)
 
 				if (type == Origin::GraphCurve::Line || type == Origin::GraphCurve::Scatter || type == Origin::GraphCurve::LineSymbol) {
+					DEBUG(Q_FUNC_INFO << ", line(symbol) or scatter curve")
 					auto* curve = new XYCurve(curveName);
 					childPlot = curve;
 					curve->setXColumnPath(xColumnPath);
@@ -1856,10 +1889,10 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 						curve->setLegendVisible(enableCurveInLegend);
 					}
 				} else { // error "curves"
-					// DEBUG(Q_FUNC_INFO << ", ERROR CURVE. curve index = " << curveIndex)
-					// find corresponing curve to add error column
+					DEBUG(Q_FUNC_INFO << ", ERROR CURVE. curve index = " << curveIndex)
+					// find corresponding curve to add error column
 					// we use the previous curve if it has the same y column
-					if (!preview) { // curves not available in preview
+					if (!preview && plot->childCount<XYCurve>() > 0) { // curves not available in preview
 						auto childIndex = plot->childCount<XYCurve>() - 1; // last curve
 						auto curve = plot->children<XYCurve>().at(childIndex);
 						if (xColumnPath == curve->yColumnPath()) { // TODO: only for reversed plots?
@@ -2072,6 +2105,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 		++curveIndex;
 	}
+
+	DEBUG(Q_FUNC_INFO << ", DONE")
 }
 
 void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
@@ -2307,20 +2342,23 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// axis title
 	if (axisFormat.label.shown) {
-		/*for (int i=0; i<axisFormat.label.text.size(); i++)
+		DEBUG(Q_FUNC_INFO << ", label text = \"" << axisFormat.label.text << "\"")
+		// debugging
+		/*
+		const auto length = axisFormat.label.text.size();
+		for (unsigned int i = 0; i < length; i++)
 			printf(" %c ", axisFormat.label.text.at(i));
 		printf("\n");
-		for (int i=0; i<axisFormat.label.text.size(); i++)
+		for (unsigned int i = 0; i < length; i++)
 			printf(" %02hhx", axisFormat.label.text.at(i));
 		printf("\n");
 		*/
-		QString titleText;
-		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
-			titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
-		else
-			titleText = parseOriginText(QString::fromStdString(axisFormat.label.text));
-		DEBUG(Q_FUNC_INFO << ", axis title string = " << STDSTRING(titleText));
-		DEBUG(Q_FUNC_INFO << ", column info = " << STDSTRING(columnInfo));
+
+		// OPJ axis label are always Latin1 encoded (see Bild_12)
+		// even in m_originFile->version() >= 9.5
+		QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text));
+		DEBUG(Q_FUNC_INFO << ", axis title string = \"" << STDSTRING(titleText) << "\"");
+		DEBUG(Q_FUNC_INFO << ", column info = \"" << STDSTRING(columnInfo) << "\"");
 
 		// if long name not defined: columnInfo contains column name (s.a.)
 		QString longName, unit, comments;
@@ -2350,9 +2388,9 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 		titleText.replace(QLatin1String("%(?X,@LU)"), unit);
 		titleText.replace(QLatin1String("%(?Y,@LU)"), unit);
 
-		DEBUG(Q_FUNC_INFO << ", axis title final = " << STDSTRING(titleText));
+		DEBUG(Q_FUNC_INFO << ", axis title final = \"" << STDSTRING(titleText) << "\"");
 
-		// use axisFormat.fontSize to override the global font size for the hmtl string
+		// use axisFormat.fontSize to override the global font size for the html string
 		DEBUG(Q_FUNC_INFO << ", axis font size = " << axisFormat.label.fontSize)
 		QTextEdit te(titleText);
 		te.selectAll();
@@ -2836,9 +2874,9 @@ void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symb
 
 	auto brush = symbol->brush();
 	auto pen = symbol->pen();
-	DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
+	DEBUG(Q_FUNC_INFO << ", OPJ symbol thickness = " << (int)originCurve.symbolThickness)
 	// border width (edge thickness in Origin) is given as percentage of the symbol radius
-	const double borderScaleFactor = 5.; // match size
+	const double borderScaleFactor = 0.6; // TUNING: match size
 	if (curve && originCurve.type == Origin::GraphCurve::LineSymbol) {
 		// symbol fill color
 		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
@@ -2862,7 +2900,7 @@ void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symb
 		} else
 			pen.setColor(color(originCurve.symbolColor));
 
-		DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
+		DEBUG(Q_FUNC_INFO << ", using border thickness = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
 		pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
 	} else if (curve && originCurve.type == Origin::GraphCurve::Scatter) {
 		// symbol color (uses originCurve.symbolColor)
@@ -2953,7 +2991,7 @@ QString OriginProjectParser::parseOriginText(const QString& str) const {
 		text.append(parseOriginTags(lines[i]));
 	}
 
-	DEBUG(Q_FUNC_INFO << ", PARSED TEXT = " << STDSTRING(text));
+	DEBUG(Q_FUNC_INFO << ", PARSED TEXT = \"" << STDSTRING(text) << "\"");
 
 	return text;
 }
@@ -3244,10 +3282,10 @@ QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const 
 
 QString OriginProjectParser::replaceSpecialChars(const QString& text) const {
 	QString t = text;
-	DEBUG(Q_FUNC_INFO << ", got " << t.toStdString())
+	DEBUG(Q_FUNC_INFO << ", got \"" << STDSTRING(t) << "\"")
 	for (const auto& r : charReplacementList())
 		t.replace(r.first, r.second);
-	DEBUG(Q_FUNC_INFO << ", now " << t.toStdString())
+	DEBUG(Q_FUNC_INFO << ", now \"" << STDSTRING(t) << "\"")
 	return t;
 }
 
@@ -3388,8 +3426,8 @@ QString greekSymbol(const QString& symbol) {
  * https://doc.qt.io/qt-5/richtext-html-subset.html
  */
 QString OriginProjectParser::parseOriginTags(const QString& str) const {
-	DEBUG(Q_FUNC_INFO << ", string = " << STDSTRING(str));
-	QDEBUG("	UTF8 string: " << str.toUtf8());
+	DEBUG(Q_FUNC_INFO << ", string = \"" << STDSTRING(str) << "\"");
+	QDEBUG(Q_FUNC_INFO << ", UTF8 string: " << str.toUtf8());
 	QString line = str;
 
 	// replace %(...) tags
@@ -3405,7 +3443,7 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	line.replace(QLatin1Char('\t'), QLatin1String("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
 
 	// In PCRE2 (which is what QRegularExpression uses) variable-length lookbehind is supposed to be
-	// exprimental in Perl 5.30; which means it doesn't work at the moment, i.e. using a variable-length
+	// experimental in Perl 5.30; which means it doesn't work at the moment, i.e. using a variable-length
 	// negative lookbehind isn't valid syntax from QRegularExpression POV.
 	// Ultimately we have to reverse the string and use a negative _lookahead_ instead.
 	// The goal is to temporatily replace '(' and ')' that don't denote tags; this is so that we
@@ -3466,7 +3504,7 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	// special characters
 	line.replace(QRegularExpression(QStringLiteral("\\\\\\((\\d+)\\)")), QLatin1String("&#\\1;"));
 
-	DEBUG("	result: " << STDSTRING(line));
+	DEBUG(Q_FUNC_INFO << ", result: \"" << STDSTRING(line) << "\"");
 
 	return line;
 }

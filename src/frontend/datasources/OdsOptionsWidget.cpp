@@ -32,11 +32,17 @@ OdsOptionsWidget::OdsOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget
 OdsOptionsWidget::~OdsOptionsWidget() {
 }
 
-void OdsOptionsWidget::updateContent(OdsFilter* filter, const QString& fileName) {
+/*!
+ * update the content of the preview using the filename
+ * returns false when parsing fails (not an ODS file)
+ */
+bool OdsOptionsWidget::updateContent(OdsFilter* filter, const QString& fileName) {
 	DEBUG(Q_FUNC_INFO)
 	ui.twDataRegions->clear();
 	auto* rootItem = ui.twDataRegions->invisibleRootItem();
-	filter->parse(fileName, rootItem);
+
+	if (! filter->parse(fileName, rootItem))
+		return false;
 
 	ui.twDataRegions->insertTopLevelItem(0, rootItem);
 	ui.twDataRegions->expandAll();
@@ -48,16 +54,18 @@ void OdsOptionsWidget::updateContent(OdsFilter* filter, const QString& fileName)
 			auto* sheet = tli->child(i);
 			if (sheet) {
 				ui.twDataRegions->setCurrentItem(sheet);
-				return;
+				return true;
 			}
 		}
 	}
+
+	return true;
 }
 
 void OdsOptionsWidget::sheetSelectionChanged() {
 	DEBUG(Q_FUNC_INFO)
 #ifdef HAVE_ORCUS
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 
 	const auto& selectedItems = ui.twDataRegions->selectedItems();
 	if (selectedItems.isEmpty()) {
@@ -97,7 +105,7 @@ void OdsOptionsWidget::sheetSelectionChanged() {
 		int colCount = 0;
 		const int maxColumns = 100;
 		for (int row = 0; row < rowCount; ++row) {
-			auto lineString = importedStrings.at(row);
+			const auto& lineString = importedStrings.at(row);
 			const int size = lineString.size();
 			colCount = std::min(maxColumns, size);
 			if (row == 0) {
@@ -129,8 +137,6 @@ void OdsOptionsWidget::sheetSelectionChanged() {
 		}
 		ui.twPreview->resizeColumnsToContents();
 	}
-
-	RESET_CURSOR;
 #endif
 }
 

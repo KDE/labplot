@@ -9,6 +9,7 @@
 */
 #include "backend/datasources/MQTTTopic.h"
 
+#include "backend/core/column/Column.h"
 #include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/filters/AsciiFilter.h"
@@ -34,34 +35,19 @@ MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool l
 	, m_topicName(name)
 	, m_MQTTClient(subscription->mqttClient())
 	, m_filter(new AsciiFilter) {
-	auto mainFilter = m_MQTTClient->filter();
-
-	m_filter->setAutoModeEnabled(mainFilter->isAutoModeEnabled());
-	if (!mainFilter->isAutoModeEnabled()) {
-		m_filter->setCommentCharacter(mainFilter->commentCharacter());
-		m_filter->setSeparatingCharacter(mainFilter->separatingCharacter());
-		m_filter->setDateTimeFormat(mainFilter->dateTimeFormat());
-		m_filter->setCreateIndexEnabled(mainFilter->createIndexEnabled());
-		m_filter->setCreateTimestampEnabled(mainFilter->createTimestampEnabled());
-		m_filter->setSimplifyWhitespacesEnabled(mainFilter->simplifyWhitespacesEnabled());
-		m_filter->setNaNValueToZero(mainFilter->NaNValueToZeroEnabled());
-		m_filter->setRemoveQuotesEnabled(mainFilter->removeQuotesEnabled());
-		m_filter->setSkipEmptyParts(mainFilter->skipEmptyParts());
-		m_filter->setHeaderEnabled(mainFilter->isHeaderEnabled());
-		QString vectorNames;
-		const QStringList& filterVectorNames = mainFilter->vectorNames();
-		for (int i = 0; i < filterVectorNames.size(); ++i) {
-			vectorNames.append(filterVectorNames.at(i));
-			if (i != vectorNames.size() - 1)
-				vectorNames.append(QLatin1String(" "));
+	// Set topic name as column name
+	auto properties = m_MQTTClient->filter()->properties();
+	if (properties.columnModes.size() != 0) {
+		properties.columnNames.clear();
+		for (int i = 0; i < properties.columnModes.size(); i++) {
+			if (properties.endColumn > 0 && i >= (properties.endColumn - properties.startColumn + 1))
+				break;
+			properties.columnNames.append(i18n("%1 %2").arg(m_topicName).arg(QString::number(i + 1)));
 		}
-
-		m_filter->setVectorNames(vectorNames);
-		m_filter->setStartRow(mainFilter->startRow());
-		m_filter->setEndRow(mainFilter->endRow());
-		m_filter->setStartColumn(mainFilter->startColumn());
-		m_filter->setEndColumn(mainFilter->endColumn());
 	}
+
+	m_filter->initialize(properties);
+	m_filter->setDataSource(this);
 
 	connect(m_MQTTClient, &MQTTClient::readFromTopics, this, &MQTTTopic::read);
 	qDebug() << "New MqttTopic: " << m_topicName;
@@ -126,8 +112,8 @@ QWidget* MQTTTopic::view() const {
 /*!
  *\brief Adds a message received by the topic to the message puffer
  */
-void MQTTTopic::newMessage(const QString& message) {
-	m_messagePuffer.push_back(message);
+void MQTTTopic::newMessage(const QMqttMessage& msg) {
+	m_messagePuffer.push_back(msg);
 }
 
 /*!
@@ -170,36 +156,10 @@ void MQTTTopic::plotData() {
 void MQTTTopic::read() {
 	while (!m_messagePuffer.isEmpty()) {
 		qDebug() << "Reading from topic " << m_topicName;
-		const QString tempMessage = m_messagePuffer.takeFirst();
-		m_filter->readMQTTTopic(tempMessage, this);
-		finalizeRead();
-	}
-}
-
-/*!
- * notify all affected columns and plots about the changes.
- * this is simililar to \sa Spreadsheet::finalizeImport().
- */
-void MQTTTopic::finalizeRead() {
-	PERFTRACE(QLatin1String("AsciiLiveDataImport, notify affected columns and plots"));
-
-	// determine the dependent plots
-	QVector<CartesianPlot*> plots;
-	const auto& columns = children<Column>();
-	for (auto* column : columns)
-		column->addUsedInPlots(plots);
-
-	// suppress retransform in the dependent plots
-	for (auto* plot : plots)
-		plot->setSuppressRetransform(true);
-
-	for (auto* column : columns)
-		column->setChanged();
-
-	// retransform the dependent plots
-	for (auto* plot : plots) {
-		plot->setSuppressRetransform(false);
-		plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated!
+		auto msg = m_messagePuffer.takeFirst();
+		BufferReader reader(msg.payload());
+		m_filter
+			->readFromDevice(reader, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, -1, this->mqttClient()->keepNValues());
 	}
 }
 
@@ -217,11 +177,11 @@ void MQTTTopic::save(QXmlStreamWriter* writer) const {
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
 	writer->writeAttribute(QStringLiteral("topicName"), m_topicName);
-	writer->writeAttribute(QStringLiteral("filterPrepared"), QString::number(m_filter->isPrepared()));
-	writer->writeAttribute(QStringLiteral("filterSeparator"), m_filter->separator());
+	writer->writeAttribute(QStringLiteral("filterPrepared"), QString::number(m_filter->initialized()));
+	writer->writeAttribute(QStringLiteral("filterSeparator"), m_filter->properties().separator);
 	writer->writeAttribute(QStringLiteral("messagePufferSize"), QString::number(m_messagePuffer.size()));
 	for (int i = 0; i < m_messagePuffer.count(); ++i)
-		writer->writeAttribute(QStringLiteral("message") + QString::number(i), m_messagePuffer[i]);
+		writer->writeAttribute(QStringLiteral("message") + QString::number(i), m_messagePuffer[i].payload());
 	writer->writeEndElement();
 
 	// filter
@@ -295,8 +255,8 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 				str = attribs.value(QStringLiteral("message") + QString::number(i)).toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'message") + QString::number(i) + QLatin1Char('\'')));
-				else
-					m_messagePuffer.push_back(str);
+				// else
+				// 	m_messagePuffer.push_back(QMqttMessage(m_topicName, str.data(), ));
 			}
 		} else if (reader->name() == QLatin1String("asciiFilter")) {
 			if (!m_filter->load(reader))
@@ -317,7 +277,31 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	// prepare filter for reading
-	m_filter->setPreparedForMQTT(isFilterPrepared, this, separator);
+	if (isFilterPrepared) {
+		auto p = m_filter->defaultProperties();
+
+		p.separator = separator;
+		p.columnModes.resize(columnCount());
+		for (int i = 0; i < columnCount(); ++i)
+			p.columnModes[i] = column(i)->columnMode();
+		p.endRow = rowCount(); // TODO: correct?
+
+		// if (prepared) {
+		// 	m_separator = separator;
+		// 	m_actualCols = endColumn - startColumn + 1;
+		// 	m_actualRows = this->rowCount();
+		// 	// set the column modes
+		// 	columnModes.resize(this->columnCount());
+		// 	for (int i = 0; i < this->columnCount(); ++i)
+		// 		columnModes[i] = this->column(i)->columnMode();
+
+		// 		   // set the data containers
+		// 	m_dataContainer.resize(m_actualCols);
+		// 	initDataContainer(this);
+		// }
+		m_filter->initialize(p);
+		// m_filter->setPreparedForMQTT(isFilterPrepared, this, separator);
+	}
 
 	return !reader->hasError();
 }

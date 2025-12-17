@@ -22,7 +22,14 @@ class ProjectPrivate;
 class QMimeData;
 class QString;
 
+Project* project();
+
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Project : public Folder {
+#else
 class Project : public Folder {
+#endif
 	Q_OBJECT
 
 public:
@@ -32,7 +39,7 @@ public:
 	Project();
 	~Project() override;
 
-	virtual const Project* project() const {
+	const Project* project() const override {
 		return this;
 	}
 	Project* project() override {
@@ -54,6 +61,8 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, dockWidgetState, DockWidgetState)
 	BASIC_D_ACCESSOR_DECL(bool, saveDefaultDockWidgetState, SaveDefaultDockWidgetState)
 	CLASS_D_ACCESSOR_DECL(QString, defaultDockWidgetState, DefaultDockWidgetState)
+	BASIC_D_ACCESSOR_DECL(bool, fileCompression, FileCompression)
+	BASIC_D_ACCESSOR_DECL(bool, saveData, SaveData)
 
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
@@ -64,7 +73,9 @@ public:
 	void save(const QPixmap&, QXmlStreamWriter*);
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
+#ifndef SDK
 	bool loadNotebook(const QString&);
+#endif
 	static void restorePointers(AbstractAspect*);
 	static void retransformElements(AbstractAspect*);
 
@@ -106,6 +117,7 @@ private:
 	void updateSpreadsheetDependencies(const Spreadsheet*) const;
 	bool readProjectAttributes(XmlStreamReader*);
 	void save(QXmlStreamWriter*) const override;
+	static Project* currentProject;
 
 	template<typename T>
 	void updateDependencies(const QVector<const AbstractAspect*>);
@@ -115,6 +127,7 @@ private:
 	friend class AbstractAspect;
 	friend class MainWin;
 	friend class ImportDialog;
+	friend Project* project();
 };
 
 #endif // ifndef PROJECT_H

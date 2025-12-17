@@ -3,18 +3,14 @@
 	Project              : LabPlot
 	Description          : settings page for Datasets
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SettingsDatasetsPage.h"
-#include "backend/core/Settings.h"
-#include "backend/lib/macros.h"
 #include "frontend/GuiTools.h"
-#include "frontend/SettingsPage.h"
 
 #include <KConfigGroup>
-#include <KLocalizedString>
 #include <QDir>
 #include <QDirIterator>
 #include <QMessageBox>
@@ -36,8 +32,6 @@ SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent)
 	ui.lKaggleUrl->setTextInteractionFlags(Qt::TextBrowserInteraction);
 	ui.lKaggleUrl->setOpenExternalLinks(true);
 
-	loadSettings();
-
 	connect(ui.bClearCache, &QPushButton::clicked, this, &SettingsDatasetsPage::clearCache);
 	connect(ui.leKagglePath, &QLineEdit::textChanged, [&] {
 		m_changed = true;
@@ -46,16 +40,20 @@ SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent)
 		GuiTools::highlight(ui.leKagglePath, invalid);
 		Q_EMIT settingsChanged();
 	});
+
+	loadSettings();
 }
 
-bool SettingsDatasetsPage::applySettings() {
-	DEBUG(Q_FUNC_INFO)
+QList<Settings::Type> SettingsDatasetsPage::applySettings() {
+	QList<Settings::Type> changes;
 	if (!m_changed)
-		return false;
+		return changes;
 
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_Datasets"));
 	group.writeEntry(QLatin1String("KaggleCLIPath"), ui.leKagglePath->text());
-	return true;
+
+	changes << Settings::Type::Datasets;
+	return changes;
 }
 
 void SettingsDatasetsPage::restoreDefaults() {
@@ -86,9 +84,8 @@ void SettingsDatasetsPage::loadSettings() {
 		}
 		ui.lFiles->setText(i18n("Files - %1", count));
 
-		if (count > 0) {
+		if (count > 0)
 			ui.bClearCache->setEnabled(true);
-		}
 
 		const auto numberLocale = QLocale();
 		QString sizeStr;

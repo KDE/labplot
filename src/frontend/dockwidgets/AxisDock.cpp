@@ -3,16 +3,13 @@
 	Project              : LabPlot
 	Description          : axes widget class
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2024 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "AxisDock.h"
-#include "backend/core/column/Column.h"
-#include "backend/lib/macros.h"
-#include "backend/worksheet/Worksheet.h"
-#include "frontend/GuiTools.h"
+#include "backend/core/AbstractColumn.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/DateTimeSpinBox.h"
 #include "frontend/widgets/LabelWidget.h"
@@ -21,15 +18,9 @@
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <KConfig>
-#include <KLineEdit>
-#include <KLocalizedString>
-#include <KMessageBox>
 
-#include <QDir>
 #include <QPainter>
-#include <QTimer>
 
-#include "backend/nsl/nsl_math.h"
 #include <gsl/gsl_math.h>
 
 namespace {
@@ -40,8 +31,6 @@ enum PositionAlignmentComboBoxIndex {
 	Logical = 3,
 };
 }
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 /*!
  \class AxisDock
@@ -118,7 +107,11 @@ AxisDock::AxisDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
-	init();
+	ui.cbLabelsDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
+	ui.cbArrowType->setIconSize(QSize(20, 20));
+
+	updateLocale();
+	retranslateUi();
 
 	//**********************************  Slots **********************************************
 
@@ -211,7 +204,7 @@ AxisDock::AxisDock(QWidget* parent)
 	// template handler
 	auto* frame = new QFrame(this);
 	auto* hlayout = new QHBoxLayout(frame);
-	hlayout->setContentsMargins(0, 11, 0, 11);
+	hlayout->setContentsMargins(0, 0, 0, 0);
 
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("Axis"));
 	hlayout->addWidget(templateHandler);
@@ -224,16 +217,17 @@ AxisDock::AxisDock(QWidget* parent)
 
 AxisDock::~AxisDock() = default;
 
-void AxisDock::init() {
+void AxisDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
-	// TODO move this stuff to retranslateUI()
+	ui.cbPosition->clear();
 	ui.cbPosition->addItem(i18n("Top")); // Left
 	ui.cbPosition->addItem(i18n("Bottom")); // Right
 	ui.cbPosition->addItem(i18n("Centered"));
 	ui.cbPosition->addItem(i18n("Logical"));
 
 	// range types
+	ui.cbRangeType->clear();
 	ui.cbRangeType->addItem(i18n("Auto"));
 	ui.cbRangeType->addItem(i18n("Auto Data"));
 	ui.cbRangeType->addItem(i18n("Custom"));
@@ -248,15 +242,19 @@ void AxisDock::init() {
 	ui.lRangeType->setToolTip(msg);
 	ui.cbRangeType->setToolTip(msg);
 
+	ui.cbMajorTicksAutoNumber->setToolTip(i18n("If enabled: Use the major tick number as base to determine the new number of ticks for nice looking values. The number of ticks might be different than the number previously set."));
+
 	// scales
+	ui.cbScale->clear();
 	for (const auto& name : RangeT::scaleNames)
 		ui.cbScale->addItem(name.toString());
 
+	ui.cbOrientation->clear();
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
 	// Arrows
-	ui.cbArrowType->setIconSize(QSize(20, 20));
+	ui.cbArrowType->clear();
 	ui.cbArrowType->addItem(i18n("No arrow"));
 	ui.cbArrowType->addItem(i18n("Simple, Small"));
 	ui.cbArrowType->addItem(i18n("Simple, Big"));
@@ -264,43 +262,54 @@ void AxisDock::init() {
 	ui.cbArrowType->addItem(i18n("Filled, Big"));
 	ui.cbArrowType->addItem(i18n("Semi-filled, Small"));
 	ui.cbArrowType->addItem(i18n("Semi-filled, Big"));
+	if (m_axis)
+		updateArrowLineColor(m_axis->line()->color()); // call this to re-create the icons after the retranslate
 
+	ui.cbArrowPosition->clear();
 	ui.cbArrowPosition->addItem(i18n("Left"));
 	ui.cbArrowPosition->addItem(i18n("Right"));
 	ui.cbArrowPosition->addItem(i18n("Both"));
 
+	ui.cbMajorTicksDirection->clear();
 	ui.cbMajorTicksDirection->addItem(i18n("None"));
 	ui.cbMajorTicksDirection->addItem(i18n("In"));
 	ui.cbMajorTicksDirection->addItem(i18n("Out"));
 	ui.cbMajorTicksDirection->addItem(i18n("In and Out"));
 
+	ui.cbMajorTicksType->clear();
 	ui.cbMajorTicksType->addItem(i18n("Number"), (int)Axis::TicksType::TotalNumber);
 	ui.cbMajorTicksType->addItem(i18n("Spacing"), (int)Axis::TicksType::Spacing);
 	ui.cbMajorTicksType->addItem(i18n("Custom column"), (int)Axis::TicksType::CustomColumn);
 	ui.cbMajorTicksType->addItem(i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
 
+	ui.cbMajorTicksStartType->clear();
 	ui.cbMajorTicksStartType->addItem(i18n("Absolute Value"));
 	ui.cbMajorTicksStartType->addItem(i18n("Offset"));
 
+	ui.cbMinorTicksDirection->clear();
 	ui.cbMinorTicksDirection->addItem(i18n("None"));
 	ui.cbMinorTicksDirection->addItem(i18n("In"));
 	ui.cbMinorTicksDirection->addItem(i18n("Out"));
 	ui.cbMinorTicksDirection->addItem(i18n("In and Out"));
 
-	ui.cbMinorTicksType->addItem(i18n("Number"));
-	ui.cbMinorTicksType->addItem(i18n("Spacing"));
-	ui.cbMinorTicksType->addItem(i18n("Custom column"));
-	// ui.cbMinorTicksType->addItem(i18n("Column labels"));
+	ui.cbMinorTicksType->clear();
+	ui.cbMinorTicksType->addItem(i18n("Number"), (int)Axis::TicksType::TotalNumber);
+	ui.cbMinorTicksType->addItem(i18n("Spacing"), (int)Axis::TicksType::Spacing);
+	ui.cbMinorTicksType->addItem(i18n("Custom column"), (int)Axis::TicksType::CustomColumn);
+	// ui.cbMinorTicksType->addItem(i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
 
 	// labels
+	ui.cbLabelsPosition->clear();
 	ui.cbLabelsPosition->addItem(i18n("No labels"));
 	ui.cbLabelsPosition->addItem(i18n("Top"));
 	ui.cbLabelsPosition->addItem(i18n("Bottom"));
 
+	ui.cbLabelsTextType->clear();
 	ui.cbLabelsTextType->addItem(i18n("Position values"), (int)Axis::LabelsTextType::PositionValues);
 	ui.cbLabelsTextType->addItem(i18n("Custom column"), (int)Axis::LabelsTextType::CustomValues);
 
 	// see Axis::labelsFormatToIndex() and Axis::indexToLabelsFormat()
+	ui.cbLabelsFormat->clear();
 	ui.cbLabelsFormat->addItem(i18n("Decimal notation"));
 	ui.cbLabelsFormat->addItem(i18n("Scientific notation"));
 	ui.cbLabelsFormat->addItem(i18n("Scientific E notation"));
@@ -309,10 +318,12 @@ void AxisDock::init() {
 	ui.cbLabelsFormat->addItem(i18n("Powers of e"));
 	ui.cbLabelsFormat->addItem(i18n("Multiples of π"));
 
-	ui.cbLabelsDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
-
+	ui.cbLabelsBackgroundType->clear();
 	ui.cbLabelsBackgroundType->addItem(i18n("Transparent"));
 	ui.cbLabelsBackgroundType->addItem(i18n("Color"));
+
+	labelWidget->retranslateUi();
+	// TODO: lineWidget->retranslateUi();
 }
 
 void AxisDock::setModel() {
@@ -441,7 +452,7 @@ void AxisDock::initConnections() {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void AxisDock::updateLocale() {
 	const auto numberLocale = QLocale();
@@ -510,7 +521,7 @@ void AxisDock::updatePlotRangeList() {
 	if (m_axis->coordinateSystemCount() == 0)
 		return;
 
-	Axis::Orientation orientation = m_axis->orientation();
+	auto orientation = m_axis->orientation();
 	Range<double> logicalRange;
 	if (orientation == Axis::Orientation::Horizontal)
 		logicalRange = m_axis->plot()->range(Dimension::Y, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Dimension::Y));
@@ -712,8 +723,6 @@ void AxisDock::rangeTypeChanged(int index) {
 
 	for (auto* axis : m_axesList)
 		axis->setRangeType(rangeType);
-
-	updateLocale(); // update values
 }
 
 void AxisDock::startChanged(double value) {
@@ -918,12 +927,9 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	ui.cbMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksAutoNumber->setEnabled(b);
 
-	if (b) {
-		if (ui.cbMajorTicksAutoNumber->isChecked())
-			ui.sbMajorTicksNumber->setEnabled(false);
-		else
-			ui.sbMajorTicksNumber->setEnabled(true);
-	} else
+	if (b)
+		ui.sbMajorTicksNumber->setEnabled(true);
+	else
 		ui.sbMajorTicksNumber->setEnabled(false);
 
 	ui.sbMajorTicksSpacingNumeric->setEnabled(b);
@@ -1046,7 +1052,6 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 void AxisDock::majorTicksAutoNumberChanged(int state) {
 	bool automatic = (state == Qt::CheckState::Checked ? true : false);
-	ui.sbMajorTicksNumber->setEnabled(!automatic);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -1480,7 +1485,7 @@ void AxisDock::labelsFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 
 	QFont labelsFont = font;
-	labelsFont.setPixelSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
+	labelsFont.setPointSizeF(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
 	for (auto* axis : m_axesList)
 		axis->setLabelsFont(labelsFont);
 }
@@ -1657,7 +1662,7 @@ void AxisDock::axisMajorTicksDirectionChanged(Axis::TicksDirection direction) {
 void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
 	CONDITIONAL_LOCK_RETURN;
 	const int index = ui.cbMajorTicksType->findData((int)type);
-	ui.cbMajorTicksType->itemData(index);
+	ui.cbMajorTicksType->setCurrentIndex(index);
 }
 void AxisDock::axisMajorTicksAutoNumberChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1690,11 +1695,11 @@ void AxisDock::axisMajorTicksStartValueChanged(qreal value) {
 }
 void AxisDock::axisMajorTicksColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbMajorTicksColumn->setColumn(column, m_axis->majorTicksColumnPath());
+	cbMajorTicksColumn->setAspect(column, m_axis->majorTicksColumnPath());
 }
 void AxisDock::axisMajorTicksLengthChanged(qreal length) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point));
+	ui.sbMajorTicksLength->setValue(std::round(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point)));
 }
 
 // minor ticks
@@ -1704,7 +1709,8 @@ void AxisDock::axisMinorTicksDirectionChanged(Axis::TicksDirection direction) {
 }
 void AxisDock::axisMinorTicksTypeChanged(Axis::TicksType type) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbMinorTicksType->setCurrentIndex(static_cast<int>(type));
+	const int index = ui.cbMinorTicksType->findData((int)type);
+	ui.cbMinorTicksType->setCurrentIndex(index);
 }
 void AxisDock::axisMinorTicksAutoNumberChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1723,11 +1729,11 @@ void AxisDock::axisMinorTicksSpacingChanged(qreal increment) {
 }
 void AxisDock::axisMinorTicksColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbMinorTicksColumn->setColumn(column, m_axis->minorTicksColumnPath());
+	cbMinorTicksColumn->setAspect(column, m_axis->minorTicksColumnPath());
 }
 void AxisDock::axisMinorTicksLengthChanged(qreal length) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbMinorTicksLength->setValue(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point));
+	ui.sbMinorTicksLength->setValue(std::round(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point)));
 }
 
 // labels
@@ -1770,13 +1776,13 @@ void AxisDock::axisLabelsTextTypeChanged(Axis::LabelsTextType type) {
 }
 void AxisDock::axisLabelsTextColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbLabelsTextColumn->setColumn(column, m_axis->labelsTextColumnPath());
+	cbLabelsTextColumn->setAspect(column, m_axis->labelsTextColumnPath());
 }
 void AxisDock::axisLabelsFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 	// we need to set the font size in points for KFontRequester
 	QFont newFont(font);
-	newFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	newFont.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelsFont->setFont(newFont);
 }
 void AxisDock::axisLabelsFontColorChanged(const QColor& color) {
@@ -1802,7 +1808,7 @@ void AxisDock::axisLabelsSuffixChanged(const QString& suffix) {
 }
 void AxisDock::axisLabelsOpacityChanged(qreal opacity) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbLabelsOpacity->setValue(round(opacity * 100.0));
+	ui.sbLabelsOpacity->setValue(std::round(opacity * 100.));
 }
 
 void AxisDock::updateMajorTicksStartType(bool visible) {
@@ -1941,7 +1947,6 @@ void AxisDock::load() {
 	ui.cbMajorTicksDirection->setCurrentIndex((int)m_axis->majorTicksDirection());
 	ui.cbMajorTicksType->setCurrentIndex(ui.cbMajorTicksType->findData((int)m_axis->majorTicksType()));
 	ui.cbMajorTicksAutoNumber->setChecked(m_axis->majorTicksAutoNumber());
-	ui.sbMajorTicksNumber->setEnabled(!m_axis->majorTicksAutoNumber());
 
 	ui.sbMajorTicksNumber->setValue(m_axis->majorTicksNumber());
 	auto value{m_axis->majorTicksSpacing()};
@@ -1956,7 +1961,7 @@ void AxisDock::load() {
 	dtsbMajorTicksDateTimeStartOffset->setValue(m_axis->majorTickStartOffset());
 	ui.sbMajorTickStartValue->setValue(m_axis->majorTickStartValue());
 	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(m_axis->majorTickStartValue());
-	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(m_axis->majorTicksLength(), Worksheet::Unit::Point));
+	ui.sbMajorTicksLength->setValue(std::round(Worksheet::convertFromSceneUnits(m_axis->majorTicksLength(), Worksheet::Unit::Point)));
 
 	// Minor ticks
 	ui.cbMinorTicksDirection->setCurrentIndex((int)m_axis->minorTicksDirection());
@@ -1964,7 +1969,7 @@ void AxisDock::load() {
 	ui.cbMinorTicksAutoNumber->setChecked(m_axis->minorTicksAutoNumber());
 	ui.sbMinorTicksNumber->setEnabled(!m_axis->minorTicksAutoNumber());
 	ui.sbMinorTicksNumber->setValue(m_axis->minorTicksNumber());
-	ui.sbMinorTicksLength->setValue(Worksheet::convertFromSceneUnits(m_axis->minorTicksLength(), Worksheet::Unit::Point));
+	ui.sbMinorTicksLength->setValue(std::round(Worksheet::convertFromSceneUnits(m_axis->minorTicksLength(), Worksheet::Unit::Point)));
 
 	// Extra ticks
 	// TODO
@@ -1984,14 +1989,14 @@ void AxisDock::load() {
 
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
-	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelsFont->setFont(font);
 	ui.kcbLabelsFontColor->setColor(m_axis->labelsColor());
 	ui.cbLabelsBackgroundType->setCurrentIndex((int)m_axis->labelsBackgroundType());
 	ui.kcbLabelsBackgroundColor->setColor(m_axis->labelsBackgroundColor());
 	ui.leLabelsPrefix->setText(m_axis->labelsPrefix());
 	ui.leLabelsSuffix->setText(m_axis->labelsSuffix());
-	ui.sbLabelsOpacity->setValue(round(m_axis->labelsOpacity() * 100.0));
+	ui.sbLabelsOpacity->setValue(std::round(m_axis->labelsOpacity() * 100.));
 
 	majorTicksDirectionChanged(ui.cbMajorTicksDirection->currentIndex());
 	majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
@@ -2035,7 +2040,7 @@ void AxisDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void AxisDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QStringLiteral("Axis"));
+	auto group = config.group(QStringLiteral("Axis"));
 
 	// General
 	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_axis->orientation()));
@@ -2059,8 +2064,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.chkShowScaleOffset->setChecked(group.readEntry(QStringLiteral("ShowScaleOffset"), static_cast<int>(m_axis->showScaleOffset())));
 
 	// Title
-	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
-	labelWidget->loadConfig(axisLabelGroup);
+	auto axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
+	labelWidget->loadConfig(axisTitleGroup);
 
 	// Line
 	lineWidget->loadConfig(group);
@@ -2088,20 +2093,20 @@ void AxisDock::loadConfig(KConfig& config) {
 	const auto majorTickStartValue = group.readEntry(QStringLiteral("MajorTickStartValue"), m_axis->majorTickStartValue());
 	ui.sbMajorTickStartValue->setValue(majorTickStartValue);
 	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(majorTickStartValue);
-	ui.sbMajorTicksLength->setValue(
-		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("MajorTicksLength"), m_axis->majorTicksLength()), Worksheet::Unit::Point));
+	ui.sbMajorTicksLength->setValue(std::round(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("MajorTicksLength"), m_axis->majorTicksLength()), Worksheet::Unit::Point)));
 	majorTicksLineWidget->loadConfig(group);
 
 	// Minor ticks
 	ui.cbMinorTicksDirection->setCurrentIndex(group.readEntry(QStringLiteral("MinorTicksDirection"), (int)m_axis->minorTicksDirection()));
-	ui.cbMinorTicksType->setCurrentIndex(group.readEntry(QStringLiteral("MinorTicksType"), (int)m_axis->minorTicksType()));
+	ui.cbMinorTicksType->setCurrentIndex(ui.cbMinorTicksType->findData(group.readEntry(QStringLiteral("MajorTicksType"), (int)m_axis->minorTicksType())));
 	ui.sbMinorTicksNumber->setValue(group.readEntry(QStringLiteral("MinorTicksNumber"), m_axis->minorTicksNumber()));
 	value = group.readEntry(QStringLiteral("MinorTicksIncrement"), m_axis->minorTicksSpacing());
 	if (numeric)
 		ui.sbMinorTicksSpacingNumeric->setValue(value);
 	else
 		dtsbMinorTicksIncrement->setValue(value);
-	ui.sbMinorTicksLength->setValue(Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksLength", m_axis->minorTicksLength()), Worksheet::Unit::Point));
+	ui.sbMinorTicksLength->setValue(std::round(Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksLength", m_axis->minorTicksLength()), Worksheet::Unit::Point)));
 	minorTicksLineWidget->loadConfig(group);
 
 	// Extra ticks
@@ -2121,7 +2126,7 @@ void AxisDock::loadConfig(KConfig& config) {
 
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
-	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelsFont->setFont(group.readEntry(QStringLiteral("LabelsFont"), font));
 
 	ui.kcbLabelsFontColor->setColor(group.readEntry(QStringLiteral("LabelsFontColor"), m_axis->labelsColor()));
@@ -2129,7 +2134,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.kcbLabelsBackgroundColor->setColor(group.readEntry(QStringLiteral("LabelsBackgroundColor"), m_axis->labelsBackgroundColor()));
 	ui.leLabelsPrefix->setText(group.readEntry(QStringLiteral("LabelsPrefix"), m_axis->labelsPrefix()));
 	ui.leLabelsSuffix->setText(group.readEntry(QStringLiteral("LabelsSuffix"), m_axis->labelsSuffix()));
-	ui.sbLabelsOpacity->setValue(round(group.readEntry(QStringLiteral("LabelsOpacity"), m_axis->labelsOpacity()) * 100.0));
+	ui.sbLabelsOpacity->setValue(std::round(group.readEntry(QStringLiteral("LabelsOpacity"), m_axis->labelsOpacity()) * 100.));
 
 	// Grid
 	majorGridLineWidget->loadConfig(group);
@@ -2141,10 +2146,11 @@ void AxisDock::loadConfig(KConfig& config) {
 }
 
 void AxisDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group(QStringLiteral("Axis"));
+	auto group = config.group(QStringLiteral("Axis"));
 
 	// General
-	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
+	auto orientation = (WorksheetElement::Orientation)ui.cbOrientation->currentIndex();
+	group.writeEntry(QStringLiteral("Orientation"), (int)orientation);
 
 	if (ui.cbPosition->currentIndex() == 2) {
 		group.writeEntry(QStringLiteral("Position"), static_cast<int>(Axis::Position::Centered));
@@ -2167,9 +2173,18 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("ScalingFactor"), ui.sbScalingFactor->value());
 	group.writeEntry(QStringLiteral("ShowScaleOffset"), ui.chkShowScaleOffset->isChecked());
 
-	// Title
-	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
-	labelWidget->saveConfig(axisLabelGroup);
+	// BOOKMARK(axis title): Title
+	auto axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
+	labelWidget->saveConfig(axisTitleGroup);
+	// additionally save rotation for x and y separately to allow independent values
+	if (orientation == Axis::Orientation::Horizontal)
+		axisTitleGroup.writeEntry(QStringLiteral("RotationX"), labelWidget->ui.sbRotation->value());
+	else {
+		axisTitleGroup.writeEntry(QStringLiteral("RotationY"), labelWidget->ui.sbRotation->value());
+	}
+	// reset rotation used by the other axis (only used when other axis not saved)
+	// see Axis.cpp:BOOKMARK(axis title)
+	axisTitleGroup.writeEntry(QStringLiteral("Rotation"), 0);
 
 	// Line
 	lineWidget->saveConfig(group);
@@ -2178,7 +2193,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("MajorTicksDirection"), ui.cbMajorTicksDirection->currentIndex());
 	group.writeEntry(QStringLiteral("MajorTicksType"), ui.cbMajorTicksType->itemData(ui.cbMajorTicksType->currentIndex()));
 	group.writeEntry(QStringLiteral("MajorTicksNumber"), ui.sbMajorTicksNumber->value());
-	bool numeric = m_axis->isNumeric();
+	const bool numeric = m_axis->isNumeric();
 	if (numeric)
 		group.writeEntry(QStringLiteral("MajorTicksIncrement"), QString::number(ui.sbMajorTicksSpacingNumeric->value()));
 	else
@@ -2202,7 +2217,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 		group.writeEntry(QStringLiteral("MinorTicksIncrement"), QString::number(ui.sbMinorTicksSpacingNumeric->value()));
 	else
 		group.writeEntry(QStringLiteral("MinorTicksIncrement"), QString::number(dtsbMinorTicksIncrement->value()));
-	group.writeEntry(QStringLiteral("MinorTicksLength"), Worksheet::convertFromSceneUnits(ui.sbMinorTicksLength->value(), Worksheet::Unit::Point));
+	group.writeEntry(QStringLiteral("MinorTicksLength"), Worksheet::convertToSceneUnits(ui.sbMinorTicksLength->value(), Worksheet::Unit::Point));
 	minorTicksLineWidget->saveConfig(group);
 
 	// Extra ticks

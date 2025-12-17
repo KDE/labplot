@@ -1,7 +1,7 @@
 /*
 	File             : EquationHighlighter.h
 	Project          : LabPlot
-	Description      : syntax highligher for mathematical equations
+	Description      : syntax highlighter for mathematical equations
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2006 David Saxton <david@bluehaze.org>

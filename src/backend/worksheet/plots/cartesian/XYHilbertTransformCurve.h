@@ -17,12 +17,17 @@ extern "C" {
 
 class XYHilbertTransformCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYHilbertTransformCurve : public XYAnalysisCurve {
+#else
 class XYHilbertTransformCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
 	struct TransformData {
-		TransformData(){};
+		TransformData() { };
 
 		nsl_hilbert_result_type type{nsl_hilbert_result_imag};
 		bool autoRange{true}; // use all data?
@@ -33,7 +38,6 @@ public:
 	explicit XYHilbertTransformCurve(const QString& name);
 	~XYHilbertTransformCurve() override;
 
-	void recalculate() override;
 	virtual const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

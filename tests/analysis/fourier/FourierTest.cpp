@@ -9,9 +9,14 @@
 */
 
 #include "FourierTest.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
-// #include "backend/worksheet/plots/cartesian/XYFourierFilterCurvePrivate.h"
 
 // ##############################################################################
 
@@ -56,6 +61,35 @@ const QString dataPath = QStringLiteral("data/"); // relative path
 			f.write(QStringLiteral("%1,%2,%3,%4\n").arg(xData.at(i)).arg(yData.at(i)).arg(filteredDataRef.at(i)).arg(filteredData.at(i)).toLatin1());          \
 		}                                                                                                                                                      \
 	} while (false);
+
+void FourierTest::addCurve() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("sheet"));
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+	sheet->column(0)->setName(QStringLiteral("x"));
+	sheet->column(1)->setName(QStringLiteral("y"));
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+
+	curve->d_func()->setSelected(true);
+	QCOMPARE(plot->currentCurve(), curve);
+
+	plot->addFourierFilterCurve(); // Should not crash and curve should be assigned accordingly
+
+	const auto& analysisCurves = plot->children<XYAnalysisCurve>();
+	QCOMPARE(analysisCurves.count(), 1);
+
+	QCOMPARE(analysisCurves.at(0)->d_func()->dataSourceCurve, curve);
+}
 
 void FourierTest::lowPassButterWorth() {
 	const QString filename = QStringLiteral("butterworth.csv");

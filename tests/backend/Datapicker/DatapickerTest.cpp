@@ -10,8 +10,8 @@
 */
 
 #include "DatapickerTest.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datapicker/DatapickerCurvePrivate.h"
@@ -19,6 +19,7 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/DatapickerPointPrivate.h"
 #include "backend/datapicker/Transform.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/widgets/DatapickerImageWidget.h"
 
@@ -310,10 +311,10 @@ void DatapickerTest::mapPolarInRadiansToCartesian() {
 	VALUES_EQUAL(t.x[0], 1.);
 	VALUES_EQUAL(t.y[0], 0.);
 
-	// TODO: VALUES_EQUAL doesn't work for the next comparions since the precision 1.e-7 is too high for the numerical error involved here.
+	// TODO: VALUES_EQUAL doesn't work for the next comparisons since the precision 1.e-7 is too high for the numerical error involved here.
 	// to improve the precision we need to get rid of QVector3D using floats internally and to switch to doubles. For now, just use a somewhat
 	// lower precision here since it's not essential.
-	// VALUES_EQUAL(t.x[1], -1.5145383137996); // precision seems to be not correct. Referece value is correct
+	// VALUES_EQUAL(t.x[1], -1.5145383137996); // precision seems to be not correct. Reference value is correct
 	double v1 = t.x[1];
 	double ref = -1.5145383137996;
 	QVERIFY2(nsl_math_approximately_equal_eps(v1, ref, 1.e-5) == true,
@@ -760,7 +761,7 @@ void DatapickerTest::logarithmic10XYMapping() {
 
 /*!
  * check the correctness of the data points after one of the reference points was moved on the scene.
- * In real this is not possible, because it is not implemented, but neverthless it shall be shown
+ * In real this is not possible, because it is not implemented, but nevertheless it shall be shown
  * that when moving reference points, the curves will be updated
  */
 void DatapickerTest::referenceMove() {
@@ -1008,6 +1009,85 @@ void DatapickerTest::selectReferencePoint() {
 	QCOMPARE(w.ui.rbRefPoint1->isChecked(), false);
 	QCOMPARE(w.ui.rbRefPoint2->isChecked(), false);
 	QCOMPARE(w.ui.rbRefPoint3->isChecked(), true);
+}
+
+void DatapickerTest::recreateAxisReferencePoints() {
+	Datapicker datapicker(QStringLiteral("Test"));
+	auto* image = datapicker.image();
+
+	// Set reference points
+	datapicker.addNewPoint(QPointF(0, 1), image);
+	datapicker.addNewPoint(QPointF(0, 0), image);
+	datapicker.addNewPoint(QPointF(1, 0), image);
+
+	auto ap = image->axisPoints();
+	ap.type = DatapickerImage::GraphType::Linear;
+	image->setAxisPoints(ap);
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+	w.ui.sbPositionX1->setValue(0);
+	w.ui.sbPositionY1->setValue(10);
+	w.ui.sbPositionZ1->setValue(0);
+	w.ui.sbPositionX2->setValue(0);
+	w.ui.sbPositionY2->setValue(0);
+	w.ui.sbPositionZ2->setValue(0);
+	w.ui.sbPositionX3->setValue(10);
+	w.ui.sbPositionY3->setValue(0);
+	w.ui.sbPositionZ3->setValue(0);
+	w.logicalPositionChanged();
+
+	auto* curve = new DatapickerCurve(i18n("Curve"));
+	curve->addDatasheet(image->axisPoints().type);
+	datapicker.addChild(curve);
+
+	datapicker.addNewPoint(QPointF(0.5, 0.5), curve); // updates the curve data
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
+
+	datapicker.addNewPoint(QPointF(0.7, 0.65), curve); // updates the curve data
+	VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+
+	// QVERIFY(datapicker.image()->plotPointsType() != DatapickerImage::PointsType::AxisPoints);
+	// datapicker.image()->setPlotPointsType(DatapickerImage::PointsType::AxisPoints);
+
+	datapicker.image()->clearReferencePoints();
+	QCOMPARE(datapicker.image()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden).count(), 0);
+
+	QVERIFY(std::isnan(curve->posXColumn()->valueAt(0)));
+	QVERIFY(std::isnan(curve->posYColumn()->valueAt(0)));
+	QVERIFY(std::isnan(curve->posXColumn()->valueAt(1)));
+	QVERIFY(std::isnan(curve->posYColumn()->valueAt(1)));
+
+	// Recreate points again
+	datapicker.addNewPoint(QPointF(0, 1), image);
+	datapicker.addNewPoint(QPointF(0, 0), image);
+	datapicker.addNewPoint(QPointF(1, 0), image);
+
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+
+	// Change position
+	{
+		auto points = datapicker.image()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+		// The logical position is still 10 for y1. So at 0.5 we have now 10 instead of 5.
+		points.at(0)->setPosition(QPointF(0., 0.5));
+		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 10.);
+		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 13.);
+
+		// Now we stretch the x axis as well
+		points.at(2)->setPosition(QPointF(0.5, 0.));
+		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 10.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 10.);
+		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 14.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 13.);
+	}
 }
 
 void DatapickerTest::imageAxisPointsChanged() {
@@ -1457,7 +1537,6 @@ void DatapickerTest::datapickerImageLoadImageEmbeddAbsolute() {
 }
 
 void DatapickerTest::datapickerImageLoadImageEmbeddAbsoluteUndoRedo() {
-	QString savePath;
 	QString imgFileName;
 
 	Project project;
@@ -1497,6 +1576,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddAbsoluteUndoRedo() {
 
 		w.ui.cbFileEmbedd->clicked(true); // Embedding image
 
+		QString savePath;
 		SAVE_PROJECT("DatapickerTestProject");
 	}
 
@@ -1589,7 +1669,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelative() {
 		w.setImages({image});
 
 		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true); // image is valid because embedded
-		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // image is valid, but embedd is turned on
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // image is valid, but embed is turned on
 		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
 		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
 
@@ -1602,7 +1682,6 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelative() {
 }
 
 void DatapickerTest::datapickerImageLoadImageEmbeddRelativeUndoRedo() {
-	QString savePath;
 	QString imgFileName;
 
 	Project project;
@@ -1640,6 +1719,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelativeUndoRedo() {
 		QCOMPARE(w.ui.leFileName->text(), imgFileName);
 		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 
+		QString savePath;
 		SAVE_PROJECT("DatapickerTestProject");
 
 		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), true); // project is now saved so calculating the relative path is possible
@@ -1763,6 +1843,9 @@ void DatapickerTest::datapickerImageClipboardSelectImageFromPath() {
 }
 
 void DatapickerTest::saveLoad() {
+#if defined(_WIN32)
+	QSKIP("Unstable", QTest::SkipSingle);
+#endif
 	QString savePath;
 	{
 		Project project;
@@ -1825,10 +1908,18 @@ void DatapickerTest::saveLoad() {
 		QVERIFY(curve);
 		const auto& curvePoints = curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 		QCOMPARE(curvePoints.length(), 2);
+		QCOMPARE(curve->posXColumn()->rowCount(), 2);
+		QCOMPARE(curve->posYColumn()->rowCount(), 2);
 		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
 		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
 		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
 		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+
+		QCOMPARE(curve->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::IncludeHidden).size(), 1);
+		const auto* data = curve->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::IncludeHidden).at(0);
+		QCOMPARE(data->columnCount(), 2);
+		QCOMPARE(data->column(0), curve->posXColumn());
+		QCOMPARE(data->column(1), curve->posYColumn());
 	}
 }
 

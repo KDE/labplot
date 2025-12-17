@@ -29,5 +29,7 @@ private Q_SLOTS:
 	// duplicate X
 	void testLinearDuplicateX();
 	//	void testPerformance();
+
+	void testRecalculation();
 };
 #endif

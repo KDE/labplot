@@ -27,9 +27,6 @@ public Q_SLOTS:
 	void print(QPrinter*) const;
 
 private Q_SLOTS:
-	// SLOTs for changes triggered in NoteView
-	void textChanged();
-
 	// SLOTs for changes triggered in Note
 	void noteTextChanged(const QString&);
 	void noteBackgroundColorChanged(const QColor&);
@@ -40,6 +37,9 @@ private:
 	Note* m_note;
 	QTextEdit* m_textEdit;
 	bool m_initializing{false};
+
+	int m_textChangedTimerId{-1};
+	void timerEvent(QTimerEvent*) override;
 };
 
 #endif // NOTEVIEW_H

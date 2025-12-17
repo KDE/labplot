@@ -3,44 +3,26 @@
 	Project              : LabPlot
 	Description          : Factory to create an object instance from its type
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ASPECTFACTORY_H
 
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/KDEPlot.h"
-#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
-#include "backend/worksheet/plots/cartesian/ParetoChart.h"
-#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
-#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
-#include "backend/worksheet/plots/cartesian/RunChart.h"
-#include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
-#include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
-#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
-#include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
-#include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
-#include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
-
+#include "backend/worksheet/plots/cartesian/plots.h"
 #ifndef SDK
 #include "backend/core/Workbook.h"
 #include "backend/datapicker/Datapicker.h"
@@ -60,20 +42,20 @@ public:
 		else if (type == AspectType::Worksheet)
 			return new Worksheet(QString());
 		else if (type == AspectType::CartesianPlot)
-			return new CartesianPlot(QString());
+			return new CartesianPlot(QString(), true /*loading*/);
 		else if (type == AspectType::TextLabel)
 			return new TextLabel(QString());
 		else if (type == AspectType::Image)
 			return new Image(QString());
 		else if (type == AspectType::CustomPoint) {
 			auto* plot = static_cast<CartesianPlot*>(parent);
-			return new CustomPoint(plot, QString());
+			return new CustomPoint(plot, QString(), true /*loading*/);
 		} else if (type == AspectType::ReferenceLine) {
 			auto* plot = static_cast<CartesianPlot*>(parent);
-			return new ReferenceLine(plot, QString());
+			return new ReferenceLine(plot, QString(), true /*loading*/);
 		} else if (type == AspectType::ReferenceRange) {
 			auto* plot = static_cast<CartesianPlot*>(parent);
-			return new ReferenceRange(plot, QString());
+			return new ReferenceRange(plot, QString(), true /*loading*/);
 		} else if (type == AspectType::InfoElement) {
 			auto* plot = static_cast<CartesianPlot*>(parent);
 			return new InfoElement(QString(), plot);
@@ -90,8 +72,8 @@ public:
 			return new XYConvolutionCurve(QString());
 		else if (type == AspectType::XYCorrelationCurve)
 			return new XYCorrelationCurve(QString());
-		else if (type == AspectType::XYDataReductionCurve)
-			return new XYDataReductionCurve(QString());
+		else if (type == AspectType::XYLineSimplificationCurve)
+			return new XYLineSimplificationCurve(QString());
 		else if (type == AspectType::XYDifferentiationCurve)
 			return new XYDifferentiationCurve(QString());
 		else if (type == AspectType::XYFitCurve)
@@ -111,9 +93,9 @@ public:
 
 		/* statistical plots */
 		else if (type == AspectType::BoxPlot)
-			return new BoxPlot(QString());
+			return new BoxPlot(QString(), true /*loading*/);
 		else if (type == AspectType::Histogram)
-			return new Histogram(QString());
+			return new Histogram(QString(), true /*loading*/);
 		else if (type == AspectType::KDEPlot)
 			return new KDEPlot(QString());
 		else if (type == AspectType::QQPlot)
@@ -127,7 +109,7 @@ public:
 
 		/* continuous improvement plots */
 		else if (type == AspectType::ProcessBehaviorChart)
-			return new ProcessBehaviorChart(QString());
+			return new ProcessBehaviorChart(QString(), true /*loading*/);
 		else if (type == AspectType::RunChart)
 			return new RunChart(QString());
 		else if (type == AspectType::ParetoChart)
@@ -139,6 +121,9 @@ public:
 		else if (type == AspectType::Column)
 			return new Column(QString());
 
+		/* time series analysis */
+		else if (type == AspectType::SeasonalDecomposition)
+			return new SeasonalDecomposition(QString(), true /*loading*/);
 #ifndef SDK
 		else if (type == AspectType::Matrix)
 			return new Matrix(QString(), true /*loading*/);

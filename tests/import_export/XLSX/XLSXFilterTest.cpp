@@ -3,12 +3,13 @@
 	Project              : LabPlot
 	Description          : Tests for the XLSX filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "XLSXFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/XLSXFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
@@ -266,6 +267,108 @@ void XLSXFilterTest::importFileDatetime() {
 	QCOMPARE(spreadsheet.column(4)->valueAt(1), 3.14);
 	QCOMPARE(spreadsheet.column(4)->valueAt(2), 0.22);
 	QCOMPARE(spreadsheet.column(4)->valueAt(3), 0.01);
+}
+
+void XLSXFilterTest::importFileAppend() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/append.xlsx"));
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	XLSXFilter filter;
+	filter.setFirstRowAsColumnNames(true);
+	filter.setCurrentSheet(QStringLiteral("Data"));
+	filter.setCurrentRange(QStringLiteral("A1:C5"));
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Append);
+
+	QCOMPARE(spreadsheet.columnCount(), 5);
+	QCOMPARE(spreadsheet.rowCount(), 100);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("2"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Date"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("Left Grip (kg)"));
+	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("Right Grip (kg)"));
+
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(0).toString(), QStringLiteral("Fri Aug 11 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(1).toString(), QStringLiteral("Mon Aug 14 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(2).toString(), QStringLiteral("Wed Aug 16 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(3).toString(), QStringLiteral("Fri Aug 18 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(3)->valueAt(1), 2);
+	QCOMPARE(spreadsheet.column(3)->valueAt(2), 3);
+	QCOMPARE(spreadsheet.column(3)->valueAt(3), 4);
+	QCOMPARE(spreadsheet.column(4)->valueAt(0), 1.1);
+	QCOMPARE(spreadsheet.column(4)->valueAt(1), 2.2);
+	QCOMPARE(spreadsheet.column(4)->valueAt(2), 3.3);
+	QCOMPARE(spreadsheet.column(4)->valueAt(3), 4.4);
+}
+
+void XLSXFilterTest::importFormula() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/formula.xlsx"));
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	XLSXFilter filter;
+	filter.setCurrentSheet(QStringLiteral("Sheet1"));
+	filter.setCurrentRange(QStringLiteral("A2:A13"));
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 12);
+
+	spreadsheet.column(0)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 4);
+	QCOMPARE(spreadsheet.column(0)->integerAt(4), 5);
+	QCOMPARE(spreadsheet.column(0)->integerAt(5), 6);
+	QCOMPARE(spreadsheet.column(0)->integerAt(6), 7);
+	QCOMPARE(spreadsheet.column(0)->integerAt(7), 8);
+	QCOMPARE(spreadsheet.column(0)->integerAt(8), 9);
+	QCOMPARE(spreadsheet.column(0)->integerAt(9), 10);
+	QCOMPARE(spreadsheet.column(0)->integerAt(10), 11);
+	QCOMPARE(spreadsheet.column(0)->integerAt(11), 12);
+
+	filter.setCurrentRange(QStringLiteral("D2:D13"));
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 12);
+
+	spreadsheet.column(0)->setColumnMode(AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QStringLiteral("January"));
+	QCOMPARE(spreadsheet.column(0)->textAt(1), QStringLiteral("February"));
+	QCOMPARE(spreadsheet.column(0)->textAt(2), QStringLiteral("March"));
+	QCOMPARE(spreadsheet.column(0)->textAt(3), QStringLiteral("April"));
+	QCOMPARE(spreadsheet.column(0)->textAt(4), QStringLiteral("May"));
+	QCOMPARE(spreadsheet.column(0)->textAt(5), QStringLiteral("June"));
+	QCOMPARE(spreadsheet.column(0)->textAt(6), QStringLiteral("July"));
+	QCOMPARE(spreadsheet.column(0)->textAt(7), QStringLiteral("August"));
+	QCOMPARE(spreadsheet.column(0)->textAt(8), QStringLiteral("September"));
+	QCOMPARE(spreadsheet.column(0)->textAt(9), QStringLiteral("October"));
+	QCOMPARE(spreadsheet.column(0)->textAt(10), QStringLiteral("November"));
+	QCOMPARE(spreadsheet.column(0)->textAt(11), QStringLiteral("December"));
+
+	filter.setCurrentRange(QStringLiteral("F2:F13"));
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 12);
+
+	// DATE() function was used to generate this column but excel date and time functions all store their calculated values as integers
+	// https://support.microsoft.com/en-us/office/date-and-time-functions-reference-fd1b5961-c1ae-4677-be58-074152f97b81
+	spreadsheet.column(0)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 45668);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 45669);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 45670);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 45671);
+	QCOMPARE(spreadsheet.column(0)->integerAt(4), 45672);
+	QCOMPARE(spreadsheet.column(0)->integerAt(5), 45673);
+	QCOMPARE(spreadsheet.column(0)->integerAt(6), 45674);
+	QCOMPARE(spreadsheet.column(0)->integerAt(7), 45675);
+	QCOMPARE(spreadsheet.column(0)->integerAt(8), 45676);
+	QCOMPARE(spreadsheet.column(0)->integerAt(9), 45677);
+	QCOMPARE(spreadsheet.column(0)->integerAt(10), 45678);
+	QCOMPARE(spreadsheet.column(0)->integerAt(11), 45679);
 }
 
 QTEST_MAIN(XLSXFilterTest)

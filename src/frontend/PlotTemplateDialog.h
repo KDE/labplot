@@ -69,8 +69,8 @@ public:
 	};
 
 	struct File {
-		QString path; // path with filename name and extension. Used to create plot
-		QString filename; // filename only without extension. Visible part in the view
+		QString path; // path with file name and extension. Used to create plot
+		QString fileName; // file name only without extension. Visible part in the view
 	};
 
 private:

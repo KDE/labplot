@@ -3,35 +3,21 @@
 	Project              : LabPlot
 	Description 	     : GUI observer
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
-#include "backend/datasources/LiveDataSource.h"
-#include "backend/matrix/Matrix.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/spreadsheet/StatisticsSpreadsheet.h"
+#include "backend/core/column/Column.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
-#include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
-#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
 #endif
@@ -40,10 +26,10 @@
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #endif
-#include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
-#include "backend/datapicker/DatapickerCurve.h"
-#include "backend/datapicker/DatapickerImage.h"
+#ifdef HAVE_SCRIPTING
+#include "backend/script/Script.h"
+#endif
 
 #include "frontend/GuiObserver.h"
 #include "frontend/ProjectExplorer.h"
@@ -58,6 +44,7 @@
 #include "frontend/dockwidgets/CursorDock.h"
 #include "frontend/dockwidgets/CustomPointDock.h"
 #include "frontend/dockwidgets/HistogramDock.h"
+#include "frontend/dockwidgets/HypothesisTestDock.h"
 #include "frontend/dockwidgets/ImageDock.h"
 #include "frontend/dockwidgets/InfoElementDock.h"
 #include "frontend/dockwidgets/KDEPlotDock.h"
@@ -73,12 +60,16 @@
 #include "frontend/dockwidgets/ReferenceRangeDock.h"
 #include "frontend/dockwidgets/RunChartDock.h"
 #include "frontend/dockwidgets/SpreadsheetDock.h"
+#ifdef HAVE_SCRIPTING
+#include "frontend/dockwidgets/ScriptDock.h"
+#endif
+#include "frontend/dockwidgets/SeasonalDecompositionDock.h"
 #include "frontend/dockwidgets/StatisticsSpreadsheetDock.h"
 #include "frontend/dockwidgets/WorksheetDock.h"
 #include "frontend/dockwidgets/XYConvolutionCurveDock.h"
 #include "frontend/dockwidgets/XYCorrelationCurveDock.h"
 #include "frontend/dockwidgets/XYCurveDock.h"
-#include "frontend/dockwidgets/XYDataReductionCurveDock.h"
+#include "frontend/dockwidgets/XYLineSimplificationCurveDock.h"
 #include "frontend/dockwidgets/XYDifferentiationCurveDock.h"
 #include "frontend/dockwidgets/XYEquationCurveDock.h"
 #include "frontend/dockwidgets/XYFitCurveDock.h"
@@ -100,7 +91,6 @@
 #include <KLocalizedString>
 #include <QStackedWidget>
 #include <QStatusBar>
-#include <QToolBar>
 
 /*!
   \class GuiObserver
@@ -202,7 +192,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 	}
 
 	const AspectType type{selectedAspects.front()->type()};
-	DEBUG(Q_FUNC_INFO << ", type: " << STDSTRING(AbstractAspect::typeName(type)))
+	DEBUG(Q_FUNC_INFO << ", type: " << AbstractAspect::typeName(type))
 
 	// update cursor dock
 	if (m_mainWindow->cursorWidget) {
@@ -210,7 +200,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 			auto* worksheet = static_cast<Worksheet*>(selectedAspects.front());
 			m_mainWindow->cursorWidget->setWorksheet(worksheet);
 		} else {
-			auto* parent = selectedAspects.front()->parent(AspectType::Worksheet);
+			auto* parent = selectedAspects.front()->parent<Worksheet>();
 			if (parent) {
 				auto* worksheet = static_cast<Worksheet*>(parent);
 				m_mainWindow->cursorWidget->setWorksheet(worksheet);
@@ -297,21 +287,10 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDockSetupConnect(m_xyFunctionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyFunctionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
-	case AspectType::XYDataReductionCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Data Reduction"));
-		if (!m_xyDataReductionCurveDock) {
-			m_xyDataReductionCurveDock = new XYDataReductionCurveDock(m_mainWindow->stackedWidget, m_mainWindow->statusBar());
-			m_xyDataReductionCurveDock->setupGeneral();
-			connect(m_xyDataReductionCurveDock, &XYDataReductionCurveDock::info, [&](const QString& text) {
-				m_mainWindow->statusBar()->showMessage(text);
-			});
-			m_mainWindow->stackedWidget->addWidget(m_xyDataReductionCurveDock);
-		}
-
-		initializedDocks << m_xyDataReductionCurveDock;
-		m_xyDataReductionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_xyDataReductionCurveDock);
+	case AspectType::XYLineSimplificationCurve:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Line Simplification"));
+		raiseDockSetupConnect(m_xyLineSimplificationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_xyLineSimplificationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYDifferentiationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Differentiation"));
@@ -448,9 +427,24 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 			QList<DatapickerImage*> list;
 			for (auto* aspect : selectedAspects)
 				list << static_cast<Datapicker*>(aspect)->image();
-			m_datapickerImageDock->setImages(list);
+			m_datapickerImageDock->setImages(std::move(list));
 		}
 		break;
+
+	// statistical analysis
+	case AspectType::HypothesisTest:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Hypothesis Test"));
+		raiseDock(m_hypothesisTestDock, m_mainWindow->stackedWidget);
+		m_hypothesisTestDock->setTest(static_cast<HypothesisTest*>(selectedAspects.first()));
+		break;
+
+	// time series analysis
+	case AspectType::SeasonalDecomposition:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Seasonal Decomposition"));
+		raiseDock(m_seasonalDecompositionDock, m_mainWindow->stackedWidget);
+		m_seasonalDecompositionDock->setDecompositions(castList<SeasonalDecomposition>(selectedAspects));
+		break;
+
 	case AspectType::Project:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Project"));
 		raiseDock(m_projectDock, m_mainWindow->stackedWidget);
@@ -465,7 +459,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Notebook", list.first()->backendName()));
 			else
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Notebook"));
-			m_notebookDock->setNotebooks(list);
+			m_notebookDock->setNotebooks(std::move(list));
 		}
 #endif
 		break;
@@ -527,6 +521,13 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_aspectDock, m_mainWindow->stackedWidget);
 		m_aspectDock->setAspects(selectedAspects);
 		break;
+	case AspectType::Script:
+#ifdef HAVE_SCRIPTING
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Script"));
+		raiseDockConnect(m_scriptDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_scriptDock->setScriptsList(castList<Script>(selectedAspects));
+#endif
+		break;
 	case AspectType::WorksheetElement:
 	case AspectType::WorksheetElementContainer:
 	case AspectType::WorksheetElementGroup:
@@ -540,7 +541,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 
 /*!
 	handles the selection of a hidden aspect \c aspect in the view (relevant for WorksheetView only at the moment).
-	Currently, a hidden aspect can only be a plot title lable or an axis label.
+	Currently, a hidden aspect can only be a plot title label or an axis label.
 	-> Activate the corresponding DockWidget and make the title tab current.
  */
 void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect) {

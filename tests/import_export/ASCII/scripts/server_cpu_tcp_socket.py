@@ -1,25 +1,38 @@
 #!/usr/bin/python3
 
-import socket, psutil
+import socket, psutil, time
 
 HOST = 'localhost'
-PORT = 1027
-ADDR = (HOST,PORT)
+PORT = 1234
 serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-serv.bind(ADDR)
-serv.listen(1)
+# bind host and port together
+serv.bind((HOST,PORT))
 
+# configure how many clients the server can listen simultaneously
+serv.listen(1)
 print ('listening ...')
 
+# accept new connections
+conn, addr = serv.accept()
+print("connection from: " + str(addr))
+
+# send the current values for the server metrics
 while True:
-  conn, addr = serv.accept()
-  print('client connected ... ', addr)
-  #message = str(psutil.cpu_percent())
-  # multiple values
-  message = str(psutil.cpu_percent()) + " " + str(psutil.boot_time()) + " " + str(psutil.cpu_count())
-  conn.send(message.encode())
-  print('written ' + message)
-  conn.close()
-  print('client disconnected')
+    cpu = psutil.cpu_percent();
+    cpu_freq = psutil.cpu_freq().current;
+    mem = psutil.virtual_memory()
+    load = psutil.getloadavg()
+    message = str(cpu) + " " + str(cpu_freq) + " " + str(mem[2]) + " " +  str(load[0]) + " " + str(load[1]) + " " + str(load[2]) + "\n"
+    try:
+        conn.send(message.encode())
+        print('written ' + message)
+        # wait 1s before sending the next message
+        time.sleep(1)
+    except:
+        conn.close()
+        print('client disconnected')
+        print ('listening ...')
+        conn, addr = serv.accept()
+        print('client connected ... ', addr)

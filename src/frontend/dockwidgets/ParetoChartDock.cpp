@@ -121,7 +121,7 @@ void ParetoChartDock::setPlots(QList<ParetoChart*> list) {
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
 		cbDataColumn->setEnabled(true);
-		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
+		cbDataColumn->setAspect(m_plot->dataColumn(), m_plot->dataColumnPath());
 	} else {
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
@@ -176,7 +176,7 @@ void ParetoChartDock::dataColumnChanged(const QModelIndex& index) {
 // General-Tab
 void ParetoChartDock::plotDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
+	cbDataColumn->setAspect(column, m_plot->dataColumnPath());
 }
 
 //*************************************************************

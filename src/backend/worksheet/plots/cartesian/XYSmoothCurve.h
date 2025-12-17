@@ -19,12 +19,17 @@ extern "C" {
 
 class XYSmoothCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYSmoothCurve : public XYAnalysisCurve {
+#else
 class XYSmoothCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
 	struct SmoothData {
-		SmoothData(){};
+		SmoothData() { };
 
 		nsl_smooth_type type{nsl_smooth_type_moving_average}; // type of smoothing
 		size_t points{5}; // number of points
@@ -41,7 +46,6 @@ public:
 	explicit XYSmoothCurve(const QString& name);
 	~XYSmoothCurve() override;
 
-	void recalculate() override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

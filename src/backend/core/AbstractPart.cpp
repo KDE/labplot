@@ -4,15 +4,18 @@
 	Description          : Base class of Aspects with MDI windows as views.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/AbstractPart.h"
 #include "backend/core/Settings.h"
+#include "backend/core/Workbook.h"
+#include "backend/datapicker/Datapicker.h"
+#ifndef SDK
 #include "frontend/core/ContentDockWidget.h"
-
 #include <DockManager.h>
+#endif
 #include <QMenu>
 #include <QStyle>
 
@@ -27,8 +30,10 @@ AbstractPart::AbstractPart(const QString& name, AspectType type)
 }
 
 AbstractPart::~AbstractPart() {
+#ifndef SDK
 	if (m_dockWidget)
 		delete m_dockWidget;
+#endif
 }
 
 /**
@@ -40,7 +45,7 @@ AbstractPart::~AbstractPart() {
  * This method may be called multiple times during the life time of a Part, or it might not get
  * called at all. Parts must not depend on the existence of a view for their operation.
  */
-
+#ifndef SDK
 /**
  * \brief Wrap the view() into a PartMdiView.
  *
@@ -48,7 +53,17 @@ AbstractPart::~AbstractPart() {
  * after that, a pointer to the pre-existing view is returned.
  */
 ContentDockWidget* AbstractPart::dockWidget() const {
-#ifndef SDK
+	// for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
+	const auto* workbook = dynamic_cast<const Workbook*>(parentAspect());
+	auto* datapicker = dynamic_cast<const Datapicker*>(parentAspect());
+	if (!datapicker)
+		datapicker = dynamic_cast<const Datapicker*>(parentAspect()->parentAspect());
+
+	if (workbook)
+		return workbook->dockWidget();
+	else if (datapicker)
+		return datapicker->dockWidget();
+
 	if (!m_dockWidget) {
 		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
 		connect(m_dockWidget, &ads::CDockWidget::closed, [this] {
@@ -60,20 +75,22 @@ ContentDockWidget* AbstractPart::dockWidget() const {
 			}
 		});
 	}
-#endif
 	return m_dockWidget;
 }
-
-bool AbstractPart::dockWidgetExists() const {
-	return m_dockWidget != nullptr;
-}
+#endif
 
 void AbstractPart::suppressDeletion(bool suppress) {
 	m_suppressDeletion = suppress;
 }
 
+#ifndef SDK
 bool AbstractPart::hasMdiSubWindow() const {
 	return m_dockWidget;
+}
+#endif
+
+bool AbstractPart::viewCreated() const {
+	return m_partView != nullptr;
 }
 
 /*!
@@ -81,19 +98,16 @@ bool AbstractPart::hasMdiSubWindow() const {
  * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
  */
 void AbstractPart::deleteView() const {
-	// if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
-	// here just set the pointer to 0.
-	auto* parent = parentAspect();
-	auto type = parent->type();
-	if (type == AspectType::Workbook || type == AspectType::Datapicker
-		|| (parent->parentAspect() && parent->parentAspect()->type() == AspectType::Datapicker)) {
-		m_partView = nullptr;
-		return;
-	}
-
 	if (m_partView) {
-		Q_EMIT viewAboutToBeDeleted();
-		delete m_partView;
+		Q_EMIT viewAboutToBeDeleted(); // Notify all parts so they can reset their pointers
+
+		// if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
+		// here just set the pointer to 0.
+		auto* parent = parentAspect();
+		auto type = parent->type();
+		if (type != AspectType::Workbook && type != AspectType::Datapicker
+			&& !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::Datapicker))
+			delete m_partView;
 		m_partView = nullptr;
 	}
 }
@@ -123,7 +137,7 @@ QMenu* AbstractPart::createContextMenu() {
 	}
 
 	// export/print actions
-	if (type != AspectType::Notebook)
+	if (type != AspectType::Notebook && type != AspectType::Script)
 		menu->addAction(QIcon::fromTheme(QLatin1String("document-export-database")), i18n("Export"), this, &AbstractPart::exportRequested);
 	menu->addAction(QIcon::fromTheme(QLatin1String("document-print")), i18n("Print"), this, &AbstractPart::printRequested);
 	menu->addAction(QIcon::fromTheme(QLatin1String("document-print-preview")), i18n("Print Preview"), this, &AbstractPart::printPreviewRequested);

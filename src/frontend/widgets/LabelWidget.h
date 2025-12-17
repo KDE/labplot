@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : label settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2014 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -24,6 +24,7 @@ class SyntaxHighlighter;
 #endif
 
 class Label;
+class LineWidget;
 class Axis;
 class QMenu;
 class KMessageWidget;
@@ -40,6 +41,7 @@ public:
 	void setAxes(QList<Axis*>);
 	void updateUnits() override;
 	void updateLocale() override;
+	void retranslateUi() override;
 
 	void load();
 	void loadConfig(KConfigGroup&);
@@ -60,9 +62,10 @@ private:
 	BaseDock::Units m_units{BaseDock::Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 #ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
-	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
+	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter{nullptr};
 	KSyntaxHighlighting::Repository m_repository;
 #endif
+	LineWidget* borderLineWidget{nullptr};
 	KMessageWidget* m_messageWidget;
 
 	QVector<QMetaObject::Connection> m_connections;
@@ -121,10 +124,6 @@ private Q_SLOTS:
 	void offsetYChanged(double);
 
 	void borderShapeChanged(int);
-	void borderStyleChanged(int);
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
-	void borderOpacityChanged(int);
 
 	void lockChanged(bool);
 	void bindingChanged(bool checked);
@@ -146,8 +145,6 @@ private Q_SLOTS:
 	void labelRotationAngleChanged(qreal);
 
 	void labelBorderShapeChanged(TextLabel::BorderShape);
-	void labelBorderPenChanged(const QPen&);
-	void labelBorderOpacityChanged(float);
 
 	void labelLockChanged(bool);
 	void labelCartesianPlotParent(bool on);
@@ -156,7 +153,6 @@ private Q_SLOTS:
 	friend class AxisDock; // fontColorChanged() and labelFontColorChanged() are private methods of LabelWidget
 	friend class TextLabelTest;
 	friend class AxisTest;
-	friend class AxisTest2;
 	friend class WorksheetElementTest;
 };
 

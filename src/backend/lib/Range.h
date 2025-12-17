@@ -10,14 +10,17 @@
 #ifndef RANGE_H
 #define RANGE_H
 
-#include "backend/gsl/parser.h"
+#include "backend/gsl/Parser.h"
 #include "backend/nsl/nsl_math.h"
 #include "macros.h" //const auto numberLocale = QLocale();
 
+#ifndef SDK
 #include <KLocalizedString>
+#endif
 
 #include <QDateTime>
 #include <QStringList>
+#include <QTimeZone>
 
 #include <cmath>
 
@@ -35,7 +38,12 @@ class QString;
  *
  *	Only types supporting comparison are supported
  */
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT RangeT {
+#else
 class RangeT { // access enum without template
+#endif
 	Q_GADGET
 public:
 	enum class Format { Numeric, DateTime };
@@ -44,8 +52,10 @@ public:
 	// TODO: InverseOffset, Prob, Probit, Logit, Weibull
 	enum class Scale { Linear, Log10, Log2, Ln, Sqrt, Square, Inverse };
 	Q_ENUM(Scale)
+#ifndef SDK
 	static inline QList<KLocalizedString>
 		scaleNames{ki18n("Linear"), ki18n("Log10"), ki18n("Log2"), ki18n("Ln"), ki18n("Sqrt"), ki18n("Square"), ki18n("Inverse")};
+#endif
 	static bool isLogScale(Scale scale) {
 		if (scale == Scale::Log10 || scale == Scale::Log2 || scale == Scale::Ln)
 			return true;
@@ -53,8 +63,14 @@ public:
 	}
 };
 
+#ifdef SDK
+#include "labplot_export.h"
+template<class T>
+class LABPLOT_EXPORT Range : RangeT {
+#else
 template<class T>
 class Range : RangeT {
+#endif
 public:
 	Range() {
 	}
@@ -64,18 +80,21 @@ public:
 	// start and end as localized strings like "pi + 1.5" (will be parsed)
 	Range(const QString& start, const QString& end, const Format format = Format::Numeric, const Scale scale = Scale::Linear) {
 		const auto numberLocale = QLocale();
+
+		Parsing::Parser parser(false);
+
 		// min
-		double min = parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
-		if (parse_errors() > 0) // if parsing fails, try default locale
-			min = parse(qPrintable(start.simplified()), "en_US");
-		if (parse_errors() > 0)
+		double min = parser.parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // if parsing fails, try default locale
+			min = parser.parse(qPrintable(start.simplified()), "en_US");
+		if (parser.parseErrors() > 0)
 			min = 0;
 
 		// max
-		double max = parse(qPrintable(end.simplified()), qPrintable(numberLocale.name()));
-		if (parse_errors() > 0) // if parsing fails, try default locale
-			max = parse(qPrintable(end.simplified()), "en_US");
-		if (parse_errors() > 0)
+		double max = parser.parse(qPrintable(end.simplified()), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // if parsing fails, try default locale
+			max = parser.parse(qPrintable(end.simplified()), "en_US");
+		if (parser.parseErrors() > 0)
 			max = 1.;
 
 		// TODO: check for NAN, INF?
@@ -170,6 +189,37 @@ public:
 		}
 		return T();
 	}
+
+	T diff() const {
+		return diff(m_scale, m_start, m_end);
+	}
+
+	static T diff(Scale scale, T start, T end) {
+		switch (scale) {
+		case RangeT::Scale::Linear:
+		case RangeT::Scale::Inverse:
+			return end - start;
+		case RangeT::Scale::Log10:
+			if (start != 0. && end / start > 0.)
+				return log10(end / start);
+			break;
+		case RangeT::Scale::Log2:
+			if (start != 0. && end / start > 0.)
+				return log2(end / start);
+			break;
+		case RangeT::Scale::Ln:
+			if (start != 0. && end / start > 0.)
+				return log(end / start);
+			break;
+		case RangeT::Scale::Sqrt:
+			if (start >= 0. && end >= 0.)
+				return std::sqrt(end) - std::sqrt(start);
+			break;
+		case RangeT::Scale::Square:
+			return end * end - start * start;
+		}
+		return T();
+	}
 	// calculate step size from number of steps
 	T stepSize(const int steps) const {
 		return (steps > 1) ? size() / static_cast<T>(steps - 1) : 0;
@@ -199,10 +249,6 @@ public:
 	bool contains(T value) const {
 		return (qMin(m_start, m_end) <= value && qMax(m_start, m_end) >= value);
 	}
-	void translate(T offset) {
-		m_start += offset;
-		m_end += offset;
-	}
 	void extend(T value) {
 		m_start -= value;
 		m_end += value;
@@ -231,8 +277,8 @@ public:
 		if (m_format == Format::Numeric)
 			return locale.toString(m_start) + QStringLiteral(" .. ") + locale.toString(m_end);
 		else
-			return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
-				+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
+			return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
+				+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
 	}
 	std::string toStdString(bool round = true) const {
 		return STDSTRING(toString(round));
@@ -492,7 +538,7 @@ public:
 	 * TODO: implement zooming depending on the relZoomPosScene also for non linear scales!
 	 */
 	void zoom(const double factor, const bool nice, const double relZoomPosScene = 0.5) {
-		const double start{this->start()}, end{this->end()};
+		const double start{static_cast<double>(this->start())}, end{static_cast<double>(this->end())};
 		switch (scale()) {
 		case RangeT::Scale::Linear: {
 			if (relZoomPosScene == 0.5 || nice)
@@ -568,6 +614,86 @@ public:
 		}
 	}
 
+	Range<T> checkRange() const {
+		if (m_scale == RangeT::Scale::Linear || (m_start > 0 && m_end > 0)) // nothing to do
+			return *this;
+		if (m_start >= 0 && m_end >= 0 && m_scale == RangeT::Scale::Sqrt) // nothing to do
+			return *this;
+		// TODO: check if start == end?
+
+		double start = m_start, end = m_end;
+		double min = 0.01, max = 1.;
+
+		if (m_scale == RangeT::Scale::Sqrt) {
+			if (start < 0)
+				start = 0.;
+		} else if (start <= 0)
+			start = min; // Log10, LogE, ...
+		if (m_scale == RangeT::Scale::Sqrt) {
+			if (end < 0)
+				end = max;
+		} else if (end <= 0)
+			end = max; // Log10, LogE, ...
+
+		auto newRange = *this;
+		newRange.setStart(start);
+		newRange.setEnd(end);
+		return newRange;
+	}
+
+	// Translate starting from \p start and ending at \p end by respecting the scale
+	void translate(T start, T end) {
+		switch (scale()) {
+		case RangeT::Scale::Linear: {
+			const double delta = (start - end);
+			this->operator+=(delta);
+			break;
+		}
+		case RangeT::Scale::Log10: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double delta = log10(start / end);
+			this->operator*=(pow(10, delta));
+			break;
+		}
+		case RangeT::Scale::Log2: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double delta = log2(start / end);
+			this->operator*=(exp2(delta));
+			break;
+		}
+		case RangeT::Scale::Ln: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double delta = log(start / end);
+			this->operator*=(exp(delta));
+			break;
+		}
+		case RangeT::Scale::Sqrt: {
+			if (start < 0 || end < 0)
+				break;
+			const double delta = sqrt(start) - sqrt(end);
+			this->operator+=(delta * delta);
+			break;
+		}
+		case RangeT::Scale::Square: {
+			if (end <= start)
+				break;
+			const double delta = end * end - start * start;
+			this->operator+=(sqrt(delta));
+			break;
+		}
+		case RangeT::Scale::Inverse: {
+			if (start == 0. || end == 0. || end <= start)
+				break;
+			const double delta = 1. / start - 1. / end;
+			this->operator+=(1. / delta);
+			break;
+		}
+		}
+	}
+
 private:
 	T m_start{0}; // start value
 	T m_end{1}; // end value
@@ -589,8 +715,8 @@ inline QString Range<double>::toString(bool round, QLocale locale) const {
 		} else
 			return locale.toString(m_start, 'g', 12) + QLatin1String(" .. ") + locale.toString(m_end, 'g', 12);
 	} else
-		return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
-			+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
+		return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
+			+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
 }
 
 #endif

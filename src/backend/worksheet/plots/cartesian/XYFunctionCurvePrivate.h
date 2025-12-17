@@ -30,13 +30,13 @@ public:
 	void setFunctionVariableCurve(const XYCurve*);
 	void setFunction(const QString& function, const QVector<XYFunctionCurve::FunctionData>& functionData);
 	void setFunction(const QString& function, const QStringList& variableNames, const QStringList& variableCurvePaths);
-	void connectFunctionCurve(const XYCurve*);
+	void connectCurve(const XYCurve*) override;
 
 	void functionVariableCurveRemoved(const AbstractAspect*);
 	void functionVariableCurveAdded(const AbstractAspect*);
 	bool preparationValid(const AbstractColumn*, const AbstractColumn*) override;
 
-	void prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) override;
+	void prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) const override;
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element);
 
 	void resetResults() override; // Clear the results of the previous calculation
@@ -48,7 +48,6 @@ public:
 private:
 	QString m_function;
 	QVector<XYFunctionCurve::FunctionData> m_functionData;
-	QVector<QMetaObject::Connection> m_connectionsUpdateFunction;
 
 	friend class XYFunctionCurveTest;
 };

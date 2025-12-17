@@ -10,26 +10,21 @@
 
 #include "BoxPlot.h"
 #include "BoxPlotPrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
-#include <QApplication>
-#include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
 
@@ -39,9 +34,15 @@
 
 /**
  * \class BoxPlot
- * \brief Box Plot
+ * \brief This class implements the box plot that is used to visualize the spread of numerical data
+ * with the help of their quartiles.
+ *
+ * The implementation supports the visualization of multiple data sets (column) at the same time with different ways to order them
+ * and to modify their properties separately. Notches, jittering of the data as well as the rug plot are possible to get more insights
+ * into the structure of the visualized data.
+ *
+ * \ingroup CartesianPlots
  */
-
 BoxPlot::BoxPlot(const QString& name, bool loading)
 	: Plot(name, new BoxPlotPrivate(this), AspectType::BoxPlot) {
 	init(loading);
@@ -49,7 +50,7 @@ BoxPlot::BoxPlot(const QString& name, bool loading)
 
 BoxPlot::BoxPlot(const QString& name, BoxPlotPrivate* dd)
 	: Plot(name, dd, AspectType::BoxPlot) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -202,17 +203,17 @@ QIcon BoxPlot::icon() const {
 }
 
 QIcon BoxPlot::staticIcon() {
-	QPainter pa;
-	pa.setRenderHint(QPainter::Antialiasing);
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
+	pm.fill(Qt::transparent);
 
 	QPen pen(Qt::SolidLine);
 	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
 
-	pm.fill(Qt::transparent);
+	QPainter pa;
 	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setPen(pen);
 	pa.drawRect(6, 6, 8, 8); // box
 	pa.drawLine(10, 6, 10, 0); // upper whisker
@@ -440,7 +441,7 @@ bool BoxPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
-bool BoxPlot::usingColumn(const Column* column) const {
+bool BoxPlot::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const BoxPlot);
 
 	for (auto* c : d->dataColumns) {
@@ -457,13 +458,11 @@ void BoxPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 	if (!column)
 		return;
 
-	const auto dataColumnPaths = d->dataColumnPaths;
 	auto dataColumns = d->dataColumns;
 	bool changed = false;
 
-	for (int i = 0; i < dataColumnPaths.count(); ++i) {
-		const auto& path = dataColumnPaths.at(i);
-
+	for (int i = 0; i < d->dataColumnPaths.count(); ++i) {
+		const auto& path = d->dataColumnPaths.at(i);
 		if (path == aspectPath) {
 			dataColumns[i] = column;
 			changed = true;
@@ -478,32 +477,36 @@ void BoxPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 }
 
 QColor BoxPlot::color() const {
-	// Q_D(const BoxPlot);
-	return QColor();
+	return colorAt(0);
+}
+
+QColor BoxPlot::colorAt(int index) const {
+	Q_D(const BoxPlot);
+	if (index >= d->backgrounds.size())
+		return QColor();
+
+	const auto* background = d->backgrounds.at(index);
+	if (background->enabled())
+		return background->firstColor();
+	else {
+		const auto* borderLine = d->borderLines.at(index);
+		if (borderLine->style() != Qt::PenStyle::NoPen)
+			return borderLine->pen().color();
+		else
+			return QColor();
+	}
 }
 
 /* ============================ setter methods and undo commands ================= */
 
+CURVE_COLUMN_CONNECT(BoxPlot, Data, data, recalc)
+
 // General
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetDataColumns, QVector<const AbstractColumn*>, dataColumns, recalc)
+CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(BoxPlot, Data, data, recalc)
 void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(BoxPlot);
-	if (columns != d->dataColumns) {
+	if (columns != d->dataColumns)
 		exec(new BoxPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
-
-		for (auto* column : columns) {
-			if (!column)
-				continue;
-
-			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::dataChanged);
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::recalc);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-		}
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrdering, BoxPlot::Ordering, ordering, recalc)
@@ -568,7 +571,7 @@ STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetJitteringEnabled, bool, jitteringEnabled, re
 void BoxPlot::setJitteringEnabled(bool enabled) {
 	Q_D(BoxPlot);
 	if (enabled != d->jitteringEnabled)
-		exec(new BoxPlotSetJitteringEnabledCmd(d, enabled, ki18n("%1: jitterring changed")));
+		exec(new BoxPlotSetJitteringEnabledCmd(d, enabled, ki18n("%1: jittering changed")));
 }
 
 // margin plots
@@ -749,7 +752,7 @@ void BoxPlotPrivate::adjustPropertiesContainers() {
 			auto* medianLine = addMedianLine(group);
 
 			if (plot) {
-				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
+				const auto& themeColor = plot->plotColor(backgrounds.count() - 1);
 				background->setFirstColor(themeColor);
 				borderLine->setColor(themeColor);
 				medianLine->setColor(themeColor);
@@ -875,6 +878,8 @@ void BoxPlotPrivate::recalc() {
 	if (variableWidth) {
 		m_widthScaleFactor = -INFINITY;
 		for (const auto* col : dataColumns) {
+			if (!col)
+				continue;
 			auto* column = static_cast<const Column*>(col);
 			if (column->statistics().size > m_widthScaleFactor)
 				m_widthScaleFactor = column->statistics().size;
@@ -890,12 +895,14 @@ void BoxPlotPrivate::recalc() {
 		if (ordering == BoxPlot::Ordering::MedianAscending || ordering == BoxPlot::Ordering::MedianDescending) {
 			for (int i = 0; i < count; ++i) {
 				auto* column = static_cast<const Column*>(dataColumns.at(i));
-				newOrdering.push_back(std::make_pair(column->statistics().median, i));
+				if (column)
+					newOrdering.push_back(std::make_pair(column->statistics().median, i));
 			}
 		} else {
 			for (int i = 0; i < count; ++i) {
 				auto* column = static_cast<const Column*>(dataColumns.at(i));
-				newOrdering.push_back(std::make_pair(column->statistics().arithmeticMean, i));
+				if (column)
+					newOrdering.push_back(std::make_pair(column->statistics().arithmeticMean, i));
 			}
 		}
 
@@ -1152,7 +1159,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		lines << QLineF(xMinBox + 0.1 * width, median, m_xMaxBox.at(index) - 0.1 * width, median);
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines);
+	q->cSystem->mapLogicalToSceneDefaultMapping(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
@@ -1160,8 +1167,8 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	lines.clear();
 	lines << QLineF(x, m_yMaxBox.at(index), x, m_whiskerMax.at(index)); // upper whisker
 	lines << QLineF(x, m_yMinBox.at(index), x, m_whiskerMin.at(index)); // lower whisker
-	lines = q->cSystem->mapLogicalToScene(lines);
-	for (const auto& line : qAsConst(lines)) {
+	q->cSystem->mapLogicalToSceneDefaultMapping(lines);
+	for (const auto& line : std::as_const(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
 	}
@@ -1240,7 +1247,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		lines << QLineF(median, yMinBox + 0.1 * width, median, yMaxBox - 0.1 * width);
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines);
+	q->cSystem->mapLogicalToSceneDefaultMapping(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
@@ -1248,8 +1255,8 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	lines.clear();
 	lines << QLineF(m_xMaxBox.at(index), y, m_whiskerMax.at(index), y); // upper whisker
 	lines << QLineF(m_xMinBox.at(index), y, m_whiskerMin.at(index), y); // lower whisker
-	lines = q->cSystem->mapLogicalToScene(lines);
-	for (const auto& line : qAsConst(lines)) {
+	q->cSystem->mapLogicalToSceneDefaultMapping(lines);
+	for (const auto& line : std::as_const(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
 	}
@@ -1306,7 +1313,7 @@ void BoxPlotPrivate::updateRug() {
 			points = q->cSystem->mapLogicalToScene(points);
 
 			// path for the vertical rug lines
-			for (const auto& point : qAsConst(points)) {
+			for (const auto& point : std::as_const(points)) {
 				rugPath.moveTo(point.x(), point.y() - rugOffset);
 				rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
 			}
@@ -1320,7 +1327,7 @@ void BoxPlotPrivate::updateRug() {
 			points = q->cSystem->mapLogicalToScene(points);
 
 			// path for the horizontal rug lines
-			for (const auto& point : qAsConst(points)) {
+			for (const auto& point : std::as_const(points)) {
 				rugPath.moveTo(point.x() + rugOffset, point.y());
 				rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
 			}
@@ -1457,7 +1464,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			continue;
 
 		QPainterPath boxPath;
-		for (const auto& line : qAsConst(m_boxRect.at(i))) {
+		for (const auto& line : std::as_const(m_boxRect.at(i))) {
 			boxPath.moveTo(line.p1());
 			boxPath.lineTo(line.p2());
 		}
@@ -1484,7 +1491,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_outlierPoints.at(i))) {
+			for (const auto& point : std::as_const(m_outlierPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1504,7 +1511,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_dataPoints.at(i))) {
+			for (const auto& point : std::as_const(m_dataPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1524,7 +1531,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_farOutPoints.at(i))) {
+			for (const auto& point : std::as_const(m_farOutPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1544,7 +1551,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_whiskerEndPoints.at(i))) {
+			for (const auto& point : std::as_const(m_whiskerEndPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1568,7 +1575,7 @@ void BoxPlotPrivate::updatePixmap() {
 	}
 	m_pixmap.fill(Qt::transparent);
 	QPainter painter(&m_pixmap);
-	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
@@ -1676,12 +1683,16 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
 	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
+
+	// no need to handle the selection/hover effect if the cached pixmap is empty
+	if (m_pixmap.isNull())
+		return;
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
@@ -1742,11 +1753,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
-	for (auto* column : d->dataColumns) {
-		writer->writeStartElement(QStringLiteral("column"));
-		writer->writeAttribute(QStringLiteral("path"), column->path());
-		writer->writeEndElement();
-	}
+	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
 	writer->writeEndElement();
 
 	// box
@@ -1842,7 +1849,6 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value(QStringLiteral("path")).toString();
 			if (!str.isEmpty())
 				d->dataColumnPaths << str;
-			// 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == QLatin1String("filling"))
 			if (!firstBackgroundRead) {
 				auto* background = d->backgrounds.at(0);
@@ -1960,15 +1966,15 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("BoxPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
-	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
-
 	Q_D(BoxPlot);
+	const auto* plot = d->m_plot;
+	int index = plot->curveChildIndex(this);
+	const QColor themeColor = plot->plotColor(index);
+
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {
-		const auto& color = plot->themeColorPalette(i);
+		const auto& color = plot->plotColor(i);
 
 		// box fillings
 		auto* background = d->backgrounds.at(i);

@@ -13,7 +13,12 @@
 
 class VectorBLFFilterPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT VectorBLFFilter : public CANFilter {
+#else
 class VectorBLFFilter : public CANFilter {
+#endif
 	Q_OBJECT
 
 public:

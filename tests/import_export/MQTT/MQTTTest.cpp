@@ -13,10 +13,12 @@
 
 #ifdef HAVE_MQTT
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/FilterStatus.h"
 #include "frontend/dockwidgets/LiveDataDock.h"
 
 #include <QDebug>
@@ -26,6 +28,27 @@
 #include <QTimer>
 #include <QTreeWidgetItem>
 #include <QVector>
+
+#include <iostream>
+
+namespace {
+const QLatin1String mqttHostName(HOSTNAME);
+const int mqttPort = PORT;
+}
+
+// This is not yet required. Can be used to start an external process which publishes mqtt messages
+// void MQTTTest::init() {
+// 	const auto executable = QStringLiteral(EXEC);
+// 	m_process.setProgram(executable);
+// 	m_process.start();
+// 	QVERIFY(m_process.waitForStarted());
+// 	// const auto e1 = m_process.errorString();
+// }
+
+// void MQTTTest::cleanup() {
+// 	m_process.terminate();
+// 	QVERIFY(m_process.waitForFinished());
+// }
 
 void MQTTTest::initTestCase() {
 	CommonTest::initTestCase();
@@ -38,7 +61,7 @@ void MQTTTest::initTestCase() {
 // ###################  check superior and inferior relations  ##################
 // ##############################################################################
 void MQTTTest::testContainFalse() {
-	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	auto* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("contain_false.txt");
 	QFile file(fileName);
 
@@ -47,7 +70,7 @@ void MQTTTest::testContainFalse() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+			auto topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 			QCOMPARE(client->checkTopicContains(topics[0], topics[1]), false);
 		}
 
@@ -57,7 +80,7 @@ void MQTTTest::testContainFalse() {
 }
 
 void MQTTTest::testContainTrue() {
-	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	auto* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("contain_true.txt");
 	QFile file(fileName);
 
@@ -66,7 +89,7 @@ void MQTTTest::testContainTrue() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+			auto topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 			QCOMPARE(client->checkTopicContains(topics[0], topics[1]), true);
 		}
 
@@ -79,7 +102,7 @@ void MQTTTest::testContainTrue() {
 // ############################  check common topics  ###########################
 // ##############################################################################
 void MQTTTest::testCommonTrue() {
-	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	auto* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("common_true.txt");
 	QFile file(fileName);
 
@@ -88,7 +111,7 @@ void MQTTTest::testCommonTrue() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+			auto topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 			QCOMPARE(client->checkCommonLevel(topics[0], topics[1]), topics[2]);
 		}
 
@@ -98,7 +121,7 @@ void MQTTTest::testCommonTrue() {
 }
 
 void MQTTTest::testCommonFalse() {
-	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	auto* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("common_false.txt");
 	QFile file(fileName);
 
@@ -107,7 +130,7 @@ void MQTTTest::testCommonFalse() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+			auto topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 			QCOMPARE(client->checkCommonLevel(topics[0], topics[1]), QString());
 		}
 
@@ -120,19 +143,26 @@ void MQTTTest::testCommonFalse() {
 // #################  test handling of data received by messages  ###############
 // ##############################################################################
 void MQTTTest::testIntegerMessage() {
-	QSKIP("broker.hivemq.com is not available anymore.");
-	AsciiFilter* filter = new AsciiFilter();
-	filter->setAutoModeEnabled(true);
+	QSKIP("Unstable", QTest::SkipSingle);
 
-	Project* project = new Project();
+	auto* filter = new AsciiFilter();
 
-	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
+	auto properties = filter->properties();
+	properties.automaticSeparatorDetection = false;
+	properties.headerEnabled = false;
+	properties.columnModesString = QStringLiteral("Int");
+	properties.intAsDouble = false;
+	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
+
+	auto* project = new Project();
+
+	auto* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
-	mqttClient->setKeepNValues(0);
+	mqttClient->setKeepNValues(100); // At least 8!
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
+	mqttClient->setMQTTClientHostPort(mqttHostName, mqttPort);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	QMqttTopicFilter topicFilter{QStringLiteral("labplot/mqttUnitTest")};
@@ -140,9 +170,9 @@ void MQTTTest::testIntegerMessage() {
 	mqttClient->read();
 	mqttClient->ready();
 
-	QMqttClient* client = new QMqttClient();
-	client->setHostname(QStringLiteral("broker.hivemq.com"));
-	client->setPort(1883);
+	auto* client = new QMqttClient();
+	client->setHostname(mqttHostName);
+	client->setPort(mqttPort);
 	client->connectToHost();
 
 	bool wait = QTest::qWaitFor(
@@ -152,82 +182,106 @@ void MQTTTest::testIntegerMessage() {
 		5000);
 	QCOMPARE(wait, true);
 
-	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
+	auto* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
-		const QString fileName = m_dataDir + QStringLiteral("integer_message_1.txt");
-		QFile file(fileName);
+		{
+			const QStringList data = {
+				QStringLiteral("1"),
+				QStringLiteral("2"),
+				QStringLiteral("3"),
+			};
+			QString savePath;
+			SAVE_FILE("testfile", data);
+			QFile file(savePath);
 
-		if (file.open(QIODevice::ReadOnly)) {
-			QTextStream in(&file);
-			QString message = in.readAll();
-			client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			if (file.open(QIODevice::ReadOnly)) {
+				QTextStream in(&file);
+				QString message = in.readAll();
+				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			}
+			file.close();
 		}
-		file.close();
 
 		QTimer timer;
 		timer.setSingleShot(true);
-		QEventLoop* loop = new QEventLoop();
-		connect(mqttClient, &MQTTClient::MQTTTopicsChanged, loop, &QEventLoop::quit);
+		auto* loop = new QEventLoop();
+		connect(mqttClient, &MQTTClient::messagedReceived, loop, &QEventLoop::quit);
 		connect((&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
 		loop->exec();
 
 		const MQTTTopic* testTopic = nullptr;
 
-		if (timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
-			for (const auto& top : topic) {
-				if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
-					testTopic = top;
-					break;
-				}
-			}
-
-			if (testTopic) {
-				Column* value = testTopic->column(testTopic->columnCount() - 1);
-				QCOMPARE(value->columnMode(), Column::ColumnMode::Integer);
-				QCOMPARE(value->rowCount(), 3);
-				QCOMPARE(value->valueAt(0), 1);
-				QCOMPARE(value->valueAt(1), 2);
-				QCOMPARE(value->valueAt(2), 3);
-
-				const QString fileName2 = m_dataDir + QStringLiteral("integer_message_2.txt");
-				QFile file2(fileName2);
-
-				if (file2.open(QIODevice::ReadOnly)) {
-					QTextStream in2(&file2);
-					QString message = in2.readAll();
-					client->publish(topicFilter.filter(), message.toUtf8(), 0);
-				}
-				file2.close();
-
-				QTest::qWait(1000);
-
-				QCOMPARE(value->rowCount(), 8);
-				QCOMPARE(value->valueAt(3), 6);
-				QCOMPARE(value->valueAt(4), 0);
-				QCOMPARE(value->valueAt(5), 0);
-				QCOMPARE(value->valueAt(6), 0);
-				QCOMPARE(value->valueAt(7), 3);
+		QVERIFY(timer.isActive());
+		auto topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (const auto& top : topic) {
+			if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
+				testTopic = top;
+				break;
 			}
 		}
+		QVERIFY(testTopic);
+
+		Column* value = testTopic->column(testTopic->columnCount() - 1);
+		QCOMPARE(value->columnMode(), Column::ColumnMode::Integer);
+		QCOMPARE(value->rowCount(), 3);
+		QCOMPARE(value->integerAt(0), 1);
+		QCOMPARE(value->integerAt(1), 2);
+		QCOMPARE(value->integerAt(2), 3);
+
+		{
+			const QStringList data = {
+				QStringLiteral("5"),
+				QStringLiteral("6"),
+				QStringLiteral("7"),
+				QStringLiteral("8"),
+			};
+			QString savePath;
+			SAVE_FILE("testfile2", data);
+			QFile file2(savePath);
+
+			if (file2.open(QIODevice::ReadOnly)) {
+				QTextStream in2(&file2);
+				QString message = in2.readAll();
+				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			}
+			file2.close();
+		}
+
+		QTest::qWait(1000);
+
+		QCOMPARE(value->rowCount(), 7);
+		QCOMPARE(value->integerAt(0), 1);
+		QCOMPARE(value->integerAt(1), 2);
+		QCOMPARE(value->integerAt(2), 3);
+		QCOMPARE(value->integerAt(3), 5);
+		QCOMPARE(value->integerAt(4), 6);
+		QCOMPARE(value->integerAt(5), 7);
+		QCOMPARE(value->integerAt(6), 8);
 	}
 }
 
 void MQTTTest::testNumericMessage() {
-	QSKIP("broker.hivemq.com is not available anymore.");
-	AsciiFilter* filter = new AsciiFilter();
-	filter->setAutoModeEnabled(true);
+	QSKIP("Unstable", QTest::SkipSingle);
+
+	auto* filter = new AsciiFilter();
+
+	auto properties = filter->properties();
+	properties.automaticSeparatorDetection = false;
+	properties.headerEnabled = false;
+	properties.columnModesString = QStringLiteral("Double");
+	properties.intAsDouble = false;
+	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
 
 	Project* project = new Project();
 
-	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
+	auto* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
-	mqttClient->setKeepNValues(0);
+	mqttClient->setKeepNValues(100); // At least 8!
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
+	mqttClient->setMQTTClientHostPort(mqttHostName, mqttPort);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	QMqttTopicFilter topicFilter{QStringLiteral("labplot/mqttUnitTest")};
@@ -235,9 +289,9 @@ void MQTTTest::testNumericMessage() {
 	mqttClient->read();
 	mqttClient->ready();
 
-	QMqttClient* client = new QMqttClient();
-	client->setHostname(QStringLiteral("broker.hivemq.com"));
-	client->setPort(1883);
+	auto* client = new QMqttClient();
+	client->setHostname(mqttHostName);
+	client->setPort(mqttPort);
 	client->connectToHost();
 
 	bool wait = QTest::qWaitFor(
@@ -247,82 +301,119 @@ void MQTTTest::testNumericMessage() {
 		5000);
 	QCOMPARE(wait, true);
 
-	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
+	auto* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
-		const QString fileName = m_dataDir + QStringLiteral("numeric_message_1.txt");
-		QFile file(fileName);
+		{
+			const QStringList data = {
+				QStringLiteral("1.5"),
+				QStringLiteral(""),
+				QStringLiteral(""),
+				QStringLiteral("2.7"),
+				QStringLiteral(""),
+				QStringLiteral(""),
+				QStringLiteral("3.9"),
+			};
+			QString savePath;
+			SAVE_FILE("testfile", data);
+			QFile file(savePath);
 
-		if (file.open(QIODevice::ReadOnly)) {
-			QTextStream in(&file);
-			QString message = in.readAll();
-			client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			if (file.open(QIODevice::ReadOnly)) {
+				QTextStream in(&file);
+				QString message = in.readAll();
+				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			}
+			file.close();
 		}
-		file.close();
 
 		QTimer timer;
 		timer.setSingleShot(true);
-		QEventLoop* loop = new QEventLoop();
-		connect(mqttClient, &MQTTClient::MQTTTopicsChanged, loop, &QEventLoop::quit);
+		auto* loop = new QEventLoop();
+		connect(mqttClient, &MQTTClient::messagedReceived, loop, &QEventLoop::quit);
 		connect((&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
 		loop->exec();
 
 		const MQTTTopic* testTopic = nullptr;
 
-		if (timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
-			for (const auto& top : topic) {
-				if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
-					testTopic = top;
-					break;
-				}
-			}
-
-			if (testTopic) {
-				Column* value = testTopic->column(testTopic->columnCount() - 1);
-				QCOMPARE(value->columnMode(), Column::ColumnMode::Double);
-				QCOMPARE(value->rowCount(), 3);
-				QCOMPARE(value->valueAt(0), 1.5);
-				QCOMPARE(value->valueAt(1), 2.7);
-				QCOMPARE(value->valueAt(2), 3.9);
-
-				const QString fileName2 = m_dataDir + QStringLiteral("numeric_message_2.txt");
-				QFile file2(fileName2);
-
-				if (file2.open(QIODevice::ReadOnly)) {
-					QTextStream in2(&file2);
-					QString message = in2.readAll();
-					client->publish(topicFilter.filter(), message.toUtf8(), 0);
-				}
-				file2.close();
-
-				QTest::qWait(1000);
-
-				QCOMPARE(value->rowCount(), 8);
-				QCOMPARE(value->valueAt(3), 6);
-				QCOMPARE((bool)std::isnan(value->valueAt(4)), true);
-				QCOMPARE((bool)std::isnan(value->valueAt(5)), true);
-				QCOMPARE((bool)std::isnan(value->valueAt(6)), true);
-				QCOMPARE(value->valueAt(7), 0.0098);
+		QVERIFY(timer.isActive());
+		auto topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (const auto& top : topic) {
+			if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
+				testTopic = top;
+				break;
 			}
 		}
+		QVERIFY(testTopic);
+
+		Column* value = testTopic->column(testTopic->columnCount() - 1);
+		QCOMPARE(value->columnMode(), Column::ColumnMode::Double);
+		QCOMPARE(value->rowCount(), 3);
+		QCOMPARE(value->valueAt(0), 1.5);
+		QCOMPARE(value->valueAt(1), 2.7);
+		QCOMPARE(value->valueAt(2), 3.9);
+
+		{
+			const QStringList data = {
+				QStringLiteral("6"),
+				QStringLiteral(""), // Invalid
+				QStringLiteral(""), // Invalid
+				QStringLiteral("house     ball"), // Invalid
+				QStringLiteral(""), // Invalid
+				QStringLiteral(""), // Invalid
+				QStringLiteral("car"), // Invalid
+				QStringLiteral("0.0098"),
+				QStringLiteral("1.0"),
+				QStringLiteral("12.42"),
+			};
+			QString savePath;
+			SAVE_FILE("testfile2", data);
+			QFile file2(savePath);
+
+			if (file2.open(QIODevice::ReadOnly)) {
+				QTextStream in2(&file2);
+				QString message = in2.readAll();
+				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			}
+			file2.close();
+		}
+
+		QTest::qWait(1000);
+
+		QCOMPARE(value->rowCount(), 9);
+		QCOMPARE(value->valueAt(0), 1.5);
+		QCOMPARE(value->valueAt(1), 2.7);
+		QCOMPARE(value->valueAt(2), 3.9);
+		QCOMPARE(value->valueAt(3), 6.);
+		QCOMPARE((bool)std::isnan(value->valueAt(4)), true);
+		QCOMPARE((bool)std::isnan(value->valueAt(5)), true);
+		QCOMPARE(value->valueAt(6), 0.0098);
+		QCOMPARE(value->valueAt(7), 1.0);
+		QCOMPARE(value->valueAt(8), 12.42);
 	}
 }
 
 void MQTTTest::testTextMessage() {
-	QSKIP("broker.hivemq.com is not available anymore.");
-	AsciiFilter* filter = new AsciiFilter();
-	filter->setAutoModeEnabled(true);
+	QSKIP("Unstable", QTest::SkipSingle);
+
+	auto* filter = new AsciiFilter();
+
+	auto properties = filter->properties();
+	properties.automaticSeparatorDetection = false;
+	properties.headerEnabled = false;
+	properties.columnModesString = QStringLiteral("Text");
+	properties.intAsDouble = false;
+	properties.commentCharacter = QStringLiteral("#");
+	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
 
 	Project* project = new Project();
 
-	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
+	auto* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
-	mqttClient->setKeepNValues(0);
+	mqttClient->setKeepNValues(100); // At least 8!
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
+	mqttClient->setMQTTClientHostPort(mqttHostName, mqttPort);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	QMqttTopicFilter topicFilter{QStringLiteral("labplot/mqttUnitTest")};
@@ -330,9 +421,9 @@ void MQTTTest::testTextMessage() {
 	mqttClient->read();
 	mqttClient->ready();
 
-	QMqttClient* client = new QMqttClient();
-	client->setHostname(QStringLiteral("broker.hivemq.com"));
-	client->setPort(1883);
+	auto* client = new QMqttClient();
+	client->setHostname(mqttHostName);
+	client->setPort(mqttPort);
 	client->connectToHost();
 
 	bool wait = QTest::qWaitFor(
@@ -342,48 +433,59 @@ void MQTTTest::testTextMessage() {
 		5000);
 	QCOMPARE(wait, true);
 
-	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
+	auto* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
-		const QString fileName = m_dataDir + QStringLiteral("text_message.txt");
-		QFile file(fileName);
+		{
+			const QStringList data = {
+				QStringLiteral("ball"),
+				QStringLiteral("cat"),
+				QStringLiteral("#comment"),
+				QStringLiteral("dog"),
+				QStringLiteral("#comment something"),
+				QStringLiteral("#comment something new"),
+				QStringLiteral("house"),
+				QStringLiteral("Barcelona"),
+			};
+			QString savePath;
+			SAVE_FILE("testfile", data);
+			QFile file(savePath);
 
-		if (file.open(QIODevice::ReadOnly)) {
-			QTextStream in(&file);
-			QString message = in.readAll();
-			client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			if (file.open(QIODevice::ReadOnly)) {
+				QTextStream in(&file);
+				QString message = in.readAll();
+				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			}
+			file.close();
 		}
-		file.close();
 
 		QTimer timer;
 		timer.setSingleShot(true);
-		QEventLoop* loop = new QEventLoop();
-		connect(mqttClient, &MQTTClient::MQTTTopicsChanged, loop, &QEventLoop::quit);
+		auto* loop = new QEventLoop();
+		connect(mqttClient, &MQTTClient::messagedReceived, loop, &QEventLoop::quit);
 		connect((&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
 		loop->exec();
 
 		const MQTTTopic* testTopic = nullptr;
 
-		if (timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
-			for (const auto& top : topic) {
-				if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
-					testTopic = top;
-					break;
-				}
-			}
-
-			if (testTopic) {
-				Column* value = testTopic->column(testTopic->columnCount() - 1);
-				QCOMPARE(value->columnMode(), Column::ColumnMode::Text);
-				QCOMPARE(value->rowCount(), 5);
-				QCOMPARE(value->textAt(0), QStringLiteral("ball"));
-				QCOMPARE(value->textAt(1), QStringLiteral("cat"));
-				QCOMPARE(value->textAt(2), QStringLiteral("dog"));
-				QCOMPARE(value->textAt(3), QStringLiteral("house"));
-				QCOMPARE(value->textAt(4), QStringLiteral("Barcelona"));
+		QVERIFY(timer.isActive());
+		auto topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (const auto& top : topic) {
+			if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
+				testTopic = top;
+				break;
 			}
 		}
+		QVERIFY(testTopic);
+
+		Column* value = testTopic->column(testTopic->columnCount() - 1);
+		QCOMPARE(value->columnMode(), Column::ColumnMode::Text);
+		QCOMPARE(value->rowCount(), 5);
+		QCOMPARE(value->textAt(0), QStringLiteral("ball"));
+		QCOMPARE(value->textAt(1), QStringLiteral("cat"));
+		QCOMPARE(value->textAt(2), QStringLiteral("dog"));
+		QCOMPARE(value->textAt(3), QStringLiteral("house"));
+		QCOMPARE(value->textAt(4), QStringLiteral("Barcelona"));
 	}
 }
 
@@ -391,25 +493,25 @@ void MQTTTest::testTextMessage() {
 // #####################  test subscribing and unsubscribing  ###################
 // ##############################################################################
 /*void MQTTTest::testSubscriptions() {
-	AsciiFilter* filter = new AsciiFilter();
+	auto* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
 
-	Project* project = new Project();
+	auto* project = new Project();
 
-	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
+	auto* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
+	mqttClient->setMQTTClientHostPort(mqttHostName, mqttPort);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	mqttClient->setMQTTWillUse(false);
 	QMqttTopicFilter topicFilter {QStringLiteral("labplot/mqttUnitTest")};
 	mqttClient->addInitialMQTTSubscriptions(topicFilter, 0);
 
-	LiveDataDock* liveDock = new LiveDataDock();
+	auto* liveDock = new LiveDataDock();
 	liveDock->setMQTTClient(mqttClient);
 
 	mqttClient->read();
@@ -417,7 +519,7 @@ void MQTTTest::testTextMessage() {
 
 	QTimer timer;
 	timer.setSingleShot(true);
-	QEventLoop* loop = new QEventLoop();
+	auto* loop = new QEventLoop();
 	connect(mqttClient, &MQTTClient::MQTTSubscribed, loop, &QEventLoop::quit);
 	connect( (&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 	timer.start(5000);
@@ -425,9 +527,9 @@ void MQTTTest::testTextMessage() {
 
 	if(timer.isActive()) {
 		delete loop;
-		QMqttClient* client = new QMqttClient();
-		client->setHostname(QStringLiteral("broker.hivemq.com"));
-		client->setPort(1883);
+		auto* client = new QMqttClient();
+		client->setHostname(mqttHostName);
+		client->setPort(mqttPort);
 		client->connectToHost();
 
 		bool wait = QTest::qWaitFor([&]() {
@@ -491,7 +593,7 @@ void MQTTTest::testTextMessage() {
 
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
+				auto subscriptions = mqttClient->MQTTSubscriptions();
 				QCOMPARE(subscriptions.contains(topic), true);
 			}
 		}
@@ -520,7 +622,7 @@ void MQTTTest::testTextMessage() {
 
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
+				auto subscriptions = mqttClient->MQTTSubscriptions();
 				QCOMPARE(subscriptions.contains(topic), true);
 			}
 		}
@@ -549,7 +651,7 @@ void MQTTTest::testTextMessage() {
 
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
+				auto subscriptions = mqttClient->MQTTSubscriptions();
 				QCOMPARE(subscriptions.contains(topic), true);
 			}
 		}

@@ -4,21 +4,13 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class Histogram
-  \brief A 2D-curve, provides an interface for editing many properties of the curve.
-
-  \ingroup worksheet
-  */
 #include "Histogram.h"
 #include "HistogramPrivate.h"
-#include "backend/core/AbstractColumn.h"
-#include "backend/core/Folder.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
@@ -29,25 +21,29 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
+#include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
-#include <QGraphicsSceneMouseEvent>
-
-#include <backend/worksheet/WorksheetElement.h>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
-static constexpr double zero = std::numeric_limits<double>::epsilon(); // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
+// zero baseline, don't use the exact 0.0 since it breaks the histogram with log-scaling
+static constexpr double zero = std::numeric_limits<double>::epsilon();
 
+/*!
+ * \class Histogram
+ * \brief This class implements the histogram - a visualization of the distribution of numerical data.
+ *
+ * Ordinary, cumulative and average shifted histograms are supported as well as
+ * different normalization and binning methods.
+ * \ingroup CartesianPlots
+ */
 Histogram::Histogram(const QString& name, bool loading)
 	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
 	init(loading);
@@ -55,7 +51,7 @@ Histogram::Histogram(const QString& name, bool loading)
 
 Histogram::Histogram(const QString& name, HistogramPrivate* dd)
 	: Plot(name, dd, AspectType::Histogram) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -153,10 +149,6 @@ void Histogram::init(bool loading) {
 	d->rugLength = group.readEntry(QStringLiteral("RugLength"), Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->rugWidth = group.readEntry(QStringLiteral("RugWidth"), 0.0);
 	d->rugOffset = group.readEntry(QStringLiteral("RugOffset"), 0.0);
-	this->initActions();
-}
-
-void Histogram::initActions() {
 }
 
 /*!
@@ -251,6 +243,11 @@ QIcon Histogram::icon() const {
 	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
 }
 
+void Histogram::updateLocale() {
+	Q_D(Histogram);
+	d->updateValues();
+}
+
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
@@ -330,7 +327,7 @@ bool Histogram::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
-bool Histogram::usingColumn(const Column* column) const {
+bool Histogram::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const Histogram);
 	return (
 		d->dataColumn == column || (d->errorBar->yErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->yPlusColumn() == column)
@@ -712,7 +709,7 @@ const AbstractColumn* HistogramPrivate::bins() {
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		m_binsColumn->resizeTo(m_bins);
 		for (size_t i = 0; i < m_bins; ++i) {
-			const double x = binRangesMin + i * width;
+			const double x = binRangesMin + i * width + width / 2.;
 			m_binsColumn->setValueAt(i, x);
 		}
 	}
@@ -878,9 +875,9 @@ void HistogramPrivate::recalc() {
 		}
 		}
 
-		DEBUG("min " << binRangesMin)
-		DEBUG("max " << binRangesMax)
-		DEBUG("number of bins " << m_bins)
+		DEBUG(Q_FUNC_INFO << ", min " << binRangesMin)
+		DEBUG(Q_FUNC_INFO << ", max " << binRangesMax)
+		DEBUG(Q_FUNC_INFO << ", number of bins " << m_bins)
 
 		// calculate the histogram
 		if (m_bins > 0) {
@@ -936,7 +933,7 @@ void HistogramPrivate::recalc() {
 					m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
 			}
 		} else
-			DEBUG("Number of bins must be positive integer")
+			DEBUG(Q_FUNC_INFO << ", number of bins must be positive integer")
 	}
 
 	const double xMin = xMinimum();
@@ -987,7 +984,7 @@ void HistogramPrivate::updateLines() {
 
 	// map the lines and the symbol positions to the scene coordinates
 	linesUnclipped = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	lines = q->cSystem->mapLogicalToScene(lines);
+	q->cSystem->mapLogicalToSceneDefaultMapping(lines);
 	visiblePoints = std::vector<bool>(pointsLogical.count(), false);
 	q->cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
 
@@ -1033,7 +1030,8 @@ void HistogramPrivate::histogramValue(double& value, int bin) const {
 	}
 	}
 
-	if (value == 0.0)
+	// don't use the exact 0.0 for probability or density since it breaks the histogram with log-scaling
+	if (value == 0.0 && normalization != Histogram::Count)
 		value = zero;
 }
 
@@ -1200,13 +1198,14 @@ void HistogramPrivate::updateValues() {
 	// determine the value string for all points that are currently visible in the plot
 	const auto& valuesPrefix = value->prefix();
 	const auto& valuesSuffix = value->suffix();
+	const auto numberLocale = QLocale();
 	if (value->type() == Value::BinEntries) {
 		switch (type) {
 		case Histogram::Ordinary:
 			for (size_t i = 0; i < m_bins; ++i) {
 				if (!visiblePoints[i])
 					continue;
-				valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberLocale.toString(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
 			}
 			break;
 		case Histogram::Cumulative: {
@@ -1215,7 +1214,7 @@ void HistogramPrivate::updateValues() {
 				if (!visiblePoints[i])
 					continue;
 				value += gsl_histogram_get(m_histogram, i);
-				valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberLocale.toString(value) + valuesSuffix;
 			}
 			break;
 		}
@@ -1240,11 +1239,12 @@ void HistogramPrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision())
+						+ valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
@@ -1433,7 +1433,7 @@ void HistogramPrivate::updateRug() {
 		points = q->cSystem->mapLogicalToScene(points);
 
 		// path for the vertical rug lines
-		for (const auto& point : qAsConst(points)) {
+		for (const auto& point : std::as_const(points)) {
 			rugPath.moveTo(point.x(), point.y() - rugOffset);
 			rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
 		}
@@ -1447,7 +1447,7 @@ void HistogramPrivate::updateRug() {
 		points = q->cSystem->mapLogicalToScene(points);
 
 		// path for the horizontal rug lines
-		for (const auto& point : qAsConst(points)) {
+		for (const auto& point : std::as_const(points)) {
 			rugPath.moveTo(point.x() + rugOffset, point.y());
 			rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
 		}
@@ -1536,7 +1536,7 @@ void HistogramPrivate::updatePixmap() {
 	}
 	m_pixmap.fill(Qt::transparent);
 	QPainter painter(&m_pixmap);
-	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
@@ -1558,12 +1558,16 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
 	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
+
+	// no need to handle the selection/hover effect if the cached pixmap is empty
+	if (m_pixmap.isNull())
+		return;
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
@@ -1595,19 +1599,6 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
-	}
-}
-
-void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && !isSelected())
-		setHover(true);
-}
-
-void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && m_hovered) {
-		setHover(false);
 	}
 }
 
@@ -1785,20 +1776,19 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("Histogram"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(Histogram);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const QColor color = plot->plotColor(index);
 
 	QPen p;
-
-	Q_D(Histogram);
 	d->suppressRecalc = true;
 
-	d->line->loadThemeConfig(group, themeColor);
-	d->symbol->loadThemeConfig(group, themeColor);
-	d->value->loadThemeConfig(group, themeColor);
-	d->background->loadThemeConfig(group, themeColor);
-	d->errorBar->loadThemeConfig(group, themeColor);
+	d->line->loadThemeConfig(group, color);
+	d->symbol->loadThemeConfig(group, color);
+	d->value->loadThemeConfig(group, color);
+	d->background->loadThemeConfig(group, color);
+	d->errorBar->loadThemeConfig(group, color);
 
 	if (plot->theme() == QLatin1String("Tufte")) {
 		d->line->setHistogramLineType(Histogram::LineType::HalfBars);

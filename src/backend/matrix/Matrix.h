@@ -18,14 +18,21 @@
 
 class MatrixPrivate;
 class MatrixModel;
+#ifndef SDK
 class MatrixView;
+#endif
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Matrix : public AbstractDataSource {
+#else
 class Matrix : public AbstractDataSource {
+#endif
 	Q_OBJECT
-	Q_ENUMS(HeaderFormat)
 
 public:
 	enum class HeaderFormat { HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues };
+	Q_ENUM(HeaderFormat)
 
 	explicit Matrix(const QString& name, bool loading = false, const AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Double);
 	Matrix(int rows, int cols, const QString& name, const AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Double);
@@ -34,6 +41,7 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;
+	void updateLocale();
 
 	bool exportView() const override;
 	bool printView() override;
@@ -144,14 +152,15 @@ Q_SIGNALS:
 	void headerFormatChanged(Matrix::HeaderFormat);
 
 private:
-	void init();
+	void init(int rows, int cols);
 
 	Q_DECLARE_PRIVATE(Matrix)
 	MatrixPrivate* const d_ptr;
 
 	mutable MatrixModel* m_model{nullptr};
+#ifndef SDK
 	mutable MatrixView* m_view{nullptr};
-
+#endif
 	friend class MatrixPrivate;
 };
 

@@ -5,12 +5,13 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2009 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/core/Settings.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
@@ -48,7 +49,7 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
 	updateHorizontalHeader(false);
 	connect(m_spreadsheet, &Spreadsheet::aspectDescriptionChanged, this, &SpreadsheetModel::handleDescriptionChange);
 
-	// Used when single columns get deleted or added
+	// Used when single column gets deleted or added
 	connect(m_spreadsheet,
 			QOverload<const AbstractAspect*, int, const AbstractAspect*>::of(&Spreadsheet::childAspectAboutToBeAdded),
 			this,
@@ -184,7 +185,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		return {col_ptr->asStringColumn()->textAt(row)};
 	case Qt::ForegroundRole:
 		if (!col_ptr->isValid(row))
-			return {QBrush(Qt::red)};
+			return QBrush(Qt::red);
 		return color(col_ptr, row, AbstractColumn::Formatting::Foreground);
 	case Qt::BackgroundRole:
 		if (m_searchText.isEmpty())
@@ -193,7 +194,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			if (col_ptr->asStringColumn()->textAt(row).indexOf(m_searchText) == -1)
 				return color(col_ptr, row, AbstractColumn::Formatting::Background);
 			else
-				return {QApplication::palette().color(QPalette::Highlight)};
+				return QApplication::palette().color(QPalette::Highlight);
 		}
 	case static_cast<int>(CustomDataRole::MaskingRole):
 		return {col_ptr->isMasked(row)};
@@ -210,6 +211,11 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 
 QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	if ((orientation == Qt::Horizontal && section > m_columnCount - 1) || (orientation == Qt::Vertical && section > m_rowCount - 1))
+		return {};
+
+	// If a column in the spreadsheet gets remove, because of an import. It can happen, that MainWindow activates a different dockwidget, which
+	// leads to a redraw of the Spreadsheetview. During this import, the spreadsheetmodel m_columnCount and the spreadsheet column count are not in sync
+	if (m_suppressSignals)
 		return {};
 
 	switch (orientation) {
@@ -336,7 +342,7 @@ void SpreadsheetModel::handleAspectsInserted(int first, int last) {
 		connect(col, &Column::formatChanged, this, &SpreadsheetModel::handleDataChange);
 		connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleModeChange);
 		connect(col, &Column::maskingChanged, this, &SpreadsheetModel::handleDataChange);
-		connect(col, &Column::formulaChanged, this, &SpreadsheetModel::handlePlotDesignationChange); // we can re-use the same slot to update the header here
+		connect(col, &Column::formulaChanged, this, &SpreadsheetModel::handlePlotDesignationChange); // we can reuse the same slot to update the header here
 		connect(col->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 	}
 
@@ -584,7 +590,7 @@ QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, Abstract
 	}
 
 	if (index < format.colors.count())
-		return {QColor(format.colors.at(index))};
+		return QColor(format.colors.at(index));
 	else
-		return {QColor(format.colors.constLast())};
+		return QColor(format.colors.constLast());
 }

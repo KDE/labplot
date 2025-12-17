@@ -4,7 +4,7 @@
 	Description          : label settings widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2012-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2012-2024 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -88,7 +88,7 @@ void SymbolWidget::adjustLayout() {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void SymbolWidget::updateLocale() {
 	const auto numberLocale = QLocale();
@@ -257,17 +257,17 @@ void SymbolWidget::symbolStyleChanged(Symbol::Style style) {
 
 void SymbolWidget::symbolSizeChanged(qreal size) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
+	ui.sbSize->setValue(std::round(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point)));
 }
 
 void SymbolWidget::symbolRotationAngleChanged(qreal angle) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbRotation->setValue(angle);
+	ui.sbRotation->setValue(std::round(angle));
 }
 
 void SymbolWidget::symbolOpacityChanged(qreal opacity) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbOpacity->setValue(round(opacity * 100.0));
+	ui.sbOpacity->setValue(std::round(opacity * 100.0));
 }
 
 void SymbolWidget::symbolBrushChanged(const QBrush& brush) {
@@ -282,7 +282,7 @@ void SymbolWidget::symbolPenChanged(const QPen& pen) {
 	ui.cbBorderStyle->setCurrentIndex((int)pen.style());
 	ui.kcbBorderColor->setColor(pen.color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, pen.color());
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
+	ui.sbBorderWidth->setValue(std::round(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point)));
 }
 
 //**********************************************************
@@ -291,14 +291,14 @@ void SymbolWidget::symbolPenChanged(const QPen& pen) {
 void SymbolWidget::load() {
 	int index = ui.cbStyle->findData((int)m_symbol->style());
 	ui.cbStyle->setCurrentIndex(index);
-	ui.sbSize->setValue(Worksheet::convertFromSceneUnits(m_symbol->size(), Worksheet::Unit::Point));
-	ui.sbRotation->setValue(m_symbol->rotationAngle());
-	ui.sbOpacity->setValue(round(m_symbol->opacity() * 100.0));
+	ui.sbSize->setValue(std::round(Worksheet::convertFromSceneUnits(m_symbol->size(), Worksheet::Unit::Point)));
+	ui.sbRotation->setValue(std::round(m_symbol->rotationAngle()));
+	ui.sbOpacity->setValue(std::round(m_symbol->opacity() * 100.0));
 	ui.cbFillingStyle->setCurrentIndex((int)m_symbol->brush().style());
 	ui.kcbFillingColor->setColor(m_symbol->brush().color());
 	ui.cbBorderStyle->setCurrentIndex((int)m_symbol->pen().style());
 	ui.kcbBorderColor->setColor(m_symbol->pen().color());
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(m_symbol->pen().widthF(), Worksheet::Unit::Point));
+	ui.sbBorderWidth->setValue(std::round(Worksheet::convertFromSceneUnits(m_symbol->pen().widthF(), Worksheet::Unit::Point)));
 
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, ui.kcbFillingColor->color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
@@ -308,14 +308,14 @@ void SymbolWidget::load() {
 void SymbolWidget::loadConfig(const KConfigGroup& group) {
 	int index = ui.cbStyle->findData((int)m_symbol->style());
 	ui.cbStyle->setCurrentIndex(group.readEntry("SymbolStyle", index));
-	ui.sbSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_symbol->size()), Worksheet::Unit::Point));
-	ui.sbRotation->setValue(group.readEntry("SymbolRotation", m_symbol->rotationAngle()));
-	ui.sbOpacity->setValue(round(group.readEntry("SymbolOpacity", m_symbol->opacity()) * 100.0));
+	ui.sbSize->setValue(std::round(Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_symbol->size()), Worksheet::Unit::Point)));
+	ui.sbRotation->setValue(std::round(group.readEntry("SymbolRotation", m_symbol->rotationAngle())));
+	ui.sbOpacity->setValue(std::round(group.readEntry("SymbolOpacity", m_symbol->opacity()) * 100.0));
 	ui.cbFillingStyle->setCurrentIndex(group.readEntry("SymbolFillingStyle", (int)m_symbol->brush().style()));
 	ui.kcbFillingColor->setColor(group.readEntry("SymbolFillingColor", m_symbol->brush().color()));
 	ui.cbBorderStyle->setCurrentIndex(group.readEntry("SymbolBorderStyle", (int)m_symbol->pen().style()));
 	ui.kcbBorderColor->setColor(group.readEntry("SymbolBorderColor", m_symbol->pen().color()));
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth", m_symbol->pen().widthF()), Worksheet::Unit::Point));
+	ui.sbBorderWidth->setValue(std::round(Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth", m_symbol->pen().widthF()), Worksheet::Unit::Point)));
 
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, ui.kcbFillingColor->color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());

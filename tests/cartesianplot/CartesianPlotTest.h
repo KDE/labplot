@@ -4,6 +4,7 @@
 	Description          : Tests for cartesian plots
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -34,7 +35,10 @@ private Q_SLOTS:
 	void equationCurveEquationChangedAutoScale();
 	void equationCurveEquationChangedNoAutoScale();
 
-	void undoInfoElement();
+	// initialize and add a child, undo and redo, save and load
+	void infoElementInit();
+	void insetPlotInit();
+	void insetPlotSaveLoad();
 
 	void axisFormat();
 	void shiftLeftAutoScale();
@@ -62,6 +66,7 @@ private Q_SLOTS:
 	void spreadsheetRemoveRows();
 	void spreadsheetInsertRows();
 	void columnRemove();
+	void columnRemoveSaveLoadRestore();
 	void spreadsheetRemove();
 
 	// handling of z-values on changes in the child hierarchy

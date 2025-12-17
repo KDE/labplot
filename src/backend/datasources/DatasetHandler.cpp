@@ -74,41 +74,50 @@ void DatasetHandler::markMetadataAsInvalid() {
  */
 void DatasetHandler::configureFilter() {
 	// set some default values common to many datasets
-	m_filter->setNumberFormat(QLocale::C);
-	m_filter->setSkipEmptyParts(false);
-	m_filter->setHeaderEnabled(false);
-	m_filter->setRemoveQuotesEnabled(true);
+	auto properties = m_filter->properties();
+	properties.locale = QLocale::C;
+	properties.skipEmptyParts = false;
+	properties.headerEnabled = false;
+	properties.removeQuotes = true;
 
 	// read properties specified in the dataset description
 	if (!m_object->isEmpty()) {
-		if (m_object->contains(QLatin1String("separator")))
-			m_filter->setSeparatingCharacter(m_object->value(QStringLiteral("separator")).toString());
+		if (m_object->contains(QLatin1String("separator"))) {
+			const auto separator = m_object->value(QStringLiteral("separator")).toString();
+			if (separator.compare(AsciiFilter::autoSeparatorDetectionString(), Qt::CaseInsensitive) == 0) {
+				properties.automaticSeparatorDetection = true;
+				properties.separator.clear();
+			} else {
+				properties.automaticSeparatorDetection = false;
+				properties.separator = separator;
+			}
+		}
 
 		if (m_object->contains(QLatin1String("comment_character")))
-			m_filter->setCommentCharacter(m_object->value(QStringLiteral("comment_character")).toString());
+			properties.commentCharacter = m_object->value(QStringLiteral("comment_character")).toString();
 
 		if (m_object->contains(QLatin1String("create_index_column")))
-			m_filter->setCreateIndexEnabled(m_object->value(QStringLiteral("create_index_column")).toBool());
+			properties.createIndex = m_object->value(QStringLiteral("create_index_column")).toBool();
 
 		if (m_object->contains(QLatin1String("skip_empty_parts")))
-			m_filter->setSkipEmptyParts(m_object->value(QStringLiteral("skip_empty_parts")).toBool());
+			properties.skipEmptyParts = m_object->value(QStringLiteral("skip_empty_parts")).toBool();
 
 		if (m_object->contains(QLatin1String("simplify_whitespaces")))
-			m_filter->setSimplifyWhitespacesEnabled(m_object->value(QStringLiteral("simplify_whitespaces")).toBool());
+			properties.simplifyWhitespaces = m_object->value(QStringLiteral("simplify_whitespaces")).toBool();
 
 		if (m_object->contains(QLatin1String("remove_quotes")))
-			m_filter->setRemoveQuotesEnabled(m_object->value(QStringLiteral("remove_quotes")).toBool());
+			properties.removeQuotes = m_object->value(QStringLiteral("remove_quotes")).toBool();
 
 		if (m_object->contains(QLatin1String("use_first_row_for_vectorname"))) {
-			m_filter->setHeaderEnabled(m_object->value(QStringLiteral("use_first_row_for_vectorname")).toBool());
-			m_filter->setHeaderLine(1);
+			properties.headerEnabled = m_object->value(QStringLiteral("use_first_row_for_vectorname")).toBool();
+			properties.headerLine = 1;
 		}
 
 		if (m_object->contains(QLatin1String("number_format")))
-			m_filter->setNumberFormat(QLocale::Language(m_object->value(QStringLiteral("number_format")).toInt()));
+			properties.locale = QLocale::Language(m_object->value(QStringLiteral("number_format")).toInt());
 
 		if (m_object->contains(QLatin1String("DateTime_format")))
-			m_filter->setDateTimeFormat(m_object->value(QStringLiteral("DateTime_format")).toString());
+			properties.dateTimeFormat = m_object->value(QStringLiteral("DateTime_format")).toString();
 
 		if (m_object->contains(QLatin1String("columns"))) {
 			const QJsonArray& columnsArray = m_object->value(QStringLiteral("columns")).toArray();
@@ -116,12 +125,14 @@ void DatasetHandler::configureFilter() {
 			for (const auto& col : columnsArray)
 				columnNames << col.toString();
 
-			m_filter->setVectorNames(columnNames);
+			properties.columnNamesRaw = columnNames.join(QLatin1Char(','));
 		}
 	} else {
 		DEBUG("Empty object");
 		markMetadataAsInvalid();
 	}
+
+	m_filter->setProperties(properties);
 }
 
 /**

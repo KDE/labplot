@@ -18,8 +18,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "frontend/GuiTools.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/worksheet/ExportWorksheetDialog.h"
 
@@ -35,7 +34,12 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
+
+void DatapickerImage::ReferencePoints::clearPoints() {
+	scenePos[0] = QPointF(std::nan("0"), std::nan("0"));
+	scenePos[1] = QPointF(std::nan("0"), std::nan("0"));
+	scenePos[2] = QPointF(std::nan("0"), std::nan("0"));
+}
 
 /**
  * \class DatapickerImage
@@ -55,6 +59,8 @@ DatapickerImage::DatapickerImage(const QString& name, bool loading)
 	, d_ptr(new DatapickerImagePrivate(this))
 	, m_segments(new Segments(this)) {
 	Q_D(DatapickerImage);
+	connect(this, &AbstractAspect::childAspectAdded, this, &DatapickerImage::childAdded);
+	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, this, &DatapickerImage::childRemoved);
 	if (!loading)
 		init();
 	else {
@@ -165,9 +171,8 @@ bool DatapickerImage::exportView() const {
 		const auto format = dlg->exportFormat();
 		const int resolution = dlg->exportResolution();
 
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		m_view->exportToFile(path, format, resolution);
-		RESET_CURSOR;
 	}
 	delete dlg;
 	return ret;
@@ -421,6 +426,20 @@ void DatapickerImage::setPrinting(bool on) const {
 		point->setPrinting(on);
 }
 
+void DatapickerImage::clearReferencePoints() {
+	Q_D(DatapickerImage);
+	const auto& points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+	if (!points.isEmpty()) {
+		beginMacro(i18n("%1: remove all axis points", name()));
+
+		for (auto* point : points)
+			point->remove();
+		endMacro();
+		d->axisPoints.clearPoints();
+		Q_EMIT axisPointsRemoved();
+	}
+}
+
 void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 	Q_D(DatapickerImage);
 	if (d->plotPointsType == pointsType)
@@ -430,14 +449,7 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 
 	if (pointsType == DatapickerImage::PointsType::AxisPoints) {
 		// clear image
-		const auto& points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
-		if (!points.isEmpty()) {
-			beginMacro(i18n("%1: remove all axis points", name()));
-
-			for (auto* point : points)
-				point->remove();
-			endMacro();
-		}
+		clearReferencePoints();
 		m_segments->setSegmentsVisible(false);
 	} else if (pointsType == DatapickerImage::PointsType::CurvePoints) {
 		m_segments->setSegmentsVisible(false);
@@ -472,6 +484,38 @@ void DatapickerImage::referencePointSelected(const DatapickerPoint* point) {
 		}
 	}
 	m_currentRefPoint = -1;
+}
+
+void DatapickerImage::childAdded(const AbstractAspect* child) {
+	const auto* point = dynamic_cast<const DatapickerPoint*>(child);
+	if (point) {
+		connect(point, &DatapickerPoint::dataChanged, this, &DatapickerImage::datapickerPointChanged);
+		connect(point, &DatapickerPoint::pointSelected, this, QOverload<const DatapickerPoint*>::of(&DatapickerImage::referencePointSelected));
+	}
+}
+
+void DatapickerImage::childRemoved(const AbstractAspect* child) {
+	const auto* point = dynamic_cast<const DatapickerPoint*>(child);
+	if (point)
+		disconnect(point, nullptr, this, nullptr);
+}
+
+bool DatapickerImage::addChild(AbstractAspect* child) {
+	if (dynamic_cast<DatapickerPoint*>(child) && children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden).count() >= 3)
+		return false;
+
+	return AbstractAspect::addChild(child);
+}
+
+void DatapickerImage::datapickerPointChanged(const DatapickerPoint* point) {
+	const auto index = indexOfChild<DatapickerPoint>(point, AbstractAspect::ChildIndexFlag::IncludeHidden);
+	assert(index < 3);
+	if (index >= 0 && index < 3) {
+		auto axisPoints = this->axisPoints();
+		axisPoints.scenePos[index].setX(point->position().x());
+		axisPoints.scenePos[index].setY(point->position().y());
+		setAxisPoints(axisPoints);
+	}
 }
 
 // ##############################################################################
@@ -516,8 +560,9 @@ bool DatapickerImagePrivate::uploadImage() {
 		discretize();
 
 		// resize the screen
-		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchX();
-		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchY();
+		const auto dpi = (m_scene && !m_scene->views().isEmpty()) ? GuiTools::dpi(m_scene->views().first()) : GuiTools::dpi(nullptr);
+		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / dpi.first;
+		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / dpi.second;
 		m_scene->setSceneRect(0, 0, w, h);
 		q->isLoaded = true;
 	}
@@ -552,7 +597,8 @@ DatapickerImagePrivate::~DatapickerImagePrivate() {
 }
 
 void DatapickerImagePrivate::updateImage() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	q->isLoaded = false;
 
 	if (q->originalPlotImage.isNull()) {
@@ -569,7 +615,6 @@ void DatapickerImagePrivate::updateImage() {
 
 	Q_EMIT q->requestUpdate();
 	Q_EMIT q->requestUpdateActions();
-	RESET_CURSOR;
 }
 
 // ##############################################################################

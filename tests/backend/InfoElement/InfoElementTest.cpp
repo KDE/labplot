@@ -1,3 +1,4 @@
+
 /*
 	File                 : InfoElementTest.cpp
 	Project              : LabPlot
@@ -170,7 +171,7 @@ void InfoElementTest::removeCurve() {
 	// project.undoStack()->undo();
 
 	// QCOMPARE(ie->connectionLineCurveName(), curve2->name()); // first curve shall be connected again
-	// // QCOMPARE(ie->connectionLineCurveName(), curve->name()); // Not implememented yet, quite difficult
+	// // QCOMPARE(ie->connectionLineCurveName(), curve->name()); // Not implemented yet, quite difficult
 	// {
 	// 	const auto points = ie->children<CustomPoint>();
 	// 	QCOMPARE(points.count(), 2);
@@ -256,6 +257,164 @@ void InfoElementTest::removeColumn() {
 	QCOMPARE(ie->isValid(), true);
 	QCOMPARE(labels.at(0)->isVisible(), true);
 	QCOMPARE(points.at(0)->isVisible(), true);
+}
+
+void InfoElementTest::changeColumn() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYCurve(QStringLiteral("f(x)"))};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("spreadsheet"));
+	spreadsheet->setColumnCount(3);
+	spreadsheet->setRowCount(11);
+	project.addChild(spreadsheet);
+	const auto& columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 3);
+	QCOMPARE(spreadsheet->rowCount(), 11);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+	auto* y2Column = columns.at(2);
+
+	for (int i = 0; i < spreadsheet->rowCount(); i++) {
+		xColumn->setValueAt(i, i);
+		yColumn->setValueAt(i, i);
+		y2Column->setValueAt(i, i + 1);
+	}
+
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+	p->addChild(curve);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	auto* ie = new InfoElement(QStringLiteral("InfoElement"), p, curve, 4.9);
+	QVERIFY(ie != nullptr);
+	p->addChild(ie);
+
+	{
+		const auto points = ie->children<CustomPoint>();
+		QCOMPARE(ie->markerPointsCount(), 1);
+		QCOMPARE(ie->markerPointAt(0).curve, curve);
+		QCOMPARE(points.count(), 1);
+		QCOMPARE(ie->markerPointAt(0).customPoint, points.at(0));
+		QCOMPARE(points.at(0)->positionLogical(), QPointF(5, 5));
+	}
+	QCOMPARE(ie->connectionLineCurveName(), curve->name());
+
+	// InfoElement is invalid
+	const auto& labels = ie->children<TextLabel>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	const auto& points = ie->children<CustomPoint>();
+	QCOMPARE(labels.count(), 1);
+	QCOMPARE(points.count(), 1);
+
+	QCOMPARE(ie->isValid(), true);
+	QCOMPARE(labels.at(0)->isVisible(), true);
+	QCOMPARE(points.at(0)->isVisible(), true);
+
+	curve->setYColumn(y2Column);
+
+	QCOMPARE(ie->isValid(), true);
+	QCOMPARE(labels.at(0)->isVisible(), true);
+	QCOMPARE(points.at(0)->isVisible(), true);
+
+	{
+		const auto points = ie->children<CustomPoint>();
+		QCOMPARE(ie->markerPointsCount(), 1);
+		QCOMPARE(ie->markerPointAt(0).curve, curve);
+		QCOMPARE(points.count(), 1);
+		QCOMPARE(ie->markerPointAt(0).customPoint, points.at(0));
+		QCOMPARE(points.at(0)->positionLogical(), QPointF(5, 6)); // y2 = i + 1
+		QCOMPARE(ie->markerPointAt(0).visible, true);
+		QCOMPARE(points.at(0)->isVisible(), true);
+	}
+}
+
+void InfoElementTest::columnValueChanged() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYCurve(QStringLiteral("f(x)"))};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("spreadsheet"));
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(11);
+	project.addChild(spreadsheet);
+	const auto& columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	QCOMPARE(spreadsheet->rowCount(), 11);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	for (int i = 0; i < spreadsheet->rowCount(); i++) {
+		xColumn->setValueAt(i, i);
+		yColumn->setValueAt(i, i);
+	}
+
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+	p->addChild(curve);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	auto* ie = new InfoElement(QStringLiteral("InfoElement"), p, curve, 4.9);
+	QVERIFY(ie != nullptr);
+	p->addChild(ie);
+
+	{
+		const auto points = ie->children<CustomPoint>();
+		QCOMPARE(ie->markerPointsCount(), 1);
+		QCOMPARE(ie->markerPointAt(0).curve, curve);
+		QCOMPARE(points.count(), 1);
+		QCOMPARE(ie->markerPointAt(0).customPoint, points.at(0));
+		QCOMPARE(points.at(0)->positionLogical(), QPointF(5, 5));
+	}
+	QCOMPARE(ie->connectionLineCurveName(), curve->name());
+
+	// InfoElement is invalid
+	const auto& labels = ie->children<TextLabel>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	const auto& points = ie->children<CustomPoint>();
+	QCOMPARE(labels.count(), 1);
+	QCOMPARE(points.count(), 1);
+
+	QCOMPARE(ie->isValid(), true);
+	QCOMPARE(labels.at(0)->isVisible(), true);
+	QCOMPARE(points.at(0)->isVisible(), true);
+
+	yColumn->setValueAt(5, 10.);
+
+	QCOMPARE(ie->isValid(), true);
+	QCOMPARE(labels.at(0)->isVisible(), true);
+	QCOMPARE(points.at(0)->isVisible(), true);
+
+	{
+		const auto points = ie->children<CustomPoint>();
+		QCOMPARE(ie->markerPointsCount(), 1);
+		QCOMPARE(ie->markerPointAt(0).curve, curve);
+		QCOMPARE(points.count(), 1);
+		QCOMPARE(ie->markerPointAt(0).customPoint, points.at(0));
+		QCOMPARE(points.at(0)->positionLogical(), QPointF(5, 10));
+		QCOMPARE(ie->markerPointAt(0).visible, true);
+		QCOMPARE(points.at(0)->isVisible(), true);
+	}
 }
 
 void InfoElementTest::deleteCurveRenameAddedAutomatically() {

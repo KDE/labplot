@@ -4,26 +4,22 @@
 	Description          : Text label supporting reach text and latex formatting
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "TextLabel.h"
 #include "TextLabelPrivate.h"
-#include "Worksheet.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/Line.h"
 #include "frontend/GuiTools.h"
 
-#include <QApplication>
 #include <QBuffer>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
@@ -38,7 +34,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <QIcon>
 
 #ifdef HAVE_DISCOUNT
 extern "C" {
@@ -53,6 +48,7 @@ public:
 		auto textOptions = document()->defaultTextOption();
 		textOptions.setWrapMode(QTextOption::NoWrap);
 		document()->setDefaultTextOption(textOptions);
+		document()->setDocumentMargin(0);
 	}
 
 	QRectF scaledBoundingRect() const {
@@ -85,7 +81,7 @@ private:
 
 /**
  * \class TextLabel
- * \brief A label supporting rendering of html- and tex-formatted texts.
+ * \brief A label supporting rendering of HTML, Markdown and LaTeX formatted texts.
  *
  * The label is aligned relative to the specified position.
  * The position can be either specified by providing the x- and y- coordinates
@@ -151,27 +147,42 @@ void TextLabel::init() {
 		d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 	}
 
-	KConfigGroup conf = Settings::group(QStringLiteral("Settings_Worksheet"));
+	auto conf = Settings::group(QStringLiteral("Settings_Worksheet"));
 	const auto& engine = conf.readEntry(QStringLiteral("LaTeXEngine"), "");
 	if (engine == QLatin1String("lualatex"))
 		d->teXFont.setFamily(QStringLiteral("Latin Modern Roman"));
+
+	// border line
+	d->borderLine = new Line(QStringLiteral("borderLine"));
+	d->borderLine->setPrefix(QStringLiteral("Border"));
+	d->borderLine->setCreateXmlElement(false);
+	d->borderLine->setHidden(true);
+	addChild(d->borderLine);
+	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->borderLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+		Q_EMIT changed();
+	});
 
 	// read settings from config if group exists
 	if (group.isValid()) {
 		// properties common to all types
 		d->textWrapper.mode = static_cast<TextLabel::Mode>(group.readEntry(QStringLiteral("Mode"), static_cast<int>(d->textWrapper.mode)));
+		QDEBUG(Q_FUNC_INFO << ", default font =" << QApplication::font())
+		setFont(group.readEntry("Font", QApplication::font()));
 		d->teXFont.setFamily(group.readEntry(QStringLiteral("TeXFontFamily"), d->teXFont.family()));
 		d->teXFont.setPointSize(group.readEntry(QStringLiteral("TeXFontSize"), d->teXFont.pointSize()));
 		d->fontColor = group.readEntry(QStringLiteral("FontColor"), d->fontColor);
 		d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), d->backgroundColor);
-		d->setRotation(group.readEntry(QStringLiteral("Rotation"), d->rotation()));
+
+		// different convention in QGraphicsItem - use negative value to rotate counter-clockwise
+		d->setRotation(-group.readEntry(QStringLiteral("Rotation"), d->rotation()));
 
 		// border
 		d->borderShape = (TextLabel::BorderShape)group.readEntry(QStringLiteral("BorderShape"), (int)d->borderShape);
-		d->borderPen = QPen(group.readEntry(QStringLiteral("BorderColor"), d->borderPen.color()),
-							group.readEntry(QStringLiteral("BorderWidth"), d->borderPen.width()),
-							(Qt::PenStyle)group.readEntry(QStringLiteral("BorderStyle"), (int)(d->borderPen.style())));
-		d->borderOpacity = group.readEntry(QStringLiteral("BorderOpacity"), d->borderOpacity);
+		d->borderLine->init(group);
 
 		// position and alignment relevant properties
 		d->position.point.setX(group.readEntry(QStringLiteral("PositionXValue"), 0.));
@@ -253,9 +264,14 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
 BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, fontColor, fontColor)
 BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, backgroundColor, backgroundColor)
 BASIC_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont)
+
+// border
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::BorderShape, borderShape, borderShape)
-BASIC_SHARED_D_READER_IMPL(TextLabel, QPen, borderPen, borderPen)
-BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
+
+Line* TextLabel::borderLine() const {
+	Q_D(const TextLabel);
+	return d->borderLine;
+}
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateText)
@@ -269,67 +285,106 @@ void TextLabel::setBackgroundColor(const QColor color) {
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setText(const TextWrapper& textWrapper) {
 	Q_D(TextLabel);
+
+	if (d->textWrapper == textWrapper)
+		return;
+
 	// DEBUG("********************\n" << Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
 	// DEBUG("\nOLD TEXT = " << STDSTRING(d->textWrapper.text) << '\n')
 	// DEBUG("NEW TEXT = " << STDSTRING(textWrapper.text) << '\n')
 	// QDEBUG("COLORS: color =" << d->fontColor << ", background color =" << d->backgroundColor)
 
-	if (d->textWrapper != textWrapper) {
-		bool oldEmpty = d->textWrapper.text.isEmpty();
-		if (textWrapper.mode == TextLabel::Mode::Text && !textWrapper.text.isEmpty()) {
-			QTextEdit pte(d->textWrapper.text); // te with previous text
-			// restore formatting when text changes or switching back to text mode
-			if (d->textWrapper.mode != TextLabel::Mode::Text || oldEmpty || pte.toPlainText().isEmpty()) {
-				// DEBUG("RESTORE FORMATTING")
-				QTextEdit te(d->textWrapper.text);
-				te.selectAll();
-				te.setText(textWrapper.text);
-				te.selectAll();
-				te.setTextColor(d->fontColor);
-				te.setTextBackgroundColor(d->backgroundColor);
+	bool oldEmpty = d->textWrapper.text.isEmpty();
+	if (textWrapper.mode == TextLabel::Mode::Text && !textWrapper.text.isEmpty()) {
+		QTextEdit pte(d->textWrapper.text); // te with previous text
+		// pte.selectAll();
+		//  restore formatting when text changes or switching back to text mode
+		if (d->textWrapper.mode != TextLabel::Mode::Text || oldEmpty || pte.toPlainText().isEmpty()) {
+			// DEBUG("RESTORE FORMATTING")
+			QTextEdit te(d->textWrapper.text);
+			te.selectAll();
+			auto font = te.currentFont();
+			// QDEBUG("CURRENT FONT =" << font)
+			te.setText(textWrapper.text);
+			te.selectAll();
+			te.setTextColor(d->fontColor);
+			te.setTextBackgroundColor(d->backgroundColor);
+			te.setCurrentFont(font); // needed to keep font
+			te.setFont(font); // body style
 
-				TextWrapper tw = textWrapper;
-				tw.text = te.toHtml();
-				// DEBUG("\nTW TEXT = " << STDSTRING(tw.text) << std::endl)
-				exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
-			} else { // the existing text is being modified
-				QUndoCommand* parent = nullptr;
-				TextLabelSetTextCmd* command = nullptr;
-				QTextEdit te;
-				te.setHtml(textWrapper.text);
-				te.selectAll();
-				if (textWrapper.text.indexOf(QStringLiteral("background-color:#")) != -1) {
-					const auto& bgColor = te.textBackgroundColor();
-					if (bgColor != d->backgroundColor) {
-						parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
-						new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
-					}
-					command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
-				} else {
-					// no color available yet, plain text is being provided -> set the color from member variable
-					te.setTextBackgroundColor(d->backgroundColor);
-					TextWrapper tw = textWrapper;
-					tw.text = te.toHtml();
-					command = new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text"), parent);
+			auto tw = textWrapper;
+			tw.text = te.toHtml();
+			// DEBUG("\nTW TEXT = " << STDSTRING(tw.text) << std::endl)
+			exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
+		} else { // the existing text (mode Text) is being modified
+			// DEBUG("MODIFY TEXT")
+			pte.selectAll();
+			auto font = pte.currentFont();
+			// QDEBUG("CURRENT FONT =" << font)
+			pte.setHtml(textWrapper.text);
+			pte.selectAll();
+			pte.setCurrentFont(font);
+
+			QUndoCommand* parent = nullptr;
+			TextLabelSetTextCmd* command = nullptr;
+			if (textWrapper.text.indexOf(QStringLiteral("background-color:")) != -1) {
+				const auto& bgColor = pte.textBackgroundColor();
+				if (bgColor != d->backgroundColor) {
+					parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
+					new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
 				}
-
-				if (!parent)
-					exec(command);
-				else
-					exec(parent);
+				command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
+			} else {
+				// no color available yet, plain text is being provided -> set the color from member variable
+				pte.setTextBackgroundColor(d->backgroundColor);
+				TextWrapper tw = textWrapper;
+				tw.text = pte.toHtml();
+				command = new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text"), parent);
 			}
-		} else
-			exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
 
-		// If previously the text was empty, the bounding rect is zero
-		// therefore the alignment did not work properly.
-		// If text is added, the bounding rectangle is updated
-		// and then the position must be changed to consider alignment
-		if (oldEmpty)
-			d->updatePosition();
-	}
+			if (!parent)
+				exec(command);
+			else
+				exec(parent);
+		}
+	} else
+		exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
 
+	// If previously the text was empty, the bounding rect is zero
+	// therefore the alignment did not work properly.
+	// If text is added, the bounding rectangle is updated
+	// and then the position must be changed to consider alignment
+	if (oldEmpty)
+		d->updatePosition();
+
+	// DEBUG(" TEXT NOW = " << d->textWrapper.text.toStdString())
 	// DEBUG(Q_FUNC_INFO << " DONE\n***********************")
+}
+
+void TextLabel::setFont(const QFont& font) {
+	QDEBUG(Q_FUNC_INFO << ", font =" << font)
+	Q_D(TextLabel);
+	auto text = d->textWrapper.text;
+	// DEBUG("TEXT = \"" << text.toStdString() << "\"")
+
+	switch (d->textWrapper.mode) {
+	case TextLabel::Mode::Text: {
+		QTextEdit te(text);
+		te.selectAll();
+		te.setFont(font);
+		d->textWrapper.text = te.toHtml();
+		// QDEBUG("NEW TEXT =" << d->textWrapper.text)
+		//	if (font != d->teXFont)
+		//		exec(new TextLabelSetTeXFontCmd(d, font, ki18n("%1: set TeX main font")));
+		break;
+	}
+	case TextLabel::Mode::LaTeX:
+		setTeXFont(font);
+		break;
+	case TextLabel::Mode::Markdown:
+		// nothing to be done
+		break;
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPlaceholderText, TextLabel::TextWrapper, textWrapper, updateText)
@@ -359,20 +414,6 @@ void TextLabel::setBorderShape(TextLabel::BorderShape shape) {
 	Q_D(TextLabel);
 	if (shape != d->borderShape)
 		exec(new TextLabelSetBorderShapeCmd(d, shape, ki18n("%1: set border shape")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetBorderPen, QPen, borderPen, update)
-void TextLabel::setBorderPen(const QPen& pen) {
-	Q_D(TextLabel);
-	if (pen != d->borderPen)
-		exec(new TextLabelSetBorderPenCmd(d, pen, ki18n("%1: set border")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetBorderOpacity, qreal, borderOpacity, update)
-void TextLabel::setBorderOpacity(qreal opacity) {
-	Q_D(TextLabel);
-	if (opacity != d->borderOpacity)
-		exec(new TextLabelSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
 }
 
 // misc
@@ -674,10 +715,10 @@ void TextLabelPrivate::updateBoundingRect() {
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
-	m_boundingRectangle.setX(-w / 2);
-	m_boundingRectangle.setY(-h / 2);
-	m_boundingRectangle.setWidth(w);
-	m_boundingRectangle.setHeight(h);
+	boundingRectangleText.setX(-w / 2);
+	boundingRectangleText.setY(-h / 2);
+	boundingRectangleText.setWidth(w);
+	boundingRectangleText.setHeight(h);
 
 	updatePosition();
 	updateBorder();
@@ -687,7 +728,7 @@ void TextLabelPrivate::updateTeXImage() {
 	if (zoomFactor == -1.0) {
 		// the view was not zoomed after the label was added so the zoom factor is not set yet.
 		// determine the current zoom factor in the view and use it
-		auto* worksheet = static_cast<const Worksheet*>(q->parent(AspectType::Worksheet));
+		auto* worksheet = static_cast<const Worksheet*>(q->parent<Worksheet>());
 		if (!worksheet)
 			return;
 		zoomFactor = worksheet->zoomFactor();
@@ -703,7 +744,7 @@ void TextLabelPrivate::updateBorder() {
 	using GluePoint = TextLabel::GluePoint;
 
 	borderShapePath = QPainterPath();
-	const auto& br = m_boundingRectangle;
+	const auto& br = boundingRectangleText;
 	switch (borderShape) {
 	case (TextLabel::BorderShape::NoBorder): {
 		m_gluePoints.clear();
@@ -962,10 +1003,12 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 
 	labelShape = QPainterPath();
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
-		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
+		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderLine->pen()));
 		m_boundingRectangle = labelShape.boundingRect();
-	} else
-		labelShape.addRect(m_boundingRectangle);
+	} else {
+		labelShape.addRect(boundingRectangleText);
+		m_boundingRectangle = boundingRectangleText;
+	}
 
 	Q_EMIT q->changed();
 }
@@ -999,9 +1042,8 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	// draw the border
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		painter->save();
-		painter->setPen(borderPen);
-		painter->setOpacity(borderOpacity);
-
+		painter->setPen(borderLine->pen());
+		painter->setOpacity(borderLine->opacity());
 		painter->drawPath(borderShapePath);
 		painter->restore();
 	}
@@ -1086,8 +1128,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	// border
 	writer->writeStartElement(QStringLiteral("border"));
 	writer->writeAttribute(QStringLiteral("borderShape"), QString::number(static_cast<int>(d->borderShape)));
-	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute(QStringLiteral("borderOpacity"), QString::number(d->borderOpacity));
+	d->borderLine->save(writer);
 	writer->writeEndElement();
 
 	if (d->textWrapper.mode == TextLabel::Mode::LaTeX) {
@@ -1121,9 +1162,16 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (!preview && reader->name() == QLatin1String("geometry")) {
 			WorksheetElement::load(reader, preview);
-		} else if (!preview && reader->name() == QLatin1String("text"))
+		} else if (!preview && reader->name() == QLatin1String("text")) {
 			d->textWrapper.text = reader->readElementText();
-		else if (!preview && reader->name() == QLatin1String("textPlaceholder"))
+			// "MS Shell Dlg 2" is a logical font on Windows (mapped to Tahoma) not used in Qt6 anymore
+			if (d->textWrapper.text.contains(QStringLiteral("MS Shell Dlg 2"))) {
+				if (QSysInfo::productType() == QStringLiteral("windows"))
+					d->textWrapper.text.replace(QStringLiteral("MS Shell Dlg 2"), QStringLiteral("Tahoma"));
+				else
+					d->textWrapper.text.replace(QStringLiteral("MS Shell Dlg 2"), QStringLiteral("Sans Serif"));
+			}
+		} else if (!preview && reader->name() == QLatin1String("textPlaceholder"))
 			d->textWrapper.textPlaceholder = reader->readElementText();
 		else if (!preview && reader->name() == QLatin1String("format")) {
 			attribs = reader->attributes();
@@ -1144,8 +1192,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("border")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("borderShape", borderShape, BorderShape);
-			READ_QPEN(d->borderPen);
-			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
+			d->borderLine->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("teXPdfData")) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
@@ -1163,7 +1210,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 
 	// starting with XML version 10, the background color used in the html text is extracted
 	// to fill the complete shape of the label and is also saved. For older projects we need
-	// to extract it from hmtl here if available.
+	// to extract it from html here if available.
 	if (d->textWrapper.mode == TextLabel::Mode::Text && Project::xmlVersion() < 10) {
 		if (d->textWrapper.text.indexOf(QStringLiteral("background-color:#")) != -1) {
 			QTextEdit te;
@@ -1215,8 +1262,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 		wrapper.textPlaceholder = te.toHtml();
 		wrapper.allowPlaceholder = d->textWrapper.allowPlaceholder;
 
-		// update the text. also in the Widget to which is connected
-
+		// update the text also in the widget to which it is connected
 		setText(wrapper);
 	} else if (d->textWrapper.mode == TextLabel::Mode::LaTeX) {
 		// call updateText() to re-render the LaTeX-image with the new text colors
@@ -1229,12 +1275,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	fontColorChanged(d->fontColor);
 
 	group = config.group(QStringLiteral("CartesianPlot"));
-	QPen pen = this->borderPen();
-	pen.setColor(group.readEntry(QStringLiteral("BorderColor"), pen.color()));
-	pen.setStyle((Qt::PenStyle)(group.readEntry(QStringLiteral("BorderStyle"), (int)pen.style())));
-	pen.setWidthF(group.readEntry(QStringLiteral("BorderWidth"), pen.widthF()));
-	this->setBorderPen(pen);
-	this->setBorderOpacity(group.readEntry(QStringLiteral("BorderOpacity"), this->borderOpacity()));
+	d->borderLine->loadThemeConfig(group);
 }
 
 void TextLabel::saveThemeConfig(const KConfig& config) {

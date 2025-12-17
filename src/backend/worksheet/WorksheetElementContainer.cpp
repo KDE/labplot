@@ -11,10 +11,8 @@
 
 #include "backend/worksheet/WorksheetElementContainer.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/ResizeItem.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
@@ -27,10 +25,12 @@
 
 /**
  * \class WorksheetElementContainer
- * \ingroup worksheet
- * \brief Worksheet element container - parent of multiple elements
+ * \brief Worksheet element container - parent of multiple elements.
+ *
  * This class provides the functionality for a containers of multiple
  * worksheet elements. Such a container can be a plot or group of elements.
+ *
+ * \ingroup worksheet
  */
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, AspectType type)
@@ -73,7 +73,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 		auto* plot = dynamic_cast<Plot*>(elem);
 		if (plot) {
 			// making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
-			// this should be avoided by supressing the retransformation in the curves.
+			// this should be avoided by suppressing the retransformation in the curves.
 			plot->setSuppressRetransform(true);
 			elem->setVisible(on);
 			plot->setSuppressRetransform(false);
@@ -117,7 +117,7 @@ void WorksheetElementContainer::retransform() {
 	if (isLoading())
 		return;
 
-	PERFTRACE(QStringLiteral("WorksheetElementContainer::retransform()"));
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	Q_D(WorksheetElementContainer);
 
 	// when retransforming every child here, don't emit the changed signal for every child,

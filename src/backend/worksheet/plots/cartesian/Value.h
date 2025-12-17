@@ -17,7 +17,12 @@ class AbstractColumn;
 class ValuePrivate;
 class KConfigGroup;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Value : public AbstractAspect {
+#else
 class Value : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:

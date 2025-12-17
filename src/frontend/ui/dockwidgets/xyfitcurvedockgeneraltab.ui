@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>566</width>
+    <width>494</width>
     <height>1243</height>
    </rect>
   </property>
@@ -17,10 +17,10 @@
    <item row="8" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -33,19 +33,19 @@
    <item row="12" column="2" rowspan="2" colspan="2">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
+         <enum>QSizePolicy::Policy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -54,6 +54,32 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbLoadFunction">
+        <property name="toolTip">
+         <string>Load a custom function</string>
+        </property>
+        <property name="text">
+         <string>Load</string>
+        </property>
+        <property name="icon">
+         <iconset theme="QIcon::ThemeIcon::InsertLink"/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbSaveFunction">
+        <property name="toolTip">
+         <string>Save a custom function</string>
+        </property>
+        <property name="text">
+         <string>Save</string>
+        </property>
+        <property name="icon">
+         <iconset theme="QIcon::ThemeIcon::DocumentSaveAs"/>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pbOptions">
@@ -70,14 +96,13 @@
          <string>Opens a dialog to change advanced fit options</string>
         </property>
         <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
+         <enum>Qt::LayoutDirection::LeftToRight</enum>
         </property>
         <property name="text">
          <string>Options</string>
         </property>
         <property name="icon">
-         <iconset theme="configure">
-          <normaloff>.</normaloff>.</iconset>
+         <iconset theme="configure"/>
         </property>
        </widget>
       </item>
@@ -95,7 +120,7 @@
     </widget>
    </item>
    <item row="31" column="2" colspan="2">
-    <widget class="QComboBox" name="cbPlotRanges">
+    <widget class="KComboBox" name="cbPlotRanges">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -107,10 +132,10 @@
    <item row="0" column="1">
     <spacer name="horizontalSpacer_5">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -123,7 +148,7 @@
    <item row="11" column="2" colspan="2">
     <layout class="QHBoxLayout" name="hlYWeight">
      <item>
-      <widget class="QComboBox" name="cbYWeight"/>
+      <widget class="KComboBox" name="cbYWeight"/>
      </item>
      <item>
       <widget class="QLabel" name="lYErrorCol">
@@ -140,7 +165,7 @@
         <string>col =</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -167,7 +192,7 @@
     </widget>
    </item>
    <item row="14" column="2" colspan="2">
-    <widget class="QComboBox" name="cbCategory">
+    <widget class="KComboBox" name="cbCategory">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -179,7 +204,7 @@
    <item row="26" column="0">
     <spacer name="verticalSpacer_5">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -200,7 +225,7 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QToolButton" name="lData">
+    <widget class="QToolButton" name="tbData">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -209,7 +234,6 @@
      </property>
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -220,8 +244,7 @@
       <string>Data:</string>
      </property>
      <property name="icon">
-      <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset theme="arrow-down"/>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -230,7 +253,7 @@
       <bool>true</bool>
      </property>
      <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
+      <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
      </property>
      <property name="autoRaise">
       <bool>true</bool>
@@ -265,17 +288,17 @@
       <string>Comment:</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
    </item>
    <item row="20" column="0">
     <spacer name="verticalSpacer_7">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Minimum</enum>
+      <enum>QSizePolicy::Policy::Minimum</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -305,10 +328,10 @@
    <item row="18" column="0">
     <spacer name="verticalSpacer_6">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -321,10 +344,10 @@
    <item row="2" column="0">
     <spacer name="verticalSpacer_3">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -357,7 +380,7 @@
    <item row="10" column="2" colspan="2">
     <layout class="QHBoxLayout" name="hlXError">
      <item>
-      <widget class="QComboBox" name="cbXWeight"/>
+      <widget class="KComboBox" name="cbXWeight"/>
      </item>
      <item>
       <widget class="QLabel" name="lXErrorCol">
@@ -374,14 +397,14 @@
         <string>col =</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
        </property>
       </widget>
      </item>
     </layout>
    </item>
    <item row="9" column="0">
-    <widget class="QToolButton" name="lWeights">
+    <widget class="QToolButton" name="tbWeights">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -390,7 +413,6 @@
      </property>
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -398,14 +420,13 @@
       <string>How to weight the data points</string>
      </property>
      <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
+      <enum>Qt::LayoutDirection::LeftToRight</enum>
      </property>
      <property name="text">
       <string>Weights:</string>
      </property>
      <property name="icon">
-      <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset theme="arrow-down"/>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -414,7 +435,7 @@
       <bool>true</bool>
      </property>
      <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
+      <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
      </property>
      <property name="autoRaise">
       <bool>true</bool>
@@ -447,15 +468,15 @@
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
+      <enum>QFrame::Shape::NoFrame</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
     </widget>
    </item>
    <item row="25" column="0">
-    <widget class="QToolButton" name="lResults">
+    <widget class="QToolButton" name="tbResults">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -464,7 +485,6 @@
      </property>
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -475,8 +495,7 @@
       <string>Results:</string>
      </property>
      <property name="icon">
-      <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset theme="arrow-down"/>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -485,7 +504,7 @@
       <bool>true</bool>
      </property>
      <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
+      <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
      </property>
      <property name="autoRaise">
       <bool>true</bool>
@@ -495,10 +514,10 @@
    <item row="32" column="0">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
+      <enum>QSizePolicy::Policy::Expanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -533,10 +552,10 @@
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
+      <enum>QFrame::Shape::NoFrame</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
@@ -623,7 +642,7 @@
     </widget>
    </item>
    <item row="13" column="0">
-    <widget class="QToolButton" name="lFit">
+    <widget class="QToolButton" name="tbFit">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -632,7 +651,6 @@
      </property>
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -649,8 +667,7 @@
       <string>Fit:</string>
      </property>
      <property name="icon">
-      <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset theme="arrow-down"/>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -659,13 +676,13 @@
       <bool>true</bool>
      </property>
      <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
+      <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
      </property>
      <property name="autoRaise">
       <bool>true</bool>
      </property>
      <property name="arrowType">
-      <enum>Qt::NoArrow</enum>
+      <enum>Qt::ArrowType::NoArrow</enum>
      </property>
     </widget>
    </item>
@@ -673,7 +690,11 @@
     <widget class="TimedLineEdit" name="leName"/>
    </item>
    <item row="1" column="2" colspan="2">
-    <widget class="ResizableTextEdit" name="teComment"/>
+    <widget class="ResizableTextEdit" name="teComment">
+     <property name="tabChangesFocus">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="22" column="3">
     <widget class="QFrame" name="frame_2">
@@ -684,10 +705,10 @@
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
@@ -703,7 +724,7 @@
       <item>
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -723,7 +744,6 @@
         </property>
         <property name="font">
          <font>
-          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -739,7 +759,7 @@
     </widget>
    </item>
    <item row="19" column="0">
-    <widget class="QToolButton" name="lParameters">
+    <widget class="QToolButton" name="tbParameters">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -754,7 +774,6 @@
      </property>
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -765,8 +784,7 @@
       <string>Parameters:</string>
      </property>
      <property name="icon">
-      <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset theme="arrow-down"/>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -775,7 +793,7 @@
       <bool>true</bool>
      </property>
      <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
+      <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
      </property>
      <property name="autoRaise">
       <bool>true</bool>
@@ -795,10 +813,10 @@
    <item row="12" column="0">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -811,12 +829,12 @@
    <item row="28" column="0" colspan="4">
     <widget class="Line" name="line_2">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
     </widget>
    </item>
    <item row="4" column="2" colspan="2">
-    <widget class="QComboBox" name="cbDataSourceType">
+    <widget class="KComboBox" name="cbDataSourceType">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -828,10 +846,10 @@
    <item row="24" column="0">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Preferred</enum>
+      <enum>QSizePolicy::Policy::Preferred</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -850,7 +868,7 @@
       <string>f(x) =</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
      </property>
     </widget>
    </item>
@@ -1218,10 +1236,10 @@
    <item row="23" column="3">
     <spacer name="verticalSpacer_8">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -1245,16 +1263,46 @@
    <header>frontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>ExpressionTextEdit</class>
-   <extends>QTextEdit</extends>
-   <header>frontend/widgets/ExpressionTextEdit.h</header>
-  </customwidget>
-  <customwidget>
    <class>TimedLineEdit</class>
    <extends>QLineEdit</extends>
    <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
+  <customwidget>
+   <class>ExpressionTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>frontend/widgets/ExpressionTextEdit.h</header>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>leName</tabstop>
+  <tabstop>teComment</tabstop>
+  <tabstop>tbData</tabstop>
+  <tabstop>cbDataSourceType</tabstop>
+  <tabstop>tbWeights</tabstop>
+  <tabstop>cbXWeight</tabstop>
+  <tabstop>cbYWeight</tabstop>
+  <tabstop>tbFit</tabstop>
+  <tabstop>pbLoadFunction</tabstop>
+  <tabstop>pbSaveFunction</tabstop>
+  <tabstop>pbOptions</tabstop>
+  <tabstop>cbCategory</tabstop>
+  <tabstop>cbModel</tabstop>
+  <tabstop>sbDegree</tabstop>
+  <tabstop>teEquation</tabstop>
+  <tabstop>tbFunctions</tabstop>
+  <tabstop>tbConstants</tabstop>
+  <tabstop>tbParameters</tabstop>
+  <tabstop>cbAlgorithm</tabstop>
+  <tabstop>pbRecalculate</tabstop>
+  <tabstop>tbResults</tabstop>
+  <tabstop>twResults</tabstop>
+  <tabstop>twLog</tabstop>
+  <tabstop>cbPlotRanges</tabstop>
+  <tabstop>chkLegendVisible</tabstop>
+  <tabstop>chkVisible</tabstop>
+  <tabstop>twGoodness</tabstop>
+  <tabstop>twParameters</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

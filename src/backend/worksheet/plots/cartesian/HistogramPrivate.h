@@ -102,8 +102,6 @@ private:
 	Column* m_binValuesColumn{nullptr}; // bin values
 	Column* m_binPDValuesColumn{nullptr}; // bin values in the probability density normalization
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void histogramValue(double& value, int bin) const;

@@ -3,25 +3,20 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "BoxPlotDock.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/Worksheet.h"
-#include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"
+#include "frontend/widgets/DataColumnsWidget.h"
 #include "frontend/widgets/LineWidget.h"
 #include "frontend/widgets/SymbolWidget.h"
-#include "frontend/widgets/TreeViewComboBox.h"
-
-#include <QPushButton>
 
 #include <KConfig>
-#include <KLocalizedString>
 
 BoxPlotDock::BoxPlotDock(QWidget* parent)
 	: BaseDock(parent) {
@@ -31,56 +26,12 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
-	m_buttonNew = new QPushButton();
-	m_buttonNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-	connect(m_buttonNew, &QPushButton::clicked, this, &BoxPlotDock::addDataColumn);
-
-	m_gridLayout = new QGridLayout(ui.frameDataColumns);
-	m_gridLayout->setContentsMargins(0, 0, 0, 0);
-	m_gridLayout->setHorizontalSpacing(2);
-	m_gridLayout->setVerticalSpacing(2);
-	ui.frameDataColumns->setLayout(m_gridLayout);
-
-	ui.cbWhiskersType->addItem(QStringLiteral("min/max"));
-	ui.cbWhiskersType->addItem(QStringLiteral("Tukey"));
-	ui.cbWhiskersType->addItem(QStringLiteral("mean ∓ k*SD"));
-	ui.cbWhiskersType->addItem(QStringLiteral("median ∓ k*MAD"));
-	ui.cbWhiskersType->addItem(i18n("10/90 percentiles"));
-	ui.cbWhiskersType->addItem(i18n("5/95 percentiles"));
-	ui.cbWhiskersType->addItem(i18n("1/99 percentiles"));
-
-	ui.cbOrientation->addItem(i18n("Horizontal"));
-	ui.cbOrientation->addItem(i18n("Vertical"));
-
-	ui.cbOrdering->addItem(i18n("None"));
-	ui.cbOrdering->addItem(i18n("By Median, Ascending"));
-	ui.cbOrdering->addItem(i18n("By Median, Descending"));
-	ui.cbOrdering->addItem(i18n("By Mean, Ascending"));
-	ui.cbOrdering->addItem(i18n("By Mean, Descending"));
-
-	QString msg = i18n("If multiple data sets are provided, define how they should be ordered or use 'None' to keep the original order.");
-	ui.lOrdering->setToolTip(msg);
-	ui.cbOrdering->setToolTip(msg);
-
-	msg = i18n("If checked, the box width is made proportional to the square root of the number of data points.");
-	ui.lVariableWidth->setToolTip(msg);
-	ui.chkVariableWidth->setToolTip(msg);
-
-	msg = i18n("Parameter controlling the range of the inner fences of the box plot.");
-	ui.lWhiskersRangeParameter->setToolTip(msg);
-	ui.leWhiskersRangeParameter->setToolTip(msg);
+	auto* gridLayout = static_cast<QGridLayout*>(ui.tabGeneral->layout());
+	m_dataColumnsWidget = new DataColumnsWidget(this);
+	gridLayout->addWidget(m_dataColumnsWidget, 4, 2, 1, 1);
 
 	// Tab "Box"
-	msg = i18n("Select the data column for which the properties should be shown and edited");
-	ui.lNumber->setToolTip(msg);
-	ui.cbNumber->setToolTip(msg);
-
-	msg = i18n("Specify the factor in percent to control the width of the box relative to its default value.");
-	ui.lWidthFactor->setToolTip(msg);
-	ui.sbWidthFactor->setToolTip(msg);
-
-	// Tab "Box"
-	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBox->layout());
+	gridLayout = static_cast<QGridLayout*>(ui.tabBox->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBox);
 	gridLayout->addWidget(backgroundWidget, 5, 0, 1, 3);
 
@@ -95,27 +46,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	gridLayout = static_cast<QGridLayout*>(ui.tabSymbol->layout());
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
 	gridLayout->addWidget(symbolWidget, 2, 0, 1, 3);
-
-	msg = i18n("Select to modify the properties of the symbol for the mean value.");
-	ui.rbMean->setToolTip(msg);
-
-	msg = i18n("Select to modify the properties of the symbol for the median value.");
-	ui.rbMedian->setToolTip(msg);
-
-	msg = i18n("Select to modify the properties of the symbol for the outlier values.");
-	ui.rbOutlier->setToolTip(msg);
-
-	msg = i18n("Select to modify the properties of the symbol for the \"far out\" values.");
-	ui.rbFarOut->setToolTip(msg);
-
-	msg = i18n("Select to modify the properties of the symbol for all data values excluding the outlier and \"far out\" values.");
-	ui.rbData->setToolTip(msg);
-
-	msg = i18n("Select to modify the properties of the symbol for the ends of the whiskers.");
-	ui.rbWhiskerEnd->setToolTip(msg);
-
-	msg = i18n("Activate to randomize the positions of the symbols (\"jittering\"), helpful for dense and overlapping data points.");
-	ui.chkJitteringEnabled->setToolTip(msg);
 
 	// Tab "Whiskers"
 	gridLayout = static_cast<QGridLayout*>(ui.tabWhiskers->layout());
@@ -139,8 +69,12 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	// Validators
 	ui.leWhiskersRangeParameter->setValidator(new QDoubleValidator(ui.leWhiskersRangeParameter));
 
+	updateLocale();
+	retranslateUi();
+
 	// SLOTS
 	// Tab "General"
+	connect(m_dataColumnsWidget, &DataColumnsWidget::dataColumnsChanged, this, &BoxPlotDock::dataColumnsChanged);
 	connect(ui.cbOrdering, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::orderingChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::orientationChanged);
 	connect(ui.chkVariableWidth, &QCheckBox::toggled, this, &BoxPlotDock::variableWidthChanged);
@@ -173,7 +107,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	// template handler
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
-	layout->setContentsMargins(0, 11, 0, 11);
+	layout->setContentsMargins(0, 0, 0, 0);
 
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("BoxPlot"));
 	layout->addWidget(templateHandler);
@@ -214,12 +148,8 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	ui.chkLegendVisible->setChecked(m_boxPlot->legendVisible());
 	ui.chkVisible->setChecked(m_boxPlot->isVisible());
 	load();
-	loadDataColumns();
 
 	updatePlotRangeList();
-
-	// set the current locale
-	updateLocale();
 
 	// SIGNALs/SLOTs
 	// general
@@ -254,7 +184,7 @@ void BoxPlotDock::setModel() {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void BoxPlotDock::updateLocale() {
 	ui.leWhiskersRangeParameter->setLocale(QLocale());
@@ -264,125 +194,78 @@ void BoxPlotDock::updateLocale() {
 	whiskersCapLineWidget->updateLocale();
 }
 
-void BoxPlotDock::loadDataColumns() {
-	// add the combobox for the first column, is always present
-	if (m_dataComboBoxes.count() == 0)
-		addDataColumn();
+void BoxPlotDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
 
-	int count = m_boxPlot->dataColumns().count();
-	ui.cbNumber->clear();
+	ui.cbWhiskersType->clear();
+	ui.cbWhiskersType->addItem(QStringLiteral("min/max"));
+	ui.cbWhiskersType->addItem(QStringLiteral("Tukey"));
+	ui.cbWhiskersType->addItem(QStringLiteral("mean ∓ k*SD"));
+	ui.cbWhiskersType->addItem(QStringLiteral("median ∓ k*MAD"));
+	ui.cbWhiskersType->addItem(i18n("10/90 percentiles"));
+	ui.cbWhiskersType->addItem(i18n("5/95 percentiles"));
+	ui.cbWhiskersType->addItem(i18n("1/99 percentiles"));
 
-	auto* model = aspectModel();
-	if (count != 0) {
-		// box plot has already data columns, make sure we have the proper number of comboboxes
-		int diff = count - m_dataComboBoxes.count();
-		if (diff > 0) {
-			for (int i = 0; i < diff; ++i)
-				addDataColumn();
-		} else if (diff < 0) {
-			for (int i = diff; i != 0; ++i)
-				removeDataColumn();
-		}
+	ui.cbOrientation->clear();
+	ui.cbOrientation->addItem(i18n("Horizontal"));
+	ui.cbOrientation->addItem(i18n("Vertical"));
 
-		// show the columns in the comboboxes
-		for (int i = 0; i < count; ++i) {
-			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
-			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i));
-		}
+	ui.cbOrdering->clear();
+	ui.cbOrdering->addItem(i18n("None"));
+	ui.cbOrdering->addItem(i18n("By Median, Ascending"));
+	ui.cbOrdering->addItem(i18n("By Median, Descending"));
+	ui.cbOrdering->addItem(i18n("By Mean, Ascending"));
+	ui.cbOrdering->addItem(i18n("By Mean, Descending"));
 
-		// show columns names in the combobox for the selection of the box to be modified
-		for (int i = 0; i < count; ++i)
-			if (m_boxPlot->dataColumns().at(i))
-				ui.cbNumber->addItem(m_boxPlot->dataColumns().at(i)->name());
-	} else {
-		// no data columns set in the box plot yet, we show the first combo box only and reset its model
-		m_dataComboBoxes.first()->setModel(model);
-		m_dataComboBoxes.first()->setAspect(nullptr);
-		for (int i = 1; i < m_dataComboBoxes.count(); ++i)
-			removeDataColumn();
-	}
+	// tooltip texts
+	QString msg = i18n("If multiple data sets are provided, define how they should be ordered or use 'None' to keep the original order.");
+	ui.lOrdering->setToolTip(msg);
+	ui.cbOrdering->setToolTip(msg);
 
-	// disable data column widgets if we're modifying more than one box plot at the same time
-	bool enabled = (m_boxPlots.count() == 1);
-	m_buttonNew->setVisible(enabled);
-	for (auto* cb : m_dataComboBoxes)
-		cb->setEnabled(enabled);
-	for (auto* b : m_removeButtons)
-		b->setVisible(enabled);
+	msg = i18n("If checked, the box width is made proportional to the square root of the number of data points.");
+	ui.lVariableWidth->setToolTip(msg);
+	ui.chkVariableWidth->setToolTip(msg);
 
-	// select the first column after all of them were added to the combobox
-	ui.cbNumber->setCurrentIndex(0);
-}
+	msg = i18n("Parameter controlling the range of the inner fences of the box plot.");
+	ui.lWhiskersRangeParameter->setToolTip(msg);
+	ui.leWhiskersRangeParameter->setToolTip(msg);
 
-void BoxPlotDock::setDataColumns() const {
-	QVector<const AbstractColumn*> columns;
+	// Tab "Box"
+	msg = i18n("Select the data column for which the properties should be shown and edited");
+	ui.lNumber->setToolTip(msg);
+	ui.cbNumber->setToolTip(msg);
 
-	for (auto* cb : m_dataComboBoxes) {
-		auto* aspect = cb->currentAspect();
-		if (aspect && aspect->type() == AspectType::Column)
-			columns << static_cast<AbstractColumn*>(aspect);
-	}
+	msg = i18n("Specify the factor in percent to control the width of the box relative to its default value.");
+	ui.lWidthFactor->setToolTip(msg);
+	ui.sbWidthFactor->setToolTip(msg);
 
-	m_boxPlot->setDataColumns(columns);
+	msg = i18n("Select to modify the properties of the symbol for the mean value.");
+	ui.rbMean->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the median value.");
+	ui.rbMedian->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the outlier values.");
+	ui.rbOutlier->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the \"far out\" values.");
+	ui.rbFarOut->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for all data values excluding the outlier and \"far out\" values.");
+	ui.rbData->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the ends of the whiskers.");
+	ui.rbWhiskerEnd->setToolTip(msg);
+
+	msg = i18n("Activate to randomize the positions of the symbols (\"jittering\"), helpful for dense and overlapping data points.");
+	ui.chkJitteringEnabled->setToolTip(msg);
 }
 
 //**********************************************************
-//*** SLOTs for changes triggered in BoxPlotDock *****
+//***** SLOTs for changes triggered in BoxPlotDock *********
 //**********************************************************
-void BoxPlotDock::addDataColumn() {
-	auto* cb = new TreeViewComboBox(this);
-	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
-	cb->setModel(aspectModel());
-	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BoxPlotDock::dataColumnChanged);
-
-	int index = m_dataComboBoxes.size();
-
-	if (index == 0) {
-		QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
-		sizePolicy1.setHorizontalStretch(0);
-		sizePolicy1.setVerticalStretch(0);
-		sizePolicy1.setHeightForWidth(cb->sizePolicy().hasHeightForWidth());
-		cb->setSizePolicy(sizePolicy1);
-	} else {
-		auto* button = new QPushButton();
-		button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
-		connect(button, &QPushButton::clicked, this, &BoxPlotDock::removeDataColumn);
-		m_gridLayout->addWidget(button, index, 1, 1, 1);
-		m_removeButtons << button;
-
-		ui.lOrdering->setEnabled(true);
-		ui.cbOrdering->setEnabled(true);
-	}
-
-	m_gridLayout->addWidget(cb, index, 0, 1, 1);
-	m_gridLayout->addWidget(m_buttonNew, index + 1, 1, 1, 1);
-
-	m_dataComboBoxes << cb;
-	ui.lDataColumn->setText(i18n("Columns:"));
-}
-
-void BoxPlotDock::removeDataColumn() {
-	auto* sender = static_cast<QPushButton*>(QObject::sender());
-	if (sender) {
-		// remove button was clicked, determin which one and
-		// delete it together with the corresponding combobox
-		for (int i = 0; i < m_removeButtons.count(); ++i) {
-			if (sender == m_removeButtons.at(i)) {
-				delete m_dataComboBoxes.takeAt(i + 1);
-				delete m_removeButtons.takeAt(i);
-			}
-		}
-	} else {
-		// no sender is available, the function is being called directly in loadDataColumns().
-		// delete the last remove button together with the corresponding combobox
-		int index = m_removeButtons.count() - 1;
-		if (index >= 0) {
-			delete m_dataComboBoxes.takeAt(index + 1);
-			delete m_removeButtons.takeAt(index);
-		}
-	}
-
-	if (!m_removeButtons.isEmpty()) {
+void BoxPlotDock::dataColumnsChanged(QVector<const AbstractColumn*> columns) {
+	if (columns.count() > 1) {
 		ui.lDataColumn->setText(i18n("Columns:"));
 		ui.lOrdering->setEnabled(true);
 		ui.cbOrdering->setEnabled(true);
@@ -392,14 +275,18 @@ void BoxPlotDock::removeDataColumn() {
 		ui.cbOrdering->setEnabled(false);
 	}
 
-	if (!m_initializing)
-		setDataColumns();
-}
+	// re-populate the combobox with the columns names after columns were changed
+	const int prevIndex = ui.cbNumber->currentIndex();
+	ui.cbNumber->clear();
+	for (int i = 0; i < columns.count(); ++i) {
+		if (columns.at(i))
+			ui.cbNumber->addItem(columns.at(i)->name());
+	}
+	const int newIndex = (prevIndex < columns.count()) ? prevIndex : 0;
+	ui.cbNumber->setCurrentIndex(newIndex);
 
-void BoxPlotDock::dataColumnChanged(const QModelIndex&) {
 	CONDITIONAL_LOCK_RETURN;
-
-	setDataColumns();
+	m_boxPlot->setDataColumns(columns);
 }
 
 void BoxPlotDock::orderingChanged(int index) {
@@ -543,7 +430,7 @@ void BoxPlotDock::whiskersCapSizeChanged(double value) const {
 void BoxPlotDock::rugEnabledChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* curve : qAsConst(m_boxPlots))
+	for (auto* curve : std::as_const(m_boxPlots))
 		curve->setRugEnabled(state);
 }
 
@@ -551,7 +438,7 @@ void BoxPlotDock::rugLengthChanged(double value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_boxPlots))
+	for (auto* curve : std::as_const(m_boxPlots))
 		curve->setRugLength(length);
 }
 
@@ -559,7 +446,7 @@ void BoxPlotDock::rugWidthChanged(double value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_boxPlots))
+	for (auto* curve : std::as_const(m_boxPlots))
 		curve->setRugWidth(width);
 }
 
@@ -567,7 +454,7 @@ void BoxPlotDock::rugOffsetChanged(double value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_boxPlots))
+	for (auto* curve : std::as_const(m_boxPlots))
 		curve->setRugOffset(offset);
 }
 
@@ -661,6 +548,7 @@ void BoxPlotDock::load() {
 	ui.cbOrientation->setCurrentIndex((int)m_boxPlot->orientation());
 	ui.chkVariableWidth->setChecked(m_boxPlot->variableWidth());
 	ui.chkNotches->setChecked(m_boxPlot->notchesEnabled());
+	loadDataColumns();
 
 	// box
 	ui.sbWidthFactor->setValue(round(m_boxPlot->widthFactor() * 100.));
@@ -681,6 +569,24 @@ void BoxPlotDock::load() {
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugWidth(), Worksheet::Unit::Point));
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugLength(), Worksheet::Unit::Point));
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugOffset(), Worksheet::Unit::Point));
+}
+
+void BoxPlotDock::loadDataColumns() {
+	// show columns names in the combobox for the selection of the box to be modified
+	ui.cbNumber->clear();
+	for (int i = 0; i < m_boxPlot->dataColumns().count(); ++i)
+		if (m_boxPlot->dataColumns().at(i))
+			ui.cbNumber->addItem(m_boxPlot->dataColumns().at(i)->name());
+
+	// select the first column after all of them were added to the combobox
+	ui.cbNumber->setCurrentIndex(0);
+
+	// show the data columns
+	m_dataColumnsWidget->setDataColumns(m_boxPlot->dataColumns(), m_boxPlot->dataColumnPaths(), aspectModel());
+
+	// disable data column widgets if we're modifying more than one box plot at the same time
+	bool enabled = (m_boxPlots.count() == 1);
+	m_dataColumnsWidget->setEnabled(enabled);
 }
 
 void BoxPlotDock::loadConfig(KConfig& config) {
@@ -740,6 +646,7 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
 	group.writeEntry(QStringLiteral("VariableWidth"), ui.chkVariableWidth->isChecked());
 	group.writeEntry(QStringLiteral("NotchesEnabled"), ui.chkNotches->isChecked());
+	loadDataColumns();
 
 	// box
 	group.writeEntry(QStringLiteral("WidthFactor"), ui.sbWidthFactor->value() / 100.0);

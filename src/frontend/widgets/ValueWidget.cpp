@@ -299,7 +299,7 @@ void ValueWidget::fontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 
 	QFont valuesFont = font;
-	valuesFont.setPixelSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
+	valuesFont.setPointSizeF(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
 	for (auto* value : m_values)
 		value->setFont(valuesFont);
 }
@@ -320,7 +320,7 @@ void ValueWidget::valueTypeChanged(Value::Type type) {
 }
 void ValueWidget::valueColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbColumn->setColumn(column, m_value->columnPath());
+	cbColumn->setAspect(column, m_value->columnPath());
 }
 void ValueWidget::valuePositionChanged(Value::Position position) {
 	CONDITIONAL_LOCK_RETURN;
@@ -360,7 +360,7 @@ void ValueWidget::valueSuffixChanged(const QString& suffix) {
 }
 void ValueWidget::valueFontChanged(QFont font) {
 	CONDITIONAL_LOCK_RETURN;
-	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrFont->setFont(font);
 }
 void ValueWidget::valueColorChanged(QColor color) {
@@ -379,12 +379,12 @@ void ValueWidget::load() {
 	ui.sbDistance->setValue(Worksheet::convertFromSceneUnits(m_value->distance(), Worksheet::Unit::Point));
 	ui.sbRotation->setValue(m_value->rotationAngle());
 	ui.sbOpacity->setValue(round(m_value->opacity()) * 100.0);
-	cbColumn->setColumn(m_value->column(), m_value->columnPath());
+	cbColumn->setAspect(m_value->column(), m_value->columnPath());
 	this->updateWidgets();
 	ui.lePrefix->setText(m_value->prefix());
 	ui.leSuffix->setText(m_value->suffix());
 	QFont font = m_value->font();
-	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrFont->setFont(font);
 	ui.kcbColor->setColor(m_value->color());
 }
@@ -399,7 +399,7 @@ void ValueWidget::loadConfig(const KConfigGroup& group) {
 	ui.lePrefix->setText(group.readEntry("ValuesPrefix", m_value->prefix()));
 	ui.leSuffix->setText(group.readEntry("ValuesSuffix", m_value->suffix()));
 	QFont font = m_value->font();
-	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrFont->setFont(group.readEntry("ValuesFont", font));
 	ui.kcbColor->setColor(group.readEntry("ValuesColor", m_value->color()));
 }

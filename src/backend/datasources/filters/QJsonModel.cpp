@@ -140,7 +140,7 @@ QJsonModel::QJsonModel(QObject* parent)
 	QFont font;
 	font.setPixelSize(60);
 
-	const QColor& color = qApp->palette().color(QPalette::Text);
+	const auto color = qApp->palette().color(QPalette::Text);
 	painter.setPen(QPen(color));
 
 	// draw the icon for JSON array
@@ -368,8 +368,7 @@ QJsonValue QJsonModel::genJson(QJsonTreeItem* item) const {
 		QJsonObject jo;
 		for (int i = 0; i < nchild; ++i) {
 			auto ch = item->child(i);
-			auto key = ch->key();
-			jo.insert(key, genJson(ch));
+			jo.insert(ch->key(), genJson(ch));
 		}
 		return jo;
 	} else if (QJsonValue::Array == type) {

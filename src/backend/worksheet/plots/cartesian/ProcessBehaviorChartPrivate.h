@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of ProcessBehaviorChart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,6 +14,7 @@
 
 class Column;
 class ProcessBehaviorChart;
+class TextLabel;
 
 class ProcessBehaviorChartPrivate : public PlotPrivate {
 public:
@@ -23,9 +24,13 @@ public:
 	void retransform() override;
 	void recalc();
 	void recalcShapeAndBoundingRect() override;
+	void updateLimitConstraints();
 	void updateControlLimits();
+	void updateSpecifications();
+	void updateLabels();
 
 	ProcessBehaviorChart::Type type{ProcessBehaviorChart::Type::XmR};
+	ProcessBehaviorChart::LimitsType limitsType{ProcessBehaviorChart::LimitsType::Statistical};
 	ProcessBehaviorChart::LimitsMetric limitsMetric{ProcessBehaviorChart::LimitsMetric::Average};
 
 	XYCurve* dataCurve{nullptr};
@@ -33,9 +38,12 @@ public:
 	XYCurve* upperLimitCurve{nullptr};
 	XYCurve* lowerLimitCurve{nullptr};
 
-	// column for the source data
-	const AbstractColumn* dataColumn{nullptr};
+	// columns for the source data
+	const AbstractColumn* dataColumn{nullptr}; // column with the data containing the actual variables/measures/attributes
 	QString dataColumnPath;
+
+	const AbstractColumn* data2Column{nullptr}; // additional input like the sample sizes for the P chart
+	QString data2ColumnPath;
 
 	// columns used for the data curve in case other statistics is being plotted
 	// and not the original data provided by the user in xDataColumn and yDataColumn above
@@ -60,8 +68,22 @@ public:
 	Column* yLowerLimitColumn{nullptr};
 	QString yLowerLimitColumnPath;
 
+	// labels for control limit values
+	bool labelsEnabled{true};
+	int labelsPrecision{2};
+	bool labelsAutoPrecision{true};
+	Line* labelsBorderLine{nullptr};
+	TextLabel* upperLimitLabel{nullptr};
+	TextLabel* centerLabel{nullptr}; // using backgroundColor as background color for label
+	TextLabel* lowerLimitLabel{nullptr};
+
 	int sampleSize{5};
-	bool negativeLowerLimitEnabled{false};
+	double maxUpperLimit{INFINITY};
+	double minLowerLimit{-INFINITY};
+	bool exactLimitsEnabled{true};
+	double centerSpecification{NAN};
+	double lowerLimitSpecification{NAN};
+	double upperLimitSpecification{NAN};
 
 	ProcessBehaviorChart* const q;
 

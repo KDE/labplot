@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the box plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,13 +14,10 @@
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_boxplotdock.h"
 
-class AspectTreeModel;
-class BoxPlot;
 class BackgroundWidget;
+class DataColumnsWidget;
 class LineWidget;
 class SymbolWidget;
-class TreeViewComboBox;
-class QPushButton;
 class KConfig;
 
 class BoxPlotDock : public BaseDock {
@@ -30,6 +27,7 @@ public:
 	explicit BoxPlotDock(QWidget*);
 	void setBoxPlots(QList<BoxPlot*>);
 	void updateLocale() override;
+	void retranslateUi() override;
 
 private:
 	Ui::BoxPlotDock ui;
@@ -42,26 +40,18 @@ private:
 
 	QList<BoxPlot*> m_boxPlots;
 	BoxPlot* m_boxPlot{nullptr};
-
-	QGridLayout* m_gridLayout;
-	QPushButton* m_buttonNew;
-	QVector<TreeViewComboBox*> m_dataComboBoxes;
-	QVector<QPushButton*> m_removeButtons;
+	DataColumnsWidget* m_dataColumnsWidget{nullptr};
 
 	void load();
 	void loadConfig(KConfig&);
 	void setModel();
-	void setDataColumns() const;
 	void loadDataColumns();
 	void updateSymbolWidgets();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in BoxPlotDock
-
 	//"General"-tab
-	void addDataColumn();
-	void removeDataColumn();
-	void dataColumnChanged(const QModelIndex&);
+	void dataColumnsChanged(QVector<const AbstractColumn*>);
 	void orderingChanged(int);
 	void orientationChanged(int);
 	void variableWidthChanged(bool);

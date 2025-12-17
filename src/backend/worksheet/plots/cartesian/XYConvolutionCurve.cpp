@@ -7,19 +7,11 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYConvolutionCurve
-  \brief A xy-curve defined by a convolution
-
-  \ingroup worksheet
-*/
-
 #include "XYConvolutionCurve.h"
 #include "XYConvolutionCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
@@ -28,6 +20,11 @@
 
 #include <gsl/gsl_math.h>
 
+/*!
+ * \class XYConvolutionCurve
+ * \brief A xy-curve defined by a convolution.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYConvolutionCurve::XYConvolutionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYConvolutionCurvePrivate(this), AspectType::XYConvolutionCurve) {
 }
@@ -39,11 +36,6 @@ XYConvolutionCurve::XYConvolutionCurve(const QString& name, XYConvolutionCurvePr
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYConvolutionCurve::~XYConvolutionCurve() = default;
-
-void XYConvolutionCurve::recalculate() {
-	Q_D(XYConvolutionCurve);
-	d->recalculate();
-}
 
 const XYAnalysisCurve::Result& XYConvolutionCurve::result() const {
 	Q_D(const XYConvolutionCurve);

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of TextLabel
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,16 +16,11 @@
 #include "tools/TeXRenderer.h"
 #include <QFutureWatcher>
 #include <QScreen>
-#include <QStaticText>
 
 #include <gsl/gsl_const_cgs.h>
 
-class QGraphicsSceneHoverEvent;
-class CartesianPlot;
-class CartesianCoordinateSystem;
 class ScaledTextItem;
 class TextLabel;
-class QStaticText;
 
 class TextLabelPrivate : public WorksheetElementPrivate {
 public:
@@ -37,19 +32,16 @@ public:
 		Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH / QApplication::primaryScreen()->physicalDotsPerInchX(), Worksheet::Unit::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;
-	QFont teXFont{QStringLiteral("Computer Modern"), 12}; // reasonable default font and size
+	QFont teXFont{QStringLiteral("Computer Modern"), 12}; // font for TeX mode, reasonable default font and size
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
-	QColor backgroundColor{Qt::transparent}; // same as fontColor
+	QColor backgroundColor{1, 1, 1, 0}; // white transparent
 	QImage teXImage;
 	QByteArray teXPdfData;
 	QFutureWatcher<QByteArray> teXImageFutureWatcher;
 	TeXRenderer::Result teXRenderResult;
 
-	// see TextLabel::init() for type specific default settings
-
 	TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
-	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
-	qreal borderOpacity{1.0};
+	Line* borderLine{nullptr};
 
 	void retransform() override;
 	void updateBoundingRect();
@@ -65,6 +57,7 @@ public:
 
 	ScaledTextItem* m_textItem{nullptr};
 
+	QRectF boundingRectangleText; // bounding rectangle of the text, doesn't include the border shape
 	QPainterPath borderShapePath;
 	QPainterPath labelShape;
 

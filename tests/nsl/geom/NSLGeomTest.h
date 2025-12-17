@@ -16,7 +16,7 @@ class NSLGeomTest : public NSLTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
+	void initTestCase() override;
 
 	void testDist();
 	void testLineSim();

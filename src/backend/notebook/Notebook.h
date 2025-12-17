@@ -11,10 +11,10 @@
 #ifndef NOTEBOOK_H
 #define NOTEBOOK_H
 
-#include <backend/core/AbstractPart.h>
 #ifdef HAVE_CANTOR_LIBS
+
+#include <backend/core/AbstractPart.h>
 #include <cantor/session.h>
-#endif
 
 namespace Cantor {
 class PanelPlugin;
@@ -41,6 +41,7 @@ public:
 	QWidget* view() const override;
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
+	void fillColumnsContextMenu(QMenu*, const QVector<Column*>&);
 	QIcon icon() const override;
 
 	bool exportView() const override;
@@ -85,5 +86,7 @@ Q_SIGNALS:
 	void statusChanged(Cantor::Session::Status);
 #endif
 };
+
+#endif // HAVE_CANTOR_LIBS
 
 #endif // NOTEBOOK_H

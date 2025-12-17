@@ -4,6 +4,7 @@
 	Description          : Tests for Axis methods
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,7 +19,6 @@ class AxisTest : public CommonTest {
 
 private Q_SLOTS:
 	void axisLine();
-	void majorTicksAutoNumberEnableDisable();
 	void minorTicksAutoNumberEnableDisable();
 	void majorTicksStartValue();
 	void TestSetCoordinateSystem();
@@ -36,11 +36,37 @@ private Q_SLOTS:
 
 	void automaticTicNumberUpdateDockMajorTicks();
 	void automaticTicNumberUpdateDockMinorTicks();
+	void tickSpacingUpdateDockMajorTicks();
+
+	void testComputeMajorTickStart();
 
 	void columnLabelValues();
 	void columnLabelValuesMaxValues();
+	void columnLabelValuesMoreTicksThanLabels();
 
 	void customTextLabels();
+	void customTextLabelsMoreTicksThanLabels();
+
+	void dateTime();
+	void dateTimeSpacing();
+	void dateTimeSpacingOffsetNonZero();
+	void dateTimeSpacingStartValueNonZero();
+
+	void numeric();
+	void numericSpacing();
+	void numericSpacingOffsetNonZero();
+	void numericSpacingStartValueNonZero();
+
+	void customColumnNumeric();
+	void customColumnNumericMaxValues();
+	void customColumnNumericMaxValuesLimitedRange();
+	void customColumnNumericMaxValuesLimitedRangeNotCompleteRange();
+	void customColumnNonMonotonicColumnValues();
+	void customColumnDateTime();
+
+	void autoScaleLog10();
+	void autoScaleLog102();
+	void autoScaleLog102Vertical();
 };
 
 #endif // AXISTEST_H

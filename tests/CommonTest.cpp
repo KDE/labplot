@@ -20,6 +20,7 @@
 void CommonTest::initTestCase() {
 	// always enable debugging
 	enableDebugTrace(true);
+	enableInfoTrace(true);
 	KLocalizedString::setApplicationDomain("labplot");
 
 #ifdef _WIN32
@@ -40,4 +41,12 @@ void CommonTest::listStack(QUndoStack* stack) {
 	}
 	qDebug() << "End list Undostack History";
 	qDebug() << "--------------------------";
+}
+
+void CommonTest::wait(int milliseconds) {
+	QTimer timer(this);
+	QEventLoop loop;
+	QTimer::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+	timer.start(milliseconds);
+	loop.exec();
 }

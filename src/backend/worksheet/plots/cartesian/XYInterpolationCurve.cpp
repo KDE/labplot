@@ -8,21 +8,12 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYInterpolationCurve
-  \brief A xy-curve defined by an interpolation
-
-  \ingroup worksheet
-*/
-
 #include "XYInterpolationCurve.h"
-#include "CartesianCoordinateSystem.h"
 #include "XYInterpolationCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 extern "C" {
 #include "backend/nsl/nsl_diff.h"
@@ -35,6 +26,11 @@ extern "C" {
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYInterpolationCurve
+ * \brief A xy-curve defined by an interpolation.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYInterpolationCurve::XYInterpolationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYInterpolationCurvePrivate(this), AspectType::XYInterpolationCurve) {
 }
@@ -46,11 +42,6 @@ XYInterpolationCurve::XYInterpolationCurve(const QString& name, XYInterpolationC
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYInterpolationCurve::~XYInterpolationCurve() = default;
-
-void XYInterpolationCurve::recalculate() {
-	Q_D(XYInterpolationCurve);
-	d->recalculate();
-}
 
 /*!
 	Returns an icon to be used in the project explorer.

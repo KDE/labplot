@@ -7,13 +7,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYFunctionCurve
-  \brief A xy-curve that is calculated as a function of other curves
-
-  \ingroup worksheet
-*/
-
 #include "XYFunctionCurve.h"
 #include "XYFunctionCurvePrivate.h"
 #include "backend/core/column/Column.h"
@@ -26,6 +19,11 @@
 #include <QElapsedTimer>
 #include <QIcon>
 
+/*!
+ * \class XYFunctionCurve
+ * \brief A xy-curve that is calculated as a function of other curves
+ * \ingroup CartesianPlots
+ */
 XYFunctionCurve::XYFunctionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFunctionCurvePrivate(this), AspectType::XYFunctionCurve) {
 	init();
@@ -61,16 +59,25 @@ void XYFunctionCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 	d->handleAspectUpdated(aspectPath, element);
 }
 
-bool XYFunctionCurve::usingColumn(const Column* column) const {
-	for (const auto& d : functionData()) {
-		const auto* curve = d.curve();
-		if (curve) {
-			if (curve->xColumn() == column || curve->yColumn() == column)
+bool XYFunctionCurve::usingColumn(const AbstractColumn* column, bool indirect) const {
+	if (indirect) {
+		for (const auto& d : functionData()) {
+			const auto* curve = d.curve();
+			if (curve && curve->usingColumn(column, indirect))
 				return true;
 		}
 	}
+	return false; // Does not directly use the curves
+}
 
-	return false;
+QVector<const Plot*> XYFunctionCurve::dependingPlots() const {
+	QVector<const Plot*> plots;
+	for (const auto& d : functionData()) {
+		const auto* curve = d.curve();
+		if (curve)
+			plots.append(curve);
+	}
+	return plots;
 }
 
 // ##############################################################################
@@ -169,11 +176,6 @@ void XYFunctionCurve::functionVariableCurveAdded(const AbstractAspect* aspect) {
 	d->functionVariableCurveAdded(aspect);
 }
 
-void XYFunctionCurve::recalculate() {
-	Q_D(XYFunctionCurve);
-	d->recalculate();
-}
-
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
@@ -207,7 +209,7 @@ void XYFunctionCurvePrivate::setFunctionVariableCurve(int index, const XYCurve* 
 	if (m_functionData.at(index).curve()) // if there exists already a valid curve, disconnect it first
 		q->disconnect(m_functionData.at(index).m_curve, nullptr, q, nullptr);
 	m_functionData[index].setCurve(curve);
-	connectFunctionCurve(curve);
+	connectCurve(curve);
 }
 
 void XYFunctionCurvePrivate::setFunctionVariableCurve(const XYCurve* c) {
@@ -219,22 +221,22 @@ void XYFunctionCurvePrivate::setFunctionVariableCurve(const XYCurve* c) {
 	}
 }
 
-void XYFunctionCurvePrivate::connectFunctionCurve(const XYCurve* curve) {
+void XYFunctionCurvePrivate::connectCurve(const XYCurve* curve) {
 	if (!curve)
 		return;
 
 	// avoid circular dependencies - the current curve cannot be part of the variable curve.
-	// this should't actually happen because of the checks done when the function is defined,
+	// this shouldn't actually happen because of the checks done when the function is defined,
 	// but in case we have bugs somewhere or somebody manipulated the project xml file we add
 	// a sanity check to avoid recursive calls here and crash because of the stack overflow.
 	if (curve == q)
 		return;
 
 	DEBUG(Q_FUNC_INFO)
-	m_connectionsUpdateFunction << q->connect(curve, &XYCurve::dataChanged, q, &XYFunctionCurve::recalculate);
-	m_connectionsUpdateFunction << q->connect(curve, &XYCurve::xDataChanged, q, &XYFunctionCurve::recalculate);
-	m_connectionsUpdateFunction << q->connect(curve, &XYCurve::yDataChanged, q, &XYFunctionCurve::recalculate);
-	m_connectionsUpdateFunction << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYFunctionCurve::functionVariableCurveRemoved);
+	m_connections << q->connect(curve, &XYCurve::dataChanged, q, &XYFunctionCurve::recalculate);
+	m_connections << q->connect(curve, &XYCurve::xDataChanged, q, &XYFunctionCurve::recalculate);
+	m_connections << q->connect(curve, &XYCurve::yDataChanged, q, &XYFunctionCurve::recalculate);
+	m_connections << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYFunctionCurve::functionVariableCurveRemoved);
 	// m_connectionsUpdateFunction << q->connect(curve->parentAspect(), &AbstractAspect::childAspectAdded, q, &XYFunctionCurve::functionVariableCurveAdded);
 }
 
@@ -281,14 +283,14 @@ void XYFunctionCurvePrivate::setFunction(const QString& function, const QVector<
 	m_function = function;
 	m_functionData = functionData; // TODO: disconnecting everything?
 
-	for (auto& connection : m_connectionsUpdateFunction)
+	for (auto& connection : m_connections)
 		if (static_cast<bool>(connection))
 			q->disconnect(connection);
 
-	for (const auto& data : qAsConst(m_functionData)) {
+	for (const auto& data : std::as_const(m_functionData)) {
 		const auto* curve = data.curve();
 		if (curve)
-			connectFunctionCurve(curve);
+			connectCurve(curve);
 	}
 	q->recalculate();
 }
@@ -326,7 +328,7 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 	}
 
 	if (valid) {
-		for (const auto& ed : qAsConst(m_functionData)) {
+		for (const auto& ed : std::as_const(m_functionData)) {
 			const auto* curve = ed.curve();
 			if (!curve || !curve->xColumn() || !curve->yColumn() || curve->xColumn()->rowCount() != numberElements
 				|| curve->yColumn()->rowCount() != numberElements) {
@@ -356,7 +358,7 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 
 		QVector<QVector<double>*> xVectors;
 		QStringList functionVariableNames;
-		for (const auto& functionData : qAsConst(m_functionData)) {
+		for (const auto& functionData : std::as_const(m_functionData)) {
 			const auto* curve = functionData.curve();
 			const auto& varName = functionData.variableName();
 			const auto* column = dynamic_cast<const Column*>(curve->yColumn());
@@ -378,7 +380,9 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
-		parser->evaluateCartesian(m_function, functionVariableNames, xVectors, yVector);
+		bool valid = parser->tryEvaluateCartesian(m_function, functionVariableNames, xVectors, yVector);
+		if (!valid)
+			DEBUG(Q_FUNC_INFO << ", WARNING: failed parsing function!")
 	}
 	m_result.available = true;
 	m_result.valid = valid;
@@ -391,8 +395,8 @@ bool XYFunctionCurvePrivate::preparationValid(const AbstractColumn*, const Abstr
 	return true;
 }
 
-void XYFunctionCurvePrivate::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) {
-	// Nothing to do
+void XYFunctionCurvePrivate::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) const {
+	// Nothing to do, because we have more than two columns
 }
 
 void XYFunctionCurvePrivate::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) {

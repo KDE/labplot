@@ -102,8 +102,8 @@ void XYSmoothCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_smoothCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_smoothCurve->dataSourceCurve());
-	cbXDataColumn->setColumn(m_smoothCurve->xDataColumn(), m_smoothCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_smoothCurve->yDataColumn(), m_smoothCurve->yDataColumnPath());
+	cbXDataColumn->setAspect(m_smoothCurve->xDataColumn(), m_smoothCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_smoothCurve->yDataColumn(), m_smoothCurve->yDataColumnPath());
 
 	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_smoothCurve->parentAspect());
@@ -403,14 +403,11 @@ void XYSmoothCurveDock::valueChanged() {
 }
 
 void XYSmoothCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setSmoothData(m_smoothData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Smoothing status: %1", m_smoothCurve->result().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

@@ -16,13 +16,18 @@
 class BinaryFilterPrivate;
 class QIODevice;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT BinaryFilter : public AbstractFileFilter {
+#else
 class BinaryFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
-	Q_ENUMS(DataType)
 
 public:
 	// TODO; use ColumnMode when it supports all these types
 	enum class DataType { INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64 };
+	Q_ENUM(DataType)
 
 	BinaryFilter();
 	~BinaryFilter() override;

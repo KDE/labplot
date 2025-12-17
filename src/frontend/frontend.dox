@@ -1,0 +1,4 @@
+/*!
+  \defgroup frontend Frontend
+  Contains classes which represent the actual GUI of the application.
+ */

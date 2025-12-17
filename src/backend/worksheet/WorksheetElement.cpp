@@ -4,22 +4,19 @@
 	Description          : Base class for all Worksheet children.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/worksheet/WorksheetElement.h"
-#include "backend/core/AspectPrivate.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElementPrivate.h"
-#include "plots/AbstractPlot.h"
 #include "plots/PlotArea.h"
-#include "plots/cartesian/CartesianCoordinateSystem.h"
 #include "plots/cartesian/Plot.h"
 
 #include <KLocalizedString>
@@ -61,11 +58,11 @@ void WorksheetElement::finalizeAdd() {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(WorksheetElement);
 	if (!d->m_plot) {
-		// determine the plot parent which is not neccessarily the parent aspect like for
+		// determine the plot parent which is not necessarily the parent aspect like for
 		// * child CustomPoint in InfoeElement
 		// * child XYCurves in QQPlot
 		// * etc.
-		d->m_plot = dynamic_cast<CartesianPlot*>(parent(AspectType::CartesianPlot));
+		d->m_plot = dynamic_cast<CartesianPlot*>(parent<CartesianPlot>());
 	}
 
 	if (d->m_plot) {
@@ -167,8 +164,8 @@ bool WorksheetElementPrivate::swapVisible(bool on) {
 
 	// When making a graphics item invisible, it gets deselected in the scene.
 	// In this case we don't want to deselect the item in the project explorer.
-	// We need to supress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+	// We need to suppress the deselection in the view.
+	auto* worksheet = static_cast<Worksheet*>(q->parent<Worksheet>());
 	if (worksheet) {
 		worksheet->suppressSelectionChangedEvent(true);
 		setVisible(on);
@@ -317,7 +314,7 @@ void WorksheetElement::prepareDrawingOrderMenu() {
 	m_moveBehindMenu->clear();
 	for (int i = 0; i < index; ++i) {
 		const auto* elem = children.at(i);
-		if (elem->hidden())
+		if (elem->isHidden())
 			continue;
 		// axes and legends are always drawn on top of other elements, don't add them to the menu
 		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
@@ -330,7 +327,7 @@ void WorksheetElement::prepareDrawingOrderMenu() {
 	m_moveInFrontOfMenu->clear();
 	for (int i = index + 1; i < children.size(); ++i) {
 		const auto* elem = children.at(i);
-		if (elem->hidden())
+		if (elem->isHidden())
 			continue;
 		// axes and legends are always drawn on top of other elements, don't add them to the menu
 		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
@@ -358,7 +355,9 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	parent->moveChild(this, newIndex - currIndex);
 }
 
+// align rect at position pos using horAlign and vertAlign
 QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const {
+	// QDEBUG(Q_FUNC_INFO << ", point " << pos << " to rect " << rect << " with alignment " << horAlign << "/" << vertAlign)
 	// positive is right
 	double xAlign = 0.;
 	switch (horAlign) {
@@ -375,21 +374,20 @@ QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment ho
 	// positive is to top
 	double yAlign = 0.;
 	switch (vertAlign) {
-	case VerticalAlignment::Bottom:
-		yAlign = -rect.height() / 2.;
-		break;
 	case VerticalAlignment::Top:
 		yAlign = rect.height() / 2.;
+		break;
+	case VerticalAlignment::Bottom:
+		yAlign = -rect.height() / 2.;
 		break;
 	case VerticalAlignment::Center:
 		break;
 	}
 
-	// For yAlign it must be two times plus.
 	if (positive)
 		return {pos.x() + xAlign, pos.y() + yAlign};
 	else
-		return {pos.x() - xAlign, pos.y() + yAlign};
+		return {pos.x() - xAlign, pos.y() - yAlign};
 }
 
 QRectF WorksheetElement::parentRect() const {
@@ -420,7 +418,7 @@ QRectF WorksheetElement::parentRect() const {
  * \param parentPos Element position in parent coordinates
  * \param parentRect Parent data rect
  * \param rect element's rect
- * \param position contains the alignement of the element to the parent
+ * \param position contains the alignment of the element to the parent
  * \return distance between the parent position to the element
  */
 QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, PositionWrapper position) const {
@@ -475,6 +473,7 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, PositionWrap
  * \return parent position
  */
 QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const {
+	// QDEBUG(Q_FUNC_INFO << ", pos point = " << position.point)
 	// increasing relative pos hor --> right
 	// increasing relative pos vert --> top
 	// increasing parent pos hor --> right
@@ -496,6 +495,7 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 		break;
 	}
 
+	// DEBUG("parent x = " << parentRect.x() << ", width = " << parentRect.width() << ", pos x = " << position.point.x())
 	if (position.horizontalPosition == HorizontalPosition::Relative)
 		parentPos.setX(parentRect.x() + parentRect.width() * position.point.x());
 	else
@@ -515,6 +515,7 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 		break;
 	}
 
+	// DEBUG("parent y = " << parentRect.y() << ", height = " << parentRect.height() << ", pos y = " << position.point.y())
 	if (position.verticalPosition == VerticalPosition::Relative)
 		parentPos.setY(parentRect.y() + parentRect.height() * position.point.y());
 	else
@@ -743,7 +744,7 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement, QPointF, positionLogical, positionL
 BASIC_SHARED_D_READER_IMPL(WorksheetElement,
 						   qreal,
 						   rotationAngle,
-						   rotation() * -1) // the rotation is in qgraphicsitem different to the convention used in labplot
+						   rotation() * -1) // the convention for rotation is different in QGraphicsItem than used in labplot
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, scale, scale())
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, isLocked, lock)
@@ -783,9 +784,10 @@ void WorksheetElement::setVerticalAlignment(const WorksheetElement::VerticalAlig
 
 STD_SETTER_CMD_IMPL_S(WorksheetElement, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled) // do I need a final method?
 bool WorksheetElement::setCoordinateBindingEnabled(bool on) {
-	Q_D(WorksheetElement);
 	if (on && !cSystem)
 		return false;
+
+	Q_D(WorksheetElement);
 	if (on != d->coordinateBindingEnabled) {
 		// Must not be in the Undo Command,
 		// because if done once, logical and
@@ -859,6 +861,7 @@ void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, 
 }
 
 void WorksheetElementPrivate::updatePosition() {
+	DEBUG(Q_FUNC_INFO)
 	QPointF p;
 	if (coordinateBindingEnabled && q->cSystem) {
 		// the position in logical coordinates was changed, calculate the position in scene coordinates
@@ -948,7 +951,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 void WorksheetElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	// when moving the element with the mouse (left button pressed), the move event doesn't have
 	// the information about the pressed button anymore (NoButton) that is needed in mouseMoveEvent()
-	// to decide if the element move was started or not. So, we check the pressed buttong here.
+	// to decide if the element move was started or not. So, we check the pressed button here.
 	if (event->button() == Qt::LeftButton)
 		m_leftButtonPressed = true;
 
@@ -964,30 +967,38 @@ void WorksheetElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	m_leftButtonPressed = false;
-	if (!m_moveStarted) {
+	if (!m_moveStarted || !(this->flags() & QGraphicsItem::ItemIsMovable)) {
 		QGraphicsItem::mouseReleaseEvent(event);
 		return;
 	}
 
-	// convert position of the item in parent coordinates to label's position
-	QPointF point = q->parentPosToRelativePos(pos(), position);
-	point = q->align(point, boundingRect(), horizontalAlignment, verticalAlignment, false);
-	if (point != position.point) {
-		// position was changed -> set the position related member variables
-		suppressRetransform = true;
+	QDEBUG(Q_FUNC_INFO << ", new position =" << pos() << ", old position (relative) =" << position.point)
+	// convert new position
+	auto point = q->align(pos(), boundingRect(), horizontalAlignment, verticalAlignment, false);
+	// in percentage
+	auto parentRect = q->parentRect();
+	point.setX((point.x() - parentRect.x()) / parentRect.width());
+	point.setY((point.y() - parentRect.y()) / parentRect.height());
+	QDEBUG(Q_FUNC_INFO << ", new position (relative) =" << point)
+
+	if (point != position.point) { // position was changed
+		Lock lock(suppressRetransform, true);
 		auto tempPosition = position;
 		tempPosition.point = point;
+		// switch to relative
+		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
+		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Relative;
 		q->setPosition(tempPosition);
 		updatePosition(); // to update the logical position if available
-		suppressRetransform = false;
 	}
 
 	m_moveStarted = false;
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
+// called when any property changes (like position)
 QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QVariant& value) {
-	if (suppressItemChangeEvent)
+	if (suppressItemChangeEvent || !(this->flags() & QGraphicsItem::ItemIsMovable))
 		return value;
 
 	if (change == QGraphicsItem::ItemPositionChange) {
@@ -1008,18 +1019,22 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		// don't use setPosition here, because then all small changes are on the undo stack
 		// setPosition is used then in mouseReleaseEvent
 		if (coordinateBindingEnabled) {
+			DEBUG(Q_FUNC_INFO << ", coordinate binding enabled")
 			if (!q->cSystem->isValid())
 				return QGraphicsItem::itemChange(change, value);
-			QPointF pos = q->align(newPos, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			auto pos = q->align(newPos, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 			Q_EMIT q->objectPositionChanged();
 		} else {
-			// convert item's center point in parent's coordinates
+			DEBUG(Q_FUNC_INFO << ", coordinate binding disabled")
 			auto tempPosition = position;
-			tempPosition.point = q->parentPosToRelativePos(newPos, position);
-			tempPosition.point = q->align(tempPosition.point, boundingRect(), horizontalAlignment, verticalAlignment, false);
+			tempPosition.point = q->align(newPos, boundingRect(), horizontalAlignment, verticalAlignment, false);
+			// in percentage
+			auto parentRect = q->parentRect();
+			tempPosition.point.setX((tempPosition.point.x() - parentRect.x()) / parentRect.width());
+			tempPosition.point.setY((tempPosition.point.y() - parentRect.y()) / parentRect.height());
 
 			// Q_EMIT the signals in order to notify the UI.
 			Q_EMIT q->positionChanged(tempPosition);
@@ -1032,7 +1047,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 }
 
 /*!
- * \brief TextLabelPrivate::mapParentToPlotArea
+ * \brief WorksheetElementPrivate::mapParentToPlotArea
  * Mapping a point from parent coordinates to plotArea coordinates
  * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
  * IMPORTANT: function is also used in Custompoint, so when changing anything, change it also there
@@ -1040,7 +1055,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
  * \return point in PlotArea coordinates
  */
 QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) const {
-	auto* parent = q->parent(AspectType::CartesianPlot);
+	auto* parent = q->parent<CartesianPlot>();
 	if (parent) {
 		auto* plot = static_cast<CartesianPlot*>(parent);
 		// mapping from parent to item coordinates and them to plot area
@@ -1051,7 +1066,7 @@ QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) const {
 }
 
 /*!
- * \brief TextLabelPrivate::mapPlotAreaToParent
+ * \brief WorksheetElementPrivate::mapPlotAreaToParent
  * Mapping a point from the PlotArea (CartesianPlot::plotArea) coordinates to the parent
  * coordinates of this item
  * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
@@ -1060,7 +1075,7 @@ QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) const {
  * \return point in parent coordinates
  */
 QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) const {
-	auto* parent = q->parent(AspectType::CartesianPlot);
+	auto* parent = q->parent<CartesianPlot>();
 	if (parent) {
 		auto* plot = static_cast<CartesianPlot*>(parent);
 		// first mapping to item coordinates and from there back to parent
@@ -1085,7 +1100,7 @@ void WorksheetElementPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* e
 	// don't show any context menu if the element is hidden which is the case
 	// for example for axis and plot title labels. For such objects the context menu
 	// of their parents, i.e. of axis and plot, is used.
-	if (!q->hidden()) {
+	if (!q->isHidden()) {
 		auto* menu = q->createContextMenu();
 		if (menu)
 			menu->exec(event->screenPos());
@@ -1108,4 +1123,40 @@ void WorksheetElementPrivate::setHover(bool on) {
 CartesianPlot* WorksheetElement::plot() const {
 	Q_D(const WorksheetElement);
 	return d->m_plot;
+}
+
+/*
+ * Returns a localized representation of the integer \c value according
+ * to \locale and to the current settings for the minus sign for negative values.
+ * if it's clear the value is always strictly positive, QLocale::toNumber() can be used directly.
+ */
+QString WorksheetElementPrivate::numberToString(int value, const QLocale& locale) {
+	QString result = locale.toString(value);
+	if (value < 0)
+		handleNegativeNumber(result);
+	return result;
+}
+
+/*
+ * Returns a localized representation of the double \c value according
+ * to \locale and to the current settings for the minus sign for negative values.
+ * if it's clear the value is always strictly positive, QLocale::toNumber() can be used directly.
+ */
+QString WorksheetElementPrivate::numberToString(double value, const QLocale& locale, char format, int precision) {
+	QString result = locale.toString(value, format, precision);
+	if (value < 0)
+		handleNegativeNumber(result);
+
+	return result;
+}
+
+/*!
+ * helper function replacing the hyphen with the minus sign in the localized string of the numerical value,
+ * if this setting is active
+ */
+void WorksheetElementPrivate::handleNegativeNumber(QString& value) {
+	const auto group = Settings::settingsGeneral();
+	const bool useHyphen = group.readEntry<bool>(QLatin1String("UseHyphen"), false);
+	if (!useHyphen)
+		value.replace(0, 1, QString::fromUtf8("−"));
 }

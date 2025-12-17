@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Folder in a project
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -27,7 +27,14 @@
 #endif
 
 #include "backend/lib/XmlStreamReader.h"
+#ifdef HAVE_SCRIPTING
+#include "backend/script/Script.h"
+#endif
 #include "backend/spreadsheet/Spreadsheet.h"
+#ifndef SDK
+#include "backend/statistics/HypothesisTest.h"
+#endif
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/Worksheet.h"
 
 #include <KLocalizedString>
@@ -222,7 +229,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 
 			// remove the path of the current child folder
 			QStringList pathesToLoadNew;
-			for (const auto& path : qAsConst(m_pathesToLoad)) {
+			for (const auto& path : std::as_const(m_pathesToLoad)) {
 				if (path.startsWith(curFolderPath))
 					pathesToLoadNew << path.right(path.length() - curFolderPath.length());
 			}
@@ -354,6 +361,37 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		}
 		addChildFast(note);
 #endif
+	} else if (element_name == QLatin1String("script")) {
+#ifndef SDK
+#ifdef HAVE_SCRIPTING
+		QString runtime = Script::readRuntime(reader);
+		if (runtime.isEmpty())
+			return false;
+
+		Script* script = new Script(QString(), runtime);
+		if (!script->load(reader, preview)) {
+			delete script;
+			return false;
+		}
+		addChildFast(script);
+#endif
+#endif
+	} else if (element_name == QLatin1String("hypothesisTest")) {
+#ifndef SDK
+		auto* test = new HypothesisTest(QString());
+		if (!test->load(reader, preview)) {
+			delete test;
+			return false;
+		}
+		addChildFast(test);
+#endif
+	} else if (element_name == QLatin1String("seasonalDecomposition")) {
+		auto* decomp = new SeasonalDecomposition(QString(), true);
+		if (!decomp->load(reader, preview)) {
+			delete decomp;
+			return false;
+		}
+		addChildFast(decomp);
 	} else {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));
 		if (!reader->skipToEndElement())

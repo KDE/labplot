@@ -62,17 +62,26 @@ private Q_SLOTS:
 	void loadDateTimeFromProject();
 	void saveLoadDateTime();
 
-	void testIndexForValue();
+	void testIndexForValueStrictlyMonotonouslyRising();
+	void testIndexForValueMonotonouslyRising();
+	void indexForValueDatetimeStrictlyMonotonouslyRising();
+	void indexForValueDatetimeMonotonouslyRising();
+	void testIndexForValuePoints();
+	void testIndexForValueLines();
 	void testIndexForValueDoubleVector();
 
 	void testInsertRow();
 	void testRemoveRow();
 
 	void testFormula();
+	void testFormula2();
 	void testFormulaCell();
+	void testFormulaCellDefault();
 	void testFormulaCellInvalid();
 	void testFormulaCellConstExpression();
 	void testFormulaCellMulti();
+	void testFormulaCurrentColumnCell();
+	void testFormulaCurrentColumnCellDefaultValue();
 	void testFormulasmmin();
 	void testFormulasmmax();
 	void testFormulasma();
@@ -122,6 +131,9 @@ private Q_SLOTS:
 
 	void testRowCountValueLabels();
 	void testRowCountValueLabelsDateTime();
+
+	void testLoadSaveNoData();
+	void testLoadSaveWithData();
 };
 
 #endif // COLUMNTEST_H

@@ -1,23 +1,18 @@
 find_package(SharedMimeInfo REQUIRED)
-set(FRONTEND_DIR frontend)
-set(BACKEND_DIR backend)
-set(CANTOR_DIR cantor)
-set(TOOLS_DIR tools)
+set(FRONTEND_DIR "${CMAKE_CURRENT_LIST_DIR}/frontend")
+set(BACKEND_DIR "${CMAKE_CURRENT_LIST_DIR}/backend")
+set(CANTOR_DIR "${CMAKE_CURRENT_LIST_DIR}/cantor")
+set(TOOLS_DIR "${CMAKE_CURRENT_LIST_DIR}/tools")
 set(CMAKE_AUTOMOC ON)
 set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
-find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
-if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
-    option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
-    option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
-    if(TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
-        message(STATUS "Building local version of Qt-Advanced-Docking-System.")
-    else ()
-        message(FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
-    endif()
+if(ENABLE_PYTHON_SCRIPTING)
+include(PythonScripting)
 endif()
 
 set(GUI_SOURCES
+    ${FRONTEND_DIR}/AboutDialog.cpp
+    ${FRONTEND_DIR}/ActionsManager.cpp
     ${FRONTEND_DIR}/DatasetModel.cpp
     ${FRONTEND_DIR}/GuiObserver.cpp
     ${FRONTEND_DIR}/GuiTools.cpp
@@ -62,6 +57,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/datasources/ImportFileDialog.cpp
     ${FRONTEND_DIR}/datasources/ImportKaggleDatasetWidget.cpp
     ${FRONTEND_DIR}/datasources/ImportKaggleDatasetDialog.cpp
+    ${FRONTEND_DIR}/datasources/ImportOriginLayersDialog.cpp
     ${FRONTEND_DIR}/datasources/ImportProjectDialog.cpp
     ${FRONTEND_DIR}/datasources/ImportSQLDatabaseDialog.cpp
     ${FRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
@@ -95,6 +91,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
     ${FRONTEND_DIR}/dockwidgets/ReferenceRangeDock.cpp
     ${FRONTEND_DIR}/dockwidgets/RunChartDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/SeasonalDecompositionDock.cpp
     ${FRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/StatisticsSpreadsheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/QQPlotDock.cpp
@@ -102,7 +99,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/XYAnalysisCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYFunctionCurveDock.cpp
-    ${FRONTEND_DIR}/dockwidgets/XYDataReductionCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYLineSimplificationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYDifferentiationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYIntegrationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYInterpolationCurveDock.cpp
@@ -114,6 +111,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/HypothesisTestDock.cpp
     ${FRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
     ${FRONTEND_DIR}/matrix/MatrixView.cpp
     ${FRONTEND_DIR}/note/NoteView.cpp
@@ -148,8 +146,10 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/worksheet/SlidingPanel.cpp
     ${FRONTEND_DIR}/worksheet/WorksheetPreviewWidget.cpp
     ${FRONTEND_DIR}/worksheet/WorksheetView.cpp
+    ${FRONTEND_DIR}/statistics/HypothesisTestView.cpp
     ${FRONTEND_DIR}/widgets/BackgroundWidget.cpp
     ${FRONTEND_DIR}/widgets/ConstantsWidget.cpp
+    ${FRONTEND_DIR}/widgets/DataColumnsWidget.cpp
     ${FRONTEND_DIR}/widgets/ThemesComboBox.cpp
     ${FRONTEND_DIR}/widgets/ThemesWidget.cpp
     ${FRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
@@ -168,15 +168,24 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
     ${FRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
     ${FRONTEND_DIR}/widgets/ResizableTextEdit.cpp
+    ${FRONTEND_DIR}/widgets/TextPreview.cpp
     ${FRONTEND_DIR}/widgets/TimedLineEdit.cpp
     ${FRONTEND_DIR}/widgets/TreeViewComboBox.cpp
     ${FRONTEND_DIR}/widgets/qxtspanslider.cpp
+    ${FRONTEND_DIR}/widgets/toggleactionmenu.cpp
     ${FRONTEND_DIR}/widgets/MemoryWidget.cpp
     ${FRONTEND_DIR}/widgets/DateTimeSpinBox.cpp
     ${FRONTEND_DIR}/widgets/NumberSpinBox.cpp
     ${FRONTEND_DIR}/widgets/UTCDateTimeEdit.cpp
     ${FRONTEND_DIR}/workbook/WorkbookView.cpp
 )
+
+if(ENABLE_SCRIPTING)
+    list(APPEND GUI_SOURCES
+        ${FRONTEND_DIR}/dockwidgets/ScriptDock.cpp
+        ${FRONTEND_DIR}/script/ScriptEditor.cpp
+        ${FRONTEND_DIR}/SettingsEditorPage.cpp)
+endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
     list(APPEND GUI_SOURCES ${FRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp)
@@ -220,6 +229,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
     ${FRONTEND_DIR}/ui/datasources/importkaggledatasetwidget.ui
     ${FRONTEND_DIR}/ui/datasources/importfilewidget.ui
+    ${FRONTEND_DIR}/ui/datasources/importoriginlayersdialog.ui
     ${FRONTEND_DIR}/ui/datasources/importwarningsdialog.ui
     ${FRONTEND_DIR}/ui/datasources/importprojectwidget.ui
     ${FRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
@@ -257,12 +267,13 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/referencerangedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/runchartdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/seasonaldecompositiondock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/statisticsspreadsheetdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/qqplotdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xycurvedockgeneraltab.ui
-    ${FRONTEND_DIR}/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui
@@ -277,6 +288,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/valuewidget.ui
     ${FRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/hypothesistestdock.ui
     ${FRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
     ${FRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
     ${FRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
@@ -300,6 +312,12 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
     ${FRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
 )
+
+if(ENABLE_SCRIPTING)
+    list(APPEND UI_SOURCES
+        ${FRONTEND_DIR}/ui/script/scripteditorwidget.ui
+        ${FRONTEND_DIR}/ui/dockwidgets/scriptdock.ui)
+endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
     list(APPEND UI_SOURCES ${FRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui)
@@ -375,6 +393,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/datasources/DatasetHandler.cpp
     ${BACKEND_DIR}/datasources/LiveDataSource.cpp
     ${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/FilterStatus.cpp
     ${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
     ${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
     ${BACKEND_DIR}/datasources/filters/XLSXFilter.cpp
@@ -399,6 +418,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/gsl/ExpressionParser.cpp
     ${BACKEND_DIR}/gsl/constants.cpp
     ${BACKEND_DIR}/gsl/functions.cpp
+    ${BACKEND_DIR}/gsl/Parser.cpp
     ${BACKEND_DIR}/lib/Range.h
     ${BACKEND_DIR}/lib/Debug.cpp
     ${BACKEND_DIR}/lib/XmlStreamReader.cpp
@@ -411,6 +431,8 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
     ${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
     ${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
+    ${BACKEND_DIR}/statistics/HypothesisTest.cpp
+    ${BACKEND_DIR}/timeseriesanalysis/SeasonalDecomposition.cpp
     ${BACKEND_DIR}/worksheet/Background.cpp
     ${BACKEND_DIR}/worksheet/Image.cpp
     ${BACKEND_DIR}/worksheet/Line.cpp
@@ -420,7 +442,6 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/InfoElement.cpp
     ${BACKEND_DIR}/worksheet/Worksheet.cpp
     ${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
-    ${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
     ${BACKEND_DIR}/worksheet/TreeModel.cpp
     ${BACKEND_DIR}/worksheet/plots/AbstractPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
@@ -449,7 +470,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFunctionCurve.cpp
-    ${BACKEND_DIR}/worksheet/plots/cartesian/XYDataReductionCurve.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYDifferentiationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYIntegrationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
@@ -462,6 +483,17 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
 )
+
+if(ENABLE_SCRIPTING)
+    list(APPEND BACKEND_SOURCES
+        ${BACKEND_DIR}/script/Script.cpp
+        ${BACKEND_DIR}/script/ScriptRuntime.cpp)
+endif()
+
+if(ENABLE_PYTHON_SCRIPTING)
+    list(APPEND BACKEND_SOURCES ${shiboken_scripting_generated_sources})
+    list(APPEND BACKEND_SOURCES ${python_scripting_backend_sources})
+endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
     list(APPEND BACKEND_SOURCES ${FRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
@@ -504,6 +536,8 @@ set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_smooth.c
     ${BACKEND_DIR}/nsl/nsl_sort.c
     ${BACKEND_DIR}/nsl/nsl_stats.c
+    ${BACKEND_DIR}/nsl/nsl_statistical_test.c
+
 )
 
 if(NOT MSVC_FOUND)
@@ -546,8 +580,6 @@ set(GENERATED_SOURCES
 INCLUDE_DIRECTORIES(. ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR})
 set(LABPLOT_SRCS ${GUI_SOURCES})
 ki18n_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
-# see also QT_MIN_VERSION in CMakeLists.txt
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
 
 # static library
 add_library(labplotnsllib STATIC ${NSL_SOURCES})
@@ -561,21 +593,39 @@ target_include_directories(labplotlib PUBLIC ${FRONTEND_DIR}/widgets) # so that 
 if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     get_target_property(QADS_INCLUDES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
     get_target_property(QADS_LIBRARIES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_LINK_LIBRARIES)
-    message(STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
-    target_include_directories(labplotbackendlib PRIVATE ${QADS_INCLUDES})
-    target_include_directories(labplotlib PRIVATE ${QADS_INCLUDES})
+    message(STATUS "QADS Found: ${QADS_LIBRARIES}, ${QADS_INCLUDES}")
+    target_include_directories(labplotbackendlib PUBLIC ${QADS_INCLUDES})
+    target_include_directories(labplotlib PUBLIC ${QADS_INCLUDES})
 endif()
 target_compile_definitions(labplotbackendlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 target_compile_definitions(labplotlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
+if(READSTAT_FOUND)   # system readstat needs libiconv
+    find_library(ICONV_LIBRARIES NAMES iconv libiconv libconv-2)
+    if(ICONV_LIBRARIES)
+        message(status "FOUND iconv: ${ICONV_LIBRARIES}. Adding with --no-as-needed")
+    endif()
+endif()
+if(NOT ICONV_LIBRARIES)
+    set(ICONV_LIBRARIES "")
+endif()
+if(NOT APPLE)
+    set(TURN_OFF_AS_NEEDED "-Wl,--no-as-needed")
+    set(TURN_ON_AS_NEEDED "-Wl,--as-needed")
+endif()
 target_link_libraries(labplotnsllib
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
+    ${TURN_OFF_AS_NEEDED}
     ${GSL_LIBRARIES}
-    ${GSL_CBLAS_LIBRARIES}
+    ${ICONV_LIBRARIES}
+    ${TURN_ON_AS_NEEDED}
+    ${LIBCERF_LIBRARIES}
+    ${FFTW3_LIBRARIES}
 )
 target_link_libraries(labplotbackendlib
     Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Concurrent   # QConcurrent
     Qt${QT_MAJOR_VERSION}::Gui    # QColor
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
     Qt${QT_MAJOR_VERSION}::Network    # QLocalSocket
@@ -589,18 +639,28 @@ target_link_libraries(labplotbackendlib
     KF${KF_MAJOR_VERSION}::CoreAddons    # kcoreaddons_version.h
     ${ZLIB_LIBRARIES}
     ${LZ4_LIBRARIES}
+    ${TURN_OFF_AS_NEEDED}
     ${GSL_LIBRARIES}
-    ${GSL_CBLAS_LIBRARIES}
+    ${TURN_ON_AS_NEEDED}
     ${HDF5_LIBRARIES}
     ${FFTW3_LIBRARIES}
     ${netCDF_LIBRARIES}
     ${CFITSIO_LIBRARIES}
     ${LIBCERF_LIBRARIES}
     ${MATIO_LIBRARIES}
+    ${READSTAT_LIBRARIES}
     ads::qt${QT_VERSION_MAJOR}advanceddocking
 )
+
+if(ENABLE_SCRIPTING)
+target_link_libraries(labplotbackendlib KF${KF_MAJOR_VERSION}::TextEditor)
+endif()
+
+if(ENABLE_PYTHON_SCRIPTING)
+target_link_libraries(labplotbackendlib ${python_scripting_link_libraries})
+endif()
+
 target_link_libraries(labplotlib
-    Qt${QT_MAJOR_VERSION}::Svg
     Qt${QT_MAJOR_VERSION}::Sql
     Qt${QT_MAJOR_VERSION}::PrintSupport    # QPrinter
 #     Qt${QT_MAJOR_VERSION}::Qml
@@ -620,9 +680,16 @@ target_link_libraries(labplotlib
     ads::qt${QT_VERSION_MAJOR}advanceddocking
 )
 
+if(ENABLE_SCRIPTING)
+target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::TextEditor)
+endif()
+
 if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::SerialPort)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::SerialPort)
+endif()
+if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
+    target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Svg)
 endif()
 if(Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::Mqtt)
@@ -647,7 +714,7 @@ if(KF${KF_MAJOR_VERSION}Purpose_FOUND)
     target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::PurposeWidgets)
 endif()
 if(ZSTD_FOUND)
-        target_link_libraries(labplotbackendlib ${ZSTD_LIBRARIES})
+    target_link_libraries(labplotbackendlib ${ZSTD_LIBRARIES})
 endif()
 
 if(Cantor_FOUND)
@@ -661,28 +728,23 @@ if(ENABLE_READSTAT)
     if(BUILD_READSTAT)
         add_dependencies(labplotbackendlib 3rdparty_readstat)
     endif()
-    # link system readstat with iconv
     if(READSTAT_FOUND)
-        find_library(ICONV_LIBRARIES NAMES iconv libiconv libconv-2)
-        if(ICONV_LIBRARIES)
-            target_link_libraries (labplotbackendlib ${ICONV_LIBRARIES})
-        endif()
-    endif()
         target_link_libraries(labplotbackendlib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES})
+    endif()
 endif()
 
 if(ENABLE_XLSX)
     # build before use
     if(BUILD_QXLSX)
-        target_include_directories(labplotbackendlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header")
+        target_include_directories(labplotbackendlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header")
         add_dependencies(labplotbackendlib QXlsx)
-        target_include_directories(labplotlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header")
+        target_include_directories(labplotlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header")
         add_dependencies(labplotlib QXlsx)
     endif()
 
     if(QXLSX_FOUND)
-        target_include_directories(labplotbackendlib PRIVATE ${QXLSX_INCLUDE_DIR})
-        target_include_directories(labplotlib PRIVATE ${QXLSX_INCLUDE_DIR})
+        target_include_directories(labplotbackendlib PUBLIC ${QXLSX_INCLUDE_DIR})
+        target_include_directories(labplotlib PUBLIC ${QXLSX_INCLUDE_DIR})
     endif()
 
     if(QXLSX_FOUND OR BUILD_QXLSX)
@@ -693,17 +755,17 @@ endif()
 if(ENABLE_LIBORIGIN)
     if(LIBORIGIN_FOUND)
         # ifsystem headers are missing: use the provided
-        target_include_directories(labplotbackendlib PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
+        target_include_directories(labplotbackendlib PUBLIC ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
         target_link_libraries(labplotbackendlib ${LIBORIGIN_LIBRARIES})
-        target_include_directories(labplotlib PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
+        target_include_directories(labplotlib PUBLIC ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
     else() # own version
-        target_include_directories(labplotbackendlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
+        target_include_directories(labplotbackendlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
         target_link_libraries(labplotbackendlib liborigin-static)
-        target_include_directories(labplotlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
+        target_include_directories(labplotlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
     endif()
 endif()
 
-IF(LZ4_FOUND)
+if(LZ4_FOUND)
     target_include_directories(labplotbackendlib PUBLIC ${LZ4_INCLUDE_DIR})
 endif()
 
@@ -737,6 +799,29 @@ set(LML_ICONS
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-application-x-labplot.png
 )
 
+if(ENABLE_PYTHON_SCRIPTING)
+get_target_property(labplotlib_INCLUDE_DIRECTORIES labplotlib INCLUDE_DIRECTORIES)
+get_target_property(labplotbackendlib_INCLUDE_DIRECTORIES labplotbackendlib INCLUDE_DIRECTORIES)
+get_target_property(labplotnsllib_INCLUDE_DIRECTORIES labplotnsllib INCLUDE_DIRECTORIES)
+get_target_property(KFi18n_INCLUDE_DIRECTORIES KF${KF_MAJOR_VERSION}::I18n INTERFACE_INCLUDE_DIRECTORIES)
+
+target_include_directories(labplotbackendlib PUBLIC ${Python3_INCLUDE_DIRS})
+
+generate_shiboken_sources(
+    PACKAGE_NAME ${scripting_library}
+    VERSION ${PROJECT_VERSION}
+    WRAPPED_HEADER ${scripting_wrapped_header}
+    TYPESYSTEM ${scripting_typesystem_file}
+    GENERATED_SOURCES ${shiboken_scripting_generated_sources}
+    INCLUDES ${labplotlib_INCLUDE_DIRECTORIES} ${labplotbackendlib_INCLUDE_DIRECTORIES} ${labplotnsllib_INCLUDE_DIRECTORIES} ${Qt${QT_MAJOR_VERSION}Core_INCLUDE_DIRS} ${Qt${QT_MAJOR_VERSION}Gui_INCLUDE_DIRS} ${Qt${QT_MAJOR_VERSION}Widgets_INCLUDE_DIRS} ${KFi18n_INCLUDE_DIRECTORIES}
+    QT_VERSION ${QT_MIN_VERSION}
+    HOMEPAGE_URL "https://invent.kde.org/education/labplot"
+    ISSUES_URL "https://bugs.kde.org/describecomponents.cgi?product=labplot2"
+    AUTHOR "The LabPlot Team"
+    README ../README.md
+)
+endif()
+
 add_subdirectory(3rdparty)
 
 # main executable
@@ -757,7 +842,7 @@ if(APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 endif()
 
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
-target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
+target_link_libraries(labplot labplotbackendlib labplotlib labplotnsllib)
 
 #if(KUserFeedbackQt6_FOUND)
 #    target_link_libraries(labplot KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
@@ -777,8 +862,6 @@ endif()
 install(TARGETS labplot ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES ${FRONTEND_DIR}/splash.png ${FRONTEND_DIR}/labplot.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME})
 install(FILES org.kde.labplot.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-# Flatpak still uses this one
-install(FILES org.kde.labplot2.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES labplot.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
 # if(${ECM_VERSION} VERSION_GREATER "5.58.0")
 #     install(FILES labplot2_themes.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR})

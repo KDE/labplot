@@ -11,17 +11,11 @@
 
 #include "BaseDock.h"
 #include "AxisDock.h"
-#include "backend/core/AbstractAspect.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
-#include "backend/lib/macros.h"
-
-#include "backend/nsl/nsl_math.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-
-#include <QComboBox>
 
 BaseDock::BaseDock(QWidget* parent)
 	: QWidget(parent) {

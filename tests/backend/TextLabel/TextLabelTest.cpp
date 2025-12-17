@@ -21,7 +21,7 @@ struct TextProperties {
 	QString text;
 	QString plainText;
 	QFont font;
-	int weigth;
+	int weight;
 	bool italic;
 	bool underline;
 };
@@ -61,7 +61,7 @@ QColor getColorFromHTMLText(const QString& text, const QString& colortype) {
 		propertyVariable.italic = te.fontItalic();                                                                                                             \
 		propertyVariable.underline = te.fontUnderline();                                                                                                       \
 		propertyVariable.plainText = te.toPlainText();                                                                                                         \
-		propertyVariable.weigth = te.fontWeight();                                                                                                             \
+		propertyVariable.weight = te.fontWeight();                                                                                                             \
 	}
 
 #define COMPARETEXTPROPERTIES(actual, expected)                                                                                                                \
@@ -71,14 +71,10 @@ QColor getColorFromHTMLText(const QString& text, const QString& colortype) {
 	QCOMPARE(actual.italic, expected.italic);                                                                                                                  \
 	QCOMPARE(actual.plainText, expected.plainText);                                                                                                            \
 	QCOMPARE(actual.underline, expected.underline);                                                                                                            \
-	QCOMPARE(actual.weigth, expected.weigth);                                                                                                                  \
+	QCOMPARE(actual.weight, expected.weight);                                                                                                                  \
 	/* QCOMPARE(actual.text, expected.text); Cannot be used, because then also in the expected html text the color must be replaced*/
 
-#define COMPARETEXTPROPERTIESLABEL(label, expected)                                                                                                            \
-	{                                                                                                                                                          \
-		STORETEXTPROPERTIES(label, propertyVariable)                                                                                                           \
-		COMPARETEXTPROPERTIES(propertyVariable, expected)                                                                                                      \
-	}
+#define COMPARETEXTPROPERTIESLABEL(label, expected) {STORETEXTPROPERTIES(label, propertyVariable) COMPARETEXTPROPERTIES(propertyVariable, expected)}
 
 #define VERIFYLABELCOLORS(label, fontcolor_, backgroundColor_)                                                                                                 \
 	{                                                                                                                                                          \
@@ -104,7 +100,7 @@ void TextLabelTest::addPlot() {
 	QCOMPARE(l->text().mode, TextLabel::Mode::Text);
 	VERIFYLABELCOLORS(l, Qt::black, Qt::transparent);
 	QCOMPARE(l->fontColor(), Qt::black);
-	QCOMPARE(l->backgroundColor(), Qt::transparent);
+	QCOMPARE(l->backgroundColor(), QColor(1, 1, 1, 0));
 
 	// add title?
 

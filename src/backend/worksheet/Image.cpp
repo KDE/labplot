@@ -29,12 +29,13 @@
 
 /**
  * \class Image
- * \brief A label supporting rendering of html- and tex-formatted texts.
+ * \brief Worksheet element to draw images.
  *
- * The label is aligned relative to the specified position.
+ * The image can be added to \c Worksheet or to \c CartesianPlot and is aligned relative to the specified position.
  * The position can be either specified by providing the x- and y- coordinates
  * in parent's coordinate system, or by specifying one of the predefined position
  * flags (\c HorizontalPosition, \c VerticalPosition).
+ * \ingroup worksheet
  */
 
 Image::Image(const QString& name)
@@ -151,22 +152,18 @@ void Image::setOpacity(qreal opacity) {
 		exec(new ImageSetOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetWidth, int, width, retransform)
+STD_SETTER_CMD_IMPL_F_S(Image, SetWidth, int, width, scaleImage)
 void Image::setWidth(int width) {
 	Q_D(Image);
-	if (width != d->width) {
+	if (width != d->width)
 		exec(new ImageSetWidthCmd(d, width, ki18n("%1: set width")));
-		d->scaleImage();
-	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetHeight, int, height, retransform)
+STD_SETTER_CMD_IMPL_F_S(Image, SetHeight, int, height, scaleImage)
 void Image::setHeight(int height) {
 	Q_D(Image);
-	if (height != d->height) {
+	if (height != d->height)
 		exec(new ImageSetHeightCmd(d, height, ki18n("%1: set height")));
-		d->scaleImage();
-	}
 }
 
 STD_SETTER_CMD_IMPL_S(Image, SetKeepRatio, bool, keepRatio)

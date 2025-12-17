@@ -22,15 +22,15 @@ class LABPLOT_EXPORT XYEquationCurve : public XYCurve {
 class XYEquationCurve : public XYCurve {
 #endif
 	Q_OBJECT
-	Q_ENUMS(EquationType)
 
 public:
 	enum class EquationType { Cartesian, Polar, Parametric, Implicit, Neutral };
+	Q_ENUM(EquationType)
 
 	struct EquationData {
 		EquationData()
 			: min(QLatin1String("0"))
-			, max(QLatin1String("1")){};
+			, max(QLatin1String("1")) { };
 
 		EquationType type{EquationType::Cartesian};
 		QString expression1; // Expression for Cartesian, Polar, ...

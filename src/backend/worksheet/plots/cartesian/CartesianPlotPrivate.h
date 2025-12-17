@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of CartesianPlot.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,13 +14,10 @@
 #include "../AbstractPlotPrivate.h"
 #include "CartesianCoordinateSystem.h"
 #include "CartesianPlot.h"
-#include "backend/worksheet/Worksheet.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QPen>
 #include <QStaticText>
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 class CartesianPlotPrivate : public AbstractPlotPrivate {
 public:
@@ -32,8 +29,8 @@ public:
 	void retransformScales(int xIndex, int yIndex);
 	void rangeChanged();
 	void niceExtendChanged();
-	void rangeFormatChanged(const Dimension dim);
-	void wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+	void rangeFormatChanged(const Dimension);
+	void wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension);
 	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
@@ -45,9 +42,14 @@ public:
 	void updateCursor();
 	void setZoomSelectionBandShow(bool show);
 	bool translateRange(int xIndex, int yIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY);
+	void updatePlotColorPalette();
 
 	CartesianPlot::Type type{CartesianPlot::Type::FourAxes};
+	CartesianPlot::PlotColorMode plotColorMode{CartesianPlot::PlotColorMode::Theme};
 	QString theme;
+	QList<QColor> plotColors;
+	QString plotColorMap{QStringLiteral("berlin10")};
+
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
@@ -253,8 +255,6 @@ public:
 		}
 	}
 
-	void checkRange(Dimension, int index);
-	Range<double> checkRange(const Range<double>&);
 	CartesianPlot::RangeBreaks rangeBreaks(Dimension);
 	bool rangeBreakingEnabled(Dimension);
 
@@ -275,7 +275,7 @@ public:
 	int defaultCoordinateSystemIndex{0};
 
 	QVector<RichRange> xRanges{{}}, yRanges{{}}; // at least one range must exist.
-	bool niceExtend{true};
+	bool niceExtend{false};
 	CartesianCoordinateSystem* coordinateSystem(int index) const;
 	QVector<AbstractCoordinateSystem*> coordinateSystems() const;
 	CartesianCoordinateSystem* defaultCoordinateSystem() const {
@@ -333,7 +333,7 @@ private:
 	QStaticText m_cursor0Text{QStringLiteral("1")};
 	QStaticText m_cursor1Text{QStringLiteral("2")};
 
-	friend class MultiRangeTest2;
+	friend class MultiRangeTest;
 	friend class CartesianPlotTest;
 };
 

@@ -19,7 +19,6 @@ class Datapicker;
 
 class QMenu;
 class QTabWidget;
-class QToolBar;
 
 class DatapickerView : public QWidget {
 	Q_OBJECT
@@ -29,7 +28,6 @@ public:
 	~DatapickerView() override;
 
 	void createContextMenu(QMenu*) const;
-	void fillToolBar(QToolBar*);
 	int currentIndex() const;
 
 private:

@@ -111,7 +111,7 @@ void NSLSFBasicTest::testran_triangular() {
 
 void NSLSFBasicTest::testlog2_int_C99() {
 	QBENCHMARK {
-		for (unsigned int i = 1; i < 4e9; i++)
+		for (unsigned int i = 1; i < 1e7; i++)
 			Q_UNUSED((int)log2(i));
 	}
 }

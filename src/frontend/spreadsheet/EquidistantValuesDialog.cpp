@@ -214,7 +214,7 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 
 /*!
  * \brief called when the method type to generate values (fixed number of fixed increment)
- * was called. Shows/hides the corresponding widgets depending on the type and on the colomn modes.
+ * was called. Shows/hides the corresponding widgets depending on the type and on the column modes.
  */
 void EquidistantValuesDialog::typeChanged(int) {
 	const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
@@ -254,7 +254,7 @@ void EquidistantValuesDialog::checkValues() const {
 
 		const double end = numberLocale.toDouble(ui.leTo->text(), &ok);
 		if (!ok || end < start) {
-			m_okButton->setToolTip(i18n("Invalid end value, must be bigger than the start value"));
+			m_okButton->setToolTip(i18n("Invalid end value, must be greater than the start value"));
 			m_okButton->setEnabled(false);
 			return;
 		}
@@ -290,14 +290,14 @@ void EquidistantValuesDialog::checkValues() const {
 }
 
 /*!
- * checks whether a valid integer value biger than 1 was provided for the parameter 'number'
+ * checks whether a valid integer value greater than 1 was provided for the parameter 'number'
  */
 bool EquidistantValuesDialog::checkNumberValue() const {
 	bool ok;
 	const auto numberLocale = QLocale();
 	const int number = numberLocale.toDouble(ui.leNumber->text(), &ok);
 	if (!ok || number < 1) {
-		m_okButton->setToolTip(i18n("The number of values to be generated must be bigger than one"));
+		m_okButton->setToolTip(i18n("The number of values to be generated must be greater than one"));
 		m_okButton->setEnabled(false);
 		return false;
 	}
@@ -314,7 +314,7 @@ bool EquidistantValuesDialog::checkIncrementValue() const {
 	if (m_hasNumeric) {
 		const double increment = numberLocale.toDouble(ui.leIncrement->text(), &ok);
 		if (!ok || increment == 0.) {
-			m_okButton->setToolTip(i18n("Invalid numeric increment value, must be bigger than zero"));
+			m_okButton->setToolTip(i18n("Invalid numeric increment value, must be greater than zero"));
 			m_okButton->setEnabled(false);
 			return false;
 		}
@@ -323,7 +323,7 @@ bool EquidistantValuesDialog::checkIncrementValue() const {
 	if (m_hasDateTime) {
 		const int increment = numberLocale.toInt(ui.leIncrementDateTime->text(), &ok);
 		if (!ok || increment == 0) {
-			m_okButton->setToolTip(i18n("Invalid Date&Time increment value, must be bigger than zero"));
+			m_okButton->setToolTip(i18n("Invalid Date&Time increment value, must be greater than zero"));
 			m_okButton->setEnabled(false);
 			return false;
 		}
@@ -340,7 +340,7 @@ void EquidistantValuesDialog::generate() {
 	bool integerModePossible = false;
 	bool bigIntRequired = false;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	bool rc = true;
 	if (m_hasNumeric) {
 		int number{0};
@@ -352,7 +352,6 @@ void EquidistantValuesDialog::generate() {
 		const double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
 		if (!ok) {
 			DEBUG("Invalid double value for 'start'!")
-			RESET_CURSOR;
 			return;
 		}
 
@@ -362,7 +361,6 @@ void EquidistantValuesDialog::generate() {
 			end = numberLocale.toDouble(ui.leTo->text(), &ok);
 			if (!ok) {
 				DEBUG("Invalid double value for 'end'!")
-				RESET_CURSOR;
 				return;
 			}
 		}
@@ -373,7 +371,6 @@ void EquidistantValuesDialog::generate() {
 			number = QLocale().toInt(ui.leNumber->text(), &ok);
 			if (!ok || number == 1) {
 				DEBUG("Invalid integer value for 'number'!")
-				RESET_CURSOR;
 				return;
 			}
 
@@ -392,14 +389,12 @@ void EquidistantValuesDialog::generate() {
 			number = QLocale().toInt(ui.leNumber->text(), &ok);
 			if (!ok || number == 1) {
 				DEBUG("Invalid integer value for 'number'!")
-				RESET_CURSOR;
 				return;
 			}
 
 			increment = QLocale().toDouble(ui.leIncrement->text(), &ok);
 			if (!ok) {
 				DEBUG("Invalid integer value for 'increment'!")
-				RESET_CURSOR;
 				return;
 			}
 
@@ -423,14 +418,12 @@ void EquidistantValuesDialog::generate() {
 			}
 
 			if (!rc) {
-				RESET_CURSOR;
 				return;
 			}
 		}
 		if (m_hasDouble || ((m_hasInteger || m_hasBigInteger) && !integerModePossible)) {
 			rc = generateDouble(newDoubleData, start, increment, number);
 			if (!rc) {
-				RESET_CURSOR;
 				return;
 			}
 		}
@@ -478,7 +471,6 @@ void EquidistantValuesDialog::generate() {
 
 		rc = generateDateTime(newDateTimeData, type, start, end, number, increment, unit);
 		if (!rc) {
-			RESET_CURSOR;
 			return;
 		}
 	}
@@ -569,7 +561,6 @@ void EquidistantValuesDialog::generate() {
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 /*!

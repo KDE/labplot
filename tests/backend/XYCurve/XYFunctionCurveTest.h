@@ -23,6 +23,7 @@ private Q_SLOTS:
 	void removeCurveRenameAutomaticAdd();
 	void saveLoad();
 	void importData();
+	void importDataComplexDependency();
 };
 
 #endif // XYFUNCTIONCURVETEST_H

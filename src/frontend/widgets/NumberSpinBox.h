@@ -4,6 +4,7 @@
 	Description          : widget for setting numbers with a spinbox
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef NUMBERSPINBOX_H
@@ -57,6 +58,17 @@ public:
 	void setMinimum(double min);
 	double maximum() const;
 	void setMaximum(double max);
+	double minimumNotEqual() const;
+	void setMinimumNotEqual(double min);
+	double maximumNotEqual() const;
+	void setMaximumNotEqual(double max);
+	void setLocale(const QLocale& l) {
+		if (locale() != l) {
+			QDoubleSpinBox::setLocale(l);
+			// update text without changing the actual value
+			setValue(value());
+		}
+	}
 
 Q_SIGNALS:
 	void valueChanged(double);
@@ -98,6 +110,8 @@ private:
 	double m_value{0};
 	double m_maximum{std::numeric_limits<double>::max()};
 	double m_minimum{std::numeric_limits<double>::lowest()};
+	double m_maximumNotEqual{std::numeric_limits<double>::max()};
+	double m_minimumNotEqual{std::numeric_limits<double>::lowest()};
 
 	friend class SpinBoxTest;
 };

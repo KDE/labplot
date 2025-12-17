@@ -13,8 +13,6 @@
 #include <QDataStream>
 #include <QStringDecoder>
 
-#include <cmath>
-
 void SpiceFileReader::init() {
 	bool ok;
 
@@ -27,8 +25,8 @@ void SpiceFileReader::init() {
 	QTextStream stream(&mFile);
 
 	// Determine if ltspice or ngspice or none of both
-	QByteArray l = mFile.readLine();
-	int pos = l.count();
+	auto l = mFile.readLine();
+	int pos = l.length();
 	if (!QLatin1String(l).startsWith(QLatin1String("Title:"))) {
 		if (!convertLTSpiceBinary(l).startsWith(QLatin1String("Title:")))
 			return;
@@ -159,7 +157,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 		// LtSpice: AC (complex): all data are 64bit
 		// LtSpice: Transient: time is 64bit, y data is 32bit
 		// LtSpice: Transient (double flag set): all data are 64bit
-		const int yDataBytes = mNgspice ? 8 : ((isComplex | isDouble()) + 1) * 4; // in ltspice the values are stored normaly as single precision
+		const int yDataBytes = mNgspice ? 8 : ((isComplex | isDouble()) + 1) * 4; // in ltspice the values are stored normally as single precision
 		// the lines multiplied with the number of bytes per lines gives the number of bytes to read
 		const int lineBytes = (8 + yDataBytes * (mVariables.count() - 1)) * numberValuesPerVariable;
 		int patchesCount = 0;
@@ -234,7 +232,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 		for (int l = 0; l < points; l++) {
 			for (int j = 0; j < mVariables.count(); j++) {
 				line = stream.readLine();
-				QStringList tokens = line.split(QLatin1Char('\t'));
+				auto tokens = line.split(QLatin1Char('\t'));
 
 				// skip lines that don't contain the proper number of tokens (wrong format, corrupted file)
 				if (tokens.size() < 2)
@@ -242,7 +240,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 
 				QString valueString = tokens.at(1).simplified(); // string containing the value(s), 0 is the index of the data
 				if (isComplex) {
-					QStringList realImgTokens = valueString.split(QLatin1Char(','));
+					auto realImgTokens = valueString.split(QLatin1Char(','));
 					if (realImgTokens.size() == 2) { // sanity check to make sure we really have both parts
 						// real part
 						double value = locale.toDouble(realImgTokens.at(0), &isNumber);

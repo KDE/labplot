@@ -4,7 +4,7 @@
 	Description          : widget providing options for the import of ascii data
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,19 +12,22 @@
 #define ASCIIOPTIONSWIDGET_H
 
 #include "ui_asciioptionswidget.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 
-class AsciiFilter;
 class KConfig;
 
 class AsciiOptionsWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit AsciiOptionsWidget(QWidget*);
-	void showAsciiHeaderOptions(bool);
+	explicit AsciiOptionsWidget(QWidget*, bool liveData = false);
+	void showAsciiHeaderOptions(bool headerLinevisible, bool columnNamesVisible);
 	void showTimestampOptions(bool);
-	void applyFilterSettings(AsciiFilter*) const;
+	void applyFilterSettings(AsciiFilter::Properties &properties) const;
+	void updateWidgets(const AsciiFilter::Properties& properties);
 	void setSeparatingCharacter(QLatin1Char);
+
+	bool isValid(QString& errorMessage);
 
 	void loadSettings() const;
 	void saveSettings() const;
@@ -38,10 +41,12 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 	void headerLineChanged(int);
+	void columnModesChanged(const QString& s);
 
 private:
 	Ui::AsciiOptionsWidget ui;
 	bool m_createTimeStampAvailable{false};
+	bool m_liveData{false};
 };
 
 #endif

@@ -4,7 +4,7 @@
 	Description          : File data source
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
-	SPDX-FileCopyrightText: 2017-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,14 +15,10 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QLocalSocket>
-#include <QMap>
-#include <QTimer>
-#include <QVector>
 #ifdef HAVE_QTSERIALPORT
 #include <QSerialPort>
 #endif
 
-class QString;
 class AbstractFileFilter;
 class QFileSystemWatcher;
 class QAction;
@@ -31,9 +27,6 @@ class QUdpSocket;
 
 class LiveDataSource : public Spreadsheet {
 	Q_OBJECT
-	Q_ENUMS(SourceType)
-	Q_ENUMS(UpdateType)
-	Q_ENUMS(ReadingType)
 
 public:
 	enum class SourceType {
@@ -44,11 +37,13 @@ public:
 		SerialPort, // serial port
 		MQTT
 	};
+	Q_ENUM(SourceType)
 
 	enum class UpdateType {
 		TimeInterval = 0, // update periodically using given interval
 		NewData // update when new data is available
 	};
+	Q_ENUM(UpdateType)
 
 	enum class ReadingType {
 		ContinuousFixed = 0, // read continuously sampleSize number of samples (lines)
@@ -56,6 +51,7 @@ public:
 		TillEnd, // read until the end
 		WholeFile // reread whole file
 	};
+	Q_ENUM(ReadingType)
 
 	explicit LiveDataSource(const QString& name, bool loading = false);
 	~LiveDataSource() override;
@@ -98,7 +94,7 @@ public:
 	int baudRate() const;
 	void setBaudRate(int);
 
-	void setUpdateInterval(int);
+	void setUpdateInterval(int interval_ms);
 	int updateInterval() const;
 
 	void setKeepNValues(int);
@@ -141,9 +137,9 @@ private:
 	QString m_host;
 
 	AbstractFileFilter::FileType m_fileType{AbstractFileFilter::FileType::Ascii};
-	UpdateType m_updateType;
-	SourceType m_sourceType;
-	ReadingType m_readingType;
+	UpdateType m_updateType{UpdateType::TimeInterval};
+	SourceType m_sourceType{SourceType::FileOrPipe};
+	ReadingType m_readingType{ReadingType::ContinuousFixed};
 
 	bool m_fileWatched{false};
 	bool m_fileLinked{false};
@@ -153,9 +149,9 @@ private:
 	bool m_reading{false};
 	bool m_pending{false};
 
-	int m_sampleSize{1};
-	int m_keepNValues{0}; // number of values to keep (0 - all)
-	int m_updateInterval{1000};
+	int m_sampleSize{1000}; // Samples to read during a simple read trigger
+	int m_keepNValues{0}; // number of values to keep (0 -> all)
+	int m_updateInterval_ms{1000};
 	quint16 m_port{1027};
 	int m_baudRate{9600};
 
@@ -176,8 +172,6 @@ private:
 	QIODevice* m_device{nullptr};
 	QAction* m_plotDataAction{nullptr};
 
-	void finalizeRead();
-
 public Q_SLOTS:
 	void read();
 	void readOnUpdate();
@@ -194,6 +188,9 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void readOnUpdateCalled();
+
+private:
+	void initDevice();
 };
 
 #endif

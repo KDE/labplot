@@ -143,7 +143,7 @@ QVariant WelcomeScreenHelper::datasetName() {
 }
 
 /**
- * @brief Returns the dataset's descripton.
+ * @brief Returns the dataset's description.
  */
 QVariant WelcomeScreenHelper::datasetDescription() {
 	return QVariant(m_spreadsheet->comment());
@@ -322,7 +322,7 @@ QVariant WelcomeScreenHelper::searchExampleProjects(const QString& searchtext) {
 	// search based on tags
 	for (auto tag = m_tagMap.begin(); tag != m_tagMap.end(); ++tag) {
 		if (tag.key().contains(searchtext)) {
-			for (QString example : tag.value()) {
+			for (const QString& example : tag.value()) {
 				if (!results.contains(example))
 					results.append(example);
 			}
@@ -330,7 +330,7 @@ QVariant WelcomeScreenHelper::searchExampleProjects(const QString& searchtext) {
 	}
 
 	// search based on name
-	for (QString example : m_projectNameList) {
+	for (const QString& example : m_projectNameList) {
 		if (example.contains(searchtext) && !results.contains(example))
 			results.append(example);
 	}

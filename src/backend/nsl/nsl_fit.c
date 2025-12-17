@@ -465,10 +465,12 @@ double nsl_fit_model_flat_param_deriv(unsigned int param, double x, double A, do
 	return 0;
 }
 double nsl_fit_model_rayleigh_param_deriv(unsigned int param, double x, double A, double s, double weight) {
-	double y = x / s, norm = sqrt(weight) * y / s, efactor = exp(-y * y / 2.);
+	double y = x / s, efactor = exp(-y * y / 2.);
 
-	if (param == 0)
+	if (param == 0) {
+		double norm = sqrt(weight) * y / s;
 		return norm * efactor;
+	}
 	if (param == 1)
 		return A * y / (s * s) * (y * y - 2.) * efactor;
 

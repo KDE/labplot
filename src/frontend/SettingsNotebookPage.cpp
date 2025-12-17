@@ -3,16 +3,14 @@
 	Project              : LabPlot
 	Description          : Settings page for Notebook
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SettingsNotebookPage.h"
-#include "backend/core/Settings.h"
 
 #include <KConfigDialogManager>
 #include <KConfigGroup>
-#include <KLocalizedString>
 #include <KPageDialog>
 #include <KPageWidgetItem>
 
@@ -38,6 +36,8 @@ SettingsNotebookPage::SettingsNotebookPage(QWidget* parent)
 	ui.chkReevaluateEntries->setToolTip(i18n("Automatically re-evaluate all entries below the current one."));
 	ui.chkAskConfirmation->setToolTip(i18n("Ask for confirmation when restarting the backend system."));
 
+	loadSettings();
+
 	connect(ui.chkSyntaxHighlighting, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
 	connect(ui.chkSyntaxCompletion, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
 	connect(ui.chkLineNumbers, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
@@ -45,13 +45,12 @@ SettingsNotebookPage::SettingsNotebookPage(QWidget* parent)
 	connect(ui.chkAnimations, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
 	connect(ui.chkReevaluateEntries, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
 	connect(ui.chkAskConfirmation, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
-
-	loadSettings();
 }
 
-bool SettingsNotebookPage::applySettings() {
+QList<Settings::Type> SettingsNotebookPage::applySettings() {
+	QList<Settings::Type> changes;
 	if (!m_changed)
-		return false;
+		return changes;
 
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
 
@@ -66,11 +65,14 @@ bool SettingsNotebookPage::applySettings() {
 	group.writeEntry(QLatin1String("ReevaluateEntries"), ui.chkReevaluateEntries->isChecked());
 	group.writeEntry(QLatin1String("AskConfirmation"), ui.chkAskConfirmation->isChecked());
 
-	for (auto* manager : m_cantorBackendConfigManagers) {
+	for (auto* manager : m_cantorBackendConfigManagers)
 		manager->updateSettings();
-	}
 
-	return true;
+#ifdef HAVE_CANTOR_LIBS
+	changes << Settings::Type::Notebook;
+#endif
+
+	return changes;
 }
 
 void SettingsNotebookPage::restoreDefaults() {
@@ -124,5 +126,8 @@ void SettingsNotebookPage::addSubPages(KPageWidgetItem* rootFrame, KPageDialog* 
 			connect(manager, &KConfigDialogManager::widgetModified, this, &SettingsNotebookPage::changed);
 			m_cantorBackendConfigManagers.append(manager);
 		}
+#else
+	Q_UNUSED(rootFrame)
+	Q_UNUSED(settingsDialog)
 #endif
 }

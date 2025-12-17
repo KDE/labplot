@@ -12,10 +12,8 @@
 #define DATAPICKERCURVEPRIVATE_H
 
 #include "backend/worksheet/Worksheet.h"
-
+#include <QPen>
 class Symbol;
-class QBrush;
-class QPen;
 
 class DatapickerCurvePrivate {
 public:
@@ -34,19 +32,20 @@ public:
 	bool pointVisibility{true};
 
 	AbstractColumn* posXColumn{nullptr};
-	QString posXColumnPath;
+	// Name of the column without path, since we know that it is a child of this element
+	QString posXColumnName;
 	AbstractColumn* posYColumn{nullptr};
-	QString posYColumnPath;
+	QString posYColumnName;
 	AbstractColumn* posZColumn{nullptr};
-	QString posZColumnPath;
+	QString posZColumnName;
 	AbstractColumn* plusDeltaXColumn{nullptr};
-	QString plusDeltaXColumnPath;
+	QString plusDeltaXColumnName;
 	AbstractColumn* minusDeltaXColumn{nullptr};
-	QString minusDeltaXColumnPath;
+	QString minusDeltaXColumnName;
 	AbstractColumn* plusDeltaYColumn{nullptr};
-	QString plusDeltaYColumnPath;
+	QString plusDeltaYColumnName;
 	AbstractColumn* minusDeltaYColumn{nullptr};
-	QString minusDeltaYColumnPath;
+	QString minusDeltaYColumnName;
 
 	friend class DatapickerTest;
 };

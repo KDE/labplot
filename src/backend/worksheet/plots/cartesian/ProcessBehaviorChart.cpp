@@ -3,16 +3,10 @@
 	Project              : LabPlot
 	Description          : ProcessBehaviorChart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class ProcessBehaviorChart
-  \brief
-
-  \ingroup worksheet
-  */
 #include "ProcessBehaviorChart.h"
 #include "ProcessBehaviorChartPrivate.h"
 #include "backend/core/column/Column.h"
@@ -27,53 +21,47 @@ extern "C" {
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-#include <QMenu>
-#include <QPainter>
-
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <gsl/gsl_statistics.h>
 
 CURVE_COLUMN_CONNECT(ProcessBehaviorChart, Data, data, recalc)
+CURVE_COLUMN_CONNECT(ProcessBehaviorChart, Data2, data2, recalc)
 
-ProcessBehaviorChart::ProcessBehaviorChart(const QString& name)
+/*!
+ * \class ProcessBehaviorChart
+ * \brief This class implements the process behavior chart.
+ *
+ * The sub-types XmR, mR, XbarR, R, XbarS, S, P, NP, C, U are implemented and the implementation follows
+ * the conventions used in the book "Making Sense of Data", Donald J. Wheeler.
+ * The visual properties of the plotted line for the control limits and for the actual data can be modified
+ * independently of each other.
+ *
+ * \ingroup CartesianPlots
+ */
+ProcessBehaviorChart::ProcessBehaviorChart(const QString& name, bool loading)
 	: Plot(name, new ProcessBehaviorChartPrivate(this), AspectType::ProcessBehaviorChart) {
-	init();
+	init(loading);
 }
 
 ProcessBehaviorChart::ProcessBehaviorChart(const QString& name, ProcessBehaviorChartPrivate* dd)
 	: Plot(name, dd, AspectType::ProcessBehaviorChart) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 ProcessBehaviorChart::~ProcessBehaviorChart() = default;
 
-void ProcessBehaviorChart::init() {
+void ProcessBehaviorChart::init(bool loading) {
 	Q_D(ProcessBehaviorChart);
-
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
-
-	d->type = static_cast<ProcessBehaviorChart::Type>(group.readEntry(QStringLiteral("Type"), static_cast<int>(ProcessBehaviorChart::Type::XmR)));
-	d->sampleSize = group.readEntry(QStringLiteral("SampleSize"), 5);
-	d->limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(
-		group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average)));
-	d->negativeLowerLimitEnabled = group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false);
 
 	// curve and columns for the data points
 	d->dataCurve = new XYCurve(QStringLiteral("data"));
 	d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->dataCurve->setHidden(true);
 	d->dataCurve->graphicsItem()->setParentItem(d);
-	d->dataCurve->line()->init(group);
-	d->dataCurve->line()->setStyle(Qt::SolidLine);
-	d->dataCurve->symbol()->setStyle(Symbol::Style::Circle);
-	d->dataCurve->background()->setPosition(Background::Position::No);
 
 	d->xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	d->xColumn->setHidden(true);
@@ -90,10 +78,6 @@ void ProcessBehaviorChart::init() {
 	d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->centerCurve->setHidden(true);
 	d->centerCurve->graphicsItem()->setParentItem(d);
-	d->centerCurve->line()->init(group);
-	d->centerCurve->line()->setStyle(Qt::SolidLine);
-	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
-	d->centerCurve->background()->setPosition(Background::Position::No);
 
 	d->xCenterColumn = new Column(QStringLiteral("xCenter"), AbstractColumn::ColumnMode::Integer);
 	d->xCenterColumn->setHidden(true);
@@ -112,10 +96,6 @@ void ProcessBehaviorChart::init() {
 	d->upperLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->upperLimitCurve->setHidden(true);
 	d->upperLimitCurve->graphicsItem()->setParentItem(d);
-	d->upperLimitCurve->line()->init(group);
-	d->upperLimitCurve->line()->setStyle(Qt::SolidLine);
-	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
-	d->upperLimitCurve->background()->setPosition(Background::Position::No);
 
 	d->xUpperLimitColumn = new Column(QStringLiteral("xUpperLimit"), AbstractColumn::ColumnMode::Integer);
 	d->xUpperLimitColumn->setHidden(true);
@@ -133,10 +113,6 @@ void ProcessBehaviorChart::init() {
 	d->lowerLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->lowerLimitCurve->setHidden(true);
 	d->lowerLimitCurve->graphicsItem()->setParentItem(d);
-	d->lowerLimitCurve->line()->init(group);
-	d->lowerLimitCurve->line()->setStyle(Qt::SolidLine);
-	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
-	d->lowerLimitCurve->background()->setPosition(Background::Position::No);
 
 	d->xLowerLimitColumn = new Column(QStringLiteral("xLowerLimit"), AbstractColumn::ColumnMode::Integer);
 	d->xLowerLimitColumn->setHidden(true);
@@ -150,26 +126,134 @@ void ProcessBehaviorChart::init() {
 	addChildFast(d->yLowerLimitColumn);
 	d->lowerLimitCurve->setYColumn(d->yLowerLimitColumn);
 
-	// synchronize the names of the internal XYCurves with the name of the current plot
-	// so we have the same name shown on the undo stack
-	connect(this, &AbstractAspect::aspectDescriptionChanged, this, &ProcessBehaviorChart::renameInternalCurves);
+	// border line for value labels
+	d->labelsBorderLine = new Line(QStringLiteral("borderLine"));
+	d->labelsBorderLine->setPrefix(QStringLiteral("Border"));
+	d->labelsBorderLine->setCreateXmlElement(false);
+	d->labelsBorderLine->setHidden(true);
+	addChild(d->labelsBorderLine);
+
+	d->upperLimitLabel = new TextLabel(QStringLiteral("upperLimitValue"));
+	d->upperLimitLabel->setHidden(true);
+	d->upperLimitLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
+
+	d->centerLabel = new TextLabel(QStringLiteral("centerValue"));
+	d->centerLabel->setHidden(true);
+	d->centerLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
+
+	d->lowerLimitLabel = new TextLabel(QStringLiteral("lowerLimitValue"));
+	d->lowerLimitLabel->setHidden(true);
+	d->lowerLimitLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
+
+	if (loading)
+		return;
+
+	// init the properties
+	KConfig config;
+	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
+
+	// general properties
+	d->type = static_cast<Type>(group.readEntry(QStringLiteral("Type"), static_cast<int>(Type::XmR)));
+	d->limitsType = static_cast<LimitsType>(group.readEntry(QStringLiteral("LimitsType"), static_cast<int>(LimitsType::Statistical)));
+	d->sampleSize = group.readEntry(QStringLiteral("SampleSize"), 5);
+	d->limitsMetric = static_cast<LimitsMetric>(group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(LimitsMetric::Average)));
+	// TODO: limit constraints and specifications?
+	d->exactLimitsEnabled = group.readEntry(QStringLiteral("ExactLimitsEnabled"), true);
+
+	d->dataCurve->line()->init(group);
+	d->dataCurve->line()->setStyle(Qt::SolidLine);
+	d->dataCurve->symbol()->setStyle(Symbol::Style::Circle);
+	d->dataCurve->background()->setPosition(Background::Position::No);
+
+	d->centerCurve->line()->init(group);
+	d->centerCurve->line()->setStyle(Qt::SolidLine);
+	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
+	d->centerCurve->background()->setPosition(Background::Position::No);
+
+	d->upperLimitCurve->line()->init(group);
+	d->upperLimitCurve->line()->setStyle(Qt::DashLine);
+	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
+	d->upperLimitCurve->background()->setPosition(Background::Position::No);
+	d->upperLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
+
+	d->lowerLimitCurve->line()->init(group);
+	d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
+	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
+	d->lowerLimitCurve->background()->setPosition(Background::Position::No);
+	d->lowerLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
+
+	// text labels for the labels
+	d->labelsEnabled = group.readEntry(QStringLiteral("LabelsEnabled"), true);
+	d->labelsAutoPrecision = group.readEntry(QStringLiteral("LabelsAutoPrecision"), false);
+	d->labelsPrecision = group.readEntry(QStringLiteral("LabelsPrecision"), 2);
+	const auto shape = static_cast<TextLabel::BorderShape>(group.readEntry(QStringLiteral("BorderShape"), (int)TextLabel::BorderShape::NoBorder));
+	d->upperLimitLabel->setBorderShape(shape);
+	d->centerLabel->setBorderShape(shape);
+	d->lowerLimitLabel->setBorderShape(shape);
 }
 
 void ProcessBehaviorChart::finalizeAdd() {
 	Q_D(ProcessBehaviorChart);
 	WorksheetElement::finalizeAdd();
+
+	// curves
 	addChildFast(d->centerCurve);
 	addChildFast(d->upperLimitCurve);
 	addChildFast(d->lowerLimitCurve);
 	addChildFast(d->dataCurve);
+
+	// labels
+	addChildFast(d->upperLimitLabel);
+	d->upperLimitLabel->setCoordinateBindingEnabled(true);
+	d->upperLimitLabel->setParentGraphicsItem(graphicsItem());
+	d->upperLimitLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+
+	addChildFast(d->centerLabel);
+	d->centerLabel->setCoordinateBindingEnabled(true);
+	d->centerLabel->setParentGraphicsItem(graphicsItem());
+	d->centerLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+
+	addChildFast(d->lowerLimitLabel);
+	d->lowerLimitLabel->setCoordinateBindingEnabled(true);
+	d->lowerLimitLabel->setParentGraphicsItem(graphicsItem());
+	d->lowerLimitLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+
+	// synchronize the names of the internal XYCurves with the name of the current plot
+	// so we have the same name shown on the undo stack
+	connect(this, &AbstractAspect::aspectDescriptionChanged, this, &ProcessBehaviorChart::renameInternalCurves);
+
+	// propagate the visual changes to the parent
+	connect(d->centerCurve, &XYCurve::changed, this, &ProcessBehaviorChart::changed);
+	connect(d->dataCurve, &XYCurve::changed, this, &ProcessBehaviorChart::changed);
+	connect(d->upperLimitCurve, &XYCurve::changed, this, &ProcessBehaviorChart::changed);
+	connect(d->lowerLimitCurve, &XYCurve::changed, this, &ProcessBehaviorChart::changed);
+
+	// re-position the labels on text changes
+	connect(d->upperLimitLabel, &TextLabel::textWrapperChanged, d->upperLimitLabel, &TextLabel::retransform);
+	connect(d->centerLabel, &TextLabel::textWrapperChanged, d->centerLabel, &TextLabel::retransform);
+	connect(d->lowerLimitLabel, &TextLabel::textWrapperChanged, d->lowerLimitLabel, &TextLabel::retransform);
+
+	// notify the dock widget on changes in Line
+	connect(d->labelsBorderLine, &Line::styleChanged, this, &ProcessBehaviorChart::labelsBorderStyleChanged);
+	connect(d->labelsBorderLine, &Line::widthChanged, this, &ProcessBehaviorChart::labelsBorderWidthChanged);
+	connect(d->labelsBorderLine, &Line::colorChanged, this, &ProcessBehaviorChart::labelsBorderColorChanged);
+	connect(d->labelsBorderLine, &Line::opacityChanged, this, &ProcessBehaviorChart::labelsBorderOpacityChanged);
 }
 
 void ProcessBehaviorChart::renameInternalCurves() {
 	Q_D(ProcessBehaviorChart);
+	d->dataCurve->setUndoAware(false);
+	d->centerCurve->setUndoAware(false);
+	d->upperLimitCurve->setUndoAware(false);
+	d->lowerLimitCurve->setUndoAware(false);
 	d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->upperLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->lowerLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	d->dataCurve->setUndoAware(true);
+	d->centerCurve->setUndoAware(true);
+	d->upperLimitCurve->setUndoAware(true);
+	d->lowerLimitCurve->setUndoAware(true);
 }
 
 /*!
@@ -195,30 +279,90 @@ void ProcessBehaviorChart::setVisible(bool on) {
 	endMacro();
 }
 
+/*!
+ * override the default implementation to handle the visibility of the internal curves
+ * and to set the z-value of the data curve to 1 higher than the z-value of the other curves.
+ */
+void ProcessBehaviorChart::setZValue(qreal value) {
+	Q_D(ProcessBehaviorChart);
+	d->centerCurve->setZValue(value);
+	d->upperLimitCurve->setZValue(value);
+	d->lowerLimitCurve->setZValue(value);
+	d->dataCurve->setZValue(value + 1);
+}
+
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
 //  general
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::Type, type, type)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::LimitsType, limitsType, limitsType)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::LimitsMetric, limitsMetric, limitsMetric)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, sampleSize, sampleSize)
-BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, negativeLowerLimitEnabled, negativeLowerLimitEnabled)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, maxUpperLimit, maxUpperLimit)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, minLowerLimit, minLowerLimit)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, centerSpecification, centerSpecification)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, upperLimitSpecification, upperLimitSpecification)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, lowerLimitSpecification, lowerLimitSpecification)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, exactLimitsEnabled, exactLimitsEnabled)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, data2Column, data2Column)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, data2ColumnPath, data2ColumnPath)
+
+// labels
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, labelsEnabled, labelsEnabled)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, labelsAutoPrecision, labelsAutoPrecision)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, labelsPrecision, labelsPrecision)
+
+QColor ProcessBehaviorChart::labelsFontColor() const {
+	Q_D(const ProcessBehaviorChart);
+	// using center label color
+	return d->centerLabel->fontColor();
+}
+
+QColor ProcessBehaviorChart::labelsBackgroundColor() const {
+	Q_D(const ProcessBehaviorChart);
+	// using center label color
+	return d->centerLabel->backgroundColor();
+}
+
+QFont ProcessBehaviorChart::labelsFont() const {
+	Q_D(const ProcessBehaviorChart);
+	// using center label font
+	QTextEdit te(d->centerLabel->text().text);
+	te.selectAll();
+	return te.currentCharFormat().font();
+}
+
+TextLabel::BorderShape ProcessBehaviorChart::labelsBorderShape() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->centerLabel->borderShape();
+}
+
+Line* ProcessBehaviorChart::labelsBorderLine() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->labelsBorderLine;
+}
 
 /*!
- * returns the number of index values used for x.
+ * returns the number of index labels used for x.
  */
 int ProcessBehaviorChart::xIndexCount() const {
 	Q_D(const ProcessBehaviorChart);
 	if (!d->dataColumn)
 		return 0;
 
-	int count = 0;
-	if (d->type == ProcessBehaviorChart::Type::XmR || d->type == ProcessBehaviorChart::Type::mR || d->type == ProcessBehaviorChart::Type::NP)
-		count = d->dataColumn->rowCount();
-	else
-		count = d->dataColumn->rowCount() / d->sampleSize;
+	int count = d->dataColumn->rowCount();
+	// subtract the remainder to handle complete samples only for chart types where one point per sample is plotted
+	if (d->type == ProcessBehaviorChart::Type::XbarR || d->type == ProcessBehaviorChart::Type::R || d->type == ProcessBehaviorChart::Type::XbarS
+		|| d->type == ProcessBehaviorChart::Type::S) {
+		const int remainder = count % d->sampleSize;
+		if (remainder > 0)
+			count -= remainder;
+
+		count = count / d->sampleSize;
+	}
 
 	return count;
 }
@@ -308,9 +452,9 @@ bool ProcessBehaviorChart::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
-bool ProcessBehaviorChart::usingColumn(const Column* column) const {
+bool ProcessBehaviorChart::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const ProcessBehaviorChart);
-	return (d->dataColumn == column);
+	return (d->dataColumn == column || d->data2Column == column);
 }
 
 void ProcessBehaviorChart::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
@@ -376,15 +520,34 @@ void ProcessBehaviorChart::setDataColumnPath(const QString& path) {
 	d->dataColumnPath = path;
 }
 
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, Data2, data2, recalc)
+void ProcessBehaviorChart::setData2Column(const AbstractColumn* column) {
+	Q_D(ProcessBehaviorChart);
+	if (column != d->data2Column)
+		exec(new ProcessBehaviorChartSetData2ColumnCmd(d, column, ki18n("%1: set data column")));
+}
+
+void ProcessBehaviorChart::setData2ColumnPath(const QString& path) {
+	Q_D(ProcessBehaviorChart);
+	d->data2ColumnPath = path;
+}
+
 STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetType, ProcessBehaviorChart::Type, type, recalc)
-void ProcessBehaviorChart::setType(ProcessBehaviorChart::Type type) {
+void ProcessBehaviorChart::setType(Type type) {
 	Q_D(ProcessBehaviorChart);
 	if (type != d->type)
 		exec(new ProcessBehaviorChartSetTypeCmd(d, type, ki18n("%1: set type")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLimitsType, ProcessBehaviorChart::LimitsType, limitsType, recalc)
+void ProcessBehaviorChart::setLimitsType(LimitsType limitsType) {
+	Q_D(ProcessBehaviorChart);
+	if (limitsType != d->limitsType)
+		exec(new ProcessBehaviorChartSetLimitsTypeCmd(d, limitsType, ki18n("%1: set limits type")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLimitsMetric, ProcessBehaviorChart::LimitsMetric, limitsMetric, recalc)
-void ProcessBehaviorChart::setLimitsMetric(ProcessBehaviorChart::LimitsMetric limitsMetric) {
+void ProcessBehaviorChart::setLimitsMetric(LimitsMetric limitsMetric) {
 	Q_D(ProcessBehaviorChart);
 	if (limitsMetric != d->limitsMetric)
 		exec(new ProcessBehaviorChartSetLimitsMetricCmd(d, limitsMetric, ki18n("%1: set limits metric")));
@@ -397,11 +560,181 @@ void ProcessBehaviorChart::setSampleSize(int sampleSize) {
 		exec(new ProcessBehaviorChartSetSampleSizeCmd(d, sampleSize, ki18n("%1: set sample size")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetNegativeLowerLimitEnabled, bool, negativeLowerLimitEnabled, recalc)
-void ProcessBehaviorChart::setNegativeLowerLimitEnabled(bool enabled) {
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetExactLimitsEnabled, bool, exactLimitsEnabled, recalc)
+void ProcessBehaviorChart::setExactLimitsEnabled(bool enabled) {
 	Q_D(ProcessBehaviorChart);
-	if (enabled != d->negativeLowerLimitEnabled)
-		exec(new ProcessBehaviorChartSetNegativeLowerLimitEnabledCmd(d, enabled, ki18n("%1: change negative lower limit")));
+	if (enabled != d->exactLimitsEnabled) {
+		KLocalizedString msg;
+		enabled ? msg = ki18n("%1: enable exact limits") : msg = ki18n("%1: disable exact limits");
+		exec(new ProcessBehaviorChartSetExactLimitsEnabledCmd(d, enabled, msg));
+	}
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetMaxUpperLimit, double, maxUpperLimit, recalc)
+void ProcessBehaviorChart::setMaxUpperLimit(double maxUpperLimit) {
+	Q_D(ProcessBehaviorChart);
+	if (maxUpperLimit != d->maxUpperLimit)
+		exec(new ProcessBehaviorChartSetMaxUpperLimitCmd(d, maxUpperLimit, ki18n("%1: set maximal upper limit")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetMinLowerLimit, double, minLowerLimit, recalc)
+void ProcessBehaviorChart::setMinLowerLimit(double minLowerLimit) {
+	Q_D(ProcessBehaviorChart);
+	if (minLowerLimit != d->minLowerLimit)
+		exec(new ProcessBehaviorChartSetMinLowerLimitCmd(d, minLowerLimit, ki18n("%1: set minimal lower limit")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetCenterSpecification, double, centerSpecification, updateSpecifications)
+void ProcessBehaviorChart::setCenterSpecification(double centerSpecification) {
+	Q_D(ProcessBehaviorChart);
+	if (centerSpecification != d->centerSpecification)
+		exec(new ProcessBehaviorChartSetCenterSpecificationCmd(d, centerSpecification, ki18n("%1: set center specification")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetUpperLimitSpecification, double, upperLimitSpecification, updateSpecifications)
+void ProcessBehaviorChart::setUpperLimitSpecification(double upperLimitSpecification) {
+	Q_D(ProcessBehaviorChart);
+	if (upperLimitSpecification != d->upperLimitSpecification)
+		exec(new ProcessBehaviorChartSetUpperLimitSpecificationCmd(d, upperLimitSpecification, ki18n("%1: set upper limit specification")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLowerLimitSpecification, double, lowerLimitSpecification, updateSpecifications)
+void ProcessBehaviorChart::setLowerLimitSpecification(double lowerLimitSpecification) {
+	Q_D(ProcessBehaviorChart);
+	if (lowerLimitSpecification != d->lowerLimitSpecification)
+		exec(new ProcessBehaviorChartSetLowerLimitSpecificationCmd(d, lowerLimitSpecification, ki18n("%1: set lower limit specification")));
+}
+
+// labels
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLabelsEnabled, bool, labelsEnabled, updateLabels)
+void ProcessBehaviorChart::setLabelsEnabled(bool enabled) {
+	Q_D(ProcessBehaviorChart);
+	if (enabled != d->labelsEnabled) {
+		KLocalizedString msg;
+		enabled ? msg = ki18n("%1: enable control labels") : msg = ki18n("%1: disable control labels");
+		exec(new ProcessBehaviorChartSetLabelsEnabledCmd(d, enabled, msg));
+	}
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLabelsAutoPrecision, bool, labelsAutoPrecision, updateLabels)
+void ProcessBehaviorChart::setLabelsAutoPrecision(bool labelsAutoPrecision) {
+	Q_D(ProcessBehaviorChart);
+	if (labelsAutoPrecision != d->labelsAutoPrecision)
+		exec(new ProcessBehaviorChartSetLabelsAutoPrecisionCmd(d, labelsAutoPrecision, ki18n("%1: set labels precision")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLabelsPrecision, int, labelsPrecision, updateLabels)
+void ProcessBehaviorChart::setLabelsPrecision(int labelsPrecision) {
+	Q_D(ProcessBehaviorChart);
+	if (labelsPrecision != d->labelsPrecision)
+		exec(new ProcessBehaviorChartSetLabelsPrecisionCmd(d, labelsPrecision, ki18n("%1: set labels precision")));
+}
+
+void ProcessBehaviorChart::setLabelsBorderShape(TextLabel::BorderShape shape) {
+	Q_D(ProcessBehaviorChart);
+	if (shape != d->centerLabel->borderShape()) {
+		beginMacro(i18n("%1: set labels border shape", name()));
+		d->centerLabel->setBorderShape(shape);
+		d->upperLimitLabel->setBorderShape(shape);
+		d->lowerLimitLabel->setBorderShape(shape);
+		endMacro();
+	}
+}
+
+void ProcessBehaviorChart::setLabelsFont(const QFont& font) {
+	QDEBUG(Q_FUNC_INFO << ", FONT = " << font)
+	Q_D(ProcessBehaviorChart);
+	auto textWrapper = d->centerLabel->text();
+	QTextEdit te(textWrapper.text);
+	te.selectAll();
+	if (font != te.font()) {
+		beginMacro(i18n("%1: set labels font", name()));
+		te.setFontFamily(font.family());
+		te.setFontPointSize(font.pointSize());
+		te.setFont(font);
+		textWrapper.text = te.toHtml();
+		d->centerLabel->setText(textWrapper);
+
+		textWrapper = d->upperLimitLabel->text();
+		te.setText(textWrapper.text);
+		te.selectAll();
+		te.setFontFamily(font.family());
+		te.setFontPointSize(font.pointSize());
+		te.setFont(font);
+		textWrapper.text = te.toHtml();
+		d->upperLimitLabel->setText(textWrapper);
+
+		textWrapper = d->lowerLimitLabel->text();
+		te.setText(textWrapper.text);
+		te.selectAll();
+		te.setFontFamily(font.family());
+		te.setFontPointSize(font.pointSize());
+		te.setFont(font);
+		textWrapper.text = te.toHtml();
+		d->lowerLimitLabel->setText(textWrapper);
+		endMacro();
+	}
+}
+
+void ProcessBehaviorChart::setLabelsFontColor(const QColor& color) {
+	Q_D(ProcessBehaviorChart);
+	auto textWrapper = d->centerLabel->text();
+	QTextEdit te;
+	te.setHtml(textWrapper.text);
+	te.selectAll();
+	if (color != te.textColor()) {
+		beginMacro(i18n("%1: set labels background color", name()));
+		te.setTextColor(color);
+		textWrapper.text = te.toHtml();
+		d->centerLabel->setText(textWrapper);
+		d->centerLabel->setFontColor(color);
+
+		textWrapper = d->upperLimitLabel->text();
+		te.setText(textWrapper.text);
+		te.selectAll();
+		te.setTextColor(color);
+		textWrapper.text = te.toHtml();
+		d->upperLimitLabel->setText(textWrapper);
+		d->upperLimitLabel->setFontColor(color);
+
+		textWrapper = d->lowerLimitLabel->text();
+		te.setHtml(textWrapper.text);
+		te.selectAll();
+		te.setTextColor(color);
+		textWrapper.text = te.toHtml();
+		d->lowerLimitLabel->setText(textWrapper);
+		d->lowerLimitLabel->setFontColor(color);
+		endMacro();
+	}
+}
+
+void ProcessBehaviorChart::setLabelsBackgroundColor(const QColor& color) {
+	Q_D(ProcessBehaviorChart);
+	auto textWrapper = d->centerLabel->text();
+	QTextEdit te;
+	te.setHtml(textWrapper.text);
+	te.selectAll();
+	if (color != te.textBackgroundColor()) {
+		beginMacro(i18n("%1: set labels background color", name()));
+		te.setTextBackgroundColor(color);
+		textWrapper.text = te.toHtml();
+		d->centerLabel->setText(textWrapper);
+
+		textWrapper = d->upperLimitLabel->text();
+		te.setHtml(textWrapper.text);
+		te.selectAll();
+		te.setTextBackgroundColor(color);
+		textWrapper.text = te.toHtml();
+		d->upperLimitLabel->setText(textWrapper);
+
+		textWrapper = d->lowerLimitLabel->text();
+		te.setHtml(textWrapper.text);
+		te.selectAll();
+		te.setTextBackgroundColor(color);
+		textWrapper.text = te.toHtml();
+		d->lowerLimitLabel->setText(textWrapper);
+		endMacro();
+	}
 }
 
 // ##############################################################################
@@ -421,7 +754,63 @@ void ProcessBehaviorChart::dataColumnAboutToBeRemoved(const AbstractAspect* aspe
 	Q_D(ProcessBehaviorChart);
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
-		CURVE_COLUMN_REMOVED(data);
+		d->recalc();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
+	}
+}
+
+void ProcessBehaviorChart::data2ColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(ProcessBehaviorChart);
+	if (aspect == d->data2Column) {
+		d->data2Column = nullptr;
+		d->recalc();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
+	}
+}
+
+void ProcessBehaviorChart::labelsBorderStyleChanged(Qt::PenStyle style) {
+	Q_D(ProcessBehaviorChart);
+	if (style != d->centerLabel->borderLine()->style()) {
+		beginMacro(i18n("%1: set labels border style", name()));
+		d->centerLabel->borderLine()->setStyle(style);
+		d->upperLimitLabel->borderLine()->setStyle(style);
+		d->lowerLimitLabel->borderLine()->setStyle(style);
+		endMacro();
+	}
+}
+
+void ProcessBehaviorChart::labelsBorderWidthChanged(double width) {
+	Q_D(ProcessBehaviorChart);
+	if (width != d->centerLabel->borderLine()->width()) {
+		beginMacro(i18n("%1: set labels border width", name()));
+		d->centerLabel->borderLine()->setWidth(width);
+		d->upperLimitLabel->borderLine()->setWidth(width);
+		d->lowerLimitLabel->borderLine()->setWidth(width);
+		endMacro();
+	}
+}
+
+void ProcessBehaviorChart::labelsBorderColorChanged(const QColor& color) {
+	Q_D(ProcessBehaviorChart);
+	if (color != d->centerLabel->borderLine()->color()) {
+		beginMacro(i18n("%1: set labels border color", name()));
+		d->centerLabel->borderLine()->setColor(color);
+		d->upperLimitLabel->borderLine()->setColor(color);
+		d->lowerLimitLabel->borderLine()->setColor(color);
+		endMacro();
+	}
+}
+
+void ProcessBehaviorChart::labelsBorderOpacityChanged(float opacity) {
+	Q_D(ProcessBehaviorChart);
+	if (opacity != d->centerLabel->borderLine()->opacity()) {
+		beginMacro(i18n("%1: set labels border color", name()));
+		d->centerLabel->borderLine()->setOpacity(opacity);
+		d->upperLimitLabel->borderLine()->setOpacity(opacity);
+		d->lowerLimitLabel->borderLine()->setOpacity(opacity);
+		endMacro();
 	}
 }
 
@@ -444,18 +833,38 @@ ProcessBehaviorChartPrivate::~ProcessBehaviorChartPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void ProcessBehaviorChartPrivate::retransform() {
-	const bool suppressed = suppressRetransform || q->isLoading();
-	if (suppressed)
+	if (suppressRetransform || q->isLoading())
 		return;
 
 	if (!isVisible())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+
+	// curves
 	dataCurve->retransform();
 	centerCurve->retransform();
 	upperLimitCurve->retransform();
 	lowerLimitCurve->retransform();
+
+	// update the position of the value labels
+	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	const auto& xRange = q->plot()->range(Dimension::X, cs->index(Dimension::X));
+	double x = xRange.end();
+
+	centerLabel->setUndoAware(false);
+	upperLimitLabel->setUndoAware(false);
+	lowerLimitLabel->setUndoAware(false);
+	centerLabel->setPositionLogical(QPointF(x, center));
+	upperLimitLabel->setPositionLogical(QPointF(x, upperLimit));
+	lowerLimitLabel->setPositionLogical(QPointF(x, lowerLimit));
+	centerLabel->retransform();
+	upperLimitLabel->retransform();
+	lowerLimitLabel->retransform();
+	centerLabel->setUndoAware(true);
+	upperLimitLabel->setUndoAware(true);
+	lowerLimitLabel->setUndoAware(true);
+
 	recalcShapeAndBoundingRect();
 }
 
@@ -464,28 +873,49 @@ void ProcessBehaviorChartPrivate::retransform() {
  */
 void ProcessBehaviorChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-	if (!dataColumn) {
+	const int count = q->xIndexCount();
+	if (!dataColumn || ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && !data2Column) || count == 0) {
 		center = 0.;
 		upperLimit = 0.;
 		lowerLimit = 0.;
+		xColumn->clear();
+		yColumn->clear();
 		xCenterColumn->clear();
 		yCenterColumn->clear();
 		xUpperLimitColumn->clear();
 		yUpperLimitColumn->clear();
 		xLowerLimitColumn->clear();
 		yLowerLimitColumn->clear();
+
+		// don't clear the labels while we're still loading and initializing, the labels should keep their texts
+		if (!q->isLoading()) {
+			centerLabel->setUndoAware(false);
+			upperLimitLabel->setUndoAware(false);
+			lowerLimitLabel->setUndoAware(false);
+			centerLabel->setText(QString());
+			upperLimitLabel->setText(QString());
+			lowerLimitLabel->setText(QString());
+			centerLabel->setUndoAware(false);
+			upperLimitLabel->setUndoAware(false);
+			lowerLimitLabel->setUndoAware(false);
+		}
 		Q_EMIT q->dataChanged();
+		Q_EMIT q->recalculated();
+
+		// notify the dock widget if the sample size is bigger than the number of rows in the data column
+		if (dataColumn && count == 0)
+			Q_EMIT q->statusError(i18n("Not enough data provided."));
+
 		return;
 	}
 
-	// supress retransforms in all internal curves while modifying the data,
+	// suppress retransforms in all internal curves while modifying the data,
 	// everything will be retransformend at the very end
 	dataCurve->setSuppressRetransform(true);
 	centerCurve->setSuppressRetransform(true);
 	upperLimitCurve->setSuppressRetransform(true);
 	lowerLimitCurve->setSuppressRetransform(true);
 
-	const int count = q->xIndexCount();
 	const int xMin = 1;
 	const int xMax = count;
 	xColumn->clear();
@@ -493,16 +923,31 @@ void ProcessBehaviorChartPrivate::recalc() {
 	for (int i = 0; i < count; ++i)
 		xColumn->setIntegerAt(i, i + 1);
 
+	dataCurve->setUndoAware(false);
 	dataCurve->setXColumn(xColumn);
+	dataCurve->setUndoAware(true);
 
-	// min and max values for x
+	// min and max labels for x
 	xCenterColumn->setIntegerAt(0, xMin);
 	xCenterColumn->setIntegerAt(1, xMax);
-	xUpperLimitColumn->setIntegerAt(0, xMin);
-	xUpperLimitColumn->setIntegerAt(1, xMax);
-	xLowerLimitColumn->setIntegerAt(0, xMin);
-	xLowerLimitColumn->setIntegerAt(1, xMax);
 
+	// for P and U chart exact limits are calculated for every individual point ("stair-step limits"),
+	// if exactLimits is true. Straight lines are drawn for limits otherwise.
+	if ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled) {
+		for (int i = 0; i < count; ++i) {
+			xUpperLimitColumn->setIntegerAt(i, i + 1);
+			xLowerLimitColumn->setIntegerAt(i, i + 1);
+		}
+	} else {
+		xUpperLimitColumn->resizeTo(2);
+		xLowerLimitColumn->resizeTo(2);
+		xUpperLimitColumn->setIntegerAt(0, xMin);
+		xUpperLimitColumn->setIntegerAt(1, xMax);
+		xLowerLimitColumn->setIntegerAt(0, xMin);
+		xLowerLimitColumn->setIntegerAt(1, xMax);
+	}
+
+	updateLimitConstraints();
 	updateControlLimits();
 
 	dataCurve->setSuppressRetransform(false);
@@ -512,20 +957,59 @@ void ProcessBehaviorChartPrivate::recalc() {
 
 	// emit dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();
+	Q_EMIT q->recalculated();
+}
+
+void ProcessBehaviorChartPrivate::updateLimitConstraints() {
+	if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
+		|| type == ProcessBehaviorChart::Type::NP || type == ProcessBehaviorChart::Type::C || type == ProcessBehaviorChart::Type::U) {
+		if (minLowerLimit != 0.) {
+			minLowerLimit = 0.;
+			Q_EMIT q->minLowerLimitChanged(0.);
+		}
+	}
+
+	if (type == ProcessBehaviorChart::Type::NP) {
+		if (maxUpperLimit > sampleSize) {
+			maxUpperLimit = sampleSize;
+			Q_EMIT q->maxUpperLimitChanged(maxUpperLimit);
+		}
+	} else if (type == ProcessBehaviorChart::Type::P) {
+		if (minLowerLimit < 0. || minLowerLimit > 1.) {
+			minLowerLimit = 0.;
+			Q_EMIT q->minLowerLimitChanged(0.);
+		}
+
+		if (maxUpperLimit < 0. || maxUpperLimit > 1.) {
+			maxUpperLimit = 1.;
+			Q_EMIT q->maxUpperLimitChanged(1.);
+		}
+	}
 }
 
 /*!
- * conventions and definitions taken from Wheeler's "Making Use of Data"
+ * conventions and definitions taken from Wheeler's book "Making Sense of Data"
  */
 void ProcessBehaviorChartPrivate::updateControlLimits() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	center = 0.;
 	upperLimit = 0.;
 	lowerLimit = 0.;
-	const int count = dataColumn->rowCount();
-
 	yColumn->clear();
 	yColumn->resizeTo(xColumn->rowCount());
+	Q_EMIT q->statusError(QString()); // reset the previous message
+	dataCurve->setUndoAware(false);
+
+	// determine the number of labels in the source data to be taken into account
+	int count = dataColumn->rowCount();
+	if (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::XbarS
+		|| type == ProcessBehaviorChart::Type::S) {
+		const int remainder = count % sampleSize;
+		if (remainder > 0) {
+			count -= remainder; // subtract the remainder to handle complete samples only
+			Q_EMIT q->statusInfo(i18n("The last sample is incomplete and was omitted."));
+		}
+	}
 
 	switch (type) {
 	case ProcessBehaviorChart::Type::XmR: {
@@ -543,7 +1027,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 			// upper and lower limits
 			const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
-			const double E2 = 3 / nsl_pcm_d2(2); // n = 2, two values used to calculate the ranges
+			const double E2 = 3 / nsl_pcm_d2(2); // n = 2, two labels used to calculate the ranges
 			upperLimit = mean + E2 * meanMovingRange;
 			lowerLimit = mean - E2 * meanMovingRange;
 		} else {
@@ -553,7 +1037,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 			// upper and lower limits
 			const double medianMovingRange = gsl_stats_median(movingRange.data(), 1, movingRange.size());
-			const double E5 = 3 / nsl_pcm_d4(2); // n = 2, two values used to calculate the ranges
+			const double E5 = 3 / nsl_pcm_d4(2); // n = 2, two labels used to calculate the ranges
 			upperLimit = median + E5 * medianMovingRange;
 			lowerLimit = median - E5 * medianMovingRange;
 		}
@@ -769,6 +1253,40 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::P: {
+		// calculate the proportions
+		double total = 0.;
+		double totalSampleSize = 0.;
+		for (int i = 0; i < count; ++i) {
+			if (dataColumn->isValid(i) && !dataColumn->isMasked(i) && data2Column->isValid(i) && !data2Column->isMasked(i)) {
+				yColumn->setValueAt(i, dataColumn->valueAt(i) / data2Column->valueAt(i));
+				total += dataColumn->valueAt(i);
+				totalSampleSize += data2Column->valueAt(i);
+			}
+		}
+
+		// center line
+		const double pbar = (totalSampleSize) ? total / totalSampleSize : 0;
+		center = pbar;
+
+		// upper and lower limits
+		if (exactLimitsEnabled) {
+			for (int i = 0; i < count; ++i) {
+				if (dataColumn->isValid(i) && !dataColumn->isMasked(i) && data2Column->isValid(i) && !data2Column->isMasked(i)) {
+					const double distance = 3. * std::sqrt(pbar * (1 - pbar) / data2Column->valueAt(i));
+					yUpperLimitColumn->setValueAt(i, pbar + distance);
+					yLowerLimitColumn->setValueAt(i, pbar - distance);
+				}
+			}
+		} else {
+			double nMean = static_cast<const Column*>(data2Column)->statistics().arithmeticMean;
+			const double distance = 3. * std::sqrt(pbar * (1 - pbar) / nMean);
+			upperLimit = pbar + distance;
+			lowerLimit = pbar - distance;
+		}
+
+		// plotted data - proportions
+		dataCurve->setYColumn(yColumn);
+
 		break;
 	}
 	case ProcessBehaviorChart::Type::NP: {
@@ -796,27 +1314,116 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::C: {
+		// center
+		center = static_cast<const Column*>(dataColumn)->statistics().arithmeticMean;
+
+		// upper and lower limits
+		upperLimit = center + 3 * std::sqrt(center);
+		lowerLimit = center - 3 * std::sqrt(center);
+
+		// plotted data - original data
+		dataCurve->setYColumn(dataColumn);
 		break;
 	}
 	case ProcessBehaviorChart::Type::U: {
+		// calculate the ratios
+		double total = 0.;
+		double totalSampleSize = 0.;
+		for (int i = 0; i < count; ++i) {
+			if (dataColumn->isValid(i) && !dataColumn->isMasked(i) && data2Column->isValid(i) && !data2Column->isMasked(i)) {
+				yColumn->setValueAt(i, dataColumn->valueAt(i) / data2Column->valueAt(i));
+				total += dataColumn->valueAt(i);
+				totalSampleSize += data2Column->valueAt(i);
+			}
+		}
+
+		// center line
+		const double ubar = (totalSampleSize) ? total / totalSampleSize : 0;
+		center = ubar;
+
+		// upper and lower limits
+		if (exactLimitsEnabled) {
+			for (int i = 0; i < count; ++i) {
+				if (dataColumn->isValid(i) && !dataColumn->isMasked(i) && data2Column->isValid(i) && !data2Column->isMasked(i)) {
+					const double distance = 3. * std::sqrt(ubar / data2Column->valueAt(i));
+					yUpperLimitColumn->setValueAt(i, ubar + distance);
+					yLowerLimitColumn->setValueAt(i, ubar - distance);
+				}
+			}
+		} else {
+			double nMean = static_cast<const Column*>(data2Column)->statistics().arithmeticMean;
+			const double distance = 3. * std::sqrt(ubar / nMean);
+			upperLimit = ubar + distance;
+			lowerLimit = ubar - distance;
+		}
+
+		// plotted data - proportions
+		dataCurve->setYColumn(yColumn);
 	}
 	}
 
-	// further restrict the lower limit if it becomes negative
-	if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS) {
-		// restrict the lower limit to 0, the curve for the lower limit line is always visible
-		if (lowerLimit < 0. && !negativeLowerLimitEnabled)
-			lowerLimit = 0.;
+	if (limitsType == ProcessBehaviorChart::LimitsType::Statistical) {
+		// restrict the calculated limits to the min/max values for the current chart type:
+		// for P and U chart limits are calculated for every individual point ("stair-step limits"),
+		// for other charts straight lines are drawn
+		if ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled) {
+			for (int i = 0; i < yUpperLimitColumn->rowCount(); ++i) {
+				if (yUpperLimitColumn->valueAt(i) > maxUpperLimit)
+					yUpperLimitColumn->setValueAt(i, maxUpperLimit);
+			}
 
-		lowerLimitCurve->setVisible(true);
-	} else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S) {
-		// restrict the lower limit to 0, hide the curve for the lower limit line
-		if (lowerLimit < 0.) {
-			lowerLimit = 0.;
-			lowerLimitCurve->setVisible(false);
-		} else
-			lowerLimitCurve->setVisible(true);
+			for (int i = 0; i < yLowerLimitColumn->rowCount(); ++i) {
+				if (yLowerLimitColumn->valueAt(i) < minLowerLimit)
+					yLowerLimitColumn->setValueAt(i, minLowerLimit);
+			}
+
+			upperLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
+			lowerLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
+		} else {
+			if (lowerLimit < minLowerLimit)
+				lowerLimit = minLowerLimit;
+			if (upperLimit > maxUpperLimit)
+				upperLimit = maxUpperLimit;
+
+			yUpperLimitColumn->setValueAt(0, upperLimit);
+			yUpperLimitColumn->setValueAt(1, upperLimit);
+			yLowerLimitColumn->setValueAt(0, lowerLimit);
+			yLowerLimitColumn->setValueAt(1, lowerLimit);
+		}
+
+		// show/hide the line for the lower limit depending on the chart type
+		lowerLimitCurve->setUndoAware(false);
+		if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS)
+			lowerLimitCurve->setVisible(true); // lower limit line is always visible
+		else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
+				 || type == ProcessBehaviorChart::Type::C) {
+			if (lowerLimit == 0.)
+				lowerLimitCurve->setVisible(false);
+			else
+				lowerLimitCurve->setVisible(true);
+		}
+		lowerLimitCurve->setUndoAware(true);
+
+		yCenterColumn->setValueAt(0, center);
+		yCenterColumn->setValueAt(1, center);
+
+		updateLabels(); // update the texts in the value labels
+	} else {
+		// if "Specification" is selected, we use the values for center and limit lines that were specified by the user without any further checks
+		// and just overwrite the values calculated above with the user-defined values
+		updateSpecifications();
+		// updateLabels() is called in updateModifications() above.
 	}
+
+	dataCurve->setUndoAware(true);
+
+	QDEBUG(Q_FUNC_INFO << ", center: " << center << " , upper limit: " << upperLimit << ", lower limit: " << lowerLimit);
+}
+
+void ProcessBehaviorChartPrivate::updateSpecifications() {
+	center = centerSpecification;
+	upperLimit = upperLimitSpecification;
+	lowerLimit = lowerLimitSpecification;
 
 	yCenterColumn->setValueAt(0, center);
 	yCenterColumn->setValueAt(1, center);
@@ -824,6 +1431,62 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	yUpperLimitColumn->setValueAt(1, upperLimit);
 	yLowerLimitColumn->setValueAt(0, lowerLimit);
 	yLowerLimitColumn->setValueAt(1, lowerLimit);
+
+	lowerLimitCurve->setUndoAware(false);
+	lowerLimitCurve->setVisible(true);
+	lowerLimitCurve->setUndoAware(true);
+
+	updateLabels(); // update the texts in the value labels
+}
+
+/*!
+ * updates the value labels, called after the values for center and limits were modified.
+ */
+void ProcessBehaviorChartPrivate::updateLabels() {
+	// no need to update the labels during the load, the properties are set in label's load()
+	if (!q->plot() || q->isLoading())
+		return;
+
+	centerLabel->setUndoAware(false);
+	upperLimitLabel->setUndoAware(false);
+	lowerLimitLabel->setUndoAware(false);
+
+	const bool uniformLimitLabelsAvailable = !((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled);
+	const bool lowerLimitAvailable = q->lowerLimitAvailable();
+	const bool validLimits = std::isfinite(center) && std::isfinite(upperLimit) && std::isfinite(lowerLimit);
+
+	centerLabel->setVisible(labelsEnabled && validLimits);
+	upperLimitLabel->setVisible(labelsEnabled && validLimits && uniformLimitLabelsAvailable);
+	lowerLimitLabel->setVisible(labelsEnabled && validLimits && lowerLimitAvailable && uniformLimitLabelsAvailable);
+
+	if (labelsEnabled && validLimits) {
+		const auto numberLocale = QLocale();
+		if (labelsAutoPrecision) {
+			centerLabel->setText(numberLocale.toString(center));
+			upperLimitLabel->setText(numberLocale.toString(upperLimit));
+			if (lowerLimitAvailable)
+				lowerLimitLabel->setText(numberLocale.toString(lowerLimit));
+		} else {
+			centerLabel->setText(numberLocale.toString(center, 'f', labelsPrecision));
+			upperLimitLabel->setText(numberLocale.toString(upperLimit, 'f', labelsPrecision));
+			if (lowerLimitAvailable)
+				lowerLimitLabel->setText(numberLocale.toString(lowerLimit, 'f', labelsPrecision));
+		}
+
+		// update the position of the value labels
+		auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+		const auto& xRange = q->plot()->range(Dimension::X, cs->index(Dimension::X));
+		double x = xRange.end();
+		centerLabel->setPositionLogical(QPointF(x, center));
+		upperLimitLabel->setPositionLogical(QPointF(x, upperLimit));
+		lowerLimitLabel->setPositionLogical(QPointF(x, lowerLimit));
+	}
+
+	centerLabel->setUndoAware(true);
+	upperLimitLabel->setUndoAware(true);
+	lowerLimitLabel->setUndoAware(true);
+
+	recalcShapeAndBoundingRect();
 }
 
 /*!
@@ -835,10 +1498,25 @@ void ProcessBehaviorChartPrivate::recalcShapeAndBoundingRect() {
 
 	prepareGeometryChange();
 	m_shape = QPainterPath();
+
+	// curves
 	m_shape.addPath(dataCurve->graphicsItem()->shape());
 	m_shape.addPath(centerCurve->graphicsItem()->shape());
 	m_shape.addPath(upperLimitCurve->graphicsItem()->shape());
 	m_shape.addPath(lowerLimitCurve->graphicsItem()->shape());
+
+	// labels
+	if (labelsEnabled) {
+		const auto& linePen = labelsBorderLine->pen();
+		auto path = WorksheetElement::shapeFromPath(centerLabel->graphicsItem()->mapToParent(centerLabel->graphicsItem()->shape()), linePen);
+		m_shape.addPath(path);
+
+		path = WorksheetElement::shapeFromPath(upperLimitLabel->graphicsItem()->mapToParent(upperLimitLabel->graphicsItem()->shape()), linePen);
+		m_shape.addPath(path);
+
+		path = WorksheetElement::shapeFromPath(lowerLimitLabel->graphicsItem()->mapToParent(lowerLimitLabel->graphicsItem()->shape()), linePen);
+		m_shape.addPath(path);
+	}
 
 	m_boundingRectangle = m_shape.boundingRect();
 }
@@ -857,6 +1535,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->dataColumn, dataColumn);
+	WRITE_COLUMN(d->data2Column, data2Column);
 	WRITE_COLUMN(d->xColumn, xColumn);
 	WRITE_COLUMN(d->yColumn, yColumn);
 	WRITE_COLUMN(d->xCenterColumn, xCenterColumn);
@@ -866,12 +1545,29 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->xLowerLimitColumn, xLowerLimitColumn);
 	WRITE_COLUMN(d->yLowerLimitColumn, yLowerLimitColumn);
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->type)));
+	writer->writeAttribute(QStringLiteral("limitsType"), QString::number(static_cast<int>(d->limitsType)));
 	writer->writeAttribute(QStringLiteral("limitsMetric"), QString::number(static_cast<int>(d->limitsMetric)));
 	writer->writeAttribute(QStringLiteral("sampleSize"), QString::number(d->sampleSize));
-	writer->writeAttribute(QStringLiteral("negativeLowerLimitEnabled"), QString::number(d->negativeLowerLimitEnabled));
+	writer->writeAttribute(QStringLiteral("minLowerLimit"), QString::number(d->minLowerLimit));
+	writer->writeAttribute(QStringLiteral("maxUpperLimit"), QString::number(d->maxUpperLimit));
+	writer->writeAttribute(QStringLiteral("exactLimitsEnabled"), QString::number(d->exactLimitsEnabled));
+	writer->writeAttribute(QStringLiteral("centerSpecification"), QString::number(d->centerSpecification));
+	writer->writeAttribute(QStringLiteral("lowerLimitSpecification"), QString::number(d->lowerLimitSpecification));
+	writer->writeAttribute(QStringLiteral("upperLimitSpecification"), QString::number(d->upperLimitSpecification));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
+
+	writer->writeStartElement(QStringLiteral("labels"));
+	writer->writeAttribute(QStringLiteral("enabled"), QString::number(d->labelsEnabled));
+	writer->writeAttribute(QStringLiteral("precision"), QString::number(d->labelsPrecision));
+	writer->writeAttribute(QStringLiteral("autoPrecision"), QString::number(d->labelsAutoPrecision));
+	d->labelsBorderLine->save(writer);
+	writer->writeEndElement();
+
+	d->centerLabel->save(writer);
+	d->lowerLimitLabel->save(writer);
+	d->upperLimitLabel->save(writer);
 
 	// save the internal columns, above only the references to them were saved
 	d->xColumn->save(writer);
@@ -923,6 +1619,7 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 			READ_COLUMN(dataColumn);
+			READ_COLUMN(data2Column);
 			READ_COLUMN(xColumn);
 			READ_COLUMN(yColumn);
 			READ_COLUMN(xCenterColumn);
@@ -931,10 +1628,16 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(yUpperLimitColumn);
 			READ_COLUMN(xLowerLimitColumn);
 			READ_COLUMN(yLowerLimitColumn);
-			READ_INT_VALUE("type", type, ProcessBehaviorChart::Type);
-			READ_INT_VALUE("limitsMetric", limitsMetric, ProcessBehaviorChart::LimitsMetric);
+			READ_INT_VALUE("type", type, Type);
+			READ_INT_VALUE("limitsType", limitsType, LimitsType);
+			READ_INT_VALUE("limitsMetric", limitsMetric, LimitsMetric);
 			READ_INT_VALUE("sampleSize", sampleSize, int);
-			READ_INT_VALUE("negativeLowerLimitEnabled", negativeLowerLimitEnabled, bool);
+			READ_DOUBLE_VALUE("minLowerLimit", minLowerLimit);
+			READ_DOUBLE_VALUE("maxUpperLimit", maxUpperLimit);
+			READ_INT_VALUE("exactLimitsEnabled", exactLimitsEnabled, bool);
+			READ_DOUBLE_VALUE("centerSpecification", centerSpecification);
+			READ_DOUBLE_VALUE("lowerLimitSpecification", lowerLimitSpecification);
+			READ_DOUBLE_VALUE("upperLimitSpecification", upperLimitSpecification);
 			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
@@ -942,6 +1645,12 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
+		} else if (!preview && reader->name() == QLatin1String("labels")) {
+			attribs = reader->attributes();
+			READ_INT_VALUE("enabled", labelsEnabled, bool);
+			READ_INT_VALUE("precision", labelsPrecision, int);
+			READ_INT_VALUE("autoPrecision", labelsAutoPrecision, bool);
+			d->labelsBorderLine->load(reader, preview);
 		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 			bool rc = false;
@@ -979,6 +1688,18 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 
 			if (!rc)
 				return false;
+		} else if (reader->name() == QLatin1String("textLabel")) {
+			attribs = reader->attributes();
+			bool rc = false;
+			if (attribs.value(QStringLiteral("name")) == QLatin1String("centerValue"))
+				rc = d->centerLabel->load(reader, preview);
+			else if (attribs.value(QStringLiteral("name")) == QLatin1String("lowerLimitValue"))
+				rc = d->lowerLimitLabel->load(reader, preview);
+			else if (attribs.value(QStringLiteral("name")) == QLatin1String("upperLimitValue"))
+				rc = d->upperLimitLabel->load(reader, preview);
+
+			if (!rc)
+				return false;
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
@@ -998,26 +1719,35 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
-	int index = plot->curveChildIndex(this);
-	QColor themeColor = plot->themeColorPalette(index);
-
 	Q_D(ProcessBehaviorChart);
+	const auto* plot = d->m_plot;
+	int index = plot->curveChildIndex(this);
+	QColor color = plot->plotColor(index);
+
 	d->suppressRecalc = true;
 
-	d->dataCurve->line()->loadThemeConfig(group, themeColor);
-	d->dataCurve->symbol()->loadThemeConfig(group, themeColor);
+	d->dataCurve->line()->loadThemeConfig(group, color);
+	d->dataCurve->symbol()->loadThemeConfig(group, color);
 
-	themeColor = plot->themeColorPalette(index + 1);
+	color = plot->plotColor(index + 1);
 
-	d->centerCurve->line()->loadThemeConfig(group, themeColor);
+	d->centerCurve->line()->loadThemeConfig(group, color);
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
-	d->upperLimitCurve->line()->loadThemeConfig(group, themeColor);
+	d->upperLimitCurve->line()->loadThemeConfig(group, color);
+	d->upperLimitCurve->line()->setStyle(Qt::DashLine);
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
-	d->lowerLimitCurve->line()->loadThemeConfig(group, themeColor);
+	d->lowerLimitCurve->line()->loadThemeConfig(group, color);
+	d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
+
+	d->centerLabel->loadThemeConfig(config);
+	d->upperLimitLabel->loadThemeConfig(config);
+	d->lowerLimitLabel->loadThemeConfig(config);
+
+	group = config.group(QStringLiteral("CartesianPlot"));
+	d->labelsBorderLine->loadThemeConfig(group);
 
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

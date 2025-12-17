@@ -12,11 +12,14 @@ public:
 
 	explicit XYAnalysisCurveDock(QWidget* parent, RequiredDataSource required = RequiredDataSource::XY);
 
+private:
+	bool eventFilter(QObject* watched, QEvent*) override;
+
 protected:
 	void showResult(const XYAnalysisCurve* curve, QTextEdit* teResult);
 	virtual QString customText() const;
 
-	void setAnalysisCurves(QList<XYCurve*>);
+	void setAnalysisCurves(const QList<XYCurve*>&);
 	void setModelCurve(TreeViewComboBox*);
 	void setModel();
 	void setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, QComboBox* cbDataSourceType = nullptr);
@@ -36,6 +39,7 @@ protected:
 protected Q_SLOTS:
 	// SLOTs for changes triggered in the dock
 	void dataSourceCurveChanged(const QModelIndex&);
+	virtual void recalculateClicked() = 0;
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void y2DataColumnChanged(const QModelIndex&);

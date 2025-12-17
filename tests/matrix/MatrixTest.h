@@ -18,6 +18,9 @@ class MatrixTest : public CommonTest {
 
 private Q_SLOTS:
 
+	void testLoadSaveNoData();
+	void testLoadSaveWithData();
+
 	// TODO: see Spreadsheet for things to test
 };
 

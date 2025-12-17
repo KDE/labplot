@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : GUI observer
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -29,6 +29,7 @@ class KDEPlotDock;
 class QQPlotDock;
 class ParetoChartDock;
 class ProcessBehaviorChartDock;
+class HypothesisTestDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ReferenceLineDock;
@@ -43,7 +44,7 @@ class StatisticsSpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
 class XYFunctionCurveDock;
-class XYDataReductionCurveDock;
+class XYLineSimplificationCurveDock;
 class XYDifferentiationCurveDock;
 class XYIntegrationCurveDock;
 class XYInterpolationCurveDock;
@@ -59,7 +60,10 @@ class ImageDock;
 class LabelWidget;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
-
+#ifdef HAVE_SCRIPTING
+class ScriptDock;
+#endif
+class SeasonalDecompositionDock;
 #ifdef HAVE_CANTOR_LIBS
 class NotebookDock;
 #endif
@@ -120,7 +124,7 @@ private:
 	ParetoChartDock* m_paretoChartDock{nullptr};
 
 	// analysis plots
-	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};
+	XYLineSimplificationCurveDock* m_xyLineSimplificationCurveDock{nullptr};
 	XYDifferentiationCurveDock* m_xyDifferentiationCurveDock{nullptr};
 	XYIntegrationCurveDock* m_xyIntegrationCurveDock{nullptr};
 	XYInterpolationCurveDock* m_xyInterpolationCurveDock{nullptr};
@@ -131,6 +135,16 @@ private:
 	XYHilbertTransformCurveDock* m_xyHilbertTransformCurveDock{nullptr};
 	XYConvolutionCurveDock* m_xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
+
+	// statistical analysis
+	HypothesisTestDock* m_hypothesisTestDock{nullptr};
+
+	// time series analysis
+	SeasonalDecompositionDock* m_seasonalDecompositionDock{nullptr};
+
+#ifdef HAVE_SCRIPTING
+	ScriptDock* m_scriptDock{nullptr};
+#endif
 
 #ifdef HAVE_CANTOR_LIBS
 	NotebookDock* m_notebookDock{nullptr};

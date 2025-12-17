@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -46,19 +46,24 @@ class SpreadsheetView : public QWidget {
 	Q_OBJECT
 
 	friend class SpreadsheetTest;
+	friend class SpreadsheetFormulaTest;
+	friend class ImportSqlDatabaseTest;
 
 public:
 	explicit SpreadsheetView(Spreadsheet*, bool readOnly = false);
 	~SpreadsheetView() override;
 
+	bool isReadOnly() const;
 	void resizeHeader();
 	void setFocus();
+	void setSuppressResizeHeader(bool);
+
+	void createContextMenu(QMenu*);
+	void fillColumnContextMenu(QMenu*, Column*);
+	void fillColumnsContextMenu(QMenu*);
 
 	void showComments(bool on = true);
-	bool areCommentsShown() const;
-
-	void showSparkLines(bool on = true);
-	bool areSparkLinesShown() const;
+	void showSparklines(bool on = true);
 
 	int selectedColumnCount(bool full = true) const;
 	int selectedColumnCount(AbstractColumn::PlotDesignation) const;
@@ -111,6 +116,7 @@ private:
 
 	QTableView* m_tableView{nullptr};
 	QTableView* m_frozenTableView{nullptr};
+	int m_selectedColumnFromContextMenu{-1};
 	bool m_editorEntered{false};
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetModel* m_model;
@@ -120,6 +126,8 @@ private:
 #endif
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
+	bool m_suppressResizeHeader{false};
+
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
 	void checkSpreadsheetSelectionMenu();
@@ -205,7 +213,7 @@ private:
 	// analysis and plot data menu actions
 	QActionGroup* plotDataActionGroup{nullptr};
 	QAction* addDataOperationAction{nullptr};
-	QAction* addDataReductionAction{nullptr};
+	QAction* addLineSimplificationAction{nullptr};
 	QAction* addDifferentiationAction{nullptr};
 	QAction* addIntegrationAction{nullptr};
 	QAction* addInterpolationAction{nullptr};
@@ -214,6 +222,12 @@ private:
 	QActionGroup* addAnalysisActionGroup{nullptr};
 	QActionGroup* addFitActionGroup{nullptr};
 	QActionGroup* addDistributionFitActionGroup{nullptr};
+
+	// time series analysis
+	QAction* tsaSeasonalDecompositionAction{nullptr};
+
+	// hypothesis testing
+	QActionGroup* addHypothesisTestActionGroup{nullptr};
 
 	// Menus
 	QMenu* m_selectionMenu{nullptr};
@@ -228,14 +242,14 @@ private:
 	QMenu* m_spreadsheetMenu{nullptr};
 	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_analyzePlotMenu{nullptr};
+	QMenu* m_statisticalAnalysisMenu{nullptr};
+	QMenu* m_timeSeriesAnalysisMenu{nullptr};
+	QMenu* m_hypothesisTestMenu{nullptr};
 
 	bool m_suppressResize{false};
 
 public Q_SLOTS:
 	void handleAspectsAdded(int first, int last);
-	void createContextMenu(QMenu*);
-	void fillColumnContextMenu(QMenu*, Column*);
-	void fillToolBar(QToolBar*);
 
 #ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);
@@ -252,10 +266,21 @@ public Q_SLOTS:
 	void selectCell(int row, int col);
 	void clearSelection();
 
+	// public slots that are also used in the toolbar
+	void insertRowAbove();
+	void insertRowBelow();
+	void removeSelectedRows();
+	void insertColumnLeft();
+	void insertColumnRight();
+	void removeSelectedColumns();
+	void sortCustom();
+	void sortAscending();
+	void sortDescending();
+
 private Q_SLOTS:
 	void searchReplace();
 	void toggleComments();
-	void toggleSparkLines();
+	void toggleSparklines();
 	void goToNextColumn();
 	void goToPreviousColumn();
 	void goToCell();
@@ -272,6 +297,8 @@ private Q_SLOTS:
 	void plotAnalysisData(QAction*);
 	void plotDataDistributionFit(QAction*);
 
+	void addSeasonalDecomposition();
+
 	void fillSelectedCellsWithRowNumbers();
 	void fillSelectedCellsWithRandomNumbers();
 	void fillWithRandomValues();
@@ -279,17 +306,11 @@ private Q_SLOTS:
 	void fillWithFunctionValues();
 	void fillSelectedCellsWithConstValues();
 
-	void insertRowAbove();
-	void insertRowBelow();
 	void insertRowsAbove();
 	void insertRowsBelow();
-	void removeSelectedRows();
 
-	void insertColumnLeft();
-	void insertColumnRight();
 	void insertColumnsLeft();
 	void insertColumnsRight();
-	void removeSelectedColumns();
 	void clearSelectedColumns();
 	void toggleFreezeColumn();
 
@@ -299,16 +320,10 @@ private Q_SLOTS:
 	void maskColumnValues();
 	void sampleColumnValues();
 	void flattenColumns();
-	// 	void joinColumns();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
 
-	void sortCustom();
-	void sortAscending();
-	void sortDescending();
-
 	void setSelectionAs();
-
 	void activateFormulaMode(bool on);
 
 	void showColumnStatistics(bool forAll = false);

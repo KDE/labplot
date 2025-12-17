@@ -4,7 +4,7 @@
 	Description          : Custom user-defined point on the plot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -15,11 +15,6 @@
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <QGraphicsSceneMouseEvent>
@@ -30,8 +25,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-using Dimension = CartesianCoordinateSystem::Dimension;
-
 namespace {
 namespace XML {
 constexpr auto name = "customPoint";
@@ -40,10 +33,12 @@ constexpr auto name = "customPoint";
 
 /**
  * \class CustomPoint
- * \brief A customizable point.
+ * \brief This class implements a customizable a symbol that can be placed at a custom position on the plot
+ * to highlight certain aspects of the visualized data.
  *
- * The position can be either specified by mouse events or by providing the
- * x- and y- coordinates in parent's coordinate system
+ * The custom position can be either specified by moving the point with the mouse or by providing the
+ * x- and y- coordinates manually. The coordinates can either be provided relatively to plot's coordinate system
+ * or relatively to the global coordinate system of the plot (values in cm, (0,0) in the middle of the parent area).
  */
 
 CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name, bool loading)
@@ -90,9 +85,6 @@ void CustomPoint::init(bool loading) {
 			d->position.point = QPointF(0, 0);
 		d->updatePosition(); // To update also scene coordinates
 	}
-}
-
-void CustomPoint::initActions() {
 }
 
 /*!

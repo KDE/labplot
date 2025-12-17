@@ -26,6 +26,13 @@ QXlsx is an excel file(.xlsx) reader/writer MIT-licensed C++ (with Qt) library (
 
 Qt Advanced Docking System lets you create customizable layouts using a full featured window docking system ([link](https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System))
 
+Changes:
+
+src/CMakeLists.txt:
++ if(NOT MSVC_FOUND)
++    target_compile_options(${library_name} PRIVATE -Wno-switch-enum)
++ endif()
+
 ## MCAP
 
 MCAP provides classes for reading and writing the MCAP file format.
@@ -42,10 +49,11 @@ QStringTokenizer is a universal, safe, zero-allocation string splitter and is pa
 
 ReadStat is a command-line tool and MIT-licensed C library for reading files from popular stats packages ([link](https://github.com/WizardMac/ReadStat))
 
-## Vector BLF (not included)
+## Vector BLF
 
 A library to access Binary Log File (BLF) files from Vector Informatik ([link](https://github.com/Murmele/vector_blf)).
 Depends on fast_float ([link](https://github.com/fastfloat/fast_float.git)) and C++ DBC Parser ([link](https://github.com/Murmele/dbc_parser_cpp))
+Included Vector BLF commit SHA 5fe16eb200a476a38fbe3f1d4281432ea5e6b976
 
 ## preview.sty
 

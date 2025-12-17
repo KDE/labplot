@@ -2,6 +2,8 @@
 
 #include "frontend/widgets/TreeViewComboBox.h"
 
+#include <QKeyEvent>
+
 XYAnalysisCurveDock::XYAnalysisCurveDock(QWidget* parent, RequiredDataSource requiredDataSource)
 	: XYCurveDock(parent)
 	, m_requiredDataSource(requiredDataSource) {
@@ -38,6 +40,20 @@ void XYAnalysisCurveDock::showResult(const XYAnalysisCurve* curve, QTextEdit* te
 
 	// enable the "recalculate"-button if the source data was changed since the last calculation
 	m_recalculateButton->setEnabled(curve->isSourceDataChangedSinceLastRecalc());
+
+	installEventFilter(this);
+}
+
+bool XYAnalysisCurveDock::eventFilter(QObject* /* watched */, QEvent* event) {
+	if (event->type() == QEvent::KeyPress) {
+		const auto* keyEvent = static_cast<QKeyEvent*>(event);
+		if (keyEvent->key() == Qt::Key_Return && keyEvent->modifiers() == Qt::ShiftModifier && m_recalculateButton->isEnabled()) {
+			recalculateClicked();
+			return true;
+		}
+	}
+
+	return false;
 }
 
 QString XYAnalysisCurveDock::customText() const {
@@ -51,6 +67,7 @@ void XYAnalysisCurveDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableText
 	m_recalculateButton = recalculate;
 	Q_ASSERT(m_recalculateButton);
 	m_recalculateButton->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
+	m_recalculateButton->setToolTip(i18n("Click this button or press Shift+Enter to recalculate the result."));
 
 	cbDataSourceType = dataSourceType;
 	if (cbDataSourceType) {
@@ -61,7 +78,7 @@ void XYAnalysisCurveDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableText
 	BaseDock::setBaseWidgets(nameLabel, commentLabel);
 }
 
-void XYAnalysisCurveDock::setAnalysisCurves(QList<XYCurve*> curves) {
+void XYAnalysisCurveDock::setAnalysisCurves(const QList<XYCurve*>& curves) {
 	m_analysisCurves.clear();
 	m_analysisCurve = nullptr;
 
@@ -189,29 +206,23 @@ void XYAnalysisCurveDock::enableRecalculate() const {
 		}
 		}
 
-		if (aspectX) {
-			cbXDataColumn->useCurrentIndexText(true);
+		if (aspectX)
 			cbXDataColumn->setInvalid(false);
-		}
 
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
+		if (aspectY)
 			cbYDataColumn->setInvalid(false);
-		}
 
-		if (aspectY2) {
-			cbY2DataColumn->useCurrentIndexText(true);
+		if (aspectY2)
 			cbY2DataColumn->setInvalid(false);
-		}
 	} else
 		hasSourceData = (m_analysisCurve->dataSourceCurve() != nullptr);
 
 	m_recalculateButton->setEnabled(hasSourceData);
 }
 
-//*************************************************************
-//***** SLOTs for changes triggered in the analyis curve ******
-//*************************************************************
+//**************************************************************
+//***** SLOTs for changes triggered in the analysis curve ******
+//**************************************************************
 void XYAnalysisCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceType->setCurrentIndex(static_cast<int>(type));
@@ -226,12 +237,12 @@ void XYAnalysisCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 
 void XYAnalysisCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_analysisCurve->xDataColumnPath());
+	cbXDataColumn->setAspect(column, m_analysisCurve->xDataColumnPath());
 	enableRecalculate();
 }
 
 void XYAnalysisCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_analysisCurve->yDataColumnPath());
+	cbYDataColumn->setAspect(column, m_analysisCurve->yDataColumnPath());
 	enableRecalculate();
 }

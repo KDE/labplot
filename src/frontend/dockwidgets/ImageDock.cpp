@@ -3,7 +3,8 @@
 	Project              : LabPlot
 	Description          : widget for image properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -43,26 +44,6 @@ ImageDock::ImageDock(QWidget* parent)
 	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 	ui.leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
 
-	// 	ui.cbSize->addItem(i18n("Original"));
-	// 	ui.cbSize->addItem(i18n("Custom"));
-
-	// Positioning and alignment
-	ui.cbPositionX->addItem(i18n("Left"));
-	ui.cbPositionX->addItem(i18n("Center"));
-	ui.cbPositionX->addItem(i18n("Right"));
-
-	ui.cbPositionY->addItem(i18n("Top"));
-	ui.cbPositionY->addItem(i18n("Center"));
-	ui.cbPositionY->addItem(i18n("Bottom"));
-
-	ui.cbHorizontalAlignment->addItem(i18n("Left"));
-	ui.cbHorizontalAlignment->addItem(i18n("Center"));
-	ui.cbHorizontalAlignment->addItem(i18n("Right"));
-
-	ui.cbVerticalAlignment->addItem(i18n("Top"));
-	ui.cbVerticalAlignment->addItem(i18n("Center"));
-	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
-
 	auto* layout = static_cast<QHBoxLayout*>(ui.tabBorder->layout());
 	borderLineWidget = new LineWidget(ui.tabBorder);
 	layout->insertWidget(0, borderLineWidget);
@@ -78,7 +59,8 @@ ImageDock::ImageDock(QWidget* parent)
 	ui.sbPositionX->setSuffix(suffix);
 	ui.sbPositionY->setSuffix(suffix);
 
-	ImageDock::updateLocale();
+	updateLocale();
+	retranslateUi();
 
 	// SLOTs
 	// General
@@ -116,8 +98,6 @@ void ImageDock::setImages(QList<Image*> list) {
 	m_image = list.first();
 	setAspects(list);
 
-	updateLocale();
-
 	QList<Line*> lines;
 	for (auto* image : m_imageList)
 		lines << image->borderLine();
@@ -148,18 +128,6 @@ void ImageDock::setImages(QList<Image*> list) {
 	connect(m_image, &Image::rotationAngleChanged, this, &ImageDock::imageRotationAngleChanged);
 }
 
-/*
- * updates the locale in the widgets. called when the application settins are changed.
- */
-void ImageDock::updateLocale() {
-	const auto numberLocale = QLocale();
-	ui.sbWidth->setLocale(numberLocale);
-	ui.sbHeight->setLocale(numberLocale);
-	ui.sbPositionX->setLocale(numberLocale);
-	ui.sbPositionY->setLocale(numberLocale);
-	borderLineWidget->updateLocale();
-}
-
 void ImageDock::updateUnits() {
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
@@ -173,24 +141,61 @@ void ImageDock::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QStringLiteral(" cm");
-		ui.sbWidth->setValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH);
-		ui.sbHeight->setValue(ui.sbHeight->value() * GSL_CONST_CGS_INCH);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() * GSL_CONST_CGS_INCH);
+		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH));
+		ui.sbHeight->setValue(roundValue(ui.sbHeight->value() * GSL_CONST_CGS_INCH));
+		ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH));
+		ui.sbPositionY->setValue(roundValue(ui.sbPositionY->value() * GSL_CONST_CGS_INCH));
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QStringLiteral(" in");
-		ui.sbWidth->setValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH);
-		ui.sbHeight->setValue(ui.sbHeight->value() / GSL_CONST_CGS_INCH);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() / GSL_CONST_CGS_INCH);
+		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH));
+		ui.sbHeight->setValue(roundValue(ui.sbHeight->value() / GSL_CONST_CGS_INCH));
+		ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH));
+		ui.sbPositionY->setValue(roundValue(ui.sbPositionY->value() / GSL_CONST_CGS_INCH));
 	}
 
 	ui.sbWidth->setSuffix(suffix);
 	ui.sbHeight->setSuffix(suffix);
 	ui.sbPositionX->setSuffix(suffix);
 	ui.sbPositionY->setSuffix(suffix);
+}
+
+/*
+ * updates the locale in the widgets. called when the application settings are changed.
+ */
+void ImageDock::updateLocale() {
+	const auto numberLocale = QLocale();
+	ui.sbWidth->setLocale(numberLocale);
+	ui.sbHeight->setLocale(numberLocale);
+	ui.sbPositionX->setLocale(numberLocale);
+	ui.sbPositionY->setLocale(numberLocale);
+	borderLineWidget->updateLocale();
+}
+
+void ImageDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	// Positioning and alignment
+	ui.cbPositionX->clear();
+	ui.cbPositionX->addItem(i18n("Left"));
+	ui.cbPositionX->addItem(i18n("Center"));
+	ui.cbPositionX->addItem(i18n("Right"));
+
+	ui.cbPositionY->clear();
+	ui.cbPositionY->addItem(i18n("Top"));
+	ui.cbPositionY->addItem(i18n("Center"));
+	ui.cbPositionY->addItem(i18n("Bottom"));
+
+	ui.cbHorizontalAlignment->clear();
+	ui.cbHorizontalAlignment->addItem(i18n("Left"));
+	ui.cbHorizontalAlignment->addItem(i18n("Center"));
+	ui.cbHorizontalAlignment->addItem(i18n("Right"));
+
+	ui.cbVerticalAlignment->clear();
+	ui.cbVerticalAlignment->addItem(i18n("Top"));
+	ui.cbVerticalAlignment->addItem(i18n("Center"));
+	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 }
 
 //*************************************************************
@@ -342,7 +347,7 @@ void ImageDock::bindingChanged(bool checked) {
 	ui.sbPositionY->setVisible(!checked);
 
 	// widgets for positioning using logical plot coordinates
-	const auto* plot = static_cast<const CartesianPlot*>(m_image->parent(AspectType::CartesianPlot));
+	const auto* plot = static_cast<const CartesianPlot*>(m_image->parent<CartesianPlot>());
 	if (plot && plot->xRangeFormatDefault() == RangeT::Format::DateTime) {
 		ui.lPositionXLogicalDateTime->setVisible(checked);
 		ui.dtePositionXLogical->setVisible(checked);
@@ -460,8 +465,8 @@ void ImageDock::imageKeepRatioChanged(bool keep) {
 // Position
 void ImageDock::imagePositionChanged(const WorksheetElement::PositionWrapper& position) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
-	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.x(), m_units), m_worksheetUnit));
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.y(), m_units), m_worksheetUnit));
 	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
 	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
 }
@@ -521,10 +526,10 @@ void ImageDock::load() {
 	// Position
 	ui.cbPositionX->setCurrentIndex((int)m_image->position().horizontalPosition);
 	positionXChanged(ui.cbPositionX->currentIndex());
-	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_image->position().point.x(), m_worksheetUnit));
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_image->position().point.x(), m_units), m_worksheetUnit));
 	ui.cbPositionY->setCurrentIndex((int)m_image->position().verticalPosition);
 	positionYChanged(ui.cbPositionY->currentIndex());
-	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_image->position().point.y(), m_worksheetUnit));
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_image->position().point.y(), m_units), m_worksheetUnit));
 
 	ui.cbHorizontalAlignment->setCurrentIndex((int)m_image->horizontalAlignment());
 	ui.cbVerticalAlignment->setCurrentIndex((int)m_image->verticalAlignment());

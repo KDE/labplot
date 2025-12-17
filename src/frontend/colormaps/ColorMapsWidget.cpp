@@ -17,8 +17,6 @@
 #include <QCompleter>
 #include <QKeyEvent>
 #include <QMenu>
-#include <QMessageBox>
-#include <QPainter>
 #include <QStandardItemModel>
 #include <QWhatsThis>
 
@@ -75,10 +73,6 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent)
 
 	// select the last used collection
 	KConfigGroup conf = Settings::group(QStringLiteral("ColorMapsWidget"));
-	m_viewMode = static_cast<ViewMode>(conf.readEntry("ViewMode", static_cast<int>(ViewMode::IconView)));
-	switchViewMode();
-
-	// available collections
 	const QString& collection = conf.readEntry("Collection", QString());
 	if (collection.isEmpty())
 		ui.cbCollections->setCurrentIndex(0);
@@ -106,6 +100,10 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent)
 			break;
 		}
 	}
+
+	// switch to the last used view mode
+	m_viewMode = static_cast<ViewMode>(conf.readEntry("ViewMode", static_cast<int>(ViewMode::IconView)));
+	switchViewMode();
 }
 
 ColorMapsWidget::~ColorMapsWidget() {
@@ -141,9 +139,7 @@ void ColorMapsWidget::collectionChanged(int) {
 	const auto& colorMapNames = m_manager->colorMapNames(collection);
 	for (const auto& name : colorMapNames) {
 		auto* item = new QStandardItem();
-		QPixmap pixmap;
-		m_manager->render(pixmap, name);
-		item->setIcon(QIcon(pixmap));
+		item->setIcon(QIcon(ColorMapsManager::instance()->previewPixmap(name)));
 		item->setText(name);
 		m_model->appendRow(item);
 	}
@@ -177,8 +173,7 @@ void ColorMapsWidget::collectionChanged(int) {
 
 void ColorMapsWidget::colorMapChanged() {
 	const QString& name = ui.lwColorMaps->currentItem()->text();
-	m_manager->render(m_pixmap, name);
-	ui.lPreview->setPixmap(m_pixmap);
+	ui.lPreview->setPixmap(m_manager->previewPixmap(name));
 }
 
 /*!
@@ -187,8 +182,7 @@ void ColorMapsWidget::colorMapChanged() {
  */
 void ColorMapsWidget::colorMapDetailsChanged() {
 	const QString& name = ui.lwColorMapsDetails->currentItem()->text();
-	m_manager->render(m_pixmap, name); // trigger this to get the list of colors below. TODO: redesign the API to get the colors directly.
-	const auto& colors = m_manager->colors();
+	const auto& colors = m_manager->colors(name);
 
 	ui.twColorMapDetails->clear();
 	static QStringList
@@ -384,15 +378,6 @@ void ColorMapsWidget::activateListDetailsViewItem(const QString& name) {
 		ui.lwColorMapsDetails->setCurrentItem(items.constFirst());
 }
 
-QPixmap ColorMapsWidget::previewPixmap() {
-	if (ui.stackedWidget->currentIndex() == 0 && ui.lvColorMaps->currentIndex().isValid()) {
-		const QString& name = ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
-		m_manager->render(m_pixmap, name);
-	}
-
-	return m_pixmap;
-}
-
 /*!
  * returns the name of the currently selected color map.
  */
@@ -413,11 +398,4 @@ QString ColorMapsWidget::name() const {
 	}
 
 	return {};
-}
-
-/*!
- * returns the vector with the colors of the currently selected color map.
- */
-QVector<QColor> ColorMapsWidget::colors() const {
-	return m_manager->colors();
 }

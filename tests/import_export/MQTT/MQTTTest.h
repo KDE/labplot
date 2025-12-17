@@ -18,7 +18,10 @@ class MQTTTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
+	// void init(); // Called before each test is executed
+	// void cleanup(); // Called after each test is executed
+
+	void initTestCase() override;
 
 	// check superior and inferior relations
 	void testContainFalse();
@@ -39,6 +42,8 @@ private Q_SLOTS:
 
 private:
 	QString m_dataDir;
+	QProcess m_process;
+
 #endif // HAVE_MQTT
 };
 

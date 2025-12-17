@@ -3,11 +3,12 @@
 	Project              : LabPlot
 	Description          : Aspect providing a spreadsheet table with column logic
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "StatisticsSpreadsheet.h"
 #include "SpreadsheetModel.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
@@ -26,8 +27,8 @@
 
 StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool loading, AspectType type)
 	: Spreadsheet(i18n("Column Statistics"), loading, type)
-	, m_spreadsheet(spreadsheet) {
-	m_metricValues = {
+	, m_spreadsheet(spreadsheet)
+	, m_metricValues{
 		StatisticsSpreadsheet::Metric::Count,
 		StatisticsSpreadsheet::Metric::Minimum,
 		StatisticsSpreadsheet::Metric::Maximum,
@@ -56,8 +57,7 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 		StatisticsSpreadsheet::Metric::Skewness,
 		StatisticsSpreadsheet::Metric::Kurtosis,
 		StatisticsSpreadsheet::Metric::Entropy,
-	};
-	m_metricNames = {
+	}, m_metricNames{
 		i18n("Count"),
 		i18n("Minimum"),
 		i18n("Maximum"),
@@ -86,8 +86,7 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 		i18n("Skewness"),
 		i18n("Kurtosis"),
 		i18n("Entropy"),
-	};
-
+	} {
 	auto* model = m_spreadsheet->model();
 	connect(model, &SpreadsheetModel::dataChanged, this, &StatisticsSpreadsheet::update);
 	connect(model, &SpreadsheetModel::rowsRemoved, this, &StatisticsSpreadsheet::update);

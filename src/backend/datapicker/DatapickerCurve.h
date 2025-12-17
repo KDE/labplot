@@ -17,8 +17,9 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
+#include <QBrush>
+
 class DatapickerPoint;
-class QAction;
 class DatapickerCurvePrivate;
 class Column;
 class Spreadsheet;
@@ -55,19 +56,19 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, pointVisibility, PointVisibility)
 
 	POINTER_D_ACCESSOR_DECL(AbstractColumn, posXColumn, PosXColumn)
-	QString& posXColumnPath() const;
+	QString& posXColumnName() const;
 	POINTER_D_ACCESSOR_DECL(AbstractColumn, posYColumn, PosYColumn)
-	QString& posYColumnPath() const;
+	QString& posYColumnName() const;
 	POINTER_D_ACCESSOR_DECL(AbstractColumn, posZColumn, PosZColumn)
-	QString& posZColumnPath() const;
+	QString& posZColumnName() const;
 	POINTER_D_ACCESSOR_DECL(AbstractColumn, plusDeltaXColumn, PlusDeltaXColumn)
-	QString& plusDeltaXColumnPath() const;
+	QString& plusDeltaXColumnName() const;
 	POINTER_D_ACCESSOR_DECL(AbstractColumn, minusDeltaXColumn, MinusDeltaXColumn)
-	QString& minusDeltaXColumnPath() const;
+	QString& minusDeltaXColumnName() const;
 	POINTER_D_ACCESSOR_DECL(AbstractColumn, plusDeltaYColumn, PlusDeltaYColumn)
-	QString& plusDeltaYColumnPath() const;
+	QString& plusDeltaYColumnName() const;
 	POINTER_D_ACCESSOR_DECL(AbstractColumn, minusDeltaYColumn, MinusDeltaYColumn)
-	QString& minusDeltaYColumnPath() const;
+	QString& minusDeltaYColumnName() const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

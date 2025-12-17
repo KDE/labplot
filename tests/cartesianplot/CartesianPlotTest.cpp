@@ -4,6 +4,7 @@
 	Description          : Tests for cartesian plot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,6 +13,7 @@
 
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -19,10 +21,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotPrivate.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "backend/worksheet/plots/cartesian/plots.h"
 #include "frontend/dockwidgets/XYFitCurveDock.h"
 #include "frontend/worksheet/WorksheetView.h"
 
@@ -154,7 +153,7 @@
 #define SET_CARTESIAN_MOUSE_MODE(mode)                                                                                                                         \
 	QAction a(nullptr);                                                                                                                                        \
 	a.setData(static_cast<int>(mode));                                                                                                                         \
-	view->cartesianPlotMouseModeChanged(&a);
+	view->changePlotMouseMode(&a);
 
 /*!
  * \brief CartesianPlotTest::changeData1: add data point
@@ -336,7 +335,11 @@ void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
 	QCOMPARE(plot->autoScale(Dimension::Y, cs->index(Dimension::Y)), false);
 }
 
-void CartesianPlotTest::undoInfoElement() {
+// ##############################################################################
+// ################  initialize and add a child, undo and redo ##################
+// ##############################################################################
+
+void CartesianPlotTest::infoElementInit() {
 	auto* project = new Project();
 	auto* worksheet = new Worksheet(QStringLiteral("ws"));
 	project->addChild(worksheet);
@@ -359,6 +362,76 @@ void CartesianPlotTest::undoInfoElement() {
 	// redo
 	project->undoStack()->redo();
 	QCOMPARE(plot->childCount<InfoElement>(), 1);
+}
+
+void CartesianPlotTest::insetPlotInit() {
+	auto* project = new Project();
+	auto* worksheet = new Worksheet(QStringLiteral("ws"));
+	project->addChild(worksheet);
+
+	// parent plot area
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+
+	// inset plot area
+	auto* insetPlot = new CartesianPlot(QStringLiteral("insetPlot"));
+	plot->addChild(insetPlot);
+
+	QCOMPARE(plot->childCount<CartesianPlot>(), 1);
+
+	// undo the last step
+	project->undoStack()->undo();
+	QCOMPARE(plot->childCount<CartesianPlot>(), 0);
+
+	// redo
+	project->undoStack()->redo();
+	QCOMPARE(plot->childCount<CartesianPlot>(), 1);
+}
+
+void CartesianPlotTest::insetPlotSaveLoad() {
+	QString savePath;
+	{
+		Project project;
+
+		// worksheet
+		auto* worksheet = new Worksheet(QStringLiteral("ws"));
+		project.addChild(worksheet);
+
+		// parent plot area
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
+		worksheet->addChild(plot);
+
+		// inset plot area
+		auto* insetPlot = new CartesianPlot(QStringLiteral("insetPlot"));
+		plot->addChild(insetPlot);
+
+		SAVE_PROJECT("insetPlotSaveLoad.lml");
+	}
+
+	// load the project and check its structure
+	{
+		Project project;
+		project.load(savePath);
+
+		// worksheet
+		QCOMPARE(project.childCount<Worksheet>(), 1);
+		auto* ws = project.child<Worksheet>(0);
+		QVERIFY(ws);
+		QCOMPARE(ws->name(), QLatin1String("ws"));
+		QVERIFY(ws->type() == AspectType::Worksheet);
+
+		// parent plot area
+		QCOMPARE(ws->childCount<CartesianPlot>(), 1);
+		auto* plot = ws->child<CartesianPlot>(0);
+		QVERIFY(plot);
+		QCOMPARE(plot->name(), QLatin1String("plot"));
+
+		// inset plot area
+		QCOMPARE(plot->childCount<CartesianPlot>(), 1);
+		auto* insetPlot = plot->child<CartesianPlot>(0);
+		QVERIFY(insetPlot);
+		QCOMPARE(insetPlot->name(), QLatin1String("insetPlot"));
+	}
 }
 
 void CartesianPlotTest::axisFormat() {
@@ -448,6 +521,7 @@ void CartesianPlotTest::shiftLeftAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -481,6 +555,7 @@ void CartesianPlotTest::shiftRightAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -514,6 +589,7 @@ void CartesianPlotTest::shiftUpAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -547,6 +623,7 @@ void CartesianPlotTest::shiftDownAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -884,8 +961,8 @@ void CartesianPlotTest::invalidcSystem() {
 	{
 		// plot->setRange(Dimension::Y, 1, range); // does not work
 		// Implementation of setRange() must be used, because setRange() uses check to check if
-		// the range is valid, which it isn't in this test. To test neverthless and not removing a test
-		// use directly the implementation
+		// the range is valid, which it isn't in this test. To test nevertheless and not removing a test,
+		// use the implementation directly
 		int index = 1;
 		auto dimension = Dimension::Y;
 		auto otherValue = range;
@@ -1457,6 +1534,160 @@ void CartesianPlotTest::columnRemove() {
 	QCOMPARE(curve->yColumn(), yColumn);
 	QCOMPARE(curve->yColumnPath(), yColumnPath);
 	QCOMPARE(yColumnSpy.count(), 2);
+}
+
+/*!
+ * check the correct restore of the data source column in the plots after the column was removed,
+ * project was reloaded and a new column with the same name was added to the project.
+ */
+void CartesianPlotTest::columnRemoveSaveLoadRestore() {
+	QString savePath;
+	{
+		Project project;
+
+		auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+		project.addChild(worksheet);
+
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
+		worksheet->addChild(plot);
+
+		auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+		sheet->setColumnCount(2);
+		project.addChild(sheet);
+
+		const auto& columns = sheet->children<Column>();
+		auto* column = columns.at(1);
+		column->setName(QLatin1String("data"));
+
+		// set the first column in the spreadsheet as the data source for all available plots
+		auto* curve = new XYCurve(QStringLiteral("curve"));
+		plot->addChild(curve);
+		curve->setXColumn(column);
+		curve->setYColumn(column);
+
+		// plots with one single data column
+		auto* histogram = new Histogram(QStringLiteral("hist"));
+		plot->addChild(histogram);
+		histogram->setDataColumn(column);
+
+		auto* kdePlot = new KDEPlot(QStringLiteral("kde"));
+		plot->addChild(kdePlot);
+		kdePlot->setDataColumn(column);
+
+		auto* qqPlot = new QQPlot(QStringLiteral("qq"));
+		plot->addChild(qqPlot);
+		qqPlot->setDataColumn(column);
+
+		auto* runChart = new RunChart(QStringLiteral("run"));
+		plot->addChild(runChart);
+		runChart->setDataColumn(column);
+
+		auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+		plot->addChild(pbc);
+		pbc->setDataColumn(column);
+
+		// plots with multiple data columns
+		auto* boxPlot = new BoxPlot(QStringLiteral("box"));
+		plot->addChild(boxPlot);
+		boxPlot->setDataColumns({column});
+
+		auto* barPlot = new BarPlot(QStringLiteral("bar"));
+		plot->addChild(barPlot);
+		barPlot->setDataColumns({column});
+
+		auto* lollipopPlot = new LollipopPlot(QStringLiteral("lollipop"));
+		plot->addChild(lollipopPlot);
+		lollipopPlot->setDataColumns({column});
+
+		// delete the source column
+		sheet->removeChild(column);
+
+		SAVE_PROJECT("columnRemoveSaveLoadRestore.lml");
+	}
+
+	// load the project and check the data source column is empty in the plot but the path is still available
+	Project project;
+	project.load(savePath);
+
+	const QString path = i18n("Project") + QLatin1String("/data/data");
+
+	const auto* curve = project.children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive).first();
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->xColumnPath(), path);
+	QCOMPARE(curve->yColumn(), nullptr);
+	QCOMPARE(curve->yColumnPath(), path);
+
+	// plots with one single data column
+	const auto* histogram = project.children<Histogram>(AbstractAspect::ChildIndexFlag::Recursive).first();
+	QCOMPARE(histogram->dataColumn(), nullptr);
+	QCOMPARE(histogram->dataColumnPath(), path);
+
+	const auto* kdePlot = project.children<KDEPlot>(AbstractAspect::ChildIndexFlag::Recursive).first();
+	QCOMPARE(kdePlot->dataColumn(), nullptr);
+	QCOMPARE(kdePlot->dataColumnPath(), path);
+
+	const auto* qqPlot = project.children<QQPlot>(AbstractAspect::ChildIndexFlag::Recursive).first();
+	QCOMPARE(qqPlot->dataColumn(), nullptr);
+	QCOMPARE(qqPlot->dataColumnPath(), path);
+
+	const auto* runChart = project.children<RunChart>(AbstractAspect::ChildIndexFlag::Recursive).first();
+	QCOMPARE(runChart->dataColumn(), nullptr);
+	QCOMPARE(runChart->dataColumnPath(), path);
+
+	const auto* pbc = project.children<ProcessBehaviorChart>(AbstractAspect::ChildIndexFlag::Recursive).first();
+	QCOMPARE(pbc->dataColumn(), nullptr);
+	QCOMPARE(pbc->dataColumnPath(), path);
+
+	// plots with multiple data columns
+	const auto* boxPlot = project.children<BoxPlot>(AbstractAspect::ChildIndexFlag::Recursive).first();
+	QCOMPARE(boxPlot->dataColumns().first(), nullptr);
+	QCOMPARE(boxPlot->dataColumnPaths().first(), path);
+
+	const auto* barPlot = project.children<BarPlot>(AbstractAspect::ChildIndexFlag::Recursive).first();
+	QCOMPARE(barPlot->dataColumns().first(), nullptr);
+	QCOMPARE(barPlot->dataColumnPaths().first(), path);
+
+	const auto* lollipopPlot = project.children<LollipopPlot>(AbstractAspect::ChildIndexFlag::Recursive).first();
+	QCOMPARE(lollipopPlot->dataColumns().first(), nullptr);
+	QCOMPARE(lollipopPlot->dataColumnPaths().first(), path);
+
+	// re-add the column with the same name to the spreadsheet, the source column in the plots should be restored
+	auto* sheet = project.children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive).first();
+	sheet->appendColumn();
+	auto* column = sheet->column(1);
+	column->setName(QLatin1String("data"));
+
+	// re-check again
+	QCOMPARE(curve->xColumn(), column);
+	QCOMPARE(curve->xColumnPath(), path);
+	QCOMPARE(curve->yColumn(), column);
+	QCOMPARE(curve->yColumnPath(), path);
+
+	// plots with one single data column
+	QCOMPARE(histogram->dataColumn(), column);
+	QCOMPARE(histogram->dataColumnPath(), path);
+
+	QCOMPARE(kdePlot->dataColumn(), column);
+	QCOMPARE(kdePlot->dataColumnPath(), path);
+
+	QCOMPARE(qqPlot->dataColumn(), column);
+	QCOMPARE(qqPlot->dataColumnPath(), path);
+
+	QCOMPARE(runChart->dataColumn(), column);
+	QCOMPARE(runChart->dataColumnPath(), path);
+
+	QCOMPARE(pbc->dataColumn(), column);
+	QCOMPARE(pbc->dataColumnPath(), path);
+
+	// plots with multiple data columns
+	QCOMPARE(boxPlot->dataColumns().first(), column);
+	QCOMPARE(boxPlot->dataColumnPaths().first(), path);
+
+	QCOMPARE(barPlot->dataColumns().first(), column);
+	QCOMPARE(barPlot->dataColumnPaths().first(), path);
+
+	QCOMPARE(lollipopPlot->dataColumns().first(), column);
+	QCOMPARE(lollipopPlot->dataColumnPaths().first(), path);
 }
 
 void CartesianPlotTest::spreadsheetRemove() {

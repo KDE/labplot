@@ -3,15 +3,14 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "MainWin.h"
-
+#include "backend/core/AbstractFilter.h"
 #include "backend/core/AspectTreeModel.h"
-#include "backend/core/Folder.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
@@ -21,25 +20,26 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #ifdef HAVE_LIBORIGIN
+#include "frontend/datasources/ImportOriginLayersDialog.h"
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
 #include "backend/datapicker/Datapicker.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/lib/macros.h"
 #include "backend/note/Note.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#ifdef HAVE_SCRIPTING
+#include "backend/script/Script.h"
+#endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
 #endif
 
+#include "frontend/ActionsManager.h"
 #include "frontend/GuiObserver.h"
 #include "frontend/HistoryDialog.h"
 #include "frontend/ProjectExplorer.h"
 #include "frontend/SettingsDialog.h"
 #include "frontend/colormaps/ColorMapsDialog.h"
 #include "frontend/core/ContentDockWidget.h"
-#include "frontend/datapicker/DatapickerImageView.h"
-#include "frontend/datapicker/DatapickerView.h"
 #include "frontend/datasources/ImportDatasetDialog.h"
 #include "frontend/datasources/ImportDatasetWidget.h"
 #include "frontend/datasources/ImportFileDialog.h"
@@ -49,12 +49,8 @@
 #include "frontend/dockwidgets/CursorDock.h"
 #include "frontend/dockwidgets/ProjectDock.h"
 #include "frontend/examples/ExamplesDialog.h"
-#include "frontend/note/NoteView.h"
-#include "frontend/matrix/MatrixView.h"
-#include "frontend/spreadsheet/SpreadsheetView.h"
 #include "frontend/widgets/FITSHeaderEditDialog.h"
 #include "frontend/widgets/LabelWidget.h"
-#include "frontend/widgets/MemoryWidget.h"
 #include "frontend/worksheet/WorksheetPreviewWidget.h"
 #include "frontend/worksheet/WorksheetView.h"
 
@@ -67,28 +63,15 @@
 #include <KUserFeedback/UsageTimeSource>
 #endif
 
-#ifdef HAVE_PURPOSE
-#include <Purpose/AlternativesModel>
-#include <Purpose/Menu>
-#include <QMimeType>
-#include <purpose_version.h>
-#endif
-
 #include <DockAreaWidget.h>
 #include <DockManager.h>
+#include <AutoHideSideBar.h>
 
-#ifdef HAVE_TOUCHBAR
-#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
-#endif
-
-#include <QActionGroup>
 #include <QCloseEvent>
 #include <QElapsedTimer>
 #include <QFileDialog>
 #include <QMenu>
-#include <QMenuBar>
 #include <QMimeData>
-#include <QProcess>
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QTemporaryFile>
@@ -100,22 +83,16 @@
 // #include <QQmlApplicationEngine>
 // #include <QQmlContext>
 
-#include <KActionCollection>
-#include <KActionMenu>
-#include <KColorScheme>
 #include <KColorSchemeManager>
-#include <KColorSchemeMenu>
 #include <KCompressionDevice>
-#include <KConfigGroup>
-#include <KLocalizedString>
 #include <KMessageBox>
 #include <KRecentFilesAction>
-#include <KStandardAction>
-#include <KToggleAction>
-#include <KToggleFullScreenAction>
 #include <KToolBar>
-#include <kconfigwidgets_version.h>
-#include <kxmlguifactory.h>
+#ifdef HAVE_SCRIPTING
+#include <KTextEditor/Editor>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+#endif
 
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
@@ -123,16 +100,22 @@
 #include <cantor/backend.h>
 #endif
 
+
 /*!
 \class MainWin
 \brief Main application window.
 
 \ingroup frontend
 */
-MainWin::MainWin(QWidget* parent, const QString& filename)
+MainWin::MainWin(QWidget* parent, const QString& fileName)
 	: KXmlGuiWindow(parent)
 	, m_schemeManager(new KColorSchemeManager(this)) {
-	initGUI(filename);
+	migrateSettings(); // call this at the very beginning to migrate the application settings first
+	updateLocale();
+
+	if (!fileName.isEmpty())
+		DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
+	initGUI(fileName);
 	setAcceptDrops(true);
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -158,26 +141,27 @@ MainWin::MainWin(QWidget* parent, const QString& filename)
 
 MainWin::~MainWin() {
 	// save the current settings in MainWin
-	m_recentProjectsAction->saveEntries(Settings::group(QStringLiteral("Recent Files")));
-
 	auto group = Settings::group(QStringLiteral("MainWin"));
 	group.writeEntry(QLatin1String("geometry"), saveGeometry()); // current geometry of the main window
 	group.writeEntry(QLatin1String("WindowState"), saveState()); // current state of QMainWindow's toolbars
 	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
+#ifdef HAVE_CANTOR_LIBS
+	if (m_actionsManager->m_lastUsedNotebookAction)
+		group.writeEntry(QLatin1String("lastUsedNotebook"), m_actionsManager->m_lastUsedNotebookAction->data().toString());
+#endif
+
 	Settings::sync();
 
-	if (m_project) {
-		delete m_guiObserver;
-		delete m_aspectTreeModel;
-		disconnect(m_project, nullptr, this, nullptr);
-		delete m_project;
-	}
+	delete m_guiObserver;
+	delete m_actionsManager;
+	delete m_aspectTreeModel;
+	disconnect(m_project, nullptr, this, nullptr);
+	delete m_project;
 
 	// if welcome screen is shown, save its settings prior to deleting it
 	// 	if (dynamic_cast<QQuickWidget*>(centralWidget()))
 	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
-
 	//	delete m_welcomeScreenHelper;
 }
 
@@ -210,7 +194,9 @@ void MainWin::initGUI(const QString& fileName) {
 	if (statusBar()->isEnabled())
 		statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 
-	initActions();
+	m_actionsManager = new ActionsManager(this);
+	setupGUI();
+	m_actionsManager->init();
 
 #ifdef Q_OS_MAC
 #ifdef HAVE_TOUCHBAR
@@ -220,68 +206,6 @@ void MainWin::initGUI(const QString& fileName) {
 #endif
 	setUnifiedTitleAndToolBarOnMac(true);
 #endif
-	setupGUI();
-
-	// Workaround to get a resonable size at first start
-	// TODO: need a better fix
-	resize(800, 600);
-
-	// all toolbars created via the KXMLGUI framework are locked on default:
-	//  * on the very first program start, unlock all toolbars
-	//  * on later program starts, set stored lock status
-	// Furthermore, we want to show icons only after the first program start.
-	KConfigGroup groupMain = Settings::group(QStringLiteral("MainWindow"));
-	if (groupMain.exists()) {
-		// KXMLGUI framework automatically stores "Disabled" for the key "ToolBarsMovable"
-		// in case the toolbars are locked -> load this value
-		const QString& str = groupMain.readEntry(QLatin1String("ToolBarsMovable"), "");
-		bool locked = (str == QLatin1String("Disabled"));
-		KToolBar::setToolBarsLocked(locked);
-	}
-
-	// in case we're starting for the first time, put all toolbars into the IconOnly mode
-	// and maximize the main window. The occurence of LabPlot's own section "MainWin"
-	// indicates whether this is the first start or not
-	groupMain = Settings::group(QStringLiteral("MainWin"));
-	if (!groupMain.exists()) {
-		// first start
-		KToolBar::setToolBarsLocked(false);
-
-		// show icons only
-		const auto& toolbars = factory()->containers(QLatin1String("ToolBar"));
-		for (auto* container : toolbars) {
-			auto* toolbar = dynamic_cast<QToolBar*>(container);
-			if (toolbar)
-				toolbar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-		}
-
-		showMaximized();
-	}
-
-	initMenus();
-
-	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container(QLatin1String("main_toolbar"), this));
-
-#ifdef HAVE_CANTOR_LIBS
-	auto* tbNotebook = new QToolButton(mainToolBar);
-	tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
-	tbNotebook->setMenu(m_newNotebookMenu); // it is possible for m_newNotebookMenu to be null when we have no backends
-	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 2);
-	mainToolBar->insertWidget(lastAction, tbNotebook);
-#endif
-
-	auto* tbImport = new QToolButton(mainToolBar);
-	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
-	tbImport->setMenu(m_importMenu);
-	tbImport->setDefaultAction(m_importFileAction);
-	auto* lastAction_ = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
-	mainToolBar->insertWidget(lastAction_, tbImport);
-
-	// hamburger menu
-	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection());
-	toolBar()->addAction(m_hamburgerMenu);
-	m_hamburgerMenu->hideActionsOf(toolBar());
-	m_hamburgerMenu->setMenuBar(menuBar());
 
 	setWindowIcon(QIcon::fromTheme(QLatin1String("LabPlot"), QGuiApplication::windowIcon()));
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -291,9 +215,6 @@ void MainWin::initGUI(const QString& fileName) {
 	font.setFamily(font.defaultFamily());
 	QFontMetrics fm(font);
 	statusBar()->setFixedHeight(fm.height() + 5);
-
-	// load recently used projects
-	m_recentProjectsAction->loadEntries(Settings::group(QStringLiteral("Recent Files")));
 
 	// General Settings
 	auto group = Settings::group(QStringLiteral("Settings_General"));
@@ -376,18 +297,8 @@ void MainWin::initGUI(const QString& fileName) {
 		}
 	}
 
-	// read the settings of MainWin
-	const KConfigGroup& groupMainWin = Settings::group(QStringLiteral("MainWin"));
-
-	// show memory info
-	m_memoryInfoAction->setEnabled(statusBar()->isEnabled()); // disable/enable menu with statusbar
-	bool memoryInfoShown = groupMainWin.readEntry(QLatin1String("ShowMemoryInfo"), true);
-	// DEBUG(Q_FUNC_INFO << ", memory info enabled in config: " << memoryInfoShown)
-	m_memoryInfoAction->setChecked(memoryInfoShown);
-	if (memoryInfoShown)
-		toggleMemoryInfo();
-
 	// restore the geometry
+	const KConfigGroup& groupMainWin = Settings::group(QStringLiteral("MainWin"));
 	if (groupMainWin.hasKey(QStringLiteral("geometry")))
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
@@ -451,11 +362,6 @@ void MainWin::resetWelcomeScreen() {
 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "restoreOriginalLayout");
 }
 */
-
-void MainWin::changeVisibleAllDocks(bool visible) {
-	for (auto dock : m_dockManagerContent->dockWidgetsMap())
-		dock->toggleView(visible);
-}
 
 void MainWin::activateNextDock() {
 	const auto* focusedDock = m_dockManagerContent->focusedDockWidget();
@@ -532,14 +438,16 @@ void MainWin::activatePreviousDock() {
 }
 
 void MainWin::dockWidgetRemoved(ads::CDockWidget* w) {
-	if (w == m_currentAspectDock)
+	if (w == m_currentAspectDock) {
 		m_currentAspectDock = nullptr;
+		m_currentAspectDockArea = nullptr;
+	}
 }
 
 void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 	Q_UNUSED(old);
 	if (!now) {
-		updateGUI();
+		m_actionsManager->updateGUI();
 		return;
 	}
 
@@ -558,420 +466,14 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 		m_projectExplorer->setCurrentAspect(view->part());
 }
 
-void MainWin::initActions() {
-	// ******************** File-menu *******************************
-	// add some standard actions
-	m_newProjectAction = KStandardAction::openNew(
-		this,
-		[=]() {
-			newProject(true);
-		},
-		actionCollection());
-	m_openProjectAction = KStandardAction::open(this, static_cast<void (MainWin::*)()>(&MainWin::openProject), actionCollection());
-	m_recentProjectsAction = KStandardAction::openRecent(this, &MainWin::openRecentProject, actionCollection());
-	// m_closeAction = KStandardAction::close(this, &MainWin::closeProject, actionCollection());
-	// actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); // remove the shortcut, QKeySequence::Close will be used for closing sub-windows
-	m_saveAction = KStandardAction::save(this, &MainWin::saveProject, actionCollection());
-	m_saveAsAction = KStandardAction::saveAs(this, &MainWin::saveProjectAs, actionCollection());
-	m_printAction = KStandardAction::print(this, &MainWin::print, actionCollection());
-	m_printPreviewAction = KStandardAction::printPreview(this, &MainWin::printPreview, actionCollection());
-
-	QAction* openExample = new QAction(i18n("&Open Example"), actionCollection());
-	openExample->setIcon(QIcon::fromTheme(QLatin1String("folder-documents")));
-	actionCollection()->addAction(QLatin1String("file_example_open"), openExample);
-	connect(openExample, &QAction::triggered, this, [=]() {
-		auto* dlg = new ExamplesDialog(this);
-		if (dlg->exec() == QDialog::Accepted) {
-			const auto& path = dlg->path();
-			if (!path.isEmpty())
-				openProject(path);
-		}
-		delete dlg;
-	});
-
-	m_fullScreenAction = KStandardAction::fullScreen(this, &MainWin::toggleFullScreen, this, actionCollection());
-
-	// QDEBUG(Q_FUNC_INFO << ", preferences action name:" << KStandardAction::name(KStandardAction::Preferences))
-	KStandardAction::preferences(this, &MainWin::settingsDialog, actionCollection());
-	// QAction* action = actionCollection()->action(KStandardAction::name(KStandardAction::Preferences)));
-	KStandardAction::quit(this, &MainWin::close, actionCollection());
-
-	// New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
-	m_newWorkbookAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-workbook-new")), i18n("Workbook"), this);
-	actionCollection()->addAction(QLatin1String("new_workbook"), m_newWorkbookAction);
-	m_newWorkbookAction->setWhatsThis(i18n("Creates a new workbook for collection spreadsheets, matrices and plots"));
-	connect(m_newWorkbookAction, &QAction::triggered, this, &MainWin::newWorkbook);
-
-	m_newDatapickerAction = new QAction(QIcon::fromTheme(QLatin1String("color-picker-black")), i18n("Data Extractor"), this);
-	m_newDatapickerAction->setWhatsThis(i18n("Creates a data extractor for getting data from a picture"));
-	actionCollection()->addAction(QLatin1String("new_datapicker"), m_newDatapickerAction);
-	connect(m_newDatapickerAction, &QAction::triggered, this, &MainWin::newDatapicker);
-
-	m_newSpreadsheetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet-new")), i18n("Spreadsheet"), this);
-	// 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
-	m_newSpreadsheetAction->setWhatsThis(i18n("Creates a new spreadsheet for data editing"));
-	actionCollection()->addAction(QLatin1String("new_spreadsheet"), m_newSpreadsheetAction);
-	connect(m_newSpreadsheetAction, &QAction::triggered, this, &MainWin::newSpreadsheet);
-
-	m_newMatrixAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-matrix-new")), i18n("Matrix"), this);
-	// 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
-	m_newMatrixAction->setWhatsThis(i18n("Creates a new matrix for data editing"));
-	actionCollection()->addAction(QLatin1String("new_matrix"), m_newMatrixAction);
-	connect(m_newMatrixAction, &QAction::triggered, this, &MainWin::newMatrix);
-
-	m_newWorksheetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-worksheet-new")), i18n("Worksheet"), this);
-	// 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
-	m_newWorksheetAction->setWhatsThis(i18n("Creates a new worksheet for data plotting"));
-	actionCollection()->addAction(QLatin1String("new_worksheet"), m_newWorksheetAction);
-	connect(m_newWorksheetAction, &QAction::triggered, this, &MainWin::newWorksheet);
-
-	m_newNotesAction = new QAction(QIcon::fromTheme(QLatin1String("document-new")), i18n("Note"), this);
-	m_newNotesAction->setWhatsThis(i18n("Creates a new note for arbitrary text"));
-	actionCollection()->addAction(QLatin1String("new_notes"), m_newNotesAction);
-	connect(m_newNotesAction, &QAction::triggered, this, &MainWin::newNotes);
-
-	m_newFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-new")), i18n("Folder"), this);
-	m_newFolderAction->setWhatsThis(i18n("Creates a new folder to collect sheets and other elements"));
-	actionCollection()->addAction(QLatin1String("new_folder"), m_newFolderAction);
-	connect(m_newFolderAction, &QAction::triggered, this, &MainWin::newFolder);
-
-	//"New file datasources"
-	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QLatin1String("edit-text-frame-update")), i18n("Live Data Source..."), this);
-	m_newLiveDataSourceAction->setWhatsThis(i18n("Creates a live data source to read data from a real time device"));
-	actionCollection()->addAction(QLatin1String("new_live_datasource"), m_newLiveDataSourceAction);
-	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSource);
-
-	// Import/Export
-	m_importFileAction = new QAction(QIcon::fromTheme(QLatin1String("document-import")), i18n("From File..."), this);
-	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL | Qt::SHIFT | Qt::Key_I);
-	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
-	connect(m_importFileAction, &QAction::triggered, this, [=]() {
-		importFileDialog();
-	});
-
-	// second "import from file" action, with a shorter name, to be used in the sub-menu of the "Import"-menu.
-	// the first action defined above will be used in the toolbar and touchbar where we need the more detailed name "Import From File".
-	m_importFileAction_2 = new QAction(QIcon::fromTheme(QLatin1String("document-import")), i18n("From File..."), this);
-	actionCollection()->addAction(QLatin1String("import_file"), m_importFileAction_2);
-	m_importFileAction_2->setWhatsThis(i18n("Import data from a regular file"));
-	connect(m_importFileAction_2, &QAction::triggered, this, [=]() {
-		importFileDialog();
-	});
-
-	m_importKaggleDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-kaggle")), i18n("From kaggle.com..."), this);
-	m_importKaggleDatasetAction->setWhatsThis(i18n("Import data from kaggle.com"));
-	actionCollection()->addAction(QLatin1String("import_dataset_kaggle"), m_importKaggleDatasetAction);
-	connect(m_importKaggleDatasetAction, &QAction::triggered, this, &MainWin::importKaggleDatasetDialog);
-
-	m_importSqlAction = new QAction(QIcon::fromTheme(QLatin1String("network-server-database")), i18n("From SQL Database..."), this);
-	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
-	actionCollection()->addAction(QLatin1String("import_sql"), m_importSqlAction);
-	connect(m_importSqlAction, &QAction::triggered, this, &MainWin::importSqlDialog);
-
-	m_importDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("database-index")), i18n("From Dataset Collection..."), this);
-	m_importDatasetAction->setWhatsThis(i18n("Import data from an online dataset"));
-	actionCollection()->addAction(QLatin1String("import_dataset_datasource"), m_importDatasetAction);
-	connect(m_importDatasetAction, &QAction::triggered, this, &MainWin::importDatasetDialog);
-
-	m_importLabPlotAction = new QAction(QIcon::fromTheme(QLatin1String("project-open")), i18n("LabPlot Project..."), this);
-	m_importLabPlotAction->setWhatsThis(i18n("Import a project from a LabPlot project file (.lml)"));
-	actionCollection()->addAction(QLatin1String("import_labplot"), m_importLabPlotAction);
-	connect(m_importLabPlotAction, &QAction::triggered, this, &MainWin::importProjectDialog);
-
-#ifdef HAVE_LIBORIGIN
-	m_importOpjAction = new QAction(QIcon::fromTheme(QLatin1String("project-open")), i18n("Origin Project (OPJ)..."), this);
-	m_importOpjAction->setWhatsThis(i18n("Import a project from an OriginLab Origin project file (.opj)"));
-	actionCollection()->addAction(QLatin1String("import_opj"), m_importOpjAction);
-	connect(m_importOpjAction, &QAction::triggered, this, &MainWin::importProjectDialog);
-#endif
-
-	m_exportAction = new QAction(QIcon::fromTheme(QLatin1String("document-export")), i18n("Export..."), this);
-	m_exportAction->setWhatsThis(i18n("Export selected element"));
-	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL | Qt::SHIFT | Qt::Key_E);
-	actionCollection()->addAction(QLatin1String("export"), m_exportAction);
-	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
-
-#ifdef HAVE_PURPOSE
-	m_shareAction = new QAction(QIcon::fromTheme(QLatin1String("document-share")), i18n("Share"), this);
-	actionCollection()->addAction(QLatin1String("share"), m_shareAction);
-#endif
-
-	// Tools
-	auto* action = new QAction(QIcon::fromTheme(QLatin1String("color-management")), i18n("Color Maps Browser"), this);
-	action->setWhatsThis(i18n("Open dialog to browse through the available color maps."));
-	actionCollection()->addAction(QLatin1String("color_maps"), action);
-	connect(action, &QAction::triggered, this, [=]() {
-		auto* dlg = new ColorMapsDialog(this);
-		dlg->exec();
-		delete dlg;
-	});
-
-#ifdef HAVE_FITS
-	action = new QAction(QIcon::fromTheme(QLatin1String("editor")), i18n("FITS Metadata Editor..."), this);
-	action->setWhatsThis(i18n("Open editor to edit FITS meta data"));
-	actionCollection()->addAction(QLatin1String("edit_fits"), action);
-	connect(action, &QAction::triggered, this, &MainWin::editFitsFileDialog);
-#endif
-
-	// Edit
-	// Undo/Redo-stuff
-	m_undoAction = KStandardAction::undo(this, SLOT(undo()), actionCollection());
-	m_redoAction = KStandardAction::redo(this, SLOT(redo()), actionCollection());
-	m_historyAction = new QAction(QIcon::fromTheme(QLatin1String("view-history")), i18n("Undo/Redo History..."), this);
-	actionCollection()->addAction(QLatin1String("history"), m_historyAction);
-	connect(m_historyAction, &QAction::triggered, this, &MainWin::historyDialog);
-
-#ifdef Q_OS_MAC
-	m_undoIconOnlyAction = new QAction(m_undoAction->icon(), QString());
-	connect(m_undoIconOnlyAction, &QAction::triggered, this, &MainWin::undo);
-
-	m_redoIconOnlyAction = new QAction(m_redoAction->icon(), QString());
-	connect(m_redoIconOnlyAction, &QAction::triggered, this, &MainWin::redo);
-#endif
-	// TODO: more menus
-	//  Appearance
-	// Analysis: see WorksheetView.cpp
-	// Drawing
-	// Script
-
-	// Windows
-	m_closeWindowAction = new QAction(i18n("&Close"), this);
-	actionCollection()->setDefaultShortcut(m_closeWindowAction, QKeySequence::Close);
-	m_closeWindowAction->setStatusTip(i18n("Close the active window"));
-	actionCollection()->addAction(QLatin1String("close window"), m_closeWindowAction);
-
-	m_closeAllWindowsAction = new QAction(i18n("Close &All"), this);
-	m_closeAllWindowsAction->setStatusTip(i18n("Close all the windows"));
-	actionCollection()->addAction(QLatin1String("close all windows"), m_closeAllWindowsAction);
-
-	m_nextWindowAction = new QAction(QIcon::fromTheme(QLatin1String("go-next-view")), i18n("Ne&xt"), this);
-	actionCollection()->setDefaultShortcut(m_nextWindowAction, QKeySequence::NextChild);
-	m_nextWindowAction->setStatusTip(i18n("Move the focus to the next window"));
-	actionCollection()->addAction(QLatin1String("next window"), m_nextWindowAction);
-
-	m_prevWindowAction = new QAction(QIcon::fromTheme(QLatin1String("go-previous-view")), i18n("Pre&vious"), this);
-	actionCollection()->setDefaultShortcut(m_prevWindowAction, QKeySequence::PreviousChild);
-	m_prevWindowAction->setStatusTip(i18n("Move the focus to the previous window"));
-	actionCollection()->addAction(QLatin1String("previous window"), m_prevWindowAction);
-
-	// Actions for window visibility
-	auto* windowVisibilityActions = new QActionGroup(this);
-	windowVisibilityActions->setExclusive(true);
-
-	m_visibilityFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder")), i18n("Current &Folder Only"), windowVisibilityActions);
-	m_visibilityFolderAction->setCheckable(true);
-	m_visibilityFolderAction->setData(static_cast<int>(Project::DockVisibility::folderOnly));
-
-	m_visibilitySubfolderAction =
-		new QAction(QIcon::fromTheme(QLatin1String("folder-documents")), i18n("Current Folder and &Subfolders"), windowVisibilityActions);
-	m_visibilitySubfolderAction->setCheckable(true);
-	m_visibilitySubfolderAction->setData(static_cast<int>(Project::DockVisibility::folderAndSubfolders));
-
-	m_visibilityAllAction = new QAction(i18n("&All"), windowVisibilityActions);
-	m_visibilityAllAction->setCheckable(true);
-	m_visibilityAllAction->setData(static_cast<int>(Project::DockVisibility::allDocks));
-
-	connect(windowVisibilityActions, &QActionGroup::triggered, this, &MainWin::setDockVisibility);
-
-	// show/hide the status and menu bars
-	//  KMainWindow should provide a menu that allows showing/hiding of the statusbar via showStatusbar()
-	//  see https://api.kde.org/frameworks/kxmlgui/html/classKXmlGuiWindow.html#a3d7371171cafabe30cb3bb7355fdfed1
-	// KXMLGUI framework automatically stores "Disabled" for the key "StatusBar"
-	KConfigGroup groupMain = Settings::group(QStringLiteral("MainWindow"));
-	const QString& str = groupMain.readEntry(QLatin1String("StatusBar"), "");
-	bool statusBarDisabled = (str == QLatin1String("Disabled"));
-	DEBUG(Q_FUNC_INFO << ", statusBar enabled in config: " << !statusBarDisabled)
-	createStandardStatusBarAction();
-	m_statusBarAction = KStandardAction::showStatusbar(this, &MainWin::toggleStatusBar, actionCollection());
-	m_statusBarAction->setChecked(!statusBarDisabled);
-	statusBar()->setEnabled(!statusBarDisabled); // setVisible() does not work
-
-	KStandardAction::showMenubar(this, &MainWin::toggleMenuBar, actionCollection());
-
-	// show/hide the memory usage widget
-	m_memoryInfoAction = new QAction(i18n("Show Memory Usage"), this);
-	m_memoryInfoAction->setCheckable(true);
-	connect(m_memoryInfoAction, &QAction::triggered, this, &MainWin::toggleMemoryInfo);
-
-	// Actions for hiding/showing the dock widgets
-	auto* docksActions = new QActionGroup(this);
-	docksActions->setExclusive(false);
-
-	m_projectExplorerDockAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Project Explorer"), docksActions);
-	m_projectExplorerDockAction->setCheckable(true);
-	m_projectExplorerDockAction->setChecked(true);
-	actionCollection()->addAction(QLatin1String("toggle_project_explorer_dock"), m_projectExplorerDockAction);
-
-	m_propertiesDockAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-details")), i18n("Properties Explorer"), docksActions);
-	m_propertiesDockAction->setCheckable(true);
-	m_propertiesDockAction->setChecked(true);
-	actionCollection()->addAction(QLatin1String("toggle_properties_explorer_dock"), m_propertiesDockAction);
-
-	m_worksheetPreviewAction = new QAction(QIcon::fromTheme(QLatin1String("view-preview")), i18n("Worksheet Preview"), docksActions);
-	m_worksheetPreviewAction->setCheckable(true);
-	m_worksheetPreviewAction->setChecked(true);
-	actionCollection()->addAction(QLatin1String("toggle_worksheet_preview_dock"), m_worksheetPreviewAction);
-
-	connect(docksActions, &QActionGroup::triggered, this, &MainWin::toggleDockWidget);
-
-	// global search
-	m_searchAction = new QAction(actionCollection());
-	m_searchAction->setShortcut(QKeySequence::Find);
-	connect(m_searchAction, &QAction::triggered, this, [=]() {
-		if (m_project) {
-			if (!m_projectExplorerDock->isVisible()) {
-				m_projectExplorerDockAction->setChecked(true);
-				toggleDockWidget(m_projectExplorerDockAction);
-			}
-			m_projectExplorer->search();
-		}
-	});
-	this->addAction(m_searchAction);
-
-#ifdef HAVE_CANTOR_LIBS
-	// configure CAS backends
-	m_configureCASAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
-	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
-	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
-	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureCASAction);
-	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
-#endif
-}
-
-void MainWin::initMenus() {
-#ifdef HAVE_PURPOSE
-	m_shareMenu = new Purpose::Menu(this);
-	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
-	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
-	m_shareAction->setMenu(m_shareMenu);
-#endif
-
-	// add the actions to toggle the status bar and the project and properties explorer widgets to the "View" menu.
-	// this menu is created automatically when the default "full screen" action is created in initActions().
-	auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("view"), this));
-	if (menu) {
-		menu->addSeparator();
-		menu->addAction(m_projectExplorerDockAction);
-		menu->addAction(m_propertiesDockAction);
-		menu->addAction(m_worksheetPreviewAction);
-	}
-
-	// menu in the main toolbar for adding new aspects
-	menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new"), this));
-	if (menu)
-		menu->setIcon(QIcon::fromTheme(QLatin1String("window-new")));
-
-	// menu in the project explorer and in the toolbar for adding new aspects
-	m_newMenu = new QMenu(i18n("Add New"), this);
-	m_newMenu->setIcon(QIcon::fromTheme(QLatin1String("window-new")));
-	m_newMenu->addAction(m_newFolderAction);
-	m_newMenu->addAction(m_newWorkbookAction);
-	m_newMenu->addAction(m_newSpreadsheetAction);
-	m_newMenu->addAction(m_newMatrixAction);
-	m_newMenu->addAction(m_newWorksheetAction);
-	m_newMenu->addAction(m_newNotesAction);
-	m_newMenu->addAction(m_newDatapickerAction);
-	m_newMenu->addSeparator();
-	m_newMenu->addAction(m_newLiveDataSourceAction);
-
-	// import menu
-	m_importMenu = new QMenu(this);
-	m_importMenu->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
-	m_importMenu->addAction(m_importFileAction_2);
-	m_importMenu->addAction(m_importSqlAction);
-	m_importMenu->addAction(m_importDatasetAction);
-	m_importMenu->addAction(m_importKaggleDatasetAction);
-	m_importMenu->addSeparator();
-	m_importMenu->addAction(m_importLabPlotAction);
-#ifdef HAVE_LIBORIGIN
-	m_importMenu->addAction(m_importOpjAction);
-#endif
-
-	// icon for the menu "import" in the main menu created via the rc file
-	menu = qobject_cast<QMenu*>(factory()->container(QLatin1String("import"), this));
-	menu->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
-
-	// menu subwindow visibility policy
-	m_visibilityMenu = new QMenu(i18n("Window Visibility"), this);
-	m_visibilityMenu->setIcon(QIcon::fromTheme(QLatin1String("window-duplicate")));
-	m_visibilityMenu->addAction(m_visibilityFolderAction);
-	m_visibilityMenu->addAction(m_visibilitySubfolderAction);
-	m_visibilityMenu->addAction(m_visibilityAllAction);
-
-#ifdef HAVE_FITS
-//	m_editMenu->addAction(m_editFitsFileAction);
-#endif
-
-	// set the action for the current color scheme checked
-	auto group = Settings::group(QStringLiteral("Settings_General"));
-	QString schemeName = group.readEntry("ColorScheme");
-	// default dark scheme on Windows is not optimal (Breeze dark is better)
-	// we can't find out if light or dark mode is used, so we don't switch to Breeze/Breeze dark here
-	DEBUG(Q_FUNC_INFO << ", Color scheme = " << STDSTRING(schemeName))
-	auto* schemesMenu = KColorSchemeMenu::createMenu(m_schemeManager, this);
-	schemesMenu->setText(i18n("Color Scheme"));
-	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
-	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
-
-	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("settings"), this));
-	if (settingsMenu) {
-		auto* action = settingsMenu->insertSeparator(settingsMenu->actions().constFirst());
-		settingsMenu->insertMenu(action, schemesMenu->menu());
-
-		// add m_memoryInfoAction after the "Show status bar" action
-		auto actions = settingsMenu->actions();
-		const int index = actions.indexOf(m_statusBarAction);
-		settingsMenu->insertAction(actions.at(index + 1), m_memoryInfoAction);
-	}
-
-	// Cantor backends to menu and context menu
-#ifdef HAVE_CANTOR_LIBS
-	auto backendNames = Cantor::Backend::listAvailableBackends();
-#if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
-	WARN(Q_FUNC_INFO << ", " << backendNames.count() << " Cantor backends available:")
-	for (const auto& b : backendNames)
-		WARN("Backend: " << STDSTRING(b))
-#endif
-
-	// sub-menu shown in the main toolbar
-	m_newNotebookMenu = new QMenu(this);
-
-	if (!backendNames.isEmpty()) {
-		// sub-menu shown in the main menu bar
-		auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
-		if (menu) {
-			menu->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
-			m_newMenu->addSeparator();
-			m_newMenu->addMenu(menu);
-			updateNotebookActions();
-		}
-	}
-#else
-	delete this->guiFactory()->container(QStringLiteral("notebook"), this);
-	delete this->guiFactory()->container(QStringLiteral("new_notebook"), this);
-	delete this->guiFactory()->container(QStringLiteral("notebook_toolbar"), this);
-#endif
-}
-
-void MainWin::colorSchemeChanged(QAction* action) {
-	// save the selected color scheme
-	auto group = Settings::group(QStringLiteral("Settings_General"));
-	const auto& schemeName = KLocalizedString::removeAcceleratorMarker(action->text());
-	group.writeEntry(QStringLiteral("ColorScheme"), schemeName);
-	group.sync();
-}
-
 /*!
 	Asks to save the project if it was modified.
 	\return \c true if the project still needs to be saved ("cancel" clicked), \c false otherwise.
  */
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
-		int option = KMessageBox::warningTwoActionsCancel(this,
-														  i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
-														  i18n("Save Project"),
-														  KStandardGuiItem::save(),
-														  KStandardGuiItem::dontSave());
+		int option = KMessageBox::warningTwoActionsCancel(this, i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
+				i18n("Save Project"), KStandardGuiItem::save(), KStandardGuiItem::dontSave());
 		switch (option) {
 		case KMessageBox::PrimaryAction:
 			return !saveProject();
@@ -986,267 +488,6 @@ bool MainWin::warnModified() {
 }
 
 /*!
- * updates the state of actions, menus and toolbars (enabled or disabled)
- * on project changes (project closes and opens)
- */
-void MainWin::updateGUIOnProjectChanges() {
-	// return;
-	if (m_closing)
-		return;
-
-	auto* factory = this->guiFactory();
-	if (!m_dockManagerContent || !m_dockManagerContent->focusedDockWidget()) {
-		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
-		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
-		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
-		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
-		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->hide();
-		factory->container(QLatin1String("datapicker_toolbar"), this)->hide();
-#ifdef HAVE_CANTOR_LIBS
-		factory->container(QLatin1String("notebook"), this)->setEnabled(false);
-		factory->container(QLatin1String("notebook_toolbar"), this)->hide();
-#endif
-	}
-
-	updateTitleBar();
-
-	// undo/redo actions are disabled in both cases - when the project is closed or opened
-	m_undoAction->setEnabled(false);
-	m_redoAction->setEnabled(false);
-}
-
-bool hasAction(const QList<QAction*>& actions) {
-	for (const auto* action : actions) {
-		if (!action->isSeparator())
-			return true;
-	}
-	return false;
-}
-
-/*
- * updates the state of actions, menus and toolbars (enabled or disabled)
- * depending on the currently active window (worksheet or spreadsheet).
- */
-void MainWin::updateGUI() {
-	if (!m_project || m_project->isLoading())
-		return;
-
-	if (m_closing || m_projectClosing)
-		return;
-
-#ifdef HAVE_TOUCHBAR
-	// reset the touchbar
-	m_touchBar->clear();
-	m_touchBar->addAction(m_undoIconOnlyAction);
-	m_touchBar->addAction(m_redoIconOnlyAction);
-	m_touchBar->addSeparator();
-#endif
-
-	auto* factory = this->guiFactory();
-	if (!m_dockManagerContent || !m_dockManagerContent->focusedDockWidget()) {
-		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
-		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
-		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
-		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
-		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->hide();
-		factory->container(QLatin1String("datapicker_toolbar"), this)->hide();
-#ifdef HAVE_CANTOR_LIBS
-		factory->container(QLatin1String("notebook"), this)->setEnabled(false);
-		factory->container(QLatin1String("notebook_toolbar"), this)->hide();
-#endif
-		m_printAction->setEnabled(false);
-		m_printPreviewAction->setEnabled(false);
-		m_exportAction->setEnabled(false);
-		return;
-	} else {
-		m_printAction->setEnabled(true);
-		m_printPreviewAction->setEnabled(true);
-		m_exportAction->setEnabled(true);
-	}
-
-#ifdef HAVE_TOUCHBAR
-	if (dynamic_cast<Folder*>(m_currentAspect)) {
-		m_touchBar->addAction(m_newWorksheetAction);
-		m_touchBar->addAction(m_newSpreadsheetAction);
-		m_touchBar->addAction(m_newMatrixAction);
-	}
-#endif
-
-	Q_ASSERT(m_currentAspect);
-
-	// Handle the Worksheet-object
-	const auto* w = dynamic_cast<Worksheet*>(m_currentAspect);
-	if (!w)
-		w = dynamic_cast<Worksheet*>(m_currentAspect->parent(AspectType::Worksheet));
-
-	if (w) {
-		bool update = false;
-		if (w != m_lastWorksheet) {
-			m_lastWorksheet = w;
-			update = true;
-		}
-
-		// populate worksheet menu
-		auto* view = qobject_cast<WorksheetView*>(w->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("worksheet"), this));
-		if (update) {
-			menu->clear();
-			view->createContextMenu(menu);
-		} else if (!hasAction(menu->actions()))
-			view->createContextMenu(menu);
-		menu->setEnabled(true);
-
-		// populate worksheet-toolbar
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("worksheet_toolbar"), this));
-		if (update) { // update because the aspect has changed
-			toolbar->clear();
-			view->fillToolBar(toolbar);
-		} else if (!hasAction(toolbar->actions())) // update because the view was closed and the actions deleted
-			view->fillToolBar(toolbar);
-		toolbar->setVisible(true);
-		toolbar->setEnabled(true);
-
-		// populate the toolbar for cartesian plots
-		toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("cartesian_plot_toolbar"), this));
-		if (update) {
-			toolbar->clear();
-			view->fillCartesianPlotToolBar(toolbar);
-		} else if (!hasAction(toolbar->actions()))
-			view->fillCartesianPlotToolBar(toolbar);
-		toolbar->setVisible(true);
-		toolbar->setEnabled(true);
-
-		// populate the touchbar on Mac
-#ifdef HAVE_TOUCHBAR
-		view->fillTouchBar(m_touchBar);
-#endif
-		// hide the spreadsheet toolbar
-		factory->container(QLatin1String("spreadsheet_toolbar"), this)->setVisible(false);
-	} else {
-		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("worksheet_toolbar"), this)->setVisible(false);
-		factory->container(QLatin1String("worksheet_toolbar"), this)->setEnabled(false);
-		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->setEnabled(false);
-	}
-
-	// Handle the Spreadsheet-object
-	const auto* spreadsheet = this->activeSpreadsheet();
-	if (spreadsheet) {
-		bool update = false;
-		if (spreadsheet != m_lastSpreadsheet) {
-			update = true;
-			m_lastSpreadsheet = spreadsheet;
-		}
-
-		// populate spreadsheet-menu
-		auto* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("spreadsheet"), this));
-		if (update) {
-			menu->clear();
-			view->createContextMenu(menu);
-		} else if (!hasAction(menu->actions()))
-			view->createContextMenu(menu);
-		menu->setEnabled(true);
-
-		// populate spreadsheet-toolbar
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("spreadsheet_toolbar"), this));
-		if (update) {
-			toolbar->clear();
-			view->fillToolBar(toolbar);
-		} else if (!hasAction(toolbar->actions()))
-			view->fillToolBar(toolbar);
-
-		toolbar->setVisible(true);
-		toolbar->setEnabled(true);
-
-		// populate the touchbar on Mac
-#ifdef HAVE_TOUCHBAR
-		m_touchBar->addAction(m_importFileAction);
-		view->fillTouchBar(m_touchBar);
-#endif
-
-		// spreadsheet has it's own search, unregister the shortcut for the global search here
-		m_searchAction->setShortcut(QKeySequence());
-	} else {
-		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("spreadsheet_toolbar"), this)->setVisible(false);
-		m_searchAction->setShortcut(QKeySequence::Find);
-	}
-
-	// Handle the Matrix-object
-	const auto* matrix = dynamic_cast<Matrix*>(m_currentAspect);
-	if (!matrix)
-		matrix = dynamic_cast<Matrix*>(m_currentAspect->parent(AspectType::Matrix));
-	if (matrix) {
-		// populate matrix-menu
-		auto* view = qobject_cast<MatrixView*>(matrix->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("matrix"), this));
-		menu->clear();
-		view->createContextMenu(menu);
-		menu->setEnabled(true);
-
-		// populate the touchbar on Mac
-#ifdef HAVE_TOUCHBAR
-		m_touchBar->addAction(m_importFileAction);
-		// view->fillTouchBar(m_touchBar);
-#endif
-	} else
-		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
-
-#ifdef HAVE_CANTOR_LIBS
-	const auto* notebook = dynamic_cast<Notebook*>(m_currentAspect);
-	if (!notebook)
-		notebook = dynamic_cast<Notebook*>(m_currentAspect->parent(AspectType::Notebook));
-	if (notebook) {
-		auto* view = qobject_cast<NotebookView*>(notebook->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("notebook"), this));
-		menu->clear();
-		view->createContextMenu(menu);
-		menu->setEnabled(true);
-
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("notebook_toolbar"), this));
-		toolbar->setVisible(true);
-		toolbar->clear();
-		view->fillToolBar(toolbar);
-	} else {
-		// no Cantor worksheet selected -> deactivate Cantor worksheet related menu and toolbar
-		factory->container(QLatin1String("notebook"), this)->setEnabled(false);
-		factory->container(QLatin1String("notebook_toolbar"), this)->setVisible(false);
-	}
-#endif
-
-	const auto* datapicker = dynamic_cast<Datapicker*>(m_currentAspect);
-	if (!datapicker)
-		datapicker = dynamic_cast<Datapicker*>(m_currentAspect->parent(AspectType::Datapicker));
-	if (!datapicker) {
-		if (m_currentAspect && m_currentAspect->type() == AspectType::DatapickerCurve)
-			datapicker = dynamic_cast<Datapicker*>(m_currentAspect->parentAspect());
-	}
-
-	if (datapicker) {
-		// populate datapicker-menu
-		auto* view = qobject_cast<DatapickerView*>(datapicker->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("datapicker"), this));
-		menu->clear();
-		view->createContextMenu(menu);
-		menu->setEnabled(true);
-
-		// populate spreadsheet-toolbar
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("datapicker_toolbar"), this));
-		toolbar->clear();
-		view->fillToolBar(toolbar);
-		toolbar->setVisible(true);
-	} else {
-		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
-		factory->container(QLatin1String("datapicker_toolbar"), this)->setVisible(false);
-	}
-}
-
-/*!
 	creates a new empty project. Returns \c true, if a new project was created.
 	the parameter \c createInitialContent whether a default content (new worksheet, etc. )
 	has to be created automatically (it's \c false if a project is opened, \c true if a new project is created).
@@ -1258,29 +499,33 @@ bool MainWin::newProject(bool createInitialContent) {
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+
 	m_project = new Project();
+	m_project->setFileCompression(!group.readEntry("CompatibleSave", m_project->fileCompression()));
+	m_project->setSaveData(group.readEntry("SaveData", m_project->saveData()));
+	Project::currentProject = m_project;
 	undoStackIndexLastSave = 0;
 	m_currentAspect = m_project;
 	m_currentFolder = m_project;
 
-	KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
 	m_project->setDockVisibility(vis);
 	if (vis == Project::DockVisibility::folderOnly)
-		m_visibilityFolderAction->setChecked(true);
+		m_actionsManager->m_visibilityFolderAction->setChecked(true);
 	else if (vis == Project::DockVisibility::folderAndSubfolders)
-		m_visibilitySubfolderAction->setChecked(true);
+		m_actionsManager->m_visibilitySubfolderAction->setChecked(true);
 	else
-		m_visibilityAllAction->setChecked(true);
+		m_actionsManager->m_visibilityAllAction->setChecked(true);
 
 	m_aspectTreeModel = new AspectTreeModel(m_project, this);
 	connect(m_aspectTreeModel, &AspectTreeModel::statusInfo, [=](const QString& text) {
 		statusBar()->showMessage(text);
 	});
 
-	m_newProjectAction->setEnabled(false);
+	m_actionsManager->m_newProjectAction->setEnabled(false);
 #ifdef HAVE_PURPOSE
-	m_shareAction->setEnabled(false); // sharing is only possible after the project was saved to a file
+	m_actionsManager->m_shareAction->setEnabled(false); // sharing is only possible after the project was saved to a file
 #endif
 
 	m_projectExplorer->setModel(m_aspectTreeModel);
@@ -1325,7 +570,7 @@ bool MainWin::newProject(bool createInitialContent) {
 
 		m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
 
-		updateGUIOnProjectChanges();
+		m_actionsManager->updateGUIOnProjectChanges();
 		m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	}
 
@@ -1421,16 +666,16 @@ void MainWin::initDocks() {
 	connect(m_dockManagerContent, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
 	connect(m_dockManagerContent, &ads::CDockManager::dockWidgetRemoved, this, &MainWin::dockWidgetRemoved);
 
-	connect(m_closeWindowAction, &QAction::triggered, [this] {
+	connect(m_actionsManager->m_closeWindowAction, &QAction::triggered, [this] {
 		m_dockManagerContent->removeDockWidget(m_currentDock);
 	});
-	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
+	connect(m_actionsManager->m_closeAllWindowsAction, &QAction::triggered, [this]() {
 		for (auto dock : m_dockManagerContent->dockWidgetsMap())
 			m_dockManagerContent->removeDockWidget(dock);
 	});
 
-	connect(m_nextWindowAction, &QAction::triggered, this, &MainWin::activateNextDock);
-	connect(m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
+	connect(m_actionsManager->m_nextWindowAction, &QAction::triggered, this, &MainWin::activateNextDock);
+	connect(m_actionsManager->m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
 
 	// restore the last used dock state
 	restoreDefaultDockState();
@@ -1448,9 +693,9 @@ void MainWin::restoreDefaultDockState() const {
 		// the state of the dock widgets not available yet, starting for the first time:
 		// show the project and properties explorers, hide the worksheet preview.
 		// for this, check the actions for the project and properties explorer, uncheck for worksheet preview
-		m_projectExplorerDockAction->setChecked(true);
-		m_propertiesDockAction->setChecked(true);
-		m_worksheetPreviewAction->setChecked(false);
+		m_actionsManager->m_projectExplorerDockAction->setChecked(true);
+		m_actionsManager->m_propertiesDockAction->setChecked(true);
+		m_actionsManager->m_worksheetPreviewAction->setChecked(false);
 		m_worksheetPreviewDock->toggleView(false);
 	}
 }
@@ -1496,22 +741,22 @@ void MainWin::openProject() {
 	}
 }
 
-void MainWin::openProject(const QString& filename) {
-	if (m_project && filename == m_project->fileName()) {
-		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename), i18n("Open Project"));
+void MainWin::openProject(const QString& fileName) {
+	if (m_project && fileName == m_project->fileName()) {
+		KMessageBox::information(this, i18n("The project file %1 is already opened.", fileName), i18n("Open Project"));
 		return;
 	}
 
 	// check whether the file can be opened for reading at all before closing the current project
 	// and creating a new project and trying to load
-	QFile file(filename);
+	QFile file(fileName);
 	if (!file.exists()) {
-		KMessageBox::error(this, i18n("The project file %1 doesn't exist.", filename), i18n("Open Project"));
+		KMessageBox::error(this, i18n("The project file %1 doesn't exist.", fileName), i18n("Open Project"));
 		return;
 	}
 
 	if (!file.open(QIODevice::ReadOnly)) {
-		KMessageBox::error(this, i18n("Couldn't read the project file %1.", filename), i18n("Open Project"));
+		KMessageBox::error(this, i18n("Couldn't read the project file %1.", fileName), i18n("Open Project"));
 		return;
 	} else
 		file.close();
@@ -1519,28 +764,46 @@ void MainWin::openProject(const QString& filename) {
 	if (!newProject(false))
 		return;
 
-	WAIT_CURSOR;
-	statusBar()->showMessage(i18n("Loading %1...", filename));
+	statusBar()->showMessage(i18n("Loading %1...", fileName));
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
-	m_project->setFileName(filename);
+	m_project->setFileName(fileName);
 	QElapsedTimer timer;
 	timer.start();
 	bool rc = false;
-	if (Project::isLabPlotProject(filename)) {
-		rc = m_project->load(filename);
+	if (Project::isLabPlotProject(fileName)) {
+		WAIT_CURSOR_AUTO_RESET;
+		rc = m_project->load(fileName);
 	}
 #ifdef HAVE_LIBORIGIN
-	else if (OriginProjectParser::isOriginProject(filename)) {
+	else if (OriginProjectParser::isOriginProject(fileName)) {
 		OriginProjectParser parser;
-		parser.setProjectFileName(filename);
+		parser.setProjectFileName(fileName);
+
+		// check if graphs have multiple layer
+		bool hasUnusedObjects, hasMultiLayerGraphs;
+		parser.checkContent(hasUnusedObjects, hasMultiLayerGraphs);
+		DEBUG(Q_FUNC_INFO << ", project has multilayer graphs: " << hasMultiLayerGraphs)
+		// ask how to import OPJ graph layers if graphs have multiple layer
+		if (hasMultiLayerGraphs) {
+			auto* dlg = new ImportOriginLayersDialog(this);
+			bool graphLayersAsPlotArea = true;
+			if (dlg->exec() == QDialog::Accepted)
+				graphLayersAsPlotArea = dlg->graphLayersAsPlotArea();
+			delete dlg;
+
+			parser.setGraphLayerAsPlotArea(graphLayersAsPlotArea);
+		}
+
+		WAIT_CURSOR_AUTO_RESET;
 		parser.importTo(m_project, QStringList()); // TODO: add return code
 		rc = true;
 	}
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
-	else if (filename.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || filename.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
-		rc = m_project->loadNotebook(filename);
+	else if (fileName.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
+		WAIT_CURSOR_AUTO_RESET;
+		rc = m_project->loadNotebook(fileName);
 	}
 #endif
 
@@ -1548,16 +811,16 @@ void MainWin::openProject(const QString& filename) {
 
 	if (!rc) {
 		closeProject();
-		RESET_CURSOR;
+		newProject();
 		return;
 	}
 
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
-	m_recentProjectsAction->addUrl(QUrl(filename));
+	m_actionsManager->m_recentProjectsAction->addUrl(QUrl(fileName));
 
-	updateGUIOnProjectChanges();
-	updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
+	m_actionsManager->updateGUIOnProjectChanges();
+	m_actionsManager->updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
 
 	const auto& dockWidgetsState = m_project->dockWidgetState().toUtf8();
 	if (!dockWidgetsState.isEmpty()) {
@@ -1566,7 +829,7 @@ void MainWin::openProject(const QString& filename) {
 			if (d)
 				d->part()->suppressDeletion(true);
 		}
-		changeVisibleAllDocks(false);
+
 		for (auto dock : m_dockManagerContent->dockWidgetsMap()) {
 			auto* d = dynamic_cast<ContentDockWidget*>(dock);
 			if (d)
@@ -1582,21 +845,19 @@ void MainWin::openProject(const QString& filename) {
 	} else
 		updateDockWindowVisibility();
 
-	m_saveAction->setEnabled(false);
-	m_newProjectAction->setEnabled(true);
+	m_actionsManager->m_saveAction->setEnabled(false);
+	m_actionsManager->m_newProjectAction->setEnabled(true);
 #ifdef HAVE_PURPOSE
-	m_shareAction->setEnabled(true);
-	fillShareMenu();
+	m_actionsManager->m_shareAction->setEnabled(true);
+	m_actionsManager->fillShareMenu();
 #endif
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
 
 	KConfigGroup group = Settings::group(QStringLiteral("MainWin"));
-	group.writeEntry("LastOpenProject", filename);
+	group.writeEntry("LastOpenProject", fileName);
 
 	if (m_autoSaveActive)
 		m_autoSaveTimer.start();
-
-	RESET_CURSOR;
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
@@ -1639,6 +900,7 @@ bool MainWin::closeProject() {
 	m_aspectTreeModel = nullptr;
 	delete m_project;
 	m_project = nullptr;
+	Project::currentProject = m_project;
 	m_projectClosing = false;
 
 	// update the UI if we're just closing a project
@@ -1646,8 +908,8 @@ bool MainWin::closeProject() {
 	if (!m_closing) {
 		m_currentAspect = nullptr;
 		m_currentFolder = nullptr;
-		updateGUIOnProjectChanges();
-		m_newProjectAction->setEnabled(true);
+		m_actionsManager->updateGUIOnProjectChanges();
+		m_actionsManager->m_newProjectAction->setEnabled(true);
 
 		if (m_autoSaveActive)
 			m_autoSaveTimer.stop();
@@ -1667,9 +929,13 @@ bool MainWin::saveProject() {
 	if (fileName.isEmpty())
 		return saveProjectAs();
 	else {
-		// don't overwrite OPJ files
-		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive))
-			fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"));
+		// don't overwrite OPJ files, replace ending
+		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive)) {
+			//fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"), Qt::CaseInsensitive);
+			// better append ending (don't overwrite existing project.lml file)
+			fileName.append(QLatin1String(".lml"));
+			DEBUG(Q_FUNC_INFO << ", renamed file name to " << fileName.toStdString())
+		}
 		return save(fileName);
 	}
 }
@@ -1681,7 +947,7 @@ bool MainWin::saveProjectAs() {
 												i18nc("@title:window", "Save Project As"),
 												dir + m_project->fileName(),
 												i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
-	// The "Automatically select filename extension (.lml)" option does not change anything
+	// The "Automatically select file name extension (.lml)" option does not change anything
 
 	if (path.isEmpty()) // "Cancel" was clicked
 		return false;
@@ -1704,25 +970,25 @@ bool MainWin::saveProjectAs() {
  * auxiliary function that does the actual saving of the project
  */
 bool MainWin::save(const QString& fileName) {
+	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
 	QTemporaryFile tempFile(QDir::tempPath() + QLatin1Char('/') + QLatin1String("labplot_save_XXXXXX"));
 	if (!tempFile.open()) {
 		KMessageBox::error(this, i18n("Couldn't open the temporary file for writing."));
 		return false;
 	}
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const QString& tempFileName = tempFile.fileName();
 	DEBUG("Using temporary file " << STDSTRING(tempFileName))
 	tempFile.close();
 
 	QIODevice* file;
 	// if file ending is .lml, do xz compression or gzip compression in compatibility mode
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	if (fileName.endsWith(QLatin1String(".lml"))) {
-		if (group.readEntry("CompatibleSave", false))
-			file = new KCompressionDevice(tempFileName, KCompressionDevice::GZip);
-		else
+		if (m_project->fileCompression())
 			file = new KCompressionDevice(tempFileName, KCompressionDevice::Xz);
+		else
+			file = new KCompressionDevice(tempFileName, KCompressionDevice::None);
 	} else // use file ending to find out how to compress file
 		file = new KCompressionDevice(tempFileName);
 	if (!file)
@@ -1787,8 +1053,8 @@ bool MainWin::save(const QString& fileName) {
 		if (rc) {
 			updateTitleBar();
 			statusBar()->showMessage(i18n("Project saved"));
-			m_saveAction->setEnabled(false);
-			m_recentProjectsAction->addUrl(QUrl(fileName));
+			m_actionsManager->m_saveAction->setEnabled(false);
+			m_actionsManager->m_recentProjectsAction->addUrl(QUrl(fileName));
 			ok = true;
 
 			// if the project dock is visible, refresh the shown content
@@ -1801,12 +1067,10 @@ bool MainWin::save(const QString& fileName) {
 			if (m_autoSaveActive && !m_autoSaveTimer.isActive())
 				m_autoSaveTimer.start();
 		} else {
-			RESET_CURSOR;
 			KMessageBox::error(this, i18n("Couldn't save the file '%1'.", fileName));
 			ok = false;
 		}
 	} else {
-		RESET_CURSOR;
 		KMessageBox::error(this, i18n("Couldn't open the file '%1' for writing.", fileName));
 		ok = false;
 	}
@@ -1814,11 +1078,10 @@ bool MainWin::save(const QString& fileName) {
 	delete file;
 
 #ifdef HAVE_PURPOSE
-	m_shareAction->setEnabled(true); // sharing is possible after the project was saved to a file
-	fillShareMenu();
+	m_actionsManager->m_shareAction->setEnabled(true); // sharing is possible after the project was saved to a file
+	m_actionsManager->fillShareMenu();
 #endif
 
-	RESET_CURSOR;
 	return ok;
 }
 
@@ -1925,9 +1188,9 @@ void MainWin::newSpreadsheet() {
 
 	// if the current active window is a workbook or one of its children,
 	// add the new matrix to the workbook
-	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = m_currentAspect->castTo<Workbook>();
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
+		workbook = m_currentAspect->parent<Workbook>();
 
 	if (workbook)
 		workbook->addChild(spreadsheet);
@@ -1936,6 +1199,16 @@ void MainWin::newSpreadsheet() {
 }
 
 /*!
+	adds a new Script to the project.
+*/
+#ifdef HAVE_SCRIPTING
+void MainWin::newScript() {
+	auto* action = static_cast<QAction*>(QObject::sender());
+	auto* script = new Script(i18n("%1", action->data().toString()), action->data().toString());
+	this->addAspectToProject(script);
+}
+#endif
+/*!
 	adds a new Matrix to the project.
 */
 void MainWin::newMatrix() {
@@ -1943,9 +1216,9 @@ void MainWin::newMatrix() {
 
 	// if the current active window is a workbook or one of its children,
 	// add the new matrix to the workbook
-	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = m_currentAspect->castTo<Workbook>();
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
+		workbook = m_currentAspect->parent<Workbook>();
 
 	if (workbook)
 		workbook->addChild(matrix);
@@ -1982,13 +1255,14 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 		return nullptr;
 
 	Spreadsheet* spreadsheet = nullptr;
-	if (m_currentAspect->type() == AspectType::Spreadsheet)
-		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+	if (auto* s = m_currentAspect->castTo<Spreadsheet>())
+		spreadsheet = s;
 	else {
 		// check whether one of spreadsheet columns is selected and determine the spreadsheet
-		auto* parent = m_currentAspect->parentAspect();
-		if (parent && parent->type() == AspectType::Spreadsheet)
-			spreadsheet = dynamic_cast<Spreadsheet*>(parent);
+		if (auto* parent = m_currentAspect->parentAspect()) {
+			if (auto* s = parent->castTo<Spreadsheet>())
+				spreadsheet = s;
+		}
 	}
 
 	return spreadsheet;
@@ -2000,6 +1274,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 */
 void MainWin::newNotebook() {
 	auto* action = static_cast<QAction*>(QObject::sender());
+	m_actionsManager->m_lastUsedNotebookAction = action;
 	auto* notebook = new Notebook(action->data().toString());
 	this->addAspectToProject(notebook);
 }
@@ -2013,9 +1288,9 @@ void MainWin::newNotebook() {
 */
 void MainWin::projectChanged() {
 	updateTitleBar();
-	m_newProjectAction->setEnabled(true);
-	m_saveAction->setEnabled(true);
-	m_undoAction->setEnabled(true);
+	m_actionsManager->m_newProjectAction->setEnabled(true);
+	m_actionsManager->m_saveAction->setEnabled(true);
+	m_actionsManager->m_undoAction->setEnabled(true);
 }
 
 void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
@@ -2053,25 +1328,26 @@ void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAs
 	//  - AbstractSimpleFilter
 	//  - columns in the data spreadsheet of a datapicker curve,
 	//    this can only happen when changing the error type and is done on the level of DatapickerImage
-	if (!aspect->inherits(AspectType::AbstractFilter) && !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve))
+
+	if (m_projectExplorer->currentAspect() != aspect)
+		return; // If the current aspect is not selected, there is no need to select the parent
+
+	if (!aspect->inherits<AbstractFilter>() && !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve))
 		m_projectExplorer->setCurrentAspect(parent);
 }
 
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
-	if (!part)
+	if (!part || !part->dockWidget())
 		return;
 
-	const auto* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-	auto* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
-	if (!datapicker)
-		datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
+	// don't do anything for children of Workbook and Datapicker, the dock widget is assigned to the parent
+	// TODO: everything seems to work correctly also without this check and return. do we really need it?
+	if (aspect->ancestor<Workbook>() || aspect->ancestor<Datapicker>())
+		return;
 
-	if (!workbook && !datapicker && part->dockWidgetExists()) {
-		ContentDockWidget* win = part->dockWidget();
-		if (win)
-			m_dockManagerContent->removeDockWidget(win);
-	}
+	if (auto* win = part->dockWidget())
+		m_dockManagerContent->removeDockWidget(win);
 }
 
 /*!
@@ -2095,7 +1371,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect* aspect) {
 	activateSubWindowForAspect(aspect);
 	m_suppressCurrentSubWindowChangedEvent = false;
 
-	updateGUI();
+	m_actionsManager->updateGUI();
 }
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
@@ -2103,26 +1379,15 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 	Q_ASSERT(m_dockManagerContent);
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
-		ContentDockWidget* win{nullptr};
-
-		// for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
-		const auto* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-		auto* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
-		if (!datapicker)
-			datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
-
-		if (workbook)
-			win = workbook->dockWidget();
-		else if (datapicker)
-			win = datapicker->dockWidget();
-		else
-			win = part->dockWidget();
+		ContentDockWidget* win = part->dockWidget();
 
 		auto* dock = m_dockManagerContent->findDockWidget(win->objectName());
 		if (dock == nullptr) {
 			// Add new dock if not found
 			ads::CDockAreaWidget* areaWidget{nullptr};
-			if (m_dockManagerContent->dockWidgetsMap().isEmpty() || !m_currentAspectDock) {
+			// when a dock area is empty, it is deleted and becomes invalid (for example after all its dock widgets are hidden/unpinned)
+			// so we also need to check that the dock area of the current aspect is valid
+			if (m_dockManagerContent->dockWidgetsMap().isEmpty() || !m_currentAspectDock || !m_currentAspectDockArea) {
 				// If only project explorer and properties dock exist place it right to the project explorer
 				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win);
 			} else {
@@ -2146,10 +1411,11 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 			dock->toggleView(true);
 
 		m_currentAspectDock = win;
+		m_currentAspectDockArea = m_currentAspectDock->dockAreaWidget();
 		m_dockManagerContent->setDockWidgetFocused(win);
 	} else {
 		// activate the mdiView of the parent, if a child was selected
-		const AbstractAspect* parent = aspect->parentAspect();
+		const auto* parent = aspect->parentAspect();
 		if (parent) {
 			activateSubWindowForAspect(parent);
 
@@ -2196,10 +1462,10 @@ void MainWin::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
 
-	menu->insertMenu(firstAction, m_newMenu);
+	menu->insertMenu(firstAction, m_actionsManager->m_newMenu);
 
 	menu->insertSeparator(firstAction);
-	menu->insertMenu(firstAction, m_visibilityMenu);
+	menu->insertMenu(firstAction, m_actionsManager->m_visibilityMenu);
 	menu->insertSeparator(firstAction);
 }
 
@@ -2213,35 +1479,33 @@ void MainWin::createFolderContextMenu(const Folder*, QMenu* menu) const {
 }
 
 void MainWin::undo() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->undo();
-	m_redoAction->setEnabled(true);
+	m_actionsManager->m_redoAction->setEnabled(true);
 
 	const int index = m_project->undoStack()->index();
 	if (index == 0)
-		m_undoAction->setEnabled(false);
+		m_actionsManager->m_undoAction->setEnabled(false);
 
 	const bool changed = (index != undoStackIndexLastSave);
-	m_saveAction->setEnabled(changed);
+	m_actionsManager->m_saveAction->setEnabled(changed);
 	m_project->setChanged(changed);
 	updateTitleBar();
-	RESET_CURSOR;
 }
 
 void MainWin::redo() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->redo();
-	m_undoAction->setEnabled(true);
+	m_actionsManager->m_undoAction->setEnabled(true);
 
 	const int index = m_project->undoStack()->index();
 	if (index == m_project->undoStack()->count())
-		m_redoAction->setEnabled(false);
+		m_actionsManager->m_redoAction->setEnabled(false);
 
 	const bool changed = (index != undoStackIndexLastSave);
-	m_saveAction->setEnabled(changed);
+	m_actionsManager->m_saveAction->setEnabled(changed);
 	m_project->setChanged(changed);
 	updateTitleBar();
-	RESET_CURSOR;
 }
 
 /*!
@@ -2276,120 +1540,21 @@ void MainWin::updateDockWindowVisibility() const {
 	}
 }
 
-void MainWin::toggleDockWidget(QAction* action) {
-	if (action->objectName() == QLatin1String("toggle_project_explorer_dock")) {
-		if (m_projectExplorerDock->isVisible())
-			m_projectExplorerDock->toggleView(false);
-		// 			toggleHideWidget(m_projectExplorerDock, true);
-		else
-			m_projectExplorerDock->toggleView(true);
-		// 			toggleShowWidget(m_projectExplorerDock, true);
-	} else if (action->objectName() == QLatin1String("toggle_properties_explorer_dock")) {
-		if (m_propertiesDock->isVisible())
-			m_propertiesDock->toggleView(false);
-		// 			toggleHideWidget(m_propertiesDock, false);
-		else
-			m_propertiesDock->toggleView(true);
-		// 			toggleShowWidget(m_propertiesDock, false);
-	} else if (action->objectName() == QLatin1String("toggle_worksheet_preview_dock"))
-		m_worksheetPreviewDock->toggleView(!m_worksheetPreviewDock->isVisible());
-}
-
-void MainWin::toggleStatusBar(bool checked) {
-	statusBar()->setVisible(checked); // show/hide statusbar
-	statusBar()->setEnabled(checked);
-	// enabled/disable memory info menu with statusbar
-	m_memoryInfoAction->setEnabled(checked);
-}
-
-void MainWin::toggleMemoryInfo() {
-	if (m_memoryInfoWidget) {
-		statusBar()->removeWidget(m_memoryInfoWidget);
-		delete m_memoryInfoWidget;
-		m_memoryInfoWidget = nullptr;
-	} else {
-		m_memoryInfoWidget = new MemoryWidget(statusBar());
-		statusBar()->addPermanentWidget(m_memoryInfoWidget);
-	}
-}
-
-void MainWin::toggleMenuBar(bool checked) {
-	menuBar()->setVisible(checked);
-}
-
 void MainWin::propertiesExplorerRequested() {
 	if (!m_propertiesDock->isVisible())
 		m_propertiesDock->toggleView(true);
 }
 
-/*
-void MainWin::toggleHideWidget(QWidget* widget, bool hideToLeft)
-{
-	auto* timeline = new QTimeLine(800, this);
-	timeline->setEasingCurve(QEasingCurve::InOutQuad);
-
-	connect(timeline, &QTimeLine::valueChanged, [=] {
-		const qreal value = timeline->currentValue();
-		const int widgetWidth = widget->width();
-		const int widgetPosY = widget->pos().y();
-
-		int moveX = 0;
-		if (hideToLeft) {
-			moveX = static_cast<int>(value * widgetWidth) - widgetWidth;
-		}
-		else {
-			const int frameRight = this->frameGeometry().right();
-			moveX = frameRight - static_cast<int>(value * widgetWidth);
-		}
-		widget->move(moveX, widgetPosY);
-	});
-	timeline->setDirection(QTimeLine::Backward);
-	timeline->start();
-
-	connect(timeline, &QTimeLine::finished, [widget] {widget->hide();});
-	connect(timeline, &QTimeLine::finished, timeline, &QTimeLine::deleteLater);
-}
-
-void MainWin::toggleShowWidget(QWidget* widget, bool showToRight)
-{
-	auto* timeline = new QTimeLine(800, this);
-	timeline->setEasingCurve(QEasingCurve::InOutQuad);
-
-	connect(timeline, &QTimeLine::valueChanged, [=]() {
-		if (widget->isHidden()) {
-			widget->show();
-		}
-		const qreal value = timeline->currentValue();
-		const int widgetWidth = widget->width();
-		const int widgetPosY = widget->pos().y();
-		int moveX = 0;
-
-		if (showToRight) {
-			moveX = static_cast<int>(value * widgetWidth) - widgetWidth;
-		}
-		else {
-			const int frameRight = this->frameGeometry().right();
-			moveX = frameRight - static_cast<int>(value * widgetWidth);
-		}
-		widget->move(moveX, widgetPosY);
-	});
-
-	timeline->setDirection(QTimeLine::Forward);
-	timeline->start();
-
-	connect(timeline, &QTimeLine::finished, timeline, &QTimeLine::deleteLater);
-}
-*/
 void MainWin::projectExplorerDockVisibilityChanged(bool visible) {
-	m_projectExplorerDockAction->setChecked(visible);
+	m_actionsManager->m_projectExplorerDockAction->setChecked(visible);
 }
 
 void MainWin::propertiesDockVisibilityChanged(bool visible) {
-	m_propertiesDockAction->setChecked(visible);
+	m_actionsManager->m_propertiesDockAction->setChecked(visible);
 }
 
 void MainWin::worksheetPreviewDockVisibilityChanged(bool visible) {
-	m_worksheetPreviewAction->setChecked(visible);
+	m_actionsManager->m_worksheetPreviewAction->setChecked(visible);
 }
 
 void MainWin::cursorDockVisibilityChanged(bool visible) {
@@ -2410,7 +1575,10 @@ void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 			cursorWidget = new CursorDock(cursorDock);
 			cursorDock->setWidget(cursorWidget);
 			connect(cursorDock, &ads::CDockWidget::viewToggled, this, &MainWin::cursorDockVisibilityChanged);
-			m_dockManagerMain->addDockWidget(ads::CenterDockWidgetArea, cursorDock, m_propertiesDock->dockAreaWidget());
+			if (m_propertiesDock->sideTabWidget())
+				m_dockManagerMain->addAutoHideDockWidget(m_propertiesDock->sideTabWidget()->sideBarLocation(), cursorDock);
+			else
+				m_dockManagerMain->addDockWidget(ads::CenterDockWidgetArea, cursorDock, m_propertiesDock->dockAreaWidget());
 		} else
 			focusCursorDock();
 
@@ -2426,39 +1594,6 @@ void MainWin::focusCursorDock() {
 		cursorDock->toggleView(true);
 		m_dockManagerMain->setDockWidgetFocused(cursorDock);
 	}
-}
-
-#ifdef HAVE_PURPOSE
-void MainWin::fillShareMenu() {
-	if (!m_shareMenu)
-		return;
-
-	m_shareMenu->clear(); // clear the menu, it will be refilled with the new file URL below
-	QMimeType mime;
-	m_shareMenu->model()->setInputData(
-		QJsonObject{{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray{QUrl::fromLocalFile(m_project->fileName()).toString()}}});
-	m_shareMenu->reload();
-}
-
-void MainWin::shareActionFinished(const QJsonObject& output, int error, const QString& message) {
-	if (error)
-		KMessageBox::error(this, i18n("There was a problem sharing the project: %1", message), i18n("Share"));
-	else {
-		const QString url = output[QStringLiteral("url")].toString();
-		if (url.isEmpty())
-			statusBar()->showMessage(i18n("Project shared successfully"));
-		else
-			KMessageBox::information(widget(),
-									 i18n("You can find the shared project at: <a href=\"%1\">%1</a>", url),
-									 i18n("Share"),
-									 QString(),
-									 KMessageBox::Notify | KMessageBox::AllowLink);
-	}
-}
-#endif
-
-void MainWin::toggleFullScreen(bool t) {
-	m_fullScreenAction->setFullScreen(this, t);
 }
 
 void MainWin::closeEvent(QCloseEvent* event) {
@@ -2495,80 +1630,161 @@ void MainWin::dropEvent(QDropEvent* event) {
 		event->ignore();
 }
 
+/*!
+ * set the default locale of the application to the locale specified in the application settings for the number format and options.
+ */
 void MainWin::updateLocale() {
-	// Set default locale
-	auto numberLocaleLanguage =
-		static_cast<QLocale::Language>(Settings::group(QStringLiteral("Settings_General"))
-										   .readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
+	// language used for the number format
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
+	auto language = static_cast<QLocale::Language>(group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::Language::AnyLanguage)));
+	QLocale newLocale(language == QLocale::AnyLanguage ? m_defaultSystemLocale : language);
 
-	auto numberOptions = static_cast<QLocale::NumberOptions>(
-		Settings::group(QStringLiteral("Settings_General")).readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
-
-	QLocale l(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);
-	l.setNumberOptions(numberOptions);
-	QLocale::setDefault(l);
+	// number options
+	auto numberOptions = static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
+	newLocale.setNumberOptions(numberOptions);
+	QLocale::setDefault(newLocale);
 }
 
-void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes) {
+/*!
+ * used to migrate application settings if there were changes between the releases.
+ */
+void MainWin::migrateSettings() {
+	// migrate the settings for the number format for versions older than 2.12 that had the decimal separator only:
+	auto group = Settings::group(QStringLiteral("Settings_General"));
+	if (group.hasKey(QLatin1String("DecimalSeparatorLocale"))) {
+		// map from the old enum values for the decimal separator to new values of the used languages for the number format,
+		// use languages that don't use any group separator for this.
+		// old enum class DecimalSeparator { Dot, Comma, Arabic, Automatic };
+		QLocale::Language language(QLocale::AnyLanguage); // AnyLanguage was used for 'Automatic'
+		int decimalSeparator = group.readEntry(QLatin1String("DecimalSeparatorLocale"), 0);
+		if (decimalSeparator == 0) // Dot
+			language = QLocale::English;
+		else if (decimalSeparator == 1) // Comma
+			language = QLocale::German;
+		else if (decimalSeparator == 2) // Arabic
+			language = QLocale::Arabic;
+
+		// delete the old entry and write the new one
+		group.deleteEntry(QLatin1String("DecimalSeparatorLocale"));
+		group.writeEntry(QLatin1String("NumberFormat"), static_cast<int>(language));
+	}
+}
+
+void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
+	WAIT_CURSOR_AUTO_RESET;
 	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
-	// title bar
-	MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
-	if (titleBarMode != m_titleBarMode) {
-		m_titleBarMode = titleBarMode;
-		updateTitleBar();
+	// handle general settings
+	// TODO: handle only those settings that were really changed, similar to how it's done for the nubmer format, etc. further below
+	if (changes.contains(Settings::Type::General)) {
+		// title bar
+		MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
+		if (titleBarMode != m_titleBarMode) {
+			m_titleBarMode = titleBarMode;
+			updateTitleBar();
+		}
+
+		// window visibility
+		auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
+		if (m_project && (vis != m_project->dockVisibility())) {
+			if (vis == Project::DockVisibility::folderOnly)
+				m_actionsManager->m_visibilityFolderAction->setChecked(true);
+			else if (vis == Project::DockVisibility::folderAndSubfolders)
+				m_actionsManager->m_visibilitySubfolderAction->setChecked(true);
+			else
+				m_actionsManager->m_visibilityAllAction->setChecked(true);
+			m_project->setDockVisibility(vis);
+		}
+
+		// autosave
+		bool autoSave = group.readEntry("AutoSave", 0);
+		if (m_autoSaveActive != autoSave) {
+			m_autoSaveActive = autoSave;
+			if (autoSave)
+				m_autoSaveTimer.start();
+			else
+				m_autoSaveTimer.stop();
+		}
+
+		int interval = group.readEntry("AutoSaveInterval", 1);
+		interval *= 60 * 1000;
+		if (interval != m_autoSaveTimer.interval())
+			m_autoSaveTimer.setInterval(interval);
 	}
 
-	// window visibility
-	auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
-	if (m_project && (vis != m_project->dockVisibility())) {
-		if (vis == Project::DockVisibility::folderOnly)
-			m_visibilityFolderAction->setChecked(true);
-		else if (vis == Project::DockVisibility::folderAndSubfolders)
-			m_visibilitySubfolderAction->setChecked(true);
-		else
-			m_visibilityAllAction->setChecked(true);
-		m_project->setDockVisibility(vis);
-	}
+	// update the number format in all visible dock widgets, worksheet elements and spreadsheets, if changed
+	if (changes.contains(Settings::Type::General_Number_Format)) {
+		updateLocale(); // set the new default runtime locale
 
-	// autosave
-	bool autoSave = group.readEntry("AutoSave", 0);
-	if (m_autoSaveActive != autoSave) {
-		m_autoSaveActive = autoSave;
-		if (autoSave)
-			m_autoSaveTimer.start();
-		else
-			m_autoSaveTimer.stop();
-	}
+		// dock widgets
+		if (stackedWidget) {
+			for (int i = 0; i < stackedWidget->count(); ++i) {
+				auto* widget = stackedWidget->widget(i);
+				auto* dock = dynamic_cast<BaseDock*>(widget);
+				if (dock)
+					dock->updateLocale();
+				else {
+					auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
+					if (labelWidget)
+						labelWidget->updateLocale();
+				}
+			}
+		}
 
-	int interval = group.readEntry("AutoSaveInterval", 1);
-	interval *= 60 * 1000;
-	if (interval != m_autoSaveTimer.interval())
-		m_autoSaveTimer.setInterval(interval);
+		if (m_project) {
+			// worksheet elements
+			const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (const auto* worksheet : worksheets) {
+				if (worksheet->viewCreated()) {
+					const auto& elements = worksheet->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+					for (auto* element : elements)
+						element->updateLocale();
+				}
+			}
 
-	// update the locale and the units in the dock widgets
-	updateLocale();
-	if (stackedWidget) {
-		for (int i = 0; i < stackedWidget->count(); ++i) {
-			auto* widget = stackedWidget->widget(i);
-			auto* dock = dynamic_cast<BaseDock*>(widget);
-			if (dock) {
-				dock->updateLocale();
-				dock->updateUnits();
-			} else {
-				auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
-				if (labelWidget)
-					labelWidget->updateUnits();
+			// spreadsheets
+			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* spreadsheet : spreadsheets) {
+				if (spreadsheet->viewCreated())
+					spreadsheet->updateLocale();
+			}
+
+			// matrices
+			const auto& matrices = m_project->children<Matrix>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* matrix : matrices) {
+				if (matrix->viewCreated())
+					matrix->updateLocale();
 			}
 		}
 	}
 
-	// update spreadsheet header
-	if (m_project) {
-		const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
-		for (auto* spreadsheet : spreadsheets) {
-			spreadsheet->updateHorizontalHeader();
-			spreadsheet->updateLocale();
+	// update units in all dock widgets, if changed
+	if (changes.contains(Settings::Type::General_Units)) {
+		if (stackedWidget) {
+			for (int i = 0; i < stackedWidget->count(); ++i) {
+				auto* widget = stackedWidget->widget(i);
+				auto* dock = dynamic_cast<BaseDock*>(widget);
+				if (dock)
+					dock->updateUnits();
+				else {
+					auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
+					if (labelWidget)
+						labelWidget->updateUnits();
+				}
+			}
+		}
+	}
+
+	// update the size of the preview thumbnails
+	if (changes.contains(Settings::Type::Worksheet))
+		m_worksheetPreviewWidget->updatePreviewSize();
+
+	if (changes.contains(Settings::Type::Spreadsheet)) {
+		// update spreadsheet header
+		if (m_project) {
+			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* spreadsheet : spreadsheets)
+				spreadsheet->updateHorizontalHeader();
 		}
 	}
 
@@ -2577,8 +1793,10 @@ void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes)
 	// 	m_showWelcomeScreen = showWelcomeScreen;
 
 #ifdef HAVE_CANTOR_LIBS
-	if (changes.contains(SettingsDialog::SettingsType::Notebook))
-		updateNotebookActions();
+	if (changes.contains(Settings::Type::Notebook))
+		m_actionsManager->updateNotebookActions();
+#else
+	Q_UNUSED(changes)
 #endif
 }
 
@@ -2588,8 +1806,21 @@ void MainWin::openDatasetExample() {
 }
 
 /***************************************************************************************/
-/************************************** dialogs ***************************************/
+/************************************** dialogs ****************************************/
 /***************************************************************************************/
+/*!
+  shows the dialog with the example projects.
+*/
+void MainWin::exampleProjectsDialog() {
+	auto* dlg = new ExamplesDialog(this);
+	if (dlg->exec() == QDialog::Accepted) {
+		const auto& path = dlg->path();
+		if (!path.isEmpty())
+			openProject(path);
+	}
+	delete dlg;
+}
+
 /*!
   shows the dialog with the Undo-history.
 */
@@ -2607,26 +1838,50 @@ void MainWin::historyDialog() {
 	// disable undo/redo-actions if the history was cleared
 	//(in both cases, when accepted or rejected in the dialog)
 	if (m_project->undoStack()->count() == 0) {
-		m_undoAction->setEnabled(false);
-		m_redoAction->setEnabled(false);
+		m_actionsManager->m_undoAction->setEnabled(false);
+		m_actionsManager->m_redoAction->setEnabled(false);
 	}
 }
 
 /*!
-  Opens the dialog to import data to the selected workbook, spreadsheet or matrix
+  Opens the dialog to import data into the selected container.
 */
 void MainWin::importFileDialog(const QString& fileName) {
-	DEBUG(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString());
 	auto* dlg = new ImportFileDialog(this, false, fileName);
 
 	// select existing container
-	if (m_currentAspect->type() == AspectType::Spreadsheet || m_currentAspect->type() == AspectType::Matrix || m_currentAspect->type() == AspectType::Workbook)
+	const auto type = m_currentAspect->type();
+	if (type == AspectType::Spreadsheet || type == AspectType::Matrix || type == AspectType::Workbook)
 		dlg->setCurrentIndex(m_projectExplorer->currentIndex());
-	else if (m_currentAspect->type() == AspectType::Column && m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
+	else if (type == AspectType::Column && m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
 		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
 	dlg->exec();
 	DEBUG(Q_FUNC_INFO << " DONE");
+}
+
+/*!
+  Opens the dialog to import multiple files in a directory into the selected container.
+*/
+void MainWin::importDirDialog(const QString& dir) {
+	auto* dlg = new ImportFileDialog(this, false /* live source */, dir, true /* import directory */);
+
+	// when importing a directory, the data is imported into multiple spreadsheet or matrix objects that are
+	// created as children of the current parent folder/project or workbook.
+	// select the current folder or workbook or use the parent folder of the current aspec if none of them is selected
+	AbstractAspect* targetAspect = nullptr;
+	const auto type = m_currentAspect->type();
+	if (type == AspectType::Folder || type == AspectType::Workbook)
+		targetAspect = m_currentAspect;
+	else {
+		targetAspect = m_currentAspect->parent<Folder>();
+		if (!targetAspect)
+			targetAspect = m_project;
+	}
+
+	dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(targetAspect));
+	dlg->exec();
 }
 
 void MainWin::importKaggleDatasetDialog() {
@@ -2635,12 +1890,15 @@ void MainWin::importKaggleDatasetDialog() {
 	if (ImportKaggleDatasetDialog::checkKaggle()) {
 		auto* dlg = new ImportKaggleDatasetDialog(this);
 		dlg->exec();
-	} else
+	} else {
 		QMessageBox::critical(this,
-							  i18n("Running Kaggle CLI tool failed"),
-							  i18n("Please follow the instructions on "
-								   "<a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
-								   "to setup the Kaggle CLI tool."));
+							  i18n("Kaggle CLI tool not found"),
+							  i18n("Provide the path to the Kaggle CLI tool in the application settings and try again."));
+		auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
+		connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
+		dlg->navigateTo(Settings::Type::Datasets);
+		dlg->exec();
+	}
 
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
@@ -2663,7 +1921,7 @@ void MainWin::importProjectDialog() {
 	DEBUG(Q_FUNC_INFO);
 
 	ImportProjectDialog::ProjectType type;
-	if (QObject::sender() == m_importOpjAction)
+	if (QObject::sender() == m_actionsManager->m_importOpjAction)
 		type = ImportProjectDialog::ProjectType::Origin;
 	else
 		type = ImportProjectDialog::ProjectType::LabPlot;
@@ -2751,7 +2009,7 @@ void MainWin::newLiveDataSource() {
 }
 
 void MainWin::addAspectToProject(AbstractAspect* aspect) {
-	const QModelIndex& index = m_projectExplorer->currentIndex();
+	const auto& index = m_projectExplorer->currentIndex();
 	if (index.isValid()) {
 		auto* parent = static_cast<AbstractAspect*>(index.internalPointer());
 #ifdef HAVE_MQTT
@@ -2769,38 +2027,16 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 }
 
 void MainWin::settingsDialog() {
-	auto* dlg = new SettingsDialog(this);
+	auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
 	connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
-	// 	connect (dlg, &SettingsDialog::resetWelcomeScreen, this, &MainWin::resetWelcomeScreen);
 	dlg->exec();
 }
 
 #ifdef HAVE_CANTOR_LIBS
-void MainWin::updateNotebookActions() {
-	auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
-	unplugActionList(QLatin1String("backends_list"));
-	QList<QAction*> newBackendActions;
-	menu->clear();
-	for (auto* backend : Cantor::Backend::availableBackends()) {
-		if (!backend->isEnabled())
-			continue;
-
-		auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
-		action->setData(backend->name());
-		action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
-		actionCollection()->addAction(QLatin1String("notebook_") + backend->name(), action);
-		connect(action, &QAction::triggered, this, &MainWin::newNotebook);
-		newBackendActions << action;
-		menu->addAction(action);
-		m_newNotebookMenu->addAction(action);
-	}
-
-	plugActionList(QLatin1String("backends_list"), newBackendActions);
-
-	menu->addSeparator();
-	menu->addAction(m_configureCASAction);
-
-	m_newNotebookMenu->addSeparator();
-	m_newNotebookMenu->addAction(m_configureCASAction);
+void MainWin::settingsNotebookDialog() {
+	auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
+	connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
+	dlg->navigateTo(Settings::Type::Notebook);
+	dlg->exec();
 }
 #endif

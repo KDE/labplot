@@ -200,7 +200,7 @@ bool ParetoChart::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
-bool ParetoChart::usingColumn(const Column* column) const {
+bool ParetoChart::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const ParetoChart);
 	return (d->dataColumn == column);
 }
@@ -483,7 +483,7 @@ void ParetoChart::loadThemeConfig(const KConfig& config) {
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);
-	QColor themeColor = plot->themeColorPalette(index);
+	QColor themeColor = plot->plotColor(index);
 
 	Q_D(ParetoChart);
 	d->suppressRecalc = true;
@@ -491,7 +491,7 @@ void ParetoChart::loadThemeConfig(const KConfig& config) {
 	d->linePlot->line()->loadThemeConfig(group, themeColor);
 	d->linePlot->symbol()->loadThemeConfig(group, themeColor);
 
-	themeColor = plot->themeColorPalette(index + 1);
+	themeColor = plot->plotColor(index + 1);
 
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

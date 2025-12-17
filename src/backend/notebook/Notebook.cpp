@@ -9,6 +9,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#ifdef HAVE_CANTOR_LIBS
+
 #include "Notebook.h"
 #include "VariableParser.h"
 #include "backend/core/Project.h"
@@ -53,7 +55,7 @@ bool Notebook::init(QByteArray* content) {
 																				 QVariantList() << m_backendName << QLatin1String("--noprogress"));
 
 	if (!result) {
-		WARN("Could not find cantorpart part");
+		WARN("Could not find cantorpart Part");
 		return false;
 	} else {
 		m_part = result.plugin;
@@ -74,7 +76,6 @@ bool Notebook::init(QByteArray* content) {
 		connect(m_worksheetAccess, SIGNAL(modified()), this, SLOT(modified()));
 
 		// Cantor's session
-#ifdef HAVE_CANTOR_LIBS
 		m_session = m_worksheetAccess->session();
 		if (!m_session) {
 			WARN("Could not create the session for backend " << STDSTRING(m_backendName))
@@ -92,20 +93,20 @@ bool Notebook::init(QByteArray* content) {
 		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &Notebook::modelReset);
 
 		// default settings
-		const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
+		const auto group = Settings::group(QStringLiteral("Settings_Notebook"));
 
 		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
 		// and we need to go through the actions provided in cantor_part.
 		//-> redesign this! expose Cantor's Worksheet directly and add more settings here.
 		auto* action = m_part->action(QStringLiteral("enable_highlighting"));
 		if (action) {
-			bool value = group.readEntry(QLatin1String("SyntaxHighlighting"), false);
+			bool value = group.readEntry(QLatin1String("SyntaxHighlighting"), true);
 			action->setChecked(value);
 		}
 
 		action = m_part->action(QStringLiteral("enable_completion"));
 		if (action) {
-			bool value = group.readEntry(QLatin1String("SyntaxCompletion"), false);
+			bool value = group.readEntry(QLatin1String("SyntaxCompletion"), true);
 			action->setChecked(value);
 		}
 
@@ -123,13 +124,12 @@ bool Notebook::init(QByteArray* content) {
 
 		action = m_part->action(QStringLiteral("enable_animations"));
 		if (action) {
-			bool value = group.readEntry(QLatin1String("Animations"), false);
+			bool value = group.readEntry(QLatin1String("Animations"), true);
 			action->setChecked(value);
 		}
 
 		// bool value = group.readEntry(QLatin1String("ReevaluateEntries"), false);
 		// value = group.readEntry(QLatin1String("AskConfirmation"), true);
-#endif
 	}
 
 	return true;
@@ -246,16 +246,29 @@ void Notebook::rowsAboutToBeRemoved(const QModelIndex& /*parent*/, int first, in
 }
 
 QList<Cantor::PanelPlugin*> Notebook::getPlugins() {
+	DEBUG(Q_FUNC_INFO)
 	if (!m_pluginsLoaded) {
 		auto* handler = new Cantor::PanelPluginHandler(this);
 		handler->loadPlugins();
-		m_plugins = handler->activePluginsForSession(m_session, Cantor::PanelPluginHandler::PanelStates());
-		for (auto* plugin : m_plugins)
+
+		if (m_plugins.isEmpty())
+			INFO(Q_FUNC_INFO << ", no plugins yet.")
+
+		auto states = Cantor::PanelPluginHandler::PanelStates();
+		if (!m_session) {
+			WARN(Q_FUNC_INFO << ", WARNING: no session!")
+		} else
+			m_plugins = handler->activePluginsForSession(m_session, states);
+
+		for (auto* plugin : m_plugins) {
+			INFO(Q_FUNC_INFO << ", connecting plugin")
 			plugin->connectToShell(m_part);
+		}
 
 		m_pluginsLoaded = true;
 	}
 
+	DEBUG(Q_FUNC_INFO << ", DONE")
 	return m_plugins;
 }
 
@@ -264,10 +277,8 @@ KParts::ReadWritePart* Notebook::part() {
 }
 
 QIcon Notebook::icon() const {
-#ifdef HAVE_CANTOR_LIBS
 	if (m_session)
 		return QIcon::fromTheme(m_session->backend()->icon());
-#endif
 	return {};
 }
 
@@ -283,7 +294,6 @@ QWidget* Notebook::view() const {
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 
 		// set the current path in the session to the path of the project file
-#ifdef HAVE_CANTOR_LIBS
 		if (m_session) {
 			const Project* project = const_cast<Notebook*>(this)->project();
 			const QString& fileName = project->fileName();
@@ -292,7 +302,6 @@ QWidget* Notebook::view() const {
 				m_session->setWorksheetPath(fi.filePath());
 			}
 		}
-#endif
 	}
 #endif
 	return m_partView;
@@ -310,12 +319,16 @@ QMenu* Notebook::createContextMenu() {
 }
 
 void Notebook::fillColumnContextMenu(QMenu* menu, Column* column) {
+	fillColumnsContextMenu(menu, {column});
+}
+
+void Notebook::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& columns) {
 #ifndef SDK
 	if (m_view)
-		m_view->fillColumnContextMenu(menu, column);
+		m_view->fillColumnsContextMenu(menu, columns);
 #else
 	Q_UNUSED(menu)
-	Q_UNUSED(column)
+	Q_UNUSED(columns)
 #endif
 }
 
@@ -456,3 +469,5 @@ bool Notebook::load(XmlStreamReader* reader, bool preview) {
 
 	return true;
 }
+
+#endif // HAVE_CANTOR_LIBS

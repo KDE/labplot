@@ -20,19 +20,21 @@
  */
 FunctionsWidget::FunctionsWidget(QWidget* parent)
 	: QWidget(parent) {
+	using Groups = Parsing::FunctionGroups;
+
 	ui.setupUi(this);
 	ui.bInsert->setIcon(QIcon::fromTheme(QStringLiteral("edit-paste")));
 	ui.bCancel->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
 	m_expressionParser = ExpressionParser::getInstance();
 
 	QVector<int> separators;
-	for (int i = 0; i < (int)FunctionGroups::END; i++) {
-		const auto group = static_cast<FunctionGroups>(i);
-		ui.cbGroup->addItem(FunctionGroupsToString(group), (int)i);
+	for (int i = 0; i < (int)Groups::END; i++) {
+		const auto group = static_cast<Groups>(i);
+		ui.cbGroup->addItem(Parsing::FunctionGroupsToString(group), (int)i);
 
 		// Add separator before these groups
-		if (group == FunctionGroups::ColumnStatistics || group == FunctionGroups::AiryFunctionsAndDerivatives || group == FunctionGroups::RandomNumberGenerator
-			|| group == FunctionGroups::GaussianDistribution)
+		if (group == Groups::ColumnStatistics || group == Groups::AiryFunctionsAndDerivatives || group == Groups::RandomNumberGenerator
+			|| group == Groups::GaussianDistribution)
 			separators.append(i);
 	}
 
@@ -52,7 +54,7 @@ FunctionsWidget::FunctionsWidget(QWidget* parent)
 		this->groupChanged(0);
 	});
 
-	// set the minimum size to show the longest funciton description without any horizontal scroll bar
+	// set the minimum size to show the longest function description without any horizontal scroll bar
 	const QStringList& names = m_expressionParser->functionsDescriptions();
 	QString maxName;
 	int maxLength = 0;
@@ -80,15 +82,15 @@ void FunctionsWidget::groupChanged(int index) {
 		return; // separator selected
 
 	bool ok;
-	const auto groupIndex = static_cast<FunctionGroups>(d.toInt(&ok));
+	const auto groupIndex = static_cast<Parsing::FunctionGroups>(d.toInt(&ok));
 	if (!ok)
 		return;
 
 	static const QStringList& functions = m_expressionParser->functions();
 	static const QStringList& names = m_expressionParser->functionsDescriptions();
-	static const QVector<FunctionGroups>& indices = m_expressionParser->functionsGroupIndices();
+	static const QVector<Parsing::FunctionGroups>& indices = m_expressionParser->functionsGroupIndices();
 
-	QDEBUG(Q_FUNC_INFO << ", index = " << FunctionGroupsToString(groupIndex));
+	QDEBUG(Q_FUNC_INFO << ", index = " << Parsing::FunctionGroupsToString(groupIndex));
 
 	ui.lwFunctions->clear();
 	for (int i = 0; i < names.size(); ++i) {

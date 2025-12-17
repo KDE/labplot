@@ -8,6 +8,7 @@
 */
 
 #include "MatioFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/MatioFilter.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -374,7 +375,7 @@ void MatioFilterTest::testImportStructPortion() {
 }
 
 void MatioFilterTest::testImportCell() {
-	QSKIP("Failing because of AddressSanitizer: heap-buffer-overflow");
+	QSKIP("Failing because of AddressSanitizer: heap-buffer-overflow", QTest::SkipSingle);
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 

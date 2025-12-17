@@ -167,13 +167,13 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 
 		info = i18n(
 			"Multiple layers are used in Origin to either implement multiple plots or multiple axes on the same plot "
-			"(see <a href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details)."
+			"(see <a href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details).<br>"
 			"LabPlot can process only one type at the same time."
 			"<br><br>"
 			"Specify how to import multi-layered graphs in the selected project:"
 			"<ul>"
 			"<li>As Plot Area - a new plot area is created for every layer.</li>"
-			"<li>As Coordinate System - a new coordinate system (data range) on the same plot area is created for every layer</li>"
+			"<li>As Coordinate System - a new coordinate system (data range) on the same plot area is created for every layer.</li>"
 			"</ul>");
 
 		ui.lGraphLayer->setWhatsThis(info);
@@ -231,13 +231,13 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 
 	const auto& indexes = ui.tvPreview->selectionModel()->selectedIndexes();
 
-	// convert the model indexes to string pathes:
+	// convert the model indexes to string paths:
 	QStringList selectedPathes;
 	for (int i = 0; i < indexes.size() / 4; ++i) {
 		const auto& index = indexes.at(i * 4);
 		const auto* aspect = static_cast<const AbstractAspect*>(index.internalPointer());
 
-		// path of the current aspect and the pathes of all aspects it depends on
+		// path of the current aspect and the paths of all aspects it depends on
 		selectedPathes << aspect->path();
 		QDEBUG(" aspect path: " << aspect->path());
 		for (const auto* depAspect : aspect->dependsOn())
@@ -373,7 +373,7 @@ void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 */
 bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
 	for (auto type : m_projectParser->topLevelClasses()) {
-		if (aspect->inherits(type))
+		if (aspect->inherits(AbstractAspect::typeName(type).data()))
 			return true;
 	}
 	return false;

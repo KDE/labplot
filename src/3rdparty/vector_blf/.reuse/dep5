@@ -1,0 +1,50 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Vector::BLF
+Upstream-Contact: Tobias Lorenz <tobias.lorenz@gmx.net>
+Source: http://tomilo.org/vector_blf.html
+
+# Sample paragraph, commented out:
+#
+# Files: src/*
+# Copyright: $YEAR $NAME <$CONTACT>
+# License: ...
+
+Files: CHANGELOG.md
+Copyright: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+License: GPL-3.0-or-later
+
+Files: README.md
+Copyright: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+License: GPL-3.0-or-later
+
+Files: src/Vector/BLF/tests/cccc/cccc.opt
+Copyright: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+License: GPL-3.0-or-later
+
+Files: src/Vector/BLF/tests/unittests/errors/*.blf
+Copyright: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+License: GPL-3.0-or-later
+
+Files: src/Vector/BLF/tests/unittests/events_from_binlog/*.blf
+Copyright: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+License: GPL-3.0-or-later
+
+Files: src/Vector/BLF/tests/unittests/events_from_converter/*.blf
+Copyright: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+License: GPL-3.0-or-later
+
+Files: src/Vector/BLF/tests/unittests/events_from_converter/sources/*.asc
+Copyright: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+License: GPL-3.0-or-later
+
+Files: src/Vector/BLF/tests/unittests/lobj/*.asc
+Copyright: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+License: GPL-3.0-or-later
+
+Files: src/Vector/BLF/tests/unittests/lobj/*.lobj
+Copyright: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+License: GPL-3.0-or-later
+
+Files: src/Vector/BLF/Vector_BLF.pc.in
+Copyright: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+License: GPL-3.0-or-later

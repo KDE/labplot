@@ -4,18 +4,19 @@
 	Description       	 : A tree view for displaying and editing an AspectTreeModel.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ProjectExplorer.h"
-#include "backend/core/AbstractPart.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/notebook/Notebook.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "frontend/core/ContentDockWidget.h"
 
@@ -33,7 +34,6 @@
 #include <QContextMenuEvent>
 #include <QDrag>
 #include <QHeaderView>
-#include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
 #include <QMimeData>
@@ -149,61 +149,109 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 	if (!index.isValid())
 		m_treeView->clearSelection();
 
+	// for the current selection determine the selected aspects
 	const auto& items = m_treeView->selectionModel()->selectedIndexes();
+	const int selectedAspectsCount = items.size() / 4; // 4 columns in the tree view, divide by 4 to get the number of rows/aspects
+	QVector<AbstractAspect*> selectedAspects;
+	for (int i = 0; i < selectedAspectsCount; ++i) {
+		const auto& index = items.at(i * 4);
+		selectedAspects << static_cast<AbstractAspect*>(index.internalPointer());
+	}
+
 	QMenu* menu = nullptr;
-	if (items.size() / 4 == 1) {
-		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	if (selectedAspectsCount == 1) { // one single aspect is selected
+		// show aspects own context menu
+		auto* aspect = selectedAspects.constFirst();
 		menu = aspect->createContextMenu();
 
+		// if the top-level project item is selected, add actions to expand/collapse the tree
 		if (aspect == m_project) {
 			auto* firstAction = menu->actions().at(2);
 			menu->insertSeparator(firstAction);
 			menu->insertAction(firstAction, expandTreeAction);
 			menu->insertAction(firstAction, collapseTreeAction);
 		}
-	} else {
+	} else if (selectedAspectsCount > 1) { // multiple aspects are selected
 		menu = new QMenu(this);
+		// add "expand/collapse" actions if the selected aspects have children
+		bool hasChildren = false;
+		for (const auto* aspect : selectedAspects) {
+			if (aspect->childCount<AbstractAspect>()) {
+				hasChildren = true;
+				break;
+			}
+		}
 
-		if (items.size() / 4 > 1) {
-			// add "expand/collapse" entries if the selected indices have children
-			bool hasChildren = false;
-			for (int i = 0; i < items.size() / 4; ++i) {
-				const auto& index = items.at(i * 4);
-				const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-				if (aspect->childCount<AbstractAspect>()) {
-					hasChildren = true;
+		if (hasChildren) {
+			menu->addAction(expandSelectedTreeAction);
+			menu->addAction(collapseSelectedTreeAction);
+			menu->addSeparator();
+		} else {
+			// check if columns from the same parent were selected only
+			// and show parent's context menu for columns to allow plot data, etc.
+			bool columnsOnly = true;
+			bool sameParent = true;
+			AbstractAspect* parentAspect = nullptr;
+			for (const auto* aspect : selectedAspects) {
+				if (aspect->type() != AspectType::Column) {
+					columnsOnly = false;
 					break;
 				}
+
+				if (!parentAspect)
+					parentAspect = aspect->parentAspect();
+				else {
+					if (aspect->parentAspect() != parentAspect) {
+						sameParent = false;
+						break;
+					}
+					parentAspect = aspect->parentAspect();
+				}
 			}
-			if (hasChildren) {
-				menu->addAction(expandSelectedTreeAction);
-				menu->addAction(collapseSelectedTreeAction);
+
+			if (columnsOnly && sameParent) {
+				if (parentAspect->type() == AspectType::Spreadsheet) {
+					auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
+					spreadsheet->fillColumnsContextMenu(menu);
+				} else if (parentAspect->type() == AspectType::Notebook) {
+#ifdef HAVE_CANTOR_LIBS
+					auto* notebook = static_cast<Notebook*>(parentAspect);
+					QVector<Column*> columns;
+					for (const auto* aspect : selectedAspects) {
+						const auto* column = static_cast<const Column*>(aspect);
+						columns << const_cast<Column*>(column);
+					}
+					notebook->fillColumnsContextMenu(menu, columns);
+#endif
+				}
 				menu->addSeparator();
 			}
-
-			menu->addAction(deleteSelectedTreeAction);
-		} else {
-			QMenu* projectMenu = m_project->createContextMenu();
-			projectMenu->setTitle(m_project->name());
-			menu->addMenu(projectMenu);
-
-			menu->addSeparator();
-			menu->addAction(expandTreeAction);
-			menu->addAction(collapseTreeAction);
-			menu->addSeparator();
-			menu->addAction(toggleFilterAction);
-
-			// Menu for showing/hiding the columns in the tree view
-			QMenu* columnsMenu = menu->addMenu(i18n("Columns"));
-			columnsMenu->addAction(showAllColumnsAction);
-			columnsMenu->addSeparator();
-			for (auto* action : qAsConst(list_showColumnActions))
-				columnsMenu->addAction(action);
-
-			// TODO
-			// Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
-			//  QMenu* objectsMenu = menu->addMenu(i18n("Show/Hide objects"));
 		}
+
+		menu->addAction(deleteSelectedTreeAction);
+	} else if (selectedAspectsCount == 0) {
+		// no aspects selected, show the actions relevant for the project explorer itself only
+		menu = new QMenu(this);
+		QMenu* projectMenu = m_project->createContextMenu();
+		projectMenu->setTitle(m_project->name());
+		menu->addMenu(projectMenu);
+
+		menu->addSeparator();
+		menu->addAction(expandTreeAction);
+		menu->addAction(collapseTreeAction);
+		menu->addSeparator();
+		menu->addAction(toggleFilterAction);
+
+		// Menu for showing/hiding the columns in the tree view
+		QMenu* columnsMenu = menu->addMenu(i18n("Columns"));
+		columnsMenu->addAction(showAllColumnsAction);
+		columnsMenu->addSeparator();
+		for (auto* action : std::as_const(list_showColumnActions))
+			columnsMenu->addAction(action);
+
+		// TODO
+		// Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
+		//  QMenu* objectsMenu = menu->addMenu(i18n("Show/Hide objects"));
 	}
 
 	if (menu)
@@ -346,7 +394,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 		columnsMenu->addSection(i18n("Columns"));
 		columnsMenu->addAction(showAllColumnsAction);
 		columnsMenu->addSeparator();
-		for (auto* action : qAsConst(list_showColumnActions))
+		for (auto* action : std::as_const(list_showColumnActions))
 			columnsMenu->addAction(action);
 
 		auto* e = static_cast<QContextMenuEvent*>(event);
@@ -442,7 +490,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			if (!index.isValid())
 				return false;
 
-			// accept only the events when the aspect being dragged is dropable onto the aspect under the cursor
+			// accept only the events when the aspect being dragged is droppable onto the aspect under the cursor
 			// and the aspect under the cursor is not already the parent of the dragged aspect
 			auto* destinationAspect = static_cast<AbstractAspect*>(index.internalPointer());
 			bool accept = sourceAspect->dropableOn().indexOf(destinationAspect->type()) != -1 && sourceAspect->parentAspect() != destinationAspect;
@@ -499,7 +547,7 @@ void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 				showErrorMessage(msg);
 			}
 		} else {
-			// no name is available, we are copy&pasting the content of a columm ("the data") and not the column itself
+			// no name is available, we are copy&pasting the content of a column ("the data") and not the column itself
 			const auto* mimeData = QApplication::clipboard()->mimeData();
 			if (!mimeData->hasFormat(QStringLiteral("text/plain")))
 				return;
@@ -553,11 +601,14 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	// don't do anything if hidden aspects were added
-	if (aspect->hidden())
+	if (aspect->isHidden())
 		return;
 
-	// don't do anything for newly added data spreadsheets of data picker curves
-	if (aspect->type() == AspectType::Spreadsheet && aspect->parentAspect()->type() == AspectType::DatapickerCurve)
+	// don't do anything for newly added:
+	// * data spreadsheets of data picker curves
+	// * notes with fit results
+	if ((aspect->type() == AspectType::Spreadsheet && aspect->parentAspect()->type() == AspectType::DatapickerCurve)
+		|| (aspect->type() == AspectType::Note && aspect->parentAspect()->type() == AspectType::XYFitCurve))
 		return;
 
 	const auto* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
@@ -596,7 +647,7 @@ void ProjectExplorer::navigateTo(const QString& path) {
 void ProjectExplorer::toggleColumn(int index) {
 	// determine the total number of checked column actions
 	int checked = 0;
-	for (const auto* action : qAsConst(list_showColumnActions)) {
+	for (const auto* action : std::as_const(list_showColumnActions)) {
 		if (action->isChecked())
 			checked++;
 	}
@@ -606,7 +657,7 @@ void ProjectExplorer::toggleColumn(int index) {
 		m_treeView->header()->resizeSection(0, 0);
 		m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 
-		for (auto* action : qAsConst(list_showColumnActions))
+		for (auto* action : std::as_const(list_showColumnActions))
 			action->setEnabled(true);
 
 		// deactivate the "show all column"-action, if all actions are checked
@@ -620,7 +671,7 @@ void ProjectExplorer::toggleColumn(int index) {
 		showAllColumnsAction->setChecked(false);
 
 		// if there is only one checked column-action, deactivated it.
-		// It should't be possible to hide all columns
+		// It shouldn't be possible to hide all columns
 		if (checked == 1) {
 			int i = 0;
 			while (!list_showColumnActions.at(i)->isChecked())
@@ -639,7 +690,7 @@ void ProjectExplorer::showAllColumns() {
 	}
 	showAllColumnsAction->setEnabled(false);
 
-	for (auto* action : qAsConst(list_showColumnActions)) {
+	for (auto* action : std::as_const(list_showColumnActions)) {
 		action->setEnabled(true);
 		action->setChecked(true);
 	}
@@ -905,8 +956,12 @@ void ProjectExplorer::deleteSelected() {
 	for (int i = 0; i < items.size() / columnCount; ++i) {
 		const QModelIndex& index = items.at(i * columnCount);
 		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		aspects << aspect;
+		if (!aspect->isFixed())
+			aspects << aspect;
 	}
+
+	if (aspects.isEmpty())
+		return; // no non-fixed aspects selected, nothing to delete
 
 	QString msg;
 	if (aspects.size() > 1)

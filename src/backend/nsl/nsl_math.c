@@ -46,7 +46,7 @@ bool nsl_math_definitely_less_than_eps(double a, double b, double epsilon) {
 double nsl_math_frexp10(double x, int* e) {
 	int expo = 0;
 	if (x != 0)
-		expo = floor(log10(fabs(x)));
+		expo = (int)floor(log10(fabs(x)));
 
 	if (e != NULL)
 		*e = expo;
@@ -94,7 +94,7 @@ double nsl_math_places(double value, int n, int method) {
 		return value;
 	}
 
-	double scale = gsl_pow_int(10., n);
+	double scale = n == 1 ? 10. : gsl_pow_int(10., n);
 	double scaled_value = value * scale;
 	if (fabs(scaled_value) > 1.e16)
 		return value;

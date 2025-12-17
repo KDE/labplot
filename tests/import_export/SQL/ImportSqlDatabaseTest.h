@@ -16,7 +16,7 @@ class ImportSqlDatabaseTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
+	void initTestCase() override;
 
 	// import full table
 	void testFullTableReplace();
@@ -30,5 +30,8 @@ private Q_SLOTS:
 
 	// import the result of a custom query
 	void testQuery();
+
+	// export
+	void testExportSpreadsheetToSqlite();
 };
 #endif

@@ -1,9 +1,9 @@
 /*
 	File                 : DropValuesDialog.cpp
 	Project              : LabPlot
-	Description          : Dialog for droping and masking values in columns
+	Description          : Dialog for dropping and masking values in columns
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -22,8 +22,6 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KWindowConfig>
-
-#include <cmath>
 
 enum class Operator { EqualTo, NotEqualTo, BetweenIncl, BetweenExcl, GreaterThan, GreaterThanEqualTo, LessThan, LessThanEqualTo };
 enum class OperatorText { EqualTo, NotEqualTo, StartsWith, EndsWith, Contain, NotContain };
@@ -74,10 +72,12 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent)
 		m_okButton->setText(i18n("&Mask"));
 		m_okButton->setToolTip(i18n("Mask values in the specified region"));
 		setWindowTitle(i18nc("@title:window", "Mask Values"));
+		ui.chbDeleteRows->setVisible(false);
 	} else {
 		m_okButton->setText(i18n("&Drop"));
 		m_okButton->setToolTip(i18n("Drop values in the specified region"));
 		setWindowTitle(i18nc("@title:window", "Drop Values"));
+		ui.chbDeleteRows->setToolTip(i18n("Delete entire rows in the spreadsheet if the condition is met."));
 	}
 
 	connect(ui.cbOperator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DropValuesDialog::operatorChanged);
@@ -102,6 +102,8 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent)
 	ui.cbOperatorDateTime->setCurrentIndex(conf.readEntry("OperatorDateTime", 0));
 	operatorDateTimeChanged(ui.cbOperatorDateTime->currentIndex());
 
+	ui.chbDeleteRows->setChecked(conf.readEntry("DeleteRows", false));
+
 	create(); // ensure there's a window created
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
@@ -121,6 +123,7 @@ DropValuesDialog::~DropValuesDialog() {
 	conf.writeEntry("OperatorDateTime", ui.cbOperatorDateTime->currentIndex());
 	conf.writeEntry("Value1DateTime", ui.dteValue1->dateTime().toMSecsSinceEpoch());
 	conf.writeEntry("Value2DateTime", ui.dteValue2->dateTime().toMSecsSinceEpoch());
+	conf.writeEntry("DeleteRows", ui.chbDeleteRows->isChecked());
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
@@ -473,16 +476,18 @@ private:
 // TODO: provide template based solution to avoid code duplication
 class DropValuesTask : public QRunnable {
 public:
-	DropValuesTask(Column* col, Operator op, double value1, double value2) {
-		m_column = col;
-		m_operator = op;
-		m_value1 = value1;
-		m_value2 = value2;
+	DropValuesTask(Column* col, Operator op, double value1, double value2, QSet<int>& rows)
+		: m_column(col)
+		, m_operator(op)
+		, m_value1(value1)
+		, m_value2(value2)
+		, m_rows(rows) {
 	}
 
 	void run() override {
 		bool changed = false;
 
+		int row = 0;
 		auto mode = m_column->columnMode();
 		if (mode == AbstractColumn::ColumnMode::Double) {
 			auto* data = static_cast<QVector<double>*>(m_column->data());
@@ -494,6 +499,8 @@ public:
 					if (d == m_value1) {
 						d = NAN;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -502,6 +509,8 @@ public:
 					if (d != m_value1) {
 						d = NAN;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -510,6 +519,8 @@ public:
 					if (d >= m_value1 && d <= m_value2) {
 						d = NAN;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -518,6 +529,8 @@ public:
 					if (d > m_value1 && d < m_value2) {
 						d = NAN;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -526,6 +539,8 @@ public:
 					if (d > m_value1) {
 						d = NAN;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -534,6 +549,8 @@ public:
 					if (d >= m_value1) {
 						d = NAN;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -542,6 +559,8 @@ public:
 					if (d < m_value1) {
 						d = NAN;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -550,6 +569,8 @@ public:
 					if (d <= m_value1) {
 						d = NAN;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 			}
@@ -566,6 +587,8 @@ public:
 					if (d == m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -574,6 +597,8 @@ public:
 					if (d != m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -582,6 +607,8 @@ public:
 					if (d >= m_value1 && d <= m_value2) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -590,6 +617,8 @@ public:
 					if (d > m_value1 && d < m_value2) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -598,6 +627,8 @@ public:
 					if (d > m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -606,6 +637,8 @@ public:
 					if (d >= m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -614,6 +647,8 @@ public:
 					if (d < m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -622,6 +657,8 @@ public:
 					if (d <= m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 			}
@@ -638,6 +675,8 @@ public:
 					if (d == m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -646,6 +685,8 @@ public:
 					if (d != m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -654,6 +695,8 @@ public:
 					if (d >= m_value1 && d <= m_value2) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -662,6 +705,8 @@ public:
 					if (d > m_value1 && d < m_value2) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -670,6 +715,8 @@ public:
 					if (d > m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -678,6 +725,8 @@ public:
 					if (d >= m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -686,6 +735,8 @@ public:
 					if (d < m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -694,6 +745,8 @@ public:
 					if (d <= m_value1) {
 						d = 0;
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 			}
@@ -710,6 +763,8 @@ public:
 					if (d.toMSecsSinceEpoch() == m_value1) {
 						d = QDateTime();
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -718,6 +773,8 @@ public:
 					if (d.toMSecsSinceEpoch() != m_value1) {
 						d = QDateTime();
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -726,6 +783,8 @@ public:
 					if (d.toMSecsSinceEpoch() >= m_value1 && d.toMSecsSinceEpoch() <= m_value2) {
 						d = QDateTime();
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -734,6 +793,8 @@ public:
 					if (d.toMSecsSinceEpoch() > m_value1 && d.toMSecsSinceEpoch() < m_value2) {
 						d = QDateTime();
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -742,6 +803,8 @@ public:
 					if (d.toMSecsSinceEpoch() > m_value1) {
 						d = QDateTime();
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -750,6 +813,8 @@ public:
 					if (d.toMSecsSinceEpoch() >= m_value1) {
 						d = QDateTime();
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -758,6 +823,8 @@ public:
 					if (d.toMSecsSinceEpoch() < m_value1) {
 						d = QDateTime();
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 				break;
@@ -766,6 +833,8 @@ public:
 					if (d.toMSecsSinceEpoch() <= m_value1) {
 						d = QDateTime();
 						changed = true;
+						m_rows << row;
+						++row;
 					}
 				}
 			}
@@ -776,10 +845,11 @@ public:
 	}
 
 private:
+	Column* m_column;
 	Operator m_operator;
 	double m_value1;
 	double m_value2;
-	Column* m_column;
+	QSet<int>& m_rows;
 };
 
 // implementation of tasks for text columns
@@ -862,16 +932,18 @@ private:
 
 class DropTextValuesTask : public QRunnable {
 public:
-	DropTextValuesTask(Column* col, OperatorText op, const QString& value)
+	DropTextValuesTask(Column* col, OperatorText op, const QString& value, QSet<int>& rows)
 		: m_operator(op)
 		, m_value(value)
-		, m_column(col) {
+		, m_column(col)
+		, m_rows(rows) {
 	}
 
 	void run() override {
 		bool changed = false;
 		auto* data = static_cast<QVector<QString>*>(m_column->data());
 		QVector<QString> new_data(*data);
+		int row = 0;
 
 		switch (m_operator) {
 		case OperatorText::EqualTo:
@@ -879,6 +951,8 @@ public:
 				if (d == m_value) {
 					d = QString();
 					changed = true;
+					m_rows << row;
+					++row;
 				}
 			}
 			break;
@@ -887,6 +961,8 @@ public:
 				if (d != m_value) {
 					d = QString();
 					changed = true;
+					m_rows << row;
+					++row;
 				}
 			}
 			break;
@@ -895,6 +971,8 @@ public:
 				if (d.startsWith(m_value)) {
 					d = QString();
 					changed = true;
+					m_rows << row;
+					++row;
 				}
 			}
 			break;
@@ -903,6 +981,8 @@ public:
 				if (d.endsWith(m_value)) {
 					d = QString();
 					changed = true;
+					m_rows << row;
+					++row;
 				}
 			}
 			break;
@@ -911,6 +991,8 @@ public:
 				if (d.indexOf(m_value) != -1) {
 					d = QString();
 					changed = true;
+					m_rows << row;
+					++row;
 				}
 			}
 			break;
@@ -919,6 +1001,8 @@ public:
 				if (d.indexOf(m_value) == -1) {
 					d = QString();
 					changed = true;
+					m_rows << row;
+					++row;
 				}
 			}
 			break;
@@ -932,6 +1016,7 @@ private:
 	OperatorText m_operator;
 	QString m_value;
 	Column* m_column;
+	QSet<int>& m_rows;
 };
 
 void DropValuesDialog::maskValues() const {
@@ -964,7 +1049,7 @@ void DropValuesDialog::maskValues() const {
 	double value1DateTime = ui.dteValue1->dateTime().toMSecsSinceEpoch();
 	double value2DateTime = ui.dteValue2->dateTime().toMSecsSinceEpoch();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: mask values", m_spreadsheet->name()));
 	for (auto* col : m_columns) {
 		if (col->isNumeric()) {
@@ -988,7 +1073,6 @@ void DropValuesDialog::maskValues() const {
 	// 	QThreadPool::globalInstance()->waitForDone();
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void DropValuesDialog::dropValues() const {
@@ -1020,18 +1104,20 @@ void DropValuesDialog::dropValues() const {
 	double value1DateTime = ui.dteValue1->dateTime().toMSecsSinceEpoch();
 	double value2DateTime = ui.dteValue2->dateTime().toMSecsSinceEpoch();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: drop values", m_spreadsheet->name()));
+
+	QSet<int> rows; // rows in which the values were dropped/deleted
 
 	for (auto* col : m_columns) {
 		if (col->isNumeric()) {
-			auto* task = new DropValuesTask(col, op, value1, value2);
+			auto* task = new DropValuesTask(col, op, value1, value2, rows);
 			QThreadPool::globalInstance()->start(task);
 		} else if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
-			auto* task = new DropValuesTask(col, opDateTime, value1DateTime, value2DateTime);
+			auto* task = new DropValuesTask(col, opDateTime, value1DateTime, value2DateTime, rows);
 			QThreadPool::globalInstance()->start(task);
 		} else {
-			auto* task = new DropTextValuesTask(col, opText, valueText);
+			auto* task = new DropTextValuesTask(col, opText, valueText, rows);
 			QThreadPool::globalInstance()->start(task);
 		}
 	}
@@ -1039,6 +1125,13 @@ void DropValuesDialog::dropValues() const {
 	// wait until all columns were processed
 	QThreadPool::globalInstance()->waitForDone();
 
+	// delete the affected rows completely in the spreadsheet, if requested
+	if (ui.chbDeleteRows->isChecked()) {
+		auto rowList = rows.values();
+		std::sort(rowList.begin(), rowList.end(), std::greater<int>());
+		for (const int row : rowList)
+			m_spreadsheet->removeRows(row, 1);
+	}
+
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }

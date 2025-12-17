@@ -74,8 +74,7 @@ void RangeTest::testTickCount() {
 		{{1.3, 2.7}, 8},
 		{{0., 3.2}, 5},
 		{{0.4, 2.}, 5},
-		{{0.5, 2.5}, 5}
-		// size=29,41 should not happen when nice extended
+		{{0.5, 2.5}, 5} // size=29,41 should not happen when nice extended
 	};
 
 	for (auto& test : tests) {
@@ -297,6 +296,15 @@ void RangeTest::zoomInOutDecreasingLinearRangeNotCenter() {
 	range.zoom(1. / 0.9, false, 0.1);
 	QCOMPARE(range.start(), 10.);
 	QCOMPARE(range.end(), 0.);
+}
+
+void RangeTest::checkRangeLog() {
+	Range<double> range(0., 100., RangeT::Format::Numeric, RangeT::Scale::Linear);
+	range.setScale(RangeT::Scale::Log10);
+	const auto r = range.checkRange();
+	QCOMPARE(r.scale(), RangeT::Scale::Log10);
+	QVERIFY(r.start() > 0.); // Zero is not valid for the logarithmic range, so set start value to a different value
+	QCOMPARE(r.end(), 100.);
 }
 
 QTEST_MAIN(RangeTest)

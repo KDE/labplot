@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : application settings dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -15,19 +15,17 @@
 // #include "SettingsWelcomePage.h"
 #include "SettingsSpreadsheetPage.h"
 #include "SettingsWorksheetPage.h"
-
-#include "backend/core/Settings.h"
+#ifdef HAVE_SCRIPTING
+#include "SettingsEditorPage.h"
+#endif
 
 #ifdef HAVE_CANTOR_LIBS
 #include "SettingsNotebookPage.h"
 #endif
 
 #include <KConfigGroup>
-#include <KLocalizedString>
 #include <KMessageBox>
-
 #include <KWindowConfig>
-#include <kcoreaddons_version.h>
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/FeedbackConfigWidget>
@@ -43,7 +41,7 @@
  * Contains the pages for general settings and view settings.
  *
  */
-SettingsDialog::SettingsDialog(QWidget* parent)
+SettingsDialog::SettingsDialog(QWidget* parent, const QLocale& locale)
 	: KPageDialog(parent) {
 	setFaceType(Tree);
 	setWindowTitle(i18nc("@title:window", "Preferences"));
@@ -54,32 +52,32 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 	buttonBox()->addButton(QDialogButtonBox::RestoreDefaults);
 	connect(buttonBox(), &QDialogButtonBox::clicked, this, &SettingsDialog::slotButtonClicked);
 
-	m_generalPage = new SettingsGeneralPage(this);
+	m_generalPage = new SettingsGeneralPage(this, locale);
 	KPageWidgetItem* generalFrame = addPage(m_generalPage, i18n("General"));
 	generalFrame->setIcon(QIcon::fromTheme(QLatin1String("settings-configure")));
 	connect(m_generalPage, &SettingsGeneralPage::settingsChanged, this, &SettingsDialog::changed);
 
 	m_worksheetPage = new SettingsWorksheetPage(this);
-	KPageWidgetItem* worksheetFrame = addPage(m_worksheetPage, i18n("Worksheet"));
-	worksheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-worksheet")));
+	m_worksheetPageItem = addPage(m_worksheetPage, i18n("Worksheet"));
+	m_worksheetPageItem->setIcon(QIcon::fromTheme(QLatin1String("labplot-worksheet")));
 	connect(m_worksheetPage, &SettingsWorksheetPage::settingsChanged, this, &SettingsDialog::changed);
 
 	m_spreadsheetPage = new SettingsSpreadsheetPage(this);
-	KPageWidgetItem* spreadsheetFrame = addPage(m_spreadsheetPage, i18n("Spreadsheet"));
-	spreadsheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")));
+	m_spreadsheetPageItem = addPage(m_spreadsheetPage, i18n("Spreadsheet"));
+	m_spreadsheetPageItem->setIcon(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")));
 	connect(m_spreadsheetPage, &SettingsSpreadsheetPage::settingsChanged, this, &SettingsDialog::changed);
 
 #ifdef HAVE_CANTOR_LIBS
 	m_notebookPage = new SettingsNotebookPage(this);
-	KPageWidgetItem* notebookFrame = addPage(m_notebookPage, i18n("Notebook"));
-	m_notebookPage->addSubPages(notebookFrame, this);
-	notebookFrame->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
+	m_notebookPageItem = addPage(m_notebookPage, i18n("Notebook"));
+	m_notebookPage->addSubPages(m_notebookPageItem, this);
+	m_notebookPageItem->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
 	connect(m_notebookPage, &SettingsNotebookPage::settingsChanged, this, &SettingsDialog::changed);
 #endif
 
 	m_datasetsPage = new SettingsDatasetsPage(this);
-	KPageWidgetItem* datasetsFrame = addPage(m_datasetsPage, i18n("Datasets"));
-	datasetsFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
+	m_datasetsPageItem = addPage(m_datasetsPage, i18n("Datasets"));
+	m_datasetsPageItem->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
 	connect(m_datasetsPage, &SettingsDatasetsPage::settingsChanged, this, &SettingsDialog::changed);
 
 	// 	m_welcomePage = new SettingsWelcomePage(this);
@@ -93,8 +91,16 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 	m_userFeedbackWidget->setFeedbackProvider(&mainWin->userFeedbackProvider());
 	connect(m_userFeedbackWidget, &KUserFeedback::FeedbackConfigWidget::configurationChanged, this, &SettingsDialog::changed);
 
-	KPageWidgetItem* userFeedBackFrame = addPage(m_userFeedbackWidget, i18n("User Feedback"));
-	userFeedBackFrame->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-locale")));
+	m_userFeedbackPageItem = addPage(m_userFeedbackWidget, i18n("User Feedback"));
+	m_userFeedbackPageItem->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-locale")));
+#endif
+
+#ifdef HAVE_SCRIPTING
+	m_editorRootPage = new SettingsEditorPage(this);
+	m_editorRootItem = addPage(m_editorRootPage, i18n("Text Editor"));
+	m_editorRootPage->addSubPages(m_editorRootItem, this);
+	m_editorRootItem->setIcon(QIcon::fromTheme(QLatin1String("accessories-text-editor")));
+	connect(m_editorRootPage, &SettingsEditorPage::settingsChanged, this, &SettingsDialog::changed);
 #endif
 
 	// restore saved settings if available
@@ -110,6 +116,40 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 SettingsDialog::~SettingsDialog() {
 	KConfigGroup dialogConfig = Settings::group(QStringLiteral("SettingsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), dialogConfig);
+}
+
+void SettingsDialog::navigateTo(Settings::Type type) {
+	switch (type) {
+	case Settings::Type::General:
+	case Settings::Type::General_Number_Format:
+	case Settings::Type::General_Units:
+		// "general" is selected initially
+		break;
+	case Settings::Type::Worksheet:
+		setCurrentPage(m_worksheetPageItem);
+		break;
+	case Settings::Type::Spreadsheet:
+		setCurrentPage(m_spreadsheetPageItem);
+		break;
+#ifdef HAVE_CANTOR_LIBS
+	case Settings::Type::Notebook:
+		setCurrentPage(m_notebookPageItem);
+		break;
+#endif
+	case Settings::Type::Datasets:
+		setCurrentPage(m_datasetsPageItem);
+		break;
+#ifdef HAVE_KUSERFEEDBACK
+	case Settings::Type::Feedback:
+		setCurrentPage(m_userFeedbackPageItem);
+		break;
+#endif
+#ifdef HAVE_SCRIPTING
+	case Settings::Type::ScriptEditor:
+		setCurrentPage(m_editorRootItem);
+		break;
+#endif
+	}
 }
 
 void SettingsDialog::slotButtonClicked(QAbstractButton* button) {
@@ -137,19 +177,17 @@ void SettingsDialog::changed() {
 
 void SettingsDialog::applySettings() {
 	m_changed = false;
-	QList<SettingsType> changes;
-	if (m_generalPage->applySettings())
-		changes.append(SettingsType::General);
-	if (m_worksheetPage->applySettings())
-		changes.append(SettingsType::Worksheet);
-	if (m_spreadsheetPage->applySettings())
-		changes.append(SettingsType::Spreadsheet);
+	QList<Settings::Type> changes;
+	changes << m_generalPage->applySettings();
+	changes << m_worksheetPage->applySettings();
+	changes << m_spreadsheetPage->applySettings();
 #ifdef HAVE_CANTOR_LIBS
-	if (m_notebookPage->applySettings())
-		changes.append(SettingsType::Notebook);
+	changes << m_notebookPage->applySettings();
 #endif
-	if (m_datasetsPage->applySettings())
-		changes.append(SettingsType::Datasets);
+	changes << m_datasetsPage->applySettings();
+#ifdef HAVE_SCRIPTING
+	changes << m_editorRootPage->applySettings();
+#endif
 
 	Settings::sync();
 
@@ -159,7 +197,8 @@ void SettingsDialog::applySettings() {
 	mainWin->userFeedbackProvider().setSurveyInterval(m_userFeedbackWidget->surveyInterval());
 #endif
 
-	Q_EMIT settingsChanged(changes);
+	if (!changes.isEmpty())
+		Q_EMIT settingsChanged(changes);
 }
 
 void SettingsDialog::restoreDefaults() {
@@ -171,4 +210,7 @@ void SettingsDialog::restoreDefaults() {
 	m_notebookPage->restoreDefaults();
 #endif
 	m_datasetsPage->restoreDefaults();
+#ifdef HAVE_SCRIPTING
+	m_editorRootPage->restoreDefaults();
+#endif
 }

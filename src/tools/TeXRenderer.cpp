@@ -42,7 +42,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	const QColor& fontColor = format.fontColor;
 	const QColor& backgroundColor = format.backgroundColor;
 	const int fontSize = format.fontSize;
-	const QString& fontFamily = format.fontFamily;
+	QString fontFamily = format.fontFamily;
 	const int dpi = format.dpi;
 
 	// determine the temp directory where the produced files are going to be created
@@ -73,9 +73,10 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 
 	// create a temporary file
 	QTemporaryFile file(tempPath + QLatin1Char('/') + QStringLiteral("labplot_XXXXXX.tex"));
-	// FOR DEBUG: file.setAutoRemove(false);
-	// DEBUG("temp file path = " << file.fileName().toUtf8().constData());
+	// enable to keep temp latex file
+	// file.setAutoRemove(false);
 	if (file.open()) {
+		DEBUG(Q_FUNC_INFO << ", temp file: " << file.fileName().toStdString());
 		QDir::setCurrent(tempPath);
 	} else {
 		QString err = i18n("Couldn't open the file") + QStringLiteral(" ") + file.fileName();
@@ -111,21 +112,28 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 		body = body.replace(QLatin1String("\n"), QLatin1String("\\\\"));
 	}
 
+	// compose latex document
+	// using newlines to make output readable (to be tested on macOS and Windows)
 	if (engine == QStringLiteral("xelatex") || engine == QStringLiteral("lualatex")) {
-		out << QStringLiteral("\\usepackage{fontspec}");
-		out << QStringLiteral("\\defaultfontfeatures{Ligatures=TeX}");
-		if (!fontFamily.isEmpty())
-			out << QStringLiteral("\\setmainfont[Mapping=tex-text]{") << fontFamily << QLatin1Char('}');
+		out << QStringLiteral("\\usepackage{fontspec}\n");
+		out << QStringLiteral("\\defaultfontfeatures{Ligatures=TeX}\n");
+		if (!fontFamily.isEmpty()) {
+			// replace failing font families
+			if (fontFamily == QLatin1String("Computer Modern"))
+				fontFamily = QLatin1String("Latin Modern Roman");
+			out << QStringLiteral("\\setmainfont[Mapping=tex-text]{") << fontFamily << QStringLiteral("}\n");
+		}
 	}
 
-	out << QStringLiteral("\\usepackage{color}");
-	out << QStringLiteral("\\usepackage[active,displaymath,textmath,tightpage]{preview}");
-	out << "\\setlength\\PreviewBorder{0pt}";
+	out << QStringLiteral("\\usepackage{xcolor}\n");
+	out << QStringLiteral("\\usepackage[active,displaymath,textmath,tightpage]{preview}\n");
+	out << "\\setlength\\PreviewBorder{0pt}\n";
 	// TODO: this fails with pdflatex
 	// out << "\\usepackage{mathtools}";
-	out << QStringLiteral("\\begin{document}");
-	out << QStringLiteral("\\begin{preview}");
-	out << QStringLiteral("\\setlength{\\fboxsep}{1.0pt}");
+	out << QStringLiteral("\\begin{document}\n");
+	out << QStringLiteral("\\begin{preview}\n");
+	// out << QStringLiteral("\\setlength{\\fboxsep}{1.0pt}\n");
+	out << QStringLiteral("\\fboxsep=1pt\n");
 	if (backgroundColor.alpha() != 0)
 		out << QStringLiteral("\\colorbox[rgb]{") << backgroundColor.redF() << QLatin1Char(',') << backgroundColor.greenF() << QLatin1Char(',')
 			<< backgroundColor.blueF() << QLatin1Char('}');
@@ -134,9 +142,9 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	out << QStringLiteral("\\color[rgb]{") << fontColor.redF() << QLatin1Char(',') << fontColor.greenF() << QLatin1Char(',') << fontColor.blueF()
 		<< QLatin1Char('}');
 	out << body;
-	out << QLatin1Char('}');
-	out << QStringLiteral("\\end{preview}");
-	out << QStringLiteral("\\end{document}");
+	out << QStringLiteral("}\n");
+	out << QStringLiteral("\\end{preview}\n");
+	out << QStringLiteral("\\end{document}\n");
 	out.flush();
 
 	if (engine == QStringLiteral("latex"))
@@ -145,7 +153,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 		return imageFromPDF(file, engine, res);
 }
 
-bool TeXRenderer::executeLatexProcess(const QString engine,
+bool TeXRenderer::executeLatexProcess(const QString& engine,
 									  const QString& baseName,
 									  const QTemporaryFile& file,
 									  const QString& resultFileExtension,
@@ -175,7 +183,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 			// really slow, but texrenderer is running asynchronous so it is not a problem
 			while (!logFile.atEnd()) {
 				const auto line = logFile.readLine();
-				if (line.count() > 0 && line.at(0) == '!') {
+				if (line.length() > 0 && line.at(0) == '!') {
 					errorLogs += QLatin1String(line);
 					break; // only first error message is enough
 				}
@@ -234,7 +242,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const QString& 
 		return {};
 	}
 
-	QByteArray ba = pdfFile.readAll();
+	auto ba = pdfFile.readAll();
 	pdfFile.close();
 	QFile::remove(baseName + QStringLiteral(".pdf"));
 	res->successful = true;
@@ -276,7 +284,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	QProcess convertProcess;
 #if defined(HAVE_WINDOWS)
 	// need to set path to magick coder modules (which are in the labplot directory)
-	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+	auto env = QProcessEnvironment::systemEnvironment();
 	env.insert(QStringLiteral("MAGICK_CODER_MODULE_PATH"), QString::fromLocal8Bit(qgetenv("PROGRAMFILES")) + QStringLiteral("\\labplot"));
 	convertProcess.setProcessEnvironment(env);
 #endif
@@ -318,7 +326,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		return {};
 	}
 
-	QByteArray ba = pdfFile.readAll();
+	auto ba = pdfFile.readAll();
 	QFile::remove(baseName + QStringLiteral(".pdf"));
 	res->successful = true;
 	res->errorMessage = QString();
@@ -327,7 +335,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 }
 
 bool TeXRenderer::enabled() {
-	KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
+	auto group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	QString engine = group.readEntry("LaTeXEngine", "");
 	if (engine.isEmpty()) {
 		// empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)

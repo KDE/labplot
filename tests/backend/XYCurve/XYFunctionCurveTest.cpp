@@ -162,7 +162,7 @@ void XYFunctionCurveTest::removeCurves() {
 	QCOMPARE(functionCurve->xColumn()->rowCount(), 0);
 	QCOMPARE(functionCurve->functionData().count(), 1);
 	QCOMPARE(functionCurve->functionData().at(0).curve(), nullptr);
-	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/curve1"));
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), i18n("Project") + QStringLiteral("/Worksheet/plot/curve1"));
 }
 
 void XYFunctionCurveTest::removeColumnFromCurve() {
@@ -265,7 +265,7 @@ void XYFunctionCurveTest::removeCurveRenameAutomaticAdd() {
 	equationCurve->remove();
 
 	QCOMPARE(functionCurve->functionData().at(0).curve(), nullptr);
-	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), i18n("Project") + QStringLiteral("/Worksheet/plot/eq"));
 
 	p->addChild(new XYEquationCurve(QLatin1String("eqDifferent"))); // different name than eq!
 	auto eqs = p->children(AspectType::XYEquationCurve);
@@ -275,12 +275,12 @@ void XYFunctionCurveTest::removeCurveRenameAutomaticAdd() {
 	equationCurveNew->setEquationData(data);
 
 	QCOMPARE(functionCurve->functionData().at(0).curve(), nullptr);
-	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), i18n("Project") + QStringLiteral("/Worksheet/plot/eq"));
 
 	equationCurveNew->setName(QStringLiteral("eq"));
 
 	QCOMPARE(functionCurve->functionData().at(0).curve(), equationCurveNew);
-	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), i18n("Project") + QStringLiteral("/Worksheet/plot/eq"));
 
 	{
 		const auto* xColumn = functionCurve->xColumn();
@@ -365,7 +365,7 @@ void XYFunctionCurveTest::saveLoad() {
 
 		const auto& data = functionCurve->functionData();
 		QCOMPARE(data.length(), 1);
-		QCOMPARE(data.at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+		QCOMPARE(data.at(0).curvePath(), i18n("Project") + QStringLiteral("/Worksheet/plot/eq"));
 		QCOMPARE(data.at(0).curve(), eq);
 		QCOMPARE(data.at(0).variableName(), QStringLiteral("z"));
 
@@ -453,9 +453,6 @@ void XYFunctionCurveTest::importData() {
 	SAVE_FILE("testStartRowSkipRow", fileContent);
 
 	AsciiFilter filter;
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
-	filter.setStartRow(1);
 	filter.readDataFromFile(savePath, sheet, AbstractFileFilter::ImportMode::Replace);
 
 	{
@@ -467,6 +464,132 @@ void XYFunctionCurveTest::importData() {
 		VALUES_EQUAL(yColumn->valueAt(0), 99.0 * 2.0);
 		VALUES_EQUAL(xColumn->valueAt(1), 17.0);
 		VALUES_EQUAL(yColumn->valueAt(1), 3.0 * 2.0);
+	}
+}
+
+void XYFunctionCurveTest::importDataComplexDependency() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	// Generate data and
+	Spreadsheet* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(11);
+	sheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::Double);
+	sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	for (int i = 0; i < sheet->rowCount(); i++) {
+		sheet->column(0)->setValueAt(i, i);
+		sheet->column(1)->setValueAt(i, 2 * i + 1);
+	}
+
+	QCOMPARE(sheet->column(0)->name(), QStringLiteral("1"));
+	QCOMPARE(sheet->column(1)->name(), QStringLiteral("2"));
+
+	auto* curve = new XYCurve(QStringLiteral("curve1"));
+	p->addChild(curve);
+	curve->setCoordinateSystemIndex(0);
+	curve->setXColumn(sheet->column(0));
+	curve->setYColumn(sheet->column(1));
+
+	p->addChild(new XYFunctionCurve(QLatin1String("eq2")));
+	auto functionCurves = p->children(AspectType::XYFunctionCurve);
+	QCOMPARE(functionCurves.count(), 1);
+	auto* functionCurve1 = static_cast<XYFunctionCurve*>(functionCurves.at(0));
+	// First function curve check
+	{
+		auto dock = XYFunctionCurveDock(nullptr);
+		dock.setupGeneral();
+		dock.setCurves({functionCurve1});
+
+		functionCurve1->setFunction(QStringLiteral("2*x"), {QStringLiteral("x")}, {curve});
+
+		{
+			const auto* xColumn = functionCurve1->xColumn();
+			const auto* yColumn = functionCurve1->yColumn();
+			QCOMPARE(xColumn->rowCount(), 11);
+			QCOMPARE(yColumn->rowCount(), 11);
+			for (int i = 0; i < xColumn->rowCount(); i++) {
+				VALUES_EQUAL(xColumn->valueAt(i), (double)i);
+				VALUES_EQUAL(yColumn->valueAt(i), 2 * (2 * i + 1.));
+			}
+		}
+	}
+
+	p->addChild(new XYFunctionCurve(QLatin1String("eq3")));
+	functionCurves = p->children(AspectType::XYFunctionCurve);
+	QCOMPARE(functionCurves.count(), 2);
+	auto* functionCurve2 = static_cast<XYFunctionCurve*>(functionCurves.at(1));
+	QCOMPARE(functionCurve2->name(), QLatin1String("eq3"));
+	// First function curve check
+	{
+		auto dock = XYFunctionCurveDock(nullptr);
+		dock.setupGeneral();
+		dock.setCurves({functionCurve2});
+
+		functionCurve2->setFunction(QStringLiteral("3*x + 5*y"), {QStringLiteral("x"), QStringLiteral("y")}, {functionCurve1, curve});
+
+		{
+			const auto* xColumn = functionCurve2->xColumn();
+			const auto* yColumn = functionCurve2->yColumn();
+			QCOMPARE(xColumn->rowCount(), 11);
+			QCOMPARE(yColumn->rowCount(), 11);
+			for (int i = 0; i < xColumn->rowCount(); i++) {
+				VALUES_EQUAL(xColumn->valueAt(i), (double)i);
+				const double valueCurve = (2. * i + 1.);
+				const double valueEq2 = 2. * valueCurve;
+				VALUES_EQUAL(yColumn->valueAt(i), 3. * valueEq2 + 5. * valueCurve);
+			}
+		}
+	}
+
+	QStringList fileContent = {
+		QStringLiteral("1,2"),
+		QStringLiteral("7,99"),
+		QStringLiteral("17,3"),
+	};
+	QString savePath;
+	SAVE_FILE("testStartRowSkipRow", fileContent);
+
+	AsciiFilter filter;
+	auto properties = filter.properties();
+	properties.automaticSeparatorDetection = true;
+	properties.headerEnabled = true;
+	properties.headerLine = 1;
+	properties.startRow = 1;
+	properties.intAsDouble = false;
+	filter.setProperties(properties);
+
+	filter.readDataFromFile(savePath, sheet, AbstractFileFilter::ImportMode::Replace);
+
+	{
+		const auto* xColumn = functionCurve1->xColumn();
+		const auto* yColumn = functionCurve1->yColumn();
+		QCOMPARE(xColumn->rowCount(), 2);
+		QCOMPARE(yColumn->rowCount(), 2);
+		VALUES_EQUAL(xColumn->valueAt(0), 7.);
+		VALUES_EQUAL(yColumn->valueAt(0), 99. * 2.);
+		VALUES_EQUAL(xColumn->valueAt(1), 17.0);
+		VALUES_EQUAL(yColumn->valueAt(1), 3. * 2.);
+	}
+
+	{
+		const auto* xColumn = functionCurve2->xColumn();
+		const auto* yColumn = functionCurve2->yColumn();
+		QCOMPARE(xColumn->rowCount(), 2);
+		QCOMPARE(yColumn->rowCount(), 2);
+		VALUES_EQUAL(xColumn->valueAt(0), 7.);
+		VALUES_EQUAL(yColumn->valueAt(0), 3. * (99. * 2.) + 5. * 99.);
+		VALUES_EQUAL(xColumn->valueAt(1), 17.);
+		VALUES_EQUAL(yColumn->valueAt(1), 3. * (3. * 2.) + 5. * 3.);
 	}
 }
 

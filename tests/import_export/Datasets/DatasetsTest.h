@@ -16,7 +16,7 @@ class DatasetsTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
+	void initTestCase() override;
 
 	// Test processing metadata files.
 	void testCategories();

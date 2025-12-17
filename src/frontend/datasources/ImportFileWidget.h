@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import file data widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2009-2025 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
@@ -55,7 +55,7 @@ class ImportFileWidget : public QWidget {
 public:
 	static QString absolutePath(const QString& fileName);
 
-	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString(), bool embedded = false);
+	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString(), bool embedded = false, bool importDir = false);
 	~ImportFileWidget() override;
 
 	void showOptions(bool);
@@ -64,17 +64,18 @@ public:
 	AbstractFileFilter::FileType currentFileType() const;
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
+	QString path() const;
 	QString fileName() const;
 	QString dbcFileName() const;
 	QString selectedObject() const;
 	bool importValid() const;
 	bool useFirstRowAsColNames() const; // use by XLSX and ODS
+	void checkValid();
 
 	const QStringList selectedXLSXRegionNames() const;
 	const QStringList selectedOdsSheetNames() const;
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;
-	const QStringList selectedFITSExtensions() const;
 	const QStringList selectedROOTNames() const;
 	const QStringList selectedMatioNames() const;
 	//	const QStringList selectedVectorBLFNames() const;
@@ -96,9 +97,12 @@ private:
 	void initOptionsWidget();
 	void initSlots();
 	QString fileInfoString(const QString&) const;
+	QString dirInfoString(const QString&) const;
 	void showJsonModel(bool);
 	void enableFirstRowAsColNames(bool enable); // used by XLSX and Ods
 	void updateHeaderOptions();
+	void updateFilterHandlingSettings(LiveDataSource::SourceType);
+	bool automaticAllowed(LiveDataSource::SourceType);
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
@@ -126,6 +130,7 @@ private:
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
 	bool m_embedded{false};
+	bool m_importDir{false};
 	TemplateHandler* m_templateHandler{nullptr};
 	bool mcapTopicsInitialized{false};
 
@@ -151,7 +156,7 @@ private Q_SLOTS:
 	void filterChanged(int);
 	void selectFile();
 	void selectDBCFile();
-	void showFileInfo();
+	void showInfo();
 	void refreshPreview();
 	void updateStartRow(int);
 	void enableDataPortionSelection(bool);

@@ -4,7 +4,7 @@
 	Description          : Dock widget for InfoElemnt
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -40,11 +40,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	m_connectionLineWidget = new LineWidget(ui->tabLines);
 	layout->addWidget(m_connectionLineWidget, 4, 0, 1, 3);
 
-	// set the current locale
-	ui->sbPosition->setLocale(QLocale());
-	m_labelWidget->updateLocale();
-	m_verticalLineWidget->updateLocale();
-	m_connectionLineWidget->updateLocale();
+	updateLocale();
 
 	//**********************************  Slots **********************************************
 	// general
@@ -155,6 +151,19 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 	connect(m_element, &InfoElement::connectionLineCurveNameChanged, this, &InfoElementDock::elementConnectionLineCurveChanged);
 	connect(m_element, &InfoElement::labelBorderShapeChangedSignal, this, &InfoElementDock::elementLabelBorderShapeChanged);
 	connect(m_element, &InfoElement::curveRemoved, this, &InfoElementDock::elementCurveRemoved);
+}
+
+/*
+ * updates the locale in the widgets. called when the application settings are changed.
+ */
+void InfoElementDock::updateLocale() {
+	ui->sbPosition->setLocale(QLocale());
+	m_labelWidget->updateLocale();
+	m_verticalLineWidget->updateLocale();
+	m_connectionLineWidget->updateLocale();
+}
+
+void InfoElementDock::retranslateUi() {
 }
 
 //*************************************************************

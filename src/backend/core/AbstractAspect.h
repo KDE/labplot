@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -32,85 +32,95 @@ class QXmlStreamWriter;
 /// returns true if the class inherits from @verbatim base@endverbatim.
 ///
 /// AspectType is used in GuiObserver to select the correct dock widget.
+///
+/// IMPORTANT: Never expose the type value outside of the running application,
+/// because it can change with every labplot version!
 enum class AspectType : quint64 {
-	AbstractAspect = 0,
+	AbstractAspect,
 
 	// classes without inheriters
-	AbstractFilter = 0x0100001,
-	DatapickerCurve = 0x0100002,
-	DatapickerPoint = 0x0100004,
+	AbstractFilter,
+	DatapickerCurve,
+	DatapickerPoint,
 
-	WorksheetElement = 0x0200000,
-	Axis = 0x0210001,
-	CartesianPlotLegend = 0x0210002,
-	CustomPoint = 0x0210004,
-	PlotArea = 0x0210010,
-	TextLabel = 0x0210020,
-	Image = 0x0210030,
-	ReferenceLine = 0x0210040,
-	ReferenceRange = 0x0210060,
-	InfoElement = 0x0210080,
+	WorksheetElement,
+	Axis,
+	CartesianPlotLegend,
+	CustomPoint,
+	PlotArea,
+	TextLabel,
+	Image,
+	ReferenceLine,
+	ReferenceRange,
+	InfoElement,
 
 	// bar plots
-	BarPlot = 0x0210200,
-	LollipopPlot = 0x0210400,
+	BarPlot,
+	LollipopPlot,
 
 	// statistical plots
-	Histogram = 0x0210008,
-	BoxPlot = 0x0210100,
-	QQPlot = 0x0210800,
-	KDEPlot = 0x0210802,
+	Histogram,
+	BoxPlot,
+	QQPlot,
+	KDEPlot,
 
-	// continious improvement plots
-	ProcessBehaviorChart = 0x0211000,
-	RunChart = 0x0211001,
-	ParetoChart = 0x0211002,
+	// continuous improvement plots
+	ProcessBehaviorChart,
+	RunChart,
+	ParetoChart,
 
-	WorksheetElementContainer = 0x0220000,
-	AbstractPlot = 0x0221000,
-	CartesianPlot = 0x0221001,
-	WorksheetElementGroup = 0x0222000,
-	XYCurve = 0x0240000,
-	XYEquationCurve = 0x0240001,
+	WorksheetElementContainer,
+	AbstractPlot,
+	CartesianPlot,
+	WorksheetElementGroup,
+	XYCurve,
+	XYEquationCurve,
 
 	// analysis curves
-	XYAnalysisCurve = 0x0280000,
-	XYConvolutionCurve = 0x0280001,
-	XYCorrelationCurve = 0x0280002,
-	XYDataReductionCurve = 0x0280004,
-	XYDifferentiationCurve = 0x0280008,
-	XYFitCurve = 0x0280010,
-	XYFourierFilterCurve = 0x0280020,
-	XYFourierTransformCurve = 0x0280040,
-	XYInterpolationCurve = 0x0280080,
-	XYIntegrationCurve = 0x0280100,
-	XYSmoothCurve = 0x0280200,
-	XYHilbertTransformCurve = 0x0280400,
-	XYFunctionCurve = 0x0280800,
+	XYAnalysisCurve,
+	XYConvolutionCurve,
+	XYCorrelationCurve,
+	XYLineSimplificationCurve,
+	XYDifferentiationCurve,
+	XYFitCurve,
+	XYFourierFilterCurve,
+	XYFourierTransformCurve,
+	XYInterpolationCurve,
+	XYIntegrationCurve,
+	XYSmoothCurve,
+	XYHilbertTransformCurve,
+	XYFunctionCurve,
 
-	AbstractPart = 0x0400000,
-	AbstractDataSource = 0x0410000,
-	Matrix = 0x0411000,
-	Spreadsheet = 0x0412000,
-	LiveDataSource = 0x0412001,
-	MQTTTopic = 0x0412002,
-	StatisticsSpreadsheet = 0x0412004,
-	Notebook = 0x0420001,
-	Datapicker = 0x0420002,
-	DatapickerImage = 0x0420004,
-	Note = 0x0420008,
-	Workbook = 0x0420010,
-	Worksheet = 0x0420020,
+	AbstractPart,
+	AbstractDataSource,
+	Matrix,
+	Spreadsheet,
+	LiveDataSource,
+	MQTTTopic,
+	StatisticsSpreadsheet,
+	Notebook,
+	Datapicker,
+	DatapickerImage,
+	Note,
+	Workbook,
+	Worksheet,
+	Script,
 
-	AbstractColumn = 0x1000000,
-	Column = 0x1000001,
-	SimpleFilterColumn = 0x1000002,
-	ColumnStringIO = 0x1000004,
+	AbstractColumn,
+	Column,
+	SimpleFilterColumn,
+	ColumnStringIO,
 
-	Folder = 0x2000000,
-	Project = 0x2000001,
-	MQTTClient = 0x2000002,
-	MQTTSubscription = 0x2000004,
+	// statistical analysis
+	HypothesisTest,
+
+	// time series analysis
+	SeasonalDecomposition,
+
+	Folder,
+	Project,
+	MQTTClient,
+	MQTTSubscription
 };
 
 #ifdef SDK
@@ -140,134 +150,144 @@ public:
 	};
 
 	// type name for internal use (no translation)
-	static QString typeName(AspectType type) {
+	// IMPORTANT: This name must match the class name!
+	// It will be used to use the QObject::inherits() function
+	static constexpr std::string_view typeName(AspectType type) {
 		switch (type) {
 		case AspectType::AbstractAspect:
-			return QStringLiteral("AbstractAspect");
+			return std::string_view("AbstractAspect");
 		case AspectType::AbstractFilter:
-			return QStringLiteral("AbstractFilter");
+			return std::string_view("AbstractFilter");
 		case AspectType::DatapickerCurve:
-			return QStringLiteral("DatapickerCurve");
+			return std::string_view("DatapickerCurve");
 		case AspectType::DatapickerPoint:
-			return QStringLiteral("DatapickerPoint");
+			return std::string_view("DatapickerPoint");
 		case AspectType::WorksheetElement:
-			return QStringLiteral("WorksheetElement");
+			return std::string_view("WorksheetElement");
 		case AspectType::Axis:
-			return QStringLiteral("Axis");
+			return std::string_view("Axis");
 		case AspectType::CartesianPlotLegend:
-			return QStringLiteral("CartesianPlotLegend");
+			return std::string_view("CartesianPlotLegend");
 		case AspectType::CustomPoint:
-			return QStringLiteral("CustomPoint");
+			return std::string_view("CustomPoint");
 		case AspectType::Histogram:
-			return QStringLiteral("Histogram");
+			return std::string_view("Histogram");
 		case AspectType::PlotArea:
-			return QStringLiteral("PlotArea");
+			return std::string_view("PlotArea");
 		case AspectType::TextLabel:
-			return QStringLiteral("TextLabel");
+			return std::string_view("TextLabel");
 		case AspectType::Image:
-			return QStringLiteral("Image");
+			return std::string_view("Image");
 		case AspectType::ReferenceLine:
-			return QStringLiteral("ReferenceLine");
+			return std::string_view("ReferenceLine");
 		case AspectType::ReferenceRange:
-			return QStringLiteral("ReferenceRange");
+			return std::string_view("ReferenceRange");
 		case AspectType::InfoElement:
-			return QStringLiteral("InfoElement");
+			return std::string_view("InfoElement");
 		case AspectType::WorksheetElementContainer:
-			return QStringLiteral("WorksheetElementContainer");
+			return std::string_view("WorksheetElementContainer");
 		case AspectType::AbstractPlot:
-			return QStringLiteral("AbstractPlot");
+			return std::string_view("AbstractPlot");
 		case AspectType::CartesianPlot:
-			return QStringLiteral("CartesianPlot");
+			return std::string_view("CartesianPlot");
 		case AspectType::WorksheetElementGroup:
-			return QStringLiteral("WorksheetElementGroup");
+			return std::string_view("WorksheetElementGroup");
 		case AspectType::XYCurve:
-			return QStringLiteral("XYCurve");
+			return std::string_view("XYCurve");
 		case AspectType::XYEquationCurve:
-			return QStringLiteral("XYEquationCurve");
+			return std::string_view("XYEquationCurve");
 		case AspectType::XYFunctionCurve:
-			return QStringLiteral("XYFunctionCurve");
+			return std::string_view("XYFunctionCurve");
 		case AspectType::XYAnalysisCurve:
-			return QStringLiteral("XYAnalysisCurve");
+			return std::string_view("XYAnalysisCurve");
 		case AspectType::XYConvolutionCurve:
-			return QStringLiteral("XYConvolutionCurve");
+			return std::string_view("XYConvolutionCurve");
 		case AspectType::XYCorrelationCurve:
-			return QStringLiteral("XYCorrelationCurve");
-		case AspectType::XYDataReductionCurve:
-			return QStringLiteral("XYDataReductionCurve");
+			return std::string_view("XYCorrelationCurve");
+		case AspectType::XYLineSimplificationCurve:
+			return std::string_view("XYLineSimplificationCurve");
 		case AspectType::XYDifferentiationCurve:
-			return QStringLiteral("XYDifferentiationCurve");
+			return std::string_view("XYDifferentiationCurve");
 		case AspectType::XYFitCurve:
-			return QStringLiteral("XYFitCurve");
+			return std::string_view("XYFitCurve");
 		case AspectType::XYFourierFilterCurve:
-			return QStringLiteral("XYFourierFilterCurve");
+			return std::string_view("XYFourierFilterCurve");
 		case AspectType::XYFourierTransformCurve:
-			return QStringLiteral("XYFourierTransformCurve");
+			return std::string_view("XYFourierTransformCurve");
 		case AspectType::XYInterpolationCurve:
-			return QStringLiteral("XYInterpolationCurve");
+			return std::string_view("XYInterpolationCurve");
 		case AspectType::XYIntegrationCurve:
-			return QStringLiteral("XYIntegrationCurve");
+			return std::string_view("XYIntegrationCurve");
 		case AspectType::XYSmoothCurve:
-			return QStringLiteral("XYSmoothCurve");
+			return std::string_view("XYSmoothCurve");
 		case AspectType::XYHilbertTransformCurve:
-			return QStringLiteral("XYHilbertTransformCurve");
+			return std::string_view("XYHilbertTransformCurve");
 		case AspectType::BarPlot:
-			return QStringLiteral("BarPlot");
+			return std::string_view("BarPlot");
 		case AspectType::BoxPlot:
-			return QStringLiteral("BoxPlot");
+			return std::string_view("BoxPlot");
 		case AspectType::QQPlot:
-			return QStringLiteral("QQPlot");
+			return std::string_view("QQPlot");
 		case AspectType::KDEPlot:
-			return QStringLiteral("KDEPlot");
+			return std::string_view("KDEPlot");
 		case AspectType::LollipopPlot:
-			return QStringLiteral("LollipopPlot");
+			return std::string_view("LollipopPlot");
 		case AspectType::ParetoChart:
-			return QStringLiteral("ParetoChart");
+			return std::string_view("ParetoChart");
 		case AspectType::ProcessBehaviorChart:
-			return QStringLiteral("ProcessBehaviorChart");
+			return std::string_view("ProcessBehaviorChart");
 		case AspectType::RunChart:
-			return QStringLiteral("RunChart");
+			return std::string_view("RunChart");
 		case AspectType::AbstractPart:
-			return QStringLiteral("AbstractPart");
+			return std::string_view("AbstractPart");
 		case AspectType::AbstractDataSource:
-			return QStringLiteral("AbstractDataSource");
+			return std::string_view("AbstractDataSource");
 		case AspectType::Matrix:
-			return QStringLiteral("Matrix");
+			return std::string_view("Matrix");
 		case AspectType::Spreadsheet:
-			return QStringLiteral("Spreadsheet");
+			return std::string_view("Spreadsheet");
 		case AspectType::StatisticsSpreadsheet:
-			return QStringLiteral("StatisticsSpreadsheet");
+			return std::string_view("StatisticsSpreadsheet");
 		case AspectType::LiveDataSource:
-			return QStringLiteral("LiveDataSource");
+			return std::string_view("LiveDataSource");
 		case AspectType::MQTTTopic:
-			return QStringLiteral("MQTTTopic");
+			return std::string_view("MQTTTopic");
 		case AspectType::Notebook:
-			return QStringLiteral("Notebook");
+			return std::string_view("Notebook");
 		case AspectType::Datapicker:
-			return QStringLiteral("Datapicker");
+			return std::string_view("Datapicker");
 		case AspectType::DatapickerImage:
-			return QStringLiteral("DatapickerImage");
+			return std::string_view("DatapickerImage");
 		case AspectType::Note:
-			return QStringLiteral("Note");
+			return std::string_view("Note");
 		case AspectType::Workbook:
-			return QStringLiteral("Workbook");
+			return std::string_view("Workbook");
 		case AspectType::Worksheet:
-			return QStringLiteral("Worksheet");
+			return std::string_view("Worksheet");
+		case AspectType::Script:
+			return std::string_view("Script");
 		case AspectType::AbstractColumn:
-			return QStringLiteral("AbstractColumn");
+			return std::string_view("AbstractColumn");
 		case AspectType::Column:
-			return QStringLiteral("Column");
+			return std::string_view("Column");
 		case AspectType::SimpleFilterColumn:
-			return QStringLiteral("SimpleFilterColumn");
+			return std::string_view("SimpleFilterColumn");
 		case AspectType::ColumnStringIO:
-			return QStringLiteral("ColumnStringIO");
+			return std::string_view("ColumnStringIO");
 		case AspectType::Folder:
-			return QStringLiteral("Folder");
+			return std::string_view("Folder");
 		case AspectType::Project:
-			return QStringLiteral("Project");
+			return std::string_view("Project");
 		case AspectType::MQTTClient:
-			return QStringLiteral("MQTTClient");
+			return std::string_view("MQTTClient");
 		case AspectType::MQTTSubscription:
-			return QStringLiteral("MQTTSubscription");
+			return std::string_view("MQTTSubscription");
+		case AspectType::HypothesisTest:
+			return std::string_view("HypothesisTest");
+			break;
+		case AspectType::SeasonalDecomposition:
+			return std::string_view("SeasonalDecomposition");
+			break;
 		}
 
 		return {};
@@ -280,9 +300,10 @@ public:
 	void setCreationTime(const QDateTime&);
 	QDateTime creationTime() const;
 	virtual Project* project();
+	virtual const Project* project() const;
 	virtual QString path() const;
 	void setHidden(bool);
-	bool hidden() const;
+	bool isHidden() const;
 	void setFixed(bool);
 	bool isFixed() const;
 	void setSelected(bool);
@@ -295,20 +316,64 @@ public:
 	void setProjectChanged(bool);
 
 	AspectType type() const;
-	bool inherits(AspectType type) const;
+	using QObject::inherits;
+	/*!
+	 * \brief inherits
+	 * Checks if the aspect inherits from Target
+	 * \return true if inherits from Target, otherwise false
+	 */
+	template<typename Target>
+	bool inherits() const {
+		return (dynamic_cast<const Target*>(this) != nullptr);
+	}
+	/*!
+	 * \brief castTo
+	 * \return a pointer to the casted Target if this aspect
+	 * derives from Target otherwise a nullptr
+	 */
+	template<typename Target>
+	Target* castTo() {
+		return dynamic_cast<Target*>(this);
+	}
+
+	/*!
+	 * \brief castTo (const variant)
+	 * \return a pointer to the casted Target if this aspect
+	 * derives from Target otherwise a nullptr
+	 */
+	template<typename Target>
+	Target* castTo() const {
+		return dynamic_cast<Target*>(this);
+	}
+
+	/*!
+	 * \brief parent
+	 * In the parent-child hierarchy, return the first parent of type \param Target or null pointer if there is none.
+	 * \return
+	 */
+	template<typename Target>
+	Target* parent() {
+		AbstractAspect* parent = parentAspect();
+		if (!parent)
+			return nullptr;
+
+		if (auto* p = parent->castTo<Target>())
+			return p;
+
+		return parent->parent<Target>();
+	}
 
 	// functions related to the handling of the tree-like project structure
 	AbstractAspect* parentAspect() const;
-	AbstractAspect* parent(AspectType type) const;
 	void setParentAspect(AbstractAspect*);
 	Folder* folder();
 	bool isDescendantOf(AbstractAspect* other);
-	void addChild(AbstractAspect*, QUndoCommand* parent = nullptr);
+	virtual bool addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
-	virtual void finalizeAdd(){};
-	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags = {}) const;
-	void insertChild(AbstractAspect* child, int index, QUndoCommand* parent = nullptr);
-	void insertChildBefore(AbstractAspect* child, AbstractAspect* before, QUndoCommand* parent = nullptr);
+	virtual void finalizeAdd() { };
+	QVector<AbstractAspect*> children(AspectType, ChildIndexFlags = {}) const;
+	void insertChild(AbstractAspect* child, int index);
+	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 	void reparent(AbstractAspect* newParent, int newIndex = -1);
 	/*!
@@ -317,15 +382,15 @@ public:
 	 * \param parent If parent is not nullptr the command will not be executed, but the parent must be executed
 	 * to indirectly execute the created undocommand
 	 */
-	void removeChild(AbstractAspect*, QUndoCommand* parent = nullptr);
+	void removeChild(AbstractAspect*);
 	void removeAllChildren();
-	void moveChild(AbstractAspect*, int steps, QUndoCommand* parent = nullptr);
+	void moveChild(AbstractAspect*, int steps);
 	virtual QVector<AbstractAspect*> dependsOn() const;
 
 	virtual QVector<AspectType> pasteTypes() const;
 	virtual bool isDraggable() const;
 	virtual QVector<AspectType> dropableOn() const;
-	virtual void processDropEvent(const QVector<quintptr>&){};
+	virtual void processDropEvent(const QVector<quintptr>&) { };
 
 	template<class T>
 	T* ancestor() const {
@@ -339,17 +404,17 @@ public:
 		return nullptr;
 	}
 
-	template<class T>
-	QVector<T*> children(ChildIndexFlags flags = {}) const {
-		QVector<T*> result;
+	template<class Target>
+	QVector<Target*> children(ChildIndexFlags flags = {}) const {
+		QVector<Target*> result;
 		for (auto* child : children()) {
-			if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
-				T* i = dynamic_cast<T*>(child);
+			if (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) {
+				auto* i = dynamic_cast<Target*>(child);
 				if (i)
 					result << i;
 
 				if (child && flags & ChildIndexFlag::Recursive)
-					result << child->template children<T>(flags);
+					result << child->template children<Target>(flags);
 			}
 		}
 		return result;
@@ -360,7 +425,7 @@ public:
 		int i = 0;
 		for (auto* child : children()) {
 			T* c = dynamic_cast<T*>(child);
-			if (c && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) && index == i++)
+			if (c && (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) && index == i++)
 				return c;
 		}
 		return nullptr;
@@ -376,12 +441,20 @@ public:
 		return nullptr;
 	}
 
+	AbstractAspect* child(const QString& name, AspectType type) const {
+		for (auto* child : children()) {
+			if (child->type() == type && child->name() == name)
+				return child;
+		}
+		return nullptr;
+	}
+
 	template<class T>
 	int childCount(ChildIndexFlags flags = {}) const {
 		int result = 0;
 		for (auto* child : children()) {
 			T* i = dynamic_cast<T*>(child);
-			if (i && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()))
+			if (i && (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()))
 				result++;
 		}
 		return result;
@@ -394,14 +467,15 @@ public:
 			if (child == c)
 				return index;
 			T* i = dynamic_cast<T*>(c);
-			if (i && (flags & ChildIndexFlag::IncludeHidden || !c->hidden()))
+			if (i && (flags & ChildIndexFlag::IncludeHidden || !c->isHidden()))
 				index++;
 		}
 		return -1;
 	}
 
 	// undo/redo related functions
-	void setUndoAware(bool);
+	void setUndoAware(bool value);
+	bool isUndoAware() const;
 	virtual QUndoStack* undoStack() const;
 	void exec(QUndoCommand*);
 	void exec(QUndoCommand* command,
@@ -418,10 +492,12 @@ public:
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*, bool preview) = 0;
 	void setPasted(bool);
-	bool pasted() const;
+	bool isPasted() const;
 
 	static AspectType clipboardAspectType(QString&);
 	static QString uniqueNameFor(const QString& name, const QStringList& names);
+
+	typedef AbstractAspectPrivate Private;
 
 protected:
 	void info(const QString& text) {
@@ -447,10 +523,9 @@ public Q_SLOTS:
 	bool setName(const QString&, NameHandling handling = NameHandling::AutoUnique, QUndoCommand* parent = nullptr);
 	void setComment(const QString&);
 	void remove();
-	void remove(QUndoCommand* parent);
 	void copy();
 	void duplicate();
-	void paste(bool duplicate = false);
+	void paste(bool duplicate = false, int index = -1);
 
 private Q_SLOTS:
 	void moveUp();
@@ -463,6 +538,10 @@ protected Q_SLOTS:
 Q_SIGNALS:
 	void aspectDescriptionAboutToChange(const AbstractAspect*);
 	void aspectDescriptionChanged(const AbstractAspect*);
+
+	void aspectCommentAboutToChange(const AbstractAspect*);
+	void aspectCommentChanged(const AbstractAspect*);
+
 	/*!
 	 * \brief aspectAboutToBeAdded
 	 * Signal indicating a new child was added at position \p index. Do not connect to both variants of aspectAboutToBeAdded!
@@ -495,6 +574,7 @@ Q_SIGNALS:
 	void aspectHiddenAboutToChange(const AbstractAspect*);
 	void aspectHiddenChanged(const AbstractAspect*);
 	void statusInfo(const QString&);
+	void statusError(const QString&);
 	void renameRequested();
 	void contextMenuRequested(AspectType, QMenu*);
 

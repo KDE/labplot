@@ -939,7 +939,7 @@ void SpinBoxTest::numberSpinBoxFeedback() {
 	sb.keyPressEvent(&event);
 	QCOMPARE(valueChangedCounter, 2);
 	QCOMPARE(lastValue, 7);
-	QCOMPARE(sb.toolTip(), QStringLiteral("Invalid value entered. Valid value: %1").arg(0));
+	QCOMPARE(sb.toolTip(), i18n("Invalid value entered. Valid value: %1", QString::number(0)));
 	QCOMPARE(sb.m_waitFeedback, false);
 
 	sb.keyPressEvent(&event);
@@ -1030,7 +1030,7 @@ void SpinBoxTest::numberSpinBoxFeedbackCursorPosition2() {
 	CartesianPlotDock d(nullptr);
 
 	d.setPlots({p});
-	d.setPlots({p}); // Important to do it a second time to see that the connections are cleared bevore connecting again
+	d.setPlots({p}); // Important to do it a second time to see that the connections are cleared before connecting again
 
 	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.5 cm"));
 	d.ui.sbPaddingHorizontal->lineEdit()->setCursorPosition(3);
@@ -1247,7 +1247,7 @@ void SpinBoxTest::thousandSeparatorScrolling2() {
 }
 
 void SpinBoxTest::thousandSeparatorScrollingSeparatorPosition() {
-	QSKIP("Undecided what to do");
+	QSKIP("Undecided what to do", QTest::SkipSingle);
 	NumberSpinBox sb;
 	sb.setLocale(QLocale(QLocale::German));
 	QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));

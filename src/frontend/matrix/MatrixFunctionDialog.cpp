@@ -11,6 +11,7 @@
 #include "MatrixFunctionDialog.h"
 #include "backend/core/Settings.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/gsl/Parser.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "frontend/widgets/ConstantsWidget.h"
@@ -29,7 +30,6 @@
 #include <QElapsedTimer>
 #endif
 
-#include "backend/gsl/parser.h"
 #include <cmath>
 
 /*!
@@ -163,12 +163,13 @@ public:
 		double y = m_yStart;
 		DEBUG("FILL col" << m_startCol << "-" << m_endCol << " x/y =" << x << '/' << y << " steps =" << m_xStep << '/' << m_yStep << " rows =" << rows)
 
-		parser_var vars[] = {{"x", x}, {"y", y}};
+		Parsing::parser_var vars[] = {{"x", x}, {"y", y}};
+		Parsing::Parser parser(true);
 		for (int col = m_startCol; col < m_endCol; ++col) {
 			vars[0].value = x;
 			for (int row = 0; row < rows; ++row) {
 				vars[1].value = y;
-				double z = parse_with_vars(m_func, vars, 2, qPrintable(QLocale().name()));
+				double z = parser.parse_with_vars(m_func, vars, 2, qPrintable(QLocale().name()));
 				// DEBUG(" z =" << z);
 				m_matrixData[col][row] = z;
 				y += m_yStep;
@@ -191,7 +192,7 @@ private:
 };
 
 void MatrixFunctionDialog::generate() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 
 	m_matrix->beginMacro(i18n("%1: fill matrix with function values", m_matrix->name()));
 
@@ -237,12 +238,13 @@ void MatrixFunctionDialog::generate() {
 	*/
 	double x = m_matrix->xStart();
 	double y = m_matrix->yStart();
-	parser_var vars[] = {{"x", x}, {"y", y}};
+	Parsing::parser_var vars[] = {{"x", x}, {"y", y}};
+	Parsing::Parser parser(true);
 	for (int col = 0; col < m_matrix->columnCount(); ++col) {
 		vars[0].value = x;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			vars[1].value = y;
-			(*new_data)[col][row] = parse_with_vars(qPrintable(ui.teEquation->toPlainText()), vars, 2, qPrintable(QLocale().name()));
+			(*new_data)[col][row] = parser.parse_with_vars(qPrintable(ui.teEquation->toPlainText()), vars, 2, qPrintable(QLocale().name()));
 			y += yStep;
 		}
 		y = m_matrix->yStart();
@@ -258,5 +260,4 @@ void MatrixFunctionDialog::generate() {
 	m_matrix->setData(new_data);
 
 	m_matrix->endMacro();
-	RESET_CURSOR;
 }

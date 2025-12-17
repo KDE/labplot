@@ -14,9 +14,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/GuiTools.h"
 
 #include <QActionGroup>
@@ -30,12 +27,14 @@
 
 /**
  * \class ReferenceRange
- * \brief A customizable point.
+ * \brief This class implements a rectangular that can be placed at a custom reference position on the plot
+ * to highlight certain range of the visualized data.
  *
- * The position can be either specified by mouse events or by providing the
- * x- and y- coordinates in parent's coordinate system
+ *
+ * The custom position can be either specified by moving the line with the mouse or by manually providing
+ * the start and end values for x or y for the vertical or horizontal orientations, respectively.
+ * The coordinates are provided relatively to plot's coordinate system.
  */
-
 ReferenceRange::ReferenceRange(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new ReferenceRangePrivate(this), AspectType::ReferenceRange) {
 	Q_D(ReferenceRange);
@@ -417,7 +416,7 @@ void ReferenceRangePrivate::updatePositionLimit() {
 
 /*!
  * called when the user moves the graphics item with the mouse and the scene position of the item is changed.
- * Here we update the logical coordinates for the start and end points based on the new valud for the logical
+ * Here we update the logical coordinates for the start and end points based on the new value for the logical
  * position \c newPosition of the item's center and notify the dock widget.
  */
 // TODO: make this undo/redo-able
@@ -618,11 +617,9 @@ void ReferenceRange::loadThemeConfig(const KConfig& config) {
 		if (child == this)
 			break;
 
-		if (child->inherits(AspectType::ReferenceRange))
+		if (child->inherits<ReferenceRange>())
 			++index;
 	}
-
-	const auto& themeColor = plot->themeColorPalette(index);
 
 	KConfigGroup group;
 	if (config.hasGroup(QStringLiteral("Theme")))
@@ -632,5 +629,5 @@ void ReferenceRange::loadThemeConfig(const KConfig& config) {
 
 	Q_D(ReferenceRange);
 	d->line->loadThemeConfig(group);
-	d->background->loadThemeConfig(group, themeColor);
+	d->background->loadThemeConfig(group, plot->plotColor(index));
 }

@@ -168,7 +168,7 @@ void StatisticsColumnWidget::setCurrentTab(int index) {
 }
 
 void StatisticsColumnWidget::currentTabChanged(int index) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	if (m_column->isNumeric()) {
 		if (index == 0 && !m_overviewInitialized)
 			showOverview();
@@ -190,7 +190,6 @@ void StatisticsColumnWidget::currentTabChanged(int index) {
 	}
 
 	Q_EMIT tabChanged(index);
-	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showOverview() {
@@ -242,8 +241,8 @@ void StatisticsColumnWidget::showOverview() {
 	} else { // datetime
 		auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
 		m_teOverview->setHtml(m_htmlOverview.arg(QString::number(statistics.size),
-												 QDateTime::fromMSecsSinceEpoch(statistics.minimum, Qt::UTC).toString(filter->format()),
-												 QDateTime::fromMSecsSinceEpoch(statistics.maximum, Qt::UTC).toString(filter->format())));
+												 QDateTime::fromMSecsSinceEpoch(statistics.minimum).toString(filter->format()),
+												 QDateTime::fromMSecsSinceEpoch(statistics.maximum).toString(filter->format())));
 	}
 
 	showOverviewPlot();
@@ -266,7 +265,7 @@ void StatisticsColumnWidget::showOverviewPlot() {
 
 	// set the axes labels
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		axis->setSuppressRetransform(true);
 		if (axis->orientation() == Axis::Orientation::Vertical)
 			axis->title()->setText(QString());
@@ -277,7 +276,7 @@ void StatisticsColumnWidget::showOverviewPlot() {
 		}
 
 		auto font = axis->labelsFont();
-		font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+		font.setPointSizeF(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 		axis->setLabelsFont(font);
 		axis->setLabelsOffset(2);
 		axis->setMajorTicksDirection(Axis::ticksIn);
@@ -318,7 +317,7 @@ void StatisticsColumnWidget::showHistogram() {
 	auto* plot = addPlot(&m_histogramWidget);
 
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(m_column->name());
 			axis->majorGridLine()->setStyle(Qt::NoPen);
@@ -333,7 +332,6 @@ void StatisticsColumnWidget::showHistogram() {
 	plot->addChild(histogram);
 	histogram->setDataColumn(m_column);
 
-	plot->retransform();
 	m_histogramInitialized = true;
 }
 
@@ -343,7 +341,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 
 	// set the axes labels
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal)
 			axis->title()->setText(m_column->name());
 		else
@@ -367,7 +365,6 @@ void StatisticsColumnWidget::showKDEPlot() {
 	kdePlot->setBandwidthType(nsl_kde_bandwidth_silverman);
 	kdePlot->setDataColumn(m_column);
 
-	plot->retransform();
 	m_kdePlotInitialized = true;
 }
 
@@ -376,7 +373,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	auto* plot = addPlot(&m_qqPlotWidget);
 
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal)
 			axis->title()->setText(i18n("Theoretical Quantiles"));
 		else
@@ -390,7 +387,6 @@ void StatisticsColumnWidget::showQQPlot() {
 	plot->addChild(qqPlot);
 	qqPlot->setDataColumn(m_column);
 
-	plot->retransform();
 	m_qqPlotInitialized = true;
 }
 
@@ -399,7 +395,7 @@ void StatisticsColumnWidget::showBoxPlot() {
 	auto* plot = addPlot(&m_boxPlotWidget);
 
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 			axis->setMajorTicksDirection(Axis::noTicks);
@@ -416,13 +412,11 @@ void StatisticsColumnWidget::showBoxPlot() {
 	auto* boxPlot = new BoxPlot(QString());
 	boxPlot->setOrientation(BoxPlot::Orientation::Vertical);
 	boxPlot->setWhiskersType(BoxPlot::WhiskersType::IQR);
+	boxPlot->setDataColumns({m_column});
+
+	// add the child to the parent _after_ the data column was set so the theme settings are properly applied in loadThemeConfig().
 	plot->addChild(boxPlot);
 
-	QVector<const AbstractColumn*> columns;
-	columns << const_cast<Column*>(m_column);
-	boxPlot->setDataColumns(columns);
-
-	plot->retransform();
 	m_boxPlotInitialized = true;
 }
 
@@ -431,12 +425,6 @@ void StatisticsColumnWidget::showBarPlot() {
 	auto* plot = addPlot(&m_barPlotWidget);
 	plot->title()->setText(m_column->name());
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
-
-	auto* barPlot = new BarPlot(QString());
-	plot->addChild(barPlot);
-	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
-	barPlot->value()->setType(Value::Type::BinEntries);
-	barPlot->value()->setPosition(Value::Position::Above);
 
 	// generate columns holding the data and the labels
 	auto* dataColumn = new Column(QStringLiteral("data"));
@@ -469,13 +457,20 @@ void StatisticsColumnWidget::showBarPlot() {
 	dataColumn->replaceInteger(0, data);
 	labelsColumn->replaceTexts(0, labels);
 
-	QVector<const AbstractColumn*> columns;
-	columns << dataColumn;
-	barPlot->setDataColumns(columns);
+	// bar plot
+	auto* barPlot = new BarPlot(QString());
+	barPlot->setDataColumns({dataColumn});
+
+	// add the child to the parent _after_ the data column was set so the theme settings are properly applied in loadThemeConfig().
+	plot->addChild(barPlot);
+
+	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
+	barPlot->value()->setType(Value::Type::BinEntries);
+	barPlot->value()->setPosition(Value::Position::Above);
 
 	// axes properties
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(QString());
 			axis->majorGridLine()->setStyle(Qt::NoPen);
@@ -494,7 +489,6 @@ void StatisticsColumnWidget::showBarPlot() {
 		axis->setArrowType(Axis::ArrowType::NoArrow);
 	}
 
-	plot->retransform();
 	m_barPlotInitialized = true;
 }
 
@@ -505,7 +499,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	plot->setHorizontalPadding(Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter));
 	plot->setRightPadding(Worksheet::convertToSceneUnits(3.2, Worksheet::Unit::Centimeter));
 
-	// add second range for the cumulative percentage of the total number of occurences
+	// add second range for the cumulative percentage of the total number of occurrences
 	plot->addYRange(Range<double>(0, 100)); // add second y range
 	plot->addCoordinateSystem(); // add cs for second y range
 	plot->setCoordinateSystemRangeIndex(plot->coordinateSystemCount() - 1, Dimension::Y, 1); // specify new y range for new cs
@@ -523,10 +517,6 @@ void StatisticsColumnWidget::showParetoPlot() {
 	axis->setCoordinateSystemIndex(1);
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
-
-	auto* barPlot = new BarPlot(QString());
-	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
-	plot->addChild(barPlot);
 
 	// generate columns holding the data and the labels
 	int count = m_column->statistics().unique;
@@ -572,7 +562,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 		data << pair.second;
 	}
 
-	// calculate the cummulative values
+	// calculate the cumulative values
 	int sum = 0;
 	row = 0;
 	for (auto value : data) {
@@ -587,18 +577,22 @@ void StatisticsColumnWidget::showParetoPlot() {
 	xColumn->setValues(xData);
 	yColumn->setValues(yData);
 
-	QVector<const AbstractColumn*> columns;
-	columns << dataColumn;
-	barPlot->setDataColumns(columns);
+	// add bar plot
+	auto* barPlot = new BarPlot(QString());
+	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
+	barPlot->setDataColumns({dataColumn});
+
+	// add the child to the parent _after_ the data column was set so the theme settings are properly applied in loadThemeConfig().
+	plot->addChild(barPlot);
 
 	// add cumulated percentage curve
 	auto* curve = new XYCurve(QStringLiteral("curve"));
-	curve->setCoordinateSystemIndex(1); // asign to the second y-range going from 0 to 100%
+	plot->addChild(curve);
+	curve->setCoordinateSystemIndex(1); // assign to the second y-range going from 0 to 100%
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
 	curve->line()->setStyle(Qt::SolidLine);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
-	plot->addChild(curve);
 	curve->setValuesType(XYCurve::ValuesType::Y);
 	curve->setValuesPosition(XYCurve::ValuesPosition::Right);
 	curve->setValuesDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
@@ -613,7 +607,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	// axes properties
 	auto axes = plot->children<Axis>();
 	bool firstYAxis = false;
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(QString());
 			axis->majorGridLine()->setStyle(Qt::NoPen);
@@ -631,7 +625,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 				firstYAxis = true;
 			} else {
 				axis->title()->setText(i18n("Cumulative Percentage"));
-				// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was adressed
+				// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was addressed
 				axis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
 			}
 		}
@@ -640,7 +634,6 @@ void StatisticsColumnWidget::showParetoPlot() {
 		axis->setArrowType(Axis::ArrowType::NoArrow);
 	}
 
-	plot->retransform();
 	m_paretoPlotInitialized = true;
 }
 

@@ -17,7 +17,12 @@ class JSONFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void testArrayImport();
+	// import of arrays
+	void testArrayImport01();
+	void testArrayImport02();
+	void testArrayImport03();
+
+	// import of objects
 	void testObjectImport01();
 	void testObjectImport02();
 	void testObjectImport03();

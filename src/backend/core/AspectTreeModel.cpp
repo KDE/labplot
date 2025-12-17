@@ -6,6 +6,7 @@
 	SPDX-FileCopyrightText: 2007-2009 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -210,6 +211,8 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 				return QLatin1String("DataExtractor");
 			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("CartesianPlot"))
 				return QLatin1String("Plot Area");
+			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("XYCurve"))
+				return QLatin1String("Plot");
 			else
 				return QLatin1String(aspect->metaObject()->className());
 		case 2:
@@ -293,7 +296,7 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex& index) const {
 
 	if (!m_selectableAspects.isEmpty()) {
 		for (AspectType type : m_selectableAspects) {
-			if (aspect->inherits(type)) {
+			if (aspect->inherits(AbstractAspect::typeName(type).data())) {
 				result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 				if (index != this->index(0, 0, QModelIndex()) && !m_filterString.isEmpty()) {
 					if (this->containsFilterString(aspect))
@@ -374,7 +377,7 @@ void AspectTreeModel::aspectAdded(const AbstractAspect* aspect) {
 }
 
 void AspectTreeModel::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	AbstractAspect* parent = aspect->parentAspect();
+	auto* parent = aspect->parentAspect();
 	int index = parent->indexOfChild<AbstractAspect>(aspect);
 	m_aspectAboutToBeRemovedCalled = true;
 	beginRemoveRows(modelIndexOfAspect(parent), index, index);
@@ -392,7 +395,7 @@ void AspectTreeModel::aspectRemoved() {
 }
 
 void AspectTreeModel::aspectAboutToBeMoved(const AbstractAspect* aspect, int destinationRow) {
-	AbstractAspect* parent = aspect->parentAspect();
+	auto* parent = aspect->parentAspect();
 	int index = parent->indexOfChild<AbstractAspect>(aspect);
 	const auto& parentIndex = modelIndexOfAspect(parent);
 	m_aspectAboutToBeMovedCalled = true;
@@ -408,20 +411,20 @@ void AspectTreeModel::aspectMoved() {
 }
 
 void AspectTreeModel::aspectHiddenAboutToChange(const AbstractAspect* aspect) {
-	for (AbstractAspect* i = aspect->parentAspect(); i; i = i->parentAspect())
-		if (i->hidden())
+	for (auto* a = aspect->parentAspect(); a; a = a->parentAspect())
+		if (a->isHidden())
 			return;
-	if (aspect->hidden())
+	if (aspect->isHidden())
 		aspectAboutToBeAdded(aspect->parentAspect(), aspect, aspect);
 	else
 		aspectAboutToBeRemoved(aspect);
 }
 
 void AspectTreeModel::aspectHiddenChanged(const AbstractAspect* aspect) {
-	for (AbstractAspect* i = aspect->parentAspect(); i; i = i->parentAspect())
-		if (i->hidden())
+	for (auto* a = aspect->parentAspect(); a; a = a->parentAspect())
+		if (a->isHidden())
 			return;
-	if (aspect->hidden())
+	if (aspect->isHidden())
 		aspectRemoved();
 	else
 		aspectAdded(aspect);
@@ -482,6 +485,40 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column)
 	return QModelIndex{};
 }
 
+QString AspectTreeModel::path(const QModelIndex& index, const QLatin1Char separator) const {
+	QStringList segments;
+	QModelIndex current = index;
+	while (current.isValid()) {
+		segments.prepend(current.data(Qt::DisplayRole).toString());
+		current = current.parent();
+	}
+	return segments.join(separator);
+}
+
+QModelIndex AspectTreeModel::modelIndexForPath(const QString& path, const QLatin1Char separator) const {
+	QStringList parts = path.split(separator, Qt::SkipEmptyParts);
+	QModelIndex parentIndex; // starts invalid, which refers to the root
+
+	for (const QString& part : parts) {
+		int rowCount = this->rowCount(parentIndex);
+
+		bool found = false;
+		for (int row = 0; row < rowCount; ++row) {
+			auto child = this->index(row, 0, parentIndex);
+			if (child.data(Qt::DisplayRole).toString() == part) {
+				parentIndex = child;
+				found = true;
+				break;
+			}
+		}
+
+		if (!found)
+			return {};
+	}
+
+	return parentIndex;
+}
+
 void AspectTreeModel::setFilterString(const QString& s) {
 	m_filterString = s;
 	QModelIndex topLeft = this->index(0, 0, QModelIndex());
@@ -530,10 +567,10 @@ void AspectTreeModel::renameRequestedSlot() {
 }
 
 void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect) {
-	if (aspect->hidden()) {
+	if (aspect->isHidden()) {
 		// a hidden aspect was selected in the view (e.g. plot title in WorksheetView)
 		// select the parent aspect first, if available
-		AbstractAspect* parent = aspect->parentAspect();
+		auto* parent = aspect->parentAspect();
 		if (parent)
 			Q_EMIT indexSelected(modelIndexOfAspect(parent));
 
@@ -548,8 +585,8 @@ void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect) {
 }
 
 void AspectTreeModel::aspectDeselectedInView(const AbstractAspect* aspect) {
-	if (aspect->hidden()) {
-		AbstractAspect* parent = aspect->parentAspect();
+	if (aspect->isHidden()) {
+		auto* parent = aspect->parentAspect();
 		if (parent)
 			Q_EMIT indexDeselected(modelIndexOfAspect(parent));
 	} else

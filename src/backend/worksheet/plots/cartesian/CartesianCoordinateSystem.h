@@ -17,10 +17,16 @@ class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
 class CartesianPlot;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT CartesianCoordinateSystem : public AbstractCoordinateSystem {
+#else
 class CartesianCoordinateSystem : public AbstractCoordinateSystem {
-	Q_ENUMS(Dimension)
+#endif
+	Q_GADGET
 public:
 	enum class Dimension { X, Y };
+	Q_ENUM(Dimension)
 
 	explicit CartesianCoordinateSystem(CartesianPlot*);
 	~CartesianCoordinateSystem() override;
@@ -29,6 +35,8 @@ public:
 
 	// TODO: document the 5 versions
 	Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
+	bool mapXLogicalToScene(double& x, MappingFlags flags = MappingFlag::DefaultMapping) const;
+	bool mapYLogicalToScene(double& y, MappingFlags flags = MappingFlag::DefaultMapping) const;
 	void mapLogicalToScene(const Points& logicalPoints,
 						   Points& scenePoints,
 						   std::vector<bool>& visiblePoints,
@@ -40,6 +48,7 @@ public:
 						   std::vector<bool>& visiblePoints,
 						   MappingFlags flags = MappingFlag::DefaultMapping) const;
 	QPointF mapLogicalToScene(QPointF, bool& visible, MappingFlags flags = MappingFlag::DefaultMapping) const override;
+	void mapLogicalToSceneDefaultMapping(Lines& lines) const;
 	Lines mapLogicalToScene(const Lines&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	Points mapSceneToLogical(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const override;
@@ -59,4 +68,5 @@ private:
 	CartesianCoordinateSystemPrivate* d;
 };
 
+using Dimension = CartesianCoordinateSystem::Dimension;
 #endif

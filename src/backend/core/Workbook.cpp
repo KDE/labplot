@@ -12,7 +12,9 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#ifndef SDK
 #include "frontend/workbook/WorkbookView.h"
+#endif
 
 #include <KLocalizedString>
 #include <QIcon>
@@ -41,6 +43,7 @@ QMenu* Workbook::createContextMenu() {
 }
 
 QWidget* Workbook::view() const {
+#ifndef SDK
 	if (!m_partView) {
 		m_view = new WorkbookView(const_cast<Workbook*>(this));
 		m_partView = m_view;
@@ -49,6 +52,9 @@ QWidget* Workbook::view() const {
 		});
 	}
 	return m_partView;
+#else
+	return nullptr;
+#endif
 }
 
 bool Workbook::exportView() const {
@@ -91,6 +97,7 @@ bool Workbook::printPreview() const {
 }
 
 Spreadsheet* Workbook::currentSpreadsheet() const {
+#ifndef SDK
 	if (!m_view)
 		return nullptr;
 
@@ -99,10 +106,12 @@ Spreadsheet* Workbook::currentSpreadsheet() const {
 		auto* aspect = child<AbstractAspect>(index);
 		return dynamic_cast<Spreadsheet*>(aspect);
 	}
+#endif
 	return nullptr;
 }
 
 Matrix* Workbook::currentMatrix() const {
+#ifndef SDK
 	if (!m_view)
 		return nullptr;
 
@@ -111,6 +120,7 @@ Matrix* Workbook::currentMatrix() const {
 		auto* aspect = child<AbstractAspect>(index);
 		return dynamic_cast<Matrix*>(aspect);
 	}
+#endif
 	return nullptr;
 }
 
@@ -121,6 +131,8 @@ Matrix* Workbook::currentMatrix() const {
  */
 void Workbook::childSelected(const AbstractAspect* aspect) {
 	int index = indexOfChild<AbstractAspect>(aspect);
+	if (index < 0)
+		return;
 	Q_EMIT workbookItemSelected(index);
 }
 
