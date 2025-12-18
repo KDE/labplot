@@ -32,6 +32,7 @@ Bug fixes:
 	* Fix updating column count in spreadsheet dock when importing data from file
 	* Fix appending data to spreadsheets from XLSX files
 	* Fix the bar chart with log-scales
+	* Undo background color of text label (#1171)
 
 -----2.12.1 (2025-08-15) -----
 Bug fixes:
