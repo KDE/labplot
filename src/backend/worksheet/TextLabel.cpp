@@ -1246,10 +1246,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	// TODO: dark mode support?
 	d->fontColor = group.readEntry(QStringLiteral("FontColor"), QColor(Qt::black)); // used when it's latex text
 	// d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::transparent)); // used when it's latex text
-	const QColor bgColor = group.readEntry(
-		QStringLiteral("BackgroundColor"),
-		QColor(Qt::transparent)
-	);
+	const QColor bgColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::transparent));
 
 	if (bgColor != d->backgroundColor)
 		setBackgroundColor(bgColor);
