@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2025-07-23 11:09+0200\n"
+"PO-Revision-Date: 2025-12-18 10:16+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -10548,7 +10548,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Color Maps Browser"
-msgstr "Navegador de mapes de color"
+msgstr "Navegador de mapes de colors"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:39
 #: src/frontend/examples/ExamplesWidget.cpp:34
@@ -15378,12 +15378,13 @@ msgstr "Compartix"
 #: src/frontend/MainWin.cpp:739
 #, kde-format
 msgid "Color Maps Browser"
-msgstr "Navegador de mapes de color"
+msgstr "Navegador de mapes de colors"
 
 #: src/frontend/MainWin.cpp:740
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
-msgstr "Obri el diàleg per a navegar a través dels mapes de color disponibles."
+msgstr ""
+"Obri el diàleg per a navegar a través dels mapes de colors disponibles."
 
 #: src/frontend/MainWin.cpp:749
 #, kde-format
@@ -25222,7 +25223,7 @@ msgid ""
 "Couldn't open the color map collections file %1. Please check your "
 "installation."
 msgstr ""
-"No s'ha pogut obrir el fitxer %1 de col·leccions de mapes de color. "
+"No s'ha pogut obrir el fitxer %1 de col·leccions de mapes de colors. "
 "Comproveu la instal·lació."
 
 #: src/tools/TeXRenderer.cpp:65
