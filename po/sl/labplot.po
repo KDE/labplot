@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-18 00:40+0000\n"
-"PO-Revision-Date: 2025-12-08 06:27+0100\n"
+"POT-Creation-Date: 2025-12-19 00:40+0000\n"
+"PO-Revision-Date: 2025-12-18 07:49+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -271,7 +271,7 @@ msgstr "Dolgo celo število"
 #: src/backend/core/AbstractColumn.cpp:230
 #: src/backend/datasources/filters/AsciiFilter.cpp:557
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:539
-#: src/frontend/ActionsManager.cpp:509
+#: src/frontend/ActionsManager.cpp:510
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
@@ -370,12 +370,12 @@ msgstr "Vh%1"
 msgid "Import Data"
 msgstr "Uvoz podatkov"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:261
+#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:262
 #, kde-format
 msgid "From File..."
 msgstr "Iz datoteke..."
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:282
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Iz zbirke podatkov SQL..."
@@ -400,7 +400,7 @@ msgstr "Natisni"
 msgid "Print Preview"
 msgstr "Predogled tiskanja"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:381
+#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:382
 #, kde-format
 msgid "&Close"
 msgstr "Zapri"
@@ -1914,7 +1914,7 @@ msgid "Unknown"
 msgstr "Neznano"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1215
+#: src/frontend/ActionsManager.cpp:222 src/frontend/MainWin.cpp:1215
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -8257,7 +8257,7 @@ msgstr "Residual"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:885
-#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1233
+#: src/frontend/ActionsManager.cpp:228 src/frontend/MainWin.cpp:1233
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -9333,7 +9333,7 @@ msgstr "Navpična os"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:540
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
-#: src/frontend/ActionsManager.cpp:513
+#: src/frontend/ActionsManager.cpp:514
 #: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:131
 #: src/frontend/notebook/NotebookView.cpp:109
@@ -9383,7 +9383,7 @@ msgid "Inset Plot Area with Data"
 msgstr "Vstavljeno področje risanja s podatki"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:582
-#: src/frontend/ActionsManager.cpp:847
+#: src/frontend/ActionsManager.cpp:848
 #: src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:441
@@ -9632,10 +9632,9 @@ msgstr "%1: omogočite Kazalec1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1790
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1791
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color mode"
-msgstr "%1: uporabi barvo risbe"
+msgstr "%1: nastavi barvni način risanja"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1802
 #: src/backend/worksheet/Worksheet.cpp:854
@@ -9658,10 +9657,9 @@ msgstr "%1: določite temo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1815
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color map"
-msgstr "%1: uporabi barvo risbe"
+msgstr "%1: nastavi barvno karto grafa"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2002
 #, kde-format
@@ -11439,33 +11437,33 @@ msgstr ""
 "večplatformsko vizualizacijo in analizo podatkov, dostopna vsem, (Različica "
 "%2) [Računalniška programska oprema]. %3."
 
-#: src/frontend/ActionsManager.cpp:192
+#: src/frontend/ActionsManager.cpp:193
 #, kde-format
 msgid "&Open Example"
 msgstr "&Odpri primer"
 
-#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1171
+#: src/frontend/ActionsManager.cpp:206 src/frontend/MainWin.cpp:1171
 #, kde-format
 msgid "Workbook"
 msgstr "Delovni zvezek"
 
-#: src/frontend/ActionsManager.cpp:207
+#: src/frontend/ActionsManager.cpp:208
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Ustvari nov delovni zvezek za preglednice, matrike in grafikone zbirke"
 
-#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1179
+#: src/frontend/ActionsManager.cpp:211 src/frontend/MainWin.cpp:1179
 #, kde-format
 msgid "Data Extractor"
 msgstr "Izvlečnik podatkov"
 
-#: src/frontend/ActionsManager.cpp:211
+#: src/frontend/ActionsManager.cpp:212
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Ustvari izvlečnik podatkov za pridobivanje podatkov iz slike"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
-#: src/frontend/ActionsManager.cpp:215
+#: src/frontend/ActionsManager.cpp:216
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
@@ -11477,234 +11475,234 @@ msgstr "Ustvari izvlečnik podatkov za pridobivanje podatkov iz slike"
 msgid "Spreadsheet"
 msgstr "Razpredelnica"
 
-#: src/frontend/ActionsManager.cpp:217
+#: src/frontend/ActionsManager.cpp:218
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Ustvari novo preglednico za urejanje podatkov"
 
-#: src/frontend/ActionsManager.cpp:223
+#: src/frontend/ActionsManager.cpp:224
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Ustvari novo matriko za urejanje podatkov"
 
-#: src/frontend/ActionsManager.cpp:229
+#: src/frontend/ActionsManager.cpp:230
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Ustvari nov delovni list za urejanje podatkov"
 
-#: src/frontend/ActionsManager.cpp:237
+#: src/frontend/ActionsManager.cpp:238
 #, kde-format
 msgid "Creates a new %1 script"
 msgstr "Ustvari nov %1 skript"
 
-#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1241
+#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1241
 #, kde-format
 msgid "Note"
 msgstr "Opomba"
 
-#: src/frontend/ActionsManager.cpp:245
+#: src/frontend/ActionsManager.cpp:246
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Ustvari novo opombo za poljubno besedilo"
 
-#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1163
+#: src/frontend/ActionsManager.cpp:250 src/frontend/MainWin.cpp:1163
 #, kde-format
 msgid "Folder"
 msgstr "Mapa"
 
-#: src/frontend/ActionsManager.cpp:250
+#: src/frontend/ActionsManager.cpp:251
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Ustvari novo mapo za zbiranje delovnih listov in drugih elementov"
 
-#: src/frontend/ActionsManager.cpp:255
+#: src/frontend/ActionsManager.cpp:256
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Vir podatkov v živo ..."
 
-#: src/frontend/ActionsManager.cpp:256
+#: src/frontend/ActionsManager.cpp:257
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Ustvari vir podatkov v živo za branje podatkov iz naprave v realnem času"
 
-#: src/frontend/ActionsManager.cpp:264
+#: src/frontend/ActionsManager.cpp:265
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Uvozi podatke iz navadne datoteke"
 
-#: src/frontend/ActionsManager.cpp:269
+#: src/frontend/ActionsManager.cpp:270
 #, kde-format
 msgid "From Directory..."
 msgstr "Iz imenika..."
 
-#: src/frontend/ActionsManager.cpp:271
+#: src/frontend/ActionsManager.cpp:272
 #, kde-format
 msgid "Import multiple files from a directory"
 msgstr "Uvozi več datotek iz imenika"
 
-#: src/frontend/ActionsManager.cpp:276
+#: src/frontend/ActionsManager.cpp:277
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "Iz kaggle.com..."
 
-#: src/frontend/ActionsManager.cpp:277
+#: src/frontend/ActionsManager.cpp:278
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Uvozi podatke iz kaggle.com"
 
-#: src/frontend/ActionsManager.cpp:282
+#: src/frontend/ActionsManager.cpp:283
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Uvozi podatke iz zbirke podatkov SQL"
 
-#: src/frontend/ActionsManager.cpp:286
+#: src/frontend/ActionsManager.cpp:287
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Iz množice zbirk podatkov..."
 
-#: src/frontend/ActionsManager.cpp:287
+#: src/frontend/ActionsManager.cpp:288
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Uvozi podatke iz spletne zbirke podatkov"
 
-#: src/frontend/ActionsManager.cpp:291
+#: src/frontend/ActionsManager.cpp:292
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Projekt LabPlot ..."
 
-#: src/frontend/ActionsManager.cpp:292
+#: src/frontend/ActionsManager.cpp:293
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Uvozi projekt iz projektne datoteke LabPlot (.lml)"
 
-#: src/frontend/ActionsManager.cpp:297
+#: src/frontend/ActionsManager.cpp:298
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Projekt Origin (OPJ) ..."
 
-#: src/frontend/ActionsManager.cpp:298
+#: src/frontend/ActionsManager.cpp:299
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Uvozi projekt iz projektne datoteke OriginLab Origin (.opj)"
 
-#: src/frontend/ActionsManager.cpp:331
+#: src/frontend/ActionsManager.cpp:332
 #, kde-format
 msgid "Export..."
 msgstr "Izvozi ..."
 
-#: src/frontend/ActionsManager.cpp:332
+#: src/frontend/ActionsManager.cpp:333
 #, kde-format
 msgid "Export selected element"
 msgstr "Izvozi izbrani element"
 
-#: src/frontend/ActionsManager.cpp:338 src/frontend/ActionsManager.cpp:1332
-#: src/frontend/ActionsManager.cpp:1340
+#: src/frontend/ActionsManager.cpp:339 src/frontend/ActionsManager.cpp:1333
+#: src/frontend/ActionsManager.cpp:1341
 #, kde-format
 msgid "Share"
 msgstr "Deli"
 
-#: src/frontend/ActionsManager.cpp:343
-#, kde-format
-msgid "Color Maps Browser"
-msgstr "Brskalnik barvnih palet"
-
 #: src/frontend/ActionsManager.cpp:344
 #, kde-format
-msgid "Open dialog to browse through the available color maps."
-msgstr "Odprite pogovorno okno za brskanje po razpoložljivih barvnih paletah."
+msgid "Color Maps Browser"
+msgstr "Brskalnik barvnih kart"
 
-#: src/frontend/ActionsManager.cpp:353
+#: src/frontend/ActionsManager.cpp:345
+#, kde-format
+msgid "Open dialog to browse through the available color maps."
+msgstr "Odprite pogovorno okno za brskanje po razpoložljivih barvnih kart."
+
+#: src/frontend/ActionsManager.cpp:354
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Urejevalnik metapodatkov FITS ..."
 
-#: src/frontend/ActionsManager.cpp:354
+#: src/frontend/ActionsManager.cpp:355
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Odpre urejevalnik za urejanje metapodatkov FITS"
 
-#: src/frontend/ActionsManager.cpp:363
+#: src/frontend/ActionsManager.cpp:364
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Zgodovina razveljavitev/ponovitev ..."
 
-#: src/frontend/ActionsManager.cpp:383
+#: src/frontend/ActionsManager.cpp:384
 #, kde-format
 msgid "Close the active window"
 msgstr "Zapri aktivno okno"
 
-#: src/frontend/ActionsManager.cpp:386
+#: src/frontend/ActionsManager.cpp:387
 #, kde-format
 msgid "Close &All"
 msgstr "Zapri vse"
 
-#: src/frontend/ActionsManager.cpp:387
+#: src/frontend/ActionsManager.cpp:388
 #, kde-format
 msgid "Close all the windows"
 msgstr "Zaprite vsa okna"
 
-#: src/frontend/ActionsManager.cpp:390
+#: src/frontend/ActionsManager.cpp:391
 #, kde-format
 msgid "Ne&xt"
 msgstr "Naslednji"
 
-#: src/frontend/ActionsManager.cpp:392
+#: src/frontend/ActionsManager.cpp:393
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Premakni pozornost na naslednje okno"
 
-#: src/frontend/ActionsManager.cpp:395
+#: src/frontend/ActionsManager.cpp:396
 #, kde-format
 msgid "Pre&vious"
 msgstr "Prejšnji"
 
-#: src/frontend/ActionsManager.cpp:397
+#: src/frontend/ActionsManager.cpp:398
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Premakni pozornost na prejšnje okno"
 
-#: src/frontend/ActionsManager.cpp:404
+#: src/frontend/ActionsManager.cpp:405
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Samo trenutna mapa"
 
-#: src/frontend/ActionsManager.cpp:409
+#: src/frontend/ActionsManager.cpp:410
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Trenutna mapa in podmape"
 
-#: src/frontend/ActionsManager.cpp:413
+#: src/frontend/ActionsManager.cpp:414
 #, kde-format
 msgid "&All"
 msgstr "Vse"
 
-#: src/frontend/ActionsManager.cpp:435
+#: src/frontend/ActionsManager.cpp:436
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Pokaži uporabo pomnilnika"
 
-#: src/frontend/ActionsManager.cpp:443
+#: src/frontend/ActionsManager.cpp:444
 #, kde-format
 msgid "Project Explorer"
 msgstr "Raziskovalec projektov"
 
-#: src/frontend/ActionsManager.cpp:448
+#: src/frontend/ActionsManager.cpp:449
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Raziskovalec lastnosti"
 
-#: src/frontend/ActionsManager.cpp:453
+#: src/frontend/ActionsManager.cpp:454
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Predogled delovnega lista"
 
-#: src/frontend/ActionsManager.cpp:476
+#: src/frontend/ActionsManager.cpp:477
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Prilagodi CAS ..."
 
-#: src/frontend/ActionsManager.cpp:477
+#: src/frontend/ActionsManager.cpp:478
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -11713,130 +11711,130 @@ msgstr ""
 "Odpre nastavitve sistemov računalniške algebre za spreminjanje "
 "razpoložljivih sistemov ali omogočanje novih"
 
-#: src/frontend/ActionsManager.cpp:504
+#: src/frontend/ActionsManager.cpp:505
 #, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
 msgstr "Novo območje izrisa"
 
-#: src/frontend/ActionsManager.cpp:520
+#: src/frontend/ActionsManager.cpp:521
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:250
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Navpična postavitev"
 
-#: src/frontend/ActionsManager.cpp:525
+#: src/frontend/ActionsManager.cpp:526
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:254
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Vodoravna postavitev"
 
-#: src/frontend/ActionsManager.cpp:530
+#: src/frontend/ActionsManager.cpp:531
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:258
 #, kde-format
 msgid "Grid Layout"
 msgstr "Postavitev mreže"
 
-#: src/frontend/ActionsManager.cpp:535
+#: src/frontend/ActionsManager.cpp:536
 #: src/frontend/dockwidgets/WorksheetDock.cpp:279
 #: src/frontend/worksheet/WorksheetView.cpp:262
 #, kde-format
 msgid "No Layout"
 msgstr "Brez postavitve"
 
-#: src/frontend/ActionsManager.cpp:543 src/frontend/ActionsManager.cpp:584
+#: src/frontend/ActionsManager.cpp:544 src/frontend/ActionsManager.cpp:585
 #: src/frontend/worksheet/WorksheetView.cpp:186
 #: src/frontend/worksheet/WorksheetView.cpp:348
 #, kde-format
 msgid "Select and Edit"
 msgstr "Izbiranje in urejanje"
 
-#: src/frontend/ActionsManager.cpp:548 src/frontend/ActionsManager.cpp:761
+#: src/frontend/ActionsManager.cpp:549 src/frontend/ActionsManager.cpp:762
 #: src/frontend/datapicker/DatapickerImageView.cpp:132
 #: src/frontend/worksheet/WorksheetView.cpp:191
 #, kde-format
 msgid "Navigate"
 msgstr "Krmari"
 
-#: src/frontend/ActionsManager.cpp:553 src/frontend/ActionsManager.cpp:766
+#: src/frontend/ActionsManager.cpp:554 src/frontend/ActionsManager.cpp:767
 #: src/frontend/datapicker/DatapickerImageView.cpp:136
 #: src/frontend/worksheet/WorksheetView.cpp:195
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Izberi in povečaj"
 
-#: src/frontend/ActionsManager.cpp:559 src/frontend/ActionsManager.cpp:795
+#: src/frontend/ActionsManager.cpp:560 src/frontend/ActionsManager.cpp:796
 #, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "Povečava"
 
-#: src/frontend/ActionsManager.cpp:565 src/frontend/ActionsManager.cpp:801
+#: src/frontend/ActionsManager.cpp:566 src/frontend/ActionsManager.cpp:802
 #, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr "Povečalo"
 
-#: src/frontend/ActionsManager.cpp:578
+#: src/frontend/ActionsManager.cpp:579
 #, kde-format
 msgctxt "@action"
 msgid "Add New"
 msgstr "Dodaj nov"
 
-#: src/frontend/ActionsManager.cpp:590
+#: src/frontend/ActionsManager.cpp:591
 #: src/frontend/worksheet/WorksheetView.cpp:353
 #, kde-format
 msgid "Crosshair"
 msgstr "Križec"
 
-#: src/frontend/ActionsManager.cpp:595
+#: src/frontend/ActionsManager.cpp:596
 #: src/frontend/worksheet/WorksheetView.cpp:358
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Izberite območje in ga približajte"
 
-#: src/frontend/ActionsManager.cpp:600
+#: src/frontend/ActionsManager.cpp:601
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Izberite x-področje in ga približajte"
 
-#: src/frontend/ActionsManager.cpp:605
+#: src/frontend/ActionsManager.cpp:606
 #: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Izberite x-področje in ga približajte"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1574
+#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1574
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1499
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
 msgid "Cursor"
 msgstr "Kazalec"
 
-#: src/frontend/ActionsManager.cpp:618
+#: src/frontend/ActionsManager.cpp:619
 #: src/frontend/worksheet/WorksheetView.cpp:381
 #, kde-format
 msgid "Auto Scale"
 msgstr "Samodejno merilo"
 
-#: src/frontend/ActionsManager.cpp:622
+#: src/frontend/ActionsManager.cpp:623
 #: src/frontend/worksheet/WorksheetView.cpp:385
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Samodejno merilo X"
 
-#: src/frontend/ActionsManager.cpp:626
+#: src/frontend/ActionsManager.cpp:627
 #: src/frontend/worksheet/WorksheetView.cpp:389
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Samodejno merilo Y"
 
-#: src/frontend/ActionsManager.cpp:631 src/frontend/ActionsManager.cpp:720
+#: src/frontend/ActionsManager.cpp:632 src/frontend/ActionsManager.cpp:721
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:190
 #: src/frontend/notebook/NotebookView.cpp:53
@@ -11846,7 +11844,7 @@ msgstr "Samodejno merilo Y"
 msgid "Zoom In"
 msgstr "Približaj"
 
-#: src/frontend/ActionsManager.cpp:635 src/frontend/ActionsManager.cpp:723
+#: src/frontend/ActionsManager.cpp:636 src/frontend/ActionsManager.cpp:724
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:191
 #: src/frontend/notebook/NotebookView.cpp:57
@@ -11856,221 +11854,221 @@ msgstr "Približaj"
 msgid "Zoom Out"
 msgstr "Oddalji"
 
-#: src/frontend/ActionsManager.cpp:639
+#: src/frontend/ActionsManager.cpp:640
 #: src/frontend/worksheet/WorksheetView.cpp:401
 #, kde-format
 msgid "Zoom In X"
 msgstr "Približaj X"
 
-#: src/frontend/ActionsManager.cpp:643
+#: src/frontend/ActionsManager.cpp:644
 #: src/frontend/worksheet/WorksheetView.cpp:405
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Oddalji X"
 
-#: src/frontend/ActionsManager.cpp:647
+#: src/frontend/ActionsManager.cpp:648
 #: src/frontend/worksheet/WorksheetView.cpp:409
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Približaj Y"
 
-#: src/frontend/ActionsManager.cpp:651
+#: src/frontend/ActionsManager.cpp:652
 #: src/frontend/worksheet/WorksheetView.cpp:413
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Oddalji Y"
 
-#: src/frontend/ActionsManager.cpp:656
+#: src/frontend/ActionsManager.cpp:657
 #: src/frontend/worksheet/WorksheetView.cpp:417
 #, kde-format
 msgid "Shift Left X"
 msgstr "Zamakni X levo"
 
-#: src/frontend/ActionsManager.cpp:660
+#: src/frontend/ActionsManager.cpp:661
 #: src/frontend/worksheet/WorksheetView.cpp:419
 #, kde-format
 msgid "Shift Right X"
 msgstr "Zamakni X desno"
 
-#: src/frontend/ActionsManager.cpp:664
+#: src/frontend/ActionsManager.cpp:665
 #: src/frontend/worksheet/WorksheetView.cpp:421
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Zamakni Y navzgor"
 
-#: src/frontend/ActionsManager.cpp:668
+#: src/frontend/ActionsManager.cpp:669
 #: src/frontend/worksheet/WorksheetView.cpp:423
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Zamakni Y navzdol"
 
-#: src/frontend/ActionsManager.cpp:680
+#: src/frontend/ActionsManager.cpp:681
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Vstavi vrstico nad"
 
-#: src/frontend/ActionsManager.cpp:683
+#: src/frontend/ActionsManager.cpp:684
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:492
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Vstavi vrstico pod"
 
-#: src/frontend/ActionsManager.cpp:686
+#: src/frontend/ActionsManager.cpp:687
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "Odstrani izbrano/e vrstico/e"
 
-#: src/frontend/ActionsManager.cpp:690
+#: src/frontend/ActionsManager.cpp:691
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:344
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Vstavi stolpec levo"
 
-#: src/frontend/ActionsManager.cpp:693
+#: src/frontend/ActionsManager.cpp:694
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:345
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Vstavi stolpec desno"
 
-#: src/frontend/ActionsManager.cpp:696
+#: src/frontend/ActionsManager.cpp:697
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:348
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "Odstrani izbrani/e stolpec(e)"
 
-#: src/frontend/ActionsManager.cpp:700
+#: src/frontend/ActionsManager.cpp:701
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:478
 #, kde-format
 msgid "&Sort..."
 msgstr "Razvrsti..."
 
-#: src/frontend/ActionsManager.cpp:701
+#: src/frontend/ActionsManager.cpp:702
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:479
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "Razvrsti več stolpcev skupaj"
 
-#: src/frontend/ActionsManager.cpp:704
+#: src/frontend/ActionsManager.cpp:705
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "Razvrsti n&araščajoče"
 
-#: src/frontend/ActionsManager.cpp:705
+#: src/frontend/ActionsManager.cpp:706
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:481
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "Razvrsti izbrane stolpce ločeno v naraščajočem vrstnem redu"
 
-#: src/frontend/ActionsManager.cpp:708
+#: src/frontend/ActionsManager.cpp:709
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Sort &Descending"
 msgstr "Razvrsti pa&dajoče"
 
-#: src/frontend/ActionsManager.cpp:709
+#: src/frontend/ActionsManager.cpp:710
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "Razvrsti izbrane stolpce ločeno v padajočem vrstnem redu"
 
-#: src/frontend/ActionsManager.cpp:726
+#: src/frontend/ActionsManager.cpp:727
 #: src/frontend/notebook/NotebookView.cpp:61
 #, kde-format
 msgid "Find"
 msgstr "Najdi"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/frontend/ActionsManager.cpp:729
+#: src/frontend/ActionsManager.cpp:730
 #: src/frontend/notebook/NotebookView.cpp:69
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "Ponovno zaženi"
 
-#: src/frontend/ActionsManager.cpp:732
+#: src/frontend/ActionsManager.cpp:733
 #: src/frontend/notebook/NotebookView.cpp:72
 #: src/frontend/notebook/NotebookView.cpp:354
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "Ovrednoti zvezek"
 
-#: src/frontend/ActionsManager.cpp:746
+#: src/frontend/ActionsManager.cpp:747
 #: src/frontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Določi točke osi"
 
-#: src/frontend/ActionsManager.cpp:751
+#: src/frontend/ActionsManager.cpp:752
 #: src/frontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Določi točke krivulje"
 
-#: src/frontend/ActionsManager.cpp:756
+#: src/frontend/ActionsManager.cpp:757
 #: src/frontend/datapicker/DatapickerImageView.cpp:148
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Izberi odseke krivulje"
 
-#: src/frontend/ActionsManager.cpp:772
+#: src/frontend/ActionsManager.cpp:773
 #: src/frontend/datapicker/DatapickerImageView.cpp:153
 #, kde-format
 msgid "New Curve"
 msgstr "Nova krivunja"
 
-#: src/frontend/ActionsManager.cpp:778
+#: src/frontend/ActionsManager.cpp:779
 #: src/frontend/datapicker/DatapickerImageView.cpp:156
 #, kde-format
 msgid "Shift Left"
 msgstr "Premakni levo"
 
-#: src/frontend/ActionsManager.cpp:782
+#: src/frontend/ActionsManager.cpp:783
 #: src/frontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
 msgid "Shift Right"
 msgstr "Premakni desno"
 
-#: src/frontend/ActionsManager.cpp:786
+#: src/frontend/ActionsManager.cpp:787
 #: src/frontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Up"
 msgstr "Premakni navzgor"
 
-#: src/frontend/ActionsManager.cpp:790
+#: src/frontend/ActionsManager.cpp:791
 #: src/frontend/datapicker/DatapickerImageView.cpp:168
 #, kde-format
 msgid "Shift Down"
 msgstr "Premakni navzdol"
 
-#: src/frontend/ActionsManager.cpp:882
+#: src/frontend/ActionsManager.cpp:883
 #, kde-format
 msgid "Window Visibility"
 msgstr "Vidnost okna"
 
-#: src/frontend/ActionsManager.cpp:899
+#: src/frontend/ActionsManager.cpp:900
 #, kde-format
 msgid "Color Scheme"
 msgstr "Barvna shema"
 
-#: src/frontend/ActionsManager.cpp:1299
+#: src/frontend/ActionsManager.cpp:1300
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Ustvari novo %1 zvezek"
 
-#: src/frontend/ActionsManager.cpp:1332
+#: src/frontend/ActionsManager.cpp:1333
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Pri souporabi projekta je prišlo do težave: %1"
 
-#: src/frontend/ActionsManager.cpp:1336
+#: src/frontend/ActionsManager.cpp:1337
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Projekt je uspešno deljen"
 
-#: src/frontend/ActionsManager.cpp:1339
+#: src/frontend/ActionsManager.cpp:1340
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Skupni projekt najdete na: <a href=\"%1\">%1</a>"
@@ -12079,7 +12077,7 @@ msgstr "Skupni projekt najdete na: <a href=\"%1\">%1</a>"
 #, kde-format
 msgctxt "@title:window"
 msgid "Color Maps Browser"
-msgstr "Brskalnik barvnih palet"
+msgstr "Brskalnik barvnih kart"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:37
 #: src/frontend/examples/ExamplesWidget.cpp:31
@@ -14467,10 +14465,9 @@ msgid "Sloped"
 msgstr "Nagnjeno"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:925
-#, fuzzy, kde-format
-#| msgid "Color Map:"
+#, kde-format
 msgid "Color Map"
-msgstr "Katalog barv:"
+msgstr "Barvna karta"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:929
 #, kde-format
@@ -14495,6 +14492,9 @@ msgid ""
 "the current theme apply to plot area</li><li>Color Map - colors are taken "
 "from the specified color map</li></ul>"
 msgstr ""
+"Določa, katere barve naj se uporabijo za grafe:<ul><li>Tema – barve so vzete "
+"iz trenutne teme in veljajo za območje grafa</li><li>Barvna karta – barve so "
+"vzete iz določene barvne karte</li></ul>"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
 #, kde-format
@@ -18642,7 +18642,7 @@ msgstr "Kategorija"
 #, kde-format
 msgctxt "@title:window"
 msgid "Conditional Formatting - Heatmap"
-msgstr "Pogojno oblikovanje - toplotni zemljevid"
+msgstr "Pogojno oblikovanje - toplotni graf"
 
 #: src/frontend/spreadsheet/FormattingHeatmapDialog.cpp:43
 #, kde-format
@@ -19461,7 +19461,7 @@ msgstr "Spremeni merilo na [a, b]:"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #, kde-format
 msgid "Heatmap"
-msgstr "Toplotni zemljevid"
+msgstr "Toplotni graf"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:493
 #, kde-format
@@ -20083,7 +20083,7 @@ msgstr "Zbirka:"
 #: src/frontend/ui/colormapswidget.ui:73
 #, kde-format
 msgid "Colormaps:"
-msgstr "Barvne palete:"
+msgstr "Barvne karte:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bInsert)
 #: src/frontend/ui/constantswidget.ui:90 src/frontend/ui/functionswidget.ui:56
@@ -22429,10 +22429,9 @@ msgstr "Širina:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotColorMode)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:48
-#, fuzzy, kde-format
-#| msgid "Plot's Color:"
+#, kde-format
 msgid "Plot Colors:"
-msgstr "Barva risbe:"
+msgstr "Barve grafa:"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twPlotRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:68
@@ -22495,7 +22494,7 @@ msgstr "..."
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:38
 #, kde-format
 msgid "Color Map:"
-msgstr "Katalog barv:"
+msgstr "Barvna karta:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddPlotRange)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:292
@@ -23239,7 +23238,7 @@ msgstr "Vrstice:"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:161
 #, kde-format
 msgid "Mapping"
-msgstr "Preslikovanje"
+msgstr "Preslikava"
 
 #. i18n: ectx: property (text), widget (QLabel, lXStart)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:168
@@ -24756,19 +24755,19 @@ msgstr "Aktiviraj"
 #: src/frontend/ui/plotsurfacestylewidget.ui:40
 #, kde-format
 msgid "Color map:"
-msgstr "Katalog barv:"
+msgstr "Barvna karta:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bCreateColorMap)
 #: src/frontend/ui/plotsurfacestylewidget.ui:86
 #, kde-format
 msgid "Create new color map"
-msgstr "Ustvari nov katalog barv"
+msgstr "Ustvari novo barvno karto"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bOpenColorMap)
 #: src/frontend/ui/plotsurfacestylewidget.ui:149
 #, kde-format
 msgid "Open existing color map"
-msgstr "Odpri obstoječ katalog barv"
+msgstr "Odpri obstoječo barvo karto"
 
 #. i18n: ectx: property (text), widget (QLabel, lFillBrushStyle)
 #: src/frontend/ui/plotsurfacestylewidget.ui:211

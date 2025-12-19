@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-18 00:40+0000\n"
-"PO-Revision-Date: 2025-12-08 13:46+0200\n"
+"POT-Creation-Date: 2025-12-19 00:40+0000\n"
+"PO-Revision-Date: 2025-12-18 07:56+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -270,7 +270,7 @@ msgstr "Велике ціле число"
 #: src/backend/core/AbstractColumn.cpp:230
 #: src/backend/datasources/filters/AsciiFilter.cpp:557
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:539
-#: src/frontend/ActionsManager.cpp:509
+#: src/frontend/ActionsManager.cpp:510
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
@@ -369,12 +369,12 @@ msgstr "Вх%1"
 msgid "Import Data"
 msgstr "Імпортувати дані"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:261
+#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:262
 #, kde-format
 msgid "From File..."
 msgstr "З файла…"
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:282
 #, kde-format
 msgid "From SQL Database..."
 msgstr "З бази даних SQL…"
@@ -399,7 +399,7 @@ msgstr "Надрукувати"
 msgid "Print Preview"
 msgstr "Перегляд друку"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:381
+#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:382
 #, kde-format
 msgid "&Close"
 msgstr "За&крити"
@@ -1925,7 +1925,7 @@ msgid "Unknown"
 msgstr "Невідомий"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1215
+#: src/frontend/ActionsManager.cpp:222 src/frontend/MainWin.cpp:1215
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -8295,7 +8295,7 @@ msgstr "Залишки"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:885
-#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1233
+#: src/frontend/ActionsManager.cpp:228 src/frontend/MainWin.cpp:1233
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -9371,7 +9371,7 @@ msgstr "Вертикальної вісі"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:540
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
-#: src/frontend/ActionsManager.cpp:513
+#: src/frontend/ActionsManager.cpp:514
 #: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:131
 #: src/frontend/notebook/NotebookView.cpp:109
@@ -9421,7 +9421,7 @@ msgid "Inset Plot Area with Data"
 msgstr "Вбудована область креслення з даними"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:582
-#: src/frontend/ActionsManager.cpp:847
+#: src/frontend/ActionsManager.cpp:848
 #: src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:441
@@ -9670,10 +9670,9 @@ msgstr "%1: увімкнено Курсор1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1790
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1791
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color mode"
-msgstr "%1: використання кольору креслення"
+msgstr "%1: встановити режим кольорів креслення"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1802
 #: src/backend/worksheet/Worksheet.cpp:854
@@ -9696,10 +9695,9 @@ msgstr "%1: встановити тему"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1815
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color map"
-msgstr "%1: використання кольору креслення"
+msgstr "%1: встановити прив'язку кольорів креслення"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2002
 #, kde-format
@@ -11478,34 +11476,34 @@ msgstr ""
 "платформах і виконує візуалізацію та аналіз даних, (версія %2) [програма для "
 "комп'ютера]. %3."
 
-#: src/frontend/ActionsManager.cpp:192
+#: src/frontend/ActionsManager.cpp:193
 #, kde-format
 msgid "&Open Example"
 msgstr "Від&крити приклад"
 
-#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1171
+#: src/frontend/ActionsManager.cpp:206 src/frontend/MainWin.cpp:1171
 #, kde-format
 msgid "Workbook"
 msgstr "Робоча книга"
 
-#: src/frontend/ActionsManager.cpp:207
+#: src/frontend/ActionsManager.cpp:208
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Створює робочу книгу для збирання електронних таблиць, матриць та креслень"
 
-#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1179
+#: src/frontend/ActionsManager.cpp:211 src/frontend/MainWin.cpp:1179
 #, kde-format
 msgid "Data Extractor"
 msgstr "Засіб видобування даних"
 
-#: src/frontend/ActionsManager.cpp:211
+#: src/frontend/ActionsManager.cpp:212
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Створює інструмент для видобування даних із зображення"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
-#: src/frontend/ActionsManager.cpp:215
+#: src/frontend/ActionsManager.cpp:216
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
@@ -11517,233 +11515,233 @@ msgstr "Створює інструмент для видобування дан
 msgid "Spreadsheet"
 msgstr "Електронна таблиця"
 
-#: src/frontend/ActionsManager.cpp:217
+#: src/frontend/ActionsManager.cpp:218
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Створює електронну таблицю для редагування даних"
 
-#: src/frontend/ActionsManager.cpp:223
+#: src/frontend/ActionsManager.cpp:224
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Створює матрицю для редагування даних"
 
-#: src/frontend/ActionsManager.cpp:229
+#: src/frontend/ActionsManager.cpp:230
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Створює робочий аркуш для креслення графіків даних"
 
-#: src/frontend/ActionsManager.cpp:237
+#: src/frontend/ActionsManager.cpp:238
 #, kde-format
 msgid "Creates a new %1 script"
 msgstr "Створює скрипт %1"
 
-#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1241
+#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1241
 #, kde-format
 msgid "Note"
 msgstr "Нотатка"
 
-#: src/frontend/ActionsManager.cpp:245
+#: src/frontend/ActionsManager.cpp:246
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Створює нотатку для довільного тексту"
 
-#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1163
+#: src/frontend/ActionsManager.cpp:250 src/frontend/MainWin.cpp:1163
 #, kde-format
 msgid "Folder"
 msgstr "Тека"
 
-#: src/frontend/ActionsManager.cpp:250
+#: src/frontend/ActionsManager.cpp:251
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Створює теку для збирання аркушів та інших елементів"
 
-#: src/frontend/ActionsManager.cpp:255
+#: src/frontend/ActionsManager.cpp:256
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Інтерактивне джерело даних…"
 
-#: src/frontend/ActionsManager.cpp:256
+#: src/frontend/ActionsManager.cpp:257
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr "Створити інтерактивне джерело даних для читання даних із пристрою"
 
-#: src/frontend/ActionsManager.cpp:264
+#: src/frontend/ActionsManager.cpp:265
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Імпортувати дані зі звичайного файла"
 
-#: src/frontend/ActionsManager.cpp:269
+#: src/frontend/ActionsManager.cpp:270
 #, kde-format
 msgid "From Directory..."
 msgstr "З каталогу…"
 
-#: src/frontend/ActionsManager.cpp:271
+#: src/frontend/ActionsManager.cpp:272
 #, kde-format
 msgid "Import multiple files from a directory"
 msgstr "Імпортувати декілька з каталогу"
 
-#: src/frontend/ActionsManager.cpp:276
+#: src/frontend/ActionsManager.cpp:277
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "З kaggle.com…"
 
-#: src/frontend/ActionsManager.cpp:277
+#: src/frontend/ActionsManager.cpp:278
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Імпортувати дані з kaggle.com"
 
-#: src/frontend/ActionsManager.cpp:282
+#: src/frontend/ActionsManager.cpp:283
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Імпортувати дані з бази даних SQL"
 
-#: src/frontend/ActionsManager.cpp:286
+#: src/frontend/ActionsManager.cpp:287
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Зі збірки наборів даних…"
 
-#: src/frontend/ActionsManager.cpp:287
+#: src/frontend/ActionsManager.cpp:288
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Імпортувати дані із набору даних у мережі"
 
-#: src/frontend/ActionsManager.cpp:291
+#: src/frontend/ActionsManager.cpp:292
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Проєкт LabPlot…"
 
-#: src/frontend/ActionsManager.cpp:292
+#: src/frontend/ActionsManager.cpp:293
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Імпортувати проєкт з файла проєкту LabPlot (.lml)"
 
-#: src/frontend/ActionsManager.cpp:297
+#: src/frontend/ActionsManager.cpp:298
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Проєкт Origin (OPJ)…"
 
-#: src/frontend/ActionsManager.cpp:298
+#: src/frontend/ActionsManager.cpp:299
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Імпортувати проєкт з файла проєкту Origin OriginLab (.opj)"
 
-#: src/frontend/ActionsManager.cpp:331
+#: src/frontend/ActionsManager.cpp:332
 #, kde-format
 msgid "Export..."
 msgstr "Експортувати…"
 
-#: src/frontend/ActionsManager.cpp:332
+#: src/frontend/ActionsManager.cpp:333
 #, kde-format
 msgid "Export selected element"
 msgstr "Експортувати позначений елемент"
 
-#: src/frontend/ActionsManager.cpp:338 src/frontend/ActionsManager.cpp:1332
-#: src/frontend/ActionsManager.cpp:1340
+#: src/frontend/ActionsManager.cpp:339 src/frontend/ActionsManager.cpp:1333
+#: src/frontend/ActionsManager.cpp:1341
 #, kde-format
 msgid "Share"
 msgstr "Оприлюднити"
 
-#: src/frontend/ActionsManager.cpp:343
+#: src/frontend/ActionsManager.cpp:344
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Навігатор картами кольорів"
 
-#: src/frontend/ActionsManager.cpp:344
+#: src/frontend/ActionsManager.cpp:345
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Відкрити вікно для навігації доступними картами кольорів."
 
-#: src/frontend/ActionsManager.cpp:353
+#: src/frontend/ActionsManager.cpp:354
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Редактор метаданих FITS…"
 
-#: src/frontend/ActionsManager.cpp:354
+#: src/frontend/ActionsManager.cpp:355
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Відкрити редактор для редагування метаданих FITS"
 
-#: src/frontend/ActionsManager.cpp:363
+#: src/frontend/ActionsManager.cpp:364
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Журнал скасування-поновлення дій…"
 
-#: src/frontend/ActionsManager.cpp:383
+#: src/frontend/ActionsManager.cpp:384
 #, kde-format
 msgid "Close the active window"
 msgstr "Закрити активне вікно"
 
-#: src/frontend/ActionsManager.cpp:386
+#: src/frontend/ActionsManager.cpp:387
 #, kde-format
 msgid "Close &All"
 msgstr "Закрити &всі"
 
-#: src/frontend/ActionsManager.cpp:387
+#: src/frontend/ActionsManager.cpp:388
 #, kde-format
 msgid "Close all the windows"
 msgstr "Закрити усі вікна"
 
-#: src/frontend/ActionsManager.cpp:390
+#: src/frontend/ActionsManager.cpp:391
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Далі"
 
-#: src/frontend/ActionsManager.cpp:392
+#: src/frontend/ActionsManager.cpp:393
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Пересунути фокус до наступного вікна"
 
-#: src/frontend/ActionsManager.cpp:395
+#: src/frontend/ActionsManager.cpp:396
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Назад"
 
-#: src/frontend/ActionsManager.cpp:397
+#: src/frontend/ActionsManager.cpp:398
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Пересунути фокус до попереднього вікна"
 
-#: src/frontend/ActionsManager.cpp:404
+#: src/frontend/ActionsManager.cpp:405
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Лише поточна &тека"
 
-#: src/frontend/ActionsManager.cpp:409
+#: src/frontend/ActionsManager.cpp:410
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Поточна тека і &підтеки"
 
-#: src/frontend/ActionsManager.cpp:413
+#: src/frontend/ActionsManager.cpp:414
 #, kde-format
 msgid "&All"
 msgstr "&Всі"
 
-#: src/frontend/ActionsManager.cpp:435
+#: src/frontend/ActionsManager.cpp:436
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Показати використання пам'яті"
 
-#: src/frontend/ActionsManager.cpp:443
+#: src/frontend/ActionsManager.cpp:444
 #, kde-format
 msgid "Project Explorer"
 msgstr "Навігатор проєктом"
 
-#: src/frontend/ActionsManager.cpp:448
+#: src/frontend/ActionsManager.cpp:449
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Навігатор властивостями"
 
-#: src/frontend/ActionsManager.cpp:453
+#: src/frontend/ActionsManager.cpp:454
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Перегляд робочого аркуша"
 
-#: src/frontend/ActionsManager.cpp:476
+#: src/frontend/ActionsManager.cpp:477
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Налаштувати КА…"
 
-#: src/frontend/ActionsManager.cpp:477
+#: src/frontend/ActionsManager.cpp:478
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -11752,130 +11750,130 @@ msgstr ""
 "Відкриває параметри системи комп'ютерної алгебри для внесення змін до "
 "доступних систем або вмикання нових"
 
-#: src/frontend/ActionsManager.cpp:504
+#: src/frontend/ActionsManager.cpp:505
 #, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
 msgstr "Нова область графіка"
 
-#: src/frontend/ActionsManager.cpp:520
+#: src/frontend/ActionsManager.cpp:521
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:250
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Вертикальне компонування"
 
-#: src/frontend/ActionsManager.cpp:525
+#: src/frontend/ActionsManager.cpp:526
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:254
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Горизонтальне компонування"
 
-#: src/frontend/ActionsManager.cpp:530
+#: src/frontend/ActionsManager.cpp:531
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:258
 #, kde-format
 msgid "Grid Layout"
 msgstr "Компонування сітки"
 
-#: src/frontend/ActionsManager.cpp:535
+#: src/frontend/ActionsManager.cpp:536
 #: src/frontend/dockwidgets/WorksheetDock.cpp:279
 #: src/frontend/worksheet/WorksheetView.cpp:262
 #, kde-format
 msgid "No Layout"
 msgstr "Немає компонування"
 
-#: src/frontend/ActionsManager.cpp:543 src/frontend/ActionsManager.cpp:584
+#: src/frontend/ActionsManager.cpp:544 src/frontend/ActionsManager.cpp:585
 #: src/frontend/worksheet/WorksheetView.cpp:186
 #: src/frontend/worksheet/WorksheetView.cpp:348
 #, kde-format
 msgid "Select and Edit"
 msgstr "Позначити і редагувати"
 
-#: src/frontend/ActionsManager.cpp:548 src/frontend/ActionsManager.cpp:761
+#: src/frontend/ActionsManager.cpp:549 src/frontend/ActionsManager.cpp:762
 #: src/frontend/datapicker/DatapickerImageView.cpp:132
 #: src/frontend/worksheet/WorksheetView.cpp:191
 #, kde-format
 msgid "Navigate"
 msgstr "Навігація"
 
-#: src/frontend/ActionsManager.cpp:553 src/frontend/ActionsManager.cpp:766
+#: src/frontend/ActionsManager.cpp:554 src/frontend/ActionsManager.cpp:767
 #: src/frontend/datapicker/DatapickerImageView.cpp:136
 #: src/frontend/worksheet/WorksheetView.cpp:195
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Позначити і масштабувати"
 
-#: src/frontend/ActionsManager.cpp:559 src/frontend/ActionsManager.cpp:795
+#: src/frontend/ActionsManager.cpp:560 src/frontend/ActionsManager.cpp:796
 #, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "Масштаб"
 
-#: src/frontend/ActionsManager.cpp:565 src/frontend/ActionsManager.cpp:801
+#: src/frontend/ActionsManager.cpp:566 src/frontend/ActionsManager.cpp:802
 #, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr "Збільшення"
 
-#: src/frontend/ActionsManager.cpp:578
+#: src/frontend/ActionsManager.cpp:579
 #, kde-format
 msgctxt "@action"
 msgid "Add New"
 msgstr "Додати"
 
-#: src/frontend/ActionsManager.cpp:590
+#: src/frontend/ActionsManager.cpp:591
 #: src/frontend/worksheet/WorksheetView.cpp:353
 #, kde-format
 msgid "Crosshair"
 msgstr "Перехрестя"
 
-#: src/frontend/ActionsManager.cpp:595
+#: src/frontend/ActionsManager.cpp:596
 #: src/frontend/worksheet/WorksheetView.cpp:358
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Позначити і збільшити область"
 
-#: src/frontend/ActionsManager.cpp:600
+#: src/frontend/ActionsManager.cpp:601
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Позначити і збільшити область за x"
 
-#: src/frontend/ActionsManager.cpp:605
+#: src/frontend/ActionsManager.cpp:606
 #: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Позначити і збільшити область за x"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1574
+#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1574
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1499
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
 msgid "Cursor"
 msgstr "Курсор"
 
-#: src/frontend/ActionsManager.cpp:618
+#: src/frontend/ActionsManager.cpp:619
 #: src/frontend/worksheet/WorksheetView.cpp:381
 #, kde-format
 msgid "Auto Scale"
 msgstr "Автомасштаб"
 
-#: src/frontend/ActionsManager.cpp:622
+#: src/frontend/ActionsManager.cpp:623
 #: src/frontend/worksheet/WorksheetView.cpp:385
 #, kde-format
 msgid "Auto Scale X"
 msgstr "автомасштаб за X"
 
-#: src/frontend/ActionsManager.cpp:626
+#: src/frontend/ActionsManager.cpp:627
 #: src/frontend/worksheet/WorksheetView.cpp:389
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "автомасштаб за Y"
 
-#: src/frontend/ActionsManager.cpp:631 src/frontend/ActionsManager.cpp:720
+#: src/frontend/ActionsManager.cpp:632 src/frontend/ActionsManager.cpp:721
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:190
 #: src/frontend/notebook/NotebookView.cpp:53
@@ -11885,7 +11883,7 @@ msgstr "автомасштаб за Y"
 msgid "Zoom In"
 msgstr "збільшити"
 
-#: src/frontend/ActionsManager.cpp:635 src/frontend/ActionsManager.cpp:723
+#: src/frontend/ActionsManager.cpp:636 src/frontend/ActionsManager.cpp:724
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:191
 #: src/frontend/notebook/NotebookView.cpp:57
@@ -11895,221 +11893,221 @@ msgstr "збільшити"
 msgid "Zoom Out"
 msgstr "зменшити"
 
-#: src/frontend/ActionsManager.cpp:639
+#: src/frontend/ActionsManager.cpp:640
 #: src/frontend/worksheet/WorksheetView.cpp:401
 #, kde-format
 msgid "Zoom In X"
 msgstr "збільшити за X"
 
-#: src/frontend/ActionsManager.cpp:643
+#: src/frontend/ActionsManager.cpp:644
 #: src/frontend/worksheet/WorksheetView.cpp:405
 #, kde-format
 msgid "Zoom Out X"
 msgstr "зменшити за X"
 
-#: src/frontend/ActionsManager.cpp:647
+#: src/frontend/ActionsManager.cpp:648
 #: src/frontend/worksheet/WorksheetView.cpp:409
 #, kde-format
 msgid "Zoom In Y"
 msgstr "збільшити за Y"
 
-#: src/frontend/ActionsManager.cpp:651
+#: src/frontend/ActionsManager.cpp:652
 #: src/frontend/worksheet/WorksheetView.cpp:413
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "зменшити за Y"
 
-#: src/frontend/ActionsManager.cpp:656
+#: src/frontend/ActionsManager.cpp:657
 #: src/frontend/worksheet/WorksheetView.cpp:417
 #, kde-format
 msgid "Shift Left X"
 msgstr "посунути ліворуч X"
 
-#: src/frontend/ActionsManager.cpp:660
+#: src/frontend/ActionsManager.cpp:661
 #: src/frontend/worksheet/WorksheetView.cpp:419
 #, kde-format
 msgid "Shift Right X"
 msgstr "посунути праворуч X"
 
-#: src/frontend/ActionsManager.cpp:664
+#: src/frontend/ActionsManager.cpp:665
 #: src/frontend/worksheet/WorksheetView.cpp:421
 #, kde-format
 msgid "Shift Up Y"
 msgstr "посунути вище Y"
 
-#: src/frontend/ActionsManager.cpp:668
+#: src/frontend/ActionsManager.cpp:669
 #: src/frontend/worksheet/WorksheetView.cpp:423
 #, kde-format
 msgid "Shift Down Y"
 msgstr "посунути нижче Y"
 
-#: src/frontend/ActionsManager.cpp:680
+#: src/frontend/ActionsManager.cpp:681
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Вставити рядок вище"
 
-#: src/frontend/ActionsManager.cpp:683
+#: src/frontend/ActionsManager.cpp:684
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:492
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Вставити рядок нижче"
 
-#: src/frontend/ActionsManager.cpp:686
+#: src/frontend/ActionsManager.cpp:687
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "Ви&лучити позначені рядки"
 
-#: src/frontend/ActionsManager.cpp:690
+#: src/frontend/ActionsManager.cpp:691
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:344
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Вставити стовпчик ліворуч"
 
-#: src/frontend/ActionsManager.cpp:693
+#: src/frontend/ActionsManager.cpp:694
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:345
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Вставити стовпчик правіше"
 
-#: src/frontend/ActionsManager.cpp:696
+#: src/frontend/ActionsManager.cpp:697
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:348
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "Вилучити позначені стовпчики"
 
-#: src/frontend/ActionsManager.cpp:700
+#: src/frontend/ActionsManager.cpp:701
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:478
 #, kde-format
 msgid "&Sort..."
 msgstr "&Упорядкувати…"
 
-#: src/frontend/ActionsManager.cpp:701
+#: src/frontend/ActionsManager.cpp:702
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:479
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "Упорядкувати множину з декількох стовпчиків"
 
-#: src/frontend/ActionsManager.cpp:704
+#: src/frontend/ActionsManager.cpp:705
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "Впорядкувати за з&ростанням"
 
-#: src/frontend/ActionsManager.cpp:705
+#: src/frontend/ActionsManager.cpp:706
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:481
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "Упорядкувати позначені стовпчики окремо за зростанням"
 
-#: src/frontend/ActionsManager.cpp:708
+#: src/frontend/ActionsManager.cpp:709
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Sort &Descending"
 msgstr "Сортування за сп&аданням"
 
-#: src/frontend/ActionsManager.cpp:709
+#: src/frontend/ActionsManager.cpp:710
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "Упорядкувати позначені стовпчики окремо за спаданням"
 
-#: src/frontend/ActionsManager.cpp:726
+#: src/frontend/ActionsManager.cpp:727
 #: src/frontend/notebook/NotebookView.cpp:61
 #, kde-format
 msgid "Find"
 msgstr "Знайти"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/frontend/ActionsManager.cpp:729
+#: src/frontend/ActionsManager.cpp:730
 #: src/frontend/notebook/NotebookView.cpp:69
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "Перезапустити"
 
-#: src/frontend/ActionsManager.cpp:732
+#: src/frontend/ActionsManager.cpp:733
 #: src/frontend/notebook/NotebookView.cpp:72
 #: src/frontend/notebook/NotebookView.cpp:354
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "Обчислити нотатник"
 
-#: src/frontend/ActionsManager.cpp:746
+#: src/frontend/ActionsManager.cpp:747
 #: src/frontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Встановити точки осі"
 
-#: src/frontend/ActionsManager.cpp:751
+#: src/frontend/ActionsManager.cpp:752
 #: src/frontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Встановити точки кривої"
 
-#: src/frontend/ActionsManager.cpp:756
+#: src/frontend/ActionsManager.cpp:757
 #: src/frontend/datapicker/DatapickerImageView.cpp:148
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Позначити сегменти кривої"
 
-#: src/frontend/ActionsManager.cpp:772
+#: src/frontend/ActionsManager.cpp:773
 #: src/frontend/datapicker/DatapickerImageView.cpp:153
 #, kde-format
 msgid "New Curve"
 msgstr "Нова крива"
 
-#: src/frontend/ActionsManager.cpp:778
+#: src/frontend/ActionsManager.cpp:779
 #: src/frontend/datapicker/DatapickerImageView.cpp:156
 #, kde-format
 msgid "Shift Left"
 msgstr "Зсунути ліворуч"
 
-#: src/frontend/ActionsManager.cpp:782
+#: src/frontend/ActionsManager.cpp:783
 #: src/frontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
 msgid "Shift Right"
 msgstr "Зсунути праворуч"
 
-#: src/frontend/ActionsManager.cpp:786
+#: src/frontend/ActionsManager.cpp:787
 #: src/frontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Up"
 msgstr "Зсунути вгору"
 
-#: src/frontend/ActionsManager.cpp:790
+#: src/frontend/ActionsManager.cpp:791
 #: src/frontend/datapicker/DatapickerImageView.cpp:168
 #, kde-format
 msgid "Shift Down"
 msgstr "Зсунути вниз"
 
-#: src/frontend/ActionsManager.cpp:882
+#: src/frontend/ActionsManager.cpp:883
 #, kde-format
 msgid "Window Visibility"
 msgstr "Видимість вікна"
 
-#: src/frontend/ActionsManager.cpp:899
+#: src/frontend/ActionsManager.cpp:900
 #, kde-format
 msgid "Color Scheme"
 msgstr "Схема кольорів"
 
-#: src/frontend/ActionsManager.cpp:1299
+#: src/frontend/ActionsManager.cpp:1300
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Створює нотатник %1"
 
-#: src/frontend/ActionsManager.cpp:1332
+#: src/frontend/ActionsManager.cpp:1333
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Під час спроби оприлюднити проєкт виникли проблеми: %1"
 
-#: src/frontend/ActionsManager.cpp:1336
+#: src/frontend/ActionsManager.cpp:1337
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Проєкт успішно оприлюднено"
 
-#: src/frontend/ActionsManager.cpp:1339
+#: src/frontend/ActionsManager.cpp:1340
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Оприлюднений проєкт можна знайти тут: <a href=\"%1\">%1</a>"
@@ -14517,10 +14515,9 @@ msgid "Sloped"
 msgstr "нахилений"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:925
-#, fuzzy, kde-format
-#| msgid "Color Map:"
+#, kde-format
 msgid "Color Map"
-msgstr "Карта кольорів:"
+msgstr "Карта кольорів"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:929
 #, kde-format
@@ -14548,6 +14545,10 @@ msgid ""
 "the current theme apply to plot area</li><li>Color Map - colors are taken "
 "from the specified color map</li></ul>"
 msgstr ""
+"Визначає, які кольори слід використовувати для креслень:<ul><li>Тема — "
+"кольори буде взято з поточної теми із застосуванням до області креслення</"
+"li><li>Карта кольорів — кольори буде взято зі вказаної карти кольорів</li></"
+"ul>"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
 #, kde-format
@@ -22519,10 +22520,9 @@ msgstr "Ширина:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotColorMode)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:48
-#, fuzzy, kde-format
-#| msgid "Plot's Color:"
+#, kde-format
 msgid "Plot Colors:"
-msgstr "Колір креслення:"
+msgstr "Кольори креслення:"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twPlotRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:68
