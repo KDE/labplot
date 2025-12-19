@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-18 00:40+0000\n"
+"POT-Creation-Date: 2025-12-19 00:40+0000\n"
 "PO-Revision-Date: 2025-11-09 12:07+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -268,7 +268,7 @@ msgstr "Numero intero grande"
 #: src/backend/core/AbstractColumn.cpp:230
 #: src/backend/datasources/filters/AsciiFilter.cpp:557
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:539
-#: src/frontend/ActionsManager.cpp:509
+#: src/frontend/ActionsManager.cpp:510
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
@@ -363,12 +363,12 @@ msgstr "In%1"
 msgid "Import Data"
 msgstr "Importa dati"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:261
+#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:262
 #, kde-format
 msgid "From File..."
 msgstr "Da file..."
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:282
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Da banca dati SQL..."
@@ -393,7 +393,7 @@ msgstr "Stampa"
 msgid "Print Preview"
 msgstr "Anteprima di stampa"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:381
+#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:382
 #, kde-format
 msgid "&Close"
 msgstr "&Chiudi"
@@ -1923,7 +1923,7 @@ msgid "Unknown"
 msgstr "Sconosciuta"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1215
+#: src/frontend/ActionsManager.cpp:222 src/frontend/MainWin.cpp:1215
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -8238,7 +8238,7 @@ msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:885
-#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1233
+#: src/frontend/ActionsManager.cpp:228 src/frontend/MainWin.cpp:1233
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -9340,7 +9340,7 @@ msgstr "Asse verticale"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:540
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
-#: src/frontend/ActionsManager.cpp:513
+#: src/frontend/ActionsManager.cpp:514
 #: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:131
 #: src/frontend/notebook/NotebookView.cpp:109
@@ -9390,7 +9390,7 @@ msgid "Inset Plot Area with Data"
 msgstr "Inserisci area del grafico con dati"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:582
-#: src/frontend/ActionsManager.cpp:847
+#: src/frontend/ActionsManager.cpp:848
 #: src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:441
@@ -11453,35 +11453,35 @@ msgstr ""
 "multi piattaforma per la visualizzazione e per l'analisi dei dati "
 "accessibile da chiunque. (Versione %2) [software per computer]. %3."
 
-#: src/frontend/ActionsManager.cpp:192
+#: src/frontend/ActionsManager.cpp:193
 #, kde-format
 msgid "&Open Example"
 msgstr "Apri esempi&o"
 
-#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1171
+#: src/frontend/ActionsManager.cpp:206 src/frontend/MainWin.cpp:1171
 #, kde-format
 msgid "Workbook"
 msgstr "Cartella di lavoro"
 
-#: src/frontend/ActionsManager.cpp:207
+#: src/frontend/ActionsManager.cpp:208
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Crea una nuova cartella di lavoro per raccogliere fogli elettronici, matrici "
 "e grafici"
 
-#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1179
+#: src/frontend/ActionsManager.cpp:211 src/frontend/MainWin.cpp:1179
 #, kde-format
 msgid "Data Extractor"
 msgstr "Estrattore di dati"
 
-#: src/frontend/ActionsManager.cpp:211
+#: src/frontend/ActionsManager.cpp:212
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Crea un estrattore di dati per ottenere i dati da un'immagine"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
-#: src/frontend/ActionsManager.cpp:215
+#: src/frontend/ActionsManager.cpp:216
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
@@ -11493,235 +11493,235 @@ msgstr "Crea un estrattore di dati per ottenere i dati da un'immagine"
 msgid "Spreadsheet"
 msgstr "Foglio elettronico"
 
-#: src/frontend/ActionsManager.cpp:217
+#: src/frontend/ActionsManager.cpp:218
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Crea un foglio elettronico per modificare i dati"
 
-#: src/frontend/ActionsManager.cpp:223
+#: src/frontend/ActionsManager.cpp:224
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Crea una nuova matrice per modificare i dati"
 
-#: src/frontend/ActionsManager.cpp:229
+#: src/frontend/ActionsManager.cpp:230
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Crea un nuovo foglio di lavoro per tracciare i dati"
 
-#: src/frontend/ActionsManager.cpp:237
+#: src/frontend/ActionsManager.cpp:238
 #, kde-format
 msgid "Creates a new %1 script"
 msgstr "Crea un nuovo script %1"
 
-#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1241
+#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1241
 #, kde-format
 msgid "Note"
 msgstr "Nota"
 
-#: src/frontend/ActionsManager.cpp:245
+#: src/frontend/ActionsManager.cpp:246
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Crea una nuova nota di testo arbitrario"
 
-#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1163
+#: src/frontend/ActionsManager.cpp:250 src/frontend/MainWin.cpp:1163
 #, kde-format
 msgid "Folder"
 msgstr "Cartella"
 
-#: src/frontend/ActionsManager.cpp:250
+#: src/frontend/ActionsManager.cpp:251
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Crea una nuova cartella per raccogliere fogli e altri elementi"
 
-#: src/frontend/ActionsManager.cpp:255
+#: src/frontend/ActionsManager.cpp:256
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Fonte dati attiva..."
 
-#: src/frontend/ActionsManager.cpp:256
+#: src/frontend/ActionsManager.cpp:257
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Crea una fonte dati attiva da cui leggere i dati da un dispositivo in tempo "
 "reale"
 
-#: src/frontend/ActionsManager.cpp:264
+#: src/frontend/ActionsManager.cpp:265
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Importa dati da un file"
 
-#: src/frontend/ActionsManager.cpp:269
+#: src/frontend/ActionsManager.cpp:270
 #, kde-format
 msgid "From Directory..."
 msgstr "Dalla cartella..."
 
-#: src/frontend/ActionsManager.cpp:271
+#: src/frontend/ActionsManager.cpp:272
 #, kde-format
 msgid "Import multiple files from a directory"
 msgstr "Importa più file da una cartella"
 
-#: src/frontend/ActionsManager.cpp:276
+#: src/frontend/ActionsManager.cpp:277
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "Da kaggle.com..."
 
-#: src/frontend/ActionsManager.cpp:277
+#: src/frontend/ActionsManager.cpp:278
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Importa dati da kaggle.com"
 
-#: src/frontend/ActionsManager.cpp:282
+#: src/frontend/ActionsManager.cpp:283
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Importa dati da una banca dati SQL"
 
-#: src/frontend/ActionsManager.cpp:286
+#: src/frontend/ActionsManager.cpp:287
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Dalla collezione di insieme di dati..."
 
-#: src/frontend/ActionsManager.cpp:287
+#: src/frontend/ActionsManager.cpp:288
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Importa dati da un insieme di dati online"
 
-#: src/frontend/ActionsManager.cpp:291
+#: src/frontend/ActionsManager.cpp:292
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Progetto di LabPlot..."
 
-#: src/frontend/ActionsManager.cpp:292
+#: src/frontend/ActionsManager.cpp:293
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Importa un progetto da un file di progetto LabPlot (.lml)"
 
-#: src/frontend/ActionsManager.cpp:297
+#: src/frontend/ActionsManager.cpp:298
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Progetto di Origin (OPJ)..."
 
-#: src/frontend/ActionsManager.cpp:298
+#: src/frontend/ActionsManager.cpp:299
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Importa un progetto da un file di progetto Origin (.opj)"
 
-#: src/frontend/ActionsManager.cpp:331
+#: src/frontend/ActionsManager.cpp:332
 #, kde-format
 msgid "Export..."
 msgstr "Esporta..."
 
-#: src/frontend/ActionsManager.cpp:332
+#: src/frontend/ActionsManager.cpp:333
 #, kde-format
 msgid "Export selected element"
 msgstr "Esporta l'elemento selezionato"
 
-#: src/frontend/ActionsManager.cpp:338 src/frontend/ActionsManager.cpp:1332
-#: src/frontend/ActionsManager.cpp:1340
+#: src/frontend/ActionsManager.cpp:339 src/frontend/ActionsManager.cpp:1333
+#: src/frontend/ActionsManager.cpp:1341
 #, kde-format
 msgid "Share"
 msgstr "Condividi"
 
-#: src/frontend/ActionsManager.cpp:343
+#: src/frontend/ActionsManager.cpp:344
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Browser di mappe di colori"
 
-#: src/frontend/ActionsManager.cpp:344
+#: src/frontend/ActionsManager.cpp:345
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Apri finestra per scegliere tra le mappe di colori disponibili."
 
-#: src/frontend/ActionsManager.cpp:353
+#: src/frontend/ActionsManager.cpp:354
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Editor di metadati FITS..."
 
-#: src/frontend/ActionsManager.cpp:354
+#: src/frontend/ActionsManager.cpp:355
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Apri editor per modificare i metadati FITS"
 
-#: src/frontend/ActionsManager.cpp:363
+#: src/frontend/ActionsManager.cpp:364
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Cronologia Annulla/Rifai..."
 
-#: src/frontend/ActionsManager.cpp:383
+#: src/frontend/ActionsManager.cpp:384
 #, kde-format
 msgid "Close the active window"
 msgstr "Chiudi la finestra attiva"
 
-#: src/frontend/ActionsManager.cpp:386
+#: src/frontend/ActionsManager.cpp:387
 #, kde-format
 msgid "Close &All"
 msgstr "C&hiudi tutte"
 
-#: src/frontend/ActionsManager.cpp:387
+#: src/frontend/ActionsManager.cpp:388
 #, kde-format
 msgid "Close all the windows"
 msgstr "Chiudi tutte le finestre"
 
-#: src/frontend/ActionsManager.cpp:390
+#: src/frontend/ActionsManager.cpp:391
 #, kde-format
 msgid "Ne&xt"
 msgstr "Successi&vo"
 
-#: src/frontend/ActionsManager.cpp:392
+#: src/frontend/ActionsManager.cpp:393
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Sposta il fuoco sulla finestra successiva"
 
-#: src/frontend/ActionsManager.cpp:395
+#: src/frontend/ActionsManager.cpp:396
 #, kde-format
 msgid "Pre&vious"
 msgstr "Prece&dente"
 
-#: src/frontend/ActionsManager.cpp:397
+#: src/frontend/ActionsManager.cpp:398
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Sposta il fuoco sulla finestra precedente"
 
-#: src/frontend/ActionsManager.cpp:404
+#: src/frontend/ActionsManager.cpp:405
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "&Solo nella cartella attuale"
 
-#: src/frontend/ActionsManager.cpp:409
+#: src/frontend/ActionsManager.cpp:410
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Nella cartella attuale e nelle &sottocartelle"
 
-#: src/frontend/ActionsManager.cpp:413
+#: src/frontend/ActionsManager.cpp:414
 #, kde-format
 msgid "&All"
 msgstr "&Tutto"
 
-#: src/frontend/ActionsManager.cpp:435
+#: src/frontend/ActionsManager.cpp:436
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Mostra uso della memoria"
 
-#: src/frontend/ActionsManager.cpp:443
+#: src/frontend/ActionsManager.cpp:444
 #, kde-format
 msgid "Project Explorer"
 msgstr "Esploratore dei progetti"
 
-#: src/frontend/ActionsManager.cpp:448
+#: src/frontend/ActionsManager.cpp:449
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Esploratore delle proprietà"
 
-#: src/frontend/ActionsManager.cpp:453
+#: src/frontend/ActionsManager.cpp:454
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Anteprima del foglio di lavoro"
 
-#: src/frontend/ActionsManager.cpp:476
+#: src/frontend/ActionsManager.cpp:477
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Configura CAS..."
 
-#: src/frontend/ActionsManager.cpp:477
+#: src/frontend/ActionsManager.cpp:478
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -11730,130 +11730,130 @@ msgstr ""
 "Apre le impostazioni dei sistemi di calcolo algebrico per modificare i "
 "sistemi disponibili o per abilitarne di nuovi"
 
-#: src/frontend/ActionsManager.cpp:504
+#: src/frontend/ActionsManager.cpp:505
 #, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
 msgstr "Nuova area del grafico"
 
-#: src/frontend/ActionsManager.cpp:520
+#: src/frontend/ActionsManager.cpp:521
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:250
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Disposizione verticale"
 
-#: src/frontend/ActionsManager.cpp:525
+#: src/frontend/ActionsManager.cpp:526
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:254
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Disposizione orizzontale"
 
-#: src/frontend/ActionsManager.cpp:530
+#: src/frontend/ActionsManager.cpp:531
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:258
 #, kde-format
 msgid "Grid Layout"
 msgstr "Disposizione a griglia"
 
-#: src/frontend/ActionsManager.cpp:535
+#: src/frontend/ActionsManager.cpp:536
 #: src/frontend/dockwidgets/WorksheetDock.cpp:279
 #: src/frontend/worksheet/WorksheetView.cpp:262
 #, kde-format
 msgid "No Layout"
 msgstr "Nessuna disposizione"
 
-#: src/frontend/ActionsManager.cpp:543 src/frontend/ActionsManager.cpp:584
+#: src/frontend/ActionsManager.cpp:544 src/frontend/ActionsManager.cpp:585
 #: src/frontend/worksheet/WorksheetView.cpp:186
 #: src/frontend/worksheet/WorksheetView.cpp:348
 #, kde-format
 msgid "Select and Edit"
 msgstr "Seleziona e modifica"
 
-#: src/frontend/ActionsManager.cpp:548 src/frontend/ActionsManager.cpp:761
+#: src/frontend/ActionsManager.cpp:549 src/frontend/ActionsManager.cpp:762
 #: src/frontend/datapicker/DatapickerImageView.cpp:132
 #: src/frontend/worksheet/WorksheetView.cpp:191
 #, kde-format
 msgid "Navigate"
 msgstr "Spostati"
 
-#: src/frontend/ActionsManager.cpp:553 src/frontend/ActionsManager.cpp:766
+#: src/frontend/ActionsManager.cpp:554 src/frontend/ActionsManager.cpp:767
 #: src/frontend/datapicker/DatapickerImageView.cpp:136
 #: src/frontend/worksheet/WorksheetView.cpp:195
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Seleziona e ingrandisci"
 
-#: src/frontend/ActionsManager.cpp:559 src/frontend/ActionsManager.cpp:795
+#: src/frontend/ActionsManager.cpp:560 src/frontend/ActionsManager.cpp:796
 #, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "Ingrandimento"
 
-#: src/frontend/ActionsManager.cpp:565 src/frontend/ActionsManager.cpp:801
+#: src/frontend/ActionsManager.cpp:566 src/frontend/ActionsManager.cpp:802
 #, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr "Ingrandimento"
 
-#: src/frontend/ActionsManager.cpp:578
+#: src/frontend/ActionsManager.cpp:579
 #, kde-format
 msgctxt "@action"
 msgid "Add New"
 msgstr "Aggiungi nuovo"
 
-#: src/frontend/ActionsManager.cpp:590
+#: src/frontend/ActionsManager.cpp:591
 #: src/frontend/worksheet/WorksheetView.cpp:353
 #, kde-format
 msgid "Crosshair"
 msgstr "Mirino"
 
-#: src/frontend/ActionsManager.cpp:595
+#: src/frontend/ActionsManager.cpp:596
 #: src/frontend/worksheet/WorksheetView.cpp:358
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Seleziona regione e ingrandiscila"
 
-#: src/frontend/ActionsManager.cpp:600
+#: src/frontend/ActionsManager.cpp:601
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Seleziona regione x e ingrandisci"
 
-#: src/frontend/ActionsManager.cpp:605
+#: src/frontend/ActionsManager.cpp:606
 #: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Seleziona regione y e ingrandisci"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1574
+#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1574
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1499
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
 msgid "Cursor"
 msgstr "Puntatore"
 
-#: src/frontend/ActionsManager.cpp:618
+#: src/frontend/ActionsManager.cpp:619
 #: src/frontend/worksheet/WorksheetView.cpp:381
 #, kde-format
 msgid "Auto Scale"
 msgstr "Scala automatica"
 
-#: src/frontend/ActionsManager.cpp:622
+#: src/frontend/ActionsManager.cpp:623
 #: src/frontend/worksheet/WorksheetView.cpp:385
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Scala X automatica"
 
-#: src/frontend/ActionsManager.cpp:626
+#: src/frontend/ActionsManager.cpp:627
 #: src/frontend/worksheet/WorksheetView.cpp:389
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Scala Y automatica"
 
-#: src/frontend/ActionsManager.cpp:631 src/frontend/ActionsManager.cpp:720
+#: src/frontend/ActionsManager.cpp:632 src/frontend/ActionsManager.cpp:721
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:190
 #: src/frontend/notebook/NotebookView.cpp:53
@@ -11863,7 +11863,7 @@ msgstr "Scala Y automatica"
 msgid "Zoom In"
 msgstr "Ingrandisci"
 
-#: src/frontend/ActionsManager.cpp:635 src/frontend/ActionsManager.cpp:723
+#: src/frontend/ActionsManager.cpp:636 src/frontend/ActionsManager.cpp:724
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:191
 #: src/frontend/notebook/NotebookView.cpp:57
@@ -11873,221 +11873,221 @@ msgstr "Ingrandisci"
 msgid "Zoom Out"
 msgstr "Rimpicciolisci"
 
-#: src/frontend/ActionsManager.cpp:639
+#: src/frontend/ActionsManager.cpp:640
 #: src/frontend/worksheet/WorksheetView.cpp:401
 #, kde-format
 msgid "Zoom In X"
 msgstr "Ingrandisci X"
 
-#: src/frontend/ActionsManager.cpp:643
+#: src/frontend/ActionsManager.cpp:644
 #: src/frontend/worksheet/WorksheetView.cpp:405
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Rimpicciolisci X"
 
-#: src/frontend/ActionsManager.cpp:647
+#: src/frontend/ActionsManager.cpp:648
 #: src/frontend/worksheet/WorksheetView.cpp:409
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Ingrandisci Y"
 
-#: src/frontend/ActionsManager.cpp:651
+#: src/frontend/ActionsManager.cpp:652
 #: src/frontend/worksheet/WorksheetView.cpp:413
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Rimpicciolisci Y"
 
-#: src/frontend/ActionsManager.cpp:656
+#: src/frontend/ActionsManager.cpp:657
 #: src/frontend/worksheet/WorksheetView.cpp:417
 #, kde-format
 msgid "Shift Left X"
 msgstr "Sposta a sinistra X"
 
-#: src/frontend/ActionsManager.cpp:660
+#: src/frontend/ActionsManager.cpp:661
 #: src/frontend/worksheet/WorksheetView.cpp:419
 #, kde-format
 msgid "Shift Right X"
 msgstr "Sposta a destra X"
 
-#: src/frontend/ActionsManager.cpp:664
+#: src/frontend/ActionsManager.cpp:665
 #: src/frontend/worksheet/WorksheetView.cpp:421
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Sposta in alto Y"
 
-#: src/frontend/ActionsManager.cpp:668
+#: src/frontend/ActionsManager.cpp:669
 #: src/frontend/worksheet/WorksheetView.cpp:423
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Sposta in basso Y"
 
-#: src/frontend/ActionsManager.cpp:680
+#: src/frontend/ActionsManager.cpp:681
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Inserisci riga sopra"
 
-#: src/frontend/ActionsManager.cpp:683
+#: src/frontend/ActionsManager.cpp:684
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:492
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Inserisci riga sotto"
 
-#: src/frontend/ActionsManager.cpp:686
+#: src/frontend/ActionsManager.cpp:687
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "Rimuo&vi le righe selezionate"
 
-#: src/frontend/ActionsManager.cpp:690
+#: src/frontend/ActionsManager.cpp:691
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:344
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Inserisci colonna a sinistra"
 
-#: src/frontend/ActionsManager.cpp:693
+#: src/frontend/ActionsManager.cpp:694
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:345
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Inserisci colonna a destra"
 
-#: src/frontend/ActionsManager.cpp:696
+#: src/frontend/ActionsManager.cpp:697
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:348
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "Elimina le colonne selezionate"
 
-#: src/frontend/ActionsManager.cpp:700
+#: src/frontend/ActionsManager.cpp:701
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:478
 #, kde-format
 msgid "&Sort..."
 msgstr "&Ordina..."
 
-#: src/frontend/ActionsManager.cpp:701
+#: src/frontend/ActionsManager.cpp:702
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:479
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "Ordina insieme le colonne multiple"
 
-#: src/frontend/ActionsManager.cpp:704
+#: src/frontend/ActionsManager.cpp:705
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "Ordin&amento crescente"
 
-#: src/frontend/ActionsManager.cpp:705
+#: src/frontend/ActionsManager.cpp:706
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:481
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "Ordina le colonne selezionate separatamente in ordine crescente"
 
-#: src/frontend/ActionsManager.cpp:708
+#: src/frontend/ActionsManager.cpp:709
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Sort &Descending"
 msgstr "Ordinamento &decrescente"
 
-#: src/frontend/ActionsManager.cpp:709
+#: src/frontend/ActionsManager.cpp:710
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "Ordina le colonne selezionate separatamente in ordine decrescente"
 
-#: src/frontend/ActionsManager.cpp:726
+#: src/frontend/ActionsManager.cpp:727
 #: src/frontend/notebook/NotebookView.cpp:61
 #, kde-format
 msgid "Find"
 msgstr "Trova"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/frontend/ActionsManager.cpp:729
+#: src/frontend/ActionsManager.cpp:730
 #: src/frontend/notebook/NotebookView.cpp:69
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "Riavvia"
 
-#: src/frontend/ActionsManager.cpp:732
+#: src/frontend/ActionsManager.cpp:733
 #: src/frontend/notebook/NotebookView.cpp:72
 #: src/frontend/notebook/NotebookView.cpp:354
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "Valuta Notebook"
 
-#: src/frontend/ActionsManager.cpp:746
+#: src/frontend/ActionsManager.cpp:747
 #: src/frontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Imposta i punti dell'asse"
 
-#: src/frontend/ActionsManager.cpp:751
+#: src/frontend/ActionsManager.cpp:752
 #: src/frontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Imposta i punti della curva"
 
-#: src/frontend/ActionsManager.cpp:756
+#: src/frontend/ActionsManager.cpp:757
 #: src/frontend/datapicker/DatapickerImageView.cpp:148
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Seleziona i segmenti della curva"
 
-#: src/frontend/ActionsManager.cpp:772
+#: src/frontend/ActionsManager.cpp:773
 #: src/frontend/datapicker/DatapickerImageView.cpp:153
 #, kde-format
 msgid "New Curve"
 msgstr "Nuova curva"
 
-#: src/frontend/ActionsManager.cpp:778
+#: src/frontend/ActionsManager.cpp:779
 #: src/frontend/datapicker/DatapickerImageView.cpp:156
 #, kde-format
 msgid "Shift Left"
 msgstr "Sposta a sinistra"
 
-#: src/frontend/ActionsManager.cpp:782
+#: src/frontend/ActionsManager.cpp:783
 #: src/frontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
 msgid "Shift Right"
 msgstr "Sposta a destra"
 
-#: src/frontend/ActionsManager.cpp:786
+#: src/frontend/ActionsManager.cpp:787
 #: src/frontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Up"
 msgstr "Sposta in alto"
 
-#: src/frontend/ActionsManager.cpp:790
+#: src/frontend/ActionsManager.cpp:791
 #: src/frontend/datapicker/DatapickerImageView.cpp:168
 #, kde-format
 msgid "Shift Down"
 msgstr "Sposta in basso"
 
-#: src/frontend/ActionsManager.cpp:882
+#: src/frontend/ActionsManager.cpp:883
 #, kde-format
 msgid "Window Visibility"
 msgstr "Visibilità delle finestre"
 
-#: src/frontend/ActionsManager.cpp:899
+#: src/frontend/ActionsManager.cpp:900
 #, kde-format
 msgid "Color Scheme"
 msgstr "Schema di colori"
 
-#: src/frontend/ActionsManager.cpp:1299
+#: src/frontend/ActionsManager.cpp:1300
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Crea un nuovo notebook %1"
 
-#: src/frontend/ActionsManager.cpp:1332
+#: src/frontend/ActionsManager.cpp:1333
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "C'è stato un problema con la condivisione del progetto: %1"
 
-#: src/frontend/ActionsManager.cpp:1336
+#: src/frontend/ActionsManager.cpp:1337
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Progetto condiviso con successo"
 
-#: src/frontend/ActionsManager.cpp:1339
+#: src/frontend/ActionsManager.cpp:1340
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Puoi trovare i progetti condivisi su: <a href=\"%1\">%1</a>"
