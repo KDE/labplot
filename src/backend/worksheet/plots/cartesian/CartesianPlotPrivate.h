@@ -48,7 +48,7 @@ public:
 	CartesianPlot::PlotColorMode plotColorMode{CartesianPlot::PlotColorMode::Theme};
 	QString theme;
 	QList<QColor> plotColors;
-	QString plotColorMap{QStringLiteral("berlin10")};
+	QString plotColorMap{QStringLiteral("batlowS10")};
 
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
