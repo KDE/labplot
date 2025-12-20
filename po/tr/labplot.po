@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-19 00:40+0000\n"
-"PO-Revision-Date: 2025-11-30 12:42+0300\n"
-"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
+"PO-Revision-Date: 2025-12-19 11:34+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.11.80\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #: src/backend/core/AbstractAspect.cpp:241
@@ -8177,10 +8177,9 @@ msgid "Parametric"
 msgstr "Parametrik"
 
 #: src/backend/statistics/HypothesisTest.cpp:1746
-#, fuzzy, kde-format
-#| msgid "Parametric"
+#, kde-format
 msgid "Non-Parametric"
-msgstr "Parametrik"
+msgstr "Parametrik Olmayan"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
@@ -9101,10 +9100,9 @@ msgstr "Başlık"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:418
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2046
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Line Simplification"
-msgstr "Basitleştirme"
+msgstr "Çizgi Basitleştirme"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
@@ -9591,10 +9589,9 @@ msgstr "%1: İmleç1 etkinleştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1790
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1791
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color mode"
-msgstr "%1: Çizimin rengini kullan"
+msgstr "%1: Çizim renk kipini kullan"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1802
 #: src/backend/worksheet/Worksheet.cpp:854
@@ -9617,10 +9614,9 @@ msgstr "%1: Temayı ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1815
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color map"
-msgstr "%1: Çizimin rengini kullan"
+msgstr "%1: Çizim renk haritasını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2002
 #, kde-format
@@ -9633,23 +9629,20 @@ msgid "Distribution Fit to '%1'"
 msgstr "“%1” Ögesine Dağılımı Sığdır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2049
-#, fuzzy, kde-format
-#| msgid "%1: smooth '%2'"
+#, kde-format
 msgid "%1: simplify '%2'"
-msgstr "%1: “%2” yumuşat"
+msgstr "%1: “%2” basitleştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2050
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:664
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Simplification of '%1'"
-msgstr "Basitleştirme"
+msgstr "“%1” Basitleştirmesi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2057
-#, fuzzy, kde-format
-#| msgid "%1: add interpolation curve"
+#, kde-format
 msgid "%1: add line simplification curve"
-msgstr "%1: Aradeğerleme eğrisi ekle"
+msgstr "%1: Çizgi basitleştirme eğrisi ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2068
 #, kde-format
@@ -10953,10 +10946,9 @@ msgstr ""
 "artmıyor!"
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:70
-#, fuzzy, kde-format
-#| msgid "%1: set options and perform the interpolation"
+#, kde-format
 msgid "%1: set options and perform the line simplification"
-msgstr "%1: Seçenekleri ayarla ve aradeğerlemeyi gerçekleştir"
+msgstr "%1: Seçenekleri ayarla ve çizgi basitleştirmesini gerçekleştir"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -14418,10 +14410,9 @@ msgid "Sloped"
 msgstr "Eğimli"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:925
-#, fuzzy, kde-format
-#| msgid "Color Map:"
+#, kde-format
 msgid "Color Map"
-msgstr "Renk haritası:"
+msgstr "Renk Haritası"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:929
 #, kde-format
@@ -14446,6 +14437,10 @@ msgid ""
 "the current theme apply to plot area</li><li>Color Map - colors are taken "
 "from the specified color map</li></ul>"
 msgstr ""
+"Çizimler için hangi renklerin kullanılacağını tanımlar:<ul><li>Tema — "
+"Renkler, çizim alanına uygulanmak üzere geçerli renk temasından alınırlar</"
+"li><li>Renk Haritası — Renkler, belirlenen renk haritasından alınırlar</li></"
+"ul>"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
 #, kde-format
@@ -15811,6 +15806,21 @@ msgid ""
 "distance apart and ensuring no point deviates more than a set tolerance from "
 "the simplified line.</li></ul>"
 msgstr ""
+"Çizgiyi basitleştirme yöntemleri<ul><li>Douglas-Peucker — çizgiyi özyineli "
+"olarak böler ve yalnızca başlangıç ve bitiş noktaları arasındaki çizgi "
+"parçasından belirtilen bir eşikten daha fazla sapan noktaları korur.</"
+"li><li>Visvalingam-Whyatt — istenen nokta sayısına veya alan eşiğine "
+"ulaşılana kadar, çokgenin şekline en az etkili alanı katkıda bulunan noktayı "
+"yinelemeli olarak kaldırır.</li><li>Dikey Uzaklık — her noktanın referans "
+"çizgisinden dik mesafesini ölçer ve yalnızca bir eşiği aşanları korur.</"
+"li><li>n. Nokta — yalnızca her n. noktayı korur.</li><li>Radyal Uzaklık — "
+"her noktanın önceki korunan noktadan uzaklığını ölçer ve yalnızca bir eşiği "
+"aşanları korur.</li><li>Aradeğerleme.</li><li>Opheim — çizgileri "
+"basitleştirmek için hem uzaklık hem de açısal toleransı kullanır. Yalnızca "
+"önceki tutulan noktadan belirli bir uzaklık ve açısal eşik değerinin dışında "
+"kalan noktaları tutar.</li><li>Lang — en az belirli bir mesafede birbirinden "
+"ayrı olan noktaları tutar ve hiçbir noktanın basitleştirilmiş çizgiden "
+"belirlenmiş bir toleranstan fazla sapmamasını sağlar.</li></ul>"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:217
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:221
@@ -15824,17 +15834,17 @@ msgstr "Tölerans (uzaklık):"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
 #, kde-format
 msgid "Maximum perpendicular distance from the connecting line segment"
-msgstr ""
+msgstr "Bağlantı çizgi parçasından en büyük dik uzaklık"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
 #, kde-format
 msgid "Maximum radial distance from the previous retained point"
-msgstr ""
+msgstr "Önceki korunan noktadan en büyük radyal uzaklık"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
 #, kde-format
 msgid "Maximum perpendicular distance from the line segment"
-msgstr ""
+msgstr "Çizgi parçasından en büyük dik uzaklık"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
 #, kde-format
@@ -15842,10 +15852,9 @@ msgid "Number of points:"
 msgstr "Nokta sayısı:"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
-#, fuzzy, kde-format
-#| msgid "The number of vectors in the file"
+#, kde-format
 msgid "Target number of points in the simplified line"
-msgstr "Dosyadaki vektör sayısı"
+msgstr "Basitleştirilmiş çizgideki hedef nokta sayısı"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:234
 #, kde-format
@@ -15855,7 +15864,7 @@ msgstr "Adım boyutu:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
 #, kde-format
 msgid "Keep every n-th point (n is the step size)"
-msgstr ""
+msgstr "Her n. noktayı tut (n, adım boyutudur)"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
 #, kde-format
@@ -15865,13 +15874,12 @@ msgstr "Yinelemeler:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
 #, kde-format
 msgid "Maximum perpendicular distance from the reference line"
-msgstr ""
+msgstr "Başvuru noktasından en büyük dik uzaklık"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
-#, fuzzy, kde-format
-#| msgid "Number of iterations to perform."
+#, kde-format
 msgid "Number of iterations to apply the simplification"
-msgstr "Gerçekleştirilecek yineleme sayısı."
+msgstr "Basitleştirmeye uygulanacak yineleme sayısı"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:244
 #, kde-format
@@ -15881,7 +15889,7 @@ msgstr "Tölerans (alan):"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
 #, kde-format
 msgid "Minimum area contribution threshold for retaining points"
-msgstr ""
+msgstr "Noktaların korunması için en küçük alan katkı eşiği"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
@@ -15896,12 +15904,12 @@ msgstr "En büyük tolerans:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:250
 #, kde-format
 msgid "Minimum distance threshold from retained point"
-msgstr ""
+msgstr "Korunan noktadan en küçük uzaklık eşiği"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
 #, kde-format
 msgid "Maximum distance threshold from retained point"
-msgstr ""
+msgstr "Korunan noktadan en büyük uzaklık eşiği"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:255
 #, kde-format
@@ -15911,33 +15919,32 @@ msgstr "Bölge ara:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:256
 #, kde-format
 msgid "Minimum point spacing distance"
-msgstr ""
+msgstr "En küçük nokta boşluklandırma uzaklığı"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:257
 #, kde-format
 msgid "Search region size in units of points"
-msgstr ""
+msgstr "Nokta türünden aranacak bölge boyutu"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:578
-#, fuzzy, kde-format
-#| msgid "status: %1"
+#, kde-format
 msgid "Status: %1"
-msgstr "durum: %1"
+msgstr "Durum: %1"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:593
 #, kde-format
 msgid "number of points: %1"
-msgstr "nokta sayısı: %1"
+msgstr "Nokta sayısı: %1"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:594
 #, kde-format
 msgid "positional squared error: %1"
-msgstr "konumsal karekök hatası: %1"
+msgstr "Konumsal karekök hatası: %1"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:595
 #, kde-format
 msgid "area error: %1"
-msgstr "alan hatası: %1"
+msgstr "Alan hatası: %1"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:410
 #, kde-format
@@ -16036,12 +16043,10 @@ msgid "Properties: Function Curve"
 msgstr "Özellikler: İşlev Eğrisi"
 
 #: src/frontend/GuiObserver.cpp:290
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Line Simplification"
-msgstr "Özellikler: Aradeğerleme"
+msgstr "Özellikler: Çizgi Basitleştirme"
 
 #: src/frontend/GuiObserver.cpp:295
 #, kde-format
@@ -19420,10 +19425,9 @@ msgid "Row Statisti&cs"
 msgstr "Satır İstati&stikleri"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:502
-#, fuzzy, kde-format
-#| msgid "Solid Line"
+#, kde-format
 msgid "Simplify Line"
-msgstr "Düz çizgi"
+msgstr "Çizgi Basitleştir"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:567
 #, kde-format
@@ -22353,10 +22357,9 @@ msgstr "Genişlik:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotColorMode)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:48
-#, fuzzy, kde-format
-#| msgid "Plot's Color:"
+#, kde-format
 msgid "Plot Colors:"
-msgstr "Çizimin rengi:"
+msgstr "Çizim renkleri:"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twPlotRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:68
