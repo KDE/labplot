@@ -567,7 +567,7 @@ void ColumnTest::statisticsClearSpreadsheetMasks() {
 	QCOMPARE(stats3.minimum, 1.);
 	QCOMPARE(stats3.maximum, 3.);
 
-	// undo the "clear masked valus"-change and check the statistics
+	// undo the "clear masked values"-change and check the statistics
 	project.undoStack()->undo();
 	auto& stats4 = c->statistics();
 	QCOMPARE(stats4.size, 2);

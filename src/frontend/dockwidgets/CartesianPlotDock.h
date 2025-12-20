@@ -37,7 +37,7 @@ public:
 	void retranslateUi() override;
 	void updateUnits() override;
 
-	void updateRangeList(const Dimension dim);
+	void updateRangeList(const Dimension);
 	void updatePlotRangeList() override;
 	void updatePlotRangeListValues(const Dimension dim, int rangeIndex);
 
@@ -63,12 +63,15 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in CartesianPlotDock
 	//"General"-tab
+	void plotColorModeChanged(int);
+	void plotColorMapChanged(const QString&);
+	void selectColorMap();
 	void rangeTypeChanged(int);
-	void niceExtendChanged(bool checked);
+	void niceExtendChanged(bool);
 	void rangePointsChanged(const QString&);
 
 	void autoScaleChanged(const Dimension, const int rangeIndex, bool);
-	void minDateTimeChanged(const QObject* sender, const Dimension, qint64 value);
+	void minDateTimeChanged(const QObject* sender, const Dimension, qint64);
 	void maxDateTimeChanged(const QObject* sender, const Dimension, qint64);
 	// void xRangeDateTimeChanged(const Range<quint64>&);
 	void rangeFormatChanged(const QObject* sender, const Dimension, int index);
@@ -124,7 +127,8 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in CartesianPlot
 	// general
-
+	void plotPlotColorModeChanged(CartesianPlot::PlotColorMode);
+	void plotPlotColorMapChanged(const QString&);
 	void plotRangeTypeChanged(CartesianPlot::RangeType);
 	void plotRangeFirstValuesChanged(int);
 	void plotRangeLastValuesChanged(int);
@@ -133,7 +137,7 @@ private Q_SLOTS:
 	void plotMinChanged(const Dimension, int rangeIndex, double);
 	void plotMaxChanged(const Dimension, int rangeIndex, double);
 	void plotRangeChanged(const Dimension, int, Range<double>);
-	void plotRangeFormatChanged(const Dimension, int rangeIndex, RangeT::Format format);
+	void plotRangeFormatChanged(const Dimension, int rangeIndex, RangeT::Format);
 	void plotScaleChanged(const Dimension, int rangeIndex, RangeT::Scale);
 
 	void defaultPlotRangeChanged();

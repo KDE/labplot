@@ -123,18 +123,19 @@ function(generate_shiboken_sources)
         --include-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths="${CMAKE_INSTALL_PREFIX}/share/PySide${QT_MAJOR_VERSION}/typesystems"
-        --typesystem-paths=${PYSIDE_TYPESYSTEMS}
+        --typesystem-paths="${PYSIDE_TYPESYSTEMS}"
         --output-directory=${CMAKE_CURRENT_BINARY_DIR})
 
     set(generated_sources_dependencies ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM})
 
     # Add custom target to run shiboken to generate the binding cpp files.
+    get_target_property(Shiboken6_EXECUTABLE Shiboken6::Executable IMPORTED_LOCATION)
     add_custom_command(
         OUTPUT ${PB_GENERATED_SOURCES}
-        COMMAND shiboken6 ${shiboken_options} ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM}
+        COMMAND ${Shiboken6_EXECUTABLE} ${shiboken_options} ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM}
         DEPENDS ${generated_sources_dependencies}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Running generator for ${PB_TYPESYSTEM}"
+        COMMENT "Running generator \"${Shiboken6_EXECUTABLE}\" for ${PB_TYPESYSTEM}"
     )
 
     # # Set the cpp files which will be used for the bindings library.

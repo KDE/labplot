@@ -17,7 +17,7 @@
    <item row="11" column="0">
     <widget class="QLabel" name="lTestMean">
      <property name="text">
-      <string>Test Mean μ₀: </string>
+      <string>Test Mean μ₀:</string>
      </property>
     </widget>
    </item>

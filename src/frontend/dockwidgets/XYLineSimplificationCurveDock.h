@@ -1,7 +1,7 @@
 /*
-	File             : XYDataReductionCurveDock.h
+	File             : XYLineSimplificationCurveDock.h
 	Project          : LabPlot
-	Description      : widget for editing properties of data reduction curves
+	Description      : widget for editing properties of line simplification curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
@@ -9,42 +9,43 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef XYDATAREDUCTIONCURVEDOCK_H
-#define XYDATAREDUCTIONCURVEDOCK_H
+#ifndef XYLINESIMPLIFICATIONCURVEDOCK_H
+#define XYLINESIMPLIFICATIONCURVEDOCK_H
 
-#include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
+#include "backend/worksheet/plots/cartesian/XYLineSimplificationCurve.h"
 #include "frontend/dockwidgets/XYAnalysisCurveDock.h"
-#include "ui_xydatareductioncurvedockgeneraltab.h"
+#include "ui_xylinesimplificationcurvedockgeneraltab.h"
 
 class XYAnalysisCurve;
 class TreeViewComboBox;
-class QStatusBar;
 
-class XYDataReductionCurveDock : public XYAnalysisCurveDock {
+class XYLineSimplificationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYDataReductionCurveDock(QWidget* parent, QStatusBar* sb);
+	explicit XYLineSimplificationCurveDock(QWidget* parent);
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
+	void updateLocale() override;
+	void retranslateUi() override;
 
 private:
 	void initGeneralTab() override;
 	void updateSettings(const AbstractColumn*) override;
 	void updateTolerance();
 	void updateTolerance2();
-	void showDataReductionResult();
+	void showLineSimplificationResult();
+	void updateOptionsTexts();
 	virtual QString customText() const override;
 
-	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
-	QStatusBar* statusBar; // main status bar to display progress
+	Ui::XYLineSimplificationCurveDockGeneralTab uiGeneralTab;
 
-	XYDataReductionCurve* m_dataReductionCurve{nullptr};
-	XYDataReductionCurve::DataReductionData m_dataReductionData;
+	XYLineSimplificationCurve* m_lineSimplificationCurve{nullptr};
+	XYLineSimplificationCurve::LineSimplificationData m_lineSimplificationData;
 	bool m_dateTimeRange{false};
 
 private Q_SLOTS:
-	// SLOTs for changes triggered in XYDataReductionCurveDock
+	// SLOTs for changes triggered in XYLineSimplificationCurveDock
 	// general tab
 	void dataSourceTypeChanged(int);
 	void xDataColumnChanged(const QModelIndex&);
@@ -63,7 +64,7 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
-	void curveDataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
+	void curveLineSimplificationDataChanged(const XYLineSimplificationCurve::LineSimplificationData&);
 };
 
 #endif

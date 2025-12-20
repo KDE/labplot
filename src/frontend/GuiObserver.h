@@ -43,7 +43,7 @@ class StatisticsSpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
 class XYFunctionCurveDock;
-class XYDataReductionCurveDock;
+class XYLineSimplificationCurveDock;
 class XYDifferentiationCurveDock;
 class XYIntegrationCurveDock;
 class XYInterpolationCurveDock;
@@ -62,7 +62,7 @@ class DatapickerCurveWidget;
 #ifdef HAVE_SCRIPTING
 class ScriptDock;
 #endif
-
+class SeasonalDecompositionDock;
 #ifdef HAVE_CANTOR_LIBS
 class NotebookDock;
 #endif
@@ -122,7 +122,7 @@ private:
 	RunChartDock* m_runChartDock{nullptr};
 
 	// analysis plots
-	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};
+	XYLineSimplificationCurveDock* m_xyLineSimplificationCurveDock{nullptr};
 	XYDifferentiationCurveDock* m_xyDifferentiationCurveDock{nullptr};
 	XYIntegrationCurveDock* m_xyIntegrationCurveDock{nullptr};
 	XYInterpolationCurveDock* m_xyInterpolationCurveDock{nullptr};
@@ -134,8 +134,11 @@ private:
 	XYConvolutionCurveDock* m_xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
 
-	// hypothesis test
+	// statistical analysis
 	HypothesisTestDock* m_hypothesisTestDock{nullptr};
+
+	// time series analysis
+	SeasonalDecompositionDock* m_seasonalDecompositionDock{nullptr};
 
 #ifdef HAVE_SCRIPTING
 	ScriptDock* m_scriptDock{nullptr};

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the XLSX filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -267,6 +267,39 @@ void XLSXFilterTest::importFileDatetime() {
 	QCOMPARE(spreadsheet.column(4)->valueAt(1), 3.14);
 	QCOMPARE(spreadsheet.column(4)->valueAt(2), 0.22);
 	QCOMPARE(spreadsheet.column(4)->valueAt(3), 0.01);
+}
+
+void XLSXFilterTest::importFileAppend() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/append.xlsx"));
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	XLSXFilter filter;
+	filter.setFirstRowAsColumnNames(true);
+	filter.setCurrentSheet(QStringLiteral("Data"));
+	filter.setCurrentRange(QStringLiteral("A1:C5"));
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Append);
+
+	QCOMPARE(spreadsheet.columnCount(), 5);
+	QCOMPARE(spreadsheet.rowCount(), 100);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("2"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Date"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("Left Grip (kg)"));
+	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("Right Grip (kg)"));
+
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(0).toString(), QStringLiteral("Fri Aug 11 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(1).toString(), QStringLiteral("Mon Aug 14 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(2).toString(), QStringLiteral("Wed Aug 16 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(3).toString(), QStringLiteral("Fri Aug 18 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(3)->valueAt(1), 2);
+	QCOMPARE(spreadsheet.column(3)->valueAt(2), 3);
+	QCOMPARE(spreadsheet.column(3)->valueAt(3), 4);
+	QCOMPARE(spreadsheet.column(4)->valueAt(0), 1.1);
+	QCOMPARE(spreadsheet.column(4)->valueAt(1), 2.2);
+	QCOMPARE(spreadsheet.column(4)->valueAt(2), 3.3);
+	QCOMPARE(spreadsheet.column(4)->valueAt(3), 4.4);
 }
 
 void XLSXFilterTest::importFormula() {

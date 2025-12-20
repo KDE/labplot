@@ -90,6 +90,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
     ${FRONTEND_DIR}/dockwidgets/ReferenceRangeDock.cpp
     ${FRONTEND_DIR}/dockwidgets/RunChartDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/SeasonalDecompositionDock.cpp
     ${FRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/StatisticsSpreadsheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/QQPlotDock.cpp
@@ -97,7 +98,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/XYAnalysisCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYFunctionCurveDock.cpp
-    ${FRONTEND_DIR}/dockwidgets/XYDataReductionCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYLineSimplificationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYDifferentiationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYIntegrationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYInterpolationCurveDock.cpp
@@ -147,6 +148,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/statistics/HypothesisTestView.cpp
     ${FRONTEND_DIR}/widgets/BackgroundWidget.cpp
     ${FRONTEND_DIR}/widgets/ConstantsWidget.cpp
+    ${FRONTEND_DIR}/widgets/DataColumnsWidget.cpp
     ${FRONTEND_DIR}/widgets/ThemesComboBox.cpp
     ${FRONTEND_DIR}/widgets/ThemesWidget.cpp
     ${FRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
@@ -263,12 +265,13 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/referencerangedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/runchartdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/seasonaldecompositiondock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/statisticsspreadsheetdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/qqplotdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xycurvedockgeneraltab.ui
-    ${FRONTEND_DIR}/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui
@@ -426,6 +429,8 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
     ${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
     ${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
+    ${BACKEND_DIR}/statistics/HypothesisTest.cpp
+    ${BACKEND_DIR}/timeseriesanalysis/SeasonalDecomposition.cpp
     ${BACKEND_DIR}/worksheet/Background.cpp
     ${BACKEND_DIR}/worksheet/Image.cpp
     ${BACKEND_DIR}/worksheet/Line.cpp
@@ -462,7 +467,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFunctionCurve.cpp
-    ${BACKEND_DIR}/worksheet/plots/cartesian/XYDataReductionCurve.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYDifferentiationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYIntegrationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
@@ -474,7 +479,6 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
-    ${BACKEND_DIR}/statistics/HypothesisTest.cpp
 )
 
 if(ENABLE_SCRIPTING)
@@ -797,6 +801,8 @@ get_target_property(labplotlib_INCLUDE_DIRECTORIES labplotlib INCLUDE_DIRECTORIE
 get_target_property(labplotbackendlib_INCLUDE_DIRECTORIES labplotbackendlib INCLUDE_DIRECTORIES)
 get_target_property(labplotnsllib_INCLUDE_DIRECTORIES labplotnsllib INCLUDE_DIRECTORIES)
 get_target_property(KFi18n_INCLUDE_DIRECTORIES KF${KF_MAJOR_VERSION}::I18n INTERFACE_INCLUDE_DIRECTORIES)
+
+target_include_directories(labplotbackendlib PUBLIC ${Python3_INCLUDE_DIRS})
 
 generate_shiboken_sources(
     PACKAGE_NAME ${scripting_library}

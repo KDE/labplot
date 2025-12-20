@@ -2517,7 +2517,7 @@ void SpreadsheetTest::testInsertColumns() {
 	QCOMPARE(columnsAboutToBeRemovedCounter, 3); // 3 columns removed in undo()
 	QCOMPARE(columnsRemovedCounter, 3); // same as for columnsAboutToBeRemovedCounter
 
-	// TODO: improve Spreadsheet::insertColumns() to reduce the number of emits and acitvate the checks below
+	// TODO: improve Spreadsheet::insertColumns() to reduce the number of emits and activate the checks below
 	/*
 	QCOMPARE(columnsAboutToBeInsertedCounter, 2); // set and redo()
 	QCOMPARE(columnsInsertedCounter, 2); // set and redo()
@@ -2567,6 +2567,48 @@ void SpreadsheetTest::testRemoveColumns() {
 	QCOMPARE(columnsInsertedCounter, 1); // undo()
 	QCOMPARE(columnsRemovedCounter, 2); // set and redo()
 	QCOMPARE(columnsAboutToBeRemovedCounter, 2); // set and redo()
+}
+
+/*!
+ * Test Spreadsheet::removeColumns() function explicitly
+ */
+void SpreadsheetTest::testRemoveColumns2() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+
+	int columnsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [&columnsAboutToBeInsertedCounter]() {
+		columnsAboutToBeInsertedCounter++;
+	});
+	int columnsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsInserted, [&columnsInsertedCounter]() {
+		columnsInsertedCounter++;
+	});
+	int columnsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [&columnsAboutToBeRemovedCounter]() {
+		columnsAboutToBeRemovedCounter++;
+	});
+	int columnsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsRemoved, [&columnsRemovedCounter]() {
+		columnsRemovedCounter++;
+	});
+
+	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(model->columnCount(), 2);
+	sheet->setColumnCount(5);
+	QCOMPARE(sheet->columnCount(), 5);
+	QCOMPARE(model->columnCount(), 5);
+
+	sheet->removeColumns(0, 2); // remove columns
+
+	QCOMPARE(sheet->columnCount(), 3);
+	QCOMPARE(model->columnCount(), 3);
+
+	QCOMPARE(columnsRemovedCounter, 1);
+	QCOMPARE(columnsAboutToBeRemovedCounter, 1);
 }
 
 /*!
@@ -3184,7 +3226,7 @@ void SpreadsheetTest::testStatisticsSpreadsheetToggle() {
 }
 
 /*!
- * change the statistics metrics and check the presense of the corresponding columns
+ * change the statistics metrics and check the presence of the corresponding columns
  */
 void SpreadsheetTest::testStatisticsSpreadsheetChangeMetrics() {
 	Project project;
@@ -3237,7 +3279,7 @@ void SpreadsheetTest::testStatisticsSpreadsheetChildIndex() {
 
 	// check also the position when adding new columns via the actions in the view that also
 	// take the current selected column into account and have more logic for "append left to"
-	// and "append right to" - ensure no columns are added after the statistics spreadhseet
+	// and "append right to" - ensure no columns are added after the statistics spreadsheet
 	auto* view = static_cast<SpreadsheetView*>(sheet->view());
 
 	// insert a new column right to the last selected column, it should be placed in front of the statistics spreadsheet
@@ -3248,8 +3290,8 @@ void SpreadsheetTest::testStatisticsSpreadsheetChildIndex() {
 
 /*!
  * check the position of the statistics spreadsheet in the list of children of the parent
- * spreadsheet after an undo and redo of a column appen, it should always be put at the last position,
- * and also check  the handling of added and removed childrend in the model in the presense of the
+ * spreadsheet after an undo and redo of a column append, it should always be put at the last position,
+ * and also check the handling of added and removed childrend in the model in the presence of the
  * statistics spreadsheet.
  */
 void SpreadsheetTest::testStatisticsSpreadsheetChildIndexAfterUndoRedo() {
@@ -3317,7 +3359,7 @@ Vector::BLF::CanMessage2* createCANMessage(uint32_t id, uint64_t timestamp, cons
 	return canMessage;
 }
 
-void createBLFFile(const QString& filename, QVector<Vector::BLF::CanMessage2*> messages) {
+void createBLFFile(const QString& filename, const QVector<Vector::BLF::CanMessage2*>& messages) {
 	Vector::BLF::File blfFile;
 	blfFile.open(filename.toStdString().c_str(), std::ios_base::out);
 	QVERIFY(blfFile.is_open());

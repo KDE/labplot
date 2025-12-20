@@ -13,6 +13,7 @@
 #include "backend/notebook/Notebook.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
 #include "frontend/spreadsheet/StatisticsDialog.h"
+#include "backend/statistics/HypothesisTest.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <QActionGroup>
@@ -285,13 +286,21 @@ void NotebookView::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& c
 		m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
 		CartesianPlot::fillAddNewPlotMenu(m_plotDataMenu, plotDataActionGroup);
 
+		// statistical analysis
+		m_statisticalAnalysisMenu = new QMenu(i18n("Statistical Analysis"), this);
+		auto* hypothesisTestMenu = new QMenu(i18n("Hypothesis Test"), this);
+		auto* hypothesisTestActionGroup = new QActionGroup(this);
+		connect(hypothesisTestActionGroup, &QActionGroup::triggered, this, &NotebookView::hypothesisTest);
+		HypothesisTest::fillAddNewHypothesisTest(hypothesisTestMenu, hypothesisTestActionGroup);
+		m_statisticalAnalysisMenu->addMenu(hypothesisTestMenu);
+
 		m_statisticsAction = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Variable Statistics..."), this);
 		connect(m_statisticsAction, &QAction::triggered, this, &NotebookView::showStatistics);
 	}
 
 	QAction* firstAction = nullptr;
 	if (!menu->actions().isEmpty())
-		firstAction = menu->actions().at(1); // called for a menu that has already actions, prepend notbook's actions here
+		firstAction = menu->actions().at(1); // called for a menu that has already actions, prepend notebook's actions here
 
 	bool plottable = false;
 	for (const auto* col : columns) {
@@ -310,6 +319,7 @@ void NotebookView::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& c
 	}
 
 	menu->insertMenu(firstAction, m_plotDataMenu);
+	menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
 	menu->insertSeparator(firstAction);
 	m_plotDataMenu->setEnabled(plottable && hasValues);
 
@@ -355,6 +365,21 @@ void NotebookView::plotData(QAction* action) {
 	auto* dlg = new PlotDataDialog(m_notebook, type);
 	dlg->setSelectedColumns(m_contextMenuColumns);
 	dlg->exec();
+}
+
+void NotebookView::hypothesisTest(QAction* action) {
+	if (m_contextMenuColumns.isEmpty())
+		return;
+
+	QString name = (m_contextMenuColumns.size() == 1) ? m_contextMenuColumns.constFirst()->name() : m_notebook->name();
+	auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", name));
+	test->setTest(static_cast<HypothesisTest::Test>(action->data().toInt()));
+	QVector<const AbstractColumn*> dataColumns;
+	for (const auto* column : m_contextMenuColumns)
+		dataColumns << column;
+	test->setDataColumns(dataColumns);
+	test->recalculate();
+	m_notebook->parentAspect()->addChild(test);
 }
 
 void NotebookView::showStatistics() {

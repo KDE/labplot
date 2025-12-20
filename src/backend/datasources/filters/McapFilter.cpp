@@ -906,7 +906,7 @@ QJsonDocument McapFilterPrivate::getJsonDocument(const QString& fileName) {
 QJsonObject McapFilterPrivate::flattenJson(QJsonValue jsonVal, QString aggregatedKey) {
 	QJsonObject flattenedJson;
 
-	auto dryFx = [&](auto& key, auto& value) {
+	auto dryFx = [&](const auto& key, auto& value) {
 		const QString delimiter = QLatin1String(".");
 		QString nKey = aggregatedKey + delimiter + key;
 		if (nKey.at(0) == delimiter)

@@ -195,8 +195,7 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 
 	// load the remaining properties
 	load();
-
-	showStatusInfo(QString()); // remove the message from the previous chart, if available
+	showStatusError(QString()); // remove the message from the previous chart, if available
 	updatePlotRangeList();
 
 	// Slots
@@ -211,6 +210,7 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	connect(m_plot, &ProcessBehaviorChart::minLowerLimitChanged, this, &ProcessBehaviorChartDock::plotMinLowerLimitChanged);
 	connect(m_plot, &ProcessBehaviorChart::exactLimitsEnabledChanged, this, &ProcessBehaviorChartDock::plotExactLimitsEnabledChanged);
 	connect(m_plot, &ProcessBehaviorChart::statusInfo, this, &ProcessBehaviorChartDock::showStatusInfo);
+	connect(m_plot, &ProcessBehaviorChart::statusError, this, &ProcessBehaviorChartDock::showStatusError);
 	connect(m_plot, &ProcessBehaviorChart::recalculated, this, &ProcessBehaviorChartDock::updateLowerLimitWidgets);
 
 	// Labels-tab
@@ -677,8 +677,8 @@ void ProcessBehaviorChartDock::plotLabelsBorderShapeChanged(TextLabel::BorderSha
 	ui.cbLabelsBorderShape->setCurrentIndex(static_cast<int>(shape));
 }
 
-void ProcessBehaviorChartDock::showStatusInfo(const QString& info) {
-	if (info.isEmpty()) {
+void ProcessBehaviorChartDock::showStatusError(const QString& error) {
+	if (error.isEmpty()) {
 		if (m_messageWidget && m_messageWidget->isVisible())
 			m_messageWidget->close();
 	} else {
@@ -687,10 +687,15 @@ void ProcessBehaviorChartDock::showStatusInfo(const QString& info) {
 			m_messageWidget->setMessageType(KMessageWidget::Warning);
 			static_cast<QGridLayout*>(ui.tabGeneral->layout())->addWidget(m_messageWidget, 11, 0, 1, 3);
 		}
-		m_messageWidget->setText(info);
+		m_messageWidget->setText(error);
 		m_messageWidget->animatedShow();
-		QDEBUG(info);
+		QDEBUG(error);
 	}
+}
+
+void ProcessBehaviorChartDock::showStatusInfo(const QString& info) {
+	showStatusError(info);
+	m_messageWidget->setMessageType(KMessageWidget::Warning);
 }
 
 //*************************************************************

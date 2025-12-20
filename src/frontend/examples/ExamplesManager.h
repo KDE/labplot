@@ -3,18 +3,14 @@
 	Project              : LabPlot
 	Description          : examples projects manager
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef COLORMAPSMANAGER_H
 #define COLORMAPSMANAGER_H
 
-#include <QColor>
 #include <QMap>
-#include <QVector>
-
-class QPixmap;
 
 class ExamplesManager {
 public:
@@ -31,6 +27,7 @@ private:
 	~ExamplesManager();
 
 	void loadCollections();
+	void loadExamples(const QString& collectionName);
 
 	static ExamplesManager* m_instance;
 

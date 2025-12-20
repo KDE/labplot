@@ -60,7 +60,7 @@ private:
 						Operator opNumeric,
 						Operator opDateTime,
 						const QString& pattern1,
-						const QString pattern2,
+						const QString& pattern2,
 						Qt::CaseSensitivity cs);
 	bool checkCellText(const QString& value, const QString& pattern, OperatorText, Qt::CaseSensitivity);
 	bool checkCellNumeric(double value, const QString& pattern1, const QString& pattern2, Operator);

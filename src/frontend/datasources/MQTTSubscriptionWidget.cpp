@@ -321,7 +321,8 @@ void MQTTSubscriptionWidget::manageCommonLevelSubscriptions() {
 
 				// Add the common topic ("merging")
 				QString commonTopic;
-				commonTopic = checkCommonLevel(equalTopics.first(), equalTopics.last());
+				if (!equalTopics.isEmpty())
+					commonTopic = checkCommonLevel(equalTopics.first(), equalTopics.last());
 				QStringList nameList;
 				nameList.append(commonTopic);
 				auto* newTopic = new QTreeWidgetItem(nameList);

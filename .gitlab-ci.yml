@@ -9,8 +9,9 @@ include:
 # reuse-lint fails
 #      - /gitlab-templates/reuse-lint.yml
       - /gitlab-templates/clang-format.yml
+      - /gitlab-templates/cppcheck.yml
       - /gitlab-templates/linux-qt6.yml
-# Fails finding ECM (2025-02-13)
+# can't find ECMConfig.cmake (2025-10-21)
 #      - /gitlab-templates/linux-qt6-next.yml
       - /gitlab-templates/windows-qt6.yml
       - /gitlab-templates/freebsd-qt6.yml
@@ -18,6 +19,8 @@ include:
       - /gitlab-templates/craft-appimage-qt6.yml
 # see below for flatpak variables
       - /gitlab-templates/flatpak.yml
+# enable when needed
+#      - /gitlab-templates/flatpak-arm64.yml
       - /gitlab-templates/craft-windows-x86-64-qt6.yml
       - /gitlab-templates/craft-macos-x86-64-qt6.yml
       - /gitlab-templates/craft-macos-arm64-qt6.yml
@@ -25,6 +28,7 @@ include:
 #      - /gitlab-templates/craft-windows-appx-qt6.yml
 # MinGW fails linking tests due to undefined references to GSL functions
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
+      - /gitlab-templates/documentation.yml
 
 # can't extend job without running it
 # "only: []" not supported anymore
@@ -96,7 +100,7 @@ clang_format:
     git diff --exit-code
 
 # see above
-flatpak:
+flatpak-amd64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: manual

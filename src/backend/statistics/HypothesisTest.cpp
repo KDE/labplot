@@ -616,10 +616,10 @@ QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 // ##############################################################################
 void HypothesisTestPrivate::recalculate() {
 	result.clear(); // clear the previous result
-	Q_EMIT q->statusInfo(QString()); // reset the previous info message
+	Q_EMIT q->statusError(QString()); // reset the previous info message
 
 	if (dataColumns.isEmpty()) {
-		Q_EMIT q->statusInfo(i18n("No variable columns provided."));
+		Q_EMIT q->statusError(i18n("No variable columns provided."));
 		return;
 	}
 
@@ -850,7 +850,7 @@ void HypothesisTestPrivate::performOneSampleTTest() {
 	size_t n = sample.size();
 
 	if (n < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -890,7 +890,7 @@ void HypothesisTestPrivate::performOneSampleTTest() {
 
 void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	if (dataColumns.size() < 2) { // we need two columns for the two sample t test
-		Q_EMIT q->statusInfo(twoColumnsRequired());
+		Q_EMIT q->statusError(twoColumnsRequired());
 		return;
 	}
 
@@ -902,12 +902,12 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	size_t n2 = samples[1].size();
 
 	if (n1 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	if (n2 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -921,7 +921,7 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	if (n1 != 0 && n2 != 0) {
 		if (paired) {
 			if (n1 != n2) {
-				Q_EMIT q->statusInfo(samplesMustBeEqualSize());
+				Q_EMIT q->statusError(samplesMustBeEqualSize());
 				return;
 			}
 
@@ -988,7 +988,7 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 
 void HypothesisTestPrivate::performWelchTTest() {
 	if (dataColumns.size() < 2) { // we need two columns for the welch t test
-		Q_EMIT q->statusInfo(twoColumnsRequired());
+		Q_EMIT q->statusError(twoColumnsRequired());
 		return;
 	}
 
@@ -1000,12 +1000,12 @@ void HypothesisTestPrivate::performWelchTTest() {
 	size_t n2 = samples.at(1).size();
 
 	if (n1 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	if (n2 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -1042,7 +1042,7 @@ void HypothesisTestPrivate::performWelchTTest() {
 
 void HypothesisTestPrivate::performOneWayANOVATest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(atLeastTwoColumnsRequired());
+		Q_EMIT q->statusError(atLeastTwoColumnsRequired());
 		return;
 	}
 
@@ -1057,7 +1057,7 @@ void HypothesisTestPrivate::performOneWayANOVATest() {
 	for (int n = 0; n < groupCount; n++) {
 		size_t sampleSize = groupData[n].size();
 		if (sampleSize < minSampleCount(test)) {
-			Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(dataColumns.at(n)->name()).arg(minSampleCount(test)));
+			Q_EMIT q->statusError(atLeastXSamplesRequired().arg(dataColumns.at(n)->name()).arg(minSampleCount(test)));
 			return;
 		}
 		groupSizes[n] = static_cast<size_t>(sampleSize);
@@ -1101,7 +1101,7 @@ void HypothesisTestPrivate::performOneWayANOVATest() {
 
 void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(atLeastTwoColumnsRequired());
+		Q_EMIT q->statusError(atLeastTwoColumnsRequired());
 		return;
 	}
 
@@ -1114,13 +1114,13 @@ void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 	auto groupSize = groupData[0].size();
 
 	if (static_cast<size_t>(groupSize) < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(dataColumns.at(0)->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(dataColumns.at(0)->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	for (int n = 1; n < groupCount; n++) {
 		if (groupData[n].size() != groupSize) {
-			Q_EMIT q->statusInfo(samplesMustBeEqualSize());
+			Q_EMIT q->statusError(samplesMustBeEqualSize());
 			return;
 		}
 	}
@@ -1165,7 +1165,7 @@ void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 
 void HypothesisTestPrivate::performMannWhitneyUTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(twoColumnsRequired());
+		Q_EMIT q->statusError(twoColumnsRequired());
 		return;
 	}
 
@@ -1177,12 +1177,12 @@ void HypothesisTestPrivate::performMannWhitneyUTest() {
 	size_t n2 = samples.at(1).size();
 
 	if (n1 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	if (n2 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -1223,7 +1223,7 @@ void HypothesisTestPrivate::performMannWhitneyUTest() {
 
 void HypothesisTestPrivate::performKruskalWallisTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(atLeastTwoColumnsRequired());
+		Q_EMIT q->statusError(atLeastTwoColumnsRequired());
 		return;
 	}
 
@@ -1238,7 +1238,7 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 	for (int n = 0; n < groupCount; n++) {
 		size_t sampleSize = groupData[n].size();
 		if (sampleSize < minSampleCount(test)) {
-			Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(dataColumns.at(n)->name()).arg(minSampleCount(test)));
+			Q_EMIT q->statusError(atLeastXSamplesRequired().arg(dataColumns.at(n)->name()).arg(minSampleCount(test)));
 			return;
 		}
 		groupSizes[n] = sampleSize;
@@ -1277,7 +1277,7 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 
 void HypothesisTestPrivate::performWilcoxonTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(twoColumnsRequired());
+		Q_EMIT q->statusError(twoColumnsRequired());
 		return;
 	}
 
@@ -1289,12 +1289,12 @@ void HypothesisTestPrivate::performWilcoxonTest() {
 	size_t n2 = samples.at(1).size();
 
 	if (n1 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	if (n2 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -1303,7 +1303,7 @@ void HypothesisTestPrivate::performWilcoxonTest() {
 
 	if (n1 != 0 && n2 != 0) {
 		if (n1 != n2) {
-			Q_EMIT q->statusInfo(samplesMustBeEqualSize());
+			Q_EMIT q->statusError(samplesMustBeEqualSize());
 			return;
 		}
 		result = nsl_stats_wilcoxon_w(samples.at(0).constData(), samples.at(1).constData(), n1, tail);
@@ -1343,7 +1343,7 @@ void HypothesisTestPrivate::performWilcoxonTest() {
 
 void HypothesisTestPrivate::performFriedmanTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(atLeastTwoColumnsRequired());
+		Q_EMIT q->statusError(atLeastTwoColumnsRequired());
 		return;
 	}
 
@@ -1356,13 +1356,13 @@ void HypothesisTestPrivate::performFriedmanTest() {
 	const auto groupSize = groupData.at(0).size();
 
 	if (static_cast<size_t>(groupSize) < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(dataColumns.at(0)->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(dataColumns.at(0)->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	for (int n = 1; n < groupCount; n++) {
 		if (groupData.at(n).size() != groupSize) {
-			Q_EMIT q->statusInfo(samplesMustBeEqualSize());
+			Q_EMIT q->statusError(samplesMustBeEqualSize());
 			return;
 		}
 	}
@@ -1398,7 +1398,7 @@ void HypothesisTestPrivate::performFriedmanTest() {
 
 void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	if (dataColumns.size() < 2) { // we need two columns for the welch t test
-		Q_EMIT q->statusInfo(twoColumnsRequired());
+		Q_EMIT q->statusError(twoColumnsRequired());
 		return;
 	}
 
@@ -1406,7 +1406,7 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	const auto* expected = dataColumns.at(1);
 
 	if (observed->columnMode() != AbstractColumn::ColumnMode::Integer && observed->columnMode() != AbstractColumn::ColumnMode::BigInt) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' must be of integer type.", observed->name()));
+		Q_EMIT q->statusError(i18n("Column '%1' must be of integer type.", observed->name()));
 		return;
 	}
 
@@ -1417,12 +1417,12 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	size_t n2 = sample2.size();
 
 	if (n1 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(observed->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(observed->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	if (n2 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(expected->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(expected->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -1431,7 +1431,7 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 
 	if (n1 != 0 && n2 != 0) {
 		if (n1 != n2) {
-			Q_EMIT q->statusInfo(samplesMustBeEqualSize());
+			Q_EMIT q->statusError(samplesMustBeEqualSize());
 			return;
 		}
 
@@ -1467,13 +1467,13 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 
 void HypothesisTestPrivate::performChisqIndependenceTest() {
 	if (dataColumns.size() < 2) { // we need at least two columns for the chi square independence test
-		Q_EMIT q->statusInfo(atLeastTwoColumnsRequired());
+		Q_EMIT q->statusError(atLeastTwoColumnsRequired());
 		return;
 	}
 
 	for (auto* col : dataColumns) {
 		if (col->columnMode() != AbstractColumn::ColumnMode::Integer && col->columnMode() != AbstractColumn::ColumnMode::BigInt) {
-			Q_EMIT q->statusInfo(i18n("Column '%1' must be of integer type.", col->name()));
+			Q_EMIT q->statusError(i18n("Column '%1' must be of integer type.", col->name()));
 			return;
 		}
 	}
@@ -1487,13 +1487,13 @@ void HypothesisTestPrivate::performChisqIndependenceTest() {
 	auto rowCount = table[0].size();
 
 	if (static_cast<size_t>(rowCount) < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(dataColumns.at(0)->name()).arg(minSampleCount(test)));
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(dataColumns.at(0)->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	for (int n = 1; n < columnCount; n++) {
 		if (table[n].size() != rowCount) {
-			Q_EMIT q->statusInfo(i18n("The size of each column in the contingency table must be equal."));
+			Q_EMIT q->statusError(i18n("The size of each column in the contingency table must be equal."));
 			return;
 		}
 	}
@@ -1530,7 +1530,7 @@ void HypothesisTestPrivate::performChisqIndependenceTest() {
 void HypothesisTestPrivate::performLogRankTest() {
 	// time, status and group columns required
 	if (dataColumns.size() < 3) {
-		Q_EMIT q->statusInfo(i18n("Three columns are required."));
+		Q_EMIT q->statusError(i18n("Three columns are required."));
 		return;
 	}
 
@@ -1539,17 +1539,17 @@ void HypothesisTestPrivate::performLogRankTest() {
 	const auto* groupCol = dataColumns.at(2);
 
 	if (statusCol->columnMode() != AbstractColumn::ColumnMode::Integer) {
-		Q_EMIT q->statusInfo(i18n("Status column should be of integer type."));
+		Q_EMIT q->statusError(i18n("Status column should be of integer type."));
 		return;
 	}
 
 	if (groupCol->columnMode() != AbstractColumn::ColumnMode::Integer) {
-		Q_EMIT q->statusInfo(i18n("Group column should be of integer type."));
+		Q_EMIT q->statusError(i18n("Group column should be of integer type."));
 		return;
 	}
 
 	if (statusCol->rowCount() != timeCol->rowCount() || groupCol->rowCount() != timeCol->rowCount()) {
-		Q_EMIT q->statusInfo(i18n("Time, Status and Group columns should have equal size."));
+		Q_EMIT q->statusError(i18n("Time, Status and Group columns should have equal size."));
 		return;
 	}
 
@@ -1568,12 +1568,12 @@ void HypothesisTestPrivate::performLogRankTest() {
 		int g = groupCol->integerAt(row); // must be 0 or 1
 
 		if (s != 0 && s != 1) {
-			Q_EMIT q->statusInfo(i18n("Status column values must be either 0 or 1."));
+			Q_EMIT q->statusError(i18n("Status column values must be either 0 or 1."));
 			return;
 		}
 
 		if (g != 0 && g != 1) {
-			Q_EMIT q->statusInfo(i18n("Group column values must be either 0 or 1."));
+			Q_EMIT q->statusError(i18n("Group column values must be either 0 or 1."));
 			return;
 		}
 
@@ -1589,7 +1589,7 @@ void HypothesisTestPrivate::performLogRankTest() {
 	}
 
 	if ((time.size() != status.size()) || g0Indices.size() + g1Indices.size() != time.size()) {
-		Q_EMIT q->statusInfo(i18n("Time, Status and Group columns should have equal number of values."));
+		Q_EMIT q->statusError(i18n("Time, Status and Group columns should have equal number of values."));
 		return;
 	}
 
@@ -1597,12 +1597,12 @@ void HypothesisTestPrivate::performLogRankTest() {
 	size_t group2size = g1Indices.size();
 
 	if (group1size < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Group 1 requires at least %1 samples.", minSampleCount(test)));
+		Q_EMIT q->statusError(i18n("Group 1 requires at least %1 samples.", minSampleCount(test)));
 		return;
 	}
 
 	if (group2size < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Group 2 requires at least %1 samples.", minSampleCount(test)));
+		Q_EMIT q->statusError(i18n("Group 2 requires at least %1 samples.", minSampleCount(test)));
 		return;
 	}
 
@@ -1713,55 +1713,74 @@ bool HypothesisTest::load(XmlStreamReader* reader, bool preview) {
 }
 
 void HypothesisTest::fillAddNewHypothesisTest(QMenu* menu, QActionGroup* actionGroup) {
+	auto* subMenu = new QMenu(i18n("Parametric"));
+
 	auto* action = new QAction(testName(Test::t_test_one_sample), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_one_sample));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::t_test_two_sample), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_two_sample));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::t_test_two_sample_paired), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_two_sample_paired));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::t_test_welch), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_welch));
-	menu->addAction(action);
+	subMenu->addAction(action);
+
+	subMenu->addSeparator();
 
 	action = new QAction(testName(Test::one_way_anova), actionGroup);
 	action->setData(static_cast<int>(Test::one_way_anova));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::one_way_anova_repeated), actionGroup);
 	action->setData(static_cast<int>(Test::one_way_anova_repeated));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
+	menu->addMenu(subMenu);
+
+	subMenu = new QMenu(i18n("Non-Parametric"));
+
+	// t-type related tests
 	action = new QAction(testName(Test::mann_whitney_u_test), actionGroup);
 	action->setData(static_cast<int>(Test::mann_whitney_u_test));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::wilcoxon_test), actionGroup);
 	action->setData(static_cast<int>(Test::wilcoxon_test));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
+	subMenu->addSeparator();
+
+	// ANOVA-related tests
 	action = new QAction(testName(Test::kruskal_wallis_test), actionGroup);
 	action->setData(static_cast<int>(Test::kruskal_wallis_test));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::friedman_test), actionGroup);
 	action->setData(static_cast<int>(Test::friedman_test));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
-	action = new QAction(testName(Test::log_rank_test), actionGroup);
-	action->setData(static_cast<int>(Test::log_rank_test));
-	menu->addAction(action);
+	subMenu->addSeparator();
 
+	// chi^2 tests
 	action = new QAction(testName(Test::chisq_independence), actionGroup);
 	action->setData(static_cast<int>(Test::chisq_independence));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::chisq_goodness_of_fit), actionGroup);
 	action->setData(static_cast<int>(Test::chisq_goodness_of_fit));
-	menu->addAction(action);
+	subMenu->addAction(action);
+
+	subMenu->addSeparator();
+
+	action = new QAction(testName(Test::log_rank_test), actionGroup);
+	action->setData(static_cast<int>(Test::log_rank_test));
+	subMenu->addAction(action);
+
+	menu->addMenu(subMenu);
 }

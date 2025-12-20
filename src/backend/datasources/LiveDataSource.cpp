@@ -565,8 +565,6 @@ void LiveDataSource::read() {
 	if (m_reading)
 		return;
 
-	static bool firstRead = true;
-
 	m_reading = true;
 
 	// initialize the device (file, socket, serial port) when calling this function for the first time
@@ -637,6 +635,8 @@ void LiveDataSource::read() {
 	case SourceType::SerialPort: {
 		DEBUG("	Reading from serial port");
 #ifdef HAVE_QTSERIALPORT
+		static bool firstRead = true;
+
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii) {
 			if (firstRead)

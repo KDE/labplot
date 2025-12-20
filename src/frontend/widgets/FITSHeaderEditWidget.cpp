@@ -128,7 +128,7 @@ void FITSHeaderEditWidget::fillTable() {
  * \param col the column of the selected item
  */
 void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const QString& itemText = item->text(col);
 	QString selectedExtension;
 	int extType = 0;
@@ -160,7 +160,6 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
 			fillTable();
 		}
 	}
-	RESET_CURSOR;
 }
 
 /*!
@@ -182,7 +181,7 @@ void FITSHeaderEditWidget::openFile() {
 			conf.writeEntry("LastDir", newDir);
 	}
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QTreeWidgetItem* root = ui->twExtensions->invisibleRootItem();
 	const int childCount = root->childCount();
 	bool opened = false;
@@ -209,7 +208,6 @@ void FITSHeaderEditWidget::openFile() {
 		KMessageBox::information(this, i18n("Cannot open file, file already opened."), i18n("File already opened"));
 	}
 	enableButtonAddUnit();
-	RESET_CURSOR;
 }
 
 /*!
@@ -227,13 +225,11 @@ bool FITSHeaderEditWidget::save() {
 		const auto& data = it.value();
 		if (data.updates.newKeywords.size() > 0) {
 			m_fitsFilter->addNewKeyword(fileName, data.updates.newKeywords);
-			if (!saved)
-				saved = true;
+			saved = true;
 		}
 		if (data.updates.removedKeywords.size() > 0) {
 			m_fitsFilter->deleteKeyword(fileName, data.updates.removedKeywords);
-			if (!saved)
-				saved = true;
+			saved = true;
 		}
 		if (!saved) {
 			for (const FITSFilter::Keyword& key : data.updates.updatedKeywords) {
@@ -253,8 +249,7 @@ bool FITSHeaderEditWidget::save() {
 
 	if (m_removedExtensions.size() > 0) {
 		m_fitsFilter->removeExtensions(m_removedExtensions);
-		if (!saved)
-			saved = true;
+		saved = true;
 	}
 	if (saved) {
 		// to reset the window title

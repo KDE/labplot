@@ -1,6 +1,6 @@
 <typesystem package="pylabplot">
-    <load-typesystem name="typesystem_widgets.xml" generate="no"/>
     <load-typesystem name="typesystem_core_common.xml" generate="no"/>
+    <load-typesystem name="typesystem_widgets.xml" generate="no"/>
 
     <!-- Global -->
     <enum-type name="AspectType">
@@ -55,7 +55,7 @@
         <declare-function signature="type()const" return-type="AspectType"/>
         <declare-function signature="parentAspect()const" return-type="AbstractAspect*"/>
         <declare-function signature="child(const QString&amp;,AspectType)const" return-type="AbstractAspect*"/>
-        <declare-function signature="children(AspectType,AbstractAspect::ChildIndexFlags)const" return-type="QVector&lt;AbstractAspect*&gt;">
+        <declare-function signature="children(AspectType,AbstractAspect::ChildIndexFlags)const" return-type="QList&lt;AbstractAspect*&gt;">
             <modify-argument index="2">
                 <replace-default-expression with="{}"/>
             </modify-argument>
@@ -84,23 +84,23 @@
         <declare-function signature="clear()" return-type="void"/>
         <declare-function signature="textAt(int)const" return-type="QString"/>
         <declare-function signature="setTextAt(int,const QString&amp;)" return-type="void"/>
-        <declare-function signature="replaceTexts(int, const QVector&lt;QString&gt;&amp;)" return-type="void"/>
+        <declare-function signature="replaceTexts(int,QList&lt;QString&gt;)" return-type="void"/>
         <declare-function signature="valueAt(int)const" return-type="double"/>
         <declare-function signature="setValueAt(int,double)" return-type="void"/>
-        <declare-function signature="replaceValues(int, const QVector&lt;double&gt;&amp;)" return-type="void"/>
+        <declare-function signature="replaceValues(int,QList&lt;double&gt;)" return-type="void"/>
         <declare-function signature="integerAt(int)const" return-type="int"/>
         <declare-function signature="setIntegerAt(int,int)" return-type="void"/>
-        <declare-function signature="replaceInteger(int,const QVector&lt;int&gt;&amp;)" return-type="void"/>
+        <declare-function signature="replaceInteger(int,QList&lt;int&gt;)" return-type="void"/>
         <declare-function signature="bigIntAt(int)const" return-type="qint64"/>
         <declare-function signature="setBigIntAt(int,qint64)" return-type="void"/>
-        <declare-function signature="replaceBigInt(int,const QVector&lt;qint64&gt;&amp;)" return-type="void"/>
+        <declare-function signature="replaceBigInt(int,QList&lt;qint64&gt;)" return-type="void"/>
         <declare-function signature="dateAt(int)const" return-type="QDate"/>
         <declare-function signature="setDateAt(int,QDate)" return-type="void"/>
         <declare-function signature="timeAt(int)const" return-type="QTime"/>
         <declare-function signature="setTimeAt(int,QTime)" return-type="void"/>
         <declare-function signature="dateTimeAt(int)const" return-type="QDateTime"/>
         <declare-function signature="setDateTimeAt(int,const QDateTime&amp;)" return-type="void"/>
-        <declare-function signature="replaceDateTimes(int,const QVector&lt;QDateTime&gt;&amp;)" return-type="void"/>
+        <declare-function signature="replaceDateTimes(int,QList&lt;QDateTime&gt;)" return-type="void"/>
     </object-type>
     <rejection class="AbstractCoordinateSystem" field-name="*"/>
     <rejection class="AbstractCoordinateSystem" function-name="*"/>
@@ -164,12 +164,15 @@
         <enum-type name="HorizontalAlignment"/>
         <enum-type name="VerticalAlignment"/>
         <enum-type name="PositionLimit"/>
-        <value-type name="PositionWrapper" disable-wrapper="yes"/>
-        <declare-function signature="position()" return-type="WorksheetElement::PositionWrapper"/>
-        <declare-function signature="setPosition(WorksheetElement::PositionWrapper)" return-type="void"/>
-        <declare-function signature="setPosition(QPointF)" return-type="void"/>
+        <!-- fails finding QPointF for constructor with flatpak-builder -->
+        <!-- <value-type name="PositionWrapper" disable-wrapper="yes"/> -->
+        <modify-function signature="position()" return-type="PositionWrapper"/>
+        <modify-function signature="setPosition(PositionWrapper)" return-type="void"/>
+        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
+        <modify-function signature="setPosition(QPointF)" return-type="void"/>
         <declare-function signature="positionLogical()" return-type="QPointF"/>
-        <declare-function signature="setPositionLogical(QPointF)" return-type="void"/>
+        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
+        <modify-function signature="setPositionLogical(QPointF)" return-type="void"/>
         <declare-function signature="horizontalAlignment()" return-type="WorksheetElement::HorizontalAlignment"/>
         <declare-function signature="setHorizontalAlignment(WorksheetElement::HorizontalAlignment)" return-type="void"/>
         <declare-function signature="verticalAlignment()" return-type="WorksheetElement::VerticalAlignment"/>
@@ -194,7 +197,8 @@
     <object-type name="WorksheetElementContainer" force-abstract="yes" disable-wrapper="yes">
         <declare-function signature="retransform()" return-type="void"/>
         <declare-function signature="rect()const" return-type="QRectF"/>
-        <declare-function signature="setRect(const QRectF&amp;)" return-type="void"/>
+        <!-- Could not find a minimal constructor for type 'QRectF': Could not find class "QRectF" in the code model -->
+        <modify-function signature="setRect(QRectF)" return-type="void"/>
     </object-type>
     <rejection class="XYAnalysisCurve" field-name="*"/>
     <rejection class="XYAnalysisCurve" function-name="*"/>
@@ -703,8 +707,8 @@
                 <define-ownership class="target" owner="c++"/>
             </modify-argument>
         </declare-function>
-        <declare-function signature="tickLabelValues()const" return-type="QVector&lt;double&gt;"/>
-        <declare-function signature="tickLabelStrings()const" return-type="QVector&lt;QString&gt;"/>
+        <declare-function signature="tickLabelValues()const" return-type="QList&lt;double&gt;"/>
+        <declare-function signature="tickLabelStrings()const" return-type="QList&lt;QString&gt;"/>
         <declare-function signature="labelsColor()const" return-type="QColor"/>
         <declare-function signature="setLabelsColor(const QColor&amp;)" return-type="void"/>
         <declare-function signature="labelsFont()const" return-type="QFont"/>
@@ -806,9 +810,11 @@
         <declare-function signature="background()const" return-type="Background*"/>
         <declare-function signature="line()const" return-type="Line*"/>
         <declare-function signature="positionLogicalStart()const" return-type="QPointF"/>
-        <declare-function signature="setPositionLogicalStart(QPointF)" return-type="void"/>
+        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
+        <modify-function signature="setPositionLogicalStart(QPointF)" return-type="void"/>
         <declare-function signature="positionLogicalEnd()const" return-type="QPointF"/>
-        <declare-function signature="setPositionLogicalEnd(QPointF)" return-type="void"/>
+        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
+        <modify-function signature="setPositionLogicalEnd(QPointF)" return-type="void"/>
         <declare-function signature="orientation()const" return-type="WorksheetElement::Orientation"/>
         <declare-function signature="setOrientation(WorksheetElement::Orientation)" return-type="void"/>
     </object-type>
@@ -825,8 +831,8 @@
                 <define-ownership class="target" owner="c++"/>
             </modify-argument>
         </declare-function>
-        <declare-function signature="dataColumns()const" return-type="QVector&lt;const AbstractColumn*&gt;"/>
-        <declare-function signature="setDataColumns(QVector&lt;const AbstractColumn*&gt;)" return-type="void">
+        <declare-function signature="dataColumns()const" return-type="QList&lt;const AbstractColumn*&gt;"/>
+        <declare-function signature="setDataColumns(QList&lt;const AbstractColumn*&gt;)" return-type="void">
             <modify-argument index="1">
                 <define-ownership class="target" owner="c++"/>
             </modify-argument>
@@ -854,8 +860,8 @@
                 <remove-argument/>
             </modify-argument>
         </declare-function>
-        <declare-function signature="dataColumns()const" return-type="QVector&lt;const AbstractColumn*&gt;"/>
-        <declare-function signature="setDataColumns(QVector&lt;const AbstractColumn*&gt;)" return-type="void">
+        <declare-function signature="dataColumns()const" return-type="QList&lt;const AbstractColumn*&gt;"/>
+        <declare-function signature="setDataColumns(QList&lt;const AbstractColumn*&gt;)" return-type="void">
             <modify-argument index="1">
                 <define-ownership class="target" owner="c++"/>
             </modify-argument>
@@ -985,8 +991,8 @@
                 <define-ownership class="target" owner="c++"/>
             </modify-argument>
         </declare-function>
-        <declare-function signature="dataColumns()const" return-type="QVector&lt;const AbstractColumn*&gt;"/>
-        <declare-function signature="setDataColumns(QVector&lt;const AbstractColumn*&gt;)" return-type="void">
+        <declare-function signature="dataColumns()const" return-type="QList&lt;const AbstractColumn*&gt;"/>
+        <declare-function signature="setDataColumns(QList&lt;const AbstractColumn*&gt;)" return-type="void">
             <modify-argument index="1">
                 <define-ownership class="target" owner="c++"/>
             </modify-argument>
@@ -1201,15 +1207,15 @@
         <declare-function signature="setCorrelationData(const XYCorrelationCurve::CorrelationData&amp;)" return-type="void"/>
         <declare-function signature="correlationResult()const" return-type="const XYCorrelationCurve::CorrelationResult&amp;"/>
     </object-type>
-    <rejection class="XYDataReductionCurve" field-name="*"/>
-    <rejection class="XYDataReductionCurve" function-name="*"/>
-    <object-type name="XYDataReductionCurve" disable-wrapper="yes">
-        <value-type name="DataReductionData" disable-wrapper="yes"/>
-        <value-type name="DataReductionResult" disable-wrapper="yes"/>
-        <declare-function signature="XYDataReductionCurve(const QString&amp;)" return-type="void"/>
-        <declare-function signature="dataReductionData()const" return-type="XYDataReductionCurve::DataReductionData"/>
-        <declare-function signature="setDataReductionData(const XYDataReductionCurve::DataReductionData&amp;)" return-type="void"/>
-        <declare-function signature="dataReductionResult()const" return-type="const XYDataReductionCurve::DataReductionResult&amp;"/>
+    <rejection class="XYLineSimplificationCurve" field-name="*"/>
+    <rejection class="XYLineSimplificationCurve" function-name="*"/>
+    <object-type name="XYLineSimplificationCurve" disable-wrapper="yes">
+        <value-type name="LineSimplificationData" disable-wrapper="yes"/>
+        <value-type name="LineSimplificationResult" disable-wrapper="yes"/>
+        <declare-function signature="XYLineSimplificationCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="lineSimplificationData()const" return-type="XYLineSimplificationCurve::LineSimplificationData"/>
+        <declare-function signature="setLineSimplificationData(const XYLineSimplificationCurve::LineSimplificationData&amp;)" return-type="void"/>
+        <declare-function signature="lineSimplificationResult()const" return-type="const XYLineSimplificationCurve::LineSimplificationResult&amp;"/>
     </object-type>
     <rejection class="XYDifferentiationCurve" field-name="*"/>
     <rejection class="XYDifferentiationCurve" function-name="*"/>
@@ -1293,14 +1299,14 @@
     <object-type name="XYFunctionCurve" disable-wrapper="yes">
         <value-type name="FunctionData" disable-wrapper="yes"/>
         <declare-function signature="XYFunctionCurve(const QString&amp;)" return-type="void"/>
-        <declare-function signature="setFunction(const QString&amp;,const QStringList&amp;,const QVector&lt;const XYCurve*&gt;&amp;)" return-type="void">
+        <declare-function signature="setFunction(const QString&amp;,const QStringList&amp;,QList&lt;const XYCurve*&gt;)" return-type="void">
             <modify-argument index="3">
                 <define-ownership class="target" owner="c++"/>
             </modify-argument>
         </declare-function>
         <declare-function signature="function()const" return-type="QString"/>
         <declare-function signature="clearFunction()" return-type="void"/>
-        <declare-function signature="functionData()const" return-type="const QVector&lt;FunctionData&gt;&amp;"/>
+        <declare-function signature="functionData()const" return-type="const QList&lt;FunctionData&gt;&amp;"/>
         <add-function signature="functionResult()const" return-type="const XYFunctionCurve::FunctionResult&amp;" access="public" static="no" classmethod="no">
             <inject-code class="target" position="beginning">
                 const XYAnalysisCurve::Result &amp; result = %CPPSELF-&gt;result();
@@ -1408,7 +1414,8 @@
             </modify-argument>
         </declare-function>
         <declare-function signature="pageRect()const" return-type="QRectF"/>
-        <declare-function signature="setPageRect(const QRectF&amp;)" return-type="void"/>
+        <!-- Could not find a minimal constructor for type 'QRectF': Could not find class "QRectF" in the code model -->
+        <modify-function signature="setPageRect(QRectF)" return-type="void"/>
         <declare-function signature="scaleContent()const" return-type="bool"/>
         <declare-function signature="setScaleContent(bool)" return-type="void"/>
         <declare-function signature="useViewSize()const" return-type="bool"/>

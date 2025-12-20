@@ -87,19 +87,19 @@ bool ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	// TODO: error handling
 	QElapsedTimer timer;
 	timer.start();
-	if (aspect->inherits(AspectType::Matrix)) {
+	if (aspect->inherits<Matrix>()) {
 		auto* matrix = qobject_cast<Matrix*>(aspect);
 		importSQLDatabaseWidget->read(matrix, mode);
-	} else if (aspect->inherits(AspectType::Spreadsheet)) {
+	} else if (aspect->inherits<Spreadsheet>()) {
 		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		importSQLDatabaseWidget->read(spreadsheet, mode);
-	} else if (aspect->inherits(AspectType::Workbook)) {
+	} else if (aspect->inherits<Workbook>()) {
 		// use active spreadsheet or matrix (only if numeric data is going to be imported) if present,
 		// create a new spreadsheet in the selected workbook otherwise
 		auto* workbook = qobject_cast<Workbook*>(aspect);
@@ -116,8 +116,6 @@ bool ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 		}
 	}
 	statusBar->showMessage(i18n("Data imported in %1 seconds.", (float)timer.elapsed() / 1000));
-
-	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 	return true;
 }

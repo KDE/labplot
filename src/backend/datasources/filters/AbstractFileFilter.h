@@ -50,6 +50,12 @@ public:
 												 int baseYear = QLocale::DefaultTwoDigitBaseYear);
 	static QString dateTimeFormat(const QString& valueString);
 	static QStringList numberFormats();
+
+	static QString textNumberFormatShort();
+	static QString textNumberFormat();
+	static QString textDateTimeFormatShort();
+	static QString textDateTimeFormat();
+
 	static bool exclusiveFileType(FileType);
 	static FileType fileType(const QString&);
 	// static QStringList fileTypes();

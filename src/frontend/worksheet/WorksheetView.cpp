@@ -2451,10 +2451,10 @@ void WorksheetView::changePlotNavigation(QAction* action) {
 					   || op == CartesianPlot::NavigationOperation::ShiftDownY || op == CartesianPlot::NavigationOperation::ZoomInY
 					   || op == CartesianPlot::NavigationOperation::ZoomOutY))) {
 		int cSystemIndex = CartesianPlot::cSystemIndex(m_selectedElement);
-		if (m_selectedElement->type() == AspectType::CartesianPlot)
-			static_cast<CartesianPlot*>(m_selectedElement)->navigate(-1, op);
+		if (auto* plot = m_selectedElement->castTo<CartesianPlot>())
+			plot->navigate(-1, op);
 		else {
-			auto parentPlot = static_cast<CartesianPlot*>(m_selectedElement->parent(AspectType::CartesianPlot));
+			auto parentPlot = m_selectedElement->parent<CartesianPlot>();
 			if (parentPlot) // really needed?
 				parentPlot->navigate(cSystemIndex, op);
 		}

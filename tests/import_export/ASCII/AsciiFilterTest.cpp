@@ -1945,7 +1945,7 @@ void AsciiFilterTest::testQuotedStrings03() {
 }
 
 /*!
- * test quoted text having separators inside - the text between quotes shouldn't be splitted into separate columns.
+ * test quoted text having separators inside - the text between quotes shouldn't be split into separate columns.
  */
 void AsciiFilterTest::testQuotedStrings04() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
@@ -1996,7 +1996,7 @@ void AsciiFilterTest::testQuotedStrings04() {
 }
 
 /*!
- * test quoted text having separators inside - a JSON file has a similar structure and we should't crash because of this "wrong" data.
+ * test quoted text having separators inside - a JSON file has a similar structure and we shouldn't crash because of this "wrong" data.
  */
 void AsciiFilterTest::testIvalidFile_Json() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
@@ -2016,7 +2016,7 @@ void AsciiFilterTest::testIvalidFile_Json() {
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// everything should be read into one single text column.
-	// the actuall content is irrelevant, we just need to make sure we don't crash because of such wrong content
+	// the actual content is irrelevant, we just need to make sure we don't crash because of such wrong content
 	QCOMPARE(spreadsheet.columnCount(), 1);
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
 }

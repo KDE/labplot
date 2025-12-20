@@ -5,7 +5,7 @@ find_package(Python3 COMPONENTS Development Interpreter REQUIRED)
 find_package(PySide6 REQUIRED)
 find_package(Shiboken6 REQUIRED)
 
-include(ECMGeneratePythonBindings)
+include(GeneratePythonBindings)
 
 set(bindings_library "pylabplot")
 
@@ -32,8 +32,8 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plot_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.h
+#    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.cpp
+#    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyanalysiscurve_wrapper.cpp
@@ -162,12 +162,12 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_differentiationdata_wrapper.cpp
@@ -247,7 +247,7 @@ get_property(_defs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINI
 list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_UP_TO=]])
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
 
-ecm_generate_python_bindings(
+generate_python_bindings(
     PACKAGE_NAME ${bindings_library}
     VERSION ${PROJECT_VERSION}
     WRAPPED_HEADER ${wrapped_header}
@@ -260,6 +260,25 @@ ecm_generate_python_bindings(
     AUTHOR "The LabPlot Team"
     README ../../README.md
 )
+
+if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
+    get_target_property(PySide6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
+    get_target_property(Shiboken6_INCLUDE_DIRECTORIES Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
+    target_include_directories(${bindings_library} PUBLIC ${Python3_INCLUDE_DIRS} ${PySide6_INCLUDE_DIRECTORIES} ${PYSIDE_PYTHONPATH}/include/QtWidgets ${PYSIDE_PYTHONPATH}/include/QtGui ${PYSIDE_PYTHONPATH}/include/QtCore)
+    # TODO: check if necessary
+    # target_include_directories(${bindings_library} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../src/3rdparty/shiboken6-${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}/include)
+    if(Shiboken6_INCLUDE_DIRECTORIES)
+        target_include_directories(${bindings_library} PUBLIC ${Shiboken6_INCLUDE_DIRECTORIES})
+    endif()
+
+    target_link_libraries(${bindings_library} PRIVATE Shiboken6::libshiboken PySide6::pyside6)
+    if(PySide6_ABI3_LIBRARY)
+        target_link_libraries(${bindings_library} PRIVATE ${PySide6_ABI3_LIBRARY})
+    endif()
+    if(Shiboken6_ABI3_LIBRARY)
+        target_link_libraries(${bindings_library} PRIVATE ${Shiboken6_ABI3_LIBRARY})
+    endif()
+endif()
 
 target_link_libraries(${bindings_library} PRIVATE LabPlot::SDK)
 target_compile_definitions(${bindings_library} PRIVATE -DSDK)

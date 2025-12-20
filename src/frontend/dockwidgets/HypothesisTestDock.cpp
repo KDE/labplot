@@ -72,7 +72,7 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	firstTreeViewCb->setAspect(nullptr); // clear the current aspect
 
 	load(); // load the remaining properties
-	showStatusInfo(QString()); // remove the message from the previous chart, if available
+	showStatusError(QString()); // remove the message from the previous test, if available
 
 	// update the aspect properties when the ui properties change
 	m_aspectConnections << connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
@@ -90,7 +90,7 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 			m_test->setTail(nsl_stats_tail_type_negative);
 	});
 
-	connect(m_test, &HypothesisTest::statusInfo, this, &HypothesisTestDock::showStatusInfo);
+	connect(m_test, &HypothesisTest::statusError, this, &HypothesisTestDock::showStatusError);
 }
 
 void HypothesisTestDock::retranslateUi() {
@@ -389,14 +389,14 @@ void HypothesisTestDock::removeVariable() {
 		updateColumns();
 }
 
-void HypothesisTestDock::showStatusInfo(const QString& info) {
+void HypothesisTestDock::showStatusError(const QString& info) {
 	if (info.isEmpty()) {
 		if (m_messageWidget && m_messageWidget->isVisible())
 			m_messageWidget->close();
 	} else {
 		if (!m_messageWidget) {
 			m_messageWidget = new KMessageWidget(this);
-			m_messageWidget->setMessageType(KMessageWidget::Warning);
+			m_messageWidget->setMessageType(KMessageWidget::Error);
 			ui.gridLayout->addWidget(m_messageWidget, 17, 0, 1, 3);
 		}
 		m_messageWidget->setText(info);

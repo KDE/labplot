@@ -64,6 +64,7 @@
 Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
 	: AbstractDataSource(name, type)
 	, d_ptr(new SpreadsheetPrivate(this)) {
+	static_assert(AbstractAspect::typeName(AspectType::Spreadsheet) == "Spreadsheet");
 	if (!loading)
 		init();
 
@@ -162,12 +163,8 @@ SpreadsheetModel* Spreadsheet::model() const {
 QWidget* Spreadsheet::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		bool readOnly = false;
-		if (this->parentAspect()) {
-			const auto type = this->parentAspect()->type();
-			readOnly = (type == AspectType::Spreadsheet || type == AspectType::DatapickerCurve);
-		}
-		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), readOnly);
+		Q_D(const Spreadsheet);
+		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), d->readOnly);
 		m_partView = m_view;
 		connect(this, &Spreadsheet::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
@@ -209,6 +206,16 @@ bool Spreadsheet::printPreview() const {
 #else
 	return true;
 #endif
+}
+
+void Spreadsheet::setReadOnly(const bool value) {
+	Q_D(Spreadsheet);
+	d->readOnly = value;
+}
+
+bool Spreadsheet::readOnly() const {
+	Q_D(const Spreadsheet);
+	return d->readOnly;
 }
 
 /*!
@@ -288,12 +295,12 @@ void Spreadsheet::removeRows(int first, int count) {
 	if (count < 1 || first < 0 || first + count > rowCount())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
 	for (auto* col : children<Column>())
 		col->removeRows(first, count);
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -305,12 +312,12 @@ void Spreadsheet::insertRows(int before, int count) {
 	if (count < 1 || before < 0 || before > rowCount())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
 	for (auto* col : children<Column>())
 		col->insertRows(before, count);
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -336,14 +343,14 @@ void Spreadsheet::removeEmptyRows() {
 	if (rows.isEmpty())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18n("%1: remove rows with missing values", name()));
 
 	for (int row = rows.count() - 1; row >= 0; --row)
 		removeRows(rows.at(row), 1);
 
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -354,7 +361,8 @@ void Spreadsheet::maskEmptyRows() {
 	if (rows.isEmpty())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18n("%1: mask rows with missing values", name()));
 
 	const auto& columns = children<Column>();
@@ -364,7 +372,6 @@ void Spreadsheet::maskEmptyRows() {
 	}
 
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -609,7 +616,8 @@ void Spreadsheet::removeColumns(int first, int count) {
 	if (count < 1 || first < 0 || first + count > columnCount())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	const int oldCount = columnCount();
 	beginMacro(i18np("%1: remove 1 column", "%1: remove %2 columns", name(), count));
 
@@ -620,7 +628,6 @@ void Spreadsheet::removeColumns(int first, int count) {
 
 	exec(new SpreadsheetSetColumnsCountCmd(this, oldCount, columnCount()));
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -629,7 +636,8 @@ void Spreadsheet::removeColumns(int first, int count) {
  * @param before The column index before which the columns are inserted.
  */
 void Spreadsheet::insertColumns(int before, int count) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
 	const int cols = columnCount();
 	const int rows = rowCount();
@@ -645,19 +653,18 @@ void Spreadsheet::insertColumns(int before, int count) {
 
 	exec(new SpreadsheetSetColumnsCountCmd(this, cols, columnCount()));
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
  * Clears all values in the spreadsheet.
  */
 void Spreadsheet::clear() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18n("%1: clear", name()));
 	for (auto* col : children<Column>())
 		col->clear();
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -674,7 +681,8 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 	// 			col->setChanged();
 	// 		}
 	// 	} else {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18n("%1: clear selected columns", name()));
 	for (auto* col : columns) {
 		col->setSuppressDataChangedSignal(true);
@@ -683,19 +691,18 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 		col->setChanged();
 	}
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
  * Clears all masks in the spreadsheet.
  */
 void Spreadsheet::clearMasks() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18n("%1: clear all masks", name()));
 	for (auto* col : children<Column>())
 		col->clearMasks();
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -797,7 +804,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		}
 	};
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	beginMacro(i18n("%1: sort columns", name()));
 
 	if (!leading) { // sort separately
@@ -1114,7 +1121,6 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 	}
 
 	endMacro();
-	RESET_CURSOR;
 } // end of sortColumns()
 
 /*!
@@ -1217,6 +1223,7 @@ void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
 			return;
 
 		d->statisticsSpreadsheet = new StatisticsSpreadsheet(this);
+		d->statisticsSpreadsheet->setReadOnly(true);
 		addChildFast(d->statisticsSpreadsheet);
 	} else {
 		if (!d->statisticsSpreadsheet)
@@ -1242,6 +1249,7 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	writer->writeStartElement(QLatin1String("general"));
+	writer->writeAttribute(QStringLiteral("readOnly"), QString::number(d->readOnly));
 	writer->writeAttribute(QStringLiteral("showComments"), QString::number(d->showComments));
 	writer->writeAttribute(QStringLiteral("showSparklines"), QString::number(d->showSparklines));
 	writer->writeEndElement();
@@ -1287,6 +1295,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 					return false;
 			} else if (reader->name() == QLatin1String("general")) {
 				attribs = reader->attributes();
+				READ_INT_VALUE("readOnly", readOnly, bool);
 				READ_INT_VALUE("showComments", showComments, bool);
 				READ_INT_VALUE("showSparklines", showSparklines, bool);
 			} else if (reader->name() == QLatin1String("linking")) {
@@ -1483,7 +1492,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, const QStringList& 
 			insertChildBefore(newColumn, firstColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Replace) {
-		// replace completely the previous content of the data source with the content to be imported.
+		// replace the previous content of the data source completely with the content to be imported
 		int columnsCount = childCount<Column>();
 
 		if (columnsCount > cols) {
@@ -1539,7 +1548,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 								 AbstractFileFilter::ImportMode columnImportMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	Q_D(Spreadsheet);
-	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
+	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn <<", row count = " << rowCount());
 
 	CleanupNoArguments cleanup([d]() {
 		d->m_usedInPlots.clear();
@@ -1734,8 +1743,9 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 #endif
 
 	// row count most probably changed after the import, notify the dock widget.
-	// no need to notify about the column count change, this is already done by add/removeChild signals
 	Q_EMIT rowCountChanged(rowCount());
+	// need to notify about the column count change although this should already done by add/removeChild signals
+	Q_EMIT columnCountChanged(columnCount());
 
 	// DEBUG(Q_FUNC_INFO << " DONE");
 }

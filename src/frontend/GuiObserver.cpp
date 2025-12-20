@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description 	     : GUI observer
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
 
@@ -62,12 +62,13 @@
 #ifdef HAVE_SCRIPTING
 #include "frontend/dockwidgets/ScriptDock.h"
 #endif
+#include "frontend/dockwidgets/SeasonalDecompositionDock.h"
 #include "frontend/dockwidgets/StatisticsSpreadsheetDock.h"
 #include "frontend/dockwidgets/WorksheetDock.h"
 #include "frontend/dockwidgets/XYConvolutionCurveDock.h"
 #include "frontend/dockwidgets/XYCorrelationCurveDock.h"
 #include "frontend/dockwidgets/XYCurveDock.h"
-#include "frontend/dockwidgets/XYDataReductionCurveDock.h"
+#include "frontend/dockwidgets/XYLineSimplificationCurveDock.h"
 #include "frontend/dockwidgets/XYDifferentiationCurveDock.h"
 #include "frontend/dockwidgets/XYEquationCurveDock.h"
 #include "frontend/dockwidgets/XYFitCurveDock.h"
@@ -190,7 +191,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 	}
 
 	const AspectType type{selectedAspects.front()->type()};
-	DEBUG(Q_FUNC_INFO << ", type: " << STDSTRING(AbstractAspect::typeName(type)))
+	DEBUG(Q_FUNC_INFO << ", type: " << AbstractAspect::typeName(type))
 
 	// update cursor dock
 	if (m_mainWindow->cursorWidget) {
@@ -198,7 +199,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 			auto* worksheet = static_cast<Worksheet*>(selectedAspects.front());
 			m_mainWindow->cursorWidget->setWorksheet(worksheet);
 		} else {
-			auto* parent = selectedAspects.front()->parent(AspectType::Worksheet);
+			auto* parent = selectedAspects.front()->parent<Worksheet>();
 			if (parent) {
 				auto* worksheet = static_cast<Worksheet*>(parent);
 				m_mainWindow->cursorWidget->setWorksheet(worksheet);
@@ -285,21 +286,10 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDockSetupConnect(m_xyFunctionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyFunctionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
-	case AspectType::XYDataReductionCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Data Reduction"));
-		if (!m_xyDataReductionCurveDock) {
-			m_xyDataReductionCurveDock = new XYDataReductionCurveDock(m_mainWindow->stackedWidget, m_mainWindow->statusBar());
-			m_xyDataReductionCurveDock->setupGeneral();
-			connect(m_xyDataReductionCurveDock, &XYDataReductionCurveDock::info, [&](const QString& text) {
-				m_mainWindow->statusBar()->showMessage(text);
-			});
-			m_mainWindow->stackedWidget->addWidget(m_xyDataReductionCurveDock);
-		}
-
-		initializedDocks << m_xyDataReductionCurveDock;
-		m_xyDataReductionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_xyDataReductionCurveDock);
+	case AspectType::XYLineSimplificationCurve:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Line Simplification"));
+		raiseDockSetupConnect(m_xyLineSimplificationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_xyLineSimplificationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYDifferentiationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Differentiation"));
@@ -434,11 +424,21 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 			m_datapickerImageDock->setImages(std::move(list));
 		}
 		break;
+
+	// statistical analysis
 	case AspectType::HypothesisTest:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Hypothesis Test"));
 		raiseDock(m_hypothesisTestDock, m_mainWindow->stackedWidget);
 		m_hypothesisTestDock->setTest(static_cast<HypothesisTest*>(selectedAspects.first()));
 		break;
+
+	// time series analysis
+	case AspectType::SeasonalDecomposition:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Seasonal Decomposition"));
+		raiseDock(m_seasonalDecompositionDock, m_mainWindow->stackedWidget);
+		m_seasonalDecompositionDock->setDecompositions(castList<SeasonalDecomposition>(selectedAspects));
+		break;
+
 	case AspectType::Project:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Project"));
 		raiseDock(m_projectDock, m_mainWindow->stackedWidget);

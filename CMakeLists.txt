@@ -53,7 +53,11 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 )
 
 # building QADS or Xlsx requires Qt${QT_VERSION_MAJOR}GuiPrivate (QADS is required, Xlsx is optional)
-find_package(Qt${QT_MAJOR_VERSION}Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
+if (Qt6Gui_VERSION VERSION_GREATER_EQUAL 6.10.0)
+    find_package(Qt6GuiPrivate ${QT_MIN_VERSION} CONFIG REQUIRED)
+else()
+    find_package(Qt${QT_MAJOR_VERSION}Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
+endif()
 
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     Archive
@@ -145,7 +149,7 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
         set(DONT_BUILD_READSTAT TRUE)
     endif()
     if(CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # overwrite -Werror=hardened to not fail
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=hardened")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=hardened -gdwarf-5 -gsplit-dwarf")
     endif()
 elseif("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
@@ -186,7 +190,7 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 	# see linker flags of gcc
     endif()
     if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # overwrite -Werror=hardened to not fail
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=hardened")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=hardened -gdwarf-5 -gsplit-dwarf")
     endif()
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
@@ -215,7 +219,6 @@ else()
     message(STATUS "UNKNOWN C++ compiler, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
 endif()
-message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")
 
 ##########################################################
 
@@ -333,6 +336,17 @@ if(WIN32)
 option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" OFF)
 else()
 option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" ON)
+endif()
+
+#################################################
+if(ENABLE_REPRODUCIBLE)
+    add_definitions(-DREPRODUCIBLE_BUILD)
+    message(STATUS "Reproducable build ENABLED")
+else()
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-date-time")
+    endif()
+    message(STATUS "Reproducable build DISABLED")
 endif()
 
 ### OS macros ####################################
@@ -708,10 +722,11 @@ endif()
 ### Eigen (optional) #############################
 if(ENABLE_EIGEN3)
     find_package(Eigen3 QUIET)
-    if(EIGEN3_FOUND)
-	    message(STATUS "Found Eigen3 library: ${EIGEN3_INCLUDE_DIR} (version \"${EIGEN3_VERSION_STRING}\")")
+    if(Eigen3_FOUND)
+        get_target_property(EIGEN3_INCLUDE_DIR Eigen3::Eigen INTERFACE_INCLUDE_DIRECTORIES)
+        message(STATUS "Found Eigen3 library: ${EIGEN3_INCLUDE_DIR} (version \"${Eigen3_VERSION}\")")
         add_definitions(-DHAVE_EIGEN3)
-	add_definitions(-DEIGEN3_VERSION_STRING=\"${EIGEN3_VERSION_STRING}\")
+	add_definitions(-DEIGEN3_VERSION_STRING=\"${Eigen3_VERSION}\")
         include_directories(${EIGEN3_INCLUDE_DIR})
     else()
         message(STATUS "Eigen3 library NOT FOUND.")
@@ -723,8 +738,16 @@ endif()
 ### Python3 (optional) #############################
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     find_package(Python3 COMPONENTS Development REQUIRED)
-    find_package(PySide6 REQUIRED)
-    find_package(Shiboken6 REQUIRED)
+    find_package(PySide6 QUIET REQUIRED)
+    if(PySide6_FOUND)
+	get_target_property(PySide6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
+	message(STATUS "Found PySide6: ${PySide6_PYTHONPATH}, ${PySide6_INCLUDE_DIRECTORIES}, ${PYSIDE_TYPESYSTEMS}, ${PySide6_ABI3_LIBRARY}")
+    endif()
+    find_package(Shiboken6 QUIET REQUIRED)
+    if(Shiboken6_FOUND)
+        get_target_property(Shiboken6_LIBRARY Shiboken6::libshiboken IMPORTED_LOCATION)
+	message(STATUS "Found Shiboken6: ${Shiboken6_EXECUTABLE}, ${Shiboken6_INCLUDE_DIR}, ${SHIBOKEN_PYTHON_INCLUDE_DIRS}, ${Shiboken6_LIBRARY}")
+    endif()
 endif()
 if(ENABLE_PYTHON_SDK)
     find_package(Python3 COMPONENTS Interpreter REQUIRED)
@@ -764,13 +787,7 @@ else()
     set(ENABLE_SCRIPTING OFF) # no scripting runtime is enabled
 endif()
 
-#################################################
-if(ENABLE_REPRODUCIBLE)
-    add_definitions(-DREPRODUCIBLE_BUILD)
-    message(STATUS "Reproducable build ENABLED")
-else()
-    message(STATUS "Reproducable build DISABLED")
-endif()
+message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")
 #################################################
 #################################################
 include(CheckFunctionExists)

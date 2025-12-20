@@ -436,39 +436,43 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 		}
 
 		spreadsheet->setUndoAware(false);
-		columnOffset = spreadsheet->resize(importMode, columnNames, colCount);
 
+		// resize spreadsheet (columns only)
+		columnOffset = spreadsheet->resize(importMode, columnNames, colCount);
+		DEBUG(Q_FUNC_INFO << ", column count = " << colCount << ", offset = " << columnOffset)
+
+		// set new row count
 		if (importMode == AbstractFileFilter::ImportMode::Replace) {
 			spreadsheet->clear();
-			spreadsheet->setRowCount(rowCount);
+			spreadsheet->setRowCount(rowCount - firstRowAsColumnNames);
 		} else {
-			if (spreadsheet->rowCount() < (rowCount))
-				spreadsheet->setRowCount(rowCount);
+			// grow if necessary
+			if (spreadsheet->rowCount() < rowCount - firstRowAsColumnNames)
+				spreadsheet->setRowCount(rowCount - firstRowAsColumnNames);
 		}
 
+		// handle new columns
 		for (int n = 0; n < colCount; ++n) {
 			auto* col = spreadsheet->column(columnOffset + n);
 			if (columnNumericTypes.at(n) == QXlsx::Cell::CellType::NumberType) {
 				col->setColumnMode(AbstractColumn::ColumnMode::Double);
 				auto* data = static_cast<QVector<double>*>(col->data());
+				data->clear();
 				numericDataPointers.push_back(data);
-				if (importMode == AbstractFileFilter::ImportMode::Replace)
-					data->clear();
 			} else if (columnNumericTypes.at(n) == QXlsx::Cell::CellType::DateType) {
 				col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 				auto* data = static_cast<QVector<QDateTime>*>(col->data());
+				data->clear();
 				datetimeDataPointers.push_back(data);
-				if (importMode == AbstractFileFilter::ImportMode::Replace)
-					data->clear();
 			} else {
 				col->setColumnMode(AbstractColumn::ColumnMode::Text);
 				auto* data = static_cast<QVector<QString>*>(col->data());
+				data->clear();
 				stringDataPointers.push_back(data);
-				if (importMode == AbstractFileFilter::ImportMode::Replace)
-					data->clear();
 			}
 		}
 
+		// add data from data region
 		for (int row = regionToRead.firstRow(); row <= regionToRead.lastRow(); ++row) {
 			int j = 0;
 			unsigned int numericidx = 0;
@@ -480,7 +484,7 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 					if (numericidx < numericDataPointers.size())
 						static_cast<QVector<double>*>(numericDataPointers[numericidx++])->push_back(val.toDouble());
 				} else if (columnNumericTypes.at(j) == QXlsx::Cell::CellType::DateType) {
-					// QDEBUG("DATETIME:" << read(row, col).toDateTime())
+					// QDEBUG("DATETIME:" << val.toDateTime())
 					if (datetimeidx < datetimeDataPointers.size()) {
 						if (val.toDateTime().time() != QTime(0, 0))
 							isDateOnly = false;

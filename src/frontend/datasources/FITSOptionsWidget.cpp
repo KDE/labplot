@@ -63,7 +63,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	QTreeWidgetItem* item = ui.twExtensions->selectedItems().first();
 	int column = ui.twExtensions->currentColumn();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const QString& itemText = item->text(column);
 	QString selectedExtension;
 	// TODO: same as extensionName() ?
@@ -117,7 +117,6 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 		}
 		ui.twPreview->resizeColumnsToContents();
 	}
-	RESET_CURSOR;
 }
 
 // return full path of file name and [extension] appended

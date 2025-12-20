@@ -28,7 +28,7 @@
 	auto* curve_variable_name = plot->child<XYCurve>(child_index);                                                                                             \
 	QVERIFY(curve_variable_name != nullptr);                                                                                                                   \
 	QCOMPARE(curve_variable_name->name(), QLatin1String(column_name));                                                                                         \
-	QCOMPARE(curve_variable_name->inherits(AspectType::XYCurve), true);                                                                                        \
+	QCOMPARE(curve_variable_name->inherits<XYCurve>(), true);                                                                                                  \
 	auto* curve_variable_name##Private = curve_variable_name->d_func();                                                                                        \
 	Q_UNUSED(curve_variable_name##Private)
 
@@ -969,7 +969,7 @@ void XYCurveTest::updateLinesNoGapDirectConnection() {
 					QLineF(QPointF(8, 0), QPointF(9, 5)),
 					QLineF(QPointF(9, 5), QPointF(10, 8)),
 				};
-				QCOMPARE(lastValueInvalidCurvePrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be ommitted
+				QCOMPARE(lastValueInvalidCurvePrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be omitted
 				auto test_lines = lastValueInvalidCurvePrivate->m_lines;
 				QCOMPARE(refLines.size(), test_lines.size());
 				for (int i = 0; i < test_lines.size(); i++) {
@@ -1219,7 +1219,7 @@ void XYCurveTest::updateLinesNoGapDirectConnectionLastVertical() {
 					QLineF(QPointF(8, 0), QPointF(9, 5)),
 					QLineF(QPointF(9, 5), QPointF(9, 8)),
 				};
-				QCOMPARE(lastVerticalCurvePrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be ommitted
+				QCOMPARE(lastVerticalCurvePrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be omitted
 				auto test_lines = lastVerticalCurvePrivate->m_lines;
 				QCOMPARE(refLines.size(), test_lines.size());
 				for (int i = 0; i < test_lines.size(); i++) {
@@ -1485,7 +1485,7 @@ void XYCurveTest::updateLinesWithGapLineSkipDirectConnection2() {
 			QLineF(QPointF(8, 0), QPointF(9, 5)),
 			QLineF(QPointF(9, 5), QPointF(10, 8)),
 		};
-		QCOMPARE(withGapCurve2Private->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be ommitted
+		QCOMPARE(withGapCurve2Private->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be omitted
 		auto test_lines = withGapCurve2Private->m_lines;
 		QCOMPARE(refLines.size(), test_lines.size());
 		for (int i = 0; i < test_lines.size(); i++) {
@@ -1967,7 +1967,7 @@ void XYCurveTest::updateLinesLog10() {
 			QLineF(QPointF(7.8, 7.8), QPointF(8.9, 8.9)),
 			QLineF(QPointF(8.9, 8.9), QPointF(10, 10)),
 		};
-		QCOMPARE(linearPrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be ommitted
+		QCOMPARE(linearPrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be omitted
 		auto test_lines = linearPrivate->m_lines;
 		QCOMPARE(refLines.size(), test_lines.size());
 		for (int i = 0; i < test_lines.size(); i++) {

@@ -10,7 +10,7 @@ serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 # bind host and port together
 serv.bind((HOST,PORT))
 
-# configure how many clients the server can listen simultaneosly
+# configure how many clients the server can listen simultaneously
 serv.listen(1)
 print ('listening ...')
 

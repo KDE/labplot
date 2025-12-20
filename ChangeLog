@@ -6,16 +6,32 @@ New features:
 		* Add possibility to skip storing the data from columns and matrices in the saved file
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
+	* [time series analysis]
+		* seasonal decomposition with STL and MSTL methods
+	* [spreadsheet]
+		* allow to drop entire rows in the spreadsheet if the condition was met in the "Drop Values Dialog" for the selected columns
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)
 		* Allow to position the center and limit lines in the process behavior chart based on user-defined specifications
+		* Additionally to using the colors for plots from the current theme palette, allow to use colors from a specified color map
 	* [import]
-		* import directories - import multiple files in a directory in one single step
+		* Import directories - import multiple files in a directory in one single step
+		* Allow to import arrays in JSON files that contain plain data only
+	* [examples]
+		* Added "All" in the examples dialog to navigate and search in the example projects from _all_ collections
 
 Performance improvements:
 		* Improved drawing performance (!731)
+		* Improved the performance of importing JSON files with a large number of elements
 
+Bug fixes:
+	* Fix displayed locale of constants
+	* Rename of psi constant to psqi to avoid clash with psi function
+	* Fix crash when loading a project with a workbook as first child (!787)
+	* Fix updating column count in spreadsheet dock when importing data from file
+	* Fix appending data to spreadsheets from XLSX files
+	* Fix the bar chart with log-scales
 
 -----2.12.1 (2025-08-15) -----
 Bug fixes:

@@ -78,7 +78,7 @@ void XYAnalysisCurveDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableText
 	BaseDock::setBaseWidgets(nameLabel, commentLabel);
 }
 
-void XYAnalysisCurveDock::setAnalysisCurves(QList<XYCurve*> curves) {
+void XYAnalysisCurveDock::setAnalysisCurves(const QList<XYCurve*>& curves) {
 	m_analysisCurves.clear();
 	m_analysisCurve = nullptr;
 

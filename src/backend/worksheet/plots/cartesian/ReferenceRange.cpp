@@ -617,11 +617,9 @@ void ReferenceRange::loadThemeConfig(const KConfig& config) {
 		if (child == this)
 			break;
 
-		if (child->inherits(AspectType::ReferenceRange))
+		if (child->inherits<ReferenceRange>())
 			++index;
 	}
-
-	const auto& themeColor = plot->themeColorPalette(index);
 
 	KConfigGroup group;
 	if (config.hasGroup(QStringLiteral("Theme")))
@@ -631,5 +629,5 @@ void ReferenceRange::loadThemeConfig(const KConfig& config) {
 
 	Q_D(ReferenceRange);
 	d->line->loadThemeConfig(group);
-	d->background->loadThemeConfig(group, themeColor);
+	d->background->loadThemeConfig(group, plot->plotColor(index));
 }

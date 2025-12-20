@@ -38,12 +38,11 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	connect(ui.cbLinkingEnabled, &QCheckBox::toggled, this, &SpreadsheetDock::linkingChanged);
 	connect(ui.cbLinkedSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &SpreadsheetDock::linkedSpreadsheetChanged);
 
-	auto* templateHandler = new TemplateHandler(this, QLatin1String("Spreadsheet"));
-	ui.gridLayout->addWidget(templateHandler, 17, 0, 1, 4);
-	templateHandler->show();
-	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);
-	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &SpreadsheetDock::saveConfigAsTemplate);
-	connect(templateHandler, &TemplateHandler::info, this, &SpreadsheetDock::info);
+	m_templateHandler = new TemplateHandler(this, QLatin1String("Spreadsheet"));
+	ui.gridLayout->addWidget(m_templateHandler, 17, 0, 1, 4);
+	connect(m_templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);
+	connect(m_templateHandler, &TemplateHandler::saveConfigRequested, this, &SpreadsheetDock::saveConfigAsTemplate);
+	connect(m_templateHandler, &TemplateHandler::info, this, &SpreadsheetDock::info);
 }
 
 void SpreadsheetDock::retranslateUi() {
@@ -66,14 +65,34 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	m_spreadsheet = list.first();
 	setAspects(list);
 
-	// check whether we have non-editable columns:
-	bool nonEditable = false;
+	// check if we have read-only spreadsheets
+	bool readOnly = false;
 	for (auto* s : m_spreadsheetList) {
-		if (s->parentAspect()->type() == AspectType::DatapickerCurve) {
-			nonEditable = true;
+		if (s->readOnly()) {
+			readOnly = true;
 			break;
 		}
 	}
+
+	ui.lDimensions->setVisible(!readOnly);
+	ui.lRowCount->setVisible(!readOnly);
+	ui.sbRowCount->setVisible(!readOnly);
+	ui.lColumnCount->setVisible(!readOnly);
+	ui.sbColumnCount->setVisible(!readOnly);
+	ui.lFormat->setVisible(!readOnly);
+	ui.lShowComments->setVisible(!readOnly);
+	ui.cbShowComments->setVisible(!readOnly);
+	ui.lShowSparklines->setVisible(!readOnly);
+	ui.cbShowSparklines->setVisible(!readOnly);
+	ui.lLinking->setVisible(!readOnly);
+	ui.lLinkingEnabled->setVisible(!readOnly);
+	ui.cbLinkingEnabled->setVisible(!readOnly);
+	ui.lLinkedSpreadsheet->setVisible(!readOnly);
+	ui.cbLinkedSpreadsheet->setVisible(!readOnly);
+	m_templateHandler->setVisible(!readOnly);
+
+	if (readOnly)
+		return;
 
 	auto* model = aspectModel();
 	model->setSelectableAspects({AspectType::Spreadsheet});
@@ -99,17 +118,6 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	connect(m_spreadsheet, &Spreadsheet::showSparklinesChanged, this, &SpreadsheetDock::spreadsheetShowSparklinesChanged);
 	connect(m_spreadsheet, &Spreadsheet::linkingChanged, this, &SpreadsheetDock::spreadsheetLinkingChanged);
 	connect(m_spreadsheet, &Spreadsheet::linkedSpreadsheetChanged, this, &SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged);
-
-	ui.lDimensions->setVisible(!nonEditable);
-	ui.lRowCount->setVisible(!nonEditable);
-	ui.sbRowCount->setVisible(!nonEditable);
-	ui.lColumnCount->setVisible(!nonEditable);
-	ui.sbColumnCount->setVisible(!nonEditable);
-	ui.lFormat->setVisible(!nonEditable);
-	ui.lShowComments->setVisible(!nonEditable);
-	ui.cbShowComments->setVisible(!nonEditable);
-	ui.lShowSparklines->setVisible(!nonEditable);
-	ui.cbShowSparklines->setVisible(!nonEditable);
 }
 
 //*************************************************************

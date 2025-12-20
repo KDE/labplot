@@ -9,7 +9,7 @@
 */
 
 #include "MainWin.h"
-
+#include "backend/core/AbstractFilter.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -99,6 +99,7 @@
 #include "frontend/notebook/NotebookView.h"
 #include <cantor/backend.h>
 #endif
+
 
 /*!
 \class MainWin
@@ -770,9 +771,8 @@ void MainWin::openProject(const QString& fileName) {
 	timer.start();
 	bool rc = false;
 	if (Project::isLabPlotProject(fileName)) {
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		rc = m_project->load(fileName);
-		RESET_CURSOR;
 	}
 #ifdef HAVE_LIBORIGIN
 	else if (OriginProjectParser::isOriginProject(fileName)) {
@@ -794,18 +794,16 @@ void MainWin::openProject(const QString& fileName) {
 			parser.setGraphLayerAsPlotArea(graphLayersAsPlotArea);
 		}
 
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		parser.importTo(m_project, QStringList()); // TODO: add return code
-		RESET_CURSOR;
 		rc = true;
 	}
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
 	else if (fileName.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		rc = m_project->loadNotebook(fileName);
-		RESET_CURSOR;
 	}
 #endif
 
@@ -979,7 +977,7 @@ bool MainWin::save(const QString& fileName) {
 		return false;
 	}
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const QString& tempFileName = tempFile.fileName();
 	DEBUG("Using temporary file " << STDSTRING(tempFileName))
 	tempFile.close();
@@ -1069,12 +1067,10 @@ bool MainWin::save(const QString& fileName) {
 			if (m_autoSaveActive && !m_autoSaveTimer.isActive())
 				m_autoSaveTimer.start();
 		} else {
-			RESET_CURSOR;
 			KMessageBox::error(this, i18n("Couldn't save the file '%1'.", fileName));
 			ok = false;
 		}
 	} else {
-		RESET_CURSOR;
 		KMessageBox::error(this, i18n("Couldn't open the file '%1' for writing.", fileName));
 		ok = false;
 	}
@@ -1086,7 +1082,6 @@ bool MainWin::save(const QString& fileName) {
 	m_actionsManager->fillShareMenu();
 #endif
 
-	RESET_CURSOR;
 	return ok;
 }
 
@@ -1193,9 +1188,9 @@ void MainWin::newSpreadsheet() {
 
 	// if the current active window is a workbook or one of its children,
 	// add the new matrix to the workbook
-	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = m_currentAspect->castTo<Workbook>();
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
+		workbook = m_currentAspect->parent<Workbook>();
 
 	if (workbook)
 		workbook->addChild(spreadsheet);
@@ -1221,9 +1216,9 @@ void MainWin::newMatrix() {
 
 	// if the current active window is a workbook or one of its children,
 	// add the new matrix to the workbook
-	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = m_currentAspect->castTo<Workbook>();
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
+		workbook = m_currentAspect->parent<Workbook>();
 
 	if (workbook)
 		workbook->addChild(matrix);
@@ -1260,13 +1255,14 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 		return nullptr;
 
 	Spreadsheet* spreadsheet = nullptr;
-	if (m_currentAspect->type() == AspectType::Spreadsheet)
-		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+	if (auto* s = m_currentAspect->castTo<Spreadsheet>())
+		spreadsheet = s;
 	else {
 		// check whether one of spreadsheet columns is selected and determine the spreadsheet
-		auto* parent = m_currentAspect->parentAspect();
-		if (parent && parent->type() == AspectType::Spreadsheet)
-			spreadsheet = dynamic_cast<Spreadsheet*>(parent);
+		if (auto* parent = m_currentAspect->parentAspect()) {
+			if (auto* s = parent->castTo<Spreadsheet>())
+				spreadsheet = s;
+		}
 	}
 
 	return spreadsheet;
@@ -1332,25 +1328,26 @@ void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAs
 	//  - AbstractSimpleFilter
 	//  - columns in the data spreadsheet of a datapicker curve,
 	//    this can only happen when changing the error type and is done on the level of DatapickerImage
-	if (!aspect->inherits(AspectType::AbstractFilter) && !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve))
+
+	if (m_projectExplorer->currentAspect() != aspect)
+		return; // If the current aspect is not selected, there is no need to select the parent
+
+	if (!aspect->inherits<AbstractFilter>() && !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve))
 		m_projectExplorer->setCurrentAspect(parent);
 }
 
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
-	if (!part)
+	if (!part || !part->dockWidget())
 		return;
 
-	const auto* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-	auto* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
-	if (!datapicker)
-		datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
+	// don't do anything for children of Workbook and Datapicker, the dock widget is assigned to the parent
+	// TODO: everything seems to work correctly also without this check and return. do we really need it?
+	if (aspect->ancestor<Workbook>() || aspect->ancestor<Datapicker>())
+		return;
 
-	if (!workbook && !datapicker && part->dockWidgetExists()) {
-		ContentDockWidget* win = part->dockWidget();
-		if (win)
-			m_dockManagerContent->removeDockWidget(win);
-	}
+	if (auto* win = part->dockWidget())
+		m_dockManagerContent->removeDockWidget(win);
 }
 
 /*!
@@ -1382,20 +1379,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 	Q_ASSERT(m_dockManagerContent);
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
-		ContentDockWidget* win{nullptr};
-
-		// for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
-		const auto* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-		auto* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
-		if (!datapicker)
-			datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
-
-		if (workbook)
-			win = workbook->dockWidget();
-		else if (datapicker)
-			win = datapicker->dockWidget();
-		else
-			win = part->dockWidget();
+		ContentDockWidget* win = part->dockWidget();
 
 		auto* dock = m_dockManagerContent->findDockWidget(win->objectName());
 		if (dock == nullptr) {
@@ -1495,7 +1479,7 @@ void MainWin::createFolderContextMenu(const Folder*, QMenu* menu) const {
 }
 
 void MainWin::undo() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->undo();
 	m_actionsManager->m_redoAction->setEnabled(true);
 
@@ -1507,11 +1491,10 @@ void MainWin::undo() {
 	m_actionsManager->m_saveAction->setEnabled(changed);
 	m_project->setChanged(changed);
 	updateTitleBar();
-	RESET_CURSOR;
 }
 
 void MainWin::redo() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->redo();
 	m_actionsManager->m_undoAction->setEnabled(true);
 
@@ -1523,7 +1506,6 @@ void MainWin::redo() {
 	m_actionsManager->m_saveAction->setEnabled(changed);
 	m_project->setChanged(changed);
 	updateTitleBar();
-	RESET_CURSOR;
 }
 
 /*!
@@ -1689,7 +1671,7 @@ void MainWin::migrateSettings() {
 }
 
 void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
 	// handle general settings
@@ -1816,8 +1798,6 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 #else
 	Q_UNUSED(changes)
 #endif
-
-	RESET_CURSOR;
 }
 
 void MainWin::openDatasetExample() {
@@ -1895,7 +1875,7 @@ void MainWin::importDirDialog(const QString& dir) {
 	if (type == AspectType::Folder || type == AspectType::Workbook)
 		targetAspect = m_currentAspect;
 	else {
-		targetAspect = m_currentAspect->parent(AspectType::Folder);
+		targetAspect = m_currentAspect->parent<Folder>();
 		if (!targetAspect)
 			targetAspect = m_project;
 	}

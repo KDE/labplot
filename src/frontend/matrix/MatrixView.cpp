@@ -4,7 +4,7 @@
 	Description          : View class for Matrix
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -34,7 +34,6 @@
 #include <QIcon>
 #include <QInputDialog>
 #include <QKeyEvent>
-#include <QLabel>
 #include <QMenu>
 #include <QMimeData>
 #include <QMutex>
@@ -44,7 +43,6 @@
 #include <QScrollArea>
 #include <QStackedWidget>
 #include <QTableView>
-#include <QTextStream>
 #include <QThreadPool>
 
 #include <cfloat>
@@ -619,14 +617,13 @@ void MatrixView::fillWithConstValues() {
 	bool ok = false;
 	const double value = QInputDialog::getDouble(this, i18n("Fill the matrix with constant value"), i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
 	if (ok) {
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		auto* newData = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 		for (int col = 0; col < m_matrix->columnCount(); ++col) {
 			for (int row = 0; row < m_matrix->rowCount(); ++row)
 				(*newData)[col][row] = value;
 		}
 		m_matrix->setData(newData);
-		RESET_CURSOR;
 	}
 }
 
@@ -635,12 +632,11 @@ void MatrixView::cutSelection() {
 	if (firstSelectedRow() < 0)
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_matrix->beginMacro(i18n("%1: cut selected cell(s)", m_matrix->name()));
 	copySelection();
 	clearSelectedCells();
 	m_matrix->endMacro();
-	RESET_CURSOR;
 }
 
 void MatrixView::copySelection() {
@@ -659,7 +655,7 @@ void MatrixView::copySelection() {
 	int cols = last_col - first_col + 1;
 	int rows = last_row - first_row + 1;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QString output_str;
 
 	for (int r = 0; r < rows; r++) {
@@ -675,7 +671,6 @@ void MatrixView::copySelection() {
 			output_str += QLatin1Char('\n');
 	}
 	QApplication::clipboard()->setText(output_str);
-	RESET_CURSOR;
 }
 
 void MatrixView::pasteIntoSelection() {
@@ -686,7 +681,7 @@ void MatrixView::pasteIntoSelection() {
 	if (!mime_data->hasFormat(QStringLiteral("text/plain")))
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_matrix->beginMacro(i18n("%1: paste from clipboard", m_matrix->name()));
 
 	int first_col = firstSelectedColumn(false);
@@ -742,7 +737,6 @@ void MatrixView::pasteIntoSelection() {
 	}
 
 	m_matrix->endMacro();
-	RESET_CURSOR;
 }
 
 void MatrixView::clearSelectedCells() {
@@ -757,7 +751,7 @@ void MatrixView::clearSelectedCells() {
 	int last_row = lastSelectedRow();
 	int last_col = lastSelectedColumn();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_matrix->beginMacro(i18n("%1: clear selected cell(s)", m_matrix->name()));
 	for (int i = first_row; i <= last_row; i++) {
 		for (int j = first_col; j <= last_col; j++) {
@@ -766,7 +760,6 @@ void MatrixView::clearSelectedCells() {
 		}
 	}
 	m_matrix->endMacro();
-	RESET_CURSOR;
 }
 
 class UpdateImageTask : public QRunnable {
@@ -818,7 +811,7 @@ private:
 
 void MatrixView::updateImage() {
 #ifndef SDK
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_image = QImage(m_matrix->columnCount(), m_matrix->rowCount(), QImage::Format_ARGB32);
 
 	// find min/max value
@@ -837,10 +830,7 @@ void MatrixView::updateImage() {
 	}
 
 	// update the image
-	auto* manager = ColorMapsManager::instance();
-	QPixmap pix;
-	manager->render(pix, QLatin1String("viridis100")); // dummy render to get the color vector initialized
-	const auto& colors = manager->colors();
+	const auto& colors = ColorMapsManager::instance()->colors(QStringLiteral("viridis100"));
 	auto* pool = QThreadPool::globalInstance();
 	int range = ceil(double(m_image.height()) / pool->maxThreadCount());
 	for (int i = 0; i < pool->maxThreadCount(); ++i) {
@@ -864,7 +854,6 @@ void MatrixView::updateImage() {
 		m_imageLabel->setPixmap(QPixmap::fromImage(zoomedImage));
 	}
 	m_imageIsDirty = false;
-	RESET_CURSOR;
 #endif
 }
 
@@ -910,7 +899,7 @@ void MatrixView::insertEmptyColumns() {
 		return;
 	int current = first;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_matrix->beginMacro(i18n("%1: insert empty column(s)", m_matrix->name()));
 	while (current <= last) {
 		current = first + 1;
@@ -925,7 +914,6 @@ void MatrixView::insertEmptyColumns() {
 		first = current;
 	}
 	m_matrix->endMacro();
-	RESET_CURSOR;
 }
 
 void MatrixView::removeSelectedColumns() {
@@ -934,24 +922,22 @@ void MatrixView::removeSelectedColumns() {
 	if (first < 0)
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_matrix->beginMacro(i18n("%1: remove selected column(s)", m_matrix->name()));
 	for (int i = last; i >= first; i--)
 		if (isColumnSelected(i, false))
 			m_matrix->removeColumns(i, 1);
 	m_matrix->endMacro();
-	RESET_CURSOR;
 }
 
 void MatrixView::clearSelectedColumns() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_matrix->beginMacro(i18n("%1: clear selected column(s)", m_matrix->name()));
 	for (int i = 0; i < m_matrix->columnCount(); i++) {
 		if (isColumnSelected(i, false))
 			m_matrix->clearColumn(i);
 	}
 	m_matrix->endMacro();
-	RESET_CURSOR;
 }
 
 // ############################## rows related slots ############################
@@ -970,7 +956,7 @@ void MatrixView::insertEmptyRows() {
 	if (first < 0)
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_matrix->beginMacro(i18n("%1: insert empty rows(s)", m_matrix->name()));
 	while (current <= last) {
 		current = first + 1;
@@ -985,7 +971,6 @@ void MatrixView::insertEmptyRows() {
 		first = current;
 	}
 	m_matrix->endMacro();
-	RESET_CURSOR;
 }
 
 void MatrixView::removeSelectedRows() {
@@ -994,13 +979,12 @@ void MatrixView::removeSelectedRows() {
 	if (first < 0)
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_matrix->beginMacro(i18n("%1: remove selected rows(s)", m_matrix->name()));
 	for (int i = last; i >= first; i--)
 		if (isRowSelected(i, false))
 			m_matrix->removeRows(i, 1);
 	m_matrix->endMacro();
-	RESET_CURSOR;
 }
 
 void MatrixView::clearSelectedRows() {
@@ -1009,14 +993,13 @@ void MatrixView::clearSelectedRows() {
 	if (first < 0)
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_matrix->beginMacro(i18n("%1: clear selected rows(s)", m_matrix->name()));
 	for (int i = first; i <= last; i++) {
 		if (isRowSelected(i))
 			m_matrix->clearRow(i);
 	}
 	m_matrix->endMacro();
-	RESET_CURSOR;
 }
 
 void MatrixView::changeZoom(QAction* action) {
@@ -1039,7 +1022,7 @@ void MatrixView::changeZoom(QAction* action) {
  */
 
 void MatrixView::print(QPrinter* printer) const {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QPainter painter(printer);
 
 	const int dpiy = printer->logicalDpiY();
@@ -1163,13 +1146,14 @@ void MatrixView::print(QPrinter* printer) const {
 			}
 		}
 	}
-	RESET_CURSOR;
 }
 
 void MatrixView::exportToFile(const QString& path, const QString& separator, QLocale::Language language) const {
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
+
+	WAIT_CURSOR_AUTO_RESET;
 
 	QTextStream out(&file);
 
@@ -1205,6 +1189,8 @@ void MatrixView::exportToLaTeX(const QString& path,
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
+
+	WAIT_CURSOR_AUTO_RESET;
 
 	QVector<QVector<QString>> toExport;
 

@@ -471,6 +471,18 @@ void BarPlotPrivate::retransform() {
 	m_stackedBarPositiveOffsets.fill(0);
 	m_stackedBarNegativeOffsets.fill(0);
 
+	if (orientation == BarPlot::Orientation::Vertical) {
+		const auto range = q->plot()->range(Dimension::Y, q->cSystem->index(Dimension::Y));
+		const auto scale = range.scale();
+		const bool logScale = (scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln);
+		m_zero = logScale ? range.start() : 0.0;
+	} else {
+		const auto range = q->plot()->range(Dimension::X, q->cSystem->index(Dimension::X));
+		const auto scale = range.scale();
+		const bool logScale = (scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln);
+		m_zero = logScale ? range.start() : 0.0;
+	}
+
 	suppressRecalc = true;
 	if (count) {
 		if (orientation == BarPlot::Orientation::Vertical) {
@@ -529,10 +541,10 @@ void BarPlotPrivate::recalc() {
 			auto* errorBar = addErrorBar(group);
 
 			if (plot) {
-				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
-				background->setFirstColor(themeColor);
-				line->setColor(themeColor);
-				errorBar->line()->setColor(themeColor);
+				const auto& color = plot->plotColor(backgrounds.count() - 1);
+				background->setFirstColor(color);
+				line->setColor(color);
+				errorBar->line()->setColor(color);
 			}
 		}
 	} else if (diff < 0) {
@@ -653,10 +665,9 @@ void BarPlotPrivate::recalc() {
 		}
 		}
 
-		// if there are no negative values, we plot
-		// in the positive y-direction only and we start at y=0
+		// if there are no negative values, we plot in the positive y-direction only and we start at y = zero-baseline
 		if (yMin > 0)
-			yMin = 0;
+			yMin = m_zero;
 	} else { // horizontal
 		// min/max for x
 		xMin = 0;
@@ -686,10 +697,9 @@ void BarPlotPrivate::recalc() {
 		}
 		}
 
-		// if there are no negative values, we plot
-		// in the positive x-direction only and we start at x=0
+		// if there are no negative values, we  in the positive x-direction only and we start at x = zero-baseline
 		if (xMin > 0)
-			xMin = 0;
+			xMin = m_zero;
 
 		// min/max for y
 		if (xColumn) {
@@ -750,9 +760,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 
 			lines.clear();
 			lines << QLineF(x, value, x + width, value);
-			lines << QLineF(x + width, value, x + width, 0);
-			lines << QLineF(x + width, 0, x, 0);
-			lines << QLineF(x, 0, x, value);
+			lines << QLineF(x + width, value, x + width, m_zero);
+			lines << QLineF(x + width, m_zero, x, m_zero);
+			lines << QLineF(x, m_zero, x, value);
 
 			valuesPointsLogical << QPointF(x + width / 2, value);
 
@@ -898,9 +908,9 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 
 			lines.clear();
 			lines << QLineF(value, y, value, y + width);
-			lines << QLineF(value, y + width, 0, y + width);
-			lines << QLineF(0, y + width, 0, y);
-			lines << QLineF(0, y, value, y);
+			lines << QLineF(value, y + width, m_zero, y + width);
+			lines << QLineF(m_zero, y + width, m_zero, y);
+			lines << QLineF(m_zero, y, value, y);
 
 			valuesPointsLogical << QPointF(value, y + width / 2);
 
@@ -1545,12 +1555,12 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(BarPlot);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = d->m_plot->themeColorPalette(index);
+	const QColor themeColor = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {
-		const auto& color = plot->themeColorPalette(i);
+		const auto& color = plot->plotColor(i);
 
 		// box filling
 		auto* background = d->backgrounds.at(i);

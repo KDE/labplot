@@ -1154,10 +1154,10 @@ void FitTest::testLinearWP_OLS() {
 	DEBUG(std::setprecision(15) << fitResult.logLik); // result: 1.0890247702592
 	FuzzyCompare(fitResult.logLik, 1.0890, 3.e-5);
 	DEBUG(std::setprecision(15) << fitResult.aic); // result: 5.82195045948161
-	// not reproducable
+	// not reproducible
 	//	FuzzyCompare(fitResult.aic, 0.2548, 2.e-6);
 	DEBUG(std::setprecision(15) << fitResult.bic); // result: 8.65415126389045
-	// not reproducable
+	// not reproducible
 	//	FuzzyCompare(fitResult.bic, 0.3964, 2.e-6);
 }
 

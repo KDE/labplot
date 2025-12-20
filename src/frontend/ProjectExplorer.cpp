@@ -956,8 +956,12 @@ void ProjectExplorer::deleteSelected() {
 	for (int i = 0; i < items.size() / columnCount; ++i) {
 		const QModelIndex& index = items.at(i * columnCount);
 		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		aspects << aspect;
+		if (!aspect->isFixed())
+			aspects << aspect;
 	}
+
+	if (aspects.isEmpty())
+		return; // no non-fixed aspects selected, nothing to delete
 
 	QString msg;
 	if (aspects.size() > 1)

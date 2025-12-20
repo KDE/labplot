@@ -171,7 +171,7 @@ struct cons _constants[] = {
 		{[]() { return i18n("Pressure of 1 meter of mercury");}, "mhg", GSL_CONST_MKSA_METER_OF_MERCURY, "kg / m s^2", ConstantGroups::Pressure},
 		{[]() { return i18n("Pressure of 1 inch of mercury");}, "inhg", GSL_CONST_MKSA_INCH_OF_MERCURY, "kg / m s^2", ConstantGroups::Pressure},
 		{[]() { return i18n("Pressure of 1 inch of water");}, "inh2o", GSL_CONST_MKSA_INCH_OF_WATER, "kg / m s^2", ConstantGroups::Pressure},
-		{[]() { return i18n("Pressure of 1 pound per square inch");}, "psi", GSL_CONST_MKSA_PSI, "kg / m s^2", ConstantGroups::Pressure},
+		{[]() { return i18n("Pressure of 1 pound per square inch");}, "psqi", GSL_CONST_MKSA_PSI, "kg / m s^2", ConstantGroups::Pressure},
 
 		// Viscosity = addConstantsGroup(i18n("Viscosity"));
 		{[]() { return i18n("Dynamic viscosity of 1 poise");}, "poise", GSL_CONST_MKSA_POISE, "kg / m s", ConstantGroups::Viscosity},

@@ -2,9 +2,9 @@
     "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "6.9",
+    "runtime-version": "6.10",
     "base": "io.qt.PySide.BaseApp",
-    "base-version": "6.9",
+    "base-version": "6.10",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
     "tags": ["nightly"],
@@ -22,12 +22,6 @@
         "--system-talk-name=org.freedesktop.UDisks2",
         "--talk-name=org.freedesktop.Flatpak"
     ],
-    "build-args": [
-        "--share=network"
-    ],
-    "extensions": {
-        "org.freedesktop.Sdk.Extension.python3": {}
-    },
     "cleanup": [
         "/include",
         "/lib/cmake",
@@ -39,14 +33,10 @@
         "/share/info",
         "/share/man"
     ],
+    "cleanup-commands": [
+        "/app/cleanup-BaseApp.sh"
+    ],
     "modules": [
-	{
-	    "name": "install-typesystems",
-	    "buildsystem": "simple",
-	    "build-commands": [
-		    "ln -s /app/lib/python3.12/site-packages/PySide6 /app/share/PySide6"
-	    ]
-	},
         {
             "name": "eigen",
             "buildsystem": "cmake-ninja",
@@ -54,8 +44,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2",
-                    "sha256": "b4c198460eba6f28d34894e3a5710998818515104d6e74e5cc331ce31e46e626"
+                    "url": "https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.bz2",
+                    "sha256": "e4de6b08f33fd8b8985d2f204381408c660bffa6170ac65b68ae1bd3cd575c0a"
                 }
             ]
         },
@@ -76,8 +66,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.09.1.tar.xz",
-                    "sha256": "0c1091d01d3dd1664a13816861e812d02b29201e96665454b81b52d261fad658"
+                    "url": "https://poppler.freedesktop.org/poppler-25.12.0.tar.xz",
+                    "sha256": "c18b40eb36b1a0c5b86e29ca054bf0770304583da4f2cdd42fe86eca6a20de48"
                 }
             ],
             "modules": [
@@ -103,8 +93,8 @@
                     "sources": [
                         {
                             "type": "archive",
-                            "url": "https://github.com/uclouvain/openjpeg/archive/v2.5.3.tar.gz",
-                            "sha256": "368fe0468228e767433c9ebdea82ad9d801a3ad1e4234421f352c8b06e7aa707"
+                            "url": "https://github.com/uclouvain/openjpeg/archive/v2.5.4.tar.gz",
+                            "sha256": "a695fbe19c0165f295a8531b1e4e855cd94d0875d2f88ec4b61080677e27188a"
                         }
                     ],
                     "cleanup": [ "/bin", "/include", "/lib/openjpeg-*", "/lib/pkgconfig" ]
@@ -118,8 +108,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.08.0/src/analitza-25.08.0.tar.xz",
-			    "sha256": "8d477f0af14bb9f7c15033a9d78987a7067135affc47f19eddda82e76c36d34b"
+			    "url": "https://download.kde.org/stable/release-service/25.12.0/src/analitza-25.12.0.tar.xz",
+			    "sha256": "ed75ecc7e867d80fb6c23b40b57cd794be3b79b17d3a7bdd081a868a8aa01ebd"
 		    }
 	    ]
         },
@@ -129,8 +119,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.08.0/src/cantor-25.08.0.tar.xz",
-			    "sha256": "5c98fa36bac3500a57d07813a101be709c58aa0ab755d4c9c9fa2b3f8836238d"
+			    "url": "https://download.kde.org/stable/release-service/25.12.0/src/cantor-25.12.0.tar.xz",
+			    "sha256": "072a3bbe238654404f17fef51c4e0aadb1b7862eed8eb8f9fed7d42628802d89"
 		    }
 	    ]
         },
@@ -180,8 +170,7 @@
                 {
                     "type": "archive",
                     "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.2.tar.gz",
-                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb",
-		    "disable-http-decompression": true
+                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb"
                 }
             ]
         },
@@ -192,8 +181,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v3.2/libcerf-v3.2.tar.gz",
-                    "sha256": "ea8d110d73ec24a643042ca3940461ccbb1b6541e21310ecb70ab4e4dc144aef"
+                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v3.3/libcerf-v3.3.tar.gz",
+                    "sha256": "ea2910085448e269b5f0f0fabe51ffd846ac68881904be99669d94dc0cc09765"
                 }
             ]
         },
@@ -217,8 +206,7 @@
                 {
                     "type": "archive",
                     "url": "https://download.kde.org/stable/frameworks/6.13/kuserfeedback-6.13.0.tar.xz",
-                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a",
-		    "_comment": "requires minimum ecm version provided by runtime"
+                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a"
                 }
             ]
         },
@@ -241,7 +229,8 @@
             "buildsystem": "cmake-ninja",
             "config-opts": [
                 "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=6"
+                "-DQT_VERSION_MAJOR=6",
+                "-DCMAKE_CXX_FLAGS=-I/usr/include/QtGui/6.10.1/QtGui"
             ],
             "sources": [
                 {
@@ -272,8 +261,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/tbeu/matio/archive/v1.5.28.tar.gz",
-                    "sha256": "04d14160a637ea822593c336b231227372179f650250c98024a8a2b744afef25"
+                    "url": "https://github.com/tbeu/matio/archive/v1.5.29.tar.gz",
+                    "sha256": "345f18bad65ad4a736ef5b4d660e8587c672939ff88b8551453e03d2146ff8b0"
                 }
             ]
         },
@@ -322,13 +311,16 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.1.0/mdds-3.1.0.tar.xz",
-                    "sha256": "ca295f4c86968a7eb1f5d503ff7ae180e6605210cfb26d01658be42048c0924c"
+                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.2.0/mdds-3.2.0.tar.xz",
+                    "sha256": "16defab556c53f94b463460ea2a1faab96e58bad2a95d7981300d2956534abbb"
                 }
             ]
         },
         {
             "name": "ixion",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
@@ -339,6 +331,9 @@
         },
         {
             "name": "orcus",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
@@ -348,18 +343,34 @@
             ]
         },
         {
+            "name": "QXlsx",
+            "buildsystem": "cmake-ninja",
+            "subdir": "QXlsx",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/QtExcel/QXlsx/archive/refs/tags/v1.5.0.tar.gz",
+                    "sha256": "4461bb0fc9b88b6a970520e8b32eb7d2fc391a1a5c326b139a0af836278cdb09"
+                },
+                {
+                    "type": "patch",
+                    "path": "admin/patches/QXlsx-1.5.0.patch"
+                }
+            ]
+        },
+        {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
-	    "build-options": {
-		    "env": {
-			    "LLVM_INSTALL_DIR": "/usr/lib/sdk/llvm18"
-		    }
-	    },
             "config-opts": [
 		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
 		    "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF",
 		    "-DENABLE_TESTS=OFF"
 	    ],
+	    "build-options": {
+		    "env": {
+			    "CLANG_INSTALL_DIR": "/app"
+		    }
+	    },
 	    "sources": [
                 {
                     "type": "dir",
