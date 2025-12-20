@@ -138,15 +138,14 @@ QMenu* Column::createContextMenu() {
 	// later, once we have some actions in the menu also for MQTT topics we'll
 	// need to explicitly to dynamic_cast for MQTTTopic
 	if (firstAction) {
-		if (parentAspect()->inherits(AspectType::Spreadsheet)) {
-			auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
+		if (auto* spreadsheet = parentAspect()->castTo<Spreadsheet>()) {
 			spreadsheet->fillColumnContextMenu(menu, this);
-		} else if (parentAspect()->type() == AspectType::Notebook) {
-#if defined(HAVE_CANTOR_LIBS) && !defined(SDK)
-			auto* notebook = static_cast<Notebook*>(parentAspect());
-			notebook->fillColumnContextMenu(menu, this);
-#endif
 		}
+#if defined(HAVE_CANTOR_LIBS) && !defined(SDK)
+		else if (auto* notebook = parentAspect()->castTo<Notebook>()) {
+			notebook->fillColumnContextMenu(menu, this);
+		}
+#endif
 	}
 
 	//"Used in" menu containing all plots where the column is used
@@ -233,13 +232,15 @@ QMenu* Column::createContextMenu() {
 	if (hasValues())
 		menu->insertAction(firstAction, m_copyDataAction);
 
-	// pasting of data is only possible for spreadsheet columns
-	if (parentAspect()->type() == AspectType::Spreadsheet) {
-		const auto* mimeData = QApplication::clipboard()->mimeData();
-		if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
-			const QString& text = QApplication::clipboard()->text();
-			if (!text.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
-				menu->insertAction(firstAction, m_pasteDataAction);
+	// pasting of data is only possible for spreadsheet columns that are not read-only
+	if (auto* spreadsheet = parentAspect()->castTo<Spreadsheet>()) {
+		if (!spreadsheet->readOnly()) {
+			const auto* mimeData = QApplication::clipboard()->mimeData();
+			if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
+				const QString& text = QApplication::clipboard()->text();
+				if (!text.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
+					menu->insertAction(firstAction, m_pasteDataAction);
+			}
 		}
 	}
 

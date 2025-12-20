@@ -29,8 +29,8 @@ public:
 	void retransformScales(int xIndex, int yIndex);
 	void rangeChanged();
 	void niceExtendChanged();
-	void rangeFormatChanged(const Dimension dim);
-	void wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+	void rangeFormatChanged(const Dimension);
+	void wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension);
 	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
@@ -42,9 +42,14 @@ public:
 	void updateCursor();
 	void setZoomSelectionBandShow(bool show);
 	bool translateRange(int xIndex, int yIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY);
+	void updatePlotColorPalette();
 
 	CartesianPlot::Type type{CartesianPlot::Type::FourAxes};
+	CartesianPlot::PlotColorMode plotColorMode{CartesianPlot::PlotColorMode::Theme};
 	QString theme;
+	QList<QColor> plotColors;
+	QString plotColorMap{QStringLiteral("batlowS10")};
+
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	int rangeFirstValues{1000}, rangeLastValues{1000};

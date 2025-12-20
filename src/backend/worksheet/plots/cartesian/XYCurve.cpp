@@ -3169,15 +3169,15 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	Q_D(XYCurve);
 	const auto* plot = d->m_plot;
 	const int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const QColor color = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
-	d->line->loadThemeConfig(group, themeColor);
-	d->dropLine->loadThemeConfig(group, themeColor);
-	d->symbol->loadThemeConfig(group, themeColor);
+	d->line->loadThemeConfig(group, color);
+	d->dropLine->loadThemeConfig(group, color);
+	d->symbol->loadThemeConfig(group, color);
 	d->background->loadThemeConfig(group);
-	d->errorBar->loadThemeConfig(group, themeColor);
+	d->errorBar->loadThemeConfig(group, color);
 
 	// line
 	// Check if the plot's theme is "Sparkline"
@@ -3192,7 +3192,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	}
 	// Values
 	this->setValuesOpacity(group.readEntry(QStringLiteral("ValuesOpacity"), 1.0));
-	this->setValuesColor(group.readEntry(QStringLiteral("ValuesColor"), themeColor));
+	this->setValuesColor(group.readEntry(QStringLiteral("ValuesColor"), color));
 
 	// margins, activate for XYCurve only, not for analysis curves
 	if (type() == AspectType::XYCurve && plot->theme() == QLatin1String("Tufte")) {

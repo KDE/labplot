@@ -43,7 +43,7 @@ class StatisticsSpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
 class XYFunctionCurveDock;
-class XYDataReductionCurveDock;
+class XYLineSimplificationCurveDock;
 class XYDifferentiationCurveDock;
 class XYIntegrationCurveDock;
 class XYInterpolationCurveDock;
@@ -68,7 +68,7 @@ class Surface3DPlotAreaDock;
 #ifdef HAVE_SCRIPTING
 class ScriptDock;
 #endif
-
+class SeasonalDecompositionDock;
 #ifdef HAVE_CANTOR_LIBS
 class NotebookDock;
 #endif
@@ -128,7 +128,7 @@ private:
 	RunChartDock* m_runChartDock{nullptr};
 
 	// analysis plots
-	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};
+	XYLineSimplificationCurveDock* m_xyLineSimplificationCurveDock{nullptr};
 	XYDifferentiationCurveDock* m_xyDifferentiationCurveDock{nullptr};
 	XYIntegrationCurveDock* m_xyIntegrationCurveDock{nullptr};
 	XYInterpolationCurveDock* m_xyInterpolationCurveDock{nullptr};
@@ -140,22 +140,18 @@ private:
 	XYConvolutionCurveDock* m_xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
 
-	// hypothesis test
+	// statistical analysis
 	HypothesisTestDock* m_hypothesisTestDock{nullptr};
 
-	// surface plot dock
+	// 3D plots
 	Surface3DPlotAreaDock* m_surfacePlotDock{nullptr};
-
-	// 3d axis
 	Axis3DDock* m_axis3dDock{nullptr};
-
-	// scatter 3d dock
 	Scatter3DPlotAreaDock* m_scatter3DPlotDock{nullptr};
-
-	// bar 3d dock
 	Bar3DPlotAreaDock* m_bar3DPlotDock{nullptr};
-
 	Plot3DAreaDock* m_plot3DAreaDock{nullptr};
+
+	// time series analysis
+	SeasonalDecompositionDock* m_seasonalDecompositionDock{nullptr};
 
 #ifdef HAVE_SCRIPTING
 	ScriptDock* m_scriptDock{nullptr};

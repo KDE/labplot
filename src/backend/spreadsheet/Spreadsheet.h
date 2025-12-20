@@ -66,6 +66,7 @@ public:
 
 	QString text(int row, int col) const;
 
+	BASIC_D_ACCESSOR_DECL(bool, readOnly, ReadOnly)
 	BASIC_D_ACCESSOR_DECL(bool, showComments, ShowComments)
 	BASIC_D_ACCESSOR_DECL(bool, showSparklines, ShowSparklines)
 	BASIC_D_ACCESSOR_DECL(bool, linking, Linking)

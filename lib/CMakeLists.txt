@@ -79,7 +79,7 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
-    ${BACKEND_DIR}/worksheet/plots/cartesian/XYDataReductionCurve.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYDifferentiationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
@@ -99,6 +99,10 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/3d/Plot3DArea.cpp
 )
 
+set(TIME_SERIES_ANALYSIS_SOURCES
+    ${BACKEND_DIR}/timeseriesanalysis/SeasonalDecomposition.cpp
+)
+
 set(SDK_SOURCES
     ${FILTER_SOURCES}
     ${DATA_CONTAINER_SOURCES}
@@ -109,6 +113,7 @@ set(SDK_SOURCES
     ${WORKSHEET_ELEMENT_CONTAINER_SOURCES}
     ${PLOT_AREA_ELEMENT_SOURCES}
     ${PLOT_SOURCES}
+    ${TIME_SERIES_ANALYSIS_SOURCES}
 )
 
 set(NSL_SOURCES
@@ -231,6 +236,7 @@ set(SDK_INTERNAL_SOURCES
     ${FRONTEND_DIR}/widgets/TextPreview.cpp
     ${FRONTEND_DIR}/GuiTools.cpp
     ${FRONTEND_DIR}/ThemeHandler.cpp
+    ${TOOLS_DIR}/ColorMapsManager.cpp
     ${TOOLS_DIR}/ImageTools.cpp
     ${TOOLS_DIR}/TeXRenderer.cpp
     ${BACKEND_DIR}/core/abstractcolumncommands.cpp

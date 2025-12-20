@@ -42,8 +42,10 @@ Dependencies:
 Environment:
   KDECI_BUILD: "TRUE"
 
+# see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/config/global.yml
 Options:
-  setup-dbus-session: True
+  use-ccache: True
+  ccache-large-cache: True
   per-test-timeout: 120
   require-passing-tests-on: ['@all']
   cmake-options: '-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON'

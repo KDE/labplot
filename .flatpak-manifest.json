@@ -2,9 +2,9 @@
     "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "6.9",
+    "runtime-version": "6.10",
     "base": "io.qt.PySide.BaseApp",
-    "base-version": "6.9",
+    "base-version": "6.10",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
     "tags": ["nightly"],
@@ -22,12 +22,6 @@
         "--system-talk-name=org.freedesktop.UDisks2",
         "--talk-name=org.freedesktop.Flatpak"
     ],
-    "build-args": [
-        "--share=network"
-    ],
-    "extensions": {
-        "org.freedesktop.Sdk.Extension.python3": {}
-    },
     "cleanup": [
         "/include",
         "/lib/cmake",
@@ -39,10 +33,9 @@
         "/share/info",
         "/share/man"
     ],
-    "build-options": {
-        "append-path": "/usr/lib/sdk/llvm18/bin",
-        "append-ld-library-path": "/usr/lib/sdk/llvm18/lib"
-    },
+    "cleanup-commands": [
+        "/app/cleanup-BaseApp.sh"
+    ],
     "modules": [
         {
             "name": "eigen",
@@ -73,8 +66,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.11.0.tar.xz",
-                    "sha256": "63f155142b77349e2bccaef148e754e7506ab1641e713b83af4f54a8f8b15369"
+                    "url": "https://poppler.freedesktop.org/poppler-25.12.0.tar.xz",
+                    "sha256": "c18b40eb36b1a0c5b86e29ca054bf0770304583da4f2cdd42fe86eca6a20de48"
                 }
             ],
             "modules": [
@@ -115,8 +108,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.08.3/src/analitza-25.08.3.tar.xz",
-			    "sha256": "1abe741c3f189b3d8cb8cf34b516890fd64cf21ba75d0f558b3711956b83e4d1"
+			    "url": "https://download.kde.org/stable/release-service/25.12.0/src/analitza-25.12.0.tar.xz",
+			    "sha256": "ed75ecc7e867d80fb6c23b40b57cd794be3b79b17d3a7bdd081a868a8aa01ebd"
 		    }
 	    ]
         },
@@ -126,8 +119,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.08.3/src/cantor-25.08.3.tar.xz",
-			    "sha256": "5635007fb9c50d82e88decf9264ff40fb9f4ee65b27474c5930b1b519eb24b72"
+			    "url": "https://download.kde.org/stable/release-service/25.12.0/src/cantor-25.12.0.tar.xz",
+			    "sha256": "072a3bbe238654404f17fef51c4e0aadb1b7862eed8eb8f9fed7d42628802d89"
 		    }
 	    ]
         },
@@ -177,8 +170,7 @@
                 {
                     "type": "archive",
                     "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.2.tar.gz",
-                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb",
-		    "disable-http-decompression": true
+                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb"
                 }
             ]
         },
@@ -214,8 +206,7 @@
                 {
                     "type": "archive",
                     "url": "https://download.kde.org/stable/frameworks/6.13/kuserfeedback-6.13.0.tar.xz",
-                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a",
-		    "_comment": "requires minimum ecm version provided by runtime"
+                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a"
                 }
             ]
         },
@@ -238,7 +229,8 @@
             "buildsystem": "cmake-ninja",
             "config-opts": [
                 "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=6"
+                "-DQT_VERSION_MAJOR=6",
+                "-DCMAKE_CXX_FLAGS=-I/usr/include/QtGui/6.10.1/QtGui"
             ],
             "sources": [
                 {
@@ -319,13 +311,16 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.1.0/mdds-3.1.0.tar.xz",
-                    "sha256": "ca295f4c86968a7eb1f5d503ff7ae180e6605210cfb26d01658be42048c0924c"
+                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.2.0/mdds-3.2.0.tar.xz",
+                    "sha256": "16defab556c53f94b463460ea2a1faab96e58bad2a95d7981300d2956534abbb"
                 }
             ]
         },
         {
             "name": "ixion",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
@@ -336,6 +331,9 @@
         },
         {
             "name": "orcus",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
@@ -345,20 +343,34 @@
             ]
         },
         {
+            "name": "QXlsx",
+            "buildsystem": "cmake-ninja",
+            "subdir": "QXlsx",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/QtExcel/QXlsx/archive/refs/tags/v1.5.0.tar.gz",
+                    "sha256": "4461bb0fc9b88b6a970520e8b32eb7d2fc391a1a5c326b139a0af836278cdb09"
+                },
+                {
+                    "type": "patch",
+                    "path": "admin/patches/QXlsx-1.5.0.patch"
+                }
+            ]
+        },
+        {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
-	    "build-options": {
-		    "env": {
-			    "LLVM_INSTALL_DIR": "/usr/lib/sdk/llvm18"
-		    }
-	    },
             "config-opts": [
 		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
 		    "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF",
-		    "-DENABLE_TESTS=OFF",
-		    "-DENABLE_PYTHON_SDK=OFF",
-		    "-DENABLE_PYTHON_SCRIPTING=OFF"
+		    "-DENABLE_TESTS=OFF"
 	    ],
+	    "build-options": {
+		    "env": {
+			    "CLANG_INSTALL_DIR": "/app"
+		    }
+	    },
 	    "sources": [
                 {
                     "type": "dir",

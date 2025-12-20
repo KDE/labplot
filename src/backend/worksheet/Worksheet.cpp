@@ -1028,7 +1028,7 @@ void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 		for (auto* plot : plots)
 			plot->mouseHoverZoomSelectionMode(logicPos, -1);
 	} else {
-		if (m_view->selectedElement()->parent(AspectType::CartesianPlot) == senderPlot)
+		if (m_view->selectedElement()->parent<CartesianPlot>() == senderPlot)
 			senderPlot->mouseHoverZoomSelectionMode(logicPos, CartesianPlot::cSystemIndex(m_view->selectedElement()));
 		else
 			senderPlot->mouseHoverZoomSelectionMode(logicPos, -1);

@@ -22,9 +22,15 @@ find_library(Shiboken6_LIBRARY
 )
 
 find_library(Shiboken6_ABI3_LIBRARY
-    NAMES shiboken6.abi3 libshiboken6.abi3 libshiboken6.abi3.so.6.9
+    NAMES shiboken6.abi3 libshiboken6.abi3 libshiboken6.abi3.so.6.10 libshiboken6.abi3.6.10 libshiboken6.abi3.6.10.dylib libshiboken6.abi3.so.6.9 libshiboken6.abi3.6.9 libshiboken6.abi3.6.9.dylib
     PATHS "${PYSIDE_PYTHONPATH}/../shiboken6" /usr/lib64 /usr/lib /app/lib
 )
+
+find_path(Shiboken6_INCLUDE_DIR
+    NAMES sbkversion.h
+    PATHS ${PYSIDE_PYTHONPATH}/../shiboken6/include ${PYSIDE_PYTHONPATH}/../shiboken6_generator/include ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/shiboken6 /usr/include/shiboken6 /usr/local/include/shiboken6
+)
+
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Shiboken6
@@ -53,6 +59,11 @@ if(Shiboken6_FOUND)
                 IMPORTED_LOCATION "${Shiboken6_ABI3_LIBRARY}"
             )
         endif()
+	if(Shiboken6_INCLUDE_DIR)
+	    set_target_properties(Shiboken6::libshiboken PROPERTIES
+		    INTERFACE_INCLUDE_DIRECTORIES ${Shiboken6_INCLUDE_DIR}
+            )
+	endif()
 
     endif()
 

@@ -22,6 +22,7 @@ add_subdirectory(livedata)
 add_subdirectory(matrix)
 add_subdirectory(multirange)
 add_subdirectory(commonfrontend)
+add_subdirectory(time_series_analysis)
 
 if(Cantor_FOUND)
     add_subdirectory(notebook)

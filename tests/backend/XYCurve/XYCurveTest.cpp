@@ -28,7 +28,7 @@
 	auto* curve_variable_name = plot->child<XYCurve>(child_index);                                                                                             \
 	QVERIFY(curve_variable_name != nullptr);                                                                                                                   \
 	QCOMPARE(curve_variable_name->name(), QLatin1String(column_name));                                                                                         \
-	QCOMPARE(curve_variable_name->inherits(AspectType::XYCurve), true);                                                                                        \
+	QCOMPARE(curve_variable_name->inherits<XYCurve>(), true);                                                                                                  \
 	auto* curve_variable_name##Private = curve_variable_name->d_func();                                                                                        \
 	Q_UNUSED(curve_variable_name##Private)
 

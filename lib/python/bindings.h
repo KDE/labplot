@@ -84,7 +84,7 @@
 // analysis plots
 #include "src/backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "src/backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
-#include "src/backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
+#include "src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.h"
 #include "src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "src/backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"

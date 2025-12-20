@@ -79,12 +79,6 @@ ContentDockWidget* AbstractPart::dockWidget() const {
 }
 #endif
 
-#ifndef SDK
-bool AbstractPart::dockWidgetExists() const {
-	return m_dockWidget != nullptr;
-}
-#endif
-
 void AbstractPart::suppressDeletion(bool suppress) {
 	m_suppressDeletion = suppress;
 }

@@ -207,6 +207,7 @@ QList<AspectType> TreeViewComboBox::plotColumnTopLevelClasses() {
 			AspectType::Datapicker,
 			AspectType::DatapickerCurve,
 			AspectType::Spreadsheet,
+			AspectType::SeasonalDecomposition,
 			AspectType::StatisticsSpreadsheet,
 			AspectType::LiveDataSource,
 			AspectType::Column,
@@ -309,7 +310,7 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 	const auto& selectableTypes = m_model->selectableAspects();
 	for (AspectType type : m_topLevelClasses) {
-		if (aspect->type() == type) {
+		if (aspect->inherits(AbstractAspect::typeName(type).data())) {
 			// current aspect is a top level aspect,
 			// check whether its selectable
 			if (selectableTypes.indexOf(type) != -1)
@@ -327,10 +328,6 @@ bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 
 			return hasSelectableAspects;
 		}
-
-		if (type == AspectType::XYAnalysisCurve)
-			if (aspect->inherits(AspectType::XYAnalysisCurve))
-				return true;
 	}
 	return false;
 }

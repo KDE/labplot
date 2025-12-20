@@ -19,6 +19,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/ActionsManager.h"
 #include "frontend/MainWin.h"
+#include "frontend/colormaps/ColorMapsDialog.h"
 #include "frontend/datapicker/DatapickerView.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/matrix/MatrixView.h"
@@ -343,11 +344,11 @@ void ActionsManager::initActions() {
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Color Maps Browser"), this);
 	action->setToolTip(i18n("Open dialog to browse through the available color maps."));
 	collection->addAction(QStringLiteral("color_maps"), action);
-	// connect(action, &QAction::triggered, this, [=]() {
-	// 	auto* dlg = new ColorMapsDialog(this);
-	// 	dlg->exec();
-	// 	delete dlg;
-	// });
+	connect(action, &QAction::triggered, this, [=]() {
+		auto* dlg = new ColorMapsDialog(m_mainWindow);
+	 	dlg->exec();
+	 	delete dlg;
+	});
 
 #ifdef HAVE_FITS
 	action = new QAction(QIcon::fromTheme(QStringLiteral("editor")), i18n("FITS Metadata Editor..."), this);
@@ -1110,7 +1111,7 @@ void ActionsManager::updateGUI() {
 	// Handle the Worksheet-object
 	const auto* w = dynamic_cast<Worksheet*>(m_mainWindow->m_currentAspect);
 	if (!w)
-		w = dynamic_cast<Worksheet*>(m_mainWindow->m_currentAspect->parent(AspectType::Worksheet));
+		w = m_mainWindow->m_currentAspect->parent<Worksheet>();
 
 	if (w) {
 		bool update = false;
@@ -1201,7 +1202,7 @@ void ActionsManager::updateGUI() {
 	// Handle the Matrix-object
 	const auto* matrix = dynamic_cast<Matrix*>(m_mainWindow->m_currentAspect);
 	if (!matrix)
-		matrix = dynamic_cast<Matrix*>(m_mainWindow->m_currentAspect->parent(AspectType::Matrix));
+		matrix = dynamic_cast<Matrix*>(m_mainWindow->m_currentAspect->parent<Matrix>());
 	if (matrix) {
 		// populate matrix-menu
 		auto* view = qobject_cast<MatrixView*>(matrix->view());
@@ -1221,7 +1222,7 @@ void ActionsManager::updateGUI() {
 #ifdef HAVE_CANTOR_LIBS
 	const auto* notebook = dynamic_cast<Notebook*>(m_mainWindow->m_currentAspect);
 	if (!notebook)
-		notebook = dynamic_cast<Notebook*>(m_mainWindow->m_currentAspect->parent(AspectType::Notebook));
+		notebook = dynamic_cast<Notebook*>(m_mainWindow->m_currentAspect->parent<Notebook>());
 	if (notebook) {
 		// menu
 		auto* view = qobject_cast<NotebookView*>(notebook->view());
@@ -1261,7 +1262,7 @@ void ActionsManager::updateGUI() {
 
 	const auto* datapicker = dynamic_cast<Datapicker*>(m_mainWindow->m_currentAspect);
 	if (!datapicker)
-		datapicker = dynamic_cast<Datapicker*>(m_mainWindow->m_currentAspect->parent(AspectType::Datapicker));
+		datapicker = dynamic_cast<Datapicker*>(m_mainWindow->m_currentAspect->parent<Datapicker>());
 	if (!datapicker) {
 		if (m_mainWindow->m_currentAspect && m_mainWindow->m_currentAspect->type() == AspectType::DatapickerCurve)
 			datapicker = dynamic_cast<Datapicker*>(m_mainWindow->m_currentAspect->parentAspect());

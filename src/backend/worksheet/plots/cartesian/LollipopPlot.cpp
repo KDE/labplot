@@ -485,9 +485,9 @@ void LollipopPlotPrivate::recalc() {
 			auto* symbol = addSymbol(group);
 
 			if (plot) {
-				const auto& themeColor = plot->themeColorPalette(lines.count() - 1);
-				line->setColor(themeColor);
-				symbol->setColor(themeColor);
+				const auto& color = plot->plotColor(lines.count() - 1);
+				line->setColor(color);
+				symbol->setColor(color);
 			}
 		}
 	} else if (diff < 0) {
@@ -1114,13 +1114,12 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 
 	Q_D(LollipopPlot);
 	const auto* plot = d->m_plot;
-	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const int index = plot->curveChildIndex(this);
 
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {
-		const auto& color = plot->themeColorPalette(i);
+		const auto& color = plot->plotColor(i);
 
 		// lines
 		auto* line = d->lines.at(i);
@@ -1132,7 +1131,7 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	}
 
 	// values
-	d->value->loadThemeConfig(group, themeColor);
+	d->value->loadThemeConfig(group, plot->plotColor(index));
 
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
