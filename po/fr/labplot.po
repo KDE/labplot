@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-19 00:40+0000\n"
-"PO-Revision-Date: 2025-12-09 18:43+0100\n"
+"PO-Revision-Date: 2025-12-19 09:18+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.11.90\n"
+"X-Generator: Lokalize 25.12.0\n"
 "X-Text-Markup: kde4\n"
 
 #: src/backend/core/AbstractAspect.cpp:241
@@ -9658,10 +9658,9 @@ msgstr "%1 : activer le curseur 1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1790
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1791
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color mode"
-msgstr "%1 : utiliser la couleur du tracé"
+msgstr "%1 : définir le mode pour la couleur du tracé"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1802
 #: src/backend/worksheet/Worksheet.cpp:854
@@ -9684,10 +9683,9 @@ msgstr "%1 : définir le thème"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1815
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color map"
-msgstr "%1 : utiliser la couleur du tracé"
+msgstr "%1 : définir la palette pour la couleur du tracé"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2002
 #, kde-format
@@ -14544,10 +14542,9 @@ msgid "Sloped"
 msgstr "Incliné"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:925
-#, fuzzy, kde-format
-#| msgid "Color Map:"
+#, kde-format
 msgid "Color Map"
-msgstr "Palette de couleurs :"
+msgstr "Palette de couleurs"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:929
 #, kde-format
@@ -14575,6 +14572,10 @@ msgid ""
 "the current theme apply to plot area</li><li>Color Map - colors are taken "
 "from the specified color map</li></ul>"
 msgstr ""
+"Définit les couleurs à utiliser pour les tracés :<ul><li>Thème - les "
+"couleurs sont sélectionnées dans le thème courant et s'appliquent à la zone "
+"de tracé</li><li>Palette des couleurs - les couleurs sont sélectionnées dans "
+"la palette de couleurs spécifiée,</li></ul>"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
 #, kde-format
@@ -22581,10 +22582,9 @@ msgstr "Largeur :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotColorMode)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:48
-#, fuzzy, kde-format
-#| msgid "Plot's Color:"
+#, kde-format
 msgid "Plot Colors:"
-msgstr "Couleur de tracé :"
+msgstr "Couleurs de tracé :"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twPlotRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:68

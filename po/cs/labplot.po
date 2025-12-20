@@ -14205,10 +14205,9 @@ msgid "Sloped"
 msgstr ""
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:925
-#, fuzzy, kde-format
-#| msgid "Color Map:"
+#, kde-format
 msgid "Color Map"
-msgstr "Barevná mapa:"
+msgstr "Barevná mapa"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:929
 #, kde-format
