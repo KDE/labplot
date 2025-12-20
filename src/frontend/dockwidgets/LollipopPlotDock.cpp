@@ -11,16 +11,13 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/macros.h"
 #include "frontend/widgets/TreeViewComboBox.h"
-#include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
+#include "frontend/widgets/DataColumnsWidget.h"
 #include "frontend/widgets/LineWidget.h"
 #include "frontend/widgets/SymbolWidget.h"
 #include "frontend/widgets/ValueWidget.h"
 
-#include <QPushButton>
-
 #include <KConfig>
-#include <KLocalizedString>
 
 LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	: BaseDock(parent) {
@@ -30,7 +27,6 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
-
 	// x-data
 	cbXColumn = new TreeViewComboBox(ui.tabGeneral);
 	QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -39,18 +35,13 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	ui.bRemoveXColumn->setIcon(QIcon::fromTheme(QStringLiteral("edit-clear")));
 
 	// y-data
-	m_buttonNew = new QPushButton();
-	m_buttonNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-
-	m_gridLayout = new QGridLayout(ui.frameDataColumns);
-	m_gridLayout->setContentsMargins(0, 0, 0, 0);
-	m_gridLayout->setHorizontalSpacing(2);
-	m_gridLayout->setVerticalSpacing(2);
-	ui.frameDataColumns->setLayout(m_gridLayout);
+	auto* gridLayout = static_cast<QGridLayout*>(ui.tabGeneral->layout());
+	m_dataColumnsWidget = new DataColumnsWidget(this);
+	gridLayout->addWidget(m_dataColumnsWidget, 5, 2, 1, 1);
 
 	// Tab "Line"
 	lineWidget = new LineWidget(ui.tabLine);
-	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabLine->layout());
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabLine->layout());
 	gridLayout->addWidget(lineWidget, 2, 0, 1, 3);
 
 	// Tab "Symbol"
@@ -83,7 +74,7 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	// Tab "General"
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &LollipopPlotDock::xColumnChanged);
 	connect(ui.bRemoveXColumn, &QPushButton::clicked, this, &LollipopPlotDock::removeXColumn);
-	connect(m_buttonNew, &QPushButton::clicked, this, &LollipopPlotDock::addDataColumn);
+	connect(m_dataColumnsWidget, &DataColumnsWidget::dataColumnsChanged, this, &LollipopPlotDock::dataColumnsChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::orientationChanged);
 
 	// Tab "Line"
@@ -152,85 +143,6 @@ void LollipopPlotDock::setModel() {
 	cbXColumn->setModel(model);
 }
 
-void LollipopPlotDock::loadDataColumns() {
-	// add the combobox for the first column, is always present
-	if (m_dataComboBoxes.count() == 0)
-		addDataColumn();
-
-	int count = m_plot->dataColumns().count();
-	ui.cbNumberLine->clear();
-	ui.cbNumberSymbol->clear();
-
-	auto* model = aspectModel();
-	if (count != 0) {
-		// box plot has already data columns, make sure we have the proper number of comboboxes
-		int diff = count - m_dataComboBoxes.count();
-		if (diff > 0) {
-			for (int i = 0; i < diff; ++i)
-				addDataColumn();
-		} else if (diff < 0) {
-			for (int i = diff; i != 0; ++i)
-				removeDataColumn();
-		}
-
-		// show the columns in the comboboxes
-		for (int i = 0; i < count; ++i) {
-			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, re-set the current model
-			m_dataComboBoxes.at(i)->setAspect(m_plot->dataColumns().at(i), m_plot->dataColumnPaths().at(i));
-		}
-
-		// show columns names in the combobox for the selection of the bar to be modified
-		for (int i = 0; i < count; ++i)
-			if (m_plot->dataColumns().at(i)) {
-				ui.cbNumberLine->addItem(m_plot->dataColumns().at(i)->name());
-				ui.cbNumberSymbol->addItem(m_plot->dataColumns().at(i)->name());
-			}
-	} else {
-		// no data columns set in the box plot yet, we show the first combo box only and reset its model
-		m_dataComboBoxes.first()->setModel(model);
-		m_dataComboBoxes.first()->setAspect(nullptr);
-		for (int i = 0; i < m_dataComboBoxes.count(); ++i)
-			removeDataColumn();
-	}
-
-	// disable data column widgets if we're modifying more than one box plot at the same time
-	bool enabled = (m_plots.count() == 1);
-	m_buttonNew->setVisible(enabled);
-	for (auto* cb : m_dataComboBoxes)
-		cb->setEnabled(enabled);
-	for (auto* b : m_removeButtons)
-		b->setVisible(enabled);
-
-	// select the first column after all of them were added to the combobox
-	ui.cbNumberLine->setCurrentIndex(0);
-	ui.cbNumberSymbol->setCurrentIndex(0);
-}
-
-void LollipopPlotDock::setDataColumns() const {
-	int newCount = m_dataComboBoxes.count();
-	int oldCount = m_plot->dataColumns().count();
-
-	if (newCount > oldCount) {
-		ui.cbNumberLine->addItem(QString::number(newCount));
-		ui.cbNumberSymbol->addItem(QString::number(newCount));
-	} else {
-		if (newCount != 0) {
-			ui.cbNumberLine->removeItem(ui.cbNumberLine->count() - 1);
-			ui.cbNumberSymbol->removeItem(ui.cbNumberSymbol->count() - 1);
-		}
-	}
-
-	QVector<const AbstractColumn*> columns;
-
-	for (auto* cb : m_dataComboBoxes) {
-		auto* aspect = cb->currentAspect();
-		if (aspect && aspect->type() == AspectType::Column)
-			columns << static_cast<AbstractColumn*>(aspect);
-	}
-
-	m_plot->setDataColumns(columns);
-}
-
 /*
  * updates the locale in the widgets. called when the application settings are changed.
  */
@@ -279,84 +191,28 @@ void LollipopPlotDock::removeXColumn() {
 		plot->setXColumn(nullptr);
 }
 
-void LollipopPlotDock::addDataColumn() {
-	auto* cb = new TreeViewComboBox(this);
-
-	static const QList<AspectType> list{AspectType::Folder,
-										AspectType::Workbook,
-										AspectType::Datapicker,
-										AspectType::DatapickerCurve,
-										AspectType::Spreadsheet,
-										AspectType::LiveDataSource,
-										AspectType::Column,
-										AspectType::Worksheet,
-										AspectType::CartesianPlot,
-										AspectType::XYFitCurve,
-										AspectType::XYSmoothCurve,
-										AspectType::Notebook};
-	cb->setTopLevelClasses(list);
-	cb->setModel(aspectModel());
-	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &LollipopPlotDock::dataColumnChanged);
-
-	int index = m_dataComboBoxes.size();
-
-	if (index == 0) {
-		QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
-		sizePolicy1.setHorizontalStretch(0);
-		sizePolicy1.setVerticalStretch(0);
-		sizePolicy1.setHeightForWidth(cb->sizePolicy().hasHeightForWidth());
-		cb->setSizePolicy(sizePolicy1);
-	} else {
-		auto* button = new QPushButton();
-		button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
-		connect(button, &QPushButton::clicked, this, &LollipopPlotDock::removeDataColumn);
-		m_gridLayout->addWidget(button, index, 1, 1, 1);
-		m_removeButtons << button;
-	}
-
-	m_gridLayout->addWidget(cb, index, 0, 1, 1);
-	m_gridLayout->addWidget(m_buttonNew, index + 1, 1, 1, 1);
-
-	m_dataComboBoxes << cb;
-	ui.lDataColumn->setText(i18n("Columns:"));
-}
-
-void LollipopPlotDock::removeDataColumn() {
-	auto* sender = static_cast<QPushButton*>(QObject::sender());
-	if (sender) {
-		// remove button was clicked, determine which one and
-		// delete it together with the corresponding combobox
-		for (int i = 0; i < m_removeButtons.count(); ++i) {
-			if (sender == m_removeButtons.at(i)) {
-				delete m_dataComboBoxes.takeAt(i + 1);
-				delete m_removeButtons.takeAt(i);
-			}
-		}
-	} else {
-		// no sender is available, the function is being called directly in loadDataColumns().
-		// delete the last remove button together with the corresponding combobox
-		int index = m_removeButtons.count() - 1;
-		if (index >= 0) {
-			delete m_dataComboBoxes.takeAt(index + 1);
-			delete m_removeButtons.takeAt(index);
+void LollipopPlotDock::dataColumnsChanged(QVector<const AbstractColumn*> columns) {
+	// re-populate the combobox with the columns names after columns were changed
+	const int oldIndexLine = ui.cbNumberLine->currentIndex();
+	const int oldIndexSymbol = ui.cbNumberSymbol->currentIndex();
+	ui.cbNumberLine->clear();
+	ui.cbNumberSymbol->clear();
+	const int count = columns.count();
+	for (int i = 0; i < count; ++i) {
+		if (columns.at(i)) {
+			const auto& name = columns.at(i)->name();
+			ui.cbNumberLine->addItem(name);
+			ui.cbNumberSymbol->addItem(name);
 		}
 	}
 
-	// TODO
-	if (!m_removeButtons.isEmpty()) {
-		ui.lDataColumn->setText(i18n("Columns:"));
-	} else {
-		ui.lDataColumn->setText(i18n("Column:"));
-	}
+	const int newIndexLine = (oldIndexLine < count) ? oldIndexLine : 0;
+	const int newIndexSymbol = (oldIndexSymbol < count) ? oldIndexSymbol : 0;
+	ui.cbNumberLine->setCurrentIndex(newIndexLine);
+	ui.cbNumberSymbol->setCurrentIndex(newIndexSymbol);
 
-	if (!m_initializing)
-		setDataColumns();
-}
-
-void LollipopPlotDock::dataColumnChanged(const QModelIndex&) {
 	CONDITIONAL_LOCK_RETURN;
-
-	setDataColumns();
+	m_plot->setDataColumns(columns);
 }
 
 void LollipopPlotDock::orientationChanged(int index) {
@@ -430,6 +286,30 @@ void LollipopPlotDock::plotOrientationChanged(LollipopPlot::Orientation orientat
 void LollipopPlotDock::load() {
 	// general
 	ui.cbOrientation->setCurrentIndex((int)m_plot->orientation());
+	loadDataColumns();
+}
+
+void LollipopPlotDock::loadDataColumns() {
+	// show columns names in the combobox for the selection of the bar to be modified
+	ui.cbNumberLine->clear();
+	ui.cbNumberSymbol->clear();
+	for (int i = 0; i < m_plot->dataColumns().count(); ++i) {
+		if (m_plot->dataColumns().at(i)) {
+			ui.cbNumberLine->addItem(m_plot->dataColumns().at(i)->name());
+			ui.cbNumberSymbol->addItem(m_plot->dataColumns().at(i)->name());
+		}
+	}
+
+	// select the first column after all of them were added to the combobox
+	ui.cbNumberLine->setCurrentIndex(0);
+	ui.cbNumberSymbol->setCurrentIndex(0);
+
+	// show the data columns
+	m_dataColumnsWidget->setDataColumns(m_plot->dataColumns(), m_plot->dataColumnPaths(), aspectModel());
+
+	// disable data column widgets if we're modifying more than one plot at the same time
+	bool enabled = (m_plots.count() == 1);
+	m_dataColumnsWidget->setEnabled(enabled);
 }
 
 void LollipopPlotDock::loadConfig(KConfig& config) {

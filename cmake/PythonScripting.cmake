@@ -153,12 +153,12 @@ set(shiboken_scripting_generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_differentiationdata_wrapper.cpp
@@ -248,14 +248,18 @@ set(python_scripting_includes
     ${PySide6_PYTHONPATH}/include/QtGui
     ${PySide6_PYTHONPATH}/include/QtCore
 )
-get_target_property(Shiboken6_LIBRARIES Shiboken6::libshiboken IMPORTED_LOCATION)
 set(python_scripting_link_libraries
     PySide6::pyside6
     Shiboken6::libshiboken
     ${Python3_LIBRARIES}
-    ${PySide6_ABI3_LIBRARY}
-    ${Shiboken6_LIBRARIES}
 )
+if(PySide6_ABI3_LIBRARY)
+    list(APPEND python_scripting_link_libraries ${PySide6_ABI3_LIBRARY})
+endif()
+get_target_property(Shiboken6_LIBRARY Shiboken6::libshiboken IMPORTED_LOCATION)
+if(Shiboken6_LIBRARY)
+    list(APPEND python_scripting_link_libraries ${Shiboken6_LIBRARY})
+endif()
 
 # Hide noisy warnings in shiboken scripting generated sources
 # 1. Wno-missing-include-dirs : pyside6 declares an include directory in the INTERFACE_INCLUDE_DIRECTORIES which doesn't actually exist and thus the compiler complains

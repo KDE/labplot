@@ -752,7 +752,7 @@ void BoxPlotPrivate::adjustPropertiesContainers() {
 			auto* medianLine = addMedianLine(group);
 
 			if (plot) {
-				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
+				const auto& themeColor = plot->plotColor(backgrounds.count() - 1);
 				background->setFirstColor(themeColor);
 				borderLine->setColor(themeColor);
 				medianLine->setColor(themeColor);
@@ -1969,12 +1969,12 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(BoxPlot);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const QColor themeColor = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {
-		const auto& color = plot->themeColorPalette(i);
+		const auto& color = plot->plotColor(i);
 
 		// box fillings
 		auto* background = d->backgrounds.at(i);

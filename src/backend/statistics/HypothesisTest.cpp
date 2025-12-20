@@ -1713,55 +1713,74 @@ bool HypothesisTest::load(XmlStreamReader* reader, bool preview) {
 }
 
 void HypothesisTest::fillAddNewHypothesisTest(QMenu* menu, QActionGroup* actionGroup) {
+	auto* subMenu = new QMenu(i18n("Parametric"));
+
 	auto* action = new QAction(testName(Test::t_test_one_sample), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_one_sample));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::t_test_two_sample), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_two_sample));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::t_test_two_sample_paired), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_two_sample_paired));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::t_test_welch), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_welch));
-	menu->addAction(action);
+	subMenu->addAction(action);
+
+	subMenu->addSeparator();
 
 	action = new QAction(testName(Test::one_way_anova), actionGroup);
 	action->setData(static_cast<int>(Test::one_way_anova));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::one_way_anova_repeated), actionGroup);
 	action->setData(static_cast<int>(Test::one_way_anova_repeated));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
+	menu->addMenu(subMenu);
+
+	subMenu = new QMenu(i18n("Non-Parametric"));
+
+	// t-type related tests
 	action = new QAction(testName(Test::mann_whitney_u_test), actionGroup);
 	action->setData(static_cast<int>(Test::mann_whitney_u_test));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::wilcoxon_test), actionGroup);
 	action->setData(static_cast<int>(Test::wilcoxon_test));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
+	subMenu->addSeparator();
+
+	// ANOVA-related tests
 	action = new QAction(testName(Test::kruskal_wallis_test), actionGroup);
 	action->setData(static_cast<int>(Test::kruskal_wallis_test));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::friedman_test), actionGroup);
 	action->setData(static_cast<int>(Test::friedman_test));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
-	action = new QAction(testName(Test::log_rank_test), actionGroup);
-	action->setData(static_cast<int>(Test::log_rank_test));
-	menu->addAction(action);
+	subMenu->addSeparator();
 
+	// chi^2 tests
 	action = new QAction(testName(Test::chisq_independence), actionGroup);
 	action->setData(static_cast<int>(Test::chisq_independence));
-	menu->addAction(action);
+	subMenu->addAction(action);
 
 	action = new QAction(testName(Test::chisq_goodness_of_fit), actionGroup);
 	action->setData(static_cast<int>(Test::chisq_goodness_of_fit));
-	menu->addAction(action);
+	subMenu->addAction(action);
+
+	subMenu->addSeparator();
+
+	action = new QAction(testName(Test::log_rank_test), actionGroup);
+	action->setData(static_cast<int>(Test::log_rank_test));
+	subMenu->addAction(action);
+
+	menu->addMenu(subMenu);
 }

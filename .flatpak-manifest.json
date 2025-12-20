@@ -2,9 +2,9 @@
     "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "6.9",
+    "runtime-version": "6.10",
     "base": "io.qt.PySide.BaseApp",
-    "base-version": "6.9",
+    "base-version": "6.10",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
     "tags": ["nightly"],
@@ -66,8 +66,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.11.0.tar.xz",
-                    "sha256": "63f155142b77349e2bccaef148e754e7506ab1641e713b83af4f54a8f8b15369"
+                    "url": "https://poppler.freedesktop.org/poppler-25.12.0.tar.xz",
+                    "sha256": "c18b40eb36b1a0c5b86e29ca054bf0770304583da4f2cdd42fe86eca6a20de48"
                 }
             ],
             "modules": [
@@ -108,8 +108,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.08.3/src/analitza-25.08.3.tar.xz",
-			    "sha256": "1abe741c3f189b3d8cb8cf34b516890fd64cf21ba75d0f558b3711956b83e4d1"
+			    "url": "https://download.kde.org/stable/release-service/25.12.0/src/analitza-25.12.0.tar.xz",
+			    "sha256": "ed75ecc7e867d80fb6c23b40b57cd794be3b79b17d3a7bdd081a868a8aa01ebd"
 		    }
 	    ]
         },
@@ -119,8 +119,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.08.3/src/cantor-25.08.3.tar.xz",
-			    "sha256": "5635007fb9c50d82e88decf9264ff40fb9f4ee65b27474c5930b1b519eb24b72"
+			    "url": "https://download.kde.org/stable/release-service/25.12.0/src/cantor-25.12.0.tar.xz",
+			    "sha256": "072a3bbe238654404f17fef51c4e0aadb1b7862eed8eb8f9fed7d42628802d89"
 		    }
 	    ]
         },
@@ -229,7 +229,8 @@
             "buildsystem": "cmake-ninja",
             "config-opts": [
                 "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=6"
+                "-DQT_VERSION_MAJOR=6",
+                "-DCMAKE_CXX_FLAGS=-I/usr/include/QtGui/6.10.1/QtGui"
             ],
             "sources": [
                 {
@@ -310,13 +311,16 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.1.0/mdds-3.1.0.tar.xz",
-                    "sha256": "ca295f4c86968a7eb1f5d503ff7ae180e6605210cfb26d01658be42048c0924c"
+                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.2.0/mdds-3.2.0.tar.xz",
+                    "sha256": "16defab556c53f94b463460ea2a1faab96e58bad2a95d7981300d2956534abbb"
                 }
             ]
         },
         {
             "name": "ixion",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
@@ -327,11 +331,30 @@
         },
         {
             "name": "orcus",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
                     "url": "https://gitlab.com/orcus/orcus/-/archive/0.21.0/orcus-0.21.0.tar.bz2",
                     "sha256": "3555660197d6d38d720643f430804bb0f95a484c1fe6c28c00808ae67f978d15"
+                }
+            ]
+        },
+        {
+            "name": "QXlsx",
+            "buildsystem": "cmake-ninja",
+            "subdir": "QXlsx",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/QtExcel/QXlsx/archive/refs/tags/v1.5.0.tar.gz",
+                    "sha256": "4461bb0fc9b88b6a970520e8b32eb7d2fc391a1a5c326b139a0af836278cdb09"
+                },
+                {
+                    "type": "patch",
+                    "path": "admin/patches/QXlsx-1.5.0.patch"
                 }
             ]
         },
@@ -353,28 +376,7 @@
                     "type": "dir",
                     "path": "."
                 }
-            ],
-	    "modules": [
-                {
-		 "name": "llvm18",
-		    "buildsystem": "simple",
-		    "build-commands": [
-			    "cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS=clang -DLLVM_TARGETS_TO_BUILD=Native -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_DOCS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_BENCHMARKS=OFF -DLLVM_ENABLE_ASSERTIONS=OFF -DLLVM_BUILD_TOOLS=OFF -DLLVM_ENABLE_BINDINGS=OFF -DCLANG_BUILD_EXAMPLES=OFF -DLLVM_ENABLE_RTTI=OFF -DLLVM_ENABLE_EH=OFF",
-			    "ninja -C build libclang",
-			    "mkdir -p /app/lib /app/lib/clang/18/include",
-			    "cp -av build/lib/libclang.so.18.1.8 /app/lib",
-                            "ln -s /app/lib/libclang.so.18.1.8 /app/lib/libclang.so.18.1",
-                            "cp -r build/lib/clang/18/include/* /app/lib/clang/18/include/"
-		  ],
-		  "sources": [
-			    {
-			    "type": "archive",
-			    "url": "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/llvm-project-18.1.8.src.tar.xz",
-			    "sha256": "0b58557a6d32ceee97c8d533a59b9212d87e0fc4d2833924eb6c611247db2f2a"
-			}
-		]
-		}
-	    ]
+            ]
         }
     ]
 }

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : header including all 2D plot classes
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -23,7 +23,6 @@
 
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
@@ -32,6 +31,7 @@
 #include "backend/worksheet/plots/cartesian/XYHilbertTransformCurve.h"
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYLineSimplificationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 
 #endif

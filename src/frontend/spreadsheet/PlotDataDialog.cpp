@@ -660,8 +660,8 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 
 		XYAnalysisCurve* analysisCurve = nullptr;
 		switch (m_analysisAction) {
-		case XYAnalysisCurve::AnalysisAction::DataReduction:
-			analysisCurve = new XYDataReductionCurve(i18n("Reduction of '%1'", name));
+		case XYAnalysisCurve::AnalysisAction::LineSimplification:
+			analysisCurve = new XYLineSimplificationCurve(i18n("Simplification of '%1'", name));
 			break;
 		case XYAnalysisCurve::AnalysisAction::Differentiation:
 			analysisCurve = new XYDifferentiationCurve(i18n("Derivative of '%1'", name));
@@ -778,15 +778,21 @@ void PlotDataDialog::addMultiSourceColumnsPlot(const QVector<const AbstractColum
 	Plot* plot{nullptr};
 	if (m_plotType == Plot::PlotType::BoxPlot) {
 		auto* boxPlot = new BoxPlot(name);
+		boxPlot->setSuppressRetransform(true);
 		boxPlot->setDataColumns(columns);
+		boxPlot->setSuppressRetransform(false);
 		plot = boxPlot;
 	} else if (m_plotType == Plot::PlotType::BarPlot) {
 		auto* barPlot = new BarPlot(name);
+		barPlot->setSuppressRetransform(true);
 		barPlot->setDataColumns(columns);
+		barPlot->setSuppressRetransform(false);
 		plot = barPlot;
 	} else if (m_plotType == Plot::PlotType::LollipopPlot) {
 		auto* lollipopPlot = new LollipopPlot(name);
+		lollipopPlot->setSuppressRetransform(true);
 		lollipopPlot->setDataColumns(columns);
+		lollipopPlot->setSuppressRetransform(false);
 		plot = lollipopPlot;
 	}
 

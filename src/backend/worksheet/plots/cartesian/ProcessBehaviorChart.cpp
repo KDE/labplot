@@ -1722,23 +1722,23 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	Q_D(ProcessBehaviorChart);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	QColor themeColor = plot->themeColorPalette(index);
+	QColor color = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
-	d->dataCurve->line()->loadThemeConfig(group, themeColor);
-	d->dataCurve->symbol()->loadThemeConfig(group, themeColor);
+	d->dataCurve->line()->loadThemeConfig(group, color);
+	d->dataCurve->symbol()->loadThemeConfig(group, color);
 
-	themeColor = plot->themeColorPalette(index + 1);
+	color = plot->plotColor(index + 1);
 
-	d->centerCurve->line()->loadThemeConfig(group, themeColor);
+	d->centerCurve->line()->loadThemeConfig(group, color);
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
-	d->upperLimitCurve->line()->loadThemeConfig(group, themeColor);
+	d->upperLimitCurve->line()->loadThemeConfig(group, color);
 	d->upperLimitCurve->line()->setStyle(Qt::DashLine);
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
-	d->lowerLimitCurve->line()->loadThemeConfig(group, themeColor);
+	d->lowerLimitCurve->line()->loadThemeConfig(group, color);
 	d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 

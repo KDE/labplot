@@ -26,7 +26,7 @@ else()
 endif()
 
 find_library(PySide6_ABI3_LIBRARY
-    NAMES pyside6.abi3 libpyside6.abi3 libpyside6.abi3.so.6.9
+    NAMES pyside6.abi3 libpyside6.abi3 libpyside6.abi3.so.6.10 libpyside6.abi3.6.10 libpyside6.abi3.6.10.dylib libpyside6.abi3.so.6.9 libpyside6.abi3.6.9 libpyside6.abi3.6.9.dylib
     PATHS "${PYSIDE_PYTHONPATH}" /usr/lib64 /usr/lib /app/lib
 )
 

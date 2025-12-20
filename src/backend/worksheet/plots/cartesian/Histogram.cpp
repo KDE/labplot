@@ -1779,16 +1779,16 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	Q_D(Histogram);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const QColor color = plot->plotColor(index);
 
 	QPen p;
 	d->suppressRecalc = true;
 
-	d->line->loadThemeConfig(group, themeColor);
-	d->symbol->loadThemeConfig(group, themeColor);
-	d->value->loadThemeConfig(group, themeColor);
-	d->background->loadThemeConfig(group, themeColor);
-	d->errorBar->loadThemeConfig(group, themeColor);
+	d->line->loadThemeConfig(group, color);
+	d->symbol->loadThemeConfig(group, color);
+	d->value->loadThemeConfig(group, color);
+	d->background->loadThemeConfig(group, color);
+	d->errorBar->loadThemeConfig(group, color);
 
 	if (plot->theme() == QLatin1String("Tufte")) {
 		d->line->setHistogramLineType(Histogram::LineType::HalfBars);

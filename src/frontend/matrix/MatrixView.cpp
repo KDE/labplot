@@ -4,7 +4,7 @@
 	Description          : View class for Matrix
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -34,7 +34,6 @@
 #include <QIcon>
 #include <QInputDialog>
 #include <QKeyEvent>
-#include <QLabel>
 #include <QMenu>
 #include <QMimeData>
 #include <QMutex>
@@ -44,7 +43,6 @@
 #include <QScrollArea>
 #include <QStackedWidget>
 #include <QTableView>
-#include <QTextStream>
 #include <QThreadPool>
 
 #include <cfloat>
@@ -832,10 +830,7 @@ void MatrixView::updateImage() {
 	}
 
 	// update the image
-	auto* manager = ColorMapsManager::instance();
-	QPixmap pix;
-	manager->render(pix, QLatin1String("viridis100")); // dummy render to get the color vector initialized
-	const auto& colors = manager->colors();
+	const auto& colors = ColorMapsManager::instance()->colors(QStringLiteral("viridis100"));
 	auto* pool = QThreadPool::globalInstance();
 	int range = ceil(double(m_image.height()) / pool->maxThreadCount());
 	for (int i = 0; i < pool->maxThreadCount(); ++i) {

@@ -5,7 +5,7 @@ find_package(Python3 COMPONENTS Development Interpreter REQUIRED)
 find_package(PySide6 REQUIRED)
 find_package(Shiboken6 REQUIRED)
 
-include(ECMGeneratePythonBindings)
+include(GeneratePythonBindings)
 
 set(bindings_library "pylabplot")
 
@@ -162,12 +162,12 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_differentiationdata_wrapper.cpp
@@ -247,7 +247,7 @@ get_property(_defs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINI
 list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_UP_TO=]])
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
 
-ecm_generate_python_bindings(
+generate_python_bindings(
     PACKAGE_NAME ${bindings_library}
     VERSION ${PROJECT_VERSION}
     WRAPPED_HEADER ${wrapped_header}
