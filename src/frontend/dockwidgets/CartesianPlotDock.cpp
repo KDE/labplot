@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2024 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -18,12 +18,10 @@
 #include "frontend/PlotTemplateDialog.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/ThemeHandler.h"
+#include "frontend/colormaps/ColorMapsDialog.h"
 #include "frontend/widgets/BackgroundWidget.h"
 #include "frontend/widgets/LabelWidget.h"
 #include "frontend/widgets/LineWidget.h"
-#include "frontend/widgets/TimedLineEdit.h"
-
-#include "frontend/colormaps/ColorMapsDialog.h"
 #include "tools/ColorMapsManager.h"
 
 #include <KIconLoader>
@@ -41,7 +39,6 @@
 
 namespace {
 enum TwRangesColumn { Automatic = 0, Format, Min, Max, Scale };
-
 enum TwPlotRangesColumn { XRange, YRange, Default, Name };
 
 // https://stackoverflow.com/questions/5821802/qspinbox-inside-a-qscrollarea-how-to-prevent-spin-box-from-stealing-focus-when
@@ -177,6 +174,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	ui.leXBreakEnd->setValidator(new QDoubleValidator(ui.leXBreakEnd));
 	ui.leYBreakStart->setValidator(new QDoubleValidator(ui.leYBreakStart));
 	ui.leYBreakEnd->setValidator(new QDoubleValidator(ui.leYBreakEnd));
+	ui.leStackYOffset->setValidator(new QDoubleValidator(ui.leStackYOffset));
 
 	updateLocale();
 	retranslateUi();
@@ -226,6 +224,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.tbBorderTypeRight, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
 	connect(ui.tbBorderTypeBottom, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
 	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::borderCornerRadiusChanged);
+
+	// Stacking
+	connect(ui.leStackYOffset, &TimedLineEdit::textChanged, this, &CartesianPlotDock::stackYOffsetChanged);
 
 	// theme and template handlers
 	auto* frame = new QFrame(this);
@@ -430,6 +431,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	// SIGNALs/SLOTs
 	connect(m_plot, &CartesianPlot::plotColorModeChanged, this, &CartesianPlotDock::plotPlotColorModeChanged);
 	connect(m_plot, &CartesianPlot::plotColorMapChanged, this, &CartesianPlotDock::plotPlotColorMapChanged);
+	connect(m_plot, &CartesianPlot::themeChanged, m_themeHandler, &ThemeHandler::setCurrentTheme);
+
 	connect(m_plot, &CartesianPlot::rectChanged, this, &CartesianPlotDock::plotRectChanged);
 	connect(m_plot, &CartesianPlot::rangeTypeChanged, this, &CartesianPlotDock::plotRangeTypeChanged);
 	connect(m_plot, &CartesianPlot::rangeFirstValuesChanged, this, &CartesianPlotDock::plotRangeFirstValuesChanged);
@@ -457,7 +460,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::bottomPaddingChanged, this, &CartesianPlotDock::plotBottomPaddingChanged);
 	connect(m_plot, &CartesianPlot::symmetricPaddingChanged, this, &CartesianPlotDock::plotSymmetricPaddingChanged);
 
-	connect(m_plot, &CartesianPlot::themeChanged, m_themeHandler, &ThemeHandler::setCurrentTheme);
+	// stacking
+	connect(m_plot, &CartesianPlot::stackYOffsetChanged, this, &CartesianPlotDock::plotStackYOffsetChanged);
 }
 
 void CartesianPlotDock::activateTitleTab() {
@@ -1695,6 +1699,20 @@ void CartesianPlotDock::borderCornerRadiusChanged(double value) {
 		plot->plotArea()->setBorderCornerRadius(radius);
 }
 
+// "Stack"-tab
+void CartesianPlotDock::stackYOffsetChanged() {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	bool ok = false;
+	double offset = QLocale().toDouble(ui.leStackYOffset->text(), &ok);
+	if (!ok)
+		return;
+
+	qDebug()<<"offset im dock " << offset;
+	for (auto* plot : m_plotList)
+		plot->setStackYOffset(offset);
+}
+
 void CartesianPlotDock::exportPlotTemplate() {
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("PlotTemplate"));
@@ -1893,6 +1911,12 @@ void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(value, m_units), m_worksheetUnit));
 }
 
+// stacking
+void CartesianPlotDock::plotStackYOffsetChanged(double offset) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.leStackYOffset->setText(QLocale().toString(offset));
+}
+
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
@@ -1991,6 +2015,9 @@ void CartesianPlotDock::load() {
 	ui.tbBorderTypeTop->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderTop));
 	ui.tbBorderTypeBottom->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderBottom));
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(plotArea->borderCornerRadius(), m_units), m_worksheetUnit));
+
+	// Stacking
+	ui.leStackYOffset->setText(QLocale().toString(m_plot->stackYOffset()));
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config) {

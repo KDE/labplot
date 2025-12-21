@@ -1107,6 +1107,8 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::PlotColorMode, plotColo
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, QString, theme, theme)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, QString, plotColorMap, plotColorMap)
 
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, double, stackYOffset, stackYOffset)
+
 Line* CartesianPlot::cursorLine() const {
 	Q_D(const CartesianPlot);
 	return d->cursorLine;
@@ -1817,6 +1819,14 @@ void CartesianPlot::setPlotColorMap(QString colorMap) {
 		d->updatePlotColorPalette();
 		endMacro();
 	}
+}
+
+// stacking
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetStackYOffset, double, stackYOffset, updateStackYOffset)
+void CartesianPlot::setStackYOffset(double offset) {
+	Q_D(CartesianPlot);
+	if (offset != d->stackYOffset)
+		exec(new CartesianPlotSetStackYOffsetCmd(d, offset, ki18n("%1: set y-offset")));
 }
 
 void CartesianPlot::retransform() {
@@ -3856,6 +3866,21 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 	return QGraphicsItem::itemChange(change, value);
 }
 
+void CartesianPlotPrivate::updateCursor() {
+	update();
+}
+
+void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
+	m_selectionBandIsShown = show;
+}
+
+void CartesianPlotPrivate::updateStackYOffset() {
+	for (auto* plot : q->children<Plot>()) {
+		plot->recalc();
+		plot->retransform();
+	}
+}
+
 // ##############################################################################
 // ##################################  Events  ##################################
 // ##############################################################################
@@ -3988,14 +4013,6 @@ void CartesianPlotPrivate::mousePressCursorMode(int cursorNumber, QPointF logica
 		cursor1Pos = QPointF(logicalPos.x(), 0);
 
 	update();
-}
-
-void CartesianPlotPrivate::updateCursor() {
-	update();
-}
-
-void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
-	m_selectionBandIsShown = show;
 }
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
