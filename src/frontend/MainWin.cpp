@@ -282,8 +282,10 @@ void MainWin::initGUI(const QString& fileName) {
 		case LoadOnStart::LastProject: {
 			initDocks();
 			const QString& path = Settings::group(QStringLiteral("MainWin")).readEntry("LastOpenProject", "");
-			if (!path.isEmpty())
-				openProject(path);
+			if (!path.isEmpty()) {
+				if (!openProject(path))
+					newProject();
+			}
 			else
 				newProject();
 			break;
@@ -730,7 +732,10 @@ void MainWin::openProject() {
 	if (path.isEmpty()) // "Cancel" was clicked
 		return;
 
-	this->openProject(path);
+	if (!openProject(path)) {
+		newProject();
+		return;
+	}
 
 	// save new "last open directory"
 	int pos = path.lastIndexOf(QLatin1String("/"));
@@ -741,10 +746,10 @@ void MainWin::openProject() {
 	}
 }
 
-void MainWin::openProject(const QString& fileName) {
+bool MainWin::openProject(const QString& fileName) {
 	if (m_project && fileName == m_project->fileName()) {
 		KMessageBox::information(this, i18n("The project file %1 is already opened.", fileName), i18n("Open Project"));
-		return;
+		return false;
 	}
 
 	// check whether the file can be opened for reading at all before closing the current project
@@ -752,17 +757,17 @@ void MainWin::openProject(const QString& fileName) {
 	QFile file(fileName);
 	if (!file.exists()) {
 		KMessageBox::error(this, i18n("The project file %1 doesn't exist.", fileName), i18n("Open Project"));
-		return;
+		return false;
 	}
 
 	if (!file.open(QIODevice::ReadOnly)) {
 		KMessageBox::error(this, i18n("Couldn't read the project file %1.", fileName), i18n("Open Project"));
-		return;
+		return false;
 	} else
 		file.close();
 
 	if (!newProject(false))
-		return;
+		return false;
 
 	statusBar()->showMessage(i18n("Loading %1...", fileName));
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
@@ -811,8 +816,7 @@ void MainWin::openProject(const QString& fileName) {
 
 	if (!rc) {
 		closeProject();
-		newProject();
-		return;
+		return false;
 	}
 
 	m_project->undoStack()->clear();
@@ -858,13 +862,16 @@ void MainWin::openProject(const QString& fileName) {
 
 	if (m_autoSaveActive)
 		m_autoSaveTimer.start();
+
+	return true;
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
-	if (url.isLocalFile()) // fix for Windows
-		this->openProject(url.toLocalFile());
-	else
-		this->openProject(url.path());
+	QString path = url.isLocalFile() ?  url.toLocalFile() : url.path(); // fix for Windows
+	if (!openProject(path)) {
+		newProject();
+		return;
+	}
 }
 
 /*!
