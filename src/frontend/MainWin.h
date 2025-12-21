@@ -152,7 +152,7 @@ private Q_SLOTS:
 
 	bool newProject(bool createInitialContent = true);
 	void openProject();
-	void openProject(const QString&);
+	bool openProject(const QString&);
 	void openRecentProject(const QUrl&);
 	bool closeProject();
 	bool saveProject();

@@ -961,8 +961,8 @@ void CartesianPlotDock::plotColorModeChanged(int index) {
 
 	if (visible) {
 		const auto& name = m_plot->plotColorMap();
+		ui.lColorMapName->setText(name);
 		ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
-		ui.lColorMapPreview->setToolTip(name);
 	}
 
 	CONDITIONAL_LOCK_RETURN;
@@ -979,8 +979,8 @@ void CartesianPlotDock::selectColorMap() {
 
 void CartesianPlotDock::plotColorMapChanged(const QString& name) {
 	if (m_plot->plotColorMode() == CartesianPlot::PlotColorMode::ColorMap) {
+		ui.lColorMapName->setText(name);
 		ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
-		ui.lColorMapPreview->setToolTip(name);
 	}
 
 	CONDITIONAL_LOCK_RETURN;
@@ -1732,8 +1732,8 @@ void CartesianPlotDock::plotPlotColorModeChanged(CartesianPlot::PlotColorMode mo
 }
 void CartesianPlotDock::plotPlotColorMapChanged(const QString& name) {
 	CONDITIONAL_LOCK_RETURN;
+	ui.lColorMapName->setText(name);
 	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
-	ui.lColorMapPreview->setToolTip(name);
 }
 void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
 	CONDITIONAL_LOCK_RETURN;
