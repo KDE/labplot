@@ -9468,7 +9468,6 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1790
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1791
 #, fuzzy, kde-format
-#| msgid "%1: set axis color"
 msgid "%1: set plot color mode"
 msgstr "%1：设置坐标轴颜色"
 
@@ -9494,7 +9493,6 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1815
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
 #, fuzzy, kde-format
-#| msgid "%1: set axis color"
 msgid "%1: set plot color map"
 msgstr "%1：设置坐标轴颜色"
 
@@ -14191,7 +14189,6 @@ msgstr ""
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:925
 #, fuzzy, kde-format
-#| msgid "Colormaps:"
 msgid "Color Map"
 msgstr "色阶："
 
@@ -21931,7 +21928,6 @@ msgstr "宽度："
 #. i18n: ectx: property (text), widget (QLabel, lPlotColorMode)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:48
 #, fuzzy, kde-format
-#| msgid "Font Color:"
 msgid "Plot Colors:"
 msgstr "字体颜色："
 
