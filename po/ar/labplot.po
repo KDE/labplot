@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-19 00:40+0000\n"
-"PO-Revision-Date: 2025-12-08 16:54+0400\n"
+"PO-Revision-Date: 2025-12-20 11:18+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -9643,10 +9643,9 @@ msgstr "%1: فعّل المؤشر 1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1790
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1791
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color mode"
-msgstr "%1: استخدم لون الرسم البياني"
+msgstr "%1: اضبط وضع لون الرسم البياني"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1802
 #: src/backend/worksheet/Worksheet.cpp:854
@@ -9669,10 +9668,9 @@ msgstr "%1: اضبط السمة"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1815
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color map"
-msgstr "%1: استخدم لون الرسم البياني"
+msgstr "%1: اضبط خريطة ألوان الرسم البياني"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2002
 #, kde-format
@@ -14434,10 +14432,9 @@ msgid "Sloped"
 msgstr "مائل"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:925
-#, fuzzy, kde-format
-#| msgid "Color Map:"
+#, kde-format
 msgid "Color Map"
-msgstr "خريطة الألوان:"
+msgstr "خريطة الألوان"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:929
 #, kde-format
@@ -14462,6 +14459,9 @@ msgid ""
 "the current theme apply to plot area</li><li>Color Map - colors are taken "
 "from the specified color map</li></ul>"
 msgstr ""
+"يحدد الألوان التي ستُستخدم في الرسوم البيانية:<ul><li>السمة - تُؤخذ الألوان من "
+"السمة الحالية وتُطبق على منطقة الرسم البياني</li><li>خريطة الألوان - تُؤخذ "
+"الألوان من خريطة الألوان المحددة</li></ul>"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
 #, kde-format
@@ -22356,10 +22356,9 @@ msgstr "العرض:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotColorMode)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:48
-#, fuzzy, kde-format
-#| msgid "Plot's Color:"
+#, kde-format
 msgid "Plot Colors:"
-msgstr "لون الرسم:"
+msgstr "ألوان الرسم:"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twPlotRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:68
