@@ -2413,7 +2413,8 @@ bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<do
 	case Dimension::Y:
 		bool rc =
 			minMax(yColumn(), xColumn(), d->errorBar->yErrorType(), d->errorBar->yPlusColumn(), d->errorBar->yMinusColumn(), indexRange, r, includeErrorBars);
-		r.setEnd(r.end() + plot()->curveChildIndex(this) * plot()->stackYOffset());
+		if (auto* p = plot())
+			r.setEnd(r.end() + p->curveChildIndex(this) * p->stackYOffset());
 		return rc;
 	}
 	return false;
