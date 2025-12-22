@@ -184,7 +184,7 @@ void CartesianPlot::init(bool loading) {
 
 	d->plotColorMode = (PlotColorMode)group.readEntry(QStringLiteral("PlotColorMode"), (int)PlotColorMode::Theme);
 	d->theme = group.readEntry(QStringLiteral("Theme"), QString());
-	d->plotColorMap = group.readEntry(QStringLiteral("ColorMap"), QStringLiteral("berlin10"));
+	d->plotColorMap = group.readEntry(QStringLiteral("ColorMap"), QStringLiteral("batlowS10"));
 
 	// initialize the color palette with default colors
 	d->updatePlotColorPalette();
