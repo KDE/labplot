@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-19 00:40+0000\n"
+"POT-Creation-Date: 2025-12-22 00:38+0000\n"
 "PO-Revision-Date: 2025-12-18 06:40-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -1913,7 +1913,7 @@ msgid "Unknown"
 msgstr "Desconhecido"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:222 src/frontend/MainWin.cpp:1215
+#: src/frontend/ActionsManager.cpp:222 src/frontend/MainWin.cpp:1222
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -6444,7 +6444,7 @@ msgstr "Circular"
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:149
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:405
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:112
-#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:61
+#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:75
 #, kde-format
 msgid "Auto"
 msgstr "Automático"
@@ -8235,7 +8235,7 @@ msgstr "Residual"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:885
-#: src/frontend/ActionsManager.cpp:228 src/frontend/MainWin.cpp:1233
+#: src/frontend/ActionsManager.cpp:228 src/frontend/MainWin.cpp:1240
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -8675,7 +8675,7 @@ msgstr "Orientação"
 #: src/frontend/ui/dockwidgets/axisdock.ui:492
 #: src/frontend/ui/dockwidgets/axisdock.ui:632
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:674
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1510
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1517
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:237
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:227
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:298
@@ -9111,7 +9111,7 @@ msgstr "nenhuma informação disponível"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:143
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5226
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:948
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:623
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:227
 #, kde-format
@@ -11422,7 +11422,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "&Abrir exemplo"
 
-#: src/frontend/ActionsManager.cpp:206 src/frontend/MainWin.cpp:1171
+#: src/frontend/ActionsManager.cpp:206 src/frontend/MainWin.cpp:1178
 #, kde-format
 msgid "Workbook"
 msgstr "Livro de trabalho"
@@ -11434,7 +11434,7 @@ msgstr ""
 "Cria um novo livro de trabalho para a coleção de planilhas, matrizes e "
 "gráficos"
 
-#: src/frontend/ActionsManager.cpp:211 src/frontend/MainWin.cpp:1179
+#: src/frontend/ActionsManager.cpp:211 src/frontend/MainWin.cpp:1186
 #, kde-format
 msgid "Data Extractor"
 msgstr "Extrator de dados"
@@ -11449,7 +11449,7 @@ msgstr "Cria um extrator de dados para obter dados de uma imagem"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
-#: src/frontend/MainWin.cpp:1187 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1194 src/frontend/SettingsDialog.cpp:66
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:125
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -11477,7 +11477,7 @@ msgstr "Cria uma nova folha de trablaho para plotagem de dados"
 msgid "Creates a new %1 script"
 msgstr "Criar um novo script %1"
 
-#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1241
+#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1248
 #, kde-format
 msgid "Note"
 msgstr "Nota"
@@ -11487,7 +11487,7 @@ msgstr "Nota"
 msgid "Creates a new note for arbitrary text"
 msgstr "Cria uma nova nota para texto arbitrário"
 
-#: src/frontend/ActionsManager.cpp:250 src/frontend/MainWin.cpp:1163
+#: src/frontend/ActionsManager.cpp:250 src/frontend/MainWin.cpp:1170
 #, kde-format
 msgid "Folder"
 msgstr "Pasta"
@@ -11792,8 +11792,8 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Selecionar a região em Y e ampliar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1574
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1499
+#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1581
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1506
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
 msgid "Cursor"
@@ -12624,8 +12624,8 @@ msgstr "Adicionar novo contêiner de dados ao projeto"
 #: src/frontend/ui/dockwidgets/axisdock.ui:65
 #: src/frontend/ui/dockwidgets/axisdock.ui:620
 #: src/frontend/ui/dockwidgets/axisdock.ui:1276
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:742
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:904
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1076
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1238
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:42
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:183
 #: src/frontend/ui/dockwidgets/valuewidget.ui:88
@@ -13577,7 +13577,7 @@ msgid "Open LabPlot Project"
 msgstr "Abrir projeto do LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:706
+#: src/frontend/MainWin.cpp:708
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Projetos do LabPlot (%1)"
@@ -13779,7 +13779,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:1999
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "Warning"
 msgstr "Aviso"
@@ -14512,7 +14512,7 @@ msgstr "O intervalo de plotagem %1 é usado pelo elemento \"%2\". "
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1367
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:966
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:641
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:772
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:344
 #, kde-format
@@ -14522,7 +14522,7 @@ msgstr "Horizontal:"
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1368
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1267
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:942
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:727
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:429
 #, kde-format
@@ -14532,7 +14532,7 @@ msgstr "Vertical:"
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1370
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1202
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:877
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:720
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:415
 #, kde-format
@@ -14542,7 +14542,7 @@ msgstr "Esquerda:"
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1371
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1209
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:884
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:669
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:408
 #, kde-format
@@ -16032,7 +16032,7 @@ msgstr ""
 "Não foi possível abrir o arquivo de coleções de exemplos %1. Verifique sua "
 "instalação."
 
-#: src/frontend/GuiObserver.cpp:185 src/frontend/MainWin.cpp:613
+#: src/frontend/GuiObserver.cpp:185 src/frontend/MainWin.cpp:615
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -16950,108 +16950,108 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Bem-vindo ao LabPlot %1"
 
-#: src/frontend/MainWin.cpp:475
+#: src/frontend/MainWin.cpp:477
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "O projeto atual \"%1\" foi modificado. Deseja salvá-lo?"
 
-#: src/frontend/MainWin.cpp:476
+#: src/frontend/MainWin.cpp:478
 #, kde-format
 msgid "Save Project"
 msgstr "Salvar projeto"
 
-#: src/frontend/MainWin.cpp:574
+#: src/frontend/MainWin.cpp:576
 #, kde-format
 msgid "%1: created"
 msgstr "%1: criado"
 
-#: src/frontend/MainWin.cpp:600
+#: src/frontend/MainWin.cpp:602
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Explorador de projetos"
 
-#: src/frontend/MainWin.cpp:625
+#: src/frontend/MainWin.cpp:627
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Visualização da folha de trabalho"
 
-#: src/frontend/MainWin.cpp:634
+#: src/frontend/MainWin.cpp:636
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Conteúdo"
 
-#: src/frontend/MainWin.cpp:711
+#: src/frontend/MainWin.cpp:713
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Projetos Origin (%1)"
 
-#: src/frontend/MainWin.cpp:717
+#: src/frontend/MainWin.cpp:719
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Projetos Cantor (*.cws)"
 
-#: src/frontend/MainWin.cpp:718
+#: src/frontend/MainWin.cpp:720
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Blocos de notas Jupyter (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:725
+#: src/frontend/MainWin.cpp:727
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Todos os arquivos suportados (%1)"
 
-#: src/frontend/MainWin.cpp:729
+#: src/frontend/MainWin.cpp:731
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Abrir projeto"
 
-#: src/frontend/MainWin.cpp:746
+#: src/frontend/MainWin.cpp:751
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "O arquivo de projeto %1 já está aberto."
 
-#: src/frontend/MainWin.cpp:746 src/frontend/MainWin.cpp:754
-#: src/frontend/MainWin.cpp:759
+#: src/frontend/MainWin.cpp:751 src/frontend/MainWin.cpp:759
+#: src/frontend/MainWin.cpp:764
 #, kde-format
 msgid "Open Project"
 msgstr "Abrir projeto"
 
-#: src/frontend/MainWin.cpp:754
+#: src/frontend/MainWin.cpp:759
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "O arquivo de projeto %1 não existe."
 
-#: src/frontend/MainWin.cpp:759
+#: src/frontend/MainWin.cpp:764
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Não foi possível ler o arquivo de projeto %1."
 
-#: src/frontend/MainWin.cpp:767
+#: src/frontend/MainWin.cpp:772
 #, kde-format
 msgid "Loading %1..."
 msgstr "Carregando %1..."
 
-#: src/frontend/MainWin.cpp:819
+#: src/frontend/MainWin.cpp:823
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: aberto"
 
-#: src/frontend/MainWin.cpp:854
+#: src/frontend/MainWin.cpp:858
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projeto aberto com sucesso (em %1 segundos)."
 
-#: src/frontend/MainWin.cpp:947
+#: src/frontend/MainWin.cpp:954
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Salvar projeto como"
 
-#: src/frontend/MainWin.cpp:949
+#: src/frontend/MainWin.cpp:956
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -17060,54 +17060,54 @@ msgstr ""
 "Projetos LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:976
+#: src/frontend/MainWin.cpp:983
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Não foi possível abrir o arquivo temporário para gravação."
 
-#: src/frontend/MainWin.cpp:1055
+#: src/frontend/MainWin.cpp:1062
 #, kde-format
 msgid "Project saved"
 msgstr "Projeto salvo"
 
-#: src/frontend/MainWin.cpp:1070
+#: src/frontend/MainWin.cpp:1077
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Não foi possível salvar o arquivo '%1'."
 
-#: src/frontend/MainWin.cpp:1074
+#: src/frontend/MainWin.cpp:1081
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Não foi possível abrir o arquivo '%1' para escrita."
 
-#: src/frontend/MainWin.cpp:1123
+#: src/frontend/MainWin.cpp:1130
 #, kde-format
 msgid "Changed"
 msgstr "Alterado"
 
-#: src/frontend/MainWin.cpp:1138 src/frontend/MainWin.cpp:1150
+#: src/frontend/MainWin.cpp:1145 src/frontend/MainWin.cpp:1157
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Preparando a impressão de %1"
 
-#: src/frontend/MainWin.cpp:1140 src/frontend/MainWin.cpp:1152
+#: src/frontend/MainWin.cpp:1147 src/frontend/MainWin.cpp:1159
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 impresso(s)"
 
-#: src/frontend/MainWin.cpp:1207
+#: src/frontend/MainWin.cpp:1214
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3792
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/MainWin.cpp:1895
+#: src/frontend/MainWin.cpp:1902
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Ferramenta Kaggle CLI não encontrada"
 
-#: src/frontend/MainWin.cpp:1896
+#: src/frontend/MainWin.cpp:1903
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -17116,27 +17116,27 @@ msgstr ""
 "Forneça o caminho para a ferramenta Kaggle CLI nas configurações do "
 "aplicativo e tente novamente."
 
-#: src/frontend/MainWin.cpp:1962
+#: src/frontend/MainWin.cpp:1969
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportado(s)"
 
-#: src/frontend/MainWin.cpp:1969
+#: src/frontend/MainWin.cpp:1976
 #, kde-format
 msgid "FITS files saved"
 msgstr "Arquivos FITS salvos"
 
-#: src/frontend/MainWin.cpp:1981
+#: src/frontend/MainWin.cpp:1988
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Cliente%1 MQTT"
 
-#: src/frontend/MainWin.cpp:1999
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Já existe um MQTTClient com este host!"
 
-#: src/frontend/MainWin.cpp:2003
+#: src/frontend/MainWin.cpp:2010
 #, kde-format
 msgid "Live data source%1"
 msgstr "Fonte de dados ao vivo%1"
@@ -18678,7 +18678,7 @@ msgstr "&Formatar"
 #. i18n: ectx: attribute (title), widget (QWidget, tabBackground)
 #: src/frontend/spreadsheet/FormattingHeatmapDialog.cpp:57
 #: src/frontend/ui/dockwidgets/axisdock.ui:1436
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1468
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1475
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:486
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:497
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:220
@@ -20221,8 +20221,8 @@ msgstr "Barras de erros"
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:125
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:135
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:145
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:752
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:877
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1086
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1211
 #: src/frontend/ui/dockwidgets/linewidget.ui:78
 #: src/frontend/ui/symbolwidget.ui:45 src/frontend/ui/symbolwidget.ui:184
 #: src/frontend/ui/symbolwidget.ui:240 src/frontend/worksheet/GridDialog.cpp:41
@@ -20371,15 +20371,15 @@ msgstr "Tamanho:"
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:859
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:881
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:906
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:982
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1016
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1071
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1093
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1115
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1173
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1232
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1254
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1418
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:657
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:691
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:746
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:768
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:790
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:848
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:907
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:929
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:113
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:178
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:238
@@ -20683,7 +20683,7 @@ msgstr "Caminho relativo"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1502
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:59
 #: src/frontend/ui/dockwidgets/barplotdock.ui:111
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1281
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1288
 #: src/frontend/ui/dockwidgets/columndock.ui:240
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:89
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:225
@@ -21819,7 +21819,7 @@ msgstr "Fator de escala:"
 #. i18n: ectx: property (text), widget (QLabel, lAutoScale)
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
 #: src/frontend/ui/dockwidgets/axisdock.ui:383
-#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:101
+#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:85
 #, kde-format
 msgid "Range:"
 msgstr "Intervalo:"
@@ -22111,8 +22111,8 @@ msgstr "Formato:"
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesOpacity)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1400
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:184
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:759
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:894
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1093
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1228
 #: src/frontend/ui/dockwidgets/imagedock.ui:465
 #: src/frontend/ui/dockwidgets/linewidget.ui:108
 #: src/frontend/ui/dockwidgets/valuewidget.ui:153
@@ -22170,8 +22170,8 @@ msgstr "Maior grade"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsEnabled)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:42
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:780
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:781
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:788
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1115
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1122
 #: src/frontend/ui/dockwidgets/histogramdock.ui:493
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:336
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:641
@@ -22269,7 +22269,7 @@ msgstr "Barras"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorder)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:258
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:439
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1402
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1409
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:599
 #: src/frontend/ui/dockwidgets/imagedock.ui:559
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:673
@@ -22425,7 +22425,7 @@ msgstr "Gráfico do tapete"
 #. i18n: ectx: property (text), widget (QLabel, lRugWidth)
 #. i18n: ectx: property (text), widget (QLabel, lWidth)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:823
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:959
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:634
 #: src/frontend/ui/dockwidgets/histogramdock.ui:500
 #: src/frontend/ui/dockwidgets/imagedock.ui:73
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:404
@@ -22502,7 +22502,7 @@ msgstr "..."
 
 #. i18n: ectx: property (text), widget (QLabel, lColorMap)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:248
-#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:38
+#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:171
 #, kde-format
 msgid "Color Map:"
 msgstr "Mapa de cores:"
@@ -22593,75 +22593,9 @@ msgstr "Adicionar um novo intervalo em y"
 msgid "remove the current selected y range"
 msgstr "remover o intervalo em y selecionado atualmente"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tabScales)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:616
-#, kde-format
-msgid "Range Breaks"
-msgstr "Quebras de intervalo"
-
-#. i18n: ectx: property (text), widget (QLabel, lTo)
-#. i18n: ectx: property (text), widget (QLabel, lToDateTime)
-#. i18n: ectx: property (text), widget (QLabel, lYBreakEnd)
-#. i18n: ectx: property (text), widget (QLabel, lXBreakEnd)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:622
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:658
-#: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:27
-#: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:144
-#, kde-format
-msgid "To:"
-msgstr "Para:"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, bAddXBreak)
-#. i18n: ectx: property (toolTip), widget (QPushButton, bAddYBreak)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:712
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:825
-#, kde-format
-msgid "Add new scale breaking"
-msgstr "Adiciona uma nova quebra na escala"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveXBreak)
-#. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveYBreak)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:722
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:835
-#, kde-format
-msgid "Remove scale breaking"
-msgstr "Remove a quebra na escala"
-
-#. i18n: ectx: property (toolTip), widget (QComboBox, cbXBreak)
-#. i18n: ectx: property (toolTip), widget (QComboBox, cbYBreak)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:732
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:845
-#, kde-format
-msgid "Current scale breaking"
-msgstr "Quebra da escala atual"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:774
-#, kde-format
-msgid "Y-Range"
-msgstr "Intervalo em Y"
-
-#. i18n: ectx: property (text), widget (QLabel, lFrom)
-#. i18n: ectx: property (text), widget (QLabel, lFromDateTime)
-#. i18n: ectx: property (text), widget (QLabel, lXBreakStart)
-#. i18n: ectx: property (text), widget (QLabel, lYBreakStart)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:855
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:911
-#: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:60
-#: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:107
-#, kde-format
-msgid "From:"
-msgstr "De:"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:867
-#, kde-format
-msgid "X-Range"
-msgstr "Intervalo em X"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:953
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:628
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:623
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:267
 #: src/frontend/worksheet/WorksheetView.cpp:471
@@ -22687,15 +22621,15 @@ msgstr "Layout"
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbLayoutHorizontalSpacing)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbLayoutTopMargin)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbLayoutVerticalSpacing)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:985
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1019
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1074
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1096
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1118
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1176
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1235
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1257
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1421
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:660
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:694
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:749
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:771
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:793
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:851
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:910
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:932
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1428
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:116
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:181
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:393
@@ -22724,7 +22658,7 @@ msgstr " cm"
 
 #. i18n: ectx: property (text), widget (QLabel, lGeometry)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1000
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:675
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:215
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:58
 #: src/frontend/ui/labelwidget.ui:150
@@ -22733,20 +22667,20 @@ msgid "Geometry"
 msgstr "Geometria"
 
 #. i18n: ectx: property (text), widget (QLabel, lPadding)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1034
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:709
 #, kde-format
 msgid "Padding"
 msgstr "Preenchimento"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1048
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:723
 #, kde-format
 msgid "Symmetric:"
 msgstr "Simétrico:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVerticalDown)
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1055
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:730
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:843
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:351
 #, kde-format
@@ -22755,7 +22689,7 @@ msgstr "Inferior:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
 #. i18n: ectx: property (text), widget (QLabel, lHeight)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1157
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:832
 #: src/frontend/ui/dockwidgets/imagedock.ui:525
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:33
 #, kde-format
@@ -22764,21 +22698,87 @@ msgstr "Altura:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontalRight)
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1216
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:891
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:779
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:370
 #, kde-format
 msgid "Right:"
 msgstr "Direita:"
 
+#. i18n: ectx: attribute (title), widget (QWidget, tabScales)
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:950
+#, kde-format
+msgid "Range Breaks"
+msgstr "Quebras de intervalo"
+
+#. i18n: ectx: property (text), widget (QLabel, lTo)
+#. i18n: ectx: property (text), widget (QLabel, lToDateTime)
+#. i18n: ectx: property (text), widget (QLabel, lYBreakEnd)
+#. i18n: ectx: property (text), widget (QLabel, lXBreakEnd)
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:956
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:992
+#: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:27
+#: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:144
+#, kde-format
+msgid "To:"
+msgstr "Para:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, bAddXBreak)
+#. i18n: ectx: property (toolTip), widget (QPushButton, bAddYBreak)
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1046
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1159
+#, kde-format
+msgid "Add new scale breaking"
+msgstr "Adiciona uma nova quebra na escala"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveXBreak)
+#. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveYBreak)
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1056
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1169
+#, kde-format
+msgid "Remove scale breaking"
+msgstr "Remove a quebra na escala"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, cbXBreak)
+#. i18n: ectx: property (toolTip), widget (QComboBox, cbYBreak)
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1066
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1179
+#, kde-format
+msgid "Current scale breaking"
+msgstr "Quebra da escala atual"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1108
+#, kde-format
+msgid "Y-Range"
+msgstr "Intervalo em Y"
+
+#. i18n: ectx: property (text), widget (QLabel, lFrom)
+#. i18n: ectx: property (text), widget (QLabel, lFromDateTime)
+#. i18n: ectx: property (text), widget (QLabel, lXBreakStart)
+#. i18n: ectx: property (text), widget (QLabel, lYBreakStart)
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1189
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1245
+#: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:60
+#: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:107
+#, kde-format
+msgid "From:"
+msgstr "De:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1201
+#, kde-format
+msgid "X-Range"
+msgstr "Intervalo em X"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1275
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1282
 #, kde-format
 msgid "Area"
 msgstr "Área"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1475
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1482
 #, kde-format
 msgid "Corner Radius:"
 msgstr "Raio do canto:"
@@ -22937,7 +22937,7 @@ msgstr "Tamanho do extremo:"
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:267
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:340
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:359
-#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:94
+#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:24
 #, kde-format
 msgid "Minimum:"
 msgstr "Mínimo:"
@@ -22982,7 +22982,7 @@ msgstr "Método:"
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:229
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:302
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:321
-#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:17
+#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:145
 #, kde-format
 msgid "Maximum:"
 msgstr "Máximo:"
@@ -24813,7 +24813,7 @@ msgstr "Escala relativa"
 #. i18n: ectx: property (text), widget (QLabel, lLevelsTop)
 #. i18n: ectx: property (text), widget (QLabel, lLevels)
 #: src/frontend/ui/plotsurfacestylewidget.ui:277
-#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:87
+#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:164
 #, kde-format
 msgid "Levels"
 msgstr "Níveis"
@@ -25370,13 +25370,13 @@ msgid "Flatten selected columns relative to:"
 msgstr "Achatar colunas selecionadas em relação a:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHightlight)
-#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:31
+#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:17
 #, kde-format
 msgid "Highlight:"
 msgstr "Realce:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColors)
-#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:117
+#: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:52
 #, kde-format
 msgid "Colors"
 msgstr "Cores"
