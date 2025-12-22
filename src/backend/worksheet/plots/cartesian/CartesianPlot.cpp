@@ -3875,9 +3875,26 @@ void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
 }
 
 void CartesianPlotPrivate::updateStackYOffset() {
-	for (auto* plot : q->children<Plot>()) {
+	// recalculate internal data structures in the plots to take the new offset into account
+	for (auto* plot : q->children<Plot>())
 		plot->recalc();
-		plot->retransform();
+
+	// trigger auto-scaling for all coordinate systems for Y, if enabled
+	q->setRangeDirty(Dimension::Y, -1, true);
+	bool rangeChanged = false;
+	for (int i = 0; i < q->coordinateSystemCount(); ++i) {
+		auto* cs = q->coordinateSystem(i);
+		const int yIndex = cs->index(Dimension::Y);
+		if (q->autoScale(Dimension::Y, yIndex))
+			rangeChanged |= q->scaleAuto(Dimension::Y, yIndex);
+	}
+
+	// if ranges changed, retransform whole container, otherwise just retransform plots
+	if (rangeChanged)
+		q->WorksheetElementContainer::retransform();
+	else {
+		for (auto* plot : q->children<Plot>())
+			plot->retransform();
 	}
 }
 
@@ -4856,6 +4873,11 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 
+
+	writer->writeStartElement(QStringLiteral("stack"));
+	writer->writeAttribute(QStringLiteral("yOffset"), QString::number(d->stackYOffset));
+	writer->writeEndElement();
+
 	// serialize all children (plot area, title text label, axes and curves)
 	const auto& elements = children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
 	for (auto* elem : elements)
@@ -5230,6 +5252,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
 
 			d->yRangeBreaks.list << b;
+		} else if (!preview && reader->name() == QLatin1String("stack")) {
+			attribs = reader->attributes();
+			READ_DOUBLE_VALUE("yOffset", stackYOffset);
 		} else if (!preview && reader->name() == QLatin1String("textLabel")) {
 			if (!titleLabelRead) {
 				m_title->setIsLoading(true);
