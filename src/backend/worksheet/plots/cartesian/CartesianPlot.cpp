@@ -4873,7 +4873,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 
-
+	// stack
 	writer->writeStartElement(QStringLiteral("stack"));
 	writer->writeAttribute(QStringLiteral("yOffset"), QString::number(d->stackYOffset));
 	writer->writeEndElement();
