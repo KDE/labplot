@@ -1,9 +1,10 @@
 /*
 	File                 : nsl_baseline.h
 	Project              : LabPlot
-	Description          : NSL baseline detection and subtraction methods
+	Description          : NSL baseline detection and correction methods
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -11,6 +12,18 @@
 #define NSL_BASELINE_H
 
 #include <cstdlib>
+
+#define NSL_BASELINE_SUBTRACTION_METHOD_COUNT 7
+typedef enum {
+	nsl_diff_baseline_correction_arpls,
+	nsl_diff_baseline_correction_minimum,
+	nsl_diff_baseline_correction_maximum,
+	nsl_diff_baseline_correction_mean,
+	nsl_diff_baseline_correction_median,
+	nsl_diff_baseline_correction_endpoints,
+	nsl_diff_baseline_correction_linear_regression
+} nsl_baseline_correction_method;
+extern const char* nsl_baseline_correction_method_name[];
 
 /* remove minimum base line from data */
 void nsl_baseline_remove_minimum(double* data, size_t n);
