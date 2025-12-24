@@ -9,8 +9,8 @@
 */
 
 #include "nsl_baseline.h"
-#include "nsl_stats.h"
 #include "nsl_common.h"
+#include "nsl_stats.h"
 
 #include <QtGlobal>
 
@@ -42,7 +42,8 @@
 #include <cstring> // memcpy
 #endif
 
-const char* nsl_baseline_subtraction_method_name[] = {"arPLS", i18n("Minimum"), i18n("Maximum"), i18n("Mean"), i18n("Median"), i18n("End Points"), i18n("Linear Regression")};
+const char* nsl_baseline_subtraction_method_name[] =
+	{"arPLS", i18n("Minimum"), i18n("Maximum"), i18n("Mean"), i18n("Median"), i18n("End Points"), i18n("Linear Regression")};
 
 void nsl_baseline_remove_minimum(double* data, const size_t n) {
 	const double min = nsl_stats_minimum(data, n, nullptr);

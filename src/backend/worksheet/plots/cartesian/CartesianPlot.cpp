@@ -5338,15 +5338,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete curve;
 				return false;
 			}
-        } else if (reader->name() == QLatin1String("xyBaselineCorrectionCurve")) {
-            auto* curve = new XYBaselineCorrectionCurve(QString());
-            curve->setIsLoading(true);
-            if (curve->load(reader, preview))
-                addChildFast(curve);
-            else {
-                delete curve;
-                return false;
-            }
+		} else if (reader->name() == QLatin1String("xyBaselineCorrectionCurve")) {
+			auto* curve = new XYBaselineCorrectionCurve(QString());
+			curve->setIsLoading(true);
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
+				delete curve;
+				return false;
+			}
 		} else if (reader->name() == QLatin1String("xyIntegrationCurve")) {
 			auto* curve = new XYIntegrationCurve(QString());
 			curve->setIsLoading(true);

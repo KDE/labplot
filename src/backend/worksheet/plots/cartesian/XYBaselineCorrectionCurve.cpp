@@ -182,8 +182,6 @@ void XYBaselineCorrectionCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("arPLSIterations"), QString::number(d->baselineData.arPLSIterations));
 	writer->writeEndElement(); // baselineData
 
-	qDebug()<<"in write " << d->baselineData.arPLSTerminationRatio;
-
 	writer->writeStartElement(QStringLiteral("baselineResult"));
 	writer->writeAttribute(QStringLiteral("available"), QString::number(d->baselineResult.available));
 	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->baselineResult.valid));
@@ -202,7 +200,7 @@ bool XYBaselineCorrectionCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYBaselineCorrectionCurve);
 
 	QXmlStreamAttributes attribs;
-    QString str;
+	QString str;
 
 	while (!reader->atEnd()) {
 		reader->readNext();

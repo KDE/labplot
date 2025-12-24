@@ -25,7 +25,8 @@ class XYBaselineCorrectionCurve : public XYAnalysisCurve {
 
 public:
 	struct BaselineData {
-		BaselineData() { }
+		BaselineData() {
+		}
 
 		nsl_baseline_correction_method method{nsl_diff_baseline_correction_arpls};
 		bool autoRange{true};
