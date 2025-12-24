@@ -16,19 +16,10 @@
 #include <QStatusBar>
 
 /*!
-  \class XYLineSimplificationCurveDock
- \brief  Provides a widget for editing the properties of the XYLineSimplificationCurves
-		(2D-curves defined by an line simplification) currently selected in
-		the project explorer.
-
-  If more than one curves are set, the properties of the first column are shown.
-  The changes of the properties are applied to all curves.
-  The exclusions are the name, the comment and the datasets (columns) of
-  the curves  - these properties can only be changed if there is only one single curve.
-
-  \ingroup frontend
+	\class XYLineSimplificationCurveDock
+	\brief  Provides a widget for editing the properties of \c XYLineSimplificationCurve.
+	\ingroup frontend
 */
-
 XYLineSimplificationCurveDock::XYLineSimplificationCurveDock(QWidget* parent)
 	: XYAnalysisCurveDock(parent) {
 }

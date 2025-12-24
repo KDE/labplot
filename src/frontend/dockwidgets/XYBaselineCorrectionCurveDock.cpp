@@ -18,7 +18,7 @@ extern "C" {
 
 /*!
 	\class XYBaselineCorrectionCurveDock
-	\brief  Provides a widget for editing the properties of the XYBaselineCorrectionCurves
+	\brief  Provides a widget for editing the properties of \c XYBaselineCorrectionCurve.
 
 	\ingroup frontend
 */

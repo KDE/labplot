@@ -23,14 +23,10 @@
 #include <KLocalizedString>
 
 /*!
-  \class XYFunctionCurveDock
-  \brief Provides a widget for editing the properties of the XYFunctionCurves
-		(2D-curves defined by a mathematical function) currently selected in
-		the project explorer.
-
-  \ingroup frontend
+	\class XYFunctionCurveDock
+	\brief Provides a widget for editing the properties of \c XYFunctionCurve.
+	\ingroup frontend
 */
-
 XYFunctionCurveDock::XYFunctionCurveDock(QWidget* parent)
 	: XYAnalysisCurveDock(parent) {
 	// remove the tab "Error bars"
