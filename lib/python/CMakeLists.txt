@@ -262,9 +262,11 @@ generate_python_bindings(
 )
 
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
-    get_target_property(PySide6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
-    get_target_property(Shiboken6_INCLUDE_DIRECTORIES Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
-    target_include_directories(${bindings_library} PUBLIC ${Python3_INCLUDE_DIRS} ${PySide6_INCLUDE_DIRECTORIES} ${Shiboken6_INCLUDE_DIRECTORIES})
+    target_include_directories(${bindings_library} PUBLIC
+        ${Python3_INCLUDE_DIRS}
+        ${PySide6_INCLUDE_DIRS}
+        ${Shiboken6_INCLUDE_DIRS}
+    )
 
     target_link_libraries(${bindings_library} PRIVATE Shiboken6::libshiboken PySide6::pyside6)
     if(PySide6_ABI3_LIBRARY)
