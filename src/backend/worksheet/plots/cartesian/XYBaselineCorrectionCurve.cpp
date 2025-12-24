@@ -100,8 +100,6 @@ bool XYBaselineCorrectionCurvePrivate::recalculateSpecific(const AbstractColumn*
 		}
 	}
 
-	// XYAnalysisCurve::copyData(xdataVector, ydataVector, tmpXDataColumn, tmpYDataColumn, xmin, xmax);
-
 	const size_t n = (size_t)ydataVector.size();
 	if (n < 1) {
 		baselineResult.available = true;
@@ -179,10 +177,12 @@ void XYBaselineCorrectionCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->baselineData.autoRange));
 	writer->writeAttribute(QStringLiteral("xRangeMin"), QString::number(d->baselineData.xRange.first()));
 	writer->writeAttribute(QStringLiteral("xRangeMax"), QString::number(d->baselineData.xRange.last()));
-	writer->writeAttribute(QStringLiteral("arPLSTerminationRatio"), QString::number(d->baselineData.arPLSTerminationRatio));
 	writer->writeAttribute(QStringLiteral("arPLSSmoothness"), QString::number(d->baselineData.arPLSSmoothness));
+	writer->writeAttribute(QStringLiteral("arPLSTerminationRatio"), QString::number(d->baselineData.arPLSTerminationRatio));
 	writer->writeAttribute(QStringLiteral("arPLSIterations"), QString::number(d->baselineData.arPLSIterations));
 	writer->writeEndElement(); // baselineData
+
+	qDebug()<<"in write " << d->baselineData.arPLSTerminationRatio;
 
 	writer->writeStartElement(QStringLiteral("baselineResult"));
 	writer->writeAttribute(QStringLiteral("available"), QString::number(d->baselineResult.available));
@@ -221,9 +221,9 @@ bool XYBaselineCorrectionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("autoRange", baselineData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", baselineData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", baselineData.xRange.last());
+			READ_INT_VALUE("arPLSSmoothness", baselineData.arPLSSmoothness, int);
 			READ_DOUBLE_VALUE("arPLSTerminationRatio", baselineData.arPLSTerminationRatio);
-			READ_DOUBLE_VALUE("arPLSSmoothness", baselineData.arPLSSmoothness);
-			READ_INT_VALUE("niter", baselineData.arPLSIterations, int);
+			READ_INT_VALUE("arPLSIterations", baselineData.arPLSIterations, int);
 		} else if (!preview && reader->name() == QLatin1String("baselineResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", baselineResult.available, int);
@@ -231,7 +231,7 @@ bool XYBaselineCorrectionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", baselineResult.status);
 			READ_INT_VALUE("time", baselineResult.elapsedTime, int);
 		} else if (!preview && reader->name() == QLatin1String("column")) {
-			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
+			auto* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

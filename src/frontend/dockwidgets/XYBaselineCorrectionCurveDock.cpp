@@ -48,7 +48,6 @@ void XYBaselineCorrectionCurveDock::setupGeneral() {
 
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
-	uiGeneralTab.leARPLSTerminationRatio->setValidator(new QDoubleValidator(uiGeneralTab.leARPLSTerminationRatio));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -67,7 +66,7 @@ void XYBaselineCorrectionCurveDock::setupGeneral() {
 
 	connect(uiGeneralTab.cbMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYBaselineCorrectionCurveDock::methodChanged);
 	connect(uiGeneralTab.sbARPLSSmoothness, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYBaselineCorrectionCurveDock::arPLSSmoothnessChanged);
-	connect(uiGeneralTab.leARPLSTerminationRatio, &QLineEdit::textChanged, this, &XYBaselineCorrectionCurveDock::arPLSTerminationRatioChanged);
+	connect(uiGeneralTab.sbARPLSTerminationRatio, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&XYBaselineCorrectionCurveDock::arPLSTerminationRatioChanged));
 	connect(uiGeneralTab.sbARPLSIterations, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYBaselineCorrectionCurveDock::arPLSIterationsChanged);
 
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYBaselineCorrectionCurveDock::recalculateClicked);
@@ -155,7 +154,7 @@ void XYBaselineCorrectionCurveDock::updateLocale() {
 	CONDITIONAL_LOCK_RETURN;
 	const auto numberLocale = QLocale();
 	uiGeneralTab.sbARPLSSmoothness->setLocale(numberLocale);
-	uiGeneralTab.leARPLSTerminationRatio->setLocale(numberLocale);
+	uiGeneralTab.sbARPLSTerminationRatio->setLocale(numberLocale);
 	uiGeneralTab.sbARPLSSmoothness->setLocale(numberLocale);
 }
 
@@ -178,7 +177,7 @@ void XYBaselineCorrectionCurveDock::retranslateUi() {
 
 	info = i18n("Weighting termination ratio - value between 0 and 1, smaller values allow less negative values.");
 	uiGeneralTab.lARPLSTerminationRatio->setToolTip(info);
-	uiGeneralTab.leARPLSTerminationRatio->setToolTip(info);
+	uiGeneralTab.sbARPLSTerminationRatio->setToolTip(info);
 
 	info = i18n("Number of iterations to perform.");
 	uiGeneralTab.lARPLSIterations->setToolTip(info);
@@ -279,13 +278,13 @@ void XYBaselineCorrectionCurveDock::recalculateClicked() {
 	Q_EMIT info(i18n("Baseline correction status: %1", m_baselineCurve->baselineResult().status));
 }
 
-void XYBaselineCorrectionCurveDock::methodChanged(int) {
-	auto method = static_cast<nsl_baseline_correction_method>(uiGeneralTab.cbMethod->currentData().toInt());
+void XYBaselineCorrectionCurveDock::methodChanged(int index) {
+	auto method = static_cast<nsl_baseline_correction_method>(index);
 	bool visible = (method == nsl_diff_baseline_correction_arpls);
 	uiGeneralTab.lARPLSSmoothness->setVisible(visible);
 	uiGeneralTab.sbARPLSSmoothness->setVisible(visible);
 	uiGeneralTab.lARPLSTerminationRatio->setVisible(visible);
-	uiGeneralTab.leARPLSTerminationRatio->setVisible(visible);
+	uiGeneralTab.sbARPLSTerminationRatio->setVisible(visible);
 	uiGeneralTab.lARPLSIterations->setVisible(visible);
 	uiGeneralTab.sbARPLSIterations->setVisible(visible);
 
@@ -298,8 +297,9 @@ void XYBaselineCorrectionCurveDock::arPLSSmoothnessChanged(int value) {
 	enableRecalculate();
 }
 
-void XYBaselineCorrectionCurveDock::arPLSTerminationRatioChanged() {
-	SET_DOUBLE_FROM_LE_REC(m_data.arPLSSmoothness, uiGeneralTab.leARPLSTerminationRatio);
+void XYBaselineCorrectionCurveDock::arPLSTerminationRatioChanged(double value) {
+	m_data.arPLSTerminationRatio = value;
+	enableRecalculate();
 }
 
 void XYBaselineCorrectionCurveDock::arPLSIterationsChanged(int value) {
@@ -324,7 +324,7 @@ void XYBaselineCorrectionCurveDock::curveBaselineDataChanged(const XYBaselineCor
 	uiGeneralTab.cbMethod->setCurrentIndex(m_data.method);
 	methodChanged(m_data.method);
 	uiGeneralTab.sbARPLSSmoothness->setValue(m_data.arPLSSmoothness);
-	uiGeneralTab.leARPLSTerminationRatio->setText(QLocale().toString(m_data.arPLSTerminationRatio));
+	uiGeneralTab.sbARPLSTerminationRatio->setValue(m_data.arPLSTerminationRatio);
 	uiGeneralTab.sbARPLSIterations->setValue(m_data.arPLSIterations);
 
 	this->showBaselineCorrectionResult();

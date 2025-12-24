@@ -33,8 +33,8 @@ public:
 
 		/* arPLS parameters */
 		double arPLSTerminationRatio{0.1}; // termination ratio
-		double arPLSSmoothness{6}; // smoothness parameter, power of 10
-		int arPLSIterations{10}; // number of iteratiosn
+		int arPLSSmoothness{6}; // smoothness parameter, power of 10
+		int arPLSIterations{10}; // number of iterations
 	};
 
 	typedef XYAnalysisCurve::Result BaselineResult;

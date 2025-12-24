@@ -46,7 +46,7 @@ private Q_SLOTS:
 
 	void methodChanged(int);
 	void arPLSSmoothnessChanged(int);
-	void arPLSTerminationRatioChanged();
+	void arPLSTerminationRatioChanged(double);
 	void arPLSIterationsChanged(int);
 
 	void recalculateClicked() override;
