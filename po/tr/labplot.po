@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2025-12-19 11:33+0300\n"
+"PO-Revision-Date: 2025-12-23 11:52+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.11.80\n"
+"X-Generator: Lokalize 25.12.0\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -381,7 +381,7 @@ msgstr "Dosyadan…"
 #: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:705
 #, kde-format
 msgid "From SQL Database..."
-msgstr "SQL Veritabanından…"
+msgstr "SQL Veri Tabanından…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
 #: src/backend/core/AbstractPart.cpp:137
@@ -10950,13 +10950,13 @@ msgstr "Önceki değeri kullan"
 #, kde-format
 msgctxt "@title:window"
 msgid "SQL Database Connections"
-msgstr "SQL Veritabanı Bağlantıları"
+msgstr "SQL Veri Tabanı Bağlantıları"
 
 #: src/frontend/datasources/DatabaseManagerDialog.cpp:66
 #, kde-format
 msgctxt "@title:window"
 msgid "SQL Database Connections  [Changed]"
-msgstr "SQL Veritabanı Bağlantıları [Değiştirilmiş]"
+msgstr "SQL Veri Tabanı Bağlantıları [Değiştirilmiş]"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:48
 #, kde-format
@@ -10995,7 +10995,7 @@ msgstr "Veri kaynağı adı:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Database File"
-msgstr "Veritabanı Dosyasını Seç"
+msgstr "Veri Tabanı Dosyasını Seç"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:349
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:409
@@ -19460,7 +19460,7 @@ msgstr "Zamanı saniyelere çevir"
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:29
 #, kde-format
 msgid "Database"
-msgstr "Veritabanı"
+msgstr "Veri Tabanı"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCustomConnection)
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:39
