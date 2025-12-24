@@ -4,17 +4,13 @@
 	Description      : widget for editing properties of baseline correction curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
-
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "XYBaselineCorrectionCurveDock.h"
 #include "backend/core/column/Column.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.h"
 #include "frontend/widgets/TreeViewComboBox.h"
-
-#include <QStandardItemModel>
 
 extern "C" {
 #include "backend/nsl/nsl_baseline.h"
@@ -52,6 +48,7 @@ void XYBaselineCorrectionCurveDock::setupGeneral() {
 
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
+	uiGeneralTab.leARPLSTerminationRatio->setValidator(new QDoubleValidator(uiGeneralTab.leARPLSTerminationRatio));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -69,6 +66,9 @@ void XYBaselineCorrectionCurveDock::setupGeneral() {
 	connect(uiGeneralTab.dateTimeEditMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYBaselineCorrectionCurveDock::xRangeMaxDateTimeChanged);
 
 	connect(uiGeneralTab.cbMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYBaselineCorrectionCurveDock::methodChanged);
+	connect(uiGeneralTab.sbARPLSSmoothness, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYBaselineCorrectionCurveDock::arPLSSmoothnessChanged);
+	connect(uiGeneralTab.leARPLSTerminationRatio, &QLineEdit::textChanged, this, &XYBaselineCorrectionCurveDock::arPLSTerminationRatioChanged);
+	connect(uiGeneralTab.sbARPLSIterations, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYBaselineCorrectionCurveDock::arPLSIterationsChanged);
 
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYBaselineCorrectionCurveDock::recalculateClicked);
 
@@ -112,8 +112,8 @@ void XYBaselineCorrectionCurveDock::initGeneralTab() {
 	uiGeneralTab.cbAutoRange->setChecked(m_data.autoRange);
 	this->autoRangeChanged();
 
-	// update list of selectable types
-	xDataColumnChanged(cbXDataColumn->currentModelIndex());
+	uiGeneralTab.cbMethod->setCurrentIndex(m_data.method);
+	this->methodChanged(m_data.method);
 
 	this->showBaselineCorrectionResult();
 
@@ -154,9 +154,9 @@ void XYBaselineCorrectionCurveDock::setCurves(QList<XYCurve*> list) {
 void XYBaselineCorrectionCurveDock::updateLocale() {
 	CONDITIONAL_LOCK_RETURN;
 	const auto numberLocale = QLocale();
-	uiGeneralTab.sbBaselineParameter1->setLocale(numberLocale);
-	uiGeneralTab.leBaselineParameter2->setLocale(numberLocale);
-	uiGeneralTab.sbBaselineParameter1->setLocale(numberLocale);
+	uiGeneralTab.sbARPLSSmoothness->setLocale(numberLocale);
+	uiGeneralTab.leARPLSTerminationRatio->setLocale(numberLocale);
+	uiGeneralTab.sbARPLSSmoothness->setLocale(numberLocale);
 }
 
 void XYBaselineCorrectionCurveDock::retranslateUi() {
@@ -173,16 +173,16 @@ void XYBaselineCorrectionCurveDock::retranslateUi() {
 	uiGeneralTab.cbMethod->addItem(i18n("Linear Regression"));
 
 	QString info = i18n("Smoothness parameter - the larger the value the smoother the resulting background.");
-	uiGeneralTab.lBaselineParameter1->setToolTip(info);
-	uiGeneralTab.sbBaselineParameter1->setToolTip(info);
+	uiGeneralTab.lARPLSSmoothness->setToolTip(info);
+	uiGeneralTab.sbARPLSSmoothness->setToolTip(info);
 
 	info = i18n("Weighting termination ratio - value between 0 and 1, smaller values allow less negative values.");
-	uiGeneralTab.lBaselineParameter2->setToolTip(info);
-	uiGeneralTab.leBaselineParameter2->setToolTip(info);
+	uiGeneralTab.lARPLSTerminationRatio->setToolTip(info);
+	uiGeneralTab.leARPLSTerminationRatio->setToolTip(info);
 
 	info = i18n("Number of iterations to perform.");
-	uiGeneralTab.lBaselineParameter3->setToolTip(info);
-	uiGeneralTab.sbBaselineParameter3->setToolTip(info);
+	uiGeneralTab.lARPLSIterations->setToolTip(info);
+	uiGeneralTab.sbARPLSIterations->setToolTip(info);
 }
 
 //****************************************************************
@@ -282,14 +282,29 @@ void XYBaselineCorrectionCurveDock::recalculateClicked() {
 void XYBaselineCorrectionCurveDock::methodChanged(int) {
 	auto method = static_cast<nsl_baseline_correction_method>(uiGeneralTab.cbMethod->currentData().toInt());
 	bool visible = (method == nsl_diff_baseline_correction_arpls);
-	uiGeneralTab.lBaselineParameter1->setVisible(visible);
-	uiGeneralTab.sbBaselineParameter1->setVisible(visible);
-	uiGeneralTab.lBaselineParameter2->setVisible(visible);
-	uiGeneralTab.leBaselineParameter2->setVisible(visible);
-	uiGeneralTab.lBaselineParameter3->setVisible(visible);
-	uiGeneralTab.sbBaselineParameter3->setVisible(visible);
+	uiGeneralTab.lARPLSSmoothness->setVisible(visible);
+	uiGeneralTab.sbARPLSSmoothness->setVisible(visible);
+	uiGeneralTab.lARPLSTerminationRatio->setVisible(visible);
+	uiGeneralTab.leARPLSTerminationRatio->setVisible(visible);
+	uiGeneralTab.lARPLSIterations->setVisible(visible);
+	uiGeneralTab.sbARPLSIterations->setVisible(visible);
 
 	m_data.method = method;
+	enableRecalculate();
+}
+
+void XYBaselineCorrectionCurveDock::arPLSSmoothnessChanged(int value) {
+	m_data.arPLSSmoothness = value;
+	enableRecalculate();
+}
+
+void XYBaselineCorrectionCurveDock::arPLSTerminationRatioChanged() {
+	SET_DOUBLE_FROM_LE_REC(m_data.arPLSSmoothness, uiGeneralTab.leARPLSTerminationRatio);
+}
+
+void XYBaselineCorrectionCurveDock::arPLSIterationsChanged(int value) {
+	m_data.arPLSIterations = value;
+	enableRecalculate();
 }
 
 /*!
@@ -308,7 +323,9 @@ void XYBaselineCorrectionCurveDock::curveBaselineDataChanged(const XYBaselineCor
 	m_data = data;
 	uiGeneralTab.cbMethod->setCurrentIndex(m_data.method);
 	methodChanged(m_data.method);
-	// TODO:
+	uiGeneralTab.sbARPLSSmoothness->setValue(m_data.arPLSSmoothness);
+	uiGeneralTab.leARPLSTerminationRatio->setText(QLocale().toString(m_data.arPLSTerminationRatio));
+	uiGeneralTab.sbARPLSIterations->setValue(m_data.arPLSIterations);
 
 	this->showBaselineCorrectionResult();
 }

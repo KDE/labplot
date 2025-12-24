@@ -43,7 +43,12 @@ private Q_SLOTS:
 	void xRangeMaxChanged();
 	void xRangeMinDateTimeChanged(qint64);
 	void xRangeMaxDateTimeChanged(qint64);
+
 	void methodChanged(int);
+	void arPLSSmoothnessChanged(int);
+	void arPLSTerminationRatioChanged();
+	void arPLSIterationsChanged(int);
+
 	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYBaselineCorrectionCurve
