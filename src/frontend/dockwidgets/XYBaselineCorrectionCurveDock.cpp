@@ -111,8 +111,14 @@ void XYBaselineCorrectionCurveDock::initGeneralTab() {
 	uiGeneralTab.cbAutoRange->setChecked(m_data.autoRange);
 	this->autoRangeChanged();
 
+	// method
 	uiGeneralTab.cbMethod->setCurrentIndex(m_data.method);
 	this->methodChanged(m_data.method);
+
+	// arPLS parameters
+	uiGeneralTab.sbARPLSSmoothness->setValue(m_data.arPLSSmoothness);
+	uiGeneralTab.sbARPLSTerminationRatio->setValue(m_data.arPLSTerminationRatio);
+	uiGeneralTab.sbARPLSIterations->setValue(m_data.arPLSIterations);
 
 	this->showBaselineCorrectionResult();
 
@@ -171,7 +177,22 @@ void XYBaselineCorrectionCurveDock::retranslateUi() {
 	uiGeneralTab.cbMethod->addItem(i18n("End Points"));
 	uiGeneralTab.cbMethod->addItem(i18n("Linear Regression"));
 
-	QString info = i18n("Smoothness parameter - the larger the value the smoother the resulting background.");
+	// tooltips
+	QString info = i18n(
+		"Method used to calculate the baseline correction:"
+		"<ul>"
+		"<li>arPLS - asymmetrically reweighted penalized least square method.</li>"
+		"<li>Minimum - subtract the minimum of the data.</li>"
+		"<li>Maximum - subtract the maximum of the data.</li>"
+		"<li>Mean - subtract the mean of the data.</li>"
+		"<li>Median - subtract the median of the data.</li>"
+		"<li>End Points - do a linear interpolation using first and last point and subtract it.</li>"
+		"<li>Linear Regression - do a linear regression to the data and subtract it.</li>"
+		"</ul>");
+	uiGeneralTab.lMethod->setToolTip(info);
+	uiGeneralTab.cbMethod->setToolTip(info);
+
+	info = i18n("Smoothness parameter - the larger the value the smoother the resulting background.");
 	uiGeneralTab.lARPLSSmoothness->setToolTip(info);
 	uiGeneralTab.sbARPLSSmoothness->setToolTip(info);
 

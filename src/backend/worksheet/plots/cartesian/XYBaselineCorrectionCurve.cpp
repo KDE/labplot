@@ -75,7 +75,7 @@ bool XYBaselineCorrectionCurvePrivate::recalculateSpecific(const AbstractColumn*
 	QVector<double> ydataVector;
 
 	double xmin, xmax;
-	if (tmpXDataColumn && baselineData.autoRange) {
+	if (baselineData.autoRange) {
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
 	} else {
@@ -83,22 +83,7 @@ bool XYBaselineCorrectionCurvePrivate::recalculateSpecific(const AbstractColumn*
 		xmax = baselineData.xRange.last();
 	}
 
-	if (tmpXDataColumn) {
-		for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
-			if (tmpXDataColumn->isValid(row) && !tmpXDataColumn->isMasked(row) && tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row)) {
-				const double xv = tmpXDataColumn->valueAt(row);
-				if (xv >= xmin && xv <= xmax) {
-					xdataVector.append(xv);
-					ydataVector.append(tmpYDataColumn->valueAt(row));
-				}
-			}
-		}
-	} else {
-		for (int row = 0; row < tmpYDataColumn->rowCount(); ++row) {
-			if (tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row))
-				ydataVector.append(tmpYDataColumn->valueAt(row));
-		}
-	}
+	XYAnalysisCurve::copyData(xdataVector, ydataVector, tmpXDataColumn, tmpYDataColumn, xmin, xmax, true);
 
 	const size_t n = (size_t)ydataVector.size();
 	if (n < 1) {
