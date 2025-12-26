@@ -16,6 +16,7 @@ New features:
 		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)
 		* Allow to position the center and limit lines in the process behavior chart based on user-defined specifications
 		* Additionally to using the colors for plots from the current theme palette, allow to use colors from a specified color map
+		* Stacked line plots
 	* [import]
 		* Import directories - import multiple files in a directory in one single step
 		* Allow to import arrays in JSON files that contain plain data only

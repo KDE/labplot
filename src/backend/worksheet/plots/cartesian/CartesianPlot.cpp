@@ -1115,6 +1115,8 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::PlotColorMode, plotColo
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, QString, theme, theme)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, QString, plotColorMap, plotColorMap)
 
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, double, stackYOffset, stackYOffset)
+
 Line* CartesianPlot::cursorLine() const {
 	Q_D(const CartesianPlot);
 	return d->cursorLine;
@@ -1825,6 +1827,14 @@ void CartesianPlot::setPlotColorMap(QString colorMap) {
 		d->updatePlotColorPalette();
 		endMacro();
 	}
+}
+
+// stacking
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetStackYOffset, double, stackYOffset, updateStackYOffset)
+void CartesianPlot::setStackYOffset(double offset) {
+	Q_D(CartesianPlot);
+	if (offset != d->stackYOffset)
+		exec(new CartesianPlotSetStackYOffsetCmd(d, offset, ki18n("%1: set y-offset")));
 }
 
 void CartesianPlot::retransform() {
@@ -3883,6 +3893,38 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 	return QGraphicsItem::itemChange(change, value);
 }
 
+void CartesianPlotPrivate::updateCursor() {
+	update();
+}
+
+void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
+	m_selectionBandIsShown = show;
+}
+
+void CartesianPlotPrivate::updateStackYOffset() {
+	// recalculate internal data structures in the plots to take the new offset into account
+	for (auto* plot : q->children<Plot>())
+		plot->recalc();
+
+	// trigger auto-scaling for all coordinate systems for Y, if enabled
+	q->setRangeDirty(Dimension::Y, -1, true);
+	bool rangeChanged = false;
+	for (int i = 0; i < q->coordinateSystemCount(); ++i) {
+		auto* cs = q->coordinateSystem(i);
+		const int yIndex = cs->index(Dimension::Y);
+		if (q->autoScale(Dimension::Y, yIndex))
+			rangeChanged |= q->scaleAuto(Dimension::Y, yIndex);
+	}
+
+	// if ranges changed, retransform whole container, otherwise just retransform plots
+	if (rangeChanged)
+		q->WorksheetElementContainer::retransform();
+	else {
+		for (auto* plot : q->children<Plot>())
+			plot->retransform();
+	}
+}
+
 // ##############################################################################
 // ##################################  Events  ##################################
 // ##############################################################################
@@ -4015,14 +4057,6 @@ void CartesianPlotPrivate::mousePressCursorMode(int cursorNumber, QPointF logica
 		cursor1Pos = QPointF(logicalPos.x(), 0);
 
 	update();
-}
-
-void CartesianPlotPrivate::updateCursor() {
-	update();
-}
-
-void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
-	m_selectionBandIsShown = show;
 }
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
@@ -4866,6 +4900,11 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 
+	// stack
+	writer->writeStartElement(QStringLiteral("stack"));
+	writer->writeAttribute(QStringLiteral("yOffset"), QString::number(d->stackYOffset));
+	writer->writeEndElement();
+
 	// serialize all children (plot area, title text label, axes and curves)
 	const auto& elements = children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
 	for (auto* elem : elements)
@@ -5240,6 +5279,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
 
 			d->yRangeBreaks.list << b;
+		} else if (!preview && reader->name() == QLatin1String("stack")) {
+			attribs = reader->attributes();
+			READ_DOUBLE_VALUE("yOffset", stackYOffset);
 		} else if (!preview && reader->name() == QLatin1String("textLabel")) {
 			if (!titleLabelRead) {
 				m_title->setIsLoading(true);

@@ -43,6 +43,7 @@ public:
 	void setZoomSelectionBandShow(bool show);
 	bool translateRange(int xIndex, int yIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY);
 	void updatePlotColorPalette();
+	void updateStackYOffset();
 
 	CartesianPlot::Type type{CartesianPlot::Type::FourAxes};
 	CartesianPlot::PlotColorMode plotColorMode{CartesianPlot::PlotColorMode::Theme};
@@ -288,6 +289,9 @@ public:
 	QPointF scenePos; // current position under the mouse cursor in scene coordinates
 	QPointF logicalPos; // current position under the mouse cursor in plot coordinates
 	bool calledFromContextMenu{false}; // we set the current position under the cursor when "add new" is called via the context menu
+
+	// stacking
+	double stackYOffset{0.0};
 
 	// Cursor
 	bool cursor0Enable{false};

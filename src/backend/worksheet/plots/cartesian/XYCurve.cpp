@@ -1040,6 +1040,10 @@ void XYCurvePrivate::recalc() {
 	const int rows = xColumn->rowCount();
 	m_logicalPoints.reserve(rows);
 
+	double yOffset = 0.0;
+	if (m_plot)
+		yOffset = m_plot->curveChildIndex(q) * m_plot->stackYOffset();
+
 	// take only valid and non masked points
 	for (int row = 0; row < rows; row++) {
 		// DEBUG("row = " << row << " valid x/y = " << xColumn->isValid(row) << " " << yColumn->isValid(row))
@@ -1067,7 +1071,7 @@ void XYCurvePrivate::recalc() {
 
 			switch (yColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				tempPoint.setY(yColumn->doubleAt(row));
+				tempPoint.setY(yColumn->doubleAt(row) + yOffset);
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 				tempPoint.setY(yColumn->integerAt(row));
@@ -2407,14 +2411,11 @@ bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<do
 					  r,
 					  includeErrorBars);
 	case Dimension::Y:
-		return minMax(yColumn(),
-					  xColumn(),
-					  d->errorBar->yErrorType(),
-					  d->errorBar->yPlusColumn(),
-					  d->errorBar->yMinusColumn(),
-					  indexRange,
-					  r,
-					  includeErrorBars);
+		bool rc =
+			minMax(yColumn(), xColumn(), d->errorBar->yErrorType(), d->errorBar->yPlusColumn(), d->errorBar->yMinusColumn(), indexRange, r, includeErrorBars);
+		if (auto* p = plot())
+			r.setEnd(r.end() + p->curveChildIndex(this) * p->stackYOffset());
+		return rc;
 	}
 	return false;
 }
