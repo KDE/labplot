@@ -19,6 +19,10 @@ if(NOT DEFINED PySide6_PATH)
 	OUTPUT_VARIABLE PySide6_PYTHONPATH
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
+
+    if(PySide6_PYTHONPATH)
+	    message(STATUS "Found PySide6 via Python: ${PySide6_PYTHONPATH}")
+	endif()
 endif()
 
 if(EXISTS "${PySide6_PYTHONPATH}")
@@ -34,8 +38,8 @@ find_path(PySide6_INCLUDE_DIRS
 )
 
 find_path(Pyside6_TYPESYSTEMS
-   NAMES typesystem_widgets.xml
-   PATHS ${PySide6_PATH}/typesystems ${CMAKE_INSTALL_PREFIX}/PySide6/typesystems /usr/share/PySide6/typesystems /usr/local/share/PySide6/typesystems
+    NAMES typesystem_widgets.xml
+    PATHS ${PySide6_PATH}/typesystems ${CMAKE_INSTALL_PREFIX}/PySide6/typesystems /usr/share/PySide6/typesystems /usr/local/share/PySide6/typesystems
 )
 
 find_library(PySide6_ABI3_LIBRARY

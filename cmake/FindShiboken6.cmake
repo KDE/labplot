@@ -8,16 +8,16 @@
 #   Shiboken6_LIBRARY         - Full path to libshiboken6 library
 
 if(NOT Shiboken6_FOUND)
-	execute_process(
-		COMMAND ${Python3_EXECUTABLE} -c "import shiboken6; print(shiboken6.__path__[0])"
-		OUTPUT_VARIABLE Shiboken6_PATH
-		OUTPUT_STRIP_TRAILING_WHITESPACE
-		ERROR_QUIET
-	)
+    execute_process(
+        COMMAND ${Python3_EXECUTABLE} -c "import shiboken6; print(shiboken6.__path__[0])"
+        OUTPUT_VARIABLE Shiboken6_PATH
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+	ERROR_QUIET
+    )
 
-	if(Shiboken6_PATH)
-		message(STATUS "Found Shiboken6 via Python: ${Shiboken6_PATH}")
-	endif()
+    if(Shiboken6_PATH)
+        message(STATUS "Found Shiboken6 via Python: ${Shiboken6_PATH}")
+    endif()
 endif()
 
 if(Shiboken6_PATH)
@@ -29,7 +29,7 @@ endif()
 # Find the executable
 find_program(Shiboken6_EXECUTABLE
     NAMES shiboken6
-    HINTS "${CMAKE_INSTALL_PREFIX}/bin" "${CMAKE_PREFIX_PATH}/bin" /usr/bin /usr/local/bin /app/bin  "${PySide6_PATH}/../shiboken6_generator"
+    HINTS "${CMAKE_INSTALL_PREFIX}/bin" "${CMAKE_PREFIX_PATH}/bin" "${PySide6_PATH}/../shiboken6_generator" /usr/bin /usr/local/bin /app/bin
 )
 
 # find header
