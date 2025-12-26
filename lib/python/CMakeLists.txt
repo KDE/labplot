@@ -5,38 +5,11 @@ find_package(Python3 COMPONENTS Development Interpreter REQUIRED)
 find_package(PySide6 QUIET)
 find_package(Shiboken6 QUIET)
 
-# On some systems, PySide6/Shiboken6 may not have proper CMake config
-# Try to find them via Python if CMake find_package failed
-if(NOT Shiboken6_FOUND OR NOT PySide6_FOUND)
-	execute_process(
-		COMMAND ${Python3_EXECUTABLE} -c "import shiboken6; print(shiboken6.__path__[0])"
-		OUTPUT_VARIABLE Shiboken6_PATH
-		OUTPUT_STRIP_TRAILING_WHITESPACE
-		ERROR_QUIET
-	)
-	execute_process(
-		COMMAND ${Python3_EXECUTABLE} -c "import PySide6; print(PySide6.__path__[0])"
-		OUTPUT_VARIABLE PySide6_PATH
-		OUTPUT_STRIP_TRAILING_WHITESPACE
-		ERROR_QUIET
-	)
-
-	if(Shiboken6_PATH)
-		list(APPEND Shiboken6_INCLUDE_DIRS "${Shiboken6_PATH}/include")
-		message(STATUS "Found Shiboken6 via Python: ${Shiboken6_PATH}")
-	endif()
-
-	if(PySide6_PATH)
-		list(APPEND PySide6_INCLUDE_DIRS "${PySide6_PATH}/include")
-		message(STATUS "Found PySide6 via Python: ${PySide6_PATH}")
-	endif()
-endif()
-
 # If still not found, report and allow user to continue (they may just not want Python support)
-if(NOT Shiboken6_FOUND AND NOT Shiboken6_PATH)
+if(NOT Shiboken6_FOUND)
 	message(WARNING "Shiboken6 not found. Python scripting support will be disabled.")
 endif()
-if(NOT PySide6_FOUND AND NOT PySide6_PATH)
+if(NOT PySide6_FOUND)
 	message(WARNING "PySide6 not found. Python scripting support will be disabled.")
 endif()
 
@@ -304,14 +277,17 @@ if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
 			${PySide6_INCLUDE_DIRS}
 			${Shiboken6_INCLUDE_DIRS}
 		)
+	endif()
 
-		target_link_libraries(${bindings_library} PRIVATE Shiboken6::libshiboken PySide6::pyside6)
-		if(PySide6_ABI3_LIBRARY)
-			target_link_libraries(${bindings_library} PRIVATE ${PySide6_ABI3_LIBRARY})
-		endif()
-		if(Shiboken6_ABI3_LIBRARY)
-			target_link_libraries(${bindings_library} PRIVATE ${Shiboken6_ABI3_LIBRARY})
-		endif()
+	if(PySide6_ABI3_LIBRARY)
+		target_link_libraries(${bindings_library} PRIVATE ${PySide6_ABI3_LIBRARY})
+	endif()
+	if(Shiboken6_LIBRARY)
+		target_link_libraries(${bindings_library} PRIVATE ${Shiboken6_LIBRARY})
+	endif()
+	if(Shiboken6_ABI3_LIBRARY)
+		target_link_libraries(${bindings_library} PRIVATE ${Shiboken6_ABI3_LIBRARY})
+	endif()
 	else()
 		message(FATAL_ERROR "Python package support requested (ENABLE_PYTHON_SDK or ENABLE_PYTHON_SCRIPTING) but PySide6/Shiboken6 not found. Please install them or disable Python support.")
 	endif()

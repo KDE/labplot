@@ -129,7 +129,7 @@ function(generate_python_bindings)
         --include-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths="${CMAKE_INSTALL_PREFIX}/share/PySide${QT_MAJOR_VERSION}/typesystems"
-        --typesystem-paths=${PYSIDE_TYPESYSTEMS}
+	--typesystem-paths=${PySide6_TYPESYSTEMS}
         --output-directory=${CMAKE_CURRENT_BINARY_DIR})
 
     set(generated_sources_dependencies ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM})
@@ -171,10 +171,8 @@ function(generate_python_bindings)
 
     # Apply relevant include and link flags.
     target_include_directories(${PB_PACKAGE_NAME} PRIVATE
-        ${PYSIDE_PYTHONPATH}/include
-        ${SHIBOKEN_PYTHON_INCLUDE_DIRS}
-        $<TARGET_PROPERTY:PySide6::pyside6,INTERFACE_INCLUDE_DIRECTORIES>
-        $<TARGET_PROPERTY:Shiboken6::libshiboken,INTERFACE_INCLUDE_DIRECTORIES>
+	${PySide6_INCLUDE_DIRS}
+	${Shiboken6_INCLUDE_DIRS}
     )
 
     # Hide noisy warnings
