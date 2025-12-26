@@ -5,7 +5,7 @@ find_package(Python3 COMPONENTS Development Interpreter REQUIRED)
 find_package(PySide6 QUIET)
 find_package(Shiboken6 QUIET)
 
-# On FreeBSD and other systems, PySide6/Shiboken6 may not have proper CMake config
+# On some systems, PySide6/Shiboken6 may not have proper CMake config
 # Try to find them via Python if CMake find_package failed
 if(NOT Shiboken6_FOUND OR NOT PySide6_FOUND)
 	execute_process(
