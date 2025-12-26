@@ -32,7 +32,7 @@ find_library(PySide6_ABI3_LIBRARY
 
 find_path(PySide6_INCLUDE_DIR
     NAMES pysideqobject.h
-    PATHS ${PYSIDE_PYTHONPATH}/include ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/PySide6 /usr/include/PySide6 /usr/local/include/PySide6
+    PATHS ${PYSIDE_PYTHONPATH}/include ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/PySide6 /usr/include/PySide6 /usr/local/include /usr/local/include/PySide6 /usr/local/PySide6/include
 )
 
 find_path(PYSIDE_TYPESYSTEMS
