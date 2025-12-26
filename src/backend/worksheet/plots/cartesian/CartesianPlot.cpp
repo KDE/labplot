@@ -426,6 +426,7 @@ void CartesianPlot::initActions() {
 	addHilbertTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), this);
 	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("(De-)Convolution"), this);
 	addCorrelationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), this);
+	addBaselineCorrectionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Baseline Correction"), this);
 
 	connect(addLineSimplificationCurveAction, &QAction::triggered, this, &CartesianPlot::addLineSimplificationCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -446,6 +447,7 @@ void CartesianPlot::initActions() {
 	connect(addCorrelationCurveAction, &QAction::triggered, this, [=]() {
 		addChild(new XYCorrelationCurve(i18n("Auto-/Cross-Correlation")));
 	});
+	connect(addBaselineCorrectionCurveAction, &QAction::triggered, this, &CartesianPlot::addBaselineCorrectionCurve);
 
 	addFunctionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Function"), this);
 	addFunctionCurveAction->setToolTip(i18n("Add a new xy-curve that is defined as a function of other xy-curves (scaled, shifted, etc.)"));
@@ -459,6 +461,7 @@ void CartesianPlot::initActions() {
 	addSmoothAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), this);
 	addConvolutionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Convolute/Deconvolute"), this);
 	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), this);
+	addBaselineCorrectionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Baseline Correction"), this);
 
 	QAction* fitAction = new QAction(i18n("Linear"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitLinear));
@@ -519,6 +522,7 @@ void CartesianPlot::initActions() {
 	connect(addCorrelationAction, &QAction::triggered, this, [=]() {
 		addChild(new XYCorrelationCurve(i18n("Auto-/Cross-Correlation")));
 	});
+	connect(addBaselineCorrectionAction, &QAction::triggered, this, &CartesianPlot::addBaselineCorrectionCurve);
 	for (const auto& action : addFitActions)
 		connect(action, &QAction::triggered, this, &CartesianPlot::addFitCurve);
 	connect(addFourierFilterAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
@@ -614,6 +618,8 @@ void CartesianPlot::initMenus() {
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addLineSimplificationCurveAction);
 	addNewAnalysisMenu->addSeparator();
+	addNewAnalysisMenu->addAction(addBaselineCorrectionCurveAction);
+	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addFunctionCurveAction);
 	m_addNewMenu->addMenu(addNewAnalysisMenu);
 
@@ -674,6 +680,8 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addLineSimplificationAction);
+	dataAnalysisMenu->addSeparator();
+	dataAnalysisMenu->addAction(addBaselineCorrectionAction);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addFunctionCurveAction);
 
@@ -2141,6 +2149,25 @@ void CartesianPlot::addSmoothCurve() {
 		Q_EMIT curve->smoothDataChanged(curve->smoothData());
 	} else {
 		beginMacro(i18n("%1: add smoothing curve", name()));
+		this->addChild(curve);
+	}
+
+	endMacro();
+}
+
+void CartesianPlot::addBaselineCorrectionCurve() {
+	auto* curve = new XYBaselineCorrectionCurve(i18n("Baseline Correction"));
+	const XYCurve* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro(i18n("%1: baseline correction for '%2'", name(), curCurve->name()));
+		curve->setName(i18n("Baseline correction for '%1'", curCurve->name()));
+		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+		curve->setDataSourceCurve(curCurve);
+		this->addChild(curve);
+		curve->recalculate();
+		// Q_EMIT curve->baselineCorrectionDataChanged(curve->baselineCorrectionData());
+	} else {
+		beginMacro(i18n("%1: add baseline correction curve", name()));
 		this->addChild(curve);
 	}
 
@@ -5346,6 +5373,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyDifferentiationCurve")) {
 			auto* curve = new XYDifferentiationCurve(QString());
+			curve->setIsLoading(true);
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
+				delete curve;
+				return false;
+			}
+		} else if (reader->name() == QLatin1String("xyBaselineCorrectionCurve")) {
+			auto* curve = new XYBaselineCorrectionCurve(QString());
 			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);

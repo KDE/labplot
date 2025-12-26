@@ -4,10 +4,12 @@
 	Description          : NSL baseline detection and subtraction functions
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "nsl_baseline.h"
+#include "nsl_common.h"
 #include "nsl_stats.h"
 
 #include <QtGlobal>
@@ -40,7 +42,8 @@
 #include <cstring> // memcpy
 #endif
 
-#include <iostream>
+const char* nsl_baseline_subtraction_method_name[] =
+	{"arPLS", i18n("Minimum"), i18n("Maximum"), i18n("Mean"), i18n("Median"), i18n("End Points"), i18n("Linear Regression")};
 
 void nsl_baseline_remove_minimum(double* data, const size_t n) {
 	const double min = nsl_stats_minimum(data, n, nullptr);

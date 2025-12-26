@@ -246,6 +246,7 @@ private:
 	QAction* addHilbertTransformCurveAction{nullptr};
 	QAction* addConvolutionCurveAction{nullptr};
 	QAction* addCorrelationCurveAction{nullptr};
+	QAction* addBaselineCorrectionCurveAction{nullptr};
 	QAction* addFunctionCurveAction{nullptr};
 
 	QAction* addHorizontalAxisAction{nullptr};
@@ -273,6 +274,7 @@ private:
 	QAction* addHilbertTransformAction{nullptr};
 	QAction* addConvolutionAction{nullptr};
 	QAction* addCorrelationAction{nullptr};
+	QAction* addBaselineCorrectionAction{nullptr};
 
 	QMenu* m_addNewMenu{nullptr};
 	QMenu* addNewAnalysisMenu{nullptr};
@@ -327,6 +329,7 @@ private Q_SLOTS:
 	void addFitCurve();
 	void addFourierFilterCurve();
 	void addFunctionCurve();
+	void addBaselineCorrectionCurve();
 
 	void addHorizontalAxis();
 	void addVerticalAxis();
