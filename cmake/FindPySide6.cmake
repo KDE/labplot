@@ -37,7 +37,7 @@ find_path(PySide6_INCLUDE_DIRS
     PATHS ${PySide6_PATH}/include ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/PySide6 /usr/include/PySide6 /usr/local/include /usr/local/include/PySide6 /usr/local/PySide6/include
 )
 
-find_path(Pyside6_TYPESYSTEMS
+find_path(PySide6_TYPESYSTEMS
     NAMES typesystem_widgets.xml
     PATHS ${PySide6_PATH}/typesystems ${CMAKE_INSTALL_PREFIX}/PySide6/typesystems /usr/share/PySide6/typesystems /usr/local/share/PySide6/typesystems
 )
