@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-22 00:38+0000\n"
-"PO-Revision-Date: 2025-12-19 11:34+0300\n"
+"PO-Revision-Date: 2025-12-23 11:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.11.80\n"
+"X-Generator: Lokalize 25.12.0\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #: src/backend/core/AbstractAspect.cpp:241
@@ -371,7 +371,7 @@ msgstr "Dosyadan…"
 #: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:282
 #, kde-format
 msgid "From SQL Database..."
-msgstr "SQL Veritabanından…"
+msgstr "SQL Veri Tabanından…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
 #: src/backend/core/AbstractPart.cpp:141
@@ -11512,7 +11512,7 @@ msgstr "kaggle.com’dan Veri İçe Aktar"
 #: src/frontend/ActionsManager.cpp:283
 #, kde-format
 msgid "Import data from a SQL database"
-msgstr "Bir SQL veritabanından veri içe aktar"
+msgstr "Bir SQL veri tabanından veri içe aktar"
 
 #: src/frontend/ActionsManager.cpp:287
 #, kde-format
@@ -12367,33 +12367,33 @@ msgstr "Önceki değeri kullan"
 #, kde-format
 msgctxt "@title:window"
 msgid "SQL Database Connections"
-msgstr "SQL Veritabanı Bağlantıları"
+msgstr "SQL Veri Tabanı Bağlantıları"
 
 #: src/frontend/datasources/DatabaseManagerDialog.cpp:66
 #, kde-format
 msgctxt "@title:window"
 msgid "SQL Database Connections  [Changed]"
-msgstr "SQL Veritabanı Bağlantıları [Değiştirilmiş]"
+msgstr "SQL Veri Tabanı Bağlantıları [Değiştirilmiş]"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:48
 #, kde-format
 msgid "Add new database connection"
-msgstr "Yeni veritabanı bağlantısı ekle"
+msgstr "Yeni veri tabanı bağlantısı ekle"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:49
 #, kde-format
 msgid "Delete selected database connection"
-msgstr "Seçilen veritabanı bağlantısını sil"
+msgstr "Seçilen veri tabanı bağlantısını sil"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:50
 #, kde-format
 msgid "Open database file"
-msgstr "Veritabanı dosyasını aç"
+msgstr "Veri tabanı dosyasını aç"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:51
 #, kde-format
 msgid "Test selected database connection"
-msgstr "Seçili veritabanı bağlantısını sına"
+msgstr "Seçili veri tabanı bağlantısını sına"
 
 #. i18n: ectx: property (text), widget (QLabel, lDatabase)
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:158
@@ -12401,7 +12401,7 @@ msgstr "Seçili veritabanı bağlantısını sına"
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:110
 #, kde-format
 msgid "Database:"
-msgstr "Veritabanı:"
+msgstr "Veri tabanı:"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:170
 #, kde-format
@@ -12412,7 +12412,7 @@ msgstr "Veri kaynağı adı:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Database File"
-msgstr "Veritabanı Dosyasını Seç"
+msgstr "Veri Tabanı Dosyasını Seç"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:349
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:409
@@ -12438,7 +12438,7 @@ msgstr "Bağlantı Başarısız"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:526
 #, kde-format
 msgid "Failed to connect to the database '%1'."
-msgstr "“%1” veritabanına bağlanırken hata oluştu."
+msgstr "“%1” veri tabanına bağlanırken hata oluştu."
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:522
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:643
@@ -12449,7 +12449,7 @@ msgstr "Bağlantı Başarılı"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:522
 #, kde-format
 msgid "Connection to the database '%1' was successful."
-msgstr "“%1” veritabanına bağlantı başarılı."
+msgstr "“%1” veri tabanına bağlantı başarılı."
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:549
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:572
@@ -13569,7 +13569,7 @@ msgid ""
 "Select a valid database object (table or query result set) that has to be "
 "imported."
 msgstr ""
-"İçe aktarılacak geçerli bir veritabanı nesnesi (tablo veya sorgu sonuç "
+"İçe aktarılacak geçerli bir veri tabanı nesnesi (tablo veya sorgu sonuç "
 "kümesi) seçin."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:35
@@ -13592,14 +13592,14 @@ msgstr "Bağlantıları yönet"
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
-"%1 veritabanı dosyası bulunamadı. Lütfen bağlantı ayarlarını denetleyin."
+"%1 veri tabanı dosyası bulunamadı. Lütfen bağlantı ayarlarını denetleyin."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:212
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
-"“%1” veritabanına bağlantı başarısız. Lütfen bağlantı ayarlarını denetleyin."
+"“%1” veri tabanına bağlantı başarısız. Lütfen bağlantı ayarlarını denetleyin."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:265
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:267
@@ -18533,7 +18533,7 @@ msgid ""
 "SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *."
 "sqlite3 *.sdb3)"
 msgstr ""
-"SQLite veritabanı dosyaları (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *."
+"SQLite veri tabanı dosyaları (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *."
 "db3 *.sqlite3 *.sdb3)"
 
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:43
@@ -19784,12 +19784,12 @@ msgstr "Hesap Tablosunu Yazdır"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4500
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
-msgstr "%1 SQLite veritabanı oluşturulamadı.."
+msgstr "%1 SQLite veri tabanı oluşturulamadı.."
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4532
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
-msgstr "%1 SQLite veritabanında tablo oluşturulamadı.."
+msgstr "%1 SQLite veri tabanında tablo oluşturulamadı.."
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4587
 #, kde-format
@@ -20920,7 +20920,7 @@ msgstr "Zamanı saniyelere çevir"
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:29
 #, kde-format
 msgid "Database"
-msgstr "Veritabanı"
+msgstr "Veri Tabanı"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCustomConnection)
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:39
@@ -21213,7 +21213,7 @@ msgstr "LWT:"
 #: src/frontend/ui/datasources/importfilewidget.ui:161
 #, kde-format
 msgid "DBC Database"
-msgstr "DBC veritabanı"
+msgstr "DBC veri tabanı"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
 #: src/frontend/ui/datasources/importfilewidget.ui:181
