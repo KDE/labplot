@@ -26,6 +26,7 @@ New features:
 Performance improvements:
 		* Improved drawing performance (!731)
 		* Improved the performance of importing JSON files with a large number of elements
+		* Faster save/load of text columns
 
 Bug fixes:
 	* Fix displayed locale of constants

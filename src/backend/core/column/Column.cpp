@@ -1059,6 +1059,8 @@ void Column::save(QXmlStreamWriter* writer) const {
 		saveData = false;
 	}
 
+	PERFTRACE(QStringLiteral("save column ") + name());
+
 	writer->writeStartElement(QStringLiteral("column"));
 	writeBasicAttributes(writer);
 
@@ -1244,14 +1246,17 @@ void Column::save(QXmlStreamWriter* writer) const {
 			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
 			break;
 		}
-		case ColumnMode::Text:
+		case ColumnMode::Text: {
+			// serialize text data using Base64 encoding with null separator
+			QByteArray bytes;
 			for (int i = 0; i < rowCount(); ++i) {
-				writer->writeStartElement(QStringLiteral("row"));
-				writer->writeAttribute(QStringLiteral("index"), QString::number(i));
-				writer->writeCharacters(textAt(i));
-				writer->writeEndElement();
+				bytes.append(textAt(i).toUtf8());
+				bytes.append('\0');
 			}
+			bytes.removeLast(); // remove the last null character
+			writer->writeCharacters(QLatin1String(bytes.toBase64()));
 			break;
+		}
 		case ColumnMode::DateTime:
 		case ColumnMode::Month:
 		case ColumnMode::Day:
@@ -1276,18 +1281,39 @@ public:
 		, m_content(content) { };
 	void run() override {
 		QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
-		if (m_private->columnMode() == AbstractColumn::ColumnMode::Double) {
+		switch (m_private->columnMode()) {
+		case AbstractColumn::ColumnMode::Double: {
 			auto* data = new QVector<double>(bytes.size() / (int)sizeof(double));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
-		} else if (m_private->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
 			auto* data = new QVector<qint64>(bytes.size() / (int)sizeof(qint64));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
-		} else {
+			break;
+		}
+		case AbstractColumn::ColumnMode::Integer: {
 			auto* data = new QVector<int>(bytes.size() / (int)sizeof(int));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Text: {
+			// deserialize text data using Base64 encoding with null separator
+			const QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
+			const QString decoded = QString::fromUtf8(bytes);
+			auto textVector = decoded.split(QLatin1Char('\0'), Qt::KeepEmptyParts);
+			m_private->replaceTexts(-1, textVector);
+			break;
+		}
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day: {
+			// nothing to do here, the data are loaded row by row
+			break;
+		}
 		}
 	}
 
@@ -1303,6 +1329,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
+	PERFTRACE(QLatin1String("load column ") + name());
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	QString str = attribs.value(QStringLiteral("rows")).toString();
@@ -1435,7 +1462,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 					break;
 				}
 				case Column::ColumnMode::Text: {
-					textVector << reader->readElementText();
+					textVector << reader->readElementText(); // old serialization format with row by row for xmlVersion < 18
 					break;
 				}
 				}
@@ -1451,8 +1478,10 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		if (!preview) {
 			// Decode data
 			QString content = reader->text().toString().trimmed();
-			// Datetime and text are read in row by row
-			if (!content.isEmpty() && (columnMode() == ColumnMode::Double || columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt)) {
+			// Datetime and Text for xmlVersion < 18 are read row by row above,
+			// everything else is Base64 encoded and is decoded via DecodeColumnTask
+			const auto mode = columnMode();
+			if (!content.isEmpty() && (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::Text)) {
 				auto* task = new DecodeColumnTask(d, content);
 				QThreadPool::globalInstance()->start(task);
 			}
@@ -1463,7 +1492,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	case AbstractColumn::ColumnMode::Double:
 	case AbstractColumn::ColumnMode::BigInt:
 	case AbstractColumn::ColumnMode::Integer:
-		/* handled above*/
+		/* handled above in DecodeColumnTask */
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
@@ -1471,7 +1500,8 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		setDateTimes(dateTimeVector);
 		break;
 	case AbstractColumn::ColumnMode::Text:
-		setText(textVector);
+		if (!textVector.isEmpty() && Project::xmlVersion() < 18) // old serialization format with row by row reading
+			setText(textVector);
 		break;
 	}
 
