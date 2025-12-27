@@ -1545,6 +1545,7 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	m_plotDataMenu->setEnabled(hasValues);
 	m_analyzePlotMenu->setEnabled(hasValues);
 	m_statisticalAnalysisMenu->setEnabled(hasValues);
+	m_timeSeriesAnalysisMenu->setEnabled(hasValues);
 	m_selectionMenu->setEnabled(hasValues);
 	action_select_all->setEnabled(hasValues);
 	action_clear_spreadsheet->setEnabled(hasValues);
@@ -1684,6 +1685,7 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 	m_plotDataMenu->setEnabled(plottable && hasValues);
 	m_analyzePlotMenu->setEnabled(numeric && hasValues);
 	m_statisticalAnalysisMenu->setEnabled(numeric && hasValues);
+	m_timeSeriesAnalysisMenu->setEnabled(numeric && hasValues);
 
 	m_columnSetAsMenu->setEnabled(numeric);
 	action_statistics_columns->setEnabled(hasEnoughValues);
