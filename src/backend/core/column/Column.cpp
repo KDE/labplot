@@ -1247,7 +1247,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 			break;
 		}
 		case ColumnMode::Text: {
-			// serialize text data using Base64 encoding with null separator			
+			// serialize text data using Base64 encoding with null separator	
 			QByteArray bytes;
 			for (int i = 0; i < rowCount(); ++i) {
 				bytes.append(textAt(i).toUtf8());
@@ -1478,7 +1478,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		if (!preview) {
 			// Decode data
 			QString content = reader->text().toString().trimmed();
-			// Datetime and Text for xmlVersion < 18 are read row by row above, 
+			// Datetime and Text for xmlVersion < 18 are read row by row above,
 			// everything else is Base64 encoded and is decoded via DecodeColumnTask
 			const auto mode = columnMode();
 			if (!content.isEmpty() && (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::Text)) {
