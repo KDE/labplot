@@ -329,7 +329,7 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	// Assert cannot be used, because the Textlabel sends the
 	// changed signal during load and so a retransform is triggered
-	// assert(!q->isLoading());
+	// Q_ASSERT(!q->isLoading());
 	if (suppress)
 		return;
 

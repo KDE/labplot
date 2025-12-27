@@ -461,7 +461,7 @@ struct PayloadExpressionParser : public Payload {
 double cell(double x, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
@@ -481,7 +481,7 @@ double cell(double x, const std::string_view& variable, const std::weak_ptr<Payl
 double cell_default_value(double x, double defaultValue, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
@@ -501,7 +501,7 @@ double cell_default_value(double x, double defaultValue, const std::string_view&
 double ma(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 	return (cell(p->row, variable, payload) + cell(p->row + 1, variable, payload)) / 2.;
@@ -510,7 +510,7 @@ double ma(const std::string_view& variable, const std::weak_ptr<Payload> payload
 double mr(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 	return fabs(cell(p->row + 1, variable, payload) - cell(p->row + 1 - 1, variable, payload));
@@ -519,7 +519,7 @@ double mr(const std::string_view& variable, const std::weak_ptr<Payload> payload
 double smmin(double x, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
@@ -546,7 +546,7 @@ double smmin(double x, const std::string_view& variable, const std::weak_ptr<Pay
 double smmax(double x, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
@@ -573,7 +573,7 @@ double smmax(double x, const std::string_view& variable, const std::weak_ptr<Pay
 double sma(double x, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
@@ -601,7 +601,7 @@ double smr(double x, const std::string_view& variable, const std::weak_ptr<Paylo
 double psample(double n, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
@@ -612,7 +612,7 @@ double psample(double n, const std::string_view& variable, const std::weak_ptr<P
 double rsample(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 

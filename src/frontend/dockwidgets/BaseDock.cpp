@@ -96,7 +96,7 @@ void BaseDock::updatePlotRangeList() {
 	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex + 1)
 
 	if (!m_cbPlotRangeList) {
-		assert(false);
+		Q_ASSERT(false);
 		DEBUG(Q_FUNC_INFO << ", ERROR: no plot range combo box")
 		return;
 	}

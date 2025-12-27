@@ -360,7 +360,7 @@ void InfoElement::curveDeleted(const AbstractAspect* aspect) {
 			// No remove of the custompoint
 
 			Lock lock(m_suppressVisibleChange);
-			assert(mp.curvePath == curve->path());
+			Q_ASSERT(mp.curvePath == curve->path());
 			mp.curve = nullptr;
 			mp.customPoint->setVisible(false);
 		}

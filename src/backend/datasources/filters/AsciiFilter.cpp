@@ -98,7 +98,7 @@ qint64 BufferReader::readData(char* out, qint64 maxLen) {
 }
 
 qint64 BufferReader::writeData(const char*, qint64) {
-	assert(false);
+	Q_ASSERT(false);
 	return 0;
 }
 
@@ -351,7 +351,7 @@ QPair<QString, QString> AsciiFilter::dataTypeString(const AbstractColumn::Column
 		}
 	}
 	DEBUG("Mode not found");
-	assert(false); // Mode not found
+	Q_ASSERT(false);
 	return QPair<QString, QString>(QStringLiteral(""), QStringLiteral(""));
 }
 
@@ -659,7 +659,7 @@ Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 	if (m_DataContainer.size() == 0) {
 		std::vector<void*> dataContainer;
 		if (!m_dataSource) {
-			assert(false);
+			Q_ASSERT(false);
 			return Status::NoDataSource();
 		}
 		// The column offset is already subtracted, so dataContainer contains only the new columns
@@ -684,7 +684,7 @@ Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 	} else if (columnImportMode == AbstractFileFilter::ImportMode::Replace)
 		dataContainerStartIndex = m_DataContainer.rowCount();
 	// This is not implemented
-	assert(rowImportMode != AbstractFileFilter::ImportMode::Prepend);
+	Q_ASSERT(rowImportMode != AbstractFileFilter::ImportMode::Prepend);
 
 	try {
 		const auto newRowCount = qMax(dataContainerStartIndex * 2, numberRowsReallocation);
@@ -1585,7 +1585,7 @@ int AsciiFilterPrivate::DataContainer::rowCount(unsigned long index) const {
 		return static_cast<QVector<QDateTime>*>(m_dataContainer[index])->size();
 		break;
 	}
-	assert(false);
+	Q_ASSERT(false);
 	return -1;
 }
 

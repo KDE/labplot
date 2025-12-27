@@ -2275,7 +2275,7 @@ void ColumnPrivate::setFormula(const QString& formula, const QVector<Column::For
 
 	for (const auto& data : m_formulaData) {
 		const auto* column = data.column();
-		assert(column);
+		Q_ASSERT(column);
 		if (autoUpdate)
 			connectFormulaColumn(column);
 	}
@@ -2377,7 +2377,7 @@ struct PayloadColumn : public Parsing::Payload {
 	double column##function_name(const std::string_view& variable, const std::weak_ptr<Parsing::Payload> payload) {                                            \
 		const auto p = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());                                                                               \
 		if (!p) {                                                                                                                                              \
-			assert(p); /* Debug build */                                                                                                                       \
+			Q_ASSERT(p);                                                                                                                                       \
 			return NAN;                                                                                                                                        \
 		}                                                                                                                                                      \
 		for (const auto& formulaData : p->formulaData) {                                                                                                       \
@@ -2419,7 +2419,7 @@ COLUMN_FUNCTION(Entropy, statistics().entropy)
 double cell_curr_column(double row, const std::weak_ptr<Parsing::Payload> payload) {
 	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
 	if (!pd) {
-		assert(pd); // Debug build
+		Q_ASSERT(pd);
 		return NAN;
 	}
 	int index = (int)row - 1;
@@ -2431,7 +2431,7 @@ double cell_curr_column(double row, const std::weak_ptr<Parsing::Payload> payloa
 double cell_curr_column_defaultvalue(double row, double defaultValue, const std::weak_ptr<Parsing::Payload> payload) {
 	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
 	if (!pd) {
-		assert(pd); // Debug build
+		Q_ASSERT(pd);
 		return NAN;
 	}
 	int index = (int)row - 1;
@@ -2443,7 +2443,7 @@ double cell_curr_column_defaultvalue(double row, double defaultValue, const std:
 double columnQuantile(double p, const std::string_view& variable, const std::weak_ptr<Parsing::Payload> payload) {
 	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
 	if (!pd) {
-		assert(pd); // Debug build
+		Q_ASSERT(pd);
 		return NAN;
 	}
 

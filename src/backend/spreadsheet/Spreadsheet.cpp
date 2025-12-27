@@ -1346,7 +1346,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
-	assert(d->m_usedInPlots.size() == 0);
+	Q_ASSERT(d->m_usedInPlots.size() == 0);
 	int columnOffset = 0;
 	setUndoAware(false);
 	if (m_model != nullptr)
