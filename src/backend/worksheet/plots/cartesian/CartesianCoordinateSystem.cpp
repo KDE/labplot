@@ -384,7 +384,7 @@ void CartesianCoordinateSystem::mapLogicalToSceneDefaultMapping(Lines& lines) co
 
 			const auto count = lines.count();
 			size_t resultIndex = 0;
-			for (size_t i = 0; i < count; i++) {
+			for (qsizetype i = 0; i < count; i++) {
 				auto line = lines.at(i);
 				LineClipResult clipResult;
 				if (!AbstractCoordinateSystem::clipLineToRect(&line, scaleRect, &clipResult))
