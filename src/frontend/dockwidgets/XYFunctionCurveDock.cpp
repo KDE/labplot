@@ -16,7 +16,6 @@
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <QCompleter>
-#include <QKeyEvent>
 #include <QMenu>
 #include <QWidgetAction>
 
@@ -179,14 +178,12 @@ void XYFunctionCurveDock::addVariable() {
 	le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 	auto* validator = new QRegularExpressionValidator(QRegularExpression(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
 	le->setValidator(validator);
-	le->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding));
 	connect(le, &QLineEdit::textChanged, this, &XYFunctionCurveDock::variableNameChanged);
 	m_gridLayoutVariables->addWidget(le, row, 0, 1, 1);
 	m_variableLineEdits << le;
 
 	// combo box for the data column
 	auto* cb{new TreeViewComboBox()};
-	cb->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &XYFunctionCurveDock::variableColumnChanged);
 	m_gridLayoutCurves->addWidget(cb, row, 2, 1, 1);
 	m_variableComboBoxes << cb;
