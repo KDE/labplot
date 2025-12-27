@@ -1247,7 +1247,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 			break;
 		}
 		case ColumnMode::Text: {
-			// serialize text data using Base64 encoding with null separator	
+			// serialize text data using Base64 encoding with null separator
 			QByteArray bytes;
 			for (int i = 0; i < rowCount(); ++i) {
 				bytes.append(textAt(i).toUtf8());
