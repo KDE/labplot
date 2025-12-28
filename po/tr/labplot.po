@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2025-12-23 11:52+0300\n"
+"PO-Revision-Date: 2025-12-27 11:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16707,14 +16707,14 @@ msgstr "Eşit değildir"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:232
 #, kde-format
 msgid "Between (Incl. End Points)"
-msgstr "Arasında (Son noktalar içerilir)"
+msgstr "Arasında (Bitiş noktaları içerilir)"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:48
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:224
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:233
 #, kde-format
 msgid "Between (Excl. End Points)"
-msgstr "Arasında (Son noktalar içerilmez)"
+msgstr "Arasında (Bitiş noktaları içerilmez)"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:49
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:225
