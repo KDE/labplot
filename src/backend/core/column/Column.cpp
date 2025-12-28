@@ -1045,6 +1045,49 @@ QIcon Column::icon() const {
 		return QIcon::fromTheme(QLatin1String("mathmode"));
 }
 
+QString Column::caption() const {
+	QString caption = AbstractAspect::caption();
+
+	caption += QLatin1String("<br>");
+	caption += QLatin1String("<br>") + i18n("Size: %1", rowCount());
+	// TODO: active this once we have a more efficient implementation of this function
+	// caption += QLatin1String("<br>") + i18n("Values: %1", col->availableRowCount());
+	caption += QLatin1String("<br>") + i18n("Type: %1", columnModeString());
+	caption += QLatin1String("<br>") + i18n("Plot Designation: %1", plotDesignationString());
+
+	// in case it's a calculated column, add additional information
+	// about the formula and parameters
+	if (!formula().isEmpty()) {
+		caption += QLatin1String("<br><br>") + i18n("Formula:");
+		QString f(QStringLiteral("f("));
+		QString parameters;
+		for (int i = 0; i < formulaData().size(); ++i) {
+			auto& data = formulaData().at(i);
+
+			// string for the function definition like f(x,y), etc.
+			f += data.variableName();
+			if (i != formulaData().size() - 1)
+				f += QStringLiteral(", ");
+
+			// string for the parameters and the references to the used columns for them
+			if (!parameters.isEmpty())
+				parameters += QLatin1String("<br>");
+			parameters += data.variableName();
+			if (data.column())
+				parameters += QStringLiteral(" = ") + data.column()->path();
+		}
+
+		caption += QStringLiteral("<br>") + f + QStringLiteral(") = ") + formula();
+		caption += QStringLiteral("<br>") + parameters;
+		if (formulaAutoUpdate())
+			caption += QStringLiteral("<br>") + i18n("auto update: true");
+		else
+			caption += QStringLiteral("<br>") + i18n("auto update: false");
+	}
+
+	return caption;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \name serialize/deserialize
 //@{

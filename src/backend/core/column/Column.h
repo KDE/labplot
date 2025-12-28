@@ -45,6 +45,7 @@ public:
 	~Column() override;
 
 	QIcon icon() const override;
+	QString caption() const override;
 	QMenu* createContextMenu() override;
 
 	void updateLocale();

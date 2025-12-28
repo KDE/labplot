@@ -298,6 +298,7 @@ public:
 	void setSuppressWriteUuid(bool);
 	QString comment() const;
 	void setCreationTime(const QDateTime&);
+	virtual QString caption() const;
 	QDateTime creationTime() const;
 	virtual Project* project();
 	virtual const Project* project() const;
