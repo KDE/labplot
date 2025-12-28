@@ -162,7 +162,7 @@ void SpreadsheetView::init() {
 	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 	// horizontal header
-	m_horizontalHeader = new SpreadsheetHeaderView(this);
+	m_horizontalHeader = new SpreadsheetHeaderView(this, m_spreadsheet);
 
 	m_horizontalHeader->setSectionsClickable(true);
 	m_horizontalHeader->setHighlightSections(true);
