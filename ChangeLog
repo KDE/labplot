@@ -11,6 +11,7 @@ New features:
 		* seasonal decomposition with STL and MSTL methods
 	* [spreadsheet]
 		* allow to drop entire rows in the spreadsheet if the condition was met in the "Drop Values Dialog" for the selected columns
+		* more informative tooltip texts for columns also including the usage of the column in other places in the project
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)

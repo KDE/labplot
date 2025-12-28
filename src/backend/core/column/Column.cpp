@@ -1055,10 +1055,9 @@ QString Column::caption() const {
 	caption += QLatin1String("<br>") + i18n("Type: %1", columnModeString());
 	caption += QLatin1String("<br>") + i18n("Plot Designation: %1", plotDesignationString());
 
-	// in case it's a calculated column, add additional information
-	// about the formula and parameters
+	// in case it's a calculated column, add additional information about the formula and parameters
 	if (!formula().isEmpty()) {
-		caption += QLatin1String("<br><br>") + i18n("Formula:");
+		caption += QLatin1String("<br><br><b>") + i18n("Formula:") + QLatin1String("</b>");
 		QString f(QStringLiteral("f("));
 		QString parameters;
 		for (int i = 0; i < formulaData().size(); ++i) {
@@ -1080,9 +1079,65 @@ QString Column::caption() const {
 		caption += QStringLiteral("<br>") + f + QStringLiteral(") = ") + formula();
 		caption += QStringLiteral("<br>") + parameters;
 		if (formulaAutoUpdate())
-			caption += QStringLiteral("<br>") + i18n("auto update: true");
+			caption += QStringLiteral("<br>") + i18n("auto update: true") + QStringLiteral("   (*)");
 		else
 			caption += QStringLiteral("<br>") + i18n("auto update: false");
+	}
+
+	// add the information about the usage of this column in other places, similar to the logic in createContextMenu().
+	auto* project = this->project();
+
+	// add curves where the column is currently in use
+	bool sectionAdded = false;
+	const auto& plots = project->children<Plot>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* plot : plots) {
+		const bool used = plot->usingColumn(this, true);
+		if (used) {
+			if (!sectionAdded) {
+				caption += QStringLiteral("<br><br><b>") + i18n("Used in Plots:") + QStringLiteral("</b>");
+				sectionAdded = true;
+			}
+
+			caption += QStringLiteral("<br>") + plot->path();
+		}
+	}
+
+	// add axes where the column is used as a custom column for ticks positions or labels
+	sectionAdded = false;
+	const auto& axes = project->children<Axis>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* axis : axes) {
+		const bool used = (axis->majorTicksColumn() == this || axis->minorTicksColumn() == this || axis->labelsTextColumn() == this);
+		if (used) {
+			if (!sectionAdded) {
+				caption += QStringLiteral("<br><br><b>") + i18n("Used in Axes:") + QStringLiteral("</b>");
+				sectionAdded = true;
+			}
+
+			caption += QStringLiteral("<br>") + axis->path();
+		}
+	}
+
+	// add calculated columns where the column is used in formula variables
+	sectionAdded = false;
+	const auto& columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+	const QString& path = this->path();
+	for (const auto* column : columns) {
+		int index = -1;
+		for (int i = 0; i < column->formulaData().count(); i++) {
+			if (path == column->formulaData().at(i).columnName()) {
+				index = i;
+				break;
+			}
+		}
+
+		if (index != -1) {
+			if (!sectionAdded) {
+				caption += QStringLiteral("<br><br><b>") + i18n("Used in Calculations:") + QStringLiteral("</b>");
+				sectionAdded = true;
+			}
+
+			caption += QStringLiteral("<br>") + column->path();
+		}
 	}
 
 	return caption;
