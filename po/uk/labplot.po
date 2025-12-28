@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-27 00:38+0000\n"
-"PO-Revision-Date: 2025-12-18 07:56+0200\n"
+"POT-Creation-Date: 2025-12-28 00:38+0000\n"
+"PO-Revision-Date: 2025-12-27 08:06+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -347,13 +347,13 @@ msgid "%1: unmask cells"
 msgstr "%1: зняти маскування з комірок"
 
 #: src/backend/core/abstractcolumncommands.cpp:239
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2646
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2648
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: встановити формат теплової карти"
 
 #: src/backend/core/abstractcolumncommands.cpp:265
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2664
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2666
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: вилучити формат теплової карти"
@@ -584,14 +584,14 @@ msgstr "%1: спорожнити стовпчик"
 msgid "%1: set random values"
 msgstr "%1: встановити випадкові значення"
 
-#: src/backend/core/column/Column.cpp:1593
+#: src/backend/core/column/Column.cpp:1623
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "номер рядка є некоректним або номер рядка пропущено"
 
-#: src/backend/core/column/Column.cpp:1602
-#: src/backend/core/column/Column.cpp:1611
-#: src/backend/core/column/Column.cpp:1620
+#: src/backend/core/column/Column.cpp:1632
+#: src/backend/core/column/Column.cpp:1641
+#: src/backend/core/column/Column.cpp:1650
 #, kde-format
 msgid "invalid row value"
 msgstr "некоректне значення рядка"
@@ -603,7 +603,7 @@ msgid "%1: change cell values"
 msgstr "%1: змінити значення у комірках"
 
 #: src/backend/core/column/columncommands.cpp:529
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2819
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2821
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: встановити позначення графіка"
@@ -1809,11 +1809,11 @@ msgstr "Кількість змінних: "
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:247
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:371
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:402
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:231
 #, kde-format
 msgid "Variables:"
 msgstr "Змінні:"
@@ -2206,10 +2206,10 @@ msgstr "Ключ"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #: src/frontend/matrix/MatrixView.cpp:618
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:187
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2552
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2572
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2589
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2605
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2554
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2574
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2591
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2607
 #: src/frontend/ui/dockwidgets/columndock.ui:182
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:65
 #, kde-format
@@ -6202,13 +6202,13 @@ msgid "unexpected end of document"
 msgstr "неочікуване завершення документа"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3823
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3825
 #, kde-format
 msgid "FITS image"
 msgstr "Зображення FITS"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3823
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3825
 #, kde-format
 msgid "FITS table"
 msgstr "Таблиця FITS"
@@ -6432,17 +6432,15 @@ msgstr "Середнє"
 
 #: src/backend/nsl/nsl_baseline.cpp:46
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
-#, fuzzy, kde-format
-#| msgid "Points"
+#, kde-format
 msgid "End Points"
-msgstr "Точки"
+msgstr "Кінцеві точки"
 
 #: src/backend/nsl/nsl_baseline.cpp:46
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:178
-#, fuzzy, kde-format
-#| msgid "Regular Expression"
+#, kde-format
 msgid "Linear Regression"
-msgstr "Формальний вираз"
+msgstr "Лінійна регресія"
 
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
@@ -9286,10 +9284,9 @@ msgstr "Авто-/Перехресна кореляція"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:429
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:464
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2159
-#, fuzzy, kde-format
-#| msgid "Delete Connection"
+#, kde-format
 msgid "Baseline Correction"
-msgstr "Вилучити з'єднання"
+msgstr "Виправлення базової лінії"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:445
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:520
@@ -9380,7 +9377,7 @@ msgstr "функція помилки"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:458
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:487
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:352
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:281
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:333
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:314
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:397
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:570
@@ -9731,10 +9728,9 @@ msgid "%1: set plot color map"
 msgstr "%1: встановити прив'язку кольорів креслення"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1837
-#, fuzzy, kde-format
-#| msgid "%1: set axis offset"
+#, kde-format
 msgid "%1: set y-offset"
-msgstr "%1: встановити відступ вісі"
+msgstr "%1: встановити відступ від y"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2020
 #, kde-format
@@ -9827,21 +9823,19 @@ msgid "%1: add smoothing curve"
 msgstr "%1: додати криву згладжування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2162
-#, fuzzy, kde-format
-#| msgid "%1: add function of '%2'"
+#, kde-format
 msgid "%1: baseline correction for '%2'"
-msgstr "%1: додати функцію «%2»"
+msgstr "%1: виправлення базової лінії для «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2163
 #, kde-format
 msgid "Baseline correction for '%1'"
-msgstr ""
+msgstr "Виправлення базової лінії для «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2170
-#, fuzzy, kde-format
-#| msgid "%1: add integration curve"
+#, kde-format
 msgid "%1: add baseline correction curve"
-msgstr "%1: додати криву інтегрування"
+msgstr "%1: додати криву виправлення базової лінії"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2181
 #, kde-format
@@ -10733,10 +10727,9 @@ msgid "%1: assign second y-data"
 msgstr "%1: призначити другі дані за y"
 
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:55
-#, fuzzy, kde-format
-#| msgid "%1: set options and perform the correlation"
+#, kde-format
 msgid "%1: set baseline options and perform correction"
-msgstr "%1: встановити параметри і виконати кореляцію"
+msgstr "%1: встановити параметри базової лінії і виконати виправлення"
 
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:92
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:158
@@ -11215,7 +11208,7 @@ msgstr "%1: розблокувати"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:451
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:38
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:112
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:166
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:340
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:145
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:47
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:103
@@ -12366,16 +12359,16 @@ msgid "Curve"
 msgstr "Крива"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4066
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4121
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4123
 #: src/frontend/worksheet/WorksheetView.cpp:2145
 #, kde-format
 msgid "Failed to export"
 msgstr "Не вдалося експортувати"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4066
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4121
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4123
 #: src/frontend/worksheet/WorksheetView.cpp:2145
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -14540,7 +14533,7 @@ msgstr "Діапазони графіка:"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:878
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:337
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:253
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:173
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:313
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:79
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:54
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:86
@@ -15593,6 +15586,14 @@ msgid ""
 "interpolation using first and last point and subtract it.</li><li>Linear "
 "Regression - do a linear regression to the data and subtract it.</li></ul>"
 msgstr ""
+"Метод, що використовується для розрахунку виправлення базової лінії:"
+"<ul><li>arPLS — метод штрафних найменших квадратів з асиметричним повторним "
+"зважуванням.</li><li>Мінімум — відняти мінімум даних.</li><li>Максимум — "
+"відняти максимум даних.</li><li>Середнє — відняти середнє значення даних.</"
+"li><li>Медіана — відняти медіану даних.</li><li>Кінцеві точки — виконати "
+"лінійну інтерполяцію, використовуючи першу та останню точку, та відняти її.</"
+"li><li>Лінійна регресія — виконати лінійну регресію даних та відняти її.</"
+"li></ul>"
 
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:195
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:163
@@ -15621,10 +15622,9 @@ msgid "Number of iterations to perform."
 msgstr "Кількість ітерацій, які слід виконати."
 
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:299
-#, fuzzy, kde-format
-#| msgid "Correlation status: %1"
+#, kde-format
 msgid "Baseline correction status: %1"
-msgstr "Стан кореляції: %1"
+msgstr "Стан виправлення базової лінії: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:180
@@ -15930,7 +15930,7 @@ msgstr "Стан фільтра Фур'є: %1"
 msgid "Fourier transformation status: %1"
 msgstr "Стан перетворення Фур'є: %1"
 
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:124
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:123
 #, kde-format
 msgid ""
 "The curve \"%1\"\n"
@@ -15941,7 +15941,7 @@ msgstr ""
 "втрачено. Його дані буде автоматично використано, коли його буде створено "
 "знову."
 
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:179
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:178
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:225
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:322
 #, kde-format
@@ -15952,14 +15952,14 @@ msgstr ""
 "Назва змінної може складатися лише з літер, цифр та символів «_» і має "
 "починатися з літери"
 
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:215
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:365
 #, kde-format
 msgid "Delete variable"
 msgstr "Вилучити змінну"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:247
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:402
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
 #, kde-format
@@ -16333,12 +16333,10 @@ msgid "Properties: Convolution/Deconvolution"
 msgstr "Властивості: Згортка/Розгортка"
 
 #: src/frontend/GuiObserver.cpp:341
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Integration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Baseline Correction"
-msgstr "Властивості: Інтегрування"
+msgstr "Властивості: Виправлення базової лінії"
 
 #: src/frontend/GuiObserver.cpp:346
 #, kde-format
@@ -16791,7 +16789,7 @@ msgstr "Виберіть файл для збереження визначенн
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:288
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:410
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:51
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:288
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:196
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:288
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:130
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:40
@@ -17266,8 +17264,8 @@ msgid "%1 printed"
 msgstr "Надруковано %1"
 
 #: src/frontend/MainWin.cpp:1214
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3792
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3793
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3794
 #, kde-format
 msgid "%1"
 msgstr "%1"
@@ -17547,7 +17545,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: вирізати позначені комірки"
 
 #: src/frontend/matrix/MatrixView.cpp:685
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1839
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1841
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: вставити з буфера обміну"
@@ -19460,14 +19458,14 @@ msgstr "Спростити стовпчики"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:328
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1196
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1582
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1583
 #, kde-format
 msgid "Show Comments"
 msgstr "Показувати коментарі"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:329
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1207
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1587
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1588
 #, kde-format
 msgid "Show Sparklines"
 msgstr "Показати спарклайни"
@@ -19516,7 +19514,7 @@ msgid "Insert Multiple Columns Right"
 msgstr "Вставити декілька стовпчиків правіше"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:350
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1672
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1673
 #, kde-format
 msgid "Freeze Column"
 msgstr "Заморозити стовпчик"
@@ -19679,7 +19677,7 @@ msgid "Log-normal"
 msgstr "Логнормальний"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:577
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2269
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2271
 #, kde-format
 msgid "Seasonal Decomposition"
 msgstr "Сезонна декомпозиція"
@@ -19721,54 +19719,54 @@ msgid "Ladder of Powers"
 msgstr "Ланцюг степенів"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1194
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1580
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1581
 #, kde-format
 msgid "Hide Comments"
 msgstr "Приховати коментарі"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1205
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1585
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1586
 #, kde-format
 msgid "Hide Sparklines"
 msgstr "Приховати спарклайни"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1676
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1677
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "Розморозити стовпчик"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1761
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1763
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: вирізати позначені комірки"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2074
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2076
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Недостатньо пам'яті для завершення цієї дії."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2087
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2089
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: замаскувати позначені комірки"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2118
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2120
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: зняти маскування позначених комірок"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2277
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2288
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2279
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2290
 #, kde-format
 msgid "Seasonal Decomposition for %1"
 msgstr "Сезонна декомпозиція для %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2309
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2311
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: заповнити комірки номерами рядків"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2373
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2375
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
@@ -19777,42 +19775,42 @@ msgstr[1] "%1: заповнити стовпчики номерами рядкі
 msgstr[2] "%1: заповнити стовпчики номерами рядків"
 msgstr[3] "%1: заповнити стовпчик номерами рядків"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2416
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2418
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: заповнити комірки випадковими значеннями"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2541
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2543
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: заповнити комірки сталими значеннями"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2551
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2572
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2589
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2605
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2553
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2574
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2591
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2607
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Заповнити позначене сталими значеннями"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2684
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2722
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2686
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2724
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Вставлення порожніх стовпчиків"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2685
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2723
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2687
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2725
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Вкажіть кількість стовпчиків, які слід вставити"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2756
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2758
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: вилучити позначені стовпчики"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2852
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2854
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
@@ -19821,7 +19819,7 @@ msgstr[1] "%1: обернути стовпчики"
 msgstr[2] "%1: обернути стовпчики"
 msgstr[3] "%1: обернути стовпчик"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2924
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2926
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -19830,142 +19828,142 @@ msgstr ""
 "Позначені стовпчики містять дані різних типів. Через це їх не можна "
 "спростити."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2960
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2962
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: нормалізувати стовпчики"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2980
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
 #, kde-format
 msgid "Sum = 0"
 msgstr "Сума = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2991
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2993
 #, kde-format
 msgid "Min = 0"
 msgstr "Min = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3002
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3004
 #, kde-format
 msgid "Max = 0"
 msgstr "Max = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3013
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3015
 #, kde-format
 msgid "Count = 0"
 msgstr "Кількість = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3024
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3026
 #, kde-format
 msgid "Mean = 0"
 msgstr "Середнє = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3035
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3037
 #, kde-format
 msgid "Median = 0"
 msgstr "Медіана = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3047
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3049
 #, kde-format
 msgid "Mode = 0"
 msgstr "Мода = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3049
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3051
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "'Моду не визначено'"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3060
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3062
 #, kde-format
 msgid "Range = 0"
 msgstr "Діапазон = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3071
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3105
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3073
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3107
 #, kde-format
 msgid "SD = 0"
 msgstr "СВ = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3082
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3117
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3084
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3119
 #, kde-format
 msgid "MAD = 0"
 msgstr "МАВ = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3093
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3129
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3095
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3131
 #, kde-format
 msgid "IQR = 0"
 msgstr "МКР = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3141
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3143
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "Max - Min = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3160
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3162
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Нормалізація неможлива"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3172
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3174
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: стовпчики перетворення степенів"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3288
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3290
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: статистика щодо стовпчиків"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3319
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3321
 #, kde-format
 msgid "Selection in %1"
 msgstr "Позначене у %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3362
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3364
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: статистика щодо рядків"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3372
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3374
 #, kde-format
 msgid "Row %1"
 msgstr "Рядок %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3397
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3433
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3399
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3435
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Вставлення декількох рядків"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3398
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3434
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3400
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3436
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Вкажіть кількість рядків, які слід вставити"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3469
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3471
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: вилучити позначені рядки"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3504
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3506
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: спорожнити позначені комірки"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3760
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr "Позначене 1: %1 рядків, %2 стовпчиків"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr "Позначене: %1 комірок"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3786
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3788
 #, kde-format
 msgid "row"
 msgid_plural "rows"
@@ -19974,7 +19972,7 @@ msgstr[1] "рядки"
 msgstr[2] "рядків"
 msgstr[3] "рядок"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3787
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3789
 #, kde-format
 msgid "column"
 msgid_plural "columns"
@@ -19983,68 +19981,68 @@ msgstr[1] "стовпчики"
 msgstr[2] "стовпчиків"
 msgstr[3] "стовпчик"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3788
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3790
 #, kde-format
 msgid "cells"
 msgstr "комірки"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3789
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
 #, kde-format
 msgid "masked value"
 msgstr "замасковане значення"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3789
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
 #, kde-format
 msgid "masked values"
 msgstr "замасковані значення"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3792
 #, kde-format
 msgid "missing value"
 msgstr "не вистачає значення"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3792
 #, kde-format
 msgid "missing values"
 msgstr "не вистачає значень"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3793
 #, kde-format
 msgid " , "
 msgstr " , "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3792
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3794
 #, kde-format
 msgid ", "
 msgstr ", "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3798
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr "Позначено: %1 %2, %3 %4%5 %6 %7 %8"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3806
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3808
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Позначено: %1 %2%3 %4 %5 %6"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3885
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3887
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Друк електронної таблиці"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4500
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4502
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Не вдалося створити базу даних SQLite %1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4532
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4534
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Не вдалося створити таблицю у базі даних SQLite %1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4587
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4589
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Не вдалося вставити значення до таблиці."
@@ -20343,7 +20341,7 @@ msgstr "Тип похибки за Y:"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:118
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:101
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:243
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:207
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:122
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:72
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:373
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:260
@@ -22675,7 +22673,7 @@ msgstr "Вилучити поточний позначений діапазон 
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:295
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:308
 #: src/frontend/ui/dockwidgets/scriptdock.ui:138
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:264
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:179
 #, kde-format
 msgid "..."
 msgstr "…"
@@ -22965,10 +22963,9 @@ msgstr "Радіус кута:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStack)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1506
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Stack"
-msgstr "Стосами"
+msgstr "Стос"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:87
@@ -23230,7 +23227,7 @@ msgstr "Рівень значущості α:"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:182
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:354
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:122
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:295
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:203
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:281
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:123
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:563
@@ -23922,10 +23919,9 @@ msgstr "Масштабування вмісту:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSubtraction)
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:199
-#, fuzzy, kde-format
-#| msgid "Subtract"
+#, kde-format
 msgid "Subtraction"
-msgstr "Відняти"
+msgstr "Віднімання"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #. i18n: ectx: property (text), widget (QLabel, lARPLSSmoothness)
@@ -24492,14 +24488,14 @@ msgid "Window:"
 msgstr "Вікно:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:136
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:275
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:63
 #, kde-format
 msgid "Function:"
 msgstr "Функція:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:197
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:287
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:162
 #, kde-format
 msgid "f(x) = "
