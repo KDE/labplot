@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-28 00:38+0000\n"
+"POT-Creation-Date: 2025-12-29 00:39+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -18,40 +18,40 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 24.04.70\n"
 
-#: src/backend/core/AbstractAspect.cpp:241
+#: src/backend/core/AbstractAspect.cpp:239
 #, fuzzy, kde-format
 #| msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgid ""
 "Intended name \"%1\" was changed to \"%2\" in order to avoid name collision."
 msgstr "將 %1 重新命名為 %2 以避免名稱衝突。"
 
-#: src/backend/core/AbstractAspect.cpp:255
+#: src/backend/core/AbstractAspect.cpp:253
 #, kde-format
 msgid "%1: change comment"
 msgstr "%1：變更註解"
 
-#: src/backend/core/AbstractAspect.cpp:348
+#: src/backend/core/AbstractAspect.cpp:353
 #, kde-format
 msgid "Duplicate Here"
 msgstr "在此建立複本"
 
-#: src/backend/core/AbstractAspect.cpp:363
+#: src/backend/core/AbstractAspect.cpp:368
 #, kde-format
 msgid "Paste '%1'"
 msgstr "貼上「%1」"
 
 # LabPlot 同時有 worksheet 和 spreadsheet，所以試算表跟工作表應該要分清楚
-#: src/backend/core/AbstractAspect.cpp:375
+#: src/backend/core/AbstractAspect.cpp:380
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "建立資料試算表"
 
-#: src/backend/core/AbstractAspect.cpp:423
+#: src/backend/core/AbstractAspect.cpp:428
 #, kde-format
 msgid "Rename"
 msgstr "重新命名"
 
-#: src/backend/core/AbstractAspect.cpp:425
+#: src/backend/core/AbstractAspect.cpp:430
 #: src/backend/spreadsheet/Spreadsheet.cpp:718
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
@@ -60,22 +60,22 @@ msgstr "重新命名"
 msgid "Delete"
 msgstr "刪除"
 
-#: src/backend/core/AbstractAspect.cpp:433
+#: src/backend/core/AbstractAspect.cpp:438
 #, kde-format
 msgid "Move"
 msgstr "移動"
 
-#: src/backend/core/AbstractAspect.cpp:436
+#: src/backend/core/AbstractAspect.cpp:441
 #, kde-format
 msgid "Up"
 msgstr "往上"
 
-#: src/backend/core/AbstractAspect.cpp:439
+#: src/backend/core/AbstractAspect.cpp:444
 #, kde-format
 msgid "Down"
 msgstr "往下"
 
-#: src/backend/core/AbstractAspect.cpp:525
+#: src/backend/core/AbstractAspect.cpp:530
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:227
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2330
@@ -83,60 +83,60 @@ msgstr "往下"
 msgid "%1: add %2"
 msgstr "%1：新增 %2"
 
-#: src/backend/core/AbstractAspect.cpp:527
-#: src/backend/core/AbstractAspect.cpp:564
+#: src/backend/core/AbstractAspect.cpp:532
+#: src/backend/core/AbstractAspect.cpp:569
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "將 %1 重新命名為 %2 以避免名稱衝突。"
 
-#: src/backend/core/AbstractAspect.cpp:562
+#: src/backend/core/AbstractAspect.cpp:567
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1：在 %3 之前插入 %2"
 
-#: src/backend/core/AbstractAspect.cpp:562
+#: src/backend/core/AbstractAspect.cpp:567
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1：在結尾之前插入 %2"
 
-#: src/backend/core/AbstractAspect.cpp:597
+#: src/backend/core/AbstractAspect.cpp:602
 #: src/backend/core/aspectcommands.h:102
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1：移除 %2"
 
-#: src/backend/core/AbstractAspect.cpp:610
+#: src/backend/core/AbstractAspect.cpp:615
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1：移除所有子節點"
 
-#: src/backend/core/AbstractAspect.cpp:722
+#: src/backend/core/AbstractAspect.cpp:727
 #, fuzzy, kde-format
 #| msgid "%1: pasted '%2'"
 msgid "%1: pasted"
 msgstr "%1：已貼上「%2」"
 
-#: src/backend/core/AbstractAspect.cpp:817
+#: src/backend/core/AbstractAspect.cpp:822
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1：已貼上「%2」"
 
-#: src/backend/core/AbstractAspect.cpp:819
+#: src/backend/core/AbstractAspect.cpp:824
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1：已為「%2」建立複本"
 
-#: src/backend/core/AbstractAspect.cpp:820
+#: src/backend/core/AbstractAspect.cpp:825
 #, fuzzy, kde-format
 msgid "Copy of '%1'"
 msgstr "不做任何事"
 
-#: src/backend/core/AbstractAspect.cpp:963
+#: src/backend/core/AbstractAspect.cpp:968
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "屬性 'name' 遺失或為空。"
 
-#: src/backend/core/AbstractAspect.cpp:969
+#: src/backend/core/AbstractAspect.cpp:974
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "%1 建立時間不正確。將改用目前時間。"
@@ -442,7 +442,7 @@ msgid "%1: rename to %2"
 msgstr "%1：重新命名為  %2"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
-#: src/backend/core/AspectTreeModel.cpp:165
+#: src/backend/core/AspectTreeModel.cpp:164
 #: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
@@ -452,7 +452,7 @@ msgid "Name"
 msgstr "名稱"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
-#: src/backend/core/AspectTreeModel.cpp:167
+#: src/backend/core/AspectTreeModel.cpp:166
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/datasources/matiooptionswidget.ui:47
@@ -460,65 +460,33 @@ msgstr "名稱"
 msgid "Type"
 msgstr "類型"
 
-#: src/backend/core/AspectTreeModel.cpp:169
+#: src/backend/core/AspectTreeModel.cpp:168
 #, fuzzy, kde-format
 msgid "Created"
 msgstr "已建立"
 
-#: src/backend/core/AspectTreeModel.cpp:171
+#: src/backend/core/AspectTreeModel.cpp:170
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:66
 #, fuzzy, kde-format
 msgid "Comment"
 msgstr "註解"
 
-#: src/backend/core/AspectTreeModel.cpp:194
+#: src/backend/core/AspectTreeModel.cpp:193
 #, kde-format
 msgid "%1   (non-plottable data)"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:196
+#: src/backend/core/AspectTreeModel.cpp:195
 #, kde-format
 msgid "%1   (non-numeric data)"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:198
+#: src/backend/core/AspectTreeModel.cpp:197
 #, fuzzy, kde-format
 msgid "%1   (no values)"
 msgstr "數值"
 
-#: src/backend/core/AspectTreeModel.cpp:236
-#: src/frontend/datasources/ImportFileWidget.cpp:1698
-#, fuzzy, kde-format
-msgid "Size: %1"
-msgstr "大小"
-
-#. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/AspectTreeModel.cpp:239
-#, fuzzy, kde-format
-msgid "Type: %1"
-msgstr "類型"
-
-#: src/backend/core/AspectTreeModel.cpp:240
-#, fuzzy, kde-format
-msgid "Plot Designation: %1"
-msgstr "位置："
-
-#: src/backend/core/AspectTreeModel.cpp:245
-#, fuzzy, kde-format
-msgid "Formula:"
-msgstr "格式："
-
-#: src/backend/core/AspectTreeModel.cpp:267
-#, kde-format
-msgid "auto update: true"
-msgstr ""
-
-#: src/backend/core/AspectTreeModel.cpp:269
-#, kde-format
-msgid "auto update: false"
-msgstr ""
-
-#: src/backend/core/AspectTreeModel.cpp:440
+#: src/backend/core/AspectTreeModel.cpp:391
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr ""
@@ -587,14 +555,63 @@ msgstr ""
 msgid "%1: set random values"
 msgstr "設定字型"
 
-#: src/backend/core/column/Column.cpp:1623
+#: src/backend/core/column/Column.cpp:1052
+#: src/frontend/datasources/ImportFileWidget.cpp:1698
+#, fuzzy, kde-format
+msgid "Size: %1"
+msgstr "大小"
+
+#. i18n("Values: %1", col->availableRowCount());
+#: src/backend/core/column/Column.cpp:1055
+#, fuzzy, kde-format
+msgid "Type: %1"
+msgstr "類型"
+
+#: src/backend/core/column/Column.cpp:1056
+#, fuzzy, kde-format
+msgid "Plot Designation: %1"
+msgstr "位置："
+
+#: src/backend/core/column/Column.cpp:1060
+#, fuzzy, kde-format
+msgid "Formula:"
+msgstr "格式："
+
+#: src/backend/core/column/Column.cpp:1082
+#, kde-format
+msgid "auto update: true"
+msgstr ""
+
+#: src/backend/core/column/Column.cpp:1084
+#, kde-format
+msgid "auto update: false"
+msgstr ""
+
+#: src/backend/core/column/Column.cpp:1097
+#, fuzzy, kde-format
+#| msgid "LabPlot2"
+msgid "Used in Plots:"
+msgstr "LabPlot2"
+
+#: src/backend/core/column/Column.cpp:1112
+#, kde-format
+msgid "Used in Axes:"
+msgstr ""
+
+#: src/backend/core/column/Column.cpp:1135
+#, fuzzy, kde-format
+#| msgid "Save  Calculations:"
+msgid "Used in Calculations:"
+msgstr "儲存計算結果："
+
+#: src/backend/core/column/Column.cpp:1721
 #, kde-format
 msgid "invalid or missing row index"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1632
-#: src/backend/core/column/Column.cpp:1641
-#: src/backend/core/column/Column.cpp:1650
+#: src/backend/core/column/Column.cpp:1730
+#: src/backend/core/column/Column.cpp:1739
+#: src/backend/core/column/Column.cpp:1748
 #, kde-format
 msgid "invalid row value"
 msgstr ""

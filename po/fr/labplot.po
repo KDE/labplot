@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-28 00:38+0000\n"
+"POT-Creation-Date: 2025-12-29 00:39+0000\n"
 "PO-Revision-Date: 2025-12-19 09:18+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -27,39 +27,39 @@ msgstr ""
 "X-Generator: Lokalize 25.12.0\n"
 "X-Text-Markup: kde4\n"
 
-#: src/backend/core/AbstractAspect.cpp:241
+#: src/backend/core/AbstractAspect.cpp:239
 #, kde-format
 msgid ""
 "Intended name \"%1\" was changed to \"%2\" in order to avoid name collision."
 msgstr ""
 "Le nom prévu « %1 » a été changé en « %2 » pour éviter un conflit de nom."
 
-#: src/backend/core/AbstractAspect.cpp:255
+#: src/backend/core/AbstractAspect.cpp:253
 #, kde-format
 msgid "%1: change comment"
 msgstr "%1 : modifier le commentaire"
 
-#: src/backend/core/AbstractAspect.cpp:348
+#: src/backend/core/AbstractAspect.cpp:353
 #, kde-format
 msgid "Duplicate Here"
 msgstr "Dupliquer ici"
 
-#: src/backend/core/AbstractAspect.cpp:363
+#: src/backend/core/AbstractAspect.cpp:368
 #, kde-format
 msgid "Paste '%1'"
 msgstr "Coller « %1 »"
 
-#: src/backend/core/AbstractAspect.cpp:375
+#: src/backend/core/AbstractAspect.cpp:380
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "Créer une feuille de calcul de données"
 
-#: src/backend/core/AbstractAspect.cpp:423
+#: src/backend/core/AbstractAspect.cpp:428
 #, kde-format
 msgid "Rename"
 msgstr "Renommer"
 
-#: src/backend/core/AbstractAspect.cpp:425
+#: src/backend/core/AbstractAspect.cpp:430
 #: src/backend/spreadsheet/Spreadsheet.cpp:718
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
@@ -68,22 +68,22 @@ msgstr "Renommer"
 msgid "Delete"
 msgstr "Supprimer"
 
-#: src/backend/core/AbstractAspect.cpp:433
+#: src/backend/core/AbstractAspect.cpp:438
 #, kde-format
 msgid "Move"
 msgstr "Déplacer"
 
-#: src/backend/core/AbstractAspect.cpp:436
+#: src/backend/core/AbstractAspect.cpp:441
 #, kde-format
 msgid "Up"
 msgstr "Haut"
 
-#: src/backend/core/AbstractAspect.cpp:439
+#: src/backend/core/AbstractAspect.cpp:444
 #, kde-format
 msgid "Down"
 msgstr "En bas"
 
-#: src/backend/core/AbstractAspect.cpp:525
+#: src/backend/core/AbstractAspect.cpp:530
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:227
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2330
@@ -91,59 +91,59 @@ msgstr "En bas"
 msgid "%1: add %2"
 msgstr "%1 : ajouter %2"
 
-#: src/backend/core/AbstractAspect.cpp:527
-#: src/backend/core/AbstractAspect.cpp:564
+#: src/backend/core/AbstractAspect.cpp:532
+#: src/backend/core/AbstractAspect.cpp:569
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "Renomme « %1 » vers « %2 » pour éviter un conflit de nom."
 
-#: src/backend/core/AbstractAspect.cpp:562
+#: src/backend/core/AbstractAspect.cpp:567
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1 : insérer %2 avant %3"
 
-#: src/backend/core/AbstractAspect.cpp:562
+#: src/backend/core/AbstractAspect.cpp:567
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1 : insérer %2 avant la fin"
 
-#: src/backend/core/AbstractAspect.cpp:597
+#: src/backend/core/AbstractAspect.cpp:602
 #: src/backend/core/aspectcommands.h:102
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1 : supprimer %2"
 
-#: src/backend/core/AbstractAspect.cpp:610
+#: src/backend/core/AbstractAspect.cpp:615
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1 : supprimer tous les enfants"
 
-#: src/backend/core/AbstractAspect.cpp:722
+#: src/backend/core/AbstractAspect.cpp:727
 #, kde-format
 msgid "%1: pasted"
 msgstr "%1 : collé"
 
-#: src/backend/core/AbstractAspect.cpp:817
+#: src/backend/core/AbstractAspect.cpp:822
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1 : collage de « %2 »"
 
-#: src/backend/core/AbstractAspect.cpp:819
+#: src/backend/core/AbstractAspect.cpp:824
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1 : duplicata de « %2 »"
 
-#: src/backend/core/AbstractAspect.cpp:820
+#: src/backend/core/AbstractAspect.cpp:825
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Copie de « %1 »"
 
-#: src/backend/core/AbstractAspect.cpp:963
+#: src/backend/core/AbstractAspect.cpp:968
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "L'attribut « nom » n'existe pas ou est vide."
 
-#: src/backend/core/AbstractAspect.cpp:969
+#: src/backend/core/AbstractAspect.cpp:974
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
@@ -446,7 +446,7 @@ msgid "%1: rename to %2"
 msgstr "%1 : renommer vers %2"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
-#: src/backend/core/AspectTreeModel.cpp:165
+#: src/backend/core/AspectTreeModel.cpp:164
 #: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
@@ -456,7 +456,7 @@ msgid "Name"
 msgstr "Nom"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
-#: src/backend/core/AspectTreeModel.cpp:167
+#: src/backend/core/AspectTreeModel.cpp:166
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/datasources/matiooptionswidget.ui:47
@@ -464,65 +464,33 @@ msgstr "Nom"
 msgid "Type"
 msgstr "Type"
 
-#: src/backend/core/AspectTreeModel.cpp:169
+#: src/backend/core/AspectTreeModel.cpp:168
 #, kde-format
 msgid "Created"
 msgstr "Créé"
 
-#: src/backend/core/AspectTreeModel.cpp:171
+#: src/backend/core/AspectTreeModel.cpp:170
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:66
 #, kde-format
 msgid "Comment"
 msgstr "Commentaire"
 
-#: src/backend/core/AspectTreeModel.cpp:194
+#: src/backend/core/AspectTreeModel.cpp:193
 #, kde-format
 msgid "%1   (non-plottable data)"
 msgstr "%1 (valeur non traçable)"
 
-#: src/backend/core/AspectTreeModel.cpp:196
+#: src/backend/core/AspectTreeModel.cpp:195
 #, kde-format
 msgid "%1   (non-numeric data)"
 msgstr "%1 (valeur non numérique)"
 
-#: src/backend/core/AspectTreeModel.cpp:198
+#: src/backend/core/AspectTreeModel.cpp:197
 #, kde-format
 msgid "%1   (no values)"
 msgstr "%1 (aucune valeur)"
 
-#: src/backend/core/AspectTreeModel.cpp:236
-#: src/frontend/datasources/ImportFileWidget.cpp:1698
-#, kde-format
-msgid "Size: %1"
-msgstr "Taille : %1"
-
-#. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/AspectTreeModel.cpp:239
-#, kde-format
-msgid "Type: %1"
-msgstr "Type : %1"
-
-#: src/backend/core/AspectTreeModel.cpp:240
-#, kde-format
-msgid "Plot Designation: %1"
-msgstr "Désignation du tracé :%1"
-
-#: src/backend/core/AspectTreeModel.cpp:245
-#, kde-format
-msgid "Formula:"
-msgstr "Formule :"
-
-#: src/backend/core/AspectTreeModel.cpp:267
-#, kde-format
-msgid "auto update: true"
-msgstr "Mise à jour automatique : vrai"
-
-#: src/backend/core/AspectTreeModel.cpp:269
-#, kde-format
-msgid "auto update: false"
-msgstr "Mise à jour automatique : faux"
-
-#: src/backend/core/AspectTreeModel.cpp:440
+#: src/backend/core/AspectTreeModel.cpp:391
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr ""
@@ -589,14 +557,64 @@ msgstr "%1 : effacer la colonne"
 msgid "%1: set random values"
 msgstr "%1 : définir avec des valeurs aléatoires"
 
-#: src/backend/core/column/Column.cpp:1623
+#: src/backend/core/column/Column.cpp:1052
+#: src/frontend/datasources/ImportFileWidget.cpp:1698
+#, kde-format
+msgid "Size: %1"
+msgstr "Taille : %1"
+
+#. i18n("Values: %1", col->availableRowCount());
+#: src/backend/core/column/Column.cpp:1055
+#, kde-format
+msgid "Type: %1"
+msgstr "Type : %1"
+
+#: src/backend/core/column/Column.cpp:1056
+#, kde-format
+msgid "Plot Designation: %1"
+msgstr "Désignation du tracé :%1"
+
+#: src/backend/core/column/Column.cpp:1060
+#, kde-format
+msgid "Formula:"
+msgstr "Formule :"
+
+#: src/backend/core/column/Column.cpp:1082
+#, kde-format
+msgid "auto update: true"
+msgstr "Mise à jour automatique : vrai"
+
+#: src/backend/core/column/Column.cpp:1084
+#, kde-format
+msgid "auto update: false"
+msgstr "Mise à jour automatique : faux"
+
+#: src/backend/core/column/Column.cpp:1097
+#, fuzzy, kde-format
+#| msgid "Used in"
+msgid "Used in Plots:"
+msgstr "Utilisé dans"
+
+#: src/backend/core/column/Column.cpp:1112
+#, fuzzy, kde-format
+#| msgid "Used in"
+msgid "Used in Axes:"
+msgstr "Utilisé dans"
+
+#: src/backend/core/column/Column.cpp:1135
+#, fuzzy, kde-format
+#| msgid "Save  Calculations:"
+msgid "Used in Calculations:"
+msgstr "Enregistrer les calculs :"
+
+#: src/backend/core/column/Column.cpp:1721
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "Index de ligne non valable ou manquant"
 
-#: src/backend/core/column/Column.cpp:1632
-#: src/backend/core/column/Column.cpp:1641
-#: src/backend/core/column/Column.cpp:1650
+#: src/backend/core/column/Column.cpp:1730
+#: src/backend/core/column/Column.cpp:1739
+#: src/backend/core/column/Column.cpp:1748
 #, kde-format
 msgid "invalid row value"
 msgstr "valeur de ligne non valable"
