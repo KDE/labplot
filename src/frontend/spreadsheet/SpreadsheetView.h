@@ -145,6 +145,7 @@ private:
 	QAction* action_fill_row_numbers{nullptr};
 	QAction* action_fill_random{nullptr};
 	QAction* action_fill_equidistant{nullptr};
+	QAction* action_fill_equidistant_datetime{nullptr};
 	QAction* action_fill_random_nonuniform{nullptr};
 	QAction* action_fill_const{nullptr};
 	QAction* action_fill_function{nullptr};
@@ -303,6 +304,7 @@ private Q_SLOTS:
 	void fillSelectedCellsWithRandomNumbers();
 	void fillWithRandomValues();
 	void fillWithEquidistantValues();
+	void fillWithEquidistantDateTimeValues();
 	void fillWithFunctionValues();
 	void fillSelectedCellsWithConstValues();
 

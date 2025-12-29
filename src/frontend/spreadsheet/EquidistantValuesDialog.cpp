@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for generating equidistant numbers
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -31,9 +31,10 @@
 	\ingroup frontend
  */
 
-EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent)
+EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent, bool dateTimeMode)
 	: QDialog(parent)
-	, m_spreadsheet(s) {
+	, m_spreadsheet(s)
+	, m_dateTimeMode(dateTimeMode) {
 	Q_ASSERT(m_spreadsheet);
 
 	auto* mainWidget = new QWidget(this);
@@ -150,25 +151,31 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	ui.leNumber->setText(QLocale().toString(m_columns.first()->rowCount()));
 	QString dateTimeFormat;
 
-	for (auto* col : m_columns) {
-		const auto mode = col->columnMode();
-		if (!m_hasDouble && mode == AbstractColumn::ColumnMode::Double)
-			m_hasDouble = true;
+	// if the datetime mode is not forced, check the column modes to see what kind of data we have
+	if (!m_dateTimeMode) {
+		for (auto* col : m_columns) {
+			const auto mode = col->columnMode();
+			if (!m_hasDouble && mode == AbstractColumn::ColumnMode::Double)
+				m_hasDouble = true;
 
-		if (!m_hasInteger && mode == AbstractColumn::ColumnMode::Integer)
-			m_hasInteger = true;
+			if (!m_hasInteger && mode == AbstractColumn::ColumnMode::Integer)
+				m_hasInteger = true;
 
-		if (!m_hasBigInteger && mode == AbstractColumn::ColumnMode::BigInt)
-			m_hasBigInteger = true;
+			if (!m_hasBigInteger && mode == AbstractColumn::ColumnMode::BigInt)
+				m_hasBigInteger = true;
 
-		if (!m_hasDateTime && mode == AbstractColumn::ColumnMode::DateTime) {
-			m_hasDateTime = true;
-			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-			dateTimeFormat = filter->format();
+			if (!m_hasDateTime && mode == AbstractColumn::ColumnMode::DateTime) {
+				m_hasDateTime = true;
+				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+				dateTimeFormat = filter->format();
+			}
 		}
-	}
 
-	m_hasNumeric = m_hasDouble || m_hasInteger || m_hasBigInteger;
+		m_hasNumeric = m_hasDouble || m_hasInteger || m_hasBigInteger;
+	} else {
+		m_hasNumeric = false;
+		m_hasDateTime = true;
+	}
 
 	ui.lNumeric->setVisible(m_hasNumeric);
 	ui.lIncrement->setVisible(m_hasNumeric);
@@ -521,6 +528,12 @@ void EquidistantValuesDialog::generate() {
 	// set the vectors with the generated data in the columns and adjust the column mode, if needed
 	for (auto* col : m_columns) {
 		col->clearFormula(); // clear the potentially available column formula
+
+		if (m_dateTimeMode) {
+			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+			col->setDateTimes(newDateTimeData);
+			continue;
+		}
 
 		switch (col->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:

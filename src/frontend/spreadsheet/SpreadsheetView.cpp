@@ -318,6 +318,7 @@ void SpreadsheetView::initActions() {
 	action_fill_random = new QAction(QIcon::fromTheme(QString()), i18n("Uniform Random Values"), this);
 	action_fill_random_nonuniform = new QAction(QIcon::fromTheme(QString()), i18n("Random Values"), this);
 	action_fill_equidistant = new QAction(QIcon::fromTheme(QString()), i18n("Equidistant Values"), this);
+	action_fill_equidistant_datetime = new QAction(QIcon::fromTheme(QString()), i18n("Equidistant Date&Time Values"), this);
 	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
 	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
 
@@ -713,6 +714,7 @@ void SpreadsheetView::initMenus() {
 		m_columnGenerateDataMenu->addAction(action_fill_const);
 		m_columnGenerateDataMenu->addSeparator();
 		m_columnGenerateDataMenu->addAction(action_fill_equidistant);
+		m_columnGenerateDataMenu->addAction(action_fill_equidistant_datetime);
 		m_columnGenerateDataMenu->addAction(action_fill_random_nonuniform);
 		m_columnGenerateDataMenu->addAction(action_fill_function);
 		m_columnGenerateDataMenu->addSeparator();
@@ -877,6 +879,7 @@ void SpreadsheetView::connectActions() {
 	// 	connect(action_fill_random, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithRandomNumbers);
 	connect(action_fill_random_nonuniform, &QAction::triggered, this, &SpreadsheetView::fillWithRandomValues);
 	connect(action_fill_equidistant, &QAction::triggered, this, &SpreadsheetView::fillWithEquidistantValues);
+	connect(action_fill_equidistant_datetime, &QAction::triggered, this, &SpreadsheetView::fillWithEquidistantDateTimeValues);
 	connect(action_fill_function, &QAction::triggered, this, &SpreadsheetView::fillWithFunctionValues);
 	connect(action_fill_const, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithConstValues);
 	connect(action_select_all, &QAction::triggered, this, &SpreadsheetView::selectAll);
@@ -1703,6 +1706,7 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 	action_fill_row_numbers->setEnabled(numeric);
 	action_fill_const->setEnabled(numeric);
 	action_fill_equidistant->setEnabled(numeric || datetime);
+	// TODO
 	action_fill_random_nonuniform->setEnabled(numeric);
 	action_fill_function->setEnabled(numeric);
 	action_sample_values->setEnabled(hasValues);
@@ -2503,7 +2507,19 @@ void SpreadsheetView::fillWithEquidistantValues() {
 	if (columns.isEmpty())
 		return;
 
-	auto* dlg = new EquidistantValuesDialog(m_spreadsheet);
+	auto* dlg = new EquidistantValuesDialog(m_spreadsheet, this);
+	dlg->setColumns(columns);
+	dlg->exec();
+#endif
+}
+
+void SpreadsheetView::fillWithEquidistantDateTimeValues() {
+#ifndef SDK
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
+		return;
+
+	auto* dlg = new EquidistantValuesDialog(m_spreadsheet, this, true /* datatime */);
 	dlg->setColumns(columns);
 	dlg->exec();
 #endif
