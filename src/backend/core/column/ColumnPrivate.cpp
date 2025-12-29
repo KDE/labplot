@@ -3428,6 +3428,7 @@ void ColumnPrivate::calculateStatistics() {
 	statistics.variance = 0.;
 	statistics.meanDeviation = 0.;
 	statistics.meanDeviationAroundMedian = 0.;
+	statistics.averageTwoPeriodMovingRange = 0.;
 	double centralMoment_r3 = 0.;
 	double centralMoment_r4 = 0.;
 	QVector<double> absoluteMedianList;
@@ -3444,6 +3445,9 @@ void ColumnPrivate::calculateStatistics() {
 
 		centralMoment_r3 += gsl_pow_3(val - statistics.arithmeticMean);
 		centralMoment_r4 += gsl_pow_4(val - statistics.arithmeticMean);
+
+		if (row != 0)
+			statistics.averageTwoPeriodMovingRange += std::abs(val - rowData.value(row - 1));
 	}
 
 	double centralMoment_r2 = statistics.variance / notNanCount;
@@ -3452,6 +3456,7 @@ void ColumnPrivate::calculateStatistics() {
 	statistics.variance = (notNanCount != 1) ? statistics.variance / (notNanCount - 1) : NAN;
 	statistics.meanDeviationAroundMedian = statistics.meanDeviationAroundMedian / notNanCount;
 	statistics.meanDeviation = statistics.meanDeviation / notNanCount;
+	statistics.averageTwoPeriodMovingRange = statistics.averageTwoPeriodMovingRange / (notNanCount - 1);
 
 	// standard deviation
 	statistics.standardDeviation = std::sqrt(statistics.variance);

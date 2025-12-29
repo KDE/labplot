@@ -116,6 +116,7 @@ public:
 		double meanDeviation{qQNaN()}; // mean absolute deviation around mean
 		double meanDeviationAroundMedian{qQNaN()}; // mean absolute deviation around median
 		double medianDeviation{qQNaN()}; // median absolute deviation
+		double averageTwoPeriodMovingRange{qQNaN()};
 		double skewness{qQNaN()};
 		double kurtosis{qQNaN()};
 		double entropy{qQNaN()};
