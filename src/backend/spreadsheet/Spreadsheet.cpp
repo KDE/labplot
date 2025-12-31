@@ -218,6 +218,74 @@ bool Spreadsheet::readOnly() const {
 	return d->readOnly;
 }
 
+QString Spreadsheet::caption() const {
+	QString caption = AbstractAspect::caption();
+	caption += QLatin1String("<br><br>") + i18n("Columns: %1", columnCount());
+	caption += QLatin1String("<br>") + i18n("Rows: %1", rowCount());
+
+	// add the information about the usage of spreadsheet columns in other places
+	const auto* project = this->project();
+	const auto& columns = children<Column>();
+	QSet<const AbstractAspect*> usedInAspects;
+
+	// add plots where the column is currently in use
+	const auto& plots = project->children<Plot>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* col : columns) {
+		for (const auto* plot : plots) {
+			const bool used = plot->usingColumn(col, true);
+			if (used)
+				usedInAspects << plot;
+		}
+	}
+
+	if (!usedInAspects.isEmpty()) {
+		caption += QStringLiteral("<br><br><b>") + i18n("Used in Plots:") + QStringLiteral("</b>");
+		for (auto* aspect  : usedInAspects)
+			caption += QStringLiteral("<br>") + aspect->path();
+	}
+
+
+	// add axes where the column is used as a custom column for ticks positions or labels
+	usedInAspects.clear();
+	const auto& axes = project->children<Axis>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* col : columns) {
+		for (const auto* axis : axes) {
+			const bool used = (axis->majorTicksColumn() == col || axis->minorTicksColumn() == col || axis->labelsTextColumn() == col);
+			if (used)
+				usedInAspects << axis;
+		}
+	}
+
+	if (!usedInAspects.isEmpty()) {
+		caption += QStringLiteral("<br><br><b>") + i18n("Used in Axes:") + QStringLiteral("</b>");
+		for (auto* aspect  : usedInAspects)
+			caption += QStringLiteral("<br>") + aspect->path();
+	}
+
+	// add calculated columns where the column is used in formula variables
+	usedInAspects.clear();
+	const auto& columnsAll = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* col : columns) {
+		const QString& path = col->path();
+		for (const auto* colOther : columnsAll) {
+			for (int i = 0; i < colOther->formulaData().count(); i++) {
+				if (path == colOther->formulaData().at(i).columnName()) {
+					usedInAspects << colOther;
+					break;
+				}
+			}
+		}
+	}
+
+	if (!usedInAspects.isEmpty()) {
+		caption += QStringLiteral("<br><br><b>") + i18n("Used in Spreadsheet Calculations:") + QStringLiteral("</b>");
+		for (auto* aspect  : usedInAspects)
+			caption += QStringLiteral("<br>") + aspect->path();
+	}
+
+	return caption;
+}
+
 /*!
  * Returns a pointer to the StatisticsSpreadsheet for the current Spreadsheet if exists or nullptr.
  * @see StatisticsSpreadsheet()

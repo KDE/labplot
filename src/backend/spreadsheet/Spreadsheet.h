@@ -34,6 +34,7 @@ public:
 	~Spreadsheet() override;
 
 	QIcon icon() const override;
+	QString caption() const override;
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
 	void fillColumnsContextMenu(QMenu*);

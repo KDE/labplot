@@ -1132,7 +1132,7 @@ QString Column::caption() const {
 
 		if (index != -1) {
 			if (!sectionAdded) {
-				caption += QStringLiteral("<br><br><b>") + i18n("Used in Calculations:") + QStringLiteral("</b>");
+				caption += QStringLiteral("<br><br><b>") + i18n("Used in Spreadsheet Calculations:") + QStringLiteral("</b>");
 				sectionAdded = true;
 			}
 
