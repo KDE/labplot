@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-30 00:38+0000\n"
-"PO-Revision-Date: 2025-12-29 08:49+0200\n"
+"PO-Revision-Date: 2025-12-30 09:48+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -19455,9 +19455,7 @@ msgid "Equidistant Values"
 msgstr "Рівномірно розподілені значення"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Equidistant Date&Time Values"
+#, kde-format
 msgid "Equidistant Date&Time Values"
 msgstr "Рівномірно розподілені часові значення"
 
@@ -20070,26 +20068,22 @@ msgid "Location Measures"
 msgstr "Міри розташування"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:67
-#, fuzzy, kde-format
-#| msgid "ArithmeticMean"
+#, kde-format
 msgid "Arithmetic Mean"
 msgstr "Арифметичне середнє"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "GeometricMean"
+#, kde-format
 msgid "Geometric Mean"
 msgstr "Середнє геометричне"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:69
-#, fuzzy, kde-format
-#| msgid "HarmonicMean"
+#, kde-format
 msgid "Harmonic Mean"
 msgstr "Середнє гармонійне"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid "ContraharmonicMean"
+#, kde-format
 msgid "Contraharmonic Mean"
 msgstr "Контргармонійне середнє"
 
@@ -20111,33 +20105,29 @@ msgid "Dispersion Measures"
 msgstr "Міри дисперсії"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "StandardDeviation"
+#, kde-format
 msgid "Standard Deviation"
 msgstr "Стандартне відхилення"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around mean"
+#, kde-format
 msgid "Mean Absolute Deviation Around Mean"
 msgstr "Середнє абсолютне відхилення від середнього"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around median"
+#, kde-format
 msgid "Mean Absolute Deviation Around Median"
 msgstr "Середнє абсолютне відхилення від медіани"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Median Absolute Deviation"
 msgstr "Медіана абсолютного відхилення"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:86
 #, kde-format
 msgid "Average 2-Period Moving Range"
-msgstr ""
+msgstr "Середнє за рухомим діапазоном у 2 періоди"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:89

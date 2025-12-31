@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-30 00:38+0000\n"
-"PO-Revision-Date: 2025-12-19 09:18+0100\n"
+"PO-Revision-Date: 2025-12-29 13:57+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -6447,17 +6447,15 @@ msgstr "Moyenne"
 
 #: src/backend/nsl/nsl_baseline.cpp:46
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
-#, fuzzy, kde-format
-#| msgid "Points:"
+#, kde-format
 msgid "End Points"
-msgstr "Points :"
+msgstr "Points terminaux"
 
 #: src/backend/nsl/nsl_baseline.cpp:46
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:178
-#, fuzzy, kde-format
-#| msgid "Regular Expression"
+#, kde-format
 msgid "Linear Regression"
-msgstr "Expression rationnelle"
+msgstr "Régression linéaire"
 
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
@@ -9284,10 +9282,9 @@ msgstr "Corrélation automatique / croisée"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:429
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:464
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2159
-#, fuzzy, kde-format
-#| msgid "Delete Connection"
+#, kde-format
 msgid "Baseline Correction"
-msgstr "Supprimer une connexion"
+msgstr "Correction de référence"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:445
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:520
@@ -9730,10 +9727,9 @@ msgid "%1: set plot color map"
 msgstr "%1 : définir la palette pour la couleur du tracé"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1837
-#, fuzzy, kde-format
-#| msgid "%1: set axis offset"
+#, kde-format
 msgid "%1: set y-offset"
-msgstr "%1 : définir le décalage de l'axe"
+msgstr "%1 : définir le décalage de l'axe y"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2020
 #, kde-format
@@ -9827,21 +9823,19 @@ msgid "%1: add smoothing curve"
 msgstr "%1 : ajouter une courbe lissée"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2162
-#, fuzzy, kde-format
-#| msgid "%1: add function of '%2'"
+#, kde-format
 msgid "%1: baseline correction for '%2'"
-msgstr "%1: ajouter la fonction de « %2 »"
+msgstr "%1 : correction de la référence pour « %2 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2163
 #, kde-format
 msgid "Baseline correction for '%1'"
-msgstr ""
+msgstr "Correction de la référence pour « %1 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2170
-#, fuzzy, kde-format
-#| msgid "%1: add integration curve"
+#, kde-format
 msgid "%1: add baseline correction curve"
-msgstr "%1 : ajouter la courbe d'intégration"
+msgstr "%1 : ajouter une courbe de correction de référence"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2181
 #, kde-format
@@ -10733,10 +10727,9 @@ msgid "%1: assign second y-data"
 msgstr "%1 : association des données secondaires en Y"
 
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:55
-#, fuzzy, kde-format
-#| msgid "%1: set options and perform the correlation"
+#, kde-format
 msgid "%1: set baseline options and perform correction"
-msgstr "%1 : définir les options et réaliser la corrélation."
+msgstr "%1 : définir les options de référence et réaliser la correction."
 
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:92
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:158
@@ -15656,6 +15649,15 @@ msgid ""
 "interpolation using first and last point and subtract it.</li><li>Linear "
 "Regression - do a linear regression to the data and subtract it.</li></ul>"
 msgstr ""
+"Méthode utilisée pour calculer la correction de référence :<ul><li>arPLS - "
+"Méthode des moindres carrés pondérée asymétriquement réévaluée.</"
+"li><li>Minimum - Soustraction du minimum des données.</li><li>Maximum - "
+"Soustraction du maximum des données.</li><li>Moyenne - Soustraction de la "
+"moyenne des données.</li><li>Médiane - Soustraction de la médiane des "
+"données.</li><li>Points finaux - Calcul d'une interpolation linéaire en "
+"utilisant le premier et le dernier point et la soustraire.</"
+"li><li>Régression linéaire - Calcul d'une régression linéaire sur les "
+"données et la soustraire.</li></ul>"
 
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:195
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:163
@@ -15684,10 +15686,9 @@ msgid "Number of iterations to perform."
 msgstr "Nombre d'itérations à réaliser."
 
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:299
-#, fuzzy, kde-format
-#| msgid "Correlation status: %1"
+#, kde-format
 msgid "Baseline correction status: %1"
-msgstr "État de corrélation : %1"
+msgstr "État de correction de référence : %1"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:180
@@ -16400,12 +16401,10 @@ msgid "Properties: Convolution/Deconvolution"
 msgstr "Propriétés : convolution / dé-convolution"
 
 #: src/frontend/GuiObserver.cpp:341
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Integration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Baseline Correction"
-msgstr "Propriétés : intégration"
+msgstr "Propriétés : correction de référence"
 
 #: src/frontend/GuiObserver.cpp:346
 #, kde-format
@@ -23092,10 +23091,9 @@ msgstr "Rayon de coin :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStack)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1506
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Stack"
-msgstr "Empilé"
+msgstr "Pile"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:87
@@ -24055,10 +24053,9 @@ msgstr "Redimensionner le contenu :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSubtraction)
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:199
-#, fuzzy, kde-format
-#| msgid "Subtract"
+#, kde-format
 msgid "Subtraction"
-msgstr "Soustraire"
+msgstr "Soustraction"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #. i18n: ectx: property (text), widget (QLabel, lARPLSSmoothness)

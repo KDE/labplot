@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-30 00:38+0000\n"
-"PO-Revision-Date: 2025-12-28 23:29-0300\n"
-"Last-Translator: Guilherme Marçal Silva <guimarcalsilva@gmail.com>\n"
+"PO-Revision-Date: 2025-12-30 06:27-0300\n"
+"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -19385,9 +19385,7 @@ msgid "Equidistant Values"
 msgstr "Valores equidistantes"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Equidistant Date&Time Values"
+#, kde-format
 msgid "Equidistant Date&Time Values"
 msgstr "Valores de data e hora equidistantes"
 
@@ -19992,28 +19990,24 @@ msgid "Location Measures"
 msgstr "Medidas de localização"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:67
-#, fuzzy, kde-format
-#| msgid "ArithmeticMean"
+#, kde-format
 msgid "Arithmetic Mean"
-msgstr "MédiaAritmética"
+msgstr "Média aritmética"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "GeometricMean"
+#, kde-format
 msgid "Geometric Mean"
-msgstr "MédiaGeométrica"
+msgstr "Média geométrica"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:69
-#, fuzzy, kde-format
-#| msgid "HarmonicMean"
+#, kde-format
 msgid "Harmonic Mean"
-msgstr "MédiaHarmônica"
+msgstr "Média harmônica"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid "ContraharmonicMean"
+#, kde-format
 msgid "Contraharmonic Mean"
-msgstr "MédiaContraHarmônica"
+msgstr "Média contra-harmônica"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:72
 #, kde-format
@@ -20033,33 +20027,29 @@ msgid "Dispersion Measures"
 msgstr "Medidas de dispersão"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "StandardDeviation"
+#, kde-format
 msgid "Standard Deviation"
-msgstr "DesvioPadrão"
+msgstr "Desvio padrão"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around mean"
+#, kde-format
 msgid "Mean Absolute Deviation Around Mean"
 msgstr "Desvio médio absoluto em torno da média"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around median"
+#, kde-format
 msgid "Mean Absolute Deviation Around Median"
 msgstr "Desvio médio absoluto em torno da mediana"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Median Absolute Deviation"
-msgstr "Desvio absoluto da mediana"
+msgstr "Desvio absoluto da média"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:86
 #, kde-format
 msgid "Average 2-Period Moving Range"
-msgstr ""
+msgstr "Média da amplitude móvel de 2 períodos"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:89

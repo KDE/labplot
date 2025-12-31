@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-30 00:38+0000\n"
-"PO-Revision-Date: 2025-12-29 06:19+0100\n"
+"PO-Revision-Date: 2025-12-30 06:18+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3767,7 +3767,7 @@ msgstr "საშუალო"
 #: src/frontend/ui/mqttwillsettingswidget.ui:119
 #, kde-format
 msgid "Standard deviation"
-msgstr "სტანდარტული აცდენა"
+msgstr "სტანდარტული გადახრა"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
@@ -7578,7 +7578,7 @@ msgstr "შუალედი"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
 #, kde-format
 msgid "StandardDeviation"
-msgstr "სტანდარტული აცდენა"
+msgstr "სტანდარტულიგადახრა"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
 #, kde-format
@@ -19336,9 +19336,7 @@ msgid "Equidistant Values"
 msgstr "თანაბრადდაშორებული მნიშვნელობები"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Equidistant Date&Time Values"
+#, kde-format
 msgid "Equidistant Date&Time Values"
 msgstr "თანაბრად დაშორებული თარიღისა და დროის მნიშვნელობები"
 
@@ -19943,28 +19941,24 @@ msgid "Location Measures"
 msgstr "მდებარეობის გაზომვები"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:67
-#, fuzzy, kde-format
-#| msgid "ArithmeticMean"
+#, kde-format
 msgid "Arithmetic Mean"
 msgstr "საშუალო არითმეტიკული"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "GeometricMean"
+#, kde-format
 msgid "Geometric Mean"
 msgstr "საშუალო გეომეტრიული"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:69
-#, fuzzy, kde-format
-#| msgid "HarmonicMean"
+#, kde-format
 msgid "Harmonic Mean"
 msgstr "საშუალო ჰარმონიული"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid "ContraharmonicMean"
+#, kde-format
 msgid "Contraharmonic Mean"
-msgstr "საშუალო ჰარმონიული"
+msgstr "საშუალო კონტრჰარმონიული"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:72
 #, kde-format
@@ -19984,33 +19978,29 @@ msgid "Dispersion Measures"
 msgstr "განაწილების გაზომვები"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "StandardDeviation"
+#, kde-format
 msgid "Standard Deviation"
-msgstr "სტანდარტული აცდენა"
+msgstr "სტანდარტული გადახრა"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around mean"
+#, kde-format
 msgid "Mean Absolute Deviation Around Mean"
 msgstr "საშუალო აბსოლუტური გადახრა საშუალოს გარშემო"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around median"
+#, kde-format
 msgid "Mean Absolute Deviation Around Median"
 msgstr "საშუალო აბსოლუტური გადახრა მედიანის გარშემო"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Median Absolute Deviation"
 msgstr "მედიანის აბსოლუტური გადახრა"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:86
 #, kde-format
 msgid "Average 2-Period Moving Range"
-msgstr ""
+msgstr "საშუალო ორპერიოდიანი გადაადგილების შუალედი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:89

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-30 00:38+0000\n"
-"PO-Revision-Date: 2025-12-29 08:23+0100\n"
+"PO-Revision-Date: 2025-12-30 09:32+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19517,11 +19517,9 @@ msgid "Equidistant Values"
 msgstr "Valors equidistants"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Equidistant Date&Time Values"
+#, kde-format
 msgid "Equidistant Date&Time Values"
-msgstr "Valors equidistants de datahora"
+msgstr "Valors equidistants de data i hora"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:325
 #, kde-format
@@ -20130,29 +20128,25 @@ msgid "Location Measures"
 msgstr "Mesures de situació"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:67
-#, fuzzy, kde-format
-#| msgid "ArithmeticMean"
+#, kde-format
 msgid "Arithmetic Mean"
-msgstr "MitjanaAritmètica"
+msgstr "Mitjana aritmètica"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "GeometricMean"
+#, kde-format
 msgid "Geometric Mean"
-msgstr "MitjanaGeomètrica"
+msgstr "Mitjana geomètrica"
 
 # Nota: https://ca.wikipedia.org/wiki/Mitjana_harm%C3%B2nica
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:69
-#, fuzzy, kde-format
-#| msgid "HarmonicMean"
+#, kde-format
 msgid "Harmonic Mean"
-msgstr "MitjanaHarmònica"
+msgstr "Mitjana harmònica"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid "ContraharmonicMean"
+#, kde-format
 msgid "Contraharmonic Mean"
-msgstr "MitjanaContraharmònica"
+msgstr "Mitjana contraharmònica"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:72
 #, kde-format
@@ -20172,33 +20166,29 @@ msgid "Dispersion Measures"
 msgstr "Mesures de dispersió"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "StandardDeviation"
+#, kde-format
 msgid "Standard Deviation"
-msgstr "DesviacióEstàndard"
+msgstr "Desviació estàndard"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around mean"
+#, kde-format
 msgid "Mean Absolute Deviation Around Mean"
 msgstr "Desviació absoluta de la mitjana sobre la mitjana"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around median"
+#, kde-format
 msgid "Mean Absolute Deviation Around Median"
 msgstr "Desviació absoluta de la mitjana sobre la mediana"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Median Absolute Deviation"
 msgstr "Desviació absoluta de la mediana"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:86
 #, kde-format
 msgid "Average 2-Period Moving Range"
-msgstr ""
+msgstr "Mitjana d'interval mòbil de 2 períodes"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:89

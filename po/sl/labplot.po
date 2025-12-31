@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-30 00:38+0000\n"
-"PO-Revision-Date: 2025-12-29 06:54+0100\n"
+"PO-Revision-Date: 2025-12-30 07:01+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -10699,7 +10699,7 @@ msgstr "%1: dodelite drugotne y-podatke"
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:55
 #, kde-format
 msgid "%1: set baseline options and perform correction"
-msgstr "%1: nastavi možnosti osnovnice in izvedi popravek "
+msgstr "%1: nastavi možnosti osnovnice in izvedi popravek"
 
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:92
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:158
@@ -19369,11 +19369,9 @@ msgid "Equidistant Values"
 msgstr "Enako oddaljene vrednosti"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Equidistant Date&Time Values"
+#, kde-format
 msgid "Equidistant Date&Time Values"
-msgstr "Enako oddaljene vrednosti datuma in časa"
+msgstr "Ekvidistantne vrednosti datuma in časa"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:325
 #, kde-format
@@ -19984,26 +19982,22 @@ msgid "Location Measures"
 msgstr "Mere centralne tendence"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:67
-#, fuzzy, kde-format
-#| msgid "ArithmeticMean"
+#, kde-format
 msgid "Arithmetic Mean"
 msgstr "Aritmetično povprečje"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "GeometricMean"
+#, kde-format
 msgid "Geometric Mean"
 msgstr "Geometrijsko povprečje"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:69
-#, fuzzy, kde-format
-#| msgid "HarmonicMean"
+#, kde-format
 msgid "Harmonic Mean"
 msgstr "Harmonično povprečje"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid "ContraharmonicMean"
+#, kde-format
 msgid "Contraharmonic Mean"
 msgstr "Kontraharmonično povprečje"
 
@@ -20025,33 +20019,29 @@ msgid "Dispersion Measures"
 msgstr "Mere variabilnosti"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "StandardDeviation"
+#, kde-format
 msgid "Standard Deviation"
 msgstr "Standardna deviacija"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around mean"
+#, kde-format
 msgid "Mean Absolute Deviation Around Mean"
-msgstr "Srednji absolutni odklon okoli sredine"
+msgstr "Srednja absolutna deviacija okoli povprečja"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around median"
+#, kde-format
 msgid "Mean Absolute Deviation Around Median"
-msgstr "Srednji absolutni odklon okoli mediane"
+msgstr "Povprečje absolutne deviacije okoli mediane"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Median Absolute Deviation"
-msgstr "Absolutno odstopanje mediane"
+msgstr "Mediana absolutne deviacije"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:86
 #, kde-format
 msgid "Average 2-Period Moving Range"
-msgstr ""
+msgstr "Povprečje 2-periodnega drsečega razpona"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:89
