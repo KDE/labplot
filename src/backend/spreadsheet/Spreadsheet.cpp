@@ -240,10 +240,9 @@ QString Spreadsheet::caption() const {
 
 	if (!usedInAspects.isEmpty()) {
 		caption += QStringLiteral("<br><br><b>") + i18n("Used in Plots:") + QStringLiteral("</b>");
-		for (auto* aspect  : usedInAspects)
+		for (auto* aspect : usedInAspects)
 			caption += QStringLiteral("<br>") + aspect->path();
 	}
-
 
 	// add axes where the column is used as a custom column for ticks positions or labels
 	usedInAspects.clear();
@@ -258,7 +257,7 @@ QString Spreadsheet::caption() const {
 
 	if (!usedInAspects.isEmpty()) {
 		caption += QStringLiteral("<br><br><b>") + i18n("Used in Axes:") + QStringLiteral("</b>");
-		for (auto* aspect  : usedInAspects)
+		for (auto* aspect : usedInAspects)
 			caption += QStringLiteral("<br>") + aspect->path();
 	}
 
@@ -279,7 +278,7 @@ QString Spreadsheet::caption() const {
 
 	if (!usedInAspects.isEmpty()) {
 		caption += QStringLiteral("<br><br><b>") + i18n("Used in Spreadsheet Calculations:") + QStringLiteral("</b>");
-		for (auto* aspect  : usedInAspects)
+		for (auto* aspect : usedInAspects)
 			caption += QStringLiteral("<br>") + aspect->path();
 	}
 
