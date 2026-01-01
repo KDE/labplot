@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-30 00:38+0000\n"
+"POT-Creation-Date: 2026-01-01 00:38+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -52,7 +52,7 @@ msgid "Rename"
 msgstr "Premenovať"
 
 #: src/backend/core/AbstractAspect.cpp:430
-#: src/backend/spreadsheet/Spreadsheet.cpp:718
+#: src/backend/spreadsheet/Spreadsheet.cpp:786
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:489
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #: src/frontend/worksheet/WorksheetView.cpp:138
@@ -324,7 +324,7 @@ msgid "UNDEFINED"
 msgstr ""
 
 #: src/backend/core/AbstractColumn.cpp:324
-#: src/backend/spreadsheet/Spreadsheet.cpp:317
+#: src/backend/spreadsheet/Spreadsheet.cpp:385
 #, fuzzy, kde-format
 #| msgid "%1: insert %2 before %3."
 msgid "%1: insert 1 row"
@@ -334,7 +334,7 @@ msgstr[1] "Vložiť riadky"
 msgstr[2] "Vložiť riadky"
 
 #: src/backend/core/AbstractColumn.cpp:337
-#: src/backend/spreadsheet/Spreadsheet.cpp:300
+#: src/backend/spreadsheet/Spreadsheet.cpp:368
 #, fuzzy, kde-format
 #| msgid "%1: remove %2"
 msgid "%1: remove 1 row"
@@ -620,20 +620,23 @@ msgid "auto update: false"
 msgstr "automatické ukladanie"
 
 #: src/backend/core/column/Column.cpp:1097
+#: src/backend/spreadsheet/Spreadsheet.cpp:242
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgid "Used in Plots:"
 msgstr "Kresliť"
 
 #: src/backend/core/column/Column.cpp:1112
+#: src/backend/spreadsheet/Spreadsheet.cpp:260
 #, kde-format
 msgid "Used in Axes:"
 msgstr ""
 
 #: src/backend/core/column/Column.cpp:1135
+#: src/backend/spreadsheet/Spreadsheet.cpp:281
 #, fuzzy, kde-format
 #| msgid "Tab position"
-msgid "Used in Calculations:"
+msgid "Used in Spreadsheet Calculations:"
 msgstr "Riešiť rovnice"
 
 #: src/backend/core/column/Column.cpp:1721
@@ -6560,7 +6563,7 @@ msgstr[1] "%1: pridať %2"
 msgstr[2] "%1: pridať %2"
 
 #: src/backend/matrix/Matrix.cpp:694 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:664
+#: src/backend/spreadsheet/Spreadsheet.cpp:732
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: vyčistiť"
@@ -7752,46 +7755,58 @@ msgctxt "@title:column"
 msgid "Type"
 msgstr "Typ"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:348
+#: src/backend/spreadsheet/Spreadsheet.cpp:223
+#, fuzzy, kde-format
+#| msgid "Column"
+msgid "Columns: %1"
+msgstr "Stĺpec"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:224
+#, fuzzy, kde-format
+#| msgid "Rows:"
+msgid "Rows: %1"
+msgstr "Riadky:"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:416
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:366
+#: src/backend/spreadsheet/Spreadsheet.cpp:434
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: mask rows with missing values"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:423
+#: src/backend/spreadsheet/Spreadsheet.cpp:491
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: toggle comments header"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:431
+#: src/backend/spreadsheet/Spreadsheet.cpp:499
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "%1: toggle sparklines header"
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:495
-#: src/backend/spreadsheet/Spreadsheet.cpp:496
-#: src/backend/spreadsheet/Spreadsheet.cpp:500
+#: src/backend/spreadsheet/Spreadsheet.cpp:563
+#: src/backend/spreadsheet/Spreadsheet.cpp:564
+#: src/backend/spreadsheet/Spreadsheet.cpp:568
 #, fuzzy, kde-format
 #| msgid "%1: set vertical alignment"
 msgid "%1: set linking"
 msgstr "%1: nastaviť vertikálne zarovnanie"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:518
-#: src/backend/spreadsheet/Spreadsheet.cpp:520
-#: src/backend/spreadsheet/Spreadsheet.cpp:523
+#: src/backend/spreadsheet/Spreadsheet.cpp:586
+#: src/backend/spreadsheet/Spreadsheet.cpp:588
+#: src/backend/spreadsheet/Spreadsheet.cpp:591
 #, fuzzy, kde-format
 #| msgid "%1: set vertical alignment"
 msgid "%1: set linked spreadsheet"
 msgstr "%1: nastaviť vertikálne zarovnanie"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:622
+#: src/backend/spreadsheet/Spreadsheet.cpp:690
 #, fuzzy, kde-format
 #| msgid "%1: remove %2"
 msgid "%1: remove 1 column"
@@ -7800,7 +7815,7 @@ msgstr[0] "Odstrániť stĺpec"
 msgstr[1] "Odstrániť stĺpce"
 msgstr[2] "Odstrániť stĺpce"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:641
+#: src/backend/spreadsheet/Spreadsheet.cpp:709
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: insert 1 column"
@@ -7809,34 +7824,34 @@ msgstr[0] "Vložiť stĺpec"
 msgstr[1] "Vložiť stĺpce"
 msgstr[2] "Vložiť stĺpce"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:686
+#: src/backend/spreadsheet/Spreadsheet.cpp:754
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "%1: clear selected columns"
 msgstr "Vybrané stĺpce"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:702
+#: src/backend/spreadsheet/Spreadsheet.cpp:770
 #, kde-format
 msgid "%1: clear all masks"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:755
+#: src/backend/spreadsheet/Spreadsheet.cpp:823
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:808
+#: src/backend/spreadsheet/Spreadsheet.cpp:876
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: sort columns"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1175
+#: src/backend/spreadsheet/Spreadsheet.cpp:1243
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1587
+#: src/backend/spreadsheet/Spreadsheet.cpp:1655
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -7844,7 +7859,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1590
+#: src/backend/spreadsheet/Spreadsheet.cpp:1658
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -7852,7 +7867,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1593
+#: src/backend/spreadsheet/Spreadsheet.cpp:1661
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -7860,7 +7875,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1596
+#: src/backend/spreadsheet/Spreadsheet.cpp:1664
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -7868,7 +7883,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1599
+#: src/backend/spreadsheet/Spreadsheet.cpp:1667
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -7876,7 +7891,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1602
+#: src/backend/spreadsheet/Spreadsheet.cpp:1670
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -7884,7 +7899,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1605
+#: src/backend/spreadsheet/Spreadsheet.cpp:1673
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"

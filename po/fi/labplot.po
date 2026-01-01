@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-30 00:38+0000\n"
+"POT-Creation-Date: 2026-01-01 00:38+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -55,7 +55,7 @@ msgid "Rename"
 msgstr "Muuta nimeä"
 
 #: src/backend/core/AbstractAspect.cpp:430
-#: src/backend/spreadsheet/Spreadsheet.cpp:718
+#: src/backend/spreadsheet/Spreadsheet.cpp:786
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:489
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #: src/frontend/worksheet/WorksheetView.cpp:138
@@ -335,7 +335,7 @@ msgid "UNDEFINED"
 msgstr "EI MÄÄRITETTY"
 
 #: src/backend/core/AbstractColumn.cpp:324
-#: src/backend/spreadsheet/Spreadsheet.cpp:317
+#: src/backend/spreadsheet/Spreadsheet.cpp:385
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -343,7 +343,7 @@ msgstr[0] "%1: lisää %2 rivi"
 msgstr[1] "%1: lisää %2 riviä"
 
 #: src/backend/core/AbstractColumn.cpp:337
-#: src/backend/spreadsheet/Spreadsheet.cpp:300
+#: src/backend/spreadsheet/Spreadsheet.cpp:368
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -630,20 +630,23 @@ msgstr "Automaattitallenna"
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
 #: src/backend/core/column/Column.cpp:1097
+#: src/backend/spreadsheet/Spreadsheet.cpp:242
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Used in Plots:"
 msgstr "LabPlot2"
 
 #: src/backend/core/column/Column.cpp:1112
+#: src/backend/spreadsheet/Spreadsheet.cpp:260
 #, kde-format
 msgid "Used in Axes:"
 msgstr ""
 
 #: src/backend/core/column/Column.cpp:1135
+#: src/backend/spreadsheet/Spreadsheet.cpp:281
 #, fuzzy, kde-format
 #| msgid "Save  Calculations:"
-msgid "Used in Calculations:"
+msgid "Used in Spreadsheet Calculations:"
 msgstr "Tallenna laskennat:"
 
 #: src/backend/core/column/Column.cpp:1721
@@ -6574,7 +6577,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/backend/matrix/Matrix.cpp:694 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:664
+#: src/backend/spreadsheet/Spreadsheet.cpp:732
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: tyhjennä"
@@ -7777,86 +7780,98 @@ msgctxt "@title:column"
 msgid "Type"
 msgstr "Tyyppi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:348
+#: src/backend/spreadsheet/Spreadsheet.cpp:223
+#, fuzzy, kde-format
+#| msgid "Column %1"
+msgid "Columns: %1"
+msgstr "Sarake %1"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:224
+#, fuzzy, kde-format
+#| msgid "Rows:"
+msgid "Rows: %1"
+msgstr "Rivejä:"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:416
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:366
+#: src/backend/spreadsheet/Spreadsheet.cpp:434
 #, fuzzy, kde-format
 #| msgid "%1: fill cells with const values"
 msgid "%1: mask rows with missing values"
 msgstr "%1: täytä solut vakioarvoin"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:423
+#: src/backend/spreadsheet/Spreadsheet.cpp:491
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: toggle comments header"
 msgstr "%1: muuta kommenttia"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:431
+#: src/backend/spreadsheet/Spreadsheet.cpp:499
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "%1: toggle sparklines header"
 msgstr "Avaaminen epäonnistui"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:495
-#: src/backend/spreadsheet/Spreadsheet.cpp:496
-#: src/backend/spreadsheet/Spreadsheet.cpp:500
+#: src/backend/spreadsheet/Spreadsheet.cpp:563
+#: src/backend/spreadsheet/Spreadsheet.cpp:564
+#: src/backend/spreadsheet/Spreadsheet.cpp:568
 #, fuzzy, kde-format
 #| msgid "%1: set vertical alignment"
 msgid "%1: set linking"
 msgstr "%1: aseta pystytasaus"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:518
-#: src/backend/spreadsheet/Spreadsheet.cpp:520
-#: src/backend/spreadsheet/Spreadsheet.cpp:523
+#: src/backend/spreadsheet/Spreadsheet.cpp:586
+#: src/backend/spreadsheet/Spreadsheet.cpp:588
+#: src/backend/spreadsheet/Spreadsheet.cpp:591
 #, fuzzy, kde-format
 #| msgid "%1: set vertical alignment"
 msgid "%1: set linked spreadsheet"
 msgstr "%1: aseta pystytasaus"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:622
+#: src/backend/spreadsheet/Spreadsheet.cpp:690
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:641
+#: src/backend/spreadsheet/Spreadsheet.cpp:709
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:686
+#: src/backend/spreadsheet/Spreadsheet.cpp:754
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: tyhjennä valitut sarakkeet"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:702
+#: src/backend/spreadsheet/Spreadsheet.cpp:770
 #, kde-format
 msgid "%1: clear all masks"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:755
+#: src/backend/spreadsheet/Spreadsheet.cpp:823
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:808
+#: src/backend/spreadsheet/Spreadsheet.cpp:876
 #, kde-format
 msgid "%1: sort columns"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1175
+#: src/backend/spreadsheet/Spreadsheet.cpp:1243
 #, fuzzy, kde-format
 #| msgid "Add new spreadsheet"
 msgid "%1: linked spreadsheet removed"
 msgstr "Lisää uusi laskentataulukko"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1587
+#: src/backend/spreadsheet/Spreadsheet.cpp:1655
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7865,7 +7880,7 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1590
+#: src/backend/spreadsheet/Spreadsheet.cpp:1658
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7874,7 +7889,7 @@ msgid_plural "integer data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1593
+#: src/backend/spreadsheet/Spreadsheet.cpp:1661
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7883,7 +7898,7 @@ msgid_plural "big integer data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1596
+#: src/backend/spreadsheet/Spreadsheet.cpp:1664
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7892,7 +7907,7 @@ msgid_plural "text data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1599
+#: src/backend/spreadsheet/Spreadsheet.cpp:1667
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7901,7 +7916,7 @@ msgid_plural "month data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1602
+#: src/backend/spreadsheet/Spreadsheet.cpp:1670
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7910,7 +7925,7 @@ msgid_plural "day data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1605
+#: src/backend/spreadsheet/Spreadsheet.cpp:1673
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
