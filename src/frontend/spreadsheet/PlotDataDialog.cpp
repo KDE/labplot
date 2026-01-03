@@ -692,6 +692,10 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		case XYAnalysisCurve::AnalysisAction::FourierFilter:
 			analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));
 			break;
+			case XYAnalysisCurve::AnalysisAction::BaselineCorrection: {
+			analysisCurve = new XYBaselineCorrectionCurve(i18n("Baseline Correction of '%1'", name));
+			break;
+		}
 		}
 
 		if (analysisCurve != nullptr) {
