@@ -1644,9 +1644,13 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 	 * Action to X: action is applied to all x ranges
 	 *	- x zoom selection: zooming into all x ranges of all plots (Normally all plots will have the same x ranges so it makes sense
 	 *  - y zoom selection: makes no sense. disable
+	 *  - x autozoom: doing on all ranges of all plots
+	 *  - y autozoom: doing on all ranges of selected plot
 	 * Action to Y: action is applied to all y ranges
 	 *  - x zoom selection: makes no sense. disable
 	 *  - y zoom selection: zooming into all y ranges of all plots
+	 *  - x autozoom: doing on all ranges of selected plot
+	 *  - y autozoom: doing on all ranges of all plots
 	 * Action to Selection
 	 * - x zoom selection: makes no sense, because the range is unknown, disable
 	 * - y zoom selection: makes no sense, because the range is unknown, disable
