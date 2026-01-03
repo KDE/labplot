@@ -3,13 +3,13 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
+# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-02 00:40+0000\n"
-"PO-Revision-Date: 2025-12-30 09:48+0200\n"
+"PO-Revision-Date: 2026-01-01 11:56+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -598,10 +598,9 @@ msgstr "Використано в осях:"
 
 #: src/backend/core/column/Column.cpp:1135
 #: src/backend/spreadsheet/Spreadsheet.cpp:280
-#, fuzzy, kde-format
-#| msgid "Used in Calculations:"
+#, kde-format
 msgid "Used in Spreadsheet Calculations:"
-msgstr "Використано в обчисленнях:"
+msgstr "Використано в обчисленнях в електронній таблиці:"
 
 #: src/backend/core/column/Column.cpp:1721
 #, kde-format
@@ -7406,16 +7405,14 @@ msgid "Type"
 msgstr "Тип"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:223
-#, fuzzy, kde-format
-#| msgid "Column %1"
+#, kde-format
 msgid "Columns: %1"
-msgstr "Стовпчик %1"
+msgstr "Стовпчики: %1"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:224
-#, fuzzy, kde-format
-#| msgid "Rows:"
+#, kde-format
 msgid "Rows: %1"
-msgstr "Рядків:"
+msgstr "Рядки: %1"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:415
 #, kde-format
