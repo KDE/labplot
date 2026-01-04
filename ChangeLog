@@ -4,6 +4,7 @@ New features:
 		* Allow to customize which actions have to be shown in the toolbars
 		* Expose more column related actions the context menu in the project (plot data, etc.) also when multiple columns are selected
 		* Add possibility to skip storing the data from columns and matrices in the saved file
+		* Improve spinbox localization
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
 		* Baseline correction analysis in the plot
