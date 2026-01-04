@@ -206,8 +206,10 @@ Project::Project()
 	setIsLoading(true);
 
 	const auto& group = Settings::group(QStringLiteral("Settings_General"));
-	setSaveDefaultDockWidgetState(group.readEntry(QStringLiteral("SaveDefaultDockWidgetState"), false));
-	setSaveCalculations(group.readEntry(QStringLiteral("SaveCalculations"), true));
+	setSaveDefaultDockWidgetState(group.readEntry(QStringLiteral("SaveDefaultDockWidgetState"), saveDefaultDockWidgetState()));
+	setSaveCalculations(group.readEntry(QStringLiteral("SaveCalculations"), saveCalculations()));
+	setFileCompression(group.readEntry("Compressed", !group.readEntry("CompatibleSave", !fileCompression()))); // CompatibleSave was the old name
+	setSaveData(group.readEntry("SaveData", saveData()));
 
 	setUndoAware(true);
 	setIsLoading(false);
@@ -509,6 +511,8 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
 	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
+	writer->writeAttribute(QStringLiteral("compressed"), QString::number(d->fileCompression));
+	writer->writeAttribute(QStringLiteral("saveData"), QString::number(d->saveData));
 
 	// save the state of the content dock widgets
 	writer->writeAttribute(QStringLiteral("dockWidgetState"), d->dockWidgetState);
@@ -1363,9 +1367,9 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 			d->defaultDockWidgetState = attribs.value(QStringLiteral("defaultDockWidgetState")).toString();
 	}
 
-	str = attribs.value(QStringLiteral("saveCalculations")).toString();
-	if (!str.isEmpty())
-		d->saveCalculations = str.toInt();
+	READ_INT_VALUE("compressed", fileCompression, bool);
+	READ_INT_VALUE("saveData", saveData, bool);
+	READ_INT_VALUE("saveCalculations", saveCalculations, bool);
 
 	return true;
 }

@@ -504,8 +504,6 @@ bool MainWin::newProject(bool createInitialContent) {
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 
 	m_project = new Project();
-	m_project->setFileCompression(!group.readEntry("CompatibleSave", m_project->fileCompression()));
-	m_project->setSaveData(group.readEntry("SaveData", m_project->saveData()));
 	Project::currentProject = m_project;
 	undoStackIndexLastSave = 0;
 	m_currentAspect = m_project;
