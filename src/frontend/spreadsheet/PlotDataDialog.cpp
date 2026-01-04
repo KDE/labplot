@@ -168,8 +168,12 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type
 			ui->rbPlotPlacementExistingPlotArea->setChecked(true);
 		else if (plotPlacement == PlotPlacement::ExistingWorksheetNewPlot && !worksheets.isEmpty())
 			ui->rbPlotPlacementExistingWorksheet->setChecked(true);
-		else // plotPlacement == PlotPlacement::ExistingWorksheetNewPlot
+		else if (plotPlacement == PlotPlacement::NewWorksheet)
 			ui->rbPlotPlacementNewWorksheet->setChecked(true);
+		else
+			ui->rbPlotPlacementNewWorksheets->setChecked(true);
+
+		curvePlacementChanged(); // call this to enable/disable widgets according to the loaded settings
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
