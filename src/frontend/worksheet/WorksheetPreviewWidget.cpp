@@ -241,7 +241,13 @@ void WorksheetPreviewWidget::updatePreview(const Worksheet* w) {
 
 	PERFTRACE(QStringLiteral("WorksheetPreviewWidget::updatePreview ") + w->name());
 	QPixmap pix(10, 10);
-	w->exportView(pix);
+	const bool rc = w->exportView(pix);
+	if (!rc) {
+		// the view is not available yet, show the placeholder preview
+		const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
+		pix = icon.pixmap(m_iconSize, m_iconSize);
+	}
+
 	ui.lwPreview->item(indexOfWorksheet(w))->setIcon(QIcon(pix));
 }
 
