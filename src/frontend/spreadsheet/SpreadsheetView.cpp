@@ -813,6 +813,8 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu->addSeparator();
 	m_columnMenu->addAction(action_freeze_columns);
 	m_columnMenu->addSeparator();
+	m_columnMenu->addAction(action_statistics_spreadsheet);
+	m_columnMenu->addSeparator();
 	m_columnMenu->addAction(action_statistics_columns);
 
 	if (!m_readOnly) {
@@ -1083,6 +1085,8 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	menu->insertMenu(firstAction, m_formattingMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_freeze_columns);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_statistics_spreadsheet);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_columns);
 
