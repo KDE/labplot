@@ -25,6 +25,7 @@
 #include "tools/ColorMapsManager.h"
 
 #include <KIconLoader>
+#include <KLocalization>
 #include <KMessageBox>
 
 #include <QButtonGroup>
@@ -138,19 +139,19 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	// Layout-tab
 	QString suffix;
 	if (m_units == Units::Metric)
-		suffix = QStringLiteral(" cm");
+		suffix = QStringLiteral("%v cm");
 	else
-		suffix = QStringLiteral(" in");
+		suffix = QStringLiteral("%v in");
 
-	ui.sbLeft->setSuffix(suffix);
-	ui.sbTop->setSuffix(suffix);
-	ui.sbWidth->setSuffix(suffix);
-	ui.sbHeight->setSuffix(suffix);
-	ui.sbBorderCornerRadius->setSuffix(suffix);
-	ui.sbPaddingHorizontal->setSuffix(suffix);
-	ui.sbPaddingVertical->setSuffix(suffix);
-	ui.sbPaddingRight->setSuffix(suffix);
-	ui.sbPaddingBottom->setSuffix(suffix);
+	KLocalization::setupSpinBoxFormatString(ui.sbLeft, ki18nc("@label:spinbox Suffix for the left spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbTop, ki18nc("@label:spinbox Suffix for the top spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbWidth, ki18nc("@label:spinbox Suffix for the width", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbHeight, ki18nc("@label:spinbox Suffix for the height", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbBorderCornerRadius, ki18nc("@label:spinbox Suffix for the border corner radius", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingHorizontal, ki18nc("@label:spinbox Suffix for the horizontal padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingVertical, ki18nc("@label:spinbox Suffix for the vertical padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingRight, ki18nc("@label:spinbox Suffix for the right padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingBottom, ki18nc("@label:spinbox Suffix for the bottom padding", qPrintable(suffix)));
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -591,15 +592,15 @@ void CartesianPlotDock::updateUnits() {
 		ui.sbPaddingBottom->setValue(roundValue(ui.sbPaddingBottom->value() / GSL_CONST_CGS_INCH));
 	}
 
-	ui.sbLeft->setSuffix(suffix);
-	ui.sbTop->setSuffix(suffix);
-	ui.sbWidth->setSuffix(suffix);
-	ui.sbHeight->setSuffix(suffix);
-	ui.sbBorderCornerRadius->setSuffix(suffix);
-	ui.sbPaddingHorizontal->setSuffix(suffix);
-	ui.sbPaddingVertical->setSuffix(suffix);
-	ui.sbPaddingRight->setSuffix(suffix);
-	ui.sbPaddingBottom->setSuffix(suffix);
+	KLocalization::setupSpinBoxFormatString(ui.sbLeft, ki18nc("@label:spinbox Suffix for the left spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbTop, ki18nc("@label:spinbox Suffix for the top spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbWidth, ki18nc("@label:spinbox Suffix for the width", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbHeight, ki18nc("@label:spinbox Suffix for the height", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbBorderCornerRadius, ki18nc("@label:spinbox Suffix for the border corner radius", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingHorizontal, ki18nc("@label:spinbox Suffix for the horizontal padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingVertical, ki18nc("@label:spinbox Suffix for the vertical padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingRight, ki18nc("@label:spinbox Suffix for the right padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingBottom, ki18nc("@label:spinbox Suffix for the bottom padding", qPrintable(suffix)));
 
 	labelWidget->updateUnits();
 }

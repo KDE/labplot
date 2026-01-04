@@ -15,6 +15,7 @@
 #include "frontend/MainWin.h" // LoadOnStart
 
 #include <KConfigGroup>
+#include <KLocalization>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -23,7 +24,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent, const QLocale& locale)
 	: SettingsPage(parent)
 	, m_defaultSystemLocale(locale) {
 	ui.setupUi(this);
-	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
+	KLocalization::setupSpinBoxFormatString(ui.sbAutoSaveInterval, ki18nc("@label:spinbox Suffix for the auto save interval", "%v min"));
 #ifdef NDEBUG
 	ui.chkDebugTrace->setVisible(false);
 #endif

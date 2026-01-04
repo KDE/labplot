@@ -16,6 +16,7 @@
 #include "frontend/widgets/BackgroundWidget.h"
 
 #include <KConfig>
+#include <KLocalization>
 
 #include <QPageSize>
 
@@ -41,18 +42,18 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 	// Layout-tab
 	QString suffix;
 	if (m_units == Units::Metric)
-		suffix = QLatin1String(" cm");
+		suffix = QLatin1String("%v cm");
 	else
-		suffix = QLatin1String(" in");
+		suffix = QLatin1String("%v in");
 
-	ui.sbWidth->setSuffix(suffix);
-	ui.sbHeight->setSuffix(suffix);
-	ui.sbLayoutTopMargin->setSuffix(suffix);
-	ui.sbLayoutBottomMargin->setSuffix(suffix);
-	ui.sbLayoutLeftMargin->setSuffix(suffix);
-	ui.sbLayoutRightMargin->setSuffix(suffix);
-	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
-	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
+	KLocalization::setupSpinBoxFormatString(ui.sbWidth, ki18nc("@label:spinbox Suffix for the width", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbHeight, ki18nc("@label:spinbox Suffix for the height", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutTopMargin, ki18nc("@label:spinbox Suffix for the top margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutBottomMargin, ki18nc("@label:spinbox Suffix for the bottom margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutLeftMargin, ki18nc("@label:spinbox Suffix for the left margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutRightMargin, ki18nc("@label:spinbox Suffix for the right margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutHorizontalSpacing, ki18nc("@label:spinbox Suffix for the horizontal spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutVerticalSpacing, ki18nc("@label:spinbox Suffix for the vertical spacing", qPrintable(suffix)));
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -167,7 +168,7 @@ void WorksheetDock::updateUnits() {
 	if (m_units == Units::Metric) {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QLatin1String(" cm");
+		suffix = QLatin1String("%v cm");
 		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH));
 		ui.sbHeight->setValue(roundValue(ui.sbHeight->value() * GSL_CONST_CGS_INCH));
 		ui.sbLayoutTopMargin->setValue(roundValue(ui.sbLayoutTopMargin->value() * GSL_CONST_CGS_INCH));
@@ -179,7 +180,7 @@ void WorksheetDock::updateUnits() {
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QLatin1String(" in");
+		suffix = QLatin1String("%v in");
 		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH));
 		ui.sbHeight->setValue(roundValue(ui.sbHeight->value() / GSL_CONST_CGS_INCH));
 		ui.sbLayoutTopMargin->setValue(roundValue(ui.sbLayoutTopMargin->value() / GSL_CONST_CGS_INCH));
@@ -190,14 +191,14 @@ void WorksheetDock::updateUnits() {
 		ui.sbLayoutVerticalSpacing->setValue(roundValue(ui.sbLayoutVerticalSpacing->value() / GSL_CONST_CGS_INCH));
 	}
 
-	ui.sbWidth->setSuffix(suffix);
-	ui.sbHeight->setSuffix(suffix);
-	ui.sbLayoutTopMargin->setSuffix(suffix);
-	ui.sbLayoutBottomMargin->setSuffix(suffix);
-	ui.sbLayoutLeftMargin->setSuffix(suffix);
-	ui.sbLayoutRightMargin->setSuffix(suffix);
-	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
-	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
+	KLocalization::setupSpinBoxFormatString(ui.sbWidth, ki18nc("@label:spinbox Suffix for the width", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbHeight, ki18nc("@label:spinbox Suffix for the height", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutTopMargin, ki18nc("@label:spinbox Suffix for the top margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutBottomMargin, ki18nc("@label:spinbox Suffix for the bottom margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutLeftMargin, ki18nc("@label:spinbox Suffix for the left margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutRightMargin, ki18nc("@label:spinbox Suffix for the right margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutHorizontalSpacing, ki18nc("@label:spinbox Suffix for the horizontal spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutVerticalSpacing, ki18nc("@label:spinbox Suffix for the vertical spacing", qPrintable(suffix)));
 }
 
 /*!

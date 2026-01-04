@@ -12,6 +12,7 @@
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
+#include <KLocalization>
 #include <KMessageBox>
 
 #include <QMenu>
@@ -355,7 +356,7 @@ void XYFourierFilterCurveDock::updateCutoffSpinBoxes(NumberSpinBox* sb, nsl_filt
 	switch (newUnit) {
 	case nsl_filter_cutoff_unit_frequency:
 		sb->setMaximum(f);
-		sb->setSuffix(QStringLiteral(" Hz"));
+		KLocalization::setupSpinBoxFormatString(sb, ki18nc("@label:spinbox Suffix for the frequency", "%v Hz"));
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			break;
