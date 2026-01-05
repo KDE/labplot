@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A widget showing the preview of all worksheets in the project
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -143,17 +143,13 @@ void WorksheetPreviewWidget::aspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
-	if (w) {
+	if (w)
 		addPreview(w, indexOfWorksheet(w));
-		return;
-	}
-
-	// in case a folder was added (copy&paste, duplicate, project import), check whether it has worksheets
-	// and add previews for them
-	const auto* folder = dynamic_cast<const Folder*>(aspect);
-	if (folder) {
+	else {
+		// in case a folder was added (copy&paste, duplicate, project import), or another aspect that can have worksheet as a children (e.g. SeasonalDecomposition),
+		// check whether the added aspect has worksheet children add previews for them
 		QTimer::singleShot(0, this, [=]() {
-			const auto& worksheets = folder->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			const auto& worksheets = aspect->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (const auto* w : worksheets)
 				addPreview(w, indexOfWorksheet(w));
 		});

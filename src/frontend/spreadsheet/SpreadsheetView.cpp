@@ -2303,7 +2303,7 @@ void SpreadsheetView::addSeasonalDecomposition() {
 		decomp->setYColumn(colY);
 	}
 
-	project()->addChild(decomp);
+	m_spreadsheet->parentAspect()->addChild(decomp);
 }
 
 void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
