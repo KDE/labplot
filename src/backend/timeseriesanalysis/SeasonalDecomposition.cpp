@@ -727,10 +727,10 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 					worksheet->insertChildBeforeFast(plotArea, plotAreaResidual);
 					plotAreasSeasonal << plotArea;
 
-					auto* curveSeasonal = new XYCurve(i18n("Seasonal"));
-					curveSeasonal->setFixed(true);
-					plotArea->addChildFast(curveSeasonal);
-					curvesSeasonal << curveSeasonal;
+					auto* curve = new XYCurve(i18n("Seasonal"));
+					curve->setFixed(true);
+					plotArea->addChildFast(curve);
+					curvesSeasonal << curve;
 				}
 			} else {
 				// remove extra plot areas and curves

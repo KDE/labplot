@@ -358,7 +358,7 @@ ROOTFilter::Directory ROOTFilterPrivate::listContent(const std::map<long int, RO
 					break;
 			}
 			while (!addpath.empty()) {
-				auto pos = addpath.pop();
+				pos = addpath.pop();
 				ROOTFilter::Directory dir;
 				dir.name = QString::fromStdString(pos->second.name);
 				currentdir->children << dir;
@@ -1066,12 +1066,12 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 			SkipObject(buf);
 			String(buf);
 			const size_t nleaves = read<int>(buf);
-			const size_t lowb = read<int>(buf);
-			for (size_t i = 0; i < nleaves; ++i) {
-				auto clname = readObject(buf, buf0, tags);
+			const size_t lowb2 = read<int>(buf);
+			for (size_t j = 0; j < nleaves; ++j) {
+				clname = readObject(buf, buf0, tags);
 				Version(buf, count); // TLeaf(D/F/B/S/I/L/C/O)
-				char* nbuf = buf + count;
-				if (i >= lowb && clname.size() == 6 && clname.compare(0, 5, "TLeaf") == 0) {
+				char* nbuf2 = buf + count;
+				if (j >= lowb2 && clname.size() == 6 && clname.compare(0, 5, "TLeaf") == 0) {
 					Version(buf); // TLeaf
 					Version(buf); // TNamed
 					SkipObject(buf);
@@ -1085,7 +1085,7 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 					leaves.emplace_back(LeafInfo{branch, leafname, leafType(clname.back()), !read<char>(buf), elements});
 				}
 
-				buf = nbuf;
+				buf = nbuf2;
 			}
 		}
 
@@ -1160,16 +1160,16 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 			SkipObject(buf);
 			String(buf);
 			const size_t nleaves = read<int>(buf);
-			const size_t lowb = read<int>(buf);
+			const size_t lowb2 = read<int>(buf);
 			int leafoffset = 0, leafcount = 0, leafcontent = 0, leafsize = 0;
 			bool leafsign = false;
 			auto leaftype = ContentType::Invalid;
-			for (size_t i = 0; i < nleaves; ++i) {
-				auto clname = readObject(buf, buf0, tags);
+			for (size_t j = 0; j < nleaves; ++j) {
+				clname = readObject(buf, buf0, tags);
 				Version(buf, count); // TLeaf(D/F/L/I/S/B/O/C/Element)
-				char* nbuf = buf + count;
+				char* nbuf2 = buf + count;
 				if (currentbranch == branchname) {
-					if (i >= lowb && clname.size() >= 5 && clname.compare(0, 5, "TLeaf") == 0) {
+					if (j >= lowb2 && clname.size() >= 5 && clname.compare(0, 5, "TLeaf") == 0) {
 						Version(buf); // TLeaf
 						Version(buf); // TNamed
 						SkipObject(buf);
@@ -1191,7 +1191,7 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 					}
 				}
 
-				buf = nbuf;
+				buf = nbuf2;
 			}
 			if (leafcontent == 0) {
 				buf = nbuf;
@@ -1209,20 +1209,20 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 			char* const basketsbuf = buf += count + 1; // TODO there is one byte to be skipped in fBaskets, why is that?
 
 			advanceTo(buf, streamerTBranch, "fBaskets", "fBasketEntry", counts);
-			for (int i = 0; i <= fWriteBasket; ++i) {
+			for (int j = 0; j <= fWriteBasket; ++j) {
 				if (static_cast<size_t>(read<long int>(buf)) > nentries) {
-					fWriteBasket = i;
+					fWriteBasket = j;
 					break;
 				}
 			}
 			// rewind to the end of fBaskets and look for the fBasketSeek array
 			advanceTo(buf = basketsbuf, streamerTBranch, "fBaskets", "fBasketSeek", counts);
 			auto readf = readType<T>(leaftype, leafsign);
-			for (int i = 0; i < fWriteBasket; ++i) {
-				long int pos = read<long int>(buf);
-				auto it = basketkeys.find(pos);
-				if (it != basketkeys.end()) {
-					auto basketbuffer = data(it->second);
+			for (int j = 0; j < fWriteBasket; ++j) {
+				long int position = read<long int>(buf);
+				auto it2 = basketkeys.find(position);
+				if (it2 != basketkeys.end()) {
+					auto basketbuffer = data(it2->second);
 					if (!basketbuffer.empty()) {
 						char* bbuf = &basketbuffer[0];
 						char* const bufend = bbuf + basketbuffer.size();
@@ -1233,7 +1233,7 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 						}
 					}
 				} else {
-					DEBUG("ROOTData: fBasketSeek(" << i << "): " << pos << " (not available)")
+					DEBUG("ROOTData: fBasketSeek(" << j << "): " << pos << " (not available)")
 				}
 			}
 		}
@@ -1374,16 +1374,16 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 
 				SkipObject(buf); // TObjArray
 				String(buf);
-				const int nobj = read<int>(buf);
+				const int nobj2 = read<int>(buf);
 				const int lowb = read<int>(buf);
-				for (int i = 0; i < nobj; ++i) {
-					auto clname = readObject(buf, buf0, tags);
+				for (int j = 0; j < nobj2; ++j) {
+					clname = readObject(buf, buf0, tags);
 					Version(buf, count);
-					char* const nbuf = buf + count;
+					char* const nbuf2 = buf + count;
 
 					const bool isbasicpointer = clname == "TStreamerBasicPointer";
 					const bool ispointer = isbasicpointer || clname == "TStreamerObjectPointer";
-					if (i >= lowb) {
+					if (j >= lowb) {
 						if (ispointer || clname == "TStreamerBase" || clname == "TStreamerBasicType" || clname == "TStreamerObject"
 							|| clname == "TStreamerObjectAny" || clname == "TStreamerString" || clname == "TStreamerSTL") {
 							Version(buf); // TStreamerXXX
@@ -1438,7 +1438,7 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 							sinfo.emplace_back(StreamerInfo{name, size, counter, iscounter, ispointer});
 						}
 					}
-					buf = nbuf;
+					buf = nbuf2;
 				}
 			} else
 				buf = nbuf;
