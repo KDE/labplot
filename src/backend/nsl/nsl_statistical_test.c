@@ -294,7 +294,7 @@ struct kruskal_wallis_test_result nsl_stats_kruskal_wallis_h(const double** grou
 
 	for (i = 0; i < n_groups; i++) {
 		for (j = 0; j < sizes[i]; j++)
-			ranks[idx++] = (rank){groups[i][j], i};
+			ranks[idx++] = (rank){groups[i][j], i, 0.0};
 	}
 
 	qsort(ranks, total_samples, sizeof(rank), compare_rank_value);
