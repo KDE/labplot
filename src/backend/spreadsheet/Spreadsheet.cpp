@@ -774,7 +774,7 @@ void Spreadsheet::clearMasks() {
 /*!
  * Transposes the spreadsheet. Possible for numeric data only and also for spreadsheets having a text column as first column
  * and numeric data in the other columns - the first column will be used to name the new transposed columns.
- * The column mode of the new columns is determined automatically to hold all data without loss (choosing the "largest" mode of all original columns). 
+ * The column mode of the new columns is determined automatically to hold all data without loss (choosing the "largest" mode of all original columns).
  */
 void Spreadsheet::transpose() {
 	WAIT_CURSOR_AUTO_RESET;

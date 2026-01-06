@@ -1627,8 +1627,8 @@ void SpreadsheetTest::testFlatten03() {
 // ********************* transposing  ***********************
 // **********************************************************
 /*!
-* transpose a spreadsheet with two integer columns, still integer columns after transposing
-*/
+ * transpose a spreadsheet with two integer columns, still integer columns after transposing
+ */
 void SpreadsheetTest::testTranspose00() {
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
@@ -1679,8 +1679,8 @@ void SpreadsheetTest::testTranspose00() {
 }
 
 /*!
-* transpose a spreadsheet with one integer and one double column, two double columns after transposing
-*/
+ * transpose a spreadsheet with one integer and one double column, two double columns after transposing
+ */
 void SpreadsheetTest::testTranspose01() {
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
@@ -1732,8 +1732,8 @@ void SpreadsheetTest::testTranspose01() {
 }
 
 /*!
-* transpose a spreadsheet with text, integer and double column, two double columns after transposing, text values as column names.
-*/
+ * transpose a spreadsheet with text, integer and double column, two double columns after transposing, text values as column names.
+ */
 void SpreadsheetTest::testTranspose02() {
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
