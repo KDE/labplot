@@ -15,6 +15,7 @@ New features:
 		* more informative tooltip texts for spreadsheets and columns showing the usage of the column in other places in the project
 		* show the average 2-period moving range in the column statistics
 		* in the plot data dialog allow to create plot areas on separate worksheets, one worksheet with plot area per column
+		* transposition of columns and rows
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)
