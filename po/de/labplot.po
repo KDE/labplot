@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the labplot package.
 # SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
 # SPDX-FileCopyrightText: 2014, 2016, 2020, 2022, 2023 Frederik Schwarzer <schwarzer@kde.org>
-# SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
+# SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 # SPDX-FileCopyrightText: 2023 Frank Steinmetzger <dev-kde@felsenfleischer.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-05 00:39+0000\n"
-"PO-Revision-Date: 2025-12-28 16:51+0100\n"
+"PO-Revision-Date: 2026-01-05 11:19+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -583,24 +583,21 @@ msgstr "Automatisch aktualisieren: Aus"
 
 #: src/backend/core/column/Column.cpp:1097
 #: src/backend/spreadsheet/Spreadsheet.cpp:242
-#, fuzzy, kde-format
-#| msgid "Used in"
+#, kde-format
 msgid "Used in Plots:"
-msgstr "Verwendet in"
+msgstr "Verwendet in Plots:"
 
 #: src/backend/core/column/Column.cpp:1112
 #: src/backend/spreadsheet/Spreadsheet.cpp:259
-#, fuzzy, kde-format
-#| msgid "Used in"
+#, kde-format
 msgid "Used in Axes:"
-msgstr "Verwendet in"
+msgstr "Verwendet in Achsen:"
 
 #: src/backend/core/column/Column.cpp:1135
 #: src/backend/spreadsheet/Spreadsheet.cpp:280
-#, fuzzy, kde-format
-#| msgid "Save  Calculations:"
+#, kde-format
 msgid "Used in Spreadsheet Calculations:"
-msgstr "Berechnungen speichern:"
+msgstr "Verwendet in Tabellen-Berechnungen:"
 
 #: src/backend/core/column/Column.cpp:1721
 #, kde-format
@@ -7351,16 +7348,14 @@ msgid "Type"
 msgstr "Typ"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:223
-#, fuzzy, kde-format
-#| msgid "Column %1"
+#, kde-format
 msgid "Columns: %1"
-msgstr "Spalte %1"
+msgstr "Spalten: %1"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:224
-#, fuzzy, kde-format
-#| msgid "Rows:"
+#, kde-format
 msgid "Rows: %1"
-msgstr "Zeilen:"
+msgstr "Zeilen: %1"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:415
 #, kde-format
@@ -22639,10 +22634,9 @@ msgstr "Breite:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotColorMode)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:48
-#, fuzzy, kde-format
-#| msgid "Plot's Color:"
+#, kde-format
 msgid "Plot Colors:"
-msgstr "Plotfarbe:"
+msgstr "Plotfarben:"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twPlotRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:68
@@ -22985,10 +22979,9 @@ msgstr "Eckenradius:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStack)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1506
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Stack"
-msgstr "Gestapelt"
+msgstr "Stapel"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:87
@@ -23232,8 +23225,7 @@ msgstr "Form"
 
 #. i18n: ectx: property (text), widget (QLabel, lTestMean)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:20
-#, fuzzy, kde-format
-#| msgid "Test Mean μ₀: "
+#, kde-format
 msgid "Test Mean μ₀:"
 msgstr "Zu prüfender Mittelwert μ₀:"
 
@@ -23782,10 +23774,9 @@ msgstr "Einstellungen"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLPeriods)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:163
-#, fuzzy, kde-format
-#| msgid "Period:"
+#, kde-format
 msgid "Periods:"
-msgstr "Periode:"
+msgstr "Perioden:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLLambda)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:173
@@ -23805,10 +23796,9 @@ msgstr "Iterationen:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLRobust)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:218
-#, fuzzy, kde-format
-#| msgid "Robust fit:"
+#, kde-format
 msgid "Robust:"
-msgstr "Robuste Anpassung:"
+msgstr "Robust:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:248
@@ -23819,17 +23809,15 @@ msgstr "Min. Länge:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLTrendLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:265
-#, fuzzy, kde-format
-#| msgid "Min. Length:"
+#, kde-format
 msgid "Trend Length:"
-msgstr "Min. Länge:"
+msgstr "Trendlänge:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:299
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Low-Pass Length:"
-msgstr "Länge:"
+msgstr "Tiefpass-Länge:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:349
@@ -23840,17 +23828,15 @@ msgstr "Grad:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLTrendDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:359
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Trend Degree:"
-msgstr "Grad:"
+msgstr "Trend-Grad:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:369
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Low-Pass Degree:"
-msgstr "Grad:"
+msgstr "Tiefpass-Grad:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalJump)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:395
@@ -23866,10 +23852,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassJump)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:463
-#, fuzzy, kde-format
-#| msgid "Low Pass"
+#, kde-format
 msgid "Low-Pass Jump:"
-msgstr "Tiefpass"
+msgstr "Tiefpass-Sprung:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -23959,10 +23944,9 @@ msgstr "Inhalt skalieren:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSubtraction)
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:199
-#, fuzzy, kde-format
-#| msgid "Subtract"
+#, kde-format
 msgid "Subtraction"
-msgstr "Subtrahieren"
+msgstr "Subtraktion"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #. i18n: ectx: property (text), widget (QLabel, lARPLSSmoothness)

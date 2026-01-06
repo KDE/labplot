@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-05 00:39+0000\n"
-"PO-Revision-Date: 2026-01-04 08:43+0100\n"
+"PO-Revision-Date: 2026-01-05 08:51+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -14814,7 +14814,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the X position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%v%"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:400
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:623
@@ -14825,7 +14825,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the Y position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%v%"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:805
 #, kde-format
@@ -16018,7 +16018,7 @@ msgstr "Límit superior:"
 #, kde-format
 msgctxt "@label:spinbox Suffix for the frequency"
 msgid "%v Hz"
-msgstr ""
+msgstr "%v Hz"
 
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:424
 #, kde-format
@@ -18119,11 +18119,10 @@ msgid "Preferences    [Changed]"
 msgstr "Preferències [modificades]"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
-#, fuzzy, kde-format
-#| msgid "x, min"
+#, kde-format
 msgctxt "@label:spinbox Suffix for the auto save interval"
 msgid "%v min"
-msgstr "x, mín"
+msgstr "%v min"
 
 #: src/frontend/SettingsGeneralPage.cpp:216
 #, kde-format
@@ -19183,30 +19182,26 @@ msgid "Sample"
 msgstr "Mostra"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1157
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "New Plot Area in an Existing Worksheet"
-msgstr "Àrea nova del diagrama en un full de càlcul existent"
+msgstr "Àrea nova de diagrama en un full de càlcul existent"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1158
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:202
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Area in a New Worksheet"
-msgstr "Àrea nova del diagrama en un full de càlcul nou"
+msgstr "Àrea nova de diagrama en un full de càlcul nou"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1165
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "New Plot Areas in an Existing Worksheet"
-msgstr "Àrea nova del diagrama en un full de càlcul existent"
+msgstr "Àrees noves de diagrama en un full de càlcul existent"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1166
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Areas in a New Worksheet"
-msgstr "Àrea nova del diagrama en un full de càlcul nou"
+msgstr "Àrees noves de diagrama en un full de càlcul nou"
 
 # skip-rule: t-sc-plot
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1193
@@ -25429,10 +25424,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompressed)
 #: src/frontend/ui/settingsgeneralpage.ui:276
-#, fuzzy, kde-format
-#| msgid "Save in uncompressed format"
+#, kde-format
 msgid "Save in compressed format"
-msgstr "Desa en un format sense comprimir"
+msgstr "Desa en un format comprimit"
 
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/frontend/ui/settingsgeneralpage.ui:283
@@ -25855,17 +25849,15 @@ msgstr "Crea un diagrama per a les dades originals"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:229
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "&New Plot Area in an Existing Worksheet"
-msgstr "Àrea nova del diagrama en un full de càlcul existent"
+msgstr "&Àrea nova de diagrama en un full de càlcul existent"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheets)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:236
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Areas in Multiple New Worksheets"
-msgstr "Àrea nova del diagrama en un full de càlcul nou"
+msgstr "Àrees noves de diagrama en diversos fulls de càlcul nous"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter2)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:41

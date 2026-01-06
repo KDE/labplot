@@ -17543,11 +17543,10 @@ msgid "Preferences    [Changed]"
 msgstr "首选项 [已修改]"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
-#, fuzzy, kde-format
-#| msgid "x, min"
+#, kde-format
 msgctxt "@label:spinbox Suffix for the auto save interval"
 msgid "%v min"
-msgstr "x 最小值"
+msgstr ""
 
 #: src/frontend/SettingsGeneralPage.cpp:216
 #, kde-format
@@ -18517,10 +18516,9 @@ msgid "Fourier Filter of '%1'"
 msgstr "'%1' 的傅立叶滤波"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:801
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Baseline Correction of '%1'"
-msgstr "'%1' 的插值"
+msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:830
 #, kde-format
@@ -18559,30 +18557,26 @@ msgid "Sample"
 msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1157
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "New Plot Area in an Existing Worksheet"
-msgstr "现有工作表中的新绘图区域(&N)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1158
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:202
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Area in a New Worksheet"
-msgstr "新工作表中的新绘图区域"
+msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1165
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "New Plot Areas in an Existing Worksheet"
-msgstr "现有工作表中的新绘图区域(&N)"
+msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1166
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Areas in a New Worksheet"
-msgstr "新工作表中的新绘图区域"
+msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1193
 #, kde-format
@@ -19184,10 +19178,9 @@ msgid "Simplify Line"
 msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:515
-#, fuzzy, kde-format
-#| msgid "Subtract Baseline"
+#, kde-format
 msgid "Correct Baseline"
-msgstr "扣除基线"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:567
 #, kde-format
@@ -25159,17 +25152,15 @@ msgstr "为原始数据绘图"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:229
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "&New Plot Area in an Existing Worksheet"
-msgstr "现有工作表中的新绘图区域(&N)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheets)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:236
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Areas in Multiple New Worksheets"
-msgstr "新工作表中的新绘图区域"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter2)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:41
