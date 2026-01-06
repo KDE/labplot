@@ -432,9 +432,9 @@ void XYFunctionCurve::save(QXmlStreamWriter* writer) const {
 
 		QStringList functionVariableNames;
 		QStringList functionVariableColumnPaths;
-		for (auto& d : functionData()) {
-			functionVariableNames << d.variableName();
-			functionVariableColumnPaths << d.curvePath();
+		for (auto& data : functionData()) {
+			functionVariableNames << data.variableName();
+			functionVariableColumnPaths << data.curvePath();
 		}
 
 		writer->writeStartElement(QStringLiteral("variableNames"));

@@ -3060,7 +3060,6 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 			}
 
 			// used to determinde direction (up/down, left/right)
-			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 			const qreal middleX = plot()->range(Dimension::X, cs->index(Dimension::X)).center();
 			const qreal middleY = plot()->range(Dimension::Y, cs->index(Dimension::Y)).center();
 			QPointF center(middleX, middleY);
@@ -3069,7 +3068,6 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 
 			QPointF lastTickPoint = tickLabelPoints.at(tickLabelPoints.size() - 1);
 			QPointF labelPosition;
-			QFontMetrics fm(labelsFont);
 			if (orientation == Axis::Orientation::Horizontal) {
 				if (center.y() < lastTickPoint.y())
 					labelPosition = QPointF(-fm.boundingRect(text).width(), 40);

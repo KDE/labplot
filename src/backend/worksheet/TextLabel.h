@@ -72,11 +72,11 @@ public:
 			: allowPlaceholder(allowPlaceholder) {
 			TextWrapper(text, mode, html);
 		}
-		QString createHtml(QString text, bool isHtml) {
-			if (isHtml || text.isEmpty())
-				return text;
+		QString createHtml(QString plaintext, bool isHtml) {
+			if (isHtml || plaintext.isEmpty())
+				return plaintext;
 
-			QTextEdit te(text);
+			QTextEdit te(plaintext);
 			// the html does not contain any colors!
 			return te.toHtml();
 		}

@@ -1150,10 +1150,10 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
 				}
 			}
 			if (ok == 3) {
-				bool ok;
-				double val = keyword.value.toDouble(&ok);
-				if (ok) {
-					if (fits_write_key(m_fitsFile, TDOUBLE, keyword.key.toLatin1().data(), &val, keyword.comment.toLatin1().data(), &status))
+				bool valid;
+				double value = keyword.value.toDouble(&valid);
+				if (valid) {
+					if (fits_write_key(m_fitsFile, TDOUBLE, keyword.key.toLatin1().data(), &value, keyword.comment.toLatin1().data(), &status))
 						printError(status);
 				} else {
 					if (fits_write_key(m_fitsFile,
