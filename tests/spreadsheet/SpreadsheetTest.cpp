@@ -1624,6 +1624,177 @@ void SpreadsheetTest::testFlatten03() {
 }
 
 // **********************************************************
+// ********************* transposing  ***********************
+// **********************************************************
+/*!
+* transpose a spreadsheet with two integer columns, still integer columns after transposing
+*/
+void SpreadsheetTest::testTranspose00() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(4);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col->setIntegerAt(0, 1);
+	col->setIntegerAt(1, 2);
+	col->setIntegerAt(2, 3);
+	col->setIntegerAt(3, 4);
+
+	col = sheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col->setIntegerAt(0, 10);
+	col->setIntegerAt(1, 20);
+	col->setIntegerAt(2, 30);
+	col->setIntegerAt(3, 40);
+
+	// transpose
+	sheet->transpose();
+
+	// checks
+	QCOMPARE(sheet->columnCount(), 4);
+	QCOMPARE(sheet->rowCount(), 2);
+
+	col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(col->valueAt(0), 1);
+	QCOMPARE(col->valueAt(1), 10);
+
+	col = sheet->column(1);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(col->valueAt(0), 2);
+	QCOMPARE(col->valueAt(1), 20);
+
+	col = sheet->column(2);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(col->valueAt(0), 3);
+	QCOMPARE(col->valueAt(1), 30);
+
+	col = sheet->column(3);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(col->valueAt(0), 4);
+	QCOMPARE(col->valueAt(1), 40);
+}
+
+/*!
+* transpose a spreadsheet with one integer and one double column, two double columns after transposing
+*/
+void SpreadsheetTest::testTranspose01() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(4);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col->setIntegerAt(0, 1);
+	col->setIntegerAt(1, 2);
+	col->setIntegerAt(2, 3);
+	col->setIntegerAt(3, 4);
+
+	col = sheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+	col->setValueAt(3, 40.);
+
+	// transpose
+	sheet->transpose();
+
+	// checks
+	QCOMPARE(sheet->columnCount(), 4);
+	QCOMPARE(sheet->rowCount(), 2);
+
+	// check values
+	col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 1.);
+	QCOMPARE(col->valueAt(1), 10.);
+
+	col = sheet->column(1);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 2.);
+	QCOMPARE(col->valueAt(1), 20.);
+
+	col = sheet->column(2);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 3.);
+	QCOMPARE(col->valueAt(1), 30.);
+
+	col = sheet->column(3);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 4.);
+	QCOMPARE(col->valueAt(1), 40.);
+}
+
+/*!
+* transpose a spreadsheet with text, integer and double column, two double columns after transposing, text values as column names.
+*/
+void SpreadsheetTest::testTranspose02() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(3);
+	sheet->setRowCount(4);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col->setTextAt(0, QLatin1String("A"));
+	col->setTextAt(1, QLatin1String("B"));
+	col->setTextAt(2, QLatin1String("C"));
+	col->setTextAt(3, QLatin1String("D"));
+
+	col = sheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col->setIntegerAt(0, 1);
+	col->setIntegerAt(1, 2);
+	col->setIntegerAt(2, 3);
+	col->setIntegerAt(3, 4);
+
+	col = sheet->column(2);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+	col->setValueAt(3, 40.);
+
+	// transpose
+	sheet->transpose();
+
+	// checks
+	QCOMPARE(sheet->columnCount(), 4);
+	QCOMPARE(sheet->rowCount(), 2);
+
+	col = sheet->column(0);
+	QCOMPARE(col->name(), QStringLiteral("A"));
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 1.);
+	QCOMPARE(col->valueAt(1), 10.);
+
+	col = sheet->column(1);
+	QCOMPARE(col->name(), QStringLiteral("B"));
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 2.);
+	QCOMPARE(col->valueAt(1), 20.);
+
+	col = sheet->column(2);
+	QCOMPARE(col->name(), QStringLiteral("C"));
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 3.);
+	QCOMPARE(col->valueAt(1), 30.);
+
+	col = sheet->column(3);
+	QCOMPARE(col->name(), QStringLiteral("D"));
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 4.);
+	QCOMPARE(col->valueAt(1), 40.);
+}
+
+// **********************************************************
 // ******************** search&replace  *********************
 // **********************************************************
 Spreadsheet* SpreadsheetTest::createSearchReplaceSpreadsheet() {
