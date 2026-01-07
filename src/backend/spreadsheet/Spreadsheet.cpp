@@ -824,21 +824,27 @@ void Spreadsheet::transpose() {
 		data.mode = column->columnMode();
 
 		switch (data.mode) {
-		case AbstractColumn::ColumnMode::Double:
-			data.numericData.reserve(rows);
-			for (int row = 0; row < rows; ++row)
-				data.numericData << column->valueAt(row);
+		case AbstractColumn::ColumnMode::Double: {
+			auto* vec = static_cast<QVector<double>*>(column->data());
+			data.numericData.resize(rows);
+			if (vec && !vec->isEmpty())
+				memcpy(data.numericData.data(), vec->constData(), rows * sizeof(double));
 			break;
-		case AbstractColumn::ColumnMode::Integer:
-			data.integerData.reserve(rows);
-			for (int row = 0; row < rows; ++row)
-				data.integerData << column->integerAt(row);
+		}
+		case AbstractColumn::ColumnMode::Integer: {
+			auto* vec = static_cast<QVector<int>*>(column->data());
+			data.integerData.resize(rows);
+			if (vec && !vec->isEmpty())
+				memcpy(data.integerData.data(), vec->constData(), rows * sizeof(int));
 			break;
-		case AbstractColumn::ColumnMode::BigInt:
-			data.bigIntData.reserve(rows);
-			for (int row = 0; row < rows; ++row)
-				data.bigIntData << column->bigIntAt(row);
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			auto* vec = static_cast<QVector<qint64>*>(column->data());
+			data.bigIntData.resize(rows);
+			if (vec && !vec->isEmpty())
+				memcpy(data.bigIntData.data(), vec->constData(), rows * sizeof(qint64));
 			break;
+		}
 		case AbstractColumn::ColumnMode::Text:
 			data.textData.reserve(rows);
 			for (int row = 0; row < rows; ++row)
