@@ -130,6 +130,7 @@ public Q_SLOTS:
 	void clear();
 	void clear(const QVector<Column*>&);
 	void clearMasks();
+	void transpose();
 
 	void moveColumn(int from, int to);
 	void sortColumns(Column* leading, const QVector<Column*>&, bool ascending);

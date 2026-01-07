@@ -156,6 +156,7 @@ private:
 	QAction* action_select_all{nullptr};
 	QAction* action_clear_spreadsheet{nullptr};
 	QAction* action_clear_masks{nullptr};
+	QAction* action_transpose{nullptr};
 	QAction* action_formatting_heatmap{nullptr};
 	QAction* action_formatting_remove{nullptr};
 	QAction* action_go_to_cell{nullptr};
@@ -323,6 +324,7 @@ private Q_SLOTS:
 	void maskColumnValues();
 	void sampleColumnValues();
 	void flattenColumns();
+	void transpose();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
 
