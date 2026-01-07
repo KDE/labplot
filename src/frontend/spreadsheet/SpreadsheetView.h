@@ -324,6 +324,7 @@ private Q_SLOTS:
 	void maskColumnValues();
 	void sampleColumnValues();
 	void flattenColumns();
+	void transpose();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
 

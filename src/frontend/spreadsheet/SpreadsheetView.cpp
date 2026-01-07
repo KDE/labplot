@@ -889,7 +889,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_select_all, &QAction::triggered, this, &SpreadsheetView::selectAll);
 	connect(action_clear_spreadsheet, &QAction::triggered, m_spreadsheet, QOverload<>::of(&Spreadsheet::clear));
 	connect(action_clear_masks, &QAction::triggered, m_spreadsheet, &Spreadsheet::clearMasks);
-	connect(action_transpose, &QAction::triggered, m_spreadsheet, &Spreadsheet::transpose);
+	connect(action_transpose, &QAction::triggered, this, &SpreadsheetView::transpose);
 	connect(action_go_to_cell, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
 	connect(action_search, &QAction::triggered, this, &SpreadsheetView::searchReplace);
 	connect(action_search_replace, &QAction::triggered, this, &SpreadsheetView::searchReplace);
@@ -2973,6 +2973,21 @@ void SpreadsheetView::flattenColumns() {
 	auto* dlg = new FlattenColumnsDialog(m_spreadsheet, this);
 	dlg->setColumns(columns);
 	dlg->exec();
+}
+
+void SpreadsheetView::transpose() {
+	if (m_spreadsheet->rowCount() > 500) {
+		auto status = KMessageBox::warningTwoActions(
+			this,
+			i18n("The spreadsheet has %1 rows. Do you really want to tranpose it?", m_spreadsheet->rowCount()),
+			i18n("Transpose Spreadsheet"),
+			KStandardGuiItem::cont(),
+			KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
+			return;
+	}
+
+	m_spreadsheet->transpose();
 }
 
 void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
