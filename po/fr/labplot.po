@@ -14,9 +14,9 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-05 00:39+0000\n"
-"PO-Revision-Date: 2026-01-02 11:18+0100\n"
+"PO-Revision-Date: 2026-01-05 09:14+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19144,8 +19144,7 @@ msgid "Fourier Filter of '%1'"
 msgstr "Filtre de Fourier de « %1 »"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:801
-#, fuzzy, kde-format
-#| msgid "Baseline correction for '%1'"
+#, kde-format
 msgid "Baseline Correction of '%1'"
 msgstr "Correction de la référence pour « %1 »"
 
@@ -19827,10 +19826,9 @@ msgid "Simplify Line"
 msgstr "Simplifier la ligne"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:515
-#, fuzzy, kde-format
-#| msgid "Subtract Baseline"
+#, kde-format
 msgid "Correct Baseline"
-msgstr "Soustraire la référence"
+msgstr "Corriger la référence"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:567
 #, kde-format

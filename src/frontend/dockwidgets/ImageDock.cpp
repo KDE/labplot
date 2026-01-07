@@ -51,9 +51,9 @@ ImageDock::ImageDock(QWidget* parent)
 
 	QString suffix;
 	if (m_units == BaseDock::Units::Metric)
-		suffix = QStringLiteral("%v cm");
+		suffix = i18n("%v cm");
 	else
-		suffix = QStringLiteral("%v in");
+		suffix = i18n("%v in");
 
 	KLocalization::setupSpinBoxFormatString(ui.sbWidth, ki18nc("@label:spinbox Suffix for the width", qPrintable(suffix)));
 	KLocalization::setupSpinBoxFormatString(ui.sbHeight, ki18nc("@label:spinbox Suffix for the height", qPrintable(suffix)));
@@ -141,7 +141,7 @@ void ImageDock::updateUnits() {
 	if (m_units == BaseDock::Units::Metric) {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QStringLiteral("%v cm");
+		suffix = i18n("%v cm");
 		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH));
 		ui.sbHeight->setValue(roundValue(ui.sbHeight->value() * GSL_CONST_CGS_INCH));
 		ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH));
@@ -149,7 +149,7 @@ void ImageDock::updateUnits() {
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QStringLiteral("%v in");
+		suffix = i18n("%v in");
 		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH));
 		ui.sbHeight->setValue(roundValue(ui.sbHeight->value() / GSL_CONST_CGS_INCH));
 		ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH));

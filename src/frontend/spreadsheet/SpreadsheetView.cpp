@@ -331,6 +331,7 @@ void SpreadsheetView::initActions() {
 
 	action_clear_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Spreadsheet"), this);
 	action_clear_masks = new QAction(QIcon::fromTheme(QStringLiteral("format-remove-node")), i18n("Clear Masks"), this);
+	action_transpose = new QAction(QIcon::fromTheme(QStringLiteral("object-flip-vertical")), i18n("Transpose"), this);
 	action_go_to_cell = new QAction(QIcon::fromTheme(QStringLiteral("go-jump")), i18n("&Go to Cell..."), this);
 	action_search = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Search"), this);
 	action_search->setShortcut(QKeySequence::Find);
@@ -888,6 +889,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_select_all, &QAction::triggered, this, &SpreadsheetView::selectAll);
 	connect(action_clear_spreadsheet, &QAction::triggered, m_spreadsheet, QOverload<>::of(&Spreadsheet::clear));
 	connect(action_clear_masks, &QAction::triggered, m_spreadsheet, &Spreadsheet::clearMasks);
+	connect(action_transpose, &QAction::triggered, this, &SpreadsheetView::transpose);
 	connect(action_go_to_cell, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
 	connect(action_search, &QAction::triggered, this, &SpreadsheetView::searchReplace);
 	connect(action_search_replace, &QAction::triggered, this, &SpreadsheetView::searchReplace);
@@ -1030,6 +1032,8 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	menu->insertAction(firstAction, action_search);
 	if (!m_readOnly)
 		menu->insertAction(firstAction, action_search_replace);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_transpose);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_toggle_comments);
 	menu->insertAction(firstAction, action_toggle_sparklines);
@@ -1594,6 +1598,23 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 		action_toggle_sparklines->setText(i18n("Hide Sparklines"));
 	else
 		action_toggle_sparklines->setText(i18n("Show Sparklines"));
+
+	// column transpose is only possible if all columns are numeric or the first column is text (used for column names after transposition) and all others are numeric
+	bool canTranspose = false;
+	if (m_spreadsheet->columnCount() > 0) {
+		const auto* firstCol = columns.constFirst();
+		if (firstCol->columnMode() == AbstractColumn::ColumnMode::Text || firstCol->isNumeric()) {
+			canTranspose = true;
+			for (int i = 1; i < columns.count(); i++) {
+				const auto* col = columns.at(i);
+				if (!col->isNumeric()) {
+					canTranspose = false;
+					break;;
+				}
+			}
+		}
+	}
+	action_transpose->setEnabled(canTranspose);
 }
 
 void SpreadsheetView::checkSpreadsheetSelectionMenu() {
@@ -2952,6 +2973,21 @@ void SpreadsheetView::flattenColumns() {
 	auto* dlg = new FlattenColumnsDialog(m_spreadsheet, this);
 	dlg->setColumns(columns);
 	dlg->exec();
+}
+
+void SpreadsheetView::transpose() {
+	if (m_spreadsheet->rowCount() > 500) {
+		auto status = KMessageBox::warningTwoActions(
+			this,
+			i18n("The spreadsheet has %1 rows. Do you really want to tranpose it?", m_spreadsheet->rowCount()),
+			i18n("Transpose Spreadsheet"),
+			KStandardGuiItem::cont(),
+			KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
+			return;
+	}
+
+	m_spreadsheet->transpose();
 }
 
 void SpreadsheetView::normalizeSelectedColumns(QAction* action) {

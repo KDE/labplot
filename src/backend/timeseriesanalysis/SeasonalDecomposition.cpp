@@ -587,11 +587,9 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			trendData.resize(size);
 			seasonalDataSingle.resize(size);
 			residualData.resize(size);
-			for (size_t i = 0; i < size; ++i) {
-				trendData[i] = result.trend[i];
-				seasonalDataSingle[i] = result.seasonal[i];
-				residualData[i] = result.remainder[i];
-			}
+			memcpy(trendData.data(), result.trend.data(), size * sizeof(double));
+			memcpy(seasonalDataSingle.data(), result.seasonal.data(), size * sizeof(double));
+			memcpy(residualData.data(), result.remainder.data(), size * sizeof(double));
 
 			seasonalData << seasonalDataSingle;
 		} else {
@@ -659,12 +657,10 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			for (int i = 0; i < (int)columnsSeasonal.size(); ++i)
 				seasonalData[i].resize(size);
 
-			for (size_t i = 0; i < size; ++i) {
-				trendData[i] = result.trend[i];
-				residualData[i] = result.remainder[i];
-				for (int j = 0; j < (int)columnsSeasonal.size(); ++j)
-					seasonalData[j][i] = result.seasonal.at(j)[i];
-			}
+			memcpy(trendData.data(), result.trend.data(), size * sizeof(double));
+			memcpy(residualData.data(), result.remainder.data(), size * sizeof(double));
+			for (int j = 0; j < (int)columnsSeasonal.size(); ++j)
+				memcpy(seasonalData[j].data(), result.seasonal.at(j).data(), size * sizeof(double));
 		}
 
 		break;

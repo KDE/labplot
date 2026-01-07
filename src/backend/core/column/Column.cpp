@@ -109,20 +109,17 @@ QMenu* Column::createContextMenu() {
 	if (parentAspect()->type() == AspectType::StatisticsSpreadsheet)
 		return nullptr;
 
-	// initialize the actions if not done yet
-	if (!m_copyDataAction) {
-		m_copyDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Data"), this);
-		connect(m_copyDataAction, &QAction::triggered, this, &Column::copyData);
+	auto* copyDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Data"), this);
+	connect(copyDataAction, &QAction::triggered, this, &Column::copyData);
 
-		m_pasteDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-paste")), i18n("Paste Data"), this);
-		connect(m_pasteDataAction, &QAction::triggered, this, &Column::pasteData);
+	auto* pasteDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-paste")), i18n("Paste Data"), this);
+	connect(pasteDataAction, &QAction::triggered, this, &Column::pasteData);
 
-		m_usedInActionGroup = new QActionGroup(this);
-		connect(m_usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
-		connect(this, &AbstractColumn::maskingChanged, this, [=] {
-			d->invalidate();
-		});
-	}
+	auto* usedInActionGroup = new QActionGroup(this);
+	connect(usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
+	connect(this, &AbstractColumn::maskingChanged, this, [=] {
+		d->invalidate();
+	});
 
 	QMenu* menu = AbstractAspect::createContextMenu();
 	QAction* firstAction{nullptr};
@@ -153,8 +150,8 @@ QMenu* Column::createContextMenu() {
 	usedInMenu->setIcon(QIcon::fromTheme(QStringLiteral("go-next-view")));
 
 	// remove previously added actions
-	for (auto* action : m_usedInActionGroup->actions())
-		m_usedInActionGroup->removeAction(action);
+	for (auto* action : usedInActionGroup->actions())
+		usedInActionGroup->removeAction(action);
 
 	auto* project = this->project();
 	bool showIsUsed = false;
@@ -170,7 +167,7 @@ QMenu* Column::createContextMenu() {
 				sectionAdded = true;
 			}
 
-			auto* action = new QAction(plot->icon(), plot->name(), m_usedInActionGroup);
+			auto* action = new QAction(plot->icon(), plot->name(), usedInActionGroup);
 			action->setData(plot->path());
 			usedInMenu->addAction(action);
 			showIsUsed = true;
@@ -188,7 +185,7 @@ QMenu* Column::createContextMenu() {
 				sectionAdded = true;
 			}
 
-			auto* action = new QAction(axis->icon(), axis->name(), m_usedInActionGroup);
+			auto* action = new QAction(axis->icon(), axis->name(), usedInActionGroup);
 			action->setData(axis->path());
 			usedInMenu->addAction(action);
 			showIsUsed = true;
@@ -214,7 +211,7 @@ QMenu* Column::createContextMenu() {
 				sectionAdded = true;
 			}
 
-			auto* action = new QAction(column->icon(), column->name(), m_usedInActionGroup);
+			auto* action = new QAction(column->icon(), column->name(), usedInActionGroup);
 			action->setData(column->path());
 			usedInMenu->addAction(action);
 			showIsUsed = true;
@@ -230,7 +227,7 @@ QMenu* Column::createContextMenu() {
 	}
 
 	if (hasValues())
-		menu->insertAction(firstAction, m_copyDataAction);
+		menu->insertAction(firstAction, copyDataAction);
 
 	// pasting of data is only possible for spreadsheet columns that are not read-only
 	if (auto* spreadsheet = parentAspect()->castTo<Spreadsheet>()) {
@@ -239,7 +236,7 @@ QMenu* Column::createContextMenu() {
 			if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
 				const QString& text = QApplication::clipboard()->text();
 				if (!text.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
-					menu->insertAction(firstAction, m_pasteDataAction);
+					menu->insertAction(firstAction, pasteDataAction);
 			}
 		}
 	}
