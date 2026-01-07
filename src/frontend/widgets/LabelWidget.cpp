@@ -108,9 +108,9 @@ LabelWidget::LabelWidget(QWidget* parent)
 
 	QString suffix;
 	if (m_units == BaseDock::Units::Metric)
-		suffix = QLatin1String("%v cm");
+		suffix = i18n("%v cm");
 	else
-		suffix = QLatin1String("%v in");
+		suffix = i18n("%v in");
 
 	KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position", qPrintable(suffix)));
 	KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position", qPrintable(suffix)));
@@ -440,7 +440,7 @@ void LabelWidget::updateUnits() {
 	if (m_units == BaseDock::Units::Metric) {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QLatin1String("%v cm");
+		suffix = i18n("%v cm");
 		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
 			ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH));
 		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
@@ -448,7 +448,7 @@ void LabelWidget::updateUnits() {
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QLatin1String("%v in");
+		suffix = i18n("%v in");
 		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
 			ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH));
 		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
@@ -975,9 +975,9 @@ void LabelWidget::positionXChanged(int index) {
 	} else {
 		QString suffix;
 		if (m_units == Units::Metric)
-			suffix = QLatin1String("%v cm");
+			suffix = i18n("%v cm");
 		else
-			suffix = QLatin1String("%v in");
+			suffix = i18n("%v in");
 		KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position", qPrintable(suffix)));
 	}
 
@@ -1013,9 +1013,9 @@ void LabelWidget::positionYChanged(int index) {
 	} else {
 		QString suffix;
 		if (m_units == Units::Metric)
-			suffix = QLatin1String("%v cm");
+			suffix = i18n("%v cm");
 		else
-			suffix = QLatin1String("%v in");
+			suffix = i18n("%v in");
 		KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position", qPrintable(suffix)));
 	}
 

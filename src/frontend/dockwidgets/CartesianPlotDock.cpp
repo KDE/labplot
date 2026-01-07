@@ -139,9 +139,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	// Layout-tab
 	QString suffix;
 	if (m_units == Units::Metric)
-		suffix = QStringLiteral("%v cm");
+		suffix = i18n("%v cm");
 	else
-		suffix = QStringLiteral("%v in");
+		suffix = i18n("%v in");
 
 	KLocalization::setupSpinBoxFormatString(ui.sbLeft, ki18nc("@label:spinbox Suffix for the left spacing", qPrintable(suffix)));
 	KLocalization::setupSpinBoxFormatString(ui.sbTop, ki18nc("@label:spinbox Suffix for the top spacing", qPrintable(suffix)));
@@ -567,7 +567,7 @@ void CartesianPlotDock::updateUnits() {
 	if (m_units == Units::Metric) {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QStringLiteral(" cm");
+		suffix = i18n("%v cm");
 		ui.sbLeft->setValue(roundValue(ui.sbLeft->value() * GSL_CONST_CGS_INCH));
 		ui.sbTop->setValue(roundValue(ui.sbTop->value() * GSL_CONST_CGS_INCH));
 		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH));
@@ -580,7 +580,7 @@ void CartesianPlotDock::updateUnits() {
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QStringLiteral(" in");
+		suffix = i18n("%v in");
 		ui.sbLeft->setValue(roundValue(ui.sbLeft->value() / GSL_CONST_CGS_INCH));
 		ui.sbTop->setValue(roundValue(ui.sbTop->value() / GSL_CONST_CGS_INCH));
 		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH));
