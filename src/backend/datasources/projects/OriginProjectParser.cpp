@@ -882,8 +882,8 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		auto* col = spreadsheet->column((int)j);
 
 		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name << ", dataset name = " << column.dataset_name)
-		QString name(QString::fromStdString(column.name));
-		col->setName(name.remove(QRegularExpression(QStringLiteral(".*_"))));
+		QString columnName(QString::fromStdString(column.name));
+		col->setName(columnName.remove(QRegularExpression(QStringLiteral(".*_"))));
 
 		if (preview)
 			continue;

@@ -1259,9 +1259,9 @@ void AxisPrivate::retransformLine() {
 		}
 	}
 
-	for (const auto& line : std::as_const(lines)) {
-		linePath.moveTo(line.p1());
-		linePath.lineTo(line.p2());
+	for (const auto& l : std::as_const(lines)) {
+		linePath.moveTo(l.p1());
+		linePath.lineTo(l.p2());
 	}
 
 	if (linePath.isEmpty()) {
@@ -1968,7 +1968,7 @@ void AxisPrivate::retransformTicks() {
 		if (Axis::noTicks != minorTicksDirection && tmpMinorTicksNumber > 0
 			&& ((tmpMajorTicksNumber > 1 && iMajor < tmpMajorTicksNumber - 1) || (dateTimeSpacing && dtValid)) && nextMajorTickPos != majorTickPos) {
 			// minor ticks are placed at equidistant positions independent of the selected scaling for the major ticks positions
-			double minorTicksIncrement = (nextMajorTickPos - majorTickPos) / (tmpMinorTicksNumber + 1);
+			minorTicksIncrement = (nextMajorTickPos - majorTickPos) / (tmpMinorTicksNumber + 1);
 			// DEBUG("	nextMajorTickPos = " << nextMajorTickPos)
 			// DEBUG("	majorTickPos = " << majorTickPos)
 			// DEBUG("	minorTicksIncrement = " << minorTicksIncrement)
@@ -2436,8 +2436,8 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 
 	// check whether we have duplicates with reduced precision
 	//-> current precision cannot be reduced, return the previous value
-	const double scale = std::abs(tickLabelValues.last() - tickLabelValues.first());
-	// DEBUG(Q_FUNC_INFO << ", scale = " << scale)
+	const double valueRange = std::abs(tickLabelValues.last() - tickLabelValues.first());
+	// DEBUG(Q_FUNC_INFO << ", value range = " << valueRange)
 	for (int i = 0; i < tempValues.size(); ++i) {
 		// return if rounded value differs too much
 		double relDiff = 0;
@@ -2445,19 +2445,19 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 		case Axis::LabelsFormat::Decimal:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:
-			relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / valueRange;
 			break;
 		case Axis::LabelsFormat::MultipliesPi:
-			relDiff = std::abs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / valueRange;
 			break;
 		case Axis::LabelsFormat::Powers10:
-			relDiff = std::abs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / valueRange;
 			break;
 		case Axis::LabelsFormat::Powers2:
-			relDiff = std::abs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / valueRange;
 			break;
 		case Axis::LabelsFormat::PowersE:
-			relDiff = std::abs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / valueRange;
 		}
 		// DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
 
@@ -2715,24 +2715,24 @@ void AxisPrivate::retransformMajorGrid() {
 		end = logicalMajorTickPoints.size();
 	}
 
-	QVector<QLineF> lines;
+	QVector<QLineF> gridLines;
 	if (orientation == Axis::Orientation::Horizontal) { // horizontal axis
 		for (int i = start; i < end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
-			lines.append(QLineF(point.x(), yRange.start(), point.x(), yRange.end()));
+			gridLines.append(QLineF(point.x(), yRange.start(), point.x(), yRange.end()));
 		}
 	} else { // vertical axis
 		// skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
 		for (int i = start; i < end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
-			lines.append(QLineF(xRange.start(), point.y(), xRange.end(), point.y()));
+			gridLines.append(QLineF(xRange.start(), point.y(), xRange.end(), point.y()));
 		}
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	for (const auto& line : lines) {
-		majorGridPath.moveTo(line.p1());
-		majorGridPath.lineTo(line.p2());
+	gridLines = q->cSystem->mapLogicalToScene(gridLines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	for (const auto& l : gridLines) {
+		majorGridPath.moveTo(l.p1());
+		majorGridPath.lineTo(l.p2());
 	}
 
 	recalcShapeAndBoundingRect();
@@ -2757,24 +2757,24 @@ void AxisPrivate::retransformMinorGrid() {
 	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->index(Dimension::X) + 1)
 	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->index(Dimension::Y) + 1)
 
-	QVector<QLineF> lines;
+	QVector<QLineF> gridLines;
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 	if (orientation == Axis::Orientation::Horizontal) { // horizontal axis
 		const Range<double> yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
 
 		for (const auto& point : logicalMinorTickPoints)
-			lines.append(QLineF(point.x(), yRange.start(), point.x(), yRange.end()));
+			gridLines.append(QLineF(point.x(), yRange.start(), point.x(), yRange.end()));
 	} else { // vertical axis
 		const Range<double> xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
 
 		for (const auto& point : logicalMinorTickPoints)
-			lines.append(QLineF(xRange.start(), point.y(), xRange.end(), point.y()));
+			gridLines.append(QLineF(xRange.start(), point.y(), xRange.end(), point.y()));
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	for (const auto& line : lines) {
-		minorGridPath.moveTo(line.p1());
-		minorGridPath.lineTo(line.p2());
+	gridLines = q->cSystem->mapLogicalToScene(gridLines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	for (const auto& l : gridLines) {
+		minorGridPath.moveTo(l.p1());
+		minorGridPath.lineTo(l.p2());
 	}
 
 	recalcShapeAndBoundingRect();
