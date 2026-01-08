@@ -95,8 +95,11 @@ if(ENABLE_VECTOR_BLF)
           add_definitions (-D__forceinline=inline)
       endif()
       # disable -Werror=maybe-uninitialized since gcc gives false positive warnings when address sanitizer is used
+      if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=maybe-uninitialized")
+      endif()
       # disable shadow warnings treated as error
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=maybe-uninitialized -Wno-error=shadow")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=shadow")
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
       set(CMAKE_PROJECT_dbc_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dbc_database_parser_disableTests.cmake")
