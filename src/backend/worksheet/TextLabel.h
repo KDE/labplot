@@ -51,26 +51,26 @@ public:
 
 	struct TextWrapper {
 		TextWrapper() = default;
-		TextWrapper(const QString& text, TextLabel::Mode mode, bool html)
-			: mode(mode) {
+		TextWrapper(const QString& twtext, TextLabel::Mode twmode, bool html)
+			: mode(twmode) {
 			if (mode == TextLabel::Mode::Text)
-				this->text = createHtml(text, html);
+				text = createHtml(twtext, html);
 			else // LaTeX and markdown use plain string
-				this->text = text;
+				text = twtext;
 		}
-		TextWrapper(const QString& text)
+		TextWrapper(const QString& twtext)
 			: mode(TextLabel::Mode::Text) {
 			// assume text is not HTML yet
-			this->text = createHtml(text, false);
+			text = createHtml(twtext, false);
 		}
-		TextWrapper(const QString& text, bool html, QString& placeholder)
+		TextWrapper(const QString& twtext, bool html, QString& placeholder)
 			: allowPlaceholder(true)
 			, textPlaceholder(placeholder) {
-			this->text = createHtml(text, html);
+			text = createHtml(twtext, html);
 		}
-		TextWrapper(const QString& text, TextLabel::Mode mode, bool html, bool allowPlaceholder)
-			: allowPlaceholder(allowPlaceholder) {
-			TextWrapper(text, mode, html);
+		TextWrapper(const QString& twtext, TextLabel::Mode twmode, bool html, bool twAllowPlaceholder)
+			: allowPlaceholder(twAllowPlaceholder) {
+			TextWrapper(twtext, twmode, html);
 		}
 		QString createHtml(QString plaintext, bool isHtml) {
 			if (isHtml || plaintext.isEmpty())
@@ -131,9 +131,9 @@ public:
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	int gluePointCount();
 	struct GluePoint {
-		GluePoint(QPointF point, const QString& name)
-			: point(point)
-			, name(name) {
+		GluePoint(QPointF gpoint, const QString& gpname)
+			: point(gpoint)
+			, name(gpname) {
 		}
 		QPointF point;
 		QString name;

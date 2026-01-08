@@ -61,8 +61,8 @@ void XYFunctionCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 
 bool XYFunctionCurve::usingColumn(const AbstractColumn* column, bool indirect) const {
 	if (indirect) {
-		for (const auto& d : functionData()) {
-			const auto* curve = d.curve();
+		for (const auto& data : functionData()) {
+			const auto* curve = data.curve();
 			if (curve && curve->usingColumn(column, indirect))
 				return true;
 		}
@@ -72,8 +72,8 @@ bool XYFunctionCurve::usingColumn(const AbstractColumn* column, bool indirect) c
 
 QVector<const Plot*> XYFunctionCurve::dependingPlots() const {
 	QVector<const Plot*> plots;
-	for (const auto& d : functionData()) {
-		const auto* curve = d.curve();
+	for (const auto& data : functionData()) {
+		const auto* curve = data.curve();
 		if (curve)
 			plots.append(curve);
 	}
@@ -102,9 +102,9 @@ public:
 	void redo() override {
 		if (!m_copied) {
 			m_function = m_curve->function();
-			for (auto& d : m_curve->functionData()) {
-				m_variableNames << d.variableName();
-				m_variableCurves << d.m_curve;
+			for (auto& data : m_curve->functionData()) {
+				m_variableNames << data.variableName();
+				m_variableCurves << data.m_curve;
 			}
 			m_copied = true;
 		}
@@ -349,12 +349,12 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 	if (valid) {
 		const auto rowCount = m_functionData.first().curve()->xColumn()->rowCount();
 		yVector->resize(rowCount);
-		const auto* xColumn = dynamic_cast<const Column*>(m_functionData.first().curve()->xColumn());
-		Q_ASSERT(xColumn);
+		const auto* xCol = dynamic_cast<const Column*>(m_functionData.first().curve()->xColumn());
+		Q_ASSERT(xCol);
 		xVector->resize(rowCount);
 		// convert integers to doubles first
-		for (int i = 0; i < xColumn->rowCount(); ++i)
-			(*xVector)[i] = xColumn->valueAt(i);
+		for (int i = 0; i < xCol->rowCount(); ++i)
+			(*xVector)[i] = xCol->valueAt(i);
 
 		QVector<QVector<double>*> xVectors;
 		QStringList functionVariableNames;
@@ -370,11 +370,11 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 				xVectors << static_cast<QVector<double>*>(column->data());
 			else {
 				// convert integers to doubles first
-				auto* xVector = new QVector<double>(column->rowCount());
+				auto* xvec = new QVector<double>(column->rowCount());
 				for (int i = 0; i < column->rowCount(); ++i)
-					(*xVector)[i] = column->valueAt(i);
+					(*xvec)[i] = column->valueAt(i);
 
-				xVectors << xVector;
+				xVectors << xvec;
 			}
 		}
 

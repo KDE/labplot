@@ -923,15 +923,15 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 
 void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	const auto* cSystem = coordinateSystem(cSystemIndex);
+	const auto* ics = coordinateSystem(cSystemIndex);
 	int xIndex = -1, yIndex = -1;
-	if (cSystem) {
-		xIndex = cSystem->index(Dimension::X);
-		yIndex = cSystem->index(Dimension::Y);
+	if (ics) {
+		xIndex = ics->index(Dimension::X);
+		yIndex = ics->index(Dimension::Y);
 	}
 
 	if (op == NavigationOperation::ScaleAuto) {
-		if (!cSystem) { // all csystems
+		if (!ics) { // all csystems
 			for (int i = 0; i < coordinateSystemCount(); i++) {
 				const auto* cs = coordinateSystem(i);
 				auto xDirty = rangeDirty(Dimension::X, cs->index(Dimension::X));
@@ -960,15 +960,15 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				setRangeDirty(Dimension::X, xIndex, true);
 				setRangeDirty(Dimension::Y, yIndex, true);
 			}
-			if (!autoScale(Dimension::X, cSystem->index(Dimension::X)))
-				enableAutoScale(Dimension::X, cSystem->index(Dimension::X), true, true);
+			if (!autoScale(Dimension::X, ics->index(Dimension::X)))
+				enableAutoScale(Dimension::X, ics->index(Dimension::X), true, true);
 			else
-				scaleAuto(Dimension::X, cSystem->index(Dimension::X), true);
+				scaleAuto(Dimension::X, ics->index(Dimension::X), true);
 
-			if (!autoScale(Dimension::Y, cSystem->index(Dimension::Y)))
-				enableAutoScale(Dimension::Y, cSystem->index(Dimension::Y), true, true);
+			if (!autoScale(Dimension::Y, ics->index(Dimension::Y)))
+				enableAutoScale(Dimension::Y, ics->index(Dimension::Y), true, true);
 			else
-				scaleAuto(Dimension::Y, cSystem->index(Dimension::Y), true);
+				scaleAuto(Dimension::Y, ics->index(Dimension::Y), true);
 			WorksheetElementContainer::retransform();
 		}
 	} else if (op == NavigationOperation::ScaleAutoX) {
@@ -1677,7 +1677,7 @@ int CartesianPlot::coordinateSystemCount() const {
 }
 
 CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const {
-	// DEBUG(Q_FUNC_INFO << ", nr of cSystems = " << coordinateSystemCount() << ", index = " << index)
+	// DEBUG(Q_FUNC_INFO << ", number of coordinate systems = " << coordinateSystemCount() << ", index = " << index)
 	if (index >= coordinateSystemCount() || index < 0)
 		return nullptr;
 
@@ -1685,12 +1685,12 @@ CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const {
 }
 
 void CartesianPlot::addCoordinateSystem() {
-	auto cSystem = new CartesianCoordinateSystem(this);
-	addCoordinateSystem(cSystem);
+	auto ccs = new CartesianCoordinateSystem(this);
+	addCoordinateSystem(ccs);
 	// retransform scales, because otherwise the CartesianCoordinateSystem
 	// does not have any scales
-	retransformScale(Dimension::X, cSystem->index(Dimension::X));
-	retransformScale(Dimension::Y, cSystem->index(Dimension::Y));
+	retransformScale(Dimension::X, ccs->index(Dimension::X));
+	retransformScale(Dimension::Y, ccs->index(Dimension::Y));
 }
 void CartesianPlot::addCoordinateSystem(CartesianCoordinateSystem* s) {
 	m_coordinateSystems.append(s);
@@ -2496,8 +2496,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		// in case a non-plot element like axis, etc. was hovered, unhover the plots
 		connect(elem, &WorksheetElement::hoveredChanged, [=](bool on) {
 			if (on) {
-				for (auto* plot : children<Plot>())
-					plot->setHover(false);
+				for (auto* childPlot : children<Plot>())
+					childPlot->setHover(false);
 			}
 		});
 	}
@@ -2680,9 +2680,9 @@ void CartesianPlot::checkAxisFormat(const int cSystemIndex, const AbstractColumn
 		// set column's datetime format for all horizontal axis
 		for (auto* axis : children<Axis>()) {
 			if (axis->orientation() == orientation) {
-				const auto* cSystem{coordinateSystem(axis->coordinateSystemIndex())};
+				const auto* cs = coordinateSystem(axis->coordinateSystemIndex());
 				const auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-				d->xRanges[cSystem ? cSystem->index(Dimension::X) : 0].range.setDateTimeFormat(filter->format());
+				d->xRanges[cs ? cs->index(Dimension::X) : 0].range.setDateTimeFormat(filter->format());
 				axis->setUndoAware(false);
 				axis->setLabelsDateTimeFormat(rangeDateTimeFormat(Dimension::X, xIndex));
 				axis->setUndoAware(true);
@@ -2897,12 +2897,12 @@ void CartesianPlot::dataChanged(Plot* curve, const Dimension dim) {
 		updated = this->scaleAuto(dim, index);
 
 	QVector<int> scaled;
-	for (auto* acSystem : m_coordinateSystems) {
-		auto* cSystem = static_cast<CartesianCoordinateSystem*>(acSystem);
-		if (cSystem->index(dim) == index && scaled.indexOf(cSystem->index(dim_other)) == -1 && // do not scale again
-			autoScale(dim_other, cSystem->index(dim_other))) {
-			scaled << cSystem->index(dim_other);
-			updated |= scaleAuto(dim_other, cSystem->index(dim_other), false);
+	for (auto* cs : m_coordinateSystems) {
+		auto* ccs = static_cast<CartesianCoordinateSystem*>(cs);
+		if (ccs->index(dim) == index && scaled.indexOf(ccs->index(dim_other)) == -1 && // do not scale again
+			autoScale(dim_other, ccs->index(dim_other))) {
+			scaled << ccs->index(dim_other);
+			updated |= scaleAuto(dim_other, ccs->index(dim_other), false);
 		}
 	}
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
@@ -3431,12 +3431,12 @@ void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
 	}
 
 	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(dim))) {
-			if (autoScale(dim_other, cs->index(dim_other))) {
-				setRangeDirty(dim_other, cs->index(dim_other), true);
-				scaleAuto(dim_other, cs->index(dim_other), false);
+	for (const auto cs : m_coordinateSystems) {
+		const auto ccs = static_cast<CartesianCoordinateSystem*>(cs);
+		if ((index == -1 || index == ccs->index(dim))) {
+			if (autoScale(dim_other, ccs->index(dim_other))) {
+				setRangeDirty(dim_other, ccs->index(dim_other), true);
+				scaleAuto(dim_other, ccs->index(dim_other), false);
 			}
 			retrans = true;
 		}
@@ -4313,7 +4313,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	}
 }
 
-void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransform) {
+void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransf) {
 	m_selectionBandIsShown = false;
 	// don't zoom if very small region was selected, avoid occasional/unwanted zooming
 	if (std::abs(m_selectionEnd.x() - m_selectionStart.x()) < 20 && std::abs(m_selectionEnd.y() - m_selectionStart.y()) < 20)
@@ -4374,7 +4374,7 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 		}
 	}
 
-	if (!suppressRetransform) {
+	if (!suppressRetransf) {
 		retransformScales(xIndex, yIndex);
 		q->WorksheetElementContainer::retransform();
 	}
@@ -4452,23 +4452,23 @@ void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 		if (worksheet->layout() == Worksheet::Layout::NoLayout) {
 			// no layout is active -> use arrow keys to move the plot on the worksheet
 			const int delta = 5;
-			QRectF rect = q->rect();
+			QRectF qrect = q->rect();
 
 			if (a == Action::MoveLeft) {
-				rect.setX(rect.x() - delta);
-				rect.setWidth(rect.width() - delta);
+				qrect.setX(qrect.x() - delta);
+				qrect.setWidth(qrect.width() - delta);
 			} else if (a == Action::MoveRight) {
-				rect.setX(rect.x() + delta);
-				rect.setWidth(rect.width() + delta);
+				qrect.setX(qrect.x() + delta);
+				qrect.setWidth(qrect.width() + delta);
 			} else if (a == Action::MoveUp) {
-				rect.setY(rect.y() - delta);
-				rect.setHeight(rect.height() - delta);
+				qrect.setY(qrect.y() - delta);
+				qrect.setHeight(qrect.height() - delta);
 			} else if (a == Action::MoveDown) {
-				rect.setY(rect.y() + delta);
-				rect.setHeight(rect.height() + delta);
+				qrect.setY(qrect.y() + delta);
+				qrect.setHeight(qrect.height() + delta);
 			}
 
-			q->setRect(rect);
+			q->setRect(qrect);
 		}
 	} else if (a == Action::NavigateNextCurve) // (key == Qt::Key_Tab)
 		navigateNextPrevCurve();
@@ -4861,11 +4861,11 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("rangeFirstValues"), QString::number(d->rangeFirstValues));
 	writer->writeAttribute(QStringLiteral("rangeLastValues"), QString::number(d->rangeLastValues));
 	writer->writeAttribute(QStringLiteral("niceExtend"), QString::number(d->niceExtend));
-	for (const auto& cSystem : m_coordinateSystems) {
+	for (const auto& cs : m_coordinateSystems) {
 		writer->writeStartElement(QStringLiteral("coordinateSystem"));
-		writer->writeAttribute(QStringLiteral("name"), cSystem->name());
-		writer->writeAttribute(QStringLiteral("xIndex"), QString::number(static_cast<CartesianCoordinateSystem*>(cSystem)->index(Dimension::X)));
-		writer->writeAttribute(QStringLiteral("yIndex"), QString::number(static_cast<CartesianCoordinateSystem*>(cSystem)->index(Dimension::Y)));
+		writer->writeAttribute(QStringLiteral("name"), cs->name());
+		writer->writeAttribute(QStringLiteral("xIndex"), QString::number(static_cast<CartesianCoordinateSystem*>(cs)->index(Dimension::X)));
+		writer->writeAttribute(QStringLiteral("yIndex"), QString::number(static_cast<CartesianCoordinateSystem*>(cs)->index(Dimension::Y)));
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
@@ -5098,19 +5098,19 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseMissingAttributeWarning(QStringLiteral("xIndex"));
 			else {
-				auto* cSystem = new CartesianCoordinateSystem(this);
-				cSystem->setIndex(Dimension::X, str.toInt());
+				auto* cs = new CartesianCoordinateSystem(this);
+				cs->setIndex(Dimension::X, str.toInt());
 
 				str = attribs.value(QStringLiteral("yIndex")).toString();
 				if (str.isEmpty())
 					reader->raiseMissingAttributeWarning(QStringLiteral("yIndex"));
 				else
-					cSystem->setIndex(Dimension::Y, str.toInt());
+					cs->setIndex(Dimension::Y, str.toInt());
 
-				addCoordinateSystem(cSystem);
+				addCoordinateSystem(cs);
 
 				str = attribs.value(QStringLiteral("name")).toString();
-				cSystem->setName(str);
+				cs->setName(str);
 			}
 
 			// old style (pre 2.9.0, to read old projects)
@@ -5198,10 +5198,10 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				if (!str.isEmpty())
 					d->yRanges[0].range.setDateTimeFormat(str);
 
-				auto* cSystem = new CartesianCoordinateSystem(this);
-				cSystem->setIndex(Dimension::X, 0);
-				cSystem->setIndex(Dimension::Y, 0);
-				addCoordinateSystem(cSystem);
+				auto* cs = new CartesianCoordinateSystem(this);
+				cs->setIndex(Dimension::X, 0);
+				cs->setIndex(Dimension::Y, 0);
+				addCoordinateSystem(cs);
 
 				READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 				READ_DOUBLE_VALUE("verticalPadding", verticalPadding);

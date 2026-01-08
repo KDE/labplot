@@ -38,9 +38,9 @@ namespace {
 // Simple object to automatically closing a device when this object
 // goes out of scope
 struct IODeviceHandler {
-	IODeviceHandler(QIODevice& d, bool reset)
+	IODeviceHandler(QIODevice& d, bool dreset)
 		: device(d)
-		, reset(reset) {
+		, reset(dreset) {
 	}
 
 	~IODeviceHandler() {

@@ -339,9 +339,9 @@ void XYBaselineCorrectionCurveDock::showBaselineCorrectionResult() {
 //* SLOTs for changes triggered in XYBaselineCorrectionCurve **
 //*************************************************************
 // General-Tab
-void XYBaselineCorrectionCurveDock::curveBaselineDataChanged(const XYBaselineCorrectionCurve::BaselineData& data) {
+void XYBaselineCorrectionCurveDock::curveBaselineDataChanged(const XYBaselineCorrectionCurve::BaselineData& bdata) {
 	CONDITIONAL_LOCK_RETURN;
-	m_data = data;
+	m_data = bdata;
 	uiGeneralTab.cbMethod->setCurrentIndex(m_data.method);
 	methodChanged(m_data.method);
 	uiGeneralTab.sbARPLSSmoothness->setValue(m_data.arPLSSmoothness);

@@ -631,21 +631,21 @@ void AddSubtractValueDialog::updatePreview() {
 		const auto* newData = static_cast<QVector<double>*>(m_yColumnResult->data());
 		switch (col->columnMode()) {
 		case AbstractColumn::ColumnMode::Integer: {
-			auto* data = static_cast<QVector<int>*>(col->data());
+			auto* bdata = static_cast<QVector<int>*>(col->data());
 			for (int i = 0; i < rows; ++i)
-				baselineData[i] = data->at(i) - newData->at(i);
+				baselineData[i] = bdata->at(i) - newData->at(i);
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			auto* data = static_cast<QVector<qint64>*>(col->data());
+			auto* bdata = static_cast<QVector<qint64>*>(col->data());
 			for (int i = 0; i < rows; ++i)
-				baselineData[i] = data->at(i) - newData->at(i);
+				baselineData[i] = bdata->at(i) - newData->at(i);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Double: {
-			auto* data = static_cast<QVector<double>*>(col->data());
+			auto* bdata = static_cast<QVector<double>*>(col->data());
 			for (int i = 0; i < rows; ++i)
-				baselineData[i] = data->at(i) - newData->at(i);
+				baselineData[i] = bdata->at(i) - newData->at(i);
 			break;
 		}
 		case AbstractColumn::ColumnMode::DateTime:
@@ -756,7 +756,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 	if (mode == AbstractColumn::ColumnMode::Integer) {
 		int value;
 		setIntValue(value, colIndex);
-		auto* data = static_cast<QVector<int>*>(col->data());
+		auto* oldData = static_cast<QVector<int>*>(col->data());
 		QVector<int> newData(rows);
 
 		switch (m_operation) {
@@ -764,7 +764,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			// copy the int data to doubles
 			QVector<double> newDoubleData(rows);
 			for (int i = 0; i < rows; ++i)
-				newDoubleData[i] = data->at(i);
+				newDoubleData[i] = oldData->at(i);
 
 			subtractBaseline(newDoubleData);
 
@@ -778,20 +778,20 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			[[fallthrough]];
 		case Add: {
 			for (int i = 0; i < rows; ++i)
-				newData[i] = data->at(i) + value;
+				newData[i] = oldData->at(i) + value;
 
 			col->setIntegers(newData);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				newData[i] = data->at(i) * value;
+				newData[i] = oldData->at(i) * value;
 
 			col->setIntegers(newData);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				newData[i] = data->at(i) / value;
+				newData[i] = oldData->at(i) / value;
 
 			col->setIntegers(newData);
 			break;
@@ -799,7 +799,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
 		qint64 value;
 		setBigIntValue(value, colIndex);
-		auto* data = static_cast<QVector<qint64>*>(col->data());
+		auto* oldData = static_cast<QVector<qint64>*>(col->data());
 		QVector<qint64> newData(rows);
 
 		switch (m_operation) {
@@ -807,7 +807,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			// copy the big int data to doubles
 			QVector<double> newDoubleData(rows);
 			for (int i = 0; i < rows; ++i)
-				newDoubleData[i] = data->at(i);
+				newDoubleData[i] = oldData->at(i);
 
 			subtractBaseline(newDoubleData);
 
@@ -821,20 +821,20 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			[[fallthrough]];
 		case Add: {
 			for (int i = 0; i < rows; ++i)
-				newData[i] = data->at(i) + value;
+				newData[i] = oldData->at(i) + value;
 
 			col->setBigInts(newData);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				newData[i] = data->at(i) * value;
+				newData[i] = oldData->at(i) * value;
 
 			col->setBigInts(newData);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				newData[i] = data->at(i) / value;
+				newData[i] = oldData->at(i) / value;
 
 			col->setBigInts(newData);
 			break;
@@ -842,13 +842,13 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 	} else if (mode == AbstractColumn::ColumnMode::Double) {
 		double value;
 		setDoubleValue(value, colIndex);
-		auto* data = static_cast<QVector<double>*>(col->data());
+		auto* oldData = static_cast<QVector<double>*>(col->data());
 		QVector<double> newData(rows);
 
 		switch (m_operation) {
 		case SubtractBaseline: {
 			// copy the data
-			QVector<double> newDoubleData(*data);
+			QVector<double> newDoubleData(*oldData);
 			subtractBaseline(newDoubleData);
 			col->setValues(newDoubleData);
 			break;
@@ -858,20 +858,20 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			[[fallthrough]];
 		case Add: {
 			for (int i = 0; i < rows; ++i)
-				newData[i] = data->at(i) + value;
+				newData[i] = oldData->at(i) + value;
 
 			col->setValues(newData);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				newData[i] = data->at(i) * value;
+				newData[i] = oldData->at(i) * value;
 
 			col->setValues(newData);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				newData[i] = data->at(i) / value;
+				newData[i] = oldData->at(i) / value;
 
 			col->setValues(newData);
 			break;
@@ -879,8 +879,8 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 	} else { // datetime
 		qint64 value;
 		setDateTimeValue(value);
-		auto* data = static_cast<QVector<QDateTime>*>(col->data());
-		QVector<QDateTime> new_data(rows);
+		auto* oldData = static_cast<QVector<QDateTime>*>(col->data());
+		QVector<QDateTime> newData(rows);
 
 		switch (m_operation) {
 		case Subtract:
@@ -888,9 +888,9 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = QDateTime::fromMSecsSinceEpoch(data->at(i).toMSecsSinceEpoch() + value, Qt::UTC);
+				newData[i] = QDateTime::fromMSecsSinceEpoch(oldData->at(i).toMSecsSinceEpoch() + value, Qt::UTC);
 
-			col->replaceDateTimes(0, new_data);
+			col->replaceDateTimes(0, newData);
 			break;
 		case Multiply:
 		case Divide:

@@ -708,9 +708,9 @@ ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col,
 void ColumnSetGlobalFormulaCmd::redo() {
 	if (!m_copied) {
 		m_formula = m_col->formula();
-		for (auto& d : m_col->formulaData()) {
-			m_variableNames << d.variableName();
-			m_variableColumns << d.m_column;
+		for (auto& data : m_col->formulaData()) {
+			m_variableNames << data.variableName();
+			m_variableColumns << data.m_column;
 		}
 		m_autoUpdate = m_col->formulaAutoUpdate();
 		m_autoResize = m_col->formulaAutoResize();

@@ -437,12 +437,12 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 					vec << (quintptr)aspect;
 				}
 
-				QByteArray data;
-				QDataStream stream(&data, QIODevice::WriteOnly);
+				QByteArray mdata;
+				QDataStream stream(&mdata, QIODevice::WriteOnly);
 				stream << (quintptr)m_project; // serialize the project pointer first, will be used as the unique identifier
 				stream << vec;
 
-				mimeData->setData(QStringLiteral("labplot-dnd"), data);
+				mimeData->setData(QStringLiteral("labplot-dnd"), mdata);
 				drag->setMimeData(mimeData);
 				drag->exec();
 			}
@@ -461,8 +461,8 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			} else {
 				// drad&drop between the different project windows is not supported yet.
 				// check whether we're dragging inside of the same project.
-				QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
-				QDataStream stream(&data, QIODevice::ReadOnly);
+				QByteArray mdata = mimeData->data(QLatin1String("labplot-dnd"));
+				QDataStream stream(&mdata, QIODevice::ReadOnly);
 				quintptr ptr = 0;
 				stream >> ptr;
 				auto* project = reinterpret_cast<Project*>(ptr);

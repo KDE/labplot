@@ -2364,10 +2364,10 @@ void ColumnPrivate::setFormulVariableColumn(Column* c) {
 }
 
 struct PayloadColumn : public Parsing::Payload {
-	PayloadColumn(const QVector<Column::FormulaData>& data, const QVector<double>& y)
+	PayloadColumn(const QVector<Column::FormulaData>& data, const QVector<double>& yValues)
 		: Parsing::Payload(true)
 		, formulaData(data)
-		, y(y) {
+		, y(yValues) {
 	}
 	const QVector<Column::FormulaData>& formulaData;
 	const QVector<double>& y; // current values

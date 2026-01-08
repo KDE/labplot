@@ -785,10 +785,10 @@ void CartesianPlotDock::updatePlotRangeListValues(const Dimension dim, int range
 		auto* cb = dynamic_cast<QComboBox*>(ui.twPlotRanges->cellWidget(cSystemIndex, column));
 		if (cb) {
 			for (auto itemIndex = 0; itemIndex < cb->count(); itemIndex++) {
-				const auto data = cb->itemData(itemIndex);
-				if (data.isValid()) {
+				const auto itemData = cb->itemData(itemIndex);
+				if (itemData.isValid()) {
 					bool ok = true;
-					const auto rangeIndexComboBox = data.toInt(&ok);
+					const auto rangeIndexComboBox = itemData.toInt(&ok);
 					Q_ASSERT(ok);
 					if (rangeIndexComboBox == rangeIndex)
 						cb->setItemText(itemIndex, generatePlotRangeString(m_plot->rangeCount(dim), rangeIndex, m_plot->range(dim, rangeIndex)));

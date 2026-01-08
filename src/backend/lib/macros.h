@@ -21,8 +21,8 @@
 #include "Debug.h"
 
 struct Lock {
-	inline explicit Lock(bool& variable, bool firstValue = true)
-		: variable(variable) {
+	inline explicit Lock(bool& var, bool firstValue = true)
+		: variable(var) {
 		// Make sure it is not already locked
 		// somewhere else
 		assert(!variable);

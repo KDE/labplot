@@ -448,10 +448,10 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 struct PayloadExpressionParser : public Payload {
 	PayloadExpressionParser() {
 	}
-	PayloadExpressionParser(const QStringList* vars, const QVector<QVector<double>*>* xVectors, bool constant = false)
-		: Payload(constant)
-		, vars(vars)
-		, xVectors(xVectors) {
+	PayloadExpressionParser(const QStringList* variables, const QVector<QVector<double>*>* xDataVectors, bool constantPayload = false)
+		: Payload(constantPayload)
+		, vars(variables)
+		, xVectors(xDataVectors) {
 	}
 	const QStringList* vars{nullptr};
 	int row{0};

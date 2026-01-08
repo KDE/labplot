@@ -632,8 +632,8 @@ std::string readObject(char*& buf, char* const buf0, std::map<size_t, std::strin
 
 using namespace ROOTDataHelpers;
 
-ROOTData::ROOTData(const std::string& filename)
-	: filename(filename) {
+ROOTData::ROOTData(const std::string& fileName)
+	: filename(fileName) {
 	DEBUG(Q_FUNC_INFO << ", filename = " << filename)
 	// The file structure is described in root/io/io/src/TFile.cxx
 	std::ifstream is(filename, std::ifstream::binary);
