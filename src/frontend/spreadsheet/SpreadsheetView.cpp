@@ -3569,8 +3569,8 @@ void SpreadsheetView::clearSelectedCells() {
 		// 				if (isCellSelected(row, col))
 		// 					column->setFormula(row, QString());
 		// 		} else {
-		int index = m_spreadsheet->indexOfChild<Column>(column);
-		if (isColumnSelected(index, true)) {
+		int childIndex = m_spreadsheet->indexOfChild<Column>(column);
+		if (isColumnSelected(childIndex, true)) {
 			// if the whole column is selected, clear directly instead of looping over the rows
 			column->clear();
 		} else {

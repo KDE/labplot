@@ -3483,12 +3483,12 @@ void AsciiFilterTest::benchMarkCompare_SimplifyWhiteSpace() {
 	QStringList content;
 
 	// Header
-	QString line;
+	QString headerLine;
 	for (int column = 0; column < numberColumns - 1; column++) {
-		line.append(QStringLiteral("c%1,").arg(QString::number(column + 1)));
+		headerLine.append(QStringLiteral("c%1,").arg(QString::number(column + 1)));
 	}
-	line.append(QStringLiteral("c%1").arg(QString::number(numberColumns)));
-	content.append(line);
+	headerLine.append(QStringLiteral("c%1").arg(QString::number(numberColumns)));
+	content.append(headerLine);
 
 	// Create data
 	for (int row = 0; row < numberRows; row++) {
@@ -3773,8 +3773,8 @@ void AsciiFilterTest::saveLoad() {
 				break;
 			}
 		}
-		const auto& s = reader.warningStrings();
-		QVERIFY(s.isEmpty());
+		const auto& ws = reader.warningStrings();
+		QVERIFY(ws.isEmpty());
 
 		const auto p = filter.properties();
 		QCOMPARE(p.automaticSeparatorDetection, false);

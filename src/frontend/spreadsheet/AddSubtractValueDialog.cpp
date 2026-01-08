@@ -757,20 +757,20 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 		int value;
 		setIntValue(value, colIndex);
 		auto* data = static_cast<QVector<int>*>(col->data());
-		QVector<int> new_data(rows);
+		QVector<int> newData(rows);
 
 		switch (m_operation) {
 		case SubtractBaseline: {
 			// copy the int data to doubles
-			QVector<double> new_data(rows);
+			QVector<double> newDoubleData(rows);
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->at(i);
+				newDoubleData[i] = data->at(i);
 
-			subtractBaseline(new_data);
+			subtractBaseline(newDoubleData);
 
 			// convert the column mode from int to double and subtract the baseline
 			col->setColumnMode(AbstractColumn::ColumnMode::Double);
-			col->setValues(new_data);
+			col->setValues(newDoubleData);
 			break;
 		}
 		case Subtract:
@@ -778,42 +778,42 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			[[fallthrough]];
 		case Add: {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->at(i) + value;
+				newData[i] = data->at(i) + value;
 
-			col->setIntegers(new_data);
+			col->setIntegers(newData);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->at(i) * value;
+				newData[i] = data->at(i) * value;
 
-			col->setIntegers(new_data);
+			col->setIntegers(newData);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->at(i) / value;
+				newData[i] = data->at(i) / value;
 
-			col->setIntegers(new_data);
+			col->setIntegers(newData);
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
 		qint64 value;
 		setBigIntValue(value, colIndex);
 		auto* data = static_cast<QVector<qint64>*>(col->data());
-		QVector<qint64> new_data(rows);
+		QVector<qint64> newData(rows);
 
 		switch (m_operation) {
 		case SubtractBaseline: {
 			// copy the big int data to doubles
-			QVector<double> new_data(rows);
+			QVector<double> newDoubleData(rows);
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->at(i);
+				newDoubleData[i] = data->at(i);
 
-			subtractBaseline(new_data);
+			subtractBaseline(newDoubleData);
 
 			// convert the column mode from int to double and set the new data
 			col->setColumnMode(AbstractColumn::ColumnMode::Double);
-			col->setValues(new_data);
+			col->setValues(newDoubleData);
 			break;
 		}
 		case Subtract:
@@ -821,36 +821,36 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			[[fallthrough]];
 		case Add: {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->at(i) + value;
+				newData[i] = data->at(i) + value;
 
-			col->setBigInts(new_data);
+			col->setBigInts(newData);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->at(i) * value;
+				newData[i] = data->at(i) * value;
 
-			col->setBigInts(new_data);
+			col->setBigInts(newData);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->at(i) / value;
+				newData[i] = data->at(i) / value;
 
-			col->setBigInts(new_data);
+			col->setBigInts(newData);
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::Double) {
 		double value;
 		setDoubleValue(value, colIndex);
 		auto* data = static_cast<QVector<double>*>(col->data());
-		QVector<double> new_data(rows);
+		QVector<double> newData(rows);
 
 		switch (m_operation) {
 		case SubtractBaseline: {
 			// copy the data
-			QVector<double> new_data(*data);
-			subtractBaseline(new_data);
-			col->setValues(new_data);
+			QVector<double> newDoubleData(*data);
+			subtractBaseline(newDoubleData);
+			col->setValues(newDoubleData);
 			break;
 		}
 		case Subtract:
@@ -858,22 +858,22 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			[[fallthrough]];
 		case Add: {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->at(i) + value;
+				newData[i] = data->at(i) + value;
 
-			col->setValues(new_data);
+			col->setValues(newData);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->at(i) * value;
+				newData[i] = data->at(i) * value;
 
-			col->setValues(new_data);
+			col->setValues(newData);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->at(i) / value;
+				newData[i] = data->at(i) / value;
 
-			col->setValues(new_data);
+			col->setValues(newData);
 			break;
 		}
 	} else { // datetime

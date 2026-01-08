@@ -653,9 +653,9 @@ bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData,
 	case Type::FixedNumber: {
 		const auto startValue = start.toMSecsSinceEpoch();
 		const auto endValue = end.toMSecsSinceEpoch();
-		int increment = 1;
+		int incr = 1;
 		if (number != 1)
-			increment = (endValue - startValue) / (number - 1);
+			incr = (endValue - startValue) / (number - 1);
 
 		try {
 			newData.resize(number);
@@ -666,7 +666,7 @@ bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData,
 		}
 
 		for (int i = 0; i < number; ++i)
-			newData[i] = QDateTime::fromMSecsSinceEpoch(startValue + increment * i, Qt::UTC);
+			newData[i] = QDateTime::fromMSecsSinceEpoch(startValue + incr * i, Qt::UTC);
 
 		break;
 	}

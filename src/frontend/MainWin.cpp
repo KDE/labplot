@@ -1265,8 +1265,8 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 	else {
 		// check whether one of spreadsheet columns is selected and determine the spreadsheet
 		if (auto* parent = m_currentAspect->parentAspect()) {
-			if (auto* s = parent->castTo<Spreadsheet>())
-				spreadsheet = s;
+			if (auto* p = parent->castTo<Spreadsheet>())
+				spreadsheet = p;
 		}
 	}
 

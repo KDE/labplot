@@ -512,15 +512,15 @@ void StatisticsColumnWidget::showParetoPlot() {
 	plot->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
 
 	// add second y-axis
-	auto* axis = new Axis(QLatin1String("y2"));
-	plot->addChild(axis);
-	axis->setOrientation(Axis::Orientation::Vertical);
-	axis->setPosition(Axis::Position::Right);
-	axis->setMajorTicksDirection(Axis::ticksBoth);
-	axis->setLabelsPosition(Axis::LabelsPosition::In);
-	axis->setLabelsSuffix(QLatin1String("%"));
-	axis->title()->setRotationAngle(90);
-	axis->setCoordinateSystemIndex(1);
+	auto* secondAxis = new Axis(QLatin1String("y2"));
+	plot->addChild(secondAxis);
+	secondAxis->setOrientation(Axis::Orientation::Vertical);
+	secondAxis->setPosition(Axis::Position::Right);
+	secondAxis->setMajorTicksDirection(Axis::ticksBoth);
+	secondAxis->setLabelsPosition(Axis::LabelsPosition::In);
+	secondAxis->setLabelsSuffix(QLatin1String("%"));
+	secondAxis->title()->setRotationAngle(90);
+	secondAxis->setCoordinateSystemIndex(1);
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 

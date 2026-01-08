@@ -54,8 +54,6 @@ void LiveDataTest::initTestCase() {
 		m_tcpSocket->write(block);
 	});
 
-	int udpNewDataUpdateTimeMs = PUBLISH_TIME_MS;
-
 	// initialize the UDP socket
 	m_udpSocket = new QUdpSocket(this);
 	QVERIFY(m_udpSocket->bind(QHostAddress(hostname), 56080)); // This port must be different to the udp port!
@@ -63,7 +61,7 @@ void LiveDataTest::initTestCase() {
 	QCoreApplication::connect(timer, &QTimer::timeout, [this]() {
 		this->m_udpSocket->writeDatagram("1,2", QHostAddress(QStringLiteral(HOSTNAME)), UDP_PORT);
 	});
-	timer->start(udpNewDataUpdateTimeMs);
+	timer->start(PUBLISH_TIME_MS);
 }
 
 void LiveDataTest::cleanupTestCase() {
@@ -1555,11 +1553,11 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 
 void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileExists() {
 	// create a temp file and write some data into it
-	QTemporaryFile tempFile;
-	if (!tempFile.open())
+	QTemporaryFile tempDataFile;
+	if (!tempDataFile.open())
 		QFAIL("failed to create the temp file for writing");
 
-	QFile file(tempFile.fileName());
+	QFile file(tempDataFile.fileName());
 	if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
 		QFAIL("failed to open the temp file for writing");
 
@@ -1607,11 +1605,11 @@ void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExists() {
 	QString importFilename;
 	{
 		// create a temp file and write some data into it
-		QTemporaryFile tempFile;
-		if (!tempFile.open())
+		QTemporaryFile tempDataFile;
+		if (!tempDataFile.open())
 			QFAIL("failed to create the temp file for writing");
 
-		importFilename = tempFile.fileName();
+		importFilename = tempDataFile.fileName();
 		QFile file(importFilename);
 		if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
 			QFAIL("failed to open the temp file for writing");
@@ -1665,11 +1663,11 @@ void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExistsRemoveLivedata() 
 	QString savePath;
 	{
 		// create a temp file and write some data into it
-		QTemporaryFile tempFile;
-		if (!tempFile.open())
+		QTemporaryFile tempDataFile;
+		if (!tempDataFile.open())
 			QFAIL("failed to create the temp file for writing");
 
-		QString importFilename = tempFile.fileName();
+		QString importFilename = tempDataFile.fileName();
 		QFile file(importFilename);
 		if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
 			QFAIL("failed to open the temp file for writing");
@@ -1706,11 +1704,11 @@ void LiveDataTest::testLoadSaveLiveDataNoLinkedFile() {
 	QString savePath;
 	{
 		// create a temp file and write some data into it
-		QTemporaryFile tempFile;
-		if (!tempFile.open())
+		QTemporaryFile tempDataFile;
+		if (!tempDataFile.open())
 			QFAIL("failed to create the temp file for writing");
 
-		QFile file(tempFile.fileName());
+		QFile file(tempDataFile.fileName());
 		if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
 			QFAIL("failed to open the temp file for writing");
 
