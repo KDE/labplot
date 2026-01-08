@@ -118,7 +118,7 @@ void ImportDatasetWidget::loadCategories() {
 
 		for (const QJsonValueRef col : m_collections) {
 			const QJsonObject& collection = col.toObject();
-			const QString& m_collection = collection[QLatin1String("name")].toString();
+			m_collection = collection[QLatin1String("name")].toString();
 
 			QString path = m_jsonDir + QLatin1Char('/') + m_collection + QStringLiteral(".json");
 			QFile collectionFile(path);

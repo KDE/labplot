@@ -339,12 +339,12 @@ void CartesianPlotLegendPrivate::retransform() {
 	m_names.clear();
 
 	const auto& plots = this->plot->children<Plot>();
-	for (auto* plot : plots) {
-		if (!plot->isVisible() || !plot->legendVisible())
+	for (auto* childPlot : plots) {
+		if (!childPlot->isVisible() || !childPlot->legendVisible())
 			continue;
 
 		// add the names for plot types which can show multiple datasets
-		auto* boxPlot = dynamic_cast<BoxPlot*>(plot);
+		auto* boxPlot = dynamic_cast<BoxPlot*>(childPlot);
 		if (boxPlot) {
 			m_plots << boxPlot;
 			const auto& columns = boxPlot->dataColumns();
@@ -354,7 +354,7 @@ void CartesianPlotLegendPrivate::retransform() {
 			continue;
 		}
 
-		auto* barPlot = dynamic_cast<BarPlot*>(plot);
+		auto* barPlot = dynamic_cast<BarPlot*>(childPlot);
 		if (barPlot) {
 			m_plots << barPlot;
 			const auto& columns = barPlot->dataColumns();
@@ -365,7 +365,7 @@ void CartesianPlotLegendPrivate::retransform() {
 			continue;
 		}
 
-		auto* lollipopPlot = dynamic_cast<LollipopPlot*>(plot);
+		auto* lollipopPlot = dynamic_cast<LollipopPlot*>(childPlot);
 		if (lollipopPlot) {
 			m_plots << lollipopPlot;
 			const auto& columns = lollipopPlot->dataColumns();
@@ -375,8 +375,8 @@ void CartesianPlotLegendPrivate::retransform() {
 			continue;
 		}
 
-		m_plots << plot;
-		m_names << plot->name();
+		m_plots << childPlot;
+		m_names << childPlot->name();
 		continue;
 	}
 
@@ -489,16 +489,16 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	painter->save();
 
 	int col = 0, row = 0;
-	for (auto* plot : m_plots) {
+	for (auto* p : m_plots) {
 		// process the curves
 		// TODO: move the logic below into the plot classes
-		const auto* curve = dynamic_cast<const XYCurve*>(plot);
-		const auto* hist = dynamic_cast<const Histogram*>(plot);
-		const auto* boxPlot = dynamic_cast<const BoxPlot*>(plot);
-		const auto* barPlot = dynamic_cast<const BarPlot*>(plot);
-		const auto* lollipopPlot = dynamic_cast<const LollipopPlot*>(plot);
-		const auto* kdePlot = dynamic_cast<const KDEPlot*>(plot);
-		const auto* qqPlot = dynamic_cast<const QQPlot*>(plot);
+		const auto* curve = dynamic_cast<const XYCurve*>(p);
+		const auto* hist = dynamic_cast<const Histogram*>(p);
+		const auto* boxPlot = dynamic_cast<const BoxPlot*>(p);
+		const auto* barPlot = dynamic_cast<const BarPlot*>(p);
+		const auto* lollipopPlot = dynamic_cast<const LollipopPlot*>(p);
+		const auto* kdePlot = dynamic_cast<const KDEPlot*>(p);
+		const auto* qqPlot = dynamic_cast<const QQPlot*>(p);
 
 		if (curve) { // draw the legend item for xy-curve
 			// curve's line (painted at the half of the ascent size)
@@ -617,18 +617,18 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->drawLine(lineSymbolWidth / 2, 0.7 * h, lineSymbolWidth / 2, h);
 
 				// draw the box
-				auto* background = boxPlot->backgroundAt(index);
-				painter->setOpacity(background->opacity());
-				painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
+				auto* bg = boxPlot->backgroundAt(index);
+				painter->setOpacity(bg->opacity());
+				painter->setBrush(QBrush(bg->firstColor(), bg->brushStyle()));
 				painter->setPen(Qt::NoPen);
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
 				painter->drawRect(QRectF(-h * 0.25, -0.2 * h, 0.5 * h, 0.4 * h));
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 
-				auto* borderLine = boxPlot->borderLineAt(index);
-				painter->setOpacity(borderLine->opacity());
+				auto* bl = boxPlot->borderLineAt(index);
+				painter->setOpacity(bl->opacity());
 				// painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-				painter->setPen(borderLine->pen());
+				painter->setPen(bl->pen());
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
 				painter->drawRect(QRectF(-h * 0.25, -0.2 * h, 0.5 * h, 0.4 * h));
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
@@ -650,9 +650,9 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 					continue;
 
 				// draw the bar
-				auto* background = barPlot->backgroundAt(index);
-				painter->setOpacity(background->opacity());
-				painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
+				auto* bg = barPlot->backgroundAt(index);
+				painter->setOpacity(bg->opacity());
+				painter->setBrush(QBrush(bg->firstColor(), bg->brushStyle()));
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
 				painter->drawRect(QRectF(-h * 0.25, -h / 2, h * 0.5, h));
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
