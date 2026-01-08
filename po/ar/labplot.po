@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-05 00:39+0000\n"
+"POT-Creation-Date: 2026-01-08 00:38+0000\n"
 "PO-Revision-Date: 2025-12-20 11:18+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -50,8 +50,8 @@ msgid "Rename"
 msgstr "غيّر الاسم"
 
 #: src/backend/core/AbstractAspect.cpp:430
-#: src/backend/spreadsheet/Spreadsheet.cpp:785
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:489
+#: src/backend/spreadsheet/Spreadsheet.cpp:941
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:490
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #: src/frontend/worksheet/WorksheetView.cpp:138
 #, kde-format
@@ -347,13 +347,13 @@ msgid "%1: unmask cells"
 msgstr "‏%1: أزل قناع الخلايا"
 
 #: src/backend/core/abstractcolumncommands.cpp:239
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2669
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2690
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "‏%1: اضبط تنسيق الخريطة الحرارية"
 
 #: src/backend/core/abstractcolumncommands.cpp:265
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2687
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2708
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "‏%1: أزل تنسيق الخريطة الحرارية"
@@ -421,7 +421,7 @@ msgstr "نوع مرشح غير متوافق"
 #: src/backend/datasources/MQTTTopic.cpp:273
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1706
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:890
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1910
 #, kde-format
 msgid "unknown element '%1'"
@@ -492,32 +492,32 @@ msgstr "‏%1 (لا قيم)"
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "الاسم \"%1\" قيد الاستخدام. اختر اسمًا آخر."
 
-#: src/backend/core/column/Column.cpp:114
+#: src/backend/core/column/Column.cpp:112
 #, kde-format
 msgid "Copy Data"
 msgstr "انسخ البيانات"
 
-#: src/backend/core/column/Column.cpp:117
+#: src/backend/core/column/Column.cpp:115
 #, kde-format
 msgid "Paste Data"
 msgstr "الصق البيانات"
 
-#: src/backend/core/column/Column.cpp:152
+#: src/backend/core/column/Column.cpp:149
 #, kde-format
 msgid "Used in"
 msgstr "استخدم في"
 
-#: src/backend/core/column/Column.cpp:169
+#: src/backend/core/column/Column.cpp:166
 #, kde-format
 msgid "Plots"
 msgstr "الرسومات"
 
-#: src/backend/core/column/Column.cpp:187
+#: src/backend/core/column/Column.cpp:184
 #, kde-format
 msgid "Axes"
 msgstr "المحاور"
 
-#: src/backend/core/column/Column.cpp:213
+#: src/backend/core/column/Column.cpp:210
 #, kde-format
 msgid "Calculations"
 msgstr "عمليات"
@@ -532,7 +532,7 @@ msgstr "عمليات"
 #. else	// Cancel
 #. return;
 #. }
-#: src/backend/core/column/Column.cpp:340
+#: src/backend/core/column/Column.cpp:337
 #: src/backend/core/column/columncommands.cpp:89
 #: src/frontend/dockwidgets/ColumnDock.cpp:363
 #: src/frontend/dockwidgets/ColumnDock.cpp:387
@@ -541,78 +541,78 @@ msgstr "عمليات"
 msgid "%1: change column type"
 msgstr "‏%1: غيّر نوع العمود"
 
-#: src/backend/core/column/Column.cpp:472
+#: src/backend/core/column/Column.cpp:469
 #: src/backend/core/column/columncommands.cpp:578
 #, kde-format
 msgid "%1: clear column"
 msgstr "‏%1: مسح العمود"
 
-#: src/backend/core/column/Column.cpp:565
+#: src/backend/core/column/Column.cpp:562
 #, kde-format
 msgid "%1: set random values"
 msgstr "‏%1: اضبط قيما عشوائية"
 
-#: src/backend/core/column/Column.cpp:1052
+#: src/backend/core/column/Column.cpp:1049
 #: src/frontend/datasources/ImportFileWidget.cpp:1698
 #, kde-format
 msgid "Size: %1"
 msgstr "الحجم: %1"
 
 #. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/column/Column.cpp:1055
+#: src/backend/core/column/Column.cpp:1052
 #, kde-format
 msgid "Type: %1"
 msgstr "النّوع: %1"
 
-#: src/backend/core/column/Column.cpp:1056
+#: src/backend/core/column/Column.cpp:1053
 #, kde-format
 msgid "Plot Designation: %1"
 msgstr "تعيين الرسم: %1"
 
-#: src/backend/core/column/Column.cpp:1060
+#: src/backend/core/column/Column.cpp:1057
 #, kde-format
 msgid "Formula:"
 msgstr "الصّيغة:"
 
-#: src/backend/core/column/Column.cpp:1082
+#: src/backend/core/column/Column.cpp:1079
 #, kde-format
 msgid "auto update: true"
 msgstr "تحديث آلي: صحيح"
 
-#: src/backend/core/column/Column.cpp:1084
+#: src/backend/core/column/Column.cpp:1081
 #, kde-format
 msgid "auto update: false"
 msgstr "تحديث آلي: خطأ"
 
-#: src/backend/core/column/Column.cpp:1097
+#: src/backend/core/column/Column.cpp:1094
 #: src/backend/spreadsheet/Spreadsheet.cpp:242
 #, fuzzy, kde-format
 #| msgid "Used in"
 msgid "Used in Plots:"
 msgstr "استخدم في"
 
-#: src/backend/core/column/Column.cpp:1112
+#: src/backend/core/column/Column.cpp:1109
 #: src/backend/spreadsheet/Spreadsheet.cpp:259
 #, fuzzy, kde-format
 #| msgid "Used in"
 msgid "Used in Axes:"
 msgstr "استخدم في"
 
-#: src/backend/core/column/Column.cpp:1135
+#: src/backend/core/column/Column.cpp:1132
 #: src/backend/spreadsheet/Spreadsheet.cpp:280
 #, fuzzy, kde-format
 #| msgid "Save  Calculations:"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "احفظ الحسابات:"
 
-#: src/backend/core/column/Column.cpp:1721
+#: src/backend/core/column/Column.cpp:1718
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "فهرس صف غير صالح أو مفقود"
 
-#: src/backend/core/column/Column.cpp:1730
-#: src/backend/core/column/Column.cpp:1739
-#: src/backend/core/column/Column.cpp:1748
+#: src/backend/core/column/Column.cpp:1727
+#: src/backend/core/column/Column.cpp:1736
+#: src/backend/core/column/Column.cpp:1745
 #, kde-format
 msgid "invalid row value"
 msgstr "قيمة صف غير صالحة"
@@ -624,7 +624,7 @@ msgid "%1: change cell values"
 msgstr "‏%1: غيّر قيم الخلايا"
 
 #: src/backend/core/column/columncommands.cpp:529
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2842
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2863
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "‏%1: اضبط تعيين الرسم"
@@ -2212,10 +2212,10 @@ msgstr "المفتاح"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #: src/frontend/matrix/MatrixView.cpp:618
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:187
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2575
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2595
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2612
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2628
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2596
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2616
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2633
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2649
 #: src/frontend/ui/dockwidgets/columndock.ui:182
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:65
 #, kde-format
@@ -2702,7 +2702,7 @@ msgstr "ثابت ستيفان-بولتزمان"
 #: src/backend/gsl/constants.cpp:83
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:486
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:160
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:535
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:536
 #, kde-format
 msgid "Gauss"
 msgstr "غاوس"
@@ -6114,7 +6114,7 @@ msgstr "ep"
 
 #: src/backend/lib/Range.h:57 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:466
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:520
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:521
 #, kde-format
 msgid "Linear"
 msgstr "خطّي"
@@ -6166,13 +6166,13 @@ msgid "unexpected end of document"
 msgstr "نهاية غير متوقعة للوثيقة"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3846
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3882
 #, kde-format
 msgid "FITS image"
 msgstr "صورة FITS"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3846
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3882
 #, kde-format
 msgid "FITS table"
 msgstr "جدول FITS"
@@ -6312,6 +6312,7 @@ msgid "%1: set cell values"
 msgstr "%1: اضبط قيم الخلايا"
 
 #: src/backend/matrix/matrixcommands.h:316
+#: src/backend/spreadsheet/Spreadsheet.cpp:862
 #, kde-format
 msgid "%1: transpose"
 msgstr "‏%1: منقولة مصفوفة"
@@ -6602,7 +6603,7 @@ msgstr "جزء تخيلي"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:470
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:523
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:524
 #, kde-format
 msgid "Power"
 msgstr "الطاقة"
@@ -6766,14 +6767,14 @@ msgstr "الإحصائيات (التوزيعات)"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:550
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:551
 #, kde-format
 msgid "Custom"
 msgstr "مخصّص"
 
 #: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:22
 #: src/backend/nsl/nsl_sf_stats.c:15
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:558
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:559
 #, kde-format
 msgid "Exponential"
 msgstr "أسي"
@@ -6784,7 +6785,7 @@ msgid "Polynomial"
 msgstr "متعددة الحدود"
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:532
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:533
 #, kde-format
 msgid "Inverse Exponential"
 msgstr "دالة أسية معكوسة"
@@ -6801,8 +6802,8 @@ msgstr "غاوسي (طبيعي)"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:490
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:538
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:564
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:539
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:565
 #, kde-format
 msgid "Cauchy-Lorentz"
 msgstr "كوشي-لورنتز"
@@ -6834,7 +6835,7 @@ msgstr "الظل المعكوس"
 
 #: src/backend/nsl/nsl_fit.c:45
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:498
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:544
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:545
 #, kde-format
 msgid "Hyperbolic Tangent"
 msgstr "الظل الزائد"
@@ -7014,7 +7015,7 @@ msgid "Integral"
 msgstr "تكامل"
 
 #: src/backend/nsl/nsl_sf_stats.c:13
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:555
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:556
 #, kde-format
 msgid "Gaussian (Normal)"
 msgstr "غاوسي (طبيعي)"
@@ -7025,7 +7026,7 @@ msgid "Gaussian Tail"
 msgstr "ذيل غاوسي"
 
 #: src/backend/nsl/nsl_sf_stats.c:16
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:561
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:562
 #, kde-format
 msgid "Laplace"
 msgstr "لابلاس"
@@ -7126,7 +7127,7 @@ msgid "Gumbel Type-2"
 msgstr "جومبل نوع-2"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:570
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:571
 #, kde-format
 msgid "Poisson"
 msgstr "بواسون"
@@ -7137,7 +7138,7 @@ msgid "Bernoulli"
 msgstr "بيرنولي"
 
 #: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:25
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:573
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:574
 #, kde-format
 msgid "Binomial"
 msgstr "ذو حدين"
@@ -7435,32 +7436,32 @@ msgstr[3] "%1: أدرج %2 أعمدة"
 msgstr[4] "%1: أدرج %2 عمودًا"
 msgstr[5] "%1: أدرج %2 عمودًا"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:753
+#: src/backend/spreadsheet/Spreadsheet.cpp:752
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: أفرغ الأعمدة المختارة"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:769
+#: src/backend/spreadsheet/Spreadsheet.cpp:768
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: أفرغ كل الأقنعة"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:822
+#: src/backend/spreadsheet/Spreadsheet.cpp:978
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: انقل العمود %2 من الموضع %3 إلى %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:875
+#: src/backend/spreadsheet/Spreadsheet.cpp:1031
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: رتب الأعمدة"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1242
+#: src/backend/spreadsheet/Spreadsheet.cpp:1398
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: إزالة جدول البيانات المرتبط"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1654
+#: src/backend/spreadsheet/Spreadsheet.cpp:1810
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -7471,7 +7472,7 @@ msgstr[3] "بيانات رقمية، %1 عناصر"
 msgstr[4] "بيانات رقمية، %1 عنصرًا"
 msgstr[5] "بيانات رقمية، %1 عنصرًا"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1657
+#: src/backend/spreadsheet/Spreadsheet.cpp:1813
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -7482,7 +7483,7 @@ msgstr[3] "بيانات عدد صحيح، %1 عناصر"
 msgstr[4] "بيانات عدد صحيح، %1 عنصرًا"
 msgstr[5] "بيانات عدد صحيح، %1 عنصرًا"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1660
+#: src/backend/spreadsheet/Spreadsheet.cpp:1816
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -7493,7 +7494,7 @@ msgstr[3] "بيانات عدد صحيح كبير، %1 عناصر"
 msgstr[4] "بيانات عدد صحيح كبير، %1 عنصرًا"
 msgstr[5] "بيانات عدد صحيح كبير، %1 عنصرًا"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1663
+#: src/backend/spreadsheet/Spreadsheet.cpp:1819
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -7504,7 +7505,7 @@ msgstr[3] "بيانات نصية، %1 عناصر"
 msgstr[4] "بيانات نصية، %1 عنصرًا"
 msgstr[5] "بيانات نصية، %1 عنصرًا"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1666
+#: src/backend/spreadsheet/Spreadsheet.cpp:1822
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -7515,7 +7516,7 @@ msgstr[3] "بيانات شهر، %1 عناصر"
 msgstr[4] "بيانات شهر، %1 عنصرًا"
 msgstr[5] "بيانات شهر، %1 عنصرًا"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1669
+#: src/backend/spreadsheet/Spreadsheet.cpp:1825
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -7526,7 +7527,7 @@ msgstr[3] "بيانات يوم، %1 عناصر"
 msgstr[4] "بيانات يوم، %1 عنصرًا"
 msgstr[5] "بيانات يوم، %1 عنصرًا"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1672
+#: src/backend/spreadsheet/Spreadsheet.cpp:1828
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -8286,7 +8287,7 @@ msgid "Non-Parametric"
 msgstr "لا بارامتري"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:876
 #, kde-format
 msgid "Result"
 msgstr "النتيجة"
@@ -8301,9 +8302,9 @@ msgstr "الاتجاه"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:117
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:153
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:176
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:700
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:722
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:730
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:696
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:718
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:726
 #, kde-format
 msgid "Seasonal"
 msgstr "موسمية"
@@ -8311,13 +8312,13 @@ msgstr "موسمية"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:123
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:160
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:181
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:762
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:758
 #, kde-format
 msgid "Residual"
 msgstr "الباقي"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:885
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:881
 #: src/frontend/ActionsManager.cpp:228 src/frontend/MainWin.cpp:1238
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
@@ -8488,47 +8489,47 @@ msgstr "يجب أن يكون طول التمرير المنخفض فرديًا �
 msgid "STL decomposition failed: %1"
 msgstr "فشل فكّ التعمية STL: %1"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:600
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:598
 #, kde-format
 msgid "No periods specified for MSTL."
 msgstr "لم تحدد فترات لـ MSTL."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:606
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:604
 #, kde-format
 msgid "Periods must be at least 2."
 msgstr "يجب أن تكون الفترات 2 على الأقل."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:610
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:608
 #, kde-format
 msgid "Time-series has less than two periods."
 msgstr "تسلسل زمني فيه أقل من فترتين."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:616
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:614
 #, kde-format
 msgid "Iterations must be > 0."
 msgstr "يجب أن تكون التكرارات > 0."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:621
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:619
 #, kde-format
 msgid "Lambda must be between 0 and 1."
 msgstr "يجب أن تكون لامدا بين 0 و 1."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:631
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:629
 #, kde-format
 msgid "Box-Cox transformation requires strictly positive data."
 msgstr "يتطلب تحويل بوكس-كوكس بيانات موجبة صرفة."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:650
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:648
 #, kde-format
 msgid "MSTL decomposition failed: %1"
 msgstr "فشل فكّ التعمية MSTL: %1"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:753
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:749
 #, kde-format
 msgid "Seasonal Component (Period: %1)"
 msgstr "مكوِّن موسمي (الفترة: %1)"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:754
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:750
 #, kde-format
 msgid "Seasonal, Period: %1"
 msgstr "موسمي، الفترة: %1"
@@ -9230,7 +9231,7 @@ msgstr "التكامل"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:422
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2140
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:511
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:512
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:72
 #, kde-format
 msgid "Smooth"
@@ -9239,7 +9240,7 @@ msgstr "سَلِس"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:648
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2178
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:633
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:634
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
@@ -9248,7 +9249,7 @@ msgstr "مطابقة"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:510
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2218
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:513
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:514
 #, kde-format
 msgid "Fourier Filter"
 msgstr "مرشح فورييه"
@@ -9308,19 +9309,19 @@ msgid ""
 msgstr "أضف منحنى س-ص جديداً معرّفاً كدالة لمنحنيات س-ص أخرى (مُقيّسة، مُزاحة، إلخ)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:458
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:505
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:506
 #, kde-format
 msgid "Differentiate"
 msgstr "فاضل"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:507
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:508
 #, kde-format
 msgid "Integrate"
 msgstr "كامِل"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:460
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:509
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:510
 #, kde-format
 msgid "Interpolate"
 msgstr "استكمل"
@@ -9331,13 +9332,13 @@ msgid "Convolute/Deconvolute"
 msgstr "التف/فك الالتفاف"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:474
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:526
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:527
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr "أُسّي (الدرجة 1)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:478
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:529
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:530
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr "أُسّي (الدرجة 2)"
@@ -9348,13 +9349,13 @@ msgid "Inverse exponential"
 msgstr "أُسّي معكوس"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:494
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:541
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:542
 #, kde-format
 msgid "Arc Tangent"
 msgstr "قوس الظل"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:502
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:547
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:548
 #, kde-format
 msgid "Error Function"
 msgstr "دالة الخطأ"
@@ -11994,73 +11995,73 @@ msgid "Shift Down Y"
 msgstr "اِزح للأسفل ص"
 
 #: src/frontend/ActionsManager.cpp:681
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:492
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:493
 #, kde-format
 msgid "Insert Row Above"
 msgstr "أدرج صفّا لأعلى"
 
 #: src/frontend/ActionsManager.cpp:684
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:493
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:494
 #, kde-format
 msgid "Insert Row Below"
 msgstr "أدرج صفّا لأسفل"
 
 #: src/frontend/ActionsManager.cpp:687
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:496
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:497
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "اِ&زل الصف (أو الصفوف) المُحدد"
 
 #: src/frontend/ActionsManager.cpp:691
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:345
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:346
 #, kde-format
 msgid "Insert Column Left"
 msgstr "اِدرِج عمود لليسار"
 
 #: src/frontend/ActionsManager.cpp:694
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:346
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:347
 #, kde-format
 msgid "Insert Column Right"
 msgstr "أَدخِل عمودًا على اليمين"
 
 #: src/frontend/ActionsManager.cpp:697
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:349
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:350
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "احذف العمود (الأعمدة) المختار"
 
 #: src/frontend/ActionsManager.cpp:701
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:479
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "&Sort..."
 msgstr "&فرز..."
 
 #: src/frontend/ActionsManager.cpp:702
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:480
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:481
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "افرز أَعمدة متعدّدة معًا"
 
 #: src/frontend/ActionsManager.cpp:705
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:481
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "افرز &تصاعديًّا"
 
 #: src/frontend/ActionsManager.cpp:706
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:482
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "افرز الأَعمدة المختارة على حدة بترتيب تصاعديّ"
 
 #: src/frontend/ActionsManager.cpp:709
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:483
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:484
 #, kde-format
 msgid "Sort &Descending"
 msgstr "افرز &تنازليًّا"
 
 #: src/frontend/ActionsManager.cpp:710
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:484
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:485
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "افرز الأَعمدة المختارة على حدة بترتيب تنازليّ"
@@ -12356,16 +12357,16 @@ msgid "Curve"
 msgstr "منحنى"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4089
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4144
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4125
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4180
 #: src/frontend/worksheet/WorksheetView.cpp:2145
 #, kde-format
 msgid "Failed to export"
 msgstr "فشل تصدير"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4089
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4144
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4125
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4180
 #: src/frontend/worksheet/WorksheetView.cpp:2145
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -14435,6 +14436,42 @@ msgstr "العمود:"
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr "%1 رسوم بيانية صندوقية: قالب \"%2\" حُمل"
+
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:142
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:570
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:55
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:205
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:366
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:404
+#: src/frontend/dockwidgets/ImageDock.cpp:54
+#: src/frontend/dockwidgets/ImageDock.cpp:144
+#: src/frontend/dockwidgets/WorksheetDock.cpp:45
+#: src/frontend/dockwidgets/WorksheetDock.cpp:171
+#: src/frontend/widgets/LabelWidget.cpp:111
+#: src/frontend/widgets/LabelWidget.cpp:443
+#: src/frontend/widgets/LabelWidget.cpp:978
+#: src/frontend/widgets/LabelWidget.cpp:1016
+#, kde-format
+msgid "%v cm"
+msgstr ""
+
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:144
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:583
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:57
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:221
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:368
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:406
+#: src/frontend/dockwidgets/ImageDock.cpp:56
+#: src/frontend/dockwidgets/ImageDock.cpp:152
+#: src/frontend/dockwidgets/WorksheetDock.cpp:47
+#: src/frontend/dockwidgets/WorksheetDock.cpp:183
+#: src/frontend/widgets/LabelWidget.cpp:113
+#: src/frontend/widgets/LabelWidget.cpp:451
+#: src/frontend/widgets/LabelWidget.cpp:980
+#: src/frontend/widgets/LabelWidget.cpp:1018
+#, kde-format
+msgid "%v in"
+msgstr ""
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:255
 #, kde-format
@@ -17183,8 +17220,8 @@ msgid "%1 printed"
 msgstr "‏%1 طُبع"
 
 #: src/frontend/MainWin.cpp:1212
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3814
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3815
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3850
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3851
 #, kde-format
 msgid "%1"
 msgstr "%1"
@@ -17310,13 +17347,13 @@ msgid "Const Values"
 msgstr "قيم ثابتة"
 
 #: src/frontend/matrix/MatrixView.cpp:137
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:350
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:351
 #, kde-format
 msgid "Clear Content"
 msgstr "اِمسح المحتوى"
 
 #: src/frontend/matrix/MatrixView.cpp:138
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:334
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:335
 #, kde-format
 msgid "&Go to Cell..."
 msgstr "&اذهب إلى خليّة..."
@@ -17403,20 +17440,20 @@ msgid "Clea&r Rows"
 msgstr "اِم&سح الصفوف"
 
 #: src/frontend/matrix/MatrixView.cpp:244
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:589
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:590
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:82
 #, kde-format
 msgid "Selection"
 msgstr "التحديد"
 
 #: src/frontend/matrix/MatrixView.cpp:266
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:713
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:714
 #, kde-format
 msgid "Generate Data"
 msgstr "ولّد بيانات"
 
 #: src/frontend/matrix/MatrixView.cpp:271
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:729
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:730
 #, kde-format
 msgid "Manipulate Data"
 msgstr "تلاعب بالبيانات"
@@ -17465,7 +17502,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: اِقطع الخليّة (الخلايا) المنتقاة"
 
 #: src/frontend/matrix/MatrixView.cpp:685
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1850
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1871
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: ألصق من الحافظة"
@@ -17590,19 +17627,19 @@ msgid "Assistants"
 msgstr "مُساعدون"
 
 #: src/frontend/notebook/NotebookView.cpp:286
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:619
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:620
 #, kde-format
 msgid "Plot Data"
 msgstr "ارسم البيانات"
 
 #: src/frontend/notebook/NotebookView.cpp:290
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:684
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:685
 #, kde-format
 msgid "Statistical Analysis"
 msgstr "تحليل إحصائي"
 
 #: src/frontend/notebook/NotebookView.cpp:291
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:685
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:686
 #, kde-format
 msgid "Hypothesis Test"
 msgstr "اختبار الفرضية"
@@ -17628,7 +17665,7 @@ msgid "Ready"
 msgstr "جاهز"
 
 #: src/frontend/notebook/NotebookView.cpp:375
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:971
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:973
 #, kde-format
 msgid "Hypothesis Test for %1"
 msgstr "اختبار فرضية لـ %1"
@@ -17749,7 +17786,7 @@ msgid "Search/Filter Options"
 msgstr "خيارات البحث/التصفية"
 
 #: src/frontend/ProjectExplorer.cpp:246 src/frontend/ProjectExplorer.cpp:394
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1103
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1107
 #, kde-format
 msgid "Columns"
 msgstr "الأعمدة"
@@ -19390,15 +19427,15 @@ msgid "Flatten Columns"
 msgstr "سوِّ الأعمدة"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:329
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1204
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1591
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1208
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1595
 #, kde-format
 msgid "Show Comments"
 msgstr "أظهر التعليقات"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:330
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1215
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1596
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1219
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1600
 #, kde-format
 msgid "Show Sparklines"
 msgstr "أظهر الرسوم البيانية المصغرة"
@@ -19413,299 +19450,305 @@ msgstr "أزِل جدول البيانات"
 msgid "Clear Masks"
 msgstr "أزِل الأقنعة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:335
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:334
+#, fuzzy, kde-format
+#| msgid "&Transpose"
+msgid "Transpose"
+msgstr "ا&نقل مصفوفة"
+
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:336
 #, kde-format
 msgid "&Search"
 msgstr "ا&بحث"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:337
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:338
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:225
 #, kde-format
 msgid "&Replace"
 msgstr "&استبدل"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:339
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:485
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:340
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:486
 #, kde-format
 msgid "Column Statistics..."
 msgstr "إحصاءات العمود..."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:341
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:342
 #, kde-format
 msgid "Column Statistics Spreadsheet"
 msgstr "جدول بيانات إحصاءات العمود"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:347
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:348
 #, kde-format
 msgid "Insert Multiple Columns Left"
 msgstr "أدخِل عدة أعمدة لليسار"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:348
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:349
 #, kde-format
 msgid "Insert Multiple Columns Right"
 msgstr "أدخِل عدة أعمدة لليمين"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:351
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1681
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:352
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1702
 #, kde-format
 msgid "Freeze Column"
 msgstr "جمِّد العمود"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:386
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:387
 #, kde-format
 msgid "Add"
 msgstr "أضف"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:388
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:389
 #, kde-format
 msgid "Subtract"
 msgstr "اطرح"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:390
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:391
 #, kde-format
 msgid "Multiply"
 msgstr "أضرب"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:392
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:393
 #, kde-format
 msgid "Divide"
 msgstr "تقسيم"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:394
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:395
 #, kde-format
 msgid "Drop Values"
 msgstr "أَسقِط القيم"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:395
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:396
 #, kde-format
 msgid "Mask Values"
 msgstr "اخفِ القيم"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:397
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:398
 #, kde-format
 msgid "Reverse"
 msgstr "اعكس"
 
 #. i18n("Join"), this);
 #. algorithms - baseline subtraction, outliar removal, etc.
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:401
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:402
 #, kde-format
 msgid "Subtract Baseline"
 msgstr "اطرح خط الأساس"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:407
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:408
 #, kde-format
 msgid "Divide by Sum"
 msgstr "اقسِم على المجموع"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:410
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:411
 #, kde-format
 msgid "Divide by Min"
 msgstr "اقسِم على الأدنى"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:413
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:414
 #, kde-format
 msgid "Divide by Max"
 msgstr "اقسِم على الأقصى"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:416
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:417
 #, kde-format
 msgid "Divide by Count"
 msgstr "اقسِم على العدد"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:419
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:420
 #, kde-format
 msgid "Divide by Mean"
 msgstr "اقسِم على المتوسط"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:422
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:423
 #, kde-format
 msgid "Divide by Median"
 msgstr "اقسِم على الوسيط"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:425
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:426
 #, kde-format
 msgid "Divide by Mode"
 msgstr "اقسِم على المنوال"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:428
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:429
 #, kde-format
 msgid "Divide by Range"
 msgstr "اقسِم على المدى"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:431
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:432
 #, kde-format
 msgid "Divide by SD"
 msgstr "اقسِم على SD"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:434
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:435
 #, kde-format
 msgid "Divide by MAD"
 msgstr "اقسِم على MAD"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:437
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:438
 #, kde-format
 msgid "Divide by IQR"
 msgstr "اقسِم على IQR"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:440
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:441
 #, kde-format
 msgid "(x-Mean)/SD"
 msgstr "(س - المتوسط) / SD"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:443
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:444
 #, kde-format
 msgid "(x-Median)/MAD"
 msgstr "(س - الوسيط) / MAD"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:446
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:447
 #, kde-format
 msgid "(x-Median)/IQR"
 msgstr "(س - الوسيط) / IQR"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:449
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:450
 #, kde-format
 msgid "Rescale to [a, b]"
 msgstr "أعِد التحجيم إلى [أ، ب]"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:488
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:489
 #, kde-format
 msgid "Heatmap"
 msgstr "خريطة حرارية"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:494
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
 msgid "Insert Multiple Rows Above"
 msgstr "أدخِل عدة صفوف في الأعلى"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:495
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:496
 #, kde-format
 msgid "Insert Multiple Rows Below"
 msgstr "أدخِل عدة صفوف في الأسفل"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:497
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:498
 #, kde-format
 msgid "Delete Rows With Missing Values"
 msgstr "احذف الصفوف التي بها قيم مفقودة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:498
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:499
 #, kde-format
 msgid "Mask Rows With Missing Values"
 msgstr "اخفِ الصفوف التي بها قيم مفقودة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:499
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:500
 #, kde-format
 msgid "Row Statisti&cs"
 msgstr "إحصاءات الص&ف"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:503
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:504
 #, kde-format
 msgid "Simplify Line"
 msgstr "بسّط الخط"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:515
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:516
 #, fuzzy, kde-format
 #| msgid "Subtract Baseline"
 msgid "Correct Baseline"
 msgstr "اطرح خط الأساس"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:567
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:568
 #, kde-format
 msgid "Log-normal"
 msgstr "لوغاريتمي عادي"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:577
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2280
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:578
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2301
 #, kde-format
 msgid "Seasonal Decomposition"
 msgstr "فك التعمية الموسمي"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:623
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:624
 #, kde-format
 msgid "Conditional Formatting"
 msgstr "التّنسيق الشّرطيّ"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:652
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:653
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
 msgstr "ملاءمة التوزيع"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:666
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:667
 #, kde-format
 msgid "Analyze and Plot Data"
 msgstr "حلِّل البيانات وارسمها"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:691
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:692
 #, kde-format
 msgid "Time Series Analysis"
 msgstr "تحليل التسلسل الزمني"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:695
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:696
 #, kde-format
 msgid "Set Column As"
 msgstr "اضبط العمود بصفة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:765
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:766
 #, kde-format
 msgid "Normalize"
 msgstr "تطبيع"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:788
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:789
 #, kde-format
 msgid "Ladder of Powers"
 msgstr "سلم القوى"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1202
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1589
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1206
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1593
 #, kde-format
 msgid "Hide Comments"
 msgstr "أخفِ التعليقات"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1213
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1594
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1217
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1598
 #, kde-format
 msgid "Hide Sparklines"
 msgstr "أخفِ الرسوم البيانية المصغرة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1685
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1706
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "أزِل تجميد العمود"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1772
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1793
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: اقْطَع الخلايا المحددة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2085
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2106
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "لا توجد ذاكرة كافية لإنهاء هذه العملية."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2098
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2119
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: اخفِ الخلايا المحددة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2129
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2150
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: أزِل قناع الخلايا المحددة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2288
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2299
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2309
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2320
 #, kde-format
 msgid "Seasonal Decomposition for %1"
 msgstr "فك التعمية الموسمي لـ %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2320
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2341
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: املأ الخلايا بأرقام الصفوف"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2384
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2405
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
@@ -19716,42 +19759,42 @@ msgstr[3] "%1: املأ الأعمدة بأرقام الصفوف"
 msgstr[4] "%1: املأ الأعمدة بأرقام الصفوف"
 msgstr[5] "%1: املأ الأعمدة بأرقام الصفوف"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2427
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2448
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: املأ الخلايا بقيم عشوائية"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2564
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2585
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: املأ الخلايا بقيم ثابتة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2574
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2595
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2612
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2628
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2616
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2633
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2649
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "املأ التحديد بقيمة ثابتة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2707
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2745
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2728
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2766
 #, kde-format
 msgid "Insert empty columns"
 msgstr "أدخِل أعمدة فارغة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2708
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2746
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2729
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2767
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "أدخِل عدد الأعمدة المراد إدراجها"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2779
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2800
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: أزِل الأعمدة المحددة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2875
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2896
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
@@ -19762,149 +19805,162 @@ msgstr[3] "%1: اعكِس الأعمدة"
 msgstr[4] "%1: اعكِس الأعمدة"
 msgstr[5] "%1: اعكِس الأعمدة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2947
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2968
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr "الأعمدة المحددة لها أنواع بيانات مختلفة ولا يمكن تسويتها بسبب هذا."
 
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
+#, fuzzy, kde-format
+#| msgid "The file already exists. Do you really want to overwrite it?"
+msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+msgstr "الملفّ موجود فعلًا. أمتأكّد من الكتابة عليه؟"
+
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2983
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Print Spreadsheet"
+msgid "Transpose Spreadsheet"
+msgstr "اطبع جدول البيانات"
+
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3019
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: ساوي الأعمدة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3003
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3039
 #, kde-format
 msgid "Sum = 0"
 msgstr "مجموع = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3014
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3050
 #, kde-format
 msgid "Min = 0"
 msgstr "الأدنى = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3025
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3061
 #, kde-format
 msgid "Max = 0"
 msgstr "الأقصى = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3036
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3072
 #, kde-format
 msgid "Count = 0"
 msgstr "العدد = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3047
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3083
 #, kde-format
 msgid "Mean = 0"
 msgstr "المعدل = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3058
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3094
 #, kde-format
 msgid "Median = 0"
 msgstr "متوسط = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3070
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3106
 #, kde-format
 msgid "Mode = 0"
 msgstr "الوضع = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3072
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3108
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "المنوال غير معرَّف"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3083
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3119
 #, kde-format
 msgid "Range = 0"
 msgstr "المدى = ٠"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3094
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3128
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3130
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3164
 #, kde-format
 msgid "SD = 0"
 msgstr "SD = ٠"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3105
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3140
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3141
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3176
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = ٠"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3116
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3152
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3188
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = ٠"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3164
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3200
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "الأقصى - الأدنى = ٠"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3183
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3219
 #, kde-format
 msgid "Normalization not possible"
 msgstr "المساواة غير ممكنة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3195
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3231
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: حوِّل الأعمدة بقوى"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3311
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3347
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: إحصاءات العمود"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3342
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3378
 #, kde-format
 msgid "Selection in %1"
 msgstr "تحديد في %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3385
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3421
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: إحصاءات الصف"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3395
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3431
 #, kde-format
 msgid "Row %1"
 msgstr "الصف %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3420
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3456
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3492
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "أدخِل عدة صفوف"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3421
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3457
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3493
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "أدخِل عدد الصفوف المراد إدراجها"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3492
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3528
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: أزِل الصفوف المحددة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3527
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3563
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: أزِل الخلايا المحددة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3781
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3817
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr "اختير ١: %1 صف، %2 عمود"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3826
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr "اختير: %1 خلية"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3809
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3845
 #, kde-format
 msgid "row"
 msgid_plural "rows"
@@ -19915,7 +19971,7 @@ msgstr[3] "صفاً"
 msgstr[4] "صف"
 msgstr[5] "صف"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3810
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3846
 #, kde-format
 msgid "column"
 msgid_plural "columns"
@@ -19926,68 +19982,68 @@ msgstr[3] "عموداً"
 msgstr[4] "عمود"
 msgstr[5] "عمود"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3811
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3847
 #, kde-format
 msgid "cells"
 msgstr "خلايا"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3812
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3848
 #, kde-format
 msgid "masked value"
 msgstr "قيمة مخفية"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3812
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3848
 #, kde-format
 msgid "masked values"
 msgstr "قيم مخفية"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3813
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3849
 #, kde-format
 msgid "missing value"
 msgstr "قيمة مفقودة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3813
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3849
 #, kde-format
 msgid "missing values"
 msgstr "قيم مفقودة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3814
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3850
 #, kde-format
 msgid " , "
 msgstr " ، "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3815
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3851
 #, kde-format
 msgid ", "
 msgstr "، "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3819
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3855
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr "اختير: %1 %2، %3 %4%5 %6 %7 %8"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3829
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3865
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "اختير: %1 %2%3 %4 %5 %6"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3908
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3944
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "اطبع جدول البيانات"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4523
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4559
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "لا أقدر على إنشاء قاعدة بيانات SQLite ‏%1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4555
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4591
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "فشل إنشاء الجدول في قاعدة بيانات SQLite ‏%1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4610
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4646
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "فشل إدراج القيم في الجدول."
