@@ -676,168 +676,168 @@ void HypothesisTestPrivate::resetResult() {
 
 	if (test == HypothesisTest::Test::t_test_one_sample) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(emptyResultColumnStatistics())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::t_test_two_sample) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(emptyResultColumnStatistics())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::t_test_two_sample_paired) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(emptyResultColumnStatistics())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::t_test_welch) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(emptyResultColumnStatistics())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::one_way_anova) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(emptyResultColumnStatistics())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::one_way_anova_repeated) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(emptyResultColumnStatistics())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::mann_whitney_u_test) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(emptyResultColumnStatistics())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::kruskal_wallis_test) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(emptyResultColumnStatistics())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::wilcoxon_test) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(emptyResultColumnStatistics())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::friedman_test) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(emptyResultColumnStatistics())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::chisq_goodness_of_fit) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(emptyResultColumnStatistics())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::chisq_independence) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::log_rank_test) {
 		resultText = resultTemplate(test)
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(notAvailable())
-					 .arg(testResultNotAvailable());
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	}
 
 	Q_EMIT q->changed(); // notify the view about the changes
@@ -876,16 +876,16 @@ void HypothesisTestPrivate::performOneSampleTTest() {
 
 	// present results
 	resultText = resultTemplate(test)
-					   .arg(nullHypothesisText)
-					   .arg(alternateHypothesisText)
-					   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col})))
-					   .arg(significanceLevel)
-					   .arg(result.p)
-					   .arg(result.df)
-					   .arg(result.t)
-					   .arg(testMean)
-					   .arg(result.mean_difference)
-					   .arg(conclusion);
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col})))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.df)
+					 .arg(result.t)
+					 .arg(testMean)
+					 .arg(result.mean_difference)
+					 .arg(conclusion);
 }
 
 void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
@@ -961,28 +961,28 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 
 	if (paired) {
 		resultText = resultTemplate(test)
-						   .arg(nullHypothesisText)
-						   .arg(alternateHypothesisText)
-						   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
-						   .arg(significanceLevel)
-						   .arg(p)
-						   .arg(df)
-						   .arg(t)
-						   .arg(meanDifference)
-						   .arg(conclusion);
+						 .arg(nullHypothesisText)
+						 .arg(alternateHypothesisText)
+						 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
+						 .arg(significanceLevel)
+						 .arg(p)
+						 .arg(df)
+						 .arg(t)
+						 .arg(meanDifference)
+						 .arg(conclusion);
 	} else {
 		resultText = resultTemplate(test)
-						   .arg(nullHypothesisText)
-						   .arg(alternateHypothesisText)
-						   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
-						   .arg(significanceLevel)
-						   .arg(p)
-						   .arg(df)
-						   .arg(t)
-						   .arg(pooledVariance)
-						   .arg(meanDifference)
-						   .arg(meanDifferenceStandardError)
-						   .arg(conclusion);
+						 .arg(nullHypothesisText)
+						 .arg(alternateHypothesisText)
+						 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
+						 .arg(significanceLevel)
+						 .arg(p)
+						 .arg(df)
+						 .arg(t)
+						 .arg(pooledVariance)
+						 .arg(meanDifference)
+						 .arg(meanDifferenceStandardError)
+						 .arg(conclusion);
 	}
 }
 
@@ -1028,16 +1028,16 @@ void HypothesisTestPrivate::performWelchTTest() {
 		conclusion = testResultNotAvailable();
 
 	resultText = resultTemplate(test)
-					   .arg(nullHypothesisText)
-					   .arg(alternateHypothesisText)
-					   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
-					   .arg(significanceLevel)
-					   .arg(result.p)
-					   .arg(result.df)
-					   .arg(result.t)
-					   .arg(result.mean_difference)
-					   .arg(result.mean_difference_standard_error)
-					   .arg(conclusion);
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.df)
+					 .arg(result.t)
+					 .arg(result.mean_difference)
+					 .arg(result.mean_difference_standard_error)
+					 .arg(conclusion);
 }
 
 void HypothesisTestPrivate::performOneWayANOVATest() {
@@ -1084,19 +1084,19 @@ void HypothesisTestPrivate::performOneWayANOVATest() {
 	}
 
 	resultText = resultTemplate(test)
-					   .arg(nullHypothesisText)
-					   .arg(alternateHypothesisText)
-					   .arg(addResultColumnStatistics(dataColumns))
-					   .arg(significanceLevel)
-					   .arg(result.p)
-					   .arg(result.df_between_groups)
-					   .arg(result.df_within_groups)
-					   .arg(result.F)
-					   .arg(result.ss_between_groups)
-					   .arg(result.ss_within_groups)
-					   .arg(result.ms_between_groups)
-					   .arg(result.ms_within_groups)
-					   .arg(conclusion);
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(addResultColumnStatistics(dataColumns))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.df_between_groups)
+					 .arg(result.df_within_groups)
+					 .arg(result.F)
+					 .arg(result.ss_between_groups)
+					 .arg(result.ss_within_groups)
+					 .arg(result.ms_between_groups)
+					 .arg(result.ms_within_groups)
+					 .arg(conclusion);
 }
 
 void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
@@ -1147,20 +1147,20 @@ void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 	}
 
 	resultText = resultTemplate(test)
-					   .arg(nullHypothesisText)
-					   .arg(alternateHypothesisText)
-					   .arg(addResultColumnStatistics(dataColumns))
-					   .arg(significanceLevel)
-					   .arg(result.p)
-					   .arg(result.df_treatment)
-					   .arg(result.df_residuals)
-					   .arg(result.F)
-					   .arg(result.ss_treatment)
-					   .arg(result.ss_residuals)
-					   .arg(result.ss_within_subjects)
-					   .arg(result.ms_treatment)
-					   .arg(result.ms_residuals)
-					   .arg(conclusion);
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(addResultColumnStatistics(dataColumns))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.df_treatment)
+					 .arg(result.df_residuals)
+					 .arg(result.F)
+					 .arg(result.ss_treatment)
+					 .arg(result.ss_residuals)
+					 .arg(result.ss_within_subjects)
+					 .arg(result.ms_treatment)
+					 .arg(result.ms_residuals)
+					 .arg(conclusion);
 }
 
 void HypothesisTestPrivate::performMannWhitneyUTest() {
@@ -1207,18 +1207,18 @@ void HypothesisTestPrivate::performMannWhitneyUTest() {
 	}
 
 	resultText = resultTemplate(test)
-					   .arg(nullHypothesisText)
-					   .arg(alternateHypothesisText)
-					   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
-					   .arg(significanceLevel)
-					   .arg(result.p)
-					   .arg(result.U)
-					   .arg(result.z)
-					   .arg(result.rank_sum1)
-					   .arg(result.mean_rank1)
-					   .arg(result.rank_sum2)
-					   .arg(result.mean_rank2)
-					   .arg(conclusion);
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.U)
+					 .arg(result.z)
+					 .arg(result.rank_sum1)
+					 .arg(result.mean_rank1)
+					 .arg(result.rank_sum2)
+					 .arg(result.mean_rank2)
+					 .arg(conclusion);
 }
 
 void HypothesisTestPrivate::performKruskalWallisTest() {
@@ -1265,14 +1265,14 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 	}
 
 	resultText = resultTemplate(test)
-					   .arg(nullHypothesisText)
-					   .arg(alternateHypothesisText)
-					   .arg(addResultColumnStatistics(dataColumns))
-					   .arg(significanceLevel)
-					   .arg(result.p)
-					   .arg(result.df)
-					   .arg(result.H)
-					   .arg(conclusion);
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(addResultColumnStatistics(dataColumns))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.df)
+					 .arg(result.H)
+					 .arg(conclusion);
 }
 
 void HypothesisTestPrivate::performWilcoxonTest() {
@@ -1324,21 +1324,21 @@ void HypothesisTestPrivate::performWilcoxonTest() {
 	}
 
 	resultText = resultTemplate(test)
-					   .arg(nullHypothesisText)
-					   .arg(alternateHypothesisText)
-					   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
-					   .arg(significanceLevel)
-					   .arg(result.p)
-					   .arg(result.W)
-					   .arg(result.z)
-					   .arg(result.positive_rank_sum)
-					   .arg(result.positive_rank_mean)
-					   .arg(result.positive_rank_count)
-					   .arg(result.negative_rank_sum)
-					   .arg(result.negative_rank_mean)
-					   .arg(result.negative_rank_count)
-					   .arg(result.tie_count)
-					   .arg(conclusion);
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.W)
+					 .arg(result.z)
+					 .arg(result.positive_rank_sum)
+					 .arg(result.positive_rank_mean)
+					 .arg(result.positive_rank_count)
+					 .arg(result.negative_rank_sum)
+					 .arg(result.negative_rank_mean)
+					 .arg(result.negative_rank_count)
+					 .arg(result.tie_count)
+					 .arg(conclusion);
 }
 
 void HypothesisTestPrivate::performFriedmanTest() {
@@ -1386,14 +1386,14 @@ void HypothesisTestPrivate::performFriedmanTest() {
 	}
 
 	resultText = resultTemplate(test)
-					   .arg(nullHypothesisText)
-					   .arg(alternateHypothesisText)
-					   .arg(addResultColumnStatistics(dataColumns))
-					   .arg(significanceLevel)
-					   .arg(result.p)
-					   .arg(result.df)
-					   .arg(result.Q)
-					   .arg(conclusion);
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(addResultColumnStatistics(dataColumns))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.df)
+					 .arg(result.Q)
+					 .arg(conclusion);
 }
 
 void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
@@ -1455,14 +1455,14 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 		conclusion = testResultNotAvailable();
 
 	resultText = resultTemplate(test)
-					   .arg(nullHypothesisText)
-					   .arg(nullHypothesisText)
-					   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({observed, expected})))
-					   .arg(significanceLevel)
-					   .arg(result.p)
-					   .arg(result.df)
-					   .arg(result.x2)
-					   .arg(conclusion);
+					 .arg(nullHypothesisText)
+					 .arg(nullHypothesisText)
+					 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({observed, expected})))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.df)
+					 .arg(result.x2)
+					 .arg(conclusion);
 }
 
 void HypothesisTestPrivate::performChisqIndependenceTest() {
@@ -1518,13 +1518,13 @@ void HypothesisTestPrivate::performChisqIndependenceTest() {
 	}
 
 	resultText = resultTemplate(test)
-					   .arg(nullHypothesisText)
-					   .arg(alternateHypothesisText)
-					   .arg(significanceLevel)
-					   .arg(result.p)
-					   .arg(result.df)
-					   .arg(result.x2)
-					   .arg(conclusion);
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.df)
+					 .arg(result.x2)
+					 .arg(conclusion);
 }
 
 void HypothesisTestPrivate::performLogRankTest() {
@@ -1623,19 +1623,19 @@ void HypothesisTestPrivate::performLogRankTest() {
 	}
 
 	resultText = resultTemplate(test)
-					   .arg(nullHypothesisText)
-					   .arg(alternateHypothesisText)
-					   .arg(significanceLevel)
-					   .arg(result.p)
-					   .arg(result.df)
-					   .arg(result.H)
-					   .arg(result.event_count1)
-					   .arg(result.censored_count1)
-					   .arg(result.total_count1)
-					   .arg(result.event_count2)
-					   .arg(result.censored_count2)
-					   .arg(result.total_count2)
-					   .arg(conclusion);
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.df)
+					 .arg(result.H)
+					 .arg(result.event_count1)
+					 .arg(result.censored_count1)
+					 .arg(result.total_count1)
+					 .arg(result.event_count2)
+					 .arg(result.censored_count2)
+					 .arg(result.total_count2)
+					 .arg(conclusion);
 }
 
 // ##############################################################################

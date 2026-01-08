@@ -50,14 +50,14 @@
 
 #define CHECK_SCALE(scale, a_ref, b_ref, c_ref)                                                                                                                \
 	do {                                                                                                                                                       \
-		double a_act;                                                                                                                                              \
-		double b_act;                                                                                                                                              \
-		double c_act;                                                                                                                                              \
+		double a_act;                                                                                                                                          \
+		double b_act;                                                                                                                                          \
+		double c_act;                                                                                                                                          \
 		Range<double> r;                                                                                                                                       \
-		scale->getProperties(&r, &a_act, &b_act, &c_act);                                                                                                                  \
-		QVERIFY2(nsl_math_approximately_equal(a_act, a_ref), qPrintable(QStringLiteral("a: v1:%1, ref:%2").arg(a_act).arg(a_ref)));                                    \
-		QVERIFY2(nsl_math_approximately_equal(b_act, b_ref), qPrintable(QStringLiteral("b: v1:%1, ref:%2").arg(b_act).arg(b_ref)));                                    \
-		QVERIFY2(nsl_math_approximately_equal(c_act, c_ref), qPrintable(QStringLiteral("c: v1:%1, ref:%2").arg(c_act).arg(c_ref)));                                    \
+		scale->getProperties(&r, &a_act, &b_act, &c_act);                                                                                                      \
+		QVERIFY2(nsl_math_approximately_equal(a_act, a_ref), qPrintable(QStringLiteral("a: v1:%1, ref:%2").arg(a_act).arg(a_ref)));                            \
+		QVERIFY2(nsl_math_approximately_equal(b_act, b_ref), qPrintable(QStringLiteral("b: v1:%1, ref:%2").arg(b_act).arg(b_ref)));                            \
+		QVERIFY2(nsl_math_approximately_equal(c_act, c_ref), qPrintable(QStringLiteral("c: v1:%1, ref:%2").arg(c_act).arg(c_ref)));                            \
 	} while (false)
 
 #define DEBUG_RANGE(plot, aspect)                                                                                                                              \
@@ -105,14 +105,14 @@
 		savePath = tempFile->fileName();                                                                                                                       \
 		QVERIFY(!savePath.isEmpty());                                                                                                                          \
 		tempFile->close();                                                                                                                                     \
-		QFile saveFile(savePath);                                                                                                                                  \
-		QCOMPARE(saveFile.open(QIODevice::WriteOnly), true);                                                                                                       \
+		QFile saveFile(savePath);                                                                                                                              \
+		QCOMPARE(saveFile.open(QIODevice::WriteOnly), true);                                                                                                   \
                                                                                                                                                                \
 		project.setFileName(savePath);                                                                                                                         \
-		QXmlStreamWriter writer(&saveFile);                                                                                                                        \
+		QXmlStreamWriter writer(&saveFile);                                                                                                                    \
 		QPixmap thumbnail;                                                                                                                                     \
 		project.save(thumbnail, &writer);                                                                                                                      \
-		saveFile.close();                                                                                                                                          \
+		saveFile.close();                                                                                                                                      \
 		DEBUG(QStringLiteral("Project stored as: ").toStdString() << savePath.toStdString());                                                                  \
 	} while (false)
 
