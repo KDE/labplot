@@ -1318,8 +1318,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	if (hasChildren && Project::xmlVersion() < 9) {
 		const auto& plots = aspect->children<CartesianPlot>(ChildIndexFlag::Recursive);
 		for (const auto* plot : plots) {
-			const auto& axes = plot->children<Axis>(ChildIndexFlag::Recursive);
-			for (auto* axis : axes) {
+			const auto& childAxes = plot->children<Axis>(ChildIndexFlag::Recursive);
+			for (auto* axis : childAxes) {
 				const auto cSystem = plot->coordinateSystem(axis->coordinateSystemIndex());
 				RangeT::Scale scale{RangeT::Scale::Linear};
 				switch (axis->orientation()) {

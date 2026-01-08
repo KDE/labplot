@@ -142,9 +142,9 @@ void WorksheetPreviewWidget::aspectAdded(const AbstractAspect* aspect) {
 	if (m_project->isLoading())
 		return;
 
-	const auto* w = dynamic_cast<const Worksheet*>(aspect);
-	if (w)
-		addPreview(w, indexOfWorksheet(w));
+	const auto* worksheet = dynamic_cast<const Worksheet*>(aspect);
+	if (worksheet)
+		addPreview(worksheet, indexOfWorksheet(worksheet));
 	else {
 		// in case a folder was added (copy&paste, duplicate, project import), or another aspect that can have worksheet as a children (e.g. SeasonalDecomposition),
 		// check whether the added aspect has worksheet children add previews for them

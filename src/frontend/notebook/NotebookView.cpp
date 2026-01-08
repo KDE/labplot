@@ -334,9 +334,9 @@ void NotebookView::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& c
 void NotebookView::triggerAction(QAction* action) {
 	const auto& name = action->data().toString();
 	if (!name.isEmpty()) {
-		auto* action = m_part->action(name);
-		if (action)
-			action->trigger();
+		auto* a = m_part->action(name);
+		if (a)
+			a->trigger();
 	}
 }
 

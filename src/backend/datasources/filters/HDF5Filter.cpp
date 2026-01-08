@@ -1619,16 +1619,16 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		columnModes.resize(actualCols);
 		// set other modes
 		if (dclass == H5T_STRING)
-			for (auto& mode : columnModes)
-				mode = AbstractColumn::ColumnMode::Text;
+			for (auto& m : columnModes)
+				m = AbstractColumn::ColumnMode::Text;
 		else if (dclass == H5T_INTEGER) {
 			if (H5Tequal(dtype, H5T_STD_I64LE) || H5Tequal(dtype, H5T_STD_I64BE) || H5Tequal(dtype, H5T_NATIVE_LLONG) || H5Tequal(dtype, H5T_STD_U64LE)
 				|| H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG))
-				for (auto& mode : columnModes)
-					mode = AbstractColumn::ColumnMode::BigInt;
+				for (auto& m : columnModes)
+					m = AbstractColumn::ColumnMode::BigInt;
 			else
-				for (auto& mode : columnModes)
-					mode = AbstractColumn::ColumnMode::Integer;
+				for (auto& m : columnModes)
+					m = AbstractColumn::ColumnMode::Integer;
 		}
 
 		// use current data set name (without path) for column name
@@ -1636,7 +1636,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		QDEBUG(Q_FUNC_INFO << ", vector names = " << vectorNames)
 
 		if (dataSource && dclass != H5T_VLEN && dclass != H5T_COMPOUND) {
-			bool ok = false;
+			ok = false;
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
 			if (!ok) {
 				q->setLastError(i18n("Not enough memory."));
@@ -1753,7 +1753,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			DEBUG(Q_FUNC_INFO << ", COMPOUND type. members: " << members)
 			columnModes.resize(members);
 			if (dataSource) { // create data pointer here
-				bool ok = false;
+				ok = false;
 				dataSource->prepareImport(dataContainer, mode, actualRows, members, vectorNames, columnModes, ok);
 				if (!ok) {
 					q->setLastError(i18n("Not enough memory."));
@@ -1774,8 +1774,8 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			// set column mode
 			hid_t base_type = H5Tget_super(dtype);
 			columnModes.resize(actualCols);
-			for (auto& mode : columnModes)
-				mode = HDF5FilterPrivate::translateHDF5TypeToMode(base_type);
+			for (auto& m : columnModes)
+				m = HDF5FilterPrivate::translateHDF5TypeToMode(base_type);
 
 			hvl_t* rdata = (hvl_t*)malloc(size * sizeof(hvl_t));
 			hid_t memtype = H5Tvlen_create(base_type);
@@ -1803,7 +1803,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 				}
 
 				// create data pointer here
-				bool ok = false;
+				ok = false;
 				dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
 				if (!ok) {
 					q->setLastError(i18n("Not enough memory."));
@@ -1939,16 +1939,16 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		columnModes.resize(actualCols);
 		// set other modes
 		if (dclass == H5T_STRING)
-			for (auto& mode : columnModes)
-				mode = AbstractColumn::ColumnMode::Text;
+			for (auto& m : columnModes)
+				m = AbstractColumn::ColumnMode::Text;
 		else if (dclass == H5T_INTEGER) {
 			if (H5Tequal(dtype, H5T_STD_I64LE) || H5Tequal(dtype, H5T_STD_I64BE) || H5Tequal(dtype, H5T_NATIVE_LLONG) || H5Tequal(dtype, H5T_STD_U64LE)
 				|| H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG))
-				for (auto& mode : columnModes)
-					mode = AbstractColumn::ColumnMode::BigInt;
+				for (auto& m : columnModes)
+					m = AbstractColumn::ColumnMode::BigInt;
 			else
-				for (auto& mode : columnModes)
-					mode = AbstractColumn::ColumnMode::Integer;
+				for (auto& m : columnModes)
+					m = AbstractColumn::ColumnMode::Integer;
 		}
 
 		// use current data set name (without path) append by "_" and column number for column names
@@ -1959,7 +1959,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		QDEBUG(Q_FUNC_INFO << ", vector names = " << vectorNames)
 
 		if (dataSource) {
-			bool ok = false;
+			ok = false;
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
 			if (!ok) {
 				q->setLastError(i18n("Not enough memory."));

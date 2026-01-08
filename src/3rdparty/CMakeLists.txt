@@ -57,6 +57,10 @@ if(BUILD_QXLSX)
     set(BUILD_SHARED_LIBS OFF)
     add_subdirectory(QXlsx EXCLUDE_FROM_ALL)
     set_property(TARGET QXlsx PROPERTY POSITION_INDEPENDENT_CODE ON)
+    # disable shadow warnings
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+        target_compile_options(QXlsx PRIVATE -Wno-shadow -Wno-switch-enum)
+    endif()
 
     get_target_property(QXLSX_VERSION QXlsx VERSION)
     message(STATUS "QXlsx VERSION ${QXLSX_VERSION}")
@@ -93,8 +97,12 @@ if(ENABLE_VECTOR_BLF)
           add_definitions (-D__forceinline=inline)
       endif()
       # disable -Werror=maybe-uninitialized since gcc gives false positive warnings when address sanitizer is used
-      if("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
+      if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
           set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=maybe-uninitialized")
+      endif()
+      # disable shadow warnings treated as error
+      if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=shadow")
       endif()
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
@@ -127,6 +135,11 @@ if(ENABLE_VECTOR_BLF)
   if(${LOCAL_VECTOR_BLF})
     add_subdirectory(vector_blf EXCLUDE_FROM_ALL)
     set_property(TARGET Vector_BLF PROPERTY AUTOMOC OFF)
+    # disable warning _FORTIFY_SOURCE requires compiling with optimization (-O)
+    # disable shadow warnings
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+        target_compile_options(Vector_BLF PRIVATE -Wno-cpp -Wno-shadow)
+    endif()
     target_include_directories(Vector_BLF PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/vector_blf/src ${CMAKE_CURRENT_BINARY_DIR}/vector_blf/src)
     list(APPEND CMAKE_SYSTEM_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/vector_blf/src ${CMAKE_CURRENT_BINARY_DIR}/vector_blf/src)
 

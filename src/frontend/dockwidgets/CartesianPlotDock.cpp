@@ -62,18 +62,18 @@ protected:
 
 #define CELLWIDGET(dim, rangeIndex, Column, castObject, function)                                                                                              \
 	{                                                                                                                                                          \
-		QTableWidget* treewidget = nullptr;                                                                                                                    \
+		QTableWidget* treeWidget = nullptr;                                                                                                                    \
 		switch (dim) {                                                                                                                                         \
 		case Dimension::X:                                                                                                                                     \
-			treewidget = ui.twXRanges;                                                                                                                         \
+			treeWidget = ui.twXRanges;                                                                                                                         \
 			break;                                                                                                                                             \
 		case Dimension::Y:                                                                                                                                     \
-			treewidget = ui.twYRanges;                                                                                                                         \
+			treeWidget = ui.twYRanges;                                                                                                                         \
 			break;                                                                                                                                             \
 		}                                                                                                                                                      \
 		if (rangeIndex < 0) {                                                                                                                                  \
-			for (int i = 0; i < treewidget->rowCount(); i++) {                                                                                                 \
-				auto obj = qobject_cast<castObject*>(treewidget->cellWidget(i, Column));                                                                       \
+			for (int Row = 0; Row < treeWidget->rowCount(); Row++) {                                                                                                 \
+				auto obj = qobject_cast<castObject*>(treeWidget->cellWidget(Row, Column));                                                                       \
 				if (obj)                                                                                                                                       \
 					obj->function;                                                                                                                             \
 				else                                                                                                                                           \
@@ -82,7 +82,7 @@ protected:
 																	   << "). Whether the object does not exist or the cellWidget has different type");        \
 			}                                                                                                                                                  \
 		} else {                                                                                                                                               \
-			auto obj = qobject_cast<castObject*>(treewidget->cellWidget(rangeIndex, Column));                                                                  \
+			auto obj = qobject_cast<castObject*>(treeWidget->cellWidget(rangeIndex, Column));                                                                  \
 			if (obj)                                                                                                                                           \
 				obj->function;                                                                                                                                 \
 			else                                                                                                                                               \
@@ -785,10 +785,10 @@ void CartesianPlotDock::updatePlotRangeListValues(const Dimension dim, int range
 		auto* cb = dynamic_cast<QComboBox*>(ui.twPlotRanges->cellWidget(cSystemIndex, column));
 		if (cb) {
 			for (auto itemIndex = 0; itemIndex < cb->count(); itemIndex++) {
-				const auto data = cb->itemData(itemIndex);
-				if (data.isValid()) {
+				const auto itemData = cb->itemData(itemIndex);
+				if (itemData.isValid()) {
 					bool ok = true;
-					const auto rangeIndexComboBox = data.toInt(&ok);
+					const auto rangeIndexComboBox = itemData.toInt(&ok);
 					Q_ASSERT(ok);
 					if (rangeIndexComboBox == rangeIndex)
 						cb->setItemText(itemIndex, generatePlotRangeString(m_plot->rangeCount(dim), rangeIndex, m_plot->range(dim, rangeIndex)));
@@ -1045,7 +1045,7 @@ void CartesianPlotDock::autoScaleChanged(const Dimension dim, const int rangeInd
 void CartesianPlotDock::autoScaleRange(const Dimension dim, const int index, bool checked) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " checked = " << checked)
 
-	QTableWidget* treewidget = ui.twXRanges;
+	auto* treewidget = ui.twXRanges;
 	Dimension dim_other = Dimension::Y;
 	switch (dim) {
 	case Dimension::X:

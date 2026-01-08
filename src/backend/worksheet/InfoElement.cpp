@@ -32,12 +32,12 @@
 #include <QPainter>
 #include <QTextEdit>
 
-InfoElement::MarkerPoints_T::MarkerPoints_T(CustomPoint* custompoint, const XYCurve* curve, const QString& curvePath)
-	: customPoint(custompoint)
-	, curve(curve)
-	, curvePath(curvePath) {
+InfoElement::MarkerPoints_T::MarkerPoints_T(CustomPoint* cp, const XYCurve* mcurve, const QString& mcurvePath)
+	: customPoint(cp)
+	, curve(mcurve)
+	, curvePath(mcurvePath) {
 	if (customPoint)
-		visible = custompoint->isVisible();
+		visible = cp->isVisible();
 }
 
 /**
@@ -948,7 +948,7 @@ void InfoElementPrivate::retransform() {
 		return;
 	}
 
-	Lock lock(q->m_suppressChildPositionChanged);
+	Lock retransformLock(q->m_suppressChildPositionChanged);
 	xposLine = QLineF();
 	m_connectionLine = QLineF();
 

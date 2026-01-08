@@ -38,9 +38,9 @@ namespace {
 // Simple object to automatically closing a device when this object
 // goes out of scope
 struct IODeviceHandler {
-	IODeviceHandler(QIODevice& d, bool reset)
+	IODeviceHandler(QIODevice& d, bool dreset)
 		: device(d)
-		, reset(reset) {
+		, reset(dreset) {
 	}
 
 	~IODeviceHandler() {
@@ -814,24 +814,24 @@ Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 }
 
 template<typename T>
-void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const AsciiFilter::Properties& properties) {
-	int columnIndex = 0 + properties.createIndex + properties.createTimestamp;
+void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const AsciiFilter::Properties& props) {
+	int columnIndex = 0 + props.createIndex + props.createTimestamp;
 	// Iterate over all columns
 	for (const auto& value : values) {
 		bool conversionOk = false;
-		if (columnIndex >= properties.columnModes.length())
+		if (columnIndex >= props.columnModes.length())
 			return;
-		switch (properties.columnModes[columnIndex]) {
+		switch (props.columnModes[columnIndex]) {
 		case AbstractColumn::ColumnMode::Double: {
-			double d = properties.locale.toDouble(value, &conversionOk);
+			double d = props.locale.toDouble(value, &conversionOk);
 			if (!conversionOk) {
-				d = properties.nanValue;
+				d = props.nanValue;
 			}
 			m_DataContainer.setData(columnIndex, rowIndex, d);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			int i = properties.locale.toInt(value, &conversionOk);
+			int i = props.locale.toInt(value, &conversionOk);
 			if (!conversionOk) {
 				i = 0;
 			}
@@ -839,7 +839,7 @@ void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			qint64 i = properties.locale.toLongLong(value, &conversionOk);
+			qint64 i = props.locale.toLongLong(value, &conversionOk);
 			if (!conversionOk) {
 				i = 0;
 			}
@@ -852,7 +852,7 @@ void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			auto dt = QDateTime::fromString(value, properties.dateTimeFormat, properties.baseYear);
+			auto dt = QDateTime::fromString(value, props.dateTimeFormat, props.baseYear);
 			dt.setTimeSpec(Qt::UTC);
 			m_DataContainer.setData(columnIndex, rowIndex, dt);
 			break;
@@ -1332,10 +1332,10 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, b
 		t.start(sleep_ms);
 		loop.exec();
 
-		const auto status =
+		const auto status2 =
 			readFromDevice(device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, lines, 0, bytes_read, skipFirstLine);
-		if (!status.success()) {
-			setLastError(status);
+		if (!status2.success()) {
+			setLastError(status2);
 			return p;
 		}
 		counter++;

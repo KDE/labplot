@@ -57,13 +57,13 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
-		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
-		if (!layout)
+		auto* tabLayout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		if (!tabLayout)
 			continue;
 
-		layout->setContentsMargins(2, 2, 2, 2);
-		layout->setHorizontalSpacing(2);
-		layout->setVerticalSpacing(2);
+		tabLayout->setContentsMargins(2, 2, 2, 2);
+		tabLayout->setHorizontalSpacing(2);
+		tabLayout->setVerticalSpacing(2);
 	}
 
 	updateLocale();

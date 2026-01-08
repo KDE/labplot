@@ -1173,9 +1173,9 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 		QStringList formulaVariableNames;
 		QStringList formulaVariableColumnPaths;
-		for (auto& d : formulaData()) {
-			formulaVariableNames << d.variableName();
-			formulaVariableColumnPaths << d.columnName();
+		for (auto& data : formulaData()) {
+			formulaVariableNames << data.variableName();
+			formulaVariableColumnPaths << data.columnName();
 		}
 
 		writer->writeStartElement(QStringLiteral("variableNames"));
@@ -1375,7 +1375,7 @@ public:
 		: m_private(priv)
 		, m_content(content) { };
 	void run() override {
-		QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
+		const auto bytes = QByteArray::fromBase64(m_content.toLatin1());
 		switch (m_private->columnMode()) {
 		case AbstractColumn::ColumnMode::Double: {
 			auto* data = new QVector<double>(bytes.size() / (int)sizeof(double));
@@ -1397,7 +1397,6 @@ public:
 		}
 		case AbstractColumn::ColumnMode::Text: {
 			// deserialize text data using Base64 encoding with null separator
-			const QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
 			const QString decoded = QString::fromUtf8(bytes);
 			auto textVector = decoded.split(QLatin1Char('\0'), Qt::KeepEmptyParts);
 			m_private->replaceTexts(-1, textVector);

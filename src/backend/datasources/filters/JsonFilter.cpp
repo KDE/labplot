@@ -434,7 +434,7 @@ bool JsonFilterPrivate::prepareDocumentToRead() {
 			countCols = 1;
 		else { // array of arrays
 			// check the number of elements in the first element of the array
-			auto count = firstRow.toArray().count();
+			count = firstRow.toArray().count();
 			countCols = (countCols == -1 || countCols > count) ? count : countCols;
 		}
 

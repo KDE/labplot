@@ -2364,10 +2364,10 @@ void ColumnPrivate::setFormulVariableColumn(Column* c) {
 }
 
 struct PayloadColumn : public Parsing::Payload {
-	PayloadColumn(const QVector<Column::FormulaData>& data, const QVector<double>& y)
+	PayloadColumn(const QVector<Column::FormulaData>& data, const QVector<double>& yValues)
 		: Parsing::Payload(true)
 		, formulaData(data)
-		, y(y) {
+		, y(yValues) {
 	}
 	const QVector<Column::FormulaData>& formulaData;
 	const QVector<double>& y; // current values
@@ -2594,8 +2594,8 @@ void ColumnPrivate::updateFormula() {
 		parser->setSpecialFunction2ValuePayload(Parsing::cell_curr_column_default, cell_curr_column_defaultvalue, payload);
 
 		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << m_formula << ", var names: " << formulaVariableNames)
-		bool valid = parser->tryEvaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);
-		if (!valid)
+		bool validEval = parser->tryEvaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);
+		if (!validEval)
 			DEBUG(Q_FUNC_INFO << ", Failed parsing formula!")
 		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")
 		replaceValues(-1, new_data);

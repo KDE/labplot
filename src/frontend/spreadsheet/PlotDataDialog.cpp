@@ -250,7 +250,7 @@ void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
 	if (m_basicPlotType && xColumnName.isEmpty()) {
 		// no X-column was selected -> look for the first non-selected X-column left to the first selected column
 		const auto& columns = m_parentAspect->children<Column>();
-		const int index = columns.indexOf(selectedColumns.first()) - 1;
+		int index = columns.indexOf(selectedColumns.first()) - 1;
 		for (int i = index; i >= 0; --i) {
 			auto* column = columns.at(i);
 			if (column->plotDesignation() == AbstractColumn::PlotDesignation::X && column->isPlottable()) {
@@ -263,7 +263,7 @@ void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
 
 		if (xColumnName.isEmpty()) {
 			// no X-column was found left to the first selected column -> look right to the last selected column
-			const int index = columns.indexOf(selectedColumns.last()) + 1;
+			index = columns.indexOf(selectedColumns.last()) + 1;
 			for (int i = index; i < columns.count(); ++i) {
 				auto* column = columns.at(i);
 				if (column->plotDesignation() == AbstractColumn::PlotDesignation::X && column->isPlottable()) {

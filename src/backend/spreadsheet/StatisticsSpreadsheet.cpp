@@ -180,7 +180,7 @@ void StatisticsSpreadsheet::update() {
 	for (const auto& metric : m_metricValues) {
 		if (m_metrics.testFlag(metric)) {
 			// rename the statistics column
-			auto* statisticsColumn = statisticsColumns.at(colIndex);
+			statisticsColumn = statisticsColumns.at(colIndex);
 			statisticsColumn->setName(m_metricNames.at(metricIndex));
 
 			// set the column mode

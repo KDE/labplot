@@ -2898,29 +2898,29 @@ void SpreadsheetView::reverseColumns() {
 		if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 			// determine the last row containing a valid value,
 			// ignore all following empty rows when doing the reverse
-			auto* data = static_cast<QVector<double>*>(col->data());
-			QVector<double> new_data(*data);
-			auto itEnd = new_data.begin();
-			auto it = new_data.begin();
-			while (it != new_data.end()) {
+			auto* oldData = static_cast<QVector<double>*>(col->data());
+			QVector<double> newData(*oldData);
+			auto itEnd = newData.begin();
+			auto it = newData.begin();
+			while (it != newData.end()) {
 				if (!std::isnan(*it))
 					itEnd = it;
 				++it;
 			}
 			++itEnd;
 
-			std::reverse(new_data.begin(), itEnd);
-			col->setValues(new_data);
+			std::reverse(newData.begin(), itEnd);
+			col->setValues(newData);
 		} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
-			auto* data = static_cast<QVector<int>*>(col->data());
-			QVector<int> new_data(*data);
-			std::reverse(new_data.begin(), new_data.end());
-			col->setIntegers(new_data);
+			auto* oldData = static_cast<QVector<int>*>(col->data());
+			QVector<int> newData(*oldData);
+			std::reverse(newData.begin(), newData.end());
+			col->setIntegers(newData);
 		} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
-			auto* data = static_cast<QVector<qint64>*>(col->data());
-			QVector<qint64> new_data(*data);
-			std::reverse(new_data.begin(), new_data.end());
-			col->setBigInts(new_data);
+			auto* oldData = static_cast<QVector<qint64>*>(col->data());
+			QVector<qint64> newData(*oldData);
+			std::reverse(newData.begin(), newData.end());
+			col->setBigInts(newData);
 		}
 	}
 	m_spreadsheet->endMacro();
@@ -3026,15 +3026,15 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 			if (col->columnMode() == AbstractColumn::ColumnMode::Integer || col->columnMode() == AbstractColumn::ColumnMode::BigInt)
 				col->setColumnMode(AbstractColumn::ColumnMode::Double);
 
-			auto* data = static_cast<QVector<double>*>(col->data());
-			QVector<double> new_data(col->rowCount());
+			auto* oldData = static_cast<QVector<double>*>(col->data());
+			QVector<double> newData(col->rowCount());
 
 			switch (method) {
 			case DivideBySum: {
-				double sum = std::accumulate(data->begin(), data->end(), 0);
+				double sum = std::accumulate(oldData->begin(), oldData->end(), 0);
 				if (sum != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / sum;
+						newData[i] = oldData->operator[](i) / sum;
 				} else {
 					messages << i18n(message, col->name(), i18n("Sum = 0"));
 					continue;
@@ -3045,7 +3045,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double min = col->minimum();
 				if (min != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / min;
+						newData[i] = oldData->operator[](i) / min;
 				} else {
 					messages << i18n(message, col->name(), i18n("Min = 0"));
 					continue;
@@ -3056,7 +3056,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double max = col->maximum();
 				if (max != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / max;
+						newData[i] = oldData->operator[](i) / max;
 				} else {
 					messages << i18n(message, col->name(), i18n("Max = 0"));
 					continue;
@@ -3064,10 +3064,10 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				break;
 			}
 			case DivideByCount: {
-				int count = data->size();
+				int count = oldData->size();
 				if (count != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / count;
+						newData[i] = oldData->operator[](i) / count;
 				} else {
 					messages << i18n(message, col->name(), i18n("Count = 0"));
 					continue;
@@ -3078,7 +3078,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double mean = col->statistics().arithmeticMean;
 				if (mean != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / mean;
+						newData[i] = oldData->operator[](i) / mean;
 				} else {
 					messages << i18n(message, col->name(), i18n("Mean = 0"));
 					continue;
@@ -3089,7 +3089,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double median = col->statistics().median;
 				if (median != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / median;
+						newData[i] = oldData->operator[](i) / median;
 				} else {
 					messages << i18n(message, col->name(), i18n("Median = 0"));
 					continue;
@@ -3100,7 +3100,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double mode = col->statistics().mode;
 				if (mode != 0.0 && !std::isnan(mode)) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / mode;
+						newData[i] = oldData->operator[](i) / mode;
 				} else {
 					if (mode == 0.0)
 						messages << i18n(message, col->name(), i18n("Mode = 0"));
@@ -3114,7 +3114,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double range = col->statistics().maximum - col->statistics().minimum;
 				if (range != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / range;
+						newData[i] = oldData->operator[](i) / range;
 				} else {
 					messages << i18n(message, col->name(), i18n("Range = 0"));
 					continue;
@@ -3125,7 +3125,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double std = col->statistics().standardDeviation;
 				if (std != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / std;
+						newData[i] = oldData->operator[](i) / std;
 				} else {
 					messages << i18n(message, col->name(), i18n("SD = 0"));
 					continue;
@@ -3136,7 +3136,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double mad = col->statistics().medianDeviation;
 				if (mad != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / mad;
+						newData[i] = oldData->operator[](i) / mad;
 				} else {
 					messages << i18n(message, col->name(), i18n("MAD = 0"));
 					continue;
@@ -3147,7 +3147,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double iqr = col->statistics().iqr;
 				if (iqr != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / iqr;
+						newData[i] = oldData->operator[](i) / iqr;
 				} else {
 					messages << i18n(message, col->name(), i18n("IQR = 0"));
 					continue;
@@ -3159,7 +3159,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double std = col->statistics().standardDeviation;
 				if (std != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = (data->operator[](i) - mean) / std;
+						newData[i] = (oldData->operator[](i) - mean) / std;
 				} else {
 					messages << i18n(message, col->name(), i18n("SD = 0"));
 					continue;
@@ -3171,7 +3171,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double mad = col->statistics().medianDeviation;
 				if (mad != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = (data->operator[](i) - median) / mad;
+						newData[i] = (oldData->operator[](i) - median) / mad;
 				} else {
 					messages << i18n(message, col->name(), i18n("MAD = 0"));
 					continue;
@@ -3183,7 +3183,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double iqr = col->statistics().thirdQuartile - col->statistics().firstQuartile;
 				if (iqr != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = (data->operator[](i) - median) / iqr;
+						newData[i] = (oldData->operator[](i) - median) / iqr;
 				} else {
 					messages << i18n(message, col->name(), i18n("IQR = 0"));
 					continue;
@@ -3195,7 +3195,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				double max = col->statistics().maximum;
 				if (max - min != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = rescaleIntervalMin + (data->operator[](i) - min) / (max - min) * (rescaleIntervalMax - rescaleIntervalMin);
+						newData[i] = rescaleIntervalMin + (oldData->operator[](i) - min) / (max - min) * (rescaleIntervalMax - rescaleIntervalMin);
 				} else {
 					messages << i18n(message, col->name(), i18n("Max - Min = 0"));
 					continue;
@@ -3204,7 +3204,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 			}
 			}
 
-			col->setValues(new_data);
+			col->setValues(newData);
 		}
 		m_spreadsheet->endMacro();
 	}
@@ -3238,77 +3238,77 @@ void SpreadsheetView::powerTransformSelectedColumns(QAction* action) {
 		if (col->columnMode() == AbstractColumn::ColumnMode::Integer || col->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			col->setColumnMode(AbstractColumn::ColumnMode::Double);
 
-		auto* data = static_cast<QVector<double>*>(col->data());
-		QVector<double> new_data(col->rowCount());
+		auto* oldData = static_cast<QVector<double>*>(col->data());
+		QVector<double> newData(col->rowCount());
 
 		switch (power) {
 		case InverseSquared: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
+				double x =oldData->operator[](i);
 				if (x != 0.0)
-					new_data[i] = 1 / gsl_pow_2(x);
+					newData[i] = 1 / gsl_pow_2(x);
 				else
-					new_data[i] = NAN;
+					newData[i] = NAN;
 			}
 			break;
 		}
 		case Inverse: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
+				double x = oldData->operator[](i);
 				if (x != 0.0)
-					new_data[i] = 1 / x;
+					newData[i] = 1 / x;
 				else
-					new_data[i] = NAN;
+					newData[i] = NAN;
 			}
 			break;
 		}
 		case InverseSquareRoot: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
+				double x = oldData->operator[](i);
 				if (x >= 0.0)
-					new_data[i] = 1 / std::sqrt(x);
+					newData[i] = 1 / std::sqrt(x);
 				else
-					new_data[i] = NAN;
+					newData[i] = NAN;
 			}
 			break;
 		}
 		case Log: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
+				double x = oldData->operator[](i);
 				if (x >= 0.0)
-					new_data[i] = log10(x);
+					newData[i] = log10(x);
 				else
-					new_data[i] = NAN;
+					newData[i] = NAN;
 			}
 			break;
 		}
 		case SquareRoot: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
+				double x = oldData->operator[](i);
 				if (x >= 0.0)
-					new_data[i] = std::sqrt(x);
+					newData[i] = std::sqrt(x);
 				else
-					new_data[i] = NAN;
+					newData[i] = NAN;
 			}
 			break;
 		}
 		case Squared: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
-				new_data[i] = gsl_pow_2(x);
+				double x = oldData->operator[](i);
+				newData[i] = gsl_pow_2(x);
 			}
 			break;
 		}
 		case Cube: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
-				new_data[i] = gsl_pow_3(x);
+				double x = oldData->operator[](i);
+				newData[i] = gsl_pow_3(x);
 			}
 			break;
 		}
 		}
 
-		col->setValues(new_data);
+		col->setValues(newData);
 	}
 
 	m_spreadsheet->endMacro();
@@ -3569,8 +3569,8 @@ void SpreadsheetView::clearSelectedCells() {
 		// 				if (isCellSelected(row, col))
 		// 					column->setFormula(row, QString());
 		// 		} else {
-		int index = m_spreadsheet->indexOfChild<Column>(column);
-		if (isColumnSelected(index, true)) {
+		int childIndex = m_spreadsheet->indexOfChild<Column>(column);
+		if (isColumnSelected(childIndex, true)) {
 			// if the whole column is selected, clear directly instead of looping over the rows
 			column->clear();
 		} else {

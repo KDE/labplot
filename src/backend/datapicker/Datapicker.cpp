@@ -295,8 +295,8 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 	for (auto* point : points)
 		point->graphicsItem()->setZValue(zVal++);
 
-	for (const auto* curve : children<DatapickerCurve>()) {
-		for (auto* point : curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
+	for (const auto* childCurve : children<DatapickerCurve>()) {
+		for (auto* point : childCurve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
 			point->graphicsItem()->setZValue(zVal++);
 	}
 

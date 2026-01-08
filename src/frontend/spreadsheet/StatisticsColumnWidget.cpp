@@ -454,13 +454,13 @@ void StatisticsColumnWidget::showBarPlot() {
 		return a.second > b.second;
 	});
 
-	QVector<int> data;
+	QVector<int> bdata;
 	QVector<QString> labels;
 	for (const auto& pair : pairs) {
 		labels << pair.first;
-		data << pair.second;
+		bdata << pair.second;
 	}
-	dataColumn->replaceInteger(0, data);
+	dataColumn->replaceInteger(0, bdata);
 	labelsColumn->replaceTexts(0, labels);
 
 	// bar plot
@@ -512,15 +512,15 @@ void StatisticsColumnWidget::showParetoPlot() {
 	plot->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
 
 	// add second y-axis
-	auto* axis = new Axis(QLatin1String("y2"));
-	plot->addChild(axis);
-	axis->setOrientation(Axis::Orientation::Vertical);
-	axis->setPosition(Axis::Position::Right);
-	axis->setMajorTicksDirection(Axis::ticksBoth);
-	axis->setLabelsPosition(Axis::LabelsPosition::In);
-	axis->setLabelsSuffix(QLatin1String("%"));
-	axis->title()->setRotationAngle(90);
-	axis->setCoordinateSystemIndex(1);
+	auto* secondAxis = new Axis(QLatin1String("y2"));
+	plot->addChild(secondAxis);
+	secondAxis->setOrientation(Axis::Orientation::Vertical);
+	secondAxis->setPosition(Axis::Position::Right);
+	secondAxis->setMajorTicksDirection(Axis::ticksBoth);
+	secondAxis->setLabelsPosition(Axis::LabelsPosition::In);
+	secondAxis->setLabelsSuffix(QLatin1String("%"));
+	secondAxis->title()->setRotationAngle(90);
+	secondAxis->setCoordinateSystemIndex(1);
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
@@ -561,24 +561,24 @@ void StatisticsColumnWidget::showParetoPlot() {
 		return a.second > b.second;
 	});
 
-	QVector<int> data;
+	QVector<int> bdata;
 	QVector<QString> labels;
 	for (const auto& pair : pairs) {
 		labels << pair.first;
-		data << pair.second;
+		bdata << pair.second;
 	}
 
 	// calculate the cumulative values
 	int sum = 0;
 	row = 0;
-	for (auto value : data) {
+	for (auto value : bdata) {
 		sum += value;
 		if (totalSumOfFrequencies != 0)
 			yData[row] = (double)sum / totalSumOfFrequencies * 100;
 		++row;
 	}
 
-	dataColumn->replaceInteger(0, data);
+	dataColumn->replaceInteger(0, bdata);
 	labelsColumn->replaceTexts(0, labels);
 	xColumn->setValues(xData);
 	yColumn->setValues(yData);
@@ -606,7 +606,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 	// resize the first y range to have the first point of the xy-curve at the top of the first bar
 	if (yData.at(0) != 0) {
-		const double max = (double)data.at(0) * 100. / yData.at(0);
+		const double max = (double)bdata.at(0) * 100. / yData.at(0);
 		plot->setMax(Dimension::Y, 0, max);
 	}
 
@@ -707,9 +707,9 @@ QString StatisticsColumnWidget::modeValue(const Column* column, double value) co
  * copy the non-nan and not masked values of the current column
  * into the vector \c data.
  */
-void StatisticsColumnWidget::copyValidData(QVector<double>& data) const {
+void StatisticsColumnWidget::copyValidData(QVector<double>& bdata) const {
 	const int rowCount = m_column->rowCount();
-	data.reserve(rowCount);
+	bdata.reserve(rowCount);
 	double val;
 	if (m_column->columnMode() == AbstractColumn::ColumnMode::Double) {
 		auto* rowValues = reinterpret_cast<QVector<double>*>(m_column->data());
@@ -718,7 +718,7 @@ void StatisticsColumnWidget::copyValidData(QVector<double>& data) const {
 			if (std::isnan(val) || m_column->isMasked(row))
 				continue;
 
-			data.push_back(val);
+			bdata.push_back(val);
 		}
 	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::Integer) {
 		auto* rowValues = reinterpret_cast<QVector<int>*>(m_column->data());
@@ -727,7 +727,7 @@ void StatisticsColumnWidget::copyValidData(QVector<double>& data) const {
 			if (std::isnan(val) || m_column->isMasked(row))
 				continue;
 
-			data.push_back(val);
+			bdata.push_back(val);
 		}
 	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 		auto* rowValues = reinterpret_cast<QVector<qint64>*>(m_column->data());
@@ -736,10 +736,10 @@ void StatisticsColumnWidget::copyValidData(QVector<double>& data) const {
 			if (std::isnan(val) || m_column->isMasked(row))
 				continue;
 
-			data.push_back(val);
+			bdata.push_back(val);
 		}
 	}
 
-	if (data.size() < rowCount)
-		data.squeeze();
+	if (bdata.size() < rowCount)
+		bdata.squeeze();
 }
