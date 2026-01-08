@@ -2979,7 +2979,7 @@ void SpreadsheetView::transpose() {
 	if (m_spreadsheet->rowCount() > 500) {
 		auto status = KMessageBox::warningTwoActions(
 			this,
-			i18n("The spreadsheet has %1 rows. Do you really want to tranpose it?", m_spreadsheet->rowCount()),
+			i18n("The spreadsheet has %1 rows. Do you really want to transpose it?", m_spreadsheet->rowCount()),
 			i18n("Transpose Spreadsheet"),
 			KStandardGuiItem::cont(),
 			KStandardGuiItem::cancel());

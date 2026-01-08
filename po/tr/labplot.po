@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-05 00:39+0000\n"
-"PO-Revision-Date: 2026-01-01 12:14+0300\n"
-"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"POT-Creation-Date: 2026-01-08 00:38+0000\n"
+"PO-Revision-Date: 2026-01-07 19:58+0300\n"
+"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -52,8 +52,8 @@ msgid "Rename"
 msgstr "Yeniden Adlandır"
 
 #: src/backend/core/AbstractAspect.cpp:430
-#: src/backend/spreadsheet/Spreadsheet.cpp:785
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:489
+#: src/backend/spreadsheet/Spreadsheet.cpp:941
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:490
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #: src/frontend/worksheet/WorksheetView.cpp:138
 #, kde-format
@@ -341,13 +341,13 @@ msgid "%1: unmask cells"
 msgstr "%1: Hücre maskesini kaldır"
 
 #: src/backend/core/abstractcolumncommands.cpp:239
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2669
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2690
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: Isı haritası biçimini ayarla"
 
 #: src/backend/core/abstractcolumncommands.cpp:265
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2687
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2708
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: Isı haritası biçimini kaldır"
@@ -415,7 +415,7 @@ msgstr "uyumsuz süzgeç türü"
 #: src/backend/datasources/MQTTTopic.cpp:273
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1706
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:890
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1910
 #, kde-format
 msgid "unknown element '%1'"
@@ -486,32 +486,32 @@ msgstr "%1   (değer yok)"
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "“%1” adı halihazırda kullanımda. Başka bir ad seçin."
 
-#: src/backend/core/column/Column.cpp:114
+#: src/backend/core/column/Column.cpp:112
 #, kde-format
 msgid "Copy Data"
 msgstr "Veri Kopyala"
 
-#: src/backend/core/column/Column.cpp:117
+#: src/backend/core/column/Column.cpp:115
 #, kde-format
 msgid "Paste Data"
 msgstr "Veri Yapıştır"
 
-#: src/backend/core/column/Column.cpp:152
+#: src/backend/core/column/Column.cpp:149
 #, kde-format
 msgid "Used in"
 msgstr "Kullanıldığı Yerler"
 
-#: src/backend/core/column/Column.cpp:169
+#: src/backend/core/column/Column.cpp:166
 #, kde-format
 msgid "Plots"
 msgstr "Çizimler"
 
-#: src/backend/core/column/Column.cpp:187
+#: src/backend/core/column/Column.cpp:184
 #, kde-format
 msgid "Axes"
 msgstr "Eksenler"
 
-#: src/backend/core/column/Column.cpp:213
+#: src/backend/core/column/Column.cpp:210
 #, kde-format
 msgid "Calculations"
 msgstr "Hesaplamalar"
@@ -526,7 +526,7 @@ msgstr "Hesaplamalar"
 #. else	// Cancel
 #. return;
 #. }
-#: src/backend/core/column/Column.cpp:340
+#: src/backend/core/column/Column.cpp:337
 #: src/backend/core/column/columncommands.cpp:89
 #: src/frontend/dockwidgets/ColumnDock.cpp:363
 #: src/frontend/dockwidgets/ColumnDock.cpp:387
@@ -535,75 +535,75 @@ msgstr "Hesaplamalar"
 msgid "%1: change column type"
 msgstr "%1: Sütun türünü değiştir"
 
-#: src/backend/core/column/Column.cpp:472
+#: src/backend/core/column/Column.cpp:469
 #: src/backend/core/column/columncommands.cpp:578
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: Sütunu temizle"
 
-#: src/backend/core/column/Column.cpp:565
+#: src/backend/core/column/Column.cpp:562
 #, kde-format
 msgid "%1: set random values"
 msgstr "%1: Rastgele değerler ayarla"
 
-#: src/backend/core/column/Column.cpp:1052
+#: src/backend/core/column/Column.cpp:1049
 #: src/frontend/datasources/ImportFileWidget.cpp:1698
 #, kde-format
 msgid "Size: %1"
 msgstr "Boyut: %1"
 
 #. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/column/Column.cpp:1055
+#: src/backend/core/column/Column.cpp:1052
 #, kde-format
 msgid "Type: %1"
 msgstr "Tür: %1"
 
-#: src/backend/core/column/Column.cpp:1056
+#: src/backend/core/column/Column.cpp:1053
 #, kde-format
 msgid "Plot Designation: %1"
 msgstr "Çizim gösterimi: %1"
 
-#: src/backend/core/column/Column.cpp:1060
+#: src/backend/core/column/Column.cpp:1057
 #, kde-format
 msgid "Formula:"
 msgstr "Formül:"
 
-#: src/backend/core/column/Column.cpp:1082
+#: src/backend/core/column/Column.cpp:1079
 #, kde-format
 msgid "auto update: true"
 msgstr "kendiliğinden güncelle: doğru"
 
-#: src/backend/core/column/Column.cpp:1084
+#: src/backend/core/column/Column.cpp:1081
 #, kde-format
 msgid "auto update: false"
 msgstr "kendiliğinden güncelle: yanlış"
 
-#: src/backend/core/column/Column.cpp:1097
+#: src/backend/core/column/Column.cpp:1094
 #: src/backend/spreadsheet/Spreadsheet.cpp:242
 #, kde-format
 msgid "Used in Plots:"
 msgstr "Kullanıldığı çizimler:"
 
-#: src/backend/core/column/Column.cpp:1112
+#: src/backend/core/column/Column.cpp:1109
 #: src/backend/spreadsheet/Spreadsheet.cpp:259
 #, kde-format
 msgid "Used in Axes:"
 msgstr "Kullanıldığı eksenler:"
 
-#: src/backend/core/column/Column.cpp:1135
+#: src/backend/core/column/Column.cpp:1132
 #: src/backend/spreadsheet/Spreadsheet.cpp:280
 #, kde-format
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Kullanıldığı hesap tabloları:"
 
-#: src/backend/core/column/Column.cpp:1721
+#: src/backend/core/column/Column.cpp:1718
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "eksik veya geçersiz satır indeksi"
 
-#: src/backend/core/column/Column.cpp:1730
-#: src/backend/core/column/Column.cpp:1739
-#: src/backend/core/column/Column.cpp:1748
+#: src/backend/core/column/Column.cpp:1727
+#: src/backend/core/column/Column.cpp:1736
+#: src/backend/core/column/Column.cpp:1745
 #, kde-format
 msgid "invalid row value"
 msgstr "geçersiz satır değeri"
@@ -615,7 +615,7 @@ msgid "%1: change cell values"
 msgstr "%1: Hücre değerlerini değiştir"
 
 #: src/backend/core/column/columncommands.cpp:529
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2842
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2863
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: Çizim gösterimini ayarla"
@@ -2210,10 +2210,10 @@ msgstr "Anahtar"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #: src/frontend/matrix/MatrixView.cpp:618
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:187
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2575
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2595
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2612
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2628
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2596
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2616
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2633
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2649
 #: src/frontend/ui/dockwidgets/columndock.ui:182
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:65
 #, kde-format
@@ -2700,7 +2700,7 @@ msgstr "Stefan–Boltzmann sabiti"
 #: src/backend/gsl/constants.cpp:83
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:486
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:160
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:535
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:536
 #, kde-format
 msgid "Gauss"
 msgstr "Gauss"
@@ -6119,7 +6119,7 @@ msgstr "ep"
 
 #: src/backend/lib/Range.h:57 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:466
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:520
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:521
 #, kde-format
 msgid "Linear"
 msgstr "Doğrusal"
@@ -6171,13 +6171,13 @@ msgid "unexpected end of document"
 msgstr "belgenin beklenmedik sonu"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3846
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3882
 #, kde-format
 msgid "FITS image"
 msgstr "FITS görseli"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3846
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3882
 #, kde-format
 msgid "FITS table"
 msgstr "FITS tablosu"
@@ -6293,6 +6293,7 @@ msgid "%1: set cell values"
 msgstr "%1: Hücre değerlerini ayarla"
 
 #: src/backend/matrix/matrixcommands.h:316
+#: src/backend/spreadsheet/Spreadsheet.cpp:862
 #, kde-format
 msgid "%1: transpose"
 msgstr "%1: Transpoze et"
@@ -6581,7 +6582,7 @@ msgstr "Sanal Kısım"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:470
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:523
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:524
 #, kde-format
 msgid "Power"
 msgstr "Güç"
@@ -6745,14 +6746,14 @@ msgstr "İstatistik (Dağılımlar)"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:550
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:551
 #, kde-format
 msgid "Custom"
 msgstr "Özel"
 
 #: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:22
 #: src/backend/nsl/nsl_sf_stats.c:15
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:558
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:559
 #, kde-format
 msgid "Exponential"
 msgstr "Üstel"
@@ -6763,7 +6764,7 @@ msgid "Polynomial"
 msgstr "Polinominal"
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:532
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:533
 #, kde-format
 msgid "Inverse Exponential"
 msgstr "Ters Üstel"
@@ -6780,8 +6781,8 @@ msgstr "Gauss (normal)"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:490
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:538
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:564
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:539
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:565
 #, kde-format
 msgid "Cauchy-Lorentz"
 msgstr "Cauchy–Lorentz"
@@ -6813,7 +6814,7 @@ msgstr "Ters Tanjant"
 
 #: src/backend/nsl/nsl_fit.c:45
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:498
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:544
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:545
 #, kde-format
 msgid "Hyperbolic Tangent"
 msgstr "Hiperbolik Tanjant"
@@ -6993,7 +6994,7 @@ msgid "Integral"
 msgstr "İntegral"
 
 #: src/backend/nsl/nsl_sf_stats.c:13
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:555
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:556
 #, kde-format
 msgid "Gaussian (Normal)"
 msgstr "Gauss (Normal)"
@@ -7004,7 +7005,7 @@ msgid "Gaussian Tail"
 msgstr "Gauss Kuyruğu"
 
 #: src/backend/nsl/nsl_sf_stats.c:16
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:561
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:562
 #, kde-format
 msgid "Laplace"
 msgstr "Laplas"
@@ -7105,7 +7106,7 @@ msgid "Gumbel Type-2"
 msgstr "Gumbel Tip 2"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:570
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:571
 #, kde-format
 msgid "Poisson"
 msgstr "Poisson"
@@ -7116,7 +7117,7 @@ msgid "Bernoulli"
 msgstr "Bernoulli"
 
 #: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:25
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:573
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:574
 #, kde-format
 msgid "Binomial"
 msgstr "İki terimli"
@@ -7404,74 +7405,74 @@ msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: 1 sütun ekle"
 msgstr[1] "%1: %2 sütun ekle"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:753
+#: src/backend/spreadsheet/Spreadsheet.cpp:752
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: Seçili sütunları temizle"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:769
+#: src/backend/spreadsheet/Spreadsheet.cpp:768
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: Tüm maskeleri temizle"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:822
+#: src/backend/spreadsheet/Spreadsheet.cpp:978
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: %2 sütununu %3 konumundan %4 konumuna taşı."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:875
+#: src/backend/spreadsheet/Spreadsheet.cpp:1031
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: Sütunları sırala"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1242
+#: src/backend/spreadsheet/Spreadsheet.cpp:1398
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: Bağlantılı hesap tablosu kaldırıldı"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1654
+#: src/backend/spreadsheet/Spreadsheet.cpp:1810
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "çifte kesinlikli veri, %1 öge"
 msgstr[1] "sayasıl veri, %1 öge"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1657
+#: src/backend/spreadsheet/Spreadsheet.cpp:1813
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "tamsayı verisi, %1 öge"
 msgstr[1] "tamsayı verisi, %1 öge"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1660
+#: src/backend/spreadsheet/Spreadsheet.cpp:1816
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "büyük tamsayı verisi, %1 öge"
 msgstr[1] "büyük tamsayı verisi, %1 öge"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1663
+#: src/backend/spreadsheet/Spreadsheet.cpp:1819
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "metin verisi, %1 öge"
 msgstr[1] "metin verisi, %1 öge"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1666
+#: src/backend/spreadsheet/Spreadsheet.cpp:1822
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "ay verisi, %1 öge"
 msgstr[1] "ay verisi, %1 öge"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1669
+#: src/backend/spreadsheet/Spreadsheet.cpp:1825
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "gün verisi, %1 öge"
 msgstr[1] "gün verisi %1 öge"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1672
+#: src/backend/spreadsheet/Spreadsheet.cpp:1828
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -8223,7 +8224,7 @@ msgid "Non-Parametric"
 msgstr "Parametrik Olmayan"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:876
 #, kde-format
 msgid "Result"
 msgstr "Sonuç"
@@ -8238,9 +8239,9 @@ msgstr "Eğilim"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:117
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:153
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:176
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:700
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:722
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:730
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:696
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:718
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:726
 #, kde-format
 msgid "Seasonal"
 msgstr "Mevsimsel"
@@ -8248,13 +8249,13 @@ msgstr "Mevsimsel"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:123
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:160
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:181
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:762
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:758
 #, kde-format
 msgid "Residual"
 msgstr "Kalıntı"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:885
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:881
 #: src/frontend/ActionsManager.cpp:228 src/frontend/MainWin.cpp:1238
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
@@ -8425,47 +8426,47 @@ msgstr "Düşük geçiş uzunluğu tek sayı ve en az 3 olmalıdır."
 msgid "STL decomposition failed: %1"
 msgstr "STL ayrıştırılamadı: %1"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:600
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:598
 #, kde-format
 msgid "No periods specified for MSTL."
 msgstr "MSTL için belirtilen periyot yok."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:606
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:604
 #, kde-format
 msgid "Periods must be at least 2."
 msgstr "Periyotlar en az 2 olmalıdır."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:610
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:608
 #, kde-format
 msgid "Time-series has less than two periods."
 msgstr "Zaman dizilerinde ikiden az periyot var."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:616
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:614
 #, kde-format
 msgid "Iterations must be > 0."
 msgstr "Yineleme sayısı sıfırdan büyük olmalıdır."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:621
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:619
 #, kde-format
 msgid "Lambda must be between 0 and 1."
 msgstr "Lambda sıfır ile bir arasında olmalıdır."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:631
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:629
 #, kde-format
 msgid "Box-Cox transformation requires strictly positive data."
 msgstr "Box-Cox dönüşümü kesinlikle pozitif veri gerektiriyor."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:650
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:648
 #, kde-format
 msgid "MSTL decomposition failed: %1"
 msgstr "MSTL ayrıştırılamadı: %1"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:753
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:749
 #, kde-format
 msgid "Seasonal Component (Period: %1)"
 msgstr "Mevsimsel Bileşen (Periyot: %1)"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:754
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:750
 #, kde-format
 msgid "Seasonal, Period: %1"
 msgstr "Mevsimsel, Periyot: %1"
@@ -9167,7 +9168,7 @@ msgstr "Tümleştirme"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:422
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2140
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:511
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:512
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:72
 #, kde-format
 msgid "Smooth"
@@ -9176,7 +9177,7 @@ msgstr "Pürüzsüzleştir"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:648
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2178
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:633
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:634
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
@@ -9185,7 +9186,7 @@ msgstr "Uydur"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:510
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2218
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:513
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:514
 #, kde-format
 msgid "Fourier Filter"
 msgstr "Fourier Süzgeci"
@@ -9246,19 +9247,19 @@ msgstr ""
 "ekleyin (ölçekli, kaydırılmış vb.)."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:458
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:505
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:506
 #, kde-format
 msgid "Differentiate"
 msgstr "Türev Al"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:507
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:508
 #, kde-format
 msgid "Integrate"
 msgstr "Integral Al"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:460
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:509
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:510
 #, kde-format
 msgid "Interpolate"
 msgstr "Aradeğerle"
@@ -9269,13 +9270,13 @@ msgid "Convolute/Deconvolute"
 msgstr "Sar/Sarmayı Aç"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:474
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:526
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:527
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr "Üstel (derece 1)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:478
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:529
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:530
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr "Üstel (derece 2)"
@@ -9286,13 +9287,13 @@ msgid "Inverse exponential"
 msgstr "Ters üstel"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:494
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:541
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:542
 #, kde-format
 msgid "Arc Tangent"
 msgstr "Ark Tanjant"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:502
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:547
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:548
 #, kde-format
 msgid "Error Function"
 msgstr "Hata İşlevi"
@@ -11937,73 +11938,73 @@ msgid "Shift Down Y"
 msgstr "Aşağı Y Kaydır"
 
 #: src/frontend/ActionsManager.cpp:681
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:492
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:493
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Yukarı Satır Ekle"
 
 #: src/frontend/ActionsManager.cpp:684
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:493
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:494
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Aşağı Satır Ekle"
 
 #: src/frontend/ActionsManager.cpp:687
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:496
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:497
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "Seçili Satırları &Kaldır"
 
 #: src/frontend/ActionsManager.cpp:691
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:345
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:346
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Sola Sütun Ekle"
 
 #: src/frontend/ActionsManager.cpp:694
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:346
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:347
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Sağa Sütun Ekle"
 
 #: src/frontend/ActionsManager.cpp:697
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:349
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:350
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "Seçili Sütunları Sil"
 
 #: src/frontend/ActionsManager.cpp:701
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:479
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "&Sort..."
 msgstr "&Sırala…"
 
 #: src/frontend/ActionsManager.cpp:702
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:480
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:481
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "Birden çok sütunu birlikte sırala"
 
 #: src/frontend/ActionsManager.cpp:705
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:481
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "&Artan Biçimde Sırala"
 
 #: src/frontend/ActionsManager.cpp:706
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:482
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "Seçili sütunları ayrı ayrı artan düzende sırala"
 
 #: src/frontend/ActionsManager.cpp:709
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:483
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:484
 #, kde-format
 msgid "Sort &Descending"
 msgstr "A&zalan Biçimde Sırala"
 
 #: src/frontend/ActionsManager.cpp:710
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:484
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:485
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "Seçili sütunları ayrı ayrı azalan düzende sırala"
@@ -12300,16 +12301,16 @@ msgid "Curve"
 msgstr "Eğri"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4089
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4144
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4125
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4180
 #: src/frontend/worksheet/WorksheetView.cpp:2145
 #, kde-format
 msgid "Failed to export"
 msgstr "Dışa aktarılamadı"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4089
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4144
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4125
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4180
 #: src/frontend/worksheet/WorksheetView.cpp:2145
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -14402,6 +14403,42 @@ msgstr "Sütun:"
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr "%1 Kutu çizimler: “%2” şablonu yüklendi"
 
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:142
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:570
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:55
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:205
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:366
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:404
+#: src/frontend/dockwidgets/ImageDock.cpp:54
+#: src/frontend/dockwidgets/ImageDock.cpp:144
+#: src/frontend/dockwidgets/WorksheetDock.cpp:45
+#: src/frontend/dockwidgets/WorksheetDock.cpp:171
+#: src/frontend/widgets/LabelWidget.cpp:111
+#: src/frontend/widgets/LabelWidget.cpp:443
+#: src/frontend/widgets/LabelWidget.cpp:978
+#: src/frontend/widgets/LabelWidget.cpp:1016
+#, kde-format
+msgid "%v cm"
+msgstr ""
+
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:144
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:583
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:57
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:221
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:368
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:406
+#: src/frontend/dockwidgets/ImageDock.cpp:56
+#: src/frontend/dockwidgets/ImageDock.cpp:152
+#: src/frontend/dockwidgets/WorksheetDock.cpp:47
+#: src/frontend/dockwidgets/WorksheetDock.cpp:183
+#: src/frontend/widgets/LabelWidget.cpp:113
+#: src/frontend/widgets/LabelWidget.cpp:451
+#: src/frontend/widgets/LabelWidget.cpp:980
+#: src/frontend/widgets/LabelWidget.cpp:1018
+#, kde-format
+msgid "%v in"
+msgstr ""
+
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:255
 #, kde-format
 msgid "Save current plot area definition as template"
@@ -14651,7 +14688,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the X position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%%v"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:400
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:623
@@ -14662,7 +14699,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the Y position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%%v"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:805
 #, kde-format
@@ -15837,7 +15874,7 @@ msgstr "Daha yüksek kesim:"
 #, kde-format
 msgctxt "@label:spinbox Suffix for the frequency"
 msgid "%v Hz"
-msgstr ""
+msgstr "%v Hz"
 
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:424
 #, kde-format
@@ -17189,8 +17226,8 @@ msgid "%1 printed"
 msgstr "%1 yazdırıldı"
 
 #: src/frontend/MainWin.cpp:1212
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3814
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3815
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3850
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3851
 #, kde-format
 msgid "%1"
 msgstr "%1"
@@ -17313,13 +17350,13 @@ msgid "Const Values"
 msgstr "Sabit Değerler"
 
 #: src/frontend/matrix/MatrixView.cpp:137
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:350
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:351
 #, kde-format
 msgid "Clear Content"
 msgstr "İçeriği Temizle"
 
 #: src/frontend/matrix/MatrixView.cpp:138
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:334
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:335
 #, kde-format
 msgid "&Go to Cell..."
 msgstr "Hücreye G&it…"
@@ -17406,20 +17443,20 @@ msgid "Clea&r Rows"
 msgstr "Satırla&rı Temizle"
 
 #: src/frontend/matrix/MatrixView.cpp:244
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:589
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:590
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:82
 #, kde-format
 msgid "Selection"
 msgstr "Seçim"
 
 #: src/frontend/matrix/MatrixView.cpp:266
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:713
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:714
 #, kde-format
 msgid "Generate Data"
 msgstr "Veri Üret"
 
 #: src/frontend/matrix/MatrixView.cpp:271
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:729
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:730
 #, kde-format
 msgid "Manipulate Data"
 msgstr "Veriyle Oyna"
@@ -17468,7 +17505,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: Seçili hücreleri kes"
 
 #: src/frontend/matrix/MatrixView.cpp:685
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1850
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1871
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: Panodan yapıştır"
@@ -17593,19 +17630,19 @@ msgid "Assistants"
 msgstr "Yardımcılar"
 
 #: src/frontend/notebook/NotebookView.cpp:286
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:619
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:620
 #, kde-format
 msgid "Plot Data"
 msgstr "Veriyi Çiz"
 
 #: src/frontend/notebook/NotebookView.cpp:290
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:684
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:685
 #, kde-format
 msgid "Statistical Analysis"
 msgstr "İstatistiksel Çözümleme"
 
 #: src/frontend/notebook/NotebookView.cpp:291
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:685
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:686
 #, kde-format
 msgid "Hypothesis Test"
 msgstr "Hipotez Testi"
@@ -17631,7 +17668,7 @@ msgid "Ready"
 msgstr "Hazır"
 
 #: src/frontend/notebook/NotebookView.cpp:375
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:971
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:973
 #, kde-format
 msgid "Hypothesis Test for %1"
 msgstr "%1 için Hipotez Testi"
@@ -17752,7 +17789,7 @@ msgid "Search/Filter Options"
 msgstr "Arama/Süzme Seçenekleri"
 
 #: src/frontend/ProjectExplorer.cpp:246 src/frontend/ProjectExplorer.cpp:394
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1103
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1107
 #, kde-format
 msgid "Columns"
 msgstr "Sütunlar"
@@ -17927,11 +17964,10 @@ msgid "Preferences    [Changed]"
 msgstr "Tercihler [Değiştirildi]"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
-#, fuzzy, kde-format
-#| msgid "x, min"
+#, kde-format
 msgctxt "@label:spinbox Suffix for the auto save interval"
 msgid "%v min"
-msgstr "x, en küçük"
+msgstr "%v dak"
 
 #: src/frontend/SettingsGeneralPage.cpp:216
 #, kde-format
@@ -18935,10 +18971,9 @@ msgid "Fourier Filter of '%1'"
 msgstr "“%1” Ögesinin Fourier Süzgeci"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:801
-#, fuzzy, kde-format
-#| msgid "Baseline correction for '%1'"
+#, kde-format
 msgid "Baseline Correction of '%1'"
-msgstr "“%1” için taban çizgisi düzeltmesi"
+msgstr "“%1” Taban Çizgisi Düzeltmesi"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:830
 #, kde-format
@@ -18977,30 +19012,26 @@ msgid "Sample"
 msgstr "Örneklem"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1157
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "New Plot Area in an Existing Worksheet"
-msgstr "Var Olan Çalışma Sayfasındaki &Yeni Çizim Alanı"
+msgstr "Var Olan Çalışma Sayfasında Yeni Çizim Alanı"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1158
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:202
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Area in a New Worksheet"
-msgstr "Yeni Çalışma Sayfasındaki Yeni Çizim Alanı"
+msgstr "Yeni Çalışma Sayfasında Yeni Çizim Alanı"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1165
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "New Plot Areas in an Existing Worksheet"
-msgstr "Var Olan Çalışma Sayfasındaki &Yeni Çizim Alanı"
+msgstr "Var Olan Çalışma Sayfasında Yeni Çizim Alanları"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1166
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Areas in a New Worksheet"
-msgstr "Yeni Çalışma Sayfasındaki Yeni Çizim Alanı"
+msgstr "Yeni Çalışma Sayfasında Yeni Çizim Alanları"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1193
 #, kde-format
@@ -19396,15 +19427,15 @@ msgid "Flatten Columns"
 msgstr "Sütunları Düzleştir"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:329
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1204
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1591
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1208
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1595
 #, kde-format
 msgid "Show Comments"
 msgstr "Açıklamaları Göster"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:330
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1215
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1596
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1219
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1600
 #, kde-format
 msgid "Show Sparklines"
 msgstr "Kıvılcım Çizgilerini Göster"
@@ -19419,348 +19450,353 @@ msgstr "Hesap Tablosunu Temizle"
 msgid "Clear Masks"
 msgstr "Maskeleri Temizle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:335
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:334
+#, fuzzy, kde-format
+#| msgid "&Transpose"
+msgid "Transpose"
+msgstr "&Transpoze Et"
+
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:336
 #, kde-format
 msgid "&Search"
 msgstr "&Ara"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:337
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:338
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:225
 #, kde-format
 msgid "&Replace"
 msgstr "&Değiştir"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:339
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:485
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:340
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:486
 #, kde-format
 msgid "Column Statistics..."
 msgstr "Sütun İstatistikleri…"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:341
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:342
 #, kde-format
 msgid "Column Statistics Spreadsheet"
 msgstr "Sütun İstatistikleri Sayfası"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:347
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:348
 #, kde-format
 msgid "Insert Multiple Columns Left"
 msgstr "Sola Birden Çok Sütun Ekle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:348
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:349
 #, kde-format
 msgid "Insert Multiple Columns Right"
 msgstr "Sağa Birden Çok Sütun Ekle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:351
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1681
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:352
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1702
 #, kde-format
 msgid "Freeze Column"
 msgstr "Sütunu Dondur"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:386
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:387
 #, kde-format
 msgid "Add"
 msgstr "Ekle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:388
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:389
 #, kde-format
 msgid "Subtract"
 msgstr "Çıkar"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:390
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:391
 #, kde-format
 msgid "Multiply"
 msgstr "Çarp"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:392
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:393
 #, kde-format
 msgid "Divide"
 msgstr "Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:394
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:395
 #, kde-format
 msgid "Drop Values"
 msgstr "Değerleri Bırak"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:395
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:396
 #, kde-format
 msgid "Mask Values"
 msgstr "Değerleri Maskele"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:397
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:398
 #, kde-format
 msgid "Reverse"
 msgstr "Ters Çevir"
 
 #. i18n("Join"), this);
 #. algorithms - baseline subtraction, outliar removal, etc.
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:401
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:402
 #, kde-format
 msgid "Subtract Baseline"
 msgstr "Taban Çizgisini Çıkar"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:407
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:408
 #, kde-format
 msgid "Divide by Sum"
 msgstr "Toplama Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:410
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:411
 #, kde-format
 msgid "Divide by Min"
 msgstr "En Küçük Değere Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:413
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:414
 #, kde-format
 msgid "Divide by Max"
 msgstr "En Büyük Değere Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:416
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:417
 #, kde-format
 msgid "Divide by Count"
 msgstr "Sayıma Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:419
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:420
 #, kde-format
 msgid "Divide by Mean"
 msgstr "Ortalamaya Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:422
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:423
 #, kde-format
 msgid "Divide by Median"
 msgstr "Ortancayla Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:425
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:426
 #, kde-format
 msgid "Divide by Mode"
 msgstr "Kipe Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:428
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:429
 #, kde-format
 msgid "Divide by Range"
 msgstr "Erime Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:431
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:432
 #, kde-format
 msgid "Divide by SD"
 msgstr "SD ile Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:434
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:435
 #, kde-format
 msgid "Divide by MAD"
 msgstr "MAD ile Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:437
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:438
 #, kde-format
 msgid "Divide by IQR"
 msgstr "IQR ile Böl"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:440
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:441
 #, kde-format
 msgid "(x-Mean)/SD"
 msgstr "(x Ortalaması)/SD"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:443
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:444
 #, kde-format
 msgid "(x-Median)/MAD"
 msgstr "(x Ortancası)/MAD"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:446
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:447
 #, kde-format
 msgid "(x-Median)/IQR"
 msgstr "(x Ortancası)/IQR"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:449
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:450
 #, kde-format
 msgid "Rescale to [a, b]"
 msgstr "[a, b]’ye yeniden ölçekle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:488
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:489
 #, kde-format
 msgid "Heatmap"
 msgstr "Isı Haritası"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:494
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
 msgid "Insert Multiple Rows Above"
 msgstr "Yukarı Birden Çok Satır Ekle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:495
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:496
 #, kde-format
 msgid "Insert Multiple Rows Below"
 msgstr "Aşağı Birden Çok Satır Ekle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:497
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:498
 #, kde-format
 msgid "Delete Rows With Missing Values"
 msgstr "Değer Olmayan Satırları Sil"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:498
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:499
 #, kde-format
 msgid "Mask Rows With Missing Values"
 msgstr "Değer Olmayan Satırları Maskele"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:499
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:500
 #, kde-format
 msgid "Row Statisti&cs"
 msgstr "Satır İstati&stikleri"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:503
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:504
 #, kde-format
 msgid "Simplify Line"
 msgstr "Çizgi Basitleştir"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:515
-#, fuzzy, kde-format
-#| msgid "Subtract Baseline"
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:516
+#, kde-format
 msgid "Correct Baseline"
-msgstr "Taban Çizgisini Çıkar"
+msgstr "Taban Çizgisini Düzelt"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:567
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:568
 #, kde-format
 msgid "Log-normal"
 msgstr "Log Normal"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:577
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2280
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:578
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2301
 #, kde-format
 msgid "Seasonal Decomposition"
 msgstr "Mevsimsel Ayrıştırma"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:623
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:624
 #, kde-format
 msgid "Conditional Formatting"
 msgstr "Koşullu Biçimlendirme"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:652
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:653
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
 msgstr "Dağılıma Uyum"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:666
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:667
 #, kde-format
 msgid "Analyze and Plot Data"
 msgstr "Veriyi Çözümle ve Çiz"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:691
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:692
 #, kde-format
 msgid "Time Series Analysis"
 msgstr "Zaman Dizisi Çözümlemesi"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:695
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:696
 #, kde-format
 msgid "Set Column As"
 msgstr "Sütunu Farklı Ayarla"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:765
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:766
 #, kde-format
 msgid "Normalize"
 msgstr "Normalleştir"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:788
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:789
 #, kde-format
 msgid "Ladder of Powers"
 msgstr "Üsler Merdiveni"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1202
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1589
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1206
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1593
 #, kde-format
 msgid "Hide Comments"
 msgstr "Açıklamaları Gizle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1213
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1594
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1217
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1598
 #, kde-format
 msgid "Hide Sparklines"
 msgstr "Kıvılcım Çizgilerini Gizle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1685
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1706
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "Sütunları Çöz"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1772
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1793
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: Seçili hücreleri kes"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2085
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2106
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Bu işlemi bitirebilmek için yeterli bellek yok."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2098
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2119
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: Seçili nesneleri maskele"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2129
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2150
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: Seçili hücrelerin maskelerini kaldır"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2288
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2299
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2309
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2320
 #, kde-format
 msgid "Seasonal Decomposition for %1"
 msgstr "%1 için Mevsimsel Ayrıştırma"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2320
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2341
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: Hücreleri satır numarasıyla doldur"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2384
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2405
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: Sütunu satır numaralarıyla doldur"
 msgstr[1] "%1: Sütunları satır numaralarıyla doldur"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2427
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2448
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: Hücreleri rastgele değerlerle doldur"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2564
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2585
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: Hücreleri sabit değerlerle doldur"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2574
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2595
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2612
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2628
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2616
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2633
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2649
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Seçimi sabit değerle doldur"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2707
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2745
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2728
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2766
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Boş sütunlar ekle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2708
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2746
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2729
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2767
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Eklenecek sütun sayısını gir"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2779
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2800
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: Seçili sütunları kaldır"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2875
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2896
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: Sütunu ters çevir"
 msgstr[1] "%1: Sütunları ters çevir"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2947
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2968
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -19768,217 +19804,230 @@ msgid ""
 msgstr ""
 "Seçili sütunlarda farklı veri türleri var ve bu yüzden düzleştirilemiyorlar. "
 
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
+#, fuzzy, kde-format
+#| msgid "The file already exists. Do you really want to overwrite it?"
+msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+msgstr "Dosya halihazırda var. Üzerine yazmayı gerçekten istiyor musunuz?"
+
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2983
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Print Spreadsheet"
+msgid "Transpose Spreadsheet"
+msgstr "Hesap Tablosunu Yazdır"
+
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3019
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: Sütunları normalleştir"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3003
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3039
 #, kde-format
 msgid "Sum = 0"
 msgstr "Toplam = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3014
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3050
 #, kde-format
 msgid "Min = 0"
 msgstr "En Küçük = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3025
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3061
 #, kde-format
 msgid "Max = 0"
 msgstr "En Büyük = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3036
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3072
 #, kde-format
 msgid "Count = 0"
 msgstr "Sayım = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3047
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3083
 #, kde-format
 msgid "Mean = 0"
 msgstr "Ortalama = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3058
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3094
 #, kde-format
 msgid "Median = 0"
 msgstr "Ortanca = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3070
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3106
 #, kde-format
 msgid "Mode = 0"
 msgstr "Kip = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3072
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3108
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "“Kip tanımlanmamış”"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3083
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3119
 #, kde-format
 msgid "Range = 0"
 msgstr "Erim = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3094
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3128
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3130
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3164
 #, kde-format
 msgid "SD = 0"
 msgstr "SD = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3105
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3140
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3141
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3176
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3116
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3152
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3188
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3164
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3200
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "En büyük − En küçük = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3183
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3219
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normalleştirme olanaklı değil"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3195
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3231
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: Sütunları üs dönüştür"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3311
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3347
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: Sütun istatistikleri"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3342
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3378
 #, kde-format
 msgid "Selection in %1"
 msgstr "%1 İçindeki Seçim"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3385
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3421
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: Satır istatistikleri"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3395
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3431
 #, kde-format
 msgid "Row %1"
 msgstr "%1. Satır"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3420
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3456
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3492
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Birden çok satır ekle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3421
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3457
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3493
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Eklenecek satır sayısını gir"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3492
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3528
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: Seçili satırları kaldır"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3527
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3563
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: Seçili hücreleri temizle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3781
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3817
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr "Seçili 1: %1 satır, %2 sütun"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3826
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr "Seçili: %1 hücre"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3809
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3845
 #, kde-format
 msgid "row"
 msgid_plural "rows"
 msgstr[0] "satır"
 msgstr[1] "satır"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3810
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3846
 #, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "sütun"
 msgstr[1] "sütun"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3811
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3847
 #, kde-format
 msgid "cells"
 msgstr "hücre"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3812
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3848
 #, kde-format
 msgid "masked value"
 msgstr "maskelenmiş değer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3812
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3848
 #, kde-format
 msgid "masked values"
 msgstr "maskelenmiş değer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3813
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3849
 #, kde-format
 msgid "missing value"
 msgstr "eksik değer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3813
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3849
 #, kde-format
 msgid "missing values"
 msgstr "eksik değer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3814
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3850
 #, kde-format
 msgid " , "
 msgstr " , "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3815
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3851
 #, kde-format
 msgid ", "
 msgstr ", "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3819
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3855
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr "Seçili: %1 %2, %3 %4%5 %6 %7 %8"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3829
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3865
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Seçili: %1 %2%3 %4 %5 %6"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3908
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3944
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Hesap Tablosunu Yazdır"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4523
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4559
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "%1 SQLite veri tabanı oluşturulamadı.."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4555
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4591
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "%1 SQLite veri tabanında tablo oluşturulamadı.."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4610
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4646
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Tabloya veriler eklenemedi."
@@ -25192,10 +25241,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompressed)
 #: src/frontend/ui/settingsgeneralpage.ui:276
-#, fuzzy, kde-format
-#| msgid "Save in uncompressed format"
+#, kde-format
 msgid "Save in compressed format"
-msgstr "Sıkıştırılmamış biçimde kaydet"
+msgstr "Sıkıştırılmış biçimde kaydet"
 
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/frontend/ui/settingsgeneralpage.ui:283
@@ -25618,17 +25666,15 @@ msgstr "Özgün Veri için Çizim Oluştur"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:229
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "&New Plot Area in an Existing Worksheet"
-msgstr "Var Olan Çalışma Sayfasındaki &Yeni Çizim Alanı"
+msgstr "Var Olan Çalışma Sayfasında &Yeni Çizim Alanı"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheets)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:236
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Areas in Multiple New Worksheets"
-msgstr "Yeni Çalışma Sayfasındaki Yeni Çizim Alanı"
+msgstr "Yeni Çalışma Sayfalarındaki Yeni Çizim Alanları"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter2)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:41
