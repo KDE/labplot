@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-08 00:38+0000\n"
-"PO-Revision-Date: 2026-01-06 01:59+0100\n"
+"POT-Creation-Date: 2026-01-09 00:39+0000\n"
+"PO-Revision-Date: 2026-01-09 01:12+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -418,7 +418,7 @@ msgstr "tipo de filtro incompatible"
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1706
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1910
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1909
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "elemento «%1» desconocido"
@@ -598,14 +598,14 @@ msgstr "Usado en ejes:"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Usado en cálculos de la hoja de cálculo:"
 
-#: src/backend/core/column/Column.cpp:1718
+#: src/backend/core/column/Column.cpp:1717
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "falta el índice de la fila, o no es válido"
 
-#: src/backend/core/column/Column.cpp:1727
-#: src/backend/core/column/Column.cpp:1736
-#: src/backend/core/column/Column.cpp:1745
+#: src/backend/core/column/Column.cpp:1726
+#: src/backend/core/column/Column.cpp:1735
+#: src/backend/core/column/Column.cpp:1744
 #, kde-format
 msgid "invalid row value"
 msgstr "valor de fila no válido"
@@ -1291,7 +1291,7 @@ msgstr "Ha fallado la apertura del dispositivo/archivo o está vacío."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:334
-#: src/backend/datasources/filters/XLSXFilter.cpp:512
+#: src/backend/datasources/filters/XLSXFilter.cpp:511
 #, kde-format
 msgid "Not enough memory."
 msgstr "No hay memoria suficiente."
@@ -2178,7 +2178,7 @@ msgid "Sheet count: %1"
 msgstr "Número de hojas: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:629
+#: src/backend/datasources/filters/XLSXFilter.cpp:628
 #, kde-format
 msgid "No sheet selected."
 msgstr "No se ha seleccionado ninguna hoja."
@@ -2461,7 +2461,7 @@ msgstr "Tiempo_10µs"
 msgid "Sheets: "
 msgstr "Hojas: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:633
+#: src/backend/datasources/filters/XLSXFilter.cpp:632
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Se ha indicado una región no válida."
@@ -14478,7 +14478,7 @@ msgstr "%1 diagramas de cajas: plantilla «%2» cargada"
 #: src/frontend/widgets/LabelWidget.cpp:1016
 #, kde-format
 msgid "%v cm"
-msgstr ""
+msgstr "%v cm"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:144
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:583
@@ -14496,7 +14496,7 @@ msgstr ""
 #: src/frontend/widgets/LabelWidget.cpp:1018
 #, kde-format
 msgid "%v in"
-msgstr ""
+msgstr "%v in"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:255
 #, kde-format
@@ -18301,7 +18301,7 @@ msgstr "Medio (5×5 cm)"
 msgid "Big (7cm x 7cm)"
 msgstr "Grande (7×7 cm)"
 
-#: src/frontend/SettingsWorksheetPage.cpp:151
+#: src/frontend/SettingsWorksheetPage.cpp:150
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
@@ -18309,22 +18309,22 @@ msgstr ""
 "No se ha encontrado o seleccionado ninguna instalación de LaTeX. La "
 "composición tipográfica con LaTeX no es posible."
 
-#: src/frontend/SettingsWorksheetPage.cpp:161
+#: src/frontend/SettingsWorksheetPage.cpp:160
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr ""
 "No se ha encontrado «convert». La composición tipográfica con LaTeX no es "
 "posible."
 
-#: src/frontend/SettingsWorksheetPage.cpp:167
+#: src/frontend/SettingsWorksheetPage.cpp:166
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr ""
 "No se ha encontrado «pvips». La composición tipográfica con LaTeX no es "
 "posible."
 
-#: src/frontend/SettingsWorksheetPage.cpp:174
-#: src/frontend/SettingsWorksheetPage.cpp:180
+#: src/frontend/SettingsWorksheetPage.cpp:173
+#: src/frontend/SettingsWorksheetPage.cpp:179
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr ""
@@ -19557,10 +19557,9 @@ msgid "Clear Masks"
 msgstr "Borrar máscaras"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:334
-#, fuzzy, kde-format
-#| msgid "&Transpose"
+#, kde-format
 msgid "Transpose"
-msgstr "&Trasponer"
+msgstr "Trasponer"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:336
 #, kde-format
@@ -19913,16 +19912,14 @@ msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
 #, fuzzy, kde-format
-#| msgid "The file already exists. Do you really want to overwrite it?"
-msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
-msgstr "El archivo ya existe. ¿Desea sobrescribirlo?"
+#| msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
+msgstr "La hoja de cálculo tiene %1 filas. ¿Realmente quiere trasponerla?"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2983
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgid "Transpose Spreadsheet"
-msgstr "Imprimir hoja de cálculo"
+msgstr "Trasponer hoja de cálculo"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3019
 #, kde-format
