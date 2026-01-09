@@ -392,7 +392,7 @@ QVector<AspectType> Column::dropableOn() const {
  * Use a filter to convert a column to another type.
  */
 bool Column::copy(const AbstractColumn* other) {
-	Q_CHECK_PTR(other);
+	Q_ASSERT(other);
 	if (other->columnMode() != columnMode())
 		return false;
 	exec(new ColumnFullCopyCmd(d, other));
@@ -410,7 +410,7 @@ bool Column::copy(const AbstractColumn* other) {
  * \param num_rows the number of rows to copy
  */
 bool Column::copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) {
-	Q_CHECK_PTR(source);
+	Q_ASSERT(source);
 	if (source->columnMode() != columnMode())
 		return false;
 	exec(new ColumnPartialCopyCmd(d, source, source_start, dest_start, num_rows));
