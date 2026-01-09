@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-08 00:38+0000\n"
-"PO-Revision-Date: 2026-01-07 19:58+0300\n"
+"POT-Creation-Date: 2026-01-09 00:39+0000\n"
+"PO-Revision-Date: 2026-01-08 17:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -416,7 +416,7 @@ msgstr "uyumsuz süzgeç türü"
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1706
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1910
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1909
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "bilinmeyen öge “%1”"
@@ -596,14 +596,14 @@ msgstr "Kullanıldığı eksenler:"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Kullanıldığı hesap tabloları:"
 
-#: src/backend/core/column/Column.cpp:1718
+#: src/backend/core/column/Column.cpp:1717
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "eksik veya geçersiz satır indeksi"
 
-#: src/backend/core/column/Column.cpp:1727
-#: src/backend/core/column/Column.cpp:1736
-#: src/backend/core/column/Column.cpp:1745
+#: src/backend/core/column/Column.cpp:1726
+#: src/backend/core/column/Column.cpp:1735
+#: src/backend/core/column/Column.cpp:1744
 #, kde-format
 msgid "invalid row value"
 msgstr "geçersiz satır değeri"
@@ -1286,7 +1286,7 @@ msgstr "Aygıt/dosya açılamadı veya boş."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:334
-#: src/backend/datasources/filters/XLSXFilter.cpp:512
+#: src/backend/datasources/filters/XLSXFilter.cpp:511
 #, kde-format
 msgid "Not enough memory."
 msgstr "Yetersiz bellek."
@@ -2167,7 +2167,7 @@ msgid "Sheet count: %1"
 msgstr "Sayfa sayısı: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:629
+#: src/backend/datasources/filters/XLSXFilter.cpp:628
 #, kde-format
 msgid "No sheet selected."
 msgstr "Seçili sayfa yok."
@@ -2450,7 +2450,7 @@ msgstr "Zaman_10µs"
 msgid "Sheets: "
 msgstr "Sayfalar: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:633
+#: src/backend/datasources/filters/XLSXFilter.cpp:632
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Geçersiz bölge belirtildi."
@@ -14419,7 +14419,7 @@ msgstr "%1 Kutu çizimler: “%2” şablonu yüklendi"
 #: src/frontend/widgets/LabelWidget.cpp:1016
 #, kde-format
 msgid "%v cm"
-msgstr ""
+msgstr "%v cm"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:144
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:583
@@ -14437,7 +14437,7 @@ msgstr ""
 #: src/frontend/widgets/LabelWidget.cpp:1018
 #, kde-format
 msgid "%v in"
-msgstr ""
+msgstr "%v inç"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:255
 #, kde-format
@@ -18211,24 +18211,24 @@ msgstr "Orta (5 cm × 5 cm)"
 msgid "Big (7cm x 7cm)"
 msgstr "Büyük (7 cm × 7 cm)"
 
-#: src/frontend/SettingsWorksheetPage.cpp:151
+#: src/frontend/SettingsWorksheetPage.cpp:150
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
 msgstr "LaTeX kurulumu bulunamadı veya seçilmedi. LaTeX dizgisi yapılamıyor."
 
-#: src/frontend/SettingsWorksheetPage.cpp:161
+#: src/frontend/SettingsWorksheetPage.cpp:160
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr "“convert” bulunamadı. LaTeX dizgisi yapılamıyor."
 
-#: src/frontend/SettingsWorksheetPage.cpp:167
+#: src/frontend/SettingsWorksheetPage.cpp:166
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr "“dvips” bulunamadı. LaTeX dizgisi yapılamıyor."
 
-#: src/frontend/SettingsWorksheetPage.cpp:174
-#: src/frontend/SettingsWorksheetPage.cpp:180
+#: src/frontend/SettingsWorksheetPage.cpp:173
+#: src/frontend/SettingsWorksheetPage.cpp:179
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Ghostscript bulunamadı. LaTeX dizgisi yapılamıyor."
@@ -19451,10 +19451,9 @@ msgid "Clear Masks"
 msgstr "Maskeleri Temizle"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:334
-#, fuzzy, kde-format
-#| msgid "&Transpose"
+#, kde-format
 msgid "Transpose"
-msgstr "&Transpoze Et"
+msgstr "Transpoze Et"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:336
 #, kde-format
@@ -19806,16 +19805,15 @@ msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
 #, fuzzy, kde-format
-#| msgid "The file already exists. Do you really want to overwrite it?"
-msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
-msgstr "Dosya halihazırda var. Üzerine yazmayı gerçekten istiyor musunuz?"
+#| msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
+msgstr ""
+"Hesap tablosunda %1 satır var. Transpoze etmeyi gerçekten istiyor musunuz?"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2983
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgid "Transpose Spreadsheet"
-msgstr "Hesap Tablosunu Yazdır"
+msgstr "Hesap Tablosunu Transpoze Et"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3019
 #, kde-format

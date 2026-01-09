@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-08 00:38+0000\n"
-"PO-Revision-Date: 2026-01-05 11:35+0100\n"
+"POT-Creation-Date: 2026-01-09 00:39+0000\n"
+"PO-Revision-Date: 2026-01-08 17:47+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -414,7 +414,7 @@ msgstr "incompatibel filtertype"
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1706
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1910
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1909
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "onbekend element '%1'"
@@ -594,14 +594,14 @@ msgstr "Gebruikt in Assen:"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Gebruikt in rekenbladberekeningen:"
 
-#: src/backend/core/column/Column.cpp:1718
+#: src/backend/core/column/Column.cpp:1717
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "ongeldige of ontbrekende rijindex"
 
-#: src/backend/core/column/Column.cpp:1727
-#: src/backend/core/column/Column.cpp:1736
-#: src/backend/core/column/Column.cpp:1745
+#: src/backend/core/column/Column.cpp:1726
+#: src/backend/core/column/Column.cpp:1735
+#: src/backend/core/column/Column.cpp:1744
 #, kde-format
 msgid "invalid row value"
 msgstr "ongeldige rijwaarde"
@@ -1283,7 +1283,7 @@ msgstr "Openen van het apparaat/bestand is mislukt of het is leeg."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:334
-#: src/backend/datasources/filters/XLSXFilter.cpp:512
+#: src/backend/datasources/filters/XLSXFilter.cpp:511
 #, kde-format
 msgid "Not enough memory."
 msgstr "Niet genoeg werkgeheugen."
@@ -2163,7 +2163,7 @@ msgid "Sheet count: %1"
 msgstr "Aantal rekenbladen: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:629
+#: src/backend/datasources/filters/XLSXFilter.cpp:628
 #, kde-format
 msgid "No sheet selected."
 msgstr "Geen rekenblad geselecteerd."
@@ -2446,7 +2446,7 @@ msgstr "Time_10µs"
 msgid "Sheets: "
 msgstr "Rekenbladen:"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:633
+#: src/backend/datasources/filters/XLSXFilter.cpp:632
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Ongeldig gebied gespecificeerd."
@@ -14451,7 +14451,7 @@ msgstr "%1 box-plots: sjabloon \"%2\" geladen"
 #: src/frontend/widgets/LabelWidget.cpp:1016
 #, kde-format
 msgid "%v cm"
-msgstr ""
+msgstr "%v cm"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:144
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:583
@@ -14469,7 +14469,7 @@ msgstr ""
 #: src/frontend/widgets/LabelWidget.cpp:1018
 #, kde-format
 msgid "%v in"
-msgstr ""
+msgstr "%v in"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:255
 #, kde-format
@@ -18266,7 +18266,7 @@ msgstr "Middel (5cm x 5cm)"
 msgid "Big (7cm x 7cm)"
 msgstr "Groot (7cm x 7cm)"
 
-#: src/frontend/SettingsWorksheetPage.cpp:151
+#: src/frontend/SettingsWorksheetPage.cpp:150
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
@@ -18274,18 +18274,18 @@ msgstr ""
 "Geen installatie van LaTeX gevonden of geselecteerd. LaTeX lettertypes "
 "onmogelijk."
 
-#: src/frontend/SettingsWorksheetPage.cpp:161
+#: src/frontend/SettingsWorksheetPage.cpp:160
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr "Geen 'convert' gevonden. LaTeX lettertypes onmogelijk."
 
-#: src/frontend/SettingsWorksheetPage.cpp:167
+#: src/frontend/SettingsWorksheetPage.cpp:166
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr "Geen 'dvips' gevonden. LaTeX lettertypes onmogelijk."
 
-#: src/frontend/SettingsWorksheetPage.cpp:174
-#: src/frontend/SettingsWorksheetPage.cpp:180
+#: src/frontend/SettingsWorksheetPage.cpp:173
+#: src/frontend/SettingsWorksheetPage.cpp:179
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Geen Ghostscript gevonden. LaTeX lettertypes onmogelijk."
@@ -19513,10 +19513,9 @@ msgid "Clear Masks"
 msgstr "Maskers wissen"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:334
-#, fuzzy, kde-format
-#| msgid "&Transpose"
+#, kde-format
 msgid "Transpose"
-msgstr "&Transponeren"
+msgstr "Transponeer"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:336
 #, kde-format
@@ -19869,16 +19868,14 @@ msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
 #, fuzzy, kde-format
-#| msgid "The file already exists. Do you really want to overwrite it?"
-msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
-msgstr "Het bestand bestaat al. Wilt u het werkelijk overschrijven?"
+#| msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
+msgstr "Het rekenblad heeft %1 rijen. Wilt u het omzetten?"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2983
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgid "Transpose Spreadsheet"
-msgstr "Rekenblad afdrukken"
+msgstr "Rekenblad omzetten"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3019
 #, kde-format

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-08 00:38+0000\n"
+"POT-Creation-Date: 2026-01-09 00:39+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -416,7 +416,7 @@ msgstr "असङ्गत फ़िल्टर प्रकार"
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1706
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1910
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1909
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "अज्ञात तत्त्वं '%1'."
@@ -599,14 +599,14 @@ msgstr "प्रयुक्तम्"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "गणनाः रक्षन्तु :"
 
-#: src/backend/core/column/Column.cpp:1718
+#: src/backend/core/column/Column.cpp:1717
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "अमान्यः अथवा अनुपलब्धः पङ्क्तिसूचकाङ्कः"
 
-#: src/backend/core/column/Column.cpp:1727
-#: src/backend/core/column/Column.cpp:1736
-#: src/backend/core/column/Column.cpp:1745
+#: src/backend/core/column/Column.cpp:1726
+#: src/backend/core/column/Column.cpp:1735
+#: src/backend/core/column/Column.cpp:1744
 #, kde-format
 msgid "invalid row value"
 msgstr "अमान्य पङ्क्तिमूल्यम्"
@@ -1283,7 +1283,7 @@ msgstr "यन्त्रं/सञ्चिकां उद्घाटयि�
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:334
-#: src/backend/datasources/filters/XLSXFilter.cpp:512
+#: src/backend/datasources/filters/XLSXFilter.cpp:511
 #, kde-format
 msgid "Not enough memory."
 msgstr "न पर्याप्तं स्मृतिः।"
@@ -2160,7 +2160,7 @@ msgid "Sheet count: %1"
 msgstr "पत्रगणना: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:629
+#: src/backend/datasources/filters/XLSXFilter.cpp:628
 #, kde-format
 msgid "No sheet selected."
 msgstr "न पत्रं चयनितम्।"
@@ -2444,7 +2444,7 @@ msgstr "काल_10μs"
 msgid "Sheets: "
 msgstr "पत्राणि : "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:633
+#: src/backend/datasources/filters/XLSXFilter.cpp:632
 #, kde-format
 msgid "Invalid region specified."
 msgstr "अमान्यः प्रदेशः निर्दिष्टः ।"
@@ -18161,24 +18161,24 @@ msgstr ""
 msgid "Big (7cm x 7cm)"
 msgstr ""
 
-#: src/frontend/SettingsWorksheetPage.cpp:151
+#: src/frontend/SettingsWorksheetPage.cpp:150
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
 msgstr "कोऽपि LaTeX संस्थापनं न प्राप्तम् अथवा चयनितम्। LaTeX टङ्कनसेटिंग् सम्भवं नास्ति।"
 
-#: src/frontend/SettingsWorksheetPage.cpp:161
+#: src/frontend/SettingsWorksheetPage.cpp:160
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr "न 'धर्मान्तरणम्' लब्धम्। LaTeX टङ्कनसेटिंग् सम्भवं नास्ति।"
 
-#: src/frontend/SettingsWorksheetPage.cpp:167
+#: src/frontend/SettingsWorksheetPage.cpp:166
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr "न 'द्विप्स्' प्राप्तम्। LaTeX टङ्कनसेटिंग् सम्भवं नास्ति।"
 
-#: src/frontend/SettingsWorksheetPage.cpp:174
-#: src/frontend/SettingsWorksheetPage.cpp:180
+#: src/frontend/SettingsWorksheetPage.cpp:173
+#: src/frontend/SettingsWorksheetPage.cpp:179
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "न Ghostscript प्राप्तम्। LaTeX टङ्कनसेटिंग् सम्भवं नास्ति।"
@@ -19760,7 +19760,7 @@ msgstr "चयनितस्तम्भानां भिन्नाः द�
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
 #, fuzzy, kde-format
 #| msgid "The file already exists. Do you really want to overwrite it?"
-msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr "सञ्चिका पूर्वमेव अस्ति । किं भवन्तः तस्य अधिलेखनं कर्तुम् इच्छन्ति वा ?"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2983

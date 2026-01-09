@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-08 00:38+0000\n"
+"POT-Creation-Date: 2026-01-09 00:39+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -415,7 +415,7 @@ msgstr "incompatible filter type"
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1706
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1910
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1909
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "unknown element '%1'"
@@ -598,14 +598,14 @@ msgstr "Used in"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Save  Calculations:"
 
-#: src/backend/core/column/Column.cpp:1718
+#: src/backend/core/column/Column.cpp:1717
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "invalid or missing row index"
 
-#: src/backend/core/column/Column.cpp:1727
-#: src/backend/core/column/Column.cpp:1736
-#: src/backend/core/column/Column.cpp:1745
+#: src/backend/core/column/Column.cpp:1726
+#: src/backend/core/column/Column.cpp:1735
+#: src/backend/core/column/Column.cpp:1744
 #, kde-format
 msgid "invalid row value"
 msgstr "invalid row value"
@@ -1286,7 +1286,7 @@ msgstr "Failed to open the device/file or it's empty."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:334
-#: src/backend/datasources/filters/XLSXFilter.cpp:512
+#: src/backend/datasources/filters/XLSXFilter.cpp:511
 #, kde-format
 msgid "Not enough memory."
 msgstr "Not enough memory."
@@ -2163,7 +2163,7 @@ msgid "Sheet count: %1"
 msgstr "Sheet count: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:629
+#: src/backend/datasources/filters/XLSXFilter.cpp:628
 #, kde-format
 msgid "No sheet selected."
 msgstr "No sheet selected."
@@ -2447,7 +2447,7 @@ msgstr "Time_10µs"
 msgid "Sheets: "
 msgstr "Sheets: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:633
+#: src/backend/datasources/filters/XLSXFilter.cpp:632
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Invalid region specified."
@@ -18309,25 +18309,25 @@ msgstr ""
 msgid "Big (7cm x 7cm)"
 msgstr ""
 
-#: src/frontend/SettingsWorksheetPage.cpp:151
+#: src/frontend/SettingsWorksheetPage.cpp:150
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
 msgstr ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
 
-#: src/frontend/SettingsWorksheetPage.cpp:161
+#: src/frontend/SettingsWorksheetPage.cpp:160
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr "No 'convert' found. LaTeX typesetting not possible."
 
-#: src/frontend/SettingsWorksheetPage.cpp:167
+#: src/frontend/SettingsWorksheetPage.cpp:166
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr "No 'dvips' found. LaTeX typesetting not possible."
 
-#: src/frontend/SettingsWorksheetPage.cpp:174
-#: src/frontend/SettingsWorksheetPage.cpp:180
+#: src/frontend/SettingsWorksheetPage.cpp:173
+#: src/frontend/SettingsWorksheetPage.cpp:179
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "No Ghostscript found. LaTeX typesetting not possible."
@@ -19923,7 +19923,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
 #, fuzzy, kde-format
 #| msgid "The file already exists. Do you really want to overwrite it?"
-msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr "The file already exists. Do you really want to overwrite it?"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2983

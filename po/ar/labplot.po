@@ -1,13 +1,13 @@
 # Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the labplot package.
-# SPDX-FileCopyrightText: 2022, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2022, 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-08 00:38+0000\n"
-"PO-Revision-Date: 2025-12-20 11:18+0400\n"
+"POT-Creation-Date: 2026-01-09 00:39+0000\n"
+"PO-Revision-Date: 2026-01-08 13:55+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -422,7 +422,7 @@ msgstr "نوع مرشح غير متوافق"
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1706
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1910
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1909
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "عنصر غير معروف '%1'"
@@ -586,33 +586,30 @@ msgstr "تحديث آلي: خطأ"
 
 #: src/backend/core/column/Column.cpp:1094
 #: src/backend/spreadsheet/Spreadsheet.cpp:242
-#, fuzzy, kde-format
-#| msgid "Used in"
+#, kde-format
 msgid "Used in Plots:"
-msgstr "استخدم في"
+msgstr "استخدم في الرسومات:"
 
 #: src/backend/core/column/Column.cpp:1109
 #: src/backend/spreadsheet/Spreadsheet.cpp:259
-#, fuzzy, kde-format
-#| msgid "Used in"
+#, kde-format
 msgid "Used in Axes:"
-msgstr "استخدم في"
+msgstr "استخدم في المحاور:"
 
 #: src/backend/core/column/Column.cpp:1132
 #: src/backend/spreadsheet/Spreadsheet.cpp:280
-#, fuzzy, kde-format
-#| msgid "Save  Calculations:"
+#, kde-format
 msgid "Used in Spreadsheet Calculations:"
-msgstr "احفظ الحسابات:"
+msgstr "استخدم في حسابات جداول البيانات:"
 
-#: src/backend/core/column/Column.cpp:1718
+#: src/backend/core/column/Column.cpp:1717
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "فهرس صف غير صالح أو مفقود"
 
-#: src/backend/core/column/Column.cpp:1727
-#: src/backend/core/column/Column.cpp:1736
-#: src/backend/core/column/Column.cpp:1745
+#: src/backend/core/column/Column.cpp:1726
+#: src/backend/core/column/Column.cpp:1735
+#: src/backend/core/column/Column.cpp:1744
 #, kde-format
 msgid "invalid row value"
 msgstr "قيمة صف غير صالحة"
@@ -1285,7 +1282,7 @@ msgstr "فشل فتح الجهاز/الملف أو أنه فارغ."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:334
-#: src/backend/datasources/filters/XLSXFilter.cpp:512
+#: src/backend/datasources/filters/XLSXFilter.cpp:511
 #, kde-format
 msgid "Not enough memory."
 msgstr "ذاكرة غير كافية."
@@ -2169,7 +2166,7 @@ msgid "Sheet count: %1"
 msgstr "عدد الأوراق: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:629
+#: src/backend/datasources/filters/XLSXFilter.cpp:628
 #, kde-format
 msgid "No sheet selected."
 msgstr "لم تختر أي ورقة."
@@ -2452,7 +2449,7 @@ msgstr "Time_10µs"
 msgid "Sheets: "
 msgstr "الأوراق: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:633
+#: src/backend/datasources/filters/XLSXFilter.cpp:632
 #, kde-format
 msgid "Invalid region specified."
 msgstr "تم تحديد منطقة غير صالحة."
@@ -6405,17 +6402,15 @@ msgstr "متوسط"
 
 #: src/backend/nsl/nsl_baseline.cpp:46
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
-#, fuzzy, kde-format
-#| msgid "Points:"
+#, kde-format
 msgid "End Points"
-msgstr "النقاط:"
+msgstr "نقاط النهاية"
 
 #: src/backend/nsl/nsl_baseline.cpp:46
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:178
-#, fuzzy, kde-format
-#| msgid "Regular Expression"
+#, kde-format
 msgid "Linear Regression"
-msgstr "تعبير نمطي"
+msgstr "الانحدار الخطي"
 
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
@@ -7369,16 +7364,14 @@ msgid "Type"
 msgstr "1النّوع"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:223
-#, fuzzy, kde-format
-#| msgid "Column %1"
+#, kde-format
 msgid "Columns: %1"
-msgstr "العمود %1"
+msgstr "الأعمدة: %1"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:224
-#, fuzzy, kde-format
-#| msgid "Rows:"
+#, kde-format
 msgid "Rows: %1"
-msgstr "الصّفوف:"
+msgstr "الصّفوف: %1"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:415
 #, kde-format
@@ -9288,10 +9281,9 @@ msgstr "الارتباط التلقائي/المتبادل"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:429
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:464
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2159
-#, fuzzy, kde-format
-#| msgid "Delete Connection"
+#, kde-format
 msgid "Baseline Correction"
-msgstr "احذف الاتصال"
+msgstr "تصحيح خط الأساس"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:445
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:520
@@ -9731,10 +9723,9 @@ msgid "%1: set plot color map"
 msgstr "%1: اضبط خريطة ألوان الرسم البياني"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1837
-#, fuzzy, kde-format
-#| msgid "%1: set axis offset"
+#, kde-format
 msgid "%1: set y-offset"
-msgstr "%1: اضبط إزاحة المحور"
+msgstr "%1: اضبط إزاحة ص"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2020
 #, kde-format
@@ -9827,21 +9818,19 @@ msgid "%1: add smoothing curve"
 msgstr "%1: أضف منحنى التنعيم"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2162
-#, fuzzy, kde-format
-#| msgid "%1: add function of '%2'"
+#, kde-format
 msgid "%1: baseline correction for '%2'"
-msgstr "%1: أضف دالة لـ '%2'"
+msgstr "%1: تصحيح خط الأساس لـ ”%2“"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2163
 #, kde-format
 msgid "Baseline correction for '%1'"
-msgstr ""
+msgstr "تصحيح خط الأساس لـ '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2170
-#, fuzzy, kde-format
-#| msgid "%1: add integration curve"
+#, kde-format
 msgid "%1: add baseline correction curve"
-msgstr "%1: أضف منحنى التكامل"
+msgstr "%1: إضافة منحنى تصحيح خط الأساس"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2181
 #, kde-format
@@ -10732,10 +10721,9 @@ msgid "%1: assign second y-data"
 msgstr "%1: اِسنِد بيانات ص ثانية"
 
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:55
-#, fuzzy, kde-format
-#| msgid "%1: set options and perform the correlation"
+#, kde-format
 msgid "%1: set baseline options and perform correction"
-msgstr "%1: اِضبط الخيارات ونفِّذ الترابط"
+msgstr "%1: تعيين خيارات خط الأساس وإجراء التصحيح"
 
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:92
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:158
@@ -14453,7 +14441,7 @@ msgstr "%1 رسوم بيانية صندوقية: قالب \"%2\" حُمل"
 #: src/frontend/widgets/LabelWidget.cpp:1016
 #, kde-format
 msgid "%v cm"
-msgstr ""
+msgstr "%v سم"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:144
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:583
@@ -14471,7 +14459,7 @@ msgstr ""
 #: src/frontend/widgets/LabelWidget.cpp:1018
 #, kde-format
 msgid "%v in"
-msgstr ""
+msgstr "%v بوصة"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:255
 #, kde-format
@@ -14722,7 +14710,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the X position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%v%"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:400
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:623
@@ -14733,7 +14721,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the Y position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%v%"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:805
 #, kde-format
@@ -15558,6 +15546,12 @@ msgid ""
 "interpolation using first and last point and subtract it.</li><li>Linear "
 "Regression - do a linear regression to the data and subtract it.</li></ul>"
 msgstr ""
+"الطريقة المستخدمة لحساب تصحيح خط الأساس:<ul><li>arPLS - طريقة أقل المربعات "
+"المعاقبة المعاد ترجيحها بشكل غير متماثل.</li><li>الحد الأدنى - طرح الحد "
+"الأدنى من البيانات.</li><li>الحد الأقصى - طرح الحد الأقصى من البيانات.</"
+"li><li>المتوسط - طرح متوسط البيانات.</li><li>الوسيط - طرح الوسيط من البيانات."
+"</li><li>نقاط النهاية - إجراء استيفاء خطي باستخدام النقطة الأولى والأخيرة "
+"وطرحها.</li><li>الانحدار الخطي - إجراء انحدار خطي للبيانات وطرحها.</li></ul>"
 
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:195
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:163
@@ -15582,10 +15576,9 @@ msgid "Number of iterations to perform."
 msgstr "عدد التكرارات اللازمة للإجراء."
 
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:299
-#, fuzzy, kde-format
-#| msgid "Correlation status: %1"
+#, kde-format
 msgid "Baseline correction status: %1"
-msgstr "حالة الارتباط: %1"
+msgstr "حالة تصحيح خط الأساس: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:180
@@ -15870,7 +15863,7 @@ msgstr "القطع الأعلى:"
 #, kde-format
 msgctxt "@label:spinbox Suffix for the frequency"
 msgid "%v Hz"
-msgstr ""
+msgstr "%v هرتز"
 
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:424
 #, kde-format
@@ -16289,12 +16282,10 @@ msgid "Properties: Convolution/Deconvolution"
 msgstr "الخصائص: الالتفاف/فك الالتفاف"
 
 #: src/frontend/GuiObserver.cpp:341
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Integration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Baseline Correction"
-msgstr "الخصائص: تكامل"
+msgstr "الخصائص: تصحيح خط الأساس"
 
 #: src/frontend/GuiObserver.cpp:346
 #, kde-format
@@ -17966,11 +17957,10 @@ msgid "Preferences    [Changed]"
 msgstr "تفضيلات    [مُغيَّر]"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
-#, fuzzy, kde-format
-#| msgid "x, min"
+#, kde-format
 msgctxt "@label:spinbox Suffix for the auto save interval"
 msgid "%v min"
-msgstr "س، دنيا"
+msgstr "%v دنيا"
 
 #: src/frontend/SettingsGeneralPage.cpp:216
 #, kde-format
@@ -18196,24 +18186,24 @@ msgstr "متوسّط (5 سم × 5 سم)"
 msgid "Big (7cm x 7cm)"
 msgstr "كبير (7 سم × 7 سم)"
 
-#: src/frontend/SettingsWorksheetPage.cpp:151
+#: src/frontend/SettingsWorksheetPage.cpp:150
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
 msgstr "لا أجد تنصيب لاتخ أو لم يُختر. تنسيق لاتخ غير مُمكن."
 
-#: src/frontend/SettingsWorksheetPage.cpp:161
+#: src/frontend/SettingsWorksheetPage.cpp:160
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr "لا أجد 'convert'. تنسيق لاتخ غير مُمكن."
 
-#: src/frontend/SettingsWorksheetPage.cpp:167
+#: src/frontend/SettingsWorksheetPage.cpp:166
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr "لا أجد 'dvips'. تنسيق لاتخ غير مُمكن."
 
-#: src/frontend/SettingsWorksheetPage.cpp:174
-#: src/frontend/SettingsWorksheetPage.cpp:180
+#: src/frontend/SettingsWorksheetPage.cpp:173
+#: src/frontend/SettingsWorksheetPage.cpp:179
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "لا أجد Ghostscript. تنسيق لاتخ غير مُمكن."
@@ -18955,10 +18945,9 @@ msgid "Fourier Filter of '%1'"
 msgstr "مرشح فورييه لـ '%1'"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:801
-#, fuzzy, kde-format
-#| msgid "Delete Connection"
+#, kde-format
 msgid "Baseline Correction of '%1'"
-msgstr "احذف الاتصال"
+msgstr "تصحيح خط الأساس لـ ”%1“"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:830
 #, kde-format
@@ -18997,30 +18986,26 @@ msgid "Sample"
 msgstr "عيّنة"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1157
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "New Plot Area in an Existing Worksheet"
-msgstr "&منطقة رسم جديدة في ورقة عمل موجودة"
+msgstr "منطقة رسم جديدة في ورقة عمل موجودة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1158
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:202
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Area in a New Worksheet"
 msgstr "منطقة رسم جديدة في ورقة عمل جديدة"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1165
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "New Plot Areas in an Existing Worksheet"
-msgstr "&منطقة رسم جديدة في ورقة عمل موجودة"
+msgstr "مناطق رسم جديدة في ورقة عمل موجودة"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1166
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Areas in a New Worksheet"
-msgstr "منطقة رسم جديدة في ورقة عمل جديدة"
+msgstr "مناطق رسم جديدة في ورقة عمل جديدة"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1193
 #, kde-format
@@ -19410,9 +19395,7 @@ msgid "Equidistant Values"
 msgstr "قيم متساوية البعد"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Equidistant Date&Time Values"
+#, kde-format
 msgid "Equidistant Date&Time Values"
 msgstr "قيم تاريخ ووقت متساوية المسافة"
 
@@ -19451,10 +19434,9 @@ msgid "Clear Masks"
 msgstr "أزِل الأقنعة"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:334
-#, fuzzy, kde-format
-#| msgid "&Transpose"
+#, kde-format
 msgid "Transpose"
-msgstr "ا&نقل مصفوفة"
+msgstr "انقل مصفوفة"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:336
 #, kde-format
@@ -19648,10 +19630,9 @@ msgid "Simplify Line"
 msgstr "بسّط الخط"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:516
-#, fuzzy, kde-format
-#| msgid "Subtract Baseline"
+#, kde-format
 msgid "Correct Baseline"
-msgstr "اطرح خط الأساس"
+msgstr "صحح خط الأساس"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:568
 #, kde-format
@@ -19814,16 +19795,14 @@ msgstr "الأعمدة المحددة لها أنواع بيانات مختلف�
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
 #, fuzzy, kde-format
-#| msgid "The file already exists. Do you really want to overwrite it?"
-msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
-msgstr "الملفّ موجود فعلًا. أمتأكّد من الكتابة عليه؟"
+#| msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
+msgstr "تحتوي جدول البيانات على %1 صفوف. هل تريد حقًا تبديلها؟"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2983
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgid "Transpose Spreadsheet"
-msgstr "اطبع جدول البيانات"
+msgstr "نقل جدول البيانات"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3019
 #, kde-format
@@ -20056,28 +20035,24 @@ msgid "Location Measures"
 msgstr "مقاييس الموقع"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:67
-#, fuzzy, kde-format
-#| msgid "ArithmeticMean"
+#, kde-format
 msgid "Arithmetic Mean"
 msgstr "المتوسط الحسابي"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "GeometricMean"
+#, kde-format
 msgid "Geometric Mean"
 msgstr "المتوسط الهندسي"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:69
-#, fuzzy, kde-format
-#| msgid "HarmonicMean"
+#, kde-format
 msgid "Harmonic Mean"
 msgstr "المتوسط التوافقي"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid "ContraharmonicMean"
+#, kde-format
 msgid "Contraharmonic Mean"
-msgstr "المتوسط المضاد للتوافقي"
+msgstr "المتوسط التوافقي العكسي"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:72
 #, kde-format
@@ -20097,33 +20072,29 @@ msgid "Dispersion Measures"
 msgstr "مقاييس التشتت"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "StandardDeviation"
+#, kde-format
 msgid "Standard Deviation"
 msgstr "الانحراف المعياري"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around mean"
+#, kde-format
 msgid "Mean Absolute Deviation Around Mean"
 msgstr "متوسط الانحراف المطلق حول المتوسط"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Mean absolute deviation around median"
+#, kde-format
 msgid "Mean Absolute Deviation Around Median"
 msgstr "متوسط الانحراف المطلق حول الوسيط"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Median Absolute Deviation"
-msgstr "انحراف وسيط مطلق"
+msgstr "الانحراف المطلق للوسيط"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:86
 #, kde-format
 msgid "Average 2-Period Moving Range"
-msgstr ""
+msgstr "متوسط النطاق المتحرك لفترة 2"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:89
@@ -23005,10 +22976,9 @@ msgstr "نصف قطر الزاوية:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStack)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1506
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Stack"
-msgstr "متراكم"
+msgstr "مكدس"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:87
@@ -23968,10 +23938,9 @@ msgstr "محتوى المقياس:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSubtraction)
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:199
-#, fuzzy, kde-format
-#| msgid "Subtract"
+#, kde-format
 msgid "Subtraction"
-msgstr "اطرح"
+msgstr "طرح"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #. i18n: ectx: property (text), widget (QLabel, lARPLSSmoothness)
@@ -25264,10 +25233,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompressed)
 #: src/frontend/ui/settingsgeneralpage.ui:276
-#, fuzzy, kde-format
-#| msgid "Save in uncompressed format"
+#, kde-format
 msgid "Save in compressed format"
-msgstr "احفظ بتنسيق غير مضغوط"
+msgstr "احفظه بتنسيق مضغوط"
 
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/frontend/ui/settingsgeneralpage.ui:283
@@ -25690,17 +25658,15 @@ msgstr "أنشئ رسمًا للبيانات الأصلية"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:229
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "&New Plot Area in an Existing Worksheet"
 msgstr "&منطقة رسم جديدة في ورقة عمل موجودة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheets)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:236
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Areas in Multiple New Worksheets"
-msgstr "منطقة رسم جديدة في ورقة عمل جديدة"
+msgstr "منطقة رسم جديدة في أوراق عمل جديدة"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter2)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:41
