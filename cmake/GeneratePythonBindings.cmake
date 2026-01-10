@@ -175,9 +175,6 @@ function(generate_python_bindings)
 	${Shiboken6_INCLUDE_DIRS}
     )
 
-    # Hide noisy warnings
-    target_compile_options(${PB_PACKAGE_NAME} PRIVATE -Wno-cast-function-type -Wno-missing-include-dirs)
-
     # Adjust the name of generated module.
     set_property(TARGET ${PB_PACKAGE_NAME} PROPERTY PREFIX "")
     set_property(TARGET ${PB_PACKAGE_NAME} PROPERTY LIBRARY_OUTPUT_NAME "${PB_PACKAGE_NAME}.${Python3_SOABI}")

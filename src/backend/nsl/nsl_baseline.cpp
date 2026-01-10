@@ -26,6 +26,7 @@
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif
 #include <Eigen/Sparse>
 #include <Eigen/SparseCholesky>

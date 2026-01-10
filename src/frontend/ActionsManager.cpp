@@ -67,7 +67,14 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <DockWidget.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #include <DockManager.h>
 
 /*!

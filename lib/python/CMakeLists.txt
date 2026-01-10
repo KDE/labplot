@@ -281,6 +281,7 @@ if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
 	message(FATAL_ERROR "Python package support requested (ENABLE_PYTHON_SDK or ENABLE_PYTHON_SCRIPTING) but PySide6/Shiboken6 not found. Please install them or disable Python support.")
     endif()
 
+
     if(PySide6_ABI3_LIBRARY)
 	target_link_libraries(${bindings_library} PRIVATE ${PySide6_ABI3_LIBRARY})
     endif()
@@ -293,7 +294,7 @@ if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
 endif()
 
 target_link_libraries(${bindings_library} PRIVATE LabPlot::SDK)
-target_compile_definitions(${bindings_library} PRIVATE -DSDK)
+target_compile_definitions(${bindings_library} PRIVATE SDK)
 
 execute_process(
     COMMAND ${Python_EXECUTABLE} -Esc "import sysconfig; print(sysconfig.get_path('platlib', vars={'platbase': '${CMAKE_INSTALL_PREFIX}', 'base': '${CMAKE_INSTALL_PREFIX}'}))"

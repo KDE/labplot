@@ -84,7 +84,7 @@ add_library(ads::${library_name} ALIAS ${library_name})
 
 # LABPLOT: disable unfixed warnings
 if(NOT MSVC_FOUND)
-    target_compile_options(${library_name} PRIVATE -Wno-switch-enum -Wno-shadow)
+    target_compile_options(${library_name} PRIVATE -Wno-switch-enum -Wno-shadow -Wno-deprecated-declarations -Wno-unused-but-set-variable)
 endif()
 
 target_link_libraries(${library_name} PUBLIC Qt${QT_VERSION_MAJOR}::Core 

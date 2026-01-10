@@ -87,7 +87,14 @@
 #include "frontend/widgets/DatapickerImageWidget.h"
 #include "frontend/widgets/LabelWidget.h"
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <DockWidget.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #include <KLocalizedString>
 #include <QStackedWidget>
 #include <QStatusBar>

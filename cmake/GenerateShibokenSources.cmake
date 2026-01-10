@@ -137,6 +137,14 @@ function(generate_shiboken_sources)
         COMMENT "Running generator \"${Shiboken6_EXECUTABLE}\" for ${PB_TYPESYSTEM}"
     )
 
+    set_source_files_properties(
+	    ${PB_GENERATED_SOURCES}
+	    PROPERTIES
+	        GENERATED TRUE
+		COMPILE_FLAGS
+		    "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wno-keyword-macro -Wno-shadow -Wno-zero-as-null-pointer-constant>"
+    )
+
     # # Set the cpp files which will be used for the bindings library.
     # set(${PB_PACKAGE_NAME}_sources ${PB_GENERATED_SOURCES})
 

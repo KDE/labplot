@@ -59,7 +59,7 @@ if(BUILD_QXLSX)
     set_property(TARGET QXlsx PROPERTY POSITION_INDEPENDENT_CODE ON)
     # disable shadow warnings
     if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-        target_compile_options(QXlsx PRIVATE -Wno-shadow -Wno-switch-enum)
+        target_compile_options(QXlsx PRIVATE -Wno-shadow -Wno-switch-enum -Wno-deprecated-declarations)
     endif()
 
     get_target_property(QXLSX_VERSION QXlsx VERSION)

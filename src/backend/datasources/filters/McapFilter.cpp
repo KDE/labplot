@@ -38,8 +38,15 @@
 #endif
 
 #define MCAP_IMPLEMENTATION
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wswitch-enum"
+#endif
 #include "mcap/mcap.hpp"
 #include "mcap/writer.hpp"
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 /*!
 \class McapFilter
