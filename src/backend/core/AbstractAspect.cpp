@@ -524,7 +524,7 @@ QString AbstractAspect::path() const {
  * \brief Add the given Aspect to my list of children.
  */
 bool AbstractAspect::addChild(AbstractAspect* child) {
-	Q_CHECK_PTR(child);
+	Q_ASSERT(child);
 
 	const QString new_name = uniqueNameFor(child->name());
 	beginMacro(i18n("%1: add %2", name(), new_name));
@@ -558,7 +558,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 }
 
 void AbstractAspect::insertChild(AbstractAspect* child, int index) {
-	Q_CHECK_PTR(child);
+	Q_ASSERT(child);
 	if (index == -1)
 		index = d->m_children.count();
 
@@ -1036,7 +1036,7 @@ QUndoStack* AbstractAspect::undoStack() const {
  * \brief Execute the given command, pushing it on the undoStack() if available.
  */
 void AbstractAspect::exec(QUndoCommand* cmd) {
-	Q_CHECK_PTR(cmd);
+	Q_ASSERT(cmd);
 	if (d->m_undoAware && (project() && project()->isUndoAware())) {
 		auto* stack = undoStack();
 		if (stack)
