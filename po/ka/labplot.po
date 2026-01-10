@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-09 00:39+0000\n"
-"PO-Revision-Date: 2026-01-08 04:58+0100\n"
+"PO-Revision-Date: 2026-01-09 06:03+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -19836,8 +19836,7 @@ msgstr ""
 "გააბრტყელებთ. "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
-#, fuzzy, kde-format
-#| msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+#, kde-format
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr "ელცხრილს აქვს %1 მწკრივი. მართლა გნებავთ მისი გადატანა?"
 

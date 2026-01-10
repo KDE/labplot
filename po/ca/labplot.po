@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-09 00:39+0000\n"
-"PO-Revision-Date: 2026-01-08 10:37+0100\n"
+"PO-Revision-Date: 2026-01-09 09:12+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20018,8 +20018,7 @@ msgstr ""
 "aplanar per aquest motiu. "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
-#, fuzzy, kde-format
-#| msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+#, kde-format
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr "El full de càlcul té %1 files. Confirmeu que el voleu transposar?"
 

@@ -5,14 +5,14 @@
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2014, 2015, 2016.
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2015, 2017, 2019, 2020, 2021, 2022.
 # SPDX-FileCopyrightText: 2025, 2026 Marcus Gama <marcus.gama@gmail.com>
-# SPDX-FileCopyrightText: 2025 Guilherme Marçal Silva <guimarcalsilva@gmail.com>
+# SPDX-FileCopyrightText: 2025, 2026 Guilherme Marçal Silva <guimarcalsilva@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-09 00:39+0000\n"
-"PO-Revision-Date: 2026-01-08 07:29-0300\n"
-"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
+"PO-Revision-Date: 2026-01-09 01:27-0300\n"
+"Last-Translator: Guilherme Marçal Silva <guimarcalsilva@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -19885,8 +19885,7 @@ msgstr ""
 "niveladas por esse motivo. "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
-#, fuzzy, kde-format
-#| msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+#, kde-format
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr "A planilha tem %1 linhas. Você realmente deseja transpor os dados?"
 

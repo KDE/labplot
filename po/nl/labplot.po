@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-09 00:39+0000\n"
-"PO-Revision-Date: 2026-01-08 17:47+0100\n"
+"PO-Revision-Date: 2026-01-09 11:23+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -19867,8 +19867,7 @@ msgstr ""
 "daarom niet plat gemaakt worden. "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
-#, fuzzy, kde-format
-#| msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+#, kde-format
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr "Het rekenblad heeft %1 rijen. Wilt u het omzetten?"
 

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-09 00:39+0000\n"
-"PO-Revision-Date: 2026-01-05 08:51+0100\n"
+"PO-Revision-Date: 2026-01-09 09:12+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: src/backend/core/AbstractAspect.cpp:239
 #, kde-format
@@ -14576,7 +14576,7 @@ msgstr "Diagrames de caixes %1: s'ha carregat la plantilla «%2»"
 #: src/frontend/widgets/LabelWidget.cpp:1016
 #, kde-format
 msgid "%v cm"
-msgstr ""
+msgstr "%v cm"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:144
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:583
@@ -14594,7 +14594,7 @@ msgstr ""
 #: src/frontend/widgets/LabelWidget.cpp:1018
 #, kde-format
 msgid "%v in"
-msgstr ""
+msgstr "%v in"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:255
 #, kde-format
@@ -19664,10 +19664,9 @@ msgid "Clear Masks"
 msgstr "Neteja les màscares"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:334
-#, fuzzy, kde-format
-#| msgid "&Transpose"
+#, kde-format
 msgid "Transpose"
-msgstr "&Invertix"
+msgstr "Invertix"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:336
 #, kde-format
@@ -20020,17 +20019,14 @@ msgstr ""
 "aplanar per este motiu. "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
-#, fuzzy, kde-format
-#| msgid "The file already exists. Do you really want to overwrite it?"
+#, kde-format
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
-msgstr "El fitxer ja existix. Segur que voleu sobreescriure'l?"
+msgstr "El full de càlcul té %1 files. Confirmeu que el voleu transposar?"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2983
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgid "Transpose Spreadsheet"
-msgstr "Imprimix el full de càlcul"
+msgstr "Invertix el full de càlcul"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3019
 #, kde-format

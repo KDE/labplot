@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-09 00:39+0000\n"
-"PO-Revision-Date: 2026-01-08 17:00+0300\n"
+"PO-Revision-Date: 2026-01-09 17:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19804,8 +19804,7 @@ msgstr ""
 "Seçili sütunlarda farklı veri türleri var ve bu yüzden düzleştirilemiyorlar. "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
-#, fuzzy, kde-format
-#| msgid "The spreadsheet has %1 rows. Do you really want to tranpose it?"
+#, kde-format
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr ""
 "Hesap tablosunda %1 satır var. Transpoze etmeyi gerçekten istiyor musunuz?"

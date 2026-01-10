@@ -19374,10 +19374,9 @@ msgid ""
 msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2982
-#, fuzzy, kde-format
-#| msgid "The file already exists. Do you really want to overwrite it?"
+#, kde-format
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
-msgstr "文件已存在，您要覆盖它吗？"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2983
 #, kde-format
