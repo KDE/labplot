@@ -41,6 +41,7 @@
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch-enum"
+#pragma GCC diagnostic ignored "-Wshadow"
 #endif
 #include "mcap/mcap.hpp"
 #include "mcap/writer.hpp"

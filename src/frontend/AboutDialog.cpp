@@ -72,7 +72,14 @@
 #include <matio_pubconf.h>
 #endif
 #ifdef HAVE_MCAP
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include "mcap/types.hpp"
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 /*!

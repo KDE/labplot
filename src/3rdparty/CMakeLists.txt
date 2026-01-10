@@ -102,7 +102,7 @@ if(ENABLE_VECTOR_BLF)
       endif()
       # disable shadow warnings treated as error
       if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=shadow")
+          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-shadow")
       endif()
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
