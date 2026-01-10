@@ -212,6 +212,11 @@
         },
         {
             "name": "readstat",
+            "build-options": {
+                "env": {
+                    "ACLOCAL_PATH": "/usr/share/gettext/m4:/usr/share/aclocal:/app/share/aclocal"
+                }
+            },
             "sources": [
                 {
                     "type": "archive",
