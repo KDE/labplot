@@ -30,6 +30,7 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 	, m_spreadsheet(spreadsheet)
 	, m_metricValues{
 		StatisticsSpreadsheet::Metric::Count,
+		StatisticsSpreadsheet::Metric::Sum,
 		StatisticsSpreadsheet::Metric::Minimum,
 		StatisticsSpreadsheet::Metric::Maximum,
 		StatisticsSpreadsheet::Metric::ArithmeticMean,
@@ -59,6 +60,7 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 		StatisticsSpreadsheet::Metric::Entropy,
 	}, m_metricNames{
 		i18n("Count"),
+		i18n("Sum"),
 		i18n("Minimum"),
 		i18n("Maximum"),
 		i18n("ArithmeticMean"),
@@ -197,6 +199,9 @@ void StatisticsSpreadsheet::update() {
 				switch (metric) {
 				case Metric::Count:
 					statisticsColumn->setIntegerAt(i, statistics.size);
+					break;
+				case Metric::Sum:
+					statisticsColumn->setValueAt(i, statistics.sum);
 					break;
 				case Metric::Minimum:
 					statisticsColumn->setValueAt(i, statistics.minimum);

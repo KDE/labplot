@@ -3363,6 +3363,7 @@ void ColumnPrivate::calculateStatistics() {
 		rowData.squeeze();
 
 	statistics.size = notNanCount;
+	statistics.sum = columnSum;
 	statistics.arithmeticMean = columnSum / notNanCount;
 
 	// geometric mean
