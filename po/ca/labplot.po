@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-09 00:39+0000\n"
+"POT-Creation-Date: 2026-01-11 00:39+0000\n"
 "PO-Revision-Date: 2026-01-09 09:12+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -274,7 +274,7 @@ msgstr "Enter gran"
 #: src/backend/core/AbstractColumn.cpp:230
 #: src/backend/datasources/filters/AsciiFilter.cpp:557
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:543
-#: src/frontend/ActionsManager.cpp:510
+#: src/frontend/ActionsManager.cpp:517
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
@@ -369,12 +369,12 @@ msgstr "En%1"
 msgid "Import Data"
 msgstr "Importa dades"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:262
+#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:269
 #, kde-format
 msgid "From File..."
 msgstr "Des del fitxer..."
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:282
+#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:289
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Des de la base de dades SQL..."
@@ -399,7 +399,7 @@ msgstr "Imprimeix"
 msgid "Print Preview"
 msgstr "Vista prèvia d'impressió"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:382
+#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:389
 #, kde-format
 msgid "&Close"
 msgstr "&Tanca"
@@ -1270,7 +1270,7 @@ msgid "Data selection empty."
 msgstr "La selecció de dades està buida."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
-#: src/backend/datasources/filters/McapFilter.cpp:188
+#: src/backend/datasources/filters/McapFilter.cpp:196
 #, kde-format
 msgid "Failed to open the device/file or it's empty."
 msgstr "Ha fallat en obrir el dispositiu/fitxer o està buit."
@@ -1295,7 +1295,7 @@ msgstr "Ha fallat en obrir el dispositiu/fitxer o està buit."
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:334
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:341
 #: src/backend/datasources/filters/XLSXFilter.cpp:511
 #, kde-format
 msgid "Not enough memory."
@@ -1304,7 +1304,7 @@ msgstr "No hi ha memòria suficient."
 #: src/backend/datasources/filters/CANFilter.cpp:220
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
 #: src/backend/datasources/filters/SpiceFilter.cpp:187
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:261
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:268
 #, kde-format
 msgid "Invalid file."
 msgstr "Fitxer no vàlid."
@@ -1760,7 +1760,7 @@ msgid "Valid JSON document"
 msgstr "Document JSON vàlid"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:224
-#: src/backend/datasources/filters/McapFilter.cpp:287
+#: src/backend/datasources/filters/McapFilter.cpp:295
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
@@ -1947,13 +1947,13 @@ msgid "Undefined"
 msgstr "Sense definir"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:412
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:57
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:64
 #, kde-format
 msgid "Unknown"
 msgstr "Desconegut"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:222 src/frontend/MainWin.cpp:1220
+#: src/frontend/ActionsManager.cpp:229 src/frontend/MainWin.cpp:1220
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2017,58 +2017,58 @@ msgstr "Encara no s'ha implementat el suport per a aquest tipus de variable."
 msgid "Variables with rank greater than 2 not supported yet."
 msgstr "Les variables amb rang superior a 2 encara no estan admeses."
 
-#: src/backend/datasources/filters/McapFilter.cpp:196
+#: src/backend/datasources/filters/McapFilter.cpp:204
 #, kde-format
 msgid "Valid MCAP file"
 msgstr "Fitxer MCAP vàlid"
 
-#: src/backend/datasources/filters/McapFilter.cpp:201
+#: src/backend/datasources/filters/McapFilter.cpp:209
 #, kde-format
 msgid "Message count: "
 msgstr "Comptador de missatges: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:203
+#: src/backend/datasources/filters/McapFilter.cpp:211
 #, kde-format
 msgid "Schema count: "
 msgstr "Comptador d'esquemes: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:205
+#: src/backend/datasources/filters/McapFilter.cpp:213
 #, kde-format
 msgid "Channel count: "
 msgstr "Comptador de canals: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:207
+#: src/backend/datasources/filters/McapFilter.cpp:215
 #, kde-format
 msgid "Attachment count: "
 msgstr "Comptador d'adjunts: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:209
+#: src/backend/datasources/filters/McapFilter.cpp:217
 #, kde-format
 msgid "Metadata count: "
 msgstr "Comptador de metadades: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:211
+#: src/backend/datasources/filters/McapFilter.cpp:219
 #, kde-format
 msgid "Message Start Time: "
 msgstr "Hora d'inici del missatge: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:213
+#: src/backend/datasources/filters/McapFilter.cpp:221
 #, kde-format
 msgid "Message End Time: "
 msgstr "Hora de fi del missatge: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:215
+#: src/backend/datasources/filters/McapFilter.cpp:223
 #, kde-format
 msgid "No Statistics found."
 msgstr "No s'ha trobat cap estadística."
 
-#: src/backend/datasources/filters/McapFilter.cpp:469
-#: src/backend/datasources/filters/McapFilter.cpp:966
+#: src/backend/datasources/filters/McapFilter.cpp:477
+#: src/backend/datasources/filters/McapFilter.cpp:974
 #, kde-format
 msgid "Failed to read the file. Reason: %1"
 msgstr "Ha fallat en llegir el fitxer. Motiu: %1"
 
-#: src/backend/datasources/filters/McapFilter.cpp:477
+#: src/backend/datasources/filters/McapFilter.cpp:485
 #, kde-format
 msgid "No JSON encoded topics found."
 msgstr "No s'ha trobat cap tema codificat en JSON."
@@ -2378,92 +2378,92 @@ msgstr "Nivell i algorisme de compressió: %1"
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Mida de l'enregistrament «TStreamerInfo»: %1 bytes"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:103
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
 #, kde-format
 msgid "Application: %1"
 msgstr "Aplicació: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:105
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:112
 #, kde-format
 msgid "Application version: %1.%2.%3"
 msgstr "Versió de l'aplicació: %1.%2.%3"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:114
 #, kde-format
 msgid "Number of Objects: %1"
 msgstr "Nombre d'objectes: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:115
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:122
 #, kde-format
 msgid "Start Time: %1"
 msgstr "Hora d'inici: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:123
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:130
 #, kde-format
 msgid "End Time: %1"
 msgstr "Hora final: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:127
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:134
 #, kde-format
 msgid "Compression Level: %1"
 msgstr "Nivell de compressió: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:129
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:136
 #, kde-format
 msgid "Uncompressed File Size: %1 Bytes"
 msgstr "Mida del fitxer descomprimit: %1 bytes"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:180
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:187
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1."
 msgstr "El «big-endian» no s'admet. ID del CAN: %1."
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:183
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:190
 #, kde-format
 msgid "Message too long. CAN id: %1."
 msgstr "Missatge massa llarg. ID del CAN: %1."
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:186
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:193
 #, kde-format
 msgid "Unknown id: %1."
 msgstr "ID desconegut: %1."
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:189
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:196
 #, kde-format
 msgid "Invalid BLF file"
 msgstr "Fitxer BLF no vàlid"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:192
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:199
 #, kde-format
 msgid "Unable to calculate conversion: %1."
 msgstr "No s'ha pogut calcular la conversió: %1."
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:195
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:202
 #, kde-format
 msgid "No DBC parser installed."
 msgstr "No hi ha instal·lat l'analitzador DBC."
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:198
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:205
 #, kde-format
 msgid "Invalid DBC file."
 msgstr "Fitxer DBC no vàlid."
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:201
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:208
 #, kde-format
 msgid "Unknown error,"
 msgstr "Error desconegut,"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:445
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:452
 #, kde-format
 msgid "Time_s"
 msgstr "Hora_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:447
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:454
 #, kde-format
 msgid "Time_ns"
 msgstr "Hora_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:449
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:456
 #, kde-format
 msgid "Time_10µs"
 msgstr "Hora_10µs"
@@ -3749,7 +3749,7 @@ msgstr "Mida"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
-#: src/backend/gsl/functions.cpp:258 src/backend/nsl/nsl_baseline.cpp:46
+#: src/backend/gsl/functions.cpp:258 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:173
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
@@ -3763,7 +3763,7 @@ msgstr "Mínim"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
-#: src/backend/gsl/functions.cpp:259 src/backend/nsl/nsl_baseline.cpp:46
+#: src/backend/gsl/functions.cpp:259 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:174
@@ -3788,7 +3788,7 @@ msgstr "Mitjana aritmètica"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
-#: src/backend/gsl/functions.cpp:261 src/backend/nsl/nsl_baseline.cpp:46
+#: src/backend/gsl/functions.cpp:261 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
 #: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
@@ -6458,7 +6458,7 @@ msgstr ""
 "No s'han pogut trobar les sessions per a %1. Comproveu la instal·lació."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/backend/nsl/nsl_baseline.cpp:46
+#: src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:136
@@ -6467,13 +6467,13 @@ msgstr ""
 msgid "Mean"
 msgstr "Mitjana"
 
-#: src/backend/nsl/nsl_baseline.cpp:46
+#: src/backend/nsl/nsl_baseline.cpp:47
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
 #, kde-format
 msgid "End Points"
 msgstr "Punts finals"
 
-#: src/backend/nsl/nsl_baseline.cpp:46
+#: src/backend/nsl/nsl_baseline.cpp:47
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:178
 #, kde-format
 msgid "Linear Regression"
@@ -8351,7 +8351,7 @@ msgstr "Residual"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:881
-#: src/frontend/ActionsManager.cpp:228 src/frontend/MainWin.cpp:1238
+#: src/frontend/ActionsManager.cpp:235 src/frontend/MainWin.cpp:1238
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -9442,7 +9442,7 @@ msgstr "Eix vertical"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:544
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2307
-#: src/frontend/ActionsManager.cpp:514
+#: src/frontend/ActionsManager.cpp:521
 #: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:131
 #: src/frontend/notebook/NotebookView.cpp:109
@@ -9492,7 +9492,7 @@ msgid "Inset Plot Area with Data"
 msgstr "Àrea de diagrama intercalat amb dades"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:586
-#: src/frontend/ActionsManager.cpp:848
+#: src/frontend/ActionsManager.cpp:855
 #: src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:441
@@ -11319,120 +11319,120 @@ msgstr "%1: usa coordenades lògiques"
 msgid "%1: set logical position"
 msgstr "%1: estableix la posició lògica"
 
-#: src/frontend/AboutDialog.cpp:79
+#: src/frontend/AboutDialog.cpp:93
 #, kde-format
 msgid "What's new"
 msgstr "Què hi ha de nou"
 
-#: src/frontend/AboutDialog.cpp:85
+#: src/frontend/AboutDialog.cpp:99
 #, kde-format
 msgid "Copy Environment"
 msgstr "Copia l'entorn"
 
-#: src/frontend/AboutDialog.cpp:90
+#: src/frontend/AboutDialog.cpp:104
 #, kde-format
 msgid "Copy Citation"
 msgstr "Copia la cita"
 
-#: src/frontend/AboutDialog.cpp:94
+#: src/frontend/AboutDialog.cpp:108
 #, kde-format
 msgid "Donate"
 msgstr "Donació de diners"
 
-#: src/frontend/AboutDialog.cpp:110
+#: src/frontend/AboutDialog.cpp:124
 #, kde-format
 msgid "Copy to Clipboard"
 msgstr "Copia al porta-retalls"
 
-#: src/frontend/AboutDialog.cpp:136
+#: src/frontend/AboutDialog.cpp:150
 #, kde-format
 msgid "Release build"
 msgstr "Compilació de llançament"
 
-#: src/frontend/AboutDialog.cpp:138
+#: src/frontend/AboutDialog.cpp:152
 #, kde-format
 msgid "Debug build"
 msgstr "Compilació de depuració"
 
-#: src/frontend/AboutDialog.cpp:174
+#: src/frontend/AboutDialog.cpp:188
 #, kde-format
 msgid "System:"
 msgstr "Sistema:"
 
-#: src/frontend/AboutDialog.cpp:175
+#: src/frontend/AboutDialog.cpp:189
 #, kde-format
 msgid "Locale:"
 msgstr "Configuració regional:"
 
 #. i18n("Used Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
-#: src/frontend/AboutDialog.cpp:177 src/frontend/ui/settingsgeneralpage.ui:183
+#: src/frontend/AboutDialog.cpp:191 src/frontend/ui/settingsgeneralpage.ui:183
 #, kde-format
 msgid "Number Format:"
 msgstr "Format numèric:"
 
-#: src/frontend/AboutDialog.cpp:177
+#: src/frontend/AboutDialog.cpp:191
 #, kde-format
 msgid "Updated on restart"
 msgstr "Actualitzat en reiniciar"
 
-#: src/frontend/AboutDialog.cpp:178
+#: src/frontend/AboutDialog.cpp:192
 #, kde-format
 msgid "Architecture:"
 msgstr "Arquitectura:"
 
-#: src/frontend/AboutDialog.cpp:179
+#: src/frontend/AboutDialog.cpp:193
 #, kde-format
 msgid "Kernel: "
 msgstr "Nucli: "
 
-#: src/frontend/AboutDialog.cpp:187
+#: src/frontend/AboutDialog.cpp:201
 #, kde-format
 msgid "Visit website:"
 msgstr "Visiteu el lloc web:"
 
-#: src/frontend/AboutDialog.cpp:189
+#: src/frontend/AboutDialog.cpp:203
 #, kde-format
 msgid "Watch video tutorials:"
 msgstr "Mireu les guies d'aprenentatge en vídeo:"
 
-#: src/frontend/AboutDialog.cpp:190
+#: src/frontend/AboutDialog.cpp:204
 #, kde-format
 msgid "Discuss on Mastodon:"
 msgstr "Debats a Mastodon:"
 
-#: src/frontend/AboutDialog.cpp:191
+#: src/frontend/AboutDialog.cpp:205
 #, kde-format
 msgid "Development:"
 msgstr "Desenvolupament:"
 
-#: src/frontend/AboutDialog.cpp:192
+#: src/frontend/AboutDialog.cpp:206
 #, kde-format
 msgid "Please report bugs to:"
 msgstr "Informeu dels errors a:"
 
-#: src/frontend/AboutDialog.cpp:193
+#: src/frontend/AboutDialog.cpp:207
 #, kde-format
 msgid "Partly funded by:"
 msgstr "Finançat parcialment per:"
 
-#: src/frontend/AboutDialog.cpp:204 src/frontend/AboutDialog.cpp:370
-#: src/frontend/AboutDialog.cpp:371
+#: src/frontend/AboutDialog.cpp:218 src/frontend/AboutDialog.cpp:384
+#: src/frontend/AboutDialog.cpp:385
 #, kde-format
 msgid "missing"
 msgstr "manca"
 
-#: src/frontend/AboutDialog.cpp:210
+#: src/frontend/AboutDialog.cpp:224
 #, kde-format
 msgid "Python scripting support"
 msgstr "Implementació de creació de scripts"
 
-#: src/frontend/AboutDialog.cpp:216
+#: src/frontend/AboutDialog.cpp:230
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "Frontal a aplicacions matemàtiques"
 
-#: src/frontend/AboutDialog.cpp:222
+#: src/frontend/AboutDialog.cpp:236
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
@@ -11440,17 +11440,17 @@ msgstr ""
 "Implementació de fitxers de dades en el format de fitxer FITS (Flexible "
 "Image Transport System)"
 
-#: src/frontend/AboutDialog.cpp:228
+#: src/frontend/AboutDialog.cpp:242
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "Implementació del llenguatge de marcatge Markdown"
 
-#: src/frontend/AboutDialog.cpp:234
+#: src/frontend/AboutDialog.cpp:248
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "Biblioteca C++ per a àlgebra lineal"
 
-#: src/frontend/AboutDialog.cpp:240
+#: src/frontend/AboutDialog.cpp:254
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr ""
@@ -11458,127 +11458,127 @@ msgstr ""
 "the West»)"
 
 # skip-rule: t-e_sola
-#: src/frontend/AboutDialog.cpp:241
+#: src/frontend/AboutDialog.cpp:255
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "Biblioteca científica de GNU («GNU Scientific Library»)"
 
-#: src/frontend/AboutDialog.cpp:247
+#: src/frontend/AboutDialog.cpp:261
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "Paquet de gestió i emmagatzematge de dades d'altes prestacions"
 
-#: src/frontend/AboutDialog.cpp:253
+#: src/frontend/AboutDialog.cpp:267
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "Motor de ressaltat de sintaxi"
 
-#: src/frontend/AboutDialog.cpp:259
+#: src/frontend/AboutDialog.cpp:273
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "Implementació de recollida de comentaris dels usuaris"
 
-#: src/frontend/AboutDialog.cpp:265
+#: src/frontend/AboutDialog.cpp:279
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "Funcions complexes d'error i relacionades"
 
-#: src/frontend/AboutDialog.cpp:271
+#: src/frontend/AboutDialog.cpp:285
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "Importació de fitxers de projecte OPJ de l'Origin"
 
-#: src/frontend/AboutDialog.cpp:277
+#: src/frontend/AboutDialog.cpp:291
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "Importa fitxers MAT de MATLAB binaris"
 
-#: src/frontend/AboutDialog.cpp:283
+#: src/frontend/AboutDialog.cpp:297
 #, kde-format
 msgid "MCAP file support"
 msgstr "Implementació de fitxers MCAP"
 
-#: src/frontend/AboutDialog.cpp:289
+#: src/frontend/AboutDialog.cpp:303
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "Format de dades comú a la xarxa («Network Common Data Form»)"
 
-#: src/frontend/AboutDialog.cpp:295
+#: src/frontend/AboutDialog.cpp:309
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "Importa fitxers ODS (Open Document Spreadsheet)"
 
-#: src/frontend/AboutDialog.cpp:301
+#: src/frontend/AboutDialog.cpp:315
 #, kde-format
 msgid "PDF rendering library"
 msgstr "Biblioteca de renderització de PDF"
 
-#: src/frontend/AboutDialog.cpp:307
+#: src/frontend/AboutDialog.cpp:321
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "Ofereix accions disponibles per a un propòsit específic"
 
-#: src/frontend/AboutDialog.cpp:308
+#: src/frontend/AboutDialog.cpp:322
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Sistema d'acoblament avançat de les Qt («Qt Advanced Docking System»)"
 
-#: src/frontend/AboutDialog.cpp:314
+#: src/frontend/AboutDialog.cpp:328
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "Implementa dades a partir d'agents MQTT"
 
-#: src/frontend/AboutDialog.cpp:320
+#: src/frontend/AboutDialog.cpp:334
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "Implementació de la funcionalitat de port en sèrie"
 
-#: src/frontend/AboutDialog.cpp:326
+#: src/frontend/AboutDialog.cpp:340
 #, kde-format
 msgid "SVG export support"
 msgstr "Implementació de l'exportació de SVG"
 
-#: src/frontend/AboutDialog.cpp:332
+#: src/frontend/AboutDialog.cpp:346
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Importa fitxers «xlsx» de l'Excel"
 
-#: src/frontend/AboutDialog.cpp:338
+#: src/frontend/AboutDialog.cpp:352
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "Llegeix (i escriu) conjunts de dades de SAS, Stata i SPSS"
 
-#: src/frontend/AboutDialog.cpp:344
+#: src/frontend/AboutDialog.cpp:358
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "Implementació de fitxers Binary Log File (BLF)"
 
-#: src/frontend/AboutDialog.cpp:347 src/frontend/AboutDialog.cpp:372
+#: src/frontend/AboutDialog.cpp:361 src/frontend/AboutDialog.cpp:386
 #, kde-format
 msgid "C++ Compiler: "
 msgstr "Compilador C++: "
 
-#: src/frontend/AboutDialog.cpp:352 src/frontend/AboutDialog.cpp:372
+#: src/frontend/AboutDialog.cpp:366 src/frontend/AboutDialog.cpp:386
 #, kde-format
 msgid "C++ Compiler Flags:"
 msgstr "Indicadors del compilador C++:"
 
-#: src/frontend/AboutDialog.cpp:366
+#: src/frontend/AboutDialog.cpp:380
 #, kde-format
 msgid "Components:"
 msgstr "Components:"
 
-#: src/frontend/AboutDialog.cpp:367
+#: src/frontend/AboutDialog.cpp:381
 #, kde-format
 msgid "Qt"
 msgstr "Qt"
 
-#: src/frontend/AboutDialog.cpp:368
+#: src/frontend/AboutDialog.cpp:382
 #, kde-format
 msgid "KDE Frameworks"
 msgstr "Frameworks del KDE"
 
-#: src/frontend/AboutDialog.cpp:383
+#: src/frontend/AboutDialog.cpp:397
 #, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
@@ -11589,35 +11589,35 @@ msgstr ""
 "de dades LLIURE, de codi obert i multiplataforma, accessible a tothom, "
 "(Versió %2) [Programari de l'ordinador]. %3."
 
-#: src/frontend/ActionsManager.cpp:193
+#: src/frontend/ActionsManager.cpp:200
 #, kde-format
 msgid "&Open Example"
 msgstr "&Obre un exemple"
 
-#: src/frontend/ActionsManager.cpp:206 src/frontend/MainWin.cpp:1176
+#: src/frontend/ActionsManager.cpp:213 src/frontend/MainWin.cpp:1176
 #, kde-format
 msgid "Workbook"
 msgstr "Llibre de treball"
 
-#: src/frontend/ActionsManager.cpp:208
+#: src/frontend/ActionsManager.cpp:215
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Crea un llibre de treball nou per a obtenir fulls de càlcul, matrius i "
 "diagrames"
 
-#: src/frontend/ActionsManager.cpp:211 src/frontend/MainWin.cpp:1184
+#: src/frontend/ActionsManager.cpp:218 src/frontend/MainWin.cpp:1184
 #, kde-format
 msgid "Data Extractor"
 msgstr "Extractor de dades"
 
-#: src/frontend/ActionsManager.cpp:212
+#: src/frontend/ActionsManager.cpp:219
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Crea un extractor de dades per a obtenir dades des d'una imatge"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
-#: src/frontend/ActionsManager.cpp:216
+#: src/frontend/ActionsManager.cpp:223
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
@@ -11629,237 +11629,237 @@ msgstr "Crea un extractor de dades per a obtenir dades des d'una imatge"
 msgid "Spreadsheet"
 msgstr "Full de càlcul"
 
-#: src/frontend/ActionsManager.cpp:218
+#: src/frontend/ActionsManager.cpp:225
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Crea un full de càlcul nou per a l'edició de les dades"
 
-#: src/frontend/ActionsManager.cpp:224
+#: src/frontend/ActionsManager.cpp:231
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Crea una matriu nova per a l'edició de les dades"
 
-#: src/frontend/ActionsManager.cpp:230
+#: src/frontend/ActionsManager.cpp:237
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Crea un full de treball nou per al traçat de les dades"
 
-#: src/frontend/ActionsManager.cpp:238
+#: src/frontend/ActionsManager.cpp:245
 #, kde-format
 msgid "Creates a new %1 script"
 msgstr "Crea un script nou de %1"
 
-#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1246
+#: src/frontend/ActionsManager.cpp:252 src/frontend/MainWin.cpp:1246
 #, kde-format
 msgid "Note"
 msgstr "Nota"
 
-#: src/frontend/ActionsManager.cpp:246
+#: src/frontend/ActionsManager.cpp:253
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Crea una nota nova per al text arbitrari"
 
-#: src/frontend/ActionsManager.cpp:250 src/frontend/MainWin.cpp:1168
+#: src/frontend/ActionsManager.cpp:257 src/frontend/MainWin.cpp:1168
 #, kde-format
 msgid "Folder"
 msgstr "Carpeta"
 
-#: src/frontend/ActionsManager.cpp:251
+#: src/frontend/ActionsManager.cpp:258
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Crea una carpeta nova per a col·leccionar els fulls i altres elements"
 
-#: src/frontend/ActionsManager.cpp:256
+#: src/frontend/ActionsManager.cpp:263
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Origen de les dades en viu..."
 
-#: src/frontend/ActionsManager.cpp:257
+#: src/frontend/ActionsManager.cpp:264
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Crea un origen de les dades en viu per a llegir-les des d'un dispositiu en "
 "temps real"
 
-#: src/frontend/ActionsManager.cpp:265
+#: src/frontend/ActionsManager.cpp:272
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Importa les dades des d'un fitxer normal"
 
-#: src/frontend/ActionsManager.cpp:270
+#: src/frontend/ActionsManager.cpp:277
 #, kde-format
 msgid "From Directory..."
 msgstr "Des del directori..."
 
-#: src/frontend/ActionsManager.cpp:272
+#: src/frontend/ActionsManager.cpp:279
 #, kde-format
 msgid "Import multiple files from a directory"
 msgstr "Importa diversos fitxers des d'un directori"
 
-#: src/frontend/ActionsManager.cpp:277
+#: src/frontend/ActionsManager.cpp:284
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "Des de kaggle.com..."
 
-#: src/frontend/ActionsManager.cpp:278
+#: src/frontend/ActionsManager.cpp:285
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Importa les dades des de kaggle.com"
 
-#: src/frontend/ActionsManager.cpp:283
+#: src/frontend/ActionsManager.cpp:290
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Importa les dades des d'una base de dades SQL"
 
-#: src/frontend/ActionsManager.cpp:287
+#: src/frontend/ActionsManager.cpp:294
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Des d'una col·lecció de conjunt de dades..."
 
-#: src/frontend/ActionsManager.cpp:288
+#: src/frontend/ActionsManager.cpp:295
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Importa les dades des d'un conjunt de dades en línia"
 
-#: src/frontend/ActionsManager.cpp:292
+#: src/frontend/ActionsManager.cpp:299
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Projecte del LabPlot..."
 
-#: src/frontend/ActionsManager.cpp:293
+#: src/frontend/ActionsManager.cpp:300
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Importa un projecte des d'un fitxer de projecte del LabPlot (.lml)"
 
-#: src/frontend/ActionsManager.cpp:298
+#: src/frontend/ActionsManager.cpp:305
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Projecte de l'Origin (OPJ)..."
 
-#: src/frontend/ActionsManager.cpp:299
+#: src/frontend/ActionsManager.cpp:306
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 "Importa un projecte des d'un fitxer de projecte Origin de l'OriginLab (.opj)"
 
-#: src/frontend/ActionsManager.cpp:332
+#: src/frontend/ActionsManager.cpp:339
 #, kde-format
 msgid "Export..."
 msgstr "Exporta..."
 
-#: src/frontend/ActionsManager.cpp:333
+#: src/frontend/ActionsManager.cpp:340
 #, kde-format
 msgid "Export selected element"
 msgstr "Exporta l'element seleccionat"
 
-#: src/frontend/ActionsManager.cpp:339 src/frontend/ActionsManager.cpp:1333
-#: src/frontend/ActionsManager.cpp:1341
+#: src/frontend/ActionsManager.cpp:346 src/frontend/ActionsManager.cpp:1340
+#: src/frontend/ActionsManager.cpp:1348
 #, kde-format
 msgid "Share"
 msgstr "Comparteix"
 
-#: src/frontend/ActionsManager.cpp:344
+#: src/frontend/ActionsManager.cpp:351
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Navegador de mapes de colors"
 
-#: src/frontend/ActionsManager.cpp:345
+#: src/frontend/ActionsManager.cpp:352
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
 "Obre el diàleg per a navegar a través dels mapes de colors disponibles."
 
-#: src/frontend/ActionsManager.cpp:354
+#: src/frontend/ActionsManager.cpp:361
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Editor de metadades del FITS..."
 
-#: src/frontend/ActionsManager.cpp:355
+#: src/frontend/ActionsManager.cpp:362
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Obre l'editor per a editar les metadades del FITS"
 
-#: src/frontend/ActionsManager.cpp:364
+#: src/frontend/ActionsManager.cpp:371
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Historial de desfer/refer..."
 
-#: src/frontend/ActionsManager.cpp:384
+#: src/frontend/ActionsManager.cpp:391
 #, kde-format
 msgid "Close the active window"
 msgstr "Tanca la finestra activa"
 
-#: src/frontend/ActionsManager.cpp:387
+#: src/frontend/ActionsManager.cpp:394
 #, kde-format
 msgid "Close &All"
 msgstr "T&anca-ho tot"
 
-#: src/frontend/ActionsManager.cpp:388
+#: src/frontend/ActionsManager.cpp:395
 #, kde-format
 msgid "Close all the windows"
 msgstr "Tanca totes les finestres"
 
-#: src/frontend/ActionsManager.cpp:391
+#: src/frontend/ActionsManager.cpp:398
 #, kde-format
 msgid "Ne&xt"
 msgstr "Se&güent"
 
-#: src/frontend/ActionsManager.cpp:393
+#: src/frontend/ActionsManager.cpp:400
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Mou el focus a la finestra següent"
 
-#: src/frontend/ActionsManager.cpp:396
+#: src/frontend/ActionsManager.cpp:403
 #, kde-format
 msgid "Pre&vious"
 msgstr "A&nterior"
 
-#: src/frontend/ActionsManager.cpp:398
+#: src/frontend/ActionsManager.cpp:405
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Mou el focus a la finestra anterior"
 
-#: src/frontend/ActionsManager.cpp:405
+#: src/frontend/ActionsManager.cpp:412
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Només la &carpeta actual"
 
-#: src/frontend/ActionsManager.cpp:410
+#: src/frontend/ActionsManager.cpp:417
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Carpeta actual i &subcarpetes"
 
-#: src/frontend/ActionsManager.cpp:414
+#: src/frontend/ActionsManager.cpp:421
 #, kde-format
 msgid "&All"
 msgstr "&Totes"
 
-#: src/frontend/ActionsManager.cpp:436
+#: src/frontend/ActionsManager.cpp:443
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Mostra l'ús de la memòria"
 
-#: src/frontend/ActionsManager.cpp:444
+#: src/frontend/ActionsManager.cpp:451
 #, kde-format
 msgid "Project Explorer"
 msgstr "Explorador del projecte"
 
-#: src/frontend/ActionsManager.cpp:449
+#: src/frontend/ActionsManager.cpp:456
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Explorador de les propietats"
 
-#: src/frontend/ActionsManager.cpp:454
+#: src/frontend/ActionsManager.cpp:461
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Vista prèvia del full de treball"
 
-#: src/frontend/ActionsManager.cpp:477
+#: src/frontend/ActionsManager.cpp:484
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Configura el CAS..."
 
-#: src/frontend/ActionsManager.cpp:478
+#: src/frontend/ActionsManager.cpp:485
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -11868,130 +11868,130 @@ msgstr ""
 "Obre la configuració per als sistemes algebraics d'ordinador per a modificar "
 "els sistemes disponibles o per a habilitar-ne de nous"
 
-#: src/frontend/ActionsManager.cpp:505
+#: src/frontend/ActionsManager.cpp:512
 #, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
 msgstr "Àrea nova del diagrama"
 
-#: src/frontend/ActionsManager.cpp:521
+#: src/frontend/ActionsManager.cpp:528
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:250
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Disposició vertical"
 
-#: src/frontend/ActionsManager.cpp:526
+#: src/frontend/ActionsManager.cpp:533
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:254
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Disposició horitzontal"
 
-#: src/frontend/ActionsManager.cpp:531
+#: src/frontend/ActionsManager.cpp:538
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
 #: src/frontend/worksheet/WorksheetView.cpp:258
 #, kde-format
 msgid "Grid Layout"
 msgstr "Disposició en quadrícula"
 
-#: src/frontend/ActionsManager.cpp:536
+#: src/frontend/ActionsManager.cpp:543
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:262
 #, kde-format
 msgid "No Layout"
 msgstr "Sense disposició"
 
-#: src/frontend/ActionsManager.cpp:544 src/frontend/ActionsManager.cpp:585
+#: src/frontend/ActionsManager.cpp:551 src/frontend/ActionsManager.cpp:592
 #: src/frontend/worksheet/WorksheetView.cpp:186
 #: src/frontend/worksheet/WorksheetView.cpp:348
 #, kde-format
 msgid "Select and Edit"
 msgstr "Selecciona i edita"
 
-#: src/frontend/ActionsManager.cpp:549 src/frontend/ActionsManager.cpp:762
+#: src/frontend/ActionsManager.cpp:556 src/frontend/ActionsManager.cpp:769
 #: src/frontend/datapicker/DatapickerImageView.cpp:132
 #: src/frontend/worksheet/WorksheetView.cpp:191
 #, kde-format
 msgid "Navigate"
 msgstr "Navega"
 
-#: src/frontend/ActionsManager.cpp:554 src/frontend/ActionsManager.cpp:767
+#: src/frontend/ActionsManager.cpp:561 src/frontend/ActionsManager.cpp:774
 #: src/frontend/datapicker/DatapickerImageView.cpp:136
 #: src/frontend/worksheet/WorksheetView.cpp:195
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Selecciona i amplia"
 
-#: src/frontend/ActionsManager.cpp:560 src/frontend/ActionsManager.cpp:796
+#: src/frontend/ActionsManager.cpp:567 src/frontend/ActionsManager.cpp:803
 #, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "Zoom"
 
-#: src/frontend/ActionsManager.cpp:566 src/frontend/ActionsManager.cpp:802
+#: src/frontend/ActionsManager.cpp:573 src/frontend/ActionsManager.cpp:809
 #, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr "Ampliació"
 
-#: src/frontend/ActionsManager.cpp:579
+#: src/frontend/ActionsManager.cpp:586
 #, kde-format
 msgctxt "@action"
 msgid "Add New"
 msgstr "Afegeix un nou"
 
-#: src/frontend/ActionsManager.cpp:591
+#: src/frontend/ActionsManager.cpp:598
 #: src/frontend/worksheet/WorksheetView.cpp:353
 #, kde-format
 msgid "Crosshair"
 msgstr "Creu"
 
-#: src/frontend/ActionsManager.cpp:596
+#: src/frontend/ActionsManager.cpp:603
 #: src/frontend/worksheet/WorksheetView.cpp:358
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Selecciona una regió i apropa"
 
-#: src/frontend/ActionsManager.cpp:601
+#: src/frontend/ActionsManager.cpp:608
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Selecciona una regió de X i apropa"
 
-#: src/frontend/ActionsManager.cpp:606
+#: src/frontend/ActionsManager.cpp:613
 #: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Selecciona una regió de Y i apropa"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1579
+#: src/frontend/ActionsManager.cpp:618 src/frontend/MainWin.cpp:1579
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
 msgid "Cursor"
 msgstr "cursor"
 
-#: src/frontend/ActionsManager.cpp:619
+#: src/frontend/ActionsManager.cpp:626
 #: src/frontend/worksheet/WorksheetView.cpp:381
 #, kde-format
 msgid "Auto Scale"
 msgstr "Escala automàticament"
 
-#: src/frontend/ActionsManager.cpp:623
+#: src/frontend/ActionsManager.cpp:630
 #: src/frontend/worksheet/WorksheetView.cpp:385
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Escala X automàticament"
 
-#: src/frontend/ActionsManager.cpp:627
+#: src/frontend/ActionsManager.cpp:634
 #: src/frontend/worksheet/WorksheetView.cpp:389
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Escala Y automàticament"
 
-#: src/frontend/ActionsManager.cpp:632 src/frontend/ActionsManager.cpp:721
+#: src/frontend/ActionsManager.cpp:639 src/frontend/ActionsManager.cpp:728
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:190
 #: src/frontend/notebook/NotebookView.cpp:53
@@ -12001,7 +12001,7 @@ msgstr "Escala Y automàticament"
 msgid "Zoom In"
 msgstr "Apropa"
 
-#: src/frontend/ActionsManager.cpp:636 src/frontend/ActionsManager.cpp:724
+#: src/frontend/ActionsManager.cpp:643 src/frontend/ActionsManager.cpp:731
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:191
 #: src/frontend/notebook/NotebookView.cpp:57
@@ -12011,221 +12011,221 @@ msgstr "Apropa"
 msgid "Zoom Out"
 msgstr "Allunya"
 
-#: src/frontend/ActionsManager.cpp:640
+#: src/frontend/ActionsManager.cpp:647
 #: src/frontend/worksheet/WorksheetView.cpp:401
 #, kde-format
 msgid "Zoom In X"
 msgstr "Apropa X"
 
-#: src/frontend/ActionsManager.cpp:644
+#: src/frontend/ActionsManager.cpp:651
 #: src/frontend/worksheet/WorksheetView.cpp:405
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Allunya X"
 
-#: src/frontend/ActionsManager.cpp:648
+#: src/frontend/ActionsManager.cpp:655
 #: src/frontend/worksheet/WorksheetView.cpp:409
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Apropa Y"
 
-#: src/frontend/ActionsManager.cpp:652
+#: src/frontend/ActionsManager.cpp:659
 #: src/frontend/worksheet/WorksheetView.cpp:413
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Allunya Y"
 
-#: src/frontend/ActionsManager.cpp:657
+#: src/frontend/ActionsManager.cpp:664
 #: src/frontend/worksheet/WorksheetView.cpp:417
 #, kde-format
 msgid "Shift Left X"
 msgstr "Desplaça X a l'esquerra"
 
-#: src/frontend/ActionsManager.cpp:661
+#: src/frontend/ActionsManager.cpp:668
 #: src/frontend/worksheet/WorksheetView.cpp:419
 #, kde-format
 msgid "Shift Right X"
 msgstr "Desplaça X a la dreta"
 
-#: src/frontend/ActionsManager.cpp:665
+#: src/frontend/ActionsManager.cpp:672
 #: src/frontend/worksheet/WorksheetView.cpp:421
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Desplaça Y amunt"
 
-#: src/frontend/ActionsManager.cpp:669
+#: src/frontend/ActionsManager.cpp:676
 #: src/frontend/worksheet/WorksheetView.cpp:423
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Desplaça Y avall"
 
-#: src/frontend/ActionsManager.cpp:681
+#: src/frontend/ActionsManager.cpp:688
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:493
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Insereix una fila a sobre"
 
-#: src/frontend/ActionsManager.cpp:684
+#: src/frontend/ActionsManager.cpp:691
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:494
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Insereix una fila a sota"
 
-#: src/frontend/ActionsManager.cpp:687
+#: src/frontend/ActionsManager.cpp:694
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:497
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "E&limina la/es fila/es seleccionada/es"
 
-#: src/frontend/ActionsManager.cpp:691
+#: src/frontend/ActionsManager.cpp:698
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:346
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Insereix una columna a l'esquerra"
 
-#: src/frontend/ActionsManager.cpp:694
+#: src/frontend/ActionsManager.cpp:701
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:347
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Insereix una columna a la dreta"
 
-#: src/frontend/ActionsManager.cpp:697
+#: src/frontend/ActionsManager.cpp:704
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:350
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "Elimina la/es columna/es seleccionada/es"
 
-#: src/frontend/ActionsManager.cpp:701
+#: src/frontend/ActionsManager.cpp:708
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "&Sort..."
 msgstr "&Ordena..."
 
-#: src/frontend/ActionsManager.cpp:702
+#: src/frontend/ActionsManager.cpp:709
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:481
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "Ordena múltiples columnes juntes"
 
-#: src/frontend/ActionsManager.cpp:705
+#: src/frontend/ActionsManager.cpp:712
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "Ordenació &ascendent"
 
-#: src/frontend/ActionsManager.cpp:706
+#: src/frontend/ActionsManager.cpp:713
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "Ordena separadament les columnes seleccionades en ordre ascendent"
 
-#: src/frontend/ActionsManager.cpp:709
+#: src/frontend/ActionsManager.cpp:716
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:484
 #, kde-format
 msgid "Sort &Descending"
 msgstr "Ordenació &descendent"
 
-#: src/frontend/ActionsManager.cpp:710
+#: src/frontend/ActionsManager.cpp:717
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:485
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "Ordena separadament les columnes seleccionades en ordre descendent"
 
-#: src/frontend/ActionsManager.cpp:727
+#: src/frontend/ActionsManager.cpp:734
 #: src/frontend/notebook/NotebookView.cpp:61
 #, kde-format
 msgid "Find"
 msgstr "Cerca"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/frontend/ActionsManager.cpp:730
+#: src/frontend/ActionsManager.cpp:737
 #: src/frontend/notebook/NotebookView.cpp:69
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "Reinicia"
 
-#: src/frontend/ActionsManager.cpp:733
+#: src/frontend/ActionsManager.cpp:740
 #: src/frontend/notebook/NotebookView.cpp:72
 #: src/frontend/notebook/NotebookView.cpp:354
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "Avalua el bloc de notes"
 
-#: src/frontend/ActionsManager.cpp:747
+#: src/frontend/ActionsManager.cpp:754
 #: src/frontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Estableix els punts de l'eix"
 
-#: src/frontend/ActionsManager.cpp:752
+#: src/frontend/ActionsManager.cpp:759
 #: src/frontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Estableix els punts de la corba"
 
-#: src/frontend/ActionsManager.cpp:757
+#: src/frontend/ActionsManager.cpp:764
 #: src/frontend/datapicker/DatapickerImageView.cpp:148
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Selecciona els segments de la corba"
 
-#: src/frontend/ActionsManager.cpp:773
+#: src/frontend/ActionsManager.cpp:780
 #: src/frontend/datapicker/DatapickerImageView.cpp:153
 #, kde-format
 msgid "New Curve"
 msgstr "Corba nova"
 
-#: src/frontend/ActionsManager.cpp:779
+#: src/frontend/ActionsManager.cpp:786
 #: src/frontend/datapicker/DatapickerImageView.cpp:156
 #, kde-format
 msgid "Shift Left"
 msgstr "Desplaça a l'esquerra"
 
-#: src/frontend/ActionsManager.cpp:783
+#: src/frontend/ActionsManager.cpp:790
 #: src/frontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
 msgid "Shift Right"
 msgstr "Desplaça a la dreta"
 
-#: src/frontend/ActionsManager.cpp:787
+#: src/frontend/ActionsManager.cpp:794
 #: src/frontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Up"
 msgstr "Desplaça amunt"
 
-#: src/frontend/ActionsManager.cpp:791
+#: src/frontend/ActionsManager.cpp:798
 #: src/frontend/datapicker/DatapickerImageView.cpp:168
 #, kde-format
 msgid "Shift Down"
 msgstr "Desplaça avall"
 
-#: src/frontend/ActionsManager.cpp:883
+#: src/frontend/ActionsManager.cpp:890
 #, kde-format
 msgid "Window Visibility"
 msgstr "Visibilitat de les finestres"
 
-#: src/frontend/ActionsManager.cpp:900
+#: src/frontend/ActionsManager.cpp:907
 #, kde-format
 msgid "Color Scheme"
 msgstr "Esquema de color"
 
-#: src/frontend/ActionsManager.cpp:1300
+#: src/frontend/ActionsManager.cpp:1307
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Crea un bloc de notes nou de %1"
 
-#: src/frontend/ActionsManager.cpp:1333
+#: src/frontend/ActionsManager.cpp:1340
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "S'ha produït un problema en compartir el projecte: %1"
 
-#: src/frontend/ActionsManager.cpp:1337
+#: src/frontend/ActionsManager.cpp:1344
 #, kde-format
 msgid "Project shared successfully"
 msgstr "El projecte s'ha compartit correctament"
 
-#: src/frontend/ActionsManager.cpp:1340
+#: src/frontend/ActionsManager.cpp:1347
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "El projecte compartit es pot trobar a: <a href=\"%1\">%1</a>"
@@ -12425,7 +12425,7 @@ msgstr "Corba"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4180
-#: src/frontend/worksheet/WorksheetView.cpp:2145
+#: src/frontend/worksheet/WorksheetView.cpp:2171
 #, kde-format
 msgid "Failed to export"
 msgstr "Ha fallat en exportar"
@@ -12433,7 +12433,7 @@ msgstr "Ha fallat en exportar"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4180
-#: src/frontend/worksheet/WorksheetView.cpp:2145
+#: src/frontend/worksheet/WorksheetView.cpp:2171
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Ha fallat en escriure a «%1». Comproveu el camí."
@@ -16340,316 +16340,316 @@ msgstr ""
 "No s'ha pogut obrir el fitxer %1 de col·leccions d'exemples. Comproveu la "
 "instal·lació."
 
-#: src/frontend/GuiObserver.cpp:186 src/frontend/MainWin.cpp:613
+#: src/frontend/GuiObserver.cpp:193 src/frontend/MainWin.cpp:613
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
 msgstr "Propietats"
 
-#: src/frontend/GuiObserver.cpp:222
+#: src/frontend/GuiObserver.cpp:229
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
 msgstr "Propietats: Full de càlcul"
 
-#: src/frontend/GuiObserver.cpp:227
+#: src/frontend/GuiObserver.cpp:234
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
 msgstr "Propietats: Estadístiques de les columnes"
 
-#: src/frontend/GuiObserver.cpp:237
+#: src/frontend/GuiObserver.cpp:244
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
 msgstr "Full de treball %1"
 
-#: src/frontend/GuiObserver.cpp:242
+#: src/frontend/GuiObserver.cpp:249
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
 msgstr "Propietats: Columna"
 
-#: src/frontend/GuiObserver.cpp:249
+#: src/frontend/GuiObserver.cpp:256
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
 msgstr "Propietats: Matriu"
 
-#: src/frontend/GuiObserver.cpp:254
+#: src/frontend/GuiObserver.cpp:261
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
 msgstr "Propietats: Full de treball"
 
-#: src/frontend/GuiObserver.cpp:260
+#: src/frontend/GuiObserver.cpp:267
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
 msgstr "Propietats: Àrea del diagrama"
 
-#: src/frontend/GuiObserver.cpp:266
+#: src/frontend/GuiObserver.cpp:273
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
 msgstr "Propietats: Llegenda"
 
-#: src/frontend/GuiObserver.cpp:271
+#: src/frontend/GuiObserver.cpp:278
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
 msgstr "Propietats: Eix"
 
-#: src/frontend/GuiObserver.cpp:276
+#: src/frontend/GuiObserver.cpp:283
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
 msgstr "Propietats: Corba-XY"
 
-#: src/frontend/GuiObserver.cpp:281
+#: src/frontend/GuiObserver.cpp:288
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
 msgstr "Propietats: Equació-XY"
 
-#: src/frontend/GuiObserver.cpp:286
+#: src/frontend/GuiObserver.cpp:293
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
 msgstr "Propietats: Corba de funció"
 
-#: src/frontend/GuiObserver.cpp:291
+#: src/frontend/GuiObserver.cpp:298
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Line Simplification"
 msgstr "Propietats: Simplificació de línia"
 
-#: src/frontend/GuiObserver.cpp:296
+#: src/frontend/GuiObserver.cpp:303
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
 msgstr "Propietats: Diferenciació"
 
-#: src/frontend/GuiObserver.cpp:301
+#: src/frontend/GuiObserver.cpp:308
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
 msgstr "Propietats: Integració"
 
-#: src/frontend/GuiObserver.cpp:306
+#: src/frontend/GuiObserver.cpp:313
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
 msgstr "Propietats: Interpolació"
 
-#: src/frontend/GuiObserver.cpp:311
+#: src/frontend/GuiObserver.cpp:318
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
 msgstr "Propietats: Suavitzat"
 
-#: src/frontend/GuiObserver.cpp:316
+#: src/frontend/GuiObserver.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
 msgstr "Propietats: Ajust"
 
-#: src/frontend/GuiObserver.cpp:321
+#: src/frontend/GuiObserver.cpp:328
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
 msgstr "Propietats: Transformada de Fourier"
 
-#: src/frontend/GuiObserver.cpp:326
+#: src/frontend/GuiObserver.cpp:333
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
 msgstr "Propietats: Transformada de Hilbert"
 
-#: src/frontend/GuiObserver.cpp:331
+#: src/frontend/GuiObserver.cpp:338
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "Propietats: Filtre de Fourier"
 
-#: src/frontend/GuiObserver.cpp:336
+#: src/frontend/GuiObserver.cpp:343
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
 msgstr "Propietats: Convolució/Desconvolució"
 
-#: src/frontend/GuiObserver.cpp:341
+#: src/frontend/GuiObserver.cpp:348
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Baseline Correction"
 msgstr "Propietats: correcció de la línia base"
 
-#: src/frontend/GuiObserver.cpp:346
+#: src/frontend/GuiObserver.cpp:353
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
 msgstr "Propietats: Correlació creuada/automàtica"
 
-#: src/frontend/GuiObserver.cpp:351
+#: src/frontend/GuiObserver.cpp:358
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
 msgstr "Propietats: Histograma"
 
-#: src/frontend/GuiObserver.cpp:357
+#: src/frontend/GuiObserver.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
 msgstr "Propietats: Diagrama de barres"
 
 # skip-rule: kct-box
-#: src/frontend/GuiObserver.cpp:362
+#: src/frontend/GuiObserver.cpp:369
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
 msgstr "Propietats: Diagrama de piruletes"
 
 # skip-rule: kct-box
-#: src/frontend/GuiObserver.cpp:368
+#: src/frontend/GuiObserver.cpp:375
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
 msgstr "Propietats: Diagrama de caixes"
 
-#: src/frontend/GuiObserver.cpp:373
+#: src/frontend/GuiObserver.cpp:380
 #, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "Diagrama del KDE"
 
-#: src/frontend/GuiObserver.cpp:378
+#: src/frontend/GuiObserver.cpp:385
 #, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
 msgstr "Diagrama Q-Q"
 
-#: src/frontend/GuiObserver.cpp:384
+#: src/frontend/GuiObserver.cpp:391
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
 msgstr "Diagrama de comportament de procés"
 
-#: src/frontend/GuiObserver.cpp:389
+#: src/frontend/GuiObserver.cpp:396
 #, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
 msgstr "Executa el diagrama"
 
-#: src/frontend/GuiObserver.cpp:394
+#: src/frontend/GuiObserver.cpp:401
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
 msgstr "Propietats: Etiqueta de text"
 
-#: src/frontend/GuiObserver.cpp:399
+#: src/frontend/GuiObserver.cpp:406
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
 msgstr "Propietats: Imatge"
 
-#: src/frontend/GuiObserver.cpp:404
+#: src/frontend/GuiObserver.cpp:411
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
 msgstr "Propietats: Punt personalitzat"
 
-#: src/frontend/GuiObserver.cpp:409
+#: src/frontend/GuiObserver.cpp:416
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
 msgstr "Propietats: Línia de referència"
 
-#: src/frontend/GuiObserver.cpp:414
+#: src/frontend/GuiObserver.cpp:421
 #, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "Interval de referència"
 
-#: src/frontend/GuiObserver.cpp:419
+#: src/frontend/GuiObserver.cpp:426
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
 msgstr "Propietats: Corba del selector de dades"
 
-#: src/frontend/GuiObserver.cpp:424
+#: src/frontend/GuiObserver.cpp:431
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
 msgstr "Propietats: Extractor de dades"
 
-#: src/frontend/GuiObserver.cpp:436
+#: src/frontend/GuiObserver.cpp:443
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hypothesis Test"
 msgstr "Propietats: Prova d'hipòtesi"
 
-#: src/frontend/GuiObserver.cpp:443
+#: src/frontend/GuiObserver.cpp:450
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Seasonal Decomposition"
 msgstr "Propietats: Descomposició estacional"
 
-#: src/frontend/GuiObserver.cpp:449
+#: src/frontend/GuiObserver.cpp:456
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "Propietats: Projecte"
 
-#: src/frontend/GuiObserver.cpp:459
+#: src/frontend/GuiObserver.cpp:466
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr "Bloc de notes del %1"
 
-#: src/frontend/GuiObserver.cpp:461
+#: src/frontend/GuiObserver.cpp:468
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "Propietats: Bloc de notes"
 
-#: src/frontend/GuiObserver.cpp:467
+#: src/frontend/GuiObserver.cpp:474
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "Propietats: Notes"
 
-#: src/frontend/GuiObserver.cpp:472
+#: src/frontend/GuiObserver.cpp:479
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr "Propietats: Element d'informació"
 
-#: src/frontend/GuiObserver.cpp:479 src/frontend/GuiObserver.cpp:486
-#: src/frontend/GuiObserver.cpp:493
+#: src/frontend/GuiObserver.cpp:486 src/frontend/GuiObserver.cpp:493
+#: src/frontend/GuiObserver.cpp:500
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "Propietats: Origen de dades MQTT"
 
-#: src/frontend/GuiObserver.cpp:499
+#: src/frontend/GuiObserver.cpp:506
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "Propietats: Dades d'origen en viu"
 
-#: src/frontend/GuiObserver.cpp:513
+#: src/frontend/GuiObserver.cpp:520
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "Propietats: Carpeta"
 
-#: src/frontend/GuiObserver.cpp:520
+#: src/frontend/GuiObserver.cpp:527
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
 msgstr "Propietats: Llibre de treball"
 
-#: src/frontend/GuiObserver.cpp:526
+#: src/frontend/GuiObserver.cpp:533
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
