@@ -276,8 +276,13 @@ set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_b
 # Full API needed for PyFunction_Check() and PyRun_String()
 #set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
 
-# PYTHON3_EXECUTABLE is the python executable path and is needed when initializing the python scripting interpreter
-set_property(SOURCE ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp APPEND PROPERTY COMPILE_DEFINITIONS -DPYTHON3_EXECUTABLE=${Python3_EXECUTABLE})
+# PYTHON3_EXECUTABLE_NAME is the python executable name (without path) and is needed when initializing the python scripting interpreter
+get_filename_component(PYTHON3_EXECUTABLE_NAME
+    "${Python3_EXECUTABLE}"
+    NAME
+)
+message(STATUS "Python executable name: ${PYTHON3_EXECUTABLE_NAME}")
+set_property(SOURCE ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp APPEND PROPERTY COMPILE_DEFINITIONS -DPYTHON3_EXECUTABLE_NAME=${PYTHON3_EXECUTABLE_NAME})
 
 # shiboken generates sources using deprecated code so we remove these deprecation macros to enable the shiboken generated files to compile
 get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)
