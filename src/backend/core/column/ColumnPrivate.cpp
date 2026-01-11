@@ -2389,6 +2389,7 @@ struct PayloadColumn : public Parsing::Payload {
 
 // Constant functions, which always return the same value independent of the row index
 COLUMN_FUNCTION(Size, statistics().size)
+COLUMN_FUNCTION(Sum, statistics().sum)
 COLUMN_FUNCTION(Min, minimum())
 COLUMN_FUNCTION(Max, maximum())
 COLUMN_FUNCTION(Mean, statistics().arithmeticMean)
@@ -2562,6 +2563,7 @@ void ColumnPrivate::updateFormula() {
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
 		parser->setSpecialFunctionVariablePayload(Parsing::colfun_size, columnSize, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_sum, columnSum, payload);
 		parser->setSpecialFunctionVariablePayload(Parsing::colfun_min, columnMin, payload);
 		parser->setSpecialFunctionVariablePayload(Parsing::colfun_max, columnMax, payload);
 		parser->setSpecialFunctionVariablePayload(Parsing::colfun_mean, columnMean, payload);
