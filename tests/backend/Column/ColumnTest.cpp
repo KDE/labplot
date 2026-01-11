@@ -1699,6 +1699,11 @@ void ColumnTest::testFormulasSize() {
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
 	COLUMN2_SET_FORMULA_AND_EVALUATE("size(x)", 5.)
 }
+void ColumnTest::testFormulasSum() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("sum(x)", 13.)
+}
 void ColumnTest::testFormulasMin() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
