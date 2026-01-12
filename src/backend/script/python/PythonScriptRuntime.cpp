@@ -11,8 +11,8 @@
 #include "pyerrors.h"
 #include "pylabplot/pylabplot_python.h"
 
-#include <string>
 #include <codecvt>
+#include <string>
 
 static wchar_t programName[] = L"labplot";
 static wchar_t* argv[] = {programName};
