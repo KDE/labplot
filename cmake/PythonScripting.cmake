@@ -282,7 +282,7 @@ get_filename_component(PYTHON3_EXECUTABLE_NAME
     NAME
 )
 message(STATUS "Python executable name: ${PYTHON3_EXECUTABLE_NAME}")
-set_property(SOURCE ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp APPEND PROPERTY COMPILE_DEFINITIONS -DPYTHON3_EXECUTABLE_NAME=${PYTHON3_EXECUTABLE_NAME})
+set_property(SOURCE ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp APPEND PROPERTY COMPILE_DEFINITIONS -DPYTHON3_EXECUTABLE=L\"${PYTHON3_EXECUTABLE_NAME}\")
 
 # shiboken generates sources using deprecated code so we remove these deprecation macros to enable the shiboken generated files to compile
 get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)

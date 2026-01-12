@@ -13,8 +13,7 @@
 
 static wchar_t programName[] = L"labplot";
 static wchar_t* argv[] = {programName};
-static const wchar_t* pythonInterpreter =
-	L"PYTHON3_EXECUTABLE_NAME"; // PYTHON3_EXECUTABLE_NAME is a macro and will be replaced by the actual python executable name
+static const wchar_t* pythonInterpreter = PYTHON3_EXECUTABLE; // PYTHON3_EXECUTABLE is a macro and will be replaced by the actual python executable name
 
 // The name of our python extension module: pylabplot
 static const char* moduleName = "pylabplot";
@@ -101,6 +100,8 @@ bool PythonScriptRuntime::initPython() {
 	if (Py_IsInitialized() && ready)
 		return true;
 
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	INFO("Using Python interpreter: " << converter.to_bytes(pythonInterpreter))
 	Py_SetProgramName(pythonInterpreter);
 
 	if (PyImport_AppendInittab(moduleName, PyInit_pylabplot) == -1)
