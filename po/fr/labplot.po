@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-12 00:39+0000\n"
-"PO-Revision-Date: 2026-01-09 10:38+0100\n"
+"PO-Revision-Date: 2026-01-11 16:30+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 "X-Text-Markup: kde4\n"
 
 #: src/backend/core/AbstractAspect.cpp:239
@@ -7436,12 +7436,12 @@ msgstr "%1 : masquer les lignes ayant des valeurs absentes"
 #: src/backend/spreadsheet/Spreadsheet.cpp:490
 #, kde-format
 msgid "%1: toggle comments header"
-msgstr "%1 : afficher / masquer l'entête de commentaire"
+msgstr "%1 : afficher / masquer l'en-tête de commentaire"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:498
 #, kde-format
 msgid "%1: toggle sparklines header"
-msgstr "%1 : afficher / masquer l'entête des sparklines"
+msgstr "%1 : afficher / masquer l'en-tête des sparklines"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:562
 #: src/backend/spreadsheet/Spreadsheet.cpp:563
@@ -7721,7 +7721,7 @@ msgstr "t-Test indépendant à deux échantillons"
 #: src/backend/statistics/HypothesisTest.cpp:313
 #, kde-format
 msgid "Paired Two-Sample t-Test"
-msgstr "t-Test à deux d'échantillons appariés"
+msgstr "t-Test à deux d'échantillons associés"
 
 #: src/backend/statistics/HypothesisTest.cpp:315
 #, kde-format
@@ -7766,7 +7766,7 @@ msgstr "Test d'indépendance en Chi-carré"
 #: src/backend/statistics/HypothesisTest.cpp:331
 #, kde-format
 msgid "Chi-Square Goodness of Fit Test"
-msgstr "Qualité en Chi-carré du test d’ajustement"
+msgstr "Qualité en Chi-carré du test d'ajustement"
 
 #: src/backend/statistics/HypothesisTest.cpp:333
 #, kde-format
@@ -7879,7 +7879,7 @@ msgstr "Tester la moyenne"
 #: src/backend/statistics/HypothesisTest.cpp:572
 #, kde-format
 msgid "Mean Difference"
-msgstr "Différence de  moyenne"
+msgstr "Différence de moyenne"
 
 #: src/backend/statistics/HypothesisTest.cpp:567
 #, kde-format
@@ -15028,12 +15028,12 @@ msgstr ""
 "largeur <i>h</i> pour les valeurs <i>n</i> :<ul><li>Par numéro - le nombre "
 "de cellules est spécifié manuellement</li><li>Par largeur - le nombre de "
 "cellules est calculé en fonction de la largeur spécifiée de cellules grâce à "
-"<i>k = (max(x) - min(x) / h</i>)</li><li>Racine carrée - <i>k = sqrt(n)</i></"
-"li><li>Rice -  <i>k = 2 * pow(n, 3 / 2)</i>, une alternative plus simple à "
-"la méthode de Sturges</li><li>Sturges - <i>k = log2 (n) + 1</i>, suppose une "
+"<i>k = (max(x) - min(x) / h</i>)</li><li>Racine carrée - <i>k = sqrt(n)</i></"
+"li><li>Rice - <i>k = 2 * pow(n, 3 / 2)</i>, une alternative plus simple à la "
+"méthode de Sturges</li><li>Sturges - <i>k = log2 (n) + 1</i>, suppose une "
 "distribution approximativement normale</li><li>Doane - version modifiée de "
 "la méthode de Sturges, veuillez consulter la documentation pour plus de "
-"détails</li><li>Scott - <i>h = 3,49 * sigma / pow (n, 3 / 2)</i>, méthode "
+"détails</li><li>Scott - <i>h = 3,49 * sigma / pow (n, 3 / 2)</i>, méthode "
 "optimale pour les données normalement distribuées</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:288
@@ -15046,7 +15046,7 @@ msgid ""
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
 "Utilisez « Auto » pour déterminer automatiquement les valeurs minimales et "
-"maximales des données à utiliser pour calculer l'histogramme.  Dans le cas "
+"maximales des données à utiliser pour calculer l'histogramme. Dans le cas "
 "contraire, veuillez spécifier les valeurs manuellement.<br><br><b>Remarque : "
 "</b> tous les échantillons se trouvant à l'extrémité supérieure de "
 "l'histogramme sont exclus. Si vous souhaitez inclure ces valeurs pour la "
@@ -15069,8 +15069,8 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
-"<ul><li><b>%1</b> - teste si une moyenne d’échantillon diffère "
-"significativement d’une moyenne de population connue,</li><b><b>%2</b> - "
+"<ul><li><b>%1</b> - teste si une moyenne d'échantillon diffère "
+"significativement d'une moyenne de population connue,</li><b><b>%2</b> - "
 "teste si deux échantillons indépendants ont la même moyenne,</li><li><b>%3</"
 "b> - testes si la différence moyenne entre deux échantillons liés est de "
 "zéro,</li><li><b>%4</b> - teste si deux échantillons indépendants avec des "
@@ -15495,10 +15495,10 @@ msgstr ""
 "Période de la composante saisonnière. Exemples :<ul><li>24 - pour des "
 "données horaires avec une saisonnalité quotidienne (24h), </li><li>168 - "
 "pour des données horaires avec une saisonnalité hebdomadaire (7 * 24h = 168 "
-"h),</li><li>7 - pour des données quotidiennes avec une saisonnalité "
-"hebdomadaire (7 jours),</li><li>365 - pour des données quotidiennes avec une "
-"saisonnalité annuelle (365 jours) ,</li><li>12 - pour des données mensuelles "
-"avec une saisonnalité annuelle (12 mois).</li></ul>"
+"h), </li><li>7 - pour des données quotidiennes avec une saisonnalité "
+"hebdomadaire (7 jours), </li><li>365 - pour des données quotidiennes avec "
+"une saisonnalité annuelle (365 jours), </li><li>12 - pour des données "
+"mensuelles avec une saisonnalité annuelle (12 mois).</li></ul>"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:196
 #, kde-format
@@ -16179,21 +16179,21 @@ msgstr ""
 "Méthode pour simplifier la ligne :<ul><li>Douglas-Peucker - divise la ligne "
 "de manière récursive et conserve uniquement les points qui s'écartent de "
 "plus d'un seuil spécifié du segment de ligne entre les points de début et de "
-"fin,</li><li>Visvalingam-Whatatt - supprime de façon itérative le point qui "
+"fin, </li><li>Visvalingam-Whatatt - supprime de façon itérative le point qui "
 "contribue à la zone la moins efficace à la forme du polygone jusqu'à ce "
-"qu'un nombre souhaité de points ou un seuil de zone soit atteint,</"
-"li><li>Distance perpendiculaire - mesure la distance perpendiculaire de "
+"qu'un nombre souhaité de points ou un seuil de zone soit atteint, </"
+"li><li>Distance perpendiculaire - mesure la distance perpendiculaire de "
 "chacun point à partir d'une ligne de référence et ne retient que ceux "
-"dépassant un seuil,</li><li>N-ième point - conserve uniquement chaque n-ième "
-"point,</li><li>Distance radiale - mesure la distance de chaque point par "
-"rapport au point précédent retenu et ne retient que ceux dépassant un seuil."
-"</li><li>Interpolation,</li><li>Opheim - utilise à la fois la distance et la "
-"tolérance angulaire pour simplifier les lignes. Il ne retient que des points "
-"que s’ils tombent en dehors d’une distance et d’un seuil angulaire spécifiés "
-"par rapport au point précédent retenu ,<li>Lang - retient des points qui "
-"sont au moins à une distance spécifiée et qui garantissent qu’aucun point ne "
-"s’écarte de plus d’une tolérance définie par rapport à la ligne simplifiée. "
-"</li></ul>"
+"dépassant un seuil, </li><li>N-ième point - conserve uniquement chaque n-"
+"ième point, </li><li>Distance radiale - mesure la distance de chaque point "
+"par rapport au point précédent retenu et ne retient que ceux dépassant un "
+"seuil.</li><li>Interpolation, </li><li>Opheim - utilise à la fois la "
+"distance et la tolérance angulaire pour simplifier les lignes. Il ne retient "
+"que des points que s'ils tombent en dehors d'une distance et d'un seuil "
+"angulaire spécifiés par rapport au point précédent retenu,<li>Lang - retient "
+"des points qui sont au moins à une distance spécifiée et qui garantissent "
+"qu'aucun point ne s'écarte de plus d'une tolérance définie par rapport à la "
+"ligne simplifiée. </li></ul>"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:208
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:212
@@ -16229,7 +16229,7 @@ msgstr "Nombre de points :"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
 #, kde-format
 msgid "Target number of points in the simplified line"
-msgstr "Nombre cible de points  dans la ligne simplifiée"
+msgstr "Nombre cible de points dans la ligne simplifiée"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:225
 #, kde-format
