@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-12 00:39+0000\n"
-"PO-Revision-Date: 2026-01-05 11:19+0100\n"
+"PO-Revision-Date: 2026-01-12 23:20+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -8284,22 +8284,19 @@ msgid "Original Data"
 msgstr "Originaldaten"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:149
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgid "Trend Component"
-msgstr "Komponenten:"
+msgstr "Trendkomponente"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:156
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgid "Seasonal Component"
-msgstr "Komponenten:"
+msgstr "Saisonkomponente"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:163
-#, fuzzy, kde-format
-#| msgid "Residual mean square"
+#, kde-format
 msgid "Residual Component"
-msgstr "Mittleres Restquadrat"
+msgstr "Restkomponente"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:267
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:546
@@ -8314,34 +8311,29 @@ msgid "%1: y-data source changed"
 msgstr "%1: Y-Datenquelle geändert"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:291
-#, fuzzy, kde-format
-#| msgid "%1: set author"
+#, kde-format
 msgid "%1: set method"
-msgstr "%1: Autor festlegen"
+msgstr "%1: Methode festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:299
-#, fuzzy, kde-format
-#| msgid "%1: set error bar size"
+#, kde-format
 msgid "%1: set period for STL"
-msgstr "%1 Größe der Fehlerbalken festlegen"
+msgstr "%1: Periode für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:305
-#, fuzzy, kde-format
-#| msgid "%1: set whiskers range parameter"
+#, kde-format
 msgid "%1: set robust parameter for STL"
-msgstr "%1: Bartbereichsparameter festlegen"
+msgstr "%1: Robuste Parameter für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:311
-#, fuzzy, kde-format
-#| msgid "%1: set axis scaling factor"
+#, kde-format
 msgid "%1: set seasonal length for STL"
-msgstr "%1: Skalierungsfaktor der Achsen festlegen"
+msgstr "%1:  Saisonlänge für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:317
-#, fuzzy, kde-format
-#| msgid "%1: set text for row %2"
+#, kde-format
 msgid "%1: set trend length for STL"
-msgstr "%1: Text für Zeile %2 festlegen"
+msgstr "%1: Trendlänge für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:323
 #, kde-format
@@ -8349,62 +8341,54 @@ msgid "%1: set trend auto-length for STL"
 msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:329
-#, fuzzy, kde-format
-#| msgid "%1: set major ticks length"
+#, kde-format
 msgid "%1: set low pass length for STL"
-msgstr "%1: Länge der Hauptstriche festlegen"
+msgstr "%1: Tiefpasslänge für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:335
-#, fuzzy, kde-format
-#| msgid "%1: set labels datetime format"
+#, kde-format
 msgid "%1: set low pass auto-length for STL"
-msgstr "%1: Datumsformat der Beschriftung festlegen"
+msgstr "%1:  automatische Tiefpasslänge für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:341
 #, kde-format
 msgid "%1: set seasonal degree for STL"
-msgstr ""
+msgstr "%1:  Saisongrad für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:347
 #, kde-format
 msgid "%1: set trend degree for STL"
-msgstr ""
+msgstr "%1: Trendgrad für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:353
-#, fuzzy, kde-format
-#| msgid "%1: set labels datetime format"
+#, kde-format
 msgid "%1: set low pass degree for STL"
-msgstr "%1: Datumsformat der Beschriftung festlegen"
+msgstr "%1: Tiefpassgrad für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:359
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set seasonal jump for STL"
-msgstr "%1: Format der Heatmap festlegen"
+msgstr "%1: Saisonsprung für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:365
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set seasonal auto-jump for STL"
-msgstr "%1: Format der Heatmap festlegen"
+msgstr "%1: Automatischer Saisonsprung für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:371
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set trend jump for STL"
-msgstr "%1: Format der Heatmap festlegen"
+msgstr "%1: Trendsprung für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:377
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set trend auto-jump for STL"
-msgstr "%1: Format der Heatmap festlegen"
+msgstr "%1: Automatischer Trendsprung für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:383
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set low pass jump for STL"
-msgstr "%1: Format der Beschriftung festlegen"
+msgstr "%1: Tiefpasssprung für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:389
 #, kde-format
@@ -8412,28 +8396,24 @@ msgid "%1: set low pass auto-jump for STL"
 msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:397
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set periods for MSTL"
-msgstr "%1: Format der Beschriftung festlegen"
+msgstr "%1: Perioden für MSTL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:403
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set Lambda for MSTL"
-msgstr "%1: Format der Heatmap festlegen"
+msgstr "%1: Lambda für MSTL  festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:409
-#, fuzzy, kde-format
-#| msgid "%1: set orientation"
+#, kde-format
 msgid "%1: set iterations for MSTL"
-msgstr "%1: Ausrichtung festlegen"
+msgstr "%1: Iterationen für MSTL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:499
-#, fuzzy, kde-format
-#| msgid "Not enough data provided."
+#, kde-format
 msgid "No valid data provided."
-msgstr "Nicht genug Daten verfügbar."
+msgstr "keine validen Daten verfügbar."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:523
 #, kde-format
@@ -8451,10 +8431,9 @@ msgid "Low-Pass Length must be odd and at least 3."
 msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:580
-#, fuzzy, kde-format
-#| msgid "Initialization failed: %1"
+#, kde-format
 msgid "STL decomposition failed: %1"
-msgstr "Initialisierung fehlgeschlagen: %1"
+msgstr "STL-Zerlegung fehlgeschlagen: %1"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:598
 #, kde-format
@@ -8472,10 +8451,9 @@ msgid "Time-series has less than two periods."
 msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:614
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Iterations must be > 0."
-msgstr "Iterationen"
+msgstr "Anzahl an Iterationen muss > 0 sein."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:619
 #, kde-format
@@ -9173,10 +9151,9 @@ msgstr "Titel"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:418
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2064
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Line Simplification"
-msgstr "Vereinfachung"
+msgstr "Linienvereinfachung"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
@@ -9257,10 +9234,9 @@ msgstr "Auto-/Kreuzkorrelation"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:429
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:464
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2159
-#, fuzzy, kde-format
-#| msgid "Delete Connection"
+#, kde-format
 msgid "Baseline Correction"
-msgstr "Verbindung löschen"
+msgstr "Basislinienkorrektur"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:445
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:520
@@ -9674,10 +9650,9 @@ msgstr "%1: Cursor 1 aktivieren"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1800
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1801
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color mode"
-msgstr "%1: Plotfarbe nutzen"
+msgstr "%1: Plotfarbenmodus einstellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1812
 #: src/backend/worksheet/Worksheet.cpp:854
@@ -9700,16 +9675,14 @@ msgstr "%1: Motiv festlegen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1825
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1826
-#, fuzzy, kde-format
-#| msgid "%1: use plot's color"
+#, kde-format
 msgid "%1: set plot color map"
-msgstr "%1: Plotfarbe nutzen"
+msgstr "%1: Farbschema für den Plot festlegen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1837
-#, fuzzy, kde-format
-#| msgid "%1: set axis offset"
+#, kde-format
 msgid "%1: set y-offset"
-msgstr "%1: Achsenversatz festlegen"
+msgstr "%1: y-Versatz festlegen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2020
 #, kde-format
@@ -9722,17 +9695,15 @@ msgid "Distribution Fit to '%1'"
 msgstr "Anpassung einer Verteilung an '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2067
-#, fuzzy, kde-format
-#| msgid "%1: smooth '%2'"
+#, kde-format
 msgid "%1: simplify '%2'"
-msgstr "%1: glätte '%2'"
+msgstr "%1: vereinfache '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2068
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:769
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Simplification of '%1'"
-msgstr "Vereinfachung"
+msgstr "Vereinfachung von '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2075
 #, fuzzy, kde-format

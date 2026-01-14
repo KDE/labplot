@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-12 00:39+0000\n"
-"PO-Revision-Date: 2026-01-09 17:10+0300\n"
+"PO-Revision-Date: 2026-01-13 18:17+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -3085,7 +3085,7 @@ msgstr "1 stokes kinematik viskozitesi"
 #: src/backend/gsl/constants.cpp:181
 #, kde-format
 msgid "Luminance of 1 stilb"
-msgstr "1 stilbnin parlaklığı"
+msgstr "1 stilbnin aydınlığı"
 
 #: src/backend/gsl/constants.cpp:182
 #, kde-format
@@ -3100,22 +3100,22 @@ msgstr "1 luxun aydınlatması"
 #: src/backend/gsl/constants.cpp:184
 #, kde-format
 msgid "Illuminance of 1 phot"
-msgstr "1 fotun aydınlığı"
+msgstr "1 fotun aydınlatması"
 
 #: src/backend/gsl/constants.cpp:185
 #, kde-format
 msgid "Illuminance of 1 footcandle"
-msgstr "1 ayak mumun aydınlığı"
+msgstr "1 ayak mumun aydınlatması"
 
 #: src/backend/gsl/constants.cpp:186
 #, kde-format
 msgid "Luminance of 1 lambert"
-msgstr "1 lambertin parlaklığı"
+msgstr "1 lambertin aydınlığı"
 
 #: src/backend/gsl/constants.cpp:187
 #, kde-format
 msgid "Luminance of 1 footlambert"
-msgstr "1 Footlambert’in parlaklığı"
+msgstr "1 Footlambert’in aydınlığı"
 
 #. i18n("Radioactivity"));
 #: src/backend/gsl/constants.cpp:190
