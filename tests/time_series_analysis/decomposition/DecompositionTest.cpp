@@ -483,6 +483,7 @@ void DecompositionTest::testDecompositionSaveLoadSTL() {
  */
 void DecompositionTest::testDecompositionSaveLoadMSTL() {
 	// create and save
+	QString savePath;
 	{
 		Project project;
 
@@ -522,7 +523,6 @@ void DecompositionTest::testDecompositionSaveLoadMSTL() {
 	// load and check
 	{
 		Project project;
-		QString savePath;
 		QCOMPARE(project.load(savePath), true);
 
 		// source spreadsheet

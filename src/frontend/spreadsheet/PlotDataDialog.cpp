@@ -549,8 +549,8 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	case Plot::PlotType::ProcessBehaviorChart:
 	case Plot::PlotType::RunChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
-			const QString& name = comboBox->currentText();
-			Column* column = columnFromName(name);
+			const auto& name = comboBox->currentText();
+			const auto* column = columnFromName(name);
 			addSingleSourceColumnPlot(column, plot);
 		}
 		break;
@@ -615,8 +615,8 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	case Plot::PlotType::ProcessBehaviorChart:
 	case Plot::PlotType::RunChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
-			const QString& name = comboBox->currentText();
-			Column* column = columnFromName(name);
+			const auto& name = comboBox->currentText();
+			const auto* column = columnFromName(name);
 
 			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);

@@ -642,7 +642,7 @@ static int compare_time_univariate_cox(const void* a, const void* b) {
 	return 0;
 }
 
-double nsl_univariate_cox_regression(double* x, double* time, const int* event, int N, int iterations, double lr) {
+double nsl_univariate_cox_regression(const double* x, const double* time, const int* event, int N, int iterations, double lr) {
 	double* time_idx = (double*)malloc(2 * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		time_idx[2 * i] = time[i]; /* time */

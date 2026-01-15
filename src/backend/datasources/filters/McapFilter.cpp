@@ -859,7 +859,7 @@ void McapFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("endColumn"), QString::number(d->endColumn));
 
 	QStringList list;
-	for (auto& it : modelRows())
+	for (const auto& it : modelRows())
 		list.append(QString::number(it));
 
 	writer->writeAttribute(QStringLiteral("modelRows"), list.join(QLatin1Char(';')));

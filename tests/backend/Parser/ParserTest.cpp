@@ -66,7 +66,7 @@ void ParserTest::testBasics() {
 												{QStringLiteral("sin(0)"), 0.},
 												{QStringLiteral("cos(pi)"), -1.}};
 
-	for (auto& expr : tests)
+	for (const auto& expr : tests)
 		QCOMPARE(parser.parse(qPrintable(expr.first), "C"), expr.second);
 
 	const QVector<QPair<QString, double>> testsFuzzy{{QStringLiteral("(sin(pi))"), 0.}};
@@ -153,12 +153,12 @@ void ParserTest::testVariables() {
 												{QStringLiteral("a+1.5"), 2.5},
 												{QStringLiteral("a!"), 1.}};
 
-	for (auto& expr : tests)
+	for (const auto& expr : tests)
 		QCOMPARE(parser.parse(qPrintable(expr.first), "C"), expr.second);
 
 	parser.assign_symbol("a", 0.); // only vars set to zero get removed
 	parser.remove_symbol("a");
-	for (auto& expr : tests)
+	for (const auto& expr : tests)
 		QVERIFY(std::isnan(parser.parse(qPrintable(expr.first), "C")));
 
 	// longer var name

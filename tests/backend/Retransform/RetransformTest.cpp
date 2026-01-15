@@ -285,7 +285,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 		QStringLiteral("Project/Worksheet/plot2/xy-curve"),
 	};
 	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list)
+	for (const auto& s : list)
 		QCOMPARE(c.callCount(s), 1);
 
 	c.resetRetransformCount();
@@ -294,7 +294,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	view->changePlotNavigation(&a);
 
 	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list)
+	for (const auto& s : list)
 		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are called only once
@@ -577,7 +577,7 @@ void RetransformTest::TestPadding() {
 	plot->setHorizontalPadding(hPad + 10);
 
 	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list)
+	for (const auto& s : list)
 		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are called only once

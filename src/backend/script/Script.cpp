@@ -142,7 +142,6 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 		return false;
 
 	QXmlStreamAttributes attribs;
-	QString str;
 
 	while (!reader->atEnd()) {
 		reader->readNext();

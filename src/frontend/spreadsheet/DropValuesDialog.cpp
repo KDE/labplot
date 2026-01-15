@@ -490,7 +490,7 @@ public:
 		int row = 0;
 		auto mode = m_column->columnMode();
 		if (mode == AbstractColumn::ColumnMode::Double) {
-			auto* data = static_cast<QVector<double>*>(m_column->data());
+			const auto* data = static_cast<QVector<double>*>(m_column->data());
 			QVector<double> new_data(*data);
 
 			switch (m_operator) {
@@ -578,7 +578,7 @@ public:
 			if (changed)
 				m_column->setValues(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::Integer) {
-			auto* data = static_cast<QVector<int>*>(m_column->data());
+			const auto* data = static_cast<QVector<int>*>(m_column->data());
 			QVector<int> new_data(*data);
 
 			switch (m_operator) {

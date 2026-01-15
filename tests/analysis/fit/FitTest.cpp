@@ -3768,7 +3768,7 @@ void FitTest::testHistogramFit() {
 
 	QCOMPARE(aspect->name(), QLatin1String("Worksheet - Spreadsheet"));
 	QVERIFY(aspect->type() == AspectType::Worksheet);
-	const auto w = dynamic_cast<Worksheet*>(aspect);
+	const auto* w = dynamic_cast<Worksheet*>(aspect);
 	if (!w)
 		return;
 
