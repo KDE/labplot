@@ -1,6 +1,6 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the labplot package.
-# SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Paolo Zamponi <feus73@gmail.com>
+# SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Paolo Zamponi <feus73@gmail.com>
 # SPDX-FileCopyrightText: 2020, 2022, 2025 Vincenzo Reale <smart2128vr@gmail.com>
 #
 msgid ""
@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-12 00:39+0000\n"
-"PO-Revision-Date: 2025-12-17 15:33+0100\n"
+"PO-Revision-Date: 2026-01-10 16:01+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.12.0\n"
 
 #: src/backend/core/AbstractAspect.cpp:239
 #, kde-format
@@ -6435,10 +6435,9 @@ msgstr "Punti"
 
 #: src/backend/nsl/nsl_baseline.cpp:47
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:178
-#, fuzzy, kde-format
-#| msgid "Regular Expression"
+#, kde-format
 msgid "Linear Regression"
-msgstr "Espressione regolare"
+msgstr "Regressione lineare"
 
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
@@ -7387,16 +7386,14 @@ msgid "Type"
 msgstr "Tipo"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:223
-#, fuzzy, kde-format
-#| msgid "Column %1"
+#, kde-format
 msgid "Columns: %1"
-msgstr "Colonna %1"
+msgstr "Colonne: %1"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:224
-#, fuzzy, kde-format
-#| msgid "Rows:"
+#, kde-format
 msgid "Rows: %1"
-msgstr "Righe:"
+msgstr "Righe: %1"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:415
 #, kde-format
@@ -8252,10 +8249,9 @@ msgid "Parametric"
 msgstr "Parametrico"
 
 #: src/backend/statistics/HypothesisTest.cpp:1746
-#, fuzzy, kde-format
-#| msgid "Parametric"
+#, kde-format
 msgid "Non-Parametric"
-msgstr "Parametrico"
+msgstr "Non parametrico"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:876
@@ -9745,10 +9741,9 @@ msgid "Distribution Fit to '%1'"
 msgstr "Adatta distribuzione a «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2067
-#, fuzzy, kde-format
-#| msgid "%1: smooth '%2'"
+#, kde-format
 msgid "%1: simplify '%2'"
-msgstr "%1: smussa «%2»"
+msgstr "%1: semplifica «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2068
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:769
@@ -14620,10 +14615,9 @@ msgid "Sloped"
 msgstr "Inclinato"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:930
-#, fuzzy, kde-format
-#| msgid "Color Map:"
+#, kde-format
 msgid "Color Map"
-msgstr "Mappa di colori:"
+msgstr "Mappa di colori"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:934
 #, kde-format
@@ -14785,7 +14779,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the X position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%v%"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:400
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:623
@@ -14796,7 +14790,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the Y position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%v%"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:805
 #, kde-format
@@ -19096,10 +19090,9 @@ msgid "Sample"
 msgstr "Campiona"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1157
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "New Plot Area in an Existing Worksheet"
-msgstr "&Nuova area del grafico in un foglio di lavoro esistente"
+msgstr "Nuova area del grafico in un foglio di lavoro esistente"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1158
@@ -19502,9 +19495,7 @@ msgid "Equidistant Values"
 msgstr "Valori equidistanti"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Equidistant Date&Time Values"
+#, kde-format
 msgid "Equidistant Date&Time Values"
 msgstr "Valori equidistanti di data e ora"
 
@@ -20142,8 +20133,7 @@ msgid "Arithmetic Mean"
 msgstr "Media aritmetica"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:69
-#, fuzzy, kde-format
-#| msgid "GeometricMean"
+#, kde-format
 msgid "Geometric Mean"
 msgstr "Media geometrica"
 
@@ -20177,8 +20167,7 @@ msgid "Dispersion Measures"
 msgstr "Misure della dispersione"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
-#, fuzzy, kde-format
-#| msgid "StandardDeviation"
+#, kde-format
 msgid "Standard Deviation"
 msgstr "Deviazione standard"
 
@@ -20195,10 +20184,9 @@ msgid "Mean Absolute Deviation Around Median"
 msgstr "Deviazione media assoluta attorno la mediana"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:85
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Median Absolute Deviation"
-msgstr "Deviazione media assoluta"
+msgstr "Deviazione mediana assoluta"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:87
 #, kde-format
@@ -23895,7 +23883,7 @@ msgstr "Periodi:"
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:173
 #, kde-format
 msgid "Lambda:"
-msgstr ""
+msgstr "Lambda:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #. i18n: ectx: property (text), widget (QLabel, lARPLSIterations)
@@ -24063,10 +24051,9 @@ msgstr "Contenuto della scala:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSubtraction)
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:199
-#, fuzzy, kde-format
-#| msgid "Subtract"
+#, kde-format
 msgid "Subtraction"
-msgstr "Sottrai"
+msgstr "Sottrazione"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #. i18n: ectx: property (text), widget (QLabel, lARPLSSmoothness)
@@ -25791,8 +25778,7 @@ msgstr "Crea un grafico per i dati originali"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:229
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "&New Plot Area in an Existing Worksheet"
 msgstr "&Nuova area del grafico in un foglio di lavoro esistente"
 
