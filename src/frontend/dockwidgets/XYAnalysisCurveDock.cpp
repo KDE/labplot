@@ -106,7 +106,7 @@ void XYAnalysisCurveDock::setModelCurve(TreeViewComboBox* cb) {
 	cb->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve : m_curvesList)
+	for (const auto* curve : m_curvesList)
 		hiddenAspects << curve;
 	cb->setHiddenAspects(hiddenAspects);
 
@@ -183,9 +183,9 @@ void XYAnalysisCurveDock::enableRecalculate() const {
 	// enable the recalculate button if all required data source columns were provided, disable otherwise
 	bool hasSourceData = false;
 	if (m_analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		AbstractAspect* aspectX = nullptr;
-		AbstractAspect* aspectY = nullptr;
-		AbstractAspect* aspectY2 = nullptr;
+		const AbstractAspect* aspectX = nullptr;
+		const AbstractAspect* aspectY = nullptr;
+		const AbstractAspect* aspectY2 = nullptr;
 		switch (m_requiredDataSource) {
 		case RequiredDataSource::XY: {
 			aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());

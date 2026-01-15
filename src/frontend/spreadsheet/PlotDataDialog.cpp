@@ -698,7 +698,7 @@ void PlotDataDialog::addCurvesToWorksheets(AbstractAspect* parent) {
 	case Plot::PlotType::RunChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
-			Column* column = columnFromName(name);
+			const auto* column = columnFromName(name);
 
 			auto* worksheet = new Worksheet(i18n("Worksheet - %1", name));
 			parent->addChild(worksheet);
@@ -980,7 +980,7 @@ void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const Column* colu
 }
 
 void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const QString& columnName) {
-	Column* column = columnFromName(columnName);
+	const auto* column = columnFromName(columnName);
 	setAxesColumnLabels(plot, column);
 }
 

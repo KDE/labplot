@@ -783,7 +783,7 @@ void addUniqueLine_double_vector_last_point_vector(double* p,
 	}
 }
 
-void addUniqueLine_double_vector_last_point_vector_lines_vector(double* p,
+void addUniqueLine_double_vector_last_point_vector_lines_vector(const double* p,
 																double& minY,
 																double& maxY,
 																double* lastPoint,
@@ -832,7 +832,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector(double* p,
 	}
 }
 
-void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(double* p,
+void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(const double* p,
 																	 double& minY,
 																	 double& maxY,
 																	 double* lastPoint,
@@ -881,7 +881,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(double* p,
 	}
 }
 
-void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_last_point(double* p,
+void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_last_point(const double* p,
 																						  double& minY,
 																						  double& maxY,
 																						  double** lastPoint,

@@ -1655,7 +1655,7 @@ QVector<QString> SearchReplaceWidget::capturePatterns(const QString& pattern) co
 
 			case L')':
 				if (!parInfos.empty()) {
-					ParInfo& top = parInfos.top();
+					const auto& top = parInfos.top();
 					if (top.capturing && (top.captureNumber <= 9)) {
 						const int start = top.openIndex + 1;
 						const int len = input - start;

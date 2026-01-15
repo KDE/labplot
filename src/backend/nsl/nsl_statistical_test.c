@@ -600,7 +600,7 @@ struct one_sample_t_test_result nsl_stats_one_sample_t(const double sample[], si
 }
 
 // Logistic Regression Function for Binary Classification
-double* nsl_stats_logistic_regression(double** x, int* y, int N, int n_in, int iterations, double lr) {
+double* nsl_stats_logistic_regression(double** x, const int* y, int N, int n_in, int iterations, double lr) {
 	int i, j, epoch;
 	double* result;
 	double* W = NULL;
@@ -642,7 +642,7 @@ static int compare_time_univariate_cox(const void* a, const void* b) {
 	return 0;
 }
 
-double nsl_univariate_cox_regression(double* x, double* time, int* event, int N, int iterations, double lr) {
+double nsl_univariate_cox_regression(double* x, double* time, const int* event, int N, int iterations, double lr) {
 	double* time_idx = (double*)malloc(2 * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		time_idx[2 * i] = time[i]; /* time */

@@ -666,7 +666,7 @@ public:
 			if (changed)
 				m_column->setIntegers(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::BigInt) {
-			auto* data = static_cast<QVector<qint64>*>(m_column->data());
+			const auto* data = static_cast<QVector<qint64>*>(m_column->data());
 			QVector<qint64> new_data(*data);
 
 			switch (m_operator) {
@@ -754,7 +754,7 @@ public:
 			if (changed)
 				m_column->setBigInts(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::DateTime) {
-			auto* data = static_cast<QVector<QDateTime>*>(m_column->data());
+			const auto* data = static_cast<QVector<QDateTime>*>(m_column->data());
 			QVector<QDateTime> new_data(*data);
 
 			switch (m_operator) {
@@ -941,7 +941,7 @@ public:
 
 	void run() override {
 		bool changed = false;
-		auto* data = static_cast<QVector<QString>*>(m_column->data());
+		const auto* data = static_cast<QVector<QString>*>(m_column->data());
 		QVector<QString> new_data(*data);
 		int row = 0;
 

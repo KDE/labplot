@@ -360,7 +360,7 @@ void HypothesisTestDock::addVariable() {
 }
 
 void HypothesisTestDock::removeVariable() {
-	auto* sender = dynamic_cast<QPushButton*>(QObject::sender());
+	const auto* sender = dynamic_cast<QPushButton*>(QObject::sender());
 	if (sender) {
 		// remove button was clicked, determine which one and
 		// delete it together with the corresponding combobox

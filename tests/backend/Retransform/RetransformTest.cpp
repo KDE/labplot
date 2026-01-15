@@ -606,7 +606,7 @@ void RetransformTest::TestPadding() {
 	plot->navigate(-1, CartesianPlot::NavigationOperation::ScaleAuto);
 
 	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list)
+	for (const auto& s : list)
 		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are already scaled due to the change of padding

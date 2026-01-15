@@ -801,11 +801,11 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 }
 
 CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
-	QGraphicsItem* item = itemAt(pos);
+	auto* item = itemAt(pos);
 	if (!item)
 		return nullptr;
 
-	QGraphicsItem* plotItem = nullptr;
+	const QGraphicsItem* plotItem = nullptr;
 	if (item->data(0).toInt() == static_cast<int>(AspectType::CartesianPlot))
 		plotItem = item;
 	else {
@@ -1247,10 +1247,10 @@ double WorksheetView::zoomFactor() const {
 }
 
 void WorksheetView::updateLabelsZoom() const {
-	const double zoom = zoomFactor();
+	const double factor = zoomFactor();
 	const auto& labels = m_worksheet->children<TextLabel>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* label : labels)
-		label->setZoomFactor(zoom);
+		label->setZoomFactor(factor);
 }
 
 void WorksheetView::changeMagnification(QAction* action) {
@@ -1506,8 +1506,8 @@ void WorksheetView::fadeOut(qreal value) {
  * sets the layout in Worksheet and enables/disables the layout actions.
  */
 void WorksheetView::changeLayout(QAction* action) const {
-	const auto layout = static_cast<Worksheet::Layout>(action->data().toInt());
-	m_worksheet->setLayout(layout);
+	const auto wsLayout = static_cast<Worksheet::Layout>(action->data().toInt());
+	m_worksheet->setLayout(wsLayout);
 }
 
 Worksheet::Layout WorksheetView::layout() const {

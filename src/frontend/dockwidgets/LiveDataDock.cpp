@@ -68,7 +68,7 @@ LiveDataDock::LiveDataDock(QWidget* parent)
 
 #ifdef HAVE_MQTT
 LiveDataDock::~LiveDataDock() {
-	for (auto& host : m_hosts)
+	for (const auto& host : m_hosts)
 		delete host.client;
 
 	delete m_subscriptionWidget;

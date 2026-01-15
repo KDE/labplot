@@ -136,12 +136,12 @@ void ParserTest::testErrors() {
 									QStringLiteral("log(0)"),
 									QStringLiteral("asin(2)")};
 
-	for (auto& expr : testsNan)
+	for (const auto& expr : testsNan)
 		QVERIFY(std::isnan(parser.parse(qPrintable(expr), "C")));
 
 	const QVector<QString> testsInf{QStringLiteral("1/0"), QStringLiteral("-1/0"), QStringLiteral("1+1/0")};
 
-	for (auto& expr : testsInf)
+	for (const auto& expr : testsInf)
 		QVERIFY(std::isinf(parser.parse(qPrintable(expr), "C")));
 }
 
@@ -168,7 +168,7 @@ void ParserTest::testVariables() {
 												 {QStringLiteral("sina+1.5"), 3.},
 												 {QStringLiteral("2*sina"), 3.}};
 
-	for (auto& expr : tests2)
+	for (const auto& expr : tests2)
 		QCOMPARE(parser.parse(qPrintable(expr.first), "C"), expr.second);
 
 	// parse_with_vars()
@@ -185,7 +185,7 @@ void ParserTest::testLocale() {
 												{QStringLiteral("1+0,5"), 1.5},
 												{QStringLiteral("2*1,5"), 3.}};
 
-	for (auto& expr : tests)
+	for (const auto& expr : tests)
 		QCOMPARE(parser.parse(qPrintable(expr.first), "de_DE"), expr.second);
 #endif
 }
