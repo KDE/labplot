@@ -338,8 +338,8 @@ PyObject* PythonScriptRuntime::shibokenConvertToPyObject(void* object) {
 		return nullptr;
 	}
 
-	// Create a Python wrapper object for the C++ instance
-	PyObject* po = Shiboken::Object::newObject(typeObject, object);
+	INFO("Creating a Python wrapper object for the C++ instance")
+	auto* po = Shiboken::Object::newObject(typeObject, object);
 
 	return po;
 }
@@ -575,7 +575,6 @@ bool PythonScriptRuntime::populateVariableInfo() {
 }
 
 QString PythonScriptRuntime::pyUnicodeToQString(PyObject* obj) {
-	INFO(Q_FUNC_INFO)
 	PyObject* bytes = PyUnicode_AsUTF8String(obj);
 	if (!bytes)
 		return {};
