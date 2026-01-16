@@ -36,6 +36,7 @@ private:
 
 	// utilities
 	static PyObject* getModuleDict(const QString&);
+	static PyTypeObject* getPythonLoggerType();
 	static PyObject* shibokenConvertToPyObject(void*);
 	static int getPyErrorLine();
 	static QString pyUnicodeToQString(PyObject*);

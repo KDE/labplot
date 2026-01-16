@@ -324,15 +324,32 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	return true;
 }
 
+PyTypeObject* PythonScriptRuntime::getPythonLoggerType() {
+	static PyTypeObject* cachedType = nullptr;
+	if (cachedType)
+		return cachedType;
+
+	// import binding module (mandatory for Qt 6.10)
+	auto* module = PyImport_ImportModule("pylabplot");
+	if (!module) {
+		WARN("Importing module pylabplot failed!")
+		return nullptr;
+	}
+
+	Py_DECREF(module);
+
+	cachedType = Shiboken::SbkType<::PythonLogger>();
+
+	return cachedType;
+}
+
 // Converts a C++ object to a PyObject (owned reference)
 PyObject* PythonScriptRuntime::shibokenConvertToPyObject(void* object) {
 	INFO(Q_FUNC_INFO)
 	if (!Py_IsInitialized() || !ready)
 		return nullptr;
 
-	auto* typeObject = reinterpret_cast<SbkObjectType*>(Shiboken::SbkType<::PythonLogger>());
-	// TODO: Crashes "print()"
-	// auto* typeObject = SbkType< ::PythonLogger >();
+	auto* typeObject = getPythonLoggerType();
 	if (!typeObject) {
 		WARN("Failed to get Python type for PythonLogger")
 		return nullptr;
