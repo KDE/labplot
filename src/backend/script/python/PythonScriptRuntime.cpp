@@ -46,11 +46,18 @@ PythonScriptRuntime::PythonScriptRuntime(Script* script)
 }
 
 PythonScriptRuntime::~PythonScriptRuntime() {
-	// decrease refcount for local context dict to allow python garbage collection
-	Py_XDECREF(m_localDict);
+	INFO(Q_FUNC_INFO)
+	if (Py_IsInitialized()) {
+		PyGILState_STATE gil = PyGILState_Ensure();
+		// decrease refcount for local vars to allow python garbage collection
+		Py_XDECREF(m_localDict);
 
-	delete m_loggerStdOut;
-	delete m_loggerStdErr;
+		m_loggerStdOut = nullptr;
+		m_loggerStdErr = nullptr;
+		m_localDict = nullptr;
+
+		PyGILState_Release(gil);
+	}
 }
 
 bool PythonScriptRuntime::init() {
