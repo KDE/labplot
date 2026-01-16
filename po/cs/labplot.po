@@ -594,7 +594,7 @@ msgstr ""
 #: src/backend/core/column/Column.cpp:1132
 #: src/backend/spreadsheet/Spreadsheet.cpp:280
 #, fuzzy, kde-format
-#| msgid "Save  Calculations:"
+#| msgid "Save Calculations:"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Uložit výpočty:"
 
@@ -15960,10 +15960,10 @@ msgstr ""
 #: src/frontend/GuiObserver.cpp:348
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
-#| msgid "Properties: Live Data Source"
+#| msgid "Properties: Reference Line"
 msgctxt "@title:window"
 msgid "Properties: Baseline Correction"
-msgstr "Vlastnosti: Zdroj měnících se dat"
+msgstr "Vlastnosti: Referenční přímka"
 
 #: src/frontend/GuiObserver.cpp:353
 #, kde-format
@@ -18582,9 +18582,9 @@ msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:801
 #, fuzzy, kde-format
-#| msgid "Delete Connection"
+#| msgid "Function of '%1'"
 msgid "Baseline Correction of '%1'"
-msgstr "Smazat spojení"
+msgstr "Funkce '%1'"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:830
 #, kde-format
@@ -19694,13 +19694,13 @@ msgstr "Směrodatná odchylka"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:83
 #, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#| msgid "Median Absolute Deviation"
 msgid "Mean Absolute Deviation Around Mean"
 msgstr "Medián absolutní odchylky"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:84
 #, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#| msgid "Median Absolute Deviation"
 msgid "Mean Absolute Deviation Around Median"
 msgstr "Medián absolutní odchylky"
 
