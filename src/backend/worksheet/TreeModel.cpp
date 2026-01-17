@@ -289,7 +289,7 @@ bool TreeModel::setData(const QModelIndex& index, const QVariant& value, int rol
 	} else if (role == Qt::UserRole) {
 		TreeItem* item = getItem(index);
 		bool result = item->setData(index.column(), value, true);
-		assert(result == true); // result must be explicit checked, do not add item->... directly here!
+		Q_ASSERT(result == true); // result must be explicit checked, do not add item->... directly here!
 	}
 
 	return false;

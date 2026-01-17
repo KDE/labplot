@@ -77,6 +77,7 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/ProcessBehaviorChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/QQPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/RunChart.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp

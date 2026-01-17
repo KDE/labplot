@@ -459,14 +459,14 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 
 		columnNumericTypes.reserve(actualCols);
 		int datatype;
-		int c = 1;
+		col = 1;
 		if (startColumn != 1) {
 			if (startColumn != 0)
-				c = startColumn;
+				col = startColumn;
 		}
 		QList<int> matrixNumericColumnIndices;
-		for (; c <= actualCols; ++c) {
-			fits_get_coltype(m_fitsFile, c, &datatype, nullptr, nullptr, &status);
+		for (; col <= actualCols; ++col) {
+			fits_get_coltype(m_fitsFile, col, &datatype, nullptr, nullptr, &status);
 
 			switch (datatype) {
 			case TSTRING:
@@ -501,7 +501,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 				break;
 			}
 			if ((datatype != TSTRING) && (datatype != TLOGICAL))
-				matrixNumericColumnIndices.append(c);
+				matrixNumericColumnIndices.append(col);
 		}
 
 		if (!dataSource)
@@ -524,16 +524,16 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 						spreadsheet->setRowCount(lines - startRrow);
 				}
 				DEBUG(Q_FUNC_INFO << ", reading columns ...");
-				for (int n = 0; n < actualCols - startCol; ++n) {
-					if (columnNumericTypes.at(n)) {
-						spreadsheet->column(columnOffset + n)->setColumnMode(AbstractColumn::ColumnMode::Double);
-						auto* datap = static_cast<QVector<double>*>(spreadsheet->column(columnOffset + n)->data());
+				for (int c = 0; c < actualCols - startCol; ++c) {
+					if (columnNumericTypes.at(c)) {
+						spreadsheet->column(columnOffset + c)->setColumnMode(AbstractColumn::ColumnMode::Double);
+						auto* datap = static_cast<QVector<double>*>(spreadsheet->column(columnOffset + c)->data());
 						numericDataPointers.push_back(datap);
 						if (importMode == AbstractFileFilter::ImportMode::Replace)
 							datap->clear();
 					} else {
-						spreadsheet->column(columnOffset + n)->setColumnMode(AbstractColumn::ColumnMode::Text);
-						auto* list = static_cast<QVector<QString>*>(spreadsheet->column(columnOffset + n)->data());
+						spreadsheet->column(columnOffset + c)->setColumnMode(AbstractColumn::ColumnMode::Text);
+						auto* list = static_cast<QVector<QString>*>(spreadsheet->column(columnOffset + c)->data());
 						stringDataPointers.push_back(list);
 						if (importMode == AbstractFileFilter::ImportMode::Replace)
 							list->clear();
@@ -565,19 +565,19 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 				row = startRow;
 		}
 
-		int coll = 1;
+		col = 1;
 		if (startColumn != 1) {
 			if (startColumn != 0)
-				coll = startColumn;
+				col = startColumn;
 		}
 		bool isMatrix = false;
 		if (dynamic_cast<Matrix*>(dataSource)) {
 			isMatrix = true;
-			coll = matrixNumericColumnIndices.first();
+			col = matrixNumericColumnIndices.first();
 			actualCols = matrixNumericColumnIndices.last();
 			if (importMode == AbstractFileFilter::ImportMode::Replace) {
-				for (auto* col : numericDataPointers)
-					static_cast<QVector<double>*>(col)->clear();
+				for (auto* p : numericDataPointers)
+					static_cast<QVector<double>*>(p)->clear();
 			}
 		}
 
@@ -587,23 +587,23 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 			int numericixd = 0;
 			int stringidx = 0;
 			QStringList line;
-			line.reserve(actualCols - coll);
-			for (int col = coll; col <= actualCols; ++col) {
+			line.reserve(actualCols - col);
+			for (int c = col; c <= actualCols; ++c) {
 				if (isMatrix) {
-					if (!matrixNumericColumnIndices.contains(col))
+					if (!matrixNumericColumnIndices.contains(c))
 						continue;
 				}
-				if (fits_read_col_str(m_fitsFile, col, row, 1, 1, nullptr, tmpArr, nullptr, &status))
+				if (fits_read_col_str(m_fitsFile, c, row, 1, 1, nullptr, tmpArr, nullptr, &status))
 					printError(status);
 				if (dataSource) {
 					QString str = QString::fromLatin1(array);
 					if (str.isEmpty()) {
-						if (columnNumericTypes.at(col - 1))
+						if (columnNumericTypes.at(c - 1))
 							static_cast<QVector<double>*>(numericDataPointers[numericixd++])->push_back(0);
 						else
 							stringDataPointers[stringidx++]->append(QLatin1String("NULL"));
 					} else {
-						if (columnNumericTypes.at(col - 1))
+						if (columnNumericTypes.at(c - 1))
 							static_cast<QVector<double>*>(numericDataPointers[numericixd++])->push_back(str.toDouble());
 						else {
 							if (!stringDataPointers.isEmpty())
@@ -763,8 +763,8 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			double* columnNumeric = new double[nrows];
 			for (int col = 1; col <= tfields; ++col) {
 				const QVector<double>& column = matrixData->at(col - 1);
-				for (int r = 0; r < column.size(); ++r)
-					columnNumeric[r] = column.at(r);
+				for (int row = 0; row < column.size(); ++row)
+					columnNumeric[row] = column.at(row);
 
 				fits_write_col(m_fitsFile, TDOUBLE, col, 1, 1, nrows, columnNumeric, &status);
 				if (status) {
@@ -1150,10 +1150,10 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
 				}
 			}
 			if (ok == 3) {
-				bool ok;
-				double val = keyword.value.toDouble(&ok);
-				if (ok) {
-					if (fits_write_key(m_fitsFile, TDOUBLE, keyword.key.toLatin1().data(), &val, keyword.comment.toLatin1().data(), &status))
+				bool valid;
+				double value = keyword.value.toDouble(&valid);
+				if (valid) {
+					if (fits_write_key(m_fitsFile, TDOUBLE, keyword.key.toLatin1().data(), &value, keyword.comment.toLatin1().data(), &status))
 						printError(status);
 				} else {
 					if (fits_write_key(m_fitsFile,

@@ -236,24 +236,24 @@ void ValueWidget::positionChanged(int index) {
 		value->setPosition(Value::Position(index));
 }
 
-void ValueWidget::distanceChanged(double v) {
+void ValueWidget::distanceChanged(double distance) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* value : m_values)
-		value->setDistance(Worksheet::convertToSceneUnits(v, Worksheet::Unit::Point));
+		value->setDistance(Worksheet::convertToSceneUnits(distance, Worksheet::Unit::Point));
 }
 
-void ValueWidget::rotationChanged(int v) {
+void ValueWidget::rotationChanged(int angle) {
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* value : m_values)
-		value->setRotationAngle(v);
+		value->setRotationAngle(angle);
 }
 
-void ValueWidget::opacityChanged(int value) {
+void ValueWidget::opacityChanged(int v) {
 	CONDITIONAL_LOCK_RETURN;
 
-	qreal opacity = static_cast<qreal>(value) / 100.;
+	qreal opacity = static_cast<qreal>(v) / 100.;
 	for (auto* value : m_values)
 		value->setOpacity(opacity);
 }

@@ -4,18 +4,25 @@ New features:
 		* Allow to customize which actions have to be shown in the toolbars
 		* Expose more column related actions the context menu in the project (plot data, etc.) also when multiple columns are selected
 		* Add possibility to skip storing the data from columns and matrices in the saved file
+		* Improve spinbox localization
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
+		* Baseline correction analysis in the plot
 	* [time series analysis]
 		* seasonal decomposition with STL and MSTL methods
 	* [spreadsheet]
 		* Pivot table
 		* allow to drop entire rows in the spreadsheet if the condition was met in the "Drop Values Dialog" for the selected columns
+		* more informative tooltip texts for spreadsheets and columns showing the usage of the column in other places in the project
+		* show the average 2-period moving range in the column statistics
+		* in the plot data dialog allow to create plot areas on separate worksheets, one worksheet with plot area per column
+		* transposition of columns and rows
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)
 		* Allow to position the center and limit lines in the process behavior chart based on user-defined specifications
 		* Additionally to using the colors for plots from the current theme palette, allow to use colors from a specified color map
+		* Stacked line plots
 	* [import]
 		* Import directories - import multiple files in a directory in one single step
 		* Allow to import arrays in JSON files that contain plain data only
@@ -25,6 +32,7 @@ New features:
 Performance improvements:
 		* Improved drawing performance (!731)
 		* Improved the performance of importing JSON files with a large number of elements
+		* Faster save/load of text columns
 
 Bug fixes:
 	* Fix displayed locale of constants
@@ -33,6 +41,7 @@ Bug fixes:
 	* Fix updating column count in spreadsheet dock when importing data from file
 	* Fix appending data to spreadsheets from XLSX files
 	* Fix the bar chart with log-scales
+	* Undo background color of text label (#1171)
 
 -----2.12.1 (2025-08-15) -----
 Bug fixes:

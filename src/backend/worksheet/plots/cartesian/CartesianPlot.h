@@ -190,6 +190,9 @@ public:
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks)
 
+	// stacking
+	BASIC_D_ACCESSOR_DECL(double, stackYOffset, StackYOffset)
+
 	// cursor
 	Line* cursorLine() const;
 	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable)
@@ -243,6 +246,7 @@ private:
 	QAction* addHilbertTransformCurveAction{nullptr};
 	QAction* addConvolutionCurveAction{nullptr};
 	QAction* addCorrelationCurveAction{nullptr};
+	QAction* addBaselineCorrectionCurveAction{nullptr};
 	QAction* addFunctionCurveAction{nullptr};
 
 	QAction* addHorizontalAxisAction{nullptr};
@@ -270,6 +274,7 @@ private:
 	QAction* addHilbertTransformAction{nullptr};
 	QAction* addConvolutionAction{nullptr};
 	QAction* addCorrelationAction{nullptr};
+	QAction* addBaselineCorrectionAction{nullptr};
 
 	QMenu* m_addNewMenu{nullptr};
 	QMenu* addNewAnalysisMenu{nullptr};
@@ -324,6 +329,7 @@ private Q_SLOTS:
 	void addFitCurve();
 	void addFourierFilterCurve();
 	void addFunctionCurve();
+	void addBaselineCorrectionCurve();
 
 	void addHorizontalAxis();
 	void addVerticalAxis();
@@ -369,12 +375,15 @@ Q_SIGNALS:
 	void maxChanged(const Dimension, int rangeIndex, double);
 	void scaleChanged(const Dimension, int rangeIndex, RangeT::Scale);
 	void defaultCoordinateSystemIndexChanged(int);
+
 	void xRangeBreakingEnabledChanged(bool);
 	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void yRangeBreakingEnabledChanged(bool);
 	void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+
 	void themeChanged(const QString&);
 	void axisShiftSignal(int delta, Dimension dim, int index);
+
 	void mousePressZoomSelectionModeSignal(QPointF logicPos);
 	void mousePressCursorModeSignal(int cursorNumber, QPointF logicPos);
 	void mouseMoveSelectionModeSignal(QPointF logicalStart, QPointF logicalEnd);
@@ -385,6 +394,9 @@ Q_SIGNALS:
 	void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
 	void mouseHoverOutsideDataRectSignal();
 	void wheelEventSignal(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+
+	void stackYOffsetChanged(double);
+
 	void curveNameChanged(const AbstractAspect* curve);
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);

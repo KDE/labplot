@@ -38,10 +38,10 @@ FitParametersWidget::FitParametersWidget(QWidget* parent)
 	updateTableSize();
 }
 
-void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
+void FitParametersWidget::setFitData(XYFitCurve::FitData* fdata) {
 	DEBUG(Q_FUNC_INFO);
 	m_initializing = true;
-	m_fitData = data;
+	m_fitData = fdata;
 
 	int np = m_fitData->paramNames.size();
 	DEBUG("# params = " << np);

@@ -9,6 +9,9 @@
     "command": "labplot",
     "tags": ["nightly"],
     "desktop-file-name-suffix": " (Nightly)",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.llvm21"
+    ],
     "finish-args": [
         "--share=network",
         "--share=ipc",
@@ -37,6 +40,14 @@
         "/app/cleanup-BaseApp.sh"
     ],
     "modules": [
+         {
+            "name": "clang-headers",
+            "buildsystem": "simple",
+            "build-commands": [
+                "mkdir -p ${FLATPAK_DEST}/lib/clang/21/include",
+                "cp -r /usr/lib/sdk/llvm21/lib/clang/21/include ${FLATPAK_DEST}/lib/clang/21/"
+            ]
+        },
         {
             "name": "eigen",
             "buildsystem": "cmake-ninja",
@@ -66,8 +77,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.12.0.tar.xz",
-                    "sha256": "c18b40eb36b1a0c5b86e29ca054bf0770304583da4f2cdd42fe86eca6a20de48"
+                    "url": "https://poppler.freedesktop.org/poppler-26.01.0.tar.xz",
+                    "sha256": "1cb944a4b88847f5fb6551683bc799db59f04990f5d8be07aba2acbf38601089"
                 }
             ],
             "modules": [
@@ -108,8 +119,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.12.0/src/analitza-25.12.0.tar.xz",
-			    "sha256": "ed75ecc7e867d80fb6c23b40b57cd794be3b79b17d3a7bdd081a868a8aa01ebd"
+			    "url": "https://download.kde.org/stable/release-service/25.12.1/src/analitza-25.12.1.tar.xz",
+			    "sha256": "8455c7593399669c420732513c6d90f3c595b0d0631609263d4aa051ba38f7fe"
 		    }
 	    ]
         },
@@ -119,8 +130,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.12.0/src/cantor-25.12.0.tar.xz",
-			    "sha256": "072a3bbe238654404f17fef51c4e0aadb1b7862eed8eb8f9fed7d42628802d89"
+			    "url": "https://download.kde.org/stable/release-service/25.12.1/src/cantor-25.12.1.tar.xz",
+			    "sha256": "ecb186bd92193098ef7bc62fa93f980c000d8b7bcf3c456a07436a1d148cf5e9"
 		    }
 	    ]
         },
@@ -212,6 +223,11 @@
         },
         {
             "name": "readstat",
+            "build-options": {
+                "env": {
+                    "ACLOCAL_PATH": "/usr/share/gettext/m4:/usr/share/aclocal:/app/share/aclocal"
+                }
+            },
             "sources": [
                 {
                     "type": "archive",
@@ -261,8 +277,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/tbeu/matio/archive/v1.5.29.tar.gz",
-                    "sha256": "345f18bad65ad4a736ef5b4d660e8587c672939ff88b8551453e03d2146ff8b0"
+                    "url": "https://github.com/tbeu/matio/archive/v1.5.30.tar.gz",
+                    "sha256": "cd514c42e13bb39477e7d8fdeaa1502014c552a6a53f0678809cce6951db2bc1"
                 }
             ]
         },

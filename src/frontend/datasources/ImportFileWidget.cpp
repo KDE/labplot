@@ -2606,8 +2606,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		//"whole file" read option is available for file or pipe only, disable it
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-		auto* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
-		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+		auto* readitem = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+		readitem->setFlags(readitem->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 		if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::ReadingType::WholeFile)
 			ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 
@@ -2617,8 +2617,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	} else {
 		// enable "whole file" item for file or pipe
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-		auto* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
-		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+		auto* readitem = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+		readitem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	}
 
 	updateFilterHandlingSettings(sourceType);

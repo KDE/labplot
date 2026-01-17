@@ -34,6 +34,7 @@ public:
 	~Spreadsheet() override;
 
 	QIcon icon() const override;
+	QString caption() const override;
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
 	void fillColumnsContextMenu(QMenu*);
@@ -131,6 +132,7 @@ public Q_SLOTS:
 	void clear();
 	void clear(const QVector<Column*>&);
 	void clearMasks();
+	void transpose();
 
 	void moveColumn(int from, int to);
 	void sortColumns(Column* leading, const QVector<Column*>&, bool ascending);

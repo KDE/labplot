@@ -55,6 +55,7 @@ class XYFourierTransformCurveDock;
 class XYHilbertTransformCurveDock;
 class XYConvolutionCurveDock;
 class XYCorrelationCurveDock;
+class XYBaselineCorrectionCurveDock;
 class WorksheetDock;
 class ImageDock;
 class LabelWidget;
@@ -135,6 +136,7 @@ private:
 	XYHilbertTransformCurveDock* m_xyHilbertTransformCurveDock{nullptr};
 	XYConvolutionCurveDock* m_xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
+	XYBaselineCorrectionCurveDock* m_xyBaselineCorrectionCurveDock{nullptr};
 
 	// statistical analysis
 	HypothesisTestDock* m_hypothesisTestDock{nullptr};

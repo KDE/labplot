@@ -25,6 +25,7 @@ private:
 
 	// instance methods
 	bool reset();
+	bool redirectStream(const char* streamName, void* loggerInstance);
 	bool redirectOutput();
 	bool unRedirectOutput();
 	bool populateVariableInfo();
@@ -35,7 +36,8 @@ private:
 
 	// utilities
 	static PyObject* getModuleDict(const QString&);
-	static PyObject* shibokenConvertToPyObject(int, void*);
+	static PyTypeObject* getPythonLoggerType();
+	static PyObject* shibokenConvertToPyObject(void*);
 	static int getPyErrorLine();
 	static QString pyUnicodeToQString(PyObject*);
 

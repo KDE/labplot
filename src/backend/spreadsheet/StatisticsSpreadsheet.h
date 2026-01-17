@@ -52,7 +52,8 @@ public:
 		Skewness = 0x01000000,
 		Kurtosis = 0x02000000,
 		Entropy = 0x04000000,
-		Range = 0x08000000
+		Range = 0x08000000,
+		Sum = 0x10000000
 	};
 	Q_DECLARE_FLAGS(Metrics, Metric)
 
