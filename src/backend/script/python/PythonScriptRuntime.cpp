@@ -38,13 +38,13 @@ bool PythonScriptRuntime::ready{false};
 // To redirect python stdout and stderr to our output in the ScriptEditor, we temporarily replace the
 // sys.stdout and sys.stderr objects in python with instances of our PythonLogger class. These variables
 // hold the original sys.stdout and sys.stderr objects from python.
-PyObject* PythonScriptRuntime::sysStdOutWrite{nullptr};
-PyObject* PythonScriptRuntime::sysStdErrWrite{nullptr};
+PyObject* PythonScriptRuntime::sysStdOut{nullptr};
+PyObject* PythonScriptRuntime::sysStdErr{nullptr};
 
 PythonScriptRuntime::PythonScriptRuntime(Script* script)
-	: ScriptRuntime(QStringLiteral("Python"), script),
-	m_loggerStdOut(new PythonLogger(this, false)),
-	m_loggerStdErr(new PythonLogger(this, true)) {
+	: ScriptRuntime(QStringLiteral("Python"), script)
+	, m_loggerStdOut(new PythonLogger(this, false))
+	, m_loggerStdErr(new PythonLogger(this, true)) {
 }
 
 PythonScriptRuntime::~PythonScriptRuntime() {
@@ -61,10 +61,13 @@ PythonScriptRuntime::~PythonScriptRuntime() {
 		PyGILState_Release(gil);
 	}
 
-	Py_XDECREF(sysStdOutWrite);
-	Py_XDECREF(sysStdErrWrite);
-	sysStdOutWrite = nullptr;
-	sysStdErrWrite = nullptr;
+	DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
+	DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
+
+	Py_XDECREF(sysStdOut);
+	Py_XDECREF(sysStdErr);
+	sysStdOut = nullptr;
+	sysStdErr = nullptr;
 
 	delete m_loggerStdOut;
 	delete m_loggerStdErr;
@@ -80,39 +83,41 @@ bool PythonScriptRuntime::init() {
 	}
 
 	// Get sys.stdout
-	if (!sysStdOutWrite) {
-		auto* sysStdOut = PySys_GetObject("stdout");	// borrowed reference
+	if (!sysStdOut) {
+		sysStdOut = PySys_GetObject("stdout"); // borrowed reference
 		if (!sysStdOut) {
 			WARN("Failed to get sys.stdout")
 			return false;
 		}
 
-		Py_INCREF(sysStdOut);	// own it
+		Py_INCREF(sysStdOut); // own it
+		DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt now = " << Py_REFCNT(sysStdOut));
 
-		sysStdOutWrite = PyObject_GetAttrString(sysStdOut, "write"); // owned reference
-		if (!sysStdOutWrite) {
+		// auto* sysStdOutWrite = PyObject_GetAttrString(sysStdOut, "write"); // owned reference
+		/*if (!sysStdOutWrite) {
 			WARN("Failed to get sys.stdout.write")
 			Py_DECREF(sysStdOut);
 			return false;
-		}
+		}*/
 	}
 
 	// Get sys.stderr
-	if (!sysStdErrWrite) {
-		auto* sysStdErr = PySys_GetObject("stderr");	// borrowed reference
+	if (!sysStdErr) {
+		sysStdErr = PySys_GetObject("stderr"); // borrowed reference
 		if (!sysStdErr) {
 			WARN("Failed to get sys.stderr")
 			return false;
 		}
 
-		Py_INCREF(sysStdErr);	// own it
+		Py_INCREF(sysStdErr); // own it
+		DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt now = " << Py_REFCNT(sysStdErr));
 
-		sysStdErrWrite = PyObject_GetAttrString(sysStdErr, "write"); // owned reference
-		if (!sysStdErrWrite) {
+		// auto* sysStdErrWrite = PyObject_GetAttrString(sysStdErr, "write"); // owned reference
+		/*if (!sysStdErrWrite) {
 			WARN("Failed to get sys.stderr.write")
 			Py_DECREF(sysStdErr);
 			return false;
-		}
+		}*/
 	}
 
 	// create a fresh local context where we can execute our scripts
@@ -141,7 +146,6 @@ bool PythonScriptRuntime::initPython() {
 	PyConfig_SetString(&config, &config.program_name, pythonInterpreter);
 	PyConfig_SetArgv(&config, 1, argv);
 
-	INFO(Q_FUNC_INFO << ", CALLING PyImport_AppendInittab()")
 	if (PyImport_AppendInittab(moduleName, PyInit_pylabplot) == -1) {
 		WARN("Failed to add the pylabplot module to the table of built-in modules")
 		return false;
@@ -195,12 +199,12 @@ bool PythonScriptRuntime::cancel() {
 
 bool PythonScriptRuntime::redirectStream(const char* streamName, PythonLogger* loggerInstance) {
 	INFO(Q_FUNC_INFO)
-	auto* sysStream = PySys_GetObject(streamName);	// borrowed reference
+	auto* sysStream = PySys_GetObject(streamName); // borrowed reference
 	if (!sysStream) {
 		WARN("Failed to get" << streamName)
 		return false;
 	}
-	Py_INCREF(sysStream);	// own it
+	Py_INCREF(sysStream); // own it
 
 	auto* loggerStream = PythonScriptRuntime::shibokenConvertToPyObject(loggerInstance); // owned reference
 	if (!loggerStream) {
@@ -209,7 +213,6 @@ bool PythonScriptRuntime::redirectStream(const char* streamName, PythonLogger* l
 		return false;
 	}
 
-	INFO("HERE 3")
 	auto* loggerStreamWrite = PyObject_GetAttrString(loggerStream, "write"); // new reference
 	if (!loggerStreamWrite) {
 		WARN("Failed to get write from loggerStream")
@@ -217,7 +220,6 @@ bool PythonScriptRuntime::redirectStream(const char* streamName, PythonLogger* l
 		Py_DECREF(loggerStream);
 		return false;
 	}
-	INFO("HERE 4")
 
 	if (PyObject_SetAttrString(sysStream, "write", loggerStreamWrite) < 0) {
 		WARN("Failed to set write from loggerStream in" << streamName)
@@ -226,60 +228,72 @@ bool PythonScriptRuntime::redirectStream(const char* streamName, PythonLogger* l
 		Py_DECREF(loggerStreamWrite);
 		return false;
 	}
-	INFO("HERE 5")
 	Py_DECREF(sysStream);
 	Py_DECREF(loggerStream);
 	Py_DECREF(loggerStreamWrite);
-	INFO("HERE 6")
 
 	return true;
 }
 
 bool PythonScriptRuntime::redirectOutput() {
-	INFO(Q_FUNC_INFO)
+	INFO(Q_FUNC_INFO << ", redirected: " << m_outputRedirected)
+	if (m_outputRedirected)
+		return true;
+
 	if (!Py_IsInitialized() || !ready) {
 		WARN(Q_FUNC_INFO << "Python interpreter or pylabplot module is not initialized")
 		return false;
 	}
 
-	INFO("HERE 7")
 	if (!redirectStream("stdout", m_loggerStdOut))
 		return false;
-	INFO("HERE 7 DONE")
-
-	INFO("HERE 8")
 	if (!redirectStream("stderr", m_loggerStdErr))
 		return false;
-	INFO("HERE 8 DONE")
+
+	m_outputRedirected = true;
 
 	return true;
 }
 
-bool PythonScriptRuntime::restoreStreamWrite(PyObject* sysModule, const char* streamName, PyObject* originalWrite) {
-	INFO(Q_FUNC_INFO)
-	auto* stream = PyObject_GetAttrString(sysModule, streamName);	// owned
+bool PythonScriptRuntime::restoreStream(PyObject* sysModule, const char* streamName, PyObject* original) {
+	PyGILState_STATE gil = PyGILState_Ensure();
+	auto* stream = PyObject_GetAttrString(sysModule, streamName); // owned
 	if (!stream) {
 		WARN("Failed to get " << streamName)
+		PyGILState_Release(gil);
 		return false;
 	}
 
-	INFO("HERE!")
-	assert(originalWrite);
-	INFO("originalWrite refcnt = " << Py_REFCNT(originalWrite));
-	if (PyObject_SetAttrString(stream, "write", originalWrite) < 0) {
-		WARN("Failed to restore " << streamName);
+	DEBUG(Q_FUNC_INFO << ", stream refcnt = " << Py_REFCNT(stream));
+	DEBUG(Q_FUNC_INFO << ", original refcnt = " << Py_REFCNT(original));
+
+	if (stream == original) { // already restored
+		INFO(Q_FUNC_INFO << ", stream already restored")
 		Py_DECREF(stream);
+		return true;
+	}
+
+	if (PyObject_SetAttrString(stream, "write", original) < 0) {
+		WARN(Q_FUNC_INFO << ", Failed to restore " << streamName);
+		Py_DECREF(stream);
+		PyGILState_Release(gil);
 		return false;
 	}
-	INFO("HERE! DONE")
 
 	Py_DECREF(stream);
+	DEBUG(Q_FUNC_INFO << ", stream refcnt now = " << Py_REFCNT(stream));
+	DEBUG(Q_FUNC_INFO << ", original now = " << Py_REFCNT(original));
+
+	PyGILState_Release(gil);
 	return true;
 }
 
-
 bool PythonScriptRuntime::unRedirectOutput() {
-	INFO(Q_FUNC_INFO)
+	INFO(Q_FUNC_INFO << ", redirected: " << m_outputRedirected)
+
+	if (!m_outputRedirected)
+		return true;
+
 	// Python interpreter and pylabplt module is not initialized
 	if (!Py_IsInitialized() || !ready) {
 		WARN(Q_FUNC_INFO << "Python interpreter or pylabplot module is not initialized")
@@ -289,22 +303,31 @@ bool PythonScriptRuntime::unRedirectOutput() {
 	PyGILState_STATE gil = PyGILState_Ensure();
 	bool ok = true;
 
-	auto* sysModule = PyImport_ImportModule("sys");	// new reference
+	auto* sysModule = PyImport_ImportModule("sys"); // new reference
 	if (!sysModule) {
 		WARN(Q_FUNC_INFO << "Failed loading sys module")
 		PyGILState_Release(gil);
 		return false;
 	}
 
-	if (sysStdOutWrite)
-		ok &= restoreStreamWrite(sysModule, "stdout", sysStdOutWrite);
-	if (sysStdErrWrite)
-		ok &= restoreStreamWrite(sysModule, "stderr", sysStdErrWrite);
+	INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
+	INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
 
-	INFO("HERE2")
+	if (sysStdOut)
+		ok &= restoreStream(sysModule, "stdout", sysStdOut);
+	bool stderrEqualStdout = (sysStdOut == sysStdErr);
+	if (stderrEqualStdout)
+		WARN("stderr == stdout!")
+	if (sysStdErr && !stderrEqualStdout)
+		ok &= restoreStream(sysModule, "stderr", sysStdErr);
+
+	INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
+	INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
+
 	Py_DECREF(sysModule);
-	INFO("HERE2 DONE")
 	PyGILState_Release(gil);
+
+	m_outputRedirected = false;
 	return ok;
 }
 
@@ -317,7 +340,7 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	PyGILState_STATE gil = PyGILState_Ensure();
 
 	if (!reset()) {
-		WARN(Q_FUNC_INFO <<", Failed to create new local context for script execution")
+		WARN(Q_FUNC_INFO << ", Failed to create new local context for script execution")
 		PyGILState_Release(gil);
 		return false;
 	}
@@ -339,7 +362,7 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	PyErr_Clear();
 
 	// Compile script to python bytecode
-	auto* compiled = Py_CompileString(qPrintable(code), qPrintable(m_name), Py_file_input);	// new reference
+	auto* compiled = Py_CompileString(qPrintable(code), qPrintable(m_name), Py_file_input); // new reference
 	if (!compiled) {
 		if (PyErr_Occurred()) {
 			m_errorLine = PythonScriptRuntime::getPyErrorLine(); // Get the line where the error occurred
@@ -355,8 +378,8 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	PyErr_Clear();
 
 	// Evaluate the python bytecode
-	auto* res = PyEval_EvalCode(compiled, m_localDict, m_localDict);
-	if (!res) {
+	auto* result = PyEval_EvalCode(compiled, m_localDict, m_localDict);
+	if (!result) {
 		Py_DECREF(compiled);
 		if (PyErr_Occurred()) {
 			m_errorLine = PythonScriptRuntime::getPyErrorLine(); // Get the line where the error occurred
@@ -369,7 +392,7 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	}
 
 	Py_DECREF(compiled);
-	Py_DECREF(res);
+	Py_DECREF(result);
 
 	// Unredirect python output to output in our ScriptEditor
 	if (!unRedirectOutput()) {
@@ -420,9 +443,7 @@ PyObject* PythonScriptRuntime::shibokenConvertToPyObject(PythonLogger* object) {
 		return nullptr;
 	}
 
-	INFO("Creating a Python wrapper object for the C++ instance ..")
 	auto* po = Shiboken::Object::newObject(loggerObject, object);
-	INFO("	DONE")
 
 	return po;
 }
@@ -435,23 +456,23 @@ PyObject* PythonScriptRuntime::getModuleDict(const QString& name) {
 	if (!Py_IsInitialized() || !ready)
 		return nullptr;
 
-	auto* module = PyImport_AddModule(qPrintable(name));	// borrowed reference
+	auto* module = PyImport_AddModule(qPrintable(name)); // borrowed reference
 	if (!module) {
 		WARN(Q_FUNC_INFO << "Failed to locate module " << name.toStdString())
 		return nullptr;
 	}
 
-	Py_INCREF(module);	// own it
+	Py_INCREF(module); // own it
 
-	auto* moduleDict = PyModule_GetDict(module);	// borrowed reference
-	if (!moduleDict) { 
+	auto* moduleDict = PyModule_GetDict(module); // borrowed reference
+	if (!moduleDict) {
 		WARN(Q_FUNC_INFO << "Failed to get module __dict__")
 		Py_DECREF(module);
 		return nullptr;
 	}
 
 	Py_INCREF(moduleDict);
-	Py_DECREF(module);	// unown it
+	Py_DECREF(module); // unown it
 
 	return moduleDict;
 }
@@ -465,16 +486,16 @@ PyObject* PythonScriptRuntime::createLocalDict() {
 	if (!Py_IsInitialized() || !ready)
 		return nullptr;
 
-	auto* mainDict = PythonScriptRuntime::getModuleDict(QStringLiteral("__main__"));	// owned reference
+	auto* mainDict = PythonScriptRuntime::getModuleDict(QStringLiteral("__main__")); // owned reference
 	if (!mainDict) {
 		WARN(Q_FUNC_INFO << "Failed to get main dict")
 		return nullptr;
 	}
 
 	// create a dictionary
-	auto* localDict = PyDict_New();	// owned
+	auto* localDict = PyDict_New(); // owned
 	if (!localDict) {
-		Py_DECREF(mainDict);	// unown it
+		Py_DECREF(mainDict); // unown it
 		return nullptr;
 	}
 
@@ -505,7 +526,7 @@ int PythonScriptRuntime::getPyErrorLine() {
 	PyErr_NormalizeException(&type, &value, &traceback);
 
 	if (traceback) {
-		auto* p = PyObject_GetAttrString(traceback, "tb_lineno");	// owned
+		auto* p = PyObject_GetAttrString(traceback, "tb_lineno"); // owned
 		if (p) {
 			long line = PyLong_AsLong(p);
 			if (line > INT_MIN && line <= INT_MAX)
@@ -516,7 +537,7 @@ int PythonScriptRuntime::getPyErrorLine() {
 	}
 
 	if (errorLine == -1 && type && value && PyErr_GivenExceptionMatches(type, PyExc_SyntaxError) != -1) {
-		auto* p = PyObject_GetAttrString(value, "lineno");	// owned
+		auto* p = PyObject_GetAttrString(value, "lineno"); // owned
 		if (p) {
 			long line = PyLong_AsLong(p);
 			if (line > INT_MIN && line <= INT_MAX)
@@ -555,7 +576,7 @@ bool PythonScriptRuntime::populateVariableInfo() {
 			return false;
 		}
 
-		const QString& key = PythonScriptRuntime::pyUnicodeToQString(keyObj);	//TODO
+		const QString& key = PythonScriptRuntime::pyUnicodeToQString(keyObj); // TODO
 		if (key.isNull()) {
 			Py_DECREF(items);
 			Py_DECREF(item);

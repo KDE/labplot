@@ -22,12 +22,13 @@ private:
 	PythonLogger* m_loggerStdOut{nullptr}; // PythonLogger instance to replace sys.stdout in the python interpreter
 	PythonLogger* m_loggerStdErr{nullptr}; // PythonLogger instance to replace sys.stderr in the python interpreter
 	PyObject* m_localDict{nullptr};
+	bool m_outputRedirected{false};
 
 	// instance methods
 	bool reset();
 	bool redirectStream(const char* streamName, PythonLogger* loggerInstance);
 	bool redirectOutput();
-	bool restoreStreamWrite(PyObject* sysModule, const char* streamName, PyObject* originalWrite);
+	bool restoreStream(PyObject* sysModule, const char* streamName, PyObject* original);
 	bool unRedirectOutput();
 	bool populateVariableInfo();
 	PyObject* createLocalDict();
@@ -44,8 +45,8 @@ private:
 
 	// singletons (shared between PythonScripts)
 	static bool ready;
-	static PyObject* sysStdOutWrite;
-	static PyObject* sysStdErrWrite;
+	static PyObject* sysStdOut;
+	static PyObject* sysStdErr;
 };
 
 #endif
