@@ -1,15 +1,24 @@
+/*
+	File                 : PythonScriptRuntime.cpp
+	Project              : LabPlot
+	Description          : Python Script Runtime
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #include "PythonScriptRuntime.h"
 #include "PythonLogger.h"
-
-#include <Python.h>
-#include <sbkconverter.h>
-#include <sbkmodule.h>
-
 #include "backend/core/Project.h"
 #include "backend/script/Script.h"
 #include "backend/script/ScriptRuntime.h"
 #include "pyerrors.h"
 #include "pylabplot/pylabplot_python.h"
+
+#include <sbkconverter.h>
+#include <sbkmodule.h>
+#include <sbkpython.h>
 
 #include <codecvt>
 #include <string>

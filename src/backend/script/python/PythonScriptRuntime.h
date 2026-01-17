@@ -1,9 +1,18 @@
+/*
+	File                 : PythonScriptRuntime.h
+	Project              : LabPlot
+	Description          : Python Script Runtime
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #ifndef PYTHONSCRIPTRUNTIME_H
 #define PYTHONSCRIPTRUNTIME_H
 
-#include <sbkpython.h>
-
 #include "backend/script/ScriptRuntime.h"
+#include <Python.h>
 
 class PythonLogger;
 

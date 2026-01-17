@@ -1,9 +1,16 @@
-#include <KLocalizedString>
-
-#include "ScriptRuntime.h"
+/*
+	File                 : ScriptRuntime.cpp
+	Project              : LabPlot
+	Description          : Script Runtime
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "Script.h"
+#include "ScriptRuntime.h"
 
+#include <KLocalizedString>
 /*!
  * \class ScriptRuntime
  * \brief Abstract class providing an interface for scripting runtimes
