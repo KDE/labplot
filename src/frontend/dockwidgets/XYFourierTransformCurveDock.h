@@ -15,8 +15,6 @@
 #include "frontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyfouriertransformcurvedockgeneraltab.h"
 
-class TreeViewComboBox;
-
 class XYFourierTransformCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 

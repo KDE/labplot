@@ -16,9 +16,6 @@
 #include "frontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xylinesimplificationcurvedockgeneraltab.h"
 
-class XYAnalysisCurve;
-class TreeViewComboBox;
-
 class XYLineSimplificationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 

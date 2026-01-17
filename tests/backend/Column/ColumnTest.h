@@ -91,6 +91,7 @@ private Q_SLOTS:
 	void testFormulasMinColumnInvalid();
 
 	void testFormulasSize();
+	void testFormulasSum();
 	void testFormulasMin();
 	void testFormulasMax();
 	void testFormulasMean();

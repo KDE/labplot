@@ -53,7 +53,14 @@
 #endif
 #include <gsl/gsl_version.h>
 #ifdef HAVE_LIBORIGIN
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include <OriginFile.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #endif
 #ifdef HAVE_HDF5
 #include <H5public.h>
@@ -65,7 +72,14 @@
 #include <matio_pubconf.h>
 #endif
 #ifdef HAVE_MCAP
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include "mcap/types.hpp"
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 /*!

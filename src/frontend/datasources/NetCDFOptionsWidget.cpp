@@ -66,7 +66,7 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 	if (ui.twContent->selectedItems().isEmpty())
 		return;
 
-	QTreeWidgetItem* item = ui.twContent->selectedItems().first();
+	auto* item = ui.twContent->selectedItems().first();
 	if (item->data(1, Qt::DisplayRole).toString() == QLatin1String("variable"))
 		m_fileWidget->refreshPreview();
 	else if (item->data(1, Qt::DisplayRole).toString().contains(QLatin1String("attribute"))) {
@@ -80,7 +80,7 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 		QString importedText = filter->readAttribute(fileName, name, varName);
 		DEBUG("importedText =" << STDSTRING(importedText));
 
-		QStringList lineStrings = importedText.split(QLatin1Char('\n'));
+		auto lineStrings = importedText.split(QLatin1Char('\n'));
 		int rows = lineStrings.size();
 		ui.twPreview->setRowCount(rows);
 		ui.twPreview->setColumnCount(0);
@@ -91,9 +91,9 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 				ui.twPreview->setColumnCount(cols);
 
 			for (int j = 0; j < cols; ++j) {
-				auto* item = new QTableWidgetItem();
-				item->setText(lineString[j]);
-				ui.twPreview->setItem(i, j, item);
+				auto* newItem = new QTableWidgetItem();
+				newItem->setText(lineString[j]);
+				ui.twPreview->setItem(i, j, newItem);
 			}
 		}
 	} else

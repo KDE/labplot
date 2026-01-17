@@ -77,6 +77,7 @@ enum class AspectType : quint64 {
 
 	// analysis curves
 	XYAnalysisCurve,
+	XYBaselineCorrectionCurve,
 	XYConvolutionCurve,
 	XYCorrelationCurve,
 	XYLineSimplificationCurve,
@@ -207,6 +208,8 @@ public:
 			return std::string_view("XYLineSimplificationCurve");
 		case AspectType::XYDifferentiationCurve:
 			return std::string_view("XYDifferentiationCurve");
+		case AspectType::XYBaselineCorrectionCurve:
+			return std::string_view("XYBaselineCorrectionCurve");
 		case AspectType::XYFitCurve:
 			return std::string_view("XYFitCurve");
 		case AspectType::XYFourierFilterCurve:
@@ -295,6 +298,7 @@ public:
 	void setSuppressWriteUuid(bool);
 	QString comment() const;
 	void setCreationTime(const QDateTime&);
+	virtual QString caption() const;
 	QDateTime creationTime() const;
 	virtual Project* project();
 	virtual const Project* project() const;

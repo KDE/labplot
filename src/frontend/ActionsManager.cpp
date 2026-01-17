@@ -67,7 +67,14 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <DockWidget.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #include <DockManager.h>
 
 /*!
@@ -926,11 +933,11 @@ void ActionsManager::initMenus() {
 
 	if (!backendNames.isEmpty()) {
 		// sub-menu shown in the main menu bar
-		auto* menu = dynamic_cast<QMenu*>(factory->container(QStringLiteral("new_notebook"), m_mainWindow));
-		if (menu) {
-			menu->setIcon(QIcon::fromTheme(QStringLiteral("cantor")));
+		auto* nbmenu = dynamic_cast<QMenu*>(factory->container(QStringLiteral("new_notebook"), m_mainWindow));
+		if (nbmenu) {
+			nbmenu->setIcon(QIcon::fromTheme(QStringLiteral("cantor")));
 			m_newMenu->addSeparator();
-			m_newMenu->addMenu(menu);
+			m_newMenu->addMenu(nbmenu);
 			updateNotebookActions();
 		}
 	}

@@ -27,6 +27,9 @@ set (devel-headers
 # static library
 add_library (liborigin-static STATIC ${sources})
 set_target_properties(liborigin-static PROPERTIES OUTPUT_NAME "origin" POSITION_INDEPENDENT_CODE ON)
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+	target_compile_options(liborigin-static PRIVATE -Wno-shadow)
+endif()
 
 # inform on log setting
 if (ENABLE_ORIGIN_PARSER_LOG)

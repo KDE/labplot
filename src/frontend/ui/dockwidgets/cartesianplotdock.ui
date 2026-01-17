@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>462</width>
+    <width>486</width>
     <height>920</height>
    </rect>
   </property>
@@ -581,6 +581,13 @@
            <number>0</number>
           </property>
           <item>
+           <widget class="QLabel" name="lColorMapName">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="lColorMapPreview">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -608,6 +615,333 @@
        </item>
        <item row="22" column="4">
         <widget class="QComboBox" name="cbPlotColorMode"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabTitle">
+      <attribute name="title">
+       <string>Title</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tabLayout_2">
+      <attribute name="title">
+       <string>Layout</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="3" column="0">
+        <widget class="QLabel" name="lBottomMargin">
+         <property name="text">
+          <string>Width:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lPaddingHorizontal">
+         <property name="text">
+          <string>Horizontal:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="NumberSpinBox" name="sbTop">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lGeometry">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Geometry</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="NumberSpinBox" name="sbPaddingHorizontal">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="lPadding">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Padding</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QCheckBox" name="cbPaddingSymmetric">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Symmetric:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="lPaddingVerticalDown">
+         <property name="text">
+          <string>Bottom:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="NumberSpinBox" name="sbWidth">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="NumberSpinBox" name="sbPaddingVertical">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="NumberSpinBox" name="sbPaddingRight">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <spacer name="verticalSpacer_14">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>614</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="5" column="0">
+        <spacer name="verticalSpacer_10">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>28</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lRightMargin">
+         <property name="text">
+          <string>Height:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="NumberSpinBox" name="sbLeft">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <spacer name="horizontalSpacer_11">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lTopMargin">
+         <property name="text">
+          <string>Left:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lLeftMargin">
+         <property name="text">
+          <string>Top:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lPaddingHorizontalRight">
+         <property name="text">
+          <string>Right:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="NumberSpinBox" name="sbHeight">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="2">
+        <widget class="NumberSpinBox" name="sbPaddingBottom">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="lPaddingVertical">
+         <property name="text">
+          <string>Vertical:</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -943,333 +1277,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabTitle">
-      <attribute name="title">
-       <string>Title</string>
-      </attribute>
-     </widget>
-     <widget class="QWidget" name="tabLayout_2">
-      <attribute name="title">
-       <string>Layout</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_4">
-       <item row="3" column="0">
-        <widget class="QLabel" name="lBottomMargin">
-         <property name="text">
-          <string>Width:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lPaddingHorizontal">
-         <property name="text">
-          <string>Horizontal:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="NumberSpinBox" name="sbTop">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lGeometry">
-         <property name="font">
-          <font>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Geometry</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="NumberSpinBox" name="sbPaddingHorizontal">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lPadding">
-         <property name="font">
-          <font>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Padding</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="QCheckBox" name="cbPaddingSymmetric">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>Symmetric:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="lPaddingVerticalDown">
-         <property name="text">
-          <string>Bottom:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="NumberSpinBox" name="sbWidth">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="2">
-        <widget class="NumberSpinBox" name="sbPaddingVertical">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="2">
-        <widget class="NumberSpinBox" name="sbPaddingRight">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0">
-        <spacer name="verticalSpacer_14">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>614</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="5" column="0">
-        <spacer name="verticalSpacer_10">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>28</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lRightMargin">
-         <property name="text">
-          <string>Height:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="NumberSpinBox" name="sbLeft">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <spacer name="horizontalSpacer_11">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lTopMargin">
-         <property name="text">
-          <string>Left:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lLeftMargin">
-         <property name="text">
-          <string>Top:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="lPaddingHorizontalRight">
-         <property name="text">
-          <string>Right:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="NumberSpinBox" name="sbHeight">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="2">
-        <widget class="NumberSpinBox" name="sbPaddingBottom">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lPaddingVertical">
-         <property name="text">
-          <string>Vertical:</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="tabPlotArea">
       <attribute name="title">
        <string>Area</string>
@@ -1488,6 +1495,56 @@
           <size>
            <width>20</width>
            <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabStack">
+      <attribute name="title">
+       <string>Stack</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="2">
+        <widget class="TimedLineEdit" name="leStackYOffset">
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lStackYOffset">
+         <property name="text">
+          <string>Offset:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_12">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <spacer name="verticalSpacer_16">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
           </size>
          </property>
         </spacer>
