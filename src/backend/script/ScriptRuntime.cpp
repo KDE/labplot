@@ -21,9 +21,9 @@
  * \param script - The Script instance that owns this script runtime
  * \return returns a ScriptRuntime instance
  */
-ScriptRuntime::ScriptRuntime(const QString& lang, Script* script)
+ScriptRuntime::ScriptRuntime(const QString& language, Script* script)
 	: QObject()
-	, lang(lang)
+	, lang(language)
 	, m_name(script->name())
 	, m_variableModel(new VariablesInfoModel(this)) {
 }

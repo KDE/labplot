@@ -95,8 +95,8 @@ QVector<QColor> ColorMapsManager::colors(const QString& name) {
 	QVector<QColor> colors;
 
 	if (!m_colors.contains(name)) {
-		for (const auto& name : collectionNames())
-			colorMapNames(name);
+		for (const auto& cname : collectionNames())
+			colorMapNames(cname);
 	}
 
 	// convert from the string RGB representation to QColor
@@ -122,8 +122,8 @@ void ColorMapsManager::render(QPixmap& pixmap, const QString& name) {
 		return;
 
 	if (!m_colors.contains(name)) {
-		for (const auto& name : collectionNames())
-			colorMapNames(name);
+		for (const auto& cname : collectionNames())
+			colorMapNames(cname);
 	}
 
 	// convert from the string RGB representation to QColor

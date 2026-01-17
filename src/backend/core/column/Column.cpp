@@ -109,20 +109,17 @@ QMenu* Column::createContextMenu() {
 	if (parentAspect()->type() == AspectType::StatisticsSpreadsheet)
 		return nullptr;
 
-	// initialize the actions if not done yet
-	if (!m_copyDataAction) {
-		m_copyDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Data"), this);
-		connect(m_copyDataAction, &QAction::triggered, this, &Column::copyData);
+	auto* copyDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Data"), this);
+	connect(copyDataAction, &QAction::triggered, this, &Column::copyData);
 
-		m_pasteDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-paste")), i18n("Paste Data"), this);
-		connect(m_pasteDataAction, &QAction::triggered, this, &Column::pasteData);
+	auto* pasteDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-paste")), i18n("Paste Data"), this);
+	connect(pasteDataAction, &QAction::triggered, this, &Column::pasteData);
 
-		m_usedInActionGroup = new QActionGroup(this);
-		connect(m_usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
-		connect(this, &AbstractColumn::maskingChanged, this, [=] {
-			d->invalidate();
-		});
-	}
+	auto* usedInActionGroup = new QActionGroup(this);
+	connect(usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
+	connect(this, &AbstractColumn::maskingChanged, this, [=] {
+		d->invalidate();
+	});
 
 	QMenu* menu = AbstractAspect::createContextMenu();
 	QAction* firstAction{nullptr};
@@ -153,8 +150,8 @@ QMenu* Column::createContextMenu() {
 	usedInMenu->setIcon(QIcon::fromTheme(QStringLiteral("go-next-view")));
 
 	// remove previously added actions
-	for (auto* action : m_usedInActionGroup->actions())
-		m_usedInActionGroup->removeAction(action);
+	for (auto* action : usedInActionGroup->actions())
+		usedInActionGroup->removeAction(action);
 
 	auto* project = this->project();
 	bool showIsUsed = false;
@@ -170,7 +167,7 @@ QMenu* Column::createContextMenu() {
 				sectionAdded = true;
 			}
 
-			auto* action = new QAction(plot->icon(), plot->name(), m_usedInActionGroup);
+			auto* action = new QAction(plot->icon(), plot->name(), usedInActionGroup);
 			action->setData(plot->path());
 			usedInMenu->addAction(action);
 			showIsUsed = true;
@@ -188,7 +185,7 @@ QMenu* Column::createContextMenu() {
 				sectionAdded = true;
 			}
 
-			auto* action = new QAction(axis->icon(), axis->name(), m_usedInActionGroup);
+			auto* action = new QAction(axis->icon(), axis->name(), usedInActionGroup);
 			action->setData(axis->path());
 			usedInMenu->addAction(action);
 			showIsUsed = true;
@@ -214,7 +211,7 @@ QMenu* Column::createContextMenu() {
 				sectionAdded = true;
 			}
 
-			auto* action = new QAction(column->icon(), column->name(), m_usedInActionGroup);
+			auto* action = new QAction(column->icon(), column->name(), usedInActionGroup);
 			action->setData(column->path());
 			usedInMenu->addAction(action);
 			showIsUsed = true;
@@ -230,7 +227,7 @@ QMenu* Column::createContextMenu() {
 	}
 
 	if (hasValues())
-		menu->insertAction(firstAction, m_copyDataAction);
+		menu->insertAction(firstAction, copyDataAction);
 
 	// pasting of data is only possible for spreadsheet columns that are not read-only
 	if (auto* spreadsheet = parentAspect()->castTo<Spreadsheet>()) {
@@ -239,7 +236,7 @@ QMenu* Column::createContextMenu() {
 			if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
 				const QString& text = QApplication::clipboard()->text();
 				if (!text.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
-					menu->insertAction(firstAction, m_pasteDataAction);
+					menu->insertAction(firstAction, pasteDataAction);
 			}
 		}
 	}
@@ -395,7 +392,7 @@ QVector<AspectType> Column::dropableOn() const {
  * Use a filter to convert a column to another type.
  */
 bool Column::copy(const AbstractColumn* other) {
-	Q_CHECK_PTR(other);
+	Q_ASSERT(other);
 	if (other->columnMode() != columnMode())
 		return false;
 	exec(new ColumnFullCopyCmd(d, other));
@@ -413,7 +410,7 @@ bool Column::copy(const AbstractColumn* other) {
  * \param num_rows the number of rows to copy
  */
 bool Column::copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) {
-	Q_CHECK_PTR(source);
+	Q_ASSERT(source);
 	if (source->columnMode() != columnMode())
 		return false;
 	exec(new ColumnPartialCopyCmd(d, source, source_start, dest_start, num_rows));
@@ -1045,6 +1042,104 @@ QIcon Column::icon() const {
 		return QIcon::fromTheme(QLatin1String("mathmode"));
 }
 
+QString Column::caption() const {
+	QString caption = AbstractAspect::caption();
+
+	caption += QLatin1String("<br>");
+	caption += QLatin1String("<br>") + i18n("Size: %1", rowCount());
+	// TODO: active this once we have a more efficient implementation of this function
+	// caption += QLatin1String("<br>") + i18n("Values: %1", col->availableRowCount());
+	caption += QLatin1String("<br>") + i18n("Type: %1", columnModeString());
+	caption += QLatin1String("<br>") + i18n("Plot Designation: %1", plotDesignationString());
+
+	// in case it's a calculated column, add additional information about the formula and parameters
+	if (!formula().isEmpty()) {
+		caption += QLatin1String("<br><br><b>") + i18n("Formula:") + QLatin1String("</b>");
+		QString f(QStringLiteral("f("));
+		QString parameters;
+		for (int i = 0; i < formulaData().size(); ++i) {
+			auto& data = formulaData().at(i);
+
+			// string for the function definition like f(x,y), etc.
+			f += data.variableName();
+			if (i != formulaData().size() - 1)
+				f += QStringLiteral(", ");
+
+			// string for the parameters and the references to the used columns for them
+			if (!parameters.isEmpty())
+				parameters += QLatin1String("<br>");
+			parameters += data.variableName();
+			if (data.column())
+				parameters += QStringLiteral(" = ") + data.column()->path();
+		}
+
+		caption += QStringLiteral("<br>") + f + QStringLiteral(") = ") + formula();
+		caption += QStringLiteral("<br>") + parameters;
+		if (formulaAutoUpdate())
+			caption += QStringLiteral("<br>") + i18n("auto update: true") + QStringLiteral("   (*)");
+		else
+			caption += QStringLiteral("<br>") + i18n("auto update: false");
+	}
+
+	// add the information about the usage of this column in other places, similar to the logic in createContextMenu().
+	auto* project = this->project();
+
+	// add curves where the column is currently in use
+	bool sectionAdded = false;
+	const auto& plots = project->children<Plot>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* plot : plots) {
+		const bool used = plot->usingColumn(this, true);
+		if (used) {
+			if (!sectionAdded) {
+				caption += QStringLiteral("<br><br><b>") + i18n("Used in Plots:") + QStringLiteral("</b>");
+				sectionAdded = true;
+			}
+
+			caption += QStringLiteral("<br>") + plot->path();
+		}
+	}
+
+	// add axes where the column is used as a custom column for ticks positions or labels
+	sectionAdded = false;
+	const auto& axes = project->children<Axis>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* axis : axes) {
+		const bool used = (axis->majorTicksColumn() == this || axis->minorTicksColumn() == this || axis->labelsTextColumn() == this);
+		if (used) {
+			if (!sectionAdded) {
+				caption += QStringLiteral("<br><br><b>") + i18n("Used in Axes:") + QStringLiteral("</b>");
+				sectionAdded = true;
+			}
+
+			caption += QStringLiteral("<br>") + axis->path();
+		}
+	}
+
+	// add calculated columns where the column is used in formula variables
+	sectionAdded = false;
+	const auto& columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+	const QString& path = this->path();
+	for (const auto* column : columns) {
+		int index = -1;
+		for (int i = 0; i < column->formulaData().count(); i++) {
+			if (path == column->formulaData().at(i).columnName()) {
+				index = i;
+				break;
+			}
+		}
+
+		if (index != -1) {
+			if (!sectionAdded) {
+				caption += QStringLiteral("<br><br><b>") + i18n("Used in Spreadsheet Calculations:") + QStringLiteral("</b>");
+				sectionAdded = true;
+			}
+
+			caption += QStringLiteral("<br>") + column->path();
+		}
+	}
+
+	return caption;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \name serialize/deserialize
 //@{
@@ -1058,6 +1153,8 @@ void Column::save(QXmlStreamWriter* writer) const {
 	if (project() && !project()->saveData()) {
 		saveData = false;
 	}
+
+	PERFTRACE(QStringLiteral("save column ") + name());
 
 	writer->writeStartElement(QStringLiteral("column"));
 	writeBasicAttributes(writer);
@@ -1076,9 +1173,9 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 		QStringList formulaVariableNames;
 		QStringList formulaVariableColumnPaths;
-		for (auto& d : formulaData()) {
-			formulaVariableNames << d.variableName();
-			formulaVariableColumnPaths << d.columnName();
+		for (auto& data : formulaData()) {
+			formulaVariableNames << data.variableName();
+			formulaVariableColumnPaths << data.columnName();
 		}
 
 		writer->writeStartElement(QStringLiteral("variableNames"));
@@ -1244,14 +1341,17 @@ void Column::save(QXmlStreamWriter* writer) const {
 			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
 			break;
 		}
-		case ColumnMode::Text:
+		case ColumnMode::Text: {
+			// serialize text data using Base64 encoding with null separator
+			QByteArray bytes;
 			for (int i = 0; i < rowCount(); ++i) {
-				writer->writeStartElement(QStringLiteral("row"));
-				writer->writeAttribute(QStringLiteral("index"), QString::number(i));
-				writer->writeCharacters(textAt(i));
-				writer->writeEndElement();
+				bytes.append(textAt(i).toUtf8());
+				bytes.append('\0');
 			}
+			bytes.removeLast(); // remove the last null character
+			writer->writeCharacters(QLatin1String(bytes.toBase64()));
 			break;
+		}
 		case ColumnMode::DateTime:
 		case ColumnMode::Month:
 		case ColumnMode::Day:
@@ -1275,19 +1375,39 @@ public:
 		: m_private(priv)
 		, m_content(content) { };
 	void run() override {
-		QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
-		if (m_private->columnMode() == AbstractColumn::ColumnMode::Double) {
+		const auto bytes = QByteArray::fromBase64(m_content.toLatin1());
+		switch (m_private->columnMode()) {
+		case AbstractColumn::ColumnMode::Double: {
 			auto* data = new QVector<double>(bytes.size() / (int)sizeof(double));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
-		} else if (m_private->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
 			auto* data = new QVector<qint64>(bytes.size() / (int)sizeof(qint64));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
-		} else {
+			break;
+		}
+		case AbstractColumn::ColumnMode::Integer: {
 			auto* data = new QVector<int>(bytes.size() / (int)sizeof(int));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Text: {
+			// deserialize text data using Base64 encoding with null separator
+			const QString decoded = QString::fromUtf8(bytes);
+			auto textVector = decoded.split(QLatin1Char('\0'), Qt::KeepEmptyParts);
+			m_private->replaceTexts(-1, textVector);
+			break;
+		}
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day: {
+			// nothing to do here, the data are loaded row by row
+			break;
+		}
 		}
 	}
 
@@ -1303,6 +1423,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
+	PERFTRACE(QLatin1String("load column ") + name());
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	QString str = attribs.value(QStringLiteral("rows")).toString();
@@ -1435,7 +1556,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 					break;
 				}
 				case Column::ColumnMode::Text: {
-					textVector << reader->readElementText();
+					textVector << reader->readElementText(); // old serialization format with row by row for xmlVersion < 18
 					break;
 				}
 				}
@@ -1451,8 +1572,10 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		if (!preview) {
 			// Decode data
 			QString content = reader->text().toString().trimmed();
-			// Datetime and text are read in row by row
-			if (!content.isEmpty() && (columnMode() == ColumnMode::Double || columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt)) {
+			// Datetime and Text for xmlVersion < 18 are read row by row above,
+			// everything else is Base64 encoded and is decoded via DecodeColumnTask
+			const auto mode = columnMode();
+			if (!content.isEmpty() && (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::Text)) {
 				auto* task = new DecodeColumnTask(d, content);
 				QThreadPool::globalInstance()->start(task);
 			}
@@ -1463,7 +1586,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	case AbstractColumn::ColumnMode::Double:
 	case AbstractColumn::ColumnMode::BigInt:
 	case AbstractColumn::ColumnMode::Integer:
-		/* handled above*/
+		/* handled above in DecodeColumnTask */
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
@@ -1471,7 +1594,8 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		setDateTimes(dateTimeVector);
 		break;
 	case AbstractColumn::ColumnMode::Text:
-		setText(textVector);
+		if (!textVector.isEmpty() && Project::xmlVersion() < 18) // old serialization format with row by row reading
+			setText(textVector);
 		break;
 	}
 

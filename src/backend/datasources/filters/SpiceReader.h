@@ -28,7 +28,7 @@ public:
 		real = 0x1, // if zero means the data is complex
 		forward = 0x2,
 		yDouble = 0x4, // y data is stored as double precision instead of float
-		log = 0x8, // ?
+		logarithmic = 0x8, // ?
 	};
 
 	enum class PlotMode { Transient, FFT, AC, DC, Noise, Unknown };

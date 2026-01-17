@@ -123,6 +123,9 @@ private Q_SLOTS:
 	void borderTypeChanged();
 	void borderCornerRadiusChanged(double);
 
+	// "Stack"-tab
+	void stackYOffsetChanged();
+
 	void exportPlotTemplate();
 
 	// SLOTs for changes triggered in CartesianPlot
@@ -159,6 +162,9 @@ private Q_SLOTS:
 	// background
 	void plotBorderTypeChanged(PlotArea::BorderType);
 	void plotBorderCornerRadiusChanged(double);
+
+	// stacking
+	void plotStackYOffsetChanged(double);
 
 	// save/load template
 	void loadConfigFromTemplate(KConfig&);

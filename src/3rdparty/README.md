@@ -30,7 +30,7 @@ Changes:
 
 src/CMakeLists.txt:
 + if(NOT MSVC_FOUND)
-+    target_compile_options(${library_name} PRIVATE -Wno-switch-enum)
++    target_compile_options(${library_name} PRIVATE -Wno-switch-enum -Wno-shadow -Wno-deprecated-declarations -Wno-unused-but-set-variable)
 + endif()
 
 ## MCAP

@@ -39,7 +39,7 @@ We have invested a lot of time and effort in creating LabPlot, please consider c
 To cite LabPlot in publications use:
 
 ```
-LabPlot Team (2025), LabPlot: A FREE, open source, cross-platform Data Visualization and Analysis software accessible to everyone, (Version 2.12.1) [Computer software]. https://labplot.org.
+LabPlot Team (2026), LabPlot: A FREE, open source, cross-platform Data Visualization and Analysis software accessible to everyone, (Version 2.12.1) [Computer software]. https://labplot.org.
 ```
 
 # Donate

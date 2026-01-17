@@ -598,11 +598,11 @@ void BarPlotPrivate::recalc() {
 				if (!column->isValid(i) || column->isMasked(i))
 					continue;
 
-				double value = column->valueAt(i);
-				if (value > 0)
-					barMaxs[valueIndex] += value;
-				if (value < 0)
-					barMins[valueIndex] += value;
+				double v = column->valueAt(i);
+				if (v > 0)
+					barMaxs[valueIndex] += v;
+				if (v < 0)
+					barMins[valueIndex] += v;
 
 				++valueIndex;
 			}
@@ -746,7 +746,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			const double value = column->valueAt(i);
+			const double v = column->valueAt(i);
 			double x;
 
 			// translate to the beginning of the group
@@ -759,12 +759,12 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			x += m_groupGap + scalingOffset + (width + barGap + 2 * scalingOffset) * columnIndex;
 
 			lines.clear();
-			lines << QLineF(x, value, x + width, value);
-			lines << QLineF(x + width, value, x + width, m_zero);
+			lines << QLineF(x, v, x + width, v);
+			lines << QLineF(x + width, v, x + width, m_zero);
 			lines << QLineF(x + width, m_zero, x, m_zero);
-			lines << QLineF(x, m_zero, x, value);
+			lines << QLineF(x, m_zero, x, v);
 
-			valuesPointsLogical << QPointF(x + width / 2, value);
+			valuesPointsLogical << QPointF(x + width / 2, v);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -783,9 +783,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			const double value = column->valueAt(i);
+			const double v = column->valueAt(i);
 			double offset;
-			if (value > 0)
+			if (v > 0)
 				offset = m_stackedBarPositiveOffsets.at(valueIndex);
 			else
 				offset = m_stackedBarNegativeOffsets.at(valueIndex);
@@ -801,16 +801,16 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			x += m_groupGap + scalingOffset;
 
 			lines.clear();
-			lines << QLineF(x, value + offset, x + width, value + offset);
-			lines << QLineF(x + width, value + offset, x + width, offset);
+			lines << QLineF(x, v + offset, x + width, v + offset);
+			lines << QLineF(x + width, v + offset, x + width, offset);
 			lines << QLineF(x + width, offset, x, offset);
-			lines << QLineF(x, offset, x, value + offset);
+			lines << QLineF(x, offset, x, v + offset);
 
-			if (value > 0) {
-				m_stackedBarPositiveOffsets[valueIndex] += value;
+			if (v > 0) {
+				m_stackedBarPositiveOffsets[valueIndex] += v;
 				valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
 			} else {
-				m_stackedBarNegativeOffsets[valueIndex] += value;
+				m_stackedBarNegativeOffsets[valueIndex] += v;
 				valuesPointsLogical << QPointF(x + width / 2, m_stackedBarNegativeOffsets.at(valueIndex));
 			}
 
@@ -831,11 +831,11 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			double value = column->valueAt(i);
-			if (value < 0)
+			double v = column->valueAt(i);
+			if (v < 0)
 				continue;
 
-			value = value * 100 / m_stackedBar100PercentValues.at(valueIndex);
+			v *= 100. / m_stackedBar100PercentValues.at(valueIndex);
 			const double offset = m_stackedBarPositiveOffsets.at(valueIndex);
 
 			// translate to the beginning of the group
@@ -849,12 +849,12 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			x += m_groupGap + scalingOffset;
 
 			lines.clear();
-			lines << QLineF(x, value + offset, x + width, value + offset);
-			lines << QLineF(x + width, value + offset, x + width, offset);
+			lines << QLineF(x, v + offset, x + width, v + offset);
+			lines << QLineF(x + width, v + offset, x + width, offset);
 			lines << QLineF(x + width, offset, x, offset);
-			lines << QLineF(x, offset, x, value + offset);
+			lines << QLineF(x, offset, x, v + offset);
 
-			m_stackedBarPositiveOffsets[valueIndex] += value;
+			m_stackedBarPositiveOffsets[valueIndex] += v;
 
 			valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
 
@@ -894,7 +894,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			const double value = column->valueAt(i);
+			const double v = column->valueAt(i);
 			double y;
 
 			// translate to the beginning of the group
@@ -907,12 +907,12 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			y += m_groupGap + scalingOffset + (width + barGap + 2 * scalingOffset) * columnIndex;
 
 			lines.clear();
-			lines << QLineF(value, y, value, y + width);
-			lines << QLineF(value, y + width, m_zero, y + width);
+			lines << QLineF(v, y, v, y + width);
+			lines << QLineF(v, y + width, m_zero, y + width);
 			lines << QLineF(m_zero, y + width, m_zero, y);
-			lines << QLineF(m_zero, y, value, y);
+			lines << QLineF(m_zero, y, v, y);
 
-			valuesPointsLogical << QPointF(value, y + width / 2);
+			valuesPointsLogical << QPointF(v, y + width / 2);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -930,9 +930,9 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			const double value = column->valueAt(i);
+			const double v = column->valueAt(i);
 			double offset;
-			if (value > 0)
+			if (v > 0)
 				offset = m_stackedBarPositiveOffsets.at(valueIndex);
 			else
 				offset = m_stackedBarNegativeOffsets.at(valueIndex);
@@ -948,16 +948,16 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			y += m_groupGap + scalingOffset;
 
 			lines.clear();
-			lines << QLineF(value + offset, y, value + offset, y + width);
-			lines << QLineF(value + offset, y + width, offset, y + width);
+			lines << QLineF(v + offset, y, v + offset, y + width);
+			lines << QLineF(v + offset, y + width, offset, y + width);
 			lines << QLineF(offset, y + width, offset, y);
-			lines << QLineF(offset, y, value + offset, y);
+			lines << QLineF(offset, y, v + offset, y);
 
-			if (value > 0) {
-				m_stackedBarPositiveOffsets[valueIndex] += value;
+			if (v > 0) {
+				m_stackedBarPositiveOffsets[valueIndex] += v;
 				valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
 			} else {
-				m_stackedBarNegativeOffsets[valueIndex] += value;
+				m_stackedBarNegativeOffsets[valueIndex] += v;
 				valuesPointsLogical << QPointF(m_stackedBarNegativeOffsets.at(valueIndex), y + width / 2);
 			}
 			barLines << q->cSystem->mapLogicalToScene(lines);
@@ -977,11 +977,11 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			double value = column->valueAt(i);
-			if (value < 0)
+			double v = column->valueAt(i);
+			if (v < 0)
 				continue;
 
-			value = value * 100 / m_stackedBar100PercentValues.at(valueIndex);
+			v *= 100. / m_stackedBar100PercentValues.at(valueIndex);
 			const double offset = m_stackedBarPositiveOffsets.at(valueIndex);
 
 			double y;
@@ -994,12 +994,12 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			y += m_groupGap + scalingOffset;
 
 			lines.clear();
-			lines << QLineF(value + offset, y, value + offset, y + width);
-			lines << QLineF(value + offset, y + width, offset, y + width);
+			lines << QLineF(v + offset, y, v + offset, y + width);
+			lines << QLineF(v + offset, y + width, offset, y + width);
 			lines << QLineF(offset, y + width, offset, y);
-			lines << QLineF(offset, y, value + offset, y);
+			lines << QLineF(offset, y, v + offset, y);
 
-			m_stackedBarPositiveOffsets[valueIndex] += value;
+			m_stackedBarPositiveOffsets[valueIndex] += v;
 			valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
@@ -1165,12 +1165,12 @@ void BarPlotPrivate::updateValues() {
 		break;
 	case Value::Center: {
 		QVector<qreal> listBarWidth;
-		for (int i = 0, j = 0; i < m_barLines.size(); i++) {
+		for (int i = 0; i < m_barLines.size(); i++) {
 			auto& columnBarLines = m_barLines.at(i);
 
-			for (int i = 0; i < columnBarLines.size(); i++, j++) { // loop over the different data columns
+			for (int j = 0; j < columnBarLines.size(); j++) { // loop over the different data columns
 				if (visiblePoints.at(j) == true)
-					listBarWidth.append(columnBarLines.at(i).at(1).length());
+					listBarWidth.append(columnBarLines.at(j).at(1).length());
 			}
 		}
 		for (int i = 0; i < m_valuesStrings.size(); i++) {

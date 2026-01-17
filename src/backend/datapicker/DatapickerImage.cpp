@@ -509,7 +509,7 @@ bool DatapickerImage::addChild(AbstractAspect* child) {
 
 void DatapickerImage::datapickerPointChanged(const DatapickerPoint* point) {
 	const auto index = indexOfChild<DatapickerPoint>(point, AbstractAspect::ChildIndexFlag::IncludeHidden);
-	assert(index < 3);
+	Q_ASSERT(index < 3);
 	if (index >= 0 && index < 3) {
 		auto axisPoints = this->axisPoints();
 		axisPoints.scenePos[index].setX(point->position().x());

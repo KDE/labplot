@@ -68,6 +68,7 @@
 #include "frontend/dockwidgets/WorksheetDock.h"
 #include "frontend/dockwidgets/XYConvolutionCurveDock.h"
 #include "frontend/dockwidgets/XYCorrelationCurveDock.h"
+#include "frontend/dockwidgets/XYBaselineCorrectionCurveDock.h"
 #include "frontend/dockwidgets/XYCurveDock.h"
 #include "frontend/dockwidgets/XYLineSimplificationCurveDock.h"
 #include "frontend/dockwidgets/XYDifferentiationCurveDock.h"
@@ -87,7 +88,14 @@
 #include "frontend/widgets/DatapickerImageWidget.h"
 #include "frontend/widgets/LabelWidget.h"
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <DockWidget.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #include <KLocalizedString>
 #include <QStackedWidget>
 #include <QStatusBar>
@@ -336,6 +344,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Convolution/Deconvolution"));
 		raiseDockSetupConnect(m_xyConvolutionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyConvolutionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYBaselineCorrectionCurve:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Baseline Correction"));
+		raiseDockSetupConnect(m_xyBaselineCorrectionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_xyBaselineCorrectionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYCorrelationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Auto-/Cross-Correlation"));

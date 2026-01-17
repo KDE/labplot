@@ -66,6 +66,8 @@ public:
 			return new Axis(QString());
 		else if (type == AspectType::XYCurve)
 			return new XYCurve(QString());
+		else if (type == AspectType::XYBaselineCorrectionCurve)
+			return new XYBaselineCorrectionCurve(QString());
 		else if (type == AspectType::XYEquationCurve)
 			return new XYEquationCurve(QString());
 		else if (type == AspectType::XYConvolutionCurve)

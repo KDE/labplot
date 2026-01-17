@@ -22,6 +22,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
 
+#include "backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
