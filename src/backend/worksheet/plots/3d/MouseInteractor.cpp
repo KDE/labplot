@@ -39,7 +39,7 @@ void MouseInteractor::mouseMoveEvent(QMouseEvent* event, const QPoint& mousePos)
 		setCameraXRotation(xrotation);
 		setCameraYRotation(yrotation);
 		setCameraZoomLevel(zoomFactor);
-		Q_EMIT scene() -> needRender();
+		Q_EMIT scene()->needRender();
 	}
 	QAbstract3DInputHandler::mouseMoveEvent(event, mousePos);
 }
@@ -48,6 +48,6 @@ void MouseInteractor::wheelEvent(QWheelEvent* event) {
 	zoomFactor = cameraZoomLevel();
 	(event->angleDelta().y() > 0) ? zoomFactor += deltaZoom : zoomFactor -= deltaZoom;
 	setCameraZoomLevel(zoomFactor);
-	Q_EMIT scene() -> needRender();
+	Q_EMIT scene()->needRender();
 	QAbstract3DInputHandler::wheelEvent(event);
 }
