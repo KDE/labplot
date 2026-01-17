@@ -64,7 +64,7 @@ ColumnDock::ColumnDock(QWidget* parent)
 	// formula
 	ui.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("format-text-symbol")));
 	ui.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
-	ui.teEquation->setFocus();
+	ui.pbApplyFormula->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 	ui.bAddVariable->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::typeChanged);
@@ -186,6 +186,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
 	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
+	connect(m_column, &Column::formulaChanged, this, &ColumnDock::loadFormula);
 }
 
 /*!
@@ -550,7 +551,7 @@ void ColumnDock::loadFormula() {
 			// for the current variable name no column exists anymore (was deleted)
 			//->highlight the combobox red
 			if (!found) {
-				m_variableDataColumns.at(i)->setCurrentModelIndex(QModelIndex());
+				m_variableDataColumns.at(i)->setAspect(nullptr);
 				m_variableDataColumns.at(i)->setInvalid(
 					true,
 					i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.",
@@ -642,7 +643,7 @@ void ColumnDock::checkValues() {
 		}
 	}
 
-	ui.pbApplyFormula->setToolTip(i18n("Generate function values"));
+	ui.pbApplyFormula->setToolTip(i18n("Apply Formula"));
 	ui.pbApplyFormula->setEnabled(true);
 }
 
@@ -752,7 +753,11 @@ void ColumnDock::addVariable() {
 	m_variableDataColumns << cb;
 
 	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
-	cb->setModel(aspectModel());
+	auto* model = aspectModel();
+	model->setSelectableAspects({AspectType::Column});
+	model->enableNumericColumnsOnly(true);
+
+	cb->setModel(model);
 
 	// don't allow to select columns to be calculated as variable columns (avoid circular dependencies)
 	QList<const AbstractAspect*> aspects;
@@ -809,11 +814,7 @@ void ColumnDock::deleteVariable() {
 	variableNameChanged();
 	checkValues();
 
-	// adjust the layout
-	resize(QSize(width(), 0).expandedTo(minimumSize()));
-
 	ui.lVariable->setText(m_variableLineEdits.size() > 1 ? i18n("Variables:") : i18n("Variable:"));
-
 	// TODO: adjust the tab-ordering after some widgets were deleted
 }
 
@@ -856,7 +857,7 @@ void ColumnDock::variableColumnChanged(const QModelIndex& index) {
 
 void ColumnDock::applyFormula() {
 	WAIT_CURSOR_AUTO_RESET;
-	m_spreadsheet->beginMacro(i18np("%1: fill column with function values", "%1: fill columns with function values", m_spreadsheet->name(), m_columns.size()));
+	m_spreadsheet->beginMacro(i18np("%1: apply column formula", "%1: apply column formula", m_spreadsheet->name(), m_columns.size()));
 
 	// determine variable names and data vectors of the specified columns
 	QStringList variableNames;
