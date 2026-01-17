@@ -19,14 +19,15 @@ public:
 	virtual bool exec(const QString&) override;
 
 private:
-	PythonLogger* m_loggerStdOut{nullptr};
-	PythonLogger* m_loggerStdErr{nullptr};
+	PythonLogger* m_loggerStdOut{nullptr}; // PythonLogger instance to replace sys.stdout in the python interpreter
+	PythonLogger* m_loggerStdErr{nullptr}; // PythonLogger instance to replace sys.stderr in the python interpreter
 	PyObject* m_localDict{nullptr};
 
 	// instance methods
 	bool reset();
-	bool redirectStream(const char* streamName, void* loggerInstance);
+	bool redirectStream(const char* streamName, PythonLogger* loggerInstance);
 	bool redirectOutput();
+	bool restoreStreamWrite(PyObject* sysModule, const char* streamName, PyObject* originalWrite);
 	bool unRedirectOutput();
 	bool populateVariableInfo();
 	PyObject* createLocalDict();
@@ -37,7 +38,7 @@ private:
 	// utilities
 	static PyObject* getModuleDict(const QString&);
 	static PyTypeObject* getPythonLoggerType();
-	static PyObject* shibokenConvertToPyObject(void*);
+	static PyObject* shibokenConvertToPyObject(PythonLogger*);
 	static int getPyErrorLine();
 	static QString pyUnicodeToQString(PyObject*);
 
