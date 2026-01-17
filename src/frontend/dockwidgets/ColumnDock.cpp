@@ -77,7 +77,7 @@ ColumnDock::ColumnDock(QWidget* parent)
 	connect(ui.bBatchEditLabels, &QPushButton::clicked, this, &ColumnDock::batchEditLabels);
 
 	connect(ui.bAddVariable, &QPushButton::pressed, this, &ColumnDock::addVariable);
-	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &ColumnDock::checkValues);
+	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &ColumnDock::validateFormula);
 	connect(ui.tbConstants, &QToolButton::clicked, this, &ColumnDock::showConstants);
 	connect(ui.tbFunctions, &QToolButton::clicked, this, &ColumnDock::showFunctions);
 	connect(ui.tbLoadFunction, &QPushButton::clicked, this, &ColumnDock::loadFunction);
@@ -562,7 +562,7 @@ void ColumnDock::loadFormula() {
 	}
 
 	// auto update
-	// enable if linking is turned on, so the user has to explicit disable recalculation, so it cannot be forgotten
+	// enable if linking is turned on, so the user has to explicitly disable recalculation, so it cannot be forgotten
 	ui.chkFormulaAutoUpdate->setChecked(m_column->formulaAutoUpdate() || m_spreadsheet->linking());
 
 	// auto-resize
@@ -575,11 +575,13 @@ void ColumnDock::loadFormula() {
 		ui.chkFormulaAutoResize->setToolTip(i18n("Spreadsheet linking is active. The size of the target spreadsheet is controlled by the linked spreadsheet."));
 	}
 
-	checkValues();
+	variableNameChanged(); // call this to check the validness of formular data (expression and variable names) and to highlight/enable/disable accordingly
 }
 
- // check if variable is already defined as constant or function
-bool ColumnDock::validVariableName(QLineEdit* le) {
+/*!
+ * check if the provided variable name in the line edit \c le is valid.
+ * */
+bool ColumnDock::validateVariableName(QLineEdit* le) {
 	bool isValid = false;
 	if (ExpressionParser::getInstance()->constants().indexOf(le->text()) != -1) {
 		SET_WARNING_STYLE(le)
@@ -601,7 +603,11 @@ bool ColumnDock::validVariableName(QLineEdit* le) {
 	return isValid;
 }
 
-void ColumnDock::checkValues() {
+/*!
+ * checks if the provided formula expression and variable names are valid
+ * and enables/disables the Ok-button accordingly.
+ */
+void ColumnDock::validateFormula() {
 	if (ui.teEquation->toPlainText().simplified().isEmpty()) {
 		ui.pbApplyFormula->setToolTip(i18n("Empty formula expression"));
 		ui.pbApplyFormula->setEnabled(false);
@@ -635,7 +641,7 @@ void ColumnDock::checkValues() {
 			}
 
 			// check whether the variable name is correct
-			if (!validVariableName(m_variableLineEdits.at(i))) {
+			if (!validateVariableName(m_variableLineEdits.at(i))) {
 				ui.pbApplyFormula->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 				ui.pbApplyFormula->setEnabled(false);
 				return;
@@ -752,12 +758,11 @@ void ColumnDock::addVariable() {
 	layout->addWidget(cb, row, 2, 1, 1);
 	m_variableDataColumns << cb;
 
-	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	auto* model = aspectModel();
 	model->setSelectableAspects({AspectType::Column});
 	model->enableNumericColumnsOnly(true);
-
 	cb->setModel(model);
+	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 
 	// don't allow to select columns to be calculated as variable columns (avoid circular dependencies)
 	QList<const AbstractAspect*> aspects;
@@ -795,7 +800,6 @@ void ColumnDock::deleteVariable() {
 	auto* ob = qobject_cast<QToolButton*>(QObject::sender());
 	if (ob) {
 		const auto index = m_variableDeleteButtons.indexOf(ob);
-
 		delete m_variableLineEdits.takeAt(index + 1);
 		delete m_variableLabels.takeAt(index + 1);
 		delete m_variableDataColumns.takeAt(index + 1);
@@ -812,7 +816,6 @@ void ColumnDock::deleteVariable() {
 	}
 
 	variableNameChanged();
-	checkValues();
 
 	ui.lVariable->setText(m_variableLineEdits.size() > 1 ? i18n("Variables:") : i18n("Variable:"));
 	// TODO: adjust the tab-ordering after some widgets were deleted
@@ -839,7 +842,8 @@ void ColumnDock::variableNameChanged() {
 
 	ui.lFunction->setText(funText);
 	ui.teEquation->setVariables(vars);
-	checkValues();
+
+	validateFormula();
 }
 
 void ColumnDock::variableColumnChanged(const QModelIndex& index) {
@@ -852,7 +856,7 @@ void ColumnDock::variableColumnChanged(const QModelIndex& index) {
 			cb->setStyleSheet(QString());
 	}
 
-	checkValues();
+	validateFormula();
 }
 
 void ColumnDock::applyFormula() {

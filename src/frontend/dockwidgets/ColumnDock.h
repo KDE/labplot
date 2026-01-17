@@ -42,7 +42,7 @@ private:
 
 	void updateTypeWidgets(AbstractColumn::ColumnMode);
 	void showValueLabels();
-	bool validVariableName(QLineEdit*);
+	bool validateVariableName(QLineEdit*);
 
 private Q_SLOTS:
 	void typeChanged(int);
@@ -54,7 +54,7 @@ private Q_SLOTS:
 	// formula
 	void loadFormula();
 	void applyFormula(); // calculate and set values from function
-	void checkValues(); // check user input and enable/disable Ok-button accordingly
+	void validateFormula();
 	void loadFunction();
 	void saveFunction();
 	void showConstants(); // select predefined constant
