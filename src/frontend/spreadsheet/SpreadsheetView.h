@@ -148,7 +148,6 @@ private:
 	QAction* action_fill_equidistant_datetime{nullptr};
 	QAction* action_fill_random_nonuniform{nullptr};
 	QAction* action_fill_const{nullptr};
-	QAction* action_fill_function{nullptr};
 
 	// spreadsheet related actions
 	QAction* action_toggle_comments{nullptr};
@@ -307,7 +306,6 @@ private Q_SLOTS:
 	void fillWithRandomValues();
 	void fillWithEquidistantValues();
 	void fillWithEquidistantDateTimeValues();
-	void fillWithFunctionValues();
 	void fillSelectedCellsWithConstValues();
 
 	void insertRowsAbove();

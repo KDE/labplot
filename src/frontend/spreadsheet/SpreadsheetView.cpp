@@ -34,7 +34,6 @@
 #include "frontend/spreadsheet/EquidistantValuesDialog.h"
 #include "frontend/spreadsheet/FlattenColumnsDialog.h"
 #include "frontend/spreadsheet/FormattingHeatmapDialog.h"
-#include "frontend/spreadsheet/FunctionValuesDialog.h"
 #include "frontend/spreadsheet/RandomValuesDialog.h"
 #include "frontend/spreadsheet/RescaleDialog.h"
 #include "frontend/spreadsheet/SampleValuesDialog.h"
@@ -319,7 +318,6 @@ void SpreadsheetView::initActions() {
 	action_fill_random_nonuniform = new QAction(QIcon::fromTheme(QString()), i18n("Random Values"), this);
 	action_fill_equidistant = new QAction(QIcon::fromTheme(QString()), i18n("Equidistant Values"), this);
 	action_fill_equidistant_datetime = new QAction(QIcon::fromTheme(QString()), i18n("Equidistant Date&Time Values"), this);
-	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
 	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
 
 	action_sample_values = new QAction(QIcon::fromTheme(QStringLiteral("view-list-details")), i18n("Sample Values"), this);
@@ -718,7 +716,6 @@ void SpreadsheetView::initMenus() {
 		m_columnGenerateDataMenu->addAction(action_fill_equidistant);
 		m_columnGenerateDataMenu->addAction(action_fill_equidistant_datetime);
 		m_columnGenerateDataMenu->addAction(action_fill_random_nonuniform);
-		m_columnGenerateDataMenu->addAction(action_fill_function);
 		m_columnGenerateDataMenu->addSeparator();
 		m_columnGenerateDataMenu->addAction(action_sample_values);
 		m_columnGenerateDataMenu->addAction(action_flatten_columns);
@@ -884,7 +881,6 @@ void SpreadsheetView::connectActions() {
 	connect(action_fill_random_nonuniform, &QAction::triggered, this, &SpreadsheetView::fillWithRandomValues);
 	connect(action_fill_equidistant, &QAction::triggered, this, &SpreadsheetView::fillWithEquidistantValues);
 	connect(action_fill_equidistant_datetime, &QAction::triggered, this, &SpreadsheetView::fillWithEquidistantDateTimeValues);
-	connect(action_fill_function, &QAction::triggered, this, &SpreadsheetView::fillWithFunctionValues);
 	connect(action_fill_const, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithConstValues);
 	connect(action_select_all, &QAction::triggered, this, &SpreadsheetView::selectAll);
 	connect(action_clear_spreadsheet, &QAction::triggered, m_spreadsheet, QOverload<>::of(&Spreadsheet::clear));
@@ -1734,7 +1730,6 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 	action_fill_equidistant->setEnabled(numeric || datetime);
 	// TODO
 	action_fill_random_nonuniform->setEnabled(numeric);
-	action_fill_function->setEnabled(numeric);
 	action_sample_values->setEnabled(hasValues);
 	action_flatten_columns->setEnabled(hasValues);
 
@@ -2546,18 +2541,6 @@ void SpreadsheetView::fillWithEquidistantDateTimeValues() {
 		return;
 
 	auto* dlg = new EquidistantValuesDialog(m_spreadsheet, this, true /* datatime */);
-	dlg->setColumns(columns);
-	dlg->exec();
-#endif
-}
-
-void SpreadsheetView::fillWithFunctionValues() {
-#ifndef SDK
-	const auto& columns = selectedColumns();
-	if (columns.isEmpty())
-		return;
-
-	auto* dlg = new FunctionValuesDialog(m_spreadsheet);
 	dlg->setColumns(columns);
 	dlg->exec();
 #endif
