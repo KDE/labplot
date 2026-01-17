@@ -399,9 +399,9 @@ QRectF WorksheetElement::parentRect() const {
 		else
 			rect = plot()->dataRect(); // axes are positioned relative to the data rect and not to the whole plot rect
 	} else {
-		const auto* parent = graphicsItem()->parentItem();
-		if (parent) {
-			rect = parent->boundingRect();
+		const auto* graphicsParent = graphicsItem()->parentItem();
+		if (graphicsParent) {
+			rect = graphicsParent->boundingRect();
 		} else {
 			if (graphicsItem()->scene())
 				rect = graphicsItem()->scene()->sceneRect();
@@ -982,7 +982,7 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 	QDEBUG(Q_FUNC_INFO << ", new position (relative) =" << point)
 
 	if (point != position.point) { // position was changed
-		Lock lock(suppressRetransform, true);
+		Lock retransformLock(suppressRetransform, true);
 		auto tempPosition = position;
 		tempPosition.point = point;
 		// switch to relative

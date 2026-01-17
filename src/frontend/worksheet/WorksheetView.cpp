@@ -1658,9 +1658,13 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 	 * Action to X: action is applied to all x ranges
 	 *	- x zoom selection: zooming into all x ranges of all plots (Normally all plots will have the same x ranges so it makes sense
 	 *  - y zoom selection: makes no sense. disable
+	 *  - x autozoom: doing on all ranges of all plots
+	 *  - y autozoom: doing on all ranges of selected plot
 	 * Action to Y: action is applied to all y ranges
 	 *  - x zoom selection: makes no sense. disable
 	 *  - y zoom selection: zooming into all y ranges of all plots
+	 *  - x autozoom: doing on all ranges of selected plot
+	 *  - y autozoom: doing on all ranges of all plots
 	 * Action to Selection
 	 * - x zoom selection: makes no sense, because the range is unknown, disable
 	 * - y zoom selection: makes no sense, because the range is unknown, disable
@@ -1700,44 +1704,66 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 			action->setEnabled(true);
 		break;
 	}
-	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX: {
+		const bool singleYRange = plot->rangeCount(Dimension::Y) == 1;
 		// mouse mode actions
 		for (auto* action : mouseModeActionGroup->actions()) {
-			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
-			if (mode == CartesianPlot::MouseMode::ZoomSelection)
+			switch (static_cast<CartesianPlot::MouseMode>(action->data().toInt())) {
+			case CartesianPlot::MouseMode::ZoomSelection:
 				action->setEnabled(false);
-			else if (mode == CartesianPlot::MouseMode::ZoomXSelection || mode == CartesianPlot::MouseMode::ZoomYSelection)
+				break;
+			case CartesianPlot::MouseMode::ZoomXSelection:
 				action->setEnabled(true);
+				break;
+			case CartesianPlot::MouseMode::ZoomYSelection:
+				action->setEnabled(singleYRange);
+				break;
+			default:
+				break;
+			}
 		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
 			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
-			const bool x = (op == CartesianPlot::NavigationOperation::ZoomInX ||op == CartesianPlot::NavigationOperation::ZoomOutX
-				||  op == CartesianPlot::NavigationOperation::ShiftLeftX ||  op == CartesianPlot::NavigationOperation::ShiftRightX
-				||  op == CartesianPlot::NavigationOperation::ScaleAutoX);
-			action->setEnabled(x);
+			const bool enableShift = singleYRange && (op == CartesianPlot::NavigationOperation::ShiftUpY || op == CartesianPlot::NavigationOperation::ShiftDownY);
+			const bool enable = (op != CartesianPlot::NavigationOperation::ScaleAuto && op != CartesianPlot::NavigationOperation::ZoomIn
+				&&  op != CartesianPlot::NavigationOperation::ZoomOut
+				&&  op != CartesianPlot::NavigationOperation::ShiftUpY &&  op != CartesianPlot::NavigationOperation::ShiftDownY) || enableShift;
+			action->setEnabled(enable);
 		}
 		break;
-	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
+	}
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY: {
+		const bool singleXRange = plot->rangeCount(Dimension::X) == 1;
 		// mouse mode actions
 		for (auto* action : mouseModeActionGroup->actions()) {
-			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
-			if (mode == CartesianPlot::MouseMode::ZoomSelection)
+			switch (static_cast<CartesianPlot::MouseMode>(action->data().toInt())) {
+			case CartesianPlot::MouseMode::ZoomSelection:
 				action->setEnabled(false);
-			else if (mode == CartesianPlot::MouseMode::ZoomXSelection || mode == CartesianPlot::MouseMode::ZoomYSelection)
+				break;
+			case CartesianPlot::MouseMode::ZoomYSelection:
 				action->setEnabled(true);
+				break;
+			case CartesianPlot::MouseMode::ZoomXSelection:
+				action->setEnabled(singleXRange);
+				break;
+			default:
+				break;
+			}
 		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
 			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
-			const bool y = (op == CartesianPlot::NavigationOperation::ZoomInY ||op == CartesianPlot::NavigationOperation::ZoomOutY
-				||  op == CartesianPlot::NavigationOperation::ShiftUpY ||  op == CartesianPlot::NavigationOperation::ShiftDownY
-				||  op == CartesianPlot::NavigationOperation::ScaleAutoY);
-			action->setEnabled(y);
+			const bool enableShift = singleXRange && (op == CartesianPlot::NavigationOperation::ShiftLeftX || op == CartesianPlot::NavigationOperation::ShiftRightX);
+			const bool enable = (op != CartesianPlot::NavigationOperation::ScaleAuto && op != CartesianPlot::NavigationOperation::ZoomIn
+								 &&  op != CartesianPlot::NavigationOperation::ZoomOut
+								 &&  op != CartesianPlot::NavigationOperation::ShiftLeftX &&  op != CartesianPlot::NavigationOperation::ShiftRightX) || enableShift;
+			action->setEnabled(enable);
 		}
 		break;
+	}
 	}
 }
 

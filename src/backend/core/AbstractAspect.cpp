@@ -45,9 +45,7 @@
  * In contrast to the similar feature of QObject, Aspect trees are fully undo/redo aware and provide
  * signals around object adding/removal.
  *
- * AbstractAspect manages for every Aspect the properties #name, #comment, #captionSpec and
- * #creationTime. All of these translate into the caption() as described in the documentation
- * of setCaptionSpec().
+ * AbstractAspect manages for every Aspect the properties #name, #comment and #creationTime.
  *
  * If an undoStack() can be found (usually it is managed by Project), changes to the properties
  * as well as adding/removing children support multi-level undo/redo. In order to support undo/redo
@@ -269,6 +267,13 @@ void AbstractAspect::setCreationTime(const QDateTime& time) {
 
 QDateTime AbstractAspect::creationTime() const {
 	return d->m_creation_time;
+}
+
+QString AbstractAspect::caption() const {
+	QString caption = QLatin1String("<b>") + d->m_name + QLatin1String("</b>");
+	if (!d->m_comment.isEmpty())
+		caption += QLatin1String("<br><br>") + d->m_comment.replace(QLatin1Char('\n'), QLatin1String("<br>"));
+	return caption;
 }
 
 bool AbstractAspect::isHidden() const {
@@ -524,7 +529,7 @@ QString AbstractAspect::path() const {
  * \brief Add the given Aspect to my list of children.
  */
 bool AbstractAspect::addChild(AbstractAspect* child) {
-	Q_CHECK_PTR(child);
+	Q_ASSERT(child);
 
 	const QString new_name = uniqueNameFor(child->name());
 	beginMacro(i18n("%1: add %2", name(), new_name));
@@ -558,7 +563,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 }
 
 void AbstractAspect::insertChild(AbstractAspect* child, int index) {
-	Q_CHECK_PTR(child);
+	Q_ASSERT(child);
 	if (index == -1)
 		index = d->m_children.count();
 
@@ -1036,7 +1041,7 @@ QUndoStack* AbstractAspect::undoStack() const {
  * \brief Execute the given command, pushing it on the undoStack() if available.
  */
 void AbstractAspect::exec(QUndoCommand* cmd) {
-	Q_CHECK_PTR(cmd);
+	Q_ASSERT(cmd);
 	if (d->m_undoAware && (project() && project()->isUndoAware())) {
 		auto* stack = undoStack();
 		if (stack)

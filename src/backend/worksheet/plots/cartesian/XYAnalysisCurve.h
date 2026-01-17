@@ -43,7 +43,8 @@ public:
 		FitTanh,
 		FitErrFunc,
 		FitCustom,
-		FourierFilter
+		FourierFilter,
+		BaselineCorrection
 	};
 	Q_ENUM(AnalysisAction)
 

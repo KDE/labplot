@@ -28,6 +28,7 @@ StatisticsSpreadsheetDock::StatisticsSpreadsheetDock(QWidget* parent)
 	ui.setupUi(this);
 
 	m_mappingComboBoxMetric[ui.cbCount] = StatisticsSpreadsheet::Metric::Count;
+	m_mappingComboBoxMetric[ui.cbSum] = StatisticsSpreadsheet::Metric::Sum;
 	m_mappingComboBoxMetric[ui.cbMinimum] = StatisticsSpreadsheet::Metric::Minimum;
 	m_mappingComboBoxMetric[ui.cbMaximum] = StatisticsSpreadsheet::Metric::Maximum;
 	m_mappingComboBoxMetric[ui.cbArithmeticMean] = StatisticsSpreadsheet::Metric::ArithmeticMean;
@@ -54,6 +55,7 @@ StatisticsSpreadsheetDock::StatisticsSpreadsheetDock(QWidget* parent)
 	ui.bSelectNone->setIcon(QIcon::fromTheme(QLatin1String("edit-none-symbolic")));
 
 	connect(ui.cbCount, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
+	connect(ui.cbSum, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbMinimum, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbMaximum, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbArithmeticMean, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
@@ -141,6 +143,7 @@ void StatisticsSpreadsheetDock::retranslateUi() {
 void StatisticsSpreadsheetDock::load() {
 	const auto metrics = m_spreadsheet->metrics();
 	ui.cbCount->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::Count));
+	ui.cbSum->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::Sum));
 	ui.cbMinimum->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::Minimum));
 	ui.cbMaximum->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::Maximum));
 	ui.cbArithmeticMean->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::ArithmeticMean));

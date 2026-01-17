@@ -294,7 +294,7 @@ struct kruskal_wallis_test_result nsl_stats_kruskal_wallis_h(const double** grou
 
 	for (i = 0; i < n_groups; i++) {
 		for (j = 0; j < sizes[i]; j++)
-			ranks[idx++] = (rank){groups[i][j], i};
+			ranks[idx++] = (rank){groups[i][j], i, 0.0};
 	}
 
 	qsort(ranks, total_samples, sizeof(rank), compare_rank_value);
@@ -861,9 +861,9 @@ struct friedman_test_result nsl_stats_friedman_q(const double** groups, size_t n
 			while (j < n_groups && row[j].value == row[i].value)
 				j++;
 			double avg_rank = ((double)(i + 1) + (double)j) / 2.0;
-			for (size_t k = i; k < j; k++) {
-				row[k].rank = avg_rank;
-				rank_sums[row[k].group] += avg_rank;
+			for (size_t n = i; n < j; n++) {
+				row[n].rank = avg_rank;
+				rank_sums[row[n].group] += avg_rank;
 			}
 			i = j;
 		}

@@ -1318,9 +1318,9 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 			// x values (first row always exist)
 			treeModel->setTreeData(QVariant(QStringLiteral("X")), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotModelIndex);
 			double valueCursor[2];
-			for (int i = 0; i < 2; i++) { // need both cursors to calculate diff
-				valueCursor[i] = sender->cursorPos(i);
-				treeModel->setTreeData(QVariant(valueCursor[i]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i, plotModelIndex);
+			for (int j = 0; j < 2; j++) { // need both cursors to calculate diff
+				valueCursor[j] = sender->cursorPos(j);
+				treeModel->setTreeData(QVariant(valueCursor[j]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + j, plotModelIndex);
 			}
 			treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]),
 								   0,

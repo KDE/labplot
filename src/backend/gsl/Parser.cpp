@@ -103,7 +103,7 @@ bool Parser::set_specialfunctionPayload(const char* function_name, func_tPayload
 	if (!ptr) // function name not found
 		return false;
 
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 0);
+	Q_ASSERT(std::get<special_function_def>(ptr->value).funsptr->argc == 0);
 	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
 	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
 	std::get<special_function_def>(ptr->value).payload = payload;
@@ -116,7 +116,7 @@ bool Parser::set_specialfunctionValuePayload(const char* function_name, func_tVa
 	auto* ptr = get_variable_symbol(function_name);
 	if (!ptr) // function name not found
 		return false;
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 1);
+	Q_ASSERT(std::get<special_function_def>(ptr->value).funsptr->argc == 1);
 	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
 	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
 	std::get<special_function_def>(ptr->value).payload = payload;
@@ -129,7 +129,7 @@ bool Parser::set_specialfunction2ValuePayload(const char* function_name, func_t2
 	auto* ptr = get_variable_symbol(function_name);
 	if (!ptr) // function name not found
 		return false;
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 2);
+	Q_ASSERT(std::get<special_function_def>(ptr->value).funsptr->argc == 2);
 	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
 	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
 	std::get<special_function_def>(ptr->value).payload = payload;
@@ -142,7 +142,7 @@ bool Parser::set_specialfunctionVariablePayload(const char* function_name, func_
 	auto* ptr = get_variable_symbol(function_name);
 	if (!ptr) // function name not found
 		return false;
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 1);
+	Q_ASSERT(std::get<special_function_def>(ptr->value).funsptr->argc == 1);
 	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
 	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
 	std::get<special_function_def>(ptr->value).payload = payload;
@@ -156,7 +156,7 @@ bool Parser::set_specialfunctionValueVariablePayload(const char* function_name, 
 	if (!ptr) // function name not found
 		return false;
 
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 2);
+	Q_ASSERT(std::get<special_function_def>(ptr->value).funsptr->argc == 2);
 	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
 	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
 	std::get<special_function_def>(ptr->value).payload = payload;
@@ -170,7 +170,7 @@ bool Parser::set_specialfunction2ValueVariablePayload(const char* function_name,
 	if (!ptr) // function name not found
 		return false;
 
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 3);
+	Q_ASSERT(std::get<special_function_def>(ptr->value).funsptr->argc == 3);
 	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
 	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
 	std::get<special_function_def>(ptr->value).payload = payload;
@@ -184,7 +184,7 @@ bool Parser::set_specialfunction3ValueVariablePayload(const char* function_name,
 	if (!ptr) // function name not found
 		return false;
 
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 4);
+	Q_ASSERT(std::get<special_function_def>(ptr->value).funsptr->argc == 4);
 	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
 	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
 	std::get<special_function_def>(ptr->value).payload = payload;

@@ -184,11 +184,11 @@ void CursorDock::resultCopyAll() {
 
 		// iterate over all children of the current row
 		auto index = model->index(row, 0);
-		for (int row = 0; row < model->rowCount(index); ++row) {
+		for (int indexRow = 0; indexRow < model->rowCount(index); ++indexRow) {
 			for (int col = 0; col < model->columnCount(); ++col) {
 				if (col != 0)
 					str += QLatin1Char('\t');
-				str += model->data(model->index(row, col, index)).toString();
+				str += model->data(model->index(indexRow, col, index)).toString();
 			}
 
 			str += QLatin1Char('\n');

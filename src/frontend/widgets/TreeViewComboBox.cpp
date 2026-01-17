@@ -128,7 +128,7 @@ void TreeViewComboBox::showPopup() {
 	if (!m_treeView->model() || !m_treeView->model()->hasChildren())
 		return;
 
-	QModelIndex root = m_treeView->model()->index(0, 0);
+	auto root = m_treeView->model()->index(0, 0);
 	showTopLevelOnly(root);
 	m_groupBox->show();
 	m_groupBox->resize(this->width(), 250);
@@ -266,7 +266,7 @@ void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 }
 
 void TreeViewComboBox::filterChanged(const QString& text) {
-	QModelIndex root = m_treeView->model()->index(0, 0);
+	auto root = m_treeView->model()->index(0, 0);
 	filter(root, text);
 }
 
@@ -274,7 +274,7 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 	bool childVisible = false;
 	const int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
-		QModelIndex child = index.model()->index(i, 0, index);
+		auto child = index.model()->index(i, 0, index);
 		auto* aspect = static_cast<AbstractAspect*>(child.internalPointer());
 		bool topLevel = isTopLevel(aspect);
 		if (!topLevel)
@@ -285,8 +285,8 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 		if (visible) {
 			// current item is visible -> make all its children (allowed top level types only and not hidden) visible without applying the filter
 			for (int j = 0; j < child.model()->rowCount(child); ++j) {
-				AbstractAspect* aspect = static_cast<AbstractAspect*>((child.model()->index(j, 0, child)).internalPointer());
-				m_treeView->setRowHidden(j, child, !(isTopLevel(aspect) && !isHidden(aspect)));
+				auto* childAspect = static_cast<AbstractAspect*>((child.model()->index(j, 0, child)).internalPointer());
+				m_treeView->setRowHidden(j, child, !(isTopLevel(childAspect) && !isHidden(childAspect)));
 			}
 
 			childVisible = true;

@@ -71,7 +71,7 @@ QVector<const Plot*> XYAnalysisCurve::dependingPlots() const {
 	case DataSourceType::Histogram:
 		return {}; // TODO: Histograms not yet implemented
 	}
-	assert(false);
+	Q_ASSERT(false);
 	return {};
 }
 

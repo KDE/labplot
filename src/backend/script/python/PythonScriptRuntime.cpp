@@ -11,9 +11,12 @@
 #include "pyerrors.h"
 #include "pylabplot/pylabplot_python.h"
 
+#include <codecvt>
+#include <string>
+
 static wchar_t programName[] = L"labplot";
 static wchar_t* argv[] = {programName};
-static const wchar_t* pythonInterpreter = L"PYTHON3_EXECUTABLE"; // PYTHON3_EXECUTABLE is a macro and will be replaced by the actual python executable path
+static const wchar_t* pythonInterpreter = PYTHON3_EXECUTABLE; // PYTHON3_EXECUTABLE is a macro and will be replaced by the actual python executable name
 
 // The name of our python extension module: pylabplot
 static const char* moduleName = "pylabplot";
@@ -43,14 +46,22 @@ PythonScriptRuntime::PythonScriptRuntime(Script* script)
 }
 
 PythonScriptRuntime::~PythonScriptRuntime() {
-	// decrease refcount for local context dict to allow python garbage collection
-	Py_XDECREF(m_localDict);
+	INFO(Q_FUNC_INFO)
+	if (Py_IsInitialized()) {
+		PyGILState_STATE gil = PyGILState_Ensure();
+		// decrease refcount for local vars to allow python garbage collection
+		Py_XDECREF(m_localDict);
 
-	delete m_loggerStdOut;
-	delete m_loggerStdErr;
+		m_loggerStdOut = nullptr;
+		m_loggerStdErr = nullptr;
+		m_localDict = nullptr;
+
+		PyGILState_Release(gil);
+	}
 }
 
 bool PythonScriptRuntime::init() {
+	INFO(Q_FUNC_INFO)
 	// initialize python interpreter and pylabplot module
 	bool init = PythonScriptRuntime::initPython();
 	if (!init)
@@ -96,29 +107,42 @@ bool PythonScriptRuntime::init() {
 }
 
 bool PythonScriptRuntime::initPython() {
+	INFO(Q_FUNC_INFO)
 	// Python interpreter and pylabplot module is already initialized
 	if (Py_IsInitialized() && ready)
 		return true;
 
-	Py_SetProgramName(pythonInterpreter);
+	PyConfig config;
+	PyConfig_InitPythonConfig(&config);
 
-	if (PyImport_AppendInittab(moduleName, PyInit_pylabplot) == -1)
-		return false; // Failed to add the pylabplot module to the table of built-in modules
+	// TODO: use macro for converting wchar_t
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	INFO("Using Python interpreter: " << converter.to_bytes(pythonInterpreter))
+	PyConfig_SetString(&config, &config.program_name, pythonInterpreter);
+	PyConfig_SetArgv(&config, 1, argv);
 
-	Py_Initialize();
+	INFO("CALLING PyImport_AppendInittab()")
+	if (PyImport_AppendInittab(moduleName, PyInit_pylabplot) == -1) {
+		WARN("Failed to add the pylabplot module to the table of built-in modules")
+		return false;
+	}
 
-	PySys_SetArgvEx(1, argv, 0);
+	Py_InitializeFromConfig(&config);
+	PyConfig_Clear(&config);
 
 	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
 	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;
-	if (!pythonInitialized || pyErrorOccurred)
-		return false; // Failed to initialize the pylabplot module
+	if (!pythonInitialized || pyErrorOccurred) {
+		WARN("Failed to initialize the pylabplot module")
+		return false;
+	}
 
 	ready = true;
 	return true;
 }
 
 bool PythonScriptRuntime::reset() {
+	INFO(Q_FUNC_INFO)
 	// Python interpreter and pylabplot module is not initialized
 	if (!Py_IsInitialized() || !ready)
 		return false;
@@ -148,84 +172,68 @@ bool PythonScriptRuntime::cancel() {
 	return false;
 }
 
+bool PythonScriptRuntime::redirectStream(const char* streamName, void* loggerInstance) {
+	INFO(Q_FUNC_INFO)
+	auto* sysStream = PySys_GetObject(streamName);
+	if (!sysStream) {
+		WARN("Failed to get" << streamName)
+		return false;
+	}
+	Py_INCREF(sysStream);
+
+	auto* loggerStream = PythonScriptRuntime::shibokenConvertToPyObject(loggerInstance); // returns an owned reference
+	// TODO: Segfault
+	// auto* loggerStream = Shiboken::Object::newObject(Shiboken::SbkType< ::PythonLogger >(), loggerInstance);	//  returns an owned reference
+	if (!loggerStream) {
+		WARN("Failed to convert PythonLogger instance to PyObject")
+		Py_DECREF(sysStream);
+		return false;
+	}
+
+	auto* loggerStreamWrite = PyObject_GetAttrString(loggerStream, "write"); // returns a new reference
+	if (!loggerStreamWrite) {
+		WARN("Failed to get write from loggerStream")
+		Py_DECREF(sysStream);
+		Py_DECREF(loggerStream);
+		return false;
+	}
+
+	if (PyObject_SetAttrString(sysStream, "write", loggerStreamWrite) < 0) {
+		WARN("Failed to set write from loggerStream in" << streamName)
+		Py_DECREF(sysStream);
+		Py_DECREF(loggerStream); // shouldn't delete c++ object
+		Py_DECREF(loggerStreamWrite);
+		return false;
+	}
+	Py_DECREF(sysStream);
+	Py_DECREF(loggerStream); // shouldn't delete c++ object
+	Py_DECREF(loggerStreamWrite);
+
+	return true;
+}
+
 bool PythonScriptRuntime::redirectOutput() {
-	// Python interpreter and pylabplot module is not initialized
-	if (!Py_IsInitialized() || !ready)
+	INFO(Q_FUNC_INFO)
+	if (!Py_IsInitialized() || !ready) {
+		WARN(Q_FUNC_INFO << "Python interpreter or pylabplot module is not initialized")
+		return false;
+	}
+
+	if (!redirectStream("stdout", m_loggerStdOut))
 		return false;
 
-	int res = -1;
-
-	// Get sys.stdout
-	PyObject* sysStdOut = PySys_GetObject("stdout");
-	if (!sysStdOut)
-		return false; // Failed to get sys.stdout
-
-	Py_INCREF(sysStdOut);
-
-	PyObject* loggerStdOut = PythonScriptRuntime::shibokenConvertToPyObject(SBK_PYTHONLOGGER_IDX, m_loggerStdOut); // returns an owned reference
-	if (!loggerStdOut) {
-		Py_DECREF(sysStdOut);
-		return false; // Failed to convert PythonLogger instance to PyObject
-	}
-
-	PyObject* loggerStdOutWrite = PyObject_GetAttrString(loggerStdOut, "write"); // returns a new reference
-	if (!loggerStdOutWrite) {
-		Py_DECREF(sysStdOut);
-		Py_DECREF(loggerStdOut);
-		return false; // Failed to get write from loggerStdOut
-	}
-
-	res = PyObject_SetAttrString(sysStdOut, "write", loggerStdOutWrite);
-	if (res < 0) {
-		Py_DECREF(sysStdOut);
-		Py_DECREF(loggerStdOut); // shouldn't delete c++ object
-		Py_DECREF(loggerStdOutWrite);
-		return false; // Failed to set write from loggerStdOut in sys.stdout
-	}
-
-	Py_DECREF(sysStdOut);
-	Py_DECREF(loggerStdOut); // shouldn't delete c++ object
-	Py_DECREF(loggerStdOutWrite);
-
-	// Get sys.stdout
-	PyObject* sysStdErr = PySys_GetObject("stderr");
-	if (!sysStdErr)
-		return false; // Failed to get sys.stderr
-
-	Py_INCREF(sysStdErr);
-
-	PyObject* loggerStdErr = PythonScriptRuntime::shibokenConvertToPyObject(SBK_PYTHONLOGGER_IDX, m_loggerStdErr); // returns an owned reference
-	if (!loggerStdErr) {
-		Py_DECREF(sysStdErr);
-		return false; // Failed to convert PythonLogger instance to PyObject
-	}
-
-	PyObject* loggerStdErrWrite = PyObject_GetAttrString(loggerStdErr, "write"); // returns a new reference
-	if (!loggerStdErrWrite) {
-		Py_DECREF(sysStdErr);
-		Py_DECREF(loggerStdErr);
-		return false; // Failed to get write from loggerStdErr
-	}
-
-	res = PyObject_SetAttrString(sysStdErr, "write", loggerStdErrWrite);
-	if (res < 0) {
-		Py_DECREF(sysStdErr);
-		Py_DECREF(loggerStdErr); // shouldn't delete c++ object
-		Py_DECREF(loggerStdErrWrite);
-		return false; // Failed to set write from loggerStdErr in sys.stderr
-	}
-
-	Py_DECREF(sysStdErr);
-	Py_DECREF(loggerStdErr); // shouldn't delete c++ object
-	Py_DECREF(loggerStdErrWrite);
+	if (!redirectStream("stderr", m_loggerStdErr))
+		return false;
 
 	return true;
 }
 
 bool PythonScriptRuntime::unRedirectOutput() {
 	// Python interpreter and pylabplt module is not initialized
-	if (!Py_IsInitialized() || !ready)
+	if (!Py_IsInitialized() || !ready) {
+		WARN(Q_FUNC_INFO << "Python interpreter or pylabplot module is not initialized")
 		return false;
+	}
 
 	int res = -1;
 
@@ -263,6 +271,7 @@ bool PythonScriptRuntime::unRedirectOutput() {
 }
 
 bool PythonScriptRuntime::exec(const QString& code) {
+	INFO(Q_FUNC_INFO)
 	// Python interpreter or pylabplot module is not initialized
 	if (!Py_IsInitialized() || !ready)
 		return false;
@@ -322,33 +331,53 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	return true;
 }
 
-// Converts a c++ object to a pyobject
-// returns an owned reference
-PyObject* PythonScriptRuntime::shibokenConvertToPyObject(int index, void* o) {
-	// Python interpreter or pylabplot module is not initialized
+PyTypeObject* PythonScriptRuntime::getPythonLoggerType() {
+	static PyTypeObject* cachedType = nullptr;
+	if (cachedType)
+		return cachedType;
+
+	// import binding module (mandatory for Qt 6.10)
+	auto* module = PyImport_ImportModule("pylabplot");
+	if (!module) {
+		WARN("Importing module pylabplot failed!")
+		return nullptr;
+	}
+
+	Py_DECREF(module);
+
+	cachedType = Shiboken::SbkType<::PythonLogger>();
+
+	return cachedType;
+}
+
+// Converts a C++ object to a PyObject (owned reference)
+PyObject* PythonScriptRuntime::shibokenConvertToPyObject(void* object) {
+	INFO(Q_FUNC_INFO)
 	if (!Py_IsInitialized() || !ready)
 		return nullptr;
 
-	PyTypeObject* typeObject = SbkpylabplotTypes[index];
-
-	// returns a borrowed reference
-	PyObject* po = Shiboken::Conversions::pointerToPython(reinterpret_cast<SbkObjectType*>(typeObject), o);
-	if (!po)
+	auto* typeObject = getPythonLoggerType();
+	if (!typeObject) {
+		WARN("Failed to get Python type for PythonLogger")
 		return nullptr;
+	}
 
-	Py_INCREF(po);
+	INFO("Creating a Python wrapper object for the C++ instance")
+	auto* po = Shiboken::Object::newObject(typeObject, object);
+
 	return po;
 }
 
-// Returns the dictionary which contains the variables in module
+// Returns the dictionary which contains the variables in module 'name'
 // returns an owned reference
-PyObject* PythonScriptRuntime::getModuleDict(const QString& moduleName) {
+PyObject* PythonScriptRuntime::getModuleDict(const QString& name) {
+	INFO(Q_FUNC_INFO)
 	// Python interpreter or pylabplot module is not initialized
 	if (!Py_IsInitialized() || !ready)
 		return nullptr;
 
 	// PyImport_AddModule returns a borrowed reference so we create own reference Py_INCREF(o); and Py_DECREF(o); when done
-	PyObject* module = PyImport_AddModule(moduleName.toLocal8Bit().constData());
+	PyObject* module = PyImport_AddModule(name.toLocal8Bit().constData());
 	if (!module) // Failed to locate module
 		return nullptr;
 
@@ -372,6 +401,7 @@ PyObject* PythonScriptRuntime::getModuleDict(const QString& moduleName) {
 // The process is create a dictionary and copy over the python builtins from the main module
 // returns owned reference
 PyObject* PythonScriptRuntime::createLocalDict() {
+	INFO(Q_FUNC_INFO)
 	// Python interpreter or pylabplot module is not initialized
 	if (!Py_IsInitialized() || !ready)
 		return nullptr;
@@ -401,6 +431,7 @@ PyObject* PythonScriptRuntime::createLocalDict() {
 
 // Get the line where the python error occurred
 int PythonScriptRuntime::getPyErrorLine() {
+	INFO(Q_FUNC_INFO)
 	// Python interpreter or pylabplot module is not initialized
 	if (!Py_IsInitialized() || !ready)
 		return -1;
@@ -440,6 +471,7 @@ int PythonScriptRuntime::getPyErrorLine() {
 }
 
 bool PythonScriptRuntime::populateVariableInfo() {
+	INFO(Q_FUNC_INFO)
 	PyObject* items = PyDict_Items(m_localDict);
 	if (!items)
 		return false;

@@ -218,6 +218,73 @@ bool Spreadsheet::readOnly() const {
 	return d->readOnly;
 }
 
+QString Spreadsheet::caption() const {
+	QString caption = AbstractAspect::caption();
+	caption += QLatin1String("<br><br>") + i18n("Columns: %1", columnCount());
+	caption += QLatin1String("<br>") + i18n("Rows: %1", rowCount());
+
+	// add the information about the usage of spreadsheet columns in other places
+	const auto* project = this->project();
+	const auto& columns = children<Column>();
+	QSet<const AbstractAspect*> usedInAspects;
+
+	// add plots where the column is currently in use
+	const auto& plots = project->children<Plot>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* col : columns) {
+		for (const auto* plot : plots) {
+			const bool used = plot->usingColumn(col, true);
+			if (used)
+				usedInAspects << plot;
+		}
+	}
+
+	if (!usedInAspects.isEmpty()) {
+		caption += QStringLiteral("<br><br><b>") + i18n("Used in Plots:") + QStringLiteral("</b>");
+		for (auto* aspect : usedInAspects)
+			caption += QStringLiteral("<br>") + aspect->path();
+	}
+
+	// add axes where the column is used as a custom column for ticks positions or labels
+	usedInAspects.clear();
+	const auto& axes = project->children<Axis>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* col : columns) {
+		for (const auto* axis : axes) {
+			const bool used = (axis->majorTicksColumn() == col || axis->minorTicksColumn() == col || axis->labelsTextColumn() == col);
+			if (used)
+				usedInAspects << axis;
+		}
+	}
+
+	if (!usedInAspects.isEmpty()) {
+		caption += QStringLiteral("<br><br><b>") + i18n("Used in Axes:") + QStringLiteral("</b>");
+		for (auto* aspect : usedInAspects)
+			caption += QStringLiteral("<br>") + aspect->path();
+	}
+
+	// add calculated columns where the column is used in formula variables
+	usedInAspects.clear();
+	const auto& columnsAll = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* col : columns) {
+		const QString& path = col->path();
+		for (const auto* colOther : columnsAll) {
+			for (int i = 0; i < colOther->formulaData().count(); i++) {
+				if (path == colOther->formulaData().at(i).columnName()) {
+					usedInAspects << colOther;
+					break;
+				}
+			}
+		}
+	}
+
+	if (!usedInAspects.isEmpty()) {
+		caption += QStringLiteral("<br><br><b>") + i18n("Used in Spreadsheet Calculations:") + QStringLiteral("</b>");
+		for (auto* aspect : usedInAspects)
+			caption += QStringLiteral("<br>") + aspect->path();
+	}
+
+	return caption;
+}
+
 /*!
  * Returns a pointer to the StatisticsSpreadsheet for the current Spreadsheet if exists or nullptr.
  * @see StatisticsSpreadsheet()
@@ -676,8 +743,7 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 	// 	if (formulaModeActive()) {
 	// 		for (auto* col : selectedColumns()) {
 	// 			col->setSuppressDataChangedSignal(true);
-	// 			col->clearFormulas();
-	// 			col->setSuppressDataChangedSignal(false);
+	// 			col->clearFormulas();	// 			col->setSuppressDataChangedSignal(false);
 	// 			col->setChanged();
 	// 		}
 	// 	} else {
@@ -702,6 +768,163 @@ void Spreadsheet::clearMasks() {
 	beginMacro(i18n("%1: clear all masks", name()));
 	for (auto* col : children<Column>())
 		col->clearMasks();
+	endMacro();
+}
+
+/*!
+ * Transposes the spreadsheet. Possible for numeric data only and also for spreadsheets having a text column as first column
+ * and numeric data in the other columns - the first column will be used to name the new transposed columns.
+ * The column mode of the new columns is determined automatically to hold all data without loss (choosing the "largest" mode of all original columns).
+ */
+void Spreadsheet::transpose() {
+	WAIT_CURSOR_AUTO_RESET;
+
+	const auto& columns = children<Column>();
+	const int cols = columns.count();
+	const int rows = rowCount();
+
+	if (cols == 0 || rows == 0)
+		return;
+
+	// determine the new column mode which can hold all data without loss
+	bool hasInt = false;
+	bool hasBigInt = false;
+	bool hasDouble = false;
+	for (auto* col : columns) {
+		const auto mode = col->columnMode();
+		if (mode == AbstractColumn::ColumnMode::Integer)
+			hasInt = true;
+		else if (mode == AbstractColumn::ColumnMode::BigInt)
+			hasBigInt = true;
+		else if (mode == AbstractColumn::ColumnMode::Double)
+			hasDouble = true;
+	}
+
+	AbstractColumn::ColumnMode newMode = AbstractColumn::ColumnMode::Double;
+	if (!hasDouble && hasBigInt)
+		newMode = AbstractColumn::ColumnMode::BigInt;
+	else if (!hasDouble && !hasBigInt && hasInt)
+		newMode = AbstractColumn::ColumnMode::Integer;
+
+	// create a copy of the current column data
+	struct ColumnData {
+		AbstractColumn::ColumnMode mode;
+		QVector<double> numericData;
+		QVector<int> integerData;
+		QVector<qint64> bigIntData;
+		QVector<QString> textData;
+	};
+
+	QVector<ColumnData> originalData;
+	originalData.reserve(cols);
+
+	for (int col = 0; col < cols; ++col) {
+		Column* column = columns.at(col);
+		ColumnData data;
+		data.mode = column->columnMode();
+
+		switch (data.mode) {
+		case AbstractColumn::ColumnMode::Double: {
+			auto* vec = static_cast<QVector<double>*>(column->data());
+			data.numericData.resize(rows);
+			if (vec && !vec->isEmpty())
+				memcpy(data.numericData.data(), vec->constData(), rows * sizeof(double));
+			break;
+		}
+		case AbstractColumn::ColumnMode::Integer: {
+			auto* vec = static_cast<QVector<int>*>(column->data());
+			data.integerData.resize(rows);
+			if (vec && !vec->isEmpty())
+				memcpy(data.integerData.data(), vec->constData(), rows * sizeof(int));
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			auto* vec = static_cast<QVector<qint64>*>(column->data());
+			data.bigIntData.resize(rows);
+			if (vec && !vec->isEmpty())
+				memcpy(data.bigIntData.data(), vec->constData(), rows * sizeof(qint64));
+			break;
+		}
+		case AbstractColumn::ColumnMode::Text:
+			data.textData.reserve(rows);
+			for (int row = 0; row < rows; ++row)
+				data.textData << column->textAt(row);
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+			break;
+		}
+
+		originalData << data;
+	}
+
+	beginMacro(i18n("%1: transpose", name()));
+
+	// if the first column is text, use its values to name the new columns
+	auto* firstCol = columns.first();
+	const bool useFirstColAsNames = (firstCol->columnMode() == AbstractColumn::ColumnMode::Text);
+	if (useFirstColAsNames) {
+		setRowCount(cols - 1);
+		setColumnCount(rows);
+
+		const auto& newColumns = children<Column>();
+		const auto& textData = originalData.first().textData;
+		for (int i = 0; i < rows; ++i)
+			newColumns.at(i)->setName(textData.at(i));
+	} else {
+		setRowCount(cols);
+		setColumnCount(rows);
+	}
+
+	const auto& newColumns = children<Column>();
+	const int newCols = columnCount();
+	const int newRows = rowCount();
+
+	// fill new columns with transposed data
+	for (int col = 0; col < newCols; ++col) {
+		auto* column = newColumns.at(col);
+		column->setColumnMode(newMode);
+
+		int offset = useFirstColAsNames ? 1 : 0;
+		for (int row = 0; row < newRows; ++row) {
+			const ColumnData& srcData = originalData.at(row + offset);
+
+			switch (column->columnMode()) {
+			case AbstractColumn::ColumnMode::Double:
+				if (srcData.mode == AbstractColumn::ColumnMode::Double) {
+					if (col < srcData.numericData.size())
+						column->setValueAt(row, srcData.numericData.at(col));
+				} else if (srcData.mode == AbstractColumn::ColumnMode::Integer) {
+					if (col < srcData.integerData.size())
+						column->setValueAt(row, srcData.integerData.at(col));
+				} else if (srcData.mode == AbstractColumn::ColumnMode::BigInt) {
+					if (col < srcData.bigIntData.size())
+						column->setValueAt(row, srcData.bigIntData.at(col));
+				}
+				break;
+			case AbstractColumn::ColumnMode::Integer:
+				if (col < srcData.integerData.size())
+					column->setIntegerAt(row, srcData.integerData.at(col));
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				if (srcData.mode == AbstractColumn::ColumnMode::BigInt) {
+					if (col < srcData.bigIntData.size())
+						column->setBigIntAt(row, srcData.bigIntData.at(col));
+				} else if (srcData.mode == AbstractColumn::ColumnMode::Integer) {
+					if (col < srcData.integerData.size())
+						column->setBigIntAt(row, srcData.integerData.at(col));
+				}
+				break;
+			case AbstractColumn::ColumnMode::Text:
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+				break;
+			}
+		}
+	}
+
 	endMacro();
 }
 
@@ -1346,7 +1569,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
-	assert(d->m_usedInPlots.size() == 0);
+	Q_ASSERT(d->m_usedInPlots.size() == 0);
 	int columnOffset = 0;
 	setUndoAware(false);
 	if (m_model != nullptr)

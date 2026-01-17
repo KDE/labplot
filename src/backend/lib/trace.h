@@ -43,7 +43,8 @@ private:
 #define PERFTRACE_EXPRESSION_PARSER 1
 
 #ifdef PERFTRACE_ENABLED
-#define PERFTRACE(msg) PerfTracer tracer(msg);
+#define PERFTRACE(msg)                                                                                                                                         \
+	{ PerfTracer tracer(msg); }
 #else
 #define PERFTRACE(msg) DEBUG(msg)
 #endif
