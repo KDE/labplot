@@ -125,7 +125,6 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/spreadsheet/FlattenColumnsDialog.cpp
     ${FRONTEND_DIR}/spreadsheet/FormattingHeatmapDialog.cpp
     ${FRONTEND_DIR}/spreadsheet/GoToDialog.cpp
-    ${FRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
     ${FRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
     ${FRONTEND_DIR}/spreadsheet/RescaleDialog.cpp
     ${FRONTEND_DIR}/spreadsheet/SampleValuesDialog.cpp
