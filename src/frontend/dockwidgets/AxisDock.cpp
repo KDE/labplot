@@ -279,8 +279,8 @@ void AxisDock::retranslateUi() {
 	ui.cbMajorTicksType->clear();
 	ui.cbMajorTicksType->addItem(i18n("Number"), (int)Axis::TicksType::TotalNumber);
 	ui.cbMajorTicksType->addItem(i18n("Spacing"), (int)Axis::TicksType::Spacing);
-	ui.cbMajorTicksType->addItem(i18n("Custom column"), (int)Axis::TicksType::CustomColumn);
-	ui.cbMajorTicksType->addItem(i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
+	ui.cbMajorTicksType->addItem(i18n("Custom Column Values"), (int)Axis::TicksType::CustomColumn);
+	ui.cbMajorTicksType->addItem(i18n("Custom Column Labels"), (int)Axis::TicksType::CustomColumnLabels);
 
 	ui.cbMajorTicksStartType->clear();
 	ui.cbMajorTicksStartType->addItem(i18n("Absolute Value"));
@@ -295,8 +295,7 @@ void AxisDock::retranslateUi() {
 	ui.cbMinorTicksType->clear();
 	ui.cbMinorTicksType->addItem(i18n("Number"), (int)Axis::TicksType::TotalNumber);
 	ui.cbMinorTicksType->addItem(i18n("Spacing"), (int)Axis::TicksType::Spacing);
-	ui.cbMinorTicksType->addItem(i18n("Custom column"), (int)Axis::TicksType::CustomColumn);
-	// ui.cbMinorTicksType->addItem(i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
+	ui.cbMinorTicksType->addItem(i18n("Custom Column Values"), (int)Axis::TicksType::CustomColumn);
 
 	// labels
 	ui.cbLabelsPosition->clear();
@@ -321,6 +320,61 @@ void AxisDock::retranslateUi() {
 	ui.cbLabelsBackgroundType->clear();
 	ui.cbLabelsBackgroundType->addItem(i18n("Transparent"));
 	ui.cbLabelsBackgroundType->addItem(i18n("Color"));
+
+	// tooltip texts
+	QString info = i18n(
+		"Defines how and where to position the major ticks on the axis:"
+		"<ul>"
+		"<li>Number - ticks are placed equidistantly, the spacing between them is determined by the provided fixed number of ticks.</li>"
+		"<li>Spacing - ticks are placed equidistantly with the provided spacing between them.</li>"
+		"<li>Custom Column Values - positions are determined by the values in the custom column provided below.</li>"
+		"<li>Custom Column Labels - positions are determined by the value labels in the custom column provided below.</li>"
+		"</ul>"
+		"</ul>");
+	ui.lMajorTicksType->setToolTip(info);
+	ui.cbMajorTicksType->setToolTip(info);
+
+	info = i18n(
+		"Defines where to position the first major tick:"
+		"<ul>"
+		"<li>Absolute Value - the first tick is positione at the absolute value provided below.</li>"
+		"<li>Offset - the first tick is positioned at the offset relatively to the beginning of the axis range.</li>"
+		"</ul>"
+		"</ul>");
+	ui.lMajorTicksStartType->setToolTip(info);
+	ui.cbMajorTicksStartType->setToolTip(info);
+
+	info = i18n("Column with the values that should be used as the positions of the major ticks.");
+	ui.lMajorTicksColumn->setToolTip(info);
+
+	info = i18n(
+		"Defines which text labels to show for the major ticks:"
+		"<ul>"
+		"<li>Position Values - the positions of the ticks are used as text labels.</li>"
+		"<li>Custom Column Values - values in the custom column provided below are used as text labels.</li>"
+		"</ul>"
+		"</ul>");
+	ui.lLabelsTextType->setToolTip(info);
+	ui.cbLabelsTextType->setToolTip(info);
+
+	info = i18n("Column with the values that should be used as the text labels for the major ticks.");
+	ui.lLabelsTextColumn->setToolTip(info);
+	cbLabelsTextColumn->setToolTip(info);
+
+	// minor
+	info = i18n(
+		"Defines how and where to position the minor ticks on the axis:"
+		"<ul>"
+		"<li>Number - ticks are placed equidistantly, the spacing between them is determined by the provided fixed number of ticks.</li>"
+		"<li>Spacing - ticks are placed equidistantly with the provided spacing between them.</li>"
+		"<li>Custom Column Values - positions are determined by the values in the custom column provided below.</li>"
+		"</ul>"
+		"</ul>");
+	ui.lMinorTicksType->setToolTip(info);
+	ui.cbMinorTicksType->setToolTip(info);
+
+	info = i18n("Column with the values that should be used as the positions of the minor ticks.");
+	ui.lMinorTicksColumn->setToolTip(info);
 
 	labelWidget->retranslateUi();
 	// TODO: lineWidget->retranslateUi();
@@ -964,11 +1018,11 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 	auto type = (Axis::TicksType)ui.cbMajorTicksType->itemData(index).toInt(); // WRONG!
 
-	ui.lLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
-	ui.cbLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
+	ui.lLabelsTextType->setVisible(type != Axis::TicksType::CustomColumnLabels);
+	ui.cbLabelsTextType->setVisible(type != Axis::TicksType::CustomColumnLabels);
 	const auto customValues = m_axis->labelsTextType() == Axis::LabelsTextType::CustomValues;
-	ui.lLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels && customValues);
-	cbLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels && customValues);
+	ui.lLabelsTextColumn->setVisible(type != Axis::TicksType::CustomColumnLabels && customValues);
+	cbLabelsTextColumn->setVisible(type != Axis::TicksType::CustomColumnLabels && customValues);
 
 	switch (type) {
 	case Axis::TicksType::TotalNumber: {
@@ -1018,12 +1072,12 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		majorTicksSpacingChanged();
 		break;
 	}
-	case Axis::TicksType::ColumnLabels:
+	case Axis::TicksType::CustomColumnLabels:
 		// Fall through
 	case Axis::TicksType::CustomColumn: {
-		ui.lMajorTicksNumber->show();
-		ui.sbMajorTicksNumber->show();
-		ui.cbMajorTicksAutoNumber->show();
+		ui.lMajorTicksNumber->hide();
+		ui.sbMajorTicksNumber->hide();
+		ui.cbMajorTicksAutoNumber->hide();
 		ui.lMajorTicksSpacingNumeric->hide();
 		ui.sbMajorTicksSpacingNumeric->hide();
 		ui.lMajorTicksIncrementDateTime->hide();
@@ -1040,8 +1094,6 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		updateMajorTicksStartType(false);
 		break;
 	}
-	case Axis::TicksType::CustomValues:
-		break;
 	}
 
 	CONDITIONAL_LOCK_RETURN;
@@ -1052,6 +1104,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 void AxisDock::majorTicksAutoNumberChanged(int state) {
 	bool automatic = (state == Qt::CheckState::Checked ? true : false);
+	ui.sbMajorTicksNumber->setEnabled(!automatic);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -1204,7 +1257,8 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		return;
 
 	auto type = Axis::TicksType(index);
-	if (type == Axis::TicksType::TotalNumber) {
+	switch (type) {
+	case Axis::TicksType::TotalNumber: {
 		ui.lMinorTicksNumber->show();
 		ui.sbMinorTicksNumber->show();
 		ui.cbMinorTicksAutoNumber->show();
@@ -1214,7 +1268,9 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		cbMinorTicksColumn->hide();
 		ui.lMinorTicksIncrementDateTime->hide();
 		dtsbMinorTicksIncrement->hide();
-	} else if (type == Axis::TicksType::Spacing) {
+		break;
+	}
+	case Axis::TicksType::Spacing: {
 		ui.lMinorTicksNumber->hide();
 		ui.sbMinorTicksNumber->hide();
 		ui.cbMinorTicksAutoNumber->hide();
@@ -1236,7 +1292,9 @@ void AxisDock::minorTicksTypeChanged(int index) {
 
 		// Check if spacing is not to small
 		minorTicksSpacingChanged();
-	} else {
+		break;
+	}
+	case Axis::TicksType::CustomColumn: {
 		ui.lMinorTicksNumber->hide();
 		ui.sbMinorTicksNumber->hide();
 		ui.cbMinorTicksAutoNumber->hide();
@@ -1246,6 +1304,11 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		dtsbMinorTicksIncrement->hide();
 		ui.lMinorTicksColumn->show();
 		cbMinorTicksColumn->show();
+		break;
+	}
+	case Axis::TicksType::CustomColumnLabels: {
+		break; // not supported
+	}
 	}
 
 	CONDITIONAL_LOCK_RETURN;
