@@ -938,7 +938,7 @@ void Axis::setLabelsFormatAuto(bool automatic) {
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsAutoPrecision, bool, labelsAutoPrecision, retransformTickLabelStrings)
 void Axis::setLabelsAutoPrecision(bool labelsAutoPrecision) {
-	Q_D(Axis);
+		Q_D(Axis);
 	if (labelsAutoPrecision != d->labelsAutoPrecision)
 		exec(new AxisSetLabelsAutoPrecisionCmd(d, labelsAutoPrecision, ki18n("%1: set labels precision")));
 }
@@ -1450,7 +1450,7 @@ int AxisPrivate::determineMinorTicksNumber() const {
 		if (majorTicksNumber > 1)
 			tmpMinorTicksNumber /= majorTicksNumber - 1;
 		break;
-	case Axis::TicksType::CustomColumn: // Fall through
+	case Axis::TicksType::CustomColumn:
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
 		break;
 	case Axis::TicksType::CustomColumnLabels:
@@ -1733,7 +1733,7 @@ void AxisPrivate::retransformTicks() {
 	case Axis::TicksType::TotalNumber:
 		break; // tmpMajorTicksIncrement is calculated already above
 	case Axis::TicksType::CustomColumnLabels: // fall through
-	case Axis::TicksType::CustomColumn: // fall through
+	case Axis::TicksType::CustomColumn:
 		majorTicksIncrement = Range<double>::diff(q->scale(), start, end);
 		if (tmpMajorTicksNumber > 1)
 			majorTicksIncrement /= tmpMajorTicksNumber - 1;
@@ -1842,7 +1842,7 @@ void AxisPrivate::retransformTicks() {
 			break;
 
 		int columnIndex = iMajor; // iMajor used if for the labels a custom column is used.
-		if ((majorTicksType == Axis::TicksType::CustomColumn)) {
+		if (majorTicksType == Axis::TicksType::CustomColumn) {
 			if (tmpMajorTicksNumberLimited) {
 				// Do not use all values of the column, but just a portion of it
 				columnIndex = majorTicksColumn->indexForValue(majorTickPos, true);
@@ -1915,7 +1915,8 @@ void AxisPrivate::retransformTicks() {
 			// DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
 
 			// if custom column is used, we can have duplicated values in it and we need only unique values
-			if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomColumnLabels) && tickLabelValues.indexOf(value) != -1)
+			if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomColumnLabels)
+				&& tickLabelValues.indexOf(value) != -1)
 				valid = false;
 
 			// add major tick's line to the painter path
