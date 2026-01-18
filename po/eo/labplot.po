@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-12 00:39+0000\n"
+"POT-Creation-Date: 2026-01-18 00:39+0000\n"
 "PO-Revision-Date: 2025-03-23 07:29+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -6315,7 +6315,7 @@ msgstr "Presi Noton"
 msgid "Text file (*.txt)"
 msgstr "Tekst-dosieroj (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:81
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:90
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6324,12 +6324,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Eksporti al Dosiero"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
 #, kde-format
 msgid "Export failed"
 msgstr "Eksporto Malsukcesis"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Malsukcesis malfermi la dosieron '%1' por skribado."
@@ -7293,55 +7293,55 @@ msgstr "Tripezo"
 msgid "Tricube"
 msgstr "Trikubo"
 
-#: src/backend/script/Script.cpp:79
+#: src/backend/script/Script.cpp:88
 #, fuzzy, kde-format
 #| msgid "Text file (*.txt)"
 msgid "Python file (*.py)"
 msgstr "Tekst-dosieroj (*.txt)"
 
-#: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
 #, fuzzy, kde-format
 #| msgid "no note element found"
 msgid "no script element found"
 msgstr "neniu notelemento trovita"
 
-#: src/backend/script/Script.cpp:193
+#: src/backend/script/Script.cpp:202
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:304 src/backend/script/Script.cpp:309
+#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
 msgstr "&Skripto"
 
-#: src/backend/script/Script.cpp:304
+#: src/backend/script/Script.cpp:313
 #, fuzzy, kde-format
 #| msgid "Failed to open the file."
 msgid "Failed to run the script."
 msgstr "Malsukcesis malfermi la dosieron."
 
-#: src/backend/script/Script.cpp:309
+#: src/backend/script/Script.cpp:318
 #, kde-format
 msgid "A script is already running."
 msgstr ""
 
-#: src/backend/script/ScriptRuntime.cpp:92
+#: src/backend/script/ScriptRuntime.cpp:99
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nomo"
 
-#: src/backend/script/ScriptRuntime.cpp:94
+#: src/backend/script/ScriptRuntime.cpp:101
 #, fuzzy, kde-format
 #| msgid "Value"
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Valoro"
 
-#: src/backend/script/ScriptRuntime.cpp:96
+#: src/backend/script/ScriptRuntime.cpp:103
 #, fuzzy, kde-format
 #| msgid "Type"
 msgctxt "@title:column"

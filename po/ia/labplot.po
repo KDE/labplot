@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-12 00:39+0000\n"
+"POT-Creation-Date: 2026-01-18 00:39+0000\n"
 "PO-Revision-Date: 2025-05-30 18:48+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -6251,7 +6251,7 @@ msgstr "Imprime Nota"
 msgid "Text file (*.txt)"
 msgstr "File de texto (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:81
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:90
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6260,12 +6260,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exporta a file"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
 #, kde-format
 msgid "Export failed"
 msgstr "Exportation falleva"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Il falleva a aperir '%1' pro scriber."
@@ -7230,52 +7230,52 @@ msgstr ""
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/script/Script.cpp:79
+#: src/backend/script/Script.cpp:88
 #, fuzzy, kde-format
 #| msgid "Text file (*.txt)"
 msgid "Python file (*.py)"
 msgstr "File de texto (*.txt)"
 
-#: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
 #, kde-format
 msgid "no script element found"
 msgstr "necun elemento de script trovate"
 
-#: src/backend/script/Script.cpp:193
+#: src/backend/script/Script.cpp:202
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: Exeque Script %2"
 
-#: src/backend/script/Script.cpp:304 src/backend/script/Script.cpp:309
+#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:304
+#: src/backend/script/Script.cpp:313
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Falleva a exequer le script."
 
-#: src/backend/script/Script.cpp:309
+#: src/backend/script/Script.cpp:318
 #, kde-format
 msgid "A script is already running."
 msgstr ""
 
-#: src/backend/script/ScriptRuntime.cpp:92
+#: src/backend/script/ScriptRuntime.cpp:99
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nomine"
 
-#: src/backend/script/ScriptRuntime.cpp:94
+#: src/backend/script/ScriptRuntime.cpp:101
 #, fuzzy, kde-format
 #| msgid "Value"
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Valor"
 
-#: src/backend/script/ScriptRuntime.cpp:96
+#: src/backend/script/ScriptRuntime.cpp:103
 #, fuzzy, kde-format
 #| msgid "Type"
 msgctxt "@title:column"

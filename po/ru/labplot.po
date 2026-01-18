@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-12 00:39+0000\n"
+"POT-Creation-Date: 2026-01-18 00:39+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -6586,7 +6586,7 @@ msgid "Text file (*.txt)"
 msgstr "Файлы LaTeX (*.tex)"
 
 # BUGME: please split strings --aspotashev
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:81
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:90
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6596,12 +6596,12 @@ msgid "Export to File"
 msgstr "Экспорт в файл"
 
 # BUGME: please split strings --aspotashev
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
 #, fuzzy, kde-format
 msgid "Export failed"
 msgstr "Экспорт в файл"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
 #, fuzzy, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Не удалось открыть файл «%1» для записи."
@@ -7584,55 +7584,55 @@ msgstr "Тривесовая"
 msgid "Tricube"
 msgstr "Трикубическая"
 
-#: src/backend/script/Script.cpp:79
+#: src/backend/script/Script.cpp:88
 #, fuzzy, kde-format
 msgid "Python file (*.py)"
 msgstr "Файлы LaTeX (*.tex)"
 
-#: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
 #, fuzzy, kde-format
 #| msgid "no matrix element found"
 msgid "no script element found"
 msgstr "Не найден элемент «matrix»."
 
-#: src/backend/script/Script.cpp:193
+#: src/backend/script/Script.cpp:202
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:304 src/backend/script/Script.cpp:309
+#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
 msgstr "&Сценарий"
 
-#: src/backend/script/Script.cpp:304
+#: src/backend/script/Script.cpp:313
 #, fuzzy, kde-format
 #| msgid "Failed to open the file '%1'."
 msgid "Failed to run the script."
 msgstr "Не удалось открыть файл «%1»."
 
-#: src/backend/script/Script.cpp:309
+#: src/backend/script/Script.cpp:318
 #, kde-format
 msgid "A script is already running."
 msgstr ""
 
 # BUGME: please split strings --aspotashev
-#: src/backend/script/ScriptRuntime.cpp:92
+#: src/backend/script/ScriptRuntime.cpp:99
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Имя"
 
-#: src/backend/script/ScriptRuntime.cpp:94
+#: src/backend/script/ScriptRuntime.cpp:101
 #, fuzzy, kde-format
 #| msgid "Value"
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Значение"
 
-#: src/backend/script/ScriptRuntime.cpp:96
+#: src/backend/script/ScriptRuntime.cpp:103
 #, fuzzy, kde-format
 #| msgid "Type"
 msgctxt "@title:column"

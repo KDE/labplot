@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-12 00:39+0000\n"
+"POT-Creation-Date: 2026-01-18 00:39+0000\n"
 "PO-Revision-Date: 2026-01-13 18:17+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -6328,7 +6328,7 @@ msgstr "Notu Yazdır"
 msgid "Text file (*.txt)"
 msgstr "Metin dosyası (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:81
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:90
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6337,12 +6337,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Dosyaya Dışa Aktar"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
 #, kde-format
 msgid "Export failed"
 msgstr "Dışa aktarma başarısız"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "“%1” dosyası yazmak için açılamadı."
@@ -7303,49 +7303,49 @@ msgstr "Üçlü Ağırlık"
 msgid "Tricube"
 msgstr "Üçlü Küp"
 
-#: src/backend/script/Script.cpp:79
+#: src/backend/script/Script.cpp:88
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Python dosyası (*.py)"
 
-#: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
 #, kde-format
 msgid "no script element found"
 msgstr "Bulunan betik ögesi yok"
 
-#: src/backend/script/Script.cpp:193
+#: src/backend/script/Script.cpp:202
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: %2 betiğini çalıştır"
 
-#: src/backend/script/Script.cpp:304 src/backend/script/Script.cpp:309
+#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
 #, kde-format
 msgid "Script"
 msgstr "Betik"
 
-#: src/backend/script/Script.cpp:304
+#: src/backend/script/Script.cpp:313
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Betik çalıştırılamadı."
 
-#: src/backend/script/Script.cpp:309
+#: src/backend/script/Script.cpp:318
 #, kde-format
 msgid "A script is already running."
 msgstr "Bir betik halihazırda çalışıyor."
 
-#: src/backend/script/ScriptRuntime.cpp:92
+#: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Ad"
 
-#: src/backend/script/ScriptRuntime.cpp:94
+#: src/backend/script/ScriptRuntime.cpp:101
 #, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Değer"
 
-#: src/backend/script/ScriptRuntime.cpp:96
+#: src/backend/script/ScriptRuntime.cpp:103
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
