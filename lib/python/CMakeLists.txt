@@ -2,10 +2,18 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 find_package(Python3 COMPONENTS Development Interpreter REQUIRED)
-find_package(PySide6 REQUIRED)
-find_package(Shiboken6 REQUIRED)
+find_package(PySide6 QUIET)
+find_package(Shiboken6 QUIET)
 
-include(ECMGeneratePythonBindings)
+# If still not found, report and allow user to continue (they may just not want Python support)
+if(NOT Shiboken6_FOUND)
+	message(WARNING "Shiboken6 not found. Python scripting support will be disabled.")
+endif()
+if(NOT PySide6_FOUND)
+	message(WARNING "PySide6 not found. Python scripting support will be disabled.")
+endif()
+
+include(GeneratePythonBindings)
 
 set(bindings_library "pylabplot")
 
@@ -162,12 +170,12 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_differentiationdata_wrapper.cpp
@@ -247,7 +255,7 @@ get_property(_defs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINI
 list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_UP_TO=]])
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
 
-ecm_generate_python_bindings(
+generate_python_bindings(
     PACKAGE_NAME ${bindings_library}
     VERSION ${PROJECT_VERSION}
     WRAPPED_HEADER ${wrapped_header}
@@ -262,26 +270,31 @@ ecm_generate_python_bindings(
 )
 
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
-    get_target_property(PySide6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
-    get_target_property(Shiboken6_INCLUDE_DIRECTORIES Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
-    target_include_directories(${bindings_library} PUBLIC ${Python3_INCLUDE_DIRS} ${PySide6_INCLUDE_DIRECTORIES} ${PYSIDE_PYTHONPATH}/include/QtWidgets ${PYSIDE_PYTHONPATH}/include/QtGui ${PYSIDE_PYTHONPATH}/include/QtCore)
-    # TODO: check if necessary
-    # target_include_directories(${bindings_library} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../src/3rdparty/shiboken6-${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}/include)
-    if(Shiboken6_INCLUDE_DIRECTORIES)
-        target_include_directories(${bindings_library} PUBLIC ${Shiboken6_INCLUDE_DIRECTORIES})
+    # Only proceed if we actually found the Python packages
+    if(Shiboken6_INCLUDE_DIRS AND PySide6_INCLUDE_DIRS)
+	target_include_directories(${bindings_library} PUBLIC
+	    ${Python3_INCLUDE_DIRS}
+	    ${PySide6_INCLUDE_DIRS}
+	    ${Shiboken6_INCLUDE_DIRS}
+	)
+    else()
+	message(FATAL_ERROR "Python package support requested (ENABLE_PYTHON_SDK or ENABLE_PYTHON_SCRIPTING) but PySide6/Shiboken6 not found. Please install them or disable Python support.")
     endif()
 
-    target_link_libraries(${bindings_library} PRIVATE Shiboken6::libshiboken PySide6::pyside6)
+
     if(PySide6_ABI3_LIBRARY)
-        target_link_libraries(${bindings_library} PRIVATE ${PySide6_ABI3_LIBRARY})
+	target_link_libraries(${bindings_library} PRIVATE ${PySide6_ABI3_LIBRARY})
+    endif()
+    if(Shiboken6_LIBRARY)
+	target_link_libraries(${bindings_library} PRIVATE ${Shiboken6_LIBRARY})
     endif()
     if(Shiboken6_ABI3_LIBRARY)
-        target_link_libraries(${bindings_library} PRIVATE ${Shiboken6_ABI3_LIBRARY})
+	target_link_libraries(${bindings_library} PRIVATE ${Shiboken6_ABI3_LIBRARY})
     endif()
 endif()
 
 target_link_libraries(${bindings_library} PRIVATE LabPlot::SDK)
-target_compile_definitions(${bindings_library} PRIVATE -DSDK)
+target_compile_definitions(${bindings_library} PRIVATE SDK)
 
 execute_process(
     COMMAND ${Python_EXECUTABLE} -Esc "import sysconfig; print(sysconfig.get_path('platlib', vars={'platbase': '${CMAKE_INSTALL_PREFIX}', 'base': '${CMAKE_INSTALL_PREFIX}'}))"

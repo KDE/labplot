@@ -12,25 +12,17 @@
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
+#include <KLocalization>
 #include <KMessageBox>
 
 #include <QMenu>
 #include <QWidgetAction>
 
 /*!
-  \class XYFourierFilterCurveDock
- \brief  Provides a widget for editing the properties of the XYFourierFilterCurves
-		(2D-curves defined by a Fourier filter) currently selected in
-		the project explorer.
-
-  If more than one curves are set, the properties of the first column are shown.
-  The changes of the properties are applied to all curves.
-  The exclusions are the name, the comment and the datasets (columns) of
-  the curves  - these properties can only be changed if there is only one single curve.
-
-  \ingroup frontend
+	\class XYFourierFilterCurveDock
+	\brief  Provides a widget for editing the properties of \c XYFourierFilterCurve.
+	\ingroup frontend
 */
-
 XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget* parent)
 	: XYAnalysisCurveDock(parent) {
 }
@@ -364,7 +356,7 @@ void XYFourierFilterCurveDock::updateCutoffSpinBoxes(NumberSpinBox* sb, nsl_filt
 	switch (newUnit) {
 	case nsl_filter_cutoff_unit_frequency:
 		sb->setMaximum(f);
-		sb->setSuffix(QStringLiteral(" Hz"));
+		KLocalization::setupSpinBoxFormatString(sb, ki18nc("@label:spinbox Suffix for the frequency", "%v Hz"));
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			break;

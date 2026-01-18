@@ -27,7 +27,7 @@ public:
 	enum class DataSourceType { Spreadsheet, Curve, Histogram };
 	Q_ENUM(DataSourceType)
 	enum class AnalysisAction {
-		DataReduction,
+		LineSimplification,
 		Differentiation,
 		Integration,
 		Interpolation,
@@ -43,7 +43,8 @@ public:
 		FitTanh,
 		FitErrFunc,
 		FitCustom,
-		FourierFilter
+		FourierFilter,
+		BaselineCorrection
 	};
 	Q_ENUM(AnalysisAction)
 

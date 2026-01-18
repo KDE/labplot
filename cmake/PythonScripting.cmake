@@ -153,12 +153,12 @@ set(shiboken_scripting_generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_differentiationdata_wrapper.cpp
@@ -248,19 +248,24 @@ set(python_scripting_includes
     ${PySide6_PYTHONPATH}/include/QtGui
     ${PySide6_PYTHONPATH}/include/QtCore
 )
-get_target_property(Shiboken6_LIBRARIES Shiboken6::libshiboken IMPORTED_LOCATION)
 set(python_scripting_link_libraries
     PySide6::pyside6
     Shiboken6::libshiboken
     ${Python3_LIBRARIES}
-    ${PySide6_ABI3_LIBRARY}
-    ${Shiboken6_LIBRARIES}
 )
+if(PySide6_ABI3_LIBRARY)
+    list(APPEND python_scripting_link_libraries ${PySide6_ABI3_LIBRARY})
+endif()
+get_target_property(Shiboken6_LIBRARY Shiboken6::libshiboken IMPORTED_LOCATION)
+if(Shiboken6_LIBRARY)
+    list(APPEND python_scripting_link_libraries ${Shiboken6_LIBRARY})
+endif()
 
 # Hide noisy warnings in shiboken scripting generated sources
 # 1. Wno-missing-include-dirs : pyside6 declares an include directory in the INTERFACE_INCLUDE_DIRECTORIES which doesn't actually exist and thus the compiler complains
 # 2. Wno-cast-function-type: the shiboken6 generated files contain weird but correct function casts which the compiler complains about
-set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_OPTIONS -Wno-cast-function-type -Wno-missing-include-dirs)
+# 3. O to avoid warning: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Wcpp]
+set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_OPTIONS -Wno-cast-function-type -Wno-missing-include-dirs -O)
 
 # Previously, we were adding the python_scripting_includes to the liblabplotbackendlib target, but we can actually restrict things further and add these includes to only the
 # shiboken generated sources since they are the ones who require the includes
@@ -271,8 +276,13 @@ set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_b
 # Full API needed for PyFunction_Check() and PyRun_String()
 #set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
 
-# PYTHON3_EXECUTABLE is the python executable path and is needed when initializing the python scripting interpreter
-set_property(SOURCE ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp APPEND PROPERTY COMPILE_DEFINITIONS -DPYTHON3_EXECUTABLE=${Python3_EXECUTABLE})
+# PYTHON3_EXECUTABLE_NAME is the python executable name (without path) and is needed when initializing the python scripting interpreter
+get_filename_component(PYTHON3_EXECUTABLE_NAME
+    "${Python3_EXECUTABLE}"
+    NAME
+)
+message(STATUS "Python executable name: ${PYTHON3_EXECUTABLE_NAME}")
+set_property(SOURCE ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp APPEND PROPERTY COMPILE_DEFINITIONS -DPYTHON3_EXECUTABLE=L\"${PYTHON3_EXECUTABLE_NAME}\")
 
 # shiboken generates sources using deprecated code so we remove these deprecation macros to enable the shiboken generated files to compile
 get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)

@@ -1,6 +1,15 @@
 diff -ruNa a/src/bin/readstat.c b/src/bin/readstat.c
---- a/src/bin/readstat.c	2023-02-20 20:09:24.000000000 +0100
-+++ b/src/bin/readstat.c	2024-02-02 17:41:51.463409738 +0100
+--- a/src/bin/readstat.c	2021-04-14 04:39:19.000000000 +0200
++++ b/src/bin/readstat.c	2025-11-26 11:36:25.083923762 +0100
+@@ -154,7 +154,7 @@
+     return error;
+ }
+ 
+-static void print_version() {
++static void print_version(void) {
+     fprintf(stdout, "ReadStat version " READSTAT_VERSION "\n");
+ }
+ 
 @@ -397,8 +397,6 @@
          module->finish(rs_ctx->module_ctx);
      }
@@ -24,4 +33,121 @@ diff -ruNa a/src/bin/readstat.c b/src/bin/readstat.c
 +
      return 0;
  }
+ 
+diff -ruNa a/src/readstat_bits.c b/src/readstat_bits.c
+--- a/src/readstat_bits.c	2018-01-15 22:14:39.000000000 +0100
++++ b/src/readstat_bits.c	2025-11-26 11:36:25.083923762 +0100
+@@ -8,7 +8,7 @@
+ 
+ #include "readstat_bits.h"
+ 
+-int machine_is_little_endian() {
++int machine_is_little_endian(void) {
+     int test_byte_order = 1;
+     return ((char *)&test_byte_order)[0];
+ }
+diff -ruNa a/src/readstat_parser.c b/src/readstat_parser.c
+--- a/src/readstat_parser.c	2020-08-25 18:29:50.000000000 +0200
++++ b/src/readstat_parser.c	2025-11-26 11:36:25.083923762 +0100
+@@ -3,7 +3,7 @@
+ #include "readstat.h"
+ #include "readstat_io_unistd.h"
+ 
+-readstat_parser_t *readstat_parser_init() {
++readstat_parser_t *readstat_parser_init(void) {
+     readstat_parser_t *parser = calloc(1, sizeof(readstat_parser_t));
+     parser->io = calloc(1, sizeof(readstat_io_t));
+     if (unistd_io_init(parser) != READSTAT_OK) {
+diff -ruNa a/src/readstat_variable.c b/src/readstat_variable.c
+--- a/src/readstat_variable.c	2023-02-20 20:09:20.000000000 +0100
++++ b/src/readstat_variable.c	2025-11-26 11:36:25.083923762 +0100
+@@ -5,7 +5,7 @@
+ static readstat_value_t make_blank_value(void);
+ static readstat_value_t make_double_value(double dval);
+ 
+-static readstat_value_t make_blank_value() {
++static readstat_value_t make_blank_value(void) {
+     readstat_value_t value = { .is_system_missing = 1, .v = { .double_value = NAN }, .type = READSTAT_TYPE_DOUBLE };
+     return value;
+ }
+diff -ruNa a/src/readstat_writer.c b/src/readstat_writer.c
+--- a/src/readstat_writer.c	2022-05-13 13:11:04.000000000 +0200
++++ b/src/readstat_writer.c	2025-11-26 11:36:25.087923755 +0100
+@@ -35,7 +35,7 @@
+     return ref;
+ }
+ 
+-readstat_writer_t *readstat_writer_init() {
++readstat_writer_t *readstat_writer_init(void) {
+     readstat_writer_t *writer = calloc(1, sizeof(readstat_writer_t));
+ 
+     writer->variables = calloc(VARIABLES_INITIAL_CAPACITY, sizeof(readstat_variable_t *));
+diff -ruNa a/src/sas/ieee.c b/src/sas/ieee.c
+--- a/src/sas/ieee.c	2023-02-20 20:09:20.000000000 +0100
++++ b/src/sas/ieee.c	2025-11-26 11:36:25.087923755 +0100
+@@ -96,7 +96,7 @@
+     return(0);
+ }
+ 
+-int get_native() {
++int get_native(void) {
+     static unsigned char float_reps[][8] = {
+         {0x41,0x10,0x00,0x00,0x00,0x00,0x00,0x00},
+         {0x3f,0xf0,0x00,0x00,0x00,0x00,0x00,0x00},
+diff -ruNa a/src/sas/readstat_sas.c b/src/sas/readstat_sas.c
+--- a/src/sas/readstat_sas.c	2021-08-18 17:13:24.000000000 +0200
++++ b/src/sas/readstat_sas.c	2025-11-26 11:36:25.087923755 +0100
+@@ -120,7 +120,7 @@
+     { .code = 248,   .name = "SHIFT_JISX0213" },
+ };
+ 
+-static time_t sas_epoch() {
++static time_t sas_epoch(void) {
+     return - 3653 * 86400; // seconds between 01-01-1960 and 01-01-1970
+ }
+ 
+diff -ruNa a/src/sas/readstat_xport_read.c b/src/sas/readstat_xport_read.c
+--- a/src/sas/readstat_xport_read.c	2022-05-13 13:11:04.000000000 +0200
++++ b/src/sas/readstat_xport_read.c	2025-11-26 11:36:25.091923747 +0100
+@@ -45,7 +45,7 @@
+     return io->update(ctx->file_size, ctx->handle.progress, ctx->user_ctx, io->io_ctx);
+ }
+ 
+-static xport_ctx_t *xport_ctx_init() {
++static xport_ctx_t *xport_ctx_init(void) {
+     xport_ctx_t *ctx = calloc(1, sizeof(xport_ctx_t));
+     return ctx;
+ }
+diff -ruNa a/src/spss/readstat_por.c b/src/spss/readstat_por.c
+--- a/src/spss/readstat_por.c	2023-01-16 17:43:58.000000000 +0100
++++ b/src/spss/readstat_por.c	2025-11-26 11:36:25.091923747 +0100
+@@ -64,7 +64,7 @@
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0 };
+ 
+-por_ctx_t *por_ctx_init() {
++por_ctx_t *por_ctx_init(void) {
+     por_ctx_t *ctx = calloc(1, sizeof(por_ctx_t));
+ 
+     ctx->space = ' ';
+diff -ruNa a/src/spss/readstat_por_write.c b/src/spss/readstat_por_write.c
+--- a/src/spss/readstat_por_write.c	2020-08-28 13:52:47.000000000 +0200
++++ b/src/spss/readstat_por_write.c	2025-11-26 12:46:46.284209438 +0100
+@@ -167,7 +167,7 @@
+     return por_write_string_field_n(writer, ctx, string, strlen(string));
+ }
+ 
+-static por_write_ctx_t *por_write_ctx_init() {
++static por_write_ctx_t *por_write_ctx_init(void) {
+     por_write_ctx_t *ctx = calloc(1, sizeof(por_write_ctx_t));
+     uint16_t max_unicode = 0;
+     int i;
+@@ -203,7 +203,7 @@
+     memset(vanity, '0', sizeof(vanity));
+ 
+     memcpy(vanity[1], "ASCII SPSS PORT FILE", 20);
+-    strncpy(vanity[1] + 20, writer->file_label, 20);
++    memcpy(vanity[1] + 20, writer->file_label, 20);
+     if (file_label_len < 20)
+         memset(vanity[1] + 20 + file_label_len, ' ', 20 - file_label_len);
  

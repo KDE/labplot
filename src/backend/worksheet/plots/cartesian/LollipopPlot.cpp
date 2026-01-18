@@ -495,9 +495,9 @@ void LollipopPlotPrivate::recalc() {
 			auto* symbol = addSymbol(group);
 
 			if (plot) {
-				const auto& themeColor = plot->themeColorPalette(lines.count() - 1);
-				line->setColor(themeColor);
-				symbol->setColor(themeColor);
+				const auto& color = plot->plotColor(lines.count() - 1);
+				line->setColor(color);
+				symbol->setColor(color);
 			}
 		}
 	} else if (diff < 0) {
@@ -630,7 +630,7 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 		if (!column->isValid(i) || column->isMasked(i))
 			continue;
 
-		const double value = column->valueAt(i);
+		const double val = column->valueAt(i);
 		double x;
 
 		// translate to the beginning of the group
@@ -641,9 +641,9 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 
 		x += m_groupGap + (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
-		symbolPoints << QPointF(x + width / 2, value);
-		m_valuesPointsLogical << QPointF(x + width / 2, value);
-		barLines << QLineF(x + width / 2, 0, x + width / 2, value);
+		symbolPoints << QPointF(x + width / 2, val);
+		m_valuesPointsLogical << QPointF(x + width / 2, val);
+		barLines << QLineF(x + width / 2, 0, x + width / 2, val);
 		++valueIndex;
 	}
 
@@ -670,7 +670,7 @@ void LollipopPlotPrivate::horizontalPlot(int columnIndex) {
 		if (!column->isValid(i) || column->isMasked(i))
 			continue;
 
-		const double value = column->valueAt(i);
+		const double val = column->valueAt(i);
 		double y;
 		if (xColumn)
 			y = xColumn->valueAt(i);
@@ -679,9 +679,9 @@ void LollipopPlotPrivate::horizontalPlot(int columnIndex) {
 
 		y += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
-		symbolPoints << QPointF(value, y - width / 2);
-		m_valuesPointsLogical << QPointF(value, y - width / 2);
-		barLines << QLineF(0, y - width / 2, value, y - width / 2);
+		symbolPoints << QPointF(val, y - width / 2);
+		m_valuesPointsLogical << QPointF(val, y - width / 2);
+		barLines << QLineF(0, y - width / 2, val, y - width / 2);
 		++valueIndex;
 	}
 
@@ -1124,13 +1124,12 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 
 	Q_D(LollipopPlot);
 	const auto* plot = d->m_plot;
-	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const int index = plot->curveChildIndex(this);
 
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {
-		const auto& color = plot->themeColorPalette(i);
+		const auto& color = plot->plotColor(i);
 
 		// lines
 		auto* line = d->lines.at(i);
@@ -1142,7 +1141,7 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	}
 
 	// values
-	d->value->loadThemeConfig(group, themeColor);
+	d->value->loadThemeConfig(group, plot->plotColor(index));
 
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

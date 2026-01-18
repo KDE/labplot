@@ -74,6 +74,11 @@ private Q_SLOTS:
 	void testFlatten02();
 	void testFlatten03();
 
+	// transposing
+	void testTranspose00();
+	void testTranspose01();
+	void testTranspose02();
+
 	// search&replace
 	void testSearchSimple00();
 
@@ -92,6 +97,7 @@ private Q_SLOTS:
 	void testRemoveRows();
 	void testInsertColumns();
 	void testRemoveColumns();
+	void testRemoveColumns2();
 
 	void testInsertRowsBegin(); // insert row at the beginning
 	void testRemoveRowsBegin(); // remove first row

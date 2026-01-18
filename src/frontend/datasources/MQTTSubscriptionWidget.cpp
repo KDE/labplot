@@ -770,7 +770,7 @@ void MQTTSubscriptionWidget::mqttSubscribe() {
 				// if an already existing subscription contains a topic that the new subscription also contains
 				// we decompose the already existing subscription
 				// by unsubscribing from its topics, that are present in the new subscription as well
-				const QStringList nameList = name.split(QLatin1Char('/'), Qt::SkipEmptyParts);
+				const auto nameList = name.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 				const QString& root = nameList.first();
 				QVector<QTreeWidgetItem*> children;
 				for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
@@ -788,15 +788,15 @@ void MQTTSubscriptionWidget::mqttSubscribe() {
 								} else {
 									QTreeWidgetItem* unsubscribeItem = child;
 									while (unsubscribeItem->parent() != nullptr) {
-										for (int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
-											const QString& childText = unsubscribeItem->parent()->child(i)->text(0);
+										for (int j = 0; j < unsubscribeItem->parent()->childCount(); ++j) {
+											const QString& childText = unsubscribeItem->parent()->child(j)->text(0);
 											if (unsubscribeItem->text(0) != childText) {
 												// add topic as subscription
 												quint8 qos = static_cast<quint8>(ui.cbQos->currentText().toUInt());
 												Q_EMIT addBeforeRemoveSubscription(childText, qos);
 												// also add it to twSubscriptions
 												ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
-												--i;
+												--j;
 											} else {
 												// before we remove the topic, we reparent it to the new subscription
 												// so no data is lost

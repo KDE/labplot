@@ -135,8 +135,14 @@
     <p xml:lang="uk">За допомогою LabPlot просто створювати креслення, керувати ними та редагувати креслення. За допомогою програми можна створювати креслення на основі електронної таблиці або даних, імпортованих із зовнішнього файла. Креслення можна експортувати у форматі растрового або векторного зображення.</p>
     <p xml:lang="zh-CN">LabPlot 提供了一种方便地创建、 管理和编辑图表的方式。它允许您基于电子表格的数据或从外部文件导入的数据来绘制图表。图表可以导出到多种格式的位图或矢量图形。</p>
   </description>
-  <url type="homepage">https://labplot.kde.org/</url>
+  <url type="homepage">https://labplot.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?product=LabPlot2&amp;format=guided</url>
+  <url type="faq">https://labplot.org/frequently-asked-questions/</url>
+  <url type="donation">https://labplot.org/donate/</url>
+  <url type="translate">https://l10n.kde.org/</url>
+  <url type="contact">https://labplot.org/support/</url>
+  <url type="vcs-browser">https://invent.kde.org/education/labplot/</url>
+  <url type="contribute">https://labplot.org/contribute/</url>
   <branding>
     <color type="primary" scheme_preference="light">#ffbe6f</color>
     <color type="primary" scheme_preference="dark">#c64600</color>
@@ -512,6 +518,5 @@
     <value key="KDE::macos_download">https://labplot.org/download/#tab-8cIUbqvRly-3</value>
     <value key="KDE::matrix">#labplot:kde.org</value>
     <value key="KDE::mailinglist">labplot-support@kde.org</value>
-    <value key="KDE::supporters"> </value>
   </custom>
 </component>

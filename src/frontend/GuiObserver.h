@@ -44,7 +44,7 @@ class StatisticsSpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
 class XYFunctionCurveDock;
-class XYDataReductionCurveDock;
+class XYLineSimplificationCurveDock;
 class XYDifferentiationCurveDock;
 class XYIntegrationCurveDock;
 class XYInterpolationCurveDock;
@@ -55,6 +55,7 @@ class XYFourierTransformCurveDock;
 class XYHilbertTransformCurveDock;
 class XYConvolutionCurveDock;
 class XYCorrelationCurveDock;
+class XYBaselineCorrectionCurveDock;
 class WorksheetDock;
 class ImageDock;
 class LabelWidget;
@@ -63,7 +64,7 @@ class DatapickerCurveWidget;
 #ifdef HAVE_SCRIPTING
 class ScriptDock;
 #endif
-
+class SeasonalDecompositionDock;
 #ifdef HAVE_CANTOR_LIBS
 class NotebookDock;
 #endif
@@ -124,7 +125,7 @@ private:
 	RunChartDock* m_runChartDock{nullptr};
 
 	// analysis plots
-	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};
+	XYLineSimplificationCurveDock* m_xyLineSimplificationCurveDock{nullptr};
 	XYDifferentiationCurveDock* m_xyDifferentiationCurveDock{nullptr};
 	XYIntegrationCurveDock* m_xyIntegrationCurveDock{nullptr};
 	XYInterpolationCurveDock* m_xyInterpolationCurveDock{nullptr};
@@ -135,9 +136,13 @@ private:
 	XYHilbertTransformCurveDock* m_xyHilbertTransformCurveDock{nullptr};
 	XYConvolutionCurveDock* m_xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
+	XYBaselineCorrectionCurveDock* m_xyBaselineCorrectionCurveDock{nullptr};
 
-	// hypothesis test
+	// statistical analysis
 	HypothesisTestDock* m_hypothesisTestDock{nullptr};
+
+	// time series analysis
+	SeasonalDecompositionDock* m_seasonalDecompositionDock{nullptr};
 
 #ifdef HAVE_SCRIPTING
 	ScriptDock* m_scriptDock{nullptr};

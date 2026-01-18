@@ -298,24 +298,24 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_lorentz:
 		case nsl_fit_model_sech:
 		case nsl_fit_model_logistic:
-			for (int d = 0; d < degree; d++) {
-				paramStartValues[3 * d + 2] = xmin + (d + 1.) * xrange / (degree + 1.); // mu
-				paramStartValues[3 * d + 1] = xrange / (10. * degree); // sigma
-				paramStartValues[3 * d] = paramStartValues[3 * d + 1] * ymax; // A = sigma * ymax
+			for (int deg = 0; deg < degree; deg++) {
+				paramStartValues[3 * deg + 2] = xmin + (deg + 1.) * xrange / (degree + 1.); // mu
+				paramStartValues[3 * deg + 1] = xrange / (10. * degree); // sigma
+				paramStartValues[3 * deg] = paramStartValues[3 * deg + 1] * ymax; // A = sigma * ymax
 			}
 			break;
 		case nsl_fit_model_voigt:
-			for (int d = 0; d < degree; d++) {
-				paramStartValues[4 * d + 1] = xmin + (d + 1.) * xrange / (degree + 1.); // mu
-				paramStartValues[4 * d + 2] = xrange / (10. * degree); // sigma
-				paramStartValues[4 * d + 3] = xrange / (10. * degree); // gamma
+			for (int deg = 0; deg < degree; deg++) {
+				paramStartValues[4 * deg + 1] = xmin + (deg + 1.) * xrange / (degree + 1.); // mu
+				paramStartValues[4 * deg + 2] = xrange / (10. * degree); // sigma
+				paramStartValues[4 * deg + 3] = xrange / (10. * degree); // gamma
 			}
 			break;
 		case nsl_fit_model_pseudovoigt1:
-			for (int d = 0; d < degree; d++) {
-				paramStartValues[4 * d + 1] = 0.5; // eta
-				paramStartValues[4 * d + 2] = xrange / (10. * degree); // sigma
-				paramStartValues[4 * d + 3] = xmin + (d + 1.) * xrange / (degree + 1.); // mu
+			for (int deg = 0; deg < degree; deg++) {
+				paramStartValues[4 * deg + 1] = 0.5; // eta
+				paramStartValues[4 * deg + 2] = xrange / (10. * degree); // sigma
+				paramStartValues[4 * deg + 3] = xmin + (deg + 1.) * xrange / (degree + 1.); // mu
 			}
 			break;
 		}
@@ -373,7 +373,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData) {
  */
 void XYFitCurve::initFitData(XYAnalysisCurve::AnalysisAction action) {
 	// TODO: exclude others too?
-	if (action == XYAnalysisCurve::AnalysisAction::DataReduction)
+	if (action == XYAnalysisCurve::AnalysisAction::LineSimplification)
 		return;
 
 	Q_D(XYFitCurve);
@@ -2252,11 +2252,11 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		for (size_t i = 0; i < n; i++)
 			mu += std::log(tmpXDataColumn->valueAt(i));
 		mu /= n;
-		double var = 0.;
+		double variance = 0.;
 		for (size_t i = 0; i < n; i++)
-			var += gsl_pow_2(std::log(tmpXDataColumn->valueAt(i)) - mu);
-		var /= (n - 1);
-		const double sigma = std::sqrt(var);
+			variance += gsl_pow_2(std::log(tmpXDataColumn->valueAt(i)) - mu);
+		variance /= (n - 1);
+		const double sigma = std::sqrt(variance);
 		fitResult.paramValues[1] = sigma;
 		fitResult.paramValues[2] = mu;
 

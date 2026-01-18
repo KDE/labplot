@@ -711,13 +711,13 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(QQPlot);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const QColor color = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
-	d->referenceCurve->line()->loadThemeConfig(group, themeColor);
+	d->referenceCurve->line()->loadThemeConfig(group, color);
 	d->percentilesCurve->line()->setStyle(Qt::NoPen);
-	d->percentilesCurve->symbol()->loadThemeConfig(group, themeColor);
+	d->percentilesCurve->symbol()->loadThemeConfig(group, color);
 
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

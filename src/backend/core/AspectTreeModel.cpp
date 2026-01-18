@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,9 +17,8 @@
 
 #include <QApplication>
 #include <QDateTime>
-#include <QFontMetrics>
 #include <QIcon>
-#include <QMenu>
+#include <QPalette>
 
 #include <KLocalizedString>
 
@@ -222,56 +221,8 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 		default:
 			return {};
 		}
-	case Qt::ToolTipRole: {
-		QString toolTip;
-		if (aspect->comment().isEmpty())
-			toolTip = QLatin1String("<b>") + aspect->name() + QLatin1String("</b>");
-		else
-			toolTip =
-				QLatin1String("<b>") + aspect->name() + QLatin1String("</b><br><br>") + aspect->comment().replace(QLatin1Char('\n'), QLatin1String("<br>"));
-
-		const auto* col = dynamic_cast<const Column*>(aspect);
-		if (col) {
-			toolTip += QLatin1String("<br>");
-			toolTip += QLatin1String("<br>") + i18n("Size: %1", col->rowCount());
-			// TODO: active this once we have a more efficient implementation of this function
-			// toolTip += QLatin1String("<br>") + i18n("Values: %1", col->availableRowCount());
-			toolTip += QLatin1String("<br>") + i18n("Type: %1", col->columnModeString());
-			toolTip += QLatin1String("<br>") + i18n("Plot Designation: %1", col->plotDesignationString());
-
-			// in case it's a calculated column, add additional information
-			// about the formula and parameters
-			if (!col->formula().isEmpty()) {
-				toolTip += QLatin1String("<br><br>") + i18n("Formula:");
-				QString f(QStringLiteral("f("));
-				QString parameters;
-				for (int i = 0; i < col->formulaData().size(); ++i) {
-					auto& data = col->formulaData().at(i);
-
-					// string for the function definition like f(x,y), etc.
-					f += data.variableName();
-					if (i != col->formulaData().size() - 1)
-						f += QStringLiteral(", ");
-
-					// string for the parameters and the references to the used columns for them
-					if (!parameters.isEmpty())
-						parameters += QLatin1String("<br>");
-					parameters += data.variableName();
-					if (data.column())
-						parameters += QStringLiteral(" = ") + data.column()->path();
-				}
-
-				toolTip += QStringLiteral("<br>") + f + QStringLiteral(") = ") + col->formula();
-				toolTip += QStringLiteral("<br>") + parameters;
-				if (col->formulaAutoUpdate())
-					toolTip += QStringLiteral("<br>") + i18n("auto update: true");
-				else
-					toolTip += QStringLiteral("<br>") + i18n("auto update: false");
-			}
-		}
-
-		return toolTip;
-	}
+	case Qt::ToolTipRole:
+		return aspect->caption();
 	case Qt::DecorationRole:
 		return index.column() == 0 ? aspect->icon() : QIcon();
 	case Qt::ForegroundRole: {

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A widget showing the preview of all worksheets in the project
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -142,18 +142,14 @@ void WorksheetPreviewWidget::aspectAdded(const AbstractAspect* aspect) {
 	if (m_project->isLoading())
 		return;
 
-	const auto* w = dynamic_cast<const Worksheet*>(aspect);
-	if (w) {
-		addPreview(w, indexOfWorksheet(w));
-		return;
-	}
-
-	// in case a folder was added (copy&paste, duplicate, project import), check whether it has worksheets
-	// and add previews for them
-	const auto* folder = dynamic_cast<const Folder*>(aspect);
-	if (folder) {
+	const auto* worksheet = dynamic_cast<const Worksheet*>(aspect);
+	if (worksheet)
+		addPreview(worksheet, indexOfWorksheet(worksheet));
+	else {
+		// in case a folder was added (copy&paste, duplicate, project import), or another aspect that can have worksheet as a children (e.g. SeasonalDecomposition),
+		// check whether the added aspect has worksheet children add previews for them
 		QTimer::singleShot(0, this, [=]() {
-			const auto& worksheets = folder->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			const auto& worksheets = aspect->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (const auto* w : worksheets)
 				addPreview(w, indexOfWorksheet(w));
 		});
@@ -241,7 +237,13 @@ void WorksheetPreviewWidget::updatePreview(const Worksheet* w) {
 
 	PERFTRACE(QStringLiteral("WorksheetPreviewWidget::updatePreview ") + w->name());
 	QPixmap pix(10, 10);
-	w->exportView(pix);
+	const bool rc = w->exportView(pix);
+	if (!rc) {
+		// the view is not available yet, show the placeholder preview
+		const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
+		pix = icon.pixmap(m_iconSize, m_iconSize);
+	}
+
 	ui.lwPreview->item(indexOfWorksheet(w))->setIcon(QIcon(pix));
 }
 

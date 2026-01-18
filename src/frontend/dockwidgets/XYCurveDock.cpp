@@ -81,13 +81,13 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
-		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
-		if (!layout)
+		auto* tabLayout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		if (!tabLayout)
 			continue;
 
-		layout->setContentsMargins(2, 2, 2, 2);
-		layout->setHorizontalSpacing(2);
-		layout->setVerticalSpacing(2);
+		tabLayout->setContentsMargins(2, 2, 2, 2);
+		tabLayout->setHorizontalSpacing(2);
+		tabLayout->setVerticalSpacing(2);
 	}
 
 	updateLocale();
@@ -322,7 +322,7 @@ void XYCurveDock::setModel() {
 				AspectType::XYFourierTransformCurve,
 				AspectType::XYConvolutionCurve,
 				AspectType::XYCorrelationCurve,
-				AspectType::XYDataReductionCurve,
+				AspectType::XYLineSimplificationCurve,
 				AspectType::XYEquationCurve,
 				AspectType::XYFunctionCurve};
 	else
@@ -406,7 +406,9 @@ void XYCurveDock::setSymbols(const QList<XYCurve*>& curves) {
 void XYCurveDock::initGeneralTab() {
 	// show the properties of the first curve
 	cbXColumn->setAspect(m_curve->xColumn(), m_curve->xColumnPath());
+	cbXColumn->setEnabled(!m_curve->isFixed()); // don't allow to modify for internal/fixed curves
 	cbYColumn->setAspect(m_curve->yColumn(), m_curve->yColumnPath());
+	cbYColumn->setEnabled(!m_curve->isFixed());
 	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
@@ -486,7 +488,6 @@ void XYCurveDock::retranslateUi() {
 	ui.cbLineType->addItem(i18n("Cubic Spline (Periodic)"));
 	ui.cbLineType->addItem(i18n("Akima-spline (Natural)"));
 	ui.cbLineType->addItem(i18n("Akima-spline (Periodic)"));
-
 
 	// formats for numeric values
 	ui.cbValuesNumericFormat->clear();
@@ -639,12 +640,6 @@ void XYCurveDock::valuesColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		curve->setValuesColumn(column);
 }
-
-/*!
-  shows the formatting properties of the column \c column.
-  Called, when a new column for the values was selected - either by changing the type of the values (none, x, y, etc.) or
-  by selecting a new custom column for the values.
-*/
 
 /*!
   depending on the currently selected values column type (column mode) updates the widgets for the values column format,

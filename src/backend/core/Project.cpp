@@ -20,6 +20,7 @@
 #ifndef SDK
 #include "backend/statistics/HypothesisTest.h"
 #endif
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
@@ -79,7 +80,7 @@ namespace {
 // the project version will be compared with this.
 // if you make any incompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 16;
+int buildXmlVersion = 18;
 }
 
 /**
@@ -207,8 +208,10 @@ Project::Project()
 	setIsLoading(true);
 
 	const auto& group = Settings::group(QStringLiteral("Settings_General"));
-	setSaveDefaultDockWidgetState(group.readEntry(QStringLiteral("SaveDefaultDockWidgetState"), false));
-	setSaveCalculations(group.readEntry(QStringLiteral("SaveCalculations"), true));
+	setSaveDefaultDockWidgetState(group.readEntry(QStringLiteral("SaveDefaultDockWidgetState"), saveDefaultDockWidgetState()));
+	setSaveCalculations(group.readEntry(QStringLiteral("SaveCalculations"), saveCalculations()));
+	setFileCompression(group.readEntry("Compressed", !group.readEntry("CompatibleSave", !fileCompression()))); // CompatibleSave was the old name
+	setSaveData(group.readEntry("SaveData", saveData()));
 
 	setUndoAware(true);
 	setIsLoading(false);
@@ -510,6 +513,8 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
 	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
+	writer->writeAttribute(QStringLiteral("compressed"), QString::number(d->fileCompression));
+	writer->writeAttribute(QStringLiteral("saveData"), QString::number(d->saveData));
 
 	// save the state of the content dock widgets
 	writer->writeAttribute(QStringLiteral("dockWidgetState"), d->dockWidgetState);
@@ -1307,6 +1312,20 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	}
 #endif
 
+	// seasonal decompositions
+	QVector<SeasonalDecomposition*> decompositions;
+	if (hasChildren)
+		decompositions = aspect->children<SeasonalDecomposition>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::SeasonalDecomposition)
+		decompositions << static_cast<SeasonalDecomposition*>(aspect);
+
+	for (auto* decomposition : decompositions) {
+		if (!decomposition)
+			continue;
+		RESTORE_COLUMN_POINTER(decomposition, xColumn, XColumn);
+		RESTORE_COLUMN_POINTER(decomposition, yColumn, YColumn);
+	}
+
 	// if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 	for (auto* col : columns) {
 		for (Column* c : columns)
@@ -1317,8 +1336,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	if (hasChildren && Project::xmlVersion() < 9) {
 		const auto& plots = aspect->children<CartesianPlot>(ChildIndexFlag::Recursive);
 		for (const auto* plot : plots) {
-			const auto& axes = plot->children<Axis>(ChildIndexFlag::Recursive);
-			for (auto* axis : axes) {
+			const auto& childAxes = plot->children<Axis>(ChildIndexFlag::Recursive);
+			for (auto* axis : childAxes) {
 				const auto cSystem = plot->coordinateSystem(axis->coordinateSystemIndex());
 				RangeT::Scale scale{RangeT::Scale::Linear};
 				switch (axis->orientation()) {
@@ -1366,9 +1385,9 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 			d->defaultDockWidgetState = attribs.value(QStringLiteral("defaultDockWidgetState")).toString();
 	}
 
-	str = attribs.value(QStringLiteral("saveCalculations")).toString();
-	if (!str.isEmpty())
-		d->saveCalculations = str.toInt();
+	READ_INT_VALUE("compressed", fileCompression, bool);
+	READ_INT_VALUE("saveData", saveData, bool);
+	READ_INT_VALUE("saveCalculations", saveCalculations, bool);
 
 	return true;
 }

@@ -1048,6 +1048,10 @@ void XYCurvePrivate::recalc() {
 	const int rows = xColumn->rowCount();
 	m_logicalPoints.reserve(rows);
 
+	double yOffset = 0.0;
+	if (m_plot)
+		yOffset = m_plot->curveChildIndex(q) * m_plot->stackYOffset();
+
 	// take only valid and non masked points
 	for (int row = 0; row < rows; row++) {
 		// DEBUG("row = " << row << " valid x/y = " << xColumn->isValid(row) << " " << yColumn->isValid(row))
@@ -1075,7 +1079,7 @@ void XYCurvePrivate::recalc() {
 
 			switch (yColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				tempPoint.setY(yColumn->doubleAt(row));
+				tempPoint.setY(yColumn->doubleAt(row) + yOffset);
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 				tempPoint.setY(yColumn->integerAt(row));
@@ -1663,11 +1667,11 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 		if (!m_lines.isEmpty()) {
 			linePath.moveTo(m_lines.constFirst().p1());
 			QPointF prevP2;
-			for (const auto& line : std::as_const(m_lines)) {
-				if (prevP2 != line.p1())
-					linePath.moveTo(line.p1());
-				linePath.lineTo(line.p2());
-				prevP2 = line.p2();
+			for (const auto& l : std::as_const(m_lines)) {
+				if (prevP2 != l.p1())
+					linePath.moveTo(l.p1());
+				linePath.lineTo(l.p2());
+				prevP2 = l.p2();
 			}
 		}
 	}
@@ -1749,9 +1753,9 @@ void XYCurvePrivate::updateDropLines() {
 	q->cSystem->mapLogicalToSceneDefaultMapping(dlines);
 
 	// new painter path for the drop lines
-	for (const auto& line : std::as_const(dlines)) {
-		dropLinePath.moveTo(line.p1());
-		dropLinePath.lineTo(line.p2());
+	for (const auto& dline : std::as_const(dlines)) {
+		dropLinePath.moveTo(dline.p1());
+		dropLinePath.lineTo(dline.p2());
 	}
 
 	recalcShapeAndBoundingRect();
@@ -1853,7 +1857,7 @@ void XYCurvePrivate::updateValues() {
 	calculateScenePoints();
 
 	// determine the value string for all points that are currently visible in the plot
-	int i{0};
+	int i = 0;
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 	const auto numberLocale = QLocale();
 	switch (valuesType) {
@@ -1939,17 +1943,16 @@ void XYCurvePrivate::updateValues() {
 		auto vColMode{valuesColumn->columnMode()};
 
 		// need to check x range
-		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 		auto xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
 
 		size_t index = 0; // index of valid points (logicalPoints)
-		for (int i = 0; i < endRow; ++i) {
+		for (int row = 0; row < endRow; ++row) {
 			// ignore value labels for invalid data points
 			// otherwise the assignment to the data points get lost
-			if (!xColumn->isValid(i) || xColumn->isMasked(i) || !yColumn->isValid(i) || yColumn->isMasked(i) || !m_pointVisible.at(index++))
+			if (!xColumn->isValid(row) || xColumn->isMasked(row) || !yColumn->isValid(row) || yColumn->isMasked(row) || !m_pointVisible.at(index++))
 				continue;
 
-			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i)) {
+			if (!valuesColumn->isValid(row) || valuesColumn->isMasked(row)) {
 				m_valueStrings << QString();
 				continue;
 			}
@@ -1959,14 +1962,14 @@ void XYCurvePrivate::updateValues() {
 			case AbstractColumn::ColumnMode::Double:
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				if (!xRange.contains(xColumn->valueAt(i)))
+				if (!xRange.contains(xColumn->valueAt(row)))
 					continue;
 				break;
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
-				if (xColumn->dateTimeAt(i) < QDateTime::fromMSecsSinceEpoch(xRange.start(), QTimeZone::UTC)
-					|| xColumn->dateTimeAt(i) > QDateTime::fromMSecsSinceEpoch(xRange.end(), QTimeZone::UTC))
+				if (xColumn->dateTimeAt(row) < QDateTime::fromMSecsSinceEpoch(xRange.start(), QTimeZone::UTC)
+					|| xColumn->dateTimeAt(row) > QDateTime::fromMSecsSinceEpoch(xRange.end(), QTimeZone::UTC))
 					continue;
 				break;
 			case AbstractColumn::ColumnMode::Text:
@@ -1975,19 +1978,19 @@ void XYCurvePrivate::updateValues() {
 
 			switch (vColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				m_valueStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale, valuesNumericFormat, valuesPrecision) + valuesSuffix;
+				m_valueStrings << valuesPrefix + numberToString(valuesColumn->valueAt(row), numberLocale, valuesNumericFormat, valuesPrecision) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				m_valueStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale) + valuesSuffix;
+				m_valueStrings << valuesPrefix + numberToString(valuesColumn->valueAt(row), numberLocale) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
-				m_valueStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
+				m_valueStrings << valuesPrefix + valuesColumn->textAt(row) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
-				m_valueStrings << valuesPrefix + valuesColumn->dateTimeAt(i).toString(valuesDateTimeFormat) + valuesSuffix;
+				m_valueStrings << valuesPrefix + valuesColumn->dateTimeAt(row).toString(valuesDateTimeFormat) + valuesSuffix;
 				break;
 			}
 		}
@@ -2259,9 +2262,9 @@ void XYCurvePrivate::updateFilling() {
 
 	QPointF p1, p2;
 	for (int i = 0; i < fillLines.size(); ++i) {
-		const QLineF& line = fillLines.at(i);
-		p1 = line.p1();
-		p2 = line.p2();
+		const QLineF& fillLine = fillLines.at(i);
+		p1 = fillLine.p1();
+		p2 = fillLine.p2();
 		if (i != 0 && p1 != fillLines.at(i - 1).p2()) {
 			// the first point of the current line is not equal to the last point of the previous line
 			//->check whether we have a break in between.
@@ -2423,14 +2426,11 @@ bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<do
 					  r,
 					  includeErrorBars);
 	case Dimension::Y:
-		return minMax(yColumn(),
-					  xColumn(),
-					  d->errorBar->yErrorType(),
-					  d->errorBar->yPlusColumn(),
-					  d->errorBar->yMinusColumn(),
-					  indexRange,
-					  r,
-					  includeErrorBars);
+		bool rc =
+			minMax(yColumn(), xColumn(), d->errorBar->yErrorType(), d->errorBar->yPlusColumn(), d->errorBar->yMinusColumn(), indexRange, r, includeErrorBars);
+		if (auto* p = plot())
+			r.setEnd(r.end() + p->curveChildIndex(this) * p->stackYOffset());
+		return rc;
 	}
 	return false;
 }
@@ -2597,8 +2597,8 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 				curvePosScene = m_scenePoints.at(row);
 			}
 		} else {
-			for (const auto& line : m_lines) {
-				if (pointLiesNearLine(line.p1(), line.p2(), mouseScenePos, maxDist))
+			for (const auto& l : m_lines) {
+				if (pointLiesNearLine(l.p1(), l.p2(), mouseScenePos, maxDist))
 					return true;
 			}
 		}
@@ -2638,8 +2638,8 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 				if (m_lines.at(index).p1().x() > xMax)
 					stop = true; // one more time if bigger
 
-				const auto& line = m_lines.at(index);
-				if (pointLiesNearLine(line.p1(), line.p2(), mouseScenePos, maxDist))
+				const auto& l = m_lines.at(index);
+				if (pointLiesNearLine(l.p1(), l.p2(), mouseScenePos, maxDist))
 					return true;
 			}
 
@@ -2747,9 +2747,9 @@ bool XYCurvePrivate::pointLiesNearCurve(const QPointF mouseScenePos,
 		} else if (q->lineType() == XYCurve::LineType::SplineAkimaNatural || q->lineType() == XYCurve::LineType::SplineCubicNatural
 				   || q->lineType() == XYCurve::LineType::SplineAkimaPeriodic || q->lineType() == XYCurve::LineType::SplineCubicPeriodic) {
 			for (int i = 0; i < q->lineInterpolationPointsCount() + 1; i++) {
-				QLineF line = m_lines.at(index * (q->lineInterpolationPointsCount() + 1) + i);
-				QPointF p1{line.p1()}; // cSystem->mapLogicalToScene(line.p1());
-				QPointF p2{line.p2()}; // cSystem->mapLogicalToScene(line.p2());
+				QLineF l = m_lines.at(index * (q->lineInterpolationPointsCount() + 1) + i);
+				QPointF p1{l.p1()}; // cSystem->mapLogicalToScene(line.p1());
+				QPointF p2{l.p2()}; // cSystem->mapLogicalToScene(line.p2());
 				if (pointLiesNearLine(p1, p2, mouseScenePos, maxDist))
 					return true;
 			}
@@ -2843,8 +2843,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 			// When exporting to svg or pdf, this creates for every line
 			// it's own path in the saved file which is not desired. We
 			// would like to have one complete path for a curve not many paths
-			for (auto& line : m_lines)
-				painter->drawLine(line);
+			for (auto& l : m_lines)
+				painter->drawLine(l);
 		} else
 			painter->drawPath(linePath);
 	}
@@ -3184,15 +3184,15 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	Q_D(XYCurve);
 	const auto* plot = d->m_plot;
 	const int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const QColor color = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
-	d->line->loadThemeConfig(group, themeColor);
-	d->dropLine->loadThemeConfig(group, themeColor);
-	d->symbol->loadThemeConfig(group, themeColor);
+	d->line->loadThemeConfig(group, color);
+	d->dropLine->loadThemeConfig(group, color);
+	d->symbol->loadThemeConfig(group, color);
 	d->background->loadThemeConfig(group);
-	d->errorBar->loadThemeConfig(group, themeColor);
+	d->errorBar->loadThemeConfig(group, color);
 
 	// line
 	// Check if the plot's theme is "Sparkline"
@@ -3207,7 +3207,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	}
 	// Values
 	this->setValuesOpacity(group.readEntry(QStringLiteral("ValuesOpacity"), 1.0));
-	this->setValuesColor(group.readEntry(QStringLiteral("ValuesColor"), themeColor));
+	this->setValuesColor(group.readEntry(QStringLiteral("ValuesColor"), color));
 
 	// margins, activate for XYCurve only, not for analysis curves
 	if (type() == AspectType::XYCurve && plot->theme() == QLatin1String("Tufte")) {

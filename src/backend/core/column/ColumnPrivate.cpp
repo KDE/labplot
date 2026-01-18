@@ -2275,7 +2275,7 @@ void ColumnPrivate::setFormula(const QString& formula, const QVector<Column::For
 
 	for (const auto& data : m_formulaData) {
 		const auto* column = data.column();
-		assert(column);
+		Q_ASSERT(column);
 		if (autoUpdate)
 			connectFormulaColumn(column);
 	}
@@ -2364,10 +2364,10 @@ void ColumnPrivate::setFormulVariableColumn(Column* c) {
 }
 
 struct PayloadColumn : public Parsing::Payload {
-	PayloadColumn(const QVector<Column::FormulaData>& data, const QVector<double>& y)
+	PayloadColumn(const QVector<Column::FormulaData>& data, const QVector<double>& yValues)
 		: Parsing::Payload(true)
 		, formulaData(data)
-		, y(y) {
+		, y(yValues) {
 	}
 	const QVector<Column::FormulaData>& formulaData;
 	const QVector<double>& y; // current values
@@ -2377,7 +2377,7 @@ struct PayloadColumn : public Parsing::Payload {
 	double column##function_name(const std::string_view& variable, const std::weak_ptr<Parsing::Payload> payload) {                                            \
 		const auto p = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());                                                                               \
 		if (!p) {                                                                                                                                              \
-			assert(p); /* Debug build */                                                                                                                       \
+			Q_ASSERT(p);                                                                                                                                       \
 			return NAN;                                                                                                                                        \
 		}                                                                                                                                                      \
 		for (const auto& formulaData : p->formulaData) {                                                                                                       \
@@ -2389,6 +2389,7 @@ struct PayloadColumn : public Parsing::Payload {
 
 // Constant functions, which always return the same value independent of the row index
 COLUMN_FUNCTION(Size, statistics().size)
+COLUMN_FUNCTION(Sum, statistics().sum)
 COLUMN_FUNCTION(Min, minimum())
 COLUMN_FUNCTION(Max, maximum())
 COLUMN_FUNCTION(Mean, statistics().arithmeticMean)
@@ -2419,7 +2420,7 @@ COLUMN_FUNCTION(Entropy, statistics().entropy)
 double cell_curr_column(double row, const std::weak_ptr<Parsing::Payload> payload) {
 	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
 	if (!pd) {
-		assert(pd); // Debug build
+		Q_ASSERT(pd);
 		return NAN;
 	}
 	int index = (int)row - 1;
@@ -2431,7 +2432,7 @@ double cell_curr_column(double row, const std::weak_ptr<Parsing::Payload> payloa
 double cell_curr_column_defaultvalue(double row, double defaultValue, const std::weak_ptr<Parsing::Payload> payload) {
 	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
 	if (!pd) {
-		assert(pd); // Debug build
+		Q_ASSERT(pd);
 		return NAN;
 	}
 	int index = (int)row - 1;
@@ -2443,7 +2444,7 @@ double cell_curr_column_defaultvalue(double row, double defaultValue, const std:
 double columnQuantile(double p, const std::string_view& variable, const std::weak_ptr<Parsing::Payload> payload) {
 	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
 	if (!pd) {
-		assert(pd); // Debug build
+		Q_ASSERT(pd);
 		return NAN;
 	}
 
@@ -2562,6 +2563,7 @@ void ColumnPrivate::updateFormula() {
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
 		parser->setSpecialFunctionVariablePayload(Parsing::colfun_size, columnSize, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_sum, columnSum, payload);
 		parser->setSpecialFunctionVariablePayload(Parsing::colfun_min, columnMin, payload);
 		parser->setSpecialFunctionVariablePayload(Parsing::colfun_max, columnMax, payload);
 		parser->setSpecialFunctionVariablePayload(Parsing::colfun_mean, columnMean, payload);
@@ -2594,8 +2596,8 @@ void ColumnPrivate::updateFormula() {
 		parser->setSpecialFunction2ValuePayload(Parsing::cell_curr_column_default, cell_curr_column_defaultvalue, payload);
 
 		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << m_formula << ", var names: " << formulaVariableNames)
-		bool valid = parser->tryEvaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);
-		if (!valid)
+		bool validEval = parser->tryEvaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);
+		if (!validEval)
 			DEBUG(Q_FUNC_INFO << ", Failed parsing formula!")
 		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")
 		replaceValues(-1, new_data);
@@ -3363,6 +3365,7 @@ void ColumnPrivate::calculateStatistics() {
 		rowData.squeeze();
 
 	statistics.size = notNanCount;
+	statistics.sum = columnSum;
 	statistics.arithmeticMean = columnSum / notNanCount;
 
 	// geometric mean
@@ -3428,6 +3431,7 @@ void ColumnPrivate::calculateStatistics() {
 	statistics.variance = 0.;
 	statistics.meanDeviation = 0.;
 	statistics.meanDeviationAroundMedian = 0.;
+	statistics.averageTwoPeriodMovingRange = 0.;
 	double centralMoment_r3 = 0.;
 	double centralMoment_r4 = 0.;
 	QVector<double> absoluteMedianList;
@@ -3444,6 +3448,9 @@ void ColumnPrivate::calculateStatistics() {
 
 		centralMoment_r3 += gsl_pow_3(val - statistics.arithmeticMean);
 		centralMoment_r4 += gsl_pow_4(val - statistics.arithmeticMean);
+
+		if (row != 0)
+			statistics.averageTwoPeriodMovingRange += std::abs(val - rowData.value(row - 1));
 	}
 
 	double centralMoment_r2 = statistics.variance / notNanCount;
@@ -3452,6 +3459,7 @@ void ColumnPrivate::calculateStatistics() {
 	statistics.variance = (notNanCount != 1) ? statistics.variance / (notNanCount - 1) : NAN;
 	statistics.meanDeviationAroundMedian = statistics.meanDeviationAroundMedian / notNanCount;
 	statistics.meanDeviation = statistics.meanDeviation / notNanCount;
+	statistics.averageTwoPeriodMovingRange = statistics.averageTwoPeriodMovingRange / (notNanCount - 1);
 
 	// standard deviation
 	statistics.standardDeviation = std::sqrt(statistics.variance);

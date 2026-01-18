@@ -34,6 +34,7 @@ public:
 	~Spreadsheet() override;
 
 	QIcon icon() const override;
+	QString caption() const override;
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
 	void fillColumnsContextMenu(QMenu*);
@@ -66,6 +67,7 @@ public:
 
 	QString text(int row, int col) const;
 
+	BASIC_D_ACCESSOR_DECL(bool, readOnly, ReadOnly)
 	BASIC_D_ACCESSOR_DECL(bool, showComments, ShowComments)
 	BASIC_D_ACCESSOR_DECL(bool, showSparklines, ShowSparklines)
 	BASIC_D_ACCESSOR_DECL(bool, linking, Linking)
@@ -128,6 +130,7 @@ public Q_SLOTS:
 	void clear();
 	void clear(const QVector<Column*>&);
 	void clearMasks();
+	void transpose();
 
 	void moveColumn(int from, int to);
 	void sortColumns(Column* leading, const QVector<Column*>&, bool ascending);

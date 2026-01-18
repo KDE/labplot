@@ -19,6 +19,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/ActionsManager.h"
 #include "frontend/MainWin.h"
+#include "frontend/colormaps/ColorMapsDialog.h"
 #include "frontend/datapicker/DatapickerView.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/matrix/MatrixView.h"
@@ -66,7 +67,14 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <DockWidget.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #include <DockManager.h>
 
 /*!
@@ -343,11 +351,11 @@ void ActionsManager::initActions() {
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Color Maps Browser"), this);
 	action->setToolTip(i18n("Open dialog to browse through the available color maps."));
 	collection->addAction(QStringLiteral("color_maps"), action);
-	// connect(action, &QAction::triggered, this, [=]() {
-	// 	auto* dlg = new ColorMapsDialog(this);
-	// 	dlg->exec();
-	// 	delete dlg;
-	// });
+	connect(action, &QAction::triggered, this, [=]() {
+		auto* dlg = new ColorMapsDialog(m_mainWindow);
+	 	dlg->exec();
+	 	delete dlg;
+	});
 
 #ifdef HAVE_FITS
 	action = new QAction(QIcon::fromTheme(QStringLiteral("editor")), i18n("FITS Metadata Editor..."), this);
@@ -925,11 +933,11 @@ void ActionsManager::initMenus() {
 
 	if (!backendNames.isEmpty()) {
 		// sub-menu shown in the main menu bar
-		auto* menu = dynamic_cast<QMenu*>(factory->container(QStringLiteral("new_notebook"), m_mainWindow));
-		if (menu) {
-			menu->setIcon(QIcon::fromTheme(QStringLiteral("cantor")));
+		auto* nbmenu = dynamic_cast<QMenu*>(factory->container(QStringLiteral("new_notebook"), m_mainWindow));
+		if (nbmenu) {
+			nbmenu->setIcon(QIcon::fromTheme(QStringLiteral("cantor")));
 			m_newMenu->addSeparator();
-			m_newMenu->addMenu(menu);
+			m_newMenu->addMenu(nbmenu);
 			updateNotebookActions();
 		}
 	}

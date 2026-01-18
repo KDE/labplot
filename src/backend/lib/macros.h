@@ -21,8 +21,8 @@
 #include "Debug.h"
 
 struct Lock {
-	inline explicit Lock(bool& variable, bool firstValue = true)
-		: variable(variable) {
+	inline explicit Lock(bool& var, bool firstValue = true)
+		: variable(var) {
 		// Make sure it is not already locked
 		// somewhere else
 		assert(!variable);
@@ -840,12 +840,12 @@ private:
 
 #define RESTORE_POINTER(obj, name, Name, Type, list)                                                                                                           \
 	if (!obj->name##Path().isEmpty()) {                                                                                                                        \
-		for (auto* aspect : list) {                                                                                                                            \
-			if (aspect->path() == obj->name##Path()) {                                                                                                         \
-				auto a = dynamic_cast<Type*>(aspect);                                                                                                          \
-				if (!a)                                                                                                                                        \
+		for (auto* asp : list) {                                                                                                                               \
+			if (asp->path() == obj->name##Path()) {                                                                                                            \
+				auto t = dynamic_cast<Type*>(asp);                                                                                                             \
+				if (!t)                                                                                                                                        \
 					continue;                                                                                                                                  \
-				obj->set##Name(a);                                                                                                                             \
+				obj->set##Name(t);                                                                                                                             \
 				break;                                                                                                                                         \
 			}                                                                                                                                                  \
 		}                                                                                                                                                      \
