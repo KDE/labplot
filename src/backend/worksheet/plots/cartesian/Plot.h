@@ -64,9 +64,36 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)
 	using Dimension = CartesianCoordinateSystem::Dimension;
-	virtual bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const = 0;
+	/*!
+	 * \brief minMax
+	 * \param dim
+	 * \param indexRange
+	 * \param rOut
+	 * \param includeErrorBars
+	 * \return The minimum and maximum in the range \p rOut between the indices \p indexRange for dimension \p dim
+	 */
+	virtual bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& rOut, bool includeErrorBars = true) const = 0;
+	/*!
+	 * \brief minimum
+	 * \param dim
+	 * \return Returns the absolute minimum value for the dimension \p dim
+	 */
 	virtual double minimum(Dimension dim) const = 0;
+	/*!
+	 * \brief maximum
+	 * \param dim
+	 * \return Returns the absolute maximum value for the dimension \p dim
+	 */
 	virtual double maximum(Dimension dim) const = 0;
+	/*!
+	 * \brief indicesMinMax
+	 * \param dim
+	 * \param v1 Start value
+	 * \param v2 End value
+	 * \param start Found start index
+	 * \param end Found end index
+	 * \return true if the indices can be found otherwise false. Return false, for example if a required column is not available, ...
+	 */
 	virtual bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const = 0;
 
 	/*!

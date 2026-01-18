@@ -258,18 +258,13 @@ void HeatmapDock::selectColorMap() {
 	auto* dlg = new ColorMapsDialog(this);
 	if (dlg->exec() == QDialog::Accepted) {
 		const auto& name = dlg->name();
-		ui.lColorMapPreview->setPixmap(dlg->previewPixmap());
-		const auto& colors = dlg->colors(); // fetch the colors _after_ the preview pixmap was fetched to get the proper colors from the color manager
+		ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
 		ui.lColorMapPreview->setFocus();
-
-		QPixmap pixmap;
-		ColorMapsManager::instance()->render(pixmap, name);
-		ui.lColorMapPreview->setPixmap(pixmap);
 
 		for (auto* plot : m_plots) {
 			auto f = plot->format();
 			f.name = name;
-			f.colors = colors;
+			f.colors = ColorMapsManager::instance()->colors(name);
 			plot->setFormat(f);
 		}
 	}

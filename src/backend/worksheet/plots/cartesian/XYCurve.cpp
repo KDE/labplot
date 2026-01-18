@@ -447,14 +447,18 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 	return d->sourceDataChangedSinceLastRecalc;
 }
 
-double XYCurve::minimum(const Dimension) const {
-	// TODO
-	return NAN;
+double XYCurve::minimum(const Dimension dim) const {
+	auto* c = column(dim);
+	if (!c)
+		return NAN;
+	return c->minimum();
 }
 
 double XYCurve::maximum(const Dimension) const {
-	// TODO
-	return NAN;
+	auto* c = column(dim);
+	if (!c)
+		return NAN;
+	return c->maximum();
 }
 
 bool XYCurve::hasData() const {
@@ -2448,6 +2452,7 @@ bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<do
  * \p min
  * \p max
  * \p includeErrorBars If true respect the error bars in the min/max calculation
+ * return true if the indices can be found otherwise false. Return false, for example if a required column is not available, ...
  */
 bool XYCurve::minMax(const AbstractColumn* column1,
 					 const AbstractColumn* column2,
