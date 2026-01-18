@@ -304,8 +304,8 @@ void AxisDock::retranslateUi() {
 	ui.cbLabelsPosition->addItem(i18n("Bottom"));
 
 	ui.cbLabelsTextType->clear();
-	ui.cbLabelsTextType->addItem(i18n("Position values"), (int)Axis::LabelsTextType::PositionValues);
-	ui.cbLabelsTextType->addItem(i18n("Custom column"), (int)Axis::LabelsTextType::CustomValues);
+	ui.cbLabelsTextType->addItem(i18n("Position Values"), (int)Axis::LabelsTextType::PositionValues);
+	ui.cbLabelsTextType->addItem(i18n("Custom Column Values"), (int)Axis::LabelsTextType::CustomValues);
 
 	// see Axis::labelsFormatToIndex() and Axis::indexToLabelsFormat()
 	ui.cbLabelsFormat->clear();
