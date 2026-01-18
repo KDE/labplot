@@ -454,7 +454,7 @@ double XYCurve::minimum(const Dimension dim) const {
 	return c->minimum();
 }
 
-double XYCurve::maximum(const Dimension) const {
+double XYCurve::maximum(const Dimension dim) const {
 	auto* c = column(dim);
 	if (!c)
 		return NAN;
