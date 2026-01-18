@@ -58,7 +58,7 @@ int Parser::parseErrors() const {
 	return mParseErrors;
 }
 
-std::string Parser::lastErrorMessage() const {
+const std::string& Parser::lastErrorMessage() const {
 	return mLastErrorMessage;
 }
 

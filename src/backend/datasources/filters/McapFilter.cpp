@@ -765,13 +765,6 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 	DEBUG(Q_FUNC_INFO << fileName.toStdString());
 	auto outputFilename = fileName.toStdString();
 
-	static const char* SCHEMA_NAME = "labplot.Spreadsheet";
-	static const char* SCHEMA_TEXT = R"({
-	"title": "Spreadsheet", 
-	"description": "An object exported from Labplot", 
-	"type": "object"
-	})"; // Todo: Create proper schema.
-
 	mcap::McapWriter writer;
 	{
 		const auto res = writer.open(outputFilename, opts);
@@ -786,6 +779,13 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 	// A schema can be used by multiple channels, and a channel can be used by multiple messages.
 	mcap::ChannelId channelId;
 	{
+		static const char* SCHEMA_NAME = "labplot.Spreadsheet";
+		static const char* SCHEMA_TEXT = R"({
+		"title": "Spreadsheet", 
+		"description": "An object exported from Labplot", 
+		"type": "object"
+		})"; // Todo: Create proper schema.
+
 		mcap::Schema schema(SCHEMA_NAME, "jsonschema", SCHEMA_TEXT);
 		writer.addSchema(schema);
 

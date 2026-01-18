@@ -2356,7 +2356,7 @@ void WorksheetView::suppressSelectionChangedEvent(bool value) {
 WorksheetElement* WorksheetView::selectedElement() const {
 	return m_selectedElement;
 }
-QList<QGraphicsItem*> WorksheetView::selectedItems() const {
+const QList<QGraphicsItem*>& WorksheetView::selectedItems() const {
 	return m_selectedItems;
 }
 
