@@ -938,7 +938,7 @@ void Axis::setLabelsFormatAuto(bool automatic) {
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsAutoPrecision, bool, labelsAutoPrecision, retransformTickLabelStrings)
 void Axis::setLabelsAutoPrecision(bool labelsAutoPrecision) {
-		Q_D(Axis);
+	Q_D(Axis);
 	if (labelsAutoPrecision != d->labelsAutoPrecision)
 		exec(new AxisSetLabelsAutoPrecisionCmd(d, labelsAutoPrecision, ki18n("%1: set labels precision")));
 }

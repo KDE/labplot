@@ -48,7 +48,8 @@ public:
 		Spacing = 1,
 		CustomColumn = 2,
 		/* 3 skipped because of an old and obsolete value */
-		CustomColumnLabels = 4};
+		CustomColumnLabels = 4
+	};
 	Q_ENUM(TicksType)
 
 	enum class ArrowType { NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig };
