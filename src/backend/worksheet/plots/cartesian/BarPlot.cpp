@@ -175,6 +175,19 @@ ErrorBar* BarPlot::errorBarAt(int index) const {
 		return nullptr;
 }
 
+bool BarPlot::indicesMinMax(const Dimension dim, double, double, int& start, int& end) const {
+	// The values are not important, because they are just passed to minMax() which does not consider the indices
+	start = 0;
+	end = 0;
+	return true;
+}
+
+bool BarPlot::minMax(const Dimension dim, const Range<int>&, Range<double>& r, bool) const {
+	r.setStart(minimum(dim));
+	r.setEnd(maximum(dim));
+	return true;
+}
+
 double BarPlot::minimum(const Dimension dim) const {
 	Q_D(const BarPlot);
 	switch (dim) {
@@ -200,6 +213,13 @@ double BarPlot::maximum(const Dimension dim) const {
 bool BarPlot::hasData() const {
 	Q_D(const BarPlot);
 	return !d->dataColumns.isEmpty();
+}
+
+int BarPlot::dataCount(Dimension) const {
+	Q_D(const BarPlot);
+	if (!hasData())
+		return -1;
+	return d->dataColumns.count();
 }
 
 bool BarPlot::usingColumn(const AbstractColumn* column, bool) const {

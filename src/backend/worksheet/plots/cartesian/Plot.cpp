@@ -17,11 +17,70 @@
 #include <QMenu>
 #include <QPainter>
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// documentation of pure virtual functions
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * \fn bool Plot::hasData()
  * \brief returns \c true if a valid data column is set, returns \c false otherwise.
  * Used in CartesianPlot to determine whether the curve needs to be taken into account
  * when calculating the data ranges of the plot area.
+ */
+
+/*!
+ * \fn int dataCount(Dimension dim) const
+ * \brief dataCount
+ * Number of elements in a specific direction
+ * \param dim
+ * \return Number of data or -1 if the plot is invalid (so it will not be considered for autoscale)
+ */
+
+/*!
+ * \fn bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& rOut, bool includeErrorBars = true) const
+ * \brief minMax
+ * \param dim
+ * \param indexRange
+ * \param rOut
+ * \param includeErrorBars
+ * \return The minimum and maximum in the range \p rOut between the indices \p indexRange for dimension \p dim
+ */
+
+/*!
+ * \fn double minimum(Dimension dim) const
+ * \brief minimum
+ * \param dim
+ * \return Returns the absolute minimum value for the dimension \p dim
+ */
+
+/*!
+ * \fn double maximum(Dimension dim) const
+ * \brief maximum
+ * \param dim
+ * \return Returns the absolute maximum value for the dimension \p dim
+ */
+
+/*!
+ * \fn bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const
+ * \brief indicesMinMax
+ * \param dim
+ * \param v1 Start value
+ * \param v2 End value
+ * \param start Found start index
+ * \param end Found end index
+ * \return true if the indices can be found otherwise false. Return false, for example if a required column is not available, ...
+ */
+
+/*!
+ * \fn bool usingColumn(const AbstractColumn*, bool indirect = true) const
+ * returns \c true if the column is used internally in the plot for the visualisation, returns \c false otherwise.
+ * If \p indirect is true it returns true also if a depending curve uses that column
+ */
+
+/*!
+ * \fn void recalc()
+ * recalculates the internal structures (additional data containers, drawing primitives, etc.) on data changes in the source data columns.
+ * these structures are used in the plot during the actual drawing of the plot on geometry changes.
  */
 
 Plot::Plot(const QString& name, PlotPrivate* dd, AspectType type)
@@ -30,11 +89,6 @@ Plot::Plot(const QString& name, PlotPrivate* dd, AspectType type)
 }
 
 Plot::~Plot() = default;
-
-// TODO: make this function pure abstract and implement it for all plot types
-bool Plot::minMax(const CartesianCoordinateSystem::Dimension, const Range<int>&, Range<double>&, bool) const {
-	return false;
-}
 
 /*!
  * \brief Plot::activatePlot
