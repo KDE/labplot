@@ -1704,7 +1704,9 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 			case CartesianPlot::MouseMode::ZoomYSelection:
 				action->setEnabled(singleYRange);
 				break;
-			default:
+			case CartesianPlot::MouseMode::Selection:
+			case CartesianPlot::MouseMode::Cursor:
+			case CartesianPlot::MouseMode::Crosshair:
 				break;
 			}
 		}
@@ -1734,7 +1736,9 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 			case CartesianPlot::MouseMode::ZoomXSelection:
 				action->setEnabled(singleXRange);
 				break;
-			default:
+			case CartesianPlot::MouseMode::Selection:
+			case CartesianPlot::MouseMode::Cursor:
+			case CartesianPlot::MouseMode::Crosshair:
 				break;
 			}
 		}
