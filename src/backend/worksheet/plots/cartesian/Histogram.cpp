@@ -300,6 +300,19 @@ BASIC_SHARED_D_READER_IMPL(Histogram, double, rugLength, rugLength)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, rugWidth, rugWidth)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, rugOffset, rugOffset)
 
+bool Histogram::indicesMinMax(const Dimension dim, double, double, int& start, int& end) const {
+	// The values are not important, because they are just passed to minMax() which does not consider the indices
+	start = 0;
+	end = 0;
+	return true;
+}
+
+bool Histogram::minMax(const Dimension dim, const Range<int>&, Range<double>& r, bool) const {
+	r.setStart(minimum(dim));
+	r.setEnd(maximum(dim));
+	return true;
+}
+
 double Histogram::minimum(const Dimension dim) const {
 	Q_D(const Histogram);
 	switch (dim) {
@@ -325,6 +338,13 @@ double Histogram::maximum(const Dimension dim) const {
 bool Histogram::hasData() const {
 	Q_D(const Histogram);
 	return (d->dataColumn != nullptr);
+}
+
+int Histogram::dataCount(Dimension) const {
+	Q_D(const Histogram);
+	if (!d->dataColumn)
+		return -1;
+	return d->dataColumn->rowCount();
 }
 
 bool Histogram::usingColumn(const AbstractColumn* column, bool) const {

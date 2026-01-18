@@ -962,7 +962,7 @@ void AxisTest::columnLabelValues() {
 	}
 
 	{
-		yAxis->setMajorTicksType(Axis::TicksType::ColumnLabels);
+		yAxis->setMajorTicksType(Axis::TicksType::CustomColumnLabels);
 		yAxis->setMajorTicksColumn(yCol);
 
 		QStringList expectedStrings{
@@ -1025,7 +1025,7 @@ void AxisTest::columnLabelValuesMaxValues() {
 	// auto* xAxis = static_cast<Axis*>(axes.at(0));
 
 	{
-		yAxis->setMajorTicksType(Axis::TicksType::ColumnLabels);
+		yAxis->setMajorTicksType(Axis::TicksType::CustomColumnLabels);
 		yAxis->setMajorTicksColumn(yCol);
 
 		const auto v = yAxis->tickLabelStrings();
@@ -1091,7 +1091,7 @@ void AxisTest::columnLabelValuesMoreTicksThanLabels() {
 	auto* yAxis = static_cast<Axis*>(axes.at(1));
 
 	{
-		yAxis->setMajorTicksType(Axis::TicksType::ColumnLabels);
+		yAxis->setMajorTicksType(Axis::TicksType::CustomColumnLabels);
 		yAxis->setMajorTicksColumn(yCol);
 
 		QStringList expectedStrings{
