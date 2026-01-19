@@ -78,7 +78,7 @@ void AsciiFilterTest::initialization() {
 			auto p = filter.properties();
 
 			p.automaticSeparatorDetection = false;
-			p.columnNamesRaw = QStringLiteral();
+			p.columnNamesRaw = QStringLiteral("");
 			p.columnModesString = QStringLiteral("Int, Int");
 			p.headerEnabled = false;
 
