@@ -3147,9 +3147,9 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 				dim_other = Dimension::X;
 				break;
 			}
-			const int index = coordinateSystem(plot->coordinateSystemIndex())->index(dim_other);
-			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
-			if (!plot->indicesMinMax(dim_other, d->range(dim_other, index).start(), d->range(dim_other, index).end(), indexRange.start(), indexRange.end()))
+			const int csindex = coordinateSystem(plot->coordinateSystemIndex())->index(dim_other);
+			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, csindex).toStdString())
+			if (!plot->indicesMinMax(dim_other, d->range(dim_other, csindex).start(), d->range(dim_other, csindex).end(), indexRange.start(), indexRange.end()))
 				continue;
 		} else { // all data
 			const int count = plot->dataCount(dim);

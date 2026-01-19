@@ -199,7 +199,7 @@ bool QQPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<dou
 	return false;
 }
 
-bool QQPlot::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+bool QQPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
 	start = 0;
 	end = 99;
 	return true;

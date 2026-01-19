@@ -3507,6 +3507,7 @@ BU_: DBG DRIVER IO MOTOR SENSOR
 
 void createDBCFile(const QString& filename, const std::string& content) {
 	auto* file = std::fopen(filename.toStdString().c_str(), "w");
+	DEBUG("Trying to open file " << filename.toStdString())
 	QVERIFY(file);
 	std::fputs(PRIMITIVE_DBC.c_str(), file);
 	std::fputs(content.c_str(), file);

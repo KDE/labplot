@@ -175,7 +175,7 @@ ErrorBar* BarPlot::errorBarAt(int index) const {
 		return nullptr;
 }
 
-bool BarPlot::indicesMinMax(const Dimension dim, double, double, int& start, int& end) const {
+bool BarPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
 	// The values are not important, because they are just passed to minMax() which does not consider the indices
 	start = 0;
 	end = 0;
