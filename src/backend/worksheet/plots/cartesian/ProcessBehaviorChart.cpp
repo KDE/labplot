@@ -425,6 +425,12 @@ bool ProcessBehaviorChart::minMax(const Dimension dim, const Range<int>& indexRa
 	return false;
 }
 
+bool ProcessBehaviorChart::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+	start = 0;
+	end = xIndexCount() - 1;
+	return true;
+}
+
 double ProcessBehaviorChart::minimum(const Dimension dim) const {
 	Q_D(const ProcessBehaviorChart);
 	switch (dim) {
@@ -450,6 +456,13 @@ double ProcessBehaviorChart::maximum(const Dimension dim) const {
 bool ProcessBehaviorChart::hasData() const {
 	Q_D(const ProcessBehaviorChart);
 	return (d->dataColumn != nullptr);
+}
+
+int ProcessBehaviorChart::dataCount(Dimension) const {
+	Q_D(const ProcessBehaviorChart);
+	if (!d->dataColumn)
+		return -1;
+	return d->dataColumn->rowCount();
 }
 
 bool ProcessBehaviorChart::usingColumn(const AbstractColumn* column, bool) const {

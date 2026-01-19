@@ -1,3 +1,12 @@
+/*
+	File                 : Script.cpp
+	Project              : LabPlot
+	Description          : Script
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #include <QDir>
 #include <QFileDialog>
 #include <QIcon>
@@ -74,7 +83,7 @@ bool Script::printPreview() const {
 }
 
 bool Script::exportView() const {
-	KConfigGroup conf = Settings::group(QStringLiteral("ExportScript"));
+	auto conf = Settings::group(QStringLiteral("ExportScript"));
 	QString dir = conf.readEntry("LastDir", "");
 	QString extensions = i18n("Python file (*.py)");
 
@@ -178,7 +187,7 @@ void Script::runScript() {
 	if (!m_initialized)
 		return;
 
-	ScriptEditor* scriptView = static_cast<ScriptEditor*>(view());
+	auto* scriptView = static_cast<ScriptEditor*>(view());
 
 	m_kTextEditorDocument->clearMarks();
 	m_scriptRuntime->clearErrorLine();
@@ -325,7 +334,7 @@ QString Script::readRuntime(XmlStreamReader* reader) {
 		return {};
 	}
 
-	QXmlStreamAttributes attribs = reader->attributes();
+	auto attribs = reader->attributes();
 	QString str = attribs.value(QStringLiteral("runtime")).toString();
 
 	if (str.isEmpty()) {

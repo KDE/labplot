@@ -973,7 +973,7 @@ void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const Column* colu
 	if (column && column->valueLabelsInitialized()) {
 		auto* axis = plot->verticalAxis();
 		if (axis) {
-			axis->setMajorTicksType(Axis::TicksType::ColumnLabels);
+			axis->setMajorTicksType(Axis::TicksType::CustomColumnLabels);
 			axis->setMajorTicksColumn(column);
 		}
 	}

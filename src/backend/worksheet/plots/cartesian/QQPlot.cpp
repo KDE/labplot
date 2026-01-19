@@ -199,6 +199,12 @@ bool QQPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<dou
 	return false;
 }
 
+bool QQPlot::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+	start = 0;
+	end = 99;
+	return true;
+}
+
 double QQPlot::minimum(const Dimension dim) const {
 	Q_D(const QQPlot);
 	switch (dim) {
@@ -224,6 +230,13 @@ double QQPlot::maximum(const Dimension dim) const {
 bool QQPlot::hasData() const {
 	Q_D(const QQPlot);
 	return (d->dataColumn != nullptr);
+}
+
+int QQPlot::dataCount(Dimension) const {
+	Q_D(const QQPlot);
+	if (!d->dataColumn)
+		return -1;
+	return d->dataColumn->rowCount();
 }
 
 bool QQPlot::usingColumn(const AbstractColumn* column, bool) const {

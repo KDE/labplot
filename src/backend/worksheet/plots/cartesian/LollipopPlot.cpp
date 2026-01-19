@@ -185,6 +185,19 @@ QVector<QString>& LollipopPlot::dataColumnPaths() const {
 	return d->dataColumnPaths;
 }
 
+bool LollipopPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	// The values are not important, because they are just passed to minMax() which does not consider the indices
+	start = 0;
+	end = 0;
+	return true;
+}
+
+bool LollipopPlot::minMax(const Dimension dim, const Range<int>&, Range<double>& r, bool) const {
+	r.setStart(minimum(dim));
+	r.setEnd(maximum(dim));
+	return true;
+}
+
 double LollipopPlot::minimum(const Dimension dim) const {
 	Q_D(const LollipopPlot);
 	switch (dim) {
@@ -210,6 +223,13 @@ double LollipopPlot::maximum(const Dimension dim) const {
 bool LollipopPlot::hasData() const {
 	Q_D(const LollipopPlot);
 	return !d->dataColumns.isEmpty();
+}
+
+int LollipopPlot::dataCount(Dimension) const {
+	Q_D(const LollipopPlot);
+	if (!hasData())
+		return -1;
+	return d->dataColumns.count();
 }
 
 bool LollipopPlot::usingColumn(const AbstractColumn* column, bool) const {
