@@ -600,35 +600,40 @@ struct one_sample_t_test_result nsl_stats_one_sample_t(const double sample[], si
 }
 
 // Logistic Regression Function for Binary Classification
+// Caller owns returned pointer and must free()
+// TODO: return struct {b, W}
 double* nsl_stats_logistic_regression(double** x, const int* y, int N, int n_in, int iterations, double lr) {
-	int i, j, epoch;
-	double* result;
-	double* W = NULL;
-	double b = 0.0;
-	double y_pred, gradient;
+	if (N <= 0 || n_in <= 0 || x == NULL || y == NULL)
+		return NULL;
 
-	result = (double*)malloc(sizeof(double) * (n_in + 1));
+	double* W = (double*)malloc(sizeof(double) * n_in);
+	double* result = (double*)malloc(sizeof(double) * (n_in + 1));
+	if (!W || !result)
+		return NULL;
 
-	// TODO: W is uninitialized!
-	for (i = 0; i < n_in; i++)
+	for (int i = 0; i < n_in; i++)
 		W[i] = 0.0;
 
-	result[0] = b;
-
-	for (epoch = 0; epoch < iterations; epoch++) {
-		for (i = 0; i < N; i++) {
+	double b = 0.0;
+	double y_pred, error;
+	for (int epoch = 0; epoch < iterations; epoch++) {
+		for (int i = 0; i < N; i++) {
 			y_pred = b;
-			for (j = 0; j < n_in; j++)
+			for (int j = 0; j < n_in; j++)
 				y_pred += W[j] * x[i][j];
 			y_pred = 1.0 / (1.0 + exp(-y_pred));
 
-			gradient = y[i] - y_pred; // Error term
-			for (j = 0; j < n_in; j++)
-				W[j] += lr * gradient * x[i][j];
-			b += lr * gradient;
+			error = y[i] - y_pred;
+			for (int j = 0; j < n_in; j++)
+				W[j] += lr * error * x[i][j];
+			b += lr * error;
 		}
 	}
 	result[0] = b;
+	for (int i = 0; i < n_in; i++)
+		result[i + 1] = W[i];
+	free(W);
+
 	return result;
 }
 
