@@ -337,7 +337,7 @@ void AxisDock::retranslateUi() {
 	info = i18n(
 		"Defines where to position the first major tick:"
 		"<ul>"
-		"<li>Absolute Value - the first tick is positione at the absolute value provided below.</li>"
+		"<li>Absolute Value - the first tick is positioned at the absolute value provided below.</li>"
 		"<li>Offset - the first tick is positioned at the offset relatively to the beginning of the axis range.</li>"
 		"</ul>"
 		"</ul>");
