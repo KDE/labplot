@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-19 00:39+0000\n"
-"PO-Revision-Date: 2026-01-09 23:14+0200\n"
+"POT-Creation-Date: 2026-01-20 00:38+0000\n"
+"PO-Revision-Date: 2026-01-19 08:42+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -14197,16 +14197,14 @@ msgstr "Інтервал"
 #: src/frontend/dockwidgets/AxisDock.cpp:282
 #: src/frontend/dockwidgets/AxisDock.cpp:298
 #: src/frontend/dockwidgets/AxisDock.cpp:308
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Values"
-msgstr "Нетиповий стовпчик"
+msgstr "Значення у нетиповому стовпчику"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:283
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Labels"
-msgstr "Нетиповий стовпчик"
+msgstr "Нетипові мітки стовпчиків"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:286
 #, kde-format
@@ -14224,8 +14222,7 @@ msgid "No labels"
 msgstr "без міток"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Position values"
+#, kde-format
 msgid "Position Values"
 msgstr "Значення позицій"
 
@@ -14280,23 +14277,40 @@ msgid ""
 "provided below.</li><li>Custom Column Labels - positions are determined by "
 "the value labels in the custom column provided below.</li></ul></ul>"
 msgstr ""
+"Визначає, як і де розташовувати основні позначки на осі:<ul><li>Кількість — "
+"позначки розміщуються на однаковій відстані, відстань між ними визначається "
+"заданою фіксованою кількістю позначок.</li><li>Інтервал — позначки "
+"розміщуються на однаковій відстані з заданим інтервалом між ними.</"
+"li><li>Нетипові значення стовпчиків — позиції визначаються значеннями у "
+"вказаному нижче стовпчику.</li><li>Нетипові мітки стовпчиків — позиції "
+"визначаються мітками значень у вказаному нижче стовпчику.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Defines where to position the first major tick:<ul><li>Absolute Value - "
+#| "the first tick is positione at the absolute value provided below.</"
+#| "li><li>Offset - the first tick is positioned at the offset relatively to "
+#| "the beginning of the axis range.</li></ul></ul>"
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
-"first tick is positione at the absolute value provided below.</li><li>Offset "
-"- the first tick is positioned at the offset relatively to the beginning of "
-"the axis range.</li></ul></ul>"
+"first tick is positioned at the absolute value provided below.</"
+"li><li>Offset - the first tick is positioned at the offset relatively to the "
+"beginning of the axis range.</li></ul></ul>"
 msgstr ""
+"Визначає, де розташувати першу основну позначку:<ul><li>Абсолютне значення — "
+"перша позначка розташовується на абсолютному значенні, яке вказано нижче.</"
+"li><li>Зсув — перша позначка розташовується із вказаним зміщенням відносно "
+"початку діапазону осі.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
-msgstr "Рядок у файлі, яким слід скористатися для визначення назв стовпчиків."
+msgstr ""
+"Стовпчик зі значеннями, які має бути використано як позиції основних "
+"позначок."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:351
 #, kde-format
@@ -14306,14 +14320,19 @@ msgid ""
 "Column Values - values in the custom column provided below are used as text "
 "labels.</li></ul></ul>"
 msgstr ""
+"Визначає, які текстові мітки слід показувати для основних позначок:"
+"<ul><li>Значення позицій — текстовими мітками будуть позиції позначок.</"
+"li><li>Значення у нетиповому стовпчику – текстовими мітками будуть значення "
+"у вказаному нижче стовпчику.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
-msgstr "Рядок у файлі, яким слід скористатися для визначення назв стовпчиків."
+msgstr ""
+"Стовпчик зі значеннями, які має бути використано як текстові мітки основних "
+"позначок."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:366
 #, kde-format
@@ -14325,14 +14344,21 @@ msgid ""
 "Values - positions are determined by the values in the custom column "
 "provided below.</li></ul></ul>"
 msgstr ""
+"Визначає, як і де розташовувати проміжні позначки на осі:<ul><li>Кількість — "
+"позначки розміщуються на однаковій відстані, відстань між ними визначається "
+"заданою фіксованою кількістю позначок</li><li>Інтервал — позначки "
+"розміщуються на однаковій відстані з заданим інтервалом між ними.</"
+"li><li>Нетипові значення стовпчиків — позиції визначаються значеннями у "
+"вказаному нижче стовпчику.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
-msgstr "Рядок у файлі, яким слід скористатися для визначення назв стовпчиків."
+msgstr ""
+"Стовпчик зі значеннями, які має бути використано як позиції проміжних "
+"позначок."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:629
 #, kde-format
@@ -15081,10 +15107,9 @@ msgstr ""
 "починатися з літери"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:652
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Apply Formula"
-msgstr "Формула:"
+msgstr "Застосувати формулу"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:789
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
@@ -15093,14 +15118,13 @@ msgid "Delete variable"
 msgstr "Вилучити змінну"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:864
-#, fuzzy, kde-format
-#| msgid "%1: set cell formula"
+#, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
-msgstr[0] "%1: встановити формулу для комірки"
-msgstr[1] "%1: встановити формулу для комірки"
-msgstr[2] "%1: встановити формулу для комірки"
-msgstr[3] "%1: встановити формулу для комірки"
+msgstr[0] "%1: застосувати формулу стовпчика"
+msgstr[1] "%1: застосувати формулу стовпчика"
+msgstr[2] "%1: застосувати формулу стовпчика"
+msgstr[3] "%1: застосувати формулу стовпчика"
 
 #: src/frontend/dockwidgets/CursorDock.cpp:32
 #, kde-format
@@ -22359,10 +22383,9 @@ msgstr "Стовпчик мітки:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #: src/frontend/ui/dockwidgets/axisdock.ui:808
 #: src/frontend/ui/dockwidgets/axisdock.ui:1116
-#, fuzzy, kde-format
-#| msgid "Position Y:"
+#, kde-format
 msgid "Position Column:"
-msgstr "Розташування за Y:"
+msgstr "Стовпчик позицій:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -23295,10 +23318,9 @@ msgstr "Радіус кута:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoUpdate)
 #: src/frontend/ui/dockwidgets/columndock.ui:65
-#, fuzzy, kde-format
-#| msgid "auto update"
+#, kde-format
 msgid "Auto-Update"
-msgstr "автооновлення"
+msgstr "Автооновлення"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
@@ -23350,10 +23372,9 @@ msgstr "Зберегти нетипову функцію"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoResize)
 #: src/frontend/ui/dockwidgets/columndock.ui:285
-#, fuzzy, kde-format
-#| msgid "Auto-save:"
+#, kde-format
 msgid "Auto-Resize"
-msgstr "Автозбереження:"
+msgstr "Автоматична зміна"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:297
@@ -23371,10 +23392,9 @@ msgstr "Позначення на графіку:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:394
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula"
-msgstr "Формула:"
+msgstr "Формула"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)

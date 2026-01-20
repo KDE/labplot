@@ -10,16 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-19 00:39+0000\n"
-"PO-Revision-Date: 2026-01-09 01:27-0300\n"
-"Last-Translator: Guilherme Marçal Silva <guimarcalsilva@gmail.com>\n"
+"POT-Creation-Date: 2026-01-20 00:38+0000\n"
+"PO-Revision-Date: 2026-01-19 07:37-0300\n"
+"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:239
 #, kde-format
@@ -14136,16 +14136,14 @@ msgstr "Espaçamento"
 #: src/frontend/dockwidgets/AxisDock.cpp:282
 #: src/frontend/dockwidgets/AxisDock.cpp:298
 #: src/frontend/dockwidgets/AxisDock.cpp:308
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Values"
-msgstr "Coluna personalizada"
+msgstr "Valores da coluna personalizada"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:283
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Labels"
-msgstr "Coluna personalizada"
+msgstr "Legendas da coluna personalizada"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:286
 #, kde-format
@@ -14163,8 +14161,7 @@ msgid "No labels"
 msgstr "Sem legendas"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Position values"
+#, kde-format
 msgid "Position Values"
 msgstr "Valores de posição"
 
@@ -14219,24 +14216,41 @@ msgid ""
 "provided below.</li><li>Custom Column Labels - positions are determined by "
 "the value labels in the custom column provided below.</li></ul></ul>"
 msgstr ""
+"Define como e onde posicionar as marcas principais no eixo:<ul><li>Número - "
+"as marcas são posicionadas equidistantes, o espaçamento entre elas é "
+"determinado pelo número fixo de marcas fornecido.</li><li>Espaçamento - as "
+"marcas são posicionadas equidistantes com o espaçamento fornecido entre elas."
+"</li><li>Valores da coluna personalizada - as posições são determinadas "
+"pelos valores na coluna personalizada fornecida abaixo.</li><li>Legendas da "
+"coluna personalizada - as posições são determinadas pelas legendas de valor "
+"na coluna personalizada fornecida abaixo.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Defines where to position the first major tick:<ul><li>Absolute Value - "
+#| "the first tick is positione at the absolute value provided below.</"
+#| "li><li>Offset - the first tick is positioned at the offset relatively to "
+#| "the beginning of the axis range.</li></ul></ul>"
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
-"first tick is positione at the absolute value provided below.</li><li>Offset "
-"- the first tick is positioned at the offset relatively to the beginning of "
-"the axis range.</li></ul></ul>"
+"first tick is positioned at the absolute value provided below.</"
+"li><li>Offset - the first tick is positioned at the offset relatively to the "
+"beginning of the axis range.</li></ul></ul>"
 msgstr ""
+"Define onde posicionar a primeira marca principal:<ul><li>Valor absoluto - a "
+"primeira marca é posicionada no valor absoluto fornecido abaixo.</"
+"li><li>Deslocamento - a primeira marca é posicionada no deslocamento em "
+"relação ao início do intervalo do eixo.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
 msgstr ""
-"Linha no arquivo que deve ser usada para determinar os nomes das colunas."
+"Coluna com os valores que devem ser usados ​​como posições das marcas de "
+"escala principais."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:351
 #, kde-format
@@ -14246,15 +14260,20 @@ msgid ""
 "Column Values - values in the custom column provided below are used as text "
 "labels.</li></ul></ul>"
 msgstr ""
+"Define quais legendas de texto exibir para as marcas de escala principais:"
+"<ul><li>Valores de posição - as posições das marcas de escala são usadas "
+"como legendas de texto.</li><li>Valores da coluna personalizada - os valores "
+"na coluna personalizada fornecida abaixo são usados ​​como legendas de texto.</"
+"li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
 msgstr ""
-"Linha no arquivo que deve ser usada para determinar os nomes das colunas."
+"Coluna com os valores que devem ser usados ​​como legendas de texto para as "
+"marcas de escala principais."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:366
 #, kde-format
@@ -14266,15 +14285,21 @@ msgid ""
 "Values - positions are determined by the values in the custom column "
 "provided below.</li></ul></ul>"
 msgstr ""
+"Define como e onde posicionar as marcas menores no eixo:<ul><li>Número - as "
+"marcas são posicionadas equidistantes, o espaçamento entre elas é "
+"determinado pelo número fixo de marcas fornecido.</li><li>Espaçamento - as "
+"marcas são posicionadas equidistantes com o espaçamento fornecido entre elas."
+"</li><li>Valores da coluna personalizada - as posições são determinadas "
+"pelos valores na coluna personalizada fornecida abaixo.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
 msgstr ""
-"Linha no arquivo que deve ser usada para determinar os nomes das colunas."
+"Coluna com os valores que devem ser usados ​​como posições das marcas de "
+"escala menores."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:629
 #, kde-format
@@ -15030,10 +15055,9 @@ msgstr ""
 "com uma letra"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:652
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Apply Formula"
-msgstr "Fórmula:"
+msgstr "Aplicar fórmula"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:789
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
@@ -15042,12 +15066,11 @@ msgid "Delete variable"
 msgstr "Excluir variável"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:864
-#, fuzzy, kde-format
-#| msgid "%1: set cell formula"
+#, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
-msgstr[0] "%1: definir a fórmula da célula"
-msgstr[1] "%1: definir a fórmula da célula"
+msgstr[0] "%1: aplicar fórmula da coluna"
+msgstr[1] "%1: aplicar fórmula da coluna"
 
 #: src/frontend/dockwidgets/CursorDock.cpp:32
 #, kde-format
@@ -22282,10 +22305,9 @@ msgstr "Coluna de legenda:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #: src/frontend/ui/dockwidgets/axisdock.ui:808
 #: src/frontend/ui/dockwidgets/axisdock.ui:1116
-#, fuzzy, kde-format
-#| msgid "Position Y:"
+#, kde-format
 msgid "Position Column:"
-msgstr "Posição Y:"
+msgstr "Coluna de posição:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -23219,10 +23241,9 @@ msgstr "Raio do canto:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoUpdate)
 #: src/frontend/ui/dockwidgets/columndock.ui:65
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Auto-Update"
-msgstr "Atualizar"
+msgstr "Atualização automática"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
@@ -23274,10 +23295,9 @@ msgstr "Salvar uma função personalizada"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoResize)
 #: src/frontend/ui/dockwidgets/columndock.ui:285
-#, fuzzy, kde-format
-#| msgid "Auto-save:"
+#, kde-format
 msgid "Auto-Resize"
-msgstr "Salvamento automático:"
+msgstr "Redimensionamento automático"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:297
@@ -23295,10 +23315,9 @@ msgstr "Designação do gráfico:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:394
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula"
-msgstr "Fórmula:"
+msgstr "Fórmula"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)

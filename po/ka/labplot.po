@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-19 00:39+0000\n"
-"PO-Revision-Date: 2026-01-09 06:03+0100\n"
+"POT-Creation-Date: 2026-01-20 00:38+0000\n"
+"PO-Revision-Date: 2026-01-19 11:27+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -14121,16 +14121,14 @@ msgstr "დაშორება"
 #: src/frontend/dockwidgets/AxisDock.cpp:282
 #: src/frontend/dockwidgets/AxisDock.cpp:298
 #: src/frontend/dockwidgets/AxisDock.cpp:308
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Values"
-msgstr "მორგებული სვეტი"
+msgstr "მორგებული სვეტის მნიშვნელობები"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:283
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Labels"
-msgstr "მორგებული სვეტი"
+msgstr "მორგებული სვეტის ჭდეები"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:286
 #, kde-format
@@ -14148,8 +14146,7 @@ msgid "No labels"
 msgstr "ჭდის გარეშე"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Position values"
+#, kde-format
 msgid "Position Values"
 msgstr "მდებარეობის მნიშვნელობები"
 
@@ -14204,23 +14201,42 @@ msgid ""
 "provided below.</li><li>Custom Column Labels - positions are determined by "
 "the value labels in the custom column provided below.</li></ul></ul>"
 msgstr ""
+"განსაზღვრავს ღერძზე მთავარი დანაყოფების პოზიციონირების წესსა და "
+"ადგილმდებარეობას:<ul><li>რაოდენობა - დანაყოფები თავსდება თანაბარი "
+"ინტერვალებით, მათ შორის დაშორება კი განისაზღვრება მითითებული ფიქსირებული "
+"რაოდენობის მიხედვით.</li><li>ბიჯი - დანაყოფები თავსდება თანაბარი "
+"ინტერვალებით, მათ შორის მითითებული დაშორების შესაბამისად.</"
+"li><li>მნიშვნელობები მორგებული სვეტიდან - პოზიციები განისაზღვრება ქვემოთ "
+"მითითებულ მორგებულ სვეტში არსებული მნიშვნელობების მიხედვით.</li><li>ჭდეები "
+"მორგებული სვეტიდან - პოზიციები განისაზღვრება ქვემოთ მითითებულ მორგებულ "
+"სვეტში არსებული მნიშვნელობების ჭდეების მიხედვით.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Defines where to position the first major tick:<ul><li>Absolute Value - "
+#| "the first tick is positione at the absolute value provided below.</"
+#| "li><li>Offset - the first tick is positioned at the offset relatively to "
+#| "the beginning of the axis range.</li></ul></ul>"
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
-"first tick is positione at the absolute value provided below.</li><li>Offset "
-"- the first tick is positioned at the offset relatively to the beginning of "
-"the axis range.</li></ul></ul>"
+"first tick is positioned at the absolute value provided below.</"
+"li><li>Offset - the first tick is positioned at the offset relatively to the "
+"beginning of the axis range.</li></ul></ul>"
 msgstr ""
+"განსაზღვრავს პირველი მთავარი დანაყოფის პოზიციონირების ადგილს:"
+"<ul><li>აბსოლუტური მნიშვნელობა - პირველი დანაყოფი თავსდება ქვემოთ მითითებულ "
+"აბსოლუტურ მნიშვნელობაზე.</li><li>წანაცვლება - პირველი დანაყოფი თავსდება "
+"ღერძის დიაპაზონის დასაწყისის მიმართ მითითებული წანაცვლებით.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
-msgstr "ხაზი ფაილში, რომელიც სვეტის სახელების დასადგენად იქნება გამოყენებული."
+msgstr ""
+"სვეტი მნიშვნელობები, რომელიც ძირითადი გაყოფების მდებარეობებისთვის იქნება "
+"გამოყენებული."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:351
 #, kde-format
@@ -14230,14 +14246,20 @@ msgid ""
 "Column Values - values in the custom column provided below are used as text "
 "labels.</li></ul></ul>"
 msgstr ""
+"განსაზღვრავს, რომელი ტექსტური ჭდეები გამოჩნდეს მთავარი დანაყოფებისთვის:"
+"<ul><li>პოზიციის მნიშვნელობები - ტექსტურ ჭდეებად გამოიყენება დანაყოფების "
+"პოზიციები.</li><li>მნიშვნელობები მორგებული სვეტიდან - ტექსტურ ჭდეებად "
+"გამოიყენება ქვემოთ მითითებულ მორგებულ სვეტში არსებული მნიშვნელობები.</li></"
+"ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
-msgstr "ხაზი ფაილში, რომელიც სვეტის სახელების დასადგენად იქნება გამოყენებული."
+msgstr ""
+"სვეტი მნიშვნელობები, რომელიც ძირითადი გაყოფების ტექსტის ჭდეებისთვის იქნება "
+"გამოყენებული."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:366
 #, kde-format
@@ -14249,14 +14271,22 @@ msgid ""
 "Values - positions are determined by the values in the custom column "
 "provided below.</li></ul></ul>"
 msgstr ""
+"განსაზღვრავს ღერძზე დამხმარე დანაყოფების (minor ticks) პოზიციონირების წესსა "
+"და ადგილმდებარეობას:<ul><li>რაოდენობა - დანაყოფები თავსდება თანაბარი "
+"ინტერვალებით, მათ შორის დაშორება კი განისაზღვრება მითითებული ფიქსირებული "
+"რაოდენობის მიხედვით.</li><li>ბიჯი - დანაყოფები თავსდება თანაბარი "
+"ინტერვალებით, მათ შორის მითითებული დაშორების შესაბამისად.</"
+"li><li>მნიშვნელობები მორგებული სვეტიდან - პოზიციები განისაზღვრება ქვემოთ "
+"მითითებულ მორგებულ სვეტში არსებული მნიშვნელობების მიხედვით.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
-msgstr "ხაზი ფაილში, რომელიც სვეტის სახელების დასადგენად იქნება გამოყენებული."
+msgstr ""
+"სვეტი მნიშვნელობები, რომელიც დამხმარე გაყოფების მდებარეობებისთვის იქნება "
+"გამოყენებული."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:629
 #, kde-format
@@ -14999,10 +15029,9 @@ msgstr ""
 "მაგრამ, მხოლოდ, ასოთი შეიძლება, იწყებოდეს"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:652
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Apply Formula"
-msgstr "ფორმულა:"
+msgstr "ფორმულის გადატარება"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:789
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
@@ -15011,12 +15040,11 @@ msgid "Delete variable"
 msgstr "ცვლადის წაშლა"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:864
-#, fuzzy, kde-format
-#| msgid "%1: set cell formula"
+#, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
-msgstr[0] "%1; უჯრედის ფორმულის დაყენება"
-msgstr[1] "%1; უჯრედის ფორმულის დაყენება"
+msgstr[0] "%1: სვეტის ფორმულის გადატარება"
+msgstr[1] "%1: სვეტის ფორმულის გადატარება"
 
 #: src/frontend/dockwidgets/CursorDock.cpp:32
 #, kde-format
@@ -22230,10 +22258,9 @@ msgstr "ჭდეების სვეტი:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #: src/frontend/ui/dockwidgets/axisdock.ui:808
 #: src/frontend/ui/dockwidgets/axisdock.ui:1116
-#, fuzzy, kde-format
-#| msgid "Position Y:"
+#, kde-format
 msgid "Position Column:"
-msgstr "მდებარეობის Y:"
+msgstr "მდებარეობის სვეტი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -23167,8 +23194,7 @@ msgstr "კუთხის რადიუსი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoUpdate)
 #: src/frontend/ui/dockwidgets/columndock.ui:65
-#, fuzzy, kde-format
-#| msgid "auto update"
+#, kde-format
 msgid "Auto-Update"
 msgstr "ავტომატური განახლება"
 
@@ -23222,10 +23248,9 @@ msgstr "მომხმარებლის ფუნქციის შენ�
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoResize)
 #: src/frontend/ui/dockwidgets/columndock.ui:285
-#, fuzzy, kde-format
-#| msgid "Auto-save:"
+#, kde-format
 msgid "Auto-Resize"
-msgstr "ავტომატური-შენახვა:"
+msgstr "ზომის ავტომატური შეცვლა"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:297
@@ -23243,10 +23268,9 @@ msgstr "გრაფიკის დანიშნულება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:394
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula"
-msgstr "ფორმულა:"
+msgstr "ფორმულა"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)

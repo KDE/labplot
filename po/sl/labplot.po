@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-19 00:39+0000\n"
-"PO-Revision-Date: 2026-01-09 06:50+0100\n"
+"POT-Creation-Date: 2026-01-20 00:38+0000\n"
+"PO-Revision-Date: 2026-01-19 07:45+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -14148,16 +14148,14 @@ msgstr "Razmik"
 #: src/frontend/dockwidgets/AxisDock.cpp:282
 #: src/frontend/dockwidgets/AxisDock.cpp:298
 #: src/frontend/dockwidgets/AxisDock.cpp:308
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Values"
-msgstr "Stolpec po meri"
+msgstr "Vrednosti stolpca po meri"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:283
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Labels"
-msgstr "Stolpec po meri"
+msgstr "Oznake stolpca po meri"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:286
 #, kde-format
@@ -14175,10 +14173,9 @@ msgid "No labels"
 msgstr "Brez oznak"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Position values"
+#, kde-format
 msgid "Position Values"
-msgstr "Vrednosti položaja"
+msgstr "Pozicijske vrednosti"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:312
 #, kde-format
@@ -14231,23 +14228,38 @@ msgid ""
 "provided below.</li><li>Custom Column Labels - positions are determined by "
 "the value labels in the custom column provided below.</li></ul></ul>"
 msgstr ""
+"Določa, kako in kam postaviti glavne črtice na osi:<ul><li>Število – črtice "
+"so postavljene enako razmaknjeno, razmik med njimi je določen z navedenim "
+"fiksnim številom črtic.</li><li>Razmik – črtice so postavljene enako "
+"razmaknjeno z navedenim razmikom med njimi.</li><li>Vrednosti stolpcev po "
+"meri – položaje določajo vrednosti v spodnjem stolpcu po meri.</"
+"li><li>Oznake stolpcev po meri – položaje določajo oznake vrednosti v "
+"spodnjem stolpcu po meri.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Defines where to position the first major tick:<ul><li>Absolute Value - "
+#| "the first tick is positione at the absolute value provided below.</"
+#| "li><li>Offset - the first tick is positioned at the offset relatively to "
+#| "the beginning of the axis range.</li></ul></ul>"
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
-"first tick is positione at the absolute value provided below.</li><li>Offset "
-"- the first tick is positioned at the offset relatively to the beginning of "
-"the axis range.</li></ul></ul>"
+"first tick is positioned at the absolute value provided below.</"
+"li><li>Offset - the first tick is positioned at the offset relatively to the "
+"beginning of the axis range.</li></ul></ul>"
 msgstr ""
+"Določa, kam postaviti prvo večjo črtico:<ul><li>Absolutna vrednost – prva "
+"črtice je postavljena na spodaj navedeni absolutni vrednosti.</li><li>Odmik "
+"– prva črtice postavljena na odmik glede na začetek območja osi.</li></ul></"
+"ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
-msgstr "Vrstica v datoteki, ki naj se uporablja za določitev imen stolpcev."
+msgstr "Stolpec z vrednostmi, ki naj se uporabijo kot položaji glavnih črtic."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:351
 #, kde-format
@@ -14257,14 +14269,19 @@ msgid ""
 "Column Values - values in the custom column provided below are used as text "
 "labels.</li></ul></ul>"
 msgstr ""
+"Določa, katere besedilne oznake naj se prikažejo za glavne črtice:"
+"<ul><li>Vrednosti položajev – položaji črtic se uporablja kot besedilne "
+"oznake.</li><li>Vrednosti stolpcev po meri – vrednosti v spodaj navedenem "
+"stolpcu po meri se uporabljajo kot besedilne oznake.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
-msgstr "Vrstica v datoteki, ki naj se uporablja za določitev imen stolpcev."
+msgstr ""
+"Stolpec z vrednostmi, ki naj se uporabijo kot besedilne oznake za glavne "
+"črtice."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:366
 #, kde-format
@@ -14276,14 +14293,18 @@ msgid ""
 "Values - positions are determined by the values in the custom column "
 "provided below.</li></ul></ul>"
 msgstr ""
+"Določa, kako in kam postaviti manjše črtice na osi:<ul><li>Število – črtice "
+"so postavljene enakomerno, razmik med njimi je določen z navedenim fiksnim "
+"številom črtic.</li><li>Razmik – črtice so postavljene enakomerno z "
+"navedenim razmikom med njimi.</li><li>Vrednosti stolpcev po meri – položaje "
+"določajo vrednosti v spodaj navedenem stolpcu po meri.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
-msgstr "Vrstica v datoteki, ki naj se uporablja za določitev imen stolpcev."
+msgstr "Stolpec z vrednostmi, ki naj se uporabijo kot položaji manjših črtic."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:629
 #, kde-format
@@ -15024,10 +15045,9 @@ msgstr ""
 "črko"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:652
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Apply Formula"
-msgstr "Formula:"
+msgstr "Uveljavi formulo"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:789
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
@@ -15036,14 +15056,13 @@ msgid "Delete variable"
 msgstr "Izbriši spremenljivko"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:864
-#, fuzzy, kde-format
-#| msgid "%1: set cell formula"
+#, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
-msgstr[0] "%1: nastavite celično formulo"
-msgstr[1] "%1: nastavite celično formulo"
-msgstr[2] "%1: nastavite celično formulo"
-msgstr[3] "%1: nastavite celično formulo"
+msgstr[0] "%1: uveljavi formulo stolpca"
+msgstr[1] "%1: uveljavi formulo stolpca"
+msgstr[2] "%1: uveljavi formulo stolpca"
+msgstr[3] "%1: uveljavi formulo stolpca"
 
 #: src/frontend/dockwidgets/CursorDock.cpp:32
 #, kde-format
@@ -22269,10 +22288,9 @@ msgstr "Stolpec oznak:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #: src/frontend/ui/dockwidgets/axisdock.ui:808
 #: src/frontend/ui/dockwidgets/axisdock.ui:1116
-#, fuzzy, kde-format
-#| msgid "Position Y:"
+#, kde-format
 msgid "Position Column:"
-msgstr "Položaj Y:"
+msgstr "Položaj stolpca:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -23204,10 +23222,9 @@ msgstr "Polmer kota:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoUpdate)
 #: src/frontend/ui/dockwidgets/columndock.ui:65
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Auto-Update"
-msgstr "Posodobi"
+msgstr "Samodejno posodobi"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
@@ -23259,10 +23276,9 @@ msgstr "Shrani funkcijo po meri"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoResize)
 #: src/frontend/ui/dockwidgets/columndock.ui:285
-#, fuzzy, kde-format
-#| msgid "Auto-save:"
+#, kde-format
 msgid "Auto-Resize"
-msgstr "Samodejno shrani:"
+msgstr "Samodejno spremeni velikost"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:297
@@ -23280,10 +23296,9 @@ msgstr "Označba grafa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:394
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula"
-msgstr "Formula:"
+msgstr "Formula"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)

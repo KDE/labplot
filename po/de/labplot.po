@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-19 00:39+0000\n"
-"PO-Revision-Date: 2026-01-18 01:40+0100\n"
+"POT-Creation-Date: 2026-01-20 00:38+0000\n"
+"PO-Revision-Date: 2026-01-19 11:25+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -8338,7 +8338,7 @@ msgstr "%1: Trendlänge für STL festlegen"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:323
 #, kde-format
 msgid "%1: set trend auto-length for STL"
-msgstr ""
+msgstr "%1: automatische Trendlänge für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:329
 #, kde-format
@@ -8393,7 +8393,7 @@ msgstr "%1: Tiefpasssprung für STL festlegen"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:389
 #, kde-format
 msgid "%1: set low pass auto-jump for STL"
-msgstr ""
+msgstr "%1: autmatischen Tiefpasssprung für STL festlegen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:397
 #, kde-format
@@ -8418,17 +8418,17 @@ msgstr "keine validen Daten verfügbar."
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:523
 #, kde-format
 msgid "Seasonal Length must be odd and at least 3."
-msgstr ""
+msgstr "Saisonlänge muss ungerade und mindestens 3 sein."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:528
 #, kde-format
 msgid "Trend Length must be odd and at least 3."
-msgstr ""
+msgstr "Trendlänge muss ungerade und mindestens 3 sein."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:533
 #, kde-format
 msgid "Low-Pass Length must be odd and at least 3."
-msgstr ""
+msgstr "Tiefpass-Länge muss ungerade und mindestens 3 sein."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:580
 #, kde-format
@@ -8438,17 +8438,17 @@ msgstr "STL-Zerlegung fehlgeschlagen: %1"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:598
 #, kde-format
 msgid "No periods specified for MSTL."
-msgstr ""
+msgstr "Keine Periode für MSTL angegeben."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:604
 #, kde-format
 msgid "Periods must be at least 2."
-msgstr ""
+msgstr "Perioden müssen mindestens 2 sein."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:608
 #, kde-format
 msgid "Time-series has less than two periods."
-msgstr ""
+msgstr "Zeitreihen haben weniger als zwei Perioden."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:614
 #, kde-format
@@ -8458,27 +8458,27 @@ msgstr "Anzahl an Iterationen muss > 0 sein."
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:619
 #, kde-format
 msgid "Lambda must be between 0 and 1."
-msgstr ""
+msgstr "Lambda muss zwischen 0 und 1 sein."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:629
 #, kde-format
 msgid "Box-Cox transformation requires strictly positive data."
-msgstr ""
+msgstr "Box-Cox-Transformation erwartet strikt positive Werte."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:648
 #, kde-format
 msgid "MSTL decomposition failed: %1"
-msgstr ""
+msgstr "MSTL-Zerlegung fehlgeschlagen: %1"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:749
 #, kde-format
 msgid "Seasonal Component (Period: %1)"
-msgstr ""
+msgstr "Saisonkomponente (Periode: %1)"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:750
 #, kde-format
 msgid "Seasonal, Period: %1"
-msgstr ""
+msgstr "Saison, Periode: %1"
 
 #: src/backend/worksheet/Background.cpp:202
 #, kde-format
@@ -9782,7 +9782,7 @@ msgstr "%1: Basislinienkorrektur von '%2'"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2171
 #, kde-format
 msgid "Baseline correction for '%1'"
-msgstr ""
+msgstr "Basislinienkorrektur von '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2178
 #, kde-format
@@ -14197,9 +14197,9 @@ msgstr ""
 #, kde-format
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
-"first tick is positione at the absolute value provided below.</li><li>Offset "
-"- the first tick is positioned at the offset relatively to the beginning of "
-"the axis range.</li></ul></ul>"
+"first tick is positioned at the absolute value provided below.</"
+"li><li>Offset - the first tick is positioned at the offset relatively to the "
+"beginning of the axis range.</li></ul></ul>"
 msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
@@ -14639,6 +14639,10 @@ msgid ""
 "the current theme apply to plot area</li><li>Color Map - colors are taken "
 "from the specified color map</li></ul>"
 msgstr ""
+"Legt fest, welche Farben für Plots verwendet werden:<ul> <li>Thema – Farben "
+"werden vom aktuellen Thema übernommen und auf den Diagrammbereich "
+"angewendet</li><li>Farbpalette – Farben werden aus der angegebenen "
+"Farbpalette entnommen</li></ul>"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1225
 #, kde-format
@@ -15528,6 +15532,10 @@ msgid ""
 "Seasonal-trend decomposition based on LOESS (\"Locally Estimated Scatterplot "
 "Smoothing\")</li><li>MSTL - STL for multiple seasonalities</li></ul>"
 msgstr ""
+"Verfahren zur Durchführung der saisonalen Trendzerlegung:<ul><li>STL – "
+"Saisonale Trendzerlegung basierend auf LOESS („Lokal geschätzte "
+"Streudiagramm-Glättung“)</li><li>MSTL – STL für mehrere Saisonalitäten</li></"
+"ul>"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:179
 #, kde-format
@@ -15535,6 +15543,8 @@ msgid ""
 "If enabled, uses a data-dependent weighting function to get more robust "
 "result if the data has outliers."
 msgstr ""
+"Wenn aktiviert, wird eine datenabhängige Gewichtungsfunktion verwendet, um "
+"bei Ausreißern in den Daten robuster Ergebnisse zu erzielen."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:184
 #, kde-format
@@ -15546,16 +15556,22 @@ msgid ""
 "seasonality</li><li>12 - for monthly data with yearly seasonality (12 "
 "months)</li></ul>"
 msgstr ""
+"Periode der saisonalen Komponente. Beispiele:<ul><li>24 – für stündliche "
+"Daten mit täglicher Saisonalität (24h)</li><li>168 – für stündliche Daten "
+"mit wöchentlicher Saisonalität (7 * 24h = 168h)</li><li>7 – für tägliche "
+"Daten mit wöchentlicher Saisonalität (7 Tage)</li><li>365 – für tägliche "
+"Daten mit jährlicher Saisonalität (365 Tage)</li><li>12 – für monatliche "
+"Daten mit jährlicher Saisonalität (12 Monate)</li></ul>"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:196
 #, kde-format
 msgid "Length of the seasonal smoother, must be odd and at least 3."
-msgstr ""
+msgstr "Länge des saisonalen Glätters; muss ungerade und mindestens 3 sein."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:200
 #, kde-format
 msgid "Length of the trend smoother, must be odd and at least 3."
-msgstr ""
+msgstr "Länge des Trendglätters; muss ungerade und mindestens 3 sein."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:203
 #, kde-format
@@ -15563,16 +15579,20 @@ msgid ""
 "If enabled, uses the smallest odd integer greater than 1.5 * \"Period\" / (1 "
 "- 1.5 / \"Seasonal Length\")."
 msgstr ""
+"Wenn aktiviert, wird die kleinste ungerade ganze Zahl verwendet, die größer "
+"ist als 1,5 * \"Periode\" / (1 - 1,5 / \"Saisonale Länge\")."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:205
 #, kde-format
 msgid "Length of the low-pass filter, must be odd and at least 3."
-msgstr ""
+msgstr "Länge des Tiefpassfilters; muss ungerade und mindestens 3 sein."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:208
 #, kde-format
 msgid "If enabled, uses the smallest odd integer greater than \"Period\"."
 msgstr ""
+"Wenn aktiviert, wird die kleinste ungerade ganze Zahl verwendet, die größer "
+"als „Periode“ ist."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:211
 #, kde-format
@@ -15582,52 +15602,57 @@ msgstr "0 - Konstant"
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:212
 #, kde-format
 msgid "1 - Constant and Trend"
-msgstr ""
+msgstr "1 - Konstante und Trend"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:225
 #, kde-format
 msgid "The degree of locally-fitted polynomial for the seasonal component."
-msgstr ""
+msgstr "Der Grad des lokal angepassten Polynoms für die saisonale Komponente."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:229
 #, kde-format
 msgid "The degree of locally-fitted polynomial for the trend component."
-msgstr ""
+msgstr "Der Grad des lokal angepassten Polynoms für die Trendkomponente."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:233
 #, kde-format
 msgid "The degree of locally-fitted polynomial for the low-pass component."
-msgstr ""
+msgstr "Der Grad des lokal angepassten Polynoms für die Tiefpasskomponente."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:238
 #, kde-format
 msgid "The number of jumps to include in the seasonal component."
 msgstr ""
+"Die Anzahl der Sprünge, die in die saisonale Komponente aufgenommen werden "
+"sollen."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:241
 #, kde-format
 msgid "If enabled, uses \"Seasonal Length\" / 10."
-msgstr ""
+msgstr "Wenn aktiviert, wird „Saisonale Länge“ / 10 verwendet."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:243
 #, kde-format
 msgid "The number of jumps to include in the trend component."
 msgstr ""
+"Die Anzahl der Sprünge, die in die Trendkomponente aufgenommen werden sollen."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:246
 #, kde-format
 msgid "If enabled, uses \"Trend Length\" / 10."
-msgstr ""
+msgstr "Wenn aktiviert, wird „Trendlänge“ / 10 verwendet."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:248
 #, kde-format
 msgid "The number of jumps to include in the low-pass component."
 msgstr ""
+"Die Anzahl der Sprünge, die in die Tiefpasskomponente aufgenommen werden "
+"sollen."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:251
 #, kde-format
 msgid "If enabled, uses \"Low-Pass Length\" / 10."
-msgstr ""
+msgstr "Wenn aktiviert, wird „Tiefpasslänge“ / 10 verwendet."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:254
 #, kde-format
@@ -15637,6 +15662,10 @@ msgid ""
 "168h) seasonality</li><li>7, 365 - for daily data with weekly (7 days) and "
 "yearly (365 days) seasonality</li></ul>"
 msgstr ""
+"Perioden der saisonalen Komponenten, kommagetrennte Werte. Beispiele:"
+"<ul><li>24, 168 – für stündliche Daten mit täglicher (24h) und wöchentlicher "
+"(7 * 24h = 168h) Saisonalität</li><li>7, 365 – für tägliche Daten mit "
+"wöchentlicher (7 Tage) und jährlicher (365 Tage) Saisonalität</li></ul>"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:262
 #, kde-format
@@ -15644,6 +15673,8 @@ msgid ""
 "The lambda parameter for the Box-Cox transformation applied prior to "
 "decomposition."
 msgstr ""
+"Der Lambda-Parameter für die Box-Cox-Transformation, die vor der Zerlegung "
+"angewendet wird."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:266
 #, kde-format
@@ -15748,6 +15779,14 @@ msgid ""
 "interpolation using first and last point and subtract it.</li><li>Linear "
 "Regression - do a linear regression to the data and subtract it.</li></ul>"
 msgstr ""
+"Verfahren zur Berechnung der Basislinienkorrektur:<ul><li>arPLS – "
+"asymmetrisch gewichtete, bestrafte Methode der kleinsten Quadrate.</"
+"li><li>Minimum – Subtrahiert das Minimum der Daten.</li><li>Maximum – "
+"Subtrahiert das Maximum der Daten.</li><li>Mittelwert – Subtrahiert den "
+"Mittelwert der Daten.</li><li>Median – Subtrahiert den Median der Daten.</"
+"li><li>Endpunkte – Führt eine lineare Interpolation mit erstem und letztem "
+"Punkt durch und subtrahiert diese.</li><li>Lineare Regression – Führt eine "
+"lineare Regression für die Daten durch und subtrahiert diese.</li></ul>"
 
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:195
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:163
@@ -16161,6 +16200,24 @@ msgid ""
 "distance apart and ensuring no point deviates more than a set tolerance from "
 "the simplified line.</li></ul>"
 msgstr ""
+"Verfahren zur Linienvereinfachung:<ul><li>Douglas-Peucker – unterteilt die "
+"Linie rekursiv und behält nur die Punkte, die mehr als einen festgelegten "
+"Schwellenwert vom Liniensegment zwischen Start- und Endpunkt abweichen.</"
+"li><li>Visvalingam-Whyatt – entfernt iterativ den Punkt, der die geringste "
+"effektive Fläche zur Form des Polygons beiträgt, bis eine gewünschte Anzahl "
+"von Punkten oder ein Flächenschwellenwert erreicht ist.</li><li>Senkrechter "
+"Abstand – misst den senkrechten Abstand jedes Punkts von einer Referenzlinie "
+"und behält nur diejenigen, die einen Schwellenwert überschreiten.</"
+"li><li>Jeder n-te Punkt – behält nur jeden n-ten Punkt.</li><li>Radialer "
+"Abstand – misst den Abstand jedes Punkts vom zuletzt behaltenen Punkt und "
+"behält nur diejenigen, die einen Schwellenwert überschreiten.</"
+"li><li>Interpolation.</li><li>Opheim – nutzt sowohl Abstands- als auch "
+"Winkeltoleranzen zur Linienvereinfachung. Es behält Punkte nur, wenn sie "
+"außerhalb eines festgelegten Abstands- und Winkelschwellenwerts vom "
+"vorherigen behaltenen Punkt liegen.</li><li>Lang – behält Punkte, die "
+"mindestens einen bestimmten Abstand voneinander haben, und stellt sicher, "
+"dass kein Punkt mehr als eine festgelegte Toleranz von der vereinfachten "
+"Linie abweicht.</li></ul>"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:208
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:212
@@ -16174,17 +16231,17 @@ msgstr "Toleranz (Abstand):"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:209
 #, kde-format
 msgid "Maximum perpendicular distance from the connecting line segment"
-msgstr ""
+msgstr "Maximaler senkrechter Abstand vom verbindenden Liniensegment"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:213
 #, kde-format
 msgid "Maximum radial distance from the previous retained point"
-msgstr ""
+msgstr "Maximaler radialer Abstand vom vorherigen behaltenen Punkt"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
 #, kde-format
 msgid "Maximum perpendicular distance from the line segment"
-msgstr ""
+msgstr "Maximaler senkrechter Abstand vom Liniensegment"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:221
 #, kde-format
@@ -16204,7 +16261,7 @@ msgstr "Schrittweite:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:226
 #, kde-format
 msgid "Keep every n-th point (n is the step size)"
-msgstr ""
+msgstr "Behalte jeden n-ten Punkt (n ist die Schrittweite)"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
 #, kde-format
@@ -16214,7 +16271,7 @@ msgstr "Wiederholungen:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
 #, kde-format
 msgid "Maximum perpendicular distance from the reference line"
-msgstr ""
+msgstr "Maximaler senkrechter Abstand von der Referenzlinie"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:232
 #, kde-format
@@ -16229,7 +16286,7 @@ msgstr "Toleranz (Fläche):"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
 #, kde-format
 msgid "Minimum area contribution threshold for retaining points"
-msgstr ""
+msgstr "Minimaler Flächenbeitrags-Schwellenwert zum Behalten von Punkten"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
 #, kde-format
@@ -16244,12 +16301,12 @@ msgstr "Max. Toleranz:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
 #, kde-format
 msgid "Minimum distance threshold from retained point"
-msgstr ""
+msgstr "Mindestabstands-Schwellenwert vom behaltenen Punkt"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:242
 #, kde-format
 msgid "Maximum distance threshold from retained point"
-msgstr ""
+msgstr "Maximaler Abstands-Schwellenwert vom behaltenen Punkt"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:246
 #, kde-format
@@ -16259,12 +16316,12 @@ msgstr "Suchbereich:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:247
 #, kde-format
 msgid "Minimum point spacing distance"
-msgstr ""
+msgstr "Minimaler Punktabstand"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
 msgid "Search region size in units of points"
-msgstr ""
+msgstr "Suchbereichsgröße in Punkteinheiten"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:569
 #, kde-format
@@ -20154,7 +20211,7 @@ msgstr "Median der absoluten Abweichung"
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:87
 #, kde-format
 msgid "Average 2-Period Moving Range"
-msgstr ""
+msgstr "Gleitende Spannweite (2-Perioden-Durchschnitt)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
