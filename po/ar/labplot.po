@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2025-12-06 18:31+0400\n"
+"PO-Revision-Date: 2026-01-19 22:32+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -892,22 +892,22 @@ msgstr "‏%1: اضبط عمود الموضع ع"
 #: src/backend/datapicker/DatapickerCurve.cpp:344
 #, kde-format
 msgid "%1: set +delta_X column"
-msgstr "‏%1: اضبط عمود +دلتا_س"
+msgstr "‏%1: اضبط عمود +فرق_س"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:351
 #, kde-format
 msgid "%1: set -delta_X column"
-msgstr "‏%1: اضبط عمود -دلتا_س"
+msgstr "‏%1: اضبط عمود -فرق_س"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:358
 #, kde-format
 msgid "%1: set +delta_Y column"
-msgstr "‏%1: اضبط عمود +دلتا_ص"
+msgstr "‏%1: اضبط عمود +فرق_ص"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:365
 #, kde-format
 msgid "%1: set -delta_Y column"
-msgstr "‏%1: اضبط عمود -دلتا_ص"
+msgstr "‏%1: اضبط عمود -فرق_ص"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:372
 #, kde-format
@@ -1012,34 +1012,34 @@ msgstr "‏%1: اضبط الموضع"
 #: src/backend/datapicker/DatapickerPoint.cpp:229
 #, kde-format
 msgid "%1: set +delta_X position"
-msgstr "‏%1: اضبط موضع +دلتا_س"
+msgstr "‏%1: اضبط موضع +فرق_س"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:231
 #: src/backend/datapicker/DatapickerPoint.cpp:234
 #, kde-format
 msgid "%1: set +delta X position"
-msgstr "‏%1: اضبط موضع +دلتا س"
+msgstr "‏%1: اضبط موضع +فرق س"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:247
 #: src/backend/datapicker/DatapickerPoint.cpp:249
 #: src/backend/datapicker/DatapickerPoint.cpp:252
 #, kde-format
 msgid "%1: set -delta_X position"
-msgstr "‏%1: اضبط موضع -دلتا_س"
+msgstr "‏%1: اضبط موضع -فرق_س"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:265
 #: src/backend/datapicker/DatapickerPoint.cpp:267
 #: src/backend/datapicker/DatapickerPoint.cpp:270
 #, kde-format
 msgid "%1: set +delta_Y position"
-msgstr "‏%1: اضبط موضع +دلتا_ص"
+msgstr "‏%1: اضبط موضع +فرق_ص"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:283
 #: src/backend/datapicker/DatapickerPoint.cpp:285
 #: src/backend/datapicker/DatapickerPoint.cpp:288
 #, kde-format
 msgid "%1: set -delta_Y position"
-msgstr "‏%1: اضبط موضع -دلتا_ص"
+msgstr "‏%1: اضبط موضع -فرق_ص"
 
 #: src/backend/datapicker/Segment.cpp:170
 #, kde-format
@@ -1855,7 +1855,7 @@ msgstr "كائن"
 #: src/backend/datasources/filters/MatioFilter.cpp:378
 #, kde-format
 msgid "Char"
-msgstr "محر"
+msgstr "محرف"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:380
 #, kde-format
@@ -2550,7 +2550,7 @@ msgstr "الثوابت الأساسية"
 #: src/backend/gsl/constants.cpp:21
 #, kde-format
 msgid "Astronomy and Astrophysics"
-msgstr "الفلك والفيزياء الفلكيةة"
+msgstr "الفلك والفيزياء الفلكية"
 
 #: src/backend/gsl/constants.cpp:23
 #, kde-format
@@ -3715,7 +3715,7 @@ msgstr "الحجم"
 #: src/frontend/ui/mqttwillsettingswidget.ui:31
 #, kde-format
 msgid "Minimum"
-msgstr "الحد الادنى"
+msgstr "الحد الأدنى"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
@@ -3728,7 +3728,7 @@ msgstr "الحد الادنى"
 #: src/frontend/ui/mqttwillsettingswidget.ui:42
 #, kde-format
 msgid "Maximum"
-msgstr "الحد الاعلى"
+msgstr "الحد الأعلى"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbArithmeticMean)
@@ -4024,22 +4024,22 @@ msgstr "قرِّب إلى ص منزلة عشرية"
 #: src/backend/gsl/functions.cpp:324
 #, kde-format
 msgid "greaterThan"
-msgstr "أكبرمن"
+msgstr "أكبر_من"
 
 #: src/backend/gsl/functions.cpp:325
 #, kde-format
 msgid "lessThan"
-msgstr "أصغرمن"
+msgstr "أصغر_من"
 
 #: src/backend/gsl/functions.cpp:326
 #, kde-format
 msgid "greaterEqualThan"
-msgstr "أكبرأويساوي"
+msgstr "أكبر_أو_يساوي"
 
 #: src/backend/gsl/functions.cpp:327
 #, kde-format
 msgid "lessEqualThan"
-msgstr "أصغرأويساوي"
+msgstr "أصغر_أو_يساوي"
 
 #: src/backend/gsl/functions.cpp:328
 #, kde-format
@@ -4492,57 +4492,57 @@ msgstr "اللوغاريتم الثنائي لوسيط حقيقي"
 #: src/backend/gsl/functions.cpp:429
 #, kde-format
 msgid "Legendre form of complete elliptic integral K"
-msgstr "صيغة ليجاندر للتكامل الإهليلجي الكامل K"
+msgstr "صيغة ليجاندر للتكامل الإهليجي الكامل K"
 
 #: src/backend/gsl/functions.cpp:430
 #, kde-format
 msgid "Legendre form of complete elliptic integral E"
-msgstr "صيغة ليجاندر للتكامل الإهليلجي الكامل E"
+msgstr "صيغة ليجاندر للتكامل الإهليجي الكامل E"
 
 #: src/backend/gsl/functions.cpp:431
 #, kde-format
 msgid "Legendre form of complete elliptic integral Pi"
-msgstr "صيغة ليجاندر للتكامل الإهليلجي الكامل Pi"
+msgstr "صيغة ليجاندر للتكامل الإهليجي الكامل Pi"
 
 #: src/backend/gsl/functions.cpp:432
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral F"
-msgstr "صيغة ليجاندر للتكامل الإهليلجي الناقص F"
+msgstr "صيغة ليجاندر للتكامل الإهليجي الناقص F"
 
 #: src/backend/gsl/functions.cpp:433
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral E"
-msgstr "صيغة ليجاندر للتكامل الإهليلجي الناقص E"
+msgstr "صيغة ليجاندر للتكامل الإهليجي الناقص E"
 
 #: src/backend/gsl/functions.cpp:434
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral P"
-msgstr "صيغة ليجاندر للتكامل الإهليلجي الناقص P"
+msgstr "صيغة ليجاندر للتكامل الإهليجي الناقص P"
 
 #: src/backend/gsl/functions.cpp:435
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral D"
-msgstr "صيغة ليجاندر للتكامل الإهليلجي الناقص D"
+msgstr "صيغة ليجاندر للتكامل الإهليجي الناقص D"
 
 #: src/backend/gsl/functions.cpp:436
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RC"
-msgstr "صيغة كارلسون للتكامل الإهليلجي الناقص RC"
+msgstr "صيغة كارلسون للتكامل الإهليجي الناقص RC"
 
 #: src/backend/gsl/functions.cpp:437
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RD"
-msgstr "صيغة كارلسون للتكامل الإهليلجي الناقص RD"
+msgstr "صيغة كارلسون للتكامل الإهليجي الناقص RD"
 
 #: src/backend/gsl/functions.cpp:438
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RF"
-msgstr "صيغة كارلسون للتكامل الإهليلجي الناقص RF"
+msgstr "صيغة كارلسون للتكامل الإهليجي الناقص RF"
 
 #: src/backend/gsl/functions.cpp:439
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RJ"
-msgstr "صيغة كارلسون للتكامل الإهليلجي الناقص RJ"
+msgstr "صيغة كارلسون للتكامل الإهليجي الناقص RJ"
 
 #: src/backend/gsl/functions.cpp:442
 #, kde-format
@@ -4836,7 +4836,7 @@ msgstr "متعددة حدود غيغنباور C_3"
 #: src/backend/gsl/functions.cpp:518
 #, kde-format
 msgid "Gegenbauer polynomial C_n"
-msgstr "متعددة حدود غيغنباور C_ن"
+msgstr "متعددة حدود غيغنباور C_n"
 
 #: src/backend/gsl/functions.cpp:522
 #, kde-format
@@ -4941,7 +4941,7 @@ msgstr "متعددات حدود لاغوير المُعمَّمة L_3"
 #: src/backend/gsl/functions.cpp:549
 #, kde-format
 msgid "generalized Laguerre polynomials L_n"
-msgstr "متعددات حدود لاغوير المُعمَّمة L_ن"
+msgstr "متعددات حدود لاغوير المُعمَّمة L_n"
 
 #: src/backend/gsl/functions.cpp:552
 #, kde-format
@@ -4971,7 +4971,7 @@ msgstr "متعددة حدود ليجاندر P_3"
 #: src/backend/gsl/functions.cpp:559
 #, kde-format
 msgid "Legendre polynomial P_l"
-msgstr "متعددة حدود ليجاندر P_ل"
+msgstr "متعددة حدود ليجاندر P_l"
 
 #: src/backend/gsl/functions.cpp:560
 #, kde-format
@@ -4986,7 +4986,7 @@ msgstr "دالة ليجاندر Q_1"
 #: src/backend/gsl/functions.cpp:562
 #, kde-format
 msgid "Legendre function Q_l"
-msgstr "دالة ليجاندر Q_ل"
+msgstr "دالة ليجاندر Q_l"
 
 #: src/backend/gsl/functions.cpp:563
 #, kde-format
@@ -9372,7 +9372,7 @@ msgstr "صليب"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:332
 #, kde-format
 msgid "heart"
-msgstr "‎‎قلب‎‎"
+msgstr "قلب"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:334
 #, kde-format
@@ -10236,7 +10236,7 @@ msgstr "انسخ المرجع"
 #: src/frontend/AboutDialog.cpp:97
 #, kde-format
 msgid "Donate"
-msgstr "اِتبرع"
+msgstr "تبرع"
 
 #: src/frontend/AboutDialog.cpp:116
 #, kde-format
@@ -10288,7 +10288,7 @@ msgstr "النواة: "
 #: src/frontend/AboutDialog.cpp:193
 #, kde-format
 msgid "Visit website:"
-msgstr "اِزرع الموقع الإلكتروني:"
+msgstr "زر الموقع الإلكتروني:"
 
 #: src/frontend/AboutDialog.cpp:195
 #, kde-format
@@ -10308,7 +10308,7 @@ msgstr "التطوير:"
 #: src/frontend/AboutDialog.cpp:198
 #, kde-format
 msgid "Please report bugs to:"
-msgstr "اِرجو الإبلاغ عن الأخطاء إلى:"
+msgstr "رجاءً الإبلاغ عن الأخطاء إلى:"
 
 #: src/frontend/AboutDialog.cpp:199
 #, kde-format
@@ -11235,7 +11235,7 @@ msgstr "أَضِف حاوية بيانات جديدة إلى المشروع"
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:499
 #, kde-format
 msgid "Position:"
-msgstr "الموقع:"
+msgstr "الموضع:"
 
 #: src/frontend/datasources/ImportDialog.cpp:109
 #, kde-format
@@ -15054,7 +15054,7 @@ msgstr "كتاب العمل"
 #: src/frontend/MainWin.cpp:641
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
-msgstr "اِنشِئ مصنف عمل جديد لجمع جداول البيانات، المصفوفات، والمُخططات"
+msgstr "ينشئ مصنف عمل جديد لجمع جداول البيانات، المصفوفات، والمُخططات"
 
 #: src/frontend/MainWin.cpp:644 src/frontend/MainWin.cpp:1975
 #, kde-format
@@ -15064,17 +15064,17 @@ msgstr "مستخرج البيانات"
 #: src/frontend/MainWin.cpp:645
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
-msgstr "اِنشِئ مستخرج بيانات للحصول على بيانات من صورة"
+msgstr "ينشئ مستخرج بيانات للحصول على بيانات من صورة"
 
 #: src/frontend/MainWin.cpp:651
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
-msgstr "اِنشِئ جدول بيانات جديد لتحرير البيانات"
+msgstr "ينشئ جدول بيانات جديد لتحرير البيانات"
 
 #: src/frontend/MainWin.cpp:657
 #, kde-format
 msgid "Creates a new matrix for data editing"
-msgstr "اِنشِئ مصفوفة جديدة لتحرير البيانات"
+msgstr "ينشئ مصفوفة جديدة لتحرير البيانات"
 
 #: src/frontend/MainWin.cpp:661 src/frontend/MainWin.cpp:2019
 #: src/frontend/SettingsDialog.cpp:59
@@ -15086,7 +15086,7 @@ msgstr "ورقة العمل"
 #: src/frontend/MainWin.cpp:663
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
-msgstr "اِنشِئ ورقة عمل جديدة لرسم البيانات"
+msgstr "ينشئ ورقة عمل جديدة لرسم البيانات"
 
 #: src/frontend/MainWin.cpp:667 src/frontend/MainWin.cpp:2027
 #, kde-format
@@ -15096,7 +15096,7 @@ msgstr "ملاحظة"
 #: src/frontend/MainWin.cpp:668
 #, kde-format
 msgid "Creates a new note for arbitrary text"
-msgstr "اِنشِئ ملاحظة جديدة لنص تعسُّفي"
+msgstr "ينشئ ملاحظة جديدة لنص تعسُّفي"
 
 #: src/frontend/MainWin.cpp:672 src/frontend/MainWin.cpp:1959
 #, kde-format
@@ -15106,7 +15106,7 @@ msgstr "المجلد"
 #: src/frontend/MainWin.cpp:673
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
-msgstr "اِنشِئ مجلد جديد لجمع الأوراق والعناصر الأخرى"
+msgstr "ينشئ مجلد جديد لجمع الأوراق والعناصر الأخرى"
 
 #: src/frontend/MainWin.cpp:678
 #, kde-format
@@ -15116,7 +15116,7 @@ msgstr "مصدر البيانات المباشر..."
 #: src/frontend/MainWin.cpp:679
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
-msgstr "اِنشِئ مصدر بيانات مباشر لقراءة البيانات من جهاز في الوقت الحقيقي"
+msgstr "ينشئ مصدر بيانات مباشر لقراءة البيانات من جهاز في الوقت الحقيقي"
 
 #: src/frontend/MainWin.cpp:686 src/frontend/MainWin.cpp:695
 #, kde-format
@@ -17903,7 +17903,7 @@ msgstr "أدخِل عدة صفوف في الأسفل"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
-msgstr "اِ&زل الصف (أو الصفوف) المُحدد"
+msgstr "أ&زل الصف (أو الصفوف) المُحدد"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:492
 #, kde-format
@@ -19274,7 +19274,7 @@ msgstr "فاصل الأعمدة:"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:73
 #, kde-format
 msgid "Create Timestamp "
-msgstr "اِنْشِئ طابع زمني "
+msgstr "أنشئ طابع زمني "
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:80
@@ -19330,7 +19330,7 @@ msgstr "حَوِّل (ليس عددًا) إلى 0"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:190
 #, kde-format
 msgid "Create Index"
-msgstr "اِنْشِئ فهرسًا"
+msgstr "انشأ فهرسًا"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:239
@@ -19399,7 +19399,7 @@ msgstr "ترتيب البايت:"
 #: src/frontend/ui/datasources/mcapoptionswidget.ui:82
 #, kde-format
 msgid "Create index column"
-msgstr "اِنْشِئ عمود فهرس"
+msgstr "انشأ عمود فهرس"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WorksheetPreviewWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SettingsNotebookPage)
@@ -20488,7 +20488,7 @@ msgstr "حدد آليًا العدد الأمثل من الأرقام بعد ا�
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:87
 #, kde-format
 msgid "Position"
-msgstr "الموقع"
+msgstr "الموضع"
 
 #. i18n: ectx: property (text), widget (QLabel, lFont)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFont)
@@ -21459,7 +21459,7 @@ msgstr "شكل"
 #: src/frontend/ui/dockwidgets/imagedock.ui:136
 #, kde-format
 msgid "Position Y:"
-msgstr "الموقع ص:"
+msgstr "موضع ص:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionYLogical)
 #: src/frontend/ui/dockwidgets/imagedock.ui:189
@@ -21486,7 +21486,7 @@ msgstr "إحداثيات منطقية"
 #: src/frontend/ui/dockwidgets/imagedock.ui:232
 #, kde-format
 msgid "Position X:"
-msgstr "الموقع س:"
+msgstr "موضع س:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEmbedded)
 #: src/frontend/ui/dockwidgets/imagedock.ui:344
@@ -24886,12 +24886,12 @@ msgstr "تحجيم آليّ"
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Auto Scale X"
-msgstr "قياس آلي لس"
+msgstr "تحجيم آلي لس"
 
 #: src/frontend/worksheet/WorksheetView.cpp:378
 #, kde-format
 msgid "Auto Scale Y"
-msgstr "قياس آلي لص"
+msgstr "تحجيم آلي لص"
 
 #: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
@@ -24916,22 +24916,22 @@ msgstr "صغِّر ص"
 #: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Shift Left X"
-msgstr "اِزح لليسار س"
+msgstr "أزح لليسار س"
 
 #: src/frontend/worksheet/WorksheetView.cpp:408
 #, kde-format
 msgid "Shift Right X"
-msgstr "اِزح لليمين س"
+msgstr "أزح لليمين س"
 
 #: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Shift Up Y"
-msgstr "اِزح للأعلى ص"
+msgstr "أزح للأعلى ص"
 
 #: src/frontend/worksheet/WorksheetView.cpp:412
 #, kde-format
 msgid "Shift Down Y"
-msgstr "اِزح للأسفل ص"
+msgstr "أزح للأسفل ص"
 
 #: src/frontend/worksheet/WorksheetView.cpp:426
 #: src/frontend/worksheet/WorksheetView.cpp:489
