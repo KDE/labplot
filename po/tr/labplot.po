@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-19 00:39+0000\n"
-"PO-Revision-Date: 2026-01-13 18:17+0300\n"
+"POT-Creation-Date: 2026-01-20 00:38+0000\n"
+"PO-Revision-Date: 2026-01-19 10:37+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #: src/backend/core/AbstractAspect.cpp:239
@@ -14092,21 +14092,19 @@ msgstr "Sayı"
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:453
 #, kde-format
 msgid "Spacing"
-msgstr "Boşluklandırma"
+msgstr "Boşluklu"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:282
 #: src/frontend/dockwidgets/AxisDock.cpp:298
 #: src/frontend/dockwidgets/AxisDock.cpp:308
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Values"
-msgstr "Özel Sütun"
+msgstr "Özel Sütun Değerleri"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:283
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Labels"
-msgstr "Özel Sütun"
+msgstr "Özel Sütun Etiketleri"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:286
 #, kde-format
@@ -14124,10 +14122,9 @@ msgid "No labels"
 msgstr "Etiketsiz"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Position values"
+#, kde-format
 msgid "Position Values"
-msgstr "Konum değerleri"
+msgstr "Konum Değerleri"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:312
 #, kde-format
@@ -14180,23 +14177,37 @@ msgid ""
 "provided below.</li><li>Custom Column Labels - positions are determined by "
 "the value labels in the custom column provided below.</li></ul></ul>"
 msgstr ""
+"Ana imlerin eksende nasıl ve nereye konumlandırılacağını tanımlar:"
+"<ul><li>Sayı — İmler eşit aralıklarla yerleştirilir, aralarındaki uzaklık "
+"verilen sabit im sayısı ile belirlenir.</li><li>Boşluklu — İmler, aralarında "
+"belirtilen boşluklar bırakılarak eşit aralıklarla yerleştirilir.</"
+"li><li>Özel Sütun Değerleri — Konumlar, aşağıda verilen özel sütundaki "
+"değerlere göre belirlenir.</li><li>Özel Sütun Etiketleri — Konumlar, aşağıda "
+"verilen özel sütundaki değer etiketlerine göre belirlenir.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Defines where to position the first major tick:<ul><li>Absolute Value - "
+#| "the first tick is positione at the absolute value provided below.</"
+#| "li><li>Offset - the first tick is positioned at the offset relatively to "
+#| "the beginning of the axis range.</li></ul></ul>"
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
-"first tick is positione at the absolute value provided below.</li><li>Offset "
-"- the first tick is positioned at the offset relatively to the beginning of "
-"the axis range.</li></ul></ul>"
+"first tick is positioned at the absolute value provided below.</"
+"li><li>Offset - the first tick is positioned at the offset relatively to the "
+"beginning of the axis range.</li></ul></ul>"
 msgstr ""
+"İlk ana imin konumlandırılacağı yeri tanımlar:<ul><li>Mutlak Değer — İlk im, "
+"aşağıda verilen mutlak değere konumlandırılır.</li><li>Ofset — İlk im, eksen "
+"aralığının başlangıcına göre ofsete konumlandırılır.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
-msgstr "Sütun adlarını belirlemede kullanılması gereken dosyadaki satır."
+msgstr "Ana imin konumları olarak kullanılacak değerleri içeren sütun."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:351
 #, kde-format
@@ -14206,14 +14217,18 @@ msgid ""
 "Column Values - values in the custom column provided below are used as text "
 "labels.</li></ul></ul>"
 msgstr ""
+"Ana imler için hangi metin etiketlerinin gösterileceğini tanımlar:"
+"<ul><li>Konum Değerleri — İmlerin konumları metin etiketleri olarak "
+"kullanılır.</li><li>Özel Sütun Değerleri — Aşağıda belirtilen özel sütundaki "
+"değerler metin etiketleri olarak kullanılır.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
-msgstr "Sütun adlarını belirlemede kullanılması gereken dosyadaki satır."
+msgstr ""
+"Ana imlerin metin etiketleri olarak kullanılacak değerleri içeren sütun."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:366
 #, kde-format
@@ -14225,14 +14240,21 @@ msgid ""
 "Values - positions are determined by the values in the custom column "
 "provided below.</li></ul></ul>"
 msgstr ""
+"Küçük imlerin eksende nasıl ve nereye konumlandırılacağını tanımlar:"
+"<ul><li>Sayı — İmler eşit aralıklarla yerleştirilir, aralarındaki uzaklık "
+"verilen sabit im sayısı ile belirlenir.</li><li>Boşluklu — İmler, aralarında "
+"belirtilen boşluklar bırakılarak eşit aralıklarla yerleştirilir.</"
+"li><li>Özel Sütun Değerleri — Konumlar, aşağıda verilen özel sütundaki "
+"değerlere göre belirlenir.</li><li>Özel Sütun Etiketleri — Konumlar, aşağıda "
+"verilen özel sütundaki değer etiketlerine göre belirlenir.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
-msgstr "Sütun adlarını belirlemede kullanılması gereken dosyadaki satır."
+msgstr ""
+"Küçük imlerin metin etiketleri olarak kullanılacak değerleri içeren sütun."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:629
 #, kde-format
@@ -14972,10 +14994,9 @@ msgstr ""
 "harfle başlamalıdır"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:652
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Apply Formula"
-msgstr "Formül:"
+msgstr "Formülü Uygula"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:789
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
@@ -14984,12 +15005,11 @@ msgid "Delete variable"
 msgstr "Değişkeni sil"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:864
-#, fuzzy, kde-format
-#| msgid "%1: set cell formula"
+#, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
-msgstr[0] "%1: Hücre formülü ayarla"
-msgstr[1] "%1: Hücre formülü ayarla"
+msgstr[0] "%1: Sütun formülünü uygula"
+msgstr[1] "%1: Sütun formülünü uygula"
 
 #: src/frontend/dockwidgets/CursorDock.cpp:32
 #, kde-format
@@ -22196,10 +22216,9 @@ msgstr "Etiket sütunu:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #: src/frontend/ui/dockwidgets/axisdock.ui:808
 #: src/frontend/ui/dockwidgets/axisdock.ui:1116
-#, fuzzy, kde-format
-#| msgid "Position Y:"
+#, kde-format
 msgid "Position Column:"
-msgstr "Y konumu:"
+msgstr "Konum sütunu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -23133,10 +23152,9 @@ msgstr "Köşe yarıçapı:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoUpdate)
 #: src/frontend/ui/dockwidgets/columndock.ui:65
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Auto-Update"
-msgstr "Güncelle"
+msgstr "Kendiliğinden güncelle"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
@@ -23188,10 +23206,9 @@ msgstr "Özel bir işlevi kaydet"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoResize)
 #: src/frontend/ui/dockwidgets/columndock.ui:285
-#, fuzzy, kde-format
-#| msgid "Auto-save:"
+#, kde-format
 msgid "Auto-Resize"
-msgstr "Kendiliğinden kaydet:"
+msgstr "Kendiliğinden yeniden boyutlandır"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:297
@@ -23209,10 +23226,9 @@ msgstr "Çizim gösterimi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:394
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula"
-msgstr "Formül:"
+msgstr "Formül"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)

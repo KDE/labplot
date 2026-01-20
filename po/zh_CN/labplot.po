@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-19 00:39+0000\n"
+"POT-Creation-Date: 2026-01-20 00:38+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -13887,16 +13887,14 @@ msgstr "间距"
 #: src/frontend/dockwidgets/AxisDock.cpp:282
 #: src/frontend/dockwidgets/AxisDock.cpp:298
 #: src/frontend/dockwidgets/AxisDock.cpp:308
-#, fuzzy, kde-format
-#| msgid "Custom column"
+#, kde-format
 msgid "Custom Column Values"
-msgstr "自定义列"
+msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:283
-#, fuzzy, kde-format
-#| msgid "Custom column"
+#, kde-format
 msgid "Custom Column Labels"
-msgstr "自定义列"
+msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:286
 #, kde-format
@@ -13914,10 +13912,9 @@ msgid "No labels"
 msgstr "无标签"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Position values"
+#, kde-format
 msgid "Position Values"
-msgstr "坐标值"
+msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:312
 #, kde-format
@@ -13975,18 +13972,17 @@ msgstr ""
 #, kde-format
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
-"first tick is positione at the absolute value provided below.</li><li>Offset "
-"- the first tick is positioned at the offset relatively to the beginning of "
-"the axis range.</li></ul></ul>"
+"first tick is positioned at the absolute value provided below.</"
+"li><li>Offset - the first tick is positioned at the offset relatively to the "
+"beginning of the axis range.</li></ul></ul>"
 msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
-msgstr "文件中用于确定列名称的行号。"
+msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:351
 #, kde-format
@@ -13998,12 +13994,11 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
-msgstr "文件中用于确定列名称的行号。"
+msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:366
 #, kde-format
@@ -14017,12 +14012,11 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
-msgstr "文件中用于确定列名称的行号。"
+msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:629
 #, kde-format
@@ -21758,10 +21752,9 @@ msgstr "标签列："
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #: src/frontend/ui/dockwidgets/axisdock.ui:808
 #: src/frontend/ui/dockwidgets/axisdock.ui:1116
-#, fuzzy, kde-format
-#| msgid "Position:"
+#, kde-format
 msgid "Position Column:"
-msgstr "位置："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -22692,10 +22685,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoUpdate)
 #: src/frontend/ui/dockwidgets/columndock.ui:65
-#, fuzzy, kde-format
-#| msgid "Auto-Save"
+#, kde-format
 msgid "Auto-Update"
-msgstr "自动保存"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
@@ -22747,10 +22739,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoResize)
 #: src/frontend/ui/dockwidgets/columndock.ui:285
-#, fuzzy, kde-format
-#| msgid "Auto-save:"
+#, kde-format
 msgid "Auto-Resize"
-msgstr "自动保存："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:297
@@ -22768,10 +22759,9 @@ msgstr "绘图设定："
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:394
-#, fuzzy, kde-format
-#| msgid "Format"
+#, kde-format
 msgid "Formula"
-msgstr "格式"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)
@@ -26520,10 +26510,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "%1: fill column with function values"
-#~ msgid_plural "%1: fill columns with function values"
-#~ msgstr[0] "%1：用函数值填充列"
-
-#~ msgid "Labels:"
-#~ msgstr "标签："

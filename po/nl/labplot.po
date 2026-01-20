@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-19 00:39+0000\n"
-"PO-Revision-Date: 2026-01-09 11:23+0100\n"
+"POT-Creation-Date: 2026-01-20 00:38+0000\n"
+"PO-Revision-Date: 2026-01-19 11:03+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:239
 #, kde-format
@@ -14117,16 +14117,14 @@ msgstr "Tussenruimte"
 #: src/frontend/dockwidgets/AxisDock.cpp:282
 #: src/frontend/dockwidgets/AxisDock.cpp:298
 #: src/frontend/dockwidgets/AxisDock.cpp:308
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Values"
-msgstr "Aangepaste kolom"
+msgstr "Aangepaste kolomwaarden"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:283
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Labels"
-msgstr "Aangepaste kolom"
+msgstr "Aangepaste kolomlabels"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:286
 #, kde-format
@@ -14144,10 +14142,9 @@ msgid "No labels"
 msgstr "Geen namen"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Position values"
+#, kde-format
 msgid "Position Values"
-msgstr "Positiewaarden"
+msgstr "Positie van waarden"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:312
 #, kde-format
@@ -14200,23 +14197,43 @@ msgid ""
 "provided below.</li><li>Custom Column Labels - positions are determined by "
 "the value labels in the custom column provided below.</li></ul></ul>"
 msgstr ""
+"Definieert hoe en waar de belangrijkste schaalverdelingen op de as worden "
+"geplaatst:<ul><li>Aantal - schaalverdelingen worden op gelijke afstand van "
+"elkaar geplaatst, de afstand ertussen wordt bepaald door het opgegeven vaste "
+"aantal schaalverdelingen.</li><li>Afstand - schaalverdelingen worden "
+"geplaatst op gelijke afstand van elkaar met de opgegeven afstand ertussen.</"
+"li><li>Aangepaste kolomwaarden - posities worden bepaald door de waarden in "
+"de aangepaste kolom die hieronder wordt opgegeven.</li><li>Aangepaste "
+"kolomlabels  - posities worden bepaald door de waardelabels in de aangepaste "
+"kolom die hieronder wordt opgegeven.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Defines where to position the first major tick:<ul><li>Absolute Value - "
+#| "the first tick is positione at the absolute value provided below.</"
+#| "li><li>Offset - the first tick is positioned at the offset relatively to "
+#| "the beginning of the axis range.</li></ul></ul>"
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
-"first tick is positione at the absolute value provided below.</li><li>Offset "
-"- the first tick is positioned at the offset relatively to the beginning of "
-"the axis range.</li></ul></ul>"
+"first tick is positioned at the absolute value provided below.</"
+"li><li>Offset - the first tick is positioned at the offset relatively to the "
+"beginning of the axis range.</li></ul></ul>"
 msgstr ""
+"Definieert waar de eerste belangrijke schaalverdeling moet worden geplaatst:"
+"<ul><li>Absolute waarde - de eerste schaalverdeling wordt geplaatst op de "
+"hieronder opgegeven absolute waarde.</li><li>Offset - de eerste "
+"schaalverdeling wordt geplaatst op de offset ten opzichte van het begin van "
+"het asbereik.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
-msgstr "Regel in het bestand bestemd voor het bepalen van de kolomnamen."
+msgstr ""
+"Kolom met de waarden die gebruikt moeten worden als posities voor de "
+"hoofdmarkeringen."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:351
 #, kde-format
@@ -14226,14 +14243,20 @@ msgid ""
 "Column Values - values in the custom column provided below are used as text "
 "labels.</li></ul></ul>"
 msgstr ""
+"Definieert welke tekstlabels voor de belangrijkste schaalverdelingen worden "
+"weergegeven:<ul><li>Positiewaarden - de posities van de schaalverdelingen "
+"worden gebruikt als tekstlabels.</li><li>Aangepaste kolomwaarden - de "
+"waarden in de onderstaande aangepaste kolom worden gebruikt als tekstlabels."
+"</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
-msgstr "Regel in het bestand bestemd voor het bepalen van de kolomnamen."
+msgstr ""
+"Kolom met de waarden die als tekstlabels voor de hoofdmarkeringen moeten "
+"worden gebruikt."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:366
 #, kde-format
@@ -14245,14 +14268,22 @@ msgid ""
 "Values - positions are determined by the values in the custom column "
 "provided below.</li></ul></ul>"
 msgstr ""
+"Definieert hoe en waar de kleine schaalverdelingen op de as worden geplaatst:"
+"<ul><li>Aantal - schaalverdelingen worden op gelijke afstand van elkaar "
+"geplaatst, de afstand ertussen wordt bepaald door het opgegeven vaste aantal "
+"schaalverdelingen.</li><li>Afstand - schaalverdelingen worden geplaatst op "
+"gelijke afstand van elkaar met de opgegeven afstand ertussen.</"
+"li><li>Aangepaste kolomwaarden - posities worden bepaald door de waarden in "
+"de aangepaste kolom die hieronder wordt opgegeven.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
-msgstr "Regel in het bestand bestemd voor het bepalen van de kolomnamen."
+msgstr ""
+"Kolom met de waarden die gebruikt moeten worden als posities van de kleine "
+"schaalverdelingen."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:629
 #, kde-format
@@ -15010,10 +15041,9 @@ msgstr ""
 "moeten beginnen met een letter"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:652
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Apply Formula"
-msgstr "Formule:"
+msgstr "Formule toepassen"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:789
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
@@ -15022,12 +15052,11 @@ msgid "Delete variable"
 msgstr "Variabele wissen"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:864
-#, fuzzy, kde-format
-#| msgid "%1: set cell formula"
+#, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
-msgstr[0] "%1: geef formule cel"
-msgstr[1] "%1: geef formule cel"
+msgstr[0] "%1: formule voor kolom toepassen"
+msgstr[1] "%1: formule voor kolom toepassen"
 
 #: src/frontend/dockwidgets/CursorDock.cpp:32
 #, kde-format
@@ -22261,10 +22290,9 @@ msgstr "Kolomnaam:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #: src/frontend/ui/dockwidgets/axisdock.ui:808
 #: src/frontend/ui/dockwidgets/axisdock.ui:1116
-#, fuzzy, kde-format
-#| msgid "Position Y:"
+#, kde-format
 msgid "Position Column:"
-msgstr "Positie Y:"
+msgstr "Positie van kolom:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -23197,10 +23225,9 @@ msgstr "Hoekradius:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoUpdate)
 #: src/frontend/ui/dockwidgets/columndock.ui:65
-#, fuzzy, kde-format
-#| msgid "auto update"
+#, kde-format
 msgid "Auto-Update"
-msgstr "auto-update"
+msgstr "Automatisch bijwerken"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
@@ -23252,10 +23279,9 @@ msgstr "Een aangepaste functie opslaan"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoResize)
 #: src/frontend/ui/dockwidgets/columndock.ui:285
-#, fuzzy, kde-format
-#| msgid "Resize"
+#, kde-format
 msgid "Auto-Resize"
-msgstr "Herschalen"
+msgstr "Grootte automatisch wijzigen"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:297
@@ -23273,10 +23299,9 @@ msgstr "Plotbestemming:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:394
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula"
-msgstr "Formule:"
+msgstr "Formule"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)
