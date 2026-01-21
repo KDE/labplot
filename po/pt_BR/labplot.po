@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-20 00:38+0000\n"
-"PO-Revision-Date: 2026-01-19 07:37-0300\n"
+"POT-Creation-Date: 2026-01-21 00:40+0000\n"
+"PO-Revision-Date: 2026-01-20 07:00-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -2459,47 +2459,47 @@ msgstr "Planilhas: "
 msgid "Invalid region specified."
 msgstr "Região inválida especificada."
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:733
 #, kde-format
 msgid "Device doesn't exist."
 msgstr "O dispositivo não existe."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:736
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr "O usuário não tem permissões suficientes para abrir o dispositivo."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:739
 #, kde-format
 msgid "Device already opened."
 msgstr "O dispositivo já está aberto."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:742
 #, kde-format
 msgid "Device is not open."
 msgstr "O dispositivo não está aberto."
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:745
 #, kde-format
 msgid "Failed to read data."
 msgstr "Falha ao ler dados."
 
-#: src/backend/datasources/LiveDataSource.cpp:749
+#: src/backend/datasources/LiveDataSource.cpp:748
 #, kde-format
 msgid "Device not available."
 msgstr "O dispositivo não está disponível."
 
-#: src/backend/datasources/LiveDataSource.cpp:752
+#: src/backend/datasources/LiveDataSource.cpp:751
 #, kde-format
 msgid "Timeout occurred."
 msgstr "Tempo limite atingido."
 
-#: src/backend/datasources/LiveDataSource.cpp:757
+#: src/backend/datasources/LiveDataSource.cpp:756
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "O seguinte erro ocorreu: %1."
 
-#: src/backend/datasources/LiveDataSource.cpp:768
+#: src/backend/datasources/LiveDataSource.cpp:767
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Erro de porta serial"
@@ -7328,27 +7328,27 @@ msgstr "Tri-cúbica"
 msgid "Python file (*.py)"
 msgstr "Arquivo python (*.py)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
 #, kde-format
 msgid "no script element found"
 msgstr "nenhum elemento de script encontrado"
 
-#: src/backend/script/Script.cpp:202
+#: src/backend/script/Script.cpp:201
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: executar script %2"
 
-#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:313
+#: src/backend/script/Script.cpp:312
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Falha ao executar o script."
 
-#: src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "A script is already running."
 msgstr "Um script já está em execução."
@@ -12333,7 +12333,7 @@ msgstr "Curva"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to export"
 msgstr "Falha ao exportar"
@@ -12341,7 +12341,7 @@ msgstr "Falha ao exportar"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Falha ao gravar em '%1'. Verifique o caminho."
@@ -14226,12 +14226,7 @@ msgstr ""
 "na coluna personalizada fornecida abaixo.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
-#, fuzzy, kde-format
-#| msgid ""
-#| "Defines where to position the first major tick:<ul><li>Absolute Value - "
-#| "the first tick is positione at the absolute value provided below.</"
-#| "li><li>Offset - the first tick is positioned at the offset relatively to "
-#| "the beginning of the axis range.</li></ul></ul>"
+#, kde-format
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
 "first tick is positioned at the absolute value provided below.</"

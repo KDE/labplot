@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-20 00:38+0000\n"
+"POT-Creation-Date: 2026-01-21 00:40+0000\n"
 "PO-Revision-Date: 2026-01-10 16:01+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -2471,47 +2471,47 @@ msgstr "Fogli: "
 msgid "Invalid region specified."
 msgstr "Regione specificata non valida."
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:733
 #, kde-format
 msgid "Device doesn't exist."
 msgstr "Il dispositivo non esiste."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:736
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr "L'utente non ha i permessi necessari per aprire il dispositivo."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:739
 #, kde-format
 msgid "Device already opened."
 msgstr "Il dispositivo è già aperto."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:742
 #, kde-format
 msgid "Device is not open."
 msgstr "Il dispositivo non è aperto."
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:745
 #, kde-format
 msgid "Failed to read data."
 msgstr "Impossibile leggere i dati."
 
-#: src/backend/datasources/LiveDataSource.cpp:749
+#: src/backend/datasources/LiveDataSource.cpp:748
 #, kde-format
 msgid "Device not available."
 msgstr "Il dispositivo non disponibile."
 
-#: src/backend/datasources/LiveDataSource.cpp:752
+#: src/backend/datasources/LiveDataSource.cpp:751
 #, kde-format
 msgid "Timeout occurred."
 msgstr "Tempo scaduto."
 
-#: src/backend/datasources/LiveDataSource.cpp:757
+#: src/backend/datasources/LiveDataSource.cpp:756
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Si è verificato il seguente errore: %1."
 
-#: src/backend/datasources/LiveDataSource.cpp:768
+#: src/backend/datasources/LiveDataSource.cpp:767
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Errore della porta seriale"
@@ -7342,27 +7342,27 @@ msgstr "Tricubo"
 msgid "Python file (*.py)"
 msgstr "File Python (*.py)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
 #, kde-format
 msgid "no script element found"
 msgstr "Nessun elemento di script trovato"
 
-#: src/backend/script/Script.cpp:202
+#: src/backend/script/Script.cpp:201
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: esegui script %2"
 
-#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:313
+#: src/backend/script/Script.cpp:312
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Impossibile eseguire lo script."
 
-#: src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "A script is already running."
 msgstr "Uno script è già in esecuzione."
@@ -12371,7 +12371,7 @@ msgstr "Curva"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to export"
 msgstr "Impossibile esportare"
@@ -12379,7 +12379,7 @@ msgstr "Impossibile esportare"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Impossibile scrivere su «%1». Controlla il percorso."

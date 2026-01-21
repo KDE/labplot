@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-20 00:38+0000\n"
-"PO-Revision-Date: 2026-01-19 07:45+0100\n"
+"POT-Creation-Date: 2026-01-21 00:40+0000\n"
+"PO-Revision-Date: 2026-01-20 07:09+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -2458,47 +2458,47 @@ msgstr "Listi: "
 msgid "Invalid region specified."
 msgstr "Navedena neveljavna regija."
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:733
 #, kde-format
 msgid "Device doesn't exist."
 msgstr "Naprava ne obstaja."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:736
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr "Uporabnik nima dovolj dovoljenj za odpiranje naprave."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:739
 #, kde-format
 msgid "Device already opened."
 msgstr "Naprava je že odprta."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:742
 #, kde-format
 msgid "Device is not open."
 msgstr "Naprava ni odprta."
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:745
 #, kde-format
 msgid "Failed to read data."
 msgstr "Branja podatkov ni uspelo."
 
-#: src/backend/datasources/LiveDataSource.cpp:749
+#: src/backend/datasources/LiveDataSource.cpp:748
 #, kde-format
 msgid "Device not available."
 msgstr "Naprava ni na voljo."
 
-#: src/backend/datasources/LiveDataSource.cpp:752
+#: src/backend/datasources/LiveDataSource.cpp:751
 #, kde-format
 msgid "Timeout occurred."
 msgstr "Bila je časovna omejitev."
 
-#: src/backend/datasources/LiveDataSource.cpp:757
+#: src/backend/datasources/LiveDataSource.cpp:756
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Prišlo je do naslednje napake: %1."
 
-#: src/backend/datasources/LiveDataSource.cpp:768
+#: src/backend/datasources/LiveDataSource.cpp:767
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Napaka zaporednih vrat"
@@ -7330,27 +7330,27 @@ msgstr "Trikubično"
 msgid "Python file (*.py)"
 msgstr "Pythonova datoteka (*.py)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
 #, kde-format
 msgid "no script element found"
 msgstr "ni najdenega elementa skripta"
 
-#: src/backend/script/Script.cpp:202
+#: src/backend/script/Script.cpp:201
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: poženi %2 skript"
 
-#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
 #, kde-format
 msgid "Script"
 msgstr "Skript"
 
-#: src/backend/script/Script.cpp:313
+#: src/backend/script/Script.cpp:312
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Skripta ni bilo mogoče zagnati."
 
-#: src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "A script is already running."
 msgstr "Skript se že izvaja."
@@ -12349,7 +12349,7 @@ msgstr "Krivulja"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to export"
 msgstr "Izvoz ni uspel"
@@ -12357,7 +12357,7 @@ msgstr "Izvoz ni uspel"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Pisanje v »%1« ni uspelo. Preverite pot."
@@ -14237,12 +14237,7 @@ msgstr ""
 "spodnjem stolpcu po meri.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
-#, fuzzy, kde-format
-#| msgid ""
-#| "Defines where to position the first major tick:<ul><li>Absolute Value - "
-#| "the first tick is positione at the absolute value provided below.</"
-#| "li><li>Offset - the first tick is positioned at the offset relatively to "
-#| "the beginning of the axis range.</li></ul></ul>"
+#, kde-format
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
 "first tick is positioned at the absolute value provided below.</"
@@ -14250,9 +14245,8 @@ msgid ""
 "beginning of the axis range.</li></ul></ul>"
 msgstr ""
 "Določa, kam postaviti prvo večjo črtico:<ul><li>Absolutna vrednost – prva "
-"črtice je postavljena na spodaj navedeni absolutni vrednosti.</li><li>Odmik "
-"– prva črtice postavljena na odmik glede na začetek območja osi.</li></ul></"
-"ul>"
+"črtice je postavljena na navedeno absolutno vrednost spodaj.</li><li>Odmik – "
+"prva črtice postavljena na odmik glede na začetek območja osi.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
 #, kde-format

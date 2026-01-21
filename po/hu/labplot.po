@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-20 00:38+0000\n"
+"POT-Creation-Date: 2026-01-21 00:40+0000\n"
 "PO-Revision-Date: 2014-02-09 10:11+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -2420,47 +2420,47 @@ msgstr ""
 msgid "Invalid region specified."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:733
 #, kde-format
 msgid "Device doesn't exist."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:736
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:739
 #, kde-format
 msgid "Device already opened."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:742
 #, kde-format
 msgid "Device is not open."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:745
 #, kde-format
 msgid "Failed to read data."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:749
+#: src/backend/datasources/LiveDataSource.cpp:748
 #, kde-format
 msgid "Device not available."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:752
+#: src/backend/datasources/LiveDataSource.cpp:751
 #, kde-format
 msgid "Timeout occurred."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:757
+#: src/backend/datasources/LiveDataSource.cpp:756
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:768
+#: src/backend/datasources/LiveDataSource.cpp:767
 #, kde-format
 msgid "Serial Port Error"
 msgstr ""
@@ -7253,28 +7253,28 @@ msgstr ""
 msgid "Python file (*.py)"
 msgstr ""
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
 #, kde-format
 msgid "no script element found"
 msgstr ""
 
-#: src/backend/script/Script.cpp:202
+#: src/backend/script/Script.cpp:201
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
 #, kde-format
 msgid "Script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:313
+#: src/backend/script/Script.cpp:312
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Failed to run the script."
 msgstr "Statisztikák"
 
-#: src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -12265,7 +12265,7 @@ msgstr ""
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to export"
 msgstr ""
@@ -12273,7 +12273,7 @@ msgstr ""
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""

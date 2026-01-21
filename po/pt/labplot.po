@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-20 00:38+0000\n"
+"POT-Creation-Date: 2026-01-21 00:40+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -2578,13 +2578,13 @@ msgstr "Folhas: "
 msgid "Invalid region specified."
 msgstr "Foi indicada uma tolerância inválida"
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:733
 #, fuzzy, kde-format
 #| msgid "File does not exist."
 msgid "Device doesn't exist."
 msgstr "O ficheiro não existe."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:736
 #, fuzzy, kde-format
 #| msgid ""
 #| "Failed to open the device. Please check your permissions on this device."
@@ -2593,40 +2593,40 @@ msgstr ""
 "Não foi possível aceder ao dispositivo. Verifique por favor as suas "
 "permissões para esse dispositivo."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:739
 #, kde-format
 msgid "Device already opened."
 msgstr "O dispositivo já está aberto."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:742
 #, fuzzy, kde-format
 #| msgid "The device is not opened."
 msgid "Device is not open."
 msgstr "O dispositivo não está aberto."
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:745
 #, kde-format
 msgid "Failed to read data."
 msgstr "Não foi possível ler os dados."
 
-#: src/backend/datasources/LiveDataSource.cpp:749
+#: src/backend/datasources/LiveDataSource.cpp:748
 #, fuzzy, kde-format
 #| msgid "no info available"
 msgid "Device not available."
 msgstr "Nenhuma informação disponível"
 
-#: src/backend/datasources/LiveDataSource.cpp:752
+#: src/backend/datasources/LiveDataSource.cpp:751
 #, fuzzy, kde-format
 #| msgid "An error occurred."
 msgid "Timeout occurred."
 msgstr "Ocorreu um erro."
 
-#: src/backend/datasources/LiveDataSource.cpp:757
+#: src/backend/datasources/LiveDataSource.cpp:756
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Ocorreu o seguinte erro: %1."
 
-#: src/backend/datasources/LiveDataSource.cpp:768
+#: src/backend/datasources/LiveDataSource.cpp:767
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Erro na Porta Série"
@@ -7579,30 +7579,30 @@ msgstr "Tri-Cúbico"
 msgid "Python file (*.py)"
 msgstr "Ficheiros de LaTeX (*.tex)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
 #, fuzzy, kde-format
 #| msgid "no note element found"
 msgid "no script element found"
 msgstr "não foi encontrado o elemento de notas"
 
-#: src/backend/script/Script.cpp:202
+#: src/backend/script/Script.cpp:201
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
 msgstr "&Programa"
 
-#: src/backend/script/Script.cpp:313
+#: src/backend/script/Script.cpp:312
 #, fuzzy, kde-format
 #| msgid "Failed to open the file '%1'."
 msgid "Failed to run the script."
 msgstr "Não foi possível abrir o ficheiro '%1'."
 
-#: src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -12776,7 +12776,7 @@ msgstr "Curva"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to export"
 msgstr "Não foi possível exportar"
@@ -12784,7 +12784,7 @@ msgstr "Não foi possível exportar"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Não foi possível gravar em '%1'. Verifique por favor a localização."

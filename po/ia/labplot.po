@@ -1,14 +1,14 @@
 # Copyright (C) 2023 This file is copyright:
 # This file is distributed under the same license as the labplot package.
 #
-# SPDX-FileCopyrightText: 2023, 2024, 2025 giovanni <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2023, 2024, 2025, 2026 giovanni <g.sora@tiscali.it>
 # giovanni <g.sora@tiscali.it>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-20 00:38+0000\n"
-"PO-Revision-Date: 2025-05-30 18:48+0200\n"
+"POT-Creation-Date: 2026-01-21 00:40+0000\n"
+"PO-Revision-Date: 2026-01-20 16:33+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -2410,48 +2410,48 @@ msgstr "Sheets (Folios): "
 msgid "Invalid region specified."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:733
 #, kde-format
 msgid "Device doesn't exist."
 msgstr "Dispositivo non existe."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:736
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:739
 #, kde-format
 msgid "Device already opened."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:742
 #, kde-format
 msgid "Device is not open."
 msgstr "Dispositivo non es aperite."
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:745
 #, kde-format
 msgid "Failed to read data."
 msgstr "Il falleva leger datos."
 
-#: src/backend/datasources/LiveDataSource.cpp:749
+#: src/backend/datasources/LiveDataSource.cpp:748
 #, kde-format
 msgid "Device not available."
 msgstr "Dispositivo no disponibile."
 
-#: src/backend/datasources/LiveDataSource.cpp:752
+#: src/backend/datasources/LiveDataSource.cpp:751
 #, fuzzy, kde-format
 #| msgid "Timeout occured."
 msgid "Timeout occurred."
 msgstr "Occurreva tempore expirate"
 
-#: src/backend/datasources/LiveDataSource.cpp:757
+#: src/backend/datasources/LiveDataSource.cpp:756
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:768
+#: src/backend/datasources/LiveDataSource.cpp:767
 #, kde-format
 msgid "Serial Port Error"
 msgstr ""
@@ -7236,48 +7236,45 @@ msgstr ""
 msgid "Python file (*.py)"
 msgstr "File de texto (*.txt)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
 #, kde-format
 msgid "no script element found"
 msgstr "necun elemento de script trovate"
 
-#: src/backend/script/Script.cpp:202
+#: src/backend/script/Script.cpp:201
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: Exeque Script %2"
 
-#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:313
+#: src/backend/script/Script.cpp:312
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Falleva a exequer le script."
 
-#: src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "A script is already running."
 msgstr ""
 
 #: src/backend/script/ScriptRuntime.cpp:99
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nomine"
 
 #: src/backend/script/ScriptRuntime.cpp:101
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Valor"
 
 #: src/backend/script/ScriptRuntime.cpp:103
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Typo"
@@ -7286,7 +7283,7 @@ msgstr "Typo"
 #, fuzzy, kde-format
 #| msgid "Column %1"
 msgid "Columns: %1"
-msgstr "Columna %1"
+msgstr "Columnas"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:224
 #, fuzzy, kde-format
@@ -7646,9 +7643,9 @@ msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:505
-#, kde-format
+#, fuzzy, kde-format
 msgid "N/A"
-msgstr ""
+msgstr "n/d"
 
 #: src/backend/statistics/HypothesisTest.cpp:509
 #, fuzzy, kde-format
@@ -7743,7 +7740,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Value"
 msgid "t-Value"
-msgstr "Valor"
+msgstr "T(valor)"
 
 #: src/backend/statistics/HypothesisTest.cpp:563
 #, fuzzy, kde-format
@@ -7825,10 +7822,9 @@ msgid "Mean Squares Residuals"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:586
-#, fuzzy, kde-format
-#| msgid "Up"
+#, kde-format
 msgid "U"
-msgstr "In alto"
+msgstr "I"
 
 #: src/backend/statistics/HypothesisTest.cpp:586
 #: src/backend/statistics/HypothesisTest.cpp:590
@@ -7860,9 +7856,9 @@ msgid "Mean Rank 2"
 msgstr "Media = 0"
 
 #: src/backend/statistics/HypothesisTest.cpp:590
-#, kde-format
+#, fuzzy, kde-format
 msgid "W"
-msgstr ""
+msgstr "W"
 
 #: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
@@ -7905,13 +7901,12 @@ msgstr "Computo"
 #: src/backend/statistics/HypothesisTest.cpp:604
 #, kde-format
 msgid "H"
-msgstr ""
+msgstr "H"
 
 #: src/backend/statistics/HypothesisTest.cpp:598
-#, fuzzy, kde-format
-#| msgid "Qt"
+#, kde-format
 msgid "Q"
-msgstr "Qt"
+msgstr "Q"
 
 #: src/backend/statistics/HypothesisTest.cpp:600
 #: src/backend/statistics/HypothesisTest.cpp:602
@@ -8152,10 +8147,9 @@ msgstr "Parametros"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:876
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "Result"
-msgstr "Resultatos:"
+msgstr "Resultato"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:111
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:146
@@ -8172,7 +8166,7 @@ msgstr ""
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:726
 #, kde-format
 msgid "Seasonal"
-msgstr ""
+msgstr "Saisonal"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:123
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:160
@@ -8193,10 +8187,9 @@ msgstr "Folio de labor"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:139
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:167
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original"
-msgstr "Grandor original"
+msgstr "Original"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:143
 #, fuzzy, kde-format
@@ -9638,7 +9631,7 @@ msgstr "Adapta Distribution a '%1' "
 #, fuzzy, kde-format
 #| msgid "%1: smooth '%2'"
 msgid "%1: simplify '%2'"
-msgstr "%1: Lisie '%2'"
+msgstr "Simplifica"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2076
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:769
@@ -12252,7 +12245,7 @@ msgstr "Curva"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to export"
 msgstr "Falleva a exportar"
@@ -12260,7 +12253,7 @@ msgstr "Falleva a exportar"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""
@@ -12677,7 +12670,7 @@ msgstr "Nomine de dossier:"
 #, fuzzy, kde-format
 #| msgid "Folder"
 msgid "New Folder"
-msgstr "Dossier"
+msgstr "Nove dossier"
 
 #: src/frontend/datasources/ImportDialog.cpp:185
 #: src/frontend/datasources/ImportDialog.cpp:189
@@ -14602,7 +14595,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the X position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%v%"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:400
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:623
@@ -14613,7 +14606,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the Y position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%v%"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:805
 #, kde-format
@@ -15239,21 +15232,19 @@ msgid "Match Complete Word"
 msgstr "Coincide con parola complete"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:53
-#, fuzzy, kde-format
-#| msgid "Day Names"
+#, kde-format
 msgid "Copy Name"
-msgstr "Nomines de Die"
+msgstr "Copia Nomine"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:54
-#, fuzzy, kde-format
-#| msgid "Drop Values"
+#, kde-format
 msgid "Copy Value"
-msgstr "Abandona Valores"
+msgstr "Copia Valor"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:55
 #, kde-format
 msgid "Copy Name and Value"
-msgstr ""
+msgstr "Copia Nomine e Valor"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:168
 #, kde-format
@@ -15987,8 +15978,7 @@ msgid "Search region size in units of points"
 msgstr ""
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:569
-#, fuzzy, kde-format
-#| msgid "status: %1"
+#, kde-format
 msgid "Status: %1"
 msgstr "Stato: %1"
 
@@ -17257,9 +17247,9 @@ msgid "Divide Value"
 msgstr ""
 
 #: src/frontend/matrix/MatrixView.cpp:176
-#, kde-format
+#, fuzzy, kde-format
 msgid "&Add Columns"
-msgstr ""
+msgstr "%1: adde %2 columnas"
 
 #: src/frontend/matrix/MatrixView.cpp:177
 #, kde-format
@@ -19804,10 +19794,9 @@ msgid "Dispersion Measures"
 msgstr ""
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
-#, fuzzy, kde-format
-#| msgid "StandardDeviation"
+#, kde-format
 msgid "Standard Deviation"
-msgstr "DeviationStandard"
+msgstr "Deviation standard"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:83
 #, kde-format
@@ -20576,10 +20565,9 @@ msgstr "Imagine:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedded:"
+#, kde-format
 msgid "Embed"
-msgstr "Incorporate:"
+msgstr "Incorpora"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/frontend/ui/datapickerimagewidget.ui:708
@@ -22713,10 +22701,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStack)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1506
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Stack"
-msgstr "Pilate"
+msgstr "Stack (Pila)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:87
@@ -22783,7 +22770,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "auto update"
 msgid "Auto-Update"
-msgstr "Actualisation Automatic"
+msgstr "Actualisation Automatic:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
@@ -22840,7 +22827,7 @@ msgstr "%1: assigna function"
 #, fuzzy, kde-format
 #| msgid "Auto-save:"
 msgid "Auto-Resize"
-msgstr "Auto Salveguarda:"
+msgstr "Auto Redimensiona"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:297
@@ -22858,10 +22845,9 @@ msgstr "Designation de tracia (Plot):"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:394
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula"
-msgstr "Formula:"
+msgstr "Formula"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)
@@ -23074,16 +23060,15 @@ msgstr "Recalcula"
 
 #. i18n: ectx: property (text), widget (QLabel, lH0)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:104
-#, kde-format
+#, fuzzy, kde-format
 msgid "Null:"
-msgstr ""
+msgstr "NULL"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Filter name:"
+#, kde-format
 msgid "Alternate:"
-msgstr "Nomine de filtro:"
+msgstr "Alternate:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
@@ -23093,10 +23078,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test:"
-msgstr "Essaya"
+msgstr "Test:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #: src/frontend/ui/dockwidgets/imagedock.ui:136
@@ -23601,7 +23585,7 @@ msgstr "Optiones"
 #, fuzzy, kde-format
 #| msgid "Period:"
 msgid "Periods:"
-msgstr "Periodo:"
+msgstr "periodos"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLLambda)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:173
@@ -23777,7 +23761,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Subtract"
 msgid "Subtraction"
-msgstr "Subtrahe"
+msgstr "Subtraction:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #. i18n: ectx: property (text), widget (QLabel, lARPLSSmoothness)
@@ -25016,10 +25000,9 @@ msgstr "Traciar:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:290
-#, fuzzy, kde-format
-#| msgid "Compression"
+#, kde-format
 msgid "Compression:"
-msgstr "Compression"
+msgstr "Compression:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
 #: src/frontend/ui/settingsgeneralpage.ui:329

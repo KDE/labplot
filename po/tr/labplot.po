@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-20 00:38+0000\n"
-"PO-Revision-Date: 2026-01-19 10:37+0300\n"
+"POT-Creation-Date: 2026-01-21 00:40+0000\n"
+"PO-Revision-Date: 2026-01-20 11:09+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2455,47 +2455,47 @@ msgstr "Sayfalar: "
 msgid "Invalid region specified."
 msgstr "Geçersiz bölge belirtildi."
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:733
 #, kde-format
 msgid "Device doesn't exist."
 msgstr "Aygıt yok."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:736
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr "Kullanıcının aygıtı açmak için yeterli izni yok."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:739
 #, kde-format
 msgid "Device already opened."
 msgstr "Aygıt zaten açık."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:742
 #, kde-format
 msgid "Device is not open."
 msgstr "Aygıt açık değil."
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:745
 #, kde-format
 msgid "Failed to read data."
 msgstr "Veri okunamadı."
 
-#: src/backend/datasources/LiveDataSource.cpp:749
+#: src/backend/datasources/LiveDataSource.cpp:748
 #, kde-format
 msgid "Device not available."
 msgstr "Aygıt kullanılabilir değil."
 
-#: src/backend/datasources/LiveDataSource.cpp:752
+#: src/backend/datasources/LiveDataSource.cpp:751
 #, kde-format
 msgid "Timeout occurred."
 msgstr "Zaman aşımı oluştu."
 
-#: src/backend/datasources/LiveDataSource.cpp:757
+#: src/backend/datasources/LiveDataSource.cpp:756
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Şu hata oluştu: %1."
 
-#: src/backend/datasources/LiveDataSource.cpp:768
+#: src/backend/datasources/LiveDataSource.cpp:767
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Seri Kapı Hatası"
@@ -7308,27 +7308,27 @@ msgstr "Üçlü Küp"
 msgid "Python file (*.py)"
 msgstr "Python dosyası (*.py)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
 #, kde-format
 msgid "no script element found"
 msgstr "Bulunan betik ögesi yok"
 
-#: src/backend/script/Script.cpp:202
+#: src/backend/script/Script.cpp:201
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: %2 betiğini çalıştır"
 
-#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
 #, kde-format
 msgid "Script"
 msgstr "Betik"
 
-#: src/backend/script/Script.cpp:313
+#: src/backend/script/Script.cpp:312
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Betik çalıştırılamadı."
 
-#: src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "A script is already running."
 msgstr "Bir betik halihazırda çalışıyor."
@@ -12307,7 +12307,7 @@ msgstr "Eğri"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to export"
 msgstr "Dışa aktarılamadı"
@@ -12315,7 +12315,7 @@ msgstr "Dışa aktarılamadı"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "“%1” yazılamadı. Lütfen yolu denetleyin."
@@ -14186,12 +14186,7 @@ msgstr ""
 "verilen özel sütundaki değer etiketlerine göre belirlenir.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
-#, fuzzy, kde-format
-#| msgid ""
-#| "Defines where to position the first major tick:<ul><li>Absolute Value - "
-#| "the first tick is positione at the absolute value provided below.</"
-#| "li><li>Offset - the first tick is positioned at the offset relatively to "
-#| "the beginning of the axis range.</li></ul></ul>"
+#, kde-format
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
 "first tick is positioned at the absolute value provided below.</"

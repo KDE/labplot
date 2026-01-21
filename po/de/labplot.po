@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-20 00:38+0000\n"
-"PO-Revision-Date: 2026-01-19 11:25+0100\n"
+"POT-Creation-Date: 2026-01-21 00:40+0000\n"
+"PO-Revision-Date: 2026-01-20 16:51+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -2437,47 +2437,47 @@ msgstr "Blätter:"
 msgid "Invalid region specified."
 msgstr "Ungültiger Bereich angegeben."
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:733
 #, kde-format
 msgid "Device doesn't exist."
 msgstr "Gerät existiert nicht."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:736
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr "Dem Nutzer fehlen die  Zugriffsrechte zum Öffnen des Gerätes."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:739
 #, kde-format
 msgid "Device already opened."
 msgstr "Das Gerät ist bereits geöffnet."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:742
 #, kde-format
 msgid "Device is not open."
 msgstr "Gerät ist nicht geöffnet."
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:745
 #, kde-format
 msgid "Failed to read data."
 msgstr "Einlesen der Daten nicht möglich"
 
-#: src/backend/datasources/LiveDataSource.cpp:749
+#: src/backend/datasources/LiveDataSource.cpp:748
 #, kde-format
 msgid "Device not available."
 msgstr "Gerät nicht verfügbar."
 
-#: src/backend/datasources/LiveDataSource.cpp:752
+#: src/backend/datasources/LiveDataSource.cpp:751
 #, kde-format
 msgid "Timeout occurred."
 msgstr "Zeitüberschreitung aufgetreten."
 
-#: src/backend/datasources/LiveDataSource.cpp:757
+#: src/backend/datasources/LiveDataSource.cpp:756
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Der folgende Fehler ist aufgetreten: %1."
 
-#: src/backend/datasources/LiveDataSource.cpp:768
+#: src/backend/datasources/LiveDataSource.cpp:767
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Fehler des Seriellen Ports"
@@ -7309,27 +7309,27 @@ msgstr "Tricube"
 msgid "Python file (*.py)"
 msgstr "Pythondatei (*.py)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:333
+#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
 #, kde-format
 msgid "no script element found"
 msgstr "Kein Skriptelement gefunden"
 
-#: src/backend/script/Script.cpp:202
+#: src/backend/script/Script.cpp:201
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: starte %2 Skript"
 
-#: src/backend/script/Script.cpp:313 src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
 #, kde-format
 msgid "Script"
 msgstr "Skript"
 
-#: src/backend/script/Script.cpp:313
+#: src/backend/script/Script.cpp:312
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Laufzeitfehler des Skriptes."
 
-#: src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "A script is already running."
 msgstr "Ein Skript läuft bereits."
@@ -12310,7 +12310,7 @@ msgstr "Kurve"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to export"
 msgstr "Fehler beim Exportieren"
@@ -12318,7 +12318,7 @@ msgstr "Fehler beim Exportieren"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4108
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4163
-#: src/frontend/worksheet/WorksheetView.cpp:2171
+#: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Fehler beim Schreiben von '%1'. Bitte den Pfad überprüfen."
@@ -14109,16 +14109,14 @@ msgstr "Abstand"
 #: src/frontend/dockwidgets/AxisDock.cpp:282
 #: src/frontend/dockwidgets/AxisDock.cpp:298
 #: src/frontend/dockwidgets/AxisDock.cpp:308
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Values"
-msgstr "Benutzerdefinierte Spalte"
+msgstr "Benutzerdefinierte Spaltenwerte"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:283
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Labels"
-msgstr "Benutzerdefinierte Spalte"
+msgstr "Benutzerdefinierte Spaltennamen"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:286
 #, kde-format
@@ -14136,8 +14134,7 @@ msgid "No labels"
 msgstr "Keine Beschriftung"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Position values"
+#, kde-format
 msgid "Position Values"
 msgstr "Positionswerte"
 
@@ -14192,6 +14189,16 @@ msgid ""
 "provided below.</li><li>Custom Column Labels - positions are determined by "
 "the value labels in the custom column provided below.</li></ul></ul>"
 msgstr ""
+"Legt fest, wie und wo die Hauptteilungsstriche auf der Achse platziert "
+"werden:<ul><li>Anzahl – Teilungsstriche werden gleichmäßig verteilt, der "
+"Abstand zwischen ihnen wird durch die angegebene feste Anzahl an "
+"Teilungsstrichen bestimmt.</li><li>Abstand – Teilungsstriche werden "
+"gleichmäßig mit dem angegebenen Abstand dazwischen platziert.</li> "
+"<li>Benutzerdefinierte Spaltenwerte – Positionen werden durch die Werte in "
+"der unten angegebenen benutzerdefinierten Spalte bestimmt.</"
+"li><li>Benutzerdefinierte Spaltenbeschriftungen – Positionen werden durch "
+"die Wertebeschriftungen in der unten angegebenen benutzerdefinierten Spalte "
+"bestimmt.</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
 #, kde-format
@@ -14203,12 +14210,13 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
-msgstr "Zeile in der Datei, die die Namen der Spalten enthält."
+msgstr ""
+"Spalte mit den Werten, die als Positionen der Hauptteilungsstriche verwendet "
+"werden sollen."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:351
 #, kde-format
@@ -14218,14 +14226,20 @@ msgid ""
 "Column Values - values in the custom column provided below are used as text "
 "labels.</li></ul></ul>"
 msgstr ""
+"Legt fest, welche Textbeschriftungen für die Hauptteilungsstriche angezeigt "
+"werden:<ul><li>Positionswerte – die Positionen der Teilungsstriche werden "
+"als Textbeschriftungen verwendet.</li><li>Benutzerdefinierte Spaltenwerte – "
+"Werte in der unten angegebenen benutzerdefinierten Spalte werden als "
+"Textbeschriftungen verwendet.</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
-msgstr "Zeile in der Datei, die die Namen der Spalten enthält."
+msgstr ""
+"Spalte mit den Werten, die als Textbeschriftungen für die "
+"Hauptteilungsstriche verwendet werden sollen."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:366
 #, kde-format
@@ -14237,14 +14251,22 @@ msgid ""
 "Values - positions are determined by the values in the custom column "
 "provided below.</li></ul></ul>"
 msgstr ""
+"Legt fest, wie und wo die Neben-Teilungsstriche auf der Achse platziert "
+"werden:<ul><li>Anzahl – Teilungsstriche werden gleichmäßig verteilt, der "
+"Abstand zwischen ihnen wird durch die angegebene feste Anzahl an "
+"Teilungsstrichen bestimmt.</li><li>Abstand – Teilungsstriche werden "
+"gleichmäßig mit dem angegebenen Abstand dazwischen platziert.</"
+"li><li>Benutzerdefinierte Spaltenwerte – Positionen werden durch die Werte "
+"in der unten angegebenen benutzerdefinierten Spalte bestimmt.</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
-msgstr "Zeile in der Datei, die die Namen der Spalten enthält."
+msgstr ""
+"Spalte mit den Werten, die als Positionen für die Nebenteilungsstriche "
+"verwendet werden sollen."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:629
 #, kde-format
@@ -14991,10 +15013,9 @@ msgstr ""
 "mit einem Buchstaben beginnen"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:652
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Apply Formula"
-msgstr "Formel:"
+msgstr "Formel anwenden"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:789
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
@@ -15003,12 +15024,11 @@ msgid "Delete variable"
 msgstr "Variable löschen"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:864
-#, fuzzy, kde-format
-#| msgid "%1: set cell formula"
+#, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
-msgstr[0] "%1: Zellenformel festlegen"
-msgstr[1] "%1: Zellenformel festlegen"
+msgstr[0] "%1: Spaltenformel anwenden"
+msgstr[1] "%1: Zellenformeln anwenden"
 
 #: src/frontend/dockwidgets/CursorDock.cpp:32
 #, kde-format
@@ -22239,10 +22259,9 @@ msgstr "Namensspalte:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #: src/frontend/ui/dockwidgets/axisdock.ui:808
 #: src/frontend/ui/dockwidgets/axisdock.ui:1116
-#, fuzzy, kde-format
-#| msgid "Position Y:"
+#, kde-format
 msgid "Position Column:"
-msgstr "Y Position:"
+msgstr "Positionsspalte:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -23175,8 +23194,7 @@ msgstr "Eckenradius:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoUpdate)
 #: src/frontend/ui/dockwidgets/columndock.ui:65
-#, fuzzy, kde-format
-#| msgid "auto update"
+#, kde-format
 msgid "Auto-Update"
 msgstr "Automatisch aktualisieren"
 
@@ -23230,10 +23248,9 @@ msgstr "Benutzer-Funktion speichern"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoResize)
 #: src/frontend/ui/dockwidgets/columndock.ui:285
-#, fuzzy, kde-format
-#| msgid "Auto-save:"
+#, kde-format
 msgid "Auto-Resize"
-msgstr "Automatisch speichern:"
+msgstr "Automatische Größenanpassung"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:297
@@ -23251,10 +23268,9 @@ msgstr "Plotzuordnung:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:394
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula"
-msgstr "Formel:"
+msgstr "Formel"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)
