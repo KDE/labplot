@@ -3,20 +3,21 @@
 # SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2024 Vít Pelčák <vit@pelcak.org>
 # SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
 #
+# SPDX-FileCopyrightText: 2026 Jan Papez (honyczek)
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-21 00:40+0000\n"
-"PO-Revision-Date: 2024-10-18 15:55+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-01-21 23:00+0100\n"
+"Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
+"Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:239
 #, kde-format
@@ -111,12 +112,12 @@ msgstr "%1: odstranit všechny potomky"
 #: src/backend/core/AbstractAspect.cpp:727
 #, kde-format
 msgid "%1: pasted"
-msgstr ""
+msgstr "%1: vloženo"
 
 #: src/backend/core/AbstractAspect.cpp:822
 #, kde-format
 msgid "%1: pasted '%2'"
-msgstr "%1: Vloženo '%2'"
+msgstr "%1: vloženo '%2'"
 
 #: src/backend/core/AbstractAspect.cpp:824
 #, kde-format
@@ -545,7 +546,7 @@ msgstr ""
 #: src/backend/core/column/Column.cpp:562
 #, kde-format
 msgid "%1: set random values"
-msgstr ""
+msgstr "%1: nastavit náhodné hodnoty"
 
 #: src/backend/core/column/Column.cpp:1049
 #: src/frontend/datasources/ImportFileWidget.cpp:1698
@@ -583,7 +584,7 @@ msgstr ""
 #: src/backend/spreadsheet/Spreadsheet.cpp:242
 #, kde-format
 msgid "Used in Plots:"
-msgstr ""
+msgstr "Použito v grafech:"
 
 #: src/backend/core/column/Column.cpp:1109
 #: src/backend/spreadsheet/Spreadsheet.cpp:259
@@ -593,10 +594,9 @@ msgstr ""
 
 #: src/backend/core/column/Column.cpp:1132
 #: src/backend/spreadsheet/Spreadsheet.cpp:280
-#, fuzzy, kde-format
-#| msgid "Save Calculations:"
+#, kde-format
 msgid "Used in Spreadsheet Calculations:"
-msgstr "Uložit výpočty:"
+msgstr "Použito v tabulkových výpočtech:"
 
 #: src/backend/core/column/Column.cpp:1717
 #, kde-format
@@ -2204,7 +2204,7 @@ msgstr "Komprese: %1"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
 #, kde-format
 msgid "Endianness: %1"
-msgstr ""
+msgstr "Endianita: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2414,7 +2414,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:742
 #, kde-format
 msgid "Device is not open."
-msgstr ""
+msgstr "Zařízení není otevřené."
 
 #: src/backend/datasources/LiveDataSource.cpp:745
 #, kde-format
@@ -2429,7 +2429,7 @@ msgstr "Zařízení není dostupné."
 #: src/backend/datasources/LiveDataSource.cpp:751
 #, kde-format
 msgid "Timeout occurred."
-msgstr ""
+msgstr "Vypršel časový limit."
 
 #: src/backend/datasources/LiveDataSource.cpp:756
 #, kde-format
@@ -2466,10 +2466,11 @@ msgstr "vysvětlivky"
 msgid "%1: Import from %2"
 msgstr "%1: Importovat z %2"
 
+# 51384 AttribValues/label
 #: src/backend/gsl/constants.cpp:15
 #, kde-format
 msgid "Programming constants"
-msgstr ""
+msgstr "Programovací konstanty"
 
 #: src/backend/gsl/constants.cpp:17
 #, kde-format
@@ -3581,7 +3582,7 @@ msgstr "Neznámá funkce"
 #: src/backend/gsl/functions.cpp:242
 #, kde-format
 msgid "Cell (index; variable)"
-msgstr ""
+msgstr "Buňka (index; proměnná)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -3631,7 +3632,7 @@ msgstr "Náhodný vzorek"
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index)"
-msgstr ""
+msgstr "Současná buňka sloupce (index)"
 
 #: src/backend/gsl/functions.cpp:254
 #, kde-format
@@ -6264,7 +6265,7 @@ msgstr "Nelze otevřít '%1' pro zápis."
 #: src/backend/note/Note.cpp:138
 #, kde-format
 msgid "%1: set text"
-msgstr ""
+msgstr "%1: nastavit text"
 
 #: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:282
 #: src/backend/worksheet/TextLabel.cpp:334
@@ -6275,12 +6276,12 @@ msgstr "%1: nastavit barvu pozadí"
 #: src/backend/note/Note.cpp:152
 #, kde-format
 msgid "%1: set text color"
-msgstr ""
+msgstr "%1: nastavit barvu textu"
 
 #: src/backend/note/Note.cpp:159
 #, kde-format
 msgid "%1: set text font"
-msgstr ""
+msgstr "%1: nastavit písmo textu"
 
 #: src/backend/note/Note.cpp:201
 #, kde-format
@@ -6309,10 +6310,9 @@ msgstr "Střední hodnota"
 
 #: src/backend/nsl/nsl_baseline.cpp:47
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
-#, fuzzy, kde-format
-#| msgid "Points:"
+#, kde-format
 msgid "End Points"
-msgstr "Body:"
+msgstr "Konečné body"
 
 #: src/backend/nsl/nsl_baseline.cpp:47
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:178
@@ -7221,17 +7221,17 @@ msgstr ""
 #: src/backend/script/Script.cpp:88
 #, kde-format
 msgid "Python file (*.py)"
-msgstr ""
+msgstr "Soubor Pythonu (*.py)"
 
 #: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
 #, kde-format
 msgid "no script element found"
-msgstr ""
+msgstr "skriptový element nenalezen"
 
 #: src/backend/script/Script.cpp:201
 #, kde-format
 msgid "%1: run %2 script"
-msgstr ""
+msgstr "%1: spustit skript %2"
 
 #: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
 #, kde-format
@@ -7241,12 +7241,12 @@ msgstr "Skript"
 #: src/backend/script/Script.cpp:312
 #, kde-format
 msgid "Failed to run the script."
-msgstr ""
+msgstr "Spuštění skriptu selhalo."
 
 #: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "A script is already running."
-msgstr ""
+msgstr "Skript již běží."
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format
@@ -7267,16 +7267,14 @@ msgid "Type"
 msgstr "Typ"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:223
-#, fuzzy, kde-format
-#| msgid "Column %1"
+#, kde-format
 msgid "Columns: %1"
-msgstr "Sloupec %1"
+msgstr "Sloupce: %1"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:224
-#, fuzzy, kde-format
-#| msgid "Rows:"
+#, kde-format
 msgid "Rows: %1"
-msgstr "Řádky:"
+msgstr "Řádky: %1"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:415
 #, kde-format
@@ -7291,12 +7289,12 @@ msgstr ""
 #: src/backend/spreadsheet/Spreadsheet.cpp:490
 #, kde-format
 msgid "%1: toggle comments header"
-msgstr ""
+msgstr "%1: přepnout hlavičku komentářů"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:498
 #, kde-format
 msgid "%1: toggle sparklines header"
-msgstr ""
+msgstr "%1: přepnout hlavičku malých čárových grafů"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:562
 #: src/backend/spreadsheet/Spreadsheet.cpp:563
@@ -7547,19 +7545,19 @@ msgstr "Sloupec"
 #, kde-format
 msgid "One column is required."
 msgid_plural "%1 columns are required."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Je potřeba jeden sloupec."
+msgstr[1] "Je potřeba %1 sloupce."
+msgstr[2] "Je potřeba %1 sloupců."
 
 #: src/backend/statistics/HypothesisTest.cpp:56
 #, kde-format
 msgid "At least %1 and at most %2 columns are required."
-msgstr ""
+msgstr "Je vyžadováno alespoň %1 a nejvíce %2 sloupců."
 
 #: src/backend/statistics/HypothesisTest.cpp:64
 #, kde-format
 msgid "Column '%1' must be of numeric type."
-msgstr ""
+msgstr "Sloupec '%1' musí být číselného typu."
 
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:232
@@ -7571,7 +7569,7 @@ msgstr "Portable Data Format (*.pdf *.PDF)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Hypothesis Test"
-msgstr ""
+msgstr "Test hypotézy"
 
 #: src/backend/statistics/HypothesisTest.cpp:309
 #, kde-format
@@ -19114,7 +19112,7 @@ msgstr "Zobrazit komentáře"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1596
 #, kde-format
 msgid "Show Sparklines"
-msgstr ""
+msgstr "Zobrazit malé čárové grafy"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:330
 #, kde-format
@@ -19385,7 +19383,7 @@ msgstr "Skrýt komentáře"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1594
 #, kde-format
 msgid "Hide Sparklines"
-msgstr ""
+msgstr "Skrýt malé čárové grafy"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1702
 #, kde-format
@@ -22809,10 +22807,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:394
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula"
-msgstr "Vzorec:"
+msgstr "Vzorec"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)
@@ -23648,7 +23645,7 @@ msgstr "Povoleno"
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:177
 #, kde-format
 msgid "Sparklines:"
-msgstr ""
+msgstr "Malé čárové grafy:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:199
