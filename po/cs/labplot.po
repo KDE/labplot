@@ -3,20 +3,21 @@
 # SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2024 Vít Pelčák <vit@pelcak.org>
 # SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
 #
+# SPDX-FileCopyrightText: 2026 Jan Papez (honyczek)
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2024-10-18 15:55+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-01-21 23:00+0100\n"
+"Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
+"Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -121,12 +122,12 @@ msgstr "%1: odstranit všechny potomky"
 #: src/backend/core/AbstractAspect.cpp:722
 #, kde-format
 msgid "%1: pasted"
-msgstr ""
+msgstr "%1: vloženo"
 
 #: src/backend/core/AbstractAspect.cpp:816
 #, kde-format
 msgid "%1: pasted '%2'"
-msgstr "%1: Vloženo '%2'"
+msgstr "%1: vloženo '%2'"
 
 #: src/backend/core/AbstractAspect.cpp:818
 #, kde-format
@@ -584,7 +585,7 @@ msgstr ""
 #: src/backend/core/column/Column.cpp:573
 #, kde-format
 msgid "%1: set random values"
-msgstr ""
+msgstr "%1: nastavit náhodné hodnoty"
 
 #: src/backend/core/column/Column.cpp:1594
 #, kde-format
@@ -1075,7 +1076,7 @@ msgstr "Úspěch"
 #: src/backend/datasources/filters/AsciiFilter.cpp:203
 #, kde-format
 msgid "Device at end"
-msgstr ""
+msgstr "Zařízení je na konci"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
@@ -1085,57 +1086,57 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
 #, kde-format
 msgid "Unable to open device"
-msgstr ""
+msgstr "Nelze otevřít zařízení"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
 #, kde-format
 msgid "No new line detected"
-msgstr ""
+msgstr "Nebyl zjištěn žádný nový řádek"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
 msgid "Unable to determine the separator"
-msgstr ""
+msgstr "Nelze zjistit oddělovač"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:213
 #, kde-format
 msgid "Invalid number of data columns"
-msgstr ""
+msgstr "Neplatný počet datových sloupců"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215
 #, kde-format
 msgid "Invalid number of column names"
-msgstr ""
+msgstr "Neplatný počet názvů sloupců"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:217
 #, kde-format
 msgid "Matrix: Unsupported column mode"
-msgstr ""
+msgstr "Matrix: Nepodporovaný režim sloupců"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:219
 #, kde-format
 msgid "Insufficient memory (RAM)"
-msgstr ""
+msgstr "Nedostatek paměti (RAM)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:221
 #, kde-format
 msgid "Unable to parse header"
-msgstr ""
+msgstr "Nelze analyzovat hlavičku"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Unsupported data source"
-msgstr ""
+msgstr "Nepodporovaný zdroj dat"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:227
 #, kde-format
 msgid "Live: No column separator selected"
-msgstr ""
+msgstr "Živě: Nebyl vybrán žádný sloupec"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:229
 #, kde-format
 msgid "Live: No column modes set"
-msgstr ""
+msgstr "Živě: Nebyl nastaven žádný režim sloupců"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:231
 #, kde-format
@@ -1145,17 +1146,17 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:233
 #, kde-format
 msgid "Header reading from device not allowed"
-msgstr ""
+msgstr "Načítání hlavičky ze zařízení není povoleno"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:235
 #, kde-format
 msgid "Separator detection not allowed"
-msgstr ""
+msgstr "Zjišťování oddělovače není povoleno"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:237
 #, kde-format
 msgid "Invalid separator"
-msgstr ""
+msgstr "Neplatný oddělovač"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
@@ -1165,7 +1166,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
-msgstr ""
+msgstr "Nesprávný poslední sloupec. Není menší než počáteční sloupec?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:243
 #, kde-format
@@ -1175,27 +1176,27 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:245
 #, kde-format
 msgid "No data destination set"
-msgstr ""
+msgstr "Nebyl nastaven žádný datový cíl"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:247
 #, kde-format
 msgid "No columns"
-msgstr ""
+msgstr "Žádné sloupce"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:249
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
-msgstr ""
+msgstr "Nelze určit režim sloupců. Zkontrolujte, zda jsou zapsány správně"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:251
 #, kde-format
 msgid "UTF16 encoding is not supported"
-msgstr ""
+msgstr "Kódování UTF16 není podporováno"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:253
 #, kde-format
 msgid "Unhandled case"
-msgstr ""
+msgstr "Nezpracovaný typ písmen"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:279
 #, kde-format
@@ -2460,7 +2461,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:740
 #, kde-format
 msgid "Device is not open."
-msgstr ""
+msgstr "Zařízení není otevřené."
 
 #: src/backend/datasources/LiveDataSource.cpp:743
 #, kde-format
@@ -2512,10 +2513,11 @@ msgstr "vysvětlivky"
 msgid "%1: Import from %2"
 msgstr "%1: Importovat z %2"
 
+# 51384 AttribValues/label
 #: src/backend/gsl/constants.cpp:15
 #, kde-format
 msgid "Programming constants"
-msgstr ""
+msgstr "Programovací konstanty"
 
 #: src/backend/gsl/constants.cpp:17
 #, kde-format
@@ -3620,7 +3622,7 @@ msgstr "Neznámá funkce"
 #: src/backend/gsl/functions.cpp:241
 #, kde-format
 msgid "Cell (index; variable)"
-msgstr ""
+msgstr "Buňka (index; proměnná)"
 
 #: src/backend/gsl/functions.cpp:242
 #, kde-format
@@ -3670,7 +3672,7 @@ msgstr "Náhodný vzorek"
 #: src/backend/gsl/functions.cpp:252
 #, kde-format
 msgid "Current column cell (index)"
-msgstr ""
+msgstr "Současná buňka sloupce (index)"
 
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
@@ -6290,7 +6292,7 @@ msgstr "Nelze otevřít '%1' pro zápis."
 #: src/backend/note/Note.cpp:138
 #, kde-format
 msgid "%1: set text"
-msgstr ""
+msgstr "%1: nastavit text"
 
 #: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:282
 #: src/backend/worksheet/TextLabel.cpp:334
@@ -6301,12 +6303,12 @@ msgstr "%1: nastavit barvu pozadí"
 #: src/backend/note/Note.cpp:152
 #, kde-format
 msgid "%1: set text color"
-msgstr ""
+msgstr "%1: nastavit barvu textu"
 
 #: src/backend/note/Note.cpp:159
 #, kde-format
 msgid "%1: set text font"
-msgstr ""
+msgstr "%1: nastavit písmo textu"
 
 #: src/backend/note/Note.cpp:201
 #, kde-format
@@ -7229,12 +7231,12 @@ msgstr ""
 #: src/backend/spreadsheet/Spreadsheet.cpp:423
 #, kde-format
 msgid "%1: toggle comments header"
-msgstr ""
+msgstr "%1: přepnout hlavičku komentářů"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:431
 #, kde-format
 msgid "%1: toggle sparklines header"
-msgstr ""
+msgstr "%1: přepnout hlavičku malých čárových grafů"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:495
 #: src/backend/spreadsheet/Spreadsheet.cpp:496
@@ -17293,7 +17295,7 @@ msgstr "Zobrazit komentáře"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1555
 #, kde-format
 msgid "Show Sparklines"
-msgstr ""
+msgstr "Zobrazit malé čárové grafy"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:327
 #, kde-format
@@ -17602,7 +17604,7 @@ msgstr "Skrýt komentáře"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1553
 #, kde-format
 msgid "Hide Sparklines"
-msgstr ""
+msgstr "Skrýt malé čárové grafy"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1644
 #, kde-format
@@ -21496,7 +21498,7 @@ msgstr "Povoleno"
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:177
 #, kde-format
 msgid "Sparklines:"
-msgstr ""
+msgstr "Malé čárové grafy:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:199
