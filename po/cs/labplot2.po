@@ -3,20 +3,21 @@
 # SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2024 Vít Pelčák <vit@pelcak.org>
 # SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
 #
+# SPDX-FileCopyrightText: 2026 Jan Papez (honyczek)
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 16:18+0000\n"
-"PO-Revision-Date: 2024-08-20 15:08+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-01-21 23:00+0100\n"
+"Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
+"Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -145,7 +146,7 @@ msgstr "%1: odstranit všechny potomky"
 #: src/backend/core/AbstractAspect.cpp:831
 #, kde-format
 msgid "%1: pasted '%2'"
-msgstr "%1: Vloženo '%2'"
+msgstr "%1: vloženo '%2'"
 
 #: src/backend/core/AbstractAspect.cpp:833
 #, kde-format
@@ -10379,7 +10380,7 @@ msgstr "Zobrazit komentáře"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:327
 #, kde-format
 msgid "Show SparkLines"
-msgstr ""
+msgstr "Zobrazit malé čárové grafy"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:329
 #, kde-format
@@ -10677,13 +10678,13 @@ msgstr "Skrýt komentáře"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1529
 #, kde-format
 msgid "Hide Sparklines"
-msgstr ""
+msgstr "Skrýt malé čárové grafy"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1160
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1531
 #, kde-format
 msgid "Show Sparklines"
-msgstr ""
+msgstr "Zobrazit malé čárové grafy"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1620
 #, kde-format
@@ -20459,7 +20460,7 @@ msgstr "Povoleno"
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
 #, kde-format
 msgid "Sparklines:"
-msgstr ""
+msgstr "Malé čárové grafy:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
