@@ -36,6 +36,7 @@
   <summary xml:lang="ar">حلِّل البيانات وارسمها</summary>
   <summary xml:lang="ca">Visualitza i analitza dades</summary>
   <summary xml:lang="ca-valencia">Visualitza i analitza les dades</summary>
+  <summary xml:lang="cs">Vizualizujte a analyzujte data</summary>
   <summary xml:lang="de">Daten visualisieren and analysieren</summary>
   <summary xml:lang="es">Visualizar y analizar datos</summary>
   <summary xml:lang="eu">Datuak irudikatu eta analizatu</summary>
@@ -57,6 +58,7 @@
     <p xml:lang="ar">معمل الرسم هو برنامج مجاني ومفتوح المصدر ومتعدد المنصات لتصور البيانات وتحليلها ويمكن للجميع الوصول إليه.</p>
     <p xml:lang="ca">El LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
     <p xml:lang="ca-valencia">LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
+    <p xml:lang="cs">LabPlot je SVOBODNÝ software pro vizualizaci a analýzu dat s otevřeným kódem a je dostupný na různých platformách pro každého.</p>
     <p xml:lang="de">LabPlot ist ein FREIE, Open Source und plattformübergreifende Software zur Datenvisualisierung und -analyse, die für jeden verfügbar ist.</p>
     <p xml:lang="es">LabPlot es un software de visualización y análisis de datos LIBRE, de código abierto y multiplataforma, al que todo el mundo puede acceder.</p>
     <p xml:lang="eu">LabPlot, guztiontzako erabilgarri dagoen datuak irudikatzeko eta analizatzeko software ASKE, sorburu irekiko eta plataforma-anitzeko bat da.</p>
@@ -80,6 +82,7 @@
     <p xml:lang="ar">يوفر معمل الرسم طريقة سهلة لإنشاء وإدارة وتحرير الرسومات. يسمح لك بإنتاج الرسومات بناءً على بيانات من جدول بيانات أو على بيانات مستوردة من ملفات خارجية. يمكن تصدير الرسومات إلى العديد من تنسيقات الرسم البيكسي والمتجه.</p>
     <p xml:lang="ca">El LabPlot proporciona una manera fàcil de crear, gestionar i editar diagrames. Permet produir diagrames a partir de les dades d'un full de càlcul o en les dades importades des de fitxers externs. Els diagrames es poden exportar a diversos formats de mapa de píxels i de gràfics vectorials.</p>
     <p xml:lang="ca-valencia">LabPlot proporciona una manera fàcil de crear, gestionar i editar diagrames. Permet produir diagrames a partir de les dades d'un full de càlcul o en les dades importades des de fitxers externs. Els diagrames es poden exportar cap a diversos formats de mapa de píxels i de gràfics vectorials.</p>
+    <p xml:lang="cs">LabPlot poskytuje jednoduchý způsob jak vytvářet, spravovat a upravovat grafy. Umožňuje vám vytvářet grafy na základě dat z tabulky nebo z dat importovaných z externích souborů. Grafy lze exportovat do několika formátů rastrových i vektorových obrázků.</p>
     <p xml:lang="de">LabPlot erlaubt es auf einfache Weise Grafiken zu erzeugen, zu verwalten und zu bearbeiten.Grafiken können aus externen Daten oder aus einer Tabelle erzeugt werden.Der Export der Grafiken in verschiedene Pixmap- und Vektorformate ist möglich.</p>
     <p xml:lang="es">LabPlot proporciona un modo fácil de crear, gestionar y editar gráficos. Le permite generar gráficos basados en datos de una hoja de cálculo o en datos importados de archivos externos. Los gráficos se pueden exportar a varios formatos de mapas de bits y de gráficos vectoriales.</p>
     <p xml:lang="eu">LabPlot-ek grafikoak sortzeko, kudeatzeko eta editatzeko era erraz bat eskaintzen du. Grafikoak kalkulu-orri bateko datuekin edo kanpoko fitxategietatik inportatutako datuekin sortzeko aukera ematen dizu. Grafikoak hainbat pixel-mapa eta bektore-grafiko formatutara esportatu daitezke.</p>
@@ -162,6 +165,7 @@
       <caption xml:lang="ar">التخطيط المتقدم للرسومات والصور</caption>
       <caption xml:lang="ca">Disposició avançada de diagrames i imatges</caption>
       <caption xml:lang="ca-valencia">Disposició avançada de diagrames i imatges</caption>
+      <caption xml:lang="cs">Pokročilé navrhování grafů a obrázků</caption>
       <caption xml:lang="de">Fortgeschrittenes Layout von Plots und Bildern</caption>
       <caption xml:lang="es">Diseño avanzado de gráficos e imágenes</caption>
       <caption xml:lang="eu">Grafikoen eta irudien antolaera aurreratua</caption>
@@ -211,6 +215,7 @@
       <caption xml:lang="ar">تصوير الدوال الرياضية</caption>
       <caption xml:lang="ca">Visualització de funcions matemàtiques</caption>
       <caption xml:lang="ca-valencia">Visualització de funcions matemàtiques</caption>
+      <caption xml:lang="cs">Vizualizace matematických funkcí</caption>
       <caption xml:lang="de">Visualisierung von mathematischen Funktionen</caption>
       <caption xml:lang="es">Visualización de funciones matemáticas</caption>
       <caption xml:lang="eu">Funtzio matematikoak irudikatzea</caption>
@@ -235,6 +240,7 @@
       <caption xml:lang="ar">تناسب النماذج المحددة مسبقًا أو المخصصة للبيانات</caption>
       <caption xml:lang="ca">Ajust de models predefinits o personalitzats a les dades</caption>
       <caption xml:lang="ca-valencia">Ajust de models predefinits o personalitzats a les dades</caption>
+      <caption xml:lang="cs">Použijte předdefinované nebo vlastní modely dat</caption>
       <caption xml:lang="de">Anpassung von Daten mit vordefinierten oder eigenen Modellen</caption>
       <caption xml:lang="es">Ajuste de modelos predefinidos o personalizados a los datos</caption>
       <caption xml:lang="eu">Datuei aurrez definitutako edo neurrira egindako ereduak egokitu</caption>
@@ -259,6 +265,7 @@
       <caption xml:lang="ar">تجانس البيانات بمساعدة طرق تجانس مختلفة</caption>
       <caption xml:lang="ca">Suavitza les dades amb l'ajuda de diversos mètodes de suavitzat</caption>
       <caption xml:lang="ca-valencia">Suavitza les dades amb l'ajuda de diversos mètodes de suavitzat</caption>
+      <caption xml:lang="cs">Vyhladit data pomocí různých metod vyhlazování</caption>
       <caption xml:lang="de">Glättung von Daten mithilfe verschiedener Glättungsmethoden</caption>
       <caption xml:lang="es">Suavizar los datos con la ayuda de diversos métodos de suavizado</caption>
       <caption xml:lang="eu">Datuak leundu, leuntzeko hainbat metodoen laguntzarekin</caption>
@@ -283,6 +290,7 @@
       <caption xml:lang="ar">واجهة حاسوب دفتري للجلسات التفاعلية في Maxima و Octave و R و Sage و Scilab و Python و Julia و Lua وغيرها</caption>
       <caption xml:lang="ca">Interfície de bloc de notes per a sessions interactives en el Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="ca-valencia">Interfície de bloc de notes per a sessions interactives en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="cs">Rozhraní poznámkového bloku pro interaktivní sezení Maxima, Octave, R, Sage, Scilab, Python, Julia, apod.</caption>
       <caption xml:lang="de">Notebookschnittstelle zu interaktiven Sitzungen in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="es">Interfaz de bloc de notas para sesiones interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="eu">koadernoaren interfazea, Maxima, Octave, R, Sage, Scilab, Python, Julia, eta abarrekin saio elkarreragileak egiteko</caption>
@@ -332,6 +340,7 @@
       <caption xml:lang="ar">مخطط هيرتزبرونج-راسل في معمل الرسم</caption>
       <caption xml:lang="ca">Diagrama Herzsprung-Russel en el LabPlot</caption>
       <caption xml:lang="ca-valencia">Diagrama Herzsprung-Russel en LabPlot</caption>
+      <caption xml:lang="cs">Hertzsprungův–Russellův diagram v LabPlotu</caption>
       <caption xml:lang="de">Herzsprung-Russel-Diagramm in LabPlot</caption>
       <caption xml:lang="es">Diagrama de Herzsprung-Russel en LabPlot</caption>
       <caption xml:lang="eu">Herzsprung-Russel diagrama LabPlot-en</caption>
@@ -356,6 +365,7 @@
       <caption xml:lang="ar">تصور البيانات المحسوبة في جَلسة ماكسيما تفاعلية</caption>
       <caption xml:lang="ca">Visualització de dades calculades en una sessió interactiva del Maxima</caption>
       <caption xml:lang="ca-valencia">Visualització de dades calculades en una sessió interactiva de Maxima</caption>
+      <caption xml:lang="cs">Vizualizace dat vypočítaných v interaktivním sezení Maxima</caption>
       <caption xml:lang="de">Visualisierung von Daten, die interaktiv in einer Maxima-Sitzung berechnet werden</caption>
       <caption xml:lang="es">Visualización de datos calculados en una sesión interactiva de Maxima</caption>
       <caption xml:lang="eu">Maxima saio elkarreragile batean kalkulatutako datuen irudikapena</caption>
