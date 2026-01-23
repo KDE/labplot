@@ -459,18 +459,6 @@ struct PayloadExpressionParser : public Payload {
 };
 
 /*!
- * \brief cellRowNumber
- * Returns the cell at row \p rowNumber
- * \param rowNumber Values are starting with 1
- * \param variable
- * \param payload
- * \return
- */
-double cellRowNumber(double rowNumber, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
-	return cell((qsizetype)rowNumber - 1, variable, payload);
-}
-
-/*!
  * \brief cell
  * Returns the cell at row index \p rowIndex
  * \param rowIndex Index starting at 0
@@ -495,6 +483,18 @@ double cell(qsizetype rowIndex, const std::string_view& variable, const std::wea
 	}
 
 	return NAN;
+}
+
+/*!
+ * \brief cellRowNumber
+ * Returns the cell at row \p rowNumber
+ * \param rowNumber Values are starting with 1
+ * \param variable
+ * \param payload
+ * \return
+ */
+double cellRowNumber(double rowNumber, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	return cell((qsizetype)rowNumber - 1, variable, payload);
 }
 
 /*!
