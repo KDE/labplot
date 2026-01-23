@@ -558,7 +558,7 @@ double smmin(double x, const std::string_view& variable, const std::weak_ptr<Pay
 				break;
 			// calculate min of last n points
 			double min = INFINITY;
-			for (auto index = std::max(0, p->rowIndex - N + 1); index <= p->rowIndex; index++) {
+			for (auto index = std::max((qsizetype)0, p->rowIndex - N + 1); index <= p->rowIndex; index++) {
 				const double v = p->xVectors->at(i)->at(index);
 				if (v < min)
 					min = v;
@@ -584,7 +584,7 @@ double smmax(double x, const std::string_view& variable, const std::weak_ptr<Pay
 				break;
 			// calculate max of last n points
 			double max = -INFINITY;
-			for (auto index = std::max(0, p->rowIndex - N + 1); index <= p->rowIndex; index++) {
+			for (auto index = std::max((qsizetype)0, p->rowIndex - N + 1); index <= p->rowIndex; index++) {
 				const double v = p->xVectors->at(i)->at(index);
 				if (v > max)
 					max = v;
@@ -610,7 +610,7 @@ double sma(double x, const std::string_view& variable, const std::weak_ptr<Paylo
 				break;
 			// calculate max of last n points
 			double sum = 0.;
-			for (auto index = std::max(0, p->rowIndex - N + 1); index <= p->rowIndex; index++)
+			for (auto index = std::max((qsizetype)0, p->rowIndex - N + 1); index <= p->rowIndex; index++)
 				sum += p->xVectors->at(i)->at(index);
 			return sum / N;
 		}
