@@ -630,7 +630,7 @@ double psample(double n, const std::string_view& variable, const std::weak_ptr<P
 	}
 
 	// every n-th value, starting @ first
-	return cell((qizetype)n * p->rowIndex, variable, payload);
+	return cell((qsizetype)n * p->rowIndex, variable, payload);
 }
 
 double rsample(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
