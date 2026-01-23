@@ -454,22 +454,41 @@ struct PayloadExpressionParser : public Payload {
 		, xVectors(xDataVectors) {
 	}
 	const QStringList* vars{nullptr};
-	int row{0};
+	qsizetype rowIndex{0}; // Row Index
 	const QVector<QVector<double>*>* xVectors{nullptr};
 };
 
-double cell(double x, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+/*!
+ * \brief cellRowNumber
+ * Returns the cell at row \p rowNumber
+ * \param rowNumber Values are starting with 1
+ * \param variable
+ * \param payload
+ * \return
+ */
+double cellRowNumber(double rowNumber, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	return cell((qsizetype)rowNumber - 1, variable, payload);
+}
+
+/*!
+ * \brief cell
+ * Returns the cell at row index \p rowIndex
+ * \param rowIndex Index starting at 0
+ * \param variable
+ * \param payload
+ * \return
+ */
+double cell(qsizetype rowIndex, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
 		Q_ASSERT(p);
 		return NAN;
 	}
 
-	const int index = (int)x - 1;
 	for (int i = 0; i < p->vars->length(); i++) {
 		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
-			if (index >= 0 && index < p->xVectors->at(i)->length())
-				return p->xVectors->at(i)->at(index);
+			if (rowIndex >= 0 && rowIndex < p->xVectors->at(i)->length())
+				return p->xVectors->at(i)->at(rowIndex);
 			else
 				break;
 		}
@@ -478,14 +497,22 @@ double cell(double x, const std::string_view& variable, const std::weak_ptr<Payl
 	return NAN;
 }
 
-double cell_default_value(double x, double defaultValue, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+/*!
+ * \brief cellRowNumber
+ * Returns the cell at row \p rowNumber if available, otherwise the default value \p defaultValue
+ * \param rowNumber Values are starting with 1
+ * \param variable
+ * \param payload
+ * \return
+ */
+double cell_default_value(double rowNumber, double defaultValue, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
 		Q_ASSERT(p);
 		return NAN;
 	}
 
-	const int index = (int)x - 1;
+	const auto index = (qsizetype)rowNumber - 1;
 	for (int i = 0; i < p->vars->length(); i++) {
 		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
 			if (index >= 0 && index < p->xVectors->at(i)->length())
@@ -504,7 +531,7 @@ double ma(const std::string_view& variable, const std::weak_ptr<Payload> payload
 		Q_ASSERT(p);
 		return NAN;
 	}
-	return (cell(p->row, variable, payload) + cell(p->row + 1, variable, payload)) / 2.;
+	return (cell(p->rowIndex - 1, variable, payload) + cell(p->rowIndex, variable, payload)) / 2.;
 }
 
 double mr(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
@@ -513,7 +540,7 @@ double mr(const std::string_view& variable, const std::weak_ptr<Payload> payload
 		Q_ASSERT(p);
 		return NAN;
 	}
-	return fabs(cell(p->row + 1, variable, payload) - cell(p->row + 1 - 1, variable, payload));
+	return fabs(cell(p->rowIndex, variable, payload) - cell(p->rowIndex - 1, variable, payload));
 }
 
 double smmin(double x, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
@@ -531,8 +558,7 @@ double smmin(double x, const std::string_view& variable, const std::weak_ptr<Pay
 				break;
 			// calculate min of last n points
 			double min = INFINITY;
-			const int row = p->row;
-			for (int index = std::max(0, row - N + 1); index <= row; index++) {
+			for (auto index = std::max(0, p->rowIndex - N + 1); index <= p->rowIndex; index++) {
 				const double v = p->xVectors->at(i)->at(index);
 				if (v < min)
 					min = v;
@@ -558,8 +584,7 @@ double smmax(double x, const std::string_view& variable, const std::weak_ptr<Pay
 				break;
 			// calculate max of last n points
 			double max = -INFINITY;
-			const int row = p->row;
-			for (int index = std::max(0, row - N + 1); index <= row; index++) {
+			for (auto index = std::max(0, p->rowIndex - N + 1); index <= p->rowIndex; index++) {
 				const double v = p->xVectors->at(i)->at(index);
 				if (v > max)
 					max = v;
@@ -585,8 +610,7 @@ double sma(double x, const std::string_view& variable, const std::weak_ptr<Paylo
 				break;
 			// calculate max of last n points
 			double sum = 0.;
-			const int row = p->row;
-			for (int index = std::max(0, row - N + 1); index <= row; index++)
+			for (auto index = std::max(0, p->rowIndex - N + 1); index <= p->rowIndex; index++)
 				sum += p->xVectors->at(i)->at(index);
 			return sum / N;
 		}
@@ -606,7 +630,7 @@ double psample(double n, const std::string_view& variable, const std::weak_ptr<P
 	}
 
 	// every n-th value, starting @ first
-	return cell((int)n * p->row + 1, variable, payload);
+	return cell((qizetype)n * p->rowIndex, variable, payload);
 }
 
 double rsample(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
@@ -625,7 +649,7 @@ double rsample(const std::string_view& variable, const std::weak_ptr<Payload> pa
 	double value;
 	do { // loop until valid index generated
 		int randomIndex = dist(gen);
-		value = cell(randomIndex + 1, variable, payload);
+		value = cell(randomIndex, variable, payload);
 	} while (std::isnan(value));
 
 	return value;
@@ -665,7 +689,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	gsl_set_error_handler_off();
 
 	// determine the minimal size of involved vectors
-	int minSize{std::numeric_limits<int>::max()};
+	qsizetype minSize{std::numeric_limits<qsizetype>::max()};
 	for (auto* xVector : xVectors) {
 		if (xVector->size() < minSize)
 			minSize = xVector->size();
@@ -682,7 +706,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 
 	Parser parser(performanceOptimization);
 
-	parser.set_specialfunctionValueVariablePayload(specialfun_cell, cell, payloadConst);
+	parser.set_specialfunctionValueVariablePayload(specialfun_cell, cellRowNumber, payloadConst);
 	parser.set_specialfunction2ValueVariablePayload(specialfun_cell_default_value, cell_default_value, payloadConst);
 	parser.set_specialfunctionVariablePayload(specialfun_ma, ma, payload);
 	parser.set_specialfunctionVariablePayload(specialfun_mr, mr, payload);
@@ -694,10 +718,10 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	parser.set_specialfunctionVariablePayload(specialfun_rsample, rsample, payload);
 
 	bool constExpression = false;
-	for (int i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {
+	for (qsizetype i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {
 		QString tmpExpr = expr;
 
-		payload->row = i; // all special functions contain pointer to payload so they get this information
+		payload->rowIndex = i; // all special functions contain pointer to payload so they get this information
 		parser.assign_symbol("i", i + 1);
 
 		for (int n = 0; n < vars.size(); ++n) {
@@ -725,7 +749,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 
 	// if the y-vector is longer than the x-vector(s), set all exceeding elements to NaN
 	if (!constExpression) {
-		for (int i = minSize; i < yVector->size(); ++i)
+		for (qsizetype i = minSize; i < yVector->size(); ++i)
 			(*yVector)[i] = NAN;
 	}
 
