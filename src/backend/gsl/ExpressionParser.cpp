@@ -454,7 +454,7 @@ struct PayloadExpressionParser : public Payload {
 		, xVectors(xDataVectors) {
 	}
 	const QStringList* vars{nullptr};
-	qsizetype rowIndex{0}; // Row Index
+	qsizetype rowIndex{0};
 	const QVector<QVector<double>*>* xVectors{nullptr};
 };
 
