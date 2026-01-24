@@ -78,9 +78,9 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 			   "<tr><td>%6</td><td>Number of 100-nanosecond intervals since January 1, 1601 (UTC), converted to DateTime.</td></tr>"
 			   "<tr><td>%7</td><td>A text.</td></tr>"
 			   "</table>");
-	using Mode = AbstractColumn::ColumnMode;
-	const QVector<Mode> vec = {Mode::Integer, Mode::BigInt, Mode::Double, Mode::DateTime, Mode::TimestampUnix, Mode::TimestampWindows, Mode::Text};
-	for (const auto m: vec) {
+	using Type = AsciiFilter::DataType;
+	const QVector<Type> vec = {Type::Integer, Type::BigInt, Type::Double, Type::DateTime, Type::TimestampUnix, Type::TimestampWindows, Type::Text};
+	for (const auto m : vec) {
 		const auto& s = AsciiFilter::dataTypeString(m);
 		if (s.first == s.second)
 			info = info.arg(s.first);
@@ -147,8 +147,8 @@ void AsciiOptionsWidget::updateWidgets(const AsciiFilter::Properties& properties
 	ui.chbSkipEmptyParts->setChecked(properties.skipEmptyParts);
 	ui.chbHeader->setChecked(properties.headerEnabled);
 	ui.sbHeaderLine->setValue(properties.headerLine);
-	ui.kleVectorNames->setText(properties.columnNamesRaw);
-	ui.kleColumnMode->setText(properties.columnModesString);
+	ui.kleVectorNames->setText(properties.columnNamesString);
+	ui.kleColumnMode->setText(properties.dataTypesString);
 	ui.chbIntAsDouble->setChecked(properties.intAsDouble);
 }
 
@@ -180,11 +180,11 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter::Properties& properties
 	properties.nanValue = ui.chbConvertNaNToZero->isChecked() ? 0.0 : std::numeric_limits<double>::quiet_NaN();
 	properties.removeQuotes = ui.chbRemoveQuotes->isChecked();
 	properties.skipEmptyParts = ui.chbSkipEmptyParts->isChecked();
-	properties.columnNamesRaw = ui.kleVectorNames->text();
+	properties.columnNamesString = ui.kleVectorNames->text();
 	properties.headerEnabled = ui.chbHeader->isChecked();
 	properties.headerLine = ui.sbHeaderLine->value();
 	properties.baseYear = ui.sbYearBase->value();
-	properties.columnModesString = ui.kleColumnMode->text();
+	properties.dataTypesString = ui.kleColumnMode->text();
 	properties.intAsDouble = ui.chbIntAsDouble->isChecked();
 }
 
@@ -194,9 +194,9 @@ void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {
 
 bool AsciiOptionsWidget::isValid(QString& errorMessage) {
 	QString invalidString;
-	QVector<AbstractColumn::ColumnMode> s;
-	if (!AsciiFilter::determineColumnModes(ui.kleColumnMode->text(), s, invalidString)) {
-		errorMessage = i18n("Datatype not found: %1").arg(invalidString);
+	QVector<AsciiFilter::DataType> s;
+	if (!AsciiFilter::validateDataTypes(ui.kleColumnMode->text(), s, invalidString)) {
+		errorMessage = i18n("Invalid data type '%1'").arg(invalidString);
 		return false;
 	}
 	return true;

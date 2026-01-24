@@ -282,7 +282,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("createTimestamp"), QString::number(p.createTimestamp));
 	writer->writeAttribute(QStringLiteral("header"), QString::number(p.headerEnabled));
 	writer->writeAttribute(QStringLiteral("headerLine"), QString::number(p.headerLine));
-	writer->writeAttribute(QStringLiteral("vectorNames"), p.columnNamesRaw);
+	writer->writeAttribute(QStringLiteral("vectorNames"), p.columnNamesString);
 	writer->writeAttribute(QStringLiteral("skipEmptyParts"), QString::number(p.skipEmptyParts));
 	writer->writeAttribute(QStringLiteral("simplifyWhitespaces"), QString::number(p.simplifyWhitespaces));
 	writer->writeAttribute(QStringLiteral("nanValue"), QString::number(p.nanValue));
@@ -291,8 +291,8 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("endRow"), QString::number(p.endRow));
 	writer->writeAttribute(QStringLiteral("startColumn"), QString::number(p.startColumn));
 	writer->writeAttribute(QStringLiteral("endColumn"), QString::number(p.endColumn));
-	writer->writeAttribute(QStringLiteral("columnModes"),
-						   AsciiFilterPrivate::convertTranslatedColumnModesToNative(p.columnModesString)); // Manually specified column modes
+	writer->writeAttribute(QStringLiteral("dataTypes"),
+						   AsciiFilterPrivate::convertTranslatedDataTypesToNative(p.dataTypesString)); // Manually specified data types
 	writer->writeAttribute(QStringLiteral("baseYear"), QString::number(p.baseYear));
 	writer->writeAttribute(QStringLiteral("dateTimeFormat"), p.dateTimeFormat);
 	writer->writeAttribute(QStringLiteral("intAsDouble"), QString::number(p.intAsDouble));
@@ -316,9 +316,9 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 
 	str = attribs.value(QStringLiteral("vectorNames")).toString();
 	if (Project::xmlVersion() < 15)
-		d->properties.columnNamesRaw = str.split(QLatin1Char(' ')).join(d->properties.separator); // may be empty
+		d->properties.columnNamesString = str.split(QLatin1Char(' ')).join(d->properties.separator); // may be empty
 	else
-		d->properties.columnNamesRaw = str;
+		d->properties.columnNamesString = str;
 
 	READ_INT_VALUE("simplifyWhitespaces", properties.simplifyWhitespaces, bool);
 	READ_DOUBLE_VALUE("nanValue", properties.nanValue);
@@ -328,35 +328,60 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	READ_INT_VALUE("endRow", properties.endRow, int);
 	READ_INT_VALUE("startColumn", properties.startColumn, int);
 	READ_INT_VALUE("endColumn", properties.endColumn, int);
-	READ_STRING_VALUE("columnModes", properties.columnModesString);
+	READ_STRING_VALUE("dataTypes", properties.dataTypesString);
 	READ_INT_VALUE("baseYear", properties.baseYear, int);
 	READ_STRING_VALUE("dateTimeFormat", properties.dateTimeFormat);
 	READ_INT_VALUE("intAsDouble", properties.intAsDouble, bool);
 	return true;
 }
 
-QStringList AsciiFilter::dataTypesString() {
-	QStringList list;
-	const auto& map = AsciiFilterPrivate::modeMap();
-	for (const auto& m : map)
-		list.append(m.first);
-	return list;
+/*!
+ * maps AsciiFilter::DataType to AbstractColumn::ColumnMode
+ */
+AbstractColumn::ColumnMode AsciiFilter::dataTypeToColumnMode(DataType type) {
+	switch (type) {
+	case DataType::Double:
+		return AbstractColumn::ColumnMode::Double;
+	case DataType::Integer:
+		return AbstractColumn::ColumnMode::Integer;
+	case DataType::BigInt:
+		return AbstractColumn::ColumnMode::BigInt;
+	case DataType::Text:
+		return AbstractColumn::ColumnMode::Text;
+	case DataType::DateTime:
+		return AbstractColumn::ColumnMode::DateTime;
+	case DataType::TimestampUnix:
+		return AbstractColumn::ColumnMode::DateTime; // Maps to DateTime internally
+	case DataType::TimestampWindows:
+		return AbstractColumn::ColumnMode::DateTime; // Maps to DateTime internally
+	}
+	return AbstractColumn::ColumnMode::Double; // fallback
 }
 
-QPair<QString, QString> AsciiFilter::dataTypeString(const AbstractColumn::ColumnMode mode) {
-	const auto& modeMap = AsciiFilterPrivate::modeMap();
-	for (auto it = modeMap.cbegin(), end = modeMap.cend(); it != end; it++) {
-		if (it.value().second == mode) {
+/*!
+ * returns the string representation of the given DataType.
+ */
+QPair<QString, QString> AsciiFilter::dataTypeString(const DataType type) {
+	const auto& dataTypeMap = AsciiFilterPrivate::dataTypeMap();
+	for (auto it = dataTypeMap.cbegin(), end = dataTypeMap.cend(); it != end; it++) {
+		if (it.value().second == type) {
 			return QPair<QString, QString>(it.key(), it.value().first);
 		}
 	}
-	DEBUG("Mode not found");
+	DEBUG("DataType not found");
 	Q_ASSERT(false);
 	return QPair<QString, QString>(QStringLiteral(""), QStringLiteral(""));
 }
 
-bool AsciiFilter::determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString& invalidString) {
-	return AsciiFilterPrivate::determineColumnModes(s, modes, invalidString);
+/*!
+ * validates the provided data types string and converts it to the list of DataTypes,
+ * \param s the string to validate
+ * \param types the resulting list of DataTypes
+ * \param invalidString the invalid part of the provided string
+ * \returns true if all provided data types are valid, false otherwise
+ */
+bool AsciiFilter::validateDataTypes(const QStringView& s, QVector<DataType>& types, QString& invalidString) {
+	return AsciiFilterPrivate::validateDataTypes(s, types, invalidString);
 }
 
 // ########################################################################################################################
@@ -445,10 +470,10 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	// Determine column names
 	if (properties.headerEnabled)
 		properties.columnNames = determineColumnsSimplifyWhiteSpace(line, properties);
-	else if (!properties.columnNamesRaw.isEmpty()) {
+	else if (!properties.columnNamesString.isEmpty()) {
 		// Determine column names from the names specified in the dialog
 		// StartColumn is always one. Because otherwise I would need to specify column names for not required columns
-		properties.columnNames = determineColumnsSimplifyWhiteSpace(properties.columnNamesRaw,
+		properties.columnNames = determineColumnsSimplifyWhiteSpace(properties.columnNamesString,
 																	QLatin1String(INTERNAL_SEPARATOR),
 																	removeQuotes,
 																	true,
@@ -478,7 +503,7 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		properties.endColumn = properties.startColumn + numberColumns;
 	}
 
-	if (properties.columnModesString.isEmpty()) {
+	if (properties.dataTypesString.isEmpty()) {
 		// Determine column modes
 		QVector<QStringList> rows;
 		size_t i = 0;
@@ -526,7 +551,7 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 			properties.dateTimeFormat = dateTimeFormat;
 	} else {
 		QString invalidString;
-		if (!determineColumnModes(properties.columnModesString, properties.columnModes, invalidString))
+		if (!validateDataTypes(properties.dataTypesString, properties.dataTypes, invalidString))
 			return Status::ColumnModeDeterminationFailed();
 	}
 
@@ -550,29 +575,29 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	return Status::Success();
 }
 
-QMap<QString, QPair<QString, AbstractColumn::ColumnMode>> AsciiFilterPrivate::modeMap() {
-	using Mode = AbstractColumn::ColumnMode;
-	return QMap<QString, QPair<QString, Mode>>{
-		{QStringLiteral("Double"), {i18n("Double"), Mode::Double}},
-		{QStringLiteral("Text"), {i18n("Text"), Mode::Text}},
-		{QStringLiteral("DateTime"), {i18n("DateTime"), Mode::DateTime}},
-		{QStringLiteral("Int"), {i18n("Int"), Mode::Integer}},
-		{QStringLiteral("Int64"), {i18n("Int64"), Mode::BigInt}},
-		{QStringLiteral("TimestampUnix"), {i18n("TimestampUnix"), Mode::TimestampUnix}},
-		{QStringLiteral("TimestampWindows"), {i18n("TimestampWindows"), Mode::TimestampWindows}},
+QMap<QString, QPair<QString, AsciiFilter::DataType>> AsciiFilterPrivate::dataTypeMap() {
+	using Type = AsciiFilter::DataType;
+	return QMap<QString, QPair<QString, Type>>{
+		{QStringLiteral("Double"), {i18n("Double"), Type::Double}},
+		{QStringLiteral("Text"), {i18n("Text"), Type::Text}},
+		{QStringLiteral("DateTime"), {i18n("DateTime"), Type::DateTime}},
+		{QStringLiteral("TimestampUnix"), {i18n("Timestamp (Unix)"), Type::TimestampUnix}},
+		{QStringLiteral("TimestampWindows"), {i18n("Timestamp (Windows)"), Type::TimestampWindows}},
+		{QStringLiteral("Int"), {i18n("Int"), Type::Integer}},
+		{QStringLiteral("Int64"), {i18n("Int64"), Type::BigInt}}
 	};
 }
 
-bool AsciiFilterPrivate::determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString& invalidString) {
+bool AsciiFilterPrivate::validateDataTypes(const QStringView& s, QVector<AsciiFilter::DataType>& types, QString& invalidString) {
 	const auto& modes_string = determineColumnsSimplifyWhiteSpace(s, QLatin1String(INTERNAL_SEPARATOR), false, true, false, 1, -1);
 
-	const auto& modeMap = AsciiFilterPrivate::modeMap();
+	const auto& dataTypeMap = AsciiFilterPrivate::dataTypeMap();
 
 	for (const auto& m : modes_string) {
 		bool found = false;
-		for (auto it = modeMap.cbegin(), end = modeMap.cend(); it != end; it++) {
+		for (auto it = dataTypeMap.cbegin(), end = dataTypeMap.cend(); it != end; it++) {
 			if (it.key() == m || it.value().first == m) {
-				modes << it.value().second;
+				types << it.value().second;
 				found = true;
 				break;
 			}
@@ -592,17 +617,17 @@ bool AsciiFilterPrivate::determineColumnModes(const QStringView& s, QVector<Abst
  * \param s
  * \return
  */
-QString AsciiFilterPrivate::convertTranslatedColumnModesToNative(const QStringView s) {
-	QVector<AbstractColumn::ColumnMode> modes;
+QString AsciiFilterPrivate::convertTranslatedDataTypesToNative(const QStringView s) {
+	QVector<AsciiFilter::DataType> types;
 	QString invalidString;
 	QString res;
-	if (!determineColumnModes(s, modes, invalidString))
+	if (!validateDataTypes(s, types, invalidString))
 		return res;
 
-	const auto& modeMap = AsciiFilterPrivate::modeMap();
-	for (const auto mode : modes) {
-		for (auto it = modeMap.cbegin(), end = modeMap.cend(); it != end; it++) {
-			if (it.value().second == mode)
+	const auto& dataTypeMap = AsciiFilterPrivate::dataTypeMap();
+	for (const auto type : types) {
+		for (auto it = dataTypeMap.cbegin(), end = dataTypeMap.cend(); it != end; it++) {
+			if (it.value().second == type)
 				res += it.key() + QLatin1String(INTERNAL_SEPARATOR);
 		}
 	}
@@ -651,8 +676,8 @@ Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 
 		// matrix data has only one column mode
 		if (dynamic_cast<Matrix*>(m_dataSource)) {
-			for (auto& c : properties.columnModes)
-				if (c != AbstractColumn::ColumnMode::Double)
+			for (auto& c : properties.dataTypes)
+				if (AsciiFilter::dataTypeToColumnMode(c) != AbstractColumn::ColumnMode::Double)
 					return Status::MatrixUnsupportedColumnMode();
 		}
 	}
@@ -664,6 +689,12 @@ Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 			Q_ASSERT(false);
 			return Status::NoDataSource();
 		}
+
+		// convert DataType to ColumnMode for prepareImport
+		properties.columnModes.clear();
+		for (const auto& type : properties.dataTypes)
+			properties.columnModes << AsciiFilter::dataTypeToColumnMode(type);
+
 		// The column offset is already subtracted, so dataContainer contains only the new columns
 		m_dataSource
 			->prepareImport(dataContainer, columnImportMode, 0, properties.columnModes.size(), properties.columnNames, properties.columnModes, ok, true);
@@ -821,10 +852,10 @@ void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const
 	// Iterate over all columns
 	for (const auto& value : values) {
 		bool conversionOk = false;
-		if (columnIndex >= props.columnModes.length())
+		if (columnIndex >= props.dataTypes.length())
 			return;
-		switch (props.columnModes[columnIndex]) {
-		case AbstractColumn::ColumnMode::Double: {
+		switch (props.dataTypes[columnIndex]) {
+		case AsciiFilter::DataType::Double: {
 			double d = props.locale.toDouble(value, &conversionOk);
 			if (!conversionOk) {
 				d = props.nanValue;
@@ -832,7 +863,7 @@ void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const
 			m_DataContainer.setData(columnIndex, rowIndex, d);
 			break;
 		}
-		case AbstractColumn::ColumnMode::Integer: {
+		case AsciiFilter::DataType::Integer: {
 			int i = props.locale.toInt(value, &conversionOk);
 			if (!conversionOk) {
 				i = 0;
@@ -840,7 +871,7 @@ void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const
 			m_DataContainer.setData(columnIndex, rowIndex, i);
 			break;
 		}
-		case AbstractColumn::ColumnMode::BigInt: {
+		case AsciiFilter::DataType::BigInt: {
 			qint64 i = props.locale.toLongLong(value, &conversionOk);
 			if (!conversionOk) {
 				i = 0;
@@ -848,18 +879,16 @@ void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const
 			m_DataContainer.setData(columnIndex, rowIndex, i);
 			break;
 		}
-		case AbstractColumn::ColumnMode::Text:
+		case AsciiFilter::DataType::Text:
 			m_DataContainer.setData(columnIndex, rowIndex, value); // Because value can be QString or QStringView
 			break;
-		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::DateTime: {
+		case AsciiFilter::DataType::DateTime: {
 			auto dt = QDateTime::fromString(value, props.dateTimeFormat, props.baseYear);
 			dt.setTimeSpec(Qt::UTC);
 			m_DataContainer.setData(columnIndex, rowIndex, dt);
 			break;
 		}
-		case AbstractColumn::ColumnMode::TimestampUnix: {
+		case AsciiFilter::DataType::TimestampUnix: {
 			// Unix epoch: seconds since January 1, 1970, 00:00:00 UTC
 			qint64 timestamp = props.locale.toLongLong(value, &conversionOk);
 			QDateTime dt;
@@ -871,7 +900,7 @@ void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const
 			m_DataContainer.setData(columnIndex, rowIndex, dt);
 			break;
 		}
-		case AbstractColumn::ColumnMode::TimestampWindows: {
+		case AsciiFilter::DataType::TimestampWindows: {
 			// Windows epoch: 100-nanosecond intervals since January 1, 1601, 00:00:00 UTC
 			qint64 timestamp = props.locale.toLongLong(value, &conversionOk);
 			QDateTime dt;
@@ -951,6 +980,7 @@ AsciiFilterPrivate::determineColumnModes(const QVector<QStringList>& rows, const
 		}
 		first = false;
 	}
+
 	return modes;
 }
 
@@ -1264,15 +1294,15 @@ Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 		return setLastError(Status::InvalidSeparator());
 
 	if (p.columnModes.isEmpty()) {
-		if (p.columnModesString.isEmpty())
+		if (p.dataTypesString.isEmpty())
 			return setLastError(Status::SequentialDeviceNoColumnModes());
 
 		QString invalidString;
-		if (!determineColumnModes(p.columnModesString, p.columnModes, invalidString))
+		if (!validateDataTypes(p.dataTypesString, p.dataTypes, invalidString))
 			return setLastError(Status::SequentialDeviceNoColumnModes());
 	}
 
-	if (p.columnNamesRaw.isEmpty() && p.columnNames.isEmpty()) {
+	if (p.columnNamesString.isEmpty() && p.columnNames.isEmpty()) {
 		// Create default column names
 		p.columnNames.clear();
 		for (int i = 0; i < p.columnModes.count(); i++) {
@@ -1282,7 +1312,7 @@ Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 		}
 	} else if (p.columnNames.isEmpty())
 		p.columnNames =
-			determineColumnsSimplifyWhiteSpace(p.columnNamesRaw, QLatin1String(INTERNAL_SEPARATOR), p.removeQuotes, true, p.skipEmptyParts, 1, p.endColumn);
+			determineColumnsSimplifyWhiteSpace(p.columnNamesString, QLatin1String(INTERNAL_SEPARATOR), p.removeQuotes, true, p.skipEmptyParts, 1, p.endColumn);
 
 	if (p.columnNames.isEmpty())
 		return setLastError(Status::UnableParsingHeader());
@@ -1483,8 +1513,6 @@ void AsciiFilterPrivate::DataContainer::removeFirst(int n) {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime:
-		case AbstractColumn::ColumnMode::TimestampUnix:
-		case AbstractColumn::ColumnMode::TimestampWindows:
 			static_cast<QVector<QDateTime>*>(m_dataContainer[i])->remove(0, n);
 			break;
 		}
@@ -1510,8 +1538,6 @@ bool AsciiFilterPrivate::DataContainer::resize(qsizetype s) const {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime:
-		case AbstractColumn::ColumnMode::TimestampUnix:
-		case AbstractColumn::ColumnMode::TimestampWindows:
 			static_cast<QVector<QDateTime>*>(m_dataContainer[i])->resize(s);
 			break;
 		}
@@ -1550,8 +1576,6 @@ bool AsciiFilterPrivate::DataContainer::reserve(qsizetype s) const {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime:
-		case AbstractColumn::ColumnMode::TimestampUnix:
-		case AbstractColumn::ColumnMode::TimestampWindows:
 			static_cast<QVector<QDateTime>*>(m_dataContainer[i])->reserve(s);
 			break;
 		}
@@ -1590,8 +1614,6 @@ void AsciiFilterPrivate::DataContainer::appendVector(AbstractColumn::ColumnMode 
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Day:
 	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::TimestampUnix:
-	case AbstractColumn::ColumnMode::TimestampWindows:
 		vector = new QVector<QDateTime>();
 		break;
 	}
@@ -1620,8 +1642,6 @@ int AsciiFilterPrivate::DataContainer::rowCount(unsigned long index) const {
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
 	case AbstractColumn::ColumnMode::DateTime:
-	case AbstractColumn::ColumnMode::TimestampUnix:
-	case AbstractColumn::ColumnMode::TimestampWindows:
 		return static_cast<QVector<QDateTime>*>(m_dataContainer[index])->size();
 		break;
 	}
