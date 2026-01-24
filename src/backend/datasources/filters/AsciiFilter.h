@@ -43,7 +43,7 @@ class LABPLOT_EXPORT AsciiFilter : public AbstractFileFilter {
 class AsciiFilter : public AbstractFileFilter {
 #endif
 public:
-	// enum for data types that are supported during the import, not necesserily the same as 
+	// enum for data types that are supported during the import, not necesserily the same as
 	// the column modes AbstractColumn::ColumnMode, mapped intternally to those.
 	enum class DataType {
 		Double = 0,
@@ -51,8 +51,8 @@ public:
 		BigInt = 2,
 		Text = 3,
 		DateTime = 4,
-		TimestampUnix = 5, // qint64, number of seconds since January 1, 1970 (UTC), converted to DateTime for now until we have an qin64 Timestamp
-		TimestampWindows = 6 // qint64, number of 100-nanosecond intervals since January 1, 1601 (UTC), converted to DateTime for now until we have an qin64 Timestamp
+		TimestampUnix = 5, // qint64, number of seconds since January 1, 1970 (UTC), converted to DateTime until we have an qin64 Timestamp
+		TimestampWindows = 6 // qint64, number of 100-nanosecond intervals since January 1, 1601 (UTC), converted to DateTime until we have an qin64 Timestamp
 	};
 
 	AsciiFilter();
@@ -103,7 +103,7 @@ public:
 		bool headerEnabled{true}; // read header from file
 		int headerLine{1}; // line to read header from (ignoring comment lines). The data starts below this line
 
-		QString columnNamesString; // String from the input dialog, parset to determine the column names below
+		QString columnNamesString; // String from the input dialog, parsed to determine the column names below
 		QStringList columnNames; // the list of column names for each column
 
 		QString dataTypesString; // String from the input dialog, parsed to determine the data types below

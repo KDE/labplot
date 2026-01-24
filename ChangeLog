@@ -25,6 +25,7 @@ New features:
 		* Stacked line plots
 	* [import]
 		* Import directories - import multiple files in a directory in one single step
+		* Support Unix timestamps (number of seconds since January 1, 1970 (UTC)) and Windows timestamps (number of 100-nanosecond intervals since January 1, 1601 (UTC)) in ASCII files, ms precision only
 		* Allow to import arrays in JSON files that contain plain data only
 	* [examples]
 		* Added "All" in the examples dialog to navigate and search in the example projects from _all_ collections

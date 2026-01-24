@@ -577,15 +577,13 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 
 QMap<QString, QPair<QString, AsciiFilter::DataType>> AsciiFilterPrivate::dataTypeMap() {
 	using Type = AsciiFilter::DataType;
-	return QMap<QString, QPair<QString, Type>>{
-		{QStringLiteral("Double"), {i18n("Double"), Type::Double}},
-		{QStringLiteral("Text"), {i18n("Text"), Type::Text}},
-		{QStringLiteral("DateTime"), {i18n("DateTime"), Type::DateTime}},
-		{QStringLiteral("TimestampUnix"), {i18n("Timestamp (Unix)"), Type::TimestampUnix}},
-		{QStringLiteral("TimestampWindows"), {i18n("Timestamp (Windows)"), Type::TimestampWindows}},
-		{QStringLiteral("Int"), {i18n("Int"), Type::Integer}},
-		{QStringLiteral("Int64"), {i18n("Int64"), Type::BigInt}}
-	};
+	return QMap<QString, QPair<QString, Type>>{{QStringLiteral("Double"), {i18n("Double"), Type::Double}},
+											   {QStringLiteral("Text"), {i18n("Text"), Type::Text}},
+											   {QStringLiteral("DateTime"), {i18n("DateTime"), Type::DateTime}},
+											   {QStringLiteral("TimestampUnix"), {i18n("Timestamp (Unix)"), Type::TimestampUnix}},
+											   {QStringLiteral("TimestampWindows"), {i18n("Timestamp (Windows)"), Type::TimestampWindows}},
+											   {QStringLiteral("Int"), {i18n("Int"), Type::Integer}},
+											   {QStringLiteral("Int64"), {i18n("Int64"), Type::BigInt}}};
 }
 
 bool AsciiFilterPrivate::validateDataTypes(const QStringView& s, QVector<AsciiFilter::DataType>& types, QString& invalidString) {
