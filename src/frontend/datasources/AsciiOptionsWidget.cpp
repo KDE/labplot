@@ -74,10 +74,12 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 			   "<tr><td>%2</td><td>Integer number with 64bit size (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</td></tr>"
 			   "<tr><td>%3</td><td>Floating point number 64bit size. Resolution of around 16 digits.</td></tr>"
 			   "<tr><td>%4</td><td>Datetime with the format from the datetime text box if not empty, otherwise automatically determined.</td></tr>"
-			   "<tr><td>%5</td><td>A text.</td></tr>"
+			   "<tr><td>%5</td><td>Number of seconds since January 1, 1970 (UTC), converted to DateTime.</td></tr>"
+			   "<tr><td>%6</td><td>Number of 100-nanosecond intervals since January 1, 1601 (UTC), converted to DateTime.</td></tr>"
+			   "<tr><td>%7</td><td>A text.</td></tr>"
 			   "</table>");
 	using Mode = AbstractColumn::ColumnMode;
-	const QVector<Mode> vec = {Mode::Integer, Mode::BigInt, Mode::Double, Mode::DateTime, Mode::Text};
+	const QVector<Mode> vec = {Mode::Integer, Mode::BigInt, Mode::Double, Mode::DateTime, Mode::TimestampUnix, Mode::TimestampWindows, Mode::Text};
 	for (const auto m: vec) {
 		const auto& s = AsciiFilter::dataTypeString(m);
 		if (s.first == s.second)

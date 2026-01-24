@@ -558,6 +558,8 @@ QMap<QString, QPair<QString, AbstractColumn::ColumnMode>> AsciiFilterPrivate::mo
 		{QStringLiteral("DateTime"), {i18n("DateTime"), Mode::DateTime}},
 		{QStringLiteral("Int"), {i18n("Int"), Mode::Integer}},
 		{QStringLiteral("Int64"), {i18n("Int64"), Mode::BigInt}},
+		{QStringLiteral("TimestampUnix"), {i18n("TimestampUnix"), Mode::TimestampUnix}},
+		{QStringLiteral("TimestampWindows"), {i18n("TimestampWindows"), Mode::TimestampWindows}},
 	};
 }
 
@@ -854,6 +856,34 @@ void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const
 		case AbstractColumn::ColumnMode::DateTime: {
 			auto dt = QDateTime::fromString(value, props.dateTimeFormat, props.baseYear);
 			dt.setTimeSpec(Qt::UTC);
+			m_DataContainer.setData(columnIndex, rowIndex, dt);
+			break;
+		}
+		case AbstractColumn::ColumnMode::TimestampUnix: {
+			// Unix epoch: seconds since January 1, 1970, 00:00:00 UTC
+			qint64 timestamp = props.locale.toLongLong(value, &conversionOk);
+			QDateTime dt;
+			if (conversionOk) {
+				dt = QDateTime::fromSecsSinceEpoch(timestamp, Qt::UTC);
+			} else {
+				dt = QDateTime(); // Invalid datetime
+			}
+			m_DataContainer.setData(columnIndex, rowIndex, dt);
+			break;
+		}
+		case AbstractColumn::ColumnMode::TimestampWindows: {
+			// Windows epoch: 100-nanosecond intervals since January 1, 1601, 00:00:00 UTC
+			qint64 timestamp = props.locale.toLongLong(value, &conversionOk);
+			QDateTime dt;
+			if (conversionOk) {
+				// Convert 100-nanosecond intervals to milliseconds
+				// Windows epoch is 11644473600 seconds before Unix epoch
+				const qint64 windowsToUnixEpochOffset = 11644473600LL;
+				qint64 unixTimestamp = (timestamp / 10000000LL) - windowsToUnixEpochOffset;
+				dt = QDateTime::fromSecsSinceEpoch(unixTimestamp, Qt::UTC);
+			} else {
+				dt = QDateTime(); // Invalid datetime
+			}
 			m_DataContainer.setData(columnIndex, rowIndex, dt);
 			break;
 		}
@@ -1453,6 +1483,8 @@ void AsciiFilterPrivate::DataContainer::removeFirst(int n) {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::TimestampUnix:
+		case AbstractColumn::ColumnMode::TimestampWindows:
 			static_cast<QVector<QDateTime>*>(m_dataContainer[i])->remove(0, n);
 			break;
 		}
@@ -1478,6 +1510,8 @@ bool AsciiFilterPrivate::DataContainer::resize(qsizetype s) const {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::TimestampUnix:
+		case AbstractColumn::ColumnMode::TimestampWindows:
 			static_cast<QVector<QDateTime>*>(m_dataContainer[i])->resize(s);
 			break;
 		}
@@ -1516,6 +1550,8 @@ bool AsciiFilterPrivate::DataContainer::reserve(qsizetype s) const {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::TimestampUnix:
+		case AbstractColumn::ColumnMode::TimestampWindows:
 			static_cast<QVector<QDateTime>*>(m_dataContainer[i])->reserve(s);
 			break;
 		}
@@ -1554,6 +1590,8 @@ void AsciiFilterPrivate::DataContainer::appendVector(AbstractColumn::ColumnMode 
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Day:
 	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::TimestampUnix:
+	case AbstractColumn::ColumnMode::TimestampWindows:
 		vector = new QVector<QDateTime>();
 		break;
 	}
@@ -1582,6 +1620,8 @@ int AsciiFilterPrivate::DataContainer::rowCount(unsigned long index) const {
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
 	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::TimestampUnix:
+	case AbstractColumn::ColumnMode::TimestampWindows:
 		return static_cast<QVector<QDateTime>*>(m_dataContainer[index])->size();
 		break;
 	}

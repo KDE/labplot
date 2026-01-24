@@ -66,7 +66,7 @@ public:
 		//		UInt16 = 23,	// quint16 (unsigned short)
 		Integer = 24, // qint32 (int)
 		//		UInt32 = 25,	// quint32 (unsigned int)
-		BigInt = 26 // qint64 (long)
+		BigInt = 26, // qint64 (long)
 		//		UInt64 = 27,	// quint64 (unsigned long)
 		// MISC
 		// QBrush = 30
@@ -77,6 +77,8 @@ public:
 		// QVector2D, QVector3D, QVector4D
 		// QMatrix
 		// etc.
+		TimestampUnix = 100, // qint64, number of seconds since January 1, 1970 (UTC), converted to DateTime for now until we have an qin64 Timestamp
+		TimestampWindows = 1000 // qint64, number of 100-nanosecond intervals since January 1, 1601 (UTC), converted to DateTime for now until we have an qin64 Timestamp
 	};
 	Q_ENUM(ColumnMode)
 	enum class Properties { // TODO: why bit pattern? Aren't they exclusive?

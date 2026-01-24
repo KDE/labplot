@@ -1613,7 +1613,11 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		auto* column = columns.at(columnOffset + n);
 		DEBUG(" column " << n << " columnMode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode[n]));
-		column->setColumnModeFast(columnMode[n]);
+		// Convert timestamp modes to DateTime for the actual column
+		auto actualMode = columnMode[n];
+		if (actualMode == AbstractColumn::ColumnMode::TimestampUnix || actualMode == AbstractColumn::ColumnMode::TimestampWindows)
+			actualMode = AbstractColumn::ColumnMode::DateTime;
+		column->setColumnModeFast(actualMode);
 
 		// in most cases the first imported column is meant to be used as x-data.
 		// Other columns provide mostly y-data or errors.
@@ -1648,7 +1652,9 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 			}
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
-			case AbstractColumn::ColumnMode::DateTime: {
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::TimestampUnix:
+			case AbstractColumn::ColumnMode::TimestampWindows: {
 				auto* vector = static_cast<QVector<QDateTime>*>(column->data());
 				dataContainer[n] = static_cast<void*>(vector);
 				break;
