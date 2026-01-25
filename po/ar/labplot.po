@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-21 00:40+0000\n"
-"PO-Revision-Date: 2026-01-19 22:32+0400\n"
+"PO-Revision-Date: 2026-01-24 11:38+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -14209,12 +14209,7 @@ msgstr ""
 "على لصائق القيم في العمود المخصص المذكور أدناه.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
-#, fuzzy, kde-format
-#| msgid ""
-#| "Defines where to position the first major tick:<ul><li>Absolute Value - "
-#| "the first tick is positione at the absolute value provided below.</"
-#| "li><li>Offset - the first tick is positioned at the offset relatively to "
-#| "the beginning of the axis range.</li></ul></ul>"
+#, kde-format
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
 "first tick is positioned at the absolute value provided below.</"

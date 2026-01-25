@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-21 00:40+0000\n"
-"PO-Revision-Date: 2026-01-20 18:09+0100\n"
+"PO-Revision-Date: 2026-01-23 07:59+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -14295,6 +14295,15 @@ msgid ""
 "provided below.</li><li>Custom Column Labels - positions are determined by "
 "the value labels in the custom column provided below.</li></ul></ul>"
 msgstr ""
+"Définit comment et où positionner les graduations majeures sur l'axe :"
+"<ul><li>Nombre - les graduations sont placées de manière équidistante, "
+"l'espacement entre elles est déterminé par le nombre fixe de graduations "
+"fourni,</li><li>Espacement - les graduations sont placées de manière "
+"équidistante avec l'espacement fourni entre elles,</li><li>Valeurs de "
+"colonne personnalisées - les positions sont déterminées par les valeurs de "
+"la colonne personnalisée fournie ci-dessous,</li><li>Étiquettes de colonne "
+"personnalisées - les positions sont déterminées par les étiquettes de valeur "
+"de la colonne personnalisée fournie ci-dessous.</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
 #, kde-format
@@ -14304,16 +14313,20 @@ msgid ""
 "li><li>Offset - the first tick is positioned at the offset relatively to the "
 "beginning of the axis range.</li></ul></ul>"
 msgstr ""
+"Définit où positionner la première graduation majeure :</p><ul><li>Valeur "
+"absolue - la première graduation est positionnée à la valeur absolue "
+"indiquée ci-dessous,</li><li>Décalage - la première graduation est "
+"positionnée avec un décalage par rapport au début de la plage de l’axe.</"
+"li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
 msgstr ""
-"Ligne dans le fichier devant être utilisée pour déterminer les noms de "
-"colonne."
+"Colonnes avec des valeurs devant être utilisées comme positions des "
+"graduations majeures."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:351
 #, kde-format
@@ -14323,16 +14336,20 @@ msgid ""
 "Column Values - values in the custom column provided below are used as text "
 "labels.</li></ul></ul>"
 msgstr ""
+"Définit quelles étiquettes de texte il faut afficher pour les principales "
+"graduations :<ul><li>Valeurs de position - les positions des graduations "
+"sont utilisées comme étiquettes de texte,</li><li>Valeurs de colonne "
+"personnalisées - les valeurs de la colonne personnalisée fournies ci-dessous "
+"sont utilisées comme étiquettes de texte.</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
 msgstr ""
-"Ligne dans le fichier devant être utilisée pour déterminer les noms de "
-"colonne."
+"Colonnes avec des valeurs devant être utilisées comme étiquettes de texte "
+"pour les graduations majeures."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:366
 #, kde-format
@@ -14344,16 +14361,22 @@ msgid ""
 "Values - positions are determined by the values in the custom column "
 "provided below.</li></ul></ul>"
 msgstr ""
+"Définit comment et où positionner les graduations mineures sur l’axe :"
+"<ul><li>Nombre - les graduations sont placées à intervalles égaux, "
+"l’espacement entre elles étant déterminé par le nombre fixe de graduations "
+"fourni,</li><li>Espacement - les graduations sont placées à intervalles "
+"égaux avec l’espacement fourni entre elles,</li><li>Valeurs de colonne "
+"personnalisées - les positions sont déterminées par les valeurs de la "
+"colonne personnalisée fournie ci-dessous.</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
 msgstr ""
-"Ligne dans le fichier devant être utilisée pour déterminer les noms de "
-"colonne."
+"Colonnes avec des valeurs devant être utilisées comme position des "
+"graduations mineures."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:629
 #, kde-format
