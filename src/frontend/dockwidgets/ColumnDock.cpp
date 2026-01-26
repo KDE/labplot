@@ -512,7 +512,7 @@ void ColumnDock::plotDesignationChanged(int index) {
 //*************************************************************
 void ColumnDock::loadFormula() {
 	// clean variable list
-	for (int i = 0; i < m_variableLineEdits.size(); i++)
+	while (!m_variableLineEdits.isEmpty())
 		deleteVariable();
 
 	// formula expression
@@ -533,11 +533,12 @@ void ColumnDock::loadFormula() {
 		const auto& cols = m_spreadsheet->project()->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (int i = 0; i < formulaData.size(); ++i) {
 			addVariable();
-			m_variableLineEdits[i]->setText(formulaData.at(i).variableName());
+			const auto& data = formulaData.at(i);
+			m_variableLineEdits[i]->setText(data.variableName());
 
 			bool found = false;
 			for (const auto* col : cols) {
-				if (col != formulaData.at(i).column())
+				if (col != data.column())
 					continue;
 
 				const auto* column = dynamic_cast<const AbstractColumn*>(col);
@@ -555,8 +556,8 @@ void ColumnDock::loadFormula() {
 				m_variableDataColumns.at(i)->setInvalid(
 					true,
 					i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.",
-						 formulaData.at(i).columnName()));
-				m_variableDataColumns.at(i)->setText(formulaData.at(i).columnName().split(QLatin1Char('/')).last());
+						 data.columnName()));
+				m_variableDataColumns.at(i)->setText(data.columnName().split(QLatin1Char('/')).last());
 			}
 		}
 	}
@@ -659,7 +660,7 @@ void ColumnDock::loadFunction() {
 		return;
 
 	// clean variable list
-	for (int i = 0; i < m_variableLineEdits.size(); i++)
+	while (!m_variableLineEdits.isEmpty())
 		deleteVariable();
 
 	// load variables
