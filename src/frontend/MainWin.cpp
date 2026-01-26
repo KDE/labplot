@@ -747,7 +747,7 @@ void MainWin::openProject() {
 bool MainWin::openProject(const QString& fileName) {
 	if (m_project && fileName == m_project->fileName()) {
 		KMessageBox::information(this, i18n("The project file %1 is already opened.", fileName), i18n("Open Project"));
-		return false;
+		return true; // nothing to do
 	}
 
 	// check whether the file can be opened for reading at all before closing the current project
