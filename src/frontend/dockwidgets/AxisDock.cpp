@@ -317,6 +317,7 @@ void AxisDock::retranslateUi() {
 	ui.cbLabelsFormat->addItem(i18n("Powers of 2"));
 	ui.cbLabelsFormat->addItem(i18n("Powers of e"));
 	ui.cbLabelsFormat->addItem(i18n("Multiples of π"));
+	ui.cbLabelsFormat->addItem(i18n("Angle (DMS)"));
 
 	ui.cbLabelsBackgroundType->clear();
 	ui.cbLabelsBackgroundType->addItem(i18n("Transparent"));
@@ -1311,6 +1312,9 @@ void AxisDock::minorTicksLengthChanged(double value) {
 void AxisDock::labelsFormatChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
+	auto format = Axis::indexToLabelsFormat(index);
+	updateLabelsFormatWidgets(format);
+
 	for (auto* axis : m_axesList)
 		axis->setLabelsFormat(Axis::indexToLabelsFormat(index));
 }
@@ -1357,6 +1361,15 @@ void AxisDock::labelsPositionChanged(int index) {
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsPosition(position);
+}
+
+void AxisDock::updateLabelsFormatWidgets(Axis::LabelsFormat format) {
+	const bool isAngle = (format == Axis::LabelsFormat::AngleDMS);
+
+	ui.chkLabelsAutoPrecision->setEnabled(!isAngle);
+	ui.sbLabelsPrecision->setEnabled(!isAngle);
+	ui.lLabelsPrecision->setVisible(!isAngle);
+	ui.frameLabelsPrecision->setVisible(!isAngle);
 }
 
 void AxisDock::labelsOffsetChanged(double value) {
@@ -1740,6 +1753,7 @@ void AxisDock::axisMinorTicksLengthChanged(qreal length) {
 void AxisDock::axisLabelsFormatChanged(Axis::LabelsFormat format) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbLabelsFormat->setCurrentIndex(Axis::labelsFormatToIndex(format));
+	updateLabelsFormatWidgets(format);
 }
 void AxisDock::axisLabelsFormatAutoChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1981,6 +1995,7 @@ void AxisDock::load() {
 	const int idx = ui.cbLabelsTextType->findData((int)m_axis->labelsTextType());
 	ui.cbLabelsTextType->setCurrentIndex(idx);
 	ui.cbLabelsFormat->setCurrentIndex(Axis::labelsFormatToIndex(m_axis->labelsFormat()));
+	updateLabelsFormatWidgets(m_axis->labelsFormat());
 	ui.cbLabelsFormat->setEnabled(!m_axis->labelsFormatAuto());
 	ui.chkLabelsFormatAuto->setChecked(m_axis->labelsFormatAuto());
 	ui.chkLabelsAutoPrecision->setChecked((int)m_axis->labelsAutoPrecision());
