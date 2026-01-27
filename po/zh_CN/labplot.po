@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-21 00:40+0000\n"
+"POT-Creation-Date: 2026-01-27 00:40+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1773,8 +1773,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/frontend/dockwidgets/ColumnDock.cpp:359
-#: src/frontend/dockwidgets/ColumnDock.cpp:795
-#: src/frontend/dockwidgets/ColumnDock.cpp:820
+#: src/frontend/dockwidgets/ColumnDock.cpp:796
+#: src/frontend/dockwidgets/ColumnDock.cpp:821
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:231
@@ -14584,7 +14584,7 @@ msgstr "自动 (E)"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/ColumnDock.cpp:359
-#: src/frontend/dockwidgets/ColumnDock.cpp:820
+#: src/frontend/dockwidgets/ColumnDock.cpp:821
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/ui/dockwidgets/columndock.ui:42
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
@@ -14647,7 +14647,7 @@ msgid ""
 "columns"
 msgstr "根据自变量列的大小，自动调整目标列的大小"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:557
+#: src/frontend/dockwidgets/ColumnDock.cpp:558
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -14655,55 +14655,55 @@ msgid ""
 "again."
 msgstr "列 \"%1\" 不存在。重新创建该列后将自动使用。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:575
+#: src/frontend/dockwidgets/ColumnDock.cpp:576
 #, kde-format
 msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
 "controlled by the linked spreadsheet."
 msgstr "数据表链接处于打开状态。目标数据表的大小将由链接的数据表控制。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:588
+#: src/frontend/dockwidgets/ColumnDock.cpp:589
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
 "use another name."
 msgstr "输入的变量名与内置常量冲突。请换一个名称。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:591
+#: src/frontend/dockwidgets/ColumnDock.cpp:592
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
 "use another name."
 msgstr "输入的变量名与内置函数冲突。请换一个名称。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:594
+#: src/frontend/dockwidgets/ColumnDock.cpp:595
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr "'i' 用于表示行号，不能用作变量名。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:597
+#: src/frontend/dockwidgets/ColumnDock.cpp:598
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr "输入的变量名以数字开头或包含特殊字符。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:612
+#: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
 msgid "Empty formula expression"
 msgstr "公式表达式为空"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:619
+#: src/frontend/dockwidgets/ColumnDock.cpp:620
 #, kde-format
 msgid "Incorrect formula syntax: "
 msgstr "公式语法错误："
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:638
+#: src/frontend/dockwidgets/ColumnDock.cpp:639
 #, kde-format
 msgid "Select a valid column"
 msgstr "选择一个有效的列"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:645
-#: src/frontend/dockwidgets/ColumnDock.cpp:743
+#: src/frontend/dockwidgets/ColumnDock.cpp:646
+#: src/frontend/dockwidgets/ColumnDock.cpp:744
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:178
 #, kde-format
 msgid ""
@@ -14711,18 +14711,18 @@ msgid ""
 "a letter"
 msgstr "变量名称只能包含字母、 数字和 '_' ，并应以字母开头。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:652
+#: src/frontend/dockwidgets/ColumnDock.cpp:653
 #, kde-format
 msgid "Apply Formula"
 msgstr ""
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:789
+#: src/frontend/dockwidgets/ColumnDock.cpp:790
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
 #, kde-format
 msgid "Delete variable"
 msgstr "删除变量"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:864
+#: src/frontend/dockwidgets/ColumnDock.cpp:865
 #, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-21 00:40+0000\n"
-"PO-Revision-Date: 2026-01-20 18:09+0100\n"
+"POT-Creation-Date: 2026-01-27 00:40+0000\n"
+"PO-Revision-Date: 2026-01-23 07:59+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -1841,8 +1841,8 @@ msgstr "Nombre de variables :"
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/frontend/dockwidgets/ColumnDock.cpp:359
-#: src/frontend/dockwidgets/ColumnDock.cpp:795
-#: src/frontend/dockwidgets/ColumnDock.cpp:820
+#: src/frontend/dockwidgets/ColumnDock.cpp:796
+#: src/frontend/dockwidgets/ColumnDock.cpp:821
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:231
@@ -14295,6 +14295,15 @@ msgid ""
 "provided below.</li><li>Custom Column Labels - positions are determined by "
 "the value labels in the custom column provided below.</li></ul></ul>"
 msgstr ""
+"Définit comment et où positionner les graduations majeures sur l'axe :"
+"<ul><li>Nombre - les graduations sont placées de manière équidistante, "
+"l'espacement entre elles est déterminé par le nombre fixe de graduations "
+"fourni,</li><li>Espacement - les graduations sont placées de manière "
+"équidistante avec l'espacement fourni entre elles,</li><li>Valeurs de "
+"colonne personnalisées - les positions sont déterminées par les valeurs de "
+"la colonne personnalisée fournie ci-dessous,</li><li>Étiquettes de colonne "
+"personnalisées - les positions sont déterminées par les étiquettes de valeur "
+"de la colonne personnalisée fournie ci-dessous.</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:338
 #, kde-format
@@ -14304,16 +14313,20 @@ msgid ""
 "li><li>Offset - the first tick is positioned at the offset relatively to the "
 "beginning of the axis range.</li></ul></ul>"
 msgstr ""
+"Définit où positionner la première graduation majeure :</p><ul><li>Valeur "
+"absolue - la première graduation est positionnée à la valeur absolue "
+"indiquée ci-dessous,</li><li>Décalage - la première graduation est "
+"positionnée avec un décalage par rapport au début de la plage de l’axe.</"
+"li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
 msgstr ""
-"Ligne dans le fichier devant être utilisée pour déterminer les noms de "
-"colonne."
+"Colonnes avec des valeurs devant être utilisées comme positions des "
+"graduations majeures."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:351
 #, kde-format
@@ -14323,16 +14336,20 @@ msgid ""
 "Column Values - values in the custom column provided below are used as text "
 "labels.</li></ul></ul>"
 msgstr ""
+"Définit quelles étiquettes de texte il faut afficher pour les principales "
+"graduations :<ul><li>Valeurs de position - les positions des graduations "
+"sont utilisées comme étiquettes de texte,</li><li>Valeurs de colonne "
+"personnalisées - les valeurs de la colonne personnalisée fournies ci-dessous "
+"sont utilisées comme étiquettes de texte.</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
 msgstr ""
-"Ligne dans le fichier devant être utilisée pour déterminer les noms de "
-"colonne."
+"Colonnes avec des valeurs devant être utilisées comme étiquettes de texte "
+"pour les graduations majeures."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:366
 #, kde-format
@@ -14344,16 +14361,22 @@ msgid ""
 "Values - positions are determined by the values in the custom column "
 "provided below.</li></ul></ul>"
 msgstr ""
+"Définit comment et où positionner les graduations mineures sur l’axe :"
+"<ul><li>Nombre - les graduations sont placées à intervalles égaux, "
+"l’espacement entre elles étant déterminé par le nombre fixe de graduations "
+"fourni,</li><li>Espacement - les graduations sont placées à intervalles "
+"égaux avec l’espacement fourni entre elles,</li><li>Valeurs de colonne "
+"personnalisées - les positions sont déterminées par les valeurs de la "
+"colonne personnalisée fournie ci-dessous.</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "Line in the file that should be used to determine the column names."
+#, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
 msgstr ""
-"Ligne dans le fichier devant être utilisée pour déterminer les noms de "
-"colonne."
+"Colonnes avec des valeurs devant être utilisées comme position des "
+"graduations mineures."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:629
 #, kde-format
@@ -14957,7 +14980,7 @@ msgstr "Automatique (E)"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/ColumnDock.cpp:359
-#: src/frontend/dockwidgets/ColumnDock.cpp:820
+#: src/frontend/dockwidgets/ColumnDock.cpp:821
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/ui/dockwidgets/columndock.ui:42
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
@@ -15037,7 +15060,7 @@ msgstr ""
 "Re-dimensionner automatiquement la colonne cible pour s'ajuster aux colonnes "
 "de variables."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:557
+#: src/frontend/dockwidgets/ColumnDock.cpp:558
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -15048,7 +15071,7 @@ msgstr ""
 "n'est plus disponible. Elle sera automatiquement utilisée une fois créée à "
 "nouveau."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:575
+#: src/frontend/dockwidgets/ColumnDock.cpp:576
 #, kde-format
 msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
@@ -15057,7 +15080,7 @@ msgstr ""
 "La liaison des feuilles de calcul est actif. La taille de la feuille de "
 "calcul cible est contrôlée par la feuille de calcul liée."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:588
+#: src/frontend/dockwidgets/ColumnDock.cpp:589
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
@@ -15066,7 +15089,7 @@ msgstr ""
 "Le nom fourni pour la variable est déjà réservé comme nom de constante. "
 "Veuillez en sélectionner un autre."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:591
+#: src/frontend/dockwidgets/ColumnDock.cpp:592
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
@@ -15075,12 +15098,12 @@ msgstr ""
 "Le nom fourni pour la variable est déjà réservé comme nom de fonction. "
 "Veuillez en sélectionner un autre."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:594
+#: src/frontend/dockwidgets/ColumnDock.cpp:595
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr "Le nom de variable « i » est réservé à l'index de la ligne de colonne."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:597
+#: src/frontend/dockwidgets/ColumnDock.cpp:598
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
@@ -15088,23 +15111,23 @@ msgstr ""
 "Le nom fourni pour la variable commence par un chiffre ou contient un "
 "caractère spécial."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:612
+#: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
 msgid "Empty formula expression"
 msgstr "Expression vide de formule"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:619
+#: src/frontend/dockwidgets/ColumnDock.cpp:620
 #, kde-format
 msgid "Incorrect formula syntax: "
 msgstr "Syntaxe incorrecte de formule :"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:638
+#: src/frontend/dockwidgets/ColumnDock.cpp:639
 #, kde-format
 msgid "Select a valid column"
 msgstr "Sélectionner un colonne valable"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:645
-#: src/frontend/dockwidgets/ColumnDock.cpp:743
+#: src/frontend/dockwidgets/ColumnDock.cpp:646
+#: src/frontend/dockwidgets/ColumnDock.cpp:744
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:178
 #, kde-format
 msgid ""
@@ -15114,18 +15137,18 @@ msgstr ""
 "Le nom de variable peut contenir des lettres, des chiffres et « _ » "
 "uniquement et doit commencer par une lettre."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:652
+#: src/frontend/dockwidgets/ColumnDock.cpp:653
 #, kde-format
 msgid "Apply Formula"
 msgstr "Appliquer la formule"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:789
+#: src/frontend/dockwidgets/ColumnDock.cpp:790
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
 #, kde-format
 msgid "Delete variable"
 msgstr "Supprimer la variable"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:864
+#: src/frontend/dockwidgets/ColumnDock.cpp:865
 #, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-21 00:40+0000\n"
+"POT-Creation-Date: 2026-01-27 00:40+0000\n"
 "PO-Revision-Date: 2026-01-20 06:17+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -1827,8 +1827,8 @@ msgstr "Кількість змінних: "
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/frontend/dockwidgets/ColumnDock.cpp:359
-#: src/frontend/dockwidgets/ColumnDock.cpp:795
-#: src/frontend/dockwidgets/ColumnDock.cpp:820
+#: src/frontend/dockwidgets/ColumnDock.cpp:796
+#: src/frontend/dockwidgets/ColumnDock.cpp:821
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:231
@@ -14948,7 +14948,7 @@ msgstr "Автоматично (E)"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/ColumnDock.cpp:359
-#: src/frontend/dockwidgets/ColumnDock.cpp:820
+#: src/frontend/dockwidgets/ColumnDock.cpp:821
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/ui/dockwidgets/columndock.ui:42
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
@@ -15026,7 +15026,7 @@ msgstr ""
 "Автоматично оновлювати розмір стовпчика призначення так, щоб він відповідав "
 "розміру стовпчиків змінних"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:557
+#: src/frontend/dockwidgets/ColumnDock.cpp:558
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -15037,7 +15037,7 @@ msgstr ""
 "втрачено. Його дані буде автоматично використано, коли його буде створено "
 "знову."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:575
+#: src/frontend/dockwidgets/ColumnDock.cpp:576
 #, kde-format
 msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
@@ -15046,7 +15046,7 @@ msgstr ""
 "Задіяно пов'язування електронних таблиць. Розмір таблиці призначення "
 "керується пов'язаною із нею таблицею."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:588
+#: src/frontend/dockwidgets/ColumnDock.cpp:589
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
@@ -15055,7 +15055,7 @@ msgstr ""
 "Вказану назву змінної вже зарезервовано як назву сталої. Будь ласка, "
 "скористайтеся іншою назвою."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:591
+#: src/frontend/dockwidgets/ColumnDock.cpp:592
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
@@ -15064,34 +15064,34 @@ msgstr ""
 "Вказану назву змінної вже зарезервовано як назву функції. Будь ласка, "
 "скористайтеся іншою назвою."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:594
+#: src/frontend/dockwidgets/ColumnDock.cpp:595
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr "Назву змінної «i» зарезервовано для індексу рядка стовпчика."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:597
+#: src/frontend/dockwidgets/ColumnDock.cpp:598
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr "Надана назва змінної починається з цифри і містить спеціальні символи."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:612
+#: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
 msgid "Empty formula expression"
 msgstr "Порожній вираз формули"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:619
+#: src/frontend/dockwidgets/ColumnDock.cpp:620
 #, kde-format
 msgid "Incorrect formula syntax: "
 msgstr "Помилкова синтаксична конструкція у формулі: "
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:638
+#: src/frontend/dockwidgets/ColumnDock.cpp:639
 #, kde-format
 msgid "Select a valid column"
 msgstr "Виберіть коректний стовпчик"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:645
-#: src/frontend/dockwidgets/ColumnDock.cpp:743
+#: src/frontend/dockwidgets/ColumnDock.cpp:646
+#: src/frontend/dockwidgets/ColumnDock.cpp:744
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:178
 #, kde-format
 msgid ""
@@ -15101,18 +15101,18 @@ msgstr ""
 "Назва змінної може складатися лише з літер, цифр та символів «_» і має "
 "починатися з літери"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:652
+#: src/frontend/dockwidgets/ColumnDock.cpp:653
 #, kde-format
 msgid "Apply Formula"
 msgstr "Застосувати формулу"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:789
+#: src/frontend/dockwidgets/ColumnDock.cpp:790
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
 #, kde-format
 msgid "Delete variable"
 msgstr "Вилучити змінну"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:864
+#: src/frontend/dockwidgets/ColumnDock.cpp:865
 #, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
