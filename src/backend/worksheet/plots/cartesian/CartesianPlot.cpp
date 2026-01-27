@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -414,126 +414,6 @@ CartesianPlot::Type CartesianPlot::type() const {
 }
 
 void CartesianPlot::initActions() {
-	// analysis curves, no icons yet
-	addLineSimplificationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Line Simplification"), this);
-	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), this);
-	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), this);
-	addInterpolationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), this);
-	addSmoothCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), this);
-	addFitCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18nc("Curve fitting", "Fit"), this);
-	addFourierFilterCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), this);
-	addFourierTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), this);
-	addHilbertTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), this);
-	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("(De-)Convolution"), this);
-	addCorrelationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), this);
-	addBaselineCorrectionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Baseline Correction"), this);
-
-	connect(addLineSimplificationCurveAction, &QAction::triggered, this, &CartesianPlot::addLineSimplificationCurve);
-	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
-	connect(addIntegrationCurveAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
-	connect(addInterpolationCurveAction, &QAction::triggered, this, &CartesianPlot::addInterpolationCurve);
-	connect(addSmoothCurveAction, &QAction::triggered, this, &CartesianPlot::addSmoothCurve);
-	connect(addFitCurveAction, &QAction::triggered, this, &CartesianPlot::addFitCurve);
-	connect(addFourierFilterCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
-	connect(addFourierTransformCurveAction, &QAction::triggered, this, [=]() {
-		addChild(new XYFourierTransformCurve(i18n("Fourier Transform")));
-	});
-	connect(addHilbertTransformCurveAction, &QAction::triggered, this, [=]() {
-		addChild(new XYHilbertTransformCurve(i18n("Hilbert Transform")));
-	});
-	connect(addConvolutionCurveAction, &QAction::triggered, this, [=]() {
-		addChild(new XYConvolutionCurve(i18n("Convolution")));
-	});
-	connect(addCorrelationCurveAction, &QAction::triggered, this, [=]() {
-		addChild(new XYCorrelationCurve(i18n("Auto-/Cross-Correlation")));
-	});
-	connect(addBaselineCorrectionCurveAction, &QAction::triggered, this, &CartesianPlot::addBaselineCorrectionCurve);
-
-	addFunctionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Function"), this);
-	addFunctionCurveAction->setToolTip(i18n("Add a new xy-curve that is defined as a function of other xy-curves (scaled, shifted, etc.)"));
-	connect(addFunctionCurveAction, &QAction::triggered, this, &CartesianPlot::addFunctionCurve);
-
-	// Analysis menu actions, used in the spreadsheet
-	addLineSimplificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Line Simplification"), this);
-	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), this);
-	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integrate"), this);
-	addInterpolationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolate"), this);
-	addSmoothAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), this);
-	addConvolutionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Convolute/Deconvolute"), this);
-	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), this);
-	addBaselineCorrectionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Baseline Correction"), this);
-
-	QAction* fitAction = new QAction(i18n("Linear"), this);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitLinear));
-	addFitActions.append(fitAction);
-
-	fitAction = new QAction(i18n("Power"), this);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPower));
-	addFitActions.append(fitAction);
-
-	fitAction = new QAction(i18n("Exponential (degree 1)"), this);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp1));
-	addFitActions.append(fitAction);
-
-	fitAction = new QAction(i18n("Exponential (degree 2)"), this);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp2));
-	addFitActions.append(fitAction);
-
-	fitAction = new QAction(i18n("Inverse exponential"), this);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitInvExp));
-	addFitActions.append(fitAction);
-
-	fitAction = new QAction(i18n("Gauss"), this);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitGauss));
-	addFitActions.append(fitAction);
-
-	fitAction = new QAction(i18n("Cauchy-Lorentz"), this);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCauchyLorentz));
-	addFitActions.append(fitAction);
-
-	fitAction = new QAction(i18n("Arc Tangent"), this);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTan));
-	addFitActions.append(fitAction);
-
-	fitAction = new QAction(i18n("Hyperbolic Tangent"), this);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTanh));
-	addFitActions.append(fitAction);
-
-	fitAction = new QAction(i18n("Error Function"), this);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitErrFunc));
-	addFitActions.append(fitAction);
-
-	fitAction = new QAction(i18n("Custom"), this);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCustom));
-	addFitActions.append(fitAction);
-
-	addFourierFilterAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), this);
-	addFourierTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), this);
-	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), this);
-
-	connect(addLineSimplificationAction, &QAction::triggered, this, &CartesianPlot::addLineSimplificationCurve);
-	connect(addDifferentiationAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
-	connect(addIntegrationAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
-	connect(addInterpolationAction, &QAction::triggered, this, &CartesianPlot::addInterpolationCurve);
-	connect(addSmoothAction, &QAction::triggered, this, &CartesianPlot::addSmoothCurve);
-	connect(addConvolutionAction, &QAction::triggered, this, [=]() {
-		addChild(new XYConvolutionCurve(i18n("Convolution")));
-	});
-	connect(addCorrelationAction, &QAction::triggered, this, [=]() {
-		addChild(new XYCorrelationCurve(i18n("Auto-/Cross-Correlation")));
-	});
-	connect(addBaselineCorrectionAction, &QAction::triggered, this, &CartesianPlot::addBaselineCorrectionCurve);
-	for (const auto& action : addFitActions)
-		connect(action, &QAction::triggered, this, &CartesianPlot::addFitCurve);
-	connect(addFourierFilterAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
-	connect(addFourierTransformAction, &QAction::triggered, this, [=]() {
-		addChild(new XYFourierTransformCurve(i18n("Fourier Transform")));
-	});
-	connect(addHilbertTransformAction, &QAction::triggered, this, [=]() {
-		addChild(new XYHilbertTransformCurve(i18n("Hilbert Transform")));
-	});
-
-	// other objects
 	addLegendAction = new QAction(QIcon::fromTheme(QStringLiteral("text-field")), i18n("Legend"), this);
 	if (children<CartesianPlotLegend>().size() > 0)
 		addLegendAction->setEnabled(false); // only one legend is allowed -> disable the action
@@ -583,12 +463,13 @@ void CartesianPlot::initActions() {
 void CartesianPlot::initMenus() {
 	initActions();
 
+	// "Add New" menu
 	m_addNewMenu = new QMenu(i18n("Add New"));
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+
+	// plots
 	auto* actionGroup = new QActionGroup(this);
 	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addPlot);
-
-	// add all available plot types
 	CartesianPlot::fillAddNewPlotMenu(m_addNewMenu, actionGroup);
 
 	// formula plot
@@ -599,30 +480,22 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->addAction(action);
 	m_addNewMenu->addSeparator();
 
-	// analysis curves
+	// analysis plots
 	addNewAnalysisMenu = new QMenu(i18n("Analysis Plots"), m_addNewMenu);
-	addNewAnalysisMenu->addAction(addFitCurveAction);
-	addNewAnalysisMenu->addSeparator();
-	addNewAnalysisMenu->addAction(addDifferentiationCurveAction);
-	addNewAnalysisMenu->addAction(addIntegrationCurveAction);
-	addNewAnalysisMenu->addSeparator();
-	addNewAnalysisMenu->addAction(addInterpolationCurveAction);
-	addNewAnalysisMenu->addAction(addSmoothCurveAction);
-	addNewAnalysisMenu->addSeparator();
-	addNewAnalysisMenu->addAction(addFourierFilterCurveAction);
-	addNewAnalysisMenu->addAction(addFourierTransformCurveAction);
-	addNewAnalysisMenu->addAction(addHilbertTransformCurveAction);
-	addNewAnalysisMenu->addSeparator();
-	addNewAnalysisMenu->addAction(addConvolutionCurveAction);
-	addNewAnalysisMenu->addAction(addCorrelationCurveAction);
-	addNewAnalysisMenu->addSeparator();
-	addNewAnalysisMenu->addAction(addLineSimplificationCurveAction);
-	addNewAnalysisMenu->addSeparator();
-	addNewAnalysisMenu->addAction(addBaselineCorrectionCurveAction);
-	addNewAnalysisMenu->addSeparator();
-	addNewAnalysisMenu->addAction(addFunctionCurveAction);
+
+	QMenu* addNewFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), m_addNewMenu);
+	addNewFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
+	actionGroup = new QActionGroup(this);
+	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addAnalysisPlot);
+	CartesianPlot::fillFitMenu(addNewFitMenu, actionGroup);
+	addNewAnalysisMenu->addMenu(addNewFitMenu);
+
+	actionGroup = new QActionGroup(this);
+	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addAnalysisPlot);
+	CartesianPlot::fillAnalysisMenu(addNewAnalysisMenu, actionGroup);
 	m_addNewMenu->addMenu(addNewAnalysisMenu);
 
+	// other objects
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addLegendAction);
 	m_addNewMenu->addSeparator();
@@ -642,48 +515,18 @@ void CartesianPlot::initMenus() {
 		m_addNewMenu->addAction(addInsetPlotWithDataAction);
 	}
 
-	// analysis menu, used in the context menu of XYCurve to allow direct application of analysis functions on the curves
+	// "Analysis" menu, used in the context menu of XYCurve to allow direct application of analysis functions on the curves
 	dataAnalysisMenu = new QMenu(i18n("Analysis"));
-
-	QMenu* dataFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), dataAnalysisMenu);
+	QMenu* dataFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), m_addNewMenu);
 	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
-	dataFitMenu->addAction(addFitActions.at(0));
-	dataFitMenu->addAction(addFitActions.at(1));
-	dataFitMenu->addAction(addFitActions.at(2));
-	dataFitMenu->addAction(addFitActions.at(3));
-	dataFitMenu->addAction(addFitActions.at(4));
-	dataFitMenu->addSeparator();
-	dataFitMenu->addAction(addFitActions.at(5));
-	dataFitMenu->addAction(addFitActions.at(6));
-	dataFitMenu->addSeparator();
-	dataFitMenu->addAction(addFitActions.at(7));
-	dataFitMenu->addAction(addFitActions.at(8));
-	dataFitMenu->addAction(addFitActions.at(9));
-	dataFitMenu->addSeparator();
-	dataFitMenu->addAction(addFitActions.at(10));
+	actionGroup = new QActionGroup(this);
+	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addAnalysisPlot);
+	CartesianPlot::fillFitMenu(dataFitMenu, actionGroup);
 	dataAnalysisMenu->addMenu(dataFitMenu);
 
-	// TODO: re-use addNewAnalysisMenu?
-	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addAction(addDifferentiationAction);
-	dataAnalysisMenu->addAction(addIntegrationAction);
-	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addAction(addInterpolationAction);
-	dataAnalysisMenu->addAction(addSmoothAction);
-	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addAction(addFourierFilterAction);
-	dataAnalysisMenu->addAction(addFourierTransformAction);
-	dataAnalysisMenu->addAction(addHilbertTransformAction);
-	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addAction(addConvolutionAction);
-	dataAnalysisMenu->addAction(addCorrelationAction);
-	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addAction(addLineSimplificationAction);
-	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addAction(addBaselineCorrectionAction);
-	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addAction(addFunctionCurveAction);
+	actionGroup = new QActionGroup(this);
+	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addAnalysisPlot);
+	CartesianPlot::fillAnalysisMenu(dataAnalysisMenu, actionGroup);
 
 	// theme menu
 	themeMenu = new QMenu(i18n("Theme"));
@@ -808,6 +651,152 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 	addNewCIPlotsMenu->addAction(action);
 
 	addNewPlotMenu->addMenu(addNewCIPlotsMenu);
+}
+
+void CartesianPlot::fillFitMenu(QMenu* menu, QActionGroup* actionGroup) {
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Linear"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitLinear));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Power"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPower));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential (degree 1)"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp1));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential (degree 2)"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp2));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Inverse Exponential"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitInvExp));
+	menu->addAction(action);
+
+	menu->addSeparator();
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Gauss"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitGauss));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Cauchy-Lorentz"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCauchyLorentz));
+	menu->addAction(action);
+
+	menu->addSeparator();
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Arc Tangent"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTan));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Hyperbolic Tangent"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTanh));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Error Function"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitErrFunc));
+	menu->addAction(action);
+
+	menu->addSeparator();
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Custom"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCustom));
+	menu->addAction(action);
+}
+
+void CartesianPlot::fillAnalysisMenu(QMenu* menu, QActionGroup* actionGroup) {
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Differentiation));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integrate"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Integration));
+	menu->addAction(action);
+
+	menu->addSeparator();
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolate"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Interpolation));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Smoothing));
+	menu->addAction(action);
+
+	menu->addSeparator();
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierFilter));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierTransform));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::HilbertTransform));;
+	menu->addAction(action);
+
+	menu->addSeparator();
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Convolute/Deconvolute"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Convolution));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Correlation));
+	menu->addAction(action);
+
+	menu->addSeparator();
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Line Simplification"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::LineSimplification));
+	menu->addAction(action);
+
+	menu->addSeparator();
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Correct Baseline"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::BaselineCorrection));
+	menu->addAction(action);
+
+	menu->addSeparator();
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Function"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Function));;
+	menu->addAction(action);
+}
+
+void CartesianPlot::fillDistributionFitMenu(QMenu* menu, QActionGroup* actionGroup) {
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Gaussian (Normal)"), actionGroup);
+	action->setData(static_cast<int>(nsl_sf_stats_gaussian));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential"), actionGroup);
+	action->setData(static_cast<int>(nsl_sf_stats_exponential));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Laplace"), actionGroup);
+	action->setData(static_cast<int>(nsl_sf_stats_laplace));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Cauchy-Lorentz"), actionGroup);
+	action->setData(static_cast<int>(nsl_sf_stats_cauchy_lorentz));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Log-normal"), actionGroup);
+	action->setData(static_cast<int>(nsl_sf_stats_lognormal));
+	menu->addAction(action);
+
+	menu->addSeparator();
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Poisson"), actionGroup);
+	action->setData(static_cast<int>(nsl_sf_stats_poisson));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Binomial"), actionGroup);
+	action->setData(static_cast<int>(nsl_sf_stats_binomial));
+	menu->addAction(action);
 }
 
 QMenu* CartesianPlot::createContextMenu() {
@@ -1952,6 +1941,77 @@ void CartesianPlot::addPlot(QAction* action) {
 		break;
 	case Plot::PlotType::RunChart:
 		addChild(new RunChart(i18n("Run Chart")));
+		break;
+	}
+}
+
+void CartesianPlot::addAnalysisPlot(QAction* action) {
+	const auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
+	switch (type) {
+	case XYAnalysisCurve::AnalysisAction::FitLinear:
+	case XYAnalysisCurve::AnalysisAction::FitPower:
+	case XYAnalysisCurve::AnalysisAction::FitExp1:
+	case XYAnalysisCurve::AnalysisAction::FitExp2:
+	case XYAnalysisCurve::AnalysisAction::FitInvExp:
+	case XYAnalysisCurve::AnalysisAction::FitGauss:
+	case XYAnalysisCurve::AnalysisAction::FitCauchyLorentz:
+	case XYAnalysisCurve::AnalysisAction::FitTan:
+	case XYAnalysisCurve::AnalysisAction::FitTanh:
+	case XYAnalysisCurve::AnalysisAction::FitErrFunc:
+	case XYAnalysisCurve::AnalysisAction::FitCustom:
+	{
+		addFitCurve();
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::Differentiation: {
+		addDifferentiationCurve();
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::Integration: {
+		addIntegrationCurve();
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::Interpolation: {
+		addInterpolationCurve();
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::Smoothing: {
+		addSmoothCurve();
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::FourierFilter: {
+		addFourierFilterCurve();
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::FourierTransform: {
+		addChild(new XYFourierTransformCurve(i18n("Fourier Transform")));
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::HilbertTransform: {
+		addChild(new XYHilbertTransformCurve(i18n("Hilbert Transform")));
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::Convolution: {
+		addChild(new XYConvolutionCurve(i18n("Convolution")));
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::Correlation: {
+		addChild(new XYCorrelationCurve(i18n("Auto-/Cross-Correlation")));
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::LineSimplification: {
+		addLineSimplificationCurve();
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::BaselineCorrection: {
+		addBaselineCorrectionCurve();
+		break;
+	}
+	case XYAnalysisCurve::AnalysisAction::Function: {
+		addFunctionCurve();
+		break;
+	}
+	default:
 		break;
 	}
 }
