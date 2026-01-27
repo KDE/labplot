@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-21 00:40+0000\n"
+"POT-Creation-Date: 2026-01-27 00:40+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -1806,8 +1806,8 @@ msgstr "चरानाम् संख्या : "
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/frontend/dockwidgets/ColumnDock.cpp:359
-#: src/frontend/dockwidgets/ColumnDock.cpp:795
-#: src/frontend/dockwidgets/ColumnDock.cpp:820
+#: src/frontend/dockwidgets/ColumnDock.cpp:796
+#: src/frontend/dockwidgets/ColumnDock.cpp:821
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:231
@@ -14853,7 +14853,7 @@ msgstr "स्वचालित (ई)"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/ColumnDock.cpp:359
-#: src/frontend/dockwidgets/ColumnDock.cpp:820
+#: src/frontend/dockwidgets/ColumnDock.cpp:821
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/ui/dockwidgets/columndock.ui:42
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
@@ -14916,7 +14916,7 @@ msgid ""
 "columns"
 msgstr "चरस्तम्भानां आकारं समायोजयितुं लक्ष्यस्तम्भस्य आकारं स्वयमेव परिवर्तयन्तु"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:557
+#: src/frontend/dockwidgets/ColumnDock.cpp:558
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -14926,7 +14926,7 @@ msgstr ""
 "\"%1\" इति स्तम्भः ।\n"
 "इतः परं न लभ्यते। पुनः एकवारं निर्मितं जातं चेत् स्वयमेव तस्य उपयोगः भविष्यति ।"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:575
+#: src/frontend/dockwidgets/ColumnDock.cpp:576
 #, kde-format
 msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
@@ -14935,7 +14935,7 @@ msgstr ""
 "स्प्रेड्शीट् लिङ्किङ्ग् सक्रियम् अस्ति । लक्ष्यस्प्रेड्शीट् इत्यस्य आकारः लिङ्क्ड् स्प्रेड्शीट् इत्यनेन "
 "नियन्त्रितः भवति ।"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:588
+#: src/frontend/dockwidgets/ColumnDock.cpp:589
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
@@ -14943,7 +14943,7 @@ msgid ""
 msgstr ""
 "प्रदत्तं चरनाम पूर्वमेव नित्यस्य नामस्य कृते आरक्षितम् अस्ति । कृपया अन्यत् नाम प्रयोजयन्तु।"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:591
+#: src/frontend/dockwidgets/ColumnDock.cpp:592
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
@@ -14951,34 +14951,34 @@ msgid ""
 msgstr ""
 "प्रदत्तं चरनाम पूर्वमेव फंक्शन् इत्यस्य नाम कृते आरक्षितम् अस्ति । कृपया अन्यत् नाम प्रयोजयन्तु।"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:594
+#: src/frontend/dockwidgets/ColumnDock.cpp:595
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr "'i' इति चरनाम स्तम्भपङ्क्तौ अनुक्रमणिकायाः कृते आरक्षितम् अस्ति ।"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:597
+#: src/frontend/dockwidgets/ColumnDock.cpp:598
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr "प्रदत्तं चरनाम अङ्केन आरभ्यते अथवा विशेषवर्णं भवति ।"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:612
+#: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
 msgid "Empty formula expression"
 msgstr "रिक्त सूत्र अभिव्यक्ति"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:619
+#: src/frontend/dockwidgets/ColumnDock.cpp:620
 #, kde-format
 msgid "Incorrect formula syntax: "
 msgstr "अशुद्धसूत्रवाक्यविन्यासः : "
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:638
+#: src/frontend/dockwidgets/ColumnDock.cpp:639
 #, kde-format
 msgid "Select a valid column"
 msgstr "वैधस्तम्भं चिनोतु"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:645
-#: src/frontend/dockwidgets/ColumnDock.cpp:743
+#: src/frontend/dockwidgets/ColumnDock.cpp:646
+#: src/frontend/dockwidgets/ColumnDock.cpp:744
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:178
 #, kde-format
 msgid ""
@@ -14986,19 +14986,19 @@ msgid ""
 "a letter"
 msgstr "चरनाम केवलं अक्षराणि, अङ्कानि, '_' च भवितुं शक्नोति, अक्षरेण आरभ्यत इति"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:652
+#: src/frontend/dockwidgets/ColumnDock.cpp:653
 #, fuzzy, kde-format
 #| msgid "Formula:"
 msgid "Apply Formula"
 msgstr "सूत्रम् :"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:789
+#: src/frontend/dockwidgets/ColumnDock.cpp:790
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
 #, kde-format
 msgid "Delete variable"
 msgstr "चरं विलोपयन्तु"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:864
+#: src/frontend/dockwidgets/ColumnDock.cpp:865
 #, fuzzy, kde-format
 #| msgid "%1: set cell formula"
 msgid "%1: apply column formula"

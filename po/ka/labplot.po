@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-21 00:40+0000\n"
+"POT-Creation-Date: 2026-01-27 00:40+0000\n"
 "PO-Revision-Date: 2026-01-20 05:54+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -1815,8 +1815,8 @@ msgstr "ცვლადების რაოდენობა: "
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/frontend/dockwidgets/ColumnDock.cpp:359
-#: src/frontend/dockwidgets/ColumnDock.cpp:795
-#: src/frontend/dockwidgets/ColumnDock.cpp:820
+#: src/frontend/dockwidgets/ColumnDock.cpp:796
+#: src/frontend/dockwidgets/ColumnDock.cpp:821
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:231
@@ -14872,7 +14872,7 @@ msgstr "ავტომატური (E)"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/ColumnDock.cpp:359
-#: src/frontend/dockwidgets/ColumnDock.cpp:820
+#: src/frontend/dockwidgets/ColumnDock.cpp:821
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
 #: src/frontend/ui/dockwidgets/columndock.ui:42
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
@@ -14948,7 +14948,7 @@ msgid ""
 msgstr ""
 "სამიზნე სვეტების ზომის ავტომატური შეცვლა, რომ ცვლადი სვეტების ზომაში ჩაეტიოს"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:557
+#: src/frontend/dockwidgets/ColumnDock.cpp:558
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -14959,7 +14959,7 @@ msgstr ""
 "ხელმისაწვდომი აღარაა. ის ავტომატურად იქნება გამოყენებული, როცა მას თავიდან "
 "შექმნით."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:575
+#: src/frontend/dockwidgets/ColumnDock.cpp:576
 #, kde-format
 msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
@@ -14968,7 +14968,7 @@ msgstr ""
 "აქტიურია ელცხრილებს მიბმა. სამიზნე ელცხრილის ზომა მიბმული ელცხრილის მიერ "
 "იმართება."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:588
+#: src/frontend/dockwidgets/ColumnDock.cpp:589
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
@@ -14977,7 +14977,7 @@ msgstr ""
 "შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც მუდმივის სახელი. გამოიყენეთ "
 "სხვა."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:591
+#: src/frontend/dockwidgets/ColumnDock.cpp:592
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
@@ -14986,34 +14986,34 @@ msgstr ""
 "შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც ფუნქციის სახელი. გამოიყენეთ "
 "სხვა."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:594
+#: src/frontend/dockwidgets/ColumnDock.cpp:595
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr "ცვლადის სახელი \"i\" დაცულია სვეტის მწკრივის ინდექსისთვის."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:597
+#: src/frontend/dockwidgets/ColumnDock.cpp:598
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr "მოწოდებული ცვლადი სახელი იწყება ციფრით ან შეიცავს სპეციალურ სიმბოლოს."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:612
+#: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
 msgid "Empty formula expression"
 msgstr "ცარიელი ფორმულის გამოსახულება"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:619
+#: src/frontend/dockwidgets/ColumnDock.cpp:620
 #, kde-format
 msgid "Incorrect formula syntax: "
 msgstr "არასწორი ფორმულის სინტაქსი: "
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:638
+#: src/frontend/dockwidgets/ColumnDock.cpp:639
 #, kde-format
 msgid "Select a valid column"
 msgstr "მონიშნეთ სწორი სვეტი"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:645
-#: src/frontend/dockwidgets/ColumnDock.cpp:743
+#: src/frontend/dockwidgets/ColumnDock.cpp:646
+#: src/frontend/dockwidgets/ColumnDock.cpp:744
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:178
 #, kde-format
 msgid ""
@@ -15023,18 +15023,18 @@ msgstr ""
 "ცვლადის სახელი, შეიძლება, ასოებს, ციფრებს და სიმბოლო '_'-ს შეიცავდეს, "
 "მაგრამ, მხოლოდ, ასოთი შეიძლება, იწყებოდეს"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:652
+#: src/frontend/dockwidgets/ColumnDock.cpp:653
 #, kde-format
 msgid "Apply Formula"
 msgstr "ფორმულის გადატარება"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:789
+#: src/frontend/dockwidgets/ColumnDock.cpp:790
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
 #, kde-format
 msgid "Delete variable"
 msgstr "ცვლადის წაშლა"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:864
+#: src/frontend/dockwidgets/ColumnDock.cpp:865
 #, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
