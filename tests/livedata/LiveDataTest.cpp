@@ -100,8 +100,8 @@ void LiveDataTest::testReadContinuousFixed00() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -184,8 +184,8 @@ void LiveDataTest::testReadContinuousFixed01() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -275,8 +275,8 @@ void LiveDataTest::testReadContinuousFixed02() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -361,8 +361,8 @@ void LiveDataTest::testReadContinuousFixedWithIndex() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	properties.createIndex = true;
@@ -451,8 +451,8 @@ void LiveDataTest::testReadContinuousFixedWithTimestamp() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	properties.createTimestamp = true;
@@ -541,8 +541,8 @@ void LiveDataTest::testReadContinuousFixedWithIndexTimestamp() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	properties.createIndex = true;
@@ -644,8 +644,8 @@ void LiveDataTest::testReadFromEnd00() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -725,8 +725,8 @@ void LiveDataTest::testReadFromEnd01() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -836,8 +836,8 @@ void LiveDataTest::testReadFromEnd02() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -932,8 +932,8 @@ void LiveDataTest::testReadTillEnd00() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -1013,8 +1013,8 @@ void LiveDataTest::testReadTillEnd01() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -1091,8 +1091,8 @@ void LiveDataTest::testReadWholeFile00() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -1162,8 +1162,8 @@ void LiveDataTest::testReadWholeFile01() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -1233,8 +1233,8 @@ void LiveDataTest::testReadWholeFileSameContentSize() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -1328,8 +1328,8 @@ void LiveDataTest::testPlotting() {
 	auto* filter = new AsciiFilter();
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
-	properties.columnNamesRaw = QStringLiteral("1, 2");
-	properties.columnModesString = QStringLiteral("Double, Double");
+	properties.columnNamesString = QStringLiteral("1, 2");
+	properties.dataTypesString = QStringLiteral("Double, Double");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	QCOMPARE(filter->initialize(properties).success(), true);
@@ -1514,8 +1514,8 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	auto properties = filter->defaultProperties();                                                                                                             \
 	properties.headerEnabled = false;                                                                                                                          \
 	properties.intAsDouble = false;                                                                                                                            \
-	properties.columnNamesRaw = QStringLiteral("x, y");                                                                                                        \
-	properties.columnModesString = QStringLiteral("Int, Int");                                                                                                 \
+	properties.columnNamesString = QStringLiteral("x, y");                                                                                                     \
+	properties.dataTypesString = QStringLiteral("Int, Int");                                                                                                   \
 	properties.automaticSeparatorDetection = false;                                                                                                            \
 	properties.separator = QStringLiteral(",");                                                                                                                \
 	QCOMPARE(filter->initialize(properties).success(), true);                                                                                                  \

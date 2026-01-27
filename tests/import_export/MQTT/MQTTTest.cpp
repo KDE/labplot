@@ -150,7 +150,7 @@ void MQTTTest::testIntegerMessage() {
 	auto properties = filter->properties();
 	properties.automaticSeparatorDetection = false;
 	properties.headerEnabled = false;
-	properties.columnModesString = QStringLiteral("Int");
+	properties.dataTypesString = QStringLiteral("Int");
 	properties.intAsDouble = false;
 	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
 
@@ -269,7 +269,7 @@ void MQTTTest::testNumericMessage() {
 	auto properties = filter->properties();
 	properties.automaticSeparatorDetection = false;
 	properties.headerEnabled = false;
-	properties.columnModesString = QStringLiteral("Double");
+	properties.dataTypesString = QStringLiteral("Double");
 	properties.intAsDouble = false;
 	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
 
@@ -400,7 +400,7 @@ void MQTTTest::testTextMessage() {
 	auto properties = filter->properties();
 	properties.automaticSeparatorDetection = false;
 	properties.headerEnabled = false;
-	properties.columnModesString = QStringLiteral("Text");
+	properties.dataTypesString = QStringLiteral("Text");
 	properties.intAsDouble = false;
 	properties.commentCharacter = QStringLiteral("#");
 	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
