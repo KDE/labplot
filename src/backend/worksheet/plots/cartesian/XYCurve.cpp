@@ -537,7 +537,6 @@ QColor XYCurve::color() const {
 }
 
 int XYCurve::dataCount(Dimension dim) const {
-	Q_D(const XYCurve);
 	if (!column(dim))
 		return -1;
 

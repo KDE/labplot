@@ -337,7 +337,7 @@ void SpreadsheetView::initActions() {
 	action_search_replace->setShortcut(QKeySequence::Replace);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
 
-	action_statistics_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics Spreadsheet"), this);
+	action_statistics_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Columns Statistics Spreadsheet"), this);
 	action_statistics_spreadsheet->setCheckable(true);
 
 	// column related actions
