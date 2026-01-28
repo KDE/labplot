@@ -15874,7 +15874,7 @@ msgstr "Poznámkový blok"
 #: src/frontend/SettingsDialog.cpp:77
 #, kde-format
 msgid "Datasets"
-msgstr ""
+msgstr "Soubory dat"
 
 #: src/frontend/SettingsDialog.cpp:92
 #, kde-format
