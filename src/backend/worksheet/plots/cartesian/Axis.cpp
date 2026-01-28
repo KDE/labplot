@@ -2212,6 +2212,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			}
 			break;
 		}
+		// AngleDMS Label format
 		case Axis::LabelsFormat::AngleDMS: {
 			DEBUG("ANGLE DMS FORMAT ACTIVE");
 			for (const auto value : std::as_const(tickLabelValues)) {
