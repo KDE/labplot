@@ -117,6 +117,7 @@ New features:
 		* use minus sign instead of hyphen for all numerical values shown on the worksheet and added a new option in the application settings to control this behavior
 		* new application setting to control the size of the thumbnails in the worksheet preview panel
 		* append file extension on export when not present
+		* add a new axis label format to display numeric values as angles in Degree:Minute:Second(DMS) format
 
 Performance improvements:
 	* Made big spreadsheet (millions of cells) more responsive when selecting columns via the spreadsheet header
