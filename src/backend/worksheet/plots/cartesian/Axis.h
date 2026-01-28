@@ -71,7 +71,7 @@ public:
 		case LabelsFormat::MultipliesPi:
 			return 6;
 		case LabelsFormat::AngleDMS:
-    		return 7;
+			return 7;
 		}
 		return 0;
 	}
