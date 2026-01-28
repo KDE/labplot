@@ -765,21 +765,6 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 
 		XYAnalysisCurve* analysisCurve = nullptr;
 		switch (m_analysisAction) {
-		case XYAnalysisCurve::AnalysisAction::LineSimplification:
-			analysisCurve = new XYLineSimplificationCurve(i18n("Simplification of '%1'", name));
-			break;
-		case XYAnalysisCurve::AnalysisAction::Differentiation:
-			analysisCurve = new XYDifferentiationCurve(i18n("Derivative of '%1'", name));
-			break;
-		case XYAnalysisCurve::AnalysisAction::Integration:
-			analysisCurve = new XYIntegrationCurve(i18n("Integral of '%1'", name));
-			break;
-		case XYAnalysisCurve::AnalysisAction::Interpolation:
-			analysisCurve = new XYInterpolationCurve(i18n("Interpolation of '%1'", name));
-			break;
-		case XYAnalysisCurve::AnalysisAction::Smoothing:
-			analysisCurve = new XYSmoothCurve(i18n("Smoothing of '%1'", name));
-			break;
 		case XYAnalysisCurve::AnalysisAction::FitLinear:
 		case XYAnalysisCurve::AnalysisAction::FitPower:
 		case XYAnalysisCurve::AnalysisAction::FitExp1:
@@ -794,13 +779,42 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			analysisCurve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", name));
 			static_cast<XYFitCurve*>(analysisCurve)->initFitData(m_analysisAction);
 			break;
+		case XYAnalysisCurve::AnalysisAction::Differentiation:
+			analysisCurve = new XYDifferentiationCurve(i18n("Derivative of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::Integration:
+			analysisCurve = new XYIntegrationCurve(i18n("Integral of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::Interpolation:
+			analysisCurve = new XYInterpolationCurve(i18n("Interpolation of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::Smoothing:
+			analysisCurve = new XYSmoothCurve(i18n("Smoothing of '%1'", name));
+			break;
 		case XYAnalysisCurve::AnalysisAction::FourierFilter:
 			analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));
 			break;
-			case XYAnalysisCurve::AnalysisAction::BaselineCorrection: {
+		case XYAnalysisCurve::AnalysisAction::FourierTransform:
+			analysisCurve = new XYFourierTransformCurve(i18n("Fourier Transform of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::HilbertTransform:
+			analysisCurve = new XYHilbertTransformCurve(i18n("Hilbert Transform of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::Convolution:
+			analysisCurve = new XYConvolutionCurve(i18n("Convolution of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::Correlation:
+			analysisCurve = new XYCorrelationCurve(i18n("Correlation of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::LineSimplification:
+			analysisCurve = new XYLineSimplificationCurve(i18n("Simplification of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::BaselineCorrection:
 			analysisCurve = new XYBaselineCorrectionCurve(i18n("Baseline Correction of '%1'", name));
 			break;
-		}
+		case XYAnalysisCurve::AnalysisAction::Function:
+			// Function case - not typically used in this context
+			break;
 		}
 
 		if (analysisCurve != nullptr) {

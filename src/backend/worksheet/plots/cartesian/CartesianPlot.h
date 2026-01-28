@@ -300,7 +300,7 @@ private Q_SLOTS:
 	void addIntegrationCurve();
 	void addInterpolationCurve();
 	void addSmoothCurve();
-	void addFitCurve();
+	void addFitCurve(QAction*);
 	void addFourierFilterCurve();
 	void addFunctionCurve();
 	void addBaselineCorrectionCurve();

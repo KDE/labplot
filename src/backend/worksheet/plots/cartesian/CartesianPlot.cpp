@@ -735,7 +735,7 @@ void CartesianPlot::fillAnalysisMenu(QMenu* menu, QActionGroup* actionGroup) {
 	menu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::HilbertTransform));;
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::HilbertTransform));
 	menu->addAction(action);
 
 	menu->addSeparator();
@@ -763,7 +763,7 @@ void CartesianPlot::fillAnalysisMenu(QMenu* menu, QActionGroup* actionGroup) {
 	menu->addSeparator();
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Function"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Function));;
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Function));
 	menu->addAction(action);
 }
 
@@ -1958,9 +1958,8 @@ void CartesianPlot::addAnalysisPlot(QAction* action) {
 	case XYAnalysisCurve::AnalysisAction::FitTan:
 	case XYAnalysisCurve::AnalysisAction::FitTanh:
 	case XYAnalysisCurve::AnalysisAction::FitErrFunc:
-	case XYAnalysisCurve::AnalysisAction::FitCustom:
-	{
-		addFitCurve();
+	case XYAnalysisCurve::AnalysisAction::FitCustom: {
+		addFitCurve(action);
 		break;
 	}
 	case XYAnalysisCurve::AnalysisAction::Differentiation: {
@@ -2242,7 +2241,7 @@ void CartesianPlot::addBaselineCorrectionCurve() {
 	endMacro();
 }
 
-void CartesianPlot::addFitCurve() {
+void CartesianPlot::addFitCurve(QAction* action) {
 	auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
 	const auto* curCurve = currentCurve();
 	if (curCurve) {
@@ -2252,7 +2251,6 @@ void CartesianPlot::addFitCurve() {
 		curve->setDataSourceCurve(curCurve);
 
 		// set the fit model category and type
-		const auto* action = qobject_cast<const QAction*>(QObject::sender());
 		if (action) {
 			auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 			curve->initFitData(type);

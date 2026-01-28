@@ -558,10 +558,10 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu = new QMenu(this);
 	m_columnMenu->addMenu(m_plotDataMenu);
 
-	// Data fit sub-menu
-	QMenu* dataFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), this);
-	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
-	CartesianPlot::fillFitMenu(dataFitMenu, addFitActionGroup);
+	// fit sub-menu
+	QMenu* fitMenu = new QMenu(i18nc("Curve fitting", "Fit"), this);
+	fitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
+	CartesianPlot::fillFitMenu(fitMenu, addFitActionGroup);
 
 	// distribution fit sub-menu
 	QMenu* distributionFitMenu = new QMenu(i18nc("Curve fitting", "Fit Distribution"), this);
@@ -570,7 +570,7 @@ void SpreadsheetView::initMenus() {
 
 	// analyze and plot data menu
 	m_analyzePlotMenu = new QMenu(i18n("Analyze and Plot Data"), this);
-	m_analyzePlotMenu->addMenu(dataFitMenu);
+	m_analyzePlotMenu->addMenu(fitMenu);
 	m_analyzePlotMenu->addMenu(distributionFitMenu);
 	m_analyzePlotMenu->addSeparator();
 	CartesianPlot::fillAnalysisMenu(m_analyzePlotMenu, addAnalysisActionGroup);
