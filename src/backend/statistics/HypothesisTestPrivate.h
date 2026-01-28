@@ -35,6 +35,7 @@ public:
 	void performChisqGoodnessOfFitTest();
 	void performChisqIndependenceTest();
 	void performLogRankTest();
+	void performMannKendallTest();
 
 	size_t minSampleCount(HypothesisTest::Test);
 

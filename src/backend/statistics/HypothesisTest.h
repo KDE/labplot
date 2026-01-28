@@ -46,7 +46,8 @@ public:
 		friedman_test,
 		chisq_independence,
 		chisq_goodness_of_fit,
-		log_rank_test
+		log_rank_test,
+		mann_kendall_test
 	};
 
 	QWidget* view() const override;

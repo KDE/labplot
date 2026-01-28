@@ -958,3 +958,72 @@ struct chisq_gof_test_result nsl_stats_chisq_gof_x2(const long long* observed, c
 
 	return result;
 }
+
+/* Mann-Kendall Test for monotonic trend detection */
+struct mann_kendall_test_result nsl_stats_mann_kendall(const double sample[], size_t n, nsl_stats_tail_type tail) {
+	struct mann_kendall_test_result result;
+	result.n = n;
+	result.S = 0.0;
+	result.tau = NAN;
+	result.z = NAN;
+	result.p = NAN;
+
+	if (n < 3) {
+		fprintf(stderr, "Error: Mann-Kendall test requires at least 3 data points.\n");
+		return result;
+	}
+
+	// calculate S statistic (sum of signs of all pairwise differences)
+	double S = 0.0;
+	for (size_t i = 0; i < n - 1; i++) {
+		for (size_t j = i + 1; j < n; j++) {
+			double diff = sample[j] - sample[i];
+			if (diff > 0.0)
+				S += 1.0;
+			else if (diff < 0.0)
+				S -= 1.0;
+		}
+	}
+	result.S = S;
+
+	// calculate Kendall's tau, the "correlation coefficient" for the trend, ranging from -1 to +1.
+	double n_pairs = (double)(n * (n - 1)) / 2.0;
+	result.tau = S / n_pairs;
+
+	// calculate the variance of S:
+	// for simplicity, we assume no ties in the data
+	// variance without tie correction: Var(S) = n(n-1)(2n+5)/18
+	double var_S = (double)(n * (n - 1) * (2 * n + 5)) / 18.0;
+
+	// calculate Z-score
+	double z;
+	if (S > 0.0)
+		z = (S - 1.0) / sqrt(var_S);
+	else if (S < 0.0)
+		z = (S + 1.0) / sqrt(var_S);
+	else
+		z = 0.0;
+	result.z = z;
+
+	// calculate p-value based on tail type
+	double p;
+	switch (tail) {
+	case nsl_stats_tail_type_two:
+		//p = 2.0 * gsl_cdf_ugaussian_Q(fabs(z));
+		p = 2.0 * fmin(gsl_cdf_ugaussian_P(fabs(z)), 1.0 - gsl_cdf_ugaussian_P(fabs(z)));
+		break;
+	case nsl_stats_tail_type_positive: // testing for positive trend
+		//p = gsl_cdf_ugaussian_Q(z);
+		p = 1.0 - gsl_cdf_ugaussian_P(z);
+		break;
+	case nsl_stats_tail_type_negative: // testing for negative trend
+		p = gsl_cdf_ugaussian_P(z);
+		break;
+	default:
+		p = NAN;
+		break;
+	}
+	result.p = p;
+
+	return result;
+}
