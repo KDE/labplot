@@ -371,7 +371,7 @@ public:
 	bool isDescendantOf(AbstractAspect* other);
 	virtual bool addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
-	virtual void finalizeAdd() { };
+	virtual void finalizeAdd() {};
 	QVector<AbstractAspect*> children(AspectType, ChildIndexFlags = {}) const;
 	void insertChild(AbstractAspect* child, int index);
 	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
@@ -391,7 +391,7 @@ public:
 	virtual QVector<AspectType> pasteTypes() const;
 	virtual bool isDraggable() const;
 	virtual QVector<AspectType> dropableOn() const;
-	virtual void processDropEvent(const QVector<quintptr>&) { };
+	virtual void processDropEvent(const QVector<quintptr>&) {};
 
 	template<class T>
 	T* ancestor() const {

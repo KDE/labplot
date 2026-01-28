@@ -93,7 +93,7 @@ public:
 	virtual void setVisible(bool on);
 	virtual bool isVisible() const;
 	virtual bool isFullyVisible() const;
-	virtual void updateLocale() { };
+	virtual void updateLocale() {};
 	void setSuppressRetransform(bool);
 
 	virtual void setPrinting(bool);

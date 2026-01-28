@@ -29,7 +29,7 @@ class XYLineSimplificationCurve : public XYAnalysisCurve {
 
 public:
 	struct LineSimplificationData {
-		LineSimplificationData() { };
+		LineSimplificationData(){};
 
 		nsl_geom_linesim_type type{nsl_geom_linesim_type_douglas_peucker_variant}; // type of simplification
 		bool autoTolerance{true}; // automatic tolerance
@@ -41,7 +41,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
 	struct LineSimplificationResult : public XYAnalysisCurve::Result {
-		LineSimplificationResult() { };
+		LineSimplificationResult(){};
 
 		size_t npoints{0};
 		double posError{0};

@@ -1285,7 +1285,8 @@ ROOTData::ContentType ROOTData::leafType(const char type) {
 }
 
 template<class T>
-T (*ROOTData::readType(ROOTData::ContentType type, bool sign) const)(char*&) {
+T (*ROOTData::readType(ROOTData::ContentType type, bool sign) const)
+(char*&) {
 	switch (type) {
 	case ContentType::Double:
 		return readcast<double, T>;
