@@ -210,8 +210,7 @@ private:
 	static ContentType leafType(char type);
 	/// Get function to read a buffer of the specified type
 	template<class T>
-	T (*readType(ContentType type, bool sign = true) const)
-	(char*&);
+	T (*readType(ContentType type, bool sign = true) const)(char*&);
 
 	/// Get the number of bins contained in a histogram
 	void readNBins(KeyBuffer& buffer);

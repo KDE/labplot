@@ -29,7 +29,7 @@ class XYFourierTransformCurve : public XYAnalysisCurve {
 
 public:
 	struct TransformData {
-		TransformData(){};
+		TransformData() { };
 
 		nsl_dft_result_type type{nsl_dft_result_amplitude};
 		bool twoSided{false};
