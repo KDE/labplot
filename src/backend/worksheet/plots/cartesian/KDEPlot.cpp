@@ -210,7 +210,6 @@ bool KDEPlot::hasData() const {
 }
 
 int KDEPlot::dataCount(Dimension) const {
-	Q_D(const KDEPlot);
 	return gridPointsCount() - 1;
 }
 
