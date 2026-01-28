@@ -33,7 +33,16 @@ class Axis : public WorksheetElement {
 public:
 	enum class RangeType { Auto, AutoData, Custom };
 	enum class Position { Top, Bottom, Left, Right, Centered, Custom, Logical };
-	enum class LabelsFormat { Decimal, ScientificE, Powers10, Powers2, PowersE, MultipliesPi, Scientific };
+	enum class LabelsFormat {
+		Decimal,
+		ScientificE,
+		Powers10,
+		Powers2,
+		PowersE,
+		MultipliesPi,
+		Scientific,
+		AngleDMS // AngleDMS - Angle in Degree:Minute:Second
+	};
 	Q_ENUM(LabelsFormat)
 	enum TicksFlags {
 		noTicks = 0x00,
@@ -77,6 +86,8 @@ public:
 			return 5;
 		case LabelsFormat::MultipliesPi:
 			return 6;
+		case LabelsFormat::AngleDMS:
+			return 7;
 		}
 		return 0;
 	}
@@ -96,6 +107,8 @@ public:
 			return LabelsFormat::PowersE;
 		case 6:
 			return LabelsFormat::MultipliesPi;
+		case 7:
+			return LabelsFormat::AngleDMS;
 		}
 		return LabelsFormat::Decimal;
 	}

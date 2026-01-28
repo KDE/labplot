@@ -2046,7 +2046,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	// automatically switch from 'decimal' to 'scientific' format for large and small numbers
 	// and back to decimal when the numbers get smaller after the auto-switch
 	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, labelsFormat))
-	if (labelsFormatAuto) {
+	if (labelsFormatAuto && labelsFormat != Axis::LabelsFormat::AngleDMS && labelsFormat != Axis::LabelsFormat::MultipliesPi) {
 		bool largeValue = false;
 		for (auto value : tickLabelValues) {
 			// switch to Scientific for large and small values if at least one is
@@ -2063,7 +2063,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	}
 
 	// determine labels precision
-	if (labelsAutoPrecision) {
+	if (labelsAutoPrecision && labelsFormat != Axis::LabelsFormat::AngleDMS) {
 		// do we need to increase the current precision?
 		int newPrecision = upperLabelsPrecision(labelsPrecision, labelsFormat);
 		if (newPrecision != labelsPrecision) {
@@ -2212,6 +2212,43 @@ void AxisPrivate::retransformTickLabelStrings() {
 			}
 			break;
 		}
+		// AngleDMS Label format
+		case Axis::LabelsFormat::AngleDMS: {
+			for (const auto value : std::as_const(tickLabelValues)) {
+				const bool negative = (value < 0);
+				const double absValue = std::abs(value);
+
+				int degrees = static_cast<int>(absValue);
+				double minutesFull = (absValue - degrees) * 60.0;
+				int minutes = static_cast<int>(minutesFull);
+				double seconds = (minutesFull - minutes) * 60.0;
+
+				// handle rounding overflow
+				if (seconds >= 60.0) {
+					seconds = 0.0;
+					++minutes;
+				}
+				if (minutes >= 60) {
+					minutes = 0;
+					++degrees;
+				}
+
+				str.clear();
+				if (negative)
+					str.append(QLatin1Char('-'));
+
+				str += numberLocale.toString(degrees);
+				str += QChar(0x00B0); // °
+				str += numberLocale.toString(minutes);
+				str += QChar(0x2032); // ′
+				str += numberLocale.toString(seconds, 'f', labelsPrecision);
+				str += QChar(0x2033); // ″
+
+				str = labelsPrefix + str + labelsSuffix;
+				tickLabelStrings << str;
+			}
+			break;
+		}
 		case Axis::LabelsFormat::Scientific: {
 			for (const auto value : std::as_const(tickLabelValues)) {
 				// DEBUG(Q_FUNC_INFO << ", value = " << value << ", precision = " << labelsPrecision)
@@ -2284,6 +2321,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 	tempValues.reserve(tickLabelValues.size());
 
 	switch (format) {
+	case Axis::LabelsFormat::AngleDMS:
 	case Axis::LabelsFormat::Decimal:
 		for (const auto value : tickLabelValues)
 			tempValues.append(nsl_math_round_places(value, precision));
@@ -2336,6 +2374,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 		double relDiff = 0;
 		// DEBUG(Q_FUNC_INFO << ", round value = " << tempValues.at(i) << ", tick label =  " << tickLabelValues.at(i))
 		switch (format) {
+		case Axis::LabelsFormat::AngleDMS:
 		case Axis::LabelsFormat::Decimal:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:
@@ -2389,6 +2428,7 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 	tempValues.reserve(tickLabelValues.size());
 
 	switch (format) {
+	case Axis::LabelsFormat::AngleDMS:
 	case Axis::LabelsFormat::Decimal:
 		for (auto value : tickLabelValues)
 			tempValues.append(nsl_math_round_places(value, precision));
@@ -2441,6 +2481,7 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 		// return if rounded value differs too much
 		double relDiff = 0;
 		switch (format) {
+		case Axis::LabelsFormat::AngleDMS:
 		case Axis::LabelsFormat::Decimal:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:
