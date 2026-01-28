@@ -104,7 +104,7 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 
 	// don't allow to select self spreadsheet!
 	QList<const AbstractAspect*> aspects;
-	for (auto* sh : m_spreadsheetList)
+	for (const auto* sh : m_spreadsheetList)
 		aspects << sh;
 	ui.cbLinkedSpreadsheet->setHiddenAspects(aspects);
 

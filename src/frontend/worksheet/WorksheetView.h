@@ -61,7 +61,7 @@ public:
 	void setPlotInteractive(bool);
 	void suppressSelectionChangedEvent(bool);
 	WorksheetElement* selectedElement() const;
-	QList<QGraphicsItem*> selectedItems() const;
+	const QList<QGraphicsItem*>& selectedItems() const;
 	double zoomFactor() const;
 	void processResize();
 

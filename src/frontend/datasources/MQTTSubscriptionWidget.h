@@ -22,7 +22,7 @@ public:
 	enum class MQTTParentWidget { ImportFileWidget, LiveDataDock };
 
 	void setTopicList(const QStringList& topicList);
-	QStringList getTopicList();
+	const QStringList& getTopicList();
 
 	int subscriptionCount();
 	QTreeWidgetItem* topLevelTopic(int);

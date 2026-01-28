@@ -92,6 +92,7 @@ public:
 	// exposed in function dialog (ColumnPrivate::updateFormula(), ExpressionParser::initFunctions(), functions.h)
 	struct ColumnStatistics {
 		int size{0};
+		double sum{qQNaN()};
 		int unique{0}; // number of unique values, relevant for text columns only
 		double minimum{qQNaN()};
 		double maximum{qQNaN()};

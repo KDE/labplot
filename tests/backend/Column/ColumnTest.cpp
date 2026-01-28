@@ -138,7 +138,7 @@ void ColumnTest::statisticsDouble() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({1.0, 1.0, 2.0, 5.0});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, 1.);
@@ -173,7 +173,7 @@ void ColumnTest::statisticsDoubleNegative() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 0.0, 2.0, 5.0});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, -1.);
@@ -208,7 +208,7 @@ void ColumnTest::statisticsDoubleBigNegative() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-100.0, 0.0, 2.0, 5.0});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, -100.);
@@ -243,7 +243,7 @@ void ColumnTest::statisticsDoubleZero() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({1.0, 0.0, 2.0, 5.0});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, 0.);
@@ -279,7 +279,7 @@ void ColumnTest::statisticsInt() {
 	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1, 1, 2, 5});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, 1.);
@@ -314,7 +314,7 @@ void ColumnTest::statisticsIntNegative() {
 	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-1, 0, 2, 5});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, -1.);
@@ -349,7 +349,7 @@ void ColumnTest::statisticsIntBigNegative() {
 	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-100, 0, 2, 5});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, -100.);
@@ -384,7 +384,7 @@ void ColumnTest::statisticsIntZero() {
 	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1, 0, 2, 5});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, 0.);
@@ -419,7 +419,7 @@ void ColumnTest::statisticsIntOverflow() {
 	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1000000000, 1100000000, 1200000000, 1300000000});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, 1000000000);
@@ -454,7 +454,7 @@ void ColumnTest::statisticsBigInt() {
 	Column c(QStringLiteral("BigInt column"), Column::ColumnMode::BigInt);
 	c.setBigInts({-10000000000, 0, 1000000000, 10000000000});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, -10000000000);
@@ -510,28 +510,28 @@ void ColumnTest::statisticsMaskValues() {
 	project.addChild(c);
 
 	// check the statistics
-	auto& stats1 = c->statistics();
+	const auto& stats1 = c->statistics();
 	QCOMPARE(stats1.size, 3);
 	QCOMPARE(stats1.minimum, 1.);
 	QCOMPARE(stats1.maximum, 3.);
 
 	// mask the last value and check the statistics
 	c->setMasked(2);
-	auto& stats2 = c->statistics();
+	const auto& stats2 = c->statistics();
 	QCOMPARE(stats2.size, 2);
 	QCOMPARE(stats2.minimum, 1.);
 	QCOMPARE(stats2.maximum, 2.);
 
 	// undo the masking change and check the statistics
 	project.undoStack()->undo();
-	auto& stats3 = c->statistics();
+	const auto& stats3 = c->statistics();
 	QCOMPARE(stats3.size, 3);
 	QCOMPARE(stats3.minimum, 1.);
 	QCOMPARE(stats3.maximum, 3.);
 
 	// redo the masking change and check the statistics
 	project.undoStack()->redo();
-	auto& stats4 = c->statistics();
+	const auto& stats4 = c->statistics();
 	QCOMPARE(stats4.size, 2);
 	QCOMPARE(stats4.minimum, 1.);
 	QCOMPARE(stats4.maximum, 2.);
@@ -548,35 +548,35 @@ void ColumnTest::statisticsClearSpreadsheetMasks() {
 	c->setValues({1., 2., 3.});
 
 	// check the statistics
-	auto& stats1 = c->statistics();
+	const auto& stats1 = c->statistics();
 	QCOMPARE(stats1.size, 3);
 	QCOMPARE(stats1.minimum, 1.);
 	QCOMPARE(stats1.maximum, 3.);
 
 	// mask the last value and check the statistics
 	c->setMasked(2);
-	auto& stats2 = c->statistics();
+	const auto& stats2 = c->statistics();
 	QCOMPARE(stats2.size, 2);
 	QCOMPARE(stats2.minimum, 1.);
 	QCOMPARE(stats2.maximum, 2.);
 
 	// clear the masked values in the spreadsheet
 	spreadsheet->clearMasks();
-	auto& stats3 = c->statistics();
+	const auto& stats3 = c->statistics();
 	QCOMPARE(stats3.size, 3);
 	QCOMPARE(stats3.minimum, 1.);
 	QCOMPARE(stats3.maximum, 3.);
 
 	// undo the "clear masked values"-change and check the statistics
 	project.undoStack()->undo();
-	auto& stats4 = c->statistics();
+	const auto& stats4 = c->statistics();
 	QCOMPARE(stats4.size, 2);
 	QCOMPARE(stats4.minimum, 1.);
 	QCOMPARE(stats4.maximum, 2.);
 
 	// redo the "clear masked values"-change and check the statistics
 	project.undoStack()->redo();
-	auto& stats5 = c->statistics();
+	const auto& stats5 = c->statistics();
 	QCOMPARE(stats5.size, 3);
 	QCOMPARE(stats5.minimum, 1.);
 	QCOMPARE(stats5.maximum, 3.);
@@ -1698,6 +1698,11 @@ void ColumnTest::testFormulasSize() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
 	COLUMN2_SET_FORMULA_AND_EVALUATE("size(x)", 5.)
+}
+void ColumnTest::testFormulasSum() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("sum(x)", 13.)
 }
 void ColumnTest::testFormulasMin() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};

@@ -447,19 +447,23 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 	return d->sourceDataChangedSinceLastRecalc;
 }
 
-double XYCurve::minimum(const Dimension) const {
-	// TODO
-	return NAN;
+double XYCurve::minimum(const Dimension dim) const {
+	auto* c = column(dim);
+	if (!c)
+		return NAN;
+	return c->minimum();
 }
 
-double XYCurve::maximum(const Dimension) const {
-	// TODO
-	return NAN;
+double XYCurve::maximum(const Dimension dim) const {
+	auto* c = column(dim);
+	if (!c)
+		return NAN;
+	return c->maximum();
 }
 
 bool XYCurve::hasData() const {
 	Q_D(const XYCurve);
-	return (d->xColumn != nullptr || d->yColumn != nullptr);
+	return (d->xColumn != nullptr && d->yColumn != nullptr);
 }
 
 bool XYCurve::usingColumn(const AbstractColumn* column, bool) const {
@@ -530,6 +534,13 @@ QColor XYCurve::color() const {
 	else if (d->symbol->style() != Symbol::Style::NoSymbols)
 		return d->symbol->pen().color();
 	return QColor();
+}
+
+int XYCurve::dataCount(Dimension dim) const {
+	if (!column(dim))
+		return -1;
+
+	return column(dim)->rowCount();
 }
 
 // ##############################################################################
@@ -2397,6 +2408,14 @@ QDateTime XYCurve::yDateTime(double x, bool& valueFound) const {
 	return {};
 }
 
+bool XYCurve::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+	if (column(dim)) {
+		column(dim)->indicesMinMax(v1, v2, start, end);
+		return true;
+	}
+	return false;
+}
+
 bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars) const {
 	Q_D(const XYCurve);
 	switch (dim) {
@@ -2432,6 +2451,7 @@ bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<do
  * \p min
  * \p max
  * \p includeErrorBars If true respect the error bars in the min/max calculation
+ * return true if the indices can be found otherwise false. Return false, for example if a required column is not available, ...
  */
 bool XYCurve::minMax(const AbstractColumn* column1,
 					 const AbstractColumn* column2,

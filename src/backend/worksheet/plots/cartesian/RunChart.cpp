@@ -192,6 +192,12 @@ Symbol* RunChart::dataSymbol() const {
 	return d->dataCurve->symbol();
 }
 
+bool RunChart::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	start = 0;
+	end = xIndexCount() - 1;
+	return true;
+}
+
 bool RunChart::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
 	Q_D(const RunChart);
 	return d->dataCurve->minMax(dim, indexRange, r, false);
@@ -210,6 +216,13 @@ double RunChart::maximum(const Dimension dim) const {
 bool RunChart::hasData() const {
 	Q_D(const RunChart);
 	return (d->dataColumn != nullptr);
+}
+
+int RunChart::dataCount(Dimension) const {
+	Q_D(const RunChart);
+	if (!d->dataColumn)
+		return -1;
+	return d->dataColumn->rowCount();
 }
 
 bool RunChart::usingColumn(const AbstractColumn* column, bool) const {

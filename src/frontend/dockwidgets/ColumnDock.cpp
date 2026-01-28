@@ -3,22 +3,36 @@
 	Project              : LabPlot
 	Description          : widget for column properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ColumnDock.h"
+#include "backend/core/AspectTreeModel.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/String2DoubleFilter.h"
+#include "backend/gsl/ExpressionParser.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/spreadsheet/AddValueLabelDialog.h"
 #include "frontend/spreadsheet/BatchEditValueLabelsDialog.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "frontend/widgets/ConstantsWidget.h"
+#include "frontend/widgets/FunctionsWidget.h"
+#include "frontend/widgets/TreeViewComboBox.h"
+#include "frontend/GuiTools.h"
+
+#include <KConfig>
+#include <KConfigGroup>
+
+#include <QMenu>
+#include <QWidgetAction>
 
 /*!
   \class ColumnDock
@@ -43,8 +57,15 @@ ColumnDock::ColumnDock(QWidget* parent)
 	for (int i = 0; i < ENUM_COUNT(AbstractColumn, PlotDesignation); i++)
 		ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation(i), false));
 
+	// labels
 	ui.twLabels->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
 	ui.twLabels->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+
+	// formula
+	ui.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("format-text-symbol")));
+	ui.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
+	ui.pbApplyFormula->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
+	ui.bAddVariable->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::typeChanged);
 	connect(ui.cbNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::numericFormatChanged);
@@ -55,20 +76,35 @@ ColumnDock::ColumnDock(QWidget* parent)
 	connect(ui.bRemoveLabel, &QPushButton::clicked, this, &ColumnDock::removeLabel);
 	connect(ui.bBatchEditLabels, &QPushButton::clicked, this, &ColumnDock::batchEditLabels);
 
+	connect(ui.bAddVariable, &QPushButton::pressed, this, &ColumnDock::addVariable);
+	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &ColumnDock::validateFormula);
+	connect(ui.tbConstants, &QToolButton::clicked, this, &ColumnDock::showConstants);
+	connect(ui.tbFunctions, &QToolButton::clicked, this, &ColumnDock::showFunctions);
+	connect(ui.tbLoadFunction, &QPushButton::clicked, this, &ColumnDock::loadFunction);
+	connect(ui.tbSaveFunction, &QPushButton::clicked, this, &ColumnDock::saveFunction);
+	connect(ui.pbApplyFormula, &QPushButton::clicked, this, &ColumnDock::applyFormula);
+
 	retranslateUi();
 }
 
 void ColumnDock::setColumns(QList<Column*> list) {
 	CONDITIONAL_LOCK_RETURN;
-	m_columnsList = list;
+	m_columns = list;
 	m_column = list.first();
 	setAspects(list);
+
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
+
+	// show the properties of the first column
+	updateTypeWidgets(m_column->columnMode());
+	ui.cbPlotDesignation->setCurrentIndex(int(m_column->plotDesignation()));
 
 	// check whether we have non-editable columns:
 	// 1. columns in read-only spreadsheets (LiveDataSource, Datapicker curve results, etc.)
 	// 2. columns for residuals calculated in XYFitCurve (don't have Spreadsheet as the parent)
 	bool nonEditable = false;
-	for (auto* col : m_columnsList) {
+	for (auto* col : m_columns) {
 		auto* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
 		if (s) {
 			if (s->readOnly()) {
@@ -85,7 +121,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	// * columns in statistics spreadsheets
 	// * columns in the result spreadsheet in SeasonalDecomposition
 	bool enableLabels = true;
-	for (auto* col : m_columnsList) {
+	for (auto* col : m_columns) {
 		auto* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
 		if (s) {
 			if (s->type() == AspectType::StatisticsSpreadsheet || s->parentAspect()->type() == AspectType::SeasonalDecomposition) {
@@ -106,7 +142,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		}
 	} else {
 		auto mode = m_column->columnMode();
-		for (auto* col : m_columnsList) {
+		for (auto* col : m_columns) {
 			if (col->columnMode() != mode) {
 				sameMode = false;
 				break;
@@ -124,21 +160,11 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	ui.lDateTimeFormat->setEnabled(sameMode);
 	ui.cbDateTimeFormat->setEnabled(sameMode);
 
-	// widgets for value labels
-	ui.lLabels->setEnabled(sameMode);
+	// value labels
 	ui.twLabels->setEnabled(sameMode);
 	ui.frameLabels->setEnabled(sameMode);
-
-	ui.lLabels->setVisible(enableLabels);
 	ui.twLabels->setVisible(enableLabels);
 	ui.frameLabels->setVisible(enableLabels);
-
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-
-	// show the properties of the first column
-	updateTypeWidgets(m_column->columnMode());
-	ui.cbPlotDesignation->setCurrentIndex(int(m_column->plotDesignation()));
 
 	// show value labels of the first column if all selected columns have the same mode
 	if (sameMode)
@@ -148,11 +174,19 @@ void ColumnDock::setColumns(QList<Column*> list) {
 			ui.twLabels->removeRow(0);
 	}
 
+	// formula, available only for columns in a spreadsheet
+	m_spreadsheet = dynamic_cast<Spreadsheet*>(m_column->parentAspect());
+	const bool isSpreadsheet = (m_spreadsheet != nullptr);
+	ui.lFormula->setVisible(isSpreadsheet);
+	if (isSpreadsheet)
+		loadFormula();
+
 	// slots
 	connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
 	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
+	connect(m_column, &Column::formulaChanged, this, &ColumnDock::loadFormula);
 }
 
 /*!
@@ -322,6 +356,8 @@ void ColumnDock::retranslateUi() {
 	ui.cbNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
 	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 
+	ui.lVariable->setText(m_variableLineEdits.size() > 1 ? i18n("Variables:") : i18n("Variable:"));
+
 	// tooltip texts
 	QString info = i18n(
 		"Specifies how numeric values are formatted in the spreadsheet:"
@@ -344,6 +380,10 @@ void ColumnDock::retranslateUi() {
 	ui.bAddLabel->setToolTip(i18n("Add a new value label"));
 	ui.bRemoveLabel->setToolTip(i18n("Remove the selected value label"));
 	ui.bBatchEditLabels->setToolTip(i18n("Modify multiple values labels in a batch mode"));
+
+	ui.bAddVariable->setToolTip(i18n("Add new variable"));
+	ui.chkFormulaAutoUpdate->setToolTip(i18n("Automatically update the calculated values in the target column on changes in the variable columns"));
+	ui.chkFormulaAutoResize->setToolTip(i18n("Automatically resize the target column to fit the size of the variable columns"));
 }
 
 /*!
@@ -354,7 +394,7 @@ void ColumnDock::typeChanged(int index) {
 	CONDITIONAL_RETURN_NO_LOCK; // TODO: lock needed?
 
 	auto columnMode = static_cast<AbstractColumn::ColumnMode>(ui.cbType->itemData(index).toInt());
-	const auto& columns = m_columnsList;
+	const auto& columns = m_columns;
 
 	switch (columnMode) {
 	case AbstractColumn::ColumnMode::Double: {
@@ -435,7 +475,7 @@ void ColumnDock::numericFormatChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	char format = ui.cbNumericFormat->itemData(index).toChar().toLatin1();
-	for (auto* col : std::as_const(m_columnsList)) {
+	for (auto* col : std::as_const(m_columns)) {
 		auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		filter->setNumericFormat(format);
 	}
@@ -444,7 +484,7 @@ void ColumnDock::numericFormatChanged(int index) {
 void ColumnDock::precisionChanged(int digits) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* col : std::as_const(m_columnsList)) {
+	for (auto* col : std::as_const(m_columns)) {
 		auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		filter->setNumDigits(digits);
 	}
@@ -453,7 +493,7 @@ void ColumnDock::precisionChanged(int digits) {
 void ColumnDock::dateTimeFormatChanged(const QString& format) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* col : std::as_const(m_columnsList)) {
+	for (auto* col : std::as_const(m_columns)) {
 		auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 		filter->setFormat(format);
 	}
@@ -463,11 +503,396 @@ void ColumnDock::plotDesignationChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto pd = AbstractColumn::PlotDesignation(index);
-	for (auto* col : std::as_const(m_columnsList))
+	for (auto* col : std::as_const(m_columns))
 		col->setPlotDesignation(pd);
 }
 
-// value labels
+//*************************************************************
+//****************** Formula handling *************************
+//*************************************************************
+void ColumnDock::loadFormula() {
+	// clean variable list
+	while (!m_variableLineEdits.isEmpty())
+		deleteVariable();
+
+	// formula expression
+	ui.teEquation->setPlainText(m_column->formula());
+
+	// variables
+	const auto& formulaData = m_column->formulaData();
+	if (formulaData.isEmpty()) {
+		// A formula without any column variable is also possible, for example when just using the rownumber: "i / 1000"
+		// This is a workaround, because right now there is no way to determine which variable is used in the formula and which not
+		// it makes no sense to add variables if they are not used (preventing cyclic dependency) Gitlab #1037
+
+		// no formula was used for this column -> add the first variable "x"
+		// addVariable();
+		// m_variableLineEdits[0]->setText(QStringLiteral("x"));
+	} else { // formula and variables are available
+		// add all available variables and select the corresponding columns
+		const auto& cols = m_spreadsheet->project()->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (int i = 0; i < formulaData.size(); ++i) {
+			addVariable();
+			const auto& data = formulaData.at(i);
+			m_variableLineEdits[i]->setText(data.variableName());
+
+			bool found = false;
+			for (const auto* col : cols) {
+				if (col != data.column())
+					continue;
+
+				const auto* column = dynamic_cast<const AbstractColumn*>(col);
+				m_variableDataColumns.at(i)->setAspect(column);
+				m_variableDataColumns.at(i)->setInvalid(false);
+
+				found = true;
+				break;
+			}
+
+			// for the current variable name no column exists anymore (was deleted)
+			//->highlight the combobox red
+			if (!found) {
+				m_variableDataColumns.at(i)->setAspect(nullptr);
+				m_variableDataColumns.at(i)->setInvalid(
+					true,
+					i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.",
+						 data.columnName()));
+				m_variableDataColumns.at(i)->setText(data.columnName().split(QLatin1Char('/')).last());
+			}
+		}
+	}
+
+	// auto update
+	// enable if linking is turned on, so the user has to explicitly disable recalculation, so it cannot be forgotten
+	ui.chkFormulaAutoUpdate->setChecked(m_column->formulaAutoUpdate() || m_spreadsheet->linking());
+
+	// auto-resize
+	if (!m_spreadsheet->linking())
+		ui.chkFormulaAutoResize->setChecked(m_column->formulaAutoResize());
+	else {
+		// linking is active, deactivate this option since the size of the target spreadsheet is controlled by the linked spreadsheet
+		ui.chkFormulaAutoResize->setChecked(false);
+		ui.chkFormulaAutoResize->setEnabled(false);
+		ui.chkFormulaAutoResize->setToolTip(i18n("Spreadsheet linking is active. The size of the target spreadsheet is controlled by the linked spreadsheet."));
+	}
+
+	variableNameChanged(); // call this to check the validness of formular data (expression and variable names) and to highlight/enable/disable accordingly
+}
+
+/*!
+ * check if the provided variable name in the line edit \c le is valid.
+ * */
+bool ColumnDock::validateVariableName(QLineEdit* le) {
+	bool isValid = false;
+	if (ExpressionParser::getInstance()->constants().indexOf(le->text()) != -1) {
+		SET_WARNING_STYLE(le)
+		le->setToolTip(i18n("Provided variable name is already reserved for a name of a constant. Please use another name."));
+	} else if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
+		SET_WARNING_STYLE(le)
+		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
+	} else if (le->text().compare(QLatin1String("i")) == 0) {
+		SET_WARNING_STYLE(le)
+		le->setToolTip(i18n("The variable name 'i' is reserved for the index of the column row."));
+	} else if (le->text().contains(QRegularExpression(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
+		SET_WARNING_STYLE(le)
+		le->setToolTip(i18n("Provided variable name starts with a digit or contains special character."));
+	} else {
+		le->setStyleSheet(QString());
+		le->setToolTip(QString());
+		isValid = true;
+	}
+	return isValid;
+}
+
+/*!
+ * checks if the provided formula expression and variable names are valid
+ * and enables/disables the Ok-button accordingly.
+ */
+void ColumnDock::validateFormula() {
+	if (ui.teEquation->toPlainText().simplified().isEmpty()) {
+		ui.pbApplyFormula->setToolTip(i18n("Empty formula expression"));
+		ui.pbApplyFormula->setEnabled(false);
+		return;
+	}
+
+	// check whether the formula syntax is correct
+	if (!ui.teEquation->isValid()) {
+		ui.pbApplyFormula->setToolTip(i18n("Incorrect formula syntax: ") + ui.teEquation->errorMessage());
+		ui.pbApplyFormula->setEnabled(false);
+		return;
+	}
+
+	// check if expression uses variables
+	if (ui.teEquation->expressionUsesVariables()) {
+		// check the variables
+		for (int i = 0; i < m_variableDataColumns.size(); ++i) {
+			const auto& varName = m_variableLineEdits.at(i)->text();
+
+			// ignore empty
+			if (varName.isEmpty())
+				continue;
+
+			// check whether a valid column was provided for the variable
+			auto* cb = m_variableDataColumns.at(i);
+			auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
+			if (!aspect) {
+				ui.pbApplyFormula->setToolTip(i18n("Select a valid column"));
+				ui.pbApplyFormula->setEnabled(false);
+				return;
+			}
+
+			// check whether the variable name is correct
+			if (!validateVariableName(m_variableLineEdits.at(i))) {
+				ui.pbApplyFormula->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
+				ui.pbApplyFormula->setEnabled(false);
+				return;
+			}
+		}
+	}
+
+	ui.pbApplyFormula->setToolTip(i18n("Apply Formula"));
+	ui.pbApplyFormula->setEnabled(true);
+}
+
+void ColumnDock::loadFunction() {
+	auto fileName = GuiTools::loadFunction(ui.teEquation);
+	if (fileName.isEmpty())
+		return;
+
+	// clean variable list
+	while (!m_variableLineEdits.isEmpty())
+		deleteVariable();
+
+	// load variables
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("Variables"));
+	auto keys = group.keyList();
+	int i = 0;
+	for (const auto &name : keys) {
+		addVariable();
+		m_variableLineEdits[i]->setText(name);
+
+		// restore path
+		auto path = group.readEntry(name, {});
+		QDEBUG(Q_FUNC_INFO << ", variable" << name << ":" << path)
+		auto index = aspectModel()->modelIndexForPath(path);
+		m_variableDataColumns[i++]->setCurrentModelIndex(index);
+	}
+}
+
+void ColumnDock::saveFunction() {
+	auto fileName = GuiTools::saveFunction(ui.teEquation);
+	if (fileName.isEmpty())
+		return;
+
+	// save variables
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("Variables"));
+	int i = 0;
+	for (auto* varName : m_variableLineEdits) {
+		QString name = varName->text().simplified();
+		auto index = m_variableDataColumns.at(i++)->currentModelIndex();
+		QString path = aspectModel()->path(index);
+		group.writeEntry(name, path);
+	}
+}
+
+void ColumnDock::showConstants() {
+	QMenu menu;
+	ConstantsWidget constants(&menu);
+	connect(&constants, &ConstantsWidget::constantSelected, this, &ColumnDock::insertConstant);
+	connect(&constants, &ConstantsWidget::constantSelected, &menu, &QMenu::close);
+	connect(&constants, &ConstantsWidget::canceled, &menu, &QMenu::close);
+
+	auto* widgetAction{new QWidgetAction(this)};
+	widgetAction->setDefaultWidget(&constants);
+	menu.addAction(widgetAction);
+
+	QPoint pos(-menu.sizeHint().width() + ui.tbConstants->width(), -menu.sizeHint().height());
+	menu.exec(ui.tbConstants->mapToGlobal(pos));
+}
+
+void ColumnDock::showFunctions() {
+	QMenu menu;
+	FunctionsWidget functions(&menu);
+	connect(&functions, &FunctionsWidget::functionSelected, this, &ColumnDock::insertFunction);
+	connect(&functions, &FunctionsWidget::functionSelected, &menu, &QMenu::close);
+	connect(&functions, &FunctionsWidget::canceled, &menu, &QMenu::close);
+
+	auto* widgetAction{new QWidgetAction(this)};
+	widgetAction->setDefaultWidget(&functions);
+	menu.addAction(widgetAction);
+
+	QPoint pos(-menu.sizeHint().width() + ui.tbFunctions->width(), -menu.sizeHint().height());
+	menu.exec(ui.tbFunctions->mapToGlobal(pos));
+}
+
+void ColumnDock::insertFunction(const QString& functionName) const {
+	ui.teEquation->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, XYEquationCurve::EquationType::Cartesian));
+}
+
+void ColumnDock::insertConstant(const QString& constantsName) const {
+	ui.teEquation->insertPlainText(constantsName);
+}
+
+void ColumnDock::addVariable() {
+	auto* layout{ui.gridLayoutVariables};
+	auto row{m_variableLineEdits.size()};
+
+	// text field for the variable name
+	auto* le{new QLineEdit};
+	le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
+	auto* validator = new QRegularExpressionValidator(QRegularExpression(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
+	le->setValidator(validator);
+	le->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
+	connect(le, &QLineEdit::textChanged, this, &ColumnDock::variableNameChanged);
+	layout->addWidget(le, row, 0, 1, 1);
+	m_variableLineEdits << le;
+	auto* l{new QLabel(QStringLiteral("="))};
+	layout->addWidget(l, row, 1, 1, 1);
+	m_variableLabels << l;
+
+	// combo box for the data column
+	auto* cb{new TreeViewComboBox()};
+	cb->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
+	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &ColumnDock::variableColumnChanged);
+	layout->addWidget(cb, row, 2, 1, 1);
+	m_variableDataColumns << cb;
+
+	auto* model = aspectModel();
+	model->setSelectableAspects({AspectType::Column});
+	model->enableNumericColumnsOnly(true);
+	cb->setModel(model);
+	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
+
+	// don't allow to select columns to be calculated as variable columns (avoid circular dependencies)
+	QList<const AbstractAspect*> aspects;
+	for (auto* col : m_columns)
+		aspects << col;
+	cb->setHiddenAspects(aspects);
+
+	// for the variable column select the first non-selected column in the spreadsheet
+	for (auto* col : m_spreadsheet->children<Column>()) {
+		if (m_columns.indexOf(col) == -1) {
+			cb->setAspect(col);
+			break;
+		}
+	}
+
+	// move the add-button to the next row
+	layout->removeWidget(ui.bAddVariable);
+	layout->addWidget(ui.bAddVariable, row + 1, 3, 1, 1);
+
+	// add delete-button for the just added variable
+	if (row != 0) {
+		auto* b = new QToolButton();
+		b->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
+		b->setToolTip(i18n("Delete variable"));
+		layout->addWidget(b, row, 3, 1, 1);
+		m_variableDeleteButtons << b;
+		connect(b, &QToolButton::pressed, this, &ColumnDock::deleteVariable);
+	}
+
+	ui.lVariable->setText(i18n("Variables:"));
+	// TODO: adjust the tab-ordering after new widgets were added
+}
+
+void ColumnDock::deleteVariable() {
+	auto* ob = qobject_cast<QToolButton*>(QObject::sender());
+	if (ob) {
+		const auto index = m_variableDeleteButtons.indexOf(ob);
+		delete m_variableLineEdits.takeAt(index + 1);
+		delete m_variableLabels.takeAt(index + 1);
+		delete m_variableDataColumns.takeAt(index + 1);
+		delete m_variableDeleteButtons.takeAt(index);
+	} else {
+		if (!m_variableLineEdits.isEmpty())
+			delete m_variableLineEdits.takeLast();
+		if (!m_variableLabels.isEmpty())
+			delete m_variableLabels.takeLast();
+		if (!m_variableDataColumns.isEmpty())
+			delete m_variableDataColumns.takeLast();
+		if (!m_variableDeleteButtons.isEmpty())
+			delete m_variableDeleteButtons.takeLast();
+	}
+
+	variableNameChanged();
+
+	ui.lVariable->setText(m_variableLineEdits.size() > 1 ? i18n("Variables:") : i18n("Variable:"));
+	// TODO: adjust the tab-ordering after some widgets were deleted
+}
+
+void ColumnDock::variableNameChanged() {
+	QStringList vars;
+	QString argText;
+	for (auto* varName : m_variableLineEdits) {
+		QString name = varName->text().simplified();
+		if (!name.isEmpty()) {
+			vars << name;
+
+			if (argText.isEmpty())
+				argText += name;
+			else
+				argText += QStringLiteral(", ") + name;
+		}
+	}
+
+	QString funText = QStringLiteral("f = ");
+	if (!argText.isEmpty())
+		funText = QStringLiteral("f(") + argText + QStringLiteral(") = ");
+
+	ui.lFunction->setText(funText);
+	ui.teEquation->setVariables(vars);
+
+	validateFormula();
+}
+
+void ColumnDock::variableColumnChanged(const QModelIndex& index) {
+	// combobox was potentially red-highlighted because of a missing column
+	// remove the highlighting when we have a valid selection now
+	auto* aspect{static_cast<AbstractAspect*>(index.internalPointer())};
+	if (aspect) {
+		auto* cb{dynamic_cast<TreeViewComboBox*>(QObject::sender())};
+		if (cb)
+			cb->setStyleSheet(QString());
+	}
+
+	validateFormula();
+}
+
+void ColumnDock::applyFormula() {
+	WAIT_CURSOR_AUTO_RESET;
+	m_spreadsheet->beginMacro(i18np("%1: apply column formula", "%1: apply column formula", m_spreadsheet->name(), m_columns.size()));
+
+	// determine variable names and data vectors of the specified columns
+	QStringList variableNames;
+	QVector<Column*> variableColumns;
+	for (int i = 0; i < m_variableLineEdits.size(); ++i) {
+		variableNames << m_variableLineEdits.at(i)->text().simplified();
+
+		auto* aspect{static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer())};
+		if (aspect) {
+			auto* column{dynamic_cast<Column*>(aspect)};
+			if (column)
+				variableColumns << column;
+		}
+	}
+
+	// set the new values and store the expression, variable names and used data columns
+	const QString& expression{ui.teEquation->toPlainText()};
+	bool autoUpdate{(ui.chkFormulaAutoUpdate->checkState() == Qt::Checked)};
+	bool autoResize{(ui.chkFormulaAutoResize->checkState() == Qt::Checked)};
+	for (auto* col : m_columns) {
+		col->setColumnMode(AbstractColumn::ColumnMode::Double);
+		col->setFormula(expression, variableNames, variableColumns, autoUpdate, autoResize);
+		col->updateFormula();
+	}
+	m_spreadsheet->endMacro();
+}
+
+//*************************************************************
+//*************** Value labels handling ***********************
+//*************************************************************
 void ColumnDock::addLabel() {
 	m_column->setLabelsMode(m_column->columnMode());
 
@@ -479,7 +904,7 @@ void ColumnDock::addLabel() {
 
 	if (dlg.exec() == QDialog::Accepted) {
 		const QString& label = dlg.label();
-		const auto& columns = m_columnsList;
+		const auto& columns = m_columns;
 		QString valueStr;
 		switch (mode) {
 		case AbstractColumn::ColumnMode::Double: {
@@ -534,7 +959,7 @@ void ColumnDock::removeLabel() {
 
 	int row = ui.twLabels->currentRow();
 	const auto& value = ui.twLabels->itemAt(row, 0)->text();
-	for (auto* col : std::as_const(m_columnsList))
+	for (auto* col : std::as_const(m_columns))
 		col->removeValueLabel(value);
 
 	ui.twLabels->removeRow(ui.twLabels->currentRow());
@@ -543,7 +968,7 @@ void ColumnDock::removeLabel() {
 
 void ColumnDock::batchEditLabels() {
 	auto* dlg = new BatchEditValueLabelsDialog(this);
-	dlg->setColumns(m_columnsList);
+	dlg->setColumns(m_columns);
 	if (dlg->exec() == QDialog::Accepted)
 		showValueLabels(); // new value labels were saved into the columns in the dialog, show them here
 
@@ -564,7 +989,6 @@ void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
 }
 
 void ColumnDock::columnFormatChanged() {
-	DEBUG(Q_FUNC_INFO)
 	CONDITIONAL_LOCK_RETURN;
 	auto columnMode = m_column->columnMode();
 	switch (columnMode) {

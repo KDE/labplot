@@ -50,7 +50,7 @@ void LiveDataTest::initTestCase() {
 			delete m_tcpSocket;
 			m_tcpSocket = nullptr;
 		}
-		QByteArray block = QStringLiteral("1,2\n").toLatin1();
+		auto block = QStringLiteral("1,2\n").toLatin1();
 		m_tcpSocket->write(block);
 	});
 

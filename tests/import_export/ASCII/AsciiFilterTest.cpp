@@ -78,7 +78,7 @@ void AsciiFilterTest::initialization() {
 			auto p = filter.properties();
 
 			p.automaticSeparatorDetection = false;
-			p.columnNamesRaw = QStringLiteral();
+			p.columnNamesRaw = QStringLiteral("");
 			p.columnModesString = QStringLiteral("Int, Int");
 			p.headerEnabled = false;
 
@@ -96,7 +96,7 @@ void AsciiFilterTest::initialization() {
 
 		p.automaticSeparatorDetection = false;
 		p.columnNamesRaw = QStringLiteral("Column1, Column2");
-		p.columnModesString = QStringLiteral();
+		p.columnModesString = QStringLiteral("");
 		p.headerEnabled = false;
 
 		QCOMPARE(filter.initialize(p).success(), false);
@@ -658,7 +658,7 @@ void AsciiFilterTest::testFirstLineHeader() {
 	p.separator = QStringLiteral(";");
 	p.headerEnabled = true;
 	p.headerLine = 1;
-	p.columnNamesRaw = QStringLiteral();
+	p.columnNamesRaw = QStringLiteral("");
 	p.intAsDouble = false;
 	filter.setProperties(p);
 	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -2194,7 +2194,7 @@ void AsciiFilterTest::testComments02() {
 	p.intAsDouble = false;
 	p.removeQuotes = true;
 	p.simplifyWhitespaces = true;
-	p.commentCharacter = QStringLiteral();
+	p.commentCharacter = QStringLiteral("");
 	p.columnNamesRaw = QStringLiteral("w,x");
 	filter.setProperties(p);
 

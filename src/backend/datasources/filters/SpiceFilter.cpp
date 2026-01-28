@@ -81,11 +81,11 @@ int SpiceFilter::endRow() const {
 	return d->endRow;
 }
 
-QStringList SpiceFilter::vectorNames() const {
+const QStringList& SpiceFilter::vectorNames() const {
 	return d->vectorNames;
 }
 
-QVector<AbstractColumn::ColumnMode> SpiceFilter::columnModes() {
+const QVector<AbstractColumn::ColumnMode>& SpiceFilter::columnModes() {
 	return d->columnModes;
 }
 

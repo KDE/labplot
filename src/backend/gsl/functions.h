@@ -147,6 +147,7 @@ enum class FunctionGroups : int {
 QString FunctionGroupsToString(FunctionGroups group);
 
 extern const char* colfun_size;
+extern const char* colfun_sum;
 extern const char* colfun_min;
 extern const char* colfun_max;
 extern const char* colfun_mean;

@@ -414,6 +414,19 @@ QVector<QString>& BoxPlot::dataColumnPaths() const {
 	return d->dataColumnPaths;
 }
 
+bool BoxPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	// The values are not important, because they are just passed to minMax() which does not consider the indices
+	start = 0;
+	end = 0;
+	return true;
+}
+
+bool BoxPlot::minMax(const Dimension dim, const Range<int>&, Range<double>& r, bool) const {
+	r.setStart(minimum(dim));
+	r.setEnd(maximum(dim));
+	return true;
+}
+
 double BoxPlot::minimum(const Dimension dim) const {
 	Q_D(const BoxPlot);
 	switch (dim) {
@@ -439,6 +452,13 @@ double BoxPlot::maximum(const Dimension dim) const {
 bool BoxPlot::hasData() const {
 	Q_D(const BoxPlot);
 	return !d->dataColumns.isEmpty();
+}
+
+int BoxPlot::dataCount(Dimension) const {
+	Q_D(const BoxPlot);
+	if (!hasData())
+		return -1;
+	return d->dataColumns.count();
 }
 
 bool BoxPlot::usingColumn(const AbstractColumn* column, bool) const {

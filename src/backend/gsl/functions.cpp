@@ -201,6 +201,7 @@ const char* specialfun_psample = "psample";
 const char* specialfun_rsample = "rsample";
 
 const char* colfun_size = "size";
+const char* colfun_sum = "sum";
 const char* colfun_min = "min";
 const char* colfun_max = "max";
 const char* colfun_mean = "mean";
@@ -255,6 +256,7 @@ const char* cell_curr_column_default = "cell_curr_column_with_default";
 		// Values independent of the row index!!!
 		// Important: When adding function here, implement it somewhere. For example column functions are implemented in ColumnPrivate!
 		{[]() { return i18n("Size"); }, colfun_size, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Sum"); }, colfun_sum, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
 		{[]() { return i18n("Minimum"); }, colfun_min, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
 		{[]() { return i18n("Maximum"); }, colfun_max, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
 		{[]() { return i18n("Arithmetic mean"); }, colfun_mean, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},

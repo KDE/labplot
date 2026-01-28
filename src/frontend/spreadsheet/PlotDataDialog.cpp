@@ -549,8 +549,8 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	case Plot::PlotType::ProcessBehaviorChart:
 	case Plot::PlotType::RunChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
-			const QString& name = comboBox->currentText();
-			Column* column = columnFromName(name);
+			const auto& name = comboBox->currentText();
+			const auto* column = columnFromName(name);
 			addSingleSourceColumnPlot(column, plot);
 		}
 		break;
@@ -615,8 +615,8 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	case Plot::PlotType::ProcessBehaviorChart:
 	case Plot::PlotType::RunChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
-			const QString& name = comboBox->currentText();
-			Column* column = columnFromName(name);
+			const auto& name = comboBox->currentText();
+			const auto* column = columnFromName(name);
 
 			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
@@ -698,7 +698,7 @@ void PlotDataDialog::addCurvesToWorksheets(AbstractAspect* parent) {
 	case Plot::PlotType::RunChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
-			Column* column = columnFromName(name);
+			const auto* column = columnFromName(name);
 
 			auto* worksheet = new Worksheet(i18n("Worksheet - %1", name));
 			parent->addChild(worksheet);
@@ -765,21 +765,6 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 
 		XYAnalysisCurve* analysisCurve = nullptr;
 		switch (m_analysisAction) {
-		case XYAnalysisCurve::AnalysisAction::LineSimplification:
-			analysisCurve = new XYLineSimplificationCurve(i18n("Simplification of '%1'", name));
-			break;
-		case XYAnalysisCurve::AnalysisAction::Differentiation:
-			analysisCurve = new XYDifferentiationCurve(i18n("Derivative of '%1'", name));
-			break;
-		case XYAnalysisCurve::AnalysisAction::Integration:
-			analysisCurve = new XYIntegrationCurve(i18n("Integral of '%1'", name));
-			break;
-		case XYAnalysisCurve::AnalysisAction::Interpolation:
-			analysisCurve = new XYInterpolationCurve(i18n("Interpolation of '%1'", name));
-			break;
-		case XYAnalysisCurve::AnalysisAction::Smoothing:
-			analysisCurve = new XYSmoothCurve(i18n("Smoothing of '%1'", name));
-			break;
 		case XYAnalysisCurve::AnalysisAction::FitLinear:
 		case XYAnalysisCurve::AnalysisAction::FitPower:
 		case XYAnalysisCurve::AnalysisAction::FitExp1:
@@ -794,13 +779,42 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			analysisCurve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", name));
 			static_cast<XYFitCurve*>(analysisCurve)->initFitData(m_analysisAction);
 			break;
+		case XYAnalysisCurve::AnalysisAction::Differentiation:
+			analysisCurve = new XYDifferentiationCurve(i18n("Derivative of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::Integration:
+			analysisCurve = new XYIntegrationCurve(i18n("Integral of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::Interpolation:
+			analysisCurve = new XYInterpolationCurve(i18n("Interpolation of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::Smoothing:
+			analysisCurve = new XYSmoothCurve(i18n("Smoothing of '%1'", name));
+			break;
 		case XYAnalysisCurve::AnalysisAction::FourierFilter:
 			analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));
 			break;
-			case XYAnalysisCurve::AnalysisAction::BaselineCorrection: {
+		case XYAnalysisCurve::AnalysisAction::FourierTransform:
+			analysisCurve = new XYFourierTransformCurve(i18n("Fourier Transform of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::HilbertTransform:
+			analysisCurve = new XYHilbertTransformCurve(i18n("Hilbert Transform of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::Convolution:
+			analysisCurve = new XYConvolutionCurve(i18n("Convolution of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::Correlation:
+			analysisCurve = new XYCorrelationCurve(i18n("Correlation of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::LineSimplification:
+			analysisCurve = new XYLineSimplificationCurve(i18n("Simplification of '%1'", name));
+			break;
+		case XYAnalysisCurve::AnalysisAction::BaselineCorrection:
 			analysisCurve = new XYBaselineCorrectionCurve(i18n("Baseline Correction of '%1'", name));
 			break;
-		}
+		case XYAnalysisCurve::AnalysisAction::Function:
+			// Function case - not typically used in this context
+			break;
 		}
 
 		if (analysisCurve != nullptr) {
@@ -973,14 +987,14 @@ void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const Column* colu
 	if (column && column->valueLabelsInitialized()) {
 		auto* axis = plot->verticalAxis();
 		if (axis) {
-			axis->setMajorTicksType(Axis::TicksType::ColumnLabels);
+			axis->setMajorTicksType(Axis::TicksType::CustomColumnLabels);
 			axis->setMajorTicksColumn(column);
 		}
 	}
 }
 
 void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const QString& columnName) {
-	Column* column = columnFromName(columnName);
+	const auto* column = columnFromName(columnName);
 	setAxesColumnLabels(plot, column);
 }
 

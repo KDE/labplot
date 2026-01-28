@@ -78,9 +78,12 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, rugLength, RugLength)
 	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
 
+	bool indicesMinMax(const Dimension dim, double, double, int& start, int& end) const override;
+	bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
+	int dataCount(Dimension) const override;
 	bool usingColumn(const AbstractColumn*, bool indirect) const override;
 	QColor color() const override;
 

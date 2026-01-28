@@ -56,7 +56,7 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	CONDITIONAL_LOCK_RETURN;
 
 	// disconnect all connections to the previous test
-	for (auto& conn : m_aspectConnections)
+	for (const auto& conn : m_aspectConnections)
 		disconnect(conn);
 
 	m_aspectConnections.clear();
@@ -292,7 +292,7 @@ void HypothesisTestDock::updateColumns() {
 
 	QVector<const AbstractColumn*> columns;
 	for (auto* treeViewCb : m_dataComboBoxes) {
-		auto* col = dynamic_cast<AbstractColumn*>(treeViewCb->currentAspect());
+		const auto* col = dynamic_cast<AbstractColumn*>(treeViewCb->currentAspect());
 		if (col)
 			columns << col;
 	}
@@ -360,7 +360,7 @@ void HypothesisTestDock::addVariable() {
 }
 
 void HypothesisTestDock::removeVariable() {
-	auto* sender = dynamic_cast<QPushButton*>(QObject::sender());
+	const auto* sender = dynamic_cast<QPushButton*>(QObject::sender());
 	if (sender) {
 		// remove button was clicked, determine which one and
 		// delete it together with the corresponding combobox

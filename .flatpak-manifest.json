@@ -9,6 +9,9 @@
     "command": "labplot",
     "tags": ["nightly"],
     "desktop-file-name-suffix": " (Nightly)",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.llvm21"
+    ],
     "finish-args": [
         "--share=network",
         "--share=ipc",
@@ -37,6 +40,14 @@
         "/app/cleanup-BaseApp.sh"
     ],
     "modules": [
+         {
+            "name": "clang-headers",
+            "buildsystem": "simple",
+            "build-commands": [
+                "mkdir -p ${FLATPAK_DEST}/lib/clang/21/include",
+                "cp -r /usr/lib/sdk/llvm21/lib/clang/21/include ${FLATPAK_DEST}/lib/clang/21/"
+            ]
+        },
         {
             "name": "eigen",
             "buildsystem": "cmake-ninja",
@@ -212,6 +223,11 @@
         },
         {
             "name": "readstat",
+            "build-options": {
+                "env": {
+                    "ACLOCAL_PATH": "/usr/share/gettext/m4:/usr/share/aclocal:/app/share/aclocal"
+                }
+            },
             "sources": [
                 {
                     "type": "archive",
