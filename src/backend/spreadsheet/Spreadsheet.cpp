@@ -1457,6 +1457,8 @@ void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
 		setUndoAware(true);
 		d->statisticsSpreadsheet = nullptr;
 	}
+
+	Q_EMIT statisticsSpreadsheetChanged(on);
 }
 
 // ##############################################################################
