@@ -362,7 +362,7 @@ AbstractColumn::ColumnMode AsciiFilter::dataTypeToColumnMode(DataType type) {
  * maps AbstractColumn::ColumnMode to AsciiFilter::DataType
  */
 AsciiFilter::DataType AsciiFilter::columnModeToDataType(AbstractColumn::ColumnMode mode) {
-        switch (mode) {
+	switch (mode) {
 	case AbstractColumn::ColumnMode::Double:
 		return DataType::Double;
 	case AbstractColumn::ColumnMode::Integer:
@@ -377,7 +377,7 @@ AsciiFilter::DataType AsciiFilter::columnModeToDataType(AbstractColumn::ColumnMo
 		return DataType::DateTime;
 	}
 
-	return DataType::Double;	// fallback
+	return DataType::Double; // fallback
 }
 
 /*!
@@ -569,7 +569,7 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		QString dateTimeFormat;
 		auto modes = determineColumnModes(rows, properties, dateTimeFormat);
 		properties.columnModes.append(modes);
-		for (auto mode: modes)
+		for (auto mode : modes)
 			properties.dataTypes.append(AsciiFilter::columnModeToDataType(mode));
 		if (properties.dateTimeFormat.isEmpty())
 			properties.dateTimeFormat = dateTimeFormat;
