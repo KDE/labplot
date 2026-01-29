@@ -251,15 +251,11 @@ QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
 			rHSymbol = QStringLiteral("0");
 		} else if (test == Test::mann_kendall_test) {
 			// Mann-Kendall uses special hypothesis text for trends
-			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(
-				i18n("No monotonic trend exists"),
-				i18n("A monotonic trend exists"));
-			hypothesis[nsl_stats_tail_type_negative] = QPair<QString, QString>(
-				i18n("No negative monotonic trend exists"),
-				i18n("A negative monotonic trend exists"));
-			hypothesis[nsl_stats_tail_type_positive] = QPair<QString, QString>(
-				i18n("No positive monotonic trend exits"),
-				i18n("A positive monotonic trend exists"));
+			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(i18n("No monotonic trend exists"), i18n("A monotonic trend exists"));
+			hypothesis[nsl_stats_tail_type_negative] =
+				QPair<QString, QString>(i18n("No negative monotonic trend exists"), i18n("A negative monotonic trend exists"));
+			hypothesis[nsl_stats_tail_type_positive] =
+				QPair<QString, QString>(i18n("No positive monotonic trend exits"), i18n("A positive monotonic trend exists"));
 			return hypothesis;
 		}
 
@@ -1695,18 +1691,16 @@ void HypothesisTestPrivate::performMannKendallTest() {
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel) {
 			if (tail == nsl_stats_tail_type_two)
-				conclusion = i18n("At the significance level %1, there is a significant monotonic trend in the data. Reject the null hypothesis.",
-								  significanceLevel);
+				conclusion =
+					i18n("At the significance level %1, there is a significant monotonic trend in the data. Reject the null hypothesis.", significanceLevel);
 			else if (tail == nsl_stats_tail_type_positive)
-				conclusion = i18n("At the significance level %1, there is a significant positive monotonic trend. Reject the null hypothesis.",
-								  significanceLevel);
+				conclusion =
+					i18n("At the significance level %1, there is a significant positive monotonic trend. Reject the null hypothesis.", significanceLevel);
 			else
-				conclusion = i18n("At the significance level %1, there is a significant negative monotonic trend. Reject the null hypothesis.",
-								  significanceLevel);
-		} else {
-			conclusion = i18n("At the significance level %1, no significant monotonic trend detected. Fail to reject the null hypothesis.",
-							  significanceLevel);
-		}
+				conclusion =
+					i18n("At the significance level %1, there is a significant negative monotonic trend. Reject the null hypothesis.", significanceLevel);
+		} else
+			conclusion = i18n("At the significance level %1, no significant monotonic trend detected. Fail to reject the null hypothesis.", significanceLevel);
 	} else
 		conclusion = testResultNotAvailable();
 
