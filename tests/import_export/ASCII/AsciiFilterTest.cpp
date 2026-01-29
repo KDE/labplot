@@ -57,7 +57,7 @@ void AsciiFilterTest::initialization() {
 		QCOMPARE(filter.initialize(p).success(), false);
 	}
 
-	// On column name to much
+	// One column name to much
 	{
 		AsciiFilter filter;
 		auto p = filter.properties();

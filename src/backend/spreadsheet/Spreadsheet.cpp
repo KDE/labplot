@@ -1773,7 +1773,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 								 AbstractFileFilter::ImportMode columnImportMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	Q_D(Spreadsheet);
-	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn <<", row count = " << rowCount());
+	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn <<", row count = " << rowCount());
 
 	CleanupNoArguments cleanup([d]() {
 		d->m_usedInPlots.clear();
@@ -1802,8 +1802,8 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	const int rows = rowCount();
 	for (size_t col = startColumn; col <= endColumn; col++) {
 		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
-		Column* column = this->column((int)(columnOffset + col - startColumn));
-		// DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
+		auto* column = this->column((int)(columnOffset + col - startColumn));
+		// DEBUG(Q_FUNC_INFO << ", column mode " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
 		if (!d->suppressSetCommentFinalizeImport) {
 			QString comment;

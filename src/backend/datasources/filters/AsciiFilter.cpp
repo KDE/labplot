@@ -449,6 +449,7 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		return Status::WrongEndRow();
 
 	properties.columnModes.clear();
+	properties.dataTypes.clear();
 	properties.columnNames.clear();
 
 	// Determine header line
@@ -589,10 +590,12 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	if (properties.createTimestamp) {
 		properties.columnNames.prepend(i18n("Timestamp"));
 		properties.columnModes.prepend(AbstractColumn::ColumnMode::DateTime);
+		properties.dataTypes.prepend(AsciiFilter::DataType::DateTime);
 	}
 	if (properties.createIndex) {
 		properties.columnNames.prepend(i18n("Index"));
 		properties.columnModes.prepend(AbstractColumn::ColumnMode::BigInt);
+		properties.dataTypes.prepend(AsciiFilter::DataType::BigInt);
 	}
 
 	initialized = true;
@@ -713,9 +716,11 @@ Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		}
 
 		// convert DataType to ColumnMode for prepareImport
+		QDEBUG("modes before = " << properties.columnModes)
 		properties.columnModes.clear();
 		for (const auto& type : properties.dataTypes)
 			properties.columnModes << AsciiFilter::dataTypeToColumnMode(type);
+		QDEBUG("modes after = " << properties.columnModes)
 
 		// The column offset is already subtracted, so dataContainer contains only the new columns
 		m_dataSource
@@ -864,6 +869,8 @@ Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 	} else
 		m_DataContainer.resize(rowIndex);
 
+	QDEBUG("column name = " << properties.columnNames)
+	DEBUG("CALLING finalizeImport with " << properties.columnNames.size() - 1)
 	m_dataSource->finalizeImport(0, 0, properties.columnNames.size() - 1, properties.dateTimeFormat, columnImportMode);
 	return Status::Success();
 }
@@ -1315,6 +1322,8 @@ Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 	if (p.separator.isEmpty())
 		return setLastError(Status::InvalidSeparator());
 
+	// columnModes and dataTypes can be empty. Only one of them needs to be filled
+	// validate dataTypes
 	if (p.columnModes.isEmpty()) {
 		if (p.dataTypesString.isEmpty())
 			return setLastError(Status::SequentialDeviceNoColumnModes());
@@ -1324,6 +1333,22 @@ Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 			return setLastError(Status::SequentialDeviceNoColumnModes());
 	}
 
+	// check if using columnModes or dataTypes
+	// QDEBUG("column modes/names before = " << p.columnModes << p.columnNames)
+	if (p.columnModes.count() < p.dataTypes.count()) { // use given data types
+		p.columnModes.clear();
+		for (auto type: p.dataTypes)
+			p.columnModes << AsciiFilter::dataTypeToColumnMode(type);
+	}
+
+	if (p.dataTypes.count() < p.columnModes.count()) { // use given column modes
+		p.dataTypes.clear();
+		for (auto mode: p.columnModes)
+			p.dataTypes << AsciiFilter::columnModeToDataType(mode);
+	}
+	// QDEBUG("column modes/names after = " << p.columnModes << p.columnNames)
+
+	// now that we have column modes: fill columnNames if empty
 	if (p.columnNamesString.isEmpty() && p.columnNames.isEmpty()) {
 		// Create default column names
 		p.columnNames.clear();
@@ -1336,11 +1361,14 @@ Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 		p.columnNames =
 			determineColumnsSimplifyWhiteSpace(p.columnNamesString, QLatin1String(INTERNAL_SEPARATOR), p.removeQuotes, true, p.skipEmptyParts, 1, p.endColumn);
 
+	// still empty
 	if (p.columnNames.isEmpty())
 		return setLastError(Status::UnableParsingHeader());
 
-	if (p.columnModes.count() != p.columnNames.count())
+	if (p.columnModes.count() != p.columnNames.count()) {
+		QDEBUG(Q_FUNC_INFO <<", columnModes" << p.columnModes << "don't fit to columnNames" << p.columnNames)
 		return setLastError(Status::SequentialDeviceNoColumnModes());
+	}
 
 	if (p.headerEnabled)
 		return setLastError(Status::HeaderDetectionNotAllowed());
@@ -1355,10 +1383,12 @@ Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 	if (p.createTimestamp) {
 		p.columnNames.prepend(i18n("Timestamp"));
 		p.columnModes.prepend(AbstractColumn::ColumnMode::DateTime);
+		p.dataTypes.prepend(AsciiFilter::DataType::DateTime);
 	}
 	if (p.createIndex) {
 		p.columnNames.prepend(i18n("Index"));
 		p.columnModes.prepend(AbstractColumn::ColumnMode::BigInt);
+		p.dataTypes.prepend(AsciiFilter::DataType::BigInt);
 	}
 
 	properties = p;
