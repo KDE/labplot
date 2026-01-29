@@ -359,14 +359,35 @@ AbstractColumn::ColumnMode AsciiFilter::dataTypeToColumnMode(DataType type) {
 }
 
 /*!
+ * maps AbstractColumn::ColumnMode to AsciiFilter::DataType
+ */
+AsciiFilter::DataType AsciiFilter::columnModeToDataType(AbstractColumn::ColumnMode mode) {
+        switch (mode) {
+	case AbstractColumn::ColumnMode::Double:
+		return DataType::Double;
+	case AbstractColumn::ColumnMode::Integer:
+		return DataType::Integer;
+	case AbstractColumn::ColumnMode::BigInt:
+		return DataType::BigInt;
+	case AbstractColumn::ColumnMode::Text:
+		return DataType::Text;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		return DataType::DateTime;
+	}
+
+	return DataType::Double;	// fallback
+}
+
+/*!
  * returns the string representation of the given DataType.
  */
 QPair<QString, QString> AsciiFilter::dataTypeString(const DataType type) {
 	const auto& dataTypeMap = AsciiFilterPrivate::dataTypeMap();
 	for (auto it = dataTypeMap.cbegin(), end = dataTypeMap.cend(); it != end; it++) {
-		if (it.value().second == type) {
+		if (it.value().second == type)
 			return QPair<QString, QString>(it.key(), it.value().first);
-		}
 	}
 	DEBUG("DataType not found");
 	Q_ASSERT(false);
@@ -546,7 +567,10 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 			i++;
 		}
 		QString dateTimeFormat;
-		properties.columnModes.append(determineColumnModes(rows, properties, dateTimeFormat));
+		auto modes = determineColumnModes(rows, properties, dateTimeFormat);
+		properties.columnModes.append(modes);
+		for (auto mode: modes)
+			properties.dataTypes.append(AsciiFilter::columnModeToDataType(mode));
 		if (properties.dateTimeFormat.isEmpty())
 			properties.dateTimeFormat = dateTimeFormat;
 	} else {

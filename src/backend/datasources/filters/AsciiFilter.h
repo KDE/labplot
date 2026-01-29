@@ -81,6 +81,7 @@ public:
 
 	static QPair<QString, QString> dataTypeString(const DataType);
 	static AbstractColumn::ColumnMode dataTypeToColumnMode(DataType);
+	static DataType columnModeToDataType(AbstractColumn::ColumnMode);
 	static bool validateDataTypes(const QStringView& s, QVector<DataType>&, QString& invalidString);
 
 	// save/load in the project XML
