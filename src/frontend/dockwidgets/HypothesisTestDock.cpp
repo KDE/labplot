@@ -83,11 +83,11 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	});
 	m_aspectConnections << connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
-			m_test->setTail(nsl_stats_tail_type_positive);
+			m_test->setTail(nsl_stats_tail_type_negative);
 	});
 	m_aspectConnections << connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
-			m_test->setTail(nsl_stats_tail_type_negative);
+			m_test->setTail(nsl_stats_tail_type_positive);
 	});
 
 	connect(m_test, &HypothesisTest::statusError, this, &HypothesisTestDock::showStatusError);
@@ -109,6 +109,7 @@ void HypothesisTestDock::retranslateUi() {
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::kruskal_wallis_test), static_cast<int>(HypothesisTest::Test::kruskal_wallis_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::friedman_test), static_cast<int>(HypothesisTest::Test::friedman_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::log_rank_test), static_cast<int>(HypothesisTest::Test::log_rank_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::mann_kendall_test), static_cast<int>(HypothesisTest::Test::mann_kendall_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_independence), static_cast<int>(HypothesisTest::Test::chisq_independence));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit), static_cast<int>(HypothesisTest::Test::chisq_goodness_of_fit));
 
@@ -133,14 +134,16 @@ void HypothesisTestDock::retranslateUi() {
 		"<li><b>%3</b> - tests differences in medians among three or more independent groups</li>"
 		"<li><b>%4</b> - tests differences in medians among three or more related/repeated measurements</li>"
 		"<li><b>%5</b> - tests differences in survival distributions between two or more groups</li>"
-		"<li><b>%6</b> - tests if two categorical variables are independent of each other</li>"
-		"<li><b>%7</b> - tests if observed data follows a specified theoretical distribution</li>"
+		"<li><b>%6</b> - tests for a trend in data over time</li>"
+		"<li><b>%7</b> - tests if two categorical variables are independent of each other</li>"
+		"<li><b>%8</b> - tests if observed data follows a specified theoretical distribution</li>"
 		"</ul>",
 		HypothesisTest::testName(HypothesisTest::Test::mann_whitney_u_test),
 		HypothesisTest::testName(HypothesisTest::Test::wilcoxon_test),
 		HypothesisTest::testName(HypothesisTest::Test::kruskal_wallis_test),
 		HypothesisTest::testName(HypothesisTest::Test::friedman_test),
 		HypothesisTest::testName(HypothesisTest::Test::log_rank_test),
+		HypothesisTest::testName(HypothesisTest::Test::mann_kendall_test),
 		HypothesisTest::testName(HypothesisTest::Test::chisq_independence),
 		HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit)
 	);
