@@ -43,6 +43,20 @@ void AsciiFilterTest::initialization() {
 		QCOMPARE(filter.initialize(p).success(), true);
 	}
 
+	// only columnModes
+	{
+		AsciiFilter filter;
+		auto p = filter.properties();
+
+		p.automaticSeparatorDetection = false;
+		p.separator = QStringLiteral(",");
+		p.columnNamesString = QStringLiteral("Column1, Column2");
+		p.columnModes = {AbstractColumn::ColumnMode::Integer, AbstractColumn::ColumnMode::Integer};
+		p.headerEnabled = false;
+
+		QCOMPARE(filter.initialize(p).success(), true);
+	}
+
 	// One column mode to much
 	{
 		AsciiFilter filter;
