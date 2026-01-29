@@ -4,6 +4,7 @@
 	Description          : ASCII I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -578,6 +579,12 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		QString invalidString;
 		if (!validateDataTypes(properties.dataTypesString, properties.dataTypes, invalidString))
 			return Status::ColumnModeDeterminationFailed();
+	}
+
+	// fill column mode from data types if empty
+	if (properties.columnModes.isEmpty()) {
+		for (auto type : properties.dataTypes)
+			properties.columnModes.append(AsciiFilter::dataTypeToColumnMode(type));
 	}
 
 	if (properties.columnModes.size() != lineSplit.size())
@@ -1337,13 +1344,13 @@ Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 	// QDEBUG("column modes/names before = " << p.columnModes << p.columnNames)
 	if (p.columnModes.count() < p.dataTypes.count()) { // use given data types
 		p.columnModes.clear();
-		for (auto type: p.dataTypes)
+		for (auto type : p.dataTypes)
 			p.columnModes << AsciiFilter::dataTypeToColumnMode(type);
 	}
 
 	if (p.dataTypes.count() < p.columnModes.count()) { // use given column modes
 		p.dataTypes.clear();
-		for (auto mode: p.columnModes)
+		for (auto mode : p.columnModes)
 			p.dataTypes << AsciiFilter::columnModeToDataType(mode);
 	}
 	// QDEBUG("column modes/names after = " << p.columnModes << p.columnNames)
@@ -1366,7 +1373,7 @@ Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 		return setLastError(Status::UnableParsingHeader());
 
 	if (p.columnModes.count() != p.columnNames.count()) {
-		QDEBUG(Q_FUNC_INFO <<", columnModes" << p.columnModes << "don't fit to columnNames" << p.columnNames)
+		QDEBUG(Q_FUNC_INFO << ", columnModes" << p.columnModes << "don't fit to columnNames" << p.columnNames)
 		return setLastError(Status::SequentialDeviceNoColumnModes());
 	}
 
