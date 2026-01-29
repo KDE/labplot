@@ -5,6 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-FileCopyrightText: 2025-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -166,6 +167,7 @@ struct mann_kendall_test_result {
 	double z;
 	double p;
 	int n;
+	double slope;
 };
 struct mann_kendall_test_result nsl_stats_mann_kendall(const double sample[], size_t n, nsl_stats_tail_type tail);
 

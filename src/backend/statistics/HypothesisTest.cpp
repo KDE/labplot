@@ -626,7 +626,8 @@ QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 				   + addResultLine(i18n("Total Count 2"), QStringLiteral("%L26")));
 	} else if (test == HypothesisTest::Test::mann_kendall_test) {
 		result += (addResultLine(i18n("S"), QStringLiteral("%L20")) + addResultLine(i18n("Kendall's Tau"), QStringLiteral("%L21"))
-				   + addResultLine(i18n("z-Value"), QStringLiteral("%L22")) + addResultLine(i18n("Sample Size"), QStringLiteral("%L23")));
+				   + addResultLine(i18n("z-Value"), QStringLiteral("%L22")) + addResultLine(i18n("Sen's Slope"), QStringLiteral("%L23"))
+				   + addResultLine(i18n("Sample Size"), QStringLiteral("%L24")));
 	}
 
 	result += addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%99");
@@ -1718,6 +1719,7 @@ void HypothesisTestPrivate::performMannKendallTest() {
 					 .arg(result.S)
 					 .arg(result.tau)
 					 .arg(result.z)
+					 .arg(result.slope)
 					 .arg(result.n)
 					 .arg(conclusion);
 }

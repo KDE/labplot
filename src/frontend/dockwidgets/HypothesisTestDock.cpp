@@ -83,11 +83,11 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	});
 	m_aspectConnections << connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
-			m_test->setTail(nsl_stats_tail_type_positive);
+			m_test->setTail(nsl_stats_tail_type_negative);
 	});
 	m_aspectConnections << connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
-			m_test->setTail(nsl_stats_tail_type_negative);
+			m_test->setTail(nsl_stats_tail_type_positive);
 	});
 
 	connect(m_test, &HypothesisTest::statusError, this, &HypothesisTestDock::showStatusError);
