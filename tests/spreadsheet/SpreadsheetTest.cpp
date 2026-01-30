@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -1280,6 +1280,199 @@ void SpreadsheetTest::testMaskRowsWithMissingValues() {
 	QCOMPARE(col1->isMasked(2), true);
 	QCOMPARE(col1->isMasked(3), false);
 	QCOMPARE(col1->isMasked(4), true);
+}
+
+void SpreadsheetTest::testMaskingRowRemovalUndoRedo() {
+	// prepare project and spreadsheet to enable undo/redo
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(2);
+	sheet->setRowCount(10);
+
+	auto* col0 = sheet->column(0);
+	auto* col1 = sheet->column(1);
+	col0->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col1->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	// populate initial values
+	for (int r = 0; r < 10; ++r) {
+		col0->setValueAt(r, static_cast<double>(r));          // 0..9
+		col1->setValueAt(r, static_cast<double>(100 + r));    // 100..109
+	}
+
+	// set masking intervals on both columns: [2,4] and [7,8]
+	col0->setMasked(Interval<int>(2, 4), true);
+	col0->setMasked(Interval<int>(7, 8), true);
+	col1->setMasked(Interval<int>(2, 4), true);
+	col1->setMasked(Interval<int>(7, 8), true);
+
+	// pre-check masks and values
+	QCOMPARE(sheet->rowCount(), 10);
+	// masks col0
+	QCOMPARE(col0->isMasked(0), false);
+	QCOMPARE(col0->isMasked(1), false);
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(5), false);
+	QCOMPARE(col0->isMasked(6), false);
+	QCOMPARE(col0->isMasked(7), true);
+	QCOMPARE(col0->isMasked(8), true);
+	QCOMPARE(col0->isMasked(9), false);
+	// masks col1 (same intervals)
+	QCOMPARE(col1->isMasked(0), false);
+	QCOMPARE(col1->isMasked(1), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(5), false);
+	QCOMPARE(col1->isMasked(6), false);
+	QCOMPARE(col1->isMasked(7), true);
+	QCOMPARE(col1->isMasked(8), true);
+	QCOMPARE(col1->isMasked(9), false);
+	// values
+	QCOMPARE(col0->valueAt(0), 0.0);
+	QCOMPARE(col0->valueAt(9), 9.0);
+	QCOMPARE(col1->valueAt(0), 100.0);
+	QCOMPARE(col1->valueAt(9), 109.0);
+
+	// remove rows [3..6] (count=4 starting at first=3); overlaps with masked [3,4]
+	sheet->removeRows(3, 4);
+
+	// after removal, rowCount decreases and masks adjust: expected masks [2,2] and [3,4]
+	QCOMPARE(sheet->rowCount(), 6);
+	// masks col0
+	QCOMPARE(col0->isMasked(0), false);
+	QCOMPARE(col0->isMasked(1), false);
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(5), false);
+	// masks col1
+	QCOMPARE(col1->isMasked(0), false);
+	QCOMPARE(col1->isMasked(1), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(5), false);
+	// values after removal: rows now map to original [0,1,2,7,8,9]
+	QCOMPARE(col0->valueAt(0), 0.0);
+	QCOMPARE(col0->valueAt(1), 1.0);
+	QCOMPARE(col0->valueAt(2), 2.0);
+	QCOMPARE(col0->valueAt(3), 7.0);
+	QCOMPARE(col0->valueAt(4), 8.0);
+	QCOMPARE(col0->valueAt(5), 9.0);
+	QCOMPARE(col1->valueAt(0), 100.0);
+	QCOMPARE(col1->valueAt(1), 101.0);
+	QCOMPARE(col1->valueAt(2), 102.0);
+	QCOMPARE(col1->valueAt(3), 107.0);
+	QCOMPARE(col1->valueAt(4), 108.0);
+	QCOMPARE(col1->valueAt(5), 109.0);
+
+	// undo: restore rows and original masks/values
+	project.undoStack()->undo();
+
+	QCOMPARE(sheet->rowCount(), 10);
+	// masks
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(7), true);
+	QCOMPARE(col0->isMasked(8), true);
+	QCOMPARE(col0->isMasked(5), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(7), true);
+	QCOMPARE(col1->isMasked(8), true);
+	QCOMPARE(col1->isMasked(5), false);
+	// values restored
+	QCOMPARE(col0->valueAt(0), 0.0);
+	QCOMPARE(col0->valueAt(9), 9.0);
+	QCOMPARE(col1->valueAt(0), 100.0);
+	QCOMPARE(col1->valueAt(9), 109.0);
+
+	// redo: apply removal again and verify adjusted masks/values
+	project.undoStack()->redo();
+
+	QCOMPARE(sheet->rowCount(), 6);
+	// masks
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(5), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(5), false);
+	// values
+	QCOMPARE(col0->valueAt(3), 7.0);
+	QCOMPARE(col0->valueAt(4), 8.0);
+	QCOMPARE(col0->valueAt(5), 9.0);
+	QCOMPARE(col1->valueAt(3), 107.0);
+	QCOMPARE(col1->valueAt(4), 108.0);
+	QCOMPARE(col1->valueAt(5), 109.0);
+}
+
+/*
+ * check that masked rows follow the sort order in a single column
+ */
+void SpreadsheetTest::testSortMasksSingleColumn() {
+	// use a project to enable undo/redo of sort macro
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(1);
+	sheet->setRowCount(4);
+	auto* col = sheet->column(0);
+
+	// values: original indices 0..3 have values [3,1,4,2]
+	const QVector<double> values{3.0, 1.0, 4.0, 2.0};
+	col->replaceValues(0, values);
+
+	// mask original rows 1 and 3
+	col->setMasked(1, true);
+	col->setMasked(3, true);
+
+	// sort ascending (separate)
+	sheet->sortColumns(nullptr, {col}, true);
+
+	// values should be [1,2,3,4]
+	QCOMPARE(col->valueAt(0), 1.0);
+	QCOMPARE(col->valueAt(1), 2.0);
+	QCOMPARE(col->valueAt(2), 3.0);
+	QCOMPARE(col->valueAt(3), 4.0);
+
+	// masks should follow values from original masked rows (1->value 1, 3->value 2)
+	QCOMPARE(col->isMasked(0), true);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), false);
+
+	// undo: expect original order and masks restored at original rows 1 and 3
+	project.undoStack()->undo();
+	QCOMPARE(col->valueAt(0), 3.0);
+	QCOMPARE(col->valueAt(1), 1.0);
+	QCOMPARE(col->valueAt(2), 4.0);
+	QCOMPARE(col->valueAt(3), 2.0);
+	QCOMPARE(col->isMasked(0), false);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), true);
+
+	// redo: expect sorted order and masks on rows 0 and 1 again
+	project.undoStack()->redo();
+	QCOMPARE(col->valueAt(0), 1.0);
+	QCOMPARE(col->valueAt(1), 2.0);
+	QCOMPARE(col->valueAt(2), 3.0);
+	QCOMPARE(col->valueAt(3), 4.0);
+	QCOMPARE(col->isMasked(0), true);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), false);
 }
 
 // **********************************************************
