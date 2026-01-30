@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-29 00:40+0000\n"
-"PO-Revision-Date: 2026-01-20 05:54+0100\n"
+"POT-Creation-Date: 2026-01-30 00:40+0000\n"
+"PO-Revision-Date: 2026-01-29 03:53+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -413,7 +413,7 @@ msgstr "ფილტრის შეუთავსებელი ტიპი"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/statistics/HypothesisTest.cpp:1706
+#: src/backend/statistics/HypothesisTest.cpp:1786
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1929
 #, kde-format
@@ -437,7 +437,7 @@ msgstr "\"%1\"-ის სახელის \"%2\"-ად გადარქმ�
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/backend/core/AspectTreeModel.cpp:164
-#: src/backend/statistics/HypothesisTest.cpp:529
+#: src/backend/statistics/HypothesisTest.cpp:543
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:99
@@ -2128,7 +2128,7 @@ msgstr "ატრიბუტები"
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
 #: src/backend/datasources/filters/NetCDFFilter.cpp:625
 #: src/frontend/ui/dockwidgets/matrixdock.ui:87
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:160
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:199
 #, kde-format
 msgid "Dimensions"
 msgstr "ზომები"
@@ -3700,7 +3700,7 @@ msgstr "მიმდინარე სვეტის უჯრედი (ი�
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:258
-#: src/backend/statistics/HypothesisTest.cpp:529
+#: src/backend/statistics/HypothesisTest.cpp:543
 #: src/frontend/ui/dockwidgets/imagedock.ui:492
 #, kde-format
 msgid "Size"
@@ -3758,7 +3758,7 @@ msgstr "საშუალო არითმეტიკული"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:263 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
-#: src/backend/statistics/HypothesisTest.cpp:529
+#: src/backend/statistics/HypothesisTest.cpp:543
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
@@ -3784,7 +3784,7 @@ msgstr "სტანდარტული გადახრა"
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
 #: src/backend/gsl/functions.cpp:265
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
-#: src/backend/statistics/HypothesisTest.cpp:529
+#: src/backend/statistics/HypothesisTest.cpp:543
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:170
 #: src/frontend/ui/mqttwillsettingswidget.ui:108
@@ -3911,7 +3911,7 @@ msgstr "მედიანის აბსოლუტური გადახ�
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
 #: src/backend/gsl/functions.cpp:283
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
-#: src/backend/statistics/HypothesisTest.cpp:529
+#: src/backend/statistics/HypothesisTest.cpp:543
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:91
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:246
 #: src/frontend/ui/mqttwillsettingswidget.ui:163
@@ -3923,7 +3923,7 @@ msgstr "სიმრუდე"
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
 #: src/backend/gsl/functions.cpp:284
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
-#: src/backend/statistics/HypothesisTest.cpp:529
+#: src/backend/statistics/HypothesisTest.cpp:543
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:92
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:253
 #: src/frontend/ui/mqttwillsettingswidget.ui:174
@@ -6391,7 +6391,7 @@ msgstr "%1-სთვის სესიის შექმნა შეუძლ
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/nsl/nsl_baseline.cpp:47
-#: src/backend/statistics/HypothesisTest.cpp:529
+#: src/backend/statistics/HypothesisTest.cpp:543
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:515
@@ -7437,49 +7437,49 @@ msgstr "%1: სვეტების დალაგება"
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: დაკავშირებული ელცხრილი წაიშალა"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1810
+#: src/backend/spreadsheet/Spreadsheet.cpp:1812
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "ორმაგი სიზუსტის მონაცემები, %1 ელემენტი"
 msgstr[1] "რიცხვითი მონაცემები, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1813
+#: src/backend/spreadsheet/Spreadsheet.cpp:1815
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "მთელრიცხვიანი მონაცემები, %1 ელემენტი"
 msgstr[1] "მთელრიცხვიანი მონაცემები, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1816
+#: src/backend/spreadsheet/Spreadsheet.cpp:1818
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "დიდი მთელრიცხვიანი მონაცემები, %1 ელემენტი"
 msgstr[1] "დიდი მთელრიცხვიანი მონაცემები, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1819
+#: src/backend/spreadsheet/Spreadsheet.cpp:1821
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "ტექსტური მონაცემები, %1 ელემენტი"
 msgstr[1] "ტექსტური მონაცემები, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1822
+#: src/backend/spreadsheet/Spreadsheet.cpp:1824
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "თვის მონაცემები, %1 ელემენტი"
 msgstr[1] "თვის მონაცემები, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1825
+#: src/backend/spreadsheet/Spreadsheet.cpp:1827
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "დღის მონაცემი, %1 ელემენტი"
 msgstr[1] "დღის მონაცემი, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1828
+#: src/backend/spreadsheet/Spreadsheet.cpp:1830
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -7649,370 +7649,428 @@ msgctxt "@title:window"
 msgid "Hypothesis Test"
 msgstr "ჰიპოთეზის შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:309
+#: src/backend/statistics/HypothesisTest.cpp:254
+#, kde-format
+msgid "No monotonic trend exists"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:254
+#, kde-format
+msgid "A monotonic trend exists"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:256
+#, kde-format
+msgid "No negative monotonic trend exists"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:256
+#, kde-format
+msgid "A negative monotonic trend exists"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:258
+#, kde-format
+msgid "No positive monotonic trend exits"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:258
+#, kde-format
+msgid "A positive monotonic trend exists"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
 msgid "One-Sample t-Test"
 msgstr "ერთსინჯიანი t-შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:311
+#: src/backend/statistics/HypothesisTest.cpp:321
 #, kde-format
 msgid "Independent Two-Sample t-Test"
 msgstr "დამოუკიდებელი ორნიმუშიანი t-შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:313
+#: src/backend/statistics/HypothesisTest.cpp:323
 #, kde-format
 msgid "Paired Two-Sample t-Test"
 msgstr "დაწყვილებული ორნიმუშიანი t-შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:315
+#: src/backend/statistics/HypothesisTest.cpp:325
 #, kde-format
 msgid "Mann-Whitney U Test"
 msgstr "მან-უიტნის U შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:317
+#: src/backend/statistics/HypothesisTest.cpp:327
 #, kde-format
 msgid "Welch t-Test"
 msgstr "უელჩის t-შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:319
+#: src/backend/statistics/HypothesisTest.cpp:329
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
 msgstr "უილკოქსონის ნიშნიანი რანგის შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:321
+#: src/backend/statistics/HypothesisTest.cpp:331
 #, kde-format
 msgid "One-Way ANOVA Test"
 msgstr "ერთმხრივი ANOVA შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:323
+#: src/backend/statistics/HypothesisTest.cpp:333
 #, kde-format
 msgid "Kruskal-Wallis Test"
 msgstr "კრისკალ-უოლისის შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:325
+#: src/backend/statistics/HypothesisTest.cpp:335
 #, kde-format
 msgid "Log-Rank Test"
 msgstr "ლოგ-რანგის შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:327
+#: src/backend/statistics/HypothesisTest.cpp:337
 #, kde-format
 msgid "Friedman Test"
 msgstr "ფრიდმანის შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:329
+#: src/backend/statistics/HypothesisTest.cpp:339
 #, kde-format
 msgid "Chi-Square Independence Test"
 msgstr "ხიკვადრატის დამოუკიდებლობის შემოწმება"
 
-#: src/backend/statistics/HypothesisTest.cpp:331
+#: src/backend/statistics/HypothesisTest.cpp:341
 #, kde-format
 msgid "Chi-Square Goodness of Fit Test"
 msgstr "ჩატევის შემოწმების ხიკვადრატის სიკეთე"
 
-#: src/backend/statistics/HypothesisTest.cpp:333
+#: src/backend/statistics/HypothesisTest.cpp:343
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr "ერთმხრივი ANOVA გამეორებული გაზომვის შემოწმებით"
 
-#: src/backend/statistics/HypothesisTest.cpp:505
+#: src/backend/statistics/HypothesisTest.cpp:345
+#, fuzzy, kde-format
+#| msgid "Mann-Whitney U Test"
+msgid "Mann-Kendall Test"
+msgstr "მან-უიტნის U შემოწმება"
+
+#: src/backend/statistics/HypothesisTest.cpp:519
 #, kde-format
 msgid "N/A"
 msgstr "ა/მ"
 
-#: src/backend/statistics/HypothesisTest.cpp:509
+#: src/backend/statistics/HypothesisTest.cpp:523
 #, kde-format
 msgid "Test result is not available."
 msgstr "შემოწმების შედეგი ხელმისაწვდომი არაა."
 
-#: src/backend/statistics/HypothesisTest.cpp:513
+#: src/backend/statistics/HypothesisTest.cpp:527
 #, kde-format
 msgid "Two columns are required for this test."
 msgstr "ამ შემოწმებისთვის აუცილებელია ორი სვეტი."
 
-#: src/backend/statistics/HypothesisTest.cpp:517
+#: src/backend/statistics/HypothesisTest.cpp:531
 #, kde-format
 msgid "At least two columns are required."
 msgstr "საჭიროა, სულ ცოტა ორი სვეტი."
 
-#: src/backend/statistics/HypothesisTest.cpp:521
+#: src/backend/statistics/HypothesisTest.cpp:535
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
 msgstr "სვეტს '%1', სულ ცოტა, %2 სინჯი სჭირდება."
 
-#: src/backend/statistics/HypothesisTest.cpp:525
+#: src/backend/statistics/HypothesisTest.cpp:539
 #, kde-format
 msgid "The size of each sample must be equal."
 msgstr "თითოეული სინჯის ზომა ტოლი უნდა იყოს."
 
-#: src/backend/statistics/HypothesisTest.cpp:544
+#: src/backend/statistics/HypothesisTest.cpp:559
 #, kde-format
 msgid "Null Hypothesis"
 msgstr "ნულოვანი ჰიპოთეზა"
 
-#: src/backend/statistics/HypothesisTest.cpp:545
+#: src/backend/statistics/HypothesisTest.cpp:560
 #, kde-format
 msgid "Alternate Hypothesis"
 msgstr "ალტერნატიული ჰიპოთეზა"
 
-#: src/backend/statistics/HypothesisTest.cpp:547
+#: src/backend/statistics/HypothesisTest.cpp:562
 #, kde-format
 msgid "Descriptive Statistics"
 msgstr "აღწერითი სტატისტიკა"
 
-#: src/backend/statistics/HypothesisTest.cpp:548
+#: src/backend/statistics/HypothesisTest.cpp:563
 #, kde-format
 msgid "Test Statistics"
 msgstr "შემოწმების სტატისტიკა"
 
-#: src/backend/statistics/HypothesisTest.cpp:548
+#: src/backend/statistics/HypothesisTest.cpp:563
 #, kde-format
 msgid "Significance Level"
 msgstr "მნიშვნელობის დონე"
 
-#: src/backend/statistics/HypothesisTest.cpp:549
+#: src/backend/statistics/HypothesisTest.cpp:564
 #, kde-format
 msgid "p-Value"
 msgstr "p-მნიშვნელობა"
 
-#: src/backend/statistics/HypothesisTest.cpp:552
+#: src/backend/statistics/HypothesisTest.cpp:567
 #, kde-format
 msgid "Degrees of Freedom Between Groups"
 msgstr "თავისუფლების ხარისხი ჯგუფებს შორის"
 
-#: src/backend/statistics/HypothesisTest.cpp:553
+#: src/backend/statistics/HypothesisTest.cpp:568
 #, kde-format
 msgid "Degrees of Freedom Within Groups"
 msgstr "თავისუფლების ხარისხი ჯგუფებში"
 
-#: src/backend/statistics/HypothesisTest.cpp:555
+#: src/backend/statistics/HypothesisTest.cpp:570
 #, kde-format
 msgid "Degrees of Freedom Treatment"
 msgstr "თავისუფლების ხარისხის დამუშავება"
 
-#: src/backend/statistics/HypothesisTest.cpp:556
+#: src/backend/statistics/HypothesisTest.cpp:571
 #, kde-format
 msgid "Degrees of Freedom Residuals"
 msgstr "თავისუფლების ხარისხის ნარჩენები"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/backend/statistics/HypothesisTest.cpp:558
+#: src/backend/statistics/HypothesisTest.cpp:573
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "თავისუფლების ხარისხები"
 
-#: src/backend/statistics/HypothesisTest.cpp:563
-#: src/backend/statistics/HypothesisTest.cpp:567
-#: src/backend/statistics/HypothesisTest.cpp:570
-#: src/backend/statistics/HypothesisTest.cpp:572
+#: src/backend/statistics/HypothesisTest.cpp:578
+#: src/backend/statistics/HypothesisTest.cpp:582
+#: src/backend/statistics/HypothesisTest.cpp:585
+#: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
 msgid "t-Value"
 msgstr "t-მნიშვნელობა"
 
-#: src/backend/statistics/HypothesisTest.cpp:563
+#: src/backend/statistics/HypothesisTest.cpp:578
 #, kde-format
 msgid "Test Mean"
 msgstr "შემოწმების საშუალო"
 
-#: src/backend/statistics/HypothesisTest.cpp:564
-#: src/backend/statistics/HypothesisTest.cpp:568
-#: src/backend/statistics/HypothesisTest.cpp:570
-#: src/backend/statistics/HypothesisTest.cpp:572
+#: src/backend/statistics/HypothesisTest.cpp:579
+#: src/backend/statistics/HypothesisTest.cpp:583
+#: src/backend/statistics/HypothesisTest.cpp:585
+#: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
 msgid "Mean Difference"
 msgstr "საშუალო სხვაობა"
 
-#: src/backend/statistics/HypothesisTest.cpp:567
+#: src/backend/statistics/HypothesisTest.cpp:582
 #, kde-format
 msgid "Pooled Variance"
 msgstr "ჯამური ვარიანტი"
 
-#: src/backend/statistics/HypothesisTest.cpp:568
-#: src/backend/statistics/HypothesisTest.cpp:573
+#: src/backend/statistics/HypothesisTest.cpp:583
+#: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
 msgid "Mean Difference Standard Error"
 msgstr "საშუალო სხვაობის სტანდარტული გადახრა"
 
-#: src/backend/statistics/HypothesisTest.cpp:575
-#: src/backend/statistics/HypothesisTest.cpp:581
+#: src/backend/statistics/HypothesisTest.cpp:590
+#: src/backend/statistics/HypothesisTest.cpp:596
 #, kde-format
 msgid "F-Statistic"
 msgstr "F-სტატისტიკა"
 
-#: src/backend/statistics/HypothesisTest.cpp:575
+#: src/backend/statistics/HypothesisTest.cpp:590
 #, kde-format
 msgid "Sum of Squares Between Groups"
 msgstr "კვადრატები ჯამი ჯგუფებს შორის"
 
-#: src/backend/statistics/HypothesisTest.cpp:576
+#: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
 msgid "Sum of Squares Within Groups"
 msgstr "კვადრატები ჯამი ჯგუფებში"
 
-#: src/backend/statistics/HypothesisTest.cpp:577
+#: src/backend/statistics/HypothesisTest.cpp:592
 #, kde-format
 msgid "Mean Squares Between Groups"
 msgstr "საშუალო კვადრატები ჯგუფებს შორის"
 
-#: src/backend/statistics/HypothesisTest.cpp:578
+#: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
 msgid "Mean Squares Within Groups"
 msgstr "საშუალო კვადრატები ჯგუფებში"
 
-#: src/backend/statistics/HypothesisTest.cpp:581
+#: src/backend/statistics/HypothesisTest.cpp:596
 #, kde-format
 msgid "Sum of Squares Treatment"
 msgstr "კვადრატები ჯამის დამუშავება"
 
-#: src/backend/statistics/HypothesisTest.cpp:582
+#: src/backend/statistics/HypothesisTest.cpp:597
 #, kde-format
 msgid "Sum of Squares Residuals"
 msgstr "კვადრატების ნაშთების ჯამი"
 
-#: src/backend/statistics/HypothesisTest.cpp:583
+#: src/backend/statistics/HypothesisTest.cpp:598
 #, kde-format
 msgid "Sum of Squares Within Subjects"
 msgstr "კვადრატების ჯამი სუბიექტებს შორის"
 
-#: src/backend/statistics/HypothesisTest.cpp:584
+#: src/backend/statistics/HypothesisTest.cpp:599
 #, kde-format
 msgid "Mean Squares Treatment"
 msgstr "საშუალო კვადრატების დამუშავება"
 
-#: src/backend/statistics/HypothesisTest.cpp:584
+#: src/backend/statistics/HypothesisTest.cpp:599
 #, kde-format
 msgid "Mean Squares Residuals"
 msgstr "საშუალო კვადრატების ნაშთი"
 
-#: src/backend/statistics/HypothesisTest.cpp:586
+#: src/backend/statistics/HypothesisTest.cpp:601
 #, kde-format
 msgid "U"
 msgstr "U"
 
-#: src/backend/statistics/HypothesisTest.cpp:586
-#: src/backend/statistics/HypothesisTest.cpp:590
+#: src/backend/statistics/HypothesisTest.cpp:601
+#: src/backend/statistics/HypothesisTest.cpp:605
+#: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "z-Value"
 msgstr "z-მნიშვნელობა"
 
-#: src/backend/statistics/HypothesisTest.cpp:587
+#: src/backend/statistics/HypothesisTest.cpp:602
 #, kde-format
 msgid "Rank Sum 1"
 msgstr "რანგის ჯამი 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:587
+#: src/backend/statistics/HypothesisTest.cpp:602
 #, kde-format
 msgid "Mean Rank 1"
 msgstr "საშუალო რანგი 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:588
+#: src/backend/statistics/HypothesisTest.cpp:603
 #, kde-format
 msgid "Rank Sum 2"
 msgstr "რანგის ჯამი 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:588
+#: src/backend/statistics/HypothesisTest.cpp:603
 #, kde-format
 msgid "Mean Rank 2"
 msgstr "საშუალო რანგი 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:590
+#: src/backend/statistics/HypothesisTest.cpp:605
 #, kde-format
 msgid "W"
 msgstr "W"
 
-#: src/backend/statistics/HypothesisTest.cpp:591
+#: src/backend/statistics/HypothesisTest.cpp:606
 #, kde-format
 msgid "Positive Rank Sum"
 msgstr "დადებითი რანგის ჯამი"
 
-#: src/backend/statistics/HypothesisTest.cpp:591
+#: src/backend/statistics/HypothesisTest.cpp:606
 #, kde-format
 msgid "Positive Rank Mean"
 msgstr "დადებითი რანგის საშუალო"
 
-#: src/backend/statistics/HypothesisTest.cpp:592
+#: src/backend/statistics/HypothesisTest.cpp:607
 #, kde-format
 msgid "Positive Rank Count"
 msgstr "დადებითი რანგების რაოდენობა"
 
-#: src/backend/statistics/HypothesisTest.cpp:592
+#: src/backend/statistics/HypothesisTest.cpp:607
 #, kde-format
 msgid "Negative Rank Sum"
 msgstr "უარყოფითი რანგის ჯამი"
 
-#: src/backend/statistics/HypothesisTest.cpp:593
+#: src/backend/statistics/HypothesisTest.cpp:608
 #, kde-format
 msgid "Negative Rank Mean"
 msgstr "უარყოფითი რანგის საშუალო"
 
-#: src/backend/statistics/HypothesisTest.cpp:593
+#: src/backend/statistics/HypothesisTest.cpp:608
 #, kde-format
 msgid "Negative Rank Count"
 msgstr "უარყოფითი რანგის რაოდენობა"
 
-#: src/backend/statistics/HypothesisTest.cpp:594
+#: src/backend/statistics/HypothesisTest.cpp:609
 #, kde-format
 msgid "Tie Count"
 msgstr "ფრეების რაოდენობა"
 
-#: src/backend/statistics/HypothesisTest.cpp:596
-#: src/backend/statistics/HypothesisTest.cpp:604
+#: src/backend/statistics/HypothesisTest.cpp:611
+#: src/backend/statistics/HypothesisTest.cpp:619
 #, kde-format
 msgid "H"
 msgstr "H"
 
-#: src/backend/statistics/HypothesisTest.cpp:598
+#: src/backend/statistics/HypothesisTest.cpp:613
 #, kde-format
 msgid "Q"
 msgstr "Q"
 
-#: src/backend/statistics/HypothesisTest.cpp:600
-#: src/backend/statistics/HypothesisTest.cpp:602
+#: src/backend/statistics/HypothesisTest.cpp:615
+#: src/backend/statistics/HypothesisTest.cpp:617
 #, kde-format
 msgid "Chi2"
 msgstr "ხიკვადრატი"
 
-#: src/backend/statistics/HypothesisTest.cpp:604
+#: src/backend/statistics/HypothesisTest.cpp:619
 #, kde-format
 msgid "Event Count 1"
 msgstr "მოვლენების რაოდენობა 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:605
+#: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
 msgid "Censored Count 1"
 msgstr "დაცენზორებული რაოდენობა 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:605
+#: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
 msgid "Total Count 1"
 msgstr "სულ რაოდენობა 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:606
+#: src/backend/statistics/HypothesisTest.cpp:621
 #, kde-format
 msgid "Event Count 2"
 msgstr "მოვლენების რაოდენობა 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:606
+#: src/backend/statistics/HypothesisTest.cpp:621
 #, kde-format
 msgid "Censored Count 2"
 msgstr "დაცენზორებული რაოდენობა 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:607
+#: src/backend/statistics/HypothesisTest.cpp:622
 #, kde-format
 msgid "Total Count 2"
 msgstr "სულ რაოდენობა 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:624
+#, kde-format
+msgid "S"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:624
+#, kde-format
+msgid "Kendall's Tau"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:625
+#, kde-format
+msgid "Sen's Slope"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:626
+#, fuzzy, kde-format
+#| msgid "Sample Size:"
+msgid "Sample Size"
+msgstr "მაგალითის ზომა:"
+
+#: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
 msgid "Statistical Conclusion"
 msgstr "სტატისტიკური დასკვნა"
 
-#: src/backend/statistics/HypothesisTest.cpp:622
+#: src/backend/statistics/HypothesisTest.cpp:641
 #, kde-format
 msgid "No variable columns provided."
 msgstr "ცვლადის სვეტები მითითებული არაა."
 
-#: src/backend/statistics/HypothesisTest.cpp:867
+#: src/backend/statistics/HypothesisTest.cpp:901
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
@@ -8021,7 +8079,7 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 პოპულაციის საშუალო მნიშვნელოვნად განსხვავდება %2-"
 "სგან. ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
 
-#: src/backend/statistics/HypothesisTest.cpp:871
+#: src/backend/statistics/HypothesisTest.cpp:905
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
@@ -8030,8 +8088,8 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 პოპულაციის საშუალო მნიშვნელოვნად არ განსხვავდება %2-"
 "სგან. ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება."
 
-#: src/backend/statistics/HypothesisTest.cpp:955
-#: src/backend/statistics/HypothesisTest.cpp:1023
+#: src/backend/statistics/HypothesisTest.cpp:989
+#: src/backend/statistics/HypothesisTest.cpp:1057
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
@@ -8040,8 +8098,8 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 პოპულაციის საშუალოები მნიშვნელოვნად განსხვავდება. "
 "ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:957
-#: src/backend/statistics/HypothesisTest.cpp:1025
+#: src/backend/statistics/HypothesisTest.cpp:991
+#: src/backend/statistics/HypothesisTest.cpp:1059
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
@@ -8050,8 +8108,8 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 პოპულაციის საშუალოები მნიშვნელოვნად არ განსხვავდება. "
 "ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1078
-#: src/backend/statistics/HypothesisTest.cpp:1141
+#: src/backend/statistics/HypothesisTest.cpp:1112
+#: src/backend/statistics/HypothesisTest.cpp:1175
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
@@ -8060,8 +8118,8 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფის საშუალო მნიშვნელოვნად განსხვავდება. "
 "ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1081
-#: src/backend/statistics/HypothesisTest.cpp:1144
+#: src/backend/statistics/HypothesisTest.cpp:1115
+#: src/backend/statistics/HypothesisTest.cpp:1178
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group means. "
@@ -8070,9 +8128,9 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფის საშუალო მნიშვნელოვნად არ "
 "განსხვავდება. ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1201
-#: src/backend/statistics/HypothesisTest.cpp:1259
-#: src/backend/statistics/HypothesisTest.cpp:1318
+#: src/backend/statistics/HypothesisTest.cpp:1235
+#: src/backend/statistics/HypothesisTest.cpp:1293
+#: src/backend/statistics/HypothesisTest.cpp:1352
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
@@ -8081,9 +8139,9 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფის განაწილება მნიშვნელოვნად "
 "განსხვავდება. ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1203
-#: src/backend/statistics/HypothesisTest.cpp:1261
-#: src/backend/statistics/HypothesisTest.cpp:1320
+#: src/backend/statistics/HypothesisTest.cpp:1237
+#: src/backend/statistics/HypothesisTest.cpp:1295
+#: src/backend/statistics/HypothesisTest.cpp:1354
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
@@ -8092,7 +8150,7 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 ჯგუფების განაწილება მნიშვნელოვნად არ განსხვავდება. "
 "ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1381
+#: src/backend/statistics/HypothesisTest.cpp:1415
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
@@ -8101,7 +8159,7 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფი მნიშვნელოვნად განსხვავდება. ნულოვანი "
 "ჰიპოთეზა უარყოფილი იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1383
+#: src/backend/statistics/HypothesisTest.cpp:1417
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. Fail "
@@ -8110,13 +8168,13 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 ჯგუფები მნიშვნელოვნად არ განსხვავდება. ნულოვანი "
 "ჰიპოთეზა უარყოფილი არ იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1409
-#: src/backend/statistics/HypothesisTest.cpp:1476
+#: src/backend/statistics/HypothesisTest.cpp:1443
+#: src/backend/statistics/HypothesisTest.cpp:1510
 #, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr "სვეტი '%1' მთელი რიცხვის ტიპის უნდა იყოს."
 
-#: src/backend/statistics/HypothesisTest.cpp:1448
+#: src/backend/statistics/HypothesisTest.cpp:1482
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
@@ -8125,7 +8183,7 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 დაკვირვებული სიხშირეები არ მისდევენ სიხშირის "
 "განაწილებას. ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1452
+#: src/backend/statistics/HypothesisTest.cpp:1486
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
@@ -8134,12 +8192,12 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 დაკვირვებული სიხშირეები მისდევენ მოსალოდნელ სიხშირის "
 "განაწილებას. ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1496
+#: src/backend/statistics/HypothesisTest.cpp:1530
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
 msgstr "გაუთვალისწინებელ ცხრილში თითოეული სვეტის ზომა ტოლი უნდა იყოს."
 
-#: src/backend/statistics/HypothesisTest.cpp:1512
+#: src/backend/statistics/HypothesisTest.cpp:1546
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are dependent. "
@@ -8148,7 +8206,7 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 ორივე კატეგორიული ცვლადი დამოკიდებულია. ნულოვანი "
 "განაწილება უარყოფილი იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1515
+#: src/backend/statistics/HypothesisTest.cpp:1549
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are independent. "
@@ -8157,53 +8215,53 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 ორივე კატეგორიული ცვლადი დამოუკიდებელია. ნულოვანი "
 "განაწილება უარყოფილი არ იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1533
+#: src/backend/statistics/HypothesisTest.cpp:1567
 #, kde-format
 msgid "Three columns are required."
 msgstr "აუცილებელია სამი სვეტი."
 
-#: src/backend/statistics/HypothesisTest.cpp:1542
+#: src/backend/statistics/HypothesisTest.cpp:1576
 #, kde-format
 msgid "Status column should be of integer type."
 msgstr "სტატუსის სვეტი მთელი რიცხვის ტიპის უნდა იყოს."
 
-#: src/backend/statistics/HypothesisTest.cpp:1547
+#: src/backend/statistics/HypothesisTest.cpp:1581
 #, kde-format
 msgid "Group column should be of integer type."
 msgstr "ჯგუფის სვეტი მთელი რიცხვის ტიპის უნდა იყოს."
 
-#: src/backend/statistics/HypothesisTest.cpp:1552
+#: src/backend/statistics/HypothesisTest.cpp:1586
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr "დროის, სტატუსის და ჯგუფის სვეტებს ტოლი ზომა უნდა ჰქონდეთ."
 
-#: src/backend/statistics/HypothesisTest.cpp:1571
+#: src/backend/statistics/HypothesisTest.cpp:1605
 #, kde-format
 msgid "Status column values must be either 0 or 1."
 msgstr "სტატუსის სვეტის მნიშვნელობები უნდა იყოს 0, ან 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1576
+#: src/backend/statistics/HypothesisTest.cpp:1610
 #, kde-format
 msgid "Group column values must be either 0 or 1."
 msgstr "ჯგუფის სვეტის მნიშვნელობები უნდა იყოს 0, ან 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1592
+#: src/backend/statistics/HypothesisTest.cpp:1626
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
 "დროის, სტატუსის და ჯგუფის სვეტებს ტოლი რაოდენობის მნიშვნელობები უნდა ჰქონდეთ."
 
-#: src/backend/statistics/HypothesisTest.cpp:1600
+#: src/backend/statistics/HypothesisTest.cpp:1634
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
 msgstr "ჯგუფს 1, სულ ცოტა, %1 სინჯი სჭირდება."
 
-#: src/backend/statistics/HypothesisTest.cpp:1605
+#: src/backend/statistics/HypothesisTest.cpp:1639
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
 msgstr "ჯგუფს 2, სულ ცოტა, %1 სინჯი სჭირდება."
 
-#: src/backend/statistics/HypothesisTest.cpp:1617
+#: src/backend/statistics/HypothesisTest.cpp:1651
 #, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
@@ -8212,7 +8270,7 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 გადარჩენის რკალები საკმაოდ განსხვავდება. ნულოვანი "
 "ჰიპოთეზა უარყოფილი იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1620
+#: src/backend/statistics/HypothesisTest.cpp:1654
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
@@ -8221,13 +8279,61 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 გადარჩენის რკალები არ განსხვავდება. ნულოვანი ჰიპოთეზა "
 "უარყოფილი არ იქნება"
 
-#: src/backend/statistics/HypothesisTest.cpp:1716
+#: src/backend/statistics/HypothesisTest.cpp:1695
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the survival curves are significantly "
+#| "different. Reject the null Hypothesis"
+msgid ""
+"At the significance level %1, there is a significant monotonic trend in the "
+"data. Reject the null hypothesis."
+msgstr ""
+"მნიშვნელობის დონეზე %1 გადარჩენის რკალები საკმაოდ განსხვავდება. ნულოვანი "
+"ჰიპოთეზა უარყოფილი იქნება"
+
+#: src/backend/statistics/HypothesisTest.cpp:1698
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the survival curves are significantly "
+#| "different. Reject the null Hypothesis"
+msgid ""
+"At the significance level %1, there is a significant positive monotonic "
+"trend. Reject the null hypothesis."
+msgstr ""
+"მნიშვნელობის დონეზე %1 გადარჩენის რკალები საკმაოდ განსხვავდება. ნულოვანი "
+"ჰიპოთეზა უარყოფილი იქნება"
+
+#: src/backend/statistics/HypothesisTest.cpp:1701
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the survival curves are significantly "
+#| "different. Reject the null Hypothesis"
+msgid ""
+"At the significance level %1, there is a significant negative monotonic "
+"trend. Reject the null hypothesis."
+msgstr ""
+"მნიშვნელობის დონეზე %1 გადარჩენის რკალები საკმაოდ განსხვავდება. ნულოვანი "
+"ჰიპოთეზა უარყოფილი იქნება"
+
+#: src/backend/statistics/HypothesisTest.cpp:1703
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, no significant difference between groups. "
+#| "Fail to reject the null Hypothesis"
+msgid ""
+"At the significance level %1, no significant monotonic trend detected. Fail "
+"to reject the null hypothesis."
+msgstr ""
+"მნიშვნელობის დონეზე %1 ჯგუფები მნიშვნელოვნად არ განსხვავდება. ნულოვანი "
+"ჰიპოთეზა უარყოფილი არ იქნება"
+
+#: src/backend/statistics/HypothesisTest.cpp:1796
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
 #, kde-format
 msgid "Parametric"
 msgstr "პარამეტრული"
 
-#: src/backend/statistics/HypothesisTest.cpp:1746
+#: src/backend/statistics/HypothesisTest.cpp:1826
 #, kde-format
 msgid "Non-Parametric"
 msgstr "არაპარამეტრული"
@@ -11478,7 +11584,7 @@ msgstr "შექმნის გამომღებს მონაცმე�
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
 #: src/frontend/MainWin.cpp:1192 src/frontend/SettingsDialog.cpp:66
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:125
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:206
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -14147,7 +14253,7 @@ msgstr "გამრავლებული π-ზე"
 #: src/frontend/dockwidgets/AxisDock.cpp:319
 #, kde-format
 msgid "Angle (DMS)"
-msgstr ""
+msgstr "კუთხე (DMS)"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:322
 #, kde-format
@@ -14287,7 +14393,7 @@ msgstr "%1 ღერძები: ნიმუში \"%2\" ჩაიტვი�
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:238
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:254
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1031
 #, kde-format
@@ -14461,12 +14567,12 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #. i18n: ectx: property (text), widget (QLabel, lVariables)
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:269
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:352
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:382
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:355
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:385
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:423
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:441
 #: src/frontend/ui/dockwidgets/matrixdock.ui:117
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:148
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:422
 #, kde-format
 msgid "Columns:"
@@ -14476,8 +14582,8 @@ msgstr "სვეტი:"
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:273
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:354
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:384
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:357
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:387
 #: src/frontend/spreadsheet/GoToDialog.cpp:49
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:169
 #: src/frontend/ui/dockwidgets/valuewidget.ui:81
@@ -15128,7 +15234,7 @@ msgstr ""
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 ჰისტოგრამა: ნიმუში \"%2\" ჩატვირთულია"
 
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:117
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:118
 #, kde-format
 msgid ""
 "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
@@ -15148,8 +15254,18 @@ msgstr ""
 "დამოუკიდებელ სინჯს ტოლი საშუალო</li><li><b>%6</b> - ამოწმებს, აქვს თუ არა "
 "სამ ან მეტ დაკავშირებულ/გამეორებულ გაზომილ მნიშვნელობას ტოლი საშუალო</li>"
 
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
-#, kde-format
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:132
+#, fuzzy, kde-format
+#| msgid ""
+#| "<li><b>%1</b> - tests differences in medians between two independent "
+#| "groups</li><li><b>%2</b> - tests if the median difference between two "
+#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
+#| "among three or more independent groups</li><li><b>%4</b> - tests "
+#| "differences in medians among three or more related/repeated measurements</"
+#| "li><li><b>%5</b> - tests differences in survival distributions between "
+#| "two or more groups</li><li><b>%6</b> - tests if two categorical variables "
+#| "are independent of each other</li><li><b>%7</b> - tests if observed data "
+#| "follows a specified theoretical distribution</li></ul>"
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15157,9 +15273,9 @@ msgid ""
 "or more independent groups</li><li><b>%4</b> - tests differences in medians "
 "among three or more related/repeated measurements</li><li><b>%5</b> - tests "
 "differences in survival distributions between two or more groups</li><li><b>"
-"%6</b> - tests if two categorical variables are independent of each other</"
-"li><li><b>%7</b> - tests if observed data follows a specified theoretical "
-"distribution</li></ul>"
+"%6</b> - tests for a trend in data over time</li><li><b>%7</b> - tests if "
+"two categorical variables are independent of each other</li><li><b>%8</b> - "
+"tests if observed data follows a specified theoretical distribution</li></ul>"
 msgstr ""
 "<li><b>%1</b> - ამოწმებს ორი დამოუკიდებელი ჯგუფის სხვაობას მედიანებში</"
 "li><li><b>%2</b> - ამოწმებს, არის თუ არა ორი დაკავშირებული სინჯის მედიანური "
@@ -15171,7 +15287,7 @@ msgstr ""
 "დამოუკიდებელი ერთმანეთისგან</li><li><b>%7</b> - ამოწმებს, მიჰყვება, თუ არა "
 "დაკვირვებული მონაცემები მითითებულ თეორიულ განაწილებას</li></ul>"
 
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:315
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr "არჩეულ შემოწმებას, სულ ცოტა %1 და მაქს %2 არაცარიელი ცვლადი სჭირდება."
@@ -15679,18 +15795,24 @@ msgstr "სეზონური კომპონენტის დასა�
 msgid "%1 seasonal decompositions: template \"%2\" loaded"
 msgstr "%1 სეზონური დაშლები: ნიმუში \"%2\" ჩაიტვირთა"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:50
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:51
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr "ჩართეთ მიბმა, რომ დაასინქრონოთ მწკრივების რაოდენობა სხვა ელცხრილთან"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:54
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:55
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "ელცხრილი, რომელთანაც მწკრივების რაოდენობის სინქრონიზაცია მოხდება"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
+#, fuzzy, kde-format
+#| msgid "Columns Statistics Spreadsheet"
+msgid "Show Columns Statistics Spreadsheet"
+msgstr "სვეტის სტატისტიკის ელცხრილი"
+
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 ელცხრილი: ნიმუში \"%2\" ჩაიტვირთა"
@@ -16937,7 +17059,7 @@ msgstr "აირჩიეთ ფაილი ფუნქციის აღწ
 #: src/frontend/ui/dockwidgets/runchartdock.ui:142
 #: src/frontend/ui/dockwidgets/scriptdock.ui:53
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:43
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:184
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:213
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:153
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:184
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
@@ -19067,28 +19189,24 @@ msgid "Fourier Filter of '%1'"
 msgstr "'%1'-ის ფურიეს ფილტრი"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:798
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgid "Fourier Transform of '%1'"
-msgstr "ფურიეს გარდაქმნა"
+msgstr "'%1'-ის ფურიეს გარდაქმნა"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:801
-#, fuzzy, kde-format
-#| msgid "Hilbert Transform"
+#, kde-format
 msgid "Hilbert Transform of '%1'"
-msgstr "ჰილბერდის გარდაქმნა"
+msgstr "'%1'-ის ჰილბერდის გარდაქმნა"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:804
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Convolution of '%1'"
-msgstr "'%1'-ის ინტერპოლაცია"
+msgstr "'%1'-ის კონვოლუცია"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:807
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Correlation of '%1'"
-msgstr "'%1'-ის ინტერპოლაცია"
+msgstr "'%1'-ის კორელაცია"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:813
 #, kde-format
@@ -19594,10 +19712,9 @@ msgid "Column Statistics..."
 msgstr "სვეტის სტატისტიკა..."
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:340
-#, fuzzy, kde-format
-#| msgid "Column Statistics Spreadsheet"
+#, kde-format
 msgid "Columns Statistics Spreadsheet"
-msgstr "სვეტის სტატისტიკის ცხრილი"
+msgstr "სვეტის სტატისტიკის ელცხრილი"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:346
 #, kde-format
@@ -20456,7 +20573,7 @@ msgstr "Y- შეცდომის ტიპი:"
 #: src/frontend/ui/dockwidgets/runchartdock.ui:116
 #: src/frontend/ui/dockwidgets/scriptdock.ui:27
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:17
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:96
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:78
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:395
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:181
@@ -23641,7 +23758,7 @@ msgstr "მთლიანი ფაილის წაკითხვა"
 
 #. i18n: ectx: property (text), widget (QLabel, lRowCount)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:94
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:216
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:164
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:401
 #, kde-format
 msgid "Rows:"
@@ -24049,12 +24166,30 @@ msgstr "ტრენდის გადასვლა:"
 msgid "Low-Pass Jump:"
 msgstr "დაბალი გავლის გადასვლა:"
 
+#. i18n: ectx: property (text), widget (QLabel, lShowComments)
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:17
+#, kde-format
+msgid "Comments:"
+msgstr "კომენტარები:"
+
+#. i18n: ectx: property (text), widget (QLabel, lLinking)
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:29
+#, kde-format
+msgid "Linking"
+msgstr "მიბმა"
+
+#. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:124
+#, kde-format
+msgid "Sparklines:"
+msgstr "ნაპერწკლის ხაზები:"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveData)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:17
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:154
 #: src/frontend/ui/settingsgeneralpage.ui:17
 #: src/frontend/ui/settingsgeneralpage.ui:51
 #: src/frontend/ui/settingsgeneralpage.ui:83
@@ -24063,29 +24198,20 @@ msgstr "დაბალი გავლის გადასვლა:"
 msgid "Enabled"
 msgstr "ჩართულია"
 
-#. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:177
-#, kde-format
-msgid "Sparklines:"
-msgstr "ნაპერწკლის ხაზები:"
-
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:199
+#. i18n: ectx: property (text), widget (QLabel, lAppearance)
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:251
+#: src/frontend/ui/settingsspreadsheetpage.ui:23
 #, kde-format
-msgid "Column Header"
-msgstr "სვეტის თავსართი"
+msgid "Header"
+msgstr "სათაური"
 
-#. i18n: ectx: property (text), widget (QLabel, lShowComments)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:223
-#, kde-format
-msgid "Comments:"
-msgstr "კომენტარები:"
-
-#. i18n: ectx: property (text), widget (QLabel, lLinking)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:235
-#, kde-format
-msgid "Linking"
-msgstr "მიბმა"
+#. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistics:"
+msgstr "სტატისტიკა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviation)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:190
@@ -25510,12 +25636,6 @@ msgstr "ავტომატური შენახვა"
 #, kde-format
 msgid "TODO"
 msgstr "განრიგის სია"
-
-#. i18n: ectx: property (text), widget (QLabel, lAppearance)
-#: src/frontend/ui/settingsspreadsheetpage.ui:23
-#, kde-format
-msgid "Header"
-msgstr "სათაური"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
@@ -27048,6 +27168,9 @@ msgstr "გადაყვანის პროცესი ჩავარდ�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
+
+#~ msgid "Column Header"
+#~ msgstr "სვეტის თავსართი"
 
 #~ msgid ""
 #~ "Add a new xy-curve that is defined as a function of other xy-curves "
