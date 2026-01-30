@@ -1055,7 +1055,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1075,7 +1075,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1095,7 +1095,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1117,7 +1117,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1141,13 +1141,17 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
 			}
-			// copy the sorted column
+			// copy the sorted column and replicate masks from temp
 			col->copy(tempCol.get(), 0, 0, rows);
+			col->clearMasks();
+			for (int i = 0; i < rows; ++i)
+				if (tempCol->isMasked(i))
+					col->setMasked(i, true);
 		}
 	} else { // sort with leading column
 		DEBUG("	sort with leading column")
@@ -1179,22 +1183,33 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 
 				// copy the sorted column
-				if (col == leading) // update all rows
+				if (col == leading) { // update all rows
 					col->copy(tempCol.get(), 0, 0, rows);
-				else { // do not overwrite unused cols
+					col->clearMasks();
+					for (int i = 0; i < rows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+				} else { // do not overwrite unused cols
 					std::unique_ptr<Column> tempInvalidCol(new Column(QStringLiteral("temp2"), col->columnMode()));
 					for (int i = 0; i < invalidRows; i++) {
 						const int idx = invalidIndex.at(i);
 						// too slow: tempInvalidCol->copy(col, idx, i, 1);
 						tempInvalidCol->setFromColumn(i, col, idx);
-						tempInvalidCol->setMasked(col->isMasked(idx));
+						tempInvalidCol->setMasked(i, col->isMasked(idx));
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+					col->clearMasks();
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < invalidRows; ++i)
+						if (tempInvalidCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
@@ -1218,10 +1233,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
 				col->copy(tempCol.get(), 0, 0, rows);
+				col->clearMasks();
+				for (int i = 0; i < rows; ++i)
+					if (tempCol->isMasked(i))
+						col->setMasked(i, true);
 			}
 			break;
 		}
@@ -1243,10 +1262,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
 				col->copy(tempCol.get(), 0, 0, rows);
+				col->clearMasks();
+				for (int i = 0; i < rows; ++i)
+					if (tempCol->isMasked(i))
+						col->setMasked(i, true);
 			}
 			break;
 		}
@@ -1275,22 +1298,33 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 
 				// copy the sorted column
-				if (col == leading) // update all rows
+				if (col == leading) { // update all rows
 					col->copy(tempCol.get(), 0, 0, rows);
-				else { // do not overwrite unused cols
+					col->clearMasks();
+					for (int i = 0; i < rows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+				} else { // do not overwrite unused cols
 					std::unique_ptr<Column> tempEmptyCol(new Column(QStringLiteral("temp2"), col->columnMode()));
 					for (int i = 0; i < emptyRows; i++) {
 						const int idx = emptyIndex.at(i);
 						// too slow: tempEmptyCol->copy(col, idx, i, 1);
 						tempEmptyCol->setFromColumn(i, col, idx);
-						tempEmptyCol->setMasked(col->isMasked(idx));
+						tempEmptyCol->setMasked(i, col->isMasked(idx));
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempEmptyCol.get(), 0, filledRows, emptyRows);
+					col->clearMasks();
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < emptyRows; ++i)
+						if (tempEmptyCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
@@ -1321,21 +1355,32 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
-				if (col == leading) // update all rows
+				if (col == leading) { // update all rows
 					col->copy(tempCol.get(), 0, 0, rows);
-				else { // do not overwrite unused cols
+					col->clearMasks();
+					for (int i = 0; i < rows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+				} else { // do not overwrite unused cols
 					std::unique_ptr<Column> tempInvalidCol(new Column(QStringLiteral("temp2"), col->columnMode()));
 					for (int i = 0; i < invalidRows; i++) {
 						const int idx = invalidIndex.at(i);
 						// too slow: tempInvalidCol->copy(col, idx, i, 1);
 						tempInvalidCol->setFromColumn(i, col, idx);
-						tempInvalidCol->setMasked(col->isMasked(idx));
+						tempInvalidCol->setMasked(i, col->isMasked(idx));
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+					col->clearMasks();
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < invalidRows; ++i)
+						if (tempInvalidCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
