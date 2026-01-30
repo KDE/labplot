@@ -1298,8 +1298,8 @@ void SpreadsheetTest::testMaskingRowRemovalUndoRedo() {
 
 	// populate initial values
 	for (int r = 0; r < 10; ++r) {
-		col0->setValueAt(r, static_cast<double>(r));          // 0..9
-		col1->setValueAt(r, static_cast<double>(100 + r));    // 100..109
+		col0->setValueAt(r, static_cast<double>(r)); // 0..9
+		col1->setValueAt(r, static_cast<double>(100 + r)); // 100..109
 	}
 
 	// set masking intervals on both columns: [2,4] and [7,8]
