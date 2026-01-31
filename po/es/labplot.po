@@ -1,16 +1,16 @@
 # Spanish translations for labplot.po package.
-# Copyright (C) 2014-2025 This file is copyright:
+# Copyright (C) 2014-2026 This file is copyright:
 # This file is distributed under the same license as the labplot package.
 # Automatically generated, 2014.
 #
-# SPDX-FileCopyrightText: 2014, 2015, 2017, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2014, 2015, 2017, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019 Javier Vinal <fjvinal@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2025-11-30 12:08+0100\n"
+"PO-Revision-Date: 2026-01-30 12:23+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -9709,7 +9709,7 @@ msgstr "Error: No se ha podido inicializar la función de splin."
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1588
 #, kde-format
 msgid "x values must be monotonically increasing."
-msgstr "los valores x deben incrementarse monotonámente."
+msgstr "los valores x deben incrementarse monótonamente."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1591
 #, kde-format
@@ -10005,7 +10005,7 @@ msgstr "El número de puntos de datos x e y debe ser igual."
 msgid "interpolation failed since x data is not strictly monotonic increasing!"
 msgstr ""
 "la interpolación ha fallado porque los datos de x no aumentan de forma "
-"estrictamente repetitiva."
+"estrictamente monótona."
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
