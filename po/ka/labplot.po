@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-30 00:40+0000\n"
-"PO-Revision-Date: 2026-01-29 03:53+0100\n"
+"POT-Creation-Date: 2026-01-31 00:39+0000\n"
+"PO-Revision-Date: 2026-01-30 04:31+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -244,7 +244,7 @@ msgid "Y-Error -"
 msgstr "Y-შეცდომა -"
 
 #: src/backend/core/AbstractColumn.cpp:224
-#: src/backend/datasources/filters/AsciiFilter.cpp:556
+#: src/backend/datasources/filters/AsciiFilter.cpp:614
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -265,7 +265,7 @@ msgstr "დიდი მთელი რიცხვი"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:230
-#: src/backend/datasources/filters/AsciiFilter.cpp:557
+#: src/backend/datasources/filters/AsciiFilter.cpp:615
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
 #: src/frontend/ActionsManager.cpp:517
 #: src/frontend/notebook/NotebookView.cpp:96
@@ -1194,31 +1194,31 @@ msgstr ""
 "table><br><br>თუ მოცემული გამოთქმა ცარიელია, ფორმატი ავტომატურად "
 "გამოვლინდება."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:223
+#: src/backend/datasources/filters/AsciiFilter.cpp:224
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "სვეტების რაოდენობა: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:225
+#: src/backend/datasources/filters/AsciiFilter.cpp:226
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "ხაზების რაოდენობა: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:467
-#: src/backend/datasources/filters/AsciiFilter.cpp:1251
+#: src/backend/datasources/filters/AsciiFilter.cpp:515
+#: src/backend/datasources/filters/AsciiFilter.cpp:1365
 #: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "სვეტი %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:541
-#: src/backend/datasources/filters/AsciiFilter.cpp:1274
+#: src/backend/datasources/filters/AsciiFilter.cpp:598
+#: src/backend/datasources/filters/AsciiFilter.cpp:1391
 #, kde-format
 msgid "Timestamp"
 msgstr "დროის შტამპი"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:545
-#: src/backend/datasources/filters/AsciiFilter.cpp:1278
+#: src/backend/datasources/filters/AsciiFilter.cpp:603
+#: src/backend/datasources/filters/AsciiFilter.cpp:1396
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1226,17 +1226,29 @@ msgstr "დროის შტამპი"
 msgid "Index"
 msgstr "ინდექსი"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:558
+#: src/backend/datasources/filters/AsciiFilter.cpp:616
 #, kde-format
 msgid "DateTime"
 msgstr "თარიღი და დრო"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:559
+#: src/backend/datasources/filters/AsciiFilter.cpp:617
+#, fuzzy, kde-format
+#| msgid "Timestamp"
+msgid "Timestamp (Unix)"
+msgstr "დროის შტამპი"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:618
+#, fuzzy, kde-format
+#| msgid "Timestamp"
+msgid "Timestamp (Windows)"
+msgstr "დროის შტამპი"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
 msgid "Int"
 msgstr "Int"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:560
+#: src/backend/datasources/filters/AsciiFilter.cpp:620
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -7652,32 +7664,32 @@ msgstr "ჰიპოთეზის შემოწმება"
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "No monotonic trend exists"
-msgstr ""
+msgstr "მონოტონური ტენდენცია არ არსებობს"
 
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "A monotonic trend exists"
-msgstr ""
+msgstr "მონოტონური ტენდენცია არსებობს"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "No negative monotonic trend exists"
-msgstr ""
+msgstr "უარყოფითი მონოტონური ტენდენცია არ არსებობს"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "A negative monotonic trend exists"
-msgstr ""
+msgstr "უარყოფითი მონოტონური ტენდენცია არსებობს"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "No positive monotonic trend exits"
-msgstr ""
+msgstr "დადებითი მონოტონური ტენდენცია არ არსებობს"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "A positive monotonic trend exists"
-msgstr ""
+msgstr "დადებითი მონოტონური ტენდენცია არსებობს"
 
 #: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
@@ -7745,10 +7757,9 @@ msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr "ერთმხრივი ANOVA გამეორებული გაზომვის შემოწმებით"
 
 #: src/backend/statistics/HypothesisTest.cpp:345
-#, fuzzy, kde-format
-#| msgid "Mann-Whitney U Test"
+#, kde-format
 msgid "Mann-Kendall Test"
-msgstr "მან-უიტნის U შემოწმება"
+msgstr "მან-კენდალის შემოწმება"
 
 #: src/backend/statistics/HypothesisTest.cpp:519
 #, kde-format
@@ -8042,23 +8053,22 @@ msgstr "სულ რაოდენობა 2"
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Kendall's Tau"
-msgstr ""
+msgstr "კენდალის ტაუ"
 
 #: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Sen's Slope"
-msgstr ""
+msgstr "სენის დახრა"
 
 #: src/backend/statistics/HypothesisTest.cpp:626
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Size"
-msgstr "მაგალითის ზომა:"
+msgstr "სემპლის ზომა"
 
 #: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
@@ -8280,52 +8290,40 @@ msgstr ""
 "უარყოფილი არ იქნება"
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. Reject the null hypothesis."
 msgstr ""
 "მნიშვნელობის დონეზე %1 გადარჩენის რკალები საკმაოდ განსხვავდება. ნულოვანი "
-"ჰიპოთეზა უარყოფილი იქნება"
+"ჰიპოთეზა უარყოფილი იქნება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"მნიშვნელობის დონეზე %1 გადარჩენის რკალები საკმაოდ განსხვავდება. ნულოვანი "
-"ჰიპოთეზა უარყოფილი იქნება"
+"მნიშვნელობის დონეზე %1 მნიშვნელოვანი დადებითი მონოტონური ტენდენცია არსებობს. "
+"ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1701
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"მნიშვნელობის დონეზე %1 გადარჩენის რკალები საკმაოდ განსხვავდება. ნულოვანი "
-"ჰიპოთეზა უარყოფილი იქნება"
+"მნიშვნელობის დონეზე %1 მნიშვნელოვანი დადებითი უარყოფითი ტენდენცია არსებობს. "
+"ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1703
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. Fail "
 "to reject the null hypothesis."
 msgstr ""
-"მნიშვნელობის დონეზე %1 ჯგუფები მნიშვნელოვნად არ განსხვავდება. ნულოვანი "
-"ჰიპოთეზა უარყოფილი არ იქნება"
+"მნიშვნელობის დონეზე %1 მნიშვნელოვანი მონოტონური ტენდენცია დადგენილი არაა. "
+"ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1796
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -12438,7 +12436,18 @@ msgid "Custom column data types, comma separated"
 msgstr "მორგებული სვეტის მონაცემის ტიპები, მძიმით გამოყოფილი"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If not empty, the number of columns must match the number of column names "
+#| "if provided and it must match the number of columns in the imported file."
+#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
+#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
+#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
+#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
+#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
+#| "td><td>Datetime with the format from the datetime text box if not empty, "
+#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
+#| "td></tr></table>"
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12448,8 +12457,10 @@ msgid ""
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
 "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
 "td><td>Datetime with the format from the datetime text box if not empty, "
-"otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-"td></tr></table>"
+"otherwise automatically determined.</td></tr><tr><td>%5</td><td>Number of "
+"seconds since January 1, 1970 (UTC), converted to DateTime.</td></tr><tr><td>"
+"%6</td><td>Number of 100-nanosecond intervals since January 1, 1601 (UTC), "
+"converted to DateTime.</td></tr><tr><td>%7</td><td>A text.</td></tr></table>"
 msgstr ""
 "თუ ცარიელი არ არის, სვეტების რაოდენობა უნდა შეესაბამებოდეს სვეტის სახელების "
 "რაოდენობას, თუ ეს მოცემულია და ის უნდა შეესაბამებოდეს იმპორტირებულ ფაილში "
@@ -12462,15 +12473,16 @@ msgstr ""
 "წინააღმდეგ შემთხვევაში ავტომატურად განისაზღვრება.</td></tr><tr><td>%5</"
 "td><td>ტექსტი.</td></tr></table>"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:86
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
 msgid "%1 or %2"
 msgstr "%1 ან %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:197
-#, kde-format
-msgid "Datatype not found: %1"
-msgstr "მონაცემების ტიპი ვერ ვიპოვე: %1"
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:199
+#, fuzzy, kde-format
+#| msgid "Invalid metadata file"
+msgid "Invalid data type '%1'"
+msgstr "არასწორი მეტამონაცემების ფაილი"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -15255,17 +15267,7 @@ msgstr ""
 "სამ ან მეტ დაკავშირებულ/გამეორებულ გაზომილ მნიშვნელობას ტოლი საშუალო</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:132
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests if two categorical variables "
-#| "are independent of each other</li><li><b>%7</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15285,7 +15287,9 @@ msgstr ""
 "%5</b> - ამოწმებს სხვაობას გადარჩენის განაწილებებს შორის ორი ან მეტი "
 "ჯგუფისთვის</li><li><b>%6</b> - ამოწმებს არის თუ არა ორი კატეგორიული ცვლადი "
 "დამოუკიდებელი ერთმანეთისგან</li><li><b>%7</b> - ამოწმებს, მიჰყვება, თუ არა "
-"დაკვირვებული მონაცემები მითითებულ თეორიულ განაწილებას</li></ul>"
+"დაკვირვებული მონაცემები მითითებულ თეორიულ განაწილებას</li></ul><b>%8</b> - "
+"ამოწმებს, მიყვება თუ არა არსებული მონაცემები მითითებულ თეორიულ განაწილებას</"
+"li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:315
 #, kde-format
@@ -15807,10 +15811,9 @@ msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "ელცხრილი, რომელთანაც მწკრივების რაოდენობის სინქრონიზაცია მოხდება"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
-#, fuzzy, kde-format
-#| msgid "Columns Statistics Spreadsheet"
+#, kde-format
 msgid "Show Columns Statistics Spreadsheet"
-msgstr "სვეტის სტატისტიკის ელცხრილი"
+msgstr "სვეტის სტატისტიკის ელცხრილის ჩვენება"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
 #, kde-format
@@ -24208,10 +24211,9 @@ msgstr "სათაური"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistics:"
-msgstr "სტატისტიკა"
+msgstr "სტატისტიკა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviation)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:190
@@ -27169,6 +27171,9 @@ msgstr "გადაყვანის პროცესი ჩავარდ�
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
 
+#~ msgid "Datatype not found: %1"
+#~ msgstr "მონაცემების ტიპი ვერ ვიპოვე: %1"
+
 #~ msgid "Column Header"
 #~ msgstr "სვეტის თავსართი"
 
@@ -27784,9 +27789,6 @@ msgstr "ფაილის გახსნა შეუძლებელია:
 
 #~ msgid "%1: move down"
 #~ msgstr "%1: ჩამოწევა"
-
-#~ msgid "Invalid metadata file"
-#~ msgstr "არასწორი მეტამონაცემების ფაილი"
 
 #~ msgid "Failed to download the dataset"
 #~ msgstr "მონაცემების სეტის გადმოწერა ჩავარდა"

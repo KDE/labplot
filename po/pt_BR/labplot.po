@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-30 00:40+0000\n"
-"PO-Revision-Date: 2026-01-29 06:55-0300\n"
+"POT-Creation-Date: 2026-01-31 00:39+0000\n"
+"PO-Revision-Date: 2026-01-30 08:47-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -248,7 +248,7 @@ msgid "Y-Error -"
 msgstr "Erro-Y -"
 
 #: src/backend/core/AbstractColumn.cpp:224
-#: src/backend/datasources/filters/AsciiFilter.cpp:556
+#: src/backend/datasources/filters/AsciiFilter.cpp:614
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -269,7 +269,7 @@ msgstr "Inteiro Grande"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:230
-#: src/backend/datasources/filters/AsciiFilter.cpp:557
+#: src/backend/datasources/filters/AsciiFilter.cpp:615
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
 #: src/frontend/ActionsManager.cpp:517
 #: src/frontend/notebook/NotebookView.cpp:96
@@ -1198,31 +1198,31 @@ msgstr ""
 "td><td>O dia é Domingo</td></tr></table><br><br>Caso a expressão fornecida "
 "esteja vazia, o formato será detectado automaticamente."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:223
+#: src/backend/datasources/filters/AsciiFilter.cpp:224
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Número de colunas: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:225
+#: src/backend/datasources/filters/AsciiFilter.cpp:226
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Número de linhas: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:467
-#: src/backend/datasources/filters/AsciiFilter.cpp:1251
+#: src/backend/datasources/filters/AsciiFilter.cpp:515
+#: src/backend/datasources/filters/AsciiFilter.cpp:1365
 #: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "Coluna %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:541
-#: src/backend/datasources/filters/AsciiFilter.cpp:1274
+#: src/backend/datasources/filters/AsciiFilter.cpp:598
+#: src/backend/datasources/filters/AsciiFilter.cpp:1391
 #, kde-format
 msgid "Timestamp"
 msgstr "Marca de tempo"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:545
-#: src/backend/datasources/filters/AsciiFilter.cpp:1278
+#: src/backend/datasources/filters/AsciiFilter.cpp:603
+#: src/backend/datasources/filters/AsciiFilter.cpp:1396
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1230,17 +1230,29 @@ msgstr "Marca de tempo"
 msgid "Index"
 msgstr "Índice"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:558
+#: src/backend/datasources/filters/AsciiFilter.cpp:616
 #, kde-format
 msgid "DateTime"
 msgstr "Data e Hora"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:559
+#: src/backend/datasources/filters/AsciiFilter.cpp:617
+#, fuzzy, kde-format
+#| msgid "Timestamp"
+msgid "Timestamp (Unix)"
+msgstr "Marca de tempo"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:618
+#, fuzzy, kde-format
+#| msgid "Timestamp"
+msgid "Timestamp (Windows)"
+msgstr "Marca de tempo"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
 msgid "Int"
 msgstr "Int"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:560
+#: src/backend/datasources/filters/AsciiFilter.cpp:620
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -7662,32 +7674,32 @@ msgstr "Teste da hipótese"
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "No monotonic trend exists"
-msgstr ""
+msgstr "Não existe uma tendência monotônica"
 
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "A monotonic trend exists"
-msgstr ""
+msgstr "Existe uma tendência monotônica"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "No negative monotonic trend exists"
-msgstr ""
+msgstr "Não existe uma tendência monotônica negativa"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "A negative monotonic trend exists"
-msgstr ""
+msgstr "Existe uma tendência monotônica negativa"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "No positive monotonic trend exits"
-msgstr ""
+msgstr "Não existe uma tendência monotônica positiva"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "A positive monotonic trend exists"
-msgstr ""
+msgstr "Existe uma tendência monotônica positiva"
 
 #: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
@@ -7755,10 +7767,9 @@ msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr "Teste ANOVA de uma via com medidas repetidas"
 
 #: src/backend/statistics/HypothesisTest.cpp:345
-#, fuzzy, kde-format
-#| msgid "Mann-Whitney U Test"
+#, kde-format
 msgid "Mann-Kendall Test"
-msgstr "Teste U de Mann-Whitney"
+msgstr "Teste de Mann-Kendall"
 
 #: src/backend/statistics/HypothesisTest.cpp:519
 #, kde-format
@@ -8052,23 +8063,22 @@ msgstr "Contagem total 2"
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Kendall's Tau"
-msgstr ""
+msgstr "'Tau' de Kendall"
 
 #: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Sen's Slope"
-msgstr ""
+msgstr "Inclinação de Sen"
 
 #: src/backend/statistics/HypothesisTest.cpp:626
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Size"
-msgstr "Tamanho da amostra:"
+msgstr "Tamanho da amostra"
 
 #: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
@@ -8290,52 +8300,40 @@ msgstr ""
 "de sobrevivência. Não é possível rejeitar a hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. Reject the null hypothesis."
 msgstr ""
-"No nível de significância %1, as curvas de sobrevivência são "
-"significativamente diferentes. Rejeitar a hipótese nula."
+"Ao nível de significância de %1, existe uma tendência monotônica "
+"significativa nos dados. Rejeitar a hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"No nível de significância %1, as curvas de sobrevivência são "
-"significativamente diferentes. Rejeitar a hipótese nula."
+"Ao nível de significância de %1, existe uma tendência monotônica positiva "
+"significativa nos dados. Rejeitar a hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1701
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"No nível de significância %1, as curvas de sobrevivência são "
-"significativamente diferentes. Rejeitar a hipótese nula."
+"Ao nível de significância de %1, existe uma tendência monotônica negativa "
+"significativa nos dados. Rejeitar a hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1703
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. Fail "
 "to reject the null hypothesis."
 msgstr ""
-"No nível de significância %1, não há diferença significativa entre os "
-"grupos. Falha em rejeitar a hipótese nula"
+"Ao nível de significância de %1, não foi detectada nenhuma tendência "
+"monotônica significativa. Falha ao rejeitar a hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1796
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -12453,7 +12451,18 @@ msgid "Custom column data types, comma separated"
 msgstr "Tipos de dados de coluna personalizados, separados por vírgula"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If not empty, the number of columns must match the number of column names "
+#| "if provided and it must match the number of columns in the imported file."
+#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
+#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
+#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
+#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
+#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
+#| "td><td>Datetime with the format from the datetime text box if not empty, "
+#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
+#| "td></tr></table>"
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12463,8 +12472,10 @@ msgid ""
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
 "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
 "td><td>Datetime with the format from the datetime text box if not empty, "
-"otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-"td></tr></table>"
+"otherwise automatically determined.</td></tr><tr><td>%5</td><td>Number of "
+"seconds since January 1, 1970 (UTC), converted to DateTime.</td></tr><tr><td>"
+"%6</td><td>Number of 100-nanosecond intervals since January 1, 1601 (UTC), "
+"converted to DateTime.</td></tr><tr><td>%7</td><td>A text.</td></tr></table>"
 msgstr ""
 "Se não estiver vazio, o número de colunas deve corresponder ao número de "
 "nomes de colunas, se fornecido, e deve corresponder ao número de colunas no "
@@ -12478,15 +12489,15 @@ msgstr ""
 "determinada automaticamente.</td></tr><tr><td>%5</td><td>Um texto.</td></"
 "tr></table>"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:86
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
 msgid "%1 or %2"
 msgstr "%1 ou %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:197
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:199
 #, kde-format
-msgid "Datatype not found: %1"
-msgstr "Tipo de dados não encontrado: %1"
+msgid "Invalid data type '%1'"
+msgstr ""
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -15281,17 +15292,7 @@ msgstr ""
 "ou mais medições relacionadas/repetidas têm a mesma média</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:132
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests if two categorical variables "
-#| "are independent of each other</li><li><b>%7</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15309,9 +15310,10 @@ msgstr ""
 "medianas entre três ou mais grupos independentes</li><li><b>%4</b> - testa "
 "diferenças nas medianas entre três ou mais medições relacionadas/repetidas</"
 "li><li><b>%5</b> - testa diferenças nas distribuições de sobrevivência entre "
-"dois ou mais grupos</li><li><b>%6</b> - testa se duas variáveis ​​categóricas "
-"são independentes uma da outra</li><li><b>%7</b> - testa se os dados "
-"observados seguem uma distribuição teórica especificada</li></ul>"
+"dois ou mais grupos</li><li><b>%6</b> - testa uma tendência nos dados no "
+"tempo</li><li><li><b>%7</b> - testa se duas variáveis ​​categóricas são "
+"independentes uma da outra</li><li><b>%8</b> - testa se os dados observados "
+"seguem uma distribuição teórica especificada</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:315
 #, kde-format
@@ -15835,10 +15837,9 @@ msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "Planilha para sincronizar o número de linhas com"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
-#, fuzzy, kde-format
-#| msgid "Columns Statistics Spreadsheet"
+#, kde-format
 msgid "Show Columns Statistics Spreadsheet"
-msgstr "Colunas de estatísticas da planilha"
+msgstr "Mostrar colunas de estatísticas da planilha"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
 #, kde-format
@@ -24255,10 +24256,9 @@ msgstr "Cabeçalho"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistics:"
-msgstr "Estatísticas"
+msgstr "Estatísticas:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviation)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:190
@@ -27218,6 +27218,9 @@ msgstr "processo do convert falhou, código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível abrir o arquivo:"
+
+#~ msgid "Datatype not found: %1"
+#~ msgstr "Tipo de dados não encontrado: %1"
 
 #~ msgid "Column Header"
 #~ msgstr "Cabeçalho da coluna"

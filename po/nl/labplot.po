@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-30 00:40+0000\n"
-"PO-Revision-Date: 2026-01-29 15:20+0100\n"
+"POT-Creation-Date: 2026-01-31 00:39+0000\n"
+"PO-Revision-Date: 2026-01-30 13:08+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -243,7 +243,7 @@ msgid "Y-Error -"
 msgstr "Y-fout -"
 
 #: src/backend/core/AbstractColumn.cpp:224
-#: src/backend/datasources/filters/AsciiFilter.cpp:556
+#: src/backend/datasources/filters/AsciiFilter.cpp:614
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -264,7 +264,7 @@ msgstr "Groot geheel getal"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:230
-#: src/backend/datasources/filters/AsciiFilter.cpp:557
+#: src/backend/datasources/filters/AsciiFilter.cpp:615
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
 #: src/frontend/ActionsManager.cpp:517
 #: src/frontend/notebook/NotebookView.cpp:96
@@ -1193,31 +1193,31 @@ msgstr ""
 "is zondag</td></tr></table><br><br>In het geval dat de expressie leeg is, "
 "wordt dit vanzelf gedetecteerd."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:223
+#: src/backend/datasources/filters/AsciiFilter.cpp:224
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Aantal kolommen: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:225
+#: src/backend/datasources/filters/AsciiFilter.cpp:226
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Aantal regels: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:467
-#: src/backend/datasources/filters/AsciiFilter.cpp:1251
+#: src/backend/datasources/filters/AsciiFilter.cpp:515
+#: src/backend/datasources/filters/AsciiFilter.cpp:1365
 #: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "Kolom %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:541
-#: src/backend/datasources/filters/AsciiFilter.cpp:1274
+#: src/backend/datasources/filters/AsciiFilter.cpp:598
+#: src/backend/datasources/filters/AsciiFilter.cpp:1391
 #, kde-format
 msgid "Timestamp"
 msgstr "timestamp (tijdstempel)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:545
-#: src/backend/datasources/filters/AsciiFilter.cpp:1278
+#: src/backend/datasources/filters/AsciiFilter.cpp:603
+#: src/backend/datasources/filters/AsciiFilter.cpp:1396
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1225,17 +1225,29 @@ msgstr "timestamp (tijdstempel)"
 msgid "Index"
 msgstr "Index"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:558
+#: src/backend/datasources/filters/AsciiFilter.cpp:616
 #, kde-format
 msgid "DateTime"
 msgstr "Datum-tijd"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:559
+#: src/backend/datasources/filters/AsciiFilter.cpp:617
+#, fuzzy, kde-format
+#| msgid "Timestamp"
+msgid "Timestamp (Unix)"
+msgstr "timestamp (tijdstempel)"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:618
+#, fuzzy, kde-format
+#| msgid "Timestamp"
+msgid "Timestamp (Windows)"
+msgstr "timestamp (tijdstempel)"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
 msgid "Int"
 msgstr "Int"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:560
+#: src/backend/datasources/filters/AsciiFilter.cpp:620
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -7646,32 +7658,32 @@ msgstr "Hypothese test"
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "No monotonic trend exists"
-msgstr ""
+msgstr "Er bestaat geen monotone trend"
 
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "A monotonic trend exists"
-msgstr ""
+msgstr "Er bestaat een monotone trend"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "No negative monotonic trend exists"
-msgstr ""
+msgstr "Er bestaat geen negatieve monotone trend"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "A negative monotonic trend exists"
-msgstr ""
+msgstr "Er bestaat een negatieve monotone trend"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "No positive monotonic trend exits"
-msgstr ""
+msgstr "Er bestaat geen positieve monotone trend"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "A positive monotonic trend exists"
-msgstr ""
+msgstr "Er bestaat een positieve monotone trend"
 
 #: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
@@ -7739,10 +7751,9 @@ msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr "Eenrichtingsverkeer ANOVA Test met herhaalde test van metingen"
 
 #: src/backend/statistics/HypothesisTest.cpp:345
-#, fuzzy, kde-format
-#| msgid "Mann-Whitney U Test"
+#, kde-format
 msgid "Mann-Kendall Test"
-msgstr "Mann-Whitney U-toets"
+msgstr "Mann-Kendall-test"
 
 #: src/backend/statistics/HypothesisTest.cpp:519
 #, kde-format
@@ -8036,23 +8047,22 @@ msgstr "Totaal aantal 2"
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Kendall's Tau"
-msgstr ""
+msgstr "Kendall's tau"
 
 #: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Sen's Slope"
-msgstr ""
+msgstr "Sen's hellingshoek"
 
 #: src/backend/statistics/HypothesisTest.cpp:626
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Size"
-msgstr "Sample-grootte:"
+msgstr "Sample-grootte"
 
 #: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
@@ -8264,7 +8274,7 @@ msgid ""
 "different. Reject the null Hypothesis"
 msgstr ""
 "Op het significantieniveau %1, zijn de overlevingskrommen verschillend. Wijs "
-"de nul-hypothese af"
+"de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1654
 #, kde-format
@@ -8273,55 +8283,43 @@ msgid ""
 "curves. Fail to reject the null Hypothesis"
 msgstr ""
 "Op het significantieniveau %1 is er geen significant verschil tussen "
-"overlevingskrommen. De nul-hypothese niet afwijzen"
+"overlevingskrommen. De nul-hypothese niet afwijzen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. Reject the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1, zijn de overlevingskrommen verschillend. Wijs "
-"de nul-hypothese af"
+"Op het significantieniveau %1, is er een significante monotone trend in de "
+"gegevens. Wijs de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1, zijn de overlevingskrommen verschillend. Wijs "
-"de nul-hypothese af"
+"Op het significantieniveau %1, is er een significante positieve monotone "
+"trend. Wijs de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1701
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1, zijn de overlevingskrommen verschillend. Wijs "
-"de nul-hypothese af"
+"Op het significantieniveau %1, is er een significante negatieve monotone "
+"trend. Wijs de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1703
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. Fail "
 "to reject the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1 is er geen significant verschil tussen "
-"groepen. De nul-hypothese niet afwijzen"
+"Op het significantieniveau %1 is er geen significante monotone trend "
+"gedetecteerd. De nul-hypothese niet afwijzen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1796
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -12437,7 +12435,18 @@ msgid "Custom column data types, comma separated"
 msgstr "Aangepaste kolomgegevenstypen, gescheiden door komma's"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If not empty, the number of columns must match the number of column names "
+#| "if provided and it must match the number of columns in the imported file."
+#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
+#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
+#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
+#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
+#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
+#| "td><td>Datetime with the format from the datetime text box if not empty, "
+#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
+#| "td></tr></table>"
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12447,8 +12456,10 @@ msgid ""
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
 "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
 "td><td>Datetime with the format from the datetime text box if not empty, "
-"otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-"td></tr></table>"
+"otherwise automatically determined.</td></tr><tr><td>%5</td><td>Number of "
+"seconds since January 1, 1970 (UTC), converted to DateTime.</td></tr><tr><td>"
+"%6</td><td>Number of 100-nanosecond intervals since January 1, 1601 (UTC), "
+"converted to DateTime.</td></tr><tr><td>%7</td><td>A text.</td></tr></table>"
 msgstr ""
 "Indien niet leeg, moet het aantal kolommen overeenkomen met het aantal "
 "kolomnamen indien geleverd en het moet overeenkomen met het aantal kolommen "
@@ -12461,15 +12472,16 @@ msgstr ""
 "datumtijdtekstvak indien niet leeg, anders automatisch bepaald.</td></"
 "tr><tr><td>%5</td><td>Een tekst.</td></tr></table>"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:86
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
 msgid "%1 or %2"
 msgstr "%1 of %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:197
-#, kde-format
-msgid "Datatype not found: %1"
-msgstr "Gegevenstype niet gevonden: %1"
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:199
+#, fuzzy, kde-format
+#| msgid "Invalid metadata file"
+msgid "Invalid data type '%1'"
+msgstr "ongeldig metadata-bestand"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -15267,17 +15279,7 @@ msgstr ""
 "hebben</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:132
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests if two categorical variables "
-#| "are independent of each other</li><li><b>%7</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15295,9 +15297,10 @@ msgstr ""
 "onder drie of meer onafhankelijke groepen</li><li><b>%4</b> - test "
 "verschillen in medianen onder drie of meer gerelateerde/herhaalde metingen</"
 "li><li><b>%5</b> - test verschillen in overlevingsdistributies tussen twee "
-"of meer groepen</li><li><b>%6</b> - test of twee categoriale variabelen "
-"onafhankelijk zijn van elkaar</li><li><b>%7</b> - test of waargenomen "
-"gegevens een gespecificeerd theoretische distributie volgt</li></ul>"
+"of meer groepen</li><li><b>%6</b> - test op een trend in gegevens in de "
+"tijd</li><li><b>%7</b> - test of twee categoriale variabelen onafhankelijk "
+"zijn van elkaar</li><li><b>%8</b> - test of waargenomen gegevens een "
+"gespecificeerde theoretische distributie volgen</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:315
 #, kde-format
@@ -15825,10 +15828,9 @@ msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "Rekenblad waarmee het aantal rijen te synchroniseren is"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
-#, fuzzy, kde-format
-#| msgid "Columns Statistics Spreadsheet"
+#, kde-format
 msgid "Show Columns Statistics Spreadsheet"
-msgstr "Kolomstatistieken van rekenblad"
+msgstr "Kolomstatistieken van rekenblad tonen"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
 #, kde-format
@@ -24239,10 +24241,9 @@ msgstr "Koptekst"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistics:"
-msgstr "Statistieken"
+msgstr "Statistieken:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviation)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:190
@@ -27200,6 +27201,9 @@ msgstr "conversie is mislukt, exitcode ="
 msgid "Unable to open file:"
 msgstr "Kon bestand niet openen:"
 
+#~ msgid "Datatype not found: %1"
+#~ msgstr "Gegevenstype niet gevonden: %1"
+
 #~ msgid "Column Header"
 #~ msgstr "Kolomkop"
 
@@ -27836,9 +27840,6 @@ msgstr "Kon bestand niet openen:"
 
 #~ msgid "%1: move in front of %2."
 #~ msgstr "%1: verplaatsen voor %2."
-
-#~ msgid "Invalid metadata file"
-#~ msgstr "ongeldig metadata-bestand"
 
 #~ msgid "Failed to download the dataset"
 #~ msgstr "Downloaden van de gegevensset is mislukt"

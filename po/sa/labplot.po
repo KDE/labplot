@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-30 00:40+0000\n"
+"POT-Creation-Date: 2026-01-31 00:39+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -245,7 +245,7 @@ msgid "Y-Error -"
 msgstr "य-दोषः -"
 
 #: src/backend/core/AbstractColumn.cpp:224
-#: src/backend/datasources/filters/AsciiFilter.cpp:556
+#: src/backend/datasources/filters/AsciiFilter.cpp:614
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -266,7 +266,7 @@ msgstr "बृहत् पूर्णाङ्कः"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:230
-#: src/backend/datasources/filters/AsciiFilter.cpp:557
+#: src/backend/datasources/filters/AsciiFilter.cpp:615
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
 #: src/frontend/ActionsManager.cpp:517
 #: src/frontend/notebook/NotebookView.cpp:96
@@ -1193,31 +1193,31 @@ msgstr ""
 "२० ६९</td></tr><tr><td> &#39;दिनम्&#39; द्द्द्द्</td><td> दिवसः रविवासरः अस्ति</"
 "td></tr></table><br><br> प्रदत्तं व्यञ्जनं रिक्तं भवति चेत् प्रारूपं स्वयमेव ज्ञायते ।"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:223
+#: src/backend/datasources/filters/AsciiFilter.cpp:224
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "स्तम्भानां संख्या: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:225
+#: src/backend/datasources/filters/AsciiFilter.cpp:226
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "पङ्क्तयः संख्या : %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:467
-#: src/backend/datasources/filters/AsciiFilter.cpp:1251
+#: src/backend/datasources/filters/AsciiFilter.cpp:515
+#: src/backend/datasources/filters/AsciiFilter.cpp:1365
 #: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "स्तम्भ %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:541
-#: src/backend/datasources/filters/AsciiFilter.cpp:1274
+#: src/backend/datasources/filters/AsciiFilter.cpp:598
+#: src/backend/datasources/filters/AsciiFilter.cpp:1391
 #, kde-format
 msgid "Timestamp"
 msgstr "समयमुद्रिका"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:545
-#: src/backend/datasources/filters/AsciiFilter.cpp:1278
+#: src/backend/datasources/filters/AsciiFilter.cpp:603
+#: src/backend/datasources/filters/AsciiFilter.cpp:1396
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1225,17 +1225,29 @@ msgstr "समयमुद्रिका"
 msgid "Index"
 msgstr "अनुक्रमणिका"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:558
+#: src/backend/datasources/filters/AsciiFilter.cpp:616
 #, kde-format
 msgid "DateTime"
 msgstr "DateTime इति"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:559
+#: src/backend/datasources/filters/AsciiFilter.cpp:617
+#, fuzzy, kde-format
+#| msgid "Timestamp"
+msgid "Timestamp (Unix)"
+msgstr "समयमुद्रिका"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:618
+#, fuzzy, kde-format
+#| msgid "Timestamp"
+msgid "Timestamp (Windows)"
+msgstr "समयमुद्रिका"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
 msgid "Int"
 msgstr "Int"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:560
+#: src/backend/datasources/filters/AsciiFilter.cpp:620
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -12468,8 +12480,10 @@ msgid ""
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
 "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
 "td><td>Datetime with the format from the datetime text box if not empty, "
-"otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-"td></tr></table>"
+"otherwise automatically determined.</td></tr><tr><td>%5</td><td>Number of "
+"seconds since January 1, 1970 (UTC), converted to DateTime.</td></tr><tr><td>"
+"%6</td><td>Number of 100-nanosecond intervals since January 1, 1601 (UTC), "
+"converted to DateTime.</td></tr><tr><td>%7</td><td>A text.</td></tr></table>"
 msgstr ""
 "यदि रिक्तं न भवति तर्हि स्तम्भसङ्ख्या स्तम्भनामसङ्ख्यायाः सङ्गतिं कर्तव्या यदि प्रदत्ता अस्ति "
 "तथा च आयातितसञ्चिकायां स्तम्भसङ्ख्यायाः सङ्गतिः भवितुमर्हति ।<br> दत्तांशप्रकाराः : १."
@@ -12481,15 +12495,15 @@ msgstr ""
 "रिक्तं न भवति, अन्यथा स्वयमेव निर्धारितम् ।</td></tr><tr><td> %5</td><td> एकः पाठः ।"
 "</td></tr></table>"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:86
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
 msgid "%1 or %2"
 msgstr "%1 अथवा %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:197
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:199
 #, kde-format
-msgid "Datatype not found: %1"
-msgstr "दत्तांशप्रकारः न प्राप्तः: %1"
+msgid "Invalid data type '%1'"
+msgstr ""
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -27085,6 +27099,9 @@ msgstr "परिवर्तन प्रक्रिया विफल, न�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "सञ्चिकां उद्घाटयितुं असमर्थः :"
+
+#~ msgid "Datatype not found: %1"
+#~ msgstr "दत्तांशप्रकारः न प्राप्तः: %1"
 
 #~ msgid "Column Header"
 #~ msgstr "स्तम्भशीर्षकम्"
