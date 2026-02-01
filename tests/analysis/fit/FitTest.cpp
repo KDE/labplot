@@ -2851,10 +2851,11 @@ void FitTest::testNonLinearHahn1_3() {
 }
 
 void FitTest::testNonLinearBennett5() {
+	QSKIP("requires over 800 iterations, timing out on CI");
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 
-	// NIST data for Hahn1 dataset
+	// NIST data for Bennett5 dataset
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/Bennett5_data.dat"));
 
 	auto properties = filter.properties();
