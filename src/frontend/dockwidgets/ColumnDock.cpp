@@ -533,12 +533,12 @@ void ColumnDock::loadFormula() {
 		const auto& cols = m_spreadsheet->project()->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (int i = 0; i < formulaData.size(); ++i) {
 			addVariable();
-			const auto& data = formulaData.at(i);
-			m_variableLineEdits[i]->setText(data.variableName());
+			const auto& fd = formulaData.at(i);
+			m_variableLineEdits[i]->setText(fd.variableName());
 
 			bool found = false;
 			for (const auto* col : cols) {
-				if (col != data.column())
+				if (col != fd.column())
 					continue;
 
 				const auto* column = dynamic_cast<const AbstractColumn*>(col);
@@ -556,8 +556,8 @@ void ColumnDock::loadFormula() {
 				m_variableDataColumns.at(i)->setInvalid(
 					true,
 					i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.",
-						 data.columnName()));
-				m_variableDataColumns.at(i)->setText(data.columnName().split(QLatin1Char('/')).last());
+						 fd.columnName()));
+				m_variableDataColumns.at(i)->setText(fd.columnName().split(QLatin1Char('/')).last());
 			}
 		}
 	}
