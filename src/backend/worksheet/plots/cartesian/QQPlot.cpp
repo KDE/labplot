@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : QQPlot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-204 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-206 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -331,11 +331,7 @@ QQPlotPrivate::~QQPlotPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void QQPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || q->isLoading();
-	if (suppressed)
-		return;
-
-	if (!isVisible())
+	if (retransformSuppressed())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));

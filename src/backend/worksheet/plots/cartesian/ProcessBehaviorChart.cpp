@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : ProcessBehaviorChart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -846,10 +846,7 @@ ProcessBehaviorChartPrivate::~ProcessBehaviorChartPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void ProcessBehaviorChartPrivate::retransform() {
-	if (suppressRetransform || q->isLoading())
-		return;
-
-	if (!isVisible())
+	if (retransformSuppressed())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
