@@ -2468,7 +2468,6 @@ void AsciiFilterTest::testTimestamp() {
 	p.automaticSeparatorDetection = false;
 	p.separator = QStringLiteral(",");
 	p.headerEnabled = true;
-	//p.columnNamesString = QStringLiteral("Unix Timestamp,Windows AD Timestamp,ISO Datetime,Temperature (∘C)");
 	p.dataTypesString = QStringLiteral("TimestampUnix,TimestampWindows,DateTime,Double");
 	filter.setProperties(p);
 
