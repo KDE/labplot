@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the ascii filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -2456,6 +2456,55 @@ void AsciiFilterTest::testDateTimeHex() {
 	QCOMPARE(spreadsheet.column(14)->valueAt(0), 94.09);
 	QCOMPARE(spreadsheet.column(15)->integerAt(0), 9680);
 	QCOMPARE(spreadsheet.column(16)->textAt(0), QLatin1String("5AD17"));
+}
+
+void AsciiFilterTest::testTimestamp() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/timestamp.csv"));
+
+	// Set up filter properties
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(",");
+	p.headerEnabled = true;
+	//p.columnNamesString = QStringLiteral("Unix Timestamp,Windows AD Timestamp,ISO Datetime,Temperature (∘C)");
+	p.dataTypesString = QStringLiteral("TimestampUnix,TimestampWindows,DateTime,Double");
+	filter.setProperties(p);
+
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.rowCount(), 8);
+
+	// Check column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Unix Timestamp"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Windows AD Timestamp"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("ISO Datetime"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("Temperature"));
+
+	// Check column modes
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	// Check a few values
+	// First row
+	auto value = QDateTime::fromString(QLatin1String("2024-01-23 10:40:00"), QLatin1String("yyyy-MM-dd HH:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(0), value);
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(0), value);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 18.5);
+
+	// Last row
+	value = QDateTime::fromString(QLatin1String("2024-01-23 17:40:00"), QLatin1String("yyyy-MM-dd HH:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(7), value);
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(7), value);
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(7), value);
+	QCOMPARE(spreadsheet.column(3)->valueAt(7), 17.6);
 }
 
 // Keep all values
