@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-31 00:39+0000\n"
-"PO-Revision-Date: 2026-01-30 12:23+0100\n"
+"PO-Revision-Date: 2026-01-31 12:15+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -1239,16 +1239,14 @@ msgid "DateTime"
 msgstr "Fecha y hora"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Unix)"
-msgstr "Marca de tiempo"
+msgstr "Marca de tiempo (Unix)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:618
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Windows)"
-msgstr "Marca de tiempo"
+msgstr "Marca de tiempo (Windows)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
@@ -12453,18 +12451,7 @@ msgid "Custom column data types, comma separated"
 msgstr "Tipos de datos de columnas personalizados, separados por comas"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12488,8 +12475,11 @@ msgstr ""
 "%3</td><td>Número en coma flotante con un tamaño de 64 bits. Con resolución "
 "de unos 16 dígitos.</td></tr><tr><td>%4</td><td>Fecha y hora con el formato "
 "del cuadro de texto «Fecha y hora», si no está vacío; en caso contrario, se "
-"detectará automáticamente.</td></tr><tr><td>%5</td><td>Un texto.</td></tr></"
-"table>"
+"detectará automáticamente.</td></tr><tr><td>%5</td><td>Número de segundos "
+"desde el 1 de enero de 1970 (UTC), convertido a DateTime.</td></tr><tr><td>"
+"%6</td><td>Número de intervalos de 100 nanosegundos desde el 1 de enero de "
+"1601 (UTC), convertido a DateTime.</td></tr><tr><td>%7</td><td>Un texto.</"
+"td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
@@ -12499,7 +12489,7 @@ msgstr "%1 o %2"
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:199
 #, kde-format
 msgid "Invalid data type '%1'"
-msgstr ""
+msgstr "Tipo de dato «%1» no válido"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -27243,6 +27233,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "Datatype not found: %1"
-#~ msgstr "Tipo de datos no encontrado: %1"

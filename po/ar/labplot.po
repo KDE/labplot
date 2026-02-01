@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-31 00:39+0000\n"
-"PO-Revision-Date: 2026-01-29 17:22+0400\n"
+"PO-Revision-Date: 2026-01-31 20:27+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1230,16 +1230,14 @@ msgid "DateTime"
 msgstr "التاريخ والوقت"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Unix)"
-msgstr "الختم الزمني"
+msgstr "الختم الزمني (يونكس)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:618
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Windows)"
-msgstr "الختم الزمني"
+msgstr "الختم الزمني (ويندوز)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
@@ -7710,32 +7708,32 @@ msgstr "اختبار الفرضيات"
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "No monotonic trend exists"
-msgstr ""
+msgstr "لا يوجد اتجاه أحادي"
 
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "A monotonic trend exists"
-msgstr ""
+msgstr "يوجد اتجاه أحادي"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "No negative monotonic trend exists"
-msgstr ""
+msgstr "لا يوجد اتجاه سلبي أحادي"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "A negative monotonic trend exists"
-msgstr ""
+msgstr "يوجد اتجاه سلبي أحادي"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "No positive monotonic trend exits"
-msgstr ""
+msgstr "لا يوجد اتجاه أحادي إيجابي"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "A positive monotonic trend exists"
-msgstr ""
+msgstr "يوجد اتجاه أحادي إيجابي"
 
 #: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
@@ -7803,10 +7801,9 @@ msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr "اختبار تحليل التباين الأحادي (ANOVA) بقياسات متكررة"
 
 #: src/backend/statistics/HypothesisTest.cpp:345
-#, fuzzy, kde-format
-#| msgid "Mann-Whitney U Test"
+#, kde-format
 msgid "Mann-Kendall Test"
-msgstr "اختبار مان-ويتني يو"
+msgstr "اختبار مان-كيندال"
 
 #: src/backend/statistics/HypothesisTest.cpp:519
 #, kde-format
@@ -8100,23 +8097,22 @@ msgstr "العد الكلي 2"
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Kendall's Tau"
-msgstr ""
+msgstr "تاو كيندال"
 
 #: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Sen's Slope"
-msgstr ""
+msgstr "منحدر سين"
 
 #: src/backend/statistics/HypothesisTest.cpp:626
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Size"
-msgstr "حجم العينة:"
+msgstr "حجم العينة"
 
 #: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
@@ -8134,7 +8130,7 @@ msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. Reject the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، يختلف متوسط المجتمع اختلافًا كبيرًا عن %2. ارفض الفرضية "
+"عند مستوى الدلالة %1، يختلف متوسط المجتمع اختلافًا كبيرًا عن %2. رفض الفرضية "
 "الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:905
@@ -8153,7 +8149,7 @@ msgid ""
 "At the significance level %1, the population means are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
-"عند مستوى الدلالة %1، تختلف متوسطات المجتمع اختلافًا كبيرًا. ارفض الفرضية "
+"عند مستوى الدلالة %1، تختلف متوسطات المجتمع اختلافًا كبيرًا. رفض الفرضية "
 "الصفرية"
 
 #: src/backend/statistics/HypothesisTest.cpp:991
@@ -8173,7 +8169,7 @@ msgid ""
 "At the significance level %1, at least one group mean is significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
-"عند مستوى الدلالة %1، يختلف متوسط مجموعة واحدة على الأقل اختلافًا كبيرًا. ارفض "
+"عند مستوى الدلالة %1، يختلف متوسط مجموعة واحدة على الأقل اختلافًا كبيرًا. رفض "
 "الفرضية الصفرية"
 
 #: src/backend/statistics/HypothesisTest.cpp:1115
@@ -8194,7 +8190,7 @@ msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. Reject the null Hypothesis"
 msgstr ""
-"عند مستوى الدلالة %1، يختلف توزيع مجموعة واحدة على الأقل اختلافًا كبيرًا. ارفض "
+"عند مستوى الدلالة %1، يختلف توزيع مجموعة واحدة على الأقل اختلافًا كبيرًا. رفض "
 "الفرضية الصفرية"
 
 #: src/backend/statistics/HypothesisTest.cpp:1237
@@ -8214,7 +8210,7 @@ msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "Reject the null Hypothesis"
 msgstr ""
-"عند مستوى الدلالة %1، تختلف مجموعة واحدة على الأقل اختلافًا كبيرًا. ارفض "
+"عند مستوى الدلالة %1، تختلف مجموعة واحدة على الأقل اختلافًا كبيرًا. رفض "
 "الفرضية الصفرية"
 
 #: src/backend/statistics/HypothesisTest.cpp:1417
@@ -8238,7 +8234,7 @@ msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. Reject the null Hypothesis"
 msgstr ""
-"عند مستوى الدلالة %1، لا تتبع الترددات المرصودة توزيع التردد المتوقع. ارفض "
+"عند مستوى الدلالة %1، لا تتبع الترددات المرصودة توزيع التردد المتوقع. رفض "
 "الفرضية الصفرية"
 
 #: src/backend/statistics/HypothesisTest.cpp:1486
@@ -8261,7 +8257,7 @@ msgid ""
 "At the significance level %1, both categorical variables are dependent. "
 "Reject the null Hypothesis"
 msgstr ""
-"عند مستوى الدلالة %1، كلا المتغيرين الفئويين معتمدان. ارفض الفرضية الصفرية"
+"عند مستوى الدلالة %1، كلا المتغيرين الفئويين معتمدان. رفض الفرضية الصفرية"
 
 #: src/backend/statistics/HypothesisTest.cpp:1549
 #, kde-format
@@ -8323,8 +8319,7 @@ msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
-"عند مستوى الدلالة %1، تختلف منحنيات البقاء اختلافًا كبيرًا. ارفض الفرضية "
-"الصفرية"
+"عند مستوى الدلالة %1، تختلف منحنيات البقاء اختلافًا كبيرًا. رفض الفرضية الصفرية"
 
 #: src/backend/statistics/HypothesisTest.cpp:1654
 #, kde-format
@@ -8336,52 +8331,40 @@ msgstr ""
 "الفرضية الصفرية"
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. Reject the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، تختلف منحنيات البقاء اختلافًا كبيرًا. ارفض الفرضية "
-"الصفرية"
+"عند مستوى الدلالة %1، يوجد اتجاه أحادي متواصل ذو دلالة إحصائية في البيانات. "
+"رفض الفرضية الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، تختلف منحنيات البقاء اختلافًا كبيرًا. ارفض الفرضية "
-"الصفرية"
+"عند مستوى الدلالة %1، يوجد اتجاه أحادي إيجابي ذو دلالة إحصائية. رفض الفرضية "
+"الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1701
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، تختلف منحنيات البقاء اختلافًا كبيرًا. ارفض الفرضية "
-"الصفرية"
+"عند مستوى الدلالة %1، يوجد اتجاه أحادي سلبي ذو دلالة إحصائية. رفض الفرضية "
+"الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1703
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. Fail "
 "to reject the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، لا يوجد فرق كبير بين المجموعات. افشل في رفض الفرضية "
-"الصفرية"
+"عند مستوى الدلالة %1، لم يتم الكشف عن أي اتجاه أحادي هام. فشل في رفض الفرضية "
+"الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1796
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -12482,18 +12465,7 @@ msgid "Custom column data types, comma separated"
 msgstr "أنواع بيانات أعمدة مخصّصة، مفصولة بفاصلة"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12508,14 +12480,17 @@ msgid ""
 "%6</td><td>Number of 100-nanosecond intervals since January 1, 1601 (UTC), "
 "converted to DateTime.</td></tr><tr><td>%7</td><td>A text.</td></tr></table>"
 msgstr ""
-"إذا لَمْ يَكُنْ فارغًا، يجب أن يتطابق عدد الأعمدة مع عدد أسماء الأعمدة إذا قُدِّمَت، "
-"ويجب أن يتطابق مع عدد الأعمدة في الملف المُستورَد.<br>أنواع البيانات:"
-"<table><tr><td>%1</td><td>عدد صحيح بحجم 32 بت (−2.147.483.648 .. "
-"2.147.483.647).</td></tr><tr><td>%2</td><td>عدد صحيح بحجم 64 بت "
+"إذا لم يكن فارغًا، يجب أن يتطابق عدد الأعمدة مع عدد أسماء الأعمدة إذا تم "
+"توفيرها، كما يجب أن يتطابق مع عدد الأعمدة في الملف المستورد.أنواع البيانات:"
+"<table><tr><td>%1</td><td>رقم صحيح بحجم 32 بت (−2.147.483.648 .. "
+"2.147.483.647).</td></tr><tr><td>%2</td><td>رقم صحيح بحجم 64 بت "
 "(−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</td></tr><tr><td>"
-"%3</td><td>عدد نقطة عائمة بحجم 64 بت. دِقَّة حوالي 16 رقمًا.</td></tr><tr><td>"
-"%4</td><td>وقت/تاريخ بالشكل من مربع نص التاريخ/الوقت إذا لَمْ يَكُنْ فارغًا، وإلَّا "
-"يحدّد آليًّا.</td></tr><tr><td>%5</td><td>نص.</td></tr></table>"
+"%3</td><td>رقم عشري بحجم 64 بت. دقة حوالي 16 رقمًا.</td></tr><tr><td>%4</"
+"td><td>التاريخ والوقت بالتنسيق الموجود في مربع النص الخاص بالتاريخ والوقت "
+"إذا لم يكن فارغًا، وإلا يتم تحديده تلقائيًا.</td></tr><tr><td>%5</td><td>عدد "
+"الثواني منذ 1 يناير 1970 (UTC)، محولة إلى DateTime.</td></tr><tr><td>%6</"
+"td><td>عدد فترات 100 نانو ثانية منذ 1 يناير 1601 (UTC)، محولة إلى DateTime.</"
+"td></tr><tr><td>%7</td><td>نص.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
@@ -12525,7 +12500,7 @@ msgstr "%1 أو %2"
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:199
 #, kde-format
 msgid "Invalid data type '%1'"
-msgstr ""
+msgstr "نوع البيانات غير صالح '%1'"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -15252,17 +15227,7 @@ msgstr ""
 "كانت ثلاثة قياسات مرتبطة/متكررة أو أكثر لها نفس المتوسط</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:132
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests if two categorical variables "
-#| "are independent of each other</li><li><b>%7</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15279,9 +15244,10 @@ msgstr ""
 "%3</b> - يختبر الاختلافات في الوسيط بين ثلاث مجموعات مستقلة أو أكثر</"
 "li><li><b>%4</b> - يختبر الاختلافات في الوسيط بين ثلاثة قياسات مرتبطة/متكررة "
 "أو أكثر</li><li><b>%5</b> - يختبر الاختلافات في توزيعات البقاء على قيد "
-"الحياة بين مجموعتين أو أكثر</li><li><b>%6</b> - يختبر ما إذا كان متغيران "
-"فئويان مستقلين عن بعضهما البعض</li><li><b>%7</b> - يختبر ما إذا كانت "
-"البيانات المرصودة تتبع توزيعًا نظريًا محددًا</li></ul>"
+"الحياة بين مجموعتين أو أكثر</li> <li><b>%6</b> - يختبر الاتجاه في البيانات "
+"عبر الزمن</li><li><b>%7</b> - يختبر ما إذا كان متغيران فئويان مستقلين عن "
+"بعضهما البعض</li><li><b>%8</b> - يختبر ما إذا كانت البيانات المرصودة تتبع "
+"توزيعًا نظريًا محددًا</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:315
 #, kde-format
@@ -15782,10 +15748,9 @@ msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "جدول البيانات لمزامنة عدد الصفوف معه"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
-#, fuzzy, kde-format
-#| msgid "Columns Statistics Spreadsheet"
+#, kde-format
 msgid "Show Columns Statistics Spreadsheet"
-msgstr "جدول بيانات إحصاءات الأعمدة"
+msgstr "اعرض جدول بيانات إحصاءات الأعمدة"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
 #, kde-format
@@ -24187,10 +24152,9 @@ msgstr "ترويسة"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistics:"
-msgstr "الإحصائيّات"
+msgstr "الإحصائيّات:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviation)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:190

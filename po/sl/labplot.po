@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-31 00:39+0000\n"
-"PO-Revision-Date: 2026-01-30 07:23+0100\n"
+"PO-Revision-Date: 2026-01-31 08:42+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -1236,16 +1236,14 @@ msgid "DateTime"
 msgstr "Datum in čas"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Unix)"
-msgstr "Časovni žig"
+msgstr "Časovni žig (Unix)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:618
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Windows)"
-msgstr "Časovni žig"
+msgstr "Časovni žig (Windows)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
@@ -12466,18 +12464,7 @@ msgid "Custom column data types, comma separated"
 msgstr "Podatkovni tipi stolpcev po meri, ločeni z vejicami"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12493,15 +12480,18 @@ msgid ""
 "converted to DateTime.</td></tr><tr><td>%7</td><td>A text.</td></tr></table>"
 msgstr ""
 "Če ni prazno, se mora število stolpcev ujemati s številom imen stolpcev, če "
-"so navedena, in se mora ujemati s številom stolpcev v uvoženi datoteki."
+"so podana, in se mora ujemati s številom stolpcev v uvoženi datoteki."
 "<br>Tipi podatkov:<table><tr><td>%1</td><td>Celo število z 32-bitno "
 "velikostjo (−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</"
-"td><td>Celo število s 64-bitno velikostjo (−9.223.372.036.854.775.808 .. "
+"td><td>Celo število z 64-bitno velikostjo (−9.223.372.036.854.775.808 .. "
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Število s plavajočo "
-"vejico 64-bitna velikost. Ločljivost približno 16 števk.</td></tr><tr><td>"
+"vejico z 64-bitno velikostjo. Ločljivost približno 16 mest.</td></tr><tr><td>"
 "%4</td><td>Datum in čas z obliko iz besedilnega polja za datum in čas, če ni "
-"prazno, sicer se določi samodejno.</td> </tr><tr><td>%5</td><td>Besedilo.</"
-"td></tr></table>"
+"prazno, sicer se določi samodejno.</td></tr><tr><td>%5</td><td>Število "
+"sekund od 1. januarja 1970 (UTC), pretvorjeno v datum in čas.</td></"
+"tr><tr><td>%6</td><td>Število 100-nanosekundnih intervalov od 1. januarja "
+"1601 (UTC), pretvorjeno v datum in čas.</td></tr><tr><td>%7</td><td>Besedilo."
+"</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
@@ -12509,10 +12499,9 @@ msgid "%1 or %2"
 msgstr "%1 ali %2"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:199
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid data type '%1'"
-msgstr "Neveljavna datoteka metapodatkov"
+msgstr "Neveljaven podatkovni tip '%1'"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format

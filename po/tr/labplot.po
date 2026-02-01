@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-31 00:39+0000\n"
-"PO-Revision-Date: 2026-01-30 15:35+0300\n"
+"PO-Revision-Date: 2026-01-31 15:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1234,16 +1234,14 @@ msgid "DateTime"
 msgstr "Tarih–zaman:"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Unix)"
-msgstr "Zaman Damgası"
+msgstr "Zaman Damgası (UNIX)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:618
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Windows)"
-msgstr "Zaman Damgası"
+msgstr "Zaman Damgası (Windows)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
@@ -12424,18 +12422,7 @@ msgid "Custom column data types, comma separated"
 msgstr "Özel sütun veri türleri, virgülle ayrılmış"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12456,9 +12443,12 @@ msgstr ""
 "2.147.483.647).</td></tr><tr><td>%2</td><td>64 bit boyutlu tamsayı "
 "(−9.223.372.036.854.775.808 ‥ 9.223.372.036.854.775.807).</td></tr><tr><td>"
 "%3</td><td>64 bit boyutlu kayan noktalı sayı. 16 basamak çözünürlüklü.</td></"
-"tr><tr><td>%4</td><td>Boş değilse tarih–zaman kutusundaki biçimli tarih–"
-"zaman, aksi takdirde kendiliğinden algılanır.</td></tr><tr><td>%5</"
-"td><td>Bir metin.</td></tr></table>"
+"tr><tr><td>%4</td><td>Boş değilse tarih–zaman kutusundaki tarih biçimi; aksi "
+"takdirde kendiliğinden belirlenir.</td></tr><tr><td>%5</td><td>1 Ocak 1970 "
+"(UTC)’den bu yana geçen saniyelerin tarih–zamana dönüştürülmüş hali.</td></"
+"tr><tr><td>%6</td><td>1 Ocak 1601 (UTC)’den bu yana geçmiş 100 saniyelik "
+"nano saniyelik aralıkların tarih–zamana dönüştürülmüş hali.</td></tr><tr><td>"
+"%7</td><td>Bir metin.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
@@ -12468,7 +12458,7 @@ msgstr "%1 veya %2"
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:199
 #, kde-format
 msgid "Invalid data type '%1'"
-msgstr ""
+msgstr "Geçersiz veri türü “%1”"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format

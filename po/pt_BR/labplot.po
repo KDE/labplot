@@ -6,13 +6,14 @@
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2015, 2017, 2019, 2020, 2021, 2022.
 # SPDX-FileCopyrightText: 2025, 2026 Marcus Gama <marcus.gama@gmail.com>
 # SPDX-FileCopyrightText: 2025, 2026 Guilherme Marçal Silva <guimarcalsilva@gmail.com>
+# SPDX-FileCopyrightText: 2026 Geraldo Simiao <geraldosimiao@fedoraproject.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-31 00:39+0000\n"
-"PO-Revision-Date: 2026-01-30 08:47-0300\n"
-"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
+"PO-Revision-Date: 2026-01-31 02:45-0300\n"
+"Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -1236,16 +1237,14 @@ msgid "DateTime"
 msgstr "Data e Hora"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Unix)"
-msgstr "Marca de tempo"
+msgstr "Marca de tempo (Unix)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:618
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Windows)"
-msgstr "Marca de tempo"
+msgstr "Marca de tempo (Windows)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
@@ -12451,18 +12450,7 @@ msgid "Custom column data types, comma separated"
 msgstr "Tipos de dados de coluna personalizados, separados por vírgula"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12486,8 +12474,11 @@ msgstr ""
 "%3</td><td>Número de ponto flutuante com tamanho de 64 bits. Resolução de "
 "cerca de 16 dígitos.</td></tr><tr><td>%4</td><td>Data e hora com o formato "
 "da caixa de texto de data e hora, se não estiver vazia, caso contrário, será "
-"determinada automaticamente.</td></tr><tr><td>%5</td><td>Um texto.</td></"
-"tr></table>"
+"determinada automaticamente.</td></tr><tr><td>%5</td><td>Número de segundos "
+"desde 1º de janeiro de 1970 (UTC), convertido para DateTime.</td></"
+"tr><tr><td>%6</td><td>Número de intervalos de 100 nanossegundos desde 1º de "
+"janeiro de 1601 (UTC), convertido para DateTime.</td></tr><tr><td>%7</"
+"td><td>Um texto.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
@@ -12497,7 +12488,7 @@ msgstr "%1 ou %2"
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:199
 #, kde-format
 msgid "Invalid data type '%1'"
-msgstr ""
+msgstr "Tipo de dados inválido '%1'"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format

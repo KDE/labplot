@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-31 00:39+0000\n"
-"PO-Revision-Date: 2026-01-30 04:31+0100\n"
+"PO-Revision-Date: 2026-01-31 05:38+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1232,16 +1232,14 @@ msgid "DateTime"
 msgstr "თარიღი და დრო"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Unix)"
-msgstr "დროის შტამპი"
+msgstr "დროის შტამპი (Unix)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:618
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Windows)"
-msgstr "დროის შტამპი"
+msgstr "დროის შტამპი (Windows)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
@@ -12436,18 +12434,7 @@ msgid "Custom column data types, comma separated"
 msgstr "მორგებული სვეტის მონაცემის ტიპები, მძიმით გამოყოფილი"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12462,16 +12449,19 @@ msgid ""
 "%6</td><td>Number of 100-nanosecond intervals since January 1, 1601 (UTC), "
 "converted to DateTime.</td></tr><tr><td>%7</td><td>A text.</td></tr></table>"
 msgstr ""
-"თუ ცარიელი არ არის, სვეტების რაოდენობა უნდა შეესაბამებოდეს სვეტის სახელების "
-"რაოდენობას, თუ ეს მოცემულია და ის უნდა შეესაბამებოდეს იმპორტირებულ ფაილში "
-"სვეტების რაოდენობას.<br>მონაცემთა ტიპები:<table><tr><td>%1</td><td>მთელი "
+"თუ ცარიელი არაა, სვეტების რაოდენობა უნდა შეესაბამებოდეს სვეტის სახელების "
+"რაოდენობას, თუ ეს მოცემულია და ის უნდა შეესაბამებოდეს შემოტანილ ფაილში "
+"სვეტების რაოდენობას..<br>მონაცემთა ტიპები:<table><tr><td>%1</td><td>მთელი "
 "რიცხვი 32 ბიტიანი ზომით (−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>"
 "%2</td><td>მთელი რიცხვი 64 ბიტიანი ზომით (−9.223.372.036.854.775.808 .. "
-"9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>მცურავი წერტილის "
-"ნომერი 64 ბიტიანი ზომა. დაახლოებით 16 ციფრის რეზოლუცია.</td></tr><tr><td>%4</"
-"td><td>თარიღი თარიღი ფორმატით თარიღის ტექსტის ყუთიდან, თუ არ არის ცარიელი, "
-"წინააღმდეგ შემთხვევაში ავტომატურად განისაზღვრება.</td></tr><tr><td>%5</"
-"td><td>ტექსტი.</td></tr></table>"
+"9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>მცურავიმძიმიანი "
+"რიცხვი 64-ბიტიანი ზომით. დაახლოებით 16 ციფრის რეზოლუცია.</td></tr><tr><td>"
+"%4</td><td>თარიღი და დრო ფორმატით თარიღის ტექსტის ველიდან, თუ ის ცარიელი "
+"არაა. წინააღმდეგ შემთხვევაში ავტომატურად განისაზღვრება.</td></tr><tr><td>%5</"
+"td><td>წამების რაოდენობა 1970 წლის 1 იანვრის შემდეგ (UTC), გადაყვანილი "
+"თარიღი/დროში.</td></tr><tr><td>%6</td><td>10 ნანოწამიანი შუალედების "
+"რაოდენობა 1601 წლის 1 იანვრის შემდეგ (UTC), გადაყვანილი თარიღი/დროში.</td></"
+"tr><tr><td>%7</td><td>ტექსტი.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
@@ -12479,10 +12469,9 @@ msgid "%1 or %2"
 msgstr "%1 ან %2"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:199
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid data type '%1'"
-msgstr "არასწორი მეტამონაცემების ფაილი"
+msgstr "არასწორი მონაცემთა ტიპი '%1'"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format

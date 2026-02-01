@@ -1199,10 +1199,9 @@ msgid "DateTime"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
-#, fuzzy, kde-format
-#| msgid "Create Timestamp "
+#, kde-format
 msgid "Timestamp (Unix)"
-msgstr "创建时间戳"
+msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:618
 #, kde-format
@@ -7966,10 +7965,9 @@ msgid "Sen's Slope"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:626
-#, fuzzy, kde-format
-#| msgid "Sample size:"
+#, kde-format
 msgid "Sample Size"
-msgstr "采样大小："
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
@@ -15386,10 +15384,9 @@ msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "待同步行数的数据表"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
-#, fuzzy, kde-format
-#| msgid "Column Statistics Spreadsheet"
+#, kde-format
 msgid "Show Columns Statistics Spreadsheet"
-msgstr "列统计数据表"
+msgstr ""
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
 #, kde-format
@@ -18693,28 +18690,24 @@ msgid "Fourier Filter of '%1'"
 msgstr "'%1' 的傅立叶滤波"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:798
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgid "Fourier Transform of '%1'"
-msgstr "傅立叶变换"
+msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:801
-#, fuzzy, kde-format
-#| msgid "Hilbert Transform"
+#, kde-format
 msgid "Hilbert Transform of '%1'"
-msgstr "希尔伯特变换"
+msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:804
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Convolution of '%1'"
-msgstr "'%1' 的插值"
+msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:807
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Correlation of '%1'"
-msgstr "'%1' 的插值"
+msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:813
 #, kde-format
@@ -19211,10 +19204,9 @@ msgid "Column Statistics..."
 msgstr "列统计..."
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:340
-#, fuzzy, kde-format
-#| msgid "Column Statistics Spreadsheet"
+#, kde-format
 msgid "Columns Statistics Spreadsheet"
-msgstr "列统计数据表"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:346
 #, kde-format
@@ -23693,10 +23685,9 @@ msgstr "表头"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistics:"
-msgstr "详情"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviation)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:190
@@ -26599,14 +26590,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "Column Header"
-#~ msgstr "列表头"
-
-#~ msgid ""
-#~ "Add a new xy-curve that is defined as a function of other xy-curves "
-#~ "(scaled, shifted, etc.)"
-#~ msgstr "添加一个由其他 XY 曲线的函数 (缩放、平移等) 定义的 XY 曲线。"
-
-#~ msgid "Inverse exponential"
-#~ msgstr "带位移的负系数指数函数"
