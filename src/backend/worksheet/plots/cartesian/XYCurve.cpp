@@ -2563,7 +2563,7 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 }
 
 bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
-	if (!isVisible())
+	if (!isVisible() || !q->xColumn())
 		return false;
 
 	int rowCount{0};

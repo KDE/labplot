@@ -4,6 +4,7 @@
 	Description          : Script
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -197,10 +198,14 @@ void Script::runScript() {
 		scriptView->writeOutput(isErr, msg); // write the output to the scripteditor output
 	});
 
+	// since we're potentially creating multiple new objects or modifying existing objects when executing the script,
+	// suppress the aspect change signal in the project explorer to avoid to many aspect changes and
 	// push all changes at once to undo stack
+	project()->setSuppressAspectAddedSignal(true);
 	beginMacro(i18n("%1: run %2 script", name(), m_language));
 	Script::runScript(this, m_kTextEditorDocument->text()); // run the script
 	endMacro();
+	project()->setSuppressAspectAddedSignal(false);
 
 	// disconnect from writeOutput signal
 	disconnect(conn);

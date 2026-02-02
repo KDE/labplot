@@ -1330,7 +1330,7 @@ void Worksheet::cursorModelPlotRemoved(const QString& name) {
 
 void Worksheet::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mode) {
 	Q_D(Worksheet);
-	if (d->updateCompleteCursorModel) {
+	if (d->updateCompleteCursorModel && mode == CartesianPlot::MouseMode::Cursor) {
 		updateCompleteCursorTreeModel();
 		d->updateCompleteCursorModel = false;
 	}
