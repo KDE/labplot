@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-31 00:39+0000\n"
-"PO-Revision-Date: 2026-01-20 19:56+0100\n"
+"POT-Creation-Date: 2026-02-02 00:39+0000\n"
+"PO-Revision-Date: 2026-01-31 13:53+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1246,16 +1246,14 @@ msgid "DateTime"
 msgstr "DataHora"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Unix)"
-msgstr "Marca horària"
+msgstr "Marca horària (Unix)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:618
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Windows)"
-msgstr "Marca horària"
+msgstr "Marca horària (Windows)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
@@ -2337,7 +2335,7 @@ msgstr "Ha fallat durant l'anàlisi sintàctica del fitxer."
 #: src/backend/datasources/MQTTClient.cpp:1192
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:496
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "L'atribut «%1» falta o està buit, s'utilitzarà el valor predeterminat"
@@ -7747,32 +7745,32 @@ msgstr "Prova d'hipòtesi"
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "No monotonic trend exists"
-msgstr ""
+msgstr "No existix tendència monotònica"
 
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "A monotonic trend exists"
-msgstr ""
+msgstr "Existix una tendència monotònica"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "No negative monotonic trend exists"
-msgstr ""
+msgstr "No existix tendència monotònica negativa"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "A negative monotonic trend exists"
-msgstr ""
+msgstr "Existix una tendència monotònica negativa"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "No positive monotonic trend exits"
-msgstr ""
+msgstr "No existix tendència monotònica positiva"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "A positive monotonic trend exists"
-msgstr ""
+msgstr "Existix una tendència monotònica positiva"
 
 #: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
@@ -7840,10 +7838,9 @@ msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr "Prova ANOVA unidireccional amb mesures repetides"
 
 #: src/backend/statistics/HypothesisTest.cpp:345
-#, fuzzy, kde-format
-#| msgid "Mann-Whitney U Test"
+#, kde-format
 msgid "Mann-Kendall Test"
-msgstr "Prova U de Mann-Whitney"
+msgstr "Prova de Mann-Kendall"
 
 #: src/backend/statistics/HypothesisTest.cpp:519
 #, kde-format
@@ -8137,23 +8134,22 @@ msgstr "Comptador total 2"
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Kendall's Tau"
-msgstr ""
+msgstr "Tau de Kendall"
 
 #: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Sen's Slope"
-msgstr ""
+msgstr "Inclinació de Sen"
 
 #: src/backend/statistics/HypothesisTest.cpp:626
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Size"
-msgstr "Mida de la mostra:"
+msgstr "Mida de la mostra"
 
 #: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
@@ -8377,52 +8373,40 @@ msgstr ""
 "les corbes de supervivència. No s'ha pogut rebutjar la hipòtesi nul·la"
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. Reject the null hypothesis."
 msgstr ""
-"Al nivell de significació %1, les corbes de supervivència són "
-"significativament diferents. Es rebutja la hipòtesi nul·la"
+"Al nivell de significació %1, hi ha una tendència monotònica significativa a "
+"les dades. Es rebutja la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"Al nivell de significació %1, les corbes de supervivència són "
-"significativament diferents. Es rebutja la hipòtesi nul·la"
+"Al nivell de significació %1, hi ha una tendència monotònica positiva "
+"significativa. Es rebutja la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1701
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"Al nivell de significació %1, les corbes de supervivència són "
-"significativament diferents. Es rebutja la hipòtesi nul·la"
+"Al nivell de significació %1, hi ha una tendència monotònica negativa "
+"significativa. Es rebutja la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1703
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. Fail "
 "to reject the null hypothesis."
 msgstr ""
-"Al nivell de significació %1, no hi ha cap diferència significativa entre "
-"grups. No s'ha pogut rebutjar la hipòtesi nul·la"
+"Al nivell de significació %1, no s'ha detectat cap tendència monotònica "
+"significativa. No s'ha pogut rebutjar la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1796
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -10379,12 +10363,12 @@ msgstr "%1: establix l'amplària de la vora de les etiquetes"
 msgid "%1: set labels border color"
 msgstr "%1: establix el color de la vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:920
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:917
 #, kde-format
 msgid "Not enough data provided."
 msgstr "No s'han proporcionat prou dades."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1023
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1020
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'última mostra és incompleta i s'ha omés."
@@ -12565,18 +12549,7 @@ msgid "Custom column data types, comma separated"
 msgstr "Tipus de dades de columna personalitzats, separats per comes"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12600,8 +12573,10 @@ msgstr ""
 "%3</td><td>Nombre de coma flotant de 64 bits de mida. Resolució d'uns 16 "
 "digits.</td></tr><tr><td>%4</td><td>Datahora amb el format a partir del "
 "quadro de text de la «data i hora» si no està buit, en cas contrari, es "
-"determina automàticament.</td></tr><tr><td>%5</td><td>Un text.</td></tr></"
-"table>"
+"determina automàticament.</td></tr>%5<tr><td>Nombre de segons des de l'1 de "
+"gener de 1970 (UTC), convertit a Datahora.</td></tr><td>%6</td><td>Nombre "
+"d'intervals de 100 nanosegons des de l'1 de gener de 1601 (UTC), convertit a "
+"Datahora.</td></tr><tr><td>%7</td><td>Un text.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
@@ -12611,7 +12586,7 @@ msgstr "%1 o %2"
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:199
 #, kde-format
 msgid "Invalid data type '%1'"
-msgstr ""
+msgstr "Tipus de dades no vàlid «%1»"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -14399,7 +14374,7 @@ msgstr "Múltiples de π"
 #: src/frontend/dockwidgets/AxisDock.cpp:319
 #, kde-format
 msgid "Angle (DMS)"
-msgstr ""
+msgstr "Angle (DMS)"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:322
 #, kde-format
@@ -15420,17 +15395,7 @@ msgstr ""
 "tres o més mesures relacionades/repetides tenen la mateixa mitjana</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:132
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests if two categorical variables "
-#| "are independent of each other</li><li><b>%7</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15448,9 +15413,10 @@ msgstr ""
 "les mitjanes entre tres o més grups independents</li><li><b>%4</b>: prova la "
 "diferència de les mitjanes entre tres o més mesures relacionades/repetides</"
 "li><li><b>%5</b>: prova les diferències a les distribucions de supervivència "
-"entre dos o més grups</li><li><b>%6</b>: prova si dues variables "
-"categòriques són independents entre elles</li><li><b>%7</b>: prova si les "
-"dades observades seguixen una distribució teòrica específica</li></ul>"
+"entre dos o més grups</li><li><b>%6</b>:prova si hi ha una tendència a les "
+"dades en el temps</li><li><b>%7</b>: prova si dues variables categòriques "
+"són independents entre elles</li><li><b>%8</b>: prova si les dades "
+"observades seguixen una distribució teòrica específica</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:315
 #, kde-format
@@ -15980,10 +15946,9 @@ msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "Full de càlcul amb el qual sincronitzar el nombre de files"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
-#, fuzzy, kde-format
-#| msgid "Column Statistics Spreadsheet"
+#, kde-format
 msgid "Show Columns Statistics Spreadsheet"
-msgstr "Full de treball d'estadístiques de les columnes"
+msgstr "Mostra el full de treball d'estadístiques de les columnes"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
 #, kde-format
@@ -19391,28 +19356,24 @@ msgid "Fourier Filter of '%1'"
 msgstr "Filtre de Fourier de «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:798
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgid "Fourier Transform of '%1'"
-msgstr "Transformada de Fourier"
+msgstr "Transformada de Fourier de «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:801
-#, fuzzy, kde-format
-#| msgid "Hilbert Transform"
+#, kde-format
 msgid "Hilbert Transform of '%1'"
-msgstr "Transformada de Hilbert"
+msgstr "Transformada de Hilbert de «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:804
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Convolution of '%1'"
-msgstr "Interpolació de «%1»"
+msgstr "Convolució de «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:807
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Correlation of '%1'"
-msgstr "Interpolació de «%1»"
+msgstr "Correlació de «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:813
 #, kde-format
@@ -19923,8 +19884,7 @@ msgid "Column Statistics..."
 msgstr "Estadístiques de les columnes…"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:340
-#, fuzzy, kde-format
-#| msgid "Column Statistics Spreadsheet"
+#, kde-format
 msgid "Columns Statistics Spreadsheet"
 msgstr "Full de treball d'estadístiques de les columnes"
 
@@ -24437,10 +24397,9 @@ msgstr "Capçalera"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistics:"
-msgstr "Estadístiques"
+msgstr "Estadístiques:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviation)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:190
@@ -27407,22 +27366,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Datatype not found: %1"
-#~ msgstr "El tipus de dada no s'ha trobat: %1"
-
-#~ msgid "Column Header"
-#~ msgstr "Capçalera de columna"
-
-#~ msgid ""
-#~ "Add a new xy-curve that is defined as a function of other xy-curves "
-#~ "(scaled, shifted, etc.)"
-#~ msgstr ""
-#~ "Afig una corba XY nova que es definix com una funció d'altres corbes XY "
-#~ "(escalada, desplaçada, etc.)"
-
-#~ msgid "Inverse exponential"
-#~ msgstr "Exponencial invers"
-
-#~ msgid "Simplify Line"
-#~ msgstr "Simplificació de línia"

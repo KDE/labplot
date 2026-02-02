@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-31 00:39+0000\n"
+"POT-Creation-Date: 2026-02-02 00:39+0000\n"
 "PO-Revision-Date: 2026-01-31 13:53+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -2333,7 +2333,7 @@ msgstr "Ha fallat en analitzar el fitxer."
 #: src/backend/datasources/MQTTClient.cpp:1192
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:496
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "L'atribut «%1» falta o està buit, s'usarà el valor per omissió"
@@ -10362,12 +10362,12 @@ msgstr "%1: estableix l'amplada de vora de les etiquetes"
 msgid "%1: set labels border color"
 msgstr "%1: estableix el color de vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:920
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:917
 #, kde-format
 msgid "Not enough data provided."
 msgstr "No s'han proporcionat prou dades."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1023
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1020
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'última mostra és incompleta i s'ha omès."

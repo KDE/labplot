@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-31 00:39+0000\n"
-"PO-Revision-Date: 2026-01-20 16:51+0100\n"
+"POT-Creation-Date: 2026-02-02 00:39+0000\n"
+"PO-Revision-Date: 2026-01-31 14:22+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -2293,7 +2293,7 @@ msgstr "Fehler beim Parsen der Datei."
 #: src/backend/datasources/MQTTClient.cpp:1192
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:496
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr ""
@@ -7655,32 +7655,32 @@ msgstr "Hypothesentest"
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "No monotonic trend exists"
-msgstr ""
+msgstr "Es liegt kein monotoner Trend vor"
 
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "A monotonic trend exists"
-msgstr ""
+msgstr "Es liegt ein monotoner Trend vor"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "No negative monotonic trend exists"
-msgstr ""
+msgstr "Es liegt kein negativer monotoner Trend vor"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "A negative monotonic trend exists"
-msgstr ""
+msgstr "Es liegt ein negativer monotoner Trend vor"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "No positive monotonic trend exits"
-msgstr ""
+msgstr "Es liegt kein positiver monotoner Trend vor"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "A positive monotonic trend exists"
-msgstr ""
+msgstr "Es liegt ein positiver monotoner Trend vor."
 
 #: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
@@ -7748,10 +7748,9 @@ msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr "Einfaktorielle ANOVA mit Messwiederholungen"
 
 #: src/backend/statistics/HypothesisTest.cpp:345
-#, fuzzy, kde-format
-#| msgid "Mann-Whitney U Test"
+#, kde-format
 msgid "Mann-Kendall Test"
-msgstr "Mann-Whitney-U-Test"
+msgstr "Mann-Kendall Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:519
 #, kde-format
@@ -8045,23 +8044,22 @@ msgstr "Gesamtzahl 2"
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Kendall's Tau"
-msgstr ""
+msgstr "Kendalls Tau"
 
 #: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Sen's Slope"
-msgstr ""
+msgstr "Sen-Steigung"
 
 #: src/backend/statistics/HypothesisTest.cpp:626
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Size"
-msgstr "Abtastgröße:"
+msgstr "Samplegröße"
 
 #: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
@@ -8285,52 +8283,40 @@ msgstr ""
 "den Überlebenskurven. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. Reject the null hypothesis."
 msgstr ""
-"Auf dem Signifikanzniveau %1 unterscheiden sich die Überlebenskurven "
-"signifikant. Die Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau von %1 liegt ein signifikanter monotoner Trend in "
+"den Daten vor. Die Nullhypothese wird abgelehnt."
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"Auf dem Signifikanzniveau %1 unterscheiden sich die Überlebenskurven "
-"signifikant. Die Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau von %1 liegt ein signifikanter positiver monotoner "
+"Trend vor. Die Nullhypothese wird abgelehnt."
 
 #: src/backend/statistics/HypothesisTest.cpp:1701
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"Auf dem Signifikanzniveau %1 unterscheiden sich die Überlebenskurven "
-"signifikant. Die Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau von %1 liegt ein signifikanter negativer monotoner "
+"Trend vor. Die Nullhypothese wird abgelehnt."
 
 #: src/backend/statistics/HypothesisTest.cpp:1703
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. Fail "
 "to reject the null hypothesis."
 msgstr ""
-"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
-"den Gruppen. Die Nullhypothese wird beibehalten."
+"Auf dem Signifikanzniveau von %1 wurde kein signifikanter monotoner Trend "
+"festgestellt. Die Nullhypothese kann nicht abgelehnt werden."
 
 #: src/backend/statistics/HypothesisTest.cpp:1796
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -10277,12 +10263,12 @@ msgstr "%1: Beschriftungsrandbreite festlegen"
 msgid "%1: set labels border color"
 msgstr "%1: Beschriftungsrandfarbe festlegen"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:920
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:917
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Nicht genug Daten verfügbar."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1023
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1020
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Der letzte Wert ist nicht komplett und wurde übersprungen."
@@ -14267,7 +14253,7 @@ msgstr "Vielfaches von π"
 #: src/frontend/dockwidgets/AxisDock.cpp:319
 #, kde-format
 msgid "Angle (DMS)"
-msgstr ""
+msgstr "Winkel (GMS)"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:322
 #, kde-format
@@ -14304,6 +14290,11 @@ msgid ""
 "li><li>Offset - the first tick is positioned at the offset relatively to the "
 "beginning of the axis range.</li></ul></ul>"
 msgstr ""
+"Legt fest, wo der erste Hauptteilungsstrich positioniert wird:"
+"<ul><li>Absoluter Wert – der erste Teilungsstrich wird auf dem unten "
+"angegebenen absoluten Wert positioniert.</li><li>Versatz – der erste "
+"Teilungsstrich wird mit einem Versatz relativ zum Anfang des Achsenbereichs "
+"positioniert.</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:348
 #, kde-format
@@ -15268,17 +15259,7 @@ msgstr ""
 "abhängige/ wiederholte Messungen denselben Mittelwert haben</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:132
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests if two categorical variables "
-#| "are independent of each other</li><li><b>%7</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15293,13 +15274,14 @@ msgstr ""
 "<li><b>%1</b> – prüft Unterschiede der Mediane zwischen zwei unabhängigen "
 "Gruppen</li><li><b>%2</b> – prüft, ob die Median-Differenz zwischen zwei "
 "abhängigen Stichproben null ist</li><li><b>%3</b> – prüft Unterschiede der "
-"Mediane zwischen drei oder mehr unabhängigen Gruppen</li> <li><b>%4</b> – "
+"Mediane zwischen drei oder mehr unabhängigen Gruppen</li><li><b>%4</b> – "
 "prüft Unterschiede der Mediane zwischen drei oder mehr abhängigen/"
 "wiederholten Messungen</li><li><b>%5</b> – prüft Unterschiede der "
-"Überlebensverteilungen zwischen zwei oder mehr Gruppen</li> <li><b>%6</b> – "
-"prüft, ob zwei kategoriale Variablen voneinander unabhängig sind</li><li><b>"
-"%7</b> – prüft, ob die beobachteten Daten einer bestimmten theoretischen "
-"Verteilung folgen</li></ul>"
+"Überlebensverteilungen zwischen zwei oder mehr Gruppen</li> <li><b>%6</b> - "
+"prüft, ob ein Trend in den Daten vorliegt</li><li><b>%7</b> – prüft, ob zwei "
+"kategoriale Variablen voneinander unabhängig sind</li><li><b>%8</b> – prüft, "
+"ob die beobachteten Daten einer bestimmten theoretischen Verteilung folgen</"
+"li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:315
 #, kde-format
@@ -15826,10 +15808,9 @@ msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "Tabelle zur Synchronisation der Reihen"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
-#, fuzzy, kde-format
-#| msgid "Column Statistics Spreadsheet"
+#, kde-format
 msgid "Show Columns Statistics Spreadsheet"
-msgstr "Spalten-Statistik Tabelle"
+msgstr "Zeige Spalten-Statistik Tabelle"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
 #, kde-format
@@ -19217,28 +19198,24 @@ msgid "Fourier Filter of '%1'"
 msgstr "Fourier-Filter von '%1'"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:798
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgid "Fourier Transform of '%1'"
-msgstr "Fourier Transformation"
+msgstr "Fourier Transformation von „%1“"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:801
-#, fuzzy, kde-format
-#| msgid "Hilbert Transform"
+#, kde-format
 msgid "Hilbert Transform of '%1'"
-msgstr "Hilbert-Transformation"
+msgstr "Hilbert-Transformation von „%1“"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:804
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Convolution of '%1'"
-msgstr "Interpolation von „%1“"
+msgstr "Faltung von „%1“"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:807
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Correlation of '%1'"
-msgstr "Interpolation von „%1“"
+msgstr "Korrelation von „%1“"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:813
 #, kde-format
@@ -19745,8 +19722,7 @@ msgid "Column Statistics..."
 msgstr "Spaltenstatistik.."
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:340
-#, fuzzy, kde-format
-#| msgid "Column Statistics Spreadsheet"
+#, kde-format
 msgid "Columns Statistics Spreadsheet"
 msgstr "Spalten-Statistik Tabelle"
 
@@ -24245,10 +24221,9 @@ msgstr "Kopf"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistics:"
-msgstr "Statistik"
+msgstr "Statistik:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviation)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:190

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-31 00:39+0000\n"
+"POT-Creation-Date: 2026-02-02 00:39+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -2364,7 +2364,7 @@ msgstr "Σύνδεση:"
 #: src/backend/datasources/MQTTClient.cpp:1192
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:496
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr ""
@@ -10621,13 +10621,13 @@ msgstr "%1: ορισμός τύπου"
 msgid "%1: set labels border color"
 msgstr "Χρώμα παρασκηνίου"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:920
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:917
 #, fuzzy, kde-format
 #| msgid "Number of levels"
 msgid "Not enough data provided."
 msgstr "Πλήθος επιπέδων"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1023
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1020
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr ""

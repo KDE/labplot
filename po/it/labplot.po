@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-31 00:39+0000\n"
-"PO-Revision-Date: 2026-01-10 16:01+0100\n"
+"POT-Creation-Date: 2026-02-02 00:39+0000\n"
+"PO-Revision-Date: 2026-01-29 21:30+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:239
 #, kde-format
@@ -2328,7 +2328,7 @@ msgstr "Impossibile analizzare il file."
 #: src/backend/datasources/MQTTClient.cpp:1192
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:496
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "L'attributo «%1» è mancate o vuoto, uso il valore predefinito"
@@ -9783,10 +9783,9 @@ msgstr "%1: semplifica «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2135
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:810
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Simplification of '%1'"
-msgstr "Semplificazione"
+msgstr "Semplificazione di «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2142
 #, fuzzy, kde-format
@@ -10308,12 +10307,12 @@ msgstr "%1: imposta lo spessore del bordo delle etichette"
 msgid "%1: set labels border color"
 msgstr "%1: imposta il colore del bordo delle etichette"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:920
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:917
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Non sono stati forniti abbastanza dati."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1023
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1020
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'ultimo campione è incompleto e verrà omesso."
@@ -14661,7 +14660,7 @@ msgstr "%1 grafico a scatola: modello «%2» caricato"
 #: src/frontend/widgets/LabelWidget.cpp:1016
 #, kde-format
 msgid "%v cm"
-msgstr ""
+msgstr "%v cm"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:144
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:583
@@ -15718,10 +15717,9 @@ msgid "If enabled, uses the smallest odd integer greater than \"Period\"."
 msgstr ""
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:211
-#, fuzzy, kde-format
-#| msgid "Constant"
+#, kde-format
 msgid "0 - Constant"
-msgstr "Costante"
+msgstr "0 - Costante"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:212
 #, kde-format
@@ -16218,7 +16216,7 @@ msgstr "Frequenza di taglio superiore:"
 #, kde-format
 msgctxt "@label:spinbox Suffix for the frequency"
 msgid "%v Hz"
-msgstr ""
+msgstr "%v Hz"
 
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:424
 #, kde-format
@@ -18931,10 +18929,9 @@ msgid "Invalid start value"
 msgstr "Valore iniziale non valido"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:264
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
-msgstr "Valore finale non valido, deve essere più grande di quello iniziale"
+msgstr "Valore finale non valido, deve essere maggiore di quello iniziale"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:307
 #, fuzzy, kde-format
@@ -19211,16 +19208,14 @@ msgid "Fourier Filter of '%1'"
 msgstr "Filtro di Fourier di «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:798
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgid "Fourier Transform of '%1'"
-msgstr "Trasformata di Fourier"
+msgstr "Trasformata di Fourier di «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:801
-#, fuzzy, kde-format
-#| msgid "Hilbert Transform"
+#, kde-format
 msgid "Hilbert Transform of '%1'"
-msgstr "Trasformata di Hilbert"
+msgstr "Trasformata di Hilbert di «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:804
 #, fuzzy, kde-format
@@ -19284,22 +19279,19 @@ msgstr "Nuova area del grafico in un foglio di lavoro esistente"
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1172
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:202
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Area in a New Worksheet"
 msgstr "Nuovo area del grafico in un nuovo foglio di lavoro"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1179
-#, fuzzy, kde-format
-#| msgid "&New Plot Area in an existing Worksheet"
+#, kde-format
 msgid "New Plot Areas in an Existing Worksheet"
-msgstr "&Nuova area del grafico in un foglio di lavoro esistente"
+msgstr "Nuove aree del grafico in un foglio di lavoro esistente"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1180
-#, fuzzy, kde-format
-#| msgid "New Plot Area in a new Worksheet"
+#, kde-format
 msgid "New Plot Areas in a New Worksheet"
-msgstr "Nuovo area del grafico in un nuovo foglio di lavoro"
+msgstr "Nuove aree del grafico in un nuovo foglio di lavoro"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1207
 #, kde-format
@@ -19721,10 +19713,9 @@ msgid "Clear Masks"
 msgstr "Cancella le maschere"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:332
-#, fuzzy, kde-format
-#| msgid "&Transpose"
+#, kde-format
 msgid "Transpose"
-msgstr "&Trasponi"
+msgstr "Trasponi"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:334
 #, kde-format
@@ -23327,10 +23318,9 @@ msgstr "Raggio dell'angolo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoUpdate)
 #: src/frontend/ui/dockwidgets/columndock.ui:65
-#, fuzzy, kde-format
-#| msgid "auto update"
+#, kde-format
 msgid "Auto-Update"
-msgstr "aggiornamento automatico"
+msgstr "Aggiornamento automatico"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
@@ -23403,10 +23393,9 @@ msgstr "Designazione dei grafici:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:394
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula"
-msgstr "Formula:"
+msgstr "Formula"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)
@@ -24159,10 +24148,9 @@ msgstr "Iterazioni:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLRobust)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:218
-#, fuzzy, kde-format
-#| msgid "Robust fit:"
+#, kde-format
 msgid "Robust:"
-msgstr "Adattamento robusto:"
+msgstr "Robusto:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:248

@@ -1,7 +1,7 @@
 # Translation for labplot.po to Euskara/Basque (eu).
 # Copyright (C) 2019-2025 This file is copyright:
 # This file is distributed under the same license as the labplot package.
-# SPDX-FileCopyrightText: 2023, 2024, 2025 KDE euskaratzeko proiektuaren arduraduna <xalba@ni.eus>
+# SPDX-FileCopyrightText: 2023, 2024, 2025, 2026 KDE euskaratzeko proiektuaren arduraduna <xalba@ni.eus>
 #
 # Translators:
 # Iñigo Salvador Azurmendi <xalba@ni.eus>, 2019, 2022, 2023, 2025.
@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-31 00:39+0000\n"
-"PO-Revision-Date: 2025-07-13 15:35+0200\n"
+"POT-Creation-Date: 2026-02-02 00:39+0000\n"
+"PO-Revision-Date: 2026-02-01 00:20+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:239
 #, kde-format
@@ -2268,7 +2268,7 @@ msgstr "Fitxategi prozesatzea huts egin du."
 #: src/backend/datasources/MQTTClient.cpp:1192
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:496
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "'%1' atributua falta da edo hutsik dago, balio lehenetsia erabiliko da"
@@ -10324,13 +10324,13 @@ msgstr "%1: etiketen formatua ezarri"
 msgid "%1: set labels border color"
 msgstr "%1: etiketaren kolorea ezarri"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:920
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:917
 #, fuzzy, kde-format
 #| msgid "Not enough data points available."
 msgid "Not enough data provided."
 msgstr "Ez dago datu nahikorik erabilgarri."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1023
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1020
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr ""
@@ -18107,7 +18107,7 @@ msgstr "Koadernoa"
 #: src/frontend/SettingsDialog.cpp:79
 #, kde-format
 msgid "Datasets"
-msgstr "Datu multzoak"
+msgstr "Datu-multzoak"
 
 #: src/frontend/SettingsDialog.cpp:94
 #, kde-format
