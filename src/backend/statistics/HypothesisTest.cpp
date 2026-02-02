@@ -255,7 +255,7 @@ QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
 			hypothesis[nsl_stats_tail_type_negative] =
 				QPair<QString, QString>(i18n("No negative monotonic trend exists"), i18n("A negative monotonic trend exists"));
 			hypothesis[nsl_stats_tail_type_positive] =
-				QPair<QString, QString>(i18n("No positive monotonic trend exits"), i18n("A positive monotonic trend exists"));
+				QPair<QString, QString>(i18n("No positive monotonic trend exists"), i18n("A positive monotonic trend exists"));
 			return hypothesis;
 		}
 
