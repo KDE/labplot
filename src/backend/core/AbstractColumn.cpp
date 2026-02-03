@@ -343,7 +343,7 @@ void AbstractColumn::removeRows(int first, int count) {
 }
 
 void AbstractColumn::handleRowRemoval(int first, int count) {
-		exec(new AbstractColumnRemoveRowsCmd(this, first, count),
+	exec(new AbstractColumnRemoveRowsCmd(this, first, count),
 		 "maskingAboutToChange",
 		 "maskingChanged",
 		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));

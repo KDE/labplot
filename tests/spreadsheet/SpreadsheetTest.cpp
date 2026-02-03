@@ -1282,7 +1282,6 @@ void SpreadsheetTest::testMaskRowsWithMissingValues() {
 	QCOMPARE(col1->isMasked(4), true);
 }
 
-
 void SpreadsheetTest::testMaskingRowRemovalUndoRedo() {
 	// prepare project and spreadsheet to enable undo/redo
 	Project project;
