@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-02 00:39+0000\n"
+"POT-Creation-Date: 2026-02-03 00:41+0000\n"
 "PO-Revision-Date: 2026-01-23 07:59+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
@@ -6396,7 +6396,7 @@ msgstr "Imprimer une note"
 msgid "Text file (*.txt)"
 msgstr "Fichiers Texte (*.tex)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:90
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6405,12 +6405,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exporter vers un fichier"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, kde-format
 msgid "Export failed"
 msgstr "Échec de l'exportation"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Impossible d'ouvrir « %1 » en écriture."
@@ -7370,32 +7370,32 @@ msgstr "Triple pondération"
 msgid "Tricube"
 msgstr "Tricubique"
 
-#: src/backend/script/Script.cpp:88
+#: src/backend/script/Script.cpp:89
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Fichiers Python (*.py)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
+#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
 #, kde-format
 msgid "no script element found"
 msgstr "Aucun élément de script n'a été trouvé."
 
-#: src/backend/script/Script.cpp:201
+#: src/backend/script/Script.cpp:205
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1 : exécuter le script %2"
 
-#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:312
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Impossible de lancer le script."
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:322
 #, kde-format
 msgid "A script is already running."
 msgstr "Un script est déjà en cours d'exécution."
@@ -7735,7 +7735,7 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
-msgid "No positive monotonic trend exits"
+msgid "No positive monotonic trend exists"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:258

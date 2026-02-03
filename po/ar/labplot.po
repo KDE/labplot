@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-02 00:39+0000\n"
+"POT-Creation-Date: 2026-02-03 00:41+0000\n"
 "PO-Revision-Date: 2026-01-31 20:27+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -6352,7 +6352,7 @@ msgstr "اطبع المذكرة"
 msgid "Text file (*.txt)"
 msgstr "ملف نصي (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:90
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6361,12 +6361,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "صدر إلى الملف"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, kde-format
 msgid "Export failed"
 msgstr "فشل التصدير"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "فشل فتح '%1' للكتابة."
@@ -7322,32 +7322,32 @@ msgstr "وزن ثلاثي"
 msgid "Tricube"
 msgstr "مكعب ثلاثي"
 
-#: src/backend/script/Script.cpp:88
+#: src/backend/script/Script.cpp:89
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "ملف بايثون (*.py)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
+#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
 #, kde-format
 msgid "no script element found"
 msgstr "لا يوجد عنصر سكريبت"
 
-#: src/backend/script/Script.cpp:201
+#: src/backend/script/Script.cpp:205
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: نفذ سكريبت %2"
 
-#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
 #, kde-format
 msgid "Script"
 msgstr "سكربت"
 
-#: src/backend/script/Script.cpp:312
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "Failed to run the script."
 msgstr "فشل تنفيذ السكريبت."
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:322
 #, kde-format
 msgid "A script is already running."
 msgstr "هناك سكريبت قيد التشغيل بالفعل."
@@ -7726,8 +7726,9 @@ msgid "A negative monotonic trend exists"
 msgstr "يوجد اتجاه سلبي أحادي"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
-#, kde-format
-msgid "No positive monotonic trend exits"
+#, fuzzy, kde-format
+#| msgid "No positive monotonic trend exits"
+msgid "No positive monotonic trend exists"
 msgstr "لا يوجد اتجاه أحادي إيجابي"
 
 #: src/backend/statistics/HypothesisTest.cpp:258

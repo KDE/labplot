@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-02 00:39+0000\n"
-"PO-Revision-Date: 2026-01-30 09:30+0100\n"
+"POT-Creation-Date: 2026-02-03 00:41+0000\n"
+"PO-Revision-Date: 2026-02-02 12:25+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1189,16 +1189,14 @@ msgid "DateTime"
 msgstr "Tempore de Data"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Unix)"
-msgstr "Marcator de tempore"
+msgstr "Marcator de tempore (Unix)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:618
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Windows)"
-msgstr "Marcator de tempore"
+msgstr "Marcator de tempore (Windows)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
@@ -6256,7 +6254,7 @@ msgstr "Imprime Nota"
 msgid "Text file (*.txt)"
 msgstr "File de texto (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:90
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6265,12 +6263,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exporta a file"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, kde-format
 msgid "Export failed"
 msgstr "Exportation falleva"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Il falleva a aperir '%1' pro scriber."
@@ -7228,32 +7226,32 @@ msgstr ""
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/script/Script.cpp:88
+#: src/backend/script/Script.cpp:89
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Python file (*.py)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
+#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
 #, kde-format
 msgid "no script element found"
 msgstr "necun elemento de script trovate"
 
-#: src/backend/script/Script.cpp:201
+#: src/backend/script/Script.cpp:205
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: Exeque Script %2"
 
-#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:312
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Falleva a exequer le script."
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:322
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -7593,7 +7591,7 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
-msgid "No positive monotonic trend exits"
+msgid "No positive monotonic trend exists"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:258
@@ -7963,7 +7961,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
@@ -12311,10 +12309,9 @@ msgid "%1 or %2"
 msgstr "%1 o %2"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:199
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid data type '%1'"
-msgstr "File de metadatos invalide"
+msgstr "Typo de datos invalide '%1'"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format

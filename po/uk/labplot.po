@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-02 00:39+0000\n"
-"PO-Revision-Date: 2026-01-20 06:17+0200\n"
+"POT-Creation-Date: 2026-02-03 00:41+0000\n"
+"PO-Revision-Date: 2026-02-02 18:29+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1240,16 +1240,14 @@ msgid "DateTime"
 msgstr "Дата і час"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Unix)"
-msgstr "Часова позначка"
+msgstr "Часова позначка (Unix)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:618
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Windows)"
-msgstr "Часова позначка"
+msgstr "Часова позначка (Windows)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
@@ -6392,7 +6390,7 @@ msgstr "Друк нотатки"
 msgid "Text file (*.txt)"
 msgstr "текстовий файл (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:90
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6401,12 +6399,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Експорт до файла"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, kde-format
 msgid "Export failed"
 msgstr "Не вдалося експортувати"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Не вдалося відкрити «%1» для читання."
@@ -7366,32 +7364,32 @@ msgstr "Тривага"
 msgid "Tricube"
 msgstr "Трикубічна"
 
-#: src/backend/script/Script.cpp:88
+#: src/backend/script/Script.cpp:89
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "файл Python (*.py)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
+#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
 #, kde-format
 msgid "no script element found"
 msgstr "не знайдено елемента скрипту"
 
-#: src/backend/script/Script.cpp:201
+#: src/backend/script/Script.cpp:205
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: запустити скрипт %2"
 
-#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
 #, kde-format
 msgid "Script"
 msgstr "Скрипт"
 
-#: src/backend/script/Script.cpp:312
+#: src/backend/script/Script.cpp:317
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Не вдалося запустити скрипт."
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:322
 #, kde-format
 msgid "A script is already running."
 msgstr "Скрипт вже запущено."
@@ -7732,32 +7730,33 @@ msgstr "Перевірка гіпотези"
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "No monotonic trend exists"
-msgstr ""
+msgstr "Немає монотонних трендів"
 
 #: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "A monotonic trend exists"
-msgstr ""
+msgstr "Є монотонний тренд"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "No negative monotonic trend exists"
-msgstr ""
+msgstr "Немає негативних монотонних трендів"
 
 #: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "A negative monotonic trend exists"
-msgstr ""
+msgstr "Є негативний монотонний тренд"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
-#, kde-format
-msgid "No positive monotonic trend exits"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "No positive monotonic trend exits"
+msgid "No positive monotonic trend exists"
+msgstr "Немає позитивних монотонних трендів"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "A positive monotonic trend exists"
-msgstr ""
+msgstr "Є позитивний монотонний тренд"
 
 #: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
@@ -7826,10 +7825,9 @@ msgstr ""
 "Тестування одновимірного дисперсійного аналізу із повторними вимірюваннями"
 
 #: src/backend/statistics/HypothesisTest.cpp:345
-#, fuzzy, kde-format
-#| msgid "Mann-Whitney U Test"
+#, kde-format
 msgid "Mann-Kendall Test"
-msgstr "U-перевірка Манна-Вітні"
+msgstr "Перевірка Манна-Кендела"
 
 #: src/backend/statistics/HypothesisTest.cpp:519
 #, kde-format
@@ -8123,23 +8121,22 @@ msgstr "Загальна кількість 2"
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Kendall's Tau"
-msgstr ""
+msgstr "τ Кендала"
 
 #: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Sen's Slope"
-msgstr ""
+msgstr "Нахил Сена"
 
 #: src/backend/statistics/HypothesisTest.cpp:626
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Size"
-msgstr "Розмір вибірки:"
+msgstr "Розмір вибірки"
 
 #: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
@@ -8361,52 +8358,40 @@ msgstr ""
 "гіпотезу не слід відкидати."
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. Reject the null hypothesis."
 msgstr ""
-"На рівні значущості %1 криві виживання значно відрізняються. Нульову "
+"На рівні значущості %1 виявлено значущий монотонний тренд у даних. Нульову "
 "гіпотезу слід відкинути."
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"На рівні значущості %1 криві виживання значно відрізняються. Нульову "
-"гіпотезу слід відкинути."
+"На рівні значущості %1 виявлено значущий позитивний монотонний тренд. "
+"Нульову гіпотезу слід відкинути."
 
 #: src/backend/statistics/HypothesisTest.cpp:1701
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. Reject the null hypothesis."
 msgstr ""
-"На рівні значущості %1 криві виживання значно відрізняються. Нульову "
-"гіпотезу слід відкинути."
+"На рівні значущості %1 виявлено значущий негативний монотонний тренд. "
+"Нульову гіпотезу слід відкинути."
 
 #: src/backend/statistics/HypothesisTest.cpp:1703
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. Fail "
 "to reject the null hypothesis."
 msgstr ""
-"На рівні значущості %1 вибірки відрізняються незначно. Нульову гіпотезу не "
-"слід відкидати."
+"На рівні значущості %1 не виявлено значущих монотонних трендів. Нульову "
+"гіпотезу не слід відкидати."
 
 #: src/backend/statistics/HypothesisTest.cpp:1796
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -12518,18 +12503,7 @@ msgid "Custom column data types, comma separated"
 msgstr "Нестандартні типи даних стовпчиків, відокремлені комами"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12552,8 +12526,11 @@ msgstr ""
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Число із рухомою "
 "крапкою, розмір 64 бітів. Роздільність у 16 цифр.</td></tr><tr><td>%4</"
 "td><td>Дата і час із форматом з поля дати і часу, якщо воно не є порожнім, "
-"інакше буде визначено автоматично.</td></tr><tr><td>%5</td><td>Текст.</td></"
-"tr></table>"
+"інакше буде визначено автоматично.</td></tr><tr><td>%5</td><td>Кількість "
+"секунд від 1 січня 1970 року (UTC), перетворена до формату DateTime.</td></"
+"tr><tr><td>%6</td><td>Кількість інтервалів у 100 наносекунд від 1 січня 1601 "
+"року (UTC), перетворена до формату DateTime.</td></tr><tr><td>%7</"
+"td><td>Текст.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
@@ -12561,10 +12538,9 @@ msgid "%1 or %2"
 msgstr "%1 або %2"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:199
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid data type '%1'"
-msgstr "Некоректний файл метаданих"
+msgstr "Некоректний тип даних «%1»"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -14355,7 +14331,7 @@ msgstr "Кратні до π"
 #: src/frontend/dockwidgets/AxisDock.cpp:319
 #, kde-format
 msgid "Angle (DMS)"
-msgstr ""
+msgstr "Кут (ГМС)"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:322
 #, kde-format
@@ -15361,17 +15337,7 @@ msgstr ""
 "більше пов'язаних/повторних вимірювань мають однакове середнє значення</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:132
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests if two categorical variables "
-#| "are independent of each other</li><li><b>%7</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15389,10 +15355,10 @@ msgstr ""
 "медіанах між трьома або більше незалежними групами</li><li><b>%4</b> – "
 "перевіряє відмінності в медіанах між трьома або більше пов'язаними/"
 "повторними вимірюваннями</li><li><b>%5</b> – перевіряє відмінності в "
-"розподілах виживання між двома або більше групами</li><li><b>%6</b> – "
-"перевіряє, чи дві категоріальні змінні незалежні одна від одної</li><li><b>"
-"%7</b> – перевіряє, чи спостережувані дані відповідають заданому "
-"теоретичному розподілу</li></ul>"
+"розподілах виживання між двома або більше групами</li><li><b>%6</b> - "
+"перевіряє, чи є часовий тренд у даних</li><li><b>%7</b> – перевіряє, чи дві "
+"категоріальні змінні незалежні одна від одної</li><li><b>%8</b> – перевіряє, "
+"чи спостережувані дані відповідають заданому теоретичному розподілу</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:315
 #, kde-format
@@ -15914,10 +15880,9 @@ msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "Електронна таблиця, з якою слід синхронізувати кількість рядків"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
-#, fuzzy, kde-format
-#| msgid "Column Statistics Spreadsheet"
+#, kde-format
 msgid "Show Columns Statistics Spreadsheet"
-msgstr "Електронна таблиця статистики щодо стовпчиків"
+msgstr "Показати електронну таблицю статистики щодо стовпчиків"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
 #, kde-format
@@ -19318,28 +19283,24 @@ msgid "Fourier Filter of '%1'"
 msgstr "Фільтрування Фур'є «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:798
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgid "Fourier Transform of '%1'"
-msgstr "Перетворення Фур'є"
+msgstr "Перетворення Фур'є «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:801
-#, fuzzy, kde-format
-#| msgid "Hilbert Transform"
+#, kde-format
 msgid "Hilbert Transform of '%1'"
-msgstr "Перетворення Гільберта"
+msgstr "Перетворення Гільберта «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:804
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Convolution of '%1'"
-msgstr "Інтерполяція «%1»"
+msgstr "Згортка «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:807
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Correlation of '%1'"
-msgstr "Інтерполяція «%1»"
+msgstr "Кореляція «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:813
 #, kde-format
@@ -19857,8 +19818,7 @@ msgid "Column Statistics..."
 msgstr "Статистика щодо стовпчиків…"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:340
-#, fuzzy, kde-format
-#| msgid "Column Statistics Spreadsheet"
+#, kde-format
 msgid "Columns Statistics Spreadsheet"
 msgstr "Електронна таблиця статистики щодо стовпчиків"
 
@@ -24363,10 +24323,9 @@ msgstr "Заголовок"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistics:"
-msgstr "Статистика"
+msgstr "Статистика:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviation)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:190

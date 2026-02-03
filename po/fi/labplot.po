@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-02 00:39+0000\n"
+"POT-Creation-Date: 2026-02-03 00:41+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -6679,7 +6679,7 @@ msgstr "Tulosta"
 msgid "Text file (*.txt)"
 msgstr "LaTeX-tiedostot (*.tex)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:90
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6688,14 +6688,14 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Vie tiedostoon"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Export to File"
 msgid "Export failed"
 msgstr "Vie tiedostoon"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to open '%1' for writing."
@@ -7735,36 +7735,36 @@ msgstr "Korkeus"
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/script/Script.cpp:88
+#: src/backend/script/Script.cpp:89
 #, fuzzy, kde-format
 #| msgid "LaTeX files (*.tex)"
 msgid "Python file (*.py)"
 msgstr "LaTeX-tiedostot (*.tex)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
+#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
 #, fuzzy, kde-format
 #| msgid "no folder element found"
 msgid "no script element found"
 msgstr "kansioelementtiä ei löytynyt"
 
-#: src/backend/script/Script.cpp:201
+#: src/backend/script/Script.cpp:205
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
 msgstr "&Skripti"
 
-#: src/backend/script/Script.cpp:312
+#: src/backend/script/Script.cpp:317
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to run the script."
 msgstr "Avaaminen epäonnistui"
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:322
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -8145,7 +8145,7 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
-msgid "No positive monotonic trend exits"
+msgid "No positive monotonic trend exists"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:258

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-02 00:39+0000\n"
+"POT-Creation-Date: 2026-02-03 00:41+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -6339,7 +6339,7 @@ msgstr "Print Note"
 msgid "Text file (*.txt)"
 msgstr "Text file (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:90
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6348,12 +6348,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Export to File"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, kde-format
 msgid "Export failed"
 msgstr "Export failed"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:104
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Failed to open '%1' for writing."
@@ -7314,36 +7314,36 @@ msgstr "Triweight"
 msgid "Tricube"
 msgstr "Tricube"
 
-#: src/backend/script/Script.cpp:88
+#: src/backend/script/Script.cpp:89
 #, fuzzy, kde-format
 #| msgid "Text file (*.txt)"
 msgid "Python file (*.py)"
 msgstr "Text file (*.txt)"
 
-#: src/backend/script/Script.cpp:146 src/backend/script/Script.cpp:332
+#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
 #, fuzzy, kde-format
 #| msgid "no matrix element found"
 msgid "no script element found"
 msgstr "no matrix element found"
 
-#: src/backend/script/Script.cpp:201
+#: src/backend/script/Script.cpp:205
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:312 src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
 msgstr "&Script"
 
-#: src/backend/script/Script.cpp:312
+#: src/backend/script/Script.cpp:317
 #, fuzzy, kde-format
 #| msgid "Failed to open the file."
 msgid "Failed to run the script."
 msgstr "Failed to open the file."
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:322
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -7690,7 +7690,7 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
-msgid "No positive monotonic trend exits"
+msgid "No positive monotonic trend exists"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:258
