@@ -2170,7 +2170,7 @@ void FitTest::testNonLinearMGH09_3() {
 }
 
 void FitTest::testNonLinearMGH10() {
-	QSKIP("requires over 250 iterations, timing out on CI");
+	QSKIP("requires over 250 iterations, timing out on CI", QTest::SkipSingle);
 	// NIST data for MGH10 dataset
 	QVector<double> xData = {5.000000E+01,
 							 5.500000E+01,
@@ -2852,7 +2852,7 @@ void FitTest::testNonLinearHahn1_3() {
 }
 
 void FitTest::testNonLinearBennett5() {
-	QSKIP("requires over 800 iterations, timing out on CI");
+	QSKIP("requires over 800 iterations, timing out on CI", QTest::SkipSingle);
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 
