@@ -67,6 +67,7 @@ private Q_SLOTS:
 	// drop/mask
 	void testRemoveRowsWithMissingValues();
 	void testMaskRowsWithMissingValues();
+	void testMaskingRowRemovalUndoRedo();
 
 	// flattening
 	void testFlatten00();
