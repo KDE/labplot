@@ -29,10 +29,15 @@ private Q_SLOTS:
 	void testFriedman();
 	void testChisqIndependence();
 	void testChisqGoodnessOfFit();
+
 	void testMannKendall01();
 	void testMannKendall02();
 	void testMannKendall03();
 	void testMannKendall04();
 	void testMannKendall05();
+
+	void testRamirezRunger01();
+	void testRamirezRunger02();
+	void testRamirezRunger03();
 };
 #endif // NSLSTATISTICALTESTTEST_H

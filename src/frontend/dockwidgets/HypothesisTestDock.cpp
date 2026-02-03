@@ -110,6 +110,7 @@ void HypothesisTestDock::retranslateUi() {
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::friedman_test), static_cast<int>(HypothesisTest::Test::friedman_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::log_rank_test), static_cast<int>(HypothesisTest::Test::log_rank_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::mann_kendall_test), static_cast<int>(HypothesisTest::Test::mann_kendall_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::ramirez_runger_test), static_cast<int>(HypothesisTest::Test::ramirez_runger_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_independence), static_cast<int>(HypothesisTest::Test::chisq_independence));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit), static_cast<int>(HypothesisTest::Test::chisq_goodness_of_fit));
 
@@ -135,8 +136,9 @@ void HypothesisTestDock::retranslateUi() {
 		"<li><b>%4</b> - tests differences in medians among three or more related/repeated measurements</li>"
 		"<li><b>%5</b> - tests differences in survival distributions between two or more groups</li>"
 		"<li><b>%6</b> - tests for a trend in data over time</li>"
-		"<li><b>%7</b> - tests if two categorical variables are independent of each other</li>"
-		"<li><b>%8</b> - tests if observed data follows a specified theoretical distribution</li>"
+		"<li><b>%7</b> - tests for randomness in a sequence of observations</li>"
+		"<li><b>%8</b> - tests if two categorical variables are independent of each other</li>"
+		"<li><b>%9</b> - tests if observed data follows a specified theoretical distribution</li>"
 		"</ul>",
 		HypothesisTest::testName(HypothesisTest::Test::mann_whitney_u_test),
 		HypothesisTest::testName(HypothesisTest::Test::wilcoxon_test),
@@ -144,6 +146,7 @@ void HypothesisTestDock::retranslateUi() {
 		HypothesisTest::testName(HypothesisTest::Test::friedman_test),
 		HypothesisTest::testName(HypothesisTest::Test::log_rank_test),
 		HypothesisTest::testName(HypothesisTest::Test::mann_kendall_test),
+		HypothesisTest::testName(HypothesisTest::Test::ramirez_runger_test),
 		HypothesisTest::testName(HypothesisTest::Test::chisq_independence),
 		HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit)
 	);

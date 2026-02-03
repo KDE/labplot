@@ -504,4 +504,111 @@ void NSLStatisticalTestTest::testMannKendall05() {
 	QVERIFY(std::abs(result.p - expected_p) < epsilon);
 }
 
+/*!
+ * \brief Test Ramirez-Runger runs test with a random sequence.
+ *
+ * Tests the Ramirez-Runger runs test using data that appears random.
+ * The sequence alternates moderately around the median without obvious clustering.
+ * This test validates that the Ramirez-Runger test correctly identifies randomness
+ * when the data does not show significant clustering or excessive alternation.
+ */
+void NSLStatisticalTestTest::testRamirezRunger01() {
+	// Example data that should appear reasonably random
+	// Data with moderate number of runs around expected
+	const double sample[] = {5.0, 7.0, 3.0, 8.0, 9.0, 2.0, 6.0, 4.0, 10.0, 1.0};
+	size_t n = 10;
+
+	ramirez_runger_test_result result = nsl_stats_ramirez_runger(sample, n, nsl_stats_tail_type_two);
+
+	// Expected values for this dataset:
+	// Sorted: 1,2,3,4,5,6,7,8,9,10
+	// Median = (5+6)/2 = 5.5
+	// Above median (>5.5): 7, 8, 9, 6, 10 = 5 values
+	// Below median (<5.5): 5, 3, 2, 4, 1 = 5 values
+	// Sequence: B A B A A B A B A B (B=below, A=above)
+	// Number of runs: 9
+	// n1=5, n2=5
+	// Expected runs: (2*5*5)/(5+5) + 1 = 6.0
+	// Variance: (2*5*5*(2*5*5-10))/(100*9) = 2.222
+	// z-score = (9 - 0.5 - 6.0) / sqrt(2.222) ≈ 1.68
+	// p-value ≈ 0.09 (reasonably random)
+
+	const double epsilon = 1e-3;
+
+	QCOMPARE(result.runs, 9);
+	QCOMPARE(result.n, 10);
+	QVERIFY(result.z > 0.0 && result.z < 2.5); // z should be positive but moderate
+	QVERIFY(result.p > 0.05); // p-value should indicate randomness
+}
+
+/*!
+ * \brief Test Ramirez-Runger runs test with clustered data (too few runs).
+ *
+ * Tests the Ramirez-Runger runs test using data that shows clustering.
+ * The sequence has consecutive low values followed by consecutive high values,
+ * resulting in too few runs compared to random expectation.
+ * This test validates that the test correctly detects non-randomness due to clustering.
+ */
+void NSLStatisticalTestTest::testRamirezRunger02() {
+	// Data showing clear clustering (low values then high values)
+	const double sample[] = {10.0, 11.0, 12.0, 13.0, 14.0, 20.0, 21.0, 22.0, 23.0, 24.0};
+	size_t n = 10;
+
+	ramirez_runger_test_result result = nsl_stats_ramirez_runger(sample, n, nsl_stats_tail_type_negative);
+
+	// Expected values for this dataset:
+	// Median = 17.0
+	// Below median (<17): 10, 11, 12, 13, 14 = 5 values
+	// Above median (>17): 20, 21, 22, 23, 24 = 5 values
+	// Sequence: B B B B B A A A A A (B=below, A=above)
+	// Number of runs: 2 (significantly fewer than expected)
+	// n1=5, n2=5
+	// Expected runs: (2*5*5)/(5+5) + 1 = 6.0
+	// Variance: (2*5*5*(2*5*5-10))/(100*9) = 2.222
+	// z-score = (2 + 0.5 - 6.0) / sqrt(2.222) ≈ -2.35 (negative z indicates clustering)
+	// p-value for left-tailed test should be small
+
+	const double epsilon = 1e-1;
+
+	QCOMPARE(result.runs, 2);
+	QCOMPARE(result.n, 10);
+	QVERIFY(result.z < -2.0); // z should be significantly negative
+	QVERIFY(result.p < 0.05); // p-value should be small (not random, clustered)
+}
+
+/*!
+ * \brief Test Ramirez-Runger runs test with alternating data (too many runs).
+ *
+ * Tests the Ramirez-Runger runs test using data that alternates excessively.
+ * The sequence switches between high and low values frequently,
+ * resulting in too many runs compared to random expectation.
+ * This test validates that the test correctly detects non-randomness due to excessive alternation.
+ */
+void NSLStatisticalTestTest::testRamirezRunger03() {
+	// Data showing excessive alternation
+	const double sample[] = {10.0, 20.0, 11.0, 21.0, 12.0, 22.0, 13.0, 23.0, 14.0, 24.0};
+	size_t n = 10;
+
+	ramirez_runger_test_result result = nsl_stats_ramirez_runger(sample, n, nsl_stats_tail_type_positive);
+
+	// Expected values for this dataset:
+	// Median = 17.0
+	// Below median (<17): 10, 11, 12, 13, 14 = 5 values
+	// Above median (>17): 20, 21, 22, 23, 24 = 5 values
+	// Sequence: B A B A B A B A B A (alternating)
+	// Number of runs: 10 (maximum possible, excessive alternation)
+	// n1=5, n2=5
+	// Expected runs: (2*5*5)/(5+5) + 1 = 6.0
+	// Variance: (2*5*5*(2*5*5-10))/(100*9) = 2.222
+	// z-score = (10 - 0.5 - 6.0) / sqrt(2.222) ≈ 2.35 (positive z indicates alternation)
+	// p-value for right-tailed test should be small
+
+	const double epsilon = 1e-1;
+
+	QCOMPARE(result.runs, 10);
+	QCOMPARE(result.n, 10);
+	QVERIFY(result.z > 2.0); // z should be significantly positive
+	QVERIFY(result.p < 0.05); // p-value should be small (not random, alternating)
+}
+
 QTEST_MAIN(NSLStatisticalTestTest)
