@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Hypothesis Test
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2025 Alexander Semke >alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025-2026 Alexander Semke >alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
@@ -260,7 +260,8 @@ QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
 			return hypothesis;
 		} else if (test == Test::wald_wolfowitz_runs_test) {
 			// Wald-Wolfowitz tests for randomness based on runs above and below the median
-			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(i18n("The data are randomly distributed"), i18n("The data are not randomly distributed"));
+			hypothesis[nsl_stats_tail_type_two] =
+				QPair<QString, QString>(i18n("The data are randomly distributed"), i18n("The data are not randomly distributed"));
 			hypothesis[nsl_stats_tail_type_negative] =
 				QPair<QString, QString>(i18n("The data are randomly distributed"), i18n("The data show clustering (too few runs)"));
 			hypothesis[nsl_stats_tail_type_positive] =
@@ -1770,13 +1771,13 @@ void HypothesisTestPrivate::performWaldWolfowitzRunsTest() {
 			if (tail == nsl_stats_tail_type_two)
 				conclusion = i18n("At the significance level %1, the data are not randomly distributed. Reject the null hypothesis.", significanceLevel);
 			else if (tail == nsl_stats_tail_type_negative)
-				conclusion = i18n("At the significance level %1, the data show clustering (too few runs). Reject the null hypothesis.",
-								  significanceLevel);
+				conclusion = i18n("At the significance level %1, the data show clustering (too few runs). Reject the null hypothesis.", significanceLevel);
 			else
 				conclusion =
 					i18n("At the significance level %1, the data show excessive alternation (too many runs). Reject the null hypothesis.", significanceLevel);
 		} else
-			conclusion = i18n("At the significance level %1, the data appear to be randomly distributed. Fail to reject the null hypothesis.", significanceLevel);
+			conclusion =
+				i18n("At the significance level %1, the data appear to be randomly distributed. Fail to reject the null hypothesis.", significanceLevel);
 	} else
 		conclusion = testResultNotAvailable();
 
