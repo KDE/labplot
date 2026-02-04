@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-03 00:41+0000\n"
-"PO-Revision-Date: 2026-01-31 12:24+0100\n"
+"PO-Revision-Date: 2026-02-03 10:40+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -7674,8 +7674,7 @@ msgid "A negative monotonic trend exists"
 msgstr "Er bestaat een negatieve monotone trend"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
-#, fuzzy, kde-format
-#| msgid "No positive monotonic trend exits"
+#, kde-format
 msgid "No positive monotonic trend exists"
 msgstr "Er bestaat geen positieve monotone trend"
 

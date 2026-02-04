@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-03 00:41+0000\n"
-"PO-Revision-Date: 2026-01-31 08:42+0100\n"
+"PO-Revision-Date: 2026-02-03 07:23+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -7712,8 +7712,7 @@ msgid "A negative monotonic trend exists"
 msgstr "Obstaja negativni monotoni trend"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
-#, fuzzy, kde-format
-#| msgid "No positive monotonic trend exits"
+#, kde-format
 msgid "No positive monotonic trend exists"
 msgstr "Ne obstaja pozitivni monotoni trend"
 

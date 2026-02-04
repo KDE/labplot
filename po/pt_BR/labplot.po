@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-03 00:41+0000\n"
-"PO-Revision-Date: 2026-01-31 02:45-0300\n"
-"Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
+"PO-Revision-Date: 2026-02-03 00:47-0300\n"
+"Last-Translator: Guilherme Marçal Silva <guimarcalsilva@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -7691,8 +7691,7 @@ msgid "A negative monotonic trend exists"
 msgstr "Existe uma tendência monotônica negativa"
 
 #: src/backend/statistics/HypothesisTest.cpp:258
-#, fuzzy, kde-format
-#| msgid "No positive monotonic trend exits"
+#, kde-format
 msgid "No positive monotonic trend exists"
 msgstr "Não existe uma tendência monotônica positiva"
 
