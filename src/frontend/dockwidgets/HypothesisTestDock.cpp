@@ -110,7 +110,7 @@ void HypothesisTestDock::retranslateUi() {
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::friedman_test), static_cast<int>(HypothesisTest::Test::friedman_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::log_rank_test), static_cast<int>(HypothesisTest::Test::log_rank_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::mann_kendall_test), static_cast<int>(HypothesisTest::Test::mann_kendall_test));
-	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::ramirez_runger_test), static_cast<int>(HypothesisTest::Test::ramirez_runger_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::wald_wolfowitz_runs_test), static_cast<int>(HypothesisTest::Test::wald_wolfowitz_runs_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_independence), static_cast<int>(HypothesisTest::Test::chisq_independence));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit), static_cast<int>(HypothesisTest::Test::chisq_goodness_of_fit));
 
@@ -146,7 +146,7 @@ void HypothesisTestDock::retranslateUi() {
 		HypothesisTest::testName(HypothesisTest::Test::friedman_test),
 		HypothesisTest::testName(HypothesisTest::Test::log_rank_test),
 		HypothesisTest::testName(HypothesisTest::Test::mann_kendall_test),
-		HypothesisTest::testName(HypothesisTest::Test::ramirez_runger_test),
+		HypothesisTest::testName(HypothesisTest::Test::wald_wolfowitz_runs_test),
 		HypothesisTest::testName(HypothesisTest::Test::chisq_independence),
 		HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit)
 	);

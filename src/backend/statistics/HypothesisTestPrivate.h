@@ -36,7 +36,7 @@ public:
 	void performChisqIndependenceTest();
 	void performLogRankTest();
 	void performMannKendallTest();
-	void performRamirezRungerTest();
+	void performWaldWolfowitzRunsTest();
 
 	size_t minSampleCount(HypothesisTest::Test);
 

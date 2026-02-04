@@ -200,7 +200,7 @@ QPair<int, int> HypothesisTest::variableCount(Test test) {
 	switch (test) {
 	case Test::t_test_one_sample:
 	case Test::mann_kendall_test:
-	case Test::ramirez_runger_test:
+	case Test::wald_wolfowitz_runs_test:
 		return {1, 1};
 		break;
 	case Test::t_test_two_sample:
@@ -258,13 +258,13 @@ QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
 			hypothesis[nsl_stats_tail_type_positive] =
 				QPair<QString, QString>(i18n("No positive monotonic trend exists"), i18n("A positive monotonic trend exists"));
 			return hypothesis;
-		} else if (test == Test::ramirez_runger_test) {
-			// Ramirez-Runger tests for randomness in the sequence
-			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(i18n("The sequence is random"), i18n("The sequence is not random"));
+		} else if (test == Test::wald_wolfowitz_runs_test) {
+			// Wald-Wolfowitz tests for randomness based on runs above and below the median
+			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(i18n("The data are randomly distributed"), i18n("The data are not randomly distributed"));
 			hypothesis[nsl_stats_tail_type_negative] =
-				QPair<QString, QString>(i18n("The sequence is random"), i18n("The sequence has too few runs (clustered)"));
+				QPair<QString, QString>(i18n("The data are randomly distributed"), i18n("The data show clustering (too few runs)"));
 			hypothesis[nsl_stats_tail_type_positive] =
-				QPair<QString, QString>(i18n("The sequence is random"), i18n("The sequence has too many runs (alternating)"));
+				QPair<QString, QString>(i18n("The data are randomly distributed"), i18n("The data show excessive alternation (too many runs)"));
 			return hypothesis;
 		}
 
@@ -308,7 +308,7 @@ int HypothesisTest::hypothesisCount(Test test) {
 	case Test::t_test_welch:
 	case Test::wilcoxon_test:
 	case Test::mann_kendall_test:
-	case Test::ramirez_runger_test:
+	case Test::wald_wolfowitz_runs_test:
 		return 3;
 	case Test::one_way_anova:
 	case Test::kruskal_wallis_test:
@@ -353,8 +353,8 @@ QString HypothesisTest::testName(Test test) {
 		return i18n("One-Way ANOVA with Repeated Measures Test");
 	case Test::mann_kendall_test:
 		return i18n("Mann-Kendall Test");
-	case Test::ramirez_runger_test:
-		return i18n("Ramirez-Runger Runs Test");
+	case Test::wald_wolfowitz_runs_test:
+		return i18n("Wald-Wolfowitz Runs Test");
 	}
 
 	return {};
@@ -375,7 +375,7 @@ size_t HypothesisTestPrivate::minSampleCount(HypothesisTest::Test htest) {
 		return 5;
 	case HypothesisTest::Test::mann_kendall_test:
 		return 3;
-	case HypothesisTest::Test::ramirez_runger_test:
+	case HypothesisTest::Test::wald_wolfowitz_runs_test:
 		return 3;
 	case HypothesisTest::Test::chisq_independence:
 	case HypothesisTest::Test::chisq_goodness_of_fit:
@@ -567,7 +567,7 @@ QString HypothesisTestPrivate::emptyResultColumnStatistics() {
 QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 	bool hasDescriptiveStatistics = (test != HypothesisTest::Test::chisq_independence) && (test != HypothesisTest::Test::log_rank_test);
 	bool hasDegreesOfFreedom = (test != HypothesisTest::Test::mann_whitney_u_test) && (test != HypothesisTest::Test::wilcoxon_test)
-		&& (test != HypothesisTest::Test::mann_kendall_test) && (test != HypothesisTest::Test::ramirez_runger_test);
+		&& (test != HypothesisTest::Test::mann_kendall_test) && (test != HypothesisTest::Test::wald_wolfowitz_runs_test);
 
 	QString result;
 	result += (addResultTitle(HypothesisTest::testName(test)) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
@@ -638,7 +638,7 @@ QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 		result += (addResultLine(i18n("S"), QStringLiteral("%L20")) + addResultLine(i18n("Kendall's Tau"), QStringLiteral("%L21"))
 				   + addResultLine(i18n("z-Value"), QStringLiteral("%L22")) + addResultLine(i18n("Sen's Slope"), QStringLiteral("%L23"))
 				   + addResultLine(i18n("Sample Size"), QStringLiteral("%L24")));
-	} else if (test == HypothesisTest::Test::ramirez_runger_test) {
+	} else if (test == HypothesisTest::Test::wald_wolfowitz_runs_test) {
 		result += (addResultLine(i18n("Number of Runs"), QStringLiteral("%L20")) + addResultLine(i18n("z-Value"), QStringLiteral("%L21"))
 				   + addResultLine(i18n("Sample Size"), QStringLiteral("%L22")));
 	}
@@ -702,8 +702,8 @@ void HypothesisTestPrivate::recalculate() {
 	case HypothesisTest::Test::mann_kendall_test:
 		performMannKendallTest();
 		break;
-	case HypothesisTest::Test::ramirez_runger_test:
-		performRamirezRungerTest();
+	case HypothesisTest::Test::wald_wolfowitz_runs_test:
+		performWaldWolfowitzRunsTest();
 		break;
 	}
 
@@ -892,7 +892,7 @@ void HypothesisTestPrivate::resetResult() {
 						 .arg(notAvailable())
 						 .arg(notAvailable())
 						 .arg(testResultNotAvailable());
-	} else if (test == HypothesisTest::Test::ramirez_runger_test) {
+	} else if (test == HypothesisTest::Test::wald_wolfowitz_runs_test) {
 		resultText = resultTemplate(test)
 						 .arg(notAvailable())
 						 .arg(notAvailable())
@@ -1749,7 +1749,7 @@ void HypothesisTestPrivate::performMannKendallTest() {
 					 .arg(conclusion);
 }
 
-void HypothesisTestPrivate::performRamirezRungerTest() {
+void HypothesisTestPrivate::performWaldWolfowitzRunsTest() {
 	const auto* col = dataColumns.constFirst();
 
 	QVector<double> sample = filterColumn<double>(col);
@@ -1760,7 +1760,7 @@ void HypothesisTestPrivate::performRamirezRungerTest() {
 		return;
 	}
 
-	ramirez_runger_test_result result = nsl_stats_ramirez_runger(sample.constData(), n, tail);
+	wald_wolfowitz_runs_test_result result = nsl_stats_wald_wolfowitz_runs(sample.constData(), n, tail);
 
 	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(tail);
 
@@ -1768,15 +1768,15 @@ void HypothesisTestPrivate::performRamirezRungerTest() {
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel) {
 			if (tail == nsl_stats_tail_type_two)
-				conclusion = i18n("At the significance level %1, the sequence is not random. Reject the null hypothesis.", significanceLevel);
+				conclusion = i18n("At the significance level %1, the data are not randomly distributed. Reject the null hypothesis.", significanceLevel);
 			else if (tail == nsl_stats_tail_type_negative)
-				conclusion = i18n("At the significance level %1, the sequence has too few runs (clustered). Reject the null hypothesis.",
+				conclusion = i18n("At the significance level %1, the data show clustering (too few runs). Reject the null hypothesis.",
 								  significanceLevel);
 			else
 				conclusion =
-					i18n("At the significance level %1, the sequence has too many runs (alternating). Reject the null hypothesis.", significanceLevel);
+					i18n("At the significance level %1, the data show excessive alternation (too many runs). Reject the null hypothesis.", significanceLevel);
 		} else
-			conclusion = i18n("At the significance level %1, the sequence appears random. Fail to reject the null hypothesis.", significanceLevel);
+			conclusion = i18n("At the significance level %1, the data appear to be randomly distributed. Fail to reject the null hypothesis.", significanceLevel);
 	} else
 		conclusion = testResultNotAvailable();
 
@@ -1940,8 +1940,8 @@ void HypothesisTest::fillAddNewHypothesisTest(QMenu* menu, QActionGroup* actionG
 	action->setData(static_cast<int>(Test::mann_kendall_test));
 	subMenu->addAction(action);
 
-	action = new QAction(testName(Test::ramirez_runger_test), actionGroup);
-	action->setData(static_cast<int>(Test::ramirez_runger_test));
+	action = new QAction(testName(Test::wald_wolfowitz_runs_test), actionGroup);
+	action->setData(static_cast<int>(Test::wald_wolfowitz_runs_test));
 	subMenu->addAction(action);
 
 	menu->addMenu(subMenu);

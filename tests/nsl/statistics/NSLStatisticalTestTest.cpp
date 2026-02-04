@@ -505,20 +505,20 @@ void NSLStatisticalTestTest::testMannKendall05() {
 }
 
 /*!
- * \brief Test Ramirez-Runger runs test with a random sequence.
+ * \brief Test Wald-Wolfowitz runs test with a random sequence.
  *
- * Tests the Ramirez-Runger runs test using data that appears random.
+ * Tests the Wald-Wolfowitz runs test using data that appears random.
  * The sequence alternates moderately around the median without obvious clustering.
- * This test validates that the Ramirez-Runger test correctly identifies randomness
+ * This test validates that the Wald-Wolfowitz runs test correctly identifies randomness
  * when the data does not show significant clustering or excessive alternation.
  */
-void NSLStatisticalTestTest::testRamirezRunger01() {
+void NSLStatisticalTestTest::testWaldWolfowitzRuns01() {
 	// Example data that should appear reasonably random
 	// Data with moderate number of runs around expected
 	const double sample[] = {5.0, 7.0, 3.0, 8.0, 9.0, 2.0, 6.0, 4.0, 10.0, 1.0};
 	size_t n = 10;
 
-	ramirez_runger_test_result result = nsl_stats_ramirez_runger(sample, n, nsl_stats_tail_type_two);
+	wald_wolfowitz_runs_test_result result = nsl_stats_wald_wolfowitz_runs(sample, n, nsl_stats_tail_type_two);
 
 	// Expected values for this dataset:
 	// Sorted: 1,2,3,4,5,6,7,8,9,10
@@ -542,19 +542,19 @@ void NSLStatisticalTestTest::testRamirezRunger01() {
 }
 
 /*!
- * \brief Test Ramirez-Runger runs test with clustered data (too few runs).
+ * \brief Test Wald-Wolfowitz runs test with clustered data (too few runs).
  *
- * Tests the Ramirez-Runger runs test using data that shows clustering.
+ * Tests the Wald-Wolfowitz runs test using data that shows clustering.
  * The sequence has consecutive low values followed by consecutive high values,
  * resulting in too few runs compared to random expectation.
  * This test validates that the test correctly detects non-randomness due to clustering.
  */
-void NSLStatisticalTestTest::testRamirezRunger02() {
+void NSLStatisticalTestTest::testWaldWolfowitzRuns02() {
 	// Data showing clear clustering (low values then high values)
 	const double sample[] = {10.0, 11.0, 12.0, 13.0, 14.0, 20.0, 21.0, 22.0, 23.0, 24.0};
 	size_t n = 10;
 
-	ramirez_runger_test_result result = nsl_stats_ramirez_runger(sample, n, nsl_stats_tail_type_negative);
+	wald_wolfowitz_runs_test_result result = nsl_stats_wald_wolfowitz_runs(sample, n, nsl_stats_tail_type_negative);
 
 	// Expected values for this dataset:
 	// Median = 17.0
@@ -577,19 +577,19 @@ void NSLStatisticalTestTest::testRamirezRunger02() {
 }
 
 /*!
- * \brief Test Ramirez-Runger runs test with alternating data (too many runs).
+ * \brief Test Wald-Wolfowitz runs test with alternating data (too many runs).
  *
- * Tests the Ramirez-Runger runs test using data that alternates excessively.
+ * Tests the Wald-Wolfowitz runs test using data that alternates excessively.
  * The sequence switches between high and low values frequently,
  * resulting in too many runs compared to random expectation.
  * This test validates that the test correctly detects non-randomness due to excessive alternation.
  */
-void NSLStatisticalTestTest::testRamirezRunger03() {
+void NSLStatisticalTestTest::testWaldWolfowitzRuns03() {
 	// Data showing excessive alternation
 	const double sample[] = {10.0, 20.0, 11.0, 21.0, 12.0, 22.0, 13.0, 23.0, 14.0, 24.0};
 	size_t n = 10;
 
-	ramirez_runger_test_result result = nsl_stats_ramirez_runger(sample, n, nsl_stats_tail_type_positive);
+	wald_wolfowitz_runs_test_result result = nsl_stats_wald_wolfowitz_runs(sample, n, nsl_stats_tail_type_positive);
 
 	// Expected values for this dataset:
 	// Median = 17.0

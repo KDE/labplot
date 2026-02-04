@@ -36,8 +36,8 @@ private Q_SLOTS:
 	void testMannKendall04();
 	void testMannKendall05();
 
-	void testRamirezRunger01();
-	void testRamirezRunger02();
-	void testRamirezRunger03();
+	void testWaldWolfowitzRuns01();
+	void testWaldWolfowitzRuns02();
+	void testWaldWolfowitzRuns03();
 };
 #endif // NSLSTATISTICALTESTTEST_H

@@ -1037,16 +1037,16 @@ struct mann_kendall_test_result nsl_stats_mann_kendall(const double sample[], si
 
 	return result;
 }
-/* Ramirez-Runger Runs Test for randomness */
-struct ramirez_runger_test_result nsl_stats_ramirez_runger(const double sample[], size_t n, nsl_stats_tail_type tail) {
-	struct ramirez_runger_test_result result;
+/* Wald-Wolfowitz Runs Test for randomness */
+struct wald_wolfowitz_runs_test_result nsl_stats_wald_wolfowitz_runs(const double sample[], size_t n, nsl_stats_tail_type tail) {
+	struct wald_wolfowitz_runs_test_result result;
 	result.n = n;
 	result.runs = 0;
 	result.z = NAN;
 	result.p = NAN;
 
 	if (n < 3) {
-		fprintf(stderr, "Error: Ramirez-Runger test requires at least 3 data points.\n");
+		fprintf(stderr, "Error: Wald-Wolfowitz runs test requires at least 3 data points.\n");
 		return result;
 	}
 
