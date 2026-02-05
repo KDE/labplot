@@ -77,8 +77,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-26.01.0.tar.xz",
-                    "sha256": "1cb944a4b88847f5fb6551683bc799db59f04990f5d8be07aba2acbf38601089"
+                    "url": "https://poppler.freedesktop.org/poppler-26.02.0.tar.xz",
+                    "sha256": "dded8621f7b2f695c91063aab1558691c8418374cd583501e89ed39487e7ab77"
                 }
             ],
             "modules": [
@@ -289,7 +289,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/fastfloat/fast_float.git",
-                    "tag": "1ea4f27b2aeee2859a1354a3c24cff52a116cad1"
+		    "tag": "v8.2.3",
+                    "commit": "01ce95dfe46abccf3264fbccf9f5139ea9016cd2"
                 }
             ]
         },
@@ -303,7 +304,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/LinuxDevon/dbc_parser_cpp.git",
-                    "tag": "cc4e80c7b6e1f7a13cc47b45f226756f823888e2"
+		    "tag": "v0.5.0",
+                    "commit": "887d779fbf416032f539675f74360a5a43a93f86"
                 },
 		{
                     "type": "patch",
@@ -318,7 +320,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Murmele/vector_blf.git",
-                    "tag": "2c1a8e649328f2e06ce4d45c6223628bc39fd178"
+                    "tag": "2c1a8e649328f2e06ce4d45c6223628bc39fd178",
+                    "commit": "2c1a8e649328f2e06ce4d45c6223628bc39fd178"
                 }
             ]
         },
