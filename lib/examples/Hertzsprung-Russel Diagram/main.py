@@ -60,9 +60,9 @@ worksheet.setLayoutVerticalSpacing(Worksheet.convertToSceneUnits(0.5, Worksheet.
 plotArea = CartesianPlot("xy-plot")
 plotArea.setType(CartesianPlot.Type.FourAxes)
 plotArea.title().setText("Hertzsprung-Russell diagram")
-border = plotArea.plotArea().borderType()
-border = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
-plotArea.plotArea().setBorderType(border)
+border = plotArea.borderType()
+border = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
+plotArea.setBorderType(border)
 plotArea.setSymmetricPadding(False)
 plotArea.setHorizontalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 plotArea.setVerticalPadding(Worksheet.convertToSceneUnits(2.8, Worksheet.Unit.Centimeter))

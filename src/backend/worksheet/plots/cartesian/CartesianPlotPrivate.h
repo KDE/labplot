@@ -293,6 +293,12 @@ public:
 	// stacking
 	double stackYOffset{0.0};
 
+	// Plot area
+	Background* background{nullptr};
+	CartesianPlot::BorderType borderType;
+	Line* borderLine{nullptr};
+	qreal borderCornerRadius{0.0};
+
 	// Cursor
 	bool cursor0Enable{false};
 	int selectedCursor{0};

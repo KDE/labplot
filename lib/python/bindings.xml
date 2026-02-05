@@ -24,7 +24,6 @@
         <reject-enum-value name="WorksheetElementGroup"/>
         <reject-enum-value name="AbstractPlot"/>
         <reject-enum-value name="WorksheetElementContainer"/>
-        <reject-enum-value name="PlotArea"/>
         <reject-enum-value name="WorksheetElement"/>
         <reject-enum-value name="AbstractFilter"/>
         <reject-enum-value name="AbstractAspect"/>
@@ -133,7 +132,6 @@
     <rejection class="AbstractPlot" field-name="*"/>
     <rejection class="AbstractPlot" function-name="*"/>
     <object-type name="AbstractPlot" force-abstract="yes" disable-wrapper="yes">
-        <declare-function signature="plotArea()" return-type="PlotArea*"/>
         <declare-function signature="title()" return-type="TextLabel*"/>
         <declare-function signature="horizontalPadding()" return-type="double"/>
         <declare-function signature="setHorizontalPadding(double)" return-type="void"/>
@@ -487,17 +485,6 @@
         <declare-function signature="setWidth(double)" return-type="void"/>
         <declare-function signature="opacity()const" return-type="double"/>
         <declare-function signature="setOpacity(double)" return-type="void"/>
-    </object-type>
-    <rejection class="PlotArea" field-name="*"/>
-    <rejection class="PlotArea" function-name="*"/>
-    <object-type name="PlotArea" disable-wrapper="yes">
-        <enum-type name="BorderTypeFlags" flags="yes"/>
-        <declare-function signature="background()const" return-type="Background*"/>
-        <declare-function signature="borderLine()const" return-type="Line*"/>
-        <declare-function signature="borderType()const" return-type="PlotArea::BorderType"/>
-        <declare-function signature="setBorderType(PlotArea::BorderType)" return-type="void"/>
-        <declare-function signature="borderCornerRadius()const" return-type="qreal"/>
-        <declare-function signature="setBorderCornerRadius(qreal)" return-type="void"/>
     </object-type>
     <value-type name="Range" disable-wrapper="yes" generate="no"/>
     <typedef-type name="DoubleRange" source="Range&lt;double&gt;"/>

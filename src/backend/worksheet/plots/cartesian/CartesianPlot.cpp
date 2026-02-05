@@ -18,12 +18,13 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
+
+#include "backend/worksheet/Background.h"
 #include "backend/worksheet/DefaultColorTheme.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
@@ -134,18 +135,43 @@ CartesianPlot::~CartesianPlot() {
 	initializes all member variables of \c CartesianPlot
 */
 void CartesianPlot::init(bool loading) {
-	// initialize the children objects
-	m_plotArea = new PlotArea(name() + QStringLiteral(" plot area"), this);
-	connect(m_plotArea, &WorksheetElement::changed, this, &WorksheetElement::changed);
-	addChildFast(m_plotArea);
-
 	// title
 	m_title = new TextLabel(this->name() + QLatin1String(" - ") + i18n("Title"), TextLabel::Type::PlotTitle);
 	addChild(m_title);
 	m_title->setHidden(true);
-	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
+	m_title->setParentGraphicsItem(graphicsItem());
 
 	Q_D(CartesianPlot);
+
+	// Background
+	d->background = new Background(QStringLiteral("background"));
+	addChild(d->background);
+	d->background->setHidden(true);
+	KConfig config;
+	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
+	d->background->init(group);
+	connect(d->background, &Background::updateRequested, [=] {
+		d->update();
+	});
+
+	// Border
+	CartesianPlot::BorderType type; // default value
+	d->borderType = static_cast<CartesianPlot::BorderType>(group.readEntry(QStringLiteral("BorderType"), static_cast<int>(type)));
+
+	d->borderLine = new Line(QStringLiteral("borderLine"));
+	d->borderLine->setPrefix(QStringLiteral("Border"));
+	d->borderLine->setCreateXmlElement(false);
+	d->borderLine->setHidden(true);
+	addChild(d->borderLine);
+	d->borderLine->init(group);
+	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->borderLine, &Line::updateRequested, [=] {
+		Q_EMIT changed();
+	});
+
+	d->borderCornerRadius = group.readEntry(QStringLiteral("BorderCornerRadius"), 0.0);
 
 	// cursor line
 	d->cursorLine = new Line(QString());
@@ -167,9 +193,6 @@ void CartesianPlot::init(bool loading) {
 		return;
 
 	m_coordinateSystems << new CartesianCoordinateSystem(this);
-
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
 
 	// TODO: load from KConfigGroup
 	// offset between the plot area and the area defining the coordinate system, in scene units.
@@ -307,7 +330,7 @@ void CartesianPlot::setType(Type type) {
 		d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 		d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 
-		m_plotArea->borderLine()->setStyle(Qt::NoPen);
+		d->borderLine->setStyle(Qt::NoPen);
 
 		Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 		axis->title()->setText(QString());
@@ -349,7 +372,7 @@ void CartesianPlot::setType(Type type) {
 		d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 		d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 
-		m_plotArea->borderLine()->setStyle(Qt::NoPen);
+		d->borderLine->setStyle(Qt::NoPen);
 
 		Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 		axis->title()->setText(QString());
@@ -1106,6 +1129,20 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, QString, plotColorMap, plotColorMap)
 
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, double, stackYOffset, stackYOffset)
 
+// plot area
+Background* CartesianPlot::background() const {
+	Q_D(const CartesianPlot);
+	return d->background;
+}
+
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::BorderType, borderType, borderType)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, qreal, borderCornerRadius, borderCornerRadius)
+
+Line* CartesianPlot::borderLine() const {
+	Q_D(const CartesianPlot);
+	return d->borderLine;
+}
+
 Line* CartesianPlot::cursorLine() const {
 	Q_D(const CartesianPlot);
 	return d->cursorLine;
@@ -1832,6 +1869,21 @@ void CartesianPlot::setStackYOffset(double offset) {
 	Q_D(CartesianPlot);
 	if (offset != d->stackYOffset)
 		exec(new CartesianPlotSetStackYOffsetCmd(d, offset, ki18n("%1: set y-offset")));
+}
+
+// plot area
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetBorderType, CartesianPlot::BorderType, borderType, update)
+void CartesianPlot::setBorderType(BorderType type) {
+	Q_D(CartesianPlot);
+	if (type != d->borderType)
+		exec(new CartesianPlotSetBorderTypeCmd(d, type, ki18n("%1: border type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetBorderCornerRadius, qreal, borderCornerRadius, update)
+void CartesianPlot::setBorderCornerRadius(qreal radius) {
+	Q_D(CartesianPlot);
+	if (radius != d->borderCornerRadius)
+		exec(new CartesianPlotSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set border corner radius")));
 }
 
 void CartesianPlot::retransform() {
@@ -2688,7 +2740,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			const auto& axes = children<Axis>();
 			for (auto* a : axes) {
 				if (a->orientation() == WorksheetElement::Orientation::Vertical) {
-					double delta = plotArea()->graphicsItem()->boundingRect().x() - a->graphicsItem()->boundingRect().x();
+					double delta = d->dataRect.x() - a->graphicsItem()->boundingRect().x();
 					if (delta > 0) {
 						setUndoAware(false);
 						// 					setSuppressRetransform(true);
@@ -3587,12 +3639,6 @@ void CartesianPlotPrivate::retransform() {
 	prepareGeometryChange();
 	setPos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
 	updateDataRect();
-
-	// plotArea position is always (0, 0) in parent's coordinates, don't need to update here
-	if (q->parentAspect() && q->parentAspect()->type() == AspectType::CartesianPlot)
-		q->plotArea()->setRect(mapRectToParent(rect));
-	else
-		q->plotArea()->setRect(mapRectFromScene(rect));
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 
@@ -4740,6 +4786,34 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	if (!isVisible() || m_printing)
 		return;
 
+	// draw the plot area background
+	background->draw(painter, dataRect, borderCornerRadius);
+
+	// draw the plot area border
+	if (borderLine->pen().style() != Qt::NoPen) {
+		painter->save();
+		painter->setPen(borderLine->pen());
+		painter->setBrush(Qt::NoBrush);
+		painter->setOpacity(borderLine->opacity());
+		if (qFuzzyIsNull(borderCornerRadius)) {
+			const double w = dataRect.width();
+			const double h = dataRect.height();
+			const double x = dataRect.x();
+			const double y = dataRect.y();
+			if (borderType.testFlag(CartesianPlot::BorderTypeFlags::BorderLeft))
+				painter->drawLine(x, y, x, y + h);
+			if (borderType.testFlag(CartesianPlot::BorderTypeFlags::BorderTop))
+				painter->drawLine(x, y, x + w, y);
+			if (borderType.testFlag(CartesianPlot::BorderTypeFlags::BorderRight))
+				painter->drawLine(x + w, y, x + w, y + h);
+			if (borderType.testFlag(CartesianPlot::BorderTypeFlags::BorderBottom))
+				painter->drawLine(x, y + h, x + w, y + h);
+		} else
+			painter->drawRoundedRect(dataRect, borderCornerRadius, borderCornerRadius);
+		painter->restore();
+	}
+
+	// draw interactive elements (selection bands, cursors, etc.)
 	if ((mouseMode == CartesianPlot::MouseMode::ZoomXSelection || mouseMode == CartesianPlot::MouseMode::ZoomYSelection) && (!m_selectionBandIsShown)
 		&& m_insideDataRect) {
 		painter->setPen(zoomSelectPen);
@@ -4943,7 +5017,13 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yOffset"), QString::number(d->stackYOffset));
 	writer->writeEndElement();
 
-	// serialize all children (plot area, title text label, axes and curves)
+	// plot area
+	writer->writeStartElement(QStringLiteral("plotArea"));
+	writer->writeAttribute(QStringLiteral("borderType"), QString::number(static_cast<int>(d->borderType)));
+	writer->writeAttribute(QStringLiteral("borderCornerRadius"), QString::number(d->borderCornerRadius));
+	writer->writeEndElement();
+
+	// serialize all children (background, border line, title text label, axes and curves)
 	const auto& elements = children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
 	for (auto* elem : elements)
 		elem->save(writer);
@@ -5362,8 +5442,27 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("plotArea")) {
-			m_plotArea->setIsLoading(true);
-			m_plotArea->load(reader, preview);
+			// Load new format with borderType and borderCornerRadius attributes
+			attribs = reader->attributes();
+
+			// Load border properties if available
+			str = attribs.value(QStringLiteral("borderType")).toString();
+			if (!str.isEmpty())
+				d->borderType = static_cast<CartesianPlot::BorderType>(str.toInt());
+
+			str = attribs.value(QStringLiteral("borderCornerRadius")).toString();
+			if (!str.isEmpty())
+				d->borderCornerRadius = str.toDouble();
+
+			// For backward compatibility, skip old PlotArea child elements
+			// The properties will be loaded from the attributes above
+			reader->skipCurrentElement();
+		} else if (!preview && reader->name() == QLatin1String("background")) {
+			d->background->setIsLoading(true);
+			d->background->load(reader, preview);
+		} else if (!preview && reader->name() == QLatin1String("borderLine")) {
+			d->borderLine->setIsLoading(true);
+			d->borderLine->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("axis")) {
 			auto* axis = new Axis(QString(), Axis::Orientation::Horizontal, true);
 			axis->setIsLoading(true);
@@ -5683,13 +5782,18 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 
 void CartesianPlot::saveTheme(KConfig& config) {
 	const QVector<Axis*>& axisElements = children<Axis>(ChildIndexFlag::IncludeHidden);
-	const QVector<PlotArea*>& plotAreaElements = children<PlotArea>(ChildIndexFlag::IncludeHidden);
+	const QVector<Background*>& backgroundElements = children<Background>(ChildIndexFlag::IncludeHidden);
+	const QVector<Line*>& lineElements = children<Line>(ChildIndexFlag::IncludeHidden);
 	const QVector<TextLabel*>& textLabelElements = children<TextLabel>(ChildIndexFlag::IncludeHidden);
 
 	axisElements.at(0)->saveThemeConfig(config);
-	plotAreaElements.at(0)->saveThemeConfig(config);
+	/*
+	if (!backgroundElements.isEmpty())
+		backgroundElements.at(0)->saveThemeConfig(config);
+	if (!lineElements.isEmpty())
+		lineElements.at(0)->saveThemeConfig(config);
 	textLabelElements.at(0)->saveThemeConfig(config);
-
+	*/
 	const auto& children = this->children<XYCurve>(ChildIndexFlag::IncludeHidden);
 	for (auto* child : children)
 		child->saveThemeConfig(config);

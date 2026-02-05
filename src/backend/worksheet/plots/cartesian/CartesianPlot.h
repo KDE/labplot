@@ -18,6 +18,7 @@
 
 #include "backend/nsl/nsl_sf_stats.h"
 
+class Background;
 class CartesianCoordinateSystem;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
@@ -62,6 +63,10 @@ public:
 	Q_ENUM(RangeType)
 	enum class RangeBreakStyle { Simple, Vertical, Sloped };
 	enum class PlotColorMode { Theme, ColorMap };
+
+	// Border type flags for plot area
+	enum class BorderTypeFlags { NoBorder = 0x0, BorderLeft = 0x1, BorderTop = 0x2, BorderRight = 0x4, BorderBottom = 0x8 };
+	Q_DECLARE_FLAGS(BorderType, BorderTypeFlags)
 
 	struct RangeBreak {
 		RangeBreak()
@@ -195,6 +200,12 @@ public:
 
 	// stacking
 	BASIC_D_ACCESSOR_DECL(double, stackYOffset, StackYOffset)
+
+	// plot area
+	Background* background() const;
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::BorderType, borderType, BorderType)
+	Line* borderLine() const;
+	BASIC_D_ACCESSOR_DECL(qreal, borderCornerRadius, BorderCornerRadius)
 
 	// cursor
 	Line* cursorLine() const;
@@ -355,6 +366,9 @@ Q_SIGNALS:
 	void yRangeBreakingEnabledChanged(bool);
 	void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
+	void borderTypeChanged(CartesianPlot::BorderType);
+	void borderCornerRadiusChanged(qreal);
+
 	void themeChanged(const QString&);
 	void axisShiftSignal(int delta, Dimension dim, int index);
 
@@ -388,5 +402,7 @@ Q_SIGNALS:
 	friend class FitTest;
 	friend class FourierTest;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(CartesianPlot::BorderType)
 
 #endif

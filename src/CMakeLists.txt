@@ -444,7 +444,6 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/TreeModel.cpp
     ${BACKEND_DIR}/worksheet/plots/AbstractPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
-    ${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Axis.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/BarPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/BoxPlot.cpp
