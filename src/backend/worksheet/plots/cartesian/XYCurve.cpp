@@ -2567,7 +2567,7 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 		return false;
 
 	int rowCount{0};
-	if (lineType != XYCurve::LineType::NoLine && m_lines.size() > 1)
+	if (lineType != XYCurve::LineType::NoLine && m_lines.size() > 0)
 		rowCount = m_lines.count();
 	else if (symbol->style() != Symbol::Style::NoSymbols) {
 		calculateScenePoints();
@@ -2588,7 +2588,10 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 		calculateScenePoints();
 
 	const auto& properties = q->xColumn()->properties();
-	if (properties == AbstractColumn::Properties::No || properties == AbstractColumn::Properties::NonMonotonic) {
+	switch (properties) {
+	case AbstractColumn::Properties::No: // fall through
+	case AbstractColumn::Properties::NonMonotonic: // fall through
+	case AbstractColumn::Properties::Constant: {
 		// assumption: points exist if no line. otherwise previously returned false
 		if (noLines) {
 			QPointF curvePosPrevScene = m_scenePoints.at(0);
@@ -2606,7 +2609,10 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 					return true;
 			}
 		}
-	} else if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		break;
+	}
+	case AbstractColumn::Properties::MonotonicIncreasing: // fall through
+	case AbstractColumn::Properties::MonotonicDecreasing: {
 		bool increase{true};
 		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
 			increase = false;
@@ -2660,6 +2666,9 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 				curvePosScene = m_scenePoints.at(index);
 			}
 		}
+		break;
+	}
+
 	}
 
 	return false;
