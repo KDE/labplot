@@ -1297,12 +1297,12 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 		QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if set
 		if (columnProperties == AbstractColumn::Properties::Constant) {
 			DEBUG(Q_FUNC_INFO << ", CONSTANT column")
-			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-			const auto& xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
-			const auto& yRange = plot()->range(Dimension::Y, cs->index(Dimension::Y));
-			tempPoint1 = QPointF(xRange.start(), yRange.start());
-			tempPoint2 = QPointF(xRange.start(), yRange.end());
-			m_lines.append(QLineF(tempPoint1, tempPoint2));
+			if (m_logicalPoints.length() > 0) {
+				// The values are already cached in the columns.
+				tempPoint1 = QPointF(xColumn->minimum(), yColumn->minimum());
+				tempPoint2 = QPointF(xColumn->maximum(), yColumn->maximum());
+				m_lines.append(QLineF(tempPoint1, tempPoint2));
+			}
 		} else {
 			QPointF lastPoint{NAN, NAN}; // last x value
 			int pixelDiff = 0;
