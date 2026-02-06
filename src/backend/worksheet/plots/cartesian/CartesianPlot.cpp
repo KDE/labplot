@@ -4786,8 +4786,11 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	if (!isVisible() || m_printing)
 		return;
 
+	// rect centered at the origin for painting
+	const QRectF plotRect(-rect.width() / 2., -rect.height() / 2., rect.width(), rect.height());
+
 	// draw the plot area background
-	background->draw(painter, dataRect, borderCornerRadius);
+	background->draw(painter, plotRect, borderCornerRadius);
 
 	// draw the plot area border
 	if (borderLine->pen().style() != Qt::NoPen) {
@@ -4796,10 +4799,10 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		painter->setBrush(Qt::NoBrush);
 		painter->setOpacity(borderLine->opacity());
 		if (qFuzzyIsNull(borderCornerRadius)) {
-			const double w = dataRect.width();
-			const double h = dataRect.height();
-			const double x = dataRect.x();
-			const double y = dataRect.y();
+			const double w = plotRect.width();
+			const double h = plotRect.height();
+			const double x = plotRect.x();
+			const double y = plotRect.y();
 			if (borderType.testFlag(CartesianPlot::BorderTypeFlags::BorderLeft))
 				painter->drawLine(x, y, x, y + h);
 			if (borderType.testFlag(CartesianPlot::BorderTypeFlags::BorderTop))
@@ -4809,7 +4812,7 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			if (borderType.testFlag(CartesianPlot::BorderTypeFlags::BorderBottom))
 				painter->drawLine(x, y + h, x + w, y + h);
 		} else
-			painter->drawRoundedRect(dataRect, borderCornerRadius, borderCornerRadius);
+			painter->drawRoundedRect(plotRect, borderCornerRadius, borderCornerRadius);
 		painter->restore();
 	}
 
@@ -4900,6 +4903,23 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 		painter->restore();
 	}
+
+	const bool selected = q->isSelected();
+	const bool hovered = (q->isHovered() && !selected);
+	if ((hovered || selected) && !q->isPrinting()) {
+		static double penWidth = 6.;
+		const qreal width = plotRect.width();
+		const qreal height = plotRect.height();
+		const QRectF newRect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
+
+		if (hovered)
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));
+		else
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));
+
+		painter->drawRect(newRect);
+	}
+
 }
 
 // ##############################################################################
@@ -5017,10 +5037,14 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yOffset"), QString::number(d->stackYOffset));
 	writer->writeEndElement();
 
-	// plot area
-	writer->writeStartElement(QStringLiteral("plotArea"));
+	// background
+	d->background->save(writer);
+
+	// border
+	writer->writeStartElement(QStringLiteral("border"));
 	writer->writeAttribute(QStringLiteral("borderType"), QString::number(static_cast<int>(d->borderType)));
 	writer->writeAttribute(QStringLiteral("borderCornerRadius"), QString::number(d->borderCornerRadius));
+	d->borderLine->save(writer);
 	writer->writeEndElement();
 
 	// serialize all children (background, border line, title text label, axes and curves)
@@ -5441,28 +5465,45 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete marker;
 				return false;
 			}
-		} else if (!preview && reader->name() == QLatin1String("plotArea")) {
-			// Load new format with borderType and borderCornerRadius attributes
+		} else if (!preview && reader->name() == QLatin1String("plotArea")) { // buildXmlVersion < 19
+			// previously, PlotArea class contained background and border line children and attributes
+			while (!reader->atEnd()) {
+				reader->readNext();
+				if (reader->isEndElement() && reader->name() == QLatin1String("plotArea"))
+					break;
+
+				if (!reader->isStartElement())
+					continue;
+
+				if (reader->name() == QLatin1String("background")) {
+					d->background->setIsLoading(true);
+					d->background->load(reader, preview);
+				} else if (reader->name() == QLatin1String("border")) {
+					attribs = reader->attributes();
+
+					str = attribs.value(QStringLiteral("borderType")).toString();
+					if (!str.isEmpty())
+						d->borderType = static_cast<CartesianPlot::BorderType>(str.toInt());
+
+					str = attribs.value(QStringLiteral("borderCornerRadius")).toString();
+					if (!str.isEmpty())
+						d->borderCornerRadius = str.toDouble();
+
+					d->borderLine->setIsLoading(true);
+					d->borderLine->load(reader, preview);
+				} else { // unknown element
+					reader->raiseUnknownElementWarning();
+					if (!reader->skipToEndElement())
+						return false;
+				}
+			}
+		} else if (!preview && reader->name() == QLatin1String("border")) { // buildXmlVersion >= 19
 			attribs = reader->attributes();
-
-			// Load border properties if available
-			str = attribs.value(QStringLiteral("borderType")).toString();
-			if (!str.isEmpty())
-				d->borderType = static_cast<CartesianPlot::BorderType>(str.toInt());
-
-			str = attribs.value(QStringLiteral("borderCornerRadius")).toString();
-			if (!str.isEmpty())
-				d->borderCornerRadius = str.toDouble();
-
-			// For backward compatibility, skip old PlotArea child elements
-			// The properties will be loaded from the attributes above
-			reader->skipCurrentElement();
-		} else if (!preview && reader->name() == QLatin1String("background")) {
-			d->background->setIsLoading(true);
-			d->background->load(reader, preview);
-		} else if (!preview && reader->name() == QLatin1String("borderLine")) {
-			d->borderLine->setIsLoading(true);
+			READ_INT_VALUE("borderType", borderType, CartesianPlot::BorderType);
+			READ_DOUBLE_VALUE("borderCornerRadius", borderCornerRadius);
 			d->borderLine->load(reader, preview);
+		} else if (!preview && reader->name() == QLatin1String("background")) {
+			d->background->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("axis")) {
 			auto* axis = new Axis(QString(), Axis::Orientation::Horizontal, true);
 			axis->setIsLoading(true);
@@ -5781,22 +5822,21 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 }
 
 void CartesianPlot::saveTheme(KConfig& config) {
-	const QVector<Axis*>& axisElements = children<Axis>(ChildIndexFlag::IncludeHidden);
-	const QVector<Background*>& backgroundElements = children<Background>(ChildIndexFlag::IncludeHidden);
-	const QVector<Line*>& lineElements = children<Line>(ChildIndexFlag::IncludeHidden);
-	const QVector<TextLabel*>& textLabelElements = children<TextLabel>(ChildIndexFlag::IncludeHidden);
+	Q_D(CartesianPlot);
 
+	auto group = config.group(QStringLiteral("CartesianPlot"));
+	d->background->saveThemeConfig(group);
+	d->borderLine->saveThemeConfig(group);
+
+	const QVector<Axis*>& axisElements = children<Axis>(ChildIndexFlag::IncludeHidden);
 	axisElements.at(0)->saveThemeConfig(config);
-	/*
-	if (!backgroundElements.isEmpty())
-		backgroundElements.at(0)->saveThemeConfig(config);
-	if (!lineElements.isEmpty())
-		lineElements.at(0)->saveThemeConfig(config);
+
+	const QVector<TextLabel*>& textLabelElements = children<TextLabel>(ChildIndexFlag::IncludeHidden);
 	textLabelElements.at(0)->saveThemeConfig(config);
-	*/
-	const auto& children = this->children<XYCurve>(ChildIndexFlag::IncludeHidden);
-	for (auto* child : children)
-		child->saveThemeConfig(config);
+
+	const auto& plots = this->children<Plot>(ChildIndexFlag::IncludeHidden);
+	for (auto* plot : plots)
+		plot->saveThemeConfig(config);
 }
 
 void CartesianPlotPrivate::updatePlotColorPalette() {
