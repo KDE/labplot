@@ -2668,7 +2668,6 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 		}
 		break;
 	}
-
 	}
 
 	return false;
