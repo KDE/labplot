@@ -163,7 +163,6 @@ set(SDK_DEPENDENCY_SOURCES
     ${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
     ${BACKEND_DIR}/worksheet/Background.cpp
     ${BACKEND_DIR}/worksheet/Line.cpp
-    ${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBar.cpp
     ${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
