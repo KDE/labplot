@@ -46,12 +46,12 @@ int main(int argc, char* argv[]) {
     auto* plotArea = new CartesianPlot("xy-plot");
 	plotArea->setType(CartesianPlot::Type::FourAxes);
     plotArea->title()->setText(QStringLiteral("El Niño-Southern Oscillation"));
-    PlotArea::BorderType border = plotArea->plotArea()->borderType();
-    border.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	border.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	border.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	border.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea->plotArea()->setBorderType(border);
+    CartesianPlot::BorderType border = plotArea->borderType();
+    border.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, true);
+	border.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, true);
+	border.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, true);
+	border.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, true);
+    plotArea->setBorderType(border);
     worksheet->addChild(plotArea);
 
     for (Axis* axis : plotArea->children<Axis>()) {
