@@ -4919,7 +4919,6 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 		painter->drawRect(newRect);
 	}
-
 }
 
 // ##############################################################################
