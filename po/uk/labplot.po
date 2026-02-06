@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-05 00:39+0000\n"
-"PO-Revision-Date: 2026-02-03 03:37+0200\n"
+"PO-Revision-Date: 2026-02-05 06:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7762,22 +7762,22 @@ msgstr "Є позитивний монотонний тренд"
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data are randomly distributed"
-msgstr ""
+msgstr "Дані розподілено випадковим чином"
 
 #: src/backend/statistics/HypothesisTest.cpp:264
 #, kde-format
 msgid "The data are not randomly distributed"
-msgstr ""
+msgstr "Дані не розподілено випадковим чином"
 
 #: src/backend/statistics/HypothesisTest.cpp:266
 #, kde-format
 msgid "The data show clustering (too few runs)"
-msgstr ""
+msgstr "У даних помітна кластеризація (замало серій)"
 
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data show excessive alternation (too many runs)"
-msgstr ""
+msgstr "У даних помітна значна зміна (забагато серій)"
 
 #: src/backend/statistics/HypothesisTest.cpp:330
 #, kde-format
@@ -7853,7 +7853,7 @@ msgstr "Перевірка Манна-Кендела"
 #: src/backend/statistics/HypothesisTest.cpp:358
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
-msgstr ""
+msgstr "Перевірка серій Вальда-Вольфовіца"
 
 #: src/backend/statistics/HypothesisTest.cpp:534
 #, kde-format
@@ -8167,10 +8167,9 @@ msgid "Sample Size"
 msgstr "Розмір вибірки"
 
 #: src/backend/statistics/HypothesisTest.cpp:643
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of Runs"
-msgstr "Кількість точок:"
+msgstr "Кількість серій"
 
 #: src/backend/statistics/HypothesisTest.cpp:647
 #, kde-format
@@ -8428,52 +8427,40 @@ msgstr ""
 "гіпотезу не слід відкидати."
 
 #: src/backend/statistics/HypothesisTest.cpp:1772
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the data are not randomly distributed. Reject "
 "the null hypothesis."
 msgstr ""
-"На рівні значущості %1 середні генеральної сукупності значно відрізняються. "
-"Нульову гіпотезу слід відкинути."
+"На рівні значущості %1 дані не розподілено випадковим чином. Нульову "
+"гіпотезу слід відкинути."
 
 #: src/backend/statistics/HypothesisTest.cpp:1774
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering (too few runs). "
 "Reject the null hypothesis."
 msgstr ""
-"На рівні значущості %1 виявлено значущий позитивний монотонний тренд. "
-"Нульову гіпотезу слід відкинути."
+"На рівні значущості %1 у даних помітна кластеризація (замало серій). Нульову "
+"гіпотезу слід відкинути."
 
 #: src/backend/statistics/HypothesisTest.cpp:1777
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show excessive alternation (too many "
 "runs). Reject the null hypothesis."
 msgstr ""
-"На рівні значущості %1 виявлено значущий негативний монотонний тренд. "
-"Нульову гіпотезу слід відкинути."
+"На рівні значущості %1 у даних значна відмінність (забагато серій). Нульову "
+"гіпотезу слід відкинути."
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. "
 "Fail to reject the null hypothesis."
 msgstr ""
-"На рівні значущості %1 не виявлено значущих монотонних трендів. Нульову "
-"гіпотезу не слід відкидати."
+"На рівні значущості %1 у даних помітний випадковість. Не вдалося відкинути "
+"нульову гіпотезу."
 
 #: src/backend/statistics/HypothesisTest.cpp:1871
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -15419,18 +15406,7 @@ msgstr ""
 "більше пов'язаних/повторних вимірювань мають однакове середнє значення</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%8</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15450,8 +15426,9 @@ msgstr ""
 "перевіряє відмінності в медіанах між трьома або більше пов'язаними/"
 "повторними вимірюваннями</li><li><b>%5</b> – перевіряє відмінності в "
 "розподілах виживання між двома або більше групами</li><li><b>%6</b> - "
-"перевіряє, чи є часовий тренд у даних</li><li><b>%7</b> – перевіряє, чи дві "
-"категоріальні змінні незалежні одна від одної</li><li><b>%8</b> – перевіряє, "
+"перевіряє, чи є часовий тренд у даних</li><li><b>%7</b> – перевіряє, чи є "
+"послідовність спостережень випадковою</li><li><b>%8</b> – перевіряє, чи дві "
+"категоріальні змінні незалежні одна від одної</li><li><b>%9</b> – перевіряє, "
 "чи спостережувані дані відповідають заданому теоретичному розподілу</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:318

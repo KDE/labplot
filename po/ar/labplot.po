@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-05 00:39+0000\n"
-"PO-Revision-Date: 2026-01-31 20:27+0400\n"
+"PO-Revision-Date: 2026-02-05 11:04+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -7726,8 +7726,7 @@ msgid "A negative monotonic trend exists"
 msgstr "يوجد اتجاه سلبي أحادي"
 
 #: src/backend/statistics/HypothesisTest.cpp:259
-#, fuzzy, kde-format
-#| msgid "No positive monotonic trend exits"
+#, kde-format
 msgid "No positive monotonic trend exists"
 msgstr "لا يوجد اتجاه أحادي إيجابي"
 
