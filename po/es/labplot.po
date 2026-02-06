@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-05 00:39+0000\n"
-"PO-Revision-Date: 2026-02-03 22:57+0100\n"
+"PO-Revision-Date: 2026-02-06 01:04+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -7698,22 +7698,22 @@ msgstr "Existe una tendencia monótona positiva"
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data are randomly distributed"
-msgstr ""
+msgstr "Los datos están distribuidos aleatoriamente"
 
 #: src/backend/statistics/HypothesisTest.cpp:264
 #, kde-format
 msgid "The data are not randomly distributed"
-msgstr ""
+msgstr "Los datos no están distribuidos aleatoriamente"
 
 #: src/backend/statistics/HypothesisTest.cpp:266
 #, kde-format
 msgid "The data show clustering (too few runs)"
-msgstr ""
+msgstr "Los datos muestran agrupamiento (muy pocas ejecuciones)"
 
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data show excessive alternation (too many runs)"
-msgstr ""
+msgstr "Los datos muestran una alternancia excesiva (demasiadas ejecuciones)"
 
 #: src/backend/statistics/HypothesisTest.cpp:330
 #, kde-format
@@ -7788,7 +7788,7 @@ msgstr "Prueba de Mann-Kendall"
 #: src/backend/statistics/HypothesisTest.cpp:358
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
-msgstr ""
+msgstr "Prueba de ejecuciones de Wald-Wolfowitz"
 
 #: src/backend/statistics/HypothesisTest.cpp:534
 #, kde-format
@@ -8102,10 +8102,9 @@ msgid "Sample Size"
 msgstr "Tamaño de la muestra"
 
 #: src/backend/statistics/HypothesisTest.cpp:643
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of Runs"
-msgstr "Número de puntos:"
+msgstr "Número de ejecuciones"
 
 #: src/backend/statistics/HypothesisTest.cpp:647
 #, kde-format
@@ -8365,52 +8364,40 @@ msgstr ""
 "monótona significativa. Falla el rechazo de la hipótesis nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1772
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the data are not randomly distributed. Reject "
 "the null hypothesis."
 msgstr ""
-"En el nivel de significación %1, las medias poblacionales son "
-"significativamente diferentes. Se rechaza la hipótesis nula."
+"En el nivel de significación %1, los datos no están distribuidos "
+"aleatoriamente. Se rechaza la hipótesis nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1774
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering (too few runs). "
 "Reject the null hypothesis."
 msgstr ""
-"En el nivel de significación %1, existe una significativa tendencia monótona "
-"positiva. Se rechaza la hipótesis nula."
+"En el nivel de significación %1, los datos muestran agrupamiento (muy pocas "
+"ejecuciones). Se rechaza la hipótesis nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1777
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show excessive alternation (too many "
 "runs). Reject the null hypothesis."
 msgstr ""
-"En el nivel de significación %1, existe una significativa tendencia monótona "
-"negativa. Se rechaza la hipótesis nula."
+"En el nivel de significación %1, los datos muestran una alternancia excesiva "
+"(demasiadas ejecuciones). Se rechaza la hipótesis nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. "
 "Fail to reject the null hypothesis."
 msgstr ""
-"En el nivel de significación %1, no se ha detectado ninguna tendencia "
-"monótona significativa. Falla el rechazo de la hipótesis nula."
+"En el nivel de significación %1, los datos parecen estar distribuidos "
+"aleatoriamente. Falla el rechazo de la hipótesis nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1871
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -15376,18 +15363,7 @@ msgstr ""
 "media.</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%8</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15408,9 +15384,10 @@ msgstr ""
 "relacionadas o repetidas.</li><li><b>%5:</b> comprueba las diferencias en "
 "las distribuciones de supervivencia entre dos o más grupos.</li><li><b>%6:</"
 "b> pruebas para detectar una tendencia en los datos a lo largo del tiempo.</"
-"li><li><b>%7:</b>comprueba si dos variables categóricas son independientes "
-"entre sí.</li><li><b>%8:</b> comprueba si los datos observados siguen una "
-"determinada distribución teórica.</li></ul>"
+"li><li><b>%7:</b> comprueba la aleatoriedad de una secuencia de "
+"observaciones.</li><li><b>%8:</b> comprueba si dos variables categóricas son "
+"independientes entre sí.</li><li><b>%9:</b> comprueba si los datos "
+"observados siguen una determinada distribución teórica.</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:318
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-05 00:39+0000\n"
-"PO-Revision-Date: 2026-02-03 19:29+0300\n"
+"PO-Revision-Date: 2026-02-05 16:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -7684,22 +7684,22 @@ msgstr "Bir pozitif monotonik trend yok"
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data are randomly distributed"
-msgstr ""
+msgstr "Veri rastgele biçimde dağıtılmamış"
 
 #: src/backend/statistics/HypothesisTest.cpp:264
 #, kde-format
 msgid "The data are not randomly distributed"
-msgstr ""
+msgstr "Veri rastgele biçimde dağıtılmamış"
 
 #: src/backend/statistics/HypothesisTest.cpp:266
 #, kde-format
 msgid "The data show clustering (too few runs)"
-msgstr ""
+msgstr "Veride kümelenme var (pek az sayıda çalıştırma)"
 
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data show excessive alternation (too many runs)"
-msgstr ""
+msgstr "Veride aşırı değişim var (pek çok sayıda çalıştırma)"
 
 #: src/backend/statistics/HypothesisTest.cpp:330
 #, kde-format
@@ -7774,7 +7774,7 @@ msgstr "Mann-Kendall Testi"
 #: src/backend/statistics/HypothesisTest.cpp:358
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
-msgstr ""
+msgstr "Wald-Wolfowitz Runs Testi"
 
 #: src/backend/statistics/HypothesisTest.cpp:534
 #, kde-format
@@ -8088,10 +8088,9 @@ msgid "Sample Size"
 msgstr "Örnek Boyut"
 
 #: src/backend/statistics/HypothesisTest.cpp:643
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of Runs"
-msgstr "Nokta sayısı:"
+msgstr "Çalıştırma Sayısı"
 
 #: src/backend/statistics/HypothesisTest.cpp:647
 #, kde-format
@@ -8347,51 +8346,39 @@ msgstr ""
 "reddetme başarısız."
 
 #: src/backend/statistics/HypothesisTest.cpp:1772
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the data are not randomly distributed. Reject "
 "the null hypothesis."
 msgstr ""
-"%1 önem düzeyinde nüfus ortalaması önemli ölçüde farklı. Sıfır hipotezini "
+"%1 önem düzeyinde veri rastgele biçimde dağıtılmamış. Sıfır hipotezini "
 "reddedin."
 
 #: src/backend/statistics/HypothesisTest.cpp:1774
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering (too few runs). "
 "Reject the null hypothesis."
 msgstr ""
-"%1 önem düzeyinde oldukça belirgin bir pozitif monotonik eğilim var. Sıfır "
+"%1 önem düzeyinde veride kümelenme var (pek az sayıda çalıştırma). Sıfır "
 "hipotezini reddedin."
 
 #: src/backend/statistics/HypothesisTest.cpp:1777
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show excessive alternation (too many "
 "runs). Reject the null hypothesis."
 msgstr ""
-"%1 önem düzeyinde oldukça belirgin bir negatif monotonik eğilim var. Sıfır "
-"hipotezini reddedin."
+"%1 önem düzeyinde oldukça fazla değişimler var (pek çok sayıda çalıştırma). "
+"Sıfır hipotezini reddedin."
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. "
 "Fail to reject the null hypothesis."
 msgstr ""
-"%1 önem düzeyinde belirgin bir monotonik trend algılanmadı. Sıfır hipotezini "
+"%1 önem düzeyinde veri rastgele dağıtılmış gibi görünüyor. Sıfır hipotezini "
 "reddetme başarısız."
 
 #: src/backend/statistics/HypothesisTest.cpp:1871
@@ -15303,18 +15290,7 @@ msgstr ""
 "ortalamaya sahip olup olmadığını sınar</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%8</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15334,9 +15310,10 @@ msgstr ""
 "fazla ilişkili/yinelenmiş ölçüler arasındaki ortanca farkını sınar</"
 "li><li><b>%5</b> — iki veya daha fazla grup arasındaki hayatta kalma "
 "dağılımlarındaki farkı sınar</li><li><b>%6</b> — bir zaman aralığındaki "
-"eğilimleri sınar</li><li><b>%7</b> — iki kategorik değişkenin birbirlerinden "
-"farklı olup olmadıklarını sınar</li><li><b>%8</b> — gözlemlenen verinin "
-"belirli bir kuramsal dağılımı izleyip izlemediğini sınar</li></ul>"
+"eğilimleri sınar</li><li><b>%7</b> — bir dizi gözlemde rastgeleliği sınar</"
+"li><li><b>%8</b> — iki kategorik değişkenin birbirlerinden farklı olup "
+"olmadıklarını sınar</li><li><b>%9</b> — gözlemlenen verinin belirli bir "
+"kuramsal dağılımı izleyip izlemediğini sınar</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:318
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-05 00:39+0000\n"
-"PO-Revision-Date: 2026-02-03 07:23+0100\n"
+"PO-Revision-Date: 2026-02-05 07:22+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -7726,22 +7726,22 @@ msgstr "Obstaja pozitivni monotoni trend"
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data are randomly distributed"
-msgstr ""
+msgstr "Podatki so naključno porazdeljeni"
 
 #: src/backend/statistics/HypothesisTest.cpp:264
 #, kde-format
 msgid "The data are not randomly distributed"
-msgstr ""
+msgstr "Podatki niso naključno porazdeljeni"
 
 #: src/backend/statistics/HypothesisTest.cpp:266
 #, kde-format
 msgid "The data show clustering (too few runs)"
-msgstr ""
+msgstr "Podatki kažejo na združevanje v skupine (premalo ponovitev)"
 
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data show excessive alternation (too many runs)"
-msgstr ""
+msgstr "Podatki kažejo na prekomerno menjavanje (preveč ponovitev)"
 
 #: src/backend/statistics/HypothesisTest.cpp:330
 #, kde-format
@@ -7816,7 +7816,7 @@ msgstr "Mann-Kendallov U test"
 #: src/backend/statistics/HypothesisTest.cpp:358
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
-msgstr ""
+msgstr "Wald-Wolfowitzov test tekov"
 
 #: src/backend/statistics/HypothesisTest.cpp:534
 #, kde-format
@@ -8130,10 +8130,9 @@ msgid "Sample Size"
 msgstr "Velikost vzorca"
 
 #: src/backend/statistics/HypothesisTest.cpp:643
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of Runs"
-msgstr "Število točk:"
+msgstr "Število tekov"
 
 #: src/backend/statistics/HypothesisTest.cpp:647
 #, kde-format
@@ -8390,52 +8389,40 @@ msgstr ""
 "Ničelne hipoteze ni bilo mogoče zavrniti."
 
 #: src/backend/statistics/HypothesisTest.cpp:1772
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the data are not randomly distributed. Reject "
 "the null hypothesis."
 msgstr ""
-"Pri stopnji značilnosti %1 se povprečja populacije bistveno razlikujejo. "
-"Zavrnite ničelno hipotezo"
+"Pri stopnji značilnosti %1 podatki niso naključno porazdeljeni. Zavrnite "
+"ničelno hipotezo."
 
 #: src/backend/statistics/HypothesisTest.cpp:1774
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering (too few runs). "
 "Reject the null hypothesis."
 msgstr ""
-"Pri stopnji značilnosti %1 obstaja pomemben pozitiven monotoni trend. "
-"Ničelno hipotezo zavrnemo."
+"Pri stopnji značilnosti %1 podatki kažejo združevanje v skupine (premalo "
+"ponovitev). Zavrnite ničelno hipotezo."
 
 #: src/backend/statistics/HypothesisTest.cpp:1777
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show excessive alternation (too many "
 "runs). Reject the null hypothesis."
 msgstr ""
-"Pri stopnji značilnosti %1 obstaja pomemben negativni monotoni trend. "
-"Ničelno hipotezo zavrnemo."
+"Pri stopnji značilnosti %1 podatki kažejo prekomerno menjavanje (preveč "
+"ponovitev). Zavrnite ničelno hipotezo."
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. "
 "Fail to reject the null hypothesis."
 msgstr ""
-"Pri stopnji značilnosti %1 ni bil zaznan noben pomemben monoton trend. "
-"Ničelne hipoteze ni bilo mogoče zavrniti."
+"Pri stopnji značilnosti %1 se zdi, da so podatki naključno porazdeljeni. "
+"Ničelne hipoteze ni mogoče zavrniti."
 
 #: src/backend/statistics/HypothesisTest.cpp:1871
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -15354,18 +15341,7 @@ msgstr ""
 "sorodnih/ponovljenih meritev enako povprečje</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%8</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15379,15 +15355,16 @@ msgid ""
 "tests if observed data follows a specified theoretical distribution</li></ul>"
 msgstr ""
 "<li><b>%1</b> - testira razlike v medianah med dvema neodvisnima skupinama</"
-"li><li><b>%2</b> - testira, ali je razlika v medianah med dvema sorodnima "
+"li><li><b>%2</b> - testira, ali je razlika v medianah med dvema odvisnima "
 "vzorcema enaka nič</li><li><b>%3</b> - testira razlike v medianah med tremi "
 "ali več neodvisnimi skupinami</li><li><b>%4</b> - testira razlike v medianah "
-"med tremi ali več sorodnimi/ponovljenimi meritvami</li><li><b>%5</b> - "
+"med tremi ali več odvisnimi/ponovljenimi meritvami</li><li><b>%5</b> - "
 "testira razlike v porazdelitvah preživetja med dvema ali več skupinami</"
 "li><li><b>%6</b> - testira trend podatkov skozi čas</li><li><b>%7</b> - "
-"testira, ali sta dve kategorični spremenljivki neodvisni druga od druge</"
-"li><li><b>%8</b> - testira, ali opazovani podatki sledijo določeni "
-"teoretični porazdelitvi</li></ul>"
+"testira naključnost v zaporedju opazovanj</li><li><b>%8</b> - testira, ali "
+"sta dve kategorični spremenljivki neodvisni druga od druge</li><li><b>%9</b> "
+"- testira, ali opazovani podatki sledijo določeni teoretični porazdelitvi</"
+"li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:318
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-05 00:39+0000\n"
-"PO-Revision-Date: 2026-02-03 10:40+0100\n"
+"PO-Revision-Date: 2026-02-05 15:15+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -7688,22 +7688,22 @@ msgstr "Er bestaat een positieve monotone trend"
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data are randomly distributed"
-msgstr ""
+msgstr "De gegevens zijn willekeurig verdeeld"
 
 #: src/backend/statistics/HypothesisTest.cpp:264
 #, kde-format
 msgid "The data are not randomly distributed"
-msgstr ""
+msgstr "De gegevens zijn niet willekeurig verdeeld"
 
 #: src/backend/statistics/HypothesisTest.cpp:266
 #, kde-format
 msgid "The data show clustering (too few runs)"
-msgstr ""
+msgstr "De gegevens tonen clustering (te weinig runs)"
 
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data show excessive alternation (too many runs)"
-msgstr ""
+msgstr "De gegevens tonen excessieve wijzigingen (te veel runs)"
 
 #: src/backend/statistics/HypothesisTest.cpp:330
 #, kde-format
@@ -7778,7 +7778,7 @@ msgstr "Mann-Kendall-test"
 #: src/backend/statistics/HypothesisTest.cpp:358
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
-msgstr ""
+msgstr "Wald-Wolfowitz runt test"
 
 #: src/backend/statistics/HypothesisTest.cpp:534
 #, kde-format
@@ -8092,10 +8092,9 @@ msgid "Sample Size"
 msgstr "Sample-grootte"
 
 #: src/backend/statistics/HypothesisTest.cpp:643
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of Runs"
-msgstr "Aantal punten:"
+msgstr "Aantal runs"
 
 #: src/backend/statistics/HypothesisTest.cpp:647
 #, kde-format
@@ -8355,52 +8354,40 @@ msgstr ""
 "gedetecteerd. De nul-hypothese niet afwijzen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1772
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the data are not randomly distributed. Reject "
 "the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1, zijn de gemiddelden van de populatie "
-"significant verschillend. Wijs de nul-hypothese af"
+"Op het significantieniveau %1, zijn de gegevens niet willekeurig verdeeld. "
+"Wijs de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1774
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering (too few runs). "
 "Reject the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1, is er een significante positieve monotone "
-"trend. Wijs de nul-hypothese af."
+"Op het significantieniveau %1, tonen de gegevens clustering ( te weinig "
+"runs). Wijs de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1777
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show excessive alternation (too many "
 "runs). Reject the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1, is er een significante negatieve monotone "
-"trend. Wijs de nul-hypothese af."
+"Op het significantieniveau %1 tonen de gegevens excessieve wijzigingen (te "
+"veel runs). Wijs de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. "
 "Fail to reject the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1 is er geen significante monotone trend "
-"gedetecteerd. De nul-hypothese niet afwijzen."
+"Op het significantieniveau %1 lijken de gegevens willekeurig verdeeld. De "
+"nul-hypothese kan niet afwezen worden."
 
 #: src/backend/statistics/HypothesisTest.cpp:1871
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -15351,18 +15338,7 @@ msgstr ""
 "hebben</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%8</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15382,9 +15358,10 @@ msgstr ""
 "verschillen in medianen onder drie of meer gerelateerde/herhaalde metingen</"
 "li><li><b>%5</b> - test verschillen in overlevingsdistributies tussen twee "
 "of meer groepen</li><li><b>%6</b> - test op een trend in gegevens in de "
-"tijd</li><li><b>%7</b> - test of twee categoriale variabelen onafhankelijk "
-"zijn van elkaar</li><li><b>%8</b> - test of waargenomen gegevens een "
-"gespecificeerde theoretische distributie volgen</li></ul>"
+"tijd</li><li><b>%7</b> -tests voor willekeurigheid in een serie "
+"waarnemingen</li><li><b>%8</b> - test of twee categoriale variabelen "
+"onafhankelijk zijn van elkaar</li><li><b>%9</b> - test of waargenomen "
+"gegevens een gespecificeerde theoretische distributie volgen</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:318
 #, kde-format

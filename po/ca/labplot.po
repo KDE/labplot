@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-05 00:39+0000\n"
-"PO-Revision-Date: 2026-02-03 10:43+0100\n"
+"PO-Revision-Date: 2026-02-05 11:07+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -7775,22 +7775,22 @@ msgstr "Existeix una tendència monotònica positiva"
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data are randomly distributed"
-msgstr ""
+msgstr "Les dades estan distribuïdes aleatòriament"
 
 #: src/backend/statistics/HypothesisTest.cpp:264
 #, kde-format
 msgid "The data are not randomly distributed"
-msgstr ""
+msgstr "Les dades no estan distribuïdes aleatòriament"
 
 #: src/backend/statistics/HypothesisTest.cpp:266
 #, kde-format
 msgid "The data show clustering (too few runs)"
-msgstr ""
+msgstr "Les dades mostren agrupació (massa poques execucions)"
 
 #: src/backend/statistics/HypothesisTest.cpp:268
 #, kde-format
 msgid "The data show excessive alternation (too many runs)"
-msgstr ""
+msgstr "Les dades mostren una alternança excessiva (massa execucions)"
 
 #: src/backend/statistics/HypothesisTest.cpp:330
 #, kde-format
@@ -7865,7 +7865,7 @@ msgstr "Prova de Mann-Kendall"
 #: src/backend/statistics/HypothesisTest.cpp:358
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
-msgstr ""
+msgstr "Prova d'execucions de Wald-Wolfowitz"
 
 #: src/backend/statistics/HypothesisTest.cpp:534
 #, kde-format
@@ -8179,10 +8179,9 @@ msgid "Sample Size"
 msgstr "Mida de la mostra"
 
 #: src/backend/statistics/HypothesisTest.cpp:643
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of Runs"
-msgstr "Nombre de punts:"
+msgstr "Nombre d'execucions"
 
 #: src/backend/statistics/HypothesisTest.cpp:647
 #, kde-format
@@ -8442,52 +8441,40 @@ msgstr ""
 "significativa. No s'ha pogut rebutjar la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1772
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the data are not randomly distributed. Reject "
 "the null hypothesis."
 msgstr ""
-"En el nivell de significació %1, la mitjana de població és significativament "
-"diferent. Es rebutja la hipòtesi nul·la"
+"En el nivell de significació %1, les dades no estan distribuïdes "
+"aleatòriament. Es rebutja la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1774
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering (too few runs). "
 "Reject the null hypothesis."
 msgstr ""
-"Al nivell de significació %1, hi ha una tendència monotònica positiva "
-"significativa. Es rebutja la hipòtesi nul·la."
+"En el nivell de significació %1, les dades mostren agrupament (massa poques "
+"execucions). Es rebutja la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1777
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show excessive alternation (too many "
 "runs). Reject the null hypothesis."
 msgstr ""
-"Al nivell de significació %1, hi ha una tendència monotònica negativa "
-"significativa. Es rebutja la hipòtesi nul·la."
+"Al nivell de significació %1, les dades mostren una alternança excessiva "
+"(massa execucions). Es rebutja la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. "
 "Fail to reject the null hypothesis."
 msgstr ""
-"Al nivell de significació %1, no s'ha detectat cap tendència monotònica "
-"significativa. No s'ha pogut rebutjar la hipòtesi nul·la."
+"Al nivell de significació %1, les dades semblen estar distribuïdes "
+"aleatòriament. No s'ha pogut rebutjar la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1871
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -15481,18 +15468,7 @@ msgstr ""
 "tres o més mesures relacionades/repetides tenen la mateixa mitjana</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%8</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests differences in medians between two independent groups</"
 "li><li><b>%2</b> - tests if the median difference between two related "
@@ -15512,9 +15488,10 @@ msgstr ""
 "diferència de les mitjanes entre tres o més mesures relacionades/repetides</"
 "li><li><b>%5</b>: prova les diferències a les distribucions de supervivència "
 "entre dos o més grups</li><li><b>%6</b>:prova si hi ha una tendència a les "
-"dades en el temps</li><li><b>%7</b>: prova si dues variables categòriques "
-"són independents entre elles</li><li><b>%8</b>: prova si les dades "
-"observades segueixen una distribució teòrica específica</li></ul>"
+"dades en el temps</li><li><b>%7</b>: proves d'aleatorietat en una seqüència "
+"d'observacions</li><li><b>%8</b>: prova si dues variables categòriques són "
+"independents entre elles</li><li><b>%9</b>: prova si les dades observades "
+"segueixen una distribució teòrica específica</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:318
 #, kde-format
