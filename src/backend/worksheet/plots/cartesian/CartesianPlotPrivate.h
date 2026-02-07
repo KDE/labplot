@@ -19,6 +19,8 @@
 #include <QPen>
 #include <QStaticText>
 
+class PlotAreaBackgroundPrivate;
+
 class CartesianPlotPrivate : public AbstractPlotPrivate {
 public:
 	explicit CartesianPlotPrivate(CartesianPlot*);
@@ -298,6 +300,7 @@ public:
 	CartesianPlot::BorderType borderType;
 	Line* borderLine{nullptr};
 	qreal borderCornerRadius{0.0};
+	PlotAreaBackgroundPrivate* plotAreaBackgroundItem{nullptr};
 
 	// Cursor
 	bool cursor0Enable{false};

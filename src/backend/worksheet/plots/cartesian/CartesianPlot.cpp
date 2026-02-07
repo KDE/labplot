@@ -11,6 +11,7 @@
 
 #include "CartesianPlot.h"
 #include "CartesianPlotPrivate.h"
+#include "PlotAreaBackground.h"
 
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
@@ -151,7 +152,7 @@ void CartesianPlot::init(bool loading) {
 	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
 	d->background->init(group);
 	connect(d->background, &Background::updateRequested, [=] {
-		d->update();
+		d->plotAreaBackgroundItem->update();
 	});
 
 	// Border
@@ -165,10 +166,10 @@ void CartesianPlot::init(bool loading) {
 	addChild(d->borderLine);
 	d->borderLine->init(group);
 	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
-		d->update();
+		d->plotAreaBackgroundItem->update();
 	});
 	connect(d->borderLine, &Line::updateRequested, [=] {
-		Q_EMIT changed();
+		d->plotAreaBackgroundItem->update();
 	});
 
 	d->borderCornerRadius = group.readEntry(QStringLiteral("BorderCornerRadius"), 0.0);
@@ -3084,8 +3085,11 @@ void CartesianPlot::setMouseMode(MouseMode mouseMode) {
 	if (mouseMode == MouseMode::Selection) {
 		d->setZoomSelectionBandShow(false);
 		d->setCursor(Qt::ArrowCursor);
-		for (auto* item : items)
+		for (auto* item : items) {
+			if (item == d->plotAreaBackgroundItem)
+				continue; // keep background item always behind
 			item->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
+		}
 	} else {
 		if (mouseMode == MouseMode::ZoomSelection || mouseMode == MouseMode::Crosshair)
 			d->setCursor(Qt::CrossCursor);
@@ -3094,8 +3098,11 @@ void CartesianPlot::setMouseMode(MouseMode mouseMode) {
 		else if (mouseMode == MouseMode::ZoomYSelection)
 			d->setCursor(Qt::SizeVerCursor);
 
-		for (auto* item : items)
+		for (auto* item : items) {
+			if (item == d->plotAreaBackgroundItem)
+				continue; // keep background item always behind
 			item->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
+		}
 	}
 
 	// when doing zoom selection, prevent the graphics item from being movable
@@ -3612,11 +3619,17 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot)
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
 
+	// background graphics item
+	plotAreaBackgroundItem = new PlotAreaBackgroundPrivate(q);
+	plotAreaBackgroundItem->setParentItem(this);
+
 	m_cursor0Text.prepare();
 	m_cursor1Text.prepare();
 }
 
-CartesianPlotPrivate::~CartesianPlotPrivate() = default;
+CartesianPlotPrivate::~CartesianPlotPrivate() {
+	delete plotAreaBackgroundItem;
+}
 
 /*!
 	updates the position of plot rectangular in scene coordinates to \c r and recalculates the scales.
@@ -3639,6 +3652,9 @@ void CartesianPlotPrivate::retransform() {
 	prepareGeometryChange();
 	setPos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
 	updateDataRect();
+
+	// update background item geometry
+	plotAreaBackgroundItem->retransform();
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 
@@ -4786,36 +4802,6 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	if (!isVisible() || m_printing)
 		return;
 
-	// rect centered at the origin for painting
-	const QRectF plotRect(-rect.width() / 2., -rect.height() / 2., rect.width(), rect.height());
-
-	// draw the plot area background
-	background->draw(painter, plotRect, borderCornerRadius);
-
-	// draw the plot area border
-	if (borderLine->pen().style() != Qt::NoPen) {
-		painter->save();
-		painter->setPen(borderLine->pen());
-		painter->setBrush(Qt::NoBrush);
-		painter->setOpacity(borderLine->opacity());
-		if (qFuzzyIsNull(borderCornerRadius)) {
-			const double w = plotRect.width();
-			const double h = plotRect.height();
-			const double x = plotRect.x();
-			const double y = plotRect.y();
-			if (borderType.testFlag(CartesianPlot::BorderTypeFlags::BorderLeft))
-				painter->drawLine(x, y, x, y + h);
-			if (borderType.testFlag(CartesianPlot::BorderTypeFlags::BorderTop))
-				painter->drawLine(x, y, x + w, y);
-			if (borderType.testFlag(CartesianPlot::BorderTypeFlags::BorderRight))
-				painter->drawLine(x + w, y, x + w, y + h);
-			if (borderType.testFlag(CartesianPlot::BorderTypeFlags::BorderBottom))
-				painter->drawLine(x, y + h, x + w, y + h);
-		} else
-			painter->drawRoundedRect(plotRect, borderCornerRadius, borderCornerRadius);
-		painter->restore();
-	}
-
 	// draw interactive elements (selection bands, cursors, etc.)
 	if ((mouseMode == CartesianPlot::MouseMode::ZoomXSelection || mouseMode == CartesianPlot::MouseMode::ZoomYSelection) && (!m_selectionBandIsShown)
 		&& m_insideDataRect) {
@@ -4908,8 +4894,8 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	const bool hovered = (q->isHovered() && !selected);
 	if ((hovered || selected) && !q->isPrinting()) {
 		static double penWidth = 6.;
-		const qreal width = plotRect.width();
-		const qreal height = plotRect.height();
+		const qreal width = rect.width();
+		const qreal height = rect.height();
 		const QRectF newRect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
 
 		if (hovered)
