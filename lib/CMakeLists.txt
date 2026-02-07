@@ -63,6 +63,7 @@ set(PLOT_AREA_ELEMENT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/Axis.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/PlotAreaBackground.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceRange.cpp
 )
