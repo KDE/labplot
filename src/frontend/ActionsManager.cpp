@@ -875,8 +875,10 @@ void ActionsManager::initMenus() {
 	m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newLiveDataSourceAction);
+#ifdef HAVE_SCRIPTING
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newPythonScriptAction);
+#endif
 
 	// import menu
 	m_importMenu = new QMenu(m_mainWindow);
