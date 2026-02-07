@@ -1664,7 +1664,7 @@ void AxisPrivate::retransformTicks() {
 		}
 	}
 
-	if (majorTicksNumber < 1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks)) {
+	if ((majorTicksNumber < 1 && !majorTicksAutoNumber) || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks)) {
 		retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 		return;
 	}
