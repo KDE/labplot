@@ -5796,6 +5796,10 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	if (d->plotColorMode == CartesianPlot::PlotColorMode::Theme)
 		d->updatePlotColorPalette();
 
+	auto group = config.group(QStringLiteral("CartesianPlot"));
+	d->background->loadThemeConfig(group);
+	d->borderLine->loadThemeConfig(group);
+
 	// load the theme for all the children
 	const auto& elements = children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
 	for (auto* child : elements)

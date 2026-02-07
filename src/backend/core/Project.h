@@ -15,12 +15,9 @@
 #include "backend/core/Folder.h"
 #include "backend/lib/macros.h"
 
-class AbstractColumn;
 class Spreadsheet;
 class ProjectPrivate;
-
 class QMimeData;
-class QString;
 
 Project* project();
 
@@ -33,11 +30,10 @@ class Project : public Folder {
 	Q_OBJECT
 
 public:
-	enum class DockVisibility { folderOnly, folderAndSubfolders, allDocks };
-
-public:
 	Project();
 	~Project() override;
+
+	enum class DockVisibility { folderOnly, folderAndSubfolders, allDocks };
 
 	const Project* project() const override {
 		return this;

@@ -15,7 +15,7 @@
 #include <QPainter>
 
 PlotAreaBackgroundPrivate::PlotAreaBackgroundPrivate(CartesianPlot* plot)
-	: QGraphicsItem(plot->graphicsItem())
+	: QGraphicsItem()
 	, q(plot) {
 	setFlag(QGraphicsItem::ItemIsSelectable, false);
 	setFlag(QGraphicsItem::ItemIsFocusable, false);
