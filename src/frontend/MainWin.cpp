@@ -4,7 +4,7 @@
 	Description          : Main window of the application
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -1209,7 +1209,7 @@ void MainWin::newSpreadsheet() {
 #ifdef HAVE_SCRIPTING
 void MainWin::newScript() {
 	auto* action = static_cast<QAction*>(QObject::sender());
-	auto* script = new Script(i18n("%1", action->data().toString()), action->data().toString());
+	auto* script = new Script(i18n("Script"), action->data().toString());
 	this->addAspectToProject(script);
 }
 #endif

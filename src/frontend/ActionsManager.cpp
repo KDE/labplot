@@ -3,7 +3,7 @@
  *	Project              : LabPlot
  *	Description 	     : Class managing all actions and their containers (menus and toolbars) in MainWin
  *	--------------------------------------------------------------------
- *	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
+ *	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
  *	SPDX-License-Identifier: GPL-2.0-or-later
  */
 
@@ -239,6 +239,14 @@ void ActionsManager::initActions() {
 	connect(m_newWorksheetAction, &QAction::triggered, m_mainWindow, &MainWin::newWorksheet);
 
 #ifdef HAVE_SCRIPTING
+	m_newPythonScriptAction = new QAction(Script::icon(QStringLiteral("Python")), i18n("Script"), this);
+	m_newPythonScriptAction->setToolTip(i18n("Creates a new Python script"));
+	m_newPythonScriptAction->setData(QStringLiteral("Python"));
+	collection->addAction(QStringLiteral("new_python_script"), m_newPythonScriptAction);
+	connect(m_newPythonScriptAction, &QAction::triggered, m_mainWindow, &MainWin::newScript);
+
+	// TODO: activate the sub-menu once we support multiple scripting languages
+	/*
 	for (auto& language : Script::languages) {
 		auto* action = new QAction(Script::icon(language), language, this);
 		action->setData(language);
@@ -247,6 +255,7 @@ void ActionsManager::initActions() {
 		connect(action, &QAction::triggered, m_mainWindow, &MainWin::newScript);
 		m_newScriptActions << action;
 	}
+	*/
 #endif
 
 	m_newNotesAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18n("Note"), this);
@@ -326,8 +335,10 @@ void ActionsManager::initActions() {
 	m_tbImport->setIconText(QStringLiteral("Import"));
 	collection->addAction(QStringLiteral("import"), m_tbImport);
 
+	// TODO: activate the sub-menu once we support multiple scripting languages
 	// create the new_script action declared in the rc file
 	// initialization is completed in initMenus
+	/*
 #ifdef HAVE_SCRIPTING
 	m_tbScript = new ToggleActionMenu(this);
 	m_tbScript->setPopupMode(QToolButton::MenuButtonPopup);
@@ -335,6 +346,7 @@ void ActionsManager::initActions() {
 	m_tbScript->setIconText(QStringLiteral("New Script"));
 	collection->addAction(QStringLiteral("new_script"), m_tbScript);
 #endif
+	*/
 
 	m_exportAction = new QAction(QIcon::fromTheme(QStringLiteral("document-export")), i18n("Export..."), this);
 	m_exportAction->setToolTip(i18n("Export selected element"));
@@ -820,7 +832,7 @@ void ActionsManager::initScriptToolbarActions() {
 	m_scriptRunAction->setToolTip(QStringLiteral("Run the script"));
 	collection->addAction(QStringLiteral("script_run"), m_scriptRunAction);
 
-	m_scriptClearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), QStringLiteral("Clear Output"), this);
+	m_scriptClearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), QStringLiteral("Clear"), this);
 	m_scriptClearAction->setToolTip(QStringLiteral("Clear the output of the script editor"));
 	collection->addAction(QStringLiteral("script_clear"), m_scriptClearAction);
 }
@@ -863,6 +875,8 @@ void ActionsManager::initMenus() {
 	m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newLiveDataSourceAction);
+	m_newMenu->addSeparator();
+	m_newMenu->addAction(m_newPythonScriptAction);
 
 	// import menu
 	m_importMenu = new QMenu(m_mainWindow);
@@ -970,6 +984,9 @@ void ActionsManager::initMenus() {
 
 	// This menu is at File > Add New > Script
 #ifdef HAVE_SCRIPTING
+
+	// TODO: activate the sub-menu once we support multiple scripting languages
+	/*
 	auto* newScriptMenu = dynamic_cast<QMenu*>(factory->container(QLatin1String("new_script"), m_mainWindow));
 	if (newScriptMenu) {
 		newScriptMenu->setIcon(QIcon::fromTheme(QLatin1String("quickopen")));
@@ -998,6 +1015,7 @@ void ActionsManager::initMenus() {
 		m_tbScript->setDefaultAction(m_newScriptActions.first());
 	}
 	connect(m_tbScript->menu(), &QMenu::triggered, m_tbScript, &ToggleActionMenu::setDefaultAction);
+	*/
 #else
 	delete factory->container(QStringLiteral("script"), m_mainWindow);
 	delete factory->container(QStringLiteral("new_script"), m_mainWindow);

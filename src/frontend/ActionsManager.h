@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Class managing all actions and their containers (menus and toolbars) in MainWin
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -108,7 +108,8 @@ private:
 	QAction* m_newMatrixAction{nullptr};
 	QAction* m_newWorksheetAction{nullptr};
 #ifdef HAVE_SCRIPTING
-	QList<QAction*> m_newScriptActions;
+	QAction* m_newPythonScriptAction{nullptr};
+	// QList<QAction*> m_newScriptActions;
 #endif
 	QAction* m_newNotesAction{nullptr};
 	QAction* m_newLiveDataSourceAction{nullptr};
@@ -126,9 +127,9 @@ private:
 	QAction* m_lastUsedNotebookAction{nullptr};
 	ToggleActionMenu* m_tbNotebook{nullptr};
 #endif
-#ifdef HAVE_SCRIPTING
-	ToggleActionMenu* m_tbScript{nullptr};
-#endif
+// #ifdef HAVE_SCRIPTING
+// 	ToggleActionMenu* m_tbScript{nullptr};
+// #endif
 	ToggleActionMenu* m_tbImport{nullptr};
 
 	// toggling dock widgets, status bar and full screen

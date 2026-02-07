@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -212,6 +212,8 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 				return QLatin1String("Plot Area");
 			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("XYCurve"))
 				return QLatin1String("Plot");
+			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("Script"))
+				return QLatin1String("Python Script");
 			else
 				return QLatin1String(aspect->metaObject()->className());
 		case 2:

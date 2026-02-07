@@ -134,15 +134,17 @@
 	<Action name="new_datapicker" />
 	<Action name="new_live_datasource" />
 	<Separator/>
+	<Action name="new_python_script" />
+	<Separator/>
 	<Menu name="new_notebook"><text>&amp;Notebook</text>
 	    <ActionList name="backends_list" />
 		<Separator/>
 		<Action name="configure_cas" />
 	</Menu>
-	<Separator/>
+<!--	<Separator/>
 	<Menu name="new_script"><text>&amp;Script</text>
 		<ActionList name="scripts_list" />
-	</Menu>
+	</Menu>-->
 </Menu>
 <Separator/>
 <Menu name="import"><text>Import</text>
