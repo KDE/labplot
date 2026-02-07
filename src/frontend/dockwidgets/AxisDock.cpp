@@ -1017,7 +1017,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 				 // axis are available
 		return;
 
-	auto type = (Axis::TicksType)ui.cbMajorTicksType->itemData(index).toInt(); // WRONG!
+	auto type = (Axis::TicksType)ui.cbMajorTicksType->itemData(index).toInt();
 
 	ui.lLabelsTextType->setVisible(type != Axis::TicksType::CustomColumnLabels);
 	ui.cbLabelsTextType->setVisible(type != Axis::TicksType::CustomColumnLabels);
@@ -1469,8 +1469,9 @@ void AxisDock::labelsTextTypeChanged(int index) {
 		break;
 	}
 	case Axis::LabelsTextType::CustomValues: {
-		ui.lLabelsTextColumn->show();
-		cbLabelsTextColumn->show();
+		const auto tickType = (Axis::TicksType)ui.cbMajorTicksType->itemData(ui.cbMajorTicksType->currentIndex()).toInt();
+		ui.lLabelsTextColumn->setVisible(tickType != Axis::TicksType::CustomColumnLabels);
+		cbLabelsTextColumn->setVisible(tickType != Axis::TicksType::CustomColumnLabels);
 		labelsTextColumnChanged(cbLabelsTextColumn->currentModelIndex());
 		break;
 	}
