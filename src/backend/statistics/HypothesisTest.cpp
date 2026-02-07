@@ -476,9 +476,9 @@ QString HypothesisTestPrivate::addResultColumnStatistics(const QVector<const Abs
 								 QLocale().toString(statistics.size),
 								 QLocale().toString(statistics.arithmeticMean),
 								 QLocale().toString(statistics.median),
-								 QLocale().toString(statistics.variance),
-								 QLocale().toString(statistics.skewness),
-								 QLocale().toString(statistics.kurtosis)};
+								 QLocale().toString(statistics.minimum),
+								 QLocale().toString(statistics.maximum),
+								 QLocale().toString(statistics.standardDeviation)};
 	}
 
 	return addResultTable(data, true);
@@ -549,7 +549,7 @@ QString HypothesisTestPrivate::samplesMustBeEqualSize() {
 }
 
 QVector<QString> HypothesisTestPrivate::columnStatisticsHeaders() {
-	return {i18n("Name"), i18n("Size"), i18n("Mean"), i18n("Median"), i18n("Variance"), i18n("Skewness"), i18n("Kurtosis")};
+	return {i18n("Name"), i18n("Size"), i18n("Mean"), i18n("Median"), i18n("Minimum"), i18n("Maximum"), i18n("Standard Deviation")};
 }
 
 QString HypothesisTestPrivate::emptyResultColumnStatistics() {
