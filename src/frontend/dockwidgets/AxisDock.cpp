@@ -1076,9 +1076,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 	case Axis::TicksType::CustomColumnLabels:
 		// Fall through
 	case Axis::TicksType::CustomColumn: {
-		ui.lMajorTicksNumber->hide();
-		ui.sbMajorTicksNumber->hide();
-		ui.cbMajorTicksAutoNumber->hide();
+		ui.lMajorTicksNumber->show(); // Show them so the user can limit the number of ticks shown
+		ui.sbMajorTicksNumber->show();
+		ui.cbMajorTicksAutoNumber->show();
 		ui.lMajorTicksSpacingNumeric->hide();
 		ui.sbMajorTicksSpacingNumeric->hide();
 		ui.lMajorTicksIncrementDateTime->hide();
