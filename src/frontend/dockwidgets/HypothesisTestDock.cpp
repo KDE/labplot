@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock for Hypothesis Tests
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 
@@ -16,7 +16,6 @@
 #include "backend/statistics/HypothesisTest.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
-#include <KLocalizedString>
 #include <KMessageWidget>
 
 /*!
@@ -44,12 +43,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	//**********************************  Slots **********************************************
 	connect(ui.cbTest, &QComboBox::currentIndexChanged, this, &HypothesisTestDock::testChanged);
 	connect(ui.pbRecalculate, &QPushButton::clicked, this, &HypothesisTestDock::recalculate);
-
 	connect(m_buttonNew, &QPushButton::clicked, this, &HypothesisTestDock::addVariable);
-
-	connect(ui.rbNullTwoTailed, &QRadioButton::toggled, ui.rbAlternateTwoTailed, &QRadioButton::setChecked);
-	connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, ui.rbAlternateOneTailedLeft, &QRadioButton::setChecked);
-	connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, ui.rbAlternateOneTailedRight, &QRadioButton::setChecked);
 }
 
 void HypothesisTestDock::setTest(HypothesisTest* test) {
@@ -77,17 +71,23 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	// update the aspect properties when the ui properties change
 	m_aspectConnections << connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
 	m_aspectConnections << connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
-	m_aspectConnections << connect(ui.rbNullTwoTailed, &QRadioButton::toggled, [this](bool checked) {
-		if (checked)
+	m_aspectConnections << connect(ui.rbAlternateTwoTailed, &QRadioButton::toggled, [this](bool checked) {
+		if (checked) {
 			m_test->setTail(nsl_stats_tail_type_two);
+			manageRecalculate();
+		}
 	});
-	m_aspectConnections << connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
-		if (checked)
+	m_aspectConnections << connect(ui.rbAlternateOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
+		if (checked) {
 			m_test->setTail(nsl_stats_tail_type_negative);
+			manageRecalculate();
+		}
 	});
-	m_aspectConnections << connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
-		if (checked)
+	m_aspectConnections << connect(ui.rbAlternateOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
+		if (checked) {
 			m_test->setTail(nsl_stats_tail_type_positive);
+			manageRecalculate();
+		}
 	});
 
 	connect(m_test, &HypothesisTest::statusError, this, &HypothesisTestDock::showStatusError);
@@ -205,36 +205,28 @@ void HypothesisTestDock::ensureHypothesis(HypothesisTest::Test test) {
 	int hypothesisCount = HypothesisTest::hypothesisCount(test);
 	auto hypothesisTexts = HypothesisTest::hypothesisText(test);
 
+	ui.lH0Definition->setText(hypothesisTexts[0].first);
+
 	if (hypothesisCount == 3) {
-		ui.lNullTwoTailed->setText(hypothesisTexts[0].first);
+		ui.rbAlternateTwoTailed->show();
 		ui.lAlternateTwoTailed->setText(hypothesisTexts[0].second);
-		ui.lNullOneTailedLeft->setText(hypothesisTexts[1].first);
-		ui.lAlternateOneTailedLeft->setText(hypothesisTexts[1].second);
-		ui.lNullOneTailedRight->setText(hypothesisTexts[2].first);
-		ui.lAlternateOneTailedRight->setText(hypothesisTexts[2].second);
 
-		ui.lNullOneTailedLeft->show();
-		ui.lAlternateOneTailedLeft->show();
-		ui.lNullOneTailedRight->show();
-		ui.lAlternateOneTailedRight->show();
-		ui.rbNullOneTailedLeft->show();
 		ui.rbAlternateOneTailedLeft->show();
-		ui.rbNullOneTailedRight->show();
+		ui.lAlternateOneTailedLeft->show();
+		ui.lAlternateOneTailedLeft->setText(hypothesisTexts[1].second);
+
 		ui.rbAlternateOneTailedRight->show();
+		ui.lAlternateOneTailedRight->show();
+		ui.lAlternateOneTailedRight->setText(hypothesisTexts[2].second);
 	} else if (hypothesisCount == 1) {
-		ui.lNullTwoTailed->setText(hypothesisTexts[0].first);
+		ui.rbAlternateTwoTailed->hide();
 		ui.lAlternateTwoTailed->setText(hypothesisTexts[0].second);
 
-		ui.lNullOneTailedLeft->hide();
-		ui.lAlternateOneTailedLeft->hide();
-		ui.lNullOneTailedRight->hide();
-		ui.lAlternateOneTailedRight->hide();
-		ui.rbNullOneTailedLeft->hide();
 		ui.rbAlternateOneTailedLeft->hide();
-		ui.rbNullOneTailedRight->hide();
-		ui.rbAlternateOneTailedRight->hide();
+		ui.lAlternateOneTailedLeft->hide();
 
-		ui.rbNullTwoTailed->setChecked(true);
+		ui.rbAlternateOneTailedRight->hide();
+		ui.lAlternateOneTailedRight->hide();
 	}
 }
 
@@ -285,7 +277,7 @@ void HypothesisTestDock::manageAddRemoveVariable() {
 	for (auto* btn : m_removeButtons)
 		btn->setEnabled(count > min);
 
-	m_buttonNew->setEnabled(count < max);
+	m_buttonNew->setVisible(count < max);
 }
 
 // called:
@@ -442,13 +434,13 @@ void HypothesisTestDock::load() {
 	if (hypothesisCount == 3) {
 		switch (m_test->tail()) {
 		case nsl_stats_tail_type_two:
-			ui.rbNullTwoTailed->setChecked(true);
+			ui.rbAlternateTwoTailed->setChecked(true);
 			break;
 		case nsl_stats_tail_type_positive:
-			ui.rbNullOneTailedLeft->setChecked(true);
+			ui.rbAlternateOneTailedLeft->setChecked(true);
 			break;
 		case nsl_stats_tail_type_negative:
-			ui.rbNullOneTailedRight->setChecked(true);
+			ui.rbAlternateOneTailedRight->setChecked(true);
 			break;
 		}
 	}

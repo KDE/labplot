@@ -226,7 +226,7 @@ QPair<int, int> HypothesisTest::variableCount(Test test) {
 }
 
 QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
-	int hypCount = hypothesisCount(test);
+	const int hypCount = hypothesisCount(test);
 	QVector<QPair<QString, QString>> hypothesis(hypCount);
 
 	if (hypCount == 3) {
@@ -251,29 +251,23 @@ QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
 			lHSymbol = QStringLiteral("η<sub>D</sub>");
 			rHSymbol = QStringLiteral("0");
 		} else if (test == Test::mann_kendall_test) {
-			// Mann-Kendall uses special hypothesis text for trends
-			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(i18n("No monotonic trend exists"), i18n("A monotonic trend exists"));
-			hypothesis[nsl_stats_tail_type_negative] =
-				QPair<QString, QString>(i18n("No negative monotonic trend exists"), i18n("A negative monotonic trend exists"));
-			hypothesis[nsl_stats_tail_type_positive] =
-				QPair<QString, QString>(i18n("No positive monotonic trend exists"), i18n("A positive monotonic trend exists"));
+			QString H0 = i18n("No monotonic trend exists");
+			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(H0, i18n("A monotonic trend exists"));
+			hypothesis[nsl_stats_tail_type_negative] = QPair<QString, QString>(H0, i18n("A negative monotonic trend exists"));
+			hypothesis[nsl_stats_tail_type_positive] = QPair<QString, QString>(H0, i18n("A positive monotonic trend exists"));
 			return hypothesis;
 		} else if (test == Test::wald_wolfowitz_runs_test) {
-			// Wald-Wolfowitz tests for randomness based on runs above and below the median
-			hypothesis[nsl_stats_tail_type_two] =
-				QPair<QString, QString>(i18n("The data are randomly distributed"), i18n("The data are not randomly distributed"));
-			hypothesis[nsl_stats_tail_type_negative] =
-				QPair<QString, QString>(i18n("The data are randomly distributed"), i18n("The data show clustering (too few runs)"));
-			hypothesis[nsl_stats_tail_type_positive] =
-				QPair<QString, QString>(i18n("The data are randomly distributed"), i18n("The data show excessive alternation (too many runs)"));
+			QString H0 = i18n("The data are randomly distributed");
+			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(H0, i18n("The data are not randomly distributed"));
+			hypothesis[nsl_stats_tail_type_negative] = QPair<QString, QString>(H0, i18n("The data show clustering (too few runs)"));
+			hypothesis[nsl_stats_tail_type_positive] = QPair<QString, QString>(H0, i18n("The data show excessive alternation (too many runs)"));
 			return hypothesis;
 		}
 
-		hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(lHSymbol + QStringLiteral(" = ") + rHSymbol, lHSymbol + QStringLiteral(" ≠ ") + rHSymbol);
-		hypothesis[nsl_stats_tail_type_negative] =
-			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≥ ") + rHSymbol, lHSymbol + QStringLiteral(" &lt; ") + rHSymbol);
-		hypothesis[nsl_stats_tail_type_positive] =
-			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≤ ") + rHSymbol, lHSymbol + QStringLiteral(" > ") + rHSymbol);
+		QString H0 = lHSymbol + QStringLiteral(" = ") + rHSymbol;
+		hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(H0, lHSymbol + QStringLiteral(" ≠ ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_negative] = QPair<QString, QString>(H0, lHSymbol + QStringLiteral(" &lt; ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_positive] = QPair<QString, QString>(H0, lHSymbol + QStringLiteral(" > ") + rHSymbol);
 	} else if (hypCount == 1) {
 		if (test == Test::one_way_anova) {
 			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(QStringLiteral("µ<sub>1</sub> = µ<sub>2</sub> = ... = µ<sub>k</sub>"),
