@@ -564,8 +564,8 @@ QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 	bool hasDegreesOfFreedom = (test != HypothesisTest::Test::mann_whitney_u_test) && (test != HypothesisTest::Test::wilcoxon_test)
 		&& (test != HypothesisTest::Test::mann_kendall_test) && (test != HypothesisTest::Test::wald_wolfowitz_runs_test);
 
-	QString result = (addResultTitle(HypothesisTest::testName(test)) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-			   + addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")));
+ 	QString result = (addResultTitle(HypothesisTest::testName(test)) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
+					  + addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")));
 	if (hasDescriptiveStatistics)
 		result += (addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3"));
 	result += (addResultSection(i18n("Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
