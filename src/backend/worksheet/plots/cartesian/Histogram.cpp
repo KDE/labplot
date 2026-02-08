@@ -632,8 +632,8 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 			size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
 			yMaxRange = gsl_histogram_get(m_histogram, maxYAddes);
 			double point = 0.0;
-			for (size_t i = 0; i < m_bins; ++i) {
-				point += gsl_histogram_get(m_histogram, i);
+			for (int i = 0; i < m_bins; ++i) {
+				point += gsl_histogram_get(m_histogram, (size_t)i);
 				if (point > yMaxRange) {
 					yMaxRange = point;
 				}
@@ -728,7 +728,7 @@ const AbstractColumn* HistogramPrivate::bins() {
 
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		m_binsColumn->resizeTo(m_bins);
-		for (size_t i = 0; i < m_bins; ++i) {
+		for (int i = 0; i < m_bins; ++i) {
 			const double x = binRangesMin + i * width + width / 2.;
 			m_binsColumn->setValueAt(i, x);
 		}
@@ -743,7 +743,7 @@ const AbstractColumn* HistogramPrivate::binValues() {
 
 		m_binValuesColumn->resizeTo(m_bins);
 		double val = 0.;
-		for (size_t i = 0; i < m_bins; ++i) {
+		for (int i = 0; i < m_bins; ++i) {
 			histogramValue(val, i);
 			m_binValuesColumn->setValueAt(i, val);
 		}
@@ -762,7 +762,7 @@ const AbstractColumn* HistogramPrivate::binPDValues() {
 
 		m_binPDValuesColumn->resizeTo(m_bins);
 		const double width = (binRangesMax - binRangesMin) / m_bins;
-		for (size_t i = 0; i < m_bins; ++i)
+		for (int i = 0; i < m_bins; ++i)
 			m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
 	}
 
@@ -868,29 +868,29 @@ void HistogramPrivate::recalc() {
 
 		switch (binningMethod) {
 		case Histogram::ByNumber:
-			m_bins = (size_t)binCount;
+			m_bins = binCount;
 			break;
 		case Histogram::ByWidth:
-			m_bins = (size_t)(binRangesMax - binRangesMin) / binWidth;
+			m_bins = (int)(binRangesMax - binRangesMin) / binWidth;
 			break;
 		case Histogram::SquareRoot:
-			m_bins = (size_t)sqrt(count);
+			m_bins = (int)sqrt(count);
 			break;
 		case Histogram::Rice:
-			m_bins = (size_t)2 * cbrt(count);
+			m_bins = (int)2 * cbrt(count);
 			break;
 		case Histogram::Sturges:
-			m_bins = (size_t)1 + log2(count);
+			m_bins = (int)(1 + log2(count));
 			break;
 		case Histogram::Doane: {
 			const double skewness = static_cast<const Column*>(dataColumn)->statistics().skewness;
-			m_bins = (size_t)(1 + log2(count) + log2(1 + abs(skewness) / sqrt((double)6 * (count - 2) / (count + 1) / (count + 3))));
+			m_bins = (int)(1 + log2(count) + log2(1 + abs(skewness) / sqrt((double)6 * (count - 2) / (count + 1) / (count + 3))));
 			break;
 		}
 		case Histogram::Scott: {
 			const double sigma = static_cast<const Column*>(dataColumn)->statistics().standardDeviation;
 			const double width = 3.5 * sigma / cbrt(count);
-			m_bins = (size_t)(binRangesMax - binRangesMin) / width;
+			m_bins = (int)(binRangesMax - binRangesMin) / width;
 			break;
 		}
 		}
@@ -926,21 +926,21 @@ void HistogramPrivate::recalc() {
 			}
 
 			totalCount = 0;
-			for (size_t i = 0; i < m_bins; ++i)
+			for (int i = 0; i < m_bins; ++i)
 				totalCount += gsl_histogram_get(m_histogram, i);
 
 			// fill the columns for the positions and values of the bins
 			if (m_binsColumn) {
 				m_binsColumn->resizeTo(m_bins);
 				const double width = (binRangesMax - binRangesMin) / m_bins;
-				for (size_t i = 0; i < m_bins; ++i)
+				for (int i = 0; i < m_bins; ++i)
 					m_binsColumn->setValueAt(i, binRangesMin + i * width);
 			}
 
 			if (m_binValuesColumn) {
 				m_binValuesColumn->resizeTo(m_bins);
 				double val = 0.;
-				for (size_t i = 0; i < m_bins; ++i) {
+				for (int i = 0; i < m_bins; ++i) {
 					histogramValue(val, i);
 					m_binValuesColumn->setValueAt(i, val);
 				}
@@ -949,7 +949,7 @@ void HistogramPrivate::recalc() {
 			if (m_binPDValuesColumn) {
 				m_binPDValuesColumn->resizeTo(m_bins);
 				const double width = (binRangesMax - binRangesMin) / m_bins;
-				for (size_t i = 0; i < m_bins; ++i)
+				for (int i = 0; i < m_bins; ++i)
 					m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
 			}
 		} else
@@ -1064,7 +1064,7 @@ void HistogramPrivate::verticalHistogram() {
 	const auto lineType = line->histogramLineType();
 	switch (lineType) {
 	case Histogram::Bars: {
-		for (size_t i = 0; i < m_bins; ++i) {
+		for (int i = 0; i < m_bins; ++i) {
 			histogramValue(val, i);
 			const double x = binRangesMin + i * width;
 			lines.append(QLineF(x, zero, x, val));
@@ -1077,7 +1077,7 @@ void HistogramPrivate::verticalHistogram() {
 	case Histogram::NoLine:
 	case Histogram::Envelope: {
 		double prevValue = 0.;
-		for (size_t i = 0; i < m_bins; ++i) {
+		for (int i = 0; i < m_bins; ++i) {
 			histogramValue(val, i);
 			const double x = binRangesMin + i * width;
 			lines.append(QLineF(x, prevValue, x, val));
@@ -1092,7 +1092,7 @@ void HistogramPrivate::verticalHistogram() {
 		break;
 	}
 	case Histogram::DropLines: {
-		for (size_t i = 0; i < m_bins; ++i) {
+		for (int i = 0; i < m_bins; ++i) {
 			histogramValue(val, i);
 			const double x = binRangesMin + i * width + width / 2;
 			lines.append(QLineF(x, zero, x, val));
@@ -1101,7 +1101,7 @@ void HistogramPrivate::verticalHistogram() {
 		break;
 	}
 	case Histogram::HalfBars: {
-		for (size_t i = 0; i < m_bins; ++i) {
+		for (int i = 0; i < m_bins; ++i) {
 			histogramValue(val, i);
 			const double x = binRangesMin + i * width + width / 2;
 			lines.append(QLineF(x, zero, x, val));
@@ -1125,7 +1125,7 @@ void HistogramPrivate::horizontalHistogram() {
 	const auto lineType = line->histogramLineType();
 	switch (lineType) {
 	case Histogram::Bars: {
-		for (size_t i = 0; i < m_bins; ++i) {
+		for (int i = 0; i < m_bins; ++i) {
 			histogramValue(val, i);
 			const double y = binRangesMin + i * width;
 			lines.append(QLineF(zero, y, val, y));
@@ -1138,7 +1138,7 @@ void HistogramPrivate::horizontalHistogram() {
 	case Histogram::NoLine:
 	case Histogram::Envelope: {
 		double prevValue = 0.;
-		for (size_t i = 0; i < m_bins; ++i) {
+		for (int i = 0; i < m_bins; ++i) {
 			histogramValue(val, i);
 			const double y = binRangesMin + i * width;
 			lines.append(QLineF(prevValue, y, val, y));
@@ -1153,7 +1153,7 @@ void HistogramPrivate::horizontalHistogram() {
 		break;
 	}
 	case Histogram::DropLines: {
-		for (size_t i = 0; i < m_bins; ++i) {
+		for (int i = 0; i < m_bins; ++i) {
 			histogramValue(val, i);
 			const double y = binRangesMin + i * width + width / 2;
 			lines.append(QLineF(zero, y, val, y));
@@ -1162,7 +1162,7 @@ void HistogramPrivate::horizontalHistogram() {
 		break;
 	}
 	case Histogram::HalfBars: {
-		for (size_t i = 0; i < m_bins; ++i) {
+		for (int i = 0; i < m_bins; ++i) {
 			histogramValue(val, i);
 			const double y = binRangesMin + i * width + width / 2;
 			lines.append(QLineF(zero, y, val, y));
@@ -1222,7 +1222,7 @@ void HistogramPrivate::updateValues() {
 	if (value->type() == Value::BinEntries) {
 		switch (type) {
 		case Histogram::Ordinary:
-			for (size_t i = 0; i < m_bins; ++i) {
+			for (int i = 0; i < m_bins; ++i) {
 				if (!visiblePoints[i])
 					continue;
 				valuesStrings << valuesPrefix + numberLocale.toString(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
@@ -1230,7 +1230,7 @@ void HistogramPrivate::updateValues() {
 			break;
 		case Histogram::Cumulative: {
 			int sum = 0;
-			for (size_t i = 0; i < m_bins; ++i) {
+			for (int i = 0; i < m_bins; ++i) {
 				if (!visiblePoints[i])
 					continue;
 				sum += gsl_histogram_get(m_histogram, i);

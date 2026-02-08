@@ -533,8 +533,6 @@ void NSLStatisticalTestTest::testWaldWolfowitzRuns01() {
 	// z-score = (9 - 0.5 - 6.0) / sqrt(2.222) ≈ 1.68
 	// p-value ≈ 0.09 (reasonably random)
 
-	const double epsilon = 1e-3;
-
 	QCOMPARE(result.runs, 9);
 	QCOMPARE(result.n, 10);
 	QVERIFY(result.z > 0.0 && result.z < 2.5); // z should be positive but moderate
@@ -568,8 +566,6 @@ void NSLStatisticalTestTest::testWaldWolfowitzRuns02() {
 	// z-score = (2 + 0.5 - 6.0) / sqrt(2.222) ≈ -2.35 (negative z indicates clustering)
 	// p-value for left-tailed test should be small
 
-	const double epsilon = 1e-1;
-
 	QCOMPARE(result.runs, 2);
 	QCOMPARE(result.n, 10);
 	QVERIFY(result.z < -2.0); // z should be significantly negative
@@ -602,8 +598,6 @@ void NSLStatisticalTestTest::testWaldWolfowitzRuns03() {
 	// Variance: (2*5*5*(2*5*5-10))/(100*9) = 2.222
 	// z-score = (10 - 0.5 - 6.0) / sqrt(2.222) ≈ 2.35 (positive z indicates alternation)
 	// p-value for right-tailed test should be small
-
-	const double epsilon = 1e-1;
 
 	QCOMPARE(result.runs, 10);
 	QCOMPARE(result.n, 10);

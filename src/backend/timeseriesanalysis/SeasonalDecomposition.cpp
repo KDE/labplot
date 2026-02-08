@@ -697,8 +697,8 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 		}
 	} else { // multiple periods, MSTL is being used
 		// adjust the result spreadsheet
-		const int columnCount = 2 + mstlPeriods.size(); // trend, residual + seasonal components
-		if (resultSpreadsheet->columnCount() != columnCount) {
+		const auto columnCount = 2 + mstlPeriods.size(); // trend, residual + seasonal components
+		if (resultSpreadsheet->columnCount() != (int)columnCount) {
 			resultSpreadsheet->setColumnCount(2 + mstlPeriods.size());
 			columnsSeasonal.clear();
 			for (int i = 1; i < resultSpreadsheet->columnCount() - 1; i++) {
