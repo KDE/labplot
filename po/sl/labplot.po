@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-07 00:39+0000\n"
+"POT-Creation-Date: 2026-02-08 00:39+0000\n"
 "PO-Revision-Date: 2026-02-05 07:22+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -81,7 +81,7 @@ msgstr "Dol"
 #: src/backend/core/AbstractAspect.cpp:530
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:227
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2448
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2449
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1: dodaj %2"
@@ -270,8 +270,8 @@ msgstr "Dolgo celo število"
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:230
 #: src/backend/datasources/filters/AsciiFilter.cpp:615
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:446
-#: src/frontend/ActionsManager.cpp:517
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
+#: src/frontend/ActionsManager.cpp:529
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
@@ -370,12 +370,12 @@ msgstr "Vh%1"
 msgid "Import Data"
 msgstr "Uvoz podatkov"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:269
+#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:278
 #, kde-format
 msgid "From File..."
 msgstr "Iz datoteke..."
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:289
+#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:298
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Iz zbirke podatkov SQL..."
@@ -400,7 +400,7 @@ msgstr "Natisni"
 msgid "Print Preview"
 msgstr "Predogled tiskanja"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:389
+#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:401
 #, kde-format
 msgid "&Close"
 msgstr "Zapri"
@@ -421,7 +421,7 @@ msgstr "nezdružljiva vrsta filtra"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/statistics/HypothesisTest.cpp:1861
+#: src/backend/statistics/HypothesisTest.cpp:1854
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1929
 #, kde-format
@@ -445,7 +445,7 @@ msgstr "%1: preimenuj v %2"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/backend/core/AspectTreeModel.cpp:164
-#: src/backend/statistics/HypothesisTest.cpp:558
+#: src/backend/statistics/HypothesisTest.cpp:552
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:99
@@ -488,7 +488,7 @@ msgstr "%1    (neštevilski podatki)"
 msgid "%1   (no values)"
 msgstr "%1   (brez vrednosti)"
 
-#: src/backend/core/AspectTreeModel.cpp:391
+#: src/backend/core/AspectTreeModel.cpp:393
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "Ime »%1« je že v uporabi. Izberite drugo ime."
@@ -823,16 +823,16 @@ msgstr "neznan element delovnega zvezka »%1«"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:48
 #: src/backend/datapicker/Datapicker.cpp:379
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1903
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1909
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1915
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1921
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1927
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1933
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1939
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1945
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1951
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1957
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1904
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1910
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1916
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1922
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1928
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1934
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1940
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1946
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1952
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1958
 #: src/frontend/ui/datapickerimagewidget.ui:260
 #, kde-format
 msgid "Plot"
@@ -1919,8 +1919,8 @@ msgstr "UInt61"
 #: src/backend/datasources/filters/MatioFilter.cpp:402
 #: src/backend/datasources/filters/MatioFilter.cpp:452
 #: src/backend/nsl/nsl_interp.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:788
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2352
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:789
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2353
 #, kde-format
 msgid "Function"
 msgstr "Funkcija"
@@ -2711,7 +2711,7 @@ msgid "Stefan-Boltzmann constant"
 msgstr "Stefan-Boltzmannova konstanta"
 
 #: src/backend/gsl/constants.cpp:83
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:702
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:703
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:160
 #, kde-format
 msgid "Gauss"
@@ -3711,7 +3711,7 @@ msgstr "Trenutni stolpec cell (index; default_value)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:258
-#: src/backend/statistics/HypothesisTest.cpp:558
+#: src/backend/statistics/HypothesisTest.cpp:552
 #: src/frontend/ui/dockwidgets/imagedock.ui:492
 #, kde-format
 msgid "Size"
@@ -3730,6 +3730,7 @@ msgstr "Vsota"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:260 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
+#: src/backend/statistics/HypothesisTest.cpp:552
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:173
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
@@ -3745,6 +3746,7 @@ msgstr "Najmanjše"
 #: src/backend/gsl/functions.cpp:261 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
+#: src/backend/statistics/HypothesisTest.cpp:552
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:174
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
@@ -3769,7 +3771,7 @@ msgstr "Aritmetična sredina"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:263 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
-#: src/backend/statistics/HypothesisTest.cpp:558
+#: src/backend/statistics/HypothesisTest.cpp:552
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
@@ -3795,7 +3797,6 @@ msgstr "Standardni odklon"
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
 #: src/backend/gsl/functions.cpp:265
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
-#: src/backend/statistics/HypothesisTest.cpp:558
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:170
 #: src/frontend/ui/mqttwillsettingswidget.ui:108
@@ -3922,7 +3923,6 @@ msgstr "Absolutno odstopanje mediane"
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
 #: src/backend/gsl/functions.cpp:283
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
-#: src/backend/statistics/HypothesisTest.cpp:558
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:246
 #: src/frontend/ui/mqttwillsettingswidget.ui:163
@@ -3934,7 +3934,6 @@ msgstr "Koeficient asimetrije"
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
 #: src/backend/gsl/functions.cpp:284
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
-#: src/backend/statistics/HypothesisTest.cpp:558
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:91
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:253
 #: src/frontend/ui/mqttwillsettingswidget.ui:174
@@ -6146,7 +6145,7 @@ msgid "ep"
 msgstr "ep"
 
 #: src/backend/lib/Range.h:57 src/backend/nsl/nsl_interp.c:14
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:680
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:681
 #, kde-format
 msgid "Linear"
 msgstr "Linearno"
@@ -6415,7 +6414,7 @@ msgstr "Ni bilo mogoče ustvariti sej za %1. Preverite vašo namestitev."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/nsl/nsl_baseline.cpp:47
-#: src/backend/statistics/HypothesisTest.cpp:558
+#: src/backend/statistics/HypothesisTest.cpp:552
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:515
@@ -6615,7 +6614,7 @@ msgid "Imaginary Part"
 msgstr "Imaginarni del"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:684
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:685
 #, kde-format
 msgid "Power"
 msgstr "Potenca"
@@ -6772,7 +6771,7 @@ msgid "Statistics (Distributions)"
 msgstr "Statistika (porazdelitve)"
 
 #: src/backend/nsl/nsl_fit.c:24
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:726
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:727
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
 #: src/frontend/datasources/ImportFileWidget.cpp:1419
 #: src/frontend/dockwidgets/AxisDock.cpp:233
@@ -6784,14 +6783,14 @@ msgid "Custom"
 msgstr "Po meri"
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:696
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:697
 #, kde-format
 msgid "Inverse Exponential"
 msgstr "Inverzna eksponentna"
 
 #: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:22
 #: src/backend/nsl/nsl_sf_stats.c:15
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:798
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:799
 #, kde-format
 msgid "Exponential"
 msgstr "Eksponentno"
@@ -6812,8 +6811,8 @@ msgid "Gaussian (normal)"
 msgstr "Gaussova (normalno)"
 
 #: src/backend/nsl/nsl_fit.c:31
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:706
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:806
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:807
 #, kde-format
 msgid "Cauchy-Lorentz"
 msgstr "Cauchy-Lorentz"
@@ -6844,7 +6843,7 @@ msgid "Inverse Tangent"
 msgstr "Inverzni tangens ali arkus tangens"
 
 #: src/backend/nsl/nsl_fit.c:45
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:716
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:717
 #, kde-format
 msgid "Hyperbolic Tangent"
 msgstr "Hiperbolični tangens"
@@ -6916,7 +6915,7 @@ msgstr "Radialna razdalja"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2240
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2241
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:272
 #, kde-format
 msgid "Interpolation"
@@ -7023,7 +7022,7 @@ msgid "Integral"
 msgstr "Integral"
 
 #: src/backend/nsl/nsl_sf_stats.c:13
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:794
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:795
 #, kde-format
 msgid "Gaussian (Normal)"
 msgstr "Gaussova (normalna)"
@@ -7034,7 +7033,7 @@ msgid "Gaussian Tail"
 msgstr "Gaussov rep"
 
 #: src/backend/nsl/nsl_sf_stats.c:16
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:802
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:803
 #, kde-format
 msgid "Laplace"
 msgstr "Laplace"
@@ -7135,7 +7134,7 @@ msgid "Gumbel Type-2"
 msgstr "Gumbel tip-2"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:816
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:817
 #, kde-format
 msgid "Poisson"
 msgstr "Poisson"
@@ -7146,7 +7145,7 @@ msgid "Bernoulli"
 msgstr "Bernoulli"
 
 #: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:25
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:820
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:821
 #, kde-format
 msgid "Binomial"
 msgstr "Binomska"
@@ -7344,6 +7343,7 @@ msgid "%1: run %2 script"
 msgstr "%1: poženi %2 skript"
 
 #: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
+#: src/frontend/ActionsManager.cpp:242 src/frontend/MainWin.cpp:1212
 #, kde-format
 msgid "Script"
 msgstr "Skript"
@@ -7691,7 +7691,7 @@ msgctxt "@title:window"
 msgid "Hypothesis Test"
 msgstr "Test hipoteze"
 
-#: src/backend/statistics/HypothesisTest.cpp:255
+#: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "No monotonic trend exists"
 msgstr "Ne obstaja monotoni trend"
@@ -7701,450 +7701,444 @@ msgstr "Ne obstaja monotoni trend"
 msgid "A monotonic trend exists"
 msgstr "Obstaja monotoni trend"
 
-#: src/backend/statistics/HypothesisTest.cpp:257
-#, kde-format
-msgid "No negative monotonic trend exists"
-msgstr "Ne obstaja negativni monotoni trend"
-
-#: src/backend/statistics/HypothesisTest.cpp:257
+#: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "A negative monotonic trend exists"
 msgstr "Obstaja negativni monotoni trend"
 
-#: src/backend/statistics/HypothesisTest.cpp:259
-#, kde-format
-msgid "No positive monotonic trend exists"
-msgstr "Ne obstaja pozitivni monotoni trend"
-
-#: src/backend/statistics/HypothesisTest.cpp:259
+#: src/backend/statistics/HypothesisTest.cpp:257
 #, kde-format
 msgid "A positive monotonic trend exists"
 msgstr "Obstaja pozitivni monotoni trend"
 
-#: src/backend/statistics/HypothesisTest.cpp:264
-#: src/backend/statistics/HypothesisTest.cpp:266
-#: src/backend/statistics/HypothesisTest.cpp:268
+#: src/backend/statistics/HypothesisTest.cpp:260
 #, kde-format
 msgid "The data are randomly distributed"
 msgstr "Podatki so naključno porazdeljeni"
 
-#: src/backend/statistics/HypothesisTest.cpp:264
+#: src/backend/statistics/HypothesisTest.cpp:261
 #, kde-format
 msgid "The data are not randomly distributed"
 msgstr "Podatki niso naključno porazdeljeni"
 
-#: src/backend/statistics/HypothesisTest.cpp:266
+#: src/backend/statistics/HypothesisTest.cpp:262
 #, kde-format
 msgid "The data show clustering (too few runs)"
 msgstr "Podatki kažejo na združevanje v skupine (premalo ponovitev)"
 
-#: src/backend/statistics/HypothesisTest.cpp:268
+#: src/backend/statistics/HypothesisTest.cpp:263
 #, kde-format
 msgid "The data show excessive alternation (too many runs)"
 msgstr "Podatki kažejo na prekomerno menjavanje (preveč ponovitev)"
 
-#: src/backend/statistics/HypothesisTest.cpp:330
+#: src/backend/statistics/HypothesisTest.cpp:324
 #, kde-format
 msgid "One-Sample t-Test"
 msgstr "Enovzorčni t-test"
 
-#: src/backend/statistics/HypothesisTest.cpp:332
+#: src/backend/statistics/HypothesisTest.cpp:326
 #, kde-format
 msgid "Independent Two-Sample t-Test"
 msgstr "Neodvisni t-test dveh vzorcev"
 
-#: src/backend/statistics/HypothesisTest.cpp:334
+#: src/backend/statistics/HypothesisTest.cpp:328
 #, kde-format
 msgid "Paired Two-Sample t-Test"
 msgstr "Primerjalni t-test dveh vzorcev"
 
-#: src/backend/statistics/HypothesisTest.cpp:336
+#: src/backend/statistics/HypothesisTest.cpp:330
 #, kde-format
 msgid "Mann-Whitney U Test"
 msgstr "Mann-Whitneyjev U test"
 
-#: src/backend/statistics/HypothesisTest.cpp:338
+#: src/backend/statistics/HypothesisTest.cpp:332
 #, kde-format
 msgid "Welch t-Test"
 msgstr "Welchov t-test"
 
-#: src/backend/statistics/HypothesisTest.cpp:340
+#: src/backend/statistics/HypothesisTest.cpp:334
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
 msgstr "Wilcoxonov test predznačenih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:342
+#: src/backend/statistics/HypothesisTest.cpp:336
 #, kde-format
 msgid "One-Way ANOVA Test"
 msgstr "Enostranski test ANOVA"
 
-#: src/backend/statistics/HypothesisTest.cpp:344
+#: src/backend/statistics/HypothesisTest.cpp:338
 #, kde-format
 msgid "Kruskal-Wallis Test"
 msgstr "Kruskal-Wallisov test"
 
-#: src/backend/statistics/HypothesisTest.cpp:346
+#: src/backend/statistics/HypothesisTest.cpp:340
 #, kde-format
 msgid "Log-Rank Test"
 msgstr "Log-rang test"
 
-#: src/backend/statistics/HypothesisTest.cpp:348
+#: src/backend/statistics/HypothesisTest.cpp:342
 #, kde-format
 msgid "Friedman Test"
 msgstr "Friedmanov test"
 
-#: src/backend/statistics/HypothesisTest.cpp:350
+#: src/backend/statistics/HypothesisTest.cpp:344
 #, kde-format
 msgid "Chi-Square Independence Test"
 msgstr "Test neodvisnosti hi-kvadrat"
 
-#: src/backend/statistics/HypothesisTest.cpp:352
+#: src/backend/statistics/HypothesisTest.cpp:346
 #, kde-format
 msgid "Chi-Square Goodness of Fit Test"
 msgstr "Test uspešnosti prileganja hi-kvadrat"
 
-#: src/backend/statistics/HypothesisTest.cpp:354
+#: src/backend/statistics/HypothesisTest.cpp:348
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr "Eno-stranski test ANOVA s ponovljenimi meritvami"
 
-#: src/backend/statistics/HypothesisTest.cpp:356
+#: src/backend/statistics/HypothesisTest.cpp:350
 #, kde-format
 msgid "Mann-Kendall Test"
 msgstr "Mann-Kendallov U test"
 
-#: src/backend/statistics/HypothesisTest.cpp:358
+#: src/backend/statistics/HypothesisTest.cpp:352
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
 msgstr "Wald-Wolfowitzov test tekov"
 
-#: src/backend/statistics/HypothesisTest.cpp:534
+#: src/backend/statistics/HypothesisTest.cpp:528
 #, kde-format
 msgid "N/A"
 msgstr "N/A"
 
-#: src/backend/statistics/HypothesisTest.cpp:538
+#: src/backend/statistics/HypothesisTest.cpp:532
 #, kde-format
 msgid "Test result is not available."
 msgstr "Rezultat testa ni na voljo."
 
-#: src/backend/statistics/HypothesisTest.cpp:542
+#: src/backend/statistics/HypothesisTest.cpp:536
 #, kde-format
 msgid "Two columns are required for this test."
 msgstr "Za ta test sta zahtevana dva stolpca."
 
-#: src/backend/statistics/HypothesisTest.cpp:546
+#: src/backend/statistics/HypothesisTest.cpp:540
 #, kde-format
 msgid "At least two columns are required."
 msgstr "Zahtevana sta vsaj dva stolpca."
 
-#: src/backend/statistics/HypothesisTest.cpp:550
+#: src/backend/statistics/HypothesisTest.cpp:544
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
 msgstr "Stolpec '%1' zahteva vsaj %2 vzorcev."
 
-#: src/backend/statistics/HypothesisTest.cpp:554
+#: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
 msgid "The size of each sample must be equal."
 msgstr "Velikost vsakega vzorca mora biti enaka."
 
-#: src/backend/statistics/HypothesisTest.cpp:574
+#: src/backend/statistics/HypothesisTest.cpp:552
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
+#, kde-format
+msgid "Standard Deviation"
+msgstr "Standardna deviacija"
+
+#: src/backend/statistics/HypothesisTest.cpp:567
 #, kde-format
 msgid "Null Hypothesis"
 msgstr "Ničelna hipoteza"
 
-#: src/backend/statistics/HypothesisTest.cpp:575
+#: src/backend/statistics/HypothesisTest.cpp:568
 #, kde-format
 msgid "Alternate Hypothesis"
 msgstr "Alternativna hipoteza"
 
-#: src/backend/statistics/HypothesisTest.cpp:577
+#: src/backend/statistics/HypothesisTest.cpp:570
 #, kde-format
 msgid "Descriptive Statistics"
 msgstr "Opisna statistika"
 
-#: src/backend/statistics/HypothesisTest.cpp:578
+#: src/backend/statistics/HypothesisTest.cpp:571
 #, kde-format
 msgid "Test Statistics"
 msgstr "Testna statistika"
 
-#: src/backend/statistics/HypothesisTest.cpp:578
+#: src/backend/statistics/HypothesisTest.cpp:571
 #, kde-format
 msgid "Significance Level"
 msgstr "Stopnja značilnosti"
 
-#: src/backend/statistics/HypothesisTest.cpp:579
+#: src/backend/statistics/HypothesisTest.cpp:572
 #, kde-format
 msgid "p-Value"
 msgstr "p-Vrednost"
 
-#: src/backend/statistics/HypothesisTest.cpp:582
+#: src/backend/statistics/HypothesisTest.cpp:575
 #, kde-format
 msgid "Degrees of Freedom Between Groups"
 msgstr "Stopnje značilnosti med skupinami"
 
-#: src/backend/statistics/HypothesisTest.cpp:583
+#: src/backend/statistics/HypothesisTest.cpp:576
 #, kde-format
 msgid "Degrees of Freedom Within Groups"
 msgstr "Stopnje značilnosti znotraj skupin"
 
-#: src/backend/statistics/HypothesisTest.cpp:585
+#: src/backend/statistics/HypothesisTest.cpp:578
 #, kde-format
 msgid "Degrees of Freedom Treatment"
 msgstr "Obravnava stopenj značilnosti"
 
-#: src/backend/statistics/HypothesisTest.cpp:586
+#: src/backend/statistics/HypothesisTest.cpp:579
 #, kde-format
 msgid "Degrees of Freedom Residuals"
 msgstr "Stopnja značilnosti ostankov"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/backend/statistics/HypothesisTest.cpp:588
+#: src/backend/statistics/HypothesisTest.cpp:581
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "Stopnja značilnosti"
 
+#: src/backend/statistics/HypothesisTest.cpp:586
+#: src/backend/statistics/HypothesisTest.cpp:590
 #: src/backend/statistics/HypothesisTest.cpp:593
-#: src/backend/statistics/HypothesisTest.cpp:597
-#: src/backend/statistics/HypothesisTest.cpp:600
-#: src/backend/statistics/HypothesisTest.cpp:602
+#: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
 msgid "t-Value"
 msgstr "t-vrednost"
 
-#: src/backend/statistics/HypothesisTest.cpp:593
+#: src/backend/statistics/HypothesisTest.cpp:586
 #, kde-format
 msgid "Test Mean"
 msgstr "Povprečje testa"
 
-#: src/backend/statistics/HypothesisTest.cpp:594
-#: src/backend/statistics/HypothesisTest.cpp:598
-#: src/backend/statistics/HypothesisTest.cpp:600
-#: src/backend/statistics/HypothesisTest.cpp:602
+#: src/backend/statistics/HypothesisTest.cpp:587
+#: src/backend/statistics/HypothesisTest.cpp:591
+#: src/backend/statistics/HypothesisTest.cpp:593
+#: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
 msgid "Mean Difference"
 msgstr "Povprečje razlike"
 
-#: src/backend/statistics/HypothesisTest.cpp:597
+#: src/backend/statistics/HypothesisTest.cpp:590
 #, kde-format
 msgid "Pooled Variance"
 msgstr "Združena varianca"
 
-#: src/backend/statistics/HypothesisTest.cpp:598
-#: src/backend/statistics/HypothesisTest.cpp:603
+#: src/backend/statistics/HypothesisTest.cpp:591
+#: src/backend/statistics/HypothesisTest.cpp:596
 #, kde-format
 msgid "Mean Difference Standard Error"
 msgstr "Standardna napaka povprečja razlike"
 
-#: src/backend/statistics/HypothesisTest.cpp:605
-#: src/backend/statistics/HypothesisTest.cpp:611
+#: src/backend/statistics/HypothesisTest.cpp:598
+#: src/backend/statistics/HypothesisTest.cpp:604
 #, kde-format
 msgid "F-Statistic"
 msgstr "Statistika F"
 
-#: src/backend/statistics/HypothesisTest.cpp:605
+#: src/backend/statistics/HypothesisTest.cpp:598
 #, kde-format
 msgid "Sum of Squares Between Groups"
 msgstr "Vsota kvadratov med skupinami"
 
-#: src/backend/statistics/HypothesisTest.cpp:606
+#: src/backend/statistics/HypothesisTest.cpp:599
 #, kde-format
 msgid "Sum of Squares Within Groups"
 msgstr "Vsota kvadratov znotraj skupin"
 
-#: src/backend/statistics/HypothesisTest.cpp:607
+#: src/backend/statistics/HypothesisTest.cpp:600
 #, kde-format
 msgid "Mean Squares Between Groups"
 msgstr "Povprečje kvadratov med skupinami"
 
-#: src/backend/statistics/HypothesisTest.cpp:608
+#: src/backend/statistics/HypothesisTest.cpp:601
 #, kde-format
 msgid "Mean Squares Within Groups"
 msgstr "Povprečje kvadratov znotraj skupin"
 
-#: src/backend/statistics/HypothesisTest.cpp:611
+#: src/backend/statistics/HypothesisTest.cpp:604
 #, kde-format
 msgid "Sum of Squares Treatment"
 msgstr "Obravnava vsote kvadratov"
 
-#: src/backend/statistics/HypothesisTest.cpp:612
+#: src/backend/statistics/HypothesisTest.cpp:605
 #, kde-format
 msgid "Sum of Squares Residuals"
 msgstr "Vsota kvadratov ostankov"
 
-#: src/backend/statistics/HypothesisTest.cpp:613
+#: src/backend/statistics/HypothesisTest.cpp:606
 #, kde-format
 msgid "Sum of Squares Within Subjects"
 msgstr "Vsota kvadratov znotraj subjektov"
 
-#: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:607
 #, kde-format
 msgid "Mean Squares Treatment"
 msgstr "Obravnava povprečij kvadratov"
 
-#: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:607
 #, kde-format
 msgid "Mean Squares Residuals"
 msgstr "Vsota kvadratov ostankov"
 
-#: src/backend/statistics/HypothesisTest.cpp:616
+#: src/backend/statistics/HypothesisTest.cpp:609
 #, kde-format
 msgid "U"
 msgstr "U"
 
-#: src/backend/statistics/HypothesisTest.cpp:616
-#: src/backend/statistics/HypothesisTest.cpp:620
-#: src/backend/statistics/HypothesisTest.cpp:640
-#: src/backend/statistics/HypothesisTest.cpp:643
+#: src/backend/statistics/HypothesisTest.cpp:609
+#: src/backend/statistics/HypothesisTest.cpp:613
+#: src/backend/statistics/HypothesisTest.cpp:633
+#: src/backend/statistics/HypothesisTest.cpp:636
 #, kde-format
 msgid "z-Value"
 msgstr "z-vrednost"
 
-#: src/backend/statistics/HypothesisTest.cpp:617
+#: src/backend/statistics/HypothesisTest.cpp:610
 #, kde-format
 msgid "Rank Sum 1"
 msgstr "Rang vsote 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:617
+#: src/backend/statistics/HypothesisTest.cpp:610
 #, kde-format
 msgid "Mean Rank 1"
 msgstr "Povprečje ranga 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:618
+#: src/backend/statistics/HypothesisTest.cpp:611
 #, kde-format
 msgid "Rank Sum 2"
 msgstr "Rang vsote 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:618
+#: src/backend/statistics/HypothesisTest.cpp:611
 #, kde-format
 msgid "Mean Rank 2"
 msgstr "Povprečje ranga 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:620
+#: src/backend/statistics/HypothesisTest.cpp:613
 #, kde-format
 msgid "W"
 msgstr "W"
 
-#: src/backend/statistics/HypothesisTest.cpp:621
+#: src/backend/statistics/HypothesisTest.cpp:614
 #, kde-format
 msgid "Positive Rank Sum"
 msgstr "Vsota pozitivnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:621
+#: src/backend/statistics/HypothesisTest.cpp:614
 #, kde-format
 msgid "Positive Rank Mean"
 msgstr "Povprečje pozitivnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:622
+#: src/backend/statistics/HypothesisTest.cpp:615
 #, kde-format
 msgid "Positive Rank Count"
 msgstr "Števec pozitivnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:622
+#: src/backend/statistics/HypothesisTest.cpp:615
 #, kde-format
 msgid "Negative Rank Sum"
 msgstr "Vsota negativnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:623
+#: src/backend/statistics/HypothesisTest.cpp:616
 #, kde-format
 msgid "Negative Rank Mean"
 msgstr "Povprečje negativnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:623
+#: src/backend/statistics/HypothesisTest.cpp:616
 #, kde-format
 msgid "Negative Rank Count"
 msgstr "Števec negativnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:617
 #, kde-format
 msgid "Tie Count"
 msgstr "Števec neodločenih izidov"
 
-#: src/backend/statistics/HypothesisTest.cpp:626
-#: src/backend/statistics/HypothesisTest.cpp:634
+#: src/backend/statistics/HypothesisTest.cpp:619
+#: src/backend/statistics/HypothesisTest.cpp:627
 #, kde-format
 msgid "H"
 msgstr "H"
 
-#: src/backend/statistics/HypothesisTest.cpp:628
+#: src/backend/statistics/HypothesisTest.cpp:621
 #, kde-format
 msgid "Q"
 msgstr "Q"
 
-#: src/backend/statistics/HypothesisTest.cpp:630
-#: src/backend/statistics/HypothesisTest.cpp:632
+#: src/backend/statistics/HypothesisTest.cpp:623
+#: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Chi2"
 msgstr "Hi-kvadrat"
 
-#: src/backend/statistics/HypothesisTest.cpp:634
+#: src/backend/statistics/HypothesisTest.cpp:627
 #, kde-format
 msgid "Event Count 1"
 msgstr "Števec dogodkov 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:635
+#: src/backend/statistics/HypothesisTest.cpp:628
 #, kde-format
 msgid "Censored Count 1"
 msgstr "Cenzuriran števec 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:635
+#: src/backend/statistics/HypothesisTest.cpp:628
 #, kde-format
 msgid "Total Count 1"
 msgstr "Skupni števec 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:636
+#: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
 msgid "Event Count 2"
 msgstr "Števec dogodkov 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:636
+#: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
 msgid "Censored Count 2"
 msgstr "Cenzurirani števec 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:637
+#: src/backend/statistics/HypothesisTest.cpp:630
 #, kde-format
 msgid "Total Count 2"
 msgstr "Skupni števec 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:639
+#: src/backend/statistics/HypothesisTest.cpp:632
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: src/backend/statistics/HypothesisTest.cpp:639
+#: src/backend/statistics/HypothesisTest.cpp:632
 #, kde-format
 msgid "Kendall's Tau"
 msgstr "Kendalov Tau"
 
-#: src/backend/statistics/HypothesisTest.cpp:640
+#: src/backend/statistics/HypothesisTest.cpp:633
 #, kde-format
 msgid "Sen's Slope"
 msgstr "Senova strmina"
 
-#: src/backend/statistics/HypothesisTest.cpp:641
-#: src/backend/statistics/HypothesisTest.cpp:644
+#: src/backend/statistics/HypothesisTest.cpp:634
+#: src/backend/statistics/HypothesisTest.cpp:637
 #, kde-format
 msgid "Sample Size"
 msgstr "Velikost vzorca"
 
-#: src/backend/statistics/HypothesisTest.cpp:643
+#: src/backend/statistics/HypothesisTest.cpp:636
 #, kde-format
 msgid "Number of Runs"
 msgstr "Število tekov"
 
-#: src/backend/statistics/HypothesisTest.cpp:647
+#: src/backend/statistics/HypothesisTest.cpp:640
 #, kde-format
 msgid "Statistical Conclusion"
 msgstr "Statistični sklep"
 
-#: src/backend/statistics/HypothesisTest.cpp:659
+#: src/backend/statistics/HypothesisTest.cpp:652
 #, kde-format
 msgid "No variable columns provided."
 msgstr "Ni na voljo nobenih stolpcev spremenljivk."
 
-#: src/backend/statistics/HypothesisTest.cpp:933
+#: src/backend/statistics/HypothesisTest.cpp:926
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
@@ -8153,7 +8147,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 se povprečje populacije bistveno razlikuje od %2. "
 "Ničelno hipotezo zavrnite."
 
-#: src/backend/statistics/HypothesisTest.cpp:937
+#: src/backend/statistics/HypothesisTest.cpp:930
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
@@ -8162,8 +8156,8 @@ msgstr ""
 "Pri stopnji značilnosti %1 se povprečje populacije ne razlikuje bistveno od "
 "%2. Ničelne hipoteze ni mogoče zavrniti."
 
-#: src/backend/statistics/HypothesisTest.cpp:1021
-#: src/backend/statistics/HypothesisTest.cpp:1089
+#: src/backend/statistics/HypothesisTest.cpp:1014
+#: src/backend/statistics/HypothesisTest.cpp:1082
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
@@ -8172,8 +8166,8 @@ msgstr ""
 "Pri stopnji značilnosti %1 se povprečja populacije bistveno razlikujejo. "
 "Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1023
-#: src/backend/statistics/HypothesisTest.cpp:1091
+#: src/backend/statistics/HypothesisTest.cpp:1016
+#: src/backend/statistics/HypothesisTest.cpp:1084
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
@@ -8182,8 +8176,8 @@ msgstr ""
 "Pri stopnji značilnosti %1 se povprečja populacije bistveno ne razlikujejo. "
 "Ničelne hipoteze ni mogoče zavrniti"
 
-#: src/backend/statistics/HypothesisTest.cpp:1144
-#: src/backend/statistics/HypothesisTest.cpp:1207
+#: src/backend/statistics/HypothesisTest.cpp:1137
+#: src/backend/statistics/HypothesisTest.cpp:1200
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
@@ -8192,8 +8186,8 @@ msgstr ""
 "Pri stopnji značilnosti %1 se vsaj eno povprečje skupine bistveno razlikuje. "
 "Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1147
-#: src/backend/statistics/HypothesisTest.cpp:1210
+#: src/backend/statistics/HypothesisTest.cpp:1140
+#: src/backend/statistics/HypothesisTest.cpp:1203
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group means. "
@@ -8202,9 +8196,9 @@ msgstr ""
 "Pri stopnji značilnosti %1 ni bistvenih razlik med povprečji skupin. Ničelne "
 "hipoteze ni mogoče zavrniti"
 
-#: src/backend/statistics/HypothesisTest.cpp:1267
-#: src/backend/statistics/HypothesisTest.cpp:1325
-#: src/backend/statistics/HypothesisTest.cpp:1384
+#: src/backend/statistics/HypothesisTest.cpp:1260
+#: src/backend/statistics/HypothesisTest.cpp:1318
+#: src/backend/statistics/HypothesisTest.cpp:1377
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
@@ -8213,9 +8207,9 @@ msgstr ""
 "Pri stopnji značilnosti %1 se vsaj ena porazdelitev skupine bistveno "
 "razlikuje. Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1269
-#: src/backend/statistics/HypothesisTest.cpp:1327
-#: src/backend/statistics/HypothesisTest.cpp:1386
+#: src/backend/statistics/HypothesisTest.cpp:1262
+#: src/backend/statistics/HypothesisTest.cpp:1320
+#: src/backend/statistics/HypothesisTest.cpp:1379
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
@@ -8224,7 +8218,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 ni bistvene razlike med porazdelitvami skupin. "
 "Ničelne hipoteze ni mogoče zavrniti"
 
-#: src/backend/statistics/HypothesisTest.cpp:1447
+#: src/backend/statistics/HypothesisTest.cpp:1440
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
@@ -8233,7 +8227,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 se vsaj ena skupina bistveno razlikuje. Zavrnite "
 "ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1449
+#: src/backend/statistics/HypothesisTest.cpp:1442
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. Fail "
@@ -8242,13 +8236,13 @@ msgstr ""
 "Pri stopnji značilnosti %1 ni bistvene razlike med skupinama. Ničelne "
 "hipoteze ni mogoče zavrniti"
 
-#: src/backend/statistics/HypothesisTest.cpp:1475
-#: src/backend/statistics/HypothesisTest.cpp:1542
+#: src/backend/statistics/HypothesisTest.cpp:1468
+#: src/backend/statistics/HypothesisTest.cpp:1535
 #, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr "Stolpec '%1' mora biti celo-številski."
 
-#: src/backend/statistics/HypothesisTest.cpp:1514
+#: src/backend/statistics/HypothesisTest.cpp:1507
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
@@ -8257,7 +8251,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 opazovane frekvence ne sledijo pričakovani "
 "porazdelitvi frekvenc. Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1518
+#: src/backend/statistics/HypothesisTest.cpp:1511
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
@@ -8266,12 +8260,12 @@ msgstr ""
 "Pri stopnji značilnosti %1 opazovane frekvence sledijo pričakovani "
 "porazdelitvi frekvenc. Ničelne hipoteze ni mogoče zavrniti"
 
-#: src/backend/statistics/HypothesisTest.cpp:1562
+#: src/backend/statistics/HypothesisTest.cpp:1555
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
 msgstr "Velikost vsakega stolpca v kontingenčni tabeli mora biti enaka."
 
-#: src/backend/statistics/HypothesisTest.cpp:1578
+#: src/backend/statistics/HypothesisTest.cpp:1571
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are dependent. "
@@ -8280,7 +8274,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 sta obe kategorični spremenljivki odvisni. "
 "Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1581
+#: src/backend/statistics/HypothesisTest.cpp:1574
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are independent. "
@@ -8289,52 +8283,52 @@ msgstr ""
 "Pri stopnji značilnosti %1 sta obe kategorični spremenljivki neodvisni. "
 "Ničelne hipoteze ni mogoče zavrniti"
 
-#: src/backend/statistics/HypothesisTest.cpp:1599
+#: src/backend/statistics/HypothesisTest.cpp:1592
 #, kde-format
 msgid "Three columns are required."
 msgstr "Zahtevani so trije stolpci."
 
-#: src/backend/statistics/HypothesisTest.cpp:1608
+#: src/backend/statistics/HypothesisTest.cpp:1601
 #, kde-format
 msgid "Status column should be of integer type."
 msgstr "Stolpec stanja mora biti celo-številski."
 
-#: src/backend/statistics/HypothesisTest.cpp:1613
+#: src/backend/statistics/HypothesisTest.cpp:1606
 #, kde-format
 msgid "Group column should be of integer type."
 msgstr "Stolpec skupine mora biti celo-številski."
 
-#: src/backend/statistics/HypothesisTest.cpp:1618
+#: src/backend/statistics/HypothesisTest.cpp:1611
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr "Stolpci Čas, Status in Skupina morajo biti enake velikosti."
 
-#: src/backend/statistics/HypothesisTest.cpp:1637
+#: src/backend/statistics/HypothesisTest.cpp:1630
 #, kde-format
 msgid "Status column values must be either 0 or 1."
 msgstr "Vrednosti v stolpcu Status morajo biti ali 0 ali 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1642
+#: src/backend/statistics/HypothesisTest.cpp:1635
 #, kde-format
 msgid "Group column values must be either 0 or 1."
 msgstr "Vrednosti v stolpcu skupine morajo biti ali 0 ali 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1658
+#: src/backend/statistics/HypothesisTest.cpp:1651
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr "Stolpci Čas, Status in Skupina morajo imeti enako število vrednosti."
 
-#: src/backend/statistics/HypothesisTest.cpp:1666
+#: src/backend/statistics/HypothesisTest.cpp:1659
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
 msgstr "Skupina 1 zahteva vsaj %1 vzorcev."
 
-#: src/backend/statistics/HypothesisTest.cpp:1671
+#: src/backend/statistics/HypothesisTest.cpp:1664
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
 msgstr "Skupina 2 zahteva vsaj %1 vzorcev."
 
-#: src/backend/statistics/HypothesisTest.cpp:1683
+#: src/backend/statistics/HypothesisTest.cpp:1676
 #, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
@@ -8343,7 +8337,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 se krivulje preživetja bistveno razlikujejo. "
 "Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1686
+#: src/backend/statistics/HypothesisTest.cpp:1679
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
@@ -8352,7 +8346,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 ni pomembne razlike med krivuljami preživetja. "
 "Ničelne hipoteze ni mogoče zavrniti"
 
-#: src/backend/statistics/HypothesisTest.cpp:1727
+#: src/backend/statistics/HypothesisTest.cpp:1720
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
@@ -8361,7 +8355,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 je v podatkih značilen monoton trend. Ničelno "
 "hipotezo zavrnite."
 
-#: src/backend/statistics/HypothesisTest.cpp:1730
+#: src/backend/statistics/HypothesisTest.cpp:1723
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
@@ -8370,7 +8364,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 obstaja pomemben pozitiven monotoni trend. "
 "Ničelno hipotezo zavrnemo."
 
-#: src/backend/statistics/HypothesisTest.cpp:1733
+#: src/backend/statistics/HypothesisTest.cpp:1726
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
@@ -8379,7 +8373,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 obstaja pomemben negativni monotoni trend. "
 "Ničelno hipotezo zavrnemo."
 
-#: src/backend/statistics/HypothesisTest.cpp:1735
+#: src/backend/statistics/HypothesisTest.cpp:1728
 #, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. Fail "
@@ -8388,7 +8382,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 ni bil zaznan noben pomemben monoton trend. "
 "Ničelne hipoteze ni bilo mogoče zavrniti."
 
-#: src/backend/statistics/HypothesisTest.cpp:1772
+#: src/backend/statistics/HypothesisTest.cpp:1765
 #, kde-format
 msgid ""
 "At the significance level %1, the data are not randomly distributed. Reject "
@@ -8397,7 +8391,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 podatki niso naključno porazdeljeni. Zavrnite "
 "ničelno hipotezo."
 
-#: src/backend/statistics/HypothesisTest.cpp:1774
+#: src/backend/statistics/HypothesisTest.cpp:1767
 #, kde-format
 msgid ""
 "At the significance level %1, the data show clustering (too few runs). "
@@ -8406,7 +8400,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 podatki kažejo združevanje v skupine (premalo "
 "ponovitev). Zavrnite ničelno hipotezo."
 
-#: src/backend/statistics/HypothesisTest.cpp:1777
+#: src/backend/statistics/HypothesisTest.cpp:1770
 #, kde-format
 msgid ""
 "At the significance level %1, the data show excessive alternation (too many "
@@ -8415,7 +8409,7 @@ msgstr ""
 "Pri stopnji značilnosti %1 podatki kažejo prekomerno menjavanje (preveč "
 "ponovitev). Zavrnite ničelno hipotezo."
 
-#: src/backend/statistics/HypothesisTest.cpp:1780
+#: src/backend/statistics/HypothesisTest.cpp:1773
 #, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. "
@@ -8424,13 +8418,13 @@ msgstr ""
 "Pri stopnji značilnosti %1 se zdi, da so podatki naključno porazdeljeni. "
 "Ničelne hipoteze ni mogoče zavrniti."
 
-#: src/backend/statistics/HypothesisTest.cpp:1871
+#: src/backend/statistics/HypothesisTest.cpp:1864
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
 #, kde-format
 msgid "Parametric"
 msgstr "Parametričen"
 
-#: src/backend/statistics/HypothesisTest.cpp:1901
+#: src/backend/statistics/HypothesisTest.cpp:1894
 #, kde-format
 msgid "Non-Parametric"
 msgstr "Neparametričen"
@@ -8902,7 +8896,7 @@ msgstr "Usmerjenost"
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:317
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:579
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:580
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
 #: src/frontend/dockwidgets/XYCurveDock.cpp:480
 #: src/frontend/ui/dockwidgets/axisdock.ui:492
@@ -9341,8 +9335,8 @@ msgid "no info available"
 msgstr "informacije niso na voljo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:139
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5436
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:140
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5422
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:623
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -9352,8 +9346,8 @@ msgid "Title"
 msgstr "Naslov"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:440
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2378
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:441
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2379
 #: src/frontend/ui/dockwidgets/barplotdock.ui:229
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:241
 #: src/frontend/ui/dockwidgets/histogramdock.ui:387
@@ -9381,19 +9375,19 @@ msgstr "Naslov"
 msgid "Legend"
 msgstr "Legenda"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:444
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:445
 #, kde-format
 msgid "Horizontal Axis"
 msgstr "Vodoravna os"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:445
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:446
 #, kde-format
 msgid "Vertical Axis"
 msgstr "Navpična os"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2425
-#: src/frontend/ActionsManager.cpp:521
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2426
+#: src/frontend/ActionsManager.cpp:533
 #: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:131
 #: src/frontend/notebook/NotebookView.cpp:109
@@ -9404,46 +9398,46 @@ msgstr "Navpična os"
 msgid "Image"
 msgstr "Slika"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2401
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2402
 #, kde-format
 msgid "Info Element"
 msgstr "Element informacije"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2445
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2446
 #, kde-format
 msgid "Custom Point"
 msgstr "Točka po meri"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2470
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2471
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:180
 #, kde-format
 msgid "Reference Line"
 msgstr "Referenčna črta"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2529
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2530
 #, kde-format
 msgid "Reference Range"
 msgstr "Referenčni interval"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:470
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2489
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2511
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:471
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2490
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2512
 #, kde-format
 msgid "Inset Plot Area"
 msgstr "Vstavljeno območje izrisa"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:471
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:472
 #, kde-format
 msgid "Inset Plot Area with Data"
 msgstr "Vstavljeno področje risanja s podatki"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:490
-#: src/frontend/ActionsManager.cpp:855
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:491
+#: src/frontend/ActionsManager.cpp:867
 #: src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:441
@@ -9451,37 +9445,37 @@ msgstr "Vstavljeno področje risanja s podatki"
 msgid "Add New"
 msgstr "Dodaj novo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
 #, kde-format
 msgid "Formula Plot"
 msgstr "Graf formule"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:501
 #, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr "Dodaj novo krivuljo xy, ki je definirana z matematičnim izrazom."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:507
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:508
 #, kde-format
 msgid "Analysis Plots"
 msgstr "Graf analize"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:509
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:543
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2297
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:510
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:544
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2298
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:562
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
 msgstr "Prilagodi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:542
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:543
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:188
 #, kde-format
 msgid "Analysis"
 msgstr "Analiza"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:555
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:929
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
 #: src/frontend/worksheet/WorksheetView.cpp:545
@@ -9489,109 +9483,109 @@ msgstr "Analiza"
 msgid "Theme"
 msgstr "Tema"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:577
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:578
 #, kde-format
 msgid "Line Plots"
 msgstr "Črtni grafi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:583
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:584
 #, kde-format
 msgid "Horizontal Step"
 msgstr "Vodoravni korak"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:587
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:588
 #, kde-format
 msgid "Vertical Step"
 msgstr "Navpični korak"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:591
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:592
 #, kde-format
 msgid "Spline Interpolated"
 msgstr "Interpoliran zlepek"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:598
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:599
 #, kde-format
 msgid "Scatter Plots"
 msgstr "Razsevni grafi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:600
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:601
 #, kde-format
 msgid "Scatter"
 msgstr "Razsev"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:604
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:605
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:218
 #, kde-format
 msgid "Y Error"
 msgstr "Napaka Y"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:608
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:609
 #, kde-format
 msgid "XY Error"
 msgstr "Napaka XY"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:615
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:616
 #, kde-format
 msgid "Line and Symbol Plots"
 msgstr "Grafi črt in simbolov"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:617
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:618
 #, kde-format
 msgid "Line + Symbol"
 msgstr "Črta + simbol"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:621
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:622
 #, kde-format
 msgid "2 Point Segment"
 msgstr "2 točkovni segment"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:625
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:626
 #, kde-format
 msgid "3 Point Segment"
 msgstr "3 točkovni segment"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:632
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:633
 #, kde-format
 msgid "Statistical Plots"
 msgstr "Statistični diagrami"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:634
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:635
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1974
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:149
 #, kde-format
 msgid "Histogram"
 msgstr "Histogram"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:638
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1970
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:639
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1971
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:892
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:152
 #, kde-format
 msgid "Box Plot"
 msgstr "Grafikon kvantilov"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:642
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1976
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:643
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1977
 #, kde-format
 msgid "Q-Q Plot"
 msgstr "Graf Q-Q"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:646
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1979
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:647
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1980
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:150
 #, kde-format
 msgid "KDE Plot"
 msgstr "Graf KDE"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:653
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:654
 #, kde-format
 msgid "Bar Plots"
 msgstr "Stolpični grafi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:655
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1984
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:656
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1985
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:894
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:896
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:155
@@ -9599,456 +9593,456 @@ msgstr "Stolpični grafi"
 msgid "Bar Plot"
 msgstr "Stolpični graf"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:659
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1987
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:660
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1988
 #, kde-format
 msgid "Lollipop Plot"
 msgstr "Grafikon lizike"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:666
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:667
 #, kde-format
 msgid "Continual Improvement Plots"
 msgstr "Diagrami nenehnega izboljševanja"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:668
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1995
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:669
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1996
 #, kde-format
 msgid "Run Chart"
 msgstr "Zaženi diagram"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:672
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1992
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:673
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1993
 #, kde-format
 msgid "Process Behavior Chart"
 msgstr "Grafikon obnašanja procesa"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:688
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:689
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr "Eksponentno (stopnja 1)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:692
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:693
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr "Eksponentno (stopnja 2)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:713
 #, kde-format
 msgid "Arc Tangent"
 msgstr "Arkus tangens"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:720
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:721
 #, kde-format
 msgid "Error Function"
 msgstr "Funkcija napake"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:732
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:733
 #, kde-format
 msgid "Differentiate"
 msgstr "Diferenciraj"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:736
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:737
 #, kde-format
 msgid "Integrate"
 msgstr "Integriraj"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:742
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:743
 #, kde-format
 msgid "Interpolate"
 msgstr "Interpoliraj"
 
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:746
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2259
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2260
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:72
 #, kde-format
 msgid "Smooth"
 msgstr "Zgladi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:752
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2336
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:753
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2337
 #, kde-format
 msgid "Fourier Filter"
 msgstr "Fourierjev filter"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:756
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2038
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:757
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2039
 #, kde-format
 msgid "Fourier Transform"
 msgstr "Fourierova transformacija"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:760
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2042
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:761
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2043
 #, kde-format
 msgid "Hilbert Transform"
 msgstr "Hilbertova transformacija"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:766
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:767
 #, kde-format
 msgid "Convolute/Deconvolute"
 msgstr "Konvolucija/dekonvolucija"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:770
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2050
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:771
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2051
 #, kde-format
 msgid "Auto-/Cross-Correlation"
 msgstr "Samodejna/navzkrižna korelacija"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:776
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2183
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:777
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2184
 #, kde-format
 msgid "Line Simplification"
 msgstr "Poenostavitev črte"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:782
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:783
 #, kde-format
 msgid "Correct Baseline"
 msgstr "Popravi osnovnico"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:810
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:811
 #, kde-format
 msgid "Log-normal"
 msgstr "Log-normalna"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:841
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:842
 #, kde-format
 msgid "No curves inside the plot area."
 msgstr "Ni krivulj znotraj območja risanja."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1186
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1220
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1187
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1221
 #, kde-format
 msgid "%1: change geometry rect"
 msgstr "%1: sprememba geometrije pravok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1255
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1256
 #, kde-format
 msgid "%1: set range type"
 msgstr "%1: določite vrsto obsega"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1262
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1263
 #, kde-format
 msgid "%1: set nice extend"
 msgstr "%1: nastavite lepo razširitev"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1269
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1276
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1270
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1277
 #, kde-format
 msgid "%1: set range"
 msgstr "%1: določite obseg"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1287
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1288
 #, kde-format
 msgid "%1: change %2-range %3 format"
 msgstr "%1: spremeni %2-obseg %3 format"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1377
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1378
 #, kde-format
 msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: spremeni %2-obseg %3 samodejno merilo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1626
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1627
 #, kde-format
 msgid "%1: change x-range %2 scale"
 msgstr "%1: spremenite merilo %2 x-obsega"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1754
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1755
 #, kde-format
 msgid "%1: set default plot range"
 msgstr "%1: nastavite privzeti obseg izrisa"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1772
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1773
 #, kde-format
 msgid "%1: x-range breaking enabled"
 msgstr "%1: omogočeni prelomi x-obsega"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1781
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
 #, kde-format
 msgid "%1: x-range breaks changed"
 msgstr "%1: prelomi x-obsega so spremenjeni"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1790
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1791
 #, kde-format
 msgid "%1: y-range breaking enabled"
 msgstr "%1: omogočeni prelomi y-obsega"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1799
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1800
 #, kde-format
 msgid "%1: y-range breaks changed"
 msgstr "%1: prelomi y-obsega so spremenjeni"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1813
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1814
 #, kde-format
 msgid "%1: Cursor0 enable"
 msgstr "%1: omogočite Kazalec0"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1825
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1826
 #, kde-format
 msgid "%1: Cursor1 enable"
 msgstr "%1: omogočite Kazalec1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1834
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1835
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1836
 #, kde-format
 msgid "%1: set plot color mode"
 msgstr "%1: nastavi barvni način risanja"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1847
 #: src/backend/worksheet/Worksheet.cpp:854
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: naložite temo %2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1848
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1849
 #: src/backend/worksheet/Worksheet.cpp:856
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: naložite privzeto temo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1850
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5807
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1851
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5793
 #: src/backend/worksheet/Worksheet.cpp:858
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: določite temo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1859
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1860
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1861
 #, kde-format
 msgid "%1: set plot color map"
 msgstr "%1: nastavi barvno karto grafa"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1871
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1872
 #, kde-format
 msgid "%1: set y-offset"
 msgstr "%1: določi odmik y"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1879
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1880
 #, kde-format
 msgid "%1: border type changed"
 msgstr "%1: spremenjena vrsta obrobe"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1886
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1887
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:236
 #, kde-format
 msgid "%1: set border corner radius"
 msgstr "%1: nastavi polmer kota obrobe"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2046
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2047
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:333
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:338
 #, kde-format
 msgid "Convolution"
 msgstr "Konvolucija"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2139
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2140
 #, kde-format
 msgid "%1: distribution fit to '%2'"
 msgstr "%1: prileganje razporeditve na '%2'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2140
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2141
 #, kde-format
 msgid "Distribution Fit to '%1'"
 msgstr "Prileganje porazdelitve na '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2186
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2187
 #, kde-format
 msgid "%1: simplify '%2'"
 msgstr "%1: poenostavi '%2'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2187
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2188
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:810
 #, kde-format
 msgid "Simplification of '%1'"
 msgstr "Poenostavitev '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2194
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2195
 #, kde-format
 msgid "%1: add line simplification curve"
 msgstr "%1: dodaj poenostavitev krivulje"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2202
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2203
 #: src/frontend/notebook/NotebookView.cpp:148
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:268
 #, kde-format
 msgid "Differentiation"
 msgstr "Odvajanje"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2205
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2206
 #, kde-format
 msgid "%1: differentiate '%2'"
 msgstr "%1: diferenciraj '%2'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2206
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2207
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:783
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Odvod '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2213
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2214
 #, kde-format
 msgid "%1: add differentiation curve"
 msgstr "%1: dodaj krivuljo odvoda"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2221
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2222
 #: src/frontend/notebook/NotebookView.cpp:154
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:159
 #, kde-format
 msgid "Integration"
 msgstr "Integracija"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2224
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2225
 #, kde-format
 msgid "%1: integrate '%2'"
 msgstr "%1: integriraj '%2'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2225
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2226
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:786
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Integral '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2232
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2233
 #, kde-format
 msgid "%1: add integration curve"
 msgstr "%1: dodaj krivuljo integrala"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2243
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2244
 #, kde-format
 msgid "%1: interpolate '%2'"
 msgstr "%1: interpoliraj '%2'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2244
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2245
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:789
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Interpolacija '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2251
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2252
 #, kde-format
 msgid "%1: add interpolation curve"
 msgstr "%1: dodaj krivuljo interpolacije"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2262
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2263
 #, kde-format
 msgid "%1: smooth '%2'"
 msgstr "%1: zgladi '%2'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2263
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2264
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:792
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Glajenje '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2271
 #, kde-format
 msgid "%1: add smoothing curve"
 msgstr "%1: dodajte krivuljo glajenja"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2278
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2279
 #, kde-format
 msgid "Baseline Correction"
 msgstr "Popravek osnovnice"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2281
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2282
 #, kde-format
 msgid "%1: baseline correction for '%2'"
 msgstr "%1: popravek osnovnice za '%2'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2282
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2283
 #, kde-format
 msgid "Baseline correction for '%1'"
 msgstr "Popravek osnovnice za '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2289
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2290
 #, kde-format
 msgid "%1: add baseline correction curve"
 msgstr "%1: dodaj krivuljo popravka osnovnice"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2300
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2301
 #, kde-format
 msgid "%1: fit to '%2'"
 msgstr "%1: prilagaj se '%2'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2301
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2302
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:779
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "Prilegaj na '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2327
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2328
 #, kde-format
 msgid "%1: add fit curve"
 msgstr "%1: dodaj krivuljo prileganja"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2339
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2340
 #, kde-format
 msgid "%1: Fourier filtering of '%2'"
 msgstr "%1: Fourierjevo filtriranje »%2«"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2340
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2341
 #, kde-format
 msgid "Fourier filtering of '%1'"
 msgstr "Fourierjevo filtriranje »%1«"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2344
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2345
 #, kde-format
 msgid "%1: add Fourier filter curve"
 msgstr "%1: dodajte krivuljo filtra Fourier"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2355
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2356
 #, kde-format
 msgid "%1: add function of '%2'"
 msgstr "%1: dodaj funkcijo '%2'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2356
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2357
 #, kde-format
 msgid "Function of '%1'"
 msgstr "Funkcija od '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2359
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2360
 #, kde-format
 msgid "%1: add function curve"
 msgstr "%1: dodajte funkcijsko krivuljo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2408
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2409
 #: src/frontend/worksheet/WorksheetView.cpp:1350
 #: src/frontend/worksheet/WorksheetView.cpp:1351
 #, kde-format
 msgid "Text Label"
 msgstr "Besedilna oznaka"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2488
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2489
 #, kde-format
 msgid "%1: add inset plot"
 msgstr "%1: dodaj vstavljeni graf"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2502
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2503
 #, kde-format
 msgid "%1: add inset plot with data"
 msgstr "%1: dodaj vstavljeni graf s podatki"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4184
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4200
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Ne znotraj omejevalnega pravok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4309
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4330
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4325
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4346
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "od x=%1 do x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4317
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4343
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4333
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4359
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "od y=%1 do y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4362
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4378
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -11693,219 +11687,220 @@ msgstr "Ustvari novo matriko za urejanje podatkov"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Ustvari nov delovni list za urejanje podatkov"
 
-#: src/frontend/ActionsManager.cpp:245
-#, kde-format
-msgid "Creates a new %1 script"
+#: src/frontend/ActionsManager.cpp:243
+#, fuzzy, kde-format
+#| msgid "Creates a new %1 script"
+msgid "Creates a new Python script"
 msgstr "Ustvari nov %1 skript"
 
-#: src/frontend/ActionsManager.cpp:252 src/frontend/MainWin.cpp:1246
+#: src/frontend/ActionsManager.cpp:261 src/frontend/MainWin.cpp:1246
 #, kde-format
 msgid "Note"
 msgstr "Opomba"
 
-#: src/frontend/ActionsManager.cpp:253
+#: src/frontend/ActionsManager.cpp:262
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Ustvari novo opombo za poljubno besedilo"
 
-#: src/frontend/ActionsManager.cpp:257 src/frontend/MainWin.cpp:1168
+#: src/frontend/ActionsManager.cpp:266 src/frontend/MainWin.cpp:1168
 #, kde-format
 msgid "Folder"
 msgstr "Mapa"
 
-#: src/frontend/ActionsManager.cpp:258
+#: src/frontend/ActionsManager.cpp:267
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Ustvari novo mapo za zbiranje delovnih listov in drugih elementov"
 
-#: src/frontend/ActionsManager.cpp:263
+#: src/frontend/ActionsManager.cpp:272
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Vir podatkov v živo ..."
 
-#: src/frontend/ActionsManager.cpp:264
+#: src/frontend/ActionsManager.cpp:273
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Ustvari vir podatkov v živo za branje podatkov iz naprave v realnem času"
 
-#: src/frontend/ActionsManager.cpp:272
+#: src/frontend/ActionsManager.cpp:281
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Uvozi podatke iz navadne datoteke"
 
-#: src/frontend/ActionsManager.cpp:277
+#: src/frontend/ActionsManager.cpp:286
 #, kde-format
 msgid "From Directory..."
 msgstr "Iz imenika..."
 
-#: src/frontend/ActionsManager.cpp:279
+#: src/frontend/ActionsManager.cpp:288
 #, kde-format
 msgid "Import multiple files from a directory"
 msgstr "Uvozi več datotek iz imenika"
 
-#: src/frontend/ActionsManager.cpp:284
+#: src/frontend/ActionsManager.cpp:293
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "Iz kaggle.com..."
 
-#: src/frontend/ActionsManager.cpp:285
+#: src/frontend/ActionsManager.cpp:294
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Uvozi podatke iz kaggle.com"
 
-#: src/frontend/ActionsManager.cpp:290
+#: src/frontend/ActionsManager.cpp:299
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Uvozi podatke iz zbirke podatkov SQL"
 
-#: src/frontend/ActionsManager.cpp:294
+#: src/frontend/ActionsManager.cpp:303
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Iz množice zbirk podatkov..."
 
-#: src/frontend/ActionsManager.cpp:295
+#: src/frontend/ActionsManager.cpp:304
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Uvozi podatke iz spletne zbirke podatkov"
 
-#: src/frontend/ActionsManager.cpp:299
+#: src/frontend/ActionsManager.cpp:308
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Projekt LabPlot ..."
 
-#: src/frontend/ActionsManager.cpp:300
+#: src/frontend/ActionsManager.cpp:309
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Uvozi projekt iz projektne datoteke LabPlot (.lml)"
 
-#: src/frontend/ActionsManager.cpp:305
+#: src/frontend/ActionsManager.cpp:314
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Projekt Origin (OPJ) ..."
 
-#: src/frontend/ActionsManager.cpp:306
+#: src/frontend/ActionsManager.cpp:315
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Uvozi projekt iz projektne datoteke OriginLab Origin (.opj)"
 
-#: src/frontend/ActionsManager.cpp:339
+#: src/frontend/ActionsManager.cpp:351
 #, kde-format
 msgid "Export..."
 msgstr "Izvozi ..."
 
-#: src/frontend/ActionsManager.cpp:340
+#: src/frontend/ActionsManager.cpp:352
 #, kde-format
 msgid "Export selected element"
 msgstr "Izvozi izbrani element"
 
-#: src/frontend/ActionsManager.cpp:346 src/frontend/ActionsManager.cpp:1340
-#: src/frontend/ActionsManager.cpp:1348
+#: src/frontend/ActionsManager.cpp:358 src/frontend/ActionsManager.cpp:1360
+#: src/frontend/ActionsManager.cpp:1368
 #, kde-format
 msgid "Share"
 msgstr "Deli"
 
-#: src/frontend/ActionsManager.cpp:351
+#: src/frontend/ActionsManager.cpp:363
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Brskalnik barvnih kart"
 
-#: src/frontend/ActionsManager.cpp:352
+#: src/frontend/ActionsManager.cpp:364
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Odprite pogovorno okno za brskanje po razpoložljivih barvnih kart."
 
-#: src/frontend/ActionsManager.cpp:361
+#: src/frontend/ActionsManager.cpp:373
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Urejevalnik metapodatkov FITS ..."
 
-#: src/frontend/ActionsManager.cpp:362
+#: src/frontend/ActionsManager.cpp:374
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Odpre urejevalnik za urejanje metapodatkov FITS"
 
-#: src/frontend/ActionsManager.cpp:371
+#: src/frontend/ActionsManager.cpp:383
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Zgodovina razveljavitev/ponovitev ..."
 
-#: src/frontend/ActionsManager.cpp:391
+#: src/frontend/ActionsManager.cpp:403
 #, kde-format
 msgid "Close the active window"
 msgstr "Zapri aktivno okno"
 
-#: src/frontend/ActionsManager.cpp:394
+#: src/frontend/ActionsManager.cpp:406
 #, kde-format
 msgid "Close &All"
 msgstr "Zapri vse"
 
-#: src/frontend/ActionsManager.cpp:395
+#: src/frontend/ActionsManager.cpp:407
 #, kde-format
 msgid "Close all the windows"
 msgstr "Zaprite vsa okna"
 
-#: src/frontend/ActionsManager.cpp:398
+#: src/frontend/ActionsManager.cpp:410
 #, kde-format
 msgid "Ne&xt"
 msgstr "Naslednji"
 
-#: src/frontend/ActionsManager.cpp:400
+#: src/frontend/ActionsManager.cpp:412
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Premakni pozornost na naslednje okno"
 
-#: src/frontend/ActionsManager.cpp:403
+#: src/frontend/ActionsManager.cpp:415
 #, kde-format
 msgid "Pre&vious"
 msgstr "Prejšnji"
 
-#: src/frontend/ActionsManager.cpp:405
+#: src/frontend/ActionsManager.cpp:417
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Premakni pozornost na prejšnje okno"
 
-#: src/frontend/ActionsManager.cpp:412
+#: src/frontend/ActionsManager.cpp:424
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Samo trenutna mapa"
 
-#: src/frontend/ActionsManager.cpp:417
+#: src/frontend/ActionsManager.cpp:429
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Trenutna mapa in podmape"
 
-#: src/frontend/ActionsManager.cpp:421
+#: src/frontend/ActionsManager.cpp:433
 #, kde-format
 msgid "&All"
 msgstr "Vse"
 
-#: src/frontend/ActionsManager.cpp:443
+#: src/frontend/ActionsManager.cpp:455
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Pokaži uporabo pomnilnika"
 
-#: src/frontend/ActionsManager.cpp:451
+#: src/frontend/ActionsManager.cpp:463
 #, kde-format
 msgid "Project Explorer"
 msgstr "Raziskovalec projektov"
 
-#: src/frontend/ActionsManager.cpp:456
+#: src/frontend/ActionsManager.cpp:468
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Raziskovalec lastnosti"
 
-#: src/frontend/ActionsManager.cpp:461
+#: src/frontend/ActionsManager.cpp:473
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Predogled delovnega lista"
 
-#: src/frontend/ActionsManager.cpp:484
+#: src/frontend/ActionsManager.cpp:496
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Prilagodi CAS ..."
 
-#: src/frontend/ActionsManager.cpp:485
+#: src/frontend/ActionsManager.cpp:497
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -11914,130 +11909,130 @@ msgstr ""
 "Odpre nastavitve sistemov računalniške algebre za spreminjanje "
 "razpoložljivih sistemov ali omogočanje novih"
 
-#: src/frontend/ActionsManager.cpp:512
+#: src/frontend/ActionsManager.cpp:524
 #, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
 msgstr "Novo območje izrisa"
 
-#: src/frontend/ActionsManager.cpp:528
+#: src/frontend/ActionsManager.cpp:540
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:250
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Navpična postavitev"
 
-#: src/frontend/ActionsManager.cpp:533
+#: src/frontend/ActionsManager.cpp:545
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:254
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Vodoravna postavitev"
 
-#: src/frontend/ActionsManager.cpp:538
+#: src/frontend/ActionsManager.cpp:550
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
 #: src/frontend/worksheet/WorksheetView.cpp:258
 #, kde-format
 msgid "Grid Layout"
 msgstr "Postavitev mreže"
 
-#: src/frontend/ActionsManager.cpp:543
+#: src/frontend/ActionsManager.cpp:555
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:262
 #, kde-format
 msgid "No Layout"
 msgstr "Brez postavitve"
 
-#: src/frontend/ActionsManager.cpp:551 src/frontend/ActionsManager.cpp:592
+#: src/frontend/ActionsManager.cpp:563 src/frontend/ActionsManager.cpp:604
 #: src/frontend/worksheet/WorksheetView.cpp:186
 #: src/frontend/worksheet/WorksheetView.cpp:348
 #, kde-format
 msgid "Select and Edit"
 msgstr "Izbiranje in urejanje"
 
-#: src/frontend/ActionsManager.cpp:556 src/frontend/ActionsManager.cpp:769
+#: src/frontend/ActionsManager.cpp:568 src/frontend/ActionsManager.cpp:781
 #: src/frontend/datapicker/DatapickerImageView.cpp:132
 #: src/frontend/worksheet/WorksheetView.cpp:191
 #, kde-format
 msgid "Navigate"
 msgstr "Krmari"
 
-#: src/frontend/ActionsManager.cpp:561 src/frontend/ActionsManager.cpp:774
+#: src/frontend/ActionsManager.cpp:573 src/frontend/ActionsManager.cpp:786
 #: src/frontend/datapicker/DatapickerImageView.cpp:136
 #: src/frontend/worksheet/WorksheetView.cpp:195
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Izberi in povečaj"
 
-#: src/frontend/ActionsManager.cpp:567 src/frontend/ActionsManager.cpp:803
+#: src/frontend/ActionsManager.cpp:579 src/frontend/ActionsManager.cpp:815
 #, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "Povečava"
 
-#: src/frontend/ActionsManager.cpp:573 src/frontend/ActionsManager.cpp:809
+#: src/frontend/ActionsManager.cpp:585 src/frontend/ActionsManager.cpp:821
 #, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr "Povečalo"
 
-#: src/frontend/ActionsManager.cpp:586
+#: src/frontend/ActionsManager.cpp:598
 #, kde-format
 msgctxt "@action"
 msgid "Add New"
 msgstr "Dodaj nov"
 
-#: src/frontend/ActionsManager.cpp:598
+#: src/frontend/ActionsManager.cpp:610
 #: src/frontend/worksheet/WorksheetView.cpp:353
 #, kde-format
 msgid "Crosshair"
 msgstr "Križec"
 
-#: src/frontend/ActionsManager.cpp:603
+#: src/frontend/ActionsManager.cpp:615
 #: src/frontend/worksheet/WorksheetView.cpp:358
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Izberite območje in ga približajte"
 
-#: src/frontend/ActionsManager.cpp:608
+#: src/frontend/ActionsManager.cpp:620
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Izberite x-področje in ga približajte"
 
-#: src/frontend/ActionsManager.cpp:613
+#: src/frontend/ActionsManager.cpp:625
 #: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Izberite x-področje in ga približajte"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:618 src/frontend/MainWin.cpp:1579
+#: src/frontend/ActionsManager.cpp:630 src/frontend/MainWin.cpp:1579
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
 msgid "Cursor"
 msgstr "Kazalec"
 
-#: src/frontend/ActionsManager.cpp:626
+#: src/frontend/ActionsManager.cpp:638
 #: src/frontend/worksheet/WorksheetView.cpp:381
 #, kde-format
 msgid "Auto Scale"
 msgstr "Samodejno merilo"
 
-#: src/frontend/ActionsManager.cpp:630
+#: src/frontend/ActionsManager.cpp:642
 #: src/frontend/worksheet/WorksheetView.cpp:385
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Samodejno merilo X"
 
-#: src/frontend/ActionsManager.cpp:634
+#: src/frontend/ActionsManager.cpp:646
 #: src/frontend/worksheet/WorksheetView.cpp:389
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Samodejno merilo Y"
 
-#: src/frontend/ActionsManager.cpp:639 src/frontend/ActionsManager.cpp:728
+#: src/frontend/ActionsManager.cpp:651 src/frontend/ActionsManager.cpp:740
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:190
 #: src/frontend/notebook/NotebookView.cpp:53
@@ -12047,7 +12042,7 @@ msgstr "Samodejno merilo Y"
 msgid "Zoom In"
 msgstr "Približaj"
 
-#: src/frontend/ActionsManager.cpp:643 src/frontend/ActionsManager.cpp:731
+#: src/frontend/ActionsManager.cpp:655 src/frontend/ActionsManager.cpp:743
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:191
 #: src/frontend/notebook/NotebookView.cpp:57
@@ -12057,221 +12052,221 @@ msgstr "Približaj"
 msgid "Zoom Out"
 msgstr "Oddalji"
 
-#: src/frontend/ActionsManager.cpp:647
+#: src/frontend/ActionsManager.cpp:659
 #: src/frontend/worksheet/WorksheetView.cpp:401
 #, kde-format
 msgid "Zoom In X"
 msgstr "Približaj X"
 
-#: src/frontend/ActionsManager.cpp:651
+#: src/frontend/ActionsManager.cpp:663
 #: src/frontend/worksheet/WorksheetView.cpp:405
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Oddalji X"
 
-#: src/frontend/ActionsManager.cpp:655
+#: src/frontend/ActionsManager.cpp:667
 #: src/frontend/worksheet/WorksheetView.cpp:409
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Približaj Y"
 
-#: src/frontend/ActionsManager.cpp:659
+#: src/frontend/ActionsManager.cpp:671
 #: src/frontend/worksheet/WorksheetView.cpp:413
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Oddalji Y"
 
-#: src/frontend/ActionsManager.cpp:664
+#: src/frontend/ActionsManager.cpp:676
 #: src/frontend/worksheet/WorksheetView.cpp:417
 #, kde-format
 msgid "Shift Left X"
 msgstr "Zamakni X levo"
 
-#: src/frontend/ActionsManager.cpp:668
+#: src/frontend/ActionsManager.cpp:680
 #: src/frontend/worksheet/WorksheetView.cpp:419
 #, kde-format
 msgid "Shift Right X"
 msgstr "Zamakni X desno"
 
-#: src/frontend/ActionsManager.cpp:672
+#: src/frontend/ActionsManager.cpp:684
 #: src/frontend/worksheet/WorksheetView.cpp:421
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Zamakni Y navzgor"
 
-#: src/frontend/ActionsManager.cpp:676
+#: src/frontend/ActionsManager.cpp:688
 #: src/frontend/worksheet/WorksheetView.cpp:423
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Zamakni Y navzdol"
 
-#: src/frontend/ActionsManager.cpp:688
+#: src/frontend/ActionsManager.cpp:700
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Vstavi vrstico nad"
 
-#: src/frontend/ActionsManager.cpp:691
+#: src/frontend/ActionsManager.cpp:703
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:492
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Vstavi vrstico pod"
 
-#: src/frontend/ActionsManager.cpp:694
+#: src/frontend/ActionsManager.cpp:706
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "Odstrani izbrano/e vrstico/e"
 
-#: src/frontend/ActionsManager.cpp:698
+#: src/frontend/ActionsManager.cpp:710
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:344
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Vstavi stolpec levo"
 
-#: src/frontend/ActionsManager.cpp:701
+#: src/frontend/ActionsManager.cpp:713
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:345
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Vstavi stolpec desno"
 
-#: src/frontend/ActionsManager.cpp:704
+#: src/frontend/ActionsManager.cpp:716
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:348
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "Odstrani izbrani/e stolpec(e)"
 
-#: src/frontend/ActionsManager.cpp:708
+#: src/frontend/ActionsManager.cpp:720
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:478
 #, kde-format
 msgid "&Sort..."
 msgstr "Razvrsti..."
 
-#: src/frontend/ActionsManager.cpp:709
+#: src/frontend/ActionsManager.cpp:721
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:479
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "Razvrsti več stolpcev skupaj"
 
-#: src/frontend/ActionsManager.cpp:712
+#: src/frontend/ActionsManager.cpp:724
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "Razvrsti n&araščajoče"
 
-#: src/frontend/ActionsManager.cpp:713
+#: src/frontend/ActionsManager.cpp:725
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:481
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "Razvrsti izbrane stolpce ločeno v naraščajočem vrstnem redu"
 
-#: src/frontend/ActionsManager.cpp:716
+#: src/frontend/ActionsManager.cpp:728
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Sort &Descending"
 msgstr "Razvrsti pa&dajoče"
 
-#: src/frontend/ActionsManager.cpp:717
+#: src/frontend/ActionsManager.cpp:729
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "Razvrsti izbrane stolpce ločeno v padajočem vrstnem redu"
 
-#: src/frontend/ActionsManager.cpp:734
+#: src/frontend/ActionsManager.cpp:746
 #: src/frontend/notebook/NotebookView.cpp:61
 #, kde-format
 msgid "Find"
 msgstr "Najdi"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/frontend/ActionsManager.cpp:737
+#: src/frontend/ActionsManager.cpp:749
 #: src/frontend/notebook/NotebookView.cpp:69
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "Ponovno zaženi"
 
-#: src/frontend/ActionsManager.cpp:740
+#: src/frontend/ActionsManager.cpp:752
 #: src/frontend/notebook/NotebookView.cpp:72
 #: src/frontend/notebook/NotebookView.cpp:354
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "Ovrednoti zvezek"
 
-#: src/frontend/ActionsManager.cpp:754
+#: src/frontend/ActionsManager.cpp:766
 #: src/frontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Določi točke osi"
 
-#: src/frontend/ActionsManager.cpp:759
+#: src/frontend/ActionsManager.cpp:771
 #: src/frontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Določi točke krivulje"
 
-#: src/frontend/ActionsManager.cpp:764
+#: src/frontend/ActionsManager.cpp:776
 #: src/frontend/datapicker/DatapickerImageView.cpp:148
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Izberi odseke krivulje"
 
-#: src/frontend/ActionsManager.cpp:780
+#: src/frontend/ActionsManager.cpp:792
 #: src/frontend/datapicker/DatapickerImageView.cpp:153
 #, kde-format
 msgid "New Curve"
 msgstr "Nova krivunja"
 
-#: src/frontend/ActionsManager.cpp:786
+#: src/frontend/ActionsManager.cpp:798
 #: src/frontend/datapicker/DatapickerImageView.cpp:156
 #, kde-format
 msgid "Shift Left"
 msgstr "Premakni levo"
 
-#: src/frontend/ActionsManager.cpp:790
+#: src/frontend/ActionsManager.cpp:802
 #: src/frontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
 msgid "Shift Right"
 msgstr "Premakni desno"
 
-#: src/frontend/ActionsManager.cpp:794
+#: src/frontend/ActionsManager.cpp:806
 #: src/frontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Up"
 msgstr "Premakni navzgor"
 
-#: src/frontend/ActionsManager.cpp:798
+#: src/frontend/ActionsManager.cpp:810
 #: src/frontend/datapicker/DatapickerImageView.cpp:168
 #, kde-format
 msgid "Shift Down"
 msgstr "Premakni navzdol"
 
-#: src/frontend/ActionsManager.cpp:890
+#: src/frontend/ActionsManager.cpp:906
 #, kde-format
 msgid "Window Visibility"
 msgstr "Vidnost okna"
 
-#: src/frontend/ActionsManager.cpp:907
+#: src/frontend/ActionsManager.cpp:923
 #, kde-format
 msgid "Color Scheme"
 msgstr "Barvna shema"
 
-#: src/frontend/ActionsManager.cpp:1307
+#: src/frontend/ActionsManager.cpp:1327
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Ustvari novo %1 zvezek"
 
-#: src/frontend/ActionsManager.cpp:1340
+#: src/frontend/ActionsManager.cpp:1360
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Pri souporabi projekta je prišlo do težave: %1"
 
-#: src/frontend/ActionsManager.cpp:1344
+#: src/frontend/ActionsManager.cpp:1364
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Projekt je uspešno deljen"
 
-#: src/frontend/ActionsManager.cpp:1347
+#: src/frontend/ActionsManager.cpp:1367
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Skupni projekt najdete na: <a href=\"%1\">%1</a>"
@@ -14647,10 +14642,10 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #. i18n: ectx: property (text), widget (QLabel, lVariables)
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:269
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:358
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:388
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:350
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:380
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:423
-#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:441
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:391
 #: src/frontend/ui/dockwidgets/matrixdock.ui:117
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:422
@@ -14662,8 +14657,8 @@ msgstr "Stolpci:"
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:273
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:360
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:390
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:352
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:382
 #: src/frontend/spreadsheet/GoToDialog.cpp:49
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:169
 #: src/frontend/ui/dockwidgets/valuewidget.ui:81
@@ -15357,7 +15352,7 @@ msgstr ""
 "- testira, ali opazovani podatki sledijo določeni teoretični porazdelitvi</"
 "li></ul>"
 
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:318
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:310
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr "Izbrani test zahteva vsaj %1 in največ %2 nepraznih spremenljivk."
@@ -17374,68 +17369,68 @@ msgstr "Dodaj novo"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/frontend/labplotui.rc:137 src/frontend/labplotui.rc:170
+#: src/frontend/labplotui.rc:139 src/frontend/labplotui.rc:172
 #, kde-format
 msgid "&Notebook"
 msgstr "Zvezek"
 
 #. i18n: ectx: Menu (new_script)
 #. i18n: ectx: Menu (script)
-#: src/frontend/labplotui.rc:143 src/frontend/labplotui.rc:173
+#: src/frontend/labplotui.rc:145 src/frontend/labplotui.rc:175
 #, kde-format
 msgid "&Script"
 msgstr "&Skript"
 
 #. i18n: ectx: Menu (import)
-#: src/frontend/labplotui.rc:148
+#: src/frontend/labplotui.rc:150
 #, kde-format
 msgid "Import"
 msgstr "Uvozi"
 
 #. i18n: ectx: Menu (edit)
-#: src/frontend/labplotui.rc:162
+#: src/frontend/labplotui.rc:164
 #, kde-format
 msgid "&Edit"
 msgstr "Ur&edi"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/frontend/labplotui.rc:167
+#: src/frontend/labplotui.rc:169
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "Preglednica"
 
 #. i18n: ectx: Menu (matrix)
-#: src/frontend/labplotui.rc:168
+#: src/frontend/labplotui.rc:170
 #, kde-format
 msgid "&Matrix"
 msgstr "&Matrika"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/frontend/labplotui.rc:169
+#: src/frontend/labplotui.rc:171
 #, kde-format
 msgid "&Worksheet"
 msgstr "Delovni list"
 
 #. i18n: ectx: Menu (data_extractor)
-#: src/frontend/labplotui.rc:171
+#: src/frontend/labplotui.rc:173
 #, kde-format
 msgid "&Data Extractor"
 msgstr "Izvlečnik podatkov"
 
 #. i18n: ectx: Menu (drawing)
-#: src/frontend/labplotui.rc:172
+#: src/frontend/labplotui.rc:174
 #, kde-format
 msgid "&Drawing"
 msgstr "Risba"
 
 #. i18n: ectx: Menu (tools)
-#: src/frontend/labplotui.rc:174
+#: src/frontend/labplotui.rc:176
 #, kde-format
 msgid "&Tools"
 msgstr "Orodja"
 
 #. i18n: ectx: Menu (windows)
-#: src/frontend/labplotui.rc:178
+#: src/frontend/labplotui.rc:180
 #, kde-format
 msgid "&Windows"
 msgstr "Okna"
@@ -17606,13 +17601,6 @@ msgstr "Priprava tiskanja %1"
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 natisnjeno"
-
-#: src/frontend/MainWin.cpp:1212
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3730
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3731
-#, kde-format
-msgid "%1"
-msgstr "%1"
 
 #: src/frontend/MainWin.cpp:1900
 #, kde-format
@@ -18331,8 +18319,9 @@ msgid "User Feedback"
 msgstr "Povratne informacije uporabnika"
 
 #: src/frontend/SettingsDialog.cpp:100
-#, kde-format
-msgid "Text Editor"
+#, fuzzy, kde-format
+#| msgid "Text Editor"
+msgid "Script Editor"
 msgstr "Urejevalnik besedila"
 
 #: src/frontend/SettingsDialog.cpp:163
@@ -20301,6 +20290,12 @@ msgstr "manjkajoče vednosti"
 msgid " , "
 msgstr " , "
 
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3730
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3731
+#, kde-format
+msgid "%1"
+msgstr "%1"
+
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3731
 #, kde-format
 msgid ", "
@@ -20380,11 +20375,6 @@ msgstr "Tretji kvartil"
 #, kde-format
 msgid "Dispersion Measures"
 msgstr "Mere variabilnosti"
-
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
-#, kde-format
-msgid "Standard Deviation"
-msgstr "Standardna deviacija"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
 #, kde-format
@@ -23661,8 +23651,9 @@ msgstr "Alternativna:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
-#, kde-format
-msgid "Hypothesis"
+#, fuzzy, kde-format
+#| msgid "Hypothesis"
+msgid "Hypotheses"
 msgstr "Hipoteza"
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
@@ -27247,6 +27238,12 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "No negative monotonic trend exists"
+#~ msgstr "Ne obstaja negativni monotoni trend"
+
+#~ msgid "No positive monotonic trend exists"
+#~ msgstr "Ne obstaja pozitivni monotoni trend"
 
 #~ msgid "%1: toggle clipping"
 #~ msgstr "%1: preklopi porezovanje"
