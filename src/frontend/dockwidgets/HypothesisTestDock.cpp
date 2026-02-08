@@ -72,22 +72,16 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	m_aspectConnections << connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
 	m_aspectConnections << connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
 	m_aspectConnections << connect(ui.rbAlternateTwoTailed, &QRadioButton::toggled, [this](bool checked) {
-		if (checked) {
+		if (checked)
 			m_test->setTail(nsl_stats_tail_type_two);
-			manageRecalculate();
-		}
 	});
 	m_aspectConnections << connect(ui.rbAlternateOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
-		if (checked) {
+		if (checked)
 			m_test->setTail(nsl_stats_tail_type_negative);
-			manageRecalculate();
-		}
 	});
 	m_aspectConnections << connect(ui.rbAlternateOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
-		if (checked) {
+		if (checked)
 			m_test->setTail(nsl_stats_tail_type_positive);
-			manageRecalculate();
-		}
 	});
 
 	connect(m_test, &HypothesisTest::statusError, this, &HypothesisTestDock::showStatusError);
@@ -184,9 +178,6 @@ void HypothesisTestDock::testChanged() {
 	ui.lTestMean->setVisible(visible);
 	ui.sbTestMean->setVisible(visible);
 
-	// check if the recalculate button should be enabled or disabled
-	manageRecalculate();
-
 	if (m_initializing)
 		return;
 
@@ -196,6 +187,9 @@ void HypothesisTestDock::testChanged() {
 	// selected variable columns and we change the selected hypothesis test. The aspect
 	// clears its list of columns, while the gui still shows columns as selected.
 	updateColumns();
+
+	// check if the recalculate button should be enabled or disabled
+	manageRecalculate();
 }
 
 // ##############################################################################
@@ -451,4 +445,6 @@ void HypothesisTestDock::load() {
 	int newIndex = ui.cbTest->currentIndex();
 	if (oldIndex == newIndex)
 		testChanged(); // manually trigger testChanged()
+
+	manageRecalculate(); // check if all input parameters are valid after the load to enable the recalculate
 }

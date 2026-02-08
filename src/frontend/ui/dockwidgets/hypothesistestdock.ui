@@ -89,7 +89,7 @@
      <item>
       <widget class="QPushButton" name="pbRecalculate">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
         <string>Recalculate</string>
@@ -370,12 +370,9 @@
        <number>0</number>
       </property>
       <item row="0" column="0">
-       <widget class="QLineEdit" name="lH0Definition">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
+       <widget class="QLabel" name="lH0Definition">
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
