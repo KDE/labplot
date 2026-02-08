@@ -1764,7 +1764,7 @@ void HypothesisTestPrivate::performWaldWolfowitzRunsTest() {
 			if (tail == nsl_stats_tail_type_two)
 				conclusion = i18n("At the significance level %1, the data are not randomly distributed. Reject the null hypothesis.", significanceLevel);
 			else if (tail == nsl_stats_tail_type_negative)
-				conclusion = i18n("At the significance level %1, the data show clustering (too few runs). Reject the null hypothesis.", significanceLevel);
+				conclusion = i18n("At the significance level %1, the data show clustering or trend (too few runs). Reject the null hypothesis.", significanceLevel);
 			else
 				conclusion =
 					i18n("At the significance level %1, the data show excessive alternation (too many runs). Reject the null hypothesis.", significanceLevel);
