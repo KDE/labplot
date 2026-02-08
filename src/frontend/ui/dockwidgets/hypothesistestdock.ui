@@ -111,7 +111,7 @@
    <item row="10" column="0">
     <widget class="QLabel" name="lH1">
      <property name="text">
-      <string>Alternate:</string>
+      <string>Alternative:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
@@ -370,15 +370,12 @@
        <number>0</number>
       </property>
       <item row="0" column="0">
-       <widget class="QLabel" name="lH0Definition">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QLineEdit" name="lH0Definition">
+        <property name="enabled">
+         <bool>false</bool>
         </property>
-        <property name="text">
-         <string/>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
