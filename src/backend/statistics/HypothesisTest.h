@@ -48,7 +48,8 @@ public:
 		chisq_goodness_of_fit,
 		log_rank_test,
 		mann_kendall_test,
-		wald_wolfowitz_runs_test
+		wald_wolfowitz_runs_test,
+		ramirez_runger_test
 	};
 
 	QWidget* view() const override;

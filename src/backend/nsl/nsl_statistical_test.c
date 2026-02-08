@@ -1037,6 +1037,7 @@ struct mann_kendall_test_result nsl_stats_mann_kendall(const double sample[], si
 
 	return result;
 }
+
 /* Wald-Wolfowitz Runs Test for randomness */
 struct wald_wolfowitz_runs_test_result nsl_stats_wald_wolfowitz_runs(const double sample[], size_t n, nsl_stats_tail_type tail) {
 	struct wald_wolfowitz_runs_test_result result;
@@ -1135,6 +1136,91 @@ struct wald_wolfowitz_runs_test_result nsl_stats_wald_wolfowitz_runs(const doubl
 		break;
 	case nsl_stats_tail_type_positive:
 		// Right-tailed: test for too many runs (alternating)
+		p = 1.0 - gsl_cdf_ugaussian_P(z);
+		break;
+	default:
+		p = NAN;
+		break;
+	}
+	result.p = p;
+
+	return result;
+}
+
+struct ramirez_runger_test_result nsl_stats_ramirez_runger(const double sample[], size_t n, nsl_stats_tail_type tail) {
+	struct ramirez_runger_test_result result;
+	result.runs = 0;
+	result.expected_runs = NAN;
+	result.n_eff = 0;
+	result.z = NAN;
+	result.p = NAN;
+
+	if (n < 3) {
+		fprintf(stderr, "Error: Ramirez-Runger runs test requires at least 3 data points.\n");
+		return result;
+	}
+
+	// Calculate the median
+	double* sorted = (double*)malloc(n * sizeof(double));
+	for (size_t i = 0; i < n; i++)
+		sorted[i] = sample[i];
+	gsl_sort(sorted, 1, n);
+	double median = gsl_stats_median_from_sorted_data(sorted, 1, n);
+	free(sorted);
+
+	// Count runs above and below median
+	int runs = 1;
+	int n_above = 0;
+	int n_below = 0;
+	int prev_above = (sample[0] > median);
+
+	for (size_t i = 0; i < n; i++) {
+		if (sample[i] > median) {
+			n_above++;
+			if (i > 0 && !prev_above)
+				runs++;
+			prev_above = 1;
+		} else if (sample[i] < median) {
+			n_below++;
+			if (i > 0 && prev_above)
+				runs++;
+			prev_above = 0;
+		}
+		// Values equal to median are ignored in runs count
+	}
+
+	// Calculate expected runs and standard deviation
+	double n_eff = (double)(n_above + n_below); // Effective sample size (excluding values at median)
+	if (n_eff < 3) {
+		fprintf(stderr, "Error: Insufficient data points after removing median values.\n");
+		return result;
+	}
+
+	double expected_runs = ((2.0 * n_above * n_below) / n_eff) + 1.0;
+	double variance = (2.0 * n_above * n_below * (2.0 * n_above * n_below - n_eff)) / (n_eff * n_eff * (n_eff - 1.0));
+	double std_dev = sqrt(variance);
+
+	// Calculate z-statistic
+	double z = (runs - expected_runs) / std_dev;
+
+	result.runs = runs;
+	result.expected_runs = expected_runs;
+	result.n_eff = (int)n_eff;
+	result.z = z;
+
+	// Calculate p-value based on tail type
+	double p;
+	switch (tail) {
+	case nsl_stats_tail_type_two:
+		// Two-tailed: test for any non-randomness
+		p = 2.0 * (1.0 - gsl_cdf_ugaussian_P(fabs(z)));
+		break;
+	case nsl_stats_tail_type_negative:
+		// Left-tailed: test for too few runs (clustering)
+		p = gsl_cdf_ugaussian_P(z);
+		break;
+	case nsl_stats_tail_type_positive:
+		// Right-tailed: test for too many runs (oscillation)
 		p = 1.0 - gsl_cdf_ugaussian_P(z);
 		break;
 	default:

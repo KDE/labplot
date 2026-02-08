@@ -105,6 +105,7 @@ void HypothesisTestDock::retranslateUi() {
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::log_rank_test), static_cast<int>(HypothesisTest::Test::log_rank_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::mann_kendall_test), static_cast<int>(HypothesisTest::Test::mann_kendall_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::wald_wolfowitz_runs_test), static_cast<int>(HypothesisTest::Test::wald_wolfowitz_runs_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::ramirez_runger_test), static_cast<int>(HypothesisTest::Test::ramirez_runger_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_independence), static_cast<int>(HypothesisTest::Test::chisq_independence));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit), static_cast<int>(HypothesisTest::Test::chisq_goodness_of_fit));
 
@@ -116,31 +117,33 @@ void HypothesisTestDock::retranslateUi() {
 		"<li><b>%3</b> - tests if the mean difference between two related samples is zero</li>"
 		"<li><b>%4</b> - tests if two independent samples with unequal variances have the same mean</li>"
 		"<li><b>%5</b> - tests if three or more independent samples have the same mean</li>"
-		"<li><b>%6</b> - tests if three or more related/repeated measurements have the same mean</li>",
+		"<li><b>%6</b> - tests if three or more related/repeated measurements have the same mean</li>"
+		"<li><b>%7</b> - tests differences in medians between two independent groups</li>",
 		HypothesisTest::testName(HypothesisTest::Test::t_test_one_sample),
 		HypothesisTest::testName(HypothesisTest::Test::t_test_two_sample),
 		HypothesisTest::testName(HypothesisTest::Test::t_test_two_sample_paired),
 		HypothesisTest::testName(HypothesisTest::Test::t_test_welch),
 		HypothesisTest::testName(HypothesisTest::Test::one_way_anova),
-		HypothesisTest::testName(HypothesisTest::Test::one_way_anova_repeated)
+		HypothesisTest::testName(HypothesisTest::Test::one_way_anova_repeated),
+		HypothesisTest::testName(HypothesisTest::Test::mann_whitney_u_test)
 	) + i18n(
-		"<li><b>%1</b> - tests differences in medians between two independent groups</li>"
-		"<li><b>%2</b> - tests if the median difference between two related samples is zero</li>"
-		"<li><b>%3</b> - tests differences in medians among three or more independent groups</li>"
-		"<li><b>%4</b> - tests differences in medians among three or more related/repeated measurements</li>"
-		"<li><b>%5</b> - tests differences in survival distributions between two or more groups</li>"
-		"<li><b>%6</b> - tests for a trend in data over time</li>"
-		"<li><b>%7</b> - tests for randomness in a sequence of observations</li>"
+		"<li><b>%1</b> - tests if the median difference between two related samples is zero</li>"
+		"<li><b>%2</b> - tests differences in medians among three or more independent groups</li>"
+		"<li><b>%3</b> - tests differences in medians among three or more related/repeated measurements</li>"
+		"<li><b>%4</b> - tests differences in survival distributions between two or more groups</li>"
+		"<li><b>%5</b> - tests for a trend in data over time</li>"
+		"<li><b>%6</b> - tests for randomness in a sequence of observations</li>"
+		"<li><b>%7</b> - tests for non-random patterns in process control data using runs above/below median</li>"
 		"<li><b>%8</b> - tests if two categorical variables are independent of each other</li>"
 		"<li><b>%9</b> - tests if observed data follows a specified theoretical distribution</li>"
 		"</ul>",
-		HypothesisTest::testName(HypothesisTest::Test::mann_whitney_u_test),
 		HypothesisTest::testName(HypothesisTest::Test::wilcoxon_test),
 		HypothesisTest::testName(HypothesisTest::Test::kruskal_wallis_test),
 		HypothesisTest::testName(HypothesisTest::Test::friedman_test),
 		HypothesisTest::testName(HypothesisTest::Test::log_rank_test),
 		HypothesisTest::testName(HypothesisTest::Test::mann_kendall_test),
 		HypothesisTest::testName(HypothesisTest::Test::wald_wolfowitz_runs_test),
+		HypothesisTest::testName(HypothesisTest::Test::ramirez_runger_test),
 		HypothesisTest::testName(HypothesisTest::Test::chisq_independence),
 		HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit)
 	);
