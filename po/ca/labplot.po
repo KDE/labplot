@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-08 00:39+0000\n"
-"PO-Revision-Date: 2026-02-05 11:07+0100\n"
+"POT-Creation-Date: 2026-02-09 00:39+0000\n"
+"PO-Revision-Date: 2026-02-08 11:05+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -420,7 +420,7 @@ msgstr "tipus de filtre incompatible"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/statistics/HypothesisTest.cpp:1854
+#: src/backend/statistics/HypothesisTest.cpp:1909
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1929
 #, kde-format
@@ -444,7 +444,7 @@ msgstr "%1: reanomena a %2"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/backend/core/AspectTreeModel.cpp:164
-#: src/backend/statistics/HypothesisTest.cpp:552
+#: src/backend/statistics/HypothesisTest.cpp:561
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:99
@@ -3750,7 +3750,7 @@ msgstr "Cel·la de la columna actual (índex; valor_predeterminat)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:258
-#: src/backend/statistics/HypothesisTest.cpp:552
+#: src/backend/statistics/HypothesisTest.cpp:561
 #: src/frontend/ui/dockwidgets/imagedock.ui:492
 #, kde-format
 msgid "Size"
@@ -3769,7 +3769,7 @@ msgstr "Suma"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:260 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
-#: src/backend/statistics/HypothesisTest.cpp:552
+#: src/backend/statistics/HypothesisTest.cpp:561
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:173
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
@@ -3785,7 +3785,7 @@ msgstr "Mínim"
 #: src/backend/gsl/functions.cpp:261 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
-#: src/backend/statistics/HypothesisTest.cpp:552
+#: src/backend/statistics/HypothesisTest.cpp:561
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:174
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
@@ -3810,7 +3810,7 @@ msgstr "Mitjana aritmètica"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:263 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
-#: src/backend/statistics/HypothesisTest.cpp:552
+#: src/backend/statistics/HypothesisTest.cpp:561
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
@@ -6475,7 +6475,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/nsl/nsl_baseline.cpp:47
-#: src/backend/statistics/HypothesisTest.cpp:552
+#: src/backend/statistics/HypothesisTest.cpp:561
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:515
@@ -7740,454 +7740,495 @@ msgctxt "@title:window"
 msgid "Hypothesis Test"
 msgstr "Prova d'hipòtesi"
 
-#: src/backend/statistics/HypothesisTest.cpp:254
+#: src/backend/statistics/HypothesisTest.cpp:255
 #, kde-format
 msgid "No monotonic trend exists"
 msgstr "No existeix tendència monotònica"
 
-#: src/backend/statistics/HypothesisTest.cpp:255
+#: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "A monotonic trend exists"
 msgstr "Existeix una tendència monotònica"
 
-#: src/backend/statistics/HypothesisTest.cpp:256
+#: src/backend/statistics/HypothesisTest.cpp:257
 #, kde-format
 msgid "A negative monotonic trend exists"
 msgstr "Existeix una tendència monotònica negativa"
 
-#: src/backend/statistics/HypothesisTest.cpp:257
+#: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "A positive monotonic trend exists"
 msgstr "Existeix una tendència monotònica positiva"
 
-#: src/backend/statistics/HypothesisTest.cpp:260
+#: src/backend/statistics/HypothesisTest.cpp:261
 #, kde-format
 msgid "The data are randomly distributed"
 msgstr "Les dades estan distribuïdes aleatòriament"
 
-#: src/backend/statistics/HypothesisTest.cpp:261
+#: src/backend/statistics/HypothesisTest.cpp:262
 #, kde-format
 msgid "The data are not randomly distributed"
 msgstr "Les dades no estan distribuïdes aleatòriament"
 
-#: src/backend/statistics/HypothesisTest.cpp:262
+#: src/backend/statistics/HypothesisTest.cpp:263
 #, kde-format
 msgid "The data show clustering (too few runs)"
 msgstr "Les dades mostren agrupació (massa poques execucions)"
 
-#: src/backend/statistics/HypothesisTest.cpp:263
+#: src/backend/statistics/HypothesisTest.cpp:264
 #, kde-format
 msgid "The data show excessive alternation (too many runs)"
 msgstr "Les dades mostren una alternança excessiva (massa execucions)"
 
-#: src/backend/statistics/HypothesisTest.cpp:324
+#: src/backend/statistics/HypothesisTest.cpp:267
+#, kde-format
+msgid "The process is in control (random pattern)"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:268
+#, fuzzy, kde-format
+#| msgid "Iterative process is out of control"
+msgid "The process is not in control"
+msgstr "El procés iteratiu està fora de control"
+
+#: src/backend/statistics/HypothesisTest.cpp:269
+#, fuzzy, kde-format
+#| msgid "The data show clustering (too few runs)"
+msgid "The process shows clustering (too few runs)"
+msgstr "Les dades mostren agrupació (massa poques execucions)"
+
+#: src/backend/statistics/HypothesisTest.cpp:270
+#, fuzzy, kde-format
+#| msgid "The data show excessive alternation (too many runs)"
+msgid "The process shows oscillation (too many runs)"
+msgstr "Les dades mostren una alternança excessiva (massa execucions)"
+
+#: src/backend/statistics/HypothesisTest.cpp:332
 #, kde-format
 msgid "One-Sample t-Test"
 msgstr "Prova t d'una mostra"
 
-#: src/backend/statistics/HypothesisTest.cpp:326
+#: src/backend/statistics/HypothesisTest.cpp:334
 #, kde-format
 msgid "Independent Two-Sample t-Test"
 msgstr "Prova t independent de dues mostres"
 
-#: src/backend/statistics/HypothesisTest.cpp:328
+#: src/backend/statistics/HypothesisTest.cpp:336
 #, kde-format
 msgid "Paired Two-Sample t-Test"
 msgstr "Prova t de dues mostres aparellades"
 
-#: src/backend/statistics/HypothesisTest.cpp:330
+#: src/backend/statistics/HypothesisTest.cpp:338
 #, kde-format
 msgid "Mann-Whitney U Test"
 msgstr "Prova U de Mann-Whitney"
 
-#: src/backend/statistics/HypothesisTest.cpp:332
+#: src/backend/statistics/HypothesisTest.cpp:340
 #, kde-format
 msgid "Welch t-Test"
 msgstr "Prova t de Welch"
 
-#: src/backend/statistics/HypothesisTest.cpp:334
+#: src/backend/statistics/HypothesisTest.cpp:342
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
 msgstr "Prova d'interval amb signe de Wilcoxon"
 
-#: src/backend/statistics/HypothesisTest.cpp:336
+#: src/backend/statistics/HypothesisTest.cpp:344
 #, kde-format
 msgid "One-Way ANOVA Test"
 msgstr "Prova ANOVA unidireccional"
 
-#: src/backend/statistics/HypothesisTest.cpp:338
+#: src/backend/statistics/HypothesisTest.cpp:346
 #, kde-format
 msgid "Kruskal-Wallis Test"
 msgstr "Prova de Kruskal-Wallis"
 
-#: src/backend/statistics/HypothesisTest.cpp:340
+#: src/backend/statistics/HypothesisTest.cpp:348
 #, kde-format
 msgid "Log-Rank Test"
 msgstr "Prova d'interval logarítmic"
 
-#: src/backend/statistics/HypothesisTest.cpp:342
+#: src/backend/statistics/HypothesisTest.cpp:350
 #, kde-format
 msgid "Friedman Test"
 msgstr "Prova de Friedman"
 
-#: src/backend/statistics/HypothesisTest.cpp:344
+#: src/backend/statistics/HypothesisTest.cpp:352
 #, kde-format
 msgid "Chi-Square Independence Test"
 msgstr "Prova d'independència Khi quadrat"
 
-#: src/backend/statistics/HypothesisTest.cpp:346
+#: src/backend/statistics/HypothesisTest.cpp:354
 #, kde-format
 msgid "Chi-Square Goodness of Fit Test"
 msgstr "Prova khi quadrat de qualitat de l'ajust"
 
-#: src/backend/statistics/HypothesisTest.cpp:348
+#: src/backend/statistics/HypothesisTest.cpp:356
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr "Prova ANOVA unidireccional amb mesures repetides"
 
-#: src/backend/statistics/HypothesisTest.cpp:350
+#: src/backend/statistics/HypothesisTest.cpp:358
 #, kde-format
 msgid "Mann-Kendall Test"
 msgstr "Prova de Mann-Kendall"
 
-#: src/backend/statistics/HypothesisTest.cpp:352
+#: src/backend/statistics/HypothesisTest.cpp:360
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
 msgstr "Prova d'execucions de Wald-Wolfowitz"
 
-#: src/backend/statistics/HypothesisTest.cpp:528
+#: src/backend/statistics/HypothesisTest.cpp:362
+#, kde-format
+msgid "Ramirez-Runger Runs Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:537
 #, kde-format
 msgid "N/A"
 msgstr "N/D"
 
-#: src/backend/statistics/HypothesisTest.cpp:532
+#: src/backend/statistics/HypothesisTest.cpp:541
 #, kde-format
 msgid "Test result is not available."
 msgstr "El resultat de la prova no està disponible."
 
-#: src/backend/statistics/HypothesisTest.cpp:536
+#: src/backend/statistics/HypothesisTest.cpp:545
 #, kde-format
 msgid "Two columns are required for this test."
 msgstr "Es requereixen dues columnes per a aquesta prova."
 
-#: src/backend/statistics/HypothesisTest.cpp:540
+#: src/backend/statistics/HypothesisTest.cpp:549
 #, kde-format
 msgid "At least two columns are required."
 msgstr "Es requereixen almenys dues columnes."
 
-#: src/backend/statistics/HypothesisTest.cpp:544
+#: src/backend/statistics/HypothesisTest.cpp:553
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
 msgstr "La columna «%1» requereix almenys %2 mostres."
 
-#: src/backend/statistics/HypothesisTest.cpp:548
+#: src/backend/statistics/HypothesisTest.cpp:557
 #, kde-format
 msgid "The size of each sample must be equal."
 msgstr "La mida de cada mostra cal que siguin iguals."
 
-#: src/backend/statistics/HypothesisTest.cpp:552
+#: src/backend/statistics/HypothesisTest.cpp:561
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
 #, kde-format
 msgid "Standard Deviation"
 msgstr "Desviació estàndard"
 
-#: src/backend/statistics/HypothesisTest.cpp:567
+#: src/backend/statistics/HypothesisTest.cpp:577
 #, kde-format
 msgid "Null Hypothesis"
 msgstr "Hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:568
+#: src/backend/statistics/HypothesisTest.cpp:578
 #, kde-format
 msgid "Alternate Hypothesis"
 msgstr "Hipòtesi alternativa"
 
-#: src/backend/statistics/HypothesisTest.cpp:570
+#: src/backend/statistics/HypothesisTest.cpp:580
 #, kde-format
 msgid "Descriptive Statistics"
 msgstr "Estadístiques descriptives"
 
-#: src/backend/statistics/HypothesisTest.cpp:571
+#: src/backend/statistics/HypothesisTest.cpp:581
 #, kde-format
 msgid "Test Statistics"
 msgstr "Estadístiques de proves"
 
-#: src/backend/statistics/HypothesisTest.cpp:571
+#: src/backend/statistics/HypothesisTest.cpp:581
 #, kde-format
 msgid "Significance Level"
 msgstr "Nivell de significació"
 
-#: src/backend/statistics/HypothesisTest.cpp:572
+#: src/backend/statistics/HypothesisTest.cpp:582
 #, kde-format
 msgid "p-Value"
 msgstr "Valor de p"
 
-#: src/backend/statistics/HypothesisTest.cpp:575
+#: src/backend/statistics/HypothesisTest.cpp:585
 #, kde-format
 msgid "Degrees of Freedom Between Groups"
 msgstr "Graus de llibertat entre grups"
 
-#: src/backend/statistics/HypothesisTest.cpp:576
+#: src/backend/statistics/HypothesisTest.cpp:586
 #, kde-format
 msgid "Degrees of Freedom Within Groups"
 msgstr "Graus de llibertat dins de grups"
 
-#: src/backend/statistics/HypothesisTest.cpp:578
+#: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
 msgid "Degrees of Freedom Treatment"
 msgstr "Tractament de graus de llibertat"
 
-#: src/backend/statistics/HypothesisTest.cpp:579
+#: src/backend/statistics/HypothesisTest.cpp:589
 #, kde-format
 msgid "Degrees of Freedom Residuals"
 msgstr "Graus de llibertat residuals"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/backend/statistics/HypothesisTest.cpp:581
+#: src/backend/statistics/HypothesisTest.cpp:591
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "Graus de llibertat"
 
-#: src/backend/statistics/HypothesisTest.cpp:586
-#: src/backend/statistics/HypothesisTest.cpp:590
-#: src/backend/statistics/HypothesisTest.cpp:593
-#: src/backend/statistics/HypothesisTest.cpp:595
+#: src/backend/statistics/HypothesisTest.cpp:596
+#: src/backend/statistics/HypothesisTest.cpp:600
+#: src/backend/statistics/HypothesisTest.cpp:603
+#: src/backend/statistics/HypothesisTest.cpp:605
 #, kde-format
 msgid "t-Value"
 msgstr "Valor de t"
 
-#: src/backend/statistics/HypothesisTest.cpp:586
+#: src/backend/statistics/HypothesisTest.cpp:596
 #, kde-format
 msgid "Test Mean"
 msgstr "Mitjana de la prova"
 
-#: src/backend/statistics/HypothesisTest.cpp:587
-#: src/backend/statistics/HypothesisTest.cpp:591
-#: src/backend/statistics/HypothesisTest.cpp:593
-#: src/backend/statistics/HypothesisTest.cpp:595
+#: src/backend/statistics/HypothesisTest.cpp:597
+#: src/backend/statistics/HypothesisTest.cpp:601
+#: src/backend/statistics/HypothesisTest.cpp:603
+#: src/backend/statistics/HypothesisTest.cpp:605
 #, kde-format
 msgid "Mean Difference"
 msgstr "Diferència de mitjanes"
 
-#: src/backend/statistics/HypothesisTest.cpp:590
+#: src/backend/statistics/HypothesisTest.cpp:600
 #, kde-format
 msgid "Pooled Variance"
 msgstr "Variància combinada"
 
-#: src/backend/statistics/HypothesisTest.cpp:591
-#: src/backend/statistics/HypothesisTest.cpp:596
+#: src/backend/statistics/HypothesisTest.cpp:601
+#: src/backend/statistics/HypothesisTest.cpp:606
 #, kde-format
 msgid "Mean Difference Standard Error"
 msgstr "Error estàndard de la diferència de mitjanes"
 
-#: src/backend/statistics/HypothesisTest.cpp:598
-#: src/backend/statistics/HypothesisTest.cpp:604
+#: src/backend/statistics/HypothesisTest.cpp:608
+#: src/backend/statistics/HypothesisTest.cpp:614
 #, kde-format
 msgid "F-Statistic"
 msgstr "Estadística F"
 
-#: src/backend/statistics/HypothesisTest.cpp:598
+#: src/backend/statistics/HypothesisTest.cpp:608
 #, kde-format
 msgid "Sum of Squares Between Groups"
 msgstr "Suma de quadrats entre grups"
 
-#: src/backend/statistics/HypothesisTest.cpp:599
+#: src/backend/statistics/HypothesisTest.cpp:609
 #, kde-format
 msgid "Sum of Squares Within Groups"
 msgstr "Suma de quadrats dins de grups"
 
-#: src/backend/statistics/HypothesisTest.cpp:600
+#: src/backend/statistics/HypothesisTest.cpp:610
 #, kde-format
 msgid "Mean Squares Between Groups"
 msgstr "Quadrats de mitjanes entre grups"
 
-#: src/backend/statistics/HypothesisTest.cpp:601
+#: src/backend/statistics/HypothesisTest.cpp:611
 #, kde-format
 msgid "Mean Squares Within Groups"
 msgstr "Quadrats de mitjanes dins de grups"
 
-#: src/backend/statistics/HypothesisTest.cpp:604
+#: src/backend/statistics/HypothesisTest.cpp:614
 #, kde-format
 msgid "Sum of Squares Treatment"
 msgstr "Tractament de la suma dels quadrats"
 
-#: src/backend/statistics/HypothesisTest.cpp:605
+#: src/backend/statistics/HypothesisTest.cpp:615
 #, kde-format
 msgid "Sum of Squares Residuals"
 msgstr "Suma dels residuals quadràtics"
 
-#: src/backend/statistics/HypothesisTest.cpp:606
+#: src/backend/statistics/HypothesisTest.cpp:616
 #, kde-format
 msgid "Sum of Squares Within Subjects"
 msgstr "Suma de quadrats dins de subjectes"
 
-#: src/backend/statistics/HypothesisTest.cpp:607
+#: src/backend/statistics/HypothesisTest.cpp:617
 #, kde-format
 msgid "Mean Squares Treatment"
 msgstr "Tractament de quadrats de mitjanes"
 
-#: src/backend/statistics/HypothesisTest.cpp:607
+#: src/backend/statistics/HypothesisTest.cpp:617
 #, kde-format
 msgid "Mean Squares Residuals"
 msgstr "Mitjana dels residuals quadràtics"
 
-#: src/backend/statistics/HypothesisTest.cpp:609
+#: src/backend/statistics/HypothesisTest.cpp:619
 #, kde-format
 msgid "U"
 msgstr "U"
 
-#: src/backend/statistics/HypothesisTest.cpp:609
-#: src/backend/statistics/HypothesisTest.cpp:613
-#: src/backend/statistics/HypothesisTest.cpp:633
-#: src/backend/statistics/HypothesisTest.cpp:636
+#: src/backend/statistics/HypothesisTest.cpp:619
+#: src/backend/statistics/HypothesisTest.cpp:623
+#: src/backend/statistics/HypothesisTest.cpp:643
+#: src/backend/statistics/HypothesisTest.cpp:646
+#: src/backend/statistics/HypothesisTest.cpp:650
 #, kde-format
 msgid "z-Value"
 msgstr "Valor z"
 
-#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
 msgid "Rank Sum 1"
 msgstr "Suma de l'interval 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
 msgid "Mean Rank 1"
 msgstr "Mitjana de l'interval 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:611
+#: src/backend/statistics/HypothesisTest.cpp:621
 #, kde-format
 msgid "Rank Sum 2"
 msgstr "Suma de l'interval 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:611
+#: src/backend/statistics/HypothesisTest.cpp:621
 #, kde-format
 msgid "Mean Rank 2"
 msgstr "Mitjana de l'interval 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:613
+#: src/backend/statistics/HypothesisTest.cpp:623
 #, kde-format
 msgid "W"
 msgstr "W"
 
-#: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Positive Rank Sum"
 msgstr "Suma d'interval positiu"
 
-#: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Positive Rank Mean"
 msgstr "Mitjana d'interval positiu"
 
-#: src/backend/statistics/HypothesisTest.cpp:615
+#: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Positive Rank Count"
 msgstr "Comptador d'interval positiu"
 
-#: src/backend/statistics/HypothesisTest.cpp:615
+#: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Negative Rank Sum"
 msgstr "Suma d'interval negatiu"
 
-#: src/backend/statistics/HypothesisTest.cpp:616
+#: src/backend/statistics/HypothesisTest.cpp:626
 #, kde-format
 msgid "Negative Rank Mean"
 msgstr "Mitjana d'interval negatiu"
 
-#: src/backend/statistics/HypothesisTest.cpp:616
+#: src/backend/statistics/HypothesisTest.cpp:626
 #, kde-format
 msgid "Negative Rank Count"
 msgstr "Comptador d'interval negatiu"
 
-#: src/backend/statistics/HypothesisTest.cpp:617
+#: src/backend/statistics/HypothesisTest.cpp:627
 #, kde-format
 msgid "Tie Count"
 msgstr "Comptador de lligams"
 
-#: src/backend/statistics/HypothesisTest.cpp:619
-#: src/backend/statistics/HypothesisTest.cpp:627
+#: src/backend/statistics/HypothesisTest.cpp:629
+#: src/backend/statistics/HypothesisTest.cpp:637
 #, kde-format
 msgid "H"
 msgstr "H"
 
-#: src/backend/statistics/HypothesisTest.cpp:621
+#: src/backend/statistics/HypothesisTest.cpp:631
 #, kde-format
 msgid "Q"
 msgstr "Q"
 
-#: src/backend/statistics/HypothesisTest.cpp:623
-#: src/backend/statistics/HypothesisTest.cpp:625
+#: src/backend/statistics/HypothesisTest.cpp:633
+#: src/backend/statistics/HypothesisTest.cpp:635
 #, kde-format
 msgid "Chi2"
 msgstr "Chi2"
 
-#: src/backend/statistics/HypothesisTest.cpp:627
+#: src/backend/statistics/HypothesisTest.cpp:637
 #, kde-format
 msgid "Event Count 1"
 msgstr "Comptador d'esdeveniments 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:628
+#: src/backend/statistics/HypothesisTest.cpp:638
 #, kde-format
 msgid "Censored Count 1"
 msgstr "Comptador de censorats 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:628
+#: src/backend/statistics/HypothesisTest.cpp:638
 #, kde-format
 msgid "Total Count 1"
 msgstr "Comptador total 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:629
+#: src/backend/statistics/HypothesisTest.cpp:639
 #, kde-format
 msgid "Event Count 2"
 msgstr "Comptador d'esdeveniments 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:629
+#: src/backend/statistics/HypothesisTest.cpp:639
 #, kde-format
 msgid "Censored Count 2"
 msgstr "Comptador de censorats 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:630
+#: src/backend/statistics/HypothesisTest.cpp:640
 #, kde-format
 msgid "Total Count 2"
 msgstr "Comptador total 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:632
+#: src/backend/statistics/HypothesisTest.cpp:642
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: src/backend/statistics/HypothesisTest.cpp:632
+#: src/backend/statistics/HypothesisTest.cpp:642
 #, kde-format
 msgid "Kendall's Tau"
 msgstr "Tau de Kendall"
 
-#: src/backend/statistics/HypothesisTest.cpp:633
+#: src/backend/statistics/HypothesisTest.cpp:643
 #, kde-format
 msgid "Sen's Slope"
 msgstr "Inclinació de Sen"
 
-#: src/backend/statistics/HypothesisTest.cpp:634
-#: src/backend/statistics/HypothesisTest.cpp:637
+#: src/backend/statistics/HypothesisTest.cpp:644
+#: src/backend/statistics/HypothesisTest.cpp:647
 #, kde-format
 msgid "Sample Size"
 msgstr "Mida de la mostra"
 
-#: src/backend/statistics/HypothesisTest.cpp:636
+#: src/backend/statistics/HypothesisTest.cpp:646
+#: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "Number of Runs"
 msgstr "Nombre d'execucions"
 
-#: src/backend/statistics/HypothesisTest.cpp:640
+#: src/backend/statistics/HypothesisTest.cpp:649
+#, kde-format
+msgid "Expected Runs"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:650
+#, fuzzy, kde-format
+#| msgid "Sample Size"
+msgid "Effective Sample Size"
+msgstr "Mida de la mostra"
+
+#: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
 msgid "Statistical Conclusion"
 msgstr "Conclusió estadística"
 
-#: src/backend/statistics/HypothesisTest.cpp:652
+#: src/backend/statistics/HypothesisTest.cpp:665
 #, kde-format
 msgid "No variable columns provided."
 msgstr "No s'ha proporcionat cap columna de variables."
 
-#: src/backend/statistics/HypothesisTest.cpp:926
+#: src/backend/statistics/HypothesisTest.cpp:942
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
@@ -8196,7 +8237,7 @@ msgstr ""
 "Al nivell de significació %1, la mitjana de població és significativament "
 "diferent de %2. Es rebutja la hipòtesi nul·la."
 
-#: src/backend/statistics/HypothesisTest.cpp:930
+#: src/backend/statistics/HypothesisTest.cpp:946
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
@@ -8205,8 +8246,8 @@ msgstr ""
 "Al nivell de significació %1, la mitjana de població no és significativament "
 "diferent de %2. No s'ha pogut rebutjar la hipòtesi nul·la."
 
-#: src/backend/statistics/HypothesisTest.cpp:1014
-#: src/backend/statistics/HypothesisTest.cpp:1082
+#: src/backend/statistics/HypothesisTest.cpp:1030
+#: src/backend/statistics/HypothesisTest.cpp:1098
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
@@ -8215,8 +8256,8 @@ msgstr ""
 "En el nivell de significació %1, la mitjana de població és significativament "
 "diferent. Es rebutja la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1016
-#: src/backend/statistics/HypothesisTest.cpp:1084
+#: src/backend/statistics/HypothesisTest.cpp:1032
+#: src/backend/statistics/HypothesisTest.cpp:1100
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
@@ -8225,8 +8266,8 @@ msgstr ""
 "En el nivell de significació %1, la mitjana de població no és "
 "significativament diferent. No s'ha pogut rebutjar la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1137
-#: src/backend/statistics/HypothesisTest.cpp:1200
+#: src/backend/statistics/HypothesisTest.cpp:1153
+#: src/backend/statistics/HypothesisTest.cpp:1216
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
@@ -8235,8 +8276,8 @@ msgstr ""
 "Al nivell de significació %1, almenys una mitjana de grup és "
 "significativament diferent. Es rebutja la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1140
-#: src/backend/statistics/HypothesisTest.cpp:1203
+#: src/backend/statistics/HypothesisTest.cpp:1156
+#: src/backend/statistics/HypothesisTest.cpp:1219
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group means. "
@@ -8245,9 +8286,9 @@ msgstr ""
 "Al nivell de significació %1, no hi ha cap diferència significativa entre "
 "les mitjanes del grups. No s'ha pogut rebutjar la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1260
-#: src/backend/statistics/HypothesisTest.cpp:1318
-#: src/backend/statistics/HypothesisTest.cpp:1377
+#: src/backend/statistics/HypothesisTest.cpp:1276
+#: src/backend/statistics/HypothesisTest.cpp:1334
+#: src/backend/statistics/HypothesisTest.cpp:1393
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
@@ -8256,9 +8297,9 @@ msgstr ""
 "Al nivell de significació %1, almenys una distribució de grup és "
 "significativament diferent. Es rebutja la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1262
-#: src/backend/statistics/HypothesisTest.cpp:1320
-#: src/backend/statistics/HypothesisTest.cpp:1379
+#: src/backend/statistics/HypothesisTest.cpp:1278
+#: src/backend/statistics/HypothesisTest.cpp:1336
+#: src/backend/statistics/HypothesisTest.cpp:1395
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
@@ -8267,7 +8308,7 @@ msgstr ""
 "Al nivell de significació %1, no hi ha cap diferència significativa entre "
 "les distribucions de grup. No s'ha pogut rebutjar la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1440
+#: src/backend/statistics/HypothesisTest.cpp:1456
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
@@ -8276,7 +8317,7 @@ msgstr ""
 "Al nivell de significació %1, almenys un grup és significativament diferent. "
 "Es rebutja la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1442
+#: src/backend/statistics/HypothesisTest.cpp:1458
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. Fail "
@@ -8285,13 +8326,13 @@ msgstr ""
 "Al nivell de significació %1, no hi ha cap diferència significativa entre "
 "grups. No s'ha pogut rebutjar la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1468
-#: src/backend/statistics/HypothesisTest.cpp:1535
+#: src/backend/statistics/HypothesisTest.cpp:1484
+#: src/backend/statistics/HypothesisTest.cpp:1551
 #, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr "La columna «%1» cal que sigui de tipus enter."
 
-#: src/backend/statistics/HypothesisTest.cpp:1507
+#: src/backend/statistics/HypothesisTest.cpp:1523
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
@@ -8300,7 +8341,7 @@ msgstr ""
 "Al nivell de significació %1, les freqüències observades no segueixen la "
 "distribució de freqüència esperada. Es rebutja la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1511
+#: src/backend/statistics/HypothesisTest.cpp:1527
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
@@ -8309,13 +8350,13 @@ msgstr ""
 "Al nivell de significació %1, les freqüències observades segueixen la "
 "distribució de freqüència esperada. No s'ha pogut rebutjar la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1555
+#: src/backend/statistics/HypothesisTest.cpp:1571
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
 msgstr ""
 "La mida de cada columna a la taula de contingència cal que siguin iguals."
 
-#: src/backend/statistics/HypothesisTest.cpp:1571
+#: src/backend/statistics/HypothesisTest.cpp:1587
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are dependent. "
@@ -8324,7 +8365,7 @@ msgstr ""
 "Al nivell de significació %1, ambdues variables categòriques són dependents. "
 "Es rebutja la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1574
+#: src/backend/statistics/HypothesisTest.cpp:1590
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are independent. "
@@ -8333,54 +8374,54 @@ msgstr ""
 "Al nivell de significació %1, ambdues variables categòriques són "
 "independents. No s'ha pogut rebutjar la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1592
+#: src/backend/statistics/HypothesisTest.cpp:1608
 #, kde-format
 msgid "Three columns are required."
 msgstr "Es requereixen tres columnes."
 
-#: src/backend/statistics/HypothesisTest.cpp:1601
+#: src/backend/statistics/HypothesisTest.cpp:1617
 #, kde-format
 msgid "Status column should be of integer type."
 msgstr "La columna d'estat hauria de ser de tipus enter."
 
-#: src/backend/statistics/HypothesisTest.cpp:1606
+#: src/backend/statistics/HypothesisTest.cpp:1622
 #, kde-format
 msgid "Group column should be of integer type."
 msgstr "La columna de grup hauria de ser de tipus enter."
 
-#: src/backend/statistics/HypothesisTest.cpp:1611
+#: src/backend/statistics/HypothesisTest.cpp:1627
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr "Les columnes d'hora, estat i grup haurien de tenir la mateixa mida."
 
-#: src/backend/statistics/HypothesisTest.cpp:1630
+#: src/backend/statistics/HypothesisTest.cpp:1646
 #, kde-format
 msgid "Status column values must be either 0 or 1."
 msgstr "Els valors de la columna estat haurien de ser 0 o 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1635
+#: src/backend/statistics/HypothesisTest.cpp:1651
 #, kde-format
 msgid "Group column values must be either 0 or 1."
 msgstr "Els valors de la columna grup haurien de ser 0 o 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1651
+#: src/backend/statistics/HypothesisTest.cpp:1667
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
 "Les columnes d'hora, estat i grup haurien de tenir un nombre de valors "
 "iguals."
 
-#: src/backend/statistics/HypothesisTest.cpp:1659
+#: src/backend/statistics/HypothesisTest.cpp:1675
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
 msgstr "El grup 1 requereix almenys %1 mostres."
 
-#: src/backend/statistics/HypothesisTest.cpp:1664
+#: src/backend/statistics/HypothesisTest.cpp:1680
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
 msgstr "El grup 2 requereix almenys %1 mostres."
 
-#: src/backend/statistics/HypothesisTest.cpp:1676
+#: src/backend/statistics/HypothesisTest.cpp:1690
 #, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
@@ -8389,7 +8430,7 @@ msgstr ""
 "Al nivell de significació %1, les corbes de supervivència són "
 "significativament diferents. Es rebutja la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1679
+#: src/backend/statistics/HypothesisTest.cpp:1693
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
@@ -8398,7 +8439,7 @@ msgstr ""
 "Al nivell de significació %1, no hi ha cap diferència significativa entre "
 "les corbes de supervivència. No s'ha pogut rebutjar la hipòtesi nul·la"
 
-#: src/backend/statistics/HypothesisTest.cpp:1720
+#: src/backend/statistics/HypothesisTest.cpp:1733
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
@@ -8407,7 +8448,7 @@ msgstr ""
 "Al nivell de significació %1, hi ha una tendència monotònica significativa a "
 "les dades. Es rebutja la hipòtesi nul·la."
 
-#: src/backend/statistics/HypothesisTest.cpp:1723
+#: src/backend/statistics/HypothesisTest.cpp:1736
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
@@ -8416,7 +8457,7 @@ msgstr ""
 "Al nivell de significació %1, hi ha una tendència monotònica positiva "
 "significativa. Es rebutja la hipòtesi nul·la."
 
-#: src/backend/statistics/HypothesisTest.cpp:1726
+#: src/backend/statistics/HypothesisTest.cpp:1739
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
@@ -8425,7 +8466,7 @@ msgstr ""
 "Al nivell de significació %1, hi ha una tendència monotònica negativa "
 "significativa. Es rebutja la hipòtesi nul·la."
 
-#: src/backend/statistics/HypothesisTest.cpp:1728
+#: src/backend/statistics/HypothesisTest.cpp:1741
 #, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. Fail "
@@ -8434,7 +8475,7 @@ msgstr ""
 "Al nivell de significació %1, no s'ha detectat cap tendència monotònica "
 "significativa. No s'ha pogut rebutjar la hipòtesi nul·la."
 
-#: src/backend/statistics/HypothesisTest.cpp:1765
+#: src/backend/statistics/HypothesisTest.cpp:1777
 #, kde-format
 msgid ""
 "At the significance level %1, the data are not randomly distributed. Reject "
@@ -8443,16 +8484,19 @@ msgstr ""
 "En el nivell de significació %1, les dades no estan distribuïdes "
 "aleatòriament. Es rebutja la hipòtesi nul·la."
 
-#: src/backend/statistics/HypothesisTest.cpp:1767
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1780
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the data show clustering (too few runs). "
+#| "Reject the null hypothesis."
 msgid ""
-"At the significance level %1, the data show clustering (too few runs). "
-"Reject the null hypothesis."
+"At the significance level %1, the data show clustering or trend (too few "
+"runs). Reject the null hypothesis."
 msgstr ""
 "En el nivell de significació %1, les dades mostren agrupament (massa poques "
 "execucions). Es rebutja la hipòtesi nul·la."
 
-#: src/backend/statistics/HypothesisTest.cpp:1770
+#: src/backend/statistics/HypothesisTest.cpp:1783
 #, kde-format
 msgid ""
 "At the significance level %1, the data show excessive alternation (too many "
@@ -8461,7 +8505,7 @@ msgstr ""
 "Al nivell de significació %1, les dades mostren una alternança excessiva "
 "(massa execucions). Es rebutja la hipòtesi nul·la."
 
-#: src/backend/statistics/HypothesisTest.cpp:1773
+#: src/backend/statistics/HypothesisTest.cpp:1786
 #, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. "
@@ -8470,13 +8514,61 @@ msgstr ""
 "Al nivell de significació %1, les dades semblen estar distribuïdes "
 "aleatòriament. No s'ha pogut rebutjar la hipòtesi nul·la."
 
-#: src/backend/statistics/HypothesisTest.cpp:1864
+#: src/backend/statistics/HypothesisTest.cpp:1820
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the data are not randomly distributed. "
+#| "Reject the null hypothesis."
+msgid ""
+"At the significance level %1, the process is not in control. Reject the null "
+"hypothesis."
+msgstr ""
+"En el nivell de significació %1, les dades no estan distribuïdes "
+"aleatòriament. Es rebutja la hipòtesi nul·la."
+
+#: src/backend/statistics/HypothesisTest.cpp:1822
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the data show clustering (too few runs). "
+#| "Reject the null hypothesis."
+msgid ""
+"At the significance level %1, the process shows clustering (too few runs). "
+"Reject the null hypothesis."
+msgstr ""
+"En el nivell de significació %1, les dades mostren agrupament (massa poques "
+"execucions). Es rebutja la hipòtesi nul·la."
+
+#: src/backend/statistics/HypothesisTest.cpp:1825
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the data show excessive alternation (too "
+#| "many runs). Reject the null hypothesis."
+msgid ""
+"At the significance level %1, the process shows oscillation (too many runs). "
+"Reject the null hypothesis."
+msgstr ""
+"Al nivell de significació %1, les dades mostren una alternança excessiva "
+"(massa execucions). Es rebutja la hipòtesi nul·la."
+
+#: src/backend/statistics/HypothesisTest.cpp:1827
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the data appear to be randomly distributed. "
+#| "Fail to reject the null hypothesis."
+msgid ""
+"At the significance level %1, the process appears to be in control. Fail to "
+"reject the null hypothesis."
+msgstr ""
+"Al nivell de significació %1, les dades semblen estar distribuïdes "
+"aleatòriament. No s'ha pogut rebutjar la hipòtesi nul·la."
+
+#: src/backend/statistics/HypothesisTest.cpp:1919
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
 #, kde-format
 msgid "Parametric"
 msgstr "Paramètrica"
 
-#: src/backend/statistics/HypothesisTest.cpp:1894
+#: src/backend/statistics/HypothesisTest.cpp:1949
 #, kde-format
 msgid "Non-Parametric"
 msgstr "No paramètrica"
@@ -11765,10 +11857,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Crea un full de treball nou per al traçat de les dades"
 
 #: src/frontend/ActionsManager.cpp:243
-#, fuzzy, kde-format
-#| msgid "Creates a new %1 script"
+#, kde-format
 msgid "Creates a new Python script"
-msgstr "Crea un script nou de %1"
+msgstr "Crea un script nou en Python"
 
 #: src/frontend/ActionsManager.cpp:261 src/frontend/MainWin.cpp:1246
 #, kde-format
@@ -11873,8 +11964,8 @@ msgstr "Exporta..."
 msgid "Export selected element"
 msgstr "Exporta l'element seleccionat"
 
-#: src/frontend/ActionsManager.cpp:358 src/frontend/ActionsManager.cpp:1360
-#: src/frontend/ActionsManager.cpp:1368
+#: src/frontend/ActionsManager.cpp:358 src/frontend/ActionsManager.cpp:1366
+#: src/frontend/ActionsManager.cpp:1374
 #, kde-format
 msgid "Share"
 msgstr "Comparteix"
@@ -12331,22 +12422,22 @@ msgstr "Visibilitat de les finestres"
 msgid "Color Scheme"
 msgstr "Esquema de color"
 
-#: src/frontend/ActionsManager.cpp:1327
+#: src/frontend/ActionsManager.cpp:1333
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Crea un bloc de notes nou de %1"
 
-#: src/frontend/ActionsManager.cpp:1360
+#: src/frontend/ActionsManager.cpp:1366
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "S'ha produït un problema en compartir el projecte: %1"
 
-#: src/frontend/ActionsManager.cpp:1364
+#: src/frontend/ActionsManager.cpp:1370
 #, kde-format
 msgid "Project shared successfully"
 msgstr "El projecte s'ha compartit correctament"
 
-#: src/frontend/ActionsManager.cpp:1367
+#: src/frontend/ActionsManager.cpp:1373
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "El projecte compartit es pot trobar a: <a href=\"%1\">%1</a>"
@@ -14755,10 +14846,10 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #. i18n: ectx: property (text), widget (QLabel, lVariables)
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:269
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:350
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:380
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:347
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:377
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:423
-#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:391
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:385
 #: src/frontend/ui/dockwidgets/matrixdock.ui:117
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:422
@@ -14770,8 +14861,8 @@ msgstr "Columnes:"
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:273
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:352
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:382
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:349
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:379
 #: src/frontend/spreadsheet/GoToDialog.cpp:49
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:169
 #: src/frontend/ui/dockwidgets/valuewidget.ui:81
@@ -15433,8 +15524,17 @@ msgstr ""
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr "Histogrames %1: s'ha carregat la plantilla «%2»"
 
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:119
-#, kde-format
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:114
+#, fuzzy, kde-format
+#| msgid ""
+#| "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
+#| "known population mean</li><li><b>%2</b> - tests if two independent "
+#| "samples have the same mean</li><li><b>%3</b> - tests if the mean "
+#| "difference between two related samples is zero</li><li><b>%4</b> - tests "
+#| "if two independent samples with unequal variances have the same mean</"
+#| "li><li><b>%5</b> - tests if three or more independent samples have the "
+#| "same mean</li><li><b>%6</b> - tests if three or more related/repeated "
+#| "measurements have the same mean</li>"
 msgid ""
 "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
 "known population mean</li><li><b>%2</b> - tests if two independent samples "
@@ -15442,7 +15542,9 @@ msgid ""
 "two related samples is zero</li><li><b>%4</b> - tests if two independent "
 "samples with unequal variances have the same mean</li><li><b>%5</b> - tests "
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
-"tests if three or more related/repeated measurements have the same mean</li>"
+"tests if three or more related/repeated measurements have the same mean</"
+"li><li><b>%7</b> - tests differences in medians between two independent "
+"groups</li>"
 msgstr ""
 "<ul><li><b>%1</b>: prova si la mitjana d'una mostra difereix de la mitjana "
 "coneguda d'una població</li><li><b>%2</b>: prova si dues mostres "
@@ -15453,19 +15555,32 @@ msgstr ""
 "mostres independents tenen la mateixa mitjana</li><li><b>%6</b>: prova si "
 "tres o més mesures relacionades/repetides tenen la mateixa mitjana</li>"
 
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:133
-#, kde-format
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:130
+#, fuzzy, kde-format
+#| msgid ""
+#| "<li><b>%1</b> - tests differences in medians between two independent "
+#| "groups</li><li><b>%2</b> - tests if the median difference between two "
+#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
+#| "among three or more independent groups</li><li><b>%4</b> - tests "
+#| "differences in medians among three or more related/repeated measurements</"
+#| "li><li><b>%5</b> - tests differences in survival distributions between "
+#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
+#| "time</li><li><b>%7</b> - tests for randomness in a sequence of "
+#| "observations</li><li><b>%8</b> - tests if two categorical variables are "
+#| "independent of each other</li><li><b>%9</b> - tests if observed data "
+#| "follows a specified theoretical distribution</li></ul>"
 msgid ""
-"<li><b>%1</b> - tests differences in medians between two independent groups</"
-"li><li><b>%2</b> - tests if the median difference between two related "
-"samples is zero</li><li><b>%3</b> - tests differences in medians among three "
-"or more independent groups</li><li><b>%4</b> - tests differences in medians "
-"among three or more related/repeated measurements</li><li><b>%5</b> - tests "
+"<li><b>%1</b> - tests if the median difference between two related samples "
+"is zero</li><li><b>%2</b> - tests differences in medians among three or more "
+"independent groups</li><li><b>%3</b> - tests differences in medians among "
+"three or more related/repeated measurements</li><li><b>%4</b> - tests "
 "differences in survival distributions between two or more groups</li><li><b>"
-"%6</b> - tests for a trend in data over time</li><li><b>%7</b> - tests for "
-"randomness in a sequence of observations</li><li><b>%8</b> - tests if two "
-"categorical variables are independent of each other</li><li><b>%9</b> - "
-"tests if observed data follows a specified theoretical distribution</li></ul>"
+"%5</b> - tests for a trend in data over time</li><li><b>%6</b> - tests for "
+"randomness in a sequence of observations</li><li><b>%7</b> - tests for non-"
+"random patterns in process control data using runs above/below median</"
+"li><li><b>%8</b> - tests if two categorical variables are independent of "
+"each other</li><li><b>%9</b> - tests if observed data follows a specified "
+"theoretical distribution</li></ul>"
 msgstr ""
 "<li><b>%1</b> prova les diferències de les mitjanes entre dos grups "
 "independents</li><li><b>%2</b>: prova si la diferència de les mitjanes entre "
@@ -15479,7 +15594,7 @@ msgstr ""
 "independents entre elles</li><li><b>%9</b>: prova si les dades observades "
 "segueixen una distribució teòrica específica</li></ul>"
 
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:310
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:307
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
@@ -18463,10 +18578,9 @@ msgid "User Feedback"
 msgstr "Comentaris de l'usuari"
 
 #: src/frontend/SettingsDialog.cpp:100
-#, fuzzy, kde-format
-#| msgid "Text Editor"
+#, kde-format
 msgid "Script Editor"
-msgstr "Editor de text"
+msgstr "Editor de scripts"
 
 #: src/frontend/SettingsDialog.cpp:163
 #, kde-format
@@ -23815,16 +23929,16 @@ msgstr "Nul:"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, kde-format
-msgid "Alternate:"
+#, fuzzy, kde-format
+#| msgid "Alternate:"
+msgid "Alternative:"
 msgstr "Alternativa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
-#, fuzzy, kde-format
-#| msgid "Hypothesis"
+#, kde-format
 msgid "Hypotheses"
-msgstr "Hipòtesi"
+msgstr "Hipòtesis"
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
