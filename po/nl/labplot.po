@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-09 00:39+0000\n"
-"PO-Revision-Date: 2026-02-08 14:27+0100\n"
+"PO-Revision-Date: 2026-02-09 11:02+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -7696,25 +7696,22 @@ msgstr "De gegevens tonen excessieve wijzigingen (te veel runs)"
 #: src/backend/statistics/HypothesisTest.cpp:267
 #, kde-format
 msgid "The process is in control (random pattern)"
-msgstr ""
+msgstr "Het proces is onder controle (willekeurig patroon)"
 
 #: src/backend/statistics/HypothesisTest.cpp:268
-#, fuzzy, kde-format
-#| msgid "Iterative process is out of control"
+#, kde-format
 msgid "The process is not in control"
-msgstr "Iteratief proces is mislukt"
+msgstr "Het proces is niet onder controle"
 
 #: src/backend/statistics/HypothesisTest.cpp:269
-#, fuzzy, kde-format
-#| msgid "The data show clustering (too few runs)"
+#, kde-format
 msgid "The process shows clustering (too few runs)"
-msgstr "De gegevens tonen clustering (te weinig runs)"
+msgstr "Het proces toont clustering (te weinig runs)"
 
 #: src/backend/statistics/HypothesisTest.cpp:270
-#, fuzzy, kde-format
-#| msgid "The data show excessive alternation (too many runs)"
+#, kde-format
 msgid "The process shows oscillation (too many runs)"
-msgstr "De gegevens tonen excessieve wijzigingen (te veel runs)"
+msgstr "Het proces toont slingeringen (te veel runs)"
 
 #: src/backend/statistics/HypothesisTest.cpp:332
 #, kde-format
@@ -7794,7 +7791,7 @@ msgstr "Wald-Wolfowitz runt test"
 #: src/backend/statistics/HypothesisTest.cpp:362
 #, kde-format
 msgid "Ramirez-Runger Runs Test"
-msgstr ""
+msgstr "Ramirez-Runger runt test"
 
 #: src/backend/statistics/HypothesisTest.cpp:537
 #, kde-format
@@ -8123,13 +8120,12 @@ msgstr "Aantal runs"
 #: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "Expected Runs"
-msgstr ""
+msgstr "Verwachte runs"
 
 #: src/backend/statistics/HypothesisTest.cpp:650
-#, fuzzy, kde-format
-#| msgid "Sample Size"
+#, kde-format
 msgid "Effective Sample Size"
-msgstr "Sample-grootte"
+msgstr "Effectieve sample-grootte"
 
 #: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
@@ -8398,16 +8394,13 @@ msgstr ""
 "Wijs de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering (too few runs). "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). Reject the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1, tonen de gegevens clustering ( te weinig "
-"runs). Wijs de nul-hypothese af."
+"Op het significantieniveau %1, tonen de gegevens clustering of trent (te "
+"weinig runs). Wijs de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1783
 #, kde-format
@@ -8428,52 +8421,40 @@ msgstr ""
 "nul-hypothese kan niet afwezen worden."
 
 #: src/backend/statistics/HypothesisTest.cpp:1820
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data are not randomly distributed. "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process is not in control. Reject the null "
 "hypothesis."
 msgstr ""
-"Op het significantieniveau %1, zijn de gegevens niet willekeurig verdeeld. "
-"Wijs de nul-hypothese af."
+"Op het significantieniveau %1, is het proces niet onder controle. Wijs de "
+"nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1822
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering (too few runs). "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering (too few runs). "
 "Reject the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1, tonen de gegevens clustering ( te weinig "
+"Op het significantieniveau %1, toont het proces clustering ( te weinig "
 "runs). Wijs de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1825
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show excessive alternation (too "
-#| "many runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation (too many runs). "
 "Reject the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1 tonen de gegevens excessieve wijzigingen (te "
-"veel runs). Wijs de nul-hypothese af."
+"Op het significantieniveau %1 toont het proces wisselingen (te veel runs). "
+"Wijs de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:1827
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data appear to be randomly distributed. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process appears to be in control. Fail to "
 "reject the null hypothesis."
 msgstr ""
-"Op het significantieniveau %1 lijken de gegevens willekeurig verdeeld. De "
-"nul-hypothese kan niet afwezen worden."
+"Op het significantieniveau %1 lijkt het proces onder controle. De nul-"
+"hypothese kan niet afwezen worden."
 
 #: src/backend/statistics/HypothesisTest.cpp:1919
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -15394,16 +15375,7 @@ msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 histogrammen: sjabloon \"%2\" geladen"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:114
-#, fuzzy, kde-format
-#| msgid ""
-#| "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
-#| "known population mean</li><li><b>%2</b> - tests if two independent "
-#| "samples have the same mean</li><li><b>%3</b> - tests if the mean "
-#| "difference between two related samples is zero</li><li><b>%4</b> - tests "
-#| "if two independent samples with unequal variances have the same mean</"
-#| "li><li><b>%5</b> - tests if three or more independent samples have the "
-#| "same mean</li><li><b>%6</b> - tests if three or more related/repeated "
-#| "measurements have the same mean</li>"
+#, kde-format
 msgid ""
 "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
 "known population mean</li><li><b>%2</b> - tests if two independent samples "
@@ -15423,22 +15395,11 @@ msgstr ""
 "variantie hetzelfde gemiddelde hebben</li><li><b>%5</b> - test of drie of "
 "meer onafhankelijke samples hetzelfde gemiddelde hebben</li><li><b>%6</b> - "
 "test of drie of meer gerelateerde/herhaalde metingen hetzelfde gemiddelde "
-"hebben</li>"
+"hebben</li><li><b>%7</b> - test verschillen in medianen tussen twee "
+"onafhankelijke groepen</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests for randomness in a sequence of "
-#| "observations</li><li><b>%8</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%9</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests if the median difference between two related samples "
 "is zero</li><li><b>%2</b> - tests differences in medians among three or more "
@@ -15452,17 +15413,18 @@ msgid ""
 "each other</li><li><b>%9</b> - tests if observed data follows a specified "
 "theoretical distribution</li></ul>"
 msgstr ""
-"<li><b>%1</b> - test verschillen in medianen tussen twee onafhankelijke "
-"groepen</li><li><b>%2</b> - test of het mediane verschil tussen twee "
-"gerelateerde samples nul is</li><li><b>%3</b> - test verschillen in medianen "
-"onder drie of meer onafhankelijke groepen</li><li><b>%4</b> - test "
-"verschillen in medianen onder drie of meer gerelateerde/herhaalde metingen</"
-"li><li><b>%5</b> - test verschillen in overlevingsdistributies tussen twee "
-"of meer groepen</li><li><b>%6</b> - test op een trend in gegevens in de "
-"tijd</li><li><b>%7</b> -tests voor willekeurigheid in een serie "
-"waarnemingen</li><li><b>%8</b> - test of twee categoriale variabelen "
-"onafhankelijk zijn van elkaar</li><li><b>%9</b> - test of waargenomen "
-"gegevens een gespecificeerde theoretische distributie volgen</li></ul>"
+"<li><b>%1</b> - test of het mediane verschil tussen twee gerelateerde "
+"steekproeven nul is</li><li><b>%2</b> - test verschillen in medianen tussen "
+"drie of meer onafhankelijke groepen</li><li><b>%3</b> - test verschillen in "
+"medianen tussen drie of meer gerelateerde/herhaalde metingen</li><li><b>%4</"
+"b> - test verschillen in overlevingsverdelingen tussen twee of meer groepen</"
+"li><li><b>%5</b> - test op een trend in gegevens over tijd</li><li><b>%6</b> "
+"- test op willekeurigheid in een reeks waarnemingen</li><li><b>%7</b> - test "
+"op niet-willekeurige patronen in procescontrolegegevens met behulp van runs "
+"boven/onder de mediaan</li><li><b>%8</b> - test of twee categorische "
+"variabelen onafhankelijk van elkaar zijn</li><li><b>%9</b> - test of "
+"waargenomen gegevens een gespecificeerd patroon met een theoretische "
+"verdeling volgen</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:307
 #, kde-format
@@ -23763,8 +23725,7 @@ msgstr "Nul:"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Alternate:"
+#, kde-format
 msgid "Alternative:"
 msgstr "Alternatief:"
 

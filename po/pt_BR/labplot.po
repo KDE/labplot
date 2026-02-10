@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-09 00:39+0000\n"
-"PO-Revision-Date: 2026-02-08 07:14-0300\n"
+"PO-Revision-Date: 2026-02-09 08:16-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -7713,25 +7713,22 @@ msgstr "Os dados mostram alternância excessiva (muitas execuções)"
 #: src/backend/statistics/HypothesisTest.cpp:267
 #, kde-format
 msgid "The process is in control (random pattern)"
-msgstr ""
+msgstr "O processo está sob controle (padrão aleatório)"
 
 #: src/backend/statistics/HypothesisTest.cpp:268
-#, fuzzy, kde-format
-#| msgid "Iterative process is out of control"
+#, kde-format
 msgid "The process is not in control"
-msgstr "O processo iterativo está fora de controle"
+msgstr "O processo está fora de controle"
 
 #: src/backend/statistics/HypothesisTest.cpp:269
-#, fuzzy, kde-format
-#| msgid "The data show clustering (too few runs)"
+#, kde-format
 msgid "The process shows clustering (too few runs)"
-msgstr "Os dados mostram agrupamento (poucas execuções)"
+msgstr "O processo mostra agrupamento (poucas execuções)"
 
 #: src/backend/statistics/HypothesisTest.cpp:270
-#, fuzzy, kde-format
-#| msgid "The data show excessive alternation (too many runs)"
+#, kde-format
 msgid "The process shows oscillation (too many runs)"
-msgstr "Os dados mostram alternância excessiva (muitas execuções)"
+msgstr "O processo apresenta oscilações (muitas execuções)"
 
 #: src/backend/statistics/HypothesisTest.cpp:332
 #, kde-format
@@ -7811,7 +7808,7 @@ msgstr "Teste de execução Wald-Wolfowitz"
 #: src/backend/statistics/HypothesisTest.cpp:362
 #, kde-format
 msgid "Ramirez-Runger Runs Test"
-msgstr ""
+msgstr "Teste de corrida de Ramirez-Runger"
 
 #: src/backend/statistics/HypothesisTest.cpp:537
 #, kde-format
@@ -8140,13 +8137,12 @@ msgstr "Número de execuções"
 #: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "Expected Runs"
-msgstr ""
+msgstr "Execuções esperadas"
 
 #: src/backend/statistics/HypothesisTest.cpp:650
-#, fuzzy, kde-format
-#| msgid "Sample Size"
+#, kde-format
 msgid "Effective Sample Size"
-msgstr "Tamanho da amostra"
+msgstr "Tamanho efetivo da amostra"
 
 #: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
@@ -8413,16 +8409,13 @@ msgstr ""
 "aleatoriamente. Rejeita-se a hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering (too few runs). "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). Reject the null hypothesis."
 msgstr ""
-"Ao nível de significância %1, os dados mostram agrupamento (poucas "
-"execuções). Rejeita-se a hipótese nula."
+"Ao nível de significância %1, os dados mostram agrupamento ou tendências "
+"(poucas execuções). Rejeita-se a hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1783
 #, kde-format
@@ -8443,52 +8436,40 @@ msgstr ""
 "aleatoriamente. Não se rejeita a hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1820
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data are not randomly distributed. "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process is not in control. Reject the null "
 "hypothesis."
 msgstr ""
-"Ao nível de significância %1, os dados não estão distribuídos "
-"aleatoriamente. Rejeita-se a hipótese nula."
+"Ao nível de significância %1, o processo não está sob controle. Rejeita-se a "
+"hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1822
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering (too few runs). "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering (too few runs). "
 "Reject the null hypothesis."
 msgstr ""
-"Ao nível de significância %1, os dados mostram agrupamento (poucas "
+"Ao nível de significância %1, o processo mostra agrupamento (poucas "
 "execuções). Rejeita-se a hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1825
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show excessive alternation (too "
-#| "many runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation (too many runs). "
 "Reject the null hypothesis."
 msgstr ""
-"Ao nível de significância %1, os dados mostram alternância excessiva (muitas "
+"Ao nível de significância %1, o processo mostra oscilação (muitas "
 "execuções). Rejeita-se a hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1827
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data appear to be randomly distributed. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process appears to be in control. Fail to "
 "reject the null hypothesis."
 msgstr ""
-"Ao nível de significância %1, os dados parecem estar distribuídos "
-"aleatoriamente. Não se rejeita a hipótese nula."
+"Ao nível de significância %1, o processo parece estar sob controle. Não se "
+"rejeita a hipótese nula."
 
 #: src/backend/statistics/HypothesisTest.cpp:1919
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -15410,16 +15391,7 @@ msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 histogramas: foi carregado o modelo \"%2\""
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:114
-#, fuzzy, kde-format
-#| msgid ""
-#| "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
-#| "known population mean</li><li><b>%2</b> - tests if two independent "
-#| "samples have the same mean</li><li><b>%3</b> - tests if the mean "
-#| "difference between two related samples is zero</li><li><b>%4</b> - tests "
-#| "if two independent samples with unequal variances have the same mean</"
-#| "li><li><b>%5</b> - tests if three or more independent samples have the "
-#| "same mean</li><li><b>%6</b> - tests if three or more related/repeated "
-#| "measurements have the same mean</li>"
+#, kde-format
 msgid ""
 "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
 "known population mean</li><li><b>%2</b> - tests if two independent samples "
@@ -15438,22 +15410,11 @@ msgstr ""
 "li><li><b>%4</b> - testa se duas amostras independentes com variâncias "
 "desiguais têm a mesma média</li><li><b>%5</b> - testa se três ou mais "
 "amostras independentes têm a mesma média</li><li><b>%6</b> - testa se três "
-"ou mais medições relacionadas/repetidas têm a mesma média</li>"
+"ou mais medições relacionadas/repetidas têm a mesma média</li><li><b>%7</b> "
+"- testa diferenças nas medianas entre dois grupos independentes</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests for randomness in a sequence of "
-#| "observations</li><li><b>%8</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%9</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests if the median difference between two related samples "
 "is zero</li><li><b>%2</b> - tests differences in medians among three or more "
@@ -15467,17 +15428,18 @@ msgid ""
 "each other</li><li><b>%9</b> - tests if observed data follows a specified "
 "theoretical distribution</li></ul>"
 msgstr ""
-"<li><b>%1</b> - testa diferenças nas medianas entre dois grupos "
-"independentes</li><li><b>%2</b> - testa se a diferença mediana entre duas "
-"amostras relacionadas é zero</li><li><b>%3</b> - testa diferenças nas "
-"medianas entre três ou mais grupos independentes</li><li><b>%4</b> - testa "
-"diferenças nas medianas entre três ou mais medições relacionadas/repetidas</"
-"li><li><b>%5</b> - testa diferenças nas distribuições de sobrevivência entre "
-"dois ou mais grupos</li><li><b>%6</b> - testa uma tendência nos dados no "
-"tempo</li><li><b>%7</b> - testes de aleatoriedade em uma sequência de "
-"observações</li><li><b>%8</b> - testa se duas variáveis ​​categóricas são "
-"independentes uma da outra</li><li><b>%9</b> - testa se os dados observados "
-"seguem uma distribuição teórica especificada</li></ul>"
+"<li><b>%1</b> - testa se a diferença mediana entre duas amostras "
+"relacionadas é zero</li><li><b>%2</b> - testa diferenças nas medianas entre "
+"três ou mais grupos independentes</li><li><b>%3</b> - testa diferenças nas "
+"medianas entre três ou mais medições relacionadas/repetidas</li><li><b>%4</"
+"b> - testa diferenças nas distribuições de sobrevivência entre dois ou mais "
+"grupos</li><li><b>%5</b> - testa uma tendência nos dados no tempo</li><li><b>"
+"%6</b> - testes de aleatoriedade em uma sequência de observações</li><li><b>"
+"%7</b> - testes para padrões não aleatórios em dados de controle de processo "
+"usando execuções acima/abaixo da mediana</li><li><b>%8</b> - testa se duas "
+"variáveis ​​categóricas são independentes uma da outra</li><li><b>%9</b> - "
+"testa se os dados observados seguem uma distribuição teórica especificada</"
+"li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:307
 #, kde-format
@@ -23780,8 +23742,7 @@ msgstr "Nula:"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Alternate:"
+#, kde-format
 msgid "Alternative:"
 msgstr "Alternativa:"
 

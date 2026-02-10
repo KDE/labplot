@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-09 00:39+0000\n"
-"PO-Revision-Date: 2026-02-08 06:23+0100\n"
+"PO-Revision-Date: 2026-02-09 04:10+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7702,25 +7702,22 @@ msgstr "მონაცემები აჩვენებს ზედმე�
 #: src/backend/statistics/HypothesisTest.cpp:267
 #, kde-format
 msgid "The process is in control (random pattern)"
-msgstr ""
+msgstr "პროცესი იმართება (შემთხვევითი ნიმუში)"
 
 #: src/backend/statistics/HypothesisTest.cpp:268
-#, fuzzy, kde-format
-#| msgid "Iterative process is out of control"
+#, kde-format
 msgid "The process is not in control"
-msgstr "იტერაციის პროცესი უკონტროლოა"
+msgstr "პროცესი უკონტროლოა"
 
 #: src/backend/statistics/HypothesisTest.cpp:269
-#, fuzzy, kde-format
-#| msgid "The data show clustering (too few runs)"
+#, kde-format
 msgid "The process shows clustering (too few runs)"
-msgstr "მონაცემები აჩვენებს შეკვრებს (მეტისმეტად ცოტა გავლა)"
+msgstr "პროცესი აჩვენებს შეკვრებს (მეტისმეტად ცოტა გავლა)"
 
 #: src/backend/statistics/HypothesisTest.cpp:270
-#, fuzzy, kde-format
-#| msgid "The data show excessive alternation (too many runs)"
+#, kde-format
 msgid "The process shows oscillation (too many runs)"
-msgstr "მონაცემები აჩვენებს ზედმეტ ინფორმაციას (მეტისმეტად ბევრი გავლა)"
+msgstr "პროცესი არჩვენებს მეტისმეტად ბევრ ცვლილებას (მეტისმეტად ბევრი გავლა)"
 
 #: src/backend/statistics/HypothesisTest.cpp:332
 #, kde-format
@@ -7800,7 +7797,7 @@ msgstr "ვოლდ-ვოლფოვიცი უშვებს შემო
 #: src/backend/statistics/HypothesisTest.cpp:362
 #, kde-format
 msgid "Ramirez-Runger Runs Test"
-msgstr ""
+msgstr "რამირეს-რუნგერი უშვებს ტესტს"
 
 #: src/backend/statistics/HypothesisTest.cpp:537
 #, kde-format
@@ -8129,13 +8126,12 @@ msgstr "გავლების რაოდენობა"
 #: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "Expected Runs"
-msgstr ""
+msgstr "მოსალოდნელი გაშვებები"
 
 #: src/backend/statistics/HypothesisTest.cpp:650
-#, fuzzy, kde-format
-#| msgid "Sample Size"
+#, kde-format
 msgid "Effective Sample Size"
-msgstr "სემპლის ზომა"
+msgstr "ეფექტური ნიმუშის ზომა"
 
 #: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
@@ -8402,16 +8398,13 @@ msgstr ""
 "ჰიპოთეზა უარყოფილი იქნება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering (too few runs). "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). Reject the null hypothesis."
 msgstr ""
-"მნიშვნელობის დონეზე %1 მონაცემები აჩვენებს ნაკრებებს (მეტისმეტად ცოტა "
-"გავლა). ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"მნიშვნელობის დონეზე %1 მონაცემები აჩვენებს ნაკრებებს, ან ტენდენციას "
+"(მეტისმეტად ცოტა გავლა). ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1783
 #, kde-format
@@ -8432,52 +8425,40 @@ msgstr ""
 "ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1820
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data are not randomly distributed. "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process is not in control. Reject the null "
 "hypothesis."
 msgstr ""
-"მნიშვნელობის დონეზე %1 მონაცემები შემთხვევით განაწილებული არაა. ნულოვანი "
-"ჰიპოთეზა უარყოფილი იქნება."
+"მნიშვნელობის დონეზე %1 პროცესი არ იმართება. ნულოვანი ჰიპოთეზა უარყოფილი "
+"იქნება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1822
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering (too few runs). "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering (too few runs). "
 "Reject the null hypothesis."
 msgstr ""
-"მნიშვნელობის დონეზე %1 მონაცემები აჩვენებს ნაკრებებს (მეტისმეტად ცოტა "
-"გავლა). ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"მნიშვნელობის დონეზე %1 პროცესი აჩვენებს ნაკრებებს (მეტისმეტად ცოტა გავლა). "
+"ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1825
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show excessive alternation (too "
-#| "many runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation (too many runs). "
 "Reject the null hypothesis."
 msgstr ""
-"მნიშვნელობის დონეზე %1 მონაცემები აჩვენებს მეტისმეტად ბევრ ცვლილებას "
+"მნიშვნელობის დონეზე %1 პროცესი აჩვენებს მეტისმეტად ბევრ ცვლილებას "
 "(მეტისმეტად ბევრი გავლა). ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1827
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data appear to be randomly distributed. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process appears to be in control. Fail to "
 "reject the null hypothesis."
 msgstr ""
-"მნიშვნელობის დონეზე %1 მონაცემები, როგორც ჩანს, შემთხვევითაა განაწილებული. "
-"ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება."
+"მნიშვნელობის დონეზე %1 პროცესი, როგორც ჩანს, იმართება. ნულოვანი ჰიპოთეზა "
+"უარყოფილი არ იქნება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1919
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -15383,16 +15364,7 @@ msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 ჰისტოგრამა: ნიმუში \"%2\" ჩატვირთულია"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:114
-#, fuzzy, kde-format
-#| msgid ""
-#| "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
-#| "known population mean</li><li><b>%2</b> - tests if two independent "
-#| "samples have the same mean</li><li><b>%3</b> - tests if the mean "
-#| "difference between two related samples is zero</li><li><b>%4</b> - tests "
-#| "if two independent samples with unequal variances have the same mean</"
-#| "li><li><b>%5</b> - tests if three or more independent samples have the "
-#| "same mean</li><li><b>%6</b> - tests if three or more related/repeated "
-#| "measurements have the same mean</li>"
+#, kde-format
 msgid ""
 "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
 "known population mean</li><li><b>%2</b> - tests if two independent samples "
@@ -15411,22 +15383,12 @@ msgstr ""
 "ამოწმებს ორ დამოუკიდებელ სინჯს, რომლებსაც არატოლი სხვაობა აქვთ, აქვთ თუ არა "
 "ტოლი საშუალო</li><li><b>%5</b> - ამოწმებს, აქვს თუ არა სამ ან მეტ "
 "დამოუკიდებელ სინჯს ტოლი საშუალო</li><li><b>%6</b> - ამოწმებს, აქვს თუ არა "
-"სამ ან მეტ დაკავშირებულ/გამეორებულ გაზომილ მნიშვნელობას ტოლი საშუალო</li>"
+"სამ ან მეტ დაკავშირებულ/გამეორებულ გაზომილ მნიშვნელობას ტოლი საშუალო</"
+"li><li><b>%7</b> - ამოწმებს სხვაობას მედიანებში ორ დამოუკიდებელ ჯგუფს შორის</"
+"li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests for randomness in a sequence of "
-#| "observations</li><li><b>%8</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%9</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests if the median difference between two related samples "
 "is zero</li><li><b>%2</b> - tests differences in medians among three or more "
@@ -15440,18 +15402,18 @@ msgid ""
 "each other</li><li><b>%9</b> - tests if observed data follows a specified "
 "theoretical distribution</li></ul>"
 msgstr ""
-"<li><b>%1</b> - ამოწმებს ორი დამოუკიდებელი ჯგუფის სხვაობას მედიანებში</"
-"li><li><b>%2</b> - ამოწმებს, არის თუ არა ორი დაკავშირებული სინჯის მედიანური "
-"სხვაობა ნულის ტოლი</li><li><b>%3</b> - ამოწმებს სხვაობას მედიანებში სამი ან "
-"მეტი დამოუკიდებელი ჯგუფისთვის</li><li><b>%4</b> - ამოწმებს სხვაობას "
-"მედიანებში სამი ან მეტი დამოკავშირებული/გამეორებული გაზომვისთვის</li><li><b>"
-"%5</b> - ამოწმებს სხვაობას გადარჩენის განაწილებებს შორის ორი ან მეტი "
-"ჯგუფისთვის</li><li><b>%6</b> - ამოწმებს არის თუ არა ორი კატეგორიული ცვლადი "
-"დამოუკიდებელი ერთმანეთისგან</li><li><b>%7</b> - ამოწმებს, მიჰყვება, თუ არა "
-"დაკვირვებული მონაცემები მითითებულ თეორიულ განაწილებას</li><li><b>%8</b> - "
-"ამოწმებს, არის თუ არა ორი კატეგორიული ცვლადი დამოუკიდებელი ერთმანეთისგან</"
-"li></ul><b>%9</b> - ამოწმებს, მიყვება თუ არა არსებული მონაცემები მითითებულ "
-"თეორიულ განაწილებას</li></ul>"
+"<li><b>%1</b> - ამოწმებს, არის თუ არა საშუალო სხვაობა ორ დაკავშირებულ ნიმუშს "
+"შორის ნულის ტოლი</li><li><b>%2</b> - ამოწმებს მედიანების განსხვავებებს სამ "
+"ან მეტ დამოუკიდებელ ჯგუფს შორის</li><li><b>%3</b> - ამოწმებს მედიანების "
+"განსხვავებებს სამ ან მეტ დაკავშირებულ/განმეორებით გაზომვას შორის</li><li><b>"
+"%4</b> - ამოწმებს გადარჩენადობის განაწილების განსხვავებებს ორ ან მეტ ჯგუფს "
+"შორის</li><li><b>%5</b> - ამოწმებს მონაცემთა ტენდენციას დროთა განმავლობაში</"
+"li><li><b>%6</b> - შემთხვევითობის ტესტები დაკვირვებების თანმიმდევრობით</"
+"li><li><b>%7</b> - ტესტები არაშემთხვევითი შაბლონებისთვის პროცესის კონტროლის "
+"მონაცემებში მედიანის ზემოთ/ქვემოთ გაშვების გამოყენებით</li><li><b>%8</b> - "
+"ტესტირები, თუ ორი კატეგორიული ცვლადი ერთმანეთისგან დამოუკიდებელია</li><li><b>"
+"%9</b> - ტესტები, თუ დაკვირვებული მონაცემები მიჰყვება მითითებულ თეორიულ "
+"განაწილებას</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:307
 #, kde-format
@@ -23733,10 +23695,9 @@ msgstr "Null:"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Alternate:"
+#, kde-format
 msgid "Alternative:"
-msgstr "ალტერნატული:"
+msgstr "ალტერნატივა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269

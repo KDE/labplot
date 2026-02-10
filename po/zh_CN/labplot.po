@@ -8030,10 +8030,9 @@ msgid "Expected Runs"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:650
-#, fuzzy, kde-format
-#| msgid "Sample size:"
+#, kde-format
 msgid "Effective Sample Size"
-msgstr "采样大小："
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
@@ -23162,10 +23161,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Interactive"
+#, kde-format
 msgid "Alternative:"
-msgstr "可交互"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269

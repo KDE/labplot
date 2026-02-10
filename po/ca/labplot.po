@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-09 00:39+0000\n"
-"PO-Revision-Date: 2026-02-08 11:05+0100\n"
+"PO-Revision-Date: 2026-02-09 12:51+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.12.2\n"
 
 #: src/backend/core/AbstractAspect.cpp:239
 #, kde-format
@@ -7783,25 +7783,22 @@ msgstr "Les dades mostren una alternança excessiva (massa execucions)"
 #: src/backend/statistics/HypothesisTest.cpp:267
 #, kde-format
 msgid "The process is in control (random pattern)"
-msgstr ""
+msgstr "El procés està controlat (patró aleatori)"
 
 #: src/backend/statistics/HypothesisTest.cpp:268
-#, fuzzy, kde-format
-#| msgid "Iterative process is out of control"
+#, kde-format
 msgid "The process is not in control"
-msgstr "El procés iteratiu està fora de control"
+msgstr "El procés està fora de control"
 
 #: src/backend/statistics/HypothesisTest.cpp:269
-#, fuzzy, kde-format
-#| msgid "The data show clustering (too few runs)"
+#, kde-format
 msgid "The process shows clustering (too few runs)"
-msgstr "Les dades mostren agrupació (massa poques execucions)"
+msgstr "El procés mostra agrupació (massa poques execucions)"
 
 #: src/backend/statistics/HypothesisTest.cpp:270
-#, fuzzy, kde-format
-#| msgid "The data show excessive alternation (too many runs)"
+#, kde-format
 msgid "The process shows oscillation (too many runs)"
-msgstr "Les dades mostren una alternança excessiva (massa execucions)"
+msgstr "El procés mostra oscil·lació (massa execucions)"
 
 #: src/backend/statistics/HypothesisTest.cpp:332
 #, kde-format
@@ -7881,7 +7878,7 @@ msgstr "Prova d'execucions de Wald-Wolfowitz"
 #: src/backend/statistics/HypothesisTest.cpp:362
 #, kde-format
 msgid "Ramirez-Runger Runs Test"
-msgstr ""
+msgstr "Prova d'execució Ramirez-Runger"
 
 #: src/backend/statistics/HypothesisTest.cpp:537
 #, kde-format
@@ -8210,13 +8207,12 @@ msgstr "Nombre d'execucions"
 #: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "Expected Runs"
-msgstr ""
+msgstr "Execucions esperades"
 
 #: src/backend/statistics/HypothesisTest.cpp:650
-#, fuzzy, kde-format
-#| msgid "Sample Size"
+#, kde-format
 msgid "Effective Sample Size"
-msgstr "Mida de la mostra"
+msgstr "Mida efectiva de la mostra"
 
 #: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
@@ -8485,16 +8481,13 @@ msgstr ""
 "aleatòriament. Es rebutja la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering (too few runs). "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). Reject the null hypothesis."
 msgstr ""
-"En el nivell de significació %1, les dades mostren agrupament (massa poques "
-"execucions). Es rebutja la hipòtesi nul·la."
+"En el nivell de significació %1, les dades mostren agrupament o tendència "
+"(massa poques execucions). Es rebutja la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1783
 #, kde-format
@@ -8515,52 +8508,40 @@ msgstr ""
 "aleatòriament. No s'ha pogut rebutjar la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1820
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data are not randomly distributed. "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process is not in control. Reject the null "
 "hypothesis."
 msgstr ""
-"En el nivell de significació %1, les dades no estan distribuïdes "
-"aleatòriament. Es rebutja la hipòtesi nul·la."
+"En el nivell de significació %1, el procés no està controlat. Es rebutja la "
+"hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1822
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering (too few runs). "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering (too few runs). "
 "Reject the null hypothesis."
 msgstr ""
-"En el nivell de significació %1, les dades mostren agrupament (massa poques "
+"En el nivell de significació %1, el procés mostra agrupament (massa poques "
 "execucions). Es rebutja la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1825
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show excessive alternation (too "
-#| "many runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation (too many runs). "
 "Reject the null hypothesis."
 msgstr ""
-"Al nivell de significació %1, les dades mostren una alternança excessiva "
-"(massa execucions). Es rebutja la hipòtesi nul·la."
+"Al nivell de significació %1, el procés mostra una oscil·lació (massa "
+"execucions). Es rebutja la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1827
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data appear to be randomly distributed. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process appears to be in control. Fail to "
 "reject the null hypothesis."
 msgstr ""
-"Al nivell de significació %1, les dades semblen estar distribuïdes "
-"aleatòriament. No s'ha pogut rebutjar la hipòtesi nul·la."
+"Al nivell de significació %1, el procés sembla que està controlat. No s'ha "
+"pogut rebutjar la hipòtesi nul·la."
 
 #: src/backend/statistics/HypothesisTest.cpp:1919
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -15525,16 +15506,7 @@ msgid "%1 histograms: template \"%2\" loaded"
 msgstr "Histogrames %1: s'ha carregat la plantilla «%2»"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:114
-#, fuzzy, kde-format
-#| msgid ""
-#| "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
-#| "known population mean</li><li><b>%2</b> - tests if two independent "
-#| "samples have the same mean</li><li><b>%3</b> - tests if the mean "
-#| "difference between two related samples is zero</li><li><b>%4</b> - tests "
-#| "if two independent samples with unequal variances have the same mean</"
-#| "li><li><b>%5</b> - tests if three or more independent samples have the "
-#| "same mean</li><li><b>%6</b> - tests if three or more related/repeated "
-#| "measurements have the same mean</li>"
+#, kde-format
 msgid ""
 "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
 "known population mean</li><li><b>%2</b> - tests if two independent samples "
@@ -15553,22 +15525,12 @@ msgstr ""
 "li><li><b>%4</b>>: prova si dues mostres independents amb variances "
 "desiguals tenen la mateixa mitjana</li><li><b>%5</b>: prova si tres o més "
 "mostres independents tenen la mateixa mitjana</li><li><b>%6</b>: prova si "
-"tres o més mesures relacionades/repetides tenen la mateixa mitjana</li>"
+"tres o més mesures relacionades/repetides tenen la mateixa mitjana</li><b>"
+"%7</b>: prova les diferències a les medianes entre dos grups independents</"
+"li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests for randomness in a sequence of "
-#| "observations</li><li><b>%8</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%9</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests if the median difference between two related samples "
 "is zero</li><li><b>%2</b> - tests differences in medians among three or more "
@@ -15582,17 +15544,18 @@ msgid ""
 "each other</li><li><b>%9</b> - tests if observed data follows a specified "
 "theoretical distribution</li></ul>"
 msgstr ""
-"<li><b>%1</b> prova les diferències de les mitjanes entre dos grups "
-"independents</li><li><b>%2</b>: prova si la diferència de les mitjanes entre "
-"dues mostres relacionades és zero</li><li><b>%3</b>: prova la diferència de "
-"les mitjanes entre tres o més grups independents</li><li><b>%4</b>: prova la "
-"diferència de les mitjanes entre tres o més mesures relacionades/repetides</"
-"li><li><b>%5</b>: prova les diferències a les distribucions de supervivència "
-"entre dos o més grups</li><li><b>%6</b>:prova si hi ha una tendència a les "
-"dades en el temps</li><li><b>%7</b>: proves d'aleatorietat en una seqüència "
-"d'observacions</li><li><b>%8</b>: prova si dues variables categòriques són "
-"independents entre elles</li><li><b>%9</b>: prova si les dades observades "
-"segueixen una distribució teòrica específica</li></ul>"
+"<li><b>%1</b>: prova si la diferència de les mitjanes entre dues mostres "
+"relacionades és zero</li><li><b>%2</b>: prova la diferència de les mitjanes "
+"entre tres o més grups independents</li><li><b>%3</b>: prova la diferència "
+"de les mitjanes entre tres o més mesures relacionades/repetides</li><li><b>"
+"%4</b>: prova les diferències a les distribucions de supervivència entre dos "
+"o més grups</li><li><b>%5</b>: prova si hi ha una tendència a les dades en "
+"el temps</li><li><b>%6</b>: prova l'aleatorietat en una seqüència "
+"d'observacions</li><li><b>%7</b>: prova si hi ha patrons no aleatoris a les "
+"dades de control de processos utilitzant execucions sobre/sota la mitjana</"
+"li><li><b>%8</b>: prova si dues variables categòriques són independents "
+"entre elles</li><li><b>%9</b>: prova si les dades observades segueixen una "
+"distribució teòrica específica</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:307
 #, kde-format
@@ -23929,8 +23892,7 @@ msgstr "Nul:"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Alternate:"
+#, kde-format
 msgid "Alternative:"
 msgstr "Alternativa:"
 
