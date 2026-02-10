@@ -699,7 +699,7 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 		// adjust the result spreadsheet
 		const auto columnCount = 2 + mstlPeriods.size(); // trend, residual + seasonal components
 		if (resultSpreadsheet->columnCount() != (int)columnCount) {
-			resultSpreadsheet->setColumnCount(2 + mstlPeriods.size());
+			resultSpreadsheet->setColumnCount(2 + (int)mstlPeriods.size());
 			columnsSeasonal.clear();
 			for (int i = 1; i < resultSpreadsheet->columnCount() - 1; i++) {
 				auto* column = resultSpreadsheet->column(i);
