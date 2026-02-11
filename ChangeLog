@@ -34,6 +34,7 @@ Performance improvements:
 		* Improved drawing performance (!731)
 		* Improved the performance of importing JSON files with a large number of elements
 		* Faster save/load of text columns
+		* Faster cutting of cells in the spreadsheet (BUG 513574)
 
 Bug fixes:
 	* Fix displayed locale of constants
