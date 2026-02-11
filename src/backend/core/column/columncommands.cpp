@@ -633,41 +633,29 @@ ColumnClearCmd::~ColumnClearCmd() {
  * \brief Execute the command
  */
 void ColumnClearCmd::redo() {
+	// TODO: replace this logic with m_col->deleteData() so we can avoid these allocations below
 	if (!m_empty_data) {
 		const int rowCount = m_col->rowCount();
 		switch (m_col->columnMode()) {
 		case AbstractColumn::ColumnMode::Double: {
-			auto* vec = new QVector<double>(rowCount);
-			m_empty_data = vec;
-			for (int i = 0; i < rowCount; ++i)
-				vec->operator[](i) = NAN;
+			m_empty_data = new QVector<double>(rowCount, NAN);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			auto* vec = new QVector<int>(rowCount);
-			m_empty_data = vec;
-			for (int i = 0; i < rowCount; ++i)
-				vec->operator[](i) = 0;
+			m_empty_data = new QVector<int>(rowCount, 0);
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			auto* vec = new QVector<qint64>(rowCount);
-			m_empty_data = vec;
-			for (int i = 0; i < rowCount; ++i)
-				vec->operator[](i) = 0;
+			m_empty_data = new QVector<qint64>(rowCount, 0);
 			break;
 		}
 		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
-			m_empty_data = new QVector<QDateTime>();
-			for (int i = 0; i < rowCount; ++i)
-				static_cast<QVector<QDateTime>*>(m_empty_data)->append(QDateTime());
+			m_empty_data = new QVector<QDateTime>(rowCount);
 			break;
 		case AbstractColumn::ColumnMode::Text:
-			m_empty_data = new QVector<QString>();
-			for (int i = 0; i < rowCount; ++i)
-				static_cast<QVector<QString>*>(m_empty_data)->append(QString());
+			m_empty_data = new QVector<QString>(rowCount);
 			break;
 		}
 		m_data = m_col->data();

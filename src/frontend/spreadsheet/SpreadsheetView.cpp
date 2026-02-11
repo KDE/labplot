@@ -1682,10 +1682,8 @@ void SpreadsheetView::cutSelection() {
 		return;
 
 	WAIT_CURSOR_AUTO_RESET;
-	m_spreadsheet->beginMacro(i18n("%1: cut selected cells", m_spreadsheet->name()));
 	copySelection();
 	clearSelectedCells();
-	m_spreadsheet->endMacro();
 }
 
 void SpreadsheetView::copySelection() {
@@ -1725,9 +1723,10 @@ void SpreadsheetView::copySelection() {
 				// 				if (formulaModeActive())
 				// 					output_str += col_ptr->formula(first_row + r);
 				// 				else
-				if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Double)
+				const auto mode = col_ptr->columnMode();
+				if (mode == AbstractColumn::ColumnMode::Double)
 					output_str += numberLocale.toString(col_ptr->valueAt(first_row + r), formats.at(c), 16); // copy with max. precision
-				else if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Integer || col_ptr->columnMode() == AbstractColumn::ColumnMode::BigInt)
+				else if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
 					output_str += numberLocale.toString(col_ptr->valueAt(first_row + r));
 				else
 					output_str += col_ptr->asStringColumn()->textAt(first_row + r);
@@ -1741,6 +1740,7 @@ void SpreadsheetView::copySelection() {
 
 	QApplication::clipboard()->setText(output_str);
 }
+
 /*
 bool determineLocale(const QString& value, QLocale& locale) {
 	int pointIndex = value.indexOf(QLatin1Char('.'));
@@ -3424,13 +3424,15 @@ void SpreadsheetView::removeSelectedRows() {
 }
 
 void SpreadsheetView::clearSelectedCells() {
+	PERFTRACE(QStringLiteral("clear selected cells"));
+
 	// don't try to clear values if the selected cells don't have any values at all
 	bool empty = true;
 
-	const auto& columns = m_spreadsheet->children<Column>();
+	const auto& allColumns = m_spreadsheet->children<Column>();
 	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
 	for (const auto& index : indexes) {
-		if (columns.at(index.column())->isValid(index.row())) {
+		if (allColumns.at(index.column())->isValid(index.row())) {
 			empty = false;
 			break;
 		}
@@ -3439,7 +3441,25 @@ void SpreadsheetView::clearSelectedCells() {
 	if (empty)
 		return;
 
+	// determine the columns with selection
+	const int first_col = firstSelectedColumn();
+	if (first_col == -1)
+		return;
+	const int last_col = lastSelectedColumn();
+	if (last_col == -2)
+		return;
+	const int cols = last_col - first_col + 1;
+
+	if (cols == 0)
+		return;
+
+	QVector<Column*> columns;
+	for (int c = 0; c < cols; c++)
+		columns << m_spreadsheet->column(first_col + c);
+
+	// delete values, iterate column by column to potentially benefit from the direct column->clear() below.
 	WAIT_CURSOR_AUTO_RESET;
+
 	m_spreadsheet->beginMacro(i18n("%1: clear selected cells", m_spreadsheet->name()));
 	for (auto* column : columns) {
 		column->setSuppressDataChangedSignal(true);
@@ -3449,13 +3469,15 @@ void SpreadsheetView::clearSelectedCells() {
 		// 				if (isCellSelected(row, col))
 		// 					column->setFormula(row, QString());
 		// 		} else {
-		int childIndex = m_spreadsheet->indexOfChild<Column>(column);
-		if (isColumnSelected(childIndex, true)) {
+		const int colIndex = m_spreadsheet->indexOfChild<Column>(column);
+		if (isColumnSelected(colIndex, true)) {
 			// if the whole column is selected, clear directly instead of looping over the rows
 			column->clear();
 		} else {
-			for (const auto& index : indexes)
-				columns.at(index.column())->asStringColumn()->setTextAt(index.row(), QString());
+			for (const auto& index : indexes) {
+				if (index.column() == colIndex)
+					columns.at(colIndex)->asStringColumn()->setTextAt(index.row(), QString());
+			}
 		}
 
 		column->setSuppressDataChangedSignal(false);
