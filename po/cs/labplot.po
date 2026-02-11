@@ -17933,10 +17933,9 @@ msgid "User Feedback"
 msgstr "Zpětná vazba uživatele"
 
 #: src/frontend/SettingsDialog.cpp:100
-#, fuzzy, kde-format
-#| msgid "Text Editor"
+#, kde-format
 msgid "Script Editor"
-msgstr "Textový editor"
+msgstr "Editor skriptů"
 
 #: src/frontend/SettingsDialog.cpp:163
 #, kde-format
@@ -23218,10 +23217,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Alternate:"
+#, kde-format
 msgid "Alternative:"
-msgstr "Alternativní:"
+msgstr "Alternativa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
