@@ -792,6 +792,9 @@ void ColumnTest::saveLoadDateTime() {
 	QCOMPARE(found, true);
 	QCOMPARE(c2.load(&reader, false), true);
 
+	// wait until all columns are decoded from base64-encoded data
+	QThreadPool::globalInstance()->waitForDone();
+
 	QCOMPARE(c2.rowCount(), 4);
 	QCOMPARE(c2.dateTimeAt(0).isValid(), true);
 	QCOMPARE(c2.dateTimeAt(0), QDateTime::fromString(QStringLiteral("2017-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs));
