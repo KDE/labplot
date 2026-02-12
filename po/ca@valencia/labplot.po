@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-09 00:39+0000\n"
+"POT-Creation-Date: 2026-02-12 00:39+0000\n"
 "PO-Revision-Date: 2026-02-09 12:51+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -627,18 +627,18 @@ msgstr "%1: canvia els valors de les cel·les"
 msgid "%1: set plot designation"
 msgstr "%1: establix la designació del diagrama"
 
-#: src/backend/core/column/columncommands.cpp:705
+#: src/backend/core/column/columncommands.cpp:693
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr "%1: establix una fórmula"
 
-#: src/backend/core/column/columncommands.cpp:773
+#: src/backend/core/column/columncommands.cpp:761
 #, kde-format
 msgid "%1: set cell formula"
 msgstr "%1: establix la fórmula de la cel·la"
 
-#: src/backend/core/column/columncommands.cpp:815
+#: src/backend/core/column/columncommands.cpp:803
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr "%1: neteja totes les fórmules"
@@ -6270,14 +6270,14 @@ msgid "unexpected end of document"
 msgstr "final inesperat del document"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3784
 #, kde-format
 msgid "FITS image"
 msgstr "Imatge FITS"
 
 # Nota: https://en.wikipedia.org/wiki/FITS
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3784
 #, kde-format
 msgid "FITS table"
 msgstr "Taula FITS"
@@ -12618,16 +12618,16 @@ msgid "Curve"
 msgstr "Corba"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4005
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4060
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4027
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to export"
 msgstr "Ha fallat mentre s'exportava"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4005
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4060
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4027
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -20240,11 +20240,6 @@ msgstr "Oculta els minidiagrames"
 msgid "Unfreeze Column"
 msgstr "Mobilitza la columna"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1685
-#, kde-format
-msgid "%1: cut selected cells"
-msgstr "%1: retalla les cel·les seleccionades"
-
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1998
 #, kde-format
 msgid "Not enough memory to finalize this operation."
@@ -20459,105 +20454,105 @@ msgstr "Introduïu el nombre de files que s'han d'inserir"
 msgid "%1: remove selected rows"
 msgstr "%1: elimina les files seleccionades"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3443
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3463
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: neteja les cel·les seleccionades"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3697
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3719
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr "Triat 1: %1 files, %2 columnes"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3706
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3728
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr "Triat: %1 cel·les"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3725
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3747
 #, kde-format
 msgid "row"
 msgid_plural "rows"
 msgstr[0] "fila"
 msgstr[1] "files"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3726
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3748
 #, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "columna"
 msgstr[1] "columnes"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3727
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3749
 #, kde-format
 msgid "cells"
 msgstr "cel·les"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3728
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3750
 #, kde-format
 msgid "masked value"
 msgstr "valor emmascarat"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3728
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3750
 #, kde-format
 msgid "masked values"
 msgstr "valors emmascarats"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3729
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3751
 #, kde-format
 msgid "missing value"
 msgstr "valor que falta"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3729
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3751
 #, kde-format
 msgid "missing values"
 msgstr "valors que falten"
 
 # skip-rule: t-sp_co
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3730
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3752
 #, kde-format
 msgid " , "
 msgstr " , "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3730
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3731
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3752
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3753
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3731
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3753
 #, kde-format
 msgid ", "
 msgstr ", "
 
 # skip-rule: t-sp_co
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3735
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3757
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr "Triat: %1 %2, %3 %4%5 %6 %7 %8"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3745
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Triat: %1 %2%3 %4 %5 %6"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3824
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3846
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Imprimix el full de càlcul"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4439
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4461
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "No s'ha pogut crear la base de dades SQLite %1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4471
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4493
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Ha fallat mentre es creava la taula a la base de dades SQLite %1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4526
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4548
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Ha fallat mentre s'inserien valors a la taula."
@@ -27496,3 +27491,6 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
+
+#~ msgid "%1: cut selected cells"
+#~ msgstr "%1: retalla les cel·les seleccionades"

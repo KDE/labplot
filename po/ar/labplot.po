@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-09 00:39+0000\n"
+"POT-Creation-Date: 2026-02-12 00:39+0000\n"
 "PO-Revision-Date: 2026-02-05 11:04+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -626,18 +626,18 @@ msgstr "‏%1: غيّر قيم الخلايا"
 msgid "%1: set plot designation"
 msgstr "‏%1: اضبط تعيين الرسم"
 
-#: src/backend/core/column/columncommands.cpp:705
+#: src/backend/core/column/columncommands.cpp:693
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr "‏%1: اضبط صيغة"
 
-#: src/backend/core/column/columncommands.cpp:773
+#: src/backend/core/column/columncommands.cpp:761
 #, kde-format
 msgid "%1: set cell formula"
 msgstr "‏%1: اضبط صيغة الخلية"
 
-#: src/backend/core/column/columncommands.cpp:815
+#: src/backend/core/column/columncommands.cpp:803
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr "‏%1: امسح كل الصيغ"
@@ -6179,13 +6179,13 @@ msgid "unexpected end of document"
 msgstr "نهاية غير متوقعة للوثيقة"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3784
 #, kde-format
 msgid "FITS image"
 msgstr "صورة FITS"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3784
 #, kde-format
 msgid "FITS table"
 msgstr "جدول FITS"
@@ -12567,16 +12567,16 @@ msgid "Curve"
 msgstr "منحنى"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4005
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4060
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4027
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to export"
 msgstr "فشل تصدير"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4005
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4060
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4027
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -20046,11 +20046,6 @@ msgstr "أخفِ الرسوم البيانية المصغرة"
 msgid "Unfreeze Column"
 msgstr "أزِل تجميد العمود"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1685
-#, kde-format
-msgid "%1: cut selected cells"
-msgstr "%1: اقْطَع الخلايا المحددة"
-
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1998
 #, kde-format
 msgid "Not enough memory to finalize this operation."
@@ -20271,22 +20266,22 @@ msgstr "أدخِل عدد الصفوف المراد إدراجها"
 msgid "%1: remove selected rows"
 msgstr "%1: أزِل الصفوف المحددة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3443
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3463
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: أزِل الخلايا المحددة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3697
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3719
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr "اختير ١: %1 صف، %2 عمود"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3706
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3728
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr "اختير: %1 خلية"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3725
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3747
 #, kde-format
 msgid "row"
 msgid_plural "rows"
@@ -20297,7 +20292,7 @@ msgstr[3] "صفاً"
 msgstr[4] "صف"
 msgstr[5] "صف"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3726
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3748
 #, kde-format
 msgid "column"
 msgid_plural "columns"
@@ -20308,74 +20303,74 @@ msgstr[3] "عموداً"
 msgstr[4] "عمود"
 msgstr[5] "عمود"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3727
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3749
 #, kde-format
 msgid "cells"
 msgstr "خلايا"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3728
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3750
 #, kde-format
 msgid "masked value"
 msgstr "قيمة مخفية"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3728
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3750
 #, kde-format
 msgid "masked values"
 msgstr "قيم مخفية"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3729
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3751
 #, kde-format
 msgid "missing value"
 msgstr "قيمة مفقودة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3729
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3751
 #, kde-format
 msgid "missing values"
 msgstr "قيم مفقودة"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3730
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3752
 #, kde-format
 msgid " , "
 msgstr " ، "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3730
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3731
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3752
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3753
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3731
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3753
 #, kde-format
 msgid ", "
 msgstr "، "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3735
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3757
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr "اختير: %1 %2، %3 %4%5 %6 %7 %8"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3745
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "اختير: %1 %2%3 %4 %5 %6"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3824
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3846
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "اطبع جدول البيانات"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4439
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4461
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "لا أقدر على إنشاء قاعدة بيانات SQLite ‏%1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4471
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4493
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "فشل إنشاء الجدول في قاعدة بيانات SQLite ‏%1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4526
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4548
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "فشل إدراج القيم في الجدول."
@@ -27280,6 +27275,9 @@ msgstr "فشلت عملية convert، رمز الخروج ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "غير قادر على حذف الملف:"
+
+#~ msgid "%1: cut selected cells"
+#~ msgstr "%1: اقْطَع الخلايا المحددة"
 
 #~ msgid "No negative monotonic trend exists"
 #~ msgstr "لا يوجد اتجاه سلبي أحادي"

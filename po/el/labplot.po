@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-09 00:39+0000\n"
+"POT-Creation-Date: 2026-02-12 00:39+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -654,18 +654,18 @@ msgstr "%1: αλλαγή τιμών σε κελιά"
 msgid "%1: set plot designation"
 msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
 
-#: src/backend/core/column/columncommands.cpp:705
+#: src/backend/core/column/columncommands.cpp:693
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr "%1: ορισμός τύπου"
 
-#: src/backend/core/column/columncommands.cpp:773
+#: src/backend/core/column/columncommands.cpp:761
 #, kde-format
 msgid "%1: set cell formula"
 msgstr "%1: ορισμός τύπου σε κελί"
 
-#: src/backend/core/column/columncommands.cpp:815
+#: src/backend/core/column/columncommands.cpp:803
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr "%1: καθαρισμός όλων των τύπων"
@@ -6294,13 +6294,13 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3784
 #, kde-format
 msgid "FITS image"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3784
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -12931,8 +12931,8 @@ msgid "Curve"
 msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4005
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4060
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4027
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/frontend/worksheet/WorksheetView.cpp:2175
 #, fuzzy, kde-format
 #| msgid "Error when opening the project"
@@ -12940,8 +12940,8 @@ msgid "Failed to export"
 msgstr "Σφάλμα κατά το άνοιγμα του έργου"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4005
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4060
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4027
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/frontend/worksheet/WorksheetView.cpp:2175
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -20576,11 +20576,6 @@ msgstr "Επιλογές:"
 msgid "Unfreeze Column"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1685
-#, kde-format
-msgid "%1: cut selected cells"
-msgstr ""
-
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1998
 #, kde-format
 msgid "Not enough memory to finalize this operation."
@@ -20808,23 +20803,23 @@ msgstr "Ορίζει το όνομα του αρχείου προς εισαγω
 msgid "%1: remove selected rows"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3443
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3463
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3697
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3719
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3706
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3728
 #, fuzzy, kde-format
 #| msgid "Source name"
 msgid "Selected: %1 cells"
 msgstr "Όνομα πηγής"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3725
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3747
 #, fuzzy, kde-format
 #| msgid "Arrow:"
 msgid "row"
@@ -20832,7 +20827,7 @@ msgid_plural "rows"
 msgstr[0] "Βέλος:"
 msgstr[1] "Βέλος:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3726
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3748
 #, fuzzy, kde-format
 #| msgid "Start column:"
 msgid "column"
@@ -20840,84 +20835,84 @@ msgid_plural "columns"
 msgstr[0] "Στήλη έναρξης:"
 msgstr[1] "Στήλη έναρξης:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3727
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3749
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3728
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3750
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "masked value"
 msgstr "%1 τιμή"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3728
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3750
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "masked values"
 msgstr "%1 τιμή"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3729
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3751
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "missing value"
 msgstr "%1 τιμή"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3729
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3751
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "missing values"
 msgstr "%1 τιμή"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3730
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3752
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3730
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3731
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3752
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3753
 #, fuzzy, kde-format
 #| msgid "10"
 msgid "%1"
 msgstr "10"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3731
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3753
 #, kde-format
 msgid ", "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3735
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3757
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3745
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3824
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3846
 #, fuzzy, kde-format
 #| msgid "&Spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Λογι&στικό φύλλο"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4439
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4461
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4471
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4493
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4526
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4548
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr ""
