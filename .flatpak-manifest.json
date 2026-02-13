@@ -34,7 +34,9 @@
         "/mkspecs",
         "/share/aclocal",
         "/share/info",
-        "/share/man"
+        "/share/doc",
+        "/share/man",
+        "/share/qlogging-categories6"
     ],
     "cleanup-commands": [
         "/app/cleanup-BaseApp.sh"
@@ -154,6 +156,7 @@
                 "-DHDF5_BUILD_TOOLS=OFF"
 	    ],
             "cleanup": [
+                "/cmake",
                 "/share/hdf5_examples"
             ],
             "sources": [
