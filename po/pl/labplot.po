@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-12 00:39+0000\n"
+"POT-Creation-Date: 2026-02-13 00:39+0000\n"
 "PO-Revision-Date: 2025-02-09 08:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -599,14 +599,14 @@ msgstr "Używany w"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Zapisz obliczenia:"
 
-#: src/backend/core/column/Column.cpp:1717
+#: src/backend/core/column/Column.cpp:1732
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "brak lub nieprawidłowy indeks wiersza"
 
-#: src/backend/core/column/Column.cpp:1726
-#: src/backend/core/column/Column.cpp:1735
-#: src/backend/core/column/Column.cpp:1744
+#: src/backend/core/column/Column.cpp:1741
+#: src/backend/core/column/Column.cpp:1750
+#: src/backend/core/column/Column.cpp:1759
 #, kde-format
 msgid "invalid row value"
 msgstr "nieprawidłowa wartość wiersza"

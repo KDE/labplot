@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-12 00:39+0000\n"
+"POT-Creation-Date: 2026-02-13 00:39+0000\n"
 "PO-Revision-Date: 2026-02-09 08:12+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -602,14 +602,14 @@ msgstr "Використано в осях:"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Використано в обчисленнях в електронній таблиці:"
 
-#: src/backend/core/column/Column.cpp:1717
+#: src/backend/core/column/Column.cpp:1732
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "номер рядка є некоректним або номер рядка пропущено"
 
-#: src/backend/core/column/Column.cpp:1726
-#: src/backend/core/column/Column.cpp:1735
-#: src/backend/core/column/Column.cpp:1744
+#: src/backend/core/column/Column.cpp:1741
+#: src/backend/core/column/Column.cpp:1750
+#: src/backend/core/column/Column.cpp:1759
 #, kde-format
 msgid "invalid row value"
 msgstr "некоректне значення рядка"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-12 00:39+0000\n"
+"POT-Creation-Date: 2026-02-13 00:39+0000\n"
 "PO-Revision-Date: 2026-02-09 12:51+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -603,14 +603,14 @@ msgstr "Usat als eixos:"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Usat als càlculs del full de càlcul:"
 
-#: src/backend/core/column/Column.cpp:1717
+#: src/backend/core/column/Column.cpp:1732
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "manca l'índex de la fila, o no és vàlid"
 
-#: src/backend/core/column/Column.cpp:1726
-#: src/backend/core/column/Column.cpp:1735
-#: src/backend/core/column/Column.cpp:1744
+#: src/backend/core/column/Column.cpp:1741
+#: src/backend/core/column/Column.cpp:1750
+#: src/backend/core/column/Column.cpp:1759
 #, kde-format
 msgid "invalid row value"
 msgstr "valor de la fila no vàlid"
