@@ -246,7 +246,7 @@
             "config-opts": [
                 "-DADS_VERSION=4.0.3",
                 "-DQT_VERSION_MAJOR=6",
-                "-DCMAKE_CXX_FLAGS=-I/usr/include/QtGui/6.10.1/QtGui"
+                "-DCMAKE_CXX_FLAGS=-I/usr/include/QtGui/6.10.2/QtGui"
             ],
             "sources": [
                 {
