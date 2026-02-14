@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-01-30 15:32+0300\n"
-"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
-"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"PO-Revision-Date: 2026-02-09 19:58+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 25.07.70\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -10863,7 +10863,21 @@ msgid "Custom column data types, comma separated"
 msgstr "Özel sütun veri türleri, virgülle ayrılmış"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If not empty, the number of columns must match the number of column names "
+#| "if provided and it must match the number of columns in the imported file."
+#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
+#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
+#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
+#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
+#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
+#| "td><td>Datetime with the format from the datetime text box if not empty, "
+#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>Number of "
+#| "seconds since January 1, 1970 (UTC), converted to DateTime.</td></"
+#| "tr><tr><td>%6</td><td>Number of 100-nanosecond intervals since January 1, "
+#| "1601 (UTC), converted to DateTime.</td></tr><tr><td>%7</td><td>A text.</"
+#| "td></tr></table>"
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -10882,9 +10896,12 @@ msgstr ""
 "2.147.483.647).</td></tr><tr><td>%2</td><td>64 bit boyutlu tamsayı "
 "(−9.223.372.036.854.775.808 ‥ 9.223.372.036.854.775.807).</td></tr><tr><td>"
 "%3</td><td>64 bit boyutlu kayan noktalı sayı. 16 basamak çözünürlüklü.</td></"
-"tr><tr><td>%4</td><td>Boş değilse tarih–zaman kutusundaki biçimli tarih–"
-"zaman, aksi takdirde kendiliğinden algılanır.</td></tr><tr><td>%5</"
-"td><td>Bir metin.</td></tr></table>"
+"tr><tr><td>%4</td><td>Boş değilse tarih–zaman kutusundaki tarih biçimi; aksi "
+"takdirde kendiliğinden belirlenir.</td></tr><tr><td>%5</td><td>1 Ocak 1970 "
+"(UTC)’den bu yana geçen saniyelerin tarih–zamana dönüştürülmüş hali.</td></"
+"tr><tr><td>%6</td><td>1 Ocak 1601 (UTC)’den bu yana geçmiş 100 saniyelik "
+"nano saniyelik aralıkların tarih–zamana dönüştürülmüş hali.</td></tr><tr><td>"
+"%7</td><td>Bir metin.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
@@ -10961,22 +10978,22 @@ msgstr "SQL Veri Tabanı Bağlantıları [Değiştirilmiş]"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:48
 #, kde-format
 msgid "Add new database connection"
-msgstr "Yeni veritabanı bağlantısı ekle"
+msgstr "Yeni veri tabanı bağlantısı ekle"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:49
 #, kde-format
 msgid "Delete selected database connection"
-msgstr "Seçilen veritabanı bağlantısını sil"
+msgstr "Seçilen veri tabanı bağlantısını sil"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:50
 #, kde-format
 msgid "Open database file"
-msgstr "Veritabanı dosyasını aç"
+msgstr "Veri tabanı dosyasını aç"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:51
 #, kde-format
 msgid "Test selected database connection"
-msgstr "Seçili veritabanı bağlantısını sına"
+msgstr "Seçili veri tabanı bağlantısını sına"
 
 #. i18n: ectx: property (text), widget (QLabel, lDatabase)
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:158
@@ -10984,7 +11001,7 @@ msgstr "Seçili veritabanı bağlantısını sına"
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:110
 #, kde-format
 msgid "Database:"
-msgstr "Veritabanı:"
+msgstr "Veri tabanı:"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:170
 #, kde-format
@@ -11021,7 +11038,7 @@ msgstr "Bağlantı Başarısız"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:526
 #, kde-format
 msgid "Failed to connect to the database '%1'."
-msgstr "“%1” veritabanına bağlanırken hata oluştu."
+msgstr "“%1” veri tabanına bağlanırken hata oluştu."
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:522
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:643
@@ -11032,7 +11049,7 @@ msgstr "Bağlantı Başarılı"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:522
 #, kde-format
 msgid "Connection to the database '%1' was successful."
-msgstr "“%1” veritabanına bağlantı başarılı."
+msgstr "“%1” veri tabanına bağlantı başarılı."
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:549
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:572
@@ -12108,7 +12125,7 @@ msgid ""
 "Select a valid database object (table or query result set) that has to be "
 "imported."
 msgstr ""
-"İçe aktarılacak geçerli bir veritabanı nesnesi (tablo veya sorgu sonuç "
+"İçe aktarılacak geçerli bir veri tabanı nesnesi (tablo veya sorgu sonuç "
 "kümesi) seçin."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:42
@@ -12131,14 +12148,14 @@ msgstr "Bağlantıları yönet"
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
-"%1 veritabanı dosyası bulunamadı. Lütfen bağlantı ayarlarını denetleyin."
+"%1 veri tabanı dosyası bulunamadı. Lütfen bağlantı ayarlarını denetleyin."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:272
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
-"“%1” veritabanına bağlantı başarısız. Lütfen bağlantı ayarlarını denetleyin."
+"“%1” veri tabanına bağlantı başarısız. Lütfen bağlantı ayarlarını denetleyin."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:330
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:332
@@ -12654,9 +12671,10 @@ msgid "No labels"
 msgstr "Etiketsiz"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:310
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Position Values"
 msgid "Position values"
-msgstr "Konum değerleri"
+msgstr "Konum Değerleri"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:315
 #, kde-format
@@ -15145,7 +15163,7 @@ msgstr "kaggle.com’dan Veri İçe Aktar"
 #: src/frontend/MainWin.cpp:706
 #, kde-format
 msgid "Import data from a SQL database"
-msgstr "Bir SQL veritabanından veri içe aktar"
+msgstr "Bir SQL veri tabanından veri içe aktar"
 
 #: src/frontend/MainWin.cpp:710
 #, kde-format
@@ -16989,7 +17007,7 @@ msgid ""
 "SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *."
 "sqlite3 *.sdb3)"
 msgstr ""
-"SQLite veritabanı dosyaları (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *."
+"SQLite veri tabanı dosyaları (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *."
 "db3 *.sqlite3 *.sdb3)"
 
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:43
@@ -17711,9 +17729,10 @@ msgid "Column Statistics..."
 msgstr "Sütun İstatistikleri…"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:336
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Columns Statistics Spreadsheet"
 msgid "Column Statistics Spreadsheet"
-msgstr "Sütun İstatistikleri Sayfası"
+msgstr "Sütunlar İstatistikleri Sayfası"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:340
 #, kde-format
@@ -18287,12 +18306,12 @@ msgstr "Hesap Tablosunu Yazdır"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4450
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
-msgstr "%1 SQLite veritabanı oluşturulamadı.."
+msgstr "%1 SQLite veri tabanı oluşturulamadı.."
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4482
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
-msgstr "%1 SQLite veritabanında tablo oluşturulamadı.."
+msgstr "%1 SQLite veri tabanında tablo oluşturulamadı.."
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4537
 #, kde-format
@@ -19753,7 +19772,7 @@ msgstr "LWT:"
 #: src/frontend/ui/datasources/importfilewidget.ui:161
 #, kde-format
 msgid "DBC Database"
-msgstr "DBC veritabanı"
+msgstr "DBC veri tabanı"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
 #: src/frontend/ui/datasources/importfilewidget.ui:181
@@ -23245,9 +23264,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:100
 #, fuzzy, kde-format
-#| msgid "Save in uncompressed format"
+#| msgid "Save in compressed format"
 msgid "Save in compatible format"
-msgstr "Sıkıştırılmamış biçimde kaydet"
+msgstr "Sıkıştırılmış biçimde kaydet"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
@@ -23714,15 +23733,17 @@ msgstr "Var Olan Çizim Alanı"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:196
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&New Plot Area in an Existing Worksheet"
 msgid "&New Plot Area in an existing Worksheet"
-msgstr "Var Olan Çalışma Sayfasındaki &Yeni Çizim Alanı"
+msgstr "Var Olan Çalışma Sayfasında &Yeni Çizim Alanı"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:203
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "New Plot Area in a New Worksheet"
 msgid "New Plot Area in a new Worksheet"
-msgstr "Yeni Çalışma Sayfasındaki Yeni Çizim Alanı"
+msgstr "Yeni Çalışma Sayfasında Yeni Çizim Alanı"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateDataCurve)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:226
@@ -25052,6 +25073,21 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
 
+#~ msgid "Used in Plots:"
+#~ msgstr "Kullanıldığı çizimler:"
+
+#~ msgid "Used in Axes:"
+#~ msgstr "Kullanıldığı eksenler:"
+
+#~ msgid "Used in Spreadsheet Calculations:"
+#~ msgstr "Kullanıldığı hesap tabloları:"
+
+#~ msgid "Timestamp (Unix)"
+#~ msgstr "Zaman Damgası (UNIX)"
+
+#~ msgid "Timestamp (Windows)"
+#~ msgstr "Zaman Damgası (Windows)"
+
 #~ msgid ""
 #~ "Invalid number of data columns. First row column count: %1. %2th row "
 #~ "column count >= %3. Check if the correct separator is used and the data "
@@ -25060,6 +25096,12 @@ msgstr "Dosya açılamadı:"
 #~ "Geçersiz veri sütunları sayısı. İlk satırdaki sütun sayısı: %1. %2. satır "
 #~ "≥ %3 sütun içeriyor. Doğru ayırıcının kullanıldığından ve verinin aynı "
 #~ "sayıda sütun içerdiğinden emin olun."
+
+#~ msgid "End Points"
+#~ msgstr "Bitiş Noktaları"
+
+#~ msgid "Linear Regression"
+#~ msgstr "Doğrusal Gerileme"
 
 #~ msgid "Python file (*.py)"
 #~ msgstr "Python dosyası (*.py)"
@@ -25091,6 +25133,12 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Type"
 #~ msgstr "Tür"
 
+#~ msgid "Columns: %1"
+#~ msgstr "Sütun: %1"
+
+#~ msgid "Rows: %1"
+#~ msgstr "Satır: %1"
+
 #~ msgid "One column is required."
 #~ msgid_plural "%1 columns are required."
 #~ msgstr[0] "1 sütun gerekiyor."
@@ -25105,6 +25153,42 @@ msgstr "Dosya açılamadı:"
 #~ msgctxt "@title:window"
 #~ msgid "Hypothesis Test"
 #~ msgstr "Hipotez Testi"
+
+#~ msgid "No monotonic trend exists"
+#~ msgstr "Var olan monotonik eğilim yok"
+
+#~ msgid "A monotonic trend exists"
+#~ msgstr "Bir monotonik eğilim var"
+
+#~ msgid "A negative monotonic trend exists"
+#~ msgstr "Bir negatif monotonik trend var"
+
+#~ msgid "A positive monotonic trend exists"
+#~ msgstr "Bir pozitif monotonik trend yok"
+
+#~ msgid "The data are randomly distributed"
+#~ msgstr "Veri rastgele biçimde dağıtılmamış"
+
+#~ msgid "The data are not randomly distributed"
+#~ msgstr "Veri rastgele biçimde dağıtılmamış"
+
+#~ msgid "The data show clustering (too few runs)"
+#~ msgstr "Veride kümelenme var (pek az sayıda çalıştırma)"
+
+#~ msgid "The data show excessive alternation (too many runs)"
+#~ msgstr "Veride aşırı değişim var (pek çok sayıda çalıştırma)"
+
+#~ msgid "The process is in control (random pattern)"
+#~ msgstr "Süreç kontrol altında (Rastgele örüntü)"
+
+#~ msgid "The process is not in control"
+#~ msgstr "Süreç kontrolde değil"
+
+#~ msgid "The process shows clustering (too few runs)"
+#~ msgstr "Süreç kümelenme gösteriyor (pek az sayıda çalıştırma)"
+
+#~ msgid "The process shows oscillation (too many runs)"
+#~ msgstr "Süreç salınım gösteriyor (pek çok sayıda çalıştırma)"
 
 #~ msgid "One-Sample t-Test"
 #~ msgstr "Tek Örneklem t Testi"
@@ -25145,6 +25229,15 @@ msgstr "Dosya açılamadı:"
 #~ msgid "One-Way ANOVA with Repeated Measures Test"
 #~ msgstr "Yinelenen Ölçüler Testiyle Tek Yönlü ANOVA"
 
+#~ msgid "Mann-Kendall Test"
+#~ msgstr "Mann-Kendall Testi"
+
+#~ msgid "Wald-Wolfowitz Runs Test"
+#~ msgstr "Wald-Wolfowitz Runs Testi"
+
+#~ msgid "Ramirez-Runger Runs Test"
+#~ msgstr "Ramirez-Runger Runs Testi"
+
 #~ msgid "N/A"
 #~ msgstr "Yok"
 
@@ -25162,6 +25255,9 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "The size of each sample must be equal."
 #~ msgstr "Her bir örneklemin büyüklüğü eşit olmalıdır."
+
+#~ msgid "Standard Deviation"
+#~ msgstr "Standart Sapma"
 
 #~ msgid "Null Hypothesis"
 #~ msgstr "Sıfır Hipotezi"
@@ -25306,6 +25402,27 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "Total Count 2"
 #~ msgstr "Toplam Sayı 2"
+
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgid "Kendall's Tau"
+#~ msgstr "Kendall’s Tau"
+
+#~ msgid "Sen's Slope"
+#~ msgstr "Sen’s Slope"
+
+#~ msgid "Sample Size"
+#~ msgstr "Örnek Boyut"
+
+#~ msgid "Number of Runs"
+#~ msgstr "Çalıştırma Sayısı"
+
+#~ msgid "Expected Runs"
+#~ msgstr "Beklenen Çalıştırmalar"
+
+#~ msgid "Effective Sample Size"
+#~ msgstr "Efektif Örneklem Boyutu"
 
 #~ msgid "Statistical Conclusion"
 #~ msgstr "İstatistiksel Sonuç"
@@ -25458,11 +25575,261 @@ msgstr "Dosya açılamadı:"
 #~ "%1 önem düzeyinde hayatta kalma eğrileri arasında önemli ölçüde bir fark "
 #~ "yok. Sıfır hipotezini reddetme başarısız."
 
+#~ msgid ""
+#~ "At the significance level %1, there is a significant monotonic trend in "
+#~ "the data. Reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde veride oldukça belirgin bir monotonik eğilim var. Sıfır "
+#~ "hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, there is a significant positive monotonic "
+#~ "trend. Reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde oldukça belirgin bir pozitif monotonik eğilim var. "
+#~ "Sıfır hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, there is a significant negative monotonic "
+#~ "trend. Reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde oldukça belirgin bir negatif monotonik eğilim var. "
+#~ "Sıfır hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, no significant monotonic trend detected. "
+#~ "Fail to reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde belirgin bir monotonik trend algılanmadı. Sıfır "
+#~ "hipotezini reddetme başarısız."
+
+#~ msgid ""
+#~ "At the significance level %1, the data are not randomly distributed. "
+#~ "Reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde veri rastgele biçimde dağıtılmamış. Sıfır hipotezini "
+#~ "reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, the data show clustering or trend (too few "
+#~ "runs). Reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde veri kümelenme veya eğilim gösteriyor (pek az sayıda "
+#~ "çalıştırma). Sıfır hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, the data show excessive alternation (too "
+#~ "many runs). Reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde oldukça fazla değişimler var (pek çok sayıda "
+#~ "çalıştırma). Sıfır hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, the data appear to be randomly distributed. "
+#~ "Fail to reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde veri rastgele dağıtılmış gibi görünüyor. Sıfır "
+#~ "hipotezini reddetme başarısız."
+
+#~ msgid ""
+#~ "At the significance level %1, the process is not in control. Reject the "
+#~ "null hypothesis."
+#~ msgstr "%1 önem düzeyinde süreç kontrolde değil. Sıfır hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, the process shows clustering (too few "
+#~ "runs). Reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde süreç kümelenme gösteriyor (pek az sayıda çalıştırma). "
+#~ "Sıfır hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, the process shows oscillation (too many "
+#~ "runs). Reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde süreç salınım gösteriyor (pek çok sayıda çalıştırma). "
+#~ "Sıfır hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, the process appears to be in control. Fail "
+#~ "to reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde süreç kontrolde gibi görünüyor. Sıfır hipotezini "
+#~ "reddetme başarısız."
+
+#~ msgid "Non-Parametric"
+#~ msgstr "Parametrik Olmayan"
+
+#~ msgid "Result"
+#~ msgstr "Sonuç"
+
+#~ msgid "Trend"
+#~ msgstr "Eğilim"
+
+#~ msgid "Seasonal"
+#~ msgstr "Mevsimsel"
+
+#~ msgid "Residual"
+#~ msgstr "Kalıntı"
+
+#~ msgid "Original"
+#~ msgstr "Özgün"
+
+#~ msgid "Original Data"
+#~ msgstr "Özgün Veri"
+
+#~ msgid "Trend Component"
+#~ msgstr "Eğilim Bileşeni"
+
+#~ msgid "Seasonal Component"
+#~ msgstr "Mevsimsel Bileşen"
+
+#~ msgid "Residual Component"
+#~ msgstr "Kalıntı Bileşeni"
+
+#~ msgid "%1: set method"
+#~ msgstr "%1: Yöntemi ayarla"
+
+#~ msgid "%1: set period for STL"
+#~ msgstr "%1: STL periyodunu ayarla"
+
+#~ msgid "%1: set robust parameter for STL"
+#~ msgstr "%1: STL dayanıklı parametresini ayarla"
+
+#~ msgid "%1: set seasonal length for STL"
+#~ msgstr "%1: STL mevsimsel uzunluğunu ayarla"
+
+#~ msgid "%1: set trend length for STL"
+#~ msgstr "%1: STL eğilim uzunluğunu ayarla"
+
+#~ msgid "%1: set trend auto-length for STL"
+#~ msgstr "%1: STL eğilimin otomatik uzunluğunu ayarla"
+
+#~ msgid "%1: set low pass length for STL"
+#~ msgstr "%1: STL düşük geçiş uzunluğunu ayarla"
+
+#~ msgid "%1: set low pass auto-length for STL"
+#~ msgstr "%1: STL düşük geçiş otomatik uzunluğunu ayarla"
+
+#~ msgid "%1: set seasonal degree for STL"
+#~ msgstr "%1: STL mevsimsel derecesini ayarla"
+
+#~ msgid "%1: set trend degree for STL"
+#~ msgstr "%1: STL eğilim derecesini ayarla"
+
+#~ msgid "%1: set low pass degree for STL"
+#~ msgstr "%1: STL düşük geçiş derecesini ayarla"
+
+#~ msgid "%1: set seasonal jump for STL"
+#~ msgstr "%1: STL mevsimsel atlamayı ayarla"
+
+#~ msgid "%1: set seasonal auto-jump for STL"
+#~ msgstr "%1: STL otomatik mevsimsel atlamayı ayarla"
+
+#~ msgid "%1: set trend jump for STL"
+#~ msgstr "%1: STL eğilim atlamayı ayarla"
+
+#~ msgid "%1: set trend auto-jump for STL"
+#~ msgstr "%1: STL eğilim otomatik atlamasını ayarla"
+
+#~ msgid "%1: set low pass jump for STL"
+#~ msgstr "%1: STL düşük geçiş atlamasını ayarla"
+
+#~ msgid "%1: set low pass auto-jump for STL"
+#~ msgstr "%1: STL otomatik düşük geçiş atlamasını ayarla"
+
+#~ msgid "%1: set periods for MSTL"
+#~ msgstr "%1: MSTL periyotlarını ayarla"
+
+#~ msgid "%1: set Lambda for MSTL"
+#~ msgstr "%1: MSTL Lambda’sını ayarla"
+
+#~ msgid "%1: set iterations for MSTL"
+#~ msgstr "%1: MSTL yinelemelerini ayarla"
+
+#~ msgid "No valid data provided."
+#~ msgstr "Sağlanan geçerli veri yok."
+
+#~ msgid "Seasonal Length must be odd and at least 3."
+#~ msgstr "Mevsimsel uzunluk tek sayı ve en az 3 olmalıdır."
+
+#~ msgid "Trend Length must be odd and at least 3."
+#~ msgstr "Eğilim uzunluğu tek sayı ve en az 3 olmalıdır."
+
+#~ msgid "Low-Pass Length must be odd and at least 3."
+#~ msgstr "Düşük geçiş uzunluğu tek sayı ve en az 3 olmalıdır."
+
+#~ msgid "STL decomposition failed: %1"
+#~ msgstr "STL ayrıştırılamadı: %1"
+
+#~ msgid "No periods specified for MSTL."
+#~ msgstr "MSTL için belirtilen periyot yok."
+
+#~ msgid "Periods must be at least 2."
+#~ msgstr "Periyotlar en az 2 olmalıdır."
+
+#~ msgid "Time-series has less than two periods."
+#~ msgstr "Zaman dizilerinde ikiden az periyot var."
+
+#~ msgid "Iterations must be > 0."
+#~ msgstr "Yineleme sayısı sıfırdan büyük olmalıdır."
+
+#~ msgid "Lambda must be between 0 and 1."
+#~ msgstr "Lambda sıfır ile bir arasında olmalıdır."
+
+#~ msgid "Box-Cox transformation requires strictly positive data."
+#~ msgstr "Box-Cox dönüşümü kesinlikle pozitif veri gerektiriyor."
+
+#~ msgid "MSTL decomposition failed: %1"
+#~ msgstr "MSTL ayrıştırılamadı: %1"
+
+#~ msgid "Seasonal Component (Period: %1)"
+#~ msgstr "Mevsimsel Bileşen (Periyot: %1)"
+
+#~ msgid "Seasonal, Period: %1"
+#~ msgstr "Mevsimsel, Periyot: %1"
+
 #~ msgid "Inset Plot Area"
 #~ msgstr "Ek Çizim Alanı"
 
 #~ msgid "Inset Plot Area with Data"
 #~ msgstr "Veri İçeren Ek Çizim Alanı"
+
+#~ msgid "Line Simplification"
+#~ msgstr "Çizgi Basitleştirme"
+
+#~ msgid "Correct Baseline"
+#~ msgstr "Taban Çizgisini Düzelt"
+
+#~ msgid "%1: set plot color mode"
+#~ msgstr "%1: Çizim renk kipini kullan"
+
+#~ msgid "%1: set plot color map"
+#~ msgstr "%1: Çizim renk haritasını ayarla"
+
+#~ msgid "%1: set y-offset"
+#~ msgstr "%1: Y ofsetini ayarla"
+
+#~ msgid "%1: simplify '%2'"
+#~ msgstr "%1: “%2” basitleştir"
+
+#~ msgid "Simplification of '%1'"
+#~ msgstr "“%1” Basitleştirmesi"
+
+#~ msgid "%1: add line simplification curve"
+#~ msgstr "%1: Çizgi basitleştirme eğrisi ekle"
+
+#~ msgid "Baseline Correction"
+#~ msgstr "Taban Çizgisi Düzeltmesi"
+
+#~ msgid "%1: baseline correction for '%2'"
+#~ msgstr "%1: “%2” için taban çizgisi düzeltmesi"
+
+#~ msgid "Baseline correction for '%1'"
+#~ msgstr "“%1” için taban çizgisi düzeltmesi"
+
+#~ msgid "%1: add baseline correction curve"
+#~ msgstr "%1: Taban çizgisi düzeltme eğrisi ekle"
 
 #~ msgid "%1: add inset plot"
 #~ msgstr "%1: Ek çizim ekle"
@@ -25482,11 +25849,17 @@ msgstr "Dosya açılamadı:"
 #~ msgid "%1: set lower limit specification"
 #~ msgstr "%1: Alt sınır belirtimini ayarla"
 
+#~ msgid "%1: set baseline options and perform correction"
+#~ msgstr "%1: Taban çizgisi seçeneklerini ayarla ve düzeltmeyi gerçekleştir"
+
+#~ msgid "%1: set options and perform the line simplification"
+#~ msgstr "%1: Seçenekleri ayarla ve çizgi basitleştirmesini gerçekleştir"
+
 #~ msgid "Python scripting support"
 #~ msgstr "Python betik yazımı desteği"
 
-#~ msgid "Creates a new %1 script"
-#~ msgstr "Yeni bir %1 betiği oluşturur"
+#~ msgid "Creates a new Python script"
+#~ msgstr "Yeni bir Python betiği oluşturur"
 
 #~ msgid "From Directory..."
 #~ msgstr "Dizinden…"
@@ -25509,6 +25882,9 @@ msgstr "Dosya açılamadı:"
 #~ msgctxt "@action"
 #~ msgid "Add New"
 #~ msgstr "Yeni Ekle"
+
+#~ msgid "Invalid data type '%1'"
+#~ msgstr "Geçersiz veri türü “%1”"
 
 #~ msgid "Add a new Folder"
 #~ msgstr "Yeni Klasör Ekle"
@@ -25541,6 +25917,125 @@ msgstr "Dosya açılamadı:"
 #~ "belirlemek üzere majör tık sayısını taban olarak kullanın. Tıkların "
 #~ "sayısı, daha önceden ayarlanan sayıdan farklı olabilir."
 
+#~ msgid "Custom Column Values"
+#~ msgstr "Özel Sütun Değerleri"
+
+#~ msgid "Custom Column Labels"
+#~ msgstr "Özel Sütun Etiketleri"
+
+#~ msgid "Angle (DMS)"
+#~ msgstr "Açı (DMS)"
+
+#~ msgid ""
+#~ "Defines how and where to position the major ticks on the axis:"
+#~ "<ul><li>Number - ticks are placed equidistantly, the spacing between them "
+#~ "is determined by the provided fixed number of ticks.</li><li>Spacing - "
+#~ "ticks are placed equidistantly with the provided spacing between them.</"
+#~ "li><li>Custom Column Values - positions are determined by the values in "
+#~ "the custom column provided below.</li><li>Custom Column Labels - "
+#~ "positions are determined by the value labels in the custom column "
+#~ "provided below.</li></ul></ul>"
+#~ msgstr ""
+#~ "Ana imlerin eksende nasıl ve nereye konumlandırılacağını tanımlar:"
+#~ "<ul><li>Sayı — İmler eşit aralıklarla yerleştirilir, aralarındaki uzaklık "
+#~ "verilen sabit im sayısı ile belirlenir.</li><li>Boşluklu — İmler, "
+#~ "aralarında belirtilen boşluklar bırakılarak eşit aralıklarla "
+#~ "yerleştirilir.</li><li>Özel Sütun Değerleri — Konumlar, aşağıda verilen "
+#~ "özel sütundaki değerlere göre belirlenir.</li><li>Özel Sütun Etiketleri — "
+#~ "Konumlar, aşağıda verilen özel sütundaki değer etiketlerine göre "
+#~ "belirlenir.</li></ul></ul>"
+
+#~ msgid ""
+#~ "Defines where to position the first major tick:<ul><li>Absolute Value - "
+#~ "the first tick is positioned at the absolute value provided below.</"
+#~ "li><li>Offset - the first tick is positioned at the offset relatively to "
+#~ "the beginning of the axis range.</li></ul></ul>"
+#~ msgstr ""
+#~ "İlk ana imin konumlandırılacağı yeri tanımlar:<ul><li>Mutlak Değer — İlk "
+#~ "im, aşağıda verilen mutlak değere konumlandırılır.</li><li>Ofset — İlk "
+#~ "im, eksen aralığının başlangıcına göre ofsete konumlandırılır.</li></ul></"
+#~ "ul>"
+
+#~ msgid ""
+#~ "Column with the values that should be used as the positions of the major "
+#~ "ticks."
+#~ msgstr "Ana imin konumları olarak kullanılacak değerleri içeren sütun."
+
+#~ msgid ""
+#~ "Defines which text labels to show for the major ticks:<ul><li>Position "
+#~ "Values - the positions of the ticks are used as text labels.</"
+#~ "li><li>Custom Column Values - values in the custom column provided below "
+#~ "are used as text labels.</li></ul></ul>"
+#~ msgstr ""
+#~ "Ana imler için hangi metin etiketlerinin gösterileceğini tanımlar:"
+#~ "<ul><li>Konum Değerleri — İmlerin konumları metin etiketleri olarak "
+#~ "kullanılır.</li><li>Özel Sütun Değerleri — Aşağıda belirtilen özel "
+#~ "sütundaki değerler metin etiketleri olarak kullanılır.</li></ul></ul>"
+
+#~ msgid ""
+#~ "Column with the values that should be used as the text labels for the "
+#~ "major ticks."
+#~ msgstr ""
+#~ "Ana imlerin metin etiketleri olarak kullanılacak değerleri içeren sütun."
+
+#~ msgid ""
+#~ "Defines how and where to position the minor ticks on the axis:"
+#~ "<ul><li>Number - ticks are placed equidistantly, the spacing between them "
+#~ "is determined by the provided fixed number of ticks.</li><li>Spacing - "
+#~ "ticks are placed equidistantly with the provided spacing between them.</"
+#~ "li><li>Custom Column Values - positions are determined by the values in "
+#~ "the custom column provided below.</li></ul></ul>"
+#~ msgstr ""
+#~ "Küçük imlerin eksende nasıl ve nereye konumlandırılacağını tanımlar:"
+#~ "<ul><li>Sayı — İmler eşit aralıklarla yerleştirilir, aralarındaki uzaklık "
+#~ "verilen sabit im sayısı ile belirlenir.</li><li>Boşluklu — İmler, "
+#~ "aralarında belirtilen boşluklar bırakılarak eşit aralıklarla "
+#~ "yerleştirilir.</li><li>Özel Sütun Değerleri — Konumlar, aşağıda verilen "
+#~ "özel sütundaki değerlere göre belirlenir.</li><li>Özel Sütun Etiketleri — "
+#~ "Konumlar, aşağıda verilen özel sütundaki değer etiketlerine göre "
+#~ "belirlenir.</li></ul></ul>"
+
+#~ msgid ""
+#~ "Column with the values that should be used as the positions of the minor "
+#~ "ticks."
+#~ msgstr ""
+#~ "Küçük imlerin metin etiketleri olarak kullanılacak değerleri içeren sütun."
+
+#~ msgid "%v cm"
+#~ msgstr "%v cm"
+
+#~ msgid "%v in"
+#~ msgstr "%v inç"
+
+#~ msgid "Color Map"
+#~ msgstr "Renk Haritası"
+
+#~ msgid ""
+#~ "Defines which colors to use for plots:<ul><li>Theme - colors are taken "
+#~ "from the current theme apply to plot area</li><li>Color Map - colors are "
+#~ "taken from the specified color map</li></ul>"
+#~ msgstr ""
+#~ "Çizimler için hangi renklerin kullanılacağını tanımlar:<ul><li>Tema — "
+#~ "Renkler, çizim alanına uygulanmak üzere geçerli renk temasından "
+#~ "alınırlar</li><li>Renk Haritası — Renkler, belirlenen renk haritasından "
+#~ "alınırlar</li></ul>"
+
+#~ msgctxt "@label:spinbox Suffix for the X position in %"
+#~ msgid "%v%"
+#~ msgstr "%%v"
+
+#~ msgctxt "@label:spinbox Suffix for the Y position in %"
+#~ msgid "%v%"
+#~ msgstr "%%v"
+
+#~ msgid "Apply Formula"
+#~ msgstr "Formülü Uygula"
+
+#~ msgid "%1: apply column formula"
+#~ msgid_plural "%1: apply column formula"
+#~ msgstr[0] "%1: Sütun formülünü uygula"
+#~ msgstr[1] "%1: Sütun formülünü uygula"
+
 #~ msgid ""
 #~ "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
 #~ "known population mean</li><li><b>%2</b> - tests if two independent "
@@ -25549,7 +26044,8 @@ msgstr "Dosya açılamadı:"
 #~ "if two independent samples with unequal variances have the same mean</"
 #~ "li><li><b>%5</b> - tests if three or more independent samples have the "
 #~ "same mean</li><li><b>%6</b> - tests if three or more related/repeated "
-#~ "measurements have the same mean</li>"
+#~ "measurements have the same mean</li><li><b>%7</b> - tests differences in "
+#~ "medians between two independent groups</li>"
 #~ msgstr ""
 #~ "<ul><li><b>%1</b> — örnek bir ortalamanın bilinen nüfus ortalamasından "
 #~ "önemli ölçüde farklı olup olmadığını sınar</li><li><b>%2</b> — iki "
@@ -25559,29 +26055,35 @@ msgstr "Dosya açılamadı:"
 #~ "bağımsız örneklemin aynı ortalamaya sahip olup olmadığını sınar</"
 #~ "li><li><b>%5</b> — üç veya daha fazla bağımsız örneklemin aynı ortalamaya "
 #~ "sahip olup olmadığını sınar</li><li><b>%6</b> — üc veya daha fazla ilgili/"
-#~ "yinelenmiş ölçülerin aynı ortalamaya sahip olup olmadığını sınar</li>"
+#~ "yinelenmiş ölçülerin aynı ortalamaya sahip olup olmadığını sınar</"
+#~ "li><li><b>%7</b> — iki bağımsız grup arasındaki ortancalar arası farkı "
+#~ "sınar</li>"
 
 #~ msgid ""
-#~ "<li><b>%1</b> - tests differences in medians between two independent "
-#~ "groups</li><li><b>%2</b> - tests if the median difference between two "
-#~ "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#~ "among three or more independent groups</li><li><b>%4</b> - tests "
-#~ "differences in medians among three or more related/repeated measurements</"
-#~ "li><li><b>%5</b> - tests differences in survival distributions between "
-#~ "two or more groups</li><li><b>%6</b> - tests if two categorical variables "
-#~ "are independent of each other</li><li><b>%7</b> - tests if observed data "
+#~ "<li><b>%1</b> - tests if the median difference between two related "
+#~ "samples is zero</li><li><b>%2</b> - tests differences in medians among "
+#~ "three or more independent groups</li><li><b>%3</b> - tests differences in "
+#~ "medians among three or more related/repeated measurements</li><li><b>%4</"
+#~ "b> - tests differences in survival distributions between two or more "
+#~ "groups</li><li><b>%5</b> - tests for a trend in data over time</li><li><b>"
+#~ "%6</b> - tests for randomness in a sequence of observations</li><li><b>"
+#~ "%7</b> - tests for non-random patterns in process control data using runs "
+#~ "above/below median</li><li><b>%8</b> - tests if two categorical variables "
+#~ "are independent of each other</li><li><b>%9</b> - tests if observed data "
 #~ "follows a specified theoretical distribution</li></ul>"
 #~ msgstr ""
-#~ "<li><b>%1</b> — iki bağımsız grup arasındaki ortancalardaki farkı sınar</"
-#~ "li><li><b>%2</b> — iki ilişkili örnek arasındaki ortanca farkın sıfır "
-#~ "olup olmadığını sınar</li><li><b>%3</b> — üç veya daha fazla bağımsız "
-#~ "grup arasında ortancalar arasındaki farkı sınar</li><li><b>%4</b> — üç "
-#~ "veya daha fazla ilişkili/yinelenmiş ölçüler arasındaki ortanca farkını "
-#~ "sınar</li><li><b>%5</b> — iki veya daha fazla grup arasındaki hayatta "
-#~ "kalma dağılımlarındaki farkı sınar</li><li><b>%6</b> — iki kategorik "
-#~ "değişkenin birbirlerinden farklı olup olmadıklarını sınar</li><li><b>%7</"
-#~ "b> — gözlemlenen verinin belirli bir kuramsal dağılımı izleyip "
-#~ "izlemediğini sınar</li></ul>"
+#~ "<li><b>%1</b> — iki ilişkili örnek arasındaki ortanca farkın sıfır olup "
+#~ "olmadığını sınar</li><li><b>%2</b> — üç veya daha fazla bağımsız grup "
+#~ "arasında ortancalar arasındaki farkı sınar</li><li><b>%3</b> — üç veya "
+#~ "daha fazla ilişkili/yinelenmiş ölçüler arasındaki ortanca farkını sınar</"
+#~ "li><li><b>%4</b> — iki veya daha fazla grup arasındaki hayatta kalma "
+#~ "dağılımlarındaki farkı sınar</li><li><b>%5</b> — bir zaman aralığındaki "
+#~ "eğilimleri sınar</li><li><b>%6</b> — bir dizi gözlemde rastgeleliği "
+#~ "sınar</li><li><b>%7</b> — iki kategorik değişkenin birbirlerinden farklı "
+#~ "olup olmadıklarını sınar</li><li><b>%8</b> — iki kategorik değişkenin "
+#~ "birbirlerinden bağımsız olup olmadığını sınar</li><li><b>%9</b> — "
+#~ "gözlemlenen verinin belirli bir kuramsal dağılımı izleyip izlemediğini "
+#~ "sınar</li></ul>"
 
 #~ msgid ""
 #~ "Selected test requires at least %1 and at most %2 non-empty variables."
@@ -25614,15 +26116,245 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Copy Name and Value"
 #~ msgstr "Adı ve Değeri Kopyala"
 
+#~ msgid ""
+#~ "Method used to perform the seasonal-trend decomposition:<ul><li>STL - "
+#~ "Seasonal-trend decomposition based on LOESS (\"Locally Estimated "
+#~ "Scatterplot Smoothing\")</li><li>MSTL - STL for multiple seasonalities</"
+#~ "li></ul>"
+#~ msgstr ""
+#~ "Mevsimsel eğilim ayrışmasını gerçekleştirmek için kullanılan yöntem:"
+#~ "<ul><li>STL — LOESS (“Locally Estimated Scatterplot Smoothing” — Yerel "
+#~ "Olarak Tahmin Edilen Serpme Diyagramı Pürüzsüzleştirmesi) tabanlı "
+#~ "mevsimsel eğilim ayrıştırması</li><li>MSTL — Çoklu mevsimsellikler için "
+#~ "STL</li></ul>"
+
+#~ msgid ""
+#~ "If enabled, uses a data-dependent weighting function to get more robust "
+#~ "result if the data has outliers."
+#~ msgstr ""
+#~ "Etkinleştirilirse verilerde aykırı değerler varsa daha sağlam sonuçlar "
+#~ "elde etmek için veriye bağlı bir ağırlıklandırma işlevi kullanılır."
+
+#~ msgid ""
+#~ "Period of the seasonal component. Examples:<ul><li>24 - for hourly data "
+#~ "with daily seasonality (24h)</li><li>168 - for hourly data with weekly "
+#~ "seasonality (7 * 24h = 168h)</li><li>7 - for daily data with weekly "
+#~ "seasonality (7 days)</li><li>365 - for daily data yearly (365 days) "
+#~ "seasonality</li><li>12 - for monthly data with yearly seasonality (12 "
+#~ "months)</li></ul>"
+#~ msgstr ""
+#~ "Mevsimsel bileşenin periyotu. Örnekler:<ul><li>24 — Günlük mevsimsellikli "
+#~ "saatlik veri için (24 sa)</li><li>168 — Haftalık mevsimsellikli saatlik "
+#~ "veri için (7 * 24h = 168 sa)</li><li>7 — Haftalık mevsimsellikli günlük "
+#~ "veri için (7 gün)</li><li>365 — Yıllık mevsimsellikli günlük veri için "
+#~ "(365 gün)</li><li>12 — Yıllık mevsimsellikli aylık veri için (12 ay)</"
+#~ "li></ul>"
+
+#~ msgid "Length of the seasonal smoother, must be odd and at least 3."
+#~ msgstr ""
+#~ "Mevsimsel pürüzsüzleştiricinin uzunluğu tek sayı ve en az 3 olmalıdır."
+
+#~ msgid "Length of the trend smoother, must be odd and at least 3."
+#~ msgstr ""
+#~ "Eğilim pürüzsüzleştiricisinin uzunluğu, tek sayı ve en az 3 olmalıdır."
+
+#~ msgid ""
+#~ "If enabled, uses the smallest odd integer greater than 1.5 * \"Period\" / "
+#~ "(1 - 1.5 / \"Seasonal Length\")."
+#~ msgstr ""
+#~ "Etkinleştirilirse 1,5 * “Periyot” / (1 − 1,5 / “Mevsimsel Uzunluk”) "
+#~ "sonucundan daha büyük olan en küçük tek tamsayıyı kullanın."
+
+#~ msgid "Length of the low-pass filter, must be odd and at least 3."
+#~ msgstr "Düşük geçiş süzgecinin uzunluğu, tek sayı ve en az 3 olmalıdır."
+
+#~ msgid "If enabled, uses the smallest odd integer greater than \"Period\"."
+#~ msgstr ""
+#~ "Etkinleştirilirse “Periyot”tan daha büyük olan en küçük tek tamsayıyı "
+#~ "kullanın."
+
+#~ msgid "0 - Constant"
+#~ msgstr "0 — Sabit"
+
+#~ msgid "1 - Constant and Trend"
+#~ msgstr "1 — Sabit ve Eğilim"
+
+#~ msgid "The degree of locally-fitted polynomial for the seasonal component."
+#~ msgstr "Mevsimsel bileşen için yerel olarak uygun polinomun derecesi."
+
+#~ msgid "The degree of locally-fitted polynomial for the trend component."
+#~ msgstr "Eğilim bileşeni için yerel olarak uygun polinomun derecesi."
+
+#~ msgid "The degree of locally-fitted polynomial for the low-pass component."
+#~ msgstr ""
+#~ "Düşük geçiş bileşeni için yerel olarak uydurulmuş polinomun derecesi."
+
+#~ msgid "The number of jumps to include in the seasonal component."
+#~ msgstr "Mevsimsel bileşene içerilecek atlama sayısı."
+
+#~ msgid "If enabled, uses \"Seasonal Length\" / 10."
+#~ msgstr "Etkinleştirilirse “Mevsimsel Uzunluk” / 10 kullanır."
+
+#~ msgid "The number of jumps to include in the trend component."
+#~ msgstr "Eğilim bileşeninde içerilecek atlama sayısı."
+
+#~ msgid "If enabled, uses \"Trend Length\" / 10."
+#~ msgstr "Etkinleştirilirse “Eğilim Uzunluğu” / 10 kullanır."
+
+#~ msgid "The number of jumps to include in the low-pass component."
+#~ msgstr "Düşük geçiş bileşeninde içerilecek atlama sayısı."
+
+#~ msgid "If enabled, uses \"Low-Pass Length\" / 10."
+#~ msgstr "Etkinleştirilirse “Düşük Geçiş Uzunluğu” / 10 kullanır."
+
+#~ msgid ""
+#~ "Periods of the seasonal components, coma-separated values. Examples:"
+#~ "<ul><li>24, 168 - for hourly data with daily (24h) and weekly (7 * 24h = "
+#~ "168h) seasonality</li><li>7, 365 - for daily data with weekly (7 days) "
+#~ "and yearly (365 days) seasonality</li></ul>"
+#~ msgstr ""
+#~ "Virgülle ayrılmış biçimde mevsimsel bileşenlerin periyotları. Örnekler:"
+#~ "<ul><li>24, 168 — Günlük (24 sa) ve haftalık (7 * 24 sa = 168 sa) "
+#~ "mevsimsellik</li><li>7, 365 — Haftalık (7 gün) ve yıllık (365 gün) "
+#~ "mevsimsellik</li></ul>"
+
+#~ msgid ""
+#~ "The lambda parameter for the Box-Cox transformation applied prior to "
+#~ "decomposition."
+#~ msgstr ""
+#~ "Ayrıştırmadan önce Box-Cox dönüşümü için uygulanan Lambda parametresi."
+
+#~ msgid "Number of iterations used to refine the seasonal component."
+#~ msgstr "Mevsimsel bileşeni iyileştirmek için kullanılan yineleme sayısı."
+
+#~ msgid "%1 seasonal decompositions: template \"%2\" loaded"
+#~ msgstr "%1 mevsimsel ayrıştırma: “%2” şablonu yüklendi"
+
+#~ msgid "Show Columns Statistics Spreadsheet"
+#~ msgstr "Sütunlar İstatistikleri Sayfasını Göster"
+
+#~ msgid ""
+#~ "Method used to calculate the baseline correction:<ul><li>arPLS - "
+#~ "asymmetrically reweighted penalized least square method.</li><li>Minimum "
+#~ "- subtract the minimum of the data.</li><li>Maximum - subtract the "
+#~ "maximum of the data.</li><li>Mean - subtract the mean of the data.</"
+#~ "li><li>Median - subtract the median of the data.</li><li>End Points - do "
+#~ "a linear interpolation using first and last point and subtract it.</"
+#~ "li><li>Linear Regression - do a linear regression to the data and "
+#~ "subtract it.</li></ul>"
+#~ msgstr ""
+#~ "Taban çizgisi düzeltmesini hesaplamak için kullanılan yöntem:"
+#~ "<ul><li>arPLS — Asimetrik olarak yeniden ağırlıklandırılmış cezalı en "
+#~ "küçük kareler yöntemi.</li><li>En Küçük — Verinin minimumunu çıkarın.</"
+#~ "li><li>En Büyük — Verinin maksimumunu çıkarın.</li><li>Ortalama — Verinin "
+#~ "ortalamasını çıkarın.</li><li>Ortanca — Verinin ortancasını çıkarın.</"
+#~ "li><li>Bitiş Noktaları — İlk ve son noktayı kullanarak doğrusal "
+#~ "aradeğerleme yapın ve çıkarın.</li><li>Doğrusal Gerileme — Veriye "
+#~ "doğrusal gerileme uygulayın ve çıkarın.</li></ul>"
+
+#~ msgid "Baseline correction status: %1"
+#~ msgstr "Taban çizgisi düzeltme durumu: %1"
+
 #~ msgid "Description:"
 #~ msgstr "Açıklama:"
 
 #~ msgid "User defined model"
 #~ msgstr "Kullanıcı tanımlı model"
 
+#~ msgctxt "@label:spinbox Suffix for the frequency"
+#~ msgid "%v Hz"
+#~ msgstr "%v Hz"
+
+#~ msgid ""
+#~ "Method to simplify the line:<ul><li>Douglas-Peucker - recursively divides "
+#~ "the line and retains only those points that deviate more than a specified "
+#~ "threshold from the line segment between the start and end points.</"
+#~ "li><li>Visvalingam-Whyatt - iteratively removes the point that "
+#~ "contributes the least effective area to the polygon's shape until a "
+#~ "desired number of points or area threshold is reached.</"
+#~ "li><li>Perpendicular Distance - measures the perpendicular distance of "
+#~ "each point from a reference line and retains only those exceeding a "
+#~ "threshold.</li><li>n-th Point - keeps every n-th point only.</"
+#~ "li><li>Radial Distance - measures the distance of each point from the "
+#~ "previous retained point and retains only those exceeding a threshold.</"
+#~ "li><li>Interpolation.</li><li>Opheim - uses both distance and angular "
+#~ "tolerance to simplify lines. It retains points only if they fall outside "
+#~ "a specified distance and angular threshold from the previous retained "
+#~ "point.</li><li>Lang - retaines points that are at least a specified "
+#~ "distance apart and ensuring no point deviates more than a set tolerance "
+#~ "from the simplified line.</li></ul>"
+#~ msgstr ""
+#~ "Çizgiyi basitleştirme yöntemleri<ul><li>Douglas-Peucker — çizgiyi "
+#~ "özyineli olarak böler ve yalnızca başlangıç ve bitiş noktaları arasındaki "
+#~ "çizgi parçasından belirtilen bir eşikten daha fazla sapan noktaları korur."
+#~ "</li><li>Visvalingam-Whyatt — istenen nokta sayısına veya alan eşiğine "
+#~ "ulaşılana kadar, çokgenin şekline en az etkili alanı katkıda bulunan "
+#~ "noktayı yinelemeli olarak kaldırır.</li><li>Dikey Uzaklık — her noktanın "
+#~ "referans çizgisinden dik mesafesini ölçer ve yalnızca bir eşiği aşanları "
+#~ "korur.</li><li>n. Nokta — yalnızca her n. noktayı korur.</li><li>Radyal "
+#~ "Uzaklık — her noktanın önceki korunan noktadan uzaklığını ölçer ve "
+#~ "yalnızca bir eşiği aşanları korur.</li><li>Aradeğerleme.</li><li>Opheim — "
+#~ "çizgileri basitleştirmek için hem uzaklık hem de açısal toleransı "
+#~ "kullanır. Yalnızca önceki tutulan noktadan belirli bir uzaklık ve açısal "
+#~ "eşik değerinin dışında kalan noktaları tutar.</li><li>Lang — en az "
+#~ "belirli bir mesafede birbirinden ayrı olan noktaları tutar ve hiçbir "
+#~ "noktanın basitleştirilmiş çizgiden belirlenmiş bir toleranstan fazla "
+#~ "sapmamasını sağlar.</li></ul>"
+
+#~ msgid "Maximum perpendicular distance from the connecting line segment"
+#~ msgstr "Bağlantı çizgi parçasından en büyük dik uzaklık"
+
+#~ msgid "Maximum radial distance from the previous retained point"
+#~ msgstr "Önceki korunan noktadan en büyük radyal uzaklık"
+
+#~ msgid "Maximum perpendicular distance from the line segment"
+#~ msgstr "Çizgi parçasından en büyük dik uzaklık"
+
+#~ msgid "Target number of points in the simplified line"
+#~ msgstr "Basitleştirilmiş çizgideki hedef nokta sayısı"
+
+#~ msgid "Keep every n-th point (n is the step size)"
+#~ msgstr "Her n. noktayı tut (n, adım boyutudur)"
+
+#~ msgid "Maximum perpendicular distance from the reference line"
+#~ msgstr "Başvuru noktasından en büyük dik uzaklık"
+
+#~ msgid "Number of iterations to apply the simplification"
+#~ msgstr "Basitleştirmeye uygulanacak yineleme sayısı"
+
+#~ msgid "Minimum area contribution threshold for retaining points"
+#~ msgstr "Noktaların korunması için en küçük alan katkı eşiği"
+
+#~ msgid "Minimum distance threshold from retained point"
+#~ msgstr "Korunan noktadan en küçük uzaklık eşiği"
+
+#~ msgid "Maximum distance threshold from retained point"
+#~ msgstr "Korunan noktadan en büyük uzaklık eşiği"
+
+#~ msgid "Minimum point spacing distance"
+#~ msgstr "En küçük nokta boşluklandırma uzaklığı"
+
+#~ msgid "Search region size in units of points"
+#~ msgstr "Nokta türünden aranacak bölge boyutu"
+
+#~ msgid "Status: %1"
+#~ msgstr "Durum: %1"
+
+#~ msgctxt "@title:window"
+#~ msgid "Properties: Line Simplification"
+#~ msgstr "Özellikler: Çizgi Basitleştirme"
+
+#~ msgctxt "@title:window"
+#~ msgid "Properties: Baseline Correction"
+#~ msgstr "Özellikler: Taban Çizgisi Düzeltme"
+
 #~ msgctxt "@title:window"
 #~ msgid "Properties: Hypothesis Test"
 #~ msgstr "Özellikler: Hipotez Testi"
+
+#~ msgctxt "@title:window"
+#~ msgid "Properties: Seasonal Decomposition"
+#~ msgstr "Özellikler: Mevsimsel Ayrıştırma"
 
 #~ msgctxt "@title:window"
 #~ msgid "Properties: Script"
@@ -25640,17 +26372,6 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Script Toolbar"
 #~ msgstr "Betik Araç Çubuğu"
 
-#~ msgid "Text Editor"
-#~ msgstr "Metin Düzenleyicisi"
-
-#~ msgid "If enabled spreadsheet and matrix data is saved in the project file"
-#~ msgstr ""
-#~ "Etkinleştirilmişse hesap tablosu ve matris verisi proje dosyasına "
-#~ "kaydedilir."
-
-#~ msgid "Delete entire rows in the spreadsheet if the condition is met."
-#~ msgstr "Koşul sağlandıysa hesap tablosundaki tam satırları silin."
-
 #~ msgid "Statistical Analysis"
 #~ msgstr "İstatistiksel Çözümleme"
 
@@ -25660,7 +26381,116 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Hypothesis Test for %1"
 #~ msgstr "%1 için Hipotez Testi"
 
-#~ msgid "Test Mean μ₀: "
+#~ msgid "Script Editor"
+#~ msgstr "Betik Düzenleyicisi"
+
+#~ msgctxt "@label:spinbox Suffix for the auto save interval"
+#~ msgid "%v min"
+#~ msgstr "%v dak"
+
+#~ msgid "If enabled spreadsheet and matrix data is saved in the project file"
+#~ msgstr ""
+#~ "Etkinleştirilmişse hesap tablosu ve matris verisi proje dosyasına "
+#~ "kaydedilir."
+
+#~ msgid "Delete entire rows in the spreadsheet if the condition is met."
+#~ msgstr "Koşul sağlandıysa hesap tablosundaki tam satırları silin."
+
+#~ msgid "Fourier Transform of '%1'"
+#~ msgstr "“%1” Fourier Dönüşümü"
+
+#~ msgid "Hilbert Transform of '%1'"
+#~ msgstr "“%1” Hilbert Dönüşümü"
+
+#~ msgid "Convolution of '%1'"
+#~ msgstr "“%1” Evrişimi"
+
+#~ msgid "Correlation of '%1'"
+#~ msgstr "“%1” Korelasyonu"
+
+#~ msgid "Baseline Correction of '%1'"
+#~ msgstr "“%1” Taban Çizgisi Düzeltmesi"
+
+#~ msgid "New Plot Area in an Existing Worksheet"
+#~ msgstr "Var Olan Çalışma Sayfasında Yeni Çizim Alanı"
+
+#~ msgid "New Plot Areas in an Existing Worksheet"
+#~ msgstr "Var Olan Çalışma Sayfasında Yeni Çizim Alanları"
+
+#~ msgid "New Plot Areas in a New Worksheet"
+#~ msgstr "Yeni Çalışma Sayfasında Yeni Çizim Alanları"
+
+#~ msgid "Equidistant Date&Time Values"
+#~ msgstr "Eşit Uzaklıklı Tarih/Zaman Değerleri"
+
+#~ msgid "Transpose"
+#~ msgstr "Transpoze Et"
+
+#~ msgid "Seasonal Decomposition"
+#~ msgstr "Mevsimsel Ayrıştırma"
+
+#~ msgid "Time Series Analysis"
+#~ msgstr "Zaman Dizisi Çözümlemesi"
+
+#~ msgid "Seasonal Decomposition for %1"
+#~ msgstr "%1 için Mevsimsel Ayrıştırma"
+
+#~ msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
+#~ msgstr ""
+#~ "Hesap tablosunda %1 satır var. Transpoze etmeyi gerçekten istiyor musunuz?"
+
+#~ msgid "Transpose Spreadsheet"
+#~ msgstr "Hesap Tablosunu Transpoze Et"
+
+#~ msgid "Arithmetic Mean"
+#~ msgstr "Aritmetik Ortalama"
+
+#~ msgid "Geometric Mean"
+#~ msgstr "Geometrik Ortalama"
+
+#~ msgid "Harmonic Mean"
+#~ msgstr "Harmonik Ortalama"
+
+#~ msgid "Contraharmonic Mean"
+#~ msgstr "Kontra Harmonik Ortalama"
+
+#~ msgid "Mean Absolute Deviation Around Mean"
+#~ msgstr "Ortalamanın Etrafındaki Ortalama Mutlak Sapma"
+
+#~ msgid "Mean Absolute Deviation Around Median"
+#~ msgstr "Ortanca Çevresindeki Ortalama Mutlak Sapma"
+
+#~ msgid "Median Absolute Deviation"
+#~ msgstr "Ortanca Mutlak Sapma"
+
+#~ msgid "Average 2-Period Moving Range"
+#~ msgstr "Ortalama İki Noktalı Hareketli Erim"
+
+#~ msgid "Position Column:"
+#~ msgstr "Konum sütunu:"
+
+#~ msgid "Plot Colors:"
+#~ msgstr "Çizim renkleri:"
+
+#~ msgid "Stack"
+#~ msgstr "Yığın"
+
+#~ msgid "Auto-Update"
+#~ msgstr "Kendiliğinden güncelle"
+
+#~ msgid "Load a custom function"
+#~ msgstr "Özel bir işlev ekle"
+
+#~ msgid "Save a custom function"
+#~ msgstr "Özel bir işlevi kaydet"
+
+#~ msgid "Auto-Resize"
+#~ msgstr "Kendiliğinden yeniden boyutlandır"
+
+#~ msgid "Formula"
+#~ msgstr "Formül"
+
+#~ msgid "Test Mean μ₀:"
 #~ msgstr "Test ortalaması μ₀:"
 
 #~ msgid "Significance Level α:"
@@ -25669,11 +26499,11 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Null:"
 #~ msgstr "Sıfır:"
 
-#~ msgid "Alternate:"
+#~ msgid "Alternative:"
 #~ msgstr "Alternatif:"
 
-#~ msgid "Hypothesis"
-#~ msgstr "Hipotez"
+#~ msgid "Hypotheses"
+#~ msgstr "Hipotezler"
 
 #~ msgid "Test:"
 #~ msgstr "Test:"
@@ -25693,11 +26523,47 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Save Data in File:"
 #~ msgstr "Veriyi dosyaya kaydet:"
 
-#~ msgid "Load a custom function"
-#~ msgstr "Özel bir işlev ekle"
+#~ msgid "Periods:"
+#~ msgstr "Periyotlar:"
 
-#~ msgid "Save a custom function"
-#~ msgstr "Özel bir işlevi kaydet"
+#~ msgid "Lambda:"
+#~ msgstr "Lambda:"
+
+#~ msgid "Robust:"
+#~ msgstr "Dayanıklı:"
+
+#~ msgid "Seasonal Length:"
+#~ msgstr "Mevsimsel uzunluk:"
+
+#~ msgid "Trend Length:"
+#~ msgstr "Eğilim uzunluğu:"
+
+#~ msgid "Low-Pass Length:"
+#~ msgstr "Düşük geçiş uzunluğu:"
+
+#~ msgid "Seasonal Degree:"
+#~ msgstr "Mevsimsel derece:"
+
+#~ msgid "Trend Degree:"
+#~ msgstr "Eğilim derecesi:"
+
+#~ msgid "Low-Pass Degree:"
+#~ msgstr "Düşük geçiş derecesi:"
+
+#~ msgid "Seasonal Jump:"
+#~ msgstr "Mevsimsel atlama:"
+
+#~ msgid "Trend Jump:"
+#~ msgstr "Eğilim atlaması:"
+
+#~ msgid "Low-Pass Jump:"
+#~ msgstr "Düşük geçiş atlaması:"
+
+#~ msgid "Statistics:"
+#~ msgstr "İstatistikler:"
+
+#~ msgid "Subtraction"
+#~ msgstr "Çıkarma"
 
 #~ msgid "Compression:"
 #~ msgstr "Sıkıştırma:"
@@ -25707,6 +26573,18 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "Delete Rows"
 #~ msgstr "Satırları Sil"
+
+#~ msgid "New Plot Areas in Multiple New Worksheets"
+#~ msgstr "Yeni Çalışma Sayfalarındaki Yeni Çizim Alanları"
+
+#~ msgid "No negative monotonic trend exists"
+#~ msgstr "Var olan negatif monotonik trend yok"
+
+#~ msgid "No positive monotonic trend exists"
+#~ msgstr "Var olan pozitif monotonik trend yok"
+
+#~ msgid "Simplify Line"
+#~ msgstr "Çizgi Basitleştir"
 
 #~ msgid "One-Way ANOVA Test Statistics"
 #~ msgstr "Tek Yönlü ANOVA Testi İstastistikleri"
