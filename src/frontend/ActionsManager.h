@@ -13,6 +13,7 @@
 #include <QObject>
 
 class DatapickerImageView;
+class LiveDataSource;
 class NotebookView;
 class MainWin;
 #ifdef HAVE_SCRIPTING
@@ -62,6 +63,10 @@ private:
 
 	void initSpreadsheetToolbarActions();
 	void connectSpreadsheetToolbarActions(const SpreadsheetView*);
+
+	void initLiveDataToolbarActions();
+	void connectLiveDataToolbarActions(LiveDataSource*);
+	void updateLiveDataPauseActionIcon(bool);
 
 	void initDataExtractorToolbarActions();
 	void connectDataExtractorToolbarActions(DatapickerImageView *);
@@ -176,6 +181,10 @@ private:
 	QAction* m_dataExtractorAddCurveAction{nullptr};
 	ToggleActionMenu* m_dataExtractorZoomMenu{nullptr};
 	ToggleActionMenu* m_dataExtractorMagnificationMenu{nullptr};
+
+	// live data
+	QAction* m_liveDataPauseAction{nullptr};
+	QAction* m_liveDataUpdateAction{nullptr};
 
 	// notebook
 #ifdef HAVE_CANTOR_LIBS

@@ -6,7 +6,7 @@
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -232,10 +232,12 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 void LiveDataDock::updatePlayPauseButtonText(bool pause) {
 	if (pause) {
-		ui.bPausePlayReading->setText(i18n("Continue Reading"));
+		ui.bPausePlayReading->setText(i18n("Continue"));
+		ui.bPausePlayReading->setToolTip(i18n("Continue Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
-		ui.bPausePlayReading->setText(i18n("Pause Reading"));
+		ui.bPausePlayReading->setText(i18n("Pause"));
+		ui.bPausePlayReading->setToolTip(i18n("Pause Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 }

@@ -15,7 +15,6 @@
 <Action name="new_worksheet" />
 <Action name="new_notes" />
 <Action name="new_datapicker" />
-<Action name="new_live_datasource" />
 <Action name="new_python_script" />
 <Action name="new_notebook" />
 <Separator/>
@@ -76,6 +75,12 @@
 	<Action name="spreadsheet_sort_desc"/>
 </ToolBar>
 
+<ToolBar name="live_data_toolbar">
+	<text>Live Data Source Toolbar</text>
+	<Action name="live_data_pause"/>
+	<Action name="live_data_update"/>
+</ToolBar>
+
 <ToolBar name="notebook_toolbar">
 	<text>Notebook Toolbar</text>
 	<Action name="notebook_evaluate"/>
@@ -132,7 +137,6 @@
 	<Action name="new_worksheet" />
 	<Action name="new_notes" />
 	<Action name="new_datapicker" />
-	<Action name="new_live_datasource" />
 	<Separator/>
 	<Action name="new_python_script" />
 	<Separator/>
@@ -151,6 +155,8 @@
 	<Action name="import_file" />
 	<Action name="import_dir" />
 	<Action name="import_sql" />
+	<Action name="new_live_datasource" />
+	<Separator/>
 	<Action name="import_dataset_datasource" />
 	<Action name="import_dataset_kaggle" />
 	<Separator/>

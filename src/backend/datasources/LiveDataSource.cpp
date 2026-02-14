@@ -150,6 +150,8 @@ void LiveDataSource::continueReading() {
 		m_pending = false;
 		updateNow();
 	}
+
+	Q_EMIT pausedChanged(false);
 }
 
 /*!
@@ -161,6 +163,8 @@ void LiveDataSource::pauseReading() {
 		m_pending = true;
 		m_updateTimer->stop();
 	}
+
+	Q_EMIT pausedChanged(true);
 }
 
 void LiveDataSource::setFileName(const QString& name) {

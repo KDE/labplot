@@ -4,7 +4,7 @@
 	Description          : File data source
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
-	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -188,6 +188,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void readOnUpdateCalled();
+	void pausedChanged(bool);
 
 private:
 	void initDevice();
