@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-13 00:39+0000\n"
-"PO-Revision-Date: 2026-02-05 11:04+0400\n"
+"PO-Revision-Date: 2026-02-12 08:10+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -7728,43 +7728,42 @@ msgstr "يوجد اتجاه أحادي إيجابي"
 #: src/backend/statistics/HypothesisTest.cpp:261
 #, kde-format
 msgid "The data are randomly distributed"
-msgstr ""
+msgstr "البيانات موزعة عشوائيًا"
 
 #: src/backend/statistics/HypothesisTest.cpp:262
 #, kde-format
 msgid "The data are not randomly distributed"
-msgstr ""
+msgstr "البيانات ليست موزعة عشوائيًا"
 
 #: src/backend/statistics/HypothesisTest.cpp:263
 #, kde-format
 msgid "The data show clustering (too few runs)"
-msgstr ""
+msgstr "تُظهر البيانات تكتلاً (عدد سلاسل قليل جدًا)"
 
 #: src/backend/statistics/HypothesisTest.cpp:264
 #, kde-format
 msgid "The data show excessive alternation (too many runs)"
-msgstr ""
+msgstr "تُظهر البيانات تبادلاً مفرطًا (عدد سلاسل كبير جدًا)"
 
 #: src/backend/statistics/HypothesisTest.cpp:267
 #, kde-format
 msgid "The process is in control (random pattern)"
-msgstr ""
+msgstr "العملية تحت السيطرة (نمط عشوائي)"
 
 #: src/backend/statistics/HypothesisTest.cpp:268
-#, fuzzy, kde-format
-#| msgid "Iterative process is out of control"
+#, kde-format
 msgid "The process is not in control"
-msgstr "العملية التكرارية خارج السيطرة"
+msgstr "العملية ليست تحت السيطرة"
 
 #: src/backend/statistics/HypothesisTest.cpp:269
 #, kde-format
 msgid "The process shows clustering (too few runs)"
-msgstr ""
+msgstr "تُظهر العملية تكتلاً (عدد سلاسل قليل جدًا)"
 
 #: src/backend/statistics/HypothesisTest.cpp:270
 #, kde-format
 msgid "The process shows oscillation (too many runs)"
-msgstr ""
+msgstr "تُظهر العملية تذبذبًا (عدد سلاسل كبير جدًا)"
 
 #: src/backend/statistics/HypothesisTest.cpp:332
 #, kde-format
@@ -7839,12 +7838,12 @@ msgstr "اختبار مان-كيندال"
 #: src/backend/statistics/HypothesisTest.cpp:360
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
-msgstr ""
+msgstr "اختبار السلاسل لوالد-وولفويتز"
 
 #: src/backend/statistics/HypothesisTest.cpp:362
 #, kde-format
 msgid "Ramirez-Runger Runs Test"
-msgstr ""
+msgstr "اختبار السلاسل لراميريز-رونجر"
 
 #: src/backend/statistics/HypothesisTest.cpp:537
 #, kde-format
@@ -8166,21 +8165,19 @@ msgstr "حجم العينة"
 
 #: src/backend/statistics/HypothesisTest.cpp:646
 #: src/backend/statistics/HypothesisTest.cpp:649
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of Runs"
-msgstr "عدد النقاط:"
+msgstr "عدد السلاسل"
 
 #: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "Expected Runs"
-msgstr ""
+msgstr "السلاسل المتوقعة"
 
 #: src/backend/statistics/HypothesisTest.cpp:650
-#, fuzzy, kde-format
-#| msgid "Sample Size"
+#, kde-format
 msgid "Effective Sample Size"
-msgstr "حجم العينة"
+msgstr "حجم العينة الفعال"
 
 #: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
@@ -8435,100 +8432,71 @@ msgstr ""
 "الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1777
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the data are not randomly distributed. Reject "
 "the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، تختلف متوسطات المجتمع اختلافًا كبيرًا. رفض الفرضية "
-"الصفرية"
+"عند مستوى الدلالة %1، البيانات ليست موزعة عشوائيًا. تُرفض الفرضية الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). Reject the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، يوجد اتجاه أحادي إيجابي ذو دلالة إحصائية. رفض الفرضية "
-"الصفرية."
+"عند مستوى الدلالة %1، تُظهر البيانات تكتلاً أو اتجاهًا (عدد سلاسل قليل جدًا). "
+"تُرفض الفرضية الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1783
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show excessive alternation (too many "
 "runs). Reject the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، يوجد اتجاه أحادي سلبي ذو دلالة إحصائية. رفض الفرضية "
-"الصفرية."
+"عند مستوى الدلالة %1، تُظهر البيانات تبادلاً مفرطًا (عدد سلاسل كبير جدًا). تُرفض "
+"الفرضية الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1786
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. "
 "Fail to reject the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، لم يتم الكشف عن أي اتجاه أحادي هام. فشل في رفض الفرضية "
-"الصفرية."
+"عند مستوى الدلالة %1، تبدو البيانات موزعة عشوائيًا. تعذر رفض الفرضية الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1820
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the process is not in control. Reject the null "
 "hypothesis."
-msgstr ""
-"عند مستوى الدلالة %1، تختلف متوسطات المجتمع اختلافًا كبيرًا. رفض الفرضية "
-"الصفرية"
+msgstr "عند مستوى الدلالة %1، العملية ليست تحت السيطرة. تُرفض الفرضية الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1822
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering (too few runs). "
 "Reject the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، يوجد اتجاه أحادي إيجابي ذو دلالة إحصائية. رفض الفرضية "
+"عند مستوى الدلالة %1، تُظهر العملية تكتلاً (عدد سلاسل قليل جدًا). تُرفض الفرضية "
 "الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1825
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation (too many runs). "
 "Reject the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، يوجد اتجاه أحادي سلبي ذو دلالة إحصائية. رفض الفرضية "
+"عند مستوى الدلالة %1، تُظهر العملية تذبذبًا (عدد سلاسل كبير جدًا). تُرفض الفرضية "
 "الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1827
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process appears to be in control. Fail to "
 "reject the null hypothesis."
 msgstr ""
-"عند مستوى الدلالة %1، لم يتم الكشف عن أي اتجاه أحادي هام. فشل في رفض الفرضية "
-"الصفرية."
+"عند مستوى الدلالة %1، تبدو العملية تحت السيطرة. تعذر رفض الفرضية الصفرية."
 
 #: src/backend/statistics/HypothesisTest.cpp:1919
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -11793,10 +11761,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "ينشئ ورقة عمل جديدة لرسم البيانات"
 
 #: src/frontend/ActionsManager.cpp:243
-#, fuzzy, kde-format
-#| msgid "Creates a new %1 script"
+#, kde-format
 msgid "Creates a new Python script"
-msgstr "ينشئ سكربت %1 جديد"
+msgstr "ينشئ سكربت بايثون جديدًا"
 
 #: src/frontend/ActionsManager.cpp:261 src/frontend/MainWin.cpp:1246
 #, kde-format
@@ -15364,16 +15331,7 @@ msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 مدرجات تكرارية: قالب \"%2\" حُمل"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:114
-#, fuzzy, kde-format
-#| msgid ""
-#| "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
-#| "known population mean</li><li><b>%2</b> - tests if two independent "
-#| "samples have the same mean</li><li><b>%3</b> - tests if the mean "
-#| "difference between two related samples is zero</li><li><b>%4</b> - tests "
-#| "if two independent samples with unequal variances have the same mean</"
-#| "li><li><b>%5</b> - tests if three or more independent samples have the "
-#| "same mean</li><li><b>%6</b> - tests if three or more related/repeated "
-#| "measurements have the same mean</li>"
+#, kde-format
 msgid ""
 "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
 "known population mean</li><li><b>%2</b> - tests if two independent samples "
@@ -15391,21 +15349,11 @@ msgstr ""
 "مرتبطتين هو صفر</li><li><b>%4</b> - يختبر ما إذا كانت عينتان مستقلتان "
 "بتباينات غير متساوية لهما نفس المتوسط</li><li><b>%5</b> - يختبر ما إذا كانت "
 "ثلاث عينات مستقلة أو أكثر لها نفس المتوسط</li><li><b>%6</b> - يختبر ما إذا "
-"كانت ثلاثة قياسات مرتبطة/متكررة أو أكثر لها نفس المتوسط</li>"
+"كانت ثلاثة قياسات مرتبطة/متكررة أو أكثر لها نفس المتوسط</li><li><b>%7</b> - "
+"يختبر الاختلافات في القيم المتوسطة بين مجموعتين مستقلتين</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%8</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests if the median difference between two related samples "
 "is zero</li><li><b>%2</b> - tests differences in medians among three or more "
@@ -15419,15 +15367,16 @@ msgid ""
 "each other</li><li><b>%9</b> - tests if observed data follows a specified "
 "theoretical distribution</li></ul>"
 msgstr ""
-"<li><b>%1</b> - يختبر الاختلافات في الوسيط بين مجموعتين مستقلتين</li><li><b>"
-"%2</b> - يختبر ما إذا كان متوسط الفرق بين عينتين مرتبطتين هو صفر</li><li><b>"
-"%3</b> - يختبر الاختلافات في الوسيط بين ثلاث مجموعات مستقلة أو أكثر</"
-"li><li><b>%4</b> - يختبر الاختلافات في الوسيط بين ثلاثة قياسات مرتبطة/متكررة "
-"أو أكثر</li><li><b>%5</b> - يختبر الاختلافات في توزيعات البقاء على قيد "
-"الحياة بين مجموعتين أو أكثر</li> <li><b>%6</b> - يختبر الاتجاه في البيانات "
-"عبر الزمن</li><li><b>%7</b> - يختبر ما إذا كان متغيران فئويان مستقلين عن "
-"بعضهما البعض</li><li><b>%8</b> - يختبر ما إذا كانت البيانات المرصودة تتبع "
-"توزيعًا نظريًا محددًا</li></ul>"
+"<li><b>%1</b> - يختبر ما إذا كان فرق الوسيط بين عينتين مرتبطتين هو صفر</"
+"li><li><b>%2</b> - يختبر الاختلافات في الوسيط بين ثلاث مجموعات مستقلة أو "
+"أكثر</li><li><b>%3</b> - يختبر الاختلافات في الوسيط بين ثلاثة قياسات مرتبطة/"
+"متكررة أو أكثر</li><li><b>%4</b> - يختبر الاختلافات في توزيعات البقاء بين "
+"مجموعتين أو أكثر</li><li><b>%5</b> - يختبر وجود اتجاه في البيانات بمرور "
+"الوقت</li><li><b>%6</b> - يختبر العشوائية في تسلسل من الملاحظات</li><li><b>"
+"%7</b> - يختبر الأنماط غير العشوائية في بيانات التحكم في العملية باستخدام "
+"السلاسل فوق/تحت الوسيط</li><li><b>%8</b> - يختبر ما إذا كان هناك متغيران "
+"فئويان مستقلين عن بعضهما البعض</li><li><b>%9</b> - يختبر ما إذا كانت "
+"البيانات المرصودة تتبع توزيعًا نظريًا محددًا</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:307
 #, kde-format
@@ -18372,10 +18321,9 @@ msgid "User Feedback"
 msgstr "مشاركة بياناتك"
 
 #: src/frontend/SettingsDialog.cpp:100
-#, fuzzy, kde-format
-#| msgid "Text Editor"
+#, kde-format
 msgid "Script Editor"
-msgstr "محرّر نصوص"
+msgstr "محرّر السّكربتات"
 
 #: src/frontend/SettingsDialog.cpp:163
 #, kde-format
@@ -23688,17 +23636,15 @@ msgstr "عدمي:"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Alternate:"
+#, kde-format
 msgid "Alternative:"
 msgstr "البديل:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
-#, fuzzy, kde-format
-#| msgid "Hypothesis"
+#, kde-format
 msgid "Hypotheses"
-msgstr "فرضية"
+msgstr "الفرضيات"
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289

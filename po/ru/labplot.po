@@ -2,15 +2,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Alexander Potashev <aspotashev@gmail.com>, 2015, 2016, 2017, 2018.
-# Alexander Yavorsky <kekcuha@gmail.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2026 Alexander Yavorsky <kekcuha@gmail.com>
 # Sergey Kazorin <translation-team@basealt.ru>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-13 00:39+0000\n"
-"PO-Revision-Date: 2023-11-13 14:41+0300\n"
-"Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
+"PO-Revision-Date: 2026-02-13 13:58+0200\n"
+"Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 25.12.2\n"
 
 #: src/backend/core/AbstractAspect.cpp:239
 #, kde-format
@@ -112,10 +112,9 @@ msgid "%1: remove all children"
 msgstr "%1: удаление всех потомков"
 
 #: src/backend/core/AbstractAspect.cpp:727
-#, fuzzy, kde-format
-#| msgid "%1: pasted '%2'"
+#, kde-format
 msgid "%1: pasted"
-msgstr "%1: вставка «%2»"
+msgstr "%1: вставлено"
 
 #: src/backend/core/AbstractAspect.cpp:822
 #, kde-format
@@ -514,10 +513,9 @@ msgid "Used in"
 msgstr "Используется в"
 
 #: src/backend/core/column/Column.cpp:166
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgid "Plots"
-msgstr "График"
+msgstr "Графики"
 
 #: src/backend/core/column/Column.cpp:184
 #, kde-format
@@ -555,10 +553,9 @@ msgid "%1: clear column"
 msgstr "%1: очистка содержимого столбца"
 
 #: src/backend/core/column/Column.cpp:562
-#, fuzzy, kde-format
-#| msgid "%1: set cell values"
+#, kde-format
 msgid "%1: set random values"
-msgstr "%1: задание значений ячейки"
+msgstr "%1: задание случайных значений"
 
 #: src/backend/core/column/Column.cpp:1049
 #: src/frontend/datasources/ImportFileWidget.cpp:1698
@@ -728,10 +725,9 @@ msgid "%1: set author"
 msgstr "%1: задать автора"
 
 #: src/backend/core/Project.cpp:316
-#, fuzzy, kde-format
-#| msgid "%1: save calculation changed"
+#, kde-format
 msgid "%1: save dock state changed"
-msgstr "%1: сохранить изменения вычислений"
+msgstr "%1: изменено состояние сохранения панели"
 
 #: src/backend/core/Project.cpp:323
 #, kde-format
@@ -1085,23 +1081,27 @@ msgid "There is no download URL present in the metadata file!"
 msgstr "В файле метаданных отсутствует URL-адрес для загрузки!"
 
 #: src/backend/datasources/DatasetHandler.cpp:202
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
-msgstr "Не удалось подключиться к базе данных «%1»."
+msgstr ""
+"Не удалось загрузить набор данных с «%1».\n"
+"%2."
 
 #: src/backend/datasources/DatasetHandler.cpp:236
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
-msgstr "Не удалось создать таблицу в базе данных SQLite %1."
+msgstr "Не удалось создать каталог «%1» для сохранения набора данных."
 
 #: src/backend/datasources/DatasetHandler.cpp:259
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr "Не удалось открыть файл «%1» для записи."
+msgstr ""
+"Не удалось открыть файл «%1» для записи.\n"
+"%2"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:123
 #, kde-format
@@ -1244,9 +1244,9 @@ msgid "Index"
 msgstr "Индекс"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:616
-#, fuzzy, kde-format
+#, kde-format
 msgid "DateTime"
-msgstr "Дата и время:"
+msgstr "Дата и время"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
 #, fuzzy, kde-format
@@ -1261,10 +1261,9 @@ msgid "Timestamp (Windows)"
 msgstr "Метка времени"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:619
-#, fuzzy, kde-format
-#| msgid "Int8"
+#, kde-format
 msgid "Int"
-msgstr "Int8"
+msgstr "Int"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:620
 #: src/backend/datasources/filters/MatioFilter.cpp:398
@@ -1277,23 +1276,20 @@ msgstr "Int64"
 #: src/backend/datasources/filters/JsonFilter.cpp:343
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
-#, fuzzy, kde-format
-#| msgid "Failed to open the device."
+#, kde-format
 msgid "Failed to open the device/file."
-msgstr "Не удалось открыть устройство."
+msgstr "Не удалось открыть устройство или файл."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
-#, fuzzy, kde-format
-#| msgid "data selection empty"
+#, kde-format
 msgid "Data selection empty."
-msgstr "пустая выборка данных"
+msgstr "Пустая выборка данных."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
 #: src/backend/datasources/filters/McapFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Failed to open the device."
+#, kde-format
 msgid "Failed to open the device/file or it's empty."
-msgstr "Не удалось открыть устройство."
+msgstr "Не удалось открыть устройство или файл, либо он пуст."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
@@ -1317,24 +1313,22 @@ msgstr "Не удалось открыть устройство."
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:341
 #: src/backend/datasources/filters/XLSXFilter.cpp:511
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Not enough memory."
-msgstr "Количество"
+msgstr "Недостаточно памяти."
 
 #: src/backend/datasources/filters/CANFilter.cpp:220
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
 #: src/backend/datasources/filters/SpiceFilter.cpp:187
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:268
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid file."
-msgstr "Недопустимый файл blf"
+msgstr "Недопустимый файл."
 
 #: src/backend/datasources/filters/CANFilter.cpp:226
 #, kde-format
 msgid "No messages read."
-msgstr ""
+msgstr "Сообщения не прочитаны."
 
 #: src/backend/datasources/filters/FilterStatus.cpp:47
 #, kde-format
@@ -1356,22 +1350,20 @@ msgstr "Таблицы: %1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:281
 #: src/backend/datasources/filters/MatioFilter.cpp:647
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file."
-msgstr "Не удалось открыть файл «%1»."
+msgstr "Не удалось открыть файл."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:288
 #: src/backend/datasources/filters/FITSFilter.cpp:368
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Failed to read the file."
-msgstr "Не удалось прочитать файл"
+msgstr "Не удалось прочитать файл."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:310
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zero dimensions."
-msgstr "Размеры:"
+msgstr "Нулевые размерности."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1060
 #: src/backend/datasources/filters/FITSFilter.cpp:1580
@@ -1683,10 +1675,9 @@ msgstr "неизвестно"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1524
 #: src/backend/datasources/filters/HDF5Filter.cpp:2151
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No data set selected."
-msgstr "Не выбран набор данных"
+msgstr "Набор данных не выбран."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1593
 #, kde-format
@@ -1747,7 +1738,7 @@ msgstr "XYRGB"
 #: src/backend/datasources/filters/ImageFilter.cpp:118
 #, kde-format
 msgid "Empty file or invalid or non-supported format."
-msgstr ""
+msgstr "Пустой файл или неподдерживаемый формат."
 
 #: src/backend/datasources/filters/ImageFilter.cpp:219
 #, kde-format
@@ -1808,21 +1799,19 @@ msgid "name"
 msgstr "имя"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:348
-#, fuzzy, kde-format
-#| msgid "The project file is empty."
+#, kde-format
 msgid "Device/file is empty."
-msgstr "Файл проекта пуст."
+msgstr "Устройство или файл пуст."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:356
 #, kde-format
 msgid "JSON format error or document empty."
-msgstr ""
+msgstr "Ошибка формата JSON или документ пуст."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:499
-#, fuzzy, kde-format
-#| msgid "Valid JSON document"
+#, kde-format
 msgid "Empty file or invalid JSON document."
-msgstr "Допустимый документ JSON"
+msgstr "Пустой файл или недопустимый JSON-документ."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:308
 #: src/backend/datasources/filters/NetCDFFilter.cpp:237
@@ -2019,16 +2008,14 @@ msgstr "Массив"
 #: src/backend/datasources/filters/MatioFilter.cpp:602
 #: src/backend/datasources/filters/MatioFilter.cpp:634
 #: src/backend/datasources/filters/MatioFilter.cpp:663
-#, fuzzy, kde-format
-#| msgid "No variable selected"
+#, kde-format
 msgid "No valid variable selected."
-msgstr "Переменная не выбрана"
+msgstr "Не выбрана допустимая переменная."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:658
-#, fuzzy, kde-format
-#| msgid "Variable not found"
+#, kde-format
 msgid "Selected variable not found."
-msgstr "Переменная не найдена"
+msgstr "Выбранная переменная не найдена."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
 #, kde-format
@@ -2038,78 +2025,68 @@ msgstr "В структуре нет полей"
 #: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
 msgid "Support for this variable type not implemented yet."
-msgstr ""
+msgstr "Поддержка данного типа переменной пока не реализована."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:1228
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
-msgstr ""
+msgstr "Переменные с рангом больше 2 пока не поддерживаются."
 
 #: src/backend/datasources/filters/McapFilter.cpp:204
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Valid MCAP file"
-msgstr "Недопустимый файл blf"
+msgstr "Допустимый файл MCAP"
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "Message type:"
+#, kde-format
 msgid "Message count: "
-msgstr "Тип сообщения:"
+msgstr "Количество сообщений: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:211
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Schema count: "
-msgstr "Количество листов: %1"
+msgstr "Количество схем: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:213
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Channel count: "
-msgstr "Количество листов: %1"
+msgstr "Количество каналов: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:215
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Attachment count: "
-msgstr "Количество листов: %1"
+msgstr "Количество вложений: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:217
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Metadata count: "
-msgstr "Количество листов: %1"
+msgstr "Количество метаданных: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:219
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Message Start Time: "
-msgstr "Время начала:"
+msgstr "Время начала сообщения: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:221
-#, fuzzy, kde-format
-#| msgid "End Time:"
+#, kde-format
 msgid "Message End Time: "
-msgstr "Время завершения:"
+msgstr "Время окончания сообщения: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:223
-#, fuzzy, kde-format
-#| msgid "No templates found."
+#, kde-format
 msgid "No Statistics found."
-msgstr "Шаблоны не найдены."
+msgstr "Статистика не найдена."
 
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #: src/backend/datasources/filters/McapFilter.cpp:974
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Failed to read the file. Reason: %1"
-msgstr "Не удалось прочитать файл"
+msgstr "Не удалось прочитать файл. Причина: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:485
 #, kde-format
 msgid "No JSON encoded topics found."
-msgstr ""
+msgstr "JSON-кодированные топики не найдены."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -2201,23 +2178,20 @@ msgstr "Переменные"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:689
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1114
-#, fuzzy, kde-format
-#| msgid "No variable selected"
+#, kde-format
 msgid "No variable selected."
-msgstr "Переменная не выбрана"
+msgstr "Переменная не выбрана."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:700
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file or it's empty."
-msgstr "Не удалось открыть файл «%1»."
+msgstr "Не удалось открыть файл или он пуст."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:938
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1078
-#, fuzzy, kde-format
-#| msgid "rank %1 not supported yet"
+#, kde-format
 msgid "Data type not supported yet."
-msgstr "ранг %1 пока не поддерживается"
+msgstr "Тип данных пока не поддерживается."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1083
 #, kde-format
@@ -2232,38 +2206,34 @@ msgstr "Количество листов: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
 #: src/backend/datasources/filters/XLSXFilter.cpp:628
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No sheet selected."
-msgstr "Не выбран набор данных"
+msgstr "Лист не выбран."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:260
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selected sheet not found."
-msgstr "Файл не найден"
+msgstr "Выбранный лист не найден."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:267
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invalid sheet."
-msgstr "Недопустимый указатель"
+msgstr "Недопустимый лист."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:329
-#, fuzzy, kde-format
-#| msgid "rank %1 not supported yet"
+#, kde-format
 msgid "Formulas not supported yet."
-msgstr "ранг %1 пока не поддерживается"
+msgstr "Формулы пока не поддерживаются."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:486
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "Sheet not found."
-msgstr "Файл не найден"
+msgstr "Лист не найден."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:493
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid sheet index."
-msgstr "Недопустимый файл метаданных"
+msgstr "Недопустимый индекс листа."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -2294,10 +2264,9 @@ msgid "Size in Bytes"
 msgstr "Размер в байтах"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document"
+#, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "Не удалось загрузить документ JSON"
+msgstr "Не удалось загрузить JSON-файл. Пустой JSON-документ."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format
@@ -2358,17 +2327,15 @@ msgid "64bit: %1"
 msgstr "64-разр.: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:482
-#, fuzzy, kde-format
-#| msgid "Error opening file"
+#, kde-format
 msgid "Error reading file."
-msgstr "Не удалось открыть файл"
+msgstr "Ошибка чтения файла."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:512
 #: src/backend/datasources/filters/ReadStatFilter.cpp:535
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to parse the file."
-msgstr "Не удалось открыть файл «%1»."
+msgstr "Не удалось разобрать файл."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
 #: src/backend/datasources/MQTTClient.cpp:1192
@@ -2385,10 +2352,9 @@ msgid "No column available"
 msgstr "Нет доступных столбцов"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:163
-#, fuzzy, kde-format
-#| msgid "unsupported float type for rank 1"
+#, kde-format
 msgid "Unsupported file type, neither histogram no tree."
-msgstr "неподдерживаемый тип числа с плавающей точкой для ранга 1"
+msgstr "Неподдерживаемый тип файла: ни гистограмма, ни дерево."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1505
 #, kde-format
@@ -2432,95 +2398,79 @@ msgstr "Размер записи TStreamerInfo: %1 байт"
 
 # BUGME: please add colon; please split --aspotashev
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:110
-#, fuzzy, kde-format
-#| msgid "Ratio: %1"
+#, kde-format
 msgid "Application: %1"
-msgstr "Коэффициент: %1"
+msgstr "Приложение: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:112
-#, fuzzy, kde-format
-#| msgid "Format version: %1"
+#, kde-format
 msgid "Application version: %1.%2.%3"
-msgstr "Версия формата: %1"
+msgstr "Версия приложения: %1.%2.%3"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:114
-#, fuzzy, kde-format
-#| msgid "Number of all objects: %1"
+#, kde-format
 msgid "Number of Objects: %1"
-msgstr "Общее число объектов: %1"
+msgstr "Количество объектов: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:122
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Start Time: %1"
-msgstr "Время начала:"
+msgstr "Время начала: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:130
-#, fuzzy, kde-format
-#| msgid "End Time:"
+#, kde-format
 msgid "End Time: %1"
-msgstr "Время завершения:"
+msgstr "Время завершения: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:134
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression Level: %1"
-msgstr "Сжатие: %1"
+msgstr "Уровень сжатия: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:136
-#, fuzzy, kde-format
-#| msgid "File size: %1 bytes"
+#, kde-format
 msgid "Uncompressed File Size: %1 Bytes"
-msgstr "Размер файла: %1 байт"
+msgstr "Размер несжатого файла: %1 байт"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:187
-#, fuzzy, kde-format
-#| msgid "Big Endian not supported. CAN id: %1"
+#, kde-format
 msgid "Big Endian not supported. CAN id: %1."
-msgstr ""
-"Обратный порядок следования байтов не поддерживается. Идентификатор CAN: %1"
+msgstr "Формат Big Endian не поддерживается. Идентификатор CAN: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:190
-#, fuzzy, kde-format
-#| msgid "Message too long. CAN id: %1"
+#, kde-format
 msgid "Message too long. CAN id: %1."
-msgstr "Слишком длинное сообщение. Идентификатор CAN: %1"
+msgstr "Слишком длинное сообщение. Идентификатор CAN: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:193
-#, fuzzy, kde-format
-#| msgid "Unknown id: %1"
+#, kde-format
 msgid "Unknown id: %1."
-msgstr "Неизвестный идентификатор: %1"
+msgstr "Неизвестный идентификатор: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid BLF file"
-msgstr "Недопустимый файл blf"
+msgstr "Недопустимый файл BLF"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:199
-#, fuzzy, kde-format
-#| msgid "Unable to calculate conversion: %1"
+#, kde-format
 msgid "Unable to calculate conversion: %1."
-msgstr "Не удалось выполнить преобразование: %1"
+msgstr "Не удалось вычислить преобразование: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:202
-#, fuzzy, kde-format
-#| msgid "No dbc parser installed"
+#, kde-format
 msgid "No DBC parser installed."
-msgstr "Анализатор синтаксиса dbc не установлен"
+msgstr "Анализатор синтаксиса DBC не установлен."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:205
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid DBC file."
-msgstr "Недопустимый файл blf"
+msgstr "Ошибка: недопустимый файл DBC."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:208
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgid "Unknown error,"
-msgstr "Неизвестная ошибка"
+msgstr "Неизвестная ошибка,"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:452
 #, kde-format
@@ -2543,25 +2493,19 @@ msgid "Sheets: "
 msgstr "Листы: "
 
 #: src/backend/datasources/filters/XLSXFilter.cpp:632
-#, fuzzy, kde-format
-#| msgid "Invalid tolerance specified"
+#, kde-format
 msgid "Invalid region specified."
-msgstr "Указано недопустимое отклонение"
+msgstr "Указана недопустимая область."
 
 #: src/backend/datasources/LiveDataSource.cpp:733
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "Файл не существует."
+msgstr "Устройство не существует."
 
 #: src/backend/datasources/LiveDataSource.cpp:736
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr ""
-"Не удалось открыть устройство. Необходимо проверить разрешения на этом "
-"устройстве."
+msgstr "Недостаточно прав для открытия устройства."
 
 #: src/backend/datasources/LiveDataSource.cpp:739
 #, kde-format
@@ -2569,8 +2513,7 @@ msgid "Device already opened."
 msgstr "Устройство уже открыто."
 
 #: src/backend/datasources/LiveDataSource.cpp:742
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not open."
 msgstr "Устройство не открыто."
 
@@ -2580,9 +2523,9 @@ msgid "Failed to read data."
 msgstr "Не удалось считать данные."
 
 #: src/backend/datasources/LiveDataSource.cpp:748
-#, fuzzy, kde-format
+#, kde-format
 msgid "Device not available."
-msgstr "Удалить переменную"
+msgstr "Устройство недоступно."
 
 #: src/backend/datasources/LiveDataSource.cpp:751
 #, fuzzy, kde-format
@@ -2603,7 +2546,7 @@ msgstr "Ошибка последовательного порта"
 #: src/backend/datasources/MQTTTopic.cpp:45
 #, kde-format
 msgid "%1 %2"
-msgstr ""
+msgstr "%1 %2"
 
 #: src/backend/datasources/MQTTTopic.cpp:130
 #, kde-format
@@ -2628,10 +2571,9 @@ msgstr "%1: Импорт из %2"
 
 # BUGME: please add context --aspotashev
 #: src/backend/gsl/constants.cpp:15
-#, fuzzy, kde-format
-#| msgid "Planck constant"
+#, kde-format
 msgid "Programming constants"
-msgstr "Постоянная Планка"
+msgstr "Константы программирования"
 
 #: src/backend/gsl/constants.cpp:17
 #, kde-format
@@ -2715,14 +2657,14 @@ msgstr "Сила и энергия"
 
 # BUGME: please add context --aspotashev
 #: src/backend/gsl/constants.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unknown Constant"
-msgstr "Константы"
+msgstr "Неизвестная константа"
 
 #: src/backend/gsl/constants.cpp:63
 #, kde-format
 msgid "RAND_MAX"
-msgstr ""
+msgstr "RAND_MAX"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:66
@@ -2742,10 +2684,9 @@ msgid "Euler's constant"
 msgstr "Постоянная Эйлера"
 
 #: src/backend/gsl/constants.cpp:69
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Not a number"
-msgstr "Количество"
+msgstr "Не число"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:72
@@ -3451,14 +3392,14 @@ msgstr "Стандартные математические функции"
 
 # BUGME: please add context --aspotashev
 #: src/backend/gsl/functions.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comparison Functions"
-msgstr "Функции Клаузена"
+msgstr "Функции сравнения"
 
 #: src/backend/gsl/functions.cpp:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Logical Functions"
-msgstr "Логистическая функция"
+msgstr "Логические функции"
 
 #: src/backend/gsl/functions.cpp:65
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:29
@@ -3756,28 +3697,25 @@ msgid "Logarithmic Distribution"
 msgstr "Логарифмическое распределение"
 
 #: src/backend/gsl/functions.cpp:185
-#, fuzzy, kde-format
-#| msgid "Landau Distribution"
+#, kde-format
 msgid "Triangular Distribution"
-msgstr "Распределение Ландау"
+msgstr "Треугольное распределение"
 
 # BUGME: please add context --aspotashev
 #: src/backend/gsl/functions.cpp:189
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unknown Function"
-msgstr "Степенная функция"
+msgstr "Неизвестная функция"
 
 #: src/backend/gsl/functions.cpp:242
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Cell (index; variable)"
-msgstr "Удалить переменную"
+msgstr "Ячейка (индекс; переменная)"
 
 #: src/backend/gsl/functions.cpp:243
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Удалить переменную"
+msgstr "Cell (индекс; значение_по_умолчанию; переменная)"
 
 #: src/backend/gsl/functions.cpp:244
 #, kde-format
@@ -3810,26 +3748,24 @@ msgid "Simple Moving Range"
 msgstr "Простой скользящий размах"
 
 #: src/backend/gsl/functions.cpp:250
-#, fuzzy, kde-format
-#| msgid "Periodically"
+#, kde-format
 msgid "Period sample"
-msgstr "Периодически"
+msgstr "Образец периода"
 
 #: src/backend/gsl/functions.cpp:251
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "Random sample"
-msgstr "Случайные значения"
+msgstr "Случайная выборка"
 
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index)"
-msgstr ""
+msgstr "Текущая ячейка столбца (индекс)"
 
 #: src/backend/gsl/functions.cpp:254
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr ""
+msgstr "Текущая ячейка столбца (индекс; значение_по_умолчанию)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:258
@@ -4088,19 +4024,19 @@ msgid "Percentile"
 msgstr "Процентиль"
 
 #: src/backend/gsl/functions.cpp:294
-#, fuzzy, kde-format
+#, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr "Псевдослучайное целое число [0,RAND_MAX]"
+msgstr "псевдослучайное целое число [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:295
-#, fuzzy, kde-format
+#, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
-msgstr "Нелинейный возвратно-аддитивный генератор случайных чисел [0,RAND_MAX]"
+msgstr "нелинейный аддитивный обратносвязный ГСЧ [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:296
-#, fuzzy, kde-format
+#, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
-msgstr "Нелинейный возвратно-аддитивный генератор случайных чисел [0,1]"
+msgstr "нелинейный аддитивный обратносвязанный ГСЧ [0, 1]"
 
 #: src/backend/gsl/functions.cpp:297
 #, kde-format
@@ -4166,63 +4102,63 @@ msgstr "Округление до ближайшего целого числа"
 #: src/backend/gsl/functions.cpp:312
 #, kde-format
 msgid "Round to y decimal places"
-msgstr ""
+msgstr "Округлить до y десятичных знаков"
 
 #: src/backend/gsl/functions.cpp:326
-#, fuzzy, kde-format
+#, kde-format
 msgid "greaterThan"
-msgstr "Больше"
+msgstr "больше чем"
 
 #: src/backend/gsl/functions.cpp:327
 #, kde-format
 msgid "lessThan"
-msgstr ""
+msgstr "меньше чем"
 
 #: src/backend/gsl/functions.cpp:328
-#, fuzzy, kde-format
+#, kde-format
 msgid "greaterEqualThan"
-msgstr "Больше"
+msgstr "больше или равно"
 
 #: src/backend/gsl/functions.cpp:329
 #, kde-format
 msgid "lessEqualThan"
-msgstr ""
+msgstr "меньше или равно"
 
 # BUGME: please add context --aspotashev
 #: src/backend/gsl/functions.cpp:330
-#, fuzzy, kde-format
+#, kde-format
 msgid "equal"
-msgstr "Равные"
+msgstr "равно"
 
 #: src/backend/gsl/functions.cpp:331
 #, kde-format
 msgid "equal with epsilon"
-msgstr ""
+msgstr "равенство с эпсилон"
 
 #: src/backend/gsl/functions.cpp:332
 #, kde-format
 msgid "between with boundaries included"
-msgstr ""
+msgstr "между с включением границ"
 
 #: src/backend/gsl/functions.cpp:333
 #, kde-format
 msgid "outside with boundaries included"
-msgstr ""
+msgstr "вне границ с включением границ"
 
 #: src/backend/gsl/functions.cpp:334
 #, kde-format
 msgid "between with boundaries excluded"
-msgstr ""
+msgstr "между (границы исключены)"
 
 #: src/backend/gsl/functions.cpp:335
-#, fuzzy, kde-format
+#, kde-format
 msgid "outside with boundaries excluded"
-msgstr "За пределами ограничивающего прямоугольника"
+msgstr "вне границ, исключая границы"
 
 #: src/backend/gsl/functions.cpp:338
 #, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr ""
+msgstr "если(условие; еслиИстина; еслиЛожь)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -4246,15 +4182,14 @@ msgstr "или"
 
 # BUGME: is this submenu name? please add ctxt. --aspotashev
 #: src/backend/gsl/functions.cpp:341
-#, fuzzy, kde-format
+#, kde-format
 msgid "xor"
-msgstr "или"
+msgstr "исключающее или"
 
 #: src/backend/gsl/functions.cpp:342
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "not"
-msgstr "нет"
+msgstr "не"
 
 #: src/backend/gsl/functions.cpp:346
 #, kde-format
@@ -5232,9 +5167,9 @@ msgid "Logarithm"
 msgstr "Логарифм"
 
 #: src/backend/gsl/functions.cpp:580
-#, fuzzy, kde-format
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Десятичный логарифм"
+msgstr "Логарифм по основанию 2"
 
 #: src/backend/gsl/functions.cpp:581
 #, kde-format
@@ -5242,36 +5177,36 @@ msgid "Logarithm of the magnitude"
 msgstr "Логарифм амплитуды"
 
 #: src/backend/gsl/functions.cpp:587
-#, fuzzy, kde-format
+#, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Собственные значения a_n(q) функций Матье ce_n(q,x)"
+msgstr "Характеристические значения a_n(q) функций Матьё ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:588
-#, fuzzy, kde-format
+#, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Собственные значения b_n(q) функций Матье se_n(q,x)"
+msgstr "Характеристические значения b_n(q) функций Матьё se_n(q, x)"
 
 # BUGME: please add context --aspotashev
 #: src/backend/gsl/functions.cpp:589
-#, fuzzy, kde-format
+#, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "Угловые функции Матье ce_n(q,x)"
+msgstr "Угловые функции Матьё ce_n(q, x)"
 
 # BUGME: please add context --aspotashev
 #: src/backend/gsl/functions.cpp:590
-#, fuzzy, kde-format
+#, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "Угловые функции Матье se_n(q,x)"
+msgstr "Угловые функции Матьё se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:591
-#, fuzzy, kde-format
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr "Радиальные функции Матье j-ого рода Mc_n^{(j)}(q,x)"
+msgstr "Радиальные функции Матьё j-го рода Mc_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:592
-#, fuzzy, kde-format
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr "Радиальные функции Матье j-ого рода Ms_n^{(j)}(q,x)"
+msgstr "Радиальные функции Матьё j-го рода Ms_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:596
 #, kde-format
@@ -5319,28 +5254,24 @@ msgid "Second synchrotron function"
 msgstr "Вторая функция синхротрона"
 
 #: src/backend/gsl/functions.cpp:611
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J2"
-msgstr "Транспортная функция"
+msgstr "Транспортная функция J2"
 
 #: src/backend/gsl/functions.cpp:612
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J3"
-msgstr "Транспортная функция"
+msgstr "Транспортная функция J3"
 
 #: src/backend/gsl/functions.cpp:613
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J4"
-msgstr "Транспортная функция"
+msgstr "Транспортная функция J4"
 
 #: src/backend/gsl/functions.cpp:614
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J5"
-msgstr "Транспортная функция"
+msgstr "Транспортная функция J5"
 
 #: src/backend/gsl/functions.cpp:617
 #, kde-format
@@ -5486,14 +5417,14 @@ msgid "Three component hypotenuse function"
 msgstr "Трёхкомпонентная функция гипотенузы"
 
 #: src/backend/gsl/functions.cpp:647
-#, fuzzy, kde-format
+#, kde-format
 msgid "restrict to [-pi, pi]"
-msgstr "ограничить до [-pi,pi]"
+msgstr "ограничить [-π, π]"
 
 #: src/backend/gsl/functions.cpp:648
-#, fuzzy, kde-format
+#, kde-format
 msgid "restrict to [0, 2 pi]"
-msgstr "ограничить до [0,2 pi]"
+msgstr "ограничить [0, 2π]"
 
 #: src/backend/gsl/functions.cpp:651
 #, kde-format
@@ -5612,10 +5543,9 @@ msgid "Binomial random numbers"
 msgstr "Биномиальные случайные числа"
 
 #: src/backend/gsl/functions.cpp:680
-#, fuzzy, kde-format
-#| msgid "Landau random numbers"
+#, kde-format
 msgid "Triangular random numbers"
-msgstr "Случайные числа с распределением Ландау"
+msgstr "Треугольные случайные числа"
 
 #: src/backend/gsl/functions.cpp:684
 #, kde-format
@@ -5688,28 +5618,24 @@ msgid "Probability density for an exponential distribution"
 msgstr "Плотность вероятности для экспоненциального распределения"
 
 #: src/backend/gsl/functions.cpp:701
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative exponential distribution function P"
-msgstr "Интегральная функция нормированного распределения P"
+msgstr "Функция кумулятивного экспоненциального распределения P"
 
 #: src/backend/gsl/functions.cpp:702
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative exponential distribution function Q"
-msgstr "Интегральная функция нормированного распределения Q"
+msgstr "Интегральная функция экспоненциального распределения Q"
 
 #: src/backend/gsl/functions.cpp:703
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function P"
+#, kde-format
 msgid "Inverse cumulative exponential distribution function P"
-msgstr "Обратная интегральная функция нормированного распределения P"
+msgstr "Обратная функция кумулятивного экспоненциального распределения P"
 
 #: src/backend/gsl/functions.cpp:704
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function Q"
+#, kde-format
 msgid "Inverse cumulative exponential distribution function Q"
-msgstr "Обратная интегральная функция нормированного распределения Q"
+msgstr "Обратная функция кумулятивного экспоненциального распределения Q"
 
 #: src/backend/gsl/functions.cpp:707
 #, kde-format
@@ -5717,16 +5643,14 @@ msgid "Probability density for a Laplace distribution"
 msgstr "Плотность вероятности для распределения Лапласа"
 
 #: src/backend/gsl/functions.cpp:708
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Laplace distribution function P"
-msgstr "Интегральная функция распределения P"
+msgstr "Интегральная функция распределения Лапласа P"
 
 #: src/backend/gsl/functions.cpp:709
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Laplace distribution function Q"
-msgstr "Интегральная функция распределения Q"
+msgstr "Интегральная функция распределения Лапласа Q"
 
 #: src/backend/gsl/functions.cpp:710
 #, fuzzy, kde-format
@@ -9978,9 +9902,9 @@ msgstr "Столбчатый график"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:660
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1988
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lollipop Plot"
-msgstr "Всем графикам"
+msgstr "График Lollipop"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:667
 #, kde-format
@@ -15818,7 +15742,7 @@ msgstr "Обычная гистограмма"
 #: src/frontend/dockwidgets/HistogramDock.cpp:256
 #, kde-format
 msgid "Cumulative Histogram"
-msgstr "Кумулятивная гистограмма"
+msgstr "Интегральная гистограмма"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:267
 #, kde-format
@@ -15849,6 +15773,16 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"Метод определения количества интервалов <i>k</i> и их ширины <i>h</i> для "
+"<i>n</i> значений:<ul><li>По количеству — количество интервалов задаётся "
+"вручную</li><li>По ширине — количество интервалов вычисляется на основе "
+"заданной ширины интервала через <i>k = (max(x) - min(x) / h</i>)</"
+"li><li>Квадратный корень — <i>k = sqrt(n)</i></li><li>Райс — <i>k = 2 * "
+"pow(n, 3/2)</i>, упрощённая альтернатива методу Стерджеса</li><li>Стерджес — "
+"<i>k = log2(n) + 1</i>, предполагает приблизительно нормальное "
+"распределение</li><li>Доан — модифицированная версия метода Стерджеса, "
+"подробности см. в документации</li><li>Скотт — <i>h = 3.49 * sigma / pow(n, "
+"3/2)</i>, оптимальный метод для нормально распределённых данных</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:288
 #, kde-format
@@ -15859,11 +15793,16 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"Используйте «Авто» для автоматического определения минимального и "
+"максимального значений данных, по которым строится гистограмма. В противном "
+"случае укажите значения вручную.<br><br><b>Примечание:</b> значения, "
+"попадающие на верхнюю границу гистограммы, исключаются. Чтобы включить их в "
+"последний интервал, добавьте дополнительный интервал."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:571
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
-msgstr "Оси (%1): загрузка шаблона «%2»"
+msgstr "Гистограммы (%1): загружен шаблон «%2»"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:114
 #, kde-format
@@ -15913,13 +15852,14 @@ msgstr "%1: удаление кривой «%2»"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #, kde-format
 msgid "Silverman"
-msgstr ""
+msgstr "Сильверман"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:175
 #, kde-format
 msgid ""
 "The window function (\"kernel\") used to estimate the probability density"
 msgstr ""
+"Оконная функция («ядро»), используемая для оценки плотности вероятности"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:182
 #, kde-format
@@ -15928,11 +15868,15 @@ msgid ""
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
+"Метод выбора ширины полосы пропускания ядра:<ul><li>Сильверман — 0.9 * "
+"min(σ, IQR / 1.34) * n<sup>-0.2</sup></li><li>Скотт — 1.059 * σ * "
+"n<sup>-0.2</sup></li><li>Вручную — пользовательское значение ширины полосы "
+"пропускания ядра</li></ul>"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:191
 #, kde-format
 msgid "Custom value for the kernel bandwidth"
-msgstr ""
+msgstr "Указанное значение ширины полосы ядра"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:804
@@ -15974,9 +15918,9 @@ msgid "Couldn't subscribe to all available topics. Something went wrong"
 msgstr "Не удалось подписаться на все доступные темы. Произошла ошибка"
 
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:330
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
-msgstr "Сохранено в новый шаблон «%1»."
+msgstr "Графики %1 «Lollipop»: загружен шаблон «%2»"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:84
 #, kde-format
@@ -16030,10 +15974,9 @@ msgstr "Упрощение"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
-#, fuzzy, kde-format
-#| msgid "Moving Average"
+#, kde-format
 msgid "Average"
-msgstr "Скользящее среднее"
+msgstr "Среднее"
 
 # BUGME: please split to allow translation "Порядок сортировки:" --aspotashev
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:234
@@ -16086,29 +16029,25 @@ msgstr "Прямоугольный параллелепипед"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:242
 #: src/frontend/widgets/LabelWidget.cpp:516
-#, fuzzy, kde-format
-#| msgid "Up Pointing rectangle"
+#, kde-format
 msgid "Up pointing rectangle"
 msgstr "Прямоугольник с заострением вверху"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:243
 #: src/frontend/widgets/LabelWidget.cpp:517
-#, fuzzy, kde-format
-#| msgid "Down Pointing rectangle"
+#, kde-format
 msgid "Down pointing rectangle"
 msgstr "Прямоугольник с заострением внизу"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:244
 #: src/frontend/widgets/LabelWidget.cpp:518
-#, fuzzy, kde-format
-#| msgid "Left Pointing rectangle"
+#, kde-format
 msgid "Left pointing rectangle"
 msgstr "Прямоугольник с заострением слева"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:245
 #: src/frontend/widgets/LabelWidget.cpp:519
-#, fuzzy, kde-format
-#| msgid "Right Pointing rectangle"
+#, kde-format
 msgid "Right pointing rectangle"
 msgstr "Прямоугольник с заострением справа"
 
@@ -16129,6 +16068,21 @@ msgid ""
 "li><li>C - plot <b>Poisson counts</b>.</li><li>U - plot <b>Poisson rates</b>."
 "</li></ul>"
 msgstr ""
+"Поддерживаемые типы диаграмм сгруппированы по отображаемой статистике и "
+"метрике, определяющей границы.<br><br>Индивидуальные значения и скользящие "
+"размахи, границы на основе среднего или медианного скользящего размаха:"
+"<ul><li>X (XmR) — отображение <b>индивидуальных значений</b>.</li><li>mR — "
+"отображение <b>скользящих размахов</b>.</li></ul>Средние и размахи, границы "
+"на основе среднего или медианного размаха:<ul><li>X̅ (X̅R) — отображение "
+"<b>средних значений для каждой выборки</b>.</li><li>R (X̅R) — отображение "
+"<b>размахов для каждой выборки</b>.</li></ul>Средние и стандартные "
+"отклонения, границы на основе стандартных отклонений:<ul><li>X̅ (X̅S) — "
+"отображение <b>средних значений для каждой выборки</b>.</li><li>S (X̅S) — "
+"отображение <b>стандартных отклонений для каждой выборки</b>.</li></"
+"ul>Атрибутивные:<ul><li>P — отображение <b>биномиальных долей</b>.</"
+"li><li>NP — отображение <b>биномиальных количеств</b>.</li><li>C — "
+"отображение <b>пуассоновских количеств</b>.</li><li>U — отображение "
+"<b>пуассоновских частот</b>.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:276
 #, kde-format
@@ -16143,11 +16097,15 @@ msgstr ""
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
 msgstr ""
+"Максимальное значение для верхней контрольной границы. Без ограничений, если "
+"пусто."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:288
 #, kde-format
 msgid "Minimal value for the lower control limit. No constraint, if empty."
 msgstr ""
+"Минимальное значение для нижней контрольной границы. Без ограничений, если "
+"пусто."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:292
 #, kde-format
@@ -16155,6 +16113,9 @@ msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
 "step limits\"), straight lines are drawn for the limits otherwise."
 msgstr ""
+"Если флажок установлен, для каждой выборки вычисляются точные границы "
+"(«ступенчатые границы»); в противном случае границы отображаются прямыми "
+"линиями."
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:74
 #, kde-format
@@ -17210,10 +17171,10 @@ msgid "Properties: Bar Plot"
 msgstr "Свойства"
 
 #: src/frontend/GuiObserver.cpp:369
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
-msgstr "Панель свойств"
+msgstr "Свойства: график Lollipop"
 
 #: src/frontend/GuiObserver.cpp:375
 #, fuzzy, kde-format

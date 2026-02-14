@@ -26695,6 +26695,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "%1: cut selected cells"
-#~ msgstr "%1：剪切选中的单元格"
