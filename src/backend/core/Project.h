@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -60,7 +60,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, fileCompression, FileCompression)
 	BASIC_D_ACCESSOR_DECL(bool, saveData, SaveData)
 
-	bool hasChanged() const;
+	void setChanged(bool value = true) override;
 	void navigateTo(const QString& path);
 
 	void setSuppressAspectAddedSignal(bool);
@@ -100,7 +100,6 @@ Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void requestFolderContextMenu(const Folder*, QMenu*);
 	void mdiWindowVisibilityChanged();
-	void changed();
 	void requestNavigateTo(const QString& path);
 	void closeRequested();
 	void saved() const;
@@ -119,7 +118,6 @@ private:
 	void updateDependencies(const QVector<const AbstractAspect*>);
 
 private:
-	void setChanged(const bool value = true);
 	friend class AbstractAspect;
 	friend class MainWin;
 	friend class ImportDialog;

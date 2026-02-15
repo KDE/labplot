@@ -473,7 +473,7 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 	\return \c true if the project still needs to be saved ("cancel" clicked), \c false otherwise.
  */
 bool MainWin::warnModified() {
-	if (m_project->hasChanged()) {
+	if (m_project->isChanged()) {
 		int option = KMessageBox::warningTwoActionsCancel(this, i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
 				i18n("Save Project"), KStandardGuiItem::save(), KStandardGuiItem::dontSave());
 		switch (option) {
@@ -538,7 +538,7 @@ bool MainWin::newProject(bool createInitialContent) {
 	connect(m_project, &Project::childAspectRemoved, this, &MainWin::handleAspectRemoved);
 	connect(m_project, &Project::childAspectAboutToBeRemoved, this, &MainWin::handleAspectAboutToBeRemoved);
 	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
-	connect(m_project, &Project::changed, this, &MainWin::projectChanged);
+	connect(m_project, &Project::aspectChangedStatusChanged, this, &MainWin::projectChanged);
 	connect(m_project, &Project::requestProjectContextMenu, this, &MainWin::createContextMenu);
 	connect(m_project, &Project::requestFolderContextMenu, this, &MainWin::createFolderContextMenu);
 	connect(m_project, &Project::mdiWindowVisibilityChanged, this, &MainWin::updateDockWindowVisibility);
@@ -546,6 +546,7 @@ bool MainWin::newProject(bool createInitialContent) {
 
 	// depending on the settings, create the default project content (add a worksheet, etc.)
 	if (createInitialContent) {
+		m_project->setUndoAware(false);
 		const auto newProject = (NewProject)group.readEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithSpreadsheet));
 		switch (newProject) {
 		case NewProject::WithWorksheet:
@@ -568,11 +569,12 @@ bool MainWin::newProject(bool createInitialContent) {
 		}
 		}
 
-		m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
-
+		m_project->setUndoAware(true);
 		m_actionsManager->updateGUIOnProjectChanges();
 		m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	}
+
+	m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
 
 	return true;
 }
@@ -983,6 +985,10 @@ bool MainWin::save(const QString& fileName) {
 	}
 
 	WAIT_CURSOR_AUTO_RESET;
+	statusBar()->showMessage(i18n("Saving %1...", fileName));
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	QElapsedTimer timer;
+	timer.start();
 	const QString& tempFileName = tempFile.fileName();
 	DEBUG("Using temporary file " << STDSTRING(tempFileName))
 	tempFile.close();
@@ -1087,6 +1093,7 @@ bool MainWin::save(const QString& fileName) {
 	m_actionsManager->fillShareMenu();
 #endif
 
+	statusBar()->showMessage(i18n("Project successfully saved (in %1 seconds).", (float)timer.elapsed() / 1000));
 	return ok;
 }
 
@@ -1096,7 +1103,7 @@ bool MainWin::save(const QString& fileName) {
 void MainWin::autoSaveProject() {
 	// don't auto save when there are no changes or the file name
 	// was not provided yet (the project was never explicitly saved yet).
-	if (!m_project->hasChanged() || m_project->fileName().isEmpty())
+	if (!m_project->isChanged() || m_project->fileName().isEmpty())
 		return;
 
 	this->saveProject();
@@ -1124,7 +1131,7 @@ void MainWin::updateTitleBar() {
 				title = m_project->fileName();
 		}
 
-		if (m_project->hasChanged())
+		if (m_project->isChanged())
 			title += QLatin1String("    [") + i18n("Changed") + QLatin1Char(']');
 	} else
 		title = QLatin1String("LabPlot");

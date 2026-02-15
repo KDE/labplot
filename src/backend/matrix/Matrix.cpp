@@ -235,7 +235,7 @@ void Matrix::setSuppressDataChangedSignal(bool b) {
 		m_model->setSuppressDataChangedSignal(b);
 }
 
-void Matrix::setChanged() {
+void Matrix::setDataChanged() {
 	if (m_model)
 		m_model->setChanged();
 }

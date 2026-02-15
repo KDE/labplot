@@ -530,7 +530,7 @@ void AbstractColumn::reset() {
  * and not via the setValueAt() or when multiple cells are being notified and the signal \c dataChanged()
  * is suppressed for performance reasons and this function needs to be called after all cells were modified.
  */
-void AbstractColumn::setChanged() {
+void AbstractColumn::setDataChanged() {
 	invalidateProperties();
 	if (!d->m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);

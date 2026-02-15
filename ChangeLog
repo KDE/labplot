@@ -5,6 +5,7 @@ New features:
 		* Expose more column related actions the context menu in the project (plot data, etc.) also when multiple columns are selected
 		* Add possibility to skip storing the data from columns and matrices in the saved file
 		* Improve spinbox localization
+		* New column "Changed" in the project explorer to inform about which objects were changed since the last save
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
 		* Baseline correction analysis in the plot
