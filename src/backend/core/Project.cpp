@@ -342,7 +342,7 @@ void Project::setChanged(bool value) {
 	AbstractAspect::setChanged(value);
 
 	// when resetting the status of the project after load (changed = false), also recusively update all children
-	if(!value) {
+	if (!value) {
 		const auto& children = this->children<AbstractAspect>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
 		for (auto* child : children)
 			child->setChanged(false);
