@@ -463,7 +463,7 @@ public:
 
 		m_column->setSuppressDataChangedSignal(false);
 		if (changed)
-			m_column->setChanged();
+			m_column->setDataChanged();
 	}
 
 private:
@@ -921,7 +921,7 @@ public:
 
 		m_column->setSuppressDataChangedSignal(false);
 		if (changed)
-			m_column->setChanged();
+			m_column->setDataChanged();
 	}
 
 private:

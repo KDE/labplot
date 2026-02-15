@@ -390,7 +390,7 @@ void ColumnInsertRowsCmd::redo() {
 	Q_EMIT m_col->q->rowsAboutToBeInserted(m_col->q, m_before, m_count);
 	m_col->insertRows(m_before, m_count);
 	m_col->q->updateFormula(); // only needed in redo
-	m_col->owner()->setChanged();
+	m_col->owner()->setDataChanged();
 	Q_EMIT m_col->q->rowsInserted(m_col->q, m_before, m_count);
 }
 
@@ -400,7 +400,7 @@ void ColumnInsertRowsCmd::redo() {
 void ColumnInsertRowsCmd::undo() {
 	Q_EMIT m_col->q->rowsAboutToBeRemoved(m_col->q, m_before, m_count);
 	m_col->removeRows(m_before, m_count);
-	m_col->owner()->setChanged();
+	m_col->owner()->setDataChanged();
 	Q_EMIT m_col->q->rowsRemoved(m_col->q, m_before, m_count);
 }
 
@@ -482,7 +482,7 @@ void ColumnRemoveRowsCmd::redo() {
 	}
 	Q_EMIT m_col->q->rowsAboutToBeRemoved(m_col->q, m_first, m_count);
 	m_col->removeRows(m_first, m_count);
-	m_col->owner()->setChanged();
+	m_col->owner()->setDataChanged();
 	Q_EMIT m_col->q->rowsRemoved(m_col->q, m_first, m_count);
 }
 
@@ -495,7 +495,7 @@ void ColumnRemoveRowsCmd::undo() {
 	m_col->copy(m_backup, 0, m_first, m_data_row_count);
 	m_col->resizeTo(m_old_size);
 	m_col->replaceFormulas(m_formulas);
-	m_col->owner()->setChanged();
+	m_col->owner()->setDataChanged();
 	Q_EMIT m_col->q->rowsInserted(m_col->q, m_first, m_count);
 }
 

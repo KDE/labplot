@@ -744,7 +744,7 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 	// 		for (auto* col : selectedColumns()) {
 	// 			col->setSuppressDataChangedSignal(true);
 	// 			col->clearFormulas();	// 			col->setSuppressDataChangedSignal(false);
-	// 			col->setChanged();
+	// 			col->setDataChanged();
 	// 		}
 	// 	} else {
 	WAIT_CURSOR_AUTO_RESET;
@@ -754,7 +754,7 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 		col->setSuppressDataChangedSignal(true);
 		col->clear();
 		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
+		col->setDataChanged();
 	}
 	endMacro();
 }
@@ -1837,7 +1837,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 		if (columnImportMode == AbstractFileFilter::ImportMode::Replace) {
 			column->setSuppressDataChangedSignal(true);
-			column->setChanged(); // Invalidate properties
+			column->setDataChanged(); // Invalidate properties
 			column->setSuppressDataChangedSignal(false);
 		}
 	}

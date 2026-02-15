@@ -1990,7 +1990,7 @@ void SpreadsheetView::pasteIntoSelection() {
 			}
 
 			col->setSuppressDataChangedSignal(false);
-			col->setChanged();
+			col->setDataChanged();
 		} // end of for-loop
 	} catch (std::bad_alloc&) {
 		cellTexts.clear();
@@ -2023,7 +2023,7 @@ void SpreadsheetView::maskSelection() {
 				column->setMasked(row);
 
 		column->setSuppressDataChangedSignal(false);
-		column->setChanged();
+		column->setDataChanged();
 	}
 
 	// some cells were masked, enable the "clear masks" action
@@ -2054,7 +2054,7 @@ void SpreadsheetView::unmaskSelection() {
 				column->setMasked(row, false);
 
 		column->setSuppressDataChangedSignal(false);
-		column->setChanged();
+		column->setDataChanged();
 	}
 
 	m_spreadsheet->endMacro();
@@ -2283,7 +2283,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
-		col_ptr->setChanged();
+		col_ptr->setDataChanged();
 	}
 	m_spreadsheet->endMacro();
 }
@@ -2402,7 +2402,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
-		col_ptr->setChanged();
+		col_ptr->setDataChanged();
 	}
 	m_spreadsheet->endMacro();
 }
@@ -2547,7 +2547,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
-		col_ptr->setChanged();
+		col_ptr->setDataChanged();
 	}
 	m_spreadsheet->endMacro();
 }
@@ -3417,7 +3417,7 @@ void SpreadsheetView::removeSelectedRows() {
 	// emit the dataChanged signal
 	for (auto* column : columns) {
 		column->setSuppressDataChangedSignal(false);
-		column->setChanged();
+		column->setDataChanged();
 	}
 
 	m_spreadsheet->endMacro();
@@ -3481,7 +3481,7 @@ void SpreadsheetView::clearSelectedCells() {
 		}
 
 		column->setSuppressDataChangedSignal(false);
-		column->setChanged();
+		column->setDataChanged();
 	}
 	m_spreadsheet->endMacro();
 }
@@ -3552,7 +3552,7 @@ void SpreadsheetView::sortAscending() {
 	m_spreadsheet->sortColumns(nullptr, cols, true);
 	for (auto* col : cols) {
 		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
+		col->setDataChanged();
 	}
 }
 
@@ -3569,7 +3569,7 @@ void SpreadsheetView::sortDescending() {
 	m_spreadsheet->sortColumns(nullptr, cols, false);
 	for (auto* col : cols) {
 		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
+		col->setDataChanged();
 	}
 }
 
@@ -3613,7 +3613,7 @@ void SpreadsheetView::sortCustom() {
 	for (auto* col : columnsToSort) {
 		col->setSuppressDataChangedSignal(false);
 		if (rc == QDialog::Accepted)
-			col->setChanged();
+			col->setDataChanged();
 	}
 }
 

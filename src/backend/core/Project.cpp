@@ -925,7 +925,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 				}
 			}
 
-			column->setChanged();
+			column->setDataChanged();
 		}
 	}
 
