@@ -175,6 +175,12 @@ Symbol* ParetoChart::symbol() const {
 	return d->linePlot->symbol();
 }
 
+bool ParetoChart::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	start = 0;
+	end = xIndexCount() - 1;
+	return true;
+}
+
 bool ParetoChart::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
 	Q_D(const ParetoChart);
 	return d->linePlot->minMax(dim, indexRange, r, false);
@@ -193,6 +199,13 @@ double ParetoChart::maximum(const Dimension dim) const {
 bool ParetoChart::hasData() const {
 	Q_D(const ParetoChart);
 	return (d->dataColumn != nullptr);
+}
+
+int ParetoChart::dataCount(Dimension) const {
+	Q_D(const ParetoChart);
+	if (!d->dataColumn)
+		return -1;
+	return d->dataColumn->rowCount();
 }
 
 bool ParetoChart::usingColumn(const AbstractColumn* column, bool) const {
