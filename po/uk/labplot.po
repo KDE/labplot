@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-15 00:39+0000\n"
-"PO-Revision-Date: 2026-02-09 08:12+0200\n"
+"PO-Revision-Date: 2026-02-15 08:25+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -11825,10 +11825,9 @@ msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Створює теку для збирання аркушів та інших елементів"
 
 #: src/frontend/ActionsManager.cpp:273
-#, fuzzy, kde-format
-#| msgid "Live Data Source..."
+#, kde-format
 msgid "From Live Data Source..."
-msgstr "Інтерактивне джерело даних…"
+msgstr "З інтерактивного джерела даних…"
 
 #: src/frontend/ActionsManager.cpp:274
 #, kde-format
@@ -12289,7 +12288,7 @@ msgstr "Упорядкувати позначені стовпчики окре�
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "Призупинити"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #. i18n: ectx: property (text), widget (QLabel, lUpdate)
@@ -12401,10 +12400,9 @@ msgstr "Оприлюднений проєкт можна знайти тут: <a
 
 #: src/frontend/ActionsManager.cpp:1554
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
-#, fuzzy, kde-format
-#| msgid "Contains"
+#, kde-format
 msgid "Continue"
-msgstr "містить"
+msgstr "Продовжити"
 
 #: src/frontend/ActionsManager.cpp:1555
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
@@ -17518,10 +17516,9 @@ msgstr "Панель інструментів електронної табли�
 
 #. i18n: ectx: ToolBar (live_data_toolbar)
 #: src/frontend/labplotui.rc:79
-#, fuzzy, kde-format
-#| msgid "Live Data Source..."
+#, kde-format
 msgid "Live Data Source Toolbar"
-msgstr "Інтерактивне джерело даних…"
+msgstr "Панель інструментів інтерактивного джерела даних"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/frontend/labplotui.rc:85
@@ -23998,10 +23995,9 @@ msgstr "Теми"
 
 #. i18n: ectx: property (text), widget (QPushButton, bWillUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:344
-#, fuzzy, kde-format
-#| msgid "Update Will Message"
+#, kde-format
 msgid "Update Message"
-msgstr "Оновити повідомлення Will"
+msgstr "Оновити повідомлення"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:371

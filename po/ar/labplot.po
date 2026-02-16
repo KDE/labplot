@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-15 00:39+0000\n"
-"PO-Revision-Date: 2026-02-12 08:10+0400\n"
+"PO-Revision-Date: 2026-02-15 20:50+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -11786,10 +11786,9 @@ msgid "Creates a new folder to collect sheets and other elements"
 msgstr "ينشئ مجلد جديد لجمع الأوراق والعناصر الأخرى"
 
 #: src/frontend/ActionsManager.cpp:273
-#, fuzzy, kde-format
-#| msgid "Live Data Source..."
+#, kde-format
 msgid "From Live Data Source..."
-msgstr "مصدر البيانات المباشر..."
+msgstr "من مصدر البيانات المباشر…"
 
 #: src/frontend/ActionsManager.cpp:274
 #, kde-format
@@ -12250,7 +12249,7 @@ msgstr "افرز الأَعمدة المختارة على حدة بترتيب ت
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "ألبث"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #. i18n: ectx: property (text), widget (QLabel, lUpdate)
@@ -12362,10 +12361,9 @@ msgstr "بإمكانك إيجاد المشروع المُشارَك على: <a h
 
 #: src/frontend/ActionsManager.cpp:1554
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
-#, fuzzy, kde-format
-#| msgid "Contains"
+#, kde-format
 msgid "Continue"
-msgstr "اِحتوِ على"
+msgstr "تابع"
 
 #: src/frontend/ActionsManager.cpp:1555
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
@@ -17364,10 +17362,9 @@ msgstr "شريط أدوات جدول البيانات"
 
 #. i18n: ectx: ToolBar (live_data_toolbar)
 #: src/frontend/labplotui.rc:79
-#, fuzzy, kde-format
-#| msgid "Live Data Source..."
+#, kde-format
 msgid "Live Data Source Toolbar"
-msgstr "مصدر البيانات المباشر..."
+msgstr "شريط أدوات مصدر البيانات المباشر"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/frontend/labplotui.rc:85
@@ -23822,10 +23819,9 @@ msgstr "المواضيع"
 
 #. i18n: ectx: property (text), widget (QPushButton, bWillUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:344
-#, fuzzy, kde-format
-#| msgid "Update Will Message"
+#, kde-format
 msgid "Update Message"
-msgstr "حدث رسالة الوصية"
+msgstr "رسالة التحديث"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:371

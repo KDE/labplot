@@ -11587,10 +11587,9 @@ msgid "Creates a new folder to collect sheets and other elements"
 msgstr "创建新的文件夹，用于存放工作表等其他元素"
 
 #: src/frontend/ActionsManager.cpp:273
-#, fuzzy, kde-format
-#| msgid "Live Data Source..."
+#, kde-format
 msgid "From Live Data Source..."
-msgstr "实时数据源..."
+msgstr ""
 
 #: src/frontend/ActionsManager.cpp:274
 #, kde-format
@@ -12161,10 +12160,9 @@ msgstr "您可以在此找到已分享的工程：<a href=\"%1\">%1</a>"
 
 #: src/frontend/ActionsManager.cpp:1554
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
-#, fuzzy, kde-format
-#| msgid "Content"
+#, kde-format
 msgid "Continue"
-msgstr "内容"
+msgstr ""
 
 #: src/frontend/ActionsManager.cpp:1555
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
@@ -16949,10 +16947,9 @@ msgstr "数据表工具栏"
 
 #. i18n: ectx: ToolBar (live_data_toolbar)
 #: src/frontend/labplotui.rc:79
-#, fuzzy, kde-format
-#| msgid "Live Data Source..."
+#, kde-format
 msgid "Live Data Source Toolbar"
-msgstr "实时数据源..."
+msgstr ""
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/frontend/labplotui.rc:85
@@ -23342,10 +23339,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bWillUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:344
-#, fuzzy, kde-format
-#| msgid "Update interval:"
+#, kde-format
 msgid "Update Message"
-msgstr "更新间隔："
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:371

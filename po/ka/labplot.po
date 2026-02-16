@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-15 00:39+0000\n"
-"PO-Revision-Date: 2026-02-09 04:10+0100\n"
+"PO-Revision-Date: 2026-02-15 02:47+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -11756,10 +11756,9 @@ msgid "Creates a new folder to collect sheets and other elements"
 msgstr "ქმნის ახალ საქაღალდეს ფურცლების და სხვა ელემენტების შესაგროვებლად"
 
 #: src/frontend/ActionsManager.cpp:273
-#, fuzzy, kde-format
-#| msgid "Live Data Source..."
+#, kde-format
 msgid "From Live Data Source..."
-msgstr "მონაცემთა ცოცხალი წყარო..."
+msgstr "მონაცემთა ცოცხალი წყაროდან..."
 
 #: src/frontend/ActionsManager.cpp:274
 #, kde-format
@@ -12222,7 +12221,7 @@ msgstr "მონიშნული სვეტების, სათითა
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "შეჩერება"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #. i18n: ectx: property (text), widget (QLabel, lUpdate)
@@ -12334,10 +12333,9 @@ msgstr "გაზიარებული პროექტის პოვნ�
 
 #: src/frontend/ActionsManager.cpp:1554
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
-#, fuzzy, kde-format
-#| msgid "Contains"
+#, kde-format
 msgid "Continue"
-msgstr "შეიცავს"
+msgstr "გაგრძელება"
 
 #: src/frontend/ActionsManager.cpp:1555
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
@@ -17434,10 +17432,9 @@ msgstr "ელცხრილის პანელი"
 
 #. i18n: ectx: ToolBar (live_data_toolbar)
 #: src/frontend/labplotui.rc:79
-#, fuzzy, kde-format
-#| msgid "Live Data Source..."
+#, kde-format
 msgid "Live Data Source Toolbar"
-msgstr "მონაცემთა ცოცხალი წყარო..."
+msgstr "მონაცემთა ცოცხალი წყაროს ხელსაწყოთა პანელი"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/frontend/labplotui.rc:85
@@ -23876,10 +23873,9 @@ msgstr "თემები"
 
 #. i18n: ectx: property (text), widget (QPushButton, bWillUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:344
-#, fuzzy, kde-format
-#| msgid "Update Will Message"
+#, kde-format
 msgid "Update Message"
-msgstr "LWT შეტყობინების განახლება"
+msgstr "განახლების შეტყობინება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:371
