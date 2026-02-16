@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of HypothesisTest
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -35,6 +35,9 @@ public:
 	void performChisqGoodnessOfFitTest();
 	void performChisqIndependenceTest();
 	void performLogRankTest();
+	void performMannKendallTest();
+	void performWaldWolfowitzRunsTest();
+	void performRamirezRungerTest();
 
 	size_t minSampleCount(HypothesisTest::Test);
 
@@ -67,6 +70,8 @@ private:
 	template<typename T>
 	static T** toArrayOfArrays(const QVector<QVector<T>>& data);
 
+	static QString rejectConclusion();
+	static QString failToRejectConclusion();
 	static QString notAvailable();
 	static QString testResultNotAvailable();
 	static QString twoColumnsRequired();

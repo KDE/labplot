@@ -5,6 +5,7 @@ New features:
 		* Expose more column related actions the context menu in the project (plot data, etc.) also when multiple columns are selected
 		* Add possibility to skip storing the data from columns and matrices in the saved file
 		* Improve spinbox localization
+		* New column "Changed" in the project explorer to inform about which objects were changed since the last save
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
 		* Baseline correction analysis in the plot
@@ -16,6 +17,7 @@ New features:
 		* show the average 2-period moving range in the column statistics
 		* in the plot data dialog allow to create plot areas on separate worksheets, one worksheet with plot area per column
 		* transposition of columns and rows
+		* move the definition of the column formula directly to the dock widget
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)
@@ -24,6 +26,7 @@ New features:
 		* Stacked line plots
 	* [import]
 		* Import directories - import multiple files in a directory in one single step
+		* Support Unix timestamps (number of seconds since January 1, 1970 (UTC)) and Windows timestamps (number of 100-nanosecond intervals since January 1, 1601 (UTC)) in ASCII files, ms precision only
 		* Allow to import arrays in JSON files that contain plain data only
 	* [examples]
 		* Added "All" in the examples dialog to navigate and search in the example projects from _all_ collections
@@ -32,6 +35,8 @@ Performance improvements:
 		* Improved drawing performance (!731)
 		* Improved the performance of importing JSON files with a large number of elements
 		* Faster save/load of text columns
+		* Faster save/load of datetime columns (BUG 478508)
+		* Faster cutting of cells in the spreadsheet (BUG 513574)
 
 Bug fixes:
 	* Fix displayed locale of constants
@@ -116,6 +121,7 @@ New features:
 		* use minus sign instead of hyphen for all numerical values shown on the worksheet and added a new option in the application settings to control this behavior
 		* new application setting to control the size of the thumbnails in the worksheet preview panel
 		* append file extension on export when not present
+		* add a new axis label format to display numeric values as angles in Degree:Minute:Second(DMS) format
 
 Performance improvements:
 	* Made big spreadsheet (millions of cells) more responsive when selecting columns via the spreadsheet header

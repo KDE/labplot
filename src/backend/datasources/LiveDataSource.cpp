@@ -150,6 +150,8 @@ void LiveDataSource::continueReading() {
 		m_pending = false;
 		updateNow();
 	}
+
+	Q_EMIT pausedChanged(false);
 }
 
 /*!
@@ -161,6 +163,8 @@ void LiveDataSource::pauseReading() {
 		m_pending = true;
 		m_updateTimer->stop();
 	}
+
+	Q_EMIT pausedChanged(true);
 }
 
 void LiveDataSource::setFileName(const QString& name) {
@@ -635,10 +639,9 @@ void LiveDataSource::read() {
 	case SourceType::SerialPort: {
 		DEBUG("	Reading from serial port");
 #ifdef HAVE_QTSERIALPORT
-		static bool firstRead = true;
-
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii) {
+			static bool firstRead = true;
 			if (firstRead)
 				static_cast<AsciiFilter*>(m_filter)->clearLastError();
 			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device,

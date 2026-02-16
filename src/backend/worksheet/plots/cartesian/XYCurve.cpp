@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -447,19 +447,23 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 	return d->sourceDataChangedSinceLastRecalc;
 }
 
-double XYCurve::minimum(const Dimension) const {
-	// TODO
-	return NAN;
+double XYCurve::minimum(const Dimension dim) const {
+	auto* c = column(dim);
+	if (!c)
+		return NAN;
+	return c->minimum();
 }
 
-double XYCurve::maximum(const Dimension) const {
-	// TODO
-	return NAN;
+double XYCurve::maximum(const Dimension dim) const {
+	auto* c = column(dim);
+	if (!c)
+		return NAN;
+	return c->maximum();
 }
 
 bool XYCurve::hasData() const {
 	Q_D(const XYCurve);
-	return (d->xColumn != nullptr || d->yColumn != nullptr);
+	return (d->xColumn != nullptr && d->yColumn != nullptr);
 }
 
 bool XYCurve::usingColumn(const AbstractColumn* column, bool) const {
@@ -530,6 +534,13 @@ QColor XYCurve::color() const {
 	else if (d->symbol->style() != Symbol::Style::NoSymbols)
 		return d->symbol->pen().color();
 	return QColor();
+}
+
+int XYCurve::dataCount(Dimension dim) const {
+	if (!column(dim))
+		return -1;
+
+	return column(dim)->rowCount();
 }
 
 // ##############################################################################
@@ -980,7 +991,7 @@ void XYCurvePrivate::calculateScenePoints() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	const bool suppressed = !isVisible() || q->isLoading() || suppressRetransform || !plot();
+	const bool suppressed = retransformSuppressed();
 	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", suppressRetransform = " << suppressRetransform);
 	trackRetransformCalled(suppressed);
 	if (suppressed)
@@ -1286,12 +1297,12 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 		QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if set
 		if (columnProperties == AbstractColumn::Properties::Constant) {
 			DEBUG(Q_FUNC_INFO << ", CONSTANT column")
-			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-			const auto& xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
-			const auto& yRange = plot()->range(Dimension::Y, cs->index(Dimension::Y));
-			tempPoint1 = QPointF(xRange.start(), yRange.start());
-			tempPoint2 = QPointF(xRange.start(), yRange.end());
-			m_lines.append(QLineF(tempPoint1, tempPoint2));
+			if (m_logicalPoints.length() > 0) {
+				// The values are already cached in the columns.
+				tempPoint1 = QPointF(xColumn->minimum(), yColumn->minimum());
+				tempPoint2 = QPointF(xColumn->maximum(), yColumn->maximum());
+				m_lines.append(QLineF(tempPoint1, tempPoint2));
+			}
 		} else {
 			QPointF lastPoint{NAN, NAN}; // last x value
 			int pixelDiff = 0;
@@ -2397,6 +2408,14 @@ QDateTime XYCurve::yDateTime(double x, bool& valueFound) const {
 	return {};
 }
 
+bool XYCurve::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+	if (column(dim)) {
+		column(dim)->indicesMinMax(v1, v2, start, end);
+		return true;
+	}
+	return false;
+}
+
 bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars) const {
 	Q_D(const XYCurve);
 	switch (dim) {
@@ -2432,6 +2451,7 @@ bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<do
  * \p min
  * \p max
  * \p includeErrorBars If true respect the error bars in the min/max calculation
+ * return true if the indices can be found otherwise false. Return false, for example if a required column is not available, ...
  */
 bool XYCurve::minMax(const AbstractColumn* column1,
 					 const AbstractColumn* column2,
@@ -2543,11 +2563,11 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 }
 
 bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
-	if (!isVisible())
+	if (!isVisible() || !q->xColumn())
 		return false;
 
 	int rowCount{0};
-	if (lineType != XYCurve::LineType::NoLine && m_lines.size() > 1)
+	if (lineType != XYCurve::LineType::NoLine && m_lines.size() > 0)
 		rowCount = m_lines.count();
 	else if (symbol->style() != Symbol::Style::NoSymbols) {
 		calculateScenePoints();
@@ -2568,7 +2588,10 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 		calculateScenePoints();
 
 	const auto& properties = q->xColumn()->properties();
-	if (properties == AbstractColumn::Properties::No || properties == AbstractColumn::Properties::NonMonotonic) {
+	switch (properties) {
+	case AbstractColumn::Properties::No: // fall through
+	case AbstractColumn::Properties::NonMonotonic: // fall through
+	case AbstractColumn::Properties::Constant: {
 		// assumption: points exist if no line. otherwise previously returned false
 		if (noLines) {
 			QPointF curvePosPrevScene = m_scenePoints.at(0);
@@ -2586,7 +2609,10 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 					return true;
 			}
 		}
-	} else if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		break;
+	}
+	case AbstractColumn::Properties::MonotonicIncreasing: // fall through
+	case AbstractColumn::Properties::MonotonicDecreasing: {
 		bool increase{true};
 		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
 			increase = false;
@@ -2640,6 +2666,8 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 				curvePosScene = m_scenePoints.at(index);
 			}
 		}
+		break;
+	}
 	}
 
 	return false;

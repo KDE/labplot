@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -18,6 +18,7 @@
 
 #include "backend/nsl/nsl_sf_stats.h"
 
+class Background;
 class CartesianCoordinateSystem;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
@@ -63,6 +64,10 @@ public:
 	enum class RangeBreakStyle { Simple, Vertical, Sloped };
 	enum class PlotColorMode { Theme, ColorMap };
 
+	// Border type flags for plot area
+	enum class BorderTypeFlags { NoBorder = 0x0, BorderLeft = 0x1, BorderTop = 0x2, BorderRight = 0x4, BorderBottom = 0x8 };
+	Q_DECLARE_FLAGS(BorderType, BorderTypeFlags)
+
 	struct RangeBreak {
 		RangeBreak()
 			: range(qQNaN(), qQNaN())
@@ -97,6 +102,9 @@ public:
 	QIcon icon() const override;
 	virtual QMenu* createContextMenu() override;
 	static void fillAddNewPlotMenu(QMenu*, QActionGroup*);
+	static void fillFitMenu(QMenu*, QActionGroup*);
+	static void fillAnalysisMenu(QMenu*, QActionGroup*);
+	static void fillDistributionFitMenu(QMenu*, QActionGroup*);
 	QMenu* addNewMenu();
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;
@@ -193,6 +201,12 @@ public:
 	// stacking
 	BASIC_D_ACCESSOR_DECL(double, stackYOffset, StackYOffset)
 
+	// plot area
+	Background* background() const;
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::BorderType, borderType, BorderType)
+	Line* borderLine() const;
+	BASIC_D_ACCESSOR_DECL(qreal, borderCornerRadius, BorderCornerRadius)
+
 	// cursor
 	Line* cursorLine() const;
 	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable)
@@ -234,21 +248,6 @@ private:
 	double m_zoomFactor{1.2};
 	bool m_menusInitialized{false};
 
-	// analysis curves actions
-	QAction* addLineSimplificationCurveAction{nullptr};
-	QAction* addDifferentiationCurveAction{nullptr};
-	QAction* addIntegrationCurveAction{nullptr};
-	QAction* addInterpolationCurveAction{nullptr};
-	QAction* addSmoothCurveAction{nullptr};
-	QAction* addFitCurveAction{nullptr};
-	QAction* addFourierFilterCurveAction{nullptr};
-	QAction* addFourierTransformCurveAction{nullptr};
-	QAction* addHilbertTransformCurveAction{nullptr};
-	QAction* addConvolutionCurveAction{nullptr};
-	QAction* addCorrelationCurveAction{nullptr};
-	QAction* addBaselineCorrectionCurveAction{nullptr};
-	QAction* addFunctionCurveAction{nullptr};
-
 	QAction* addHorizontalAxisAction{nullptr};
 	QAction* addVerticalAxisAction{nullptr};
 	QAction* addLegendAction{nullptr};
@@ -260,21 +259,6 @@ private:
 	QAction* addReferenceRangeAction{nullptr};
 	QAction* addInsetPlotAction{nullptr};
 	QAction* addInsetPlotWithDataAction{nullptr};
-
-	// analysis menu actions
-	QAction* addDataOperationAction{nullptr};
-	QAction* addLineSimplificationAction{nullptr};
-	QAction* addDifferentiationAction{nullptr};
-	QAction* addIntegrationAction{nullptr};
-	QAction* addInterpolationAction{nullptr};
-	QAction* addSmoothAction{nullptr};
-	QVector<QAction*> addFitActions;
-	QAction* addFourierFilterAction{nullptr};
-	QAction* addFourierTransformAction{nullptr};
-	QAction* addHilbertTransformAction{nullptr};
-	QAction* addConvolutionAction{nullptr};
-	QAction* addCorrelationAction{nullptr};
-	QAction* addBaselineCorrectionAction{nullptr};
 
 	QMenu* m_addNewMenu{nullptr};
 	QMenu* addNewAnalysisMenu{nullptr};
@@ -320,13 +304,14 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 	void addPlot(QAction*);
+	void addAnalysisPlot(QAction*);
 
 	void addLineSimplificationCurve();
 	void addDifferentiationCurve();
 	void addIntegrationCurve();
 	void addInterpolationCurve();
 	void addSmoothCurve();
-	void addFitCurve();
+	void addFitCurve(QAction* action = nullptr);
 	void addFourierFilterCurve();
 	void addFunctionCurve();
 	void addBaselineCorrectionCurve();
@@ -381,6 +366,9 @@ Q_SIGNALS:
 	void yRangeBreakingEnabledChanged(bool);
 	void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
+	void borderTypeChanged(CartesianPlot::BorderType);
+	void borderCornerRadiusChanged(qreal);
+
 	void themeChanged(const QString&);
 	void axisShiftSignal(int delta, Dimension dim, int index);
 
@@ -414,5 +402,7 @@ Q_SIGNALS:
 	friend class FitTest;
 	friend class FourierTest;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(CartesianPlot::BorderType)
 
 #endif

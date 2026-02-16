@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -12,13 +12,10 @@
 #ifndef CARTESIANPLOTDOCK_H
 #define CARTESIANPLOTDOCK_H
 
-#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_cartesianplotdock.h"
 
-template<class T>
-class QList;
 class BackgroundWidget;
 class LabelWidget;
 class LineWidget;
@@ -160,7 +157,7 @@ private Q_SLOTS:
 	void plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
 	// background
-	void plotBorderTypeChanged(PlotArea::BorderType);
+	void plotBorderTypeChanged(CartesianPlot::BorderType);
 	void plotBorderCornerRadiusChanged(double);
 
 	// stacking

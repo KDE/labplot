@@ -5,6 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-FileCopyrightText: 2025-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -600,35 +601,40 @@ struct one_sample_t_test_result nsl_stats_one_sample_t(const double sample[], si
 }
 
 // Logistic Regression Function for Binary Classification
-double* nsl_stats_logistic_regression(double** x, int* y, int N, int n_in, int iterations, double lr) {
-	int i, j, epoch;
-	double* result;
-	double* W = NULL;
-	double b = 0.0;
-	double y_pred, gradient;
+// Caller owns returned pointer and must free()
+// TODO: return struct {b, W}
+double* nsl_stats_logistic_regression(double** x, const int* y, int N, int n_in, int iterations, double lr) {
+	if (N <= 0 || n_in <= 0 || x == NULL || y == NULL)
+		return NULL;
 
-	result = (double*)malloc(sizeof(double) * (n_in + 1));
+	double* W = (double*)malloc(sizeof(double) * n_in);
+	double* result = (double*)malloc(sizeof(double) * (n_in + 1));
+	if (!W || !result)
+		return NULL;
 
-	// TODO: W is uninitialized!
-	for (i = 0; i < n_in; i++)
+	for (int i = 0; i < n_in; i++)
 		W[i] = 0.0;
 
-	result[0] = b;
-
-	for (epoch = 0; epoch < iterations; epoch++) {
-		for (i = 0; i < N; i++) {
+	double b = 0.0;
+	double y_pred, error;
+	for (int epoch = 0; epoch < iterations; epoch++) {
+		for (int i = 0; i < N; i++) {
 			y_pred = b;
-			for (j = 0; j < n_in; j++)
+			for (int j = 0; j < n_in; j++)
 				y_pred += W[j] * x[i][j];
 			y_pred = 1.0 / (1.0 + exp(-y_pred));
 
-			gradient = y[i] - y_pred; // Error term
-			for (j = 0; j < n_in; j++)
-				W[j] += lr * gradient * x[i][j];
-			b += lr * gradient;
+			error = y[i] - y_pred;
+			for (int j = 0; j < n_in; j++)
+				W[j] += lr * error * x[i][j];
+			b += lr * error;
 		}
 	}
 	result[0] = b;
+	for (int i = 0; i < n_in; i++)
+		result[i + 1] = W[i];
+	free(W);
+
 	return result;
 }
 
@@ -642,7 +648,7 @@ static int compare_time_univariate_cox(const void* a, const void* b) {
 	return 0;
 }
 
-double nsl_univariate_cox_regression(double* x, double* time, int* event, int N, int iterations, double lr) {
+double nsl_univariate_cox_regression(const double* x, const double* time, const int* event, int N, int iterations, double lr) {
 	double* time_idx = (double*)malloc(2 * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		time_idx[2 * i] = time[i]; /* time */
@@ -950,6 +956,244 @@ struct chisq_gof_test_result nsl_stats_chisq_gof_x2(const long long* observed, c
 	result.x2 = x2;
 	result.p = p_value;
 	result.df = df;
+
+	return result;
+}
+
+/* Mann-Kendall Test for monotonic trend detection */
+struct mann_kendall_test_result nsl_stats_mann_kendall(const double sample[], size_t n, nsl_stats_tail_type tail) {
+	struct mann_kendall_test_result result;
+	result.n = n;
+	result.S = 0.0;
+	result.tau = NAN;
+	result.z = NAN;
+	result.p = NAN;
+
+	if (n < 3) {
+		fprintf(stderr, "Error: Mann-Kendall test requires at least 3 data points.\n");
+		return result;
+	}
+
+	// calculate S statistic (sum of signs of all pairwise differences) and
+	// the Sen's slope (median of all pairwise slopes)
+	double S = 0.0;
+	const double n_pairs = (double)(n * (n - 1)) / 2.0;
+	double* slopes = (double*)malloc(sizeof(double) * (size_t)n_pairs);
+	size_t slope_idx = 0;
+	for (size_t i = 0; i < n - 1; i++) {
+		for (size_t j = i + 1; j < n; j++) {
+			double diff = sample[j] - sample[i];
+			if (diff > 0.0)
+				S += 1.0;
+			else if (diff < 0.0)
+				S -= 1.0;
+
+			double slope = (sample[j] - sample[i]) / (double)(j - i);
+			slopes[slope_idx++] = slope;
+		}
+	}
+	result.S = S;
+
+	gsl_sort(slopes, 1, (size_t)n_pairs);
+	double slope = gsl_stats_median_from_sorted_data(slopes, 1, (size_t)n_pairs);
+	free(slopes);
+	result.slope = slope;
+
+	// calculate Kendall's tau, the "correlation coefficient" for the trend, ranging from -1 to +1.
+	result.tau = S / n_pairs;
+
+	// calculate the variance of S:
+	// for simplicity, we assume no ties in the data
+	// variance without tie correction: Var(S) = n(n-1)(2n+5)/18
+	double var_S = (double)(n * (n - 1) * (2 * n + 5)) / 18.0;
+
+	// calculate Z-score
+	double z;
+	if (S > 0.0)
+		z = (S - 1.0) / sqrt(var_S);
+	else if (S < 0.0)
+		z = (S + 1.0) / sqrt(var_S);
+	else
+		z = 0.0;
+	result.z = z;
+
+	// calculate p-value based on tail type
+	double p;
+	switch (tail) {
+	case nsl_stats_tail_type_two:
+		p = 2.0 * fmin(gsl_cdf_ugaussian_P(fabs(z)), 1.0 - gsl_cdf_ugaussian_P(fabs(z)));
+		break;
+	case nsl_stats_tail_type_positive: // testing for positive trend
+		p = 1.0 - gsl_cdf_ugaussian_P(z);
+		break;
+	case nsl_stats_tail_type_negative: // testing for negative trend
+		p = gsl_cdf_ugaussian_P(z);
+		break;
+	default:
+		p = NAN;
+		break;
+	}
+	result.p = p;
+
+	return result;
+}
+
+/* Wald-Wolfowitz Runs Test for randomness */
+struct wald_wolfowitz_runs_test_result nsl_stats_wald_wolfowitz_runs(const double sample[], size_t n, nsl_stats_tail_type tail) {
+	struct wald_wolfowitz_runs_test_result result;
+	result.n = n;
+	result.runs = 0;
+	result.z = NAN;
+	result.p = NAN;
+
+	if (n < 3) {
+		fprintf(stderr, "Error: Wald-Wolfowitz runs test requires at least 3 data points.\n");
+		return result;
+	}
+
+	// Calculate the median
+	double* sorted = (double*)malloc(n * sizeof(double));
+	for (size_t i = 0; i < n; i++)
+		sorted[i] = sample[i];
+	gsl_sort(sorted, 1, n);
+	double median = gsl_stats_median_from_sorted_data(sorted, 1, n);
+	free(sorted);
+
+	// Count runs: a run is a sequence of consecutive values above or below the median
+	// Values equal to the median are excluded from the analysis
+	int runs = 0;
+	int last_sign = 0; // 0 = unknown, 1 = above median, -1 = below median
+	int valid_n = 0; // count of values not equal to median
+
+	for (size_t i = 0; i < n; i++) {
+		int current_sign = 0;
+		if (sample[i] > median) {
+			current_sign = 1;
+			valid_n++;
+		} else if (sample[i] < median) {
+			current_sign = -1;
+			valid_n++;
+		} else {
+			continue; // skip values equal to median
+		}
+
+		if (last_sign == 0) {
+			// First valid value
+			runs = 1;
+		} else if (current_sign != last_sign) {
+			// Sign changed, new run
+			runs++;
+		}
+		last_sign = current_sign;
+	}
+
+	result.runs = runs;
+	result.n = valid_n;
+
+	if (valid_n < 3) {
+		fprintf(stderr, "Error: Insufficient data points after removing median values.\n");
+		return result;
+	}
+
+	// Count values above and below median
+	int n1 = 0; // count above median
+	int n2 = 0; // count below median
+	for (size_t i = 0; i < n; i++) {
+		if (sample[i] > median)
+			n1++;
+		else if (sample[i] < median)
+			n2++;
+	}
+
+	// Calculate expected number of runs and variance
+	// For the runs test: E(R) = (2*n1*n2)/(n1+n2) + 1
+	//                    Var(R) = (2*n1*n2*(2*n1*n2 - n1 - n2)) / ((n1+n2)^2 * (n1+n2-1))
+	double n_total = (double)(n1 + n2);
+	double expected_runs = (2.0 * n1 * n2) / n_total + 1.0;
+	double var_runs = (2.0 * n1 * n2 * (2.0 * n1 * n2 - n_total)) / (n_total * n_total * (n_total - 1.0));
+
+	// Calculate z-score using continuity correction
+	double z;
+	if (runs > expected_runs)
+		z = (runs - 0.5 - expected_runs) / sqrt(var_runs);
+	else if (runs < expected_runs)
+		z = (runs + 0.5 - expected_runs) / sqrt(var_runs);
+	else
+		z = 0.0;
+
+	result.z = z;
+
+	// Calculate p-value based on tail type
+	double p;
+	switch (tail) {
+	case nsl_stats_tail_type_two:
+		// Two-tailed: test for any non-randomness
+		p = 2.0 * fmin(gsl_cdf_ugaussian_P(fabs(z)), 1.0 - gsl_cdf_ugaussian_P(fabs(z)));
+		break;
+	case nsl_stats_tail_type_negative:
+		// Left-tailed: test for too few runs (clustering)
+		p = gsl_cdf_ugaussian_P(z);
+		break;
+	case nsl_stats_tail_type_positive:
+		// Right-tailed: test for too many runs (alternating)
+		p = 1.0 - gsl_cdf_ugaussian_P(z);
+		break;
+	default:
+		p = NAN;
+		break;
+	}
+	result.p = p;
+
+	return result;
+}
+
+struct ramirez_runger_test_result nsl_stats_ramirez_runger(const double sample[], size_t n, nsl_stats_tail_type tail) {
+	struct ramirez_runger_test_result result;
+	result.stability_ratio = NAN;
+	result.dof = 0;
+	result.p = NAN;
+	result.mean_diff = NAN;
+
+	if (n < 3) {
+		fprintf(stderr, "Error: Ramirez-Runger runs test requires at least 3 data points.\n");
+		return result;
+	}
+
+	// calculate the standard deviation of the sample
+	double std = sqrt(gsl_stats_variance(sample, 1, n));
+
+	// calculate the average differences between consecutive values
+	double diffs_sum = 0.;
+	for (size_t i = 0; i < n - 1; i++)
+		diffs_sum += fabs(sample[i + 1] - sample[i]);
+	double mean_diff = diffs_sum / (n - 1);
+
+	// calculate the test statitic "Stability Ratio"
+	double stability_ratio = pow(1.128 * std / mean_diff, 2);
+
+	// Calculate p-value based on tail type using the F distribution
+	int dof = n - 1;
+	int eff_dof = 0.62 * (n - 1); // effective degrees of freedom based on the original paper
+	double p = nsl_stats_fdist_p(stability_ratio, dof, eff_dof);
+
+	switch (tail) {
+	case nsl_stats_tail_type_two:
+		result.p = 2.0 * fmin(p, 1.0 - p);
+		break;
+	case nsl_stats_tail_type_negative:
+		result.p = p;
+		break;
+	case nsl_stats_tail_type_positive:
+		result.p = 1.0 - p;
+		break;
+	default:
+		break;
+	}
+
+	result.stability_ratio = stability_ratio;
+	result.dof = dof;
+	result.eff_dof = eff_dof;
+	result.mean_diff = mean_diff;
 
 	return result;
 }

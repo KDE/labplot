@@ -801,11 +801,11 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 }
 
 CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
-	QGraphicsItem* item = itemAt(pos);
+	auto* item = itemAt(pos);
 	if (!item)
 		return nullptr;
 
-	QGraphicsItem* plotItem = nullptr;
+	const QGraphicsItem* plotItem = nullptr;
 	if (item->data(0).toInt() == static_cast<int>(AspectType::CartesianPlot))
 		plotItem = item;
 	else {
@@ -1247,10 +1247,10 @@ double WorksheetView::zoomFactor() const {
 }
 
 void WorksheetView::updateLabelsZoom() const {
-	const double zoom = zoomFactor();
+	const double factor = zoomFactor();
 	const auto& labels = m_worksheet->children<TextLabel>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* label : labels)
-		label->setZoomFactor(zoom);
+		label->setZoomFactor(factor);
 }
 
 void WorksheetView::changeMagnification(QAction* action) {
@@ -1506,8 +1506,8 @@ void WorksheetView::fadeOut(qreal value) {
  * sets the layout in Worksheet and enables/disables the layout actions.
  */
 void WorksheetView::changeLayout(QAction* action) const {
-	const auto layout = static_cast<Worksheet::Layout>(action->data().toInt());
-	m_worksheet->setLayout(layout);
+	const auto wsLayout = static_cast<Worksheet::Layout>(action->data().toInt());
+	m_worksheet->setLayout(wsLayout);
 }
 
 Worksheet::Layout WorksheetView::layout() const {
@@ -1704,7 +1704,9 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 			case CartesianPlot::MouseMode::ZoomYSelection:
 				action->setEnabled(singleYRange);
 				break;
-			default:
+			case CartesianPlot::MouseMode::Selection:
+			case CartesianPlot::MouseMode::Cursor:
+			case CartesianPlot::MouseMode::Crosshair:
 				break;
 			}
 		}
@@ -1734,7 +1736,9 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 			case CartesianPlot::MouseMode::ZoomXSelection:
 				action->setEnabled(singleXRange);
 				break;
-			default:
+			case CartesianPlot::MouseMode::Selection:
+			case CartesianPlot::MouseMode::Cursor:
+			case CartesianPlot::MouseMode::Crosshair:
 				break;
 			}
 		}
@@ -2352,7 +2356,7 @@ void WorksheetView::suppressSelectionChangedEvent(bool value) {
 WorksheetElement* WorksheetView::selectedElement() const {
 	return m_selectedElement;
 }
-QList<QGraphicsItem*> WorksheetView::selectedItems() const {
+const QList<QGraphicsItem*>& WorksheetView::selectedItems() const {
 	return m_selectedItems;
 }
 

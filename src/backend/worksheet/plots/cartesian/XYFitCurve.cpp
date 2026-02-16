@@ -2046,7 +2046,7 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 	DEBUG(Q_FUNC_INFO << ", fit data range = " << xRange.start() << " .. " << xRange.end());
 
 	prepareResultColumns();
-	const size_t rowCount = tmpXDataColumn->rowCount();
+	const int rowCount = tmpXDataColumn->rowCount();
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
 	residualsVector->resize(rowCount);
@@ -2090,7 +2090,7 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 	if (fitData.autoRange || fitData.algorithm == nsl_fit_algorithm_ml) { // evaluate residuals
 		QVector<double> v;
 		v.resize(rowCount);
-		for (size_t i = 0; i < rowCount; i++)
+		for (int i = 0; i < rowCount; i++)
 			if (tmpXDataColumn->isNumeric())
 				v[i] = tmpXDataColumn->valueAt(i);
 			else if (tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::DateTime)
@@ -2104,11 +2104,11 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 		if (valid) {
 			switch (fitData.algorithm) {
 			case nsl_fit_algorithm_lm:
-				for (size_t i = 0; i < rowCount; i++)
+				for (int i = 0; i < rowCount; i++)
 					(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector).at(i);
 				break;
 			case nsl_fit_algorithm_ml:
-				for (size_t i = 0; i < rowCount; i++) {
+				for (int i = 0; i < rowCount; i++) {
 					// DEBUG("y data / column @" << i << ":" << tmpXDataColumn->valueAt(i))
 					if (xRange.contains(tmpXDataColumn->valueAt(i)))
 						(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector).at(i);

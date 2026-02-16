@@ -54,6 +54,7 @@ public:
 
 private Q_SLOTS:
 	void aspectDescriptionChanged(const AbstractAspect*);
+	void aspectChangedStatusChanged(const AbstractAspect*);
 	void aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void aspectAdded(const AbstractAspect* parent);
 	void aspectAboutToBeRemoved(const AbstractAspect*);

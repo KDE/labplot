@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock for Hypothesis Tests
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 
@@ -16,7 +16,6 @@
 #include "backend/statistics/HypothesisTest.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
-#include <KLocalizedString>
 #include <KMessageWidget>
 
 /*!
@@ -44,19 +43,14 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	//**********************************  Slots **********************************************
 	connect(ui.cbTest, &QComboBox::currentIndexChanged, this, &HypothesisTestDock::testChanged);
 	connect(ui.pbRecalculate, &QPushButton::clicked, this, &HypothesisTestDock::recalculate);
-
 	connect(m_buttonNew, &QPushButton::clicked, this, &HypothesisTestDock::addVariable);
-
-	connect(ui.rbNullTwoTailed, &QRadioButton::toggled, ui.rbAlternateTwoTailed, &QRadioButton::setChecked);
-	connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, ui.rbAlternateOneTailedLeft, &QRadioButton::setChecked);
-	connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, ui.rbAlternateOneTailedRight, &QRadioButton::setChecked);
 }
 
 void HypothesisTestDock::setTest(HypothesisTest* test) {
 	CONDITIONAL_LOCK_RETURN;
 
 	// disconnect all connections to the previous test
-	for (auto& conn : m_aspectConnections)
+	for (const auto& conn : m_aspectConnections)
 		disconnect(conn);
 
 	m_aspectConnections.clear();
@@ -77,17 +71,17 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	// update the aspect properties when the ui properties change
 	m_aspectConnections << connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
 	m_aspectConnections << connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
-	m_aspectConnections << connect(ui.rbNullTwoTailed, &QRadioButton::toggled, [this](bool checked) {
+	m_aspectConnections << connect(ui.rbAlternateTwoTailed, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
 			m_test->setTail(nsl_stats_tail_type_two);
 	});
-	m_aspectConnections << connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
-		if (checked)
-			m_test->setTail(nsl_stats_tail_type_positive);
-	});
-	m_aspectConnections << connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
+	m_aspectConnections << connect(ui.rbAlternateOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
 			m_test->setTail(nsl_stats_tail_type_negative);
+	});
+	m_aspectConnections << connect(ui.rbAlternateOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
+		if (checked)
+			m_test->setTail(nsl_stats_tail_type_positive);
 	});
 
 	connect(m_test, &HypothesisTest::statusError, this, &HypothesisTestDock::showStatusError);
@@ -109,6 +103,9 @@ void HypothesisTestDock::retranslateUi() {
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::kruskal_wallis_test), static_cast<int>(HypothesisTest::Test::kruskal_wallis_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::friedman_test), static_cast<int>(HypothesisTest::Test::friedman_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::log_rank_test), static_cast<int>(HypothesisTest::Test::log_rank_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::mann_kendall_test), static_cast<int>(HypothesisTest::Test::mann_kendall_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::wald_wolfowitz_runs_test), static_cast<int>(HypothesisTest::Test::wald_wolfowitz_runs_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::ramirez_runger_test), static_cast<int>(HypothesisTest::Test::ramirez_runger_test));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_independence), static_cast<int>(HypothesisTest::Test::chisq_independence));
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit), static_cast<int>(HypothesisTest::Test::chisq_goodness_of_fit));
 
@@ -120,27 +117,33 @@ void HypothesisTestDock::retranslateUi() {
 		"<li><b>%3</b> - tests if the mean difference between two related samples is zero</li>"
 		"<li><b>%4</b> - tests if two independent samples with unequal variances have the same mean</li>"
 		"<li><b>%5</b> - tests if three or more independent samples have the same mean</li>"
-		"<li><b>%6</b> - tests if three or more related/repeated measurements have the same mean</li>",
+		"<li><b>%6</b> - tests if three or more related/repeated measurements have the same mean</li>"
+		"<li><b>%7</b> - tests differences in medians between two independent groups</li>",
 		HypothesisTest::testName(HypothesisTest::Test::t_test_one_sample),
 		HypothesisTest::testName(HypothesisTest::Test::t_test_two_sample),
 		HypothesisTest::testName(HypothesisTest::Test::t_test_two_sample_paired),
 		HypothesisTest::testName(HypothesisTest::Test::t_test_welch),
 		HypothesisTest::testName(HypothesisTest::Test::one_way_anova),
-		HypothesisTest::testName(HypothesisTest::Test::one_way_anova_repeated)
+		HypothesisTest::testName(HypothesisTest::Test::one_way_anova_repeated),
+		HypothesisTest::testName(HypothesisTest::Test::mann_whitney_u_test)
 	) + i18n(
-		"<li><b>%1</b> - tests differences in medians between two independent groups</li>"
-		"<li><b>%2</b> - tests if the median difference between two related samples is zero</li>"
-		"<li><b>%3</b> - tests differences in medians among three or more independent groups</li>"
-		"<li><b>%4</b> - tests differences in medians among three or more related/repeated measurements</li>"
-		"<li><b>%5</b> - tests differences in survival distributions between two or more groups</li>"
-		"<li><b>%6</b> - tests if two categorical variables are independent of each other</li>"
-		"<li><b>%7</b> - tests if observed data follows a specified theoretical distribution</li>"
+		"<li><b>%1</b> - tests if the median difference between two related samples is zero</li>"
+		"<li><b>%2</b> - tests differences in medians among three or more independent groups</li>"
+		"<li><b>%3</b> - tests differences in medians among three or more related/repeated measurements</li>"
+		"<li><b>%4</b> - tests differences in survival distributions between two or more groups</li>"
+		"<li><b>%5</b> - tests for a trend in data over time</li>"
+		"<li><b>%6</b> - tests for randomness in a sequence of observations</li>"
+		"<li><b>%7</b> - tests for non-random patterns in process control data using runs above/below median</li>"
+		"<li><b>%8</b> - tests if two categorical variables are independent of each other</li>"
+		"<li><b>%9</b> - tests if observed data follows a specified theoretical distribution</li>"
 		"</ul>",
-		HypothesisTest::testName(HypothesisTest::Test::mann_whitney_u_test),
 		HypothesisTest::testName(HypothesisTest::Test::wilcoxon_test),
 		HypothesisTest::testName(HypothesisTest::Test::kruskal_wallis_test),
 		HypothesisTest::testName(HypothesisTest::Test::friedman_test),
 		HypothesisTest::testName(HypothesisTest::Test::log_rank_test),
+		HypothesisTest::testName(HypothesisTest::Test::mann_kendall_test),
+		HypothesisTest::testName(HypothesisTest::Test::wald_wolfowitz_runs_test),
+		HypothesisTest::testName(HypothesisTest::Test::ramirez_runger_test),
 		HypothesisTest::testName(HypothesisTest::Test::chisq_independence),
 		HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit)
 	);
@@ -178,9 +181,6 @@ void HypothesisTestDock::testChanged() {
 	ui.lTestMean->setVisible(visible);
 	ui.sbTestMean->setVisible(visible);
 
-	// check if the recalculate button should be enabled or disabled
-	manageRecalculate();
-
 	if (m_initializing)
 		return;
 
@@ -190,6 +190,9 @@ void HypothesisTestDock::testChanged() {
 	// selected variable columns and we change the selected hypothesis test. The aspect
 	// clears its list of columns, while the gui still shows columns as selected.
 	updateColumns();
+
+	// check if the recalculate button should be enabled or disabled
+	manageRecalculate();
 }
 
 // ##############################################################################
@@ -199,36 +202,28 @@ void HypothesisTestDock::ensureHypothesis(HypothesisTest::Test test) {
 	int hypothesisCount = HypothesisTest::hypothesisCount(test);
 	auto hypothesisTexts = HypothesisTest::hypothesisText(test);
 
+	ui.lH0Definition->setText(hypothesisTexts[0].first);
+
 	if (hypothesisCount == 3) {
-		ui.lNullTwoTailed->setText(hypothesisTexts[0].first);
+		ui.rbAlternateTwoTailed->show();
 		ui.lAlternateTwoTailed->setText(hypothesisTexts[0].second);
-		ui.lNullOneTailedLeft->setText(hypothesisTexts[1].first);
-		ui.lAlternateOneTailedLeft->setText(hypothesisTexts[1].second);
-		ui.lNullOneTailedRight->setText(hypothesisTexts[2].first);
-		ui.lAlternateOneTailedRight->setText(hypothesisTexts[2].second);
 
-		ui.lNullOneTailedLeft->show();
-		ui.lAlternateOneTailedLeft->show();
-		ui.lNullOneTailedRight->show();
-		ui.lAlternateOneTailedRight->show();
-		ui.rbNullOneTailedLeft->show();
 		ui.rbAlternateOneTailedLeft->show();
-		ui.rbNullOneTailedRight->show();
+		ui.lAlternateOneTailedLeft->show();
+		ui.lAlternateOneTailedLeft->setText(hypothesisTexts[1].second);
+
 		ui.rbAlternateOneTailedRight->show();
+		ui.lAlternateOneTailedRight->show();
+		ui.lAlternateOneTailedRight->setText(hypothesisTexts[2].second);
 	} else if (hypothesisCount == 1) {
-		ui.lNullTwoTailed->setText(hypothesisTexts[0].first);
+		ui.rbAlternateTwoTailed->hide();
 		ui.lAlternateTwoTailed->setText(hypothesisTexts[0].second);
 
-		ui.lNullOneTailedLeft->hide();
-		ui.lAlternateOneTailedLeft->hide();
-		ui.lNullOneTailedRight->hide();
-		ui.lAlternateOneTailedRight->hide();
-		ui.rbNullOneTailedLeft->hide();
 		ui.rbAlternateOneTailedLeft->hide();
-		ui.rbNullOneTailedRight->hide();
-		ui.rbAlternateOneTailedRight->hide();
+		ui.lAlternateOneTailedLeft->hide();
 
-		ui.rbNullTwoTailed->setChecked(true);
+		ui.rbAlternateOneTailedRight->hide();
+		ui.lAlternateOneTailedRight->hide();
 	}
 }
 
@@ -279,7 +274,7 @@ void HypothesisTestDock::manageAddRemoveVariable() {
 	for (auto* btn : m_removeButtons)
 		btn->setEnabled(count > min);
 
-	m_buttonNew->setEnabled(count < max);
+	m_buttonNew->setVisible(count < max);
 }
 
 // called:
@@ -292,7 +287,7 @@ void HypothesisTestDock::updateColumns() {
 
 	QVector<const AbstractColumn*> columns;
 	for (auto* treeViewCb : m_dataComboBoxes) {
-		auto* col = dynamic_cast<AbstractColumn*>(treeViewCb->currentAspect());
+		const auto* col = dynamic_cast<AbstractColumn*>(treeViewCb->currentAspect());
 		if (col)
 			columns << col;
 	}
@@ -360,7 +355,7 @@ void HypothesisTestDock::addVariable() {
 }
 
 void HypothesisTestDock::removeVariable() {
-	auto* sender = dynamic_cast<QPushButton*>(QObject::sender());
+	const auto* sender = dynamic_cast<QPushButton*>(QObject::sender());
 	if (sender) {
 		// remove button was clicked, determine which one and
 		// delete it together with the corresponding combobox
@@ -436,13 +431,13 @@ void HypothesisTestDock::load() {
 	if (hypothesisCount == 3) {
 		switch (m_test->tail()) {
 		case nsl_stats_tail_type_two:
-			ui.rbNullTwoTailed->setChecked(true);
+			ui.rbAlternateTwoTailed->setChecked(true);
 			break;
 		case nsl_stats_tail_type_positive:
-			ui.rbNullOneTailedLeft->setChecked(true);
+			ui.rbAlternateOneTailedLeft->setChecked(true);
 			break;
 		case nsl_stats_tail_type_negative:
-			ui.rbNullOneTailedRight->setChecked(true);
+			ui.rbAlternateOneTailedRight->setChecked(true);
 			break;
 		}
 	}
@@ -453,4 +448,6 @@ void HypothesisTestDock::load() {
 	int newIndex = ui.cbTest->currentIndex();
 	if (oldIndex == newIndex)
 		testChanged(); // manually trigger testChanged()
+
+	manageRecalculate(); // check if all input parameters are valid after the load to enable the recalculate
 }

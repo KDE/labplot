@@ -63,12 +63,12 @@ int main(int argc, char* argv[]) {
     auto* plotArea = new CartesianPlot("xy-plot");
 	plotArea->setType(CartesianPlot::Type::FourAxes);
     plotArea->title()->setText(QStringLiteral("Hertzsprung-Russell diagram"));
-    PlotArea::BorderType border = plotArea->plotArea()->borderType();
-    border.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	border.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	border.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	border.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea->plotArea()->setBorderType(border);
+    CartesianPlot::BorderType border = plotArea->borderType();
+    border.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, true);
+	border.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, true);
+	border.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, true);
+	border.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, true);
+    plotArea->setBorderType(border);
     plotArea->setSymmetricPadding(false);
     plotArea->setHorizontalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
     plotArea->setVerticalPadding(Worksheet::convertToSceneUnits(2.8, Worksheet::Unit::Centimeter));

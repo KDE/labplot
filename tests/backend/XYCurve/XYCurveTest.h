@@ -18,6 +18,7 @@ class XYCurveTest : public CommonTest {
 
 private Q_SLOTS:
 
+	void lineVertical();
 	void setColumn();
 
 	void addUniqueLineTest01();

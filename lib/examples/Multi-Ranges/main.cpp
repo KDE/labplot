@@ -68,12 +68,12 @@ int main(int argc, char* argv[]) {
     plotArea1->setRightPadding(Worksheet::convertToSceneUnits(1.7, Worksheet::Unit::Centimeter));
     plotArea1->setBottomPadding(Worksheet::convertToSceneUnits(1.7, Worksheet::Unit::Centimeter));
 
-    PlotArea::BorderType border1 = plotArea1->plotArea()->borderType();
-    border1.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	border1.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	border1.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	border1.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea1->plotArea()->setBorderType(border1);
+    CartesianPlot::BorderType border1 = plotArea1->borderType();
+    border1.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, true);
+	border1.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, true);
+	border1.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, true);
+	border1.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, true);
+    plotArea1->setBorderType(border1);
 
     for (Axis* axis : plotArea1->children<Axis>()) {
         if (axis->orientation() == WorksheetElement::Orientation::Horizontal && axis->position() == Axis::Position::Bottom){
@@ -157,12 +157,12 @@ int main(int argc, char* argv[]) {
     plotArea2->setRightPadding(Worksheet::convertToSceneUnits(1.7, Worksheet::Unit::Centimeter));
     plotArea2->setBottomPadding(Worksheet::convertToSceneUnits(1.7, Worksheet::Unit::Centimeter));
 
-    PlotArea::BorderType border2 = plotArea2->plotArea()->borderType();
-    border2.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	border2.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	border2.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	border2.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea2->plotArea()->setBorderType(border2);
+    CartesianPlot::BorderType border2 = plotArea2->borderType();
+    border2.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, true);
+	border2.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, true);
+	border2.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, true);
+	border2.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, true);
+    plotArea2->setBorderType(border2);
 
     Range<double> rangeX2 = plotArea2->range(CartesianCoordinateSystem::Dimension::X, 0);
     rangeX2.setRange(350, 800);
@@ -281,12 +281,12 @@ int main(int argc, char* argv[]) {
     plotArea3->setRightPadding(Worksheet::convertToSceneUnits(0.6, Worksheet::Unit::Centimeter));
     plotArea3->setBottomPadding(Worksheet::convertToSceneUnits(1.7, Worksheet::Unit::Centimeter));
 
-    PlotArea::BorderType border3 = plotArea3->plotArea()->borderType();
-    border3.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	border3.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	border3.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	border3.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea3->plotArea()->setBorderType(border3);
+    CartesianPlot::BorderType border3 = plotArea3->borderType();
+    border3.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, true);
+	border3.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, true);
+	border3.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, true);
+	border3.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, true);
+    plotArea3->setBorderType(border3);
 
     Range<double> rangeX3 = plotArea3->range(CartesianCoordinateSystem::Dimension::X, 0);
     rangeX3.setRange(350, 800);

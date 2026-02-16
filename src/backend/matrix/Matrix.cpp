@@ -235,7 +235,7 @@ void Matrix::setSuppressDataChangedSignal(bool b) {
 		m_model->setSuppressDataChangedSignal(b);
 }
 
-void Matrix::setChanged() {
+void Matrix::setDataChanged() {
 	if (m_model)
 		m_model->setChanged();
 }
@@ -1135,7 +1135,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	// vector with row heights
 	writer->writeStartElement(QStringLiteral("row_heights"));
 	const char* data = reinterpret_cast<const char*>(d->rowHeights.constData());
-	int size = d->rowHeights.size() * sizeof(int);
+	auto size = d->rowHeights.size() * sizeof(int);
 	writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
 	writer->writeEndElement();
 

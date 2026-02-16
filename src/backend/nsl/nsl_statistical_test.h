@@ -5,6 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-FileCopyrightText: 2025-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -159,6 +160,33 @@ struct log_rank_test_result {
 	int total_count2;
 };
 struct log_rank_test_result nsl_stats_log_rank_h(const double* time, const int* status, const size_t* g1_ind, size_t size1, const size_t* g2_ind, size_t size2);
+
+struct mann_kendall_test_result {
+	double S;
+	double tau;
+	double z;
+	double p;
+	int n;
+	double slope;
+};
+struct mann_kendall_test_result nsl_stats_mann_kendall(const double sample[], size_t n, nsl_stats_tail_type tail);
+
+struct wald_wolfowitz_runs_test_result {
+	double z;
+	double p;
+	int runs;
+	int n;
+};
+struct wald_wolfowitz_runs_test_result nsl_stats_wald_wolfowitz_runs(const double sample[], size_t n, nsl_stats_tail_type tail);
+
+struct ramirez_runger_test_result {
+	double stability_ratio;
+	int dof;
+	int eff_dof;
+	double p;
+	double mean_diff;
+};
+struct ramirez_runger_test_result nsl_stats_ramirez_runger(const double sample[], size_t n, nsl_stats_tail_type tail);
 
 __END_DECLS
 

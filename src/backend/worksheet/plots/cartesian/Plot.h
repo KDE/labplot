@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all plots like scatter plot, box plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -62,26 +62,17 @@ public:
 	};
 
 	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)
-	virtual bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
-	virtual double minimum(CartesianCoordinateSystem::Dimension dim) const = 0;
-	virtual double maximum(CartesianCoordinateSystem::Dimension dim) const = 0;
+	using Dimension = CartesianCoordinateSystem::Dimension;
+	virtual bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& rOut, bool includeErrorBars = true) const = 0;
+	virtual double minimum(Dimension dim) const = 0;
+	virtual double maximum(Dimension dim) const = 0;
+	virtual bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const = 0;
+	virtual int dataCount(Dimension dim) const = 0;
 	virtual bool hasData() const = 0;
 	bool activatePlot(QPointF mouseScenePos, double maxDist = -1);
 	virtual QColor color() const = 0; // Color of the plot. If the plot consists multiple colors, return the main Color (This is used in the cursor dock as
 									  // background color for example)
-
-	/*!
-	 * returns \c true if the column is used internally in the plot for the visualisation, returns \c false otherwise.
-	 * If \p indirect is true it returns true also if a depending curve uses that column
-	 */
 	virtual bool usingColumn(const AbstractColumn*, bool indirect = true) const = 0;
-
-	// TODO: make protected and use friend classes if access required!
-	/*!
-	 * recalculates the internal structures (additional data containers, drawing primitives, etc.) on data changes in the source data columns.
-	 * these structures are used in the plot during the actual drawing of the plot on geometry changes.
-	 */
-	virtual void recalc() = 0;
 
 	typedef PlotPrivate Private;
 
@@ -91,6 +82,11 @@ private:
 protected:
 	Plot(const QString&, PlotPrivate* dd, AspectType);
 	PlotPrivate* const d_ptr;
+
+	friend class CartesianPlot;
+	friend class CartesianPlotPrivate;
+	friend class Spreadsheet;
+	virtual void recalc() = 0;
 
 Q_SIGNALS:
 	void dataChanged(); // emitted when the data to be plotted was changed to re-adjust the parent plot area

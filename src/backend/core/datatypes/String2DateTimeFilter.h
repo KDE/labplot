@@ -37,7 +37,7 @@ public:
 	 * The default format string is "yyyy-MM-dd hh:mm:ss.zzz".
 	 * \sa QDate::toString()
 	 */
-	QString format() const {
+	const QString& format() const {
 		return m_format;
 	}
 

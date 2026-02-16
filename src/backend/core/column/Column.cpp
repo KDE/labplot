@@ -1352,16 +1352,18 @@ void Column::save(QXmlStreamWriter* writer) const {
 			writer->writeCharacters(QLatin1String(bytes.toBase64()));
 			break;
 		}
-		case ColumnMode::DateTime:
 		case ColumnMode::Month:
 		case ColumnMode::Day:
+		case ColumnMode::DateTime: {
+			// convert QDateTime values to milliseconds since epoch and serialize them using Base64 encoding
+			QByteArray bytes;
 			for (int i = 0; i < rowCount(); ++i) {
-				writer->writeStartElement(QStringLiteral("row"));
-				writer->writeAttribute(QStringLiteral("index"), QString::number(i));
-				writer->writeCharacters(dateTimeAt(i).toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
-				writer->writeEndElement();
+				qint64 msecs = dateTimeAt(i).toMSecsSinceEpoch();
+				bytes.append(reinterpret_cast<const char*>(&msecs), sizeof(qint64));
 			}
+			writer->writeCharacters(QLatin1String(bytes.toBase64()));
 			break;
+		}
 		}
 	}
 
@@ -1402,10 +1404,17 @@ public:
 			m_private->replaceTexts(-1, textVector);
 			break;
 		}
-		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day: {
-			// nothing to do here, the data are loaded row by row
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime: {
+			// deserialize QDateTime values from milliseconds since epoch
+			QVector<QDateTime> dateTimeVector;
+			for (int i = 0; i < bytes.size(); i += sizeof(qint64)) {
+				qint64 msecs;
+				memcpy(&msecs, bytes.data() + i, sizeof(qint64));
+				dateTimeVector.append(QDateTime::fromMSecsSinceEpoch(msecs));
+			}
+			m_private->replaceDateTimes(-1, dateTimeVector);
 			break;
 		}
 		}
@@ -1551,12 +1560,14 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				case Column::ColumnMode::DateTime:
 				case Column::ColumnMode::Month:
 				case Column::ColumnMode::Day: {
+					// old serialization format with row by row for xmlVersion < 20
 					dateTimeVector << QDateTime::fromString(reader->readElementText() + QStringLiteral("Z"),
 															QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt")); // timezone is important
 					break;
 				}
 				case Column::ColumnMode::Text: {
-					textVector << reader->readElementText(); // old serialization format with row by row for xmlVersion < 18
+					// old serialization format with row by row for xmlVersion < 18
+					textVector << reader->readElementText();
 					break;
 				}
 				}
@@ -1572,10 +1583,13 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		if (!preview) {
 			// Decode data
 			QString content = reader->text().toString().trimmed();
-			// Datetime and Text for xmlVersion < 18 are read row by row above,
+			// Text for xmlVersion < 18 and DateTime for xmlVersion < 20 are read row by row above,
 			// everything else is Base64 encoded and is decoded via DecodeColumnTask
 			const auto mode = columnMode();
-			if (!content.isEmpty() && (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::Text)) {
+			bool decode = mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt
+				|| (mode == ColumnMode::Text && Project::xmlVersion() >= 18)
+				|| ((mode == ColumnMode::DateTime || mode == ColumnMode::Month || mode == ColumnMode::Day) && Project::xmlVersion() >= 20);
+			if (!content.isEmpty() && decode) {
 				auto* task = new DecodeColumnTask(d, content);
 				QThreadPool::globalInstance()->start(task);
 			}
@@ -1588,10 +1602,11 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	case AbstractColumn::ColumnMode::Integer:
 		/* handled above in DecodeColumnTask */
 		break;
-	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
-		setDateTimes(dateTimeVector);
+	case AbstractColumn::ColumnMode::DateTime:
+		if (!dateTimeVector.isEmpty() && Project::xmlVersion() < 20) // old serialization format with row by row reading
+			setDateTimes(dateTimeVector);
 		break;
 	case AbstractColumn::ColumnMode::Text:
 		if (!textVector.isEmpty() && Project::xmlVersion() < 18) // old serialization format with row by row reading

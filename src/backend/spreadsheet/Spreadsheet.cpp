@@ -744,7 +744,7 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 	// 		for (auto* col : selectedColumns()) {
 	// 			col->setSuppressDataChangedSignal(true);
 	// 			col->clearFormulas();	// 			col->setSuppressDataChangedSignal(false);
-	// 			col->setChanged();
+	// 			col->setDataChanged();
 	// 		}
 	// 	} else {
 	WAIT_CURSOR_AUTO_RESET;
@@ -754,7 +754,7 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 		col->setSuppressDataChangedSignal(true);
 		col->clear();
 		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
+		col->setDataChanged();
 	}
 	endMacro();
 }
@@ -1457,6 +1457,8 @@ void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
 		setUndoAware(true);
 		d->statisticsSpreadsheet = nullptr;
 	}
+
+	Q_EMIT statisticsSpreadsheetChanged(on);
 }
 
 // ##############################################################################
@@ -1771,7 +1773,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 								 AbstractFileFilter::ImportMode columnImportMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	Q_D(Spreadsheet);
-	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn <<", row count = " << rowCount());
+	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn << ", row count = " << rowCount());
 
 	CleanupNoArguments cleanup([d]() {
 		d->m_usedInPlots.clear();
@@ -1800,8 +1802,8 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	const int rows = rowCount();
 	for (size_t col = startColumn; col <= endColumn; col++) {
 		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
-		Column* column = this->column((int)(columnOffset + col - startColumn));
-		// DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
+		auto* column = this->column((int)(columnOffset + col - startColumn));
+		// DEBUG(Q_FUNC_INFO << ", column mode " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
 		if (!d->suppressSetCommentFinalizeImport) {
 			QString comment;
@@ -1835,7 +1837,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 		if (columnImportMode == AbstractFileFilter::ImportMode::Replace) {
 			column->setSuppressDataChangedSignal(true);
-			column->setChanged(); // Invalidate properties
+			column->setDataChanged(); // Invalidate properties
 			column->setSuppressDataChangedSignal(false);
 		}
 	}

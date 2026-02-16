@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Hypothesis Test
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2025 Alexander Semke >alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025-2026 Alexander Semke >alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
@@ -20,7 +20,6 @@
 #include <QAction>
 #include <QActionGroup>
 #include <QFileDialog>
-#include <QLocale>
 #include <QMenu>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
@@ -199,6 +198,9 @@ QWidget* HypothesisTest::view() const {
 QPair<int, int> HypothesisTest::variableCount(Test test) {
 	switch (test) {
 	case Test::t_test_one_sample:
+	case Test::mann_kendall_test:
+	case Test::wald_wolfowitz_runs_test:
+	case Test::ramirez_runger_test:
 		return {1, 1};
 		break;
 	case Test::t_test_two_sample:
@@ -224,7 +226,7 @@ QPair<int, int> HypothesisTest::variableCount(Test test) {
 }
 
 QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
-	int hypCount = hypothesisCount(test);
+	const int hypCount = hypothesisCount(test);
 	QVector<QPair<QString, QString>> hypothesis(hypCount);
 
 	if (hypCount == 3) {
@@ -248,13 +250,30 @@ QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
 		} else if (test == Test::wilcoxon_test) {
 			lHSymbol = QStringLiteral("η<sub>D</sub>");
 			rHSymbol = QStringLiteral("0");
+		} else if (test == Test::mann_kendall_test) {
+			QString H0 = i18n("No monotonic trend exists");
+			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(H0, i18n("A monotonic trend exists"));
+			hypothesis[nsl_stats_tail_type_negative] = QPair<QString, QString>(H0, i18n("A negative monotonic trend exists"));
+			hypothesis[nsl_stats_tail_type_positive] = QPair<QString, QString>(H0, i18n("A positive monotonic trend exists"));
+			return hypothesis;
+		} else if (test == Test::wald_wolfowitz_runs_test) {
+			QString H0 = i18n("The process is stable (random)");
+			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(H0, i18n("The data are not randomly distributed"));
+			hypothesis[nsl_stats_tail_type_negative] = QPair<QString, QString>(H0, i18n("The process shows shifting or clustering"));
+			hypothesis[nsl_stats_tail_type_positive] = QPair<QString, QString>(H0, i18n("The process shows oscillations or over-control"));
+			return hypothesis;
+		} else if (test == Test::ramirez_runger_test) {
+			QString H0 = i18n("The process is stable (random)");
+			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(H0, i18n("The process is unstable (non-random)"));
+			hypothesis[nsl_stats_tail_type_negative] = QPair<QString, QString>(H0, i18n("The process shows oscillations or over-control"));
+			hypothesis[nsl_stats_tail_type_positive] = QPair<QString, QString>(H0, i18n("The process shows shifting or clustering"));
+			return hypothesis;
 		}
 
-		hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(lHSymbol + QStringLiteral(" = ") + rHSymbol, lHSymbol + QStringLiteral(" ≠ ") + rHSymbol);
-		hypothesis[nsl_stats_tail_type_negative] =
-			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≥ ") + rHSymbol, lHSymbol + QStringLiteral(" &lt; ") + rHSymbol);
-		hypothesis[nsl_stats_tail_type_positive] =
-			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≤ ") + rHSymbol, lHSymbol + QStringLiteral(" > ") + rHSymbol);
+		QString H0 = lHSymbol + QStringLiteral(" = ") + rHSymbol;
+		hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(H0, lHSymbol + QStringLiteral(" ≠ ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_negative] = QPair<QString, QString>(H0, lHSymbol + QStringLiteral(" &lt; ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_positive] = QPair<QString, QString>(H0, lHSymbol + QStringLiteral(" > ") + rHSymbol);
 	} else if (hypCount == 1) {
 		if (test == Test::one_way_anova) {
 			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(QStringLiteral("µ<sub>1</sub> = µ<sub>2</sub> = ... = µ<sub>k</sub>"),
@@ -289,6 +308,9 @@ int HypothesisTest::hypothesisCount(Test test) {
 	case Test::mann_whitney_u_test:
 	case Test::t_test_welch:
 	case Test::wilcoxon_test:
+	case Test::mann_kendall_test:
+	case Test::wald_wolfowitz_runs_test:
+	case Test::ramirez_runger_test:
 		return 3;
 	case Test::one_way_anova:
 	case Test::kruskal_wallis_test:
@@ -331,6 +353,12 @@ QString HypothesisTest::testName(Test test) {
 		return i18n("Chi-Square Goodness of Fit Test");
 	case Test::one_way_anova_repeated:
 		return i18n("One-Way ANOVA with Repeated Measures Test");
+	case Test::mann_kendall_test:
+		return i18n("Mann-Kendall Test");
+	case Test::wald_wolfowitz_runs_test:
+		return i18n("Wald-Wolfowitz Runs Test");
+	case Test::ramirez_runger_test:
+		return i18n("Ramirez-Runger Runs Test");
 	}
 
 	return {};
@@ -349,9 +377,12 @@ size_t HypothesisTestPrivate::minSampleCount(HypothesisTest::Test htest) {
 	case HypothesisTest::Test::wilcoxon_test:
 	case HypothesisTest::Test::friedman_test:
 		return 5;
+	case HypothesisTest::Test::mann_kendall_test:
+	case HypothesisTest::Test::wald_wolfowitz_runs_test:
+	case HypothesisTest::Test::ramirez_runger_test:
+		return 3;
 	case HypothesisTest::Test::chisq_independence:
 	case HypothesisTest::Test::chisq_goodness_of_fit:
-		return 2;
 	case HypothesisTest::Test::log_rank_test:
 		return 2;
 	}
@@ -453,9 +484,9 @@ QString HypothesisTestPrivate::addResultColumnStatistics(const QVector<const Abs
 								 QLocale().toString(statistics.size),
 								 QLocale().toString(statistics.arithmeticMean),
 								 QLocale().toString(statistics.median),
-								 QLocale().toString(statistics.variance),
-								 QLocale().toString(statistics.skewness),
-								 QLocale().toString(statistics.kurtosis)};
+								 QLocale().toString(statistics.minimum),
+								 QLocale().toString(statistics.maximum),
+								 QLocale().toString(statistics.standardDeviation)};
 	}
 
 	return addResultTable(data, true);
@@ -501,6 +532,14 @@ QString HypothesisTestPrivate::addResultTable(const QVector<QVector<QString>>& d
 	return html;
 }
 
+QString HypothesisTestPrivate::rejectConclusion() {
+	return i18n("<b>Reject the null hypothesis.</b>");
+}
+
+QString HypothesisTestPrivate::failToRejectConclusion() {
+	return i18n("<b>Fail to reject the null hypothesis.</b>");
+}
+
 QString HypothesisTestPrivate::notAvailable() {
 	return i18n("N/A");
 }
@@ -526,7 +565,7 @@ QString HypothesisTestPrivate::samplesMustBeEqualSize() {
 }
 
 QVector<QString> HypothesisTestPrivate::columnStatisticsHeaders() {
-	return {i18n("Name"), i18n("Size"), i18n("Mean"), i18n("Median"), i18n("Variance"), i18n("Skewness"), i18n("Kurtosis")};
+	return {i18n("Name"), i18n("Size"), i18n("Mean"), i18n("Median"), i18n("Minimum"), i18n("Maximum"), i18n("Standard Deviation")};
 }
 
 QString HypothesisTestPrivate::emptyResultColumnStatistics() {
@@ -538,11 +577,12 @@ QString HypothesisTestPrivate::emptyResultColumnStatistics() {
 
 QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 	bool hasDescriptiveStatistics = (test != HypothesisTest::Test::chisq_independence) && (test != HypothesisTest::Test::log_rank_test);
-	bool hasDegreesOfFreedom = (test != HypothesisTest::Test::mann_whitney_u_test) && (test != HypothesisTest::Test::wilcoxon_test);
+	bool hasDegreesOfFreedom = (test != HypothesisTest::Test::mann_whitney_u_test) && (test != HypothesisTest::Test::wilcoxon_test)
+		&& (test != HypothesisTest::Test::mann_kendall_test) && (test != HypothesisTest::Test::wald_wolfowitz_runs_test)
+		&& (test != HypothesisTest::Test::ramirez_runger_test);
 
-	QString result;
-	result += (addResultTitle(HypothesisTest::testName(test)) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-			   + addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")));
+	QString result = (addResultTitle(HypothesisTest::testName(test)) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
+					  + addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")));
 	if (hasDescriptiveStatistics)
 		result += (addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3"));
 	result += (addResultSection(i18n("Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
@@ -605,6 +645,17 @@ QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 				   + addResultLine(i18n("Censored Count 1"), QStringLiteral("%L22")) + addResultLine(i18n("Total Count 1"), QStringLiteral("%L23"))
 				   + addResultLine(i18n("Event Count 2"), QStringLiteral("%L24")) + addResultLine(i18n("Censored Count 2"), QStringLiteral("%L25"))
 				   + addResultLine(i18n("Total Count 2"), QStringLiteral("%L26")));
+	} else if (test == HypothesisTest::Test::mann_kendall_test) {
+		result += (addResultLine(i18n("S"), QStringLiteral("%L20")) + addResultLine(i18n("Kendall's Tau"), QStringLiteral("%L21"))
+				   + addResultLine(i18n("z-Value"), QStringLiteral("%L22")) + addResultLine(i18n("Sen's Slope"), QStringLiteral("%L23"))
+				   + addResultLine(i18n("Sample Size"), QStringLiteral("%L24")));
+	} else if (test == HypothesisTest::Test::wald_wolfowitz_runs_test) {
+		result += (addResultLine(i18n("Number of Runs"), QStringLiteral("%L20")) + addResultLine(i18n("z-Value"), QStringLiteral("%L21"))
+				   + addResultLine(i18n("Sample Size"), QStringLiteral("%L22")));
+	} else if (test == HypothesisTest::Test::ramirez_runger_test) {
+		result += (addResultLine(i18n("Stability Ratio"), QStringLiteral("%L20")) + addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L21"))
+				   + addResultLine(i18n("Effective Degrees of Freedom"), QStringLiteral("%L22"))
+				   + addResultLine(i18n("Avverage Successive Difference"), QStringLiteral("%L23")));
 	}
 
 	result += addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%99");
@@ -662,6 +713,15 @@ void HypothesisTestPrivate::recalculate() {
 		break;
 	case HypothesisTest::Test::log_rank_test:
 		performLogRankTest();
+		break;
+	case HypothesisTest::Test::mann_kendall_test:
+		performMannKendallTest();
+		break;
+	case HypothesisTest::Test::wald_wolfowitz_runs_test:
+		performWaldWolfowitzRunsTest();
+		break;
+	case HypothesisTest::Test::ramirez_runger_test:
+		performRamirezRungerTest();
 		break;
 	}
 
@@ -838,6 +898,29 @@ void HypothesisTestPrivate::resetResult() {
 						 .arg(notAvailable())
 						 .arg(notAvailable())
 						 .arg(testResultNotAvailable());
+	} else if (test == HypothesisTest::Test::mann_kendall_test) {
+		resultText = resultTemplate(test)
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
+	} else if (test == HypothesisTest::Test::wald_wolfowitz_runs_test) {
+		resultText = resultTemplate(test)
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
 	}
 
 	Q_EMIT q->changed(); // notify the view about the changes
@@ -864,13 +947,15 @@ void HypothesisTestPrivate::performOneSampleTTest() {
 	QString conclusion;
 	if (!std::isnan(result.p))
 		if (result.p <= significanceLevel)
-			conclusion = i18n("At the significance level %1, the population mean is significantly different from %2. Reject the null hypothesis.",
+			conclusion = i18n("At the significance level %1, the population mean is significantly different from %2. %3",
 							  significanceLevel,
-							  testMean);
+							  testMean,
+							  rejectConclusion());
 		else
-			conclusion = i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null hypothesis.",
+			conclusion = i18n("At the significance level %1, the population mean is not significantly different from %2. %3",
 							  significanceLevel,
-							  testMean);
+							  testMean,
+							  failToRejectConclusion());
 	else
 		conclusion = testResultNotAvailable();
 
@@ -952,10 +1037,10 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	QString conclusion;
 	if (!std::isnan(p)) {
 		if (p <= significanceLevel)
-			conclusion = i18n("At the significance level %1, the population means are significantly different. Reject the null Hypothesis", significanceLevel);
+			conclusion = i18n("At the significance level %1, the population means are significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion = i18n("At the significance level %1, the population means are not significantly different. Fail to reject the null Hypothesis",
-							  significanceLevel);
+			conclusion =
+				i18n("At the significance level %1, the population means are not significantly different. %2", significanceLevel, failToRejectConclusion());
 	} else
 		conclusion = testResultNotAvailable();
 
@@ -1020,10 +1105,10 @@ void HypothesisTestPrivate::performWelchTTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion = i18n("At the significance level %1, the population means are significantly different. Reject the null Hypothesis", significanceLevel);
+			conclusion = i18n("At the significance level %1, the population means are significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion = i18n("At the significance level %1, the population means are not significantly different. Fail to reject the null Hypothesis",
-							  significanceLevel);
+			conclusion =
+				i18n("At the significance level %1, the population means are not significantly different. %2", significanceLevel, failToRejectConclusion());
 	} else
 		conclusion = testResultNotAvailable();
 
@@ -1074,11 +1159,9 @@ void HypothesisTestPrivate::performOneWayANOVATest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion =
-				i18n("At the significance level %1, at least one group mean is significantly different. Reject the null Hypothesis", significanceLevel);
+			conclusion = i18n("At the significance level %1, at least one group mean is significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion =
-				i18n("At the significance level %1, no significant difference between group means. Fail to reject the null Hypothesis", significanceLevel);
+			conclusion = i18n("At the significance level %1, no significant difference between group means. %2", significanceLevel, failToRejectConclusion());
 	} else {
 		conclusion = testResultNotAvailable();
 	}
@@ -1137,11 +1220,9 @@ void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion =
-				i18n("At the significance level %1, at least one group mean is significantly different. Reject the null Hypothesis", significanceLevel);
+			conclusion = i18n("At the significance level %1, at least one group mean is significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion =
-				i18n("At the significance level %1, no significant difference between group means. Fail to reject the null Hypothesis", significanceLevel);
+			conclusion = i18n("At the significance level %1, no significant difference between group means. %2", significanceLevel, failToRejectConclusion());
 	} else {
 		conclusion = testResultNotAvailable();
 	}
@@ -1198,10 +1279,10 @@ void HypothesisTestPrivate::performMannWhitneyUTest() {
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
 			conclusion =
-				i18n("At the significance level %1, at least one group distribution is significantly different. Reject the null Hypothesis", significanceLevel);
+				i18n("At the significance level %1, at least one group distribution is significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion = i18n("At the significance level %1, no significant difference between group distributions. Fail to reject the null Hypothesis",
-							  significanceLevel);
+			conclusion =
+				i18n("At the significance level %1, no significant difference between group distributions. %2", significanceLevel, failToRejectConclusion());
 	} else {
 		conclusion = testResultNotAvailable();
 	}
@@ -1256,10 +1337,10 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
 			conclusion =
-				i18n("At the significance level %1, at least one group distribution is significantly different. Reject the null Hypothesis", significanceLevel);
+				i18n("At the significance level %1, at least one group distribution is significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion = i18n("At the significance level %1, no significant difference between group distributions. Fail to reject the null Hypothesis",
-							  significanceLevel);
+			conclusion =
+				i18n("At the significance level %1, no significant difference between group distributions. %2", significanceLevel, failToRejectConclusion());
 	} else {
 		conclusion = testResultNotAvailable();
 	}
@@ -1315,10 +1396,10 @@ void HypothesisTestPrivate::performWilcoxonTest() {
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
 			conclusion =
-				i18n("At the significance level %1, at least one group distribution is significantly different. Reject the null Hypothesis", significanceLevel);
+				i18n("At the significance level %1, at least one group distribution is significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion = i18n("At the significance level %1, no significant difference between group distributions. Fail to reject the null Hypothesis",
-							  significanceLevel);
+			conclusion =
+				i18n("At the significance level %1, no significant difference between group distributions. %2", significanceLevel, failToRejectConclusion());
 	} else {
 		conclusion = testResultNotAvailable();
 	}
@@ -1378,9 +1459,9 @@ void HypothesisTestPrivate::performFriedmanTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion = i18n("At the significance level %1, at least one group is significantly different. Reject the null Hypothesis", significanceLevel);
+			conclusion = i18n("At the significance level %1, at least one group is significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion = i18n("At the significance level %1, no significant difference between groups. Fail to reject the null Hypothesis", significanceLevel);
+			conclusion = i18n("At the significance level %1, no significant difference between groups. %2", significanceLevel, failToRejectConclusion());
 	} else {
 		conclusion = testResultNotAvailable();
 	}
@@ -1444,13 +1525,13 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion =
-				i18n("At the significance level %1, the observed frequencies do not follow the expected frequency distribution. Reject the null Hypothesis",
-					 significanceLevel);
+			conclusion = i18n("At the significance level %1, the observed frequencies do not follow the expected frequency distribution. %2",
+							  significanceLevel,
+							  rejectConclusion());
 		else
-			conclusion =
-				i18n("At the significance level %1, the observed frequencies follow the expected frequency distribution. Fail to reject the null Hypothesis",
-					 significanceLevel);
+			conclusion = i18n("At the significance level %1, the observed frequencies follow the expected frequency distribution. %2",
+							  significanceLevel,
+							  failToRejectConclusion());
 	} else
 		conclusion = testResultNotAvailable();
 
@@ -1509,10 +1590,9 @@ void HypothesisTestPrivate::performChisqIndependenceTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion = i18n("At the significance level %1, both categorical variables are dependent. Reject the null Hypothesis", significanceLevel);
+			conclusion = i18n("At the significance level %1, both categorical variables are dependent. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion =
-				i18n("At the significance level %1, both categorical variables are independent. Fail to reject the null Hypothesis", significanceLevel);
+			conclusion = i18n("At the significance level %1, both categorical variables are independent. %2", significanceLevel, failToRejectConclusion());
 	} else {
 		conclusion = testResultNotAvailable();
 	}
@@ -1606,18 +1686,16 @@ void HypothesisTestPrivate::performLogRankTest() {
 		return;
 	}
 
-	log_rank_test_result result =
-		nsl_stats_log_rank_h(time.constData(), status.constData(), g0Indices.constData(), group1size, g1Indices.constData(), group2size);
-
+	auto result = nsl_stats_log_rank_h(time.constData(), status.constData(), g0Indices.constData(), group1size, g1Indices.constData(), group2size);
 	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(0);
 
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion = i18n("At the significance level %1, the survival curves are significantly different. Reject the null Hypothesis", significanceLevel);
+			conclusion = i18n("At the significance level %1, the survival curves are significantly different. %2", significanceLevel, rejectConclusion());
 		else
 			conclusion =
-				i18n("At the significance level %1, no significant difference between survival curves. Fail to reject the null Hypothesis", significanceLevel);
+				i18n("At the significance level %1, no significant difference between survival curves. %2", significanceLevel, failToRejectConclusion());
 	} else {
 		conclusion = testResultNotAvailable();
 	}
@@ -1635,6 +1713,131 @@ void HypothesisTestPrivate::performLogRankTest() {
 					 .arg(result.event_count2)
 					 .arg(result.censored_count2)
 					 .arg(result.total_count2)
+					 .arg(conclusion);
+}
+
+void HypothesisTestPrivate::performMannKendallTest() {
+	const auto* col = dataColumns.constFirst();
+
+	QVector<double> sample = filterColumn<double>(col);
+	size_t n = sample.size();
+
+	if (n < minSampleCount(test)) {
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col->name()).arg(minSampleCount(test)));
+		return;
+	}
+
+	auto result = nsl_stats_mann_kendall(sample.constData(), n, tail);
+	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(tail);
+
+	QString conclusion;
+	if (!std::isnan(result.p)) {
+		if (result.p <= significanceLevel) {
+			if (tail == nsl_stats_tail_type_two)
+				conclusion =
+					i18n("At the significance level %1, there is a significant monotonic trend in the data. %2", significanceLevel, rejectConclusion());
+			else if (tail == nsl_stats_tail_type_positive)
+				conclusion = i18n("At the significance level %1, there is a significant positive monotonic trend. %2", significanceLevel, rejectConclusion());
+			else
+				conclusion = i18n("At the significance level %1, there is a significant negative monotonic trend. %2", significanceLevel, rejectConclusion());
+		} else
+			conclusion = i18n("At the significance level %1, no significant monotonic trend detected. %2", significanceLevel, failToRejectConclusion());
+	} else
+		conclusion = testResultNotAvailable();
+
+	resultText = resultTemplate(test)
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col})))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.S)
+					 .arg(result.tau)
+					 .arg(result.z)
+					 .arg(result.slope)
+					 .arg(result.n)
+					 .arg(conclusion);
+}
+
+void HypothesisTestPrivate::performWaldWolfowitzRunsTest() {
+	const auto* col = dataColumns.constFirst();
+
+	QVector<double> sample = filterColumn<double>(col);
+	size_t n = sample.size();
+
+	if (n < minSampleCount(test)) {
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col->name()).arg(minSampleCount(test)));
+		return;
+	}
+
+	auto result = nsl_stats_wald_wolfowitz_runs(sample.constData(), n, tail);
+	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(tail);
+
+	QString conclusion;
+	if (!std::isnan(result.p)) {
+		if (result.p <= significanceLevel) {
+			if (tail == nsl_stats_tail_type_two)
+				conclusion = i18n("At the significance level %1, the data are not randomly distributed. %2", significanceLevel, rejectConclusion());
+			else if (tail == nsl_stats_tail_type_negative)
+				conclusion = i18n("At the significance level %1, the data show clustering or trend (too few runs). %2", significanceLevel, rejectConclusion());
+			else
+				conclusion =
+					i18n("At the significance level %1, the data show oscillation or over-control (too many runs). %2", significanceLevel, rejectConclusion());
+		} else
+			conclusion = i18n("At the significance level %1, the data appear to be randomly distributed. %2", significanceLevel, failToRejectConclusion());
+	} else
+		conclusion = testResultNotAvailable();
+
+	resultText = resultTemplate(test)
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col})))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.runs)
+					 .arg(result.z)
+					 .arg(result.n)
+					 .arg(conclusion);
+}
+
+void HypothesisTestPrivate::performRamirezRungerTest() {
+	const auto* col = dataColumns.constFirst();
+
+	QVector<double> sample = filterColumn<double>(col);
+	size_t n = sample.size();
+
+	if (n < minSampleCount(test)) {
+		Q_EMIT q->statusError(atLeastXSamplesRequired().arg(col->name()).arg(minSampleCount(test)));
+		return;
+	}
+
+	auto result = nsl_stats_ramirez_runger(sample.constData(), n, tail);
+	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(tail);
+
+	QString conclusion;
+	if (!std::isnan(result.p)) {
+		if (result.p <= significanceLevel) {
+			if (tail == nsl_stats_tail_type_two)
+				conclusion = i18n("At the significance level %1, the process is unstable (non-homogeneous). %2", significanceLevel, rejectConclusion());
+			else if (tail == nsl_stats_tail_type_negative)
+				conclusion = i18n("At the significance level %1, the process shows oscillation or over-control. %2", significanceLevel, rejectConclusion());
+			else
+				conclusion = i18n("At the significance level %1, the process shows clustering, shifting, or trends. %2", significanceLevel, rejectConclusion());
+		} else
+			conclusion = i18n("At the significance level %1, the process appears to be stable (homogeneous). %2", significanceLevel, failToRejectConclusion());
+	} else
+		conclusion = testResultNotAvailable();
+
+	resultText = resultTemplate(test)
+					 .arg(nullHypothesisText)
+					 .arg(alternateHypothesisText)
+					 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col})))
+					 .arg(significanceLevel)
+					 .arg(result.p)
+					 .arg(result.stability_ratio)
+					 .arg(result.dof)
+					 .arg(result.eff_dof)
+					 .arg(result.mean_diff)
 					 .arg(conclusion);
 }
 
@@ -1780,6 +1983,18 @@ void HypothesisTest::fillAddNewHypothesisTest(QMenu* menu, QActionGroup* actionG
 
 	action = new QAction(testName(Test::log_rank_test), actionGroup);
 	action->setData(static_cast<int>(Test::log_rank_test));
+	subMenu->addAction(action);
+
+	action = new QAction(testName(Test::mann_kendall_test), actionGroup);
+	action->setData(static_cast<int>(Test::mann_kendall_test));
+	subMenu->addAction(action);
+
+	action = new QAction(testName(Test::wald_wolfowitz_runs_test), actionGroup);
+	action->setData(static_cast<int>(Test::wald_wolfowitz_runs_test));
+	subMenu->addAction(action);
+
+	action = new QAction(testName(Test::ramirez_runger_test), actionGroup);
+	action->setData(static_cast<int>(Test::ramirez_runger_test));
 	subMenu->addAction(action);
 
 	menu->addMenu(subMenu);

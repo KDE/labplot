@@ -2854,7 +2854,7 @@ void FitTest::testNonLinearBennett5() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 
-	// NIST data for Hahn1 dataset
+	// NIST data for Bennett5 dataset
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/Bennett5_data.dat"));
 
 	auto properties = filter.properties();
@@ -3768,7 +3768,7 @@ void FitTest::testHistogramFit() {
 
 	QCOMPARE(aspect->name(), QLatin1String("Worksheet - Spreadsheet"));
 	QVERIFY(aspect->type() == AspectType::Worksheet);
-	auto w = dynamic_cast<Worksheet*>(aspect);
+	const auto* w = dynamic_cast<Worksheet*>(aspect);
 	if (!w)
 		return;
 

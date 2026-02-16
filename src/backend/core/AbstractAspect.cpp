@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -318,6 +318,25 @@ void AbstractAspect::setIsLoading(bool load) {
 
 bool AbstractAspect::isLoading() const {
 	return d->m_isLoading;
+}
+
+void AbstractAspect::setChanged(bool changed) {
+	if (d->m_changed == changed || d->m_isLoading)
+		return;
+
+	d->m_changed = changed;
+
+	// update the status for the parent aspect if the current aspect is hidden
+	// to properly show the changed status in the aspect tree model
+	if (d->m_hidden && changed)
+		if (auto* p = parentAspect())
+			p->setChanged(true);
+
+	Q_EMIT aspectChangedStatusChanged(this);
+}
+
+bool AbstractAspect::isChanged() const {
+	return d->m_changed;
 }
 
 /**
@@ -1052,6 +1071,8 @@ void AbstractAspect::exec(QUndoCommand* cmd) {
 		cmd->redo();
 		delete cmd;
 	}
+
+	setChanged(true);
 }
 
 /**
@@ -1211,6 +1232,7 @@ QString AbstractAspect::uniqueNameFor(const QString& name, const QStringList& na
 void AbstractAspect::connectChild(AbstractAspect* child) {
 	connect(child, &AbstractAspect::aspectDescriptionAboutToChange, this, &AbstractAspect::aspectDescriptionAboutToChange);
 	connect(child, &AbstractAspect::aspectDescriptionChanged, this, &AbstractAspect::aspectDescriptionChanged);
+	connect(child, &AbstractAspect::aspectChangedStatusChanged, this, &AbstractAspect::aspectChangedStatusChanged);
 	connect(child,
 			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
 			this,

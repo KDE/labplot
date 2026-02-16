@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Hypothesis Test
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 
@@ -46,7 +46,10 @@ public:
 		friedman_test,
 		chisq_independence,
 		chisq_goodness_of_fit,
-		log_rank_test
+		log_rank_test,
+		mann_kendall_test,
+		wald_wolfowitz_runs_test,
+		ramirez_runger_test
 	};
 
 	QWidget* view() const override;

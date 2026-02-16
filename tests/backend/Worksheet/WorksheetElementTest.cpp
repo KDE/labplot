@@ -881,7 +881,7 @@ void WorksheetElementTest::moveTreeModelInteraction() {
 	ws->setItemSelectedInView(lFirst->graphicsItem(), false);
 	ws->setItemSelectedInView(lThird->graphicsItem(), true);
 	const auto& indices = projectExplorer->m_treeView->selectionModel()->selectedIndexes();
-	QCOMPARE(indices.length(), 4);
+	QCOMPARE(indices.length(), 5);
 	const auto& aspectIndex = indices.at(0);
 	const auto* selectedAspect = static_cast<AbstractAspect*>(aspectIndex.internalPointer());
 	QCOMPARE(selectedAspect->name(), lThird->name()); // The selectionModel() got updated correctly

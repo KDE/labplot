@@ -78,7 +78,7 @@ namespace {
 // the project version will be compared with this.
 // if you make any incompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 18;
+int buildXmlVersion = 20;
 }
 
 /**
@@ -162,7 +162,6 @@ public:
 	}
 
 	Project::DockVisibility dockVisibility{Project::DockVisibility::folderOnly};
-	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
 
 	static int m_versionNumber;
@@ -213,7 +212,6 @@ Project::Project()
 
 	setUndoAware(true);
 	setIsLoading(false);
-	d->changed = false;
 
 	connect(this, &Project::aspectDescriptionChanged, this, &Project::descriptionChanged);
 	connect(this, &Project::childAspectAdded, this, &Project::aspectAddedSlot);
@@ -337,16 +335,18 @@ void Project::setSaveData(bool save) {
 	setProjectChanged(true);
 }
 
-void Project::setChanged(const bool value) {
+void Project::setChanged(bool value) {
 	if (isLoading())
 		return;
 
-	Q_D(Project);
+	AbstractAspect::setChanged(value);
 
-	d->changed = value;
-
-	if (value)
-		Q_EMIT changed();
+	// when resetting the status of the project after load (changed = false), also recusively update all children
+	if (!value) {
+		const auto& children = this->children<AbstractAspect>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+		for (auto* child : children)
+			child->setChanged(false);
+	}
 }
 
 void Project::setSuppressAspectAddedSignal(bool value) {
@@ -357,11 +357,6 @@ void Project::setSuppressAspectAddedSignal(bool value) {
 bool Project::aspectAddedSignalSuppressed() const {
 	Q_D(const Project);
 	return d->aspectAddedSignalSuppressed;
-}
-
-bool Project::hasChanged() const {
-	Q_D(const Project);
-	return d->changed;
 }
 
 /*!
@@ -402,9 +397,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	updateDependencies<WorksheetElement>({aspect}); // notify all worksheetelements
 	updateDependencies<Spreadsheet>({aspect}); // notify all spreadsheets. Linked spreadsheets
 
-	Q_D(Project);
-	d->changed = true;
-	Q_EMIT changed();
+	setChanged();
 }
 
 /*!
@@ -932,7 +925,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 				}
 			}
 
-			column->setChanged();
+			column->setDataChanged();
 		}
 	}
 

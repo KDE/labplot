@@ -50,7 +50,7 @@ public:
 		return mValid;
 	}
 
-	QString infoString() {
+	const QString& infoString() {
 		return mInfoString;
 	}
 	bool binary() const {

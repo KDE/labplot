@@ -1450,11 +1450,10 @@ int AxisPrivate::determineMinorTicksNumber() const {
 		if (majorTicksNumber > 1)
 			tmpMinorTicksNumber /= majorTicksNumber - 1;
 		break;
-	case Axis::TicksType::CustomColumn: // Fall through
-	case Axis::TicksType::CustomValues:
+	case Axis::TicksType::CustomColumn:
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
 		break;
-	case Axis::TicksType::ColumnLabels:
+	case Axis::TicksType::CustomColumnLabels:
 		break; // not supported
 	}
 	return tmpMinorTicksNumber;
@@ -1672,7 +1671,7 @@ void AxisPrivate::retransformTicks() {
 
 	bool tmpMajorTicksNumberLimited = false;
 	int firstIndexCustomColumn = -1;
-	if (majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues) {
+	if (majorTicksType == Axis::TicksType::CustomColumn) {
 		if (majorTicksColumn) {
 			if (majorTicksAutoNumber) {
 				tmpMajorTicksNumber = majorTicksColumn->rowCount(start, end);
@@ -1698,7 +1697,7 @@ void AxisPrivate::retransformTicks() {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
 		}
-	} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
+	} else if (majorTicksType == Axis::TicksType::CustomColumnLabels) {
 		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 		if (c && c->valueLabelsInitialized()) {
 			tmpMajorTicksNumber = c->valueLabelsCount(start, end);
@@ -1733,9 +1732,8 @@ void AxisPrivate::retransformTicks() {
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber:
 		break; // tmpMajorTicksIncrement is calculated already above
-	case Axis::TicksType::ColumnLabels: // fall through
-	case Axis::TicksType::CustomColumn: // fall through
-	case Axis::TicksType::CustomValues:
+	case Axis::TicksType::CustomColumnLabels: // fall through
+	case Axis::TicksType::CustomColumn:
 		majorTicksIncrement = Range<double>::diff(q->scale(), start, end);
 		if (tmpMajorTicksNumber > 1)
 			majorTicksIncrement /= tmpMajorTicksNumber - 1;
@@ -1844,7 +1842,7 @@ void AxisPrivate::retransformTicks() {
 			break;
 
 		int columnIndex = iMajor; // iMajor used if for the labels a custom column is used.
-		if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)) {
+		if (majorTicksType == Axis::TicksType::CustomColumn) {
 			if (tmpMajorTicksNumberLimited) {
 				// Do not use all values of the column, but just a portion of it
 				columnIndex = majorTicksColumn->indexForValue(majorTickPos, true);
@@ -1864,7 +1862,7 @@ void AxisPrivate::retransformTicks() {
 				else
 					nextMajorTickPos = majorTickPos;
 			}
-		} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
+		} else if (majorTicksType == Axis::TicksType::CustomColumnLabels) {
 			const auto* c = static_cast<const Column*>(majorTicksColumn);
 			Q_ASSERT(tmpMajorTicksNumber > 0);
 			if (tmpMajorTicksNumberLimited) {
@@ -1917,7 +1915,8 @@ void AxisPrivate::retransformTicks() {
 			// DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
 
 			// if custom column is used, we can have duplicated values in it and we need only unique values
-			if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::ColumnLabels) && tickLabelValues.indexOf(value) != -1)
+			if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomColumnLabels)
+				&& tickLabelValues.indexOf(value) != -1)
 				valid = false;
 
 			// add major tick's line to the painter path
@@ -1927,9 +1926,9 @@ void AxisPrivate::retransformTicks() {
 					majorTicksPath.lineTo(endPoint);
 				}
 				majorTickPoints << anchorPoint;
-				if (majorTicksType == Axis::TicksType::ColumnLabels) {
+				if (majorTicksType == Axis::TicksType::CustomColumnLabels) {
 					const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
-					// majorTicksType == Axis::TicksType::ColumnLabels
+					// majorTicksType == Axis::TicksType::CustomColumnLabels
 					if (c && c->valueLabelsInitialized()) {
 						if (columnIndex < c->valueLabelsCount())
 							tickLabelValuesString << c->valueLabelAt(columnIndex);
@@ -2047,7 +2046,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	// automatically switch from 'decimal' to 'scientific' format for large and small numbers
 	// and back to decimal when the numbers get smaller after the auto-switch
 	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, labelsFormat))
-	if (labelsFormatAuto) {
+	if (labelsFormatAuto && labelsFormat != Axis::LabelsFormat::AngleDMS && labelsFormat != Axis::LabelsFormat::MultipliesPi) {
 		bool largeValue = false;
 		for (auto value : tickLabelValues) {
 			// switch to Scientific for large and small values if at least one is
@@ -2064,7 +2063,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	}
 
 	// determine labels precision
-	if (labelsAutoPrecision) {
+	if (labelsAutoPrecision && labelsFormat != Axis::LabelsFormat::AngleDMS) {
 		// do we need to increase the current precision?
 		int newPrecision = upperLabelsPrecision(labelsPrecision, labelsFormat);
 		if (newPrecision != labelsPrecision) {
@@ -2083,7 +2082,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	// category of format
 	bool numeric = false, datetime = false, text = false;
-	if (majorTicksType == Axis::TicksType::ColumnLabels)
+	if (majorTicksType == Axis::TicksType::CustomColumnLabels)
 		text = true;
 	else if (labelsTextType == Axis::LabelsTextType::PositionValues) {
 		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
@@ -2213,6 +2212,43 @@ void AxisPrivate::retransformTickLabelStrings() {
 			}
 			break;
 		}
+		// AngleDMS Label format
+		case Axis::LabelsFormat::AngleDMS: {
+			for (const auto value : std::as_const(tickLabelValues)) {
+				const bool negative = (value < 0);
+				const double absValue = std::abs(value);
+
+				int degrees = static_cast<int>(absValue);
+				double minutesFull = (absValue - degrees) * 60.0;
+				int minutes = static_cast<int>(minutesFull);
+				double seconds = (minutesFull - minutes) * 60.0;
+
+				// handle rounding overflow
+				if (seconds >= 60.0) {
+					seconds = 0.0;
+					++minutes;
+				}
+				if (minutes >= 60) {
+					minutes = 0;
+					++degrees;
+				}
+
+				str.clear();
+				if (negative)
+					str.append(QLatin1Char('-'));
+
+				str += numberLocale.toString(degrees);
+				str += QChar(0x00B0); // °
+				str += numberLocale.toString(minutes);
+				str += QChar(0x2032); // ′
+				str += numberLocale.toString(seconds, 'f', labelsPrecision);
+				str += QChar(0x2033); // ″
+
+				str = labelsPrefix + str + labelsSuffix;
+				tickLabelStrings << str;
+			}
+			break;
+		}
 		case Axis::LabelsFormat::Scientific: {
 			for (const auto value : std::as_const(tickLabelValues)) {
 				// DEBUG(Q_FUNC_INFO << ", value = " << value << ", precision = " << labelsPrecision)
@@ -2285,6 +2321,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 	tempValues.reserve(tickLabelValues.size());
 
 	switch (format) {
+	case Axis::LabelsFormat::AngleDMS:
 	case Axis::LabelsFormat::Decimal:
 		for (const auto value : tickLabelValues)
 			tempValues.append(nsl_math_round_places(value, precision));
@@ -2337,6 +2374,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 		double relDiff = 0;
 		// DEBUG(Q_FUNC_INFO << ", round value = " << tempValues.at(i) << ", tick label =  " << tickLabelValues.at(i))
 		switch (format) {
+		case Axis::LabelsFormat::AngleDMS:
 		case Axis::LabelsFormat::Decimal:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:
@@ -2390,6 +2428,7 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 	tempValues.reserve(tickLabelValues.size());
 
 	switch (format) {
+	case Axis::LabelsFormat::AngleDMS:
 	case Axis::LabelsFormat::Decimal:
 		for (auto value : tickLabelValues)
 			tempValues.append(nsl_math_round_places(value, precision));
@@ -2442,6 +2481,7 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 		// return if rounded value differs too much
 		double relDiff = 0;
 		switch (format) {
+		case Axis::LabelsFormat::AngleDMS:
 		case Axis::LabelsFormat::Decimal:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:

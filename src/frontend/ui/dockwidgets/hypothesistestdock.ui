@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>468</width>
-    <height>1036</height>
+    <width>430</width>
+    <height>723</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,7 +89,7 @@
      <item>
       <widget class="QPushButton" name="pbRecalculate">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
         <string>Recalculate</string>
@@ -111,7 +111,7 @@
    <item row="10" column="0">
     <widget class="QLabel" name="lH1">
      <property name="text">
-      <string>Alternate:</string>
+      <string>Alternative:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
@@ -145,7 +145,7 @@
       <item row="0" column="0">
        <widget class="QRadioButton" name="rbAlternateTwoTailed">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text">
          <string/>
@@ -158,7 +158,7 @@
       <item row="2" column="0">
        <widget class="QRadioButton" name="rbAlternateOneTailedRight">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text">
          <string/>
@@ -168,7 +168,7 @@
       <item row="1" column="0">
        <widget class="QRadioButton" name="rbAlternateOneTailedLeft">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text">
          <string/>
@@ -178,7 +178,7 @@
       <item row="0" column="1">
        <widget class="QLabel" name="lAlternateTwoTailed">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -194,7 +194,7 @@
       <item row="1" column="1">
        <widget class="QLabel" name="lAlternateOneTailedLeft">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -210,7 +210,7 @@
       <item row="2" column="1">
        <widget class="QLabel" name="lAlternateOneTailedRight">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -266,7 +266,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Hypothesis</string>
+      <string>Hypotheses</string>
      </property>
     </widget>
    </item>
@@ -369,64 +369,8 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="1" column="0">
-       <widget class="QRadioButton" name="rbNullOneTailedLeft">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QRadioButton" name="rbNullOneTailedRight">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
-       <widget class="QRadioButton" name="rbNullTwoTailed">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="lNullTwoTailed">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="lNullOneTailedLeft">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="lNullOneTailedRight">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+       <widget class="QLabel" name="lH0Definition">
         <property name="text">
          <string/>
         </property>
