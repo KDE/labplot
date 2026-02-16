@@ -427,6 +427,7 @@ set(LABPLOT_DATA_SOURCES
 set(LABPLOT_WORKSHEET_SOURCES
     ${BACKEND_DIR}/worksheet/Background.cpp
     ${BACKEND_DIR}/worksheet/Image.cpp
+    ${BACKEND_DIR}/worksheet/ScriptWorksheetElement.cpp
     ${BACKEND_DIR}/worksheet/Line.cpp
     ${BACKEND_DIR}/worksheet/ResizeItem.cpp
     ${BACKEND_DIR}/worksheet/WorksheetElement.cpp
