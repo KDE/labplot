@@ -39,7 +39,7 @@ public:
 	enum class ExportArea { BoundingBox, Selection, Worksheet };
 	enum class ZoomMode { ZoomIn, ZoomOut, ZoomOrigin };
 	enum class MouseMode { Selection, Navigation, ZoomSelection };
-	enum class AddNewMode { PlotAreaFourAxes, PlotAreaTwoAxes, PlotAreaTwoAxesCentered, PlotAreaTwoAxesCenteredZero, PlotAreaFromTemplate, TextLabel, Image};
+	enum class AddNewMode { PlotAreaFourAxes, PlotAreaTwoAxes, PlotAreaTwoAxesCentered, PlotAreaTwoAxesCenteredZero, PlotAreaFromTemplate, TextLabel, Image, ScriptButton};
 
 	struct GridSettings {
 		GridStyle style;
@@ -191,6 +191,7 @@ private:
 	QAction* addCartesianPlotTemplateAction{nullptr};
 	QAction* addTextLabelAction{nullptr};
 	QAction* addImageAction{nullptr};
+	QAction* addScriptButtonAction{nullptr};
 
 	QAction* verticalLayoutAction{nullptr};
 	QAction* horizontalLayoutAction{nullptr};
