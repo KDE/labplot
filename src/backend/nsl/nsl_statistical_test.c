@@ -1149,85 +1149,51 @@ struct wald_wolfowitz_runs_test_result nsl_stats_wald_wolfowitz_runs(const doubl
 
 struct ramirez_runger_test_result nsl_stats_ramirez_runger(const double sample[], size_t n, nsl_stats_tail_type tail) {
 	struct ramirez_runger_test_result result;
-	result.runs = 0;
-	result.expected_runs = NAN;
-	result.n_eff = 0;
-	result.z = NAN;
+	result.stability_ratio = NAN;
+	result.dof = 0;
 	result.p = NAN;
+	result.mean_diff = NAN;
 
 	if (n < 3) {
 		fprintf(stderr, "Error: Ramirez-Runger runs test requires at least 3 data points.\n");
 		return result;
 	}
 
-	// Calculate the median
-	double* sorted = (double*)malloc(n * sizeof(double));
-	for (size_t i = 0; i < n; i++)
-		sorted[i] = sample[i];
-	gsl_sort(sorted, 1, n);
-	double median = gsl_stats_median_from_sorted_data(sorted, 1, n);
-	free(sorted);
+	// calculate the standard deviation of the sample
+	double std = sqrt(gsl_stats_variance(sample, 1, n));
 
-	// Count runs above and below median
-	int runs = 1;
-	int n_above = 0;
-	int n_below = 0;
-	int prev_above = (sample[0] > median);
+	// calculate the average differences between consecutive values
+	double diffs_sum = 0.;
+	for (size_t i = 0; i < n - 1; i++)
+		diffs_sum += fabs(sample[i + 1] - sample[i]);
+	double mean_diff = diffs_sum / (n - 1);
 
-	for (size_t i = 0; i < n; i++) {
-		if (sample[i] > median) {
-			n_above++;
-			if (i > 0 && !prev_above)
-				runs++;
-			prev_above = 1;
-		} else if (sample[i] < median) {
-			n_below++;
-			if (i > 0 && prev_above)
-				runs++;
-			prev_above = 0;
-		}
-		// Values equal to median are ignored in runs count
-	}
+	// calculate the test statitic "Stability Ratio"
+	double stability_ratio = pow(1.128 * std / mean_diff, 2);
 
-	// Calculate expected runs and standard deviation
-	double n_eff = (double)(n_above + n_below); // Effective sample size (excluding values at median)
-	if (n_eff < 3) {
-		fprintf(stderr, "Error: Insufficient data points after removing median values.\n");
-		return result;
-	}
+	// Calculate p-value based on tail type using the F distribution
+	int dof = n -1;
+	int eff_dof = 0.62 * (n - 1); // effective degrees of freedom based on the original paper
+	double p = nsl_stats_fdist_p(stability_ratio, dof, eff_dof);
 
-	double expected_runs = ((2.0 * n_above * n_below) / n_eff) + 1.0;
-	double variance = (2.0 * n_above * n_below * (2.0 * n_above * n_below - n_eff)) / (n_eff * n_eff * (n_eff - 1.0));
-	double std_dev = sqrt(variance);
-
-	// Calculate z-statistic
-	double z = (runs - expected_runs) / std_dev;
-
-	result.runs = runs;
-	result.expected_runs = expected_runs;
-	result.n_eff = (int)n_eff;
-	result.z = z;
-
-	// Calculate p-value based on tail type
-	double p;
 	switch (tail) {
 	case nsl_stats_tail_type_two:
-		// Two-tailed: test for any non-randomness
-		p = 2.0 * (1.0 - gsl_cdf_ugaussian_P(fabs(z)));
+		result.p = 2.0 * fmin(p, 1.0 - p);
 		break;
 	case nsl_stats_tail_type_negative:
-		// Left-tailed: test for too few runs (clustering)
-		p = gsl_cdf_ugaussian_P(z);
+		result.p = p;
 		break;
 	case nsl_stats_tail_type_positive:
-		// Right-tailed: test for too many runs (oscillation)
-		p = 1.0 - gsl_cdf_ugaussian_P(z);
+		result.p = 1.0 - p;
 		break;
 	default:
-		p = NAN;
 		break;
 	}
-	result.p = p;
+
+	result.stability_ratio = stability_ratio;
+	result.dof= dof;
+	result.eff_dof = eff_dof;
+	result.mean_diff = mean_diff;
 
 	return result;
 }

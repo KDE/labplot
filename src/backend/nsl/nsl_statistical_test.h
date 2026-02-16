@@ -180,11 +180,11 @@ struct wald_wolfowitz_runs_test_result {
 struct wald_wolfowitz_runs_test_result nsl_stats_wald_wolfowitz_runs(const double sample[], size_t n, nsl_stats_tail_type tail);
 
 struct ramirez_runger_test_result {
-	double z;
+	double stability_ratio;
+	int dof;
+	int eff_dof;
 	double p;
-	int runs;
-	double expected_runs;
-	int n_eff;
+	double mean_diff;
 };
 struct ramirez_runger_test_result nsl_stats_ramirez_runger(const double sample[], size_t n, nsl_stats_tail_type tail);
 
