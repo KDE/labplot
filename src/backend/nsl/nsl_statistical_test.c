@@ -1172,7 +1172,7 @@ struct ramirez_runger_test_result nsl_stats_ramirez_runger(const double sample[]
 	double stability_ratio = pow(1.128 * std / mean_diff, 2);
 
 	// Calculate p-value based on tail type using the F distribution
-	int dof = n -1;
+	int dof = n - 1;
 	int eff_dof = 0.62 * (n - 1); // effective degrees of freedom based on the original paper
 	double p = nsl_stats_fdist_p(stability_ratio, dof, eff_dof);
 
@@ -1191,7 +1191,7 @@ struct ramirez_runger_test_result nsl_stats_ramirez_runger(const double sample[]
 	}
 
 	result.stability_ratio = stability_ratio;
-	result.dof= dof;
+	result.dof = dof;
 	result.eff_dof = eff_dof;
 	result.mean_diff = mean_diff;
 

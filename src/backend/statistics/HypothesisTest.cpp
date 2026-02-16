@@ -1039,7 +1039,8 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 		if (p <= significanceLevel)
 			conclusion = i18n("At the significance level %1, the population means are significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion = i18n("At the significance level %1, the population means are not significantly different. %2", significanceLevel, failToRejectConclusion());
+			conclusion =
+				i18n("At the significance level %1, the population means are not significantly different. %2", significanceLevel, failToRejectConclusion());
 	} else
 		conclusion = testResultNotAvailable();
 
@@ -1106,7 +1107,8 @@ void HypothesisTestPrivate::performWelchTTest() {
 		if (result.p <= significanceLevel)
 			conclusion = i18n("At the significance level %1, the population means are significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion = i18n("At the significance level %1, the population means are not significantly different. %2", significanceLevel, failToRejectConclusion());
+			conclusion =
+				i18n("At the significance level %1, the population means are not significantly different. %2", significanceLevel, failToRejectConclusion());
 	} else
 		conclusion = testResultNotAvailable();
 
@@ -1157,11 +1159,9 @@ void HypothesisTestPrivate::performOneWayANOVATest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion =
-				i18n("At the significance level %1, at least one group mean is significantly different. %2", significanceLevel, rejectConclusion());
+			conclusion = i18n("At the significance level %1, at least one group mean is significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion =
-				i18n("At the significance level %1, no significant difference between group means. %2", significanceLevel, failToRejectConclusion());
+			conclusion = i18n("At the significance level %1, no significant difference between group means. %2", significanceLevel, failToRejectConclusion());
 	} else {
 		conclusion = testResultNotAvailable();
 	}
@@ -1220,11 +1220,9 @@ void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion =
-				i18n("At the significance level %1, at least one group mean is significantly different. %2", significanceLevel, rejectConclusion());
+			conclusion = i18n("At the significance level %1, at least one group mean is significantly different. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion =
-				i18n("At the significance level %1, no significant difference between group means. %2", significanceLevel, failToRejectConclusion());
+			conclusion = i18n("At the significance level %1, no significant difference between group means. %2", significanceLevel, failToRejectConclusion());
 	} else {
 		conclusion = testResultNotAvailable();
 	}
@@ -1527,11 +1525,13 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion =
-				i18n("At the significance level %1, the observed frequencies do not follow the expected frequency distribution. %2", significanceLevel, rejectConclusion());
+			conclusion = i18n("At the significance level %1, the observed frequencies do not follow the expected frequency distribution. %2",
+							  significanceLevel,
+							  rejectConclusion());
 		else
-			conclusion =
-				i18n("At the significance level %1, the observed frequencies follow the expected frequency distribution. %2", significanceLevel, failToRejectConclusion());
+			conclusion = i18n("At the significance level %1, the observed frequencies follow the expected frequency distribution. %2",
+							  significanceLevel,
+							  failToRejectConclusion());
 	} else
 		conclusion = testResultNotAvailable();
 
@@ -1592,8 +1592,7 @@ void HypothesisTestPrivate::performChisqIndependenceTest() {
 		if (result.p <= significanceLevel)
 			conclusion = i18n("At the significance level %1, both categorical variables are dependent. %2", significanceLevel, rejectConclusion());
 		else
-			conclusion =
-				i18n("At the significance level %1, both categorical variables are independent. %2", significanceLevel, failToRejectConclusion());
+			conclusion = i18n("At the significance level %1, both categorical variables are independent. %2", significanceLevel, failToRejectConclusion());
 	} else {
 		conclusion = testResultNotAvailable();
 	}
@@ -1738,11 +1737,9 @@ void HypothesisTestPrivate::performMannKendallTest() {
 				conclusion =
 					i18n("At the significance level %1, there is a significant monotonic trend in the data. %2", significanceLevel, rejectConclusion());
 			else if (tail == nsl_stats_tail_type_positive)
-				conclusion =
-					i18n("At the significance level %1, there is a significant positive monotonic trend. %2", significanceLevel, rejectConclusion());
+				conclusion = i18n("At the significance level %1, there is a significant positive monotonic trend. %2", significanceLevel, rejectConclusion());
 			else
-				conclusion =
-					i18n("At the significance level %1, there is a significant negative monotonic trend. %2", significanceLevel, rejectConclusion());
+				conclusion = i18n("At the significance level %1, there is a significant negative monotonic trend. %2", significanceLevel, rejectConclusion());
 		} else
 			conclusion = i18n("At the significance level %1, no significant monotonic trend detected. %2", significanceLevel, failToRejectConclusion());
 	} else
@@ -1782,14 +1779,12 @@ void HypothesisTestPrivate::performWaldWolfowitzRunsTest() {
 			if (tail == nsl_stats_tail_type_two)
 				conclusion = i18n("At the significance level %1, the data are not randomly distributed. %2", significanceLevel, rejectConclusion());
 			else if (tail == nsl_stats_tail_type_negative)
-				conclusion =
-					i18n("At the significance level %1, the data show clustering or trend (too few runs). %2", significanceLevel, rejectConclusion());
+				conclusion = i18n("At the significance level %1, the data show clustering or trend (too few runs). %2", significanceLevel, rejectConclusion());
 			else
 				conclusion =
 					i18n("At the significance level %1, the data show oscillation or over-control (too many runs). %2", significanceLevel, rejectConclusion());
 		} else
-			conclusion =
-				i18n("At the significance level %1, the data appear to be randomly distributed. %2", significanceLevel, failToRejectConclusion());
+			conclusion = i18n("At the significance level %1, the data appear to be randomly distributed. %2", significanceLevel, failToRejectConclusion());
 	} else
 		conclusion = testResultNotAvailable();
 
@@ -1827,8 +1822,7 @@ void HypothesisTestPrivate::performRamirezRungerTest() {
 			else if (tail == nsl_stats_tail_type_negative)
 				conclusion = i18n("At the significance level %1, the process shows oscillation or over-control. %2", significanceLevel, rejectConclusion());
 			else
-				conclusion =
-					i18n("At the significance level %1, the process shows clustering, shifting, or trends. %2", significanceLevel, rejectConclusion());
+				conclusion = i18n("At the significance level %1, the process shows clustering, shifting, or trends. %2", significanceLevel, rejectConclusion());
 		} else
 			conclusion = i18n("At the significance level %1, the process appears to be stable (homogeneous). %2", significanceLevel, failToRejectConclusion());
 	} else
