@@ -16,6 +16,7 @@
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Image.h"
+#include "backend/worksheet/ScriptWorksheetElement.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h" // TODO: redesign, don't depend on the private class
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
@@ -241,6 +242,9 @@ void WorksheetView::initActions() {
 	addImageAction = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), addNewActionGroup);
 	addImageAction->setData(static_cast<int>(AddNewMode::Image));
 
+	addScriptButtonAction = new QAction(QIcon::fromTheme(QStringLiteral("code-context")), i18n("Script Button"), addNewActionGroup);
+	addScriptButtonAction->setData(static_cast<int>(AddNewMode::ScriptButton));
+
 	// Layout actions
 	// TODO: the icons labplot-editvlayout and labplot-edithlayout are confusing for the user.
 	// the orientation is visualized as a horizontal or vertical line on the icon, but the user
@@ -444,6 +448,7 @@ void WorksheetView::initMenus() {
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 	m_addNewMenu->addAction(addImageAction);
+	m_addNewMenu->addAction(addScriptButtonAction);
 
 	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_viewMouseModeMenu->setIcon(QIcon::fromTheme(QStringLiteral("input-mouse")));
@@ -1357,6 +1362,11 @@ void WorksheetView::addNew(QAction* action) {
 		aspect = image;
 		break;
 	}
+	case AddNewMode::ScriptButton: {
+		auto* button = new ScriptWorksheetElement(i18n("Script Button"));
+		aspect = button;
+		break;
+	}
 	}
 
 	if (!aspect)
@@ -1371,7 +1381,7 @@ void WorksheetView::addNew(QAction* action) {
 
 	// labels and images with their initial positions need to be retransformed
 	// after they have gotten a parent
-	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image) {
+	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image || aspect->type() == AspectType::ScriptWorksheetElement) {
 		if (m_calledFromContextMenu) {
 			// must be done after add Child, because otherwise the parentData rect is not available
 			// and therefore aligning will not work

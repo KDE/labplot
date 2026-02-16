@@ -407,6 +407,10 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_imageDock, m_mainWindow->stackedWidget);
 		m_imageDock->setImages(castList<Image>(selectedAspects));
 		break;
+	case AspectType::ScriptWorksheetElement:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Script Button"));
+		// TODO: Add dock widget for ScriptWorksheetElement properties
+		break;
 	case AspectType::CustomPoint:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Custom Point"));
 		raiseDock(m_customPointDock, m_mainWindow->stackedWidget);

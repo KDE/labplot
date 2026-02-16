@@ -253,6 +253,7 @@ private:
 	QAction* addLegendAction{nullptr};
 	QAction* addTextLabelAction{nullptr};
 	QAction* addImageAction{nullptr};
+	QAction* addScriptButtonAction{nullptr};
 	QAction* addInfoElementAction{nullptr};
 	QAction* addCustomPointAction{nullptr};
 	QAction* addReferenceLineAction{nullptr};
@@ -320,6 +321,7 @@ private Q_SLOTS:
 	void addVerticalAxis();
 	void addTextLabel();
 	void addImage();
+	void addScriptButton();
 	void addCustomPoint();
 	void addReferenceLine();
 	void addReferenceRange();

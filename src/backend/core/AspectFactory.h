@@ -15,6 +15,7 @@
 #include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
+#include "backend/worksheet/ScriptWorksheetElement.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -47,6 +48,8 @@ public:
 			return new TextLabel(QString());
 		else if (type == AspectType::Image)
 			return new Image(QString());
+		else if (type == AspectType::ScriptWorksheetElement)
+			return new ScriptWorksheetElement(QString());
 		else if (type == AspectType::CustomPoint) {
 			auto* plot = static_cast<CartesianPlot*>(parent);
 			return new CustomPoint(plot, QString(), true /*loading*/);
