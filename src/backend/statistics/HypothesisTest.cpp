@@ -655,7 +655,7 @@ QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 	} else if (test == HypothesisTest::Test::ramirez_runger_test) {
 		result += (addResultLine(i18n("Stability Ratio"), QStringLiteral("%L20")) + addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L21"))
 				   + addResultLine(i18n("Effective Degrees of Freedom"), QStringLiteral("%L22"))
-				   + addResultLine(i18n("Avverage Successive Difference"), QStringLiteral("%L23")));
+				   + addResultLine(i18n("Average Successive Difference"), QStringLiteral("%L23")));
 	}
 
 	result += addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%99");
