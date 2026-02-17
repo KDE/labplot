@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-15 00:39+0000\n"
+"POT-Creation-Date: 2026-02-17 00:39+0000\n"
 "PO-Revision-Date: 2026-02-15 09:20+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -34,27 +34,27 @@ msgstr ""
 msgid "%1: change comment"
 msgstr "%1: spremeni komentar"
 
-#: src/backend/core/AbstractAspect.cpp:353
+#: src/backend/core/AbstractAspect.cpp:372
 #, kde-format
 msgid "Duplicate Here"
 msgstr "Dupliciraj tukaj"
 
-#: src/backend/core/AbstractAspect.cpp:368
+#: src/backend/core/AbstractAspect.cpp:387
 #, kde-format
 msgid "Paste '%1'"
 msgstr "Prilepi '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:380
+#: src/backend/core/AbstractAspect.cpp:399
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "Ustvari preglednico podatkov"
 
-#: src/backend/core/AbstractAspect.cpp:428
+#: src/backend/core/AbstractAspect.cpp:447
 #, kde-format
 msgid "Rename"
 msgstr "Preimenuj"
 
-#: src/backend/core/AbstractAspect.cpp:430
+#: src/backend/core/AbstractAspect.cpp:449
 #: src/backend/spreadsheet/Spreadsheet.cpp:941
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
@@ -63,22 +63,22 @@ msgstr "Preimenuj"
 msgid "Delete"
 msgstr "Izbriši"
 
-#: src/backend/core/AbstractAspect.cpp:438
+#: src/backend/core/AbstractAspect.cpp:457
 #, kde-format
 msgid "Move"
 msgstr "Prenesi"
 
-#: src/backend/core/AbstractAspect.cpp:441
+#: src/backend/core/AbstractAspect.cpp:460
 #, kde-format
 msgid "Up"
 msgstr "Gor"
 
-#: src/backend/core/AbstractAspect.cpp:444
+#: src/backend/core/AbstractAspect.cpp:463
 #, kde-format
 msgid "Down"
 msgstr "Dol"
 
-#: src/backend/core/AbstractAspect.cpp:530
+#: src/backend/core/AbstractAspect.cpp:549
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:227
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2449
@@ -86,59 +86,59 @@ msgstr "Dol"
 msgid "%1: add %2"
 msgstr "%1: dodaj %2"
 
-#: src/backend/core/AbstractAspect.cpp:532
-#: src/backend/core/AbstractAspect.cpp:569
+#: src/backend/core/AbstractAspect.cpp:551
+#: src/backend/core/AbstractAspect.cpp:588
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "Preimenovanje \"%1\" v \"%2\", da bi se izognili sporu zaradi imena."
 
-#: src/backend/core/AbstractAspect.cpp:567
+#: src/backend/core/AbstractAspect.cpp:586
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: vstavi %2 pred %3"
 
-#: src/backend/core/AbstractAspect.cpp:567
+#: src/backend/core/AbstractAspect.cpp:586
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1: vstavi %2 pred koncem"
 
-#: src/backend/core/AbstractAspect.cpp:602
+#: src/backend/core/AbstractAspect.cpp:621
 #: src/backend/core/aspectcommands.h:102
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: odstrani %2"
 
-#: src/backend/core/AbstractAspect.cpp:615
+#: src/backend/core/AbstractAspect.cpp:634
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: odstrani vse naslednike"
 
-#: src/backend/core/AbstractAspect.cpp:727
+#: src/backend/core/AbstractAspect.cpp:746
 #, kde-format
 msgid "%1: pasted"
 msgstr "%1: prilepljeno"
 
-#: src/backend/core/AbstractAspect.cpp:822
+#: src/backend/core/AbstractAspect.cpp:841
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: prilepljeno '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:824
+#: src/backend/core/AbstractAspect.cpp:843
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: duplicirano '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:825
+#: src/backend/core/AbstractAspect.cpp:844
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Kopija '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:968
+#: src/backend/core/AbstractAspect.cpp:987
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "Atribut 'name' manjka ali je prazen."
 
-#: src/backend/core/AbstractAspect.cpp:974
+#: src/backend/core/AbstractAspect.cpp:993
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "Neveljaven čas ustvarjanja za »%1«. Uporabljen bo trenutni čas."
@@ -416,7 +416,7 @@ msgid "incompatible filter type"
 msgstr "nezdružljiva vrsta filtra"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:158 src/backend/core/Project.cpp:728
+#: src/backend/core/Folder.cpp:158 src/backend/core/Project.cpp:721
 #: src/backend/datasources/MQTTClient.cpp:1368
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
@@ -444,8 +444,8 @@ msgid "%1: rename to %2"
 msgstr "%1: preimenuj v %2"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
-#: src/backend/core/AspectTreeModel.cpp:164
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/core/AspectTreeModel.cpp:165
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:99
@@ -454,7 +454,7 @@ msgid "Name"
 msgstr "Ime"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
-#: src/backend/core/AspectTreeModel.cpp:166
+#: src/backend/core/AspectTreeModel.cpp:167
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/datasources/matiooptionswidget.ui:47
@@ -462,33 +462,38 @@ msgstr "Ime"
 msgid "Type"
 msgstr "Vrsta"
 
-#: src/backend/core/AspectTreeModel.cpp:168
+#: src/backend/core/AspectTreeModel.cpp:169
 #, kde-format
 msgid "Created"
 msgstr "Ustvarjeno"
 
-#: src/backend/core/AspectTreeModel.cpp:170
+#: src/backend/core/AspectTreeModel.cpp:171
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:66
 #, kde-format
 msgid "Comment"
 msgstr "Komentar"
 
-#: src/backend/core/AspectTreeModel.cpp:193
+#: src/backend/core/AspectTreeModel.cpp:173 src/frontend/MainWin.cpp:1135
+#, kde-format
+msgid "Changed"
+msgstr "Spremenjeno"
+
+#: src/backend/core/AspectTreeModel.cpp:196
 #, kde-format
 msgid "%1   (non-plottable data)"
 msgstr "%1    (podatki, ki jih ni mogoče izrisati)"
 
-#: src/backend/core/AspectTreeModel.cpp:195
+#: src/backend/core/AspectTreeModel.cpp:198
 #, kde-format
 msgid "%1   (non-numeric data)"
 msgstr "%1    (neštevilski podatki)"
 
-#: src/backend/core/AspectTreeModel.cpp:197
+#: src/backend/core/AspectTreeModel.cpp:200
 #, kde-format
 msgid "%1   (no values)"
 msgstr "%1   (brez vrednosti)"
 
-#: src/backend/core/AspectTreeModel.cpp:393
+#: src/backend/core/AspectTreeModel.cpp:404
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "Ime »%1« je že v uporabi. Izberite drugo ime."
@@ -704,53 +709,53 @@ msgid "Not yet loaded."
 msgstr "Še ni naloženo."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:190
+#: src/backend/core/Project.cpp:189
 #: src/frontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Projekt"
 
-#: src/backend/core/Project.cpp:309
+#: src/backend/core/Project.cpp:307
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: določi avtorja"
 
-#: src/backend/core/Project.cpp:316
+#: src/backend/core/Project.cpp:314
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1: shrani spremenjena stanja sidrišč"
 
-#: src/backend/core/Project.cpp:323
+#: src/backend/core/Project.cpp:321
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: shrani spremenjen izračun"
 
-#: src/backend/core/Project.cpp:572 src/backend/core/Project.cpp:602
+#: src/backend/core/Project.cpp:565 src/backend/core/Project.cpp:595
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Oprostite. Datoteke ni bilo mogoče odpreti za branje."
 
-#: src/backend/core/Project.cpp:583 src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:576 src/backend/core/Project.cpp:602
 #, kde-format
 msgid "The project file is empty."
 msgstr "Datoteka projekta je prazna."
 
-#: src/backend/core/Project.cpp:583 src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:576 src/backend/core/Project.cpp:602
 #, kde-format
 msgid "Error opening project"
 msgstr "Napaka pri odpiranju projekta"
 
-#: src/backend/core/Project.cpp:628
+#: src/backend/core/Project.cpp:621
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Neznana napaka pri odpiranju projekta %1."
 
-#: src/backend/core/Project.cpp:629
+#: src/backend/core/Project.cpp:622
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Napaka pri odpiranju projekta"
 
-#: src/backend/core/Project.cpp:649
+#: src/backend/core/Project.cpp:642
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -769,43 +774,43 @@ msgstr ""
 "\n"
 "Ali želite nadaljevati?"
 
-#: src/backend/core/Project.cpp:655
+#: src/backend/core/Project.cpp:648
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Manjkajoča podpora za CAS"
 
-#: src/backend/core/Project.cpp:685
+#: src/backend/core/Project.cpp:678
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Manjka atribut »različica« (»version«)."
 
-#: src/backend/core/Project.cpp:735
+#: src/backend/core/Project.cpp:728
 #, kde-format
 msgid "no project element found"
 msgstr "ni najdenega elementa projekta"
 
-#: src/backend/core/Project.cpp:737
+#: src/backend/core/Project.cpp:730
 #, kde-format
 msgid "no valid XML document found"
 msgstr "ni bilo najdenega veljavnega dokumenta XML"
 
-#: src/backend/core/Project.cpp:787 src/backend/core/Project.cpp:793
-#: src/backend/core/Project.cpp:844
+#: src/backend/core/Project.cpp:780 src/backend/core/Project.cpp:786
+#: src/backend/core/Project.cpp:837
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Odpiranje datoteke »%1« ni uspelo."
 
-#: src/backend/core/Project.cpp:850
+#: src/backend/core/Project.cpp:843
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Obdelava vsebine datoteke »%1« ni uspela."
 
-#: src/backend/core/Project.cpp:853
+#: src/backend/core/Project.cpp:846
 #, kde-format
 msgid "Failed to open project"
 msgstr "Odpiranje projekta ni uspelo"
 
-#: src/backend/core/Project.cpp:1351
+#: src/backend/core/Project.cpp:1344
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Neveljaven čas spreminjanja projekta. Uporabljen bo trenutni čas."
@@ -1943,7 +1948,7 @@ msgid "Unknown"
 msgstr "Neznano"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:230 src/frontend/MainWin.cpp:1220
+#: src/frontend/ActionsManager.cpp:230 src/frontend/MainWin.cpp:1227
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -3711,7 +3716,7 @@ msgstr "Trenutni stolpec cell (index; default_value)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:258
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/ui/dockwidgets/imagedock.ui:492
 #, kde-format
 msgid "Size"
@@ -3730,7 +3735,7 @@ msgstr "Vsota"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:260 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:173
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
@@ -3746,7 +3751,7 @@ msgstr "Najmanjše"
 #: src/backend/gsl/functions.cpp:261 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:174
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
@@ -3771,7 +3776,7 @@ msgstr "Aritmetična sredina"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:263 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
@@ -6358,7 +6363,7 @@ msgid "Text file (*.txt)"
 msgstr "Besedilna datoteka (*.txt)"
 
 #: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
-#: src/backend/statistics/HypothesisTest.cpp:143
+#: src/backend/statistics/HypothesisTest.cpp:142
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
 #, kde-format
@@ -6414,7 +6419,7 @@ msgstr "Ni bilo mogoče ustvariti sej za %1. Preverite vašo namestitev."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/nsl/nsl_baseline.cpp:47
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:515
@@ -7343,7 +7348,7 @@ msgid "%1: run %2 script"
 msgstr "%1: poženi %2 skript"
 
 #: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
-#: src/frontend/ActionsManager.cpp:243 src/frontend/MainWin.cpp:1212
+#: src/frontend/ActionsManager.cpp:243 src/frontend/MainWin.cpp:1219
 #, kde-format
 msgid "Script"
 msgstr "Skript"
@@ -7660,7 +7665,7 @@ msgstr "Mediana deviacije"
 msgid "Column"
 msgstr "Stolpec"
 
-#: src/backend/statistics/HypothesisTest.cpp:54
+#: src/backend/statistics/HypothesisTest.cpp:53
 #, kde-format
 msgid "One column is required."
 msgid_plural "%1 columns are required."
@@ -7669,824 +7674,907 @@ msgstr[1] "Zahtevan je %1 stolpec."
 msgstr[2] "Zahtevana sta %1 stolpca."
 msgstr[3] "Zahtevani so %1 stolpci."
 
-#: src/backend/statistics/HypothesisTest.cpp:56
+#: src/backend/statistics/HypothesisTest.cpp:55
 #, kde-format
 msgid "At least %1 and at most %2 columns are required."
 msgstr "Zahtevano je vsaj %1 in največ %2 stolpcev."
 
-#: src/backend/statistics/HypothesisTest.cpp:64
+#: src/backend/statistics/HypothesisTest.cpp:63
 #, kde-format
 msgid "Column '%1' must be of numeric type."
 msgstr "Stolpec '%1' mora biti numeričnega tipa."
 
-#: src/backend/statistics/HypothesisTest.cpp:143
+#: src/backend/statistics/HypothesisTest.cpp:142
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:232
 #, kde-format
 msgid "Portable Data Format (*.pdf *.PDF)"
 msgstr "PDF - Portable Data Format (*.pdf *.PDF)"
 
-#: src/backend/statistics/HypothesisTest.cpp:169
+#: src/backend/statistics/HypothesisTest.cpp:168
 #, kde-format
 msgctxt "@title:window"
 msgid "Hypothesis Test"
 msgstr "Test hipoteze"
 
-#: src/backend/statistics/HypothesisTest.cpp:255
+#: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "No monotonic trend exists"
 msgstr "Ne obstaja monotoni trend"
 
-#: src/backend/statistics/HypothesisTest.cpp:256
+#: src/backend/statistics/HypothesisTest.cpp:255
 #, kde-format
 msgid "A monotonic trend exists"
 msgstr "Obstaja monotoni trend"
 
-#: src/backend/statistics/HypothesisTest.cpp:257
+#: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "A negative monotonic trend exists"
 msgstr "Obstaja negativni monotoni trend"
 
-#: src/backend/statistics/HypothesisTest.cpp:258
+#: src/backend/statistics/HypothesisTest.cpp:257
 #, kde-format
 msgid "A positive monotonic trend exists"
 msgstr "Obstaja pozitivni monotoni trend"
 
-#: src/backend/statistics/HypothesisTest.cpp:261
-#, kde-format
-msgid "The data are randomly distributed"
-msgstr "Podatki so naključno porazdeljeni"
+#: src/backend/statistics/HypothesisTest.cpp:260
+#: src/backend/statistics/HypothesisTest.cpp:266
+#, fuzzy, kde-format
+#| msgid "The process is in control (random pattern)"
+msgid "The process is stable (random)"
+msgstr "Postopek je pod nadzorom (naključni vzorec)"
 
-#: src/backend/statistics/HypothesisTest.cpp:262
+#: src/backend/statistics/HypothesisTest.cpp:261
 #, kde-format
 msgid "The data are not randomly distributed"
 msgstr "Podatki niso naključno porazdeljeni"
 
-#: src/backend/statistics/HypothesisTest.cpp:263
-#, kde-format
-msgid "The data show clustering (too few runs)"
-msgstr "Podatki kažejo na združevanje v skupine (premalo ponovitev)"
-
-#: src/backend/statistics/HypothesisTest.cpp:264
-#, kde-format
-msgid "The data show excessive alternation (too many runs)"
-msgstr "Podatki kažejo na prekomerno menjavanje (preveč ponovitev)"
-
-#: src/backend/statistics/HypothesisTest.cpp:267
-#, kde-format
-msgid "The process is in control (random pattern)"
-msgstr "Postopek je pod nadzorom (naključni vzorec)"
-
-#: src/backend/statistics/HypothesisTest.cpp:268
-#, kde-format
-msgid "The process is not in control"
-msgstr "Postopek ni pod nadzorom"
-
+#: src/backend/statistics/HypothesisTest.cpp:262
 #: src/backend/statistics/HypothesisTest.cpp:269
-#, kde-format
-msgid "The process shows clustering (too few runs)"
+#, fuzzy, kde-format
+#| msgid "The process shows clustering (too few runs)"
+msgid "The process shows shifting or clustering"
 msgstr "Postopek prikazuje združevanje v gruče (premalo ponovitev)"
 
-#: src/backend/statistics/HypothesisTest.cpp:270
-#, kde-format
-msgid "The process shows oscillation (too many runs)"
+#: src/backend/statistics/HypothesisTest.cpp:263
+#: src/backend/statistics/HypothesisTest.cpp:268
+#, fuzzy, kde-format
+#| msgid "The process shows oscillation (too many runs)"
+msgid "The process shows oscillations or over-control"
 msgstr "Postopek kaže oscilacije (preveč ponovitev)"
 
-#: src/backend/statistics/HypothesisTest.cpp:332
+#: src/backend/statistics/HypothesisTest.cpp:267
+#, fuzzy, kde-format
+#| msgid "The process is not in control"
+msgid "The process is unstable (non-random)"
+msgstr "Postopek ni pod nadzorom"
+
+#: src/backend/statistics/HypothesisTest.cpp:331
 #, kde-format
 msgid "One-Sample t-Test"
 msgstr "Enovzorčni t-test"
 
-#: src/backend/statistics/HypothesisTest.cpp:334
+#: src/backend/statistics/HypothesisTest.cpp:333
 #, kde-format
 msgid "Independent Two-Sample t-Test"
 msgstr "Neodvisni t-test dveh vzorcev"
 
-#: src/backend/statistics/HypothesisTest.cpp:336
+#: src/backend/statistics/HypothesisTest.cpp:335
 #, kde-format
 msgid "Paired Two-Sample t-Test"
 msgstr "Primerjalni t-test dveh vzorcev"
 
-#: src/backend/statistics/HypothesisTest.cpp:338
+#: src/backend/statistics/HypothesisTest.cpp:337
 #, kde-format
 msgid "Mann-Whitney U Test"
 msgstr "Mann-Whitneyjev U test"
 
-#: src/backend/statistics/HypothesisTest.cpp:340
+#: src/backend/statistics/HypothesisTest.cpp:339
 #, kde-format
 msgid "Welch t-Test"
 msgstr "Welchov t-test"
 
-#: src/backend/statistics/HypothesisTest.cpp:342
+#: src/backend/statistics/HypothesisTest.cpp:341
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
 msgstr "Wilcoxonov test predznačenih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:344
+#: src/backend/statistics/HypothesisTest.cpp:343
 #, kde-format
 msgid "One-Way ANOVA Test"
 msgstr "Enostranski test ANOVA"
 
-#: src/backend/statistics/HypothesisTest.cpp:346
+#: src/backend/statistics/HypothesisTest.cpp:345
 #, kde-format
 msgid "Kruskal-Wallis Test"
 msgstr "Kruskal-Wallisov test"
 
-#: src/backend/statistics/HypothesisTest.cpp:348
+#: src/backend/statistics/HypothesisTest.cpp:347
 #, kde-format
 msgid "Log-Rank Test"
 msgstr "Log-rang test"
 
-#: src/backend/statistics/HypothesisTest.cpp:350
+#: src/backend/statistics/HypothesisTest.cpp:349
 #, kde-format
 msgid "Friedman Test"
 msgstr "Friedmanov test"
 
-#: src/backend/statistics/HypothesisTest.cpp:352
+#: src/backend/statistics/HypothesisTest.cpp:351
 #, kde-format
 msgid "Chi-Square Independence Test"
 msgstr "Test neodvisnosti hi-kvadrat"
 
-#: src/backend/statistics/HypothesisTest.cpp:354
+#: src/backend/statistics/HypothesisTest.cpp:353
 #, kde-format
 msgid "Chi-Square Goodness of Fit Test"
 msgstr "Test uspešnosti prileganja hi-kvadrat"
 
-#: src/backend/statistics/HypothesisTest.cpp:356
+#: src/backend/statistics/HypothesisTest.cpp:355
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr "Eno-stranski test ANOVA s ponovljenimi meritvami"
 
-#: src/backend/statistics/HypothesisTest.cpp:358
+#: src/backend/statistics/HypothesisTest.cpp:357
 #, kde-format
 msgid "Mann-Kendall Test"
 msgstr "Mann-Kendallov U test"
 
-#: src/backend/statistics/HypothesisTest.cpp:360
+#: src/backend/statistics/HypothesisTest.cpp:359
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
 msgstr "Wald-Wolfowitzov test tekov"
 
-#: src/backend/statistics/HypothesisTest.cpp:362
+#: src/backend/statistics/HypothesisTest.cpp:361
 #, kde-format
 msgid "Ramirez-Runger Runs Test"
 msgstr "Ramirez-Rungerjev test tekov"
 
-#: src/backend/statistics/HypothesisTest.cpp:537
+#: src/backend/statistics/HypothesisTest.cpp:536
+#, kde-format
+msgid "<b>Reject the null hypothesis.</b>"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:540
+#, kde-format
+msgid "<b>Fail to reject the null hypothesis.</b>"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:544
 #, kde-format
 msgid "N/A"
 msgstr "N/A"
 
-#: src/backend/statistics/HypothesisTest.cpp:541
+#: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
 msgid "Test result is not available."
 msgstr "Rezultat testa ni na voljo."
 
-#: src/backend/statistics/HypothesisTest.cpp:545
+#: src/backend/statistics/HypothesisTest.cpp:552
 #, kde-format
 msgid "Two columns are required for this test."
 msgstr "Za ta test sta zahtevana dva stolpca."
 
-#: src/backend/statistics/HypothesisTest.cpp:549
+#: src/backend/statistics/HypothesisTest.cpp:556
 #, kde-format
 msgid "At least two columns are required."
 msgstr "Zahtevana sta vsaj dva stolpca."
 
-#: src/backend/statistics/HypothesisTest.cpp:553
+#: src/backend/statistics/HypothesisTest.cpp:560
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
 msgstr "Stolpec '%1' zahteva vsaj %2 vzorcev."
 
-#: src/backend/statistics/HypothesisTest.cpp:557
+#: src/backend/statistics/HypothesisTest.cpp:564
 #, kde-format
 msgid "The size of each sample must be equal."
 msgstr "Velikost vsakega vzorca mora biti enaka."
 
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
 #, kde-format
 msgid "Standard Deviation"
 msgstr "Standardna deviacija"
 
-#: src/backend/statistics/HypothesisTest.cpp:577
+#: src/backend/statistics/HypothesisTest.cpp:584
 #, kde-format
 msgid "Null Hypothesis"
 msgstr "Ničelna hipoteza"
 
-#: src/backend/statistics/HypothesisTest.cpp:578
+#: src/backend/statistics/HypothesisTest.cpp:585
 #, kde-format
 msgid "Alternate Hypothesis"
 msgstr "Alternativna hipoteza"
 
-#: src/backend/statistics/HypothesisTest.cpp:580
+#: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
 msgid "Descriptive Statistics"
 msgstr "Opisna statistika"
 
-#: src/backend/statistics/HypothesisTest.cpp:581
+#: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
 msgid "Test Statistics"
 msgstr "Testna statistika"
 
-#: src/backend/statistics/HypothesisTest.cpp:581
+#: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
 msgid "Significance Level"
 msgstr "Stopnja značilnosti"
 
-#: src/backend/statistics/HypothesisTest.cpp:582
+#: src/backend/statistics/HypothesisTest.cpp:589
 #, kde-format
 msgid "p-Value"
 msgstr "p-Vrednost"
 
-#: src/backend/statistics/HypothesisTest.cpp:585
+#: src/backend/statistics/HypothesisTest.cpp:592
 #, kde-format
 msgid "Degrees of Freedom Between Groups"
 msgstr "Stopnje značilnosti med skupinami"
 
-#: src/backend/statistics/HypothesisTest.cpp:586
+#: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
 msgid "Degrees of Freedom Within Groups"
 msgstr "Stopnje značilnosti znotraj skupin"
 
-#: src/backend/statistics/HypothesisTest.cpp:588
+#: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
 msgid "Degrees of Freedom Treatment"
 msgstr "Obravnava stopenj značilnosti"
 
-#: src/backend/statistics/HypothesisTest.cpp:589
+#: src/backend/statistics/HypothesisTest.cpp:596
 #, kde-format
 msgid "Degrees of Freedom Residuals"
 msgstr "Stopnja značilnosti ostankov"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/backend/statistics/HypothesisTest.cpp:591
+#: src/backend/statistics/HypothesisTest.cpp:598
+#: src/backend/statistics/HypothesisTest.cpp:656
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "Stopnja značilnosti"
 
-#: src/backend/statistics/HypothesisTest.cpp:596
-#: src/backend/statistics/HypothesisTest.cpp:600
 #: src/backend/statistics/HypothesisTest.cpp:603
-#: src/backend/statistics/HypothesisTest.cpp:605
+#: src/backend/statistics/HypothesisTest.cpp:607
+#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:612
 #, kde-format
 msgid "t-Value"
 msgstr "t-vrednost"
 
-#: src/backend/statistics/HypothesisTest.cpp:596
+#: src/backend/statistics/HypothesisTest.cpp:603
 #, kde-format
 msgid "Test Mean"
 msgstr "Povprečje testa"
 
-#: src/backend/statistics/HypothesisTest.cpp:597
-#: src/backend/statistics/HypothesisTest.cpp:601
-#: src/backend/statistics/HypothesisTest.cpp:603
-#: src/backend/statistics/HypothesisTest.cpp:605
+#: src/backend/statistics/HypothesisTest.cpp:604
+#: src/backend/statistics/HypothesisTest.cpp:608
+#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:612
 #, kde-format
 msgid "Mean Difference"
 msgstr "Povprečje razlike"
 
-#: src/backend/statistics/HypothesisTest.cpp:600
+#: src/backend/statistics/HypothesisTest.cpp:607
 #, kde-format
 msgid "Pooled Variance"
 msgstr "Združena varianca"
 
-#: src/backend/statistics/HypothesisTest.cpp:601
-#: src/backend/statistics/HypothesisTest.cpp:606
+#: src/backend/statistics/HypothesisTest.cpp:608
+#: src/backend/statistics/HypothesisTest.cpp:613
 #, kde-format
 msgid "Mean Difference Standard Error"
 msgstr "Standardna napaka povprečja razlike"
 
-#: src/backend/statistics/HypothesisTest.cpp:608
-#: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:615
+#: src/backend/statistics/HypothesisTest.cpp:621
 #, kde-format
 msgid "F-Statistic"
 msgstr "Statistika F"
 
-#: src/backend/statistics/HypothesisTest.cpp:608
+#: src/backend/statistics/HypothesisTest.cpp:615
 #, kde-format
 msgid "Sum of Squares Between Groups"
 msgstr "Vsota kvadratov med skupinami"
 
-#: src/backend/statistics/HypothesisTest.cpp:609
+#: src/backend/statistics/HypothesisTest.cpp:616
 #, kde-format
 msgid "Sum of Squares Within Groups"
 msgstr "Vsota kvadratov znotraj skupin"
 
-#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:617
 #, kde-format
 msgid "Mean Squares Between Groups"
 msgstr "Povprečje kvadratov med skupinami"
 
-#: src/backend/statistics/HypothesisTest.cpp:611
+#: src/backend/statistics/HypothesisTest.cpp:618
 #, kde-format
 msgid "Mean Squares Within Groups"
 msgstr "Povprečje kvadratov znotraj skupin"
 
-#: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:621
 #, kde-format
 msgid "Sum of Squares Treatment"
 msgstr "Obravnava vsote kvadratov"
 
-#: src/backend/statistics/HypothesisTest.cpp:615
+#: src/backend/statistics/HypothesisTest.cpp:622
 #, kde-format
 msgid "Sum of Squares Residuals"
 msgstr "Vsota kvadratov ostankov"
 
-#: src/backend/statistics/HypothesisTest.cpp:616
+#: src/backend/statistics/HypothesisTest.cpp:623
 #, kde-format
 msgid "Sum of Squares Within Subjects"
 msgstr "Vsota kvadratov znotraj subjektov"
 
-#: src/backend/statistics/HypothesisTest.cpp:617
+#: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Mean Squares Treatment"
 msgstr "Obravnava povprečij kvadratov"
 
-#: src/backend/statistics/HypothesisTest.cpp:617
+#: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Mean Squares Residuals"
 msgstr "Vsota kvadratov ostankov"
 
-#: src/backend/statistics/HypothesisTest.cpp:619
+#: src/backend/statistics/HypothesisTest.cpp:626
 #, kde-format
 msgid "U"
 msgstr "U"
 
-#: src/backend/statistics/HypothesisTest.cpp:619
-#: src/backend/statistics/HypothesisTest.cpp:623
-#: src/backend/statistics/HypothesisTest.cpp:643
-#: src/backend/statistics/HypothesisTest.cpp:646
+#: src/backend/statistics/HypothesisTest.cpp:626
+#: src/backend/statistics/HypothesisTest.cpp:630
 #: src/backend/statistics/HypothesisTest.cpp:650
+#: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
 msgid "z-Value"
 msgstr "z-vrednost"
 
-#: src/backend/statistics/HypothesisTest.cpp:620
+#: src/backend/statistics/HypothesisTest.cpp:627
 #, kde-format
 msgid "Rank Sum 1"
 msgstr "Rang vsote 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:620
+#: src/backend/statistics/HypothesisTest.cpp:627
 #, kde-format
 msgid "Mean Rank 1"
 msgstr "Povprečje ranga 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:621
+#: src/backend/statistics/HypothesisTest.cpp:628
 #, kde-format
 msgid "Rank Sum 2"
 msgstr "Rang vsote 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:621
+#: src/backend/statistics/HypothesisTest.cpp:628
 #, kde-format
 msgid "Mean Rank 2"
 msgstr "Povprečje ranga 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:623
+#: src/backend/statistics/HypothesisTest.cpp:630
 #, kde-format
 msgid "W"
 msgstr "W"
 
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:631
 #, kde-format
 msgid "Positive Rank Sum"
 msgstr "Vsota pozitivnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:631
 #, kde-format
 msgid "Positive Rank Mean"
 msgstr "Povprečje pozitivnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:625
+#: src/backend/statistics/HypothesisTest.cpp:632
 #, kde-format
 msgid "Positive Rank Count"
 msgstr "Števec pozitivnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:625
+#: src/backend/statistics/HypothesisTest.cpp:632
 #, kde-format
 msgid "Negative Rank Sum"
 msgstr "Vsota negativnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:626
+#: src/backend/statistics/HypothesisTest.cpp:633
 #, kde-format
 msgid "Negative Rank Mean"
 msgstr "Povprečje negativnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:626
+#: src/backend/statistics/HypothesisTest.cpp:633
 #, kde-format
 msgid "Negative Rank Count"
 msgstr "Števec negativnih rangov"
 
-#: src/backend/statistics/HypothesisTest.cpp:627
+#: src/backend/statistics/HypothesisTest.cpp:634
 #, kde-format
 msgid "Tie Count"
 msgstr "Števec neodločenih izidov"
 
-#: src/backend/statistics/HypothesisTest.cpp:629
-#: src/backend/statistics/HypothesisTest.cpp:637
+#: src/backend/statistics/HypothesisTest.cpp:636
+#: src/backend/statistics/HypothesisTest.cpp:644
 #, kde-format
 msgid "H"
 msgstr "H"
 
-#: src/backend/statistics/HypothesisTest.cpp:631
+#: src/backend/statistics/HypothesisTest.cpp:638
 #, kde-format
 msgid "Q"
 msgstr "Q"
 
-#: src/backend/statistics/HypothesisTest.cpp:633
-#: src/backend/statistics/HypothesisTest.cpp:635
+#: src/backend/statistics/HypothesisTest.cpp:640
+#: src/backend/statistics/HypothesisTest.cpp:642
 #, kde-format
 msgid "Chi2"
 msgstr "Hi-kvadrat"
 
-#: src/backend/statistics/HypothesisTest.cpp:637
+#: src/backend/statistics/HypothesisTest.cpp:644
 #, kde-format
 msgid "Event Count 1"
 msgstr "Števec dogodkov 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:638
+#: src/backend/statistics/HypothesisTest.cpp:645
 #, kde-format
 msgid "Censored Count 1"
 msgstr "Cenzuriran števec 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:638
+#: src/backend/statistics/HypothesisTest.cpp:645
 #, kde-format
 msgid "Total Count 1"
 msgstr "Skupni števec 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:639
+#: src/backend/statistics/HypothesisTest.cpp:646
 #, kde-format
 msgid "Event Count 2"
 msgstr "Števec dogodkov 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:639
+#: src/backend/statistics/HypothesisTest.cpp:646
 #, kde-format
 msgid "Censored Count 2"
 msgstr "Cenzurirani števec 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:640
+#: src/backend/statistics/HypothesisTest.cpp:647
 #, kde-format
 msgid "Total Count 2"
 msgstr "Skupni števec 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:642
+#: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: src/backend/statistics/HypothesisTest.cpp:642
+#: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "Kendall's Tau"
 msgstr "Kendalov Tau"
 
-#: src/backend/statistics/HypothesisTest.cpp:643
+#: src/backend/statistics/HypothesisTest.cpp:650
 #, kde-format
 msgid "Sen's Slope"
 msgstr "Senova strmina"
 
-#: src/backend/statistics/HypothesisTest.cpp:644
-#: src/backend/statistics/HypothesisTest.cpp:647
+#: src/backend/statistics/HypothesisTest.cpp:651
+#: src/backend/statistics/HypothesisTest.cpp:654
 #, kde-format
 msgid "Sample Size"
 msgstr "Velikost vzorca"
 
-#: src/backend/statistics/HypothesisTest.cpp:646
-#: src/backend/statistics/HypothesisTest.cpp:649
+#: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
 msgid "Number of Runs"
 msgstr "Število tekov"
 
-#: src/backend/statistics/HypothesisTest.cpp:649
+#: src/backend/statistics/HypothesisTest.cpp:656
 #, kde-format
-msgid "Expected Runs"
-msgstr "Pričakovani teki"
+msgid "Stability Ratio"
+msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:650
+#: src/backend/statistics/HypothesisTest.cpp:657
+#, fuzzy, kde-format
+#| msgid "Degrees of Freedom"
+msgid "Effective Degrees of Freedom"
+msgstr "Stopnja značilnosti"
+
+#: src/backend/statistics/HypothesisTest.cpp:658
 #, kde-format
-msgid "Effective Sample Size"
-msgstr "Efektivna velikost vzorca"
+msgid "Avverage Successive Difference"
+msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:653
+#: src/backend/statistics/HypothesisTest.cpp:661
 #, kde-format
 msgid "Statistical Conclusion"
 msgstr "Statistični sklep"
 
-#: src/backend/statistics/HypothesisTest.cpp:665
+#: src/backend/statistics/HypothesisTest.cpp:673
 #, kde-format
 msgid "No variable columns provided."
 msgstr "Ni na voljo nobenih stolpcev spremenljivk."
 
-#: src/backend/statistics/HypothesisTest.cpp:942
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:950
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the population mean is significantly "
+#| "different from %2. Reject the null hypothesis."
 msgid ""
 "At the significance level %1, the population mean is significantly different "
-"from %2. Reject the null hypothesis."
+"from %2. %3"
 msgstr ""
 "Pri stopnji značilnosti %1 se povprečje populacije bistveno razlikuje od %2. "
 "Ničelno hipotezo zavrnite."
 
-#: src/backend/statistics/HypothesisTest.cpp:946
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:955
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the population mean is significantly "
+#| "different from %2. Reject the null hypothesis."
 msgid ""
 "At the significance level %1, the population mean is not significantly "
-"different from %2. Fail to reject the null hypothesis."
+"different from %2. %3"
 msgstr ""
-"Pri stopnji značilnosti %1 se povprečje populacije ne razlikuje bistveno od "
-"%2. Ničelne hipoteze ni mogoče zavrniti."
+"Pri stopnji značilnosti %1 se povprečje populacije bistveno razlikuje od %2. "
+"Ničelno hipotezo zavrnite."
 
-#: src/backend/statistics/HypothesisTest.cpp:1030
-#: src/backend/statistics/HypothesisTest.cpp:1098
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1040
+#: src/backend/statistics/HypothesisTest.cpp:1108
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the population means are significantly "
+#| "different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, the population means are significantly "
-"different. Reject the null Hypothesis"
+"different. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 se povprečja populacije bistveno razlikujejo. "
 "Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1032
-#: src/backend/statistics/HypothesisTest.cpp:1100
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1043
+#: src/backend/statistics/HypothesisTest.cpp:1111
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the population means are significantly "
+#| "different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, the population means are not significantly "
-"different. Fail to reject the null Hypothesis"
+"different. %2"
 msgstr ""
-"Pri stopnji značilnosti %1 se povprečja populacije bistveno ne razlikujejo. "
-"Ničelne hipoteze ni mogoče zavrniti"
+"Pri stopnji značilnosti %1 se povprečja populacije bistveno razlikujejo. "
+"Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1153
-#: src/backend/statistics/HypothesisTest.cpp:1216
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1162
+#: src/backend/statistics/HypothesisTest.cpp:1223
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, at least one group mean is significantly "
+#| "different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
-"different. Reject the null Hypothesis"
+"different. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 se vsaj eno povprečje skupine bistveno razlikuje. "
 "Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1156
-#: src/backend/statistics/HypothesisTest.cpp:1219
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1164
+#: src/backend/statistics/HypothesisTest.cpp:1225
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, no significant difference between group "
+#| "means. Fail to reject the null Hypothesis"
 msgid ""
 "At the significance level %1, no significant difference between group means. "
-"Fail to reject the null Hypothesis"
+"%2"
 msgstr ""
 "Pri stopnji značilnosti %1 ni bistvenih razlik med povprečji skupin. Ničelne "
 "hipoteze ni mogoče zavrniti"
 
-#: src/backend/statistics/HypothesisTest.cpp:1276
-#: src/backend/statistics/HypothesisTest.cpp:1334
-#: src/backend/statistics/HypothesisTest.cpp:1393
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1282
+#: src/backend/statistics/HypothesisTest.cpp:1340
+#: src/backend/statistics/HypothesisTest.cpp:1399
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, at least one group distribution is "
+#| "significantly different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, at least one group distribution is "
-"significantly different. Reject the null Hypothesis"
+"significantly different. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 se vsaj ena porazdelitev skupine bistveno "
 "razlikuje. Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1278
-#: src/backend/statistics/HypothesisTest.cpp:1336
-#: src/backend/statistics/HypothesisTest.cpp:1395
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1285
+#: src/backend/statistics/HypothesisTest.cpp:1343
+#: src/backend/statistics/HypothesisTest.cpp:1402
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, no significant difference between group "
+#| "distributions. Fail to reject the null Hypothesis"
 msgid ""
 "At the significance level %1, no significant difference between group "
-"distributions. Fail to reject the null Hypothesis"
+"distributions. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 ni bistvene razlike med porazdelitvami skupin. "
 "Ničelne hipoteze ni mogoče zavrniti"
 
-#: src/backend/statistics/HypothesisTest.cpp:1456
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1462
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, at least one group is significantly "
+#| "different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
-"Reject the null Hypothesis"
+"%2"
 msgstr ""
 "Pri stopnji značilnosti %1 se vsaj ena skupina bistveno razlikuje. Zavrnite "
 "ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1458
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1464
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, no significant difference between groups. "
+#| "Fail to reject the null Hypothesis"
 msgid ""
-"At the significance level %1, no significant difference between groups. Fail "
-"to reject the null Hypothesis"
+"At the significance level %1, no significant difference between groups. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 ni bistvene razlike med skupinama. Ničelne "
 "hipoteze ni mogoče zavrniti"
 
-#: src/backend/statistics/HypothesisTest.cpp:1484
-#: src/backend/statistics/HypothesisTest.cpp:1551
+#: src/backend/statistics/HypothesisTest.cpp:1490
+#: src/backend/statistics/HypothesisTest.cpp:1557
 #, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr "Stolpec '%1' mora biti celo-številski."
 
-#: src/backend/statistics/HypothesisTest.cpp:1523
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1528
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the observed frequencies do not follow the "
+#| "expected frequency distribution. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
-"expected frequency distribution. Reject the null Hypothesis"
+"expected frequency distribution. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 opazovane frekvence ne sledijo pričakovani "
 "porazdelitvi frekvenc. Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1527
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1532
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the observed frequencies do not follow the "
+#| "expected frequency distribution. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
-"frequency distribution. Fail to reject the null Hypothesis"
+"frequency distribution. %2"
 msgstr ""
-"Pri stopnji značilnosti %1 opazovane frekvence sledijo pričakovani "
-"porazdelitvi frekvenc. Ničelne hipoteze ni mogoče zavrniti"
+"Pri stopnji značilnosti %1 opazovane frekvence ne sledijo pričakovani "
+"porazdelitvi frekvenc. Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1571
+#: src/backend/statistics/HypothesisTest.cpp:1577
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
 msgstr "Velikost vsakega stolpca v kontingenčni tabeli mora biti enaka."
 
-#: src/backend/statistics/HypothesisTest.cpp:1587
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1593
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, both categorical variables are dependent. "
+#| "Reject the null Hypothesis"
 msgid ""
-"At the significance level %1, both categorical variables are dependent. "
-"Reject the null Hypothesis"
+"At the significance level %1, both categorical variables are dependent. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 sta obe kategorični spremenljivki odvisni. "
 "Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1590
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1595
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, both categorical variables are dependent. "
+#| "Reject the null Hypothesis"
 msgid ""
-"At the significance level %1, both categorical variables are independent. "
-"Fail to reject the null Hypothesis"
+"At the significance level %1, both categorical variables are independent. %2"
 msgstr ""
-"Pri stopnji značilnosti %1 sta obe kategorični spremenljivki neodvisni. "
-"Ničelne hipoteze ni mogoče zavrniti"
+"Pri stopnji značilnosti %1 sta obe kategorični spremenljivki odvisni. "
+"Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1608
+#: src/backend/statistics/HypothesisTest.cpp:1613
 #, kde-format
 msgid "Three columns are required."
 msgstr "Zahtevani so trije stolpci."
 
-#: src/backend/statistics/HypothesisTest.cpp:1617
+#: src/backend/statistics/HypothesisTest.cpp:1622
 #, kde-format
 msgid "Status column should be of integer type."
 msgstr "Stolpec stanja mora biti celo-številski."
 
-#: src/backend/statistics/HypothesisTest.cpp:1622
+#: src/backend/statistics/HypothesisTest.cpp:1627
 #, kde-format
 msgid "Group column should be of integer type."
 msgstr "Stolpec skupine mora biti celo-številski."
 
-#: src/backend/statistics/HypothesisTest.cpp:1627
+#: src/backend/statistics/HypothesisTest.cpp:1632
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr "Stolpci Čas, Status in Skupina morajo biti enake velikosti."
 
-#: src/backend/statistics/HypothesisTest.cpp:1646
+#: src/backend/statistics/HypothesisTest.cpp:1651
 #, kde-format
 msgid "Status column values must be either 0 or 1."
 msgstr "Vrednosti v stolpcu Status morajo biti ali 0 ali 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1651
+#: src/backend/statistics/HypothesisTest.cpp:1656
 #, kde-format
 msgid "Group column values must be either 0 or 1."
 msgstr "Vrednosti v stolpcu skupine morajo biti ali 0 ali 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1667
+#: src/backend/statistics/HypothesisTest.cpp:1672
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr "Stolpci Čas, Status in Skupina morajo imeti enako število vrednosti."
 
-#: src/backend/statistics/HypothesisTest.cpp:1675
+#: src/backend/statistics/HypothesisTest.cpp:1680
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
 msgstr "Skupina 1 zahteva vsaj %1 vzorcev."
 
-#: src/backend/statistics/HypothesisTest.cpp:1680
+#: src/backend/statistics/HypothesisTest.cpp:1685
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
 msgstr "Skupina 2 zahteva vsaj %1 vzorcev."
 
-#: src/backend/statistics/HypothesisTest.cpp:1690
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1695
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the survival curves are significantly "
+#| "different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, the survival curves are significantly "
-"different. Reject the null Hypothesis"
+"different. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 se krivulje preživetja bistveno razlikujejo. "
 "Zavrnite ničelno hipotezo"
 
-#: src/backend/statistics/HypothesisTest.cpp:1693
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1698
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, no significant difference between survival "
+#| "curves. Fail to reject the null Hypothesis"
 msgid ""
 "At the significance level %1, no significant difference between survival "
-"curves. Fail to reject the null Hypothesis"
+"curves. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 ni pomembne razlike med krivuljami preživetja. "
 "Ničelne hipoteze ni mogoče zavrniti"
 
-#: src/backend/statistics/HypothesisTest.cpp:1733
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1738
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, there is a significant monotonic trend in "
+#| "the data. Reject the null hypothesis."
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
-"data. Reject the null hypothesis."
+"data. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 je v podatkih značilen monoton trend. Ničelno "
 "hipotezo zavrnite."
 
-#: src/backend/statistics/HypothesisTest.cpp:1736
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1740
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, there is a significant positive monotonic "
+#| "trend. Reject the null hypothesis."
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
-"trend. Reject the null hypothesis."
+"trend. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 obstaja pomemben pozitiven monotoni trend. "
 "Ničelno hipotezo zavrnemo."
 
-#: src/backend/statistics/HypothesisTest.cpp:1739
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1742
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, there is a significant negative monotonic "
+#| "trend. Reject the null hypothesis."
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
-"trend. Reject the null hypothesis."
+"trend. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 obstaja pomemben negativni monotoni trend. "
 "Ničelno hipotezo zavrnemo."
 
-#: src/backend/statistics/HypothesisTest.cpp:1741
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1744
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, no significant monotonic trend detected. "
+#| "Fail to reject the null hypothesis."
 msgid ""
-"At the significance level %1, no significant monotonic trend detected. Fail "
-"to reject the null hypothesis."
+"At the significance level %1, no significant monotonic trend detected. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 ni bil zaznan noben pomemben monoton trend. "
 "Ničelne hipoteze ni bilo mogoče zavrniti."
 
-#: src/backend/statistics/HypothesisTest.cpp:1777
-#, kde-format
-msgid ""
-"At the significance level %1, the data are not randomly distributed. Reject "
-"the null hypothesis."
+#: src/backend/statistics/HypothesisTest.cpp:1780
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the data are not randomly distributed. "
+#| "Reject the null hypothesis."
+msgid "At the significance level %1, the data are not randomly distributed. %2"
 msgstr ""
 "Pri stopnji značilnosti %1 podatki niso naključno porazdeljeni. Zavrnite "
 "ničelno hipotezo."
 
-#: src/backend/statistics/HypothesisTest.cpp:1780
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1782
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the data show clustering or trend (too few "
+#| "runs). Reject the null hypothesis."
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
-"runs). Reject the null hypothesis."
+"runs). %2"
 msgstr ""
 "Pri stopnji značilnosti %1 podatki kažejo združevanje v skupine (premalo "
 "ponovitev). Zavrnite ničelno hipotezo."
 
-#: src/backend/statistics/HypothesisTest.cpp:1783
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1785
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the process shows oscillation (too many "
+#| "runs). Reject the null hypothesis."
 msgid ""
-"At the significance level %1, the data show excessive alternation (too many "
-"runs). Reject the null hypothesis."
-msgstr ""
-"Pri stopnji značilnosti %1 podatki kažejo prekomerno menjavanje (preveč "
-"ponovitev). Zavrnite ničelno hipotezo."
-
-#: src/backend/statistics/HypothesisTest.cpp:1786
-#, kde-format
-msgid ""
-"At the significance level %1, the data appear to be randomly distributed. "
-"Fail to reject the null hypothesis."
-msgstr ""
-"Pri stopnji značilnosti %1 se zdi, da so podatki naključno porazdeljeni. "
-"Ničelne hipoteze ni mogoče zavrniti."
-
-#: src/backend/statistics/HypothesisTest.cpp:1820
-#, kde-format
-msgid ""
-"At the significance level %1, the process is not in control. Reject the null "
-"hypothesis."
-msgstr ""
-"Pri stopnji značilnosti %1 postopek ni pod nadzorom. Zavrnite ničelno "
-"hipotezo."
-
-#: src/backend/statistics/HypothesisTest.cpp:1822
-#, kde-format
-msgid ""
-"At the significance level %1, the process shows clustering (too few runs). "
-"Reject the null hypothesis."
-msgstr ""
-"Pri stopnji značilnosti %1 postopek kaže združevanje v skupine (premalo "
-"ponovitev). Zavrnite ničelno hipotezo."
-
-#: src/backend/statistics/HypothesisTest.cpp:1825
-#, kde-format
-msgid ""
-"At the significance level %1, the process shows oscillation (too many runs). "
-"Reject the null hypothesis."
+"At the significance level %1, the data show oscillation or over-control (too "
+"many runs). %2"
 msgstr ""
 "Pri stopnji značilnosti %1 postopek kaže prekomerne oscilacije (preveč "
 "ponovitev). Zavrnite ničelno hipotezo."
 
-#: src/backend/statistics/HypothesisTest.cpp:1827
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1787
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the data appear to be randomly distributed. "
+#| "Fail to reject the null hypothesis."
 msgid ""
-"At the significance level %1, the process appears to be in control. Fail to "
-"reject the null hypothesis."
+"At the significance level %1, the data appear to be randomly distributed. %2"
+msgstr ""
+"Pri stopnji značilnosti %1 se zdi, da so podatki naključno porazdeljeni. "
+"Ničelne hipoteze ni mogoče zavrniti."
+
+#: src/backend/statistics/HypothesisTest.cpp:1821
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the process is not in control. Reject the "
+#| "null hypothesis."
+msgid ""
+"At the significance level %1, the process is unstable (non-homogeneous). %2"
+msgstr ""
+"Pri stopnji značilnosti %1 postopek ni pod nadzorom. Zavrnite ničelno "
+"hipotezo."
+
+#: src/backend/statistics/HypothesisTest.cpp:1823
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the process shows oscillation (too many "
+#| "runs). Reject the null hypothesis."
+msgid ""
+"At the significance level %1, the process shows oscillation or over-control. "
+"%2"
+msgstr ""
+"Pri stopnji značilnosti %1 postopek kaže prekomerne oscilacije (preveč "
+"ponovitev). Zavrnite ničelno hipotezo."
+
+#: src/backend/statistics/HypothesisTest.cpp:1825
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the process shows clustering (too few "
+#| "runs). Reject the null hypothesis."
+msgid ""
+"At the significance level %1, the process shows clustering, shifting, or "
+"trends. %2"
+msgstr ""
+"Pri stopnji značilnosti %1 postopek kaže združevanje v skupine (premalo "
+"ponovitev). Zavrnite ničelno hipotezo."
+
+#: src/backend/statistics/HypothesisTest.cpp:1827
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the process appears to be in control. Fail "
+#| "to reject the null hypothesis."
+msgid ""
+"At the significance level %1, the process appears to be stable "
+"(homogeneous). %2"
 msgstr ""
 "Pri stopnji značilnosti %1 se zdi, da je postopek pod nadzorom. Ničelne "
 "hipoteze ni mogoče zavrniti."
@@ -8535,7 +8623,7 @@ msgstr "Residual"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:881
-#: src/frontend/ActionsManager.cpp:236 src/frontend/MainWin.cpp:1238
+#: src/frontend/ActionsManager.cpp:236 src/frontend/MainWin.cpp:1245
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -11712,7 +11800,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "&Odpri primer"
 
-#: src/frontend/ActionsManager.cpp:214 src/frontend/MainWin.cpp:1176
+#: src/frontend/ActionsManager.cpp:214 src/frontend/MainWin.cpp:1183
 #, kde-format
 msgid "Workbook"
 msgstr "Delovni zvezek"
@@ -11722,7 +11810,7 @@ msgstr "Delovni zvezek"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Ustvari nov delovni zvezek za preglednice, matrike in grafikone zbirke"
 
-#: src/frontend/ActionsManager.cpp:219 src/frontend/MainWin.cpp:1184
+#: src/frontend/ActionsManager.cpp:219 src/frontend/MainWin.cpp:1191
 #, kde-format
 msgid "Data Extractor"
 msgstr "Izvlečnik podatkov"
@@ -11737,7 +11825,7 @@ msgstr "Ustvari izvlečnik podatkov za pridobivanje podatkov iz slike"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1192 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1199 src/frontend/SettingsDialog.cpp:66
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:206
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -11765,7 +11853,7 @@ msgstr "Ustvari nov delovni list za urejanje podatkov"
 msgid "Creates a new Python script"
 msgstr "Ustvari nov Pythonov skript"
 
-#: src/frontend/ActionsManager.cpp:262 src/frontend/MainWin.cpp:1246
+#: src/frontend/ActionsManager.cpp:262 src/frontend/MainWin.cpp:1253
 #, kde-format
 msgid "Note"
 msgstr "Opomba"
@@ -11775,7 +11863,7 @@ msgstr "Opomba"
 msgid "Creates a new note for arbitrary text"
 msgstr "Ustvari novo opombo za poljubno besedilo"
 
-#: src/frontend/ActionsManager.cpp:267 src/frontend/MainWin.cpp:1168
+#: src/frontend/ActionsManager.cpp:267 src/frontend/MainWin.cpp:1175
 #, kde-format
 msgid "Folder"
 msgstr "Mapa"
@@ -12079,7 +12167,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Izberite x-področje in ga približajte"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:632 src/frontend/MainWin.cpp:1579
+#: src/frontend/ActionsManager.cpp:632 src/frontend/MainWin.cpp:1586
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -13904,7 +13992,7 @@ msgid "Open LabPlot Project"
 msgstr "Odpri projekt LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:706
+#: src/frontend/MainWin.cpp:708
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Projekti LabPlot (%1)"
@@ -14107,7 +14195,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:2004
+#: src/frontend/MainWin.cpp:2011
 #, kde-format
 msgid "Warning"
 msgstr "Opozorilo"
@@ -16631,7 +16719,7 @@ msgid ""
 msgstr ""
 "Datoteke zbirk primerov %1 ni bilo mogoče odpreti. Preverite namestitev."
 
-#: src/frontend/GuiObserver.cpp:193 src/frontend/MainWin.cpp:613
+#: src/frontend/GuiObserver.cpp:193 src/frontend/MainWin.cpp:615
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -17577,93 +17665,93 @@ msgstr "Shrani projekt"
 msgid "%1: created"
 msgstr "%1: ustvarjeno"
 
-#: src/frontend/MainWin.cpp:600
+#: src/frontend/MainWin.cpp:602
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Raziskovalec projektov"
 
-#: src/frontend/MainWin.cpp:625
+#: src/frontend/MainWin.cpp:627
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Predogled delovnega lista"
 
-#: src/frontend/MainWin.cpp:634
+#: src/frontend/MainWin.cpp:636
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Vsebina"
 
-#: src/frontend/MainWin.cpp:711
+#: src/frontend/MainWin.cpp:713
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Projekti Origin (%1)"
 
-#: src/frontend/MainWin.cpp:717
+#: src/frontend/MainWin.cpp:719
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Projekti Cantor (*.cws)"
 
-#: src/frontend/MainWin.cpp:718
+#: src/frontend/MainWin.cpp:720
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Zvezki Jupyter (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:725
+#: src/frontend/MainWin.cpp:727
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Vse podprte datoteke (%1)"
 
-#: src/frontend/MainWin.cpp:729
+#: src/frontend/MainWin.cpp:731
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Odpri projekt"
 
-#: src/frontend/MainWin.cpp:749
+#: src/frontend/MainWin.cpp:751
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Projektna datoteka %1 je že odprta."
 
-#: src/frontend/MainWin.cpp:749 src/frontend/MainWin.cpp:757
-#: src/frontend/MainWin.cpp:762
+#: src/frontend/MainWin.cpp:751 src/frontend/MainWin.cpp:759
+#: src/frontend/MainWin.cpp:764
 #, kde-format
 msgid "Open Project"
 msgstr "Odpri projekt"
 
-#: src/frontend/MainWin.cpp:757
+#: src/frontend/MainWin.cpp:759
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Projektna datoteka %1 ne obstaja."
 
-#: src/frontend/MainWin.cpp:762
+#: src/frontend/MainWin.cpp:764
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Ni bilo mogoče prebrati projektne datoteka %1."
 
-#: src/frontend/MainWin.cpp:770
+#: src/frontend/MainWin.cpp:772
 #, kde-format
 msgid "Loading %1..."
 msgstr "Nalaganje %1 ..."
 
-#: src/frontend/MainWin.cpp:821
+#: src/frontend/MainWin.cpp:823
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: odprto"
 
-#: src/frontend/MainWin.cpp:856
+#: src/frontend/MainWin.cpp:858
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekt se je uspešno odprl (v %1 s)."
 
-#: src/frontend/MainWin.cpp:952
+#: src/frontend/MainWin.cpp:954
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Shrani projekt kot"
 
-#: src/frontend/MainWin.cpp:954
+#: src/frontend/MainWin.cpp:956
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -17672,47 +17760,54 @@ msgstr ""
 "Projekti LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:981
+#: src/frontend/MainWin.cpp:983
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Začasne datoteke za pisanje ni bilo mogoče odpreti."
 
-#: src/frontend/MainWin.cpp:1060
+#: src/frontend/MainWin.cpp:988
+#, fuzzy, kde-format
+#| msgid "Loading %1..."
+msgid "Saving %1..."
+msgstr "Nalaganje %1 ..."
+
+#: src/frontend/MainWin.cpp:1066
 #, kde-format
 msgid "Project saved"
 msgstr "Projekt shranjen"
 
-#: src/frontend/MainWin.cpp:1075
+#: src/frontend/MainWin.cpp:1081
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Datoteke »%1« ni bilo mogoče shraniti."
 
-#: src/frontend/MainWin.cpp:1079
+#: src/frontend/MainWin.cpp:1085
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Datoteke »%1« ni bilo mogoče odpreti za pisanje."
 
-#: src/frontend/MainWin.cpp:1128
-#, kde-format
-msgid "Changed"
-msgstr "Spremenjeno"
+#: src/frontend/MainWin.cpp:1096
+#, fuzzy, kde-format
+#| msgid "Project successfully opened (in %1 seconds)."
+msgid "Project successfully saved (in %1 seconds)."
+msgstr "Projekt se je uspešno odprl (v %1 s)."
 
-#: src/frontend/MainWin.cpp:1143 src/frontend/MainWin.cpp:1155
+#: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Priprava tiskanja %1"
 
-#: src/frontend/MainWin.cpp:1145 src/frontend/MainWin.cpp:1157
+#: src/frontend/MainWin.cpp:1152 src/frontend/MainWin.cpp:1164
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 natisnjeno"
 
-#: src/frontend/MainWin.cpp:1900
+#: src/frontend/MainWin.cpp:1907
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Orodje Kaggle CLI ni bilo najdeno"
 
-#: src/frontend/MainWin.cpp:1901
+#: src/frontend/MainWin.cpp:1908
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -17720,27 +17815,27 @@ msgid ""
 msgstr ""
 "Vnesite pot do orodja Kaggle CLI v nastavitvah aplikacije in poskusite znova."
 
-#: src/frontend/MainWin.cpp:1967
+#: src/frontend/MainWin.cpp:1974
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 izvoženo"
 
-#: src/frontend/MainWin.cpp:1974
+#: src/frontend/MainWin.cpp:1981
 #, kde-format
 msgid "FITS files saved"
 msgstr "Datoteke FITS shranjene"
 
-#: src/frontend/MainWin.cpp:1986
+#: src/frontend/MainWin.cpp:1993
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Odjemalec MQTT%1"
 
-#: src/frontend/MainWin.cpp:2004
+#: src/frontend/MainWin.cpp:2011
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "S tem gostiteljem že obstaja MQTTClient!"
 
-#: src/frontend/MainWin.cpp:2008
+#: src/frontend/MainWin.cpp:2015
 #, kde-format
 msgid "Live data source%1"
 msgstr "Vir podatkov v živo%1"
@@ -27324,6 +27419,56 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "The data are randomly distributed"
+#~ msgstr "Podatki so naključno porazdeljeni"
+
+#~ msgid "The data show clustering (too few runs)"
+#~ msgstr "Podatki kažejo na združevanje v skupine (premalo ponovitev)"
+
+#~ msgid "The data show excessive alternation (too many runs)"
+#~ msgstr "Podatki kažejo na prekomerno menjavanje (preveč ponovitev)"
+
+#~ msgid "Expected Runs"
+#~ msgstr "Pričakovani teki"
+
+#~ msgid "Effective Sample Size"
+#~ msgstr "Efektivna velikost vzorca"
+
+#~ msgid ""
+#~ "At the significance level %1, the population mean is not significantly "
+#~ "different from %2. Fail to reject the null hypothesis."
+#~ msgstr ""
+#~ "Pri stopnji značilnosti %1 se povprečje populacije ne razlikuje bistveno "
+#~ "od %2. Ničelne hipoteze ni mogoče zavrniti."
+
+#~ msgid ""
+#~ "At the significance level %1, the population means are not significantly "
+#~ "different. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "Pri stopnji značilnosti %1 se povprečja populacije bistveno ne "
+#~ "razlikujejo. Ničelne hipoteze ni mogoče zavrniti"
+
+#~ msgid ""
+#~ "At the significance level %1, the observed frequencies follow the "
+#~ "expected frequency distribution. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "Pri stopnji značilnosti %1 opazovane frekvence sledijo pričakovani "
+#~ "porazdelitvi frekvenc. Ničelne hipoteze ni mogoče zavrniti"
+
+#~ msgid ""
+#~ "At the significance level %1, both categorical variables are independent. "
+#~ "Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "Pri stopnji značilnosti %1 sta obe kategorični spremenljivki neodvisni. "
+#~ "Ničelne hipoteze ni mogoče zavrniti"
+
+#~ msgid ""
+#~ "At the significance level %1, the data show excessive alternation (too "
+#~ "many runs). Reject the null hypothesis."
+#~ msgstr ""
+#~ "Pri stopnji značilnosti %1 podatki kažejo prekomerno menjavanje (preveč "
+#~ "ponovitev). Zavrnite ničelno hipotezo."
 
 #~ msgid "Update Now"
 #~ msgstr "Posodobi zdaj"

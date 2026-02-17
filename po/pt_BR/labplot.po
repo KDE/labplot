@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-15 00:39+0000\n"
+"POT-Creation-Date: 2026-02-17 00:39+0000\n"
 "PO-Revision-Date: 2026-02-15 07:11-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -35,27 +35,27 @@ msgstr ""
 msgid "%1: change comment"
 msgstr "%1: alterar o comentário"
 
-#: src/backend/core/AbstractAspect.cpp:353
+#: src/backend/core/AbstractAspect.cpp:372
 #, kde-format
 msgid "Duplicate Here"
 msgstr "Duplicar aqui"
 
-#: src/backend/core/AbstractAspect.cpp:368
+#: src/backend/core/AbstractAspect.cpp:387
 #, kde-format
 msgid "Paste '%1'"
 msgstr "Colar '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:380
+#: src/backend/core/AbstractAspect.cpp:399
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "Criar planilha de dados"
 
-#: src/backend/core/AbstractAspect.cpp:428
+#: src/backend/core/AbstractAspect.cpp:447
 #, kde-format
 msgid "Rename"
 msgstr "Renomear"
 
-#: src/backend/core/AbstractAspect.cpp:430
+#: src/backend/core/AbstractAspect.cpp:449
 #: src/backend/spreadsheet/Spreadsheet.cpp:941
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
@@ -64,22 +64,22 @@ msgstr "Renomear"
 msgid "Delete"
 msgstr "Excluir"
 
-#: src/backend/core/AbstractAspect.cpp:438
+#: src/backend/core/AbstractAspect.cpp:457
 #, kde-format
 msgid "Move"
 msgstr "Mover"
 
-#: src/backend/core/AbstractAspect.cpp:441
+#: src/backend/core/AbstractAspect.cpp:460
 #, kde-format
 msgid "Up"
 msgstr "Para cima"
 
-#: src/backend/core/AbstractAspect.cpp:444
+#: src/backend/core/AbstractAspect.cpp:463
 #, kde-format
 msgid "Down"
 msgstr "Para cima"
 
-#: src/backend/core/AbstractAspect.cpp:530
+#: src/backend/core/AbstractAspect.cpp:549
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:227
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2449
@@ -87,59 +87,59 @@ msgstr "Para cima"
 msgid "%1: add %2"
 msgstr "%1: adicionar %2"
 
-#: src/backend/core/AbstractAspect.cpp:532
-#: src/backend/core/AbstractAspect.cpp:569
+#: src/backend/core/AbstractAspect.cpp:551
+#: src/backend/core/AbstractAspect.cpp:588
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "Renomeando \"%1\" para \"%2\", de forma a evitar conflito de nomes."
 
-#: src/backend/core/AbstractAspect.cpp:567
+#: src/backend/core/AbstractAspect.cpp:586
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: inserir o %2 antes de %3"
 
-#: src/backend/core/AbstractAspect.cpp:567
+#: src/backend/core/AbstractAspect.cpp:586
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1: inserir o %2 antes do fim"
 
-#: src/backend/core/AbstractAspect.cpp:602
+#: src/backend/core/AbstractAspect.cpp:621
 #: src/backend/core/aspectcommands.h:102
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: remover %2"
 
-#: src/backend/core/AbstractAspect.cpp:615
+#: src/backend/core/AbstractAspect.cpp:634
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: remover todos os filhos"
 
-#: src/backend/core/AbstractAspect.cpp:727
+#: src/backend/core/AbstractAspect.cpp:746
 #, kde-format
 msgid "%1: pasted"
 msgstr "%1: colado"
 
-#: src/backend/core/AbstractAspect.cpp:822
+#: src/backend/core/AbstractAspect.cpp:841
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: colou '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:824
+#: src/backend/core/AbstractAspect.cpp:843
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: duplicou '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:825
+#: src/backend/core/AbstractAspect.cpp:844
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Cópia de '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:968
+#: src/backend/core/AbstractAspect.cpp:987
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "Falta o atributo 'name' ou está em branco."
 
-#: src/backend/core/AbstractAspect.cpp:974
+#: src/backend/core/AbstractAspect.cpp:993
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "A hora de criação de '%1' é inválida. Usando a hora atual."
@@ -413,7 +413,7 @@ msgid "incompatible filter type"
 msgstr "tipo de filtro incompatível"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:158 src/backend/core/Project.cpp:728
+#: src/backend/core/Folder.cpp:158 src/backend/core/Project.cpp:721
 #: src/backend/datasources/MQTTClient.cpp:1368
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
@@ -441,8 +441,8 @@ msgid "%1: rename to %2"
 msgstr "%1: renomear para %2"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
-#: src/backend/core/AspectTreeModel.cpp:164
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/core/AspectTreeModel.cpp:165
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:99
@@ -451,7 +451,7 @@ msgid "Name"
 msgstr "Nome"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
-#: src/backend/core/AspectTreeModel.cpp:166
+#: src/backend/core/AspectTreeModel.cpp:167
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/datasources/matiooptionswidget.ui:47
@@ -459,33 +459,38 @@ msgstr "Nome"
 msgid "Type"
 msgstr "Tipo"
 
-#: src/backend/core/AspectTreeModel.cpp:168
+#: src/backend/core/AspectTreeModel.cpp:169
 #, kde-format
 msgid "Created"
 msgstr "Criado em"
 
-#: src/backend/core/AspectTreeModel.cpp:170
+#: src/backend/core/AspectTreeModel.cpp:171
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:66
 #, kde-format
 msgid "Comment"
 msgstr "Comentário"
 
-#: src/backend/core/AspectTreeModel.cpp:193
+#: src/backend/core/AspectTreeModel.cpp:173 src/frontend/MainWin.cpp:1135
+#, kde-format
+msgid "Changed"
+msgstr "Alterado"
+
+#: src/backend/core/AspectTreeModel.cpp:196
 #, kde-format
 msgid "%1   (non-plottable data)"
 msgstr "%1   (dados não plotáveis)"
 
-#: src/backend/core/AspectTreeModel.cpp:195
+#: src/backend/core/AspectTreeModel.cpp:198
 #, kde-format
 msgid "%1   (non-numeric data)"
 msgstr "%1   (dados não numéricos)"
 
-#: src/backend/core/AspectTreeModel.cpp:197
+#: src/backend/core/AspectTreeModel.cpp:200
 #, kde-format
 msgid "%1   (no values)"
 msgstr "%1   (sem valores)"
 
-#: src/backend/core/AspectTreeModel.cpp:393
+#: src/backend/core/AspectTreeModel.cpp:404
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "O nome \"%1\" já está em uso. Escolha outro nome."
@@ -701,53 +706,53 @@ msgid "Not yet loaded."
 msgstr "Ainda não carregado."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:190
+#: src/backend/core/Project.cpp:189
 #: src/frontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Projeto"
 
-#: src/backend/core/Project.cpp:309
+#: src/backend/core/Project.cpp:307
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: definir autor"
 
-#: src/backend/core/Project.cpp:316
+#: src/backend/core/Project.cpp:314
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1: salvar estado do dock alterado"
 
-#: src/backend/core/Project.cpp:323
+#: src/backend/core/Project.cpp:321
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: salvar cálculo alterado"
 
-#: src/backend/core/Project.cpp:572 src/backend/core/Project.cpp:602
+#: src/backend/core/Project.cpp:565 src/backend/core/Project.cpp:595
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Infelizmente, não foi possível abrir o arquivo para leitura."
 
-#: src/backend/core/Project.cpp:583 src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:576 src/backend/core/Project.cpp:602
 #, kde-format
 msgid "The project file is empty."
 msgstr "O arquivo de projeto está vazio."
 
-#: src/backend/core/Project.cpp:583 src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:576 src/backend/core/Project.cpp:602
 #, kde-format
 msgid "Error opening project"
 msgstr "Erro ao abrir o projeto"
 
-#: src/backend/core/Project.cpp:628
+#: src/backend/core/Project.cpp:621
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Erro desconhecido ao abrir o projeto %1."
 
-#: src/backend/core/Project.cpp:629
+#: src/backend/core/Project.cpp:622
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Erro ao abrir o projeto"
 
-#: src/backend/core/Project.cpp:649
+#: src/backend/core/Project.cpp:642
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -766,43 +771,43 @@ msgstr ""
 "\n"
 "Deseja continuar?"
 
-#: src/backend/core/Project.cpp:655
+#: src/backend/core/Project.cpp:648
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Faltando suporte para o CAS"
 
-#: src/backend/core/Project.cpp:685
+#: src/backend/core/Project.cpp:678
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Falta o atributo 'version'."
 
-#: src/backend/core/Project.cpp:735
+#: src/backend/core/Project.cpp:728
 #, kde-format
 msgid "no project element found"
 msgstr "não foi encontrado o elemento do projeto"
 
-#: src/backend/core/Project.cpp:737
+#: src/backend/core/Project.cpp:730
 #, kde-format
 msgid "no valid XML document found"
 msgstr "não foi encontrado nenhum documento XML válido"
 
-#: src/backend/core/Project.cpp:787 src/backend/core/Project.cpp:793
-#: src/backend/core/Project.cpp:844
+#: src/backend/core/Project.cpp:780 src/backend/core/Project.cpp:786
+#: src/backend/core/Project.cpp:837
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Falha ao abrir o arquivo '%1'."
 
-#: src/backend/core/Project.cpp:850
+#: src/backend/core/Project.cpp:843
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Falha ao processar o conteúdo do arquivo '%1'."
 
-#: src/backend/core/Project.cpp:853
+#: src/backend/core/Project.cpp:846
 #, kde-format
 msgid "Failed to open project"
 msgstr "Falha ao abrir o projeto"
 
-#: src/backend/core/Project.cpp:1351
+#: src/backend/core/Project.cpp:1344
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "A hora de modificação do projeto é inválida. Usando a hora atual."
@@ -1944,7 +1949,7 @@ msgid "Unknown"
 msgstr "Desconhecido"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:230 src/frontend/MainWin.cpp:1220
+#: src/frontend/ActionsManager.cpp:230 src/frontend/MainWin.cpp:1227
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -3713,7 +3718,7 @@ msgstr "Coluna atual da célula (índice; valor_padrão)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:258
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/ui/dockwidgets/imagedock.ui:492
 #, kde-format
 msgid "Size"
@@ -3732,7 +3737,7 @@ msgstr "Soma"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:260 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:173
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
@@ -3748,7 +3753,7 @@ msgstr "Mínimo"
 #: src/backend/gsl/functions.cpp:261 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:174
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
@@ -3773,7 +3778,7 @@ msgstr "Média aritmética"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:263 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
@@ -6357,7 +6362,7 @@ msgid "Text file (*.txt)"
 msgstr "Arquivo texto (*.txt)"
 
 #: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
-#: src/backend/statistics/HypothesisTest.cpp:143
+#: src/backend/statistics/HypothesisTest.cpp:142
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
 #, kde-format
@@ -6413,7 +6418,7 @@ msgstr "Não foi possível criar as sessões para %1. Verifique sua instalação
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/nsl/nsl_baseline.cpp:47
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:515
@@ -7342,7 +7347,7 @@ msgid "%1: run %2 script"
 msgstr "%1: executar script %2"
 
 #: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
-#: src/frontend/ActionsManager.cpp:243 src/frontend/MainWin.cpp:1212
+#: src/frontend/ActionsManager.cpp:243 src/frontend/MainWin.cpp:1219
 #, kde-format
 msgid "Script"
 msgstr "Script"
@@ -7641,832 +7646,914 @@ msgstr "DesvioMediana"
 msgid "Column"
 msgstr "Coluna"
 
-#: src/backend/statistics/HypothesisTest.cpp:54
+#: src/backend/statistics/HypothesisTest.cpp:53
 #, kde-format
 msgid "One column is required."
 msgid_plural "%1 columns are required."
 msgstr[0] "Um coluna é necessária."
 msgstr[1] "%1 colunas são necessárias."
 
-#: src/backend/statistics/HypothesisTest.cpp:56
+#: src/backend/statistics/HypothesisTest.cpp:55
 #, kde-format
 msgid "At least %1 and at most %2 columns are required."
 msgstr "Pelo menos %1 e no máximo %2 colunas são necessárias."
 
-#: src/backend/statistics/HypothesisTest.cpp:64
+#: src/backend/statistics/HypothesisTest.cpp:63
 #, kde-format
 msgid "Column '%1' must be of numeric type."
 msgstr "A coluna '%1' deve ser do tipo numérico."
 
-#: src/backend/statistics/HypothesisTest.cpp:143
+#: src/backend/statistics/HypothesisTest.cpp:142
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:232
 #, kde-format
 msgid "Portable Data Format (*.pdf *.PDF)"
 msgstr "Portable Data Format (*.pdf *.PDF)"
 
-#: src/backend/statistics/HypothesisTest.cpp:169
+#: src/backend/statistics/HypothesisTest.cpp:168
 #, kde-format
 msgctxt "@title:window"
 msgid "Hypothesis Test"
 msgstr "Teste da hipótese"
 
-#: src/backend/statistics/HypothesisTest.cpp:255
+#: src/backend/statistics/HypothesisTest.cpp:254
 #, kde-format
 msgid "No monotonic trend exists"
 msgstr "Não existe uma tendência monotônica"
 
-#: src/backend/statistics/HypothesisTest.cpp:256
+#: src/backend/statistics/HypothesisTest.cpp:255
 #, kde-format
 msgid "A monotonic trend exists"
 msgstr "Existe uma tendência monotônica"
 
-#: src/backend/statistics/HypothesisTest.cpp:257
+#: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "A negative monotonic trend exists"
 msgstr "Existe uma tendência monotônica negativa"
 
-#: src/backend/statistics/HypothesisTest.cpp:258
+#: src/backend/statistics/HypothesisTest.cpp:257
 #, kde-format
 msgid "A positive monotonic trend exists"
 msgstr "Existe uma tendência monotônica positiva"
 
-#: src/backend/statistics/HypothesisTest.cpp:261
-#, kde-format
-msgid "The data are randomly distributed"
-msgstr "Os dados estão distribuídos aleatoriamente"
+#: src/backend/statistics/HypothesisTest.cpp:260
+#: src/backend/statistics/HypothesisTest.cpp:266
+#, fuzzy, kde-format
+#| msgid "The process is in control (random pattern)"
+msgid "The process is stable (random)"
+msgstr "O processo está sob controle (padrão aleatório)"
 
-#: src/backend/statistics/HypothesisTest.cpp:262
+#: src/backend/statistics/HypothesisTest.cpp:261
 #, kde-format
 msgid "The data are not randomly distributed"
 msgstr "Os dados não estão distribuídos aleatoriamente"
 
-#: src/backend/statistics/HypothesisTest.cpp:263
-#, kde-format
-msgid "The data show clustering (too few runs)"
-msgstr "Os dados mostram agrupamento (poucas execuções)"
-
-#: src/backend/statistics/HypothesisTest.cpp:264
-#, kde-format
-msgid "The data show excessive alternation (too many runs)"
-msgstr "Os dados mostram alternância excessiva (muitas execuções)"
-
-#: src/backend/statistics/HypothesisTest.cpp:267
-#, kde-format
-msgid "The process is in control (random pattern)"
-msgstr "O processo está sob controle (padrão aleatório)"
-
-#: src/backend/statistics/HypothesisTest.cpp:268
-#, kde-format
-msgid "The process is not in control"
-msgstr "O processo está fora de controle"
-
+#: src/backend/statistics/HypothesisTest.cpp:262
 #: src/backend/statistics/HypothesisTest.cpp:269
-#, kde-format
-msgid "The process shows clustering (too few runs)"
+#, fuzzy, kde-format
+#| msgid "The process shows clustering (too few runs)"
+msgid "The process shows shifting or clustering"
 msgstr "O processo mostra agrupamento (poucas execuções)"
 
-#: src/backend/statistics/HypothesisTest.cpp:270
-#, kde-format
-msgid "The process shows oscillation (too many runs)"
+#: src/backend/statistics/HypothesisTest.cpp:263
+#: src/backend/statistics/HypothesisTest.cpp:268
+#, fuzzy, kde-format
+#| msgid "The process shows oscillation (too many runs)"
+msgid "The process shows oscillations or over-control"
 msgstr "O processo apresenta oscilações (muitas execuções)"
 
-#: src/backend/statistics/HypothesisTest.cpp:332
+#: src/backend/statistics/HypothesisTest.cpp:267
+#, fuzzy, kde-format
+#| msgid "The process is not in control"
+msgid "The process is unstable (non-random)"
+msgstr "O processo está fora de controle"
+
+#: src/backend/statistics/HypothesisTest.cpp:331
 #, kde-format
 msgid "One-Sample t-Test"
 msgstr "Teste-t com uma amostra"
 
-#: src/backend/statistics/HypothesisTest.cpp:334
+#: src/backend/statistics/HypothesisTest.cpp:333
 #, kde-format
 msgid "Independent Two-Sample t-Test"
 msgstr "Teste-t independente de duas amostras"
 
-#: src/backend/statistics/HypothesisTest.cpp:336
+#: src/backend/statistics/HypothesisTest.cpp:335
 #, kde-format
 msgid "Paired Two-Sample t-Test"
 msgstr "Teste-t de duas amostras pareadas"
 
-#: src/backend/statistics/HypothesisTest.cpp:338
+#: src/backend/statistics/HypothesisTest.cpp:337
 #, kde-format
 msgid "Mann-Whitney U Test"
 msgstr "Teste U de Mann-Whitney"
 
-#: src/backend/statistics/HypothesisTest.cpp:340
+#: src/backend/statistics/HypothesisTest.cpp:339
 #, kde-format
 msgid "Welch t-Test"
 msgstr "Teste-t de Welch"
 
-#: src/backend/statistics/HypothesisTest.cpp:342
+#: src/backend/statistics/HypothesisTest.cpp:341
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
 msgstr "Teste de classificação de sinais de Wilcoxon"
 
-#: src/backend/statistics/HypothesisTest.cpp:344
+#: src/backend/statistics/HypothesisTest.cpp:343
 #, kde-format
 msgid "One-Way ANOVA Test"
 msgstr "Teste ANOVA de uma via"
 
-#: src/backend/statistics/HypothesisTest.cpp:346
+#: src/backend/statistics/HypothesisTest.cpp:345
 #, kde-format
 msgid "Kruskal-Wallis Test"
 msgstr "Teste de Kruskal-Wallis"
 
-#: src/backend/statistics/HypothesisTest.cpp:348
+#: src/backend/statistics/HypothesisTest.cpp:347
 #, kde-format
 msgid "Log-Rank Test"
 msgstr "Teste de Log-Rank"
 
-#: src/backend/statistics/HypothesisTest.cpp:350
+#: src/backend/statistics/HypothesisTest.cpp:349
 #, kde-format
 msgid "Friedman Test"
 msgstr "Teste de Friedman"
 
-#: src/backend/statistics/HypothesisTest.cpp:352
+#: src/backend/statistics/HypothesisTest.cpp:351
 #, kde-format
 msgid "Chi-Square Independence Test"
 msgstr "Teste de independência do qui-quadrado"
 
-#: src/backend/statistics/HypothesisTest.cpp:354
+#: src/backend/statistics/HypothesisTest.cpp:353
 #, kde-format
 msgid "Chi-Square Goodness of Fit Test"
 msgstr "Teste de qualidade de ajuste do qui-quadrado"
 
-#: src/backend/statistics/HypothesisTest.cpp:356
+#: src/backend/statistics/HypothesisTest.cpp:355
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr "Teste ANOVA de uma via com medidas repetidas"
 
-#: src/backend/statistics/HypothesisTest.cpp:358
+#: src/backend/statistics/HypothesisTest.cpp:357
 #, kde-format
 msgid "Mann-Kendall Test"
 msgstr "Teste de Mann-Kendall"
 
-#: src/backend/statistics/HypothesisTest.cpp:360
+#: src/backend/statistics/HypothesisTest.cpp:359
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
 msgstr "Teste de execução Wald-Wolfowitz"
 
-#: src/backend/statistics/HypothesisTest.cpp:362
+#: src/backend/statistics/HypothesisTest.cpp:361
 #, kde-format
 msgid "Ramirez-Runger Runs Test"
 msgstr "Teste de corrida de Ramirez-Runger"
 
-#: src/backend/statistics/HypothesisTest.cpp:537
+#: src/backend/statistics/HypothesisTest.cpp:536
+#, kde-format
+msgid "<b>Reject the null hypothesis.</b>"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:540
+#, kde-format
+msgid "<b>Fail to reject the null hypothesis.</b>"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:544
 #, kde-format
 msgid "N/A"
 msgstr "N/D"
 
-#: src/backend/statistics/HypothesisTest.cpp:541
+#: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
 msgid "Test result is not available."
 msgstr "O resultado do teste não está disponível."
 
-#: src/backend/statistics/HypothesisTest.cpp:545
+#: src/backend/statistics/HypothesisTest.cpp:552
 #, kde-format
 msgid "Two columns are required for this test."
 msgstr "Duas colunas são necessárias para este teste."
 
-#: src/backend/statistics/HypothesisTest.cpp:549
+#: src/backend/statistics/HypothesisTest.cpp:556
 #, kde-format
 msgid "At least two columns are required."
 msgstr "São necessárias pelo menos duas colunas."
 
-#: src/backend/statistics/HypothesisTest.cpp:553
+#: src/backend/statistics/HypothesisTest.cpp:560
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
 msgstr "A coluna '%1' requer pelo menos %2 amostras."
 
-#: src/backend/statistics/HypothesisTest.cpp:557
+#: src/backend/statistics/HypothesisTest.cpp:564
 #, kde-format
 msgid "The size of each sample must be equal."
 msgstr "O tamanho de cada amostra deve ser igual."
 
-#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:568
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
 #, kde-format
 msgid "Standard Deviation"
 msgstr "Desvio padrão"
 
-#: src/backend/statistics/HypothesisTest.cpp:577
+#: src/backend/statistics/HypothesisTest.cpp:584
 #, kde-format
 msgid "Null Hypothesis"
 msgstr "Hipótese nula"
 
-#: src/backend/statistics/HypothesisTest.cpp:578
+#: src/backend/statistics/HypothesisTest.cpp:585
 #, kde-format
 msgid "Alternate Hypothesis"
 msgstr "Hipótese alternativa"
 
-#: src/backend/statistics/HypothesisTest.cpp:580
+#: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
 msgid "Descriptive Statistics"
 msgstr "Estatísticas descritivas"
 
-#: src/backend/statistics/HypothesisTest.cpp:581
+#: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
 msgid "Test Statistics"
 msgstr "Estatísticas do Teste"
 
-#: src/backend/statistics/HypothesisTest.cpp:581
+#: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
 msgid "Significance Level"
 msgstr "Nível de significância"
 
-#: src/backend/statistics/HypothesisTest.cpp:582
+#: src/backend/statistics/HypothesisTest.cpp:589
 #, kde-format
 msgid "p-Value"
 msgstr "Valor-p"
 
-#: src/backend/statistics/HypothesisTest.cpp:585
+#: src/backend/statistics/HypothesisTest.cpp:592
 #, kde-format
 msgid "Degrees of Freedom Between Groups"
 msgstr "Graus de liberdade entre grupos"
 
-#: src/backend/statistics/HypothesisTest.cpp:586
+#: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
 msgid "Degrees of Freedom Within Groups"
 msgstr "Graus de liberdade dentro dos grupos"
 
-#: src/backend/statistics/HypothesisTest.cpp:588
+#: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
 msgid "Degrees of Freedom Treatment"
 msgstr "Tratamento de graus de liberdade"
 
-#: src/backend/statistics/HypothesisTest.cpp:589
+#: src/backend/statistics/HypothesisTest.cpp:596
 #, kde-format
 msgid "Degrees of Freedom Residuals"
 msgstr "Graus de liberdade residuais"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/backend/statistics/HypothesisTest.cpp:591
+#: src/backend/statistics/HypothesisTest.cpp:598
+#: src/backend/statistics/HypothesisTest.cpp:656
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "Graus de liberdade"
 
-#: src/backend/statistics/HypothesisTest.cpp:596
-#: src/backend/statistics/HypothesisTest.cpp:600
 #: src/backend/statistics/HypothesisTest.cpp:603
-#: src/backend/statistics/HypothesisTest.cpp:605
+#: src/backend/statistics/HypothesisTest.cpp:607
+#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:612
 #, kde-format
 msgid "t-Value"
 msgstr "Valor-t"
 
-#: src/backend/statistics/HypothesisTest.cpp:596
+#: src/backend/statistics/HypothesisTest.cpp:603
 #, kde-format
 msgid "Test Mean"
 msgstr "Testar média"
 
-#: src/backend/statistics/HypothesisTest.cpp:597
-#: src/backend/statistics/HypothesisTest.cpp:601
-#: src/backend/statistics/HypothesisTest.cpp:603
-#: src/backend/statistics/HypothesisTest.cpp:605
+#: src/backend/statistics/HypothesisTest.cpp:604
+#: src/backend/statistics/HypothesisTest.cpp:608
+#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:612
 #, kde-format
 msgid "Mean Difference"
 msgstr "Diferença média"
 
-#: src/backend/statistics/HypothesisTest.cpp:600
+#: src/backend/statistics/HypothesisTest.cpp:607
 #, kde-format
 msgid "Pooled Variance"
 msgstr "Variância combinada"
 
-#: src/backend/statistics/HypothesisTest.cpp:601
-#: src/backend/statistics/HypothesisTest.cpp:606
+#: src/backend/statistics/HypothesisTest.cpp:608
+#: src/backend/statistics/HypothesisTest.cpp:613
 #, kde-format
 msgid "Mean Difference Standard Error"
 msgstr "Erro padrão da diferença média"
 
-#: src/backend/statistics/HypothesisTest.cpp:608
-#: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:615
+#: src/backend/statistics/HypothesisTest.cpp:621
 #, kde-format
 msgid "F-Statistic"
 msgstr "Estatísticas-F"
 
-#: src/backend/statistics/HypothesisTest.cpp:608
+#: src/backend/statistics/HypothesisTest.cpp:615
 #, kde-format
 msgid "Sum of Squares Between Groups"
 msgstr "Soma dos quadrados entre grupos"
 
-#: src/backend/statistics/HypothesisTest.cpp:609
+#: src/backend/statistics/HypothesisTest.cpp:616
 #, kde-format
 msgid "Sum of Squares Within Groups"
 msgstr "Soma dos quadrados dentro de grupos"
 
-#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:617
 #, kde-format
 msgid "Mean Squares Between Groups"
 msgstr "Quadrados médios entre grupos"
 
-#: src/backend/statistics/HypothesisTest.cpp:611
+#: src/backend/statistics/HypothesisTest.cpp:618
 #, kde-format
 msgid "Mean Squares Within Groups"
 msgstr "Quadrados médios dentro de grupos"
 
-#: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:621
 #, kde-format
 msgid "Sum of Squares Treatment"
 msgstr "Tratamento da soma dos quadrados"
 
-#: src/backend/statistics/HypothesisTest.cpp:615
+#: src/backend/statistics/HypothesisTest.cpp:622
 #, kde-format
 msgid "Sum of Squares Residuals"
 msgstr "Soma dos quadrados residuais"
 
-#: src/backend/statistics/HypothesisTest.cpp:616
+#: src/backend/statistics/HypothesisTest.cpp:623
 #, kde-format
 msgid "Sum of Squares Within Subjects"
 msgstr "Soma dos quadrados dentro dos assuntos"
 
-#: src/backend/statistics/HypothesisTest.cpp:617
+#: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Mean Squares Treatment"
 msgstr "Tratamento da média dos quadrados"
 
-#: src/backend/statistics/HypothesisTest.cpp:617
+#: src/backend/statistics/HypothesisTest.cpp:624
 #, kde-format
 msgid "Mean Squares Residuals"
 msgstr "Média dos quadrados residuais"
 
-#: src/backend/statistics/HypothesisTest.cpp:619
+#: src/backend/statistics/HypothesisTest.cpp:626
 #, kde-format
 msgid "U"
 msgstr "U"
 
-#: src/backend/statistics/HypothesisTest.cpp:619
-#: src/backend/statistics/HypothesisTest.cpp:623
-#: src/backend/statistics/HypothesisTest.cpp:643
-#: src/backend/statistics/HypothesisTest.cpp:646
+#: src/backend/statistics/HypothesisTest.cpp:626
+#: src/backend/statistics/HypothesisTest.cpp:630
 #: src/backend/statistics/HypothesisTest.cpp:650
+#: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
 msgid "z-Value"
 msgstr "Valor-z"
 
-#: src/backend/statistics/HypothesisTest.cpp:620
+#: src/backend/statistics/HypothesisTest.cpp:627
 #, kde-format
 msgid "Rank Sum 1"
 msgstr "Soma Clas 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:620
+#: src/backend/statistics/HypothesisTest.cpp:627
 #, kde-format
 msgid "Mean Rank 1"
 msgstr "Clas Média 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:621
+#: src/backend/statistics/HypothesisTest.cpp:628
 #, kde-format
 msgid "Rank Sum 2"
 msgstr "Soma Clas 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:621
+#: src/backend/statistics/HypothesisTest.cpp:628
 #, kde-format
 msgid "Mean Rank 2"
 msgstr "Clas Média 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:623
+#: src/backend/statistics/HypothesisTest.cpp:630
 #, kde-format
 msgid "W"
 msgstr "W"
 
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:631
 #, kde-format
 msgid "Positive Rank Sum"
 msgstr "Soma de classificação positiva"
 
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:631
 #, kde-format
 msgid "Positive Rank Mean"
 msgstr "Média de classificação positiva"
 
-#: src/backend/statistics/HypothesisTest.cpp:625
+#: src/backend/statistics/HypothesisTest.cpp:632
 #, kde-format
 msgid "Positive Rank Count"
 msgstr "Contagem de classificação positiva"
 
-#: src/backend/statistics/HypothesisTest.cpp:625
+#: src/backend/statistics/HypothesisTest.cpp:632
 #, kde-format
 msgid "Negative Rank Sum"
 msgstr "Soma de classificação negativa"
 
-#: src/backend/statistics/HypothesisTest.cpp:626
+#: src/backend/statistics/HypothesisTest.cpp:633
 #, kde-format
 msgid "Negative Rank Mean"
 msgstr "Média de classificação negativa"
 
-#: src/backend/statistics/HypothesisTest.cpp:626
+#: src/backend/statistics/HypothesisTest.cpp:633
 #, kde-format
 msgid "Negative Rank Count"
 msgstr "Contagem de classificação negativa"
 
-#: src/backend/statistics/HypothesisTest.cpp:627
+#: src/backend/statistics/HypothesisTest.cpp:634
 #, kde-format
 msgid "Tie Count"
 msgstr "Contagem de nó"
 
-#: src/backend/statistics/HypothesisTest.cpp:629
-#: src/backend/statistics/HypothesisTest.cpp:637
+#: src/backend/statistics/HypothesisTest.cpp:636
+#: src/backend/statistics/HypothesisTest.cpp:644
 #, kde-format
 msgid "H"
 msgstr "H"
 
-#: src/backend/statistics/HypothesisTest.cpp:631
+#: src/backend/statistics/HypothesisTest.cpp:638
 #, kde-format
 msgid "Q"
 msgstr "Q"
 
-#: src/backend/statistics/HypothesisTest.cpp:633
-#: src/backend/statistics/HypothesisTest.cpp:635
+#: src/backend/statistics/HypothesisTest.cpp:640
+#: src/backend/statistics/HypothesisTest.cpp:642
 #, kde-format
 msgid "Chi2"
 msgstr "Qui2"
 
-#: src/backend/statistics/HypothesisTest.cpp:637
+#: src/backend/statistics/HypothesisTest.cpp:644
 #, kde-format
 msgid "Event Count 1"
 msgstr "Contagem evento 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:638
+#: src/backend/statistics/HypothesisTest.cpp:645
 #, kde-format
 msgid "Censored Count 1"
 msgstr "Contagem censurada 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:638
+#: src/backend/statistics/HypothesisTest.cpp:645
 #, kde-format
 msgid "Total Count 1"
 msgstr "Contagem total 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:639
+#: src/backend/statistics/HypothesisTest.cpp:646
 #, kde-format
 msgid "Event Count 2"
 msgstr "Contagem evento 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:639
+#: src/backend/statistics/HypothesisTest.cpp:646
 #, kde-format
 msgid "Censored Count 2"
 msgstr "Contagem censurada 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:640
+#: src/backend/statistics/HypothesisTest.cpp:647
 #, kde-format
 msgid "Total Count 2"
 msgstr "Contagem total 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:642
+#: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: src/backend/statistics/HypothesisTest.cpp:642
+#: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "Kendall's Tau"
 msgstr "'Tau' de Kendall"
 
-#: src/backend/statistics/HypothesisTest.cpp:643
+#: src/backend/statistics/HypothesisTest.cpp:650
 #, kde-format
 msgid "Sen's Slope"
 msgstr "Inclinação de Sen"
 
-#: src/backend/statistics/HypothesisTest.cpp:644
-#: src/backend/statistics/HypothesisTest.cpp:647
+#: src/backend/statistics/HypothesisTest.cpp:651
+#: src/backend/statistics/HypothesisTest.cpp:654
 #, kde-format
 msgid "Sample Size"
 msgstr "Tamanho da amostra"
 
-#: src/backend/statistics/HypothesisTest.cpp:646
-#: src/backend/statistics/HypothesisTest.cpp:649
+#: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
 msgid "Number of Runs"
 msgstr "Número de execuções"
 
-#: src/backend/statistics/HypothesisTest.cpp:649
+#: src/backend/statistics/HypothesisTest.cpp:656
 #, kde-format
-msgid "Expected Runs"
-msgstr "Execuções esperadas"
+msgid "Stability Ratio"
+msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:650
+#: src/backend/statistics/HypothesisTest.cpp:657
+#, fuzzy, kde-format
+#| msgid "Degrees of Freedom"
+msgid "Effective Degrees of Freedom"
+msgstr "Graus de liberdade"
+
+#: src/backend/statistics/HypothesisTest.cpp:658
 #, kde-format
-msgid "Effective Sample Size"
-msgstr "Tamanho efetivo da amostra"
+msgid "Avverage Successive Difference"
+msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:653
+#: src/backend/statistics/HypothesisTest.cpp:661
 #, kde-format
 msgid "Statistical Conclusion"
 msgstr "Conclusão estatística"
 
-#: src/backend/statistics/HypothesisTest.cpp:665
+#: src/backend/statistics/HypothesisTest.cpp:673
 #, kde-format
 msgid "No variable columns provided."
 msgstr "Nenhuma coluna variável fornecida."
 
-#: src/backend/statistics/HypothesisTest.cpp:942
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:950
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the population mean is significantly "
+#| "different from %2. Reject the null hypothesis."
 msgid ""
 "At the significance level %1, the population mean is significantly different "
-"from %2. Reject the null hypothesis."
+"from %2. %3"
 msgstr ""
 "No nível de significância %1, a média populacional é significativamente "
 "diferente de %2. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:946
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:955
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the population mean is significantly "
+#| "different from %2. Reject the null hypothesis."
 msgid ""
 "At the significance level %1, the population mean is not significantly "
-"different from %2. Fail to reject the null hypothesis."
+"different from %2. %3"
 msgstr ""
-"No nível de significância %1, a média populacional não é significativamente "
-"diferente de %2. Não é possível rejeitar a hipótese nula."
+"No nível de significância %1, a média populacional é significativamente "
+"diferente de %2. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1030
-#: src/backend/statistics/HypothesisTest.cpp:1098
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1040
+#: src/backend/statistics/HypothesisTest.cpp:1108
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the population means are significantly "
+#| "different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, the population means are significantly "
-"different. Reject the null Hypothesis"
+"different. %2"
 msgstr ""
 "No nível de significância %1, as médias populacionais são significativamente "
 "diferentes. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1032
-#: src/backend/statistics/HypothesisTest.cpp:1100
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1043
+#: src/backend/statistics/HypothesisTest.cpp:1111
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the population means are significantly "
+#| "different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, the population means are not significantly "
-"different. Fail to reject the null Hypothesis"
+"different. %2"
 msgstr ""
-"No nível de significância %1, as médias populacionais não são "
-"significativamente diferentes. Não é possível rejeitar a hipótese nula."
+"No nível de significância %1, as médias populacionais são significativamente "
+"diferentes. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1153
-#: src/backend/statistics/HypothesisTest.cpp:1216
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1162
+#: src/backend/statistics/HypothesisTest.cpp:1223
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, at least one group mean is significantly "
+#| "different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
-"different. Reject the null Hypothesis"
+"different. %2"
 msgstr ""
 "No nível de significância %1, pelo menos uma média de grupo é "
 "significativamente diferente. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1156
-#: src/backend/statistics/HypothesisTest.cpp:1219
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1164
+#: src/backend/statistics/HypothesisTest.cpp:1225
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, no significant difference between group "
+#| "means. Fail to reject the null Hypothesis"
 msgid ""
 "At the significance level %1, no significant difference between group means. "
-"Fail to reject the null Hypothesis"
+"%2"
 msgstr ""
 "No nível de significância %1, não houve diferença significativa entre as "
 "médias dos grupos. Não é possível rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1276
-#: src/backend/statistics/HypothesisTest.cpp:1334
-#: src/backend/statistics/HypothesisTest.cpp:1393
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1282
+#: src/backend/statistics/HypothesisTest.cpp:1340
+#: src/backend/statistics/HypothesisTest.cpp:1399
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, at least one group distribution is "
+#| "significantly different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, at least one group distribution is "
-"significantly different. Reject the null Hypothesis"
+"significantly different. %2"
 msgstr ""
 "No nível de significância %1, pelo menos uma distribuição de grupo é "
 "significativamente diferente. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1278
-#: src/backend/statistics/HypothesisTest.cpp:1336
-#: src/backend/statistics/HypothesisTest.cpp:1395
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1285
+#: src/backend/statistics/HypothesisTest.cpp:1343
+#: src/backend/statistics/HypothesisTest.cpp:1402
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, no significant difference between group "
+#| "distributions. Fail to reject the null Hypothesis"
 msgid ""
 "At the significance level %1, no significant difference between group "
-"distributions. Fail to reject the null Hypothesis"
+"distributions. %2"
 msgstr ""
 "No nível de significância %1, não há diferença significativa entre as "
 "distribuições dos grupos. Não é possível rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1456
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1462
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, at least one group is significantly "
+#| "different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
-"Reject the null Hypothesis"
+"%2"
 msgstr ""
 "No nível de significância %1, pelo menos um grupo é significativamente "
 "diferente. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1458
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1464
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, no significant difference between groups. "
+#| "Fail to reject the null Hypothesis"
 msgid ""
-"At the significance level %1, no significant difference between groups. Fail "
-"to reject the null Hypothesis"
+"At the significance level %1, no significant difference between groups. %2"
 msgstr ""
 "No nível de significância %1, não há diferença significativa entre os "
 "grupos. Falha em rejeitar a hipótese nula"
 
-#: src/backend/statistics/HypothesisTest.cpp:1484
-#: src/backend/statistics/HypothesisTest.cpp:1551
+#: src/backend/statistics/HypothesisTest.cpp:1490
+#: src/backend/statistics/HypothesisTest.cpp:1557
 #, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr "A coluna '%1' deve ser do tipo inteiro."
 
-#: src/backend/statistics/HypothesisTest.cpp:1523
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1528
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the observed frequencies do not follow the "
+#| "expected frequency distribution. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
-"expected frequency distribution. Reject the null Hypothesis"
+"expected frequency distribution. %2"
 msgstr ""
 "No nível de significância %1, as frequências observadas não seguem a "
 "distribuição de frequência esperada. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1527
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1532
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the observed frequencies do not follow the "
+#| "expected frequency distribution. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
-"frequency distribution. Fail to reject the null Hypothesis"
+"frequency distribution. %2"
 msgstr ""
-"No nível de significância %1, as frequências observadas seguem a "
-"distribuição de frequências esperada. Não é possível rejeitar a hipótese "
-"nula."
+"No nível de significância %1, as frequências observadas não seguem a "
+"distribuição de frequência esperada. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1571
+#: src/backend/statistics/HypothesisTest.cpp:1577
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
 msgstr "O tamanho de cada coluna na tabela de contingência deve ser igual."
 
-#: src/backend/statistics/HypothesisTest.cpp:1587
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1593
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, both categorical variables are dependent. "
+#| "Reject the null Hypothesis"
 msgid ""
-"At the significance level %1, both categorical variables are dependent. "
-"Reject the null Hypothesis"
+"At the significance level %1, both categorical variables are dependent. %2"
 msgstr ""
 "No nível de significância %1, ambas as variáveis ​​categóricas são "
 "dependentes. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1590
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1595
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, both categorical variables are dependent. "
+#| "Reject the null Hypothesis"
 msgid ""
-"At the significance level %1, both categorical variables are independent. "
-"Fail to reject the null Hypothesis"
+"At the significance level %1, both categorical variables are independent. %2"
 msgstr ""
 "No nível de significância %1, ambas as variáveis ​​categóricas são "
-"independentes. Falha ao rejeitar a hipótese nula."
+"dependentes. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1608
+#: src/backend/statistics/HypothesisTest.cpp:1613
 #, kde-format
 msgid "Three columns are required."
 msgstr "São necessárias três colunas."
 
-#: src/backend/statistics/HypothesisTest.cpp:1617
+#: src/backend/statistics/HypothesisTest.cpp:1622
 #, kde-format
 msgid "Status column should be of integer type."
 msgstr "A coluna de status deve ser do tipo inteiro."
 
-#: src/backend/statistics/HypothesisTest.cpp:1622
+#: src/backend/statistics/HypothesisTest.cpp:1627
 #, kde-format
 msgid "Group column should be of integer type."
 msgstr "A coluna do grupo deve ser do tipo inteiro."
 
-#: src/backend/statistics/HypothesisTest.cpp:1627
+#: src/backend/statistics/HypothesisTest.cpp:1632
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr "As colunas Tempo, Status e Grupo devem ter o mesmo tamanho."
 
-#: src/backend/statistics/HypothesisTest.cpp:1646
+#: src/backend/statistics/HypothesisTest.cpp:1651
 #, kde-format
 msgid "Status column values must be either 0 or 1."
 msgstr "Os valores da coluna de status devem ser 0 ou 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1651
+#: src/backend/statistics/HypothesisTest.cpp:1656
 #, kde-format
 msgid "Group column values must be either 0 or 1."
 msgstr "Os valores da coluna de grupo devem ser 0 ou 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1667
+#: src/backend/statistics/HypothesisTest.cpp:1672
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr "As colunas Tempo, Status e Grupo devem ter o mesmo número de valores."
 
-#: src/backend/statistics/HypothesisTest.cpp:1675
+#: src/backend/statistics/HypothesisTest.cpp:1680
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
 msgstr "O grupo 1 requer pelo menos %1 amostras."
 
-#: src/backend/statistics/HypothesisTest.cpp:1680
+#: src/backend/statistics/HypothesisTest.cpp:1685
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
 msgstr "O grupo 2 requer pelo menos %1 amostras."
 
-#: src/backend/statistics/HypothesisTest.cpp:1690
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1695
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the survival curves are significantly "
+#| "different. Reject the null Hypothesis"
 msgid ""
 "At the significance level %1, the survival curves are significantly "
-"different. Reject the null Hypothesis"
+"different. %2"
 msgstr ""
 "No nível de significância %1, as curvas de sobrevivência são "
 "significativamente diferentes. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1693
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1698
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, no significant difference between survival "
+#| "curves. Fail to reject the null Hypothesis"
 msgid ""
 "At the significance level %1, no significant difference between survival "
-"curves. Fail to reject the null Hypothesis"
+"curves. %2"
 msgstr ""
 "No nível de significância %1, não há diferença significativa entre as curvas "
 "de sobrevivência. Não é possível rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1733
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1738
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, there is a significant monotonic trend in "
+#| "the data. Reject the null hypothesis."
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
-"data. Reject the null hypothesis."
+"data. %2"
 msgstr ""
 "Ao nível de significância de %1, existe uma tendência monotônica "
 "significativa nos dados. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1736
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1740
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, there is a significant positive monotonic "
+#| "trend. Reject the null hypothesis."
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
-"trend. Reject the null hypothesis."
+"trend. %2"
 msgstr ""
 "Ao nível de significância de %1, existe uma tendência monotônica positiva "
 "significativa nos dados. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1739
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1742
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, there is a significant negative monotonic "
+#| "trend. Reject the null hypothesis."
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
-"trend. Reject the null hypothesis."
+"trend. %2"
 msgstr ""
 "Ao nível de significância de %1, existe uma tendência monotônica negativa "
 "significativa nos dados. Rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1741
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1744
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, no significant monotonic trend detected. "
+#| "Fail to reject the null hypothesis."
 msgid ""
-"At the significance level %1, no significant monotonic trend detected. Fail "
-"to reject the null hypothesis."
+"At the significance level %1, no significant monotonic trend detected. %2"
 msgstr ""
 "Ao nível de significância de %1, não foi detectada nenhuma tendência "
 "monotônica significativa. Falha ao rejeitar a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1777
-#, kde-format
-msgid ""
-"At the significance level %1, the data are not randomly distributed. Reject "
-"the null hypothesis."
+#: src/backend/statistics/HypothesisTest.cpp:1780
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the data are not randomly distributed. "
+#| "Reject the null hypothesis."
+msgid "At the significance level %1, the data are not randomly distributed. %2"
 msgstr ""
 "Ao nível de significância %1, os dados não estão distribuídos "
 "aleatoriamente. Rejeita-se a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1780
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1782
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the data show clustering or trend (too few "
+#| "runs). Reject the null hypothesis."
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
-"runs). Reject the null hypothesis."
+"runs). %2"
 msgstr ""
 "Ao nível de significância %1, os dados mostram agrupamento ou tendências "
 "(poucas execuções). Rejeita-se a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1783
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1785
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the process shows oscillation (too many "
+#| "runs). Reject the null hypothesis."
 msgid ""
-"At the significance level %1, the data show excessive alternation (too many "
-"runs). Reject the null hypothesis."
-msgstr ""
-"Ao nível de significância %1, os dados mostram alternância excessiva (muitas "
-"execuções). Rejeita-se a hipótese nula."
-
-#: src/backend/statistics/HypothesisTest.cpp:1786
-#, kde-format
-msgid ""
-"At the significance level %1, the data appear to be randomly distributed. "
-"Fail to reject the null hypothesis."
-msgstr ""
-"Ao nível de significância %1, os dados parecem estar distribuídos "
-"aleatoriamente. Não se rejeita a hipótese nula."
-
-#: src/backend/statistics/HypothesisTest.cpp:1820
-#, kde-format
-msgid ""
-"At the significance level %1, the process is not in control. Reject the null "
-"hypothesis."
-msgstr ""
-"Ao nível de significância %1, o processo não está sob controle. Rejeita-se a "
-"hipótese nula."
-
-#: src/backend/statistics/HypothesisTest.cpp:1822
-#, kde-format
-msgid ""
-"At the significance level %1, the process shows clustering (too few runs). "
-"Reject the null hypothesis."
-msgstr ""
-"Ao nível de significância %1, o processo mostra agrupamento (poucas "
-"execuções). Rejeita-se a hipótese nula."
-
-#: src/backend/statistics/HypothesisTest.cpp:1825
-#, kde-format
-msgid ""
-"At the significance level %1, the process shows oscillation (too many runs). "
-"Reject the null hypothesis."
+"At the significance level %1, the data show oscillation or over-control (too "
+"many runs). %2"
 msgstr ""
 "Ao nível de significância %1, o processo mostra oscilação (muitas "
 "execuções). Rejeita-se a hipótese nula."
 
-#: src/backend/statistics/HypothesisTest.cpp:1827
-#, kde-format
+#: src/backend/statistics/HypothesisTest.cpp:1787
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the data appear to be randomly distributed. "
+#| "Fail to reject the null hypothesis."
 msgid ""
-"At the significance level %1, the process appears to be in control. Fail to "
-"reject the null hypothesis."
+"At the significance level %1, the data appear to be randomly distributed. %2"
+msgstr ""
+"Ao nível de significância %1, os dados parecem estar distribuídos "
+"aleatoriamente. Não se rejeita a hipótese nula."
+
+#: src/backend/statistics/HypothesisTest.cpp:1821
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the process is not in control. Reject the "
+#| "null hypothesis."
+msgid ""
+"At the significance level %1, the process is unstable (non-homogeneous). %2"
+msgstr ""
+"Ao nível de significância %1, o processo não está sob controle. Rejeita-se a "
+"hipótese nula."
+
+#: src/backend/statistics/HypothesisTest.cpp:1823
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the process shows oscillation (too many "
+#| "runs). Reject the null hypothesis."
+msgid ""
+"At the significance level %1, the process shows oscillation or over-control. "
+"%2"
+msgstr ""
+"Ao nível de significância %1, o processo mostra oscilação (muitas "
+"execuções). Rejeita-se a hipótese nula."
+
+#: src/backend/statistics/HypothesisTest.cpp:1825
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the process shows clustering (too few "
+#| "runs). Reject the null hypothesis."
+msgid ""
+"At the significance level %1, the process shows clustering, shifting, or "
+"trends. %2"
+msgstr ""
+"Ao nível de significância %1, o processo mostra agrupamento (poucas "
+"execuções). Rejeita-se a hipótese nula."
+
+#: src/backend/statistics/HypothesisTest.cpp:1827
+#, fuzzy, kde-format
+#| msgid ""
+#| "At the significance level %1, the process appears to be in control. Fail "
+#| "to reject the null hypothesis."
+msgid ""
+"At the significance level %1, the process appears to be stable "
+"(homogeneous). %2"
 msgstr ""
 "Ao nível de significância %1, o processo parece estar sob controle. Não se "
 "rejeita a hipótese nula."
@@ -8515,7 +8602,7 @@ msgstr "Residual"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:881
-#: src/frontend/ActionsManager.cpp:236 src/frontend/MainWin.cpp:1238
+#: src/frontend/ActionsManager.cpp:236 src/frontend/MainWin.cpp:1245
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -11694,7 +11781,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "&Abrir exemplo"
 
-#: src/frontend/ActionsManager.cpp:214 src/frontend/MainWin.cpp:1176
+#: src/frontend/ActionsManager.cpp:214 src/frontend/MainWin.cpp:1183
 #, kde-format
 msgid "Workbook"
 msgstr "Livro de trabalho"
@@ -11706,7 +11793,7 @@ msgstr ""
 "Cria um novo livro de trabalho para a coleção de planilhas, matrizes e "
 "gráficos"
 
-#: src/frontend/ActionsManager.cpp:219 src/frontend/MainWin.cpp:1184
+#: src/frontend/ActionsManager.cpp:219 src/frontend/MainWin.cpp:1191
 #, kde-format
 msgid "Data Extractor"
 msgstr "Extrator de dados"
@@ -11721,7 +11808,7 @@ msgstr "Cria um extrator de dados para obter dados de uma imagem"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1192 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1199 src/frontend/SettingsDialog.cpp:66
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:206
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -11749,7 +11836,7 @@ msgstr "Cria uma nova folha de trablaho para plotagem de dados"
 msgid "Creates a new Python script"
 msgstr "Cria um novo script Python"
 
-#: src/frontend/ActionsManager.cpp:262 src/frontend/MainWin.cpp:1246
+#: src/frontend/ActionsManager.cpp:262 src/frontend/MainWin.cpp:1253
 #, kde-format
 msgid "Note"
 msgstr "Nota"
@@ -11759,7 +11846,7 @@ msgstr "Nota"
 msgid "Creates a new note for arbitrary text"
 msgstr "Cria uma nova nota para texto arbitrário"
 
-#: src/frontend/ActionsManager.cpp:267 src/frontend/MainWin.cpp:1168
+#: src/frontend/ActionsManager.cpp:267 src/frontend/MainWin.cpp:1175
 #, kde-format
 msgid "Folder"
 msgstr "Pasta"
@@ -12064,7 +12151,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Selecionar a região em Y e ampliar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:632 src/frontend/MainWin.cpp:1579
+#: src/frontend/ActionsManager.cpp:632 src/frontend/MainWin.cpp:1586
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -13893,7 +13980,7 @@ msgid "Open LabPlot Project"
 msgstr "Abrir projeto do LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:706
+#: src/frontend/MainWin.cpp:708
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Projetos do LabPlot (%1)"
@@ -14095,7 +14182,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:2004
+#: src/frontend/MainWin.cpp:2011
 #, kde-format
 msgid "Warning"
 msgstr "Aviso"
@@ -16661,7 +16748,7 @@ msgstr ""
 "Não foi possível abrir o arquivo de coleções de exemplos %1. Verifique sua "
 "instalação."
 
-#: src/frontend/GuiObserver.cpp:193 src/frontend/MainWin.cpp:613
+#: src/frontend/GuiObserver.cpp:193 src/frontend/MainWin.cpp:615
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -17607,93 +17694,93 @@ msgstr "Salvar projeto"
 msgid "%1: created"
 msgstr "%1: criado"
 
-#: src/frontend/MainWin.cpp:600
+#: src/frontend/MainWin.cpp:602
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Explorador de projetos"
 
-#: src/frontend/MainWin.cpp:625
+#: src/frontend/MainWin.cpp:627
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Visualização da folha de trabalho"
 
-#: src/frontend/MainWin.cpp:634
+#: src/frontend/MainWin.cpp:636
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Conteúdo"
 
-#: src/frontend/MainWin.cpp:711
+#: src/frontend/MainWin.cpp:713
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Projetos Origin (%1)"
 
-#: src/frontend/MainWin.cpp:717
+#: src/frontend/MainWin.cpp:719
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Projetos Cantor (*.cws)"
 
-#: src/frontend/MainWin.cpp:718
+#: src/frontend/MainWin.cpp:720
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Blocos de notas Jupyter (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:725
+#: src/frontend/MainWin.cpp:727
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Todos os arquivos suportados (%1)"
 
-#: src/frontend/MainWin.cpp:729
+#: src/frontend/MainWin.cpp:731
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Abrir projeto"
 
-#: src/frontend/MainWin.cpp:749
+#: src/frontend/MainWin.cpp:751
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "O arquivo de projeto %1 já está aberto."
 
-#: src/frontend/MainWin.cpp:749 src/frontend/MainWin.cpp:757
-#: src/frontend/MainWin.cpp:762
+#: src/frontend/MainWin.cpp:751 src/frontend/MainWin.cpp:759
+#: src/frontend/MainWin.cpp:764
 #, kde-format
 msgid "Open Project"
 msgstr "Abrir projeto"
 
-#: src/frontend/MainWin.cpp:757
+#: src/frontend/MainWin.cpp:759
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "O arquivo de projeto %1 não existe."
 
-#: src/frontend/MainWin.cpp:762
+#: src/frontend/MainWin.cpp:764
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Não foi possível ler o arquivo de projeto %1."
 
-#: src/frontend/MainWin.cpp:770
+#: src/frontend/MainWin.cpp:772
 #, kde-format
 msgid "Loading %1..."
 msgstr "Carregando %1..."
 
-#: src/frontend/MainWin.cpp:821
+#: src/frontend/MainWin.cpp:823
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: aberto"
 
-#: src/frontend/MainWin.cpp:856
+#: src/frontend/MainWin.cpp:858
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projeto aberto com sucesso (em %1 segundos)."
 
-#: src/frontend/MainWin.cpp:952
+#: src/frontend/MainWin.cpp:954
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Salvar projeto como"
 
-#: src/frontend/MainWin.cpp:954
+#: src/frontend/MainWin.cpp:956
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -17702,47 +17789,54 @@ msgstr ""
 "Projetos LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:981
+#: src/frontend/MainWin.cpp:983
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Não foi possível abrir o arquivo temporário para gravação."
 
-#: src/frontend/MainWin.cpp:1060
+#: src/frontend/MainWin.cpp:988
+#, fuzzy, kde-format
+#| msgid "Loading %1..."
+msgid "Saving %1..."
+msgstr "Carregando %1..."
+
+#: src/frontend/MainWin.cpp:1066
 #, kde-format
 msgid "Project saved"
 msgstr "Projeto salvo"
 
-#: src/frontend/MainWin.cpp:1075
+#: src/frontend/MainWin.cpp:1081
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Não foi possível salvar o arquivo '%1'."
 
-#: src/frontend/MainWin.cpp:1079
+#: src/frontend/MainWin.cpp:1085
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Não foi possível abrir o arquivo '%1' para escrita."
 
-#: src/frontend/MainWin.cpp:1128
-#, kde-format
-msgid "Changed"
-msgstr "Alterado"
+#: src/frontend/MainWin.cpp:1096
+#, fuzzy, kde-format
+#| msgid "Project successfully opened (in %1 seconds)."
+msgid "Project successfully saved (in %1 seconds)."
+msgstr "Projeto aberto com sucesso (em %1 segundos)."
 
-#: src/frontend/MainWin.cpp:1143 src/frontend/MainWin.cpp:1155
+#: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Preparando a impressão de %1"
 
-#: src/frontend/MainWin.cpp:1145 src/frontend/MainWin.cpp:1157
+#: src/frontend/MainWin.cpp:1152 src/frontend/MainWin.cpp:1164
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 impresso(s)"
 
-#: src/frontend/MainWin.cpp:1900
+#: src/frontend/MainWin.cpp:1907
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Ferramenta Kaggle CLI não encontrada"
 
-#: src/frontend/MainWin.cpp:1901
+#: src/frontend/MainWin.cpp:1908
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -17751,27 +17845,27 @@ msgstr ""
 "Forneça o caminho para a ferramenta Kaggle CLI nas configurações do "
 "aplicativo e tente novamente."
 
-#: src/frontend/MainWin.cpp:1967
+#: src/frontend/MainWin.cpp:1974
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportado(s)"
 
-#: src/frontend/MainWin.cpp:1974
+#: src/frontend/MainWin.cpp:1981
 #, kde-format
 msgid "FITS files saved"
 msgstr "Arquivos FITS salvos"
 
-#: src/frontend/MainWin.cpp:1986
+#: src/frontend/MainWin.cpp:1993
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Cliente%1 MQTT"
 
-#: src/frontend/MainWin.cpp:2004
+#: src/frontend/MainWin.cpp:2011
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Já existe um MQTTClient com este host!"
 
-#: src/frontend/MainWin.cpp:2008
+#: src/frontend/MainWin.cpp:2015
 #, kde-format
 msgid "Live data source%1"
 msgstr "Fonte de dados ao vivo%1"
@@ -27350,6 +27444,58 @@ msgstr "processo do convert falhou, código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível abrir o arquivo:"
+
+#~ msgid "The data are randomly distributed"
+#~ msgstr "Os dados estão distribuídos aleatoriamente"
+
+#~ msgid "The data show clustering (too few runs)"
+#~ msgstr "Os dados mostram agrupamento (poucas execuções)"
+
+#~ msgid "The data show excessive alternation (too many runs)"
+#~ msgstr "Os dados mostram alternância excessiva (muitas execuções)"
+
+#~ msgid "Expected Runs"
+#~ msgstr "Execuções esperadas"
+
+#~ msgid "Effective Sample Size"
+#~ msgstr "Tamanho efetivo da amostra"
+
+#~ msgid ""
+#~ "At the significance level %1, the population mean is not significantly "
+#~ "different from %2. Fail to reject the null hypothesis."
+#~ msgstr ""
+#~ "No nível de significância %1, a média populacional não é "
+#~ "significativamente diferente de %2. Não é possível rejeitar a hipótese "
+#~ "nula."
+
+#~ msgid ""
+#~ "At the significance level %1, the population means are not significantly "
+#~ "different. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "No nível de significância %1, as médias populacionais não são "
+#~ "significativamente diferentes. Não é possível rejeitar a hipótese nula."
+
+#~ msgid ""
+#~ "At the significance level %1, the observed frequencies follow the "
+#~ "expected frequency distribution. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "No nível de significância %1, as frequências observadas seguem a "
+#~ "distribuição de frequências esperada. Não é possível rejeitar a hipótese "
+#~ "nula."
+
+#~ msgid ""
+#~ "At the significance level %1, both categorical variables are independent. "
+#~ "Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "No nível de significância %1, ambas as variáveis ​​categóricas são "
+#~ "independentes. Falha ao rejeitar a hipótese nula."
+
+#~ msgid ""
+#~ "At the significance level %1, the data show excessive alternation (too "
+#~ "many runs). Reject the null hypothesis."
+#~ msgstr ""
+#~ "Ao nível de significância %1, os dados mostram alternância excessiva "
+#~ "(muitas execuções). Rejeita-se a hipótese nula."
 
 #~ msgid "Update Now"
 #~ msgstr "Atualizar agora"
