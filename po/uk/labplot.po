@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-17 00:39+0000\n"
-"PO-Revision-Date: 2026-02-15 08:25+0200\n"
+"POT-Creation-Date: 2026-02-18 00:40+0000\n"
+"PO-Revision-Date: 2026-02-17 08:14+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7754,10 +7754,9 @@ msgstr "Є позитивний монотонний тренд"
 
 #: src/backend/statistics/HypothesisTest.cpp:260
 #: src/backend/statistics/HypothesisTest.cpp:266
-#, fuzzy, kde-format
-#| msgid "The process is in control (random pattern)"
+#, kde-format
 msgid "The process is stable (random)"
-msgstr "Процес із керуванням (випадковий характер)"
+msgstr "Процес є стабільним (випадковим)"
 
 #: src/backend/statistics/HypothesisTest.cpp:261
 #, kde-format
@@ -7766,23 +7765,20 @@ msgstr "Дані не розподілено випадковим чином"
 
 #: src/backend/statistics/HypothesisTest.cpp:262
 #: src/backend/statistics/HypothesisTest.cpp:269
-#, fuzzy, kde-format
-#| msgid "The process shows clustering (too few runs)"
+#, kde-format
 msgid "The process shows shifting or clustering"
-msgstr "У процесі помітна кластеризація (замало серій)"
+msgstr "У процесі помітний зсув або кластеризація"
 
 #: src/backend/statistics/HypothesisTest.cpp:263
 #: src/backend/statistics/HypothesisTest.cpp:268
-#, fuzzy, kde-format
-#| msgid "The process shows oscillation (too many runs)"
+#, kde-format
 msgid "The process shows oscillations or over-control"
-msgstr "У даних помітна осциляція (забагато серій)"
+msgstr "У даних помітна осциляція або надмірне керування"
 
 #: src/backend/statistics/HypothesisTest.cpp:267
-#, fuzzy, kde-format
-#| msgid "The process is not in control"
+#, kde-format
 msgid "The process is unstable (non-random)"
-msgstr "Процес без керування"
+msgstr "Процес є нестабільним (невипадковим)"
 
 #: src/backend/statistics/HypothesisTest.cpp:331
 #, kde-format
@@ -7868,12 +7864,12 @@ msgstr "Перевірка серій Раміреса-Рунґера"
 #: src/backend/statistics/HypothesisTest.cpp:536
 #, kde-format
 msgid "<b>Reject the null hypothesis.</b>"
-msgstr ""
+msgstr "<b>Відкинути нульову гіпотезу.</b>"
 
 #: src/backend/statistics/HypothesisTest.cpp:540
 #, kde-format
 msgid "<b>Fail to reject the null hypothesis.</b>"
-msgstr ""
+msgstr "<b>Не вдалося відкинути нульову гіпотезу.</b>"
 
 #: src/backend/statistics/HypothesisTest.cpp:544
 #, kde-format
@@ -8201,18 +8197,18 @@ msgstr "Кількість серій"
 #: src/backend/statistics/HypothesisTest.cpp:656
 #, kde-format
 msgid "Stability Ratio"
-msgstr ""
+msgstr "Коефіцієнт стабільності"
 
 #: src/backend/statistics/HypothesisTest.cpp:657
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Effective Degrees of Freedom"
-msgstr "Степені свободи"
+msgstr "Ефективні степені свободи"
 
 #: src/backend/statistics/HypothesisTest.cpp:658
-#, kde-format
-msgid "Avverage Successive Difference"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Avverage Successive Difference"
+msgid "Average Successive Difference"
+msgstr "Середня послідовна різниця"
 
 #: src/backend/statistics/HypothesisTest.cpp:661
 #, kde-format
@@ -8225,131 +8221,93 @@ msgid "No variable columns provided."
 msgstr "Не надано стовпчиків змінних."
 
 #: src/backend/statistics/HypothesisTest.cpp:950
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population mean is significantly "
-#| "different from %2. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. %3"
 msgstr ""
 "На рівні значущості %1 середнє генеральної сукупності значно відрізняється "
-"від %2. Нульову гіпотезу слід відкинути."
+"від %2. %3"
 
 #: src/backend/statistics/HypothesisTest.cpp:955
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population mean is significantly "
-#| "different from %2. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
 "different from %2. %3"
 msgstr ""
-"На рівні значущості %1 середнє генеральної сукупності значно відрізняється "
-"від %2. Нульову гіпотезу слід відкинути."
+"На рівні значущості %1 середнє генеральної сукупності незначно відрізняється "
+"від %2. %3"
 
 #: src/backend/statistics/HypothesisTest.cpp:1040
 #: src/backend/statistics/HypothesisTest.cpp:1108
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
 "different. %2"
 msgstr ""
 "На рівні значущості %1 середні генеральної сукупності значно відрізняються. "
-"Нульову гіпотезу слід відкинути."
+"%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1043
 #: src/backend/statistics/HypothesisTest.cpp:1111
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
 "different. %2"
 msgstr ""
-"На рівні значущості %1 середні генеральної сукупності значно відрізняються. "
-"Нульову гіпотезу слід відкинути."
+"На рівні значущості %1 середні генеральної сукупності незначно "
+"відрізняються. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1162
 #: src/backend/statistics/HypothesisTest.cpp:1223
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group mean is significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
 "different. %2"
 msgstr ""
 "На рівні значущості %1 середнє принаймні однієї групи значно відрізняється. "
-"Нульову гіпотезу слід відкинути"
+"%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1164
 #: src/backend/statistics/HypothesisTest.cpp:1225
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between group "
-#| "means. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group means. "
 "%2"
-msgstr ""
-"На рівні значущості %1 середні вибірок відрізняються незначно. Нульову "
-"гіпотезу не слід відкидати."
+msgstr "На рівні значущості %1 середні вибірок відрізняються незначно. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1282
 #: src/backend/statistics/HypothesisTest.cpp:1340
 #: src/backend/statistics/HypothesisTest.cpp:1399
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group distribution is "
-#| "significantly different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. %2"
 msgstr ""
 "На рівні значущості %1 розподіл у принаймні одній групі значно "
-"відрізняється. Нульову гіпотезу слід відкинути"
+"відрізняється. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1285
 #: src/backend/statistics/HypothesisTest.cpp:1343
 #: src/backend/statistics/HypothesisTest.cpp:1402
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between group "
-#| "distributions. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
 "distributions. %2"
-msgstr ""
-"На рівні значущості %1 розподіли вибірок відрізняються незначно. Нульову "
-"гіпотезу не слід відкидати."
+msgstr "На рівні значущості %1 розподіли вибірок відрізняються незначно. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1462
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group is significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "%2"
-msgstr ""
-"На рівні значущості %1 принаймні одна група значно відрізняється. Нульову "
-"гіпотезу слід відкинути"
+msgstr "На рівні значущості %1 принаймні одна група значно відрізняється. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1464
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. %2"
-msgstr ""
-"На рівні значущості %1 вибірки відрізняються незначно. Нульову гіпотезу не "
-"слід відкидати."
+msgstr "На рівні значущості %1 вибірки відрізняються незначно. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1490
 #: src/backend/statistics/HypothesisTest.cpp:1557
@@ -8358,28 +8316,22 @@ msgid "Column '%1' must be of integer type."
 msgstr "Значенням у стовпчику «%1» має бути ціле число."
 
 #: src/backend/statistics/HypothesisTest.cpp:1528
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the observed frequencies do not follow the "
-#| "expected frequency distribution. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. %2"
 msgstr ""
 "На рівні значущості %1 спостережні частоти не відповідають очікуваному "
-"розподілу частот. Нульову гіпотезу слід відкинути"
+"розподілу частот. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1532
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the observed frequencies do not follow the "
-#| "expected frequency distribution. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. %2"
 msgstr ""
-"На рівні значущості %1 спостережні частоти не відповідають очікуваному "
-"розподілу частот. Нульову гіпотезу слід відкинути"
+"На рівні значущості %1 спостережні частоти відповідають очікуваному "
+"розподілу частот. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1577
 #, kde-format
@@ -8387,26 +8339,16 @@ msgid "The size of each column in the contingency table must be equal."
 msgstr "Розміри усіх стовпчиків у таблиці спряженості має бути однаковим."
 
 #: src/backend/statistics/HypothesisTest.cpp:1593
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, both categorical variables are dependent. "
-#| "Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are dependent. %2"
-msgstr ""
-"На рівні значущості %1 обидві категоріальні змінні є залежними. Нульову "
-"гіпотезу слід відкинути"
+msgstr "На рівні значущості %1 обидві категоріальні змінні є залежними. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1595
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, both categorical variables are dependent. "
-#| "Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are independent. %2"
-msgstr ""
-"На рівні значущості %1 обидві категоріальні змінні є залежними. Нульову "
-"гіпотезу слід відкинути"
+msgstr "На рівні значущості %1 обидві категоріальні змінні є незалежними. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1613
 #, kde-format
@@ -8455,166 +8397,108 @@ msgid "Group 2 requires at least %1 samples."
 msgstr "У групі 2 має бути принаймні %1 спостережень."
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. %2"
-msgstr ""
-"На рівні значущості %1 криві виживання значно відрізняються. Нульову "
-"гіпотезу слід відкинути."
+msgstr "На рівні значущості %1 криві виживання значно відрізняються. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between survival "
-#| "curves. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
 "curves. %2"
-msgstr ""
-"На рівні значущості %1 криві виживання відрізняються незначно. Нульову "
-"гіпотезу не слід відкидати."
+msgstr "На рівні значущості %1 криві виживання відрізняються незначно. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1738
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant monotonic trend in "
-#| "the data. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. %2"
-msgstr ""
-"На рівні значущості %1 виявлено значущий монотонний тренд у даних. Нульову "
-"гіпотезу слід відкинути."
+msgstr "На рівні значущості %1 виявлено значущий монотонний тренд у даних. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1740
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. %2"
 msgstr ""
-"На рівні значущості %1 виявлено значущий позитивний монотонний тренд. "
-"Нульову гіпотезу слід відкинути."
+"На рівні значущості %1 виявлено значущий позитивний монотонний тренд. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1742
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. %2"
 msgstr ""
-"На рівні значущості %1 виявлено значущий негативний монотонний тренд. "
-"Нульову гіпотезу слід відкинути."
+"На рівні значущості %1 виявлено значущий негативний монотонний тренд. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1744
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. %2"
-msgstr ""
-"На рівні значущості %1 не виявлено значущих монотонних трендів. Нульову "
-"гіпотезу не слід відкидати."
+msgstr "На рівні значущості %1 не виявлено значущих монотонних трендів. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data are not randomly distributed. "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid "At the significance level %1, the data are not randomly distributed. %2"
-msgstr ""
-"На рівні значущості %1 дані не розподілено випадковим чином. Нульову "
-"гіпотезу слід відкинути."
+msgstr "На рівні значущості %1 дані не розподілено випадковим чином. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1782
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering or trend (too few "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). %2"
 msgstr ""
 "На рівні значущості %1 у даних помітна кластеризація або тренд (замало "
-"серій). Нульову гіпотезу слід відкинути."
+"серій). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1785
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows oscillation (too many "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show oscillation or over-control (too "
 "many runs). %2"
 msgstr ""
-"На рівні значущості %1 у даних процесу помітна осциляція (забагато серій). "
-"Нульову гіпотезу слід відкинути."
+"На рівні значущості %1 у даних процесу помітна осциляція (забагато серій). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1787
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data appear to be randomly distributed. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. %2"
-msgstr ""
-"На рівні значущості %1 у даних помітний випадковість. Не вдалося відкинути "
-"нульову гіпотезу."
+msgstr "На рівні значущості %1 у даних помітний випадковість. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1821
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process is not in control. Reject the "
-#| "null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process is unstable (non-homogeneous). %2"
-msgstr ""
-"На рівні значущості %1 процес є некерованим. Нульову гіпотезу слід відкинути."
+msgstr "На рівні значущості %1 процес є нестабільним (неоднорідним). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1823
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows oscillation (too many "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation or over-control. "
 "%2"
 msgstr ""
-"На рівні значущості %1 у даних процесу помітна осциляція (забагато серій). "
-"Нульову гіпотезу слід відкинути."
+"На рівні значущості %1 у даних процесу помітна осциляція (або надмірне "
+"керування). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1825
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows clustering (too few "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering, shifting, or "
 "trends. %2"
 msgstr ""
-"На рівні значущості %1 у даних процесу помітна кластеризація (замало серій). "
-"Нульову гіпотезу слід відкинути."
+"На рівні значущості %1 у даних процесу помітна кластеризація, зсув або "
+"тренди. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1827
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process appears to be in control. Fail "
-#| "to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process appears to be stable "
 "(homogeneous). %2"
 msgstr ""
-"На рівні значущості %1 у даних помітне керування процесом. Не вдалося "
-"відкинути нульову гіпотезу."
+"На рівні значущості %1 у даних помітна стабільність (однорідність) процесу. "
+"%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1919
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -17844,10 +17728,9 @@ msgid "Couldn't open the temporary file for writing."
 msgstr "Не вдалося відкрити тимчасовий файл для запису."
 
 #: src/frontend/MainWin.cpp:988
-#, fuzzy, kde-format
-#| msgid "Loading %1..."
+#, kde-format
 msgid "Saving %1..."
-msgstr "Завантажуємо %1…"
+msgstr "Збереження %1…"
 
 #: src/frontend/MainWin.cpp:1066
 #, kde-format
@@ -17865,10 +17748,9 @@ msgid "Couldn't open the file '%1' for writing."
 msgstr "Не вдалося відкрити файл «%1» для запису."
 
 #: src/frontend/MainWin.cpp:1096
-#, fuzzy, kde-format
-#| msgid "Project successfully opened (in %1 seconds)."
+#, kde-format
 msgid "Project successfully saved (in %1 seconds)."
-msgstr "Проєкт успішно відкрито (за %1 секунд)."
+msgstr "Проєкт успішно збережено (за %1 секунд)."
 
 #: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
 #, kde-format

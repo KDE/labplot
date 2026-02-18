@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-17 00:39+0000\n"
-"PO-Revision-Date: 2026-02-15 02:47+0100\n"
+"POT-Creation-Date: 2026-02-18 00:40+0000\n"
+"PO-Revision-Date: 2026-02-17 04:12+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7686,10 +7686,9 @@ msgstr "დადებითი მონოტონური ტენდე�
 
 #: src/backend/statistics/HypothesisTest.cpp:260
 #: src/backend/statistics/HypothesisTest.cpp:266
-#, fuzzy, kde-format
-#| msgid "The process is in control (random pattern)"
+#, kde-format
 msgid "The process is stable (random)"
-msgstr "პროცესი იმართება (შემთხვევითი ნიმუში)"
+msgstr "პროცესი სტაბილურია (შემთხვევითი)"
 
 #: src/backend/statistics/HypothesisTest.cpp:261
 #, kde-format
@@ -7698,23 +7697,20 @@ msgstr "მონაცემები შემთხვევით არა�
 
 #: src/backend/statistics/HypothesisTest.cpp:262
 #: src/backend/statistics/HypothesisTest.cpp:269
-#, fuzzy, kde-format
-#| msgid "The process shows clustering (too few runs)"
+#, kde-format
 msgid "The process shows shifting or clustering"
-msgstr "პროცესი აჩვენებს შეკვრებს (მეტისმეტად ცოტა გავლა)"
+msgstr "პროცესი აჩვენებს შეკვრებს, ან წანაცვლებას"
 
 #: src/backend/statistics/HypothesisTest.cpp:263
 #: src/backend/statistics/HypothesisTest.cpp:268
-#, fuzzy, kde-format
-#| msgid "The process shows oscillation (too many runs)"
+#, kde-format
 msgid "The process shows oscillations or over-control"
-msgstr "პროცესი არჩვენებს მეტისმეტად ბევრ ცვლილებას (მეტისმეტად ბევრი გავლა)"
+msgstr "პროცესი არჩვენებს ცვლილებას, ან ზედმეტი კონტროლს"
 
 #: src/backend/statistics/HypothesisTest.cpp:267
-#, fuzzy, kde-format
-#| msgid "The process is not in control"
+#, kde-format
 msgid "The process is unstable (non-random)"
-msgstr "პროცესი უკონტროლოა"
+msgstr "პროცესი არასტაბილურია (არაშემთხვევითი)"
 
 #: src/backend/statistics/HypothesisTest.cpp:331
 #, kde-format
@@ -7799,12 +7795,12 @@ msgstr "რამირეს-რუნგერი უშვებს ტეს
 #: src/backend/statistics/HypothesisTest.cpp:536
 #, kde-format
 msgid "<b>Reject the null hypothesis.</b>"
-msgstr ""
+msgstr "<b>ნულოვანი ჰიპოთეზის უარყოფა.</b>"
 
 #: src/backend/statistics/HypothesisTest.cpp:540
 #, kde-format
 msgid "<b>Fail to reject the null hypothesis.</b>"
-msgstr ""
+msgstr "<b>ნულოვანი ჰიპოთეზის უარყოფა ჩავარდა.</b>"
 
 #: src/backend/statistics/HypothesisTest.cpp:544
 #, kde-format
@@ -8132,18 +8128,18 @@ msgstr "გავლების რაოდენობა"
 #: src/backend/statistics/HypothesisTest.cpp:656
 #, kde-format
 msgid "Stability Ratio"
-msgstr ""
+msgstr "სტაბილურობის კოეფიციენტი"
 
 #: src/backend/statistics/HypothesisTest.cpp:657
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Effective Degrees of Freedom"
-msgstr "თავისუფლების ხარისხები"
+msgstr "ეფექტური თავისუფლების ხარისხები"
 
 #: src/backend/statistics/HypothesisTest.cpp:658
-#, kde-format
-msgid "Avverage Successive Difference"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Avverage Successive Difference"
+msgid "Average Successive Difference"
+msgstr "საშუალო თანმიმდევრული სხვაობა"
 
 #: src/backend/statistics/HypothesisTest.cpp:661
 #, kde-format
@@ -8156,131 +8152,94 @@ msgid "No variable columns provided."
 msgstr "ცვლადის სვეტები მითითებული არაა."
 
 #: src/backend/statistics/HypothesisTest.cpp:950
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population mean is significantly "
-#| "different from %2. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. %3"
 msgstr ""
 "მნიშვნელობის დონეზე %1 პოპულაციის საშუალო მნიშვნელოვნად განსხვავდება %2-"
-"სგან. ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"ისგან. %3"
 
 #: src/backend/statistics/HypothesisTest.cpp:955
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population mean is significantly "
-#| "different from %2. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
 "different from %2. %3"
 msgstr ""
 "მნიშვნელობის დონეზე %1 პოპულაციის საშუალო მნიშვნელოვნად განსხვავდება %2-"
-"სგან. ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"სგან. %3"
 
 #: src/backend/statistics/HypothesisTest.cpp:1040
 #: src/backend/statistics/HypothesisTest.cpp:1108
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
 "different. %2"
 msgstr ""
-"მნიშვნელობის დონეზე %1 პოპულაციის საშუალოები მნიშვნელოვნად განსხვავდება. "
-"ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
+"მნიშვნელობის დონეზე %1 პოპულაციის საშუალოები მნიშვნელოვნად განსხვავდება. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1043
 #: src/backend/statistics/HypothesisTest.cpp:1111
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
 "different. %2"
 msgstr ""
-"მნიშვნელობის დონეზე %1 პოპულაციის საშუალოები მნიშვნელოვნად განსხვავდება. "
-"ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
+"მნიშვნელობის დონეზე %1 პოპულაციის საშუალოები მნიშვნელოვნად განსხვავდება. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1162
 #: src/backend/statistics/HypothesisTest.cpp:1223
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group mean is significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
 "different. %2"
 msgstr ""
 "მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფის საშუალო მნიშვნელოვნად განსხვავდება. "
-"ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
+"%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1164
 #: src/backend/statistics/HypothesisTest.cpp:1225
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between group "
-#| "means. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group means. "
 "%2"
 msgstr ""
-"მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფის საშუალო მნიშვნელოვნად არ "
-"განსხვავდება. ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება"
+"მნიშვნელობის დონეზე %1 ჯგუფის საშუალოები მნიშვნელოვნად არ განსხვავდება. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1282
 #: src/backend/statistics/HypothesisTest.cpp:1340
 #: src/backend/statistics/HypothesisTest.cpp:1399
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group distribution is "
-#| "significantly different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. %2"
 msgstr ""
 "მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფის განაწილება მნიშვნელოვნად "
-"განსხვავდება. ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
+"განსხვავდება. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1285
 #: src/backend/statistics/HypothesisTest.cpp:1343
 #: src/backend/statistics/HypothesisTest.cpp:1402
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between group "
-#| "distributions. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
 "distributions. %2"
 msgstr ""
-"მნიშვნელობის დონეზე %1 ჯგუფების განაწილება მნიშვნელოვნად არ განსხვავდება. "
-"ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება"
+"მნიშვნელობის დონეზე %1 ჯგუფების განაწილება მნიშვნელოვნად არ განსხვავდება. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1462
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group is significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "%2"
 msgstr ""
-"მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფი მნიშვნელოვნად განსხვავდება. ნულოვანი "
-"ჰიპოთეზა უარყოფილი იქნება"
+"მნიშვნელობის დონეზე %1 სულ ცოტა, 1 ჯგუფი მნიშვნელოვნად განსხვავდება. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1464
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. %2"
-msgstr ""
-"მნიშვნელობის დონეზე %1 ჯგუფები მნიშვნელოვნად არ განსხვავდება. ნულოვანი "
-"ჰიპოთეზა უარყოფილი არ იქნება"
+msgstr "მნიშვნელობის დონეზე %1 ჯგუფები მნიშვნელოვნად არ განსხვავდება. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1490
 #: src/backend/statistics/HypothesisTest.cpp:1557
@@ -8289,28 +8248,22 @@ msgid "Column '%1' must be of integer type."
 msgstr "სვეტი '%1' მთელი რიცხვის ტიპის უნდა იყოს."
 
 #: src/backend/statistics/HypothesisTest.cpp:1528
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the observed frequencies do not follow the "
-#| "expected frequency distribution. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. %2"
 msgstr ""
 "მნიშვნელობის დონეზე %1 დაკვირვებული სიხშირეები არ მისდევენ სიხშირის "
-"განაწილებას. ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
+"განაწილებას. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1532
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the observed frequencies do not follow the "
-#| "expected frequency distribution. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. %2"
 msgstr ""
 "მნიშვნელობის დონეზე %1 დაკვირვებული სიხშირეები არ მისდევენ სიხშირის "
-"განაწილებას. ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
+"განაწილებას. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1577
 #, kde-format
@@ -8318,26 +8271,16 @@ msgid "The size of each column in the contingency table must be equal."
 msgstr "გაუთვალისწინებელ ცხრილში თითოეული სვეტის ზომა ტოლი უნდა იყოს."
 
 #: src/backend/statistics/HypothesisTest.cpp:1593
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, both categorical variables are dependent. "
-#| "Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are dependent. %2"
-msgstr ""
-"მნიშვნელობის დონეზე %1 ორივე კატეგორიული ცვლადი დამოკიდებულია. ნულოვანი "
-"განაწილება უარყოფილი იქნება"
+msgstr "მნიშვნელობის დონეზე %1 ორივე კატეგორიული ცვლადი დამოკიდებულია. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1595
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, both categorical variables are dependent. "
-#| "Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are independent. %2"
-msgstr ""
-"მნიშვნელობის დონეზე %1 ორივე კატეგორიული ცვლადი დამოკიდებულია. ნულოვანი "
-"განაწილება უარყოფილი იქნება"
+msgstr "მნიშვნელობის დონეზე %1 ორივე კატეგორიული ცვლადი დამოკიდებულია.%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1613
 #, kde-format
@@ -8386,167 +8329,114 @@ msgid "Group 2 requires at least %1 samples."
 msgstr "ჯგუფს 2, სულ ცოტა, %1 სინჯი სჭირდება."
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. %2"
-msgstr ""
-"მნიშვნელობის დონეზე %1 გადარჩენის რკალები საკმაოდ განსხვავდება. ნულოვანი "
-"ჰიპოთეზა უარყოფილი იქნება"
+msgstr "მნიშვნელობის დონეზე %1 გადარჩენის რკალები საკმაოდ განსხვავდება. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between survival "
-#| "curves. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
 "curves. %2"
-msgstr ""
-"მნიშვნელობის დონეზე %1 გადარჩენის რკალები არ განსხვავდება. ნულოვანი ჰიპოთეზა "
-"უარყოფილი არ იქნება"
+msgstr "მნიშვნელობის დონეზე %1 გადარჩენის რკალები არ განსხვავდება. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1738
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant monotonic trend in "
-#| "the data. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. %2"
 msgstr ""
-"მნიშვნელობის დონეზე %1 გადარჩენის რკალები საკმაოდ განსხვავდება. ნულოვანი "
-"ჰიპოთეზა უარყოფილი იქნება."
+"მნიშვნელობის დონეზე %1 მონაცემებში არსებობს მნიშვნელოვანი მონოტონური "
+"ტენდენცია. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1740
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. %2"
 msgstr ""
 "მნიშვნელობის დონეზე %1 მნიშვნელოვანი დადებითი მონოტონური ტენდენცია არსებობს. "
-"ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1742
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. %2"
 msgstr ""
 "მნიშვნელობის დონეზე %1 მნიშვნელოვანი დადებითი უარყოფითი ტენდენცია არსებობს. "
-"ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1744
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. %2"
 msgstr ""
-"მნიშვნელობის დონეზე %1 მნიშვნელოვანი მონოტონური ტენდენცია დადგენილი არაა. "
-"ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება."
+"მნიშვნელობის დონეზე %1 მნიშვნელოვანი მონოტონური ტენდენცია დადგენილი არაა. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data are not randomly distributed. "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid "At the significance level %1, the data are not randomly distributed. %2"
-msgstr ""
-"მნიშვნელობის დონეზე %1 მონაცემები შემთხვევით განაწილებული არაა. ნულოვანი "
-"ჰიპოთეზა უარყოფილი იქნება."
+msgstr "მნიშვნელობის დონეზე %1 მონაცემები შემთხვევით განაწილებული არაა. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1782
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering or trend (too few "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). %2"
 msgstr ""
 "მნიშვნელობის დონეზე %1 მონაცემები აჩვენებს ნაკრებებს, ან ტენდენციას "
-"(მეტისმეტად ცოტა გავლა). ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"(მეტისმეტად ცოტა გავლა). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1785
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows oscillation (too many "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show oscillation or over-control (too "
 "many runs). %2"
 msgstr ""
 "მნიშვნელობის დონეზე %1 პროცესი აჩვენებს მეტისმეტად ბევრ ცვლილებას "
-"(მეტისმეტად ბევრი გავლა). ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"(მეტისმეტად ბევრი გავლა). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1787
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data appear to be randomly distributed. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. %2"
 msgstr ""
-"მნიშვნელობის დონეზე %1 მონაცემები, როგორც ჩანს, შემთხვევითაა განაწილებული. "
-"ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება."
+"მნიშვნელობის დონეზე %1 მონაცემები, როგორც ჩანს, შემთხვევითაა განაწილებული. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1821
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process is not in control. Reject the "
-#| "null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process is unstable (non-homogeneous). %2"
-msgstr ""
-"მნიშვნელობის დონეზე %1 პროცესი არ იმართება. ნულოვანი ჰიპოთეზა უარყოფილი "
-"იქნება."
+msgstr "მნიშვნელობის დონეზე %1 პროცესი არასტაბილურია (არაერთგვაროვანია). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1823
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows oscillation (too many "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation or over-control. "
 "%2"
 msgstr ""
-"მნიშვნელობის დონეზე %1 პროცესი აჩვენებს მეტისმეტად ბევრ ცვლილებას "
-"(მეტისმეტად ბევრი გავლა). ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"მნიშვნელობის დონეზე %1 პროცესი აჩვენებს მეტისმეტად ბევრ ცვლილებას, ან ზედმეტ "
+"კონტროლს. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1825
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows clustering (too few "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering, shifting, or "
 "trends. %2"
 msgstr ""
-"მნიშვნელობის დონეზე %1 პროცესი აჩვენებს ნაკრებებს (მეტისმეტად ცოტა გავლა). "
-"ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"მნიშვნელობის დონეზე %1 პროცესი აჩვენებს ნაკრებებს, წანაცვლებას, ან "
+"ტენდენციებს. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1827
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process appears to be in control. Fail "
-#| "to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process appears to be stable "
 "(homogeneous). %2"
 msgstr ""
-"მნიშვნელობის დონეზე %1 პროცესი, როგორც ჩანს, იმართება. ნულოვანი ჰიპოთეზა "
-"უარყოფილი არ იქნება."
+"მნიშვნელობის დონეზე %1 პროცესი, როგორც ჩანს, სტაბილურია (ერთგვაროვანი). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1919
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -17760,10 +17650,9 @@ msgid "Couldn't open the temporary file for writing."
 msgstr "დროებითი ფაილის ჩასაწერად გახსნა შეუძლებელია."
 
 #: src/frontend/MainWin.cpp:988
-#, fuzzy, kde-format
-#| msgid "Loading %1..."
+#, kde-format
 msgid "Saving %1..."
-msgstr "%1-ის ჩატვირთვა..."
+msgstr "%1-ის შენახვა..."
 
 #: src/frontend/MainWin.cpp:1066
 #, kde-format
@@ -17781,10 +17670,9 @@ msgid "Couldn't open the file '%1' for writing."
 msgstr "ფაილის %1 ჩასაწერად გახსნა შეუძლებელია."
 
 #: src/frontend/MainWin.cpp:1096
-#, fuzzy, kde-format
-#| msgid "Project successfully opened (in %1 seconds)."
+#, kde-format
 msgid "Project successfully saved (in %1 seconds)."
-msgstr "პროექტი წარმატებით გაიხსნა (%1 წამში)."
+msgstr "პროექტის შენახვა წარმატებულია (%1 წამში)."
 
 #: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
 #, kde-format

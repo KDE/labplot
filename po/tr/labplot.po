@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-17 00:39+0000\n"
+"POT-Creation-Date: 2026-02-18 00:40+0000\n"
 "PO-Revision-Date: 2026-02-09 19:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
@@ -8132,7 +8132,7 @@ msgstr "Özgürlük Dereceleri"
 
 #: src/backend/statistics/HypothesisTest.cpp:658
 #, kde-format
-msgid "Avverage Successive Difference"
+msgid "Average Successive Difference"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:661

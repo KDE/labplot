@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-17 00:39+0000\n"
+"POT-Creation-Date: 2026-02-18 00:40+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -8038,7 +8038,7 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:658
 #, kde-format
-msgid "Avverage Successive Difference"
+msgid "Average Successive Difference"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:661

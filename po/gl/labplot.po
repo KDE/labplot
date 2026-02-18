@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-17 00:39+0000\n"
+"POT-Creation-Date: 2026-02-18 00:40+0000\n"
 "PO-Revision-Date: 2025-06-21 12:07+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -8209,7 +8209,7 @@ msgstr "Graos de liberdade"
 
 #: src/backend/statistics/HypothesisTest.cpp:658
 #, kde-format
-msgid "Avverage Successive Difference"
+msgid "Average Successive Difference"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:661

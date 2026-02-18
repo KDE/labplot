@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-17 00:39+0000\n"
-"PO-Revision-Date: 2026-02-15 14:45+0100\n"
+"POT-Creation-Date: 2026-02-18 00:40+0000\n"
+"PO-Revision-Date: 2026-02-17 12:32+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -7680,10 +7680,9 @@ msgstr "Er bestaat een positieve monotone trend"
 
 #: src/backend/statistics/HypothesisTest.cpp:260
 #: src/backend/statistics/HypothesisTest.cpp:266
-#, fuzzy, kde-format
-#| msgid "The process is in control (random pattern)"
+#, kde-format
 msgid "The process is stable (random)"
-msgstr "Het proces is onder controle (willekeurig patroon)"
+msgstr "Het proces is stabiel (willekeurig)"
 
 #: src/backend/statistics/HypothesisTest.cpp:261
 #, kde-format
@@ -7692,23 +7691,20 @@ msgstr "De gegevens zijn niet willekeurig verdeeld"
 
 #: src/backend/statistics/HypothesisTest.cpp:262
 #: src/backend/statistics/HypothesisTest.cpp:269
-#, fuzzy, kde-format
-#| msgid "The process shows clustering (too few runs)"
+#, kde-format
 msgid "The process shows shifting or clustering"
-msgstr "Het proces toont clustering (te weinig runs)"
+msgstr "Het proces toont verschuiving of clustering"
 
 #: src/backend/statistics/HypothesisTest.cpp:263
 #: src/backend/statistics/HypothesisTest.cpp:268
-#, fuzzy, kde-format
-#| msgid "The process shows oscillation (too many runs)"
+#, kde-format
 msgid "The process shows oscillations or over-control"
-msgstr "Het proces toont slingeringen (te veel runs)"
+msgstr "Het proces toont schommelingen of overmatige controle"
 
 #: src/backend/statistics/HypothesisTest.cpp:267
-#, fuzzy, kde-format
-#| msgid "The process is not in control"
+#, kde-format
 msgid "The process is unstable (non-random)"
-msgstr "Het proces is niet onder controle"
+msgstr "Het proces is onstabiel (niet-willekeurig)"
 
 #: src/backend/statistics/HypothesisTest.cpp:331
 #, kde-format
@@ -7793,12 +7789,12 @@ msgstr "Ramirez-Runger runt test"
 #: src/backend/statistics/HypothesisTest.cpp:536
 #, kde-format
 msgid "<b>Reject the null hypothesis.</b>"
-msgstr ""
+msgstr "<b>Wijs de nul-hypothese af.</b>"
 
 #: src/backend/statistics/HypothesisTest.cpp:540
 #, kde-format
 msgid "<b>Fail to reject the null hypothesis.</b>"
-msgstr ""
+msgstr "<b>De nul-hypothese afwijzen kan niet.</b>"
 
 #: src/backend/statistics/HypothesisTest.cpp:544
 #, kde-format
@@ -8126,18 +8122,18 @@ msgstr "Aantal runs"
 #: src/backend/statistics/HypothesisTest.cpp:656
 #, kde-format
 msgid "Stability Ratio"
-msgstr ""
+msgstr "Stabiliteitsverhouding"
 
 #: src/backend/statistics/HypothesisTest.cpp:657
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Effective Degrees of Freedom"
-msgstr "Vrijheidsgraden"
+msgstr "Effectieve vrijheidsgraden"
 
 #: src/backend/statistics/HypothesisTest.cpp:658
-#, kde-format
-msgid "Avverage Successive Difference"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Avverage Successive Difference"
+msgid "Average Successive Difference"
+msgstr "Gemiddeld successief verschil"
 
 #: src/backend/statistics/HypothesisTest.cpp:661
 #, kde-format
@@ -8150,131 +8146,101 @@ msgid "No variable columns provided."
 msgstr "Geen variabele kolommen geleverd."
 
 #: src/backend/statistics/HypothesisTest.cpp:950
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population mean is significantly "
-#| "different from %2. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. %3"
 msgstr ""
 "Op het significantieniveau %1, is het gemiddelde van de populatie "
-"significant verschillend van %2. Wijs de nul-hypothese af."
+"significant verschillend van %2. %3"
 
 #: src/backend/statistics/HypothesisTest.cpp:955
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population mean is significantly "
-#| "different from %2. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
 "different from %2. %3"
 msgstr ""
-"Op het significantieniveau %1, is het gemiddelde van de populatie "
-"significant verschillend van %2. Wijs de nul-hypothese af."
+"Op het significantieniveau %1, is het gemiddelde van de populatie niet "
+"significant verschillend van %2. %3"
 
 #: src/backend/statistics/HypothesisTest.cpp:1040
 #: src/backend/statistics/HypothesisTest.cpp:1108
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
 "different. %2"
 msgstr ""
 "Op het significantieniveau %1, zijn de gemiddelden van de populatie "
-"significant verschillend. Wijs de nul-hypothese af"
+"significant verschillend. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1043
 #: src/backend/statistics/HypothesisTest.cpp:1111
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
 "different. %2"
 msgstr ""
-"Op het significantieniveau %1, zijn de gemiddelden van de populatie "
-"significant verschillend. Wijs de nul-hypothese af"
+"Op het significantieniveau %1, is het gemiddelde van de populatie niet "
+"significant verschillend. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1162
 #: src/backend/statistics/HypothesisTest.cpp:1223
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group mean is significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
 "different. %2"
 msgstr ""
 "Op het significantieniveau %1, is minstens het gemiddelde van één groep "
-"significant verschillend. Wijs de nul-hypothese af"
+"significant verschillend. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1164
 #: src/backend/statistics/HypothesisTest.cpp:1225
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between group "
-#| "means. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group means. "
 "%2"
 msgstr ""
 "Op het significantieniveau %1 is er geen significant verschil tussen "
-"groepsgemiddelde. De nul-hypothese niet afwijzen"
+"groepsgemiddelden. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1282
 #: src/backend/statistics/HypothesisTest.cpp:1340
 #: src/backend/statistics/HypothesisTest.cpp:1399
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group distribution is "
-#| "significantly different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. %2"
 msgstr ""
 "Op het significantieniveau %1, is minstens één groepsverdeling significant "
-"verschillend. Wijs de nul-hypothese af"
+"verschillend. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1285
 #: src/backend/statistics/HypothesisTest.cpp:1343
 #: src/backend/statistics/HypothesisTest.cpp:1402
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between group "
-#| "distributions. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
 "distributions. %2"
 msgstr ""
 "Op het significantieniveau %1 is er geen significant verschil tussen "
-"groepsverdelingen. De nul-hypothese niet afwijzen"
+"groepsverdelingen. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1462
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group is significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "%2"
 msgstr ""
 "Op het significantieniveau %1, is minstens één groep significant "
-"verschillend. Wijs de nul-hypothese af"
+"verschillend. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1464
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. %2"
 msgstr ""
 "Op het significantieniveau %1 is er geen significant verschil tussen "
-"groepen. De nul-hypothese niet afwijzen"
+"groepen. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1490
 #: src/backend/statistics/HypothesisTest.cpp:1557
@@ -8283,28 +8249,22 @@ msgid "Column '%1' must be of integer type."
 msgstr "Kolom '%1' moet van het type geheel getal zijn."
 
 #: src/backend/statistics/HypothesisTest.cpp:1528
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the observed frequencies do not follow the "
-#| "expected frequency distribution. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. %2"
 msgstr ""
 "Op het significantieniveau %1 volgen de waargenomen frequenties niet de "
-"verwachte frequentieverdeling. De nul-hypothese afwijzen"
+"verwachte frequentieverdeling. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1532
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the observed frequencies do not follow the "
-#| "expected frequency distribution. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. %2"
 msgstr ""
-"Op het significantieniveau %1 volgen de waargenomen frequenties niet de "
-"verwachte frequentieverdeling. De nul-hypothese afwijzen"
+"Op het significantieniveau %1 volgen de waargenomen frequenties de verwachte "
+"frequentieverdeling. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1577
 #, kde-format
@@ -8312,26 +8272,20 @@ msgid "The size of each column in the contingency table must be equal."
 msgstr "De grootte van elke kolom in de contingentietabel moet gelijk zijn."
 
 #: src/backend/statistics/HypothesisTest.cpp:1593
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, both categorical variables are dependent. "
-#| "Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are dependent. %2"
 msgstr ""
 "Op het significantieniveau %1 zijn beide categoriale variabelen afhankelijk "
-"van elkaar. De nul-hypothese afwijzen"
+"van elkaar. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1595
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, both categorical variables are dependent. "
-#| "Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are independent. %2"
 msgstr ""
-"Op het significantieniveau %1 zijn beide categoriale variabelen afhankelijk "
-"van elkaar. De nul-hypothese afwijzen"
+"Op het significantieniveau %1 zijn beide categoriale variabelen afhankelijk. "
+"%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1613
 #, kde-format
@@ -8382,167 +8336,120 @@ msgid "Group 2 requires at least %1 samples."
 msgstr "Groep 2 vereist minstens %1 monsters."
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. %2"
 msgstr ""
-"Op het significantieniveau %1, zijn de overlevingskrommen verschillend. Wijs "
-"de nul-hypothese af."
+"Op het significantieniveau %1, zijn de overlevingskrommen significant "
+"verschillend. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between survival "
-#| "curves. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
 "curves. %2"
 msgstr ""
 "Op het significantieniveau %1 is er geen significant verschil tussen "
-"overlevingskrommen. De nul-hypothese niet afwijzen."
+"overlevingskrommen. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1738
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant monotonic trend in "
-#| "the data. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. %2"
 msgstr ""
 "Op het significantieniveau %1, is er een significante monotone trend in de "
-"gegevens. Wijs de nul-hypothese af."
+"gegevens. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1740
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. %2"
 msgstr ""
 "Op het significantieniveau %1, is er een significante positieve monotone "
-"trend. Wijs de nul-hypothese af."
+"trend. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1742
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. %2"
 msgstr ""
 "Op het significantieniveau %1, is er een significante negatieve monotone "
-"trend. Wijs de nul-hypothese af."
+"trend. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1744
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. %2"
 msgstr ""
 "Op het significantieniveau %1 is er geen significante monotone trend "
-"gedetecteerd. De nul-hypothese niet afwijzen."
+"gedetecteerd. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data are not randomly distributed. "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid "At the significance level %1, the data are not randomly distributed. %2"
 msgstr ""
-"Op het significantieniveau %1, zijn de gegevens niet willekeurig verdeeld. "
-"Wijs de nul-hypothese af."
+"Op het significantieniveau %1, zijn de gegevens niet willekeurig verdeeld. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1782
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering or trend (too few "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). %2"
 msgstr ""
 "Op het significantieniveau %1, tonen de gegevens clustering of trent (te "
-"weinig runs). Wijs de nul-hypothese af."
+"weinig runs). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1785
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows oscillation (too many "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show oscillation or over-control (too "
 "many runs). %2"
 msgstr ""
-"Op het significantieniveau %1 toont het proces wisselingen (te veel runs). "
-"Wijs de nul-hypothese af."
+"Op het significantieniveau %1 toont het proces schommelingen of overmatige "
+"controle (te veel runs). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1787
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data appear to be randomly distributed. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. %2"
 msgstr ""
-"Op het significantieniveau %1 lijken de gegevens willekeurig verdeeld. De "
-"nul-hypothese kan niet afwezen worden."
+"Op het significantieniveau %1 lijken de gegevens willekeurig verdeeld. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1821
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process is not in control. Reject the "
-#| "null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process is unstable (non-homogeneous). %2"
 msgstr ""
-"Op het significantieniveau %1, is het proces niet onder controle. Wijs de "
-"nul-hypothese af."
+"Op het significantieniveau %1, is het proces onstabiel (niet-homogeen). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1823
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows oscillation (too many "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation or over-control. "
 "%2"
 msgstr ""
-"Op het significantieniveau %1 toont het proces wisselingen (te veel runs). "
-"Wijs de nul-hypothese af."
+"Op het significantieniveau %1 toont het proces schommelingen of overmatige "
+"controle. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1825
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows clustering (too few "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering, shifting, or "
 "trends. %2"
 msgstr ""
-"Op het significantieniveau %1, toont het proces clustering ( te weinig "
-"runs). Wijs de nul-hypothese af."
+"Op het significantieniveau %1, toont het proces clustering, verschuiving of "
+"trends. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1827
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process appears to be in control. Fail "
-#| "to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process appears to be stable "
 "(homogeneous). %2"
-msgstr ""
-"Op het significantieniveau %1 lijkt het proces onder controle. De nul-"
-"hypothese kan niet afwezen worden."
+msgstr "Op het significantieniveau %1 lijkt het proces stabiel (homogeen). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1919
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -17781,10 +17688,9 @@ msgid "Couldn't open the temporary file for writing."
 msgstr "Kon tijdelijk bestand niet openen voor schrijven."
 
 #: src/frontend/MainWin.cpp:988
-#, fuzzy, kde-format
-#| msgid "Loading %1..."
+#, kde-format
 msgid "Saving %1..."
-msgstr "%1 inlezen ..."
+msgstr "%1 wordt opgeslagen..."
 
 #: src/frontend/MainWin.cpp:1066
 #, kde-format
@@ -17802,10 +17708,9 @@ msgid "Couldn't open the file '%1' for writing."
 msgstr "Kon bestand '%1' niet openen voor schrijven."
 
 #: src/frontend/MainWin.cpp:1096
-#, fuzzy, kde-format
-#| msgid "Project successfully opened (in %1 seconds)."
+#, kde-format
 msgid "Project successfully saved (in %1 seconds)."
-msgstr "Project met succes geopend (in %1 seconden)."
+msgstr "Project met succes opgeslagen (in %1 seconden)."
 
 #: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
 #, kde-format

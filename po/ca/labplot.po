@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-17 00:39+0000\n"
-"PO-Revision-Date: 2026-02-15 10:10+0100\n"
+"POT-Creation-Date: 2026-02-18 00:40+0000\n"
+"PO-Revision-Date: 2026-02-17 10:52+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -7767,10 +7767,9 @@ msgstr "Existeix una tendència monotònica positiva"
 
 #: src/backend/statistics/HypothesisTest.cpp:260
 #: src/backend/statistics/HypothesisTest.cpp:266
-#, fuzzy, kde-format
-#| msgid "The process is in control (random pattern)"
+#, kde-format
 msgid "The process is stable (random)"
-msgstr "El procés està controlat (patró aleatori)"
+msgstr "El procés és estable (aleatori)"
 
 #: src/backend/statistics/HypothesisTest.cpp:261
 #, kde-format
@@ -7779,23 +7778,20 @@ msgstr "Les dades no estan distribuïdes aleatòriament"
 
 #: src/backend/statistics/HypothesisTest.cpp:262
 #: src/backend/statistics/HypothesisTest.cpp:269
-#, fuzzy, kde-format
-#| msgid "The process shows clustering (too few runs)"
+#, kde-format
 msgid "The process shows shifting or clustering"
-msgstr "El procés mostra agrupació (massa poques execucions)"
+msgstr "El procés mostra desplaçament o agrupació"
 
 #: src/backend/statistics/HypothesisTest.cpp:263
 #: src/backend/statistics/HypothesisTest.cpp:268
-#, fuzzy, kde-format
-#| msgid "The process shows oscillation (too many runs)"
+#, kde-format
 msgid "The process shows oscillations or over-control"
-msgstr "El procés mostra oscil·lació (massa execucions)"
+msgstr "El procés mostra oscil·lació o sobrecontrol"
 
 #: src/backend/statistics/HypothesisTest.cpp:267
-#, fuzzy, kde-format
-#| msgid "The process is not in control"
+#, kde-format
 msgid "The process is unstable (non-random)"
-msgstr "El procés està fora de control"
+msgstr "El procés és inestable (no aleatori)"
 
 #: src/backend/statistics/HypothesisTest.cpp:331
 #, kde-format
@@ -7880,12 +7876,12 @@ msgstr "Prova d'execució Ramirez-Runger"
 #: src/backend/statistics/HypothesisTest.cpp:536
 #, kde-format
 msgid "<b>Reject the null hypothesis.</b>"
-msgstr ""
+msgstr "<b>Rebutja la hipòtesi nul·la.</b>"
 
 #: src/backend/statistics/HypothesisTest.cpp:540
 #, kde-format
 msgid "<b>Fail to reject the null hypothesis.</b>"
-msgstr ""
+msgstr "<b>Ha fallat a rebutjar la hipòtesi nul·la.</b>"
 
 #: src/backend/statistics/HypothesisTest.cpp:544
 #, kde-format
@@ -8213,18 +8209,18 @@ msgstr "Nombre d'execucions"
 #: src/backend/statistics/HypothesisTest.cpp:656
 #, kde-format
 msgid "Stability Ratio"
-msgstr ""
+msgstr "Relació d'estabilitat"
 
 #: src/backend/statistics/HypothesisTest.cpp:657
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Effective Degrees of Freedom"
-msgstr "Graus de llibertat"
+msgstr "Graus de llibertat efectius"
 
 #: src/backend/statistics/HypothesisTest.cpp:658
-#, kde-format
-msgid "Avverage Successive Difference"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Avverage Successive Difference"
+msgid "Average Successive Difference"
+msgstr "Diferència successiva mitjana"
 
 #: src/backend/statistics/HypothesisTest.cpp:661
 #, kde-format
@@ -8237,131 +8233,101 @@ msgid "No variable columns provided."
 msgstr "No s'ha proporcionat cap columna de variables."
 
 #: src/backend/statistics/HypothesisTest.cpp:950
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population mean is significantly "
-#| "different from %2. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. %3"
 msgstr ""
 "Al nivell de significació %1, la mitjana de població és significativament "
-"diferent de %2. Es rebutja la hipòtesi nul·la."
+"diferent de %2. %3"
 
 #: src/backend/statistics/HypothesisTest.cpp:955
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population mean is significantly "
-#| "different from %2. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
 "different from %2. %3"
 msgstr ""
-"Al nivell de significació %1, la mitjana de població és significativament "
-"diferent de %2. Es rebutja la hipòtesi nul·la."
+"Al nivell de significació %1, la mitjana de població no és significativament "
+"diferent de %2. %3"
 
 #: src/backend/statistics/HypothesisTest.cpp:1040
 #: src/backend/statistics/HypothesisTest.cpp:1108
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
 "different. %2"
 msgstr ""
 "En el nivell de significació %1, la mitjana de població és significativament "
-"diferent. Es rebutja la hipòtesi nul·la"
+"diferent. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1043
 #: src/backend/statistics/HypothesisTest.cpp:1111
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
 "different. %2"
 msgstr ""
-"En el nivell de significació %1, la mitjana de població és significativament "
-"diferent. Es rebutja la hipòtesi nul·la"
+"En el nivell de significació %1, la mitjana de població no és "
+"significativament diferent. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1162
 #: src/backend/statistics/HypothesisTest.cpp:1223
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group mean is significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
 "different. %2"
 msgstr ""
 "Al nivell de significació %1, almenys una mitjana de grup és "
-"significativament diferent. Es rebutja la hipòtesi nul·la"
+"significativament diferent. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1164
 #: src/backend/statistics/HypothesisTest.cpp:1225
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between group "
-#| "means. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group means. "
 "%2"
 msgstr ""
 "Al nivell de significació %1, no hi ha cap diferència significativa entre "
-"les mitjanes del grups. No s'ha pogut rebutjar la hipòtesi nul·la"
+"les mitjanes del grups. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1282
 #: src/backend/statistics/HypothesisTest.cpp:1340
 #: src/backend/statistics/HypothesisTest.cpp:1399
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group distribution is "
-#| "significantly different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. %2"
 msgstr ""
 "Al nivell de significació %1, almenys una distribució de grup és "
-"significativament diferent. Es rebutja la hipòtesi nul·la"
+"significativament diferent. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1285
 #: src/backend/statistics/HypothesisTest.cpp:1343
 #: src/backend/statistics/HypothesisTest.cpp:1402
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between group "
-#| "distributions. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
 "distributions. %2"
 msgstr ""
 "Al nivell de significació %1, no hi ha cap diferència significativa entre "
-"les distribucions de grup. No s'ha pogut rebutjar la hipòtesi nul·la"
+"les distribucions de grup. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1462
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group is significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "%2"
 msgstr ""
 "Al nivell de significació %1, almenys un grup és significativament diferent. "
-"Es rebutja la hipòtesi nul·la"
+"%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1464
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. %2"
 msgstr ""
 "Al nivell de significació %1, no hi ha cap diferència significativa entre "
-"grups. No s'ha pogut rebutjar la hipòtesi nul·la"
+"grups. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1490
 #: src/backend/statistics/HypothesisTest.cpp:1557
@@ -8370,28 +8336,22 @@ msgid "Column '%1' must be of integer type."
 msgstr "La columna «%1» cal que sigui de tipus enter."
 
 #: src/backend/statistics/HypothesisTest.cpp:1528
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the observed frequencies do not follow the "
-#| "expected frequency distribution. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. %2"
 msgstr ""
 "Al nivell de significació %1, les freqüències observades no segueixen la "
-"distribució de freqüència esperada. Es rebutja la hipòtesi nul·la"
+"distribució de freqüència esperada. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1532
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the observed frequencies do not follow the "
-#| "expected frequency distribution. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. %2"
 msgstr ""
-"Al nivell de significació %1, les freqüències observades no segueixen la "
-"distribució de freqüència esperada. Es rebutja la hipòtesi nul·la"
+"Al nivell de significació %1, les freqüències observades segueixen la "
+"distribució de freqüència esperada. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1577
 #, kde-format
@@ -8400,26 +8360,20 @@ msgstr ""
 "La mida de cada columna a la taula de contingència cal que siguin iguals."
 
 #: src/backend/statistics/HypothesisTest.cpp:1593
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, both categorical variables are dependent. "
-#| "Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are dependent. %2"
 msgstr ""
 "Al nivell de significació %1, ambdues variables categòriques són dependents. "
-"Es rebutja la hipòtesi nul·la"
+"%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1595
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, both categorical variables are dependent. "
-#| "Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are independent. %2"
 msgstr ""
-"Al nivell de significació %1, ambdues variables categòriques són dependents. "
-"Es rebutja la hipòtesi nul·la"
+"Al nivell de significació %1, ambdues variables categòriques són "
+"independents. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1613
 #, kde-format
@@ -8469,167 +8423,124 @@ msgid "Group 2 requires at least %1 samples."
 msgstr "El grup 2 requereix almenys %1 mostres."
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. %2"
 msgstr ""
 "Al nivell de significació %1, les corbes de supervivència són "
-"significativament diferents. Es rebutja la hipòtesi nul·la"
+"significativament diferents. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between survival "
-#| "curves. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
 "curves. %2"
 msgstr ""
 "Al nivell de significació %1, no hi ha cap diferència significativa entre "
-"les corbes de supervivència. No s'ha pogut rebutjar la hipòtesi nul·la"
+"les corbes de supervivència. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1738
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant monotonic trend in "
-#| "the data. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. %2"
 msgstr ""
 "Al nivell de significació %1, hi ha una tendència monotònica significativa a "
-"les dades. Es rebutja la hipòtesi nul·la."
+"les dades. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1740
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. %2"
 msgstr ""
 "Al nivell de significació %1, hi ha una tendència monotònica positiva "
-"significativa. Es rebutja la hipòtesi nul·la."
+"significativa. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1742
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. %2"
 msgstr ""
 "Al nivell de significació %1, hi ha una tendència monotònica negativa "
-"significativa. Es rebutja la hipòtesi nul·la."
+"significativa. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1744
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. %2"
 msgstr ""
 "Al nivell de significació %1, no s'ha detectat cap tendència monotònica "
-"significativa. No s'ha pogut rebutjar la hipòtesi nul·la."
+"significativa. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data are not randomly distributed. "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid "At the significance level %1, the data are not randomly distributed. %2"
 msgstr ""
 "En el nivell de significació %1, les dades no estan distribuïdes "
-"aleatòriament. Es rebutja la hipòtesi nul·la."
+"aleatòriament. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1782
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering or trend (too few "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). %2"
 msgstr ""
 "En el nivell de significació %1, les dades mostren agrupament o tendència "
-"(massa poques execucions). Es rebutja la hipòtesi nul·la."
+"(massa poques execucions). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1785
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows oscillation (too many "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show oscillation or over-control (too "
 "many runs). %2"
 msgstr ""
-"Al nivell de significació %1, el procés mostra una oscil·lació (massa "
-"execucions). Es rebutja la hipòtesi nul·la."
+"Al nivell de significació %1, les dades mostren una oscil·lació o "
+"sobrecontrol (massa execucions). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1787
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data appear to be randomly distributed. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. %2"
 msgstr ""
 "Al nivell de significació %1, les dades semblen estar distribuïdes "
-"aleatòriament. No s'ha pogut rebutjar la hipòtesi nul·la."
+"aleatòriament. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1821
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process is not in control. Reject the "
-#| "null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process is unstable (non-homogeneous). %2"
 msgstr ""
-"En el nivell de significació %1, el procés no està controlat. Es rebutja la "
-"hipòtesi nul·la."
+"En el nivell de significació %1, el procés és inestable (no homogeni). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1823
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows oscillation (too many "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation or over-control. "
 "%2"
 msgstr ""
-"Al nivell de significació %1, el procés mostra una oscil·lació (massa "
-"execucions). Es rebutja la hipòtesi nul·la."
+"Al nivell de significació %1, el procés mostra una oscil·lació o "
+"sobrecontrol. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1825
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process shows clustering (too few "
-#| "runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering, shifting, or "
 "trends. %2"
 msgstr ""
-"En el nivell de significació %1, el procés mostra agrupament (massa poques "
-"execucions). Es rebutja la hipòtesi nul·la."
+"En el nivell de significació %1, el procés mostra agrupament, desplaçament o "
+"tendències. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1827
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the process appears to be in control. Fail "
-#| "to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process appears to be stable "
 "(homogeneous). %2"
 msgstr ""
-"Al nivell de significació %1, el procés sembla que està controlat. No s'ha "
-"pogut rebutjar la hipòtesi nul·la."
+"Al nivell de significació %1, el procés sembla que que sigui estable "
+"(homogeni). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1919
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -17890,7 +17801,7 @@ msgstr "%1: obert"
 #: src/frontend/MainWin.cpp:858
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
-msgstr "S'ha obert el projecte amb èxit (en %1 segons)."
+msgstr "S'ha obert el projecte correctament (en %1 segons)."
 
 #: src/frontend/MainWin.cpp:954
 #, kde-format
@@ -17913,10 +17824,9 @@ msgid "Couldn't open the temporary file for writing."
 msgstr "No s'ha pogut obrir el fitxer temporal per a escriptura."
 
 #: src/frontend/MainWin.cpp:988
-#, fuzzy, kde-format
-#| msgid "Loading %1..."
+#, kde-format
 msgid "Saving %1..."
-msgstr "S'està carregant %1..."
+msgstr "S'està desant %1..."
 
 #: src/frontend/MainWin.cpp:1066
 #, kde-format
@@ -17934,10 +17844,9 @@ msgid "Couldn't open the file '%1' for writing."
 msgstr "No s'ha pogut obrir el fitxer «%1» per a escriptura."
 
 #: src/frontend/MainWin.cpp:1096
-#, fuzzy, kde-format
-#| msgid "Project successfully opened (in %1 seconds)."
+#, kde-format
 msgid "Project successfully saved (in %1 seconds)."
-msgstr "S'ha obert el projecte amb èxit (en %1 segons)."
+msgstr "El projecte s'ha desat correctament (en %1 segons)."
 
 #: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
 #, kde-format

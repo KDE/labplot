@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-17 00:39+0000\n"
+"POT-Creation-Date: 2026-02-18 00:40+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -8467,7 +8467,7 @@ msgstr "Graus de Liberdade"
 
 #: src/backend/statistics/HypothesisTest.cpp:658
 #, kde-format
-msgid "Avverage Successive Difference"
+msgid "Average Successive Difference"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:661
