@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:40+0000\n"
-"PO-Revision-Date: 2026-02-11 12:48+0100\n"
+"PO-Revision-Date: 2026-02-18 19:03+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -11598,10 +11598,9 @@ msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:273
-#, fuzzy, kde-format
-#| msgid "From SQL Database..."
+#, kde-format
 msgid "From Live Data Source..."
-msgstr "Ex Base de datos SQL..."
+msgstr "Ex Base de datos Live..."
 
 #: src/frontend/ActionsManager.cpp:274
 #, kde-format
@@ -12172,10 +12171,9 @@ msgstr ""
 
 #: src/frontend/ActionsManager.cpp:1554
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
-#, fuzzy, kde-format
-#| msgid "Contains"
+#, kde-format
 msgid "Continue"
-msgstr "Il contine"
+msgstr "Continua"
 
 #: src/frontend/ActionsManager.cpp:1555
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
@@ -16942,10 +16940,9 @@ msgstr "Barra de instrumento de Folio de calculo electronic"
 
 #. i18n: ectx: ToolBar (live_data_toolbar)
 #: src/frontend/labplotui.rc:79
-#, fuzzy, kde-format
-#| msgid "Data Source"
+#, kde-format
 msgid "Live Data Source Toolbar"
-msgstr "Fonte de datos"
+msgstr "Barra de Instrumento de Fonte de datos Live"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/frontend/labplotui.rc:85
@@ -17179,10 +17176,9 @@ msgid "Couldn't open the temporary file for writing."
 msgstr ""
 
 #: src/frontend/MainWin.cpp:988
-#, fuzzy, kde-format
-#| msgid "Loading %1..."
+#, kde-format
 msgid "Saving %1..."
-msgstr "Cargante %1..."
+msgstr "Salveguardante %1..."
 
 #: src/frontend/MainWin.cpp:1066
 #, kde-format
@@ -23328,10 +23324,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bWillUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:344
-#, fuzzy, kde-format
-#| msgid "Own Message"
+#, kde-format
 msgid "Update Message"
-msgstr "Message proprie"
+msgstr "Actualisa Message"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:371

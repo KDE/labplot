@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:40+0000\n"
-"PO-Revision-Date: 2026-02-17 10:52+0100\n"
+"PO-Revision-Date: 2026-02-18 12:57+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -8217,8 +8217,7 @@ msgid "Effective Degrees of Freedom"
 msgstr "Graus de llibertat efectius"
 
 #: src/backend/statistics/HypothesisTest.cpp:658
-#, fuzzy, kde-format
-#| msgid "Avverage Successive Difference"
+#, kde-format
 msgid "Average Successive Difference"
 msgstr "Diferència successiva mitjana"
 
