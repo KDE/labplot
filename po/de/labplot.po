@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:40+0000\n"
-"PO-Revision-Date: 2026-02-08 13:00+0100\n"
+"PO-Revision-Date: 2026-02-18 15:39+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -7677,10 +7677,9 @@ msgstr "Es liegt ein positiver monotoner Trend vor."
 
 #: src/backend/statistics/HypothesisTest.cpp:260
 #: src/backend/statistics/HypothesisTest.cpp:266
-#, fuzzy, kde-format
-#| msgid "Iterative process is out of control"
+#, kde-format
 msgid "The process is stable (random)"
-msgstr "Iterativer Prozess ist außer Kontrolle"
+msgstr "Der Prozess ist stabil (zufällig)"
 
 #: src/backend/statistics/HypothesisTest.cpp:261
 #, kde-format
@@ -7689,23 +7688,20 @@ msgstr "Die Daten sind nicht zufällig verteilt"
 
 #: src/backend/statistics/HypothesisTest.cpp:262
 #: src/backend/statistics/HypothesisTest.cpp:269
-#, fuzzy, kde-format
-#| msgid "The data show clustering (too few runs)"
+#, kde-format
 msgid "The process shows shifting or clustering"
-msgstr "Die Daten zeigen eine Clusterbildung (zu wenige Durchläufe)"
+msgstr "Der Prozess zeigt Verschiebungen oder Clusterbildung"
 
 #: src/backend/statistics/HypothesisTest.cpp:263
 #: src/backend/statistics/HypothesisTest.cpp:268
-#, fuzzy, kde-format
-#| msgid "The data show excessive alternation (too many runs)"
+#, kde-format
 msgid "The process shows oscillations or over-control"
-msgstr "Die Daten zeigen ein übermäßiges Alternieren (zu viele Durchläufe)"
+msgstr "Der Prozess zeigt Oszillationen oder Überregelung"
 
 #: src/backend/statistics/HypothesisTest.cpp:267
-#, fuzzy, kde-format
-#| msgid "Iterative process is out of control"
+#, kde-format
 msgid "The process is unstable (non-random)"
-msgstr "Iterativer Prozess ist außer Kontrolle"
+msgstr "Der Prozess ist instabil (nicht zufällig)"
 
 #: src/backend/statistics/HypothesisTest.cpp:331
 #, kde-format
@@ -7785,17 +7781,17 @@ msgstr "Wald-Wolfowitz-Läufetest"
 #: src/backend/statistics/HypothesisTest.cpp:361
 #, kde-format
 msgid "Ramirez-Runger Runs Test"
-msgstr ""
+msgstr "Ramirez-Runger-Läufetest"
 
 #: src/backend/statistics/HypothesisTest.cpp:536
 #, kde-format
 msgid "<b>Reject the null hypothesis.</b>"
-msgstr ""
+msgstr "<b>Die Nullhypothese wird abgelehnt.</b>"
 
 #: src/backend/statistics/HypothesisTest.cpp:540
 #, kde-format
 msgid "<b>Fail to reject the null hypothesis.</b>"
-msgstr ""
+msgstr "<b>Die Nullhypothese kann nicht abgelehnt werden.</b>"
 
 #: src/backend/statistics/HypothesisTest.cpp:544
 #, kde-format
@@ -8123,18 +8119,17 @@ msgstr "Anzahl der Durchläufe"
 #: src/backend/statistics/HypothesisTest.cpp:656
 #, kde-format
 msgid "Stability Ratio"
-msgstr ""
+msgstr "Stabilitätsverhältnis"
 
 #: src/backend/statistics/HypothesisTest.cpp:657
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Effective Degrees of Freedom"
-msgstr "Freiheitsgrade"
+msgstr "Effektive Freiheitsgrade"
 
 #: src/backend/statistics/HypothesisTest.cpp:658
 #, kde-format
 msgid "Average Successive Difference"
-msgstr ""
+msgstr "Mittlere sukzessive Differenz"
 
 #: src/backend/statistics/HypothesisTest.cpp:661
 #, kde-format
@@ -8147,131 +8142,101 @@ msgid "No variable columns provided."
 msgstr "Es wurden keine Variablen-Spalten angegeben."
 
 #: src/backend/statistics/HypothesisTest.cpp:950
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population mean is significantly "
-#| "different from %2. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. %3"
 msgstr ""
-"Auf dem Signifikanzniveau %1 ist der Populationsmittelwert signifikant von "
-"%2 verschieden. Die Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau %1 unterscheidet sich der Populationsmittelwert "
+"signifikant von %2. %3"
 
 #: src/backend/statistics/HypothesisTest.cpp:955
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population mean is significantly "
-#| "different from %2. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
 "different from %2. %3"
 msgstr ""
-"Auf dem Signifikanzniveau %1 ist der Populationsmittelwert signifikant von "
-"%2 verschieden. Die Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau %1 unterscheidet sich der Populationsmittelwert "
+"nicht signifikant von %2. %3"
 
 #: src/backend/statistics/HypothesisTest.cpp:1040
 #: src/backend/statistics/HypothesisTest.cpp:1108
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
 "different. %2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 sind die Populationsmittelwerte signifikant "
-"verschieden. Die Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau %1 unterscheiden sich die Populationsmittelwerte "
+"signifikant. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1043
 #: src/backend/statistics/HypothesisTest.cpp:1111
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the population means are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
 "different. %2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 sind die Populationsmittelwerte signifikant "
-"verschieden. Die Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau %1 unterscheiden sich die Populationsmittelwerte "
+"nicht signifikant. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1162
 #: src/backend/statistics/HypothesisTest.cpp:1223
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group mean is significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
 "different. %2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 ist mindestens ein Gruppenmittelwert "
-"signifikant verschieden. Die Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau %1 unterscheidet sich mindestens ein "
+"Gruppenmittelwert signifikant. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1164
 #: src/backend/statistics/HypothesisTest.cpp:1225
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between group "
-#| "means. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group means. "
 "%2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
-"den Gruppenmittelwerten. Die Nullhypothese wird beibehalten."
+"Auf dem Signifikanzniveau %1 liegt kein signifikanter Unterschied zwischen "
+"den Gruppenmittelwerten vor. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1282
 #: src/backend/statistics/HypothesisTest.cpp:1340
 #: src/backend/statistics/HypothesisTest.cpp:1399
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group distribution is "
-#| "significantly different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. %2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 ist mindestens eine Gruppenverteilung "
-"signifikant unterschiedlich. Die Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau %1 unterscheidet sich mindestens eine "
+"Gruppenverteilung signifikant. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1285
 #: src/backend/statistics/HypothesisTest.cpp:1343
 #: src/backend/statistics/HypothesisTest.cpp:1402
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between group "
-#| "distributions. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
 "distributions. %2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
-"den Gruppenverteilungen. Die Nullhypothese wird beibehalten."
+"Auf dem Signifikanzniveau %1 liegt kein signifikanter Unterschied zwischen "
+"den Gruppenverteilungen vor. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1462
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, at least one group is significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "%2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 ist mindestens eine Gruppe signifikant "
-"unterschiedlich. Die Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau %1 unterscheidet sich mindestens eine Gruppe "
+"signifikant. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1464
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between groups. "
-#| "Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. %2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
-"den Gruppen. Die Nullhypothese wird beibehalten."
+"Auf dem Signifikanzniveau %1 liegt kein signifikanter Unterschied zwischen "
+"den Gruppen vor. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1490
 #: src/backend/statistics/HypothesisTest.cpp:1557
@@ -8280,28 +8245,22 @@ msgid "Column '%1' must be of integer type."
 msgstr "Spalte „%1“ muss vom Ganzzahltyp sein."
 
 #: src/backend/statistics/HypothesisTest.cpp:1528
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the observed frequencies do not follow the "
-#| "expected frequency distribution. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. %2"
 msgstr ""
 "Auf dem Signifikanzniveau %1 folgen die beobachteten Häufigkeiten nicht der "
-"erwarteten Häufigkeitsverteilung. Die Nullhypothese wird verworfen."
+"erwarteten Häufigkeitsverteilung. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1532
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the observed frequencies do not follow the "
-#| "expected frequency distribution. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. %2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 folgen die beobachteten Häufigkeiten nicht der "
-"erwarteten Häufigkeitsverteilung. Die Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau %1 folgen die beobachteten Häufigkeiten der "
+"erwarteten Häufigkeitsverteilung. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1577
 #, kde-format
@@ -8309,26 +8268,18 @@ msgid "The size of each column in the contingency table must be equal."
 msgstr "Die Größe jeder Spalte in der Kontingenztabelle muss gleich sein."
 
 #: src/backend/statistics/HypothesisTest.cpp:1593
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, both categorical variables are dependent. "
-#| "Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are dependent. %2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 sind beide kategorialen Variablen abhängig. Die "
-"Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau %1 sind beide kategorialen Variablen abhängig. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1595
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, both categorical variables are dependent. "
-#| "Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are independent. %2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 sind beide kategorialen Variablen abhängig. Die "
-"Nullhypothese wird verworfen."
+"Auf dem Signifikanzniveau %1 sind beide kategorialen Variablen unabhängig. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1613
 #, kde-format
@@ -8379,167 +8330,121 @@ msgid "Group 2 requires at least %1 samples."
 msgstr "Gruppe 2 benötigt mindestens %1 Werte."
 
 #: src/backend/statistics/HypothesisTest.cpp:1695
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the survival curves are significantly "
-#| "different. Reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. %2"
 msgstr ""
 "Auf dem Signifikanzniveau %1 unterscheiden sich die Überlebenskurven "
-"signifikant. Die Nullhypothese wird verworfen."
+"signifikant. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1698
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant difference between survival "
-#| "curves. Fail to reject the null Hypothesis"
+#, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
 "curves. %2"
 msgstr ""
-"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
-"den Überlebenskurven. Die Nullhypothese wird beibehalten."
+"Auf dem Signifikanzniveau %1 liegt kein signifikanter Unterschied zwischen "
+"den Überlebenskurven vor. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1738
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant monotonic trend in "
-#| "the data. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. %2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 liegt ein signifikanter monotoner Trend in "
-"den Daten vor. Die Nullhypothese wird abgelehnt."
+"Auf dem Signifikanzniveau %1 liegt ein signifikanter monotoner Trend in den "
+"Daten vor. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1740
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant positive monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. %2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 liegt ein signifikanter positiver monotoner "
-"Trend vor. Die Nullhypothese wird abgelehnt."
+"Auf dem Signifikanzniveau %1 liegt ein signifikanter positiver monotoner "
+"Trend vor. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1742
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, there is a significant negative monotonic "
-#| "trend. Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. %2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 liegt ein signifikanter negativer monotoner "
-"Trend vor. Die Nullhypothese wird abgelehnt."
+"Auf dem Signifikanzniveau %1 liegt ein signifikanter negativer monotoner "
+"Trend vor. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1744
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, no significant monotonic trend detected. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. %2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 wurde kein signifikanter monotoner Trend "
-"festgestellt. Die Nullhypothese kann nicht abgelehnt werden."
+"Auf dem Signifikanzniveau %1 wurde kein signifikanter monotoner Trend "
+"festgestellt. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data are not randomly distributed. "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid "At the significance level %1, the data are not randomly distributed. %2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 sind die Daten nicht zufällig verteilt. Die "
-"Nullhypothese wird abgelehnt."
+"Auf dem Signifikanzniveau %1 sind die Daten nicht zufällig verteilt. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1782
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering (too few runs). "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). %2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 zeigen die Daten eine Clusterbildung (zu "
-"wenige Durchläufe). Die Nullhypothese wird abgelehnt."
+"Auf dem Signifikanzniveau %1 zeigen die Daten eine Clusterbildung oder einen "
+"Trend (zu wenige Läufe). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1785
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show excessive alternation (too "
-#| "many runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data show oscillation or over-control (too "
 "many runs). %2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 zeigen die Daten ein übermäßiges "
-"Alternieren (zu viele Durchläufe). Die Nullhypothese wird abgelehnt."
+"Auf dem Signifikanzniveau %1 zeigen die Daten eine Oszillation oder "
+"Überregelung (zu viele Läufe). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1787
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data appear to be randomly distributed. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. %2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 scheinen die Daten zufällig verteilt zu "
-"sein. Die Nullhypothese kann nicht abgelehnt werden."
+"Auf dem Signifikanzniveau %1 scheinen die Daten zufällig verteilt zu sein. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1821
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data are not randomly distributed. "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process is unstable (non-homogeneous). %2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 sind die Daten nicht zufällig verteilt. Die "
-"Nullhypothese wird abgelehnt."
+"Auf dem Signifikanzniveau %1 ist der Prozess instabil (nicht homogen). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1823
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show excessive alternation (too "
-#| "many runs). Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation or over-control. "
 "%2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 zeigen die Daten ein übermäßiges "
-"Alternieren (zu viele Durchläufe). Die Nullhypothese wird abgelehnt."
+"Auf dem Signifikanzniveau %1 zeigt der Prozess Oszillation oder "
+"Überregelung. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1825
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data show clustering (too few runs). "
-#| "Reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering, shifting, or "
 "trends. %2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 zeigen die Daten eine Clusterbildung (zu "
-"wenige Durchläufe). Die Nullhypothese wird abgelehnt."
+"At the significance level %1, the process shows clustering, shifting, or "
+"trends. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1827
-#, fuzzy, kde-format
-#| msgid ""
-#| "At the significance level %1, the data appear to be randomly distributed. "
-#| "Fail to reject the null hypothesis."
+#, kde-format
 msgid ""
 "At the significance level %1, the process appears to be stable "
 "(homogeneous). %2"
 msgstr ""
-"Auf dem Signifikanzniveau von %1 scheinen die Daten zufällig verteilt zu "
-"sein. Die Nullhypothese kann nicht abgelehnt werden."
+"Auf dem Signifikanzniveau %1 scheint der Prozess stabil (homogen) zu sein. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1919
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
@@ -11810,10 +11715,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Erzeugt ein neues Arbeitsblatt zur grafischen Anzeige von Daten"
 
 #: src/frontend/ActionsManager.cpp:244
-#, fuzzy, kde-format
-#| msgid "Creates a new %1 script"
+#, kde-format
 msgid "Creates a new Python script"
-msgstr "Erzeugt ein neues %1 Skript"
+msgstr "Erzeugt ein neues Python Skript"
 
 #: src/frontend/ActionsManager.cpp:262 src/frontend/MainWin.cpp:1253
 #, kde-format
@@ -11837,10 +11741,9 @@ msgstr ""
 "Erzeugt einen neuen Ordner zum Sammeln von Seiten und anderen Elementen"
 
 #: src/frontend/ActionsManager.cpp:273
-#, fuzzy, kde-format
-#| msgid "Live Data Source..."
+#, kde-format
 msgid "From Live Data Source..."
-msgstr "Live-Datenquelle..."
+msgstr "Aus Live-Datenquelle..."
 
 #: src/frontend/ActionsManager.cpp:274
 #, kde-format
@@ -12301,7 +12204,7 @@ msgstr "Ausgewählte Spalten separat in absteigender Reihenfolge sortieren"
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #. i18n: ectx: property (text), widget (QLabel, lUpdate)
@@ -12413,10 +12316,9 @@ msgstr "Das geteilte Projekt findet sich unter: <a href=\"%1\">%1</a>"
 
 #: src/frontend/ActionsManager.cpp:1554
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
-#, fuzzy, kde-format
-#| msgid "Contains"
+#, kde-format
 msgid "Continue"
-msgstr "Enthält"
+msgstr "Fortfahren"
 
 #: src/frontend/ActionsManager.cpp:1555
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
@@ -15481,16 +15383,7 @@ msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 Histogramme: Vorlage \"%2\" geladen"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:114
-#, fuzzy, kde-format
-#| msgid ""
-#| "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
-#| "known population mean</li><li><b>%2</b> - tests if two independent "
-#| "samples have the same mean</li><li><b>%3</b> - tests if the mean "
-#| "difference between two related samples is zero</li><li><b>%4</b> - tests "
-#| "if two independent samples with unequal variances have the same mean</"
-#| "li><li><b>%5</b> - tests if three or more independent samples have the "
-#| "same mean</li><li><b>%6</b> - tests if three or more related/repeated "
-#| "measurements have the same mean</li>"
+#, kde-format
 msgid ""
 "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
 "known population mean</li><li><b>%2</b> - tests if two independent samples "
@@ -15502,30 +15395,19 @@ msgid ""
 "li><li><b>%7</b> - tests differences in medians between two independent "
 "groups</li>"
 msgstr ""
-"<ul><li><b>%1</b> – prüft, ob sich der Mittelwert einer Stichprobe "
-"signifikant von einem bekannten Populationsmittelwert unterscheidet</li> "
-"<li><b>%2</b> – prüft, ob zwei unabhängige Stichproben denselben Mittelwert "
-"haben</li><li><b>%3</b> – prüft, ob die mittlere Differenz zwischen zwei "
-"abhängigen Stichproben null ist</li><li><b>%4</b> – prüft, ob zwei "
-"unabhängige Stichproben mit ungleichen Varianzen denselben Mittelwert haben</"
-"li><li><b>%5</b> – prüft, ob drei oder mehr unabhängige Stichproben "
-"denselben Mittelwert haben</li><li><b>%6</b> – prüft, ob drei oder mehr "
-"abhängige/ wiederholte Messungen denselben Mittelwert haben</li>"
+"<ul><li><b>%1</b> – prüft, ob sich ein Stichprobenmittelwert signifikant von "
+"einem bekannten Populationsmittelwert unterscheidet</li><li><b>%2</b> – "
+"prüft, ob zwei unabhängige Stichproben denselben Mittelwert haben</li><li><b>"
+"%3</b> – prüft, ob die mittlere Differenz zwischen zwei verbundenen "
+"Stichproben Null ist</li><li><b>%4</b> – prüft, ob zwei unabhängige "
+"Stichproben mit ungleichen Varianzen denselben Mittelwert haben</li><li><b>"
+"%5</b> – prüft, ob drei oder mehr unabhängige Stichproben denselben "
+"Mittelwert haben</li><li><b>%6</b> – prüft, ob drei oder mehr verbundene / "
+"wiederholte Messungen denselben Mittelwert haben</li><li><b>%7</b> – prüft "
+"Unterschiede in den Medianen zwischen zwei unabhängigen Gruppen</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "<li><b>%1</b> - tests differences in medians between two independent "
-#| "groups</li><li><b>%2</b> - tests if the median difference between two "
-#| "related samples is zero</li><li><b>%3</b> - tests differences in medians "
-#| "among three or more independent groups</li><li><b>%4</b> - tests "
-#| "differences in medians among three or more related/repeated measurements</"
-#| "li><li><b>%5</b> - tests differences in survival distributions between "
-#| "two or more groups</li><li><b>%6</b> - tests for a trend in data over "
-#| "time</li><li><b>%7</b> - tests for randomness in a sequence of "
-#| "observations</li><li><b>%8</b> - tests if two categorical variables are "
-#| "independent of each other</li><li><b>%9</b> - tests if observed data "
-#| "follows a specified theoretical distribution</li></ul>"
+#, kde-format
 msgid ""
 "<li><b>%1</b> - tests if the median difference between two related samples "
 "is zero</li><li><b>%2</b> - tests differences in medians among three or more "
@@ -15539,18 +15421,19 @@ msgid ""
 "each other</li><li><b>%9</b> - tests if observed data follows a specified "
 "theoretical distribution</li></ul>"
 msgstr ""
-"<li><b>%1</b> – prüft Unterschiede der Mediane zwischen zwei unabhängigen "
-"Gruppen</li><li><b>%2</b> – prüft, ob die Median-Differenz zwischen zwei "
-"abhängigen Stichproben null ist</li><li><b>%3</b> – prüft Unterschiede der "
-"Mediane zwischen drei oder mehr unabhängigen Gruppen</li><li><b>%4</b> – "
-"prüft Unterschiede der Mediane zwischen drei oder mehr abhängigen/"
-"wiederholten Messungen</li><li><b>%5</b> – prüft Unterschiede der "
-"Überlebensverteilungen zwischen zwei oder mehr Gruppen</li> <li><b>%6</b> - "
-"prüft, ob ein Trend in den Daten vorliegt</li><li><b>%7</b> - prüft die "
-"Zufälligkeit in einer Beobachtungsreihe</li><li><b>%8</b> – prüft, ob zwei "
-"kategoriale Variablen voneinander unabhängig sind</li><li><b>%9</b> – prüft, "
-"ob die beobachteten Daten einer bestimmten theoretischen Verteilung folgen</"
-"li></ul>"
+"<li><b>%1</b> – prüft, ob die Mediandifferenz zwischen zwei verbundenen "
+"Stichproben Null ist</li><li><b>%2</b> – prüft Unterschiede in den Medianen "
+"zwischen drei oder mehr unabhängigen Gruppen</li><li><b>%3</b> – prüft "
+"Unterschiede in den Medianen zwischen drei oder mehr verbundenen / "
+"wiederholten Messungen</li><li><b>%4</b> – prüft Unterschiede in den "
+"Überlebensverteilungen zwischen zwei oder mehr Gruppen</li><li><b>%5</b> – "
+"prüft auf einen Trend in Daten über die Zeit</li><li><b>%6</b> – prüft auf "
+"Zufälligkeit in einer Folge von Beobachtungen</li><li><b>%7</b> – prüft auf "
+"nicht-zufällige Muster in der Prozesskontrolle mittels Läufen oberhalb/"
+"unterhalb des Medians</li><li><b>%8</b> – prüft, ob zwei kategoriale "
+"Variablen voneinander unabhängig sind</li><li><b>%9</b> – prüft, ob "
+"beobachtete Daten einer spezifizierten theoretischen Verteilung folgen</li></"
+"ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:307
 #, kde-format
@@ -17542,10 +17425,9 @@ msgstr "Tabellen Symbolleiste"
 
 #. i18n: ectx: ToolBar (live_data_toolbar)
 #: src/frontend/labplotui.rc:79
-#, fuzzy, kde-format
-#| msgid "Live Data Source..."
+#, kde-format
 msgid "Live Data Source Toolbar"
-msgstr "Live-Datenquelle..."
+msgstr "Symbolleiste für Live-Datenquelle"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/frontend/labplotui.rc:85
@@ -17783,10 +17665,9 @@ msgid "Couldn't open the temporary file for writing."
 msgstr "Die temporäre Datei konnte nicht zum Schreiben geöffnet werden."
 
 #: src/frontend/MainWin.cpp:988
-#, fuzzy, kde-format
-#| msgid "Loading %1..."
+#, kde-format
 msgid "Saving %1..."
-msgstr "Lade %1..."
+msgstr "Speichere %1..."
 
 #: src/frontend/MainWin.cpp:1066
 #, kde-format
@@ -17804,10 +17685,9 @@ msgid "Couldn't open the file '%1' for writing."
 msgstr "Die Datei '%1' kann nicht zum Schreiben geöffnet werden."
 
 #: src/frontend/MainWin.cpp:1096
-#, fuzzy, kde-format
-#| msgid "Project successfully opened (in %1 seconds)."
+#, kde-format
 msgid "Project successfully saved (in %1 seconds)."
-msgstr "Das Projekt wurde erfolgreich in %1 Sekunden geöffnet."
+msgstr "Das Projekt wurde erfolgreich in %1 Sekunden gespeichert."
 
 #: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
 #, kde-format
@@ -18531,10 +18411,9 @@ msgid "User Feedback"
 msgstr "Benutzer-Feedback"
 
 #: src/frontend/SettingsDialog.cpp:100
-#, fuzzy, kde-format
-#| msgid "Text Editor"
+#, kde-format
 msgid "Script Editor"
-msgstr "Texteditor"
+msgstr "Skripteditor"
 
 #: src/frontend/SettingsDialog.cpp:163
 #, kde-format
@@ -23848,17 +23727,15 @@ msgstr "Null:"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Alternate:"
+#, kde-format
 msgid "Alternative:"
-msgstr "Alternativ:"
+msgstr "Alternative:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
-#, fuzzy, kde-format
-#| msgid "Hypothesis"
+#, kde-format
 msgid "Hypotheses"
-msgstr "Hypothese"
+msgstr "Hypothesen"
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
@@ -24004,10 +23881,9 @@ msgstr "Themen"
 
 #. i18n: ectx: property (text), widget (QPushButton, bWillUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:344
-#, fuzzy, kde-format
-#| msgid "Update Will Message"
+#, kde-format
 msgid "Update Message"
-msgstr "Letzer Wille Nachricht aktualisieren"
+msgstr "Aktualisierungsnachricht"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:371
