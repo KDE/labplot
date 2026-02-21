@@ -990,7 +990,9 @@ void ActionsManager::initMenus() {
 
 	// complete initialization of new_notebook action after m_newNotebookMenu is created
 	m_tbNotebook->setMenu(m_newNotebookMenu);
-	m_tbNotebook->setDefaultAction(m_lastUsedNotebookAction ? m_lastUsedNotebookAction : m_newNotebookMenu->actions().first());
+	const auto actions = m_newNotebookMenu->actions();
+	if (!actions.isEmpty())
+		m_tbNotebook->setDefaultAction(m_lastUsedNotebookAction ? m_lastUsedNotebookAction : actions.constFirst());
 	connect(m_tbNotebook->menu(), &QMenu::triggered, m_tbNotebook, &ToggleActionMenu::setDefaultAction);
 #else
 	delete factory->container(QStringLiteral("notebook"), m_mainWindow);
@@ -1369,8 +1371,9 @@ void ActionsManager::updateNotebookActions() {
 	m_newNotebookMenu->addAction(m_configureNotebookAction);
 
 	// we just updated the notebook action list. its possible that the defaultAction isn't in the list anymore
-	if (m_tbNotebook && !m_newNotebookMenu->actions().contains(m_tbNotebook->defaultAction()))
-		m_tbNotebook->setDefaultAction(m_newNotebookMenu->actions().first());
+	const auto actions = m_newNotebookMenu->actions();
+	if (m_tbNotebook && !actions.contains(m_tbNotebook->defaultAction()) && !actions.isEmpty())
+		m_tbNotebook->setDefaultAction(actions.constFirst());
 }
 #endif
 
