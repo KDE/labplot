@@ -1512,7 +1512,9 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 	}
 
 	auto r = range.checkRange();
-	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
+	// Important: do not check if infinite here, because if the range is (NAN, NAN) 
+	// and the user sets one to a valid number it is otherwise not applied
+	if (index >= 0 && index < rangeCount(dim) && r != d->rangeConst(dim, index)) {
 		exec(new CartesianPlotSetRangeIndexCmd(d, dim, r, index));
 	} else if (index < 0 || index >= rangeCount(dim))
 		DEBUG(Q_FUNC_INFO << QStringLiteral("Warning: wrong index: %1").arg(index).toStdString());
