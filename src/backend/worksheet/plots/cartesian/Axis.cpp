@@ -1414,17 +1414,19 @@ bool AxisPrivate::calculateTickHorizontal(Axis::TicksDirection tickDirection,
 										  QPointF& startPointOut,
 										  QPointF& endPointOut) {
 	const bool valid = q->cSystem->mapXLogicalToScene(xTickPos);
-	if (valid) {
+	if (valid)
 		anchorPointOut.setX(xTickPos);
-		anchorPointOut.setY(yAnchorPos);
-		// for yDirection == -1 start is above end
-		if (anchorPointOut.y() >= centerValue) { // below
-			startPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0);
-			endPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksOut) ? -rangeDirection * ticksLength : 0);
-		} else { // above
-			startPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksOut) ? rangeDirection * ticksLength : 0);
-			endPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksIn) ? -rangeDirection * ticksLength : 0);
-		}
+	else
+		anchorPointOut.setX(0.);
+
+	anchorPointOut.setY(yAnchorPos);
+	// for yDirection == -1 start is above end
+	if (anchorPointOut.y() >= centerValue) { // below
+		startPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0);
+		endPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksOut) ? -rangeDirection * ticksLength : 0);
+	} else { // above
+		startPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksOut) ? rangeDirection * ticksLength : 0);
+		endPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksIn) ? -rangeDirection * ticksLength : 0);
 	}
 	return valid;
 }
@@ -1439,17 +1441,19 @@ bool AxisPrivate::calculateTickVertical(Axis::TicksDirection tickDirection,
 										QPointF& startPointOut,
 										QPointF& endPointOut) {
 	const bool valid = q->cSystem->mapYLogicalToScene(yTickPos);
-	if (valid) {
-		anchorPointOut.setX(xAnchorPos);
+	if (valid)
 		anchorPointOut.setY(yTickPos);
-		// for xDirection == 1 start is right of end
-		if (anchorPointOut.x() < centerValue) { // left
-			startPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0, 0);
-			endPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksOut) ? -rangeDirection * ticksLength : 0, 0);
-		} else { // right
-			startPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksOut) ? rangeDirection * ticksLength : 0, 0);
-			endPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksIn) ? -rangeDirection * ticksLength : 0, 0);
-		}
+	else
+		anchorPointOut.setY(0.);
+
+	anchorPointOut.setX(xAnchorPos);
+	// for xDirection == 1 start is right of end
+	if (anchorPointOut.x() < centerValue) { // left
+		startPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0, 0);
+		endPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksOut) ? -rangeDirection * ticksLength : 0, 0);
+	} else { // right
+		startPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksOut) ? rangeDirection * ticksLength : 0, 0);
+		endPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksIn) ? -rangeDirection * ticksLength : 0, 0);
 	}
 	return valid;
 }
@@ -1474,47 +1478,46 @@ int AxisPrivate::determineMinorTicksNumber() const {
 	return tmpMinorTicksNumber;
 }
 
-double AxisPrivate::calculateStartFromIncrement(double start, RangeT::Scale scale, double increment, bool* ok) {
-	if (ok)
-		*ok = true;
+double AxisPrivate::calculateStartFromIncrement(double start, RangeT::Scale scale, double increment, bool& ok) {
+	ok = true;
+
+	if (!qIsFinite(increment)) {
+		ok = false;
+		return std::nan("0");
+	}
 	switch (scale) {
 	case RangeT::Scale::Linear: // fall through
 	case RangeT::Scale::Inverse:
 		return ceil(start / increment) * increment;
 	case RangeT::Scale::Log10:
 		if (start <= 0) {
-			if (ok)
-				*ok = false;
-			return 0;
+			ok = false;
+			return std::nan("0");
 		}
 		return pow(10, ceil(log10(start) / increment) * increment);
 	case RangeT::Scale::Log2:
 		if (start <= 0) {
-			if (ok)
-				*ok = false;
-			return false;
+			ok = false;
+			return std::nan("0");
 		}
 		return pow(2, ceil(log2(start) / increment) * increment);
 	case RangeT::Scale::Ln:
 		if (start <= 0) {
-			if (ok)
-				*ok = false;
-			return false;
+			ok = false;
+			return std::nan("0");
 		}
 		return pow(M_E, ceil(log(start) / increment) * increment);
 	case RangeT::Scale::Sqrt:
 		if (start < 0) {
-			if (ok)
-				*ok = false;
-			return false;
+			ok = false;
+			return std::nan("0");
 		}
 		return pow(ceil(sqrt(start) / increment) * increment, 2);
 	case RangeT::Scale::Square:
 		return sqrt(ceil(pow(start, 2) / increment) * increment);
 	}
-	if (ok)
-		*ok = false;
-	return 0;
+	ok = false;
+	return std::nan("0");;
 }
 
 int AxisPrivate::calculateTicksNumberFromIncrement(double start, double end, RangeT::Scale scale, double increment) {
@@ -1612,11 +1615,11 @@ double AxisPrivate::calculateAutoParameters(int& majorTickCount, const Range<dou
 	}
 
 	bool ok = false;
-	const auto start = calculateStartFromIncrement(r.start(), r.scale(), spacing, &ok);
+	const auto start = calculateStartFromIncrement(r.start(), r.scale(), spacing, ok);
 	if (ok)
 		majorTickCount = calculateTicksNumberFromIncrement(start, r.end(), r.scale(), spacing);
 	else
-		majorTickCount = 0;
+		majorTickCount = 2; // Show start and end even when NAN or infinity
 	return start;
 }
 
@@ -1780,11 +1783,15 @@ void AxisPrivate::retransformTicks() {
 	// calculate the position of the center point in scene coordinates,
 	// will be used later to differentiate between "in" and "out" depending
 	// on the position relative to the center.
-	const double middleX = plot()->range(Dimension::X, cs->index(Dimension::X)).center();
-	const double middleY = plot()->range(Dimension::Y, cs->index(Dimension::Y)).center();
-	QPointF center(middleX, middleY);
 	bool valid = true;
-	center = q->cSystem->mapLogicalToScene(center, valid);
+	double center_other_dim = std::nan("0");
+	if (orientation == Axis::Orientation::Horizontal) {
+		center_other_dim = plot()->range(Dimension::Y, cs->index(Dimension::Y)).center();
+		valid = q->cSystem->mapYLogicalToScene(center_other_dim);
+	} else {
+		center_other_dim = plot()->range(Dimension::X, cs->index(Dimension::X)).center();
+		valid = q->cSystem->mapXLogicalToScene(center_other_dim);
+	}
 
 	const bool dateTimeSpacing = !q->isNumeric() && q->scale() == RangeT::Scale::Linear && majorTicksType == Axis::TicksType::Spacing;
 	DateTime::DateTime dt;
@@ -1909,21 +1916,41 @@ void AxisPrivate::retransformTicks() {
 												majorTicksLength,
 												majorTickPos,
 												otherDirAnchorPoint,
-												center.y(),
+												center_other_dim,
 												yDirection,
 												anchorPoint,
 												startPoint,
 												endPoint);
+				if (!valid) {
+					QRectF rect = m_plot->dataRect();
+					auto x = rect.x();
+					if (iMajor != 0)
+						x += rect.width();
+					anchorPoint.setX(x);
+					startPoint.setX(x);
+					endPoint.setX(x);
+					valid = true; // Draw the tick
+				}
 			} else { // vertical
 				valid = calculateTickVertical(majorTicksDirection,
 											  majorTicksLength,
 											  majorTickPos,
 											  otherDirAnchorPoint,
-											  center.x(),
+											  center_other_dim,
 											  xDirection,
 											  anchorPoint,
 											  startPoint,
 											  endPoint);
+				if (!valid) {
+					QRectF rect = m_plot->dataRect();
+					auto y = rect.y();
+					if (iMajor == 0)
+						y += rect.height();
+					anchorPoint.setY(y);
+					startPoint.setY(y);
+					endPoint.setY(y);
+					valid = true; // Draw the tick
+				}
 			}
 
 			const qreal value = scalingFactor * majorTickPos + zeroOffset;
@@ -2010,7 +2037,7 @@ void AxisPrivate::retransformTicks() {
 													minorTicksLength,
 													minorTickPos,
 													otherDirAnchorPoint,
-													center.y(),
+													center_other_dim,
 													yDirection,
 													anchorPoint,
 													startPoint,
@@ -2020,7 +2047,7 @@ void AxisPrivate::retransformTicks() {
 												  minorTicksLength,
 												  minorTickPos,
 												  otherDirAnchorPoint,
-												  center.x(),
+												  center_other_dim,
 												  xDirection,
 												  anchorPoint,
 												  startPoint,
