@@ -1209,19 +1209,26 @@ void AxisPrivate::retransformLine() {
 			wrapper.point = QPointF(offset, offset);
 			const auto pos = q->relativePosToParentPos(wrapper);
 
-			Lines ranges{QLineF(QPointF(range.start(), 1.), QPointF(range.end(), 1.))};
-			// y=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
-			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+			double min = range.start(), max = range.end();
+			const auto min_ok = q->cSystem->mapXLogicalToScene(min, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+			const auto max_ok = q->cSystem->mapXLogicalToScene(max, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 
-			if (sceneRange.size() > 0) {
+			if (min_ok && max_ok && qIsFinite(range.start()) && qIsFinite(range.end()) && min != max) {
 				// std::max/std::min: stay inside rect()
 				QRectF rect = m_plot->dataRect();
-				startPoint = QPointF(std::max(sceneRange.at(0).x1(), rect.x()), pos.y());
-				endPoint = QPointF(std::min(sceneRange.at(0).x2(), rect.x() + rect.width()), pos.y());
+				startPoint = QPointF(std::max(min, rect.x()), pos.y());
+				endPoint = QPointF(std::min(max, rect.x() + rect.width()), pos.y());
 
 				lines.append(QLineF(startPoint, endPoint));
 				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE =" << lines)
+			} else {
+				// Draw line neverthless. Makes not sense to draw any line
+				QRectF rect = m_plot->dataRect();
+				startPoint = QPointF(rect.x(), pos.y());
+				endPoint = QPointF(rect.x() + rect.width(), pos.y());
+
+				lines.append(QLineF(startPoint, endPoint));
 			}
 		}
 	} else { // vertical
@@ -1243,18 +1250,26 @@ void AxisPrivate::retransformLine() {
 			wrapper.point = QPointF(offset, offset);
 			const auto pos = q->relativePosToParentPos(wrapper);
 
-			Lines ranges{QLineF(QPointF(1., range.start()), QPointF(1., range.end()))};
-			// x=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
-			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+
+			double min = range.start(), max = range.end();
+			const auto min_ok = q->cSystem->mapYLogicalToScene(min, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+			const auto max_ok = q->cSystem->mapYLogicalToScene(max, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
-			if (sceneRange.size() > 0) {
+			if (min_ok && max_ok && qIsFinite(range.start()) && qIsFinite(range.end()) && min != max) {
 				// std::max/std::min: stay inside rect()
 				QRectF rect = m_plot->dataRect();
-				startPoint = QPointF(pos.x(), std::min(sceneRange.at(0).y1(), rect.y() + rect.height()));
-				endPoint = QPointF(pos.x(), std::max(sceneRange.at(0).y2(), rect.y()));
+				startPoint = QPointF(pos.x(), std::min(min, rect.y() + rect.height()));
+				endPoint = QPointF(pos.x(), std::max(max, rect.y()));
 
 				lines.append(QLineF(startPoint, endPoint));
 				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
+			} else {
+				// Draw line neverthless. Makes not sense to draw any line
+				QRectF rect = m_plot->dataRect();
+				startPoint = QPointF(pos.x(), rect.y() + rect.height());
+				endPoint = QPointF(pos.x(), rect.y());
+
+				lines.append(QLineF(startPoint, endPoint));
 			}
 		}
 	}
@@ -1463,7 +1478,7 @@ double AxisPrivate::calculateStartFromIncrement(double start, RangeT::Scale scal
 	if (ok)
 		*ok = true;
 	switch (scale) {
-	case RangeT::Scale::Linear:
+	case RangeT::Scale::Linear: // fall through
 	case RangeT::Scale::Inverse:
 		return ceil(start / increment) * increment;
 	case RangeT::Scale::Log10:
