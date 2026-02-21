@@ -1481,7 +1481,7 @@ int AxisPrivate::determineMinorTicksNumber() const {
 double AxisPrivate::calculateStartFromIncrement(double start, RangeT::Scale scale, double increment, bool& ok) {
 	ok = true;
 
-	if (!qIsFinite(increment)) {
+	if (!qIsFinite(increment) || increment == 0.) {
 		ok = false;
 		return std::nan("0");
 	}
@@ -1517,7 +1517,7 @@ double AxisPrivate::calculateStartFromIncrement(double start, RangeT::Scale scal
 		return sqrt(ceil(pow(start, 2) / increment) * increment);
 	}
 	ok = false;
-	return std::nan("0");;
+	return std::nan("0");
 }
 
 int AxisPrivate::calculateTicksNumberFromIncrement(double start, double end, RangeT::Scale scale, double increment) {
@@ -1562,7 +1562,12 @@ int AxisPrivate::calculateTicksNumberFromIncrement(double start, double end, Ran
  * MajorTickMode.
  */
 double AxisPrivate::calculateAutoParameters(int& majorTickCount, const Range<double>& r, double& spacing) {
-	const auto diff = r.diff();
+	constexpr auto invalidMajorTickCount = 2; // Show start and end even when NAN or infinity or the values are equal
+	const auto diff = abs(r.diff());
+	if (diff == 0) {
+		majorTickCount = invalidMajorTickCount;
+		return r.start();
+	}
 	const auto b = floor(log10(diff / majorTickCount));
 
 	const auto d1 = 1 * pow(10, b); // tick spacing
@@ -1614,12 +1619,15 @@ double AxisPrivate::calculateAutoParameters(int& majorTickCount, const Range<dou
 		}
 	}
 
+	if (r.diff() < 0.)
+		spacing *= -1.;
+
 	bool ok = false;
 	const auto start = calculateStartFromIncrement(r.start(), r.scale(), spacing, ok);
 	if (ok)
 		majorTickCount = calculateTicksNumberFromIncrement(start, r.end(), r.scale(), spacing);
 	else
-		majorTickCount = 2; // Show start and end even when NAN or infinity
+		majorTickCount = invalidMajorTickCount;
 	return start;
 }
 
