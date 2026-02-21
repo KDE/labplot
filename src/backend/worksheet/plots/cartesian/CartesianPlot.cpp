@@ -5743,6 +5743,13 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(plot);
 			else
 				return false;
+		} else if (reader->name() == QLatin1String("ParetoChart")) {
+			auto* plot = new ParetoChart(QStringLiteral("Pareto Chart"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
 		} else if (reader->name() == QLatin1String("cartesianPlot")) {
 			auto* plot = new CartesianPlot(QString(), true);
 			plot->setIsLoading(true);
@@ -5883,5 +5890,6 @@ const QList<QColor>& CartesianPlot::plotColors() const {
 const QColor CartesianPlot::plotColor(int index) const {
 	Q_D(const CartesianPlot);
 	const int i = index % d->plotColors.count();
+
 	return d->plotColors.at(i);
 }

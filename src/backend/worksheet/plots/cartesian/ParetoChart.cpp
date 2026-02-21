@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Run Chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -55,32 +55,14 @@ void ParetoChart::init() {
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("ParetoChart"));
 
-	// column for the sorted data used in the bar plot
-	d->dataSortedColumn = new Column(QStringLiteral("data"), AbstractColumn::ColumnMode::Double);
-	d->dataSortedColumn->setHidden(true);
-	d->dataSortedColumn->setUndoAware(false);
-	addChildFast(d->dataSortedColumn);
+	// column for the sorted frequencies used in the bar plot
+	d->frequenciesColumn = new Column(QStringLiteral("data"), AbstractColumn::ColumnMode::Integer);
+	d->frequenciesColumn->setHidden(true);
+	d->frequenciesColumn->setUndoAware(false);
+	addChildFast(d->frequenciesColumn);
 
-	// bar plot
-	d->barPlot = new BarPlot(QString());
-	d->barPlot->setHidden(true);
-	// d->barPlot->setOrientation(BoxPlot::Orientation::Vertical);
-
-	// line plot
-	d->linePlot = new XYCurve(QStringLiteral("data"));
-	d->linePlot->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
-	d->linePlot->setHidden(true);
-	d->linePlot->graphicsItem()->setParentItem(d);
-	d->linePlot->line()->init(group);
-	d->linePlot->line()->setStyle(Qt::SolidLine);
-	d->linePlot->symbol()->setStyle(Symbol::Style::NoSymbols);
-	d->linePlot->background()->setPosition(Background::Position::No);
-
-	// column with the sorted data that is shown in the bar plot
-	d->dataSortedColumn = new Column(QStringLiteral("data"), AbstractColumn::ColumnMode::Double);
-	d->dataSortedColumn->setHidden(true);
-	d->dataSortedColumn->setUndoAware(false);
-	addChildFast(d->dataSortedColumn);
+	// column with the text represenation of the sorted frequencies, used in the horizontal axis of the parent plot area
+	d->labelsColumn = new Column(QStringLiteral("labels"), AbstractColumn::ColumnMode::Text);
 
 	// column for x and y values used in the line plot for the cumulative percentage
 	d->xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
@@ -93,8 +75,25 @@ void ParetoChart::init() {
 	d->yColumn->setUndoAware(false);
 	addChildFast(d->yColumn);
 
+	// bar plot for the frequencies
+	d->barPlot = new BarPlot(QString());
+	d->barPlot->setHidden(true);
+	d->barPlot->setOrientation(BarPlot::Orientation::Vertical);
+
+	// line plot for the cumulative percentage values
+	d->linePlot = new XYCurve(QStringLiteral("data"));
+	d->linePlot->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	d->linePlot->setHidden(true);
+	d->linePlot->graphicsItem()->setParentItem(d);
+	d->linePlot->line()->setStyle(Qt::SolidLine);
+	d->linePlot->symbol()->setStyle(Symbol::Style::Circle);
+	d->linePlot->setValuesType(XYCurve::ValuesType::Y);
+	d->linePlot->setValuesPosition(XYCurve::ValuesPosition::Right);
+	d->linePlot->setValuesDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	d->linePlot->setValuesSuffix(QStringLiteral("%"));
+
 	// set the columns in the plots
-	d->barPlot->setDataColumns({d->dataSortedColumn});
+	d->barPlot->setDataColumns({d->frequenciesColumn});
 	d->linePlot->setXColumn(d->xColumn);
 	d->linePlot->setYColumn(d->yColumn);
 
@@ -108,6 +107,7 @@ void ParetoChart::finalizeAdd() {
 	WorksheetElement::finalizeAdd();
 	addChildFast(d->barPlot);
 	addChildFast(d->linePlot);
+	d->linePlot->setCoordinateSystemIndex(1); // assign to the second y-range going from 0 to 100%
 }
 
 void ParetoChart::renameInternalCurves() {
@@ -152,7 +152,7 @@ int ParetoChart::xIndexCount() const {
 	if (!d->dataColumn)
 		return 0;
 
-	return d->dataSortedColumn->rowCount();
+	return d->frequenciesColumn->rowCount();
 }
 
 Line* ParetoChart::barLine() const {
@@ -310,7 +310,7 @@ void ParetoChartPrivate::retransform() {
 void ParetoChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	if (!dataColumn) {
-		dataSortedColumn->clear();
+		frequenciesColumn->clear();
 		xColumn->clear();
 		yColumn->clear();
 		Q_EMIT q->dataChanged();
@@ -322,35 +322,47 @@ void ParetoChartPrivate::recalc() {
 	barPlot->setSuppressRetransform(true);
 	linePlot->setSuppressRetransform(true);
 
-	QVector<double> data;
-
-	double totalSumOfFrequencies = 0.;
-	for (int i = 1; i < dataColumn->rowCount(); ++i) {
-		if (dataColumn->isValid(i) && !dataColumn->isMasked(i)) {
-			auto value = dataColumn->valueAt(i);
-			data << value;
-			totalSumOfFrequencies += value;
-		}
-	}
-
-	std::sort(data.begin(), data.end(), std::greater{});
-
-	// calculate the cummulative values
-	const int count = data.size();
+	// sort the frequencies and the accompanying labels and calculate the total sum of frequencies
+	const auto& frequencies = static_cast<const Column*>(dataColumn)->frequencies();
+	const int count = frequencies.count();
 	QVector<double> xData(count);
 	QVector<double> yData(count);
-	double sum = 0.;
+
+	auto i = frequencies.constBegin();
+	QVector<QPair<QString, int>> pairs;
 	int row = 0;
-	for (auto value : data) {
+	int totalSumOfFrequencies = 0;
+	while (i != frequencies.constEnd()) {
+		pairs << QPair<QString, int>(i.key(), i.value());
+		xData[row] = 0.5 + row;
+		totalSumOfFrequencies += i.value();
+		++row;
+		++i;
+	}
+
+	std::sort(pairs.begin(), pairs.end(), [](QPair<QString, int> a, QPair<QString, int> b) {
+		return a.second > b.second;
+	});
+
+	QVector<int> frequenciesData;
+	QVector<QString> labelsData;
+	for (const auto& pair : pairs) {
+		labelsData << pair.first;
+		frequenciesData << pair.second;
+	}
+
+	// calculate the cumulative values
+	int sum = 0;
+	row = 0;
+	for (auto value : frequenciesData) {
 		sum += value;
 		if (totalSumOfFrequencies != 0)
 			yData[row] = (double)sum / totalSumOfFrequencies * 100;
-
-		xData[row] = 0.5 + row;
 		++row;
 	}
 
-	dataSortedColumn->setValues(data);
+	frequenciesColumn->setIntegers(frequenciesData);
+	labelsColumn->setText(labelsData);
 	xColumn->setValues(xData);
 	yColumn->setValues(yData);
 
@@ -390,7 +402,7 @@ void ParetoChart::save(QXmlStreamWriter* writer) const {
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->dataColumn, dataColumn);
-	WRITE_COLUMN(d->dataSortedColumn, dataSortedColumn);
+	WRITE_COLUMN(d->frequenciesColumn, frequenciesColumn);
 	WRITE_COLUMN(d->xColumn, xColumn);
 	WRITE_COLUMN(d->yColumn, yColumn);
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
@@ -398,7 +410,7 @@ void ParetoChart::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// save the internal columns, above only the references to them were saved
-	d->dataSortedColumn->save(writer);
+	d->frequenciesColumn->save(writer);
 	d->xColumn->save(writer);
 	d->yColumn->save(writer);
 
@@ -438,7 +450,7 @@ bool ParetoChart::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 			READ_COLUMN(dataColumn);
-			READ_COLUMN(dataSortedColumn);
+			READ_COLUMN(frequenciesColumn);
 			READ_COLUMN(xColumn);
 			READ_COLUMN(yColumn);
 
@@ -456,14 +468,16 @@ bool ParetoChart::load(XmlStreamReader* reader, bool preview) {
 			else if (name == QLatin1String("y"))
 				rc = d->xColumn->load(reader, preview);
 			else if (name == QLatin1String("data"))
-				rc = d->dataSortedColumn->load(reader, preview);
+				rc = d->frequenciesColumn->load(reader, preview);
 
 			if (!rc)
 				return false;
 		} else if (reader->name() == QLatin1String("barPlot")) {
+			d->barPlot->setIsLoading(true);
 			if (!d->barPlot->load(reader, preview))
 				return false;
 		} else if (reader->name() == QLatin1String("linePlot")) {
+			d->linePlot->setIsLoading(true);
 			if (!d->linePlot->load(reader, preview))
 				return false;
 		} else { // unknown element

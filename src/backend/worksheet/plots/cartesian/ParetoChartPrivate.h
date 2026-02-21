@@ -33,8 +33,12 @@ public:
 	QString dataColumnPath;
 
 	// column for the sorted data used in the bar plot
-	Column* dataSortedColumn{nullptr};
-	QString dataSortedColumnPath;
+	Column* frequenciesColumn{nullptr};
+	QString frequenciesColumnPath;
+
+	// column for labels used in the horizontal axis
+	Column* labelsColumn{nullptr};
+	QString labelsColumnPath;
 
 	// column for x and y values used in the line plot for the cumulative percentage
 	Column* xColumn{nullptr};
