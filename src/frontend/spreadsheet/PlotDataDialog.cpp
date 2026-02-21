@@ -591,10 +591,10 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	case Plot::PlotType::LineSymbol3PointSegment:
 	case Plot::PlotType::Formula: {
 		const QString& xColumnName = ui->cbXColumn->currentText();
-		Column* xColumn = columnFromName(xColumnName);
+		auto* xColumn = columnFromName(xColumnName);
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
-			Column* yColumn = columnFromName(name);
+			auto* yColumn = columnFromName(name);
 			if (yColumn == xColumn)
 				continue;
 
@@ -605,7 +605,11 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			addCurve(name, xColumn, yColumn, plot);
 			plot->scaleAuto(-1, -1);
 			plot->retransform();
-			setAxesTitles(plot, name);
+
+			// adjust padding and axis titles
+			const bool first = (comboBox == m_columnComboBoxes.at(1));
+			const bool last = (comboBox == m_columnComboBoxes.last());
+			adjustPadding(plot, name, first, last);
 		}
 		break;
 	}
@@ -620,11 +624,15 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 
 			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
-			setAxesTitles(plot, name);
 			worksheet->addChild(plot);
 			addSingleSourceColumnPlot(column, plot);
 			plot->scaleAuto(-1, -1);
 			plot->retransform();
+
+			// adjust padding and axis titles
+			const bool first = (comboBox == m_columnComboBoxes.first());
+			const bool last = (comboBox == m_columnComboBoxes.last());
+			adjustPadding(plot, name, first, last);
 		}
 		break;
 	}
@@ -633,7 +641,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	case Plot::PlotType::LollipopPlot: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
-			Column* column = columnFromName(name);
+			auto* column = columnFromName(name);
 
 			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
@@ -641,7 +649,11 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			addMultiSourceColumnsPlot(QVector<const AbstractColumn*>{column}, plot);
 			plot->scaleAuto(-1, -1);
 			plot->retransform();
-			setAxesTitles(plot, name);
+
+			// adjust padding and axis titles
+			const bool first = (comboBox == m_columnComboBoxes.first());
+			const bool last = (comboBox == m_columnComboBoxes.last());
+			adjustPadding(plot, name, first, last);
 		}
 		break;
 	}
@@ -1158,6 +1170,21 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 			verticalAxis->title()->setText(yColumnName);
 		}
 	}
+	}
+}
+
+void PlotDataDialog::adjustPadding(CartesianPlot* plot, const QString& name, bool firstColumn, bool lastColumn) const {
+	plot->setSymmetricPadding(false);
+	if (lastColumn) {
+		setAxesTitles(plot, name);
+		plot->setVerticalPadding(Worksheet::convertToSceneUnits(0.3, Worksheet::Unit::Centimeter));
+	} else {
+		plot->horizontalAxis()->title()->setText(QString());
+		plot->horizontalAxis()->setLabelsPosition(Axis::LabelsPosition::NoLabels);
+		plot->setBottomPadding(Worksheet::convertToSceneUnits(0.3, Worksheet::Unit::Centimeter));
+
+		if (!firstColumn) // reduce also the top-padding for non-first y-columns
+			plot->setVerticalPadding(Worksheet::convertToSceneUnits(0.3, Worksheet::Unit::Centimeter));
 	}
 }
 
