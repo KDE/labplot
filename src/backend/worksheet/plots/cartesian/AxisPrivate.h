@@ -164,7 +164,7 @@ private:
 							   QPointF& endPointOut);
 	int determineMinorTicksNumber() const;
 	static double calculateAutoParameters(int& majorTickCount, const Range<double>& r, double& spacing);
-	static double calculateStartFromIncrement(double start, RangeT::Scale scale, double increment, bool &ok);
+	static double calculateStartFromIncrement(double start, RangeT::Scale scale, double increment, bool& ok);
 	static int calculateTicksNumberFromIncrement(double start, double end, RangeT::Scale scale, double increment);
 
 	QPainterPath arrowPath;
