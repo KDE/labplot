@@ -3298,7 +3298,11 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		}
 		DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
 
-		plot->minMax(dim, indexRange, range, true);
+		// Pareto chart requires two coordinate systems, handle it differently.
+		if (dim == Dimension::Y && plot->type() == AspectType::ParetoChart)
+			static_cast<const ParetoChart*>(plot)->multiMinMax(index, dim, indexRange, range, true);
+		else
+			plot->minMax(dim, indexRange, range, true);
 
 		// check ranges for nonlinear scales
 		if (range.scale() != RangeT::Scale::Linear)

@@ -623,14 +623,6 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 
-			if (m_plotType == Plot::PlotType::ParetoChart) {
-				// add second range for the cumulative percentage of the total number of occurrences
-				plot->addYRange(Range<double>(0, 100)); // add second y range
-				plot->addCoordinateSystem(); // add cs for second y range
-				plot->setCoordinateSystemRangeIndex(plot->coordinateSystemCount() - 1, Dimension::Y, 1); // specify new y range for new cs
-				plot->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
-			}
-
 			setAxesTitles(plot, name);
 			worksheet->addChild(plot);
 			addSingleSourceColumnPlot(column, plot);

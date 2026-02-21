@@ -31,7 +31,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-#include <gsl/gsl_statistics.h>
+// #include <gsl/gsl_statistics.h>
 
 CURVE_COLUMN_CONNECT(ParetoChart, Data, data, recalc)
 
@@ -56,7 +56,7 @@ void ParetoChart::init() {
 	KConfigGroup group = config.group(QStringLiteral("ParetoChart"));
 
 	// column for the sorted frequencies used in the bar plot
-	d->frequenciesColumn = new Column(QStringLiteral("data"), AbstractColumn::ColumnMode::Integer);
+	d->frequenciesColumn = new Column(QStringLiteral("frequencies"), AbstractColumn::ColumnMode::Integer);
 	d->frequenciesColumn->setHidden(true);
 	d->frequenciesColumn->setUndoAware(false);
 	addChildFast(d->frequenciesColumn);
@@ -175,23 +175,31 @@ Symbol* ParetoChart::symbol() const {
 	return d->linePlot->symbol();
 }
 
-bool ParetoChart::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+bool ParetoChart::indicesMinMax(Dimension, double, double, int& start, int& end) const {
 	start = 0;
 	end = xIndexCount() - 1;
 	return true;
 }
 
-bool ParetoChart::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
+bool ParetoChart::multiMinMax(int csIndex, Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
+	Q_D(const ParetoChart);
+	if (csIndex == 0 && dim == Dimension::Y)
+		return d->barPlot->minMax(dim, indexRange, r, false);
+	else
+		return d->linePlot->minMax(dim, indexRange, r, false);
+}
+
+bool ParetoChart::minMax(Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
 	Q_D(const ParetoChart);
 	return d->linePlot->minMax(dim, indexRange, r, false);
 }
 
-double ParetoChart::minimum(const Dimension dim) const {
+double ParetoChart::minimum(Dimension dim) const {
 	Q_D(const ParetoChart);
 	return d->linePlot->minimum(dim);
 }
 
-double ParetoChart::maximum(const Dimension dim) const {
+double ParetoChart::maximum(Dimension dim) const {
 	Q_D(const ParetoChart);
 	return d->linePlot->maximum(dim);
 }
@@ -467,7 +475,7 @@ bool ParetoChart::load(XmlStreamReader* reader, bool preview) {
 				rc = d->xColumn->load(reader, preview);
 			else if (name == QLatin1String("y"))
 				rc = d->xColumn->load(reader, preview);
-			else if (name == QLatin1String("data"))
+			else if (name == QLatin1String("frequencies"))
 				rc = d->frequenciesColumn->load(reader, preview);
 
 			if (!rc)

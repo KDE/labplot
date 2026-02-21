@@ -37,13 +37,13 @@
  */
 
 /*!
- * \fn bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& rOut, bool includeErrorBars = true) const
+ * \fn bool minMax(Dimension dim, const Range<int>& indexRange, Range<double>& rOut, bool includeErrorBars = true) const
  * \brief minMax
  * \param dim
  * \param indexRange
  * \param rOut
  * \param includeErrorBars
- * \return The minimum and maximum in the range \p rOut between the indices \p indexRange for dimension \p dim
+ * \return The minimum and maximum in the range \p rOut between the indices \p indexRange for dimension \p dim.
  */
 
 /*!
@@ -61,7 +61,7 @@
  */
 
 /*!
- * \fn bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const
+ * \fn bool indicesMinMax(Dimension dim, double v1, double v2, int& start, int& end) const
  * \brief indicesMinMax
  * \param dim
  * \param v1 Start value

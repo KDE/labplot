@@ -60,10 +60,11 @@ public:
 	void setVisible(bool) override;
 
 	int xIndexCount() const;
-	bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const override;
-	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
-	double minimum(CartesianCoordinateSystem::Dimension) const override;
-	double maximum(CartesianCoordinateSystem::Dimension) const override;
+	bool indicesMinMax(Dimension, double v1, double v2, int& start, int& end) const override;
+	bool multiMinMax(int csIndex, Dimension, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
+	bool minMax(Dimension, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
+	double minimum(Dimension) const override;
+	double maximum(Dimension) const override;
 	bool hasData() const override;
 	int dataCount(Dimension) const override;
 	bool usingColumn(const AbstractColumn*, bool indirect) const override;
