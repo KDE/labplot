@@ -547,7 +547,8 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	case Plot::PlotType::KDEPlot:
 	case Plot::PlotType::QQPlot:
 	case Plot::PlotType::ProcessBehaviorChart:
-	case Plot::PlotType::RunChart: {
+	case Plot::PlotType::RunChart:
+	case Plot::PlotType::ParetoChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const auto& name = comboBox->currentText();
 			const auto* column = columnFromName(name);
@@ -591,10 +592,10 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	case Plot::PlotType::LineSymbol3PointSegment:
 	case Plot::PlotType::Formula: {
 		const QString& xColumnName = ui->cbXColumn->currentText();
-		Column* xColumn = columnFromName(xColumnName);
+		auto* xColumn = columnFromName(xColumnName);
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
-			Column* yColumn = columnFromName(name);
+			auto* yColumn = columnFromName(name);
 			if (yColumn == xColumn)
 				continue;
 
@@ -613,13 +614,23 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	case Plot::PlotType::KDEPlot:
 	case Plot::PlotType::QQPlot:
 	case Plot::PlotType::ProcessBehaviorChart:
-	case Plot::PlotType::RunChart: {
+	case Plot::PlotType::RunChart:
+	case Plot::PlotType::ParetoChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const auto& name = comboBox->currentText();
 			const auto* column = columnFromName(name);
 
 			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
+
+			if (m_plotType == Plot::PlotType::ParetoChart) {
+				// add second range for the cumulative percentage of the total number of occurrences
+				plot->addYRange(Range<double>(0, 100)); // add second y range
+				plot->addCoordinateSystem(); // add cs for second y range
+				plot->setCoordinateSystemRangeIndex(plot->coordinateSystemCount() - 1, Dimension::Y, 1); // specify new y range for new cs
+				plot->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
+			}
+
 			setAxesTitles(plot, name);
 			worksheet->addChild(plot);
 			addSingleSourceColumnPlot(column, plot);
@@ -695,7 +706,8 @@ void PlotDataDialog::addCurvesToWorksheets(AbstractAspect* parent) {
 	case Plot::PlotType::KDEPlot:
 	case Plot::PlotType::QQPlot:
 	case Plot::PlotType::ProcessBehaviorChart:
-	case Plot::PlotType::RunChart: {
+	case Plot::PlotType::RunChart:
+	case Plot::PlotType::ParetoChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			const auto* column = columnFromName(name);
@@ -877,6 +889,16 @@ void PlotDataDialog::addSingleSourceColumnPlot(const Column* column, CartesianPl
 		auto* chart = new RunChart(name);
 		chart->setDataColumn(column);
 		plot = chart;
+	} else if (m_plotType == Plot::PlotType::ParetoChart) {
+		auto* chart = new ParetoChart(name);
+		chart->setDataColumn(column);
+		plot = chart;
+
+		// add second range for the cumulative percentage of the total number of occurrences
+		plotArea->addYRange(Range<double>(0, 100)); // add second y range
+		plotArea->addCoordinateSystem(); // add cs for second y range
+		plotArea->setCoordinateSystemRangeIndex(plotArea->coordinateSystemCount() - 1, Dimension::Y, 1); // specify new y range for new cs
+		plotArea->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
 	}
 
 	if (plot) {
@@ -1156,6 +1178,35 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		} else if (m_columnComboBoxes.size() == 1) {
 			const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
 			verticalAxis->title()->setText(yColumnName);
+		}
+	}
+	case Plot::PlotType::ParetoChart: {
+		verticalAxis->title()->setText(i18n("Frequency"));
+		verticalAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
+		verticalAxis->setMajorTicksNumber(10 + 1); // same tick number as percentage axis below
+
+		// determine the second vertical axis and set its title to "Cumulative Percentage"
+		Axis* secondAxis = nullptr;
+		const auto& axes = plot->children(AspectType::Axis);
+		for (auto a : axes) {
+			auto axis = static_cast<Axis*>(a);
+			if (axis->orientation() == Axis::Orientation::Vertical && axis != verticalAxis) {
+				secondAxis = axis;
+				break;
+			}
+		}
+
+		if (secondAxis) {
+			secondAxis->setPosition(Axis::Position::Right);
+			secondAxis->setMajorTicksDirection(Axis::ticksBoth);
+			secondAxis->setLabelsPosition(Axis::LabelsPosition::In);
+			secondAxis->setLabelsSuffix(QLatin1String("%"));
+			secondAxis->title()->setRotationAngle(90);
+			secondAxis->setCoordinateSystemIndex(1);
+
+			secondAxis->title()->setText(i18n("Cumulative Percentage"));
+			// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was addressed
+			secondAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
 		}
 	}
 	}
