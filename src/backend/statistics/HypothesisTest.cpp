@@ -38,7 +38,9 @@ HypothesisTest::HypothesisTest(const QString& name)
 	, d_ptr(new HypothesisTestPrivate(this)) {
 }
 
-HypothesisTest::~HypothesisTest() = default;
+HypothesisTest::~HypothesisTest() {
+	delete d_ptr;
+}
 
 QString HypothesisTest::resultHtml() const {
 	Q_D(const HypothesisTest);

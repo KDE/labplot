@@ -156,6 +156,12 @@ struct anova_oneway_test_result nsl_stats_anova_oneway_f(const double** groups, 
 
 		total_samples += sizes[i];
 	}
+
+	if (total_samples == 0) {
+		result.p = NAN;
+		return result;
+	}
+
 	double grand_mean = grand_total / total_samples;
 	double ssb = 0.0;
 	for (size_t i = 0; i < n_groups; i++) {
@@ -173,7 +179,8 @@ struct anova_oneway_test_result nsl_stats_anova_oneway_f(const double** groups, 
 	if (delta != 0.) {
 		const double ms_within = ssw / delta;
 		result.ms_within_groups = ms_within;
-		F = ms_between / ms_within;
+		if (ms_within != 0.)
+			F = ms_between / ms_within;
 	} else {
 		result.p = NAN;
 		return result;
@@ -214,8 +221,10 @@ struct anova_oneway_repeated_test_result nsl_stats_anova_oneway_repeated_f(const
 
 	if (total_samples == 0) {
 		result.p = NAN;
+		free(sample_means);
 		return result;
 	}
+
 	double grand_mean = grand_total / total_samples;
 
 	double ssb = 0.0;
@@ -609,8 +618,6 @@ double* nsl_stats_logistic_regression(double** x, const int* y, int N, int n_in,
 
 	double* W = (double*)malloc(sizeof(double) * n_in);
 	double* result = (double*)malloc(sizeof(double) * (n_in + 1));
-	if (!W || !result)
-		return NULL;
 
 	for (int i = 0; i < n_in; i++)
 		W[i] = 0.0;
@@ -839,10 +846,10 @@ struct wilcoxon_test_result nsl_stats_wilcoxon_w(const double sample1[], const d
 	result.W = T;
 	result.tie_count = ties;
 	result.positive_rank_sum = T_plus;
-	result.positive_rank_mean = T_plus / nT_plus;
+	result.positive_rank_mean = (nT_plus != 0) ? T_plus / nT_plus : NAN;
 	result.positive_rank_count = nT_plus;
 	result.negative_rank_sum = T_minus;
-	result.negative_rank_mean = T_minus / nT_minus;
+	result.negative_rank_mean = (nT_minus != 0) ? T_minus / nT_minus : NAN;
 	result.negative_rank_count = nT_minus;
 
 	return result;
