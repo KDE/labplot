@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-18 00:40+0000\n"
+"POT-Creation-Date: 2026-02-22 00:39+0000\n"
 "PO-Revision-Date: 2026-01-23 07:59+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
@@ -6697,7 +6697,7 @@ msgid "Raw"
 msgstr "Brut"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1053
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1065
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:234
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:492
@@ -9752,7 +9752,7 @@ msgstr "Histogramme"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:639
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1971
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:892
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:904
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:152
 #, kde-format
 msgid "Box Plot"
@@ -9778,8 +9778,8 @@ msgstr "Tracé en barres"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:656
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1985
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:894
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:896
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:906
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:908
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:155
 #, kde-format
 msgid "Bar Plot"
@@ -10044,7 +10044,7 @@ msgid "%1: simplify '%2'"
 msgstr "%1 : simplifier « %2 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2188
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:810
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:822
 #, kde-format
 msgid "Simplification of '%1'"
 msgstr "Simplification de « %1 »"
@@ -10068,7 +10068,7 @@ msgid "%1: differentiate '%2'"
 msgstr "%1 : différencier « %2 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2207
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:783
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:795
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Dérivée de « %1 »"
@@ -10092,7 +10092,7 @@ msgid "%1: integrate '%2'"
 msgstr "%1 : intégrer « %2 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2226
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:786
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:798
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Intégrale de « %1 »"
@@ -10108,7 +10108,7 @@ msgid "%1: interpolate '%2'"
 msgstr "%1 : interpoler « %2 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2245
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:789
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:801
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Interpolation de « %1 »"
@@ -10124,7 +10124,7 @@ msgid "%1: smooth '%2'"
 msgstr "%1 : lisser « %2 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2264
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:792
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:804
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Lissage de « %1 »"
@@ -10160,7 +10160,7 @@ msgid "%1: fit to '%2'"
 msgstr "%1 : ajuster à « %2 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2302
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:779
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:791
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
@@ -12003,8 +12003,8 @@ msgstr "Exporter..."
 msgid "Export selected element"
 msgstr "Exporter l'élément sélectionné"
 
-#: src/frontend/ActionsManager.cpp:359 src/frontend/ActionsManager.cpp:1392
-#: src/frontend/ActionsManager.cpp:1400
+#: src/frontend/ActionsManager.cpp:359 src/frontend/ActionsManager.cpp:1395
+#: src/frontend/ActionsManager.cpp:1403
 #, kde-format
 msgid "Share"
 msgstr "Partager"
@@ -12384,7 +12384,7 @@ msgid "Sort the selected columns separately in descending order"
 msgstr "Trier les colonnes sélectionnées séparément dans un ordre décroissant"
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/ActionsManager.cpp:742 src/frontend/ActionsManager.cpp:1558
+#: src/frontend/ActionsManager.cpp:742 src/frontend/ActionsManager.cpp:1561
 #: src/frontend/dockwidgets/LiveDataDock.cpp:239
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
@@ -12479,40 +12479,40 @@ msgstr "Visibilité des fenêtres"
 msgid "Color Scheme"
 msgstr "Thème de couleurs"
 
-#: src/frontend/ActionsManager.cpp:1359
+#: src/frontend/ActionsManager.cpp:1361
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Crée un nouveau carnet %1"
 
-#: src/frontend/ActionsManager.cpp:1392
+#: src/frontend/ActionsManager.cpp:1395
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Un problème est survenu lors du partage du projet : %1"
 
-#: src/frontend/ActionsManager.cpp:1396
+#: src/frontend/ActionsManager.cpp:1399
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Projet partagé avec succès"
 
-#: src/frontend/ActionsManager.cpp:1399
+#: src/frontend/ActionsManager.cpp:1402
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Vous pouvez trouver le projet partagé à : <a href=\"%1\">%1</a>"
 
-#: src/frontend/ActionsManager.cpp:1554
+#: src/frontend/ActionsManager.cpp:1557
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, fuzzy, kde-format
 #| msgid "Contains"
 msgid "Continue"
 msgstr "Contient"
 
-#: src/frontend/ActionsManager.cpp:1555
+#: src/frontend/ActionsManager.cpp:1558
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
 msgstr "Poursuivre la lecture"
 
-#: src/frontend/ActionsManager.cpp:1559
+#: src/frontend/ActionsManager.cpp:1562
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
 #, kde-format
 msgid "Pause Reading"
@@ -19617,9 +19617,9 @@ msgstr "Zone de tracé - %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:411
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:440
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:680
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:703
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:723
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:692
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:715
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:735
 #, kde-format
 msgid "Worksheet - %1"
 msgstr "Feuille de travail - %1"
@@ -19631,124 +19631,124 @@ msgid "Plot data from %1"
 msgstr "Données de tracé à partir %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:601
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:621
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:638
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:683
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:706
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:726
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:625
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:646
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:695
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:718
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:738
 #, kde-format
 msgid "Plot Area %1"
 msgstr "Zone de tracé %1"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:795
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:807
 #, kde-format
 msgid "Fourier Filter of '%1'"
 msgstr "Filtre de Fourier de « %1 »"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:798
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:810
 #, fuzzy, kde-format
 #| msgid "Fourier Transform"
 msgid "Fourier Transform of '%1'"
 msgstr "Transformation de Fourier"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:801
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:813
 #, fuzzy, kde-format
 #| msgid "Hilbert Transform"
 msgid "Hilbert Transform of '%1'"
 msgstr "Transformation de Hilbert"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:804
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:816
 #, fuzzy, kde-format
 #| msgid "Interpolation of '%1'"
 msgid "Convolution of '%1'"
 msgstr "Interpolation de « %1 »"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:807
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:819
 #, fuzzy, kde-format
 #| msgid "Interpolation of '%1'"
 msgid "Correlation of '%1'"
 msgstr "Interpolation de « %1 »"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:813
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:825
 #, kde-format
 msgid "Baseline Correction of '%1'"
 msgstr "Correction de la référence pour « %1 »"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:844
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:856
 #, kde-format
 msgid "Probability Density of '%1'"
 msgstr "Densité de probabilité de « %1 »"
 
 # unreviewed-context
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:850
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:862
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
 msgstr "Distribution ajustée à « %1 »"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1055
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1067
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:356
 #: src/frontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Densité"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1061
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1073
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:386
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "Quantiles théoriques"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1064
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1076
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:388
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "Échantillonner les quantiles"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1148
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1160
 #, kde-format
 msgid "Sample"
 msgstr "Échantillon"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1171
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1198
 #, kde-format
 msgid "New Plot Area in an Existing Worksheet"
 msgstr "Nouvelle zone de tracé dans une feuille de travail existante"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1172
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1199
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:202
 #, kde-format
 msgid "New Plot Area in a New Worksheet"
 msgstr "Nouvelle zone de tracé dans une nouvelle feuille de travail"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1179
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1206
 #, kde-format
 msgid "New Plot Areas in an Existing Worksheet"
 msgstr "Nouvelles zones de tracé dans une feuille de travail existante"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1180
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1207
 #, kde-format
 msgid "New Plot Areas in a New Worksheet"
 msgstr "Nouvelles zones de tracé dans une nouvelle feuille de travail"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1207
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1234
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Aucune donnée à tracer sélectionnée."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1211
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1238
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Un tracé déjà existant doit être sélectionné."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1215
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1242
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Une feuille de travail déjà existante doit être sélectionnée."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1221
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1248
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Fermer la boite de dialogue et tracer les données."
