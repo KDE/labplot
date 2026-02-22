@@ -794,6 +794,35 @@ void ProjectImportTest::testOriginBarPlot() {
 }
 
 /*!
+ * test the import of "stacked plots",
+ * the test file was taken from https://blog.originlab.com/stack-lines-in-groups-with-y-offset.
+ */
+void ProjectImportTest::testOriginStackedPlots() {
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/Stack_lines_with_Y_offset.opj")));
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	// check the project tree for the imported project
+	// spreadsheet
+	auto* sheet = dynamic_cast<Spreadsheet*>(project.child<AbstractAspect>(0));
+	QVERIFY(sheet != nullptr);
+	QCOMPARE(sheet->columnCount(), 81);
+	QCOMPARE(sheet->rowCount(), 300);
+
+	// worksheet
+	auto* ws = dynamic_cast<Worksheet*>(project.child<AbstractAspect>(1));
+	QVERIFY(ws != nullptr);
+	QCOMPARE(ws->name(), QLatin1String("Graph1"));
+
+	auto* plot = dynamic_cast<CartesianPlot*>(ws->child<CartesianPlot>(0));
+	QVERIFY(plot != nullptr);
+	QCOMPARE(plot->name(), i18n("Plot%1", QString::number(1)));
+
+	// TODO: add more check for the created line plots and also check the stacked offset property
+}
+
+/*!
  * read a project file containing one plot area/layer with one single coordinate system with 4 axes and one curve.
  */
 void ProjectImportTest::testOriginSingleLayerTwoAxes() {
