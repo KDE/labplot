@@ -2130,13 +2130,13 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 }
 
 void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn, const double norm) {
-	const size_t n = tmpXDataColumn->rowCount();
+	const int n = tmpXDataColumn->rowCount();
 
 	fitResult.available = true;
 	fitResult.valid = true;
 	fitResult.status = i18n("Success"); // can it fail in any way?
 
-	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
+	const int np = (int)fitData.paramNames.size(); // number of fit parameters
 	fitResult.dof = n - np;
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
@@ -2249,11 +2249,11 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	case nsl_sf_stats_lognormal: {
 		// calculate mu and sigma
 		double mu = 0.;
-		for (size_t i = 0; i < n; i++)
+		for (int i = 0; i < n; i++)
 			mu += std::log(tmpXDataColumn->valueAt(i));
 		mu /= n;
 		double variance = 0.;
-		for (size_t i = 0; i < n; i++)
+		for (int i = 0; i < n; i++)
 			variance += gsl_pow_2(std::log(tmpXDataColumn->valueAt(i)) - mu);
 		variance /= (n - 1);
 		const double sigma = std::sqrt(variance);
@@ -2307,7 +2307,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	fitResult.calculateResult(n, np);
 
 	if (fitData.useResults) // set start values
-		for (unsigned int i = 0; i < np; i++)
+		for (int i = 0; i < np; i++)
 			fitData.paramStartValues.data()[i] = fitResult.paramValues.at(i);
 }
 

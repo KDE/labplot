@@ -885,7 +885,7 @@ struct friedman_test_result nsl_stats_friedman_q(const double** groups, size_t n
 
 	double Q = ((12.0 * n_samples) / (n_groups * (n_groups + 1))) * sum;
 
-	int df = n_groups - 1;
+	size_t df = n_groups - 1;
 	double p_value = gsl_cdf_chisq_Q(Q, (double)df);
 
 	struct friedman_test_result result;
@@ -927,7 +927,7 @@ struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const long long** table, siz
 	free(row_sums);
 	free(column_sums);
 
-	int df = (row - 1) * (column - 1);
+	size_t df = (row - 1) * (column - 1);
 	double p_value = gsl_cdf_chisq_Q(x2, (double)df);
 
 	struct chisq_ind_test_result result;
@@ -1172,8 +1172,8 @@ struct ramirez_runger_test_result nsl_stats_ramirez_runger(const double sample[]
 	double stability_ratio = pow(1.128 * std / mean_diff, 2);
 
 	// Calculate p-value based on tail type using the F distribution
-	int dof = n - 1;
-	int eff_dof = 0.62 * (n - 1); // effective degrees of freedom based on the original paper
+	size_t dof = n - 1;
+	size_t eff_dof = 0.62 * (n - 1); // effective degrees of freedom based on the original paper
 	double p = nsl_stats_fdist_p(stability_ratio, dof, eff_dof);
 
 	switch (tail) {
