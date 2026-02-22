@@ -1250,7 +1250,6 @@ void AxisPrivate::retransformLine() {
 			wrapper.point = QPointF(offset, offset);
 			const auto pos = q->relativePosToParentPos(wrapper);
 
-
 			double min = range.start(), max = range.end();
 			const auto min_ok = q->cSystem->mapYLogicalToScene(min, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			const auto max_ok = q->cSystem->mapYLogicalToScene(max, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);

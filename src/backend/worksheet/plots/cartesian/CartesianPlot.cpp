@@ -1512,7 +1512,7 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 	}
 
 	auto r = range.checkRange();
-	// Important: do not check if infinite here, because if the range is (NAN, NAN) 
+	// Important: do not check if infinite here, because if the range is (NAN, NAN)
 	// and the user sets one to a valid number it is otherwise not applied
 	if (index >= 0 && index < rangeCount(dim) && r != d->rangeConst(dim, index)) {
 		exec(new CartesianPlotSetRangeIndexCmd(d, dim, r, index));
