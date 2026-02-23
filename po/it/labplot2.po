@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 16:18+0000\n"
-"PO-Revision-Date: 2025-09-23 18:50+0200\n"
+"PO-Revision-Date: 2026-02-21 09:58+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 25.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1501,7 +1501,7 @@ msgstr "tipo di dati"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1351
 #, kde-format
 msgid "rank %1 not supported yet"
-msgstr "rank %1 non ancora supportato"
+msgstr "rango %1 non ancora supportato"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1358
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:75
@@ -1538,43 +1538,43 @@ msgstr "Nessun insieme di dati selezionato."
 #: src/backend/datasources/filters/HDF5Filter.cpp:1582
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
-msgstr "rank 0 non ancora implementato per il tipo %1"
+msgstr "rango 0 non ancora implementato per il tipo %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1721
 #: src/backend/datasources/filters/HDF5Filter.cpp:1870
 #, kde-format
 msgid "unsupported integer type for rank 1"
-msgstr "tipo intero non supportato per rank 1"
+msgstr "tipo intero non supportato per rango 1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1734
 #, kde-format
 msgid "unsupported float type for rank 1"
-msgstr "tipo in virgola mobile non supportato per rank 1"
+msgstr "tipo in virgola mobile non supportato per rango 1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1885
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
-msgstr "rank 1 non ancora implementato per il tipo %1"
+msgstr "rango 1 non ancora implementato per il tipo %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2018
 #, kde-format
 msgid "unsupported integer type for rank 2"
-msgstr "tipo intero non supportato per rank 2"
+msgstr "tipo intero non supportato per rango 2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2031
 #, kde-format
 msgid "unsupported float type for rank 2"
-msgstr "tipo in virgola mobile non supportato per rank 2"
+msgstr "tipo in virgola mobile non supportato per rango 2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2094
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
-msgstr "rank 2 non ancora implementato per il tipo %1"
+msgstr "rango 2 non ancora implementato per il tipo %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2103
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
-msgstr "rank %1 non ancora implementato per il tipo %2"
+msgstr "rango %1 non ancora implementato per il tipo %2"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
@@ -1883,7 +1883,7 @@ msgstr ""
 #: src/backend/datasources/filters/MatioFilter.cpp:1228
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
-msgstr "Le variabili con rank maggiore di 2 non sono ancora supportate."
+msgstr "Le variabili con rango maggiore di 2 non sono ancora supportate."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -19112,7 +19112,7 @@ msgstr "Variabile"
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:32
 #, kde-format
 msgid "Rank"
-msgstr "Rank"
+msgstr "Rango"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:37
