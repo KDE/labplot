@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-22 00:39+0000\n"
+"POT-Creation-Date: 2026-02-23 00:40+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -480,7 +480,7 @@ msgstr "tipo de filtro incompatível"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/statistics/HypothesisTest.cpp:1909
+#: src/backend/statistics/HypothesisTest.cpp:1911
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:886
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1929
 #, kde-format
@@ -504,7 +504,7 @@ msgstr "%1: mudar o nome para %2"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/backend/core/AspectTreeModel.cpp:165
-#: src/backend/statistics/HypothesisTest.cpp:568
+#: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:99
@@ -3854,7 +3854,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:258
-#: src/backend/statistics/HypothesisTest.cpp:568
+#: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/ui/dockwidgets/imagedock.ui:492
 #, kde-format
 msgid "Size"
@@ -3873,7 +3873,7 @@ msgstr "Soma"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:260 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
-#: src/backend/statistics/HypothesisTest.cpp:568
+#: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:173
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
@@ -3889,7 +3889,7 @@ msgstr "Mínimo"
 #: src/backend/gsl/functions.cpp:261 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
-#: src/backend/statistics/HypothesisTest.cpp:568
+#: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:174
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
@@ -3914,7 +3914,7 @@ msgstr "Média aritmética"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:263 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
-#: src/backend/statistics/HypothesisTest.cpp:568
+#: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
@@ -6600,7 +6600,7 @@ msgid "Text file (*.txt)"
 msgstr "Ficheiros de LaTeX (*.tex)"
 
 #: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
-#: src/backend/statistics/HypothesisTest.cpp:142
+#: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
 #, kde-format
@@ -6667,7 +6667,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/nsl/nsl_baseline.cpp:47
-#: src/backend/statistics/HypothesisTest.cpp:568
+#: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:515
@@ -7926,597 +7926,589 @@ msgstr "Desvio da mediana"
 msgid "Column"
 msgstr "Coluna"
 
-#: src/backend/statistics/HypothesisTest.cpp:53
+#: src/backend/statistics/HypothesisTest.cpp:55
 #, kde-format
 msgid "One column is required."
 msgid_plural "%1 columns are required."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/statistics/HypothesisTest.cpp:55
+#: src/backend/statistics/HypothesisTest.cpp:57
 #, kde-format
 msgid "At least %1 and at most %2 columns are required."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:63
+#: src/backend/statistics/HypothesisTest.cpp:65
 #, kde-format
 msgid "Column '%1' must be of numeric type."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:142
+#: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:232
 #, kde-format
 msgid "Portable Data Format (*.pdf *.PDF)"
 msgstr "Formato Portável de Dados (*.pdf *.PDF)"
 
-#: src/backend/statistics/HypothesisTest.cpp:168
+#: src/backend/statistics/HypothesisTest.cpp:170
 #, kde-format
 msgctxt "@title:window"
 msgid "Hypothesis Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:254
+#: src/backend/statistics/HypothesisTest.cpp:256
 #, kde-format
 msgid "No monotonic trend exists"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:255
+#: src/backend/statistics/HypothesisTest.cpp:257
 #, kde-format
 msgid "A monotonic trend exists"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:256
+#: src/backend/statistics/HypothesisTest.cpp:258
 #, kde-format
 msgid "A negative monotonic trend exists"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:257
+#: src/backend/statistics/HypothesisTest.cpp:259
 #, kde-format
 msgid "A positive monotonic trend exists"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:260
-#: src/backend/statistics/HypothesisTest.cpp:266
+#: src/backend/statistics/HypothesisTest.cpp:262
+#: src/backend/statistics/HypothesisTest.cpp:268
 #, fuzzy, kde-format
 #| msgid "Iterative process is out of control"
 msgid "The process is stable (random)"
 msgstr "O processo iterativo está fora de controlo"
 
-#: src/backend/statistics/HypothesisTest.cpp:261
+#: src/backend/statistics/HypothesisTest.cpp:263
 #, kde-format
 msgid "The data are not randomly distributed"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:262
-#: src/backend/statistics/HypothesisTest.cpp:269
+#: src/backend/statistics/HypothesisTest.cpp:264
+#: src/backend/statistics/HypothesisTest.cpp:271
 #, fuzzy, kde-format
 #| msgid "Iterative process is out of control"
 msgid "The process shows shifting or clustering"
 msgstr "O processo iterativo está fora de controlo"
 
-#: src/backend/statistics/HypothesisTest.cpp:263
-#: src/backend/statistics/HypothesisTest.cpp:268
+#: src/backend/statistics/HypothesisTest.cpp:265
+#: src/backend/statistics/HypothesisTest.cpp:270
 #, fuzzy, kde-format
 #| msgid "Iterative process is out of control"
 msgid "The process shows oscillations or over-control"
 msgstr "O processo iterativo está fora de controlo"
 
-#: src/backend/statistics/HypothesisTest.cpp:267
+#: src/backend/statistics/HypothesisTest.cpp:269
 #, fuzzy, kde-format
 #| msgid "Iterative process is out of control"
 msgid "The process is unstable (non-random)"
 msgstr "O processo iterativo está fora de controlo"
 
-#: src/backend/statistics/HypothesisTest.cpp:331
+#: src/backend/statistics/HypothesisTest.cpp:333
 #, fuzzy, kde-format
 #| msgid "Sample Quantiles"
 msgid "One-Sample t-Test"
 msgstr "Quartis da Amostra"
 
-#: src/backend/statistics/HypothesisTest.cpp:333
+#: src/backend/statistics/HypothesisTest.cpp:335
 #, kde-format
 msgid "Independent Two-Sample t-Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:335
+#: src/backend/statistics/HypothesisTest.cpp:337
 #, kde-format
 msgid "Paired Two-Sample t-Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:337
+#: src/backend/statistics/HypothesisTest.cpp:339
 #, kde-format
 msgid "Mann-Whitney U Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:339
+#: src/backend/statistics/HypothesisTest.cpp:341
 #, kde-format
 msgid "Welch t-Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:341
+#: src/backend/statistics/HypothesisTest.cpp:343
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:343
+#: src/backend/statistics/HypothesisTest.cpp:345
 #, kde-format
 msgid "One-Way ANOVA Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:345
+#: src/backend/statistics/HypothesisTest.cpp:347
 #, kde-format
 msgid "Kruskal-Wallis Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:347
+#: src/backend/statistics/HypothesisTest.cpp:349
 #, kde-format
 msgid "Log-Rank Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:349
+#: src/backend/statistics/HypothesisTest.cpp:351
 #, kde-format
 msgid "Friedman Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:351
+#: src/backend/statistics/HypothesisTest.cpp:353
 #, kde-format
 msgid "Chi-Square Independence Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:353
+#: src/backend/statistics/HypothesisTest.cpp:355
 #, fuzzy, kde-format
 #| msgid "Goodness of fit"
 msgid "Chi-Square Goodness of Fit Test"
 msgstr "Qualidade do ajuste"
 
-#: src/backend/statistics/HypothesisTest.cpp:355
+#: src/backend/statistics/HypothesisTest.cpp:357
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:357
+#: src/backend/statistics/HypothesisTest.cpp:359
 #, kde-format
 msgid "Mann-Kendall Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:359
+#: src/backend/statistics/HypothesisTest.cpp:361
 #, kde-format
 msgid "Wald-Wolfowitz Runs Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:361
+#: src/backend/statistics/HypothesisTest.cpp:363
 #, kde-format
 msgid "Ramirez-Runger Runs Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:536
+#: src/backend/statistics/HypothesisTest.cpp:538
 #, kde-format
 msgid "<b>Reject the null hypothesis.</b>"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:540
+#: src/backend/statistics/HypothesisTest.cpp:542
 #, kde-format
 msgid "<b>Fail to reject the null hypothesis.</b>"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:544
+#: src/backend/statistics/HypothesisTest.cpp:546
 #, kde-format
 msgid "N/A"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:548
+#: src/backend/statistics/HypothesisTest.cpp:550
 #, fuzzy, kde-format
 #| msgid "no info available"
 msgid "Test result is not available."
 msgstr "Nenhuma informação disponível"
 
-#: src/backend/statistics/HypothesisTest.cpp:552
+#: src/backend/statistics/HypothesisTest.cpp:554
 #, kde-format
 msgid "Two columns are required for this test."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:556
+#: src/backend/statistics/HypothesisTest.cpp:558
 #, kde-format
 msgid "At least two columns are required."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:560
+#: src/backend/statistics/HypothesisTest.cpp:562
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:564
+#: src/backend/statistics/HypothesisTest.cpp:566
 #, kde-format
 msgid "The size of each sample must be equal."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:568
+#: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
 #, fuzzy, kde-format
 #| msgid "Standard deviation"
 msgid "Standard Deviation"
 msgstr "Desvio-padrão"
 
-#: src/backend/statistics/HypothesisTest.cpp:584
+#: src/backend/statistics/HypothesisTest.cpp:586
 #, kde-format
 msgid "Null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:585
+#: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
 msgid "Alternate Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:587
+#: src/backend/statistics/HypothesisTest.cpp:589
 #, fuzzy, kde-format
 #| msgid "t statistic"
 msgid "Descriptive Statistics"
 msgstr "Estatística 't'"
 
-#: src/backend/statistics/HypothesisTest.cpp:588
+#: src/backend/statistics/HypothesisTest.cpp:590
 #, fuzzy, kde-format
 #| msgid "t statistic"
 msgid "Test Statistics"
 msgstr "Estatística 't'"
 
-#: src/backend/statistics/HypothesisTest.cpp:588
+#: src/backend/statistics/HypothesisTest.cpp:590
 #, kde-format
 msgid "Significance Level"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:589
+#: src/backend/statistics/HypothesisTest.cpp:591
 #, fuzzy, kde-format
 #| msgid "Value"
 msgid "p-Value"
 msgstr "Valor"
 
-#: src/backend/statistics/HypothesisTest.cpp:592
+#: src/backend/statistics/HypothesisTest.cpp:594
 #, fuzzy, kde-format
 #| msgid "Degrees of Freedom"
 msgid "Degrees of Freedom Between Groups"
 msgstr "Graus de Liberdade"
 
-#: src/backend/statistics/HypothesisTest.cpp:593
+#: src/backend/statistics/HypothesisTest.cpp:595
 #, fuzzy, kde-format
 #| msgid "Degrees of Freedom"
 msgid "Degrees of Freedom Within Groups"
 msgstr "Graus de Liberdade"
 
-#: src/backend/statistics/HypothesisTest.cpp:595
+#: src/backend/statistics/HypothesisTest.cpp:597
 #, fuzzy, kde-format
 #| msgid "Degrees of Freedom"
 msgid "Degrees of Freedom Treatment"
 msgstr "Graus de Liberdade"
 
-#: src/backend/statistics/HypothesisTest.cpp:596
+#: src/backend/statistics/HypothesisTest.cpp:598
 #, fuzzy, kde-format
 #| msgid "Degrees of Freedom"
 msgid "Degrees of Freedom Residuals"
 msgstr "Graus de Liberdade"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/backend/statistics/HypothesisTest.cpp:598
-#: src/backend/statistics/HypothesisTest.cpp:656
+#: src/backend/statistics/HypothesisTest.cpp:600
+#: src/backend/statistics/HypothesisTest.cpp:658
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "Graus de Liberdade"
 
-#: src/backend/statistics/HypothesisTest.cpp:603
-#: src/backend/statistics/HypothesisTest.cpp:607
-#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:605
+#: src/backend/statistics/HypothesisTest.cpp:609
 #: src/backend/statistics/HypothesisTest.cpp:612
+#: src/backend/statistics/HypothesisTest.cpp:614
 #, fuzzy, kde-format
 #| msgid "Value"
 msgid "t-Value"
 msgstr "Valor"
 
-#: src/backend/statistics/HypothesisTest.cpp:603
+#: src/backend/statistics/HypothesisTest.cpp:605
 #, fuzzy, kde-format
 #| msgid "Test"
 msgid "Test Mean"
 msgstr "Testar"
 
-#: src/backend/statistics/HypothesisTest.cpp:604
-#: src/backend/statistics/HypothesisTest.cpp:608
+#: src/backend/statistics/HypothesisTest.cpp:606
 #: src/backend/statistics/HypothesisTest.cpp:610
 #: src/backend/statistics/HypothesisTest.cpp:612
+#: src/backend/statistics/HypothesisTest.cpp:614
 #, fuzzy, kde-format
 #| msgid "Difference"
 msgid "Mean Difference"
 msgstr "Diferença"
 
-#: src/backend/statistics/HypothesisTest.cpp:607
+#: src/backend/statistics/HypothesisTest.cpp:609
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "Pooled Variance"
 msgstr "Variância"
 
-#: src/backend/statistics/HypothesisTest.cpp:608
-#: src/backend/statistics/HypothesisTest.cpp:613
+#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:615
 #, kde-format
 msgid "Mean Difference Standard Error"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:615
-#: src/backend/statistics/HypothesisTest.cpp:621
+#: src/backend/statistics/HypothesisTest.cpp:617
+#: src/backend/statistics/HypothesisTest.cpp:623
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "F-Statistic"
 msgstr "Estatísticas"
 
-#: src/backend/statistics/HypothesisTest.cpp:615
+#: src/backend/statistics/HypothesisTest.cpp:617
 #, fuzzy, kde-format
 #| msgid "Sum of squared residuals"
 msgid "Sum of Squares Between Groups"
 msgstr "Soma dos resíduos ao quadrado"
 
-#: src/backend/statistics/HypothesisTest.cpp:616
+#: src/backend/statistics/HypothesisTest.cpp:618
 #, fuzzy, kde-format
 #| msgid "Sum of squared residuals"
 msgid "Sum of Squares Within Groups"
 msgstr "Soma dos resíduos ao quadrado"
 
-#: src/backend/statistics/HypothesisTest.cpp:617
+#: src/backend/statistics/HypothesisTest.cpp:619
 #, kde-format
 msgid "Mean Squares Between Groups"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:618
+#: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
 msgid "Mean Squares Within Groups"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:621
+#: src/backend/statistics/HypothesisTest.cpp:623
 #, fuzzy, kde-format
 #| msgid "Sum of squared residuals"
 msgid "Sum of Squares Treatment"
 msgstr "Soma dos resíduos ao quadrado"
 
-#: src/backend/statistics/HypothesisTest.cpp:622
+#: src/backend/statistics/HypothesisTest.cpp:624
 #, fuzzy, kde-format
 #| msgid "Sum of squared residuals"
 msgid "Sum of Squares Residuals"
 msgstr "Soma dos resíduos ao quadrado"
 
-#: src/backend/statistics/HypothesisTest.cpp:623
+#: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Sum of Squares Within Subjects"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:626
 #, kde-format
 msgid "Mean Squares Treatment"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:626
 #, fuzzy, kde-format
 #| msgid "Sum of squared residuals"
 msgid "Mean Squares Residuals"
 msgstr "Soma dos resíduos ao quadrado"
 
-#: src/backend/statistics/HypothesisTest.cpp:626
+#: src/backend/statistics/HypothesisTest.cpp:628
 #, fuzzy, kde-format
 #| msgid "Up"
 msgid "U"
 msgstr "Subir"
 
-#: src/backend/statistics/HypothesisTest.cpp:626
-#: src/backend/statistics/HypothesisTest.cpp:630
-#: src/backend/statistics/HypothesisTest.cpp:650
-#: src/backend/statistics/HypothesisTest.cpp:653
+#: src/backend/statistics/HypothesisTest.cpp:628
+#: src/backend/statistics/HypothesisTest.cpp:632
+#: src/backend/statistics/HypothesisTest.cpp:652
+#: src/backend/statistics/HypothesisTest.cpp:655
 #, fuzzy, kde-format
 #| msgid "Value"
 msgid "z-Value"
 msgstr "Valor"
 
-#: src/backend/statistics/HypothesisTest.cpp:627
+#: src/backend/statistics/HypothesisTest.cpp:629
 #, kde-format
 msgid "Rank Sum 1"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:627
+#: src/backend/statistics/HypothesisTest.cpp:629
 #, fuzzy, kde-format
 #| msgid "Mean = 0"
 msgid "Mean Rank 1"
 msgstr "Média = 0"
 
-#: src/backend/statistics/HypothesisTest.cpp:628
+#: src/backend/statistics/HypothesisTest.cpp:630
 #, kde-format
 msgid "Rank Sum 2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:628
+#: src/backend/statistics/HypothesisTest.cpp:630
 #, fuzzy, kde-format
 #| msgid "Mean = 0"
 msgid "Mean Rank 2"
 msgstr "Média = 0"
 
-#: src/backend/statistics/HypothesisTest.cpp:630
+#: src/backend/statistics/HypothesisTest.cpp:632
 #, kde-format
 msgid "W"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:631
+#: src/backend/statistics/HypothesisTest.cpp:633
 #, kde-format
 msgid "Positive Rank Sum"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:631
+#: src/backend/statistics/HypothesisTest.cpp:633
 #, fuzzy, kde-format
 #| msgid "Positive Lookahead"
 msgid "Positive Rank Mean"
 msgstr "Referência Posterior Positiva"
 
-#: src/backend/statistics/HypothesisTest.cpp:632
+#: src/backend/statistics/HypothesisTest.cpp:634
 #, kde-format
 msgid "Positive Rank Count"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:632
+#: src/backend/statistics/HypothesisTest.cpp:634
 #, fuzzy, kde-format
 #| msgid "Negative Binomial"
 msgid "Negative Rank Sum"
 msgstr "Binomial Negativa"
 
-#: src/backend/statistics/HypothesisTest.cpp:633
+#: src/backend/statistics/HypothesisTest.cpp:635
 #, fuzzy, kde-format
 #| msgid "Negative lookahead"
 msgid "Negative Rank Mean"
 msgstr "Referência posterior negativa"
 
-#: src/backend/statistics/HypothesisTest.cpp:633
+#: src/backend/statistics/HypothesisTest.cpp:635
 #, fuzzy, kde-format
 #| msgid "Nonnegative square root"
 msgid "Negative Rank Count"
 msgstr "Raiz-quadrada não negativa"
 
-#: src/backend/statistics/HypothesisTest.cpp:634
+#: src/backend/statistics/HypothesisTest.cpp:636
 #, fuzzy, kde-format
 #| msgid "Bin Count:"
 msgid "Tie Count"
 msgstr "Número de Grupos:"
 
-#: src/backend/statistics/HypothesisTest.cpp:636
-#: src/backend/statistics/HypothesisTest.cpp:644
+#: src/backend/statistics/HypothesisTest.cpp:638
+#: src/backend/statistics/HypothesisTest.cpp:646
 #, kde-format
 msgid "H"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:638
+#: src/backend/statistics/HypothesisTest.cpp:640
 #, kde-format
 msgid "Q"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:640
 #: src/backend/statistics/HypothesisTest.cpp:642
+#: src/backend/statistics/HypothesisTest.cpp:644
 #, kde-format
 msgid "Chi2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:644
+#: src/backend/statistics/HypothesisTest.cpp:646
 #, fuzzy, kde-format
 #| msgid "Sheet count: %1"
 msgid "Event Count 1"
 msgstr "Número de folhas: %1"
 
-#: src/backend/statistics/HypothesisTest.cpp:645
+#: src/backend/statistics/HypothesisTest.cpp:647
 #, kde-format
 msgid "Censored Count 1"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:645
+#: src/backend/statistics/HypothesisTest.cpp:647
 #, kde-format
 msgid "Total Count 1"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:646
+#: src/backend/statistics/HypothesisTest.cpp:648
 #, fuzzy, kde-format
 #| msgid "Set Column As"
 msgid "Event Count 2"
 msgstr "Configurar a Coluna Como"
 
-#: src/backend/statistics/HypothesisTest.cpp:646
+#: src/backend/statistics/HypothesisTest.cpp:648
 #, kde-format
 msgid "Censored Count 2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:647
+#: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "Total Count 2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:649
+#: src/backend/statistics/HypothesisTest.cpp:651
 #, kde-format
 msgid "S"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:649
+#: src/backend/statistics/HypothesisTest.cpp:651
 #, kde-format
 msgid "Kendall's Tau"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:650
+#: src/backend/statistics/HypothesisTest.cpp:652
 #, kde-format
 msgid "Sen's Slope"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:651
-#: src/backend/statistics/HypothesisTest.cpp:654
+#: src/backend/statistics/HypothesisTest.cpp:653
+#: src/backend/statistics/HypothesisTest.cpp:656
 #, fuzzy, kde-format
 #| msgid "Sample Size:"
 msgid "Sample Size"
 msgstr "Tamanho da Amostra:"
 
-#: src/backend/statistics/HypothesisTest.cpp:653
+#: src/backend/statistics/HypothesisTest.cpp:655
 #, fuzzy, kde-format
 #| msgid "Number of points:"
 msgid "Number of Runs"
 msgstr "Número de pontos:"
 
-#: src/backend/statistics/HypothesisTest.cpp:656
+#: src/backend/statistics/HypothesisTest.cpp:658
 #, kde-format
 msgid "Stability Ratio"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:657
+#: src/backend/statistics/HypothesisTest.cpp:659
 #, fuzzy, kde-format
 #| msgid "Degrees of Freedom"
 msgid "Effective Degrees of Freedom"
 msgstr "Graus de Liberdade"
 
-#: src/backend/statistics/HypothesisTest.cpp:658
+#: src/backend/statistics/HypothesisTest.cpp:660
 #, kde-format
 msgid "Average Successive Difference"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:661
+#: src/backend/statistics/HypothesisTest.cpp:663
 #, fuzzy, kde-format
 #| msgid "Statistical Plots"
 msgid "Statistical Conclusion"
 msgstr "Gráficos Estatísticos"
 
-#: src/backend/statistics/HypothesisTest.cpp:673
+#: src/backend/statistics/HypothesisTest.cpp:675
 #, fuzzy, kde-format
 #| msgid "No variable selected"
 msgid "No variable columns provided."
 msgstr "Sem variáveis seleccionadas"
 
-#: src/backend/statistics/HypothesisTest.cpp:950
+#: src/backend/statistics/HypothesisTest.cpp:952
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. %3"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:955
+#: src/backend/statistics/HypothesisTest.cpp:957
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
 "different from %2. %3"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1040
-#: src/backend/statistics/HypothesisTest.cpp:1108
+#: src/backend/statistics/HypothesisTest.cpp:1042
+#: src/backend/statistics/HypothesisTest.cpp:1110
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
 "different. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1043
-#: src/backend/statistics/HypothesisTest.cpp:1111
+#: src/backend/statistics/HypothesisTest.cpp:1045
+#: src/backend/statistics/HypothesisTest.cpp:1113
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
-"different. %2"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:1162
-#: src/backend/statistics/HypothesisTest.cpp:1223
-#, kde-format
-msgid ""
-"At the significance level %1, at least one group mean is significantly "
 "different. %2"
 msgstr ""
 
@@ -8524,223 +8516,231 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:1225
 #, kde-format
 msgid ""
+"At the significance level %1, at least one group mean is significantly "
+"different. %2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1166
+#: src/backend/statistics/HypothesisTest.cpp:1227
+#, kde-format
+msgid ""
 "At the significance level %1, no significant difference between group means. "
 "%2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1282
-#: src/backend/statistics/HypothesisTest.cpp:1340
-#: src/backend/statistics/HypothesisTest.cpp:1399
+#: src/backend/statistics/HypothesisTest.cpp:1284
+#: src/backend/statistics/HypothesisTest.cpp:1342
+#: src/backend/statistics/HypothesisTest.cpp:1401
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1285
-#: src/backend/statistics/HypothesisTest.cpp:1343
-#: src/backend/statistics/HypothesisTest.cpp:1402
+#: src/backend/statistics/HypothesisTest.cpp:1287
+#: src/backend/statistics/HypothesisTest.cpp:1345
+#: src/backend/statistics/HypothesisTest.cpp:1404
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
 "distributions. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1462
+#: src/backend/statistics/HypothesisTest.cpp:1464
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "%2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1464
+#: src/backend/statistics/HypothesisTest.cpp:1466
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1490
-#: src/backend/statistics/HypothesisTest.cpp:1557
+#: src/backend/statistics/HypothesisTest.cpp:1492
+#: src/backend/statistics/HypothesisTest.cpp:1559
 #, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1528
+#: src/backend/statistics/HypothesisTest.cpp:1530
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1532
+#: src/backend/statistics/HypothesisTest.cpp:1534
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1577
+#: src/backend/statistics/HypothesisTest.cpp:1579
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:1593
-#, kde-format
-msgid ""
-"At the significance level %1, both categorical variables are dependent. %2"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1595
 #, kde-format
 msgid ""
+"At the significance level %1, both categorical variables are dependent. %2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1597
+#, kde-format
+msgid ""
 "At the significance level %1, both categorical variables are independent. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1613
+#: src/backend/statistics/HypothesisTest.cpp:1615
 #, kde-format
 msgid "Three columns are required."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1622
+#: src/backend/statistics/HypothesisTest.cpp:1624
 #, kde-format
 msgid "Status column should be of integer type."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1627
+#: src/backend/statistics/HypothesisTest.cpp:1629
 #, kde-format
 msgid "Group column should be of integer type."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1632
+#: src/backend/statistics/HypothesisTest.cpp:1634
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1651
+#: src/backend/statistics/HypothesisTest.cpp:1653
 #, kde-format
 msgid "Status column values must be either 0 or 1."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1656
+#: src/backend/statistics/HypothesisTest.cpp:1658
 #, kde-format
 msgid "Group column values must be either 0 or 1."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1672
+#: src/backend/statistics/HypothesisTest.cpp:1674
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1680
+#: src/backend/statistics/HypothesisTest.cpp:1682
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1685
+#: src/backend/statistics/HypothesisTest.cpp:1687
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1695
+#: src/backend/statistics/HypothesisTest.cpp:1697
 #, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1698
+#: src/backend/statistics/HypothesisTest.cpp:1700
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
 "curves. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1738
+#: src/backend/statistics/HypothesisTest.cpp:1740
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1740
+#: src/backend/statistics/HypothesisTest.cpp:1742
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1742
+#: src/backend/statistics/HypothesisTest.cpp:1744
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1744
+#: src/backend/statistics/HypothesisTest.cpp:1746
 #, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1780
+#: src/backend/statistics/HypothesisTest.cpp:1782
 #, kde-format
 msgid "At the significance level %1, the data are not randomly distributed. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1782
+#: src/backend/statistics/HypothesisTest.cpp:1784
 #, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1785
+#: src/backend/statistics/HypothesisTest.cpp:1787
 #, kde-format
 msgid ""
 "At the significance level %1, the data show oscillation or over-control (too "
 "many runs). %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1787
+#: src/backend/statistics/HypothesisTest.cpp:1789
 #, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1821
+#: src/backend/statistics/HypothesisTest.cpp:1823
 #, kde-format
 msgid ""
 "At the significance level %1, the process is unstable (non-homogeneous). %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1823
+#: src/backend/statistics/HypothesisTest.cpp:1825
 #, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation or over-control. "
 "%2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1825
+#: src/backend/statistics/HypothesisTest.cpp:1827
 #, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering, shifting, or "
 "trends. %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1827
+#: src/backend/statistics/HypothesisTest.cpp:1829
 #, kde-format
 msgid ""
 "At the significance level %1, the process appears to be stable "
 "(homogeneous). %2"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1919
+#: src/backend/statistics/HypothesisTest.cpp:1921
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
 #, kde-format
 msgid "Parametric"
 msgstr "Paramétrico"
 
-#: src/backend/statistics/HypothesisTest.cpp:1949
+#: src/backend/statistics/HypothesisTest.cpp:1951
 #, fuzzy, kde-format
 #| msgid "Parametric"
 msgid "Non-Parametric"
@@ -9274,256 +9274,256 @@ msgstr "Estilo"
 msgid "Color"
 msgstr "Cor"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:554
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:545
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: mudar o tipo de intervalo do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:579
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:570
 #: src/frontend/dockwidgets/AxisDock.cpp:675
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: mudar a orientação do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:586
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:577
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: mudar a posição do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:594
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:585
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: mudar a posição do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:609
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:600
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: mudar o intervalo do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:644
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:635
 #, fuzzy, kde-format
 #| msgid "%1: set range"
 msgid "%1: set range scale"
 msgstr "%1: mudar o intervalo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:651
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:642
 #, fuzzy, kde-format
 #| msgid "%1: set visible"
 msgid "%1: set scale"
 msgstr "%1: mudar para visível"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:658
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:649
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr "%1: mudar o tipo do início dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:665
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:656
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr "%1: mudar o deslocamento do início dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:673
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:664
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr "%1: mudar o valor inicial dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:685
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:676
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: mudar o factor de escala do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:694
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:685
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: mudar a posição do zero no eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:700
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:691
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr "%1: mudar a escala e a posição"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:707
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:698
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: mudar a posição lógica do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:715
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:722
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:706
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:713
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: mudar a posição do título"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:730
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:721
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: mudar o tipo de seta"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:737
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:728
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: mudar a posição da seta"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:744
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:735
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: mudar o tamanho da seta"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:752
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:743
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: mudar a direcção dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:759
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:750
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: mudar o tipo dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:767
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:758
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr "%1: activar/desactivar os números automáticos dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:770
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:785
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:761
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:776
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: mudar o número total dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:808
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:799
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: mudar o espaço entre os traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:815
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:806
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: atribuir os valores aos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:829
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:820
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: mudar o tamanho dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:837
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:828
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: mudar a direcção dos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:844
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:835
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: mudar o tipo dos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:852
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: activar/desactivar os números automáticos dos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:855
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:866
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:846
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:857
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: mudar o número total dos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:858
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: desactivar os números automáticos dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:899
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:890
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: mudar o espaço entre os traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:906
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:897
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: atribuir valores aos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:920
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:911
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: mudar o tamanho dos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:929
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:920
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: mudar o formato das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:936
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:927
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: mudar o formato automático das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:943
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:950
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:934
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:941
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:636
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:643
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: mudar a precisão das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:957
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:948
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: mudar o formato das datas/horas das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:964
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:955
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: mudar a posição das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:971
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:962
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: mudar a posição adicional das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:978
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:969
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: mudar o ângulo de rotação das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:985
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:976
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: mudar o tipo de texto da legenda"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:992
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:983
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: mudar a coluna do texto da legenda"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1006
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:997
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: mudar a cor das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1013
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1004
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: mudar o tipo de letra das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1020
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1011
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: mudar o tipo de fundo das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1027
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1018
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: mudar a cor de fundo das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1034
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1025
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: mudar o prefixo das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1041
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1032
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: mudar o sufixo das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1048
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1039
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: mudar a opacidade das legendas"
@@ -9564,7 +9564,7 @@ msgstr "%1: o factor da largura foi modificado"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:162
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:335
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:338
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:109
 #, kde-format
 msgid "%1 - Data"
@@ -11227,27 +11227,27 @@ msgstr "%1: mudar o tipo de letra dos valores"
 msgid "%1: set values color"
 msgstr "%1: mudar a cor dos valores"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:209
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: o tipo da fonte de dados foi modificado"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:216
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: a curva da fonte de dados foi modificada"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:221
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:224
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: atribuir dados em X"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:229
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: atribuir dados em Y"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:237
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:240
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: atribuir os segundos dados em Y"
