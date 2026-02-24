@@ -54,7 +54,7 @@ void FitTest::addCurve() {
 	plot->addChild(curve);
 
 	curve->d_func()->setSelected(true);
-	QCOMPARE(plot->currentCurve(), curve);
+	QCOMPARE(plot->selectedCurves().first(), curve);
 
 	plot->addFitCurve(); // Should not crash and curve should be assigned accordingly
 
