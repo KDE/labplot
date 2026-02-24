@@ -2707,12 +2707,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			for (auto* a : axes) {
 				if (a->orientation() == WorksheetElement::Orientation::Vertical) {
 					double delta = d->dataRect.x() - a->graphicsItem()->boundingRect().x();
-					if (delta > 0) {
+					if (delta > horizontalPadding()) {
 						setUndoAware(false);
-						// 					setSuppressRetransform(true);
 						setSymmetricPadding(false);
-						setHorizontalPadding(horizontalPadding() + delta);
-						// 					setSuppressRetransform(false);
+						setHorizontalPadding(delta);
 						setUndoAware(true);
 					}
 					break;
