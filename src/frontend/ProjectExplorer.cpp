@@ -17,7 +17,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/notebook/Notebook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/core/ContentDockWidget.h"
 
 #include <KConfig>
