@@ -1539,7 +1539,7 @@ void ActionsManager::connectLiveDataToolbarActions(LiveDataSource* lds) {
 	disconnect(this, &ActionsManager::updateLiveDataPauseActionIcon, nullptr, nullptr);
 
 	// connect to the new view
-	connect(m_liveDataPauseAction, &QAction::triggered, [this, lds]() {
+	connect(m_liveDataPauseAction, &QAction::triggered, [lds]() {
 		if (lds->isPaused())
 			lds->pauseReading();
 		else
