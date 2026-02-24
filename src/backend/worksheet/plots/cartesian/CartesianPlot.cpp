@@ -2169,198 +2169,163 @@ void CartesianPlot::addHistogramFit(Histogram* hist, nsl_sf_stats_distribution t
 }
 
 /*!
- * returns the first selected XYCurve in the plot
+ * returns the list of currently selected XYCurves in the plot
  */
-const XYCurve* CartesianPlot::currentCurve() const {
-	for (const auto* curve : children<const XYCurve>()) {
+QVector<XYCurve*> CartesianPlot::selectedCurves() const {
+	QVector<XYCurve*> selectedCurves;
+	for (auto* curve : children<XYCurve>()) {
 		if (curve->graphicsItem()->isSelected())
-			return curve;
+			selectedCurves.append(curve);
 	}
 
-	return nullptr;
+	return selectedCurves;
 }
 
 void CartesianPlot::addLineSimplificationCurve() {
-	auto* curve = new XYLineSimplificationCurve(i18n("Line Simplification"));
-	const XYCurve* curCurve = currentCurve();
-	if (curCurve) {
-		beginMacro(i18n("%1: simplify '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Simplification of '%1'", curCurve->name()));
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
-		curve->setDataSourceCurve(curCurve);
-		this->addChild(curve);
-		curve->recalculate();
-		Q_EMIT curve->lineSimplificationDataChanged(curve->lineSimplificationData());
-	} else {
-		beginMacro(i18n("%1: add line simplification curve", name()));
-		this->addChild(curve);
-	}
-
-	endMacro();
+	const auto& selectedCurves = this->selectedCurves();
+	if (!selectedCurves.isEmpty()) {
+		for (const auto* curCurve : selectedCurves) {
+			auto* curve = new XYLineSimplificationCurve(i18n("Simplification of '%1'", curCurve->name()));
+			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+			curve->setDataSourceCurve(curCurve);
+			this->addChild(curve);
+			curve->recalculate();
+		}
+	} else
+		this->addChild(new XYLineSimplificationCurve(i18n("Line Simplification")));
 }
 
 void CartesianPlot::addDifferentiationCurve() {
-	auto* curve = new XYDifferentiationCurve(i18n("Differentiation"));
-	const XYCurve* curCurve = currentCurve();
-	if (curCurve) {
-		beginMacro(i18n("%1: differentiate '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Derivative of '%1'", curCurve->name()));
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
-		curve->setDataSourceCurve(curCurve);
-		this->addChild(curve);
-		curve->recalculate();
-		Q_EMIT curve->differentiationDataChanged(curve->differentiationData());
-	} else {
-		beginMacro(i18n("%1: add differentiation curve", name()));
-		this->addChild(curve);
-	}
-
-	endMacro();
+	const auto& selectedCurves = this->selectedCurves();
+	if (!selectedCurves.isEmpty()) {
+		for (const auto* curCurve : selectedCurves) {
+			auto* curve = new XYDifferentiationCurve(i18n("Derivative of '%1'", curCurve->name()));
+			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+			curve->setDataSourceCurve(curCurve);
+			this->addChild(curve);
+			curve->recalculate();
+		}
+	} else
+		this->addChild(new XYDifferentiationCurve(i18n("Differentiation")));
 }
 
 void CartesianPlot::addIntegrationCurve() {
-	auto* curve = new XYIntegrationCurve(i18n("Integration"));
-	const XYCurve* curCurve = currentCurve();
-	if (curCurve) {
-		beginMacro(i18n("%1: integrate '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Integral of '%1'", curCurve->name()));
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
-		curve->setDataSourceCurve(curCurve);
-		this->addChild(curve);
-		curve->recalculate();
-		Q_EMIT curve->integrationDataChanged(curve->integrationData());
-	} else {
-		beginMacro(i18n("%1: add integration curve", name()));
-		this->addChild(curve);
-	}
-
-	endMacro();
+	const auto& selectedCurves = this->selectedCurves();
+	if (!selectedCurves.isEmpty()) {
+		for (const auto* curCurve : selectedCurves) {
+			auto* curve = new XYIntegrationCurve(i18n("Integral of '%1'", curCurve->name()));
+			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+			curve->setDataSourceCurve(curCurve);
+			this->addChild(curve);
+			curve->recalculate();
+		}
+	} else
+		this->addChild(new XYIntegrationCurve(i18n("Integration")));
 }
 
 void CartesianPlot::addInterpolationCurve() {
-	auto* curve = new XYInterpolationCurve(i18n("Interpolation"));
-	const XYCurve* curCurve = currentCurve();
-	if (curCurve) {
-		beginMacro(i18n("%1: interpolate '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Interpolation of '%1'", curCurve->name()));
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
-		curve->setDataSourceCurve(curCurve);
-		curve->recalculate();
-		this->addChild(curve);
-		Q_EMIT curve->interpolationDataChanged(curve->interpolationData());
-	} else {
-		beginMacro(i18n("%1: add interpolation curve", name()));
-		this->addChild(curve);
-	}
-
-	endMacro();
+	const auto& selectedCurves = this->selectedCurves();
+	if (!selectedCurves.isEmpty()) {
+		for (const auto* curCurve : selectedCurves) {
+			auto* curve = new XYInterpolationCurve(i18n("Interpolation of '%1'", curCurve->name()));
+			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+			curve->setDataSourceCurve(curCurve);
+			this->addChild(curve);
+			curve->recalculate();
+		}
+	} else
+		this->addChild(new XYInterpolationCurve(i18n("Interpolation")));
 }
 
 void CartesianPlot::addSmoothCurve() {
-	auto* curve = new XYSmoothCurve(i18n("Smooth"));
-	const XYCurve* curCurve = currentCurve();
-	if (curCurve) {
-		beginMacro(i18n("%1: smooth '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Smoothing of '%1'", curCurve->name()));
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
-		curve->setDataSourceCurve(curCurve);
-		this->addChild(curve);
-		curve->recalculate();
-		Q_EMIT curve->smoothDataChanged(curve->smoothData());
-	} else {
-		beginMacro(i18n("%1: add smoothing curve", name()));
-		this->addChild(curve);
-	}
-
-	endMacro();
+	const auto& selectedCurves = this->selectedCurves();
+	if (!selectedCurves.isEmpty()) {
+		for (const auto* curCurve : selectedCurves) {
+			auto* curve = new XYSmoothCurve(i18n("Smoothing of '%1'", curCurve->name()));
+			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+			curve->setDataSourceCurve(curCurve);
+			this->addChild(curve);
+			curve->recalculate();
+		}
+	} else
+		this->addChild(new XYSmoothCurve(i18n("Smooth")));
 }
 
 void CartesianPlot::addBaselineCorrectionCurve() {
-	auto* curve = new XYBaselineCorrectionCurve(i18n("Baseline Correction"));
-	const XYCurve* curCurve = currentCurve();
-	if (curCurve) {
-		beginMacro(i18n("%1: baseline correction for '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Baseline correction for '%1'", curCurve->name()));
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
-		curve->setDataSourceCurve(curCurve);
-		this->addChild(curve);
-		curve->recalculate();
-		// Q_EMIT curve->baselineCorrectionDataChanged(curve->baselineCorrectionData());
-	} else {
-		beginMacro(i18n("%1: add baseline correction curve", name()));
-		this->addChild(curve);
-	}
-
-	endMacro();
+	const auto& selectedCurves = this->selectedCurves();
+	if (!selectedCurves.isEmpty()) {
+		for (const auto* curCurve : selectedCurves) {
+			auto* curve = new XYBaselineCorrectionCurve(i18n("Baseline correction for '%1'", curCurve->name()));
+			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+			curve->setDataSourceCurve(curCurve);
+			this->addChild(curve);
+			curve->recalculate();
+		}
+	} else
+		this->addChild(new XYBaselineCorrectionCurve(i18n("Baseline Correction")));
 }
 
 void CartesianPlot::addFitCurve(QAction* action) {
-	auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
-	const auto* curCurve = currentCurve();
-	if (curCurve) {
-		beginMacro(i18n("%1: fit to '%2'", name(), curCurve->name()));
-		curve->setName(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
-		curve->setDataSourceCurve(curCurve);
+	const auto& selectedCurves = this->selectedCurves();
+	if (!selectedCurves.isEmpty()) {
+		for (const auto* curCurve : selectedCurves) {
+			auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
+			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+			curve->setDataSourceCurve(curCurve);
 
-		// set the fit model category and type
-		if (action) {
-			auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
-			curve->initFitData(type);
-		} else
-			DEBUG(Q_FUNC_INFO << "WARNING: no action found!")
+			// set the fit model category and type
+			if (action) {
+				auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
+				curve->initFitData(type);
+			} else
+				DEBUG(Q_FUNC_INFO << "WARNING: no action found!")
 
-		// fit with weights for y if the curve has error bars for y
-		if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
-			auto fitData = curve->fitData();
-			fitData.yWeightsType = nsl_fit_weight_instrumental;
-			curve->setFitData(fitData);
-			curve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
+			// fit with weights for y if the curve has error bars for y
+			if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
+				auto fitData = curve->fitData();
+				fitData.yWeightsType = nsl_fit_weight_instrumental;
+				curve->setFitData(fitData);
+				curve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
+			}
+
+			curve->recalculate();
+
+			// add the child after the fit was calculated so the dock widgets gets the fit results
+			// and call retransform() after this to calculate and to paint the data points of the fit-curve
+			this->addChild(curve);
+			curve->retransform();
 		}
-
-		curve->recalculate();
-
-		// add the child after the fit was calculated so the dock widgets gets the fit results
-		// and call retransform() after this to calculate and to paint the data points of the fit-curve
-		this->addChild(curve);
-		curve->retransform();
 	} else {
-		beginMacro(i18n("%1: add fit curve", name()));
-		curve->initFitData(XYAnalysisCurve::AnalysisAction::FitLinear); // TODO: should happen directly in the constructor of XYFitCurve
+		auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
+		curve->initFitData(XYAnalysisCurve::AnalysisAction::FitLinear);
 		this->addChild(curve);
 	}
-
-	endMacro();
 }
 
 void CartesianPlot::addFourierFilterCurve() {
-	auto* curve = new XYFourierFilterCurve(i18n("Fourier Filter"));
-	const XYCurve* curCurve = currentCurve();
-	if (curCurve) {
-		beginMacro(i18n("%1: Fourier filtering of '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Fourier filtering of '%1'", curCurve->name()));
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
-		curve->setDataSourceCurve(curCurve);
-	} else {
-		beginMacro(i18n("%1: add Fourier filter curve", name()));
-	}
-	this->addChild(curve);
-
-	endMacro();
+	const auto& selectedCurves = this->selectedCurves();
+	if (!selectedCurves.isEmpty()) {
+		for (const auto* curCurve : selectedCurves) {
+			auto* curve = new XYFourierFilterCurve(i18n("Fourier filtering of '%1'", curCurve->name()));
+			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+			curve->setDataSourceCurve(curCurve);
+			this->addChild(curve);
+			curve->recalculate();
+		}
+	} else
+		this->addChild(new XYFourierFilterCurve(i18n("Fourier Filter")));
 }
 
 void CartesianPlot::addFunctionCurve() {
-	auto* curve = new XYFunctionCurve(i18n("Function"));
-	const auto* curCurve = currentCurve();
-	if (curCurve) {
-		beginMacro(i18n("%1: add function of '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Function of '%1'", curCurve->name()));
-		curve->setFunction(QString(), {QStringLiteral("x")}, {curCurve});
+	const auto& selectedCurves = this->selectedCurves();
+	if (!selectedCurves.isEmpty()) {
+		for (const auto* curCurve : selectedCurves) {
+			auto* curve = new XYFunctionCurve(i18n("Function of '%1'", curCurve->name()));
+			curve->setFunction(QString(), {QStringLiteral("x")}, {curCurve});
+			this->addChild(curve);
+		}
 	} else
-		beginMacro(i18n("%1: add function curve", name()));
-
-	this->addChild(curve);
-	endMacro();
+		this->addChild(new XYFunctionCurve(i18n("Function")));
 }
 
 /*!

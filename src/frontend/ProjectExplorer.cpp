@@ -4,7 +4,7 @@
 	Description       	 : A tree view for displaying and editing an AspectTreeModel.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -187,17 +187,11 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 			menu->addAction(collapseSelectedTreeAction);
 			menu->addSeparator();
 		} else {
-			// check if columns from the same parent were selected only
-			// and show parent's context menu for columns to allow plot data, etc.
-			bool columnsOnly = true;
+			// check if the selected objects have the same parent and 
+			// show parent's context menu for columns to allow plot data, etc.
 			bool sameParent = true;
 			AbstractAspect* parentAspect = nullptr;
 			for (const auto* aspect : selectedAspects) {
-				if (aspect->type() != AspectType::Column) {
-					columnsOnly = false;
-					break;
-				}
-
 				if (!parentAspect)
 					parentAspect = aspect->parentAspect();
 				else {
@@ -209,22 +203,39 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 				}
 			}
 
-			if (columnsOnly && sameParent) {
-				if (parentAspect->type() == AspectType::Spreadsheet) {
-					auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
-					spreadsheet->fillColumnsContextMenu(menu);
-				} else if (parentAspect->type() == AspectType::Notebook) {
-#ifdef HAVE_CANTOR_LIBS
-					auto* notebook = static_cast<Notebook*>(parentAspect);
-					QVector<Column*> columns;
+			if (sameParent && parentAspect) {
+				// lambda function to check if all selected aspects are of a specific type
+				auto checkAspectType = [&selectedAspects](AspectType type) -> bool {
 					for (const auto* aspect : selectedAspects) {
-						const auto* column = static_cast<const Column*>(aspect);
-						columns << const_cast<Column*>(column);
+						if (aspect->type() != type)
+							return false;
 					}
-					notebook->fillColumnsContextMenu(menu, columns);
+					return true;
+				};
+
+				if (checkAspectType(AspectType::Column)) { // check columns
+					if (parentAspect->type() == AspectType::Spreadsheet) {
+						auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
+						spreadsheet->fillColumnsContextMenu(menu);
+					} else if (parentAspect->type() == AspectType::Notebook) {
+#ifdef HAVE_CANTOR_LIBS
+						auto* notebook = static_cast<Notebook*>(parentAspect);
+						QVector<Column*> columns;
+						for (const auto* aspect : selectedAspects) {
+							const auto* column = static_cast<const Column*>(aspect);
+							columns << const_cast<Column*>(column);
+						}
+						notebook->fillColumnsContextMenu(menu, columns);
 #endif
+					}
+					menu->addSeparator();
+				} else if (checkAspectType(AspectType::XYCurve)) { // check xy-curves
+					auto* plotArea = dynamic_cast<CartesianPlot*>(parentAspect);
+					if (plotArea) {
+						menu->addMenu(plotArea->analysisMenu());
+						menu->addSeparator();
+					}
 				}
-				menu->addSeparator();
 			}
 		}
 
