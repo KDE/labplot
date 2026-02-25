@@ -18,6 +18,7 @@
 #include "backend/notebook/Notebook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/Worksheet.h"
 #include "frontend/core/ContentDockWidget.h"
 
 #include <KConfig>
@@ -173,69 +174,84 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 		}
 	} else if (selectedAspectsCount > 1) { // multiple aspects are selected
 		menu = new QMenu(this);
-		// add "expand/collapse" actions if the selected aspects have children
-		bool hasChildren = false;
+
+		// check if the selected objects have the same parent and 
+		// show parent's context menu for columns to allow plot data, etc.
+		bool sameParent = true;
+		AbstractAspect* parentAspect = nullptr;
 		for (const auto* aspect : selectedAspects) {
-			if (aspect->childCount<AbstractAspect>()) {
-				hasChildren = true;
-				break;
+			if (!parentAspect)
+				parentAspect = aspect->parentAspect();
+			else {
+				if (aspect->parentAspect() != parentAspect) {
+					sameParent = false;
+					break;
+				}
+				parentAspect = aspect->parentAspect();
 			}
 		}
 
-		if (hasChildren) {
-			menu->addAction(expandSelectedTreeAction);
-			menu->addAction(collapseSelectedTreeAction);
-			menu->addSeparator();
-		} else {
-			// check if the selected objects have the same parent and 
-			// show parent's context menu for columns to allow plot data, etc.
-			bool sameParent = true;
-			AbstractAspect* parentAspect = nullptr;
-			for (const auto* aspect : selectedAspects) {
-				if (!parentAspect)
-					parentAspect = aspect->parentAspect();
-				else {
-					if (aspect->parentAspect() != parentAspect) {
-						sameParent = false;
-						break;
-					}
-					parentAspect = aspect->parentAspect();
-				}
-			}
-
-			if (sameParent && parentAspect) {
-				// lambda function to check if all selected aspects are of a specific type
-				auto checkAspectType = [&selectedAspects](AspectType type) -> bool {
+		if (sameParent && parentAspect) {
+			// lambda function to check if all selected aspects are of a specific type
+			auto checkAspectType = [&selectedAspects](AspectType type) -> bool {
+				// for WorksheetElements, check the inheritance and not the exact type
+				if (type == AspectType::WorksheetElement) {
 					for (const auto* aspect : selectedAspects) {
-						if (aspect->type() != type)
+						if (!aspect->inherits<WorksheetElement>())
 							return false;
 					}
 					return true;
-				};
+				}
 
-				if (checkAspectType(AspectType::Column)) { // check columns
-					if (parentAspect->type() == AspectType::Spreadsheet) {
-						auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
-						spreadsheet->fillColumnsContextMenu(menu);
-					} else if (parentAspect->type() == AspectType::Notebook) {
+				for (const auto* aspect : selectedAspects) {
+					if (aspect->type() != type)
+						return false;
+				}
+				return true;
+			};
+
+			if (checkAspectType(AspectType::Column)) { // check columns
+				if (parentAspect->type() == AspectType::Spreadsheet) {
+					auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
+					spreadsheet->fillColumnsContextMenu(menu);
+				} else if (parentAspect->type() == AspectType::Notebook) {
 #ifdef HAVE_CANTOR_LIBS
-						auto* notebook = static_cast<Notebook*>(parentAspect);
-						QVector<Column*> columns;
-						for (const auto* aspect : selectedAspects) {
-							const auto* column = static_cast<const Column*>(aspect);
-							columns << const_cast<Column*>(column);
-						}
-						notebook->fillColumnsContextMenu(menu, columns);
-#endif
+					auto* notebook = static_cast<Notebook*>(parentAspect);
+					QVector<Column*> columns;
+					for (const auto* aspect : selectedAspects) {
+						const auto* column = static_cast<const Column*>(aspect);
+						columns << const_cast<Column*>(column);
 					}
-					menu->addSeparator();
-				} else if (checkAspectType(AspectType::XYCurve)) { // check xy-curves
+					notebook->fillColumnsContextMenu(menu, columns);
+#endif
+				}
+				menu->addSeparator();
+			} else if (checkAspectType(AspectType::WorksheetElement)) { // check worksheet elements
+				if (checkAspectType(AspectType::XYCurve)) { // check xy-curves
 					auto* plotArea = dynamic_cast<CartesianPlot*>(parentAspect);
 					if (plotArea) {
 						menu->addMenu(plotArea->analysisMenu());
 						menu->addSeparator();
 					}
 				}
+
+				auto* worksheet = dynamic_cast<Worksheet*>(parentAspect);
+				if (!worksheet)
+					worksheet = parentAspect->parent<Worksheet>();
+				if (worksheet) {
+					worksheet->fillElementsContextMenu(menu);
+					menu->addSeparator();
+				}
+			}
+		}
+
+		// add "expand/collapse" actions if the selected aspects have children
+		for (const auto* aspect : selectedAspects) {
+			if (aspect->childCount<AbstractAspect>()) {
+				menu->addAction(expandSelectedTreeAction);
+				menu->addAction(collapseSelectedTreeAction);
+				menu->addSeparator();
+				break;
 			}
 		}
 
