@@ -5,6 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
 	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,6 +22,8 @@ private Q_SLOTS:
 	void testArrayImport01();
 	void testArrayImport02();
 	void testArrayImport03();
+	void testArrayPlainImport();
+	void testArrayObjectsImport();
 
 	// import of objects
 	void testObjectImport01();
