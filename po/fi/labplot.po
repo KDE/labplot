@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-25 00:42+0000\n"
+"POT-Creation-Date: 2026-02-26 00:39+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -9886,7 +9886,7 @@ msgstr "ei tietoa saatavilla"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:140
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5387
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5385
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:623
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -10390,22 +10390,22 @@ msgid "%1: set plot color mode"
 msgstr "%1: aseta fonttiväri"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1847
-#: src/backend/worksheet/Worksheet.cpp:854
+#: src/backend/worksheet/Worksheet.cpp:908
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load theme %2"
 msgstr "%1: lisää %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1849
-#: src/backend/worksheet/Worksheet.cpp:856
+#: src/backend/worksheet/Worksheet.cpp:910
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load default theme"
 msgstr "%1: lisää %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1851
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5758
-#: src/backend/worksheet/Worksheet.cpp:858
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5756
+#: src/backend/worksheet/Worksheet.cpp:912
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set theme"
@@ -10556,24 +10556,24 @@ msgstr "%1: lisää %2."
 msgid "%1: add inset plot with data"
 msgstr "%1: lisää %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4165
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4163
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4290
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4311
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4288
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4309
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "x=%1…x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4298
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4324
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4296
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4322
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "y=%1…y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4343
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4341
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -10606,50 +10606,50 @@ msgid "%1: change line+symbol width"
 msgstr "%1: aseta viivan ja symbolin leveys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:726
-#: src/backend/worksheet/Worksheet.cpp:727
+#: src/backend/worksheet/Worksheet.cpp:780
+#: src/backend/worksheet/Worksheet.cpp:781
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: aseta asettelun yläreunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:736
-#: src/backend/worksheet/Worksheet.cpp:737
+#: src/backend/worksheet/Worksheet.cpp:790
+#: src/backend/worksheet/Worksheet.cpp:791
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: aseta asettelu alareunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:746
-#: src/backend/worksheet/Worksheet.cpp:747
+#: src/backend/worksheet/Worksheet.cpp:800
+#: src/backend/worksheet/Worksheet.cpp:801
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: aseta asettelu vasen reunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:756
-#: src/backend/worksheet/Worksheet.cpp:757
+#: src/backend/worksheet/Worksheet.cpp:810
+#: src/backend/worksheet/Worksheet.cpp:811
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: aseta asettelu oikea reunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:766
-#: src/backend/worksheet/Worksheet.cpp:767
+#: src/backend/worksheet/Worksheet.cpp:820
+#: src/backend/worksheet/Worksheet.cpp:821
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: aseta asettelun pystyvälistys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:776
-#: src/backend/worksheet/Worksheet.cpp:777
+#: src/backend/worksheet/Worksheet.cpp:830
+#: src/backend/worksheet/Worksheet.cpp:831
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: aseta asettelun vaakavälistys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:796
-#: src/backend/worksheet/Worksheet.cpp:797
+#: src/backend/worksheet/Worksheet.cpp:850
+#: src/backend/worksheet/Worksheet.cpp:851
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: aseta asettelun sarakemäärä"
@@ -11859,42 +11859,56 @@ msgstr "%1: aseta TeX-pääfontti"
 msgid "%1: set border shape"
 msgstr "%1: aseta reunan tyyli"
 
-#: src/backend/worksheet/Worksheet.cpp:245
+#: src/backend/worksheet/Worksheet.cpp:170
+#, fuzzy, kde-format
+#| msgid "Window Visibility Policy"
+msgid "Change &Visibility"
+msgstr "Ikkunoiden näkyvyyskäytäntö"
+
+#: src/backend/worksheet/Worksheet.cpp:210
+#, fuzzy, kde-format
+#| msgid "%1: change size type"
+msgid "%1: change visibility"
+msgid_plural "%1: change visibility of %2 elements"
+msgstr[0] "%1: muuta koon tyyppiä"
+msgstr[1] "%1: muuta koon tyyppiä"
+
+#: src/backend/worksheet/Worksheet.cpp:299
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Tulosta työvihko"
 
-#: src/backend/worksheet/Worksheet.cpp:696
+#: src/backend/worksheet/Worksheet.cpp:750
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: muuta koon tyyppiä"
 
-#: src/backend/worksheet/Worksheet.cpp:708
+#: src/backend/worksheet/Worksheet.cpp:762
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:716
-#: src/backend/worksheet/Worksheet.cpp:717
+#: src/backend/worksheet/Worksheet.cpp:770
+#: src/backend/worksheet/Worksheet.cpp:771
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: aseta asettelu"
 
-#: src/backend/worksheet/Worksheet.cpp:786
-#: src/backend/worksheet/Worksheet.cpp:787
+#: src/backend/worksheet/Worksheet.cpp:840
+#: src/backend/worksheet/Worksheet.cpp:841
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: aseta asettelun rivimäärä"
 
-#: src/backend/worksheet/Worksheet.cpp:827
-#: src/backend/worksheet/Worksheet.cpp:828
+#: src/backend/worksheet/Worksheet.cpp:881
+#: src/backend/worksheet/Worksheet.cpp:882
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/Worksheet.cpp:1527
+#: src/backend/worksheet/Worksheet.cpp:1581
 #, kde-format
 msgid "Curves"
 msgstr "Käyrät"
@@ -16358,14 +16372,14 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:38
-#: src/frontend/ProjectExplorer.cpp:718
+#: src/frontend/ProjectExplorer.cpp:734
 #, fuzzy, kde-format
 #| msgid "case sensitive"
 msgid "Case Sensitive"
 msgstr "erota pien- ja suuraakkoset"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:42
-#: src/frontend/ProjectExplorer.cpp:726
+#: src/frontend/ProjectExplorer.cpp:742
 #, fuzzy, kde-format
 #| msgid "match complete word"
 msgid "Match Complete Word"
@@ -18936,96 +18950,96 @@ msgid "XML error: No cartesianPlot found"
 msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
-#: src/frontend/ProjectExplorer.cpp:69
+#: src/frontend/ProjectExplorer.cpp:70
 #: src/frontend/ui/dockwidgets/scriptdock.ui:131
 #, fuzzy, kde-format
 #| msgid "Search/Filter:"
 msgid "Search/Filter"
 msgstr "Hae/suodata:"
 
-#: src/frontend/ProjectExplorer.cpp:114
+#: src/frontend/ProjectExplorer.cpp:115
 #, fuzzy, kde-format
 #| msgid "expand all"
 msgid "Expand All"
 msgstr "laajenna kaikki"
 
-#: src/frontend/ProjectExplorer.cpp:117
+#: src/frontend/ProjectExplorer.cpp:118
 #, fuzzy, kde-format
 #| msgid "expand all"
 msgid "Expand Selected"
 msgstr "laajenna kaikki"
 
-#: src/frontend/ProjectExplorer.cpp:120
+#: src/frontend/ProjectExplorer.cpp:121
 #, fuzzy, kde-format
 #| msgid "collapse all"
 msgid "Collapse All"
 msgstr "supista kaikki"
 
-#: src/frontend/ProjectExplorer.cpp:123
+#: src/frontend/ProjectExplorer.cpp:124
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "Collapse Selected"
 msgstr "N&ormalisoi valinta"
 
-#: src/frontend/ProjectExplorer.cpp:126
+#: src/frontend/ProjectExplorer.cpp:127
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Delete Selected"
 msgstr "Poista valitut oliot"
 
-#: src/frontend/ProjectExplorer.cpp:129
+#: src/frontend/ProjectExplorer.cpp:130
 #, fuzzy, kde-format
 #| msgid "hide search/filter options"
 msgid "Search/Filter Options"
 msgstr "piilota haku- ja suodatusasetukset"
 
-#: src/frontend/ProjectExplorer.cpp:257 src/frontend/ProjectExplorer.cpp:405
+#: src/frontend/ProjectExplorer.cpp:273 src/frontend/ProjectExplorer.cpp:421
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1009
 #, kde-format
 msgid "Columns"
 msgstr "Sarakkeet"
 
-#: src/frontend/ProjectExplorer.cpp:318
+#: src/frontend/ProjectExplorer.cpp:334
 #, kde-format
 msgid "Show All"
 msgstr "Näytä kaikki"
 
-#: src/frontend/ProjectExplorer.cpp:557
+#: src/frontend/ProjectExplorer.cpp:573
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr ""
 
-#: src/frontend/ProjectExplorer.cpp:571
+#: src/frontend/ProjectExplorer.cpp:587
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
 "this."
 msgstr ""
 
-#: src/frontend/ProjectExplorer.cpp:735
+#: src/frontend/ProjectExplorer.cpp:751
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr ""
 
-#: src/frontend/ProjectExplorer.cpp:951
+#: src/frontend/ProjectExplorer.cpp:967
 #, fuzzy, kde-format
 #| msgid "%1: set visible"
 msgid "%1 elements: set visible: %2"
 msgstr "%1: aseta näkyväksi"
 
-#: src/frontend/ProjectExplorer.cpp:979
+#: src/frontend/ProjectExplorer.cpp:995
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected object?"
 #| msgid_plural "Do you really want to delete the selected %1 objects?"
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "Haluatko varmasti poistaa valitun kohteen?"
 
-#: src/frontend/ProjectExplorer.cpp:981
+#: src/frontend/ProjectExplorer.cpp:997
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "Haluatko varmasti poistaa teeman %1?"
 
-#: src/frontend/ProjectExplorer.cpp:985
+#: src/frontend/ProjectExplorer.cpp:1001
 #: src/frontend/worksheet/WorksheetView.cpp:1454
 #, kde-format
 msgid "Delete selected object"
@@ -19033,7 +19047,7 @@ msgid_plural "Delete selected objects"
 msgstr[0] "Poista valittu olio"
 msgstr[1] "Poista valitut oliot"
 
-#: src/frontend/ProjectExplorer.cpp:991
+#: src/frontend/ProjectExplorer.cpp:1007
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Project Explorer: delete %1 selected object"
