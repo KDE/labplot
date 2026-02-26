@@ -116,9 +116,7 @@ QStringList AbstractColumn::dateTimeFormats() {
 	dateTimes << timeFormats();
 	// any combination of date and times
 	for (const auto& d : dateFormats()) {
-		dateTimes << d;
 		for (const auto& t : timeFormats()) {
-			dateTimes << t;
 			dateTimes << d + QLatin1Char(' ') + t;
 		}
 	}
