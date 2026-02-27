@@ -161,6 +161,60 @@ QMenu* Worksheet::createContextMenu() {
 	return menu;
 }
 
+/*!
+ * fills the context menu with actions for multiple selected elements for
+ * the context menu created in the Project Explorer, adding actions that
+ * can be applied for multiple selected elements.
+ */
+void Worksheet::fillElementsContextMenu(QMenu* menu) {
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Change &Visibility"), this);
+	connect(action, &QAction::triggered, this, &Worksheet::changeSelectedVisibility);
+	menu->addAction(action);
+
+	// TODO: add more actions if applicable.
+	// menu->addAction(m_view->changeSelectedLockAction);
+	// auto* changeSelectedLockAction = new QAction(QIcon::fromTheme(QStringLiteral("object-locked")), i18n("Change &Lock Status"), this);
+	// connect(changeSelectedLockAction, &QAction::triggered, m_worksheet, &Worksheet::changeSelectedLock);
+}
+
+/*!
+ * changes visibility for all selected worksheet elements
+ */
+void Worksheet::changeSelectedVisibility() {
+	if (!m_view)
+		return;
+
+	const auto& selectedItems = m_view->selectedItems();
+	if (selectedItems.isEmpty())
+		return;
+
+	// determine all selected worksheet elements
+	const auto& children = this->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+	QVector<WorksheetElement*> elements;
+	for (auto* item : selectedItems) {
+		for (auto* child : children) {
+			if (child->graphicsItem() == item) {
+				elements << child;
+				break;
+			}
+		}
+	}
+
+	if (elements.isEmpty())
+		return;
+
+	// use first element as reference
+	const bool newVisible = !elements.constFirst()->isVisible();
+
+	if (elements.size() > 1) {
+		beginMacro(i18np("%1: change visibility", "%1: change visibility of %2 elements", name(), elements.size()));
+		for (auto* element : elements)
+			element->setVisible(newVisible);
+		endMacro();
+	} else
+		elements.constFirst()->setVisible(newVisible);
+}
+
 //! Construct a primary view on me.
 /**
  * This method may be called multiple times during the life time of an Aspect, or it might not get

@@ -161,7 +161,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartValue, MajorTickStartValue)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
-	QString& majorTicksColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, majorTicksColumnPath, MajorTicksColumnPath)
 	Line* majorTicksLine() const;
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength)
 
@@ -171,7 +171,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksSpacing, MinorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
-	QString& minorTicksColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, minorTicksColumnPath, MinorTicksColumnPath)
 	Line* minorTicksLine() const;
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength)
 
@@ -185,7 +185,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelsRotationAngle)
 	BASIC_D_ACCESSOR_DECL(LabelsTextType, labelsTextType, LabelsTextType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, labelsTextColumn, LabelsTextColumn)
-	QString& labelsTextColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, labelsTextColumnPath, LabelsTextColumnPath)
 	QVector<double> tickLabelValues() const;
 	QVector<QString> tickLabelStrings() const;
 	CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor)

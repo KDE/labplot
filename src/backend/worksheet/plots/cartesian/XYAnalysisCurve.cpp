@@ -85,6 +85,9 @@ void XYAnalysisCurve::copyData(QVector<double>& xData,
 							   double xMin,
 							   double xMax,
 							   bool avgUniqueX) {
+	if (!xDataColumn || !yDataColumn)
+		return;
+
 	const int rowCount = std::min(xDataColumn->rowCount(), yDataColumn->rowCount());
 	bool uniqueX = true;
 	for (int row = 0; row < rowCount; ++row) {

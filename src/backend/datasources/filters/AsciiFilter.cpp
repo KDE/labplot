@@ -533,7 +533,7 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		if (!properties.headerEnabled) {
 			rows.append(determineColumnsSimplifyWhiteSpace(line, properties));
 			if (rows.last().count() != numberColumns)
-				return Status::InvalidNumberDataColumns(numberColumns, rows.last().count(), i + 1);
+				return Status::InvalidNumberDataColumns(numberColumns, (int)rows.last().count(), i + 1);
 			i++;
 		} else {
 			// Skip all lines until startRow line
@@ -564,7 +564,7 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 				if (properties.headerEnabled) {
 					i += properties.startRow;
 				}
-				return Status::InvalidNumberDataColumns(numberColumns, rows.last().count(), i + 1);
+				return Status::InvalidNumberDataColumns(numberColumns, (int)rows.last().count(), i + 1);
 			}
 			i++;
 		}
@@ -1611,7 +1611,7 @@ bool AsciiFilterPrivate::DataContainer::resize(qsizetype s) const {
 		return false;
 
 	for (size_t i = 1; i < m_dataContainer.size(); i++) {
-		if (size != rowCount(i))
+		if ((int)size != rowCount(i))
 			return false;
 	}
 	return true;

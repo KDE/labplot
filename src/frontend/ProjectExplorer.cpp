@@ -4,7 +4,7 @@
 	Description       	 : A tree view for displaying and editing an AspectTreeModel.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,7 +17,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/notebook/Notebook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/Worksheet.h"
 #include "frontend/core/ContentDockWidget.h"
 
 #include <KConfig>
@@ -173,43 +174,43 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 		}
 	} else if (selectedAspectsCount > 1) { // multiple aspects are selected
 		menu = new QMenu(this);
-		// add "expand/collapse" actions if the selected aspects have children
-		bool hasChildren = false;
+
+		// check if the selected objects have the same parent and 
+		// show parent's context menu for columns to allow plot data, etc.
+		bool sameParent = true;
+		AbstractAspect* parentAspect = nullptr;
 		for (const auto* aspect : selectedAspects) {
-			if (aspect->childCount<AbstractAspect>()) {
-				hasChildren = true;
-				break;
+			if (!parentAspect)
+				parentAspect = aspect->parentAspect();
+			else {
+				if (aspect->parentAspect() != parentAspect) {
+					sameParent = false;
+					break;
+				}
+				parentAspect = aspect->parentAspect();
 			}
 		}
 
-		if (hasChildren) {
-			menu->addAction(expandSelectedTreeAction);
-			menu->addAction(collapseSelectedTreeAction);
-			menu->addSeparator();
-		} else {
-			// check if columns from the same parent were selected only
-			// and show parent's context menu for columns to allow plot data, etc.
-			bool columnsOnly = true;
-			bool sameParent = true;
-			AbstractAspect* parentAspect = nullptr;
-			for (const auto* aspect : selectedAspects) {
-				if (aspect->type() != AspectType::Column) {
-					columnsOnly = false;
-					break;
-				}
-
-				if (!parentAspect)
-					parentAspect = aspect->parentAspect();
-				else {
-					if (aspect->parentAspect() != parentAspect) {
-						sameParent = false;
-						break;
+		if (sameParent && parentAspect) {
+			// lambda function to check if all selected aspects are of a specific type
+			auto checkAspectType = [&selectedAspects](AspectType type) -> bool {
+				// for WorksheetElements, check the inheritance and not the exact type
+				if (type == AspectType::WorksheetElement) {
+					for (const auto* aspect : selectedAspects) {
+						if (!aspect->inherits<WorksheetElement>())
+							return false;
 					}
-					parentAspect = aspect->parentAspect();
+					return true;
 				}
-			}
 
-			if (columnsOnly && sameParent) {
+				for (const auto* aspect : selectedAspects) {
+					if (aspect->type() != type)
+						return false;
+				}
+				return true;
+			};
+
+			if (checkAspectType(AspectType::Column)) { // check columns
 				if (parentAspect->type() == AspectType::Spreadsheet) {
 					auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
 					spreadsheet->fillColumnsContextMenu(menu);
@@ -225,6 +226,32 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 #endif
 				}
 				menu->addSeparator();
+			} else if (checkAspectType(AspectType::WorksheetElement)) { // check worksheet elements
+				if (checkAspectType(AspectType::XYCurve)) { // check xy-curves
+					auto* plotArea = dynamic_cast<CartesianPlot*>(parentAspect);
+					if (plotArea) {
+						menu->addMenu(plotArea->analysisMenu());
+						menu->addSeparator();
+					}
+				}
+
+				auto* worksheet = dynamic_cast<Worksheet*>(parentAspect);
+				if (!worksheet)
+					worksheet = parentAspect->parent<Worksheet>();
+				if (worksheet) {
+					worksheet->fillElementsContextMenu(menu);
+					menu->addSeparator();
+				}
+			}
+		}
+
+		// add "expand/collapse" actions if the selected aspects have children
+		for (const auto* aspect : selectedAspects) {
+			if (aspect->childCount<AbstractAspect>()) {
+				menu->addAction(expandSelectedTreeAction);
+				menu->addAction(collapseSelectedTreeAction);
+				menu->addSeparator();
+				break;
 			}
 		}
 

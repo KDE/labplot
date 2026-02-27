@@ -238,7 +238,8 @@ private:
 	void init(bool loading);
 	void initActions();
 	void initMenus();
-	const XYCurve* currentCurve() const;
+
+	QVector<XYCurve*> selectedCurves() const;
 	void zoom(int index, const Dimension, bool in, const double relPosSceneRange);
 	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, WorksheetElement::Orientation);
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);

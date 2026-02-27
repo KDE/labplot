@@ -2965,6 +2965,8 @@ void OriginProjectParser::parseColumnInfo(const QString& info, QString& longName
 	if (info.isEmpty())
 		return;
 	auto infoList = info.split(QRegularExpression(QStringLiteral("[\r\n]")), Qt::SkipEmptyParts);
+	if (infoList.isEmpty())
+		return;
 
 	switch (infoList.size()) {
 	case 2: // long name, unit

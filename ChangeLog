@@ -24,6 +24,7 @@ New features:
 		* Allow to position the center and limit lines in the process behavior chart based on user-defined specifications
 		* Additionally to using the colors for plots from the current theme palette, allow to use colors from a specified color map
 		* Stacked line plots
+		* Allow to do analysis (fit, smoothe, etc.) on multiple curves simultaneously
 	* [import]
 		* Import directories - import multiple files in a directory in one single step
 		* Support Unix timestamps (number of seconds since January 1, 1970 (UTC)) and Windows timestamps (number of 100-nanosecond intervals since January 1, 1601 (UTC)) in ASCII files, ms precision only

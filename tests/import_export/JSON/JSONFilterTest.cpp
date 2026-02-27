@@ -5,6 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
 	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -126,6 +127,89 @@ void JSONFilterTest::testArrayImport03() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(0), 0.01);
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0.02);
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0.03);
+}
+
+/*!
+ * import an array of plain values
+ */
+void JSONFilterTest::testArrayPlainImport() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	JsonFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/array_plain.json"));
+	filter.setCreateIndexEnabled(true);
+	filter.setDataRowType(QJsonValue::Array);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QStringLiteral("index"));
+	QCOMPARE(spreadsheet.column(1)->name(), QStringLiteral("1"));
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 4);
+	QCOMPARE(spreadsheet.column(0)->integerAt(4), 5);
+
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 2.0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 3.0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 4.0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(4), 5.0);
+}
+
+/*!
+ * import an array of objects
+ */
+void JSONFilterTest::testArrayObjectsImport() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	JsonFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/array_objects.json"));
+	filter.setCreateIndexEnabled(true);
+	filter.setDataRowType(QJsonValue::Array);
+	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 4);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+
+	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("time"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("value"));
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 4);
+
+	QDateTime value = QDateTime::fromString(QLatin1String("2026-02-16 00:00:08.584"), QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(0), value);
+	value = QDateTime::fromString(QLatin1String("2026-02-16 00:02:03.084"), QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(1), value);
+	value = QDateTime::fromString(QLatin1String("2026-02-16 00:02:05.084"), QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(2), value);
+	value = QDateTime::fromString(QLatin1String("2026-02-16 00:03:59.613"), QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(3), value);
+
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 17.0);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0.0);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), 17.0);
+	QCOMPARE(spreadsheet.column(2)->valueAt(3), 5.0);
 }
 
 /*!

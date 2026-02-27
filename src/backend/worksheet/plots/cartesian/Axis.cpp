@@ -473,10 +473,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, bool, majorTicksAutoNumber, majorTicksAutoNumbe
 BASIC_SHARED_D_READER_IMPL(Axis, int, majorTicksNumber, majorTicksNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksSpacing, majorTicksSpacing)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, majorTicksColumn, majorTicksColumn)
-QString& Axis::majorTicksColumnPath() const {
-	D(Axis);
-	return d->majorTicksColumnPath;
-}
+BASIC_SHARED_D_READER_IMPL(Axis, QString, majorTicksColumnPath, majorTicksColumnPath)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength)
 
 Line* Axis::majorTicksLine() const {
@@ -490,10 +487,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, bool, minorTicksAutoNumber, minorTicksAutoNumbe
 BASIC_SHARED_D_READER_IMPL(Axis, int, minorTicksNumber, minorTicksNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksSpacing, minorTicksIncrement)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, minorTicksColumn, minorTicksColumn)
-QString& Axis::minorTicksColumnPath() const {
-	D(Axis);
-	return d->minorTicksColumnPath;
-}
+BASIC_SHARED_D_READER_IMPL(Axis, QString, minorTicksColumnPath, minorTicksColumnPath)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength)
 
 Line* Axis::minorTicksLine() const {
@@ -511,10 +505,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOffset, labelsOffset)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsRotationAngle, labelsRotationAngle)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsTextType, labelsTextType, labelsTextType)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, labelsTextColumn, labelsTextColumn)
-QString& Axis::labelsTextColumnPath() const {
-	D(Axis);
-	return d->labelsTextColumnPath;
-}
+BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsTextColumnPath, labelsTextColumnPath)
 QVector<double> Axis::tickLabelValues() const {
 	D(Axis);
 	return d->tickLabelValues;
