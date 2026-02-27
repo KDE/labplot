@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-26 00:39+0000\n"
+"POT-Creation-Date: 2026-02-27 00:39+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -148,39 +148,39 @@ msgstr ""
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:136
+#: src/backend/core/AbstractColumn.cpp:134
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:69
 #, kde-format
 msgid "Milliseconds"
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:138
+#: src/backend/core/AbstractColumn.cpp:136
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:68
 #, fuzzy, kde-format
 #| msgid "second"
 msgid "Seconds"
 msgstr "sekunda"
 
-#: src/backend/core/AbstractColumn.cpp:140
+#: src/backend/core/AbstractColumn.cpp:138
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:67
 #, kde-format
 msgid "Minutes"
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:142
+#: src/backend/core/AbstractColumn.cpp:140
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:66
 #, kde-format
 msgid "Hours"
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:144
+#: src/backend/core/AbstractColumn.cpp:142
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:65
 #, kde-format
 msgid "Days"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbNone)
-#: src/backend/core/AbstractColumn.cpp:160 src/backend/nsl/nsl_conv.c:22
+#: src/backend/core/AbstractColumn.cpp:158 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:274
 #: src/frontend/dockwidgets/AxisDock.cpp:290
@@ -193,73 +193,73 @@ msgstr ""
 msgid "None"
 msgstr "Žiadne"
 
-#: src/backend/core/AbstractColumn.cpp:173
+#: src/backend/core/AbstractColumn.cpp:171
 #, kde-format
 msgid "X-Uncertainty"
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:175
+#: src/backend/core/AbstractColumn.cpp:173
 #, fuzzy, kde-format
 #| msgid "Error"
 msgid "X-Error"
 msgstr "Chyba"
 
-#: src/backend/core/AbstractColumn.cpp:179
+#: src/backend/core/AbstractColumn.cpp:177
 #, kde-format
 msgid "X-Uncertainty +"
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:181
+#: src/backend/core/AbstractColumn.cpp:179
 #, fuzzy, kde-format
 #| msgid "Format :"
 msgid "X-Error +"
 msgstr "Formát:"
 
-#: src/backend/core/AbstractColumn.cpp:185
+#: src/backend/core/AbstractColumn.cpp:183
 #, kde-format
 msgid "X-Uncertainty -"
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:187
+#: src/backend/core/AbstractColumn.cpp:185
 #, fuzzy, kde-format
 #| msgid "Format :"
 msgid "X-Error -"
 msgstr "Formát:"
 
-#: src/backend/core/AbstractColumn.cpp:191
+#: src/backend/core/AbstractColumn.cpp:189
 #, kde-format
 msgid "Y-Uncertainty"
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:193
+#: src/backend/core/AbstractColumn.cpp:191
 #, fuzzy, kde-format
 #| msgid "Error"
 msgid "Y-Error"
 msgstr "Chyba"
 
-#: src/backend/core/AbstractColumn.cpp:197
+#: src/backend/core/AbstractColumn.cpp:195
 #, kde-format
 msgid "Y-Uncertainty +"
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:199
+#: src/backend/core/AbstractColumn.cpp:197
 #, fuzzy, kde-format
 #| msgid "Format :"
 msgid "Y-Error +"
 msgstr "Formát:"
 
-#: src/backend/core/AbstractColumn.cpp:203
+#: src/backend/core/AbstractColumn.cpp:201
 #, kde-format
 msgid "Y-Uncertainty -"
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:205
+#: src/backend/core/AbstractColumn.cpp:203
 #, fuzzy, kde-format
 #| msgid "Format :"
 msgid "Y-Error -"
 msgstr "Formát:"
 
-#: src/backend/core/AbstractColumn.cpp:224
+#: src/backend/core/AbstractColumn.cpp:222
 #: src/backend/datasources/filters/AsciiFilter.cpp:614
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
@@ -268,12 +268,12 @@ msgstr "Formát:"
 msgid "Double"
 msgstr "double"
 
-#: src/backend/core/AbstractColumn.cpp:226
+#: src/backend/core/AbstractColumn.cpp:224
 #, kde-format
 msgid "Integer"
 msgstr "Celé číslo"
 
-#: src/backend/core/AbstractColumn.cpp:228
+#: src/backend/core/AbstractColumn.cpp:226
 #, fuzzy, kde-format
 #| msgid "Integer"
 msgid "Big Integer"
@@ -282,7 +282,7 @@ msgstr "Celé číslo"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
-#: src/backend/core/AbstractColumn.cpp:230
+#: src/backend/core/AbstractColumn.cpp:228
 #: src/backend/datasources/filters/AsciiFilter.cpp:615
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
 #: src/frontend/ActionsManager.cpp:531
@@ -299,7 +299,7 @@ msgid "Text"
 msgstr "Textový"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTime)
-#: src/backend/core/AbstractColumn.cpp:232
+#: src/backend/core/AbstractColumn.cpp:230
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:211
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:120
 #, fuzzy, kde-format
@@ -307,23 +307,23 @@ msgstr "Textový"
 msgid "Date & Time"
 msgstr "Dátum a čas"
 
-#: src/backend/core/AbstractColumn.cpp:234
+#: src/backend/core/AbstractColumn.cpp:232
 #, kde-format
 msgid "Month Names"
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:236
+#: src/backend/core/AbstractColumn.cpp:234
 #, fuzzy, kde-format
 #| msgid "Name"
 msgid "Day Names"
 msgstr "Názov"
 
-#: src/backend/core/AbstractColumn.cpp:239
+#: src/backend/core/AbstractColumn.cpp:237
 #, kde-format
 msgid "UNDEFINED"
 msgstr ""
 
-#: src/backend/core/AbstractColumn.cpp:324
+#: src/backend/core/AbstractColumn.cpp:322
 #: src/backend/spreadsheet/Spreadsheet.cpp:384
 #, fuzzy, kde-format
 #| msgid "%1: insert %2 before %3."
@@ -333,7 +333,7 @@ msgstr[0] "Vložiť riadok"
 msgstr[1] "Vložiť riadky"
 msgstr[2] "Vložiť riadky"
 
-#: src/backend/core/AbstractColumn.cpp:337
+#: src/backend/core/AbstractColumn.cpp:335
 #: src/backend/spreadsheet/Spreadsheet.cpp:367
 #, fuzzy, kde-format
 #| msgid "%1: remove %2"
@@ -343,7 +343,7 @@ msgstr[0] "Odstrániť riadok"
 msgstr[1] "Odstrániť riadky"
 msgstr[2] "Odstrániť riadky"
 
-#: src/backend/core/AbstractColumn.cpp:894
+#: src/backend/core/AbstractColumn.cpp:892
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr ""
@@ -1327,7 +1327,7 @@ msgstr "Nepodarilo sa otvoriť"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
 #: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:516
+#: src/backend/datasources/filters/JsonFilter.cpp:520
 #: src/backend/datasources/filters/MatioFilter.cpp:890
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
@@ -1849,7 +1849,7 @@ msgstr ""
 msgid "JSON format error or document empty."
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:499
+#: src/backend/datasources/filters/JsonFilter.cpp:503
 #, fuzzy, kde-format
 #| msgid "Failed to read data."
 msgid "Empty file or invalid JSON document."

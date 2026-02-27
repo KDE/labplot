@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-26 00:39+0000\n"
-"PO-Revision-Date: 2026-02-18 05:42+0100\n"
+"POT-Creation-Date: 2026-02-27 00:39+0000\n"
+"PO-Revision-Date: 2026-02-26 05:47+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -139,38 +139,38 @@ msgstr "ატრიბუტი \"name\" აკლია ან ცარიე
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "\"%1\"-ის შექმნის დრო არასწორია. გამოიყენება მიმდინარე დრო."
 
-#: src/backend/core/AbstractColumn.cpp:136
+#: src/backend/core/AbstractColumn.cpp:134
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:69
 #, kde-format
 msgid "Milliseconds"
 msgstr "მილიწამი"
 
-#: src/backend/core/AbstractColumn.cpp:138
+#: src/backend/core/AbstractColumn.cpp:136
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:68
 #, kde-format
 msgid "Seconds"
 msgstr "წამი"
 
-#: src/backend/core/AbstractColumn.cpp:140
+#: src/backend/core/AbstractColumn.cpp:138
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:67
 #, kde-format
 msgid "Minutes"
 msgstr "წთ"
 
-#: src/backend/core/AbstractColumn.cpp:142
+#: src/backend/core/AbstractColumn.cpp:140
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:66
 #, kde-format
 msgid "Hours"
 msgstr "საათი"
 
-#: src/backend/core/AbstractColumn.cpp:144
+#: src/backend/core/AbstractColumn.cpp:142
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:65
 #, kde-format
 msgid "Days"
 msgstr "დღე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbNone)
-#: src/backend/core/AbstractColumn.cpp:160 src/backend/nsl/nsl_conv.c:22
+#: src/backend/core/AbstractColumn.cpp:158 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:274
 #: src/frontend/dockwidgets/AxisDock.cpp:290
@@ -183,67 +183,67 @@ msgstr "დღე"
 msgid "None"
 msgstr "არცერთი"
 
-#: src/backend/core/AbstractColumn.cpp:173
+#: src/backend/core/AbstractColumn.cpp:171
 #, kde-format
 msgid "X-Uncertainty"
 msgstr "X-გაურკვევლობა"
 
-#: src/backend/core/AbstractColumn.cpp:175
+#: src/backend/core/AbstractColumn.cpp:173
 #, kde-format
 msgid "X-Error"
 msgstr "X-შეცდომა"
 
-#: src/backend/core/AbstractColumn.cpp:179
+#: src/backend/core/AbstractColumn.cpp:177
 #, kde-format
 msgid "X-Uncertainty +"
 msgstr "X-გაურკვევლობა +"
 
-#: src/backend/core/AbstractColumn.cpp:181
+#: src/backend/core/AbstractColumn.cpp:179
 #, kde-format
 msgid "X-Error +"
 msgstr "X-შეცდომა +"
 
-#: src/backend/core/AbstractColumn.cpp:185
+#: src/backend/core/AbstractColumn.cpp:183
 #, kde-format
 msgid "X-Uncertainty -"
 msgstr "X-გაურკვევლობა -"
 
-#: src/backend/core/AbstractColumn.cpp:187
+#: src/backend/core/AbstractColumn.cpp:185
 #, kde-format
 msgid "X-Error -"
 msgstr "X-შეცდომა -"
 
-#: src/backend/core/AbstractColumn.cpp:191
+#: src/backend/core/AbstractColumn.cpp:189
 #, kde-format
 msgid "Y-Uncertainty"
 msgstr "Y-გაურკვევლობა"
 
-#: src/backend/core/AbstractColumn.cpp:193
+#: src/backend/core/AbstractColumn.cpp:191
 #, kde-format
 msgid "Y-Error"
 msgstr "Y-შეცდომა"
 
-#: src/backend/core/AbstractColumn.cpp:197
+#: src/backend/core/AbstractColumn.cpp:195
 #, kde-format
 msgid "Y-Uncertainty +"
 msgstr "Y-გაურკვევლობა +"
 
-#: src/backend/core/AbstractColumn.cpp:199
+#: src/backend/core/AbstractColumn.cpp:197
 #, kde-format
 msgid "Y-Error +"
 msgstr "Y-შეცდომა +"
 
-#: src/backend/core/AbstractColumn.cpp:203
+#: src/backend/core/AbstractColumn.cpp:201
 #, kde-format
 msgid "Y-Uncertainty -"
 msgstr "Y-გაურკვევლობა -"
 
-#: src/backend/core/AbstractColumn.cpp:205
+#: src/backend/core/AbstractColumn.cpp:203
 #, kde-format
 msgid "Y-Error -"
 msgstr "Y-შეცდომა -"
 
-#: src/backend/core/AbstractColumn.cpp:224
+#: src/backend/core/AbstractColumn.cpp:222
 #: src/backend/datasources/filters/AsciiFilter.cpp:614
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
@@ -251,12 +251,12 @@ msgstr "Y-შეცდომა -"
 msgid "Double"
 msgstr "ორმაგი"
 
-#: src/backend/core/AbstractColumn.cpp:226
+#: src/backend/core/AbstractColumn.cpp:224
 #, kde-format
 msgid "Integer"
 msgstr "მთელი რიცხვი"
 
-#: src/backend/core/AbstractColumn.cpp:228
+#: src/backend/core/AbstractColumn.cpp:226
 #, kde-format
 msgid "Big Integer"
 msgstr "დიდი მთელი რიცხვი"
@@ -264,7 +264,7 @@ msgstr "დიდი მთელი რიცხვი"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
-#: src/backend/core/AbstractColumn.cpp:230
+#: src/backend/core/AbstractColumn.cpp:228
 #: src/backend/datasources/filters/AsciiFilter.cpp:615
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
 #: src/frontend/ActionsManager.cpp:531
@@ -281,29 +281,29 @@ msgid "Text"
 msgstr "ტექსტი"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTime)
-#: src/backend/core/AbstractColumn.cpp:232
+#: src/backend/core/AbstractColumn.cpp:230
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:211
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:120
 #, kde-format
 msgid "Date & Time"
 msgstr "თარიღი & დრო"
 
-#: src/backend/core/AbstractColumn.cpp:234
+#: src/backend/core/AbstractColumn.cpp:232
 #, kde-format
 msgid "Month Names"
 msgstr "თვის სახელები"
 
-#: src/backend/core/AbstractColumn.cpp:236
+#: src/backend/core/AbstractColumn.cpp:234
 #, kde-format
 msgid "Day Names"
 msgstr "დღის სახელები"
 
-#: src/backend/core/AbstractColumn.cpp:239
+#: src/backend/core/AbstractColumn.cpp:237
 #, kde-format
 msgid "UNDEFINED"
 msgstr "გაურკვეველი"
 
-#: src/backend/core/AbstractColumn.cpp:324
+#: src/backend/core/AbstractColumn.cpp:322
 #: src/backend/spreadsheet/Spreadsheet.cpp:384
 #, kde-format
 msgid "%1: insert 1 row"
@@ -311,7 +311,7 @@ msgid_plural "%1: insert %2 rows"
 msgstr[0] "%1: 1 მწკრივის ჩასმა"
 msgstr[1] "%1: %2 მწკრივის ჩასმა"
 
-#: src/backend/core/AbstractColumn.cpp:337
+#: src/backend/core/AbstractColumn.cpp:335
 #: src/backend/spreadsheet/Spreadsheet.cpp:367
 #, kde-format
 msgid "%1: remove 1 row"
@@ -319,7 +319,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1: 1 მწკრივის წაშლა"
 msgstr[1] "%1: %2 მწკრივის წაშლა"
 
-#: src/backend/core/AbstractColumn.cpp:894
+#: src/backend/core/AbstractColumn.cpp:892
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "საწყისი ან საბოლოო მწკრივის დასაწყისი ან დასასრული არასწორია"
@@ -1287,7 +1287,7 @@ msgstr "მოწყობილობის/ფაილის გახსნ�
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
 #: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:516
+#: src/backend/datasources/filters/JsonFilter.cpp:520
 #: src/backend/datasources/filters/MatioFilter.cpp:890
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
@@ -1789,7 +1789,7 @@ msgstr "მოწყობილობა/ფაილი ფაილი ცა
 msgid "JSON format error or document empty."
 msgstr "JSON ფორმატის შეცდომა ან დოკუმენტი ცარიელია."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:499
+#: src/backend/datasources/filters/JsonFilter.cpp:503
 #, kde-format
 msgid "Empty file or invalid JSON document."
 msgstr "ცარიელი ფაილი ან არასწორი JSON დოკუმენტი."
@@ -11163,18 +11163,16 @@ msgid "%1: set border shape"
 msgstr "%1: საზღვრის ფორმის დაყენება"
 
 #: src/backend/worksheet/Worksheet.cpp:170
-#, fuzzy, kde-format
-#| msgid "Window Visibility"
+#, kde-format
 msgid "Change &Visibility"
-msgstr "ფანჯრის ხილვადობა"
+msgstr "ხილვადობის შეც&ვლა"
 
 #: src/backend/worksheet/Worksheet.cpp:210
-#, fuzzy, kde-format
-#| msgid "%1: change size type"
+#, kde-format
 msgid "%1: change visibility"
 msgid_plural "%1: change visibility of %2 elements"
-msgstr[0] "%1: ზომის ტიპის შეცვლა"
-msgstr[1] "%1: ზომის ტიპის შეცვლა"
+msgstr[0] "%1: ხილვადობის შეცვლა"
+msgstr[1] "%1: %2 ელემენტის ხილვადობის შეცვლა"
 
 #: src/backend/worksheet/Worksheet.cpp:299
 #, kde-format
