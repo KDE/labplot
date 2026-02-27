@@ -79,6 +79,7 @@ void ParetoChart::init() {
 	d->barPlot = new BarPlot(QString());
 	d->barPlot->setHidden(true);
 	d->barPlot->setOrientation(BarPlot::Orientation::Vertical);
+	d->barPlot->graphicsItem()->setParentItem(d);
 
 	// line plot for the cumulative percentage values
 	d->linePlot = new XYCurve(QStringLiteral("data"));
