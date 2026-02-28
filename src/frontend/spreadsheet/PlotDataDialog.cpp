@@ -14,6 +14,7 @@
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
@@ -1184,32 +1185,35 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		}
 	}
 	case Plot::PlotType::ParetoChart: {
-		verticalAxis->title()->setText(i18n("Frequency"));
-		verticalAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
-		verticalAxis->setMajorTicksNumber(10 + 1); // same tick number as percentage axis below
-
-		// determine the second vertical axis and set its title to "Cumulative Percentage"
-		Axis* secondAxis = nullptr;
-		const auto& axes = plot->children(AspectType::Axis);
-		for (auto a : axes) {
-			auto axis = static_cast<Axis*>(a);
-			if (axis->orientation() == Axis::Orientation::Vertical && axis != verticalAxis) {
-				secondAxis = axis;
-				break;
+		// axes properties
+		auto axes = plot->children<Axis>();
+		bool firstYAxis = false;
+		auto* paretoChart = static_cast<ParetoChart*>(m_lastAddedCurve);
+		for (auto* axis : std::as_const(axes)) {
+			if (axis->orientation() == Axis::Orientation::Horizontal) {
+				axis->title()->setText(QString());
+				axis->majorGridLine()->setStyle(Qt::NoPen);
+				axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
+				axis->setMajorTickStartOffset(0.5);
+				axis->setMajorTicksType(Axis::TicksType::Spacing);
+				axis->setMajorTicksSpacing(1.);
+				axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+				axis->setLabelsTextColumn(paretoChart->labelsColumn());
+			} else {
+				if (!firstYAxis) {
+					axis->title()->setText(i18n("Frequency"));
+					axis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
+					axis->setMajorTicksNumber(10 + 1); // same tick number as percentage axis
+					firstYAxis = true;
+				} else {
+					axis->title()->setText(i18n("Cumulative Percentage"));
+					// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was addressed
+					axis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
+				}
 			}
-		}
 
-		if (secondAxis) {
-			secondAxis->setPosition(Axis::Position::Right);
-			secondAxis->setMajorTicksDirection(Axis::ticksBoth);
-			secondAxis->setLabelsPosition(Axis::LabelsPosition::In);
-			secondAxis->setLabelsSuffix(QLatin1String("%"));
-			secondAxis->title()->setRotationAngle(90);
-			secondAxis->setCoordinateSystemIndex(1);
-
-			secondAxis->title()->setText(i18n("Cumulative Percentage"));
-			// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was addressed
-			secondAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
+			axis->setMinorTicksDirection(Axis::noTicks);
+			axis->setArrowType(Axis::ArrowType::NoArrow);
 		}
 	}
 	}

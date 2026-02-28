@@ -63,6 +63,7 @@ void ParetoChart::init() {
 
 	// column with the text represenation of the sorted frequencies, used in the horizontal axis of the parent plot area
 	d->labelsColumn = new Column(QStringLiteral("labels"), AbstractColumn::ColumnMode::Text);
+	addChildFast(d->labelsColumn);
 
 	// column for x and y values used in the line plot for the cumulative percentage
 	d->xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
@@ -144,6 +145,8 @@ void ParetoChart::setVisible(bool on) {
 //  general
 BASIC_SHARED_D_READER_IMPL(ParetoChart, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(ParetoChart, QString, dataColumnPath, dataColumnPath)
+BASIC_SHARED_D_READER_IMPL(ParetoChart, const AbstractColumn*, labelsColumn, labelsColumn)
+BASIC_SHARED_D_READER_IMPL(ParetoChart, QString, labelsColumnPath, labelsColumnPath)
 
 /*!
  * returns the number of index values used for x.

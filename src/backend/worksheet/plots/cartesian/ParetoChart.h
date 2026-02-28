@@ -49,6 +49,9 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
 
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, labelsColumn, LabelsColumn)
+	CLASS_D_ACCESSOR_DECL(QString, labelsColumnPath, LabelsColumnPath)
+
 	Line* barLine() const;
 	Background* barBackground() const;
 	Line* line() const;
