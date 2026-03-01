@@ -194,14 +194,14 @@ int main(int argc, char* argv[]) {
 	// debugging paths
 	const auto& appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
 	INFO("AppDataLocation paths:")
-	for (const auto& path : appdatapaths)
-		WARN("	" << STDSTRING(path))
+	for (const auto& p : appdatapaths)
+		WARN("	" << STDSTRING(p))
 	INFO("Icon theme search paths:")
-	for (const auto& path : QIcon::themeSearchPaths())
-		WARN("	" << STDSTRING(path))
+	for (const auto& p : QIcon::themeSearchPaths())
+		WARN("	" << STDSTRING(p))
 	INFO("Library search paths:")
-	for (const auto& path : QCoreApplication::libraryPaths())
-		WARN("	" << STDSTRING(path))
+	for (const auto& p : QCoreApplication::libraryPaths())
+		WARN("	" << STDSTRING(p))
 #endif
 
 	QString schemeName = group.readEntry("ColorScheme");
