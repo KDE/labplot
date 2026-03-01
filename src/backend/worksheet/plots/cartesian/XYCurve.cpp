@@ -1856,7 +1856,8 @@ void XYCurvePrivate::updateValues() {
 
 			switch (vColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				m_valueStrings << value->prefix() + numberToString(value->column()->valueAt(row), locale, value->numericFormat(), value->precision()) + value->suffix();
+				m_valueStrings << value->prefix() + numberToString(value->column()->valueAt(row), locale, value->numericFormat(), value->precision())
+						+ value->suffix();
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
