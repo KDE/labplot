@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all analysis curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 
@@ -383,8 +384,8 @@ void XYAnalysisCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 			setY2DataColumn(column);
 
 		// From XYCurve
-		if (valuesColumnPath() == aspectPath)
-			setValuesColumn(column);
+		if (value()->columnPath() == aspectPath)
+			value()->setColumn(column);
 	} else if (curve) {
 		if (dataSourceCurvePath() == aspectPath)
 			setDataSourceCurve(curve);

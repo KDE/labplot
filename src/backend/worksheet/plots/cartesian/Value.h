@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Value
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -26,7 +26,7 @@ class Value : public AbstractAspect {
 	Q_OBJECT
 
 public:
-	enum Type { NoValues, BinEntries, CustomColumn };
+	enum Type { NoValues, BinEntries, CustomColumn, X, Y, XY, XYBracketed };
 	enum Position { Above, Under, Left, Right, Center };
 
 	explicit Value(const QString& name);

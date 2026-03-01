@@ -25,6 +25,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
@@ -463,7 +464,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: check more curve properties
 
 	auto* symbol = curve->symbol();
@@ -523,7 +524,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: check more curve properties
 
 	symbol = curve->symbol();
@@ -596,7 +597,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: more curve properties
 
 	auto* symbol = curve->symbol();
@@ -646,7 +647,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: more curve properties
 
 	symbol = curve->symbol();

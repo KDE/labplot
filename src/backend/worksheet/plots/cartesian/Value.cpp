@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Value
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -20,6 +20,7 @@
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -269,6 +270,34 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 	auto attribs = reader->attributes();
 
 	READ_INT_VALUE("type", type, Value::Type);
+
+	// for projects with xmlVersion < 21 and if the parent is XYCurve, we need to map from the old enum in XYCurve
+	// enum class ValuesType { NoValues, X, Y, XY, XYBracketed, CustomColumn };
+	// to the new enum in Value
+	// enum Type { NoValues, BinEntries, CustomColumn, X, Y, XY, XYBracketed };
+	if (Project::xmlVersion() < 21 && dynamic_cast<XYCurve*>(parentAspect())) {
+		switch ((int)d->type) {
+		case 0: // NoValues -> NoValues
+			d->type = Value::Type::NoValues;
+			break;
+		case 1: // X -> X
+			d->type = Value::Type::X;
+			break;
+		case 2: // Y -> Y
+			d->type = Value::Type::Y;
+			break;
+		case 3: // XY -> XY
+			d->type = Value::Type::XY;
+			break;
+		case 4: // XYBracketed -> XYBracketed
+			d->type = Value::Type::XYBracketed;
+			break;
+		case 5: // CustomColumn -> CustomColumn
+			d->type = Value::Type::CustomColumn;
+			break;
+		}
+	}
+
 	READ_COLUMN(column);
 	READ_INT_VALUE("position", position, Value::Position);
 	READ_DOUBLE_VALUE("distance", rotationAngle);
