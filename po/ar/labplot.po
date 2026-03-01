@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-27 00:39+0000\n"
-"PO-Revision-Date: 2026-02-24 22:58+0400\n"
+"PO-Revision-Date: 2026-02-28 12:38+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -11178,22 +11178,20 @@ msgid "%1: set border shape"
 msgstr "%1: اِضبط شكل الحد"
 
 #: src/backend/worksheet/Worksheet.cpp:170
-#, fuzzy, kde-format
-#| msgid "Window Visibility"
+#, kde-format
 msgid "Change &Visibility"
-msgstr "إظهار النّافذة"
+msgstr "غيّر ال&رؤية"
 
 #: src/backend/worksheet/Worksheet.cpp:210
-#, fuzzy, kde-format
-#| msgid "%1: change size type"
+#, kde-format
 msgid "%1: change visibility"
 msgid_plural "%1: change visibility of %2 elements"
-msgstr[0] "%1: غيِّر نوع الحجم"
-msgstr[1] "%1: غيِّر نوع الحجم"
-msgstr[2] "%1: غيِّر نوع الحجم"
-msgstr[3] "%1: غيِّر نوع الحجم"
-msgstr[4] "%1: غيِّر نوع الحجم"
-msgstr[5] "%1: غيِّر نوع الحجم"
+msgstr[0] "%1: غيّر الرؤية"
+msgstr[1] "%1: غيّر رؤية عنصر واحد"
+msgstr[2] "%1: غيّر رؤية لعنصرين"
+msgstr[3] "%1: غيّر رؤية %2 عناصر"
+msgstr[4] "%1: غيّر رؤية %2 عنصرًا"
+msgstr[5] "%1: غيّر رؤية %2 عنصر"
 
 #: src/backend/worksheet/Worksheet.cpp:299
 #, kde-format
