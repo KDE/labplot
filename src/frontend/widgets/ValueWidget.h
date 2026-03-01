@@ -22,10 +22,13 @@ class ValueWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ValueWidget(QWidget*);
+	explicit ValueWidget(QWidget*, bool xy = false);
 	~ValueWidget();
 
 	void setValues(const QList<Value*>&);
+	void setXColumn(const AbstractColumn*);
+	void setYColumn(const AbstractColumn*);
+	void updateLocale();
 
 	void load();
 	void loadConfig(const KConfigGroup&);
@@ -38,6 +41,8 @@ private:
 	bool m_initializing{false};
 	TreeViewComboBox* cbColumn{nullptr};
 	AspectTreeModel* m_aspectModel{nullptr};
+	const AbstractColumn* m_xColumn{nullptr};
+	const AbstractColumn* m_yColumn{nullptr};
 
 	void updateWidgets();
 

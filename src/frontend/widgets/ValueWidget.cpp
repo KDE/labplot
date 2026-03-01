@@ -21,21 +21,30 @@
 
 	\ingroup frontend
  */
-ValueWidget::ValueWidget(QWidget* parent)
+ValueWidget::ValueWidget(QWidget* parent, bool xy)
 	: QWidget(parent) {
 	ui.setupUi(this);
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	cbColumn = new TreeViewComboBox(this);
 	gridLayout->addWidget(cbColumn, 2, 2, 1, 1);
 
-	ui.cbType->addItem(i18n("No Values"));
-	ui.cbType->addItem(i18n("Frequency"));
-	ui.cbType->addItem(i18n("Custom Column"));
+	if (xy) {
+		ui.cbType->addItem(i18n("No Values"), static_cast<int>(Value::Type::NoValues));
+		ui.cbType->addItem(QStringLiteral("x"), static_cast<int>(Value::Type::X));
+		ui.cbType->addItem(QStringLiteral("y"), static_cast<int>(Value::Type::Y));
+		ui.cbType->addItem(QStringLiteral("x, y"), static_cast<int>(Value::Type::XY));
+		ui.cbType->addItem(QStringLiteral("(x, y)"), static_cast<int>(Value::Type::XYBracketed));
+		ui.cbType->addItem(i18n("Custom Column"), static_cast<int>(Value::Type::CustomColumn));
+	} else {
+		ui.cbType->addItem(i18n("No Values"), static_cast<int>(Value::Type::NoValues));
+		ui.cbType->addItem(i18n("Frequency"), static_cast<int>(Value::Type::BinEntries));
+		ui.cbType->addItem(i18n("Custom Column"), static_cast<int>(Value::Type::CustomColumn));
+	}
 
-	ui.cbPosition->addItem(i18n("Above"));
-	ui.cbPosition->addItem(i18n("Below"));
-	ui.cbPosition->addItem(i18n("Left"));
-	ui.cbPosition->addItem(i18n("Right"));
+	ui.cbPosition->addItem(i18n("Above"), static_cast<int>(Value::Position::Above));
+	ui.cbPosition->addItem(i18n("Below"), static_cast<int>(Value::Position::Under));
+	ui.cbPosition->addItem(i18n("Left"), static_cast<int>(Value::Position::Left));
+	ui.cbPosition->addItem(i18n("Right"), static_cast<int>(Value::Position::Right));
 
 	// add formats for numeric values
 	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
@@ -92,7 +101,7 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	// add center value if position is available
 	if (m_value->centerPositionAvailable())
 		if (!ui.cbPosition->contains(i18n("Center")))
-			ui.cbPosition->addItem(i18n("Center"));
+			ui.cbPosition->addItem(i18n("Center"), static_cast<int>(Value::Position::Center));
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
@@ -129,6 +138,20 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	connect(m_value, &Value::colorChanged, this, &ValueWidget::valueColorChanged);
 }
 
+void ValueWidget::updateLocale() {
+	ui.sbDistance->setLocale(QLocale());
+}
+
+void ValueWidget::setXColumn(const AbstractColumn* column) {
+	m_xColumn = column;
+	updateWidgets();
+}
+
+void ValueWidget::setYColumn(const AbstractColumn* column) {
+	m_yColumn = column;
+	updateWidgets();
+}
+
 //*************************************************************
 //******** SLOTs for changes triggered in ValueWidget *********
 //*************************************************************
@@ -152,7 +175,7 @@ void ValueWidget::typeChanged(int index) {
   values column was changed.
 */
 void ValueWidget::updateWidgets() {
-	const auto type = Value::Type(ui.cbType->currentIndex());
+	const auto type = static_cast<Value::Type>(ui.cbType->currentData().toInt());
 	bool showValues = (type != Value::Type::NoValues);
 
 	ui.cbPosition->setEnabled(showValues);
@@ -185,6 +208,16 @@ void ValueWidget::updateWidgets() {
 
 		if (type == Value::Type::BinEntries)
 			hasInteger = true;
+		else {
+			hasInteger = (m_xColumn && (m_xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || m_xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt))
+			|| (m_yColumn && (m_yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || m_yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt));
+
+			hasNumeric = (m_xColumn && m_xColumn->columnMode() == AbstractColumn::ColumnMode::Double)
+				|| (m_yColumn && m_yColumn->columnMode() == AbstractColumn::ColumnMode::Double);
+
+			hasDateTime = (m_xColumn && m_xColumn->columnMode() == AbstractColumn::ColumnMode::DateTime)
+				|| (m_yColumn && m_yColumn->columnMode() == AbstractColumn::ColumnMode::DateTime);
+		}
 	}
 
 	// hide all the format related widgets first and
@@ -229,11 +262,12 @@ void ValueWidget::columnChanged(const QModelIndex& index) {
 		value->setColumn(column);
 }
 
-void ValueWidget::positionChanged(int index) {
+void ValueWidget::positionChanged(int) {
 	CONDITIONAL_LOCK_RETURN;
 
+	const auto position = static_cast<Value::Position>(ui.cbPosition->currentData().toInt());
 	for (auto* value : m_values)
-		value->setPosition(Value::Position(index));
+		value->setPosition(position);
 }
 
 void ValueWidget::distanceChanged(double distance) {
@@ -316,7 +350,7 @@ void ValueWidget::colorChanged(const QColor& color) {
 //*************************************************************
 void ValueWidget::valueTypeChanged(Value::Type type) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbType->setCurrentIndex((int)type);
+	ui.cbType->setCurrentIndex(ui.cbType->findData((int)type));
 }
 void ValueWidget::valueColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
@@ -324,7 +358,7 @@ void ValueWidget::valueColumnChanged(const AbstractColumn* column) {
 }
 void ValueWidget::valuePositionChanged(Value::Position position) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbPosition->setCurrentIndex((int)position);
+	ui.cbPosition->setCurrentIndex(ui.cbPosition->findData((int)position));
 }
 void ValueWidget::valueDistanceChanged(qreal distance) {
 	CONDITIONAL_LOCK_RETURN;
@@ -373,9 +407,8 @@ void ValueWidget::valueColorChanged(QColor color) {
 //**********************************************************
 void ValueWidget::load() {
 	CONDITIONAL_LOCK_RETURN;
-
-	ui.cbType->setCurrentIndex((int)m_value->type());
-	ui.cbPosition->setCurrentIndex((int)m_value->position());
+	ui.cbType->setCurrentIndex(ui.cbType->findData((int)m_value->type()));
+	ui.cbPosition->setCurrentIndex(ui.cbPosition->findData((int)m_value->position()));
 	ui.sbDistance->setValue(Worksheet::convertFromSceneUnits(m_value->distance(), Worksheet::Unit::Point));
 	ui.sbRotation->setValue(m_value->rotationAngle());
 	ui.sbOpacity->setValue(round(m_value->opacity()) * 100.0);
@@ -390,8 +423,8 @@ void ValueWidget::load() {
 }
 
 void ValueWidget::loadConfig(const KConfigGroup& group) {
-	ui.cbType->setCurrentIndex(group.readEntry("ValuesType", (int)m_value->type()));
-	ui.cbPosition->setCurrentIndex(group.readEntry("ValuesPosition", (int)m_value->position()));
+	ui.cbType->setCurrentIndex(ui.cbType->findData(group.readEntry("ValuesType", (int)m_value->type())));
+	ui.cbPosition->setCurrentIndex(ui.cbPosition->findData(group.readEntry("ValuesPosition", (int)m_value->position())));
 	ui.sbDistance->setValue(Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", m_value->distance()), Worksheet::Unit::Point));
 	ui.sbRotation->setValue(group.readEntry("ValuesRotation", m_value->rotationAngle()));
 	ui.sbOpacity->setValue(round(group.readEntry("ValuesOpacity", m_value->opacity()) * 100.0));
@@ -405,8 +438,8 @@ void ValueWidget::loadConfig(const KConfigGroup& group) {
 }
 
 void ValueWidget::saveConfig(KConfigGroup& group) const {
-	group.writeEntry("ValuesType", ui.cbType->currentIndex());
-	group.writeEntry("ValuesPosition", ui.cbPosition->currentIndex());
+	group.writeEntry("ValuesType", ui.cbType->currentData().toInt());
+	group.writeEntry("ValuesPosition", ui.cbPosition->currentData().toInt());
 	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbDistance->value(), Worksheet::Unit::Point));
 	group.writeEntry("ValuesRotation", ui.sbRotation->value());
 	group.writeEntry("ValuesOpacity", ui.sbOpacity->value() / 100.0);

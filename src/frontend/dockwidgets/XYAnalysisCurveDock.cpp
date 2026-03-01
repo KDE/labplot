@@ -1,8 +1,18 @@
+/*
+	File                 : XYAnalysisCurveDock.cpp
+	Project              : LabPlot
+	Description          : Dock widget for analysis curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #include "XYAnalysisCurveDock.h"
 
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <QKeyEvent>
+#include <QPushButton>
 
 XYAnalysisCurveDock::XYAnalysisCurveDock(QWidget* parent, RequiredDataSource requiredDataSource)
 	: XYCurveDock(parent)
