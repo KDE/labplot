@@ -1737,7 +1737,7 @@ void XYCurvePrivate::updateValues() {
 	// determine the value string for all points that are currently visible in the plot
 	int i = 0;
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto numberLocale = QLocale();
+	const auto locale = QLocale();
 	switch (value->type()) {
 	case Value::Type::NoValues:
 	case Value::Type::X: {
@@ -1750,7 +1750,7 @@ void XYCurvePrivate::updateValues() {
 				continue;
 			QString valueStr;
 			if (xRangeFormat == RangeT::Format::Numeric)
-				valueStr = numberToString(point.x(), numberLocale, value->numericFormat(), precision);
+				valueStr = numberToString(point.x(), locale, value->numericFormat(), precision);
 			else
 				valueStr = QDateTime::fromMSecsSinceEpoch(point.x(), QTimeZone::UTC).toString(value->dateTimeFormat());
 			m_valueStrings << value->prefix() + valueStr + value->suffix();
@@ -1767,7 +1767,7 @@ void XYCurvePrivate::updateValues() {
 				continue;
 			QString valueStr;
 			if (rangeFormat == RangeT::Format::Numeric)
-				valueStr = numberToString(point.y(), numberLocale, value->numericFormat(), precision);
+				valueStr = numberToString(point.y(), locale, value->numericFormat(), precision);
 			else
 				valueStr = QDateTime::fromMSecsSinceEpoch(point.y(), QTimeZone::UTC).toString(value->dateTimeFormat());
 			m_valueStrings << value->prefix() + valueStr + value->suffix();
@@ -1794,12 +1794,12 @@ void XYCurvePrivate::updateValues() {
 			if (value->type() == Value::Type::XYBracketed)
 				valueStr = QLatin1Char('(');
 			if (xRangeFormat == RangeT::Format::Numeric)
-				valueStr += numberToString(point.x(), numberLocale, value->numericFormat(), xPrecision);
+				valueStr += numberToString(point.x(), locale, value->numericFormat(), xPrecision);
 			else
 				valueStr += QDateTime::fromMSecsSinceEpoch(point.x(), QTimeZone::UTC).toString(value->dateTimeFormat());
 
 			if (yRangeFormat == RangeT::Format::Numeric)
-				valueStr += QLatin1Char(',') + numberToString(point.y(), numberLocale, value->numericFormat(), yPrecision);
+				valueStr += QLatin1Char(',') + numberToString(point.y(), locale, value->numericFormat(), yPrecision);
 			else
 				valueStr += QLatin1Char(',') + QDateTime::fromMSecsSinceEpoch(point.y(), QTimeZone::UTC).toString(value->dateTimeFormat());
 
@@ -1856,11 +1856,11 @@ void XYCurvePrivate::updateValues() {
 
 			switch (vColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				m_valueStrings << value->prefix() + numberToString(value->column()->valueAt(row), numberLocale, value->numericFormat(), value->precision()) + value->suffix();
+				m_valueStrings << value->prefix() + numberToString(value->column()->valueAt(row), locale, value->numericFormat(), value->precision()) + value->suffix();
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				m_valueStrings << value->prefix() + numberToString(value->column()->valueAt(row), numberLocale) + value->suffix();
+				m_valueStrings << value->prefix() + numberToString(value->column()->valueAt(row), locale) + value->suffix();
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				m_valueStrings << value->prefix() + value->column()->textAt(row) + value->suffix();

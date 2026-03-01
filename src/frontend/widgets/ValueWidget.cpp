@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : values settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,13 +12,11 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "frontend/widgets/TreeViewComboBox.h"
-#include "frontend/dockwidgets/BaseDock.h"
+#include "backend/worksheet/Worksheet.h"
 
 /*!
 	\class ValueWidget
-	\brief Widget for editing the properties of a
-   Value object, mostly used in an appropriate dock widget.
-
+	\brief Widget for editing the properties of a Value object, mostly used in an appropriate dock widget.
 	\ingroup frontend
  */
 ValueWidget::ValueWidget(QWidget* parent, bool xy)
@@ -158,14 +156,14 @@ void ValueWidget::setYColumn(const AbstractColumn* column) {
 /*!
   called when the type of the values (none, x, y, (x,y) etc.) was changed.
 */
-void ValueWidget::typeChanged(int index) {
+void ValueWidget::typeChanged(int) {
 	this->updateWidgets();
 
 	CONDITIONAL_LOCK_RETURN;
 
-	auto valuesType = Value::Type(index);
+	const auto type = static_cast<Value::Type>(ui.cbType->currentData().toInt());
 	for (auto* value : m_values)
-		value->setType(valuesType);
+		value->setType(type);
 }
 
 /*!
