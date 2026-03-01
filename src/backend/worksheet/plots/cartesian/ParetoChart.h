@@ -17,6 +17,7 @@ class Background;
 class BarPlot;
 class Line;
 class ParetoChartPrivate;
+class Value;
 class Symbol;
 class XYCurve;
 
@@ -56,6 +57,7 @@ public:
 	Background* barBackground() const;
 	Line* line() const;
 	Symbol* symbol() const;
+	Value* value() const;
 
 	void retransform() override;
 	void recalc() override;

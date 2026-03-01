@@ -24,6 +24,7 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 
 #include <QIcon>
 
@@ -89,10 +90,10 @@ void ParetoChart::init() {
 	d->linePlot->graphicsItem()->setParentItem(d);
 	d->linePlot->line()->setStyle(Qt::SolidLine);
 	d->linePlot->symbol()->setStyle(Symbol::Style::Circle);
-	d->linePlot->setValuesType(XYCurve::ValuesType::Y);
-	d->linePlot->setValuesPosition(XYCurve::ValuesPosition::Right);
-	d->linePlot->setValuesDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
-	d->linePlot->setValuesSuffix(QStringLiteral("%"));
+	d->linePlot->value()->setType(Value::Type::Y);
+	d->linePlot->value()->setPosition(Value::Position::Right);
+	d->linePlot->value()->setDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	d->linePlot->value()->setSuffix(QStringLiteral("%"));
 
 	// set the columns in the plots
 	d->barPlot->setDataColumns({d->frequenciesColumn});
@@ -179,6 +180,11 @@ Symbol* ParetoChart::symbol() const {
 	return d->linePlot->symbol();
 }
 
+Value* ParetoChart::value() const {
+	Q_D(const ParetoChart);
+	return d->linePlot->value();
+}
+
 bool ParetoChart::indicesMinMax(Dimension, double, double, int& start, int& end) const {
 	start = 0;
 	end = xIndexCount() - 1;
@@ -187,10 +193,26 @@ bool ParetoChart::indicesMinMax(Dimension, double, double, int& start, int& end)
 
 bool ParetoChart::multiMinMax(int csIndex, Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
 	Q_D(const ParetoChart);
-	if (csIndex == 0 && dim == Dimension::Y)
-		return d->barPlot->minMax(dim, indexRange, r, false);
-	else
+	if (csIndex == 0) {
+		if (dim == Dimension::X) {
+			// for X dimension in the first coordinate system, use barPlot
+			return d->barPlot->minMax(dim, indexRange, r, false);
+		} else {
+			// for Y dimension, resize the first y range to have the first point of the xy-curve at the top of the first bar
+			if (d->yColumn->valueAt(0) != 0) {
+				r.setStart(0);
+				const double max = (double)d->frequenciesColumn->integerAt(0) * 100. / d->yColumn->valueAt(0);
+				r.setEnd(max);
+			} else { // fallback
+				r.setStart(0);
+				r.setEnd(1);
+			}
+			return true;
+		}
+	} else {
+		// for second coordinate system (cumulative %), use linePlot
 		return d->linePlot->minMax(dim, indexRange, r, false);
+	}
 }
 
 bool ParetoChart::minMax(Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {

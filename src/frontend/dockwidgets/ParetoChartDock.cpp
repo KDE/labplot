@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for properties of Pareto chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -107,16 +107,19 @@ void ParetoChartDock::setPlots(QList<ParetoChart*> list) {
 	QList<Line*> barLines;
 	QList<Line*> lines;
 	QList<Symbol*> symbols;
+	QList<Value*> values;
 	for (auto* plot : m_plots) {
 		barBackgrounds << plot->barBackground();
 		barLines << plot->barLine();
 		lines << plot->line();
 		symbols << plot->symbol();
+		values << plot->value();
 	}
 	barBackgroundWidget->setBackgrounds(barBackgrounds);
 	barLineWidget->setLines(barLines);
 	lineWidget->setLines(lines);
 	symbolWidget->setSymbols(symbols);
+	valueWidget->setValues(values);
 
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
