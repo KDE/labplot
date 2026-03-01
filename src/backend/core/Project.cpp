@@ -78,7 +78,7 @@ namespace {
 // the project version will be compared with this.
 // if you make any incompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 20;
+int buildXmlVersion = 21;
 }
 
 /**
@@ -1003,7 +1003,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		} else {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 			RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
-			RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
+			RESTORE_COLUMN_POINTER(curve->value(), column, Column);
 			RESTORE_COLUMN_POINTER(curve->errorBar(), xPlusColumn, XPlusColumn);
 			RESTORE_COLUMN_POINTER(curve->errorBar(), xMinusColumn, XMinusColumn);
 			RESTORE_COLUMN_POINTER(curve->errorBar(), yPlusColumn, YPlusColumn);

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for XYCurve properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2022 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -22,6 +22,7 @@
 #include "frontend/widgets/LineWidget.h"
 #include "frontend/widgets/SymbolWidget.h"
 #include "frontend/widgets/TreeViewComboBox.h"
+#include "frontend/widgets/ValueWidget.h"
 
 #include <QPainter>
 
@@ -55,15 +56,11 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	hboxLayout->setSpacing(2);
 
 	// Tab "Values"
-	gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
-	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
-	gridLayout->addWidget(cbValuesColumn, 2, 2, 1, 1);
-
-	// add format for date, time and datetime values
-	for (const auto& s : AbstractColumn::dateTimeFormats())
-		ui.cbValuesDateTimeFormat->addItem(s, QVariant(s));
-
-	ui.cbValuesDateTimeFormat->setEditable(true);
+	hboxLayout = new QHBoxLayout(ui.tabValues);
+	valueWidget = new ValueWidget(ui.tabValues, true);
+	hboxLayout->addWidget(valueWidget);
+	hboxLayout->setContentsMargins(2, 2, 2, 2);
+	hboxLayout->setSpacing(2);
 
 	// Tab "Filling"
 	auto* layout = static_cast<QHBoxLayout*>(ui.tabAreaFilling->layout());
@@ -102,21 +99,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	connect(ui.chkLineSkipGaps, &QCheckBox::clicked, this, &XYCurveDock::lineSkipGapsChanged);
 	connect(ui.chkLineIncreasingXOnly, &QCheckBox::clicked, this, &XYCurveDock::lineIncreasingXOnlyChanged);
 
-	// Values
-	connect(ui.cbValuesType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesTypeChanged);
-	connect(cbValuesColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::valuesColumnChanged);
-	connect(ui.cbValuesPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesPositionChanged);
-	connect(ui.sbValuesDistance, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::valuesDistanceChanged);
-	connect(ui.sbValuesRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::valuesRotationChanged);
-	connect(ui.sbValuesOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::valuesOpacityChanged);
-	connect(ui.cbValuesNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesNumericFormatChanged);
-	connect(ui.sbValuesPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::valuesPrecisionChanged);
-	connect(ui.cbValuesDateTimeFormat, &QComboBox::currentTextChanged, this, &XYCurveDock::valuesDateTimeFormatChanged);
-	connect(ui.leValuesPrefix, &QLineEdit::textChanged, this, &XYCurveDock::valuesPrefixChanged);
-	connect(ui.leValuesSuffix, &QLineEdit::textChanged, this, &XYCurveDock::valuesSuffixChanged);
-	connect(ui.kfrValuesFont, &KFontRequester::fontSelected, this, &XYCurveDock::valuesFontChanged);
-	connect(ui.kcbValuesColor, &KColorButton::changed, this, &XYCurveDock::valuesColorChanged);
-
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &XYCurveDock::rugEnabledChanged);
 	connect(ui.cbRugOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::rugOrientationChanged);
@@ -139,7 +121,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 }
 
 XYCurveDock::~XYCurveDock() {
-	delete m_valuesModel;
 }
 
 void XYCurveDock::setupGeneral() {
@@ -308,7 +289,6 @@ void XYCurveDock::setModel() {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);
 	}
-	cbValuesColumn->setTopLevelClasses(list);
 
 	if (m_curve->inherits<XYAnalysisCurve>())
 		// the model is used in the combobox for curve data sources -> allow to also select analysis curves
@@ -334,14 +314,6 @@ void XYCurveDock::setModel() {
 		cbXColumn->setModel(model);
 		cbYColumn->setModel(model);
 	}
-
-	// for value labels we need a dedicated model since we also want to allow
-	// to select text columns and we don't want to call enablePlottableColumnsOnly().
-	if (!m_valuesModel) {
-		m_valuesModel = new AspectTreeModel(m_curve->project());
-		m_valuesModel->setSelectableAspects(list);
-	}
-	cbValuesColumn->setModel(m_valuesModel);
 
 	errorBarWidget->setModel(model);
 
@@ -388,12 +360,14 @@ void XYCurveDock::setSymbols(const QList<XYCurve*>& curves) {
 	QList<Line*> lines;
 	QList<Line*> dropLines;
 	QList<ErrorBar*> errorBars;
+	QList<Value*> values;
 	for (auto* curve : curves) {
 		symbols << curve->symbol();
 		backgrounds << curve->background();
 		lines << curve->line();
 		dropLines << curve->dropLine();
 		errorBars << curve->errorBar();
+		values << curve->value();
 	}
 
 	symbolWidget->setSymbols(symbols);
@@ -401,6 +375,7 @@ void XYCurveDock::setSymbols(const QList<XYCurve*>& curves) {
 	lineWidget->setLines(lines);
 	dropLineWidget->setLines(dropLines);
 	errorBarWidget->setErrorBars(errorBars);
+	valueWidget->setValues(values);
 }
 
 void XYCurveDock::initGeneralTab() {
@@ -420,12 +395,6 @@ void XYCurveDock::initGeneralTab() {
 }
 
 void XYCurveDock::initTabs() {
-	// if there are more than one curve in the list, disable the tab "general"
-	if (m_curvesList.size() == 1)
-		cbValuesColumn->setAspect(m_curve->valuesColumn(), m_curve->valuesColumnPath());
-	else
-		cbValuesColumn->setCurrentModelIndex(QModelIndex());
-
 	// show the properties of the first curve
 	load();
 
@@ -437,21 +406,6 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, &XYCurve::lineIncreasingXOnlyChanged, this, &XYCurveDock::curveLineIncreasingXOnlyChanged);
 	connect(m_curve, &XYCurve::lineInterpolationPointsCountChanged, this, &XYCurveDock::curveLineInterpolationPointsCountChanged);
 
-	// Values-Tab
-	connect(m_curve, &XYCurve::valuesTypeChanged, this, &XYCurveDock::curveValuesTypeChanged);
-	connect(m_curve, &XYCurve::valuesColumnChanged, this, &XYCurveDock::curveValuesColumnChanged);
-	connect(m_curve, &XYCurve::valuesPositionChanged, this, &XYCurveDock::curveValuesPositionChanged);
-	connect(m_curve, &XYCurve::valuesDistanceChanged, this, &XYCurveDock::curveValuesDistanceChanged);
-	connect(m_curve, &XYCurve::valuesOpacityChanged, this, &XYCurveDock::curveValuesOpacityChanged);
-	connect(m_curve, &XYCurve::valuesRotationAngleChanged, this, &XYCurveDock::curveValuesRotationAngleChanged);
-	connect(m_curve, &XYCurve::valuesNumericFormatChanged, this, &XYCurveDock::curveValuesNumericFormatChanged);
-	connect(m_curve, &XYCurve::valuesPrecisionChanged, this, &XYCurveDock::curveValuesPrecisionChanged);
-	connect(m_curve, &XYCurve::valuesDateTimeFormatChanged, this, &XYCurveDock::curveValuesDateTimeFormatChanged);
-	connect(m_curve, &XYCurve::valuesPrefixChanged, this, &XYCurveDock::curveValuesPrefixChanged);
-	connect(m_curve, &XYCurve::valuesSuffixChanged, this, &XYCurveDock::curveValuesSuffixChanged);
-	connect(m_curve, &XYCurve::valuesFontChanged, this, &XYCurveDock::curveValuesFontChanged);
-	connect(m_curve, &XYCurve::valuesColorChanged, this, &XYCurveDock::curveValuesColorChanged);
-
 	//"Margin Plots"-Tab
 	connect(m_curve, &XYCurve::rugEnabledChanged, this, &XYCurveDock::curveRugEnabledChanged);
 	connect(m_curve, &XYCurve::rugOrientationChanged, this, &XYCurveDock::curveRugOrientationChanged);
@@ -461,11 +415,11 @@ void XYCurveDock::initTabs() {
 }
 
 void XYCurveDock::updateLocale() {
-	ui.sbValuesDistance->setLocale(QLocale());
 	lineWidget->updateLocale();
 	dropLineWidget->updateLocale();
 	symbolWidget->updateLocale();
 	errorBarWidget->updateLocale();
+	valueWidget->updateLocale();
 }
 
 //*************************************************************
@@ -489,29 +443,6 @@ void XYCurveDock::retranslateUi() {
 	ui.cbLineType->addItem(i18n("Akima-spline (Natural)"));
 	ui.cbLineType->addItem(i18n("Akima-spline (Periodic)"));
 
-	// formats for numeric values
-	ui.cbValuesNumericFormat->clear();
-	ui.cbValuesNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
-	ui.cbValuesNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
-	ui.cbValuesNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
-	ui.cbValuesNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
-	ui.cbValuesNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
-
-	// Values
-	ui.cbValuesType->clear();
-	ui.cbValuesType->addItem(i18n("No Values"));
-	ui.cbValuesType->addItem(QStringLiteral("x"));
-	ui.cbValuesType->addItem(QStringLiteral("y"));
-	ui.cbValuesType->addItem(QStringLiteral("x, y"));
-	ui.cbValuesType->addItem(QStringLiteral("(x, y)"));
-	ui.cbValuesType->addItem(i18n("Custom Column"));
-
-	ui.cbValuesPosition->clear();
-	ui.cbValuesPosition->addItem(i18n("Above"));
-	ui.cbValuesPosition->addItem(i18n("Below"));
-	ui.cbValuesPosition->addItem(i18n("Left"));
-	ui.cbValuesPosition->addItem(i18n("Right"));
-
 	// Margin Plots
 	ui.cbRugOrientation->clear();
 	ui.cbRugOrientation->addItem(i18n("Vertical"));
@@ -528,33 +459,32 @@ void XYCurveDock::retranslateUi() {
 }
 
 void XYCurveDock::xColumnChanged(const QModelIndex& index) {
-	updateValuesWidgets();
-
-	CONDITIONAL_LOCK_RETURN;
-
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = nullptr;
+	const AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
 		Q_ASSERT(column);
 	}
 
+	valueWidget->setXColumn(column); // set the column in ValueWidget to update dependent widgets
+
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		curve->setXColumn(column);
 }
 
 void XYCurveDock::yColumnChanged(const QModelIndex& index) {
-	updateValuesWidgets();
-
-	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = nullptr;
+	const AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
 		Q_ASSERT(column);
 	}
 
+	valueWidget->setYColumn(column); // set the column in ValueWidget to update dependent widgets
+
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		curve->setYColumn(column);
 }
@@ -613,213 +543,6 @@ void XYCurveDock::lineInterpolationPointsCountChanged(int count) {
 		curve->setLineInterpolationPointsCount(count);
 }
 
-// Values-tab
-
-/*!
-  called when the type of the values (none, x, y, (x,y) etc.) was changed.
-*/
-void XYCurveDock::valuesTypeChanged(int index) {
-	this->updateValuesWidgets();
-
-	CONDITIONAL_LOCK_RETURN;
-
-	const auto type = XYCurve::ValuesType(index);
-	for (auto* curve : m_curvesList)
-		curve->setValuesType(type);
-}
-
-/*!
-  called when the custom column for the values was changed.
-*/
-void XYCurveDock::valuesColumnChanged(const QModelIndex& index) {
-	this->updateValuesWidgets();
-
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-	for (auto* curve : m_curvesList)
-		curve->setValuesColumn(column);
-}
-
-/*!
-  depending on the currently selected values column type (column mode) updates the widgets for the values column format,
-  shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
-  Called when the values column was changed.
-*/
-void XYCurveDock::updateValuesWidgets() {
-	const auto type{XYCurve::ValuesType(ui.cbValuesType->currentIndex())};
-	bool showValues{type != XYCurve::ValuesType::NoValues};
-
-	ui.cbValuesPosition->setEnabled(showValues);
-	ui.sbValuesDistance->setEnabled(showValues);
-	ui.sbValuesRotation->setEnabled(showValues);
-	ui.sbValuesOpacity->setEnabled(showValues);
-	ui.kfrValuesFont->setEnabled(showValues);
-	ui.kcbValuesColor->setEnabled(showValues);
-
-	bool hasInteger = false;
-	bool hasNumeric = false;
-	bool hasDateTime = false;
-
-	if (type == XYCurve::ValuesType::CustomColumn) {
-		ui.lValuesColumn->show();
-		cbValuesColumn->show();
-
-		auto* column = static_cast<AbstractColumn*>(cbValuesColumn->currentModelIndex().internalPointer());
-		if (column) {
-			if (column->columnMode() == AbstractColumn::ColumnMode::Double)
-				hasNumeric = true;
-			else if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt)
-				hasInteger = true;
-			else if (column->columnMode() == AbstractColumn::ColumnMode::DateTime)
-				hasDateTime = true;
-		}
-	} else {
-		ui.lValuesColumn->hide();
-		cbValuesColumn->hide();
-
-		const AbstractColumn* xColumn = nullptr;
-		const AbstractColumn* yColumn = nullptr;
-		switch (type) {
-		case XYCurve::ValuesType::NoValues:
-			break;
-		case XYCurve::ValuesType::X:
-			xColumn = m_curve->xColumn();
-			break;
-		case XYCurve::ValuesType::Y:
-			yColumn = m_curve->yColumn();
-			break;
-		case XYCurve::ValuesType::XY:
-		case XYCurve::ValuesType::XYBracketed:
-			xColumn = m_curve->xColumn();
-			yColumn = m_curve->yColumn();
-			break;
-		case XYCurve::ValuesType::CustomColumn:
-			break;
-		}
-
-		hasInteger = (xColumn && (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt))
-			|| (yColumn && (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt));
-
-		hasNumeric = (xColumn && xColumn->columnMode() == AbstractColumn::ColumnMode::Double)
-			|| (yColumn && yColumn->columnMode() == AbstractColumn::ColumnMode::Double);
-
-		hasDateTime = (xColumn && xColumn->columnMode() == AbstractColumn::ColumnMode::DateTime)
-			|| (yColumn && yColumn->columnMode() == AbstractColumn::ColumnMode::DateTime);
-	}
-
-	// hide all the format related widgets first and
-	// then show only what is required depending of the column mode(s)
-	ui.lValuesFormat->hide();
-	ui.lValuesNumericFormat->hide();
-	ui.cbValuesNumericFormat->hide();
-	ui.lValuesPrecision->hide();
-	ui.sbValuesPrecision->hide();
-	ui.lValuesDateTimeFormat->hide();
-	ui.cbValuesDateTimeFormat->hide();
-
-	if (hasNumeric || hasInteger) {
-		ui.lValuesFormat->show();
-		ui.lValuesNumericFormat->show();
-		ui.cbValuesNumericFormat->show();
-	}
-
-	// precision is only available for Numeric
-	if (hasNumeric) {
-		ui.lValuesPrecision->show();
-		ui.sbValuesPrecision->show();
-	}
-
-	if (hasDateTime) {
-		ui.lValuesFormat->show();
-		ui.lValuesDateTimeFormat->show();
-		ui.cbValuesDateTimeFormat->show();
-	}
-}
-
-void XYCurveDock::valuesPositionChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setValuesPosition(XYCurve::ValuesPosition(index));
-}
-
-void XYCurveDock::valuesDistanceChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	for (auto* curve : m_curvesList)
-		curve->setValuesDistance(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-}
-
-void XYCurveDock::valuesRotationChanged(int value) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setValuesRotationAngle(value);
-}
-
-void XYCurveDock::valuesOpacityChanged(int value) {
-	CONDITIONAL_LOCK_RETURN;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* curve : m_curvesList)
-		curve->setValuesOpacity(opacity);
-}
-
-void XYCurveDock::valuesNumericFormatChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	char format = ui.cbValuesNumericFormat->itemData(index).toChar().toLatin1();
-	for (auto* curve : m_curvesList)
-		curve->setValuesNumericFormat(format);
-}
-
-void XYCurveDock::valuesDateTimeFormatChanged(const QString& format) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setValuesDateTimeFormat(format);
-}
-
-void XYCurveDock::valuesPrecisionChanged(int precision) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setValuesPrecision(precision);
-}
-
-void XYCurveDock::valuesPrefixChanged() {
-	CONDITIONAL_LOCK_RETURN;
-
-	QString prefix = ui.leValuesPrefix->text();
-	for (auto* curve : m_curvesList)
-		curve->setValuesPrefix(prefix);
-}
-
-void XYCurveDock::valuesSuffixChanged() {
-	CONDITIONAL_LOCK_RETURN;
-
-	QString suffix = ui.leValuesSuffix->text();
-	for (auto* curve : m_curvesList)
-		curve->setValuesSuffix(suffix);
-}
-
-void XYCurveDock::valuesFontChanged(const QFont& font) {
-	CONDITIONAL_LOCK_RETURN;
-
-	QFont valuesFont = font;
-	valuesFont.setPointSizeF(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
-	for (auto* curve : m_curvesList)
-		curve->setValuesFont(valuesFont);
-}
-
-void XYCurveDock::valuesColorChanged(const QColor& color) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setValuesColor(color);
-}
-
 //"Margin Plots"-Tab
 void XYCurveDock::rugEnabledChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
@@ -876,13 +599,14 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 }
 
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
-	updateValuesWidgets();
+	valueWidget->setXColumn(column);
 	CONDITIONAL_LOCK_RETURN;
 	cbXColumn->setAspect(column, m_curve->xColumnPath());
 }
 
 void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
-	updateValuesWidgets();
+	valueWidget->setYColumn(column);
+
 	CONDITIONAL_LOCK_RETURN;
 	cbYColumn->setAspect(column, m_curve->yColumnPath());
 }
@@ -903,61 +627,6 @@ void XYCurveDock::curveLineIncreasingXOnlyChanged(bool incr) {
 void XYCurveDock::curveLineInterpolationPointsCountChanged(int count) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbLineInterpolationPointsCount->setValue(count);
-}
-
-// Values-Tab
-void XYCurveDock::curveValuesTypeChanged(XYCurve::ValuesType type) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbValuesType->setCurrentIndex((int)type);
-}
-void XYCurveDock::curveValuesColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbValuesColumn->setAspect(column, m_curve->valuesColumnPath());
-}
-void XYCurveDock::curveValuesPositionChanged(XYCurve::ValuesPosition position) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbValuesPosition->setCurrentIndex((int)position);
-}
-void XYCurveDock::curveValuesDistanceChanged(qreal distance) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.sbValuesDistance->setValue(Worksheet::convertFromSceneUnits(distance, Worksheet::Unit::Point));
-}
-void XYCurveDock::curveValuesRotationAngleChanged(qreal angle) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.sbValuesRotation->setValue(angle);
-}
-void XYCurveDock::curveValuesNumericFormatChanged(char format) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbValuesNumericFormat->setCurrentIndex(ui.cbValuesNumericFormat->findData(format));
-}
-void XYCurveDock::curveValuesPrecisionChanged(int precision) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.sbValuesPrecision->setValue(precision);
-}
-void XYCurveDock::curveValuesDateTimeFormatChanged(const QString& format) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbValuesDateTimeFormat->setCurrentText(format);
-}
-void XYCurveDock::curveValuesOpacityChanged(qreal opacity) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.sbValuesOpacity->setValue(round(opacity * 100.0));
-}
-void XYCurveDock::curveValuesPrefixChanged(const QString& prefix) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.leValuesPrefix->setText(prefix);
-}
-void XYCurveDock::curveValuesSuffixChanged(const QString& suffix) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.leValuesSuffix->setText(suffix);
-}
-void XYCurveDock::curveValuesFontChanged(QFont font) {
-	CONDITIONAL_LOCK_RETURN;
-	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
-	ui.kfrValuesFont->setFont(font);
-}
-void XYCurveDock::curveValuesColorChanged(QColor color) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.kcbValuesColor->setColor(color);
 }
 
 //"Margin Plot"-Tab
@@ -996,23 +665,6 @@ void XYCurveDock::load() {
 		ui.chkLineSkipGaps->setChecked(m_curve->lineSkipGaps());
 		ui.sbLineInterpolationPointsCount->setValue(m_curve->lineInterpolationPointsCount());
 	}
-
-	// Values
-	ui.cbValuesType->setCurrentIndex((int)m_curve->valuesType());
-	ui.cbValuesPosition->setCurrentIndex((int)m_curve->valuesPosition());
-	ui.sbValuesDistance->setValue(Worksheet::convertFromSceneUnits(m_curve->valuesDistance(), Worksheet::Unit::Point));
-	ui.sbValuesRotation->setValue(m_curve->valuesRotationAngle());
-	ui.sbValuesOpacity->setValue(std::round(m_curve->valuesOpacity() * 100.0));
-	ui.sbValuesPrecision->setValue(m_curve->valuesPrecision());
-	ui.cbValuesNumericFormat->setCurrentIndex(ui.cbValuesNumericFormat->findData(m_curve->valuesNumericFormat()));
-	ui.cbValuesDateTimeFormat->setCurrentText(m_curve->valuesDateTimeFormat());
-	ui.leValuesPrefix->setText(m_curve->valuesPrefix());
-	ui.leValuesSuffix->setText(m_curve->valuesSuffix());
-	QFont valuesFont = m_curve->valuesFont();
-	valuesFont.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Unit::Point)));
-	ui.kfrValuesFont->setFont(valuesFont);
-	ui.kcbValuesColor->setColor(m_curve->valuesColor());
-	this->updateValuesWidgets();
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
@@ -1057,18 +709,7 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	symbolWidget->loadConfig(group);
 
 	// Values
-	ui.cbValuesType->setCurrentIndex(group.readEntry(QStringLiteral("ValuesType"), (int)m_curve->valuesType()));
-	ui.cbValuesPosition->setCurrentIndex(group.readEntry(QStringLiteral("ValuesPosition"), (int)m_curve->valuesPosition()));
-	ui.sbValuesDistance->setValue(
-		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("ValuesDistance"), m_curve->valuesDistance()), Worksheet::Unit::Point));
-	ui.sbValuesRotation->setValue(group.readEntry(QStringLiteral("ValuesRotation"), m_curve->valuesRotationAngle()));
-	ui.sbValuesOpacity->setValue(std::round(group.readEntry(QStringLiteral("ValuesOpacity"), m_curve->valuesOpacity()) * 100.0));
-	ui.leValuesPrefix->setText(group.readEntry(QStringLiteral("ValuesPrefix"), m_curve->valuesPrefix()));
-	ui.leValuesSuffix->setText(group.readEntry(QStringLiteral("ValuesSuffix"), m_curve->valuesSuffix()));
-	QFont valuesFont = m_curve->valuesFont();
-	valuesFont.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Unit::Point)));
-	ui.kfrValuesFont->setFont(group.readEntry(QStringLiteral("ValuesFont"), valuesFont));
-	ui.kcbValuesColor->setColor(group.readEntry(QStringLiteral("ValuesColor"), m_curve->valuesColor()));
+	valueWidget->loadConfig(group);
 
 	// Filling
 	backgroundWidget->loadConfig(group);
@@ -1095,18 +736,7 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	symbolWidget->saveConfig(group);
 
 	// Values
-	group.writeEntry(QStringLiteral("ValuesType"), ui.cbValuesType->currentIndex());
-	group.writeEntry(QStringLiteral("ValuesPosition"), ui.cbValuesPosition->currentIndex());
-	group.writeEntry(QStringLiteral("ValuesDistance"), Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(), Worksheet::Unit::Point));
-	group.writeEntry(QStringLiteral("ValuesRotation"), ui.sbValuesRotation->value());
-	group.writeEntry(QStringLiteral("ValuesOpacity"), ui.sbValuesOpacity->value() / 100.0);
-	group.writeEntry(QStringLiteral("valuesNumericFormat"), ui.cbValuesNumericFormat->currentText());
-	group.writeEntry(QStringLiteral("valuesPrecision"), ui.sbValuesPrecision->value());
-	group.writeEntry(QStringLiteral("valuesDateTimeFormat"), ui.cbValuesDateTimeFormat->currentText());
-	group.writeEntry(QStringLiteral("ValuesPrefix"), ui.leValuesPrefix->text());
-	group.writeEntry(QStringLiteral("ValuesSuffix"), ui.leValuesSuffix->text());
-	group.writeEntry(QStringLiteral("ValuesFont"), ui.kfrValuesFont->font());
-	group.writeEntry(QStringLiteral("ValuesColor"), ui.kcbValuesColor->color());
+	valueWidget->saveConfig(group);
 
 	// Filling
 	backgroundWidget->saveConfig(group);

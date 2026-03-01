@@ -1,9 +1,19 @@
+/*
+	File                 : XYAnalysisCurveDock.h
+	Project              : LabPlot
+	Description          : Dock widget for analysis curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #ifndef XYANALYSISCURVEDOCK_H
 #define XYANALYSISCURVEDOCK_H
 
 #include "XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
+class QPushButton;
 class TreeViewComboBox;
 
 class XYAnalysisCurveDock : public XYCurveDock {

@@ -601,10 +601,10 @@ void StatisticsColumnWidget::showParetoPlot() {
 	curve->setYColumn(yColumn);
 	curve->line()->setStyle(Qt::SolidLine);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
-	curve->setValuesType(XYCurve::ValuesType::Y);
-	curve->setValuesPosition(XYCurve::ValuesPosition::Right);
-	curve->setValuesDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
-	curve->setValuesSuffix(QStringLiteral("%"));
+	curve->value()->setType(Value::Type::Y);
+	curve->value()->setPosition(Value::Position::Right);
+	curve->value()->setDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	curve->value()->setSuffix(QStringLiteral("%"));
 
 	// resize the first y range to have the first point of the xy-curve at the top of the first bar
 	if (yData.at(0) != 0) {
