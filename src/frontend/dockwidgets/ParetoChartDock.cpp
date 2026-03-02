@@ -51,7 +51,7 @@ ParetoChartDock::ParetoChartDock(QWidget* parent)
 
 	// Tab "Values"
 	hBoxLayout = static_cast<QHBoxLayout*>(ui.tabValues->layout());
-	valueWidget = new ValueWidget(ui.tabValues);
+	valueWidget = new ValueWidget(ui.tabValues, true);
 	hBoxLayout->insertWidget(0, valueWidget);
 
 	// Tab "Line"
