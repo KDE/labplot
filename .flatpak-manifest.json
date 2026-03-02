@@ -320,8 +320,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.2.0/mdds-3.2.0.tar.xz",
-                    "sha256": "16defab556c53f94b463460ea2a1faab96e58bad2a95d7981300d2956534abbb"
+                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.2.1/mdds-3.2.1.tar.xz",
+                    "sha256": "673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc936432f6b0687c112"
                 }
             ]
         },
