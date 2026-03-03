@@ -2002,9 +2002,46 @@ void CartesianPlot::addPlot(QAction* action) {
 	case Plot::PlotType::RunChart:
 		addChild(new RunChart(i18n("Run Chart")));
 		break;
-	case Plot::PlotType::ParetoChart:
+	case Plot::PlotType::ParetoChart: {
+		beginMacro(i18n("%1: add Pareto chart", name()));
+		// for Pareto chart we need a second range for the cumulative percentage of the total number of occurrences,
+		// add a new range if not already available
+		if (rangeCount(Dimension::Y) < 2)
+			addYRange(Range<double>(0, 100)); // add second y range
+		else if (range(Dimension::Y, 1) != Range<double>(0, 100))
+			setYRange(1, Range<double>(0, 100)); // set to 0 .. 100 if already available but different
+
+		// add the second coordinate system for the second y range if not already available and set it to use the second y range
+		if (coordinateSystemCount() < 2)
+			addCoordinateSystem(); // add cs for second y range
+		setCoordinateSystemRangeIndex(coordinateSystemCount() - 1, Dimension::Y, 1);
+		enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
+
+		// add second y-axis if not available yet
+		Axis* secondAxis = nullptr;
+		const auto& axes = children<Axis>();
+		for (auto* axis : axes) {
+			if (axis->orientation() == Axis::Orientation::Vertical && axis->position() == Axis::Position::Right) {
+				secondAxis = axis;
+				break;
+			}
+		}
+		if (!secondAxis) {
+			secondAxis = new Axis(QLatin1String("y2"));
+			addChild(secondAxis);
+		}
+		secondAxis->setOrientation(Axis::Orientation::Vertical);
+		secondAxis->setPosition(Axis::Position::Right);
+		secondAxis->setMajorTicksDirection(Axis::ticksIn);
+		secondAxis->setLabelsPosition(Axis::LabelsPosition::In);
+		secondAxis->setLabelsSuffix(QLatin1String("%"));
+		secondAxis->title()->setRotationAngle(90);
+		secondAxis->setCoordinateSystemIndex(1);
+
 		addChild(new ParetoChart(i18n("Pareto Chart")));
+		endMacro();
 		break;
+	}
 	}
 }
 
@@ -2601,6 +2638,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
 	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
 	const auto* lollipopPlot = dynamic_cast<const LollipopPlot*>(child);
+	const auto* paretoChart = dynamic_cast<const ParetoChart*>(child);
 
 	const auto* axis = dynamic_cast<const Axis*>(child);
 
@@ -2679,6 +2717,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(lollipopPlot, &LollipopPlot::xDataChanged, [this, lollipopPlot]() {
 			this->dataChanged(const_cast<LollipopPlot*>(lollipopPlot), Dimension::X);
 		});
+	} else if (paretoChart) {
+		DEBUG(Q_FUNC_INFO << ", PARETO CHART")
+		// TODO: connect to data changes of the pareto chart when implemented
 	} else if (axis) {
 		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	} else {
@@ -2712,21 +2753,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	if (!isLoading() && !isPasted() && !child->isPasted() && !child->isMoved()) {
 		// new child was added which might change the ranges and the axis tick labels.
 		// adjust the plot area padding if the axis label is outside of the plot area
-		if (rangeChanged) {
-			const auto& axes = children<Axis>();
-			for (auto* a : axes) {
-				if (a->orientation() == WorksheetElement::Orientation::Vertical) {
-					double delta = d->dataRect.x() - a->graphicsItem()->boundingRect().x();
-					if (delta > horizontalPadding()) {
-						setUndoAware(false);
-						setSymmetricPadding(false);
-						setHorizontalPadding(delta);
-						setUndoAware(true);
-					}
-					break;
-				}
-			}
-		}
+		if (rangeChanged)
+			adjustPadding();
 
 		// if a theme was selected, apply the theme settings for newly added children,
 		// load default theme settings otherwise.
@@ -2745,6 +2773,49 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		if (project())
 			project()->setUndoAware(true);
+	}
+}
+
+/*!
+* Adjusts the plot area padding to make sure that axis labels and titles are insight the plot area and fully visible.
+*/
+void CartesianPlot::adjustPadding() {
+	if (isLoading())
+		return;
+
+	Q_D(CartesianPlot);
+	QRectF plotRect = d->mapRectFromScene(d->rect);
+	const auto& axes = children<Axis>();
+
+	for (auto* a : axes) {
+		if (a->orientation() == WorksheetElement::Orientation::Vertical) {
+			// Map axis bounding rect from axis coordinates to plot coordinates
+			QRectF axisBoundingRect = d->mapRectFromItem(a->graphicsItem(), a->graphicsItem()->boundingRect());
+
+			if (a->position() == Axis::Position::Left) {
+				// left-side vertical axis - check if it extends beyond the left edge of the data rect
+				double delta = d->dataRect.x() - axisBoundingRect.x();
+				if (delta > horizontalPadding()) {
+					setUndoAware(false);
+					setSymmetricPadding(false);
+					setHorizontalPadding(delta);
+					setUndoAware(true);
+				}
+			} else if (a->position() == Axis::Position::Right) {
+				// right-side vertical axis - check if it extends beyond the right edge of the plot rect
+				// (the axis itself is positioned at the right edge of the data rect, so we need to check
+				// against the plot rect to know how much padding is needed)
+				double delta = axisBoundingRect.right() - plotRect.right();
+				if (delta > 0) {
+					setUndoAware(false);
+					setSymmetricPadding(false);
+					// Increase the existing right padding by the overflow amount so that
+					// the axis (including title and tick labels) fits into the plot rect.
+					setRightPadding(rightPadding() + delta);
+					setUndoAware(true);
+				}
+			}
+		}
 	}
 }
 
@@ -2911,9 +2982,10 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 	else if (autoScale(Dimension::Y, yIndex))
 		updated = scaleAuto(Dimension::Y, yIndex);
 
-	if (updated)
+	if (updated) {
 		WorksheetElementContainer::retransform();
-	else {
+		adjustPadding(); // check if padding needs to be adjusted after the retransform
+	} else {
 		// even if the plot ranges were not changed, either no auto scale active or the new data
 		// is within the current ranges and no change of the ranges is required,
 		// retransform the curve in order to show the changes
@@ -2999,9 +3071,10 @@ void CartesianPlot::dataChanged(Plot* curve, const Dimension dim) {
 	}
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
-	if (updated)
+	if (updated) {
 		WorksheetElementContainer::retransform();
-	else {
+		adjustPadding(); // check if padding needs to be adjusted after the retransform
+	} else {
 		// even if the plot ranges were not changed, either no auto scale active or the new data
 		// is within the current ranges and no change of the ranges is required,
 		// retransform the curve in order to show the changes

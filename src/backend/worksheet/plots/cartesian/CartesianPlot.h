@@ -127,6 +127,7 @@ public:
 	Axis* horizontalAxis() const;
 	Axis* verticalAxis() const;
 
+	void addPlot(QAction*);
 	void addLegend(CartesianPlotLegend*);
 	int curveCount() const;
 	const XYCurve* getCurve(int index) const;
@@ -242,6 +243,7 @@ private:
 	QVector<XYCurve*> selectedCurves() const;
 	void zoom(int index, const Dimension, bool in, const double relPosSceneRange);
 	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, WorksheetElement::Orientation);
+	void adjustPadding();
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
 	int curveTotalCount() const;
 
@@ -304,7 +306,6 @@ public Q_SLOTS:
 	void dataChanged(int xIndex = -1, int yIndex = -1, WorksheetElement* sender = nullptr);
 
 private Q_SLOTS:
-	void addPlot(QAction*);
 	void addAnalysisPlot(QAction*);
 
 	void addLineSimplificationCurve();

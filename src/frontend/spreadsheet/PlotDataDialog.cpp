@@ -894,19 +894,18 @@ void PlotDataDialog::addSingleSourceColumnPlot(const Column* column, CartesianPl
 		chart->setDataColumn(column);
 		plot = chart;
 	} else if (m_plotType == Plot::PlotType::ParetoChart) {
-		auto* chart = new ParetoChart(name);
+		// add ParetoChart via addPlot() to ensure the second axis and coordinate systems are created
+		auto* action = new QAction();
+		action->setData(static_cast<int>(Plot::PlotType::ParetoChart));
+		plotArea->addPlot(action);
+		auto* chart = plotArea->children<ParetoChart>().last();
 		chart->setDataColumn(column);
 		plot = chart;
-
-		// add second range for the cumulative percentage of the total number of occurrences
-		plotArea->addYRange(Range<double>(0, 100)); // add second y range
-		plotArea->addCoordinateSystem(); // add cs for second y range
-		plotArea->setCoordinateSystemRangeIndex(plotArea->coordinateSystemCount() - 1, Dimension::Y, 1); // specify new y range for new cs
-		plotArea->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
 	}
 
 	if (plot) {
-		plotArea->addChild(plot);
+		if (m_plotType != Plot::PlotType::ParetoChart) // ParetoChart is already added to the plotArea via addPlot() above, so don't add it again
+			plotArea->addChild(plot);
 		m_lastAddedCurve = plot;
 	}
 }
