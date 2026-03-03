@@ -1023,6 +1023,10 @@ void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const QString& col
 	setAxesColumnLabels(plot, column);
 }
 
+/*!
+* sets the axes titles of the plot according to the selected columns and the plot type,
+* called after new plots were added to the plot area.
+*/
 void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) const {
 	DEBUG(Q_FUNC_INFO)
 	auto* horizontalAxis = plot->horizontalAxis();
@@ -1169,6 +1173,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 	case Plot::PlotType::RunChart: {
 		plot->setNiceExtend(false);
 		plot->setRightPadding(plot->horizontalPadding()); // do symmetric padding horizontally to have enough space for values labels in PBC
+
 		// x-axis title
 		horizontalAxis->title()->setText(i18n("Sample"));
 
@@ -1184,36 +1189,9 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		}
 	}
 	case Plot::PlotType::ParetoChart: {
-		// axes properties
-		auto axes = plot->children<Axis>();
-		bool firstYAxis = false;
-		auto* paretoChart = static_cast<ParetoChart*>(m_lastAddedCurve);
-		for (auto* axis : std::as_const(axes)) {
-			if (axis->orientation() == Axis::Orientation::Horizontal) {
-				axis->title()->setText(QString());
-				axis->majorGridLine()->setStyle(Qt::NoPen);
-				axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
-				axis->setMajorTickStartOffset(0.5);
-				axis->setMajorTicksType(Axis::TicksType::Spacing);
-				axis->setMajorTicksSpacing(1.);
-				axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
-				axis->setLabelsTextColumn(paretoChart->labelsColumn());
-			} else {
-				if (!firstYAxis) {
-					axis->title()->setText(i18n("Frequency"));
-					axis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
-					axis->setMajorTicksNumber(10 + 1); // same tick number as percentage axis
-					firstYAxis = true;
-				} else {
-					axis->title()->setText(i18n("Cumulative Percentage"));
-					// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was addressed
-					axis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
-				}
-			}
-
-			axis->setMinorTicksDirection(Axis::noTicks);
-			axis->setArrowType(Axis::ArrowType::NoArrow);
-		}
+		// no need to set here anything, the axis titles are fixed and independent of the selected column names 
+		// and are set when adding a new pareto chat in CartesianPlot::addPlot().
+		break;
 	}
 	}
 }

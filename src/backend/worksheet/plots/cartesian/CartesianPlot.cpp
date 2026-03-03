@@ -2004,6 +2004,8 @@ void CartesianPlot::addPlot(QAction* action) {
 		break;
 	case Plot::PlotType::ParetoChart: {
 		beginMacro(i18n("%1: add Pareto chart", name()));
+		auto* paretoChart = new ParetoChart(i18n("Pareto Chart"));
+
 		// for Pareto chart we need a second range for the cumulative percentage of the total number of occurrences,
 		// add a new range if not already available
 		if (rangeCount(Dimension::Y) < 2)
@@ -2018,27 +2020,51 @@ void CartesianPlot::addPlot(QAction* action) {
 		enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
 
 		// add second y-axis if not available yet
-		Axis* secondAxis = nullptr;
+		Axis* secondYAxis = nullptr;
 		const auto& axes = children<Axis>();
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical && axis->position() == Axis::Position::Right) {
-				secondAxis = axis;
+				secondYAxis = axis;
 				break;
 			}
 		}
-		if (!secondAxis) {
-			secondAxis = new Axis(QLatin1String("y2"));
-			addChild(secondAxis);
+		if (!secondYAxis) {
+			secondYAxis = new Axis(QLatin1String("y2"));
+			addChild(secondYAxis);
 		}
-		secondAxis->setOrientation(Axis::Orientation::Vertical);
-		secondAxis->setPosition(Axis::Position::Right);
-		secondAxis->setMajorTicksDirection(Axis::ticksIn);
-		secondAxis->setLabelsPosition(Axis::LabelsPosition::In);
-		secondAxis->setLabelsSuffix(QLatin1String("%"));
-		secondAxis->title()->setRotationAngle(90);
-		secondAxis->setCoordinateSystemIndex(1);
+		secondYAxis->setOrientation(Axis::Orientation::Vertical);
+		secondYAxis->setPosition(Axis::Position::Right);
+		secondYAxis->setMajorTicksDirection(Axis::ticksIn);
+		secondYAxis->setLabelsPosition(Axis::LabelsPosition::In);
+		secondYAxis->setLabelsSuffix(QLatin1String("%"));
+		secondYAxis->title()->setRotationAngle(90);
+		secondYAxis->setCoordinateSystemIndex(1);
 
-		addChild(new ParetoChart(i18n("Pareto Chart")));
+		// adjust axes properties as required for the Pareto chart
+		// x: place the ticks between the bars, show category labels, no grid lines
+		auto* firstXAxis = horizontalAxis();
+		firstXAxis->title()->setText(QString());
+		firstXAxis->majorGridLine()->setStyle(Qt::NoPen);
+		firstXAxis->setMajorTicksStartType(Axis::TicksStartType::Offset);
+		firstXAxis->setMajorTickStartOffset(0.5);
+		firstXAxis->setMajorTicksType(Axis::TicksType::Spacing);
+		firstXAxis->setMajorTicksSpacing(1.);
+		firstXAxis->setMinorTicksDirection(Axis::noTicks);
+		firstXAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+		firstXAxis->setLabelsTextColumn(paretoChart->labelsColumn()); // show the category labels on the x-axis
+
+		// y:
+		auto* firstYAxis = verticalAxis();
+		firstYAxis->title()->setText(i18n("Frequency"));
+		firstYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
+		firstYAxis->setMajorTicksNumber(10 + 1); // same tick number as percentage axis
+
+		// y2:
+		secondYAxis->title()->setText(i18n("Cumulative Percentage"));
+		// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was addressed
+		secondYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
+
+		addChild(paretoChart);
 		endMacro();
 		break;
 	}
