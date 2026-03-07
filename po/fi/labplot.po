@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:41+0000\n"
+"POT-Creation-Date: 2026-03-07 00:39+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -58,7 +58,7 @@ msgstr "Muuta nimeä"
 #: src/backend/spreadsheet/Spreadsheet.cpp:941
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:497
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
-#: src/frontend/worksheet/WorksheetView.cpp:138
+#: src/frontend/worksheet/WorksheetView.cpp:139
 #, kde-format
 msgid "Delete"
 msgstr "Poista"
@@ -301,7 +301,7 @@ msgstr "iteraatiota"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:634
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/widgets/LabelWidget.cpp:477
-#: src/frontend/worksheet/WorksheetView.cpp:238
+#: src/frontend/worksheet/WorksheetView.cpp:239
 #, kde-format
 msgid "Text"
 msgstr "Teksti"
@@ -9940,8 +9940,8 @@ msgstr "Pystyakseli"
 #: src/frontend/matrix/MatrixView.cpp:131
 #: src/frontend/notebook/NotebookView.cpp:109
 #: src/frontend/widgets/BackgroundWidget.cpp:123
-#: src/frontend/worksheet/WorksheetView.cpp:241
-#: src/frontend/worksheet/WorksheetView.cpp:1356
+#: src/frontend/worksheet/WorksheetView.cpp:242
+#: src/frontend/worksheet/WorksheetView.cpp:1360
 #, kde-format
 msgid "Image"
 msgstr "Kuva"
@@ -9992,7 +9992,7 @@ msgstr "Oma piirtoalue kullekin kaaviolle"
 #: src/frontend/ActionsManager.cpp:883
 #: src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
-#: src/frontend/worksheet/WorksheetView.cpp:441
+#: src/frontend/worksheet/WorksheetView.cpp:442
 #, kde-format
 msgid "Add New"
 msgstr "Lisää uusi"
@@ -10033,7 +10033,7 @@ msgstr "Analyysi"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:929
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:545
+#: src/frontend/worksheet/WorksheetView.cpp:546
 #, fuzzy, kde-format
 #| msgid "Theme:"
 msgid "Theme"
@@ -10536,8 +10536,8 @@ msgid "Function of '%1'"
 msgstr "Älä tee mitään"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2376
-#: src/frontend/worksheet/WorksheetView.cpp:1350
-#: src/frontend/worksheet/WorksheetView.cpp:1351
+#: src/frontend/worksheet/WorksheetView.cpp:1354
+#: src/frontend/worksheet/WorksheetView.cpp:1355
 #, kde-format
 msgid "Text Label"
 msgstr "Tekstikenttä"
@@ -12571,49 +12571,49 @@ msgstr "Kaavion alue"
 
 #: src/frontend/ActionsManager.cpp:542
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
-#: src/frontend/worksheet/WorksheetView.cpp:250
+#: src/frontend/worksheet/WorksheetView.cpp:251
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Pystyasettelu"
 
 #: src/frontend/ActionsManager.cpp:547
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
-#: src/frontend/worksheet/WorksheetView.cpp:254
+#: src/frontend/worksheet/WorksheetView.cpp:255
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Vaaka-asettelu"
 
 #: src/frontend/ActionsManager.cpp:552
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
-#: src/frontend/worksheet/WorksheetView.cpp:258
+#: src/frontend/worksheet/WorksheetView.cpp:259
 #, kde-format
 msgid "Grid Layout"
 msgstr "Ruudukkoasettelu"
 
 #: src/frontend/ActionsManager.cpp:557
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
-#: src/frontend/worksheet/WorksheetView.cpp:262
+#: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
 msgid "No Layout"
 msgstr "Ei asettelua"
 
 #: src/frontend/ActionsManager.cpp:565 src/frontend/ActionsManager.cpp:606
-#: src/frontend/worksheet/WorksheetView.cpp:186
-#: src/frontend/worksheet/WorksheetView.cpp:348
+#: src/frontend/worksheet/WorksheetView.cpp:187
+#: src/frontend/worksheet/WorksheetView.cpp:349
 #, kde-format
 msgid "Select and Edit"
 msgstr "Valitse ja muokkaa"
 
 #: src/frontend/ActionsManager.cpp:570 src/frontend/ActionsManager.cpp:797
 #: src/frontend/datapicker/DatapickerImageView.cpp:132
-#: src/frontend/worksheet/WorksheetView.cpp:191
+#: src/frontend/worksheet/WorksheetView.cpp:192
 #, kde-format
 msgid "Navigate"
 msgstr "Liikkuminen"
 
 #: src/frontend/ActionsManager.cpp:575 src/frontend/ActionsManager.cpp:802
 #: src/frontend/datapicker/DatapickerImageView.cpp:136
-#: src/frontend/worksheet/WorksheetView.cpp:195
+#: src/frontend/worksheet/WorksheetView.cpp:196
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Valitse ja lähennä"
@@ -12640,25 +12640,25 @@ msgid "Add New"
 msgstr "Lisää uusi"
 
 #: src/frontend/ActionsManager.cpp:612
-#: src/frontend/worksheet/WorksheetView.cpp:353
+#: src/frontend/worksheet/WorksheetView.cpp:354
 #, kde-format
 msgid "Crosshair"
 msgstr "Risti"
 
 #: src/frontend/ActionsManager.cpp:617
-#: src/frontend/worksheet/WorksheetView.cpp:358
+#: src/frontend/worksheet/WorksheetView.cpp:359
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Valitse alue ja lähennä"
 
 #: src/frontend/ActionsManager.cpp:622
-#: src/frontend/worksheet/WorksheetView.cpp:363
+#: src/frontend/worksheet/WorksheetView.cpp:364
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Valitse X-alue ja lähennä"
 
 #: src/frontend/ActionsManager.cpp:627
-#: src/frontend/worksheet/WorksheetView.cpp:368
+#: src/frontend/worksheet/WorksheetView.cpp:369
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Valitse Y-alue ja lähennä"
@@ -12666,25 +12666,25 @@ msgstr "Valitse Y-alue ja lähennä"
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/frontend/ActionsManager.cpp:632 src/frontend/MainWin.cpp:1586
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
-#: src/frontend/worksheet/WorksheetView.cpp:373
+#: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Cursor"
 msgstr "Kohdistin"
 
 #: src/frontend/ActionsManager.cpp:640
-#: src/frontend/worksheet/WorksheetView.cpp:381
+#: src/frontend/worksheet/WorksheetView.cpp:382
 #, kde-format
 msgid "Auto Scale"
 msgstr "Automaattinen skaalaus"
 
 #: src/frontend/ActionsManager.cpp:644
-#: src/frontend/worksheet/WorksheetView.cpp:385
+#: src/frontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Automaattiskaalaa X"
 
 #: src/frontend/ActionsManager.cpp:648
-#: src/frontend/worksheet/WorksheetView.cpp:389
+#: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Automaattiskaalaa Y"
@@ -12693,8 +12693,8 @@ msgstr "Automaattiskaalaa Y"
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:190
 #: src/frontend/notebook/NotebookView.cpp:53
-#: src/frontend/worksheet/WorksheetView.cpp:148
-#: src/frontend/worksheet/WorksheetView.cpp:393
+#: src/frontend/worksheet/WorksheetView.cpp:149
+#: src/frontend/worksheet/WorksheetView.cpp:394
 #, kde-format
 msgid "Zoom In"
 msgstr "Lähennä"
@@ -12703,58 +12703,58 @@ msgstr "Lähennä"
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:191
 #: src/frontend/notebook/NotebookView.cpp:57
-#: src/frontend/worksheet/WorksheetView.cpp:151
-#: src/frontend/worksheet/WorksheetView.cpp:397
+#: src/frontend/worksheet/WorksheetView.cpp:152
+#: src/frontend/worksheet/WorksheetView.cpp:398
 #, kde-format
 msgid "Zoom Out"
 msgstr "Loitonna"
 
 #: src/frontend/ActionsManager.cpp:661
-#: src/frontend/worksheet/WorksheetView.cpp:401
+#: src/frontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Zoom In X"
 msgstr "Lähennä X"
 
 #: src/frontend/ActionsManager.cpp:665
-#: src/frontend/worksheet/WorksheetView.cpp:405
+#: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Loitonna X"
 
 #: src/frontend/ActionsManager.cpp:669
-#: src/frontend/worksheet/WorksheetView.cpp:409
+#: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Lähennä Y"
 
 #: src/frontend/ActionsManager.cpp:673
-#: src/frontend/worksheet/WorksheetView.cpp:413
+#: src/frontend/worksheet/WorksheetView.cpp:414
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Loitonna Y"
 
 #: src/frontend/ActionsManager.cpp:678
-#: src/frontend/worksheet/WorksheetView.cpp:417
+#: src/frontend/worksheet/WorksheetView.cpp:418
 #, fuzzy, kde-format
 #| msgid "Right"
 msgid "Shift Left X"
 msgstr "Oikea"
 
 #: src/frontend/ActionsManager.cpp:682
-#: src/frontend/worksheet/WorksheetView.cpp:419
+#: src/frontend/worksheet/WorksheetView.cpp:420
 #, fuzzy, kde-format
 #| msgid "Right"
 msgid "Shift Right X"
 msgstr "Oikea"
 
 #: src/frontend/ActionsManager.cpp:686
-#: src/frontend/worksheet/WorksheetView.cpp:421
+#: src/frontend/worksheet/WorksheetView.cpp:422
 #, kde-format
 msgid "Shift Up Y"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:690
-#: src/frontend/worksheet/WorksheetView.cpp:423
+#: src/frontend/worksheet/WorksheetView.cpp:424
 #, kde-format
 msgid "Shift Down Y"
 msgstr ""
@@ -13076,13 +13076,13 @@ msgstr "Kopioi kaikki"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:125
 #: src/frontend/matrix/MatrixView.cpp:192
-#: src/frontend/worksheet/WorksheetView.cpp:154
+#: src/frontend/worksheet/WorksheetView.cpp:155
 #, kde-format
 msgid "Original Size"
 msgstr "Alkuperäinen koko"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:128
-#: src/frontend/worksheet/WorksheetView.cpp:172
+#: src/frontend/worksheet/WorksheetView.cpp:173
 #, fuzzy, kde-format
 #| msgid "Fit to Height"
 msgctxt "Zoom"
@@ -13090,7 +13090,7 @@ msgid "Fit to Height"
 msgstr "Sovita korkeuteen"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:129
-#: src/frontend/worksheet/WorksheetView.cpp:175
+#: src/frontend/worksheet/WorksheetView.cpp:176
 #, fuzzy, kde-format
 #| msgid "Fit to Width"
 msgctxt "Zoom"
@@ -13098,38 +13098,38 @@ msgid "Fit to Width"
 msgstr "Sovita leveyteen"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:173
-#: src/frontend/worksheet/WorksheetView.cpp:200
+#: src/frontend/worksheet/WorksheetView.cpp:201
 #, kde-format
 msgid "No Magnification"
 msgstr "Ei suurennusta"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:178
-#: src/frontend/worksheet/WorksheetView.cpp:205
+#: src/frontend/worksheet/WorksheetView.cpp:206
 #, kde-format
 msgid "2x Magnification"
 msgstr "2× suurennus"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:182
-#: src/frontend/worksheet/WorksheetView.cpp:209
+#: src/frontend/worksheet/WorksheetView.cpp:210
 #, kde-format
 msgid "3x Magnification"
 msgstr "3× suurennus"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:186
-#: src/frontend/worksheet/WorksheetView.cpp:213
+#: src/frontend/worksheet/WorksheetView.cpp:214
 #, kde-format
 msgid "4x Magnification"
 msgstr "4× suurennus"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:190
-#: src/frontend/worksheet/WorksheetView.cpp:217
+#: src/frontend/worksheet/WorksheetView.cpp:218
 #, kde-format
 msgid "5x Magnification"
 msgstr "5× suurennus"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:218
-#: src/frontend/worksheet/WorksheetView.cpp:448
-#: src/frontend/worksheet/WorksheetView.cpp:514
+#: src/frontend/worksheet/WorksheetView.cpp:449
+#: src/frontend/worksheet/WorksheetView.cpp:515
 #, kde-format
 msgid "Mouse Mode"
 msgstr "Hiiren tila"
@@ -13146,7 +13146,7 @@ msgid "Move Last Point"
 msgstr "Siirrä viimeistä pistettä"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:241
-#: src/frontend/worksheet/WorksheetView.cpp:466
+#: src/frontend/worksheet/WorksheetView.cpp:467
 #, kde-format
 msgid "Magnification"
 msgstr "Suurennus"
@@ -13190,7 +13190,7 @@ msgstr "Kaari"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4034
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4089
-#: src/frontend/worksheet/WorksheetView.cpp:2175
+#: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to export"
 msgstr "Vienti epäonnistui"
@@ -13198,7 +13198,7 @@ msgstr "Vienti epäonnistui"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4034
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4089
-#: src/frontend/worksheet/WorksheetView.cpp:2175
+#: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""
@@ -18175,7 +18175,7 @@ msgstr "&Ikkunat"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
 #: src/frontend/MainWin.cpp:181 src/frontend/ui/settingsworksheetpage.ui:106
-#: src/frontend/worksheet/WorksheetView.cpp:290
+#: src/frontend/worksheet/WorksheetView.cpp:291
 #, kde-format
 msgid "Presenter Mode"
 msgstr ""
@@ -18453,7 +18453,7 @@ msgstr "T&yhjennä valinta"
 #: src/frontend/matrix/MatrixView.cpp:123
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:318
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:292
-#: src/frontend/worksheet/WorksheetView.cpp:134
+#: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
 msgid "Select All"
 msgstr "Valitse kaikki"
@@ -18601,7 +18601,7 @@ msgid "Header Format"
 msgstr "Otsakkeen muoto"
 
 #: src/frontend/matrix/MatrixView.cpp:293
-#: src/frontend/worksheet/WorksheetView.cpp:454
+#: src/frontend/worksheet/WorksheetView.cpp:455
 #, kde-format
 msgid "Zoom"
 msgstr "Lähennys"
@@ -18985,7 +18985,7 @@ msgid "Do you really want to delete %1?"
 msgstr "Haluatko varmasti poistaa teeman %1?"
 
 #: src/frontend/ProjectExplorer.cpp:1001
-#: src/frontend/worksheet/WorksheetView.cpp:1454
+#: src/frontend/worksheet/WorksheetView.cpp:1458
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -23538,7 +23538,7 @@ msgstr "Fonttiväri:"
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1624
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
-#: src/frontend/worksheet/WorksheetView.cpp:479
+#: src/frontend/worksheet/WorksheetView.cpp:480
 #, kde-format
 msgid "Grid"
 msgstr "Ruudukko"
@@ -23998,7 +23998,7 @@ msgstr "poista valittu y-alue"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:628
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:623
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:267
-#: src/frontend/worksheet/WorksheetView.cpp:471
+#: src/frontend/worksheet/WorksheetView.cpp:472
 #, kde-format
 msgid "Layout"
 msgstr "Asettelu"
@@ -27980,156 +27980,156 @@ msgstr "Poistu esityksestä"
 msgid "Pin the navigation panel"
 msgstr ""
 
-#: src/frontend/worksheet/WorksheetView.cpp:168
+#: src/frontend/worksheet/WorksheetView.cpp:169
 #, kde-format
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "Ei sovitusta"
 
-#: src/frontend/worksheet/WorksheetView.cpp:178
+#: src/frontend/worksheet/WorksheetView.cpp:179
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "Sovita valintaan"
 
-#: src/frontend/worksheet/WorksheetView.cpp:181
+#: src/frontend/worksheet/WorksheetView.cpp:182
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "Sovita"
 
-#: src/frontend/worksheet/WorksheetView.cpp:222
+#: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Four Axes"
 msgstr "Neljä akselia"
 
-#: src/frontend/worksheet/WorksheetView.cpp:225
+#: src/frontend/worksheet/WorksheetView.cpp:226
 #, kde-format
 msgid "Two Axes"
 msgstr "Kaksi akselia"
 
-#: src/frontend/worksheet/WorksheetView.cpp:228
+#: src/frontend/worksheet/WorksheetView.cpp:229
 #, kde-format
 msgid "Two Axes, Centered"
 msgstr "Kaksi akselia, keskitetty"
 
-#: src/frontend/worksheet/WorksheetView.cpp:232
+#: src/frontend/worksheet/WorksheetView.cpp:233
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
 msgstr "Kaksi origossa risteävää akselia"
 
-#: src/frontend/worksheet/WorksheetView.cpp:235
+#: src/frontend/worksheet/WorksheetView.cpp:236
 #, kde-format
 msgid "Load from Template"
 msgstr "Lataa mallista"
 
-#: src/frontend/worksheet/WorksheetView.cpp:267
+#: src/frontend/worksheet/WorksheetView.cpp:268
 #, kde-format
 msgid "No Grid"
 msgstr "Ei ruudukkoa"
 
-#: src/frontend/worksheet/WorksheetView.cpp:272
+#: src/frontend/worksheet/WorksheetView.cpp:273
 #, kde-format
 msgid "Dense Line Grid"
 msgstr "Tiheä viivaruudukko"
 
-#: src/frontend/worksheet/WorksheetView.cpp:275
+#: src/frontend/worksheet/WorksheetView.cpp:276
 #, kde-format
 msgid "Sparse Line Grid"
 msgstr "Harva viivaruudukko"
 
-#: src/frontend/worksheet/WorksheetView.cpp:278
+#: src/frontend/worksheet/WorksheetView.cpp:279
 #, kde-format
 msgid "Dense Dot Grid"
 msgstr "Tiheä pisteruudukko"
 
-#: src/frontend/worksheet/WorksheetView.cpp:281
+#: src/frontend/worksheet/WorksheetView.cpp:282
 #, kde-format
 msgid "Sparse Dot Grid"
 msgstr "Harva pisteruudukko"
 
-#: src/frontend/worksheet/WorksheetView.cpp:284
+#: src/frontend/worksheet/WorksheetView.cpp:285
 #, kde-format
 msgid "Custom Grid"
 msgstr "Mukautettu ruudukko"
 
-#: src/frontend/worksheet/WorksheetView.cpp:287
+#: src/frontend/worksheet/WorksheetView.cpp:288
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Kiinnitä ruudukkoon"
 
-#: src/frontend/worksheet/WorksheetView.cpp:307
+#: src/frontend/worksheet/WorksheetView.cpp:308
 #, kde-format
 msgid "Interactive Plots"
 msgstr "Vuorovaikutteiset kaaviot"
 
-#: src/frontend/worksheet/WorksheetView.cpp:308
+#: src/frontend/worksheet/WorksheetView.cpp:309
 #, kde-format
 msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
 
-#: src/frontend/worksheet/WorksheetView.cpp:316
-#: src/frontend/worksheet/WorksheetView.cpp:330
+#: src/frontend/worksheet/WorksheetView.cpp:317
+#: src/frontend/worksheet/WorksheetView.cpp:331
 #, fuzzy, kde-format
 #| msgid "selected plots"
 msgid "Selected Plot Areas"
 msgstr "valitut kuvaajat"
 
-#: src/frontend/worksheet/WorksheetView.cpp:318
-#: src/frontend/worksheet/WorksheetView.cpp:332
+#: src/frontend/worksheet/WorksheetView.cpp:319
+#: src/frontend/worksheet/WorksheetView.cpp:333
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "All Plot Areas"
 msgstr "Kaavion alue"
 
-#: src/frontend/worksheet/WorksheetView.cpp:320
+#: src/frontend/worksheet/WorksheetView.cpp:321
 #, fuzzy, kde-format
 #| msgid "all plots"
 msgid "All Plot Areas X"
 msgstr "kaikki kuvaajat"
 
-#: src/frontend/worksheet/WorksheetView.cpp:322
+#: src/frontend/worksheet/WorksheetView.cpp:323
 #, fuzzy, kde-format
 #| msgid "all plots"
 msgid "All Plot Areas Y"
 msgstr "kaikki kuvaajat"
 
-#: src/frontend/worksheet/WorksheetView.cpp:433
-#: src/frontend/worksheet/WorksheetView.cpp:494
-#: src/frontend/worksheet/WorksheetView.cpp:1296
-#: src/frontend/worksheet/WorksheetView.cpp:1305
-#: src/frontend/worksheet/WorksheetView.cpp:1314
-#: src/frontend/worksheet/WorksheetView.cpp:1323
+#: src/frontend/worksheet/WorksheetView.cpp:434
+#: src/frontend/worksheet/WorksheetView.cpp:495
+#: src/frontend/worksheet/WorksheetView.cpp:1300
+#: src/frontend/worksheet/WorksheetView.cpp:1309
+#: src/frontend/worksheet/WorksheetView.cpp:1318
+#: src/frontend/worksheet/WorksheetView.cpp:1327
 #, kde-format
 msgid "Plot Area"
 msgstr "Kaavion alue"
 
-#: src/frontend/worksheet/WorksheetView.cpp:497
+#: src/frontend/worksheet/WorksheetView.cpp:498
 #, kde-format
 msgid "Apply Actions to"
 msgstr "Käytä toimintoja kohteeseen"
 
-#: src/frontend/worksheet/WorksheetView.cpp:504
+#: src/frontend/worksheet/WorksheetView.cpp:505
 #, fuzzy, kde-format
 #| msgid "Apply actions to"
 msgid "Apply Cursor to"
 msgstr "Käytä toimintoja kohteeseen"
 
-#: src/frontend/worksheet/WorksheetView.cpp:523
+#: src/frontend/worksheet/WorksheetView.cpp:524
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "Lähennys/liikkuminen"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1453
+#: src/frontend/worksheet/WorksheetView.cpp:1457
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] "Haluatko varmasti poistaa valitun kohteen?"
 msgstr[1] "Haluatko varmasti poistaa valitut %1 kohdetta?"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1461
+#: src/frontend/worksheet/WorksheetView.cpp:1465
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Poista valitut työvihkoalkiot."
