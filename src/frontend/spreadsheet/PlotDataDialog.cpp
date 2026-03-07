@@ -894,18 +894,13 @@ void PlotDataDialog::addSingleSourceColumnPlot(const Column* column, CartesianPl
 		chart->setDataColumn(column);
 		plot = chart;
 	} else if (m_plotType == Plot::PlotType::ParetoChart) {
-		// add ParetoChart via addPlot() to ensure the second axis and coordinate systems are created
-		auto* action = new QAction();
-		action->setData(static_cast<int>(Plot::PlotType::ParetoChart));
-		plotArea->addPlot(action);
-		auto* chart = plotArea->children<ParetoChart>().last();
+		auto* chart = new ParetoChart(name);
 		chart->setDataColumn(column);
 		plot = chart;
 	}
 
 	if (plot) {
-		if (m_plotType != Plot::PlotType::ParetoChart) // ParetoChart is already added to the plotArea via addPlot() above, so don't add it again
-			plotArea->addChild(plot);
+		plotArea->addChild(plot);
 		m_lastAddedCurve = plot;
 	}
 }

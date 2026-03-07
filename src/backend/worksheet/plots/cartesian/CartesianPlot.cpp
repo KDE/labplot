@@ -187,6 +187,7 @@ void CartesianPlot::init(bool loading) {
 	});
 
 	connect(this, &AbstractAspect::childAspectAdded, this, &CartesianPlot::childAdded);
+	connect(this, QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded), this, &CartesianPlot::childAboutToBeAdded);
 	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
 
 	// if not loading, initialize the default properties (read in load() otherwise)
@@ -493,7 +494,7 @@ void CartesianPlot::initMenus() {
 
 	// plots
 	auto* actionGroup = new QActionGroup(this);
-	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addPlot);
+	connect(actionGroup, &QActionGroup::triggered, this, QOverload<const QAction*>::of(&CartesianPlot::addPlot));
 	CartesianPlot::fillAddNewPlotMenu(m_addNewMenu, actionGroup);
 
 	// formula plot
@@ -1902,9 +1903,8 @@ void CartesianPlot::retransform() {
 // ################################################################
 // ########################## Slots ###############################
 // ################################################################
-void CartesianPlot::addPlot(QAction* action) {
+void CartesianPlot::addPlot(const QAction* action) {
 	const auto type = static_cast<Plot::PlotType>(action->data().toInt());
-
 	switch (type) {
 	// basic plots
 	case Plot::PlotType::Line: {
@@ -2003,75 +2003,13 @@ void CartesianPlot::addPlot(QAction* action) {
 		addChild(new RunChart(i18n("Run Chart")));
 		break;
 	case Plot::PlotType::ParetoChart: {
-		beginMacro(i18n("%1: add Pareto chart", name()));
-		auto* paretoChart = new ParetoChart(i18n("Pareto Chart"));
-
-		// for Pareto chart we need a second range for the cumulative percentage of the total number of occurrences,
-		// add a new range if not already available
-		if (rangeCount(Dimension::Y) < 2)
-			addYRange(Range<double>(0, 100)); // add second y range
-		else if (range(Dimension::Y, 1) != Range<double>(0, 100))
-			setYRange(1, Range<double>(0, 100)); // set to 0 .. 100 if already available but different
-
-		// add the second coordinate system for the second y range if not already available and set it to use the second y range
-		if (coordinateSystemCount() < 2)
-			addCoordinateSystem(); // add cs for second y range
-		setCoordinateSystemRangeIndex(coordinateSystemCount() - 1, Dimension::Y, 1);
-		enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
-
-		// add second y-axis if not available yet
-		Axis* secondYAxis = nullptr;
-		const auto& axes = children<Axis>();
-		for (auto* axis : axes) {
-			if (axis->orientation() == Axis::Orientation::Vertical && axis->position() == Axis::Position::Right) {
-				secondYAxis = axis;
-				break;
-			}
-		}
-		if (!secondYAxis) {
-			secondYAxis = new Axis(QLatin1String("y2"));
-			addChild(secondYAxis);
-		}
-		secondYAxis->setOrientation(Axis::Orientation::Vertical);
-		secondYAxis->setPosition(Axis::Position::Right);
-		secondYAxis->setMajorTicksDirection(Axis::ticksIn);
-		secondYAxis->setLabelsPosition(Axis::LabelsPosition::In);
-		secondYAxis->setLabelsSuffix(QLatin1String("%"));
-		secondYAxis->title()->setRotationAngle(90);
-		secondYAxis->setCoordinateSystemIndex(1);
-
-		// adjust axes properties as required for the Pareto chart
-		// x: place the ticks between the bars, show category labels, no grid lines
-		auto* firstXAxis = horizontalAxis();
-		firstXAxis->title()->setText(QString());
-		firstXAxis->majorGridLine()->setStyle(Qt::NoPen);
-		firstXAxis->setMajorTicksStartType(Axis::TicksStartType::Offset);
-		firstXAxis->setMajorTickStartOffset(0.5);
-		firstXAxis->setMajorTicksType(Axis::TicksType::Spacing);
-		firstXAxis->setMajorTicksSpacing(1.);
-		firstXAxis->setMinorTicksDirection(Axis::noTicks);
-		firstXAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
-		firstXAxis->setLabelsTextColumn(paretoChart->labelsColumn()); // show the category labels on the x-axis
-
-		// y:
-		auto* firstYAxis = verticalAxis();
-		firstYAxis->title()->setText(i18n("Frequency"));
-		firstYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
-		firstYAxis->setMajorTicksNumber(10 + 1); // same tick number as percentage axis
-
-		// y2:
-		secondYAxis->title()->setText(i18n("Cumulative Percentage"));
-		// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was addressed
-		secondYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
-
-		addChild(paretoChart);
-		endMacro();
+		addChild(new ParetoChart(i18n("Pareto Chart")));
 		break;
 	}
 	}
 }
 
-void CartesianPlot::addAnalysisPlot(QAction* action) {
+void CartesianPlot::addAnalysisPlot(const QAction* action) {
 	const auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	switch (type) {
 	case XYAnalysisCurve::AnalysisAction::FitLinear:
@@ -2338,7 +2276,7 @@ void CartesianPlot::addBaselineCorrectionCurve() {
 		this->addChild(new XYBaselineCorrectionCurve(i18n("Baseline Correction")));
 }
 
-void CartesianPlot::addFitCurve(QAction* action) {
+void CartesianPlot::addFitCurve(const QAction* action) {
 	const auto& selectedCurves = this->selectedCurves();
 	if (!selectedCurves.isEmpty()) {
 		for (const auto* curCurve : selectedCurves) {
@@ -2800,6 +2738,74 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		if (project())
 			project()->setUndoAware(true);
 	}
+}
+
+void CartesianPlot::childAboutToBeAdded(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
+	qDebug() << Q_FUNC_INFO;
+	if (isLoading())
+		return;
+
+	auto* paretoChart = dynamic_cast<const ParetoChart*>(child);
+	if (!paretoChart)
+		return;
+
+	// for Pareto chart we need a second range for the cumulative percentage of the total number of occurrences,
+	// add a new range if not already available
+	if (rangeCount(Dimension::Y) < 2)
+		addYRange(Range<double>(0, 100)); // add second y range
+	else if (range(Dimension::Y, 1) != Range<double>(0, 100))
+		setYRange(1, Range<double>(0, 100)); // set to 0 .. 100 if already available but different
+
+	// add the second coordinate system for the second y range if not already available and set it to use the second y range
+	if (coordinateSystemCount() < 2)
+		addCoordinateSystem(); // add cs for the second y range
+	setCoordinateSystemRangeIndex(coordinateSystemCount() - 1, Dimension::Y, 1);
+	enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
+
+	// add second y-axis if not available yet
+	Axis* secondYAxis = nullptr;
+	const auto& axes = children<Axis>();
+	for (auto* axis : axes) {
+		if (axis->orientation() == Axis::Orientation::Vertical && axis->position() == Axis::Position::Right) {
+			secondYAxis = axis;
+			break;
+		}
+	}
+	if (!secondYAxis) {
+		secondYAxis = new Axis(QLatin1String("y2"));
+		addChild(secondYAxis);
+	}
+	secondYAxis->setOrientation(Axis::Orientation::Vertical);
+	secondYAxis->setPosition(Axis::Position::Right);
+	secondYAxis->setMajorTicksDirection(Axis::ticksIn);
+	secondYAxis->setLabelsPosition(Axis::LabelsPosition::In);
+	secondYAxis->setLabelsSuffix(QLatin1String("%"));
+	secondYAxis->title()->setRotationAngle(90);
+	secondYAxis->setCoordinateSystemIndex(1);
+
+	// adjust axes properties as required for the Pareto chart
+	// x: place the ticks between the bars, show category labels, no grid lines
+	auto* firstXAxis = horizontalAxis();
+	firstXAxis->title()->setText(QString());
+	firstXAxis->majorGridLine()->setStyle(Qt::NoPen);
+	firstXAxis->setMajorTicksStartType(Axis::TicksStartType::Offset);
+	firstXAxis->setMajorTickStartOffset(0.5);
+	firstXAxis->setMajorTicksType(Axis::TicksType::Spacing);
+	firstXAxis->setMajorTicksSpacing(1.);
+	firstXAxis->setMinorTicksDirection(Axis::noTicks);
+	firstXAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+	firstXAxis->setLabelsTextColumn(paretoChart->labelsColumn()); // show the category labels on the x-axis
+
+	// y:
+	auto* firstYAxis = verticalAxis();
+	firstYAxis->title()->setText(i18n("Frequency"));
+	firstYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
+	firstYAxis->setMajorTicksNumber(10 + 1); // same tick number as percentage axis
+
+	// y2:
+	secondYAxis->title()->setText(i18n("Cumulative Percentage"));
+	// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was addressed
+	secondYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
 }
 
 /*!

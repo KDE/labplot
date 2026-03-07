@@ -13,10 +13,10 @@
 #define CARTESIANPLOT_H
 
 #include "backend/lib/Range.h"
+#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
-
-#include "backend/nsl/nsl_sf_stats.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 class Background;
 class CartesianCoordinateSystem;
@@ -127,7 +127,6 @@ public:
 	Axis* horizontalAxis() const;
 	Axis* verticalAxis() const;
 
-	void addPlot(QAction*);
 	void addLegend(CartesianPlotLegend*);
 	int curveCount() const;
 	const XYCurve* getCurve(int index) const;
@@ -306,14 +305,15 @@ public Q_SLOTS:
 	void dataChanged(int xIndex = -1, int yIndex = -1, WorksheetElement* sender = nullptr);
 
 private Q_SLOTS:
-	void addAnalysisPlot(QAction*);
+	void addPlot(const QAction*);
+	void addAnalysisPlot(const QAction*);
 
 	void addLineSimplificationCurve();
 	void addDifferentiationCurve();
 	void addIntegrationCurve();
 	void addInterpolationCurve();
 	void addSmoothCurve();
-	void addFitCurve(QAction* action = nullptr);
+	void addFitCurve(const QAction* action = nullptr);
 	void addFourierFilterCurve();
 	void addFunctionCurve();
 	void addBaselineCorrectionCurve();
@@ -331,6 +331,7 @@ private Q_SLOTS:
 
 	void updateLegend();
 	void childAdded(const AbstractAspect*);
+	void childAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for statistical plots like Q-Q plot, KDE plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,7 @@
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "backend/worksheet/plots/cartesian/ParetoChart.h"
 #include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/RunChart.h"
@@ -1191,6 +1192,7 @@ void StatisticalPlotsTest::testRunChartDuplicate() {
  * test the run chart using Average for the center line, data from from Wheeler "Making Sense of Data", chapter seven.
  */
 void StatisticalPlotsTest::testRunChartCenterAverage() {
+
 	// prepare the data
 	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
 	column->setIntegers({11, 4, 6, 4, 5, 7, 5, 4, 7, 12, 4, 2, 4, 5, 6, 4, 2, 2, 5, 9, 5, 6, 5, 9});
@@ -1243,6 +1245,102 @@ void StatisticalPlotsTest::testRunChartCenterMedian() {
 	QCOMPARE(xColumn->rowCount(), rowCount);
 	for (int i = 0; i < rowCount; ++i)
 		QCOMPARE(xColumn->valueAt(i), i + 1);
+}
+
+// ##############################################################################
+// ######################### Pareto Chart #######################################
+// ##############################################################################
+/*!
+ * \brief create and add a new pareto chart, undo and redo this step
+ */
+void StatisticalPlotsTest::testParetoChartInit() {
+	QSKIP("crash", QTest::SkipSingleton);
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pc = new ParetoChart(QStringLiteral("pareto"));
+	p->addChild(pc);
+
+	auto children = p->children<ParetoChart>();
+
+	QCOMPARE(children.size(), 1);
+
+	project.undoStack()->undo();
+	children = p->children<ParetoChart>();
+	QCOMPARE(children.size(), 0);
+
+	project.undoStack()->redo();
+	children = p->children<ParetoChart>();
+	QCOMPARE(children.size(), 1);
+}
+
+/*!
+ * \brief create and add a new pareto chart, duplicate it and check the number of children
+ */
+void StatisticalPlotsTest::testParetoChartDuplicate() {
+	QSKIP("crash", QTest::SkipSingleton);
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pc = new ParetoChart(QStringLiteral("pareto"));
+	p->addChild(pc);
+
+	pc->duplicate();
+
+	auto children = p->children<ParetoChart>();
+	QCOMPARE(children.size(), 2);
+}
+
+/*!
+ * test the ranges of the pareto chart, the limits for bars should be from 0 to the maximum value in the data,
+ * the limits for the cumulative curve should be from 0 to 100%
+ */
+void StatisticalPlotsTest::testParetoChartRanges() {
+	QSKIP("crash", QTest::SkipSingleton);
+	Project project;
+
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	column->setIntegers({5, 9, 2, 4, 7});
+	project.addChild(column);
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pc = new ParetoChart(QStringLiteral("pareto"));
+	pc->setDataColumn(column);
+	p->addChild(pc);
+
+	// check the number of coordinates systems, should be 2, one for bars and one for the cumulative curve
+	QCOMPARE(p->coordinateSystems().size(), 2);
+
+	// check the ranges, the limits for bars should be from 0 to 9, the limits for the cumulative curve should be from 0 to 100%
+	auto range = p->range(Dimension::X, 0);
+	QCOMPARE(range.start(), 0);
+	QCOMPARE(range.end(), 5);
+
+	range = p->range(Dimension::Y, 0);
+	QCOMPARE(range.start(), 0);
+	QCOMPARE(range.end(), 9);
+
+	range = p->range(Dimension::X, 1);
+	QCOMPARE(range.start(), 0);
+	QCOMPARE(range.end(), 5);
+
+	range = p->range(Dimension::Y, 1);
+	QCOMPARE(range.start(), 0);
+	QCOMPARE(range.end(), 100);
 }
 
 QTEST_MAIN(StatisticalPlotsTest)
