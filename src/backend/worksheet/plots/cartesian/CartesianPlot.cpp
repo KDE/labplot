@@ -2809,8 +2809,8 @@ void CartesianPlot::childAboutToBeAdded(const AbstractAspect* /*parent*/, const 
 }
 
 /*!
-* Adjusts the plot area padding to make sure that axis labels and titles are insight the plot area and fully visible.
-*/
+ * Adjusts the plot area padding to make sure that axis labels and titles are insight the plot area and fully visible.
+ */
 void CartesianPlot::adjustPadding() {
 	if (isLoading())
 		return;
