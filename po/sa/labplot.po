@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:41+0000\n"
+"POT-Creation-Date: 2026-03-07 00:39+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -54,7 +54,7 @@ msgstr "पुनर्नाम"
 #: src/backend/spreadsheet/Spreadsheet.cpp:941
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:497
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
-#: src/frontend/worksheet/WorksheetView.cpp:138
+#: src/frontend/worksheet/WorksheetView.cpp:139
 #, kde-format
 msgid "Delete"
 msgstr "लुप्"
@@ -274,7 +274,7 @@ msgstr "बृहत् पूर्णाङ्कः"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:634
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/widgets/LabelWidget.cpp:477
-#: src/frontend/worksheet/WorksheetView.cpp:238
+#: src/frontend/worksheet/WorksheetView.cpp:239
 #, kde-format
 msgid "Text"
 msgstr "पाठ"
@@ -9411,8 +9411,8 @@ msgstr "ऊर्ध्वाधर अक्ष"
 #: src/frontend/matrix/MatrixView.cpp:131
 #: src/frontend/notebook/NotebookView.cpp:109
 #: src/frontend/widgets/BackgroundWidget.cpp:123
-#: src/frontend/worksheet/WorksheetView.cpp:241
-#: src/frontend/worksheet/WorksheetView.cpp:1356
+#: src/frontend/worksheet/WorksheetView.cpp:242
+#: src/frontend/worksheet/WorksheetView.cpp:1360
 #, kde-format
 msgid "Image"
 msgstr "छवि"
@@ -9461,7 +9461,7 @@ msgstr "प्रति प्लॉट् एकं प्लॉट् एर�
 #: src/frontend/ActionsManager.cpp:883
 #: src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
-#: src/frontend/worksheet/WorksheetView.cpp:441
+#: src/frontend/worksheet/WorksheetView.cpp:442
 #, kde-format
 msgid "Add New"
 msgstr "New योजयतु"
@@ -9499,7 +9499,7 @@ msgstr "आँकलन"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:929
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:545
+#: src/frontend/worksheet/WorksheetView.cpp:546
 #, kde-format
 msgid "Theme"
 msgstr "विषयवस्तु"
@@ -9947,8 +9947,8 @@ msgid "Function of '%1'"
 msgstr "'%1' इत्यस्य कार्यम् ।"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2376
-#: src/frontend/worksheet/WorksheetView.cpp:1350
-#: src/frontend/worksheet/WorksheetView.cpp:1351
+#: src/frontend/worksheet/WorksheetView.cpp:1354
+#: src/frontend/worksheet/WorksheetView.cpp:1355
 #, kde-format
 msgid "Text Label"
 msgstr "पाठ लेबल"
@@ -11878,49 +11878,49 @@ msgstr "भूखण्ड क्षेत्र"
 
 #: src/frontend/ActionsManager.cpp:542
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
-#: src/frontend/worksheet/WorksheetView.cpp:250
+#: src/frontend/worksheet/WorksheetView.cpp:251
 #, kde-format
 msgid "Vertical Layout"
 msgstr "ऊर्ध्वाधर विन्यास"
 
 #: src/frontend/ActionsManager.cpp:547
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
-#: src/frontend/worksheet/WorksheetView.cpp:254
+#: src/frontend/worksheet/WorksheetView.cpp:255
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "क्षैतिज विन्यास"
 
 #: src/frontend/ActionsManager.cpp:552
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
-#: src/frontend/worksheet/WorksheetView.cpp:258
+#: src/frontend/worksheet/WorksheetView.cpp:259
 #, kde-format
 msgid "Grid Layout"
 msgstr "जालविन्यासः"
 
 #: src/frontend/ActionsManager.cpp:557
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
-#: src/frontend/worksheet/WorksheetView.cpp:262
+#: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
 msgid "No Layout"
 msgstr "न विन्यासः"
 
 #: src/frontend/ActionsManager.cpp:565 src/frontend/ActionsManager.cpp:606
-#: src/frontend/worksheet/WorksheetView.cpp:186
-#: src/frontend/worksheet/WorksheetView.cpp:348
+#: src/frontend/worksheet/WorksheetView.cpp:187
+#: src/frontend/worksheet/WorksheetView.cpp:349
 #, kde-format
 msgid "Select and Edit"
 msgstr "चयनं कृत्वा सम्पादयतु"
 
 #: src/frontend/ActionsManager.cpp:570 src/frontend/ActionsManager.cpp:797
 #: src/frontend/datapicker/DatapickerImageView.cpp:132
-#: src/frontend/worksheet/WorksheetView.cpp:191
+#: src/frontend/worksheet/WorksheetView.cpp:192
 #, kde-format
 msgid "Navigate"
 msgstr "नेविगेट् कुर्वन्तु"
 
 #: src/frontend/ActionsManager.cpp:575 src/frontend/ActionsManager.cpp:802
 #: src/frontend/datapicker/DatapickerImageView.cpp:136
-#: src/frontend/worksheet/WorksheetView.cpp:195
+#: src/frontend/worksheet/WorksheetView.cpp:196
 #, kde-format
 msgid "Select and Zoom"
 msgstr "चयनं कृत्वा जूम कुर्वन्तु"
@@ -11947,25 +11947,25 @@ msgid "Add New"
 msgstr "New योजयतु"
 
 #: src/frontend/ActionsManager.cpp:612
-#: src/frontend/worksheet/WorksheetView.cpp:353
+#: src/frontend/worksheet/WorksheetView.cpp:354
 #, kde-format
 msgid "Crosshair"
 msgstr "क्रॉसशेयर"
 
 #: src/frontend/ActionsManager.cpp:617
-#: src/frontend/worksheet/WorksheetView.cpp:358
+#: src/frontend/worksheet/WorksheetView.cpp:359
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Region इति चित्वा Zoom In इति चिनोतु"
 
 #: src/frontend/ActionsManager.cpp:622
-#: src/frontend/worksheet/WorksheetView.cpp:363
+#: src/frontend/worksheet/WorksheetView.cpp:364
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "X-Region इति चित्वा Zoom In इति चिनोतु"
 
 #: src/frontend/ActionsManager.cpp:627
-#: src/frontend/worksheet/WorksheetView.cpp:368
+#: src/frontend/worksheet/WorksheetView.cpp:369
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Y-Region इति चित्वा Zoom In इति चिनोतु"
@@ -11973,25 +11973,25 @@ msgstr "Y-Region इति चित्वा Zoom In इति चिनोत�
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/frontend/ActionsManager.cpp:632 src/frontend/MainWin.cpp:1586
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
-#: src/frontend/worksheet/WorksheetView.cpp:373
+#: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Cursor"
 msgstr "कर्सर"
 
 #: src/frontend/ActionsManager.cpp:640
-#: src/frontend/worksheet/WorksheetView.cpp:381
+#: src/frontend/worksheet/WorksheetView.cpp:382
 #, kde-format
 msgid "Auto Scale"
 msgstr "कार स्केल"
 
 #: src/frontend/ActionsManager.cpp:644
-#: src/frontend/worksheet/WorksheetView.cpp:385
+#: src/frontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Auto Scale X"
 msgstr "स्वतः स्केल X"
 
 #: src/frontend/ActionsManager.cpp:648
-#: src/frontend/worksheet/WorksheetView.cpp:389
+#: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "स्वतः स्केल Y"
@@ -12000,8 +12000,8 @@ msgstr "स्वतः स्केल Y"
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:190
 #: src/frontend/notebook/NotebookView.cpp:53
-#: src/frontend/worksheet/WorksheetView.cpp:148
-#: src/frontend/worksheet/WorksheetView.cpp:393
+#: src/frontend/worksheet/WorksheetView.cpp:149
+#: src/frontend/worksheet/WorksheetView.cpp:394
 #, kde-format
 msgid "Zoom In"
 msgstr "Zoom In इति"
@@ -12010,56 +12010,56 @@ msgstr "Zoom In इति"
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:191
 #: src/frontend/notebook/NotebookView.cpp:57
-#: src/frontend/worksheet/WorksheetView.cpp:151
-#: src/frontend/worksheet/WorksheetView.cpp:397
+#: src/frontend/worksheet/WorksheetView.cpp:152
+#: src/frontend/worksheet/WorksheetView.cpp:398
 #, kde-format
 msgid "Zoom Out"
 msgstr "Zoom Out इति"
 
 #: src/frontend/ActionsManager.cpp:661
-#: src/frontend/worksheet/WorksheetView.cpp:401
+#: src/frontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Zoom In X"
 msgstr "Zoom In X"
 
 #: src/frontend/ActionsManager.cpp:665
-#: src/frontend/worksheet/WorksheetView.cpp:405
+#: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Zoom Out X"
 
 #: src/frontend/ActionsManager.cpp:669
-#: src/frontend/worksheet/WorksheetView.cpp:409
+#: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Zoom In Y"
 
 #: src/frontend/ActionsManager.cpp:673
-#: src/frontend/worksheet/WorksheetView.cpp:413
+#: src/frontend/worksheet/WorksheetView.cpp:414
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Zoom Out Y"
 
 #: src/frontend/ActionsManager.cpp:678
-#: src/frontend/worksheet/WorksheetView.cpp:417
+#: src/frontend/worksheet/WorksheetView.cpp:418
 #, kde-format
 msgid "Shift Left X"
 msgstr "शिफ्ट वाम X"
 
 #: src/frontend/ActionsManager.cpp:682
-#: src/frontend/worksheet/WorksheetView.cpp:419
+#: src/frontend/worksheet/WorksheetView.cpp:420
 #, kde-format
 msgid "Shift Right X"
 msgstr "शिफ्ट राइट X"
 
 #: src/frontend/ActionsManager.cpp:686
-#: src/frontend/worksheet/WorksheetView.cpp:421
+#: src/frontend/worksheet/WorksheetView.cpp:422
 #, kde-format
 msgid "Shift Up Y"
 msgstr "शिफ्ट अप Y"
 
 #: src/frontend/ActionsManager.cpp:690
-#: src/frontend/worksheet/WorksheetView.cpp:423
+#: src/frontend/worksheet/WorksheetView.cpp:424
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Shift Down Y"
@@ -12359,58 +12359,58 @@ msgstr "सर्वाणि प्रतिलिख्यताम्"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:125
 #: src/frontend/matrix/MatrixView.cpp:192
-#: src/frontend/worksheet/WorksheetView.cpp:154
+#: src/frontend/worksheet/WorksheetView.cpp:155
 #, kde-format
 msgid "Original Size"
 msgstr "मूल आकार"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:128
-#: src/frontend/worksheet/WorksheetView.cpp:172
+#: src/frontend/worksheet/WorksheetView.cpp:173
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
 msgstr "ऊर्ध्वतां यावत् फिट्"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:129
-#: src/frontend/worksheet/WorksheetView.cpp:175
+#: src/frontend/worksheet/WorksheetView.cpp:176
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
 msgstr "चौड़ाई यावत् फिट्"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:173
-#: src/frontend/worksheet/WorksheetView.cpp:200
+#: src/frontend/worksheet/WorksheetView.cpp:201
 #, kde-format
 msgid "No Magnification"
 msgstr "न आवर्धनम्"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:178
-#: src/frontend/worksheet/WorksheetView.cpp:205
+#: src/frontend/worksheet/WorksheetView.cpp:206
 #, kde-format
 msgid "2x Magnification"
 msgstr "२x आवर्धनम्"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:182
-#: src/frontend/worksheet/WorksheetView.cpp:209
+#: src/frontend/worksheet/WorksheetView.cpp:210
 #, kde-format
 msgid "3x Magnification"
 msgstr "३x आवर्धनम्"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:186
-#: src/frontend/worksheet/WorksheetView.cpp:213
+#: src/frontend/worksheet/WorksheetView.cpp:214
 #, kde-format
 msgid "4x Magnification"
 msgstr "४x आवर्धनम्"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:190
-#: src/frontend/worksheet/WorksheetView.cpp:217
+#: src/frontend/worksheet/WorksheetView.cpp:218
 #, kde-format
 msgid "5x Magnification"
 msgstr "५x आवर्धनम्"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:218
-#: src/frontend/worksheet/WorksheetView.cpp:448
-#: src/frontend/worksheet/WorksheetView.cpp:514
+#: src/frontend/worksheet/WorksheetView.cpp:449
+#: src/frontend/worksheet/WorksheetView.cpp:515
 #, kde-format
 msgid "Mouse Mode"
 msgstr "मूषक मोड"
@@ -12426,7 +12426,7 @@ msgid "Move Last Point"
 msgstr "अन्तिमबिन्दुं चालयन्तु"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:241
-#: src/frontend/worksheet/WorksheetView.cpp:466
+#: src/frontend/worksheet/WorksheetView.cpp:467
 #, kde-format
 msgid "Magnification"
 msgstr "आवर्धनम्"
@@ -12466,7 +12466,7 @@ msgstr "वक्रम्"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4034
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4089
-#: src/frontend/worksheet/WorksheetView.cpp:2175
+#: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to export"
 msgstr "निर्यातं कर्तुं असफलम्"
@@ -12474,7 +12474,7 @@ msgstr "निर्यातं कर्तुं असफलम्"
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4034
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4089
-#: src/frontend/worksheet/WorksheetView.cpp:2175
+#: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "'%1' इत्यत्र लिखितुं असफलम् । कृपया मार्गं पश्यतु।"
@@ -17289,7 +17289,7 @@ msgstr "&विण्डोज"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
 #: src/frontend/MainWin.cpp:181 src/frontend/ui/settingsworksheetpage.ui:106
-#: src/frontend/worksheet/WorksheetView.cpp:290
+#: src/frontend/worksheet/WorksheetView.cpp:291
 #, kde-format
 msgid "Presenter Mode"
 msgstr "वर्तमान फैशन"
@@ -17555,7 +17555,7 @@ msgstr "Clea&r चयनम्"
 #: src/frontend/matrix/MatrixView.cpp:123
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:318
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:292
-#: src/frontend/worksheet/WorksheetView.cpp:134
+#: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
 msgid "Select All"
 msgstr "सर्वं चिनोतु"
@@ -17695,7 +17695,7 @@ msgid "Header Format"
 msgstr "शीर्षक प्रारूप"
 
 #: src/frontend/matrix/MatrixView.cpp:293
-#: src/frontend/worksheet/WorksheetView.cpp:454
+#: src/frontend/worksheet/WorksheetView.cpp:455
 #, kde-format
 msgid "Zoom"
 msgstr "जूम"
@@ -18055,7 +18055,7 @@ msgid "Do you really want to delete %1?"
 msgstr "किं भवान् वास्तवमेव %1 विलोपयितुम् इच्छति?"
 
 #: src/frontend/ProjectExplorer.cpp:1001
-#: src/frontend/worksheet/WorksheetView.cpp:1454
+#: src/frontend/worksheet/WorksheetView.cpp:1458
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -22458,7 +22458,7 @@ msgstr "फ़ॉन्ट् रङ्गः :"
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1624
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
-#: src/frontend/worksheet/WorksheetView.cpp:479
+#: src/frontend/worksheet/WorksheetView.cpp:480
 #, kde-format
 msgid "Grid"
 msgstr "गृध्र"
@@ -22912,7 +22912,7 @@ msgstr "वर्तमान चयनितं y श्रेणीं नि�
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:628
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:623
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:267
-#: src/frontend/worksheet/WorksheetView.cpp:471
+#: src/frontend/worksheet/WorksheetView.cpp:472
 #, kde-format
 msgid "Layout"
 msgstr "प्रारूपं"
@@ -26886,90 +26886,90 @@ msgstr "प्रस्तुति त्यजतु"
 msgid "Pin the navigation panel"
 msgstr "नेविगेशन-पटलं पिन कुर्वन्तु"
 
-#: src/frontend/worksheet/WorksheetView.cpp:168
+#: src/frontend/worksheet/WorksheetView.cpp:169
 #, kde-format
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "न फिट्"
 
-#: src/frontend/worksheet/WorksheetView.cpp:178
+#: src/frontend/worksheet/WorksheetView.cpp:179
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "चयनं प्रति उपयुक्तम्"
 
-#: src/frontend/worksheet/WorksheetView.cpp:181
+#: src/frontend/worksheet/WorksheetView.cpp:182
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "योग्यः"
 
-#: src/frontend/worksheet/WorksheetView.cpp:222
+#: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Four Axes"
 msgstr "चत्वारः अक्षाः"
 
-#: src/frontend/worksheet/WorksheetView.cpp:225
+#: src/frontend/worksheet/WorksheetView.cpp:226
 #, kde-format
 msgid "Two Axes"
 msgstr "अक्षद्वयम्"
 
-#: src/frontend/worksheet/WorksheetView.cpp:228
+#: src/frontend/worksheet/WorksheetView.cpp:229
 #, kde-format
 msgid "Two Axes, Centered"
 msgstr "द्वौ अक्षौ, केन्द्रीकृतौ"
 
-#: src/frontend/worksheet/WorksheetView.cpp:232
+#: src/frontend/worksheet/WorksheetView.cpp:233
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
 msgstr "द्वौ अक्षौ, उत्पत्तिस्थाने पारं कुर्वतः"
 
-#: src/frontend/worksheet/WorksheetView.cpp:235
+#: src/frontend/worksheet/WorksheetView.cpp:236
 #, kde-format
 msgid "Load from Template"
 msgstr "टेम्पलेट् तः लोड् कुर्वन्तु"
 
-#: src/frontend/worksheet/WorksheetView.cpp:267
+#: src/frontend/worksheet/WorksheetView.cpp:268
 #, kde-format
 msgid "No Grid"
 msgstr "न जालम्"
 
-#: src/frontend/worksheet/WorksheetView.cpp:272
+#: src/frontend/worksheet/WorksheetView.cpp:273
 #, kde-format
 msgid "Dense Line Grid"
 msgstr "सघन रेखा जाल"
 
-#: src/frontend/worksheet/WorksheetView.cpp:275
+#: src/frontend/worksheet/WorksheetView.cpp:276
 #, kde-format
 msgid "Sparse Line Grid"
 msgstr "विरल रेखा जाल"
 
-#: src/frontend/worksheet/WorksheetView.cpp:278
+#: src/frontend/worksheet/WorksheetView.cpp:279
 #, kde-format
 msgid "Dense Dot Grid"
 msgstr "सघन बिन्दु जाल"
 
-#: src/frontend/worksheet/WorksheetView.cpp:281
+#: src/frontend/worksheet/WorksheetView.cpp:282
 #, kde-format
 msgid "Sparse Dot Grid"
 msgstr "विरल बिन्दु जाल"
 
-#: src/frontend/worksheet/WorksheetView.cpp:284
+#: src/frontend/worksheet/WorksheetView.cpp:285
 #, kde-format
 msgid "Custom Grid"
 msgstr "कस्टम ग्रिड"
 
-#: src/frontend/worksheet/WorksheetView.cpp:287
+#: src/frontend/worksheet/WorksheetView.cpp:288
 #, kde-format
 msgid "Snap to Grid"
 msgstr "ग्रिड् मध्ये स्नैप कुर्वन्तु"
 
-#: src/frontend/worksheet/WorksheetView.cpp:307
+#: src/frontend/worksheet/WorksheetView.cpp:308
 #, kde-format
 msgid "Interactive Plots"
 msgstr "अन्तरक्रियाशील कथानक"
 
-#: src/frontend/worksheet/WorksheetView.cpp:308
+#: src/frontend/worksheet/WorksheetView.cpp:309
 #, kde-format
 msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
@@ -26978,61 +26978,61 @@ msgstr ""
 "यदि सक्रियः न भवति तर्हि कार्यपत्रके प्लॉट् drag and mouse wheel events इत्यत्र "
 "प्रतिक्रियां न कुर्वन्ति ।"
 
-#: src/frontend/worksheet/WorksheetView.cpp:316
-#: src/frontend/worksheet/WorksheetView.cpp:330
+#: src/frontend/worksheet/WorksheetView.cpp:317
+#: src/frontend/worksheet/WorksheetView.cpp:331
 #, kde-format
 msgid "Selected Plot Areas"
 msgstr "चयनित प्लॉट क्षेत्र"
 
-#: src/frontend/worksheet/WorksheetView.cpp:318
-#: src/frontend/worksheet/WorksheetView.cpp:332
+#: src/frontend/worksheet/WorksheetView.cpp:319
+#: src/frontend/worksheet/WorksheetView.cpp:333
 #, kde-format
 msgid "All Plot Areas"
 msgstr "सर्वे भूखण्डक्षेत्राणि"
 
-#: src/frontend/worksheet/WorksheetView.cpp:320
+#: src/frontend/worksheet/WorksheetView.cpp:321
 #, kde-format
 msgid "All Plot Areas X"
 msgstr "सर्वे भूखण्डक्षेत्राणि X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:322
+#: src/frontend/worksheet/WorksheetView.cpp:323
 #, kde-format
 msgid "All Plot Areas Y"
 msgstr "सर्वे भूखण्ड क्षेत्र Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:433
-#: src/frontend/worksheet/WorksheetView.cpp:494
-#: src/frontend/worksheet/WorksheetView.cpp:1296
-#: src/frontend/worksheet/WorksheetView.cpp:1305
-#: src/frontend/worksheet/WorksheetView.cpp:1314
-#: src/frontend/worksheet/WorksheetView.cpp:1323
+#: src/frontend/worksheet/WorksheetView.cpp:434
+#: src/frontend/worksheet/WorksheetView.cpp:495
+#: src/frontend/worksheet/WorksheetView.cpp:1300
+#: src/frontend/worksheet/WorksheetView.cpp:1309
+#: src/frontend/worksheet/WorksheetView.cpp:1318
+#: src/frontend/worksheet/WorksheetView.cpp:1327
 #, kde-format
 msgid "Plot Area"
 msgstr "भूखण्ड क्षेत्र"
 
-#: src/frontend/worksheet/WorksheetView.cpp:497
+#: src/frontend/worksheet/WorksheetView.cpp:498
 #, kde-format
 msgid "Apply Actions to"
 msgstr "Apply Actions to इति"
 
-#: src/frontend/worksheet/WorksheetView.cpp:504
+#: src/frontend/worksheet/WorksheetView.cpp:505
 #, kde-format
 msgid "Apply Cursor to"
 msgstr "कर्सरं प्रयोजयन्तु"
 
-#: src/frontend/worksheet/WorksheetView.cpp:523
+#: src/frontend/worksheet/WorksheetView.cpp:524
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "जूम/नेविगेट्"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1453
+#: src/frontend/worksheet/WorksheetView.cpp:1457
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] "किं भवन्तः वास्तवमेव चयनितं वस्तु विलोपयितुम् इच्छन्ति?"
 msgstr[1] "किं भवान् वास्तवमेव चयनितानि %1 वस्तुनि विलोपयितुम् इच्छति?"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1461
+#: src/frontend/worksheet/WorksheetView.cpp:1465
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: चयनितकार्यपत्रतत्त्वानि निष्कासयन्तु।"
