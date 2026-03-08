@@ -18038,7 +18038,7 @@ msgstr "工具栏设定"
 #: src/frontend/TemplateHandler.cpp:205
 #, kde-format
 msgid "Text position"
-msgstr "文字位置"
+msgstr "文本位置"
 
 #: src/frontend/TemplateHandler.cpp:207
 #, kde-format
@@ -18048,17 +18048,17 @@ msgstr "仅图标"
 #: src/frontend/TemplateHandler.cpp:214
 #, kde-format
 msgid "Text only"
-msgstr "仅文字"
+msgstr "仅文本"
 
 #: src/frontend/TemplateHandler.cpp:221
 #, kde-format
 msgid "Text Alongside Icons"
-msgstr "文字与图标并排"
+msgstr "文本与图标并排"
 
 #: src/frontend/TemplateHandler.cpp:228
 #, kde-format
 msgid "Text Under Icons"
-msgstr "文字在图标下方"
+msgstr "文本在图标下方"
 
 #: src/frontend/TemplateHandler.cpp:268
 #, kde-format
@@ -21313,7 +21313,7 @@ msgstr "背景颜色："
 #: src/frontend/ui/dockwidgets/notedock.ui:86
 #, kde-format
 msgid "Text color:"
-msgstr "文字颜色："
+msgstr "文本颜色："
 
 #. i18n: ectx: property (text), widget (QLabel, lExactLimits)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:37
