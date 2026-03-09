@@ -129,7 +129,7 @@ void FlattenColumnsDialog::addReferenceColumn() {
 }
 
 void FlattenColumnsDialog::removeReferenceColumn() {
-	auto* sender = static_cast<QPushButton*>(QObject::sender());
+	const auto* sender = static_cast<QPushButton*>(QObject::sender());
 	if (!sender)
 		return;
 

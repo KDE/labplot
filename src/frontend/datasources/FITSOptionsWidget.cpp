@@ -93,7 +93,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	if (!selectedExtension.isEmpty()) {
 		auto filter = static_cast<FITSFilter*>(m_fileWidget->currentFileFilter());
 		bool readFitsTableToMatrix;
-		const QVector<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
+		const auto importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
 		Q_EMIT m_fileWidget->enableImportToMatrix(readFitsTableToMatrix);
 
 		const int rows = importedStrings.size();
@@ -102,7 +102,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 		ui.twPreview->setRowCount(rows);
 		const int maxColumns = 300;
 		for (int i = 0; i < rows; ++i) {
-			QStringList lineString = importedStrings[i];
+			auto lineString = importedStrings[i];
 			int colCount;
 			if (i == 0) {
 				colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
@@ -111,8 +111,8 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 			colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
 
 			for (int j = 0; j < colCount; ++j) {
-				auto* item = new QTableWidgetItem(lineString[j]);
-				ui.twPreview->setItem(i, j, item);
+				auto* newItem = new QTableWidgetItem(lineString[j]);
+				ui.twPreview->setItem(i, j, newItem);
 			}
 		}
 		ui.twPreview->resizeColumnsToContents();

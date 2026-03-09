@@ -24,7 +24,6 @@
         <reject-enum-value name="WorksheetElementGroup"/>
         <reject-enum-value name="AbstractPlot"/>
         <reject-enum-value name="WorksheetElementContainer"/>
-        <reject-enum-value name="PlotArea"/>
         <reject-enum-value name="WorksheetElement"/>
         <reject-enum-value name="AbstractFilter"/>
         <reject-enum-value name="AbstractAspect"/>
@@ -133,7 +132,6 @@
     <rejection class="AbstractPlot" field-name="*"/>
     <rejection class="AbstractPlot" function-name="*"/>
     <object-type name="AbstractPlot" force-abstract="yes" disable-wrapper="yes">
-        <declare-function signature="plotArea()" return-type="PlotArea*"/>
         <declare-function signature="title()" return-type="TextLabel*"/>
         <declare-function signature="horizontalPadding()" return-type="double"/>
         <declare-function signature="setHorizontalPadding(double)" return-type="void"/>
@@ -487,17 +485,6 @@
         <declare-function signature="setWidth(double)" return-type="void"/>
         <declare-function signature="opacity()const" return-type="double"/>
         <declare-function signature="setOpacity(double)" return-type="void"/>
-    </object-type>
-    <rejection class="PlotArea" field-name="*"/>
-    <rejection class="PlotArea" function-name="*"/>
-    <object-type name="PlotArea" disable-wrapper="yes">
-        <enum-type name="BorderTypeFlags" flags="yes"/>
-        <declare-function signature="background()const" return-type="Background*"/>
-        <declare-function signature="borderLine()const" return-type="Line*"/>
-        <declare-function signature="borderType()const" return-type="PlotArea::BorderType"/>
-        <declare-function signature="setBorderType(PlotArea::BorderType)" return-type="void"/>
-        <declare-function signature="borderCornerRadius()const" return-type="qreal"/>
-        <declare-function signature="setBorderCornerRadius(qreal)" return-type="void"/>
     </object-type>
     <value-type name="Range" disable-wrapper="yes" generate="no"/>
     <typedef-type name="DoubleRange" source="Range&lt;double&gt;"/>
@@ -912,8 +899,6 @@
         <enum-type name="Normalization"/>
         <enum-type name="BinningMethod"/>
         <enum-type name="LineType"/>
-        <enum-type name="ValuesType"/>
-        <enum-type name="ValuesPosition"/>
         <declare-function signature="Histogram(const QString&amp;,bool)" return-type="void">
             <modify-argument index="2">
                 <replace-default-expression with="false"/>
@@ -1097,8 +1082,6 @@
     <object-type name="XYCurve" disable-wrapper="yes">
         <enum-type name="LineType"/>
         <enum-type name="DropLineType"/>
-        <enum-type name="ValuesType"/>
-        <enum-type name="ValuesPosition"/>
         <declare-function signature="XYCurve(const QString&amp;,AspectType,bool)" return-type="void">
             <modify-argument index="2">
                 <replace-default-expression with="AspectType::XYCurve"/>
@@ -1115,6 +1098,7 @@
         <declare-function signature="symbol()const" return-type="Symbol*"/>
         <declare-function signature="background()const" return-type="Background*"/>
         <declare-function signature="errorBar() const" return-type="ErrorBar*"/>
+        <declare-function signature="value()const" return-type="Value*"/>
         <declare-function signature="xColumn()const" return-type="const AbstractColumn*"/>
         <declare-function signature="setXColumn(const AbstractColumn*)" return-type="void">
             <modify-argument index="1">
@@ -1135,36 +1119,6 @@
         <declare-function signature="setLineIncreasingXOnly(bool)" return-type="void"/>
         <declare-function signature="lineInterpolationPointsCount()const" return-type="int"/>
         <declare-function signature="setLineInterpolationPointsCount(int)" return-type="void"/>
-        <declare-function signature="valuesType()const" return-type="XYCurve::ValuesType"/>
-        <declare-function signature="setValuesType(XYCurve::ValuesType)" return-type="void"/>
-        <declare-function signature="valuesColumn()const" return-type="const AbstractColumn*"/>
-        <declare-function signature="setValuesColumn(const AbstractColumn*)" return-type="void">
-            <modify-argument index="1">
-                <define-ownership class="target" owner="c++"/>
-            </modify-argument>
-        </declare-function>
-        <declare-function signature="valuesPosition()const" return-type="XYCurve::ValuesPosition"/>
-        <declare-function signature="setValuesPosition(XYCurve::ValuesPosition)" return-type="void"/>
-        <declare-function signature="valuesDistance()const" return-type="qreal"/>
-        <declare-function signature="setValuesDistance(qreal)" return-type="void"/>
-        <declare-function signature="valuesRotationAngle()const" return-type="qreal"/>
-        <declare-function signature="setValuesRotationAngle(qreal)" return-type="void"/>
-        <declare-function signature="valuesOpacity()const" return-type="qreal"/>
-        <declare-function signature="setValuesOpacity(qreal)" return-type="void"/>
-        <declare-function signature="valuesNumericFormat()const" return-type="char"/>
-        <declare-function signature="setValuesNumericFormat(char)" return-type="void"/>
-        <declare-function signature="valuesPrecision()const" return-type="int"/>
-        <declare-function signature="setValuesPrecision(int)" return-type="void"/>
-        <declare-function signature="valuesDateTimeFormat()const" return-type="QString"/>
-        <declare-function signature="setValuesDateTimeFormat(const QString&amp;)" return-type="void"/>
-        <declare-function signature="valuesPrefix()const" return-type="QString"/>
-        <declare-function signature="setValuesPrefix(const QString&amp;)" return-type="void"/>
-        <declare-function signature="valuesSuffix()const" return-type="QString"/>
-        <declare-function signature="setValuesSuffix(const QString&amp;)" return-type="void"/>
-        <declare-function signature="valuesColor()const" return-type="QColor"/>
-        <declare-function signature="setValuesColor(const QColor&amp;)" return-type="void"/>
-        <declare-function signature="valuesFont()const" return-type="QFont"/>
-        <declare-function signature="setValuesFont(const QFont&amp;)" return-type="void"/>
         <declare-function signature="rugEnabled()const" return-type="bool"/>
         <declare-function signature="setRugEnabled(bool)" return-type="void"/>
         <declare-function signature="rugOrientation()const" return-type="WorksheetElement::Orientation"/>
@@ -1207,15 +1161,15 @@
         <declare-function signature="setCorrelationData(const XYCorrelationCurve::CorrelationData&amp;)" return-type="void"/>
         <declare-function signature="correlationResult()const" return-type="const XYCorrelationCurve::CorrelationResult&amp;"/>
     </object-type>
-    <rejection class="XYDataReductionCurve" field-name="*"/>
-    <rejection class="XYDataReductionCurve" function-name="*"/>
-    <object-type name="XYDataReductionCurve" disable-wrapper="yes">
-        <value-type name="DataReductionData" disable-wrapper="yes"/>
-        <value-type name="DataReductionResult" disable-wrapper="yes"/>
-        <declare-function signature="XYDataReductionCurve(const QString&amp;)" return-type="void"/>
-        <declare-function signature="dataReductionData()const" return-type="XYDataReductionCurve::DataReductionData"/>
-        <declare-function signature="setDataReductionData(const XYDataReductionCurve::DataReductionData&amp;)" return-type="void"/>
-        <declare-function signature="dataReductionResult()const" return-type="const XYDataReductionCurve::DataReductionResult&amp;"/>
+    <rejection class="XYLineSimplificationCurve" field-name="*"/>
+    <rejection class="XYLineSimplificationCurve" function-name="*"/>
+    <object-type name="XYLineSimplificationCurve" disable-wrapper="yes">
+        <value-type name="LineSimplificationData" disable-wrapper="yes"/>
+        <value-type name="LineSimplificationResult" disable-wrapper="yes"/>
+        <declare-function signature="XYLineSimplificationCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="lineSimplificationData()const" return-type="XYLineSimplificationCurve::LineSimplificationData"/>
+        <declare-function signature="setLineSimplificationData(const XYLineSimplificationCurve::LineSimplificationData&amp;)" return-type="void"/>
+        <declare-function signature="lineSimplificationResult()const" return-type="const XYLineSimplificationCurve::LineSimplificationResult&amp;"/>
     </object-type>
     <rejection class="XYDifferentiationCurve" field-name="*"/>
     <rejection class="XYDifferentiationCurve" function-name="*"/>

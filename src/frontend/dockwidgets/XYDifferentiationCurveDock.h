@@ -16,8 +16,6 @@
 #include "frontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xydifferentiationcurvedockgeneraltab.h"
 
-class TreeViewComboBox;
-
 class XYDifferentiationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 

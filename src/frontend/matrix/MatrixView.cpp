@@ -4,7 +4,7 @@
 	Description          : View class for Matrix
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -34,7 +34,6 @@
 #include <QIcon>
 #include <QInputDialog>
 #include <QKeyEvent>
-#include <QLabel>
 #include <QMenu>
 #include <QMimeData>
 #include <QMutex>
@@ -44,7 +43,6 @@
 #include <QScrollArea>
 #include <QStackedWidget>
 #include <QTableView>
-#include <QTextStream>
 #include <QThreadPool>
 
 #include <cfloat>
@@ -818,12 +816,12 @@ void MatrixView::updateImage() {
 
 	// find min/max value
 	double dmax = -DBL_MAX, dmin = DBL_MAX;
-	const auto* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+	const auto* mdata = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 	const int width = m_matrix->columnCount();
 	const int height = m_matrix->rowCount();
 	for (int col = 0; col < width; ++col) {
 		for (int row = 0; row < height; ++row) {
-			const double value = (data->operator[](col))[row];
+			const double value = (mdata->operator[](col))[row];
 			if (dmax < value)
 				dmax = value;
 			if (dmin > value)
@@ -832,10 +830,7 @@ void MatrixView::updateImage() {
 	}
 
 	// update the image
-	auto* manager = ColorMapsManager::instance();
-	QPixmap pix;
-	manager->render(pix, QLatin1String("viridis100")); // dummy render to get the color vector initialized
-	const auto& colors = manager->colors();
+	const auto& colors = ColorMapsManager::instance()->colors(QStringLiteral("viridis100"));
 	auto* pool = QThreadPool::globalInstance();
 	int range = ceil(double(m_image.height()) / pool->maxThreadCount());
 	for (int i = 0; i < pool->maxThreadCount(); ++i) {
@@ -843,7 +838,7 @@ void MatrixView::updateImage() {
 		int end = (i + 1) * range;
 		if (end > m_image.height())
 			end = m_image.height();
-		auto* task = new UpdateImageTask(start, end, m_image, data, dmin, dmax, colors);
+		auto* task = new UpdateImageTask(start, end, m_image, mdata, dmin, dmax, colors);
 		pool->start(task);
 	}
 	pool->waitForDone();
@@ -1033,9 +1028,9 @@ void MatrixView::print(QPrinter* printer) const {
 	const int dpiy = printer->logicalDpiY();
 	const int margin = (int)((1 / GSL_CONST_CGS_INCH) * dpiy); // 1 cm margins
 
-	QHeaderView* hHeader = m_tableView->horizontalHeader();
-	QHeaderView* vHeader = m_tableView->verticalHeader();
-	auto* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+	auto* hHeader = m_tableView->horizontalHeader();
+	auto* vHeader = m_tableView->verticalHeader();
+	auto* mdata = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 
 	const int rows = m_matrix->rowCount();
 	const int cols = m_matrix->columnCount();
@@ -1048,18 +1043,18 @@ void MatrixView::print(QPrinter* printer) const {
 	int firstRowStringWidth = vertHeaderWidth;
 	bool tablesNeeded = false;
 	QVector<int> firstRowCeilSizes;
-	firstRowCeilSizes.reserve(data[0].size());
-	firstRowCeilSizes.resize(data[0].size());
+	firstRowCeilSizes.reserve(mdata[0].size());
+	firstRowCeilSizes.resize(mdata[0].size());
 	QRect br;
 
-	for (int i = 0; i < data->size(); ++i) {
-		br = painter.boundingRect(br, Qt::AlignCenter, QString::number(data->at(i)[0]) + QLatin1Char('\t'));
+	for (int i = 0; i < mdata->size(); ++i) {
+		br = painter.boundingRect(br, Qt::AlignCenter, QString::number(mdata->at(i)[0]) + QLatin1Char('\t'));
 		firstRowCeilSizes[i] = br.width() > m_tableView->columnWidth(i) ? br.width() : m_tableView->columnWidth(i);
 	}
 	const int width = printer->pageLayout().paintRectPixels(printer->resolution()).width() - 2 * margin;
 	for (int col = 0; col < cols; ++col) {
 		headerStringWidth += m_tableView->columnWidth(col);
-		br = painter.boundingRect(br, Qt::AlignCenter, QString::number(data->at(col)[0]) + QLatin1Char('\t'));
+		br = painter.boundingRect(br, Qt::AlignCenter, QString::number(mdata->at(col)[0]) + QLatin1Char('\t'));
 		firstRowStringWidth += br.width();
 		if ((headerStringWidth >= width) || (firstRowStringWidth >= width)) {
 			tablesNeeded = true;
@@ -1081,7 +1076,6 @@ void MatrixView::print(QPrinter* printer) const {
 		// Paint the horizontal header first
 		painter.setFont(hHeader->font());
 		QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
-		QRect br;
 		br = painter.boundingRect(br, Qt::AlignCenter, headerString);
 		QRect tr(br);
 		if (table != 0)
@@ -1132,7 +1126,7 @@ void MatrixView::print(QPrinter* printer) const {
 			}
 			for (; j < toJ; j++) {
 				int w = /*m_tableView->columnWidth(j)*/ firstRowCeilSizes[j];
-				cellText = QString::number(data->at(j)[i]) + QLatin1Char('\t');
+				cellText = QString::number(mdata->at(j)[i]) + QLatin1Char('\t');
 				tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
 				br.setTopLeft(QPoint(right, height));
 				br.setWidth(w);
@@ -1169,14 +1163,14 @@ void MatrixView::exportToFile(const QString& path, const QString& separator, QLo
 	// export values
 	const int cols = m_matrix->columnCount();
 	const int rows = m_matrix->rowCount();
-	const auto* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+	const auto* mdata = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 	// TODO: use general setting for number locale?
 	QLocale locale(language);
 	for (int row = 0; row < rows; ++row) {
 		for (int col = 0; col < cols; ++col) {
-			out << locale.toString(data->at(col)[row], m_matrix->numericFormat(), m_matrix->precision());
+			out << locale.toString(mdata->at(col)[row], m_matrix->numericFormat(), m_matrix->precision());
 
-			out << data->at(col)[row];
+			out << mdata->at(col)[row];
 			if (col != cols - 1)
 				out << sep;
 		}

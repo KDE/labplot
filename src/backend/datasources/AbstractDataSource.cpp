@@ -31,6 +31,6 @@ void AbstractDataSource::clear() {
 		column->clear();
 		column->setUndoAware(true);
 		column->setSuppressDataChangedSignal(false);
-		column->setChanged();
+		column->setDataChanged();
 	}
 }

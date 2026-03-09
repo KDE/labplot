@@ -74,6 +74,11 @@ private Q_SLOTS:
 	void testFlatten02();
 	void testFlatten03();
 
+	// transposing
+	void testTranspose00();
+	void testTranspose01();
+	void testTranspose02();
+
 	// search&replace
 	void testSearchSimple00();
 

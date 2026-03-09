@@ -92,6 +92,7 @@ public:
 	// exposed in function dialog (ColumnPrivate::updateFormula(), ExpressionParser::initFunctions(), functions.h)
 	struct ColumnStatistics {
 		int size{0};
+		double sum{qQNaN()};
 		int unique{0}; // number of unique values, relevant for text columns only
 		double minimum{qQNaN()};
 		double maximum{qQNaN()};
@@ -116,6 +117,7 @@ public:
 		double meanDeviation{qQNaN()}; // mean absolute deviation around mean
 		double meanDeviationAroundMedian{qQNaN()}; // mean absolute deviation around median
 		double medianDeviation{qQNaN()}; // median absolute deviation
+		double averageTwoPeriodMovingRange{qQNaN()};
 		double skewness{qQNaN()};
 		double kurtosis{qQNaN()};
 		double entropy{qQNaN()};
@@ -219,7 +221,7 @@ public:
 	void setHeatmapFormat(const HeatmapFormat&);
 	void removeFormat();
 	void reset();
-	void setChanged();
+	void setDataChanged();
 	void setSuppressDataChangedSignal(const bool);
 
 Q_SIGNALS:

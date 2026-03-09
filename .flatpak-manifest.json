@@ -2,13 +2,16 @@
     "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "6.9",
+    "runtime-version": "6.10",
     "base": "io.qt.PySide.BaseApp",
-    "base-version": "6.9",
+    "base-version": "6.10",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
     "tags": ["nightly"],
     "desktop-file-name-suffix": " (Nightly)",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.llvm21"
+    ],
     "finish-args": [
         "--share=network",
         "--share=ipc",
@@ -31,12 +34,22 @@
         "/mkspecs",
         "/share/aclocal",
         "/share/info",
-        "/share/man"
+        "/share/doc",
+        "/share/man",
+        "/share/qlogging-categories6"
     ],
     "cleanup-commands": [
         "/app/cleanup-BaseApp.sh"
     ],
     "modules": [
+         {
+            "name": "clang-headers",
+            "buildsystem": "simple",
+            "build-commands": [
+                "mkdir -p ${FLATPAK_DEST}/lib/clang/21/include",
+                "cp -r /usr/lib/sdk/llvm21/lib/clang/21/include ${FLATPAK_DEST}/lib/clang/21/"
+            ]
+        },
         {
             "name": "eigen",
             "buildsystem": "cmake-ninja",
@@ -66,8 +79,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.11.0.tar.xz",
-                    "sha256": "63f155142b77349e2bccaef148e754e7506ab1641e713b83af4f54a8f8b15369"
+                    "url": "https://poppler.freedesktop.org/poppler-26.03.0.tar.xz",
+                    "sha256": "8b3c5e2a9f2ab4c3ec5029f28af1b433c6b71f0d1e7b3997aa561cf1c0ca4ebe"
                 }
             ],
             "modules": [
@@ -85,19 +98,6 @@
                             "sha256": "46d9d2c06637b219270877c9e16155cbd015b6dc84349af064c088e9b5b12f7b"
                         }
                     ]
-                },
-                {
-                    "name": "openjpeg2",
-                    "buildsystem": "cmake-ninja",
-                    "builddir": true,
-                    "sources": [
-                        {
-                            "type": "archive",
-                            "url": "https://github.com/uclouvain/openjpeg/archive/v2.5.4.tar.gz",
-                            "sha256": "a695fbe19c0165f295a8531b1e4e855cd94d0875d2f88ec4b61080677e27188a"
-                        }
-                    ],
-                    "cleanup": [ "/bin", "/include", "/lib/openjpeg-*", "/lib/pkgconfig" ]
                 }
             ],
             "cleanup": [ "/include", "/lib/pkgconfig" ]
@@ -108,8 +108,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.08.3/src/analitza-25.08.3.tar.xz",
-			    "sha256": "1abe741c3f189b3d8cb8cf34b516890fd64cf21ba75d0f558b3711956b83e4d1"
+			    "url": "https://download.kde.org/stable/release-service/25.12.2/src/analitza-25.12.2.tar.xz",
+			    "sha256": "5918986927ad6820f9baa53b4d935b9450ddaf579d015fa5d449b9f3ef70c5ae"
 		    }
 	    ]
         },
@@ -119,8 +119,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.08.3/src/cantor-25.08.3.tar.xz",
-			    "sha256": "5635007fb9c50d82e88decf9264ff40fb9f4ee65b27474c5930b1b519eb24b72"
+			    "url": "https://download.kde.org/stable/release-service/25.12.2/src/cantor-25.12.2.tar.xz",
+			    "sha256": "d72152513ef5fcd93c520ff2dc1d4b6decbddf1e7be98cb811b465b57972b823"
 		    }
 	    ]
         },
@@ -143,6 +143,7 @@
                 "-DHDF5_BUILD_TOOLS=OFF"
 	    ],
             "cleanup": [
+                "/cmake",
                 "/share/hdf5_examples"
             ],
             "sources": [
@@ -159,8 +160,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.9.3.tar.gz",
-                    "sha256": "990f46d49525d6ab5dc4249f8684c6deeaf54de6fec63a187e9fb382cc0ffdff"
+                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.10.0.tar.gz",
+                    "sha256": "ce160f9c1483b32d1ba8b7633d7984510259e4e439c48a218b95a023dc02fd4c"
                 }
             ]
         },
@@ -212,6 +213,11 @@
         },
         {
             "name": "readstat",
+            "build-options": {
+                "env": {
+                    "ACLOCAL_PATH": "/usr/share/gettext/m4:/usr/share/aclocal:/app/share/aclocal"
+                }
+            },
             "sources": [
                 {
                     "type": "archive",
@@ -229,7 +235,8 @@
             "buildsystem": "cmake-ninja",
             "config-opts": [
                 "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=6"
+                "-DQT_VERSION_MAJOR=6",
+                "-DCMAKE_CXX_FLAGS=-I/usr/include/QtGui/6.10.2/QtGui"
             ],
             "sources": [
                 {
@@ -260,8 +267,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/tbeu/matio/archive/v1.5.29.tar.gz",
-                    "sha256": "345f18bad65ad4a736ef5b4d660e8587c672939ff88b8551453e03d2146ff8b0"
+                    "url": "https://github.com/tbeu/matio/archive/v1.5.30.tar.gz",
+                    "sha256": "cd514c42e13bb39477e7d8fdeaa1502014c552a6a53f0678809cce6951db2bc1"
                 }
             ]
         },
@@ -272,7 +279,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/fastfloat/fast_float.git",
-                    "tag": "1ea4f27b2aeee2859a1354a3c24cff52a116cad1"
+		    "tag": "v8.2.3",
+                    "commit": "01ce95dfe46abccf3264fbccf9f5139ea9016cd2"
                 }
             ]
         },
@@ -286,7 +294,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/LinuxDevon/dbc_parser_cpp.git",
-                    "tag": "cc4e80c7b6e1f7a13cc47b45f226756f823888e2"
+		    "tag": "v0.5.0",
+                    "commit": "887d779fbf416032f539675f74360a5a43a93f86"
                 },
 		{
                     "type": "patch",
@@ -301,7 +310,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Murmele/vector_blf.git",
-                    "tag": "2c1a8e649328f2e06ce4d45c6223628bc39fd178"
+                    "tag": "2c1a8e649328f2e06ce4d45c6223628bc39fd178",
+                    "commit": "2c1a8e649328f2e06ce4d45c6223628bc39fd178"
                 }
             ]
         },
@@ -310,13 +320,16 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.1.0/mdds-3.1.0.tar.xz",
-                    "sha256": "ca295f4c86968a7eb1f5d503ff7ae180e6605210cfb26d01658be42048c0924c"
+                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.2.1/mdds-3.2.1.tar.xz",
+                    "sha256": "673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc936432f6b0687c112"
                 }
             ]
         },
         {
             "name": "ixion",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
@@ -327,11 +340,30 @@
         },
         {
             "name": "orcus",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
                     "url": "https://gitlab.com/orcus/orcus/-/archive/0.21.0/orcus-0.21.0.tar.bz2",
                     "sha256": "3555660197d6d38d720643f430804bb0f95a484c1fe6c28c00808ae67f978d15"
+                }
+            ]
+        },
+        {
+            "name": "QXlsx",
+            "buildsystem": "cmake-ninja",
+            "subdir": "QXlsx",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/QtExcel/QXlsx/archive/refs/tags/v1.5.0.tar.gz",
+                    "sha256": "4461bb0fc9b88b6a970520e8b32eb7d2fc391a1a5c326b139a0af836278cdb09"
+                },
+                {
+                    "type": "patch",
+                    "path": "admin/patches/QXlsx-1.5.0.patch"
                 }
             ]
         },
@@ -353,28 +385,7 @@
                     "type": "dir",
                     "path": "."
                 }
-            ],
-	    "modules": [
-                {
-		 "name": "llvm18",
-		    "buildsystem": "simple",
-		    "build-commands": [
-			    "cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS=clang -DLLVM_TARGETS_TO_BUILD=Native -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_DOCS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_BENCHMARKS=OFF -DLLVM_ENABLE_ASSERTIONS=OFF -DLLVM_BUILD_TOOLS=OFF -DLLVM_ENABLE_BINDINGS=OFF -DCLANG_BUILD_EXAMPLES=OFF -DLLVM_ENABLE_RTTI=OFF -DLLVM_ENABLE_EH=OFF",
-			    "ninja -C build libclang",
-			    "mkdir -p /app/lib /app/lib/clang/18/include",
-			    "cp -av build/lib/libclang.so.18.1.8 /app/lib",
-                            "ln -s /app/lib/libclang.so.18.1.8 /app/lib/libclang.so.18.1",
-                            "cp -r build/lib/clang/18/include/* /app/lib/clang/18/include/"
-		  ],
-		  "sources": [
-			    {
-			    "type": "archive",
-			    "url": "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/llvm-project-18.1.8.src.tar.xz",
-			    "sha256": "0b58557a6d32ceee97c8d533a59b9212d87e0fc4d2833924eb6c611247db2f2a"
-			}
-		]
-		}
-	    ]
+            ]
         }
     ]
 }

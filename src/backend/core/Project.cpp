@@ -19,6 +19,7 @@
 #ifndef SDK
 #include "backend/statistics/HypothesisTest.h"
 #endif
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
@@ -77,7 +78,7 @@ namespace {
 // the project version will be compared with this.
 // if you make any incompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 16;
+int buildXmlVersion = 21;
 }
 
 /**
@@ -161,7 +162,6 @@ public:
 	}
 
 	Project::DockVisibility dockVisibility{Project::DockVisibility::folderOnly};
-	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
 
 	static int m_versionNumber;
@@ -205,12 +205,13 @@ Project::Project()
 	setIsLoading(true);
 
 	const auto& group = Settings::group(QStringLiteral("Settings_General"));
-	setSaveDefaultDockWidgetState(group.readEntry(QStringLiteral("SaveDefaultDockWidgetState"), false));
-	setSaveCalculations(group.readEntry(QStringLiteral("SaveCalculations"), true));
+	setSaveDefaultDockWidgetState(group.readEntry(QStringLiteral("SaveDefaultDockWidgetState"), saveDefaultDockWidgetState()));
+	setSaveCalculations(group.readEntry(QStringLiteral("SaveCalculations"), saveCalculations()));
+	setFileCompression(group.readEntry("Compressed", !group.readEntry("CompatibleSave", !fileCompression()))); // CompatibleSave was the old name
+	setSaveData(group.readEntry("SaveData", saveData()));
 
 	setUndoAware(true);
 	setIsLoading(false);
-	d->changed = false;
 
 	connect(this, &Project::aspectDescriptionChanged, this, &Project::descriptionChanged);
 	connect(this, &Project::childAspectAdded, this, &Project::aspectAddedSlot);
@@ -334,16 +335,18 @@ void Project::setSaveData(bool save) {
 	setProjectChanged(true);
 }
 
-void Project::setChanged(const bool value) {
+void Project::setChanged(bool value) {
 	if (isLoading())
 		return;
 
-	Q_D(Project);
+	AbstractAspect::setChanged(value);
 
-	d->changed = value;
-
-	if (value)
-		Q_EMIT changed();
+	// when resetting the status of the project after load (changed = false), also recusively update all children
+	if (!value) {
+		const auto& children = this->children<AbstractAspect>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+		for (auto* child : children)
+			child->setChanged(false);
+	}
 }
 
 void Project::setSuppressAspectAddedSignal(bool value) {
@@ -354,11 +357,6 @@ void Project::setSuppressAspectAddedSignal(bool value) {
 bool Project::aspectAddedSignalSuppressed() const {
 	Q_D(const Project);
 	return d->aspectAddedSignalSuppressed;
-}
-
-bool Project::hasChanged() const {
-	Q_D(const Project);
-	return d->changed;
 }
 
 /*!
@@ -399,9 +397,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	updateDependencies<WorksheetElement>({aspect}); // notify all worksheetelements
 	updateDependencies<Spreadsheet>({aspect}); // notify all spreadsheets. Linked spreadsheets
 
-	Q_D(Project);
-	d->changed = true;
-	Q_EMIT changed();
+	setChanged();
 }
 
 /*!
@@ -508,6 +504,8 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
 	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
+	writer->writeAttribute(QStringLiteral("compressed"), QString::number(d->fileCompression));
+	writer->writeAttribute(QStringLiteral("saveData"), QString::number(d->saveData));
 
 	// save the state of the content dock widgets
 	writer->writeAttribute(QStringLiteral("dockWidgetState"), d->dockWidgetState);
@@ -927,7 +925,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 				}
 			}
 
-			column->setChanged();
+			column->setDataChanged();
 		}
 	}
 
@@ -1008,6 +1006,20 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		}
 	}
 
+	// seasonal decompositions
+	QVector<SeasonalDecomposition*> decompositions;
+	if (hasChildren)
+		decompositions = aspect->children<SeasonalDecomposition>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::SeasonalDecomposition)
+		decompositions << static_cast<SeasonalDecomposition*>(aspect);
+
+	for (auto* decomposition : decompositions) {
+		if (!decomposition)
+			continue;
+		RESTORE_COLUMN_POINTER(decomposition, xColumn, XColumn);
+		RESTORE_COLUMN_POINTER(decomposition, yColumn, YColumn);
+	}
+
 	// if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 	for (auto* col : columns) {
 		for (Column* c : columns)
@@ -1018,8 +1030,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	if (hasChildren && Project::xmlVersion() < 9) {
 		const auto& plots = aspect->children<CartesianPlot>(ChildIndexFlag::Recursive);
 		for (const auto* plot : plots) {
-			const auto& axes = plot->children<Axis>(ChildIndexFlag::Recursive);
-			for (auto* axis : axes) {
+			const auto& childAxes = plot->children<Axis>(ChildIndexFlag::Recursive);
+			for (auto* axis : childAxes) {
 				const auto cSystem = plot->coordinateSystem(axis->coordinateSystemIndex());
 				RangeT::Scale scale{RangeT::Scale::Linear};
 				switch (axis->orientation()) {
@@ -1067,9 +1079,9 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 			d->defaultDockWidgetState = attribs.value(QStringLiteral("defaultDockWidgetState")).toString();
 	}
 
-	str = attribs.value(QStringLiteral("saveCalculations")).toString();
-	if (!str.isEmpty())
-		d->saveCalculations = str.toInt();
+	READ_INT_VALUE("compressed", fileCompression, bool);
+	READ_INT_VALUE("saveData", saveData, bool);
+	READ_INT_VALUE("saveCalculations", saveCalculations, bool);
 
 	return true;
 }

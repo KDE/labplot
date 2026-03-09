@@ -298,24 +298,24 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_lorentz:
 		case nsl_fit_model_sech:
 		case nsl_fit_model_logistic:
-			for (int d = 0; d < degree; d++) {
-				paramStartValues[3 * d + 2] = xmin + (d + 1.) * xrange / (degree + 1.); // mu
-				paramStartValues[3 * d + 1] = xrange / (10. * degree); // sigma
-				paramStartValues[3 * d] = paramStartValues[3 * d + 1] * ymax; // A = sigma * ymax
+			for (int deg = 0; deg < degree; deg++) {
+				paramStartValues[3 * deg + 2] = xmin + (deg + 1.) * xrange / (degree + 1.); // mu
+				paramStartValues[3 * deg + 1] = xrange / (10. * degree); // sigma
+				paramStartValues[3 * deg] = paramStartValues[3 * deg + 1] * ymax; // A = sigma * ymax
 			}
 			break;
 		case nsl_fit_model_voigt:
-			for (int d = 0; d < degree; d++) {
-				paramStartValues[4 * d + 1] = xmin + (d + 1.) * xrange / (degree + 1.); // mu
-				paramStartValues[4 * d + 2] = xrange / (10. * degree); // sigma
-				paramStartValues[4 * d + 3] = xrange / (10. * degree); // gamma
+			for (int deg = 0; deg < degree; deg++) {
+				paramStartValues[4 * deg + 1] = xmin + (deg + 1.) * xrange / (degree + 1.); // mu
+				paramStartValues[4 * deg + 2] = xrange / (10. * degree); // sigma
+				paramStartValues[4 * deg + 3] = xrange / (10. * degree); // gamma
 			}
 			break;
 		case nsl_fit_model_pseudovoigt1:
-			for (int d = 0; d < degree; d++) {
-				paramStartValues[4 * d + 1] = 0.5; // eta
-				paramStartValues[4 * d + 2] = xrange / (10. * degree); // sigma
-				paramStartValues[4 * d + 3] = xmin + (d + 1.) * xrange / (degree + 1.); // mu
+			for (int deg = 0; deg < degree; deg++) {
+				paramStartValues[4 * deg + 1] = 0.5; // eta
+				paramStartValues[4 * deg + 2] = xrange / (10. * degree); // sigma
+				paramStartValues[4 * deg + 3] = xmin + (deg + 1.) * xrange / (degree + 1.); // mu
 			}
 			break;
 		}
@@ -373,7 +373,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData) {
  */
 void XYFitCurve::initFitData(XYAnalysisCurve::AnalysisAction action) {
 	// TODO: exclude others too?
-	if (action == XYAnalysisCurve::AnalysisAction::DataReduction)
+	if (action == XYAnalysisCurve::AnalysisAction::LineSimplification)
 		return;
 
 	Q_D(XYFitCurve);
@@ -2048,7 +2048,7 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 	DEBUG(Q_FUNC_INFO << ", fit data range = " << xRange.start() << " .. " << xRange.end());
 
 	prepareResultColumns();
-	const size_t rowCount = tmpXDataColumn->rowCount();
+	const int rowCount = tmpXDataColumn->rowCount();
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
 	residualsVector->resize(rowCount);
@@ -2092,7 +2092,7 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 	if (fitData.autoRange || fitData.algorithm == nsl_fit_algorithm_ml) { // evaluate residuals
 		QVector<double> v;
 		v.resize(rowCount);
-		for (size_t i = 0; i < rowCount; i++)
+		for (int i = 0; i < rowCount; i++)
 			if (tmpXDataColumn->isNumeric())
 				v[i] = tmpXDataColumn->valueAt(i);
 			else if (tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::DateTime)
@@ -2106,11 +2106,11 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 		if (valid) {
 			switch (fitData.algorithm) {
 			case nsl_fit_algorithm_lm:
-				for (size_t i = 0; i < rowCount; i++)
+				for (int i = 0; i < rowCount; i++)
 					(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector).at(i);
 				break;
 			case nsl_fit_algorithm_ml:
-				for (size_t i = 0; i < rowCount; i++) {
+				for (int i = 0; i < rowCount; i++) {
 					// DEBUG("y data / column @" << i << ":" << tmpXDataColumn->valueAt(i))
 					if (xRange.contains(tmpXDataColumn->valueAt(i)))
 						(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector).at(i);
@@ -2132,13 +2132,13 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 }
 
 void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn, const double norm) {
-	const size_t n = tmpXDataColumn->rowCount();
+	const int n = tmpXDataColumn->rowCount();
 
 	fitResult.available = true;
 	fitResult.valid = true;
 	fitResult.status = i18n("Success"); // can it fail in any way?
 
-	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
+	const int np = (int)fitData.paramNames.size(); // number of fit parameters
 	fitResult.dof = n - np;
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
@@ -2251,14 +2251,14 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	case nsl_sf_stats_lognormal: {
 		// calculate mu and sigma
 		double mu = 0.;
-		for (size_t i = 0; i < n; i++)
+		for (int i = 0; i < n; i++)
 			mu += std::log(tmpXDataColumn->valueAt(i));
 		mu /= n;
-		double var = 0.;
-		for (size_t i = 0; i < n; i++)
-			var += gsl_pow_2(std::log(tmpXDataColumn->valueAt(i)) - mu);
-		var /= (n - 1);
-		const double sigma = std::sqrt(var);
+		double variance = 0.;
+		for (int i = 0; i < n; i++)
+			variance += gsl_pow_2(std::log(tmpXDataColumn->valueAt(i)) - mu);
+		variance /= (n - 1);
+		const double sigma = std::sqrt(variance);
 		fitResult.paramValues[1] = sigma;
 		fitResult.paramValues[2] = mu;
 
@@ -2309,7 +2309,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	fitResult.calculateResult(n, np);
 
 	if (fitData.useResults) // set start values
-		for (unsigned int i = 0; i < np; i++)
+		for (int i = 0; i < np; i++)
 			fitData.paramStartValues.data()[i] = fitResult.paramValues.at(i);
 }
 

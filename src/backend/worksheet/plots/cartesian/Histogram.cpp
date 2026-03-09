@@ -4,7 +4,7 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -300,6 +300,19 @@ BASIC_SHARED_D_READER_IMPL(Histogram, double, rugLength, rugLength)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, rugWidth, rugWidth)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, rugOffset, rugOffset)
 
+bool Histogram::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	// The values are not important, because they are just passed to minMax() which does not consider the indices
+	start = 0;
+	end = 0;
+	return true;
+}
+
+bool Histogram::minMax(const Dimension dim, const Range<int>&, Range<double>& r, bool) const {
+	r.setStart(minimum(dim));
+	r.setEnd(maximum(dim));
+	return true;
+}
+
 double Histogram::minimum(const Dimension dim) const {
 	Q_D(const Histogram);
 	switch (dim) {
@@ -325,6 +338,13 @@ double Histogram::maximum(const Dimension dim) const {
 bool Histogram::hasData() const {
 	Q_D(const Histogram);
 	return (d->dataColumn != nullptr);
+}
+
+int Histogram::dataCount(Dimension) const {
+	Q_D(const Histogram);
+	if (!d->dataColumn)
+		return -1;
+	return d->dataColumn->rowCount();
 }
 
 bool Histogram::usingColumn(const AbstractColumn* column, bool) const {
@@ -612,8 +632,8 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 			size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
 			yMaxRange = gsl_histogram_get(m_histogram, maxYAddes);
 			double point = 0.0;
-			for (size_t i = 0; i < m_bins; ++i) {
-				point += gsl_histogram_get(m_histogram, i);
+			for (int i = 0; i < m_bins; ++i) {
+				point += gsl_histogram_get(m_histogram, (size_t)i);
 				if (point > yMaxRange) {
 					yMaxRange = point;
 				}
@@ -708,7 +728,7 @@ const AbstractColumn* HistogramPrivate::bins() {
 
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		m_binsColumn->resizeTo(m_bins);
-		for (size_t i = 0; i < m_bins; ++i) {
+		for (int i = 0; i < m_bins; ++i) {
 			const double x = binRangesMin + i * width + width / 2.;
 			m_binsColumn->setValueAt(i, x);
 		}
@@ -722,10 +742,10 @@ const AbstractColumn* HistogramPrivate::binValues() {
 		m_binValuesColumn = new Column(QStringLiteral("values"));
 
 		m_binValuesColumn->resizeTo(m_bins);
-		double value = 0.;
-		for (size_t i = 0; i < m_bins; ++i) {
-			histogramValue(value, i);
-			m_binValuesColumn->setValueAt(i, value);
+		double val = 0.;
+		for (int i = 0; i < m_bins; ++i) {
+			histogramValue(val, i);
+			m_binValuesColumn->setValueAt(i, val);
 		}
 	}
 
@@ -742,7 +762,7 @@ const AbstractColumn* HistogramPrivate::binPDValues() {
 
 		m_binPDValuesColumn->resizeTo(m_bins);
 		const double width = (binRangesMax - binRangesMin) / m_bins;
-		for (size_t i = 0; i < m_bins; ++i)
+		for (int i = 0; i < m_bins; ++i)
 			m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
 	}
 
@@ -755,7 +775,7 @@ const AbstractColumn* HistogramPrivate::binPDValues() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void HistogramPrivate::retransform() {
-	const bool suppressed = suppressRetransform || q->isLoading();
+	const bool suppressed = retransformSuppressed();
 	Q_EMIT trackRetransformCalled(suppressed);
 	if (suppressed)
 		return;
@@ -848,29 +868,29 @@ void HistogramPrivate::recalc() {
 
 		switch (binningMethod) {
 		case Histogram::ByNumber:
-			m_bins = (size_t)binCount;
+			m_bins = binCount;
 			break;
 		case Histogram::ByWidth:
-			m_bins = (size_t)(binRangesMax - binRangesMin) / binWidth;
+			m_bins = (int)(binRangesMax - binRangesMin) / binWidth;
 			break;
 		case Histogram::SquareRoot:
-			m_bins = (size_t)sqrt(count);
+			m_bins = (int)sqrt(count);
 			break;
 		case Histogram::Rice:
-			m_bins = (size_t)2 * cbrt(count);
+			m_bins = (int)2 * cbrt(count);
 			break;
 		case Histogram::Sturges:
-			m_bins = (size_t)1 + log2(count);
+			m_bins = (int)(1 + log2(count));
 			break;
 		case Histogram::Doane: {
 			const double skewness = static_cast<const Column*>(dataColumn)->statistics().skewness;
-			m_bins = (size_t)(1 + log2(count) + log2(1 + abs(skewness) / sqrt((double)6 * (count - 2) / (count + 1) / (count + 3))));
+			m_bins = (int)(1 + log2(count) + log2(1 + abs(skewness) / sqrt((double)6 * (count - 2) / (count + 1) / (count + 3))));
 			break;
 		}
 		case Histogram::Scott: {
 			const double sigma = static_cast<const Column*>(dataColumn)->statistics().standardDeviation;
 			const double width = 3.5 * sigma / cbrt(count);
-			m_bins = (size_t)(binRangesMax - binRangesMin) / width;
+			m_bins = (int)(binRangesMax - binRangesMin) / width;
 			break;
 		}
 		}
@@ -906,30 +926,30 @@ void HistogramPrivate::recalc() {
 			}
 
 			totalCount = 0;
-			for (size_t i = 0; i < m_bins; ++i)
+			for (int i = 0; i < m_bins; ++i)
 				totalCount += gsl_histogram_get(m_histogram, i);
 
 			// fill the columns for the positions and values of the bins
 			if (m_binsColumn) {
 				m_binsColumn->resizeTo(m_bins);
 				const double width = (binRangesMax - binRangesMin) / m_bins;
-				for (size_t i = 0; i < m_bins; ++i)
+				for (int i = 0; i < m_bins; ++i)
 					m_binsColumn->setValueAt(i, binRangesMin + i * width);
 			}
 
 			if (m_binValuesColumn) {
 				m_binValuesColumn->resizeTo(m_bins);
-				double value = 0.;
-				for (size_t i = 0; i < m_bins; ++i) {
-					histogramValue(value, i);
-					m_binValuesColumn->setValueAt(i, value);
+				double val = 0.;
+				for (int i = 0; i < m_bins; ++i) {
+					histogramValue(val, i);
+					m_binValuesColumn->setValueAt(i, val);
 				}
 			}
 
 			if (m_binPDValuesColumn) {
 				m_binPDValuesColumn->resizeTo(m_bins);
 				const double width = (binRangesMax - binRangesMin) / m_bins;
-				for (size_t i = 0; i < m_bins; ++i)
+				for (int i = 0; i < m_bins; ++i)
 					m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
 			}
 		} else
@@ -989,50 +1009,50 @@ void HistogramPrivate::updateLines() {
 	q->cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
 
 	// new line path
-	for (const auto& line : lines) {
-		linePath.moveTo(line.p1());
-		linePath.lineTo(line.p2());
+	for (const auto& l : lines) {
+		linePath.moveTo(l.p1());
+		linePath.lineTo(l.p2());
 	}
 
 	updateFilling();
 	recalcShapeAndBoundingRect();
 }
 
-void HistogramPrivate::histogramValue(double& value, int bin) const {
+void HistogramPrivate::histogramValue(double& val, int bin) const {
 	switch (normalization) {
 	case Histogram::Count:
 		if (type == Histogram::Ordinary)
-			value = gsl_histogram_get(m_histogram, bin);
+			val = gsl_histogram_get(m_histogram, bin);
 		else
-			value += gsl_histogram_get(m_histogram, bin);
+			val += gsl_histogram_get(m_histogram, bin);
 		break;
 	case Histogram::Probability:
 		if (type == Histogram::Ordinary)
-			value = gsl_histogram_get(m_histogram, bin) / totalCount;
+			val = gsl_histogram_get(m_histogram, bin) / totalCount;
 		else
-			value += gsl_histogram_get(m_histogram, bin) / totalCount;
+			val += gsl_histogram_get(m_histogram, bin) / totalCount;
 		break;
 	case Histogram::CountDensity: {
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		if (type == Histogram::Ordinary)
-			value = gsl_histogram_get(m_histogram, bin) / width;
+			val = gsl_histogram_get(m_histogram, bin) / width;
 		else
-			value += gsl_histogram_get(m_histogram, bin) / width;
+			val += gsl_histogram_get(m_histogram, bin) / width;
 		break;
 	}
 	case Histogram::ProbabilityDensity: {
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		if (type == Histogram::Ordinary)
-			value = gsl_histogram_get(m_histogram, bin) / totalCount / width;
+			val = gsl_histogram_get(m_histogram, bin) / totalCount / width;
 		else
-			value += gsl_histogram_get(m_histogram, bin) / totalCount / width;
+			val += gsl_histogram_get(m_histogram, bin) / totalCount / width;
 		break;
 	}
 	}
 
 	// don't use the exact 0.0 for probability or density since it breaks the histogram with log-scaling
-	if (value == 0.0 && normalization != Histogram::Count)
-		value = zero;
+	if (val == 0.0 && normalization != Histogram::Count)
+		val = zero;
 }
 
 void HistogramPrivate::verticalHistogram() {
@@ -1040,53 +1060,53 @@ void HistogramPrivate::verticalHistogram() {
 		return;
 
 	const double width = (binRangesMax - binRangesMin) / m_bins;
-	double value = 0.;
+	double val = 0.;
 	const auto lineType = line->histogramLineType();
 	switch (lineType) {
 	case Histogram::Bars: {
-		for (size_t i = 0; i < m_bins; ++i) {
-			histogramValue(value, i);
+		for (int i = 0; i < m_bins; ++i) {
+			histogramValue(val, i);
 			const double x = binRangesMin + i * width;
-			lines.append(QLineF(x, zero, x, value));
-			lines.append(QLineF(x, value, x + width, value));
-			lines.append(QLineF(x + width, value, x + width, zero));
-			pointsLogical.append(QPointF(x + width / 2, value));
+			lines.append(QLineF(x, zero, x, val));
+			lines.append(QLineF(x, val, x + width, val));
+			lines.append(QLineF(x + width, val, x + width, zero));
+			pointsLogical.append(QPointF(x + width / 2, val));
 		}
 		break;
 	}
 	case Histogram::NoLine:
 	case Histogram::Envelope: {
 		double prevValue = 0.;
-		for (size_t i = 0; i < m_bins; ++i) {
-			histogramValue(value, i);
+		for (int i = 0; i < m_bins; ++i) {
+			histogramValue(val, i);
 			const double x = binRangesMin + i * width;
-			lines.append(QLineF(x, prevValue, x, value));
-			lines.append(QLineF(x, value, x + width, value));
-			pointsLogical.append(QPointF(x + width / 2, value));
+			lines.append(QLineF(x, prevValue, x, val));
+			lines.append(QLineF(x, val, x + width, val));
+			pointsLogical.append(QPointF(x + width / 2, val));
 
 			if (i == m_bins - 1)
-				lines.append(QLineF(x + width, value, x + width, zero));
+				lines.append(QLineF(x + width, val, x + width, zero));
 
-			prevValue = value;
+			prevValue = val;
 		}
 		break;
 	}
 	case Histogram::DropLines: {
-		for (size_t i = 0; i < m_bins; ++i) {
-			histogramValue(value, i);
+		for (int i = 0; i < m_bins; ++i) {
+			histogramValue(val, i);
 			const double x = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(x, zero, x, value));
-			pointsLogical.append(QPointF(x, value));
+			lines.append(QLineF(x, zero, x, val));
+			pointsLogical.append(QPointF(x, val));
 		}
 		break;
 	}
 	case Histogram::HalfBars: {
-		for (size_t i = 0; i < m_bins; ++i) {
-			histogramValue(value, i);
+		for (int i = 0; i < m_bins; ++i) {
+			histogramValue(val, i);
 			const double x = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(x, zero, x, value));
-			lines.append(QLineF(x, value, x - width / 4, value));
-			pointsLogical.append(QPointF(x, value));
+			lines.append(QLineF(x, zero, x, val));
+			lines.append(QLineF(x, val, x - width / 4, val));
+			pointsLogical.append(QPointF(x, val));
 		}
 		break;
 	}
@@ -1101,53 +1121,53 @@ void HistogramPrivate::horizontalHistogram() {
 		return;
 
 	const double width = (binRangesMax - binRangesMin) / m_bins;
-	double value = 0.;
+	double val = 0.;
 	const auto lineType = line->histogramLineType();
 	switch (lineType) {
 	case Histogram::Bars: {
-		for (size_t i = 0; i < m_bins; ++i) {
-			histogramValue(value, i);
+		for (int i = 0; i < m_bins; ++i) {
+			histogramValue(val, i);
 			const double y = binRangesMin + i * width;
-			lines.append(QLineF(zero, y, value, y));
-			lines.append(QLineF(value, y, value, y + width));
-			lines.append(QLineF(value, y + width, zero, y + width));
-			pointsLogical.append(QPointF(value, y + width / 2));
+			lines.append(QLineF(zero, y, val, y));
+			lines.append(QLineF(val, y, val, y + width));
+			lines.append(QLineF(val, y + width, zero, y + width));
+			pointsLogical.append(QPointF(val, y + width / 2));
 		}
 		break;
 	}
 	case Histogram::NoLine:
 	case Histogram::Envelope: {
 		double prevValue = 0.;
-		for (size_t i = 0; i < m_bins; ++i) {
-			histogramValue(value, i);
+		for (int i = 0; i < m_bins; ++i) {
+			histogramValue(val, i);
 			const double y = binRangesMin + i * width;
-			lines.append(QLineF(prevValue, y, value, y));
-			lines.append(QLineF(value, y, value, y + width));
-			pointsLogical.append(QPointF(value, y + width / 2));
+			lines.append(QLineF(prevValue, y, val, y));
+			lines.append(QLineF(val, y, val, y + width));
+			pointsLogical.append(QPointF(val, y + width / 2));
 
 			if (i == m_bins - 1)
-				lines.append(QLineF(value, y + width, zero, y + width));
+				lines.append(QLineF(val, y + width, zero, y + width));
 
-			prevValue = value;
+			prevValue = val;
 		}
 		break;
 	}
 	case Histogram::DropLines: {
-		for (size_t i = 0; i < m_bins; ++i) {
-			histogramValue(value, i);
+		for (int i = 0; i < m_bins; ++i) {
+			histogramValue(val, i);
 			const double y = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(zero, y, value, y));
-			pointsLogical.append(QPointF(value, y));
+			lines.append(QLineF(zero, y, val, y));
+			pointsLogical.append(QPointF(val, y));
 		}
 		break;
 	}
 	case Histogram::HalfBars: {
-		for (size_t i = 0; i < m_bins; ++i) {
-			histogramValue(value, i);
+		for (int i = 0; i < m_bins; ++i) {
+			histogramValue(val, i);
 			const double y = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(zero, y, value, y));
-			lines.append(QLineF(value, y, value, y + width / 4));
-			pointsLogical.append(QPointF(value, y));
+			lines.append(QLineF(zero, y, val, y));
+			lines.append(QLineF(val, y, val, y + width / 4));
+			pointsLogical.append(QPointF(val, y));
 		}
 		break;
 	}
@@ -1202,19 +1222,19 @@ void HistogramPrivate::updateValues() {
 	if (value->type() == Value::BinEntries) {
 		switch (type) {
 		case Histogram::Ordinary:
-			for (size_t i = 0; i < m_bins; ++i) {
+			for (int i = 0; i < m_bins; ++i) {
 				if (!visiblePoints[i])
 					continue;
 				valuesStrings << valuesPrefix + numberLocale.toString(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
 			}
 			break;
 		case Histogram::Cumulative: {
-			int value = 0;
-			for (size_t i = 0; i < m_bins; ++i) {
+			int sum = 0;
+			for (int i = 0; i < m_bins; ++i) {
 				if (!visiblePoints[i])
 					continue;
-				value += gsl_histogram_get(m_histogram, i);
-				valuesStrings << valuesPrefix + numberLocale.toString(value) + valuesSuffix;
+				sum += gsl_histogram_get(m_histogram, i);
+				valuesStrings << valuesPrefix + numberLocale.toString(sum) + valuesSuffix;
 			}
 			break;
 		}
@@ -1352,7 +1372,7 @@ void HistogramPrivate::updateFilling() {
 		return;
 	}
 
-	const auto& lines = linesUnclipped;
+	const auto& ulines = linesUnclipped;
 	if (lines.isEmpty())
 		return;
 
@@ -1360,9 +1380,9 @@ void HistogramPrivate::updateFilling() {
 	// out of them that will be filled out.
 	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
 	int i = 0;
-	for (const auto& line : lines) {
+	for (const auto& uline : ulines) {
 		// clip the first point of the line
-		QPointF p1 = line.p1();
+		QPointF p1 = uline.p1();
 		if (p1.x() < dataRect.left())
 			p1.setX(dataRect.left());
 		else if (p1.x() > dataRect.right())
@@ -1374,7 +1394,7 @@ void HistogramPrivate::updateFilling() {
 			p1.setY(dataRect.bottom());
 
 		// clip the second point of the line
-		QPointF p2 = line.p2();
+		QPointF p2 = uline.p2();
 		if (p2.x() < dataRect.left())
 			p2.setX(dataRect.left());
 		else if (p2.x() > dataRect.right())
@@ -1385,7 +1405,7 @@ void HistogramPrivate::updateFilling() {
 		else if (p2.y() > dataRect.bottom())
 			p2.setY(dataRect.bottom());
 
-		if (i != lines.size() - 1)
+		if (i != ulines.size() - 1)
 			fillPolygon << p1;
 		else {
 			// close the polygon for the last line,
@@ -1779,16 +1799,16 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	Q_D(Histogram);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const QColor color = plot->plotColor(index);
 
 	QPen p;
 	d->suppressRecalc = true;
 
-	d->line->loadThemeConfig(group, themeColor);
-	d->symbol->loadThemeConfig(group, themeColor);
-	d->value->loadThemeConfig(group, themeColor);
-	d->background->loadThemeConfig(group, themeColor);
-	d->errorBar->loadThemeConfig(group, themeColor);
+	d->line->loadThemeConfig(group, color);
+	d->symbol->loadThemeConfig(group, color);
+	d->value->loadThemeConfig(group, color);
+	d->background->loadThemeConfig(group, color);
+	d->errorBar->loadThemeConfig(group, color);
 
 	if (plot->theme() == QLatin1String("Tufte")) {
 		d->line->setHistogramLineType(Histogram::LineType::HalfBars);

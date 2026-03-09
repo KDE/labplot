@@ -1,8 +1,18 @@
+/*
+	File                 : XYAnalysisCurveDock.cpp
+	Project              : LabPlot
+	Description          : Dock widget for analysis curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #include "XYAnalysisCurveDock.h"
 
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <QKeyEvent>
+#include <QPushButton>
 
 XYAnalysisCurveDock::XYAnalysisCurveDock(QWidget* parent, RequiredDataSource requiredDataSource)
 	: XYCurveDock(parent)
@@ -106,7 +116,7 @@ void XYAnalysisCurveDock::setModelCurve(TreeViewComboBox* cb) {
 	cb->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve : m_curvesList)
+	for (const auto* curve : m_curvesList)
 		hiddenAspects << curve;
 	cb->setHiddenAspects(hiddenAspects);
 
@@ -183,9 +193,9 @@ void XYAnalysisCurveDock::enableRecalculate() const {
 	// enable the recalculate button if all required data source columns were provided, disable otherwise
 	bool hasSourceData = false;
 	if (m_analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		AbstractAspect* aspectX = nullptr;
-		AbstractAspect* aspectY = nullptr;
-		AbstractAspect* aspectY2 = nullptr;
+		const AbstractAspect* aspectX = nullptr;
+		const AbstractAspect* aspectY = nullptr;
+		const AbstractAspect* aspectY2 = nullptr;
 		switch (m_requiredDataSource) {
 		case RequiredDataSource::XY: {
 			aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());

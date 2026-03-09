@@ -21,9 +21,7 @@ public:
 	explicit ColorMapsDialog(QWidget*);
 	~ColorMapsDialog() override;
 
-	QPixmap previewPixmap() const;
 	QString name() const;
-	QVector<QColor> colors() const;
 
 private:
 	ColorMapsWidget* m_colorMapsWidget;

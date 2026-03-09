@@ -14,7 +14,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <KLocalizedString>
 #include <QDebug> // qWarning()
 #include <QElapsedTimer>
 #include <QIcon>

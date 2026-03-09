@@ -80,7 +80,7 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 
 	auto* item = selectedItems.last();
 	int column = ui.twDataRegions->currentColumn();
-	int row = ui.twDataRegions->currentIndex().row();
+	int currentRow = ui.twDataRegions->currentIndex().row();
 	const auto& selectedRegionText = item->text(column);
 	auto* const filter = static_cast<XLSXFilter*>(m_fileWidget->currentFileFilter());
 
@@ -111,7 +111,7 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 		Q_EMIT m_fileWidget->enableImportToMatrix(regionCanBeImportedToMatrix);
 
 		// sheet name - item row will identify the region
-		const auto mapVal = qMakePair(sheetName, row);
+		const auto mapVal = qMakePair(sheetName, currentRow);
 		// this region was not currently selected
 		if (m_regionIsPossibleToImportToMatrix.find(mapVal) != m_regionIsPossibleToImportToMatrix.end())
 			m_regionIsPossibleToImportToMatrix.insert(mapVal, regionCanBeImportedToMatrix);
@@ -135,8 +135,8 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 
 				if (firstRowAsHeader) {
 					for (int col = 0; col < colCount; ++col) {
-						auto* item = new QTableWidgetItem(lineString.at(col));
-						ui.twPreview->setHorizontalHeaderItem(col, item);
+						auto* twitem = new QTableWidgetItem(lineString.at(col));
+						ui.twPreview->setHorizontalHeaderItem(col, twitem);
 					}
 					continue; // data used as header
 				} else {
@@ -146,19 +146,19 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 						//  TODO: show column modes?
 						// auto* item = new QTableWidgetItem(colName + QStringLiteral(" {") + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode,
 						//	filter->columnModes().at(i))) + QStringLiteral("}"));
-						auto* item = new QTableWidgetItem(colName);
+						auto* headerItem = new QTableWidgetItem(colName);
 
-						ui.twPreview->setHorizontalHeaderItem(col, item);
+						ui.twPreview->setHorizontalHeaderItem(col, headerItem);
 					}
 				}
 			}
 
-			auto* item = new QTableWidgetItem(QString::number(selectedRegion.firstRow() + row - firstRowAsHeader));
-			ui.twPreview->setVerticalHeaderItem(row - firstRowAsHeader, item);
+			auto* rowHeaderItem = new QTableWidgetItem(QString::number(selectedRegion.firstRow() + row - firstRowAsHeader));
+			ui.twPreview->setVerticalHeaderItem(row - firstRowAsHeader, rowHeaderItem);
 
 			for (int col = 0; col < colCount; ++col) {
-				auto* item = new QTableWidgetItem(lineString.at(col));
-				ui.twPreview->setItem(row - firstRowAsHeader, col, item);
+				auto* citem = new QTableWidgetItem(lineString.at(col));
+				ui.twPreview->setItem(row - firstRowAsHeader, col, citem);
 			}
 		}
 		ui.twPreview->resizeColumnsToContents();

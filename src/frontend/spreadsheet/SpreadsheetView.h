@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -145,9 +145,9 @@ private:
 	QAction* action_fill_row_numbers{nullptr};
 	QAction* action_fill_random{nullptr};
 	QAction* action_fill_equidistant{nullptr};
+	QAction* action_fill_equidistant_datetime{nullptr};
 	QAction* action_fill_random_nonuniform{nullptr};
 	QAction* action_fill_const{nullptr};
-	QAction* action_fill_function{nullptr};
 
 	// spreadsheet related actions
 	QAction* action_toggle_comments{nullptr};
@@ -155,6 +155,7 @@ private:
 	QAction* action_select_all{nullptr};
 	QAction* action_clear_spreadsheet{nullptr};
 	QAction* action_clear_masks{nullptr};
+	QAction* action_transpose{nullptr};
 	QAction* action_formatting_heatmap{nullptr};
 	QAction* action_formatting_remove{nullptr};
 	QAction* action_go_to_cell{nullptr};
@@ -213,15 +214,12 @@ private:
 	// analysis and plot data menu actions
 	QActionGroup* plotDataActionGroup{nullptr};
 	QAction* addDataOperationAction{nullptr};
-	QAction* addDataReductionAction{nullptr};
-	QAction* addDifferentiationAction{nullptr};
-	QAction* addIntegrationAction{nullptr};
-	QAction* addInterpolationAction{nullptr};
-	QAction* addSmoothAction{nullptr};
-	QAction* addFourierFilterAction{nullptr};
 	QActionGroup* addAnalysisActionGroup{nullptr};
 	QActionGroup* addFitActionGroup{nullptr};
 	QActionGroup* addDistributionFitActionGroup{nullptr};
+
+	// time series analysis
+	QAction* tsaSeasonalDecompositionAction{nullptr};
 
 	// hypothesis testing
 	QActionGroup* addHypothesisTestActionGroup{nullptr};
@@ -239,8 +237,8 @@ private:
 	QMenu* m_spreadsheetMenu{nullptr};
 	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_analyzePlotMenu{nullptr};
-	// hypothesis related menu
 	QMenu* m_statisticalAnalysisMenu{nullptr};
+	QMenu* m_timeSeriesAnalysisMenu{nullptr};
 	QMenu* m_hypothesisTestMenu{nullptr};
 
 	bool m_suppressResize{false};
@@ -294,11 +292,13 @@ private Q_SLOTS:
 	void plotAnalysisData(QAction*);
 	void plotDataDistributionFit(QAction*);
 
+	void addSeasonalDecomposition();
+
 	void fillSelectedCellsWithRowNumbers();
 	void fillSelectedCellsWithRandomNumbers();
 	void fillWithRandomValues();
 	void fillWithEquidistantValues();
-	void fillWithFunctionValues();
+	void fillWithEquidistantDateTimeValues();
 	void fillSelectedCellsWithConstValues();
 
 	void insertRowsAbove();
@@ -315,6 +315,7 @@ private Q_SLOTS:
 	void maskColumnValues();
 	void sampleColumnValues();
 	void flattenColumns();
+	void transpose();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
 

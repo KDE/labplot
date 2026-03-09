@@ -15,7 +15,14 @@
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #ifdef HAVE_LIBORIGIN
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include <OriginFile.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 class Axis;

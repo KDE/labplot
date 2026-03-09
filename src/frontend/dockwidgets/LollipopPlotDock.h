@@ -15,6 +15,7 @@
 #include "ui_lollipopplotdock.h"
 
 class AbstractAspect;
+class DataColumnsWidget;
 class LineWidget;
 class SymbolWidget;
 class ValueWidget;
@@ -39,11 +40,7 @@ private:
 	QList<LollipopPlot*> m_plots;
 	LollipopPlot* m_plot{nullptr};
 	TreeViewComboBox* cbXColumn{nullptr};
-
-	QGridLayout* m_gridLayout;
-	QPushButton* m_buttonNew;
-	QVector<TreeViewComboBox*> m_dataComboBoxes;
-	QVector<QPushButton*> m_removeButtons;
+	DataColumnsWidget* m_dataColumnsWidget{nullptr};
 
 	void setModel();
 	void load();
@@ -57,9 +54,7 @@ private Q_SLOTS:
 	//"General"-tab
 	void xColumnChanged(const QModelIndex&);
 	void removeXColumn();
-	void addDataColumn();
-	void removeDataColumn();
-	void dataColumnChanged(const QModelIndex&);
+	void dataColumnsChanged(QVector<const AbstractColumn*>);
 	void orientationChanged(int);
 
 	//"Line"-tab

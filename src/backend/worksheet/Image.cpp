@@ -318,9 +318,9 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 	if ((hovered || selected) && !q->isPrinting()) {
 		static double penWidth = 2.;
 		const QRectF& br = boundingRect();
-		const qreal width = br.width();
-		const qreal height = br.height();
-		const QRectF rect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
+		const qreal w = br.width();
+		const qreal h = br.height();
+		const QRectF rect = QRectF(-w / 2 + penWidth / 2, -h / 2 + penWidth / 2, w - penWidth, h - penWidth);
 
 		if (hovered)
 			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));

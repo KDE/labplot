@@ -391,11 +391,11 @@ void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const
 	// for the just selected aspect, determine all the objects it depends on and select them, too
 	// TODO: we need a better "selection", maybe with tri-state check boxes in the tree view
 	const auto* aspect = static_cast<const AbstractAspect*>(indexes.at(0).internalPointer());
-	const QVector<AbstractAspect*> aspects = aspect->dependsOn();
+	const QVector<AbstractAspect*> dependAspects = aspect->dependsOn();
 
 	const auto* model = reinterpret_cast<AspectTreeModel*>(ui.tvPreview->model());
-	for (const auto* aspect : aspects) {
-		QModelIndex index = model->modelIndexOfAspect(aspect, 0);
+	for (const auto* dependAspect : dependAspects) {
+		QModelIndex index = model->modelIndexOfAspect(dependAspect, 0);
 		ui.tvPreview->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 	}
 

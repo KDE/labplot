@@ -97,7 +97,7 @@ public:
 
 private:
 	gsl_histogram* m_histogram{nullptr};
-	size_t m_bins{0};
+	int m_bins{0};
 	Column* m_binsColumn{nullptr}; // bin positions/edges
 	Column* m_binValuesColumn{nullptr}; // bin values
 	Column* m_binPDValuesColumn{nullptr}; // bin values in the probability density normalization

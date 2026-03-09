@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -45,9 +45,7 @@
  * In contrast to the similar feature of QObject, Aspect trees are fully undo/redo aware and provide
  * signals around object adding/removal.
  *
- * AbstractAspect manages for every Aspect the properties #name, #comment, #captionSpec and
- * #creationTime. All of these translate into the caption() as described in the documentation
- * of setCaptionSpec().
+ * AbstractAspect manages for every Aspect the properties #name, #comment and #creationTime.
  *
  * If an undoStack() can be found (usually it is managed by Project), changes to the properties
  * as well as adding/removing children support multi-level undo/redo. In order to support undo/redo
@@ -266,6 +264,13 @@ QDateTime AbstractAspect::creationTime() const {
 	return d->m_creation_time;
 }
 
+QString AbstractAspect::caption() const {
+	QString caption = QLatin1String("<b>") + d->m_name + QLatin1String("</b>");
+	if (!d->m_comment.isEmpty())
+		caption += QLatin1String("<br><br>") + d->m_comment.replace(QLatin1Char('\n'), QLatin1String("<br>"));
+	return caption;
+}
+
 bool AbstractAspect::isHidden() const {
 	return d->m_hidden;
 }
@@ -280,7 +285,14 @@ void AbstractAspect::setHidden(bool value) {
 }
 
 /**
- * \brief Set "fixed" property which defines whether the object can be renamed, deleted, etc.
+ * \brief Set "fixed" property which is used to define internal created aspects used by other aspects
+ * It defines whether the object properties can be modified. If false any of the below data shall be
+ * modifyable (Must be done by the developer):
+ * - deleting
+ * - moving (order of the objects)
+ * - data changed (Column: row values changing, XYCurve: Changing the data columns, ...)
+ *
+ * Other properties like appearance properties shall still be modifyable
  */
 void AbstractAspect::setFixed(bool value) {
 	if (value == d->m_fixed)
@@ -306,6 +318,25 @@ void AbstractAspect::setIsLoading(bool load) {
 
 bool AbstractAspect::isLoading() const {
 	return d->m_isLoading;
+}
+
+void AbstractAspect::setChanged(bool changed) {
+	if (d->m_changed == changed || d->m_isLoading)
+		return;
+
+	d->m_changed = changed;
+
+	// update the status for the parent aspect if the current aspect is hidden
+	// to properly show the changed status in the aspect tree model
+	if (d->m_hidden && changed)
+		if (auto* p = parentAspect())
+			p->setChanged(true);
+
+	Q_EMIT aspectChangedStatusChanged(this);
+}
+
+bool AbstractAspect::isChanged() const {
+	return d->m_changed;
 }
 
 /**
@@ -512,7 +543,7 @@ QString AbstractAspect::path() const {
  * \brief Add the given Aspect to my list of children.
  */
 bool AbstractAspect::addChild(AbstractAspect* child) {
-	Q_CHECK_PTR(child);
+	Q_ASSERT(child);
 
 	const QString new_name = uniqueNameFor(child->name());
 	beginMacro(i18n("%1: add %2", name(), new_name));
@@ -546,7 +577,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 }
 
 void AbstractAspect::insertChild(AbstractAspect* child, int index) {
-	Q_CHECK_PTR(child);
+	Q_ASSERT(child);
 	if (index == -1)
 		index = d->m_children.count();
 
@@ -936,6 +967,8 @@ bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
 void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QLatin1String("creation_time"), creationTime().toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QLatin1String("name"), name());
+	writer->writeAttribute(QLatin1String("fixed"), QString::number(isFixed()));
+	writer->writeAttribute(QLatin1String("undoAware"), QString::number(isUndoAware()));
 	if (!d->m_suppressWriteUuid)
 		writer->writeAttribute(QLatin1String("uuid"), uuid().toString());
 }
@@ -952,7 +985,6 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 	QString str = attribs.value(QLatin1String("name")).toString();
 	if (str.isEmpty())
 		reader->raiseWarning(i18n("Attribute 'name' is missing or empty."));
-
 	d->m_name = str;
 
 	// creation time
@@ -968,10 +1000,18 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 			d->m_creation_time = QDateTime::currentDateTime();
 	}
 
+	str = attribs.value(QLatin1String("fixed")).toString();
+	if (!str.isEmpty())
+		d->m_fixed = static_cast<bool>(str.toInt());
+
+	str = attribs.value(QLatin1String("undoAware")).toString();
+	if (!str.isEmpty())
+		d->m_undoAware = static_cast<bool>(str.toInt());
+
 	str = attribs.value(QLatin1String("uuid")).toString();
-	if (!str.isEmpty()) {
+	if (!str.isEmpty())
 		d->m_uuid = QUuid(str);
-	}
+
 	return true;
 }
 
@@ -1015,7 +1055,7 @@ QUndoStack* AbstractAspect::undoStack() const {
  * \brief Execute the given command, pushing it on the undoStack() if available.
  */
 void AbstractAspect::exec(QUndoCommand* cmd) {
-	Q_CHECK_PTR(cmd);
+	Q_ASSERT(cmd);
 	if (d->m_undoAware && (project() && project()->isUndoAware())) {
 		auto* stack = undoStack();
 		if (stack)
@@ -1031,6 +1071,8 @@ void AbstractAspect::exec(QUndoCommand* cmd) {
 		cmd->redo();
 		delete cmd;
 	}
+
+	setChanged(true);
 }
 
 /**
@@ -1190,6 +1232,7 @@ QString AbstractAspect::uniqueNameFor(const QString& name, const QStringList& na
 void AbstractAspect::connectChild(AbstractAspect* child) {
 	connect(child, &AbstractAspect::aspectDescriptionAboutToChange, this, &AbstractAspect::aspectDescriptionAboutToChange);
 	connect(child, &AbstractAspect::aspectDescriptionChanged, this, &AbstractAspect::aspectDescriptionChanged);
+	connect(child, &AbstractAspect::aspectChangedStatusChanged, this, &AbstractAspect::aspectChangedStatusChanged);
 	connect(child,
 			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
 			this,

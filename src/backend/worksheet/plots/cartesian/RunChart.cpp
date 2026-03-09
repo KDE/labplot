@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Run Chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -202,6 +202,12 @@ Symbol* RunChart::dataSymbol() const {
 	return d->dataCurve->symbol();
 }
 
+bool RunChart::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	start = 0;
+	end = xIndexCount() - 1;
+	return true;
+}
+
 bool RunChart::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
 	Q_D(const RunChart);
 	return d->dataCurve->minMax(dim, indexRange, r, false);
@@ -220,6 +226,13 @@ double RunChart::maximum(const Dimension dim) const {
 bool RunChart::hasData() const {
 	Q_D(const RunChart);
 	return (d->dataColumn != nullptr);
+}
+
+int RunChart::dataCount(Dimension) const {
+	Q_D(const RunChart);
+	if (!d->dataColumn)
+		return -1;
+	return d->dataColumn->rowCount();
 }
 
 bool RunChart::usingColumn(const AbstractColumn* column, bool) const {
@@ -324,11 +337,7 @@ RunChartPrivate::~RunChartPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void RunChartPrivate::retransform() {
-	const bool suppressed = suppressRetransform || q->isLoading();
-	if (suppressed)
-		return;
-
-	if (!isVisible())
+	if (retransformSuppressed())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
@@ -520,16 +529,16 @@ void RunChart::loadThemeConfig(const KConfig& config) {
 	Q_D(RunChart);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	QColor themeColor = plot->themeColorPalette(index);
+	QColor color = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
-	d->dataCurve->line()->loadThemeConfig(group, themeColor);
-	d->dataCurve->symbol()->loadThemeConfig(group, themeColor);
+	d->dataCurve->line()->loadThemeConfig(group, color);
+	d->dataCurve->symbol()->loadThemeConfig(group, color);
 
-	themeColor = plot->themeColorPalette(index + 1);
+	color = plot->plotColor(index + 1);
 
-	d->centerCurve->line()->loadThemeConfig(group, themeColor);
+	d->centerCurve->line()->loadThemeConfig(group, color);
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->suppressRecalc = false;

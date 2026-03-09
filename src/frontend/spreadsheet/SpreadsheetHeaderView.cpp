@@ -11,8 +11,12 @@
 #include "SpreadsheetHeaderView.h"
 #include "SpreadsheetCommentsHeaderModel.h"
 #include "SpreadsheetSparkLineHeaderModel.h"
+#include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 #include <QPainter>
+#include <QHelpEvent>
+#include <QToolTip>
 
 /*!
  * \class SpreadsheetCommentsHeaderView
@@ -94,8 +98,9 @@ SpreadsheetSparkLinesHeaderModel* SpreadsheetSparkLineHeaderView::getModel() con
  * \sa QHeaderView
  * \ingroup frontend
 */
-SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)
+SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent, const Spreadsheet* spreadsheet)
 	: QHeaderView(Qt::Horizontal, parent)
+	, m_spreadsheet(spreadsheet)
 	, m_commentSlave(new SpreadsheetCommentsHeaderView())
 	, m_sparklineSlave(new SpreadsheetSparkLineHeaderView()) {
 	setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -131,8 +136,8 @@ SpreadsheetSparkLinesHeaderModel* SpreadsheetHeaderView::model() const {
 
 void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
 	QRect master_rect = rect;
-	auto* model = m_sparklineSlave->getModel();
-	QPixmap pixmap = model->headerData(logicalIndex, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::SparkLineRole)).value<QPixmap>();
+	const auto* sparklineModel = m_sparklineSlave->getModel();
+	auto pixmap = sparklineModel->headerData(logicalIndex, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::SparkLineRole)).value<QPixmap>();
 
 	// Handle header painting for different sections
 	if (m_showComments && m_showSparklines) {
@@ -149,6 +154,7 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 	QHeaderView::paintSection(painter, master_rect, logicalIndex);
 	painter->restore();
 
+	// TODO: m_showSparklines, m_showComments checked twice!
 	if (m_showComments && m_showSparklines && rect.height() > QHeaderView::sizeHint().height()) {
 		if (m_showSparklines) {
 			QRect slave2_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, -m_commentSlave->sizeHint().height());
@@ -238,4 +244,16 @@ void SpreadsheetHeaderView::headerDataChanged(Qt::Orientation orientation, int /
 		return;
 	if (orientation == Qt::Horizontal)
 		refresh();
+}
+
+bool SpreadsheetHeaderView::viewportEvent(QEvent* e) {
+	if (e->type() == QEvent::ToolTip) {
+		auto* helpEvent = static_cast<QHelpEvent*>(e);
+		const int logicalIndex = logicalIndexAt(helpEvent->pos());
+		auto* col = m_spreadsheet->column(logicalIndex);
+		if (col)
+			QToolTip::showText(helpEvent->globalPos(), col->caption(), this);
+		return true;
+	}
+	return QHeaderView::viewportEvent(e);
 }

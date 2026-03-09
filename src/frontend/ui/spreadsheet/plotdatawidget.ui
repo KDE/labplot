@@ -32,10 +32,10 @@
          </sizepolicy>
         </property>
         <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
+         <enum>QFrame::Shape::NoFrame</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
+         <enum>QFrame::Shadow::Plain</enum>
         </property>
         <property name="widgetResizable">
          <bool>true</bool>
@@ -45,8 +45,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>414</width>
-           <height>73</height>
+           <width>442</width>
+           <height>91</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout">
@@ -78,10 +78,10 @@
           <item row="0" column="1">
            <spacer name="horizontalSpacer_5">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
+             <enum>QSizePolicy::Policy::Fixed</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -104,7 +104,7 @@
           <item row="1" column="0" colspan="3">
            <widget class="Line" name="line">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
            </widget>
           </item>
@@ -118,10 +118,10 @@
           <item row="2" column="1">
            <spacer name="horizontalSpacer_6">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
+             <enum>QSizePolicy::Policy::Fixed</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -180,6 +180,29 @@
       <string>Add Plots to</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
+      <item row="4" column="0">
+       <spacer name="spacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Policy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>38</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="rbPlotPlacementNewWorksheet">
+        <property name="text">
+         <string>New Plot Area in a New Worksheet</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QRadioButton" name="rbPlotPlacementExistingPlotArea">
         <property name="text">
@@ -190,43 +213,27 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QRadioButton" name="rbPlotPlacementExistingWorksheet">
-        <property name="text">
-         <string>&amp;New Plot Area in an existing Worksheet</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QRadioButton" name="rbPlotPlacementNewWorksheet">
-        <property name="text">
-         <string>New Plot Area in a new Worksheet</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <spacer name="spacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>38</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="4" column="0">
+      <item row="5" column="0">
        <widget class="QCheckBox" name="chkCreateDataCurve">
         <property name="text">
          <string>Create Plot for original Data</string>
         </property>
         <property name="checked">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="rbPlotPlacementExistingWorksheet">
+        <property name="text">
+         <string>&amp;New Plot Area in an Existing Worksheet</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QRadioButton" name="rbPlotPlacementNewWorksheets">
+        <property name="text">
+         <string>New Plot Areas in Multiple New Worksheets</string>
         </property>
        </widget>
       </item>

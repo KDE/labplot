@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -64,8 +64,6 @@ enum class AspectType : quint64 {
 	QQPlot,
 	KDEPlot,
 
-	HypothesisTest,
-
 	// continuous improvement plots
 	ProcessBehaviorChart,
 	RunChart,
@@ -79,9 +77,10 @@ enum class AspectType : quint64 {
 
 	// analysis curves
 	XYAnalysisCurve,
+	XYBaselineCorrectionCurve,
 	XYConvolutionCurve,
 	XYCorrelationCurve,
-	XYDataReductionCurve,
+	XYLineSimplificationCurve,
 	XYDifferentiationCurve,
 	XYFitCurve,
 	XYFourierFilterCurve,
@@ -112,10 +111,16 @@ enum class AspectType : quint64 {
 	SimpleFilterColumn,
 	ColumnStringIO,
 
+	// statistical analysis
+	HypothesisTest,
+
+	// time series analysis
+	SeasonalDecomposition,
+
 	Folder,
 	Project,
 	MQTTClient,
-	MQTTSubscription,
+	MQTTSubscription
 };
 
 #ifdef SDK
@@ -199,10 +204,12 @@ public:
 			return std::string_view("XYConvolutionCurve");
 		case AspectType::XYCorrelationCurve:
 			return std::string_view("XYCorrelationCurve");
-		case AspectType::XYDataReductionCurve:
-			return std::string_view("XYDataReductionCurve");
+		case AspectType::XYLineSimplificationCurve:
+			return std::string_view("XYLineSimplificationCurve");
 		case AspectType::XYDifferentiationCurve:
 			return std::string_view("XYDifferentiationCurve");
+		case AspectType::XYBaselineCorrectionCurve:
+			return std::string_view("XYBaselineCorrectionCurve");
 		case AspectType::XYFitCurve:
 			return std::string_view("XYFitCurve");
 		case AspectType::XYFourierFilterCurve:
@@ -278,6 +285,9 @@ public:
 		case AspectType::HypothesisTest:
 			return std::string_view("HypothesisTest");
 			break;
+		case AspectType::SeasonalDecomposition:
+			return std::string_view("SeasonalDecomposition");
+			break;
 		}
 
 		return {};
@@ -288,6 +298,7 @@ public:
 	void setSuppressWriteUuid(bool);
 	QString comment() const;
 	void setCreationTime(const QDateTime&);
+	virtual QString caption() const;
 	QDateTime creationTime() const;
 	virtual Project* project();
 	virtual const Project* project() const;
@@ -301,6 +312,8 @@ public:
 	bool isMoved() const;
 	void setIsLoading(bool);
 	bool isLoading() const;
+	virtual void setChanged(bool value = true);
+	bool isChanged() const;
 	virtual QIcon icon() const;
 	virtual QMenu* createContextMenu();
 	void setProjectChanged(bool);
@@ -533,6 +546,8 @@ Q_SIGNALS:
 
 	void aspectCommentAboutToChange(const AbstractAspect*);
 	void aspectCommentChanged(const AbstractAspect*);
+
+	void aspectChangedStatusChanged(const AbstractAspect*);
 
 	/*!
 	 * \brief aspectAboutToBeAdded

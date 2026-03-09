@@ -15,10 +15,9 @@
 #include "ui_boxplotdock.h"
 
 class BackgroundWidget;
+class DataColumnsWidget;
 class LineWidget;
 class SymbolWidget;
-class TreeViewComboBox;
-class QPushButton;
 class KConfig;
 
 class BoxPlotDock : public BaseDock {
@@ -41,25 +40,18 @@ private:
 
 	QList<BoxPlot*> m_boxPlots;
 	BoxPlot* m_boxPlot{nullptr};
-
-	QGridLayout* m_gridLayout;
-	QPushButton* m_buttonNew;
-	QVector<TreeViewComboBox*> m_dataComboBoxes;
-	QVector<QPushButton*> m_removeButtons;
+	DataColumnsWidget* m_dataColumnsWidget{nullptr};
 
 	void load();
 	void loadConfig(KConfig&);
 	void setModel();
-	void setDataColumns() const;
 	void loadDataColumns();
 	void updateSymbolWidgets();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in BoxPlotDock
 	//"General"-tab
-	void addDataColumn();
-	void removeDataColumn();
-	void dataColumnChanged(const QModelIndex&);
+	void dataColumnsChanged(QVector<const AbstractColumn*>);
 	void orderingChanged(int);
 	void orientationChanged(int);
 	void variableWidthChanged(bool);

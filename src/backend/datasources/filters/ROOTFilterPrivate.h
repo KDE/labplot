@@ -83,9 +83,9 @@ public:
 		Directory()
 			: parent(0) {
 		}
-		Directory(const std::string& name, long int parent)
-			: name(name)
-			, parent(parent) {
+		Directory(const std::string& dname, long int dparent)
+			: name(dname)
+			, parent(dparent) {
 		}
 		std::string name;
 		long int parent;

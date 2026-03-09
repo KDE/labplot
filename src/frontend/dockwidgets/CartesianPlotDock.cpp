@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2024 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -18,12 +18,14 @@
 #include "frontend/PlotTemplateDialog.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/ThemeHandler.h"
+#include "frontend/colormaps/ColorMapsDialog.h"
 #include "frontend/widgets/BackgroundWidget.h"
 #include "frontend/widgets/LabelWidget.h"
 #include "frontend/widgets/LineWidget.h"
-#include "frontend/widgets/TimedLineEdit.h"
+#include "tools/ColorMapsManager.h"
 
 #include <KIconLoader>
+#include <KLocalization>
 #include <KMessageBox>
 
 #include <QButtonGroup>
@@ -38,7 +40,6 @@
 
 namespace {
 enum TwRangesColumn { Automatic = 0, Format, Min, Max, Scale };
-
 enum TwPlotRangesColumn { XRange, YRange, Default, Name };
 
 // https://stackoverflow.com/questions/5821802/qspinbox-inside-a-qscrollarea-how-to-prevent-spin-box-from-stealing-focus-when
@@ -61,18 +62,18 @@ protected:
 
 #define CELLWIDGET(dim, rangeIndex, Column, castObject, function)                                                                                              \
 	{                                                                                                                                                          \
-		QTableWidget* treewidget = nullptr;                                                                                                                    \
+		QTableWidget* treeWidget = nullptr;                                                                                                                    \
 		switch (dim) {                                                                                                                                         \
 		case Dimension::X:                                                                                                                                     \
-			treewidget = ui.twXRanges;                                                                                                                         \
+			treeWidget = ui.twXRanges;                                                                                                                         \
 			break;                                                                                                                                             \
 		case Dimension::Y:                                                                                                                                     \
-			treewidget = ui.twYRanges;                                                                                                                         \
+			treeWidget = ui.twYRanges;                                                                                                                         \
 			break;                                                                                                                                             \
 		}                                                                                                                                                      \
 		if (rangeIndex < 0) {                                                                                                                                  \
-			for (int i = 0; i < treewidget->rowCount(); i++) {                                                                                                 \
-				auto obj = qobject_cast<castObject*>(treewidget->cellWidget(i, Column));                                                                       \
+			for (int Row = 0; Row < treeWidget->rowCount(); Row++) {                                                                                                 \
+				auto obj = qobject_cast<castObject*>(treeWidget->cellWidget(Row, Column));                                                                       \
 				if (obj)                                                                                                                                       \
 					obj->function;                                                                                                                             \
 				else                                                                                                                                           \
@@ -81,7 +82,7 @@ protected:
 																	   << "). Whether the object does not exist or the cellWidget has different type");        \
 			}                                                                                                                                                  \
 		} else {                                                                                                                                               \
-			auto obj = qobject_cast<castObject*>(treewidget->cellWidget(rangeIndex, Column));                                                                  \
+			auto obj = qobject_cast<castObject*>(treeWidget->cellWidget(rangeIndex, Column));                                                                  \
 			if (obj)                                                                                                                                           \
 				obj->function;                                                                                                                                 \
 			else                                                                                                                                               \
@@ -117,6 +118,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	ui.bRemoveYBreak->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 	ui.cbYBreak->addItem(QStringLiteral("1"));
 
+	ui.bColorMap->setIcon(QIcon::fromTheme(QLatin1String("color-management")));
+	ui.lColorMapPreview->setMaximumHeight(ui.bColorMap->height());
+
 	//"Background"-tab
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabPlotArea->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabPlotArea);
@@ -135,19 +139,19 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	// Layout-tab
 	QString suffix;
 	if (m_units == Units::Metric)
-		suffix = QStringLiteral(" cm");
+		suffix = i18n("%v cm");
 	else
-		suffix = QStringLiteral(" in");
+		suffix = i18n("%v in");
 
-	ui.sbLeft->setSuffix(suffix);
-	ui.sbTop->setSuffix(suffix);
-	ui.sbWidth->setSuffix(suffix);
-	ui.sbHeight->setSuffix(suffix);
-	ui.sbBorderCornerRadius->setSuffix(suffix);
-	ui.sbPaddingHorizontal->setSuffix(suffix);
-	ui.sbPaddingVertical->setSuffix(suffix);
-	ui.sbPaddingRight->setSuffix(suffix);
-	ui.sbPaddingBottom->setSuffix(suffix);
+	KLocalization::setupSpinBoxFormatString(ui.sbLeft, ki18nc("@label:spinbox Suffix for the left spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbTop, ki18nc("@label:spinbox Suffix for the top spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbWidth, ki18nc("@label:spinbox Suffix for the width", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbHeight, ki18nc("@label:spinbox Suffix for the height", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbBorderCornerRadius, ki18nc("@label:spinbox Suffix for the border corner radius", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingHorizontal, ki18nc("@label:spinbox Suffix for the horizontal padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingVertical, ki18nc("@label:spinbox Suffix for the vertical padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingRight, ki18nc("@label:spinbox Suffix for the right padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingBottom, ki18nc("@label:spinbox Suffix for the bottom padding", qPrintable(suffix)));
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -171,6 +175,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	ui.leXBreakEnd->setValidator(new QDoubleValidator(ui.leXBreakEnd));
 	ui.leYBreakStart->setValidator(new QDoubleValidator(ui.leYBreakStart));
 	ui.leYBreakEnd->setValidator(new QDoubleValidator(ui.leYBreakEnd));
+	ui.leStackYOffset->setValidator(new QDoubleValidator(ui.leStackYOffset));
 
 	updateLocale();
 	retranslateUi();
@@ -181,6 +186,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::rangeTypeChanged);
 	connect(ui.cbNiceExtend, &QCheckBox::clicked, this, &CartesianPlotDock::niceExtendChanged);
 	connect(ui.leRangePoints, &QLineEdit::textChanged, this, &CartesianPlotDock::rangePointsChanged);
+	connect(ui.cbPlotColorMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::plotColorModeChanged);
+	connect(ui.bColorMap, &QPushButton::clicked, this, &CartesianPlotDock::selectColorMap);
 
 	// Layout
 	connect(ui.sbLeft, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
@@ -218,6 +225,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.tbBorderTypeRight, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
 	connect(ui.tbBorderTypeBottom, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
 	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::borderCornerRadiusChanged);
+
+	// Stacking
+	connect(ui.leStackYOffset, &TimedLineEdit::textChanged, this, &CartesianPlotDock::stackYOffsetChanged);
 
 	// theme and template handlers
 	auto* frame = new QFrame(this);
@@ -420,6 +430,10 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	}
 
 	// SIGNALs/SLOTs
+	connect(m_plot, &CartesianPlot::plotColorModeChanged, this, &CartesianPlotDock::plotPlotColorModeChanged);
+	connect(m_plot, &CartesianPlot::plotColorMapChanged, this, &CartesianPlotDock::plotPlotColorMapChanged);
+	connect(m_plot, &CartesianPlot::themeChanged, m_themeHandler, &ThemeHandler::setCurrentTheme);
+
 	connect(m_plot, &CartesianPlot::rectChanged, this, &CartesianPlotDock::plotRectChanged);
 	connect(m_plot, &CartesianPlot::rangeTypeChanged, this, &CartesianPlotDock::plotRangeTypeChanged);
 	connect(m_plot, &CartesianPlot::rangeFirstValuesChanged, this, &CartesianPlotDock::plotRangeFirstValuesChanged);
@@ -447,7 +461,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::bottomPaddingChanged, this, &CartesianPlotDock::plotBottomPaddingChanged);
 	connect(m_plot, &CartesianPlot::symmetricPaddingChanged, this, &CartesianPlotDock::plotSymmetricPaddingChanged);
 
-	connect(m_plot, &CartesianPlot::themeChanged, m_themeHandler, &ThemeHandler::setCurrentTheme);
+	// stacking
+	connect(m_plot, &CartesianPlot::stackYOffsetChanged, this, &CartesianPlotDock::plotStackYOffsetChanged);
 }
 
 void CartesianPlotDock::activateTitleTab() {
@@ -552,7 +567,7 @@ void CartesianPlotDock::updateUnits() {
 	if (m_units == Units::Metric) {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QStringLiteral(" cm");
+		suffix = i18n("%v cm");
 		ui.sbLeft->setValue(roundValue(ui.sbLeft->value() * GSL_CONST_CGS_INCH));
 		ui.sbTop->setValue(roundValue(ui.sbTop->value() * GSL_CONST_CGS_INCH));
 		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH));
@@ -565,7 +580,7 @@ void CartesianPlotDock::updateUnits() {
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QStringLiteral(" in");
+		suffix = i18n("%v in");
 		ui.sbLeft->setValue(roundValue(ui.sbLeft->value() / GSL_CONST_CGS_INCH));
 		ui.sbTop->setValue(roundValue(ui.sbTop->value() / GSL_CONST_CGS_INCH));
 		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH));
@@ -577,15 +592,15 @@ void CartesianPlotDock::updateUnits() {
 		ui.sbPaddingBottom->setValue(roundValue(ui.sbPaddingBottom->value() / GSL_CONST_CGS_INCH));
 	}
 
-	ui.sbLeft->setSuffix(suffix);
-	ui.sbTop->setSuffix(suffix);
-	ui.sbWidth->setSuffix(suffix);
-	ui.sbHeight->setSuffix(suffix);
-	ui.sbBorderCornerRadius->setSuffix(suffix);
-	ui.sbPaddingHorizontal->setSuffix(suffix);
-	ui.sbPaddingVertical->setSuffix(suffix);
-	ui.sbPaddingRight->setSuffix(suffix);
-	ui.sbPaddingBottom->setSuffix(suffix);
+	KLocalization::setupSpinBoxFormatString(ui.sbLeft, ki18nc("@label:spinbox Suffix for the left spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbTop, ki18nc("@label:spinbox Suffix for the top spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbWidth, ki18nc("@label:spinbox Suffix for the width", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbHeight, ki18nc("@label:spinbox Suffix for the height", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbBorderCornerRadius, ki18nc("@label:spinbox Suffix for the border corner radius", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingHorizontal, ki18nc("@label:spinbox Suffix for the horizontal padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingVertical, ki18nc("@label:spinbox Suffix for the vertical padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingRight, ki18nc("@label:spinbox Suffix for the right padding", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPaddingBottom, ki18nc("@label:spinbox Suffix for the bottom padding", qPrintable(suffix)));
 
 	labelWidget->updateUnits();
 }
@@ -770,10 +785,10 @@ void CartesianPlotDock::updatePlotRangeListValues(const Dimension dim, int range
 		auto* cb = dynamic_cast<QComboBox*>(ui.twPlotRanges->cellWidget(cSystemIndex, column));
 		if (cb) {
 			for (auto itemIndex = 0; itemIndex < cb->count(); itemIndex++) {
-				const auto data = cb->itemData(itemIndex);
-				if (data.isValid()) {
+				const auto itemData = cb->itemData(itemIndex);
+				if (itemData.isValid()) {
 					bool ok = true;
-					const auto rangeIndexComboBox = data.toInt(&ok);
+					const auto rangeIndexComboBox = itemData.toInt(&ok);
 					Q_ASSERT(ok);
 					if (rangeIndexComboBox == rangeIndex)
 						cb->setItemText(itemIndex, generatePlotRangeString(m_plot->rangeCount(dim), rangeIndex, m_plot->range(dim, rangeIndex)));
@@ -910,6 +925,10 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbYBreakStyle->addItem(i18n("Vertical"));
 	ui.cbYBreakStyle->addItem(i18n("Sloped"));
 
+	ui.cbPlotColorMode->clear();
+	ui.cbPlotColorMode->addItem(i18n("Theme"));
+	ui.cbPlotColorMode->addItem(i18n("Color Map"));
+
 	// tooltip texts
 	QString msg = i18n(
 		"Data Range:"
@@ -924,12 +943,56 @@ void CartesianPlotDock::retranslateUi() {
 	msg = i18n("If checked, automatically extend the plot range to nice values");
 	ui.lNiceExtend->setToolTip(msg);
 	ui.cbNiceExtend->setToolTip(msg);
+
+	msg = i18n(
+		"Defines which colors to use for plots:"
+		"<ul>"
+		"<li>Theme - colors are taken from the current theme apply to plot area</li>"
+		"<li>Color Map - colors are taken from the specified color map</li>"
+		"</ul>");
+	ui.lPlotColorMode->setToolTip(msg);
+	ui.cbPlotColorMode->setToolTip(msg);
 }
 
 //************************************************************
 //**** SLOTs for changes triggered in CartesianPlotDock ******
 //************************************************************
 // "General"-tab
+void CartesianPlotDock::plotColorModeChanged(int index) {
+	const auto mode = static_cast<CartesianPlot::PlotColorMode>(index);
+	const bool visible = (mode == CartesianPlot::PlotColorMode::ColorMap);
+	ui.lColorMap->setVisible(visible);
+	ui.frameColorMap->setVisible(visible);
+
+	if (visible) {
+		const auto& name = m_plot->plotColorMap();
+		ui.lColorMapName->setText(name);
+		ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
+	}
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plotList)
+		plot->setPlotColorMode(mode);
+}
+
+void CartesianPlotDock::selectColorMap() {
+	auto* dlg = new ColorMapsDialog(this);
+	if (dlg->exec() == QDialog::Accepted)
+		plotColorMapChanged(dlg->name());
+	delete dlg;
+}
+
+void CartesianPlotDock::plotColorMapChanged(const QString& name) {
+	if (m_plot->plotColorMode() == CartesianPlot::PlotColorMode::ColorMap) {
+		ui.lColorMapName->setText(name);
+		ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
+	}
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plotList)
+		plot->setPlotColorMap(name);
+}
+
 void CartesianPlotDock::rangeTypeChanged(int index) {
 	auto type = static_cast<CartesianPlot::RangeType>(index);
 	if (type == CartesianPlot::RangeType::Free) {
@@ -938,19 +1001,14 @@ void CartesianPlotDock::rangeTypeChanged(int index) {
 	} else {
 		ui.lRangePoints->show();
 		ui.leRangePoints->show();
+
+		if (type == CartesianPlot::RangeType::First)
+			ui.leRangePoints->setText(QLocale().toString(m_plot->rangeFirstValues()));
+		else
+			ui.leRangePoints->setText(QLocale().toString(m_plot->rangeLastValues()));
 	}
 
 	CONDITIONAL_LOCK_RETURN;
-
-	if (type != CartesianPlot::RangeType::Free) {
-		const auto numberLocale = QLocale();
-		;
-		if (type == CartesianPlot::RangeType::First)
-			ui.leRangePoints->setText(numberLocale.toString(m_plot->rangeFirstValues()));
-		else
-			ui.leRangePoints->setText(numberLocale.toString(m_plot->rangeLastValues()));
-	}
-
 	for (auto* plot : m_plotList)
 		plot->setRangeType(type);
 }
@@ -987,7 +1045,7 @@ void CartesianPlotDock::autoScaleChanged(const Dimension dim, const int rangeInd
 void CartesianPlotDock::autoScaleRange(const Dimension dim, const int index, bool checked) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " checked = " << checked)
 
-	QTableWidget* treewidget = ui.twXRanges;
+	auto* treewidget = ui.twXRanges;
 	Dimension dim_other = Dimension::Y;
 	switch (dim) {
 	case Dimension::X:
@@ -1618,20 +1676,20 @@ void CartesianPlotDock::yBreakStyleChanged(int styleIndex) {
 void CartesianPlotDock::borderTypeChanged() {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto type = m_plot->plotArea()->borderType();
+	auto type = m_plot->borderType();
 	auto* tb = static_cast<QToolButton*>(QObject::sender());
 	bool checked = tb->isChecked();
 	if (tb == ui.tbBorderTypeLeft)
-		type.setFlag(PlotArea::BorderTypeFlags::BorderLeft, checked);
+		type.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, checked);
 	else if (tb == ui.tbBorderTypeTop)
-		type.setFlag(PlotArea::BorderTypeFlags::BorderTop, checked);
+		type.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, checked);
 	else if (tb == ui.tbBorderTypeRight)
-		type.setFlag(PlotArea::BorderTypeFlags::BorderRight, checked);
+		type.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, checked);
 	else if (tb == ui.tbBorderTypeBottom)
-		type.setFlag(PlotArea::BorderTypeFlags::BorderBottom, checked);
+		type.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, checked);
 
 	for (auto* plot : m_plotList)
-		plot->plotArea()->setBorderType(type);
+		plot->setBorderType(type);
 }
 
 void CartesianPlotDock::borderCornerRadiusChanged(double value) {
@@ -1639,7 +1697,21 @@ void CartesianPlotDock::borderCornerRadiusChanged(double value) {
 
 	const double radius = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* plot : m_plotList)
-		plot->plotArea()->setBorderCornerRadius(radius);
+		plot->setBorderCornerRadius(radius);
+}
+
+// "Stack"-tab
+void CartesianPlotDock::stackYOffsetChanged() {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	bool ok = false;
+	double offset = QLocale().toDouble(ui.leStackYOffset->text(), &ok);
+	if (!ok)
+		return;
+
+	qDebug()<<"offset im dock " << offset;
+	for (auto* plot : m_plotList)
+		plot->setStackYOffset(offset);
 }
 
 void CartesianPlotDock::exportPlotTemplate() {
@@ -1673,6 +1745,15 @@ void CartesianPlotDock::exportPlotTemplate() {
 //****** SLOTs for changes triggered in CartesianPlot *********
 //*************************************************************
 // general
+void CartesianPlotDock::plotPlotColorModeChanged(CartesianPlot::PlotColorMode mode) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbPlotColorMode->setCurrentIndex(static_cast<int>(mode));
+}
+void CartesianPlotDock::plotPlotColorMapChanged(const QString& name) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.lColorMapName->setText(name);
+	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
+}
 void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(type));
@@ -1818,17 +1899,23 @@ void CartesianPlotDock::plotSymmetricPaddingChanged(bool symmetric) {
 }
 
 // border
-void CartesianPlotDock::plotBorderTypeChanged(PlotArea::BorderType type) {
+void CartesianPlotDock::plotBorderTypeChanged(CartesianPlot::BorderType type) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
-	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
-	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
-	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
+	ui.tbBorderTypeLeft->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderLeft));
+	ui.tbBorderTypeRight->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderRight));
+	ui.tbBorderTypeTop->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderTop));
+	ui.tbBorderTypeBottom->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderBottom));
 }
 
 void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(value, m_units), m_worksheetUnit));
+}
+
+// stacking
+void CartesianPlotDock::plotStackYOffsetChanged(double offset) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.leStackYOffset->setText(QLocale().toString(offset));
 }
 
 //*************************************************************
@@ -1861,6 +1948,11 @@ void CartesianPlotDock::load() {
 	m_updateUI = true;
 	updateRangeList(Dimension::Y);
 
+	index = static_cast<int>(m_plot->plotColorMode());
+	ui.cbPlotColorMode->setCurrentIndex(index);
+	plotColorModeChanged(index);
+	plotColorMapChanged(m_plot->plotColorMap());
+
 	// Title
 	labelWidget->load();
 
@@ -1889,15 +1981,13 @@ void CartesianPlotDock::load() {
 	ui.cbYBreak->setCurrentIndex(0);
 
 	//"Plot Area"-tab
-	const auto* plotArea = m_plot->plotArea();
-
 	// Background, border and cursor Lines
 	QList<Background*> backgrounds;
 	QList<Line*> cursorLines;
 	QList<Line*> borderLines;
 	for (auto* plot : m_plotList) {
-		backgrounds << plot->plotArea()->background();
-		borderLines << plot->plotArea()->borderLine();
+		backgrounds << plot->background();
+		borderLines << plot->borderLine();
 		cursorLines << plot->cursorLine();
 	}
 
@@ -1919,11 +2009,14 @@ void CartesianPlotDock::load() {
 	ui.cbPaddingSymmetric->setChecked(m_plot->symmetricPadding());
 
 	// Border
-	ui.tbBorderTypeLeft->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderLeft));
-	ui.tbBorderTypeRight->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderRight));
-	ui.tbBorderTypeTop->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderTop));
-	ui.tbBorderTypeBottom->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderBottom));
-	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(plotArea->borderCornerRadius(), m_units), m_worksheetUnit));
+	ui.tbBorderTypeLeft->setChecked(m_plot->borderType().testFlag(CartesianPlot::BorderTypeFlags::BorderLeft));
+	ui.tbBorderTypeRight->setChecked(m_plot->borderType().testFlag(CartesianPlot::BorderTypeFlags::BorderRight));
+	ui.tbBorderTypeTop->setChecked(m_plot->borderType().testFlag(CartesianPlot::BorderTypeFlags::BorderTop));
+	ui.tbBorderTypeBottom->setChecked(m_plot->borderType().testFlag(CartesianPlot::BorderTypeFlags::BorderBottom));
+	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_plot->borderCornerRadius(), m_units), m_worksheetUnit));
+
+	// Stacking
+	ui.leStackYOffset->setText(QLocale().toString(m_plot->stackYOffset()));
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config) {
@@ -1931,8 +2024,11 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 
 	// General
 	// we don't load/save the settings in the general-tab, since they are not style related.
-	// It doesn't make sense to load/save them in the template.
 	// This data is read in CartesianPlotDock::setPlots().
+	auto index = group.readEntry(QStringLiteral("PlotColorMode"), static_cast<int>(m_plot->plotColorMode()));
+	ui.cbPlotColorMode->setCurrentIndex(index);
+	plotColorModeChanged(index);
+	plotColorMapChanged(group.readEntry(QStringLiteral("PlotColorMap"), m_plot->plotColorMap()));
 
 	// Title
 	KConfigGroup plotTitleGroup = config.group(QStringLiteral("CartesianPlotTitle"));
@@ -1953,24 +2049,25 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	// Area
 	backgroundWidget->loadConfig(group);
 
-	const auto* plotArea = m_plot->plotArea();
-	auto type = static_cast<PlotArea::BorderType>(group.readEntry(QStringLiteral("BorderType"), static_cast<int>(plotArea->borderType())));
-	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
-	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
-	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
-	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
+	auto type = static_cast<CartesianPlot::BorderType>(group.readEntry(QStringLiteral("BorderType"), static_cast<int>(m_plot->borderType())));
+	ui.tbBorderTypeLeft->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderLeft));
+	ui.tbBorderTypeRight->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderRight));
+	ui.tbBorderTypeTop->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderTop));
+	ui.tbBorderTypeBottom->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderBottom));
 
 	borderLineWidget->loadConfig(group);
 	ui.sbBorderCornerRadius->setValue(
-		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("BorderCornerRadius"), plotArea->borderCornerRadius()), m_units), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("BorderCornerRadius"), m_plot->borderCornerRadius()), m_units), m_worksheetUnit));
 }
 
 void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
 
 	// General
-	// we don't load/save the settings in the general-tab, since they are not style related.
-	// It doesn't make sense to load/save them in the template.
+	// we don't load/save the any settings in the general-tab that are not style/appearance related.
+	group.writeEntry(QStringLiteral("PlotColorMode"), static_cast<int>(m_plot->plotColorMode()));
+	group.writeEntry(QStringLiteral("Theme"), m_plot->theme());
+	group.writeEntry(QStringLiteral("PlotColorMap"), m_plot->plotColorMap());
 
 	// Title
 	KConfigGroup plotTitleGroup = config.group(QStringLiteral("CartesianPlotTitle"));
@@ -1988,9 +2085,9 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	// Area
 	backgroundWidget->saveConfig(group);
-	group.writeEntry(QStringLiteral("BorderType"), static_cast<int>(m_plot->plotArea()->borderType()));
+	group.writeEntry(QStringLiteral("BorderType"), static_cast<int>(m_plot->borderType()));
 	borderLineWidget->saveConfig(group);
-	group.writeEntry(QStringLiteral("BorderCornerRadius"), m_plot->plotArea()->borderCornerRadius());
+	group.writeEntry(QStringLiteral("BorderCornerRadius"), m_plot->borderCornerRadius());
 
 	config.sync();
 }

@@ -621,8 +621,6 @@ void ReferenceRange::loadThemeConfig(const KConfig& config) {
 			++index;
 	}
 
-	const auto& themeColor = plot->themeColorPalette(index);
-
 	KConfigGroup group;
 	if (config.hasGroup(QStringLiteral("Theme")))
 		group = config.group(QStringLiteral("Axis")); // when loading from the theme config, use the same properties as for Axis
@@ -631,5 +629,5 @@ void ReferenceRange::loadThemeConfig(const KConfig& config) {
 
 	Q_D(ReferenceRange);
 	d->line->loadThemeConfig(group);
-	d->background->loadThemeConfig(group, themeColor);
+	d->background->loadThemeConfig(group, plot->plotColor(index));
 }

@@ -3,7 +3,7 @@
  *	Project              : LabPlot
  *	Description 	     : Class managing all actions and their containers (menus and toolbars) in MainWin
  *	--------------------------------------------------------------------
- *	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
+ *	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
  *	SPDX-License-Identifier: GPL-2.0-or-later
  */
 
@@ -12,6 +12,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/datapicker/Datapicker.h"
+#include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
 #ifdef HAVE_SCRIPTING
 #include "backend/script/Script.h"
@@ -19,6 +20,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/ActionsManager.h"
 #include "frontend/MainWin.h"
+#include "frontend/colormaps/ColorMapsDialog.h"
 #include "frontend/datapicker/DatapickerView.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/matrix/MatrixView.h"
@@ -66,7 +68,14 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <DockWidget.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #include <DockManager.h>
 
 /*!
@@ -231,6 +240,14 @@ void ActionsManager::initActions() {
 	connect(m_newWorksheetAction, &QAction::triggered, m_mainWindow, &MainWin::newWorksheet);
 
 #ifdef HAVE_SCRIPTING
+	m_newPythonScriptAction = new QAction(Script::icon(QStringLiteral("Python")), i18n("Script"), this);
+	m_newPythonScriptAction->setToolTip(i18n("Creates a new Python script"));
+	m_newPythonScriptAction->setData(QStringLiteral("Python"));
+	collection->addAction(QStringLiteral("new_python_script"), m_newPythonScriptAction);
+	connect(m_newPythonScriptAction, &QAction::triggered, m_mainWindow, &MainWin::newScript);
+
+	// TODO: activate the sub-menu once we support multiple scripting languages
+	/*
 	for (auto& language : Script::languages) {
 		auto* action = new QAction(Script::icon(language), language, this);
 		action->setData(language);
@@ -239,6 +256,7 @@ void ActionsManager::initActions() {
 		connect(action, &QAction::triggered, m_mainWindow, &MainWin::newScript);
 		m_newScriptActions << action;
 	}
+	*/
 #endif
 
 	m_newNotesAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18n("Note"), this);
@@ -252,7 +270,7 @@ void ActionsManager::initActions() {
 	connect(m_newFolderAction, &QAction::triggered, m_mainWindow, &MainWin::newFolder);
 
 	//"New file datasources"
-	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-text-frame-update")), i18n("Live Data Source..."), this);
+	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-text-frame-update")), i18n("From Live Data Source..."), this);
 	m_newLiveDataSourceAction->setToolTip(i18n("Creates a live data source to read data from a real time device"));
 	collection->addAction(QStringLiteral("new_live_datasource"), m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, &QAction::triggered, m_mainWindow, &MainWin::newLiveDataSource);
@@ -318,8 +336,10 @@ void ActionsManager::initActions() {
 	m_tbImport->setIconText(QStringLiteral("Import"));
 	collection->addAction(QStringLiteral("import"), m_tbImport);
 
+	// TODO: activate the sub-menu once we support multiple scripting languages
 	// create the new_script action declared in the rc file
 	// initialization is completed in initMenus
+	/*
 #ifdef HAVE_SCRIPTING
 	m_tbScript = new ToggleActionMenu(this);
 	m_tbScript->setPopupMode(QToolButton::MenuButtonPopup);
@@ -327,6 +347,7 @@ void ActionsManager::initActions() {
 	m_tbScript->setIconText(QStringLiteral("New Script"));
 	collection->addAction(QStringLiteral("new_script"), m_tbScript);
 #endif
+	*/
 
 	m_exportAction = new QAction(QIcon::fromTheme(QStringLiteral("document-export")), i18n("Export..."), this);
 	m_exportAction->setToolTip(i18n("Export selected element"));
@@ -343,11 +364,11 @@ void ActionsManager::initActions() {
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Color Maps Browser"), this);
 	action->setToolTip(i18n("Open dialog to browse through the available color maps."));
 	collection->addAction(QStringLiteral("color_maps"), action);
-	// connect(action, &QAction::triggered, this, [=]() {
-	// 	auto* dlg = new ColorMapsDialog(this);
-	// 	dlg->exec();
-	// 	delete dlg;
-	// });
+	connect(action, &QAction::triggered, this, [=]() {
+		auto* dlg = new ColorMapsDialog(m_mainWindow);
+	 	dlg->exec();
+	 	delete dlg;
+	});
 
 #ifdef HAVE_FITS
 	action = new QAction(QIcon::fromTheme(QStringLiteral("editor")), i18n("FITS Metadata Editor..."), this);
@@ -485,6 +506,7 @@ void ActionsManager::initActions() {
 	initWorksheetToolbarActions();
 	initPlotAreaToolbarActions();
 	initDataExtractorToolbarActions();
+	initLiveDataToolbarActions();
 #ifdef HAVE_CANTOR_LIBS
 	initNotebookToolbarActions();
 #endif
@@ -710,6 +732,20 @@ void ActionsManager::initSpreadsheetToolbarActions() {
 	collection->addAction(QStringLiteral("spreadsheet_sort_desc"), m_spreadsheetSortDescAction);
 }
 
+
+/*!
+ * initializes live data source related actions shown in the toolbar.
+ */
+void ActionsManager::initLiveDataToolbarActions() {
+	auto* collection = m_mainWindow->actionCollection();
+
+	m_liveDataPauseAction = new QAction(QIcon::fromTheme(QStringLiteral("media-playback-pause")), i18n("Pause"), m_mainWindow);
+	collection->addAction(QStringLiteral("live_data_pause"), m_liveDataPauseAction);
+
+	m_liveDataUpdateAction = new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Update"), m_mainWindow);
+	collection->addAction(QStringLiteral("live_data_update"), m_liveDataUpdateAction);
+}
+
 /*!
  * initializes notebook related actions shown in the toolbar.
  */
@@ -812,7 +848,7 @@ void ActionsManager::initScriptToolbarActions() {
 	m_scriptRunAction->setToolTip(QStringLiteral("Run the script"));
 	collection->addAction(QStringLiteral("script_run"), m_scriptRunAction);
 
-	m_scriptClearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), QStringLiteral("Clear Output"), this);
+	m_scriptClearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), QStringLiteral("Clear"), this);
 	m_scriptClearAction->setToolTip(QStringLiteral("Clear the output of the script editor"));
 	collection->addAction(QStringLiteral("script_clear"), m_scriptClearAction);
 }
@@ -853,8 +889,10 @@ void ActionsManager::initMenus() {
 	m_newMenu->addAction(m_newWorksheetAction);
 	m_newMenu->addAction(m_newNotesAction);
 	m_newMenu->addAction(m_newDatapickerAction);
+#ifdef HAVE_SCRIPTING
 	m_newMenu->addSeparator();
-	m_newMenu->addAction(m_newLiveDataSourceAction);
+	m_newMenu->addAction(m_newPythonScriptAction);
+#endif
 
 	// import menu
 	m_importMenu = new QMenu(m_mainWindow);
@@ -862,6 +900,8 @@ void ActionsManager::initMenus() {
 	m_importMenu->addAction(m_importFileAction);
 	m_importMenu->addAction(m_importDirAction);
 	m_importMenu->addAction(m_importSqlAction);
+	m_importMenu->addAction(m_newLiveDataSourceAction);
+	m_importMenu->addSeparator();
 	m_importMenu->addAction(m_importDatasetAction);
 	m_importMenu->addAction(m_importKaggleDatasetAction);
 	m_importMenu->addSeparator();
@@ -925,11 +965,11 @@ void ActionsManager::initMenus() {
 
 	if (!backendNames.isEmpty()) {
 		// sub-menu shown in the main menu bar
-		auto* menu = dynamic_cast<QMenu*>(factory->container(QStringLiteral("new_notebook"), m_mainWindow));
-		if (menu) {
-			menu->setIcon(QIcon::fromTheme(QStringLiteral("cantor")));
+		auto* nbmenu = dynamic_cast<QMenu*>(factory->container(QStringLiteral("new_notebook"), m_mainWindow));
+		if (nbmenu) {
+			nbmenu->setIcon(QIcon::fromTheme(QStringLiteral("cantor")));
 			m_newMenu->addSeparator();
-			m_newMenu->addMenu(menu);
+			m_newMenu->addMenu(nbmenu);
 			updateNotebookActions();
 		}
 	}
@@ -950,7 +990,9 @@ void ActionsManager::initMenus() {
 
 	// complete initialization of new_notebook action after m_newNotebookMenu is created
 	m_tbNotebook->setMenu(m_newNotebookMenu);
-	m_tbNotebook->setDefaultAction(m_lastUsedNotebookAction ? m_lastUsedNotebookAction : m_newNotebookMenu->actions().first());
+	const auto actions = m_newNotebookMenu->actions();
+	if (!actions.isEmpty())
+		m_tbNotebook->setDefaultAction(m_lastUsedNotebookAction ? m_lastUsedNotebookAction : actions.constFirst());
 	connect(m_tbNotebook->menu(), &QMenu::triggered, m_tbNotebook, &ToggleActionMenu::setDefaultAction);
 #else
 	delete factory->container(QStringLiteral("notebook"), m_mainWindow);
@@ -962,6 +1004,9 @@ void ActionsManager::initMenus() {
 
 	// This menu is at File > Add New > Script
 #ifdef HAVE_SCRIPTING
+
+	// TODO: activate the sub-menu once we support multiple scripting languages
+	/*
 	auto* newScriptMenu = dynamic_cast<QMenu*>(factory->container(QLatin1String("new_script"), m_mainWindow));
 	if (newScriptMenu) {
 		newScriptMenu->setIcon(QIcon::fromTheme(QLatin1String("quickopen")));
@@ -990,6 +1035,7 @@ void ActionsManager::initMenus() {
 		m_tbScript->setDefaultAction(m_newScriptActions.first());
 	}
 	connect(m_tbScript->menu(), &QMenu::triggered, m_tbScript, &ToggleActionMenu::setDefaultAction);
+	*/
 #else
 	delete factory->container(QStringLiteral("script"), m_mainWindow);
 	delete factory->container(QStringLiteral("new_script"), m_mainWindow);
@@ -1253,12 +1299,19 @@ void ActionsManager::updateGUI() {
 		// toolbar
 		connectScriptToolbarActions(view);
 		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->setVisible(true);
+
+		// deactivate the shortcuts for the undo/redo action so those shortcuts can be used in the text editor
+		m_undoAction->setShortcut(QKeySequence());
+		m_redoAction->setShortcut(QKeySequence());
 	} else {
 		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
 		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->setVisible(false);
+		m_undoAction->setShortcut(QKeySequence::Undo);
+		m_redoAction->setShortcut(QKeySequence::Redo);
 	}
 #endif
 
+	// data picker
 	const auto* datapicker = dynamic_cast<Datapicker*>(m_mainWindow->m_currentAspect);
 	if (!datapicker)
 		datapicker = dynamic_cast<Datapicker*>(m_mainWindow->m_currentAspect->parent<Datapicker>());
@@ -1282,6 +1335,15 @@ void ActionsManager::updateGUI() {
 		factory->container(QStringLiteral("data_extractor"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("data_extractor_toolbar"), m_mainWindow)->setVisible(false);
 	}
+
+	// live data
+	auto* lds = dynamic_cast<LiveDataSource*>(m_mainWindow->m_currentAspect);
+	if (lds) {
+		// toolbar
+		connectLiveDataToolbarActions(lds);
+		factory->container(QStringLiteral("live_data_toolbar"), m_mainWindow)->setVisible(true);
+	} else
+		factory->container(QStringLiteral("live_data_toolbar"), m_mainWindow)->setVisible(false);
 }
 
 #ifdef HAVE_CANTOR_LIBS
@@ -1309,8 +1371,9 @@ void ActionsManager::updateNotebookActions() {
 	m_newNotebookMenu->addAction(m_configureNotebookAction);
 
 	// we just updated the notebook action list. its possible that the defaultAction isn't in the list anymore
-	if (m_tbNotebook && !m_newNotebookMenu->actions().contains(m_tbNotebook->defaultAction()))
-		m_tbNotebook->setDefaultAction(m_newNotebookMenu->actions().first());
+	const auto actions = m_newNotebookMenu->actions();
+	if (m_tbNotebook && !actions.contains(m_tbNotebook->defaultAction()) && !actions.isEmpty())
+		m_tbNotebook->setDefaultAction(actions.constFirst());
 }
 #endif
 
@@ -1467,6 +1530,38 @@ void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* vie
 	connect(m_spreadsheetSortAction, &QAction::triggered, view, &SpreadsheetView::sortCustom);
 	connect(m_spreadsheetSortAscAction, &QAction::triggered, view, &SpreadsheetView::sortAscending);
 	connect(m_spreadsheetSortDescAction, &QAction::triggered, view, &SpreadsheetView::sortDescending);
+}
+
+void ActionsManager::connectLiveDataToolbarActions(LiveDataSource* lds) {
+	// disconnect from the old view
+	disconnect(m_liveDataPauseAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_liveDataUpdateAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(this, &ActionsManager::updateLiveDataPauseActionIcon, nullptr, nullptr);
+
+	// connect to the new view
+	connect(m_liveDataPauseAction, &QAction::triggered, [lds]() {
+		if (lds->isPaused())
+			lds->pauseReading();
+		else
+			lds->continueReading();
+	});
+	connect(m_liveDataUpdateAction, &QAction::triggered, lds, &LiveDataSource::updateNow);
+	connect(lds, &LiveDataSource::pausedChanged, this, &ActionsManager::updateLiveDataPauseActionIcon);
+
+	// set the icon for the current paused status
+	updateLiveDataPauseActionIcon(lds->isPaused());
+}
+
+void ActionsManager::updateLiveDataPauseActionIcon(bool paused) {
+	if (paused) {
+		m_liveDataPauseAction->setText(i18n("Continue"));
+		m_liveDataPauseAction->setToolTip(i18n("Continue Reading"));
+		m_liveDataPauseAction->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
+	} else {
+		m_liveDataPauseAction->setText(i18n("Pause"));
+		m_liveDataPauseAction->setToolTip(i18n("Pause Reading"));
+		m_liveDataPauseAction->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
+	}
 }
 
 #ifdef HAVE_CANTOR_LIBS

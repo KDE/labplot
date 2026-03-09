@@ -1,5 +1,14 @@
-#ifndef PYTHON_LOGGER
-#define PYTHON_LOGGER
+/*
+	File                 : PythonLogger.h
+	Project              : LabPlot
+	Description          : Python Logger
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
+#ifndef PYTHON_LOGGER_H
+#define PYTHON_LOGGER_H
 
 #include <QString>
 

@@ -53,7 +53,14 @@
 #endif
 #include <gsl/gsl_version.h>
 #ifdef HAVE_LIBORIGIN
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include <OriginFile.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #endif
 #ifdef HAVE_HDF5
 #include <H5public.h>
@@ -65,7 +72,14 @@
 #include <matio_pubconf.h>
 #endif
 #ifdef HAVE_MCAP
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include "mcap/types.hpp"
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 /*!
@@ -102,7 +116,7 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	linkCopyLayout->addWidget(copyCiteButton);
 	linkCopyLayout->addWidget(donateButton);
 
-	((QVBoxLayout *)layout())->insertLayout(1, linkCopyLayout);
+	static_cast<QVBoxLayout *>(layout())->insertLayout(1, linkCopyLayout);
 
 	// Find and hide the "Copy to Clipboard" button
 	auto buttons = findChildren<QPushButton *>();
@@ -138,8 +152,8 @@ QString AboutDialog::systemInfo() {
 	const QString buildType(i18n("Debug build") + QLatin1Char(' ') + QLatin1String(GIT_COMMIT));
 #endif
 
-	QLocale locale = QLocale();
-	const QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(", ") + QLocale::countryToString(locale.country());
+	//QLocale locale = QLocale();
+	// const QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(", ") + QLocale::countryToString(locale.country());
 
 	QLocale systemLocale = QLocale::system();
 	const QString systemLanguage = QLocale::languageToString(systemLocale.language()) + QStringLiteral(", ") + QLocale::countryToString(systemLocale.country());
