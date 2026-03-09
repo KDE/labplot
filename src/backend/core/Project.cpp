@@ -998,7 +998,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			aspect->handleAspectUpdated(path, curve);
 		}
 	}
-	
+
 	for (auto* spreadsheet : spreadsheets) {
 		const auto& path = spreadsheet->path();
 		for (auto* aspect : aaaa) {

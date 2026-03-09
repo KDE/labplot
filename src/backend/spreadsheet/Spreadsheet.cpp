@@ -1978,7 +1978,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 void Spreadsheet::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	if (!linking())
 		return;
-	
+
 	const auto* sh = dynamic_cast<const Spreadsheet*>(aspect);
 	if (sh && linkedSpreadsheetPath() == aspectPath) {
 		setUndoAware(false);
