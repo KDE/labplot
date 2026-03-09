@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 16:18+0000\n"
-"PO-Revision-Date: 2026-02-24 22:58+0400\n"
+"PO-Revision-Date: 2026-03-08 22:56+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -16173,7 +16173,7 @@ msgstr ""
 #: src/kdefrontend/SettingsGeneralPage.cpp:273
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
-msgstr "يُنشِّط مخرجات تتبّع إضافيّة في الطّرفيّة."
+msgstr "يُنشِّط مخرجات تتبّع إضافيّة في الطرفية."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:274
 #, kde-format
