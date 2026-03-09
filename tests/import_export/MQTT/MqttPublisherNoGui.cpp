@@ -20,9 +20,9 @@ int main(int argc, char* argv[]) {
 		QCoreApplication::processEvents(QEventLoop::AllEvents, 0);
 	}
 
-	const auto& status = client.subscribeBrownianTopic();
-	if (!status.isEmpty()) {
-		qDebug() << status;
+	const auto& subscribeStatus = client.subscribeBrownianTopic();
+	if (!subscribeStatus.isEmpty()) {
+		qDebug() << subscribeStatus;
 		exit(-2);
 	}
 

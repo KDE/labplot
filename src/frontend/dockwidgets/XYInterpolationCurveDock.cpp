@@ -549,9 +549,9 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolationCurve::InterpolationData& data) {
+void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolationCurve::InterpolationData& idata) {
 	CONDITIONAL_LOCK_RETURN;
-	m_interpolationData = data;
+	m_interpolationData = idata;
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
 	this->typeChanged(m_interpolationData.type);
 

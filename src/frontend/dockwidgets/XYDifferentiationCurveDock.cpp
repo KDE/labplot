@@ -5,36 +5,21 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
-
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "XYDifferentiationCurveDock.h"
 #include "backend/core/column/Column.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <QStandardItemModel>
 
-extern "C" {
-#include "backend/nsl/nsl_diff.h"
-}
-
 /*!
-  \class XYDifferentiationCurveDock
- \brief  Provides a widget for editing the properties of the XYDifferentiationCurves
-		(2D-curves defined by a differentiation) currently selected in
-		the project explorer.
-
-  If more than one curves are set, the properties of the first column are shown.
-  The changes of the properties are applied to all curves.
-  The exclusions are the name, the comment and the datasets (columns) of
-  the curves  - these properties can only be changed if there is only one single curve.
-
-  \ingroup frontend
+	\class XYDifferentiationCurveDock
+	\brief  Provides a widget for editing the properties of \c XYDifferentiationCurve.
+	\ingroup frontend
 */
-
 XYDifferentiationCurveDock::XYDifferentiationCurveDock(QWidget* parent)
 	: XYAnalysisCurveDock(parent) {
 }

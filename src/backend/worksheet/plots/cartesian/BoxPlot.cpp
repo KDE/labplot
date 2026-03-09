@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Box Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -414,6 +414,19 @@ QVector<QString>& BoxPlot::dataColumnPaths() const {
 	return d->dataColumnPaths;
 }
 
+bool BoxPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	// The values are not important, because they are just passed to minMax() which does not consider the indices
+	start = 0;
+	end = 0;
+	return true;
+}
+
+bool BoxPlot::minMax(const Dimension dim, const Range<int>&, Range<double>& r, bool) const {
+	r.setStart(minimum(dim));
+	r.setEnd(maximum(dim));
+	return true;
+}
+
 double BoxPlot::minimum(const Dimension dim) const {
 	Q_D(const BoxPlot);
 	switch (dim) {
@@ -439,6 +452,13 @@ double BoxPlot::maximum(const Dimension dim) const {
 bool BoxPlot::hasData() const {
 	Q_D(const BoxPlot);
 	return !d->dataColumns.isEmpty();
+}
+
+int BoxPlot::dataCount(Dimension) const {
+	Q_D(const BoxPlot);
+	if (!hasData())
+		return -1;
+	return d->dataColumns.count();
 }
 
 bool BoxPlot::usingColumn(const AbstractColumn* column, bool) const {
@@ -752,7 +772,7 @@ void BoxPlotPrivate::adjustPropertiesContainers() {
 			auto* medianLine = addMedianLine(group);
 
 			if (plot) {
-				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
+				const auto& themeColor = plot->plotColor(backgrounds.count() - 1);
 				background->setFirstColor(themeColor);
 				borderLine->setColor(themeColor);
 				medianLine->setColor(themeColor);
@@ -767,7 +787,7 @@ void BoxPlotPrivate::adjustPropertiesContainers() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void BoxPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || !isVisible() || q->isLoading();
+	const bool suppressed = retransformSuppressed();
 	Q_EMIT trackRetransformCalled(suppressed);
 	if (suppressed)
 		return;
@@ -1292,10 +1312,9 @@ void BoxPlotPrivate::updateRug() {
 	}
 
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double xMin = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
-	const double yMin = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
+	const double xmin = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double ymin = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
 
-	QPainterPath rugPath;
 	QVector<QPointF> points;
 
 	for (int i = 0; i < q->dataColumns().count(); ++i) {
@@ -1306,7 +1325,7 @@ void BoxPlotPrivate::updateRug() {
 		if (orientation == BoxPlot::Orientation::Horizontal) {
 			for (int row = 0; row < column->rowCount(); ++row) {
 				if (column->isValid(row) && !column->isMasked(row))
-					points << QPointF(column->valueAt(row), yMin);
+					points << QPointF(column->valueAt(row), ymin);
 			}
 
 			// map the points to scene coordinates
@@ -1320,7 +1339,7 @@ void BoxPlotPrivate::updateRug() {
 		} else { // horizontal
 			for (int row = 0; row < column->rowCount(); ++row) {
 				if (column->isValid(row) && !column->isMasked(row))
-					points << QPointF(xMin, column->valueAt(row));
+					points << QPointF(xmin, column->valueAt(row));
 			}
 
 			// map the points to scene coordinates
@@ -1969,12 +1988,12 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(BoxPlot);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const QColor themeColor = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {
-		const auto& color = plot->themeColorPalette(i);
+		const auto& color = plot->plotColor(i);
 
 		// box fillings
 		auto* background = d->backgrounds.at(i);

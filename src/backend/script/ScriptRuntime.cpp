@@ -1,9 +1,16 @@
-#include <KLocalizedString>
+/*
+	File                 : ScriptRuntime.cpp
+	Project              : LabPlot
+	Description          : Script Runtime
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "ScriptRuntime.h"
-
 #include "Script.h"
 
+#include <KLocalizedString>
 /*!
  * \class ScriptRuntime
  * \brief Abstract class providing an interface for scripting runtimes
@@ -21,9 +28,9 @@
  * \param script - The Script instance that owns this script runtime
  * \return returns a ScriptRuntime instance
  */
-ScriptRuntime::ScriptRuntime(const QString& lang, Script* script)
+ScriptRuntime::ScriptRuntime(const QString& language, Script* script)
 	: QObject()
-	, lang(lang)
+	, lang(language)
 	, m_name(script->name())
 	, m_variableModel(new VariablesInfoModel(this)) {
 }

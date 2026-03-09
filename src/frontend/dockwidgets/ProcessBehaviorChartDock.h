@@ -105,6 +105,7 @@ private Q_SLOTS:
 	void plotLabelsBorderShapeChanged(TextLabel::BorderShape);
 
 	void showStatusInfo(const QString&);
+	void showStatusError(const QString&);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

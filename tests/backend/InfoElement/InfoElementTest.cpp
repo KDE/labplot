@@ -328,7 +328,6 @@ void InfoElementTest::changeColumn() {
 	QCOMPARE(points.at(0)->isVisible(), true);
 
 	{
-		const auto points = ie->children<CustomPoint>();
 		QCOMPARE(ie->markerPointsCount(), 1);
 		QCOMPARE(ie->markerPointAt(0).curve, curve);
 		QCOMPARE(points.count(), 1);
@@ -406,7 +405,6 @@ void InfoElementTest::columnValueChanged() {
 	QCOMPARE(points.at(0)->isVisible(), true);
 
 	{
-		const auto points = ie->children<CustomPoint>();
 		QCOMPARE(ie->markerPointsCount(), 1);
 		QCOMPARE(ie->markerPointAt(0).curve, curve);
 		QCOMPARE(points.count(), 1);

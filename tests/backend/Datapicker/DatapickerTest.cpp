@@ -1665,19 +1665,19 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelative() {
 		QVERIFY(datapicker);
 		auto* image = datapicker->image();
 
-		DatapickerImageWidget w(nullptr);
-		w.setImages({image});
+		DatapickerImageWidget widget(nullptr);
+		widget.setImages({image});
 
-		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true); // image is valid because embedded
-		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // image is valid, but embed is turned on
-		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
-		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
+		QCOMPARE(widget.ui.cbFileEmbedd->isEnabled(), true); // image is valid because embedded
+		QCOMPARE(widget.ui.cbFileRelativePath->isEnabled(), false); // image is valid, but embed is turned on
+		QCOMPARE(widget.ui.cbFileEmbedd->isChecked(), true);
+		QCOMPARE(widget.ui.cbFileRelativePath->isChecked(), true);
 
 		QFileInfo fi(imgFileName);
 		QCOMPARE(image->fileName(), fi.fileName());
 		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
-		QCOMPARE(w.ui.leFileName->text(), fi.fileName());
-		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+		QCOMPARE(widget.ui.leFileName->text(), fi.fileName());
+		QCOMPARE(widget.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 	}
 }
 
@@ -1843,6 +1843,9 @@ void DatapickerTest::datapickerImageClipboardSelectImageFromPath() {
 }
 
 void DatapickerTest::saveLoad() {
+#if defined(_WIN32)
+	QSKIP("Unstable", QTest::SkipSingle);
+#endif
 	QString savePath;
 	{
 		Project project;

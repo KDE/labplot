@@ -4,12 +4,12 @@
 	Description          : Main window of the application
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "MainWin.h"
-
+#include "backend/core/AbstractFilter.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -99,6 +99,7 @@
 #include "frontend/notebook/NotebookView.h"
 #include <cantor/backend.h>
 #endif
+
 
 /*!
 \class MainWin
@@ -281,8 +282,10 @@ void MainWin::initGUI(const QString& fileName) {
 		case LoadOnStart::LastProject: {
 			initDocks();
 			const QString& path = Settings::group(QStringLiteral("MainWin")).readEntry("LastOpenProject", "");
-			if (!path.isEmpty())
-				openProject(path);
+			if (!path.isEmpty()) {
+				if (!openProject(path))
+					newProject();
+			}
 			else
 				newProject();
 			break;
@@ -470,7 +473,7 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 	\return \c true if the project still needs to be saved ("cancel" clicked), \c false otherwise.
  */
 bool MainWin::warnModified() {
-	if (m_project->hasChanged()) {
+	if (m_project->isChanged()) {
 		int option = KMessageBox::warningTwoActionsCancel(this, i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
 				i18n("Save Project"), KStandardGuiItem::save(), KStandardGuiItem::dontSave());
 		switch (option) {
@@ -501,8 +504,6 @@ bool MainWin::newProject(bool createInitialContent) {
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 
 	m_project = new Project();
-	m_project->setFileCompression(!group.readEntry("CompatibleSave", m_project->fileCompression()));
-	m_project->setSaveData(group.readEntry("SaveData", m_project->saveData()));
 	Project::currentProject = m_project;
 	undoStackIndexLastSave = 0;
 	m_currentAspect = m_project;
@@ -537,7 +538,7 @@ bool MainWin::newProject(bool createInitialContent) {
 	connect(m_project, &Project::childAspectRemoved, this, &MainWin::handleAspectRemoved);
 	connect(m_project, &Project::childAspectAboutToBeRemoved, this, &MainWin::handleAspectAboutToBeRemoved);
 	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
-	connect(m_project, &Project::changed, this, &MainWin::projectChanged);
+	connect(m_project, &Project::aspectChangedStatusChanged, this, &MainWin::projectChanged);
 	connect(m_project, &Project::requestProjectContextMenu, this, &MainWin::createContextMenu);
 	connect(m_project, &Project::requestFolderContextMenu, this, &MainWin::createFolderContextMenu);
 	connect(m_project, &Project::mdiWindowVisibilityChanged, this, &MainWin::updateDockWindowVisibility);
@@ -545,6 +546,7 @@ bool MainWin::newProject(bool createInitialContent) {
 
 	// depending on the settings, create the default project content (add a worksheet, etc.)
 	if (createInitialContent) {
+		m_project->setUndoAware(false);
 		const auto newProject = (NewProject)group.readEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithSpreadsheet));
 		switch (newProject) {
 		case NewProject::WithWorksheet:
@@ -567,11 +569,12 @@ bool MainWin::newProject(bool createInitialContent) {
 		}
 		}
 
-		m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
-
+		m_project->setUndoAware(true);
 		m_actionsManager->updateGUIOnProjectChanges();
 		m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	}
+
+	m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
 
 	return true;
 }
@@ -729,7 +732,10 @@ void MainWin::openProject() {
 	if (path.isEmpty()) // "Cancel" was clicked
 		return;
 
-	this->openProject(path);
+	if (!openProject(path)) {
+		newProject();
+		return;
+	}
 
 	// save new "last open directory"
 	int pos = path.lastIndexOf(QLatin1String("/"));
@@ -740,10 +746,10 @@ void MainWin::openProject() {
 	}
 }
 
-void MainWin::openProject(const QString& fileName) {
+bool MainWin::openProject(const QString& fileName) {
 	if (m_project && fileName == m_project->fileName()) {
 		KMessageBox::information(this, i18n("The project file %1 is already opened.", fileName), i18n("Open Project"));
-		return;
+		return true; // open project "succeeded" (by virtue of it already being open), so no error is reported and no new project is created
 	}
 
 	// check whether the file can be opened for reading at all before closing the current project
@@ -751,17 +757,17 @@ void MainWin::openProject(const QString& fileName) {
 	QFile file(fileName);
 	if (!file.exists()) {
 		KMessageBox::error(this, i18n("The project file %1 doesn't exist.", fileName), i18n("Open Project"));
-		return;
+		return false;
 	}
 
 	if (!file.open(QIODevice::ReadOnly)) {
 		KMessageBox::error(this, i18n("Couldn't read the project file %1.", fileName), i18n("Open Project"));
-		return;
+		return false;
 	} else
 		file.close();
 
 	if (!newProject(false))
-		return;
+		return false;
 
 	statusBar()->showMessage(i18n("Loading %1...", fileName));
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
@@ -810,8 +816,7 @@ void MainWin::openProject(const QString& fileName) {
 
 	if (!rc) {
 		closeProject();
-		newProject();
-		return;
+		return false;
 	}
 
 	m_project->undoStack()->clear();
@@ -857,13 +862,16 @@ void MainWin::openProject(const QString& fileName) {
 
 	if (m_autoSaveActive)
 		m_autoSaveTimer.start();
+
+	return true;
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
-	if (url.isLocalFile()) // fix for Windows
-		this->openProject(url.toLocalFile());
-	else
-		this->openProject(url.path());
+	QString path = url.isLocalFile() ?  url.toLocalFile() : url.path(); // fix for Windows
+	if (!openProject(path)) {
+		newProject();
+		return;
+	}
 }
 
 /*!
@@ -977,6 +985,10 @@ bool MainWin::save(const QString& fileName) {
 	}
 
 	WAIT_CURSOR_AUTO_RESET;
+	statusBar()->showMessage(i18n("Saving %1...", fileName));
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	QElapsedTimer timer;
+	timer.start();
 	const QString& tempFileName = tempFile.fileName();
 	DEBUG("Using temporary file " << STDSTRING(tempFileName))
 	tempFile.close();
@@ -1081,6 +1093,7 @@ bool MainWin::save(const QString& fileName) {
 	m_actionsManager->fillShareMenu();
 #endif
 
+	statusBar()->showMessage(i18n("Project successfully saved (in %1 seconds).", (float)timer.elapsed() / 1000));
 	return ok;
 }
 
@@ -1090,7 +1103,7 @@ bool MainWin::save(const QString& fileName) {
 void MainWin::autoSaveProject() {
 	// don't auto save when there are no changes or the file name
 	// was not provided yet (the project was never explicitly saved yet).
-	if (!m_project->hasChanged() || m_project->fileName().isEmpty())
+	if (!m_project->isChanged() || m_project->fileName().isEmpty())
 		return;
 
 	this->saveProject();
@@ -1118,7 +1131,7 @@ void MainWin::updateTitleBar() {
 				title = m_project->fileName();
 		}
 
-		if (m_project->hasChanged())
+		if (m_project->isChanged())
 			title += QLatin1String("    [") + i18n("Changed") + QLatin1Char(']');
 	} else
 		title = QLatin1String("LabPlot");
@@ -1187,9 +1200,9 @@ void MainWin::newSpreadsheet() {
 
 	// if the current active window is a workbook or one of its children,
 	// add the new matrix to the workbook
-	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = m_currentAspect->castTo<Workbook>();
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
+		workbook = m_currentAspect->parent<Workbook>();
 
 	if (workbook)
 		workbook->addChild(spreadsheet);
@@ -1203,7 +1216,7 @@ void MainWin::newSpreadsheet() {
 #ifdef HAVE_SCRIPTING
 void MainWin::newScript() {
 	auto* action = static_cast<QAction*>(QObject::sender());
-	auto* script = new Script(i18n("%1", action->data().toString()), action->data().toString());
+	auto* script = new Script(i18n("Script"), action->data().toString());
 	this->addAspectToProject(script);
 }
 #endif
@@ -1215,9 +1228,9 @@ void MainWin::newMatrix() {
 
 	// if the current active window is a workbook or one of its children,
 	// add the new matrix to the workbook
-	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = m_currentAspect->castTo<Workbook>();
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
+		workbook = m_currentAspect->parent<Workbook>();
 
 	if (workbook)
 		workbook->addChild(matrix);
@@ -1254,13 +1267,14 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 		return nullptr;
 
 	Spreadsheet* spreadsheet = nullptr;
-	if (m_currentAspect->type() == AspectType::Spreadsheet)
-		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+	if (auto* s = m_currentAspect->castTo<Spreadsheet>())
+		spreadsheet = s;
 	else {
 		// check whether one of spreadsheet columns is selected and determine the spreadsheet
-		auto* parent = m_currentAspect->parentAspect();
-		if (parent && parent->type() == AspectType::Spreadsheet)
-			spreadsheet = dynamic_cast<Spreadsheet*>(parent);
+		if (auto* parent = m_currentAspect->parentAspect()) {
+			if (auto* p = parent->castTo<Spreadsheet>())
+				spreadsheet = p;
+		}
 	}
 
 	return spreadsheet;
@@ -1326,25 +1340,26 @@ void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAs
 	//  - AbstractSimpleFilter
 	//  - columns in the data spreadsheet of a datapicker curve,
 	//    this can only happen when changing the error type and is done on the level of DatapickerImage
-	if (!aspect->inherits(AspectType::AbstractFilter) && !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve))
+
+	if (m_projectExplorer->currentAspect() != aspect)
+		return; // If the current aspect is not selected, there is no need to select the parent
+
+	if (!aspect->inherits<AbstractFilter>() && !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve))
 		m_projectExplorer->setCurrentAspect(parent);
 }
 
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
-	if (!part)
+	if (!part || !part->dockWidget())
 		return;
 
-	const auto* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-	auto* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
-	if (!datapicker)
-		datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
+	// don't do anything for children of Workbook and Datapicker, the dock widget is assigned to the parent
+	// TODO: everything seems to work correctly also without this check and return. do we really need it?
+	if (aspect->ancestor<Workbook>() || aspect->ancestor<Datapicker>())
+		return;
 
-	if (!workbook && !datapicker && part->dockWidgetExists()) {
-		ContentDockWidget* win = part->dockWidget();
-		if (win)
-			m_dockManagerContent->removeDockWidget(win);
-	}
+	if (auto* win = part->dockWidget())
+		m_dockManagerContent->removeDockWidget(win);
 }
 
 /*!
@@ -1872,7 +1887,7 @@ void MainWin::importDirDialog(const QString& dir) {
 	if (type == AspectType::Folder || type == AspectType::Workbook)
 		targetAspect = m_currentAspect;
 	else {
-		targetAspect = m_currentAspect->parent(AspectType::Folder);
+		targetAspect = m_currentAspect->parent<Folder>();
 		if (!targetAspect)
 			targetAspect = m_project;
 	}

@@ -1,0 +1,21 @@
+diff -ruNa a/QXlsx/CMakeLists.txt b/QXlsx/CMakeLists.txt
+--- a/QXlsx/CMakeLists.txt	2024-12-31 01:27:50.000000000 +0100
++++ b/QXlsx/CMakeLists.txt	2025-12-01 14:20:54.977394427 +0100
+@@ -26,7 +26,7 @@
+ endif()
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
++list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+ 
+ if(NOT DEFINED QXLSX_PARENTPATH)
+     set(QXLSX_PARENTPATH ${CMAKE_CURRENT_SOURCE_DIR}/../)
+@@ -164,6 +164,8 @@
+     target_compile_definitions(QXlsx PUBLIC QXlsx_SHAREDLIB)
+ endif()
+ 
++find_package(Qt6GuiPrivate REQUIRED)
++
+ target_link_libraries(${PROJECT_NAME}
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::GuiPrivate

@@ -135,17 +135,17 @@ const void* CANFilterPrivate::DataContainer::datas(size_t index) const {
 	return nullptr;
 }
 
-bool CANFilterPrivate::DataContainer::resize(uint32_t s) const {
+bool CANFilterPrivate::DataContainer::resize(uint32_t size) const {
 	for (uint32_t i = 0; i < m_dataContainer.size(); i++) {
 		switch (m_columnModes.at(i)) {
 		case AbstractColumn::ColumnMode::BigInt:
-			static_cast<QVector<qint64>*>(m_dataContainer[i])->resize(s);
+			static_cast<QVector<qint64>*>(m_dataContainer[i])->resize(size);
 			break;
 		case AbstractColumn::ColumnMode::Integer:
-			static_cast<QVector<qint32>*>(m_dataContainer[i])->resize(s);
+			static_cast<QVector<qint32>*>(m_dataContainer[i])->resize(size);
 			break;
 		case AbstractColumn::ColumnMode::Double:
-			static_cast<QVector<double>*>(m_dataContainer[i])->resize(s);
+			static_cast<QVector<double>*>(m_dataContainer[i])->resize(size);
 			break;
 		// TODO: implement missing cases
 		case AbstractColumn::ColumnMode::Text:
@@ -160,16 +160,16 @@ bool CANFilterPrivate::DataContainer::resize(uint32_t s) const {
 		return true;
 
 	// Check that all vectors have same length
-	int size = -1;
+	qsizetype s = -1;
 	switch (m_columnModes.at(0)) {
 	case AbstractColumn::ColumnMode::BigInt:
-		size = static_cast<QVector<qint64>*>(m_dataContainer[0])->size();
+		s = static_cast<QVector<qint64>*>(m_dataContainer[0])->size();
 		break;
 	case AbstractColumn::ColumnMode::Integer:
-		size = static_cast<QVector<qint32>*>(m_dataContainer[0])->size();
+		s = static_cast<QVector<qint32>*>(m_dataContainer[0])->size();
 		break;
 	case AbstractColumn::ColumnMode::Double:
-		size = static_cast<QVector<double>*>(m_dataContainer[0])->size();
+		s = static_cast<QVector<double>*>(m_dataContainer[0])->size();
 		break;
 	// TODO: implement missing cases
 	case AbstractColumn::ColumnMode::Text:
@@ -179,11 +179,11 @@ bool CANFilterPrivate::DataContainer::resize(uint32_t s) const {
 		break;
 	}
 
-	if (size == -1)
+	if (s == -1)
 		return false;
 
 	for (uint32_t i = 0; i < m_dataContainer.size(); i++) {
-		int s = -1;
+		s = -1;
 		switch (m_columnModes.at(i)) {
 		case AbstractColumn::ColumnMode::BigInt:
 			s = static_cast<QVector<qint64>*>(m_dataContainer[i])->size();

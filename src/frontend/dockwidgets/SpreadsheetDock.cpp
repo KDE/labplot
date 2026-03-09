@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for spreadsheet properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -37,13 +37,13 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 
 	connect(ui.cbLinkingEnabled, &QCheckBox::toggled, this, &SpreadsheetDock::linkingChanged);
 	connect(ui.cbLinkedSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &SpreadsheetDock::linkedSpreadsheetChanged);
+	connect(ui.cbStatisticsSpreadsheet, &QCheckBox::toggled, this, &SpreadsheetDock::toggleStatisticsSpreadsheet);
 
-	auto* templateHandler = new TemplateHandler(this, QLatin1String("Spreadsheet"));
-	ui.gridLayout->addWidget(templateHandler, 17, 0, 1, 4);
-	templateHandler->show();
-	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);
-	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &SpreadsheetDock::saveConfigAsTemplate);
-	connect(templateHandler, &TemplateHandler::info, this, &SpreadsheetDock::info);
+	m_templateHandler = new TemplateHandler(this, QLatin1String("Spreadsheet"));
+	ui.gridLayout->addWidget(m_templateHandler, 19, 0, 1, 4);
+	connect(m_templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);
+	connect(m_templateHandler, &TemplateHandler::saveConfigRequested, this, &SpreadsheetDock::saveConfigAsTemplate);
+	connect(m_templateHandler, &TemplateHandler::info, this, &SpreadsheetDock::info);
 }
 
 void SpreadsheetDock::retranslateUi() {
@@ -55,6 +55,10 @@ void SpreadsheetDock::retranslateUi() {
 	info = i18n("Spreadsheet to synchronize the number of rows with");
 	ui.lLinkedSpreadsheet->setToolTip(info);
 	ui.cbLinkedSpreadsheet->setToolTip(info);
+
+	info = i18n("Show Columns Statistics Spreadsheet");
+	ui.lStatisticsSpreadsheet->setToolTip(info);
+	ui.cbStatisticsSpreadsheet->setToolTip(info);
 }
 
 /*!
@@ -62,18 +66,38 @@ void SpreadsheetDock::retranslateUi() {
 */
 void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	CONDITIONAL_LOCK_RETURN;
-	m_spreadsheetList = list;
+	m_spreadsheets = list;
 	m_spreadsheet = list.first();
 	setAspects(list);
 
-	// check whether we have non-editable columns:
-	bool nonEditable = false;
-	for (auto* s : m_spreadsheetList) {
-		if (s->parentAspect()->type() == AspectType::DatapickerCurve) {
-			nonEditable = true;
+	// check if we have read-only spreadsheets
+	bool readOnly = false;
+	for (auto* s : m_spreadsheets) {
+		if (s->readOnly()) {
+			readOnly = true;
 			break;
 		}
 	}
+
+	ui.lDimensions->setVisible(!readOnly);
+	ui.lRowCount->setVisible(!readOnly);
+	ui.sbRowCount->setVisible(!readOnly);
+	ui.lColumnCount->setVisible(!readOnly);
+	ui.sbColumnCount->setVisible(!readOnly);
+	ui.lFormat->setVisible(!readOnly);
+	ui.lShowComments->setVisible(!readOnly);
+	ui.cbShowComments->setVisible(!readOnly);
+	ui.lShowSparklines->setVisible(!readOnly);
+	ui.cbShowSparklines->setVisible(!readOnly);
+	ui.lLinking->setVisible(!readOnly);
+	ui.lLinkingEnabled->setVisible(!readOnly);
+	ui.cbLinkingEnabled->setVisible(!readOnly);
+	ui.lLinkedSpreadsheet->setVisible(!readOnly);
+	ui.cbLinkedSpreadsheet->setVisible(!readOnly);
+	m_templateHandler->setVisible(!readOnly);
+
+	if (readOnly)
+		return;
 
 	auto* model = aspectModel();
 	model->setSelectableAspects({AspectType::Spreadsheet});
@@ -85,7 +109,7 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 
 	// don't allow to select self spreadsheet!
 	QList<const AbstractAspect*> aspects;
-	for (auto* sh : m_spreadsheetList)
+	for (const auto* sh : m_spreadsheets)
 		aspects << sh;
 	ui.cbLinkedSpreadsheet->setHiddenAspects(aspects);
 
@@ -99,17 +123,7 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	connect(m_spreadsheet, &Spreadsheet::showSparklinesChanged, this, &SpreadsheetDock::spreadsheetShowSparklinesChanged);
 	connect(m_spreadsheet, &Spreadsheet::linkingChanged, this, &SpreadsheetDock::spreadsheetLinkingChanged);
 	connect(m_spreadsheet, &Spreadsheet::linkedSpreadsheetChanged, this, &SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged);
-
-	ui.lDimensions->setVisible(!nonEditable);
-	ui.lRowCount->setVisible(!nonEditable);
-	ui.sbRowCount->setVisible(!nonEditable);
-	ui.lColumnCount->setVisible(!nonEditable);
-	ui.sbColumnCount->setVisible(!nonEditable);
-	ui.lFormat->setVisible(!nonEditable);
-	ui.lShowComments->setVisible(!nonEditable);
-	ui.cbShowComments->setVisible(!nonEditable);
-	ui.lShowSparklines->setVisible(!nonEditable);
-	ui.cbShowSparklines->setVisible(!nonEditable);
+	connect(m_spreadsheet, &Spreadsheet::statisticsSpreadsheetChanged, this, &SpreadsheetDock::spreadsheetStatisticsSpreadsheetChanged);
 }
 
 //*************************************************************
@@ -118,14 +132,14 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 void SpreadsheetDock::rowCountChanged(int rows) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* spreadsheet : m_spreadsheetList)
+	for (auto* spreadsheet : m_spreadsheets)
 		spreadsheet->setRowCount(rows);
 }
 
 void SpreadsheetDock::columnCountChanged(int columns) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* spreadsheet : m_spreadsheetList)
+	for (auto* spreadsheet : m_spreadsheets)
 		spreadsheet->setColumnCount(columns);
 }
 
@@ -135,7 +149,7 @@ void SpreadsheetDock::columnCountChanged(int columns) {
 void SpreadsheetDock::commentsShownChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* spreadsheet : m_spreadsheetList)
+	for (auto* spreadsheet : m_spreadsheets)
 		spreadsheet->setShowComments(state);
 }
 /*!
@@ -144,7 +158,7 @@ void SpreadsheetDock::commentsShownChanged(bool state) {
 void SpreadsheetDock::sparklinesShownChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* spreadsheet : m_spreadsheetList)
+	for (auto* spreadsheet : m_spreadsheets)
 		spreadsheet->setShowSparklines(state);
 }
 
@@ -155,7 +169,7 @@ void SpreadsheetDock::linkingChanged(bool linking) {
 
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* spreadsheet : m_spreadsheetList)
+	for (auto* spreadsheet : m_spreadsheets)
 		spreadsheet->setLinking(linking);
 }
 
@@ -169,10 +183,16 @@ void SpreadsheetDock::linkedSpreadsheetChanged(const QModelIndex& index) {
 			cb->setStyleSheet(QString());
 		auto* sh = dynamic_cast<Spreadsheet*>(aspect);
 		if (sh) {
-			for (auto* spreadsheet : m_spreadsheetList)
+			for (auto* spreadsheet : m_spreadsheets)
 				spreadsheet->setLinkedSpreadsheet(sh);
 		}
 	}
+}
+
+void SpreadsheetDock::toggleStatisticsSpreadsheet(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* spreadsheet : m_spreadsheets)
+		spreadsheet->toggleStatisticsSpreadsheet(on);
 }
 
 //*************************************************************
@@ -208,6 +228,10 @@ void SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged(const Spreadsheet* spr
 	ui.cbLinkedSpreadsheet->setAspect(spreadsheet);
 }
 
+void SpreadsheetDock::spreadsheetStatisticsSpreadsheetChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbStatisticsSpreadsheet->setChecked(on);
+}
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
@@ -223,7 +247,7 @@ void SpreadsheetDock::load() {
 
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 	auto name = TemplateHandler::templateName(config);
-	const int size = m_spreadsheetList.size();
+	const int size = m_spreadsheets.size();
 	if (size > 1)
 		m_spreadsheet->beginMacro(i18n("%1 spreadsheets: template \"%2\" loaded", size, name));
 	else

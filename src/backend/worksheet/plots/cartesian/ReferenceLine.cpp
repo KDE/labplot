@@ -375,7 +375,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			// old logic for the position for xml version < 6
 			Q_D(ReferenceLine);
 			attribs = reader->attributes();
-			auto str = attribs.value(QStringLiteral("position")).toString();
+			str = attribs.value(QStringLiteral("position")).toString();
 			if (str.isEmpty())
 				reader->raiseMissingAttributeWarning(QStringLiteral("position"));
 			else {

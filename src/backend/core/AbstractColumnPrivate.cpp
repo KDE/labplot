@@ -20,5 +20,5 @@
  */
 AbstractColumnPrivate::AbstractColumnPrivate(AbstractColumn* owner)
 	: m_owner(owner) {
-	Q_CHECK_PTR(m_owner);
+	Q_ASSERT(m_owner);
 }

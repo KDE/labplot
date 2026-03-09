@@ -15,8 +15,6 @@
 #include "frontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyintegrationcurvedockgeneraltab.h"
 
-class TreeViewComboBox;
-
 class XYIntegrationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 

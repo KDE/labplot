@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : QQPlot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-204 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-206 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -199,6 +199,12 @@ bool QQPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<dou
 	return false;
 }
 
+bool QQPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	start = 0;
+	end = 99;
+	return true;
+}
+
 double QQPlot::minimum(const Dimension dim) const {
 	Q_D(const QQPlot);
 	switch (dim) {
@@ -224,6 +230,13 @@ double QQPlot::maximum(const Dimension dim) const {
 bool QQPlot::hasData() const {
 	Q_D(const QQPlot);
 	return (d->dataColumn != nullptr);
+}
+
+int QQPlot::dataCount(Dimension) const {
+	Q_D(const QQPlot);
+	if (!d->dataColumn)
+		return -1;
+	return d->dataColumn->rowCount();
 }
 
 bool QQPlot::usingColumn(const AbstractColumn* column, bool) const {
@@ -318,11 +331,7 @@ QQPlotPrivate::~QQPlotPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void QQPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || q->isLoading();
-	if (suppressed)
-		return;
-
-	if (!isVisible())
+	if (retransformSuppressed())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
@@ -705,13 +714,13 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(QQPlot);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const QColor color = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
-	d->referenceCurve->line()->loadThemeConfig(group, themeColor);
+	d->referenceCurve->line()->loadThemeConfig(group, color);
 	d->percentilesCurve->line()->setStyle(Qt::NoPen);
-	d->percentilesCurve->symbol()->loadThemeConfig(group, themeColor);
+	d->percentilesCurve->symbol()->loadThemeConfig(group, color);
 
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

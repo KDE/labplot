@@ -57,10 +57,10 @@ public:
 	};
 
 	struct Keyword {
-		Keyword(const QString& key, const QString& value, const QString& comment)
-			: key(key)
-			, value(value)
-			, comment(comment) {
+		Keyword(const QString& kkey, const QString& kvalue, const QString& kcomment)
+			: key(kkey)
+			, value(kvalue)
+			, comment(kcomment) {
 		}
 		Keyword() {
 		}

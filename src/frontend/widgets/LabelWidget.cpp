@@ -11,7 +11,6 @@
 #include "LabelWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/worksheet/Background.h"
-#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "frontend/GuiTools.h"
 #include "frontend/dockwidgets/BaseDock.h"
@@ -19,6 +18,7 @@
 #include "tools/TeXRenderer.h"
 
 #include <KCharSelect>
+#include <KLocalization>
 #include <KLocalizedString>
 #include <KMessageWidget>
 
@@ -107,12 +107,12 @@ LabelWidget::LabelWidget(QWidget* parent)
 
 	QString suffix;
 	if (m_units == BaseDock::Units::Metric)
-		suffix = QLatin1String(" cm");
+		suffix = i18n("%v cm");
 	else
-		suffix = QLatin1String(" in");
+		suffix = i18n("%v in");
 
-	ui.sbPositionX->setSuffix(suffix);
-	ui.sbPositionY->setSuffix(suffix);
+	KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position", qPrintable(suffix)));
 
 	m_dateTimeMenu->setSeparatorsCollapsible(false); // we don't want the first separator to be removed
 
@@ -315,11 +315,11 @@ void LabelWidget::updateBackground() const {
 	if (type == AspectType::Worksheet)
 		color = static_cast<const Worksheet*>(m_label->parentAspect())->background()->firstColor();
 	else if (type == AspectType::CartesianPlot)
-		color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->background()->firstColor();
+		color = static_cast<CartesianPlot*>(m_label->parentAspect())->background()->firstColor();
 	else if (type == AspectType::CartesianPlotLegend)
 		color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->background()->firstColor();
 	else if (type == AspectType::InfoElement || type == AspectType::Axis)
-		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->background()->firstColor();
+		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->background()->firstColor();
 	else
 		DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
 
@@ -356,14 +356,14 @@ void LabelWidget::initConnections() {
 		auto* worksheet = static_cast<const Worksheet*>(m_label->parentAspect());
 		connect(worksheet->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::CartesianPlot) {
-		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea();
-		connect(plotArea->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
+		auto* plot = static_cast<CartesianPlot*>(m_label->parentAspect());
+		connect(plot->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::CartesianPlotLegend) {
 		auto* legend = static_cast<const CartesianPlotLegend*>(m_label->parentAspect());
 		connect(legend->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::InfoElement || type == AspectType::Axis) {
-		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea();
-		connect(plotArea->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
+		auto* plot = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect());
+		connect(plot->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	}
 }
 
@@ -439,7 +439,7 @@ void LabelWidget::updateUnits() {
 	if (m_units == BaseDock::Units::Metric) {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QLatin1String(" cm");
+		suffix = i18n("%v cm");
 		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
 			ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH));
 		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
@@ -447,7 +447,7 @@ void LabelWidget::updateUnits() {
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QLatin1String(" in");
+		suffix = i18n("%v in");
 		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
 			ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH));
 		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
@@ -455,9 +455,9 @@ void LabelWidget::updateUnits() {
 	}
 
 	if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
-		ui.sbPositionX->setSuffix(suffix);
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position", qPrintable(suffix)));
 	if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
-		ui.sbPositionY->setSuffix(suffix);
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position", qPrintable(suffix)));
 }
 
 void LabelWidget::updateLocale() {
@@ -970,12 +970,14 @@ void LabelWidget::positionXChanged(int index) {
 		case WorksheetElement::HorizontalPosition::Right:
 			x = 1.0;
 		}
-		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position in %", "%v%"));
 	} else {
+		QString suffix;
 		if (m_units == Units::Metric)
-			ui.sbPositionX->setSuffix(QStringLiteral(" cm"));
+			suffix = i18n("%v cm");
 		else
-			ui.sbPositionX->setSuffix(QStringLiteral(" in"));
+			suffix = i18n("%v in");
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position", qPrintable(suffix)));
 	}
 
 	position.point.setX(x);
@@ -1006,12 +1008,14 @@ void LabelWidget::positionYChanged(int index) {
 		case WorksheetElement::VerticalPosition::Bottom:
 			y = 1.0;
 		}
-		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position in %", "%v%"));
 	} else {
+		QString suffix;
 		if (m_units == Units::Metric)
-			ui.sbPositionY->setSuffix(QStringLiteral(" cm"));
+			suffix = i18n("%v cm");
 		else
-			ui.sbPositionY->setSuffix(QStringLiteral(" in"));
+			suffix = i18n("%v in");
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position", qPrintable(suffix)));
 	}
 
 	position.point.setY(y);
@@ -1147,7 +1151,7 @@ void LabelWidget::bindingChanged(bool checked) {
 	ui.sbPositionY->setVisible(!checked);
 
 	// widgets for positioning using logical plot coordinates
-	const auto* plot = static_cast<const CartesianPlot*>(m_label->parent(AspectType::CartesianPlot));
+	const auto* plot = static_cast<const CartesianPlot*>(m_label->parent<CartesianPlot>());
 	if (plot && plot->xRangeFormatDefault() == RangeT::Format::DateTime) {
 		ui.lPositionXLogicalDateTime->setVisible(checked);
 		ui.dtePositionXLogical->setVisible(checked);
@@ -1260,13 +1264,13 @@ void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& positio
 	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
 	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
 		ui.sbPositionX->setValue(std::round(position.point.x() * 100.));
-		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position in %", "%v%"));
 	} else
 		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.x(), m_units), m_worksheetUnit));
 
 	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative) {
 		ui.sbPositionY->setValue(std::round(position.point.y() * 100.));
-		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position in %", "%v%"));
 	} else
 		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.y(), m_units), m_worksheetUnit));
 }
@@ -1420,14 +1424,14 @@ void LabelWidget::load() {
 	// positionXChanged(ui.cbPositionX->currentIndex());
 	if (m_label->position().horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
 		ui.sbPositionX->setValue(std::round(m_label->position().point.x() * 100.));
-		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position in %", "%v%"));
 	} else
 		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_label->position().point.x(), m_units), m_worksheetUnit));
 	ui.cbPositionY->setCurrentIndex((int)m_label->position().verticalPosition);
 	// positionYChanged(ui.cbPositionY->currentIndex());
 	if (m_label->position().verticalPosition == WorksheetElement::VerticalPosition::Relative) {
 		ui.sbPositionY->setValue(std::round(m_label->position().point.y() * 100.));
-		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position in %", "%v%"));
 	} else
 		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_label->position().point.y(), m_units), m_worksheetUnit));
 

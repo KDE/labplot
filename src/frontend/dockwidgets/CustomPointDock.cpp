@@ -251,7 +251,7 @@ void CustomPointDock::bindingChanged(bool checked) {
 	ui.sbPositionY->setVisible(!checked);
 
 	// widgets for positioning using logical plot coordinates
-	const auto* plot = static_cast<const CartesianPlot*>(m_point->parent(AspectType::CartesianPlot));
+	const auto* plot = static_cast<const CartesianPlot*>(m_point->parent<CartesianPlot>());
 	if (plot) {
 		// x
 		bool numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);

@@ -4,7 +4,7 @@
 	Description       	 : A tree view for displaying and editing an AspectTreeModel.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,7 +17,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/notebook/Notebook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/Worksheet.h"
 #include "frontend/core/ContentDockWidget.h"
 
 #include <KConfig>
@@ -154,8 +155,8 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 	const int selectedAspectsCount = items.size() / 4; // 4 columns in the tree view, divide by 4 to get the number of rows/aspects
 	QVector<AbstractAspect*> selectedAspects;
 	for (int i = 0; i < selectedAspectsCount; ++i) {
-		const auto& index = items.at(i * 4);
-		selectedAspects << static_cast<AbstractAspect*>(index.internalPointer());
+		const auto& item = items.at(i * 4);
+		selectedAspects << static_cast<AbstractAspect*>(item.internalPointer());
 	}
 
 	QMenu* menu = nullptr;
@@ -173,43 +174,43 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 		}
 	} else if (selectedAspectsCount > 1) { // multiple aspects are selected
 		menu = new QMenu(this);
-		// add "expand/collapse" actions if the selected aspects have children
-		bool hasChildren = false;
+
+		// check if the selected objects have the same parent and 
+		// show parent's context menu for columns to allow plot data, etc.
+		bool sameParent = true;
+		AbstractAspect* parentAspect = nullptr;
 		for (const auto* aspect : selectedAspects) {
-			if (aspect->childCount<AbstractAspect>()) {
-				hasChildren = true;
-				break;
+			if (!parentAspect)
+				parentAspect = aspect->parentAspect();
+			else {
+				if (aspect->parentAspect() != parentAspect) {
+					sameParent = false;
+					break;
+				}
+				parentAspect = aspect->parentAspect();
 			}
 		}
 
-		if (hasChildren) {
-			menu->addAction(expandSelectedTreeAction);
-			menu->addAction(collapseSelectedTreeAction);
-			menu->addSeparator();
-		} else {
-			// check if columns from the same parent were selected only
-			// and show parent's context menu for columns to allow plot data, etc.
-			bool columnsOnly = true;
-			bool sameParent = true;
-			AbstractAspect* parentAspect = nullptr;
-			for (const auto* aspect : selectedAspects) {
-				if (aspect->type() != AspectType::Column) {
-					columnsOnly = false;
-					break;
-				}
-
-				if (!parentAspect)
-					parentAspect = aspect->parentAspect();
-				else {
-					if (aspect->parentAspect() != parentAspect) {
-						sameParent = false;
-						break;
+		if (sameParent && parentAspect) {
+			// lambda function to check if all selected aspects are of a specific type
+			auto checkAspectType = [&selectedAspects](AspectType type) -> bool {
+				// for WorksheetElements, check the inheritance and not the exact type
+				if (type == AspectType::WorksheetElement) {
+					for (const auto* aspect : selectedAspects) {
+						if (!aspect->inherits<WorksheetElement>())
+							return false;
 					}
-					parentAspect = aspect->parentAspect();
+					return true;
 				}
-			}
 
-			if (columnsOnly && sameParent) {
+				for (const auto* aspect : selectedAspects) {
+					if (aspect->type() != type)
+						return false;
+				}
+				return true;
+			};
+
+			if (checkAspectType(AspectType::Column)) { // check columns
 				if (parentAspect->type() == AspectType::Spreadsheet) {
 					auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
 					spreadsheet->fillColumnsContextMenu(menu);
@@ -225,6 +226,32 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 #endif
 				}
 				menu->addSeparator();
+			} else if (checkAspectType(AspectType::WorksheetElement)) { // check worksheet elements
+				if (checkAspectType(AspectType::XYCurve)) { // check xy-curves
+					auto* plotArea = dynamic_cast<CartesianPlot*>(parentAspect);
+					if (plotArea) {
+						menu->addMenu(plotArea->analysisMenu());
+						menu->addSeparator();
+					}
+				}
+
+				auto* worksheet = dynamic_cast<Worksheet*>(parentAspect);
+				if (!worksheet)
+					worksheet = parentAspect->parent<Worksheet>();
+				if (worksheet) {
+					worksheet->fillElementsContextMenu(menu);
+					menu->addSeparator();
+				}
+			}
+		}
+
+		// add "expand/collapse" actions if the selected aspects have children
+		for (const auto* aspect : selectedAspects) {
+			if (aspect->childCount<AbstractAspect>()) {
+				menu->addAction(expandSelectedTreeAction);
+				menu->addAction(collapseSelectedTreeAction);
+				menu->addSeparator();
+				break;
 			}
 		}
 
@@ -437,12 +464,12 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 					vec << (quintptr)aspect;
 				}
 
-				QByteArray data;
-				QDataStream stream(&data, QIODevice::WriteOnly);
+				QByteArray mdata;
+				QDataStream stream(&mdata, QIODevice::WriteOnly);
 				stream << (quintptr)m_project; // serialize the project pointer first, will be used as the unique identifier
 				stream << vec;
 
-				mimeData->setData(QStringLiteral("labplot-dnd"), data);
+				mimeData->setData(QStringLiteral("labplot-dnd"), mdata);
 				drag->setMimeData(mimeData);
 				drag->exec();
 			}
@@ -461,8 +488,8 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			} else {
 				// drad&drop between the different project windows is not supported yet.
 				// check whether we're dragging inside of the same project.
-				QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
-				QDataStream stream(&data, QIODevice::ReadOnly);
+				QByteArray mdata = mimeData->data(QLatin1String("labplot-dnd"));
+				QDataStream stream(&mdata, QIODevice::ReadOnly);
 				quintptr ptr = 0;
 				stream >> ptr;
 				auto* project = reinterpret_cast<Project*>(ptr);
@@ -878,8 +905,8 @@ void ProjectExplorer::selectionChanged(const QItemSelection& selected, const QIt
 
 	const auto& items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	for (const auto& index : items) {
-		aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	for (const auto& item : items) {
+		aspect = static_cast<AbstractAspect*>(item.internalPointer());
 		QDEBUG("items ASPECT =" << aspect)
 		selectedAspects << aspect;
 	}
@@ -956,8 +983,12 @@ void ProjectExplorer::deleteSelected() {
 	for (int i = 0; i < items.size() / columnCount; ++i) {
 		const QModelIndex& index = items.at(i * columnCount);
 		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		aspects << aspect;
+		if (!aspect->isFixed())
+			aspects << aspect;
 	}
+
+	if (aspects.isEmpty())
+		return; // no non-fixed aspects selected, nothing to delete
 
 	QString msg;
 	if (aspects.size() > 1)
@@ -1058,20 +1089,20 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 			writer->writeEndElement();
 		}
 
-		const auto& index = model->modelIndexOfAspect(aspect);
-		if (model->rowCount(index) > 0 && m_treeView->isExpanded(index)) {
+		const auto& aindex = model->modelIndexOfAspect(aspect);
+		if (model->rowCount(aindex) > 0 && m_treeView->isExpanded(aindex)) {
 			writer->writeStartElement(QStringLiteral("expanded"));
 			writer->writeAttribute(QStringLiteral("path"), path);
 			writer->writeEndElement();
 		}
 
-		if (selectedRows.indexOf(index) != -1) {
+		if (selectedRows.indexOf(aindex) != -1) {
 			writer->writeStartElement(QStringLiteral("selected"));
 			writer->writeAttribute(QStringLiteral("path"), path);
 			writer->writeEndElement();
 		}
 
-		if (index == m_treeView->currentIndex()) {
+		if (aindex == m_treeView->currentIndex()) {
 			writer->writeStartElement(QStringLiteral("current"));
 			writer->writeAttribute(QStringLiteral("path"), path);
 			writer->writeEndElement();

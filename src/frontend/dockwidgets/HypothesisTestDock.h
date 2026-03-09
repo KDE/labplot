@@ -57,7 +57,7 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in HypothesisTest
 	// TODO
 
-	void showStatusInfo(const QString&);
+	void showStatusError(const QString&);
 };
 
 #endif // HYPOTHESISTESTDOCK_H

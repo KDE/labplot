@@ -93,13 +93,13 @@ bool ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	// TODO: error handling
 	QElapsedTimer timer;
 	timer.start();
-	if (aspect->inherits(AspectType::Matrix)) {
+	if (aspect->inherits<Matrix>()) {
 		auto* matrix = qobject_cast<Matrix*>(aspect);
 		importSQLDatabaseWidget->read(matrix, mode);
-	} else if (aspect->inherits(AspectType::Spreadsheet)) {
+	} else if (aspect->inherits<Spreadsheet>()) {
 		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		importSQLDatabaseWidget->read(spreadsheet, mode);
-	} else if (aspect->inherits(AspectType::Workbook)) {
+	} else if (aspect->inherits<Workbook>()) {
 		// use active spreadsheet or matrix (only if numeric data is going to be imported) if present,
 		// create a new spreadsheet in the selected workbook otherwise
 		auto* workbook = qobject_cast<Workbook*>(aspect);

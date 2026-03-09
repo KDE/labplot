@@ -21,16 +21,16 @@
 #include "Debug.h"
 
 struct Lock {
-	inline explicit Lock(bool& variable)
-		: variable(variable) {
+	inline explicit Lock(bool& var, bool firstValue = true)
+		: variable(var) {
 		// Make sure it is not already locked
 		// somewhere else
 		assert(!variable);
-		this->variable = true;
+		this->variable = firstValue;
 	}
 
 	inline ~Lock() {
-		variable = false;
+		variable = !variable;
 	}
 
 private:
@@ -56,6 +56,34 @@ public:
 
 private:
 	T m_cleanupFunction;
+};
+
+/*!
+ * \brief The AutoRestore class
+ * Cleanup class which passes during construction the value \p startValue to the function \p func and
+ * when the object goes out of scope function \p func is called with the inverted value of \p startValue
+ *
+ * @param startValue: Value which shall be passed in the constructor to the function \p func and in the
+ *					  destructor inverted
+ * @param func: function which shall be called in the constructor and the destructor of this object when it goes out of scope
+ *
+ * Example (Supressing AspectAdded signal as long as this object is in scope):
+ *	AutoRestore cleanup(true, [this](bool value) {q->project()->setSuppressAspectAddedSignal(value);});
+ */
+class AutoRestore {
+public:
+	AutoRestore(bool startValue, std::function<void(bool)> func)
+		: m_function(func)
+		, m_startValue(startValue) {
+		m_function(m_startValue);
+	}
+	~AutoRestore() {
+		m_function(!m_startValue);
+	}
+
+private:
+	std::function<void(bool)> m_function;
+	bool m_startValue;
 };
 
 /*!
@@ -729,12 +757,12 @@ private:
 
 #define RESTORE_POINTER(obj, name, Name, Type, list)                                                                                                           \
 	if (!obj->name##Path().isEmpty()) {                                                                                                                        \
-		for (auto* aspect : list) {                                                                                                                            \
-			if (aspect->path() == obj->name##Path()) {                                                                                                         \
-				auto a = dynamic_cast<Type*>(aspect);                                                                                                          \
-				if (!a)                                                                                                                                        \
+		for (auto* asp : list) {                                                                                                                               \
+			if (asp->path() == obj->name##Path()) {                                                                                                            \
+				auto t = dynamic_cast<Type*>(asp);                                                                                                             \
+				if (!t)                                                                                                                                        \
 					continue;                                                                                                                                  \
-				obj->set##Name(a);                                                                                                                             \
+				obj->set##Name(t);                                                                                                                             \
 				break;                                                                                                                                         \
 			}                                                                                                                                                  \
 		}                                                                                                                                                      \

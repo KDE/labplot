@@ -16,16 +16,16 @@ LabPlot is a FREE, open source and cross-platform Data Visualization and Analysi
 If you're reading this on GitHub, please be aware this is just a mirror. The main repository where our development is happening is https://invent.kde.org/education/labplot.
 
 # Project Pages:
-* Visit our [Homepage](https://labplot.kde.org) for more details.
-* The most current stable version as well as nightly builds are available in the [download section](https://labplot.kde.org/download/) of our homepage.
+* Visit our [Homepage](https://labplot.org) for more details.
+* The most current stable version as well as nightly builds are available in the [download section](https://labplot.org/download/) of our homepage.
 * If you're interested in following the development of the project or would like to contribute,
-visit https://labplot.kde.org/contribute/.
-* For more screenshots, see the [gallery](https://labplot.kde.org/gallery/) on our homepage.
-* [Documentation](https://labplot.kde.org/documentation/)
+visit https://labplot.org/contribute/.
+* For more screenshots, see the [gallery](https://labplot.org/gallery/) on our homepage.
+* [Documentation](https://labplot.org/documentation/)
 * [PeerTube](https://tube.kockatoo.org/c/labplot/videos)
 * [Mastodon](https://floss.social/@LabPlot)
 * [YouTube](https://youtube.com/@LabPlot)
-* [Twitter](https://twitter.com/LabPlot)
+* [X](https://x.com/LabPlot)
 
 # How To Build LabPlot
 Please see the [INSTALL file](https://invent.kde.org/education/labplot/-/blob/master/INSTALL) for installation details.
@@ -39,18 +39,8 @@ We have invested a lot of time and effort in creating LabPlot, please consider c
 To cite LabPlot in publications use:
 
 ```
-LabPlot Team (2025), LabPlot: A FREE, open source, cross-platform Data Visualization and Analysis software accessible to everyone, (Version 2.11.1) [Computer software]. https://labplot.org.
+LabPlot Team (2026), LabPlot: A FREE, open source, cross-platform Data Visualization and Analysis software accessible to everyone, (Version 2.12.1) [Computer software]. https://labplot.org.
 ```
 
-See also: https://guides.libraries.uc.edu/citing/code
-
-
 # Donate
-We provide LabPlot for free. If you productively use LabPlot and want to financially support its future development, please consider donating via [Liberapay](https://liberapay.com/LabPlot/donate)
-
-
-## Funding
-This project received funding through [NGI Zero Core](https://nlnet.nl/core), a fund established by [NLnet](https://nlnet.nl) with financial support from the European Commission's [Next Generation Internet](https://ngi.eu) program. Learn more at the [NLnet project page](https://nlnet.nl/project/LabPlot).
-
-[<img src="https://nlnet.nl/logo/banner.png" alt="NLnet foundation logo" width="20%" />](https://nlnet.nl)
-[<img src="https://nlnet.nl/image/logos/NGI0_tag.svg" alt="NGI Zero Logo" width="20%" />](https://nlnet.nl/core)
+We provide LabPlot for free. If you productively use LabPlot and want to financially support its future development, please consider donating via [Liberapay](https://liberapay.com/LabPlot/donate).

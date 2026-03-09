@@ -45,6 +45,7 @@ public:
 	~Column() override;
 
 	QIcon icon() const override;
+	QString caption() const override;
 	QMenu* createContextMenu() override;
 
 	void updateLocale();
@@ -253,10 +254,6 @@ private:
 
 	void handleRowInsertion(int before, int count) override;
 	void handleRowRemoval(int first, int count) override;
-
-	QAction* m_copyDataAction{nullptr};
-	QAction* m_pasteDataAction{nullptr};
-	QActionGroup* m_usedInActionGroup{nullptr};
 
 	ColumnPrivate* d;
 	ColumnStringIO* m_string_io;
