@@ -187,7 +187,10 @@ void CartesianPlot::init(bool loading) {
 	});
 
 	connect(this, &AbstractAspect::childAspectAdded, this, &CartesianPlot::childAdded);
-	connect(this, QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded), this, &CartesianPlot::childAboutToBeAdded);
+	connect(this,
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
+			this,
+			&CartesianPlot::childAboutToBeAdded);
 	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
 
 	// if not loading, initialize the default properties (read in load() otherwise)

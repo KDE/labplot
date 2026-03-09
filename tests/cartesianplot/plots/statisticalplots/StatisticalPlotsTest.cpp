@@ -1192,7 +1192,6 @@ void StatisticalPlotsTest::testRunChartDuplicate() {
  * test the run chart using Average for the center line, data from from Wheeler "Making Sense of Data", chapter seven.
  */
 void StatisticalPlotsTest::testRunChartCenterAverage() {
-
 	// prepare the data
 	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
 	column->setIntegers({11, 4, 6, 4, 5, 7, 5, 4, 7, 12, 4, 2, 4, 5, 6, 4, 2, 2, 5, 9, 5, 6, 5, 9});
