@@ -125,7 +125,7 @@ void DatasetHandler::configureFilter() {
 			for (const auto& col : columnsArray)
 				columnNames << col.toString();
 
-			properties.columnNamesRaw = columnNames.join(QLatin1Char(','));
+			properties.columnNamesString = columnNames.join(QLatin1Char(','));
 		}
 	} else {
 		DEBUG("Empty object");

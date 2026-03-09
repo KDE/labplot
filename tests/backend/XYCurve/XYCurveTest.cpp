@@ -783,7 +783,7 @@ void addUniqueLine_double_vector_last_point_vector(double* p,
 	}
 }
 
-void addUniqueLine_double_vector_last_point_vector_lines_vector(double* p,
+void addUniqueLine_double_vector_last_point_vector_lines_vector(const double* p,
 																double& minY,
 																double& maxY,
 																double* lastPoint,
@@ -832,7 +832,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector(double* p,
 	}
 }
 
-void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(double* p,
+void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(const double* p,
 																	 double& minY,
 																	 double& maxY,
 																	 double* lastPoint,
@@ -881,7 +881,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(double* p,
 	}
 }
 
-void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_last_point(double* p,
+void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_last_point(const double* p,
 																						  double& minY,
 																						  double& maxY,
 																						  double** lastPoint,
@@ -949,6 +949,58 @@ void addUniqueLine02(QPointF p, double x, double& minY, double& maxY, QPointF& l
 		maxY = p.y();
 		lastPoint = p;
 	}
+}
+
+void XYCurveTest::lineVertical() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	const QVector<double> xValues = {10., 10., 10.};
+
+	const QVector<double> yValues = {10., 10., 0.};
+
+	xColumn->replaceValues(-1, xValues);
+	yColumn->replaceValues(-1, yValues);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	curve->setLineType(XYCurve::LineType::Line);
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+
+	int callCounter = 0;
+	connect(curve, &XYCurve::linesUpdated, [&callCounter, xValues, yValues](const XYCurve*, const QVector<QLineF>& lines) {
+		QCOMPARE(xValues.size(), yValues.size());
+		QCOMPARE(lines.size(), 1); // We have only one vertical line
+
+		VALUES_EQUAL(lines.at(0).p1().x(), 10.);
+		VALUES_EQUAL(lines.at(0).p1().y(), 0.);
+		VALUES_EQUAL(lines.at(0).p2().x(), 10.);
+		VALUES_EQUAL(lines.at(0).p2().y(), 10.);
+
+		callCounter++;
+	});
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 9., 11.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0, 10.);
+
+	QCOMPARE(callCounter, 1);
 }
 
 void XYCurveTest::updateLinesNoGapDirectConnection() {

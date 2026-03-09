@@ -30,7 +30,7 @@ public:
 	LabelSet() {
 	}
 
-	QVector<QString> labels() const {
+	const QVector<QString>& labels() const {
 		return m_labels;
 	}
 	QString valueString(int i) const {

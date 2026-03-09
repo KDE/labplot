@@ -110,8 +110,6 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/doublerange_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/doublerange_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/intrange_wrapper.cpp
@@ -271,16 +269,17 @@ generate_python_bindings(
 
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     # Only proceed if we actually found the Python packages
-    if(Shiboken6_INCLUDE_DIRS AND PySide6_INCLUDE_DIRS)
+    if(NOT Shiboken6_INCLUDE_DIRS)
+    	message(FATAL_ERROR "Python package support requested (ENABLE_PYTHON_SDK or ENABLE_PYTHON_SCRIPTING) but Shiboken6 not found. Please install or disable Python support.")
+    endif()
+    if (NOT PySide6_INCLUDE_DIRS)
+    	message(FATAL_ERROR "Python package support requested (ENABLE_PYTHON_SDK or ENABLE_PYTHON_SCRIPTING) but PySide6 not found. Please install or disable Python support.")
+    endif()
 	target_include_directories(${bindings_library} PUBLIC
 	    ${Python3_INCLUDE_DIRS}
 	    ${PySide6_INCLUDE_DIRS}
 	    ${Shiboken6_INCLUDE_DIRS}
 	)
-    else()
-	message(FATAL_ERROR "Python package support requested (ENABLE_PYTHON_SDK or ENABLE_PYTHON_SCRIPTING) but PySide6/Shiboken6 not found. Please install them or disable Python support.")
-    endif()
-
 
     if(PySide6_ABI3_LIBRARY)
 	target_link_libraries(${bindings_library} PRIVATE ${PySide6_ABI3_LIBRARY})

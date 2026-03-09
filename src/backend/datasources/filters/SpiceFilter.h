@@ -34,8 +34,8 @@ public:
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
-	QStringList vectorNames() const;
-	QVector<AbstractColumn::ColumnMode> columnModes();
+	const QStringList& vectorNames() const;
+	const QVector<AbstractColumn::ColumnMode>& columnModes();
 
 	void setStartRow(const int);
 	int startRow() const;

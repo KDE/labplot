@@ -108,7 +108,7 @@ void DataColumnsWidget::addDataColumn() {
 }
 
 void DataColumnsWidget::removeDataColumn() {
-	auto* sender = static_cast<QPushButton*>(QObject::sender());
+	const auto* sender = static_cast<QPushButton*>(QObject::sender());
 	if (sender) {
 		// remove button was clicked, determine which one and
 		// delete it together with the corresponding combobox

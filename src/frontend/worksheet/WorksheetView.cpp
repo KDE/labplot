@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2018 Stefan-Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -98,6 +98,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	connect(m_worksheet, &Worksheet::requestUpdate, this, &WorksheetView::updateBackground);
 	connect(m_worksheet, &Worksheet::childAspectAboutToBeRemoved, this, &WorksheetView::aspectAboutToBeRemoved);
 	connect(m_worksheet, &Worksheet::useViewSizeChanged, this, &WorksheetView::useViewSizeChanged);
+	connect(m_worksheet, &Worksheet::pageRectChanged, this, &WorksheetView::updateFit);
 	connect(m_worksheet, &Worksheet::layoutChanged, this, &WorksheetView::layoutChanged);
 	connect(m_worksheet, &Worksheet::changed, this, [=] {
 		if (m_magnificationWindow && m_magnificationWindow->isVisible())
@@ -163,22 +164,22 @@ void WorksheetView::initActions() {
 	gridActionGroup->setExclusive(true);
 	magnificationActionGroup = new QActionGroup(this);
 
-	auto* fitActionGroup = new QActionGroup(zoomActionGroup);
-	fitActionGroup->setExclusive(true);
-	zoomFitNoneAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18nc("Zoom", "No fit"), fitActionGroup);
+	zoomFitActionGroup = new QActionGroup(zoomActionGroup);
+	zoomFitActionGroup->setExclusive(true);
+	zoomFitNoneAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18nc("Zoom", "No fit"), zoomFitActionGroup);
 	zoomFitNoneAction->setCheckable(true);
 	zoomFitNoneAction->setChecked(true);
 	zoomFitNoneAction->setData((int)Worksheet::ZoomFit::None);
-	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18nc("Zoom", "Fit to Height"), fitActionGroup);
+	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18nc("Zoom", "Fit to Height"), zoomFitActionGroup);
 	zoomFitPageHeightAction->setCheckable(true);
 	zoomFitPageHeightAction->setData((int)Worksheet::ZoomFit::FitToHeight);
-	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18nc("Zoom", "Fit to Width"), fitActionGroup);
+	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18nc("Zoom", "Fit to Width"), zoomFitActionGroup);
 	zoomFitPageWidthAction->setCheckable(true);
 	zoomFitPageWidthAction->setData((int)Worksheet::ZoomFit::FitToWidth);
-	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18nc("Zoom", "Fit to Selection"), fitActionGroup);
+	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18nc("Zoom", "Fit to Selection"), zoomFitActionGroup);
 	zoomFitSelectionAction->setCheckable(true);
 	zoomFitSelectionAction->setData((int)Worksheet::ZoomFit::FitToSelection);
-	zoomFitAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18nc("Zoom", "Fit"), fitActionGroup);
+	zoomFitAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18nc("Zoom", "Fit"), zoomFitActionGroup);
 	zoomFitAction->setCheckable(true);
 	zoomFitAction->setData((int)Worksheet::ZoomFit::Fit);
 
@@ -295,7 +296,7 @@ void WorksheetView::initActions() {
 
 	connect(addNewActionGroup, &QActionGroup::triggered, this, &WorksheetView::addNew);
 	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeMouseMode);
-	connect(fitActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoomFit);
+	connect(zoomFitActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoomFit);
 	connect(zoomActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoom);
 	connect(magnificationActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeMagnification);
 	connect(layoutActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeLayout);
@@ -627,6 +628,9 @@ void WorksheetView::fillZoomMenu(ToggleActionMenu* menu) const {
 	menu->addAction(zoomFitPageHeightAction);
 	menu->addAction(zoomFitPageWidthAction);
 	menu->addAction(zoomFitSelectionAction);
+	for (auto* action : zoomFitActionGroup->actions())
+		if (static_cast<Worksheet::ZoomFit>(action->data().toInt()) == m_worksheet->zoomFit())
+			action->setChecked(true);
 }
 
 void WorksheetView::fillMagnificationMenu(ToggleActionMenu* menu) const {
@@ -801,11 +805,11 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 }
 
 CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
-	QGraphicsItem* item = itemAt(pos);
+	auto* item = itemAt(pos);
 	if (!item)
 		return nullptr;
 
-	QGraphicsItem* plotItem = nullptr;
+	const QGraphicsItem* plotItem = nullptr;
 	if (item->data(0).toInt() == static_cast<int>(AspectType::CartesianPlot))
 		plotItem = item;
 	else {
@@ -1247,10 +1251,10 @@ double WorksheetView::zoomFactor() const {
 }
 
 void WorksheetView::updateLabelsZoom() const {
-	const double zoom = zoomFactor();
+	const double factor = zoomFactor();
 	const auto& labels = m_worksheet->children<TextLabel>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* label : labels)
-		label->setZoomFactor(zoom);
+		label->setZoomFactor(factor);
 }
 
 void WorksheetView::changeMagnification(QAction* action) {
@@ -1506,8 +1510,8 @@ void WorksheetView::fadeOut(qreal value) {
  * sets the layout in Worksheet and enables/disables the layout actions.
  */
 void WorksheetView::changeLayout(QAction* action) const {
-	const auto layout = static_cast<Worksheet::Layout>(action->data().toInt());
-	m_worksheet->setLayout(layout);
+	const auto wsLayout = static_cast<Worksheet::Layout>(action->data().toInt());
+	m_worksheet->setLayout(wsLayout);
 }
 
 Worksheet::Layout WorksheetView::layout() const {
@@ -1704,7 +1708,9 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 			case CartesianPlot::MouseMode::ZoomYSelection:
 				action->setEnabled(singleYRange);
 				break;
-			default:
+			case CartesianPlot::MouseMode::Selection:
+			case CartesianPlot::MouseMode::Cursor:
+			case CartesianPlot::MouseMode::Crosshair:
 				break;
 			}
 		}
@@ -1734,7 +1740,9 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 			case CartesianPlot::MouseMode::ZoomXSelection:
 				action->setEnabled(singleXRange);
 				break;
-			default:
+			case CartesianPlot::MouseMode::Selection:
+			case CartesianPlot::MouseMode::Cursor:
+			case CartesianPlot::MouseMode::Crosshair:
 				break;
 			}
 		}
@@ -2352,7 +2360,7 @@ void WorksheetView::suppressSelectionChangedEvent(bool value) {
 WorksheetElement* WorksheetView::selectedElement() const {
 	return m_selectedElement;
 }
-QList<QGraphicsItem*> WorksheetView::selectedItems() const {
+const QList<QGraphicsItem*>& WorksheetView::selectedItems() const {
 	return m_selectedItems;
 }
 

@@ -63,6 +63,7 @@ set(PLOT_AREA_ELEMENT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/Axis.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/PlotAreaBackground.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceRange.cpp
 )
@@ -163,7 +164,6 @@ set(SDK_DEPENDENCY_SOURCES
     ${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
     ${BACKEND_DIR}/worksheet/Background.cpp
     ${BACKEND_DIR}/worksheet/Line.cpp
-    ${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBar.cpp
     ${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp

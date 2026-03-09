@@ -45,9 +45,9 @@ plotArea = CartesianPlot("Plot Area")
 plotArea.setType(CartesianPlot.Type.FourAxes)
 plotArea.title().setText("Rydberg Spectrum of Helium")
 
-border = plotArea.plotArea().borderType()
-border = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
-plotArea.plotArea().setBorderType(border)
+border = plotArea.borderType()
+border = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
+plotArea.setBorderType(border)
 
 plotArea.setSymmetricPadding(False)
 plotArea.setHorizontalPadding(Worksheet.convertToSceneUnits(2.1, Worksheet.Unit.Centimeter))

@@ -104,7 +104,7 @@ void MQTTSubscriptionWidget::setTopicList(const QStringList& topicList) {
 	m_topicList = topicList;
 }
 
-QStringList MQTTSubscriptionWidget::getTopicList() {
+const QStringList& MQTTSubscriptionWidget::getTopicList() {
 	return m_topicList;
 }
 

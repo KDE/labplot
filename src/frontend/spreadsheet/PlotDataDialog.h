@@ -76,6 +76,7 @@ private:
 	Column* columnFromName(const QString&) const;
 	void adjustWorksheetSize(Worksheet*) const;
 	void setAxesTitles(CartesianPlot*, const QString& yColumnName = QString()) const;
+	void adjustPadding(CartesianPlot*, const QString& yColumnName, bool firstColumn = false, bool lastColumn = false) const;
 
 	void setAxesColumnLabels(CartesianPlot*, const QString& columnName);
 	void setAxesColumnLabels(CartesianPlot*, const Column*);

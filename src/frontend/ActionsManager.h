@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Class managing all actions and their containers (menus and toolbars) in MainWin
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,6 +13,7 @@
 #include <QObject>
 
 class DatapickerImageView;
+class LiveDataSource;
 class NotebookView;
 class MainWin;
 #ifdef HAVE_SCRIPTING
@@ -63,6 +64,10 @@ private:
 	void initSpreadsheetToolbarActions();
 	void connectSpreadsheetToolbarActions(const SpreadsheetView*);
 
+	void initLiveDataToolbarActions();
+	void connectLiveDataToolbarActions(LiveDataSource*);
+	void updateLiveDataPauseActionIcon(bool);
+
 	void initDataExtractorToolbarActions();
 	void connectDataExtractorToolbarActions(DatapickerImageView *);
 
@@ -108,7 +113,8 @@ private:
 	QAction* m_newMatrixAction{nullptr};
 	QAction* m_newWorksheetAction{nullptr};
 #ifdef HAVE_SCRIPTING
-	QList<QAction*> m_newScriptActions;
+	QAction* m_newPythonScriptAction{nullptr};
+	// QList<QAction*> m_newScriptActions;
 #endif
 	QAction* m_newNotesAction{nullptr};
 	QAction* m_newLiveDataSourceAction{nullptr};
@@ -126,9 +132,9 @@ private:
 	QAction* m_lastUsedNotebookAction{nullptr};
 	ToggleActionMenu* m_tbNotebook{nullptr};
 #endif
-#ifdef HAVE_SCRIPTING
-	ToggleActionMenu* m_tbScript{nullptr};
-#endif
+// #ifdef HAVE_SCRIPTING
+// 	ToggleActionMenu* m_tbScript{nullptr};
+// #endif
 	ToggleActionMenu* m_tbImport{nullptr};
 
 	// toggling dock widgets, status bar and full screen
@@ -175,6 +181,10 @@ private:
 	QAction* m_dataExtractorAddCurveAction{nullptr};
 	ToggleActionMenu* m_dataExtractorZoomMenu{nullptr};
 	ToggleActionMenu* m_dataExtractorMagnificationMenu{nullptr};
+
+	// live data
+	QAction* m_liveDataPauseAction{nullptr};
+	QAction* m_liveDataUpdateAction{nullptr};
 
 	// notebook
 #ifdef HAVE_CANTOR_LIBS

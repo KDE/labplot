@@ -55,11 +55,13 @@ public:
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	void setVisible(bool) override;
 
+	bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const override;
 	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	int gridPointsCount() const;
 	bool hasData() const override;
+	int dataCount(Dimension) const override;
 	bool usingColumn(const AbstractColumn*, bool indirect) const override;
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	QColor color() const override;

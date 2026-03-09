@@ -33,9 +33,9 @@ public:
 	QVector<QStringList> preview(QIODevice&, int lines, bool reinit = true, bool skipFirstLine = false);
 	QVector<QStringList> preview(const QString& fileName, int lines, bool reinit = true);
 
-	static QMap<QString, QPair<QString, AbstractColumn::ColumnMode>> modeMap();
-	static bool determineColumnModes(const QStringView&, QVector<AbstractColumn::ColumnMode>&, QString& invalidString);
-	static QString convertTranslatedColumnModesToNative(const QStringView);
+	static QMap<QString, QPair<QString, AsciiFilter::DataType>> dataTypeMap();
+	static bool validateDataTypes(const QStringView&, QVector<AsciiFilter::DataType>&, QString& invalidString);
+	static QString convertTranslatedDataTypesToNative(const QStringView);
 	Status setLastError(Status);
 	bool isUTF16(QIODevice&);
 
@@ -59,8 +59,7 @@ private:
 								   const QChar separatorCharacter,
 								   QVector<QStringView>& columnValues);
 	static Status determineSeparator(const QString& line, bool removeQuotes, bool simplifyWhiteSpaces, QString& separator);
-	static QVector<AbstractColumn::ColumnMode>
-	determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties&, QString& dateTimeFormat);
+	static QVector<AbstractColumn::ColumnMode> determineColumnModes(const QVector<QStringList>&, const AsciiFilter::Properties&, QString& dateTimeFormat);
 	Status getLine(QIODevice&, QString& line);
 
 	template<typename T>
