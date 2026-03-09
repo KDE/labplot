@@ -13,7 +13,7 @@
 
 #define SET_WARNING_PALETTE                                                                                                                                    \
 	{                                                                                                                                                          \
-		QPalette p = palette();                                                                                                                                \
+		auto p = palette();                                                                                                                                    \
 		if (qGray(p.color(QPalette::Base).rgb()) > 160) /* light */                                                                                            \
 			p.setColor(QPalette::Text, QColor(255, 200, 200));                                                                                                 \
 		else /* dark */                                                                                                                                        \
@@ -23,7 +23,7 @@
 
 #define SET_WARNING_BACKGROUND(elem)                                                                                                                           \
 	{                                                                                                                                                          \
-		QPalette p = palette();                                                                                                                                \
+		auto p = palette();                                                                                                                                    \
 		if (qGray(p.color(QPalette::Base).rgb()) > 160) /* light */                                                                                            \
 			elem->setBackground(QColor(255, 200, 200));                                                                                                        \
 		else /* dark */                                                                                                                                        \

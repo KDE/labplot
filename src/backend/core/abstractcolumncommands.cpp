@@ -67,8 +67,8 @@ void AbstractColumnClearMasksCmd::undo() {
 }
 
 void AbstractColumnClearMasksCmd::finalize() const {
-	// TODO: implement AbstractColumn::setChanged() instead of these two calls,
-	// move the already available Column::setChanged to the base class.
+	// TODO: implement AbstractColumn::setDataChanged() instead of these two calls,
+	// move the already available Column::setDataChanged to the base class.
 	Q_EMIT m_col->owner()->dataChanged(m_col->owner());
 	m_col->owner()->invalidateProperties();
 }
@@ -131,7 +131,7 @@ void AbstractColumnSetMaskedCmd::redo() {
 		m_copied = true;
 	}
 	m_col->m_masking.setValue(m_interval, m_masked);
-	m_col->owner()->setChanged();
+	m_col->owner()->setDataChanged();
 }
 
 /**
@@ -139,7 +139,7 @@ void AbstractColumnSetMaskedCmd::redo() {
  */
 void AbstractColumnSetMaskedCmd::undo() {
 	m_col->m_masking = m_masking;
-	m_col->owner()->setChanged();
+	m_col->owner()->setDataChanged();
 }
 
 /** ***************************************************************************

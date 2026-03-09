@@ -1408,7 +1408,7 @@ void ColumnPrivate::replaceData(void* data) {
 	Q_EMIT q->dataAboutToChange(q);
 
 	m_data = data;
-	q->setChanged();
+	q->setDataChanged();
 }
 
 /**
@@ -1470,7 +1470,7 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	}
 	}
 
-	q->setChanged();
+	q->setDataChanged();
 
 	DEBUG(Q_FUNC_INFO << ", done")
 	return true;
@@ -1533,7 +1533,7 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 		break;
 	}
 
-	q->setChanged();
+	q->setDataChanged();
 
 	return true;
 }
@@ -1590,7 +1590,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 		break;
 	}
 
-	q->setChanged();
+	q->setDataChanged();
 
 	return true;
 }
@@ -1652,7 +1652,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 		break;
 	}
 
-	q->setChanged();
+	q->setDataChanged();
 
 	return true;
 }
@@ -3022,7 +3022,7 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 			ptr[first + i] = new_values.at(i);
 	}
 
-	q->setChanged();
+	q->setDataChanged();
 }
 
 void ColumnPrivate::addValueLabel(const QString& value, const QString& label) {

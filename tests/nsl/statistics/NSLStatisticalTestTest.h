@@ -4,6 +4,7 @@
 	Description          : NSL Tests for statistical functions
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -28,5 +29,15 @@ private Q_SLOTS:
 	void testFriedman();
 	void testChisqIndependence();
 	void testChisqGoodnessOfFit();
+
+	void testMannKendall01();
+	void testMannKendall02();
+	void testMannKendall03();
+	void testMannKendall04();
+	void testMannKendall05();
+
+	void testWaldWolfowitzRuns01();
+	void testWaldWolfowitzRuns02();
+	void testWaldWolfowitzRuns03();
 };
 #endif // NSLSTATISTICALTESTTEST_H

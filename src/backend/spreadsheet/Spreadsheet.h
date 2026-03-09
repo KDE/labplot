@@ -184,6 +184,7 @@ Q_SIGNALS:
 	void showSparklinesChanged(bool);
 	void linkingChanged(bool);
 	void linkedSpreadsheetChanged(const Spreadsheet*);
+	void statisticsSpreadsheetChanged(bool);
 
 	friend class SpreadsheetSetLinkingCmd;
 	friend class SpreadsheetSetColumnCountCommand;

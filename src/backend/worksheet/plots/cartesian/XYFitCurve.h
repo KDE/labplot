@@ -68,7 +68,7 @@ public:
 		void calculateResult(size_t n, unsigned int np); // calculate depending results (uses dof, sse, sst)
 
 		int iterations{0};
-		double dof{0}; // degrees of freedom
+		int dof{0}; // degrees of freedom
 		// residuals: r_i = y_i - Y_i
 		double sse{0}; // sum of squared errors (SSE) / residual sum of squares (RSS) / sum of sq. residuals (SSR) / S = chi^2 = \sum_i^n r_i^2
 		double sst{0}; // total sum of squares (SST) = \sum_i^n (y_i - <y>)^2

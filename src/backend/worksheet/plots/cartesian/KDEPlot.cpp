@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : KDE Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -171,6 +171,12 @@ XYCurve* KDEPlot::rugCurve() const {
 	return d->rugCurve;
 }
 
+bool KDEPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	start = 0;
+	end = gridPointsCount() - 1;
+	return true;
+}
+
 bool KDEPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
 	Q_D(const KDEPlot);
 	return d->estimationCurve->minMax(dim, indexRange, r);
@@ -201,6 +207,10 @@ double KDEPlot::maximum(const Dimension dim) const {
 bool KDEPlot::hasData() const {
 	Q_D(const KDEPlot);
 	return (d->dataColumn != nullptr);
+}
+
+int KDEPlot::dataCount(Dimension) const {
+	return gridPointsCount() - 1;
 }
 
 bool KDEPlot::usingColumn(const AbstractColumn* column, bool) const {
@@ -315,11 +325,7 @@ KDEPlotPrivate::~KDEPlotPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void KDEPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || q->isLoading();
-	if (suppressed)
-		return;
-
-	if (!isVisible())
+	if (retransformSuppressed())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
