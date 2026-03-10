@@ -12,6 +12,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/ScopedUndoDisabler.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
@@ -452,12 +453,7 @@ QString SeasonalDecompositionPrivate::name() const {
 void SeasonalDecompositionPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
-	// set the columns in the curves, no need to put this onto the undo stack
-	curveOriginal->setUndoAware(false);
-	curveTrend->setUndoAware(false);
-	for (auto* curve : curvesSeasonal)
-		curve->setUndoAware(false);
-	curveResidual->setUndoAware(false);
+	ScopedUndoDisabler undoDisabler(q->project()); // internal changes only, don't pollute the undo stack
 
 	curveOriginal->setXColumn(xColumn);
 	curveOriginal->setYColumn(yColumn);
@@ -465,12 +461,6 @@ void SeasonalDecompositionPrivate::recalc() {
 	for (auto* curve : curvesSeasonal)
 		curve->setXColumn(xColumn);
 	curveResidual->setXColumn(xColumn);
-
-	curveOriginal->setUndoAware(true);
-	curveTrend->setUndoAware(true);
-	for (auto* curve : curvesSeasonal)
-		curve->setUndoAware(true);
-	curveResidual->setUndoAware(true);
 
 	if (!xColumn || !yColumn)
 		return;
@@ -510,6 +500,7 @@ void SeasonalDecompositionPrivate::recalc() {
 void SeasonalDecompositionPrivate::recalcDecomposition() {
 	Q_EMIT q->statusError(QString());
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+	ScopedUndoDisabler undoDisabler(q->project()); // internal changes only, don't pollute the undo stack
 
 	QVector<double> trendData;
 	QVector<QVector<double>> seasonalData; // vector of vectors for multiple seasonal components, one element for methods supporting one single component only
@@ -685,9 +676,6 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 				auto plotArea = std::unique_ptr<CartesianPlot>(plotAreasSeasonal.takeLast());
 				curvesSeasonal.takeLast(); // Curve is a child of the plot area, so we don't have to explicitly delete it
 				columnsSeasonal.takeLast(); // Column is a child of the spreadsheet, so we don't have to explicitly delete it
-				AutoRestore cleanup(false, [this](bool value) {
-					worksheet->setUndoAware(value);
-				});
 				worksheet->removeChild(plotArea.get());
 			}
 
@@ -733,9 +721,6 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 				while (plotAreasSeasonal.size() > (int)mstlPeriods.size()) {
 					auto plotArea = std::unique_ptr<CartesianPlot>(plotAreasSeasonal.takeLast());
 					curvesSeasonal.takeLast(); // Curve is a child of the plot area, so we don't have to explicitly delete it
-					AutoRestore undo(false, [this](bool value) {
-						worksheet->setUndoAware(value);
-					});
 					worksheet->removeChild(plotArea.get());
 				}
 			}
@@ -743,9 +728,6 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 
 		// adjust the plot titles for seasonal components to reflect new periods
 		for (size_t i = 0; i < mstlPeriods.size(); i++) {
-			AutoRestore undo(false, [this, i](bool value) {
-				plotAreasSeasonal.at(i)->setUndoAware(value);
-			});
 			plotAreasSeasonal.at(i)->title()->setText(i18n("Seasonal Component (Period: %1)", mstlPeriods.at(i)));
 			columnsSeasonal.at(i)->setName(i18n("Seasonal, Period: %1", mstlPeriods.at(i)));
 			curvesSeasonal.at(i)->setYColumn(columnsSeasonal.at(i));

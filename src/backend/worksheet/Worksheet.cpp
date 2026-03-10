@@ -15,6 +15,7 @@
 #include "WorksheetPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
+#include "backend/lib/ScopedUndoDisabler.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Image.h"
@@ -386,12 +387,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	// for the project globally so it's ignored for all elements below when applying the theme recursively.
 	if (!d->theme.isEmpty() && !isLoading() && !isPasted() && !aspect->isPasted()) {
 		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-		// const_cast<WorksheetElement*>(addedElement)->setUndoAware(false, true);
-		if (project())
-			project()->setUndoAware(false);
+		ScopedUndoDisabler undoDisabler(project());
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
-		if (project())
-			project()->setUndoAware(true);
 	}
 
 	// recalculate the layout if enabled, set the currently added plot resizable otherwise
