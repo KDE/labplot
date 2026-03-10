@@ -10,7 +10,7 @@
 #ifndef SCOPEDUNDODISABLER_H
 #define SCOPEDUNDODISABLER_H
 
-class Project;
+#include "backend/core/Project.h"
 
 /**
  * \class ScopedUndoDisabler
@@ -18,7 +18,7 @@ class Project;
  *
  * This class uses the RAII (Resource Acquisition Is Initialization) pattern
  * to automatically restore the undo-aware state when the object goes out of scope.
- * 
+ *
  * Usage example:
  * \code
  * {
