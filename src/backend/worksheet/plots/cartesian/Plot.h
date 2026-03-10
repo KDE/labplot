@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all plots like scatter plot, box plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -73,9 +73,6 @@ public:
 									  // background color for example)
 	virtual bool usingColumn(const AbstractColumn*, bool indirect = true) const = 0;
 
-	// TODO: make protected and use friend classes if access required!
-	virtual void recalc() = 0;
-
 	typedef PlotPrivate Private;
 
 private:
@@ -84,6 +81,11 @@ private:
 protected:
 	Plot(const QString&, PlotPrivate* dd, AspectType);
 	PlotPrivate* const d_ptr;
+
+	friend class CartesianPlot;
+	friend class CartesianPlotPrivate;
+	friend class Spreadsheet;
+	virtual void recalc() = 0;
 
 Q_SIGNALS:
 	void dataChanged(); // emitted when the data to be plotted was changed to re-adjust the parent plot area

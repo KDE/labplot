@@ -527,7 +527,7 @@ void SeasonalDecompositionDock::decompositionSTLLowPassJumpAutoChanged(bool valu
 QString mstlPeriodsToString(const std::vector<size_t>& periods) {
 	QString text;
 	const auto locale = QLocale();
-	for (int period : periods) {
+	for (auto period : periods) {
 		if (!text.isEmpty())
 			text += QLatin1String(", ");
 		text += locale.toString(period);

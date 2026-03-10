@@ -214,13 +214,6 @@ private:
 	// analysis and plot data menu actions
 	QActionGroup* plotDataActionGroup{nullptr};
 	QAction* addDataOperationAction{nullptr};
-	QAction* addLineSimplificationAction{nullptr};
-	QAction* addDifferentiationAction{nullptr};
-	QAction* addIntegrationAction{nullptr};
-	QAction* addInterpolationAction{nullptr};
-	QAction* addSmoothAction{nullptr};
-	QAction* addFourierFilterAction{nullptr};
-	QAction* addBaselineCorrectionAction{nullptr};
 	QActionGroup* addAnalysisActionGroup{nullptr};
 	QActionGroup* addFitActionGroup{nullptr};
 	QActionGroup* addDistributionFitActionGroup{nullptr};

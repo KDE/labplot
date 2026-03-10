@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Bar Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -175,7 +175,7 @@ ErrorBar* BarPlot::errorBarAt(int index) const {
 		return nullptr;
 }
 
-bool BarPlot::indicesMinMax(const Dimension dim, double, double, int& start, int& end) const {
+bool BarPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
 	// The values are not important, because they are just passed to minMax() which does not consider the indices
 	start = 0;
 	end = 0;
@@ -474,7 +474,7 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void BarPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || !isVisible() || q->isLoading();
+	const bool suppressed = retransformSuppressed();
 	Q_EMIT trackRetransformCalled(suppressed);
 	if (suppressed)
 		return;

@@ -318,7 +318,7 @@ namespace Parsing {
                         }
                 }
 
-                /* do not assign value if symbol already exits as function */
+                /* do not assign value if symbol already exists as function */
                 if (ptr->type == VAR)
                         ptr->value = value;
 

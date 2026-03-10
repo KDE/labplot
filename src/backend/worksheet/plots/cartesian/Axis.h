@@ -33,7 +33,16 @@ class Axis : public WorksheetElement {
 public:
 	enum class RangeType { Auto, AutoData, Custom };
 	enum class Position { Top, Bottom, Left, Right, Centered, Custom, Logical };
-	enum class LabelsFormat { Decimal, ScientificE, Powers10, Powers2, PowersE, MultipliesPi, Scientific };
+	enum class LabelsFormat {
+		Decimal,
+		ScientificE,
+		Powers10,
+		Powers2,
+		PowersE,
+		MultipliesPi,
+		Scientific,
+		AngleDMS // AngleDMS - Angle in Degree:Minute:Second
+	};
 	Q_ENUM(LabelsFormat)
 	enum TicksFlags {
 		noTicks = 0x00,
@@ -77,6 +86,8 @@ public:
 			return 5;
 		case LabelsFormat::MultipliesPi:
 			return 6;
+		case LabelsFormat::AngleDMS:
+			return 7;
 		}
 		return 0;
 	}
@@ -96,6 +107,8 @@ public:
 			return LabelsFormat::PowersE;
 		case 6:
 			return LabelsFormat::MultipliesPi;
+		case 7:
+			return LabelsFormat::AngleDMS;
 		}
 		return LabelsFormat::Decimal;
 	}
@@ -148,7 +161,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartValue, MajorTickStartValue)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
-	QString& majorTicksColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, majorTicksColumnPath, MajorTicksColumnPath)
 	Line* majorTicksLine() const;
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength)
 
@@ -158,7 +171,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksSpacing, MinorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
-	QString& minorTicksColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, minorTicksColumnPath, MinorTicksColumnPath)
 	Line* minorTicksLine() const;
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength)
 
@@ -172,7 +185,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelsRotationAngle)
 	BASIC_D_ACCESSOR_DECL(LabelsTextType, labelsTextType, LabelsTextType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, labelsTextColumn, LabelsTextColumn)
-	QString& labelsTextColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, labelsTextColumnPath, LabelsTextColumnPath)
 	QVector<double> tickLabelValues() const;
 	QVector<QString> tickLabelStrings() const;
 	CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor)

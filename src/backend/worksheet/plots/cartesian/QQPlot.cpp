@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : QQPlot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-204 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-206 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -199,7 +199,7 @@ bool QQPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<dou
 	return false;
 }
 
-bool QQPlot::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+bool QQPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
 	start = 0;
 	end = 99;
 	return true;
@@ -331,11 +331,7 @@ QQPlotPrivate::~QQPlotPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void QQPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || q->isLoading();
-	if (suppressed)
-		return;
-
-	if (!isVisible())
+	if (retransformSuppressed())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));

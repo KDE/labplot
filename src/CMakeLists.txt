@@ -444,13 +444,13 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/TreeModel.cpp
     ${BACKEND_DIR}/worksheet/plots/AbstractPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
-    ${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Axis.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/BarPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/BoxPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianScale.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/PlotAreaBackground.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBar.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp

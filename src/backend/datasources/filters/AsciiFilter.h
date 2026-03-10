@@ -43,6 +43,18 @@ class LABPLOT_EXPORT AsciiFilter : public AbstractFileFilter {
 class AsciiFilter : public AbstractFileFilter {
 #endif
 public:
+	// enum for data types that are supported during the import, not necesserily the same as
+	// the column modes AbstractColumn::ColumnMode, mapped intternally to those.
+	enum class DataType {
+		Double = 0,
+		Integer = 1,
+		BigInt = 2,
+		Text = 3,
+		DateTime = 4,
+		TimestampUnix = 5, // qint64, number of seconds since January 1, 1970 (UTC), converted to DateTime until we have an qin64 Timestamp
+		TimestampWindows = 6 // qint64, number of 100-nanosecond intervals since January 1, 1601 (UTC), converted to DateTime until we have an qin64 Timestamp
+	};
+
 	AsciiFilter();
 	~AsciiFilter();
 
@@ -67,9 +79,10 @@ public:
 	static int columnNumber(const QString& fileName, const QString& separator = QString());
 	static size_t lineCount(const QString& fileName, size_t maxLines = std::numeric_limits<std::size_t>::max());
 
-	static QStringList dataTypesString();
-	static QPair<QString, QString> dataTypeString(const AbstractColumn::ColumnMode);
-	static bool determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString& invalidString);
+	static QPair<QString, QString> dataTypeString(const DataType);
+	static AbstractColumn::ColumnMode dataTypeToColumnMode(DataType);
+	static DataType columnModeToDataType(AbstractColumn::ColumnMode);
+	static bool validateDataTypes(const QStringView& s, QVector<DataType>&, QString& invalidString);
 
 	// save/load in the project XML
 	void save(QXmlStreamWriter*) const override;
@@ -90,10 +103,13 @@ public:
 
 		bool headerEnabled{true}; // read header from file
 		int headerLine{1}; // line to read header from (ignoring comment lines). The data starts below this line
-		QString columnNamesRaw; // String from the input dialog. From those columnNames is retrieved
-		QStringList columnNames;
-		QVector<AbstractColumn::ColumnMode> columnModes;
-		QString columnModesString;
+
+		QString columnNamesString; // String from the input dialog, parsed to determine the column names below
+		QStringList columnNames; // the list of column names for each column
+
+		QString dataTypesString; // String from the input dialog, parsed to determine the data types below
+		QVector<DataType> dataTypes; // the list of data types for each column
+		QVector<AbstractColumn::ColumnMode> columnModes; // column modes for each column, determined from the list of provided data types
 
 		int startRow{1}; // Start row. If headerEnabled, it is the offset from that line
 		int endRow{-1}; // Last row to read. A negative value means the complete file

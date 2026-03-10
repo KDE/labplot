@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Box Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -414,7 +414,7 @@ QVector<QString>& BoxPlot::dataColumnPaths() const {
 	return d->dataColumnPaths;
 }
 
-bool BoxPlot::indicesMinMax(const Dimension dim, double, double, int& start, int& end) const {
+bool BoxPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
 	// The values are not important, because they are just passed to minMax() which does not consider the indices
 	start = 0;
 	end = 0;
@@ -787,7 +787,7 @@ void BoxPlotPrivate::adjustPropertiesContainers() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void BoxPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || !isVisible() || q->isLoading();
+	const bool suppressed = retransformSuppressed();
 	Q_EMIT trackRetransformCalled(suppressed);
 	if (suppressed)
 		return;

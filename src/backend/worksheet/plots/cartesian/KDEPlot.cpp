@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : KDE Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -171,7 +171,7 @@ XYCurve* KDEPlot::rugCurve() const {
 	return d->rugCurve;
 }
 
-bool KDEPlot::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+bool KDEPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
 	start = 0;
 	end = gridPointsCount() - 1;
 	return true;
@@ -210,7 +210,6 @@ bool KDEPlot::hasData() const {
 }
 
 int KDEPlot::dataCount(Dimension) const {
-	Q_D(const KDEPlot);
 	return gridPointsCount() - 1;
 }
 
@@ -326,11 +325,7 @@ KDEPlotPrivate::~KDEPlotPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void KDEPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || q->isLoading();
-	if (suppressed)
-		return;
-
-	if (!isVisible())
+	if (retransformSuppressed())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));

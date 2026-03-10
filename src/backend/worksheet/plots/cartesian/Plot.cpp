@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all plots like scatter plot, box plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -125,6 +125,15 @@ bool PlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
 		return false;
 
 	return m_shape.contains(mouseScenePos);
+}
+
+/*!
+ * for performance reasons and not to run into uninialized objects, the retransform call shouldb be suppressed sometimes -
+ * either because explicitly requested or some other conditions like being unvisible, etc. are fullfilled.
+ * This helper function returns \c true if the retransform() call should be skipped and returns \c false, otherwise.
+ */
+bool PlotPrivate::retransformSuppressed() const {
+	return (!isVisible() || q->isLoading() || suppressRetransform || !m_plot);
 }
 
 void PlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {

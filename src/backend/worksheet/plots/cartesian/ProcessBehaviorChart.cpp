@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : ProcessBehaviorChart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -425,7 +425,7 @@ bool ProcessBehaviorChart::minMax(const Dimension dim, const Range<int>& indexRa
 	return false;
 }
 
-bool ProcessBehaviorChart::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+bool ProcessBehaviorChart::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
 	start = 0;
 	end = xIndexCount() - 1;
 	return true;
@@ -846,10 +846,7 @@ ProcessBehaviorChartPrivate::~ProcessBehaviorChartPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void ProcessBehaviorChartPrivate::retransform() {
-	if (suppressRetransform || q->isLoading())
-		return;
-
-	if (!isVisible())
+	if (retransformSuppressed())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));

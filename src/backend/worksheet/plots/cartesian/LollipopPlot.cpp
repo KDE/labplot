@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Lollipop Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -441,7 +441,9 @@ void LollipopPlotPrivate::addValue(const KConfigGroup& group) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void LollipopPlotPrivate::retransform() {
-	if (suppressRetransform || !isVisible() || q->isLoading())
+	const bool suppressed = retransformSuppressed();
+	Q_EMIT trackRetransformCalled(suppressed);
+	if (suppressed)
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));

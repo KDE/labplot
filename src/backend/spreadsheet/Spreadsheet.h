@@ -170,6 +170,7 @@ Q_SIGNALS:
 	void showCommentsChanged(bool);
 	void showSparklinesChanged(bool);
 	void linkedSpreadsheetChanged(const Spreadsheet*);
+	void statisticsSpreadsheetChanged(bool);
 
 	friend class SpreadsheetSetLinkingCmd;
 	friend class SpreadsheetSetColumnCountCommand;
