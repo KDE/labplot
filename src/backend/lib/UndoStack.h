@@ -19,7 +19,7 @@
  * onto the undo stack while already executing an undo/redo operation.
  *
  * Qt's QUndoStack is not reentrant. Attempting to modify the stack during an active
- * undo/redo operation causes stack corruption and cryptic crashes. A typical chain 
+ * undo/redo operation causes stack corruption and cryptic crashes. A typical chain
  * of events leading to such problems is:
  * 1. User triggers undo/redo operation
  * 2. UndoStack begins executing the command (stack is being traversed)
