@@ -363,8 +363,10 @@ void RunChartPrivate::recalc() {
 	for (int i = 0; i < count; ++i)
 		xColumn->setIntegerAt(i, i + 1);
 
+	dataCurve->setUndowAware(false);
 	dataCurve->setXColumn(xColumn);
 	dataCurve->setYColumn(dataColumn);
+	dataCurve->setUndoAware(true);
 
 	// min and max values for x
 	xCenterColumn->setIntegerAt(0, xMin);
