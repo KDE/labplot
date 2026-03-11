@@ -1982,7 +1982,9 @@ void XYFitCurvePrivate::updateResultsNote() {
 	text += AICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
 	text += BICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
 
+	resultNote->setUndoAware(false);
 	resultsNote->setText(text);
+	resultsNote->setUndoAware(true);
 
 	DEBUG("NOTE TEXT: " << resultsNote->text().toStdString())
 }
@@ -3165,7 +3167,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	d->resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 	d->resultsNote->setBackgroundColor(QColor(Qt::white));
 	d->resultsNote->setTextFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-	addChild(d->resultsNote);
+	addChildFast(d->resultsNote);
 
 	////////////////////////////// fix old projects /////////////////////////
 
