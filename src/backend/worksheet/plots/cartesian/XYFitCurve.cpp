@@ -1982,7 +1982,7 @@ void XYFitCurvePrivate::updateResultsNote() {
 	text += AICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
 	text += BICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
 
-	resultNote->setUndoAware(false);
+	resultsNote->setUndoAware(false);
 	resultsNote->setText(text);
 	resultsNote->setUndoAware(true);
 
