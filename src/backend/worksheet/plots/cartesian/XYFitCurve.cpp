@@ -1821,13 +1821,13 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		resultsNote->setBackgroundColor(QColor(Qt::white));
 		resultsNote->setTextFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-		q->addChild(resultsNote);
+		q->addChildFast(resultsNote);
 	}
 	if (!residualsColumn) {
 		residualsColumn = new Column(QStringLiteral("Residuals"), AbstractColumn::ColumnMode::Double);
 		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
 		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
-		q->addChild(residualsColumn);
+		q->addChildFast(residualsColumn);
 	}
 }
 
