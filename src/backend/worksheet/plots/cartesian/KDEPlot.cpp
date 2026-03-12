@@ -340,8 +340,10 @@ void KDEPlotPrivate::retransform() {
 void KDEPlotPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
+	rugCurve->setUndoAware(false);
 	rugCurve->setXColumn(dataColumn);
 	rugCurve->setYColumn(dataColumn);
+	rugCurve->setUndoAware(true);
 
 	if (!dataColumn) {
 		xEstimationColumn->clear();
