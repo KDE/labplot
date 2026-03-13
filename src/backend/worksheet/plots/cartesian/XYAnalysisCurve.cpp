@@ -547,9 +547,9 @@ void XYAnalysisCurvePrivate::recalculate() {
 		yVector = static_cast<QVector<double>*>(yColumn->data());
 
 		xColumn->setHidden(true);
-		q->addChild(xColumn);
+		q->addChildFast(xColumn);
 		yColumn->setHidden(true);
-		q->addChild(yColumn);
+		q->addChildFast(yColumn);
 
 		q->setUndoAware(false);
 		q->setXColumn(xColumn); // pass the column to the xycurve

@@ -16,6 +16,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/lib/ScopedUndoDisabler.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
@@ -2727,8 +2728,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		// load default theme settings otherwise.
 		// no need to put these changes onto the undo stack, temporarily deactivate the undo awareness
 		// for the project globally so it's ignored for all elements below when applying the theme recursively.
-		if (project())
-			project()->setUndoAware(false);
+		ScopedUndoDisabler undoDisabler(project());
 
 		if (!d->theme.isEmpty()) {
 			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
@@ -2737,9 +2737,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			KConfig config;
 			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
 		}
-
-		if (project())
-			project()->setUndoAware(true);
 	}
 }
 
