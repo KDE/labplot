@@ -509,6 +509,11 @@ endif()
 if(ENABLE_PYTHON_SCRIPTING)
     list(APPEND LABPLOT_CORE_SOURCES ${shiboken_scripting_generated_sources})
     list(APPEND LABPLOT_CORE_SOURCES ${python_scripting_backend_sources})
+    # Shiboken-generated files and Python backend sources are compiled with different
+    # optimization flags (set by the shiboken CMake module), causing Clang to reject
+    # the PCH built for labplot_core_obj.  Skip PCH for those files only.
+    set_source_files_properties(${shiboken_scripting_generated_sources} ${python_scripting_backend_sources}
+        PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -725,10 +730,13 @@ target_link_libraries(labplotbackendlib
 )
 
 if(ENABLE_SCRIPTING)
+target_link_libraries(labplot_core_obj PRIVATE KF${KF_MAJOR_VERSION}::TextEditor)
 target_link_libraries(labplotbackendlib KF${KF_MAJOR_VERSION}::TextEditor)
 endif()
 
 if(ENABLE_PYTHON_SCRIPTING)
+target_link_libraries(labplot_core_obj PRIVATE ${python_scripting_link_libraries})
+target_include_directories(labplot_core_obj PRIVATE ${python_scripting_includes})
 target_link_libraries(labplotbackendlib ${python_scripting_link_libraries})
 endif()
 
@@ -770,6 +778,10 @@ if(Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
     foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj labplot_datasources_obj)
         target_link_libraries(${_labplot_obj} PRIVATE Qt${QT_MAJOR_VERSION}::Mqtt)
     endforeach()
+    # MQTTClient.cpp (in labplot_datasources_obj) includes MQTTErrorWidget.h → ui_mqtterrorwidget.h.
+    # Tell AUTOUIC where to find mqtterrorwidget.ui so it can generate the header for this target.
+    set_property(TARGET labplot_datasources_obj APPEND PROPERTY
+        AUTOUIC_SEARCH_PATHS ${FRONTEND_DIR}/ui/datasources)
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::Mqtt)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Mqtt)
 endif()
@@ -889,6 +901,7 @@ get_target_property(labplotbackendlib_INCLUDE_DIRECTORIES labplotbackendlib INCL
 get_target_property(labplotnsllib_INCLUDE_DIRECTORIES labplotnsllib INCLUDE_DIRECTORIES)
 get_target_property(KFi18n_INCLUDE_DIRECTORIES KF${KF_MAJOR_VERSION}::I18n INTERFACE_INCLUDE_DIRECTORIES)
 
+target_include_directories(labplot_core_obj PRIVATE ${Python3_INCLUDE_DIRS})
 target_include_directories(labplotbackendlib PUBLIC ${Python3_INCLUDE_DIRS})
 
 generate_shiboken_sources(
