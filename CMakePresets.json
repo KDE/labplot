@@ -1,0 +1,90 @@
+{
+  "version": 10,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 17,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "release",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "Release"
+        },
+        "CMAKE_INSTALL_PREFIX": {
+          "type": "STRING",
+          "value": "/usr"
+        },
+        "LOCAL_DBC_PARSER": {
+          "type": "BOOL",
+          "value": "ON"
+        },
+        "LOCAL_VECTOR_BLF": {
+          "type": "BOOL",
+          "value": "ON"
+        }
+      }
+    },
+    {
+      "name": "debug",
+      "binaryDir": "${sourceDir}/build-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "Debug"
+        },
+        "CMAKE_INSTALL_PREFIX": {
+          "type": "STRING",
+          "value": "/usr"
+        },
+        "LOCAL_DBC_PARSER": {
+          "type": "BOOL",
+          "value": "ON"
+        },
+        "LOCAL_VECTOR_BLF": {
+          "type": "BOOL",
+          "value": "ON"
+        }
+      }
+    },
+    {
+      "name": "devel",
+      "inherits": ["debug"],
+      "binaryDir": "${sourceDir}/build-devel",
+      "cacheVariables": {
+        "ENABLE_TESTS": {
+          "type": "BOOL",
+          "value": "OFF"
+        },
+        "ENABLE_SDK": {
+          "type": "BOOL",
+          "value": "OFF"
+        },
+        "ENABLE_PYTHON_SCRIPTING": {
+          "type": "BOOL",
+          "value": "OFF"
+        }
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "release",
+      "configurePreset": "release",
+      "jobs": 6
+    },
+    {
+      "name": "debug",
+      "configurePreset": "debug",
+      "jobs": 6
+    },
+    {
+      "name": "devel",
+      "configurePreset": "devel",
+      "jobs": 6
+    }
+  ]
+}
