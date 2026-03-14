@@ -2741,7 +2741,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 }
 
 void CartesianPlot::childAboutToBeAdded(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
-	qDebug() << Q_FUNC_INFO;
 	if (isLoading())
 		return;
 
@@ -2825,12 +2824,9 @@ void CartesianPlot::adjustPadding() {
 
 	for (auto* a : axes) {
 		if (a->orientation() == WorksheetElement::Orientation::Vertical) {
-			// Map axis bounding rect from axis coordinates to plot coordinates
-			QRectF axisBoundingRect = d->mapRectFromItem(a->graphicsItem(), a->graphicsItem()->boundingRect());
-
 			if (a->position() == Axis::Position::Left) {
 				// left-side vertical axis - check if it extends beyond the left edge of the data rect
-				double delta = d->dataRect.x() - axisBoundingRect.x();
+				double delta = d->dataRect.x() - a->graphicsItem()->boundingRect().x();
 				if (delta > horizontalPadding()) {
 					setUndoAware(false);
 					setSymmetricPadding(false);
@@ -2838,6 +2834,9 @@ void CartesianPlot::adjustPadding() {
 					setUndoAware(true);
 				}
 			} else if (a->position() == Axis::Position::Right) {
+				// Map axis bounding rect from axis coordinates to plot coordinates
+				QRectF axisBoundingRect = d->mapRectFromItem(a->graphicsItem(), a->graphicsItem()->boundingRect());
+
 				// right-side vertical axis - check if it extends beyond the right edge of the plot rect
 				// (the axis itself is positioned at the right edge of the data rect, so we need to check
 				// against the plot rect to know how much padding is needed)
