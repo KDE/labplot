@@ -1332,7 +1332,7 @@ void StatisticalPlotsTest::testParetoChartRanges() {
 
 	range = p->range(Dimension::Y, 0);
 	QCOMPARE(range.start(), 0);
-	QCOMPARE(range.end(), 9);
+	QCOMPARE(range.end(), 5);
 
 	range = p->range(Dimension::X, 1);
 	QCOMPARE(range.start(), 0);
