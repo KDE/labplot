@@ -3,6 +3,14 @@ cmake_minimum_required(VERSION 3.17.0)
 project(labplot VERSION 2.12.80 LANGUAGES CXX C)
 set(YEAR 2025)
 
+# Use ccache if available to speed up incremental builds by caching compiled objects
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    message(STATUS "Using ccache: ${CCACHE_PROGRAM}")
+endif()
+
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)

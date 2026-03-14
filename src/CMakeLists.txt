@@ -327,7 +327,11 @@ if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
     list(APPEND UI_SOURCES ${FRONTEND_DIR}/ui/mqttwillsettingswidget.ui)
 endif()
 
-set(BACKEND_SOURCES
+# Split backend sources into logical groups. Each group gets its own OBJECT library,
+# yielding a separate mocs_compilation.cpp per group so AUTOMOC only recompiles
+# the affected group when a header changes.
+
+set(LABPLOT_CORE_SOURCES
     ${BACKEND_DIR}/core/Time.cpp
     ${BACKEND_DIR}/core/Folder.cpp
     ${BACKEND_DIR}/core/AbstractAspect.cpp
@@ -382,40 +386,6 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/core/datatypes/DayOfWeek2BigIntFilter.h
     ${BACKEND_DIR}/core/plugin/PluginLoader.cpp
     ${BACKEND_DIR}/core/plugin/PluginManager.cpp
-    ${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
-    ${BACKEND_DIR}/datapicker/DatapickerImage.cpp
-    ${BACKEND_DIR}/datapicker/Datapicker.cpp
-    ${BACKEND_DIR}/datapicker/Transform.cpp
-    ${BACKEND_DIR}/datapicker/ImageEditor.cpp
-    ${BACKEND_DIR}/datapicker/Segment.cpp
-    ${BACKEND_DIR}/datapicker/Segments.cpp
-    ${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
-    ${BACKEND_DIR}/datasources/AbstractDataSource.cpp
-    ${BACKEND_DIR}/datasources/DatasetHandler.cpp
-    ${BACKEND_DIR}/datasources/LiveDataSource.cpp
-    ${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/FilterStatus.cpp
-    ${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/XLSXFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
-    ${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/McapFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/OdsFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
-    ${BACKEND_DIR}/datasources/filters/ReadStatFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/ROOTFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/SpiceReader.cpp
-    ${BACKEND_DIR}/datasources/filters/SpiceFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/VectorBLFFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/CANFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/DBCParser.cpp
-    ${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
-    ${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
     ${BACKEND_DIR}/gsl/ExpressionParser.cpp
     ${BACKEND_DIR}/gsl/constants.cpp
     ${BACKEND_DIR}/gsl/functions.cpp
@@ -425,6 +395,17 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/lib/XmlStreamReader.cpp
     ${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
     ${BACKEND_DIR}/lib/hostprocess.cpp
+)
+
+set(LABPLOT_DATA_SOURCES
+    ${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
+    ${BACKEND_DIR}/datapicker/DatapickerImage.cpp
+    ${BACKEND_DIR}/datapicker/Datapicker.cpp
+    ${BACKEND_DIR}/datapicker/Transform.cpp
+    ${BACKEND_DIR}/datapicker/ImageEditor.cpp
+    ${BACKEND_DIR}/datapicker/Segment.cpp
+    ${BACKEND_DIR}/datapicker/Segments.cpp
+    ${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
     ${BACKEND_DIR}/matrix/Matrix.cpp
     ${BACKEND_DIR}/matrix/matrixcommands.cpp
     ${BACKEND_DIR}/matrix/MatrixModel.cpp
@@ -434,6 +415,10 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
     ${BACKEND_DIR}/statistics/HypothesisTest.cpp
     ${BACKEND_DIR}/timeseriesanalysis/SeasonalDecomposition.cpp
+    ${TOOLS_DIR}/ImageTools.cpp
+)
+
+set(LABPLOT_WORKSHEET_SOURCES
     ${BACKEND_DIR}/worksheet/Background.cpp
     ${BACKEND_DIR}/worksheet/Image.cpp
     ${BACKEND_DIR}/worksheet/Line.cpp
@@ -486,22 +471,54 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
 )
 
+set(LABPLOT_DATASOURCES_SOURCES
+    ${BACKEND_DIR}/datasources/AbstractDataSource.cpp
+    ${BACKEND_DIR}/datasources/DatasetHandler.cpp
+    ${BACKEND_DIR}/datasources/LiveDataSource.cpp
+    ${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/FilterStatus.cpp
+    ${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/XLSXFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
+    ${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/McapFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/OdsFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
+    ${BACKEND_DIR}/datasources/filters/ReadStatFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/ROOTFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/SpiceReader.cpp
+    ${BACKEND_DIR}/datasources/filters/SpiceFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/VectorBLFFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/CANFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/DBCParser.cpp
+    ${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
+    ${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
+)
+
 if(ENABLE_SCRIPTING)
-    list(APPEND BACKEND_SOURCES
+    list(APPEND LABPLOT_CORE_SOURCES
         ${BACKEND_DIR}/script/Script.cpp
         ${BACKEND_DIR}/script/ScriptRuntime.cpp)
 endif()
 
 if(ENABLE_PYTHON_SCRIPTING)
-    list(APPEND BACKEND_SOURCES ${shiboken_scripting_generated_sources})
-    list(APPEND BACKEND_SOURCES ${python_scripting_backend_sources})
+    list(APPEND LABPLOT_CORE_SOURCES ${shiboken_scripting_generated_sources})
+    list(APPEND LABPLOT_CORE_SOURCES ${python_scripting_backend_sources})
 endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
-    list(APPEND BACKEND_SOURCES ${FRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
-    list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTClient.cpp)
-    list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTSubscription.cpp)
-    list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTTopic.cpp)
+    # MQTTWillSettingsWidget.cpp is a frontend widget that #includes ui_mqttwillsettingswidget.h
+    # (generated by ki18n_wrap_ui). It must NOT be in an OBJECT lib — keep it with UI_SOURCES
+    # inside labplotbackendlib directly, just like in the original monolithic build.
+    set(LABPLOT_MQTT_WIDGET_SOURCES ${FRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
+    list(APPEND LABPLOT_DATASOURCES_SOURCES ${BACKEND_DIR}/datasources/MQTTClient.cpp)
+    list(APPEND LABPLOT_DATASOURCES_SOURCES ${BACKEND_DIR}/datasources/MQTTSubscription.cpp)
+    list(APPEND LABPLOT_DATASOURCES_SOURCES ${BACKEND_DIR}/datasources/MQTTTopic.cpp)
 endif()
 
 # add the qml.qrc file
@@ -509,7 +526,7 @@ endif()
 # better: enable AUTORCC
 
 if(ENABLE_LIBORIGIN)
-    list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
+    list(APPEND LABPLOT_DATASOURCES_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
 endif()
 
 set(NSL_SOURCES
@@ -561,9 +578,6 @@ if(Cantor_FOUND)
     set(UI_SOURCES ${UI_SOURCES} ${CANTOR_UI_SOURCES})
 endif()
 
-set(BACKEND_TOOLS_SOURCES
-    ${TOOLS_DIR}/ImageTools.cpp
-)
 set(TOOLS_SOURCES
     ${TOOLS_DIR}/ColorMapsManager.cpp
     ${TOOLS_DIR}/EquationHighlighter.cpp
@@ -585,20 +599,76 @@ ki18n_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
 
 # static library
 add_library(labplotnsllib STATIC ${NSL_SOURCES})
-add_library(labplotbackendlib STATIC ${BACKEND_SOURCES} ${UI_SOURCES} ${BACKEND_TOOLS_SOURCES} ${GENERATED_SOURCES})
+
+# OBJECT libraries per module
+add_library(labplot_core_obj OBJECT ${LABPLOT_CORE_SOURCES})
+add_library(labplot_data_obj OBJECT ${LABPLOT_DATA_SOURCES})
+add_library(labplot_worksheet_obj OBJECT ${LABPLOT_WORKSHEET_SOURCES})
+add_library(labplot_datasources_obj OBJECT ${LABPLOT_DATASOURCES_SOURCES})
+
+# labplotbackendlib aggregates all OBJECT libs + generated/UI sources into one STATIC lib
+add_library(labplotbackendlib STATIC
+    ${UI_SOURCES}
+    ${GENERATED_SOURCES}
+    ${LABPLOT_MQTT_WIDGET_SOURCES}
+    $<TARGET_OBJECTS:labplot_core_obj>
+    $<TARGET_OBJECTS:labplot_data_obj>
+    $<TARGET_OBJECTS:labplot_worksheet_obj>
+    $<TARGET_OBJECTS:labplot_datasources_obj>
+)
 add_library(labplotlib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${FRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
-# set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
+# Propagate include path to all OBJECT libs so AUTOMOC and compilation find NumberSpinBox.h, etc.
+foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj labplot_datasources_obj)
+    target_include_directories(${_labplot_obj} PRIVATE ${FRONTEND_DIR}/widgets)
+endforeach()
 target_include_directories(labplotbackendlib PUBLIC ${FRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 target_include_directories(labplotlib PUBLIC ${FRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 
 # add system QADS include path
+# Note: ads::qt6advanceddocking is always available (either found as a system package
+# or built as a bundled target via add_subdirectory(3rdparty)). When using the bundled
+# version, qt${QT_VERSION_MAJOR}advanceddocking_FOUND is FALSE, so we must NOT guard
+# this with if(_FOUND). labplotbackendlib and labplotlib also link it unconditionally.
 if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
-    get_target_property(QADS_INCLUDES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
     get_target_property(QADS_LIBRARIES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_LINK_LIBRARIES)
-    message(STATUS "QADS Found: ${QADS_LIBRARIES}, ${QADS_INCLUDES}")
-    target_include_directories(labplotbackendlib PUBLIC ${QADS_INCLUDES})
-    target_include_directories(labplotlib PUBLIC ${QADS_INCLUDES})
+    message(STATUS "QADS Found: ${QADS_LIBRARIES}")
 endif()
+# Apply compile definitions and Qt/KF link targets (for include paths) to all OBJECT libs
+foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj labplot_datasources_obj)
+    target_compile_definitions(${_labplot_obj} PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
+    target_link_libraries(${_labplot_obj} PRIVATE
+        Qt${QT_MAJOR_VERSION}::Core
+        Qt${QT_MAJOR_VERSION}::Concurrent
+        Qt${QT_MAJOR_VERSION}::Gui
+        Qt${QT_MAJOR_VERSION}::Widgets
+        Qt${QT_MAJOR_VERSION}::Network
+        Qt${QT_MAJOR_VERSION}::Xml
+        Qt${QT_MAJOR_VERSION}::PrintSupport
+        KF${KF_MAJOR_VERSION}::ConfigCore
+        KF${KF_MAJOR_VERSION}::I18n
+        KF${KF_MAJOR_VERSION}::ConfigWidgets
+        KF${KF_MAJOR_VERSION}::Archive
+        KF${KF_MAJOR_VERSION}::TextWidgets
+        KF${KF_MAJOR_VERSION}::CoreAddons
+        ads::qt${QT_VERSION_MAJOR}advanceddocking
+    )
+
+    # Precompiled headers: parse common Qt/KF and LabPlot lib/ headers once per OBJECT lib.
+    target_precompile_headers(${_labplot_obj} PRIVATE
+        <QObject>
+        <QVector>
+        <QString>
+        <QColor>
+        <QRectF>
+        <KLocalizedString>
+        "backend/lib/macros.h"
+        "backend/lib/macrosCurve.h"
+        "backend/lib/commandtemplates.h"
+        "backend/lib/Debug.h"
+        "backend/lib/Range.h"
+        "backend/lib/XmlStreamReader.h"
+    )
+endforeach()
 target_compile_definitions(labplotbackendlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 target_compile_definitions(labplotlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
@@ -687,6 +757,9 @@ target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::TextEditor)
 endif()
 
 if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
+    foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj labplot_datasources_obj)
+        target_link_libraries(${_labplot_obj} PRIVATE Qt${QT_MAJOR_VERSION}::SerialPort)
+    endforeach()
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::SerialPort)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::SerialPort)
 endif()
@@ -694,6 +767,9 @@ if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Svg)
 endif()
 if(Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
+    foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj labplot_datasources_obj)
+        target_link_libraries(${_labplot_obj} PRIVATE Qt${QT_MAJOR_VERSION}::Mqtt)
+    endforeach()
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::Mqtt)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Mqtt)
 endif()
@@ -720,7 +796,7 @@ if(ZSTD_FOUND)
 endif()
 
 if(Cantor_FOUND)
-    # KFX::Service, KFX::Parts is optional but probably required by Cantor
+    # KFX::Service, KFX::Parts is optional but required by Cantor
     target_link_libraries(labplotbackendlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
     target_link_libraries(labplotlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
 endif()
@@ -738,6 +814,8 @@ endif()
 if(ENABLE_XLSX)
     # build before use
     if(BUILD_QXLSX)
+        target_include_directories(labplot_datasources_obj PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header")
+        add_dependencies(labplot_datasources_obj QXlsx)
         target_include_directories(labplotbackendlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header")
         add_dependencies(labplotbackendlib QXlsx)
         target_include_directories(labplotlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header")
@@ -745,22 +823,26 @@ if(ENABLE_XLSX)
     endif()
 
     if(QXLSX_FOUND)
+        target_include_directories(labplot_datasources_obj PRIVATE ${QXLSX_INCLUDE_DIR})
         target_include_directories(labplotbackendlib PUBLIC ${QXLSX_INCLUDE_DIR})
         target_include_directories(labplotlib PUBLIC ${QXLSX_INCLUDE_DIR})
     endif()
 
     if(QXLSX_FOUND OR BUILD_QXLSX)
-    target_link_libraries(labplotbackendlib QXlsx)
+        target_link_libraries(labplotbackendlib QXlsx)
     endif()
 endif()
 
 if(ENABLE_LIBORIGIN)
     if(LIBORIGIN_FOUND)
-        # ifsystem headers are missing: use the provided
+        target_include_directories(labplot_core_obj PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
+        target_include_directories(labplot_datasources_obj PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
         target_include_directories(labplotbackendlib PUBLIC ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
         target_link_libraries(labplotbackendlib ${LIBORIGIN_LIBRARIES})
         target_include_directories(labplotlib PUBLIC ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
     else() # own version
+        target_include_directories(labplot_core_obj PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
+        target_include_directories(labplot_datasources_obj PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
         target_include_directories(labplotbackendlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
         target_link_libraries(labplotbackendlib liborigin-static)
         target_include_directories(labplotlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
