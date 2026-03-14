@@ -1253,12 +1253,12 @@ void StatisticalPlotsTest::testRunChartCenterMedian() {
  * \brief create and add a new pareto chart, undo and redo this step
  */
 void StatisticalPlotsTest::testParetoChartInit() {
-	QSKIP("crash", QTest::SkipSingleton);
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto* pc = new ParetoChart(QStringLiteral("pareto"));
@@ -1281,12 +1281,12 @@ void StatisticalPlotsTest::testParetoChartInit() {
  * \brief create and add a new pareto chart, duplicate it and check the number of children
  */
 void StatisticalPlotsTest::testParetoChartDuplicate() {
-	QSKIP("crash", QTest::SkipSingleton);
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto* pc = new ParetoChart(QStringLiteral("pareto"));
@@ -1303,7 +1303,6 @@ void StatisticalPlotsTest::testParetoChartDuplicate() {
  * the limits for the cumulative curve should be from 0 to 100%
  */
 void StatisticalPlotsTest::testParetoChartRanges() {
-	QSKIP("crash", QTest::SkipSingleton);
 	Project project;
 
 	// prepare the data
@@ -1314,7 +1313,9 @@ void StatisticalPlotsTest::testParetoChartRanges() {
 	// prepare the worksheet + plot
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	project.addChild(ws);
+
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto* pc = new ParetoChart(QStringLiteral("pareto"));
@@ -1324,7 +1325,7 @@ void StatisticalPlotsTest::testParetoChartRanges() {
 	// check the number of coordinates systems, should be 2, one for bars and one for the cumulative curve
 	QCOMPARE(p->coordinateSystems().size(), 2);
 
-	// check the ranges, the limits for bars should be from 0 to 9, the limits for the cumulative curve should be from 0 to 100%
+	// check the ranges, the limits for bars should be from 0 to 5 (5 values), the limits for the cumulative curve should be from 0 to 100%
 	auto range = p->range(Dimension::X, 0);
 	QCOMPARE(range.start(), 0);
 	QCOMPARE(range.end(), 5);

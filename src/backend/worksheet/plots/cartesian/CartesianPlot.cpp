@@ -2786,21 +2786,25 @@ void CartesianPlot::childAboutToBeAdded(const AbstractAspect* /*parent*/, const 
 	// adjust axes properties as required for the Pareto chart
 	// x: place the ticks between the bars, show category labels, no grid lines
 	auto* firstXAxis = horizontalAxis();
-	firstXAxis->title()->setText(QString());
-	firstXAxis->majorGridLine()->setStyle(Qt::NoPen);
-	firstXAxis->setMajorTicksStartType(Axis::TicksStartType::Offset);
-	firstXAxis->setMajorTickStartOffset(0.5);
-	firstXAxis->setMajorTicksType(Axis::TicksType::Spacing);
-	firstXAxis->setMajorTicksSpacing(1.);
-	firstXAxis->setMinorTicksDirection(Axis::noTicks);
-	firstXAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
-	firstXAxis->setLabelsTextColumn(paretoChart->labelsColumn()); // show the category labels on the x-axis
+	if (firstXAxis) {
+		firstXAxis->title()->setText(QString());
+		firstXAxis->majorGridLine()->setStyle(Qt::NoPen);
+		firstXAxis->setMajorTicksStartType(Axis::TicksStartType::Offset);
+		firstXAxis->setMajorTickStartOffset(0.5);
+		firstXAxis->setMajorTicksType(Axis::TicksType::Spacing);
+		firstXAxis->setMajorTicksSpacing(1.);
+		firstXAxis->setMinorTicksDirection(Axis::noTicks);
+		firstXAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+		firstXAxis->setLabelsTextColumn(paretoChart->labelsColumn()); // show the category labels on the x-axis
+	}
 
 	// y:
 	auto* firstYAxis = verticalAxis();
-	firstYAxis->title()->setText(i18n("Frequency"));
-	firstYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
-	firstYAxis->setMajorTicksNumber(10 + 1); // same tick number as percentage axis
+	if (firstYAxis) {
+		firstYAxis->title()->setText(i18n("Frequency"));
+		firstYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
+		firstYAxis->setMajorTicksNumber(secondYAxis->majorTicksNumber()); // same tick number as percentage axis
+	}
 
 	// y2:
 	secondYAxis->title()->setText(i18n("Cumulative Percentage"));
