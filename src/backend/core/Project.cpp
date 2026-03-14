@@ -23,8 +23,8 @@
 #include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/plots.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
+#include "backend/worksheet/plots/cartesian/plots.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
