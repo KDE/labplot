@@ -21,7 +21,13 @@ target_precompile_headers(labplottest PRIVATE
     "${SRC_DIR}/backend/lib/macros.h"
     "${SRC_DIR}/backend/lib/Debug.h"
 )
-target_precompile_headers(labplotmetatest REUSE_FROM labplottest)
+target_precompile_headers(labplotmetatest PRIVATE
+    <QtTest>
+    <QObject>
+    <QString>
+    "${SRC_DIR}/backend/lib/macros.h"
+    "${SRC_DIR}/backend/lib/Debug.h"
+)
 
 add_subdirectory(analysis)
 add_subdirectory(backend)
