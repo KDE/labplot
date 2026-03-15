@@ -11073,7 +11073,7 @@ msgstr "قيم مفقودة"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
 #, kde-format
 msgid " , "
-msgstr " ، "
+msgstr " ،  "
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
@@ -11089,7 +11089,7 @@ msgstr "، "
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
-msgstr "اختير: %1 %2 ، %3 %4%5 %6 %7 %8"
+msgstr "اختير: %1 %2 ،  %3 %4%5 %6 %7 %8"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3772
 #, kde-format
