@@ -1181,7 +1181,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
 					col->clearMasks();
-					// Apply masks to original column from the tempCol					
+					// Apply masks to original column from the tempCol
 					for (int i = 0; i < filledRows; ++i)
 						if (tempCol->isMasked(i))
 							col->setMasked(i, true);
