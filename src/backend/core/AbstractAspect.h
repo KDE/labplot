@@ -67,6 +67,7 @@ enum class AspectType : quint64 {
 	// continuous improvement plots
 	ProcessBehaviorChart,
 	RunChart,
+	ParetoChart,
 
 	WorksheetElementContainer,
 	AbstractPlot,
@@ -234,6 +235,8 @@ public:
 			return std::string_view("KDEPlot");
 		case AspectType::LollipopPlot:
 			return std::string_view("LollipopPlot");
+		case AspectType::ParetoChart:
+			return std::string_view("ParetoChart");
 		case AspectType::ProcessBehaviorChart:
 			return std::string_view("ProcessBehaviorChart");
 		case AspectType::RunChart:

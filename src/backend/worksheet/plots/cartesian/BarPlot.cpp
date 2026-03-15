@@ -552,7 +552,7 @@ void BarPlotPrivate::recalc() {
 		// one more bar needs to be added
 		KConfig config;
 		KConfigGroup group = config.group(QLatin1String("BarPlot"));
-		const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
+		const auto* plot = q->parent<CartesianPlot>();
 
 		for (int i = 0; i < diff; ++i) {
 			// box filling and border line
@@ -1047,7 +1047,10 @@ void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QV
 	// clip the points to the plot data rect and create a new polygon
 	// out of them that will be filled out.
 	QPolygonF polygon;
-	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
+	const auto* plot = q->parent<CartesianPlot>();
+	if (!plot)
+		return;
+	const QRectF& dataRect = plot->dataRect();
 	int i = 0;
 	for (const auto& line : unclippedLines) {
 		// clip the first point of the line

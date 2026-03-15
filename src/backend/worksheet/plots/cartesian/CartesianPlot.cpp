@@ -188,6 +188,10 @@ void CartesianPlot::init(bool loading) {
 	});
 
 	connect(this, &AbstractAspect::childAspectAdded, this, &CartesianPlot::childAdded);
+	connect(this,
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
+			this,
+			&CartesianPlot::childAboutToBeAdded);
 	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
 
 	// if not loading, initialize the default properties (read in load() otherwise)
@@ -494,7 +498,7 @@ void CartesianPlot::initMenus() {
 
 	// plots
 	auto* actionGroup = new QActionGroup(this);
-	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addPlot);
+	connect(actionGroup, &QActionGroup::triggered, this, QOverload<const QAction*>::of(&CartesianPlot::addPlot));
 	CartesianPlot::fillAddNewPlotMenu(m_addNewMenu, actionGroup);
 
 	// formula plot
@@ -651,7 +655,7 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 
 	addNewPlotMenu->addMenu(addNewStatisticalPlotsMenu);
 
-	// // bar plots
+	// bar plots
 	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), addNewPlotMenu);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), actionGroup);
@@ -673,6 +677,10 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Process Behavior Chart"), actionGroup);
 	action->setData(static_cast<int>(Plot::PlotType::ProcessBehaviorChart));
+	addNewCIPlotsMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Pareto Chart"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::ParetoChart));
 	addNewCIPlotsMenu->addAction(action);
 
 	addNewPlotMenu->addMenu(addNewCIPlotsMenu);
@@ -909,6 +917,7 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::QQPlot,
 							  AspectType::RunChart,
 							  AspectType::ProcessBehaviorChart,
+							  AspectType::ParetoChart,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
 							  AspectType::XYFunctionCurve,
@@ -1898,9 +1907,8 @@ void CartesianPlot::retransform() {
 // ################################################################
 // ########################## Slots ###############################
 // ################################################################
-void CartesianPlot::addPlot(QAction* action) {
+void CartesianPlot::addPlot(const QAction* action) {
 	const auto type = static_cast<Plot::PlotType>(action->data().toInt());
-
 	switch (type) {
 	// basic plots
 	case Plot::PlotType::Line: {
@@ -1998,10 +2006,14 @@ void CartesianPlot::addPlot(QAction* action) {
 	case Plot::PlotType::RunChart:
 		addChild(new RunChart(i18n("Run Chart")));
 		break;
+	case Plot::PlotType::ParetoChart: {
+		addChild(new ParetoChart(i18n("Pareto Chart")));
+		break;
+	}
 	}
 }
 
-void CartesianPlot::addAnalysisPlot(QAction* action) {
+void CartesianPlot::addAnalysisPlot(const QAction* action) {
 	const auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	switch (type) {
 	case XYAnalysisCurve::AnalysisAction::FitLinear:
@@ -2268,7 +2280,7 @@ void CartesianPlot::addBaselineCorrectionCurve() {
 		this->addChild(new XYBaselineCorrectionCurve(i18n("Baseline Correction")));
 }
 
-void CartesianPlot::addFitCurve(QAction* action) {
+void CartesianPlot::addFitCurve(const QAction* action) {
 	const auto& selectedCurves = this->selectedCurves();
 	if (!selectedCurves.isEmpty()) {
 		for (const auto* curCurve : selectedCurves) {
@@ -2540,7 +2552,7 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 		++index;
 
 		// for the process behavior and run charts two colors are used - for the data and for the control line(s)
-		if (plot->type() == AspectType::ProcessBehaviorChart || plot->type() == AspectType::RunChart)
+		if (plot->type() == AspectType::ProcessBehaviorChart || plot->type() == AspectType::RunChart || plot->type() == AspectType::ParetoChart)
 			++index;
 	}
 
@@ -2594,6 +2606,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
 	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
 	const auto* lollipopPlot = dynamic_cast<const LollipopPlot*>(child);
+	const auto* paretoChart = dynamic_cast<const ParetoChart*>(child);
 
 	const auto* axis = dynamic_cast<const Axis*>(child);
 
@@ -2672,6 +2685,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(lollipopPlot, &LollipopPlot::xDataChanged, [this, lollipopPlot]() {
 			this->dataChanged(const_cast<LollipopPlot*>(lollipopPlot), Dimension::X);
 		});
+	} else if (paretoChart) {
+		DEBUG(Q_FUNC_INFO << ", PARETO CHART")
+		// TODO: connect to data changes of the pareto chart when implemented
 	} else if (axis) {
 		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	} else {
@@ -2705,21 +2721,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	if (!isLoading() && !isPasted() && !child->isPasted() && !child->isMoved()) {
 		// new child was added which might change the ranges and the axis tick labels.
 		// adjust the plot area padding if the axis label is outside of the plot area
-		if (rangeChanged) {
-			const auto& axes = children<Axis>();
-			for (auto* a : axes) {
-				if (a->orientation() == WorksheetElement::Orientation::Vertical) {
-					double delta = d->dataRect.x() - a->graphicsItem()->boundingRect().x();
-					if (delta > horizontalPadding()) {
-						setUndoAware(false);
-						setSymmetricPadding(false);
-						setHorizontalPadding(delta);
-						setUndoAware(true);
-					}
-					break;
-				}
-			}
-		}
+		if (rangeChanged)
+			adjustPadding();
 
 		// if a theme was selected, apply the theme settings for newly added children,
 		// load default theme settings otherwise.
@@ -2733,6 +2736,120 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		} else {
 			KConfig config;
 			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
+		}
+	}
+}
+
+void CartesianPlot::childAboutToBeAdded(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
+	if (isLoading())
+		return;
+
+	auto* paretoChart = dynamic_cast<const ParetoChart*>(child);
+	if (!paretoChart)
+		return;
+
+	// for Pareto chart we need a second range for the cumulative percentage of the total number of occurrences,
+	// add a new range if not already available
+	if (rangeCount(Dimension::Y) < 2)
+		addYRange(Range<double>(0, 100)); // add second y range
+	else if (range(Dimension::Y, 1) != Range<double>(0, 100))
+		setYRange(1, Range<double>(0, 100)); // set to 0 .. 100 if already available but different
+
+	// add the second coordinate system for the second y range if not already available and set it to use the second y range
+	if (coordinateSystemCount() < 2)
+		addCoordinateSystem(); // add cs for the second y range
+	setCoordinateSystemRangeIndex(coordinateSystemCount() - 1, Dimension::Y, 1);
+	enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
+
+	// add second y-axis if not available yet
+	Axis* secondYAxis = nullptr;
+	const auto& axes = children<Axis>();
+	for (auto* axis : axes) {
+		if (axis->orientation() == Axis::Orientation::Vertical && axis->position() == Axis::Position::Right) {
+			secondYAxis = axis;
+			break;
+		}
+	}
+	if (!secondYAxis) {
+		secondYAxis = new Axis(QLatin1String("y2"));
+		addChild(secondYAxis);
+	}
+	secondYAxis->setOrientation(Axis::Orientation::Vertical);
+	secondYAxis->setPosition(Axis::Position::Right);
+	secondYAxis->setMajorTicksDirection(Axis::ticksIn);
+	secondYAxis->setLabelsPosition(Axis::LabelsPosition::In);
+	secondYAxis->setLabelsSuffix(QLatin1String("%"));
+	secondYAxis->title()->setRotationAngle(90);
+	secondYAxis->setCoordinateSystemIndex(1);
+
+	// adjust axes properties as required for the Pareto chart
+	// x: place the ticks between the bars, show category labels, no grid lines
+	auto* firstXAxis = horizontalAxis();
+	if (firstXAxis) {
+		firstXAxis->title()->setText(QString());
+		firstXAxis->majorGridLine()->setStyle(Qt::NoPen);
+		firstXAxis->setMajorTicksStartType(Axis::TicksStartType::Offset);
+		firstXAxis->setMajorTickStartOffset(0.5);
+		firstXAxis->setMajorTicksType(Axis::TicksType::Spacing);
+		firstXAxis->setMajorTicksSpacing(1.);
+		firstXAxis->setMinorTicksDirection(Axis::noTicks);
+		firstXAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+		firstXAxis->setLabelsTextColumn(paretoChart->labelsColumn()); // show the category labels on the x-axis
+	}
+
+	// y:
+	auto* firstYAxis = verticalAxis();
+	if (firstYAxis) {
+		firstYAxis->title()->setText(i18n("Frequency"));
+		firstYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
+		firstYAxis->setMajorTicksNumber(secondYAxis->majorTicksNumber()); // same tick number as percentage axis
+	}
+
+	// y2:
+	secondYAxis->title()->setText(i18n("Cumulative Percentage"));
+	// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was addressed
+	secondYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
+}
+
+/*!
+ * Adjusts the plot area padding to make sure that axis labels and titles are insight the plot area and fully visible.
+ */
+void CartesianPlot::adjustPadding() {
+	if (isLoading())
+		return;
+
+	Q_D(CartesianPlot);
+	QRectF plotRect = d->mapRectFromScene(d->rect);
+	const auto& axes = children<Axis>();
+
+	for (auto* a : axes) {
+		if (a->orientation() == WorksheetElement::Orientation::Vertical) {
+			if (a->position() == Axis::Position::Left) {
+				// left-side vertical axis - check if it extends beyond the left edge of the data rect
+				double delta = d->dataRect.x() - a->graphicsItem()->boundingRect().x();
+				if (delta > horizontalPadding()) {
+					setUndoAware(false);
+					setSymmetricPadding(false);
+					setHorizontalPadding(delta);
+					setUndoAware(true);
+				}
+			} else if (a->position() == Axis::Position::Right) {
+				// Map axis bounding rect from axis coordinates to plot coordinates
+				QRectF axisBoundingRect = d->mapRectFromItem(a->graphicsItem(), a->graphicsItem()->boundingRect());
+
+				// right-side vertical axis - check if it extends beyond the right edge of the plot rect
+				// (the axis itself is positioned at the right edge of the data rect, so we need to check
+				// against the plot rect to know how much padding is needed)
+				double delta = axisBoundingRect.right() - plotRect.right();
+				if (delta > 0) {
+					setUndoAware(false);
+					setSymmetricPadding(false);
+					// Increase the existing right padding by the overflow amount so that
+					// the axis (including title and tick labels) fits into the plot rect.
+					setRightPadding(rightPadding() + delta);
+					setUndoAware(true);
+				}
+			}
 		}
 	}
 }
@@ -2900,9 +3017,10 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 	else if (autoScale(Dimension::Y, yIndex))
 		updated = scaleAuto(Dimension::Y, yIndex);
 
-	if (updated)
+	if (updated) {
 		WorksheetElementContainer::retransform();
-	else {
+		adjustPadding(); // check if padding needs to be adjusted after the retransform
+	} else {
 		// even if the plot ranges were not changed, either no auto scale active or the new data
 		// is within the current ranges and no change of the ranges is required,
 		// retransform the curve in order to show the changes
@@ -2988,9 +3106,10 @@ void CartesianPlot::dataChanged(Plot* curve, const Dimension dim) {
 	}
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
-	if (updated)
+	if (updated) {
 		WorksheetElementContainer::retransform();
-	else {
+		adjustPadding(); // check if padding needs to be adjusted after the retransform
+	} else {
 		// even if the plot ranges were not changed, either no auto scale active or the new data
 		// is within the current ranges and no change of the ranges is required,
 		// retransform the curve in order to show the changes
@@ -3252,7 +3371,11 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		}
 		DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
 
-		plot->minMax(dim, indexRange, range, true);
+		// Pareto chart requires two coordinate systems, handle it differently.
+		if (plot->type() == AspectType::ParetoChart)
+			static_cast<const ParetoChart*>(plot)->multiMinMax(index, dim, indexRange, range, true);
+		else
+			plot->minMax(dim, indexRange, range, true);
 
 		// check ranges for nonlinear scales
 		if (range.scale() != RangeT::Scale::Linear)
@@ -5697,6 +5820,13 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(plot);
 			else
 				return false;
+		} else if (reader->name() == QLatin1String("ParetoChart")) {
+			auto* plot = new ParetoChart(QStringLiteral("Pareto Chart"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
 		} else if (reader->name() == QLatin1String("cartesianPlot")) {
 			auto* plot = new CartesianPlot(QString(), true);
 			plot->setIsLoading(true);
@@ -5837,5 +5967,6 @@ const QList<QColor>& CartesianPlot::plotColors() const {
 const QColor CartesianPlot::plotColor(int index) const {
 	Q_D(const CartesianPlot);
 	const int i = index % d->plotColors.count();
+
 	return d->plotColors.at(i);
 }

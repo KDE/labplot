@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -23,19 +23,8 @@
 #include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/ErrorBar.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/KDEPlot.h"
-#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
-#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
-#include "backend/worksheet/plots/cartesian/QQPlot.h"
-#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
-#include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
+#include "backend/worksheet/plots/cartesian/plots.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
@@ -1232,6 +1221,19 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		runPlots << runPlot;
 
 	for (auto* plot : runPlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
+	}
+
+	// Pareto charts/plots
+	QVector<ParetoChart*> paretoPlots;
+	if (hasChildren)
+		paretoPlots = aspect->children<ParetoChart>(ChildIndexFlag::Recursive);
+	else if (auto* paretoPlot = aspect->castTo<ParetoChart>())
+		paretoPlots << paretoPlot;
+
+	for (auto* plot : paretoPlots) {
 		if (!plot)
 			continue;
 		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
