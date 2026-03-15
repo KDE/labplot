@@ -1034,7 +1034,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1054,7 +1054,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1074,7 +1074,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1096,7 +1096,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1120,13 +1120,19 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
 			}
 			// copy the sorted column
 			col->copy(tempCol.get(), 0, 0, rows);
+			col->clearMasks();
+			// Apply masks to original column from the tempCol
+			for (int i = 0; i < rows; ++i) {
+				if (tempCol->isMasked(i))
+					col->setMasked(i, true);
+			}
 		}
 	} else { // sort with leading column
 		DEBUG("	sort with leading column")
@@ -1158,7 +1164,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 
 				// copy the sorted column
@@ -1174,6 +1180,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+					col->clearMasks();
+					// Apply masks to original column from the tempCol					
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < invalidRows; ++i)
+						if (tempInvalidCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
@@ -1197,10 +1211,16 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
 				col->copy(tempCol.get(), 0, 0, rows);
+				col->clearMasks();
+				// Apply masks to original column from the tempCol
+				for (int i = 0; i < rows; ++i) {
+					if (tempCol->isMasked(i))
+						col->setMasked(i, true);
+				}
 			}
 			break;
 		}
@@ -1222,10 +1242,16 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
 				col->copy(tempCol.get(), 0, 0, rows);
+				col->clearMasks();
+				// Apply masks to original column from the tempCol
+				for (int i = 0; i < rows; ++i) {
+					if (tempCol->isMasked(i))
+						col->setMasked(i, true);
+				}
 			}
 			break;
 		}
@@ -1254,7 +1280,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 
 				// copy the sorted column
@@ -1270,6 +1296,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempEmptyCol.get(), 0, filledRows, emptyRows);
+					col->clearMasks();
+					// Apply masks to original column from the tempCol
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < emptyRows; ++i)
+						if (tempEmptyCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
@@ -1300,7 +1334,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
 				if (col == leading) // update all rows
@@ -1315,6 +1349,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+					col->clearMasks();
+					// Apply masks to original column from the tempCol
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < invalidRows; ++i)
+						if (tempInvalidCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
