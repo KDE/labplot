@@ -18252,7 +18252,7 @@ msgstr "قيم مفقودة"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3740
 #, kde-format
 msgid " , "
-msgstr " ، "
+msgstr " ،  "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3740
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3741
