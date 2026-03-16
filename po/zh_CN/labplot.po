@@ -9507,10 +9507,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2010
-#, fuzzy, kde-format
-#| msgid "Pareto"
+#, kde-format
 msgid "Pareto Chart"
-msgstr "Pareto 分布"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #, kde-format
@@ -16241,11 +16240,10 @@ msgid "Run Chart"
 msgstr ""
 
 #: src/frontend/GuiObserver.cpp:402
-#, fuzzy, kde-format
-#| msgid "Pareto"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pareto Chart"
-msgstr "Pareto 分布"
+msgstr ""
 
 #: src/frontend/GuiObserver.cpp:407
 #, kde-format

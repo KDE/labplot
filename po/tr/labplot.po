@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-15 00:40+0000\n"
-"PO-Revision-Date: 2026-03-09 21:52+0300\n"
+"PO-Revision-Date: 2026-03-15 13:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9610,10 +9610,9 @@ msgstr "Süreç Davranış Grafiği"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2010
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgid "Pareto Chart"
-msgstr "Pareto Çizimi"
+msgstr "Pareto Grafiği"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #, kde-format
@@ -16633,11 +16632,10 @@ msgid "Run Chart"
 msgstr "Grafiği Çalıştır"
 
 #: src/frontend/GuiObserver.cpp:402
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pareto Chart"
-msgstr "Pareto Çizimi"
+msgstr "Pareto Grafiği"
 
 #: src/frontend/GuiObserver.cpp:407
 #, kde-format
