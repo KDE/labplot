@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-15 00:40+0000\n"
-"PO-Revision-Date: 2026-02-26 06:59+0100\n"
+"PO-Revision-Date: 2026-03-15 08:36+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -9672,8 +9672,7 @@ msgstr "Grafikon obnašanja procesa"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2010
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgid "Pareto Chart"
 msgstr "Paretov diagram"
 
@@ -16703,8 +16702,7 @@ msgid "Run Chart"
 msgstr "Zaženi diagram"
 
 #: src/frontend/GuiObserver.cpp:402
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pareto Chart"
 msgstr "Paretov diagram"

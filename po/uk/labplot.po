@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-15 00:40+0000\n"
-"PO-Revision-Date: 2026-02-26 09:59+0200\n"
+"PO-Revision-Date: 2026-03-15 11:58+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -9703,10 +9703,9 @@ msgstr "Діаграма поведінки процесу"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2010
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgid "Pareto Chart"
-msgstr "Графік Парето"
+msgstr "Діаграма Парето"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #, kde-format
@@ -16776,11 +16775,10 @@ msgid "Run Chart"
 msgstr "Рухома діаграма"
 
 #: src/frontend/GuiObserver.cpp:402
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pareto Chart"
-msgstr "Графік Парето"
+msgstr "Діаграма Парето"
 
 #: src/frontend/GuiObserver.cpp:407
 #, kde-format

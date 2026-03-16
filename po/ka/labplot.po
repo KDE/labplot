@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-15 00:40+0000\n"
-"PO-Revision-Date: 2026-02-26 05:47+0100\n"
+"PO-Revision-Date: 2026-03-15 07:43+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -9642,10 +9642,9 @@ msgstr "ქცევის გრაფიკის დამუშავებ�
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2010
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgid "Pareto Chart"
-msgstr "პარეტოს ნახაზი"
+msgstr "პარეტოს დიაგრამა"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #, kde-format
@@ -16695,11 +16694,10 @@ msgid "Run Chart"
 msgstr "გრაფიკის გაშვება"
 
 #: src/frontend/GuiObserver.cpp:402
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pareto Chart"
-msgstr "პარეტოს ნახაზი"
+msgstr "პარეტოს დიაგრამა"
 
 #: src/frontend/GuiObserver.cpp:407
 #, kde-format

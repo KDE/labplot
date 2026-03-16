@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-15 00:40+0000\n"
-"PO-Revision-Date: 2026-02-26 11:21+0100\n"
+"PO-Revision-Date: 2026-03-15 19:48+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -9668,10 +9668,9 @@ msgstr "Gráfico de comportamiento de procesos"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2010
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgid "Pareto Chart"
-msgstr "Diagrama de Pareto"
+msgstr "Gráfico de Pareto"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #, kde-format
@@ -16765,11 +16764,10 @@ msgid "Run Chart"
 msgstr "Gráfico de ejecución"
 
 #: src/frontend/GuiObserver.cpp:402
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pareto Chart"
-msgstr "Diagrama de Pareto"
+msgstr "Gráfico de Pareto"
 
 #: src/frontend/GuiObserver.cpp:407
 #, kde-format
