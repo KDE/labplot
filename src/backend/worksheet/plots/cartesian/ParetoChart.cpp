@@ -36,9 +36,9 @@
 
 CURVE_COLUMN_CONNECT(ParetoChart, Data, data, recalc)
 
-ParetoChart::ParetoChart(const QString& name)
+ParetoChart::ParetoChart(const QString& name, bool loading)
 	: Plot(name, new ParetoChartPrivate(this), AspectType::ParetoChart) {
-	init();
+	init(loading);
 }
 
 ParetoChart::ParetoChart(const QString& name, ParetoChartPrivate* dd)
@@ -50,11 +50,8 @@ ParetoChart::ParetoChart(const QString& name, ParetoChartPrivate* dd)
 // and is deleted during the cleanup in QGraphicsScene
 ParetoChart::~ParetoChart() = default;
 
-void ParetoChart::init() {
+void ParetoChart::init(bool loading) {
 	Q_D(ParetoChart);
-
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("ParetoChart"));
 
 	// column for the sorted frequencies used in the bar plot
 	d->frequenciesColumn = new Column(QStringLiteral("frequencies"), AbstractColumn::ColumnMode::Integer);
@@ -88,12 +85,6 @@ void ParetoChart::init() {
 	d->linePlot->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->linePlot->setHidden(true);
 	d->linePlot->graphicsItem()->setParentItem(d);
-	d->linePlot->line()->setStyle(Qt::SolidLine);
-	d->linePlot->symbol()->setStyle(Symbol::Style::Circle);
-	d->linePlot->value()->setType(Value::Type::Y);
-	d->linePlot->value()->setPosition(Value::Position::Right);
-	d->linePlot->value()->setDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
-	d->linePlot->value()->setSuffix(QStringLiteral("%"));
 
 	// set the columns in the plots
 	d->barPlot->setDataColumns({d->frequenciesColumn});
@@ -103,6 +94,19 @@ void ParetoChart::init() {
 	// synchronize the names of the internal XYCurves with the name of the current plot
 	// so we have the same name shown on the undo stack
 	connect(this, &AbstractAspect::aspectDescriptionChanged, this, &ParetoChart::renameInternalCurves);
+
+	if (loading)
+		return;
+
+	// TODO: read from the config?
+	// KConfig config;
+	// KConfigGroup group = config.group(QStringLiteral("ParetoChart"));
+	d->linePlot->line()->setStyle(Qt::SolidLine);
+	d->linePlot->symbol()->setStyle(Symbol::Style::Circle);
+	d->linePlot->value()->setType(Value::Type::Y);
+	d->linePlot->value()->setPosition(Value::Position::Right);
+	d->linePlot->value()->setDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	d->linePlot->value()->setSuffix(QStringLiteral("%"));
 }
 
 void ParetoChart::finalizeAdd() {
@@ -508,9 +512,11 @@ bool ParetoChart::load(XmlStreamReader* reader, bool preview) {
 			if (!rc)
 				return false;
 		} else if (reader->name() == QLatin1String("barPlot")) {
+			 // clear the paths first set in init() before loading, as they will be loaded from XML again
+			d->barPlot->setDataColumnPaths({});
 			if (!d->barPlot->load(reader, preview))
 				return false;
-		} else if (reader->name() == QLatin1String("linePlot")) {
+		} else if (reader->name() == QLatin1String("xyCurve")) {
 			if (!d->linePlot->load(reader, preview))
 				return false;
 		} else { // unknown element

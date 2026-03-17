@@ -5788,7 +5788,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			else
 				return false;
 		} else if (reader->name() == QLatin1String("ParetoChart")) {
-			auto* plot = new ParetoChart(QStringLiteral("Pareto Chart"));
+			auto* plot = new ParetoChart(QStringLiteral("Pareto Chart"), true);
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else

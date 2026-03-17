@@ -34,7 +34,7 @@ public:
 
 	enum class CenterMetric { Average, Median };
 
-	explicit ParetoChart(const QString& name);
+	explicit ParetoChart(const QString& name, bool loading = false);
 	~ParetoChart() override;
 
 	void finalizeAdd() override;
@@ -87,7 +87,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ParetoChart)
-	void init();
+	void init(bool loading = false);
 	void connectDataColumn(const AbstractColumn*);
 
 	// private methods used in tests
