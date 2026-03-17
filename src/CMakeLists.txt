@@ -729,6 +729,10 @@ target_link_libraries(labplotbackendlib
 if(ENABLE_SCRIPTING)
 target_link_libraries(labplot_core_obj PRIVATE KF${KF_MAJOR_VERSION}::TextEditor)
 target_link_libraries(labplotbackendlib KF${KF_MAJOR_VERSION}::TextEditor)
+# Script.cpp (in labplot_core_obj) includes ScriptEditor.h which includes ui_scripteditorwidget.h.
+# AUTOUIC only scans direct includes in the target's own .cpp files, not transitive header
+# includes. Adding the .ui file as a source makes AUTOUIC generate the header for this target.
+target_sources(labplot_core_obj PRIVATE ${FRONTEND_DIR}/ui/script/scripteditorwidget.ui)
 endif()
 
 if(ENABLE_PYTHON_SCRIPTING)
