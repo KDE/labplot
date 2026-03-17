@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-15 00:40+0000\n"
-"PO-Revision-Date: 2026-02-26 08:48+0100\n"
+"PO-Revision-Date: 2026-03-15 09:51+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -9760,8 +9760,7 @@ msgstr "Diagrama de comportament de procés"
 # skip-rule: kct-box
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2010
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgid "Pareto Chart"
 msgstr "Diagrama de Pareto"
 
@@ -16869,8 +16868,7 @@ msgstr "Executa el diagrama"
 
 # skip-rule: kct-box
 #: src/frontend/GuiObserver.cpp:402
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pareto Chart"
 msgstr "Diagrama de Pareto"
