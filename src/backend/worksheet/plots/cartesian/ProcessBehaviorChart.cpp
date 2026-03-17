@@ -1609,6 +1609,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(ProcessBehaviorChart);
 
 	if (!readBasicAttributes(reader))

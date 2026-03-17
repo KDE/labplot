@@ -462,6 +462,7 @@ void ParetoChart::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool ParetoChart::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(ParetoChart);
 
 	if (!readBasicAttributes(reader))
@@ -507,11 +508,9 @@ bool ParetoChart::load(XmlStreamReader* reader, bool preview) {
 			if (!rc)
 				return false;
 		} else if (reader->name() == QLatin1String("barPlot")) {
-			d->barPlot->setIsLoading(true);
 			if (!d->barPlot->load(reader, preview))
 				return false;
 		} else if (reader->name() == QLatin1String("linePlot")) {
-			d->linePlot->setIsLoading(true);
 			if (!d->linePlot->load(reader, preview))
 				return false;
 		} else { // unknown element

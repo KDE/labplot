@@ -348,8 +348,7 @@ bool StatisticsSpreadsheet::load(XmlStreamReader* reader, bool preview) {
 
 		if (reader->isStartElement()) {
 			if (reader->name() == QStringLiteral("column")) {
-				Column* column = new Column(QString());
-				column->setIsLoading(true);
+				auto* column = new Column(QString());
 				if (!column->load(reader, preview)) {
 					delete column;
 					setColumnCount(0);

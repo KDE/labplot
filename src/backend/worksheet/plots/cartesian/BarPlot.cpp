@@ -1468,6 +1468,7 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool BarPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(BarPlot);
 
 	if (!readBasicAttributes(reader))

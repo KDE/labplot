@@ -855,6 +855,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	for (auto* child : aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden))
 		child->setIsLoading(false);
 
+	// set "isLoading" to false for all columns
 	for (auto& column : aspect->project()->children<Column>(ChildIndexFlag::Recursive))
 		column->setIsLoading(false);
 

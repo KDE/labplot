@@ -198,6 +198,7 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYIntegrationCurve);
 
 	QXmlStreamAttributes attribs;

@@ -1528,8 +1528,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 				READ_INT_VALUE("enabled", linking.linking, bool);
 				d->linking.linkedSpreadsheetPath = attribs.value(QStringLiteral("spreadsheet")).toString();
 			} else if (reader->name() == QLatin1String("column")) {
-				Column* column = new Column(QString());
-				column->setIsLoading(true);
+				auto* column = new Column(QString());
 				if (!column->load(reader, preview)) {
 					delete column;
 					setColumnCount(0);
