@@ -352,6 +352,7 @@ void ReferenceLine::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(ReferenceLine);
 
 	if (!readBasicAttributes(reader))

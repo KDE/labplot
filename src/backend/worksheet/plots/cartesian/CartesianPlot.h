@@ -13,10 +13,10 @@
 #define CARTESIANPLOT_H
 
 #include "backend/lib/Range.h"
+#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
-
-#include "backend/nsl/nsl_sf_stats.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 class Background;
 class CartesianCoordinateSystem;
@@ -242,6 +242,7 @@ private:
 	QVector<XYCurve*> selectedCurves() const;
 	void zoom(int index, const Dimension, bool in, const double relPosSceneRange);
 	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, WorksheetElement::Orientation);
+	void adjustPadding();
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
 	int curveTotalCount() const;
 
@@ -304,15 +305,15 @@ public Q_SLOTS:
 	void dataChanged(int xIndex = -1, int yIndex = -1, WorksheetElement* sender = nullptr);
 
 private Q_SLOTS:
-	void addPlot(QAction*);
-	void addAnalysisPlot(QAction*);
+	void addPlot(const QAction*);
+	void addAnalysisPlot(const QAction*);
 
 	void addLineSimplificationCurve();
 	void addDifferentiationCurve();
 	void addIntegrationCurve();
 	void addInterpolationCurve();
 	void addSmoothCurve();
-	void addFitCurve(QAction* action = nullptr);
+	void addFitCurve(const QAction* action = nullptr);
 	void addFourierFilterCurve();
 	void addFunctionCurve();
 	void addBaselineCorrectionCurve();
@@ -330,6 +331,7 @@ private Q_SLOTS:
 
 	void updateLegend();
 	void childAdded(const AbstractAspect*);
+	void childAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 

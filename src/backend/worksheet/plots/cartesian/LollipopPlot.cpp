@@ -1047,6 +1047,7 @@ void LollipopPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(LollipopPlot);
 
 	if (!readBasicAttributes(reader))

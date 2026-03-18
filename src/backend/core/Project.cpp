@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -22,19 +23,8 @@
 #include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/ErrorBar.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/KDEPlot.h"
-#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
-#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
-#include "backend/worksheet/plots/cartesian/QQPlot.h"
-#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
-#include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
+#include "backend/worksheet/plots/cartesian/plots.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
@@ -61,7 +51,6 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QThreadPool>
-#include <QUndoStack>
 
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
@@ -178,7 +167,7 @@ public:
 	bool saveDefaultDockWidgetState{false};
 	QString defaultDockWidgetState;
 	bool saveCalculations{true};
-	QUndoStack undo_stack;
+	UndoStack undo_stack;
 };
 
 int ProjectPrivate::m_versionNumber = 0;
@@ -262,7 +251,7 @@ int Project::currentBuildXmlVersion() {
 	return buildXmlVersion;
 }
 
-QUndoStack* Project::undoStack() const {
+UndoStack* Project::undoStack() const {
 	// Q_D(const Project);
 	return &d_ptr->undo_stack;
 }
@@ -866,6 +855,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	for (auto* child : aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden))
 		child->setIsLoading(false);
 
+	// set "isLoading" to false for all columns
 	for (auto& column : aspect->project()->children<Column>(ChildIndexFlag::Recursive))
 		column->setIsLoading(false);
 
@@ -1232,6 +1222,19 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		runPlots << runPlot;
 
 	for (auto* plot : runPlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
+	}
+
+	// Pareto charts/plots
+	QVector<ParetoChart*> paretoPlots;
+	if (hasChildren)
+		paretoPlots = aspect->children<ParetoChart>(ChildIndexFlag::Recursive);
+	else if (auto* paretoPlot = aspect->castTo<ParetoChart>())
+		paretoPlots << paretoPlot;
+
+	for (auto* plot : paretoPlots) {
 		if (!plot)
 			continue;
 		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);

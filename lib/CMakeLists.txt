@@ -74,6 +74,7 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/KDEPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/LollipopPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/ParetoChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ProcessBehaviorChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/QQPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/RunChart.cpp

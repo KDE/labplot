@@ -10,6 +10,7 @@
 #include "ProcessBehaviorChart.h"
 #include "ProcessBehaviorChartPrivate.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/ScopedUndoDisabler.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
@@ -195,6 +196,7 @@ void ProcessBehaviorChart::init(bool loading) {
 void ProcessBehaviorChart::finalizeAdd() {
 	Q_D(ProcessBehaviorChart);
 	WorksheetElement::finalizeAdd();
+	ScopedUndoDisabler undoDisabler(project()); // internal changes only, don't pollute the undo stack
 
 	// curves
 	addChildFast(d->centerCurve);
@@ -1607,6 +1609,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(ProcessBehaviorChart);
 
 	if (!readBasicAttributes(reader))

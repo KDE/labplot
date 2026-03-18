@@ -1146,6 +1146,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool TextLabel::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	if (!readBasicAttributes(reader))
 		return false;
 
