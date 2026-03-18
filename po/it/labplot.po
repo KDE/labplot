@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-15 00:40+0000\n"
-"PO-Revision-Date: 2026-02-21 09:58+0100\n"
+"PO-Revision-Date: 2026-03-09 15:03+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -8072,10 +8072,9 @@ msgid "Negative Rank Count"
 msgstr "Conteggio dei ranghi negativi"
 
 #: src/backend/statistics/HypothesisTest.cpp:636
-#, fuzzy, kde-format
-#| msgid "Bin Count:"
+#, kde-format
 msgid "Tie Count"
-msgstr "Conteggio del contenitore:"
+msgstr "Conteggio dei nodi"
 
 #: src/backend/statistics/HypothesisTest.cpp:638
 #: src/backend/statistics/HypothesisTest.cpp:646
@@ -8158,10 +8157,9 @@ msgid "Stability Ratio"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:659
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Effective Degrees of Freedom"
-msgstr "Gradi di libertà"
+msgstr "Gradi effettivi di libertà"
 
 #: src/backend/statistics/HypothesisTest.cpp:660
 #, kde-format
@@ -16343,10 +16341,9 @@ msgid "Number of points:"
 msgstr "Numero di punti:"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
-#, fuzzy, kde-format
-#| msgid "The number of vectors in the file"
+#, kde-format
 msgid "Target number of points in the simplified line"
-msgstr "Il numero di vettori nel file"
+msgstr "Numero di punti desiderati nella linea semplificata"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:225
 #, kde-format
@@ -16416,7 +16413,7 @@ msgstr ""
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
 msgid "Search region size in units of points"
-msgstr ""
+msgstr "Dimensione regione di ricerca in unità di punti"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:569
 #, kde-format
@@ -17513,10 +17510,9 @@ msgid "Couldn't open the temporary file for writing."
 msgstr "Impossibile aprire il file temporaneo in scrittura."
 
 #: src/frontend/MainWin.cpp:988
-#, fuzzy, kde-format
-#| msgid "Loading %1..."
+#, kde-format
 msgid "Saving %1..."
-msgstr "Caricamento di %1..."
+msgstr "Salvataggio di %1..."
 
 #: src/frontend/MainWin.cpp:1066
 #, kde-format
@@ -17534,10 +17530,9 @@ msgid "Couldn't open the file '%1' for writing."
 msgstr "Impossibile aprire il file «%1» in lettura."
 
 #: src/frontend/MainWin.cpp:1096
-#, fuzzy, kde-format
-#| msgid "Project successfully opened (in %1 seconds)."
+#, kde-format
 msgid "Project successfully saved (in %1 seconds)."
-msgstr "Progetto aperto correttamente (in %1 secondi)."
+msgstr "Progetto salvato correttamente (in %1 secondi)."
 
 #: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
 #, kde-format
