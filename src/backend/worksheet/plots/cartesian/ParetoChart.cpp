@@ -61,6 +61,7 @@ void ParetoChart::init(bool loading) {
 
 	// column with the text represenation of the sorted frequencies, used in the horizontal axis of the parent plot area
 	d->labelsColumn = new Column(QStringLiteral("labels"), AbstractColumn::ColumnMode::Text);
+	d->labelsColumn->setFixed(true);
 	addChildFast(d->labelsColumn);
 
 	// column for x and y values used in the line plot for the cumulative percentage
@@ -512,7 +513,7 @@ bool ParetoChart::load(XmlStreamReader* reader, bool preview) {
 			if (!rc)
 				return false;
 		} else if (reader->name() == QLatin1String("barPlot")) {
-			 // clear the paths first set in init() before loading, as they will be loaded from XML again
+			// clear the paths first set in init() before loading, as they will be loaded from XML again
 			d->barPlot->setDataColumnPaths({});
 			if (!d->barPlot->load(reader, preview))
 				return false;
