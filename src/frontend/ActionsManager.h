@@ -218,6 +218,7 @@ private:
 #endif
 
 private Q_SLOTS:
+	void showHelp();
 	void toggleDockWidget(QAction*);
 	void toggleStatusBar(bool);
 	void toggleMenuBar(bool);
