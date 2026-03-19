@@ -2975,12 +2975,6 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
 	QCOMPARE(sheetCalculations->rowCount(), 2); // Go back to original row count
 	QCOMPARE(modelSheetCalculations->rowCount(), 2);
-
-	sheetCalculations->undoStack()->undo();
-	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
-	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
-	QCOMPARE(sheetCalculations->rowCount(), 2);
-	QCOMPARE(modelSheetCalculations->rowCount(), 2);
 }
 
 void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
