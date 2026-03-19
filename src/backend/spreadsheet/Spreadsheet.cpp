@@ -520,8 +520,12 @@ public:
 			QObject::disconnect(m_target->linkedSpreadsheet, nullptr, m_target->q, nullptr);
 
 		if (m_linkedSpreadsheet) {
-			m_linkedSpreadsheetPath = m_linkedSpreadsheet->path();
+			m_target->linkedSpreadsheetPath = m_linkedSpreadsheet->path();
 			m_target->q->initConnectionsLinking(m_linkedSpreadsheet, m_target->q);
+		} else if (m_target->linkedSpreadsheet) {
+			// Preserve the path when unlinking so re-linking works if a new spreadsheet
+			// with the same path is added later.
+			m_target->linkedSpreadsheetPath = m_target->linkedSpreadsheet->path();
 		}
 
 		const auto* spreadsheet = m_target->linkedSpreadsheet;
@@ -548,7 +552,6 @@ public:
 private:
 	Spreadsheet::Private* m_target;
 	const Spreadsheet* m_linkedSpreadsheet;
-	QString m_linkedSpreadsheetPath;
 };
 
 BASIC_SHARED_D_READER_IMPL(Spreadsheet, const Spreadsheet*, linkedSpreadsheet, linkedSpreadsheet)
@@ -1375,7 +1378,6 @@ void Spreadsheet::childDeselected(const AbstractAspect* aspect) {
 
 void Spreadsheet::linkedSpreadsheetDeleted() {
 	Q_D(Spreadsheet);
-	d->linkedSpreadsheet = nullptr;
 	exec(new SpreadsheetSetLinkingCmd(d, nullptr, ki18n("%1: linked spreadsheet removed")));
 }
 
