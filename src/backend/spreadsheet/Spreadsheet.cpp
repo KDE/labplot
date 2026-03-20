@@ -519,14 +519,8 @@ public:
 		if (m_target->linkedSpreadsheet)
 			QObject::disconnect(m_target->linkedSpreadsheet, nullptr, m_target->q, nullptr);
 
-		if (m_linkedSpreadsheet) {
-			m_target->linkedSpreadsheetPath = m_linkedSpreadsheet->path();
+		if (m_linkedSpreadsheet)
 			m_target->q->initConnectionsLinking(m_linkedSpreadsheet, m_target->q);
-		} else if (m_target->linkedSpreadsheet) {
-			// Preserve the path when unlinking so re-linking works if a new spreadsheet
-			// with the same path is added later.
-			m_target->linkedSpreadsheetPath = m_target->linkedSpreadsheet->path();
-		}
 
 		const auto* spreadsheet = m_target->linkedSpreadsheet;
 		m_target->linkedSpreadsheet = m_linkedSpreadsheet;
@@ -1378,6 +1372,11 @@ void Spreadsheet::childDeselected(const AbstractAspect* aspect) {
 
 void Spreadsheet::linkedSpreadsheetDeleted() {
 	Q_D(Spreadsheet);
+	// preserve the path before unlinking so re-linking works if a new spreadsheet
+	// with the same path is added later. Must be done here — the command does not
+	// write linkedSpreadsheetPath, and after execute() the pointer is already null.
+	if (d->linkedSpreadsheet)
+		d->linkedSpreadsheetPath = d->linkedSpreadsheet->path();
 	exec(new SpreadsheetSetLinkingCmd(d, nullptr, ki18n("%1: linked spreadsheet removed")));
 }
 
