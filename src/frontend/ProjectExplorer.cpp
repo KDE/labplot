@@ -588,13 +588,9 @@ void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 				showErrorMessage(msg);
 			}
 		}
-	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) {
-		// duplicate
-		if (aspect != m_project) {
-			aspect->copy();
-			aspect->parentAspect()->paste(true);
-			showErrorMessage(QString());
-		}
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) { // duplicate
+		deselectIndex(m_treeView->currentIndex()); // deselect the current aspect first, the new one will be selected when added
+		aspect->duplicate();
 	} else if (event->key() == 32) {
 		// space key - hide/show the current object
 		changeSelectedVisible();
