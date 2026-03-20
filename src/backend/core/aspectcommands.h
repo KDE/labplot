@@ -198,10 +198,20 @@ public:
 
 	// calling redo transfers ownership of m_child to the new parent aspect
 	void redo() override {
-		Q_EMIT m_child->childAspectAboutToBeRemoved(m_child);
+		if (!m_child->isHidden() || m_child->type() == AspectType::DatapickerPoint)
+			Q_EMIT m_target->q->childAspectAboutToBeRemoved(m_child);
+		Q_EMIT m_child->aspectAboutToBeRemoved(m_child);
+
 		m_index = removeChild(m_target, m_child);
+
+		Q_EMIT m_target->q->childAspectRemoved(m_target->q, nullptr, m_child);
+
+		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, nullptr, m_child);
+		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, m_index, m_child);
+
 		m_new_parent->insertChild(m_new_index, m_child);
-		Q_EMIT m_child->childAspectAdded(m_child);
+
+		Q_EMIT m_target->q->childAspectAdded(m_child);
 	}
 
 	// calling undo transfers ownership of m_child back to its previous parent aspect
