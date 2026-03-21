@@ -35,8 +35,6 @@ public:
 	enum Normalization { Count, Probability, CountDensity, ProbabilityDensity };
 	enum BinningMethod { ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott };
 	enum LineType { NoLine, Bars, Envelope, DropLines, HalfBars };
-	enum ValuesType { NoValues, ValuesBinEntries, ValuesCustomColumn };
-	enum ValuesPosition { ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight };
 
 	explicit Histogram(const QString& name, bool loading = false);
 	~Histogram() override;

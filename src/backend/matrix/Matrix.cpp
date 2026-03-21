@@ -1289,14 +1289,14 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
-			int count = bytes.size() / sizeof(int);
+			auto count = bytes.size() / sizeof(int);
 			d->rowHeights.resize(count);
 			memcpy(d->rowHeights.data(), bytes.data(), count * sizeof(int));
 		} else if (!preview && reader->name() == QLatin1String("column_widths")) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
-			int count = bytes.size() / sizeof(int);
+			auto count = bytes.size() / sizeof(int);
 			d->columnWidths.resize(count);
 			memcpy(d->columnWidths.data(), bytes.data(), count * sizeof(int));
 		} else if (!preview && reader->name() == QLatin1String("column")) {
@@ -1308,7 +1308,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 
 				switch (d->mode) {
 				case AbstractColumn::ColumnMode::Double: {
-					int count = bytes.size() / sizeof(double);
+					auto count = bytes.size() / sizeof(double);
 					QVector<double> column;
 					column.resize(count);
 					memcpy(column.data(), bytes.data(), count * sizeof(double));
@@ -1316,7 +1316,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 					break;
 				}
 				case AbstractColumn::ColumnMode::Text: {
-					int count = bytes.size() / sizeof(char);
+					auto count = bytes.size() / sizeof(char);
 					QVector<QString> column;
 					column.resize(count);
 					// TODO: warning (GCC8): writing to an object of type 'class QString' with no trivial copy-assignment; use copy-assignment or
@@ -1325,7 +1325,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 					break;
 				}
 				case AbstractColumn::ColumnMode::Integer: {
-					int count = bytes.size() / sizeof(int);
+					auto count = bytes.size() / sizeof(int);
 					QVector<int> column;
 					column.resize(count);
 					memcpy(column.data(), bytes.data(), count * sizeof(int));
@@ -1333,7 +1333,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 					break;
 				}
 				case AbstractColumn::ColumnMode::BigInt: {
-					int count = bytes.size() / sizeof(qint64);
+					auto count = bytes.size() / sizeof(qint64);
 					QVector<qint64> column;
 					column.resize(count);
 					memcpy(column.data(), bytes.data(), count * sizeof(qint64));
@@ -1343,7 +1343,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 				case AbstractColumn::ColumnMode::Day:
 				case AbstractColumn::ColumnMode::Month:
 				case AbstractColumn::ColumnMode::DateTime: {
-					int count = bytes.size() / sizeof(QDateTime);
+					auto count = bytes.size() / sizeof(QDateTime);
 					QVector<QDateTime> column;
 					column.resize(count);
 					// TODO: warning (GCC8): writing to an object of type 'class QDateTime' with no trivial copy-assignment; use copy-assignment or

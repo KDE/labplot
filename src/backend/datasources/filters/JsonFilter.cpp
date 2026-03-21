@@ -4,7 +4,7 @@
 	Description          : JSON I/O-filter.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
-	SPDX-FileCopyrightText: 2018-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -430,12 +430,16 @@ bool JsonFilterPrivate::prepareDocumentToRead() {
 		firstRow = *(arr.begin() + (startRow - 1));
 
 		// determine the number of columns to be imported
-		if (!firstRow.isArray()) // array of plain data types
-			countCols = 1;
-		else { // array of arrays
+		if (firstRow.isArray()) { // array of arrays
 			// check the number of elements in the first element of the array
 			count = firstRow.toArray().count();
 			countCols = (countCols == -1 || countCols > count) ? count : countCols;
+		} else if (firstRow.isObject()) { // array of objects
+			// check the number of keys in the first object
+			count = firstRow.toObject().count();
+			countCols = (countCols == -1 || countCols > count) ? count : countCols;
+		} else { // array of plain data types
+			countCols = 1;
 		}
 
 		countRows = endRowOffset - startRow + 1;
@@ -552,9 +556,11 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 			QJsonValue value;
 			if (row.isArray())
 				value = *(row.toArray().begin() + n + startColumn - 1);
-			else if (row.isObject())
-				value = *(row.toObject().begin() + n + startColumn - 1);
-			else
+			else if (row.isObject()) {
+				// Use the key name from vectorNames to ensure consistent ordering
+				const QString& key = vectorNames.at(colOffset + n);
+				value = row.toObject().value(key);
+			} else
 				value = row;
 
 			switch (value.type()) {

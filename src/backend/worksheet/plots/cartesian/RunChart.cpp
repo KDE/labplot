@@ -363,8 +363,10 @@ void RunChartPrivate::recalc() {
 	for (int i = 0; i < count; ++i)
 		xColumn->setIntegerAt(i, i + 1);
 
+	dataCurve->setUndoAware(false);
 	dataCurve->setXColumn(xColumn);
 	dataCurve->setYColumn(dataColumn);
+	dataCurve->setUndoAware(true);
 
 	// min and max values for x
 	xCenterColumn->setIntegerAt(0, xMin);
@@ -442,6 +444,7 @@ void RunChart::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool RunChart::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(RunChart);
 
 	if (!readBasicAttributes(reader))

@@ -4,7 +4,7 @@
 	Description       	 : A tree view for displaying and editing an AspectTreeModel.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,7 +17,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/notebook/Notebook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/Worksheet.h"
 #include "frontend/core/ContentDockWidget.h"
 
 #include <KConfig>
@@ -85,6 +86,7 @@ ProjectExplorer::ProjectExplorer(QWidget* parent)
 	m_treeView->viewport()->installEventFilter(this);
 	m_treeView->header()->setStretchLastSection(true);
 	m_treeView->header()->installEventFilter(this);
+	m_treeView->installEventFilter(this);
 	m_treeView->setDragEnabled(true);
 	m_treeView->setAcceptDrops(true);
 	m_treeView->setDropIndicatorShown(true);
@@ -173,43 +175,43 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 		}
 	} else if (selectedAspectsCount > 1) { // multiple aspects are selected
 		menu = new QMenu(this);
-		// add "expand/collapse" actions if the selected aspects have children
-		bool hasChildren = false;
+
+		// check if the selected objects have the same parent and 
+		// show parent's context menu for columns to allow plot data, etc.
+		bool sameParent = true;
+		AbstractAspect* parentAspect = nullptr;
 		for (const auto* aspect : selectedAspects) {
-			if (aspect->childCount<AbstractAspect>()) {
-				hasChildren = true;
-				break;
+			if (!parentAspect)
+				parentAspect = aspect->parentAspect();
+			else {
+				if (aspect->parentAspect() != parentAspect) {
+					sameParent = false;
+					break;
+				}
+				parentAspect = aspect->parentAspect();
 			}
 		}
 
-		if (hasChildren) {
-			menu->addAction(expandSelectedTreeAction);
-			menu->addAction(collapseSelectedTreeAction);
-			menu->addSeparator();
-		} else {
-			// check if columns from the same parent were selected only
-			// and show parent's context menu for columns to allow plot data, etc.
-			bool columnsOnly = true;
-			bool sameParent = true;
-			AbstractAspect* parentAspect = nullptr;
-			for (const auto* aspect : selectedAspects) {
-				if (aspect->type() != AspectType::Column) {
-					columnsOnly = false;
-					break;
-				}
-
-				if (!parentAspect)
-					parentAspect = aspect->parentAspect();
-				else {
-					if (aspect->parentAspect() != parentAspect) {
-						sameParent = false;
-						break;
+		if (sameParent && parentAspect) {
+			// lambda function to check if all selected aspects are of a specific type
+			auto checkAspectType = [&selectedAspects](AspectType type) -> bool {
+				// for WorksheetElements, check the inheritance and not the exact type
+				if (type == AspectType::WorksheetElement) {
+					for (const auto* aspect : selectedAspects) {
+						if (!aspect->inherits<WorksheetElement>())
+							return false;
 					}
-					parentAspect = aspect->parentAspect();
+					return true;
 				}
-			}
 
-			if (columnsOnly && sameParent) {
+				for (const auto* aspect : selectedAspects) {
+					if (aspect->type() != type)
+						return false;
+				}
+				return true;
+			};
+
+			if (checkAspectType(AspectType::Column)) { // check columns
 				if (parentAspect->type() == AspectType::Spreadsheet) {
 					auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
 					spreadsheet->fillColumnsContextMenu(menu);
@@ -225,6 +227,32 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 #endif
 				}
 				menu->addSeparator();
+			} else if (checkAspectType(AspectType::WorksheetElement)) { // check worksheet elements
+				if (checkAspectType(AspectType::XYCurve)) { // check xy-curves
+					auto* plotArea = dynamic_cast<CartesianPlot*>(parentAspect);
+					if (plotArea) {
+						menu->addMenu(plotArea->analysisMenu());
+						menu->addSeparator();
+					}
+				}
+
+				auto* worksheet = dynamic_cast<Worksheet*>(parentAspect);
+				if (!worksheet)
+					worksheet = parentAspect->parent<Worksheet>();
+				if (worksheet) {
+					worksheet->fillElementsContextMenu(menu);
+					menu->addSeparator();
+				}
+			}
+		}
+
+		// add "expand/collapse" actions if the selected aspects have children
+		for (const auto* aspect : selectedAspects) {
+			if (aspect->childCount<AbstractAspect>()) {
+				menu->addAction(expandSelectedTreeAction);
+				menu->addAction(collapseSelectedTreeAction);
+				menu->addSeparator();
+				break;
 			}
 		}
 
@@ -388,7 +416,17 @@ void ProjectExplorer::search() {
 	Provides a menu for selective showing and hiding of columns.
 */
 bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
-	if (obj == m_treeView->header() && event->type() == QEvent::ContextMenu) {
+	if (obj == m_treeView && event->type() == QEvent::KeyPress) { // forward custom key shortcuts from the tree view to ProjectExplorer
+		auto* keyEvent = static_cast<QKeyEvent*>(event);
+		if (keyEvent->matches(QKeySequence::Delete) || keyEvent->matches(QKeySequence::Copy) || keyEvent->matches(QKeySequence::Paste)
+			|| ((keyEvent->modifiers() & Qt::ControlModifier)
+				&& (keyEvent->key() == Qt::Key_D || keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down))
+			|| keyEvent->key() == Qt::Key_Space) {
+			keyPressEvent(keyEvent);
+			return true;
+		}
+		return false;
+	} else if (obj == m_treeView->header() && event->type() == QEvent::ContextMenu) {
 		// Menu for showing/hiding the columns in the tree view
 		QMenu* columnsMenu = new QMenu(m_treeView->header());
 		columnsMenu->addSection(i18n("Columns"));
@@ -561,13 +599,15 @@ void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 				showErrorMessage(msg);
 			}
 		}
-	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) {
-		// duplicate
-		if (aspect != m_project) {
-			aspect->copy();
-			aspect->parentAspect()->paste(true);
-			showErrorMessage(QString());
-		}
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) { // duplicate
+		deselectIndex(m_treeView->currentIndex()); // deselect the current aspect first, the new one will be selected when added
+		aspect->duplicate();
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Up)) { // move up
+		aspect->moveUp();
+		m_treeView->setCurrentIndex(dynamic_cast<AspectTreeModel*>(m_treeView->model())->modelIndexOfAspect(aspect));
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Down)) { // move down
+		aspect->moveDown();
+		m_treeView->setCurrentIndex(dynamic_cast<AspectTreeModel*>(m_treeView->model())->modelIndexOfAspect(aspect));
 	} else if (event->key() == 32) {
 		// space key - hide/show the current object
 		changeSelectedVisible();

@@ -79,8 +79,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-26.02.0.tar.xz",
-                    "sha256": "dded8621f7b2f695c91063aab1558691c8418374cd583501e89ed39487e7ab77"
+                    "url": "https://poppler.freedesktop.org/poppler-26.03.0.tar.xz",
+                    "sha256": "8b3c5e2a9f2ab4c3ec5029f28af1b433c6b71f0d1e7b3997aa561cf1c0ca4ebe"
                 }
             ],
             "modules": [
@@ -108,8 +108,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.12.2/src/analitza-25.12.2.tar.xz",
-			    "sha256": "5918986927ad6820f9baa53b4d935b9450ddaf579d015fa5d449b9f3ef70c5ae"
+			    "url": "https://download.kde.org/stable/release-service/25.12.3/src/analitza-25.12.3.tar.xz",
+			    "sha256": "4f0bc01116d61953d9759f91f943eb9da674f1f048a453d55035f4459c3bfdb7"
 		    }
 	    ]
         },
@@ -119,8 +119,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.12.2/src/cantor-25.12.2.tar.xz",
-			    "sha256": "d72152513ef5fcd93c520ff2dc1d4b6decbddf1e7be98cb811b465b57972b823"
+			    "url": "https://download.kde.org/stable/release-service/25.12.3/src/cantor-25.12.3.tar.xz",
+			    "sha256": "08873503b24e77a2f0d334327d639fb88ca71a4a72f6a92453c0d47f43caae4b"
 		    }
 	    ]
         },
@@ -160,8 +160,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.9.3.tar.gz",
-                    "sha256": "990f46d49525d6ab5dc4249f8684c6deeaf54de6fec63a187e9fb382cc0ffdff"
+                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.10.0.tar.gz",
+                    "sha256": "ce160f9c1483b32d1ba8b7633d7984510259e4e439c48a218b95a023dc02fd4c"
                 }
             ]
         },
@@ -320,8 +320,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.2.0/mdds-3.2.0.tar.xz",
-                    "sha256": "16defab556c53f94b463460ea2a1faab96e58bad2a95d7981300d2956534abbb"
+                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.2.1/mdds-3.2.1.tar.xz",
+                    "sha256": "673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc936432f6b0687c112"
                 }
             ]
         },

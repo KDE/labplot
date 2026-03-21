@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -206,6 +206,7 @@ private:
 	QAction* customGridAction{nullptr};
 	QAction* snapToGridAction{nullptr};
 
+	QActionGroup* zoomFitActionGroup{nullptr};
 	QActionGroup* magnificationActionGroup{nullptr};
 
 	QAction* plotsInteractiveAction{nullptr};

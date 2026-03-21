@@ -234,6 +234,13 @@ void SpreadsheetView::init() {
 	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnSelected, this, &SpreadsheetView::selectColumn);
 	connect(m_spreadsheet, &Spreadsheet::columnDeselected, this, &SpreadsheetView::deselectColumn);
+
+	// connect the corner button (top-left button where headers meet) to selectAll,
+	// this is required since SpreadsheetView uses a custom header and the default behavior of QTableView to select all cells
+	// when clicking the corner button doesn't work anymore.
+	auto* cornerButton = m_tableView->findChild<QAbstractButton*>();
+	if (cornerButton)
+		connect(cornerButton, &QAbstractButton::clicked, this, &SpreadsheetView::selectAll);
 }
 
 bool SpreadsheetView::isReadOnly() const {
@@ -309,6 +316,8 @@ void SpreadsheetView::initActions() {
 	action_reverse_selection = new QAction(QIcon::fromTheme(QStringLiteral("reverse")), i18n("&Reverse"), this);
 	action_clear_selection = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clea&r Content"), this);
 	action_select_all = new QAction(QIcon::fromTheme(QStringLiteral("edit-select-all")), i18n("Select All"), this);
+	// the shortcut needs to be set explicitly because eventFilter() interferes with the default shortcut handling of QTableView
+	action_select_all->setShortcut(QKeySequence::SelectAll);
 
 	// 	action_set_formula = new QAction(QIcon::fromTheme(QString()), i18n("Assign &Formula"), this);
 	// 	action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
@@ -1416,8 +1425,6 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 #endif
 		else if (key_event->matches(QKeySequence::Cut))
 			cutSelection();
-		else if (key_event->matches(QKeySequence::SelectAll)) // TODO: doesn't work
-			selectAll();
 	}
 
 	return QWidget::eventFilter(watched, event);
@@ -1452,7 +1459,7 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	m_statisticalAnalysisMenu->setEnabled(hasValues);
 	m_timeSeriesAnalysisMenu->setEnabled(hasValues);
 	m_selectionMenu->setEnabled(hasValues);
-	action_select_all->setEnabled(hasValues);
+	action_select_all->setEnabled(cellsAvail);
 	action_clear_spreadsheet->setEnabled(hasValues);
 	action_statistics_all_columns->setEnabled(hasValues);
 	action_go_to_cell->setEnabled(cellsAvail);

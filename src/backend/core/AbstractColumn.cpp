@@ -116,9 +116,7 @@ QStringList AbstractColumn::dateTimeFormats() {
 	dateTimes << timeFormats();
 	// any combination of date and times
 	for (const auto& d : dateFormats()) {
-		dateTimes << d;
 		for (const auto& t : timeFormats()) {
-			dateTimes << t;
 			dateTimes << d + QLatin1Char(' ') + t;
 		}
 	}
@@ -327,7 +325,10 @@ void AbstractColumn::insertRows(int before, int count) {
 }
 
 void AbstractColumn::handleRowInsertion(int before, int count) {
-	new AbstractColumnInsertRowsCmd(this, before, count);
+	exec(new AbstractColumnInsertRowsCmd(this, before, count),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -340,7 +341,10 @@ void AbstractColumn::removeRows(int first, int count) {
 }
 
 void AbstractColumn::handleRowRemoval(int first, int count) {
-	new AbstractColumnRemoveRowsCmd(this, first, count);
+	exec(new AbstractColumnRemoveRowsCmd(this, first, count),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**

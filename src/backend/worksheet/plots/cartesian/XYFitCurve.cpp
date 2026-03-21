@@ -1821,13 +1821,13 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		resultsNote->setBackgroundColor(QColor(Qt::white));
 		resultsNote->setTextFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-		q->addChild(resultsNote);
+		q->addChildFast(resultsNote);
 	}
 	if (!residualsColumn) {
 		residualsColumn = new Column(QStringLiteral("Residuals"), AbstractColumn::ColumnMode::Double);
 		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
 		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
-		q->addChild(residualsColumn);
+		q->addChildFast(residualsColumn);
 	}
 }
 
@@ -1982,7 +1982,9 @@ void XYFitCurvePrivate::updateResultsNote() {
 	text += AICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
 	text += BICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
 
+	resultsNote->setUndoAware(false);
 	resultsNote->setText(text);
+	resultsNote->setUndoAware(true);
 
 	DEBUG("NOTE TEXT: " << resultsNote->text().toStdString())
 }
@@ -2130,13 +2132,13 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 }
 
 void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn, const double norm) {
-	const size_t n = tmpXDataColumn->rowCount();
+	const int n = tmpXDataColumn->rowCount();
 
 	fitResult.available = true;
 	fitResult.valid = true;
 	fitResult.status = i18n("Success"); // can it fail in any way?
 
-	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
+	const int np = (int)fitData.paramNames.size(); // number of fit parameters
 	fitResult.dof = n - np;
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
@@ -2249,11 +2251,11 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	case nsl_sf_stats_lognormal: {
 		// calculate mu and sigma
 		double mu = 0.;
-		for (size_t i = 0; i < n; i++)
+		for (int i = 0; i < n; i++)
 			mu += std::log(tmpXDataColumn->valueAt(i));
 		mu /= n;
 		double variance = 0.;
-		for (size_t i = 0; i < n; i++)
+		for (int i = 0; i < n; i++)
 			variance += gsl_pow_2(std::log(tmpXDataColumn->valueAt(i)) - mu);
 		variance /= (n - 1);
 		const double sigma = std::sqrt(variance);
@@ -2307,7 +2309,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	fitResult.calculateResult(n, np);
 
 	if (fitData.useResults) // set start values
-		for (unsigned int i = 0; i < np; i++)
+		for (int i = 0; i < np; i++)
 			fitData.paramStartValues.data()[i] = fitResult.paramValues.at(i);
 }
 
@@ -3002,6 +3004,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYFitCurve);
 
 	QXmlStreamAttributes attribs;
@@ -3165,7 +3168,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	d->resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 	d->resultsNote->setBackgroundColor(QColor(Qt::white));
 	d->resultsNote->setTextFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-	addChild(d->resultsNote);
+	addChildFast(d->resultsNote);
 
 	////////////////////////////// fix old projects /////////////////////////
 

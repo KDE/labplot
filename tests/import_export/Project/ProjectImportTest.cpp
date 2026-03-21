@@ -25,6 +25,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
@@ -463,7 +464,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: check more curve properties
 
 	auto* symbol = curve->symbol();
@@ -523,7 +524,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: check more curve properties
 
 	symbol = curve->symbol();
@@ -596,7 +597,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: more curve properties
 
 	auto* symbol = curve->symbol();
@@ -646,7 +647,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: more curve properties
 
 	symbol = curve->symbol();
@@ -791,6 +792,35 @@ void ProjectImportTest::testOriginBarPlot() {
 	QCOMPARE(barPlot->coordinateSystemIndex(), plot->defaultCoordinateSystemIndex());
 	QCOMPARE(barPlot->orientation(), BarPlot::Orientation::Vertical);
 	// TODO: check more properties of the barPlot
+}
+
+/*!
+ * test the import of "stacked plots",
+ * the test file was taken from https://blog.originlab.com/stack-lines-in-groups-with-y-offset.
+ */
+void ProjectImportTest::testOriginStackedPlots() {
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/Stack_lines_with_Y_offset.opj")));
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	// check the project tree for the imported project
+	// spreadsheet
+	auto* sheet = dynamic_cast<Spreadsheet*>(project.child<AbstractAspect>(0));
+	QVERIFY(sheet != nullptr);
+	QCOMPARE(sheet->columnCount(), 81);
+	QCOMPARE(sheet->rowCount(), 300);
+
+	// worksheet
+	auto* ws = dynamic_cast<Worksheet*>(project.child<AbstractAspect>(1));
+	QVERIFY(ws != nullptr);
+	QCOMPARE(ws->name(), QLatin1String("Graph1"));
+
+	auto* plot = dynamic_cast<CartesianPlot*>(ws->child<CartesianPlot>(0));
+	QVERIFY(plot != nullptr);
+	QCOMPARE(plot->name(), i18n("Plot%1", QString::number(1)));
+
+	// TODO: add more check for the created line plots and also check the stacked offset property
 }
 
 /*!

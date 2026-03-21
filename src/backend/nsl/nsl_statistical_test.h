@@ -33,7 +33,7 @@ struct one_sample_t_test_result {
 	double mean_standard_error;
 	double t;
 	double p;
-	int df;
+	size_t df;
 	double mean_difference;
 };
 struct one_sample_t_test_result nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail);
@@ -47,7 +47,7 @@ struct independent_t_test_result {
 	double mean_standard_error2;
 	double t;
 	double p;
-	int df;
+	size_t df;
 	double pooled_variance;
 	double mean_difference_standard_error;
 	double mean_difference;
@@ -63,7 +63,7 @@ struct welch_t_test_result {
 	double mean_standard_error2;
 	double t;
 	double p;
-	int df;
+	size_t df;
 	double mean_difference_standard_error;
 	double mean_difference;
 };
@@ -108,7 +108,7 @@ struct mannwhitney_test_result nsl_stats_mannwhitney_u(const double sample1[], s
 struct kruskal_wallis_test_result {
 	double p;
 	double H;
-	int df;
+	size_t df;
 };
 struct kruskal_wallis_test_result nsl_stats_kruskal_wallis_h(const double** groups, const size_t* sizes, size_t n_groups);
 
@@ -129,7 +129,7 @@ struct wilcoxon_test_result nsl_stats_wilcoxon_w(const double sample1[], const d
 struct friedman_test_result {
 	double p;
 	double Q;
-	int df;
+	size_t df;
 };
 struct friedman_test_result nsl_stats_friedman_q(const double** groups, size_t n_samples, size_t n_groups);
 
@@ -137,14 +137,14 @@ struct chisq_ind_test_result {
 	double p;
 	double x2;
 	int df;
-	int total_observed_frequencies;
+	size_t total_observed_frequencies;
 };
 struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const long long** table, size_t row, size_t column);
 
 struct chisq_gof_test_result {
 	double p;
 	double x2;
-	int df;
+	size_t df;
 };
 struct chisq_gof_test_result nsl_stats_chisq_gof_x2(const long long* observed, const double* expected, size_t n, size_t params_estimated);
 
@@ -166,7 +166,7 @@ struct mann_kendall_test_result {
 	double tau;
 	double z;
 	double p;
-	int n;
+	size_t n;
 	double slope;
 };
 struct mann_kendall_test_result nsl_stats_mann_kendall(const double sample[], size_t n, nsl_stats_tail_type tail);
@@ -175,14 +175,14 @@ struct wald_wolfowitz_runs_test_result {
 	double z;
 	double p;
 	int runs;
-	int n;
+	size_t n;
 };
 struct wald_wolfowitz_runs_test_result nsl_stats_wald_wolfowitz_runs(const double sample[], size_t n, nsl_stats_tail_type tail);
 
 struct ramirez_runger_test_result {
 	double stability_ratio;
-	int dof;
-	int eff_dof;
+	size_t dof;
+	size_t eff_dof;
 	double p;
 	double mean_diff;
 };
