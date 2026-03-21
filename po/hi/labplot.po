@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:39+0000\n"
+"POT-Creation-Date: 2026-03-21 00:40+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -50,7 +50,7 @@ msgid "Rename"
 msgstr "नाम बदलें"
 
 #: src/backend/core/AbstractAspect.cpp:450
-#: src/backend/spreadsheet/Spreadsheet.cpp:941
+#: src/backend/spreadsheet/Spreadsheet.cpp:920
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:497
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #: src/frontend/worksheet/WorksheetView.cpp:139
@@ -309,7 +309,7 @@ msgid_plural "%1: insert %2 rows"
 msgstr[0] "%1: %2 पंक्तियाँ डालें"
 msgstr[1] "%1: %2 पंक्तियाँ डालें"
 
-#: src/backend/core/AbstractColumn.cpp:335
+#: src/backend/core/AbstractColumn.cpp:338
 #: src/backend/spreadsheet/Spreadsheet.cpp:367
 #, kde-format
 msgid "%1: remove 1 row"
@@ -317,7 +317,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1: %2 पंक्तियाँ हटाएँ"
 msgstr[1] "%1: %2 पंक्तियाँ हटाएँ"
 
-#: src/backend/core/AbstractColumn.cpp:892
+#: src/backend/core/AbstractColumn.cpp:898
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "अमान्य या अनुपस्थित आरंभ या अंतिम पंक्ति"
@@ -337,13 +337,13 @@ msgstr "%1: मास्क सेल"
 msgid "%1: unmask cells"
 msgstr "%1: सेल अनमास्क करें"
 
-#: src/backend/core/abstractcolumncommands.cpp:239
+#: src/backend/core/abstractcolumncommands.cpp:243
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2577
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: हीटमैप प्रारूप सेट करें"
 
-#: src/backend/core/abstractcolumncommands.cpp:265
+#: src/backend/core/abstractcolumncommands.cpp:269
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2595
 #, kde-format
 msgid "%1: remove heatmap format"
@@ -803,7 +803,7 @@ msgstr "फ़ाइल '%1' की सामग्री को संसाध
 msgid "Failed to open project"
 msgstr "प्रोजेक्ट खोलने में विफल"
 
-#: src/backend/core/Project.cpp:1347
+#: src/backend/core/Project.cpp:1346
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "परियोजना संशोधन समय अमान्य है। वर्तमान समय का उपयोग किया जा रहा है।"
@@ -2137,7 +2137,7 @@ msgstr "गुण"
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
 #: src/backend/datasources/filters/NetCDFFilter.cpp:625
 #: src/frontend/ui/dockwidgets/matrixdock.ui:87
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:199
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:48
 #, kde-format
 msgid "Dimensions"
 msgstr "DIMENSIONS"
@@ -6226,7 +6226,7 @@ msgstr[0] "%1: %2 कॉलम जोड़ें"
 msgstr[1] "%1: %2 कॉलम जोड़ें"
 
 #: src/backend/matrix/Matrix.cpp:694 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:731
+#: src/backend/spreadsheet/Spreadsheet.cpp:710
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: साफ़ करें"
@@ -6281,7 +6281,7 @@ msgid "%1: set cell values"
 msgstr "%1: सेल मान सेट करें"
 
 #: src/backend/matrix/matrixcommands.h:316
-#: src/backend/spreadsheet/Spreadsheet.cpp:862
+#: src/backend/spreadsheet/Spreadsheet.cpp:841
 #, kde-format
 msgid "%1: transpose"
 msgstr "%1: ट्रांसपोज़"
@@ -7370,102 +7370,95 @@ msgstr "%1: कैसे बदलें"
 msgid "%1: toggle sparklines header"
 msgstr "हेडर पार्स करने में असमर्थ"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:562
+#: src/backend/spreadsheet/Spreadsheet.cpp:561
 #: src/backend/spreadsheet/Spreadsheet.cpp:563
-#: src/backend/spreadsheet/Spreadsheet.cpp:567
-#, kde-format
-msgid "%1: set linking"
-msgstr "%1: लिंकिंग सेट करें"
-
-#: src/backend/spreadsheet/Spreadsheet.cpp:585
-#: src/backend/spreadsheet/Spreadsheet.cpp:587
-#: src/backend/spreadsheet/Spreadsheet.cpp:590
+#: src/backend/spreadsheet/Spreadsheet.cpp:566
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: लिंक की गई स्प्रेडशीट सेट करें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:689
+#: src/backend/spreadsheet/Spreadsheet.cpp:668
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: %2 कॉलम हटाएँ"
 msgstr[1] "%1: %2 कॉलम हटाएँ"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:708
+#: src/backend/spreadsheet/Spreadsheet.cpp:687
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: %2 कॉलम डालें"
 msgstr[1] "%1: %2 कॉलम डालें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:752
+#: src/backend/spreadsheet/Spreadsheet.cpp:731
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: चयनित कॉलम साफ़ करें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:768
+#: src/backend/spreadsheet/Spreadsheet.cpp:747
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: सभी मास्क साफ़ करें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:978
+#: src/backend/spreadsheet/Spreadsheet.cpp:957
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: स्तंभ %2 को स्थिति %3 से %4 पर ले जाएँ।"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1031
+#: src/backend/spreadsheet/Spreadsheet.cpp:1010
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: कॉलम सॉर्ट करें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1398
+#: src/backend/spreadsheet/Spreadsheet.cpp:1380
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: लिंक की गई स्प्रेडशीट हटा दी गई"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1811
+#: src/backend/spreadsheet/Spreadsheet.cpp:1790
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "संख्यात्मक डेटा, %1 तत्व"
 msgstr[1] "संख्यात्मक डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1814
+#: src/backend/spreadsheet/Spreadsheet.cpp:1793
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "पूर्णांक डेटा, %1 तत्व"
 msgstr[1] "पूर्णांक डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1817
+#: src/backend/spreadsheet/Spreadsheet.cpp:1796
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "बड़ा पूर्णांक डेटा, %1 तत्व"
 msgstr[1] "बड़ा पूर्णांक डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1820
+#: src/backend/spreadsheet/Spreadsheet.cpp:1799
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "पाठ डेटा, %1 तत्व"
 msgstr[1] "पाठ डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1823
+#: src/backend/spreadsheet/Spreadsheet.cpp:1802
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "महीने का डेटा, %1 तत्व"
 msgstr[1] "महीने का डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1826
+#: src/backend/spreadsheet/Spreadsheet.cpp:1805
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "दिन डेटा, %1 तत्व"
 msgstr[1] "दिन डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1829
+#: src/backend/spreadsheet/Spreadsheet.cpp:1808
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -11654,13 +11647,11 @@ msgstr "डेटा एक्सट्रैक्टर"
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "चित्र से डेटा प्राप्त करने के लिए डेटा एक्सट्रैक्टर बनाता है"
 
-#. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/ActionsManager.cpp:225
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
 #: src/frontend/MainWin.cpp:1199 src/frontend/SettingsDialog.cpp:66
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:206
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -14483,7 +14474,7 @@ msgstr "%1 अक्ष: टेम्पलेट \"%2\" लोड किया 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:254
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:683
 #, kde-format
@@ -14659,7 +14650,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:423
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:385
 #: src/frontend/ui/dockwidgets/matrixdock.ui:117
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:120
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:422
 #, kde-format
 msgid "Columns:"
@@ -15620,13 +15611,13 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:38
-#: src/frontend/ProjectExplorer.cpp:734
+#: src/frontend/ProjectExplorer.cpp:747
 #, kde-format
 msgid "Case Sensitive"
 msgstr "अक्षर संवेदनशील"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:42
-#: src/frontend/ProjectExplorer.cpp:742
+#: src/frontend/ProjectExplorer.cpp:755
 #, kde-format
 msgid "Match Complete Word"
 msgstr "पूरा शब्द मिलाएँ"
@@ -15786,25 +15777,18 @@ msgstr "निष्पादित किए जाने वाले पु�
 msgid "%1 seasonal decompositions: template \"%2\" loaded"
 msgstr "%1 कस्टम पॉइंट: टेम्पलेट \"%2\" लोड किया गया"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:51
-#, kde-format
-msgid ""
-"Enable linking to synchronize the number of rows with another spreadsheet"
-msgstr ""
-"पंक्तियों की संख्या को किसी अन्य स्प्रेडशीट के साथ सिंक्रनाइज़ करने के लिए लिंकिंग सक्षम करें"
-
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:55
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:49
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "पंक्तियों की संख्या को सिंक्रनाइज़ करने के लिए स्प्रेडशीट"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:53
 #, fuzzy, kde-format
 #| msgid "Column Statistics Spreadsheet"
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "कॉलम सांख्यिकी स्प्रेडशीट"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:226
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1स्प्रेडशीट:टेम्पलेट \"%2\" लोड किया गया"
@@ -17020,7 +17004,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/runchartdock.ui:142
 #: src/frontend/ui/dockwidgets/scriptdock.ui:53
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:43
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:213
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:210
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:153
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:184
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
@@ -18042,80 +18026,80 @@ msgstr "XML त्रुटि: कोई कार्टेशियनप्�
 msgid "Search/Filter"
 msgstr "खोज/फ़िल्टर"
 
-#: src/frontend/ProjectExplorer.cpp:115
+#: src/frontend/ProjectExplorer.cpp:116
 #, kde-format
 msgid "Expand All"
 msgstr "सभी का विस्तार"
 
-#: src/frontend/ProjectExplorer.cpp:118
+#: src/frontend/ProjectExplorer.cpp:119
 #, kde-format
 msgid "Expand Selected"
 msgstr "चयनित का विस्तार करें"
 
-#: src/frontend/ProjectExplorer.cpp:121
+#: src/frontend/ProjectExplorer.cpp:122
 #, kde-format
 msgid "Collapse All"
 msgstr "सभी को संकुचित करें"
 
-#: src/frontend/ProjectExplorer.cpp:124
+#: src/frontend/ProjectExplorer.cpp:125
 #, kde-format
 msgid "Collapse Selected"
 msgstr "चयनित संक्षिप्त करें"
 
-#: src/frontend/ProjectExplorer.cpp:127
+#: src/frontend/ProjectExplorer.cpp:128
 #, kde-format
 msgid "Delete Selected"
 msgstr "चयनित को हटाओ"
 
-#: src/frontend/ProjectExplorer.cpp:130
+#: src/frontend/ProjectExplorer.cpp:131
 #, kde-format
 msgid "Search/Filter Options"
 msgstr "खोज/फ़िल्टर विकल्प"
 
-#: src/frontend/ProjectExplorer.cpp:273 src/frontend/ProjectExplorer.cpp:421
+#: src/frontend/ProjectExplorer.cpp:274 src/frontend/ProjectExplorer.cpp:432
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1009
 #, kde-format
 msgid "Columns"
 msgstr "कॉलम"
 
-#: src/frontend/ProjectExplorer.cpp:334
+#: src/frontend/ProjectExplorer.cpp:335
 #, kde-format
 msgid "Show All"
 msgstr "सब दिखाएं"
 
-#: src/frontend/ProjectExplorer.cpp:573
+#: src/frontend/ProjectExplorer.cpp:584
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr "'%1' को '%2' में चिपकाया नहीं जा सकता."
 
-#: src/frontend/ProjectExplorer.cpp:587
+#: src/frontend/ProjectExplorer.cpp:598
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
 "this."
 msgstr "डेटा को सीधे '%1' में चिपकाया नहीं जा सकता। इसके लिए स्प्रेडशीट कॉलम चुनें।"
 
-#: src/frontend/ProjectExplorer.cpp:751
+#: src/frontend/ProjectExplorer.cpp:764
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr "फ़ज़ी मिलान"
 
-#: src/frontend/ProjectExplorer.cpp:967
+#: src/frontend/ProjectExplorer.cpp:980
 #, kde-format
 msgid "%1 elements: set visible: %2"
 msgstr "%1 तत्व: दृश्यमान सेट करें: %2"
 
-#: src/frontend/ProjectExplorer.cpp:995
+#: src/frontend/ProjectExplorer.cpp:1008
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "क्या आप सचमुच चयनित %1 ऑब्जेक्ट्स को हटाना चाहते हैं?"
 
-#: src/frontend/ProjectExplorer.cpp:997
+#: src/frontend/ProjectExplorer.cpp:1010
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "क्या आप सचमुच %1 को हटाना चाहते हैं?"
 
-#: src/frontend/ProjectExplorer.cpp:1001
+#: src/frontend/ProjectExplorer.cpp:1014
 #: src/frontend/worksheet/WorksheetView.cpp:1458
 #, kde-format
 msgid "Delete selected object"
@@ -18123,7 +18107,7 @@ msgid_plural "Delete selected objects"
 msgstr[0] "चयनित ऑब्जेक्ट हटाएं"
 msgstr[1] "चयनित ऑब्जेक्ट हटाएं"
 
-#: src/frontend/ProjectExplorer.cpp:1007
+#: src/frontend/ProjectExplorer.cpp:1020
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
@@ -20548,7 +20532,7 @@ msgstr "Y-त्रुटि प्रकार:"
 #: src/frontend/ui/dockwidgets/runchartdock.ui:116
 #: src/frontend/ui/dockwidgets/scriptdock.ui:27
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:17
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:78
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:127
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:395
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:181
@@ -23710,7 +23694,7 @@ msgstr "संपूर्ण फ़ाइल पढ़ें"
 
 #. i18n: ectx: property (text), widget (QLabel, lRowCount)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:94
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:164
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:134
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:401
 #, kde-format
 msgid "Rows:"
@@ -24135,47 +24119,33 @@ msgid "Low-Pass Jump:"
 msgstr "कम उत्तीर्ण"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:17
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:113
 #, kde-format
 msgid "Comments:"
 msgstr "टिप्पणियाँ:"
 
-#. i18n: ectx: property (text), widget (QLabel, lLinking)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:29
-#, kde-format
-msgid "Linking"
-msgstr "लिंक करना"
-
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:124
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:180
 #, kde-format
 msgid "Sparklines:"
 msgstr "स्पार्कलाइन:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveData)
-#. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:154
-#: src/frontend/ui/settingsgeneralpage.ui:17
-#: src/frontend/ui/settingsgeneralpage.ui:51
-#: src/frontend/ui/settingsgeneralpage.ui:83
-#: src/frontend/ui/settingsgeneralpage.ui:446
+#. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
 #, kde-format
-msgid "Enabled"
-msgstr "सक्रिय"
+msgid "Sync Rows With:"
+msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lFormat)
+#. i18n: ectx: property (text), widget (QLabel, lHeader)
 #. i18n: ectx: property (text), widget (QLabel, lAppearance)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:251
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:232
 #: src/frontend/ui/settingsspreadsheetpage.ui:23
 #, kde-format
 msgid "Header"
 msgstr "हैडर"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:239
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Statistics:"
@@ -25379,6 +25349,18 @@ msgstr "फ़ाइलें -"
 #, kde-format
 msgid "Clear"
 msgstr "स्पष्ट"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveData)
+#: src/frontend/ui/settingsgeneralpage.ui:17
+#: src/frontend/ui/settingsgeneralpage.ui:51
+#: src/frontend/ui/settingsgeneralpage.ui:83
+#: src/frontend/ui/settingsgeneralpage.ui:446
+#, kde-format
+msgid "Enabled"
+msgstr "सक्रिय"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/frontend/ui/settingsgeneralpage.ui:27
@@ -27160,6 +27142,17 @@ msgstr "रूपांतरण प्रक्रिया विफल, न�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "फाइल खोलने में असमर्थ:"
+
+#~ msgid "%1: set linking"
+#~ msgstr "%1: लिंकिंग सेट करें"
+
+#~ msgid ""
+#~ "Enable linking to synchronize the number of rows with another spreadsheet"
+#~ msgstr ""
+#~ "पंक्तियों की संख्या को किसी अन्य स्प्रेडशीट के साथ सिंक्रनाइज़ करने के लिए लिंकिंग सक्षम करें"
+
+#~ msgid "Linking"
+#~ msgstr "लिंक करना"
 
 #, fuzzy
 #~| msgid "%1: smooth '%2'"

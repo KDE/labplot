@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:39+0000\n"
+"POT-Creation-Date: 2026-03-21 00:40+0000\n"
 "PO-Revision-Date: 2026-03-15 19:48+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -54,7 +54,7 @@ msgid "Rename"
 msgstr "Cambiar nombre"
 
 #: src/backend/core/AbstractAspect.cpp:450
-#: src/backend/spreadsheet/Spreadsheet.cpp:941
+#: src/backend/spreadsheet/Spreadsheet.cpp:920
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:497
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #: src/frontend/worksheet/WorksheetView.cpp:139
@@ -312,7 +312,7 @@ msgid_plural "%1: insert %2 rows"
 msgstr[0] "%1: insertar 1 fila"
 msgstr[1] "%1: insertar %2 filas"
 
-#: src/backend/core/AbstractColumn.cpp:335
+#: src/backend/core/AbstractColumn.cpp:338
 #: src/backend/spreadsheet/Spreadsheet.cpp:367
 #, kde-format
 msgid "%1: remove 1 row"
@@ -320,7 +320,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1: eliminar 1 fila"
 msgstr[1] "%1: eliminar %2 filas"
 
-#: src/backend/core/AbstractColumn.cpp:892
+#: src/backend/core/AbstractColumn.cpp:898
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "fila de inicio o fin falta o no es válida"
@@ -340,13 +340,13 @@ msgstr "%1: enmascarar celdas"
 msgid "%1: unmask cells"
 msgstr "%1: desenmascarar celdas"
 
-#: src/backend/core/abstractcolumncommands.cpp:239
+#: src/backend/core/abstractcolumncommands.cpp:243
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2577
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: definir formato del mapa de calor"
 
-#: src/backend/core/abstractcolumncommands.cpp:265
+#: src/backend/core/abstractcolumncommands.cpp:269
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2595
 #, kde-format
 msgid "%1: remove heatmap format"
@@ -803,7 +803,7 @@ msgstr "No se ha podido procesar el contenido del archivo «%1»."
 msgid "Failed to open project"
 msgstr "No se ha podido abrir el proyecto"
 
-#: src/backend/core/Project.cpp:1347
+#: src/backend/core/Project.cpp:1346
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Hora de modificación del proyecto no válida. Se usa la hora actual."
@@ -2152,7 +2152,7 @@ msgstr "Atributos"
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
 #: src/backend/datasources/filters/NetCDFFilter.cpp:625
 #: src/frontend/ui/dockwidgets/matrixdock.ui:87
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:199
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:48
 #, kde-format
 msgid "Dimensions"
 msgstr "Dimensiones"
@@ -6272,7 +6272,7 @@ msgstr[0] "%1: añadir %2 columna"
 msgstr[1] "%1: añadir %2 columnas"
 
 #: src/backend/matrix/Matrix.cpp:694 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:731
+#: src/backend/spreadsheet/Spreadsheet.cpp:710
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: borrar"
@@ -6327,7 +6327,7 @@ msgid "%1: set cell values"
 msgstr "%1: definir valores de celdas"
 
 #: src/backend/matrix/matrixcommands.h:316
-#: src/backend/spreadsheet/Spreadsheet.cpp:862
+#: src/backend/spreadsheet/Spreadsheet.cpp:841
 #, kde-format
 msgid "%1: transpose"
 msgstr "%1: trasponer"
@@ -7404,102 +7404,95 @@ msgstr "%1: conmutar cabecera de comentarios"
 msgid "%1: toggle sparklines header"
 msgstr "%1: conmutar cabecera de minigráficos de pulso"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:562
+#: src/backend/spreadsheet/Spreadsheet.cpp:561
 #: src/backend/spreadsheet/Spreadsheet.cpp:563
-#: src/backend/spreadsheet/Spreadsheet.cpp:567
-#, kde-format
-msgid "%1: set linking"
-msgstr "%1: definir enlace"
-
-#: src/backend/spreadsheet/Spreadsheet.cpp:585
-#: src/backend/spreadsheet/Spreadsheet.cpp:587
-#: src/backend/spreadsheet/Spreadsheet.cpp:590
+#: src/backend/spreadsheet/Spreadsheet.cpp:566
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: definir hoja de cálculo enlazada"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:689
+#: src/backend/spreadsheet/Spreadsheet.cpp:668
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: eliminar 1 columna"
 msgstr[1] "%1: eliminar %2 columnas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:708
+#: src/backend/spreadsheet/Spreadsheet.cpp:687
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: insertar 1 columna"
 msgstr[1] "%1: insertar %2 columnas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:752
+#: src/backend/spreadsheet/Spreadsheet.cpp:731
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: borrar columnas seleccionadas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:768
+#: src/backend/spreadsheet/Spreadsheet.cpp:747
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: borrar todas las máscaras"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:978
+#: src/backend/spreadsheet/Spreadsheet.cpp:957
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: mover columna %2 de la posición %3 a la %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1031
+#: src/backend/spreadsheet/Spreadsheet.cpp:1010
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: ordenar columnas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1398
+#: src/backend/spreadsheet/Spreadsheet.cpp:1380
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: hoja de cálculo enlazada eliminada"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1811
+#: src/backend/spreadsheet/Spreadsheet.cpp:1790
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "datos de doble precisión, %1 elemento"
 msgstr[1] "datos numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1814
+#: src/backend/spreadsheet/Spreadsheet.cpp:1793
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "datos enteros, %1 elemento"
 msgstr[1] "datos enteros, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1817
+#: src/backend/spreadsheet/Spreadsheet.cpp:1796
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "datos enteros grandes, %1 elemento"
 msgstr[1] "datos enteros grandes, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1820
+#: src/backend/spreadsheet/Spreadsheet.cpp:1799
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "datos de texto, %1 elemento"
 msgstr[1] "datos de texto, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1823
+#: src/backend/spreadsheet/Spreadsheet.cpp:1802
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "datos mensuales, %1 elemento"
 msgstr[1] "datos mensuales, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1826
+#: src/backend/spreadsheet/Spreadsheet.cpp:1805
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "datos diarios, %1 elemento"
 msgstr[1] "datos diarios, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1829
+#: src/backend/spreadsheet/Spreadsheet.cpp:1808
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -11637,13 +11630,11 @@ msgstr "Extractor de datos"
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Crea un extractor de datos para obtener datos desde una imagen"
 
-#. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/ActionsManager.cpp:225
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
 #: src/frontend/MainWin.cpp:1199 src/frontend/SettingsDialog.cpp:66
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:206
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -14500,7 +14491,7 @@ msgstr "%1 ejes: plantilla «%2» cargada"
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:254
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:683
 #, kde-format
@@ -14688,7 +14679,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:423
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:385
 #: src/frontend/ui/dockwidgets/matrixdock.ui:117
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:120
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:422
 #, kde-format
 msgid "Columns:"
@@ -15723,13 +15714,13 @@ msgstr ""
 "situar la línea central"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:38
-#: src/frontend/ProjectExplorer.cpp:734
+#: src/frontend/ProjectExplorer.cpp:747
 #, kde-format
 msgid "Case Sensitive"
 msgstr "Distinguir mayúsculas"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:42
-#: src/frontend/ProjectExplorer.cpp:742
+#: src/frontend/ProjectExplorer.cpp:755
 #, kde-format
 msgid "Match Complete Word"
 msgstr "Coincidir con palabra completa"
@@ -15904,24 +15895,17 @@ msgstr "Número de iteraciones usadas para refinar el componente estacional."
 msgid "%1 seasonal decompositions: template \"%2\" loaded"
 msgstr "%1 descomposiciones estacionales: plantilla «%2» cargada"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:51
-#, kde-format
-msgid ""
-"Enable linking to synchronize the number of rows with another spreadsheet"
-msgstr ""
-"Activar enlace para sincronizar el número de filas con otra hoja de cálculo"
-
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:55
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:49
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "Hoja de cálculo con la que se debe sincronizar el número de filas"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:53
 #, kde-format
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "Mostrar hoja de cálculo de estadísticas de columnas"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:226
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 hojas de cálculo: plantilla «%2» cargada"
@@ -17156,7 +17140,7 @@ msgstr "Seleccionar archivo para guardar definición de función"
 #: src/frontend/ui/dockwidgets/runchartdock.ui:142
 #: src/frontend/ui/dockwidgets/scriptdock.ui:53
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:43
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:213
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:210
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:153
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:184
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
@@ -18175,53 +18159,53 @@ msgstr "Error de XML: No se ha encontrado «cartesianPlot»"
 msgid "Search/Filter"
 msgstr "Buscar/filtrar"
 
-#: src/frontend/ProjectExplorer.cpp:115
+#: src/frontend/ProjectExplorer.cpp:116
 #, kde-format
 msgid "Expand All"
 msgstr "Expandir todo"
 
-#: src/frontend/ProjectExplorer.cpp:118
+#: src/frontend/ProjectExplorer.cpp:119
 #, kde-format
 msgid "Expand Selected"
 msgstr "Expandir lo seleccionado"
 
-#: src/frontend/ProjectExplorer.cpp:121
+#: src/frontend/ProjectExplorer.cpp:122
 #, kde-format
 msgid "Collapse All"
 msgstr "Contraer todo"
 
-#: src/frontend/ProjectExplorer.cpp:124
+#: src/frontend/ProjectExplorer.cpp:125
 #, kde-format
 msgid "Collapse Selected"
 msgstr "Contraer lo seleccionado"
 
-#: src/frontend/ProjectExplorer.cpp:127
+#: src/frontend/ProjectExplorer.cpp:128
 #, kde-format
 msgid "Delete Selected"
 msgstr "Borrar lo seleccionado"
 
-#: src/frontend/ProjectExplorer.cpp:130
+#: src/frontend/ProjectExplorer.cpp:131
 #, kde-format
 msgid "Search/Filter Options"
 msgstr "Opciones de búsqueda/filtrado"
 
-#: src/frontend/ProjectExplorer.cpp:273 src/frontend/ProjectExplorer.cpp:421
+#: src/frontend/ProjectExplorer.cpp:274 src/frontend/ProjectExplorer.cpp:432
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1009
 #, kde-format
 msgid "Columns"
 msgstr "Columnas"
 
-#: src/frontend/ProjectExplorer.cpp:334
+#: src/frontend/ProjectExplorer.cpp:335
 #, kde-format
 msgid "Show All"
 msgstr "Mostrar todo"
 
-#: src/frontend/ProjectExplorer.cpp:573
+#: src/frontend/ProjectExplorer.cpp:584
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr "No se puede pegar «%1» en «%2»."
 
-#: src/frontend/ProjectExplorer.cpp:587
+#: src/frontend/ProjectExplorer.cpp:598
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
@@ -18230,27 +18214,27 @@ msgstr ""
 "No se puede pegar los datos directamente en «%1». Seleccione una columna de "
 "la hoja de cálculo para ello."
 
-#: src/frontend/ProjectExplorer.cpp:751
+#: src/frontend/ProjectExplorer.cpp:764
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr "Coincidencia aproximada"
 
-#: src/frontend/ProjectExplorer.cpp:967
+#: src/frontend/ProjectExplorer.cpp:980
 #, kde-format
 msgid "%1 elements: set visible: %2"
 msgstr "%1 elementos: definir como visibles: %2"
 
-#: src/frontend/ProjectExplorer.cpp:995
+#: src/frontend/ProjectExplorer.cpp:1008
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "¿Realmente desea borrar los %1 objetos seleccionados?"
 
-#: src/frontend/ProjectExplorer.cpp:997
+#: src/frontend/ProjectExplorer.cpp:1010
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "¿Realmente desea borrar %1?"
 
-#: src/frontend/ProjectExplorer.cpp:1001
+#: src/frontend/ProjectExplorer.cpp:1014
 #: src/frontend/worksheet/WorksheetView.cpp:1458
 #, kde-format
 msgid "Delete selected object"
@@ -18258,7 +18242,7 @@ msgid_plural "Delete selected objects"
 msgstr[0] "Borrar el objeto seleccionado"
 msgstr[1] "Borrar los objetos seleccionados"
 
-#: src/frontend/ProjectExplorer.cpp:1007
+#: src/frontend/ProjectExplorer.cpp:1020
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
@@ -20688,7 +20672,7 @@ msgstr "Tipo de error-Y:"
 #: src/frontend/ui/dockwidgets/runchartdock.ui:116
 #: src/frontend/ui/dockwidgets/scriptdock.ui:27
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:17
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:78
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:127
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:395
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:181
@@ -23840,7 +23824,7 @@ msgstr "Leer archivo completo"
 
 #. i18n: ectx: property (text), widget (QLabel, lRowCount)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:94
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:164
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:134
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:401
 #, kde-format
 msgid "Rows:"
@@ -24249,47 +24233,33 @@ msgid "Low-Pass Jump:"
 msgstr "Salto de paso bajo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:17
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:113
 #, kde-format
 msgid "Comments:"
 msgstr "Comentarios:"
 
-#. i18n: ectx: property (text), widget (QLabel, lLinking)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:29
-#, kde-format
-msgid "Linking"
-msgstr "Enlace"
-
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:124
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:180
 #, kde-format
 msgid "Sparklines:"
 msgstr "Minigráficos de pulso:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveData)
-#. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:154
-#: src/frontend/ui/settingsgeneralpage.ui:17
-#: src/frontend/ui/settingsgeneralpage.ui:51
-#: src/frontend/ui/settingsgeneralpage.ui:83
-#: src/frontend/ui/settingsgeneralpage.ui:446
+#. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
 #, kde-format
-msgid "Enabled"
-msgstr "Activado"
+msgid "Sync Rows With:"
+msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lFormat)
+#. i18n: ectx: property (text), widget (QLabel, lHeader)
 #. i18n: ectx: property (text), widget (QLabel, lAppearance)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:251
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:232
 #: src/frontend/ui/settingsspreadsheetpage.ui:23
 #, kde-format
 msgid "Header"
 msgstr "Cabecera"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:239
 #, kde-format
 msgid "Statistics:"
 msgstr "Estadísticas:"
@@ -25485,6 +25455,18 @@ msgstr "Archivos - "
 #, kde-format
 msgid "Clear"
 msgstr "Borrar"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveData)
+#: src/frontend/ui/settingsgeneralpage.ui:17
+#: src/frontend/ui/settingsgeneralpage.ui:51
+#: src/frontend/ui/settingsgeneralpage.ui:83
+#: src/frontend/ui/settingsgeneralpage.ui:446
+#, kde-format
+msgid "Enabled"
+msgstr "Activado"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/frontend/ui/settingsgeneralpage.ui:27
@@ -27269,3 +27251,15 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
+
+#~ msgid "%1: set linking"
+#~ msgstr "%1: definir enlace"
+
+#~ msgid ""
+#~ "Enable linking to synchronize the number of rows with another spreadsheet"
+#~ msgstr ""
+#~ "Activar enlace para sincronizar el número de filas con otra hoja de "
+#~ "cálculo"
+
+#~ msgid "Linking"
+#~ msgstr "Enlace"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:39+0000\n"
+"POT-Creation-Date: 2026-03-21 00:40+0000\n"
 "PO-Revision-Date: 2026-03-15 07:43+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -51,7 +51,7 @@ msgid "Rename"
 msgstr "ვიეტნამური"
 
 #: src/backend/core/AbstractAspect.cpp:450
-#: src/backend/spreadsheet/Spreadsheet.cpp:941
+#: src/backend/spreadsheet/Spreadsheet.cpp:920
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:497
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #: src/frontend/worksheet/WorksheetView.cpp:139
@@ -309,7 +309,7 @@ msgid_plural "%1: insert %2 rows"
 msgstr[0] "%1: 1 მწკრივის ჩასმა"
 msgstr[1] "%1: %2 მწკრივის ჩასმა"
 
-#: src/backend/core/AbstractColumn.cpp:335
+#: src/backend/core/AbstractColumn.cpp:338
 #: src/backend/spreadsheet/Spreadsheet.cpp:367
 #, kde-format
 msgid "%1: remove 1 row"
@@ -317,7 +317,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1: 1 მწკრივის წაშლა"
 msgstr[1] "%1: %2 მწკრივის წაშლა"
 
-#: src/backend/core/AbstractColumn.cpp:892
+#: src/backend/core/AbstractColumn.cpp:898
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "საწყისი ან საბოლოო მწკრივის დასაწყისი ან დასასრული არასწორია"
@@ -337,13 +337,13 @@ msgstr "%1: უჯრედების შენიღბვა"
 msgid "%1: unmask cells"
 msgstr "%1: ნიღბის მოხსნა"
 
-#: src/backend/core/abstractcolumncommands.cpp:239
+#: src/backend/core/abstractcolumncommands.cpp:243
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2577
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: heatmap-ის ფორმატის დაყენება"
 
-#: src/backend/core/abstractcolumncommands.cpp:265
+#: src/backend/core/abstractcolumncommands.cpp:269
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2595
 #, kde-format
 msgid "%1: remove heatmap format"
@@ -800,7 +800,7 @@ msgstr "ჩავარდა შემცველობის დამუშ�
 msgid "Failed to open project"
 msgstr "პროექტის გახსნის შეცდომა"
 
-#: src/backend/core/Project.cpp:1347
+#: src/backend/core/Project.cpp:1346
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "პროექტის მოდიფიკაციის არასწორი დრო. გამოიყენება მიმდნარე დრო."
@@ -2143,7 +2143,7 @@ msgstr "ატრიბუტები"
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
 #: src/backend/datasources/filters/NetCDFFilter.cpp:625
 #: src/frontend/ui/dockwidgets/matrixdock.ui:87
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:199
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:48
 #, kde-format
 msgid "Dimensions"
 msgstr "ზომები"
@@ -6266,7 +6266,7 @@ msgstr[0] "%1 %2 სვეტის დამატება"
 msgstr[1] "%1 %2 სვეტის დამატება"
 
 #: src/backend/matrix/Matrix.cpp:694 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:731
+#: src/backend/spreadsheet/Spreadsheet.cpp:710
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: გასუფთავება"
@@ -6321,7 +6321,7 @@ msgid "%1: set cell values"
 msgstr "%1: უჯრედის მნიშვნელობების დაყენება"
 
 #: src/backend/matrix/matrixcommands.h:316
-#: src/backend/spreadsheet/Spreadsheet.cpp:862
+#: src/backend/spreadsheet/Spreadsheet.cpp:841
 #, kde-format
 msgid "%1: transpose"
 msgstr "%1: გადატანა"
@@ -7400,102 +7400,95 @@ msgstr "%1: კომენტარის თავსართის გად
 msgid "%1: toggle sparklines header"
 msgstr "%1: ნაპერწკლის ხაზის თავსართის გადართვა"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:562
+#: src/backend/spreadsheet/Spreadsheet.cpp:561
 #: src/backend/spreadsheet/Spreadsheet.cpp:563
-#: src/backend/spreadsheet/Spreadsheet.cpp:567
-#, kde-format
-msgid "%1: set linking"
-msgstr "%1: დააყენეთ მიბმა"
-
-#: src/backend/spreadsheet/Spreadsheet.cpp:585
-#: src/backend/spreadsheet/Spreadsheet.cpp:587
-#: src/backend/spreadsheet/Spreadsheet.cpp:590
+#: src/backend/spreadsheet/Spreadsheet.cpp:566
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: დააყენეთ მიბმული ელცხრილი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:689
+#: src/backend/spreadsheet/Spreadsheet.cpp:668
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: 1 სვეტის წაშლა"
 msgstr[1] "%1: %2 სვეტის წაშლა"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:708
+#: src/backend/spreadsheet/Spreadsheet.cpp:687
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: 1 სვეტის ჩასმა"
 msgstr[1] "%1: %2 სვეტის ჩასმა"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:752
+#: src/backend/spreadsheet/Spreadsheet.cpp:731
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: მონიშნული სვეტების გასუფთავება"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:768
+#: src/backend/spreadsheet/Spreadsheet.cpp:747
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: ყველა ნიღბის გასუფთავება"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:978
+#: src/backend/spreadsheet/Spreadsheet.cpp:957
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: %2 სვეტის %3-დან %4 მდებარეობაზე გადატანა."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1031
+#: src/backend/spreadsheet/Spreadsheet.cpp:1010
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: სვეტების დალაგება"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1398
+#: src/backend/spreadsheet/Spreadsheet.cpp:1380
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: დაკავშირებული ელცხრილი წაიშალა"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1811
+#: src/backend/spreadsheet/Spreadsheet.cpp:1790
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "ორმაგი სიზუსტის მონაცემები, %1 ელემენტი"
 msgstr[1] "რიცხვითი მონაცემები, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1814
+#: src/backend/spreadsheet/Spreadsheet.cpp:1793
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "მთელრიცხვიანი მონაცემები, %1 ელემენტი"
 msgstr[1] "მთელრიცხვიანი მონაცემები, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1817
+#: src/backend/spreadsheet/Spreadsheet.cpp:1796
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "დიდი მთელრიცხვიანი მონაცემები, %1 ელემენტი"
 msgstr[1] "დიდი მთელრიცხვიანი მონაცემები, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1820
+#: src/backend/spreadsheet/Spreadsheet.cpp:1799
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "ტექსტური მონაცემები, %1 ელემენტი"
 msgstr[1] "ტექსტური მონაცემები, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1823
+#: src/backend/spreadsheet/Spreadsheet.cpp:1802
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "თვის მონაცემები, %1 ელემენტი"
 msgstr[1] "თვის მონაცემები, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1826
+#: src/backend/spreadsheet/Spreadsheet.cpp:1805
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "დღის მონაცემი, %1 ელემენტი"
 msgstr[1] "დღის მონაცემი, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1829
+#: src/backend/spreadsheet/Spreadsheet.cpp:1808
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -11606,13 +11599,11 @@ msgstr "მონაცემების გამომღები"
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "შექმნის გამომღებს მონაცმების სურათიდან ასაღებად"
 
-#. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/ActionsManager.cpp:225
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
 #: src/frontend/MainWin.cpp:1199 src/frontend/SettingsDialog.cpp:66
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:206
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -14459,7 +14450,7 @@ msgstr "%1 ღერძები: ნიმუში \"%2\" ჩაიტვი�
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:254
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:683
 #, kde-format
@@ -14638,7 +14629,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:423
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:385
 #: src/frontend/ui/dockwidgets/matrixdock.ui:117
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:120
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:422
 #, kde-format
 msgid "Columns:"
@@ -15660,13 +15651,13 @@ msgstr ""
 "ცენტრალური ხაზი"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:38
-#: src/frontend/ProjectExplorer.cpp:734
+#: src/frontend/ProjectExplorer.cpp:747
 #, kde-format
 msgid "Case Sensitive"
 msgstr "რეგისტრზე-დამოკიდებული"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:42
-#: src/frontend/ProjectExplorer.cpp:742
+#: src/frontend/ProjectExplorer.cpp:755
 #, kde-format
 msgid "Match Complete Word"
 msgstr "სიტყვის სრული დამთხვევა"
@@ -15842,23 +15833,17 @@ msgstr "სეზონური კომპონენტის დასა�
 msgid "%1 seasonal decompositions: template \"%2\" loaded"
 msgstr "%1 სეზონური დაშლები: ნიმუში \"%2\" ჩაიტვირთა"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:51
-#, kde-format
-msgid ""
-"Enable linking to synchronize the number of rows with another spreadsheet"
-msgstr "ჩართეთ მიბმა, რომ დაასინქრონოთ მწკრივების რაოდენობა სხვა ელცხრილთან"
-
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:55
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:49
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "ელცხრილი, რომელთანაც მწკრივების რაოდენობის სინქრონიზაცია მოხდება"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:59
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:53
 #, kde-format
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "სვეტის სტატისტიკის ელცხრილის ჩვენება"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:252
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:226
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 ელცხრილი: ნიმუში \"%2\" ჩაიტვირთა"
@@ -17086,7 +17071,7 @@ msgstr "აირჩიეთ ფაილი ფუნქციის აღწ
 #: src/frontend/ui/dockwidgets/runchartdock.ui:142
 #: src/frontend/ui/dockwidgets/scriptdock.ui:53
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:43
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:213
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:210
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:153
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:184
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
@@ -18105,53 +18090,53 @@ msgstr "XML-ის შეცდომა: cartesianPlot აღმოჩენი
 msgid "Search/Filter"
 msgstr "ძებნა/გაფილტვრა"
 
-#: src/frontend/ProjectExplorer.cpp:115
+#: src/frontend/ProjectExplorer.cpp:116
 #, kde-format
 msgid "Expand All"
 msgstr "ყველას ამოკეცვა"
 
-#: src/frontend/ProjectExplorer.cpp:118
+#: src/frontend/ProjectExplorer.cpp:119
 #, kde-format
 msgid "Expand Selected"
 msgstr "მონიშნულის ამოკეცვა"
 
-#: src/frontend/ProjectExplorer.cpp:121
+#: src/frontend/ProjectExplorer.cpp:122
 #, kde-format
 msgid "Collapse All"
 msgstr "ყველას ჩაკეცვა"
 
-#: src/frontend/ProjectExplorer.cpp:124
+#: src/frontend/ProjectExplorer.cpp:125
 #, kde-format
 msgid "Collapse Selected"
 msgstr "მონიშნულის ჩაკეცვა"
 
-#: src/frontend/ProjectExplorer.cpp:127
+#: src/frontend/ProjectExplorer.cpp:128
 #, kde-format
 msgid "Delete Selected"
 msgstr "მონიშნულის წაშლა"
 
-#: src/frontend/ProjectExplorer.cpp:130
+#: src/frontend/ProjectExplorer.cpp:131
 #, kde-format
 msgid "Search/Filter Options"
 msgstr "ძებნის/ფილტრის მორგება"
 
-#: src/frontend/ProjectExplorer.cpp:273 src/frontend/ProjectExplorer.cpp:421
+#: src/frontend/ProjectExplorer.cpp:274 src/frontend/ProjectExplorer.cpp:432
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1009
 #, kde-format
 msgid "Columns"
 msgstr "სვეტები"
 
-#: src/frontend/ProjectExplorer.cpp:334
+#: src/frontend/ProjectExplorer.cpp:335
 #, kde-format
 msgid "Show All"
 msgstr "ყველას ჩვენება"
 
-#: src/frontend/ProjectExplorer.cpp:573
+#: src/frontend/ProjectExplorer.cpp:584
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr "'%1'-ს ვერ ჩასვამთ '%2'-ში."
 
-#: src/frontend/ProjectExplorer.cpp:587
+#: src/frontend/ProjectExplorer.cpp:598
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
@@ -18159,27 +18144,27 @@ msgid ""
 msgstr ""
 "მონაცემებს, პირდაპირ, '%1'-ში ვერ ჩასვამთ. ამისთვის აირჩიეთ ელცხრილის სვეტი."
 
-#: src/frontend/ProjectExplorer.cpp:751
+#: src/frontend/ProjectExplorer.cpp:764
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr "ბუნდოვანი დამთხვევა"
 
-#: src/frontend/ProjectExplorer.cpp:967
+#: src/frontend/ProjectExplorer.cpp:980
 #, kde-format
 msgid "%1 elements: set visible: %2"
 msgstr "%1: ელემენტები: ხილვადად დაყენება: %2"
 
-#: src/frontend/ProjectExplorer.cpp:995
+#: src/frontend/ProjectExplorer.cpp:1008
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "მართლა გნებავთ მონიშნული %1 ობიექტის წაშლა?"
 
-#: src/frontend/ProjectExplorer.cpp:997
+#: src/frontend/ProjectExplorer.cpp:1010
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "მართლა გნებავთ წაშალოთ %1?"
 
-#: src/frontend/ProjectExplorer.cpp:1001
+#: src/frontend/ProjectExplorer.cpp:1014
 #: src/frontend/worksheet/WorksheetView.cpp:1458
 #, kde-format
 msgid "Delete selected object"
@@ -18187,7 +18172,7 @@ msgid_plural "Delete selected objects"
 msgstr[0] "მონიშნული ობიექტის წაშლა"
 msgstr[1] "მონიშნული ობიექტების წაშლა"
 
-#: src/frontend/ProjectExplorer.cpp:1007
+#: src/frontend/ProjectExplorer.cpp:1020
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
@@ -20595,7 +20580,7 @@ msgstr "Y- შეცდომის ტიპი:"
 #: src/frontend/ui/dockwidgets/runchartdock.ui:116
 #: src/frontend/ui/dockwidgets/scriptdock.ui:27
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:17
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:78
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:127
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:395
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:181
@@ -23747,7 +23732,7 @@ msgstr "მთლიანი ფაილის წაკითხვა"
 
 #. i18n: ectx: property (text), widget (QLabel, lRowCount)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:94
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:164
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:134
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:401
 #, kde-format
 msgid "Rows:"
@@ -24156,47 +24141,33 @@ msgid "Low-Pass Jump:"
 msgstr "დაბალი გავლის გადასვლა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:17
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:113
 #, kde-format
 msgid "Comments:"
 msgstr "კომენტარები:"
 
-#. i18n: ectx: property (text), widget (QLabel, lLinking)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:29
-#, kde-format
-msgid "Linking"
-msgstr "მიბმა"
-
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:124
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:180
 #, kde-format
 msgid "Sparklines:"
 msgstr "ნაპერწკლის ხაზები:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveData)
-#. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:154
-#: src/frontend/ui/settingsgeneralpage.ui:17
-#: src/frontend/ui/settingsgeneralpage.ui:51
-#: src/frontend/ui/settingsgeneralpage.ui:83
-#: src/frontend/ui/settingsgeneralpage.ui:446
+#. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
 #, kde-format
-msgid "Enabled"
-msgstr "ჩართულია"
+msgid "Sync Rows With:"
+msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lFormat)
+#. i18n: ectx: property (text), widget (QLabel, lHeader)
 #. i18n: ectx: property (text), widget (QLabel, lAppearance)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:251
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:232
 #: src/frontend/ui/settingsspreadsheetpage.ui:23
 #, kde-format
 msgid "Header"
 msgstr "სათაური"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:274
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:239
 #, kde-format
 msgid "Statistics:"
 msgstr "სტატისტიკა:"
@@ -25390,6 +25361,18 @@ msgstr "ფაილები - "
 #, kde-format
 msgid "Clear"
 msgstr "სუფთა ცა"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveData)
+#: src/frontend/ui/settingsgeneralpage.ui:17
+#: src/frontend/ui/settingsgeneralpage.ui:51
+#: src/frontend/ui/settingsgeneralpage.ui:83
+#: src/frontend/ui/settingsgeneralpage.ui:446
+#, kde-format
+msgid "Enabled"
+msgstr "ჩართულია"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/frontend/ui/settingsgeneralpage.ui:27
@@ -27174,6 +27157,16 @@ msgstr "გადაყვანის პროცესი ჩავარდ�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
+
+#~ msgid "%1: set linking"
+#~ msgstr "%1: დააყენეთ მიბმა"
+
+#~ msgid ""
+#~ "Enable linking to synchronize the number of rows with another spreadsheet"
+#~ msgstr "ჩართეთ მიბმა, რომ დაასინქრონოთ მწკრივების რაოდენობა სხვა ელცხრილთან"
+
+#~ msgid "Linking"
+#~ msgstr "მიბმა"
 
 #~ msgid "%1: simplify '%2'"
 #~ msgstr "%1: '%2'-ის გამარტივება"
