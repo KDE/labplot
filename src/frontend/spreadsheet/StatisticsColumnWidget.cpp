@@ -18,7 +18,6 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
@@ -270,7 +269,7 @@ void StatisticsColumnWidget::showOverviewPlot() {
 	plot->setRightPadding(2 * padding);
 	plot->setVerticalPadding(padding);
 	plot->setBottomPadding(padding);
-	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
+	plot->borderLine()->setStyle(Qt::NoPen);
 
 	// set the axes labels
 	auto axes = plot->children<Axis>();
@@ -602,10 +601,10 @@ void StatisticsColumnWidget::showParetoPlot() {
 	curve->setYColumn(yColumn);
 	curve->line()->setStyle(Qt::SolidLine);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
-	curve->setValuesType(XYCurve::ValuesType::Y);
-	curve->setValuesPosition(XYCurve::ValuesPosition::Right);
-	curve->setValuesDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
-	curve->setValuesSuffix(QStringLiteral("%"));
+	curve->value()->setType(Value::Type::Y);
+	curve->value()->setPosition(Value::Position::Right);
+	curve->value()->setDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	curve->value()->setSuffix(QStringLiteral("%"));
 
 	// resize the first y range to have the first point of the xy-curve at the top of the first bar
 	if (yData.at(0) != 0) {
@@ -662,7 +661,7 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	const double padding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
-	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
+	plot->borderLine()->setStyle(Qt::NoPen);
 
 	ws->addChild(plot);
 	plot->setSuppressRetransform(false);

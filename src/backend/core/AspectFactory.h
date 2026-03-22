@@ -114,6 +114,8 @@ public:
 			return new ProcessBehaviorChart(QString(), true /*loading*/);
 		else if (type == AspectType::RunChart)
 			return new RunChart(QString());
+		else if (type == AspectType::ParetoChart)
+			return new ParetoChart(QString());
 
 		/* data containers */
 		else if (type == AspectType::Spreadsheet)

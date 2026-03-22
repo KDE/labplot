@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/pivot/PivotTable.h"
@@ -23,19 +24,8 @@
 #include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/ErrorBar.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/KDEPlot.h"
-#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
-#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
-#include "backend/worksheet/plots/cartesian/QQPlot.h"
-#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
-#include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
+#include "backend/worksheet/plots/cartesian/plots.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
@@ -62,7 +52,6 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QThreadPool>
-#include <QUndoStack>
 
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
@@ -79,7 +68,7 @@ namespace {
 // the project version will be compared with this.
 // if you make any incompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 18;
+int buildXmlVersion = 21;
 }
 
 /**
@@ -163,7 +152,6 @@ public:
 	}
 
 	Project::DockVisibility dockVisibility{Project::DockVisibility::folderOnly};
-	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
 
 	static int m_versionNumber;
@@ -180,7 +168,7 @@ public:
 	bool saveDefaultDockWidgetState{false};
 	QString defaultDockWidgetState;
 	bool saveCalculations{true};
-	QUndoStack undo_stack;
+	UndoStack undo_stack;
 };
 
 int ProjectPrivate::m_versionNumber = 0;
@@ -214,7 +202,6 @@ Project::Project()
 
 	setUndoAware(true);
 	setIsLoading(false);
-	d->changed = false;
 
 	connect(this, &Project::aspectDescriptionChanged, this, &Project::descriptionChanged);
 	connect(this, &Project::childAspectAdded, this, &Project::aspectAddedSlot);
@@ -265,7 +252,7 @@ int Project::currentBuildXmlVersion() {
 	return buildXmlVersion;
 }
 
-QUndoStack* Project::undoStack() const {
+UndoStack* Project::undoStack() const {
 	// Q_D(const Project);
 	return &d_ptr->undo_stack;
 }
@@ -338,16 +325,18 @@ void Project::setSaveData(bool save) {
 	setProjectChanged(true);
 }
 
-void Project::setChanged(const bool value) {
+void Project::setChanged(bool value) {
 	if (isLoading())
 		return;
 
-	Q_D(Project);
+	AbstractAspect::setChanged(value);
 
-	d->changed = value;
-
-	if (value)
-		Q_EMIT changed();
+	// when resetting the status of the project after load (changed = false), also recusively update all children
+	if (!value) {
+		const auto& children = this->children<AbstractAspect>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+		for (auto* child : children)
+			child->setChanged(false);
+	}
 }
 
 void Project::setSuppressAspectAddedSignal(bool value) {
@@ -358,11 +347,6 @@ void Project::setSuppressAspectAddedSignal(bool value) {
 bool Project::aspectAddedSignalSuppressed() const {
 	Q_D(const Project);
 	return d->aspectAddedSignalSuppressed;
-}
-
-bool Project::hasChanged() const {
-	Q_D(const Project);
-	return d->changed;
 }
 
 /*!
@@ -403,9 +387,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	updateDependencies<WorksheetElement>({aspect}); // notify all worksheetelements
 	updateDependencies<Spreadsheet>({aspect}); // notify all spreadsheets. Linked spreadsheets
 
-	Q_D(Project);
-	d->changed = true;
-	Q_EMIT changed();
+	setChanged();
 }
 
 /*!
@@ -874,6 +856,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	for (auto* child : aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden))
 		child->setIsLoading(false);
 
+	// set "isLoading" to false for all columns
 	for (auto& column : aspect->project()->children<Column>(ChildIndexFlag::Recursive))
 		column->setIsLoading(false);
 
@@ -933,7 +916,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 				}
 			}
 
-			column->setChanged();
+			column->setDataChanged();
 		}
 	}
 
@@ -1011,7 +994,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		} else {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 			RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
-			RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
+			RESTORE_COLUMN_POINTER(curve->value(), column, Column);
 			RESTORE_COLUMN_POINTER(curve->errorBar(), xPlusColumn, XPlusColumn);
 			RESTORE_COLUMN_POINTER(curve->errorBar(), xMinusColumn, XMinusColumn);
 			RESTORE_COLUMN_POINTER(curve->errorBar(), yPlusColumn, YPlusColumn);
@@ -1245,17 +1228,29 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
 	}
 
+	// Pareto charts/plots
+	QVector<ParetoChart*> paretoPlots;
+	if (hasChildren)
+		paretoPlots = aspect->children<ParetoChart>(ChildIndexFlag::Recursive);
+	else if (auto* paretoPlot = aspect->castTo<ParetoChart>())
+		paretoPlots << paretoPlot;
+
+	for (auto* plot : paretoPlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
+	}
+
 	// spreadsheet
 	QVector<Spreadsheet*> spreadsheets;
 	if (hasChildren)
 		spreadsheets = aspect->children<Spreadsheet>(ChildIndexFlag::Recursive);
 	for (auto* linkingSpreadsheet : spreadsheets) {
-		if (!linkingSpreadsheet->linking())
+		if (linkingSpreadsheet->linkedSpreadsheetPath().isEmpty())
 			continue;
 		for (const auto* toLinkedSpreadsheet : spreadsheets) {
-			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path()) {
+			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path())
 				linkingSpreadsheet->setLinkedSpreadsheet(toLinkedSpreadsheet, true);
-			}
 		}
 	}
 

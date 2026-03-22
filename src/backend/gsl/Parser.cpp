@@ -58,7 +58,7 @@ int Parser::parseErrors() const {
 	return mParseErrors;
 }
 
-std::string Parser::lastErrorMessage() const {
+const std::string& Parser::lastErrorMessage() const {
 	return mLastErrorMessage;
 }
 
@@ -74,7 +74,7 @@ bool Parser::skipSpecialFunctionEvaluation() const {
 	return mSkipSpecialFunctionEvaluation;
 }
 
-int yyerror(param* p, const char* s) {
+int yyerror(const param* p, const char* s) {
 	/* remove trailing newline */
 	DEBUG_PARSER("PARSER ERROR: " << s << " @ position " << (int)p->pos << " of string '" << p->string << "'");
 

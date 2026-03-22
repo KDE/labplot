@@ -15,6 +15,7 @@
 #include "WorksheetPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
+#include "backend/lib/ScopedUndoDisabler.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Image.h"
@@ -159,6 +160,60 @@ QMenu* Worksheet::createContextMenu() {
 	Q_ASSERT(menu);
 	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
+}
+
+/*!
+ * fills the context menu with actions for multiple selected elements for
+ * the context menu created in the Project Explorer, adding actions that
+ * can be applied for multiple selected elements.
+ */
+void Worksheet::fillElementsContextMenu(QMenu* menu) {
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Change &Visibility"), this);
+	connect(action, &QAction::triggered, this, &Worksheet::changeSelectedVisibility);
+	menu->addAction(action);
+
+	// TODO: add more actions if applicable.
+	// menu->addAction(m_view->changeSelectedLockAction);
+	// auto* changeSelectedLockAction = new QAction(QIcon::fromTheme(QStringLiteral("object-locked")), i18n("Change &Lock Status"), this);
+	// connect(changeSelectedLockAction, &QAction::triggered, m_worksheet, &Worksheet::changeSelectedLock);
+}
+
+/*!
+ * changes visibility for all selected worksheet elements
+ */
+void Worksheet::changeSelectedVisibility() {
+	if (!m_view)
+		return;
+
+	const auto& selectedItems = m_view->selectedItems();
+	if (selectedItems.isEmpty())
+		return;
+
+	// determine all selected worksheet elements
+	const auto& children = this->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+	QVector<WorksheetElement*> elements;
+	for (auto* item : selectedItems) {
+		for (auto* child : children) {
+			if (child->graphicsItem() == item) {
+				elements << child;
+				break;
+			}
+		}
+	}
+
+	if (elements.isEmpty())
+		return;
+
+	// use first element as reference
+	const bool newVisible = !elements.constFirst()->isVisible();
+
+	if (elements.size() > 1) {
+		beginMacro(i18np("%1: change visibility", "%1: change visibility of %2 elements", name(), elements.size()));
+		for (auto* element : elements)
+			element->setVisible(newVisible);
+		endMacro();
+	} else
+		elements.constFirst()->setVisible(newVisible);
 }
 
 //! Construct a primary view on me.
@@ -332,12 +387,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	// for the project globally so it's ignored for all elements below when applying the theme recursively.
 	if (!d->theme.isEmpty() && !isLoading() && !isPasted() && !aspect->isPasted()) {
 		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-		// const_cast<WorksheetElement*>(addedElement)->setUndoAware(false, true);
-		if (project())
-			project()->setUndoAware(false);
+		ScopedUndoDisabler undoDisabler(project());
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
-		if (project())
-			project()->setUndoAware(true);
 	}
 
 	// recalculate the layout if enabled, set the currently added plot resizable otherwise
@@ -1330,7 +1381,7 @@ void Worksheet::cursorModelPlotRemoved(const QString& name) {
 
 void Worksheet::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mode) {
 	Q_D(Worksheet);
-	if (d->updateCompleteCursorModel) {
+	if (d->updateCompleteCursorModel && mode == CartesianPlot::MouseMode::Cursor) {
 		updateCompleteCursorTreeModel();
 		d->updateCompleteCursorModel = false;
 	}
@@ -1740,6 +1791,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool Worksheet::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	if (!readBasicAttributes(reader))
 		return false;
 
@@ -1825,7 +1877,6 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("cartesianPlotCursorMode", cartesianPlotCursorMode, Worksheet::CartesianPlotActionMode);
 		} else if (reader->name() == QLatin1String("cartesianPlot")) {
 			auto* plot = new CartesianPlot(QString(), true);
-			plot->setIsLoading(true);
 			if (!plot->load(reader, preview)) {
 				delete plot;
 				return false;
@@ -1833,7 +1884,6 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(plot);
 		} else if (!preview && reader->name() == QLatin1String("textLabel")) {
 			auto* label = new TextLabel(QString());
-			label->setIsLoading(true);
 			if (!label->load(reader, preview)) {
 				delete label;
 				return false;
@@ -1841,7 +1891,6 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(label);
 		} else if (!preview && reader->name() == QLatin1String("image")) {
 			Image* image = new Image(QString());
-			image->setIsLoading(true);
 			if (!image->load(reader, preview)) {
 				delete image;
 				return false;

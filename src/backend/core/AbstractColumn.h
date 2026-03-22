@@ -221,7 +221,7 @@ public:
 	void setHeatmapFormat(const HeatmapFormat&);
 	void removeFormat();
 	void reset();
-	void setChanged();
+	void setDataChanged();
 	void setSuppressDataChangedSignal(const bool);
 
 Q_SIGNALS:

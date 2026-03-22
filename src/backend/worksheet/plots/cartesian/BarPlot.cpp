@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Bar Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -175,6 +175,19 @@ ErrorBar* BarPlot::errorBarAt(int index) const {
 		return nullptr;
 }
 
+bool BarPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	// The values are not important, because they are just passed to minMax() which does not consider the indices
+	start = 0;
+	end = 0;
+	return true;
+}
+
+bool BarPlot::minMax(const Dimension dim, const Range<int>&, Range<double>& r, bool) const {
+	r.setStart(minimum(dim));
+	r.setEnd(maximum(dim));
+	return true;
+}
+
 double BarPlot::minimum(const Dimension dim) const {
 	Q_D(const BarPlot);
 	switch (dim) {
@@ -200,6 +213,13 @@ double BarPlot::maximum(const Dimension dim) const {
 bool BarPlot::hasData() const {
 	Q_D(const BarPlot);
 	return !d->dataColumns.isEmpty();
+}
+
+int BarPlot::dataCount(Dimension) const {
+	Q_D(const BarPlot);
+	if (!hasData())
+		return -1;
+	return d->dataColumns.count();
 }
 
 bool BarPlot::usingColumn(const AbstractColumn* column, bool) const {
@@ -454,7 +474,7 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void BarPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || !isVisible() || q->isLoading();
+	const bool suppressed = retransformSuppressed();
 	Q_EMIT trackRetransformCalled(suppressed);
 	if (suppressed)
 		return;
@@ -532,7 +552,7 @@ void BarPlotPrivate::recalc() {
 		// one more bar needs to be added
 		KConfig config;
 		KConfigGroup group = config.group(QLatin1String("BarPlot"));
-		const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
+		const auto* plot = q->parent<CartesianPlot>();
 
 		for (int i = 0; i < diff; ++i) {
 			// box filling and border line
@@ -1027,7 +1047,10 @@ void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QV
 	// clip the points to the plot data rect and create a new polygon
 	// out of them that will be filled out.
 	QPolygonF polygon;
-	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
+	const auto* plot = q->parent<CartesianPlot>();
+	if (!plot)
+		return;
+	const QRectF& dataRect = plot->dataRect();
 	int i = 0;
 	for (const auto& line : unclippedLines) {
 		// clip the first point of the line
@@ -1445,6 +1468,7 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool BarPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(BarPlot);
 
 	if (!readBasicAttributes(reader))

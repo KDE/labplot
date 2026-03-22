@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -65,6 +65,7 @@ void AspectTreeModel::setRoot(AbstractAspect* root) {
 	m_root = root;
 	connect(m_root, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 	connect(m_root, &AbstractAspect::aspectDescriptionChanged, this, &AspectTreeModel::aspectDescriptionChanged);
+	connect(m_root, &AbstractAspect::aspectChangedStatusChanged, this, &AspectTreeModel::aspectChangedStatusChanged);
 	connect(m_root,
 			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
 			this,
@@ -150,7 +151,7 @@ int AspectTreeModel::rowCount(const QModelIndex& parent) const {
 }
 
 int AspectTreeModel::columnCount(const QModelIndex& /*parent*/) const {
-	return 4;
+	return 5;
 }
 
 QVariant AspectTreeModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -168,6 +169,8 @@ QVariant AspectTreeModel::headerData(int section, Qt::Orientation orientation, i
 			return i18n("Created");
 		case 3:
 			return i18n("Comment");
+		case 4:
+			return i18n("Changed");
 		default:
 			return {};
 		}
@@ -212,12 +215,16 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 				return QLatin1String("Plot Area");
 			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("XYCurve"))
 				return QLatin1String("Plot");
+			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("Script"))
+				return QLatin1String("Python Script");
 			else
 				return QLatin1String(aspect->metaObject()->className());
 		case 2:
 			return QLocale::system().toString(aspect->creationTime(), QLocale::ShortFormat);
 		case 3:
 			return aspect->comment().replace(QLatin1Char('\n'), QLatin1Char(' ')).simplified();
+		case 4:
+			return aspect->isChanged() ? QLatin1String("*") : QString();
 		default:
 			return {};
 		}
@@ -301,6 +308,10 @@ void AspectTreeModel::aspectDescriptionChanged(const AbstractAspect* aspect) {
 	Q_EMIT dataChanged(modelIndexOfAspect(aspect), modelIndexOfAspect(aspect, 3));
 }
 
+void AspectTreeModel::aspectChangedStatusChanged(const AbstractAspect* aspect) {
+	Q_EMIT dataChanged(modelIndexOfAspect(aspect, 4), modelIndexOfAspect(aspect, 4));
+}
+
 void AspectTreeModel::aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* /*child*/) {
 	int index = parent->indexOfChild<AbstractAspect>(before);
 	if (index == -1)
@@ -317,6 +328,7 @@ void AspectTreeModel::aspectAdded(const AbstractAspect* aspect) {
 	connect(aspect, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 	connect(aspect, &AbstractAspect::childAspectSelectedInView, this, &AspectTreeModel::aspectSelectedInView);
 	connect(aspect, &AbstractAspect::childAspectDeselectedInView, this, &AspectTreeModel::aspectDeselectedInView);
+	connect(aspect, &AbstractAspect::aspectChangedStatusChanged, this, &AspectTreeModel::aspectChangedStatusChanged);
 
 	// add signal-slot connects for all children, too
 	const auto& children = aspect->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive);
@@ -324,6 +336,7 @@ void AspectTreeModel::aspectAdded(const AbstractAspect* aspect) {
 		connect(child, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 		connect(child, &AbstractAspect::childAspectSelectedInView, this, &AspectTreeModel::aspectSelectedInView);
 		connect(child, &AbstractAspect::childAspectDeselectedInView, this, &AspectTreeModel::aspectDeselectedInView);
+		connect(child, &AbstractAspect::aspectChangedStatusChanged, this, &AspectTreeModel::aspectChangedStatusChanged);
 	}
 }
 

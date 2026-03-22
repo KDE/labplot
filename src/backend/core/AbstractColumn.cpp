@@ -116,9 +116,7 @@ QStringList AbstractColumn::dateTimeFormats() {
 	dateTimes << timeFormats();
 	// any combination of date and times
 	for (const auto& d : dateFormats()) {
-		dateTimes << d;
 		for (const auto& t : timeFormats()) {
-			dateTimes << t;
 			dateTimes << d + QLatin1Char(' ') + t;
 		}
 	}
@@ -327,7 +325,10 @@ void AbstractColumn::insertRows(int before, int count) {
 }
 
 void AbstractColumn::handleRowInsertion(int before, int count) {
-	new AbstractColumnInsertRowsCmd(this, before, count);
+	exec(new AbstractColumnInsertRowsCmd(this, before, count),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -340,7 +341,10 @@ void AbstractColumn::removeRows(int first, int count) {
 }
 
 void AbstractColumn::handleRowRemoval(int first, int count) {
-	new AbstractColumnRemoveRowsCmd(this, first, count);
+	exec(new AbstractColumnRemoveRowsCmd(this, first, count),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -530,7 +534,7 @@ void AbstractColumn::reset() {
  * and not via the setValueAt() or when multiple cells are being notified and the signal \c dataChanged()
  * is suppressed for performance reasons and this function needs to be called after all cells were modified.
  */
-void AbstractColumn::setChanged() {
+void AbstractColumn::setDataChanged() {
 	invalidateProperties();
 	if (!d->m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
@@ -540,7 +544,7 @@ void AbstractColumn::setChanged() {
  * suppresses the \c dataChanged signal if \c value is \c true, enables it otherwise.
  *
  * used when multiple cells are being modified and the signal needs to be suppressed for performance reasons,
- * \sa setChanged().
+ * \sa setDataChanged().
  */
 void AbstractColumn::setSuppressDataChangedSignal(bool value) {
 	d->m_suppressDataChangedSignal = value;

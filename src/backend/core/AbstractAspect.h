@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -19,12 +19,12 @@ class AbstractAspectPrivate;
 class Folder;
 class Project;
 class XmlStreamReader;
+class UndoStack;
 
 class QDateTime;
 class QIcon;
 class QMenu;
 class QUndoCommand;
-class QUndoStack;
 class QXmlStreamWriter;
 
 /// Information about class inheritance
@@ -67,6 +67,7 @@ enum class AspectType : quint64 {
 	// continuous improvement plots
 	ProcessBehaviorChart,
 	RunChart,
+	ParetoChart,
 
 	WorksheetElementContainer,
 	AbstractPlot,
@@ -235,6 +236,8 @@ public:
 			return std::string_view("KDEPlot");
 		case AspectType::LollipopPlot:
 			return std::string_view("LollipopPlot");
+		case AspectType::ParetoChart:
+			return std::string_view("ParetoChart");
 		case AspectType::ProcessBehaviorChart:
 			return std::string_view("ProcessBehaviorChart");
 		case AspectType::RunChart:
@@ -315,6 +318,8 @@ public:
 	bool isMoved() const;
 	void setIsLoading(bool);
 	bool isLoading() const;
+	virtual void setChanged(bool value = true);
+	bool isChanged() const;
 	virtual QIcon icon() const;
 	virtual QMenu* createContextMenu();
 	void setProjectChanged(bool);
@@ -480,7 +485,7 @@ public:
 	// undo/redo related functions
 	void setUndoAware(bool value);
 	bool isUndoAware() const;
-	virtual QUndoStack* undoStack() const;
+	virtual UndoStack* undoStack() const;
 	void exec(QUndoCommand*);
 	void exec(QUndoCommand* command,
 			  const char* preChangeSignal,
@@ -530,8 +535,6 @@ public Q_SLOTS:
 	void copy();
 	void duplicate();
 	void paste(bool duplicate = false, int index = -1);
-
-private Q_SLOTS:
 	void moveUp();
 	void moveDown();
 
@@ -545,6 +548,8 @@ Q_SIGNALS:
 
 	void aspectCommentAboutToChange(const AbstractAspect*);
 	void aspectCommentChanged(const AbstractAspect*);
+
+	void aspectChangedStatusChanged(const AbstractAspect*);
 
 	/*!
 	 * \brief aspectAboutToBeAdded

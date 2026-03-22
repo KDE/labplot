@@ -180,6 +180,6 @@ int DatasetModel::datasetCount(const QString& collection, const QString& categor
 /**
  * @brief Returns the list of every collection.
  */
-QStringList DatasetModel::collections() {
+const QStringList& DatasetModel::collections() {
 	return m_collectionList;
 }

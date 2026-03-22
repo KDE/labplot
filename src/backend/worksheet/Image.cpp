@@ -381,6 +381,7 @@ void Image::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool Image::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	if (!readBasicAttributes(reader))
 		return false;
 
