@@ -92,6 +92,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/ReferenceRangeDock.cpp
     ${FRONTEND_DIR}/dockwidgets/RunChartDock.cpp
     ${FRONTEND_DIR}/dockwidgets/SeasonalDecompositionDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/ScriptButtonDock.cpp
     ${FRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/StatisticsSpreadsheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/QQPlotDock.cpp
@@ -267,6 +268,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/referencerangedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/runchartdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/scriptbuttondock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/seasonaldecompositiondock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/statisticsspreadsheetdock.ui
@@ -421,7 +423,7 @@ set(LABPLOT_DATA_SOURCES
 set(LABPLOT_WORKSHEET_SOURCES
     ${BACKEND_DIR}/worksheet/Background.cpp
     ${BACKEND_DIR}/worksheet/Image.cpp
-    ${BACKEND_DIR}/worksheet/ScriptWorksheetElement.cpp
+    ${BACKEND_DIR}/worksheet/ScriptButton.cpp
     ${BACKEND_DIR}/worksheet/Line.cpp
     ${BACKEND_DIR}/worksheet/ResizeItem.cpp
     ${BACKEND_DIR}/worksheet/WorksheetElement.cpp

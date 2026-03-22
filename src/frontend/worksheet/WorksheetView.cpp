@@ -16,7 +16,7 @@
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Image.h"
-#include "backend/worksheet/ScriptWorksheetElement.h"
+#include "backend/worksheet/ScriptButton.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h" // TODO: redesign, don't depend on the private class
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
@@ -1299,7 +1299,7 @@ WorksheetView::MouseMode WorksheetView::mouseMode() const {
 void WorksheetView::addNew(QAction* action) {
 	m_addNewMode = static_cast<AddNewMode>(action->data().toInt());
 	bool restorePointers = false;
-	WorksheetElement* aspect = nullptr;
+	AbstractAspect* aspect = nullptr;
 	switch (m_addNewMode) {
 	case AddNewMode::PlotAreaFourAxes:{
 		auto* plot = new CartesianPlot(i18n("Plot Area"));
@@ -1367,7 +1367,7 @@ void WorksheetView::addNew(QAction* action) {
 		break;
 	}
 	case AddNewMode::ScriptButton: {
-		auto* button = new ScriptWorksheetElement(i18n("Script Button"));
+		auto* button = new ScriptButton(i18n("Script Button"));
 		aspect = button;
 		break;
 	}
@@ -1385,18 +1385,19 @@ void WorksheetView::addNew(QAction* action) {
 
 	// labels and images with their initial positions need to be retransformed
 	// after they have gotten a parent
-	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image || aspect->type() == AspectType::ScriptWorksheetElement) {
+	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image /* || aspect->type() == AspectType::ScriptButton */) {
+		auto* element = static_cast<WorksheetElement*>(aspect);
 		if (m_calledFromContextMenu) {
 			// must be done after add Child, because otherwise the parentData rect is not available
 			// and therefore aligning will not work
-			auto position = aspect->position();
-			position.point = aspect->parentPosToRelativePos(m_cursorPos, position);
+			auto position = element->position();
+			position.point = element->parentPosToRelativePos(m_cursorPos, position);
 			position.point =
-				aspect->align(position.point, aspect->graphicsItem()->boundingRect(), aspect->horizontalAlignment(), aspect->verticalAlignment(), false);
-			aspect->setPosition(position);
+				element->align(position.point, element->graphicsItem()->boundingRect(), element->horizontalAlignment(), element->verticalAlignment(), false);
+			element->setPosition(position);
 			m_calledFromContextMenu = false;
 		} else
-			aspect->retransform();
+			element->retransform();
 	} else if (aspect->type() == AspectType::CartesianPlot)
 		static_cast<CartesianPlot*>(aspect)->retransform();
 
@@ -1426,11 +1427,14 @@ void WorksheetView::addNew(QAction* action) {
 	}
 
 	// create the opacity effect and start the actual fade-in
-	lastAddedWorksheetElement = aspect;
-	auto* effect = new QGraphicsOpacityEffect(this);
-	effect->setOpacity(0);
-	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
-	m_fadeInTimeLine->start();
+	auto* element = dynamic_cast<WorksheetElement*>(aspect);
+	if (element) {
+		lastAddedWorksheetElement = element;
+		auto* effect = new QGraphicsOpacityEffect(this);
+		effect->setOpacity(0);
+		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
+		m_fadeInTimeLine->start();
+	}
 }
 
 WorksheetView::AddNewMode WorksheetView::addNewMode() const {

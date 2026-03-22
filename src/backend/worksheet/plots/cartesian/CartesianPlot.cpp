@@ -26,7 +26,6 @@
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/ScriptWorksheetElement.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -452,7 +451,6 @@ void CartesianPlot::initActions() {
 	addVerticalAxisAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical Axis"), this);
 	addTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), this);
 	addImageAction = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), this);
-	addScriptButtonAction = new QAction(QIcon::fromTheme(QStringLiteral("code-context")), i18n("Script Button"), this);
 	addInfoElementAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Info Element"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-cross")), i18n("Custom Point"), this);
 	addReferenceLineAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-line")), i18n("Reference Line"), this);
@@ -483,7 +481,6 @@ void CartesianPlot::initActions() {
 	connect(addVerticalAxisAction, &QAction::triggered, this, &CartesianPlot::addVerticalAxis);
 	connect(addTextLabelAction, &QAction::triggered, this, &CartesianPlot::addTextLabel);
 	connect(addImageAction, &QAction::triggered, this, &CartesianPlot::addImage);
-	connect(addScriptButtonAction, &QAction::triggered, this, &CartesianPlot::addScriptButton);
 	connect(addInfoElementAction, &QAction::triggered, this, &CartesianPlot::addInfoElement);
 	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 	connect(addReferenceLineAction, &QAction::triggered, this, &CartesianPlot::addReferenceLine);
@@ -536,7 +533,6 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 	m_addNewMenu->addAction(addImageAction);
-	m_addNewMenu->addAction(addScriptButtonAction);
 	m_addNewMenu->addAction(addInfoElementAction);
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addCustomPointAction);
@@ -2423,22 +2419,6 @@ void CartesianPlot::addImage() {
 
 	this->addChild(image);
 	image->retransform();
-}
-
-void CartesianPlot::addScriptButton() {
-	auto* button = new ScriptWorksheetElement(i18n("Script Button"));
-
-	Q_D(CartesianPlot);
-	if (d->calledFromContextMenu) {
-		auto position = button->position();
-		position.point = button->parentPosToRelativePos(d->scenePos, position);
-		position.point = button->align(position.point, button->graphicsItem()->boundingRect(), button->horizontalAlignment(), button->verticalAlignment(), false);
-		button->setPosition(position);
-		d->calledFromContextMenu = false;
-	}
-
-	this->addChild(button);
-	button->retransform();
 }
 
 void CartesianPlot::addCustomPoint() {
