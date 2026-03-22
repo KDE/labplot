@@ -50,7 +50,7 @@ enum class AspectType : quint64 {
 	PlotArea,
 	TextLabel,
 	Image,
-	ScriptWorksheetElement,
+	ScriptButton,
 	ReferenceLine,
 	ReferenceRange,
 	InfoElement,
@@ -180,8 +180,8 @@ public:
 			return std::string_view("TextLabel");
 		case AspectType::Image:
 			return std::string_view("Image");
-		case AspectType::ScriptWorksheetElement:
-			return std::string_view("ScriptWorksheetElement");
+		case AspectType::ScriptButton:
+			return std::string_view("ScriptButton");
 		case AspectType::ReferenceLine:
 			return std::string_view("ReferenceLine");
 		case AspectType::ReferenceRange:

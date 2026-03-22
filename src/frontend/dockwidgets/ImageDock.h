@@ -85,4 +85,4 @@ Q_SIGNALS:
 	friend class WorksheetElementTest;
 };
 
-#endif // WORKSHEETDOCK_H
+#endif // IMAGEDOCK_H

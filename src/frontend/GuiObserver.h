@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : GUI observer
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -39,6 +39,7 @@ class ColumnDock;
 class LiveDataDock;
 class MatrixDock;
 class ProjectDock;
+class ScriptButtonDock;
 class SpreadsheetDock;
 class StatisticsSpreadsheetDock;
 class XYCurveDock;
@@ -103,6 +104,7 @@ private:
 	LabelWidget* m_textLabelDock{nullptr};
 	ReferenceLineDock* m_referenceLineDock{nullptr};
 	ReferenceRangeDock* m_referenceRangeDock{nullptr};
+	ScriptButtonDock* m_scriptButtonDock{nullptr};
 	WorksheetDock* m_worksheetDock{nullptr};
 
 	XYCurveDock* m_xyCurveDock{nullptr};
