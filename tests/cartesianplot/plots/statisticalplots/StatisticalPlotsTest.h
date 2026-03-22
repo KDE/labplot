@@ -67,6 +67,11 @@ private Q_SLOTS:
 	void testRunChartDuplicate();
 	void testRunChartCenterAverage();
 	void testRunChartCenterMedian();
+
+	// Pareto chart
+	void testParetoChartInit();
+	void testParetoChartDuplicate();
+	void testParetoChartRanges();
 };
 
 #endif

@@ -3340,6 +3340,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool Axis::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(Axis);
 
 	if (!readBasicAttributes(reader))

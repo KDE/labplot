@@ -20,7 +20,7 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 
 void AbstractAspectTest::name() {
 	Project project;

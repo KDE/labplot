@@ -1429,6 +1429,7 @@ private:
  * \brief Load the column from XML
  */
 bool Column::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true); // set to false in Project::retransformElements() after everything was loaded
 	if (!readBasicAttributes(reader))
 		return false;
 

@@ -540,6 +540,7 @@ void ReferenceRange::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(ReferenceRange);
 
 	if (!readBasicAttributes(reader))

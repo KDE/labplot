@@ -30,13 +30,11 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 
 	retranslateUi();
 
+	connect(ui.cbLinkedSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &SpreadsheetDock::linkedSpreadsheetChanged);
 	connect(ui.sbColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::columnCountChanged);
 	connect(ui.sbRowCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
 	connect(ui.cbShowComments, &QCheckBox::toggled, this, &SpreadsheetDock::commentsShownChanged);
 	connect(ui.cbShowSparklines, &QCheckBox::toggled, this, &SpreadsheetDock::sparklinesShownChanged);
-
-	connect(ui.cbLinkingEnabled, &QCheckBox::toggled, this, &SpreadsheetDock::linkingChanged);
-	connect(ui.cbLinkedSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &SpreadsheetDock::linkedSpreadsheetChanged);
 	connect(ui.cbStatisticsSpreadsheet, &QCheckBox::toggled, this, &SpreadsheetDock::toggleStatisticsSpreadsheet);
 
 	m_templateHandler = new TemplateHandler(this, QLatin1String("Spreadsheet"));
@@ -48,11 +46,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 
 void SpreadsheetDock::retranslateUi() {
 	// tooltip texts
-	QString info = i18n("Enable linking to synchronize the number of rows with another spreadsheet");
-	ui.lLinkingEnabled->setToolTip(info);
-	ui.cbLinkingEnabled->setToolTip(info);
-
-	info = i18n("Spreadsheet to synchronize the number of rows with");
+	QString info = i18n("Spreadsheet to synchronize the number of rows with");
 	ui.lLinkedSpreadsheet->setToolTip(info);
 	ui.cbLinkedSpreadsheet->setToolTip(info);
 
@@ -84,14 +78,10 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	ui.sbRowCount->setVisible(!readOnly);
 	ui.lColumnCount->setVisible(!readOnly);
 	ui.sbColumnCount->setVisible(!readOnly);
-	ui.lFormat->setVisible(!readOnly);
 	ui.lShowComments->setVisible(!readOnly);
 	ui.cbShowComments->setVisible(!readOnly);
 	ui.lShowSparklines->setVisible(!readOnly);
 	ui.cbShowSparklines->setVisible(!readOnly);
-	ui.lLinking->setVisible(!readOnly);
-	ui.lLinkingEnabled->setVisible(!readOnly);
-	ui.cbLinkingEnabled->setVisible(!readOnly);
 	ui.lLinkedSpreadsheet->setVisible(!readOnly);
 	ui.cbLinkedSpreadsheet->setVisible(!readOnly);
 	m_templateHandler->setVisible(!readOnly);
@@ -102,8 +92,6 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	auto* model = aspectModel();
 	model->setSelectableAspects({AspectType::Spreadsheet});
 	model->enableNumericColumnsOnly(true);
-	// model->enableNonEmptyNumericColumnsOnly(true);
-
 	ui.cbLinkedSpreadsheet->setTopLevelClasses({AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet});
 	ui.cbLinkedSpreadsheet->setModel(model);
 
@@ -117,12 +105,11 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	this->load();
 
 	// undo functions
+	connect(m_spreadsheet, &Spreadsheet::linkedSpreadsheetChanged, this, &SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged);
 	connect(m_spreadsheet, &Spreadsheet::rowCountChanged, this, &SpreadsheetDock::spreadsheetRowCountChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, &SpreadsheetDock::spreadsheetColumnCountChanged);
 	connect(m_spreadsheet, &Spreadsheet::showCommentsChanged, this, &SpreadsheetDock::spreadsheetShowCommentsChanged);
 	connect(m_spreadsheet, &Spreadsheet::showSparklinesChanged, this, &SpreadsheetDock::spreadsheetShowSparklinesChanged);
-	connect(m_spreadsheet, &Spreadsheet::linkingChanged, this, &SpreadsheetDock::spreadsheetLinkingChanged);
-	connect(m_spreadsheet, &Spreadsheet::linkedSpreadsheetChanged, this, &SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged);
 	connect(m_spreadsheet, &Spreadsheet::statisticsSpreadsheetChanged, this, &SpreadsheetDock::spreadsheetStatisticsSpreadsheetChanged);
 }
 
@@ -162,21 +149,14 @@ void SpreadsheetDock::sparklinesShownChanged(bool state) {
 		spreadsheet->setShowSparklines(state);
 }
 
-void SpreadsheetDock::linkingChanged(bool linking) {
-	ui.sbRowCount->setEnabled(!linking);
-	ui.lLinkedSpreadsheet->setVisible(linking);
-	ui.cbLinkedSpreadsheet->setVisible(linking);
+void SpreadsheetDock::linkedSpreadsheetChanged(const QModelIndex& index) {
+	auto* aspect{static_cast<AbstractAspect*>(index.internalPointer())};
+	ui.sbRowCount->setEnabled(aspect == nullptr);
 
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* spreadsheet : m_spreadsheets)
-		spreadsheet->setLinking(linking);
-}
-
-void SpreadsheetDock::linkedSpreadsheetChanged(const QModelIndex& index) {
 	// combobox was potentially red-highlighted because of a missing column
 	// remove the highlighting when we have a valid selection now
-	auto* aspect{static_cast<AbstractAspect*>(index.internalPointer())};
 	if (aspect) {
 		auto* cb{dynamic_cast<TreeViewComboBox*>(QObject::sender())};
 		if (cb)
@@ -218,11 +198,6 @@ void SpreadsheetDock::spreadsheetShowSparklinesChanged(bool checked) {
 	ui.cbShowSparklines->setChecked(checked);
 }
 
-void SpreadsheetDock::spreadsheetLinkingChanged(bool linking) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbLinkingEnabled->setChecked(linking);
-}
-
 void SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged(const Spreadsheet* spreadsheet) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbLinkedSpreadsheet->setAspect(spreadsheet);
@@ -241,8 +216,7 @@ void SpreadsheetDock::load() {
 	ui.cbShowComments->setChecked(m_spreadsheet->showComments());
 	ui.cbShowSparklines->setChecked(m_spreadsheet->showSparklines());
 	ui.cbLinkedSpreadsheet->setAspect(m_spreadsheet->linkedSpreadsheet());
-	ui.cbLinkingEnabled->setChecked(m_spreadsheet->linking());
-	linkingChanged(m_spreadsheet->linking()); // call this to update the widgets
+	ui.sbRowCount->setEnabled(m_spreadsheet->linkedSpreadsheet() == nullptr);
 }
 
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {

@@ -1694,6 +1694,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool Histogram::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(Histogram);
 
 	if (!readBasicAttributes(reader))

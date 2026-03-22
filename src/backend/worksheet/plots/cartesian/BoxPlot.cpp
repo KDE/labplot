@@ -1818,6 +1818,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(BoxPlot);
 
 	if (!readBasicAttributes(reader))

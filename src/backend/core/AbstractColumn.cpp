@@ -325,7 +325,10 @@ void AbstractColumn::insertRows(int before, int count) {
 }
 
 void AbstractColumn::handleRowInsertion(int before, int count) {
-	new AbstractColumnInsertRowsCmd(this, before, count);
+	exec(new AbstractColumnInsertRowsCmd(this, before, count),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -338,7 +341,10 @@ void AbstractColumn::removeRows(int first, int count) {
 }
 
 void AbstractColumn::handleRowRemoval(int first, int count) {
-	new AbstractColumnRemoveRowsCmd(this, first, count);
+	exec(new AbstractColumnRemoveRowsCmd(this, first, count),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
