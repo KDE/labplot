@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-21 00:40+0000\n"
-"PO-Revision-Date: 2026-03-15 07:43+0100\n"
+"PO-Revision-Date: 2026-03-21 06:04+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -24156,7 +24156,7 @@ msgstr "ნაპერწკლის ხაზები:"
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
 #, kde-format
 msgid "Sync Rows With:"
-msgstr ""
+msgstr "მწკრივების სინქრონიზაცია:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #. i18n: ectx: property (text), widget (QLabel, lAppearance)

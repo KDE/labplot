@@ -26590,10 +26590,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid ""
-#~ "Enable linking to synchronize the number of rows with another spreadsheet"
-#~ msgstr "启用链接，将行数与其他数据表同步"
-
-#~ msgid "Linking"
-#~ msgstr "链接"

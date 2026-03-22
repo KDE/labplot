@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-21 00:40+0000\n"
-"PO-Revision-Date: 2026-03-15 09:51+0100\n"
+"PO-Revision-Date: 2026-03-21 10:48+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1234,7 +1234,7 @@ msgstr "Columna %1"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1391
 #, kde-format
 msgid "Timestamp"
-msgstr "Marca horària"
+msgstr "Marca de temps"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:603
 #: src/backend/datasources/filters/AsciiFilter.cpp:1396
@@ -1253,12 +1253,12 @@ msgstr "DataHora"
 #: src/backend/datasources/filters/AsciiFilter.cpp:617
 #, kde-format
 msgid "Timestamp (Unix)"
-msgstr "Marca horària (Unix)"
+msgstr "Marca de temps (Unix)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:618
 #, kde-format
 msgid "Timestamp (Windows)"
-msgstr "Marca horària (Windows)"
+msgstr "Marca de temps (Windows)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:619
 #, kde-format
@@ -1785,7 +1785,7 @@ msgstr "Índex"
 #: src/backend/datasources/filters/JsonFilter.cpp:232
 #, kde-format
 msgid "timestamp"
-msgstr "marca horària"
+msgstr "marca de temps"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:234
 #, kde-format
@@ -19528,7 +19528,7 @@ msgstr ""
 "Valor de la llavor per a restablir el generador de nombres aleatoris.\n"
 "Si el generador s'alimenta amb el mateix valor, es generarà el mateix flux "
 "de nombres aleatoris en crides successives.\n"
-"Si no s'especifica cap valor, s'utilitzarà la marca horària actual per a "
+"Si no s'especifica cap valor, s'utilitzarà la marca de temps actual per a "
 "alimentar el generador."
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:91
@@ -21435,7 +21435,7 @@ msgstr "Separador de columna:"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:73
 #, kde-format
 msgid "Create Timestamp "
-msgstr "Crea una marca horària "
+msgstr "Crea una marca de temps "
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:80
@@ -21649,7 +21649,7 @@ msgstr "Controlador:"
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:66
 #, kde-format
 msgid "Host:"
-msgstr "Amfitrió:"
+msgstr "Màquina:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPort)
 #. i18n: ectx: property (text), widget (QLabel, lSerialPort)
@@ -24375,7 +24375,7 @@ msgstr "Minidiagrames:"
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
 #, kde-format
 msgid "Sync Rows With:"
-msgstr ""
+msgstr "Sincronitza les files amb:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #. i18n: ectx: property (text), widget (QLabel, lAppearance)
@@ -27386,15 +27386,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "%1: set linking"
-#~ msgstr "%1: establix l'enllaçat"
-
-#~ msgid ""
-#~ "Enable linking to synchronize the number of rows with another spreadsheet"
-#~ msgstr ""
-#~ "Activa l'enllaçat per a sincronitzar el nombre de files amb un altre full "
-#~ "de càlcul"
-
-#~ msgid "Linking"
-#~ msgstr "Enllaçat"

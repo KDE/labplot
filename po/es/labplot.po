@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-21 00:40+0000\n"
-"PO-Revision-Date: 2026-03-15 19:48+0100\n"
+"PO-Revision-Date: 2026-03-21 16:50+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -24248,7 +24248,7 @@ msgstr "Minigráficos de pulso:"
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
 #, kde-format
 msgid "Sync Rows With:"
-msgstr ""
+msgstr "Sincronizar filas con:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #. i18n: ectx: property (text), widget (QLabel, lAppearance)
@@ -27251,15 +27251,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "%1: set linking"
-#~ msgstr "%1: definir enlace"
-
-#~ msgid ""
-#~ "Enable linking to synchronize the number of rows with another spreadsheet"
-#~ msgstr ""
-#~ "Activar enlace para sincronizar el número de filas con otra hoja de "
-#~ "cálculo"
-
-#~ msgid "Linking"
-#~ msgstr "Enlace"
