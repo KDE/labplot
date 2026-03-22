@@ -103,16 +103,16 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	// check whether we have non-editable columns:
 	// 1. columns in read-only spreadsheets (LiveDataSource, Datapicker curve results, etc.)
 	// 2. columns for residuals calculated in XYFitCurve (don't have Spreadsheet as the parent)
-	bool nonEditable = false;
+	bool editable = true;
 	for (auto* col : m_columns) {
 		auto* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
 		if (s) {
 			if (s->readOnly()) {
-				nonEditable = true;
+				editable = false;
 				break;
 			}
-		} else {
-			nonEditable = true;
+		} else { // the parent is not a spreadsheet - child columns attached to analysis curves, etc.
+			editable = false;
 			break;
 		}
 	}
@@ -136,7 +136,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 
 	if (list.size() == 1) {
 		// names and comments of non-editable columns in a file data source cannot be changed.
-		if (!nonEditable && m_column->parentAspect()->type() == AspectType::LiveDataSource) {
+		if (editable && m_column->parentAspect()->type() == AspectType::LiveDataSource) {
 			ui.leName->setEnabled(false);
 			ui.teComment->setEnabled(false);
 		}
@@ -152,13 +152,25 @@ void ColumnDock::setColumns(QList<Column*> list) {
 
 	// type and formatting
 	ui.lType->setEnabled(sameMode);
-	ui.cbType->setEnabled(sameMode && !nonEditable); // don't allow to change the column type if there is at least one non-editable column
+	ui.cbType->setEnabled(sameMode && editable); // don't allow to change the column type if there is at least one non-editable column
 	ui.lNumericFormat->setEnabled(sameMode);
 	ui.cbNumericFormat->setEnabled(sameMode);
 	ui.lPrecision->setEnabled(sameMode);
 	ui.sbPrecision->setEnabled(sameMode);
 	ui.lDateTimeFormat->setEnabled(sameMode);
 	ui.cbDateTimeFormat->setEnabled(sameMode);
+
+	// formula
+	ui.lFormula->setVisible(editable);
+	ui.lVariable->setVisible(editable);
+	ui.frameVariables->setVisible(editable);
+	ui.lFunction->setVisible(editable);
+	ui.frameFormula->setVisible(editable);
+	ui.lFormulaAutoUpdate->setVisible(editable);
+	ui.chkFormulaAutoUpdate->setVisible(editable);
+	ui.lFormulaAutoResize->setVisible(editable);
+	ui.chkFormulaAutoResize->setVisible(editable);
+	ui.pbApplyFormula->setVisible(editable);
 
 	// value labels
 	ui.twLabels->setEnabled(sameMode);
@@ -564,10 +576,10 @@ void ColumnDock::loadFormula() {
 
 	// auto update
 	// enable if linking is turned on, so the user has to explicitly disable recalculation, so it cannot be forgotten
-	ui.chkFormulaAutoUpdate->setChecked(m_column->formulaAutoUpdate() || m_spreadsheet->linking());
+	ui.chkFormulaAutoUpdate->setChecked(m_column->formulaAutoUpdate() || m_spreadsheet->linkedSpreadsheet());
 
 	// auto-resize
-	if (!m_spreadsheet->linking())
+	if (!m_spreadsheet->linkedSpreadsheet())
 		ui.chkFormulaAutoResize->setChecked(m_column->formulaAutoResize());
 	else {
 		// linking is active, deactivate this option since the size of the target spreadsheet is controlled by the linked spreadsheet
@@ -736,7 +748,7 @@ void ColumnDock::insertConstant(const QString& constantsName) const {
 }
 
 void ColumnDock::addVariable() {
-	auto* layout{ui.gridLayoutVariables};
+	auto* layout = static_cast<QGridLayout*>(ui.frameVariables->layout());
 	auto row{m_variableLineEdits.size()};
 
 	// text field for the variable name

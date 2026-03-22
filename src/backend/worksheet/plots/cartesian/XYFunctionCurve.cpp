@@ -460,6 +460,7 @@ void XYFunctionCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYFunctionCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	while (!reader->atEnd()) {
 		reader->readNext();
 		if (reader->isEndElement() && reader->name() == saveName)

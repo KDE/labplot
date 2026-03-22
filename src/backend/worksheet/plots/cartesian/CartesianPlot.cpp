@@ -16,6 +16,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/lib/ScopedUndoDisabler.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
@@ -187,6 +188,10 @@ void CartesianPlot::init(bool loading) {
 	});
 
 	connect(this, &AbstractAspect::childAspectAdded, this, &CartesianPlot::childAdded);
+	connect(this,
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
+			this,
+			&CartesianPlot::childAboutToBeAdded);
 	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
 
 	// if not loading, initialize the default properties (read in load() otherwise)
@@ -493,7 +498,7 @@ void CartesianPlot::initMenus() {
 
 	// plots
 	auto* actionGroup = new QActionGroup(this);
-	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addPlot);
+	connect(actionGroup, &QActionGroup::triggered, this, QOverload<const QAction*>::of(&CartesianPlot::addPlot));
 	CartesianPlot::fillAddNewPlotMenu(m_addNewMenu, actionGroup);
 
 	// formula plot
@@ -650,7 +655,7 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 
 	addNewPlotMenu->addMenu(addNewStatisticalPlotsMenu);
 
-	// // bar plots
+	// bar plots
 	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), addNewPlotMenu);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), actionGroup);
@@ -672,6 +677,10 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Process Behavior Chart"), actionGroup);
 	action->setData(static_cast<int>(Plot::PlotType::ProcessBehaviorChart));
+	addNewCIPlotsMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Pareto Chart"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::ParetoChart));
 	addNewCIPlotsMenu->addAction(action);
 
 	addNewPlotMenu->addMenu(addNewCIPlotsMenu);
@@ -908,6 +917,7 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::QQPlot,
 							  AspectType::RunChart,
 							  AspectType::ProcessBehaviorChart,
+							  AspectType::ParetoChart,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
 							  AspectType::XYFunctionCurve,
@@ -1897,9 +1907,8 @@ void CartesianPlot::retransform() {
 // ################################################################
 // ########################## Slots ###############################
 // ################################################################
-void CartesianPlot::addPlot(QAction* action) {
+void CartesianPlot::addPlot(const QAction* action) {
 	const auto type = static_cast<Plot::PlotType>(action->data().toInt());
-
 	switch (type) {
 	// basic plots
 	case Plot::PlotType::Line: {
@@ -1997,10 +2006,14 @@ void CartesianPlot::addPlot(QAction* action) {
 	case Plot::PlotType::RunChart:
 		addChild(new RunChart(i18n("Run Chart")));
 		break;
+	case Plot::PlotType::ParetoChart: {
+		addChild(new ParetoChart(i18n("Pareto Chart")));
+		break;
+	}
 	}
 }
 
-void CartesianPlot::addAnalysisPlot(QAction* action) {
+void CartesianPlot::addAnalysisPlot(const QAction* action) {
 	const auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	switch (type) {
 	case XYAnalysisCurve::AnalysisAction::FitLinear:
@@ -2267,7 +2280,7 @@ void CartesianPlot::addBaselineCorrectionCurve() {
 		this->addChild(new XYBaselineCorrectionCurve(i18n("Baseline Correction")));
 }
 
-void CartesianPlot::addFitCurve(QAction* action) {
+void CartesianPlot::addFitCurve(const QAction* action) {
 	const auto& selectedCurves = this->selectedCurves();
 	if (!selectedCurves.isEmpty()) {
 		for (const auto* curCurve : selectedCurves) {
@@ -2539,7 +2552,7 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 		++index;
 
 		// for the process behavior and run charts two colors are used - for the data and for the control line(s)
-		if (plot->type() == AspectType::ProcessBehaviorChart || plot->type() == AspectType::RunChart)
+		if (plot->type() == AspectType::ProcessBehaviorChart || plot->type() == AspectType::RunChart || plot->type() == AspectType::ParetoChart)
 			++index;
 	}
 
@@ -2593,6 +2606,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
 	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
 	const auto* lollipopPlot = dynamic_cast<const LollipopPlot*>(child);
+	const auto* paretoChart = dynamic_cast<const ParetoChart*>(child);
 
 	const auto* axis = dynamic_cast<const Axis*>(child);
 
@@ -2671,6 +2685,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(lollipopPlot, &LollipopPlot::xDataChanged, [this, lollipopPlot]() {
 			this->dataChanged(const_cast<LollipopPlot*>(lollipopPlot), Dimension::X);
 		});
+	} else if (paretoChart) {
+		DEBUG(Q_FUNC_INFO << ", PARETO CHART")
+		// TODO: connect to data changes of the pareto chart when implemented
 	} else if (axis) {
 		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	} else {
@@ -2704,28 +2721,14 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	if (!isLoading() && !isPasted() && !child->isPasted() && !child->isMoved()) {
 		// new child was added which might change the ranges and the axis tick labels.
 		// adjust the plot area padding if the axis label is outside of the plot area
-		if (rangeChanged) {
-			const auto& axes = children<Axis>();
-			for (auto* a : axes) {
-				if (a->orientation() == WorksheetElement::Orientation::Vertical) {
-					double delta = d->dataRect.x() - a->graphicsItem()->boundingRect().x();
-					if (delta > horizontalPadding()) {
-						setUndoAware(false);
-						setSymmetricPadding(false);
-						setHorizontalPadding(delta);
-						setUndoAware(true);
-					}
-					break;
-				}
-			}
-		}
+		if (rangeChanged)
+			adjustPadding();
 
 		// if a theme was selected, apply the theme settings for newly added children,
 		// load default theme settings otherwise.
 		// no need to put these changes onto the undo stack, temporarily deactivate the undo awareness
 		// for the project globally so it's ignored for all elements below when applying the theme recursively.
-		if (project())
-			project()->setUndoAware(false);
+		ScopedUndoDisabler undoDisabler(project());
 
 		if (!d->theme.isEmpty()) {
 			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
@@ -2734,9 +2737,120 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			KConfig config;
 			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
 		}
+	}
+}
 
-		if (project())
-			project()->setUndoAware(true);
+void CartesianPlot::childAboutToBeAdded(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
+	if (isLoading())
+		return;
+
+	auto* paretoChart = dynamic_cast<const ParetoChart*>(child);
+	if (!paretoChart)
+		return;
+
+	// for Pareto chart we need a second range for the cumulative percentage of the total number of occurrences,
+	// add a new range if not already available
+	if (rangeCount(Dimension::Y) < 2)
+		addYRange(Range<double>(0, 100)); // add second y range
+	else if (range(Dimension::Y, 1) != Range<double>(0, 100))
+		setYRange(1, Range<double>(0, 100)); // set to 0 .. 100 if already available but different
+
+	// add the second coordinate system for the second y range if not already available and set it to use the second y range
+	if (coordinateSystemCount() < 2)
+		addCoordinateSystem(); // add cs for the second y range
+	setCoordinateSystemRangeIndex(coordinateSystemCount() - 1, Dimension::Y, 1);
+	enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
+
+	// add second y-axis if not available yet
+	Axis* secondYAxis = nullptr;
+	const auto& axes = children<Axis>();
+	for (auto* axis : axes) {
+		if (axis->orientation() == Axis::Orientation::Vertical && axis->position() == Axis::Position::Right) {
+			secondYAxis = axis;
+			break;
+		}
+	}
+	if (!secondYAxis) {
+		secondYAxis = new Axis(QLatin1String("y2"));
+		addChild(secondYAxis);
+	}
+	secondYAxis->setOrientation(Axis::Orientation::Vertical);
+	secondYAxis->setPosition(Axis::Position::Right);
+	secondYAxis->setMajorTicksDirection(Axis::ticksIn);
+	secondYAxis->setLabelsPosition(Axis::LabelsPosition::In);
+	secondYAxis->setLabelsSuffix(QLatin1String("%"));
+	secondYAxis->title()->setRotationAngle(90);
+	secondYAxis->setCoordinateSystemIndex(1);
+
+	// adjust axes properties as required for the Pareto chart
+	// x: place the ticks between the bars, show category labels, no grid lines
+	auto* firstXAxis = horizontalAxis();
+	if (firstXAxis) {
+		firstXAxis->title()->setText(QString());
+		firstXAxis->majorGridLine()->setStyle(Qt::NoPen);
+		firstXAxis->setMajorTicksStartType(Axis::TicksStartType::Offset);
+		firstXAxis->setMajorTickStartOffset(0.5);
+		firstXAxis->setMajorTicksType(Axis::TicksType::Spacing);
+		firstXAxis->setMajorTicksSpacing(1.);
+		firstXAxis->setMinorTicksDirection(Axis::noTicks);
+		firstXAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+		firstXAxis->setLabelsTextColumn(paretoChart->labelsColumn()); // show the category labels on the x-axis
+	}
+
+	// y:
+	auto* firstYAxis = verticalAxis();
+	if (firstYAxis) {
+		firstYAxis->title()->setText(i18n("Frequency"));
+		firstYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
+		firstYAxis->setMajorTicksNumber(secondYAxis->majorTicksNumber()); // same tick number as percentage axis
+	}
+
+	// y2:
+	secondYAxis->title()->setText(i18n("Cumulative Percentage"));
+	// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was addressed
+	secondYAxis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
+}
+
+/*!
+ * Adjusts the plot area padding to make sure that axis labels and titles are insight the plot area and fully visible.
+ */
+void CartesianPlot::adjustPadding() {
+	if (isLoading())
+		return;
+
+	Q_D(CartesianPlot);
+	QRectF plotRect = d->mapRectFromScene(d->rect);
+	const auto& axes = children<Axis>();
+
+	for (auto* a : axes) {
+		if (a->orientation() == WorksheetElement::Orientation::Vertical) {
+			if (a->position() == Axis::Position::Left) {
+				// left-side vertical axis - check if it extends beyond the left edge of the data rect
+				double delta = d->dataRect.x() - a->graphicsItem()->boundingRect().x();
+				if (delta > horizontalPadding()) {
+					setUndoAware(false);
+					setSymmetricPadding(false);
+					setHorizontalPadding(delta);
+					setUndoAware(true);
+				}
+			} else if (a->position() == Axis::Position::Right) {
+				// Map axis bounding rect from axis coordinates to plot coordinates
+				QRectF axisBoundingRect = d->mapRectFromItem(a->graphicsItem(), a->graphicsItem()->boundingRect());
+
+				// right-side vertical axis - check if it extends beyond the right edge of the plot rect
+				// (the axis itself is positioned at the right edge of the data rect, so we need to check
+				// against the plot rect to know how much padding is needed)
+				double delta = axisBoundingRect.right() - plotRect.right();
+				if (delta > 0) {
+					setUndoAware(false);
+					setSymmetricPadding(false);
+					// Increase the existing right padding by the overflow amount so that
+					// the axis (including title and tick labels) fits into the plot rect.
+					setRightPadding(rightPadding() + delta);
+					setUndoAware(true);
+				}
+			}
+		}
 	}
 }
 
@@ -2903,9 +3017,10 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 	else if (autoScale(Dimension::Y, yIndex))
 		updated = scaleAuto(Dimension::Y, yIndex);
 
-	if (updated)
+	if (updated) {
 		WorksheetElementContainer::retransform();
-	else {
+		adjustPadding(); // check if padding needs to be adjusted after the retransform
+	} else {
 		// even if the plot ranges were not changed, either no auto scale active or the new data
 		// is within the current ranges and no change of the ranges is required,
 		// retransform the curve in order to show the changes
@@ -2991,9 +3106,10 @@ void CartesianPlot::dataChanged(Plot* curve, const Dimension dim) {
 	}
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
-	if (updated)
+	if (updated) {
 		WorksheetElementContainer::retransform();
-	else {
+		adjustPadding(); // check if padding needs to be adjusted after the retransform
+	} else {
 		// even if the plot ranges were not changed, either no auto scale active or the new data
 		// is within the current ranges and no change of the ranges is required,
 		// retransform the curve in order to show the changes
@@ -3255,7 +3371,11 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		}
 		DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
 
-		plot->minMax(dim, indexRange, range, true);
+		// Pareto chart requires two coordinate systems, handle it differently.
+		if (plot->type() == AspectType::ParetoChart)
+			static_cast<const ParetoChart*>(plot)->multiMinMax(index, dim, indexRange, range, true);
+		else
+			plot->minMax(dim, indexRange, range, true);
 
 		// check ranges for nonlinear scales
 		if (range.scale() != RangeT::Scale::Linear)
@@ -5007,6 +5127,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(CartesianPlot);
 
 	if (!readBasicAttributes(reader))
@@ -5376,7 +5497,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("yOffset", stackYOffset);
 		} else if (!preview && reader->name() == QLatin1String("textLabel")) {
 			if (!titleLabelRead) {
-				m_title->setIsLoading(true);
 				// the first text label is always the title label
 				m_title->load(reader, preview);
 				titleLabelRead = true;
@@ -5387,7 +5507,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				m_title->setName(name() + QLatin1String(" - ") + i18n("Title"));
 			} else {
 				auto* label = new TextLabel(QStringLiteral("text label"), this);
-				label->setIsLoading(true);
 				if (label->load(reader, preview)) {
 					addChildFast(label);
 					label->setParentGraphicsItem(graphicsItem());
@@ -5398,7 +5517,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == QLatin1String("image")) {
 			auto* image = new Image(QString());
-			image->setIsLoading(true);
 			if (image->load(reader, preview))
 				addChildFast(image);
 			else {
@@ -5407,7 +5525,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == QLatin1String("infoElement")) {
 			auto* marker = new InfoElement(QStringLiteral("Marker"), this);
-			marker->setIsLoading(true);
 			if (marker->load(reader, preview)) {
 				addChildFast(marker);
 				marker->setParentGraphicsItem(graphicsItem());
@@ -5426,7 +5543,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					continue;
 
 				if (reader->name() == QLatin1String("background")) {
-					d->background->setIsLoading(true);
 					d->background->load(reader, preview);
 				} else if (reader->name() == QLatin1String("border")) {
 					attribs = reader->attributes();
@@ -5439,7 +5555,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					if (!str.isEmpty())
 						d->borderCornerRadius = str.toDouble();
 
-					d->borderLine->setIsLoading(true);
 					d->borderLine->load(reader, preview);
 				} else { // unknown element
 					reader->raiseUnknownElementWarning();
@@ -5456,7 +5571,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			d->background->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("axis")) {
 			auto* axis = new Axis(QString(), Axis::Orientation::Horizontal, true);
-			axis->setIsLoading(true);
 			if (axis->load(reader, preview))
 				addChildFast(axis);
 			else {
@@ -5465,7 +5579,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyCurve")) {
 			auto* curve = new XYCurve(QString(), AspectType::XYCurve, true);
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5474,7 +5587,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyEquationCurve")) {
 			auto* curve = new XYEquationCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5483,7 +5595,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == XYFunctionCurve::saveName) {
 			auto* curve = new XYFunctionCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5492,7 +5603,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyLineSimplificationCurve")) {
 			auto* curve = new XYLineSimplificationCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5501,7 +5611,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyDifferentiationCurve")) {
 			auto* curve = new XYDifferentiationCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5510,7 +5619,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyBaselineCorrectionCurve")) {
 			auto* curve = new XYBaselineCorrectionCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5519,7 +5627,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyIntegrationCurve")) {
 			auto* curve = new XYIntegrationCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5528,7 +5635,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyInterpolationCurve")) {
 			auto* curve = new XYInterpolationCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5537,7 +5643,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xySmoothCurve")) {
 			auto* curve = new XYSmoothCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5546,7 +5651,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyFitCurve")) {
 			auto* curve = new XYFitCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5555,7 +5659,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyFourierFilterCurve")) {
 			auto* curve = new XYFourierFilterCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5564,7 +5667,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyFourierTransformCurve")) {
 			auto* curve = new XYFourierTransformCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5573,7 +5675,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyHilbertTransformCurve")) {
 			auto* curve = new XYHilbertTransformCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5582,7 +5683,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyConvolutionCurve")) {
 			auto* curve = new XYConvolutionCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5591,7 +5691,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyCorrelationCurve")) {
 			auto* curve = new XYCorrelationCurve(QString());
-			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5600,7 +5699,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == QLatin1String("cartesianPlotLegend")) {
 			m_legend = new CartesianPlotLegend(QString());
-			m_legend->setIsLoading(true);
 			if (m_legend->load(reader, preview))
 				addChildFast(m_legend);
 			else {
@@ -5609,7 +5707,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == QLatin1String("customPoint")) {
 			auto* point = new CustomPoint(this, QString(), true);
-			point->setIsLoading(true);
 			if (point->load(reader, preview))
 				addChildFast(point);
 			else {
@@ -5618,7 +5715,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceLine")) {
 			auto* line = new ReferenceLine(this, QString(), true);
-			line->setIsLoading(true);
 			if (line->load(reader, preview))
 				addChildFast(line);
 			else {
@@ -5627,7 +5723,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceRange")) {
 			auto* range = new ReferenceRange(this, QString(), true);
-			range->setIsLoading(true);
 			if (range->load(reader, preview))
 				addChildFast(range);
 			else {
@@ -5636,7 +5731,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("boxPlot")) {
 			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"), true);
-			boxPlot->setIsLoading(true);
 			if (boxPlot->load(reader, preview))
 				addChildFast(boxPlot);
 			else {
@@ -5645,7 +5739,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("barPlot")) {
 			auto* barPlot = new BarPlot(QStringLiteral("BarPlot"));
-			barPlot->setIsLoading(true);
 			if (barPlot->load(reader, preview))
 				addChildFast(barPlot);
 			else {
@@ -5654,7 +5747,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("lollipopPlot")) {
 			auto* plot = new LollipopPlot(QStringLiteral("LollipopPlot"));
-			plot->setIsLoading(true);
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else {
@@ -5663,7 +5755,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("Histogram")) {
 			auto* hist = new Histogram(QStringLiteral("Histogram"), true);
-			hist->setIsLoading(true);
 			if (hist->load(reader, preview))
 				addChildFast(hist);
 			else {
@@ -5672,7 +5763,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("QQPlot")) {
 			auto* plot = new QQPlot(QStringLiteral("Q-Q Plot"));
-			plot->setIsLoading(true);
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else {
@@ -5681,28 +5771,30 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("KDEPlot")) {
 			auto* plot = new KDEPlot(QStringLiteral("KDE Plot"));
-			plot->setIsLoading(true);
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else
 				return false;
 		} else if (reader->name() == QLatin1String("ProcessBehaviorChart")) {
 			auto* plot = new ProcessBehaviorChart(QStringLiteral("Process Behavior Chart"), true);
-			plot->setIsLoading(true);
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else
 				return false;
 		} else if (reader->name() == QLatin1String("RunChart")) {
 			auto* plot = new RunChart(QStringLiteral("Run Chart"));
-			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
+		} else if (reader->name() == QLatin1String("ParetoChart")) {
+			auto* plot = new ParetoChart(QStringLiteral("Pareto Chart"), true);
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else
 				return false;
 		} else if (reader->name() == QLatin1String("cartesianPlot")) {
 			auto* plot = new CartesianPlot(QString(), true);
-			plot->setIsLoading(true);
 			if (!plot->load(reader, preview)) {
 				delete plot;
 				return false;
@@ -5840,5 +5932,6 @@ const QList<QColor>& CartesianPlot::plotColors() const {
 const QColor CartesianPlot::plotColor(int index) const {
 	Q_D(const CartesianPlot);
 	const int i = index % d->plotColors.count();
+
 	return d->plotColors.at(i);
 }

@@ -2965,6 +2965,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYCurve);
 
 	if (!readBasicAttributes(reader))

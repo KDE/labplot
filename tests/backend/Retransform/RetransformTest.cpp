@@ -2017,14 +2017,21 @@ void RetransformTest::xyFunctionCurve() {
 
 	{
 		const auto stat = c.statistic(false);
-		QCOMPARE(stat.count(), 4); // equationCurve, functionCurve, xAxis and yAxis are inside
+		// equationCurve, functionCurve, xAxis and yAxis are inside as well as plot itself (padding was adjusted)
+		QCOMPARE(stat.count(), 5);
 		QCOMPARE(stat.contains(equationCurve->path()), true);
 		QCOMPARE(stat.contains(functionCurve->path()), true);
 		QCOMPARE(stat.contains(axes.at(0)->path()), true);
 		QCOMPARE(stat.contains(axes.at(1)->path()), true);
-		QVERIFY(c.calledExact(1, false));
-		QCOMPARE(c.logsXScaleRetransformed.count(), 0); // only the y range changed
-		QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+
+		// children were retransfomed twice - initially and after the padding was adjusted
+		QCOMPARE(c.callCount(equationCurve->path()), 2);
+		QCOMPARE(c.callCount(functionCurve->path()), 2);
+		QCOMPARE(c.callCount(axes.at(0)->path()), 2);
+		QCOMPARE(c.callCount(axes.at(1)->path()), 2);
+
+		QCOMPARE(c.logsXScaleRetransformed.count(), 1); // x was also changed after padding adjustment
+		QCOMPARE(c.logsYScaleRetransformed.count(), 2); // initial change, one more after padding adjustment
 	}
 
 	{
@@ -2047,13 +2054,13 @@ void RetransformTest::xyFunctionCurve() {
 
 	{
 		const auto stat = c.statistic(false);
-		QCOMPARE(stat.count(), 4); // equationCurve, functionCurve, xAxis and yAxis are inside
+		QCOMPARE(stat.count(), 5); // equationCurve, functionCurve, xAxis and yAxis are inside
 		QCOMPARE(stat.contains(equationCurve->path()), true);
 		QCOMPARE(stat.contains(functionCurve->path()), true);
 		QCOMPARE(stat.contains(axes.at(0)->path()), true);
 		QCOMPARE(stat.contains(axes.at(1)->path()), true);
 		// QVERIFY(c.calledExact(1, false)); // TODO: how to verify that retransform gets called only once?
-		QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+		QCOMPARE(c.logsXScaleRetransformed.count(), 3); // initially 1, +1 after the curve was updates, +1 after padding adjustement
 		QVERIFY(c.logsYScaleRetransformed.count() >= 1);
 		// QCOMPARE(c.logsYScaleRetransformed.count(), 1);
 	}

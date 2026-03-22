@@ -14,6 +14,7 @@
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
@@ -30,7 +31,6 @@
 #include <QClipboard>
 #include <QModelIndex>
 #include <QRandomGenerator>
-#include <QUndoStack>
 
 //**********************************************************
 //****************** Copy&Paste tests **********************
@@ -1280,6 +1280,140 @@ void SpreadsheetTest::testMaskRowsWithMissingValues() {
 	QCOMPARE(col1->isMasked(2), true);
 	QCOMPARE(col1->isMasked(3), false);
 	QCOMPARE(col1->isMasked(4), true);
+}
+
+void SpreadsheetTest::testMaskingRowRemovalUndoRedo() {
+	// prepare project and spreadsheet to enable undo/redo
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(2);
+	sheet->setRowCount(10);
+
+	auto* col0 = sheet->column(0);
+	auto* col1 = sheet->column(1);
+	col0->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col1->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	// populate initial values
+	for (int r = 0; r < 10; ++r) {
+		col0->setValueAt(r, static_cast<double>(r)); // 0..9
+		col1->setValueAt(r, static_cast<double>(100 + r)); // 100..109
+	}
+
+	// set masking intervals on both columns: [2,4] and [7,8]
+	col0->setMasked(Interval<int>(2, 4), true);
+	col0->setMasked(Interval<int>(7, 8), true);
+	col1->setMasked(Interval<int>(2, 4), true);
+	col1->setMasked(Interval<int>(7, 8), true);
+
+	// pre-check masks and values
+	QCOMPARE(sheet->rowCount(), 10);
+	// masks col0
+	QCOMPARE(col0->isMasked(0), false);
+	QCOMPARE(col0->isMasked(1), false);
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(5), false);
+	QCOMPARE(col0->isMasked(6), false);
+	QCOMPARE(col0->isMasked(7), true);
+	QCOMPARE(col0->isMasked(8), true);
+	QCOMPARE(col0->isMasked(9), false);
+	// masks col1 (same intervals)
+	QCOMPARE(col1->isMasked(0), false);
+	QCOMPARE(col1->isMasked(1), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(5), false);
+	QCOMPARE(col1->isMasked(6), false);
+	QCOMPARE(col1->isMasked(7), true);
+	QCOMPARE(col1->isMasked(8), true);
+	QCOMPARE(col1->isMasked(9), false);
+	// values
+	QCOMPARE(col0->valueAt(0), 0.0);
+	QCOMPARE(col0->valueAt(9), 9.0);
+	QCOMPARE(col1->valueAt(0), 100.0);
+	QCOMPARE(col1->valueAt(9), 109.0);
+
+	// remove rows [3..6] (count=4 starting at first=3); overlaps with masked [3,4]
+	sheet->removeRows(3, 4);
+
+	// after removal, rowCount decreases and masks adjust: expected masks [2,2] and [3,4]
+	QCOMPARE(sheet->rowCount(), 6);
+	// masks col0
+	QCOMPARE(col0->isMasked(0), false);
+	QCOMPARE(col0->isMasked(1), false);
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(5), false);
+	// masks col1
+	QCOMPARE(col1->isMasked(0), false);
+	QCOMPARE(col1->isMasked(1), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(5), false);
+	// values after removal: rows now map to original [0,1,2,7,8,9]
+	QCOMPARE(col0->valueAt(0), 0.0);
+	QCOMPARE(col0->valueAt(1), 1.0);
+	QCOMPARE(col0->valueAt(2), 2.0);
+	QCOMPARE(col0->valueAt(3), 7.0);
+	QCOMPARE(col0->valueAt(4), 8.0);
+	QCOMPARE(col0->valueAt(5), 9.0);
+	QCOMPARE(col1->valueAt(0), 100.0);
+	QCOMPARE(col1->valueAt(1), 101.0);
+	QCOMPARE(col1->valueAt(2), 102.0);
+	QCOMPARE(col1->valueAt(3), 107.0);
+	QCOMPARE(col1->valueAt(4), 108.0);
+	QCOMPARE(col1->valueAt(5), 109.0);
+
+	// undo: restore rows and original masks/values
+	project.undoStack()->undo();
+
+	QCOMPARE(sheet->rowCount(), 10);
+	// masks
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(7), true);
+	QCOMPARE(col0->isMasked(8), true);
+	QCOMPARE(col0->isMasked(5), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(7), true);
+	QCOMPARE(col1->isMasked(8), true);
+	QCOMPARE(col1->isMasked(5), false);
+	// values restored
+	QCOMPARE(col0->valueAt(0), 0.0);
+	QCOMPARE(col0->valueAt(9), 9.0);
+	QCOMPARE(col1->valueAt(0), 100.0);
+	QCOMPARE(col1->valueAt(9), 109.0);
+
+	// redo: apply removal again and verify adjusted masks/values
+	project.undoStack()->redo();
+
+	QCOMPARE(sheet->rowCount(), 6);
+	// masks
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(5), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(5), false);
+	// values
+	QCOMPARE(col0->valueAt(3), 7.0);
+	QCOMPARE(col0->valueAt(4), 8.0);
+	QCOMPARE(col0->valueAt(5), 9.0);
+	QCOMPARE(col1->valueAt(3), 107.0);
+	QCOMPARE(col1->valueAt(4), 108.0);
+	QCOMPARE(col1->valueAt(5), 109.0);
 }
 
 // **********************************************************
@@ -2924,17 +3058,9 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	dock.setSpreadsheets({sheetCalculations});
 	auto* modelSheetCalculations = new SpreadsheetModel(sheetCalculations);
 
-	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
-	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
-	QCOMPARE(dock.m_spreadsheet->linking(), false);
+	QCOMPARE(dock.m_spreadsheet->linkedSpreadsheet(), nullptr);
 
-	dock.ui.cbLinkingEnabled->toggled(true);
-
-	// QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), true); // does not work here. Don't know why
-	// QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), true);
-	// QCOMPARE(dock.ui.sbRowCount->isEnabled(), false);
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
 	QCOMPARE(sheetCalculations->rowCount(), 2);
@@ -2952,7 +3078,6 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData2);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData2);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData2->path());
 	QCOMPARE(sheetCalculations->rowCount(), 100);
@@ -2960,7 +3085,6 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 
 	sheetCalculations->undoStack()->undo();
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -2968,14 +3092,12 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 
 	sheetCalculations->undoStack()->redo();
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData2);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData2->path());
 	QCOMPARE(sheetCalculations->rowCount(), 100);
 	QCOMPARE(modelSheetCalculations->rowCount(), 100);
 
 	sheetCalculations->undoStack()->undo(); // first undo
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -2983,17 +3105,9 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 
 	sheetCalculations->undoStack()->undo();
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr); // No linked spreadsheet anymore
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
 	QCOMPARE(sheetCalculations->rowCount(), 2); // Go back to original row count
-	QCOMPARE(modelSheetCalculations->rowCount(), 2);
-
-	sheetCalculations->undoStack()->undo();
-	QCOMPARE(sheetCalculations->linking(), false);
-	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
-	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
-	QCOMPARE(sheetCalculations->rowCount(), 2);
 	QCOMPARE(modelSheetCalculations->rowCount(), 2);
 }
 
@@ -3015,16 +3129,11 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
-	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
-	QCOMPARE(sheetCalculations->linking(), false);
-
-	Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -3032,7 +3141,6 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 	sheetData->remove();
 	sheetData->setRowCount(100);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), i18n("Project") + QStringLiteral("/data"));
 	QCOMPARE(sheetCalculations->rowCount(), 10); // does not change
@@ -3042,7 +3150,6 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 	sheetDataNew->setRowCount(12);
 	project.addChild(sheetDataNew);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetDataNew);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetDataNew->path());
 	QCOMPARE(sheetCalculations->rowCount(), 12);
@@ -3066,16 +3173,11 @@ void SpreadsheetTest::testLinkSpreadsheetAddRow() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
-	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
-	QCOMPARE(sheetCalculations->linking(), false);
-
-	Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -3083,7 +3185,6 @@ void SpreadsheetTest::testLinkSpreadsheetAddRow() {
 	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
 	sheetData->setRowCount(13);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 13);
@@ -3107,16 +3208,11 @@ void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
-	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
-	QCOMPARE(sheetCalculations->linking(), false);
-
-	dock.ui.cbLinkingEnabled->toggled(true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -3124,7 +3220,6 @@ void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
 	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
 	sheetData->setRowCount(7);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 7);
@@ -3161,10 +3256,8 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
 		for (int i = 0; i < 10; i++)
 			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
 	}
-	sheetCalculations->setLinking(true);
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -3210,10 +3303,8 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculateRowCountChange() {
 		for (int i = 0; i < 2; i++)
 			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
 	}
-	sheetCalculations->setLinking(true);
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -3274,16 +3365,11 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 		SpreadsheetDock dock(nullptr);
 		dock.setSpreadsheets({sheetCalculations});
 
-		QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
-		QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 		QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
-		QCOMPARE(sheetCalculations->linking(), false);
-
-		Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
+		QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 
 		sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-		QCOMPARE(sheetCalculations->linking(), true);
 		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 		QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -3300,14 +3386,12 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 		auto sheetCalculations = project.child<Spreadsheet>(1);
 		QVERIFY(sheetCalculations);
 
-		QCOMPARE(sheetCalculations->linking(), true);
 		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 		QCOMPARE(sheetCalculations->rowCount(), 10);
 
 		sheetData->setRowCount(11); // Changing shall also update sheetCalculations also after loading
 
-		QCOMPARE(sheetCalculations->linking(), true);
 		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 		QCOMPARE(sheetCalculations->rowCount(), 11);
@@ -3331,10 +3415,8 @@ void SpreadsheetTest::testLinkSpreadsheetsModelDockUpdateCheckRemoveRows() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	sheetCalculations->setLinking(true);
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 20);
@@ -3359,10 +3441,8 @@ void SpreadsheetTest::testLinkSpreadsheetsModelDockUpdateCheckInsertRows() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	sheetCalculations->setLinking(true);
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 100);
@@ -3619,10 +3699,8 @@ BO_ 541 MSG2: 8 Vector__XXX
 			VALUES_EQUAL(sheetCalculationsColumn1->doubleAt(i), ref.at(i));
 	}
 
-	sheetCalculations->setLinking(true);
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);

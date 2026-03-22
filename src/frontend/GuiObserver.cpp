@@ -52,6 +52,7 @@
 #include "frontend/dockwidgets/LollipopPlotDock.h"
 #include "frontend/dockwidgets/MatrixDock.h"
 #include "frontend/dockwidgets/NoteDock.h"
+#include "frontend/dockwidgets/ParetoChartDock.h"
 #include "frontend/dockwidgets/ProcessBehaviorChartDock.h"
 #include "frontend/dockwidgets/ProjectDock.h"
 #include "frontend/dockwidgets/QQPlotDock.h"
@@ -397,6 +398,12 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_runChartDock, m_mainWindow->stackedWidget);
 		m_runChartDock->setPlots(castList<RunChart>(selectedAspects));
 		break;
+	case AspectType::ParetoChart:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Pareto Chart"));
+		raiseDock(m_paretoChartDock, m_mainWindow->stackedWidget);
+		m_paretoChartDock->setPlots(castList<ParetoChart>(selectedAspects));
+		break;
+	// 3d
 	case AspectType::Surface3DPlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Surface Plot"));
 		raiseDock(m_surfacePlotDock, m_mainWindow->stackedWidget);
