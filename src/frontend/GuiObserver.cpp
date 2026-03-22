@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description 	     : GUI observer
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
 
@@ -15,6 +15,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
+#include "backend/worksheet/ScriptButton.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
@@ -59,6 +60,7 @@
 #include "frontend/dockwidgets/ReferenceLineDock.h"
 #include "frontend/dockwidgets/ReferenceRangeDock.h"
 #include "frontend/dockwidgets/RunChartDock.h"
+#include "frontend/dockwidgets/ScriptButtonDock.h"
 #include "frontend/dockwidgets/SpreadsheetDock.h"
 #ifdef HAVE_SCRIPTING
 #include "frontend/dockwidgets/ScriptDock.h"
@@ -413,9 +415,10 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_imageDock, m_mainWindow->stackedWidget);
 		m_imageDock->setImages(castList<Image>(selectedAspects));
 		break;
-	case AspectType::ScriptWorksheetElement:
+	case AspectType::ScriptButton:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Script Button"));
-		// TODO: Add dock widget for ScriptWorksheetElement properties
+		raiseDock(m_scriptButtonDock, m_mainWindow->stackedWidget);
+		m_scriptButtonDock->setScriptButtons(castList<ScriptButton>(selectedAspects));
 		break;
 	case AspectType::CustomPoint:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Custom Point"));
