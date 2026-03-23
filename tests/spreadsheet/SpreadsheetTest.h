@@ -68,6 +68,7 @@ private Q_SLOTS:
 	void testRemoveRowsWithMissingValues();
 	void testMaskRowsWithMissingValues();
 	void testMaskingRowRemovalUndoRedo();
+	void testSortMasksSingleColumn();
 
 	// flattening
 	void testFlatten00();

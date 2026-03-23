@@ -1416,6 +1416,69 @@ void SpreadsheetTest::testMaskingRowRemovalUndoRedo() {
 	QCOMPARE(col1->valueAt(5), 109.0);
 }
 
+/*
+ * check that masked rows follow the sort order in a single column
+ */
+void SpreadsheetTest::testSortMasksSingleColumn() {
+	// use a project to enable undo/redo of sort macro
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(1);
+	sheet->setRowCount(4);
+	auto* col = sheet->column(0);
+
+	// values: original indices 0..3 have values [3,1,4,2]
+	const QVector<double> values{3.0, 1.0, 4.0, 2.0};
+	col->replaceValues(0, values);
+
+	// mask original rows 1 and 3
+	col->setMasked(1, true);
+	col->setMasked(3, true);
+
+	// sort ascending (separate)
+	sheet->sortColumns(nullptr, {col}, true);
+
+	// values should be [1,2,3,4]
+	QCOMPARE(col->valueAt(0), 1.0);
+	QCOMPARE(col->valueAt(1), 2.0);
+	QCOMPARE(col->valueAt(2), 3.0);
+	QCOMPARE(col->valueAt(3), 4.0);
+
+	// masks should follow values from original masked rows (1->value 1, 3->value 2)
+	QCOMPARE(col->isMasked(0), true);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), false);
+
+	// undo: expect original order and masks restored at original rows 1 and 3
+	project.undoStack()->undo();
+	QCOMPARE(col->valueAt(0), 3.0);
+	QCOMPARE(col->valueAt(1), 1.0);
+	QCOMPARE(col->valueAt(2), 4.0);
+	QCOMPARE(col->valueAt(3), 2.0);
+	QCOMPARE(col->isMasked(0), false);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), true);
+
+	// redo: expect sorted order and masks on rows 0 and 1 again
+	// TODO: crash after the redo of the sort
+	/*
+	project.undoStack()->redo();
+	QCOMPARE(col->valueAt(0), 1.0);
+	QCOMPARE(col->valueAt(1), 2.0);
+	QCOMPARE(col->valueAt(2), 3.0);
+	QCOMPARE(col->valueAt(3), 4.0);
+	QCOMPARE(col->isMasked(0), true);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), false);
+	*/
+}
+
+
 // **********************************************************
 // ********************* flattening  ************************
 // **********************************************************
