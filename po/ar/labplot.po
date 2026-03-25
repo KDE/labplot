@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-03-08 22:56+0400\n"
+"PO-Revision-Date: 2026-03-24 10:43+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -6320,7 +6320,7 @@ msgstr "‏%1: اعكس أفقيّا"
 #: src/backend/matrix/matrixcommands.h:388
 #, kde-format
 msgid "%1: mirror vertically"
-msgstr "‏%1: اعكس رأسيّا"
+msgstr "‏%1: اعكس عموديًا"
 
 #: src/backend/note/Note.cpp:74
 #, kde-format
@@ -7866,17 +7866,17 @@ msgstr "%1: اضبط المقياس"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:662
 #, kde-format
 msgid "%1: set major tick start type"
-msgstr "%1: اضبط نوع بدء العلامة الرئيسية"
+msgstr "%1: اضبط نوع بدء العلامة الرئيسة"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:669
 #, kde-format
 msgid "%1: set major tick start offset"
-msgstr "%1: اضبط إزاحة بدء العلامة الرئيسية"
+msgstr "%1: اضبط إزاحة بدء العلامة الرئيسة"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:677
 #, kde-format
 msgid "%1: set major tick start value"
-msgstr "%1: اضبط قيمة بدء العلامة الرئيسية"
+msgstr "%1: اضبط قيمة بدء العلامة الرئيسة"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:689
 #, kde-format
@@ -7922,44 +7922,44 @@ msgstr "%1: اضبط حجم السهم"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:756
 #, kde-format
 msgid "%1: set major ticks direction"
-msgstr "%1: اضبط اتجاه علامات التدريج الرئيسية"
+msgstr "%1: اضبط اتجاه علامات التدريج الرئيسة"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:763
 #, kde-format
 msgid "%1: set major ticks type"
-msgstr "%1: اضبط نوع علامات التدريج الرئيسية"
+msgstr "%1: اضبط نوع علامات التدريج الرئيسة"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:771
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
-msgstr "%1: فعّل/عطّل أرقام علامات التدريج الرئيسية الآلية"
+msgstr "%1: فعّل/عطّل أرقام علامات التدريج الرئيسة الآلية"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:773
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:788
 #, kde-format
 msgid "%1: set the total number of the major ticks"
-msgstr "%1: اضبط العدد الإجمالي لعلامات التدريج الرئيسية"
+msgstr "%1: اضبط العدد الإجمالي لعلامات التدريج الرئيسة"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:790
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:874
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
-msgstr "%1: عطّل أرقام علامات التدريج الرئيسية الآلية"
+msgstr "%1: عطّل أرقام علامات التدريج الرئيسة الآلية"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:815
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
-msgstr "%1: اضبط تباعد علامات التدريج الرئيسية"
+msgstr "%1: اضبط تباعد علامات التدريج الرئيسة"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:822
 #, kde-format
 msgid "%1: assign major ticks' values"
-msgstr "%1: عيّن قيم علامات التدريج الرئيسية"
+msgstr "%1: عيّن قيم علامات التدريج الرئيسة"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:836
 #, kde-format
 msgid "%1: set major ticks length"
-msgstr "%1: اضبط طول علامات التدريج الرئيسية"
+msgstr "%1: اضبط طول علامات التدريج الرئيسة"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:844
 #, kde-format
@@ -10206,7 +10206,7 @@ msgstr "%1: اِضبط المحاذاة الأفقية"
 #: src/backend/worksheet/WorksheetElement.cpp:786
 #, kde-format
 msgid "%1: set vertical alignment"
-msgstr "%1: اِضبط المحاذاة الرأسية"
+msgstr "%1: اِضبط المحاذاة العمودية"
 
 #: src/backend/worksheet/WorksheetElement.cpp:801
 #, kde-format
@@ -13725,7 +13725,7 @@ msgstr "لا يوجد تخطيط"
 #: src/frontend/worksheet/WorksheetView.cpp:233
 #, kde-format
 msgid "Vertical Layout"
-msgstr "تخطيط رأسي"
+msgstr "تخطيط عمودي"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:236
@@ -13813,7 +13813,7 @@ msgstr "بداية أفقي"
 #: src/frontend/dockwidgets/XYCurveDock.cpp:487
 #, kde-format
 msgid "Vert. Start"
-msgstr "بداية رأسي"
+msgstr "بداية عمودية"
 
 #: src/frontend/dockwidgets/XYCurveDock.cpp:488
 #, kde-format
@@ -13823,7 +13823,7 @@ msgstr "نقطة المنتصف الأفقية"
 #: src/frontend/dockwidgets/XYCurveDock.cpp:489
 #, kde-format
 msgid "Vert. Midpoint"
-msgstr "نقطة المنتصف الرأسية"
+msgstr "نقطة المنتصف العمودية"
 
 #: src/frontend/dockwidgets/XYCurveDock.cpp:490
 #, kde-format
@@ -15621,7 +15621,7 @@ msgstr "اعكس أفقيّا"
 #: src/frontend/matrix/MatrixView.cpp:144
 #, kde-format
 msgid "Mirror &Vertically"
-msgstr "اعكس رأسيّا"
+msgstr "اعكس عموديًا"
 
 #: src/frontend/matrix/MatrixView.cpp:147
 #, kde-format
@@ -20353,7 +20353,7 @@ msgstr "التّباعد:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:764
 #, kde-format
 msgid "Major Ticks"
-msgstr "علامات التجزئة الرئيسية"
+msgstr "علامات التجزئة الرئيسة"
 
 #. i18n: ectx: property (text), widget (QLabel, lIncrementDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lIncrement)
@@ -20614,7 +20614,7 @@ msgstr "شبكة ثانوية"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1679
 #, kde-format
 msgid "Major Grid"
-msgstr "شبكة رئيسية"
+msgstr "شبكة رئيسة"
 
 #. i18n: ectx: property (text), widget (QLabel, lEnabled)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -21498,7 +21498,7 @@ msgstr "مضمّنة:"
 #: src/frontend/ui/dockwidgets/imagedock.ui:364
 #, kde-format
 msgid "Vert. align.:"
-msgstr "محاذاة رأسية:"
+msgstr "محاذاة عمودية:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/frontend/ui/dockwidgets/imagedock.ui:421
@@ -21541,7 +21541,7 @@ msgstr "الخطوط"
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:249
 #, kde-format
 msgid "Vertical Line"
-msgstr "خط رأسي"
+msgstr "خط عمودي"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLines)
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:267
@@ -24723,7 +24723,7 @@ msgstr "مسافات أفقية:"
 #: src/frontend/worksheet/GridDialog.cpp:58
 #, kde-format
 msgid "Vertical spacing:"
-msgstr "مسافات رأسية:"
+msgstr "مسافات عمودية:"
 
 #: src/frontend/worksheet/SlidingPanel.cpp:86
 #, kde-format
