@@ -29,7 +29,7 @@ target_precompile_headers(labplotmetatest PRIVATE
     "${SRC_DIR}/backend/lib/Debug.h"
 )
 
-add_subdirectory(analysis)
+# add_subdirectory(analysis)
 add_subdirectory(backend)
 add_subdirectory(cartesianplot)
 add_subdirectory(import_export)
