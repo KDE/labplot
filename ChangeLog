@@ -32,6 +32,11 @@ New features:
 		* Allow to import arrays in JSON files that contain plain data only
 	* [examples]
 		* Added "All" in the examples dialog to navigate and search in the example projects from _all_ collections
+	* [datasets]
+		* Show the more user-friendly dataset names instead of file names in the import dialog
+		* Switched to HTTPS for all datasets in JSE collection, jse.amsat.org enforces HTTPS now
+		* Added the collection of datasets from OpenIntro (https://www.openintro.org/data/)
+		* Added the collection of datasets from UCI Machine Learning Repository (https://archive.ics.uci.edu/)
 
 Performance improvements:
 		* Improved drawing performance (!731)

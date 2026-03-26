@@ -23,6 +23,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkInformation>
 #include <QNetworkReply>
+#include <QRegularExpression>
 #include <QStandardPaths>
 
 #include <KConfigGroup>
@@ -145,9 +146,13 @@ void ImportDatasetWidget::loadCategories() {
 						const QJsonArray& datasetArray = currentSubCategory.value(QLatin1String("datasets")).toArray();
 
 						// processing the datasets of the actual subcategory
-						for (const auto& dataset : datasetArray)
-							m_datasetsMap[m_collection][categoryName][subcategoryName].push_back(
-								dataset.toObject().value(QLatin1String("filename")).toString());
+						for (const auto& dataset : datasetArray) {
+							const QJsonObject& datasetObj = dataset.toObject();
+							const QString& displayName = datasetObj.contains(QLatin1String("name"))
+								? datasetObj.value(QLatin1String("name")).toString()
+								: datasetObj.value(QLatin1String("filename")).toString();
+							m_datasetsMap[m_collection][categoryName][subcategoryName].push_back(displayName);
+						}
 					}
 				}
 			}
@@ -412,8 +417,11 @@ QJsonObject ImportDatasetWidget::loadDatasetObject() {
 
 								// processing the datasets of the actual subcategory
 								for (const auto& dataset : datasetArray) {
-									if (getSelectedDataset().compare(dataset.toObject().value(QLatin1String("filename")).toString()) == 0)
-										return dataset.toObject();
+									const QJsonObject& datasetObj = dataset.toObject();
+									const QString& selected = getSelectedDataset();
+									if (selected == datasetObj.value(QLatin1String("name")).toString()
+										|| selected == datasetObj.value(QLatin1String("filename")).toString())
+										return datasetObj;
 								}
 
 								if (!m_subcategory.isEmpty())
@@ -521,7 +529,9 @@ void ImportDatasetWidget::datasetChanged() {
 				return;
 			} else if (QNetworkInformation::instance()->reachability() == QNetworkInformation::Reachability::Online) {
 				WAIT_CURSOR_AUTO_RESET;
-				m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject[QLatin1String("description_url")].toString())));
+				QNetworkRequest request(QUrl(m_datasetObject[QLatin1String("description_url")].toString()));
+				request.setHeader(QNetworkRequest::UserAgentHeader, QStringLiteral("LabPlot")); // add the agent header, some URLs like OpenInto require it
+				m_networkManager->get(request);
 			}
 		} else {
 			m_datasetDescription = QStringLiteral("<b>") + i18n("Dataset") + QStringLiteral(":</b><br>");
@@ -563,6 +573,80 @@ void ImportDatasetWidget::downloadFinished(QNetworkReply* reply) {
 
 			info = info.replace(QLatin1String("<body>\n\n\n\n\n\n"), QLatin1String("<body>"));
 			info = info.remove(QLatin1String("\n\n\n"));
+		} else if (m_collection == QLatin1String("UCI")) {
+			// UCI pages are full web pages with navbar, sidebar, footer, cookie banners, etc.
+			// Extract only the relevant dataset description from the main content area.
+
+			// extract content within <main>...</main>
+			int mainStart = info.indexOf(QLatin1String("<main"));
+			int mainEnd = info.indexOf(QLatin1String("</main>"));
+			if (mainStart != -1 && mainEnd != -1)
+				info = info.mid(mainStart, mainEnd - mainStart + 7);
+
+			// remove the sidebar (download/cite/python import section)
+			int sidebarStart = info.indexOf(QLatin1String("col-span-12 md:col-span-3"));
+			if (sidebarStart != -1) {
+				sidebarStart = info.lastIndexOf(QLatin1String("<div"), sidebarStart);
+				if (sidebarStart != -1)
+					info = info.left(sidebarStart);
+			}
+
+			// remove everything from "Dataset Files" section onwards
+			int cutoff = info.indexOf(QLatin1String(">Dataset Files<"));
+			if (cutoff == -1)
+				cutoff = info.indexOf(QLatin1String(">Papers Citing"));
+			if (cutoff != -1) {
+				int sectionStart = info.lastIndexOf(QLatin1String("<div class=\"shadow\""), cutoff);
+				if (sectionStart != -1)
+					info = info.left(sectionStart);
+			}
+
+			// remove SVG, image, button, select/option, and script elements
+			static const QRegularExpression svgRe(QStringLiteral("<svg[^>]*>.*?</svg>"),
+												 QRegularExpression::DotMatchesEverythingOption);
+			static const QRegularExpression imgRe(QStringLiteral("<img[^>]*/?>"));
+			static const QRegularExpression buttonRe(QStringLiteral("<button[^>]*>.*?</button>"),
+													QRegularExpression::DotMatchesEverythingOption);
+			static const QRegularExpression selectRe(QStringLiteral("<select[^>]*>.*?</select>"),
+													QRegularExpression::DotMatchesEverythingOption);
+			static const QRegularExpression scriptRe(QStringLiteral("<script[^>]*>.*?</script>"),
+													QRegularExpression::DotMatchesEverythingOption);
+			static const QRegularExpression commentRe(QStringLiteral("<!--.*?-->"),
+													 QRegularExpression::DotMatchesEverythingOption);
+			info.remove(svgRe);
+			info.remove(imgRe);
+			info.remove(buttonRe);
+			info.remove(selectRe);
+			info.remove(scriptRe);
+			info.remove(commentRe);
+		} else if (m_collection == QLatin1String("OpenIntro")) {
+			// OpenIntro pages are full web pages. The dataset description is between
+			// <!-- PlainStart --> and <!-- PlainEnd --> markers, inside a <section> with actual content.
+
+			// extract content between the markers
+			int start = info.indexOf(QLatin1String("<!-- PlainStart -->"));
+			int end = info.indexOf(QLatin1String("<!-- PlainEnd -->"));
+			if (start != -1 && end != -1)
+				info = info.mid(start, end - start);
+
+			// narrow to the inner section containing the actual description
+			int sectionStart = info.indexOf(QLatin1String("<section style="));
+			if (sectionStart != -1)
+				info = info.mid(sectionStart);
+
+			// remove the "Downloads" section and everything after it
+			int downloadsStart = info.indexOf(QLatin1String("<h2>Downloads</h2>"));
+			if (downloadsStart != -1)
+				info = info.left(downloadsStart);
+
+			// remove the "Return to..." link
+			static const QRegularExpression returnLinkRe(QStringLiteral("<a[^>]*>Return to[^<]*</a>"));
+			info.remove(returnLinkRe);
+
+			// remove script tags
+			static const QRegularExpression scriptReOI(QStringLiteral("<script[^>]*>.*?</script>"),
+													   QRegularExpression::DotMatchesEverythingOption);
+			info.remove(scriptReOI);
 		} else
 			info = info.replace(QLatin1Char('\n'), QLatin1String("<br>"));
 

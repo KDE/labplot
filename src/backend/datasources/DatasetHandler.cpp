@@ -146,13 +146,10 @@ void DatasetHandler::configureSpreadsheet(const QString& description) {
 		else
 			markMetadataAsInvalid();
 
-		if (description.startsWith(QLatin1String("<!DOCTYPE html"))) {
-			// remove html-formatting
-			QTextEdit te;
-			te.setHtml(description);
-			m_spreadsheet->setComment(te.toPlainText());
-		} else
-			m_spreadsheet->setComment(description);
+		// remove any html-formatting, use plain text only for the comment
+		QTextEdit te;
+		te.setHtml(description);
+		m_spreadsheet->setComment(te.toPlainText());
 	} else
 		markMetadataAsInvalid();
 }
@@ -180,6 +177,7 @@ void DatasetHandler::doDownload(const QUrl& url) {
 	QDEBUG("Download request " << url);
 	QNetworkRequest request(url);
 	request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
+	request.setHeader(QNetworkRequest::UserAgentHeader, QStringLiteral("LabPlot")); // add the agent header, some URLs like OpenInto require it
 	m_currentDownload = m_downloadManager->get(request);
 	connect(m_currentDownload, &QNetworkReply::downloadProgress, [this](qint64 bytesReceived, qint64 bytesTotal) {
 		double progress;
