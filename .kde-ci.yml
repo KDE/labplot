@@ -48,5 +48,6 @@ Options:
   ccache-large-cache: True
   per-test-timeout: 120
   require-passing-tests-on: ['@all']
+  release-build: True
   cmake-options: '-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON'
   core-usage-limit: 8
