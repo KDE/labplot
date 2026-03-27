@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-21 00:40+0000\n"
+"POT-Creation-Date: 2026-03-27 00:40+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -1135,12 +1135,12 @@ msgstr "%1: desenhar pontos sobre o segmento"
 msgid "The metadata file for the selected dataset is invalid."
 msgstr "O ficheiro de meta-dados do conjunto seleccionado é inválido."
 
-#: src/backend/datasources/DatasetHandler.cpp:170
+#: src/backend/datasources/DatasetHandler.cpp:167
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr "Não existe nenhum URL de transferência no ficheiro de meta-dados!"
 
-#: src/backend/datasources/DatasetHandler.cpp:202
+#: src/backend/datasources/DatasetHandler.cpp:200
 #, fuzzy, kde-format
 #| msgid "Failed to connect to the database '%1'."
 msgid ""
@@ -1148,13 +1148,13 @@ msgid ""
 "%2."
 msgstr "Não foi possível ligar-se à base de dados '%1'."
 
-#: src/backend/datasources/DatasetHandler.cpp:236
+#: src/backend/datasources/DatasetHandler.cpp:234
 #, fuzzy, kde-format
 #| msgid "Failed to create table in the SQLite database %1."
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "Não foi possível criar uma tabela na base de dados SQLite %1."
 
-#: src/backend/datasources/DatasetHandler.cpp:259
+#: src/backend/datasources/DatasetHandler.cpp:257
 #, fuzzy, kde-format
 #| msgid "Couldn't open the file '%1' for writing."
 msgid ""
@@ -12717,7 +12717,7 @@ msgid "Switch between icon and list views"
 msgstr "Alternar entre a vista em lista e de ícones"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:51
-#: src/frontend/datasources/ImportDatasetWidget.cpp:51
+#: src/frontend/datasources/ImportDatasetWidget.cpp:52
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:125
 #: src/frontend/examples/ExamplesWidget.cpp:48
 #, kde-format
@@ -12725,7 +12725,7 @@ msgid "Enter the keyword you want to search for"
 msgstr "Indique a palavra-chave que está a pesquisar"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:54
-#: src/frontend/datasources/ImportDatasetWidget.cpp:54
+#: src/frontend/datasources/ImportDatasetWidget.cpp:55
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:128
 #: src/frontend/examples/ExamplesWidget.cpp:51
 #, kde-format
@@ -13198,8 +13198,8 @@ msgid "Dataset imported in %1 seconds."
 msgstr "O conjunto de dados foi importado em %1 segundos."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
-#: src/frontend/datasources/ImportDatasetWidget.cpp:161
-#: src/frontend/datasources/ImportDatasetWidget.cpp:230
+#: src/frontend/datasources/ImportDatasetWidget.cpp:166
+#: src/frontend/datasources/ImportDatasetWidget.cpp:235
 #: src/frontend/examples/ExamplesWidget.cpp:57
 #: src/frontend/ui/datasources/importfilewidget.ui:785
 #: src/frontend/ui/dockwidgets/livedatadock.ui:267
@@ -13207,14 +13207,14 @@ msgstr "O conjunto de dados foi importado em %1 segundos."
 msgid "All"
 msgstr "Tudo"
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:168
+#: src/frontend/datasources/ImportDatasetWidget.cpp:173
 #: src/frontend/examples/ExamplesManager.cpp:192
 #: src/tools/ColorMapsManager.cpp:177
 #, kde-format
 msgid "File not found"
 msgstr "O ficheiro não foi encontrado"
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:169
+#: src/frontend/datasources/ImportDatasetWidget.cpp:174
 #, kde-format
 msgid ""
 "Couldn't open the dataset collections file %1. Please check your "
@@ -13223,13 +13223,13 @@ msgstr ""
 "Não foi possível abrir o ficheiro de colecções de conjuntos de dados '%1'. "
 "Verifique por favor a sua instalação."
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:527
+#: src/frontend/datasources/ImportDatasetWidget.cpp:537
 #, kde-format
 msgid "Dataset"
 msgstr "Conjunto de dados"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/frontend/datasources/ImportDatasetWidget.cpp:530
+#: src/frontend/datasources/ImportDatasetWidget.cpp:540
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, kde-format
 msgid "Description"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-21 00:40+0000\n"
+"POT-Creation-Date: 2026-03-27 00:40+0000\n"
 "PO-Revision-Date: 2025-11-21 01:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -1063,12 +1063,12 @@ msgstr "%1: rita punkter över segment"
 msgid "The metadata file for the selected dataset is invalid."
 msgstr "Metadatafilen för den valda datamängden är ogiltig."
 
-#: src/backend/datasources/DatasetHandler.cpp:170
+#: src/backend/datasources/DatasetHandler.cpp:167
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr "Det finns ingen nerladdad webbadress tillgänglig i metadatafilen."
 
-#: src/backend/datasources/DatasetHandler.cpp:202
+#: src/backend/datasources/DatasetHandler.cpp:200
 #, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
@@ -1077,12 +1077,12 @@ msgstr ""
 "Misslyckades ladda ner datamängden från %1.\n"
 "%2."
 
-#: src/backend/datasources/DatasetHandler.cpp:236
+#: src/backend/datasources/DatasetHandler.cpp:234
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "Misslyckades skapa katalogen %1 för att spara datamängden."
 
-#: src/backend/datasources/DatasetHandler.cpp:259
+#: src/backend/datasources/DatasetHandler.cpp:257
 #, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -12408,7 +12408,7 @@ msgid "Switch between icon and list views"
 msgstr "Byt mellan ikon- och listvy"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:51
-#: src/frontend/datasources/ImportDatasetWidget.cpp:51
+#: src/frontend/datasources/ImportDatasetWidget.cpp:52
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:125
 #: src/frontend/examples/ExamplesWidget.cpp:48
 #, kde-format
@@ -12416,7 +12416,7 @@ msgid "Enter the keyword you want to search for"
 msgstr "Ange nyckelordet som du vill söka efter"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:54
-#: src/frontend/datasources/ImportDatasetWidget.cpp:54
+#: src/frontend/datasources/ImportDatasetWidget.cpp:55
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:128
 #: src/frontend/examples/ExamplesWidget.cpp:51
 #, kde-format
@@ -12897,8 +12897,8 @@ msgid "Dataset imported in %1 seconds."
 msgstr "Datamängd importerad på %1 sekunder."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
-#: src/frontend/datasources/ImportDatasetWidget.cpp:161
-#: src/frontend/datasources/ImportDatasetWidget.cpp:230
+#: src/frontend/datasources/ImportDatasetWidget.cpp:166
+#: src/frontend/datasources/ImportDatasetWidget.cpp:235
 #: src/frontend/examples/ExamplesWidget.cpp:57
 #: src/frontend/ui/datasources/importfilewidget.ui:785
 #: src/frontend/ui/dockwidgets/livedatadock.ui:267
@@ -12906,14 +12906,14 @@ msgstr "Datamängd importerad på %1 sekunder."
 msgid "All"
 msgstr "Alla"
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:168
+#: src/frontend/datasources/ImportDatasetWidget.cpp:173
 #: src/frontend/examples/ExamplesManager.cpp:192
 #: src/tools/ColorMapsManager.cpp:177
 #, kde-format
 msgid "File not found"
 msgstr "Filen hittades inte"
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:169
+#: src/frontend/datasources/ImportDatasetWidget.cpp:174
 #, kde-format
 msgid ""
 "Couldn't open the dataset collections file %1. Please check your "
@@ -12921,13 +12921,13 @@ msgid ""
 msgstr ""
 "Kunde inte hitta datamängdssamlingsfilen %1. Kontrollera installationen."
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:527
+#: src/frontend/datasources/ImportDatasetWidget.cpp:537
 #, kde-format
 msgid "Dataset"
 msgstr "Datamängd"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/frontend/datasources/ImportDatasetWidget.cpp:530
+#: src/frontend/datasources/ImportDatasetWidget.cpp:540
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, kde-format
 msgid "Description"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-21 00:40+0000\n"
+"POT-Creation-Date: 2026-03-27 00:40+0000\n"
 "PO-Revision-Date: 2026-03-21 06:44+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1070,12 +1070,12 @@ msgstr "%1: rišite točke nad odsekom"
 msgid "The metadata file for the selected dataset is invalid."
 msgstr "Datoteka metapodatkov za izbrani nabor podatkov ni veljavna."
 
-#: src/backend/datasources/DatasetHandler.cpp:170
+#: src/backend/datasources/DatasetHandler.cpp:167
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr "V datoteki metapodatkov ni URL-ja za prenos!"
 
-#: src/backend/datasources/DatasetHandler.cpp:202
+#: src/backend/datasources/DatasetHandler.cpp:200
 #, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
@@ -1084,12 +1084,12 @@ msgstr ""
 "Prenos podatkovne zbirke iz %1 ni uspel.\n"
 "%2."
 
-#: src/backend/datasources/DatasetHandler.cpp:236
+#: src/backend/datasources/DatasetHandler.cpp:234
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "Kreiranje imenika %1 za shranjevanje podatkovne zbirke ni uspelo."
 
-#: src/backend/datasources/DatasetHandler.cpp:259
+#: src/backend/datasources/DatasetHandler.cpp:257
 #, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -12288,7 +12288,7 @@ msgid "Switch between icon and list views"
 msgstr "Preklopi med pogledoma ikone in seznama"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:51
-#: src/frontend/datasources/ImportDatasetWidget.cpp:51
+#: src/frontend/datasources/ImportDatasetWidget.cpp:52
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:125
 #: src/frontend/examples/ExamplesWidget.cpp:48
 #, kde-format
@@ -12296,7 +12296,7 @@ msgid "Enter the keyword you want to search for"
 msgstr "Vnesite ključno besedo, ki jo želite poiskati"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:54
-#: src/frontend/datasources/ImportDatasetWidget.cpp:54
+#: src/frontend/datasources/ImportDatasetWidget.cpp:55
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:128
 #: src/frontend/examples/ExamplesWidget.cpp:51
 #, kde-format
@@ -12771,8 +12771,8 @@ msgid "Dataset imported in %1 seconds."
 msgstr "Nabor podatkov se je uvozil v %1 s."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
-#: src/frontend/datasources/ImportDatasetWidget.cpp:161
-#: src/frontend/datasources/ImportDatasetWidget.cpp:230
+#: src/frontend/datasources/ImportDatasetWidget.cpp:166
+#: src/frontend/datasources/ImportDatasetWidget.cpp:235
 #: src/frontend/examples/ExamplesWidget.cpp:57
 #: src/frontend/ui/datasources/importfilewidget.ui:785
 #: src/frontend/ui/dockwidgets/livedatadock.ui:267
@@ -12780,14 +12780,14 @@ msgstr "Nabor podatkov se je uvozil v %1 s."
 msgid "All"
 msgstr "Vse"
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:168
+#: src/frontend/datasources/ImportDatasetWidget.cpp:173
 #: src/frontend/examples/ExamplesManager.cpp:192
 #: src/tools/ColorMapsManager.cpp:177
 #, kde-format
 msgid "File not found"
 msgstr "Datoteke ni mogoče najti"
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:169
+#: src/frontend/datasources/ImportDatasetWidget.cpp:174
 #, kde-format
 msgid ""
 "Couldn't open the dataset collections file %1. Please check your "
@@ -12796,13 +12796,13 @@ msgstr ""
 "Datoteke zbirk množic podatkov %1 ni bilo mogoče odpreti. Preverite "
 "namestitev."
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:527
+#: src/frontend/datasources/ImportDatasetWidget.cpp:537
 #, kde-format
 msgid "Dataset"
 msgstr "Nabor podatkov"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/frontend/datasources/ImportDatasetWidget.cpp:530
+#: src/frontend/datasources/ImportDatasetWidget.cpp:540
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, kde-format
 msgid "Description"
