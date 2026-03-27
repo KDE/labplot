@@ -14,7 +14,6 @@
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "frontend/datasources/MQTTErrorWidget.h"
 
 #include <QTimer>
 #include <QtMqtt/QMqttSubscription>
@@ -1073,21 +1072,17 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 }
 
 /*!
- *\brief Handles some of the possible errors of the client, using MQTTErrorWidget
+ *\brief Handles some of the possible errors of the client by emitting clientErrorOccurred.
  */
 void MQTTClient::MQTTErrorChanged(QMqttClient::ClientError clientError) {
-	if (clientError != QMqttClient::ClientError::NoError) {
-		auto* errorWidget = new MQTTErrorWidget(clientError, this);
-		errorWidget->show();
-	}
+	if (clientError != QMqttClient::ClientError::NoError)
+		Q_EMIT clientErrorOccurred(clientError);
 }
 
 void MQTTClient::disconnected() {
 	auto error = m_client->error();
-	if (error != QMqttClient::ClientError::NoError) {
-		auto* errorWidget = new MQTTErrorWidget(error, this);
-		errorWidget->show();
-	}
+	if (error != QMqttClient::ClientError::NoError)
+		Q_EMIT clientErrorOccurred(error);
 }
 
 /*!

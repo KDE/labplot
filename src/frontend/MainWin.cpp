@@ -31,6 +31,7 @@
 #endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
+#include "frontend/datasources/MQTTErrorWidget.h"
 #endif
 
 #include "frontend/ActionsManager.h"
@@ -1333,6 +1334,15 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	} else if (aspect->type() == AspectType::Folder)
 		for (auto* child : aspect->children<AbstractAspect>())
 			handleAspectAdded(child);
+#ifdef HAVE_MQTT
+	if (aspect->type() == AspectType::MQTTClient) {
+		auto* client = const_cast<MQTTClient*>(static_cast<const MQTTClient*>(aspect));
+		connect(client, &MQTTClient::clientErrorOccurred, this, [client](QMqttClient::ClientError error) {
+			auto* errorWidget = new MQTTErrorWidget(error, client);
+			errorWidget->show();
+		});
+	}
+#endif
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* aspect) {

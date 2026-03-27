@@ -779,10 +779,6 @@ if(Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
     foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj labplot_datasources_obj)
         target_link_libraries(${_labplot_obj} PRIVATE Qt${QT_MAJOR_VERSION}::Mqtt)
     endforeach()
-    # MQTTClient.cpp (in labplot_datasources_obj) includes MQTTErrorWidget.h → ui_mqtterrorwidget.h.
-    # Tell AUTOUIC where to find mqtterrorwidget.ui so it can generate the header for this target.
-    set_property(TARGET labplot_datasources_obj APPEND PROPERTY
-        AUTOUIC_SEARCH_PATHS ${FRONTEND_DIR}/ui/datasources)
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::Mqtt)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Mqtt)
 endif()
