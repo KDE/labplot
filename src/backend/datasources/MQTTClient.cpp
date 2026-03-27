@@ -15,6 +15,7 @@
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 
+#include <QIcon>
 #include <QTimer>
 #include <QtMqtt/QMqttSubscription>
 #include <QtMqtt/QMqttTopicName>
