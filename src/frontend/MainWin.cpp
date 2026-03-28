@@ -1703,7 +1703,7 @@ void MainWin::migrateSettings() {
 	const QString lastVersion = group.readEntry(QLatin1String("lastRunVersion"), QString());
 	if (lastVersion != QLatin1String(LVERSION)) {
 		m_showWhatsNew = true;
-		group.writeEntry(QLatin1String("lastRunVersion"), QLatin1String(LVERSION));
+		group.writeEntry(QLatin1String("lastRunVersion"), QString(QLatin1String(LVERSION)));
 		Settings::sync();
 	}
 }
