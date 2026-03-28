@@ -11,6 +11,7 @@
 
 #include "AbstractAspectTest.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/Folder.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -511,6 +512,409 @@ void AbstractAspectTest::moveUpDown() {
 	QCOMPARE(project.child<AbstractAspect>(0), worksheet);
 	QCOMPARE(project.child<AbstractAspect>(1), spreadsheet2);
 	QCOMPARE(project.child<AbstractAspect>(2), spreadsheet);
+}
+
+/*!
+ * \brief AbstractAspectTest::reparentSimple
+ * Move a leaf object (Spreadsheet) from the project root into a sub-folder.
+ * Verify parent pointer and tree-model consistency.
+ */
+void AbstractAspectTest::reparentSimple() {
+	Project project;
+	AspectTreeModel treeModel(&project, this);
+
+	auto* folder = new Folder(QStringLiteral("Folder"));
+	project.addChild(folder);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	// initial state: both folder and spreadsheet are direct children of the project
+	QCOMPARE(project.childCount<AbstractAspect>(), 2);
+	QCOMPARE(spreadsheet->parentAspect(), &project);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 2);
+
+	// move the spreadsheet into the folder
+	spreadsheet->reparent(folder);
+
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+	QCOMPARE(folder->childCount<AbstractAspect>(), 1);
+	QCOMPARE(spreadsheet->parentAspect(), folder);
+	QCOMPARE(folder->child<AbstractAspect>(0), spreadsheet);
+
+	// verify tree model consistency
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 1);
+	const auto folderIdx = treeModel.modelIndexOfAspect(folder);
+	QCOMPARE(treeModel.data(treeModel.index(0, 0, folderIdx)).toString(), QStringLiteral("Spreadsheet"));
+}
+
+/*!
+ * \brief AbstractAspectTest::reparentSimpleUndoRedo
+ * Move a leaf (Spreadsheet) into a sub-folder, undo, then redo.
+ * Verify aspect tree and model consistency at each step.
+ */
+void AbstractAspectTest::reparentSimpleUndoRedo() {
+	Project project;
+	AspectTreeModel treeModel(&project, this);
+
+	auto* folder = new Folder(QStringLiteral("Folder"));
+	project.addChild(folder);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	auto* undoStack = project.undoStack();
+
+	// move the spreadsheet into the folder
+	spreadsheet->reparent(folder);
+
+	QCOMPARE(spreadsheet->parentAspect(), folder);
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+	QCOMPARE(folder->childCount<AbstractAspect>(), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 1);
+
+	// undo
+	undoStack->undo();
+
+	QCOMPARE(spreadsheet->parentAspect(), &project);
+	QCOMPARE(project.childCount<AbstractAspect>(), 2);
+	QCOMPARE(folder->childCount<AbstractAspect>(), 0);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 2);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 0);
+
+	// redo
+	undoStack->redo();
+
+	QCOMPARE(spreadsheet->parentAspect(), folder);
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+	QCOMPARE(folder->childCount<AbstractAspect>(), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 1);
+	const auto folderIdx = treeModel.modelIndexOfAspect(folder);
+	QCOMPARE(treeModel.data(treeModel.index(0, 0, folderIdx)).toString(), QStringLiteral("Spreadsheet"));
+}
+
+/*!
+ * \brief AbstractAspectTest::reparentWithChildren
+ * Move a Worksheet (which has child objects — a CartesianPlot with curves) into a
+ * sub-folder. Verify that the whole subtree moves together and the tree model
+ * (AspectTreeModel) stays consistent throughout.
+ */
+void AbstractAspectTest::reparentWithChildren() {
+	Project project;
+	AspectTreeModel treeModel(&project, this);
+
+	auto* folder = new Folder(QStringLiteral("Folder"));
+	project.addChild(folder);
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	worksheet->addChild(plot);
+
+	auto* curve = new XYCurve(QStringLiteral("Curve"));
+	plot->addChild(curve);
+
+	// initial state
+	QCOMPARE(project.childCount<AbstractAspect>(), 2); // folder + worksheet
+	QCOMPARE(worksheet->parentAspect(), &project);
+
+	// move the worksheet (with its subtree) into the folder
+	worksheet->reparent(folder);
+
+	// parent updated
+	QCOMPARE(worksheet->parentAspect(), folder);
+
+	// project now has only the folder as a direct child
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+
+	// folder contains the worksheet
+	QCOMPARE(folder->childCount<AbstractAspect>(), 1);
+	QCOMPARE(folder->child<AbstractAspect>(0), worksheet);
+
+	// worksheet's subtree is intact
+	const auto plots = worksheet->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.count(), 1);
+	QCOMPARE(plots.at(0), plot);
+
+	const auto curves = worksheet->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(curves.count(), 1);
+	QCOMPARE(curves.at(0), curve);
+
+	// verify tree model consistency
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 1);
+	const auto folderIdx = treeModel.modelIndexOfAspect(folder);
+	QCOMPARE(treeModel.data(treeModel.index(0, 0, folderIdx)).toString(), QStringLiteral("Worksheet"));
+}
+
+/*!
+ * \brief AbstractAspectTest::reparentWithChildrenUndoRedo
+ * Move a Worksheet with children into a sub-folder, then undo the move (worksheet
+ * returns to the project root), then redo (worksheet is back in the folder).
+ * The AspectTreeModel is kept alive throughout to detect any begin/end imbalance
+ * that would crash or corrupt the model.
+ */
+void AbstractAspectTest::reparentWithChildrenUndoRedo() {
+	Project project;
+	AspectTreeModel treeModel(&project, this);
+
+	auto* folder = new Folder(QStringLiteral("Folder"));
+	project.addChild(folder);
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	worksheet->addChild(plot);
+
+	auto* curve = new XYCurve(QStringLiteral("Curve"));
+	plot->addChild(curve);
+
+	auto* undoStack = project.undoStack();
+
+	// 3 commands on the undo stack: addFolder, addWorksheet, addPlot, addCurve
+	const int stackDepthBeforeReparent = undoStack->count();
+
+	// move the worksheet into the folder
+	worksheet->reparent(folder);
+	QCOMPARE(undoStack->count(), stackDepthBeforeReparent + 1);
+
+	// post-move state
+	QCOMPARE(worksheet->parentAspect(), folder);
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+	QCOMPARE(folder->childCount<AbstractAspect>(), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 1);
+
+	// undo — worksheet should return to the project root
+	undoStack->undo();
+
+	QCOMPARE(worksheet->parentAspect(), &project);
+	QCOMPARE(project.childCount<AbstractAspect>(), 2); // folder + worksheet
+	QCOMPARE(folder->childCount<AbstractAspect>(), 0);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 2);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 0);
+
+	// worksheet's subtree must still be intact after undo
+	QCOMPARE(worksheet->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive).count(), 1);
+	QCOMPARE(worksheet->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive).count(), 1);
+
+	// redo — worksheet moves into the folder again
+	undoStack->redo();
+
+	QCOMPARE(worksheet->parentAspect(), folder);
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+	QCOMPARE(folder->childCount<AbstractAspect>(), 1);
+	QCOMPARE(folder->child<AbstractAspect>(0), worksheet);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 1);
+
+	// subtree intact after redo
+	QCOMPARE(worksheet->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive).count(), 1);
+	QCOMPARE(worksheet->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive).count(), 1);
+}
+
+/*!
+ * \brief AbstractAspectTest::reparentBetweenFolders
+ * Move a Spreadsheet from one sub-folder to another sub-folder.
+ */
+void AbstractAspectTest::reparentBetweenFolders() {
+	Project project;
+	AspectTreeModel treeModel(&project, this);
+
+	auto* folderA = new Folder(QStringLiteral("FolderA"));
+	project.addChild(folderA);
+
+	auto* folderB = new Folder(QStringLiteral("FolderB"));
+	project.addChild(folderB);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	folderA->addChild(spreadsheet);
+
+	// initial state
+	QCOMPARE(folderA->childCount<AbstractAspect>(), 1);
+	QCOMPARE(folderB->childCount<AbstractAspect>(), 0);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderA)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderB)), 0);
+
+	// move from folderA to folderB
+	spreadsheet->reparent(folderB);
+
+	QCOMPARE(spreadsheet->parentAspect(), folderB);
+	QCOMPARE(folderA->childCount<AbstractAspect>(), 0);
+	QCOMPARE(folderB->childCount<AbstractAspect>(), 1);
+	QCOMPARE(folderB->child<AbstractAspect>(0), spreadsheet);
+
+	// model consistency
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderA)), 0);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderB)), 1);
+	const auto folderBIdx = treeModel.modelIndexOfAspect(folderB);
+	QCOMPARE(treeModel.data(treeModel.index(0, 0, folderBIdx)).toString(), QStringLiteral("Spreadsheet"));
+
+	// undo — spreadsheet goes back to folderA
+	project.undoStack()->undo();
+
+	QCOMPARE(spreadsheet->parentAspect(), folderA);
+	QCOMPARE(folderA->childCount<AbstractAspect>(), 1);
+	QCOMPARE(folderB->childCount<AbstractAspect>(), 0);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderA)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderB)), 0);
+
+	// redo
+	project.undoStack()->redo();
+
+	QCOMPARE(spreadsheet->parentAspect(), folderB);
+	QCOMPARE(folderA->childCount<AbstractAspect>(), 0);
+	QCOMPARE(folderB->childCount<AbstractAspect>(), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderA)), 0);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderB)), 1);
+}
+
+/*!
+ * \brief AbstractAspectTest::reparentToProjectRoot
+ * Move a Spreadsheet from a sub-folder back up to the project root.
+ */
+void AbstractAspectTest::reparentToProjectRoot() {
+	Project project;
+	AspectTreeModel treeModel(&project, this);
+
+	auto* folder = new Folder(QStringLiteral("Folder"));
+	project.addChild(folder);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	folder->addChild(spreadsheet);
+
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+	QCOMPARE(folder->childCount<AbstractAspect>(), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 1);
+
+	// move spreadsheet up to the project root
+	spreadsheet->reparent(&project);
+
+	QCOMPARE(spreadsheet->parentAspect(), &project);
+	QCOMPARE(project.childCount<AbstractAspect>(), 2); // folder + spreadsheet
+	QCOMPARE(folder->childCount<AbstractAspect>(), 0);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 2);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 0);
+
+	// undo — spreadsheet returns to the folder
+	project.undoStack()->undo();
+
+	QCOMPARE(spreadsheet->parentAspect(), folder);
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+	QCOMPARE(folder->childCount<AbstractAspect>(), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 1);
+}
+
+/*!
+ * \brief AbstractAspectTest::reparentToNestedFolder
+ * Move a Spreadsheet from the project root into a deeply nested folder (folder/subfolder).
+ */
+void AbstractAspectTest::reparentToNestedFolder() {
+	Project project;
+	AspectTreeModel treeModel(&project, this);
+
+	auto* folder = new Folder(QStringLiteral("Folder"));
+	project.addChild(folder);
+
+	auto* subfolder = new Folder(QStringLiteral("Subfolder"));
+	folder->addChild(subfolder);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	QCOMPARE(project.childCount<AbstractAspect>(), 2); // folder + spreadsheet
+	QCOMPARE(subfolder->childCount<AbstractAspect>(), 0);
+
+	// move spreadsheet into the nested subfolder
+	spreadsheet->reparent(subfolder);
+
+	QCOMPARE(spreadsheet->parentAspect(), subfolder);
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+	QCOMPARE(subfolder->childCount<AbstractAspect>(), 1);
+	QCOMPARE(subfolder->child<AbstractAspect>(0), spreadsheet);
+
+	// model consistency at every level
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folder)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(subfolder)), 1);
+	const auto subfolderIdx = treeModel.modelIndexOfAspect(subfolder);
+	QCOMPARE(treeModel.data(treeModel.index(0, 0, subfolderIdx)).toString(), QStringLiteral("Spreadsheet"));
+
+	// undo
+	project.undoStack()->undo();
+
+	QCOMPARE(spreadsheet->parentAspect(), &project);
+	QCOMPARE(project.childCount<AbstractAspect>(), 2);
+	QCOMPARE(subfolder->childCount<AbstractAspect>(), 0);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 2);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(subfolder)), 0);
+}
+
+/*!
+ * \brief AbstractAspectTest::reparentFolder
+ * Move a Folder (containing a Spreadsheet) into another Folder.
+ * This is the path exercised by processDropEvent for Folder-on-Folder drops.
+ */
+void AbstractAspectTest::reparentFolder() {
+	Project project;
+	AspectTreeModel treeModel(&project, this);
+
+	auto* folderA = new Folder(QStringLiteral("FolderA"));
+	project.addChild(folderA);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	folderA->addChild(spreadsheet);
+
+	auto* folderB = new Folder(QStringLiteral("FolderB"));
+	project.addChild(folderB);
+
+	QCOMPARE(project.childCount<AbstractAspect>(), 2);
+	QCOMPARE(folderA->childCount<AbstractAspect>(), 1);
+
+	// move folderA (with its child spreadsheet) into folderB
+	folderA->reparent(folderB);
+
+	QCOMPARE(folderA->parentAspect(), folderB);
+	QCOMPARE(project.childCount<AbstractAspect>(), 1); // only folderB
+	QCOMPARE(folderB->childCount<AbstractAspect>(), 1); // folderA
+	QCOMPARE(folderA->childCount<AbstractAspect>(), 1); // spreadsheet
+	QCOMPARE(folderA->child<AbstractAspect>(0), spreadsheet);
+
+	// model consistency
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderB)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderA)), 1);
+	const auto folderAIdx = treeModel.modelIndexOfAspect(folderA);
+	QCOMPARE(treeModel.data(treeModel.index(0, 0, folderAIdx)).toString(), QStringLiteral("Spreadsheet"));
+
+	// undo — folderA returns to the project root
+	project.undoStack()->undo();
+
+	QCOMPARE(folderA->parentAspect(), &project);
+	QCOMPARE(project.childCount<AbstractAspect>(), 2);
+	QCOMPARE(folderB->childCount<AbstractAspect>(), 0);
+	QCOMPARE(folderA->childCount<AbstractAspect>(), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 2);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderB)), 0);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderA)), 1);
+
+	// redo
+	project.undoStack()->redo();
+
+	QCOMPARE(folderA->parentAspect(), folderB);
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+	QCOMPARE(folderB->childCount<AbstractAspect>(), 1);
+	QCOMPARE(folderA->childCount<AbstractAspect>(), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(&project)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderB)), 1);
+	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderA)), 1);
 }
 
 QTEST_MAIN(AbstractAspectTest)

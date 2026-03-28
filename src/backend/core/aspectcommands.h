@@ -206,21 +206,34 @@ public:
 
 		Q_EMIT m_target->q->childAspectRemoved(m_target->q, nullptr, m_child);
 
-		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, nullptr, m_child);
-		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, m_index, m_child);
+		auto* beforeRedo = m_new_index < m_new_parent->m_children.count() ? m_new_parent->m_children.at(m_new_index) : nullptr;
+		Q_EMIT m_new_parent->q->childAspectAboutToBeAdded(m_new_parent->q, beforeRedo, m_child);
+		Q_EMIT m_new_parent->q->childAspectAboutToBeAdded(m_new_parent->q, m_new_index, m_child);
 
 		m_new_parent->insertChild(m_new_index, m_child);
 
-		Q_EMIT m_target->q->childAspectAdded(m_child);
+		Q_EMIT m_new_parent->q->childAspectAdded(m_child);
 	}
 
 	// calling undo transfers ownership of m_child back to its previous parent aspect
 	void undo() override {
 		Q_ASSERT(m_index != -1);
-		Q_EMIT m_child->childAspectAboutToBeRemoved(m_child);
+
+		if (!m_child->isHidden() || m_child->type() == AspectType::DatapickerPoint)
+			Q_EMIT m_new_parent->q->childAspectAboutToBeRemoved(m_child);
+		Q_EMIT m_child->aspectAboutToBeRemoved(m_child);
+
 		removeChild(m_new_parent, m_child);
+
+		Q_EMIT m_new_parent->q->childAspectRemoved(m_new_parent->q, nullptr, m_child);
+
+		auto* beforeUndo = m_index < m_target->m_children.count() ? m_target->m_children.at(m_index) : nullptr;
+		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, beforeUndo, m_child);
+		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, m_index, m_child);
+
 		m_target->insertChild(m_index, m_child);
-		Q_EMIT m_child->childAspectAdded(m_child);
+
+		Q_EMIT m_target->q->childAspectAdded(m_child);
 	}
 
 protected:

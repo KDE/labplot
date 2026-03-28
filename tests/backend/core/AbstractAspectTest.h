@@ -34,6 +34,15 @@ private Q_SLOTS:
 	void moveUp();
 	void moveDown();
 	void moveUpDown();
+
+	void reparentSimple();
+	void reparentSimpleUndoRedo();
+	void reparentWithChildren();
+	void reparentWithChildrenUndoRedo();
+	void reparentBetweenFolders();
+	void reparentToProjectRoot();
+	void reparentToNestedFolder();
+	void reparentFolder();
 };
 
 #endif // ABSTRACTASPECTTEST_H
