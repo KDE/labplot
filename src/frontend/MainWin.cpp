@@ -37,6 +37,7 @@
 #include "frontend/ActionsManager.h"
 #include "frontend/GuiObserver.h"
 #include "frontend/HistoryDialog.h"
+#include "frontend/WhatsNewDialog.h"
 #include "frontend/ProjectExplorer.h"
 #include "frontend/SettingsDialog.h"
 #include "frontend/colormaps/ColorMapsDialog.h"
@@ -306,6 +307,13 @@ void MainWin::initGUI(const QString& fileName) {
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
+
+	if (m_showWhatsNew) {
+		QTimer::singleShot(0, this, [this]() {
+			auto* dlg = new WhatsNewDialog(this);
+			dlg->exec();
+		});
+	}
 }
 
 /**
@@ -1689,6 +1697,14 @@ void MainWin::migrateSettings() {
 		// delete the old entry and write the new one
 		group.deleteEntry(QLatin1String("DecimalSeparatorLocale"));
 		group.writeEntry(QLatin1String("NumberFormat"), static_cast<int>(language));
+	}
+
+	// detect first run after a version upgrade and schedule the "What's New" dialog
+	const QString lastVersion = group.readEntry(QLatin1String("lastRunVersion"), QString());
+	if (lastVersion != QLatin1String(LVERSION)) {
+		m_showWhatsNew = true;
+		group.writeEntry(QLatin1String("lastRunVersion"), QLatin1String(LVERSION));
+		Settings::sync();
 	}
 }
 

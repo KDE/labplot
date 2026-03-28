@@ -18,6 +18,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/GuiTools.cpp
     ${FRONTEND_DIR}/HistoryDialog.cpp
     ${FRONTEND_DIR}/MainWin.cpp
+    ${FRONTEND_DIR}/WhatsNewDialog.cpp
     ${FRONTEND_DIR}/PlotTemplateDialog.cpp
     ${FRONTEND_DIR}/ProjectExplorer.cpp
     ${FRONTEND_DIR}/SettingsDialog.cpp

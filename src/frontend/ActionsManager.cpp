@@ -8,6 +8,7 @@
  */
 
 #include "frontend/AboutDialog.h"
+#include "frontend/WhatsNewDialog.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -504,6 +505,14 @@ void ActionsManager::initActions() {
 
 	// actions used in the toolbars
 	initSpreadsheetToolbarActions();
+
+	// what's new action
+	m_whatsNewAction = new QAction(QIcon::fromTheme(QStringLiteral("help-whats-new")), i18n("What's New"), this);
+	collection->addAction(QStringLiteral("whats_new"), m_whatsNewAction);
+	connect(m_whatsNewAction, &QAction::triggered, m_mainWindow, [this]() {
+		auto* dlg = new WhatsNewDialog(m_mainWindow);
+		dlg->exec();
+	});
 	initWorksheetToolbarActions();
 	initPlotAreaToolbarActions();
 	initDataExtractorToolbarActions();
@@ -1063,6 +1072,8 @@ void ActionsManager::initMenus() {
     if (helpMenu) {
         auto* whatsThis = collection->action(KStandardAction::name(KStandardAction::WhatsThis));
         helpMenu->insertAction(whatsThis, helpAction);
+        helpMenu->insertAction(whatsThis, m_whatsNewAction);
+        helpMenu->insertSeparator(whatsThis);
     }
 }
 
