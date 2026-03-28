@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog showing what's new in the current release
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2025 LabPlot developers
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -26,7 +26,7 @@
 	\brief Shows the changelog for the current release on first launch after an upgrade.
 
 	The dialog reads a versioned HTML file from the application data directory
-	(e.g. whats-new/whats-new-2.12.80.html). If the file is not found it falls
+	(e.g. whats-new/whats-new-3.0.html). If the file is not found it falls
 	back to a link pointing to the online changelog.
 
 	\ingroup frontend
