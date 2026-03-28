@@ -196,7 +196,14 @@ public:
 		setText(i18n("%1: move %2 to %3.", m_target->m_name, m_child->name(), m_new_parent->m_name));
 	}
 
-	// calling redo transfers ownership of m_child to the new parent aspect
+	// calling redo transfers ownership of m_child to the new parent aspect.
+	// Signal sequence:
+	//   1. Remove from old parent (m_target): aboutToBeRemoved → removeChild → removed
+	//   2. Add to new parent (m_new_parent): aboutToBeAdded → insertChild → added
+	// Signals must be emitted on the respective parent (not on m_child) so they
+	// propagate up to the root via connectChild() and reach the AspectTreeModel.
+	// The "before" sibling is resolved from the target index so the model calls
+	// beginInsertRows at the correct position rather than always at the end.
 	void redo() override {
 		if (!m_child->isHidden() || m_child->type() == AspectType::DatapickerPoint)
 			Q_EMIT m_target->q->childAspectAboutToBeRemoved(m_child);
@@ -215,7 +222,8 @@ public:
 		Q_EMIT m_new_parent->q->childAspectAdded(m_child);
 	}
 
-	// calling undo transfers ownership of m_child back to its previous parent aspect
+	// calling undo transfers ownership of m_child back to its previous parent aspect.
+	// Mirror of redo(): remove from new parent, re-add to old parent at the saved index.
 	void undo() override {
 		Q_ASSERT(m_index != -1);
 

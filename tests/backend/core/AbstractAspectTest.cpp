@@ -917,4 +917,50 @@ void AbstractAspectTest::reparentFolder() {
 	QCOMPARE(treeModel.rowCount(treeModel.modelIndexOfAspect(folderA)), 1);
 }
 
+/*!
+ * \brief AbstractAspectTest::reparentPreservesOrder
+ * Move the first child of the project root into a folder, then undo.
+ * Verify that the model reports items in the original order (not appended at the end).
+ * This catches the bug where beginInsertRows was always called with the last position.
+ */
+void AbstractAspectTest::reparentPreservesOrder() {
+	Project project;
+	AspectTreeModel treeModel(&project, this);
+
+	// Create children in a specific order: Worksheet first, then Folder
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* folder = new Folder(QStringLiteral("Folder"));
+	project.addChild(folder);
+
+	// initial order in model: Worksheet (row 0), Folder (row 1)
+	const auto projectIdx = treeModel.modelIndexOfAspect(&project);
+	QCOMPARE(treeModel.data(treeModel.index(0, 0, projectIdx)).toString(), QStringLiteral("Worksheet"));
+	QCOMPARE(treeModel.data(treeModel.index(1, 0, projectIdx)).toString(), QStringLiteral("Folder"));
+
+	// move the worksheet (index 0) into the folder
+	worksheet->reparent(folder);
+
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+	QCOMPARE(treeModel.rowCount(projectIdx), 1);
+	QCOMPARE(treeModel.data(treeModel.index(0, 0, projectIdx)).toString(), QStringLiteral("Folder"));
+
+	// undo — worksheet must return to index 0, before Folder
+	project.undoStack()->undo();
+
+	QCOMPARE(project.childCount<AbstractAspect>(), 2);
+	QCOMPARE(treeModel.rowCount(projectIdx), 2);
+	// the original order must be restored in the model
+	QCOMPARE(treeModel.data(treeModel.index(0, 0, projectIdx)).toString(), QStringLiteral("Worksheet"));
+	QCOMPARE(treeModel.data(treeModel.index(1, 0, projectIdx)).toString(), QStringLiteral("Folder"));
+
+	// redo — worksheet goes back into folder
+	project.undoStack()->redo();
+
+	QCOMPARE(project.childCount<AbstractAspect>(), 1);
+	QCOMPARE(treeModel.rowCount(projectIdx), 1);
+	QCOMPARE(treeModel.data(treeModel.index(0, 0, projectIdx)).toString(), QStringLiteral("Folder"));
+}
+
 QTEST_MAIN(AbstractAspectTest)
