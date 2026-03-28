@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-27 00:40+0000\n"
+"POT-Creation-Date: 2026-03-28 00:39+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -442,7 +442,7 @@ msgstr "nekompatibilan filter tip"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:158 src/backend/core/Project.cpp:710
-#: src/backend/datasources/MQTTClient.cpp:1368
+#: src/backend/datasources/MQTTClient.cpp:1364
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
 #: src/backend/lib/XmlStreamReader.cpp:104
@@ -499,7 +499,7 @@ msgstr "Napravljeno"
 msgid "Comment"
 msgstr "Komentar"
 
-#: src/backend/core/AspectTreeModel.cpp:173 src/frontend/MainWin.cpp:1135
+#: src/backend/core/AspectTreeModel.cpp:173 src/frontend/MainWin.cpp:1136
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "Changed"
@@ -2044,7 +2044,7 @@ msgid "Unknown"
 msgstr "nepoznato"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:231 src/frontend/MainWin.cpp:1227
+#: src/frontend/ActionsManager.cpp:231 src/frontend/MainWin.cpp:1228
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2461,7 +2461,7 @@ msgid "Failed to parse the file."
 msgstr "Otvaranje neuspješno"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
-#: src/backend/datasources/MQTTClient.cpp:1192
+#: src/backend/datasources/MQTTClient.cpp:1188
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:499
@@ -7797,7 +7797,7 @@ msgid "%1: run %2 script"
 msgstr ""
 
 #: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
-#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1219
+#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1220
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
@@ -7915,13 +7915,13 @@ msgstr "%1: pomjeri kolonu %2 sa pozicije %3 na %4."
 msgid "%1: sort columns"
 msgstr "%1: sortiraj kolone"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1380
+#: src/backend/spreadsheet/Spreadsheet.cpp:1422
 #, fuzzy, kde-format
 #| msgid "no spreadsheet element found"
 msgid "%1: linked spreadsheet removed"
 msgstr "nije pronađen element proračunske tablice"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1790
+#: src/backend/spreadsheet/Spreadsheet.cpp:1832
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7931,7 +7931,7 @@ msgstr[0] "numerički podatak, %1 element"
 msgstr[1] "numerički podatak, %1 elementa"
 msgstr[2] "numerički podatak, %1 elemenata"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1793
+#: src/backend/spreadsheet/Spreadsheet.cpp:1835
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7941,7 +7941,7 @@ msgstr[0] "numerički podatak, %1 element"
 msgstr[1] "numerički podatak, %1 elementa"
 msgstr[2] "numerički podatak, %1 elemenata"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1796
+#: src/backend/spreadsheet/Spreadsheet.cpp:1838
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7951,7 +7951,7 @@ msgstr[0] "numerički podatak, %1 element"
 msgstr[1] "numerički podatak, %1 elementa"
 msgstr[2] "numerički podatak, %1 elemenata"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1799
+#: src/backend/spreadsheet/Spreadsheet.cpp:1841
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7961,7 +7961,7 @@ msgstr[0] "numerički podatak, %1 element"
 msgstr[1] "numerički podatak, %1 elementa"
 msgstr[2] "numerički podatak, %1 elemenata"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1802
+#: src/backend/spreadsheet/Spreadsheet.cpp:1844
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7971,7 +7971,7 @@ msgstr[0] "numerički podatak, %1 element"
 msgstr[1] "numerički podatak, %1 elementa"
 msgstr[2] "numerički podatak, %1 elemenata"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1805
+#: src/backend/spreadsheet/Spreadsheet.cpp:1847
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7981,7 +7981,7 @@ msgstr[0] "numerički podatak, %1 element"
 msgstr[1] "numerički podatak, %1 elementa"
 msgstr[2] "numerički podatak, %1 elemenata"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1808
+#: src/backend/spreadsheet/Spreadsheet.cpp:1850
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -8997,7 +8997,7 @@ msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
-#: src/frontend/ActionsManager.cpp:237 src/frontend/MainWin.cpp:1245
+#: src/frontend/ActionsManager.cpp:237 src/frontend/MainWin.cpp:1246
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -12412,7 +12412,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "novi filter"
 
-#: src/frontend/ActionsManager.cpp:215 src/frontend/MainWin.cpp:1183
+#: src/frontend/ActionsManager.cpp:215 src/frontend/MainWin.cpp:1184
 #, kde-format
 msgid "Workbook"
 msgstr ""
@@ -12422,7 +12422,7 @@ msgstr ""
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:220 src/frontend/MainWin.cpp:1191
+#: src/frontend/ActionsManager.cpp:220 src/frontend/MainWin.cpp:1192
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
@@ -12437,7 +12437,7 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1199 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1200 src/frontend/SettingsDialog.cpp:66
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -12465,7 +12465,7 @@ msgstr ""
 msgid "Creates a new Python script"
 msgstr "Kreiraj novu mapu boja"
 
-#: src/frontend/ActionsManager.cpp:263 src/frontend/MainWin.cpp:1253
+#: src/frontend/ActionsManager.cpp:263 src/frontend/MainWin.cpp:1254
 #, fuzzy, kde-format
 #| msgid "Notes"
 msgid "Note"
@@ -12476,7 +12476,7 @@ msgstr "Bilješke"
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:268 src/frontend/MainWin.cpp:1175
+#: src/frontend/ActionsManager.cpp:268 src/frontend/MainWin.cpp:1176
 #, kde-format
 msgid "Folder"
 msgstr "Direktorij"
@@ -12802,7 +12802,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Označi x-područje i uvećaj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:639 src/frontend/MainWin.cpp:1586
+#: src/frontend/ActionsManager.cpp:639 src/frontend/MainWin.cpp:1596
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
@@ -14713,7 +14713,7 @@ msgid "Open LabPlot Project"
 msgstr "Otvori projekat"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:708
+#: src/frontend/MainWin.cpp:709
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -14925,7 +14925,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:2011
+#: src/frontend/MainWin.cpp:2021
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -17376,7 +17376,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:194 src/frontend/MainWin.cpp:615
+#: src/frontend/GuiObserver.cpp:194 src/frontend/MainWin.cpp:616
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
@@ -18406,140 +18406,140 @@ msgid "&Windows"
 msgstr "&Prozori"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:181 src/frontend/ui/settingsworksheetpage.ui:106
+#: src/frontend/MainWin.cpp:182 src/frontend/ui/settingsworksheetpage.ui:106
 #: src/frontend/worksheet/WorksheetView.cpp:291
 #, kde-format
 msgid "Presenter Mode"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:181
+#: src/frontend/MainWin.cpp:182
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:195
+#: src/frontend/MainWin.cpp:196
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Dobro došli u LabPlot %1"
 
-#: src/frontend/MainWin.cpp:477
+#: src/frontend/MainWin.cpp:478
 #, fuzzy, kde-format
 #| msgid "The current project %1 has been modified. Do you want to save it?"
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Trenutni projekat %1 je modificiran. Da li želite da ga spasite?"
 
-#: src/frontend/MainWin.cpp:478
+#: src/frontend/MainWin.cpp:479
 #, kde-format
 msgid "Save Project"
 msgstr "Spasi projekat"
 
-#: src/frontend/MainWin.cpp:574
+#: src/frontend/MainWin.cpp:575
 #, fuzzy, kde-format
 #| msgid "%1: clear"
 msgid "%1: created"
 msgstr "%1: obriši"
 
-#: src/frontend/MainWin.cpp:602
+#: src/frontend/MainWin.cpp:603
 #, fuzzy, kde-format
 #| msgid "Project Explorer"
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Pretraživač Projekata"
 
-#: src/frontend/MainWin.cpp:627
+#: src/frontend/MainWin.cpp:628
 #, fuzzy, kde-format
 #| msgid "Worksheet printed"
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Radni list ispisan"
 
-#: src/frontend/MainWin.cpp:636
+#: src/frontend/MainWin.cpp:637
 #, fuzzy, kde-format
 #| msgid "Density"
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Gustina"
 
-#: src/frontend/MainWin.cpp:713
+#: src/frontend/MainWin.cpp:714
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
 msgstr "Otvori projekat"
 
-#: src/frontend/MainWin.cpp:719
+#: src/frontend/MainWin.cpp:720
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "Zatvori projekat"
 
-#: src/frontend/MainWin.cpp:720
+#: src/frontend/MainWin.cpp:721
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:727
+#: src/frontend/MainWin.cpp:728
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:731
+#: src/frontend/MainWin.cpp:732
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Otvori projekat"
 
-#: src/frontend/MainWin.cpp:751
+#: src/frontend/MainWin.cpp:752
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Projektna datoteka %1 je već otvorena."
 
-#: src/frontend/MainWin.cpp:751 src/frontend/MainWin.cpp:759
-#: src/frontend/MainWin.cpp:764
+#: src/frontend/MainWin.cpp:752 src/frontend/MainWin.cpp:760
+#: src/frontend/MainWin.cpp:765
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Open Project"
 msgstr "Otvori projekat"
 
-#: src/frontend/MainWin.cpp:759
+#: src/frontend/MainWin.cpp:760
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "The project file %1 doesn't exist."
 msgstr "Projektna datoteka %1 je već otvorena."
 
-#: src/frontend/MainWin.cpp:764
+#: src/frontend/MainWin.cpp:765
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't read the project file %1."
 msgstr "Ne može se otvoriti fajl %1 za čitanje."
 
-#: src/frontend/MainWin.cpp:772
+#: src/frontend/MainWin.cpp:773
 #, kde-format
 msgid "Loading %1..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:823
+#: src/frontend/MainWin.cpp:824
 #, fuzzy, kde-format
 #| msgid "Project %1 opened"
 msgid "%1: opened"
 msgstr "Projekat %1 otvoren"
 
-#: src/frontend/MainWin.cpp:858
+#: src/frontend/MainWin.cpp:859
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekat uspješno otvoren (u %1 sekundi)."
 
-#: src/frontend/MainWin.cpp:954
+#: src/frontend/MainWin.cpp:955
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Spasi projekat"
 
-#: src/frontend/MainWin.cpp:956
+#: src/frontend/MainWin.cpp:957
 #, fuzzy, kde-format
 #| msgid "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"
 msgid ""
@@ -18547,83 +18547,83 @@ msgid ""
 "*.LML.XZ)"
 msgstr "LabPlot Projekti (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"
 
-#: src/frontend/MainWin.cpp:983
+#: src/frontend/MainWin.cpp:984
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for writing."
 msgid "Couldn't open the temporary file for writing."
 msgstr "Žao nam je. Datoteka ne može biti otvorena za pisanje."
 
-#: src/frontend/MainWin.cpp:988
+#: src/frontend/MainWin.cpp:989
 #, kde-format
 msgid "Saving %1..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1066
+#: src/frontend/MainWin.cpp:1067
 #, kde-format
 msgid "Project saved"
 msgstr "Projekat spašen"
 
-#: src/frontend/MainWin.cpp:1081
+#: src/frontend/MainWin.cpp:1082
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1085
+#: src/frontend/MainWin.cpp:1086
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Ne može se otvoriti fajl %1 za čitanje."
 
-#: src/frontend/MainWin.cpp:1096
+#: src/frontend/MainWin.cpp:1097
 #, fuzzy, kde-format
 #| msgid "Project successfully opened (in %1 seconds)."
 msgid "Project successfully saved (in %1 seconds)."
 msgstr "Projekat uspješno otvoren (u %1 sekundi)."
 
-#: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
+#: src/frontend/MainWin.cpp:1151 src/frontend/MainWin.cpp:1163
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1152 src/frontend/MainWin.cpp:1164
+#: src/frontend/MainWin.cpp:1153 src/frontend/MainWin.cpp:1165
 #, kde-format
 msgid "%1 printed"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1907
+#: src/frontend/MainWin.cpp:1917
 #, fuzzy, kde-format
 #| msgid "File info"
 msgid "Kaggle CLI tool not found"
 msgstr "Info podatka"
 
-#: src/frontend/MainWin.cpp:1908
+#: src/frontend/MainWin.cpp:1918
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1974
+#: src/frontend/MainWin.cpp:1984
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1981
+#: src/frontend/MainWin.cpp:1991
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1993
+#: src/frontend/MainWin.cpp:2003
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2011
+#: src/frontend/MainWin.cpp:2021
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2015
+#: src/frontend/MainWin.cpp:2025
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"
