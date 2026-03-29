@@ -413,11 +413,12 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 
 		// add a ComboBox for every further column to be plotted
 		auto* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
+		const int rowOffset = m_tickLabelsColumn ? 2 : 1; // row 0: X/Labels, row 1: line, row 2: Y/first data
 		for (int i = firstDataIndex + 1; i < m_columns.size(); ++i) {
 			auto* label = new QLabel(i18n("Data"));
 			auto* comboBox = new QComboBox();
-			gridLayout->addWidget(label, i + 1, 0, 1, 1);
-			gridLayout->addWidget(comboBox, i + 1, 2, 1, 1);
+			gridLayout->addWidget(label, i + rowOffset, 0, 1, 1);
+			gridLayout->addWidget(comboBox, i + rowOffset, 2, 1, 1);
 			comboBox->addItems(columnNames);
 			comboBox->setCurrentIndex(i);
 			m_columnComboBoxes << comboBox;
