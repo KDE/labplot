@@ -150,6 +150,7 @@ private Q_SLOTS:
 	void fillWithFunctionValues();
 	void fillWithConstValues();
 
+	void syncSelectionWithProject();
 	void cutSelection();
 	void copySelection();
 	void pasteIntoSelection();

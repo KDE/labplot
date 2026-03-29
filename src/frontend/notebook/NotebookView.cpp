@@ -9,6 +9,7 @@
 */
 
 #include "NotebookView.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/notebook/Notebook.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
@@ -17,6 +18,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <QActionGroup>
+#include <QEvent>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMenu>
@@ -33,6 +35,10 @@ NotebookView::NotebookView(Notebook* worksheet)
 	m_part = worksheet->part();
 	if (m_part) {
 		layout->addWidget(m_part->widget());
+		m_part->widget()->installEventFilter(this);
+		for (auto* child : m_part->widget()->findChildren<QWidget*>()) {
+			child->installEventFilter(this);
+		}
 		initActions();
 		connect(m_notebook, &Notebook::requestProjectContextMenu, this, &NotebookView::createContextMenu);
 		connect(m_notebook, &Notebook::statusChanged, this, &NotebookView::statusChanged);
@@ -272,6 +278,14 @@ void NotebookView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_restartAction);
 	menu->insertSeparator(firstAction);
+}
+
+bool NotebookView::eventFilter(QObject* watched, QEvent* event) {
+	if (event->type() == QEvent::MouseButtonPress) {
+		if (m_notebook->project())
+			m_notebook->project()->navigateTo(m_notebook->path());
+	}
+	return QWidget::eventFilter(watched, event);
 }
 
 /*!
