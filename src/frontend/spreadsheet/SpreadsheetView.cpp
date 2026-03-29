@@ -1549,8 +1549,8 @@ void SpreadsheetView::checkSpreadsheetSelectionMenu() {
 
 void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 	bool numeric = true;
-	bool plottable = true;
-	bool datetime = false;
+	bool plottable = false; // true if at least one column is plottable (numeric or datetime), non-plottable columns will be ignored in the plot data dialog or used as text labels
+	bool datetime = true; // true if all columns are numeric or datetime
 	bool text = false;
 	bool hasValues = false;
 	bool hasFormat = false;
@@ -1558,13 +1558,12 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 
 	for (const auto* col : columns) {
 		if (!col->isNumeric()) {
-			datetime = (col->columnMode() == AbstractColumn::ColumnMode::DateTime);
-			if (!datetime)
-				plottable = false;
-
 			numeric = false;
-			break;
+			if (col->columnMode() != AbstractColumn::ColumnMode::DateTime)
+				datetime = false;
 		}
+		if (col->isPlottable())
+			plottable = true;
 	}
 
 	for (const auto* col : columns) {

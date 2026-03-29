@@ -223,8 +223,18 @@ void PlotDataDialog::setFitDistribution(nsl_sf_stats_distribution distribution) 
 }
 
 void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
+	// for bar plots and lollipop plots, extract the first text column to use as tick labels on the x-axis
+	if (m_plotType == Plot::PlotType::BarPlot || m_plotType == Plot::PlotType::LollipopPlot) {
+		for (auto* col : selectedColumns) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Text) {
+				m_tickLabelsColumn = col;
+				break;
+			}
+		}
+	}
+
 	// skip error and non-plottable columns
-	for (Column* col : selectedColumns) {
+	for (auto* col : selectedColumns) {
 		if ((col->plotDesignation() == AbstractColumn::PlotDesignation::X || col->plotDesignation() == AbstractColumn::PlotDesignation::Y
 			 || col->plotDesignation() == AbstractColumn::PlotDesignation::NoDesignation)
 			&& col->isPlottable())
@@ -1157,8 +1167,12 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 				axis->setMajorTicksType(Axis::TicksType::Spacing);
 				axis->setMajorTickStartOffset(0.5);
 				axis->setMajorTicksSpacing(1.);
-				axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 				axis->setMinorTicksDirection(Axis::noTicks);
+				if (m_tickLabelsColumn) {
+					axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+					axis->setLabelsTextColumn(m_tickLabelsColumn);
+				} else
+					axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 			}
 			axis->title()->setText(QString()); // no title
 		}
