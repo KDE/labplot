@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-28 00:39+0000\n"
+"POT-Creation-Date: 2026-03-29 00:39+0000\n"
 "PO-Revision-Date: 2026-02-26 15:09+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -429,7 +429,7 @@ msgstr "%1: Move in alto"
 msgid "%1: move %2 to %3."
 msgstr "%1: Move %2 a %3."
 
-#: src/backend/core/aspectcommands.h:230
+#: src/backend/core/aspectcommands.h:261
 #, kde-format
 msgid "%1: rename to %2"
 msgstr "%1: Renomina  a %2"
@@ -14176,7 +14176,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:204
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:806
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:248
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
@@ -15239,7 +15239,18 @@ msgid ""
 "percentiles of the provided data"
 msgstr ""
 
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:226
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:124
+#, kde-format
+msgid "%1 reference lines: orientation changed"
+msgstr ""
+
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:126
+#, fuzzy, kde-format
+#| msgid "%1: jittering changed"
+msgid "%1: orientation changed"
+msgstr "%1:  jitttering cambiava"
+
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:246
 #, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr ""

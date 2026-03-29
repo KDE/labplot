@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-28 00:39+0000\n"
+"POT-Creation-Date: 2026-03-29 00:39+0000\n"
 "PO-Revision-Date: 2026-03-06 21:42+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -437,7 +437,7 @@ msgstr "%1: перемещение вверх"
 msgid "%1: move %2 to %3."
 msgstr "%1: перемещение %2 в %3."
 
-#: src/backend/core/aspectcommands.h:230
+#: src/backend/core/aspectcommands.h:261
 #, kde-format
 msgid "%1: rename to %2"
 msgstr "%1: переименование в %2"
@@ -14704,7 +14704,7 @@ msgstr "Оси (%1): загрузка шаблона «%2»"
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:204
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:806
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:248
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
@@ -15905,7 +15905,19 @@ msgstr ""
 "Распределение, используемое для расчёта процентилей, сравниваемых с "
 "процентилями предоставленных данных."
 
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:226
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:124
+#, fuzzy, kde-format
+#| msgid "%1 reference lines: template \"%2\" loaded"
+msgid "%1 reference lines: orientation changed"
+msgstr "Контрольные линии (%1): загрузка шаблона «%2»"
+
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:126
+#, fuzzy, kde-format
+#| msgid "%1: precision changed"
+msgid "%1: orientation changed"
+msgstr "%1: изменение точности"
+
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:246
 #, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr "Контрольные линии (%1): загрузка шаблона «%2»"

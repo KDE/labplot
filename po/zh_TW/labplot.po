@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-28 00:39+0000\n"
+"POT-Creation-Date: 2026-03-29 00:39+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -434,7 +434,7 @@ msgstr "移除"
 msgid "%1: move %2 to %3."
 msgstr "移動到"
 
-#: src/backend/core/aspectcommands.h:230
+#: src/backend/core/aspectcommands.h:261
 #, kde-format
 msgid "%1: rename to %2"
 msgstr "%1：重新命名為  %2"
@@ -14656,7 +14656,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:204
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:806
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:248
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
@@ -15740,7 +15740,17 @@ msgid ""
 "percentiles of the provided data"
 msgstr ""
 
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:226
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:124
+#, kde-format
+msgid "%1 reference lines: orientation changed"
+msgstr ""
+
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:126
+#, fuzzy, kde-format
+msgid "%1: orientation changed"
+msgstr "設定背景影像..."
+
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:246
 #, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr ""

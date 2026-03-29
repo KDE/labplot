@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-28 00:39+0000\n"
+"POT-Creation-Date: 2026-03-29 00:39+0000\n"
 "PO-Revision-Date: 2025-11-21 01:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -426,7 +426,7 @@ msgstr "%1: flytta upp"
 msgid "%1: move %2 to %3."
 msgstr "%1: flytta %2 till %3."
 
-#: src/backend/core/aspectcommands.h:230
+#: src/backend/core/aspectcommands.h:261
 #, kde-format
 msgid "%1: rename to %2"
 msgstr "%1: byt namn på %2"
@@ -14569,7 +14569,7 @@ msgstr "%1 axlar: mall \"%2\" inläst"
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:204
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:806
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:248
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
@@ -15767,7 +15767,19 @@ msgstr ""
 "Fördelning som används för att beräkna de percentiler som ska jämföras med "
 "percentilerna för tillhandahållen data"
 
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:226
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:124
+#, fuzzy, kde-format
+#| msgid "%1 reference lines: template \"%2\" loaded"
+msgid "%1 reference lines: orientation changed"
+msgstr "%1 referenslinjer: mall \"%2\" inläst"
+
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:126
+#, fuzzy, kde-format
+#| msgid "%1: precision changed"
+msgid "%1: orientation changed"
+msgstr "%1: precision ändrad"
+
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:246
 #, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr "%1 referenslinjer: mall \"%2\" inläst"
