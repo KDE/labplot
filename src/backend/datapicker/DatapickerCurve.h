@@ -40,7 +40,7 @@ public:
 
 	QIcon icon() const override;
 	void setPrinting(bool);
-	void setSelectedInView(bool);
+	void setSelectedInView(bool) override;
 	void addDatasheet(DatapickerImage::GraphType);
 	void updatePoints();
 	void updatePoint(const DatapickerPoint*);

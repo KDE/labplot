@@ -3693,15 +3693,14 @@ void SpreadsheetView::deselectColumn(int column) {
 void SpreadsheetView::columnClicked(int column) {
 	m_spreadsheet->setColumnSelectedInView(column, true);
 }
+
 /*!
   called when the user presses inside the table view.
   Navigates to this \c Spreadsheet in the project explorer and ensures the table view receives focus.
 */
 void SpreadsheetView::navigateToSpreadsheetOnClick(const QModelIndex&) {
-	if (m_spreadsheet->project()) {
-		m_spreadsheet->project()->navigateTo(m_spreadsheet->path());
-		setFocus();
-	}
+	m_spreadsheet->setSelectedInView(true);
+    setFocus(); 
 }
 
 /*!

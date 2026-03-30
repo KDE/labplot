@@ -195,7 +195,7 @@ void MatrixView::initActions() {
 	// connections
 
 	// selection related actions
-	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MatrixView::syncSelectionWithProject);
+	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MatrixView::navigateToMatrixOnClick);
 	connect(action_cut_selection, &QAction::triggered, this, &MatrixView::cutSelection);
 	connect(action_copy_selection, &QAction::triggered, this, &MatrixView::copySelection);
 	connect(action_paste_into_selection, &QAction::triggered, this, &MatrixView::pasteIntoSelection);
@@ -630,11 +630,9 @@ void MatrixView::fillWithConstValues() {
 }
 
 // ############################ selection related slots #########################
-void MatrixView::syncSelectionWithProject() {
-	if (m_matrix->project()) {
-		m_matrix->project()->navigateTo(m_matrix->path());
-		setFocus();
-	}
+void MatrixView::navigateToMatrixOnClick() {
+	m_matrix->setSelectedInView(true);
+    m_tableView->setFocus();
 }
 
 void MatrixView::cutSelection() {

@@ -50,7 +50,7 @@ public:
 	DatapickerImageView* imageView() const;
 
 	void setChildSelectedInView(int index, bool selected);
-	void setSelectedInView(const bool);
+	void setSelectedInView(const bool) override;
 	void addNewPoint(QPointF, AbstractAspect*);
 
 	bool xDateTime() const;

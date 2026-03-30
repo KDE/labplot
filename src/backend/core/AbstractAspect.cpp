@@ -1133,6 +1133,21 @@ void AbstractAspect::endMacro() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ * this function is called when the selection in the UI view was changed.
+ * forwards the selection/deselection to the ProjectExplorer via emitting a signal
+ * and triggers the navigation to this aspect's path in the project tree.
+ */
+void AbstractAspect::setSelectedInView(bool selected) {
+	if (selected) {
+		Q_EMIT childAspectSelectedInView(this);
+		if (project()) {
+			project()->navigateTo(path());
+		}
+	} else {
+		Q_EMIT childAspectDeselectedInView(this);
+	}
+}
 
 /*!
  * this function is called when the selection in ProjectExplorer was changed.

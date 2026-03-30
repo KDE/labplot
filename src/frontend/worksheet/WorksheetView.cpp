@@ -917,11 +917,8 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 	// and there is no selection currently. We need this for the case when
 	// there is a single worksheet in the project and we change from the project-node
 	// in the project explorer to the worksheet-node by clicking the view.
-	if (scene()->selectedItems().isEmpty()) {
+	if (scene()->selectedItems().isEmpty()) 
 		m_worksheet->setSelectedInView(true);
-		if (m_worksheet->project())
-			m_worksheet->project()->navigateTo(m_worksheet->path());
-	}
 
 	QGraphicsView::mousePressEvent(event);
 }
@@ -1144,10 +1141,7 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 
 	// select the worksheet in the project explorer and bring the view to the foreground
 	m_worksheet->setSelectedInView(true); 
-	if (m_worksheet->project()) {
-		m_worksheet->project()->navigateTo(m_worksheet->path());
-		this->setFocus();
-	}
+	this->setFocus();
 }
 
 // ##############################################################################
@@ -1630,8 +1624,6 @@ void WorksheetView::selectionChanged() {
 		// no items selected -> select the worksheet again.
 		m_worksheet->setSelectedInView(true);
 
-		if (m_worksheet->project())
-			m_worksheet->project()->navigateTo(m_worksheet->path());
 		
 		// if one of the "zoom&select" plot mouse modes was selected before, activate the default "selection mode" again
 		// since no plots are selected now.

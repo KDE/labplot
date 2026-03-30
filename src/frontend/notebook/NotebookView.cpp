@@ -282,8 +282,10 @@ void NotebookView::createContextMenu(QMenu* menu) {
 
 bool NotebookView::eventFilter(QObject* watched, QEvent* event) {
 	if (event->type() == QEvent::MouseButtonPress) {
-		if (m_notebook->project())
-			m_notebook->project()->navigateTo(m_notebook->path());
+		m_notebook->setSelectedInView(true);
+        if (auto* w = qobject_cast<QWidget*>(watched)) {
+            w->setFocus();
+        }
 	}
 	return QWidget::eventFilter(watched, event);
 }
