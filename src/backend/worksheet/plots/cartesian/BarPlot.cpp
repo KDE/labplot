@@ -578,17 +578,15 @@ void BarPlotPrivate::recalc() {
 	// this number is equal to the max number of non-empty
 	// values in the provided datasets
 	int barGroupsCount = 0;
-	int columnIndex = 0;
-	for (auto* column : std::as_const(dataColumns)) {
+	for (int i = 0; i < newSize; ++i) {
+		const auto* column = dataColumns.at(i);
 		if (!column)
 			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
-		m_barLines[columnIndex].resize(size);
-		m_fillPolygons[columnIndex].resize(size);
+		m_barLines[i].resize(size);
+		m_fillPolygons[i].resize(size);
 		if (size > barGroupsCount)
 			barGroupsCount = size;
-
-		++columnIndex;
 	}
 
 	m_stackedBarPositiveOffsets.resize(barGroupsCount);
