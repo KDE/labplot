@@ -1139,14 +1139,10 @@ void AbstractAspect::endMacro() {
  * and triggers the navigation to this aspect's path in the project tree.
  */
 void AbstractAspect::setSelectedInView(bool selected) {
-	if (selected) {
+	if (selected)
 		Q_EMIT childAspectSelectedInView(this);
-		if (project()) {
-			project()->navigateTo(path());
-		}
-	} else {
+	else
 		Q_EMIT childAspectDeselectedInView(this);
-	}
 }
 
 /*!

@@ -550,19 +550,6 @@ WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* pare
 	}
 }
 
-/*!
-	Selects or deselects the worksheet in the project explorer.
-	This function is called in \c WorksheetView.
-	The worksheet gets deselected if there are selected items in the view,
-	and selected if there are no selected items in the view.
-*/
-void Worksheet::setSelectedInView(const bool b) {
-	if (b)
-		Q_EMIT childAspectSelectedInView(this);
-	else
-		Q_EMIT childAspectDeselectedInView(this);
-}
-
 void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
 	Q_ASSERT(item);
 	// determine the corresponding aspect

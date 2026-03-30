@@ -36,9 +36,9 @@ NotebookView::NotebookView(Notebook* worksheet)
 	if (m_part) {
 		layout->addWidget(m_part->widget());
 		m_part->widget()->installEventFilter(this);
-		for (auto* child : m_part->widget()->findChildren<QWidget*>()) {
+		for (auto* child : m_part->widget()->findChildren<QWidget*>())
 			child->installEventFilter(this);
-		}
+		
 		initActions();
 		connect(m_notebook, &Notebook::requestProjectContextMenu, this, &NotebookView::createContextMenu);
 		connect(m_notebook, &Notebook::statusChanged, this, &NotebookView::statusChanged);
@@ -283,9 +283,8 @@ void NotebookView::createContextMenu(QMenu* menu) {
 bool NotebookView::eventFilter(QObject* watched, QEvent* event) {
 	if (event->type() == QEvent::MouseButtonPress) {
 		m_notebook->setSelectedInView(true);
-		if (auto* w = qobject_cast<QWidget*>(watched)) {
+		if (auto* w = qobject_cast<QWidget*>(watched))
 			w->setFocus();
-		}
 	}
 	return QWidget::eventFilter(watched, event);
 }

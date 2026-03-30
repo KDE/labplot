@@ -196,19 +196,6 @@ bool DatapickerImage::printPreview() const {
 	return dlg->exec();
 }
 
-/*!
-	Selects or deselects the Datapicker/DatapickerImage in the project explorer.
-	This function is called in \c DatapickerImageView.
-	The DatapickerImage gets deselected if there are selected items in the view,
-	and selected if there are no selected items in the view.
-*/
-void DatapickerImage::setSelectedInView(const bool b) {
-	if (b)
-		Q_EMIT childAspectSelectedInView(this);
-	else
-		Q_EMIT childAspectDeselectedInView(this);
-}
-
 void DatapickerImage::setSegmentsHoverEvent(const bool on) {
 	m_segments->setAcceptHoverEvents(on);
 }

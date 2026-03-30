@@ -71,7 +71,7 @@ private:
 
 	void initActions();
 	void initMenus();
-	bool eventFilter(QObject* watched, QEvent* event) override;
+	bool eventFilter(QObject*, QEvent*) override;
 
 private Q_SLOTS:
 	void statusChanged(Cantor::Session::Status);

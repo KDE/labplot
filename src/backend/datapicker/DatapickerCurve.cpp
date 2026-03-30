@@ -397,17 +397,6 @@ void DatapickerCurve::setPrinting(bool on) {
 		point->setPrinting(on);
 }
 
-/*!
-	Selects or deselects the Datapicker/Curve in the project explorer.
-	This function is called in \c DatapickerImageView.
-*/
-void DatapickerCurve::setSelectedInView(bool b) {
-	if (b)
-		Q_EMIT childAspectSelectedInView(this);
-	else
-		Q_EMIT childAspectDeselectedInView(this);
-}
-
 // ##############################################################################
 // ######  SLOTs for changes triggered via QActions in the context menu  ########
 // ##############################################################################

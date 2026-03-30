@@ -83,7 +83,6 @@ public:
 	void setPrinting(bool) const;
 
 	void setItemSelectedInView(const QGraphicsItem*, const bool);
-	void setSelectedInView(const bool) override;
 	void deleteAspectFromGraphicsItem(const QGraphicsItem*);
 	void setIsClosing();
 	void suppressSelectionChangedEvent(bool);

@@ -77,7 +77,6 @@ public:
 	void setPageRect(const QRectF&);
 	QGraphicsScene* scene() const;
 	void setPrinting(bool) const;
-	void setSelectedInView(const bool) override;
 	void setSegmentsHoverEvent(const bool);
 	int currentSelectedReferencePoint() const;
 

@@ -1623,7 +1623,6 @@ void WorksheetView::selectionChanged() {
 	if (items.isEmpty()) {
 		// no items selected -> select the worksheet again.
 		m_worksheet->setSelectedInView(true);
-		
 		// if one of the "zoom&select" plot mouse modes was selected before, activate the default "selection mode" again
 		// since no plots are selected now.
 		if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection) {
