@@ -3700,7 +3700,7 @@ void SpreadsheetView::columnClicked(int column) {
 */
 void SpreadsheetView::navigateToSpreadsheetOnClick(const QModelIndex&) {
 	m_spreadsheet->setSelectedInView(true);
-    setFocus(); 
+	setFocus(); 
 }
 
 /*!

@@ -632,7 +632,7 @@ void MatrixView::fillWithConstValues() {
 // ############################ selection related slots #########################
 void MatrixView::navigateToMatrixOnClick() {
 	m_matrix->setSelectedInView(true);
-    m_tableView->setFocus();
+	m_tableView->setFocus();
 }
 
 void MatrixView::cutSelection() {
