@@ -23,6 +23,9 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updateOrientation();
 	void updatePositionLimit();
+	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 
 	ReferenceLine::Orientation orientation{ReferenceLine::Orientation::Horizontal};
 	double length{0.0}; // length of the line in graphic item's coordinates
@@ -32,6 +35,10 @@ public:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	ReferenceLine* const q;
+
+private:
+	QPointF m_undoPos;
+	bool m_isDragged{false};
 };
 
 #endif
