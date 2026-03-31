@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-30 00:39+0000\n"
+"POT-Creation-Date: 2026-03-31 00:40+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -59,7 +59,7 @@ msgstr "Preimenuj"
 
 #: src/backend/core/AbstractAspect.cpp:450
 #: src/backend/spreadsheet/Spreadsheet.cpp:920
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:497
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:498
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #: src/frontend/worksheet/WorksheetView.cpp:139
 #, kde-format
@@ -84,7 +84,7 @@ msgstr ""
 
 #: src/backend/core/AbstractAspect.cpp:550
 #: src/backend/core/aspectcommands.h:171
-#: src/backend/datapicker/Datapicker.cpp:227
+#: src/backend/datapicker/Datapicker.cpp:216
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2429
 #, kde-format
 msgid "%1: add %2"
@@ -292,7 +292,7 @@ msgstr "iteracije"
 #: src/backend/datasources/filters/AsciiFilter.cpp:615
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
 #: src/frontend/ActionsManager.cpp:547
-#: src/frontend/notebook/NotebookView.cpp:96
+#: src/frontend/notebook/NotebookView.cpp:102
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:634
@@ -368,14 +368,14 @@ msgid "%1: unmask cells"
 msgstr "%1: demaskiraj ćelije"
 
 #: src/backend/core/abstractcolumncommands.cpp:243
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2576
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2577
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set heatmap format"
 msgstr "%1: postavi format oznake"
 
 #: src/backend/core/abstractcolumncommands.cpp:269
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2594
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2595
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: remove heatmap format"
@@ -668,7 +668,7 @@ msgid "%1: change cell values"
 msgstr "%1: promijeni vrijednost ćelije"
 
 #: src/backend/core/column/columncommands.cpp:529
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2749
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2750
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: postavi oznake"
@@ -874,7 +874,7 @@ msgstr "nepoznat element '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:48
-#: src/backend/datapicker/Datapicker.cpp:379
+#: src/backend/datapicker/Datapicker.cpp:368
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1915
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1921
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1927
@@ -897,13 +897,13 @@ msgstr "LabPlot2"
 msgid "%1, active curve \"%2\""
 msgstr "Relativna skala"
 
-#: src/backend/datapicker/Datapicker.cpp:224
+#: src/backend/datapicker/Datapicker.cpp:213
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Point %1"
 msgstr "LabPlot2"
 
-#: src/backend/datapicker/Datapicker.cpp:396
+#: src/backend/datapicker/Datapicker.cpp:385
 #, fuzzy, kde-format
 #| msgid "unknown element '%1'"
 msgid "unknown datapicker element '%1'"
@@ -913,7 +913,7 @@ msgstr "nepoznat element '%1'"
 #. i18n: ectx: property (text), widget (QLabel, lData)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/DatapickerCurve.cpp:175
-#: src/frontend/matrix/MatrixView.cpp:128
+#: src/frontend/matrix/MatrixView.cpp:129
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:378
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:395
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:409
@@ -1008,7 +1008,7 @@ msgid "%1: set error bar outline style"
 msgstr "%1: postavi grešku bar stila"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:420
+#: src/backend/datapicker/DatapickerImage.cpp:407
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
 #: src/backend/worksheet/plots/cartesian/ParetoChart.cpp:141
@@ -1023,7 +1023,7 @@ msgid "%1: set visible"
 msgstr "%1: postavi vidljivo"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:420
+#: src/backend/datapicker/DatapickerImage.cpp:407
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
 #: src/backend/worksheet/plots/cartesian/ParetoChart.cpp:141
@@ -1045,49 +1045,49 @@ msgctxt "@title:window"
 msgid "Print Datapicker Image"
 msgstr "Podaci:"
 
-#: src/backend/datapicker/DatapickerImage.cpp:317
-#: src/backend/datapicker/DatapickerImage.cpp:372
+#: src/backend/datapicker/DatapickerImage.cpp:304
+#: src/backend/datapicker/DatapickerImage.cpp:359
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: upload image"
 msgstr "%1: postavi pozadinsku sliku"
 
-#: src/backend/datapicker/DatapickerImage.cpp:371
+#: src/backend/datapicker/DatapickerImage.cpp:358
 #, kde-format
 msgid "%1: upload new image"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerImage.cpp:391
+#: src/backend/datapicker/DatapickerImage.cpp:378
 #: src/backend/worksheet/WorksheetElement.cpp:837
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: postavi ugao rotacije"
 
-#: src/backend/datapicker/DatapickerImage.cpp:398
+#: src/backend/datapicker/DatapickerImage.cpp:385
 #, fuzzy, kde-format
 #| msgid "%1: set axis position"
 msgid "%1: set Axis points"
 msgstr "%1: postavi osnu poziciju"
 
-#: src/backend/datapicker/DatapickerImage.cpp:405
+#: src/backend/datapicker/DatapickerImage.cpp:392
 #, fuzzy, kde-format
 #| msgid "%1: set axis orientation"
 msgid "%1: set editor settings"
 msgstr "%1: postavi osnu orjentaciju"
 
-#: src/backend/datapicker/DatapickerImage.cpp:412
+#: src/backend/datapicker/DatapickerImage.cpp:399
 #, fuzzy, kde-format
 #| msgid "%1: set minor ticks length"
 msgid "%1: set minimum segment length"
 msgstr "%1: postavi dužinu sporednih podioka"
 
-#: src/backend/datapicker/DatapickerImage.cpp:433
+#: src/backend/datapicker/DatapickerImage.cpp:420
 #, fuzzy, kde-format
 #| msgid "%1: set axis position"
 msgid "%1: remove all axis points"
 msgstr "%1: postavi osnu poziciju"
 
-#: src/backend/datapicker/DatapickerImage.cpp:728
+#: src/backend/datapicker/DatapickerImage.cpp:715
 #: src/backend/worksheet/Image.cpp:411
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -2360,12 +2360,12 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1884
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
-#: src/frontend/matrix/MatrixView.cpp:618
+#: src/frontend/matrix/MatrixView.cpp:620
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:187
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2482
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2502
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2519
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2535
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2483
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2503
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2520
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2536
 #: src/frontend/ui/dockwidgets/columndock.ui:542
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:65
 #, kde-format
@@ -6564,14 +6564,14 @@ msgid "unexpected end of document"
 msgstr "neočekivan kraj dokumenta"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3800
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "FITS image"
 msgstr "slika"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3800
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -10013,11 +10013,11 @@ msgstr "vertikalna oa"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2406
 #: src/frontend/ActionsManager.cpp:551
 #: src/frontend/datasources/ImportFileWidget.cpp:113
-#: src/frontend/matrix/MatrixView.cpp:131
-#: src/frontend/notebook/NotebookView.cpp:109
+#: src/frontend/matrix/MatrixView.cpp:132
+#: src/frontend/notebook/NotebookView.cpp:115
 #: src/frontend/widgets/BackgroundWidget.cpp:123
 #: src/frontend/worksheet/WorksheetView.cpp:242
-#: src/frontend/worksheet/WorksheetView.cpp:1360
+#: src/frontend/worksheet/WorksheetView.cpp:1361
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "Image"
@@ -10069,7 +10069,7 @@ msgstr "%1: postavi linijsku providnost za područje u kojem se crta"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:496
 #: src/frontend/ActionsManager.cpp:899
-#: src/frontend/notebook/NotebookView.cpp:167
+#: src/frontend/notebook/NotebookView.cpp:173
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:442
 #, fuzzy, kde-format
@@ -10097,7 +10097,7 @@ msgstr "&Analiza"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:515
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:549
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2314
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:571
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:572
 #, fuzzy, kde-format
 #| msgid "Fit:"
 msgctxt "Curve fitting"
@@ -10482,14 +10482,14 @@ msgid "%1: set plot color mode"
 msgstr "%1: postavi boju fonta"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1859
-#: src/backend/worksheet/Worksheet.cpp:905
+#: src/backend/worksheet/Worksheet.cpp:892
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load theme %2"
 msgstr "%1: dodaj %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1861
-#: src/backend/worksheet/Worksheet.cpp:907
+#: src/backend/worksheet/Worksheet.cpp:894
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load default theme"
@@ -10497,7 +10497,7 @@ msgstr "%1: dodaj %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1863
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5850
-#: src/backend/worksheet/Worksheet.cpp:909
+#: src/backend/worksheet/Worksheet.cpp:896
 #, fuzzy, kde-format
 #| msgid "%1: set cell value"
 msgid "%1: set theme"
@@ -10564,7 +10564,7 @@ msgstr "&Redoslijed crtanja"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2224
-#: src/frontend/notebook/NotebookView.cpp:148
+#: src/frontend/notebook/NotebookView.cpp:154
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:268
 #, fuzzy, kde-format
 #| msgid "Orientation"
@@ -10580,7 +10580,7 @@ msgstr "&Redoslijed crtanja"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2238
-#: src/frontend/notebook/NotebookView.cpp:154
+#: src/frontend/notebook/NotebookView.cpp:160
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:159
 #, fuzzy, kde-format
 #| msgid "iterations"
@@ -10633,8 +10633,8 @@ msgid "Function of '%1'"
 msgstr "Ne radi ništa"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2389
-#: src/frontend/worksheet/WorksheetView.cpp:1354
 #: src/frontend/worksheet/WorksheetView.cpp:1355
+#: src/frontend/worksheet/WorksheetView.cpp:1356
 #, fuzzy, kde-format
 #| msgid "text label"
 msgid "Text Label"
@@ -10710,50 +10710,50 @@ msgid "%1: change line+symbol width"
 msgstr "%1: promijeni linija+simbol širinu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:777
-#: src/backend/worksheet/Worksheet.cpp:778
+#: src/backend/worksheet/Worksheet.cpp:764
+#: src/backend/worksheet/Worksheet.cpp:765
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: postavi gornju marginu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:787
-#: src/backend/worksheet/Worksheet.cpp:788
+#: src/backend/worksheet/Worksheet.cpp:774
+#: src/backend/worksheet/Worksheet.cpp:775
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: postavi donju marginu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:797
-#: src/backend/worksheet/Worksheet.cpp:798
+#: src/backend/worksheet/Worksheet.cpp:784
+#: src/backend/worksheet/Worksheet.cpp:785
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: postavi lijevu marginu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:807
-#: src/backend/worksheet/Worksheet.cpp:808
+#: src/backend/worksheet/Worksheet.cpp:794
+#: src/backend/worksheet/Worksheet.cpp:795
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: postavi desnu marginu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:817
-#: src/backend/worksheet/Worksheet.cpp:818
+#: src/backend/worksheet/Worksheet.cpp:804
+#: src/backend/worksheet/Worksheet.cpp:805
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: postavi vertikalni razmak"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:827
-#: src/backend/worksheet/Worksheet.cpp:828
+#: src/backend/worksheet/Worksheet.cpp:814
+#: src/backend/worksheet/Worksheet.cpp:815
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: postavi horizontalni razmak"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:847
-#: src/backend/worksheet/Worksheet.cpp:848
+#: src/backend/worksheet/Worksheet.cpp:834
+#: src/backend/worksheet/Worksheet.cpp:835
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: postavi računanje kolone"
@@ -11998,37 +11998,37 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Ispiši radni list"
 
-#: src/backend/worksheet/Worksheet.cpp:747
+#: src/backend/worksheet/Worksheet.cpp:734
 #, fuzzy, kde-format
 #| msgid "%1: change column type"
 msgid "%1: change size type"
 msgstr "%1: promijeni tip kolone"
 
-#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:746
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: promijeni \"reskaliraj sadržaj\" opciju"
 
-#: src/backend/worksheet/Worksheet.cpp:767
-#: src/backend/worksheet/Worksheet.cpp:768
+#: src/backend/worksheet/Worksheet.cpp:754
+#: src/backend/worksheet/Worksheet.cpp:755
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: postavi raspored"
 
-#: src/backend/worksheet/Worksheet.cpp:837
-#: src/backend/worksheet/Worksheet.cpp:838
+#: src/backend/worksheet/Worksheet.cpp:824
+#: src/backend/worksheet/Worksheet.cpp:825
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: postavi brojač redova za raspored"
 
-#: src/backend/worksheet/Worksheet.cpp:878
-#: src/backend/worksheet/Worksheet.cpp:879
+#: src/backend/worksheet/Worksheet.cpp:865
+#: src/backend/worksheet/Worksheet.cpp:866
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: postavi veličinu stranice"
 
-#: src/backend/worksheet/Worksheet.cpp:1578
+#: src/backend/worksheet/Worksheet.cpp:1565
 #, fuzzy, kde-format
 #| msgid "xy-curve"
 msgid "Curves"
@@ -12838,8 +12838,8 @@ msgstr "auto skaliraj Y"
 
 #: src/frontend/ActionsManager.cpp:669 src/frontend/ActionsManager.cpp:772
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
-#: src/frontend/matrix/MatrixView.cpp:190
-#: src/frontend/notebook/NotebookView.cpp:53
+#: src/frontend/matrix/MatrixView.cpp:191
+#: src/frontend/notebook/NotebookView.cpp:59
 #: src/frontend/worksheet/WorksheetView.cpp:149
 #: src/frontend/worksheet/WorksheetView.cpp:394
 #, fuzzy, kde-format
@@ -12849,8 +12849,8 @@ msgstr "Uvećaj"
 
 #: src/frontend/ActionsManager.cpp:673 src/frontend/ActionsManager.cpp:775
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
-#: src/frontend/matrix/MatrixView.cpp:191
-#: src/frontend/notebook/NotebookView.cpp:57
+#: src/frontend/matrix/MatrixView.cpp:192
+#: src/frontend/notebook/NotebookView.cpp:63
 #: src/frontend/worksheet/WorksheetView.cpp:152
 #: src/frontend/worksheet/WorksheetView.cpp:398
 #, fuzzy, kde-format
@@ -12915,83 +12915,83 @@ msgid "Shift Down Y"
 msgstr "pomjeri > na dolje"
 
 #: src/frontend/ActionsManager.cpp:718
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:500
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:501
 #, kde-format
 msgid "Insert Row Above"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:721
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:501
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:502
 #, fuzzy, kde-format
 #| msgid "Scale Breakings"
 msgid "Insert Row Below"
 msgstr "Probijanja granica skale"
 
 #: src/frontend/ActionsManager.cpp:724
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:504
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:505
 #, fuzzy, kde-format
 #| msgid "%1: remove selected rows"
 msgid "Remo&ve Selected Row(s)"
 msgstr "%1: ukloni selektovane redove"
 
 #: src/frontend/ActionsManager.cpp:728
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:353
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:354
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert Column Left"
 msgstr "&Umetni prazne kolone"
 
 #: src/frontend/ActionsManager.cpp:731
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:354
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:355
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert Column Right"
 msgstr "&Umetni prazne kolone"
 
 #: src/frontend/ActionsManager.cpp:734
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:357
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, fuzzy, kde-format
 #| msgid "%1: remove selected column(s)"
 msgid "Delete Selected Column(s)"
 msgstr "%1: ukloni selektovanu kolonu(e)"
 
 #: src/frontend/ActionsManager.cpp:738
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:487
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #, fuzzy, kde-format
 #| msgid "&Sort"
 msgid "&Sort..."
 msgstr "&Sortiraj"
 
 #: src/frontend/ActionsManager.cpp:739
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:488
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:489
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Sort multiple columns together"
 msgstr "&Umetni prazne kolone"
 
 #: src/frontend/ActionsManager.cpp:742
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:489
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:490
 #, fuzzy, kde-format
 #| msgid "&Ascending"
 msgid "Sort &Ascending"
 msgstr "&Rastući"
 
 #: src/frontend/ActionsManager.cpp:743
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:490
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:491
 #, fuzzy, kde-format
 #| msgid "%1: clear selected columns"
 msgid "Sort the selected columns separately in ascending order"
 msgstr "%1: očisti selektovane kolone"
 
 #: src/frontend/ActionsManager.cpp:746
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:491
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:492
 #, fuzzy, kde-format
 #| msgid "&Descending"
 msgid "Sort &Descending"
 msgstr "&Opadajući"
 
 #: src/frontend/ActionsManager.cpp:747
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:492
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:493
 #, fuzzy, kde-format
 #| msgid "%1: clear selected columns"
 msgid "Sort the selected columns separately in descending order"
@@ -13016,14 +13016,14 @@ msgid "Update"
 msgstr "Podaci:"
 
 #: src/frontend/ActionsManager.cpp:778
-#: src/frontend/notebook/NotebookView.cpp:61
+#: src/frontend/notebook/NotebookView.cpp:67
 #, kde-format
 msgid "Find"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
 #: src/frontend/ActionsManager.cpp:781
-#: src/frontend/notebook/NotebookView.cpp:69
+#: src/frontend/notebook/NotebookView.cpp:75
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, fuzzy, kde-format
 #| msgid "Start"
@@ -13031,8 +13031,8 @@ msgid "Restart"
 msgstr "Početak"
 
 #: src/frontend/ActionsManager.cpp:784
-#: src/frontend/notebook/NotebookView.cpp:72
-#: src/frontend/notebook/NotebookView.cpp:354
+#: src/frontend/notebook/NotebookView.cpp:78
+#: src/frontend/notebook/NotebookView.cpp:369
 #, fuzzy, kde-format
 #| msgid "Fitted Points"
 msgid "Evaluate Notebook"
@@ -13238,7 +13238,7 @@ msgid "Copy All"
 msgstr "zatvori sve"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:125
-#: src/frontend/matrix/MatrixView.cpp:192
+#: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/worksheet/WorksheetView.cpp:155
 #, fuzzy, kde-format
 #| msgid "Original size"
@@ -13354,8 +13354,8 @@ msgid "Curve"
 msgstr "xy-kriva"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4033
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4088
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4043
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4098
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -13363,8 +13363,8 @@ msgid "Failed to export"
 msgstr "Otvaranje neuspješno"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4033
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4088
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4043
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4098
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -13761,7 +13761,7 @@ msgid "Prepend"
 msgstr "Dodaj na početak"
 
 #: src/frontend/datasources/ImportDialog.cpp:106
-#: src/frontend/notebook/NotebookView.cpp:65
+#: src/frontend/notebook/NotebookView.cpp:71
 #, kde-format
 msgid "Replace"
 msgstr "Zamijeni"
@@ -16331,21 +16331,21 @@ msgid "Automatic (G)"
 msgstr "Automatski (G)"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:88
-#: src/frontend/matrix/MatrixView.cpp:160
+#: src/frontend/matrix/MatrixView.cpp:161
 #, fuzzy, kde-format
 #| msgid "Remo&ve Columns"
 msgid "Rows and Columns"
 msgstr "&Ukloni kolone"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:89
-#: src/frontend/matrix/MatrixView.cpp:162
+#: src/frontend/matrix/MatrixView.cpp:163
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "xy-Values"
 msgstr "Vrijednosti"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:90
-#: src/frontend/matrix/MatrixView.cpp:164
+#: src/frontend/matrix/MatrixView.cpp:165
 #, kde-format
 msgid "Rows, Columns and xy-Values"
 msgstr ""
@@ -18683,399 +18683,399 @@ msgstr "Generiši funkcijske vrijednosti"
 msgid "%1: fill matrix with function values"
 msgstr "%1: ispuni kolonu funkcijskim vrijednostima"
 
-#: src/frontend/matrix/MatrixView.cpp:119
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:311
+#: src/frontend/matrix/MatrixView.cpp:120
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:312
 #, kde-format
 msgid "Cu&t"
 msgstr "&Isijeci"
 
-#: src/frontend/matrix/MatrixView.cpp:120
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:312
+#: src/frontend/matrix/MatrixView.cpp:121
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:313
 #, kde-format
 msgid "&Copy"
 msgstr "&Kopiraj"
 
-#: src/frontend/matrix/MatrixView.cpp:121
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:313
+#: src/frontend/matrix/MatrixView.cpp:122
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:314
 #, kde-format
 msgid "Past&e"
 msgstr "&Umetni"
 
-#: src/frontend/matrix/MatrixView.cpp:122
+#: src/frontend/matrix/MatrixView.cpp:123
 #, kde-format
 msgid "Clea&r Selection"
 msgstr "Uklon&i Selektovano"
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
-#: src/frontend/matrix/MatrixView.cpp:123
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:318
+#: src/frontend/matrix/MatrixView.cpp:124
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:319
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:292
 #: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
 msgid "Select All"
 msgstr "Označi sve"
 
-#: src/frontend/matrix/MatrixView.cpp:135
+#: src/frontend/matrix/MatrixView.cpp:136
 #, kde-format
 msgid "Function Values"
 msgstr "Vrijednosti funkcije"
 
-#: src/frontend/matrix/MatrixView.cpp:136
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:330
+#: src/frontend/matrix/MatrixView.cpp:137
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:331
 #, kde-format
 msgid "Const Values"
 msgstr "Konstantne vrijednosti"
 
-#: src/frontend/matrix/MatrixView.cpp:137
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:358
+#: src/frontend/matrix/MatrixView.cpp:138
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:359
 #, fuzzy, kde-format
 #| msgid "Clea&r Columns"
 msgid "Clear Content"
 msgstr "Očisti kolone"
 
-#: src/frontend/matrix/MatrixView.cpp:138
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:342
+#: src/frontend/matrix/MatrixView.cpp:139
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:343
 #, fuzzy, kde-format
 #| msgid "&Go to Cell"
 msgid "&Go to Cell..."
 msgstr "&Idi na ćeliju"
 
-#: src/frontend/matrix/MatrixView.cpp:140
+#: src/frontend/matrix/MatrixView.cpp:141
 #, kde-format
 msgid "&Transpose"
 msgstr "&Transpozicija"
 
-#: src/frontend/matrix/MatrixView.cpp:141
+#: src/frontend/matrix/MatrixView.cpp:142
 #, kde-format
 msgid "Mirror &Horizontally"
 msgstr "Ogledalo &Horizontalno"
 
-#: src/frontend/matrix/MatrixView.cpp:142
+#: src/frontend/matrix/MatrixView.cpp:143
 #, kde-format
 msgid "Mirror &Vertically"
 msgstr "Ogledalo &Vertikalno"
 
-#: src/frontend/matrix/MatrixView.cpp:145
+#: src/frontend/matrix/MatrixView.cpp:146
 #, fuzzy, kde-format
 #| msgid "Value"
 msgid "Add Value"
 msgstr "Vrijednost"
 
-#: src/frontend/matrix/MatrixView.cpp:147
+#: src/frontend/matrix/MatrixView.cpp:148
 #, fuzzy, kde-format
 #| msgid "Start value"
 msgid "Subtract Value"
 msgstr "Početna vrijednost"
 
-#: src/frontend/matrix/MatrixView.cpp:149
+#: src/frontend/matrix/MatrixView.cpp:150
 #, fuzzy, kde-format
 #| msgid "Function Values"
 msgid "Multiply Value"
 msgstr "Vrijednosti funkcije"
 
-#: src/frontend/matrix/MatrixView.cpp:151
+#: src/frontend/matrix/MatrixView.cpp:152
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide Value"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/matrix/MatrixView.cpp:176
+#: src/frontend/matrix/MatrixView.cpp:177
 #, kde-format
 msgid "&Add Columns"
 msgstr "&Dodaj kolone"
 
-#: src/frontend/matrix/MatrixView.cpp:177
+#: src/frontend/matrix/MatrixView.cpp:178
 #, kde-format
 msgid "&Insert Empty Columns"
 msgstr "&Umetni prazne kolone"
 
-#: src/frontend/matrix/MatrixView.cpp:178
+#: src/frontend/matrix/MatrixView.cpp:179
 #, kde-format
 msgid "Remo&ve Columns"
 msgstr "&Ukloni kolone"
 
-#: src/frontend/matrix/MatrixView.cpp:179
+#: src/frontend/matrix/MatrixView.cpp:180
 #, kde-format
 msgid "Clea&r Columns"
 msgstr "Očisti kolone"
 
-#: src/frontend/matrix/MatrixView.cpp:180
-#: src/frontend/matrix/MatrixView.cpp:187
+#: src/frontend/matrix/MatrixView.cpp:181
+#: src/frontend/matrix/MatrixView.cpp:188
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Statisti&cs"
 msgstr "Statistike"
 
-#: src/frontend/matrix/MatrixView.cpp:183
+#: src/frontend/matrix/MatrixView.cpp:184
 #, kde-format
 msgid "&Add Rows"
 msgstr "&Dodaj redove"
 
-#: src/frontend/matrix/MatrixView.cpp:184
+#: src/frontend/matrix/MatrixView.cpp:185
 #, kde-format
 msgid "&Insert Empty Rows"
 msgstr "&Umetni prazne redove"
 
-#: src/frontend/matrix/MatrixView.cpp:185
+#: src/frontend/matrix/MatrixView.cpp:186
 #, kde-format
 msgid "Remo&ve Rows"
 msgstr "&Ukloni redove"
 
-#: src/frontend/matrix/MatrixView.cpp:186
+#: src/frontend/matrix/MatrixView.cpp:187
 #, kde-format
 msgid "Clea&r Rows"
 msgstr "&Očisti redove"
 
-#: src/frontend/matrix/MatrixView.cpp:244
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:527
+#: src/frontend/matrix/MatrixView.cpp:246
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:528
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:82
 #, kde-format
 msgid "Selection"
 msgstr "Odabiranje"
 
-#: src/frontend/matrix/MatrixView.cpp:266
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:618
+#: src/frontend/matrix/MatrixView.cpp:268
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:619
 #, kde-format
 msgid "Generate Data"
 msgstr "Generiši podatke"
 
-#: src/frontend/matrix/MatrixView.cpp:271
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:633
+#: src/frontend/matrix/MatrixView.cpp:273
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:634
 #, fuzzy, kde-format
 #| msgid "Generate Data"
 msgid "Manipulate Data"
 msgstr "Generiši podatke"
 
 #. i18n: ectx: property (text), widget (QToolButton, bViewMode)
-#: src/frontend/matrix/MatrixView.cpp:282 src/frontend/ui/colormapswidget.ui:60
+#: src/frontend/matrix/MatrixView.cpp:284 src/frontend/ui/colormapswidget.ui:60
 #, kde-format
 msgid "View"
 msgstr ""
 
-#: src/frontend/matrix/MatrixView.cpp:287
+#: src/frontend/matrix/MatrixView.cpp:289
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Header Format"
 msgstr "Format podataka"
 
-#: src/frontend/matrix/MatrixView.cpp:293
+#: src/frontend/matrix/MatrixView.cpp:295
 #: src/frontend/worksheet/WorksheetView.cpp:455
 #, kde-format
 msgid "Zoom"
 msgstr "Uvećaj"
 
-#: src/frontend/matrix/MatrixView.cpp:583
-#: src/frontend/matrix/MatrixView.cpp:587
+#: src/frontend/matrix/MatrixView.cpp:585
+#: src/frontend/matrix/MatrixView.cpp:589
 #, kde-format
 msgid "Go to Cell"
 msgstr "Idi na ćeliju"
 
-#: src/frontend/matrix/MatrixView.cpp:583
+#: src/frontend/matrix/MatrixView.cpp:585
 #, kde-format
 msgid "Enter column"
 msgstr "Unesi kolonu"
 
-#: src/frontend/matrix/MatrixView.cpp:587
+#: src/frontend/matrix/MatrixView.cpp:589
 #, kde-format
 msgid "Enter row"
 msgstr "Unesi red"
 
-#: src/frontend/matrix/MatrixView.cpp:618
+#: src/frontend/matrix/MatrixView.cpp:620
 #, fuzzy, kde-format
 #| msgid "Fill the selection with constant value"
 msgid "Fill the matrix with constant value"
 msgstr "Ispuni selektovano konstantnim vrijednostima"
 
-#: src/frontend/matrix/MatrixView.cpp:636
+#: src/frontend/matrix/MatrixView.cpp:643
 #, kde-format
 msgid "%1: cut selected cell(s)"
 msgstr "%1: izreži selektovanu(e) ćeliju(e)"
 
-#: src/frontend/matrix/MatrixView.cpp:685
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1769
+#: src/frontend/matrix/MatrixView.cpp:692
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1770
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: zalijepi iz clipboard-a"
 
-#: src/frontend/matrix/MatrixView.cpp:755
+#: src/frontend/matrix/MatrixView.cpp:762
 #, kde-format
 msgid "%1: clear selected cell(s)"
 msgstr "%1: ukloni označenu ćeliju(e)"
 
-#: src/frontend/matrix/MatrixView.cpp:903
+#: src/frontend/matrix/MatrixView.cpp:910
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1: umetni praznu(e) kolonu(e)"
 
-#: src/frontend/matrix/MatrixView.cpp:926
+#: src/frontend/matrix/MatrixView.cpp:933
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1: ukloni selektovanu kolonu(e)"
 
-#: src/frontend/matrix/MatrixView.cpp:935
+#: src/frontend/matrix/MatrixView.cpp:942
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1: obriši selektovanu kolonu(e)"
 
-#: src/frontend/matrix/MatrixView.cpp:960
+#: src/frontend/matrix/MatrixView.cpp:967
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1: umetni prazan red(ove)"
 
-#: src/frontend/matrix/MatrixView.cpp:983
+#: src/frontend/matrix/MatrixView.cpp:990
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1: izbriši označeni red(ove)"
 
-#: src/frontend/matrix/MatrixView.cpp:997
+#: src/frontend/matrix/MatrixView.cpp:1004
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1: ukloni označeni red(ove)"
 
-#: src/frontend/notebook/NotebookView.cpp:40
+#: src/frontend/notebook/NotebookView.cpp:46
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to initialize %1."
 msgstr "Otvaranje neuspješno"
 
-#: src/frontend/notebook/NotebookView.cpp:84
+#: src/frontend/notebook/NotebookView.cpp:90
 #, fuzzy, kde-format
 #| msgid "Fitted Points"
 msgid "Evaluate Entry"
 msgstr "Tačke podešavanja"
 
-#: src/frontend/notebook/NotebookView.cpp:88
+#: src/frontend/notebook/NotebookView.cpp:94
 #, kde-format
 msgid "Remove Current Entry"
 msgstr ""
 
-#: src/frontend/notebook/NotebookView.cpp:92
+#: src/frontend/notebook/NotebookView.cpp:98
 #, fuzzy, kde-format
 #| msgid "Comment"
 msgid "Command"
 msgstr "Komentar"
 
-#: src/frontend/notebook/NotebookView.cpp:102
+#: src/frontend/notebook/NotebookView.cpp:108
 #: src/frontend/widgets/LabelWidget.cpp:480
 #, kde-format
 msgid "Markdown"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTex)
-#: src/frontend/notebook/NotebookView.cpp:106
+#: src/frontend/notebook/NotebookView.cpp:112
 #: src/frontend/ui/settingsworksheetpage.ui:65
 #: src/frontend/widgets/LabelWidget.cpp:478
 #, kde-format
 msgid "LaTeX"
 msgstr ""
 
-#: src/frontend/notebook/NotebookView.cpp:112
+#: src/frontend/notebook/NotebookView.cpp:118
 #, fuzzy, kde-format
 #| msgid "Scale Breakings"
 msgid "Page Break"
 msgstr "Probijanja granica skale"
 
-#: src/frontend/notebook/NotebookView.cpp:124
+#: src/frontend/notebook/NotebookView.cpp:130
 #, kde-format
 msgid "Compute Eigenvectors"
 msgstr ""
 
-#: src/frontend/notebook/NotebookView.cpp:130
+#: src/frontend/notebook/NotebookView.cpp:136
 #, fuzzy, kde-format
 #| msgid "Clear Matrix"
 msgid "Create Matrix"
 msgstr "Očisti matricu"
 
-#: src/frontend/notebook/NotebookView.cpp:136
+#: src/frontend/notebook/NotebookView.cpp:142
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "Compute Eigenvalues"
 msgstr "nema vrijednosti"
 
-#: src/frontend/notebook/NotebookView.cpp:142
+#: src/frontend/notebook/NotebookView.cpp:148
 #, fuzzy, kde-format
 #| msgid "Matrix"
 msgid "Invert Matrix"
 msgstr "Matrica"
 
-#: src/frontend/notebook/NotebookView.cpp:160
+#: src/frontend/notebook/NotebookView.cpp:166
 #, fuzzy, kde-format
 #| msgid "Tree options"
 msgid "Solve Equations"
 msgstr "Opcije stabla"
 
-#: src/frontend/notebook/NotebookView.cpp:183
+#: src/frontend/notebook/NotebookView.cpp:189
 #, fuzzy, kde-format
 #| msgid "linear"
 msgid "Linear Algebra"
 msgstr "linearan"
 
-#: src/frontend/notebook/NotebookView.cpp:195
+#: src/frontend/notebook/NotebookView.cpp:201
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Calculate"
 msgstr "Preračunaj"
 
-#: src/frontend/notebook/NotebookView.cpp:205
+#: src/frontend/notebook/NotebookView.cpp:211
 #, kde-format
 msgid "Settings"
 msgstr ""
 
-#: src/frontend/notebook/NotebookView.cpp:254
+#: src/frontend/notebook/NotebookView.cpp:260
 #, fuzzy, kde-format
 #| msgid "Constants"
 msgid "Assistants"
 msgstr "Konstante"
 
-#: src/frontend/notebook/NotebookView.cpp:286
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:557
+#: src/frontend/notebook/NotebookView.cpp:301
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:558
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Plot Data"
 msgstr "Prostor za Crtanje"
 
-#: src/frontend/notebook/NotebookView.cpp:290
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:589
+#: src/frontend/notebook/NotebookView.cpp:305
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:590
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Statistical Analysis"
 msgstr "Statistike"
 
-#: src/frontend/notebook/NotebookView.cpp:291
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:590
+#: src/frontend/notebook/NotebookView.cpp:306
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:591
 #, kde-format
 msgid "Hypothesis Test"
 msgstr ""
 
-#: src/frontend/notebook/NotebookView.cpp:297
+#: src/frontend/notebook/NotebookView.cpp:312
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Variable Statistics..."
 msgstr "Statistike"
 
-#: src/frontend/notebook/NotebookView.cpp:350
+#: src/frontend/notebook/NotebookView.cpp:365
 #, fuzzy, kde-format
 #| msgid "iterations"
 msgid "Interrupt"
 msgstr "iteracije"
 
-#: src/frontend/notebook/NotebookView.cpp:352
+#: src/frontend/notebook/NotebookView.cpp:367
 #, kde-format
 msgid "Calculating..."
 msgstr ""
 
-#: src/frontend/notebook/NotebookView.cpp:356
+#: src/frontend/notebook/NotebookView.cpp:371
 #, kde-format
 msgid "Ready"
 msgstr ""
 
-#: src/frontend/notebook/NotebookView.cpp:375
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:875
+#: src/frontend/notebook/NotebookView.cpp:390
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:876
 #, kde-format
 msgid "Hypothesis Test for %1"
 msgstr ""
 
-#: src/frontend/notebook/NotebookView.cpp:389
+#: src/frontend/notebook/NotebookView.cpp:404
 #, fuzzy, kde-format
 #| msgid "Row Statisti&cs"
 msgid "%1: variable statistics"
@@ -19209,7 +19209,7 @@ msgid "Search/Filter Options"
 msgstr "sakrije pretragu/opcije za filtriranje"
 
 #: src/frontend/ProjectExplorer.cpp:274 src/frontend/ProjectExplorer.cpp:432
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1009
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1010
 #, kde-format
 msgid "Columns"
 msgstr "Kolone"
@@ -19258,7 +19258,7 @@ msgid "Do you really want to delete %1?"
 msgstr "Da li zaista želite da obrišete odabrani %1 objekat?"
 
 #: src/frontend/ProjectExplorer.cpp:1014
-#: src/frontend/worksheet/WorksheetView.cpp:1458
+#: src/frontend/worksheet/WorksheetView.cpp:1459
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Delete selected object"
@@ -19949,7 +19949,7 @@ msgid "Does Not Contain"
 msgstr "Ne radi ništa"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:72
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:314
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:315
 #, kde-format
 msgid "&Mask"
 msgstr ""
@@ -20821,18 +20821,18 @@ msgstr "&Selektovane Kolone"
 msgid "Sort"
 msgstr "Sortiraj"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:315
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:316
 #, kde-format
 msgid "&Unmask"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:316
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:317
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "&Reverse"
 msgstr "Inverzni eksponent"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:317
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:318
 #, fuzzy, kde-format
 #| msgid "Clea&r Columns"
 msgid "Clea&r Content"
@@ -20841,383 +20841,383 @@ msgstr "Očisti kolone"
 #. i18n("Assign &Formula"), this);
 #. action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
 #. action_fill_sel_row_numbers = new QAction(QIcon::fromTheme(QString()), i18n("Row Numbers"), this);
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:325
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:326
 #, kde-format
 msgid "Row Numbers"
 msgstr "Brojevi redova"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:326
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:327
 #, kde-format
 msgid "Uniform Random Values"
 msgstr "Uniformirane slučajne Vrijednosti"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:327
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:328
 #, kde-format
 msgid "Random Values"
 msgstr "Slučajne Vrijednosti"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:328
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:329
 #, kde-format
 msgid "Equidistant Values"
 msgstr "Ekvidistantne vrijednosti"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:329
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:330
 #, fuzzy, kde-format
 #| msgid "Equidistant Values"
 msgid "Equidistant Date&Time Values"
 msgstr "Ekvidistantne vrijednosti"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:332
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:333
 #, fuzzy, kde-format
 #| msgid "Cap size"
 msgid "Sample Values"
 msgstr "Veličina kape"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:333
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:334
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Flatten Columns"
 msgstr "&Selektovane Kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:336
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1110
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1495
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:337
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1111
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1496
 #, kde-format
 msgid "Show Comments"
 msgstr "Prikaži komentare"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:337
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1121
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1500
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:338
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1122
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1501
 #, fuzzy, kde-format
 #| msgid "Show Options"
 msgid "Show Sparklines"
 msgstr "Prikaži opcije"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:339
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:340
 #, kde-format
 msgid "Clear Spreadsheet"
 msgstr "Očisti Tabelarni prikaz"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:340
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:341
 #, kde-format
 msgid "Clear Masks"
 msgstr "Očisti maske"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:341
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:342
 #, fuzzy, kde-format
 #| msgid "&Transpose"
 msgid "Transpose"
 msgstr "&Transpozicija"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:343
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:344
 #, fuzzy, kde-format
 #| msgid "Search/Filter:"
 msgid "&Search"
 msgstr "Traži/Filtriraj:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:345
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:346
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:225
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgid "&Replace"
 msgstr "Zamijeni"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:347
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:493
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:348
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:494
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "Column Statistics..."
 msgstr "Statisti&ka Kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:349
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:350
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "Columns Statistics Spreadsheet"
 msgstr "Statisti&ka Kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:355
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:356
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert Multiple Columns Left"
 msgstr "&Umetni prazne kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:356
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:357
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert Multiple Columns Right"
 msgstr "&Umetni prazne kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:359
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1601
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:360
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1602
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Freeze Column"
 msgstr "&Selektovane Kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:394
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:395
 #, fuzzy, kde-format
 #| msgid "&Add Rows"
 msgid "Add"
 msgstr "&Dodaj redove"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:396
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:397
 #, fuzzy, kde-format
 #| msgid "Start value"
 msgid "Subtract"
 msgstr "Početna vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:398
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:399
 #, fuzzy, kde-format
 #| msgid "Function Values"
 msgid "Multiply"
 msgstr "Vrijednosti funkcije"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:400
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:401
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:402
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:403
 #, fuzzy, kde-format
 #| msgid "Drop lines:"
 msgid "Drop Values"
 msgstr "Padajuće linije:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:403
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:404
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "Mask Values"
 msgstr "Vrijednosti"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:405
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:406
 #, kde-format
 msgid "Reverse"
 msgstr ""
 
 #. i18n("Join"), this);
 #. algorithms - baseline subtraction, outliar removal, etc.
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:409
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:410
 #, fuzzy, kde-format
 #| msgid "Start value"
 msgid "Subtract Baseline"
 msgstr "Početna vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:415
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:416
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide by Sum"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:418
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:419
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide by Min"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:421
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:422
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide by Max"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:424
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:425
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide by Count"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:427
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:428
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide by Mean"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:430
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:431
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide by Median"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:433
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:434
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide by Mode"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:436
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:437
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide by Range"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:439
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:440
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide by SD"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:442
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:443
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide by MAD"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:445
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:446
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgid "Divide by IQR"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:448
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:449
 #, kde-format
 msgid "(x-Mean)/SD"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:451
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:452
 #, kde-format
 msgid "(x-Median)/MAD"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:454
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:455
 #, kde-format
 msgid "(x-Median)/IQR"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:457
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:458
 #, fuzzy, kde-format
 #| msgid "Interface"
 msgid "Rescale to [a, b]"
 msgstr "Interfejs"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:496
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:497
 #, kde-format
 msgid "Heatmap"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:502
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:503
 #, kde-format
 msgid "Insert Multiple Rows Above"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:503
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:504
 #, fuzzy, kde-format
 #| msgid "Scale Breakings"
 msgid "Insert Multiple Rows Below"
 msgstr "Probijanja granica skale"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:505
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:506
 #, fuzzy, kde-format
 #| msgid "%1: fill column function values"
 #| msgid_plural "%1: fill columns with function values"
 msgid "Delete Rows With Missing Values"
 msgstr "%1: ispuni kolonu funkcijskim vrijednostima"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:506
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:507
 #, kde-format
 msgid "Mask Rows With Missing Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:507
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:508
 #, kde-format
 msgid "Row Statisti&cs"
 msgstr "Statisti&ka Reda"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:515
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2199
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:516
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2200
 #, kde-format
 msgid "Seasonal Decomposition"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:561
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:562
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Conditional Formatting"
 msgstr "Veza:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:576
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:577
 #, fuzzy, kde-format
 #| msgid "Beta Distribution"
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
 msgstr "Beta Distribucija"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:581
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:582
 #, kde-format
 msgid "Analyze and Plot Data"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:596
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:597
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Time Series Analysis"
 msgstr "Statistike"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:600
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:601
 #, fuzzy, kde-format
 #| msgid "S&et Column As"
 msgid "Set Column As"
 msgstr "P&ostavi Kolonu Kao"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:669
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:670
 #, fuzzy, kde-format
 #| msgid "&Normalize Columns"
 msgid "Normalize"
 msgstr "&Normalizuj Kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:692
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:693
 #, kde-format
 msgid "Ladder of Powers"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1108
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1493
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1109
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1494
 #, kde-format
 msgid "Hide Comments"
 msgstr "Sakrij komentare"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1119
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1498
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1120
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1499
 #, fuzzy, kde-format
 #| msgid "Hide Options"
 msgid "Hide Sparklines"
 msgstr "Sakrij Opcije"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1605
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1606
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Unfreeze Column"
 msgstr "&Selektovane Kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2004
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2005
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2017
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2018
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: maskiraj selektovane ćelije"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2048
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2049
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: demaskiraj selektovane ćelije"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2207
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2218
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2208
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2219
 #, kde-format
 msgid "Seasonal Decomposition for %1"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2239
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2240
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: ispuni ćelije brojevima redova"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2303
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2304
 #, fuzzy, kde-format
 #| msgid "%1: fill cells with row numbers"
 msgid "%1: fill column with row numbers"
@@ -21226,44 +21226,44 @@ msgstr[0] "%1: ispuni ćelije brojevima redova"
 msgstr[1] "%1: ispuni ćelije brojevima redova"
 msgstr[2] "%1: ispuni ćelije brojevima redova"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2346
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2347
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: ispuni ćelije slučajnim vrijednostima"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2471
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2472
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: ispuni ćelije konstantnim vrijednostima"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2481
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2502
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2519
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2535
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2482
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2503
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2520
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2536
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Ispuni selektovano konstantnim vrijednostima"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2614
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2652
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2615
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2653
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert empty columns"
 msgstr "&Umetni prazne kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2615
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2653
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2616
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2654
 #, fuzzy, kde-format
 #| msgid "Enter number of columns"
 msgid "Enter the number of columns to insert"
 msgstr "Unesi broj kolona"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2686
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2687
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: ukloni selektovane kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2782
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2783
 #, fuzzy, kde-format
 #| msgid "%1: remove 1 column"
 #| msgid_plural "%1: remove %2 columns"
@@ -21273,173 +21273,173 @@ msgstr[0] "%1: ukloni %2 kolonu"
 msgstr[1] "%1: ukloni %2 kolone"
 msgstr[2] "%1: ukloni %2 kolona"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2854
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2855
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2868
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2869
 #, fuzzy, kde-format
 #| msgid "The file already exists. Do you really want to overwrite it?"
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr "Datoteka već postoji. Da li zaista želite da je ponovo sačuvate?"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2869
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2870
 #, fuzzy, kde-format
 #| msgid "Print spreadsheet"
 msgid "Transpose Spreadsheet"
 msgstr "Ispiši tabelarni prikaz"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2905
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2906
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: normalizuj kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2925
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2926
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2936
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2937
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2947
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2948
 #, kde-format
 msgid "Max = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2958
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2959
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Count = 0"
 msgstr "centar"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2969
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2970
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean = 0"
 msgstr "Srednje"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2980
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2981
 #, fuzzy, kde-format
 #| msgid "mean absolute error"
 msgid "Median = 0"
 msgstr "srednja apsolutna greška"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2992
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2993
 #, fuzzy, kde-format
 #| msgid "Model"
 msgid "Mode = 0"
 msgstr "Model"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2994
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2995
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3005
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3006
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "Range = 0"
 msgstr "x-Domet:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3016
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3050
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3017
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3051
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3027
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3062
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3028
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3063
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3038
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3074
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3039
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3075
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3086
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3087
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3105
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3106
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3117
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3118
 #, fuzzy, kde-format
 #| msgid "%1: sort columns"
 msgid "%1: power transform columns"
 msgstr "%1: sortiraj kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3233
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3234
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "%1: column statistics"
 msgstr "Statisti&ka Kolone"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3264
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3265
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Selection in %1"
 msgstr "Odabiranje"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3307
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3308
 #, fuzzy, kde-format
 #| msgid "Row Statisti&cs"
 msgid "%1: row statistics"
 msgstr "Statisti&ka Reda"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3317
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3318
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3342
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3378
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3343
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3379
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "Insert multiple rows"
 msgstr "&Umetni prazne redove"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3343
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3379
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3344
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3380
 #, fuzzy, kde-format
 #| msgid "Enter number of rows"
 msgid "Enter the number of rows to insert"
 msgstr "Unesi broj redova"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3414
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3415
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: ukloni selektovane redove"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3469
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3470
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: očisti selektovane ćelije"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3725
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3735
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3734
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3744
 #, fuzzy, kde-format
 #| msgid "Source name"
 msgid "Selected: %1 cells"
 msgstr "Ime izvora"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3753
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3763
 #, fuzzy, kde-format
 #| msgid "Arrow:"
 msgid "row"
@@ -21448,7 +21448,7 @@ msgstr[0] "Strelica:"
 msgstr[1] "Strelica:"
 msgstr[2] "Strelica:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3754
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3764
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "column"
@@ -21457,83 +21457,83 @@ msgstr[0] "Kolona"
 msgstr[1] "Kolona"
 msgstr[2] "Kolona"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3755
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3765
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3756
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3766
 #, fuzzy, kde-format
 #| msgid "value"
 msgid "masked value"
 msgstr "vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3756
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3766
 #, fuzzy, kde-format
 #| msgid "value"
 msgid "masked values"
 msgstr "vrijednost"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3757
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "missing value"
 msgstr "nema vrijednosti"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3757
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "missing values"
 msgstr "nema vrijednosti"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3768
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3758
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3759
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
 #, fuzzy, kde-format
 #| msgid "1"
 msgid "%1"
 msgstr "1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3759
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
 #, fuzzy, kde-format
 #| msgctxt "postfix for XML warning messages"
 #| msgid " "
 msgid ", "
 msgstr " "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3763
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3773
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3773
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3783
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3852
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3862
 #, fuzzy, kde-format
 #| msgid "Print spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Ispiši tabelarni prikaz"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4467
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4477
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4499
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4509
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Otvaranje neuspješno"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4554
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4564
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -28868,10 +28868,10 @@ msgstr "sva crtanja"
 
 #: src/frontend/worksheet/WorksheetView.cpp:434
 #: src/frontend/worksheet/WorksheetView.cpp:495
-#: src/frontend/worksheet/WorksheetView.cpp:1300
-#: src/frontend/worksheet/WorksheetView.cpp:1309
-#: src/frontend/worksheet/WorksheetView.cpp:1318
-#: src/frontend/worksheet/WorksheetView.cpp:1327
+#: src/frontend/worksheet/WorksheetView.cpp:1301
+#: src/frontend/worksheet/WorksheetView.cpp:1310
+#: src/frontend/worksheet/WorksheetView.cpp:1319
+#: src/frontend/worksheet/WorksheetView.cpp:1328
 #, kde-format
 msgid "Plot Area"
 msgstr "Prostor za Crtanje"
@@ -28893,7 +28893,7 @@ msgstr "Primijeni akcije na"
 msgid "Zoom/Navigate"
 msgstr "Uvećanje/Navigacija"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1457
+#: src/frontend/worksheet/WorksheetView.cpp:1458
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
@@ -28901,7 +28901,7 @@ msgstr[0] "Da li zaista želite da obrišete odabrani %1 objekat?"
 msgstr[1] "Da li zaista želite da obrišete odabrana %1 objekta?"
 msgstr[2] "Da li zaista želite da obrišete odabranih %1 objekata?"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1465
+#: src/frontend/worksheet/WorksheetView.cpp:1466
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Uklonik odabrane radne elmente."

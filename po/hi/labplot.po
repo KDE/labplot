@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-30 00:39+0000\n"
+"POT-Creation-Date: 2026-03-31 00:40+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -51,7 +51,7 @@ msgstr "नाम बदलें"
 
 #: src/backend/core/AbstractAspect.cpp:450
 #: src/backend/spreadsheet/Spreadsheet.cpp:920
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:497
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:498
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #: src/frontend/worksheet/WorksheetView.cpp:139
 #, kde-format
@@ -75,7 +75,7 @@ msgstr "नीचे"
 
 #: src/backend/core/AbstractAspect.cpp:550
 #: src/backend/core/aspectcommands.h:171
-#: src/backend/datapicker/Datapicker.cpp:227
+#: src/backend/datapicker/Datapicker.cpp:216
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2429
 #, kde-format
 msgid "%1: add %2"
@@ -267,7 +267,7 @@ msgstr "बड़ा पूर्णांक"
 #: src/backend/datasources/filters/AsciiFilter.cpp:615
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
 #: src/frontend/ActionsManager.cpp:547
-#: src/frontend/notebook/NotebookView.cpp:96
+#: src/frontend/notebook/NotebookView.cpp:102
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:634
@@ -338,13 +338,13 @@ msgid "%1: unmask cells"
 msgstr "%1: सेल अनमास्क करें"
 
 #: src/backend/core/abstractcolumncommands.cpp:243
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2576
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2577
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: हीटमैप प्रारूप सेट करें"
 
 #: src/backend/core/abstractcolumncommands.cpp:269
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2594
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2595
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: हीटमैप प्रारूप हटाएँ"
@@ -620,7 +620,7 @@ msgid "%1: change cell values"
 msgstr "%1: सेल मान बदलें"
 
 #: src/backend/core/column/columncommands.cpp:529
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2749
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2750
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: प्लॉट पदनाम निर्धारित करें"
@@ -820,7 +820,7 @@ msgstr "अज्ञात कार्यपुस्तिका तत्व 
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:48
-#: src/backend/datapicker/Datapicker.cpp:379
+#: src/backend/datapicker/Datapicker.cpp:368
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1915
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1921
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1927
@@ -841,12 +841,12 @@ msgstr "कथानक"
 msgid "%1, active curve \"%2\""
 msgstr "%1, सक्रिय वक्र \"%2\""
 
-#: src/backend/datapicker/Datapicker.cpp:224
+#: src/backend/datapicker/Datapicker.cpp:213
 #, kde-format
 msgid "Point %1"
 msgstr "बिन्दु %1"
 
-#: src/backend/datapicker/Datapicker.cpp:396
+#: src/backend/datapicker/Datapicker.cpp:385
 #, kde-format
 msgid "unknown datapicker element '%1'"
 msgstr "अज्ञात डेटापिकर तत्व '%1'"
@@ -855,7 +855,7 @@ msgstr "अज्ञात डेटापिकर तत्व '%1'"
 #. i18n: ectx: property (text), widget (QLabel, lData)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/DatapickerCurve.cpp:175
-#: src/frontend/matrix/MatrixView.cpp:128
+#: src/frontend/matrix/MatrixView.cpp:129
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:378
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:395
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:409
@@ -938,7 +938,7 @@ msgid "%1: set error bar outline style"
 msgstr "%1: त्रुटि बार आउटलाइन शैली सेट करें"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:420
+#: src/backend/datapicker/DatapickerImage.cpp:407
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
 #: src/backend/worksheet/plots/cartesian/ParetoChart.cpp:141
@@ -953,7 +953,7 @@ msgid "%1: set visible"
 msgstr "%1: दृश्यमान सेट करें"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:420
+#: src/backend/datapicker/DatapickerImage.cpp:407
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
 #: src/backend/worksheet/plots/cartesian/ParetoChart.cpp:141
@@ -974,44 +974,44 @@ msgctxt "@title:window"
 msgid "Print Datapicker Image"
 msgstr "डेटापिकर छवि प्रिंट करें"
 
-#: src/backend/datapicker/DatapickerImage.cpp:317
-#: src/backend/datapicker/DatapickerImage.cpp:372
+#: src/backend/datapicker/DatapickerImage.cpp:304
+#: src/backend/datapicker/DatapickerImage.cpp:359
 #, kde-format
 msgid "%1: upload image"
 msgstr "%1: छवि अपलोड करें"
 
-#: src/backend/datapicker/DatapickerImage.cpp:371
+#: src/backend/datapicker/DatapickerImage.cpp:358
 #, kde-format
 msgid "%1: upload new image"
 msgstr "%1: नई छवि अपलोड करें"
 
-#: src/backend/datapicker/DatapickerImage.cpp:391
+#: src/backend/datapicker/DatapickerImage.cpp:378
 #: src/backend/worksheet/WorksheetElement.cpp:837
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: रोटेशन कोण सेट करें"
 
-#: src/backend/datapicker/DatapickerImage.cpp:398
+#: src/backend/datapicker/DatapickerImage.cpp:385
 #, kde-format
 msgid "%1: set Axis points"
 msgstr "%1: अक्ष बिंदु सेट करें"
 
-#: src/backend/datapicker/DatapickerImage.cpp:405
+#: src/backend/datapicker/DatapickerImage.cpp:392
 #, kde-format
 msgid "%1: set editor settings"
 msgstr "%1: संपादक सेटिंग्स सेट करें"
 
-#: src/backend/datapicker/DatapickerImage.cpp:412
+#: src/backend/datapicker/DatapickerImage.cpp:399
 #, kde-format
 msgid "%1: set minimum segment length"
 msgstr "%1: न्यूनतम खंड लंबाई निर्धारित करें"
 
-#: src/backend/datapicker/DatapickerImage.cpp:433
+#: src/backend/datapicker/DatapickerImage.cpp:420
 #, kde-format
 msgid "%1: remove all axis points"
 msgstr "%1: सभी अक्ष बिंदु हटाएँ"
 
-#: src/backend/datapicker/DatapickerImage.cpp:728
+#: src/backend/datapicker/DatapickerImage.cpp:715
 #: src/backend/worksheet/Image.cpp:411
 #, kde-format
 msgid "Failed to read image data"
@@ -2220,12 +2220,12 @@ msgstr "चाबी"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1884
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
-#: src/frontend/matrix/MatrixView.cpp:618
+#: src/frontend/matrix/MatrixView.cpp:620
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:187
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2482
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2502
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2519
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2535
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2483
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2503
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2520
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2536
 #: src/frontend/ui/dockwidgets/columndock.ui:542
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:65
 #, kde-format
@@ -6160,13 +6160,13 @@ msgid "unexpected end of document"
 msgstr "दस्तावेज़ का अप्रत्याशित अंत"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3800
 #, kde-format
 msgid "FITS image"
 msgstr "FITS छवि"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3800
 #, kde-format
 msgid "FITS table"
 msgstr "FITS तालिका"
@@ -9409,11 +9409,11 @@ msgstr "ऊर्ध्वाधर अक्ष"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2406
 #: src/frontend/ActionsManager.cpp:551
 #: src/frontend/datasources/ImportFileWidget.cpp:113
-#: src/frontend/matrix/MatrixView.cpp:131
-#: src/frontend/notebook/NotebookView.cpp:109
+#: src/frontend/matrix/MatrixView.cpp:132
+#: src/frontend/notebook/NotebookView.cpp:115
 #: src/frontend/widgets/BackgroundWidget.cpp:123
 #: src/frontend/worksheet/WorksheetView.cpp:242
-#: src/frontend/worksheet/WorksheetView.cpp:1360
+#: src/frontend/worksheet/WorksheetView.cpp:1361
 #, kde-format
 msgid "Image"
 msgstr "छवि"
@@ -9460,7 +9460,7 @@ msgstr "प्रति प्लॉट एक प्लॉट क्षेत�
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:496
 #: src/frontend/ActionsManager.cpp:899
-#: src/frontend/notebook/NotebookView.cpp:167
+#: src/frontend/notebook/NotebookView.cpp:173
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:442
 #, kde-format
@@ -9488,7 +9488,7 @@ msgstr "विश्लेषण"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:515
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:549
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2314
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:571
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:572
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
@@ -9834,20 +9834,20 @@ msgid "%1: set plot color mode"
 msgstr "%1: प्लॉट का रंग उपयोग करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1859
-#: src/backend/worksheet/Worksheet.cpp:905
+#: src/backend/worksheet/Worksheet.cpp:892
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: थीम लोड करें %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1861
-#: src/backend/worksheet/Worksheet.cpp:907
+#: src/backend/worksheet/Worksheet.cpp:894
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: डिफ़ॉल्ट थीम लोड करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1863
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5850
-#: src/backend/worksheet/Worksheet.cpp:909
+#: src/backend/worksheet/Worksheet.cpp:896
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: थीम सेट करें"
@@ -9908,7 +9908,7 @@ msgstr "'%1' का व्युत्पन्न"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2224
-#: src/frontend/notebook/NotebookView.cpp:148
+#: src/frontend/notebook/NotebookView.cpp:154
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:268
 #, kde-format
 msgid "Differentiation"
@@ -9922,7 +9922,7 @@ msgstr "'%1' का समाकलन"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2238
-#: src/frontend/notebook/NotebookView.cpp:154
+#: src/frontend/notebook/NotebookView.cpp:160
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:159
 #, kde-format
 msgid "Integration"
@@ -9969,8 +9969,8 @@ msgid "Function of '%1'"
 msgstr "'%1' का कार्य"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2389
-#: src/frontend/worksheet/WorksheetView.cpp:1354
 #: src/frontend/worksheet/WorksheetView.cpp:1355
+#: src/frontend/worksheet/WorksheetView.cpp:1356
 #, kde-format
 msgid "Text Label"
 msgstr "पाठ लेबल"
@@ -10042,50 +10042,50 @@ msgid "%1: change line+symbol width"
 msgstr "%1: लाइन+प्रतीक चौड़ाई बदलें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:777
-#: src/backend/worksheet/Worksheet.cpp:778
+#: src/backend/worksheet/Worksheet.cpp:764
+#: src/backend/worksheet/Worksheet.cpp:765
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: लेआउट शीर्ष मार्जिन सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:787
-#: src/backend/worksheet/Worksheet.cpp:788
+#: src/backend/worksheet/Worksheet.cpp:774
+#: src/backend/worksheet/Worksheet.cpp:775
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: लेआउट निचला मार्जिन सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:797
-#: src/backend/worksheet/Worksheet.cpp:798
+#: src/backend/worksheet/Worksheet.cpp:784
+#: src/backend/worksheet/Worksheet.cpp:785
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: लेआउट बायां मार्जिन सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:807
-#: src/backend/worksheet/Worksheet.cpp:808
+#: src/backend/worksheet/Worksheet.cpp:794
+#: src/backend/worksheet/Worksheet.cpp:795
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: लेआउट दायाँ मार्जिन सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:817
-#: src/backend/worksheet/Worksheet.cpp:818
+#: src/backend/worksheet/Worksheet.cpp:804
+#: src/backend/worksheet/Worksheet.cpp:805
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: लेआउट ऊर्ध्वाधर रिक्ति सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:827
-#: src/backend/worksheet/Worksheet.cpp:828
+#: src/backend/worksheet/Worksheet.cpp:814
+#: src/backend/worksheet/Worksheet.cpp:815
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: लेआउट क्षैतिज रिक्ति सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:847
-#: src/backend/worksheet/Worksheet.cpp:848
+#: src/backend/worksheet/Worksheet.cpp:834
+#: src/backend/worksheet/Worksheet.cpp:835
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: लेआउट कॉलम गिनती सेट करें"
@@ -11222,36 +11222,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "वर्कशीट प्रिंट करें"
 
-#: src/backend/worksheet/Worksheet.cpp:747
+#: src/backend/worksheet/Worksheet.cpp:734
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: आकार प्रकार बदलें"
 
-#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:746
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: \"सामग्री को पुनः स्केल करें\" गुण बदलें"
 
-#: src/backend/worksheet/Worksheet.cpp:767
-#: src/backend/worksheet/Worksheet.cpp:768
+#: src/backend/worksheet/Worksheet.cpp:754
+#: src/backend/worksheet/Worksheet.cpp:755
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: लेआउट सेट करें"
 
-#: src/backend/worksheet/Worksheet.cpp:837
-#: src/backend/worksheet/Worksheet.cpp:838
+#: src/backend/worksheet/Worksheet.cpp:824
+#: src/backend/worksheet/Worksheet.cpp:825
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: लेआउट पंक्ति संख्या सेट करें"
 
-#: src/backend/worksheet/Worksheet.cpp:878
-#: src/backend/worksheet/Worksheet.cpp:879
+#: src/backend/worksheet/Worksheet.cpp:865
+#: src/backend/worksheet/Worksheet.cpp:866
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: पृष्ठ आकार निर्धारित करें"
 
-#: src/backend/worksheet/Worksheet.cpp:1578
+#: src/backend/worksheet/Worksheet.cpp:1565
 #, kde-format
 msgid "Curves"
 msgstr "घटता"
@@ -12031,8 +12031,8 @@ msgstr "ऑटो स्केल वाई"
 
 #: src/frontend/ActionsManager.cpp:669 src/frontend/ActionsManager.cpp:772
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
-#: src/frontend/matrix/MatrixView.cpp:190
-#: src/frontend/notebook/NotebookView.cpp:53
+#: src/frontend/matrix/MatrixView.cpp:191
+#: src/frontend/notebook/NotebookView.cpp:59
 #: src/frontend/worksheet/WorksheetView.cpp:149
 #: src/frontend/worksheet/WorksheetView.cpp:394
 #, kde-format
@@ -12041,8 +12041,8 @@ msgstr "ज़ूम इन"
 
 #: src/frontend/ActionsManager.cpp:673 src/frontend/ActionsManager.cpp:775
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
-#: src/frontend/matrix/MatrixView.cpp:191
-#: src/frontend/notebook/NotebookView.cpp:57
+#: src/frontend/matrix/MatrixView.cpp:192
+#: src/frontend/notebook/NotebookView.cpp:63
 #: src/frontend/worksheet/WorksheetView.cpp:152
 #: src/frontend/worksheet/WorksheetView.cpp:398
 #, kde-format
@@ -12098,73 +12098,73 @@ msgid "Shift Down Y"
 msgstr "नीचे शिफ्ट Y"
 
 #: src/frontend/ActionsManager.cpp:718
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:500
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:501
 #, kde-format
 msgid "Insert Row Above"
 msgstr "ऊपर पंक्ति डालें"
 
 #: src/frontend/ActionsManager.cpp:721
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:501
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:502
 #, kde-format
 msgid "Insert Row Below"
 msgstr "नीचे पंक्ति डालें"
 
 #: src/frontend/ActionsManager.cpp:724
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:504
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:505
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "चयनित पंक्ति(पंक्तियाँ) हटाएं"
 
 #: src/frontend/ActionsManager.cpp:728
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:353
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:354
 #, kde-format
 msgid "Insert Column Left"
 msgstr "स्तंभ बाएँ डालें"
 
 #: src/frontend/ActionsManager.cpp:731
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:354
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:355
 #, kde-format
 msgid "Insert Column Right"
 msgstr "कॉलम दायाँ डालें"
 
 #: src/frontend/ActionsManager.cpp:734
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:357
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "चयनित कॉलम हटाएं"
 
 #: src/frontend/ActionsManager.cpp:738
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:487
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #, kde-format
 msgid "&Sort..."
 msgstr "&क्रम से लगाना..."
 
 #: src/frontend/ActionsManager.cpp:739
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:488
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:489
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "एकाधिक कॉलम को एक साथ क्रमबद्ध करें"
 
 #: src/frontend/ActionsManager.cpp:742
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:489
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:490
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "छोटे से बड़े क्रम में क्रमबद्ध करें"
 
 #: src/frontend/ActionsManager.cpp:743
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:490
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "चयनित स्तंभों को अलग-अलग आरोही क्रम में क्रमबद्ध करें"
 
 #: src/frontend/ActionsManager.cpp:746
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:491
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:492
 #, kde-format
 msgid "Sort &Descending"
 msgstr "अवरोही छांट"
 
 #: src/frontend/ActionsManager.cpp:747
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:492
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:493
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "चयनित स्तंभों को अवरोही क्रम में अलग-अलग क्रमबद्ध करें"
@@ -12187,22 +12187,22 @@ msgid "Update"
 msgstr "अद्यतन"
 
 #: src/frontend/ActionsManager.cpp:778
-#: src/frontend/notebook/NotebookView.cpp:61
+#: src/frontend/notebook/NotebookView.cpp:67
 #, kde-format
 msgid "Find"
 msgstr "खोजो"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
 #: src/frontend/ActionsManager.cpp:781
-#: src/frontend/notebook/NotebookView.cpp:69
+#: src/frontend/notebook/NotebookView.cpp:75
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "पुनः आरंभ करें"
 
 #: src/frontend/ActionsManager.cpp:784
-#: src/frontend/notebook/NotebookView.cpp:72
-#: src/frontend/notebook/NotebookView.cpp:354
+#: src/frontend/notebook/NotebookView.cpp:78
+#: src/frontend/notebook/NotebookView.cpp:369
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "मूल्यांकन नोटबुक"
@@ -12391,7 +12391,7 @@ msgid "Copy All"
 msgstr "सभी को कॉपी करें"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:125
-#: src/frontend/matrix/MatrixView.cpp:192
+#: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/worksheet/WorksheetView.cpp:155
 #, kde-format
 msgid "Original Size"
@@ -12497,16 +12497,16 @@ msgid "Curve"
 msgstr "वक्र"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4033
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4088
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4043
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4098
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to export"
 msgstr "निर्यात करने में विफल"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4033
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4088
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4043
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4098
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -12903,7 +12903,7 @@ msgid "Prepend"
 msgstr "प्रारंभ में लगा"
 
 #: src/frontend/datasources/ImportDialog.cpp:106
-#: src/frontend/notebook/NotebookView.cpp:65
+#: src/frontend/notebook/NotebookView.cpp:71
 #, kde-format
 msgid "Replace"
 msgstr "प्रतिस्थापित करें"
@@ -15386,19 +15386,19 @@ msgid "Automatic (G)"
 msgstr "स्वचालित (जी)"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:88
-#: src/frontend/matrix/MatrixView.cpp:160
+#: src/frontend/matrix/MatrixView.cpp:161
 #, kde-format
 msgid "Rows and Columns"
 msgstr "पंक्तियाँ और स्तंभ"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:89
-#: src/frontend/matrix/MatrixView.cpp:162
+#: src/frontend/matrix/MatrixView.cpp:163
 #, kde-format
 msgid "xy-Values"
 msgstr "xy-मान"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:90
-#: src/frontend/matrix/MatrixView.cpp:164
+#: src/frontend/matrix/MatrixView.cpp:165
 #, kde-format
 msgid "Rows, Columns and xy-Values"
 msgstr "पंक्तियाँ, स्तंभ और xy-मान"
@@ -17591,375 +17591,375 @@ msgstr "फ़ंक्शन मान उत्पन्न करें"
 msgid "%1: fill matrix with function values"
 msgstr "%1: मैट्रिक्स को फ़ंक्शन मानों से भरें"
 
-#: src/frontend/matrix/MatrixView.cpp:119
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:311
+#: src/frontend/matrix/MatrixView.cpp:120
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:312
 #, kde-format
 msgid "Cu&t"
 msgstr "साथ&टी"
 
-#: src/frontend/matrix/MatrixView.cpp:120
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:312
+#: src/frontend/matrix/MatrixView.cpp:121
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:313
 #, kde-format
 msgid "&Copy"
 msgstr "&कॉपी करें"
 
-#: src/frontend/matrix/MatrixView.cpp:121
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:313
+#: src/frontend/matrix/MatrixView.cpp:122
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:314
 #, kde-format
 msgid "Past&e"
 msgstr "पेस्ट करें"
 
-#: src/frontend/matrix/MatrixView.cpp:122
+#: src/frontend/matrix/MatrixView.cpp:123
 #, kde-format
 msgid "Clea&r Selection"
 msgstr "साफ़ चयन"
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
-#: src/frontend/matrix/MatrixView.cpp:123
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:318
+#: src/frontend/matrix/MatrixView.cpp:124
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:319
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:292
 #: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
 msgid "Select All"
 msgstr "सबका चयन करें"
 
-#: src/frontend/matrix/MatrixView.cpp:135
+#: src/frontend/matrix/MatrixView.cpp:136
 #, kde-format
 msgid "Function Values"
 msgstr "फ़ंक्शन मान"
 
-#: src/frontend/matrix/MatrixView.cpp:136
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:330
+#: src/frontend/matrix/MatrixView.cpp:137
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:331
 #, kde-format
 msgid "Const Values"
 msgstr "कॉन्स्ट मान"
 
-#: src/frontend/matrix/MatrixView.cpp:137
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:358
+#: src/frontend/matrix/MatrixView.cpp:138
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:359
 #, kde-format
 msgid "Clear Content"
 msgstr "सामग्री साफ़ करें"
 
-#: src/frontend/matrix/MatrixView.cpp:138
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:342
+#: src/frontend/matrix/MatrixView.cpp:139
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:343
 #, kde-format
 msgid "&Go to Cell..."
 msgstr "&सेल पर जाएं..."
 
-#: src/frontend/matrix/MatrixView.cpp:140
+#: src/frontend/matrix/MatrixView.cpp:141
 #, kde-format
 msgid "&Transpose"
 msgstr "&ट्रांसपोज़"
 
-#: src/frontend/matrix/MatrixView.cpp:141
+#: src/frontend/matrix/MatrixView.cpp:142
 #, kde-format
 msgid "Mirror &Horizontally"
 msgstr "दर्पण और क्षैतिज"
 
-#: src/frontend/matrix/MatrixView.cpp:142
+#: src/frontend/matrix/MatrixView.cpp:143
 #, kde-format
 msgid "Mirror &Vertically"
 msgstr "दर्पण और लंबवत"
 
-#: src/frontend/matrix/MatrixView.cpp:145
+#: src/frontend/matrix/MatrixView.cpp:146
 #, kde-format
 msgid "Add Value"
 msgstr "मूल्य जोड़ें"
 
-#: src/frontend/matrix/MatrixView.cpp:147
+#: src/frontend/matrix/MatrixView.cpp:148
 #, kde-format
 msgid "Subtract Value"
 msgstr "मान घटाएँ"
 
-#: src/frontend/matrix/MatrixView.cpp:149
+#: src/frontend/matrix/MatrixView.cpp:150
 #, kde-format
 msgid "Multiply Value"
 msgstr "गुणन मान"
 
-#: src/frontend/matrix/MatrixView.cpp:151
+#: src/frontend/matrix/MatrixView.cpp:152
 #, kde-format
 msgid "Divide Value"
 msgstr "मूल्य विभाजित करें"
 
-#: src/frontend/matrix/MatrixView.cpp:176
+#: src/frontend/matrix/MatrixView.cpp:177
 #, kde-format
 msgid "&Add Columns"
 msgstr "&कॉलम जोड़ें"
 
-#: src/frontend/matrix/MatrixView.cpp:177
+#: src/frontend/matrix/MatrixView.cpp:178
 #, kde-format
 msgid "&Insert Empty Columns"
 msgstr "&खाली कॉलम डालें"
 
-#: src/frontend/matrix/MatrixView.cpp:178
+#: src/frontend/matrix/MatrixView.cpp:179
 #, kde-format
 msgid "Remo&ve Columns"
 msgstr "कॉलम हटाएँ"
 
-#: src/frontend/matrix/MatrixView.cpp:179
+#: src/frontend/matrix/MatrixView.cpp:180
 #, kde-format
 msgid "Clea&r Columns"
 msgstr "कॉलम साफ़ करें"
 
-#: src/frontend/matrix/MatrixView.cpp:180
-#: src/frontend/matrix/MatrixView.cpp:187
+#: src/frontend/matrix/MatrixView.cpp:181
+#: src/frontend/matrix/MatrixView.cpp:188
 #, kde-format
 msgid "Statisti&cs"
 msgstr "आंकड़े"
 
-#: src/frontend/matrix/MatrixView.cpp:183
+#: src/frontend/matrix/MatrixView.cpp:184
 #, kde-format
 msgid "&Add Rows"
 msgstr "&पंक्तियाँ जोड़ें"
 
-#: src/frontend/matrix/MatrixView.cpp:184
+#: src/frontend/matrix/MatrixView.cpp:185
 #, kde-format
 msgid "&Insert Empty Rows"
 msgstr "&खाली पंक्तियाँ डालें"
 
-#: src/frontend/matrix/MatrixView.cpp:185
+#: src/frontend/matrix/MatrixView.cpp:186
 #, kde-format
 msgid "Remo&ve Rows"
 msgstr "पंक्तियाँ हटाएँ"
 
-#: src/frontend/matrix/MatrixView.cpp:186
+#: src/frontend/matrix/MatrixView.cpp:187
 #, kde-format
 msgid "Clea&r Rows"
 msgstr "पंक्तियाँ साफ़ करें"
 
-#: src/frontend/matrix/MatrixView.cpp:244
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:527
+#: src/frontend/matrix/MatrixView.cpp:246
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:528
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:82
 #, kde-format
 msgid "Selection"
 msgstr "चयन"
 
-#: src/frontend/matrix/MatrixView.cpp:266
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:618
+#: src/frontend/matrix/MatrixView.cpp:268
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:619
 #, kde-format
 msgid "Generate Data"
 msgstr "डेटा उत्पन्न करें"
 
-#: src/frontend/matrix/MatrixView.cpp:271
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:633
+#: src/frontend/matrix/MatrixView.cpp:273
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:634
 #, kde-format
 msgid "Manipulate Data"
 msgstr "डेटा में हेरफेर"
 
 #. i18n: ectx: property (text), widget (QToolButton, bViewMode)
-#: src/frontend/matrix/MatrixView.cpp:282 src/frontend/ui/colormapswidget.ui:60
+#: src/frontend/matrix/MatrixView.cpp:284 src/frontend/ui/colormapswidget.ui:60
 #, kde-format
 msgid "View"
 msgstr "देखना"
 
-#: src/frontend/matrix/MatrixView.cpp:287
+#: src/frontend/matrix/MatrixView.cpp:289
 #, kde-format
 msgid "Header Format"
 msgstr "हेडर प्रारूप"
 
-#: src/frontend/matrix/MatrixView.cpp:293
+#: src/frontend/matrix/MatrixView.cpp:295
 #: src/frontend/worksheet/WorksheetView.cpp:455
 #, kde-format
 msgid "Zoom"
 msgstr "ज़ूम"
 
-#: src/frontend/matrix/MatrixView.cpp:583
-#: src/frontend/matrix/MatrixView.cpp:587
+#: src/frontend/matrix/MatrixView.cpp:585
+#: src/frontend/matrix/MatrixView.cpp:589
 #, kde-format
 msgid "Go to Cell"
 msgstr "सेल पर जाएँ"
 
-#: src/frontend/matrix/MatrixView.cpp:583
+#: src/frontend/matrix/MatrixView.cpp:585
 #, kde-format
 msgid "Enter column"
 msgstr "कॉलम दर्ज करें"
 
-#: src/frontend/matrix/MatrixView.cpp:587
+#: src/frontend/matrix/MatrixView.cpp:589
 #, kde-format
 msgid "Enter row"
 msgstr "पंक्ति दर्ज करें"
 
-#: src/frontend/matrix/MatrixView.cpp:618
+#: src/frontend/matrix/MatrixView.cpp:620
 #, kde-format
 msgid "Fill the matrix with constant value"
 msgstr "मैट्रिक्स को स्थिर मान से भरें"
 
-#: src/frontend/matrix/MatrixView.cpp:636
+#: src/frontend/matrix/MatrixView.cpp:643
 #, kde-format
 msgid "%1: cut selected cell(s)"
 msgstr "%1: चयनित सेल(सेल्स) काटें"
 
-#: src/frontend/matrix/MatrixView.cpp:685
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1769
+#: src/frontend/matrix/MatrixView.cpp:692
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1770
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1:क्लिपबोर्ड से पेस्ट करें"
 
-#: src/frontend/matrix/MatrixView.cpp:755
+#: src/frontend/matrix/MatrixView.cpp:762
 #, kde-format
 msgid "%1: clear selected cell(s)"
 msgstr "%1: चयनित सेल साफ़ करें"
 
-#: src/frontend/matrix/MatrixView.cpp:903
+#: src/frontend/matrix/MatrixView.cpp:910
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1: रिक्त कॉलम डालें"
 
-#: src/frontend/matrix/MatrixView.cpp:926
+#: src/frontend/matrix/MatrixView.cpp:933
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1: चयनित कॉलम हटाएं"
 
-#: src/frontend/matrix/MatrixView.cpp:935
+#: src/frontend/matrix/MatrixView.cpp:942
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1: चयनित कॉलम साफ़ करें"
 
-#: src/frontend/matrix/MatrixView.cpp:960
+#: src/frontend/matrix/MatrixView.cpp:967
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1: रिक्त पंक्तियां डालें"
 
-#: src/frontend/matrix/MatrixView.cpp:983
+#: src/frontend/matrix/MatrixView.cpp:990
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1: चयनित पंक्तियाँ हटाएं"
 
-#: src/frontend/matrix/MatrixView.cpp:997
+#: src/frontend/matrix/MatrixView.cpp:1004
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1: चयनित पंक्तियाँ साफ़ करें"
 
-#: src/frontend/notebook/NotebookView.cpp:40
+#: src/frontend/notebook/NotebookView.cpp:46
 #, kde-format
 msgid "Failed to initialize %1."
 msgstr "%1 आरंभ करने में विफल."
 
-#: src/frontend/notebook/NotebookView.cpp:84
+#: src/frontend/notebook/NotebookView.cpp:90
 #, kde-format
 msgid "Evaluate Entry"
 msgstr "प्रविष्टि का मूल्यांकन करें"
 
-#: src/frontend/notebook/NotebookView.cpp:88
+#: src/frontend/notebook/NotebookView.cpp:94
 #, kde-format
 msgid "Remove Current Entry"
 msgstr "वर्तमान प्रविष्टि हटाएँ"
 
-#: src/frontend/notebook/NotebookView.cpp:92
+#: src/frontend/notebook/NotebookView.cpp:98
 #, kde-format
 msgid "Command"
 msgstr "आज्ञा"
 
-#: src/frontend/notebook/NotebookView.cpp:102
+#: src/frontend/notebook/NotebookView.cpp:108
 #: src/frontend/widgets/LabelWidget.cpp:480
 #, kde-format
 msgid "Markdown"
 msgstr "markdown"
 
 #. i18n: ectx: property (text), widget (QLabel, lTex)
-#: src/frontend/notebook/NotebookView.cpp:106
+#: src/frontend/notebook/NotebookView.cpp:112
 #: src/frontend/ui/settingsworksheetpage.ui:65
 #: src/frontend/widgets/LabelWidget.cpp:478
 #, kde-format
 msgid "LaTeX"
 msgstr "कंडोम"
 
-#: src/frontend/notebook/NotebookView.cpp:112
+#: src/frontend/notebook/NotebookView.cpp:118
 #, kde-format
 msgid "Page Break"
 msgstr "पृष्ठ ब्रेक"
 
-#: src/frontend/notebook/NotebookView.cpp:124
+#: src/frontend/notebook/NotebookView.cpp:130
 #, kde-format
 msgid "Compute Eigenvectors"
 msgstr "आइजेनवेक्टर की गणना करें"
 
-#: src/frontend/notebook/NotebookView.cpp:130
+#: src/frontend/notebook/NotebookView.cpp:136
 #, kde-format
 msgid "Create Matrix"
 msgstr "मैट्रिक्स बनाएं"
 
-#: src/frontend/notebook/NotebookView.cpp:136
+#: src/frontend/notebook/NotebookView.cpp:142
 #, kde-format
 msgid "Compute Eigenvalues"
 msgstr "आइजेनवैल्यू की गणना करें"
 
-#: src/frontend/notebook/NotebookView.cpp:142
+#: src/frontend/notebook/NotebookView.cpp:148
 #, kde-format
 msgid "Invert Matrix"
 msgstr "उलटा मैट्रिक्स"
 
-#: src/frontend/notebook/NotebookView.cpp:160
+#: src/frontend/notebook/NotebookView.cpp:166
 #, kde-format
 msgid "Solve Equations"
 msgstr "समीकरण हल करें"
 
-#: src/frontend/notebook/NotebookView.cpp:183
+#: src/frontend/notebook/NotebookView.cpp:189
 #, kde-format
 msgid "Linear Algebra"
 msgstr "लीनियर अलजेब्रा"
 
-#: src/frontend/notebook/NotebookView.cpp:195
+#: src/frontend/notebook/NotebookView.cpp:201
 #, kde-format
 msgid "Calculate"
 msgstr "गणना"
 
-#: src/frontend/notebook/NotebookView.cpp:205
+#: src/frontend/notebook/NotebookView.cpp:211
 #, kde-format
 msgid "Settings"
 msgstr "सेटिंग्स"
 
-#: src/frontend/notebook/NotebookView.cpp:254
+#: src/frontend/notebook/NotebookView.cpp:260
 #, kde-format
 msgid "Assistants"
 msgstr "सहायकों"
 
-#: src/frontend/notebook/NotebookView.cpp:286
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:557
+#: src/frontend/notebook/NotebookView.cpp:301
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:558
 #, kde-format
 msgid "Plot Data"
 msgstr "प्लॉट डेटा"
 
-#: src/frontend/notebook/NotebookView.cpp:290
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:589
+#: src/frontend/notebook/NotebookView.cpp:305
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:590
 #, fuzzy, kde-format
 #| msgid "Statistical Plots"
 msgid "Statistical Analysis"
 msgstr "सांख्यिकीय प्लॉट"
 
-#: src/frontend/notebook/NotebookView.cpp:291
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:590
+#: src/frontend/notebook/NotebookView.cpp:306
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:591
 #, kde-format
 msgid "Hypothesis Test"
 msgstr ""
 
-#: src/frontend/notebook/NotebookView.cpp:297
+#: src/frontend/notebook/NotebookView.cpp:312
 #, kde-format
 msgid "Variable Statistics..."
 msgstr "परिवर्तनशील सांख्यिकी..."
 
-#: src/frontend/notebook/NotebookView.cpp:350
+#: src/frontend/notebook/NotebookView.cpp:365
 #, kde-format
 msgid "Interrupt"
 msgstr "रुकावट डालना"
 
-#: src/frontend/notebook/NotebookView.cpp:352
+#: src/frontend/notebook/NotebookView.cpp:367
 #, kde-format
 msgid "Calculating..."
 msgstr "गणना..."
 
-#: src/frontend/notebook/NotebookView.cpp:356
+#: src/frontend/notebook/NotebookView.cpp:371
 #, kde-format
 msgid "Ready"
 msgstr "तैयार"
 
-#: src/frontend/notebook/NotebookView.cpp:375
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:875
+#: src/frontend/notebook/NotebookView.cpp:390
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:876
 #, kde-format
 msgid "Hypothesis Test for %1"
 msgstr ""
 
-#: src/frontend/notebook/NotebookView.cpp:389
+#: src/frontend/notebook/NotebookView.cpp:404
 #, kde-format
 msgid "%1: variable statistics"
 msgstr "%1: परिवर्तनशील आँकड़े"
@@ -18075,7 +18075,7 @@ msgid "Search/Filter Options"
 msgstr "खोज/फ़िल्टर विकल्प"
 
 #: src/frontend/ProjectExplorer.cpp:274 src/frontend/ProjectExplorer.cpp:432
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1009
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1010
 #, kde-format
 msgid "Columns"
 msgstr "कॉलम"
@@ -18118,7 +18118,7 @@ msgid "Do you really want to delete %1?"
 msgstr "क्या आप सचमुच %1 को हटाना चाहते हैं?"
 
 #: src/frontend/ProjectExplorer.cpp:1014
-#: src/frontend/worksheet/WorksheetView.cpp:1458
+#: src/frontend/worksheet/WorksheetView.cpp:1459
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -18768,7 +18768,7 @@ msgid "Does Not Contain"
 msgstr "इसमें शामिल नहीं है"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:72
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:314
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:315
 #, kde-format
 msgid "&Mask"
 msgstr "&नकाब"
@@ -19591,17 +19591,17 @@ msgstr "चयनित कॉलम को क्रमबद्ध करे�
 msgid "Sort"
 msgstr "क्रम से लगाना"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:315
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:316
 #, kde-format
 msgid "&Unmask"
 msgstr "&पोल खोलना"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:316
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:317
 #, kde-format
 msgid "&Reverse"
 msgstr "&रिवर्स"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:317
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:318
 #, kde-format
 msgid "Clea&r Content"
 msgstr "सामग्री साफ़ करें"
@@ -19609,396 +19609,396 @@ msgstr "सामग्री साफ़ करें"
 #. i18n("Assign &Formula"), this);
 #. action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
 #. action_fill_sel_row_numbers = new QAction(QIcon::fromTheme(QString()), i18n("Row Numbers"), this);
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:325
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:326
 #, kde-format
 msgid "Row Numbers"
 msgstr "पंक्ति संख्या"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:326
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:327
 #, kde-format
 msgid "Uniform Random Values"
 msgstr "समान यादृच्छिक मान"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:327
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:328
 #, kde-format
 msgid "Random Values"
 msgstr "यादृच्छिक मान"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:328
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:329
 #, kde-format
 msgid "Equidistant Values"
 msgstr "समदूरस्थ मान"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:329
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:330
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Equidistant Date&Time Values"
 msgid "Equidistant Date&Time Values"
 msgstr "समदूरस्थ दिनांक और समय मान"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:332
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:333
 #, kde-format
 msgid "Sample Values"
 msgstr "नमूना मान"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:333
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:334
 #, kde-format
 msgid "Flatten Columns"
 msgstr "स्तंभ समतल करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:336
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1110
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1495
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:337
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1111
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1496
 #, kde-format
 msgid "Show Comments"
 msgstr "टिप्पणियाँ दिखाएं"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:337
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1121
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1500
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:338
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1122
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1501
 #, kde-format
 msgid "Show Sparklines"
 msgstr "स्पार्कलाइन दिखाएं"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:339
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:340
 #, kde-format
 msgid "Clear Spreadsheet"
 msgstr "स्प्रेडशीट साफ़ करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:340
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:341
 #, kde-format
 msgid "Clear Masks"
 msgstr "स्पष्ट मास्क"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:341
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:342
 #, fuzzy, kde-format
 #| msgid "&Transpose"
 msgid "Transpose"
 msgstr "&ट्रांसपोज़"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:343
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:344
 #, kde-format
 msgid "&Search"
 msgstr "&खोज"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:345
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:346
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:225
 #, kde-format
 msgid "&Replace"
 msgstr "&प्रतिस्थापित करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:347
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:493
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:348
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:494
 #, kde-format
 msgid "Column Statistics..."
 msgstr "स्तंभ सांख्यिकी..."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:349
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:350
 #, fuzzy, kde-format
 #| msgid "Column Statistics Spreadsheet"
 msgid "Columns Statistics Spreadsheet"
 msgstr "कॉलम सांख्यिकी स्प्रेडशीट"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:355
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:356
 #, kde-format
 msgid "Insert Multiple Columns Left"
 msgstr "एकाधिक कॉलम डालें बाएँ"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:356
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:357
 #, kde-format
 msgid "Insert Multiple Columns Right"
 msgstr "एकाधिक कॉलम डालें दाएँ"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:359
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1601
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:360
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1602
 #, kde-format
 msgid "Freeze Column"
 msgstr "फ़्रीज़ कॉलम"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:394
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:395
 #, kde-format
 msgid "Add"
 msgstr "जोड़ना"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:396
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:397
 #, kde-format
 msgid "Subtract"
 msgstr "घटाना"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:398
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:399
 #, kde-format
 msgid "Multiply"
 msgstr "गुणा"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:400
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:401
 #, kde-format
 msgid "Divide"
 msgstr "विभाजित करना"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:402
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:403
 #, kde-format
 msgid "Drop Values"
 msgstr "मान गिराएँ"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:403
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:404
 #, kde-format
 msgid "Mask Values"
 msgstr "मास्क मान"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:405
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:406
 #, kde-format
 msgid "Reverse"
 msgstr "रिवर्स"
 
 #. i18n("Join"), this);
 #. algorithms - baseline subtraction, outliar removal, etc.
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:409
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:410
 #, kde-format
 msgid "Subtract Baseline"
 msgstr "आधार रेखा घटाएँ"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:415
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:416
 #, kde-format
 msgid "Divide by Sum"
 msgstr "योग से भाग दें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:418
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:419
 #, kde-format
 msgid "Divide by Min"
 msgstr "न्यूनतम से विभाजित करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:421
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:422
 #, kde-format
 msgid "Divide by Max"
 msgstr "अधिकतम से विभाजित करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:424
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:425
 #, kde-format
 msgid "Divide by Count"
 msgstr "गिनती से भाग दें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:427
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:428
 #, kde-format
 msgid "Divide by Mean"
 msgstr "माध्य से विभाजित करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:430
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:431
 #, kde-format
 msgid "Divide by Median"
 msgstr "माध्यिका से भाग दें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:433
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:434
 #, kde-format
 msgid "Divide by Mode"
 msgstr "बहुलक से विभाजित करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:436
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:437
 #, kde-format
 msgid "Divide by Range"
 msgstr "श्रेणी से विभाजित करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:439
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:440
 #, kde-format
 msgid "Divide by SD"
 msgstr "SD से विभाजित करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:442
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:443
 #, kde-format
 msgid "Divide by MAD"
 msgstr "MAD से विभाजित करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:445
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:446
 #, kde-format
 msgid "Divide by IQR"
 msgstr "IQR से विभाजित करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:448
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:449
 #, kde-format
 msgid "(x-Mean)/SD"
 msgstr "(x-मीन)/एसडी"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:451
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:452
 #, kde-format
 msgid "(x-Median)/MAD"
 msgstr "(x-मीडियन)/MAD"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:454
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:455
 #, kde-format
 msgid "(x-Median)/IQR"
 msgstr "(x-मीडियन)/आईक्यूआर"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:457
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:458
 #, kde-format
 msgid "Rescale to [a, b]"
 msgstr "[a, b] पर पुनः स्केल करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:496
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:497
 #, kde-format
 msgid "Heatmap"
 msgstr "हीटमैप"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:502
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:503
 #, kde-format
 msgid "Insert Multiple Rows Above"
 msgstr "ऊपर एकाधिक पंक्तियाँ डालें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:503
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:504
 #, kde-format
 msgid "Insert Multiple Rows Below"
 msgstr "नीचे कई पंक्तियाँ डालें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:505
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:506
 #, kde-format
 msgid "Delete Rows With Missing Values"
 msgstr "लुप्त मान वाली पंक्तियाँ हटाएँ"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:506
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:507
 #, kde-format
 msgid "Mask Rows With Missing Values"
 msgstr "लुप्त मानों वाली पंक्तियों को मास्क करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:507
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:508
 #, kde-format
 msgid "Row Statisti&cs"
 msgstr "पंक्ति सांख्यिकी"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:515
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2199
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:516
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2200
 #, kde-format
 msgid "Seasonal Decomposition"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:561
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:562
 #, kde-format
 msgid "Conditional Formatting"
 msgstr "सशर्त स्वरूपण"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:576
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:577
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
 msgstr "फिट वितरण"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:581
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:582
 #, kde-format
 msgid "Analyze and Plot Data"
 msgstr "डेटा का विश्लेषण और प्लॉटिंग करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:596
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:597
 #, fuzzy, kde-format
 #| msgid "Statistical Plots"
 msgid "Time Series Analysis"
 msgstr "सांख्यिकीय प्लॉट"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:600
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:601
 #, kde-format
 msgid "Set Column As"
 msgstr "कॉलम को इस प्रकार सेट करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:669
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:670
 #, kde-format
 msgid "Normalize"
 msgstr "सामान्य"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:692
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:693
 #, kde-format
 msgid "Ladder of Powers"
 msgstr "शक्तियों की सीढ़ी"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1108
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1493
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1109
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1494
 #, kde-format
 msgid "Hide Comments"
 msgstr "टिप्पणियाँ छिपाएँ"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1119
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1498
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1120
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1499
 #, kde-format
 msgid "Hide Sparklines"
 msgstr "स्पार्कलाइन छिपाएँ"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1605
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1606
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "कॉलम अनफ़्रीज़ करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2004
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2005
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "इस ऑपरेशन को अंतिम रूप देने के लिए पर्याप्त मेमोरी नहीं है."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2017
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2018
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: चयनित सेल मास्क करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2048
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2049
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: चयनित सेल अनमास्क करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2207
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2218
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2208
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2219
 #, kde-format
 msgid "Seasonal Decomposition for %1"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2239
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2240
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: कक्षों को पंक्ति संख्याओं से भरें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2303
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2304
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: पंक्ति संख्याओं से कॉलम भरें"
 msgstr[1] "%1: पंक्ति संख्याओं से कॉलम भरें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2346
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2347
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: कक्षों को यादृच्छिक मानों से भरें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2471
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2472
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: कोशिकाओं को const मानों से भरें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2481
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2502
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2519
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2535
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2482
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2503
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2520
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2536
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "चयन को स्थिर मान से भरें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2614
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2652
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2615
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2653
 #, kde-format
 msgid "Insert empty columns"
 msgstr "रिक्त कॉलम डालें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2615
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2653
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2616
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2654
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "सम्मिलित करने के लिए स्तंभों की संख्या दर्ज करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2686
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2687
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: चयनित कॉलम हटाएं"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2782
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2783
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: उल्टे कॉलम"
 msgstr[1] "%1: उल्टे कॉलम"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2854
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2855
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -20006,236 +20006,236 @@ msgid ""
 msgstr ""
 "चयनित कॉलमों में भिन्न-भिन्न डेटा प्रकार हैं और इस कारण उन्हें समतल नहीं किया जा सकता।"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2868
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2869
 #, fuzzy, kde-format
 #| msgid "The file already exists. Do you really want to overwrite it?"
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr "फ़ाइल पहले से मौजूद है। क्या आप वाकई इसे ओवरराइट करना चाहते हैं?"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2869
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2870
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Print Spreadsheet"
 msgid "Transpose Spreadsheet"
 msgstr "स्प्रेडशीट प्रिंट करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2905
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2906
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: कॉलम सामान्य करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2925
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2926
 #, kde-format
 msgid "Sum = 0"
 msgstr "योग = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2936
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2937
 #, kde-format
 msgid "Min = 0"
 msgstr "न्यूनतम = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2947
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2948
 #, kde-format
 msgid "Max = 0"
 msgstr "अधिकतम = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2958
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2959
 #, kde-format
 msgid "Count = 0"
 msgstr "गिनती = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2969
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2970
 #, kde-format
 msgid "Mean = 0"
 msgstr "माध्य = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2980
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2981
 #, kde-format
 msgid "Median = 0"
 msgstr "माध्यिका = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2992
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2993
 #, kde-format
 msgid "Mode = 0"
 msgstr "मोड = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2994
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2995
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "'मोड परिभाषित नहीं है'"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3005
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3006
 #, kde-format
 msgid "Range = 0"
 msgstr "रेंज = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3016
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3050
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3017
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3051
 #, kde-format
 msgid "SD = 0"
 msgstr "एसडी = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3027
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3062
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3028
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3063
 #, kde-format
 msgid "MAD = 0"
 msgstr "एमएडी = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3038
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3074
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3039
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3075
 #, kde-format
 msgid "IQR = 0"
 msgstr "आईक्यूआर = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3086
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3087
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "अधिकतम - न्यूनतम = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3105
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3106
 #, kde-format
 msgid "Normalization not possible"
 msgstr "सामान्यीकरण संभव नहीं"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3117
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3118
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: पावर ट्रांसफॉर्म कॉलम"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3233
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3234
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: कॉलम आँकड़े"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3264
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3265
 #, kde-format
 msgid "Selection in %1"
 msgstr "%1 में चयन"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3307
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3308
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: पंक्ति आँकड़े"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3317
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3318
 #, kde-format
 msgid "Row %1"
 msgstr "पंक्ति %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3342
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3378
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3343
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3379
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "एकाधिक पंक्तियाँ सम्मिलित करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3343
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3379
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3344
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3380
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "सम्मिलित करने के लिए पंक्तियों की संख्या दर्ज करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3414
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3415
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: चयनित पंक्तियाँ हटाएँ"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3469
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3470
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: चयनित कक्ष साफ़ करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3725
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3735
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr "चयनित 1: %1 पंक्तियाँ, %2 स्तंभ"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3734
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3744
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr "चयनित: %1 सेल"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3753
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3763
 #, kde-format
 msgid "row"
 msgid_plural "rows"
 msgstr[0] "पंक्तियों"
 msgstr[1] "पंक्तियों"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3754
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3764
 #, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "कॉलम"
 msgstr[1] "कॉलम"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3755
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3765
 #, kde-format
 msgid "cells"
 msgstr "कोशिकाओं"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3756
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3766
 #, kde-format
 msgid "masked value"
 msgstr "छिपा हुआ मूल्य"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3756
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3766
 #, kde-format
 msgid "masked values"
 msgstr "छिपे हुए मूल्य"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3757
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
 #, kde-format
 msgid "missing value"
 msgstr "अनुपस्थित मान"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3757
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
 #, kde-format
 msgid "missing values"
 msgstr "लुप्त मान"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3768
 #, kde-format
 msgid " , "
 msgstr ","
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3758
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3759
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3759
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
 #, kde-format
 msgid ", "
 msgstr ","
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3763
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3773
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr "चयनित: %1 %2, %3 %4%5 %6 %7 %8"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3773
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3783
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "चयनित: %1 %2%3 %4 %5 %6"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3852
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3862
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "स्प्रेडशीट प्रिंट करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4467
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4477
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "SQLite डाटाबेस %1 नहीं बनाया जा सका."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4499
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4509
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "SQLite डाटाबेस %1 में तालिका बनाने में विफल."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4554
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4564
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "तालिका में मान सम्मिलित करने में विफल."
@@ -27084,10 +27084,10 @@ msgstr "सभी प्लॉट क्षेत्र Y"
 
 #: src/frontend/worksheet/WorksheetView.cpp:434
 #: src/frontend/worksheet/WorksheetView.cpp:495
-#: src/frontend/worksheet/WorksheetView.cpp:1300
-#: src/frontend/worksheet/WorksheetView.cpp:1309
-#: src/frontend/worksheet/WorksheetView.cpp:1318
-#: src/frontend/worksheet/WorksheetView.cpp:1327
+#: src/frontend/worksheet/WorksheetView.cpp:1301
+#: src/frontend/worksheet/WorksheetView.cpp:1310
+#: src/frontend/worksheet/WorksheetView.cpp:1319
+#: src/frontend/worksheet/WorksheetView.cpp:1328
 #, kde-format
 msgid "Plot Area"
 msgstr "निश्चित भूभाग का क्षेत्रफल"
@@ -27107,14 +27107,14 @@ msgstr "कर्सर को यहां लागू करें"
 msgid "Zoom/Navigate"
 msgstr "ज़ूम/नेविगेट"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1457
+#: src/frontend/worksheet/WorksheetView.cpp:1458
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] "क्या आप सचमुच चयनित %1 ऑब्जेक्ट्स को हटाना चाहते हैं?"
 msgstr[1] "क्या आप सचमुच चयनित %1 ऑब्जेक्ट्स को हटाना चाहते हैं?"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1465
+#: src/frontend/worksheet/WorksheetView.cpp:1466
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: चयनित वर्कशीट तत्व हटाएं."
