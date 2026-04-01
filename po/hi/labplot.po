@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:40+0000\n"
+"POT-Creation-Date: 2026-04-01 00:40+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -9224,7 +9224,7 @@ msgstr "%1: प्रकार निर्धारित करें"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, kde-format
 msgid "%1: set orientation"
@@ -10365,6 +10365,12 @@ msgstr "अंतिम नमूना अधूरा है और उसे 
 msgid "%1: set distribution"
 msgstr "%1: वितरण सेट करें"
 
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
+#, fuzzy, kde-format
+#| msgid "Reference Line"
+msgid "Move Reference Line"
+msgstr "संदर्भ रेखा"
+
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, kde-format
 msgid "Border Line"
@@ -10379,6 +10385,12 @@ msgstr "%1: आरंभिक तार्किक स्थिति नि�
 #, kde-format
 msgid "%1: set end logical position"
 msgstr "%1: तार्किक स्थिति का अंत निर्धारित करें"
+
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
+#, fuzzy, kde-format
+#| msgid "Reference Range"
+msgid "Move Reference Range"
+msgstr "संदर्भ सीमा"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, kde-format

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:40+0000\n"
+"POT-Creation-Date: 2026-04-01 00:40+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -9440,7 +9440,7 @@ msgstr "%1: αλλαγή τύπου στήλης"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, fuzzy, kde-format
 #| msgid "%1: set plot designation"
@@ -10671,6 +10671,12 @@ msgstr ""
 msgid "%1: set distribution"
 msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
 
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
+#, fuzzy, kde-format
+#| msgid "Preferences"
+msgid "Move Reference Line"
+msgstr "Προτιμήσεις"
+
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, fuzzy, kde-format
 #| msgid "Line:"
@@ -10688,6 +10694,12 @@ msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
 #| msgid "%1: set plot designation"
 msgid "%1: set end logical position"
 msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
+
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
+#, fuzzy, kde-format
+#| msgid "Preferences"
+msgid "Move Reference Range"
+msgstr "Προτιμήσεις"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, fuzzy, kde-format

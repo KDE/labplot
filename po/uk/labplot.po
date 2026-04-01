@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:40+0000\n"
+"POT-Creation-Date: 2026-04-01 00:40+0000\n"
 "PO-Revision-Date: 2026-03-30 09:37+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -9284,7 +9284,7 @@ msgstr "%1: встановити тип"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, kde-format
 msgid "%1: set orientation"
@@ -10384,6 +10384,12 @@ msgstr "Остання вибірка була неповною, її пропу
 msgid "%1: set distribution"
 msgstr "%1: встановити розподіл"
 
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
+#, fuzzy, kde-format
+#| msgid "Reference Line"
+msgid "Move Reference Line"
+msgstr "Лінія відліку"
+
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, kde-format
 msgid "Border Line"
@@ -10398,6 +10404,12 @@ msgstr "%1: встановлення початкової логічної по�
 #, kde-format
 msgid "%1: set end logical position"
 msgstr "%1: встановлення кінцевої логічної позиції"
+
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
+#, fuzzy, kde-format
+#| msgid "Reference Range"
+msgid "Move Reference Range"
+msgstr "Еталонний діапазон"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, kde-format

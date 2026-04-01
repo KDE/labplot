@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:40+0000\n"
+"POT-Creation-Date: 2026-04-01 00:40+0000\n"
 "PO-Revision-Date: 2026-03-06 21:42+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -9374,7 +9374,7 @@ msgstr "%1: задание типа"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, kde-format
 msgid "%1: set orientation"
@@ -10498,6 +10498,12 @@ msgstr "Последняя выборка неполная и пропущена
 msgid "%1: set distribution"
 msgstr "%1: задание распределения"
 
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
+#, fuzzy, kde-format
+#| msgid "Reference Line"
+msgid "Move Reference Line"
+msgstr "Контрольная линия"
+
 # BUGME: please split to allow translation "Порядок сортировки:" --aspotashev
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, kde-format
@@ -10513,6 +10519,12 @@ msgstr "%1: задание начала логической позиции"
 #, kde-format
 msgid "%1: set end logical position"
 msgstr "%1: задание завершения логической позиции"
+
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
+#, fuzzy, kde-format
+#| msgid "Reference Range"
+msgid "Move Reference Range"
+msgstr "Справочный диапазон"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, kde-format

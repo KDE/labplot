@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:40+0000\n"
+"POT-Creation-Date: 2026-04-01 00:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Irish Gaelic <kde-i18n-doc@kde.org>\n"
@@ -9081,7 +9081,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, kde-format
 msgid "%1: set orientation"
@@ -10179,6 +10179,11 @@ msgstr ""
 msgid "%1: set distribution"
 msgstr ""
 
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
+#, kde-format
+msgid "Move Reference Line"
+msgstr ""
+
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, kde-format
 msgid "Border Line"
@@ -10192,6 +10197,11 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, kde-format
 msgid "%1: set end logical position"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
+#, kde-format
+msgid "Move Reference Range"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285

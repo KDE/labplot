@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:40+0000\n"
+"POT-Creation-Date: 2026-04-01 00:40+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -9384,7 +9384,7 @@ msgstr "設定佈局"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, fuzzy, kde-format
 #| msgid "%1: set creation time"
@@ -10560,6 +10560,11 @@ msgstr ""
 msgid "%1: set distribution"
 msgstr "方向"
 
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
+#, fuzzy, kde-format
+msgid "Move Reference Line"
+msgstr "喜好設定"
+
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, fuzzy, kde-format
 msgid "Border Line"
@@ -10574,6 +10579,11 @@ msgstr "設定不透明度"
 #, fuzzy, kde-format
 msgid "%1: set end logical position"
 msgstr "設定不透明度"
+
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
+#, fuzzy, kde-format
+msgid "Move Reference Range"
+msgstr "喜好設定"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, fuzzy, kde-format

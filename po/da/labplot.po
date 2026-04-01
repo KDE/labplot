@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:40+0000\n"
+"POT-Creation-Date: 2026-04-01 00:40+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -9679,7 +9679,7 @@ msgstr "&Indsæt tomme rækker"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
@@ -10919,6 +10919,12 @@ msgstr ""
 msgid "%1: set distribution"
 msgstr "Retning"
 
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
+#, fuzzy, kde-format
+#| msgid "Preferences"
+msgid "Move Reference Line"
+msgstr "Indstillinger"
+
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, fuzzy, kde-format
 #| msgid "Border"
@@ -10936,6 +10942,12 @@ msgstr "&Indsæt tomme kolonner"
 #| msgid "&Insert Empty Columns"
 msgid "%1: set end logical position"
 msgstr "&Indsæt tomme kolonner"
+
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
+#, fuzzy, kde-format
+#| msgid "Preferences"
+msgid "Move Reference Range"
+msgstr "Indstillinger"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, fuzzy, kde-format
