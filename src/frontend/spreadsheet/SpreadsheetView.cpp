@@ -1799,6 +1799,8 @@ void SpreadsheetView::pasteIntoSelection() {
 		// TEST ' ' as group separator:
 		for (int i = 0; i < input_row_count; i++) {
 			const auto& rowText = input_rows.at(i).trimmed();
+			if (rowText.trimmed().isEmpty())
+				continue;
 			if (hasTabs)
 				cellTexts.append(rowText.split(QLatin1Char('\t')));
 			else if (numberLocale.groupSeparator().trimmed().isEmpty()
@@ -1807,10 +1809,14 @@ void SpreadsheetView::pasteIntoSelection() {
 			else
 				cellTexts.append(rowText.split(QRegularExpression(QStringLiteral("\\s+"))));
 
-			if (cellTexts.at(i).count() > input_col_count)
-				input_col_count = cellTexts.at(i).count();
+			if (cellTexts.last().count() > input_col_count)
+				input_col_count = cellTexts.last().count();
 		}
-
+		input_row_count = cellTexts.count();
+		if (input_row_count == 0) {
+			m_spreadsheet->endMacro();
+			return;
+		}
 		input_rows.clear(); // not needed anymore, release memory
 
 		// when pasting DateTime data in the format 'yyyy-MM-dd hh:mm:ss' and similar, it gets split above because of the space separator.
@@ -1832,8 +1838,10 @@ void SpreadsheetView::pasteIntoSelection() {
 				if (newMode == AbstractColumn::ColumnMode::DateTime) {
 					// merge the first two columns
 					for (auto& row : cellTexts) {
-						row[1] = row.at(0) + QLatin1Char(' ') + row.at(1);
-						row.takeFirst();
+						if (row.size() > 1) {
+							row[1] = row.at(0) + QLatin1Char(' ') + row.at(1);
+							row.takeFirst();
+						}
 					}
 					--input_col_count;
 				}
@@ -1848,6 +1856,29 @@ void SpreadsheetView::pasteIntoSelection() {
 		// 3. the whole column is selected (the use clicked on the header)
 		// Also, set the proper column mode if the target column doesn't have any values yet
 		// and set the proper column mode if the column is empty
+
+		int check_row = first_row;
+		if (check_row == -1) {
+			int current_row, current_col;
+			getCurrentCell(&current_row, &current_col);
+			check_row = (current_row == -1) ? 0 : current_row;
+		}
+
+		bool firstRowIsHeader = false;
+		QStringList headerValues;
+
+		if (check_row == 0 && cellTexts.size() > 1) {
+		auto reply = QMessageBox::question(this,
+			i18n("Import Headers"),
+			i18n("Do you want to use the first row as column headers?"),
+			QMessageBox::Yes | QMessageBox::No);
+			if (reply == QMessageBox::Yes) {
+				firstRowIsHeader = true;
+				headerValues = cellTexts.takeFirst();
+				input_row_count--;
+			}
+		}
+
 		if ((first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col)
 			|| (first_row == 0 && last_row == m_spreadsheet->rowCount() - 1)) {
 			int current_row, current_col;
@@ -1883,7 +1914,10 @@ void SpreadsheetView::pasteIntoSelection() {
 				// 				localeDetermined = determineLocale(nonEmptyValue, locale);
 
 				QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
-				const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
+				auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
+				if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
+					mode = AbstractColumn::ColumnMode::Double;
+
 				col->setColumnMode(mode);
 				if (mode == AbstractColumn::ColumnMode::DateTime) {
 					auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
@@ -1908,7 +1942,10 @@ void SpreadsheetView::pasteIntoSelection() {
 					// 					localeDetermined = determineLocale(nonEmptyValue, locale);
 
 					QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
-					const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
+					auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
+					if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
+						mode = AbstractColumn::ColumnMode::Double;
+
 					Column* new_col = new Column(QString::number(curCol), mode);
 					if (mode == AbstractColumn::ColumnMode::DateTime) {
 						auto* filter = static_cast<DateTime2StringFilter*>(new_col->outputFilter());
@@ -1926,6 +1963,14 @@ void SpreadsheetView::pasteIntoSelection() {
 
 			// select the rectangle to be pasted in
 			setCellsSelected(first_row, first_col, last_row, last_col);
+		}
+
+		if (firstRowIsHeader) {
+			for (int c = 0; c < headerValues.size(); ++c) {
+				int targetColIndex = first_col + c;
+				if (targetColIndex < m_spreadsheet->columnCount())
+					m_spreadsheet->column(targetColIndex)->setName(headerValues.at(c));
+			}
 		}
 
 		const int rows = last_row - first_row + 1;
