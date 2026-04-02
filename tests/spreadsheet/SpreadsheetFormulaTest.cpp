@@ -17,6 +17,9 @@
 
 #include <QClipboard>
 #include <cmath>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QTimer>
 
 #define INIT_SPREADSHEET                                                                                                                                       \
 	Spreadsheet sheet(QStringLiteral("test 2 cols"), false);                                                                                                   \
@@ -526,6 +529,14 @@ void SpreadsheetFormulaTest::formulaUpdateAfterPaste() {
 	const QString str = QStringLiteral("10\n20\n30");
 	QApplication::clipboard()->setText(str);
 	SpreadsheetView viewToPaste(&sheet, false);
+	QTimer::singleShot(100, []() {
+		for (QWidget* widget : QApplication::topLevelWidgets()) {
+			if (auto* box = qobject_cast<QMessageBox*>(widget)) {
+				if (auto* btn = box->button(QMessageBox::No))
+					btn->click();
+			}
+		}
+	});
 	viewToPaste.pasteIntoSelection();
 
 	// check the first three rows

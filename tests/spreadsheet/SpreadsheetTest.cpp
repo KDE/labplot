@@ -29,8 +29,11 @@
 #endif
 
 #include <QClipboard>
+#include <QMessageBox>
 #include <QModelIndex>
+#include <QPushButton>
 #include <QRandomGenerator>
+#include <QTimer>
 
 //**********************************************************
 //****************** Copy&Paste tests **********************
@@ -39,6 +42,19 @@
 //**********************************************************
 //********** Handling of different columns modes ***********
 //**********************************************************
+
+void clickMessageBoxButton(QMessageBox::StandardButton buttonType, int delay = 100) {
+	QTimer::singleShot(delay, [buttonType]() {
+		for (QWidget* widget : QApplication::topLevelWidgets()) {
+			if (auto* box = qobject_cast<QMessageBox*>(widget)) {
+				if (auto* btn = box->button(buttonType)) {
+					btn->click();
+					return;
+				}
+			}
+		}
+	});
+}
 /*!
    insert two columns with float values into an empty spreadsheet
 */
@@ -52,6 +68,7 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -86,6 +103,7 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -117,6 +135,7 @@ void SpreadsheetTest::testCopyPasteColumnMode02() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -153,6 +172,7 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -214,6 +234,7 @@ void SpreadsheetTest::testCopyPasteColumnMode04() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -251,6 +272,7 @@ void SpreadsheetTest::testCopyPasteColumnMode05() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -287,6 +309,7 @@ void SpreadsheetTest::testCopyPasteColumnMode06() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -322,6 +345,7 @@ void SpreadsheetTest::testCopyPasteColumnMode07() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size and column mode

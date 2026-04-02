@@ -1867,7 +1867,7 @@ void SpreadsheetView::pasteIntoSelection() {
 		bool firstRowIsHeader = false;
 		QStringList headerValues;
 
-		if (check_row == 0 && cellTexts.size() > 1) {
+		if (check_row == 0 && cellTexts.size() > 1 && this->isVisible()) {
 		auto reply = QMessageBox::question(this,
 			i18n("Import Headers"),
 			i18n("Do you want to use the first row as column headers?"),
@@ -1894,57 +1894,78 @@ void SpreadsheetView::pasteIntoSelection() {
 			last_col = first_col + input_col_count - 1;
 			const int columnCount = m_spreadsheet->columnCount();
 			// if the target columns that are already available don't have any values yet,
-			// convert their mode to the mode of the data to be pasted
+			// convert their mode to the mode of the data to be pasted and update existing columns 
+			// upgrade their mode if the pasted data requires it (int -> Double)
 			for (int c = first_col; c <= last_col && c < columnCount; ++c) {
 				Column* col = m_spreadsheet->column(c);
-				if (col->hasValues())
-					continue;
-
-				// first non-empty value in the column to paste determines the column mode/type of the new column to be added
 				const int curCol = c - first_col;
-				QString nonEmptyValue;
+				auto currentMode = col->columnMode();
+				auto mode = currentMode; 
+				bool modeChanged = false;
+				QString dateTimeFormat;
+				bool isFirstValue = !col->hasValues(); 
+
+				// scan all pasted values for this column to prevent decimal truncation
 				for (auto& r : cellTexts) {
 					if (curCol < r.count() && !r.at(curCol).isEmpty()) {
-						nonEmptyValue = r.at(curCol);
-						break;
+						QString tempFormat;
+						auto cellMode = AbstractFileFilter::columnMode(r.at(curCol), tempFormat, numberLocale);
+						
+						if (isFirstValue) {
+							mode = cellMode;
+							dateTimeFormat = tempFormat;
+							isFirstValue = false;
+							modeChanged = true;
+						} else {
+							if ((mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt) && 
+								cellMode == AbstractColumn::ColumnMode::Double) {
+								mode = AbstractColumn::ColumnMode::Double;
+								modeChanged = true;
+							} else if (mode == AbstractColumn::ColumnMode::Integer && cellMode == AbstractColumn::ColumnMode::BigInt) {
+								mode = AbstractColumn::ColumnMode::BigInt;
+								modeChanged = true;
+							}
+						}
 					}
 				}
-
-				// 			if (!localeDetermined)
-				// 				localeDetermined = determineLocale(nonEmptyValue, locale);
-
-				QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
-				auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
-				if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
-					mode = AbstractColumn::ColumnMode::Double;
-
-				col->setColumnMode(mode);
-				if (mode == AbstractColumn::ColumnMode::DateTime) {
-					auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-					filter->setFormat(dateTimeFormat);
+				// only update the column if we actually needed to upgrade it or if it was empty
+				if (modeChanged && mode != currentMode) {
+					col->setColumnMode(mode);
+					if (mode == AbstractColumn::ColumnMode::DateTime && !dateTimeFormat.isEmpty()) {
+						auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+						filter->setFormat(dateTimeFormat);
+					}
 				}
 			}
 
 			// add columns if necessary
 			if (last_col >= columnCount) {
 				for (int c = 0; c < last_col - (columnCount - 1); ++c) {
-					const int curCol = columnCount - first_col + c;
-					// first non-empty value in the column to paste determines the column mode/type of the new column to be added
-					QString nonEmptyValue;
+					const int curCol = columnCount - first_col + c;                    
+					QString dateTimeFormat;
+					bool isFirstValue = true;
+					auto mode = AbstractColumn::ColumnMode::Double; 
+
+					// scan all values in the column to prevent decimal truncation
 					for (auto& r : cellTexts) {
 						if (curCol < r.count() && !r.at(curCol).isEmpty()) {
-							nonEmptyValue = r.at(curCol);
-							break;
+							QString tempFormat;
+							auto cellMode = AbstractFileFilter::columnMode(r.at(curCol), tempFormat, numberLocale);
+							
+							if (isFirstValue) {
+								mode = cellMode;
+								dateTimeFormat = tempFormat;
+								isFirstValue = false;
+							} else {
+								if ((mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt) && cellMode == AbstractColumn::ColumnMode::Double)
+									mode = AbstractColumn::ColumnMode::Double;
+								else if (mode == AbstractColumn::ColumnMode::Integer && cellMode == AbstractColumn::ColumnMode::BigInt)
+									mode = AbstractColumn::ColumnMode::BigInt;
+							}
 						}
 					}
-
-					// 				if (!localeDetermined)
-					// 					localeDetermined = determineLocale(nonEmptyValue, locale);
-
-					QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
-					auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
-					if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
-						mode = AbstractColumn::ColumnMode::Double;
+					if (isFirstValue)
+						mode = AbstractFileFilter::columnMode(QString(), dateTimeFormat, numberLocale);
 
 					Column* new_col = new Column(QString::number(curCol), mode);
 					if (mode == AbstractColumn::ColumnMode::DateTime) {
