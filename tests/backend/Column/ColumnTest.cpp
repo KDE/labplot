@@ -19,6 +19,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include "backend/lib/UndoStack.h"
+#include <cmath>
 
 #define SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)                                                                                                                \
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);                                                                                \
@@ -1635,8 +1636,9 @@ void ColumnTest::testFormulasma() {
 	c2.setFormula(QStringLiteral("sma(3; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
-	VALUES_EQUAL(c2.valueAt(0), 1. / 3.);
-	VALUES_EQUAL(c2.valueAt(1), 0.);
+	QVERIFY(std::isnan(c2.valueAt(0)));
+	QVERIFY(std::isnan(c2.valueAt(1)));
+
 	VALUES_EQUAL(c2.valueAt(2), 5. / 3.);
 	VALUES_EQUAL(c2.valueAt(3), 3.);
 	VALUES_EQUAL(c2.valueAt(4), 13. / 3.);

@@ -16,6 +16,7 @@
 #include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <QClipboard>
+#include <cmath>
 
 #define INIT_SPREADSHEET                                                                                                                                       \
 	Spreadsheet sheet(QStringLiteral("test 2 cols"), false);                                                                                                   \
@@ -445,10 +446,16 @@ void SpreadsheetFormulaTest::formulasma() {
 	const int N = 4;
 	for (int i = 0; i < rows; i++) {
 		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
-		double value = 0.;
-		for (int index = std::max(0, i - N + 1); index <= i; index++)
-			value += sheet.column(0)->valueAt(index);
-		QCOMPARE(sheet.column(1)->valueAt(i), value / N);
+
+		if (i < N - 1) {
+			QVERIFY(std::isnan(sheet.column(1)->valueAt(i)));
+		} else {
+			double value = 0.;
+			for (int index = i - N + 1; index <= i; index++) {
+				value += sheet.column(0)->valueAt(index);
+			}
+			QCOMPARE(sheet.column(1)->valueAt(i), value / N);
+		}
 	}
 }
 /*!
