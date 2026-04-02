@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-01 00:40+0000\n"
-"PO-Revision-Date: 2026-03-30 19:12+0100\n"
+"PO-Revision-Date: 2026-04-01 12:16+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -10350,10 +10350,9 @@ msgid "%1: set distribution"
 msgstr "%1: definir distribución"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgid "Move Reference Line"
-msgstr "Línea de referencia"
+msgstr "Mover línea de referencia"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, kde-format
@@ -10371,10 +10370,9 @@ msgid "%1: set end logical position"
 msgstr "%1: definir posición lógica final"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
-#, fuzzy, kde-format
-#| msgid "Reference Range"
+#, kde-format
 msgid "Move Reference Range"
-msgstr "Intervalo de referencia"
+msgstr "Mover intervalo de referencia"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, kde-format

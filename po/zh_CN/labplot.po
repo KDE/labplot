@@ -10187,10 +10187,9 @@ msgid "%1: set distribution"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgid "Move Reference Line"
-msgstr "参考线"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, kde-format
@@ -10208,10 +10207,9 @@ msgid "%1: set end logical position"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
-#, fuzzy, kde-format
-#| msgid "Reference Range"
+#, kde-format
 msgid "Move Reference Range"
-msgstr "参照区间"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, kde-format

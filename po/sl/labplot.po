@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-01 00:40+0000\n"
-"PO-Revision-Date: 2026-03-30 07:18+0200\n"
+"PO-Revision-Date: 2026-04-01 07:05+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -10354,10 +10354,9 @@ msgid "%1: set distribution"
 msgstr "%1: nastavite porazdelitev"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgid "Move Reference Line"
-msgstr "Referenčna črta"
+msgstr "Premakni referenčno črto"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, kde-format
@@ -10375,10 +10374,9 @@ msgid "%1: set end logical position"
 msgstr "%1: nastavi končni logični položaj"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
-#, fuzzy, kde-format
-#| msgid "Reference Range"
+#, kde-format
 msgid "Move Reference Range"
-msgstr "Referenčni interval"
+msgstr "Premakni referenčni interval"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, kde-format

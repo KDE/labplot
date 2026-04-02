@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-01 00:40+0000\n"
-"PO-Revision-Date: 2026-03-24 10:43+0400\n"
+"PO-Revision-Date: 2026-04-01 19:27+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -10341,10 +10341,9 @@ msgid "%1: set distribution"
 msgstr "%1: اضبط التوزيع"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgid "Move Reference Line"
-msgstr "خط مرجعي"
+msgstr "حرّك سطر مرجعي"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, kde-format
@@ -10362,10 +10361,9 @@ msgid "%1: set end logical position"
 msgstr "%1: اضبط موضع النهاية المنطقي"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
-#, fuzzy, kde-format
-#| msgid "Reference Range"
+#, kde-format
 msgid "Move Reference Range"
-msgstr "نطاق مرجعي"
+msgstr "حرّك نطاق مرجعي"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, kde-format
@@ -11874,8 +11872,7 @@ msgstr ""
 "جديدة"
 
 #: src/frontend/ActionsManager.cpp:510
-#, fuzzy, kde-format
-#| msgid "What's new"
+#, kde-format
 msgid "What's New"
 msgstr "ما الجديد"
 
@@ -15591,16 +15588,14 @@ msgid ""
 msgstr "التوزيع المستَخدم لحساب المئينات لمقارنتها بمئينات البيانات المُعطاة"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1 reference lines: template \"%2\" loaded"
+#, kde-format
 msgid "%1 reference lines: orientation changed"
-msgstr "%1 خطوط مرجعية: قالب \"%2\" حُمل"
+msgstr "%1 سطور مرجعية: تغير الاتجاه"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:126
-#, fuzzy, kde-format
-#| msgid "%1: precision changed"
+#, kde-format
 msgid "%1: orientation changed"
-msgstr "%1: غير الدقة"
+msgstr "%1: تغير الاتجاه"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:246
 #, kde-format
@@ -26077,17 +26072,17 @@ msgid "Resolution:"
 msgstr "الدقّة:"
 
 #: src/frontend/WhatsNewDialog.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "%1 is the LabPlot version"
-#| msgid "Welcome to LabPlot %1"
+#, kde-format
 msgid "What's New in LabPlot %1"
-msgstr "أهلاً بك في LabPlot معمل الرسم %1"
+msgstr "أهلاً بك في معمل الرسم %1"
 
 #: src/frontend/WhatsNewDialog.cpp:54
 #, kde-format
 msgid ""
 "See the full changelog for LabPlot %1 on our <a href=\"%2\">website</a>."
 msgstr ""
+"اطلع على سجل التغييرات الكامل لبرنامج معمل الرسم %1 على موقعنا <a href="
+"\"%2\"></a>."
 
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:42
