@@ -1352,8 +1352,8 @@ void WorksheetView::addNew(QAction* action) {
 		break;
 	}
 	case AddNewMode::TextLabel: {
-		auto* l = new TextLabel(i18n("Text Label"));
-		l->setText(i18n("Text Label"));
+		auto* l = new TextLabel(i18n("Text Label"));\
+		l->setText(TextLabel::TextWrapper(i18n("text")));
 		aspect = l;
 		break;
 	}

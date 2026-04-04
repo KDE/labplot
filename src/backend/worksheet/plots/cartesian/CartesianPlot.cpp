@@ -2387,7 +2387,7 @@ void CartesianPlot::addInfoElement() {
 
 void CartesianPlot::addTextLabel() {
 	auto* label = new TextLabel(i18n("Text Label"), this);
-
+	label->setText(TextLabel::TextWrapper(i18n("text")));
 	Q_D(CartesianPlot);
 	if (d->calledFromContextMenu) {
 		auto position = label->position();
