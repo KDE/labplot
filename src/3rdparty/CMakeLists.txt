@@ -93,8 +93,25 @@ if(ENABLE_VECTOR_BLF)
       )
       # fix missing variable and keyword for fast_float
       if(NOT MSVC_FOUND)
-          add_definitions (-UFASTFLOAT_VISUAL_STUDIO)
-          add_definitions (-D__forceinline=inline)
+        # get version of fast_float
+        find_path(FASTFLOAT_INCLUDE_DIR fast_float/fast_float.h)
+        file(READ "${FASTFLOAT_INCLUDE_DIR}/fast_float/float_common.h" _ff_header)
+        string(REGEX MATCH "#define FASTFLOAT_VERSION_MAJOR ([0-9]+)" _ ${_ff_header})
+        set(FF_MAJOR ${CMAKE_MATCH_1})
+        string(REGEX MATCH "#define FASTFLOAT_VERSION_MINOR ([0-9]+)" _ ${_ff_header})
+        set(FF_MINOR ${CMAKE_MATCH_1})
+        string(REGEX MATCH "#define FASTFLOAT_VERSION_PATCH ([0-9]+)" _ ${_ff_header})
+        set(FF_PATCH ${CMAKE_MATCH_1})
+        set(FastFloat_VERSION "${FF_MAJOR}.${FF_MINOR}.${FF_PATCH}")
+        message(STATUS "FastFloat version: ${FastFloat_VERSION}")
+
+        if(FastFloat_VERSION VERSION_GREATER_EQUAL "6.1.4")
+              add_definitions (-UFASTFLOAT_VISUAL_STUDIO)
+        else()
+              add_definitions (-DFASTFLOAT_VISUAL_STUDIO=0)
+        endif()
+
+        add_definitions (-D__forceinline=inline)
       endif()
       # disable -Werror=maybe-uninitialized since gcc gives false positive warnings when address sanitizer is used
       if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
