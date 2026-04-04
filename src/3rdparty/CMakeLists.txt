@@ -93,7 +93,7 @@ if(ENABLE_VECTOR_BLF)
       )
       # fix missing variable and keyword for fast_float
       if(NOT MSVC_FOUND)
-          add_definitions (-DFASTFLOAT_VISUAL_STUDIO=0)
+          add_definitions (-UFASTFLOAT_VISUAL_STUDIO)
           add_definitions (-D__forceinline=inline)
       endif()
       # disable -Werror=maybe-uninitialized since gcc gives false positive warnings when address sanitizer is used
