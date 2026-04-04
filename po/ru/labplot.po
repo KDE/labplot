@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-01 00:40+0000\n"
-"PO-Revision-Date: 2026-03-06 21:42+0200\n"
+"PO-Revision-Date: 2026-04-03 20:35+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -9795,10 +9795,9 @@ msgstr "Диаграмма поведения процесса"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2010
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgid "Pareto Chart"
-msgstr "График Парето"
+msgstr "Диаграмма Парето"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #, kde-format
@@ -10499,10 +10498,9 @@ msgid "%1: set distribution"
 msgstr "%1: задание распределения"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgid "Move Reference Line"
-msgstr "Контрольная линия"
+msgstr "Переместить контрольную линию"
 
 # BUGME: please split to allow translation "Порядок сортировки:" --aspotashev
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
@@ -10521,10 +10519,9 @@ msgid "%1: set end logical position"
 msgstr "%1: задание завершения логической позиции"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
-#, fuzzy, kde-format
-#| msgid "Reference Range"
+#, kde-format
 msgid "Move Reference Range"
-msgstr "Справочный диапазон"
+msgstr "Переместить контрольный интервал"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, kde-format
@@ -12063,8 +12060,7 @@ msgstr ""
 "систем или подключения новых."
 
 #: src/frontend/ActionsManager.cpp:510
-#, fuzzy, kde-format
-#| msgid "What's new"
+#, kde-format
 msgid "What's New"
 msgstr "Нововведения"
 
@@ -15925,16 +15921,14 @@ msgstr ""
 "процентилями предоставленных данных."
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1 reference lines: template \"%2\" loaded"
+#, kde-format
 msgid "%1 reference lines: orientation changed"
-msgstr "Контрольные линии (%1): загрузка шаблона «%2»"
+msgstr "Контрольные линии (%1): изменена ориентация"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:126
-#, fuzzy, kde-format
-#| msgid "%1: precision changed"
+#, kde-format
 msgid "%1: orientation changed"
-msgstr "%1: изменение точности"
+msgstr "%1: изменена ориентация"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:246
 #, kde-format
@@ -17000,11 +16994,10 @@ msgid "Run Chart"
 msgstr "Запуск графика"
 
 #: src/frontend/GuiObserver.cpp:402
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pareto Chart"
-msgstr "График Парето"
+msgstr "Диаграмма Парето"
 
 #: src/frontend/GuiObserver.cpp:407
 #, kde-format
@@ -24680,7 +24673,7 @@ msgstr "Спарклайны:"
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
 #, kde-format
 msgid "Sync Rows With:"
-msgstr ""
+msgstr "Синхронизация строк с:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #. i18n: ectx: property (text), widget (QLabel, lAppearance)
@@ -26684,17 +26677,17 @@ msgid "Resolution:"
 msgstr "Разрешение:"
 
 #: src/frontend/WhatsNewDialog.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "%1 is the LabPlot version"
-#| msgid "Welcome to LabPlot %1"
+#, kde-format
 msgid "What's New in LabPlot %1"
-msgstr "Добро пожаловать в LabPlot %1"
+msgstr "Нововведения в LabPlot %1"
 
 #: src/frontend/WhatsNewDialog.cpp:54
 #, kde-format
 msgid ""
 "See the full changelog for LabPlot %1 on our <a href=\"%2\">website</a>."
 msgstr ""
+"Подробный список изменений в LabPlot %1 доступен на <a href=\"%2\">нашем веб-"
+"сайте</a>."
 
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:42
