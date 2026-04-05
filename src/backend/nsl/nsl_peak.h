@@ -11,6 +11,7 @@
 #define NSL_PEAK_H
 
 #include <cmath>
+#include <stddef.h>
 
 template<typename T>
 size_t* nsl_peak_detect(T* data, size_t n, size_t& np, T height = -INFINITY, size_t distance = 0);
