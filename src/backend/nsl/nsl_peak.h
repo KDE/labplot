@@ -12,6 +12,7 @@
 
 #include <cmath>
 #include <cstddef>
+using std::size_t;
 
 template<typename T>
 size_t* nsl_peak_detect(T* data, size_t n, size_t& np, T height = -INFINITY, size_t distance = 0);
