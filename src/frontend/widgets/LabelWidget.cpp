@@ -100,6 +100,8 @@ LabelWidget::LabelWidget(QWidget* parent)
 	// set the minimum size of the text edit widget to one row of a QLabel
 	ui.teLabel->setMinimumHeight(ui.lName->height());
 
+	ui.kfontRequester->setMaximumHeight(ui.leName->height());
+	ui.kfontRequesterTeX->setMaximumHeight(ui.leName->height());
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	m_units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
 	if (m_units == BaseDock::Units::Imperial)

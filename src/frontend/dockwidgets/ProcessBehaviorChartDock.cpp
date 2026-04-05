@@ -35,6 +35,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
+	ui.kfrLabelsFont->setMaximumHeight(ui.leName->height());
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
