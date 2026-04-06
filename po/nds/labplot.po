@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-01 00:40+0000\n"
+"POT-Creation-Date: 2026-04-06 00:39+0000\n"
 "PO-Revision-Date: 2014-03-19 20:12+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -9878,9 +9878,14 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2389
 #: src/frontend/worksheet/WorksheetView.cpp:1355
-#: src/frontend/worksheet/WorksheetView.cpp:1356
 #, kde-format
 msgid "Text Label"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2390
+#: src/frontend/worksheet/WorksheetView.cpp:1356
+#, kde-format
+msgid "text"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2469
