@@ -160,6 +160,7 @@ void LollipopPlot::updateLocale() {
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<QString>, dataColumnPaths, dataColumnPaths)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, LollipopPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QString, xColumnPath, xColumnPath)
@@ -178,11 +179,6 @@ Symbol* LollipopPlot::symbolAt(int index) const {
 		return d->symbols.at(index);
 	else
 		return nullptr;
-}
-
-QVector<QString>& LollipopPlot::dataColumnPaths() const {
-	D(LollipopPlot);
-	return d->dataColumnPaths;
 }
 
 bool LollipopPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {

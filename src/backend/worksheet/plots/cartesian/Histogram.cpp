@@ -395,17 +395,17 @@ QColor Histogram::color() const {
 }
 
 const AbstractColumn* Histogram::bins() const {
-	D(Histogram);
+	Q_D(const Histogram);
 	return d->bins();
 }
 
 const AbstractColumn* Histogram::binValues() const {
-	D(Histogram);
+	Q_D(const Histogram);
 	return d->binValues();
 }
 
 const AbstractColumn* Histogram::binPDValues() const {
-	D(Histogram);
+	Q_D(const Histogram);
 	return d->binPDValues();
 }
 
@@ -568,7 +568,7 @@ void Histogram::retransform() {
 }
 
 void Histogram::recalc() {
-	D(Histogram);
+	Q_D(Histogram);
 	d->recalc();
 }
 
@@ -585,7 +585,7 @@ void Histogram::handleResize(double horizontalRatio, double /*verticalRatio*/, b
 }
 
 void Histogram::updateValues() {
-	D(Histogram);
+	Q_D(Histogram);
 	d->updateValues();
 }
 
@@ -722,7 +722,7 @@ double HistogramPrivate::yMaximum() const {
 	return -INFINITY;
 }
 
-const AbstractColumn* HistogramPrivate::bins() {
+const AbstractColumn* HistogramPrivate::bins() const {
 	if (!m_binsColumn) {
 		m_binsColumn = new Column(QStringLiteral("bins"));
 
@@ -737,7 +737,7 @@ const AbstractColumn* HistogramPrivate::bins() {
 	return m_binsColumn;
 }
 
-const AbstractColumn* HistogramPrivate::binValues() {
+const AbstractColumn* HistogramPrivate::binValues() const {
 	if (!m_binValuesColumn) {
 		m_binValuesColumn = new Column(QStringLiteral("values"));
 
@@ -756,7 +756,7 @@ const AbstractColumn* HistogramPrivate::binValues() {
  * returns a column with the bin values in the probability density normalization
  * \return
  */
-const AbstractColumn* HistogramPrivate::binPDValues() {
+const AbstractColumn* HistogramPrivate::binPDValues() const {
 	if (!m_binPDValuesColumn) {
 		m_binPDValuesColumn = new Column(QStringLiteral("values"));
 

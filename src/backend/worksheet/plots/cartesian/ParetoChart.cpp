@@ -294,12 +294,12 @@ void ParetoChart::setDataColumnPath(const QString& path) {
 // #################################  SLOTS  ####################################
 // ##############################################################################
 void ParetoChart::retransform() {
-	D(ParetoChart);
+	Q_D(ParetoChart);
 	d->retransform();
 }
 
 void ParetoChart::recalc() {
-	D(ParetoChart);
+	Q_D(ParetoChart);
 	d->recalc();
 }
 

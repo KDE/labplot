@@ -289,12 +289,12 @@ void RunChart::setCenterMetric(RunChart::CenterMetric centerMetric) {
 // #################################  SLOTS  ####################################
 // ##############################################################################
 void RunChart::retransform() {
-	D(RunChart);
+	Q_D(RunChart);
 	d->retransform();
 }
 
 void RunChart::recalc() {
-	D(RunChart);
+	Q_D(RunChart);
 	d->recalc();
 }
 

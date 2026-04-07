@@ -41,7 +41,7 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	CLASS_D_ACCESSOR_DECL(QString, xColumnPath, XColumnPath)
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
-	QVector<QString>& dataColumnPaths() const;
+	CLASS_D_ACCESSOR_DECL(QVector<QString>, dataColumnPaths, DataColumnPaths)
 	BASIC_D_ACCESSOR_DECL(LollipopPlot::Orientation, orientation, Orientation)
 
 	Line* lineAt(int) const;
