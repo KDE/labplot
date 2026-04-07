@@ -163,6 +163,9 @@ function(generate_python_bindings)
     # Define and build the bindings library.
     add_library(${PB_PACKAGE_NAME} SHARED ${${PB_PACKAGE_NAME}_sources})
 
+    target_compile_options(${PB_PACKAGE_NAME} PRIVATE
+        $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wno-keyword-macro -Wno-shadow -Wno-cast-function-type -Wno-zero-as-null-pointer-constant>
+    )
     target_link_libraries(${PB_PACKAGE_NAME} PRIVATE
         PySide6::pyside6
         Shiboken6::libshiboken
