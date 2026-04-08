@@ -1843,6 +1843,19 @@ bool Column::isValid(int row) const {
 	return AbstractColumn::isValid(row);
 }
 
+/*!
+ * \brief Set all rows as valid
+ *
+ * Has to be called when the data is written directly to the data vector without using setValueAt() etc.
+ * and thus bypassing the validity tracking in the setters.
+*/
+void Column::setAllValid() {
+	if (AbstractColumnPrivate::needsValidityTracking(columnMode())) {
+		d->m_valid.resize(rowCount());
+		d->m_valid.fill(true);
+	}
+}
+
 /**
  * \brief Return the column mode
  *

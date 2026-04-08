@@ -1856,6 +1856,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		}
 
 		if (columnImportMode == AbstractFileFilter::ImportMode::Replace) {
+			column->setAllValid(); // the data was written directly into the data container without calling the setters, so we have to set all values valid here
 			column->setSuppressDataChangedSignal(true);
 			column->setDataChanged(); // Invalidate properties
 			column->setSuppressDataChangedSignal(false);
