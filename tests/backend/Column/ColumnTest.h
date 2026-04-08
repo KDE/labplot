@@ -135,6 +135,19 @@ private Q_SLOTS:
 
 	void testLoadSaveNoData();
 	void testLoadSaveWithData();
+
+	// integer validity bitmap tests
+	void integerValidityInitEmpty();
+	void integerValiditySetValue();
+	void integerValidityUndoRedo();
+	void integerValidityClear();
+	void integerValidityInsertRows();
+	void integerValidityRemoveRows();
+	void integerValidityModeConversionDoubleToInt();
+	void integerValidityModeConversionIntToDouble();
+	void integerValiditySaveLoad();
+	void integerValidityHasValues();
+	void integerValidityCopyColumn();
 };
 
 #endif // COLUMNTEST_H
