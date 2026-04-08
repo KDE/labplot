@@ -1413,7 +1413,7 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode,
 									void* data,
 									AbstractSimpleFilter* in_filter,
 									AbstractSimpleFilter* out_filter,
- 									const QBitArray& valid) {
+									const QBitArray& valid) {
 	replaceModeData(mode, data, in_filter, out_filter);
 	m_valid = valid;
 }
