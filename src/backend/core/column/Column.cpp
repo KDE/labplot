@@ -1385,9 +1385,10 @@ void Column::save(QXmlStreamWriter* writer) const {
 // TODO: extra header
 class DecodeColumnTask : public QRunnable {
 public:
-	DecodeColumnTask(ColumnPrivate* priv, const QString& content)
+	DecodeColumnTask(ColumnPrivate* priv, const QString& content, const QString& validContent)
 		: m_private(priv)
-		, m_content(content) { };
+		, m_content(content)
+		, m_validContent(validContent) { };
 	void run() override {
 		const auto bytes = QByteArray::fromBase64(m_content.toLatin1());
 		switch (m_private->columnMode()) {
@@ -1401,18 +1402,12 @@ public:
 			auto* data = new QVector<qint64>(bytes.size() / (int)sizeof(qint64));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
-			// mark all loaded values as valid (backward compatibility)
-			m_private->m_valid.resize(data->size());
-			m_private->m_valid.fill(true);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
 			auto* data = new QVector<int>(bytes.size() / (int)sizeof(int));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
-			// mark all loaded values as valid (backward compatibility)
-			m_private->m_valid.resize(data->size());
-			m_private->m_valid.fill(true);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
@@ -1436,11 +1431,32 @@ public:
 			break;
 		}
 		}
+
+		// apply per-element validity bitmap for Integer/BigInt columns
+		if (AbstractColumnPrivate::needsValidityTracking(m_private->columnMode())) {
+			const int numRows = m_private->rowCount();
+			if (!m_validContent.isEmpty()) {
+				// restore saved validity bitmap
+				const auto validBytes = QByteArray::fromBase64(m_validContent.toLatin1());
+				m_private->m_valid = QBitArray(numRows);
+				const int byteCount = qMin(validBytes.size(), (numRows + 7) / 8);
+				const auto* bits = reinterpret_cast<const uchar*>(validBytes.constData());
+				for (int i = 0; i < numRows; ++i) {
+					if (i / 8 < byteCount && (bits[i / 8] & (1 << (i % 8))))
+						m_private->m_valid.setBit(i, true);
+				}
+			} else {
+				// backward compatibility: no validity element, mark all as valid
+				m_private->m_valid.resize(numRows);
+				m_private->m_valid.fill(true);
+			}
+		}
 	}
 
 private:
 	ColumnPrivate* m_private;
 	QString m_content;
+	QString m_validContent;
 };
 
 /**
@@ -1480,6 +1496,8 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 
 	QVector<QDateTime> dateTimeVector;
 	QVector<QString> textVector;
+	QString pendingDecodeContent;
+	QString pendingValidContent;
 
 	// read child elements
 	while (!reader->atEnd()) {
@@ -1569,18 +1587,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 					break;
 				}
 			} else if (reader->name() == QLatin1String("valid")) {
-				const QString validContent = reader->readElementText().trimmed();
-				if (!validContent.isEmpty()) {
-					const auto validBytes = QByteArray::fromBase64(validContent.toLatin1());
-					const int numRows = d->rowCount();
-					d->m_valid = QBitArray(numRows);
-					const int byteCount = qMin(validBytes.size(), (numRows + 7) / 8);
-					const auto* bits = reinterpret_cast<const uchar*>(validBytes.constData());
-					for (int i = 0; i < numRows; ++i) {
-						if (i / 8 < byteCount && (bits[i / 8] & (1 << (i % 8))))
-							d->m_valid.setBit(i, true);
-					}
-				}
+				pendingValidContent = reader->readElementText().trimmed();
 			} else if (reader->name() == QLatin1String("row")) {
 				// Assumption: the next elements are all rows
 				switch (columnMode()) {
@@ -1621,11 +1628,15 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 			bool decode = mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt
 				|| (mode == ColumnMode::Text && Project::xmlVersion() >= 18)
 				|| ((mode == ColumnMode::DateTime || mode == ColumnMode::Month || mode == ColumnMode::Day) && Project::xmlVersion() >= 20);
-			if (!content.isEmpty() && decode) {
-				auto* task = new DecodeColumnTask(d, content);
-				QThreadPool::globalInstance()->start(task);
-			}
+			if (!content.isEmpty() && decode)
+				pendingDecodeContent = content;
 		}
+	}
+
+	// start the decode task after all elements (including <valid>) have been parsed
+	if (!pendingDecodeContent.isEmpty()) {
+		auto* task = new DecodeColumnTask(d, pendingDecodeContent, pendingValidContent);
+		QThreadPool::globalInstance()->start(task);
 	}
 
 	switch (columnMode()) {

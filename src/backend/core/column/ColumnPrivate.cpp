@@ -1322,6 +1322,13 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		break;
 	} // switch(mode)
 
+	// save the old validity bitmap before changing mode, so we can transfer
+	// invalidity to modes that use sentinel values instead of a bitmap
+	const bool oldModeNeedsValidity = AbstractColumnPrivate::needsValidityTracking(m_columnMode);
+	QBitArray oldValid;
+	if (oldModeNeedsValidity)
+		oldValid = m_valid;
+
 	m_columnMode = mode;
 
 	m_inputFilter = new_in_filter;
@@ -1339,6 +1346,38 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		copy(filter->output(0));
 		DEBUG(" DONE")
 		delete temp_col;
+
+		// transfer invalidity from the old validity bitmap to the new data format
+		if (oldModeNeedsValidity && !AbstractColumnPrivate::needsValidityTracking(mode)) {
+			const int count = qMin(oldValid.size(), rowCount());
+			switch (mode) {
+			case AbstractColumn::ColumnMode::Double: {
+				auto* data = static_cast<QVector<double>*>(m_data);
+				for (int i = 0; i < count; ++i)
+					if (!oldValid.testBit(i))
+						(*data)[i] = NAN;
+				break;
+			}
+			case AbstractColumn::ColumnMode::Text: {
+				auto* data = static_cast<QVector<QString>*>(m_data);
+				for (int i = 0; i < count; ++i)
+					if (!oldValid.testBit(i))
+						(*data)[i] = QString();
+				break;
+			}
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day: {
+				auto* data = static_cast<QVector<QDateTime>*>(m_data);
+				for (int i = 0; i < count; ++i)
+					if (!oldValid.testBit(i))
+						(*data)[i] = QDateTime();
+				break;
+			}
+			default:
+				break;
+			}
+		}
 	}
 
 	if (filter_is_temporary)
