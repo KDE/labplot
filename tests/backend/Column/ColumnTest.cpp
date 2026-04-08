@@ -2174,13 +2174,13 @@ void ColumnTest::integerValidityInsertRows() {
 	c.insertRows(1, 2);
 	QCOMPARE(c.rowCount(), 5);
 
-	QCOMPARE(c.isValid(0), true);  // original row 0
+	QCOMPARE(c.isValid(0), true); // original row 0
 	QCOMPARE(c.integerAt(0), 10);
 	QCOMPARE(c.isValid(1), false); // inserted
 	QCOMPARE(c.isValid(2), false); // inserted
-	QCOMPARE(c.isValid(3), true);  // original row 1
+	QCOMPARE(c.isValid(3), true); // original row 1
 	QCOMPARE(c.integerAt(3), 20);
-	QCOMPARE(c.isValid(4), true);  // original row 2
+	QCOMPARE(c.isValid(4), true); // original row 2
 	QCOMPARE(c.integerAt(4), 30);
 }
 
@@ -2201,10 +2201,10 @@ void ColumnTest::integerValidityRemoveRows() {
 	c.removeRows(1, 2);
 	QCOMPARE(c.rowCount(), 3);
 
-	QCOMPARE(c.isValid(0), true);  // original row 0
+	QCOMPARE(c.isValid(0), true); // original row 0
 	QCOMPARE(c.integerAt(0), 10);
 	QCOMPARE(c.isValid(1), false); // original row 3
-	QCOMPARE(c.isValid(2), true);  // original row 4
+	QCOMPARE(c.isValid(2), true); // original row 4
 	QCOMPARE(c.integerAt(2), 50);
 }
 
@@ -2226,9 +2226,9 @@ void ColumnTest::integerValidityModeConversionDoubleToInt() {
 
 	QCOMPARE(c->columnMode(), Column::ColumnMode::Integer);
 	QCOMPARE(c->isValid(0), true);
-	QCOMPARE(c->integerAt(0), 2);  // round(1.5)
+	QCOMPARE(c->integerAt(0), 2); // round(1.5)
 	QCOMPARE(c->isValid(1), true);
-	QCOMPARE(c->integerAt(1), 3);  // round(2.7)
+	QCOMPARE(c->integerAt(1), 3); // round(2.7)
 	QCOMPARE(c->isValid(2), false); // was NaN → empty
 	QCOMPARE(c->isValid(3), false); // was NaN → empty
 }
