@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -68,9 +68,9 @@ msgid "Duplicate Here"
 msgstr "&Duplikovať"
 
 #: src/backend/core/AbstractAspect.cpp:347
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paste '%1'"
-msgstr "Vložiť"
+msgstr "Vložiť '%1'"
 
 #: src/backend/core/AbstractAspect.cpp:357
 #, kde-format
@@ -121,14 +121,14 @@ msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "Premenovanie \"%1\" na \"%2\" aby sa predišlo kolízii názvov."
 
 #: src/backend/core/AbstractAspect.cpp:568
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: insert %2 before %3"
-msgstr "Vložiť pred"
+msgstr "%1: vložiť %2 pred %3"
 
 #: src/backend/core/AbstractAspect.cpp:568
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: insert %2 before end"
-msgstr "Vložiť pred"
+msgstr "%1: vložiť %2 pred koniec"
 
 #: src/backend/core/AbstractAspect.cpp:612
 #: src/backend/core/aspectcommands.h:103
@@ -137,9 +137,9 @@ msgid "%1: remove %2"
 msgstr "%1: odstrániť %2"
 
 #: src/backend/core/AbstractAspect.cpp:632
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: remove all children"
-msgstr "Odstrániť stĺpec"
+msgstr "%1: odstrániť všetkých potomkov"
 
 #: src/backend/core/AbstractAspect.cpp:831
 #, kde-format
@@ -147,14 +147,14 @@ msgid "%1: pasted '%2'"
 msgstr "%1: pridať %2"
 
 #: src/backend/core/AbstractAspect.cpp:833
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: duplicated '%2'"
-msgstr "Redukovať"
+msgstr "%1: duplikované '%2'"
 
 #: src/backend/core/AbstractAspect.cpp:834
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy of '%1'"
-msgstr "Vyhladzovanie"
+msgstr "Copy of '%1'"
 
 #: src/backend/core/AbstractAspect.cpp:966
 #, kde-format
@@ -327,21 +327,21 @@ msgstr "NEDEFINOVANÉ"
 
 #: src/backend/core/AbstractColumn.cpp:328
 #: src/backend/spreadsheet/Spreadsheet.cpp:209
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
-msgstr[0] "Vlož&iť riadok"
-msgstr[1] "Vložiť riadky"
-msgstr[2] "Vložiť riadky"
+msgstr[0] "%1: vložiť 1 riadok"
+msgstr[1] "%1: vložiť %2 riadky"
+msgstr[2] "%1: vložiť %2 riadkov"
 
 #: src/backend/core/AbstractColumn.cpp:330
 #: src/backend/spreadsheet/Spreadsheet.cpp:211
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
-msgstr[0] "Odstrániť riadok"
-msgstr[1] "Odstrániť riadky"
-msgstr[2] "Odstrániť riadky"
+msgstr[0] "%1: odstrániť 1 riadok"
+msgstr[1] "%1: odstrániť %2 riadky"
+msgstr[2] "%1: odstrániť %2 riadkov"
 
 #: src/backend/core/AbstractColumn.cpp:924
 #, kde-format
@@ -446,9 +446,9 @@ msgid "unknown element '%1'"
 msgstr "neznámy prvok '%1'"
 
 #: src/backend/core/aspectcommands.h:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: move up"
-msgstr "%1: odstrániť %2"
+msgstr "%1: move up"
 
 #: src/backend/core/aspectcommands.h:192
 #, kde-format
@@ -499,9 +499,9 @@ msgid "%1   (non-numeric data)"
 msgstr "%1   (nenumerické dáta)"
 
 #: src/backend/core/AspectTreeModel.cpp:190
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1   (no values)"
-msgstr "Hodnoty"
+msgstr "%1   (no values)"
 
 #: src/backend/core/AspectTreeModel.cpp:228
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
@@ -511,14 +511,14 @@ msgstr "Veľkosť: %1"
 
 #. i18n("Values: %1", col->availableRowCount());
 #: src/backend/core/AspectTreeModel.cpp:231
-#, fuzzy, kde-format
+#, kde-format
 msgid "Type: %1"
-msgstr "Typ:"
+msgstr "Type: %1"
 
 #: src/backend/core/AspectTreeModel.cpp:232
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plot Designation: %1"
-msgstr "Pozícia:"
+msgstr "Plot Designation: %1"
 
 #: src/backend/core/AspectTreeModel.cpp:237
 #, kde-format
@@ -643,9 +643,9 @@ msgstr "%1: nastaviť hodnotu pre riadok %2"
 #: src/backend/core/column/columncommands.h:287
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1149
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: replace values"
-msgstr "Hodnoty"
+msgstr "%1: replace values"
 
 #: src/backend/core/column/columncommands.h:289
 #, kde-format
@@ -723,9 +723,9 @@ msgid "%1: save calculation changed"
 msgstr "%1: nastaviť obrázok pozadia"
 
 #: src/backend/core/Project.cpp:550 src/backend/core/Project.cpp:584
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sorry. Could not open file for reading."
-msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
+msgstr "Sorry. Could not open file for reading."
 
 #: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:591
 #, kde-format
@@ -738,9 +738,9 @@ msgid "Error opening project"
 msgstr "Otvoriť projekt"
 
 #: src/backend/core/Project.cpp:610
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unknown error when opening the project %1."
-msgstr "Otvoriť projekt"
+msgstr "Unknown error when opening the project %1."
 
 #: src/backend/core/Project.cpp:611
 #, kde-format
@@ -793,9 +793,9 @@ msgid "Failed to open the file '%1'."
 msgstr "Zlyhalo otvorenie súboru %1"
 
 #: src/backend/core/Project.cpp:836
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to process the content of the file '%1'."
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Failed to process the content of the file '%1'."
 
 #: src/backend/core/Project.cpp:839
 #, kde-format
@@ -826,14 +826,14 @@ msgid "Plot"
 msgstr "Kresliť"
 
 #: src/backend/datapicker/Datapicker.cpp:138
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1, active curve \"%2\""
-msgstr "aktivovat"
+msgstr "%1, active curve \"%2\""
 
 #: src/backend/datapicker/Datapicker.cpp:217
-#, fuzzy, kde-format
+#, kde-format
 msgid "Point %1"
-msgstr "Bod"
+msgstr "Point %1"
 
 #: src/backend/datapicker/Datapicker.cpp:373
 #, kde-format
@@ -888,24 +888,24 @@ msgid "%1: set position Z column"
 msgstr "%1: nastaviť písmo"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:327
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set +delta_X column"
-msgstr "Vložiť stĺpec"
+msgstr "%1: set +delta_X stĺpec"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:334
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set -delta_X column"
-msgstr "Vložiť stĺpec"
+msgstr "%1: set -delta_X stĺpec"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:341
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set +delta_Y column"
-msgstr "Vložiť stĺpec"
+msgstr "%1: set +delta_Y stĺpec"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:348
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set -delta_Y column"
-msgstr "Vložiť stĺpec"
+msgstr "%1: set -delta_Y stĺpec"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:355
 #, kde-format
@@ -1051,23 +1051,27 @@ msgid "There is no download URL present in the metadata file!"
 msgstr "V súbore metadát nie je prítomná žiadna URL na stiahnutie!"
 
 #: src/backend/datasources/DatasetHandler.cpp:191
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
-msgstr "Čítanie dát zlyhalo."
+msgstr ""
+"Failed to download the dataset from %1.\n"
+"%2."
 
 #: src/backend/datasources/DatasetHandler.cpp:225
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Failed to create the directory %1 to save the dataset."
 
 #: src/backend/datasources/DatasetHandler.cpp:248
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
+msgstr ""
+"Couldn't open the file %1 for writing.\n"
+"%2"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:167
 #, kde-format
@@ -1131,9 +1135,9 @@ msgstr "Hodnota"
 #: src/backend/datasources/filters/AsciiFilter.cpp:959
 #: src/backend/datasources/filters/AsciiFilter.cpp:1514
 #: src/backend/datasources/filters/AsciiFilter.cpp:2069
-#, fuzzy, kde-format
+#, kde-format
 msgid "Value %1"
-msgstr "Hodnota"
+msgstr "Value %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:1269
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
@@ -1189,26 +1193,26 @@ msgid "No messages read."
 msgstr "Žiadne prečítané správy."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:224
-#, fuzzy, kde-format
+#, kde-format
 msgid "Images: %1"
-msgstr "Obrázky"
+msgstr "Images: %1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:229
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tables: %1"
-msgstr "Tabuľky"
+msgstr "Tables: %1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:259
 #: src/backend/datasources/filters/MatioFilter.cpp:647
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to open the file."
-msgstr "Zlyhalo otvorenie súboru %1"
+msgstr "Failed to open the file."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:267
 #: src/backend/datasources/filters/FITSFilter.cpp:346
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to read the file."
-msgstr "Zlyhalo otvorenie súboru %1"
+msgstr "Failed to read the file."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:288
 #, kde-format
@@ -1225,9 +1229,9 @@ msgid "Primary header"
 msgstr "Primárna hlavička"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1028
-#, fuzzy, kde-format
+#, kde-format
 msgid "IMAGE #%1"
-msgstr "Obrázok"
+msgstr "IMAGE #%1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1031
 #, kde-format
@@ -1265,9 +1269,9 @@ msgid "Failed opening HDF5 file"
 msgstr "Nepodarilo sa otvoriť"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:188
-#, fuzzy, kde-format
+#, kde-format
 msgid "File size: %1 bytes"
-msgstr "Veľkosť súboru (bajty)"
+msgstr "File size: %1 bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:193
 #, kde-format
@@ -1285,9 +1289,9 @@ msgid "Number of data sets: %1"
 msgstr "Počet riadkov: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:205
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of groups: %1"
-msgstr "Počet skupín:"
+msgstr "Number of groups: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:208
 #, kde-format
@@ -1487,15 +1491,15 @@ msgid "data type"
 msgstr "Dátový typ:"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1351
-#, fuzzy, kde-format
+#, kde-format
 msgid "rank %1 not supported yet"
-msgstr "Ešte neimplemetované"
+msgstr "rank %1 not supported yet"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1358
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "data set"
-msgstr "Dátová sada %1"
+msgstr "data set"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1376
 #, kde-format
@@ -1524,9 +1528,9 @@ msgid "No data set selected."
 msgstr "Vyčistiť výber"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1582
-#, fuzzy, kde-format
+#, kde-format
 msgid "rank 0 not implemented yet for type %1"
-msgstr "Ešte neimplemetované"
+msgstr "rank 0 not implemented yet for type %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1721
 #: src/backend/datasources/filters/HDF5Filter.cpp:1870
@@ -1540,9 +1544,9 @@ msgid "unsupported float type for rank 1"
 msgstr "nepodporovaný desatinný typ pre rank 1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1885
-#, fuzzy, kde-format
+#, kde-format
 msgid "rank 1 not implemented yet for type %1"
-msgstr "Ešte neimplemetované"
+msgstr "rank 1 not implemented yet for type %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2018
 #, kde-format
@@ -1555,19 +1559,19 @@ msgid "unsupported float type for rank 2"
 msgstr "nepodporovaný desatinný typ pre rank 2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2094
-#, fuzzy, kde-format
+#, kde-format
 msgid "rank 2 not implemented yet for type %1"
-msgstr "Ešte neimplemetované"
+msgstr "rank 2 not implemented yet for type %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2103
-#, fuzzy, kde-format
+#, kde-format
 msgid "rank %1 not implemented yet for type %2"
-msgstr "Ešte neimplemetované"
+msgstr "rank %1 not implemented yet for type %2"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Matrix (grayscale)"
-msgstr "Matica %1"
+msgstr "Matrix (grayscale)"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
@@ -1603,9 +1607,9 @@ msgid "Empty file"
 msgstr "Prázdny súbor"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:198
-#, fuzzy, kde-format
+#, kde-format
 msgid "Parse error: %1 at offset %2"
-msgstr "Vytvorené: %1"
+msgstr "Parse error: %1 at offset %2"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:201
 #, kde-format
@@ -1686,9 +1690,9 @@ msgid "Matlab version undefined"
 msgstr "Verzia Matlab nedefinovaná"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:332
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of variables: "
-msgstr "Počet riadkov: %1"
+msgstr "Number of variables: "
 
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:325
@@ -1726,9 +1730,9 @@ msgid "Char"
 msgstr "Stĺpcový graf"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:380
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sparse"
-msgstr "%1 parsek"
+msgstr "Sparse"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:384
 #: src/backend/datasources/filters/MatioFilter.cpp:426
@@ -1896,9 +1900,9 @@ msgstr "Počet riadkov: %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:232
 #: src/backend/datasources/filters/ReadStatFilter.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgid "Format version: %1"
-msgstr "Ukázať voľby"
+msgstr "Format version: %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:235
 #, kde-format
@@ -1916,9 +1920,9 @@ msgid "global attribute"
 msgstr "Smer"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:458
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 attribute"
-msgstr "Atribút"
+msgstr "%1 attribute"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:486
 #, kde-format
@@ -1966,9 +1970,9 @@ msgid "No variable selected."
 msgstr "Vyčistiť výber"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:700
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to open the file or it's empty."
-msgstr "Zlyhalo otvorenie súboru %1"
+msgstr "Failed to open the file or it's empty."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:938
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1078
@@ -2035,9 +2039,9 @@ msgid "Failed to load the JSON file. Empty JSON document."
 msgstr "Čítanie dát zlyhalo."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to load JSON document. Error: %1."
-msgstr "Čítanie dát zlyhalo."
+msgstr "Failed to load JSON document. Error: %1."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:124
 #, kde-format
@@ -2045,14 +2049,14 @@ msgid "Unknown file extension"
 msgstr "Neznáma prípona súboru"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:129
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of records: %1"
-msgstr "Počet skupín:"
+msgstr "Number of records: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:133
-#, fuzzy, kde-format
+#, kde-format
 msgid "Creation time: %1"
-msgstr "Interpolácia:"
+msgstr "Creation time: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:135
 #, kde-format
@@ -2060,29 +2064,29 @@ msgid "Modification time: %1"
 msgstr "Čas úpravy: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Compression: %1"
-msgstr "Ukázať voľby"
+msgstr "Compression: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgid "Endianess: %1"
-msgstr "Obrázky"
+msgstr "Endianess: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
-#, fuzzy, kde-format
+#, kde-format
 msgid "Table name: %1"
-msgstr "Tabuľky"
+msgstr "Table name: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:169
-#, fuzzy, kde-format
+#, kde-format
 msgid "File label: %1"
-msgstr "Názov súboru:"
+msgstr "File label: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:171
-#, fuzzy, kde-format
+#, kde-format
 msgid "File encoding: %1"
-msgstr "Ukázať voľby"
+msgstr "File encoding: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:173
 #, kde-format
@@ -2096,9 +2100,9 @@ msgstr "Chyba pri otváraní súboru"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:512
 #: src/backend/datasources/filters/ReadStatFilter.cpp:535
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to parse the file."
-msgstr "Zlyhalo otvorenie súboru %1"
+msgstr "Failed to parse the file."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
 #: src/backend/datasources/MQTTClient.cpp:1200
@@ -2125,9 +2129,9 @@ msgid "Not a ROOT file"
 msgstr "Nie je ROOT súbor"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1507
-#, fuzzy, kde-format
+#, kde-format
 msgid "File format version: %1"
-msgstr "Ukázať voľby"
+msgstr "File format version: %1"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1515
 #, kde-format
@@ -2160,9 +2164,9 @@ msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Veľkosť záznamu TStreamerInfo: %1 bajtov"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Application: %1"
-msgstr "Otočenie: "
+msgstr "Application: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:105
 #, kde-format
@@ -2175,24 +2179,24 @@ msgid "Number of Objects: %1"
 msgstr "Počet riadkov: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start Time: %1"
-msgstr "Začiatok:"
+msgstr "Start Time: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:123
-#, fuzzy, kde-format
+#, kde-format
 msgid "End Time: %1"
-msgstr "Dátum a čas"
+msgstr "End Time: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:127
-#, fuzzy, kde-format
+#, kde-format
 msgid "Compression Level: %1"
-msgstr "Ukázať voľby"
+msgstr "Compression Level: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:129
-#, fuzzy, kde-format
+#, kde-format
 msgid "Uncompressed File Size: %1 Bytes"
-msgstr "Veľkosť súboru (bajty)"
+msgstr "Uncompressed File Size: %1 Bytes"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, kde-format
@@ -2205,9 +2209,9 @@ msgid "Message too long. CAN id: %1."
 msgstr "Správa je príliš dlhá. CAN id: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:186
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unknown id: %1."
-msgstr "neznáme"
+msgstr "Unknown id: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:189
 #, kde-format
@@ -2215,9 +2219,9 @@ msgid "Invalid BLF file"
 msgstr "Exportovať do súboru"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:192
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unable to calculate conversion: %1."
-msgstr "Ukázať voľby"
+msgstr "Unable to calculate conversion: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:195
 #, kde-format
@@ -2285,9 +2289,9 @@ msgstr ""
 "zariadení."
 
 #: src/backend/datasources/LiveDataSource.cpp:732
-#, fuzzy, kde-format
+#, kde-format
 msgid "Device already opened."
-msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
+msgstr "Device already opened."
 
 #: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
@@ -2320,9 +2324,9 @@ msgid "Plot data"
 msgstr "Kresliť údaje"
 
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1322
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plot%1"
-msgstr "Kresliť"
+msgstr "Plot%1"
 
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1482
 #, kde-format
@@ -2330,9 +2334,9 @@ msgid "legend"
 msgstr "vysvetlivky"
 
 #: src/backend/datasources/projects/ProjectParser.cpp:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: Import from %2"
-msgstr "Importovať z %1..."
+msgstr "%1: Import from %2"
 
 #: src/backend/gsl/constants.cpp:12
 #, kde-format
@@ -2442,9 +2446,9 @@ msgstr "Číslo"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Speed of light"
-msgstr "%1 rýchlosť svetla"
+msgstr "Speed of light"
 
 #: src/backend/gsl/constants.cpp:64
 #, kde-format
@@ -2506,9 +2510,9 @@ msgstr "Gaussovské"
 
 #. i18n("Astronomy and Astrophysics"));
 #: src/backend/gsl/constants.cpp:77
-#, fuzzy, kde-format
+#, kde-format
 msgid "Astronomical unit"
-msgstr "%1 astronomická jednotka"
+msgstr "Astronomical unit"
 
 #: src/backend/gsl/constants.cpp:78
 #, kde-format
@@ -2516,14 +2520,14 @@ msgid "Gravitational constant"
 msgstr "Gravitačná konštanta"
 
 #: src/backend/gsl/constants.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Light year"
-msgstr "%1 svetelný rok"
+msgstr "Light year"
 
 #: src/backend/gsl/constants.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgid "Parsec"
-msgstr "%1 parsek"
+msgstr "Parsec"
 
 #: src/backend/gsl/constants.cpp:81
 #, kde-format
@@ -2628,24 +2632,24 @@ msgstr "Elektrický dipólový moment 1 Debye"
 
 #. i18n("Measurement of Time"));
 #: src/backend/gsl/constants.cpp:105
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of seconds in 1 minute"
-msgstr "Počet stĺpcov: %1"
+msgstr "Number of seconds in 1 minute"
 
 #: src/backend/gsl/constants.cpp:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of seconds in 1 hour"
-msgstr "Počet stĺpcov: %1"
+msgstr "Number of seconds in 1 hour"
 
 #: src/backend/gsl/constants.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of seconds in 1 day"
-msgstr "Počet stĺpcov: %1"
+msgstr "Number of seconds in 1 day"
 
 #: src/backend/gsl/constants.cpp:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of seconds in 1 week"
-msgstr "Počet stĺpcov: %1"
+msgstr "Number of seconds in 1 week"
 
 #. i18n("Imperial Units"));
 #: src/backend/gsl/constants.cpp:111
@@ -3066,9 +3070,9 @@ msgid "Matrix, vector lengths are not conformant"
 msgstr "Dĺžky matice a vektora nie sú kompatibilné"
 
 #: src/backend/gsl/errors.h:62
-#, fuzzy, kde-format
+#, kde-format
 msgid "Matrix not square"
-msgstr "Matica %1"
+msgstr "Matrix not square"
 
 #: src/backend/gsl/errors.h:64
 #, kde-format
@@ -3437,9 +3441,9 @@ msgid "Unknown Function"
 msgstr "Funkcia"
 
 #: src/backend/gsl/functions.cpp:234
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell (index, variable)"
-msgstr "Vymazať premennú <b>%1</b>?"
+msgstr "Cell (index, variable)"
 
 #: src/backend/gsl/functions.cpp:235
 #, kde-format
@@ -5937,9 +5941,9 @@ msgstr "Inverzný sínus"
 #: src/backend/lib/XmlStreamReader.cpp:95
 #: src/backend/lib/XmlStreamReader.cpp:100
 #: src/backend/lib/XmlStreamReader.cpp:105
-#, fuzzy, kde-format
+#, kde-format
 msgid "line %1, column %2: %3"
-msgstr " Riadok: %1 Stĺpec: %2 "
+msgstr "line %1, stĺpec %2: %3"
 
 #: src/backend/lib/XmlStreamReader.cpp:119
 #: src/backend/lib/XmlStreamReader.cpp:128
@@ -6011,12 +6015,12 @@ msgstr[1] "%1: pridať %2"
 msgstr[2] "%1: pridať %2"
 
 #: src/backend/matrix/Matrix.cpp:539
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
-msgstr[0] "Pridať stĺpec..."
-msgstr[1] "%1: pridať %2"
-msgstr[2] "%1: pridať %2"
+msgstr[0] "%1: pridať %2 stĺpec"
+msgstr[1] "%1: pridať %2 stĺpce"
+msgstr[2] "%1: pridať %2 stĺpcov"
 
 #: src/backend/matrix/Matrix.cpp:664 src/backend/matrix/matrixcommands.h:126
 #: src/backend/spreadsheet/Spreadsheet.cpp:605
@@ -6025,20 +6029,20 @@ msgid "%1: clear"
 msgstr "%1: vyčistiť"
 
 #: src/backend/matrix/matrixcommands.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: insert %2 column"
 msgid_plural "%1: insert %2 columns"
-msgstr[0] "Vložiť stĺpec"
-msgstr[1] "Vložiť stĺpce"
-msgstr[2] "Vložiť stĺpce"
+msgstr[0] "%1: vložiť %2 stĺpec"
+msgstr[1] "%1: vložiť %2 stĺpce"
+msgstr[2] "%1: vložiť %2 stĺpcov"
 
 #: src/backend/matrix/matrixcommands.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: insert %2 row"
 msgid_plural "%1: insert %2 rows"
-msgstr[0] "Vlož&iť riadok"
-msgstr[1] "Vložiť riadky"
-msgstr[2] "Vložiť riadky"
+msgstr[0] "%1: vložiť %2 riadok"
+msgstr[1] "%1: vložiť %2 riadky"
+msgstr[2] "%1: vložiť %2 riadkov"
 
 #: src/backend/matrix/matrixcommands.cpp:61
 #, kde-format
@@ -6046,20 +6050,20 @@ msgid "%1: set matrix coordinates"
 msgstr "%1: nastaviť súradnice matice"
 
 #: src/backend/matrix/matrixcommands.h:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: remove %2 column"
 msgid_plural "%1: remove %2 columns"
-msgstr[0] "Odstrániť stĺpec"
-msgstr[1] "Odstrániť stĺpce"
-msgstr[2] "Odstrániť stĺpce"
+msgstr[0] "%1: odstrániť %2 stĺpec"
+msgstr[1] "%1: odstrániť %2 stĺpce"
+msgstr[2] "%1: odstrániť %2 stĺpcov"
 
 #: src/backend/matrix/matrixcommands.h:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: remove %2 row"
 msgid_plural "%1: remove %2 rows"
-msgstr[0] "Odstrániť riadok"
-msgstr[1] "Odstrániť riadky"
-msgstr[2] "Odstrániť riadky"
+msgstr[0] "%1: odstrániť %2 riadok"
+msgstr[1] "%1: odstrániť %2 riadky"
+msgstr[2] "%1: odstrániť %2 riadkov"
 
 #: src/backend/matrix/matrixcommands.h:158
 #, kde-format
@@ -6294,9 +6298,9 @@ msgid "Real Part"
 msgstr "Sériový port"
 
 #: src/backend/nsl/nsl_dft.c:21 src/backend/nsl/nsl_hilbert.c:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Imaginary Part"
-msgstr "Binárne dáta: %1"
+msgstr "Imaginary Part"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:541
@@ -7041,25 +7045,25 @@ msgid "%1: set linked spreadsheet"
 msgstr "%1: nastaviť vertikálne zarovnanie"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:502
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
-msgstr[0] "Vložiť stĺpec"
-msgstr[1] "Vložiť stĺpce"
-msgstr[2] "Vložiť stĺpce"
+msgstr[0] "%1: vložiť 1 stĺpec"
+msgstr[1] "%1: vložiť %2 stĺpce"
+msgstr[2] "%1: vložiť %2 stĺpcov"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:504
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
-msgstr[0] "Odstrániť stĺpec"
-msgstr[1] "Odstrániť stĺpce"
-msgstr[2] "Odstrániť stĺpce"
+msgstr[0] "%1: odstrániť 1 stĺpec"
+msgstr[1] "%1: odstrániť %2 stĺpce"
+msgstr[2] "%1: odstrániť %2 stĺpcov"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:613
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: clear selected columns"
-msgstr "Vybrané stĺpce"
+msgstr "%1: clear selected stĺpecs"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:637
 #, kde-format
@@ -7322,14 +7326,14 @@ msgid "%1: set background opacity"
 msgstr "%1: nastaviť obrázok pozadia"
 
 #: src/backend/worksheet/Image.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set image"
-msgstr "Nastaviť obrázok ..."
+msgstr "%1: set image"
 
 #: src/backend/worksheet/Image.cpp:144
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: embed image"
-msgstr "Nastaviť obrázok ..."
+msgstr "%1: embed image"
 
 #: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:375
 #, kde-format
@@ -7534,9 +7538,9 @@ msgid "%1: set axis orientation"
 msgstr "%1: nastaviť orientáciu osi"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:579
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set axis position"
-msgstr "Nastaviť pozíciu osi"
+msgstr "%1: set axis position"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:587
 #, kde-format
@@ -7734,9 +7738,9 @@ msgid "%1: set labels text type"
 msgstr "%1: nastaviť obrázok pozadia"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:988
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set labels text column"
-msgstr "Vložiť stĺpec"
+msgstr "%1: set labels text stĺpec"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:1002
 #, kde-format
@@ -7754,9 +7758,9 @@ msgid "%1: set labels background type"
 msgstr "%1: nastaviť obrázok pozadia"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:1023
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set label background color"
-msgstr "Nastaviť farbu &pozadia..."
+msgstr "%1: set label background color"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:1030
 #, kde-format
@@ -7775,16 +7779,16 @@ msgstr "%1: nastaviť priehľadnosť menoviek"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:267
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:271
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set x column"
-msgstr "Vložiť stĺpec"
+msgstr "%1: set x stĺpec"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:285
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:492
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:289
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set data columns"
-msgstr "Vložiť stĺpec"
+msgstr "%1: set data stĺpecs"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:312
 #, kde-format
@@ -7810,9 +7814,9 @@ msgstr "%1    [zmenené]"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:340
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 - Data"
-msgstr "Žiadne dáta"
+msgstr "%1 - Data"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
@@ -7870,19 +7874,19 @@ msgid "%1: changed notches"
 msgstr "%1: zmeniť komentár"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:549
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set whiskers type"
-msgstr "Dátový typ:"
+msgstr "%1: set whiskers type"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:556
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set whiskers range parameter"
-msgstr "Dátový typ:"
+msgstr "%1: set whiskers range parameter"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:563
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set whiskers cap size"
-msgstr "Dátový typ:"
+msgstr "%1: set whiskers cap size"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:571
 #, kde-format
@@ -8280,19 +8284,19 @@ msgid "%1: set range"
 msgstr "%1: nastaviť písmo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1165
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: change %2-range %3 format"
-msgstr "%1: zmeniť komentár"
+msgstr "%1: change %2-range %3 format"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1255
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: change %2-range %3 auto scaling"
-msgstr "%1: zmeniť komentár"
+msgstr "%1: change %2-range %3 auto scaling"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1496
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: change x-range %2 scale"
-msgstr "%1: zmeniť komentár"
+msgstr "%1: change x-range %2 scale"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1624
 #, kde-format
@@ -8320,14 +8324,14 @@ msgid "%1: y-range breaks changed"
 msgstr "%1    [zmenené]"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1683
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: Cursor0 enable"
-msgstr "Hodnoty"
+msgstr "%1: Cursor0 enable"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1695
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: Cursor1 enable"
-msgstr "Hodnoty"
+msgstr "%1: Cursor1 enable"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1706
 #: src/backend/worksheet/Worksheet.cpp:844
@@ -8337,9 +8341,9 @@ msgstr "%1: pridať %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1708
 #: src/backend/worksheet/Worksheet.cpp:846
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: load default theme"
-msgstr "%1: pridať %2."
+msgstr "%1: load default theme"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1710
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5343
@@ -8349,125 +8353,125 @@ msgid "%1: set theme"
 msgstr "%1: nastaviť rozloženie"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1760
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: distribution fit to '%2'"
-msgstr "Integrovať"
+msgstr "%1: distribution fit to '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distribution Fit to '%1'"
-msgstr "Rozdelenie"
+msgstr "Distribution Fit to '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1807
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: reduce '%2'"
-msgstr "Redukovať"
+msgstr "%1: reduce '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1808
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:698
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reduction of '%1'"
-msgstr "Vyhladzovanie"
+msgstr "Reduction of '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1815
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: add data reduction curve"
-msgstr "Vlastnosti projektu"
+msgstr "%1: add data reduction curve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1826
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: differentiate '%2'"
-msgstr "Diferencovať"
+msgstr "%1: differentiate '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1827
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:701
-#, fuzzy, kde-format
+#, kde-format
 msgid "Derivative of '%1'"
-msgstr "Orientácia"
+msgstr "Derivative of '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1834
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: add differentiation curve"
-msgstr "Vlastnosti projektu"
+msgstr "%1: add differentiation curve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1845
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: integrate '%2'"
-msgstr "Integrovať"
+msgstr "%1: integrate '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:704
-#, fuzzy, kde-format
+#, kde-format
 msgid "Integral of '%1'"
-msgstr "Orientácia"
+msgstr "Integral of '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1853
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: add integration curve"
-msgstr "Vlastnosti projektu"
+msgstr "%1: add integration curve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1864
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: interpolate '%2'"
-msgstr "Interpolovať"
+msgstr "%1: interpolate '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:707
-#, fuzzy, kde-format
+#, kde-format
 msgid "Interpolation of '%1'"
-msgstr "Interpolácia"
+msgstr "Interpolation of '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1872
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: add interpolation curve"
-msgstr "Vlastnosti projektu"
+msgstr "%1: add interpolation curve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1883
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: smooth '%2'"
-msgstr "Plynulý"
+msgstr "%1: smooth '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1884
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:710
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smoothing of '%1'"
-msgstr "Vyhladzovanie"
+msgstr "Smoothing of '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1891
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: add smoothing curve"
-msgstr "Pridať stĺpec"
+msgstr "%1: add smoothing curve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1902
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: fit to '%2'"
-msgstr "Integrovať"
+msgstr "%1: fit to '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1903
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:723
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fit to '%1'"
-msgstr "Orientácia"
+msgstr "Fit to '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1932
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: add fit curve"
-msgstr "Pridať stĺpec"
+msgstr "%1: add fit curve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1943
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: Fourier filtering of '%2'"
-msgstr "nový filter"
+msgstr "%1: Fourier filtering of '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1944
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fourier filtering of '%1'"
-msgstr "nový filter"
+msgstr "Fourier filtering of '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1948
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: add Fourier filter curve"
-msgstr "Pridať stĺpec"
+msgstr "%1: add Fourier filter curve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1998
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1363
@@ -8494,9 +8498,9 @@ msgid "from y=%1 to y=%2"
 msgstr "od y=%1 do y=%2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4014
-#, fuzzy, kde-format
+#, kde-format
 msgid "x=%1"
-msgstr "X"
+msgstr "x=%1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:208
 #, kde-format
@@ -8645,14 +8649,14 @@ msgstr "Smer"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:404
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:253
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set data column"
-msgstr "Vložiť stĺpec"
+msgstr "%1: set data stĺpec"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:416
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set histogram type"
-msgstr "Dátový typ:"
+msgstr "%1: set histogram type"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:423
 #, kde-format
@@ -8724,9 +8728,9 @@ msgid "%1: legend visibility changed"
 msgstr "%1    [zmenené]"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:265
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set distribution"
-msgstr "Smer"
+msgstr "%1: set distribution"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:146
 #, kde-format
@@ -9517,9 +9521,9 @@ msgstr "%1: nastaviť polomer rohu oblasti grafu"
 
 #: src/backend/worksheet/TextLabel.cpp:266
 #: src/backend/worksheet/TextLabel.cpp:305
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set background color"
-msgstr "Nastaviť farbu &pozadia..."
+msgstr "%1: set background color"
 
 #: src/backend/worksheet/TextLabel.cpp:294
 #: src/backend/worksheet/TextLabel.cpp:304
@@ -9680,9 +9684,9 @@ msgid "%1: set logical position"
 msgstr "%1: nastaviť písmo"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to initialize %1."
-msgstr "Inicializácia zlyhala"
+msgstr "Failed to initialize %1."
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:52
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:120
@@ -9832,9 +9836,9 @@ msgid "Ready"
 msgstr "Pripravený"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:362
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: variable statistics"
-msgstr "Štatistika"
+msgstr "%1: variable statistics"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:126
 #: src/commonfrontend/matrix/MatrixView.cpp:194
@@ -9982,9 +9986,9 @@ msgid "%1: change position of selected DatapickerPoints."
 msgstr "%1: zmeniť pozíciu vybraných DatapickerPoints."
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:736
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: add new curve."
-msgstr "Pridať stĺpec"
+msgstr "%1: add new curve."
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:737
 #, kde-format
@@ -10229,9 +10233,9 @@ msgid "%1: paste from clipboard"
 msgstr "%1: vložiť zo schránky"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:759
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: clear selected cell(s)"
-msgstr "Vybrané stĺpce"
+msgstr "%1: clear selected cell(s)"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:912
 #, kde-format
@@ -10244,9 +10248,9 @@ msgid "%1: remove selected column(s)"
 msgstr "%1: odstrániť vybrané stĺpce"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:946
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: clear selected column(s)"
-msgstr "Vybrané stĺpce"
+msgstr "%1: clear selected stĺpec(s)"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:972
 #, kde-format
@@ -10259,9 +10263,9 @@ msgid "%1: remove selected rows(s)"
 msgstr "%1: odstrániť vybrané riadky"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:1011
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: clear selected rows(s)"
-msgstr "Vybrané stĺpce"
+msgstr "%1: clear selected riadoks(s)"
 
 #: src/commonfrontend/ProjectExplorer.cpp:72
 #, kde-format
@@ -10315,11 +10319,13 @@ msgid "'%1' cannot be pasted into '%2'."
 msgstr "'%1' nie je možné vložiť do '%2'."
 
 #: src/commonfrontend/ProjectExplorer.cpp:531
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
 "this."
-msgstr "'%1' nie je možné vložiť do '%2'."
+msgstr ""
+"Data cannot be pasted into '%1' directly. Select a spreadsheet stĺpec for "
+"this."
 
 #: src/commonfrontend/ProjectExplorer.cpp:675
 #, kde-format
@@ -10337,9 +10343,9 @@ msgid "Fuzzy Matching"
 msgstr "Rozmazané vyhľadávanie"
 
 #: src/commonfrontend/ProjectExplorer.cpp:908
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 elements: set visible: %2"
-msgstr "%1: zmeniť na neviditeľné"
+msgstr "%1 elements: set visible: %2"
 
 #: src/commonfrontend/ProjectExplorer.cpp:932
 #, kde-format
@@ -10817,9 +10823,9 @@ msgstr[1] "%1: vložiť prázdne stĺpce"
 msgstr[2] "%1: vložiť prázdnych stĺpcov"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2744
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: remove selected columns"
-msgstr "Vybrané stĺpce"
+msgstr "%1: odstrániť selected stĺpecs"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2841
 #, kde-format
@@ -10922,19 +10928,19 @@ msgid "%1: power transform columns"
 msgstr "%1: nastaviť písmo"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3282
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: column statistics"
-msgstr "Štatistika"
+msgstr "%1: stĺpec statistics"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3313
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selection in %1"
-msgstr "Výber"
+msgstr "Selection in %1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3356
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: row statistics"
-msgstr "Štatistika"
+msgstr "%1: riadok statistics"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3366
 #, kde-format
@@ -10943,9 +10949,9 @@ msgstr "Riadok %1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3391
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert multiple rows"
-msgstr "%1: nastaviť nepriehľadnosť"
+msgstr "Insert multiple riadoks"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3392
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3431
@@ -10958,9 +10964,9 @@ msgstr "Názov filtra:"
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
-msgstr[0] "V&ložiť prázdny riadok"
-msgstr[1] "%1: nastaviť nepriehľadnosť"
-msgstr[2] "%1: nastaviť nepriehľadnosť"
+msgstr[0] "%1: vložiť prázdny riadok"
+msgstr[1] "%1: vložiť prázdne riadky"
+msgstr[2] "%1: vložiť prázdne riadky"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3466
 #, kde-format
@@ -11020,9 +11026,9 @@ msgstr " ( "
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1"
-msgstr "1"
+msgstr "%1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
 #, kde-format
@@ -11051,9 +11057,9 @@ msgid "Couldn't create the SQLite database %1."
 msgstr "Nepodarilo sa vytvoriť SQLite databázu %1."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4482
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to create table in the SQLite database %1."
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Failed to create table in the SQLite database %1."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4535
 #, kde-format
@@ -11066,14 +11072,14 @@ msgid "Memory used %1 MB, peak %2 MB"
 msgstr "Použitá pamäť %1 MB, špička %2 MB"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Minimum allowed value: %1"
-msgstr "Tolerancia"
+msgstr "Minimum všetkýchowed value: %1"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Maximum allowed value: %1"
-msgstr "Tolerancia"
+msgstr "Maximum všetkýchowed value: %1"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:57
 #, kde-format
@@ -11394,18 +11400,18 @@ msgid "Apply Actions to"
 msgstr "Použiť akcie na"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:527
-#, fuzzy, kde-format
+#, kde-format
 msgid "Apply Cursor to"
-msgstr "%1: pridať %2"
+msgstr "Apply Cursor to"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1458
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1467
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
-msgstr[0] "Naozaj chcete vymazať vybraný objekt?"
-msgstr[1] "Naozaj chcete vymazať vybrané %1 objekty?"
-msgstr[2] "Naozaj chcete vymazať vybraných %1 objektov?"
+msgstr[0] "Naozaj chcete odstrániť vybraný objekt?"
+msgstr[1] "Naozaj chcete odstrániť vybraných %1 objektov?"
+msgstr[2] "Naozaj chcete odstrániť vybraných %1 objektov?"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1474
 #, kde-format
@@ -11704,10 +11710,10 @@ msgid "New connection"
 msgstr "Nové pripojenie"
 
 #: src/kdefrontend/datasources/DatasetMetadataManagerDialog.cpp:35
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Dataset metadata manager"
-msgstr "Posledná zmena: %1"
+msgstr "Dataset metadata manager"
 
 #: src/kdefrontend/datasources/DatasetMetadataManagerWidget.cpp:513
 #, kde-format
@@ -11750,19 +11756,19 @@ msgstr "Importovať dáta"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:93
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dataset%1"
-msgstr "Dátová sada"
+msgstr "Dataset%1"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to connect within %1 seconds"
-msgstr "Pridať novú premennú"
+msgstr "Failed to connect within %1 seconds"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dataset imported in %1 seconds."
-msgstr "Pridať novú premennú"
+msgstr "Dataset imported in %1 seconds."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:163
@@ -11901,9 +11907,9 @@ msgid "Add a new Matrix"
 msgstr "Pridať nový"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:152
-#, fuzzy, kde-format
+#, kde-format
 msgid "Matrix name:"
-msgstr "Matica %1"
+msgstr "Matrix name:"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -11939,9 +11945,9 @@ msgid "Show Options"
 msgstr "Ukázať voľby"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "Live data source created in %1 seconds."
-msgstr "Pridať novú premennú"
+msgstr "Live data source created in %1 seconds."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:176
 #, kde-format
@@ -11996,9 +12002,9 @@ msgstr ""
 "Nie je možné sa pripojiť k zadanému lokálnemu soketu. Soket neexistuje."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:457
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Could not connect to the provided TCP socket. Error: %1."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:463
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:489
@@ -12007,9 +12013,9 @@ msgid "Either the host name or the port number is missing."
 msgstr "Chýba názov hostiteľa alebo číslo portu."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:483
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Could not connect to the provided UDP socket. Error: %1."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:514
 #, kde-format
@@ -12036,9 +12042,9 @@ msgid "ASCII data"
 msgstr "ASCII dáta"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "Binary data"
-msgstr "Binárne dáta: %1"
+msgstr "Binary data"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:101
 #, kde-format
@@ -12103,9 +12109,9 @@ msgid "ASCII Data"
 msgstr "Kopírovať dáta"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:138
-#, fuzzy, kde-format
+#, kde-format
 msgid "Binary Data"
-msgstr "Binárne dáta: %1"
+msgstr "Binary Data"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:150
 #, kde-format
@@ -12290,9 +12296,9 @@ msgid "cannot open"
 msgstr "nemôžem otvoriť"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1482
-#, fuzzy, kde-format
+#, kde-format
 msgid "<b>File type:</b> %1"
-msgstr "Typ súboru"
+msgstr "<b>File type:</b> %1"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
 #, kde-format
@@ -12398,14 +12404,14 @@ msgid "Couldn't subscribe to all available topics."
 msgstr "Nepodarilo sa prihlásiť na všetky dostupné témy."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2424
-#, fuzzy, kde-format
+#, kde-format
 msgid "Disconnected from '%1'."
-msgstr "Odpojený"
+msgstr "Disconnected from '%1'."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2493
-#, fuzzy, kde-format
+#, kde-format
 msgid "Available (%1)"
-msgstr "Dostupný"
+msgstr "Available (%1)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2605
 #, kde-format
@@ -12439,9 +12445,9 @@ msgid "An error occurred."
 msgstr "Došlo k chybe."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2641
-#, fuzzy, kde-format
+#, kde-format
 msgid "Connecting to '%1:%2' timed out."
-msgstr "Pripojenie:"
+msgstr "Connecting to '%1:%2' timed out."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
@@ -12493,9 +12499,9 @@ msgid "As Plot Area"
 msgstr "Oblasť zákresu"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:161
-#, fuzzy, kde-format
+#, kde-format
 msgid "As Coordinate System"
-msgstr "%1: nastaviť písmo"
+msgstr "As Coordinate System"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:165
 #, kde-format
@@ -12570,9 +12576,9 @@ msgstr "Otvoriť projekt"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
 #: src/kdefrontend/MainWin.cpp:1484
-#, fuzzy, kde-format
+#, kde-format
 msgid "LabPlot Projects (%1)"
-msgstr "Zatvoriť projekt"
+msgstr "LabPlot Projects (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:449
 #, kde-format
@@ -12581,9 +12587,9 @@ msgid "Open Origin OPJ Project"
 msgstr "Otvoriť projekt"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:451
-#, fuzzy, kde-format
+#, kde-format
 msgid "Origin OPJ Projects (%1)"
-msgstr "Otvoriť projekt"
+msgstr "Origin OPJ Projects (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
 #, kde-format
@@ -12784,20 +12790,21 @@ msgid "Please set a valid port."
 msgstr "Nastavte prosím platný port."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:656
-#, fuzzy, kde-format
+#, kde-format
 msgid "Connection to the broker '%1:%2' was successful."
-msgstr "Pripojenie:"
+msgstr "Connection to the broker '%1:%2' was successful."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:670
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to connect to the broker '%1:%2'."
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Failed to connect to the broker '%1:%2'."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:684
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Disconnected from the broker '%1:%2' before the connection was successful."
-msgstr "Pripojenie:"
+msgstr ""
+"Disconnected from the broker '%1:%2' pred the connection was successful."
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:40
 #, kde-format
@@ -13209,9 +13216,9 @@ msgid "%1: template \"%2\" loaded"
 msgstr "%1: šablóna \"%2\" načítaná"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grouped"
-msgstr "Skupina: %1"
+msgstr "Grouped"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:53
 #, kde-format
@@ -13413,14 +13420,14 @@ msgid "Save current plot area definition as template"
 msgstr "Uložiť aktuálnu definíciu oblasti grafu ako šablónu"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:605
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1-Ranges:"
-msgstr "X rozsah:"
+msgstr "%1-Ranges:"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:607
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1-Range:"
-msgstr "X rozsah:"
+msgstr "%1-Range:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:631
@@ -13572,9 +13579,9 @@ msgid "Choose Template Save File"
 msgstr "Vybrať súbor na uloženie šablóny"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1648
-#, fuzzy, kde-format
+#, kde-format
 msgid "Labplot Plot Templates (*%1)"
-msgstr "Zatvoriť projekt"
+msgstr "Labplot Plot šablónus (*%1)"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1837
 #, kde-format
@@ -13778,14 +13785,14 @@ msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 histogramy: šablóna \"%2\" načítaná"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:218
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
-msgstr "Odstrániť riadok"
+msgstr "%1 info elements: curve \"%2\" odstrániťd"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:220
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: curve \"%2\" removed"
-msgstr "Odstrániť riadok"
+msgstr "%1: curve \"%2\" odstrániťd"
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:169
 #, kde-format
@@ -13936,9 +13943,9 @@ msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "%1 pracovné hárky: šablóna \"%2\" načítaná"
 
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "status: %1"
-msgstr "Stav"
+msgstr "status: %1"
 
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:29
 #, kde-format
@@ -13975,19 +13982,19 @@ msgid "Deconvolution"
 msgstr "Pripojenie"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:383
-#, fuzzy, kde-format
+#, kde-format
 msgid "Convolution status: %1"
-msgstr "Interpolácia:"
+msgstr "Convolution status: %1"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:385
-#, fuzzy, kde-format
+#, kde-format
 msgid "Deconvolution status: %1"
-msgstr "Interpolácia:"
+msgstr "Deconvolution status: %1"
 
 #: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:282
-#, fuzzy, kde-format
+#, kde-format
 msgid "Correlation status: %1"
-msgstr "Interpolácia:"
+msgstr "Correlation status: %1"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:197
 #, kde-format
@@ -14120,14 +14127,14 @@ msgid "Search region:"
 msgstr "Hľadať oblasť"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:504
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data reduction status: %1"
-msgstr "Smer"
+msgstr "Data reduction status: %1"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:519
-#, fuzzy, kde-format
+#, kde-format
 msgid "number of points: %1"
-msgstr "Počet bodov"
+msgstr "number of points: %1"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:520
 #, kde-format
@@ -14140,9 +14147,9 @@ msgid "area error: %1"
 msgstr "Vytvorené: %1"
 
 #: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:382
-#, fuzzy, kde-format
+#, kde-format
 msgid "Differentiation status: %1"
-msgstr "Derivovanie"
+msgstr "Differentiation status: %1"
 
 #: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:71
 #, kde-format
@@ -14256,9 +14263,9 @@ msgid "Number of peaks:"
 msgstr "Počet bodov"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1224
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fit status: %1"
-msgstr "Stav"
+msgstr "Fit status: %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
 #, kde-format
@@ -14307,29 +14314,29 @@ msgid "band width <= 0"
 msgstr "šírka pásma <= 0"
 
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:442
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fourier-Filter status: %1"
-msgstr "nový filter"
+msgstr "Fourier-Filter status: %1"
 
 #: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:236
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fourier transformation status: %1"
-msgstr "nový filter"
+msgstr "Fourier transformation status: %1"
 
 #: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:184
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hilbert transformation status: %1"
-msgstr "nový filter"
+msgstr "Hilbert transformation status: %1"
 
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:321
-#, fuzzy, kde-format
+#, kde-format
 msgid "Integration status: %1"
-msgstr "Integrácia"
+msgstr "Integration status: %1"
 
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:334
-#, fuzzy, kde-format
+#, kde-format
 msgid "value: %1"
-msgstr "Hodnota"
+msgstr "value: %1"
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:79
 #, kde-format
@@ -14351,14 +14358,14 @@ msgstr ""
 "dát."
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:540
-#, fuzzy, kde-format
+#, kde-format
 msgid "Interpolation status: %1"
-msgstr "Interpolácia:"
+msgstr "Interpolation status: %1"
 
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:412
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smoothing status: %1"
-msgstr "Vyhladzovanie"
+msgstr "Smoothing status: %1"
 
 #: src/kdefrontend/examples/ExamplesDialog.cpp:42
 #, kde-format
@@ -14394,10 +14401,10 @@ msgid "Properties: Column Statistics"
 msgstr "Štatistika"
 
 #: src/kdefrontend/GuiObserver.cpp:241
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
-msgstr "List"
+msgstr "%1 Worksheet"
 
 #: src/kdefrontend/GuiObserver.cpp:246
 #, kde-format
@@ -14972,9 +14979,9 @@ msgid "System: "
 msgstr "Systém"
 
 #: src/kdefrontend/LabPlot.cpp:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "Locale: "
-msgstr "Národné kódovanie ( %1 )"
+msgstr "Locale: "
 
 #: src/kdefrontend/LabPlot.cpp:74
 #, kde-format
@@ -15517,9 +15524,9 @@ msgid "Color Scheme"
 msgstr "Farebná schéma"
 
 #: src/kdefrontend/MainWin.cpp:999 src/kdefrontend/MainWin.cpp:1013
-#, fuzzy, kde-format
+#, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
-msgstr "Aktuálny projekt bol zmenený. Chcete ho uložiť?"
+msgstr "The current project %1 has been modified. Do you want to save it?"
 
 #: src/kdefrontend/MainWin.cpp:1000 src/kdefrontend/MainWin.cpp:1014
 #, kde-format
@@ -15527,9 +15534,9 @@ msgid "Save Project"
 msgstr "Uloženie projektu"
 
 #: src/kdefrontend/MainWin.cpp:1352
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: created"
-msgstr "Vytvorené"
+msgstr "%1: created"
 
 #: src/kdefrontend/MainWin.cpp:1378
 #, kde-format
@@ -15550,9 +15557,9 @@ msgid "Content"
 msgstr "Obsah"
 
 #: src/kdefrontend/MainWin.cpp:1489
-#, fuzzy, kde-format
+#, kde-format
 msgid "Origin Projects (%1)"
-msgstr "Otvoriť projekt"
+msgstr "Origin Projects (%1)"
 
 #: src/kdefrontend/MainWin.cpp:1495
 #, kde-format
@@ -15602,9 +15609,9 @@ msgid "Loading %1..."
 msgstr "Načítava sa %1..."
 
 #: src/kdefrontend/MainWin.cpp:1579
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: opened"
-msgstr "Otvorené"
+msgstr "%1: opened"
 
 #: src/kdefrontend/MainWin.cpp:1614
 #, kde-format
@@ -15627,9 +15634,9 @@ msgstr ""
 "*.LML.XZ)"
 
 #: src/kdefrontend/MainWin.cpp:1732
-#, fuzzy, kde-format
+#, kde-format
 msgid "Couldn't open the temporary file for writing."
-msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
+msgstr "Couldn't open the temporary file for writing."
 
 #: src/kdefrontend/MainWin.cpp:1812
 #, kde-format
@@ -15697,9 +15704,9 @@ msgid "There already is a MQTTClient with this host!"
 msgstr "MQTTClient s týmto hostiteľom už existuje!"
 
 #: src/kdefrontend/MainWin.cpp:2745
-#, fuzzy, kde-format
+#, kde-format
 msgid "Live data source%1"
-msgstr "Pridať novú premennú"
+msgstr "Live data source%1"
 
 #: src/kdefrontend/MainWin.cpp:2786
 #, kde-format
@@ -15802,9 +15809,9 @@ msgid "File does not exist."
 msgstr "Súbor neexistuje."
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unable to read the file"
-msgstr "Zlyhalo otvorenie súboru %1"
+msgstr "Unable to read the file"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:165
 #: src/kdefrontend/PlotTemplateDialog.cpp:172
@@ -15827,14 +15834,14 @@ msgid "Clear downloaded files"
 msgstr "Vyčistiť stiahnuté súbory"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Files - %1"
-msgstr "Súbory"
+msgstr "Files - %1"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Total size - %1"
-msgstr "Celková veľkosť"
+msgstr "Total size - %1"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:70
 #: src/kdefrontend/SettingsDatasetsPage.cpp:86
@@ -16256,9 +16263,9 @@ msgid "Number of iterations to perform."
 msgstr "Počet riadkov:"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:532
-#, fuzzy, kde-format
+#, kde-format
 msgid "raw data"
-msgstr "Binárne dáta: %1"
+msgstr "raw data"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:538
 #, kde-format
@@ -16271,9 +16278,9 @@ msgid "result"
 msgstr "Výsledky:"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:626
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ratio: %1"
-msgstr "Otočenie: "
+msgstr "Ratio: %1"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:670
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:677
@@ -16288,19 +16295,19 @@ msgid "Wrong numeric value provided."
 msgstr "Poskytnutá nesprávna numerická hodnota."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: add %2 to column values"
-msgstr "Pridať stĺpec"
+msgstr "%1: add %2 to stĺpec values"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: subtract %2 from column values"
-msgstr "Vložiť stĺpec"
+msgstr "%1: subtract %2 from stĺpec values"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1224
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: subtract baseline from column values"
-msgstr "Vložiť stĺpec"
+msgstr "%1: subtract baseline from stĺpec values"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1227
 #, kde-format
@@ -16486,9 +16493,9 @@ msgid "%1: mask values"
 msgstr "%1: zmeniť komentár"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1024
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: drop values"
-msgstr "Hodnoty"
+msgstr "%1: drop values"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:47
 #, kde-format
@@ -16611,9 +16618,9 @@ msgstr "Exportovať"
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:315
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:218
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:224
-#, fuzzy, kde-format
+#, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
-msgstr "Súbor <b>%1</b> už existuje. Naozaj ho chcete prepísať?"
+msgstr "The file already exists. Do you revšetkýchy want to overwrite it?"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:363
 #, kde-format
@@ -16672,9 +16679,9 @@ msgid "Remove reference column"
 msgstr "Vybrané stĺpce"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:150
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: flatten values"
-msgstr "Hodnoty"
+msgstr "%1: flatten values"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:169
 #, kde-format
@@ -16817,9 +16824,9 @@ msgstr ""
 "písmenom"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:319
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete variable"
-msgstr "Vymazať premennú <b>%1</b>?"
+msgstr "Delete variable"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:345
@@ -16843,9 +16850,9 @@ msgid "Go to Cell"
 msgstr "Prejsť na bunku"
 
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Row:"
-msgstr "Riadok %1"
+msgstr "Row:"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:85
 #, kde-format
@@ -16884,32 +16891,32 @@ msgstr "Kresliť"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:458
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:469
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:499
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plot Area - %1"
-msgstr "Oblasť zákresu"
+msgstr "Plot Area - %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:465
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:494
-#, fuzzy, kde-format
+#, kde-format
 msgid "Worksheet - %1"
-msgstr "Pracovný list"
+msgstr "Worksheet - %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:493
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plot data from %1"
-msgstr "Oblasť zákresu"
+msgstr "Plot data from %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:619
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:637
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:654
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plot Area %1"
-msgstr "Oblasť zákresu"
+msgstr "Plot Area %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:728
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fourier Filter of '%1'"
-msgstr "nový filter"
+msgstr "Fourier Filter of '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
@@ -17063,9 +17070,9 @@ msgid "Sample Size:"
 msgstr "Veľkosť vzorky"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:205
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: sample values"
-msgstr "Hodnoty"
+msgstr "%1: sample values"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:208
 #, kde-format
@@ -17439,9 +17446,9 @@ msgid "New default template was saved."
 msgstr "Nová predvolená šablóna bola uložená."
 
 #: src/kdefrontend/ThemeHandler.cpp:141
-#, fuzzy, kde-format
+#, kde-format
 msgid "Theme '%1'"
-msgstr "Téma:"
+msgstr "Theme '%1'"
 
 #: src/kdefrontend/ThemeHandler.cpp:142
 #, kde-format
@@ -18596,9 +18603,9 @@ msgstr "Zobrazí obsah vybraného súboru HDF5"
 
 #. i18n: ectx: property (text), widget (QLabel, lImportFormat)
 #: src/kdefrontend/ui/datasources/imageoptionswidget.ui:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import as:"
-msgstr "Importovať %1 ako %2"
+msgstr "Import as:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbImportFormat)
 #: src/kdefrontend/ui/datasources/imageoptionswidget.ui:50
@@ -18913,9 +18920,9 @@ msgstr "Priečinok"
 
 #. i18n: ectx: property (text), widget (QLabel, lImportFrom)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import from:"
-msgstr "Importovať z %1..."
+msgstr "Import from:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
@@ -18934,9 +18941,9 @@ msgstr "Otázka"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportWarningsDialog)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:14
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import Warnings"
-msgstr "Importovať %1 ako %2"
+msgstr "Import Warnings"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:38
@@ -18946,9 +18953,9 @@ msgstr "OK"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbImportObjectNames)
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import object names"
-msgstr "Importovať %1 ako %2"
+msgstr "Import object names"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twContent)
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
@@ -20147,9 +20154,9 @@ msgstr "Šírka čiary"
 #. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:412
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Logical coordinates"
-msgstr "%1: nastaviť písmo"
+msgstr "Logical coordinates"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:458
@@ -20393,9 +20400,9 @@ msgstr "X"
 #. i18n: ectx: property (text), widget (QCheckBox, chbBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:219
 #: src/kdefrontend/ui/labelwidget.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Logical Coordinates"
-msgstr "%1: nastaviť písmo"
+msgstr "Logical Coordinates"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:229
@@ -21016,9 +21023,9 @@ msgstr "Názov krivky preloženia"
 #. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:140
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:374
-#, fuzzy, kde-format
+#, kde-format
 msgid "col ="
-msgstr "Stĺp. %1"
+msgstr "col ="
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:152
@@ -21781,9 +21788,9 @@ msgstr "10000"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillMessageType)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:276
-#, fuzzy, kde-format
+#, kde-format
 msgid "Own Message"
-msgstr "%1: nastaviť rozloženie"
+msgstr "Own Message"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillMessageType)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:281
@@ -21889,9 +21896,9 @@ msgstr "Úrovne"
 
 #. i18n: ectx: property (text), widget (QLabel, lLevelsNumber)
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:284
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of levels:"
-msgstr "Počet riadkov: %1"
+msgstr "Number of levels:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLevelsLineWidth)
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:314
@@ -22353,9 +22360,9 @@ msgstr "Hlavičky"
 
 #. i18n: ectx: property (text), widget (QLabel, lEmptyRows)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:213
-#, fuzzy, kde-format
+#, kde-format
 msgid "Skip empty rows:"
-msgstr "%1: nastaviť nepriehľadnosť"
+msgstr "Skip empty riadoks:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportArea)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:227
@@ -22740,9 +22747,9 @@ msgid "Center Tiled"
 msgstr "Vydláždiť s centrovaním"
 
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:275
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 elements: background color style changed"
-msgstr "Nastaviť farbu &pozadia..."
+msgstr "%1 elements: background color style changed"
 
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:29
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:33
@@ -23076,14 +23083,14 @@ msgid "Open FITS File"
 msgstr "Otvoriť súbor"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:209
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cannot open file, file already opened."
-msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
+msgstr "Cannot open file, file already opened."
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:209
-#, fuzzy, kde-format
+#, kde-format
 msgid "File already opened"
-msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
+msgstr "File already opened"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:271
 #, kde-format
@@ -23551,14 +23558,14 @@ msgid "Couldn't find preview.sty."
 msgstr "Nepodarilo sa nájsť preview.sty."
 
 #: src/tools/TeXRenderer.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "Couldn't open the file"
-msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
+msgstr "Couldn't open the file"
 
 #: src/tools/TeXRenderer.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 not found"
-msgstr "Súbor nenájdený"
+msgstr "%1 not found"
 
 #: src/tools/TeXRenderer.cpp:193
 #, kde-format
@@ -23591,12 +23598,10 @@ msgid "convert process failed, exit code ="
 msgstr "proces convert zlyhal, návratový kód ="
 
 #: src/tools/TeXRenderer.cpp:317
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unable to open file:"
-msgstr "Zlyhalo otvorenie súboru %1"
+msgstr "Unable to open file:"
 
-#
-#~| msgid "%1: remove %2"
 #~ msgid "%1: move down"
 #~ msgstr "Odstrániť riadok"
 
@@ -23609,80 +23614,54 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Ma&ximize"
 #~ msgstr "Ma&ximalizovať"
 
-#
-#~| msgid "Curve"
 #~ msgid "XY-Curves"
 #~ msgstr "Krivka"
 
-#
 #~ msgid "could not open device"
 #~ msgstr "Nepodarilo sa otvoriť zariadenie %1"
 
-#
 #~ msgid "Not implemented yet"
 #~ msgstr "Ešte neimplemetované"
 
 #~ msgid "%1: copy %2"
 #~ msgstr "%1: kopírovať %2"
 
-#
-#~| msgid "Remo&ve Columns"
 #~ msgid "Remove Columns"
 #~ msgstr "Odstrániť stĺpce"
 
-#
 #~ msgid "Drop"
 #~ msgstr "Kvapka"
 
-#
 #~ msgid "Mask"
 #~ msgstr "Maska"
 
-#
-#~| msgid "&Remove"
 #~ msgid "Remove"
 #~ msgstr "O&dstrániť"
 
-#
-#~| msgid "Curve"
 #~ msgid "xy-Curve"
 #~ msgstr "Krivka"
 
-#
-#~| msgid "Search..."
 #~ msgid "End Search"
 #~ msgstr "Hľadať..."
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-Curve from a Formula"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Data format"
 #~ msgid "Data Operation"
 #~ msgstr "Dátový formát"
 
-#
-#~| msgid "Correlation"
 #~ msgid "Auto/Cross Correlation"
 #~ msgstr "Korelácia"
 
-#
-#~| msgid "Data format"
 #~ msgid "Data Manipulation"
 #~ msgstr "Dátový formát"
 
-#
-#~| msgid "%1: add %2"
 #~ msgid "%1: Add curve to %2 plots"
 #~ msgstr "%1: pridať %2"
 
 #~ msgid "Add %1"
 #~ msgstr "Pridať %1"
 
-#
-#~| msgid "Name:"
 #~ msgid "%1 name:"
 #~ msgstr "Názov"
 
@@ -23698,8 +23677,6 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "test"
 #~ msgstr "test"
 
-#
-#~| msgid "Spreadsheet"
 #~ msgctxt "@title:window"
 #~ msgid "Spreadsheet"
 #~ msgstr "Zošit"
@@ -23712,14 +23689,10 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Matrix"
 #~ msgstr "Matica"
 
-#
-#~| msgid "Plot Area"
 #~ msgctxt "@title:window"
 #~ msgid "Plot Area"
 #~ msgstr "Oblasť zákresu"
 
-#
-#~| msgid "legend"
 #~ msgctxt "@title:window"
 #~ msgid "Legend"
 #~ msgstr "Vysvetlivky"
@@ -23728,14 +23701,10 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Axis"
 #~ msgstr "Os"
 
-#
-#~| msgid "Curve"
 #~ msgctxt "@title:window"
 #~ msgid "XY-Curve"
 #~ msgstr "Krivka"
 
-#
-#~| msgid "Direction"
 #~ msgctxt "@title:window"
 #~ msgid "Data Reduction"
 #~ msgstr "Smer"
@@ -23760,50 +23729,34 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Fit"
 #~ msgstr "Prispôsobiť"
 
-#
-#~| msgid "new filter"
 #~ msgctxt "@title:window"
 #~ msgid "Fourier Transform"
 #~ msgstr "nový filter"
 
-#
-#~| msgid "new filter"
 #~ msgctxt "@title:window"
 #~ msgid "Hilbert Transform"
 #~ msgstr "nový filter"
 
-#
-#~| msgid "new filter"
 #~ msgctxt "@title:window"
 #~ msgid "Fourier Filter"
 #~ msgstr "nový filter"
 
-#
-#~| msgid "Connection:"
 #~ msgctxt "@title:window"
 #~ msgid "Convolution/Deconvolution"
 #~ msgstr "Pripojenie"
 
-#
-#~| msgid "Correlation"
 #~ msgctxt "@title:window"
 #~ msgid "Auto-/Cross-Correlation"
 #~ msgstr "Korelácia"
 
-#
-#~| msgid "Histogram"
 #~ msgctxt "@title:window"
 #~ msgid "Histogram"
 #~ msgstr "Histogram"
 
-#
-#~| msgid "Plot"
 #~ msgctxt "@title:window"
 #~ msgid "Bar Plot"
 #~ msgstr "Kresliť"
 
-#
-#~| msgid "Plot"
 #~ msgctxt "@title:window"
 #~ msgid "Box Plot"
 #~ msgstr "Kresliť"
@@ -23812,14 +23765,10 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Text Label"
 #~ msgstr "Textové pole"
 
-#
-#~| msgid "Images"
 #~ msgctxt "@title:window"
 #~ msgid "Image"
 #~ msgstr "Obrázok"
 
-#
-#~| msgid "custom"
 #~ msgctxt "@title:window"
 #~ msgid "Custom Point"
 #~ msgstr "vlastné"
@@ -23832,8 +23781,6 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Project"
 #~ msgstr "Projekt"
 
-#
-#~| msgid "Note"
 #~ msgctxt "@title:window"
 #~ msgid "Notebook"
 #~ msgstr "Poznámka"
@@ -23842,14 +23789,10 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Notes"
 #~ msgstr "Poznámky"
 
-#
-#~| msgid "Increment"
 #~ msgctxt "@title:window"
 #~ msgid "Info Element"
 #~ msgstr "Prírastok"
 
-#
-#~| msgid "Folder"
 #~ msgctxt "@title:window"
 #~ msgid "Folder"
 #~ msgstr "Priečinok"
@@ -23857,8 +23800,6 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "&Analysis"
 #~ msgstr "Rozbor"
 
-#
-#~| msgid "Project properties"
 #~ msgid "GUI configuration file not found"
 #~ msgstr "Vlastnosti projektu"
 
@@ -23868,72 +23809,46 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "&Cascade"
 #~ msgstr "Kaskáda"
 
-#
-#~| msgid "Do nothing"
 #~ msgid "Do Nothing"
 #~ msgstr "Nerobiť nič"
 
-#
-#~| msgid "Show file info"
 #~ msgid "Show all Windows"
 #~ msgstr "Zobraziť informácie o súbore"
 
-#
-#~| msgid "Values"
 #~ msgctxt "@title:window"
 #~ msgid "Equidistant Values"
 #~ msgstr "Hodnoty"
 
-#
-#~| msgid "Data type:"
 #~ msgid "Add Histogram to"
 #~ msgstr "Dátový typ:"
 
-#
-#~| msgid "Plot"
 #~ msgid "Add Box Plot to"
 #~ msgstr "Kresliť"
 
-#
-#~| msgid "Plot"
 #~ msgid "Add Bar Plot to"
 #~ msgstr "Kresliť"
 
-#
-#~| msgid "Data type:"
 #~ msgid "Add Histograms to"
 #~ msgstr "Dátový typ:"
 
-#
-#~| msgid "Plot"
 #~ msgid "Add Box Plots to"
 #~ msgstr "Kresliť"
 
-#
-#~| msgid "Plot"
 #~ msgid "Add Bar Plots to"
 #~ msgstr "Kresliť"
 
-#
-#~| msgid "iterations"
 #~ msgid "Point Separation:"
 #~ msgstr "iterácie"
 
-#
-#~| msgid "Preferences"
 #~ msgid "Reference Points"
 #~ msgstr "Nastavenia"
 
-#
-#~| msgid "Database Error"
 #~ msgid "Parse Errors"
 #~ msgstr "Chyba databázy"
 
 #~ msgid "Manage filters"
 #~ msgstr "Spravovať filtre"
 
-#
-#~| msgid "Show Comments"
 #~ msgid "Column Comments:"
 #~ msgstr "Zobraziť komentáre"
 
@@ -23943,21 +23858,15 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Interface:"
 #~ msgstr "Rozhranie:"
 
-#
-#~| msgid "auto-save"
 #~ msgid "auto update"
 #~ msgstr "Automaticky aktualizovať:"
 
-#
-#~| msgid "&Selected Columns"
 #~ msgid "Sort columns:"
 #~ msgstr "Vybrané stĺpce"
 
 #~ msgid "Together"
 #~ msgstr "Spolu"
 
-#
-#~| msgid "End column:"
 #~ msgid "Leading column:"
 #~ msgstr "Konečný stĺpec:"
 
@@ -23967,7 +23876,6 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "maximum"
 #~ msgstr "maximum"
 
-#
 #~ msgid "imaginary part"
 #~ msgstr "Binárne dáta: %1"
 
@@ -23977,8 +23885,6 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "cosine"
 #~ msgstr "kosínus"
 
-#
-#~| msgid "Exponential"
 #~ msgid "exponential"
 #~ msgstr "Exponenciála"
 
@@ -23988,123 +23894,78 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "constant"
 #~ msgstr "konštanta"
 
-#
-#~| msgid "%1: set vertical alignment"
 #~ msgid "%1: set vertical line style"
 #~ msgstr "%1: nastaviť vertikálne zarovnanie"
 
-#
-#~| msgid "%1: set vertical alignment"
 #~ msgid "%1: set vertical line opacity"
 #~ msgstr "%1: nastaviť vertikálne zarovnanie"
 
-#
-#~| msgid "%1: set invisible"
 #~ msgid "%1: set connection line style"
 #~ msgstr "%1: zmeniť na neviditeľné"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "%1: set connection line opacity"
 #~ msgstr "%1: nastaviť písmo"
 
-#
-#~| msgid "%1: set background image"
 #~ msgid "%1: set filling image"
 #~ msgstr "%1: nastaviť obrázok pozadia"
 
-#
-#~| msgid "%1: set opacity"
 #~ msgid "%1: set filling opacity"
 #~ msgstr "%1: nastaviť nepriehľadnosť"
 
-#
-#~| msgid "%1: set layout"
 #~ msgid "%1: set border pen"
 #~ msgstr "%1: nastaviť rozloženie"
 
-#
-#~| msgid "%1: set vertical alignment"
 #~ msgid "%1: set median line opacity"
 #~ msgstr "%1: nastaviť vertikálne zarovnanie"
 
-#
-#~| msgid "%1: set opacity"
 #~ msgid "%1: set whiskers opacity"
 #~ msgstr "%1: nastaviť nepriehľadnosť"
 
-#
-#~| msgid "Data type:"
 #~ msgid "%1: set whiskers cap pen"
 #~ msgstr "Dátový typ:"
 
-#
-#~| msgid "%1: set opacity"
 #~ msgid "%1: set whiskers cap opacity"
 #~ msgstr "%1: nastaviť nepriehľadnosť"
 
-#
-#~| msgid "%1: change comment"
 #~ msgid "%1: change y-range %2 format"
 #~ msgstr "%1: zmeniť komentár"
 
-#
-#~| msgid "%1: change comment"
 #~ msgid "%1: change y-range %2 auto scaling"
 #~ msgstr "%1: zmeniť komentár"
 
 #~ msgid "%1: set opacity"
 #~ msgstr "%1: nastaviť nepriehľadnosť"
 
-#
-#~| msgid "&Selected Columns"
 #~ msgid "Select y-Region and Zoom In"
 #~ msgstr "Vybrané stĺpce"
 
-#
-#~| msgid "new filter"
 #~ msgid "Hilbert-Transform"
 #~ msgstr "nový filter"
 
 #~ msgid "Created: %1"
 #~ msgstr "Vytvorené: %1"
 
-#
-#~| msgid "Solid Line"
 #~ msgid "SolidLine"
 #~ msgstr "Plná čiara"
 
-#
-#~| msgid "Dash Line"
 #~ msgid "DashLine"
 #~ msgstr "Čiarkovaná čiara"
 
-#
-#~| msgid "Dot Line"
 #~ msgid "DotLine"
 #~ msgstr "Bodková čiara"
 
-#
-#~| msgid "dash-dot line"
 #~ msgid "DashDotLine"
 #~ msgstr "Bodkočiarkovaná čiara"
 
-#
 #~ msgid "DashDotDotLine"
 #~ msgstr "Čiarkovano-bodkovano-bodkovaná čiara"
 
-#
-#~| msgid "x-Range:"
 #~ msgid "Y-Ranges:"
 #~ msgstr "X rozsah:"
 
-#
-#~| msgid "horizontal axis"
 #~ msgid "Horizontal Linear Gradient"
 #~ msgstr "Horizontálny prechod"
 
-#
-#~| msgid "radial gradient"
 #~ msgid "Vertical Linear Gradient"
 #~ msgstr "Vertikálny prechod"
 
@@ -24115,107 +23976,69 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Cartesian Plot"
 #~ msgstr "Kartézsky nákres"
 
-#
-#~| msgid "Curve"
 #~ msgctxt "@title:window"
 #~ msgid "xy-Curve"
 #~ msgstr "Krivka"
 
-#
-#~| msgid "Tab position"
 #~ msgctxt "@title:window"
 #~ msgid "xy-Equation"
 #~ msgstr "Riešiť rovnice"
 
-#
-#~| msgid "Column properties"
 #~ msgctxt "@title:window"
 #~ msgid "Histogram Properties"
 #~ msgstr "Vlastnosti stĺpca"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "Subtract the specified value from column values"
 #~ msgstr "Vložiť stĺpec"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "Add the specified value to matrix values"
 #~ msgstr "Vložiť stĺpec"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "Subtract the specified value from matrix values"
 #~ msgstr "Vložiť stĺpec"
 
-#
-#~| msgid "%1: add %2"
 #~ msgid "Add Curve to"
 #~ msgstr "%1: pridať %2"
 
-#
-#~| msgid "Plot Data"
 #~ msgid "Box Plot Data"
 #~ msgstr "Kresliť údaje"
 
-#
-#~| msgid "Project properties"
 #~ msgid "Histogram Placement"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Plot"
 #~ msgid "Plot - %1"
 #~ msgstr "Kresliť"
 
-#
-#~| msgid "Plot"
 #~ msgid "Plot %1"
 #~ msgstr "Kresliť"
 
 #~ msgid "Error bars"
 #~ msgstr "Chybové tabule"
 
-#
-#~| msgid "Column:"
 #~ msgid "Tick Column:"
 #~ msgstr "Stĺpec:"
 
-#
-#~| msgid "Type"
 #~ msgid "Tick Type:"
 #~ msgstr "Typ:"
 
 #~ msgid "Font"
 #~ msgstr "Písmo"
 
-#
-#~| msgid "x-Range:"
 #~ msgid "y-Range"
 #~ msgstr "X rozsah:"
 
-#
-#~| msgid "x-Range:"
 #~ msgid "x-Range"
 #~ msgstr "X rozsah"
 
-#
-#~| msgid "Top margin"
 #~ msgid "Top margin:"
 #~ msgstr "Horný okraj"
 
-#
-#~| msgid "Bottom margin"
 #~ msgid "Bottom margin:"
 #~ msgstr "Spodný okraj"
 
-#
-#~| msgid "Horizontal spacing"
 #~ msgid "Hor. spacing:"
 #~ msgstr "Horizontálne medzery"
 
-#
-#~| msgid "Vertical spacing"
 #~ msgid "Ver. spacing:"
 #~ msgstr "Vertikálne medzery"
 
@@ -24225,165 +24048,105 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "cm"
 #~ msgstr "cm"
 
-#
-#~| msgid "Start"
 #~ msgid "x-Start:"
 #~ msgstr "Začiatok"
 
 #~ msgid "x-Range:"
 #~ msgstr "X rozsah:"
 
-#
-#~| msgid "orange"
 #~ msgid "Plot ranges:"
 #~ msgstr "X rozsah:"
 
-#
-#~| msgid "Error"
 #~ msgid "x-error"
 #~ msgstr "Chyba"
 
-#
-#~| msgid "Format :"
 #~ msgid "Error type:"
 #~ msgstr "Formát:"
 
-#
-#~| msgid "Format :"
 #~ msgid "y-error"
 #~ msgstr "Formát:"
 
-#
-#~| msgid "Data:"
 #~ msgid "x-data:"
 #~ msgstr "Dáta:"
 
-#
-#~| msgid "Data:"
 #~ msgid "y-data:"
 #~ msgstr "Dáta:"
 
-#
-#~| msgid "Data:"
 #~ msgid "y-Data:"
 #~ msgstr "Dáta"
 
-#
 #~ msgid "Advanced"
 #~ msgstr "Pokročilé"
 
-#
-#~| msgid "Weight"
 #~ msgid "y-Weight:"
 #~ msgstr "Výška"
 
 #~ msgid "Font color:"
 #~ msgstr "Farba písma:"
 
-#
-#~| msgid "Values"
 #~ msgid "Drop values:"
 #~ msgstr "Hodnoty"
 
-#
-#~| msgid "Data:"
 #~ msgid "X-data:"
 #~ msgstr "Dáta:"
 
-#
-#~| msgid "Data:"
 #~ msgid "Y-data:"
 #~ msgstr "Dáta:"
 
-#
-#~| msgid "%1: add %2"
 #~ msgid "Add Curves to"
 #~ msgstr "%1: pridať %2"
 
 #~ msgid "c"
 #~ msgstr "c"
 
-#
-#~| msgid "%1: set layout"
 #~ msgid "%1: set point's style"
 #~ msgstr "%1: nastaviť rozloženie"
 
-#
-#~| msgid "%1: set background image"
 #~ msgid "%1: set point's size"
 #~ msgstr "%1: nastaviť obrázok pozadia"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "%1: rotate point"
 #~ msgstr "%1: nastaviť písmo"
 
-#
-#~| msgid "%1: set background image"
 #~ msgid "%1: set point's filling"
 #~ msgstr "%1: nastaviť obrázok pozadia"
 
-#
-#~| msgid "%1: set layout"
 #~ msgid "%1: set outline style"
 #~ msgstr "%1: nastaviť rozloženie"
 
-#
-#~| msgid "%1: set opacity"
 #~ msgid "%1: set point's opacity"
 #~ msgstr "%1: nastaviť nepriehľadnosť"
 
-#
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr "Ešte neimplemetované"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve from a mathematical Equation"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Apply"
 #~ msgid "Apply Theme"
 #~ msgstr "Použiť"
 
-#
-#~| msgid "%1: set layout"
 #~ msgid "%1: set x-range format"
 #~ msgstr "%1: nastaviť rozloženie"
 
-#
-#~| msgid "%1: set layout"
 #~ msgid "%1: set y-range format"
 #~ msgstr "%1: nastaviť rozloženie"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "%1: set min x"
 #~ msgstr "%1: nastaviť písmo"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "%1: set max x"
 #~ msgstr "%1: nastaviť písmo"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "%1: set min y"
 #~ msgstr "%1: nastaviť písmo"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "%1: set max y"
 #~ msgstr "%1: nastaviť písmo"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "%1: set y scale"
 #~ msgstr "%1: nastaviť písmo"
 
-#
-#~| msgid "%1: set opacity"
 #~ msgid "%1: set symbol opacity"
 #~ msgstr "%1: nastaviť nepriehľadnosť"
 
@@ -24399,28 +24162,18 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Insert LaTeX Entry"
 #~ msgstr "Vložiť položku LaTeX"
 
-#
-#~| msgid "Hide Controls"
 #~ msgid "Show/Hide columns"
 #~ msgstr "Skryť ovládače"
 
-#
-#~| msgid "Search/Filter:"
 #~ msgid "Show Search/Filter Options"
 #~ msgstr "Hľadať/Filter:"
 
-#
-#~| msgid "Format :"
 #~ msgid "X-error plus"
 #~ msgstr "Formát:"
 
-#
-#~| msgid "Format :"
 #~ msgid "Y-error plus"
 #~ msgstr "Formát:"
 
-#
-#~| msgid "Clea&r Selection"
 #~ msgid "Clea&r Selected Rows"
 #~ msgstr "Vyčistiť výber"
 
@@ -24437,18 +24190,12 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "ln(x)"
 #~ msgstr "ln(x)"
 
-#
-#~| msgid "log(x)"
 #~ msgid "log(abs(x))"
 #~ msgstr "log(x)"
 
-#
-#~| msgid "log(x)"
 #~ msgid "log2(abs(x))"
 #~ msgstr "log(x)"
 
-#
-#~| msgid "log(x)"
 #~ msgid "ln(abs(x))"
 #~ msgstr "log(x)"
 
@@ -24461,46 +24208,30 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "ln(y)"
 #~ msgstr "ln(y)"
 
-#
-#~| msgid "log(y)"
 #~ msgid "log(abs(y))"
 #~ msgstr "log(y)"
 
-#
-#~| msgid "log2(y)"
 #~ msgid "log2(abs(y))"
 #~ msgstr "log2(y)"
 
-#
-#~| msgid "log(x)"
 #~ msgid "ln(abs(y))"
 #~ msgstr "log(x)"
 
 #~ msgid "Z"
 #~ msgstr "Z"
 
-#
-#~| msgid "%1: set layout"
 #~ msgid "%1 CustomPoints: style changed"
 #~ msgstr "%1: nastaviť rozloženie"
 
-#
-#~| msgid "%1: set background image"
 #~ msgid "%1 CustomPoints: size changed"
 #~ msgstr "%1: nastaviť obrázok pozadia"
 
-#
-#~| msgid "%1: set opacity"
 #~ msgid "%1 CustomPoints: opacity changed"
 #~ msgstr "%1: nastaviť nepriehľadnosť"
 
-#
-#~| msgid "Format :"
 #~ msgid "Error, %"
 #~ msgstr "Chyba"
 
-#
-#~| msgid "Data:"
 #~ msgctxt "@title:window"
 #~ msgid "Datapicker"
 #~ msgstr "Dáta:"
@@ -24509,8 +24240,6 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "%1 Properties"
 #~ msgstr "Vlastnosti %1"
 
-#
-#~| msgid "Properties"
 #~ msgctxt "@title:window"
 #~ msgid "CAS Properties"
 #~ msgstr "Vlastnosti"
@@ -24522,103 +24251,69 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ "LabPlot je KDE aplikácia pre interaktívne grafy a analýzu vedeckých "
 #~ "údajov."
 
-#
-#~| msgid "Data:"
 #~ msgid "Datapicker"
 #~ msgstr "Dáta:"
 
-#
-#~| msgid "Worksheet"
 #~ msgid "CAS Worksheet"
 #~ msgstr "Pracovný hárok CAS"
 
-#
-#~| msgid "&Worksheet"
 #~ msgid "&CAS Worksheet"
 #~ msgstr "Pracovný hárok CAS"
 
-#
-#~| msgid "Data:"
 #~ msgid "&Datapicker"
 #~ msgstr "Dáta:"
 
-#
-#~| msgid "Import"
 #~ msgid "Import from File"
 #~ msgstr "Importovať zo súboru"
 
 #~ msgid "Show Status Bar"
 #~ msgstr "Zobraziť stavový riadok"
 
-#
-#~| msgid "&Edit"
 #~ msgid "Edit"
 #~ msgstr "Upraviť"
 
-#
-#~| msgid "Apply"
 #~ msgid "Apply theme [active '%1']"
 #~ msgstr "Použiť"
 
-#
-#~| msgid "Error bars"
 #~ msgid "Error Bar"
 #~ msgstr "Chybové tabule"
 
 #~ msgid "points"
 #~ msgstr "body"
 
-#
-#~| msgid "Scaling"
 #~ msgid "Scaling:"
 #~ msgstr "Škálovanie"
 
-#
-#~| msgid "Show Controls"
 #~ msgid "Show &last"
 #~ msgstr "Zobraziť posledné:"
 
-#
 #~ msgid "Show f&irst"
 #~ msgstr "Prvý"
 
-#
-#~| msgid "x-Range:"
 #~ msgid "y-Range:"
 #~ msgstr "X rozsah:"
 
-#
-#~| msgid "Close Project"
 #~ msgid "LabPlot version"
 #~ msgstr "Zatvoriť projekt"
 
 #~ msgid "Notes:"
 #~ msgstr "Poznámky:"
 
-#
 #~ msgid "Switch to text mode"
 #~ msgstr "Prepnúť do textového režimu"
 
 #~ msgid "Foreground color:"
 #~ msgstr "Farba popredia:"
 
-#
-#~| msgid "%1: set layout"
 #~ msgid "%1: set outliers symbol style"
 #~ msgstr "%1: nastaviť rozloženie"
 
-#
-#~| msgid "%1: set layout"
 #~ msgid "%1: set mean symbol style"
 #~ msgstr "%1: nastaviť rozloženie"
 
-#
-#~| msgid "Date and Time"
 #~ msgid "Date/Time"
 #~ msgstr "DátumČas"
 
-#
-#~| msgid "center tiled"
 #~ msgid "2/98 percentiles"
 #~ msgstr "Percentil:"
 
@@ -24628,173 +24323,109 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "x^2"
 #~ msgstr "x^2"
 
-#
-#~| msgid "log(x)"
 #~ msgid "log(|x|)"
 #~ msgstr "log(x)"
 
-#
-#~| msgid "log2(x)"
 #~ msgid "log2(|x|)"
 #~ msgstr "log2(x)"
 
-#
-#~| msgid "variable"
 #~ msgid "AvailableCurves"
 #~ msgstr "Dostupný"
 
-#
-#~| msgid "Source name"
 #~ msgid "Selected curve:"
 #~ msgstr "Názov zdroja"
 
-#
-#~| msgid "Tab position:"
 #~ msgid "Marker position:"
 #~ msgstr "Pozícia kariet:"
 
-#
-#~| msgid "%1: set vertical alignment"
 #~ msgid "%1: set vertical line color"
 #~ msgstr "%1: nastaviť vertikálne zarovnanie"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "%1: set connection line color"
 #~ msgstr "%1: nastaviť písmo"
 
-#
-#~| msgid "%1: set vertical alignment"
 #~ msgid "Enable vertical line"
 #~ msgstr "%1: nastaviť vertikálne zarovnanie"
 
-#
-#~| msgid "Connection:"
 #~ msgid "Enable connection line"
 #~ msgstr "Spravovať pripojenia"
 
-#
-#~| msgid "Line width:"
 #~ msgid "Linewidth"
 #~ msgstr "Šírka čiary:"
 
-#
-#~| msgid "Line color"
 #~ msgid "Linecolor"
 #~ msgstr "Farba čiary"
 
-#
-#~| msgid "Connection:"
 #~ msgid "Connect line to curve"
 #~ msgstr "Pripojenie:"
 
-#
-#~| msgid "Connection:"
 #~ msgid "Couldn't connect"
 #~ msgstr "Pripojenie"
 
-#
-#~| msgid "Select all"
 #~ msgid "Server unavailable"
 #~ msgstr "Vymazať premennú"
 
-#
 #~ msgid "Not authorized"
 #~ msgstr "Nemá oprávnenie"
 
-#
 #~ msgid "(Disconnected)"
 #~ msgstr "Odpojený"
 
-#
-#~| msgid "Connection:"
 #~ msgid ""
 #~ "Disconnected from the broker '%1' before the connection was successful."
 #~ msgstr "Pripojenie:"
 
-#
-#~| msgid "Show file info"
 #~ msgid "Show memory info:"
 #~ msgstr "Zobraziť informácie o súbore"
 
 #~ msgid "Number format"
 #~ msgstr "Formát čísla"
 
-#
-#~| msgid "Close Project"
 #~ msgid "Debug version"
 #~ msgstr "Zatvoriť projekt"
 
-#
-#~| msgid "Selection"
 #~ msgid "Fi&ll Selection With"
 #~ msgstr "Výber"
 
-#
-#~| msgid "Selection"
 #~ msgid "&Mask Selection"
 #~ msgstr "Výber"
 
-#
-#~| msgid "Selection"
 #~ msgid "&Unmask Selection"
 #~ msgstr "Výber"
 
-#
-#~| msgid "Clea&r Selection"
 #~ msgid "&Normalize Selection"
 #~ msgstr "Vyčistiť výber"
 
-#
-#~| msgid "Statistics"
 #~ msgid "t statistic:"
 #~ msgstr "Štatistika"
 
-#
-#~| msgid "Value:"
 #~ msgid "p value:"
 #~ msgstr "Hodnota:"
 
-#
-#~| msgid "Interface"
 #~ msgid "conf. interval:"
 #~ msgstr "Rozhranie"
 
 #~ msgid "P > "
 #~ msgstr "P > "
 
-#
-#~| msgid "Statistics"
 #~ msgid "F statistic"
 #~ msgstr "Štatistika"
 
-#
-#~| msgid "status"
 #~ msgid "status:"
 #~ msgstr "Stav"
 
-#
-#~| msgid "Tolerance"
 #~ msgid "tolerance:"
 #~ msgstr "Tolerancia"
 
-#
-#~| msgid "degrees of freedom"
 #~ msgid "degrees of freedom:"
 #~ msgstr "Stupne voľnosti"
 
-#
-#~| msgid "Parameters:"
 #~ msgid "parameters:"
 #~ msgstr "Parametre:"
 
-#
-#~| msgid "Format :"
 #~ msgid "Format type:"
 #~ msgstr "Formát:"
 
-#
-#~| msgid "X range"
 #~ msgid "Free ranges"
 #~ msgstr "X rozsah"
 
@@ -24810,151 +24441,93 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "BIC"
 #~ msgstr "BIC"
 
-#
-#~| msgid "%1: set layout"
 #~ msgid "%1: disable theming"
 #~ msgstr "%1: nastaviť rozloženie"
 
-#
-#~| msgid "Break layout"
 #~ msgid "Break Layout"
 #~ msgstr "Zrušiť usporiadanie"
 
-#
-#~| msgid "Numeric"
 #~ msgid "numeric"
 #~ msgstr "Číselný"
 
-#
-#~| msgid "Open project"
 #~ msgid ";;Origin Projects (%1)"
 #~ msgstr "Otvoriť projekt"
 
-#
-#~| msgid " pt"
 #~ msgid "pt"
 #~ msgstr " bd"
 
-#
 #~ msgid "Divide by std"
 #~ msgstr "Deliť"
 
-#
-#~| msgid "Close Project"
 #~ msgid "Import from LabPlot Project"
 #~ msgstr "Zatvoriť projekt"
 
-#
-#~| msgid "Open project"
 #~ msgid "Import from Origin Project (OPJ)"
 #~ msgstr "Otvoriť projekt"
 
-#
-#~| msgid "Original Size"
 #~ msgid "Original"
 #~ msgstr "Originálna veľkosť"
 
-#
-#~| msgid "Curve"
 #~ msgid "Plot/Curve"
 #~ msgstr "Krivka"
 
-#
-#~| msgid "new Spreadsheet"
 #~ msgid "Update Spreadsheet"
 #~ msgstr "nový zošit"
 
-#
-#~| msgid "%1: add %2"
 #~ msgid "%1: add new point"
 #~ msgstr "Pridať stĺpec"
 
-#
-#~| msgid "%1: add %2"
 #~ msgid "%1: add new point %2"
 #~ msgstr "%1: pridať %2"
 
-#
 #~ msgid "%1 Point"
 #~ msgstr "Bod"
 
-#
-#~| msgid "Data:"
 #~ msgid "Data Entry Mode"
 #~ msgstr "Dáta:"
 
-#
-#~| msgid "Select all"
 #~ msgid "Select and Move"
 #~ msgstr "Vybrať všetko"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve from a Data Reduction"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve from a Differentiation"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve from an Integration"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve from an Interpolation"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve from a Smooth"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve from a Fourier Filter"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "new filter"
 #~ msgid "xy-curve from a Fourier Transform"
 #~ msgstr "nový filter"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve from a (De-)Convolution"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve from a Auto-/Cross-Correlation"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve from a Data Operation"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve From an Interpolation"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Data format"
 #~ msgid "Data Fitting"
 #~ msgstr "Dátový formát"
 
-#
-#~| msgid "Data type:"
 #~ msgid "Equation type:"
 #~ msgstr "Dátový typ:"
 
-#
-#~| msgid "Lines"
 #~ msgid "Linestyle"
 #~ msgstr "Čiary"
 
@@ -24968,127 +24541,81 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Correlation"
 #~ msgstr "Korelácia"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curvefFrom an Integration"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve from a (de-)convolution"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve From a Differentiation"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-curve From a Correlation"
 #~ msgstr "Vlastnosti projektu"
 
 #~ msgid "%1 Source (*.%2)"
 #~ msgstr "%1 Zdroj (*.%2)"
 
-#
-#~| msgid "Connection:"
 #~ msgid "Manage Will Settings:"
 #~ msgstr "Nové pripojenie"
 
-#
 #~ msgid "Subscribe"
 #~ msgstr "Prihlásiť sa"
 
-#
 #~ msgid "Unsubscribe"
 #~ msgstr "Odhlásiť"
 
-#
-#~| msgid "Show Options"
 #~ msgid "Format Options"
 #~ msgstr "Možnosti formátu:"
 
-#
-#~| msgid "Data type:"
 #~ msgid "Data to import:"
 #~ msgstr "Dátový typ:"
 
-#
-#~| msgid "Dataset"
 #~ msgid "ODBC datasource:"
 #~ msgstr "Dátová sada"
 
-#
-#~| msgid "%1: add %2"
 #~ msgid "%1: add value to column"
 #~ msgid_plural "%1: add value to columns"
 #~ msgstr[0] "Pridať stĺpec"
 #~ msgstr[1] "%1: pridať %2"
 #~ msgstr[2] "%1: pridať %2"
 
-#
-#~| msgid "%1: add %2"
 #~ msgid "Add curve to"
 #~ msgstr "%1: pridať %2"
 
-#
-#~| msgid "Data:"
 #~ msgid "x-Data (optional):"
 #~ msgstr "Dáta"
 
-#
-#~| msgid "Connection:"
 #~ msgid "Convolute"
 #~ msgstr "Pripojenie"
 
-#
-#~| msgid "Data:"
 #~ msgid "Will update type:"
 #~ msgstr "Dátový typ"
 
-#
-#~| msgid "Password"
 #~ msgid "Password"
 #~ msgstr "Heslo"
 
-#
-#~| msgid "Port"
 #~ msgid "Port"
 #~ msgstr "Port"
 
-#
-#~| msgid "character"
 #~ msgid "Separating character:"
 #~ msgstr "znak"
 
-#
-#~| msgid "%1: change comment"
 #~ msgid "%1: assign x values"
 #~ msgstr "%1: zmeniť komentár"
 
-#
-#~| msgid "Project properties"
 #~ msgid "no Cantor worksheet element found"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "no json filter element found"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "no ROOT filter element found"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "no xy integration curve element found"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Data type:"
 #~ msgid "Bars type:"
 #~ msgstr "Dátový typ:"
 
@@ -25101,12 +24628,9 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Plot:"
 #~ msgstr "Kresliť:"
 
-#
 #~ msgid "Hue"
 #~ msgstr "Odtieň"
 
-#
-#~| msgid "Interface"
 #~ msgid "Update interval"
 #~ msgstr "Integrál"
 
@@ -25128,18 +24652,12 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Grid:"
 #~ msgstr "Mriežka:"
 
-#
-#~| msgid "Options"
 #~ msgid "Option"
 #~ msgstr "Voľba"
 
-#
-#~| msgid "Orientation"
 #~ msgid "Differentiation:"
 #~ msgstr "Derivovanie"
 
-#
-#~| msgid "Interpolation"
 #~ msgid "Integration:"
 #~ msgstr "Integrácia"
 
@@ -25176,8 +24694,6 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "US Common #10 Envelope"
 #~ msgstr "US Bežná #10 Obálka"
 
-#
-#~| msgid "red"
 #~ msgid "end"
 #~ msgstr "červená"
 
@@ -25196,13 +24712,9 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "text label"
 #~ msgstr "textové pole"
 
-#
-#~| msgid "custom"
 #~ msgid "custom point"
 #~ msgstr "vlastné"
 
-#
-#~| msgid "new filter"
 #~ msgid "Fourier filter"
 #~ msgstr "nový filter"
 
@@ -25215,13 +24727,9 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Select all"
 #~ msgstr "Vybrať všetko"
 
-#
-#~| msgid "Select all"
 #~ msgid "Select and edit"
 #~ msgstr "Vybrať všetko"
 
-#
-#~| msgid "new filter"
 #~ msgid "Fourier transform"
 #~ msgstr "nový filter"
 
@@ -25267,21 +24775,15 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "grey"
 #~ msgstr "šedú"
 
-#
-#~| msgid "Values"
 #~ msgid "Equidistant values"
 #~ msgstr "Hodnoty"
 
-#
-#~| msgid "Values"
 #~ msgid "Random values"
 #~ msgstr "Hodnoty"
 
 #~ msgid "new:"
 #~ msgstr "nové:"
 
-#
-#~| msgid "Apply"
 #~ msgid "Apply theme"
 #~ msgstr "Použiť"
 
@@ -25291,18 +24793,12 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "dots"
 #~ msgstr "bodky"
 
-#
-#~| msgid "Project properties"
 #~ msgid "no liveDataSource element found"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Error"
 #~ msgid "Errors:"
 #~ msgstr "Chyba"
 
-#
-#~| msgid "Apply"
 #~ msgid "&Themes"
 #~ msgstr "Použiť"
 
@@ -25312,33 +24808,21 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Main"
 #~ msgstr "Hlavné"
 
-#
-#~| msgid "Project properties"
 #~ msgid "no xy dataReduction curve element found"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "no xy differentiation curve element found"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "no xy interpolation curve element found"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Data:"
 #~ msgid "y-Data/Error"
 #~ msgstr "Dáta"
 
-#
-#~| msgid "Data:"
 #~ msgid "x-Data/Error"
 #~ msgstr "Dáta"
 
-#
-#~| msgid "%1: add %2."
 #~ msgid "%1: Load theme %2."
 #~ msgstr "%1: pridať %2."
 
@@ -25348,36 +24832,24 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "iMin"
 #~ msgstr "iMin"
 
-#
-#~| msgid "Delete selected objects"
 #~ msgid "The remote host closed the connection."
 #~ msgstr "Zmazať vybrané objekty"
 
 #~ msgid "P > |t|"
 #~ msgstr "P > |t|"
 
-#
-#~| msgid "Data format"
 #~ msgid "C format"
 #~ msgstr "Dátový formát"
 
-#
-#~| msgid "Number"
 #~ msgid "Numbers"
 #~ msgstr "Číslo"
 
-#
-#~| msgid "Date"
 #~ msgid "Dates"
 #~ msgstr "Dátum"
 
-#
-#~| msgid "Data type:"
 #~ msgid "Data type"
 #~ msgstr "Dátový typ:"
 
-#
-#~| msgid "Direction"
 #~ msgid "Type-2 Gumbel"
 #~ msgstr "Smer"
 
@@ -25393,67 +24865,42 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "LabPlot2"
 #~ msgstr "LabPlot2"
 
-#
-#~| msgid "Ctrl+W"
 #~ msgid "Ctrl+C"
 #~ msgstr "Ctrl+W"
 
-#
-#~| msgid "log(x)"
 #~ msgid "log(1+x)"
 #~ msgstr "log(x)"
 
-#
-#~| msgid "x^2"
 #~ msgid "x^n"
 #~ msgstr "x^2"
 
-#
-#~| msgid "x^2"
 #~ msgid "x^3"
 #~ msgstr "x"
 
-#
-#~| msgid "x^2"
 #~ msgid "x^4"
 #~ msgstr "x"
 
-#
-#~| msgid "x^2"
 #~ msgid "x^5"
 #~ msgstr "x"
 
-#
-#~| msgid "x^2"
 #~ msgid "x^6"
 #~ msgstr "x"
 
-#
-#~| msgid "x^2"
 #~ msgid "x^7"
 #~ msgstr "x"
 
-#
-#~| msgid "x^2"
 #~ msgid "x^8"
 #~ msgstr "x"
 
-#
-#~| msgid "x^2"
 #~ msgid "x^9"
 #~ msgstr "x"
 
-#
 #~ msgid "exp(x) - 1"
 #~ msgstr "EXP(x)"
 
-#
-#~| msgid "log(x)"
 #~ msgid "log(1+x) - x"
 #~ msgstr "log(x)"
 
-#
-#~| msgid "log(x)"
 #~ msgid "log(cosh(x))"
 #~ msgstr "log(x)"
 
@@ -25529,41 +24976,27 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Cl&ose"
 #~ msgstr "Zavrieť"
 
-#
-#~| msgid "Headers"
 #~ msgid "FITS Headers"
 #~ msgstr "Hlavičky"
 
-#
-#~| msgid "Direction"
 #~ msgid "Type-1 Gumbel"
 #~ msgstr "Smer"
 
-#
-#~| msgid "Direction"
 #~ msgid "Rayleigh Tail Distribution"
 #~ msgstr "Smer"
 
-#
-#~| msgid "sqrt(x)"
 #~ msgid "sqrt(y)"
 #~ msgstr "sqrt(x)"
 
-#
-#~| msgid "x^2"
 #~ msgid "y^2"
 #~ msgstr "Y"
 
-#
 #~ msgid "x * 2^y"
 #~ msgstr "x,y"
 
-#
 #~ msgid "exp(x)-1"
 #~ msgstr "EXP(x)"
 
-#
-#~| msgid "sqrt(x)"
 #~ msgid "sqrt(x^2+y^2)"
 #~ msgstr "sqrt(x)"
 
@@ -25573,12 +25006,9 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "sine"
 #~ msgstr "sínus"
 
-#
-#~| msgid "ln(x)"
 #~ msgid "sin(x)/x"
 #~ msgstr "ln(x)"
 
-#
 #~ msgid "Sigmoid"
 #~ msgstr "sigmoid"
 
@@ -25589,56 +25019,36 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "weights"
 #~ msgstr "váhy"
 
-#
-#~| msgid "Project properties"
 #~ msgid "Matrix properties"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-fourier_filter-curve properties"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "xy-smooth-curve properties"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Column properties"
 #~ msgid "Custom point properties"
 #~ msgstr "Vlastnosti stĺpca"
 
-#
-#~| msgid "Project properties"
 #~ msgid "DatapickerCurve properties"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "Datapicker properties"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Project properties"
 #~ msgid "Notes properties"
 #~ msgstr "Vlastnosti projektu"
 
-#
-#~| msgid "Parameters"
 #~ msgid "<b>Parameters:</b>"
 #~ msgstr "Parametre"
 
 #~ msgid "Folder %1"
 #~ msgstr "Priečinok %1"
 
-#
-#~| msgid "%1: set invisible"
 #~ msgid "%1: set x-scale breaks"
 #~ msgstr "%1: zmeniť na neviditeľné"
 
-#
-#~| msgid "Project properties"
 #~ msgid "Matrix options"
 #~ msgstr "Vlastnosti projektu"
 
@@ -25648,31 +25058,21 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Options <<"
 #~ msgstr "Voľby <<"
 
-#
-#~| msgid "Image Style"
 #~ msgid "Image Menu"
 #~ msgstr "Štýl obrázka"
 
-#
-#~| msgid "Project properties"
 #~ msgid "DatapickerPoint properties"
 #~ msgstr "Vlastnosti projektu"
 
 #~ msgid "symbol"
 #~ msgstr "symbol"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "%1: set -delta X position"
 #~ msgstr "%1: nastaviť písmo"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "%1: set +delta Y position"
 #~ msgstr "%1: nastaviť písmo"
 
-#
-#~| msgid "%1: set font"
 #~ msgid "%1: set -delta Y position"
 #~ msgstr "%1: nastaviť písmo"
 
@@ -25684,23 +25084,15 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "&Dimensions"
 #~ msgstr "Rozmery"
 
-#
-#~| msgid "Data format"
 #~ msgid "Display &Format"
 #~ msgstr "Dátový formát"
 
-#
-#~| msgid "Spreadsheet"
 #~ msgid "Spreadsheet/Matrix"
 #~ msgstr "Zošit"
 
-#
-#~| msgid "Add new"
 #~ msgid "Add new matrix"
 #~ msgstr "Pridať nový"
 
-#
-#~| msgid "view size"
 #~ msgid "Resize"
 #~ msgstr "veľkosť pohľadu"
 
@@ -25720,13 +25112,9 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Hide Controls"
 #~ msgstr "Skryť ovládače"
 
-#
-#~| msgid "Import image..."
 #~ msgid "SciDAVis - Import image..."
 #~ msgstr "Importovať obrázok..."
 
-#
-#~| msgid "%1: move %2 to %3."
 #~ msgid "%1: %2 %3"
 #~ msgstr "%1: presunúť %2 do %3."
 
@@ -25745,8 +25133,6 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "UNLIMITED"
 #~ msgstr "Bez obmedzenia"
 
-#
-#~| msgid "Could not open file %1 for reading."
 #~ msgid "Sorry. Could not open file %1 for reading."
 #~ msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
@@ -25768,8 +25154,6 @@ msgstr "Zlyhalo otvorenie súboru %1"
 #~ msgid "Redo"
 #~ msgstr "Znovu"
 
-#
-#~| msgid "Direction"
 #~ msgid "Dirichlet Distribution"
 #~ msgstr "Smer"
 
