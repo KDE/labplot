@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-07 00:39+0000\n"
-"PO-Revision-Date: 2026-04-01 12:16+0100\n"
+"POT-Creation-Date: 2026-04-08 00:41+0000\n"
+"PO-Revision-Date: 2026-04-07 00:24+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -416,7 +416,7 @@ msgstr "tipo de filtro incompatible"
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1911
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:867
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1930
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1926
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "elemento «%1» desconocido"
@@ -9228,14 +9228,14 @@ msgid "%1: set labels opacity"
 msgstr "%1: definir opacidad de las etiquetas"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:298
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:308
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:304
 #, kde-format
 msgid "%1: set x column"
 msgstr "%1: definir columna X"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:310
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:320
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:316
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: definir columnas de datos"
@@ -9247,8 +9247,8 @@ msgid "%1: set type"
 msgstr "%1: definir tipo"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:323
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, kde-format
@@ -9256,7 +9256,7 @@ msgid "%1: set orientation"
 msgstr "%1: definir orientación"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:336
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:557
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:553
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: factor de anchura cambiado"
@@ -9309,63 +9309,63 @@ msgstr "número de valores atípicos"
 msgid "far out points count"
 msgstr "número de puntos lejanos"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: definir orden"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:550
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:546
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: anchura de variable cambiada"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:564
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:560
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: muescas cambiadas"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:572
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: definir tipo de bigotes"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:575
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: definir el parámetro de intervalo de los bigotes"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: definir tamaño del remate de los bigotes"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:594
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:590
 #, kde-format
 msgid "%1: jittering changed"
 msgstr "%1: la fluctuación ha cambiado"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:602
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:539
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:597
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: cambiar activación de la alfombra"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:609
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:546
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:611
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: cambiar anchura de la alfombra"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:616
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:612
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:553
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:618
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: cambiar longitud de la alfombra"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:623
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:619
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:560
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:625
 #, kde-format
@@ -9978,7 +9978,7 @@ msgstr "Etiqueta de texto"
 #: src/frontend/worksheet/WorksheetView.cpp:1356
 #, kde-format
 msgid "text"
-msgstr ""
+msgstr "texto"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2469
 #, kde-format
@@ -10724,67 +10724,67 @@ msgstr "pica"
 msgid "club"
 msgstr "trébol"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:115
+#: src/backend/worksheet/plots/cartesian/Value.cpp:107
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: definir tipo de valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:126
+#: src/backend/worksheet/plots/cartesian/Value.cpp:118
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: definir columna de valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:138
+#: src/backend/worksheet/plots/cartesian/Value.cpp:135
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: definir posición de valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:145
+#: src/backend/worksheet/plots/cartesian/Value.cpp:142
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: definir distancia de valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:152
+#: src/backend/worksheet/plots/cartesian/Value.cpp:149
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: rotar valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:159
+#: src/backend/worksheet/plots/cartesian/Value.cpp:156
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: definir opacidad de los valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:166
+#: src/backend/worksheet/plots/cartesian/Value.cpp:163
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: definir formato numérico de los valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:173
+#: src/backend/worksheet/plots/cartesian/Value.cpp:170
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: definir precisión de los valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:180
+#: src/backend/worksheet/plots/cartesian/Value.cpp:177
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: definir el formato de fecha y hora de los valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:187
+#: src/backend/worksheet/plots/cartesian/Value.cpp:184
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: definir prefijo de los valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:194
+#: src/backend/worksheet/plots/cartesian/Value.cpp:191
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: definir sufijo de los valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:201
+#: src/backend/worksheet/plots/cartesian/Value.cpp:198
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: definir tipo de letra de los valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:208
+#: src/backend/worksheet/plots/cartesian/Value.cpp:205
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: definir color de los valores"

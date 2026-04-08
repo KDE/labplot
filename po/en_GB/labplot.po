@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-07 00:39+0000\n"
+"POT-Creation-Date: 2026-04-08 00:41+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -413,7 +413,7 @@ msgstr "incompatible filter type"
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1911
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:867
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1930
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1926
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "unknown element '%1'"
@@ -9245,14 +9245,14 @@ msgid "%1: set labels opacity"
 msgstr "%1: set labels opacity"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:298
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:308
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:304
 #, kde-format
 msgid "%1: set x column"
 msgstr "%1: set x column"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:310
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:320
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:316
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: set data columns"
@@ -9264,8 +9264,8 @@ msgid "%1: set type"
 msgstr "%1: set type"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:323
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, kde-format
@@ -9273,7 +9273,7 @@ msgid "%1: set orientation"
 msgstr "%1: set orientation"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:336
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:557
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:553
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: width factor changed"
@@ -9326,64 +9326,64 @@ msgstr "outliers count"
 msgid "far out points count"
 msgstr "far out points count"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: set ordering"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:550
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:546
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: variable width changed"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:564
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:560
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: changed notches"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:572
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: set whiskers type"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:575
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: set whiskers range parameter"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: set whiskers cap size"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:594
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:590
 #, fuzzy, kde-format
 #| msgid "%1: jitterring changed"
 msgid "%1: jittering changed"
 msgstr "%1: jitterring changed"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:602
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:539
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:597
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: change rug enabled"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:609
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:546
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:611
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: change rug width"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:616
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:612
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:553
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:618
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: change rug length"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:623
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:619
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:560
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:625
 #, kde-format
@@ -10787,67 +10787,67 @@ msgstr "spade"
 msgid "club"
 msgstr "club"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:115
+#: src/backend/worksheet/plots/cartesian/Value.cpp:107
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: set values type"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:126
+#: src/backend/worksheet/plots/cartesian/Value.cpp:118
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: set values column"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:138
+#: src/backend/worksheet/plots/cartesian/Value.cpp:135
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: set values position"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:145
+#: src/backend/worksheet/plots/cartesian/Value.cpp:142
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: set values distance"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:152
+#: src/backend/worksheet/plots/cartesian/Value.cpp:149
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: rotate values"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:159
+#: src/backend/worksheet/plots/cartesian/Value.cpp:156
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: set values opacity"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:166
+#: src/backend/worksheet/plots/cartesian/Value.cpp:163
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: set values numeric format"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:173
+#: src/backend/worksheet/plots/cartesian/Value.cpp:170
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: set values precision"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:180
+#: src/backend/worksheet/plots/cartesian/Value.cpp:177
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: set values datetime format"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:187
+#: src/backend/worksheet/plots/cartesian/Value.cpp:184
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: set values prefix"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:194
+#: src/backend/worksheet/plots/cartesian/Value.cpp:191
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: set values suffix"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:201
+#: src/backend/worksheet/plots/cartesian/Value.cpp:198
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: set values font"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:208
+#: src/backend/worksheet/plots/cartesian/Value.cpp:205
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: set values colour"

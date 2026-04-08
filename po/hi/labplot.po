@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-07 00:39+0000\n"
+"POT-Creation-Date: 2026-04-08 00:41+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -413,7 +413,7 @@ msgstr "असंगत फ़िल्टर प्रकार"
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1911
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:867
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1930
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1926
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "अज्ञात तत्व '%1'"
@@ -9203,14 +9203,14 @@ msgid "%1: set labels opacity"
 msgstr "%1: लेबल अपारदर्शिता सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:298
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:308
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:304
 #, kde-format
 msgid "%1: set x column"
 msgstr "%1: x कॉलम सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:310
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:320
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:316
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: डेटा कॉलम सेट करें"
@@ -9222,8 +9222,8 @@ msgid "%1: set type"
 msgstr "%1: प्रकार निर्धारित करें"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:323
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, kde-format
@@ -9231,7 +9231,7 @@ msgid "%1: set orientation"
 msgstr "%1: अभिविन्यास सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:336
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:557
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:553
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: चौड़ाई कारक परिवर्तित"
@@ -9284,64 +9284,64 @@ msgstr "आउटलायर्स की गिनती"
 msgid "far out points count"
 msgstr "दूर के अंक गिनती"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: क्रम निर्धारित करें"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:550
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:546
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: चर चौड़ाई परिवर्तित"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:564
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:560
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: नोच बदले गए"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:572
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: व्हिस्कर्स प्रकार सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:575
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: व्हिस्कर्स रेंज पैरामीटर सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: व्हिस्कर्स कैप का आकार निर्धारित करें"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:594
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:590
 #, fuzzy, kde-format
 #| msgid "%1: jitterring changed"
 msgid "%1: jittering changed"
 msgstr "%1: जिटरिंग परिवर्तित"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:602
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:539
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:597
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: परिवर्तन गलीचा सक्षम"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:609
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:546
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:611
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: गलीचे की चौड़ाई बदलें"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:616
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:612
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:553
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:618
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: गलीचे की लंबाई बदलें"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:623
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:619
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:560
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:625
 #, kde-format
@@ -10742,67 +10742,67 @@ msgstr "कुदाल"
 msgid "club"
 msgstr "क्लब"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:115
+#: src/backend/worksheet/plots/cartesian/Value.cpp:107
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: मान प्रकार सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:126
+#: src/backend/worksheet/plots/cartesian/Value.cpp:118
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: मान स्तंभ सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:138
+#: src/backend/worksheet/plots/cartesian/Value.cpp:135
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: मान स्थिति निर्धारित करें"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:145
+#: src/backend/worksheet/plots/cartesian/Value.cpp:142
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: दूरी मान सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:152
+#: src/backend/worksheet/plots/cartesian/Value.cpp:149
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: मान घुमाएँ"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:159
+#: src/backend/worksheet/plots/cartesian/Value.cpp:156
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: अपारदर्शिता मान सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:166
+#: src/backend/worksheet/plots/cartesian/Value.cpp:163
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: मान संख्यात्मक प्रारूप में सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:173
+#: src/backend/worksheet/plots/cartesian/Value.cpp:170
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: सेट मान परिशुद्धता"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:180
+#: src/backend/worksheet/plots/cartesian/Value.cpp:177
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: मान दिनांकसमय प्रारूप सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:187
+#: src/backend/worksheet/plots/cartesian/Value.cpp:184
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: मान उपसर्ग सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:194
+#: src/backend/worksheet/plots/cartesian/Value.cpp:191
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: मान प्रत्यय सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:201
+#: src/backend/worksheet/plots/cartesian/Value.cpp:198
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: फ़ॉन्ट मान सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:208
+#: src/backend/worksheet/plots/cartesian/Value.cpp:205
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: मान रंग सेट करें"

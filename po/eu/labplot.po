@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-07 00:39+0000\n"
+"POT-Creation-Date: 2026-04-08 00:41+0000\n"
 "PO-Revision-Date: 2026-02-01 00:20+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -416,7 +416,7 @@ msgstr "iragazki mota bateraezina"
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1911
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:867
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1930
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1926
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "elementu ezezaguna '%1'"
@@ -9210,14 +9210,14 @@ msgid "%1: set labels opacity"
 msgstr "%1: etiketen opakutasuna ezarri"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:298
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:308
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:304
 #, kde-format
 msgid "%1: set x column"
 msgstr "%1: x zutabea ezarri"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:310
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:320
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:316
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: datu zutabeak ezarri"
@@ -9229,8 +9229,8 @@ msgid "%1: set type"
 msgstr "%1: mota ezarri"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:323
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, kde-format
@@ -9238,7 +9238,7 @@ msgid "%1: set orientation"
 msgstr "%1: orientazioa ezarri"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:336
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:557
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:553
 #, fuzzy, kde-format
 #| msgid "%1: set formula"
 msgid "%1: width factor changed"
@@ -9293,47 +9293,47 @@ msgstr ""
 msgid "far out points count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
 #, fuzzy, kde-format
 #| msgid "%1: insert %2 before end"
 msgid "%1: set ordering"
 msgstr "%1: txertatu %2 bukaera baino lehen"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:550
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:546
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: aldagaiaren zabalera aldatu da"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:564
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:560
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: changed notches"
 msgstr "%1: Aldatu iruzkina"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:572
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
 #, fuzzy, kde-format
 msgid "%1: set whiskers type"
 msgstr "Ezarri letra-tipoa"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:575
 #, fuzzy, kde-format
 #| msgid "%1: set value for row %2"
 msgid "%1: set whiskers range parameter"
 msgstr "%1: ezarri %2 errenkadako balioa"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #, fuzzy, kde-format
 #| msgid "%1: set value for row %2"
 msgid "%1: set whiskers cap size"
 msgstr "%1: ezarri %2 errenkadako balioa"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:594
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:590
 #, fuzzy, kde-format
 #| msgid "%1: set formula"
 msgid "%1: jittering changed"
 msgstr "%1: ezarri formula"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:602
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:539
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:597
 #, fuzzy, kde-format
@@ -9341,7 +9341,7 @@ msgstr "%1: ezarri formula"
 msgid "%1: change rug enabled"
 msgstr "%1: aldatu gelaxken balioak"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:609
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:546
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:611
 #, fuzzy, kde-format
@@ -9349,7 +9349,7 @@ msgstr "%1: aldatu gelaxken balioak"
 msgid "%1: change rug width"
 msgstr "%1: aldatu zutabe mota"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:616
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:612
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:553
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:618
 #, fuzzy, kde-format
@@ -9357,7 +9357,7 @@ msgstr "%1: aldatu zutabe mota"
 msgid "%1: change rug length"
 msgstr "%1: Aldatu iruzkina"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:623
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:619
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:560
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:625
 #, fuzzy, kde-format
@@ -10773,67 +10773,67 @@ msgstr "laia"
 msgid "club"
 msgstr "Club-a"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:115
+#: src/backend/worksheet/plots/cartesian/Value.cpp:107
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: balio-mota ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:126
+#: src/backend/worksheet/plots/cartesian/Value.cpp:118
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: balioen zutabea ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:138
+#: src/backend/worksheet/plots/cartesian/Value.cpp:135
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: balioen kokapena ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:145
+#: src/backend/worksheet/plots/cartesian/Value.cpp:142
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: balioen distantzia ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:152
+#: src/backend/worksheet/plots/cartesian/Value.cpp:149
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: balioak biratu"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:159
+#: src/backend/worksheet/plots/cartesian/Value.cpp:156
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: balioen opakutasuna ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:166
+#: src/backend/worksheet/plots/cartesian/Value.cpp:163
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: balioen zenbakizko formatua ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:173
+#: src/backend/worksheet/plots/cartesian/Value.cpp:170
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: balioen doitasuna ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:180
+#: src/backend/worksheet/plots/cartesian/Value.cpp:177
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: data-ordu formatuaren balioa ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:187
+#: src/backend/worksheet/plots/cartesian/Value.cpp:184
 #, kde-format
 msgid "%1: set values prefix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:194
+#: src/backend/worksheet/plots/cartesian/Value.cpp:191
 #, kde-format
 msgid "%1: set values suffix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:201
+#: src/backend/worksheet/plots/cartesian/Value.cpp:198
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: balioen letra-tipoa ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:208
+#: src/backend/worksheet/plots/cartesian/Value.cpp:205
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: balioen kolorea ezarri"

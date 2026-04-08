@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-07 00:39+0000\n"
+"POT-Creation-Date: 2026-04-08 00:41+0000\n"
 "PO-Revision-Date: 2026-04-01 19:27+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -420,7 +420,7 @@ msgstr "نوع مرشح غير متوافق"
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1911
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:867
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1930
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1926
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "عنصر غير معروف '%1'"
@@ -9220,14 +9220,14 @@ msgid "%1: set labels opacity"
 msgstr "%1: اضبط عتامة اللصائق"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:298
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:308
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:304
 #, kde-format
 msgid "%1: set x column"
 msgstr "%1: اضبط عمود س"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:310
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:320
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:316
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: اضبط أعمدة البيانات"
@@ -9239,8 +9239,8 @@ msgid "%1: set type"
 msgstr "%1: اضبط النوع"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:329
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:543
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:327
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:323
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:221
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, kde-format
@@ -9248,7 +9248,7 @@ msgid "%1: set orientation"
 msgstr "%1: اضبط الاتجاه"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:336
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:557
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:553
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: غيِّر عامل العرض"
@@ -9301,63 +9301,63 @@ msgstr "عدد القيم الشاذة"
 msgid "far out points count"
 msgstr "عدد النقاط البعيدة جداً"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: اضبط الترتيب"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:550
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:546
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: غيِّر العرض المتغير"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:564
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:560
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: غيِّر الشقوق"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:572
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: اضبط نوع الشعيرات"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:575
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: اضبط معامل نطاق الشعيرات"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: اضبط حجم غطاء الشعيرات"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:594
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:590
 #, kde-format
 msgid "%1: jittering changed"
 msgstr "%1: غيِّر الارتعاش"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:602
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:539
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:597
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: غيِّر تفعيل خطوط التوزيع"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:609
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:546
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:611
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: غيِّر عرض خطوط التوزيع"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:616
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:612
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:553
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:618
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: غيِّر طول خطوط التوزيع"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:623
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:619
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:560
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:625
 #, kde-format
@@ -10715,67 +10715,67 @@ msgstr "مسحاة"
 msgid "club"
 msgstr "نادي"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:115
+#: src/backend/worksheet/plots/cartesian/Value.cpp:107
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: اِضبط نوع القِيَم"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:126
+#: src/backend/worksheet/plots/cartesian/Value.cpp:118
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: اِضبط عمود القِيَم"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:138
+#: src/backend/worksheet/plots/cartesian/Value.cpp:135
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: اِضبط موضع القِيَم"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:145
+#: src/backend/worksheet/plots/cartesian/Value.cpp:142
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: اِضبط مسافة القِيَم"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:152
+#: src/backend/worksheet/plots/cartesian/Value.cpp:149
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: اِجعل القِيَم تدور"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:159
+#: src/backend/worksheet/plots/cartesian/Value.cpp:156
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: اِضبط عتامة القِيَم"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:166
+#: src/backend/worksheet/plots/cartesian/Value.cpp:163
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: اِضبط التنسيق الرقمي للقِيَم"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:173
+#: src/backend/worksheet/plots/cartesian/Value.cpp:170
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: اِضبط دقة القِيَم"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:180
+#: src/backend/worksheet/plots/cartesian/Value.cpp:177
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: اِضبط تنسيق التاريخ والوقت للقِيَم"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:187
+#: src/backend/worksheet/plots/cartesian/Value.cpp:184
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: اِضبط بادئة القِيَم"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:194
+#: src/backend/worksheet/plots/cartesian/Value.cpp:191
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: اِضبط لاحقة القِيَم"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:201
+#: src/backend/worksheet/plots/cartesian/Value.cpp:198
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: اِضبط خط القِيَم"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:208
+#: src/backend/worksheet/plots/cartesian/Value.cpp:205
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: اِضبط لون القِيَم"
