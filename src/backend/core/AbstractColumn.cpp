@@ -381,7 +381,7 @@ bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 	case ColumnMode::Double:
 		return std::isfinite(doubleAt(row));
-	case ColumnMode::Integer: // there is no invalid integer
+	case ColumnMode::Integer:
 	case ColumnMode::BigInt:
 		return true;
 	case ColumnMode::Text:

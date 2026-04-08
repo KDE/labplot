@@ -3483,7 +3483,7 @@ void SpreadsheetView::clearSelectedCells() {
 		} else {
 			for (const auto& index : indexes) {
 				if (index.column() == colIndex)
-					columns.at(colIndex)->asStringColumn()->setTextAt(index.row(), QString());
+					column->asStringColumn()->setTextAt(index.row(), QString());
 			}
 		}
 

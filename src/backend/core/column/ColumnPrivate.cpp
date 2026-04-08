@@ -871,6 +871,11 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 	}
 	}
 
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+		m_valid.resize(resize ? m_rowCount : 0);
+		m_valid.fill(false);
+	}
+
 	return true;
 }
 
@@ -1402,12 +1407,22 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 }
 
 /**
+ * \brief Replace all mode related members with validity bitmap
+ */
+void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data, AbstractSimpleFilter* in_filter, AbstractSimpleFilter* out_filter,
+									const QBitArray& valid) {
+	replaceModeData(mode, data, in_filter, out_filter);
+	m_valid = valid;
+}
+
+/**
  * \brief Replace data pointer
  */
 void ColumnPrivate::replaceData(void* data) {
 	Q_EMIT q->dataAboutToChange(q);
 
 	m_data = data;
+
 	q->setDataChanged();
 }
 
@@ -1468,6 +1483,12 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 			vec->replace(i, other->dateTimeAt(i));
 		break;
 	}
+	}
+
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+		m_valid.resize(num_rows);
+		for (int i = 0; i < num_rows; ++i)
+			m_valid.setBit(i, other->isValid(i));
 	}
 
 	q->setDataChanged();
@@ -1533,6 +1554,11 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 		break;
 	}
 
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+		for (int i = 0; i < num_rows; ++i)
+			m_valid.setBit(dest_start + i, source->isValid(source_start + i));
+	}
+
 	q->setDataChanged();
 
 	return true;
@@ -1589,6 +1615,9 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 			static_cast<QVector<QDateTime>*>(m_data)->replace(i, other->dateTimeAt(i));
 		break;
 	}
+
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode))
+		m_valid = other->m_valid;
 
 	q->setDataChanged();
 
@@ -1650,6 +1679,13 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 		for (int i = 0; i < num_rows; ++i)
 			static_cast<QVector<QDateTime>*>(m_data)->replace(dest_start + i, source->dateTimeAt(source_start + i));
 		break;
+	}
+
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+		for (int i = 0; i < num_rows; ++i) {
+			bool valid = (source_start + i < source->m_valid.size()) ? source->m_valid.testBit(source_start + i) : false;
+			m_valid.setBit(dest_start + i, valid);
+		}
 	}
 
 	q->setDataChanged();
@@ -1819,6 +1855,9 @@ void ColumnPrivate::resizeTo(int new_size) {
 	}
 	}
 
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode))
+		m_valid.resize(new_size); // new rows are invalid (false), shrinking just truncates
+
 	invalidate();
 }
 
@@ -1857,6 +1896,17 @@ void ColumnPrivate::insertRows(int before, int count) {
 			for (int i = 0; i < count; ++i)
 				static_cast<QVector<QString>*>(m_data)->insert(before, QString());
 			break;
+		}
+
+		if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+			const int oldSize = m_valid.size();
+			m_valid.resize(oldSize + count);
+			// shift existing bits from 'before' to the right by 'count'
+			for (int i = oldSize - 1; i >= before; --i)
+				m_valid.setBit(i + count, m_valid.testBit(i));
+			// new inserted rows are invalid
+			for (int i = before; i < before + count; ++i)
+				m_valid.setBit(i, false);
 		}
 	}
 
@@ -1902,6 +1952,14 @@ void ColumnPrivate::removeRows(int first, int count) {
 			for (int i = 0; i < corrected_count; ++i)
 				static_cast<QVector<QString>*>(m_data)->removeAt(first);
 			break;
+		}
+
+		if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+			const int oldSize = m_valid.size();
+			// shift bits after removed range to the left
+			for (int i = first; i < oldSize - corrected_count; ++i)
+				m_valid.setBit(i, m_valid.testBit(i + corrected_count));
+			m_valid.resize(oldSize - corrected_count);
 		}
 	}
 
@@ -2145,6 +2203,10 @@ void ColumnPrivate::setWidth(int value) {
 void ColumnPrivate::setData(void* data) {
 	deleteData();
 	m_data = data;
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+		m_valid.resize(rowCount());
+		m_valid.fill(true);
+	}
 	invalidate();
 }
 

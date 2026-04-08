@@ -819,10 +819,15 @@ bool Column::hasValues() const {
 		break;
 	}
 	case ColumnMode::Integer:
-	case ColumnMode::BigInt:
-		// integer values are always valid
-		foundValues = true;
+	case ColumnMode::BigInt: {
+		for (int row = 0; row < rowCount(); ++row) {
+			if (isValid(row)) {
+				foundValues = true;
+				break;
+			}
+		}
 		break;
+	}
 	case ColumnMode::DateTime:
 	case ColumnMode::Month:
 	case ColumnMode::Day: {
@@ -857,8 +862,7 @@ bool Column::hasValueAt(int row) const {
 	}
 	case ColumnMode::Integer:
 	case ColumnMode::BigInt:
-		// integer values are always valid
-		foundValue = true;
+		foundValue = isValid(row);
 		break;
 	case ColumnMode::DateTime:
 	case ColumnMode::Month:
@@ -1365,6 +1369,14 @@ void Column::save(QXmlStreamWriter* writer) const {
 			break;
 		}
 		}
+
+		// save per-cell validity bitmap for Integer/BigInt columns
+		if ((columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt) && !d->m_valid.isEmpty()) {
+			const QByteArray validBytes(reinterpret_cast<const char*>(d->m_valid.bits()), (d->m_valid.size() + 7) / 8);
+			writer->writeStartElement(QStringLiteral("valid"));
+			writer->writeCharacters(QLatin1String(validBytes.toBase64()));
+			writer->writeEndElement();
+		}
 	}
 
 	writer->writeEndElement(); // "column"
@@ -1389,12 +1401,18 @@ public:
 			auto* data = new QVector<qint64>(bytes.size() / (int)sizeof(qint64));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
+			// mark all loaded values as valid (backward compatibility)
+			m_private->m_valid.resize(data->size());
+			m_private->m_valid.fill(true);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
 			auto* data = new QVector<int>(bytes.size() / (int)sizeof(int));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
+			// mark all loaded values as valid (backward compatibility)
+			m_private->m_valid.resize(data->size());
+			m_private->m_valid.fill(true);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
@@ -1549,6 +1567,19 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				case AbstractColumn::ColumnMode::DateTime:
 					addValueLabel(QDateTime::fromMSecsSinceEpoch(attribs.value(QLatin1String("value")).toLongLong(), QTimeZone::UTC), label);
 					break;
+				}
+			} else if (reader->name() == QLatin1String("valid")) {
+				const QString validContent = reader->readElementText().trimmed();
+				if (!validContent.isEmpty()) {
+					const auto validBytes = QByteArray::fromBase64(validContent.toLatin1());
+					const int numRows = d->rowCount();
+					d->m_valid = QBitArray(numRows);
+					const int byteCount = qMin(validBytes.size(), (numRows + 7) / 8);
+					const auto* bits = reinterpret_cast<const uchar*>(validBytes.constData());
+					for (int i = 0; i < numRows; ++i) {
+						if (i / 8 < byteCount && (bits[i / 8] & (1 << (i % 8))))
+							d->m_valid.setBit(i, true);
+					}
 				}
 			} else if (reader->name() == QLatin1String("row")) {
 				// Assumption: the next elements are all rows
@@ -1790,6 +1821,15 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
  */
 bool Column::isReadOnly() const {
 	return false;
+}
+
+bool Column::isValid(int row) const {
+	if (AbstractColumnPrivate::needsValidityTracking(columnMode())) {
+		if (row < 0 || row >= d->m_valid.size())
+			return false;
+		return d->m_valid.testBit(row);
+	}
+	return AbstractColumn::isValid(row);
 }
 
 /**

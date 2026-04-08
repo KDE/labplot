@@ -66,6 +66,7 @@ public:
 	void setPlotDesignation(AbstractColumn::PlotDesignation) override;
 
 	bool isReadOnly() const override;
+	bool isValid(int row) const override;
 	void resizeTo(int);
 	int rowCount() const override;
 	int rowCount(double min, double max) const override;
