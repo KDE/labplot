@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-08 00:41+0000\n"
+"POT-Creation-Date: 2026-04-10 00:40+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -573,7 +573,7 @@ msgid "%1: change column type"
 msgstr ""
 
 #: src/backend/core/column/Column.cpp:469
-#: src/backend/core/column/columncommands.cpp:578
+#: src/backend/core/column/columncommands.cpp:590
 #, kde-format
 msgid "%1: clear column"
 msgstr ""
@@ -584,7 +584,7 @@ msgstr ""
 msgid "%1: set random values"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/core/column/Column.cpp:1049
+#: src/backend/core/column/Column.cpp:1053
 #: src/frontend/datasources/ImportFileWidget.cpp:1698
 #, fuzzy, kde-format
 #| msgid "Size"
@@ -592,102 +592,102 @@ msgid "Size: %1"
 msgstr "Størrelse"
 
 #. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/column/Column.cpp:1052
+#: src/backend/core/column/Column.cpp:1056
 #, fuzzy, kde-format
 #| msgid "Type"
 msgid "Type: %1"
 msgstr "Type"
 
-#: src/backend/core/column/Column.cpp:1053
+#: src/backend/core/column/Column.cpp:1057
 #, fuzzy, kde-format
 #| msgid "Position:"
 msgid "Plot Designation: %1"
 msgstr "Position:"
 
-#: src/backend/core/column/Column.cpp:1057
+#: src/backend/core/column/Column.cpp:1061
 #, fuzzy, kde-format
 #| msgid "Format:"
 msgid "Formula:"
 msgstr "Format:"
 
-#: src/backend/core/column/Column.cpp:1079
+#: src/backend/core/column/Column.cpp:1083
 #, fuzzy, kde-format
 #| msgid "auto-save"
 msgid "auto update: true"
 msgstr "autogemning"
 
-#: src/backend/core/column/Column.cpp:1081
+#: src/backend/core/column/Column.cpp:1085
 #, fuzzy, kde-format
 #| msgid "auto-save"
 msgid "auto update: false"
 msgstr "autogemning"
 
-#: src/backend/core/column/Column.cpp:1094
+#: src/backend/core/column/Column.cpp:1098
 #: src/backend/spreadsheet/Spreadsheet.cpp:242
 #, fuzzy, kde-format
 #| msgid "%1: add %2 rows(s)"
 msgid "Used in Plots:"
 msgstr "%1: tilføj %2 rækker"
 
-#: src/backend/core/column/Column.cpp:1109
+#: src/backend/core/column/Column.cpp:1113
 #: src/backend/spreadsheet/Spreadsheet.cpp:259
 #, kde-format
 msgid "Used in Axes:"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1132
+#: src/backend/core/column/Column.cpp:1136
 #: src/backend/spreadsheet/Spreadsheet.cpp:280
 #, fuzzy, kde-format
 #| msgid "Tab position"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Fanebladsposition"
 
-#: src/backend/core/column/Column.cpp:1733
+#: src/backend/core/column/Column.cpp:1775
 #, kde-format
 msgid "invalid or missing row index"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1742
-#: src/backend/core/column/Column.cpp:1751
-#: src/backend/core/column/Column.cpp:1760
+#: src/backend/core/column/Column.cpp:1784
+#: src/backend/core/column/Column.cpp:1793
+#: src/backend/core/column/Column.cpp:1802
 #, kde-format
 msgid "invalid row value"
 msgstr ""
 
-#: src/backend/core/column/columncommands.cpp:216
-#: src/backend/core/column/columncommands.cpp:327
+#: src/backend/core/column/columncommands.cpp:218
+#: src/backend/core/column/columncommands.cpp:339
 #, kde-format
 msgid "%1: change cell values"
 msgstr ""
 
-#: src/backend/core/column/columncommands.cpp:529
+#: src/backend/core/column/columncommands.cpp:541
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2750
 #, kde-format
 msgid "%1: set plot designation"
 msgstr ""
 
-#: src/backend/core/column/columncommands.cpp:693
+#: src/backend/core/column/columncommands.cpp:713
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr ""
 
-#: src/backend/core/column/columncommands.cpp:761
+#: src/backend/core/column/columncommands.cpp:781
 #, kde-format
 msgid "%1: set cell formula"
 msgstr ""
 
-#: src/backend/core/column/columncommands.cpp:803
+#: src/backend/core/column/columncommands.cpp:823
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr ""
 
-#: src/backend/core/column/columncommands.h:228
+#: src/backend/core/column/columncommands.h:233
 #, kde-format
 msgid "%1: set value for row %2"
 msgstr ""
 
-#: src/backend/core/column/columncommands.h:285
+#: src/backend/core/column/columncommands.h:295
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1150
 #, fuzzy, kde-format
@@ -695,7 +695,7 @@ msgstr ""
 msgid "%1: replace values"
 msgstr "Værdier"
 
-#: src/backend/core/column/columncommands.h:287
+#: src/backend/core/column/columncommands.h:297
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
 msgstr ""

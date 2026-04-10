@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-08 00:41+0000\n"
+"POT-Creation-Date: 2026-04-10 00:40+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -581,7 +581,7 @@ msgid "%1: change column type"
 msgstr "%1: promijeni tip kolone"
 
 #: src/backend/core/column/Column.cpp:469
-#: src/backend/core/column/columncommands.cpp:578
+#: src/backend/core/column/columncommands.cpp:590
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: isprazni kolonu"
@@ -592,109 +592,109 @@ msgstr "%1: isprazni kolonu"
 msgid "%1: set random values"
 msgstr "%1: postavi vrijednosti ćelija"
 
-#: src/backend/core/column/Column.cpp:1049
+#: src/backend/core/column/Column.cpp:1053
 #: src/frontend/datasources/ImportFileWidget.cpp:1698
 #, kde-format
 msgid "Size: %1"
 msgstr "Veličina: %1"
 
 #. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/column/Column.cpp:1052
+#: src/backend/core/column/Column.cpp:1056
 #, fuzzy, kde-format
 #| msgid "Type"
 msgid "Type: %1"
 msgstr "Vrsta"
 
-#: src/backend/core/column/Column.cpp:1053
+#: src/backend/core/column/Column.cpp:1057
 #, fuzzy, kde-format
 #| msgid "Plot designation"
 msgid "Plot Designation: %1"
 msgstr "Oznaka grafa"
 
-#: src/backend/core/column/Column.cpp:1057
+#: src/backend/core/column/Column.cpp:1061
 #, fuzzy, kde-format
 #| msgid "Format:"
 msgid "Formula:"
 msgstr "Format:"
 
-#: src/backend/core/column/Column.cpp:1079
+#: src/backend/core/column/Column.cpp:1083
 #, fuzzy, kde-format
 #| msgid "auto-save"
 msgid "auto update: true"
 msgstr "auto-sačuvaj"
 
-#: src/backend/core/column/Column.cpp:1081
+#: src/backend/core/column/Column.cpp:1085
 #, fuzzy, kde-format
 #| msgid "auto-save"
 msgid "auto update: false"
 msgstr "auto-sačuvaj"
 
-#: src/backend/core/column/Column.cpp:1094
+#: src/backend/core/column/Column.cpp:1098
 #: src/backend/spreadsheet/Spreadsheet.cpp:242
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Used in Plots:"
 msgstr "LabPlot2"
 
-#: src/backend/core/column/Column.cpp:1109
+#: src/backend/core/column/Column.cpp:1113
 #: src/backend/spreadsheet/Spreadsheet.cpp:259
 #, kde-format
 msgid "Used in Axes:"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1132
+#: src/backend/core/column/Column.cpp:1136
 #: src/backend/spreadsheet/Spreadsheet.cpp:280
 #, fuzzy, kde-format
 #| msgid "Tree options"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Opcije stabla"
 
-#: src/backend/core/column/Column.cpp:1733
+#: src/backend/core/column/Column.cpp:1775
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "pogrešan ili nedostaje indeks reda"
 
-#: src/backend/core/column/Column.cpp:1742
-#: src/backend/core/column/Column.cpp:1751
-#: src/backend/core/column/Column.cpp:1760
+#: src/backend/core/column/Column.cpp:1784
+#: src/backend/core/column/Column.cpp:1793
+#: src/backend/core/column/Column.cpp:1802
 #, kde-format
 msgid "invalid row value"
 msgstr "pogrešna vrijednost reda"
 
-#: src/backend/core/column/columncommands.cpp:216
-#: src/backend/core/column/columncommands.cpp:327
+#: src/backend/core/column/columncommands.cpp:218
+#: src/backend/core/column/columncommands.cpp:339
 #, kde-format
 msgid "%1: change cell values"
 msgstr "%1: promijeni vrijednost ćelije"
 
-#: src/backend/core/column/columncommands.cpp:529
+#: src/backend/core/column/columncommands.cpp:541
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2750
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: postavi oznake"
 
-#: src/backend/core/column/columncommands.cpp:693
+#: src/backend/core/column/columncommands.cpp:713
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr "%1: postavi fomulu"
 
-#: src/backend/core/column/columncommands.cpp:761
+#: src/backend/core/column/columncommands.cpp:781
 #, kde-format
 msgid "%1: set cell formula"
 msgstr "%1: postavi formulu za ćeliju"
 
-#: src/backend/core/column/columncommands.cpp:803
+#: src/backend/core/column/columncommands.cpp:823
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr "%1: obriši sve formule"
 
-#: src/backend/core/column/columncommands.h:228
+#: src/backend/core/column/columncommands.h:233
 #, kde-format
 msgid "%1: set value for row %2"
 msgstr "%1: postavi vrijednost za red %2"
 
-#: src/backend/core/column/columncommands.h:285
+#: src/backend/core/column/columncommands.h:295
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1150
 #, fuzzy, kde-format
@@ -702,7 +702,7 @@ msgstr "%1: postavi vrijednost za red %2"
 msgid "%1: replace values"
 msgstr "%1: rotiraj vrijednosti"
 
-#: src/backend/core/column/columncommands.h:287
+#: src/backend/core/column/columncommands.h:297
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: zamijeni vrijednosti za redove %2 i %3"

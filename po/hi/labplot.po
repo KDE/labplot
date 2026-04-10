@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-08 00:41+0000\n"
+"POT-Creation-Date: 2026-04-10 00:40+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -538,7 +538,7 @@ msgid "%1: change column type"
 msgstr "%1: कॉलम प्रकार बदलें"
 
 #: src/backend/core/column/Column.cpp:469
-#: src/backend/core/column/columncommands.cpp:578
+#: src/backend/core/column/columncommands.cpp:590
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: कॉलम साफ़ करें"
@@ -548,112 +548,112 @@ msgstr "%1: कॉलम साफ़ करें"
 msgid "%1: set random values"
 msgstr "%1: यादृच्छिक मान सेट करें"
 
-#: src/backend/core/column/Column.cpp:1049
+#: src/backend/core/column/Column.cpp:1053
 #: src/frontend/datasources/ImportFileWidget.cpp:1698
 #, kde-format
 msgid "Size: %1"
 msgstr "आकार: %1"
 
 #. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/column/Column.cpp:1052
+#: src/backend/core/column/Column.cpp:1056
 #, kde-format
 msgid "Type: %1"
 msgstr "प्रकार: %1"
 
-#: src/backend/core/column/Column.cpp:1053
+#: src/backend/core/column/Column.cpp:1057
 #, kde-format
 msgid "Plot Designation: %1"
 msgstr "प्लॉट का नाम: %1"
 
-#: src/backend/core/column/Column.cpp:1057
+#: src/backend/core/column/Column.cpp:1061
 #, kde-format
 msgid "Formula:"
 msgstr "सूत्र:"
 
-#: src/backend/core/column/Column.cpp:1079
+#: src/backend/core/column/Column.cpp:1083
 #, kde-format
 msgid "auto update: true"
 msgstr "स्वतः अद्यतन: सत्य"
 
-#: src/backend/core/column/Column.cpp:1081
+#: src/backend/core/column/Column.cpp:1085
 #, kde-format
 msgid "auto update: false"
 msgstr "स्वतः अद्यतन: गलत"
 
-#: src/backend/core/column/Column.cpp:1094
+#: src/backend/core/column/Column.cpp:1098
 #: src/backend/spreadsheet/Spreadsheet.cpp:242
 #, fuzzy, kde-format
 #| msgid "Used in"
 msgid "Used in Plots:"
 msgstr "में प्रयुक्त"
 
-#: src/backend/core/column/Column.cpp:1109
+#: src/backend/core/column/Column.cpp:1113
 #: src/backend/spreadsheet/Spreadsheet.cpp:259
 #, fuzzy, kde-format
 #| msgid "Used in"
 msgid "Used in Axes:"
 msgstr "में प्रयुक्त"
 
-#: src/backend/core/column/Column.cpp:1132
+#: src/backend/core/column/Column.cpp:1136
 #: src/backend/spreadsheet/Spreadsheet.cpp:280
 #, fuzzy, kde-format
 #| msgid "Save  Calculations:"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "गणना सहेजें:"
 
-#: src/backend/core/column/Column.cpp:1733
+#: src/backend/core/column/Column.cpp:1775
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "अमान्य या अनुपलब्ध पंक्ति अनुक्रमणिका"
 
-#: src/backend/core/column/Column.cpp:1742
-#: src/backend/core/column/Column.cpp:1751
-#: src/backend/core/column/Column.cpp:1760
+#: src/backend/core/column/Column.cpp:1784
+#: src/backend/core/column/Column.cpp:1793
+#: src/backend/core/column/Column.cpp:1802
 #, kde-format
 msgid "invalid row value"
 msgstr "अमान्य पंक्ति मान"
 
-#: src/backend/core/column/columncommands.cpp:216
-#: src/backend/core/column/columncommands.cpp:327
+#: src/backend/core/column/columncommands.cpp:218
+#: src/backend/core/column/columncommands.cpp:339
 #, kde-format
 msgid "%1: change cell values"
 msgstr "%1: सेल मान बदलें"
 
-#: src/backend/core/column/columncommands.cpp:529
+#: src/backend/core/column/columncommands.cpp:541
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2750
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: प्लॉट पदनाम निर्धारित करें"
 
-#: src/backend/core/column/columncommands.cpp:693
+#: src/backend/core/column/columncommands.cpp:713
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr "%1: सूत्र सेट करें"
 
-#: src/backend/core/column/columncommands.cpp:761
+#: src/backend/core/column/columncommands.cpp:781
 #, kde-format
 msgid "%1: set cell formula"
 msgstr "%1: सेल सूत्र सेट करें"
 
-#: src/backend/core/column/columncommands.cpp:803
+#: src/backend/core/column/columncommands.cpp:823
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr "%1: सभी सूत्र साफ़ करें"
 
-#: src/backend/core/column/columncommands.h:228
+#: src/backend/core/column/columncommands.h:233
 #, kde-format
 msgid "%1: set value for row %2"
 msgstr "%1: पंक्ति %2 के लिए मान सेट करें"
 
-#: src/backend/core/column/columncommands.h:285
+#: src/backend/core/column/columncommands.h:295
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1150
 #, kde-format
 msgid "%1: replace values"
 msgstr "%1: मान बदलें"
 
-#: src/backend/core/column/columncommands.h:287
+#: src/backend/core/column/columncommands.h:297
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: पंक्तियों %2 से %3 के मानों को प्रतिस्थापित करें"
