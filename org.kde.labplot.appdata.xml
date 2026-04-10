@@ -65,6 +65,7 @@
   <summary xml:lang="nl">Gegevens visualiseren en analyseren</summary>
   <summary xml:lang="pt-BR">Visualize e analise dados</summary>
   <summary xml:lang="ru">Визуализация и анализ данных</summary>
+  <summary xml:lang="sk">Vizualizácia a analýza dát</summary>
   <summary xml:lang="sl">Vizualizira in analizira podatke</summary>
   <summary xml:lang="sv">Åskådliggör och analysera data</summary>
   <summary xml:lang="tr">Veri görselleyin ve çözümleyin</summary>
@@ -98,6 +99,7 @@
     <p xml:lang="pt-BR">O LabPlot é um software de visualização e análise de dados GRATUITO, de código aberto e multiplataforma acessível a todos.</p>
     <p xml:lang="ru">LabPlot — бесплатное кросс-платформенное приложение для визуализации и анализа данных с открытым исходным кодом.</p>
     <p xml:lang="sa">LabPlot इति निःशुल्कं, मुक्तस्रोतं तथा च पार-मञ्चं Data Visualization and Analysis सॉफ्टवेयरं सर्वेषां कृते सुलभम् अस्ति ।</p>
+    <p xml:lang="sk">LabPlot je BEZPLATNÝ, open source a multiplatformový softvér na vizualizáciu a analýzu dát prístupný pre každého.</p>
     <p xml:lang="sl">LabPlot je PROSTA, odprtokodna in večplatformska vizualizacija podatkov in programska oprema za analizo dostopna vsem.</p>
     <p xml:lang="sv">Labplot är FRI datavisualiserings- och analysprogramvara med öppen källkod för flera plattformar tillgänglig för vem som helst.</p>
     <p xml:lang="tr">LabPlot herkese açık, ÜCRETSİZ, açık kaynaklı ve çok sayıda platform üzerinde çalışan bir veri görselleştirme ve çözümleme yazılımıdır.</p>
@@ -179,6 +181,7 @@
       <caption xml:lang="pt-BR">Visualização básica de dados</caption>
       <caption xml:lang="ru">Базовая визуализация данных</caption>
       <caption xml:lang="sa">दत्तांशस्य मूलभूतं दृश्यीकरणं</caption>
+      <caption xml:lang="sk">Základná vizualizácia dát</caption>
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="tr">Temel veri görselleştirmesi</caption>
@@ -211,6 +214,7 @@
       <caption xml:lang="pt-BR">Visualização básica de dados</caption>
       <caption xml:lang="ru">Базовая визуализация данных</caption>
       <caption xml:lang="sa">दत्तांशस्य मूलभूतं दृश्यीकरणं</caption>
+      <caption xml:lang="sk">Základná vizualizácia dát</caption>
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="tr">Temel veri görselleştirmesi</caption>
@@ -243,6 +247,7 @@
       <caption xml:lang="pt-BR">Layout avançado de gráficos e imagens</caption>
       <caption xml:lang="ru">Расширенные возможности формирования графиков и изображений</caption>
       <caption xml:lang="sa">कथानकानाम्, चित्राणां च उन्नतविन्यासः</caption>
+      <caption xml:lang="sk">Pokročilé rozloženie grafov a obrázkov</caption>
       <caption xml:lang="sl">Napredna postavitev grafikonov in slik</caption>
       <caption xml:lang="sv">Avancerad layout av diagram och bilder</caption>
       <caption xml:lang="tr">Çizimlerin ve görsellerin gelişmiş yerleşimi</caption>
@@ -275,6 +280,7 @@
       <caption xml:lang="pt-BR">Temas</caption>
       <caption xml:lang="ru">Темы</caption>
       <caption xml:lang="sa">विषयवस्तु</caption>
+      <caption xml:lang="sk">Témy</caption>
       <caption xml:lang="sl">Teme</caption>
       <caption xml:lang="sv">Teman</caption>
       <caption xml:lang="tr">Temalama</caption>
@@ -307,6 +313,7 @@
       <caption xml:lang="pt-BR">Visualização de funções matemáticas</caption>
       <caption xml:lang="ru">Построение графиков математических функций</caption>
       <caption xml:lang="sa">गणितीय फलनानां दृश्यीकरण</caption>
+      <caption xml:lang="sk">Vizualizácia matematických funkcií</caption>
       <caption xml:lang="sl">Vizualizacija matematičnih funkcij</caption>
       <caption xml:lang="sv">Visualisering av matematiska funktioner</caption>
       <caption xml:lang="tr">Matematiksel işlevlerin görselleştirilmesi</caption>
@@ -339,6 +346,7 @@
       <caption xml:lang="pt-BR">Ajusta modelos predefinidos ou personalizados aos dados</caption>
       <caption xml:lang="ru">Подбор предопределённых или настраиваемых моделей по данным</caption>
       <caption xml:lang="sa">पूर्वनिर्धारितं वा कस्टम् मॉडल् दत्तांशं प्रति फिट् कुर्वन्तु</caption>
+      <caption xml:lang="sk">Prispôsobenie preddefinovaných alebo vlastných modelov na dáta</caption>
       <caption xml:lang="sl">Prilagajanje vnaprej določenih modelov ali modelov po meri podatkom</caption>
       <caption xml:lang="sv">Anpassa data till fördefinierade eller egna modeller</caption>
       <caption xml:lang="tr">Veriye önceden tanımlanmış veya özel modelleri uydurun</caption>
@@ -371,6 +379,7 @@
       <caption xml:lang="pt-BR">Suaviza os dados com a ajuda de vários métodos de suavização</caption>
       <caption xml:lang="ru">Сглаживание данных с помощью различных методов сглаживания</caption>
       <caption xml:lang="sa">विभिन्नानां स्मूथिंग पद्धतीनां साहाय्येन दत्तांशं सुस्पष्टं कुर्वन्तु</caption>
+      <caption xml:lang="sk">Vyhladzovanie dát pomocou rôznych metód vyhladzovania</caption>
       <caption xml:lang="sl">Zgladite podatke s pomočjo različnih metod glajenja</caption>
       <caption xml:lang="sv">Jämna ut data med hjälp av diverse utjämningsmetoder</caption>
       <caption xml:lang="tr">Çeşitli pürüzsüzleştirme yöntemlerinin yardımıyla veriyi pürüzsüzleştirin</caption>
@@ -403,6 +412,7 @@
       <caption xml:lang="pt-BR">Interface de notebook para sessões interativas em Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="ru">Блокнот служит в качестве интерфейса для интерактивного взаимодействия с Maxima, Octave, R, Sage, Scilab, Python, Julia и так далее.</caption>
       <caption xml:lang="sa">Maxima, Octave, R, Sage, Scilab, Python, Julia इत्यादिषु अन्तरक्रियाशीलसत्रेषु नोटबुक-अन्तरफलकम्</caption>
+      <caption xml:lang="sk">Rozhranie zápisníka pre interaktívne relácie v Maxima, Octave, R, Sage, Scilab, Python, Julia atď.</caption>
       <caption xml:lang="sl">Prenosni vmesnik za interaktivne seje v Maxima, Octave, R, Sage, Scilab, Python, Julia itd.</caption>
       <caption xml:lang="sv">Anteckningsbok för interaktiva sessioner i Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="tr">Maxima, Octave, R, Sage, Scilab, Python, Julia vb. içinde etkileşimli oturumlar için defter arayüzü</caption>
@@ -435,6 +445,7 @@
       <caption xml:lang="pt-BR">Análise de sinais</caption>
       <caption xml:lang="ru">Анализ сигнала</caption>
       <caption xml:lang="sa">संकेत विश्लेषण</caption>
+      <caption xml:lang="sk">Analýza signálu</caption>
       <caption xml:lang="sl">Analiza signalov</caption>
       <caption xml:lang="sv">Signalanalys</caption>
       <caption xml:lang="tr">Sinyal çözümlemesi</caption>
@@ -467,6 +478,7 @@
       <caption xml:lang="pt-BR">Diagrama de Herzsprung-Russel no LabPlot</caption>
       <caption xml:lang="ru">Диаграмма Герцшпрунга-Рассела в LabPlot</caption>
       <caption xml:lang="sa">LabPlot इत्यस्मिन् Herzsprung-Russel आरेखम्</caption>
+      <caption xml:lang="sk">Hertzsprungov-Russellov diagram v LabPlot</caption>
       <caption xml:lang="sl">Herzsprung-Russelovi diagrami v LabPlotu</caption>
       <caption xml:lang="sv">Herzsprung-Russel-diagram i Labplot</caption>
       <caption xml:lang="tr">LabPlot’ta Herzsprung-Russel diyagramı</caption>
@@ -499,6 +511,7 @@
       <caption xml:lang="pt-BR">Visualização de dados calculados em uma sessão interativa do Maxima</caption>
       <caption xml:lang="ru">Визаулизация данных, рассчитанных в результате интерактивного взаимодействия с Maxima</caption>
       <caption xml:lang="sa">एकस्मिन् अन्तरक्रियाशील Maxima सत्रे गणितस्य आँकडानां दृश्यीकरणं</caption>
+      <caption xml:lang="sk">Vizualizácia dát vypočítaných v interaktívnej relácii Maxima</caption>
       <caption xml:lang="sl">Vizualizacija podatkov izračunanih v interaktivni seji Maxima</caption>
       <caption xml:lang="sv">Visualisering av data beräknad i en interaktiv Maxima-session</caption>
       <caption xml:lang="tr">Bir etkileşimli Maxima oturumunda hesaplanan verinin görselleştirilmesi</caption>
