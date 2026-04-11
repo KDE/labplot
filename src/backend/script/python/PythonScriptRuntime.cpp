@@ -11,6 +11,7 @@
 #include "PythonScriptRuntime.h"
 #include "PythonLogger.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/script/Script.h"
 #include "backend/script/ScriptRuntime.h"
 #include "pyerrors.h"
@@ -25,6 +26,10 @@
 
 #include <codecvt>
 #include <string>
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
 
 // PyObject* handling:
 // PySys_GetObject(), PyImport_AddModule() return a borrowed reference so we create own reference with Py_INCREF() and Py_DECREF(o) when done
@@ -149,6 +154,24 @@ bool PythonScriptRuntime::initPython() {
 	// Python interpreter and pylabplot module is already initialized
 	if (Py_IsInitialized() && ready)
 		return true;
+
+	// Allow user to override Python runtime location via config file
+	// Python will automatically read the standard PYTHONHOME environment variable during Py_Initialize()
+	KConfigGroup group = Settings::group(QStringLiteral("Python"));
+	QString pythonHome = group.readEntry("PythonHome", QString());
+
+	if (!pythonHome.isEmpty()) {
+		// Validate that the path exists
+		QDir pythonDir(pythonHome);
+		if (pythonDir.exists()) {
+			INFO(Q_FUNC_INFO << ", Using custom Python from: " << pythonHome.toStdString())
+			// Set standard Python environment variable - Python reads this automatically during Py_Initialize()
+			qputenv("PYTHONHOME", pythonHome.toUtf8());
+		} else {
+			WARN("Python home directory does not exist: " << pythonHome.toStdString())
+			WARN("Falling back to default Python")
+		}
+	}
 
 	// Use stable ABI: Py_SetProgramName + Py_Initialize instead of PyConfig_*
 	// Set program name before initializing (stable ABI)
