@@ -52,9 +52,10 @@ public:
 		double eps{1.e-4};
 		size_t evaluatedPoints{1000};
 		bool useDataErrors{true}; // use given data errors when fitting (default)
-		bool errorScaling{true}; // if true: calculated parameter uncertainties are scaled with the reduced chi square to use scaled/relative sigmas, otherwise
-								 // unscaled/absolute sigmas are used true: gnuplot (default, set fit noerrorscaling), SciPy (default), R, Stata, SAS false:
-								 // GSL, Matlab, ROOT (typical), Julia (typical), Origin, IgorPro
+		bool errorScaling{true}; // if true calculated parameter uncertainties are scaled with the reduced chi square to use scaled/relative sigmas, otherwise
+								 // unscaled/absolute sigmas are used
+								 // true: gnuplot (default, set fit noerrorscaling), SciPy (default), R, Stata, SAS
+								 // false: GSL, Matlab, ROOT (typical), Julia (typical), Origin, IgorPro
 		bool useResults{false}; // use results as new start values (default)
 		bool previewEnabled{false}; // preview fit function with given start parameters
 		double confidenceInterval{95.}; // confidence interval for fit result
