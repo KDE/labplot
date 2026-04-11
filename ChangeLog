@@ -8,6 +8,7 @@ New features:
 		* New column "Changed" in the project explorer to inform about which objects were changed since the last save
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
+		* Add option to enable/disable parameter error scaling (relative vs. absolute sigma)
 		* Baseline correction analysis in the plot
 	* [time series analysis]
 		* seasonal decomposition with STL and MSTL methods
