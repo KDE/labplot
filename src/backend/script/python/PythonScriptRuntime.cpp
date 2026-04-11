@@ -73,8 +73,9 @@ PythonScriptRuntime::~PythonScriptRuntime() {
 		PyGILState_Release(gil);
 	}
 
-	DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
-	DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
+	// Note: Py_REFCNT is not in stable ABI, debug output disabled
+	// DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
+	// DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
 
 	Py_XDECREF(sysStdOut);
 	Py_XDECREF(sysStdErr);
@@ -103,7 +104,7 @@ bool PythonScriptRuntime::init() {
 		}
 
 		Py_INCREF(sysStdOut); // own it
-		DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt now = " << Py_REFCNT(sysStdOut));
+		// DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt now = " << Py_REFCNT(sysStdOut));
 
 		// auto* sysStdOutWrite = PyObject_GetAttrString(sysStdOut, "write"); // owned reference
 		/*if (!sysStdOutWrite) {
@@ -122,7 +123,7 @@ bool PythonScriptRuntime::init() {
 		}
 
 		Py_INCREF(sysStdErr); // own it
-		DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt now = " << Py_REFCNT(sysStdErr));
+		// DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt now = " << Py_REFCNT(sysStdErr));
 
 		// auto* sysStdErrWrite = PyObject_GetAttrString(sysStdErr, "write"); // owned reference
 		/*if (!sysStdErrWrite) {
@@ -149,22 +150,22 @@ bool PythonScriptRuntime::initPython() {
 	if (Py_IsInitialized() && ready)
 		return true;
 
-	PyConfig config;
-	PyConfig_InitPythonConfig(&config);
-
-	// TODO: use macro for converting wchar_t
+	// Use stable ABI: Py_SetProgramName + Py_Initialize instead of PyConfig_*
+	// Set program name before initializing (stable ABI)
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	INFO(Q_FUNC_INFO << ", Python interpreter: " << converter.to_bytes(pythonInterpreter))
-	PyConfig_SetString(&config, &config.program_name, pythonInterpreter);
-	PyConfig_SetArgv(&config, 1, argv);
+	Py_SetProgramName(pythonInterpreter);
 
 	if (PyImport_AppendInittab(moduleName, PyInit_pylabplot) == -1) {
 		WARN("Failed to add the pylabplot module to the table of built-in modules")
 		return false;
 	}
 
-	Py_InitializeFromConfig(&config);
-	PyConfig_Clear(&config);
+	// Initialize Python interpreter (stable ABI)
+	Py_Initialize();
+
+	// Set argv after initialization (stable ABI)
+	PySys_SetArgv(1, argv);
 
 	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
 	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;
@@ -276,8 +277,8 @@ bool PythonScriptRuntime::restoreStream(PyObject* sysModule, const char* streamN
 		return false;
 	}
 
-	DEBUG(Q_FUNC_INFO << ", stream refcnt = " << Py_REFCNT(stream));
-	DEBUG(Q_FUNC_INFO << ", original refcnt = " << Py_REFCNT(original));
+	// DEBUG(Q_FUNC_INFO << ", stream refcnt = " << Py_REFCNT(stream));
+	// DEBUG(Q_FUNC_INFO << ", original refcnt = " << Py_REFCNT(original));
 
 	if (stream == original) { // already restored
 		INFO(Q_FUNC_INFO << ", stream already restored")
@@ -293,8 +294,8 @@ bool PythonScriptRuntime::restoreStream(PyObject* sysModule, const char* streamN
 	}
 
 	Py_DECREF(stream);
-	DEBUG(Q_FUNC_INFO << ", stream refcnt now = " << Py_REFCNT(stream));
-	DEBUG(Q_FUNC_INFO << ", original now = " << Py_REFCNT(original));
+	// DEBUG(Q_FUNC_INFO << ", stream refcnt now = " << Py_REFCNT(stream));
+	// DEBUG(Q_FUNC_INFO << ", original now = " << Py_REFCNT(original));
 
 	PyGILState_Release(gil);
 	return true;
@@ -322,8 +323,8 @@ bool PythonScriptRuntime::unRedirectOutput() {
 		return false;
 	}
 
-	INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
-	INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
+	// INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
+	// INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
 
 	if (sysStdOut)
 		ok &= restoreStream(sysModule, "stdout", sysStdOut);
@@ -333,8 +334,8 @@ bool PythonScriptRuntime::unRedirectOutput() {
 	if (sysStdErr && !stderrEqualStdout)
 		ok &= restoreStream(sysModule, "stderr", sysStdErr);
 
-	INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
-	INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
+	// INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
+	// INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
 
 	Py_DECREF(sysModule);
 	PyGILState_Release(gil);
@@ -615,22 +616,50 @@ bool PythonScriptRuntime::populateVariableInfo() {
 			return false;
 		}
 
-		if (PyModule_Check(valueObj)) {
+		// Use stable ABI: Check type name instead of PyModule_Check
+		auto* typeObj = PyObject_Type(valueObj);
+		if (typeObj) {
+			auto* typeName = PyObject_GetAttrString(typeObj, "__name__");
+			if (typeName) {
+				const QString& name = pyUnicodeToQString(typeName);
+				Py_DECREF(typeName);
+				Py_DECREF(typeObj);
+				if (name == QStringLiteral("module")) {
+					Py_DECREF(item);
+					Py_DECREF(valueObj);
+					continue;
+				}
+			} else {
+				Py_DECREF(typeObj);
+			}
+		}
+
+		// Use stable ABI: PyCallable_Check instead of PyFunction_Check
+		// This filters out functions, methods, and other callables
+		if (PyCallable_Check(valueObj)) {
 			Py_DECREF(item);
 			Py_DECREF(valueObj);
 			continue;
 		}
 
-		if (PyFunction_Check(valueObj)) {
-			Py_DECREF(item);
-			Py_DECREF(valueObj);
-			continue;
-		}
-
-		if (PyType_Check(valueObj)) {
-			Py_DECREF(item);
-			Py_DECREF(valueObj);
-			continue;
+		// Use stable ABI: Check type name instead of PyType_Check
+		{
+			auto* typeObj = PyObject_Type(valueObj);
+			if (typeObj) {
+				auto* typeName = PyObject_GetAttrString(typeObj, "__name__");
+				if (typeName) {
+					const QString& name = pyUnicodeToQString(typeName);
+					Py_DECREF(typeName);
+					Py_DECREF(typeObj);
+					if (name == QStringLiteral("type")) {
+						Py_DECREF(item);
+						Py_DECREF(valueObj);
+						continue;
+					}
+				} else {
+					Py_DECREF(typeObj);
+				}
+			}
 		}
 
 		auto* valueRepr = PyObject_Repr(valueObj);
@@ -654,8 +683,15 @@ bool PythonScriptRuntime::populateVariableInfo() {
 
 		Py_DECREF(valueRepr);
 
+		// Use stable ABI: Py_CompileString + PyEval_EvalCode instead of PyRun_String
 		const QString& typeQuery = QStringLiteral("type(") + key + QStringLiteral(")");
-		auto* typeObj = PyRun_String(qPrintable(typeQuery), Py_eval_input, m_localDict, m_localDict);
+		auto* compiledTypeQuery = Py_CompileString(qPrintable(typeQuery), "<type_check>", Py_eval_input);
+		if (!compiledTypeQuery) {
+			Py_DECREF(items);
+			return false;
+		}
+		typeObj = PyEval_EvalCode(compiledTypeQuery, m_localDict, m_localDict);
+		Py_DECREF(compiledTypeQuery);
 		if (!typeObj) {
 			Py_DECREF(items);
 			return false;

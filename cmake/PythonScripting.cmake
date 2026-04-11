@@ -269,10 +269,10 @@ set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_b
 # shiboken generated sources since they are the ones who require the includes
 set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY INCLUDE_DIRECTORIES ${python_scripting_includes})
 
-# Shiboken internally defines the Py_LIMITED_API to 3.8 and we also define the Py_LIMITED_API but to 3.9 so the compiler warns about a macro redefinition. Now we apply our
-# definition to only our source files
-# Full API needed for PyFunction_Check() and PyRun_String()
-#set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
+# Enable Python Stable ABI (Limited API) for Python 3.9+
+# Note: We only apply this to our source files, not shiboken-generated sources to avoid redefinition warnings
+set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
+message(STATUS "Python Stable ABI enabled (minimum: Python 3.9)")
 
 # PYTHON3_EXECUTABLE_NAME is the python executable name (without path) and is needed when initializing the python scripting interpreter
 get_filename_component(PYTHON3_EXECUTABLE_NAME
