@@ -16,10 +16,10 @@
 #include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <QClipboard>
-#include <cmath>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTimer>
+#include <cmath>
 
 #define INIT_SPREADSHEET                                                                                                                                       \
 	Spreadsheet sheet(QStringLiteral("test 2 cols"), false);                                                                                                   \

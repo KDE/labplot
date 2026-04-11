@@ -40,6 +40,7 @@
 #include "frontend/spreadsheet/SearchReplaceWidget.h"
 #include "frontend/spreadsheet/SortDialog.h"
 #endif
+#include "backend/datasources/filters/AsciiFilter.h"
 #include "frontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "frontend/spreadsheet/GoToDialog.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
@@ -1748,6 +1749,46 @@ void SpreadsheetView::copySelection() {
 	QApplication::clipboard()->setText(output_str);
 }
 
+/*!
+	* Evaluates and upgrades the initial column mode to prevent data truncation by scanning rows beyond the initial sample size
+	* -Integer can be upgraded to BigInt or Double
+	* -BigInt can be upgraded to Double
+	* \brief AsciiFilter::evaluateExtendedColumnMode
+	* \return The final, potentially upgraded column mode     
+*/
+static AbstractColumn::ColumnMode
+evaluateExtendedColumnMode(AbstractColumn::ColumnMode mode, int sampleSize, const QVector<QStringList>& cellTexts, int curCol, const QLocale& numberLocale) {
+	// if already text or date-time
+	if (mode == AbstractColumn::ColumnMode::Text || mode == AbstractColumn::ColumnMode::DateTime || mode == AbstractColumn::ColumnMode::Double)
+        return mode;
+
+	for (int r = sampleSize; r < cellTexts.size(); ++r) {
+		if (curCol >= cellTexts.at(r).count())
+			continue;
+
+		QString cellStr = cellTexts.at(r).at(curCol).trimmed();
+		if (cellStr.isEmpty())
+			continue;
+
+		bool isInt;
+		qint64 intVal = numberLocale.toLongLong(cellStr, &isInt);
+
+		if (isInt) {
+			if (mode == AbstractColumn::ColumnMode::Integer && (intVal > INT_MAX || intVal < INT_MIN))
+				mode = AbstractColumn::ColumnMode::BigInt;
+		} else {
+			bool isDouble;
+			numberLocale.toDouble(cellStr, &isDouble);
+			if (isDouble)
+				mode = AbstractColumn::ColumnMode::Double;
+			else
+				mode = AbstractColumn::ColumnMode::Text;
+			break;
+		}
+	}
+	return mode;
+}
+
 /*
 bool determineLocale(const QString& value, QLocale& locale) {
 	int pointIndex = value.indexOf(QLatin1Char('.'));
@@ -1868,14 +1909,25 @@ void SpreadsheetView::pasteIntoSelection() {
 		QStringList headerValues;
 
 		if (check_row == 0 && cellTexts.size() > 1 && this->isVisible()) {
-		auto reply = QMessageBox::question(this,
+			bool isTextRow = false;
+			QString tempFormat;
+			for (const QString& cell : cellTexts.constFirst()) {
+				if (AbstractFileFilter::columnMode(cell.trimmed(), tempFormat, numberLocale) == AbstractColumn::ColumnMode::Text) {
+					isTextRow = true;
+					break;
+				}
+			}
+
+			if (isTextRow) {
+			auto reply = QMessageBox::question(this,
 			i18n("Import Headers"),
 			i18n("Do you want to use the first row as column headers?"),
 			QMessageBox::Yes | QMessageBox::No);
-			if (reply == QMessageBox::Yes) {
-				firstRowIsHeader = true;
-				headerValues = cellTexts.takeFirst();
-				input_row_count--;
+				if (reply == QMessageBox::Yes) {
+					firstRowIsHeader = true;
+					headerValues = cellTexts.takeFirst();
+					input_row_count--;
+				}
 			}
 		}
 
@@ -1893,43 +1945,33 @@ void SpreadsheetView::pasteIntoSelection() {
 			last_row = first_row + input_row_count - 1;
 			last_col = first_col + input_col_count - 1;
 			const int columnCount = m_spreadsheet->columnCount();
-			// if the target columns that are already available don't have any values yet,
-			// convert their mode to the mode of the data to be pasted and update existing columns 
-			// upgrade their mode if the pasted data requires it (int -> Double)
+
+			// get baseline modes from the first 20 rows
+			const int sampleSize = qMin(20, (int)cellTexts.size());
+			QVector<QStringList> sampleRows = cellTexts.mid(0, sampleSize);
+
+			AsciiFilter::Properties props;
+			props.locale = numberLocale;
+			props.simplifyWhitespaces = true;
+			props.removeQuotes = true;
+			props.intAsDouble = false;
+			props.dateTimeFormat.clear();
+			
+			QString globalDateTimeFormat;
+			QVector<AbstractColumn::ColumnMode> baselineModes = AsciiFilter::determineColumnModes(sampleRows, props, globalDateTimeFormat);
+
+			// Update existing columns
 			for (int c = first_col; c <= last_col && c < columnCount; ++c) {
 				Column* col = m_spreadsheet->column(c);
 				const int curCol = c - first_col;
 				auto currentMode = col->columnMode();
-				auto mode = currentMode; 
-				bool modeChanged = false;
-				QString dateTimeFormat;
-				bool isFirstValue = !col->hasValues(); 
+				auto mode = (curCol < baselineModes.size()) ? baselineModes.at(curCol) : AbstractColumn::ColumnMode::Double;
+				QString dateTimeFormat = globalDateTimeFormat;
+				bool isFirstValue = !col->hasValues();
+				if (isFirstValue)
+					mode = evaluateExtendedColumnMode(mode, sampleSize, cellTexts, curCol, numberLocale);
 
-				// scan all pasted values for this column to prevent decimal truncation
-				for (auto& r : cellTexts) {
-					if (curCol < r.count() && !r.at(curCol).isEmpty()) {
-						QString tempFormat;
-						auto cellMode = AbstractFileFilter::columnMode(r.at(curCol), tempFormat, numberLocale);
-						
-						if (isFirstValue) {
-							mode = cellMode;
-							dateTimeFormat = tempFormat;
-							isFirstValue = false;
-							modeChanged = true;
-						} else {
-							if ((mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt) && 
-								cellMode == AbstractColumn::ColumnMode::Double) {
-								mode = AbstractColumn::ColumnMode::Double;
-								modeChanged = true;
-							} else if (mode == AbstractColumn::ColumnMode::Integer && cellMode == AbstractColumn::ColumnMode::BigInt) {
-								mode = AbstractColumn::ColumnMode::BigInt;
-								modeChanged = true;
-							}
-						}
-					}
-				}
-				// only update the column if we actually needed to upgrade it or if it was empty
-				if (modeChanged && mode != currentMode) {
+				if (mode != currentMode) {
 					col->setColumnMode(mode);
 					if (mode == AbstractColumn::ColumnMode::DateTime && !dateTimeFormat.isEmpty()) {
 						auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
@@ -1941,34 +1983,14 @@ void SpreadsheetView::pasteIntoSelection() {
 			// add columns if necessary
 			if (last_col >= columnCount) {
 				for (int c = 0; c < last_col - (columnCount - 1); ++c) {
-					const int curCol = columnCount - first_col + c;                    
-					QString dateTimeFormat;
-					bool isFirstValue = true;
-					auto mode = AbstractColumn::ColumnMode::Double; 
+					const int curCol = columnCount - first_col + c;
+					QString dateTimeFormat = globalDateTimeFormat;
 
-					// scan all values in the column to prevent decimal truncation
-					for (auto& r : cellTexts) {
-						if (curCol < r.count() && !r.at(curCol).isEmpty()) {
-							QString tempFormat;
-							auto cellMode = AbstractFileFilter::columnMode(r.at(curCol), tempFormat, numberLocale);
-							
-							if (isFirstValue) {
-								mode = cellMode;
-								dateTimeFormat = tempFormat;
-								isFirstValue = false;
-							} else {
-								if ((mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt) && cellMode == AbstractColumn::ColumnMode::Double)
-									mode = AbstractColumn::ColumnMode::Double;
-								else if (mode == AbstractColumn::ColumnMode::Integer && cellMode == AbstractColumn::ColumnMode::BigInt)
-									mode = AbstractColumn::ColumnMode::BigInt;
-							}
-						}
-					}
-					if (isFirstValue)
-						mode = AbstractFileFilter::columnMode(QString(), dateTimeFormat, numberLocale);
+					auto mode = (curCol < baselineModes.size()) ? baselineModes.at(curCol) : AbstractColumn::ColumnMode::Double;
+					mode = evaluateExtendedColumnMode(mode, sampleSize, cellTexts, curCol, numberLocale);
 
-					Column* new_col = new Column(QString::number(curCol), mode);
-					if (mode == AbstractColumn::ColumnMode::DateTime) {
+					Column* new_col = new Column(QString::number(curCol + 1), mode);
+					if (mode == AbstractColumn::ColumnMode::DateTime && !dateTimeFormat.isEmpty()) {
 						auto* filter = static_cast<DateTime2StringFilter*>(new_col->outputFilter());
 						filter->setFormat(dateTimeFormat);
 					}
