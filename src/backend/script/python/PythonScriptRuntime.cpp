@@ -11,7 +11,6 @@
 #include "PythonScriptRuntime.h"
 #include "PythonLogger.h"
 #include "backend/core/Project.h"
-#include "backend/core/Settings.h"
 #include "backend/script/Script.h"
 #include "backend/script/ScriptRuntime.h"
 #include "pyerrors.h"
@@ -152,33 +151,14 @@ bool PythonScriptRuntime::initPython() {
 	if (Py_IsInitialized() && ready)
 		return true;
 
-	// Allow user to override Python runtime location via config file
-	// Python will automatically read the standard PYTHONHOME environment variable during Py_Initialize()
-	KConfigGroup group = Settings::group(QStringLiteral("Python"));
-	QString pythonHome = group.readEntry("PythonHome", QString());
-
-	if (!pythonHome.isEmpty()) {
-		// Validate that the path exists
-		QDir pythonDir(pythonHome);
-		if (pythonDir.exists()) {
-			INFO(Q_FUNC_INFO << ", Using custom Python from: " << pythonHome.toStdString())
-			// Set standard Python environment variable - Python reads this automatically during Py_Initialize()
-			qputenv("PYTHONHOME", pythonHome.toUtf8());
-		} else {
-			WARN("Python home directory does not exist: " << pythonHome.toStdString())
-			WARN("Falling back to default Python")
-		}
-	}
-
 	if (PyImport_AppendInittab(moduleName, PyInit_pylabplot) == -1) {
 		WARN("Failed to add the pylabplot module to the table of built-in modules")
 		return false;
 	}
 
 	// Initialize Python interpreter (stable ABI)
-	// PYTHONHOME env var (set above if configured) guides prefix resolution.
-	// We do NOT call Py_SetProgramName() — it is pending removal in Python 3.14
-	// and not needed when PYTHONHOME is used.
+	// Python auto-detects its prefix. Users can override via the standard
+	// PYTHONHOME environment variable if needed.
 	Py_Initialize();
 
 	// Set sys.argv using stable ABI calls.
