@@ -3873,4 +3873,181 @@ void SpreadsheetTest::testClearColumns() {
 	}
 }
 
+// **********************************************************
+// ************** clearing and data input  ******************
+// **********************************************************
+
+void SpreadsheetTest::testClearCellsValidity() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(1);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+
+	model->setData(model->index(0, 0), QStringLiteral("42"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("100"), Qt::EditRole);
+
+	QVERIFY(c0->isValid(0));
+	QVERIFY(c1->isValid(0));
+
+	model->setData(model->index(0, 0), QString(), Qt::EditRole);
+	model->setData(model->index(0, 1), QString(), Qt::EditRole);
+
+	QVERIFY(!c0->isValid(0));
+	QVERIFY(!c1->isValid(0));
+}
+
+void SpreadsheetTest::testInvalidNumericInput() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(1);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("abc"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("xyz"), Qt::EditRole);
+
+	QVERIFY(!c0->isValid(0));
+	QVERIFY(!c1->isValid(0));
+}
+
+void SpreadsheetTest::testRealZeroInput() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(1);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	c0->setValid(0, false);
+	c1->setValid(0, false);
+
+	QVERIFY(!c0->isValid(0));
+	QVERIFY(!c1->isValid(0));
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("0"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("0"), Qt::EditRole);
+
+	QVERIFY(c0->isValid(0));
+	QCOMPARE(c0->integerAt(0), 0);
+	QCOMPARE(c0->asStringColumn()->textAt(0), QStringLiteral("0"));
+
+	QVERIFY(c1->isValid(0));
+	QCOMPARE(c1->bigIntAt(0), 0);
+	QCOMPARE(c1->asStringColumn()->textAt(0), QStringLiteral("0"));
+}
+
+void SpreadsheetTest::testClearMixedCellsValidity() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(3);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+
+	model->setData(model->index(0, 0), QStringLiteral("10"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("100"), Qt::EditRole);
+	c0->setValid(1, false);
+	c1->setValid(1, false);
+
+	model->setData(model->index(2, 0), QStringLiteral("20"), Qt::EditRole);
+	model->setData(model->index(2, 1), QStringLiteral("200"), Qt::EditRole);
+
+	for (int row = 0; row < 3; ++row) {
+		model->setData(model->index(row, 0), QString(), Qt::EditRole);
+		model->setData(model->index(row, 1), QString(), Qt::EditRole);
+	}
+
+	for (int row = 0; row < 3; ++row) {
+		QVERIFY(!c0->isValid(row));
+		QVERIFY(!c1->isValid(row));
+	}
+}
+void SpreadsheetTest::testClearWholeColumn() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(5);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+
+	for (int row = 0; row < 5; ++row) {
+		model->setData(model->index(row, 0), QString::number(row + 1), Qt::EditRole);
+		model->setData(model->index(row, 1), QString::number((row + 1) * 10), Qt::EditRole);
+	}
+	sheet->clear({c0, c1});
+
+	for (int row = 0; row < 5; ++row) {
+		QVERIFY(!c0->isValid(row));
+		QVERIFY(!c1->isValid(row));
+	}
+	project.undoStack()->undo();
+
+	for (int row = 0; row < 5; ++row) {
+		QVERIFY(c0->isValid(row));
+		QVERIFY(c1->isValid(row));
+		QCOMPARE(c0->integerAt(row), row + 1);
+		QCOMPARE(c1->bigIntAt(row), (row + 1) * 10);
+	}
+}
+void SpreadsheetTest::testUndoRedoCellClear() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* c0 = sheet->column(0);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	auto* model = sheet->model();
+
+	model->setData(model->index(0, 0), QStringLiteral("42"), Qt::EditRole);
+	QVERIFY(c0->isValid(0));
+	QCOMPARE(c0->integerAt(0), 42);
+
+	model->setData(model->index(0, 0), QString(), Qt::EditRole);
+	QVERIFY(!c0->isValid(0));
+
+	project.undoStack()->undo();
+	QVERIFY(c0->isValid(0));
+	QCOMPARE(c0->integerAt(0), 42);
+}
+
 QTEST_MAIN(SpreadsheetTest)
