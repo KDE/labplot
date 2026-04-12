@@ -274,14 +274,6 @@ set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_b
 set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
 message(STATUS "Python Stable ABI enabled (minimum: Python 3.9)")
 
-# PYTHON3_EXECUTABLE_NAME is the python executable name (without path) and is needed when initializing the python scripting interpreter
-get_filename_component(PYTHON3_EXECUTABLE_NAME
-    "${Python3_EXECUTABLE}"
-    NAME
-)
-message(STATUS "Python executable name: ${PYTHON3_EXECUTABLE_NAME}")
-set_property(SOURCE ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp APPEND PROPERTY COMPILE_DEFINITIONS -DPYTHON3_EXECUTABLE=L\"${PYTHON3_EXECUTABLE_NAME}\")
-
 # shiboken generates sources using deprecated code so we remove these deprecation macros to enable the shiboken generated files to compile
 get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)
 list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_BEFORE=]])

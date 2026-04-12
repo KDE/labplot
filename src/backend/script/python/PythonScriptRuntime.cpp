@@ -24,7 +24,6 @@
 #include <basewrapper.h>
 #endif
 
-#include <codecvt>
 #include <string>
 
 #ifdef Q_OS_WIN
@@ -35,9 +34,7 @@
 // PySys_GetObject(), PyImport_AddModule() return a borrowed reference so we create own reference with Py_INCREF() and Py_DECREF(o) when done
 // PyObject_GetAttrString(), Shiboken::Object::newObject() return a new reference
 
-static wchar_t programName[] = L"labplot";
-static wchar_t* argv[] = {programName};
-static const wchar_t* pythonInterpreter = PYTHON3_EXECUTABLE; // PYTHON3_EXECUTABLE is a macro and will be replaced by the actual python executable name
+static const wchar_t programName[] = L"labplot";
 
 // The name of our python extension module: pylabplot
 static const char* moduleName = "pylabplot";
@@ -173,22 +170,26 @@ bool PythonScriptRuntime::initPython() {
 		}
 	}
 
-	// Use stable ABI: Py_SetProgramName + Py_Initialize instead of PyConfig_*
-	// Set program name before initializing (stable ABI)
-	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	INFO(Q_FUNC_INFO << ", Python interpreter: " << converter.to_bytes(pythonInterpreter))
-	Py_SetProgramName(pythonInterpreter);
-
 	if (PyImport_AppendInittab(moduleName, PyInit_pylabplot) == -1) {
 		WARN("Failed to add the pylabplot module to the table of built-in modules")
 		return false;
 	}
 
 	// Initialize Python interpreter (stable ABI)
+	// PYTHONHOME env var (set above if configured) guides prefix resolution.
+	// We do NOT call Py_SetProgramName() — it is pending removal in Python 3.14
+	// and not needed when PYTHONHOME is used.
 	Py_Initialize();
 
-	// Set argv after initialization (stable ABI)
-	PySys_SetArgv(1, argv);
+	// Set sys.argv using stable ABI calls.
+	// PySys_SetArgv() is pending removal in Python 3.14, and PyConfig.argv is not
+	// part of the limited API. Use PySys_SetObject() instead.
+	PyObject* argvList = PyList_New(1);
+	if (argvList) {
+		PyList_SetItem(argvList, 0, PyUnicode_FromWideChar(programName, -1)); // steals reference
+		PySys_SetObject("argv", argvList);
+		Py_DECREF(argvList);
+	}
 
 	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
 	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;

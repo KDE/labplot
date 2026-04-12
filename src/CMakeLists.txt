@@ -946,6 +946,20 @@ target_link_libraries(labplot labplotbackendlib labplotlib labplotnsllib)
 #endif()
 target_compile_definitions(labplot PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
+# macOS: Make Python library path version-independent for stable ABI compatibility.
+# This allows switching Python versions at runtime via PYTHONHOME (e.g., from 3.11 to 3.13)
+# by rewriting the versioned framework path to the "Current" symlink.
+if(APPLE AND ENABLE_PYTHON_SCRIPTING)
+    add_custom_command(TARGET labplot POST_BUILD
+        COMMAND install_name_tool -change
+            "@rpath/Python.framework/Versions/${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/Python"
+            "@rpath/Python.framework/Versions/Current/Python"
+            "$<TARGET_FILE:labplot>"
+        COMMENT "labplot: rewriting Python framework path ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR} -> Current for stable ABI"
+        VERBATIM
+    )
+endif()
+
 if(APPLE) # Apple app package
     set_target_properties(labplot PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
     set_target_properties(labplot PROPERTIES
