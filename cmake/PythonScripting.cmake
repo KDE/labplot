@@ -246,10 +246,23 @@ set(python_scripting_includes
     ${PySide6_PYTHONPATH}/include/QtGui
     ${PySide6_PYTHONPATH}/include/QtCore
 )
+# Derive the stable ABI library from the versioned library path:
+#   Linux:  libpython3.XX.so  -> libpython3.so
+#   Windows: python3XX.lib    -> python3.lib
+#   macOS:  handled via install_name_tool, no change needed
+set(_python_lib ${Python3_LIBRARIES})
+if(NOT APPLE)
+    string(REGEX REPLACE "libpython3\\.[0-9]+\\.so" "libpython3.so" _python_sabi_lib "${Python3_LIBRARIES}")
+    string(REGEX REPLACE "python3[0-9]+\\.lib" "python3.lib" _python_sabi_lib "${_python_sabi_lib}")
+    if(NOT "${_python_sabi_lib}" STREQUAL "${Python3_LIBRARIES}" AND EXISTS "${_python_sabi_lib}")
+        message(STATUS "Python stable ABI library: ${_python_sabi_lib}")
+        set(_python_lib ${_python_sabi_lib})
+    endif()
+endif()
 set(python_scripting_link_libraries
     PySide6::pyside6
     Shiboken6::libshiboken
-    ${Python3_LIBRARIES}
+    ${_python_lib}
 )
 if(PySide6_ABI3_LIBRARY)
     list(APPEND python_scripting_link_libraries ${PySide6_ABI3_LIBRARY})
