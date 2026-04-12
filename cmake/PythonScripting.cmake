@@ -235,6 +235,7 @@ set(shiboken_scripting_generated_sources
 set(python_scripting_backend_sources
     ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp
     ${BACKEND_DIR}/script/python/PythonLogger.cpp
+    ${BACKEND_DIR}/script/python/PythonScriptingInfo.cpp
 )
 get_target_property(PySide6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
 set(python_scripting_includes
