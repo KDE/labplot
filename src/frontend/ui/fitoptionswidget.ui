@@ -261,7 +261,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, parameter uncertainties are scaled with chi^2/dof which makes them independant of the given uncertainties (relative σ).&lt;/p&gt;&lt;p&gt;Otherwise absolute σ is used (no  uncertainties scaling).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, parameter uncertainties are scaled with chi^2/dof which makes them independent of the given uncertainties (relative σ).&lt;/p&gt;&lt;p&gt;Otherwise absolute σ is used (no uncertainties scaling).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>Use relative uncertainties (enable scaling)</string>
