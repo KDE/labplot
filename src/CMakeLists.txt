@@ -185,7 +185,8 @@ if(ENABLE_SCRIPTING)
     list(APPEND GUI_SOURCES
         ${FRONTEND_DIR}/dockwidgets/ScriptDock.cpp
         ${FRONTEND_DIR}/script/ScriptEditor.cpp
-        ${FRONTEND_DIR}/SettingsEditorPage.cpp)
+        ${FRONTEND_DIR}/SettingsEditorPage.cpp
+        ${FRONTEND_DIR}/SettingsScriptingPage.cpp)
 endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -318,7 +319,8 @@ set(UI_SOURCES
 if(ENABLE_SCRIPTING)
     list(APPEND UI_SOURCES
         ${FRONTEND_DIR}/ui/script/scripteditorwidget.ui
-        ${FRONTEND_DIR}/ui/dockwidgets/scriptdock.ui)
+        ${FRONTEND_DIR}/ui/dockwidgets/scriptdock.ui
+        ${FRONTEND_DIR}/ui/settingsscriptingpage.ui)
 endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)

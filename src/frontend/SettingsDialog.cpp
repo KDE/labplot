@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : application settings dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,6 +16,7 @@
 #include "SettingsSpreadsheetPage.h"
 #include "SettingsWorksheetPage.h"
 #ifdef HAVE_SCRIPTING
+#include "SettingsScriptingPage.h"
 #include "SettingsEditorPage.h"
 #endif
 
@@ -96,6 +97,12 @@ SettingsDialog::SettingsDialog(QWidget* parent, const QLocale& locale)
 #endif
 
 #ifdef HAVE_SCRIPTING
+	// SettingsScirptingPage as the parent page for Scripting and SriptEditorPage as a subpage of it:
+	m_scriptingPage = new SettingsScriptingPage(this);
+	KPageWidgetItem* scriptingPageItem = addPage(m_scriptingPage, i18n("Scripting"));
+	scriptingPageItem->setIcon(QIcon::fromTheme(QLatin1String("applications-development")));
+	connect(m_scriptingPage, &SettingsScriptingPage::settingsChanged, this, &SettingsDialog::changed);
+
 	m_editorRootPage = new SettingsEditorPage(this);
 	m_editorRootItem = addPage(m_editorRootPage, i18n("Script Editor"));
 	m_editorRootPage->addSubPages(m_editorRootItem, this);
