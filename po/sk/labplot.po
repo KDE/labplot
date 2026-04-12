@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-10 00:40+0000\n"
+"POT-Creation-Date: 2026-04-12 00:39+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -11013,7 +11013,7 @@ msgstr ""
 msgid "Fit model not specified!"
 msgstr "Model preloženia nie je zadaný!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3167
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3170
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
@@ -20826,7 +20826,7 @@ msgstr "Veľkosť:"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:196
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:209
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:439
-#: src/frontend/ui/fitoptionswidget.ui:248 src/frontend/ui/labelwidget.ui:126
+#: src/frontend/ui/fitoptionswidget.ui:119 src/frontend/ui/labelwidget.ui:126
 #: src/frontend/ui/labelwidget.ui:181 src/frontend/ui/labelwidget.ui:212
 #: src/frontend/ui/labelwidget.ui:352 src/frontend/ui/labelwidget.ui:399
 #: src/frontend/ui/labelwidget.ui:665 src/frontend/ui/symbolwidget.ui:293
@@ -24806,32 +24806,80 @@ msgstr "Usporiadanie bajtov:"
 msgid "Examples:"
 msgstr "Veľkosť vzorky"
 
-#. i18n: ectx: property (toolTip), widget (QCheckBox, cbPreview)
+#. i18n: ectx: property (toolTip), widget (QLabel, lEvaluatedPoints)
+#: src/frontend/ui/fitoptionswidget.ui:50
+#, kde-format
+msgid "Number of points to use when evaluating the final fit function"
+msgstr "Počet bodov na použitie pri vyhodnocovaní konečnej funkcie preloženia"
+
+#. i18n: ectx: property (text), widget (QLabel, lEvaluatedPoints)
 #: src/frontend/ui/fitoptionswidget.ui:53
+#, kde-format
+msgid "Evaluated points:"
+msgstr "Vyhodnotiť"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/fitoptionswidget.ui:60
+#, kde-format
+msgid "Confidence Interval"
+msgstr "Interval spoľahlivosti"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoEvalRange)
+#: src/frontend/ui/fitoptionswidget.ui:67
+#, kde-format
+msgid "Select the range to evaluate the resulting fit function"
+msgstr "Vybrať rozsah na vyhodnotenie výslednej funkcie preloženia"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbAutoEvalRange)
+#: src/frontend/ui/fitoptionswidget.ui:70
+#, kde-format
+msgid "Auto evaluation range"
+msgstr "Automatický rozsah vyhodnotenia"
+
+#. i18n: ectx: property (text), widget (QLabel, lRobust)
+#: src/frontend/ui/fitoptionswidget.ui:96
+#, kde-format
+msgid "Robust fit:"
+msgstr "Robustné preloženie:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, cbPreview)
+#: src/frontend/ui/fitoptionswidget.ui:103
 #, kde-format
 msgid "show the fit function with the given start parameters"
 msgstr "zobraziť funkciu preloženia s danými počiatočnými parametrami"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPreview)
-#: src/frontend/ui/fitoptionswidget.ui:56
+#: src/frontend/ui/fitoptionswidget.ui:106
 #, kde-format
 msgid "Preview fit function"
 msgstr "funkcie"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lEps)
-#: src/frontend/ui/fitoptionswidget.ui:66
+#. i18n: ectx: property (text), widget (QLabel, lXRangeDateTime)
+#. i18n: ectx: property (text), widget (QLabel, lEvalRange)
+#. i18n: ectx: property (text), widget (QLabel, lEvalRangeDateTime)
+#. i18n: ectx: property (text), widget (QLabel, lXRange)
+#: src/frontend/ui/fitoptionswidget.ui:132
+#: src/frontend/ui/fitoptionswidget.ui:139
+#: src/frontend/ui/fitoptionswidget.ui:146
+#: src/frontend/ui/fitoptionswidget.ui:199
 #, kde-format
-msgid "Specify the tolerance for the fit algorithm convergence"
-msgstr "Zadajte toleranciu pre konvergenciu algoritmu preloženia"
+msgid ".."
+msgstr ".."
 
-#. i18n: ectx: property (text), widget (QLabel, lEps)
-#: src/frontend/ui/fitoptionswidget.ui:69
+#. i18n: ectx: property (toolTip), widget (QLabel, lMaxIterations)
+#: src/frontend/ui/fitoptionswidget.ui:163
 #, kde-format
-msgid "Tolerance:"
-msgstr "Tolerancia"
+msgid "Specify maximum number of iterations for the fit algorithm"
+msgstr "Zadajte maximálny počet iterácií pre algoritmus preloženia"
+
+#. i18n: ectx: property (text), widget (QLabel, lMaxIterations)
+#: src/frontend/ui/fitoptionswidget.ui:166
+#, kde-format
+msgid "Max. iterations:"
+msgstr "Iterácie:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUseDataErrors)
-#: src/frontend/ui/fitoptionswidget.ui:76
+#: src/frontend/ui/fitoptionswidget.ui:173
 #, kde-format
 msgid ""
 "This option can be used to turn on and off the usage of given data "
@@ -24841,73 +24889,37 @@ msgstr ""
 "dát pri prekladaní."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUseDataErrors)
-#: src/frontend/ui/fitoptionswidget.ui:79
+#: src/frontend/ui/fitoptionswidget.ui:176
 #, kde-format
 msgid "Use given data uncertainties"
 msgstr "Použiť dané neistoty dát"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lEvaluatedPoints)
-#: src/frontend/ui/fitoptionswidget.ui:95
-#, kde-format
-msgid "Number of points to use when evaluating the final fit function"
-msgstr "Počet bodov na použitie pri vyhodnocovaní konečnej funkcie preloženia"
-
-#. i18n: ectx: property (text), widget (QLabel, lEvaluatedPoints)
-#: src/frontend/ui/fitoptionswidget.ui:98
-#, kde-format
-msgid "Evaluated points:"
-msgstr "Vyhodnotiť"
-
-#. i18n: ectx: property (text), widget (QLabel, lEvalRange)
-#. i18n: ectx: property (text), widget (QLabel, lXRange)
-#. i18n: ectx: property (text), widget (QLabel, lXRangeDateTime)
-#. i18n: ectx: property (text), widget (QLabel, lEvalRangeDateTime)
-#: src/frontend/ui/fitoptionswidget.ui:105
-#: src/frontend/ui/fitoptionswidget.ui:125
-#: src/frontend/ui/fitoptionswidget.ui:221
-#: src/frontend/ui/fitoptionswidget.ui:228
-#, kde-format
-msgid ".."
-msgstr ".."
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lMaxIterations)
-#: src/frontend/ui/fitoptionswidget.ui:112
-#, kde-format
-msgid "Specify maximum number of iterations for the fit algorithm"
-msgstr "Zadajte maximálny počet iterácií pre algoritmus preloženia"
-
-#. i18n: ectx: property (text), widget (QLabel, lMaxIterations)
-#: src/frontend/ui/fitoptionswidget.ui:115
-#, kde-format
-msgid "Max. iterations:"
-msgstr "Iterácie:"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoRange)
-#: src/frontend/ui/fitoptionswidget.ui:141
+#: src/frontend/ui/fitoptionswidget.ui:186
 #, kde-format
 msgid "Select range of data to use for fitting"
 msgstr "Vybrať rozsah dát na použitie pre preloženie"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoRange)
-#: src/frontend/ui/fitoptionswidget.ui:144
+#: src/frontend/ui/fitoptionswidget.ui:189
 #, kde-format
 msgid "Auto fit range"
 msgstr "X rozsah:"
 
-#. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoEvalRange)
-#: src/frontend/ui/fitoptionswidget.ui:154
+#. i18n: ectx: property (toolTip), widget (QLabel, lEps)
+#: src/frontend/ui/fitoptionswidget.ui:216
 #, kde-format
-msgid "Select the range to evaluate the resulting fit function"
-msgstr "Vybrať rozsah na vyhodnotenie výslednej funkcie preloženia"
+msgid "Specify the tolerance for the fit algorithm convergence"
+msgstr "Zadajte toleranciu pre konvergenciu algoritmu preloženia"
 
-#. i18n: ectx: property (text), widget (QCheckBox, cbAutoEvalRange)
-#: src/frontend/ui/fitoptionswidget.ui:157
+#. i18n: ectx: property (text), widget (QLabel, lEps)
+#: src/frontend/ui/fitoptionswidget.ui:219
 #, kde-format
-msgid "Auto evaluation range"
-msgstr "Automatický rozsah vyhodnotenia"
+msgid "Tolerance:"
+msgstr "Tolerancia"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUseResults)
-#: src/frontend/ui/fitoptionswidget.ui:167
+#: src/frontend/ui/fitoptionswidget.ui:226
 #, kde-format
 msgid "If selected, the resulting fit parameter are set as new start values."
 msgstr ""
@@ -24915,22 +24927,26 @@ msgstr ""
 "hodnoty."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUseResults)
-#: src/frontend/ui/fitoptionswidget.ui:170
+#: src/frontend/ui/fitoptionswidget.ui:229
 #, kde-format
 msgid "Use results as new start values"
 msgstr "Použiť výsledky ako nové počiatočné hodnoty"
 
-#. i18n: ectx: property (text), widget (QLabel, lRobust)
-#: src/frontend/ui/fitoptionswidget.ui:183
+#. i18n: ectx: property (toolTip), widget (QCheckBox, cbErrorScaling)
+#: src/frontend/ui/fitoptionswidget.ui:264
 #, kde-format
-msgid "Robust fit:"
-msgstr "Robustné preloženie:"
+msgid ""
+"<html><head/><body><p>When enabled, parameter uncertainties are scaled with "
+"chi^2/dof which makes them independant of the given uncertainties (relative "
+"σ).</p><p>Otherwise absolute σ is used (no  uncertainties scaling).</p></"
+"body></html>"
+msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/fitoptionswidget.ui:235
+#. i18n: ectx: property (text), widget (QCheckBox, cbErrorScaling)
+#: src/frontend/ui/fitoptionswidget.ui:267
 #, kde-format
-msgid "Confidence Interval"
-msgstr "Interval spoľahlivosti"
+msgid "Use relative uncertainties (enable scaling)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lUnit)
 #: src/frontend/ui/fitsheadereditaddunitwidget.ui:17

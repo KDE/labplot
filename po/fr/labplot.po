@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-10 00:40+0000\n"
+"POT-Creation-Date: 2026-04-12 00:39+0000\n"
 "PO-Revision-Date: 2026-01-23 07:59+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
@@ -11223,7 +11223,7 @@ msgstr ""
 msgid "Fit model not specified!"
 msgstr "Modèle d'ajustement non spécifié !"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3167
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3170
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
@@ -21250,7 +21250,7 @@ msgstr "Taille : "
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:196
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:209
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:439
-#: src/frontend/ui/fitoptionswidget.ui:248 src/frontend/ui/labelwidget.ui:126
+#: src/frontend/ui/fitoptionswidget.ui:119 src/frontend/ui/labelwidget.ui:126
 #: src/frontend/ui/labelwidget.ui:181 src/frontend/ui/labelwidget.ui:212
 #: src/frontend/ui/labelwidget.ui:352 src/frontend/ui/labelwidget.ui:399
 #: src/frontend/ui/labelwidget.ui:665 src/frontend/ui/symbolwidget.ui:293
@@ -25246,34 +25246,85 @@ msgstr "Ordre du polynôme :"
 msgid "Examples:"
 msgstr "Exemples : "
 
-#. i18n: ectx: property (toolTip), widget (QCheckBox, cbPreview)
+#. i18n: ectx: property (toolTip), widget (QLabel, lEvaluatedPoints)
+#: src/frontend/ui/fitoptionswidget.ui:50
+#, kde-format
+msgid "Number of points to use when evaluating the final fit function"
+msgstr ""
+"Nombre de points à utiliser lors de l'évaluation de la fonction d'ajustement "
+"final."
+
+#. i18n: ectx: property (text), widget (QLabel, lEvaluatedPoints)
 #: src/frontend/ui/fitoptionswidget.ui:53
+#, kde-format
+msgid "Evaluated points:"
+msgstr "Points évalués :"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/fitoptionswidget.ui:60
+#, kde-format
+msgid "Confidence Interval"
+msgstr "Intervalle de confiance"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoEvalRange)
+#: src/frontend/ui/fitoptionswidget.ui:67
+#, kde-format
+msgid "Select the range to evaluate the resulting fit function"
+msgstr ""
+"Sélectionner l'intervalle à évaluer pour la fonction de résultat d'ajustement"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbAutoEvalRange)
+#: src/frontend/ui/fitoptionswidget.ui:70
+#, kde-format
+msgid "Auto evaluation range"
+msgstr "Intervalle automatique d'évaluation"
+
+#. i18n: ectx: property (text), widget (QLabel, lRobust)
+#: src/frontend/ui/fitoptionswidget.ui:96
+#, kde-format
+msgid "Robust fit:"
+msgstr "Adaptation robuste :"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, cbPreview)
+#: src/frontend/ui/fitoptionswidget.ui:103
 #, kde-format
 msgid "show the fit function with the given start parameters"
 msgstr ""
 "Afficher la fonction d'ajustement avec les paramètres fournis de démarrage."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPreview)
-#: src/frontend/ui/fitoptionswidget.ui:56
+#: src/frontend/ui/fitoptionswidget.ui:106
 #, kde-format
 msgid "Preview fit function"
 msgstr "Faire un aperçu de la fonction d'ajustement"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lEps)
-#: src/frontend/ui/fitoptionswidget.ui:66
+#. i18n: ectx: property (text), widget (QLabel, lXRangeDateTime)
+#. i18n: ectx: property (text), widget (QLabel, lEvalRange)
+#. i18n: ectx: property (text), widget (QLabel, lEvalRangeDateTime)
+#. i18n: ectx: property (text), widget (QLabel, lXRange)
+#: src/frontend/ui/fitoptionswidget.ui:132
+#: src/frontend/ui/fitoptionswidget.ui:139
+#: src/frontend/ui/fitoptionswidget.ui:146
+#: src/frontend/ui/fitoptionswidget.ui:199
 #, kde-format
-msgid "Specify the tolerance for the fit algorithm convergence"
-msgstr ""
-"Spécifier la tolérance pour la convergence de l'algorithme d'ajustement."
+msgid ".."
+msgstr ".."
 
-#. i18n: ectx: property (text), widget (QLabel, lEps)
-#: src/frontend/ui/fitoptionswidget.ui:69
+#. i18n: ectx: property (toolTip), widget (QLabel, lMaxIterations)
+#: src/frontend/ui/fitoptionswidget.ui:163
 #, kde-format
-msgid "Tolerance:"
-msgstr "Tolérance :"
+msgid "Specify maximum number of iterations for the fit algorithm"
+msgstr ""
+"Spécifier le nombre maximum d'itérations pour l'algorithme d'ajustement."
+
+#. i18n: ectx: property (text), widget (QLabel, lMaxIterations)
+#: src/frontend/ui/fitoptionswidget.ui:166
+#, kde-format
+msgid "Max. iterations:"
+msgstr "Itérations maximum :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUseDataErrors)
-#: src/frontend/ui/fitoptionswidget.ui:76
+#: src/frontend/ui/fitoptionswidget.ui:173
 #, kde-format
 msgid ""
 "This option can be used to turn on and off the usage of given data "
@@ -25283,77 +25334,38 @@ msgstr ""
 "incertitudes sur les données lors de l'ajustement."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUseDataErrors)
-#: src/frontend/ui/fitoptionswidget.ui:79
+#: src/frontend/ui/fitoptionswidget.ui:176
 #, kde-format
 msgid "Use given data uncertainties"
 msgstr "Utiliser les incertitudes fournies sur données."
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lEvaluatedPoints)
-#: src/frontend/ui/fitoptionswidget.ui:95
-#, kde-format
-msgid "Number of points to use when evaluating the final fit function"
-msgstr ""
-"Nombre de points à utiliser lors de l'évaluation de la fonction d'ajustement "
-"final."
-
-#. i18n: ectx: property (text), widget (QLabel, lEvaluatedPoints)
-#: src/frontend/ui/fitoptionswidget.ui:98
-#, kde-format
-msgid "Evaluated points:"
-msgstr "Points évalués :"
-
-#. i18n: ectx: property (text), widget (QLabel, lEvalRange)
-#. i18n: ectx: property (text), widget (QLabel, lXRange)
-#. i18n: ectx: property (text), widget (QLabel, lXRangeDateTime)
-#. i18n: ectx: property (text), widget (QLabel, lEvalRangeDateTime)
-#: src/frontend/ui/fitoptionswidget.ui:105
-#: src/frontend/ui/fitoptionswidget.ui:125
-#: src/frontend/ui/fitoptionswidget.ui:221
-#: src/frontend/ui/fitoptionswidget.ui:228
-#, kde-format
-msgid ".."
-msgstr ".."
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lMaxIterations)
-#: src/frontend/ui/fitoptionswidget.ui:112
-#, kde-format
-msgid "Specify maximum number of iterations for the fit algorithm"
-msgstr ""
-"Spécifier le nombre maximum d'itérations pour l'algorithme d'ajustement."
-
-#. i18n: ectx: property (text), widget (QLabel, lMaxIterations)
-#: src/frontend/ui/fitoptionswidget.ui:115
-#, kde-format
-msgid "Max. iterations:"
-msgstr "Itérations maximum :"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoRange)
-#: src/frontend/ui/fitoptionswidget.ui:141
+#: src/frontend/ui/fitoptionswidget.ui:186
 #, kde-format
 msgid "Select range of data to use for fitting"
 msgstr "Sélectionner l'intervalle de données à utiliser pour l'ajustement."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoRange)
-#: src/frontend/ui/fitoptionswidget.ui:144
+#: src/frontend/ui/fitoptionswidget.ui:189
 #, kde-format
 msgid "Auto fit range"
 msgstr "Intervalle à ajustement automatique"
 
-#. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoEvalRange)
-#: src/frontend/ui/fitoptionswidget.ui:154
+#. i18n: ectx: property (toolTip), widget (QLabel, lEps)
+#: src/frontend/ui/fitoptionswidget.ui:216
 #, kde-format
-msgid "Select the range to evaluate the resulting fit function"
+msgid "Specify the tolerance for the fit algorithm convergence"
 msgstr ""
-"Sélectionner l'intervalle à évaluer pour la fonction de résultat d'ajustement"
+"Spécifier la tolérance pour la convergence de l'algorithme d'ajustement."
 
-#. i18n: ectx: property (text), widget (QCheckBox, cbAutoEvalRange)
-#: src/frontend/ui/fitoptionswidget.ui:157
+#. i18n: ectx: property (text), widget (QLabel, lEps)
+#: src/frontend/ui/fitoptionswidget.ui:219
 #, kde-format
-msgid "Auto evaluation range"
-msgstr "Intervalle automatique d'évaluation"
+msgid "Tolerance:"
+msgstr "Tolérance :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUseResults)
-#: src/frontend/ui/fitoptionswidget.ui:167
+#: src/frontend/ui/fitoptionswidget.ui:226
 #, kde-format
 msgid "If selected, the resulting fit parameter are set as new start values."
 msgstr ""
@@ -25361,22 +25373,26 @@ msgstr ""
 "sont définis comme de nouvelles valeurs de départ."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUseResults)
-#: src/frontend/ui/fitoptionswidget.ui:170
+#: src/frontend/ui/fitoptionswidget.ui:229
 #, kde-format
 msgid "Use results as new start values"
 msgstr "Utiliser les résultats comme nouvelles valeurs de départ"
 
-#. i18n: ectx: property (text), widget (QLabel, lRobust)
-#: src/frontend/ui/fitoptionswidget.ui:183
+#. i18n: ectx: property (toolTip), widget (QCheckBox, cbErrorScaling)
+#: src/frontend/ui/fitoptionswidget.ui:264
 #, kde-format
-msgid "Robust fit:"
-msgstr "Adaptation robuste :"
+msgid ""
+"<html><head/><body><p>When enabled, parameter uncertainties are scaled with "
+"chi^2/dof which makes them independant of the given uncertainties (relative "
+"σ).</p><p>Otherwise absolute σ is used (no  uncertainties scaling).</p></"
+"body></html>"
+msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/fitoptionswidget.ui:235
+#. i18n: ectx: property (text), widget (QCheckBox, cbErrorScaling)
+#: src/frontend/ui/fitoptionswidget.ui:267
 #, kde-format
-msgid "Confidence Interval"
-msgstr "Intervalle de confiance"
+msgid "Use relative uncertainties (enable scaling)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lUnit)
 #: src/frontend/ui/fitsheadereditaddunitwidget.ui:17
