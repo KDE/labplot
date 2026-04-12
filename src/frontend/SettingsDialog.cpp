@@ -193,6 +193,7 @@ void SettingsDialog::applySettings() {
 #endif
 	changes << m_datasetsPage->applySettings();
 #ifdef HAVE_SCRIPTING
+	changes << m_scriptingPage->applySettings();
 	changes << m_editorRootPage->applySettings();
 #endif
 
@@ -218,6 +219,7 @@ void SettingsDialog::restoreDefaults() {
 #endif
 	m_datasetsPage->restoreDefaults();
 #ifdef HAVE_SCRIPTING
+	m_scriptingPage->restoreDefaults();
 	m_editorRootPage->restoreDefaults();
 #endif
 }

@@ -218,6 +218,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/settingsgeneralpage.ui
     ${FRONTEND_DIR}/ui/settingsspreadsheetpage.ui
     ${FRONTEND_DIR}/ui/settingsworksheetpage.ui
+    ${FRONTEND_DIR}/ui/settingsscriptingpage.ui
 #     ${FRONTEND_DIR}/ui/settingswelcomepage.ui
     ${FRONTEND_DIR}/ui/settingsdatasetspage.ui
     ${FRONTEND_DIR}/ui/settingsprintingpage.ui

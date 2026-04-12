@@ -64,7 +64,7 @@ private:
 	KPageWidgetItem* m_datasetsPageItem{nullptr};
 
 #ifdef HAVE_SCRIPTING
-	SettingsScriptingPage* m_scriptinPage{nullptr};
+	SettingsScriptingPage* m_scriptingPage{nullptr};
 	KPageWidgetItem* m_scriptingPageItem{nullptr};
 
 	SettingsEditorPage* m_editorRootPage{nullptr};

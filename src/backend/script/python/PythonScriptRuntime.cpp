@@ -11,8 +11,11 @@
 #include "PythonScriptRuntime.h"
 #include "PythonLogger.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/script/Script.h"
 #include "backend/script/ScriptRuntime.h"
+
+#include <KConfigGroup>
 #include "pyerrors.h"
 #include "pylabplot/pylabplot_python.h"
 
@@ -169,6 +172,19 @@ bool PythonScriptRuntime::initPython() {
 		PyList_SetItem(argvList, 0, PyUnicode_FromWideChar(programName, -1)); // steals reference
 		PySys_SetObject("argv", argvList);
 		Py_DECREF(argvList);
+	}
+
+	// Add the user-configured virtual environment's site-packages to sys.path
+	// so that packages from that environment are available for import.
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
+	const QString sitePackages = group.readEntry(QLatin1String("PythonEnvironment"), QString());
+	if (!sitePackages.isEmpty()) {
+		PyObject* path = PySys_GetObject("path"); // borrowed reference
+		if (path) {
+			PyObject* pySitePackages = PyUnicode_FromString(sitePackages.toUtf8().constData());
+			PyList_Insert(path, 1, pySitePackages);
+			Py_DECREF(pySitePackages);
+		}
 	}
 
 	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
