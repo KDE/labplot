@@ -1842,6 +1842,13 @@ bool Column::isValid(int row) const {
 	}
 	return AbstractColumn::isValid(row);
 }
+void Column::setValid(int row, bool valid) {
+	if (columnMode() == AbstractColumn::ColumnMode::Integer || columnMode() == AbstractColumn::ColumnMode::BigInt) {
+		if (row >= d->m_valid.size())
+			d->m_valid.resize(row + 1);
+		d->m_valid.setBit(row, valid);
+	}
+}
 
 /*!
  * \brief Set all rows as valid

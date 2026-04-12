@@ -67,6 +67,7 @@ public:
 
 	bool isReadOnly() const override;
 	bool isValid(int row) const override;
+	void setValid(int row, bool valid);
 	void setAllValid();
 	void resizeTo(int);
 	int rowCount() const override;

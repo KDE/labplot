@@ -3482,8 +3482,11 @@ void SpreadsheetView::clearSelectedCells() {
 			column->clear();
 		} else {
 			for (const auto& index : indexes) {
-				if (index.column() == colIndex)
+				if (index.column() == colIndex) {
 					column->asStringColumn()->setTextAt(index.row(), QString());
+					if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt)
+						column->setValid(index.row(), false);
+				}
 			}
 		}
 
