@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-12 00:39+0000\n"
+"POT-Creation-Date: 2026-04-13 00:39+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -6450,13 +6450,13 @@ msgid "unexpected end of document"
 msgstr "atingiu-se o fim do ficheiro inesperadamente"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3800
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3803
 #, kde-format
 msgid "FITS image"
 msgstr "Imagem do FITS"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3800
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3803
 #, kde-format
 msgid "FITS table"
 msgstr "Tabela do FITS"
@@ -12927,16 +12927,16 @@ msgid "Curve"
 msgstr "Curva"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4043
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4098
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4046
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4101
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to export"
 msgstr "Não foi possível exportar"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4043
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4098
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4046
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4101
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -20702,18 +20702,18 @@ msgstr "%1: remover as linhas seleccionadas"
 msgid "%1: clear selected cells"
 msgstr "%1: limpar as células seleccionadas"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3735
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3738
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3744
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3747
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cells"
 msgid "Selected: %1 cells"
 msgstr "%1: cortar as células seleccionadas"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3763
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3766
 #, fuzzy, kde-format
 #| msgid "Arrow"
 msgid "row"
@@ -20721,7 +20721,7 @@ msgid_plural "rows"
 msgstr[0] "Seta"
 msgstr[1] "Seta"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3764
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "column"
@@ -20729,79 +20729,79 @@ msgid_plural "columns"
 msgstr[0] "Coluna"
 msgstr[1] "Coluna"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3768
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
 #, fuzzy, kde-format
 #| msgid "%1: mask values"
 msgid "masked value"
 msgstr "%1: mascarar os valores"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
 #, fuzzy, kde-format
 #| msgid "%1: mask values"
 msgid "masked values"
 msgstr "%1: mascarar os valores"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3770
 #, fuzzy, kde-format
 #| msgid "bin values"
 msgid "missing value"
 msgstr "valores dos grupos"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3770
 #, fuzzy, kde-format
 #| msgid "bin values"
 msgid "missing values"
 msgstr "valores dos grupos"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3771
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3768
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3771
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3772
 #, fuzzy, kde-format
 #| msgid "1"
 msgid "%1"
 msgstr "1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3772
 #, kde-format
 msgid ", "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3773
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3776
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3783
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3786
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3862
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3865
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Imprimir a Folha de Cálculo"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4477
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4480
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Não foi possível criar a base de dados SQLite %1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4509
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4512
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Não foi possível criar uma tabela na base de dados SQLite %1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4564
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4567
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Não foi possível inserir valores na tabela."
@@ -25581,8 +25581,8 @@ msgstr "Usar os resultados como novos valores iniciais"
 #, kde-format
 msgid ""
 "<html><head/><body><p>When enabled, parameter uncertainties are scaled with "
-"chi^2/dof which makes them independant of the given uncertainties (relative "
-"σ).</p><p>Otherwise absolute σ is used (no  uncertainties scaling).</p></"
+"chi^2/dof which makes them independent of the given uncertainties (relative "
+"σ).</p><p>Otherwise absolute σ is used (no uncertainties scaling).</p></"
 "body></html>"
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-12 00:39+0000\n"
+"POT-Creation-Date: 2026-04-13 00:39+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -6326,13 +6326,13 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3800
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3803
 #, fuzzy, kde-format
 msgid "FITS image"
 msgstr "image"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3800
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3803
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -12742,8 +12742,8 @@ msgid "Curve"
 msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4043
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4098
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4046
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4101
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -12751,8 +12751,8 @@ msgid "Failed to export"
 msgstr "開啟失敗"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4043
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4098
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4046
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4101
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -20348,101 +20348,101 @@ msgstr ""
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3735
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3738
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3744
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3747
 #, fuzzy, kde-format
 #| msgid "Source name"
 msgid "Selected: %1 cells"
 msgstr "來源名稱"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3763
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3766
 #, fuzzy, kde-format
 #| msgid "Start row:"
 msgid "row"
 msgid_plural "rows"
 msgstr[0] "開始列："
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3764
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "欄"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3768
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
 #, fuzzy, kde-format
 msgid "masked value"
 msgstr "值"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
 #, fuzzy, kde-format
 msgid "masked values"
 msgstr "值"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3770
 #, fuzzy, kde-format
 msgid "missing value"
 msgstr "位置"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3767
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3770
 #, fuzzy, kde-format
 msgid "missing values"
 msgstr "位置"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3771
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3768
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3771
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3772
 #, fuzzy, kde-format
 #| msgid "A1"
 msgid "%1"
 msgstr "A1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3769
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3772
 #, kde-format
 msgid ", "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3773
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3776
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3783
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3786
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3862
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3865
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "列印試算表"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4477
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4480
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4509
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4512
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "開啟失敗"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4564
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4567
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -25293,8 +25293,8 @@ msgstr ""
 #, kde-format
 msgid ""
 "<html><head/><body><p>When enabled, parameter uncertainties are scaled with "
-"chi^2/dof which makes them independant of the given uncertainties (relative "
-"σ).</p><p>Otherwise absolute σ is used (no  uncertainties scaling).</p></"
+"chi^2/dof which makes them independent of the given uncertainties (relative "
+"σ).</p><p>Otherwise absolute σ is used (no uncertainties scaling).</p></"
 "body></html>"
 msgstr ""
 
