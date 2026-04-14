@@ -653,7 +653,7 @@ foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj lab
         KF${KF_MAJOR_VERSION}::Archive
         KF${KF_MAJOR_VERSION}::TextWidgets
         KF${KF_MAJOR_VERSION}::CoreAddons
-        ads::qt${QT_VERSION_MAJOR}advanceddocking
+        qt${QT_VERSION_MAJOR}advanceddocking
     )
 
     # Precompiled headers: parse common Qt/KF and LabPlot lib/ headers once per OBJECT lib.
@@ -724,7 +724,7 @@ target_link_libraries(labplotbackendlib
     ${LIBCERF_LIBRARIES}
     ${MATIO_LIBRARIES}
     ${READSTAT_LIBRARIES}
-    ads::qt${QT_VERSION_MAJOR}advanceddocking
+    qt${QT_VERSION_MAJOR}advanceddocking
 )
 
 if(ENABLE_SCRIPTING)
@@ -759,7 +759,7 @@ target_link_libraries(labplotlib
     KF${KF_MAJOR_VERSION}::Archive    # KFilterDev
     KF${KF_MAJOR_VERSION}::TextWidgets    # KTextEdit
     ${Poppler_LIBRARIES}
-    ads::qt${QT_VERSION_MAJOR}advanceddocking
+    qt${QT_VERSION_MAJOR}advanceddocking
 )
 
 if(ENABLE_SCRIPTING)

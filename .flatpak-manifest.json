@@ -230,22 +230,6 @@
                 }
             ]
         },
-        {
-            "name": "Qt-Advanced-Docking-System",
-            "buildsystem": "cmake-ninja",
-            "config-opts": [
-                "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=6",
-                "-DCMAKE_CXX_FLAGS=-I/usr/include/QtGui/6.10.2/QtGui"
-            ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git",
-                    "commit": "a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6"
-                }
-            ]
-        },
 	{
             "name": "discount",
             "buildsystem": "simple",

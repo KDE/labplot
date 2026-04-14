@@ -214,9 +214,13 @@ if(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
     target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"git\")
 elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
     # https://cmake.org/cmake/help/latest/variable/CMAKE_PROJECT_INCLUDE.html
+    # src/3rdparty/cmake/QtADS_config.cmake
     set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
     set(ADS_VERSION ${labplot_VERSION})
     add_subdirectory(Qt-Advanced-Docking-System EXCLUDE_FROM_ALL)
+    target_include_directories(labplotlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
+    target_include_directories(labplot_core_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
+    target_include_directories(labplot_data_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
 
     get_target_property(QADS_VERSION qt${QT_VERSION_MAJOR}advanceddocking VERSION)
     message(STATUS "QADS VERSION ${QADS_VERSION}")
