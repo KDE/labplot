@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-13 00:39+0000\n"
-"PO-Revision-Date: 2026-04-06 19:49+0300\n"
+"PO-Revision-Date: 2026-04-13 21:03+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -24956,12 +24956,16 @@ msgid ""
 "σ).</p><p>Otherwise absolute σ is used (no uncertainties scaling).</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Etkinleştirildiğinde, parametre kesinsizlikleri chi^2/"
+"dof ile ölçeklenir; bu da onları verilen kesinsizliklerden bağımsız kılar "
+"(göreceli σ).</p><p>Aksi taktirde σ mutlağı kullanılır (hiçbir kesinsizlik "
+"ölçeklenmez).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbErrorScaling)
 #: src/frontend/ui/fitoptionswidget.ui:267
 #, kde-format
 msgid "Use relative uncertainties (enable scaling)"
-msgstr ""
+msgstr "Göreceli kesinsizlikler kullan (ölçeklendirmeyi etkinleştir)"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnit)
 #: src/frontend/ui/fitsheadereditaddunitwidget.ui:17

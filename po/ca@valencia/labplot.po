@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-13 00:39+0000\n"
-"PO-Revision-Date: 2026-04-06 09:52+0200\n"
+"PO-Revision-Date: 2026-04-13 08:54+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -25247,12 +25247,16 @@ msgid ""
 "σ).</p><p>Otherwise absolute σ is used (no uncertainties scaling).</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Quan es marca, les incerteses de paràmetres s'escalen "
+"amb chi^2/dof que els fa independents de les incerteses indicades (σ "
+"relativa).</p><p>En cas contrari, s'utilitza la σ absoluta (les incerteses "
+"no s'escalen).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbErrorScaling)
 #: src/frontend/ui/fitoptionswidget.ui:267
 #, kde-format
 msgid "Use relative uncertainties (enable scaling)"
-msgstr ""
+msgstr "Utilitza incerteses relatives (activa l'escalat)"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnit)
 #: src/frontend/ui/fitsheadereditaddunitwidget.ui:17

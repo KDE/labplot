@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-13 00:39+0000\n"
-"PO-Revision-Date: 2026-04-12 09:17+0300\n"
+"PO-Revision-Date: 2026-04-13 08:39+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -25132,12 +25132,7 @@ msgstr "Використовувати результати як нові поч
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbErrorScaling)
 #: src/frontend/ui/fitoptionswidget.ui:264
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>When enabled, parameter uncertainties are scaled "
-#| "with chi^2/dof which makes them independant of the given uncertainties "
-#| "(relative σ).</p><p>Otherwise absolute σ is used (no  uncertainties "
-#| "scaling).</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>When enabled, parameter uncertainties are scaled with "
 "chi^2/dof which makes them independent of the given uncertainties (relative "
