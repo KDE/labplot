@@ -21,6 +21,7 @@
   <name xml:lang="eu">LabPlot</name>
   <name xml:lang="fi">LabPlot</name>
   <name xml:lang="fr">LabPlot</name>
+  <name xml:lang="ga">LabPlot</name>
   <name xml:lang="gl">LabPlot</name>
   <name xml:lang="he">LabPlot</name>
   <name xml:lang="ia">LabPlot</name>
@@ -82,6 +83,7 @@
     <p xml:lang="eu">LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.</p>
     <p xml:lang="fi">LabPlot on VAPAA, kaikkien käytettävissä oleva, avointa lähdekoodia ja monialustainen tiedon visualisointi- ja analyysiohjelma.</p>
     <p xml:lang="fr">LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-source » et multi-plate-forme, accessible à tous.</p>
+    <p xml:lang="ga">Is bogearraí Amharcléiriú agus Anailís Sonraí SAOR IN AISCE, foinse oscailte agus tras-ardán é LabPlot atá inrochtana ag gach duine.</p>
     <p xml:lang="gl">LabPlot é un programa libre, de código aberto e multiplataforma de visualización e análise de datos, a disposición de calquera.</p>
     <p xml:lang="he">LabPlot היא תוכנה להמחשה וניתוח נתונים בחינם ובקוד פתוח שנגישה לכולם ולמגוון מערכות.</p>
     <p xml:lang="ia">LabPlot es un software LIBERE e gratuite, a fonte aperite e inter-platteforma per Visualisation e Analyse de datos accessibile a omnes.</p>
@@ -114,6 +116,7 @@
     <p xml:lang="eu">LabPlot-ek grafikoak sortu, kudeatu eta editatzeko era erraz bat eskaintzen du. Grafikoak sortzen uzten dizu kalkulu-orrietako datuekin edo kanpoko fitxategietatik inportatutako datuekin. Grafikoak hainbat pixel-mapa eta bektore grafiko formatutara esportatu daitezke.</p>
     <p xml:lang="fi">LabPlot tarjoaa helpon tavan luoda, hallita ja muokata kaavioita. Voit tuottaa kaavioita laskentataulukon tai muiden ulkoisten tiedostojen datasta. Kaavioita voi viedä eri bittikartta- ja vektorigrafiikkamuotoihin.</p>
     <p xml:lang="fr">LabPlot fournit une moyen facile de créer, gérer et éditer des courbes. Il vous permet de produire des courbes produites à partir de données issues d'un tableur ou d'un fichier externe. Les courbes peuvent être exportées vers plusieurs format d'image matriciels ou vectoriels.</p>
+    <p xml:lang="ga">Cuireann LabPlot bealach éasca ar fáil chun plotaí a chruthú, a bhainistiú agus a chur in eagar. Ligeann sé duit plotaí a tháirgeadh bunaithe ar shonraí ó scarbhileog nó ar shonraí a allmhairítear ó chomhaid sheachtracha. Is féidir plotaí a onnmhairiú chuig roinnt formáidí grafaicí picteilíní agus veicteoirí.</p>
     <p xml:lang="gl">LabPlot fornece unha forma doada de crear, xestionar e editar gráficos. Permítelle producir gráficos baseados en datos dunha folla de cálculo ou datos importados de ficheiros externos. Pode exportar os gráficos en distintos formatos de imaxe, de mapas de píxeles ou vectoriais.</p>
     <p xml:lang="he">‏LabPlot מספקת דרך קלה ליצור, לנהל ולערוך שרטוטים. היא מאפשרת לך לייצר שרטוטים לפי נתונים מגיליונות נתונים או לפי נתונים שיובאו מקבצים חיצוניים. אפשר לייצא שרטוטים למגוון תסדירים של מפות פיסקלים וגרפיקת וקטורים.</p>
     <p xml:lang="ia">Labplot forni un modo facile per crear, gerer e modificar tracias (plots). Illo te permitte producer tracias basate sur datos ab un folio electronic o sur datos importate ex files externe. Tracias pote esser exportate a multe formatos de pixmap e vector graphic.</p>
@@ -149,6 +152,7 @@
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
+      <caption xml:lang="ga">Amharcléiriú bunúsach sonraí</caption>
       <caption xml:lang="gl">Visualización básica de datos.</caption>
       <caption xml:lang="he">המחשה פשוטה של נתונים</caption>
       <caption xml:lang="ia">Visualisation basice de datos</caption>
@@ -179,6 +183,7 @@
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
+      <caption xml:lang="ga">Amharcléiriú bunúsach sonraí</caption>
       <caption xml:lang="gl">Visualización básica de datos.</caption>
       <caption xml:lang="he">המחשה פשוטה של נתונים</caption>
       <caption xml:lang="ia">Visualisation basice de datos</caption>
@@ -209,6 +214,7 @@
       <caption xml:lang="eu">Irudien eta trazuen antolamendu aurreratua</caption>
       <caption xml:lang="fi">Kaavioiden ja kuvioiden edistynyt asettelu</caption>
       <caption xml:lang="fr">Mise en forme avancée de tracés et d'images</caption>
+      <caption xml:lang="ga">Leagan amach ardleibhéil plotaí agus íomhánna</caption>
       <caption xml:lang="gl">Disposicións avanzadas de gráficos e imaxes.</caption>
       <caption xml:lang="he">עימוד מתקדם של שרטוטים ותמונות</caption>
       <caption xml:lang="ia">Dispositionar avantiate de tracias (plots) e imagines</caption>
@@ -239,6 +245,7 @@
       <caption xml:lang="eu">Gaiak aldatzea</caption>
       <caption xml:lang="fi">Teemoitus</caption>
       <caption xml:lang="fr">Application de thèmes</caption>
+      <caption xml:lang="ga">Téamaíocht</caption>
       <caption xml:lang="gl">Temas.</caption>
       <caption xml:lang="he">עיצוב</caption>
       <caption xml:lang="ia">Facer Themas</caption>
@@ -269,6 +276,7 @@
       <caption xml:lang="eu">Funtzio matematikoak irudikatzea</caption>
       <caption xml:lang="fi">Matemaattisten funktioiden visualisointi</caption>
       <caption xml:lang="fr">Affichage de fonctions mathématiques</caption>
+      <caption xml:lang="ga">Amharcléiriú feidhmeanna matamaiticiúla</caption>
       <caption xml:lang="gl">Visualización de funcións matemáticas.</caption>
       <caption xml:lang="he">המחשה של פונקציות מתמטיות</caption>
       <caption xml:lang="ia">Visualisation de functiones mathematic</caption>
@@ -299,6 +307,7 @@
       <caption xml:lang="eu">Datuei aurrez definitutako edo neurrira egindako ereduak egokitu</caption>
       <caption xml:lang="fi">Sovita tietoon ennalta-asetettuja ja mukautettuja malleja</caption>
       <caption xml:lang="fr">Ajuster des modèles prédéfinis ou personnalisés aux données</caption>
+      <caption xml:lang="ga">Feistigh samhlacha réamhshainithe nó saincheaptha leis na sonraí</caption>
       <caption xml:lang="gl">Axustar os modelos predefinidos ou personalizados aos datos.</caption>
       <caption xml:lang="he">התאמת מודלים שנערכו מראש או מותאמים לנתונים</caption>
       <caption xml:lang="ia">Adapta modellos predefinite o personalisat al datos</caption>
@@ -329,6 +338,7 @@
       <caption xml:lang="eu">Datuak leundu, leuntzeko hainbat metodoen laguntzarekin</caption>
       <caption xml:lang="fi">Tasoita tietoja eri tasoitusmenetelmillä</caption>
       <caption xml:lang="fr">Lisser les données grâce aux différentes méthodes de lissage</caption>
+      <caption xml:lang="ga">Réidh na sonraí le cabhair ó mhodhanna éagsúla réidhithe</caption>
       <caption xml:lang="gl">Suavizar os datos coa axuda de varios métodos de suavizado.</caption>
       <caption xml:lang="he">החלקת הנתונים בעזרת מגוון שיטות החלקה</caption>
       <caption xml:lang="ia">Lisia le datos con le adjuta de varie metodos de lisiar</caption>
@@ -359,6 +369,7 @@
       <caption xml:lang="eu">Ohar-blokaren interfazea, Maxima, Octave, R, Sage, Scilab, Python, Julia, eta abarrekin saio elkarreragileak egiteko</caption>
       <caption xml:lang="fi">Muistiokäyttöliittymä vuorovaikutteisiin istuntoihin Maximassa, Octavessa, R:ssä, Sagessa, Scilabissa, Pythonissa, Juliassa jne.</caption>
       <caption xml:lang="fr">Interface pour ordinateur de type « Notebook » pour des sessions interactives pour Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="ga">Comhéadan leabhar nótaí le haghaidh seisiún idirghníomhach i Maxima, Octave, R, Sage, Scilab, Python, Julia, srl</caption>
       <caption xml:lang="gl">Interface de caderno para sesións interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="he">ממשק מחברת להפעלות אינטראקטיביות ב־Maxima,‏ Octave,‏ R,‏ Sage,‏ Scilab,‏ Python,‏ Julia ועוד</caption>
       <caption xml:lang="ia">Interfacie de Notebook per sessiones interactive in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
@@ -389,6 +400,7 @@
       <caption xml:lang="eu">Seinaleen analisia</caption>
       <caption xml:lang="fi">Signaalianalyysi</caption>
       <caption xml:lang="fr">Analyse de signaux</caption>
+      <caption xml:lang="ga">Anailís comhartha</caption>
       <caption xml:lang="gl">Análise de sinais.</caption>
       <caption xml:lang="he">ניתוח אותות</caption>
       <caption xml:lang="ia">Analyse de signal</caption>
@@ -419,6 +431,7 @@
       <caption xml:lang="eu">Herzsprung-Russel diagrama LabPlot-en</caption>
       <caption xml:lang="fi">Herzsprung-Russel-diagrammi LabPlotissa</caption>
       <caption xml:lang="fr">Diagramme de Herzsprung-Russel dans LabPlot</caption>
+      <caption xml:lang="ga">Léaráid Hertzsprung-Russell i LabPlot</caption>
       <caption xml:lang="gl">Diagrama de Herzsprung-Russel diagram en LabPlot.</caption>
       <caption xml:lang="he">דיאגרמת הרצשפרונג-ראסל ב־LabPlot</caption>
       <caption xml:lang="ia">Diagramma de Herzsprung-Russel  in LabPlot</caption>
@@ -449,6 +462,7 @@
       <caption xml:lang="eu">Maxima saio elkarreragile batean kalkulatuta datuen irudikapena</caption>
       <caption xml:lang="fi">Vuorovaikutteisessa Maxima-istunnossa lasketun tiedon visualisointi</caption>
       <caption xml:lang="fr">Affichage de données calculées dans une session interactive de Maxima</caption>
+      <caption xml:lang="ga">Amharcléiriú sonraí a ríomhadh i seisiún idirghníomhach Maxima</caption>
       <caption xml:lang="gl">Visualización de datos calculados nunha sesión interactiva de Maxima.</caption>
       <caption xml:lang="he">המחשת נתונים שחושבו בהפעלה אינטראקטיבית של Maxima</caption>
       <caption xml:lang="ia">Visualisation de datos calculate in unsession interactide de Maxima</caption>
