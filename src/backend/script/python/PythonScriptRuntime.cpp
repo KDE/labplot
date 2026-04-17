@@ -15,7 +15,6 @@
 #include "backend/script/Script.h"
 #include "backend/script/ScriptRuntime.h"
 
-#include <KConfigGroup>
 #include "pyerrors.h"
 #include "pylabplot/pylabplot_python.h"
 
@@ -31,6 +30,8 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
+
+#include <KConfigGroup>
 
 // PyObject* handling:
 // PySys_GetObject(), PyImport_AddModule() return a borrowed reference so we create own reference with Py_INCREF() and Py_DECREF(o) when done
