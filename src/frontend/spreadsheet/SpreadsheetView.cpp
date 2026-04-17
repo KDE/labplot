@@ -1031,7 +1031,8 @@ void SpreadsheetView::handleAspectsAdded(int first, int last) {
 			m_tableView->setColumnWidth(i, col->width());
 	}
 
-	goToCell(0, last);
+	if (m_spreadsheet->rowCount() > 0)
+		goToCell(0, last);
 }
 
 void SpreadsheetView::handleAspectAboutToBeRemoved(int first, int last) {
@@ -1055,13 +1056,20 @@ void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /* ol
 }
 
 void SpreadsheetView::goToCell(int row, int col) {
-	QModelIndex index = m_model->index(row, col);
+	const auto& index = m_model->index(row, col);
+	if (!index.isValid())
+		return;
+
 	m_tableView->scrollTo(index);
 	m_tableView->setCurrentIndex(index);
 }
 
 void SpreadsheetView::selectCell(int row, int col) {
-	m_tableView->selectionModel()->select(m_model->index(row, col), QItemSelectionModel::Select);
+	const auto& index = m_model->index(row, col);
+	if (!index.isValid())
+		return;
+
+	m_tableView->selectionModel()->select(index, QItemSelectionModel::Select);
 }
 
 void SpreadsheetView::clearSelection() {
