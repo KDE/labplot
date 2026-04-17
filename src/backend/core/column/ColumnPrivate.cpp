@@ -1358,6 +1358,9 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 						(*data)[i] = NAN;
 				break;
 			}
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
+				break; // nothing to do in these cases
 			case AbstractColumn::ColumnMode::Text: {
 				auto* data = static_cast<QVector<QString>*>(m_data);
 				for (int i = 0; i < count; ++i)
