@@ -397,7 +397,7 @@ QMenu* AbstractAspect::createContextMenu() {
 	menu->addSeparator();
 
 	// action to create data spreadsheet based on the results of the calculations for types that support it
-	 if (inherits<XYAnalysisCurve>() || m_type == AspectType::XYEquationCurve || m_type == AspectType::Histogram || m_type == AspectType::BoxPlot) {
+	if (inherits<XYAnalysisCurve>() || m_type == AspectType::XYEquationCurve || m_type == AspectType::Histogram || m_type == AspectType::BoxPlot) {
 		auto* action = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
 
 		// handle types that support it
@@ -429,7 +429,7 @@ QMenu* AbstractAspect::createContextMenu() {
 			menu->addSeparator();
 		} else
 			delete action; // no results available yet, no need to show in the menu
-	 }
+	}
 
 	// don't allow to rename and delete fixed objects and
 	//  - columns in live-data source
