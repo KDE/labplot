@@ -31,11 +31,13 @@
 #endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
+#include "frontend/datasources/MQTTErrorWidget.h"
 #endif
 
 #include "frontend/ActionsManager.h"
 #include "frontend/GuiObserver.h"
 #include "frontend/HistoryDialog.h"
+#include "frontend/WhatsNewDialog.h"
 #include "frontend/ProjectExplorer.h"
 #include "frontend/SettingsDialog.h"
 #include "frontend/colormaps/ColorMapsDialog.h"
@@ -75,7 +77,7 @@
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QTemporaryFile>
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 // #include <QtWidgets>
 // #include <QtQuickWidgets/QQuickWidget>
 // #include <QQuickItem>
@@ -305,6 +307,13 @@ void MainWin::initGUI(const QString& fileName) {
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
+
+	if (m_showWhatsNew) {
+		QTimer::singleShot(0, this, [this]() {
+			auto* dlg = new WhatsNewDialog(this);
+			dlg->exec();
+		});
+	}
 }
 
 /**
@@ -1333,6 +1342,15 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	} else if (aspect->type() == AspectType::Folder)
 		for (auto* child : aspect->children<AbstractAspect>())
 			handleAspectAdded(child);
+#ifdef HAVE_MQTT
+	if (aspect->type() == AspectType::MQTTClient) {
+		auto* client = const_cast<MQTTClient*>(static_cast<const MQTTClient*>(aspect));
+		connect(client, &MQTTClient::clientErrorOccurred, this, [client](QMqttClient::ClientError error) {
+			auto* errorWidget = new MQTTErrorWidget(error, client);
+			errorWidget->show();
+		});
+	}
+#endif
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* aspect) {
@@ -1679,6 +1697,14 @@ void MainWin::migrateSettings() {
 		// delete the old entry and write the new one
 		group.deleteEntry(QLatin1String("DecimalSeparatorLocale"));
 		group.writeEntry(QLatin1String("NumberFormat"), static_cast<int>(language));
+	}
+
+	// detect first run after a version upgrade and schedule the "What's New" dialog
+	const QString lastVersion = group.readEntry(QLatin1String("lastRunVersion"), QString());
+	if (lastVersion != QLatin1String(LVERSION)) {
+		m_showWhatsNew = true;
+		group.writeEntry(QLatin1String("lastRunVersion"), QString(QLatin1String(LVERSION)));
+		Settings::sync();
 	}
 }
 

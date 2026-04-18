@@ -217,6 +217,7 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYEquationCurve);
 
 	QXmlStreamAttributes attribs;

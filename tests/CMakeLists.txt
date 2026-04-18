@@ -11,6 +11,23 @@ if(KUserFeedback_FOUND AND QT_MAJOR_VERSION EQUAL 6)
     target_link_libraries(labplottest KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
 endif()
 target_compile_definitions(labplottest PUBLIC ${LABPLOT_COMPILE_DEFINITIONS})
+# Precompile the most-included headers once for the shared test libraries.
+# Use absolute paths: quoted PCH headers are resolved relative to the target's
+# source directory (tests/), not the include_directories, so ${SRC_DIR} is needed.
+target_precompile_headers(labplottest PRIVATE
+    <QtTest>
+    <QObject>
+    <QString>
+    "${SRC_DIR}/backend/lib/macros.h"
+    "${SRC_DIR}/backend/lib/Debug.h"
+)
+target_precompile_headers(labplotmetatest PRIVATE
+    <QtTest>
+    <QObject>
+    <QString>
+    "${SRC_DIR}/backend/lib/macros.h"
+    "${SRC_DIR}/backend/lib/Debug.h"
+)
 
 add_subdirectory(analysis)
 add_subdirectory(backend)

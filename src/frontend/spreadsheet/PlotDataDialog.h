@@ -52,6 +52,7 @@ private:
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
 	AbstractAspect* m_lastAddedCurve{nullptr};
+	Column* m_tickLabelsColumn{nullptr};
 	Plot::PlotType m_plotType;
 	bool m_basicPlotType{false};
 

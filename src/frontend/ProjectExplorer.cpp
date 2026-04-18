@@ -86,6 +86,7 @@ ProjectExplorer::ProjectExplorer(QWidget* parent)
 	m_treeView->viewport()->installEventFilter(this);
 	m_treeView->header()->setStretchLastSection(true);
 	m_treeView->header()->installEventFilter(this);
+	m_treeView->installEventFilter(this);
 	m_treeView->setDragEnabled(true);
 	m_treeView->setAcceptDrops(true);
 	m_treeView->setDropIndicatorShown(true);
@@ -415,7 +416,17 @@ void ProjectExplorer::search() {
 	Provides a menu for selective showing and hiding of columns.
 */
 bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
-	if (obj == m_treeView->header() && event->type() == QEvent::ContextMenu) {
+	if (obj == m_treeView && event->type() == QEvent::KeyPress) { // forward custom key shortcuts from the tree view to ProjectExplorer
+		auto* keyEvent = static_cast<QKeyEvent*>(event);
+		if (keyEvent->matches(QKeySequence::Delete) || keyEvent->matches(QKeySequence::Copy) || keyEvent->matches(QKeySequence::Paste)
+			|| ((keyEvent->modifiers() & Qt::ControlModifier)
+				&& (keyEvent->key() == Qt::Key_D || keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down))
+			|| keyEvent->key() == Qt::Key_Space) {
+			keyPressEvent(keyEvent);
+			return true;
+		}
+		return false;
+	} else if (obj == m_treeView->header() && event->type() == QEvent::ContextMenu) {
 		// Menu for showing/hiding the columns in the tree view
 		QMenu* columnsMenu = new QMenu(m_treeView->header());
 		columnsMenu->addSection(i18n("Columns"));
@@ -588,13 +599,15 @@ void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 				showErrorMessage(msg);
 			}
 		}
-	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) {
-		// duplicate
-		if (aspect != m_project) {
-			aspect->copy();
-			aspect->parentAspect()->paste(true);
-			showErrorMessage(QString());
-		}
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) { // duplicate
+		deselectIndex(m_treeView->currentIndex()); // deselect the current aspect first, the new one will be selected when added
+		aspect->duplicate();
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Up)) { // move up
+		aspect->moveUp();
+		m_treeView->setCurrentIndex(dynamic_cast<AspectTreeModel*>(m_treeView->model())->modelIndexOfAspect(aspect));
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Down)) { // move down
+		aspect->moveDown();
+		m_treeView->setCurrentIndex(dynamic_cast<AspectTreeModel*>(m_treeView->model())->modelIndexOfAspect(aspect));
 	} else if (event->key() == 32) {
 		// space key - hide/show the current object
 		changeSelectedVisible();

@@ -871,6 +871,11 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 	}
 	}
 
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+		m_valid.resize(resize ? m_rowCount : 0);
+		m_valid.fill(false);
+	}
+
 	return true;
 }
 
@@ -1317,6 +1322,13 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		break;
 	} // switch(mode)
 
+	// save the old validity bitmap before changing mode, so we can transfer
+	// invalidity to modes that use sentinel values instead of a bitmap
+	const bool oldModeNeedsValidity = AbstractColumnPrivate::needsValidityTracking(m_columnMode);
+	QBitArray oldValid;
+	if (oldModeNeedsValidity)
+		oldValid = m_valid;
+
 	m_columnMode = mode;
 
 	m_inputFilter = new_in_filter;
@@ -1334,6 +1346,41 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		copy(filter->output(0));
 		DEBUG(" DONE")
 		delete temp_col;
+
+		// transfer invalidity from the old validity bitmap to the new data format
+		if (oldModeNeedsValidity && !AbstractColumnPrivate::needsValidityTracking(mode)) {
+			const int count = qMin(oldValid.size(), rowCount());
+			switch (mode) {
+			case AbstractColumn::ColumnMode::Double: {
+				auto* data = static_cast<QVector<double>*>(m_data);
+				for (int i = 0; i < count; ++i)
+					if (!oldValid.testBit(i))
+						(*data)[i] = NAN;
+				break;
+			}
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
+				break; // nothing to do in these cases
+			case AbstractColumn::ColumnMode::Text: {
+				auto* data = static_cast<QVector<QString>*>(m_data);
+				for (int i = 0; i < count; ++i)
+					if (!oldValid.testBit(i))
+						(*data)[i] = QString();
+				break;
+			}
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day: {
+				auto* data = static_cast<QVector<QDateTime>*>(m_data);
+				for (int i = 0; i < count; ++i)
+					if (!oldValid.testBit(i))
+						(*data)[i] = QDateTime();
+				break;
+			}
+			default:
+				break;
+			}
+		}
 	}
 
 	if (filter_is_temporary)
@@ -1402,12 +1449,25 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 }
 
 /**
+ * \brief Replace all mode related members with validity bitmap
+ */
+void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode,
+									void* data,
+									AbstractSimpleFilter* in_filter,
+									AbstractSimpleFilter* out_filter,
+									const QBitArray& valid) {
+	replaceModeData(mode, data, in_filter, out_filter);
+	m_valid = valid;
+}
+
+/**
  * \brief Replace data pointer
  */
 void ColumnPrivate::replaceData(void* data) {
 	Q_EMIT q->dataAboutToChange(q);
 
 	m_data = data;
+
 	q->setDataChanged();
 }
 
@@ -1468,6 +1528,12 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 			vec->replace(i, other->dateTimeAt(i));
 		break;
 	}
+	}
+
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+		m_valid.resize(num_rows);
+		for (int i = 0; i < num_rows; ++i)
+			m_valid.setBit(i, other->isValid(i));
 	}
 
 	q->setDataChanged();
@@ -1533,6 +1599,11 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 		break;
 	}
 
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+		for (int i = 0; i < num_rows; ++i)
+			m_valid.setBit(dest_start + i, source->isValid(source_start + i));
+	}
+
 	q->setDataChanged();
 
 	return true;
@@ -1589,6 +1660,9 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 			static_cast<QVector<QDateTime>*>(m_data)->replace(i, other->dateTimeAt(i));
 		break;
 	}
+
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode))
+		m_valid = other->m_valid;
 
 	q->setDataChanged();
 
@@ -1650,6 +1724,13 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 		for (int i = 0; i < num_rows; ++i)
 			static_cast<QVector<QDateTime>*>(m_data)->replace(dest_start + i, source->dateTimeAt(source_start + i));
 		break;
+	}
+
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+		for (int i = 0; i < num_rows; ++i) {
+			bool valid = (source_start + i < source->m_valid.size()) ? source->m_valid.testBit(source_start + i) : false;
+			m_valid.setBit(dest_start + i, valid);
+		}
 	}
 
 	q->setDataChanged();
@@ -1819,6 +1900,9 @@ void ColumnPrivate::resizeTo(int new_size) {
 	}
 	}
 
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode))
+		m_valid.resize(new_size); // new rows are invalid (false), shrinking just truncates
+
 	invalidate();
 }
 
@@ -1857,6 +1941,17 @@ void ColumnPrivate::insertRows(int before, int count) {
 			for (int i = 0; i < count; ++i)
 				static_cast<QVector<QString>*>(m_data)->insert(before, QString());
 			break;
+		}
+
+		if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+			const int oldSize = m_valid.size();
+			m_valid.resize(oldSize + count);
+			// shift existing bits from 'before' to the right by 'count'
+			for (int i = oldSize - 1; i >= before; --i)
+				m_valid.setBit(i + count, m_valid.testBit(i));
+			// new inserted rows are invalid
+			for (int i = before; i < before + count; ++i)
+				m_valid.setBit(i, false);
 		}
 	}
 
@@ -1902,6 +1997,14 @@ void ColumnPrivate::removeRows(int first, int count) {
 			for (int i = 0; i < corrected_count; ++i)
 				static_cast<QVector<QString>*>(m_data)->removeAt(first);
 			break;
+		}
+
+		if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+			const int oldSize = m_valid.size();
+			// shift bits after removed range to the left
+			for (int i = first; i < oldSize - corrected_count; ++i)
+				m_valid.setBit(i, m_valid.testBit(i + corrected_count));
+			m_valid.resize(oldSize - corrected_count);
 		}
 	}
 
@@ -2145,6 +2248,10 @@ void ColumnPrivate::setWidth(int value) {
 void ColumnPrivate::setData(void* data) {
 	deleteData();
 	m_data = data;
+	if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+		m_valid.resize(rowCount());
+		m_valid.fill(true);
+	}
 	invalidate();
 }
 
@@ -2884,6 +2991,12 @@ int ColumnPrivate::dictionaryIndex(int row) const {
 	return index;
 }
 
+/*!
+ * \brief Return the dictionary of the column.
+ *
+ * The dictionary is a list of all different values in the column (string representation)
+ * together with their frequencies of occurrence.
+ */
 const QMap<QString, int>& ColumnPrivate::frequencies() const {
 	if (!available.dictionary)
 		const_cast<ColumnPrivate*>(this)->initDictionary();
@@ -2894,21 +3007,114 @@ const QMap<QString, int>& ColumnPrivate::frequencies() const {
 void ColumnPrivate::initDictionary() {
 	m_dictionary.clear();
 	m_dictionaryFrequencies.clear();
-	if (!m_data || columnMode() != AbstractColumn::ColumnMode::Text)
+	if (!m_data)
 		return;
 
-	auto data = static_cast<QVector<QString>*>(m_data);
-	for (auto& value : *data) {
-		if (value.isEmpty())
-			continue;
+	QString value;
+	const auto locale = QLocale();
 
-		if (!m_dictionary.contains(value))
-			m_dictionary << value;
-
-		if (m_dictionaryFrequencies.constFind(value) == m_dictionaryFrequencies.constEnd())
-			m_dictionaryFrequencies[value] = 1;
-		else
-			m_dictionaryFrequencies[value]++;
+	switch (columnMode()) {
+	case AbstractColumn::ColumnMode::Text: {
+		auto data = static_cast<QVector<QString>*>(m_data);
+		for (auto& val : *data) {
+			if (val.isEmpty())
+				continue;
+			value = val;
+			if (!m_dictionary.contains(value))
+				m_dictionary << value;
+			if (m_dictionaryFrequencies.constFind(value) == m_dictionaryFrequencies.constEnd())
+				m_dictionaryFrequencies[value] = 1;
+			else
+				m_dictionaryFrequencies[value]++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::Double: {
+		auto data = static_cast<QVector<double>*>(m_data);
+		for (auto val : *data) {
+			if (std::isnan(val))
+				continue;
+			value = locale.toString(val);
+			if (!m_dictionary.contains(value))
+				m_dictionary << value;
+			if (m_dictionaryFrequencies.constFind(value) == m_dictionaryFrequencies.constEnd())
+				m_dictionaryFrequencies[value] = 1;
+			else
+				m_dictionaryFrequencies[value]++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::Integer: {
+		auto data = static_cast<QVector<int>*>(m_data);
+		for (auto val : *data) {
+			value = locale.toString(val);
+			if (!m_dictionary.contains(value))
+				m_dictionary << value;
+			if (m_dictionaryFrequencies.constFind(value) == m_dictionaryFrequencies.constEnd())
+				m_dictionaryFrequencies[value] = 1;
+			else
+				m_dictionaryFrequencies[value]++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::BigInt: {
+		auto data = static_cast<QVector<qint64>*>(m_data);
+		for (auto val : *data) {
+			value = locale.toString(val);
+			if (!m_dictionary.contains(value))
+				m_dictionary << value;
+			if (m_dictionaryFrequencies.constFind(value) == m_dictionaryFrequencies.constEnd())
+				m_dictionaryFrequencies[value] = 1;
+			else
+				m_dictionaryFrequencies[value]++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::DateTime: {
+		auto data = static_cast<QVector<QDateTime>*>(m_data);
+		for (const auto& val : *data) {
+			if (!val.isValid())
+				continue;
+			value = val.toString(Qt::ISODate);
+			if (!m_dictionary.contains(value))
+				m_dictionary << value;
+			if (m_dictionaryFrequencies.constFind(value) == m_dictionaryFrequencies.constEnd())
+				m_dictionaryFrequencies[value] = 1;
+			else
+				m_dictionaryFrequencies[value]++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::Month: {
+		auto data = static_cast<QVector<QDateTime>*>(m_data);
+		for (const auto& val : *data) {
+			if (!val.isValid())
+				continue;
+			value = val.toString(QStringLiteral("MMMM")); // Full month name
+			if (!m_dictionary.contains(value))
+				m_dictionary << value;
+			if (m_dictionaryFrequencies.constFind(value) == m_dictionaryFrequencies.constEnd())
+				m_dictionaryFrequencies[value] = 1;
+			else
+				m_dictionaryFrequencies[value]++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::Day: {
+		auto data = static_cast<QVector<QDateTime>*>(m_data);
+		for (const auto& val : *data) {
+			if (!val.isValid())
+				continue;
+			value = val.toString(QStringLiteral("dddd")); // Full day name
+			if (!m_dictionary.contains(value))
+				m_dictionary << value;
+			if (m_dictionaryFrequencies.constFind(value) == m_dictionaryFrequencies.constEnd())
+				m_dictionaryFrequencies[value] = 1;
+			else
+				m_dictionaryFrequencies[value]++;
+		}
+		break;
+	}
 	}
 
 	available.dictionary = true;

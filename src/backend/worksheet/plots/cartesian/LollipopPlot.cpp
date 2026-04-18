@@ -160,6 +160,7 @@ void LollipopPlot::updateLocale() {
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<QString>, dataColumnPaths, dataColumnPaths)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, LollipopPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QString, xColumnPath, xColumnPath)
@@ -178,11 +179,6 @@ Symbol* LollipopPlot::symbolAt(int index) const {
 		return d->symbols.at(index);
 	else
 		return nullptr;
-}
-
-QVector<QString>& LollipopPlot::dataColumnPaths() const {
-	D(LollipopPlot);
-	return d->dataColumnPaths;
 }
 
 bool LollipopPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
@@ -529,17 +525,15 @@ void LollipopPlotPrivate::recalc() {
 	// this number is equal to the max number of non-empty
 	// values in the provided datasets
 	int barGroupsCount = 0;
-	int columnIndex = 0;
-	for (auto* column : std::as_const(dataColumns)) {
+	for (int i = 0; i < newSize; ++i) {
+		const auto* column = dataColumns.at(i);
 		if (!column)
 			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
-		m_barLines[columnIndex].resize(size);
-		m_symbolPoints[columnIndex].resize(size);
+		m_barLines[i].resize(size);
+		m_symbolPoints[i].resize(size);
 		if (size > barGroupsCount)
 			barGroupsCount = size;
-
-		++columnIndex;
 	}
 
 	// if an x-column was provided and it has less values than the count determined
@@ -1053,6 +1047,7 @@ void LollipopPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(LollipopPlot);
 
 	if (!readBasicAttributes(reader))

@@ -178,10 +178,12 @@ AbstractColumnInsertRowsCmd::~AbstractColumnInsertRowsCmd() = default;
 
 void AbstractColumnInsertRowsCmd::redo() {
 	m_col->m_masking.insertRows(m_before, m_count);
+	m_col->owner()->setChanged();
 }
 
 void AbstractColumnInsertRowsCmd::undo() {
 	m_col->m_masking.removeRows(m_before, m_count);
+	m_col->owner()->setChanged();
 }
 
 /** ***************************************************************************
@@ -223,10 +225,12 @@ AbstractColumnRemoveRowsCmd::~AbstractColumnRemoveRowsCmd() = default;
 void AbstractColumnRemoveRowsCmd::redo() {
 	m_masking = m_col->m_masking;
 	m_col->m_masking.removeRows(m_first, m_count);
+	m_col->owner()->setChanged();
 }
 
 void AbstractColumnRemoveRowsCmd::undo() {
 	m_col->m_masking = m_masking;
+	m_col->owner()->setChanged();
 }
 
 /** ***************************************************************************

@@ -19,12 +19,12 @@ class AbstractAspectPrivate;
 class Folder;
 class Project;
 class XmlStreamReader;
+class UndoStack;
 
 class QDateTime;
 class QIcon;
 class QMenu;
 class QUndoCommand;
-class QUndoStack;
 class QXmlStreamWriter;
 
 /// Information about class inheritance
@@ -67,6 +67,7 @@ enum class AspectType : quint64 {
 	// continuous improvement plots
 	ProcessBehaviorChart,
 	RunChart,
+	ParetoChart,
 
 	WorksheetElementContainer,
 	AbstractPlot,
@@ -234,6 +235,8 @@ public:
 			return std::string_view("KDEPlot");
 		case AspectType::LollipopPlot:
 			return std::string_view("LollipopPlot");
+		case AspectType::ParetoChart:
+			return std::string_view("ParetoChart");
 		case AspectType::ProcessBehaviorChart:
 			return std::string_view("ProcessBehaviorChart");
 		case AspectType::RunChart:
@@ -308,6 +311,7 @@ public:
 	void setFixed(bool);
 	bool isFixed() const;
 	void setSelected(bool);
+	void setSelectedInView(bool selected);
 	void setMoved(bool);
 	bool isMoved() const;
 	void setIsLoading(bool);
@@ -479,7 +483,7 @@ public:
 	// undo/redo related functions
 	void setUndoAware(bool value);
 	bool isUndoAware() const;
-	virtual QUndoStack* undoStack() const;
+	virtual UndoStack* undoStack() const;
 	void exec(QUndoCommand*);
 	void exec(QUndoCommand* command,
 			  const char* preChangeSignal,
@@ -531,8 +535,6 @@ public Q_SLOTS:
 	void copy();
 	void duplicate();
 	void paste(bool duplicate = false, int index = -1);
-
-private Q_SLOTS:
 	void moveUp();
 	void moveDown();
 

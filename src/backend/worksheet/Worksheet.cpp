@@ -15,6 +15,7 @@
 #include "WorksheetPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
+#include "backend/lib/ScopedUndoDisabler.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Image.h"
@@ -386,12 +387,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	// for the project globally so it's ignored for all elements below when applying the theme recursively.
 	if (!d->theme.isEmpty() && !isLoading() && !isPasted() && !aspect->isPasted()) {
 		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-		// const_cast<WorksheetElement*>(addedElement)->setUndoAware(false, true);
-		if (project())
-			project()->setUndoAware(false);
+		ScopedUndoDisabler undoDisabler(project());
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
-		if (project())
-			project()->setUndoAware(true);
 	}
 
 	// recalculate the layout if enabled, set the currently added plot resizable otherwise
@@ -551,19 +548,6 @@ WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* pare
 		}
 		return nullptr;
 	}
-}
-
-/*!
-	Selects or deselects the worksheet in the project explorer.
-	This function is called in \c WorksheetView.
-	The worksheet gets deselected if there are selected items in the view,
-	and selected if there are no selected items in the view.
-*/
-void Worksheet::setSelectedInView(const bool b) {
-	if (b)
-		Q_EMIT childAspectSelectedInView(this);
-	else
-		Q_EMIT childAspectDeselectedInView(this);
 }
 
 void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
@@ -1794,6 +1778,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool Worksheet::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	if (!readBasicAttributes(reader))
 		return false;
 
@@ -1879,7 +1864,6 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("cartesianPlotCursorMode", cartesianPlotCursorMode, Worksheet::CartesianPlotActionMode);
 		} else if (reader->name() == QLatin1String("cartesianPlot")) {
 			auto* plot = new CartesianPlot(QString(), true);
-			plot->setIsLoading(true);
 			if (!plot->load(reader, preview)) {
 				delete plot;
 				return false;
@@ -1887,7 +1871,6 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(plot);
 		} else if (!preview && reader->name() == QLatin1String("textLabel")) {
 			auto* label = new TextLabel(QString());
-			label->setIsLoading(true);
 			if (!label->load(reader, preview)) {
 				delete label;
 				return false;
@@ -1895,7 +1878,6 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(label);
 		} else if (!preview && reader->name() == QLatin1String("image")) {
 			Image* image = new Image(QString());
-			image->setIsLoading(true);
 			if (!image->load(reader, preview)) {
 				delete image;
 				return false;

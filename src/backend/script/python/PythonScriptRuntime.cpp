@@ -19,6 +19,9 @@
 #include <sbkconverter.h>
 #include <sbkmodule.h>
 #include <sbkpython.h>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 11, 0)
+#include <basewrapper.h>
+#endif
 
 #include <codecvt>
 #include <string>

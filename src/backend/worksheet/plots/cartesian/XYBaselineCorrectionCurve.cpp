@@ -176,6 +176,7 @@ void XYBaselineCorrectionCurve::save(QXmlStreamWriter* writer) const {
 }
 
 bool XYBaselineCorrectionCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYBaselineCorrectionCurve);
 
 	QXmlStreamAttributes attribs;

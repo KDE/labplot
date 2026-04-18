@@ -507,11 +507,11 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsTextType, labelsTextType, labelsTex
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, labelsTextColumn, labelsTextColumn)
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsTextColumnPath, labelsTextColumnPath)
 QVector<double> Axis::tickLabelValues() const {
-	D(Axis);
+	Q_D(const Axis);
 	return d->tickLabelValues;
 }
 QVector<QString> Axis::tickLabelStrings() const {
-	D(Axis);
+	Q_D(const Axis);
 	return d->tickLabelStrings;
 }
 BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor)
@@ -3346,6 +3346,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool Axis::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(Axis);
 
 	if (!readBasicAttributes(reader))

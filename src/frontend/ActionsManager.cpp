@@ -8,6 +8,7 @@
  */
 
 #include "frontend/AboutDialog.h"
+#include "frontend/WhatsNewDialog.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -39,6 +40,7 @@
 #endif
 
 #include <QActionGroup>
+#include <QDesktopServices>
 #include <QJsonArray>
 #include <QMenuBar>
 #include <QStatusBar>
@@ -503,6 +505,14 @@ void ActionsManager::initActions() {
 
 	// actions used in the toolbars
 	initSpreadsheetToolbarActions();
+
+	// what's new action
+	m_whatsNewAction = new QAction(QIcon::fromTheme(QStringLiteral("help-whats-new")), i18n("What's New"), this);
+	collection->addAction(QStringLiteral("whats_new"), m_whatsNewAction);
+	connect(m_whatsNewAction, &QAction::triggered, m_mainWindow, [this]() {
+		auto* dlg = new WhatsNewDialog(m_mainWindow);
+		dlg->exec();
+	});
 	initWorksheetToolbarActions();
 	initPlotAreaToolbarActions();
 	initDataExtractorToolbarActions();
@@ -513,6 +523,12 @@ void ActionsManager::initActions() {
 #ifdef HAVE_SCRIPTING
 	initScriptToolbarActions();
 #endif
+}
+
+void ActionsManager::showHelp() {
+	// TODO: remove en language later once the translations are available online
+	static const QString url = QStringLiteral("https://docs.labplot.org/en/index.html");
+	QDesktopServices::openUrl(QUrl(url));
 }
 
 /*!
@@ -1043,6 +1059,22 @@ void ActionsManager::initMenus() {
 	// remove the new_script action created in the rc file
 	delete m_mainWindow->actionCollection()->action(QStringLiteral("new_script"));
 #endif
+
+	// help action and menu - redirect the default help action to our own function to open the online documentation in the browser
+    // delete the default action first and recreate it using a different slot
+	auto* collection = m_mainWindow->actionCollection();
+    auto* helpAction = collection->action(KStandardAction::name(KStandardAction::HelpContents));
+    collection->removeAction(helpAction);
+    helpAction = KStandardAction::helpContents(this, &ActionsManager::showHelp, collection);
+
+    // re-add it to the Help menu
+    auto* helpMenu = static_cast<QMenu *>(factory->container(QStringLiteral("help"), m_mainWindow));
+    if (helpMenu) {
+        auto* whatsThis = collection->action(KStandardAction::name(KStandardAction::WhatsThis));
+        helpMenu->insertAction(whatsThis, helpAction);
+        helpMenu->insertAction(whatsThis, m_whatsNewAction);
+        helpMenu->insertSeparator(whatsThis);
+    }
 }
 
 void MainWin::colorSchemeChanged(QAction* action) {

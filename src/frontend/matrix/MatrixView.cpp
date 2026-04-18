@@ -10,6 +10,7 @@
 */
 
 #include "frontend/matrix/MatrixView.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/lib/hostprocess.h"
@@ -194,6 +195,7 @@ void MatrixView::initActions() {
 	// connections
 
 	// selection related actions
+	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MatrixView::navigateToMatrixOnClick);
 	connect(action_cut_selection, &QAction::triggered, this, &MatrixView::cutSelection);
 	connect(action_copy_selection, &QAction::triggered, this, &MatrixView::copySelection);
 	connect(action_paste_into_selection, &QAction::triggered, this, &MatrixView::pasteIntoSelection);
@@ -628,6 +630,11 @@ void MatrixView::fillWithConstValues() {
 }
 
 // ############################ selection related slots #########################
+void MatrixView::navigateToMatrixOnClick() {
+	m_matrix->setSelectedInView(true);
+	m_tableView->setFocus();
+}
+
 void MatrixView::cutSelection() {
 	if (firstSelectedRow() < 0)
 		return;

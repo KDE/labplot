@@ -334,6 +334,7 @@ private Q_SLOTS:
 	void updateHeaderGeometry(Qt::Orientation, int first, int last);
 
 	void columnClicked(int);
+	void navigateToSpreadsheetOnClick(const QModelIndex& index);
 	void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 	void advanceCell();
 };

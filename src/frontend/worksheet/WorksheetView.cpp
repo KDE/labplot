@@ -1140,7 +1140,8 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 	plot->processDropEvent(plot->project()->droppedAspects(mimeData));
 
 	// select the worksheet in the project explorer and bring the view to the foreground
-	m_worksheet->setSelectedInView(true); // FIXME: doesn't work
+	m_worksheet->setSelectedInView(true);
+	this->setFocus();
 }
 
 // ##############################################################################
@@ -1351,8 +1352,8 @@ void WorksheetView::addNew(QAction* action) {
 		break;
 	}
 	case AddNewMode::TextLabel: {
-		auto* l = new TextLabel(i18n("Text Label"));
-		l->setText(i18n("Text Label"));
+		auto* l = new TextLabel(i18n("Text Label"));\
+		l->setText(TextLabel::TextWrapper(i18n("text")));
 		aspect = l;
 		break;
 	}
@@ -1622,7 +1623,6 @@ void WorksheetView::selectionChanged() {
 	if (items.isEmpty()) {
 		// no items selected -> select the worksheet again.
 		m_worksheet->setSelectedInView(true);
-
 		// if one of the "zoom&select" plot mouse modes was selected before, activate the default "selection mode" again
 		// since no plots are selected now.
 		if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection) {

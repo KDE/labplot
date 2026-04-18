@@ -54,7 +54,7 @@ public:
 		FunctionData(const QString& variableName, const XYCurve* curve)
 			: m_curve(curve)
 			, m_variableName(variableName)
-			, m_curvePath(curve->path()) {
+			, m_curvePath(curve ? curve->path() : QString()) {
 		}
 		QString curvePath() const {
 			return (m_curve ? m_curve->path() : m_curvePath);

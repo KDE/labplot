@@ -95,6 +95,7 @@ private:
 	// main menu and toolbar
 	KRecentFilesAction* m_recentProjectsAction{nullptr};
 	QAction* m_searchAction{nullptr};
+	QAction* m_whatsNewAction{nullptr};
 	QAction* m_saveAction{nullptr};
 	QAction* m_saveAsAction{nullptr};
 	QAction* m_printAction{nullptr};
@@ -218,6 +219,7 @@ private:
 #endif
 
 private Q_SLOTS:
+	void showHelp();
 	void toggleDockWidget(QAction*);
 	void toggleStatusBar(bool);
 	void toggleMenuBar(bool);

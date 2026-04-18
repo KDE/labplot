@@ -4,7 +4,7 @@
 	Description          : Tests for data fitting
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2018-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2018-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -86,6 +86,17 @@ private Q_SLOTS:
 	void testLinearGP_PY_xyerror_custom();
 	void testLinearGP_PY_xyerror_custom_instrumental_weight();
 	void testLinearGP_PY_xyerror_custom_inverse_weight();
+	void testLinearBevington_6_2();
+	void testLinearBevington_6_2_custom();
+	void testLinearBevington_6_2_noErrorScaling();
+	void testLinearBevington_6_2_constYError();
+	void testLinearBevington_6_2_constYError_noErrorScaling();
+	void testLinearBevington_6_2_custom_constYError();
+	void testLinearBevington_6_2_custom_constYError_noErrorScaling();
+	void testLinearBevington_6_2_constYError2();
+	void testLinearBevington_6_2_constYError2_noErrorScaling();
+	void testLinearBevington_6_2_custom_constYError2();
+	void testLinearBevington_6_2_custom_constYError2_noErrorScaling();
 
 	void testNonLinear_yerror_zero_bug408535();
 

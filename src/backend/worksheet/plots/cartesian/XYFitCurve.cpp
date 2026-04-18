@@ -1823,13 +1823,13 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		resultsNote->setBackgroundColor(QColor(Qt::white));
 		resultsNote->setTextFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-		q->addChild(resultsNote);
+		q->addChildFast(resultsNote);
 	}
 	if (!residualsColumn) {
 		residualsColumn = new Column(QStringLiteral("Residuals"), AbstractColumn::ColumnMode::Double);
 		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
 		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
-		q->addChild(residualsColumn);
+		q->addChildFast(residualsColumn);
 	}
 }
 
@@ -1984,7 +1984,9 @@ void XYFitCurvePrivate::updateResultsNote() {
 	text += AICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
 	text += BICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
 
+	resultsNote->setUndoAware(false);
 	resultsNote->setText(text);
+	resultsNote->setUndoAware(true);
 
 	DEBUG("NOTE TEXT: " << resultsNote->text().toStdString())
 }
@@ -2719,9 +2721,12 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	fitResult.tdist_tValues.resize(np);
 	fitResult.tdist_pValues.resize(np);
 	fitResult.marginValues.resize(np);
-	// GSL: cerr = GSL_MAX_DBL(1., sqrt(fitResult.rms)); // increase error for poor fit
-	// NIST: cerr = sqrt(fitResult.rms); // increase error for poor fit, decrease for good fit
-	const double cerr = sqrt(fitResult.rms);
+	double cerr = 1.;
+	if (fitData.errorScaling) { // scale parameter uncertainties with sqrt(chi^2/dof) to use scaled/relative sigmas, otherwise unscaled/absolute sigmas are used
+		// GSL: cerr = GSL_MAX_DBL(1., sqrt(fitResult.rms)); // increase error for poor fit
+		// NIST: cerr = sqrt(fitResult.rms); // increase error for poor fit, decrease for good fit
+		cerr = sqrt(fitResult.rms);
+	}
 	// CI = 100 * (1 - alpha)
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
 	for (auto i = 0; i < np; i++) {
@@ -3004,6 +3009,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYFitCurve);
 
 	QXmlStreamAttributes attribs;
@@ -3167,7 +3173,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	d->resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 	d->resultsNote->setBackgroundColor(QColor(Qt::white));
 	d->resultsNote->setTextFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-	addChild(d->resultsNote);
+	addChildFast(d->resultsNote);
 
 	////////////////////////////// fix old projects /////////////////////////
 

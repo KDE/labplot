@@ -564,7 +564,7 @@ void BarPlotPrivate::recalc() {
 		// one more bar needs to be added
 		KConfig config;
 		KConfigGroup group = config.group(QLatin1String("BarPlot"));
-		const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
+		const auto* plot = q->parent<CartesianPlot>();
 
 		for (int i = 0; i < diff; ++i) {
 			// box filling and border line
@@ -590,17 +590,15 @@ void BarPlotPrivate::recalc() {
 	// this number is equal to the max number of non-empty
 	// values in the provided datasets
 	int barGroupsCount = 0;
-	int columnIndex = 0;
-	for (auto* column : std::as_const(dataColumns)) {
+	for (int i = 0; i < newSize; ++i) {
+		const auto* column = dataColumns.at(i);
 		if (!column)
 			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
-		m_barLines[columnIndex].resize(size);
-		m_fillPolygons[columnIndex].resize(size);
+		m_barLines[i].resize(size);
+		m_fillPolygons[i].resize(size);
 		if (size > barGroupsCount)
 			barGroupsCount = size;
-
-		++columnIndex;
 	}
 
 	m_stackedBarPositiveOffsets.resize(barGroupsCount);
@@ -1059,7 +1057,10 @@ void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QV
 	// clip the points to the plot data rect and create a new polygon
 	// out of them that will be filled out.
 	QPolygonF polygon;
-	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
+	const auto* plot = q->parent<CartesianPlot>();
+	if (!plot)
+		return;
+	const QRectF& dataRect = plot->dataRect();
 	int i = 0;
 	for (const auto& line : unclippedLines) {
 		// clip the first point of the line
@@ -1477,6 +1478,7 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool BarPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(BarPlot);
 
 	if (!readBasicAttributes(reader))

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for statistical plots like Q-Q plot, KDE plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,8 @@
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/ParetoChart.h"
 #include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/RunChart.h"
@@ -24,7 +26,7 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 
 // ##############################################################################
 // ############################## Histogram #####################################
@@ -1243,6 +1245,210 @@ void StatisticalPlotsTest::testRunChartCenterMedian() {
 	QCOMPARE(xColumn->rowCount(), rowCount);
 	for (int i = 0; i < rowCount; ++i)
 		QCOMPARE(xColumn->valueAt(i), i + 1);
+}
+
+// ##############################################################################
+// ######################### Pareto Chart #######################################
+// ##############################################################################
+/*!
+ * \brief create and add a new pareto chart, undo and redo this step
+ */
+void StatisticalPlotsTest::testParetoChartInit() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	ws->addChild(p);
+
+	auto* pc = new ParetoChart(QStringLiteral("pareto"));
+	p->addChild(pc);
+
+	auto children = p->children<ParetoChart>();
+
+	QCOMPARE(children.size(), 1);
+
+	project.undoStack()->undo();
+	children = p->children<ParetoChart>();
+	QCOMPARE(children.size(), 0);
+
+	project.undoStack()->redo();
+	children = p->children<ParetoChart>();
+	QCOMPARE(children.size(), 1);
+}
+
+/*!
+ * \brief create and add a new pareto chart, duplicate it and check the number of children
+ */
+void StatisticalPlotsTest::testParetoChartDuplicate() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	ws->addChild(p);
+
+	auto* pc = new ParetoChart(QStringLiteral("pareto"));
+	p->addChild(pc);
+
+	pc->duplicate();
+
+	auto children = p->children<ParetoChart>();
+	QCOMPARE(children.size(), 2);
+}
+
+/*!
+ * test the ranges of the pareto chart, the limits for bars should be from 0 to the maximum value in the data,
+ * the limits for the cumulative curve should be from 0 to 100%
+ */
+void StatisticalPlotsTest::testParetoChartRanges() {
+	Project project;
+
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	column->setIntegers({5, 9, 2, 4, 7});
+	project.addChild(column);
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	ws->addChild(p);
+
+	auto* pc = new ParetoChart(QStringLiteral("pareto"));
+	pc->setDataColumn(column);
+	p->addChild(pc);
+
+	// check the number of coordinates systems, should be 2, one for bars and one for the cumulative curve
+	QCOMPARE(p->coordinateSystems().size(), 2);
+
+	// check the ranges, the limits for bars should be from 0 to 5 (5 values), the limits for the cumulative curve should be from 0 to 100%
+	auto range = p->range(Dimension::X, 0);
+	QCOMPARE(range.start(), 0);
+	QCOMPARE(range.end(), 5);
+
+	range = p->range(Dimension::Y, 0);
+	QCOMPARE(range.start(), 0);
+	QCOMPARE(range.end(), 5);
+
+	range = p->range(Dimension::X, 1);
+	QCOMPARE(range.start(), 0);
+	QCOMPARE(range.end(), 5);
+
+	range = p->range(Dimension::Y, 1);
+	QCOMPARE(range.start(), 0);
+	QCOMPARE(range.end(), 100);
+}
+
+/*!
+ * \brief remove a data column used in a BarPlot and check that it doesn't crash.
+ * Regression test for the bug where recalc() used a compacted columnIndex
+ * to resize inner vectors while retransform() used the real dataColumns index.
+ */
+void StatisticalPlotsTest::testBarPlotColumnRemoved() {
+	Project project;
+
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(3);
+	sheet->setRowCount(3);
+	auto* c1 = sheet->column(0);
+	auto* c2 = sheet->column(1);
+	auto* c3 = sheet->column(2);
+	c1->setValueAt(0, 1);
+	c1->setValueAt(1, 2);
+	c1->setValueAt(2, 3);
+	c2->setValueAt(0, 10);
+	c2->setValueAt(1, 20);
+	c2->setValueAt(2, 30);
+	c3->setValueAt(0, 100);
+	c3->setValueAt(1, 200);
+	c3->setValueAt(2, 300);
+
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* barPlot = new BarPlot(QStringLiteral("barplot"));
+	p->addChild(barPlot);
+	barPlot->setDataColumns({c1, c2, c3});
+
+	// remove the first column - this should not crash
+	c1->remove();
+
+	auto dataColumns = barPlot->dataColumns();
+	QCOMPARE(dataColumns.size(), 3);
+	QCOMPARE(dataColumns.at(0), nullptr);
+	QCOMPARE(dataColumns.at(1), c2);
+	QCOMPARE(dataColumns.at(2), c3);
+
+	// undo the removal - the column should be restored
+	project.undoStack()->undo();
+
+	dataColumns = barPlot->dataColumns();
+	QCOMPARE(dataColumns.size(), 3);
+	QCOMPARE(dataColumns.at(0), c1);
+	QCOMPARE(dataColumns.at(1), c2);
+	QCOMPARE(dataColumns.at(2), c3);
+}
+
+/*!
+ * \brief remove a data column used in a LollipopPlot and check that it doesn't crash.
+ * Same regression test as testBarPlotColumnRemoved but for LollipopPlot.
+ */
+void StatisticalPlotsTest::testLollipopPlotColumnRemoved() {
+	Project project;
+
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(3);
+	sheet->setRowCount(3);
+	auto* c1 = sheet->column(0);
+	auto* c2 = sheet->column(1);
+	auto* c3 = sheet->column(2);
+	c1->setValueAt(0, 1);
+	c1->setValueAt(1, 2);
+	c1->setValueAt(2, 3);
+	c2->setValueAt(0, 10);
+	c2->setValueAt(1, 20);
+	c2->setValueAt(2, 30);
+	c3->setValueAt(0, 100);
+	c3->setValueAt(1, 200);
+	c3->setValueAt(2, 300);
+
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* lollipopPlot = new LollipopPlot(QStringLiteral("lollipopplot"));
+	p->addChild(lollipopPlot);
+	lollipopPlot->setDataColumns({c1, c2, c3});
+
+	// remove the first column - this should not crash
+	c1->remove();
+
+	auto dataColumns = lollipopPlot->dataColumns();
+	QCOMPARE(dataColumns.size(), 3);
+	QCOMPARE(dataColumns.at(0), nullptr);
+	QCOMPARE(dataColumns.at(1), c2);
+	QCOMPARE(dataColumns.at(2), c3);
+
+	// undo the removal - the column should be restored
+	project.undoStack()->undo();
+
+	dataColumns = lollipopPlot->dataColumns();
+	QCOMPARE(dataColumns.size(), 3);
+	QCOMPARE(dataColumns.at(0), c1);
+	QCOMPARE(dataColumns.at(1), c2);
+	QCOMPARE(dataColumns.at(2), c3);
 }
 
 QTEST_MAIN(StatisticalPlotsTest)

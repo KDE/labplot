@@ -79,8 +79,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-26.03.0.tar.xz",
-                    "sha256": "8b3c5e2a9f2ab4c3ec5029f28af1b433c6b71f0d1e7b3997aa561cf1c0ca4ebe"
+                    "url": "https://poppler.freedesktop.org/poppler-26.04.0.tar.xz",
+                    "sha256": "b0955163114af96bc0106f68cb24daf973a629462453d8b82775f81b0d4e0693"
                 }
             ],
             "modules": [
@@ -108,8 +108,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.12.2/src/analitza-25.12.2.tar.xz",
-			    "sha256": "5918986927ad6820f9baa53b4d935b9450ddaf579d015fa5d449b9f3ef70c5ae"
+			    "url": "https://download.kde.org/stable/release-service/25.12.3/src/analitza-25.12.3.tar.xz",
+			    "sha256": "4f0bc01116d61953d9759f91f943eb9da674f1f048a453d55035f4459c3bfdb7"
 		    }
 	    ]
         },
@@ -119,8 +119,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.12.2/src/cantor-25.12.2.tar.xz",
-			    "sha256": "d72152513ef5fcd93c520ff2dc1d4b6decbddf1e7be98cb811b465b57972b823"
+			    "url": "https://download.kde.org/stable/release-service/25.12.3/src/cantor-25.12.3.tar.xz",
+			    "sha256": "08873503b24e77a2f0d334327d639fb88ca71a4a72f6a92453c0d47f43caae4b"
 		    }
 	    ]
         },
@@ -227,22 +227,6 @@
 		{
                     "type": "patch",
                     "path": "admin/patches/readstat-1.1.9.patch"
-                }
-            ]
-        },
-        {
-            "name": "Qt-Advanced-Docking-System",
-            "buildsystem": "cmake-ninja",
-            "config-opts": [
-                "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=6",
-                "-DCMAKE_CXX_FLAGS=-I/usr/include/QtGui/6.10.2/QtGui"
-            ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git",
-                    "commit": "a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6"
                 }
             ]
         },
@@ -372,7 +356,6 @@
             "buildsystem": "cmake-ninja",
             "config-opts": [
 		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
-		    "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF",
 		    "-DENABLE_TESTS=OFF"
 	    ],
 	    "build-options": {

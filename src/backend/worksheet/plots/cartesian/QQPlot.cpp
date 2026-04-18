@@ -293,12 +293,12 @@ void QQPlot::setDistribution(nsl_sf_stats_distribution distribution) {
 // #################################  SLOTS  ####################################
 // ##############################################################################
 void QQPlot::retransform() {
-	D(QQPlot);
+	Q_D(QQPlot);
 	d->retransform();
 }
 
 void QQPlot::recalc() {
-	D(QQPlot);
+	Q_D(QQPlot);
 	d->recalc();
 }
 
@@ -633,6 +633,7 @@ void QQPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool QQPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(QQPlot);
 
 	if (!readBasicAttributes(reader))

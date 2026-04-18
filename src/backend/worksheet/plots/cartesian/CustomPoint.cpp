@@ -232,6 +232,7 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(CustomPoint);
 
 	if (!readBasicAttributes(reader))
