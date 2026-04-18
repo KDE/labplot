@@ -960,10 +960,10 @@ void XYCurvePrivate::recalc() {
 				tempPoint.setY(yColumn->doubleAt(row) + yOffset);
 				break;
 			case AbstractColumn::ColumnMode::Integer:
-				tempPoint.setY(yColumn->integerAt(row));
+				tempPoint.setY(yColumn->integerAt(row) + (int)yOffset);
 				break;
 			case AbstractColumn::ColumnMode::BigInt:
-				tempPoint.setY(yColumn->bigIntAt(row));
+				tempPoint.setY(yColumn->bigIntAt(row) + (int)yOffset);
 				break;
 			case AbstractColumn::ColumnMode::DateTime:
 				tempPoint.setY(yColumn->dateTimeAt(row).toMSecsSinceEpoch());
