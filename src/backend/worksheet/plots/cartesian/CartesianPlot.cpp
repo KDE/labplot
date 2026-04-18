@@ -193,6 +193,7 @@ void CartesianPlot::init(bool loading) {
 			this,
 			&CartesianPlot::childAboutToBeAdded);
 	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
+	connect(this, &AbstractAspect::childAspectMoved, this, &CartesianPlot::childMoved);
 
 	// if not loading, initialize the default properties (read in load() otherwise)
 	if (loading)
@@ -2957,6 +2958,18 @@ void CartesianPlot::childRemoved(const AbstractAspect* /*parent*/, const Abstrac
 				WorksheetElementContainer::retransform();
 		}
 	}
+}
+
+/*!
+ * called when the one of the children wsa moved, updates everything that
+ * depends on the actual order of childred like the order of items in the legend,
+ * the order of plots in the stack plot, etc.
+ */
+void CartesianPlot::childMoved() {
+	updateLegend();
+	Q_D(CartesianPlot);
+	if (d->stackYOffset != 0.)
+		d->updateStackYOffset();
 }
 
 /*!
