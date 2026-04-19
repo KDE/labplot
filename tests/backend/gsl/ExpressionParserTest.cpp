@@ -1,6 +1,19 @@
+/*
+	File                 : ExpressionParserTest.h
+	Project              : LabPlot
+	Description          : Tests for ExpressionParser
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2023-2025 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #include "ExpressionParserTest.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/functions.h"
+
+#include <QDate>
 
 using namespace Parsing;
 
@@ -261,6 +274,24 @@ void ExpressionParserTest::testequalEpsilon() {
 	QCOMPARE(fnct(5.11, 5.3, 0.1), 0);
 	QCOMPARE(fnct(-5.11, 5.3, 0.2), 0);
 	QCOMPARE(fnct(-5.11, -5.3, 0.2), 1);
+}
+
+void ExpressionParserTest::testTodayFunction() {
+	double result = todayFunction();
+	double expected = QDate(1900, 1, 1).daysTo(QDate::currentDate());
+	QCOMPARE(result, expected);
+}
+
+void ExpressionParserTest::testTodayExpression() {
+	const QString expr = QStringLiteral("today()");
+	const QStringList vars = {};
+	QVector<QVector<double>*> xVectors;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QCOMPARE(yVector.at(0), todayFunction());
 }
 
 void ExpressionParserTest::testRoundn() {

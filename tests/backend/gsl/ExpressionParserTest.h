@@ -1,3 +1,14 @@
+/*
+	File                 : ExpressionParserTest.h
+	Project              : LabPlot
+	Description          : Tests for ExpressionParser
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2023-2025 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #ifndef EXPRESSIONPARSERTEST_H
 #define EXPRESSIONPARSERTEST_H
 
@@ -21,6 +32,8 @@ private Q_SLOTS:
 	void testxorFunction();
 	void testnotFunction();
 	void testbetweenIncluded();
+	void testTodayFunction();
+	void testTodayExpression();
 	void testoutsideIncluded();
 	void testbetween();
 	void testoutside();
