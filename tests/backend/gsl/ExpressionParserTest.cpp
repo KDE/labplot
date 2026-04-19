@@ -291,6 +291,153 @@ void ExpressionParserTest::testNowFunction() {
 	QVERIFY(qAbs(result - expected) < 1e-3);
 }
 
+void ExpressionParserTest::testDateFunction() {
+	double result = dateFunction(2026, 4, 19);
+	double expected = double(QDate(1900, 1, 1).daysTo(QDate(2026, 4, 19)));
+	QCOMPARE(result, expected);
+}
+
+void ExpressionParserTest::testDatedifFunction() {
+	// Test days difference
+	double start = dateFunction(2026, 4, 15);
+	double end = dateFunction(2026, 4, 19);
+	QCOMPARE(datedifFunction(start, end, 0), 4.0); // 4 days
+
+	// Test months difference
+	start = dateFunction(2026, 1, 1);
+	end = dateFunction(2026, 4, 1);
+	QCOMPARE(datedifFunction(start, end, 1), 3.0); // 3 months
+
+	// Test years difference
+	start = dateFunction(2020, 4, 19);
+	end = dateFunction(2026, 4, 19);
+	QCOMPARE(datedifFunction(start, end, 2), 6.0); // 6 years
+}
+
+void ExpressionParserTest::testEomonthFunction() {
+	// Test end of current month
+	double start = dateFunction(2026, 4, 19);
+	QCOMPARE(eomonthFunction(start, 0), dateFunction(2026, 4, 30)); // April 30, 2026
+
+	// Test end of next month
+	QCOMPARE(eomonthFunction(start, 1), dateFunction(2026, 5, 31)); // May 31, 2026
+
+	// Test end of previous month
+	QCOMPARE(eomonthFunction(start, -1), dateFunction(2026, 3, 31)); // March 31, 2026
+
+	// Test February (non-leap year)
+	start = dateFunction(2025, 1, 15);
+	QCOMPARE(eomonthFunction(start, 1), dateFunction(2025, 2, 28)); // February 28, 2025
+
+	// Test February (leap year)
+	start = dateFunction(2024, 1, 15);
+	QCOMPARE(eomonthFunction(start, 1), dateFunction(2024, 2, 29)); // February 29, 2024
+}
+
+void ExpressionParserTest::testWeekdayFunction() {
+	// Test Monday (April 20, 2026 is a Monday)
+	double date = dateFunction(2026, 4, 20);
+	QCOMPARE(weekdayFunction(date), 0.0); // Monday = 0
+
+	// Test Tuesday
+	date = dateFunction(2026, 4, 21);
+	QCOMPARE(weekdayFunction(date), 1.0); // Tuesday = 1
+
+	// Test Wednesday
+	date = dateFunction(2026, 4, 22);
+	QCOMPARE(weekdayFunction(date), 2.0); // Wednesday = 2
+
+	// Test Thursday
+	date = dateFunction(2026, 4, 23);
+	QCOMPARE(weekdayFunction(date), 3.0); // Thursday = 3
+
+	// Test Friday
+	date = dateFunction(2026, 4, 24);
+	QCOMPARE(weekdayFunction(date), 4.0); // Friday = 4
+
+	// Test Saturday
+	date = dateFunction(2026, 4, 25);
+	QCOMPARE(weekdayFunction(date), 5.0); // Saturday = 5
+
+	// Test Sunday (today)
+	date = dateFunction(2026, 4, 19);
+	QCOMPARE(weekdayFunction(date), 6.0); // Sunday = 6
+}
+
+void ExpressionParserTest::testNetworkdaysFunction() {
+	// Test single day - Monday
+	double start = dateFunction(2026, 4, 20); // Monday
+	double end = dateFunction(2026, 4, 20); // Monday
+	QCOMPARE(networkdaysFunction(start, end), 1.0); // 1 working day
+
+	// Test single day - Saturday
+	start = dateFunction(2026, 4, 25); // Saturday
+	end = dateFunction(2026, 4, 25); // Saturday
+	QCOMPARE(networkdaysFunction(start, end), 0.0); // 0 working days
+
+	// Test week: Monday to Friday
+	start = dateFunction(2026, 4, 20); // Monday
+	end = dateFunction(2026, 4, 24); // Friday
+	QCOMPARE(networkdaysFunction(start, end), 5.0); // 5 working days
+
+	// Test week: Monday to Sunday (includes weekend)
+	start = dateFunction(2026, 4, 20); // Monday
+	end = dateFunction(2026, 4, 26); // Sunday
+	QCOMPARE(networkdaysFunction(start, end), 5.0); // 5 working days (Mon-Fri)
+
+	// Test two weeks
+	start = dateFunction(2026, 4, 20); // Monday
+	end = dateFunction(2026, 5, 3); // Sunday (2 weeks later)
+	QCOMPARE(networkdaysFunction(start, end), 10.0); // 10 working days
+}
+
+void ExpressionParserTest::testYearFunction() {
+	double date = dateFunction(2026, 4, 19);
+	QCOMPARE(yearFunction(date), 2026.0);
+
+	date = dateFunction(2000, 1, 1);
+	QCOMPARE(yearFunction(date), 2000.0);
+
+	date = dateFunction(2050, 12, 31);
+	QCOMPARE(yearFunction(date), 2050.0);
+}
+
+void ExpressionParserTest::testMonthFunction() {
+	double date = dateFunction(2026, 4, 19);
+	QCOMPARE(monthFunction(date), 4.0);
+
+	date = dateFunction(2026, 1, 1);
+	QCOMPARE(monthFunction(date), 1.0);
+
+	date = dateFunction(2026, 12, 31);
+	QCOMPARE(monthFunction(date), 12.0);
+}
+
+void ExpressionParserTest::testDayFunction() {
+	double date = dateFunction(2026, 4, 19);
+	QCOMPARE(dayFunction(date), 19.0);
+
+	date = dateFunction(2026, 4, 1);
+	QCOMPARE(dayFunction(date), 1.0);
+
+	date = dateFunction(2026, 4, 30);
+	QCOMPARE(dayFunction(date), 30.0);
+}
+
+void ExpressionParserTest::testWeeknumFunction() {
+	// April 19, 2026 is Sunday of week 16
+	double date = dateFunction(2026, 4, 19);
+	QCOMPARE(weeknumFunction(date), 16.0);
+
+	// January 1, 2026 is Thursday of week 1
+	date = dateFunction(2026, 1, 1);
+	QCOMPARE(weeknumFunction(date), 1.0);
+
+	// First day of 2026 should be in week 1
+	date = dateFunction(2026, 1, 4);
+	QVERIFY(weeknumFunction(date) >= 1.0);
+}
+
 void ExpressionParserTest::testTodayExpression() {
 	const QString expr = QStringLiteral("today()");
 	const QStringList vars = {};
@@ -313,6 +460,114 @@ void ExpressionParserTest::testNowExpression() {
 
 	QCOMPARE(yVector.size(), 1);
 	QVERIFY(qAbs(yVector.at(0) - nowFunction()) < 1e-3);
+}
+
+void ExpressionParserTest::testDateExpression() {
+	const QString expr = QStringLiteral("date(2026; 4; 19)");
+	const QStringList vars = {};
+	QVector<QVector<double>*> xVectors;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QCOMPARE(yVector.at(0), dateFunction(2026, 4, 19));
+}
+
+void ExpressionParserTest::testDatedifExpression() {
+	const QString expr = QStringLiteral("datedif(date(2026; 4; 15); date(2026; 4; 19); 0)");
+	const QStringList vars = {};
+	QVector<QVector<double>*> xVectors;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QCOMPARE(yVector.at(0), 4.0); // 4 days difference
+}
+
+void ExpressionParserTest::testEomonthExpression() {
+	const QString expr = QStringLiteral("eomonth(date(2026; 4; 19); 0)");
+	const QStringList vars = {};
+	QVector<QVector<double>*> xVectors;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QCOMPARE(yVector.at(0), dateFunction(2026, 4, 30)); // End of April 2026
+}
+
+void ExpressionParserTest::testWeekdayExpression() {
+	const QString expr = QStringLiteral("weekday(date(2026; 4; 20))"); // Monday
+	const QStringList vars = {};
+	QVector<QVector<double>*> xVectors;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QCOMPARE(yVector.at(0), 0.0); // Monday = 0
+}
+
+void ExpressionParserTest::testNetworkdaysExpression() {
+	const QString expr = QStringLiteral("networkdays(date(2026; 4; 20); date(2026; 4; 24))"); // Mon-Fri
+	const QStringList vars = {};
+	QVector<QVector<double>*> xVectors;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QCOMPARE(yVector.at(0), 5.0); // 5 working days
+}
+
+void ExpressionParserTest::testYearExpression() {
+	const QString expr = QStringLiteral("year(date(2026; 4; 19))");
+	const QStringList vars = {};
+	QVector<QVector<double>*> xVectors;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QCOMPARE(yVector.at(0), 2026.0);
+}
+
+void ExpressionParserTest::testMonthExpression() {
+	const QString expr = QStringLiteral("month(date(2026; 4; 19))");
+	const QStringList vars = {};
+	QVector<QVector<double>*> xVectors;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QCOMPARE(yVector.at(0), 4.0);
+}
+
+void ExpressionParserTest::testDayExpression() {
+	const QString expr = QStringLiteral("day(date(2026; 4; 19))");
+	const QStringList vars = {};
+	QVector<QVector<double>*> xVectors;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QCOMPARE(yVector.at(0), 19.0);
+}
+
+void ExpressionParserTest::testWeeknumExpression() {
+	const QString expr = QStringLiteral("weeknum(date(2026; 4; 19))");
+	const QStringList vars = {};
+	QVector<QVector<double>*> xVectors;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QCOMPARE(yVector.at(0), 16.0); // April 19, 2026 is in week 16
 }
 
 void ExpressionParserTest::testRoundn() {

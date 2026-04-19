@@ -4,7 +4,7 @@
 	Description          : definition of functions
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2014-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2014-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -348,6 +348,15 @@ const char* cell_curr_column_default = "cell_curr_column_with_default";
 		// Datetime
 		{[]() { return i18n("today"); }, "today", todayFunction, 0, nullptr, FunctionGroups::DatetimeFunctions},
 		{[]() { return i18n("now"); }, "now", nowFunction, 0, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("date(year; month; day)"); }, "date", dateFunction, 3, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("datedif(start_date; end_date; unit)"); }, "datedif", datedifFunction, 3, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("eomonth(start_date; months)"); }, "eomonth", eomonthFunction, 2, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("weekday(date)"); }, "weekday", weekdayFunction, 1, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("networkdays(start_date; end_date)"); }, "networkdays", networkdaysFunction, 2, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("year(date)"); }, "year", yearFunction, 1, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("month(date)"); }, "month", monthFunction, 1, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("day(date)"); }, "day", dayFunction, 1, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("weeknum(date)"); }, "weeknum", weeknumFunction, 1, nullptr, FunctionGroups::DatetimeFunctions},
 
 		// https://www.gnu.org/software/gsl/doc/html/specfunc.html
 		// Airy Functions and Derivatives
@@ -933,6 +942,143 @@ double nowFunction() {
 	const auto now = QDateTime::currentDateTime();
 	const QDateTime start(QDate(1900, 1, 1), QTime(0, 0, 0, 0));
 	return double(start.msecsTo(now)) / 86400000.0;
+}
+
+double dateFunction(const double year, const double month, const double day) {
+	const int y = qRound(year);
+	const int m = qRound(month);
+	const int d = qRound(day);
+	const QDate date(y, m, d);
+	if (!date.isValid())
+		return NAN;
+	const QDate start(1900, 1, 1);
+	return double(start.daysTo(date));
+}
+
+enum class DateDifUnit { Days = 0, Months = 1, Years = 2, MonthsIgnoringYears = 3, DaysIgnoringYears = 4, DaysIgnoringMonthsAndYears = 5 };
+
+double datedifFunction(const double start_date, const double end_date, const double unit) {
+	const QDate start = QDate(1900, 1, 1).addDays(qRound(start_date));
+	const QDate end = QDate(1900, 1, 1).addDays(qRound(end_date));
+	const DateDifUnit unit_code = static_cast<DateDifUnit>(qRound(unit));
+
+	if (!start.isValid() || !end.isValid() || start > end)
+		return NAN;
+
+	switch (unit_code) {
+	case DateDifUnit::Days:
+		return double(start.daysTo(end));
+	case DateDifUnit::Months: {
+		int years = end.year() - start.year();
+		int months = end.month() - start.month();
+		if (end.day() < start.day())
+			months--;
+		return double(years * 12 + months);
+	}
+	case DateDifUnit::Years:
+		return double(end.year() - start.year());
+	case DateDifUnit::MonthsIgnoringYears: {
+		int months = end.month() - start.month();
+		if (end.day() < start.day())
+			months--;
+		if (months < 0)
+			months += 12;
+		return double(months);
+	}
+	case DateDifUnit::DaysIgnoringYears: {
+		QDate start_same_year(end.year(), start.month(), start.day());
+		if (start_same_year > end) {
+			start_same_year = start_same_year.addYears(-1);
+		}
+		return double(start_same_year.daysTo(end));
+	}
+	case DateDifUnit::DaysIgnoringMonthsAndYears: {
+		QDate start_same_year_month(end.year(), end.month(), start.day());
+		if (start_same_year_month > end) {
+			start_same_year_month = start_same_year_month.addMonths(-1);
+		}
+		return double(start_same_year_month.daysTo(end));
+	}
+	default:
+		return NAN;
+	}
+}
+
+double eomonthFunction(const double start_date, const double months) {
+	const QDate start = QDate(1900, 1, 1).addDays(qRound(start_date));
+	if (!start.isValid())
+		return NAN;
+
+	// Add the specified number of months to the start date
+	QDate target_date = start.addMonths(qRound(months));
+
+	// Get the last day of the target month
+	QDate last_day_of_month(target_date.year(), target_date.month(), 1);
+	last_day_of_month = last_day_of_month.addMonths(1).addDays(-1);
+
+	const QDate reference(1900, 1, 1);
+	return double(reference.daysTo(last_day_of_month));
+}
+
+double weekdayFunction(const double date) {
+	const QDate d = QDate(1900, 1, 1).addDays(qRound(date));
+	if (!d.isValid())
+		return NAN;
+
+	// QDate::dayOfWeek() returns 1=Monday to 7=Sunday
+	// Convert to 0=Monday to 6=Sunday
+	return double(d.dayOfWeek() - 1);
+}
+
+double networkdaysFunction(const double start_date, const double end_date) {
+	const QDate start = QDate(1900, 1, 1).addDays(qRound(start_date));
+	const QDate end = QDate(1900, 1, 1).addDays(qRound(end_date));
+
+	if (!start.isValid() || !end.isValid() || start > end)
+		return NAN;
+
+	int working_days = 0;
+	QDate current = start;
+
+	while (current <= end) {
+		// Monday=1, Tuesday=2, Wednesday=3, Thursday=4, Friday=5
+		// Skip Saturday=6, Sunday=7
+		int day_of_week = current.dayOfWeek();
+		if (day_of_week >= 1 && day_of_week <= 5) {
+			working_days++;
+		}
+		current = current.addDays(1);
+	}
+
+	return double(working_days);
+}
+
+double yearFunction(const double date) {
+	const QDate d = QDate(1900, 1, 1).addDays(qRound(date));
+	if (!d.isValid())
+		return NAN;
+	return double(d.year());
+}
+
+double monthFunction(const double date) {
+	const QDate d = QDate(1900, 1, 1).addDays(qRound(date));
+	if (!d.isValid())
+		return NAN;
+	return double(d.month());
+}
+
+double dayFunction(const double date) {
+	const QDate d = QDate(1900, 1, 1).addDays(qRound(date));
+	if (!d.isValid())
+		return NAN;
+	return double(d.day());
+}
+
+double weeknumFunction(const double date) {
+	const QDate d = QDate(1900, 1, 1).addDays(qRound(date));
+	if (!d.isValid())
+		return NAN;
+	return double(d.weekNumber());
 }
 
 ////////////////////////////////////////////////////////////////////////
