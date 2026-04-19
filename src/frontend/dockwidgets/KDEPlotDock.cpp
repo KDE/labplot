@@ -109,8 +109,6 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	// initialize widgets for common properties
 	QList<Line*> estimationLines;
 	QList<Background*> estimationBackgrounds;
-	//QList<Line*> histogramLines;
-	//QList<Background*> histogramBackgrounds;
 	for (auto* plot : m_plots) {
 		estimationLines << plot->estimationCurve()->line();
 		estimationBackgrounds << plot->estimationCurve()->background();
