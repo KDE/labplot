@@ -176,7 +176,7 @@ void CartesianPlot::init(bool loading) {
 	d->borderCornerRadius = group.readEntry(QStringLiteral("BorderCornerRadius"), 0.0);
 
 	// cursor line
-	d->cursorLine = new Line(QString());
+	d->cursorLine = new Line(QStringLiteral("cursorLine"));
 	d->cursorLine->setPrefix(QLatin1String("Cursor"));
 	d->cursorLine->setHidden(true);
 	addChild(d->cursorLine);
