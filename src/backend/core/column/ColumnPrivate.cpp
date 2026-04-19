@@ -21,6 +21,7 @@
 #include "backend/nsl/nsl_stats.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
+#include <cmath>
 
 #include "functions.h"
 
@@ -3193,20 +3194,31 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
  */
 void ColumnPrivate::setValueAt(int row, double new_value) {
 	// DEBUG(Q_FUNC_INFO);
-	if (m_columnMode != AbstractColumn::ColumnMode::Double)
+	if (m_columnMode == AbstractColumn::ColumnMode::Double) {
+		setValueAtPrivate<double>(row, new_value);
+	} else if (m_columnMode == AbstractColumn::ColumnMode::DateTime) {
+		// Convert double (days since 1900-01-01) to QDateTime
+		QDateTime start(QDate(1900, 1, 1).startOfDay());
+		int days = std::floor(new_value);
+		double frac = new_value - days;
+		auto date = start.addDays(days);
+		int msecs = std::round(frac * 86400000.0);
+		date = date.addMSecs(msecs);
+		setDateTimeAt(row, date);
+	} else {
+		// For other modes, do nothing or handle similarly
 		return;
-
-	setValueAtPrivate<double>(row, new_value);
+	}
 }
 
 /**
  * \brief Replace a range of values
  *
- * Use this only when columnMode() is Numeric
+ * Use this only when columnMode() is Numeric or DateTime
  */
 void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) {
 	// DEBUG(Q_FUNC_INFO);
-	if (m_columnMode != AbstractColumn::ColumnMode::Double)
+	if (m_columnMode != AbstractColumn::ColumnMode::Double && m_columnMode != AbstractColumn::ColumnMode::DateTime)
 		return;
 
 	if (!m_data) {
@@ -3217,15 +3229,45 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 
 	Q_EMIT q->dataAboutToChange(q);
 
-	if (first < 0)
-		*static_cast<QVector<double>*>(m_data) = new_values;
-	else {
-		const int num_rows = new_values.size();
-		resizeTo(first + num_rows);
+	if (m_columnMode == AbstractColumn::ColumnMode::Double) {
+		if (first < 0)
+			*static_cast<QVector<double>*>(m_data) = new_values;
+		else {
+			const int num_rows = new_values.size();
+			resizeTo(first + num_rows);
 
-		double* ptr = static_cast<QVector<double>*>(m_data)->data();
-		for (int i = 0; i < num_rows; ++i)
-			ptr[first + i] = new_values.at(i);
+			double* ptr = static_cast<QVector<double>*>(m_data)->data();
+			for (int i = 0; i < num_rows; ++i)
+				ptr[first + i] = new_values.at(i);
+		}
+	} else if (m_columnMode == AbstractColumn::ColumnMode::DateTime) {
+		QDateTime start(QDate(1900, 1, 1).startOfDay());
+		if (first < 0) {
+			resizeTo(new_values.size());
+			auto* data = static_cast<QVector<QDateTime>*>(m_data);
+			for (int i = 0; i < new_values.size(); ++i) {
+				double value = new_values.at(i);
+				int days = std::floor(value);
+				double frac = value - days;
+				QDateTime date = start.addDays(days);
+				int msecs = std::round(frac * 86400000.0);
+				date = date.addMSecs(msecs);
+				data->replace(i, date);
+			}
+		} else {
+			const int num_rows = new_values.size();
+			resizeTo(first + num_rows);
+			auto* data = static_cast<QVector<QDateTime>*>(m_data);
+			for (int i = 0; i < num_rows; ++i) {
+				double value = new_values.at(i);
+				int days = std::floor(value);
+				double frac = value - days;
+				QDateTime date = start.addDays(days);
+				int msecs = std::round(frac * 86400000.0);
+				date = date.addMSecs(msecs);
+				data->replace(first + i, date);
+			}
+		}
 	}
 
 	q->setDataChanged();

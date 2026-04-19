@@ -45,7 +45,6 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 
 	// first try the selected format string m_format
 	QDateTime result = QDateTime::fromString(input_value, m_format);
-	result.setTimeZone(QTimeZone::UTC);
 	if (result.isValid())
 		return result;
 
@@ -87,7 +86,7 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 	else if (date_result.isValid() && !time_result.isValid())
 		time_result = QTime(0, 0, 0, 0);
 
-	return {date_result, time_result};
+	return {date_result, time_result, QTimeZone::UTC};
 }
 
 QDate String2DateTimeFilter::dateAt(int row) const {
