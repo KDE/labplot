@@ -19,9 +19,9 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include "backend/nsl/nsl_stats.h"
+#include <cmath>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
-#include <cmath>
 
 #include "functions.h"
 
