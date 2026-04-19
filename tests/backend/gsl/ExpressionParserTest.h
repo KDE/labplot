@@ -33,7 +33,9 @@ private Q_SLOTS:
 	void testnotFunction();
 	void testbetweenIncluded();
 	void testTodayFunction();
+	void testNowFunction();
 	void testTodayExpression();
+	void testNowExpression();
 	void testoutsideIncluded();
 	void testbetween();
 	void testoutside();

@@ -14,6 +14,8 @@
 #include "backend/gsl/functions.h"
 
 #include <QDate>
+#include <QDateTime>
+#include <QTime>
 
 using namespace Parsing;
 
@@ -282,6 +284,13 @@ void ExpressionParserTest::testTodayFunction() {
 	QCOMPARE(result, expected);
 }
 
+void ExpressionParserTest::testNowFunction() {
+	double result = nowFunction();
+	auto now = QDateTime::currentDateTime();
+	double expected = double(QDateTime(QDate(1900, 1, 1), QTime(0, 0, 0, 0)).msecsTo(now)) / 86400000.0;
+	QVERIFY(qAbs(result - expected) < 1e-3);
+}
+
 void ExpressionParserTest::testTodayExpression() {
 	const QString expr = QStringLiteral("today()");
 	const QStringList vars = {};
@@ -292,6 +301,18 @@ void ExpressionParserTest::testTodayExpression() {
 
 	QCOMPARE(yVector.size(), 1);
 	QCOMPARE(yVector.at(0), todayFunction());
+}
+
+void ExpressionParserTest::testNowExpression() {
+	const QString expr = QStringLiteral("now()");
+	const QStringList vars = {};
+	QVector<QVector<double>*> xVectors;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QVERIFY(qAbs(yVector.at(0) - nowFunction()) < 1e-3);
 }
 
 void ExpressionParserTest::testRoundn() {

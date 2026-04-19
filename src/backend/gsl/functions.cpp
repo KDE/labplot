@@ -347,6 +347,7 @@ const char* cell_curr_column_default = "cell_curr_column_with_default";
 
 		// Datetime
 		{[]() { return i18n("today"); }, "today", todayFunction, 0, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("now"); }, "now", nowFunction, 0, nullptr, FunctionGroups::DatetimeFunctions},
 
 		// https://www.gnu.org/software/gsl/doc/html/specfunc.html
 		// Airy Functions and Derivatives
@@ -926,6 +927,12 @@ double todayFunction() {
 	QDateTime today(QDate::currentDate(), QTime(0, 0, 0, 0));
 	QDateTime start(QDate(1900, 1, 1), QTime(0, 0, 0, 0));
 	return start.daysTo(today);
+}
+
+double nowFunction() {
+	const auto now = QDateTime::currentDateTime();
+	const QDateTime start(QDate(1900, 1, 1), QTime(0, 0, 0, 0));
+	return double(start.msecsTo(now)) / 86400000.0;
 }
 
 ////////////////////////////////////////////////////////////////////////
