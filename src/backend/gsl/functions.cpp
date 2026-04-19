@@ -16,6 +16,8 @@
 
 #include <KLocalizedString>
 
+#include <QDateTime>
+
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_randist.h>
@@ -61,6 +63,8 @@ QString FunctionGroupsToString(FunctionGroups group) {
 		return i18n("Comparison Functions");
 	case FunctionGroups::LogicalFunctions:
 		return i18n("Logical Functions");
+	case FunctionGroups::DatetimeFunctions:
+		return i18n("Datetime Functions");
 	case FunctionGroups::ColumnStatistics:
 		return i18n("Column Statistics");
 	case FunctionGroups::MovingStatistics:
@@ -340,6 +344,9 @@ const char* cell_curr_column_default = "cell_curr_column_with_default";
 		{[]() { return i18n("or"); }, "or", orFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 		{[]() { return i18n("xor"); }, "xor", xorFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 		{[]() { return i18n("not"); }, "not", notFunction, 1, nullptr, FunctionGroups::LogicalFunctions},
+
+		// Datetime
+		{[]() { return i18n("today"); }, "today", todayFunction, 0, nullptr, FunctionGroups::DatetimeFunctions},
 
 		// https://www.gnu.org/software/gsl/doc/html/specfunc.html
 		// Airy Functions and Derivatives
@@ -914,6 +921,14 @@ double notFunction(const double v) {
 		return 0;
 	return 1;
 }
+
+double todayFunction() {
+	QDateTime today(QDate::currentDate(), QTime(0, 0, 0, 0));
+	QDateTime start(QDate(1900, 1, 1), QTime(0, 0, 0, 0));
+	return start.daysTo(today);
+}
+
+////////////////////////////////////////////////////////////////////////
 
 double betweenIncluded(const double x, const double min, const double max) {
 	if (x >= min && x <= max)

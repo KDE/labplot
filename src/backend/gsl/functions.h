@@ -76,6 +76,7 @@ enum class FunctionGroups : int {
 	StandardMathematicalFunctions,
 	ComparisonFunctions,
 	LogicalFunctions,
+	DatetimeFunctions,
 	ColumnStatistics,
 	MovingStatistics,
 	AiryFunctionsAndDerivatives,
@@ -193,6 +194,7 @@ extern const char* specialfun_rsample;
 double andFunction(const double v1, const double v2);
 double orFunction(const double v1, const double v2);
 double notFunction(const double v);
+double todayFunction();
 double greaterThan(const double v1, const double v2);
 double greaterEqualThan(const double v1, const double v2);
 double lessThan(const double v1, const double v2);
