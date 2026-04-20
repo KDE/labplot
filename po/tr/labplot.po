@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-19 00:39+0000\n"
+"POT-Creation-Date: 2026-04-20 00:40+0000\n"
 "PO-Revision-Date: 2026-04-17 07:09+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2715,7 +2715,7 @@ msgstr "Stefan–Boltzmann sabiti"
 
 #: src/backend/gsl/constants.cpp:83
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:713
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:160
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:158
 #, kde-format
 msgid "Gauss"
 msgstr "Gauss"
@@ -5198,7 +5198,7 @@ msgstr "Sinüs"
 
 #: src/backend/gsl/functions.cpp:618 src/backend/nsl/nsl_interp.c:21
 #: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:30
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:167
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:165
 #, kde-format
 msgid "Cosine"
 msgstr "Kosinüs"
@@ -6760,7 +6760,7 @@ msgstr "İstatistik (Dağılımlar)"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
 #: src/frontend/datasources/ImportFileWidget.cpp:1419
 #: src/frontend/dockwidgets/AxisDock.cpp:234
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:172
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #, kde-format
@@ -7176,7 +7176,7 @@ msgid "Frechet (Inverse Weibull)"
 msgstr "Frechet (Ters Weibull)"
 
 #: src/backend/nsl/nsl_sf_stats.c:48 src/backend/nsl/nsl_sf_window.c:16
-#: src/backend/nsl/nsl_smooth.c:24 src/frontend/dockwidgets/KDEPlotDock.cpp:162
+#: src/backend/nsl/nsl_smooth.c:24 src/frontend/dockwidgets/KDEPlotDock.cpp:160
 #, kde-format
 msgid "Triangular"
 msgstr "Üçgensel"
@@ -7287,27 +7287,27 @@ msgstr "Sabit"
 msgid "Periodic"
 msgstr "Periyodik"
 
-#: src/backend/nsl/nsl_smooth.c:23 src/frontend/dockwidgets/KDEPlotDock.cpp:161
+#: src/backend/nsl/nsl_smooth.c:23 src/frontend/dockwidgets/KDEPlotDock.cpp:159
 #, kde-format
 msgid "Uniform (Rectangular)"
 msgstr "Tekdüze (Dikdörtgen)"
 
-#: src/backend/nsl/nsl_smooth.c:26 src/frontend/dockwidgets/KDEPlotDock.cpp:163
+#: src/backend/nsl/nsl_smooth.c:26 src/frontend/dockwidgets/KDEPlotDock.cpp:161
 #, kde-format
 msgid "Parabolic (Epanechnikov)"
 msgstr "Parabolik (Epaneçnikov)"
 
-#: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/KDEPlotDock.cpp:164
+#: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/KDEPlotDock.cpp:162
 #, kde-format
 msgid "Quartic (Biweight)"
 msgstr "Dörtlenik (İkili Ağırlık)"
 
-#: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:165
+#: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:163
 #, kde-format
 msgid "Triweight"
 msgstr "Üçlü Ağırlık"
 
-#: src/backend/nsl/nsl_smooth.c:29 src/frontend/dockwidgets/KDEPlotDock.cpp:166
+#: src/backend/nsl/nsl_smooth.c:29 src/frontend/dockwidgets/KDEPlotDock.cpp:164
 #, kde-format
 msgid "Tricube"
 msgstr "Üçlü Küp"
@@ -14411,7 +14411,7 @@ msgstr "%1 eksenleri: “%2” şablonu yüklendi"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:808
 #: src/frontend/dockwidgets/CustomPointDock.cpp:385
 #: src/frontend/dockwidgets/HistogramDock.cpp:573
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:375
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:373
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:332
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:204
@@ -15174,7 +15174,7 @@ msgid "Doane"
 msgstr "Doane"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:251
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:171
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:169
 #, kde-format
 msgid "Scott"
 msgstr "Scott"
@@ -15316,19 +15316,19 @@ msgstr "%1 bilgi ögeleri: “%2” eğrisi kaldırıldı"
 msgid "%1: curve \"%2\" removed"
 msgstr "%1: “%2” eğrisi kaldırıldı"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:170
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:168
 #, kde-format
 msgid "Silverman"
 msgstr "Silverman"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:175
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:173
 #, kde-format
 msgid ""
 "The window function (\"kernel\") used to estimate the probability density"
 msgstr ""
 "Pencere işlevi (“çekirdek”), olasılık yoğunluğunu hesaplamak için kullanıldı"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:182
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:180
 #, kde-format
 msgid ""
 "Method to select the bandwidth of the kernel:<ul><li>Silverman -  0.9 * "
@@ -15340,12 +15340,12 @@ msgstr ""
 "—  1,059 * sigma * n^(−0,2)</li><li>Özel — Çekirdek bant genişliği için özel "
 "değer</li></ul>"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:191
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:189
 #, kde-format
 msgid "Custom value for the kernel bandwidth"
 msgstr "Çekirdek bant genişliği için özel değer"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:373
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:202
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:805
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
