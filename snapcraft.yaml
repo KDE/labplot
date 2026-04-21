@@ -282,14 +282,9 @@ parts:
       - usr/share/metainfo/org.kde.labplot.appdata.xml
     plugin: cmake
     build-snaps:
-<<<<<<< HEAD
       - kde-qt6-core24-sdk/latest/stable
       - kf6-core24-sdk/latest/stable
       - kde-pyside6-core24-sdk/latest/stable
-=======
-      - kde-qt6-core24-sdk/latest/beta
-      - kf6-core24-sdk/latest/beta
->>>>>>> c46de164e37b4eadb2da2f3510e8d66e9384e506
     build-packages:
       - libhdf5-dev
       - libboost-all-dev
