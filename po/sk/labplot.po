@@ -19914,15 +19914,14 @@ msgid "Unfreeze Column"
 msgstr "Vybrané stĺpce"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1891
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import Headers"
-msgstr "Import as:"
+msgstr "Importovať hlavičky"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1892
 #, kde-format
 msgid "Do you want to use the first row as column headers?"
-msgstr ""
+msgstr "Chcete použiť prvý riadok ako hlavičky stĺpcov?"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2055
 #, kde-format
