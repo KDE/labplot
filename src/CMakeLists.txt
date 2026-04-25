@@ -623,6 +623,7 @@ add_library(labplotbackendlib STATIC
     $<TARGET_OBJECTS:labplot_datasources_obj>
 )
 add_library(labplotlib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${FRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
+
 # Propagate include path to all OBJECT libs so AUTOMOC and compilation find NumberSpinBox.h, etc.
 foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj labplot_datasources_obj)
     target_include_directories(${_labplot_obj} PRIVATE ${FRONTEND_DIR}/widgets)
@@ -942,7 +943,11 @@ if(APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 endif()
 
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
-target_link_libraries(labplot labplotbackendlib labplotlib labplotnsllib)
+target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
+
+if(ENABLE_PYTHON_SCRIPTING)
+target_link_libraries(labplot ${python_scripting_link_libraries} Python3::Python)
+endif()
 
 #if(KUserFeedbackQt6_FOUND)
 #    target_link_libraries(labplot KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
