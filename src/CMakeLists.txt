@@ -743,7 +743,7 @@ endif()
 if(ENABLE_PYTHON_SCRIPTING)
 target_link_libraries(labplot_core_obj PRIVATE ${python_scripting_link_libraries})
 target_include_directories(labplot_core_obj PRIVATE ${python_scripting_includes})
-target_link_libraries(labplotbackendlib ${python_scripting_link_libraries})
+target_link_libraries(labplotbackendlib ${python_scripting_link_libraries} Python3::Python)
 endif()
 
 target_link_libraries(labplotlib
@@ -944,10 +944,6 @@ endif()
 
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
 target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
-
-if(ENABLE_PYTHON_SCRIPTING)
-target_link_libraries(labplot ${python_scripting_link_libraries} Python3::Python)
-endif()
 
 #if(KUserFeedbackQt6_FOUND)
 #    target_link_libraries(labplot KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
