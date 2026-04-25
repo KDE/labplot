@@ -6,10 +6,10 @@ if(ENABLE_TEST_SPREADSHEET)
     add_test(NAME SpreadsheetTest COMMAND SpreadsheetTest)
 
     add_executable (SpreadsheetFormulaTest SpreadsheetFormulaTest.cpp)
-    target_link_libraries(SpreadsheetFormulaTest labplotbackendlib labplotlib labplottest)
+    target_link_libraries(SpreadsheetFormulaTest labplotlib labplotbackendlib labplottest)
     add_test(NAME SpreadsheetFormulaTest COMMAND SpreadsheetFormulaTest)
 
     add_executable (SpreadsheetGenerateDataTest SpreadsheetGenerateDataTest.cpp)
-    target_link_libraries(SpreadsheetGenerateDataTest labplotbackendlib labplotlib labplottest)
+    target_link_libraries(SpreadsheetGenerateDataTest labplotlib labplotbackendlib labplottest)
     add_test(NAME SpreadsheetGenerateDataTest COMMAND SpreadsheetGenerateDataTest)
 endif()

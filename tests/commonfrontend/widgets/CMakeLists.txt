@@ -1,6 +1,6 @@
 add_executable(SpinBoxTest SpinBoxTest.cpp)
 
-target_link_libraries(SpinBoxTest labplotbackendlib labplotlib labplottest)
+target_link_libraries(SpinBoxTest labplotlib labplotbackendlib labplottest)
 
 add_test(NAME SpinBoxTest COMMAND SpinBoxTest)
 
