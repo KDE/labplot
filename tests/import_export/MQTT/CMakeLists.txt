@@ -11,7 +11,7 @@ target_compile_definitions(MqttPublisherNoGui PRIVATE HOSTNAME="${HOSTNAME}" POR
 
 
 add_executable(MQTTTest MQTTTest.cpp)
-target_link_libraries(MQTTTest Qt${QT_VERSION_MAJOR}::Mqtt labplotlib labplotbackendlib labplottest mqtt_test_publisher_lib)
+target_link_libraries(MQTTTest Qt${QT_VERSION_MAJOR}::Mqtt labplotbackendlib labplotlib labplottest mqtt_test_publisher_lib)
 
 add_test(NAME MQTTTest COMMAND MQTTTest)
 

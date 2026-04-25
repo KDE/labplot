@@ -12,7 +12,7 @@ set_property(TARGET UdpTcpPublisher PROPERTY AUTOMOC ON)
 target_compile_definitions(UdpTcpPublisher PRIVATE HOSTNAME="${HOSTNAME}" UDP_PORT=${UDP_PORT} TCP_PORT=${TCP_PORT} PUBLISH_TIME_MS=${PUBLISH_TIME_MS})
 
 
-target_link_libraries(LiveDataTest labplotlib labplotbackendlib labplottest)
+target_link_libraries(LiveDataTest labplotbackendlib labplotlib labplottest)
 
 add_test(NAME LiveDataTest COMMAND LiveDataTest)
 

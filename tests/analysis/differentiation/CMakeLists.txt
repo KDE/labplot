@@ -1,5 +1,5 @@
 add_executable(DifferentiationTest DifferentiationTest.cpp)
 
-target_link_libraries(DifferentiationTest labplotlib labplotbackendlib labplottest)
+target_link_libraries(DifferentiationTest labplotbackendlib labplotlib labplottest)
 
 add_test(NAME DifferentiationTest COMMAND DifferentiationTest)

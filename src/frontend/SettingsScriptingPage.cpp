@@ -11,7 +11,7 @@
 #include "backend/core/Settings.h"
 
 #ifdef HAVE_PYTHON_SCRIPTING
-#include "backend/script/python/PythonScriptingInfo.h"
+#include <Python.h>
 #endif
 
 #include <KConfigGroup>
@@ -30,9 +30,9 @@ SettingsScriptingPage::SettingsScriptingPage(QWidget* parent)
 
 	// show information about the current python runtime
 #ifdef HAVE_PYTHON_SCRIPTING
-	if (PythonScriptingInfo::isInitialized()) {
-		ui.lPythonVersion->setText(PythonScriptingInfo::version());
-		ui.lPythonPath->setText(PythonScriptingInfo::prefix());
+	if (Py_IsInitialized()) {
+		ui.lPythonVersion->setText(QString::fromUtf8(Py_GetVersion()).section(QLatin1Char(' '), 0, 0));
+		ui.lPythonPath->setText(QString::fromWCharArray(Py_GetPrefix()));
 	} else {
 		// Python not yet initialized — show build-time version, hide path
 		ui.lPythonVersion->setText(QStringLiteral(PYTHON3_VERSION_STRING));
@@ -92,8 +92,8 @@ void SettingsScriptingPage::changed() {
 void SettingsScriptingPage::discoverEnvironments() {
 	// determine the runtime Python minor version for environment compatibility filtering
 #ifdef HAVE_PYTHON_SCRIPTING
-	const QString pyVersion = PythonScriptingInfo::isInitialized()
-		? PythonScriptingInfo::version()
+	const QString pyVersion = Py_IsInitialized()
+		? QString::fromUtf8(Py_GetVersion()).section(QLatin1Char(' '), 0, 0)
 		: QStringLiteral(PYTHON3_VERSION_STRING);
 #else
 	const QString pyVersion = QStringLiteral(PYTHON3_VERSION_STRING);

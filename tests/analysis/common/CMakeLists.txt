@@ -1,5 +1,5 @@
 add_executable(CommonAnalysisTest CommonAnalysisTest.cpp)
 
-target_link_libraries(CommonAnalysisTest labplotlib labplotbackendlib labplottest)
+target_link_libraries(CommonAnalysisTest labplotbackendlib labplotlib labplottest)
 
 add_test(NAME CommonAnalysisTest COMMAND CommonAnalysisTest)
