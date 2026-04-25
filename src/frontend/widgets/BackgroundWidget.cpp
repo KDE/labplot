@@ -401,16 +401,16 @@ void BackgroundWidget::load() {
 	bool visible = m_background->enabledAvailable();
 	ui.lEnabled->setVisible(visible);
 	ui.chkEnabled->setVisible(visible);
+	if (visible)
+		ui.chkEnabled->setChecked(m_background->enabled());
 
 	visible = m_background->positionAvailable();
 	ui.lPosition->setVisible(visible);
 	ui.cbPosition->setVisible(visible);
-
-	if (m_background->enabledAvailable())
-		ui.chkEnabled->setChecked(m_background->enabled());
-
-	if (m_background->enabledAvailable())
+	if (visible) {
 		ui.cbPosition->setCurrentIndex((int)m_background->position());
+		positionChanged(ui.cbPosition->currentIndex()); // call to update the visibility of widgets if "No" is selected
+	}
 
 	// highlight the text field for the background image red if an image is used and cannot be found
 	const QString& fileName = m_background->fileName();

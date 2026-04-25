@@ -518,7 +518,7 @@ QColor XYCurve::color() const {
 	if (d->lineType != XYCurve::LineType::NoLine)
 		return d->line->pen().color();
 	else if (d->symbol->style() != Symbol::Style::NoSymbols)
-		return d->symbol->pen().color();
+		return d->symbol->brush().color();
 	return QColor();
 }
 
@@ -1945,7 +1945,7 @@ void XYCurvePrivate::updateFilling() {
 	//  - no filling was enabled
 	//  - the number of visible points on the scene is too high
 	//  - no scene points available, everything outside of the plot region or no scene points calculated yet
-	auto fillingPosition = background->position();
+	const auto fillingPosition = background->position();
 	if (fillingPosition == Background::Position::No) {
 		recalcShapeAndBoundingRect();
 		return;
