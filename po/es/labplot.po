@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-20 00:40+0000\n"
+"POT-Creation-Date: 2026-04-26 00:39+0000\n"
 "PO-Revision-Date: 2026-04-17 11:40+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -6654,7 +6654,7 @@ msgstr "En bruto"
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:492
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:630
-#: src/frontend/widgets/ValueWidget.cpp:39
+#: src/frontend/widgets/ValueWidget.cpp:40
 #, kde-format
 msgid "Frequency"
 msgstr "Frecuencia"
@@ -14127,7 +14127,7 @@ msgstr "Regiones de datos"
 #: src/frontend/dockwidgets/AxisDock.cpp:546
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:271
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:282
-#: src/frontend/dockwidgets/CustomPointDock.cpp:134
+#: src/frontend/dockwidgets/CustomPointDock.cpp:144
 #: src/frontend/dockwidgets/ImageDock.cpp:187
 #: src/frontend/dockwidgets/ImageDock.cpp:197
 #: src/frontend/widgets/LabelWidget.cpp:493
@@ -14142,7 +14142,7 @@ msgstr "Arriba"
 #: src/frontend/dockwidgets/AxisDock.cpp:547
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:273
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:284
-#: src/frontend/dockwidgets/CustomPointDock.cpp:136
+#: src/frontend/dockwidgets/CustomPointDock.cpp:146
 #: src/frontend/dockwidgets/ImageDock.cpp:189
 #: src/frontend/dockwidgets/ImageDock.cpp:199
 #: src/frontend/widgets/LabelWidget.cpp:495
@@ -14236,13 +14236,13 @@ msgstr "Medio rellena, grande"
 #: src/frontend/dockwidgets/AxisDock.cpp:555
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:265
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:277
-#: src/frontend/dockwidgets/CustomPointDock.cpp:129
+#: src/frontend/dockwidgets/CustomPointDock.cpp:139
 #: src/frontend/dockwidgets/ImageDock.cpp:182
 #: src/frontend/dockwidgets/ImageDock.cpp:192
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
-#: src/frontend/widgets/ValueWidget.cpp:45
+#: src/frontend/widgets/ValueWidget.cpp:46
 #, kde-format
 msgid "Left"
 msgstr "Izquierda"
@@ -14253,13 +14253,13 @@ msgstr "Izquierda"
 #: src/frontend/dockwidgets/AxisDock.cpp:554
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:267
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:279
-#: src/frontend/dockwidgets/CustomPointDock.cpp:131
+#: src/frontend/dockwidgets/CustomPointDock.cpp:141
 #: src/frontend/dockwidgets/ImageDock.cpp:184
 #: src/frontend/dockwidgets/ImageDock.cpp:194
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:489
 #: src/frontend/widgets/LabelWidget.cpp:501
-#: src/frontend/widgets/ValueWidget.cpp:46
+#: src/frontend/widgets/ValueWidget.cpp:47
 #, kde-format
 msgid "Right"
 msgstr "Derecha"
@@ -14501,7 +14501,7 @@ msgstr "%1 ejes: plantilla «%2» cargada"
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:634
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1930
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:808
-#: src/frontend/dockwidgets/CustomPointDock.cpp:385
+#: src/frontend/dockwidgets/CustomPointDock.cpp:395
 #: src/frontend/dockwidgets/HistogramDock.cpp:573
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:332
@@ -14729,6 +14729,7 @@ msgstr "%1 diagramas de cajas: plantilla «%2» cargada"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:206
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:367
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:405
+#: src/frontend/dockwidgets/CustomPointDock.cpp:47
 #: src/frontend/dockwidgets/ImageDock.cpp:54
 #: src/frontend/dockwidgets/ImageDock.cpp:144
 #: src/frontend/dockwidgets/WorksheetDock.cpp:45
@@ -14747,6 +14748,7 @@ msgstr "%v cm"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:222
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:369
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:407
+#: src/frontend/dockwidgets/CustomPointDock.cpp:49
 #: src/frontend/dockwidgets/ImageDock.cpp:56
 #: src/frontend/dockwidgets/ImageDock.cpp:152
 #: src/frontend/dockwidgets/WorksheetDock.cpp:47
@@ -14967,8 +14969,8 @@ msgstr "Mayor de fila"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:272
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:278
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:283
-#: src/frontend/dockwidgets/CustomPointDock.cpp:130
-#: src/frontend/dockwidgets/CustomPointDock.cpp:135
+#: src/frontend/dockwidgets/CustomPointDock.cpp:140
+#: src/frontend/dockwidgets/CustomPointDock.cpp:145
 #: src/frontend/dockwidgets/ImageDock.cpp:183
 #: src/frontend/dockwidgets/ImageDock.cpp:188
 #: src/frontend/dockwidgets/ImageDock.cpp:193
@@ -14979,8 +14981,8 @@ msgstr "Mayor de fila"
 #: src/frontend/widgets/LabelWidget.cpp:500
 #: src/frontend/widgets/LabelWidget.cpp:505
 #: src/frontend/widgets/LabelWidget.cpp:552
-#: src/frontend/widgets/ValueWidget.cpp:102
 #: src/frontend/widgets/ValueWidget.cpp:103
+#: src/frontend/widgets/ValueWidget.cpp:104
 #, kde-format
 msgid "Center"
 msgstr "Centro"
@@ -15031,33 +15033,33 @@ msgstr "%1 leyendas de gráficos cartesianos: plantilla «%2» cargada"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:365
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
-#: src/frontend/widgets/ValueWidget.cpp:49
+#: src/frontend/widgets/ValueWidget.cpp:50
 #, kde-format
 msgid "Decimal"
 msgstr "Decimal"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:366
 #: src/frontend/dockwidgets/MatrixDock.cpp:82
-#: src/frontend/widgets/ValueWidget.cpp:50
+#: src/frontend/widgets/ValueWidget.cpp:51
 #, kde-format
 msgid "Scientific (e)"
 msgstr "Científica (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:367
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
-#: src/frontend/widgets/ValueWidget.cpp:51
+#: src/frontend/widgets/ValueWidget.cpp:52
 #, kde-format
 msgid "Scientific (E)"
 msgstr "Científica (E)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
-#: src/frontend/widgets/ValueWidget.cpp:52
+#: src/frontend/widgets/ValueWidget.cpp:53
 #, kde-format
 msgid "Automatic (e)"
 msgstr "Automática (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:369
-#: src/frontend/widgets/ValueWidget.cpp:53
+#: src/frontend/widgets/ValueWidget.cpp:54
 #, kde-format
 msgid "Automatic (E)"
 msgstr "Automática (E)"
@@ -15249,7 +15251,7 @@ msgstr "Contraer todas las curvas"
 msgid "Expand all curves"
 msgstr "Expandir todas las curvas"
 
-#: src/frontend/dockwidgets/CustomPointDock.cpp:383
+#: src/frontend/dockwidgets/CustomPointDock.cpp:393
 #, kde-format
 msgid "%1 custom points: template \"%2\" loaded"
 msgstr "%1 puntos personalizados: plantilla «%2» cargada"
@@ -26285,13 +26287,13 @@ msgstr ""
 "\"%2\">sitio web</a>."
 
 #: src/frontend/widgets/BackgroundWidget.cpp:115
-#: src/frontend/widgets/ValueWidget.cpp:43
+#: src/frontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Above"
 msgstr "Encima"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:116
-#: src/frontend/widgets/ValueWidget.cpp:44
+#: src/frontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Below"
 msgstr "Debajo"
@@ -26944,14 +26946,14 @@ msgstr ""
 "ya no está disponible. Se usará automáticamente en cuanto se haya vuelto a "
 "crear."
 
-#: src/frontend/widgets/ValueWidget.cpp:31
-#: src/frontend/widgets/ValueWidget.cpp:38
+#: src/frontend/widgets/ValueWidget.cpp:32
+#: src/frontend/widgets/ValueWidget.cpp:39
 #, kde-format
 msgid "No Values"
 msgstr "Sin valores"
 
-#: src/frontend/widgets/ValueWidget.cpp:36
-#: src/frontend/widgets/ValueWidget.cpp:40
+#: src/frontend/widgets/ValueWidget.cpp:37
+#: src/frontend/widgets/ValueWidget.cpp:41
 #, kde-format
 msgid "Custom Column"
 msgstr "Columna personalizada"
