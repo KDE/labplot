@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-19 00:39+0000\n"
+"POT-Creation-Date: 2026-04-26 00:39+0000\n"
 "PO-Revision-Date: 2025-03-23 07:29+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -2714,7 +2714,7 @@ msgstr "Stefan-Boltzmann konstanto"
 
 #: src/backend/gsl/constants.cpp:83
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:713
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:160
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:158
 #, kde-format
 msgid "Gauss"
 msgstr "Gauss"
@@ -5187,7 +5187,7 @@ msgstr "Sine"
 
 #: src/backend/gsl/functions.cpp:618 src/backend/nsl/nsl_interp.c:21
 #: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:30
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:167
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:165
 #, kde-format
 msgid "Cosine"
 msgstr "Kosinuso"
@@ -6632,7 +6632,7 @@ msgstr "Kruda"
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:492
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:630
-#: src/frontend/widgets/ValueWidget.cpp:39
+#: src/frontend/widgets/ValueWidget.cpp:40
 #, kde-format
 msgid "Frequency"
 msgstr "Ofteco"
@@ -6752,7 +6752,7 @@ msgstr "Statistiko (Distribuoj)"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
 #: src/frontend/datasources/ImportFileWidget.cpp:1419
 #: src/frontend/dockwidgets/AxisDock.cpp:234
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:172
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #, kde-format
@@ -7168,7 +7168,7 @@ msgid "Frechet (Inverse Weibull)"
 msgstr "Frechet (Inversa Weibull)"
 
 #: src/backend/nsl/nsl_sf_stats.c:48 src/backend/nsl/nsl_sf_window.c:16
-#: src/backend/nsl/nsl_smooth.c:24 src/frontend/dockwidgets/KDEPlotDock.cpp:162
+#: src/backend/nsl/nsl_smooth.c:24 src/frontend/dockwidgets/KDEPlotDock.cpp:160
 #, kde-format
 msgid "Triangular"
 msgstr "Triangula"
@@ -7279,27 +7279,27 @@ msgstr "Konstanta"
 msgid "Periodic"
 msgstr "Perioda"
 
-#: src/backend/nsl/nsl_smooth.c:23 src/frontend/dockwidgets/KDEPlotDock.cpp:161
+#: src/backend/nsl/nsl_smooth.c:23 src/frontend/dockwidgets/KDEPlotDock.cpp:159
 #, kde-format
 msgid "Uniform (Rectangular)"
 msgstr "Uniformo (Rektangula)"
 
-#: src/backend/nsl/nsl_smooth.c:26 src/frontend/dockwidgets/KDEPlotDock.cpp:163
+#: src/backend/nsl/nsl_smooth.c:26 src/frontend/dockwidgets/KDEPlotDock.cpp:161
 #, kde-format
 msgid "Parabolic (Epanechnikov)"
 msgstr "Parabola (Epanechnikov)"
 
-#: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/KDEPlotDock.cpp:164
+#: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/KDEPlotDock.cpp:162
 #, kde-format
 msgid "Quartic (Biweight)"
 msgstr "Kvarta (Bipezo)"
 
-#: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:165
+#: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:163
 #, kde-format
 msgid "Triweight"
 msgstr "Tripezo"
 
-#: src/backend/nsl/nsl_smooth.c:29 src/frontend/dockwidgets/KDEPlotDock.cpp:166
+#: src/backend/nsl/nsl_smooth.c:29 src/frontend/dockwidgets/KDEPlotDock.cpp:164
 #, kde-format
 msgid "Tricube"
 msgstr "Trikubo"
@@ -14150,7 +14150,7 @@ msgstr "Datumaj regionoj"
 #: src/frontend/dockwidgets/AxisDock.cpp:546
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:271
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:282
-#: src/frontend/dockwidgets/CustomPointDock.cpp:134
+#: src/frontend/dockwidgets/CustomPointDock.cpp:144
 #: src/frontend/dockwidgets/ImageDock.cpp:187
 #: src/frontend/dockwidgets/ImageDock.cpp:197
 #: src/frontend/widgets/LabelWidget.cpp:493
@@ -14165,7 +14165,7 @@ msgstr "Supre"
 #: src/frontend/dockwidgets/AxisDock.cpp:547
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:273
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:284
-#: src/frontend/dockwidgets/CustomPointDock.cpp:136
+#: src/frontend/dockwidgets/CustomPointDock.cpp:146
 #: src/frontend/dockwidgets/ImageDock.cpp:189
 #: src/frontend/dockwidgets/ImageDock.cpp:199
 #: src/frontend/widgets/LabelWidget.cpp:495
@@ -14255,13 +14255,13 @@ msgstr "Duonplenigita, Granda"
 #: src/frontend/dockwidgets/AxisDock.cpp:555
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:265
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:277
-#: src/frontend/dockwidgets/CustomPointDock.cpp:129
+#: src/frontend/dockwidgets/CustomPointDock.cpp:139
 #: src/frontend/dockwidgets/ImageDock.cpp:182
 #: src/frontend/dockwidgets/ImageDock.cpp:192
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
-#: src/frontend/widgets/ValueWidget.cpp:45
+#: src/frontend/widgets/ValueWidget.cpp:46
 #, kde-format
 msgid "Left"
 msgstr "Maldekstre"
@@ -14272,13 +14272,13 @@ msgstr "Maldekstre"
 #: src/frontend/dockwidgets/AxisDock.cpp:554
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:267
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:279
-#: src/frontend/dockwidgets/CustomPointDock.cpp:131
+#: src/frontend/dockwidgets/CustomPointDock.cpp:141
 #: src/frontend/dockwidgets/ImageDock.cpp:184
 #: src/frontend/dockwidgets/ImageDock.cpp:194
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:489
 #: src/frontend/widgets/LabelWidget.cpp:501
-#: src/frontend/widgets/ValueWidget.cpp:46
+#: src/frontend/widgets/ValueWidget.cpp:47
 #, kde-format
 msgid "Right"
 msgstr "Ĝuste"
@@ -14501,9 +14501,9 @@ msgstr "%1 aksoj: ŝablono \"%2\" ŝargita"
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:634
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1930
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:808
-#: src/frontend/dockwidgets/CustomPointDock.cpp:385
+#: src/frontend/dockwidgets/CustomPointDock.cpp:395
 #: src/frontend/dockwidgets/HistogramDock.cpp:573
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:375
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:373
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:332
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:204
@@ -14721,6 +14721,7 @@ msgstr "%1 kestaj grafikoj: ŝablono \"%2\" ŝargita"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:206
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:367
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:405
+#: src/frontend/dockwidgets/CustomPointDock.cpp:47
 #: src/frontend/dockwidgets/ImageDock.cpp:54
 #: src/frontend/dockwidgets/ImageDock.cpp:144
 #: src/frontend/dockwidgets/WorksheetDock.cpp:45
@@ -14739,6 +14740,7 @@ msgstr ""
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:222
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:369
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:407
+#: src/frontend/dockwidgets/CustomPointDock.cpp:49
 #: src/frontend/dockwidgets/ImageDock.cpp:56
 #: src/frontend/dockwidgets/ImageDock.cpp:152
 #: src/frontend/dockwidgets/WorksheetDock.cpp:47
@@ -14955,8 +14957,8 @@ msgstr "Vico Major"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:272
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:278
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:283
-#: src/frontend/dockwidgets/CustomPointDock.cpp:130
-#: src/frontend/dockwidgets/CustomPointDock.cpp:135
+#: src/frontend/dockwidgets/CustomPointDock.cpp:140
+#: src/frontend/dockwidgets/CustomPointDock.cpp:145
 #: src/frontend/dockwidgets/ImageDock.cpp:183
 #: src/frontend/dockwidgets/ImageDock.cpp:188
 #: src/frontend/dockwidgets/ImageDock.cpp:193
@@ -14967,8 +14969,8 @@ msgstr "Vico Major"
 #: src/frontend/widgets/LabelWidget.cpp:500
 #: src/frontend/widgets/LabelWidget.cpp:505
 #: src/frontend/widgets/LabelWidget.cpp:552
-#: src/frontend/widgets/ValueWidget.cpp:102
 #: src/frontend/widgets/ValueWidget.cpp:103
+#: src/frontend/widgets/ValueWidget.cpp:104
 #, kde-format
 msgid "Center"
 msgstr "Centro"
@@ -15019,33 +15021,33 @@ msgstr "%1 karteziaj diagramhelpetoj: ŝablono \"%2\" ŝargita"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:365
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
-#: src/frontend/widgets/ValueWidget.cpp:49
+#: src/frontend/widgets/ValueWidget.cpp:50
 #, kde-format
 msgid "Decimal"
 msgstr "Decimalo"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:366
 #: src/frontend/dockwidgets/MatrixDock.cpp:82
-#: src/frontend/widgets/ValueWidget.cpp:50
+#: src/frontend/widgets/ValueWidget.cpp:51
 #, kde-format
 msgid "Scientific (e)"
 msgstr "Scienca (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:367
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
-#: src/frontend/widgets/ValueWidget.cpp:51
+#: src/frontend/widgets/ValueWidget.cpp:52
 #, kde-format
 msgid "Scientific (E)"
 msgstr "Scienca (E)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
-#: src/frontend/widgets/ValueWidget.cpp:52
+#: src/frontend/widgets/ValueWidget.cpp:53
 #, kde-format
 msgid "Automatic (e)"
 msgstr "Aŭtomata (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:369
-#: src/frontend/widgets/ValueWidget.cpp:53
+#: src/frontend/widgets/ValueWidget.cpp:54
 #, kde-format
 msgid "Automatic (E)"
 msgstr "Aŭtomata (E)"
@@ -15224,7 +15226,7 @@ msgstr "Malvastigi ĉiujn kurbojn"
 msgid "Expand all curves"
 msgstr "Vastigi ĉiujn kurbojn"
 
-#: src/frontend/dockwidgets/CustomPointDock.cpp:383
+#: src/frontend/dockwidgets/CustomPointDock.cpp:393
 #, kde-format
 msgid "%1 custom points: template \"%2\" loaded"
 msgstr "%1 propraj punktoj: ŝablono \"%2\" ŝargita"
@@ -15260,7 +15262,7 @@ msgid "Doane"
 msgstr "Doane"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:251
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:171
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:169
 #, kde-format
 msgid "Scott"
 msgstr "Scott"
@@ -15365,18 +15367,18 @@ msgstr "%1 infoelementoj: kurbo \"%2\" forigita"
 msgid "%1: curve \"%2\" removed"
 msgstr "%1: kurbo \"%2\" forigita"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:170
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:168
 #, kde-format
 msgid "Silverman"
 msgstr "Silverman"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:175
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:173
 #, kde-format
 msgid ""
 "The window function (\"kernel\") used to estimate the probability density"
 msgstr "La fenestra funkcio (\"kerno\") uzata por taksi la probablodensecon"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:182
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:180
 #, kde-format
 msgid ""
 "Method to select the bandwidth of the kernel:<ul><li>Silverman -  0.9 * "
@@ -15387,12 +15389,12 @@ msgstr ""
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott - 1.059 * sigma * n^( -0.2)</"
 "li><li>Laŭmenda - propra valoro por la bendolarĝo de la kerno</li></ul>"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:191
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:189
 #, kde-format
 msgid "Custom value for the kernel bandwidth"
 msgstr "Propra valoro por la bendolarĝo de la kerno"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:373
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:202
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:805
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
@@ -26225,13 +26227,13 @@ msgid ""
 msgstr ""
 
 #: src/frontend/widgets/BackgroundWidget.cpp:115
-#: src/frontend/widgets/ValueWidget.cpp:43
+#: src/frontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Above"
 msgstr "Supre"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:116
-#: src/frontend/widgets/ValueWidget.cpp:44
+#: src/frontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Below"
 msgstr "Malsupre"
@@ -26880,14 +26882,14 @@ msgstr ""
 "La aspekto \"%1\"\n"
 "ne disponeblas plu. Ĝi estos aŭtomate uzata post kiam ĝi estas kreita denove."
 
-#: src/frontend/widgets/ValueWidget.cpp:31
-#: src/frontend/widgets/ValueWidget.cpp:38
+#: src/frontend/widgets/ValueWidget.cpp:32
+#: src/frontend/widgets/ValueWidget.cpp:39
 #, kde-format
 msgid "No Values"
 msgstr "Neniuj Valoroj"
 
-#: src/frontend/widgets/ValueWidget.cpp:36
-#: src/frontend/widgets/ValueWidget.cpp:40
+#: src/frontend/widgets/ValueWidget.cpp:37
+#: src/frontend/widgets/ValueWidget.cpp:41
 #, kde-format
 msgid "Custom Column"
 msgstr "Propra Kolumno"

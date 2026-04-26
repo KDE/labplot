@@ -22,7 +22,8 @@
 ValueWidget::ValueWidget(QWidget* parent, bool xy)
 	: QWidget(parent) {
 	ui.setupUi(this);
-	ui.kfrFont->setMaximumHeight(ui.lColor->height());
+	ui.kfrFont->setFixedHeight(ui.lColor->sizeHint().height());
+
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	cbColumn = new TreeViewComboBox(this);
 	gridLayout->addWidget(cbColumn, 2, 2, 1, 1);
