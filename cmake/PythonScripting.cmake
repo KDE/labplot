@@ -282,6 +282,13 @@ set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_b
 # shiboken generated sources since they are the ones who require the includes
 set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY INCLUDE_DIRECTORIES ${python_scripting_includes})
 
+# Pass the PySide6 site-packages directory to PythonScriptRuntime so it can add it
+# to sys.path at runtime. This makes the embedded Python find PySide6 without requiring
+# the user to set PYTHONPATH. The user's PYTHONPATH is still respected if set.
+get_filename_component(_pyside6_site_packages "${PySide6_PATH}" DIRECTORY)
+set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY
+    COMPILE_DEFINITIONS PYSIDE6_SITE_PACKAGES="${_pyside6_site_packages}")
+
 # Enable Python Stable ABI (Limited API) for Python 3.9+
 # Note: We only apply this to our source files, not shiboken-generated sources to avoid redefinition warnings
 set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)

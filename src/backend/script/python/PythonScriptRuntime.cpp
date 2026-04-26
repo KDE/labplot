@@ -175,6 +175,23 @@ bool PythonScriptRuntime::initPython() {
 		Py_DECREF(argvList);
 	}
 
+	// Ensure PySide6's site-packages directory is on sys.path so that the
+	// shiboken-generated pylabplot module can "import PySide6.QtCore" etc.
+	// Use the build-time path as a fallback; the user's PYTHONPATH takes
+	// precedence because Py_Initialize() already processes it.
+	{
+		PyObject* path = PySys_GetObject("path"); // borrowed reference
+		if (path) {
+#ifdef PYSIDE6_SITE_PACKAGES
+			// Append (not insert) so user-supplied paths in PYTHONPATH win
+			PyObject* pySiteDir = PyUnicode_FromString(PYSIDE6_SITE_PACKAGES);
+			if (PySequence_Contains(path, pySiteDir) == 0)
+				PyList_Append(path, pySiteDir);
+			Py_DECREF(pySiteDir);
+#endif
+		}
+	}
+
 	// Add the user-configured virtual environment's site-packages to sys.path
 	// so that packages from that environment are available for import.
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
@@ -192,6 +209,8 @@ bool PythonScriptRuntime::initPython() {
 	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;
 	if (!pythonInitialized || pyErrorOccurred) {
 		WARN("Failed to initialize the pylabplot module")
+		if (pyErrorOccurred)
+			PyErr_Print();
 		return false;
 	}
 

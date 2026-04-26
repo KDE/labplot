@@ -743,7 +743,7 @@ endif()
 if(ENABLE_PYTHON_SCRIPTING)
 target_link_libraries(labplot_core_obj PRIVATE ${python_scripting_link_libraries})
 target_include_directories(labplot_core_obj PRIVATE ${python_scripting_includes})
-target_link_libraries(labplotbackendlib ${python_scripting_link_libraries} Python3::Python)
+target_link_libraries(labplotbackendlib ${python_scripting_link_libraries})
 # SettingsScriptingPage.cpp uses Python C-API directly (Py_IsInitialized, etc.)
 set_property(SOURCE ${FRONTEND_DIR}/SettingsScriptingPage.cpp APPEND PROPERTY
     INCLUDE_DIRECTORIES $<TARGET_PROPERTY:Python3::Python,INTERFACE_INCLUDE_DIRECTORIES>)
