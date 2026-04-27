@@ -895,7 +895,7 @@ void ColumnDock::applyFormula() {
 	bool autoUpdate{(ui.chkFormulaAutoUpdate->checkState() == Qt::Checked)};
 	bool autoResize{(ui.chkFormulaAutoResize->checkState() == Qt::Checked)};
 	for (auto* col : m_columns) {
-		col->setColumnMode(AbstractColumn::ColumnMode::Double);
+		// preserve the original column mode (e.g., DateTime) instead of forcing Double
 		col->setFormula(expression, variableNames, variableColumns, autoUpdate, autoResize);
 		col->updateFormula();
 	}
