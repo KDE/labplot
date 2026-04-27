@@ -100,6 +100,7 @@
 #include "backend/notebook/Notebook.h"
 #include "frontend/notebook/NotebookView.h"
 #include <cantor/backend.h>
+#include <cantor/cantor_version.h>
 #endif
 
 
@@ -1832,7 +1833,16 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 
 #ifdef HAVE_CANTOR_LIBS
 	if (changes.contains(Settings::Type::Notebook))
+	{
 		m_actionsManager->updateNotebookActions();
+		#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 4, 0)
+		if (m_project) {
+			const auto& notebooks = m_project->children<Notebook>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* notebook : notebooks)
+				notebook->updateSettings();
+		}
+		#endif
+	}
 #else
 	Q_UNUSED(changes)
 #endif
