@@ -13581,7 +13581,7 @@ msgstr "Vybrať súbor na uloženie šablóny"
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1648
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
-msgstr "Labplot Plot šablónus (*%1)"
+msgstr "Labplot Plot šablóny (*%1)"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1837
 #, kde-format
@@ -23348,7 +23348,7 @@ msgstr "Barov"
 #: src/kdefrontend/widgets/LineWidget.cpp:59
 #, kde-format
 msgid "No Drop Lines"
-msgstr "Žiadne spustné čiary"
+msgstr "Žiadne spádové čiary"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:60
 #, kde-format
