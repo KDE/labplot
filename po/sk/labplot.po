@@ -13322,12 +13322,12 @@ msgstr "%1 histogramy: šablóna \"%2\" načítaná"
 #: src/frontend/dockwidgets/InfoElementDock.cpp:227
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
-msgstr "%1 info elements: curve \"%2\" odstrániťd"
+msgstr "%1 info elements: krivka \"%2\" odstránená"
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:229
 #, kde-format
 msgid "%1: curve \"%2\" removed"
-msgstr "%1: curve \"%2\" odstrániťd"
+msgstr "%1: krivka \"%2\" odstránená"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #, kde-format
@@ -19442,7 +19442,7 @@ msgstr "Autentifikácia"
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:162
 #, kde-format
 msgid "User:"
-msgstr "Uživateľ:"
+msgstr "Užívateľ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPassword)
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:176
