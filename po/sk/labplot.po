@@ -15297,12 +15297,12 @@ msgstr "Selected test requires at least %1 and at most %2 non-empty variables."
 #: src/frontend/dockwidgets/InfoElementDock.cpp:227
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
-msgstr "%1 info elements: curve \"%2\" odstrániťd"
+msgstr "%1 info elements: krivka \"%2\" odstránená"
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:229
 #, kde-format
 msgid "%1: curve \"%2\" removed"
-msgstr "%1: curve \"%2\" odstrániťd"
+msgstr "%1: krivka \"%2\" odstránená"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:168
 #, kde-format
