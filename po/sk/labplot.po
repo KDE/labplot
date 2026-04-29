@@ -14967,10 +14967,10 @@ msgid ""
 msgstr ""
 "Určuje, ako sú formátované číselné hodnoty v tabuľke:<ul><li>Desiatkové - "
 "formát [-]9.9</li><li>Vedecké (e) - formát [-]9.9e[+|-]999</li><li>Vedecké "
-"(E) - formát [-]9.9E[+|-]999</li><li>Automatické (e) - selects between "
-"'Decimal' and 'Vedecké (e)' to get the most concise format</"
-"li><li>Automatické (E) - selects between 'Decimal' and 'Vedecké (E)' to get "
-"the most concise format</li></ul>"
+"(E) - formát [-]9.9E[+|-]999</li><li>Automatické (e) - vyberá medzi "
+"„Desiatkovým“ a „Vedeckým (e)“ formátom, aby bol formát čo najstručnejší</"
+"li><li>Automatické (E) - vyberá medzi „Desiatkovým“ a „Vedeckým (E)“ "
+"formátom, aby bol formát čo najstručnejší</li></ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:387
 #, kde-format
@@ -18094,8 +18094,7 @@ msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
 "this."
 msgstr ""
-"Data cannot be pasted into '%1' directly. Select a spreadsheet stĺpec for "
-"this."
+"Údaje nie je možné prilepiť priamo do „%1“. Vyberte na to stĺpec tabuľky."
 
 #: src/frontend/ProjectExplorer.cpp:764
 #, kde-format
@@ -18949,7 +18948,7 @@ msgstr "Exportovať"
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:261
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
-msgstr "The file already exists. Do you revšetkýchy want to overwrite it?"
+msgstr "Súbor už existuje. Naozaj ho chcete prepísať?"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:377
 #, kde-format
