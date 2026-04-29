@@ -10860,14 +10860,14 @@ msgid ""
 "td></tr></table>"
 msgstr ""
 "Ak nie je prázdne, počet stĺpcov sa musí zhodovať s počtom názvov stĺpcov, "
-"ak sú zadané a musí sa zhodovať s počtom stĺpcov v importovanom súbore."
-"<br>Dátové typy:<table><tr><td>%1</td><td>Celé číslo with 32bit size "
-"(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Celé číslo "
-"with 64bit size (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</"
-"td></tr><tr><td>%3</td><td>Floating point number 64bit size. Resolution of "
-"around 16 digits.</td></tr><tr><td>%4</td><td>Datetime with the format from "
-"the datetime text box if not empty, otherwise automatically determined.</"
-"td></tr><tr><td>%5</td><td>A text.</td></tr></table>"
+"ak sú zadané, a musí sa zhodovať s počtom stĺpcov v importovanom súbore."
+"<br>Dátové typy:<table><tr><td>%1</td><td>Celé číslo s veľkosťou 32 bitov "
+"(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Celé číslo s "
+"veľkosťou 64 bitov (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807)."
+"</td></tr><tr><td>%3</td><td>Číslo s pohyblivou rádovou čiarkou s veľkosťou "
+"64 bitov. Rozlíšenie okolo 16 číslic.</td></tr><tr><td>%4</td><td>Dátum a "
+"čas vo formáte z textového poľa pre dátum a čas, ak nie je prázdne, inak sa "
+"určí automaticky.</td></tr><tr><td>%5</td><td>Text.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
@@ -13163,10 +13163,10 @@ msgid ""
 msgstr ""
 "Určuje, ako sú formátované číselné hodnoty v tabuľke:<ul><li>Desiatkové - "
 "formát [-]9.9</li><li>Vedecké (e) - formát [-]9.9e[+|-]999</li><li>Vedecké "
-"(E) - formát [-]9.9E[+|-]999</li><li>Automatické (e) - selects between "
-"'Decimal' and 'Vedecké (e)' to get the most concise format</"
-"li><li>Automatické (E) - selects between 'Decimal' and 'Vedecké (E)' to get "
-"the most concise format</li></ul>"
+"(E) - formát [-]9.9E[+|-]999</li><li>Automatické (e) - vyberá medzi "
+"„Desiatkovým“ a „Vedeckým (e)“ formátom, aby bol formát čo najstručnejší</"
+"li><li>Automatické (E) - vyberá medzi „Desiatkovým“ a „Vedeckým (E)“ "
+"formátom, aby bol formát čo najstručnejší</li></ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:337
 #, kde-format
@@ -15998,8 +15998,7 @@ msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
 "this."
 msgstr ""
-"Data cannot be pasted into '%1' directly. Select a spreadsheet stĺpec for "
-"this."
+"Údaje nie je možné prilepiť priamo do „%1“. Vyberte na to stĺpec tabuľky."
 
 #: src/frontend/ProjectExplorer.cpp:659
 #, kde-format
@@ -16882,7 +16881,7 @@ msgstr "Exportovať"
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:264
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
-msgstr "The file already exists. Do you revšetkýchy want to overwrite it?"
+msgstr "Súbor už existuje. Naozaj ho chcete prepísať?"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:379
 #, kde-format
