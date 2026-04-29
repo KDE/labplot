@@ -88,6 +88,7 @@ public:
 
 protected:
 	void resizeEvent(QResizeEvent*) override;
+	void showEvent(QShowEvent*) override;
 
 private:
 	void init();
@@ -127,6 +128,7 @@ private:
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
 	bool m_suppressResizeHeader{false};
+	bool m_initialNavigationDone{false};
 
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();

@@ -72,6 +72,7 @@ private:
 	bool eventFilter(QObject*, QEvent*) override;
 	void keyPressEvent(QKeyEvent*) override;
 	void wheelEvent(QWheelEvent*) override;
+	void showEvent(QShowEvent*) override;
 
 	QStackedWidget* m_stackedWidget;
 	QTableView* m_tableView;
@@ -80,6 +81,7 @@ private:
 	MatrixModel* m_model;
 	QImage m_image;
 	bool m_imageIsDirty{true};
+	bool m_initialNavigationDone{false};
 	double m_zoomFactor{1.};
 
 	// Actions
