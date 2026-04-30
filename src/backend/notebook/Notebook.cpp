@@ -22,10 +22,10 @@
 #include "frontend/notebook/NotebookView.h"
 #endif
 
+#include <cantor/cantor_version.h>
 #include <cantor/panelplugin.h>
 #include <cantor/panelpluginhandler.h>
 #include <cantor/worksheetaccess.h>
-#include <cantor/cantor_version.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -35,11 +35,11 @@
 #include <kcoreaddons_version.h>
 
 #include <QAction>
+#include <QApplication>
 #include <QFileInfo>
 #include <QModelIndex>
-#include <QTimer>
-#include <QApplication>
 #include <QPalette>
+#include <QTimer>
 
 Notebook::Notebook(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Notebook)
@@ -96,16 +96,15 @@ bool Notebook::init(QByteArray* content) {
 		connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &Notebook::rowsAboutToBeRemoved);
 		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &Notebook::modelReset);
 
-
 		// default settings
 		const auto group = Settings::group(QStringLiteral("Settings_Notebook"));
 
-		#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 4, 0)
+#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
 		QTimer::singleShot(0, this, &Notebook::updateSettings);
 		const QString theme = group.readEntry(QLatin1String("Theme"), QString());
 		if (m_worksheetAccess && !theme.isEmpty())
 			m_worksheetAccess->setTheme(theme);
-		#endif
+#endif
 
 		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
 		// and we need to go through the actions provided in cantor_part.
@@ -309,7 +308,7 @@ void Notebook::updateSettings() {
 			action->setChecked(group.readEntry(QLatin1String("Animations"), true));
 	}
 
-	#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 4, 0)
+#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
 	if (m_worksheetAccess) {
 		QString theme = group.readEntry(QLatin1String("Theme"), QString());
 		if (theme.isEmpty()) {
@@ -318,7 +317,7 @@ void Notebook::updateSettings() {
 		}
 		m_worksheetAccess->setTheme(theme);
 	}
-	#endif
+#endif
 }
 
 KParts::ReadWritePart* Notebook::part() {

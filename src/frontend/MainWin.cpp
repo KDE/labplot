@@ -1835,7 +1835,7 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 	if (changes.contains(Settings::Type::Notebook))
 	{
 		m_actionsManager->updateNotebookActions();
-		#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 4, 0)
+		#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
 		if (m_project) {
 			const auto& notebooks = m_project->children<Notebook>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* notebook : notebooks)
