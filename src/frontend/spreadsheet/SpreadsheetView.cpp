@@ -295,6 +295,20 @@ void SpreadsheetView::setSuppressResizeHeader(bool suppress) {
 	m_suppressResizeHeader = suppress;
 }
 
+void SpreadsheetView::showEvent(QShowEvent* event) {
+	QWidget::showEvent(event);
+	if (!m_initialNavigationDone) {
+		m_initialNavigationDone = true;
+		// Navigate to the first cell and set the focus so the user can start directly entering new data.
+		// Defer by one event loop iteration so the native platform widget (Cocoa on macOS) has time
+		// to fully initialize its internal data structures after the widget becomes visible.
+		QTimer::singleShot(0, this, [this]() {
+			goToCell(0, 0);
+			setFocus();
+		});
+	}
+}
+
 void SpreadsheetView::resizeEvent(QResizeEvent* event) {
 	QWidget::resizeEvent(event);
 	if (m_frozenTableView)
