@@ -28,7 +28,6 @@
 #include <KConfigGroup>
 
 #include <QMenu>
-#include <QTimer>
 #include <QXmlStreamWriter>
 
 /*!
@@ -168,14 +167,6 @@ QWidget* Spreadsheet::view() const {
 		m_partView = m_view;
 		connect(this, &Spreadsheet::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
-		});
-
-		// navigate to the first cell and set the focus so the user can start directly entering new data
-		QTimer::singleShot(0, this, [=]() {
-			if (m_view) { // we're accessing m_view outside of the event loop, it can be already deleted, check for nulltpr
-				m_view->goToCell(0, 0);
-				m_view->setFocus();
-			}
 		});
 	}
 	return m_partView;

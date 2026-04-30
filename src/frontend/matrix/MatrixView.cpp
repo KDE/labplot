@@ -45,6 +45,7 @@
 #include <QStackedWidget>
 #include <QTableView>
 #include <QThreadPool>
+#include <QTimer>
 
 #include <cfloat>
 #include <cmath>
@@ -567,6 +568,20 @@ void MatrixView::wheelEvent(QWheelEvent* event) {
 		QWidget::wheelEvent(event);
 }
 
+void MatrixView::showEvent(QShowEvent* event) {
+	QWidget::showEvent(event);
+	if (!m_initialNavigationDone) {
+		m_initialNavigationDone = true;
+		// Navigate to the first cell and set the focus so the user can start directly entering new data.
+		// Defer by one event loop iteration so the native platform widget (Cocoa on macOS) has time
+		// to fully initialize its internal data structures after the widget becomes visible.
+		QTimer::singleShot(0, this, [this]() {
+			goToCell(0, 0);
+			setFocus();
+		});
+	}
+}
+
 // ##############################################################################
 // ####################################  SLOTs   ################################
 // ##############################################################################
@@ -595,6 +610,9 @@ void MatrixView::goToCell() {
 
 void MatrixView::goToCell(int row, int col) {
 	const auto& index = m_model->index(row, col);
+	if (!index.isValid())
+		return;
+
 	m_tableView->scrollTo(index);
 	m_tableView->setCurrentIndex(index);
 }
