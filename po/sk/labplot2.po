@@ -75,7 +75,7 @@ msgstr "Vložiť '%1'"
 #: src/backend/core/AbstractAspect.cpp:357
 #, kde-format
 msgid "Create Data Spreadsheet"
-msgstr "nový zošit"
+msgstr "Vytvoriť dátovú tabuľku"
 
 #: src/backend/core/AbstractAspect.cpp:405
 #, kde-format
@@ -104,7 +104,7 @@ msgstr "px"
 #: src/backend/core/AbstractAspect.cpp:421
 #, kde-format
 msgid "Down"
-msgstr "Dole"
+msgstr "Dolu"
 
 #: src/backend/core/AbstractAspect.cpp:524
 #: src/backend/core/aspectcommands.h:167
@@ -144,7 +144,7 @@ msgstr "%1: odstrániť všetkých potomkov"
 #: src/backend/core/AbstractAspect.cpp:831
 #, kde-format
 msgid "%1: pasted '%2'"
-msgstr "%1: pridať %2"
+msgstr "%1: vložiť '%2'"
 
 #: src/backend/core/AbstractAspect.cpp:833
 #, kde-format
@@ -170,13 +170,13 @@ msgstr "Neplatný čas vytvorenia pre '%1'. Používa sa aktuálny čas."
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:68
 #, kde-format
 msgid "Milliseconds"
-msgstr "sekunda"
+msgstr "Milisekundy"
 
 #: src/backend/core/AbstractColumn.cpp:137
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:67
 #, kde-format
 msgid "Seconds"
-msgstr "sekunda"
+msgstr "Sekundy"
 
 #: src/backend/core/AbstractColumn.cpp:139
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:66
@@ -217,7 +217,7 @@ msgstr "X-Neistota"
 #: src/backend/core/AbstractColumn.cpp:174
 #, kde-format
 msgid "X-Error"
-msgstr "Chyba"
+msgstr "Chyba X"
 
 #: src/backend/core/AbstractColumn.cpp:178
 #, kde-format
@@ -227,7 +227,7 @@ msgstr "X-Neistota +"
 #: src/backend/core/AbstractColumn.cpp:180
 #, kde-format
 msgid "X-Error +"
-msgstr "Formát:"
+msgstr "Chyba X +"
 
 #: src/backend/core/AbstractColumn.cpp:184
 #, kde-format
@@ -237,7 +237,7 @@ msgstr "X-Neistota -"
 #: src/backend/core/AbstractColumn.cpp:186
 #, kde-format
 msgid "X-Error -"
-msgstr "Formát:"
+msgstr "Chyba X -"
 
 #: src/backend/core/AbstractColumn.cpp:190
 #, kde-format
@@ -247,7 +247,7 @@ msgstr "Y-Neistota"
 #: src/backend/core/AbstractColumn.cpp:192
 #, kde-format
 msgid "Y-Error"
-msgstr "Chyba"
+msgstr "Chyba Y"
 
 #: src/backend/core/AbstractColumn.cpp:196
 #, kde-format
@@ -257,7 +257,7 @@ msgstr "Y-Neistota +"
 #: src/backend/core/AbstractColumn.cpp:198
 #, kde-format
 msgid "Y-Error +"
-msgstr "Formát:"
+msgstr "Chyba Y +"
 
 #: src/backend/core/AbstractColumn.cpp:202
 #, kde-format
@@ -267,7 +267,7 @@ msgstr "Y-Neistota -"
 #: src/backend/core/AbstractColumn.cpp:204
 #, kde-format
 msgid "Y-Error -"
-msgstr "Formát:"
+msgstr "Chyba Y -"
 
 #: src/backend/core/AbstractColumn.cpp:223
 #: src/backend/datasources/filters/MatioFilter.cpp:382
@@ -284,7 +284,7 @@ msgstr "Celé číslo"
 #: src/backend/core/AbstractColumn.cpp:227
 #, kde-format
 msgid "Big Integer"
-msgstr "Celé číslo"
+msgstr "Veľké celé číslo"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
@@ -373,7 +373,7 @@ msgstr "%1: nastaviť rozloženie"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2601
 #, kde-format
 msgid "%1: remove heatmap format"
-msgstr "%1: nastaviť rozloženie"
+msgstr "%1: odstrániť formát heatmapy"
 
 #: src/backend/core/AbstractFilter.cpp:203
 #, kde-format
@@ -523,17 +523,17 @@ msgstr "Plot Designation: %1"
 #: src/backend/core/AspectTreeModel.cpp:237
 #, kde-format
 msgid "Formula:"
-msgstr "Formát:"
+msgstr "Vzorec:"
 
 #: src/backend/core/AspectTreeModel.cpp:259
 #, kde-format
 msgid "auto update: true"
-msgstr "Automaticky aktualizovať:"
+msgstr "automatická aktualizácia: zapnutá"
 
 #: src/backend/core/AspectTreeModel.cpp:261
 #, kde-format
 msgid "auto update: false"
-msgstr "Automaticky aktualizovať:"
+msgstr "automatická aktualizácia: vypnutá"
 
 #: src/backend/core/AspectTreeModel.cpp:432
 #, kde-format
@@ -548,7 +548,7 @@ msgstr "Kopírovať dáta"
 #: src/backend/core/column/Column.cpp:124
 #, kde-format
 msgid "Paste Data"
-msgstr "Kresliť údaje"
+msgstr "Vložiť dáta"
 
 #: src/backend/core/column/Column.cpp:160
 #, kde-format
@@ -568,7 +568,7 @@ msgstr "Osi"
 #: src/backend/core/column/Column.cpp:221
 #, kde-format
 msgid "Calculations"
-msgstr "Prepočítať"
+msgstr "Výpočty"
 
 #. i18n("DateTime Filter"), i18n("Unit:"), items, 0, false, &ok);
 #. if (ok) {
@@ -611,7 +611,7 @@ msgstr "neplatná hodnota riadka"
 #: src/backend/core/column/columncommands.cpp:327
 #, kde-format
 msgid "%1: change cell values"
-msgstr "%1: zmeniť komentár"
+msgstr "%1: zmeniť hodnoty buniek"
 
 #: src/backend/core/column/columncommands.cpp:531
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2808
@@ -710,17 +710,17 @@ msgstr "Zavrieť"
 #: src/backend/core/Project.cpp:299
 #, kde-format
 msgid "%1: set author"
-msgstr "%1: nastaviť rozloženie"
+msgstr "%1: nastaviť autora"
 
 #: src/backend/core/Project.cpp:306
 #, kde-format
 msgid "%1: save dock state changed"
-msgstr "%1: nastaviť obrázok pozadia"
+msgstr "%1: ukladanie stavu doku zmenené"
 
 #: src/backend/core/Project.cpp:313
 #, kde-format
 msgid "%1: save calculation changed"
-msgstr "%1: nastaviť obrázok pozadia"
+msgstr "%1: ukladanie výpočtu zmenené"
 
 #: src/backend/core/Project.cpp:550 src/backend/core/Project.cpp:584
 #, kde-format
@@ -735,7 +735,7 @@ msgstr "Súbor projektu je prázdny."
 #: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:591
 #, kde-format
 msgid "Error opening project"
-msgstr "Otvoriť projekt"
+msgstr "Chyba pri otváraní projektu"
 
 #: src/backend/core/Project.cpp:610
 #, kde-format
@@ -800,7 +800,7 @@ msgstr "Failed to process the content of the file '%1'."
 #: src/backend/core/Project.cpp:839
 #, kde-format
 msgid "Failed to open project"
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Nepodarilo sa otvoriť projekt"
 
 #: src/backend/core/Project.cpp:1257
 #, kde-format
@@ -815,7 +815,7 @@ msgstr "matica"
 #: src/backend/core/Workbook.cpp:215
 #, kde-format
 msgid "unknown workbook element '%1'"
-msgstr "neznámy prvok '%1'"
+msgstr "neznámy prvok pracovného zošita '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:45
@@ -838,7 +838,7 @@ msgstr "Point %1"
 #: src/backend/datapicker/Datapicker.cpp:373
 #, kde-format
 msgid "unknown datapicker element '%1'"
-msgstr "neznámy prvok '%1'"
+msgstr "neznámy prvok datapickera '%1'"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbData)
 #. i18n: ectx: property (text), widget (QLabel, lData)
@@ -951,7 +951,7 @@ msgstr "%1: zmeniť na neviditeľné"
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
-msgstr "Dáta:"
+msgstr "Tlačiť obrázok datapickera"
 
 #: src/backend/datapicker/DatapickerImage.cpp:312
 #: src/backend/datapicker/DatapickerImage.cpp:367
@@ -988,13 +988,13 @@ msgstr "%1: nastaviť minimálnu dĺžku segmentu"
 #: src/backend/datapicker/DatapickerImage.cpp:435
 #, kde-format
 msgid "%1: remove all axis points"
-msgstr "%1: nastaviť písmo"
+msgstr "%1: odstrániť všetky body osi"
 
 #: src/backend/datapicker/DatapickerImage.cpp:683
 #: src/backend/worksheet/Image.cpp:413
 #, kde-format
 msgid "Failed to read image data"
-msgstr "Čítanie dát zlyhalo."
+msgstr "Nepodarilo sa načítať obrazové dáta."
 
 #: src/backend/datapicker/DatapickerPoint.cpp:218
 #: src/backend/worksheet/InfoElement.cpp:841
@@ -1006,34 +1006,34 @@ msgstr "%1: nastaviť pozíciu"
 #: src/backend/datapicker/DatapickerPoint.cpp:229
 #, kde-format
 msgid "%1: set +delta_X position"
-msgstr "%1: nastaviť písmo"
+msgstr "%1: nastaviť pozíciu +delta_X"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:231
 #: src/backend/datapicker/DatapickerPoint.cpp:234
 #, kde-format
 msgid "%1: set +delta X position"
-msgstr "%1: nastaviť písmo"
+msgstr "%1: nastaviť pozíciu +delta X"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:247
 #: src/backend/datapicker/DatapickerPoint.cpp:249
 #: src/backend/datapicker/DatapickerPoint.cpp:252
 #, kde-format
 msgid "%1: set -delta_X position"
-msgstr "%1: nastaviť písmo"
+msgstr "%1: nastaviť pozíciu -delta_X"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:265
 #: src/backend/datapicker/DatapickerPoint.cpp:267
 #: src/backend/datapicker/DatapickerPoint.cpp:270
 #, kde-format
 msgid "%1: set +delta_Y position"
-msgstr "%1: nastaviť písmo"
+msgstr "%1: nastaviť pozíciu +delta_Y"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:283
 #: src/backend/datapicker/DatapickerPoint.cpp:285
 #: src/backend/datapicker/DatapickerPoint.cpp:288
 #, kde-format
 msgid "%1: set -delta_Y position"
-msgstr "%1: nastaviť písmo"
+msgstr "%1: nastaviť pozíciu -delta_Y"
 
 #: src/backend/datapicker/Segment.cpp:170
 #, kde-format
@@ -1177,7 +1177,7 @@ msgstr "Nepodarilo sa otvoriť"
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
 #, kde-format
 msgid "Data selection empty."
-msgstr "Prispôsobiť výberu"
+msgstr "Výber dát je prázdny."
 
 #: src/backend/datasources/filters/CANFilter.cpp:220
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
@@ -1185,7 +1185,7 @@ msgstr "Prispôsobiť výberu"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:261
 #, kde-format
 msgid "Invalid file."
-msgstr "Exportovať do súboru"
+msgstr "Neplatný súbor."
 
 #: src/backend/datasources/filters/CANFilter.cpp:226
 #, kde-format
@@ -1266,7 +1266,7 @@ msgstr "Zlyhala kontrola súboru"
 #: src/backend/datasources/filters/HDF5Filter.cpp:182
 #, kde-format
 msgid "Failed opening HDF5 file"
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Nepodarilo sa otvoriť súbor HDF5"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:188
 #, kde-format
@@ -1286,7 +1286,7 @@ msgstr "Počet súborov: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:202
 #, kde-format
 msgid "Number of data sets: %1"
-msgstr "Počet riadkov: %1"
+msgstr "Počet dátových sád: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:205
 #, kde-format
@@ -1301,12 +1301,12 @@ msgstr "Počet riadkov: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:211
 #, kde-format
 msgid "Number of attributes: %1"
-msgstr "Počet riadkov: %1"
+msgstr "Počet atribútov: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:214
 #, kde-format
 msgid "Number of all objects: %1"
-msgstr "Počet riadkov: %1"
+msgstr "Počet všetkých objektov: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:222
 #, kde-format
@@ -1476,7 +1476,7 @@ msgstr "Vyrovnávacia pamäť stránok zakázaná"
 #: src/backend/datasources/filters/HDF5Filter.cpp:350
 #, kde-format
 msgid "h5dump not found."
-msgstr "Súbor nenájdený"
+msgstr "h5dump nebol nájdený."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
@@ -1514,7 +1514,7 @@ msgstr "Odkaz na %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1389
 #, kde-format
 msgid "hard link"
-msgstr "plná čiara"
+msgstr "pevný odkaz"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1453
 #, kde-format
@@ -1525,7 +1525,7 @@ msgstr "neznáme"
 #: src/backend/datasources/filters/HDF5Filter.cpp:2140
 #, kde-format
 msgid "No data set selected."
-msgstr "Vyčistiť výber"
+msgstr "Nie je vybraná žiadna dátová sada."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1582
 #, kde-format
@@ -1599,7 +1599,7 @@ msgstr[2] "numerické dáta, %1 prvkov"
 #: src/backend/datasources/filters/JsonFilter.cpp:189
 #, kde-format
 msgid "Open device failed"
-msgstr "Všeobecné"
+msgstr "Otvorenie zariadenia zlyhalo"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:192
 #, kde-format
@@ -1660,7 +1660,7 @@ msgstr "Chyba formátu JSON alebo prázdny dokument."
 #: src/backend/datasources/filters/JsonFilter.cpp:522
 #, kde-format
 msgid "Empty file or invalid JSON document."
-msgstr "Čítanie dát zlyhalo."
+msgstr "Prázdny súbor alebo neplatný dokument JSON."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:308
 #: src/backend/datasources/filters/NetCDFFilter.cpp:237
@@ -1672,17 +1672,17 @@ msgstr "Chyba pri získavaní informácií o súbore"
 #: src/backend/datasources/filters/MatioFilter.cpp:317
 #, kde-format
 msgid "Matlab version 7.3"
-msgstr "Ukázať voľby"
+msgstr "Matlab verzia 7.3"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:320
 #, kde-format
 msgid "Matlab version 5"
-msgstr "Ukázať voľby"
+msgstr "Matlab verzia 5"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:323
 #, kde-format
 msgid "Matlab version 4"
-msgstr "Ukázať voľby"
+msgstr "Matlab verzia 4"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:326
 #, kde-format
@@ -1722,7 +1722,7 @@ msgstr "Štruktúra"
 #: src/backend/datasources/filters/MatioFilter.cpp:376
 #, kde-format
 msgid "Object"
-msgstr "Projekt"
+msgstr "Objekt"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:378
 #, kde-format
@@ -1804,7 +1804,7 @@ msgstr "Nepriehľadný"
 #: src/backend/datasources/filters/MatioFilter.cpp:455
 #, kde-format
 msgid "Undefined"
-msgstr "Podčiarknuté"
+msgstr "Nedefinované"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:412
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:57
@@ -1855,12 +1855,12 @@ msgstr "Veľkosť Poľa:"
 #: src/backend/datasources/filters/MatioFilter.cpp:663
 #, kde-format
 msgid "No valid variable selected."
-msgstr "Vyčistiť výber"
+msgstr "Nie je vybraná žiadna platná premenná."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:658
 #, kde-format
 msgid "Selected variable not found."
-msgstr "Súbor nenájdený"
+msgstr "Vybraná premenná nebola nájdená."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
 #, kde-format
@@ -1885,12 +1885,12 @@ msgstr "Chyba pri otváraní súboru"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:222
 #, kde-format
 msgid "Number of global attributes: %1"
-msgstr "Počet riadkov: %1"
+msgstr "Počet globálnych atribútov: %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:224
 #, kde-format
 msgid "Number of dimensions: %1"
-msgstr "Počet riadkov: %1"
+msgstr "Počet rozmerov: %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:226
 #: src/backend/datasources/filters/ReadStatFilter.cpp:131
@@ -1995,12 +1995,12 @@ msgstr "Počet hárkov: %1"
 #: src/backend/datasources/filters/XLSXFilter.cpp:632
 #, kde-format
 msgid "No sheet selected."
-msgstr "Vyčistiť výber"
+msgstr "Nie je vybraný žiadny hárok."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
 #, kde-format
 msgid "Selected sheet not found."
-msgstr "Súbor nenájdený"
+msgstr "Vybraný hárok nebol nájdený."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:257
 #, kde-format
@@ -2015,7 +2015,7 @@ msgstr "Ešte neimplemetované"
 #: src/backend/datasources/filters/OdsFilter.cpp:473
 #, kde-format
 msgid "Sheet not found."
-msgstr "Súbor nenájdený"
+msgstr "Hárok nebol nájdený."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:480
 #, kde-format
@@ -2036,7 +2036,7 @@ msgstr "Veľkosť v bytoch"
 #: src/backend/datasources/filters/QJsonModel.cpp:200
 #, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "Čítanie dát zlyhalo."
+msgstr "Nepodarilo sa načítať súbor JSON. Prázdny dokument JSON."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format
@@ -2096,7 +2096,7 @@ msgstr "64bit: %1"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:482
 #, kde-format
 msgid "Error reading file."
-msgstr "Chyba pri otváraní súboru"
+msgstr "Chyba pri čítaní súboru."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:512
 #: src/backend/datasources/filters/ReadStatFilter.cpp:535
@@ -2116,7 +2116,7 @@ msgstr "Atribút '%1' chýba alebo je prázdny, použije sa predvolená hodnota"
 #: src/backend/datasources/filters/ROOTFilter.cpp:149
 #, kde-format
 msgid "No column available"
-msgstr "Vymazať premennú"
+msgstr "Žiadny stĺpec nie je k dispozícii"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:163
 #, kde-format
@@ -2136,22 +2136,22 @@ msgstr "File format version: %1"
 #: src/backend/datasources/filters/ROOTFilter.cpp:1515
 #, kde-format
 msgid "FREE data record size: %1 bytes"
-msgstr "Typ súboru: %1"
+msgstr "Veľkosť voľného dátového záznamu: %1 bajtov"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1517
 #, kde-format
 msgid "Number of free data records: %1"
-msgstr "Počet riadkov: %1"
+msgstr "Počet voľných dátových záznamov: %1"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1519
 #, kde-format
 msgid "TNamed size: %1 bytes"
-msgstr "Typ súboru: %1"
+msgstr "Veľkosť TNamed: %1 bajtov"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1521
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
-msgstr "Typ súboru: %1"
+msgstr "Veľkosť ukazovateľov súboru: %1 bajtov"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1526
 #, kde-format
@@ -2176,7 +2176,7 @@ msgstr "Verzia aplikácie: %1.%2.%3"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, kde-format
 msgid "Number of Objects: %1"
-msgstr "Počet riadkov: %1"
+msgstr "Počet objektov: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:115
 #, kde-format
@@ -2216,7 +2216,7 @@ msgstr "Unknown id: %1."
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:189
 #, kde-format
 msgid "Invalid BLF file"
-msgstr "Exportovať do súboru"
+msgstr "Neplatný súbor BLF"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:192
 #, kde-format
@@ -2231,12 +2231,12 @@ msgstr "Žiadny DBC parser nainštalovaný."
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:198
 #, kde-format
 msgid "Invalid DBC file."
-msgstr "Exportovať do súboru"
+msgstr "Neplatný súbor DBC."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:201
 #, kde-format
 msgid "Unknown error,"
-msgstr "neznáme"
+msgstr "Neznáma chyba,"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:443
 #, kde-format
@@ -2421,13 +2421,13 @@ msgstr "Sila a energia"
 #: src/backend/gsl/constants.cpp:46
 #, kde-format
 msgid "Unknown Constant"
-msgstr "Konštanty"
+msgstr "Neznáma konštanta"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:57
 #, kde-format
 msgid "Base of exponentials"
-msgstr "Exponenciála"
+msgstr "Základ exponenciál"
 
 #: src/backend/gsl/constants.cpp:58
 #, kde-format
@@ -2437,12 +2437,12 @@ msgstr "Pi"
 #: src/backend/gsl/constants.cpp:59
 #, kde-format
 msgid "Euler's constant"
-msgstr "Konštanty"
+msgstr "Eulerova konštanta"
 
 #: src/backend/gsl/constants.cpp:60
 #, kde-format
 msgid "Not a number"
-msgstr "Číslo"
+msgstr "Nie je číslo"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:63
@@ -2463,12 +2463,12 @@ msgstr "Permitivita vákua"
 #: src/backend/gsl/constants.cpp:66
 #, kde-format
 msgid "Planck constant"
-msgstr "Konštanty"
+msgstr "Planckova konštanta"
 
 #: src/backend/gsl/constants.cpp:67
 #, kde-format
 msgid "Reduced Planck constant"
-msgstr "Konštanty"
+msgstr "Redukovaná Planckova konštanta"
 
 #: src/backend/gsl/constants.cpp:68
 #, kde-format
@@ -2506,7 +2506,7 @@ msgstr "Stefan-Boltzmannova konštanta"
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:159
 #, kde-format
 msgid "Gauss"
-msgstr "Gaussovské"
+msgstr "Gauss"
 
 #. i18n("Astronomy and Astrophysics"));
 #: src/backend/gsl/constants.cpp:77
@@ -2537,13 +2537,13 @@ msgstr "Gravitačné zrýchlenie"
 #: src/backend/gsl/constants.cpp:82
 #, kde-format
 msgid "Solar mass"
-msgstr "Mapa farieb"
+msgstr "Slnečná hmotnosť"
 
 #. i18n("Atomic and Nuclear Physics"));
 #: src/backend/gsl/constants.cpp:85
 #, kde-format
 msgid "Charge of the electron"
-msgstr "Prispôsobiť výberu"
+msgstr "Náboj elektrónu"
 
 #: src/backend/gsl/constants.cpp:86
 #, kde-format
@@ -2558,7 +2558,7 @@ msgstr "Jednotná atómová hmotnosť"
 #: src/backend/gsl/constants.cpp:88
 #, kde-format
 msgid "Mass of the electron"
-msgstr "Výber"
+msgstr "Hmotnosť elektrónu"
 
 #: src/backend/gsl/constants.cpp:89
 #, kde-format
@@ -2835,7 +2835,7 @@ msgstr "Energia 1 thermu"
 #: src/backend/gsl/constants.cpp:156
 #, kde-format
 msgid "Power of 1 horsepower"
-msgstr "Sila"
+msgstr "Výkon 1 konskej sily"
 
 #. i18n("Pressure"));
 #: src/backend/gsl/constants.cpp:159
@@ -2997,12 +2997,12 @@ msgstr "Dodaný neplatný argument"
 #: src/backend/gsl/errors.h:34
 #, kde-format
 msgid "Generic failure"
-msgstr "Všeobecné"
+msgstr "Všeobecná chyba"
 
 #: src/backend/gsl/errors.h:36
 #, kde-format
 msgid "Factorization failed"
-msgstr "Spojenie zlyhalo"
+msgstr "Faktorizácia zlyhala"
 
 #: src/backend/gsl/errors.h:38
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:585
@@ -3012,7 +3012,7 @@ msgstr "Spojenie zlyhalo"
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:449
 #, kde-format
 msgid "Failed to allocate memory"
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Nepodarilo sa alokovať pamäť"
 
 #: src/backend/gsl/errors.h:40
 #, kde-format
@@ -3132,7 +3132,7 @@ msgstr "Nie je možné dosiahnuť zadanú toleranciu v gradiente"
 #: src/backend/gsl/errors.h:86
 #, kde-format
 msgid "End of file"
-msgstr "Exportovať do súboru"
+msgstr "Koniec súboru"
 
 #: src/backend/gsl/functions.cpp:57
 #, kde-format
@@ -3142,7 +3142,7 @@ msgstr "Smerodajná odchýlka"
 #: src/backend/gsl/functions.cpp:59
 #, kde-format
 msgid "Comparison Functions"
-msgstr "Funkcie"
+msgstr "Porovnávacie funkcie"
 
 #: src/backend/gsl/functions.cpp:61
 #, kde-format
@@ -3153,12 +3153,12 @@ msgstr "funkcie"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
 #, kde-format
 msgid "Column Statistics"
-msgstr "Štatistika"
+msgstr "Štatistika stĺpca"
 
 #: src/backend/gsl/functions.cpp:65
 #, kde-format
 msgid "Moving Statistics"
-msgstr "Štatistika"
+msgstr "Pohyblivá štatistika"
 
 #: src/backend/gsl/functions.cpp:67
 #, kde-format
@@ -3168,22 +3168,22 @@ msgstr "Airyho funkcie a derivácie"
 #: src/backend/gsl/functions.cpp:69
 #, kde-format
 msgid "Bessel Functions"
-msgstr "Funkcie"
+msgstr "Besselove funkcie"
 
 #: src/backend/gsl/functions.cpp:71
 #, kde-format
 msgid "Clausen Functions"
-msgstr "Funkcie"
+msgstr "Clausenove funkcie"
 
 #: src/backend/gsl/functions.cpp:73
 #, kde-format
 msgid "Coulomb Functions"
-msgstr "Funkcie"
+msgstr "Coulombove funkcie"
 
 #: src/backend/gsl/functions.cpp:75
 #, kde-format
 msgid "Dawson Function"
-msgstr "Funkcia"
+msgstr "Dawsonova funkcia"
 
 #: src/backend/gsl/functions.cpp:77
 #, kde-format
@@ -3218,7 +3218,7 @@ msgstr "Smer"
 #: src/backend/gsl/functions.cpp:93
 #, kde-format
 msgid "Exponential Integrals"
-msgstr "Exponenciála"
+msgstr "Exponenciálne integráty"
 
 #: src/backend/gsl/functions.cpp:95
 #, kde-format
@@ -3273,7 +3273,7 @@ msgstr "Funkcie"
 #: src/backend/gsl/functions.cpp:119
 #, kde-format
 msgid "Power Function"
-msgstr "Funkcia"
+msgstr "Mocninová funkcia"
 
 #: src/backend/gsl/functions.cpp:121
 #, kde-format
@@ -3328,7 +3328,7 @@ msgstr "Exponenciálne mocninové rozdelenie"
 #: src/backend/gsl/functions.cpp:141
 #, kde-format
 msgid "Cauchy Distribution"
-msgstr "Smer"
+msgstr "Cauchyho rozdelenie"
 
 #: src/backend/gsl/functions.cpp:143
 #, kde-format
@@ -3358,7 +3358,7 @@ msgstr "Smer"
 #: src/backend/gsl/functions.cpp:153
 #, kde-format
 msgid "Chi-squared Distribution"
-msgstr "Smer"
+msgstr "Chí-kvadrát rozdelenie"
 
 #: src/backend/gsl/functions.cpp:155
 #, kde-format
@@ -3373,7 +3373,7 @@ msgstr "Smer"
 #: src/backend/gsl/functions.cpp:159
 #, kde-format
 msgid "Beta Distribution"
-msgstr "Smer"
+msgstr "Beta rozdelenie"
 
 #: src/backend/gsl/functions.cpp:161
 #, kde-format
@@ -3403,12 +3403,12 @@ msgstr "Smer"
 #: src/backend/gsl/functions.cpp:171
 #, kde-format
 msgid "Bernoulli Distribution"
-msgstr "Smer"
+msgstr "Bernoulliho rozdelenie"
 
 #: src/backend/gsl/functions.cpp:173
 #, kde-format
 msgid "Binomial Distribution"
-msgstr "Smer"
+msgstr "Binomické rozdelenie"
 
 #: src/backend/gsl/functions.cpp:175
 #, kde-format
@@ -3438,7 +3438,7 @@ msgstr "Smer"
 #: src/backend/gsl/functions.cpp:187
 #, kde-format
 msgid "Unknown Function"
-msgstr "Funkcia"
+msgstr "Neznáma funkcia"
 
 #: src/backend/gsl/functions.cpp:234
 #, kde-format
@@ -3453,7 +3453,7 @@ msgstr "Kĺzavý priemer"
 #: src/backend/gsl/functions.cpp:236
 #, kde-format
 msgid "Moving Range"
-msgstr "stred"
+msgstr "Pohyblivý rozsah"
 
 #: src/backend/gsl/functions.cpp:237
 #, kde-format
@@ -3597,7 +3597,7 @@ msgstr "Režim"
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:101
 #, kde-format
 msgid "First quartile"
-msgstr "Orientácia"
+msgstr "Prvý kvartil"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbThirdQuartile)
 #: src/backend/gsl/functions.cpp:256
@@ -3611,32 +3611,32 @@ msgstr "Orientácia"
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:206
 #, kde-format
 msgid "Interquartile range"
-msgstr "Interaktívny"
+msgstr "Medzikvartilové rozpätie"
 
 #: src/backend/gsl/functions.cpp:258
 #, kde-format
 msgid "1st percentile"
-msgstr "Percentil:"
+msgstr "1. percentil"
 
 #: src/backend/gsl/functions.cpp:259
 #, kde-format
 msgid "5th percentile"
-msgstr "Percentil:"
+msgstr "5. percentil"
 
 #: src/backend/gsl/functions.cpp:260
 #, kde-format
 msgid "10th percentile"
-msgstr "Percentil:"
+msgstr "10. percentil"
 
 #: src/backend/gsl/functions.cpp:261
 #, kde-format
 msgid "90th percentile"
-msgstr "Percentil:"
+msgstr "90. percentil"
 
 #: src/backend/gsl/functions.cpp:262
 #, kde-format
 msgid "95th percentile"
-msgstr "Percentil:"
+msgstr "95. percentil"
 
 #: src/backend/gsl/functions.cpp:263
 #, kde-format
@@ -3655,7 +3655,7 @@ msgstr "Trimean"
 #: src/backend/gsl/functions.cpp:265
 #, kde-format
 msgid "Mean absolute deviation"
-msgstr "Smerodajná odchýlka"
+msgstr "Stredná absolútna odchýlka"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviationAroundMedian)
 #: src/backend/gsl/functions.cpp:266
@@ -3709,7 +3709,7 @@ msgstr "Entropia"
 #: src/backend/gsl/functions.cpp:271
 #, kde-format
 msgid "Quantile"
-msgstr "Veľkosť vzorky"
+msgstr "Kvantil"
 
 #: src/backend/gsl/functions.cpp:272 src/backend/nsl/nsl_smooth.c:21
 #, kde-format
@@ -3799,7 +3799,7 @@ msgstr "Zaokrúhliť na y desatinných miest"
 #: src/backend/gsl/functions.cpp:311
 #, kde-format
 msgid "greaterThan"
-msgstr "Väčšie ako"
+msgstr "väčšieAko"
 
 #: src/backend/gsl/functions.cpp:312
 #, kde-format
@@ -3809,7 +3809,7 @@ msgstr "menšieAko"
 #: src/backend/gsl/functions.cpp:313
 #, kde-format
 msgid "greaterEqualThan"
-msgstr "Väčšie ako"
+msgstr "väčšieAleboRovnéAko"
 
 #: src/backend/gsl/functions.cpp:314
 #, kde-format
@@ -3819,7 +3819,7 @@ msgstr "menšieAleboRovné"
 #: src/backend/gsl/functions.cpp:315
 #, kde-format
 msgid "equal"
-msgstr "Rovné"
+msgstr "rovné"
 
 #: src/backend/gsl/functions.cpp:316
 #, kde-format
@@ -4220,7 +4220,7 @@ msgstr "n-tá kladná nula Besselovej funkcie Jnu"
 #: src/backend/gsl/functions.cpp:395
 #, kde-format
 msgid "Clausen function"
-msgstr "funkcie"
+msgstr "Clausenova funkcia"
 
 #: src/backend/gsl/functions.cpp:398
 #, kde-format
@@ -4331,7 +4331,7 @@ msgstr "Carlsonov tvar neúplného eliptického integrálu RJ"
 #: src/backend/gsl/functions.cpp:429
 #, kde-format
 msgid "Error function"
-msgstr "funkcie"
+msgstr "Chybová funkcia"
 
 #: src/backend/gsl/functions.cpp:430
 #, kde-format
@@ -4405,7 +4405,7 @@ msgstr "Exponenciála"
 #: src/backend/gsl/functions.cpp:453
 #, kde-format
 msgid "Exponential integral"
-msgstr "Exponenciála"
+msgstr "Exponenciálny integrál"
 
 #: src/backend/gsl/functions.cpp:454
 #, kde-format
@@ -4590,7 +4590,7 @@ msgstr "Komplementárna normalizovaná neúplná funkcia gama"
 #: src/backend/gsl/functions.cpp:496
 #, kde-format
 msgid "Beta function"
-msgstr "funkcie"
+msgstr "Beta funkcia"
 
 #: src/backend/gsl/functions.cpp:498
 #, kde-format
@@ -4655,7 +4655,7 @@ msgstr "Derivácie Hermiteových polynómov verzia pravdepodobnostníkov"
 #: src/backend/gsl/functions.cpp:517
 #, kde-format
 msgid "Derivatives of Hermite functions"
-msgstr "funkcie"
+msgstr "Derivácie Hermiteových funkcií"
 
 #: src/backend/gsl/functions.cpp:521
 #, kde-format
@@ -4680,7 +4680,7 @@ msgstr "Konfluentná hypergeometrická funkcia U pre celočíselné parametre"
 #: src/backend/gsl/functions.cpp:525
 #, kde-format
 msgid "Confluent hypergeometric function U"
-msgstr "Smer"
+msgstr "Konfluovateľná hypergeometrická funkcia U"
 
 #: src/backend/gsl/functions.cpp:526
 #, kde-format
@@ -4849,7 +4849,7 @@ msgstr "Logaritmus"
 #: src/backend/gsl/functions.cpp:565
 #, kde-format
 msgid "Base 2 logarithm"
-msgstr "Logaritmus so základom 10"
+msgstr "Logaritmus so základom 2"
 
 #: src/backend/gsl/functions.cpp:566
 #, kde-format
@@ -4859,22 +4859,22 @@ msgstr "Logaritmus veľkosti"
 #: src/backend/gsl/functions.cpp:572
 #, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Funkcie"
+msgstr "Charakteristické hodnoty a_n(q) Mathieuových funkcií ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:573
 #, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Funkcie"
+msgstr "Charakteristické hodnoty b_n(q) Mathieuových funkcií se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:574
 #, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "Funkcie"
+msgstr "Uhlové Mathieuove funkcie ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:575
 #, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "Funkcie"
+msgstr "Uhlové Mathieuove funkcie se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:576
 #, kde-format
@@ -4899,7 +4899,7 @@ msgstr "Funkcia digama pre kladné celé číslo n"
 #: src/backend/gsl/functions.cpp:585
 #, kde-format
 msgid "Digamma function"
-msgstr "funkcie"
+msgstr "Digama funkcia"
 
 #: src/backend/gsl/functions.cpp:586
 #, kde-format
@@ -5036,17 +5036,17 @@ msgstr "Kotangens"
 #: src/backend/gsl/functions.cpp:618
 #, kde-format
 msgid "Inverse secant"
-msgstr "Inverzný hyperbolický tangens"
+msgstr "Inverzný sekans"
 
 #: src/backend/gsl/functions.cpp:619
 #, kde-format
 msgid "Inverse cosecant"
-msgstr "Inverzný hyperbolický tangens"
+msgstr "Inverzný kosekans"
 
 #: src/backend/gsl/functions.cpp:620
 #, kde-format
 msgid "Inverse cotangent"
-msgstr "Inverzný hyperbolický tangens"
+msgstr "Inverzný kotangens"
 
 #: src/backend/gsl/functions.cpp:621
 #, kde-format
@@ -5066,17 +5066,17 @@ msgstr "Hyperbolický kotangens"
 #: src/backend/gsl/functions.cpp:624
 #, kde-format
 msgid "Inverse hyperbolic secant"
-msgstr "Inverzný hyperbolický sínus"
+msgstr "Inverzný hyperbolický sekans"
 
 #: src/backend/gsl/functions.cpp:625
 #, kde-format
 msgid "Inverse hyperbolic cosecant"
-msgstr "Inverzný hyperbolický kosínus"
+msgstr "Inverzný hyperbolický kosekans"
 
 #: src/backend/gsl/functions.cpp:626
 #, kde-format
 msgid "Inverse hyperbolic cotangent"
-msgstr "Inverzný hyperbolický tangens"
+msgstr "Inverzný hyperbolický kotangens"
 
 #: src/backend/gsl/functions.cpp:627
 #, kde-format
@@ -5136,12 +5136,12 @@ msgstr "Funkcia eta pre celé číslo n"
 #: src/backend/gsl/functions.cpp:642
 #, kde-format
 msgid "Eta function"
-msgstr "funkcie"
+msgstr "Eta funkcia"
 
 #: src/backend/gsl/functions.cpp:646
 #, kde-format
 msgid "Gaussian random numbers"
-msgstr "Gaussovské"
+msgstr "Gaussovské náhodné čísla"
 
 #: src/backend/gsl/functions.cpp:647
 #, kde-format
@@ -5191,7 +5191,7 @@ msgstr "Hodnoty"
 #: src/backend/gsl/functions.cpp:657
 #, kde-format
 msgid "Chi-squared random numbers"
-msgstr "Smer"
+msgstr "Chí-kvadrát náhodné čísla"
 
 #: src/backend/gsl/functions.cpp:658
 #, kde-format
@@ -5221,7 +5221,7 @@ msgstr "Binomické náhodné čísla"
 #: src/backend/gsl/functions.cpp:665
 #, kde-format
 msgid "Triangular random numbers"
-msgstr "Gaussovské"
+msgstr "Trojuholníkové náhodné čísla"
 
 #: src/backend/gsl/functions.cpp:669
 #, kde-format
@@ -5361,7 +5361,7 @@ msgstr "Hustota pravdepodobnosti pre Cauchyho rozdelenie"
 #: src/backend/gsl/functions.cpp:705
 #, kde-format
 msgid "Cumulative Cauchy distribution function P"
-msgstr "Smer"
+msgstr "Kumulatívna distribučná funkcia Cauchyho rozdelenia P"
 
 #: src/backend/gsl/functions.cpp:706
 #, kde-format
@@ -5838,12 +5838,12 @@ msgstr "p-tý kvantil pre trojuholníkové rozdelenie"
 #: src/backend/gsl/functions.cpp:998
 #, kde-format
 msgid "Invalid"
-msgstr "Exportovať do súboru"
+msgstr "Neplatné"
 
 #: src/backend/gsl/functions.cpp:954
 #, kde-format
 msgid "condition"
-msgstr "Pripojenie:"
+msgstr "podmienka"
 
 #: src/backend/gsl/functions.cpp:956
 #, kde-format
@@ -5853,12 +5853,12 @@ msgstr "Hodnota"
 #: src/backend/gsl/functions.cpp:958
 #, kde-format
 msgid "falseValue"
-msgstr "Veľkosť vzorky"
+msgstr "hodnotaNepravda"
 
 #: src/backend/gsl/functions.cpp:966
 #, kde-format
 msgid "n"
-msgstr "Čiara"
+msgstr "n"
 
 #: src/backend/gsl/functions.cpp:968
 #, kde-format
@@ -5920,7 +5920,7 @@ msgstr "Log2"
 #: src/backend/lib/Range.h:48
 #, kde-format
 msgid "Ln"
-msgstr "Čiara"
+msgstr "Ln"
 
 #: src/backend/lib/Range.h:48
 #, kde-format
@@ -5935,7 +5935,7 @@ msgstr "Štvorec"
 #: src/backend/lib/Range.h:48
 #, kde-format
 msgid "Inverse"
-msgstr "Inverzný sínus"
+msgstr "Inverzný"
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
@@ -6118,12 +6118,12 @@ msgstr "Exportovať do súboru"
 #: src/backend/note/Note.cpp:81
 #, kde-format
 msgid "Export failed"
-msgstr "Exportovať do súboru"
+msgstr "Export zlyhal"
 
 #: src/backend/note/Note.cpp:81
 #, kde-format
 msgid "Failed to open '%1' for writing."
-msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
+msgstr "Nepodarilo sa otvoriť '%1' pre zápis."
 
 #: src/backend/note/Note.cpp:161
 #, kde-format
@@ -6133,12 +6133,12 @@ msgstr "nenájdený žiadny prvok poznámky"
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
 msgid "Forward (Convolution)"
-msgstr "Vlastnosti projektu"
+msgstr "Dopredu (konvolúcia)"
 
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
 msgid "Backward (Deconvolution)"
-msgstr "Vlastnosti projektu"
+msgstr "Spätná (dekonvolúcia)"
 
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
 #, kde-format
@@ -6225,7 +6225,7 @@ msgstr "Kĺzavý priemer"
 #: src/backend/nsl/nsl_conv.c:25
 #, kde-format
 msgid "Triangular Smooth"
-msgstr "trojuholníkový"
+msgstr "trojuholníkové vyhladzovanie"
 
 #: src/backend/nsl/nsl_conv.c:26
 #, kde-format
@@ -6235,7 +6235,7 @@ msgstr "Pseudo-Gaussovské vyhladzovanie"
 #: src/backend/nsl/nsl_conv.c:27
 #, kde-format
 msgid "First Derivative"
-msgstr "Orientácia"
+msgstr "Prvá derivácia"
 
 #: src/backend/nsl/nsl_conv.c:28
 #, kde-format
@@ -6270,7 +6270,7 @@ msgstr "Lorentzovské"
 #: src/backend/nsl/nsl_corr.c:19
 #, kde-format
 msgid "Biased"
-msgstr "Skreslenie:"
+msgstr "Skreslené"
 
 #: src/backend/nsl/nsl_corr.c:19
 #, kde-format
@@ -6295,7 +6295,7 @@ msgstr "Amplitúda"
 #: src/backend/nsl/nsl_dft.c:20
 #, kde-format
 msgid "Real Part"
-msgstr "Sériový port"
+msgstr "Reálna časť"
 
 #: src/backend/nsl/nsl_dft.c:21 src/backend/nsl/nsl_hilbert.c:18
 #, kde-format
@@ -6327,12 +6327,12 @@ msgstr "Vyčistiť výber"
 #: src/backend/nsl/nsl_dft.c:26
 #, kde-format
 msgid "Magnitude Squared"
-msgstr "Magnitúda"
+msgstr "Magnitúda na druhú"
 
 #: src/backend/nsl/nsl_dft.c:27
 #, kde-format
 msgid "Amplitude Squared"
-msgstr "Amplitúda"
+msgstr "Amplitúda na druhú"
 
 #: src/backend/nsl/nsl_dft.c:28
 #, kde-format
@@ -6403,7 +6403,7 @@ msgstr "Pásmový priepust"
 #: src/backend/nsl/nsl_filter.c:20
 #, kde-format
 msgid "Band Reject"
-msgstr "Uloženie projektu"
+msgstr "Pásmová zádrž"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
@@ -6443,7 +6443,7 @@ msgstr "Zlomok"
 #: src/backend/nsl/nsl_fit.c:20
 #, kde-format
 msgid "Basic Functions"
-msgstr "funkcie"
+msgstr "Základné funkcie"
 
 #: src/backend/nsl/nsl_fit.c:21
 #, kde-format
@@ -6499,7 +6499,7 @@ msgstr "Fourier"
 #: src/backend/nsl/nsl_fit.c:30
 #, kde-format
 msgid "Gaussian (normal)"
-msgstr "Gaussovské"
+msgstr "Gaussovské (normálne)"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
@@ -6511,7 +6511,7 @@ msgstr "Cauchy-Lorentz"
 #: src/backend/nsl/nsl_fit.c:32 src/backend/nsl/nsl_sf_stats.c:45
 #, kde-format
 msgid "Hyperbolic Secant (sech)"
-msgstr "Hyperbolický sínus"
+msgstr "Hyperbolický sekans (sech)"
 
 #: src/backend/nsl/nsl_fit.c:33
 #, kde-format
@@ -6553,7 +6553,7 @@ msgstr "funkcie"
 #: src/backend/nsl/nsl_fit.c:48
 #, kde-format
 msgid "Error Function (erf)"
-msgstr "funkcie"
+msgstr "Chybová funkcia (erf)"
 
 #: src/backend/nsl/nsl_fit.c:49
 #, kde-format
@@ -6593,17 +6593,17 @@ msgstr "Reumann-Witkam"
 #: src/backend/nsl/nsl_geom_linesim.c:20
 #, kde-format
 msgid "Perpendicular Distance"
-msgstr "Tolerancia"
+msgstr "Kolmá vzdialenosť"
 
 #: src/backend/nsl/nsl_geom_linesim.c:21
 #, kde-format
 msgid "n-th Point"
-msgstr "iterácie"
+msgstr "n-tý bod"
 
 #: src/backend/nsl/nsl_geom_linesim.c:22
 #, kde-format
 msgid "Radial Distance"
-msgstr "radiálny prechod"
+msgstr "Radiálna vzdialenosť"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
@@ -6632,7 +6632,7 @@ msgstr "Obálka"
 #: src/backend/nsl/nsl_int.c:19
 #, kde-format
 msgid "Rectangle (1-point)"
-msgstr "Obdĺžnik"
+msgstr "Obdĺžnik (1 bod)"
 
 #: src/backend/nsl/nsl_int.c:19
 #, kde-format
@@ -6689,7 +6689,7 @@ msgstr "funkcie"
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
 msgid "Finite Differences"
-msgstr "Nastavenia"
+msgstr "Konečné diferencie"
 
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
@@ -6709,7 +6709,7 @@ msgstr "Kochanek-Bartels (TCB)"
 #: src/backend/nsl/nsl_interp.c:26
 #, kde-format
 msgid "Derivative"
-msgstr "Orientácia"
+msgstr "Derivácia"
 
 #: src/backend/nsl/nsl_interp.c:26
 #, kde-format
@@ -6719,22 +6719,22 @@ msgstr "Integrál"
 #: src/backend/nsl/nsl_sf_stats.c:13
 #, kde-format
 msgid "Gaussian (Normal)"
-msgstr "Gaussovské"
+msgstr "Gaussovské (normálne)"
 
 #: src/backend/nsl/nsl_sf_stats.c:14
 #, kde-format
 msgid "Gaussian Tail"
-msgstr "Gaussovské"
+msgstr "Gaussov chvost"
 
 #: src/backend/nsl/nsl_sf_stats.c:16
 #, kde-format
 msgid "Laplace"
-msgstr "Nahradiť"
+msgstr "Laplace"
 
 #: src/backend/nsl/nsl_sf_stats.c:17
 #, kde-format
 msgid "Exponential Power"
-msgstr "Exponenciála"
+msgstr "Exponenciálna mocnina"
 
 #: src/backend/nsl/nsl_sf_stats.c:18
 #, kde-format
@@ -6779,12 +6779,12 @@ msgstr "rovnomerné"
 #: src/backend/nsl/nsl_sf_stats.c:26
 #, kde-format
 msgid "Log-Normal (Galton)"
-msgstr "Normalizovať"
+msgstr "Log-normálne (Galton)"
 
 #: src/backend/nsl/nsl_sf_stats.c:27
 #, kde-format
 msgid "Chi-Squared"
-msgstr "Štvorec"
+msgstr "Chí-kvadrát"
 
 #: src/backend/nsl/nsl_sf_stats.c:28
 #, kde-format
@@ -6824,7 +6824,7 @@ msgstr "Gumbel typ 1 (maximálna hodnota; log-Weibull)"
 #: src/backend/nsl/nsl_sf_stats.c:35
 #, kde-format
 msgid "Gumbel Type-2"
-msgstr "Číslo"
+msgstr "Gumbelov typ 2"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
 #, kde-format
@@ -6977,7 +6977,7 @@ msgstr "Periodické"
 #: src/backend/nsl/nsl_smooth.c:22
 #, kde-format
 msgid "Interpolating"
-msgstr "iterácie"
+msgstr "Interpolácia"
 
 #: src/backend/nsl/nsl_smooth.c:22
 #, kde-format
@@ -6992,7 +6992,7 @@ msgstr "Najbližšie"
 #: src/backend/nsl/nsl_smooth.c:22
 #, kde-format
 msgid "Constant"
-msgstr "Konštanty"
+msgstr "Konštanta"
 
 #: src/backend/nsl/nsl_smooth.c:23
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:160
@@ -7037,12 +7037,12 @@ msgstr "%1: zmeniť komentár"
 #: src/backend/spreadsheet/Spreadsheet.cpp:427
 #, kde-format
 msgid "%1: set linking"
-msgstr "%1: nastaviť vertikálne zarovnanie"
+msgstr "%1: nastaviť prepojenie"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:447
 #, kde-format
 msgid "%1: set linked spreadsheet"
-msgstr "%1: nastaviť vertikálne zarovnanie"
+msgstr "%1: nastaviť prepojenú tabuľku"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:502
 #, kde-format
@@ -7190,7 +7190,7 @@ msgstr "KontraharmonickýPriemer"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
 #, kde-format
 msgid "FirstQuartile"
-msgstr "Orientácia"
+msgstr "PrvýKvartil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
 #, kde-format
@@ -7201,7 +7201,7 @@ msgstr "Orientácia"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:85
 #, kde-format
 msgid "Interquartile Range"
-msgstr "Interaktívny"
+msgstr "Medzikvartilové rozpätie"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
 #, kde-format
@@ -7239,7 +7239,7 @@ msgstr "Percentil:"
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:158
 #, kde-format
 msgid "Range"
-msgstr "X rozsah:"
+msgstr "Rozsah"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
 #, kde-format
@@ -7249,17 +7249,17 @@ msgstr "Smerodajná odchýlka"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
 #, kde-format
 msgid "MeanDeviation"
-msgstr "Smerodajná odchýlka"
+msgstr "StredOdch"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
 #, kde-format
 msgid "MeanDeviationAroundMedian"
-msgstr "Smerodajná odchýlka"
+msgstr "StredOdchOkolMedianu"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
 #, kde-format
 msgid "MedianDeviation"
-msgstr "Smerodajná odchýlka"
+msgstr "MedianOdch"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberLine)
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
@@ -7278,7 +7278,7 @@ msgstr "Stĺpec"
 #: src/backend/worksheet/Background.cpp:199
 #, kde-format
 msgid "%1: filling changed"
-msgstr "%1: nastaviť obrázok pozadia"
+msgstr "%1: výplň zmenená"
 
 #: src/backend/worksheet/Background.cpp:206
 #, kde-format
@@ -7323,7 +7323,7 @@ msgstr "%1: nastaviť obrázok pozadia"
 #: src/backend/worksheet/Background.cpp:262
 #, kde-format
 msgid "%1: set background opacity"
-msgstr "%1: nastaviť obrázok pozadia"
+msgstr "%1: nastaviť priehľadnosť pozadia"
 
 #: src/backend/worksheet/Image.cpp:137
 #, kde-format
@@ -7353,7 +7353,7 @@ msgstr "%1: nastaviť písmo"
 #: src/backend/worksheet/Image.cpp:176
 #, kde-format
 msgid "%1: change keep ratio"
-msgstr "%1: zmeniť komentár"
+msgstr "%1: zmeniť zachovanie pomeru strán"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:146
@@ -7361,7 +7361,7 @@ msgstr "%1: zmeniť komentár"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
-msgstr "Štítky"
+msgstr "Popisok"
 
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
@@ -7529,7 +7529,7 @@ msgstr "Farba"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:547
 #, kde-format
 msgid "%1: set axis range type"
-msgstr "%1: nastaviť rozloženie"
+msgstr "%1: nastaviť typ rozsahu osi"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:572
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:621
@@ -7606,7 +7606,7 @@ msgstr "%1: nastaviť posun nadpisu"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:727
 #, kde-format
 msgid "%1: set arrow type"
-msgstr "%1: nastaviť rozloženie"
+msgstr "%1: nastaviť typ šípky"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:734
 #, kde-format
@@ -7616,7 +7616,7 @@ msgstr "%1: nastaviť písmo"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:741
 #, kde-format
 msgid "%1: set arrow size"
-msgstr "%1: nastaviť obrázok pozadia"
+msgstr "%1: nastaviť veľkosť šípky"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:749
 #, kde-format
@@ -7808,7 +7808,7 @@ msgstr "%1: nastaviť písmo"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:534
 #, kde-format
 msgid "%1: width factor changed"
-msgstr "%1    [zmenené]"
+msgstr "%1: faktor šírky zmenený"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
@@ -7821,12 +7821,12 @@ msgstr "%1 - Data"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "1st quartile"
-msgstr "Orientácia"
+msgstr "1. kvartil"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:306
 #, kde-format
 msgid "3rd quartile"
-msgstr "Orientácia"
+msgstr "3. kvartil"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:307
 #, kde-format
@@ -7851,7 +7851,7 @@ msgstr "počet dátových bodov"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:311
 #, kde-format
 msgid "outliers count"
-msgstr "Konštanty"
+msgstr "počet odľahlých hodnôt"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:312
 #, kde-format
@@ -7891,28 +7891,28 @@ msgstr "%1: set whiskers cap size"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:571
 #, kde-format
 msgid "%1: jitterring changed"
-msgstr "%1: nastaviť obrázok pozadia"
+msgstr "%1: jitter zmenený"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:522
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:571
 #, kde-format
 msgid "%1: change rug enabled"
-msgstr "%1: zmeniť komentár"
+msgstr "%1: zmeniť zobrazenie rug grafu"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:529
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:585
 #, kde-format
 msgid "%1: change rug width"
-msgstr "%1: nastaviť písmo"
+msgstr "%1: zmeniť šírku rug grafu"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:593
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:536
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:592
 #, kde-format
 msgid "%1: change rug length"
-msgstr "%1: zmeniť komentár"
+msgstr "%1: zmeniť dĺžku rug grafu"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:600
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:543
@@ -7924,7 +7924,7 @@ msgstr "%1: zmeniť komentár"
 #: src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp:54
 #, kde-format
 msgid "no info available"
-msgstr "Vymazať premennú"
+msgstr "žiadne informácie nie sú k dispozícii"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:165
@@ -7946,7 +7946,7 @@ msgstr "xy-krivka"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:429
 #, kde-format
 msgid "xy-curve from a Formula"
-msgstr "Vlastnosti projektu"
+msgstr "Krivka xy zo vzorca"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:432
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:487
@@ -7964,7 +7964,7 @@ msgstr "Histogram"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:146
 #, kde-format
 msgid "Box Plot"
-msgstr "Kresliť"
+msgstr "Krabicový graf"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:434
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:493
@@ -7989,7 +7989,7 @@ msgstr "Kresliť"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:149
 #, kde-format
 msgid "Bar Plot"
-msgstr "Kresliť"
+msgstr "Stĺpcový graf"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
@@ -8049,7 +8049,7 @@ msgstr "Prispôsobiť"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:557
 #, kde-format
 msgid "Fourier Filter"
-msgstr "nový filter"
+msgstr "Fourierov filter"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:505
@@ -8057,7 +8057,7 @@ msgstr "nový filter"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:600
 #, kde-format
 msgid "Fourier Transform"
-msgstr "nový filter"
+msgstr "Fourierova transformácia"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:508
@@ -8065,14 +8065,14 @@ msgstr "nový filter"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:603
 #, kde-format
 msgid "Hilbert Transform"
-msgstr "nový filter"
+msgstr "Hilbertova transformácia"
 
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:311
 #, kde-format
 msgid "(De-)Convolution"
-msgstr "Pripojenie"
+msgstr "(De-)Konvolúcia"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:514
@@ -8080,7 +8080,7 @@ msgstr "Pripojenie"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:594
 #, kde-format
 msgid "Auto-/Cross-Correlation"
-msgstr "Korelácia"
+msgstr "Auto-/krížová korelácia"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
@@ -8134,13 +8134,13 @@ msgstr "Obrázok"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1991
 #, kde-format
 msgid "Info Element"
-msgstr "Prírastok"
+msgstr "Informačný prvok"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:463
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2035
 #, kde-format
 msgid "Custom Point"
-msgstr "vlastné"
+msgstr "Vlastný bod"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:464
@@ -8154,7 +8154,7 @@ msgstr "Referenčný riadok"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2073
 #, kde-format
 msgid "Reference Range"
-msgstr "Referenčný riadok"
+msgstr "Referenčný rozsah"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:511
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:591
@@ -8162,7 +8162,7 @@ msgstr "Referenčný riadok"
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:347
 #, kde-format
 msgid "Convolution"
-msgstr "Pripojenie"
+msgstr "Konvolúcia"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:530
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:502
@@ -8185,19 +8185,19 @@ msgstr "Interpolovať"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:534
 #, kde-format
 msgid "Convolute/Deconvolute"
-msgstr "Pripojenie"
+msgstr "Konvolvovať/Dekonvolvovať"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:545
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:521
 #, kde-format
 msgid "Exponential (degree 1)"
-msgstr "Exponenciála"
+msgstr "Exponenciála (stupeň 1)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:549
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:525
 #, kde-format
 msgid "Exponential (degree 2)"
-msgstr "Exponenciála"
+msgstr "Exponenciála (stupeň 2)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:553
 #, kde-format
@@ -8230,13 +8230,13 @@ msgstr "Pridať nový"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:238
 #, kde-format
 msgid "Statistical Plots"
-msgstr "Štatistika"
+msgstr "Štatistické grafy"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:622
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:256
 #, kde-format
 msgid "Bar Plots"
-msgstr "Kresliť"
+msgstr "Stĺpcové grafy"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:629
 #, kde-format
@@ -8259,13 +8259,13 @@ msgstr "Rozbor"
 #: src/kdefrontend/ThemeHandler.cpp:49 src/kdefrontend/ThemeHandler.cpp:144
 #, kde-format
 msgid "Theme"
-msgstr "Téma:"
+msgstr "Téma"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1064
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1098
 #, kde-format
 msgid "%1: change geometry rect"
-msgstr "%1: zmeniť komentár"
+msgstr "%1: zmeniť geometrický obdĺžnik"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1133
 #, kde-format
@@ -8581,7 +8581,7 @@ msgstr "%1: nastaviť počet stĺpcov rozloženia"
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:188
 #, kde-format
 msgid "%1: error type changed"
-msgstr "%1    [zmenené]"
+msgstr "%1: typ chyby zmenený"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:147
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:159
@@ -8671,7 +8671,7 @@ msgstr "%1: nastaviť písmo"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:437
 #, kde-format
 msgid "%1: set binning method"
-msgstr "%1: nastaviť obrázok pozadia"
+msgstr "%1: nastaviť metódu rozdelenia do intervalov"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:444
 #, kde-format
@@ -8686,7 +8686,7 @@ msgstr "%1: nastaviť písmo"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:459
 #, kde-format
 msgid "%1: change auto bin ranges"
-msgstr "%1: zmeniť komentár"
+msgstr "%1: zmeniť automatické rozdelenie do intervalov"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:507
 #, kde-format
@@ -8725,7 +8725,7 @@ msgstr "%1: nastaviť písmo"
 #: src/backend/worksheet/plots/cartesian/Plot.cpp:58
 #, kde-format
 msgid "%1: legend visibility changed"
-msgstr "%1    [zmenené]"
+msgstr "%1: viditeľnosť legendy zmenená"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:265
 #, kde-format
@@ -8735,7 +8735,7 @@ msgstr "%1: set distribution"
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:146
 #, kde-format
 msgid "Border Line"
-msgstr "Okraj"
+msgstr "Okrajová čiara"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:222
 #, kde-format
@@ -8805,7 +8805,7 @@ msgstr "Rovnostranný trojuholník"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:302
 #, kde-format
 msgid "right triangle"
-msgstr "svetlooranžová"
+msgstr "pravouhlý trojuholník"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:304
 #, kde-format
@@ -8860,12 +8860,12 @@ msgstr "malý bumerang"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:324
 #, kde-format
 msgid "star4"
-msgstr "Hviezda"
+msgstr "hviezda4"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:326
 #, kde-format
 msgid "star5"
-msgstr "Hviezda"
+msgstr "hviezda5"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:328
 #, kde-format
@@ -8885,7 +8885,7 @@ msgstr "srdce"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:334
 #, kde-format
 msgid "lightning"
-msgstr "Výška"
+msgstr "blesk"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:336
 #, kde-format
@@ -8900,7 +8900,7 @@ msgstr "hviezdička"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:340
 #, kde-format
 msgid "tri"
-msgstr "Priviazať"
+msgstr "trojica"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:342
 #, kde-format
@@ -8915,7 +8915,7 @@ msgstr "Plus"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:346
 #, kde-format
 msgid "latin cross"
-msgstr "kríž"
+msgstr "latinský kríž"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:348
 #, kde-format
@@ -8955,7 +8955,7 @@ msgstr "štvorec"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:362
 #, kde-format
 msgid "square triangle"
-msgstr "Rovnostranný trojuholník"
+msgstr "pravouhlý trojuholník"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:364
 #, kde-format
@@ -8985,37 +8985,37 @@ msgstr "mier"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:374
 #, kde-format
 msgid "triangle dot"
-msgstr "trojuholníkový"
+msgstr "trojuholník s bodkou"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:376
 #, kde-format
 msgid "triangle line"
-msgstr "trojuholníkový"
+msgstr "trojuholník s čiarou"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:378
 #, kde-format
 msgid "half triangle"
-msgstr "svetlooranžová"
+msgstr "polo-trojuholník"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:380
 #, kde-format
 msgid "flower"
-msgstr "Sila"
+msgstr "kvet"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:382
 #, kde-format
 msgid "flower2"
-msgstr "Sila"
+msgstr "kvet2"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:384
 #, kde-format
 msgid "flower3"
-msgstr "Sila"
+msgstr "kvet3"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:386
 #, kde-format
 msgid "flower5"
-msgstr "Sila"
+msgstr "kvet5"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:388
 #, kde-format
@@ -9025,17 +9025,17 @@ msgstr "Sila"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:390
 #, kde-format
 msgid "star"
-msgstr "Hviezda"
+msgstr "hviezda"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:392
 #, kde-format
 msgid "star3"
-msgstr "Hviezda"
+msgstr "hviezda3"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:394
 #, kde-format
 msgid "star6"
-msgstr "Hviezda"
+msgstr "hviezda6"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:396
 #, kde-format
@@ -9050,7 +9050,7 @@ msgstr "šesťuholník"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:400
 #, kde-format
 msgid "latin"
-msgstr "Korelácia"
+msgstr "latinský"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:402
 #, kde-format
@@ -9085,7 +9085,7 @@ msgstr "pik"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:414
 #, kde-format
 msgid "club"
-msgstr "kríž"
+msgstr "krížik (karta)"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:113
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:467
@@ -9168,12 +9168,12 @@ msgstr "%1: nastaviť farbu hodnôt"
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:192
 #, kde-format
 msgid "%1: data source type changed"
-msgstr "%1    [zmenené]"
+msgstr "%1: typ zdroja dát zmenený"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:199
 #, kde-format
 msgid "%1: data source curve changed"
-msgstr "%1    [zmenené]"
+msgstr "%1: zdrojová krivka dát zmenená"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:220
 #, kde-format
@@ -9188,7 +9188,7 @@ msgstr "%1: priradiť y-dáta"
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:256
 #, kde-format
 msgid "%1: assign second y-data"
-msgstr "%1: nastaviť rozloženie"
+msgstr "%1: priradiť druhé údaje y"
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:77
 #, kde-format
@@ -9219,7 +9219,7 @@ msgstr "Navigovať do %1."
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:413
 #, kde-format
 msgid "%1: x-data source changed"
-msgstr "%1    [zmenené]"
+msgstr "%1: zdroj dát x zmenený"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:420
 #, kde-format
@@ -9229,7 +9229,7 @@ msgstr "%1    [zmenené]"
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:445
 #, kde-format
 msgid "%1: set skip line gaps"
-msgstr "%1: zmeniť na neviditeľné"
+msgstr "%1: nastaviť preskočenie medzier v čiarach"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:452
 #, kde-format
@@ -9284,17 +9284,17 @@ msgstr "%1: nastaviť písmo"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:934
 #, kde-format
 msgid "%1: data source histogram changed"
-msgstr "%1    [zmenené]"
+msgstr "%1: zdrojový histogram dát zmenený"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:946
 #, kde-format
 msgid "%1: assign x-error"
-msgstr "%1: nastaviť rozloženie"
+msgstr "%1: priradiť chybu x"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:961
 #, kde-format
 msgid "%1: assign y-error"
-msgstr "%1: nastaviť rozloženie"
+msgstr "%1: priradiť chybu y"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:977
 #, kde-format
@@ -9305,7 +9305,7 @@ msgstr "%1: nastaviť voľby preloženia a vykonať preloženie"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3092
 #, kde-format
 msgid "Fit Results"
-msgstr "Výsledky:"
+msgstr "Výsledky prispôsobenia"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
 #, kde-format
@@ -9380,7 +9380,7 @@ msgstr "Stredný štvorec reziduí"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1906
 #, kde-format
 msgid "Root mean square deviation"
-msgstr "Smerodajná odchýlka"
+msgstr "Kvadratická stredná odchýlka"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
@@ -9414,7 +9414,7 @@ msgstr "Test"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1912
 #, kde-format
 msgid "Mean absolute error"
-msgstr "Smerodajná odchýlka"
+msgstr "Stredná absolútna chyba"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1913
 #, kde-format
@@ -9429,18 +9429,18 @@ msgstr "Bayesovské informačné kritérium"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
 #, kde-format
 msgid "Model has no parameters!"
-msgstr "Počet bodov"
+msgstr "Model nemá žiadne parametre!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
 #, kde-format
 msgid "Not sufficient weight data points provided!"
-msgstr "Počet bodov"
+msgstr "Nebolo poskytnutých dostatok váhových dátových bodov!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
 #, kde-format
 msgid "No X data available!"
-msgstr "Vymazať premennú"
+msgstr "Žiadne dáta X nie sú k dispozícii!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
 #, kde-format
@@ -9512,7 +9512,7 @@ msgstr "%1: prepnúť orezávanie"
 #: src/backend/worksheet/plots/PlotArea.cpp:161
 #, kde-format
 msgid "%1: border type changed"
-msgstr "%1    [zmenené]"
+msgstr "%1: typ okraja zmenený"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:168
 #, kde-format
@@ -9558,7 +9558,7 @@ msgstr "%1: nastaviť písmo"
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
-msgstr "List"
+msgstr "Tlačiť pracovný hárok"
 
 #: src/backend/worksheet/Worksheet.cpp:691
 #, kde-format
@@ -9568,7 +9568,7 @@ msgstr "%1: zmeniť komentár"
 #: src/backend/worksheet/Worksheet.cpp:703
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
-msgstr "%1: zmeniť komentár"
+msgstr "%1: zmeniť vlastnosť „zmeniť mierku obsahu“"
 
 #: src/backend/worksheet/Worksheet.cpp:711
 #: src/backend/worksheet/Worksheet.cpp:712
@@ -9728,7 +9728,7 @@ msgstr "Reštartovať backend"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:342
 #, kde-format
 msgid "Evaluate Notebook"
-msgstr "Vyhodnotiť"
+msgstr "Vyhodnotiť zápisník"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:83
 #, kde-format
@@ -9743,7 +9743,7 @@ msgstr "Odstrániť súčasnú položku"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:91
 #, kde-format
 msgid "Command"
-msgstr "Komentár"
+msgstr "Príkaz"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
 #: src/kdefrontend/widgets/LabelWidget.cpp:211
@@ -9792,7 +9792,7 @@ msgstr "Riešiť rovnice"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:182
 #, kde-format
 msgid "Linear Algebra"
-msgstr "Lineárny"
+msgstr "Lineárna algebra"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:194
 #, kde-format
@@ -9807,7 +9807,7 @@ msgstr "Nastavenia"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:253
 #, kde-format
 msgid "Assistants"
-msgstr "Konštanty"
+msgstr "Asistenti"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:288
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:597
@@ -9869,7 +9869,7 @@ msgstr "Prejsť"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:189
 #, kde-format
 msgid "Select and Zoom"
-msgstr "Vybrať všetko"
+msgstr "Vybrať a priblížiť"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:141
 #, kde-format
@@ -9951,7 +9951,7 @@ msgstr "Režim myši"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:222
 #, kde-format
 msgid "Zoom View"
-msgstr "Priblížiť"
+msgstr "Priblížiť pohľad"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:230
 #, kde-format
@@ -9972,7 +9972,7 @@ msgstr "%1, aktívna krivka \"%2\": %3=%4, %5=%6"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:620
 #, kde-format
 msgid "Remove existing reference points?"
-msgstr "Nastavenia"
+msgstr "Odstrániť existujúce referenčné body?"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:621
 #, kde-format
@@ -10027,7 +10027,7 @@ msgstr "&Kopírovať"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:305
 #, kde-format
 msgid "Past&e"
-msgstr "Vložiť"
+msgstr "Vl&ožiť"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:124
 #, kde-format
@@ -10053,13 +10053,13 @@ msgstr "Funkcie"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:320
 #, kde-format
 msgid "Const Values"
-msgstr "Hodnoty"
+msgstr "Konštantné hodnoty"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:139
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:347
 #, kde-format
 msgid "Clear Content"
-msgstr "Obsah"
+msgstr "Vymazanie obsahu"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:140
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:331
@@ -10095,18 +10095,18 @@ msgstr "Počiatočná hodnota"
 #: src/commonfrontend/matrix/MatrixView.cpp:151
 #, kde-format
 msgid "Multiply Value"
-msgstr "Násobenie"
+msgstr "Násobiť hodnotu"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:153
 #, kde-format
 msgid "Divide Value"
-msgstr "Pridať hodnotu"
+msgstr "Vydeliť hodnotu"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:162
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:37
 #, kde-format
 msgid "Rows and Columns"
-msgstr "Odstrániť stĺpce"
+msgstr "Riadky a stĺpce"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:164
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:38
@@ -10144,7 +10144,7 @@ msgstr "Vyčisti&ť stĺpce"
 #: src/commonfrontend/matrix/MatrixView.cpp:189
 #, kde-format
 msgid "Statisti&cs"
-msgstr "Štatistika"
+msgstr "Štatisti&ka"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:185
 #, kde-format
@@ -10182,7 +10182,7 @@ msgstr "Generovať"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:676
 #, kde-format
 msgid "Manipulate Data"
-msgstr "Generovať"
+msgstr "Manipulovať s dátami"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:284
 #, kde-format
@@ -10290,7 +10290,7 @@ msgstr "Zbaliť všetko"
 #: src/commonfrontend/ProjectExplorer.cpp:126
 #, kde-format
 msgid "Collapse Selected"
-msgstr "Vyčistiť výber"
+msgstr "Zbaliť vybrané"
 
 #: src/commonfrontend/ProjectExplorer.cpp:129
 #, kde-format
@@ -10350,7 +10350,7 @@ msgstr "%1 elements: set visible: %2"
 #: src/commonfrontend/ProjectExplorer.cpp:932
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
-msgstr "Naozaj chcete odstrániť pripojenie '%1'?"
+msgstr "Naozaj chcete odstrániť vybrané objekty (%1)?"
 
 #: src/commonfrontend/ProjectExplorer.cpp:934
 #, kde-format
@@ -10395,7 +10395,7 @@ msgstr "Otočiť"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
 msgid "Clea&r Content"
-msgstr "Obsah"
+msgstr "Vymazan&ie obsahu"
 
 #. i18n("Assign &Formula"), this);
 #. action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
@@ -10403,7 +10403,7 @@ msgstr "Obsah"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:315
 #, kde-format
 msgid "Row Numbers"
-msgstr "Číslo"
+msgstr "Čísla riadkov"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
 #, kde-format
@@ -10423,12 +10423,12 @@ msgstr "Hodnoty"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:322
 #, kde-format
 msgid "Sample Values"
-msgstr "Veľkosť vzorky"
+msgstr "Vzorkové hodnoty"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:323
 #, kde-format
 msgid "Flatten Columns"
-msgstr "Vybrané stĺpce"
+msgstr "Sploštiť stĺpce"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:326
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
@@ -10440,12 +10440,12 @@ msgstr "Zobraziť komentáre"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:327
 #, kde-format
 msgid "Show SparkLines"
-msgstr "Ukázať voľby"
+msgstr "Zobraziť sparklines"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:329
 #, kde-format
 msgid "Clear Spreadsheet"
-msgstr "nový zošit"
+msgstr "Vyčistiť tabuľku"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:330
 #, kde-format
@@ -10468,12 +10468,12 @@ msgstr "Nahradiť"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Column Statistics..."
-msgstr "Štatistika"
+msgstr "Štatistika stĺpca..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:338
 #, kde-format
 msgid "Column Statistics Spreadsheet"
-msgstr "Štatistika"
+msgstr "Tabuľka štatistiky stĺpca"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:342
 #, kde-format
@@ -10488,12 +10488,12 @@ msgstr "Vložiť stĺpec vpravo"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:344
 #, kde-format
 msgid "Insert Multiple Columns Left"
-msgstr "Vložiť stĺpec vľavo"
+msgstr "Vložiť viacero stĺpcov vľavo"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:345
 #, kde-format
 msgid "Insert Multiple Columns Right"
-msgstr "Vložiť stĺpec vpravo"
+msgstr "Vložiť viacero stĺpcov vpravo"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:346
 #, kde-format
@@ -10504,7 +10504,7 @@ msgstr "Vybrané stĺpce"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1616
 #, kde-format
 msgid "Freeze Column"
-msgstr "Vybrané stĺpce"
+msgstr "Zmraziť stĺpec"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:383
 #, kde-format
@@ -10529,7 +10529,7 @@ msgstr "Deliť"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:391
 #, kde-format
 msgid "Drop Values"
-msgstr "Hodnoty"
+msgstr "Hodnoty zvislých čiar"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:392
 #, kde-format
@@ -10551,57 +10551,57 @@ msgstr "Počiatočná hodnota"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:404
 #, kde-format
 msgid "Divide by Sum"
-msgstr "Deliť"
+msgstr "Vydeliť súčtom"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:407
 #, kde-format
 msgid "Divide by Min"
-msgstr "Deliť"
+msgstr "Vydeliť minimom"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:410
 #, kde-format
 msgid "Divide by Max"
-msgstr "Pridať hodnotu"
+msgstr "Vydeliť maximom"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:413
 #, kde-format
 msgid "Divide by Count"
-msgstr "Deliť"
+msgstr "Vydeliť počtom"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:416
 #, kde-format
 msgid "Divide by Mean"
-msgstr "Pridať hodnotu"
+msgstr "Vydeliť priemerom"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:419
 #, kde-format
 msgid "Divide by Median"
-msgstr "Pridať hodnotu"
+msgstr "Vydeliť mediánom"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:422
 #, kde-format
 msgid "Divide by Mode"
-msgstr "Pridať hodnotu"
+msgstr "Vydeliť modusom"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:425
 #, kde-format
 msgid "Divide by Range"
-msgstr "Pridať hodnotu"
+msgstr "Vydeliť rozsahom"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:428
 #, kde-format
 msgid "Divide by SD"
-msgstr "Deliť"
+msgstr "Vydeliť smerodajnou odchýlkou"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:431
 #, kde-format
 msgid "Divide by MAD"
-msgstr "Deliť"
+msgstr "Vydeliť MAD"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:434
 #, kde-format
 msgid "Divide by IQR"
-msgstr "Deliť"
+msgstr "Vydeliť IQR"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:437
 #, kde-format
@@ -10621,7 +10621,7 @@ msgstr "Medián"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
 #, kde-format
 msgid "Rescale to [a, b]"
-msgstr "Interval:"
+msgstr "Zmeniť mierku na [a, b]"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:476
 #, kde-format
@@ -10631,7 +10631,7 @@ msgstr "Triediť"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:477
 #, kde-format
 msgid "Sort multiple columns together"
-msgstr "Vložiť stĺpec vľavo"
+msgstr "Triediť viacero stĺpcov spolu"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:478
 #, kde-format
@@ -10671,17 +10671,17 @@ msgstr "Vložiť riadok pod"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Insert Multiple Rows Above"
-msgstr "Vložiť riadok nad"
+msgstr "Vložiť viacero riadkov nad"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:492
 #, kde-format
 msgid "Insert Multiple Rows Below"
-msgstr "Vložiť riadok pod"
+msgstr "Vložiť viacero riadkov pod"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:493
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
-msgstr "Odstrániť riadky"
+msgstr "Odstrániť vybraný(é) riadok (riadky)"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:494
 #, kde-format
@@ -10696,7 +10696,7 @@ msgstr "Maskovať riadky s chýbajúcimi hodnotami"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:496
 #, kde-format
 msgid "Row Statisti&cs"
-msgstr "Štatistika"
+msgstr "Štatistika &riadku"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:499
 #, kde-format
@@ -10706,7 +10706,7 @@ msgstr "Redukovať dáta"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:601
 #, kde-format
 msgid "Conditional Formatting"
-msgstr "Pripojenie:"
+msgstr "Podmienečné formátovanie"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:629
 #, kde-format
@@ -10738,13 +10738,13 @@ msgstr "Skryť komentáre"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1529
 #, kde-format
 msgid "Hide Sparklines"
-msgstr "Skryť voľby"
+msgstr "Skryť sparklines"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1160
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1531
 #, kde-format
 msgid "Show Sparklines"
-msgstr "Ukázať voľby"
+msgstr "Zobraziť sparklines"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1620
 #, kde-format
@@ -10812,7 +10812,7 @@ msgstr "Vložiť stĺpec"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
 #, kde-format
 msgid "Enter the number of columns to insert"
-msgstr "Názov filtra:"
+msgstr "Zadajte počet stĺpcov na vloženie"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2674
 #, kde-format
@@ -10892,7 +10892,7 @@ msgstr "'Modus nie je definovaný'"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3052
 #, kde-format
 msgid "Range = 0"
-msgstr "X rozsah:"
+msgstr "Rozsah = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3063
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3097
@@ -10925,7 +10925,7 @@ msgstr "Normalizácia nie je možná"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3164
 #, kde-format
 msgid "%1: power transform columns"
-msgstr "%1: nastaviť písmo"
+msgstr "%1: mocninová transformácia stĺpcov"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3282
 #, kde-format
@@ -10957,7 +10957,7 @@ msgstr "Insert multiple riadoks"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3431
 #, kde-format
 msgid "Enter the number of rows to insert"
-msgstr "Názov filtra:"
+msgstr "Zadajte počet riadkov na vloženie"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3411
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3450
@@ -11002,12 +11002,12 @@ msgstr "bunky"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, kde-format
 msgid "masked value"
-msgstr "hodnota"
+msgstr "maskovaná hodnota"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, kde-format
 msgid "masked values"
-msgstr "hodnota"
+msgstr "maskované hodnoty"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
 #, kde-format
@@ -11049,7 +11049,7 @@ msgstr "Vybrané: %1 %2%3 %4 %5 %6"
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
-msgstr "Zošit"
+msgstr "Tlačiť tabuľku"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4450
 #, kde-format
@@ -11064,7 +11064,7 @@ msgstr "Failed to create table in the SQLite database %1."
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4535
 #, kde-format
 msgid "Failed to insert values into the table."
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Nepodarilo sa vložiť hodnoty do tabuľky."
 
 #: src/commonfrontend/widgets/MemoryWidget.cpp:26
 #, kde-format
@@ -11089,7 +11089,7 @@ msgstr "Hodnota nepredstavuje platné číslo"
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:59
 #, kde-format
 msgid "No number entered"
-msgstr "Počet bodov"
+msgstr "Nebolo zadané žiadne číslo"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:63
 #, kde-format
@@ -11128,12 +11128,12 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
 msgid "Spreadsheet"
-msgstr "Zošit"
+msgstr "Tabuľka"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:165
 #, kde-format
 msgid "No fit"
-msgstr "Automaticky prispôsobiť"
+msgstr "Bez prispôsobenia"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:175
 #, kde-format
@@ -11144,7 +11144,7 @@ msgstr "Pri&spôsobiť výberu"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:334
 #, kde-format
 msgid "Select and Edit"
-msgstr "Vybrať všetko"
+msgstr "Vybrať a upraviť"
 
 #. i18n("Selection"), mouseModeActionGroup);
 #. selectionModeAction->setCheckable(true);
@@ -11152,7 +11152,7 @@ msgstr "Vybrať všetko"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:214
 #, kde-format
 msgid "Four Axes"
-msgstr "Roman Paholík"
+msgstr "Štyri osi"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:215
 #, kde-format
@@ -11172,7 +11172,7 @@ msgstr "Dve osi, križujúce sa v počiatku"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:219
 #, kde-format
 msgid "Load from Template"
-msgstr "Zdroj načítania"
+msgstr "Načítať zo šablóny"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:229
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:47
@@ -11196,12 +11196,12 @@ msgstr "Vzhľad mriežky"
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:46
 #, kde-format
 msgid "No Layout"
-msgstr "Rozloženie"
+msgstr "Bez rozloženia"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:242
 #, kde-format
 msgid "No Grid"
-msgstr "Mriežka"
+msgstr "Bez mriežky"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:247
 #, kde-format
@@ -11244,7 +11244,7 @@ msgstr "Prezentačný režim"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:282
 #, kde-format
 msgid "Interactive Plots"
-msgstr "Interaktívny"
+msgstr "Interaktívne grafy"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:283
 #, kde-format
@@ -11259,23 +11259,23 @@ msgstr ""
 #: src/commonfrontend/worksheet/WorksheetView.cpp:314
 #, kde-format
 msgid "Selected Plot Areas"
-msgstr "Zmazať vybrané objekty"
+msgstr "Vybrané oblasti grafu"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:302
 #: src/commonfrontend/worksheet/WorksheetView.cpp:316
 #, kde-format
 msgid "All Plot Areas"
-msgstr "Oblasť zákresu"
+msgstr "Všetky oblasti grafu"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:304
 #, kde-format
 msgid "All Plot Areas X"
-msgstr "Kresliť"
+msgstr "Všetky oblasti grafu X"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:306
 #, kde-format
 msgid "All Plot Areas Y"
-msgstr "Kresliť"
+msgstr "Všetky oblasti grafu Y"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:339
 #, kde-format
@@ -11313,42 +11313,42 @@ msgstr "Automatická mierka"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:370
 #, kde-format
 msgid "Auto Scale X"
-msgstr "automatická mierka"
+msgstr "Automatická mierka X"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Auto Scale Y"
-msgstr "automatická mierka"
+msgstr "Automatická mierka Y"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Zoom In X"
-msgstr "Priblížiť"
+msgstr "Priblížiť X"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Zoom Out X"
-msgstr "Oddialiť"
+msgstr "Oddialiť X"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:394
 #, kde-format
 msgid "Zoom In Y"
-msgstr "Priblížiť"
+msgstr "Priblížiť Y"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:398
 #, kde-format
 msgid "Zoom Out Y"
-msgstr "Oddialiť"
+msgstr "Oddialiť Y"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Shift Left X"
-msgstr "Posunúť vľavo"
+msgstr "Posunúť X vľavo"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:404
 #, kde-format
 msgid "Shift Right X"
-msgstr "Posunúť vpravo"
+msgstr "Posunúť X vpravo"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:406
 #, kde-format
@@ -11422,7 +11422,7 @@ msgstr "%1: Odstrániť vybrané prvky pracovného hárku."
 #, kde-format
 msgctxt "@title:window"
 msgid "CAS Preferences"
-msgstr "Nastavenia"
+msgstr "Predvoľby CAS"
 
 #: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
 #, kde-format
@@ -11441,7 +11441,7 @@ msgstr "Prepnúť medzi zobrazením ikon a zoznamu"
 #: src/kdefrontend/examples/ExamplesWidget.cpp:51
 #, kde-format
 msgid "Enter the keyword you want to search for"
-msgstr "Názov filtra:"
+msgstr "Zadajte kľúčové slovo, ktoré chcete hľadať"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:52
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
@@ -11615,7 +11615,7 @@ msgstr "Použiť predchádzajúcu hodnotu"
 #, kde-format
 msgctxt "@title:window"
 msgid "SQL Database Connections"
-msgstr "Odstrániť spojenie"
+msgstr "Pripojenia k SQL databáze"
 
 #: src/kdefrontend/datasources/DatabaseManagerDialog.cpp:66
 #, kde-format
@@ -11631,7 +11631,7 @@ msgstr "Pridať nové pripojenie k databáze"
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:51
 #, kde-format
 msgid "Delete selected database connection"
-msgstr "Zmazať vybrané objekty"
+msgstr "Odstrániť vybrané databázové pripojenie"
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:52
 #, kde-format
@@ -11641,7 +11641,7 @@ msgstr "Otvoriť súbor databázy"
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:53
 #, kde-format
 msgid "Test selected database connection"
-msgstr "Vybrať všetko"
+msgstr "Otestovať vybrané databázové pripojenie"
 
 #. i18n: ectx: property (text), widget (QLabel, lDatabase)
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:160
@@ -11654,13 +11654,13 @@ msgstr "Databáza:"
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:172
 #, kde-format
 msgid "Data Source Name:"
-msgstr "Dátová sada"
+msgstr "Názov zdroja dát:"
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:213
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Database File"
-msgstr "Vybrať všetko"
+msgstr "Vybrať súbor databázy"
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:352
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:360
@@ -11696,7 +11696,7 @@ msgstr "Nepodarilo sa pripojiť k databáze '%1'."
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:657
 #, kde-format
 msgid "Connection Successful"
-msgstr "Pripojenie:"
+msgstr "Pripojenie úspešné"
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:532
 #, kde-format
@@ -11723,7 +11723,7 @@ msgstr "popis_stĺpca_%1"
 #: src/kdefrontend/datasources/DatasetMetadataManagerWidget.cpp:523
 #, kde-format
 msgid "Description for column %1"
-msgstr "Počet stĺpcov: %1"
+msgstr "Popis stĺpca %1"
 
 #: src/kdefrontend/datasources/FITSOptionsWidget.cpp:22
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:98
@@ -11752,7 +11752,7 @@ msgstr "Táto voľba určuje, ako sa obrázok prevedie pri importe."
 #, kde-format
 msgctxt "@title:window"
 msgid "Import from Dataset Collection"
-msgstr "Importovať dáta"
+msgstr "Importovať z kolekcie dátových sád"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:93
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
@@ -11815,7 +11815,7 @@ msgstr "Nový zošit"
 #: src/kdefrontend/datasources/ImportDialog.cpp:52
 #, kde-format
 msgid "New Spreadsheet"
-msgstr "nový zošit"
+msgstr "Nová tabuľka"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:53
 #, kde-format
@@ -11832,7 +11832,7 @@ msgstr "Importovať"
 #: src/kdefrontend/datasources/ImportDialog.cpp:76
 #, kde-format
 msgid "Data container:"
-msgstr "Dátový typ:"
+msgstr "Kontajner dát:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:77
 #: src/kdefrontend/datasources/ImportDialog.cpp:83
@@ -11848,7 +11848,7 @@ msgstr "Nové"
 #: src/kdefrontend/datasources/ImportDialog.cpp:99
 #, kde-format
 msgid "Add new data container to the project"
-msgstr "Pridať novú premennú"
+msgstr "Pridať nový kontajner dát do projektu"
 
 #. i18n: ectx: property (text), widget (QLabel, lYBreakPosition)
 #. i18n: ectx: property (text), widget (QLabel, lXBreakPosition)
@@ -11884,17 +11884,17 @@ msgstr "Predradiť:"
 #: src/kdefrontend/datasources/ImportDialog.cpp:145
 #, kde-format
 msgid "Add a new Workbook"
-msgstr "Pridať novú premennú"
+msgstr "Pridať nový pracovný zošit"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:146
 #, kde-format
 msgid "Workbook name:"
-msgstr "Názov priečinka:"
+msgstr "Názov pracovného zošita:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:148
 #, kde-format
 msgid "Add a new Spreadsheet"
-msgstr "nový zošit"
+msgstr "Pridať novú tabuľku"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:149
 #, kde-format
@@ -11904,7 +11904,7 @@ msgstr "Zošit"
 #: src/kdefrontend/datasources/ImportDialog.cpp:151
 #, kde-format
 msgid "Add a new Matrix"
-msgstr "Pridať nový"
+msgstr "Pridať novú maticu"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:152
 #, kde-format
@@ -11916,13 +11916,13 @@ msgstr "Matrix name:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Data to Spreadsheet or Matrix"
-msgstr "Zošit"
+msgstr "Importovať dáta do tabuľky alebo matice"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Live Data Source"
-msgstr "Pridať novú premennú"
+msgstr "Pridať nový živý zdroj dát"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:346
@@ -11952,7 +11952,7 @@ msgstr "Live data source created in %1 seconds."
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:176
 #, kde-format
 msgid "No target data container selected"
-msgstr "Vyčistiť výber"
+msgstr "Nie je vybraný žiadny cieľový kontajner dát"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:321
 #, kde-format
@@ -12054,7 +12054,7 @@ msgstr "Excel 2007+ (XSLX)"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:104
 #, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr "Zošit"
+msgstr "Tabuľka OpenDocument (ODS)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:107
 #, kde-format
@@ -12079,7 +12079,7 @@ msgstr "Formát dát systému flexibilného prenosu obrazu (FITS)"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:118
 #, kde-format
 msgid "JSON Data"
-msgstr "Žiadne dáta"
+msgstr "JSON dáta"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:120
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:140
@@ -12106,7 +12106,7 @@ msgstr "Súbor MATLAB MAT"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:137
 #, kde-format
 msgid "ASCII Data"
-msgstr "Kopírovať dáta"
+msgstr "ASCII dáta"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:138
 #, kde-format
@@ -12143,7 +12143,7 @@ msgstr "Nepretržite fixované"
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:353
 #, kde-format
 msgid "From End"
-msgstr "Zo súboru"
+msgstr "Od konca"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:161
 #, kde-format
@@ -12222,7 +12222,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:247
 #, kde-format
 msgid "Manage MQTT connections"
-msgstr "Nové pripojenie"
+msgstr "Spravovať MQTT pripojenia"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:249
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:63
@@ -12244,7 +12244,7 @@ msgstr "Pridať novú premennú"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
-msgstr "Vybrať všetko"
+msgstr "Vybrať súbor DBC"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:934
 #, kde-format
@@ -12277,7 +12277,7 @@ msgstr "Časť dát na čítanie"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1182
 #, kde-format
 msgid "Data format && preview"
-msgstr "Dátový formát"
+msgstr "Formát dát a náhľad"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1225
 #: src/kdefrontend/SettingsGeneralPage.cpp:251
@@ -12288,7 +12288,7 @@ msgstr "Automaticky"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1466
 #, kde-format
 msgid "file command not found"
-msgstr "Súbor nenájdený"
+msgstr "príkaz file nebol nájdený"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1477
 #, kde-format
@@ -12342,7 +12342,7 @@ msgstr "Čas vytvorenia: %1"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
 #, kde-format
 msgid "Last metadata changed: %1"
-msgstr "Posledná zmena: %1"
+msgstr "Posledná zmena metadát: %1"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
 #, kde-format
@@ -12391,7 +12391,7 @@ msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1724
 #, kde-format
 msgid "No data arrived yet for the selected topic"
-msgstr "Vyčistiť výber"
+msgstr "Pre vybranú tému ešte neprišli žiadne dáta"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1961
 #, kde-format
@@ -12431,7 +12431,7 @@ msgstr "Broker %1 nebol dostupný."
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2615
 #, kde-format
 msgid "The client is not authorized to connect."
-msgstr "Vybrať všetko"
+msgstr "Klient nie je oprávnený na pripojenie."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2618
 #, kde-format
@@ -12453,19 +12453,19 @@ msgstr "Connecting to '%1:%2' timed out."
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
 #, kde-format
 msgid "Add new folder"
-msgstr "Pridať nový"
+msgstr "Pridať nový priečinok"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:107
 #, kde-format
 msgctxt "@title:window"
 msgid "Import LabPlot Project"
-msgstr "Zatvoriť projekt"
+msgstr "Importovať projekt LabPlot"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:112
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Project"
-msgstr "Otvoriť projekt"
+msgstr "Importovať projekt Origin"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:122
 #, kde-format
@@ -12496,7 +12496,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
 #, kde-format
 msgid "As Plot Area"
-msgstr "Oblasť zákresu"
+msgstr "Ako oblasť grafu"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:161
 #, kde-format
@@ -12572,7 +12572,7 @@ msgstr "Vyberte objekt(y) na import."
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
-msgstr "Otvoriť projekt"
+msgstr "Otvoriť projekt LabPlot"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
 #: src/kdefrontend/MainWin.cpp:1484
@@ -12584,7 +12584,7 @@ msgstr "LabPlot Projects (%1)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
-msgstr "Otvoriť projekt"
+msgstr "Otvoriť projekt Origin OPJ"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:451
 #, kde-format
@@ -12637,13 +12637,15 @@ msgstr ""
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
-msgstr "Nepodarilo sa pripojiť k databáze '%1'."
+msgstr ""
+"Nepodarilo sa pripojiť k databáze '%1'. Skontrolujte, prosím, nastavenia "
+"pripojenia."
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:330
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:332
 #, kde-format
 msgid "Failed to execute the query for the preview"
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Nepodarilo sa vykonať dopyt pre náhľad"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
@@ -12659,7 +12661,7 @@ msgstr "Vykonať dotaz a zobraziť náhľad výsledku"
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:535
 #, kde-format
 msgid "Failed to execute the query"
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Nepodarilo sa vykonať dopyt"
 
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:120
 #, kde-format
@@ -12723,23 +12725,23 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "MQTT Connections"
-msgstr "Pripojenie"
+msgstr "MQTT pripojenia"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerDialog.cpp:82
 #, kde-format
 msgctxt "@title:window"
 msgid "MQTT Connections  [Changed]"
-msgstr "Spojenie zlyhalo"
+msgstr "MQTT pripojenia  [zmenené]"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:41
 #, kde-format
 msgid "Add new MQTT connection"
-msgstr "Nové pripojenie"
+msgstr "Pridať nové MQTT pripojenie"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:42
 #, kde-format
 msgid "Remove selected MQTT connection"
-msgstr "Zmazať vybrané objekty"
+msgstr "Odstrániť vybrané MQTT pripojenie"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:62
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:351
@@ -12824,7 +12826,7 @@ msgstr "Zadajte názov témy pre navigáciu na ňu."
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:49
 #, kde-format
 msgid "Enter the name of the topic"
-msgstr "Názov filtra:"
+msgstr "Zadajte názov témy"
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:58
 #, kde-format
@@ -12874,12 +12876,12 @@ msgstr "Hodnoty"
 #: src/kdefrontend/datasources/OdsOptionsWidget.cpp:19
 #, kde-format
 msgid "Data sheets"
-msgstr "Dátová sada"
+msgstr "Dátové hárky"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:22
 #, kde-format
 msgid "Histograms"
-msgstr "Dátový typ:"
+msgstr "Histogramy"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format
@@ -12889,12 +12891,12 @@ msgstr "Stromy a n-tice"
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:89
 #, kde-format
 msgid "Histogram Data"
-msgstr "Dátový typ:"
+msgstr "Dáta histogramu"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:91
 #, kde-format
 msgid "Bin Center"
-msgstr "stred"
+msgstr "Stred intervalu"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:95
 #, kde-format
@@ -12968,7 +12970,7 @@ msgstr "funkcie"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:241
 #, kde-format
 msgid "Auto Data"
-msgstr "Žiadne dáta"
+msgstr "Automatické dáta"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:245
 #, kde-format
@@ -13107,17 +13109,17 @@ msgstr "Vlastný stĺpec"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:283
 #, kde-format
 msgid "Column labels"
-msgstr "Bez popisov"
+msgstr "Popisky stĺpcov"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:285
 #, kde-format
 msgid "Absolute Value"
-msgstr "Hodnoty"
+msgstr "Absolútna hodnota"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:286
 #, kde-format
 msgid "Offset"
-msgstr "Posun:"
+msgstr "Posun"
 
 #. i18n("Column labels"));
 #. labels
@@ -13144,7 +13146,7 @@ msgstr "Vedecký zápis"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:309
 #, kde-format
 msgid "Scientific E notation"
-msgstr "Výber"
+msgstr "Vedecká notácia E"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:310
 #, kde-format
@@ -13154,17 +13156,17 @@ msgstr "Mocniny 10"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:311
 #, kde-format
 msgid "Powers of 2"
-msgstr "Sila"
+msgstr "Mocniny 2"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:312
 #, kde-format
 msgid "Powers of e"
-msgstr "Sila"
+msgstr "Mocniny e"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:313
 #, kde-format
 msgid "Multiples of π"
-msgstr "Počet bodov"
+msgstr "Násobky π"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:317
 #, kde-format
@@ -13179,7 +13181,7 @@ msgstr "%1: nastaviť písmo"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:578
 #, kde-format
 msgid "%1 axes: set color"
-msgstr "%1: nastaviť rozloženie"
+msgstr "%1 osi: nastaviť farbu"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1585
 #, kde-format
@@ -13300,37 +13302,37 @@ msgstr "Vyberte prosím iný názov, pretože tento je už používaný."
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:48
 #, kde-format
 msgid "10/90 percentiles"
-msgstr "Percentil:"
+msgstr "10./90. percentil"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:49
 #, kde-format
 msgid "5/95 percentiles"
-msgstr "Percentil:"
+msgstr "5./95. percentil"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:50
 #, kde-format
 msgid "1/99 percentiles"
-msgstr "Percentil:"
+msgstr "1./99. percentil"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:56
 #, kde-format
 msgid "By Median, Ascending"
-msgstr "Vzostupne"
+msgstr "Podľa mediánu, vzostupne"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #, kde-format
 msgid "By Median, Descending"
-msgstr "Zostupne"
+msgstr "Podľa mediánu, zostupne"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:58
 #, kde-format
 msgid "By Mean, Ascending"
-msgstr "Vzostupne"
+msgstr "Podľa priemeru, vzostupne"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:59
 #, kde-format
 msgid "By Mean, Descending"
-msgstr "Zostupne"
+msgstr "Podľa priemeru, zostupne"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:61
 #, kde-format
@@ -13389,20 +13391,24 @@ msgstr "Vyberte na úpravu vlastností symbolu pre \"far out\" hodnoty."
 msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
-msgstr "Vyberte na úpravu vlastností symbolu pre \"far out\" hodnoty."
+msgstr ""
+"Vybrať na úpravu vlastností symbolu pre všetky hodnoty okrem odľahlých a "
+"\"far out\" hodnôt."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:114
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
-msgstr "Vyberte na úpravu vlastností symbolu pre \"far out\" hodnoty."
+msgstr "Vybrať na úpravu vlastností symbolu pre konce fúzov."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
 #, kde-format
 msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
-msgstr "Vyberte na úpravu vlastností symbolu pre \"far out\" hodnoty."
+msgstr ""
+"Aktivovať na náhodné rozloženie pozícií symbolov (\"jitter\"), užitočné pre "
+"husté a prekrývajúce sa dátové body."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
@@ -13440,7 +13446,7 @@ msgstr "Číselný"
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:777
 #, kde-format
 msgid "Plot Ranges:"
-msgstr "stred"
+msgstr "Rozsahy grafov:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:779
@@ -13467,7 +13473,7 @@ msgstr "stred"
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:106
 #, kde-format
 msgid "Plot Range:"
-msgstr "stred"
+msgstr "Rozsah grafu:"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:870
 #, kde-format
@@ -13482,7 +13488,7 @@ msgstr "Body"
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:872
 #, kde-format
 msgid "First Points"
-msgstr "vlastné"
+msgstr "Prvé body"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:875
 #, kde-format
@@ -13592,7 +13598,7 @@ msgstr "%1 karteziánske grafy: šablóna \"%2\" načítaná"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:246
 #, kde-format
 msgid "Column Major"
-msgstr "Stĺpec"
+msgstr "Stĺpcové usporiadanie"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:247
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:247
@@ -13627,7 +13633,7 @@ msgstr "Vycentrovať"
 #: src/kdefrontend/widgets/LabelWidget.cpp:161
 #, kde-format
 msgid "Relative to plot"
-msgstr "Relatívna cesta"
+msgstr "Relatívne k grafu"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:779
 #, kde-format
@@ -13675,12 +13681,12 @@ msgstr "Automatický (E)"
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:319
 #, kde-format
 msgid "Add a new value label"
-msgstr "Pridať novú premennú"
+msgstr "Pridať nový popisok hodnoty"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:320
 #, kde-format
 msgid "Remove the selected value label"
-msgstr "Odstrániť vybrané"
+msgstr "Odstrániť vybraný popisok hodnoty"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:321
 #, kde-format
@@ -13690,12 +13696,12 @@ msgstr "Upraviť viacero menoviek hodnôt v dávkovom režime"
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:32
 #, kde-format
 msgid "Collapse all curves"
-msgstr "Zbaliť všetko"
+msgstr "Zbaliť všetky krivky"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:33
 #, kde-format
 msgid "Expand all curves"
-msgstr "Rozbaliť všetko"
+msgstr "Rozbaliť všetky krivky"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1358
@@ -13721,12 +13727,12 @@ msgstr "%1 vlastné body: šablóna \"%2\" načítaná"
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:144
 #, kde-format
 msgid "By Number"
-msgstr "Číslo"
+msgstr "Podľa čísla"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:145
 #, kde-format
 msgid "By Width"
-msgstr "Šírka čiary"
+msgstr "Podľa šírky"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:146
 #, kde-format
@@ -13809,7 +13815,7 @@ msgstr "%1 xy-krivky: šablóna \"%2\" načítaná"
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:60
 #, kde-format
 msgid "Manage MQTT connection's will settings"
-msgstr "Nové pripojenie"
+msgstr "Spravovať nastavenia závetu MQTT pripojenia"
 
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:106
 #, kde-format
@@ -13961,7 +13967,7 @@ msgstr "čas výpočtu: %1 ms"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:76
 #, kde-format
 msgid "XY-Curve"
-msgstr "Krivka"
+msgstr "Krivka XY"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:189
@@ -13979,7 +13985,7 @@ msgstr "s Jadrom/Veľkosťou:"
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:346
 #, kde-format
 msgid "Deconvolution"
-msgstr "Pripojenie"
+msgstr "Dekonvolúcia"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:383
 #, kde-format
@@ -13999,22 +14005,22 @@ msgstr "Correlation status: %1"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:197
 #, kde-format
 msgid "Horiz. Start"
-msgstr "Horizontálne"
+msgstr "Hor. začiatok"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:198
 #, kde-format
 msgid "Vert. Start"
-msgstr "Začiatok"
+msgstr "Vert. začiatok"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:199
 #, kde-format
 msgid "Horiz. Midpoint"
-msgstr "Horizontálne"
+msgstr "Hor. stred"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:200
 #, kde-format
 msgid "Vert. Midpoint"
-msgstr "iterácie"
+msgstr "Vert. stred"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:201
 #, kde-format
@@ -14046,7 +14052,7 @@ msgstr "Hodnoty"
 #: src/kdefrontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
-msgstr "vlastné"
+msgstr "Vlastný stĺpec"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:338
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:124
@@ -14089,7 +14095,7 @@ msgstr "Táto metóda je oveľa pomalšia ako akákoľvek iná"
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:434
 #, kde-format
 msgid "Tolerance (distance):"
-msgstr "Tolerancia"
+msgstr "Tolerancia (vzdialenosť):"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:368
 #, kde-format
@@ -14109,17 +14115,17 @@ msgstr "Opakovaní:"
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:406
 #, kde-format
 msgid "Tolerance (area):"
-msgstr "Tolerancia"
+msgstr "Tolerancia (plocha):"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:417
 #, kde-format
 msgid "Minimum tolerance:"
-msgstr "Tolerancia"
+msgstr "Minimálna tolerancia:"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:421
 #, kde-format
 msgid "Maximum tolerance:"
-msgstr "Tolerancia"
+msgstr "Maximálna tolerancia:"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:438
 #, kde-format
@@ -14228,7 +14234,7 @@ msgstr "Nie je zadaný stĺpec Y!"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
 #, kde-format
 msgid "No Y data available!"
-msgstr "Vymazať premennú"
+msgstr "Žiadne dáta Y nie sú k dispozícii!"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
@@ -14243,7 +14249,7 @@ msgstr "Vymazať premennú"
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:510
 #, kde-format
 msgid "Curve:"
-msgstr "Krivka"
+msgstr "Krivka:"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:451
 #, kde-format
@@ -14260,7 +14266,7 @@ msgstr "&Stupeň"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:895
 #, kde-format
 msgid "Number of peaks:"
-msgstr "Počet bodov"
+msgstr "Počet vrcholov:"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1224
 #, kde-format
@@ -14270,7 +14276,7 @@ msgstr "Fit status: %1"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
 #, kde-format
 msgid "No data source available!"
-msgstr "Vymazať premennú"
+msgstr "Žiadny zdroj dát nie je k dispozícii!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
@@ -14292,12 +14298,12 @@ msgstr "prerušenie"
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:297
 #, kde-format
 msgid "Lower cutoff:"
-msgstr "Funkcia"
+msgstr "Dolná medza:"
 
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:298
 #, kde-format
 msgid "Upper cutoff:"
-msgstr "Funkcia"
+msgstr "Horná medza:"
 
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:432
 #, kde-format
@@ -14341,12 +14347,12 @@ msgstr "value: %1"
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:79
 #, kde-format
 msgid "Auto (5x data points)"
-msgstr "Počet bodov"
+msgstr "Automaticky (5× dátových bodov)"
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:80
 #, kde-format
 msgid "Multiple of data points"
-msgstr "Počet bodov"
+msgstr "Násobok dátových bodov"
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:91
 #, kde-format
@@ -14371,7 +14377,7 @@ msgstr "Smoothing status: %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Example Projects"
-msgstr "Uloženie projektu"
+msgstr "Príklady projektov"
 
 #: src/kdefrontend/examples/ExamplesManager.cpp:176
 #, kde-format
@@ -14392,13 +14398,13 @@ msgstr "Vlastnosti"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr "Zošit"
+msgstr "Vlastnosti: tabuľka"
 
 #: src/kdefrontend/GuiObserver.cpp:231
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "Štatistika"
+msgstr "Vlastnosti: štatistika stĺpca"
 
 #: src/kdefrontend/GuiObserver.cpp:241
 #, kde-format
@@ -14410,7 +14416,7 @@ msgstr "%1 Worksheet"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr "Vlastnosti"
+msgstr "Vlastnosti: stĺpec"
 
 #: src/kdefrontend/GuiObserver.cpp:253
 #, kde-format
@@ -14422,7 +14428,7 @@ msgstr "Vlastnosti"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr "Animovať pracovný zošit"
+msgstr "Vlastnosti: pracovný hárok"
 
 #: src/kdefrontend/GuiObserver.cpp:264
 #, kde-format
@@ -14440,7 +14446,7 @@ msgstr "Vlastnosti"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr "Vlastnosti"
+msgstr "Vlastnosti: os"
 
 #: src/kdefrontend/GuiObserver.cpp:280
 #, kde-format
@@ -14470,7 +14476,7 @@ msgstr "Derivovanie"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
-msgstr "Integrácia"
+msgstr "Vlastnosti: integrácia"
 
 #: src/kdefrontend/GuiObserver.cpp:316
 #, kde-format
@@ -14488,37 +14494,37 @@ msgstr "Vlastnosti"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
-msgstr "Vlastnosti"
+msgstr "Vlastnosti: prispôsobenie"
 
 #: src/kdefrontend/GuiObserver.cpp:331
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
-msgstr "nový filter"
+msgstr "Vlastnosti: Fourierova transformácia"
 
 #: src/kdefrontend/GuiObserver.cpp:336
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
-msgstr "nový filter"
+msgstr "Vlastnosti: Hilbertova transformácia"
 
 #: src/kdefrontend/GuiObserver.cpp:341
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
-msgstr "nový filter"
+msgstr "Vlastnosti: Fourierov filter"
 
 #: src/kdefrontend/GuiObserver.cpp:346
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
-msgstr "Pripojenie"
+msgstr "Vlastnosti: konvolúcia/dekonvolúcia"
 
 #: src/kdefrontend/GuiObserver.cpp:351
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
-msgstr "Korelácia"
+msgstr "Vlastnosti: auto-/krížová korelácia"
 
 #: src/kdefrontend/GuiObserver.cpp:356
 #, kde-format
@@ -14530,7 +14536,7 @@ msgstr "Vlastnosti"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
-msgstr "Vlastnosti"
+msgstr "Vlastnosti: stĺpcový graf"
 
 #: src/kdefrontend/GuiObserver.cpp:366
 #, kde-format
@@ -14542,7 +14548,7 @@ msgstr "Vlastnosti"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr "Vlastnosti"
+msgstr "Vlastnosti: krabicový graf"
 
 #: src/kdefrontend/GuiObserver.cpp:376
 #, kde-format
@@ -14572,13 +14578,13 @@ msgstr "Vlastnosti"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
-msgstr "vlastné"
+msgstr "Vlastnosti: vlastný bod"
 
 #: src/kdefrontend/GuiObserver.cpp:401
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
-msgstr "Referenčný riadok"
+msgstr "Vlastnosti: referenčná čiara"
 
 #: src/kdefrontend/GuiObserver.cpp:406
 #, kde-format
@@ -14590,7 +14596,7 @@ msgstr "Referenčný riadok"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
-msgstr "Dáta:"
+msgstr "Vlastnosti: krivka datapickera"
 
 #: src/kdefrontend/GuiObserver.cpp:416
 #, kde-format
@@ -14626,26 +14632,26 @@ msgstr "Vlastnosti"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
-msgstr "Prírastok"
+msgstr "Vlastnosti: informačný prvok"
 
 #: src/kdefrontend/GuiObserver.cpp:456 src/kdefrontend/GuiObserver.cpp:463
 #: src/kdefrontend/GuiObserver.cpp:470
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
-msgstr "Dátová sada"
+msgstr "Vlastnosti: zdroj dát MQTT"
 
 #: src/kdefrontend/GuiObserver.cpp:476
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
-msgstr "Pridať novú premennú"
+msgstr "Vlastnosti: živý zdroj dát"
 
 #: src/kdefrontend/GuiObserver.cpp:490
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
-msgstr "Vlastnosti"
+msgstr "Vlastnosti: priečinok"
 
 #: src/kdefrontend/GuiObserver.cpp:497
 #, kde-format
@@ -14656,7 +14662,7 @@ msgstr "Vlastnosti"
 #: src/kdefrontend/GuiTools.cpp:72 src/kdefrontend/GuiTools.cpp:98
 #, kde-format
 msgid "No Line"
-msgstr "Čiara"
+msgstr "Bez čiary"
 
 #: src/kdefrontend/GuiTools.cpp:72 src/kdefrontend/GuiTools.cpp:98
 #, kde-format
@@ -14726,7 +14732,7 @@ msgstr "Extrémne riedke"
 #: src/kdefrontend/GuiTools.cpp:165
 #, kde-format
 msgid "Horiz. Lines"
-msgstr "plná čiara"
+msgstr "Vodorovné čiary"
 
 #: src/kdefrontend/GuiTools.cpp:166
 #, kde-format
@@ -14887,7 +14893,7 @@ msgstr "Svetlošedá"
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
-msgstr "Otvoriť súbor"
+msgstr "Otvoriť obrazový súbor"
 
 #: src/kdefrontend/GuiTools.cpp:287
 #, kde-format
@@ -14936,7 +14942,7 @@ msgstr "Vyčistiť históriu"
 #: src/kdefrontend/LabPlot.cpp:44
 #, kde-format
 msgid "Release build "
-msgstr "Zatvoriť projekt"
+msgstr "Vydanie (release build) "
 
 #: src/kdefrontend/LabPlot.cpp:46
 #, kde-format
@@ -14951,12 +14957,12 @@ msgstr "Desatinná čiarka"
 #: src/kdefrontend/LabPlot.cpp:50 src/kdefrontend/LabPlot.cpp:53
 #, kde-format
 msgid "Group separator "
-msgstr "iterácie"
+msgstr "Oddeľovač skupín "
 
 #: src/kdefrontend/LabPlot.cpp:54
 #, kde-format
 msgid "Exponential "
-msgstr "Exponenciála"
+msgstr "Exponenciála "
 
 #: src/kdefrontend/LabPlot.cpp:54
 #, kde-format
@@ -14991,7 +14997,7 @@ msgstr "Počet bodov"
 #: src/kdefrontend/LabPlot.cpp:74
 #, kde-format
 msgid "Updated on restart"
-msgstr "Skryť voľby"
+msgstr "Aktualizované po reštarte"
 
 #: src/kdefrontend/LabPlot.cpp:75
 #, kde-format
@@ -15126,7 +15132,7 @@ msgstr "Spustiť v prezentačnom režime"
 #: src/kdefrontend/LabPlot.cpp:140
 #, kde-format
 msgid "Open a project file."
-msgstr "Otvoriť projekt"
+msgstr "Otvoriť súbor projektu."
 
 #: src/kdefrontend/LabPlot.cpp:159
 #, kde-format
@@ -15146,19 +15152,19 @@ msgstr "Nepodarilo sa otvoriť"
 #: src/kdefrontend/labplot2ui.rc:6
 #, kde-format
 msgid "Project Toolbar"
-msgstr "Vlastnosti projektu"
+msgstr "Panel nástrojov projektu"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
 #, kde-format
 msgid "Worksheet Toolbar"
-msgstr "List"
+msgstr "Panel nástrojov pracovného hárku"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
 #, kde-format
 msgid "Data Extractor Toolbar"
-msgstr "Dátový formát"
+msgstr "Panel nástrojov extraktora dát"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
@@ -15170,13 +15176,13 @@ msgstr "Zošit"
 #: src/kdefrontend/labplot2ui.rc:36
 #, kde-format
 msgid "Notebook Toolbar"
-msgstr "Poznámka"
+msgstr "Panel nástrojov zápisníka"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
 #, kde-format
 msgid "Plot Area Toolbar"
-msgstr "Oblasť zákresu"
+msgstr "Panel nástrojov oblasti grafu"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -15213,7 +15219,7 @@ msgstr "&Upraviť"
 #: src/kdefrontend/labplot2ui.rc:80
 #, kde-format
 msgid "&Spreadsheet"
-msgstr "Zošit"
+msgstr "&Tabuľka"
 
 #. i18n: ectx: Menu (matrix)
 #: src/kdefrontend/labplot2ui.rc:81
@@ -15231,7 +15237,7 @@ msgstr "Pracovný list"
 #: src/kdefrontend/labplot2ui.rc:84
 #, kde-format
 msgid "&Data Extractor"
-msgstr "Dátový formát"
+msgstr "&Extraktor dát"
 
 #. i18n: ectx: Menu (drawing)
 #: src/kdefrontend/labplot2ui.rc:85
@@ -15275,7 +15281,7 @@ msgstr "Vitajte v LabPlot %1"
 #: src/kdefrontend/MainWin.cpp:599
 #, kde-format
 msgid "&Open Example"
-msgstr "Otvoriť súbor"
+msgstr "&Otvoriť príklad"
 
 #: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1931
 #, kde-format
@@ -15290,7 +15296,7 @@ msgstr "Vytvorí nový zošit na zber tabuliek, matíc a grafov"
 #: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1939
 #, kde-format
 msgid "Data Extractor"
-msgstr "Dátový formát"
+msgstr "Extraktor dát"
 
 #: src/kdefrontend/MainWin.cpp:626
 #, kde-format
@@ -15341,7 +15347,7 @@ msgstr "Vytvorí nový priečinok na zber hárkov a iných prvkov"
 #: src/kdefrontend/MainWin.cpp:659
 #, kde-format
 msgid "Live Data Source..."
-msgstr "Pridať novú premennú"
+msgstr "Živý zdroj dát..."
 
 #: src/kdefrontend/MainWin.cpp:660
 #, kde-format
@@ -15361,17 +15367,17 @@ msgstr "Importovať dáta z SQL databázy"
 #: src/kdefrontend/MainWin.cpp:686
 #, kde-format
 msgid "From Dataset Collection..."
-msgstr "Odstrániť spojenie"
+msgstr "Z kolekcie dátových sád..."
 
 #: src/kdefrontend/MainWin.cpp:687
 #, kde-format
 msgid "Imports data from an online dataset"
-msgstr "Importovať dáta"
+msgstr "Importuje dáta z online dátovej sady"
 
 #: src/kdefrontend/MainWin.cpp:691
 #, kde-format
 msgid "LabPlot Project..."
-msgstr "Zatvoriť projekt"
+msgstr "Projekt LabPlot..."
 
 #: src/kdefrontend/MainWin.cpp:692
 #, kde-format
@@ -15381,7 +15387,7 @@ msgstr "Importovať projekt zo súboru projektu LabPlot (.lml)"
 #: src/kdefrontend/MainWin.cpp:697
 #, kde-format
 msgid "Origin Project (OPJ)..."
-msgstr "Otvoriť projekt"
+msgstr "Projekt Origin (OPJ)..."
 
 #: src/kdefrontend/MainWin.cpp:698
 #, kde-format
@@ -15391,12 +15397,12 @@ msgstr "Importovať projekt zo súboru projektu OriginLab Origin (.opj)"
 #: src/kdefrontend/MainWin.cpp:703
 #, kde-format
 msgid "Export..."
-msgstr "Exportovať"
+msgstr "Exportovať..."
 
 #: src/kdefrontend/MainWin.cpp:704
 #, kde-format
 msgid "Export selected element"
-msgstr "Prispôsobiť výberu"
+msgstr "Exportovať vybraný prvok"
 
 #: src/kdefrontend/MainWin.cpp:710 src/kdefrontend/MainWin.cpp:2468
 #: src/kdefrontend/MainWin.cpp:2476
@@ -15482,22 +15488,22 @@ msgstr "&Všetko"
 #: src/kdefrontend/MainWin.cpp:807
 #, kde-format
 msgid "Show Memory Usage"
-msgstr "Zobraziť informácie o súbore"
+msgstr "Zobraziť využitie pamäte"
 
 #: src/kdefrontend/MainWin.cpp:815
 #, kde-format
 msgid "Project Explorer"
-msgstr "Prieskumník projektu"
+msgstr "Prehliadač projektu"
 
 #: src/kdefrontend/MainWin.cpp:820
 #, kde-format
 msgid "Properties Explorer"
-msgstr "Vlastnosti"
+msgstr "Prehliadač vlastností"
 
 #: src/kdefrontend/MainWin.cpp:825
 #, kde-format
 msgid "Worksheet Preview"
-msgstr "List"
+msgstr "Náhľad pracovného hárku"
 
 #: src/kdefrontend/MainWin.cpp:848
 #, kde-format
@@ -15564,7 +15570,7 @@ msgstr "Origin Projects (%1)"
 #: src/kdefrontend/MainWin.cpp:1495
 #, kde-format
 msgid "Cantor Projects (*.cws)"
-msgstr "Zatvoriť projekt"
+msgstr "Projekty Cantor (*.cws)"
 
 #: src/kdefrontend/MainWin.cpp:1496
 #, kde-format
@@ -15601,7 +15607,7 @@ msgstr "Súbor projektu %1 neexistuje."
 #: src/kdefrontend/MainWin.cpp:1537
 #, kde-format
 msgid "Couldn't read the project file %1."
-msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
+msgstr "Nepodarilo sa načítať súbor projektu %1."
 
 #: src/kdefrontend/MainWin.cpp:1546
 #, kde-format
@@ -15651,7 +15657,7 @@ msgstr "Nepodarilo sa uložiť súbor '%1'."
 #: src/kdefrontend/MainWin.cpp:1833
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
-msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
+msgstr "Nepodarilo sa otvoriť súbor '%1' pre zápis."
 
 #: src/kdefrontend/MainWin.cpp:1883
 #, kde-format
@@ -15759,7 +15765,7 @@ msgstr "%1: vyplniť maticu hodnotami funkcie"
 #, kde-format
 msgctxt "@title:window"
 msgid "Plot Area Templates"
-msgstr "Zdroj načítania"
+msgstr "Šablóny oblastí grafu"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/PlotTemplateDialog.cpp:44
@@ -15775,22 +15781,22 @@ msgstr "Predvolené"
 #: src/kdefrontend/PlotTemplateDialog.cpp:45
 #, kde-format
 msgid "Custom Folder"
-msgstr "Vlastný dotaz..."
+msgstr "Vlastný priečinok"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:48
 #, kde-format
 msgid "Location of plot area templates"
-msgstr "X rozsah:"
+msgstr "Umiestnenie šablón oblasti grafu"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:52
 #, kde-format
 msgid "Custom folder for the location of plot area templates"
-msgstr "X rozsah:"
+msgstr "Vlastný priečinok pre umiestnenie šablón oblasti grafu"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:56
 #, kde-format
 msgid "Open the folder for the location of plot area templates"
-msgstr "X rozsah:"
+msgstr "Otvoriť priečinok pre umiestnenie šablón oblasti grafu"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:135
 #, kde-format
@@ -15821,7 +15827,7 @@ msgstr "Unable to read the file"
 #: src/kdefrontend/PlotTemplateDialog.cpp:206
 #, kde-format
 msgid "Failed to load the selected plot template"
-msgstr "Nepodarilo sa otvoriť"
+msgstr "Nepodarilo sa načítať vybranú šablónu grafu"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:197
 #, kde-format
@@ -15857,7 +15863,7 @@ msgstr "Súbory"
 #: src/kdefrontend/SettingsDatasetsPage.cpp:88
 #, kde-format
 msgid "Datasets cache"
-msgstr "Dátová sada"
+msgstr "Vyrovnávacia pamäť dátových sád"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:88
 #, kde-format
@@ -15869,7 +15875,7 @@ msgstr "Stiahnuté súbory úspešne vymazané."
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
-msgstr "Nastavenia"
+msgstr "Predvoľby"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGeneral)
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
@@ -15907,12 +15913,12 @@ msgstr "Všeobecné"
 #: src/kdefrontend/SettingsDialog.cpp:78
 #, kde-format
 msgid "Notebook"
-msgstr "Poznámka"
+msgstr "Zápisník"
 
 #: src/kdefrontend/SettingsDialog.cpp:84
 #, kde-format
 msgid "Datasets"
-msgstr "Dátová sada"
+msgstr "Dátové sady"
 
 #: src/kdefrontend/SettingsDialog.cpp:98
 #, kde-format
@@ -15928,7 +15934,7 @@ msgstr "Všetky nastavenia sa obnovia na predvolené hodnoty. Chcete pokračova�
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
-msgstr "Nastavenia"
+msgstr "Predvoľby    [zmenené]"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
@@ -15944,7 +15950,7 @@ msgstr "min."
 #: src/kdefrontend/SettingsGeneralPage.cpp:217
 #, kde-format
 msgid "Create New Project"
-msgstr "nový zošit"
+msgstr "Vytvoriť nový projekt"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:218
 #, kde-format
@@ -15959,7 +15965,7 @@ msgstr "Zošit"
 #: src/kdefrontend/SettingsGeneralPage.cpp:223
 #, kde-format
 msgid "With Worksheet"
-msgstr "List"
+msgstr "S pracovným hárkom"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, kde-format
@@ -15969,7 +15975,7 @@ msgstr "Zošit"
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
 msgid "With Notebook"
-msgstr "Poznámka"
+msgstr "So zápisníkom"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:229
 #, kde-format
@@ -15986,7 +15992,7 @@ msgstr "Ovláda správanie umiestnenia widgetov doku po znovuotvorení"
 #: src/kdefrontend/SettingsGeneralPage.cpp:237
 #, kde-format
 msgid "Original Position"
-msgstr "Originálna veľkosť"
+msgstr "Pôvodná poloha"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:238
 #, kde-format
@@ -16006,7 +16012,7 @@ msgstr "Zobraziť názov súboru"
 #: src/kdefrontend/SettingsGeneralPage.cpp:243
 #, kde-format
 msgid "Show Project Name"
-msgstr "Uložiť projekt ako"
+msgstr "Zobraziť názov projektu"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:245
 #, kde-format
@@ -16102,7 +16108,7 @@ msgstr "Povoliť zvýrazňovanie syntaxe"
 #: src/kdefrontend/SettingsNotebookPage.cpp:24
 #, kde-format
 msgid "Enable syntax completion"
-msgstr "Dátový formát"
+msgstr "Povoliť dopĺňanie syntaxe"
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:25
 #, kde-format
@@ -16121,7 +16127,7 @@ msgstr ""
 #: src/kdefrontend/SettingsNotebookPage.cpp:27
 #, kde-format
 msgid "Animate transitions"
-msgstr "Iterácie"
+msgstr "Animovať prechody"
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:29
 #, kde-format
@@ -16189,7 +16195,7 @@ msgstr "Počiatočná hodnota"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
 #, kde-format
 msgid "Subtract:"
-msgstr "Rozdiel"
+msgstr "Odčítať:"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:117
 #, kde-format
@@ -16228,17 +16234,17 @@ msgstr " Priemer:"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:144
 #, kde-format
 msgid "Custom Value"
-msgstr "Vlastný dotaz..."
+msgstr "Vlastná hodnota"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:145
 #, kde-format
 msgid "Difference"
-msgstr "Diferencovať"
+msgstr "Rozdiel"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:161
 #, kde-format
 msgid "Baseline (arPLS Algorithm)"
-msgstr "Logaritmus so základom 10"
+msgstr "Základná línia (algoritmus arPLS)"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:168
 #, kde-format
@@ -16270,12 +16276,12 @@ msgstr "raw data"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:538
 #, kde-format
 msgid "baseline"
-msgstr "Čiarkovaná čiara"
+msgstr "základná línia"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:546
 #, kde-format
 msgid "result"
-msgstr "Výsledky:"
+msgstr "výsledok"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:626
 #, kde-format
@@ -16323,7 +16329,7 @@ msgstr "%1: vydeliť hodnoty stĺpca hodnotou %2"
 #, kde-format
 msgctxt "@title:window"
 msgid "Add Value Label"
-msgstr "Pridať hodnotu"
+msgstr "Pridať popisok hodnoty"
 
 #. i18n: ectx: property (text), widget (QLabel, lValue)
 #. i18n: ectx: property (text), widget (QLabel, lTimeValue)
@@ -16342,18 +16348,18 @@ msgstr "Hodnota:"
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:84
 #, kde-format
 msgid "Label:"
-msgstr "Štítky"
+msgstr "Popisok:"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:36
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Value Labels"
-msgstr "Hodnoty"
+msgstr "Upraviť popisky hodnôt"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:40
 #, kde-format
 msgid "Value Labels:"
-msgstr "Štítky"
+msgstr "Popisky hodnôt:"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:154
 #, kde-format
@@ -16372,7 +16378,7 @@ msgstr "Rovné"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:231
 #, kde-format
 msgid "Not Equal to"
-msgstr "Rovné"
+msgstr "Nerovná sa"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:47
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:223
@@ -16426,13 +16432,13 @@ msgstr "Rovné"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:213
 #, kde-format
 msgid "Not Equal To"
-msgstr "Rovné"
+msgstr "Nerovná sa"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:59
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:214
 #, kde-format
 msgid "Starts With"
-msgstr "Začiatok:"
+msgstr "Začína s"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:60
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:215
@@ -16444,7 +16450,7 @@ msgstr "Končí na"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:216
 #, kde-format
 msgid "Contains"
-msgstr "Obsah"
+msgstr "Obsahuje"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:62
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:217
@@ -16510,7 +16516,7 @@ msgstr "Prírastok"
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:60
 #, kde-format
 msgid "Number and Increment"
-msgstr "Prírastok"
+msgstr "Číslo a prírastok"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:62
 #, kde-format
@@ -16538,12 +16544,12 @@ msgstr "Hodnoty"
 #, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Date&Time Values"
-msgstr "Hodnoty"
+msgstr "Ekvidistantné hodnoty dátumu a času"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:250
 #, kde-format
 msgid "Invalid start value"
-msgstr "Počiatočná hodnota"
+msgstr "Neplatná počiatočná hodnota"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:257
 #, kde-format
@@ -16585,12 +16591,12 @@ msgstr "Nedostatok pamäte na vykonanie tejto operácie."
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:87
 #, kde-format
 msgid "Export Spreadsheet"
-msgstr "Zošit"
+msgstr "Exportovať tabuľku"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:88
 #, kde-format
 msgid "Export Selection"
-msgstr "Prispôsobiť výberu"
+msgstr "Exportovať výber"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:94
 #, kde-format
@@ -16607,12 +16613,12 @@ msgstr "Zošit"
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Matrix"
-msgstr "Exportovať"
+msgstr "Exportovať maticu"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:219
 #, kde-format
 msgid "Export matrix"
-msgstr "Exportovať"
+msgstr "Exportovať maticu"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:309
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:315
@@ -16655,18 +16661,18 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:43
 #, kde-format
 msgid "&Flatten"
-msgstr "Vzorka"
+msgstr "&Sploštiť"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:44
 #, kde-format
 msgid "Flatten selected columns"
-msgstr "Vybrané stĺpce"
+msgstr "Sploštiť vybrané stĺpce"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:51
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Selected Columns"
-msgstr "Vybrané stĺpce"
+msgstr "Sploštiť vybrané stĺpce"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:56
 #, kde-format
@@ -16676,7 +16682,7 @@ msgstr "Pridať ďalší referenčný stĺpec"
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:119
 #, kde-format
 msgid "Remove reference column"
-msgstr "Vybrané stĺpce"
+msgstr "Odstrániť referenčný stĺpec"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:150
 #, kde-format
@@ -16730,7 +16736,7 @@ msgstr "Pozadie"
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:62
 #, kde-format
 msgid "Font Color"
-msgstr "Farba písma:"
+msgstr "Farba písma"
 
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:63
 #, kde-format
@@ -16858,12 +16864,12 @@ msgstr "Row:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Plot Spreadsheet Data"
-msgstr "Zošit"
+msgstr "Kresliť dáta tabuľky"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:94
 #, kde-format
 msgid "Plot the selected data"
-msgstr "Odstrániť vybrané"
+msgstr "Kresliť vybrané dáta"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:95
 #, kde-format
@@ -16879,14 +16885,14 @@ msgstr "Y-dáta"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:423
 #, kde-format
 msgid "Add Plot to"
-msgstr "Kresliť"
+msgstr "Pridať graf do"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:426
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:180
 #, kde-format
 msgid "Add Plots to"
-msgstr "Kresliť"
+msgstr "Pridať grafy do"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:458
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:469
@@ -16936,12 +16942,12 @@ msgstr "Orientácia"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:383
 #, kde-format
 msgid "Sample Quantiles"
-msgstr "Veľkosť vzorky"
+msgstr "Vzorkové kvantily"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1073
 #, kde-format
 msgid "No data selected to plot."
-msgstr "Vyčistiť výber"
+msgstr "Nie sú vybrané žiadne dáta na kreslenie."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1078
 #, kde-format
@@ -17004,7 +17010,7 @@ msgstr[2] "%1: vyplniť stĺpec nerovnomernými náhodnými číslami"
 #, kde-format
 msgctxt "@title:window"
 msgid "Rescale Interval"
-msgstr "Rozhranie"
+msgstr "Interval zmeny mierky"
 
 #: src/kdefrontend/spreadsheet/RescaleDialog.cpp:36
 #, kde-format
@@ -17014,7 +17020,7 @@ msgstr "Preškálovať"
 #: src/kdefrontend/spreadsheet/RescaleDialog.cpp:37
 #, kde-format
 msgid "Interval [a, b]:"
-msgstr "Interval:"
+msgstr "Interval [a, b]:"
 
 #: src/kdefrontend/spreadsheet/RescaleDialog.cpp:38
 #, kde-format
@@ -17044,7 +17050,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:62
 #, kde-format
 msgid "&Sample"
-msgstr "Jednoduchý"
+msgstr "&Vzorka"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:63
 #, kde-format
@@ -17113,7 +17119,7 @@ msgstr "Začiatok riadka"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1539
 #, kde-format
 msgid "End of line"
-msgstr "Exportovať do súboru"
+msgstr "Koniec riadku"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1541
 #, kde-format
@@ -17123,12 +17129,12 @@ msgstr "Zhoda s akýmkoľvek znakom okrem nového riadka (predvolene)"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1542
 #, kde-format
 msgid "One or more occurrences"
-msgstr "Došlo k chybe."
+msgstr "Jeden alebo viacero výskytov"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1543
 #, kde-format
 msgid "Zero or more occurrences"
-msgstr "Došlo k chybe."
+msgstr "Nula alebo viacero výskytov"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1544
 #, kde-format
@@ -17153,7 +17159,7 @@ msgstr "Alebo"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1549
 #, kde-format
 msgid "Set of characters"
-msgstr "znak"
+msgstr "Sada znakov"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1550
 #, kde-format
@@ -17173,7 +17179,7 @@ msgstr "Odkaz"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1569
 #, kde-format
 msgid "Line break"
-msgstr "Lineárny"
+msgstr "Zalomenie riadku"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1570
 #, kde-format
@@ -17218,7 +17224,7 @@ msgstr "Znakový znak (alfanumerické plus '_')"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1580
 #, kde-format
 msgid "Non-word character"
-msgstr "znak"
+msgstr "Neslovný znak"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1583
 #, kde-format
@@ -17287,7 +17293,7 @@ msgstr "Funkcie"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:72
 #, kde-format
 msgid "First Quartile"
-msgstr "Orientácia"
+msgstr "Prvý kvartil"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:74
 #, kde-format
@@ -17323,7 +17329,7 @@ msgstr "Funkcie"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:120
 #, kde-format
 msgid "Overview"
-msgstr "Náhľad"
+msgstr "Prehľad"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:145
 #, kde-format
@@ -17413,7 +17419,7 @@ msgstr "Text pod ikonami"
 #: src/kdefrontend/TemplateHandler.cpp:268
 #, kde-format
 msgid "Load From Template"
-msgstr "Zdroj načítania"
+msgstr "Načítať zo šablóny"
 
 #: src/kdefrontend/TemplateHandler.cpp:288
 #, kde-format
@@ -17483,7 +17489,7 @@ msgstr "Kolekcia:"
 #: src/kdefrontend/ui/colormapswidget.ui:73
 #, kde-format
 msgid "Colormaps:"
-msgstr "Mapa farieb"
+msgstr "Mapy farieb:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bInsert)
 #: src/kdefrontend/ui/constantswidget.ui:90
@@ -17619,13 +17625,13 @@ msgstr "Názov:"
 #: src/kdefrontend/ui/datapickercurvewidget.ui:100
 #, kde-format
 msgid "Error Type"
-msgstr "Formát:"
+msgstr "Typ chyby"
 
 #. i18n: ectx: property (text), widget (QLabel, lXErrorType)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:113
 #, kde-format
 msgid "X-error type:"
-msgstr "Formát:"
+msgstr "Typ chyby X:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:186
@@ -17945,7 +17951,7 @@ msgstr "Zadajte názov súboru obrázka."
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:434
 #, kde-format
 msgid " Select the image file"
-msgstr "Vybrať všetko"
+msgstr " Vybrať obrazový súbor"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbPointSeparation)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPointSeparation)
@@ -17967,7 +17973,7 @@ msgstr " px"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:155
 #, kde-format
 msgid "References"
-msgstr "Odkaz"
+msgstr "Referencie"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:171
@@ -18028,7 +18034,7 @@ msgstr "Detekcia minimálnej dĺžky segmentu"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:248
 #, kde-format
 msgid "Min. Length:"
-msgstr "Dĺžka:"
+msgstr "Min. dĺžka:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:280
@@ -18235,7 +18241,7 @@ msgstr "Zjednodušiť biele znaky"
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:46
 #, kde-format
 msgid "Names at Line:"
-msgstr "Čiarkovaná čiara"
+msgstr "Názvy na čiare:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:99
@@ -18255,43 +18261,43 @@ msgstr "Previesť NaN na 0"
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:129
 #, kde-format
 msgid "Create Index"
-msgstr "Vytvorené"
+msgstr "Vytvoriť index"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
 #, kde-format
 msgid "DateTime Format:"
-msgstr "Dátový formát"
+msgstr "Formát dátumu a času:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
 #, kde-format
 msgid "Column Separator:"
-msgstr "Stĺpec"
+msgstr "Oddeľovač stĺpcov:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:182
 #, kde-format
 msgid "Create Timestamp "
-msgstr "Konečný stĺpec:"
+msgstr "Vytvoriť časové razítko "
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:189
 #, kde-format
 msgid "Comment Character:"
-msgstr "znak"
+msgstr "Znak komentára:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:196
 #, kde-format
 msgid "Custom Names:"
-msgstr "Vlastný dotaz..."
+msgstr "Vlastné názvy:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:203
 #, kde-format
 msgid "Remove Quotes"
-msgstr "Odstrániť riadky"
+msgstr "Odstrániť úvodzovky"
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:210
@@ -18353,7 +18359,7 @@ msgstr "Usporiadanie bajtov:"
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:23
 #, kde-format
 msgid "Create index column"
-msgstr "Konečný stĺpec:"
+msgstr "Vytvoriť stĺpec indexu"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WorksheetPreviewWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SettingsNotebookPage)
@@ -18418,7 +18424,7 @@ msgstr "Povoliť"
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:46
 #, kde-format
 msgid "Connection String:"
-msgstr "Pripojenie:"
+msgstr "Reťazec pripojenia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDriver)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:66
@@ -18468,19 +18474,19 @@ msgstr "Heslo:"
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:34
 #, kde-format
 msgid "Column Descriptions"
-msgstr "Pripojenie:"
+msgstr "Popisy stĺpcov"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:40
 #, kde-format
 msgid "Delete Description"
-msgstr "Odstrániť spojenie"
+msgstr "Odstrániť popis"
 
 #. i18n: ectx: property (text), widget (QPushButton, bNewColumn)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:47
 #, kde-format
 msgid "Add new description"
-msgstr "Nové pripojenie"
+msgstr "Pridať nový popis"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbFilter)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:73
@@ -18492,7 +18498,7 @@ msgstr "Možnosti filtra"
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:79
 #, kde-format
 msgid "Comment character:"
-msgstr "znak"
+msgstr "Znak komentára:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparator)
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
@@ -18514,7 +18520,7 @@ msgstr "Formát čísel"
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:40
 #, kde-format
 msgid "DateTime format:"
-msgstr "Dátový formát"
+msgstr "Formát dátumu a času:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:107
@@ -18532,7 +18538,7 @@ msgstr "Zjednodušiť biele znaky"
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:144
 #, kde-format
 msgid "Remove quotes"
-msgstr "Odstrániť riadky"
+msgstr "Odstrániť úvodzovky"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:193
@@ -18617,7 +18623,7 @@ msgstr "Vyberte spôsob importu obrázka"
 #: src/kdefrontend/ui/datasources/importdatasetwidget.ui:86
 #, kde-format
 msgid "Dataset:"
-msgstr "Dátová sada"
+msgstr "Dátová sada:"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twCategories)
 #: src/kdefrontend/ui/datasources/importdatasetwidget.ui:103
@@ -18707,7 +18713,7 @@ msgstr " Vyberte súbor na import"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:223
 #, kde-format
 msgid "Relative Path:"
-msgstr "Relatívna cesta"
+msgstr "Relatívna cesta:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bFileInfo)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:259
@@ -18820,7 +18826,7 @@ msgstr "Konečný riadok:"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:708
 #, kde-format
 msgid "Update Options"
-msgstr "Skryť voľby"
+msgstr "Aktualizovať voľby"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdateType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:717
@@ -18847,7 +18853,7 @@ msgstr "Interval aktualizácie:"
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:120
 #, kde-format
 msgid "Keep last values:"
-msgstr "hodnota"
+msgstr "Zachovať posledné hodnoty:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:755
@@ -18868,7 +18874,7 @@ msgstr "Periodické"
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:23
 #, kde-format
 msgid "On New Data"
-msgstr "Dáta"
+msgstr "Pri nových dátach"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbUpdateInterval)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:801
@@ -18896,7 +18902,7 @@ msgstr "Názov súboru:"
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:49
 #, kde-format
 msgid "Objects to Import"
-msgstr "Dátový typ:"
+msgstr "Objekty na import"
 
 #. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
@@ -18969,7 +18975,7 @@ msgstr "Zobrazí obsah vybraného súboru NetCDF"
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:27
 #, kde-format
 msgid "Variable"
-msgstr "Premenné"
+msgstr "Premenná"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:32
@@ -18993,7 +18999,7 @@ msgstr "Trieda"
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:52
 #, kde-format
 msgid "Complex"
-msgstr "Jednoduchý"
+msgstr "Komplexný"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbConnection)
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:23
@@ -19049,7 +19055,7 @@ msgstr "Meno používateľa:"
 #: src/kdefrontend/ui/datasources/mqtterrorwidget.ui:53
 #, kde-format
 msgid "Make Changes"
-msgstr "X rozsah"
+msgstr "Vykonať zmeny"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twSubscriptions)
 #: src/kdefrontend/ui/datasources/mqttsubscriptionwidget.ui:92
@@ -19091,7 +19097,7 @@ msgstr "Prvý riadok"
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:89
 #, kde-format
 msgid "Last row:"
-msgstr "Počiatočný riadok:"
+msgstr "Posledný riadok:"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lStart)
@@ -19111,7 +19117,7 @@ msgstr "Zobraziť mierku a posun vedľa osi"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:82
 #, kde-format
 msgid "Show scale and offset"
-msgstr "Zväčšený a orezaný"
+msgstr "Zobraziť mierku a posun"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbUnityScale)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:126
@@ -19149,7 +19155,7 @@ msgstr "Mierka:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:174
 #, kde-format
 msgid "Zero Offset:"
-msgstr "Posun:"
+msgstr "Nulový posun:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEndDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lEnd)
@@ -19254,7 +19260,7 @@ msgstr "Číslo:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1148
 #, kde-format
 msgid "1st Tick Value:"
-msgstr "Hodnoty"
+msgstr "Hodnota 1. dielika:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
@@ -19268,7 +19274,7 @@ msgstr "Rozostup:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:760
 #, kde-format
 msgid "Major Ticks"
-msgstr "bez mriežky"
+msgstr "Hlavné delenie"
 
 #. i18n: ectx: property (text), widget (QLabel, lIncrementDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lIncrement)
@@ -19280,13 +19286,13 @@ msgstr "bez mriežky"
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:137
 #, kde-format
 msgid "Increment:"
-msgstr "Posun:"
+msgstr "Prírastok:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:774
 #, kde-format
 msgid "Label Type:"
-msgstr "Číslo"
+msgstr "Typ popisku:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextColumn)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:781
@@ -19345,7 +19351,7 @@ msgstr "Dĺžka:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:993
 #, kde-format
 msgid "Minor Ticks"
-msgstr "bez mriežky"
+msgstr "Vedľajšie delenie"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1033
@@ -19360,7 +19366,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1036
 #, kde-format
 msgid "1st Tick Offset:"
-msgstr "Posun:"
+msgstr "Posun 1. dielika:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1105
@@ -19519,13 +19525,13 @@ msgstr "Farba písma:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1663
 #, kde-format
 msgid "Minor Grid"
-msgstr "bez mriežky"
+msgstr "Vedľajšia mriežka"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1675
 #, kde-format
 msgid "Major Grid"
-msgstr "bez mriežky"
+msgstr "Hlavná mriežka"
 
 #. i18n: ectx: property (text), widget (QLabel, lEnabled)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -19598,7 +19604,7 @@ msgstr "x:"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:220
 #, kde-format
 msgid "Data:"
-msgstr "Dáta"
+msgstr "Dáta:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
@@ -19643,7 +19649,7 @@ msgstr "Okraj"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:398
 #, kde-format
 msgid "Width"
-msgstr "Šírka:"
+msgstr "Šírka"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilling)
 #. i18n: ectx: property (text), widget (QLabel, lEstimationFilling)
@@ -19693,13 +19699,13 @@ msgstr "k:"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:227
 #, kde-format
 msgid "Variable Width:"
-msgstr "Premenná:"
+msgstr "Variabilná šírka:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabBox)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:256
 #, kde-format
 msgid "Box"
-msgstr "Obdĺžnik"
+msgstr "Rámik"
 
 #. i18n: ectx: property (text), widget (QLabel, lMedianLine)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:348
@@ -19805,7 +19811,7 @@ msgstr "Vyhodnotiť pracovný zošit"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:73
 #, kde-format
 msgid "List of plot ranges"
-msgstr "X rozsah:"
+msgstr "Zoznam rozsahov grafu"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:89
@@ -19848,7 +19854,7 @@ msgstr "Formát"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:348
 #, kde-format
 msgid "Start"
-msgstr "Začiatok:"
+msgstr "Začiatok"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
@@ -19887,7 +19893,7 @@ msgstr "<html><head/><body><p>Pridať nový rozsah x</p></body></html>"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:278
 #, kde-format
 msgid "Remove the current selected x range"
-msgstr "Odstrániť súčasnú položku"
+msgstr "Odstrániť aktuálny vybraný rozsah x"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbRemoveXRange)
 #. i18n: ectx: property (text), widget (QToolButton, tbAddPlotRange)
@@ -19909,31 +19915,31 @@ msgstr "Dátové rozsahy"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:310
 #, kde-format
 msgid "List of x ranges"
-msgstr "svetlooranžová"
+msgstr "Zoznam rozsahov x"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddPlotRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:407
 #, kde-format
 msgid "Add new plot range"
-msgstr "nový zošit"
+msgstr "Pridať nový rozsah grafu"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemovePlotRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:421
 #, kde-format
 msgid "Remove current plot range"
-msgstr "Odstrániť súčasnú položku"
+msgstr "Odstrániť aktuálny rozsah grafu"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddYRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:488
 #, kde-format
 msgid "Add a new y range"
-msgstr "Pridať novú premennú"
+msgstr "Pridať nový rozsah y"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemoveYRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:499
 #, kde-format
 msgid "remove the current selected y range"
-msgstr "Odstrániť súčasnú položku"
+msgstr "odstrániť aktuálny vybraný rozsah y"
 
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:512
@@ -20008,13 +20014,13 @@ msgstr "Geometria"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:629
 #, kde-format
 msgid "Padding"
-msgstr "Výplň"
+msgstr "Výplň/Odsadenie"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:643
 #, kde-format
 msgid "Symmetric:"
-msgstr "nesúmerne"
+msgstr "Súmerne:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVerticalDown)
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
@@ -20113,7 +20119,7 @@ msgstr "X rozsah:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1202
 #, kde-format
 msgid "Area"
-msgstr "Oblasť zákresu"
+msgstr "Plocha"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1402
@@ -20143,13 +20149,13 @@ msgstr "Poradie:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:212
 #, kde-format
 msgid "Ver. align.:"
-msgstr "Vertikálne medzery"
+msgstr "Vert. zarovnanie:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSymbolWidth)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:219
 #, kde-format
 msgid "Line+Symbol Width:"
-msgstr "Šírka čiary"
+msgstr "Šírka čiary + symbolu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:412
@@ -20188,7 +20194,7 @@ msgstr "DátumČas"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:153
 #, kde-format
 msgid "Labels:"
-msgstr "Štítky"
+msgstr "Popisky:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
@@ -20209,19 +20215,19 @@ msgstr "Dátový typ"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:315
 #, kde-format
 msgid "Plot Designation:"
-msgstr "Pozícia:"
+msgstr "Určenie grafu:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCursor0en)
 #: src/kdefrontend/ui/dockwidgets/cursordock.ui:19
 #, kde-format
 msgid "Cursor 1"
-msgstr "Kurzor"
+msgstr "Kurzor 1"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCursor1en)
 #: src/kdefrontend/ui/dockwidgets/cursordock.ui:42
 #, kde-format
 msgid "Cursor 2"
-msgstr "Kurzor"
+msgstr "Kurzor 2"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPositionX)
@@ -20244,7 +20250,7 @@ msgstr "Horizontálna pozícia relatívne k rodičovi menovky"
 #: src/kdefrontend/ui/dockwidgets/errorbarwidget.ui:83
 #, kde-format
 msgid "X Error"
-msgstr "Chyba"
+msgstr "Chyba X"
 
 #. i18n: ectx: property (text), widget (QLabel, lXDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lYDataPlus)
@@ -20254,7 +20260,7 @@ msgstr "Chyba"
 #: src/kdefrontend/widgets/ErrorBarWidget.cpp:329
 #, kde-format
 msgid "Data, +:"
-msgstr "Dáta"
+msgstr "Dáta, +:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXDataMinus)
 #. i18n: ectx: property (text), widget (QLabel, lYDataMinus)
@@ -20262,19 +20268,19 @@ msgstr "Dáta"
 #: src/kdefrontend/ui/dockwidgets/errorbarwidget.ui:183
 #, kde-format
 msgid "Data, -:"
-msgstr "Dáta"
+msgstr "Dáta, -:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCapSize)
 #: src/kdefrontend/ui/dockwidgets/errorbarwidget.ui:150
 #, kde-format
 msgid "Cap size:"
-msgstr "Veľkosť kroku"
+msgstr "Veľkosť zakončenia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
 #: src/kdefrontend/ui/dockwidgets/errorbarwidget.ui:221
 #, kde-format
 msgid "Y Error"
-msgstr "Chyba"
+msgstr "Chyba Y"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinimum)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
@@ -20351,25 +20357,25 @@ msgstr "Maximum:"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:221
 #, kde-format
 msgid "Bin Width:"
-msgstr "Šírka čiary"
+msgstr "Šírka intervalu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNormalization)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:235
 #, kde-format
 msgid "Normalization:"
-msgstr "Normalizovať"
+msgstr "Normalizácia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinRanges)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:283
 #, kde-format
 msgid "Bin Ranges"
-msgstr "stred"
+msgstr "Rozsahy intervalov"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinCount)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:348
 #, kde-format
 msgid "Bin Count:"
-msgstr "stred"
+msgstr "Počet intervalov:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLine)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:393
@@ -20426,7 +20432,7 @@ msgstr "Vert. zarovnanie:"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:418
 #, kde-format
 msgid "Specify the name of the image file"
-msgstr "Počiatočná hodnota"
+msgstr "Zadajte názov obrazového súboru"
 
 #. i18n: ectx: property (text), widget (QLabel, lRatio)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:446
@@ -20438,19 +20444,19 @@ msgstr "Zachovať pomer strán"
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:32
 #, kde-format
 msgid "Curves:"
-msgstr "Krivka"
+msgstr "Krivky:"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnectToCurve)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:62
 #, kde-format
 msgid "Connect To:"
-msgstr "Pripojenie"
+msgstr "Pripojiť k:"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnectToAnchor)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:69
 #, kde-format
 msgid "Anchor:"
-msgstr "Autor:"
+msgstr "Kotva:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLines)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:229
@@ -20463,13 +20469,13 @@ msgstr "Čiary"
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:246
 #, kde-format
 msgid "Vertical Line"
-msgstr "vertikálna os"
+msgstr "Vertikálna čiara"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLines)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:264
 #, kde-format
 msgid "Connection Line"
-msgstr "Pripojenie zlyhalo"
+msgstr "Spojovacia čiara"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernelType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:91
@@ -20481,7 +20487,7 @@ msgstr "Jadro"
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:111
 #, kde-format
 msgid "Bandwidth:"
-msgstr "Šírka čiary"
+msgstr "Šírka pásma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:160
@@ -20495,7 +20501,7 @@ msgstr "X rozsah:"
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:211
 #, kde-format
 msgid "Estimation"
-msgstr "Iterácie"
+msgstr "Odhadovanie"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:67
@@ -20559,7 +20565,7 @@ msgstr "Kartografia"
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:167
 #, kde-format
 msgid "X-Start:"
-msgstr "Začiatok"
+msgstr "X-Začiatok:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXMax)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:181
@@ -20571,7 +20577,7 @@ msgstr "Koniec:"
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:211
 #, kde-format
 msgid "Y-Start:"
-msgstr "Začiatok"
+msgstr "Y-Začiatok:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYEnd)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:225
@@ -20601,7 +20607,7 @@ msgstr "Farba textu:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:66
 #, kde-format
 msgid "Version:"
-msgstr "Rozmery"
+msgstr "Verzia:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:73
@@ -20614,7 +20620,7 @@ msgstr "Vytvorené:"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:284
 #, kde-format
 msgid "Save Dock States:"
-msgstr "Uložiť projekt ako"
+msgstr "Ukladať stavy dokov:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:100
@@ -20634,7 +20640,7 @@ msgstr "Názov súboru:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:202
 #, kde-format
 msgid "Settings:"
-msgstr "Nastavenia"
+msgstr "Nastavenia:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:209
@@ -20646,7 +20652,7 @@ msgstr "Autor:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:253
 #, kde-format
 msgid "Save Calculations:"
-msgstr "Riešiť rovnice"
+msgstr "Uložiť výpočty:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:109
@@ -20659,7 +20665,7 @@ msgstr "Rozdelenie"
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:123
 #, kde-format
 msgid "p(x) ="
-msgstr "f(x) ="
+msgstr "p(x) ="
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPercentiles)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:196
@@ -20673,7 +20679,7 @@ msgstr "Percentil:"
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:105
 #, kde-format
 msgid "End x:"
-msgstr "Konečný riadok:"
+msgstr "Koniec x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
@@ -20681,7 +20687,7 @@ msgstr "Konečný riadok:"
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:313
 #, kde-format
 msgid "Start x:"
-msgstr "Začiatok:"
+msgstr "Začiatok x:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -20699,13 +20705,13 @@ msgstr "Povolené"
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
 #, kde-format
 msgid "Sparklines:"
-msgstr "plná čiara"
+msgstr "Sparklines:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
 #, kde-format
 msgid "Column Header"
-msgstr "Stĺpec"
+msgstr "Hlavička stĺpca"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
@@ -20717,13 +20723,13 @@ msgstr "Komentár:"
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:235
 #, kde-format
 msgid "Linking"
-msgstr "Odkaz"
+msgstr "Prepájanie"
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectNone)
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:295
 #, kde-format
 msgid "Select None"
-msgstr "Výber"
+msgstr "Vybrať nič"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
@@ -20737,7 +20743,7 @@ msgstr "Vzdialenosť:"
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:66
 #, kde-format
 msgid "Page:"
-msgstr "Obrázok"
+msgstr "Strana:"
 
 #. i18n: ectx: property (text), widget (QLabel, lScaleContent)
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:164
@@ -20750,13 +20756,13 @@ msgstr "Rozsah obsahu"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:312
 #, kde-format
 msgid "Sampling Interval:"
-msgstr "Rozhranie"
+msgstr "Vzorkovací interval:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWrap)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:117
 #, kde-format
 msgid "Wrap Response:"
-msgstr "Dátový typ:"
+msgstr "Zabalená odozva:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:131
@@ -20774,7 +20780,7 @@ msgstr "Dátový typ:"
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:74
 #, kde-format
 msgid "X-Data:"
-msgstr "Dáta"
+msgstr "Dáta X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXRange)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:138
@@ -20841,7 +20847,7 @@ msgstr "Výsledky:"
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:424
 #, kde-format
 msgid "Norm. Response:"
-msgstr "Dátový typ:"
+msgstr "Norm. odozva:"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
@@ -20855,19 +20861,19 @@ msgstr "Korelácia"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:154
 #, kde-format
 msgid "Y-Data Signal 2:"
-msgstr "Dáta"
+msgstr "Dáta Y signál 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:202
 #, kde-format
 msgid "Y-Data Signal 1:"
-msgstr "Dáta"
+msgstr "Dáta Y signál 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNormalize)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:209
 #, kde-format
 msgid "Normalize:"
-msgstr "Normalizovať"
+msgstr "Normalizovať:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLineInterpolationPointsCount)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:78
@@ -20879,13 +20885,13 @@ msgstr "medziľahlé body na vyhodnotenie medzi každými dvoma bodmi"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:123
 #, kde-format
 msgid "Drop lines"
-msgstr "Hodnoty"
+msgstr "Zvislé čiary k osi"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineInterpolationPointsCount)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:133
 #, kde-format
 msgid "Interm. points:"
-msgstr "iterácie"
+msgstr "Medziľahlé body:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSkipGaps)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:140
@@ -20925,7 +20931,7 @@ msgstr "Dáta"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:30
 #, kde-format
 msgid "Simplification"
-msgstr "Výber"
+msgstr "Zjednodušenie"
 
 #. i18n: ectx: property (text), widget (QLabel, lOption2)
 #. i18n: ectx: property (text), widget (QLabel, lOption)
@@ -20939,13 +20945,13 @@ msgstr "Voľba:"
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:292
 #, kde-format
 msgid "Derivative:"
-msgstr "Orientácia"
+msgstr "Derivácia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lAccuracyOrder)
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:384
 #, kde-format
 msgid "Accuracy Order:"
-msgstr "Usporiadanie bajtov:"
+msgstr "Rád presnosti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation1)
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:108
@@ -20993,7 +20999,7 @@ msgstr "y=g(t)"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:67
 #, kde-format
 msgid "Advanced fit options"
-msgstr "Skryť voľby"
+msgstr "Rozšírené možnosti prispôsobenia"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, pbOptions)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:70
@@ -21037,7 +21043,7 @@ msgstr "Váha pre y dáta"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:155
 #, kde-format
 msgid "Y-Weight:"
-msgstr "Výška"
+msgstr "Hmotnosť Y:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:162
@@ -21049,7 +21055,7 @@ msgstr "Váha pre x dáta"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:165
 #, kde-format
 msgid "X-Weight:"
-msgstr "Výška"
+msgstr "Hmotnosť X:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:195
@@ -21067,7 +21073,7 @@ msgstr "Kategória:"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:217
 #, kde-format
 msgid "Data to fit"
-msgstr "Dátový typ:"
+msgstr "Dáta na prispôsobenie"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lComment)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:262
@@ -21103,7 +21109,7 @@ msgstr "Zdroj y dát"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:398
 #, kde-format
 msgid "How to weight the data points"
-msgstr "Počet bodov"
+msgstr "Ako váhovať dátové body"
 
 #. i18n: ectx: property (text), widget (QToolButton, lWeights)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:404
@@ -21121,13 +21127,13 @@ msgstr "Pridať stĺpec"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:472
 #, kde-format
 msgid "Fit results"
-msgstr "Výsledky:"
+msgstr "Výsledky prispôsobenia"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:514
 #, kde-format
 msgid "Degree of fit model"
-msgstr "Stupne voľnosti"
+msgstr "Stupeň modelu prispôsobenia"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:592
@@ -21163,7 +21169,7 @@ msgstr "Automaticky prispôsobiť"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:734
 #, kde-format
 msgid "Run"
-msgstr "Automaticky prispôsobiť"
+msgstr "Spustiť"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lParameters)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:762
@@ -21298,7 +21304,7 @@ msgstr "Tolerancia"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1154
 #, kde-format
 msgid "Calculation time"
-msgstr "Prepočítať"
+msgstr "Čas výpočtu"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1164
@@ -21322,7 +21328,7 @@ msgstr "Forma:"
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:297
 #, kde-format
 msgid "Cutoff2:"
-msgstr "prerušenie"
+msgstr "Medza 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilter)
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:423
@@ -21347,13 +21353,13 @@ msgstr "dvojstranné"
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:75
 #, kde-format
 msgid "Shifted"
-msgstr "Posunúť vľavo"
+msgstr "Posunuté"
 
 #. i18n: ectx: property (text), widget (QLabel, lXScale)
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:127
 #, kde-format
 msgid "X-Axis Scale:"
-msgstr "automatická mierka"
+msgstr "Mierka osi X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWindow)
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:193
@@ -21389,13 +21395,13 @@ msgstr "Vyhodnotiť"
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:440
 #, kde-format
 msgid "Tension:"
-msgstr "Rozmery"
+msgstr "Napätie:"
 
 #. i18n: ectx: property (text), widget (QLabel, lContinuity)
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:469
 #, kde-format
 msgid "Continuity:"
-msgstr "Obsah"
+msgstr "Spojitosť:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBias)
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:498
@@ -21419,7 +21425,7 @@ msgstr "Výplň:"
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:180
 #, kde-format
 msgid "Left value:"
-msgstr "Počiatočná hodnota"
+msgstr "Ľavá hodnota:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightValue)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:187
@@ -21431,19 +21437,19 @@ msgstr "svetlomodrá"
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:233
 #, kde-format
 msgid "Weight:"
-msgstr "Výška:"
+msgstr "Hmotnosť:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:489
 #, kde-format
 msgid "Polynom Order:"
-msgstr "Usporiadanie bajtov:"
+msgstr "Rád polynomu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColormap)
 #: src/kdefrontend/ui/exampleswidget.ui:73
 #, kde-format
 msgid "Examples:"
-msgstr "Veľkosť vzorky"
+msgstr "Príklady:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)
@@ -21475,7 +21481,7 @@ msgstr "Zadajte toleranciu pre konvergenciu algoritmu preloženia"
 #: src/kdefrontend/ui/fitoptionswidget.ui:69
 #, kde-format
 msgid "Tolerance:"
-msgstr "Tolerancia"
+msgstr "Tolerancia:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUseDataErrors)
 #: src/kdefrontend/ui/fitoptionswidget.ui:76
@@ -21503,7 +21509,7 @@ msgstr "Počet bodov na použitie pri vyhodnocovaní konečnej funkcie preložen
 #: src/kdefrontend/ui/fitoptionswidget.ui:98
 #, kde-format
 msgid "Evaluated points:"
-msgstr "Vyhodnotiť"
+msgstr "Vyhodnotené body:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEvalRange)
 #. i18n: ectx: property (text), widget (QLabel, lXRange)
@@ -21527,7 +21533,7 @@ msgstr "Zadajte maximálny počet iterácií pre algoritmus preloženia"
 #: src/kdefrontend/ui/fitoptionswidget.ui:115
 #, kde-format
 msgid "Max. iterations:"
-msgstr "Iterácie:"
+msgstr "Max. počet iterácií:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoRange)
 #: src/kdefrontend/ui/fitoptionswidget.ui:141
@@ -21539,7 +21545,7 @@ msgstr "Vybrať rozsah dát na použitie pre preloženie"
 #: src/kdefrontend/ui/fitoptionswidget.ui:144
 #, kde-format
 msgid "Auto fit range"
-msgstr "X rozsah:"
+msgstr "Automatický rozsah prispôsobenia"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoEvalRange)
 #: src/kdefrontend/ui/fitoptionswidget.ui:154
@@ -21577,7 +21583,7 @@ msgstr "Robustné preloženie:"
 #: src/kdefrontend/ui/fitoptionswidget.ui:235
 #, kde-format
 msgid "Confidence Interval"
-msgstr "Rozhranie"
+msgstr "Interval spoľahlivosti"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnit)
 #: src/kdefrontend/ui/fitsheadereditaddunitwidget.ui:17
@@ -21619,7 +21625,7 @@ msgstr "Hor. zarovnanie:"
 #: src/kdefrontend/ui/labelwidget.ui:84
 #, kde-format
 msgid "Vert. Alignment:"
-msgstr "Vertikálne medzery"
+msgstr "Vertikálne zarovnanie:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFontTeX)
 #: src/kdefrontend/ui/labelwidget.ui:111
@@ -21676,7 +21682,7 @@ msgstr "Posun X:"
 #: src/kdefrontend/ui/labelwidget.ui:494
 #, kde-format
 msgid "Mode:"
-msgstr "Model:"
+msgstr "Mód:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/kdefrontend/ui/labelwidget.ui:586
@@ -21688,7 +21694,7 @@ msgstr "Tvar:"
 #: src/kdefrontend/ui/labelwidget.ui:707
 #, kde-format
 msgid "Offset Y:"
-msgstr "Posun X:"
+msgstr "Posun Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/kdefrontend/ui/labelwidget.ui:785
@@ -21724,7 +21730,7 @@ msgstr "QoS"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:130
 #, kde-format
 msgid "Mean deviation"
-msgstr "Smerodajná odchýlka"
+msgstr "Stredná odchýlka"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:141
@@ -21736,7 +21742,7 @@ msgstr "Priemerná odchýlka okolo mediánu"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:152
 #, kde-format
 msgid "Median deviation"
-msgstr "Smerodajná odchýlka"
+msgstr "Mediánová odchýlka"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillQoS)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:206
@@ -21766,7 +21772,7 @@ msgstr "Typ správy"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:239
 #, kde-format
 msgid "Time Interval"
-msgstr "Rozhranie"
+msgstr "Časový interval"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillUpdate)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:244
@@ -21778,7 +21784,7 @@ msgstr "Na kliknutie"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:255
 #, kde-format
 msgid "Time interval:"
-msgstr "Rozhranie"
+msgstr "Časový interval:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, leWillUpdateInterval)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:262
@@ -21878,7 +21884,7 @@ msgstr "10"
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:241
 #, kde-format
 msgid "Mesh"
-msgstr "Mriežka"
+msgstr "Sieť"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbRelativeScaleEnabled)
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:248
@@ -21928,7 +21934,7 @@ msgstr "Dialóg"
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:33
 #, kde-format
 msgid "Installed Templates:"
-msgstr "Uložiť ako ša&blónu"
+msgstr "Nainštalované šablóny:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -21942,7 +21948,7 @@ msgstr "Náhľad"
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:102
 #, kde-format
 msgid "Location:"
-msgstr "Otočenie: "
+msgstr "Umiestnenie:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCache)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:23
@@ -21978,13 +21984,13 @@ msgstr "Spustenie"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:50
 #, kde-format
 msgid "New Project:"
-msgstr "Uloženie projektu"
+msgstr "Nový projekt:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:60
 #, kde-format
 msgid "Notebook:"
-msgstr "Poznámka"
+msgstr "Zápisník:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:86
@@ -22039,7 +22045,7 @@ msgstr "Počet bodov"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:166
 #, kde-format
 msgid "Omit group separator"
-msgstr "iterácie"
+msgstr "Vynechať oddeľovač skupín"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:173
@@ -22063,13 +22069,13 @@ msgstr "Automatické ukladanie"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:298
 #, kde-format
 msgid "Save  Calculations:"
-msgstr "Riešiť rovnice"
+msgstr "Uložiť výpočty:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:312
 #, kde-format
 msgid "Compatibility:"
-msgstr "Obsah"
+msgstr "Kompatibilita:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:319
@@ -22091,7 +22097,7 @@ msgstr "Dátový formát"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:329
 #, kde-format
 msgid "Tracing:"
-msgstr "Rozostup:"
+msgstr "Sledovanie:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
@@ -22137,13 +22143,13 @@ msgstr "Čísla riadkov"
 #: src/kdefrontend/ui/settingsnotebookpage.ui:54
 #, kde-format
 msgid "LaTeX Typesetting"
-msgstr "Skryť voľby"
+msgstr "Sadzba LaTeX"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnimations)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:61
 #, kde-format
 msgid "Animations"
-msgstr "Iterácie"
+msgstr "Animácie"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:90
@@ -22191,7 +22197,7 @@ msgstr "Skryť ovládače"
 #: src/kdefrontend/ui/settingsspreadsheetpage.ui:37
 #, kde-format
 msgid "Show plot designation"
-msgstr "Pozícia:"
+msgstr "Zobraziť určenie grafu"
 
 #. i18n: ectx: property (text), widget (QPushButton, bResetLayout)
 #: src/kdefrontend/ui/settingswelcomepage.ui:17
@@ -22221,7 +22227,7 @@ msgstr "Povoliť dvojité vyrovnávanie"
 #: src/kdefrontend/ui/settingsworksheetpage.ui:154
 #, kde-format
 msgid "Typesetting engine:"
-msgstr "Skryť voľby"
+msgstr "Sadzobný stroj:"
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:42
@@ -22233,13 +22239,13 @@ msgstr "Pridať:"
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
 #, kde-format
 msgid "Start Time:"
-msgstr "Začiatok:"
+msgstr "Čas začiatku:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueEnd)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
 #, kde-format
 msgid "End Value:"
-msgstr "Hodnota:"
+msgstr "Konečná hodnota:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
@@ -22269,7 +22275,7 @@ msgstr "Iterácie:"
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:308
 #, kde-format
 msgid "End Time:"
-msgstr "Dátum a čas"
+msgstr "Čas konca:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
@@ -22285,7 +22291,7 @@ msgstr "Hodnoty"
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:234
 #, kde-format
 msgid "Condition:"
-msgstr "Pripojenie:"
+msgstr "Podmienka:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
 #. i18n: ectx: property (text), widget (QLabel, lMaxDateTime)
@@ -22307,7 +22313,7 @@ msgstr "Hodnoty"
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:203
 #, kde-format
 msgid "DateTime Values"
-msgstr "DátumČas"
+msgstr "Hodnoty DátumČas"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -22320,31 +22326,31 @@ msgstr "Opraviť"
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:63
 #, kde-format
 msgid "Specify the name of the file to export."
-msgstr "Počiatočná hodnota"
+msgstr "Zadajte názov súboru na export."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:81
 #, kde-format
 msgid "Export header:"
-msgstr "Exportovať"
+msgstr "Exportovať hlavičku:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixVHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:104
 #, kde-format
 msgid "Export vertical header:"
-msgstr "Exportovať"
+msgstr "Exportovať zvislú hlavičku:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixHHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:121
 #, kde-format
 msgid "Export horizontal header:"
-msgstr "Exportovať"
+msgstr "Exportovať vodorovnú hlavičku:"
 
 #. i18n: ectx: property (text), widget (QLabel, lGridLines)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:162
 #, kde-format
 msgid "Grid lines:"
-msgstr "plná čiara"
+msgstr "Čiary mriežky:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCaptions)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:179
@@ -22386,13 +22392,13 @@ msgstr "Komentáre ako jednotky stĺpcov:"
 #: src/kdefrontend/ui/spreadsheet/flattencolumnswidget.ui:26
 #, kde-format
 msgid "Flatten selected columns relative to:"
-msgstr "Vybrané stĺpce"
+msgstr "Sploštiť vybrané stĺpce relatívne k:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHightlight)
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:31
 #, kde-format
 msgid "Highlight:"
-msgstr "Výška:"
+msgstr "Zvýraznenie:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColorMap)
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:38
@@ -22404,7 +22410,7 @@ msgstr "Mapa farieb"
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:117
 #, kde-format
 msgid "Colors"
-msgstr "Farba"
+msgstr "Farby"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:63
@@ -22422,7 +22428,7 @@ msgstr "f(x) = "
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
 #, kde-format
 msgid "auto update the values"
-msgstr "Automaticky aktualizovať:"
+msgstr "automaticky aktualizovať hodnoty"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:162
@@ -22434,7 +22440,7 @@ msgstr "Vybrané stĺpce"
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
 #, kde-format
 msgid "Placement"
-msgstr "Vybrané stĺpce"
+msgstr "Umiestnenie"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOnePlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
@@ -22452,7 +22458,7 @@ msgstr "Jedna oblasť grafu na graf"
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
 #, kde-format
 msgid "Existing Plot Area"
-msgstr "Oblasť zákresu"
+msgstr "Existujúca oblasť grafu"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:196
@@ -22534,7 +22540,7 @@ msgstr "b:"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:561
 #, kde-format
 msgid "Replace:"
-msgstr "Nahradiť"
+msgstr "Nahradiť:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:97
@@ -22546,7 +22552,7 @@ msgstr "Nájsť"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:134
 #, kde-format
 msgid "Search order"
-msgstr "Hľadať oblasť"
+msgstr "Poradie hľadania"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:147
@@ -22559,7 +22565,7 @@ msgstr "Rozlišovať veľkosť písmen"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:164
 #, kde-format
 msgid "Search in the selection only"
-msgstr "Prispôsobiť výberu"
+msgstr "Hľadať iba vo výbere"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:194
@@ -22597,7 +22603,7 @@ msgstr "Nahradiť"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:242
 #, kde-format
 msgid "&Find All"
-msgstr "Rozbaliť všetko"
+msgstr "Nájsť &všetko"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:249
@@ -22761,7 +22767,7 @@ msgstr "Žiadna chyba"
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:34
 #, kde-format
 msgid "Symmetric"
-msgstr "nesúmerne"
+msgstr "Súmerne"
 
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:31
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:35
@@ -22866,12 +22872,12 @@ msgstr "Logaritmické (log(x), log(y))"
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:172
 #, kde-format
 msgid "Logarithmic (log(x), y)"
-msgstr "Logaritmická"
+msgstr "Logaritmická (log(x), y)"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:173
 #, kde-format
 msgid "Logarithmic (x, log(y))"
-msgstr "Logaritmická"
+msgstr "Logaritmická (x, log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:174
 #, kde-format
@@ -22992,12 +22998,12 @@ msgstr "Horný limit"
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Unit"
-msgstr "Pridať nový"
+msgstr "Pridať novú jednotku"
 
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:36
 #, kde-format
 msgid "Enter unit name here"
-msgstr "Názov filtra:"
+msgstr "Zadajte tu názov jednotky"
 
 #: src/kdefrontend/widgets/FITSHeaderEditDialog.cpp:38
 #, kde-format
@@ -23026,17 +23032,17 @@ msgstr "Pridať nový"
 #, kde-format
 msgctxt "@title:window"
 msgid "Specify the New Keyword"
-msgstr "Počiatočná hodnota"
+msgstr "Zadajte nové kľúčové slovo"
 
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:54
 #, kde-format
 msgid "Specify the name"
-msgstr "Počiatočná hodnota"
+msgstr "Zadajte názov"
 
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:55
 #, kde-format
 msgid "Specify the value"
-msgstr "Počiatočná hodnota"
+msgstr "Zadajte hodnotu"
 
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:56
 #, kde-format
@@ -23064,7 +23070,7 @@ msgstr "Pridať nový"
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:51
 #, kde-format
 msgid "Remove selected keyword"
-msgstr "Odstrániť riadky"
+msgstr "Odstrániť vybrané kľúčové slovo"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:55
 #, kde-format
@@ -23080,7 +23086,7 @@ msgstr "Zatvoriť súbor"
 #, kde-format
 msgctxt "@title:window"
 msgid "Open FITS File"
-msgstr "Otvoriť súbor"
+msgstr "Otvoriť súbor FITS"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:209
 #, kde-format
@@ -23100,12 +23106,12 @@ msgstr "Pridať nový"
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:272
 #, kde-format
 msgid "Remove Keyword"
-msgstr "Odstrániť riadky"
+msgstr "Odstrániť kľúčové slovo"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:274
 #, kde-format
 msgid "Add Unit"
-msgstr "Pridať nový"
+msgstr "Pridať jednotku"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:322
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:329
@@ -23145,7 +23151,7 @@ msgstr "Nie je možné odstrániť povinné kľúčové slovo."
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:406
 #, kde-format
 msgid "Removing Keyword"
-msgstr "Odstrániť riadky"
+msgstr "Odstraňovanie kľúčového slova"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:120
 #, kde-format
@@ -23178,12 +23184,12 @@ msgstr "Prečiarknuté"
 #: src/kdefrontend/widgets/LabelWidget.cpp:143
 #, kde-format
 msgid "Super Script"
-msgstr "Skript"
+msgstr "Horný index"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:144
 #, kde-format
 msgid "Sub-Script"
-msgstr "Skript"
+msgstr "Dolný index"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:145
 #, kde-format
@@ -23203,12 +23209,12 @@ msgstr "Zarovnať"
 #: src/kdefrontend/widgets/LabelWidget.cpp:149
 #, kde-format
 msgid "Insert Symbol"
-msgstr "Vložiť"
+msgstr "Vložiť symbol"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:150
 #, kde-format
 msgid "Insert Date/Time"
-msgstr "DátumČas"
+msgstr "Vložiť dátum/čas"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:180
 #, kde-format
@@ -23268,7 +23274,7 @@ msgstr "Obdĺžnik smerujúci vľavo"
 #: src/kdefrontend/widgets/LabelWidget.cpp:191
 #, kde-format
 msgid "Right Pointing rectangle"
-msgstr "svetlooranžová"
+msgstr "Obdĺžnik smerujúci doprava"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:193
 #, kde-format
@@ -23338,7 +23344,7 @@ msgstr "Dátum a čas"
 #: src/kdefrontend/widgets/LineWidget.cpp:51
 #, kde-format
 msgid "Drop Lines"
-msgstr "Hodnoty"
+msgstr "Zvislé čiary k osi"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:52
 #, kde-format
@@ -23448,7 +23454,7 @@ msgstr "Aktuálny výber"
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:94
 #, kde-format
 msgid "Complete Worksheet"
-msgstr "Animovať pracovný zošit"
+msgstr "Kompletný pracovný hárok"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:97
 #, kde-format
@@ -23460,7 +23466,7 @@ msgstr "%1 (plocha)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Worksheet"
-msgstr "List"
+msgstr "Exportovať pracovný hárok"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:269
 #, kde-format
@@ -23580,7 +23586,7 @@ msgstr "proces zlyhal, návratový kód ="
 #: src/tools/TeXRenderer.cpp:258
 #, kde-format
 msgid "dvips not found"
-msgstr "Súbor nenájdený"
+msgstr "dvips nebol nájdený"
 
 #: src/tools/TeXRenderer.cpp:265
 #, kde-format
@@ -23590,7 +23596,7 @@ msgstr "proces dvips zlyhal, návratový kód ="
 #: src/tools/TeXRenderer.cpp:287
 #, kde-format
 msgid "convert not found"
-msgstr "Súbor nenájdený"
+msgstr "convert nebol nájdený"
 
 #: src/tools/TeXRenderer.cpp:295
 #, kde-format
