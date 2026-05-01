@@ -948,6 +948,10 @@ endif()
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
 target_link_libraries(labplot labplotbackendlib labplotlib labplotnsllib)
 
+if (ENABLE_PYTHON_SCRIPTING)
+    target_link_libraries(labplot Python3::Python)
+endif()
+
 #if(KUserFeedbackQt6_FOUND)
 #    target_link_libraries(labplot KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
 #endif()
