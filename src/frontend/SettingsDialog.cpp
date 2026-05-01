@@ -104,7 +104,7 @@ SettingsDialog::SettingsDialog(QWidget* parent, const QLocale& locale)
 	connect(m_scriptingPage, &SettingsScriptingPage::settingsChanged, this, &SettingsDialog::changed);
 
 	m_editorRootPage = new SettingsEditorPage(this);
-	m_editorRootItem = addPage(m_editorRootPage, i18n("Script Editor"));
+	m_editorRootItem = addSubPage(scriptingPageItem, m_editorRootPage, i18n("Editor"));
 	m_editorRootPage->addSubPages(m_editorRootItem, this);
 	m_editorRootItem->setIcon(QIcon::fromTheme(QLatin1String("accessories-text-editor")));
 	connect(m_editorRootPage, &SettingsEditorPage::settingsChanged, this, &SettingsDialog::changed);
