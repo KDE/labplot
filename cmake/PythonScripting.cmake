@@ -251,13 +251,33 @@ set(python_scripting_includes
 #   Windows: python3XX.lib    -> python3.lib
 #   macOS:  handled via install_name_tool, no change needed
 set(_python_lib ${Python3_LIBRARIES})
-if(NOT APPLE)
-    string(REGEX REPLACE "libpython3\\.[0-9]+\\.so" "libpython3.so" _python_sabi_lib "${Python3_LIBRARIES}")
+if(WIN32)
     string(REGEX REPLACE "python3[0-9]+\\.lib" "python3.lib" _python_sabi_lib "${_python_sabi_lib}")
     if(NOT "${_python_sabi_lib}" STREQUAL "${Python3_LIBRARIES}" AND EXISTS "${_python_sabi_lib}")
         message(STATUS "Python stable ABI library: ${_python_sabi_lib}")
         set(_python_lib ${_python_sabi_lib})
     endif()
+endif()
+set(_python_soname "")
+if(UNIX AND NOT APPLE)
+    foreach(_lib IN LISTS Python3_LIBRARIES)
+        if(NOT _lib)
+            continue()
+        endif()
+        get_filename_component(_real_lib "${_lib}" REALPATH)
+        get_filename_component(_lib_name "${_real_lib}" NAME)
+        if(_lib_name MATCHES "^libpython3(\\.[0-9]+[a-zA-Z]*)?\\.so(\\.[0-9]+)*$")
+            set(_python_soname "${_lib_name}")
+            break()
+        endif()
+    endforeach()
+    if(NOT _python_soname)
+        message(FATAL_ERROR
+            "Could not extract Python shared library name from Python3_LIBRARIES.\n"
+            "Python3_LIBRARIES = ${Python3_LIBRARIES}"
+        )
+    endif()
+    message(STATUS "Python library soname: ${_python_soname}")
 endif()
 set(python_scripting_link_libraries
     PySide6::pyside6

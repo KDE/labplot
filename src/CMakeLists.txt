@@ -948,10 +948,6 @@ endif()
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
 target_link_libraries(labplot labplotbackendlib labplotlib labplotnsllib)
 
-if (ENABLE_PYTHON_SCRIPTING)
-    target_link_libraries(labplot Python3::Python)
-endif()
-
 #if(KUserFeedbackQt6_FOUND)
 #    target_link_libraries(labplot KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
 #endif()
@@ -968,6 +964,23 @@ if(APPLE AND ENABLE_PYTHON_SCRIPTING)
             "@rpath/Python.framework/Versions/Current/Python"
             "$<TARGET_FILE:labplot>"
         COMMENT "labplot: rewriting Python framework path ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR} -> Current for stable ABI"
+        VERBATIM
+    )
+endif()
+
+# see more: https://github.com/python/cpython/issues/104612#issuecomment-1755544510
+if (ENABLE_PYTHON_SCRIPTING AND UNIX AND NOT APPLE)
+    find_program(PATCHELF_EXECUTABLE patchelf REQUIRED)
+    find_program(GREP_EXECUTABLE grep REQUIRED)
+    add_custom_command(
+        TARGET labplot POST_BUILD
+        COMMAND ${PATCHELF_EXECUTABLE}
+                --replace-needed
+                ${_python_soname}
+                libpython3.so
+                $<TARGET_FILE:labplot>
+        COMMAND ${CMAKE_COMMAND} -E env sh -c "${PATCHELF_EXECUTABLE} --print-needed $<TARGET_FILE:labplot> | ${GREP_EXECUTABLE} -qx libpython3.so"
+        COMMENT "labplot: replacing versioned Python soname ${_python_soname} -> libpython3.so"
         VERBATIM
     )
 endif()
