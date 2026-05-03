@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-30 00:39+0000\n"
-"PO-Revision-Date: 2026-04-17 07:09+0300\n"
+"PO-Revision-Date: 2026-05-02 19:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
@@ -487,7 +487,7 @@ msgstr "%1   (değer yok)"
 #: src/backend/core/AspectTreeModel.cpp:404
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
-msgstr "“%1” adı halihazırda kullanımda. Başka bir ad seçin."
+msgstr "“%1” adı hâlihazırda kullanımda. Başka bir ad seçin."
 
 #: src/backend/core/column/Column.cpp:112
 #, kde-format
@@ -7341,7 +7341,7 @@ msgstr "Betik çalıştırılamadı."
 #: src/backend/script/Script.cpp:322
 #, kde-format
 msgid "A script is already running."
-msgstr "Bir betik halihazırda çalışıyor."
+msgstr "Bir betik hâlihazırda çalışıyor."
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format
@@ -11350,7 +11350,7 @@ msgstr "Yeniden başlatmada güncellenir"
 #: src/frontend/AboutDialog.cpp:192
 #, kde-format
 msgid "Architecture:"
-msgstr "Mimari:"
+msgstr "Mimarî:"
 
 #: src/frontend/AboutDialog.cpp:193
 #, kde-format
@@ -13959,12 +13959,12 @@ msgstr "Uyarı"
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #, kde-format
 msgid "You already subscribed to a topic containing this one"
-msgstr "Bunu içeren bir konuya halihazırda abonesiniz"
+msgstr "Bunu içeren bir konuya hâlihazırda abonesiniz"
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
 #, kde-format
 msgid "You already subscribed to this topic"
-msgstr "Bu konuya halihazırda abonesiniz"
+msgstr "Bu konuya hâlihazırda abonesiniz"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twTopics)
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:980
@@ -14474,7 +14474,7 @@ msgstr "%1 Çubuk çizimler: “%2” şablonu yüklendi"
 #: src/frontend/dockwidgets/BaseDock.cpp:206
 #, kde-format
 msgid "Please choose another name, because this is already in use."
-msgstr "Lütfen başka bir ad seçin; çünkü bu ad halihazırda kullanımda."
+msgstr "Lütfen başka bir ad seçin; çünkü bu ad hâlihazırda kullanımda."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:205
 #, kde-format
@@ -15062,7 +15062,7 @@ msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
 "use another name."
 msgstr ""
-"Sağlanan değişken adı, halihazırda bir sabit için ayrılıyor. Lütfen başka "
+"Sağlanan değişken adı, hâlihazırda bir sabit için ayrılıyor. Lütfen başka "
 "bir ad kullanın."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:604
@@ -15071,7 +15071,7 @@ msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
 "use another name."
 msgstr ""
-"Sağlanan değişken adı, halihazırda bir işlev adı için ayrılıyor. Lütfen "
+"Sağlanan değişken adı, hâlihazırda bir işlev adı için ayrılıyor. Lütfen "
 "başka bir ad kullanın."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:607
@@ -17446,7 +17446,7 @@ msgstr "Proje Aç"
 #: src/frontend/MainWin.cpp:760
 #, kde-format
 msgid "The project file %1 is already opened."
-msgstr "%1 proje dosyası halihazırda açık."
+msgstr "%1 proje dosyası hâlihazırda açık."
 
 #: src/frontend/MainWin.cpp:760 src/frontend/MainWin.cpp:768
 #: src/frontend/MainWin.cpp:773
@@ -17566,7 +17566,7 @@ msgstr "MQTT İstemcisi%1"
 #: src/frontend/MainWin.cpp:2037
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
-msgstr "Bu makineyle halihazırda bir MQTT istemcisi var!"
+msgstr "Bu makineyle hâlihazırda bir MQTT istemcisi var!"
 
 #: src/frontend/MainWin.cpp:2041
 #, kde-format
@@ -18970,7 +18970,7 @@ msgstr "Matrisi dışa aktar"
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:261
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
-msgstr "Dosya halihazırda var. Üzerine yazmayı gerçekten istiyor musunuz?"
+msgstr "Dosya hâlihazırda var. Üzerine yazmayı gerçekten istiyor musunuz?"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:377
 #, kde-format
@@ -19274,12 +19274,12 @@ msgstr "Çizilecek veri seçilmedi."
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1291
 #, kde-format
 msgid "An already existing plot area has to be selected."
-msgstr "Halihazırda var olan bir çizim alanının seçilmesi gereklidir."
+msgstr "Hâlihazırda var olan bir çizim alanının seçilmesi gereklidir."
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1295
 #, kde-format
 msgid "An already existing worksheet has to be selected."
-msgstr "Halihazırda var olan bir çalışma sayfası seçilmeli."
+msgstr "Hâlihazırda var olan bir çalışma sayfası seçilmeli."
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1301
 #, kde-format
@@ -26536,12 +26536,12 @@ msgstr "FITS Dosyası Aç"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:208
 #, kde-format
 msgid "Cannot open file, file already opened."
-msgstr "Dosya açılamıyor, dosya halihazırda açık."
+msgstr "Dosya açılamıyor, dosya hâlihazırda açık."
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:208
 #, kde-format
 msgid "File already opened"
-msgstr "Dosya halihazırda açık"
+msgstr "Dosya hâlihazırda açık"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:266
 #, kde-format
@@ -26562,7 +26562,7 @@ msgstr "Birim Ekle"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:324
 #, kde-format
 msgid "Cannot add keyword, keyword already added"
-msgstr "Anahtar sözcük eklenemiyor; halihazırda eklenmiş"
+msgstr "Anahtar sözcük eklenemiyor; hâlihazırda eklenmiş"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:317
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:324
@@ -26574,7 +26574,7 @@ msgstr "Anahtar Sözcük Eklenemiyor"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:331
 #, kde-format
 msgid "Cannot add mandatory keyword, they are already present"
-msgstr "Zorunlu anahtar sözcük eklenemiyor; halihazırda varlar"
+msgstr "Zorunlu anahtar sözcük eklenemiyor; hâlihazırda varlar"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:375
 #, kde-format
