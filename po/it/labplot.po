@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-30 00:39+0000\n"
-"PO-Revision-Date: 2026-03-09 15:03+0100\n"
+"PO-Revision-Date: 2026-04-10 16:02+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -9631,8 +9631,7 @@ msgstr "Grafico del comportamento del processo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:683
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2011
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgid "Pareto Chart"
 msgstr "Grafico di Pareto"
 
@@ -9948,7 +9947,7 @@ msgstr "Etichetta di testo"
 #: src/frontend/worksheet/WorksheetView.cpp:1356
 #, kde-format
 msgid "text"
-msgstr ""
+msgstr "testo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2470
 #, kde-format
@@ -11179,18 +11178,16 @@ msgid "%1: set border shape"
 msgstr "%1: imposta la forma del bordo"
 
 #: src/backend/worksheet/Worksheet.cpp:171
-#, fuzzy, kde-format
-#| msgid "Window Visibility"
+#, kde-format
 msgid "Change &Visibility"
-msgstr "Visibilità delle finestre"
+msgstr "Cambia &visibilità"
 
 #: src/backend/worksheet/Worksheet.cpp:211
-#, fuzzy, kde-format
-#| msgid "%1: change size type"
+#, kde-format
 msgid "%1: change visibility"
 msgid_plural "%1: change visibility of %2 elements"
-msgstr[0] "%1: cambia il tipo di dimensione"
-msgstr[1] "%1: cambia il tipo di dimensione"
+msgstr[0] "%1: cambia la visibilità"
+msgstr[1] "%1: cambia la visibilità di %2 elementi"
 
 #: src/backend/worksheet/Worksheet.cpp:300
 #, kde-format
@@ -11869,8 +11866,7 @@ msgstr ""
 "sistemi disponibili o per abilitarne di nuovi"
 
 #: src/frontend/ActionsManager.cpp:510
-#, fuzzy, kde-format
-#| msgid "What's new"
+#, kde-format
 msgid "What's New"
 msgstr "Cosa c'è di nuovo"
 
@@ -16675,8 +16671,7 @@ msgid "Run Chart"
 msgstr "Grafico di andamento"
 
 #: src/frontend/GuiObserver.cpp:402
-#, fuzzy, kde-format
-#| msgid "Pareto Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pareto Chart"
 msgstr "Grafico di Pareto"
@@ -24191,7 +24186,7 @@ msgstr "Sparkline:"
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:187
 #, kde-format
 msgid "Sync Rows With:"
-msgstr ""
+msgstr "Sincronizza le righe con:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #. i18n: ectx: property (text), widget (QLabel, lAppearance)
@@ -26183,6 +26178,8 @@ msgstr "Benvenuto in LabPlot %1"
 msgid ""
 "See the full changelog for LabPlot %1 on our <a href=\"%2\">website</a>."
 msgstr ""
+"Vedi l'elenco completo delle modifiche di Labplot %1 sul nostro <a href="
+"\"%2\">sito web</a>."
 
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:44
