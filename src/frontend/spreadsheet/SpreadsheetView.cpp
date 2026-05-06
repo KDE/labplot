@@ -4617,9 +4617,28 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 					if (j != 0)
 						query += QLatin1String(", ");
 
-					QString text = col->asStringColumn()->textAt(row);
-					text = text.replace(QLatin1String("'"), QLatin1String("''"));
-					query += QLatin1Char('\'') + text + QLatin1Char('\'');
+					switch (col->columnMode()) {
+					case AbstractColumn::ColumnMode::Double: {
+						double value = col->valueAt(row);
+						if (std::isnan(value))
+							query += QLatin1String("NULL");
+						else
+							query += QString::number(value, 'g', 15);
+						break;
+					}
+					case AbstractColumn::ColumnMode::Integer:
+						query += QString::number(col->integerAt(row));
+						break;
+					case AbstractColumn::ColumnMode::BigInt:
+						query += QString::number(col->bigIntAt(row));
+						break;
+					default: {
+						QString text = col->asStringColumn()->textAt(row);
+						text = text.replace(QLatin1String("'"), QLatin1String("''"));
+						query += QLatin1Char('\'') + text + QLatin1Char('\'');
+						break;
+					}
+					}
 				}
 				query += QLatin1String(")");
 			}
