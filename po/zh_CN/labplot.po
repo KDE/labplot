@@ -1069,17 +1069,17 @@ msgstr "成功"
 #: src/backend/datasources/filters/AsciiFilter.cpp:203
 #, kde-format
 msgid "Device at end"
-msgstr ""
+msgstr "末端设备"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
-msgstr ""
+msgstr "未选择足够数量的行。请增加行数。"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
 #, kde-format
 msgid "Unable to open device"
-msgstr ""
+msgstr "无法打开设备"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
 #, kde-format
@@ -1089,17 +1089,17 @@ msgstr "没有检测到新行"
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
 msgid "Unable to determine the separator"
-msgstr ""
+msgstr "无法确定分隔符"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:213
 #, kde-format
 msgid "Invalid number of data columns"
-msgstr ""
+msgstr "无效的数据列数"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215
 #, kde-format
 msgid "Invalid number of column names"
-msgstr ""
+msgstr "列名称数量无效"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:217
 #, kde-format
@@ -1109,12 +1109,12 @@ msgstr "矩阵：不支持的列模式"
 #: src/backend/datasources/filters/AsciiFilter.cpp:219
 #, kde-format
 msgid "Insufficient memory (RAM)"
-msgstr ""
+msgstr "内存 (RAM) 不足"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:221
 #, kde-format
 msgid "Unable to parse header"
-msgstr ""
+msgstr "无法解析表头"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
@@ -1124,32 +1124,32 @@ msgstr "不支持的数据源"
 #: src/backend/datasources/filters/AsciiFilter.cpp:227
 #, kde-format
 msgid "Live: No column separator selected"
-msgstr ""
+msgstr "当前：未选择分隔符"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:229
 #, kde-format
 msgid "Live: No column modes set"
-msgstr ""
+msgstr "当前：没有设置列模式"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:231
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
-msgstr ""
+msgstr "已发现 Datetime 列，但未提供 Datetime 格式"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:233
 #, kde-format
 msgid "Header reading from device not allowed"
-msgstr ""
+msgstr "未允许从设备中读取表头"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:235
 #, kde-format
 msgid "Separator detection not allowed"
-msgstr ""
+msgstr "未允许分隔符检测"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:237
 #, kde-format
 msgid "Invalid separator"
-msgstr ""
+msgstr "无效的分隔符"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
@@ -1159,27 +1159,27 @@ msgstr "读取数据前必须初始化串行设备"
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
-msgstr ""
+msgstr "末尾列错误。它是不是小于起始列？"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:243
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
-msgstr ""
+msgstr "结束行错误。它是不是小于开始行？"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:245
 #, kde-format
 msgid "No data destination set"
-msgstr ""
+msgstr "未设置数据目标"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:247
 #, kde-format
 msgid "No columns"
-msgstr ""
+msgstr "无栏目"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:249
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
-msgstr ""
+msgstr "无法确定列模式。请检查它们是否撰写正确。"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:251
 #, kde-format
@@ -2468,7 +2468,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:749
 #, kde-format
 msgid "Timeout occured."
-msgstr ""
+msgstr "发生了超时。"
 
 #: src/backend/datasources/LiveDataSource.cpp:754
 #, kde-format
@@ -8667,7 +8667,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
 #, kde-format
 msgid "%1: interpolate '%2'"
-msgstr ""
+msgstr "%1：插值处理 '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2016
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:674
@@ -8678,12 +8678,12 @@ msgstr "'%1' 的插值"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2023
 #, kde-format
 msgid "%1: add interpolation curve"
-msgstr ""
+msgstr "%1：添加插值曲线"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2034
 #, kde-format
 msgid "%1: smooth '%2'"
-msgstr ""
+msgstr "%1：平滑处理 '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2035
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:677
@@ -8694,12 +8694,12 @@ msgstr "'%1' 的平滑"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2042
 #, kde-format
 msgid "%1: add smoothing curve"
-msgstr ""
+msgstr "%1：添加平滑曲线"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
 #, kde-format
 msgid "%1: fit to '%2'"
-msgstr ""
+msgstr "%1：拟合 '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2054
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:690
@@ -8711,12 +8711,12 @@ msgstr "'%1' 的拟合"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2081
 #, kde-format
 msgid "%1: add fit curve"
-msgstr ""
+msgstr "%1：添加拟合曲线"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2093
 #, kde-format
 msgid "%1: Fourier filtering of '%2'"
-msgstr ""
+msgstr "%1：'%2' 的 Fourier 滤波"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2094
 #, kde-format
@@ -8726,12 +8726,12 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2098
 #, kde-format
 msgid "%1: add Fourier filter curve"
-msgstr ""
+msgstr "%1：添加 Fourier 滤波曲线"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2109
 #, kde-format
 msgid "%1: add function of '%2'"
-msgstr ""
+msgstr "%1：添加 '%2' 的函数"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2110
 #, kde-format
@@ -8741,7 +8741,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2113
 #, kde-format
 msgid "%1: add function curve"
-msgstr ""
+msgstr "%1：添加函数曲线"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2162
 #: src/frontend/worksheet/WorksheetView.cpp:1339
