@@ -18873,7 +18873,7 @@ msgstr "Ekvidistantné číselné hodnoty"
 #, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Date&Time Values"
-msgstr "Ekvidistantné hodnoty dátumu a času&"
+msgstr "Ekvidistantné hodnoty dátumu &a času"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
 #, kde-format
