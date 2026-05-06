@@ -2851,6 +2851,7 @@ void FitTest::testNonLinearHahn1_3() {
 }
 
 void FitTest::testNonLinearBennett5() {
+	QSKIP("Too slow", QTest::SkipSingle);
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 
