@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-03-09 21:52+0300\n"
+"PO-Revision-Date: 2026-05-02 19:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
-"Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -523,7 +523,7 @@ msgstr "kendiliğinden güncelle: yanlış"
 #: src/backend/core/AspectTreeModel.cpp:439
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
-msgstr "“%1” adı halihazırda kullanımda. Başka bir ad seçin."
+msgstr "“%1” adı hâlihazırda kullanımda. Başka bir ad seçin."
 
 #: src/backend/core/column/Column.cpp:122
 #, kde-format
@@ -10226,7 +10226,7 @@ msgstr "Yeniden başlatmada güncellenir"
 #: src/frontend/AboutDialog.cpp:184
 #, kde-format
 msgid "Architecture:"
-msgstr "Mimari:"
+msgstr "Mimarî:"
 
 #: src/frontend/AboutDialog.cpp:185
 #, kde-format
@@ -12395,12 +12395,12 @@ msgstr "Uyarı"
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #, kde-format
 msgid "You already subscribed to a topic containing this one"
-msgstr "Bunu içeren bir konuya halihazırda abonesiniz"
+msgstr "Bunu içeren bir konuya hâlihazırda abonesiniz"
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
 #, kde-format
 msgid "You already subscribed to this topic"
-msgstr "Bu konuya halihazırda abonesiniz"
+msgstr "Bu konuya hâlihazırda abonesiniz"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twTopics)
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:979
@@ -12842,7 +12842,7 @@ msgstr "%1 Çubuk çizimler: “%2” şablonu yüklendi"
 #: src/frontend/dockwidgets/BaseDock.cpp:212
 #, kde-format
 msgid "Please choose another name, because this is already in use."
-msgstr "Lütfen başka bir ad seçin; çünkü bu ad halihazırda kullanımda."
+msgstr "Lütfen başka bir ad seçin; çünkü bu ad hâlihazırda kullanımda."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:278
 #, kde-format
@@ -15134,9 +15134,10 @@ msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Sayfaları ve diğer ögeleri toplamak için yeni bir klasör oluşturur"
 
 #: src/frontend/MainWin.cpp:678
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "From Live Data Source..."
 msgid "Live Data Source..."
-msgstr "Canlı Veri Kaynağı…"
+msgstr "Canlı Veri Kaynağından…"
 
 #: src/frontend/MainWin.cpp:679
 #, kde-format
@@ -15392,7 +15393,7 @@ msgstr "Proje Aç"
 #: src/frontend/MainWin.cpp:1536
 #, kde-format
 msgid "The project file %1 is already opened."
-msgstr "%1 proje dosyası halihazırda açık."
+msgstr "%1 proje dosyası hâlihazırda açık."
 
 #: src/frontend/MainWin.cpp:1536 src/frontend/MainWin.cpp:1544
 #: src/frontend/MainWin.cpp:1549
@@ -15530,7 +15531,7 @@ msgstr "MQTT İstemcisi%1"
 #: src/frontend/MainWin.cpp:2895
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
-msgstr "Bu makineyle halihazırda bir MQTT istemcisi var!"
+msgstr "Bu makineyle hâlihazırda bir MQTT istemcisi var!"
 
 #: src/frontend/MainWin.cpp:2899
 #, kde-format
@@ -16973,7 +16974,7 @@ msgstr "Matrisi dışa aktar"
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:264
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
-msgstr "Dosya halihazırda var. Üzerine yazmayı gerçekten istiyor musunuz?"
+msgstr "Dosya hâlihazırda var. Üzerine yazmayı gerçekten istiyor musunuz?"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:379
 #, kde-format
@@ -17143,7 +17144,7 @@ msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
 "use another name."
 msgstr ""
-"Sağlanan değişken adı, halihazırda bir sabit için ayrılıyor. Lütfen başka "
+"Sağlanan değişken adı, hâlihazırda bir sabit için ayrılıyor. Lütfen başka "
 "bir ad kullanın."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:174
@@ -17152,7 +17153,7 @@ msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
 "use another name."
 msgstr ""
-"Sağlanan değişken adı, halihazırda bir işlev adı için ayrılıyor. Lütfen "
+"Sağlanan değişken adı, hâlihazırda bir işlev adı için ayrılıyor. Lütfen "
 "başka bir ad kullanın."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:177
@@ -17308,12 +17309,12 @@ msgstr "Çizilecek veri seçilmedi."
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1116
 #, kde-format
 msgid "An already existing plot area has to be selected."
-msgstr "Halihazırda var olan bir çizim alanının seçilmesi gereklidir."
+msgstr "Hâlihazırda var olan bir çizim alanının seçilmesi gereklidir."
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1121
 #, kde-format
 msgid "An already existing worksheet has to be selected."
-msgstr "Halihazırda var olan bir çalışma sayfası seçilmeli."
+msgstr "Hâlihazırda var olan bir çalışma sayfası seçilmeli."
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1127
 #, kde-format
@@ -21629,9 +21630,10 @@ msgstr "Güncelle"
 
 #. i18n: ectx: property (text), widget (QPushButton, bWillUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:296
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Update Message"
 msgid "Update Will Message"
-msgstr "Vasiyet İletisini Güncelle"
+msgstr "İletiyi Güncelle"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:355
@@ -24359,12 +24361,12 @@ msgstr "FITS Dosyası Aç"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:209
 #, kde-format
 msgid "Cannot open file, file already opened."
-msgstr "Dosya açılamıyor, dosya halihazırda açık."
+msgstr "Dosya açılamıyor, dosya hâlihazırda açık."
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:209
 #, kde-format
 msgid "File already opened"
-msgstr "Dosya halihazırda açık"
+msgstr "Dosya hâlihazırda açık"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
 #, kde-format
@@ -24385,7 +24387,7 @@ msgstr "Birim Ekle"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
 #, kde-format
 msgid "Cannot add keyword, keyword already added"
-msgstr "Anahtar sözcük eklenemiyor; halihazırda eklenmiş"
+msgstr "Anahtar sözcük eklenemiyor; hâlihazırda eklenmiş"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
@@ -24397,7 +24399,7 @@ msgstr "Anahtar Sözcük Eklenemiyor"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
 #, kde-format
 msgid "Cannot add mandatory keyword, they are already present"
-msgstr "Zorunlu anahtar sözcük eklenemiyor; halihazırda varlar"
+msgstr "Zorunlu anahtar sözcük eklenemiyor; hâlihazırda varlar"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:380
 #, kde-format
@@ -25119,7 +25121,7 @@ msgstr "Dosya açılamadı:"
 #~ msgstr "Betik çalıştırılamadı."
 
 #~ msgid "A script is already running."
-#~ msgstr "Bir betik halihazırda çalışıyor."
+#~ msgstr "Bir betik hâlihazırda çalışıyor."
 
 #~ msgctxt "@title:column"
 #~ msgid "Name"
@@ -25166,29 +25168,20 @@ msgstr "Dosya açılamadı:"
 #~ msgid "A positive monotonic trend exists"
 #~ msgstr "Bir pozitif monotonik trend yok"
 
-#~ msgid "The data are randomly distributed"
-#~ msgstr "Veri rastgele biçimde dağıtılmamış"
+#~ msgid "The process is stable (random)"
+#~ msgstr "Süreç kararlı (rastgele)"
 
 #~ msgid "The data are not randomly distributed"
 #~ msgstr "Veri rastgele biçimde dağıtılmamış"
 
-#~ msgid "The data show clustering (too few runs)"
-#~ msgstr "Veride kümelenme var (pek az sayıda çalıştırma)"
+#~ msgid "The process shows shifting or clustering"
+#~ msgstr "Süreç kayma veya kümelenme gösteriyor"
 
-#~ msgid "The data show excessive alternation (too many runs)"
-#~ msgstr "Veride aşırı değişim var (pek çok sayıda çalıştırma)"
+#~ msgid "The process shows oscillations or over-control"
+#~ msgstr "Süreç salınımlar veya aşırı denetim gösteriyor"
 
-#~ msgid "The process is in control (random pattern)"
-#~ msgstr "Süreç kontrol altında (Rastgele örüntü)"
-
-#~ msgid "The process is not in control"
-#~ msgstr "Süreç kontrolde değil"
-
-#~ msgid "The process shows clustering (too few runs)"
-#~ msgstr "Süreç kümelenme gösteriyor (pek az sayıda çalıştırma)"
-
-#~ msgid "The process shows oscillation (too many runs)"
-#~ msgstr "Süreç salınım gösteriyor (pek çok sayıda çalıştırma)"
+#~ msgid "The process is unstable (non-random)"
+#~ msgstr "Süreç kararsız (rastgele olmayan)"
 
 #~ msgid "One-Sample t-Test"
 #~ msgstr "Tek Örneklem t Testi"
@@ -25237,6 +25230,12 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "Ramirez-Runger Runs Test"
 #~ msgstr "Ramirez-Runger Runs Testi"
+
+#~ msgid "<b>Reject the null hypothesis.</b>"
+#~ msgstr "<b>Sıfır hipotezini reddedin.</b>"
+
+#~ msgid "<b>Fail to reject the null hypothesis.</b>"
+#~ msgstr "<b>Sıfır hipotezini reddetmeyin.</b>"
 
 #~ msgid "N/A"
 #~ msgstr "Yok"
@@ -25418,11 +25417,14 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Number of Runs"
 #~ msgstr "Çalıştırma Sayısı"
 
-#~ msgid "Expected Runs"
-#~ msgstr "Beklenen Çalıştırmalar"
+#~ msgid "Stability Ratio"
+#~ msgstr "Kararlılık Oranı"
 
-#~ msgid "Effective Sample Size"
-#~ msgstr "Efektif Örneklem Boyutu"
+#~ msgid "Effective Degrees of Freedom"
+#~ msgstr "Etkili Özgürlük Dereceleri"
+
+#~ msgid "Average Successive Difference"
+#~ msgstr "Ortalama Ardışık Fark"
 
 #~ msgid "Statistical Conclusion"
 #~ msgstr "İstatistiksel Sonuç"
@@ -25432,107 +25434,89 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid ""
 #~ "At the significance level %1, the population mean is significantly "
-#~ "different from %2. Reject the null hypothesis."
-#~ msgstr ""
-#~ "%1 önem düzeyinde nüfus ortalaması %2 değerinden oldukça farklı. Sıfır "
-#~ "hipotezini reddedin."
+#~ "different from %2. %3"
+#~ msgstr "%1 önem düzeyinde nüfus ortalaması %2 değerinden oldukça farklı. %3"
 
 #~ msgid ""
 #~ "At the significance level %1, the population mean is not significantly "
-#~ "different from %2. Fail to reject the null hypothesis."
+#~ "different from %2. %3"
 #~ msgstr ""
-#~ "%1 önem düzeyinde nüfus ortalaması %2 değerinden pek farklı değil. Sıfır "
-#~ "hipotezini reddetme başarısız."
+#~ "%1 önem düzeyinde nüfus ortalaması %2 değerinden oldukça farklı değil. %3"
 
 #~ msgid ""
 #~ "At the significance level %1, the population means are significantly "
-#~ "different. Reject the null Hypothesis"
-#~ msgstr ""
-#~ "%1 önem düzeyinde nüfus ortalaması önemli ölçüde farklı. Sıfır hipotezini "
-#~ "reddedin."
+#~ "different. %2"
+#~ msgstr "%1 önem düzeyinde nüfus ortalaması önemli ölçüde farklı. %2"
 
 #~ msgid ""
 #~ "At the significance level %1, the population means are not significantly "
-#~ "different. Fail to reject the null Hypothesis"
-#~ msgstr ""
-#~ "%1 önem düzeyinde nüfus ortalamaları pek farklı değil. Sıfır hipotezini "
-#~ "reddetme başarısız."
+#~ "different. %2"
+#~ msgstr "%1 önem düzeyinde nüfus ortalamaları önemli ölçüde farklı değil. %2"
 
 #~ msgid ""
 #~ "At the significance level %1, at least one group mean is significantly "
-#~ "different. Reject the null Hypothesis"
-#~ msgstr ""
-#~ "%1 önem düzeyinde en az bir grubun ortalaması oldukça farklı. Sıfır "
-#~ "hipotezini reddedin."
+#~ "different. %2"
+#~ msgstr "%1 önem düzeyinde en az bir grubun ortalaması oldukça farklı. %2"
 
 #~ msgid ""
 #~ "At the significance level %1, no significant difference between group "
-#~ "means. Fail to reject the null Hypothesis"
+#~ "means. %2"
 #~ msgstr ""
 #~ "%1 önem düzeyinde grup ortalamaları arasında önemli ölçüde bir fark yok. "
-#~ "Sıfır hipotezini reddetme başarısız."
+#~ "%2"
 
 #~ msgid ""
 #~ "At the significance level %1, at least one group distribution is "
-#~ "significantly different. Reject the null Hypothesis"
-#~ msgstr ""
-#~ "%1 önem düzeyinde en az bir grup dağılımı oldukça farklı. Sıfır "
-#~ "hipotezini reddedin."
+#~ "significantly different. %2"
+#~ msgstr "%1 önem düzeyinde en az bir grup dağılımı oldukça farklı. %2"
 
 #~ msgid ""
 #~ "At the significance level %1, no significant difference between group "
-#~ "distributions. Fail to reject the null Hypothesis"
+#~ "distributions. %2"
 #~ msgstr ""
-#~ "%1 önem düzeyinde grup dağılımları arasında önemli ölçüde bir fark yok. "
-#~ "Sıfır hipotezini reddetme başarısız."
+#~ "%1 önem düzeyinde grup dağılımları arasında önemli ölçüde bir fark yok. %2"
 
 #~ msgid ""
 #~ "At the significance level %1, at least one group is significantly "
-#~ "different. Reject the null Hypothesis"
-#~ msgstr ""
-#~ "%1 önem düzeyinde en az bir grup oldukça farklı. Sıfır hipotezini "
-#~ "reddedin."
+#~ "different. %2"
+#~ msgstr "%1 önem düzeyinde en az bir grup oldukça farklı. %2"
 
 #~ msgid ""
-#~ "At the significance level %1, no significant difference between groups. "
-#~ "Fail to reject the null Hypothesis"
-#~ msgstr ""
-#~ "%1 önem düzeyinde gruplar arasında pek bir fark yok. Sıfır hipotezini "
-#~ "reddetme başarısız."
+#~ "At the significance level %1, no significant difference between groups. %2"
+#~ msgstr "%1 önem düzeyinde gruplar arasında pek bir fark yok. %2"
 
 #~ msgid "Column '%1' must be of integer type."
 #~ msgstr "“%1” sütunu tamsayı türünde olmalı."
 
 #~ msgid ""
 #~ "At the significance level %1, the observed frequencies do not follow the "
-#~ "expected frequency distribution. Reject the null Hypothesis"
+#~ "expected frequency distribution. %2"
 #~ msgstr ""
 #~ "%1 önem düzeyinde gözlenen sıklıklar beklenen sıklık dağılımını "
-#~ "izlemiyor. Sıfır hipotezini reddedin."
+#~ "izlemiyor. %2"
 
 #~ msgid ""
 #~ "At the significance level %1, the observed frequencies follow the "
-#~ "expected frequency distribution. Fail to reject the null Hypothesis"
+#~ "expected frequency distribution. %2"
 #~ msgstr ""
-#~ "%1 önem düzeyinde gözlenen sıklıklar beklenen sıklık dağılımını "
-#~ "izlemiyor. Sıfır hipotezini reddedin."
+#~ "%1 önem düzeyinde gözlenen sıklıklar beklenen sıklık dağılımını izliyor. "
+#~ "%2"
 
 #~ msgid "The size of each column in the contingency table must be equal."
 #~ msgstr "Olumsallık çizelgesendeki her bir sütunun boyutu eşit olmalı."
 
 #~ msgid ""
-#~ "At the significance level %1, both categorical variables are dependent. "
-#~ "Reject the null Hypothesis"
+#~ "At the significance level %1, both categorical variables are dependent. %2"
 #~ msgstr ""
 #~ "%1 önem düzeyinde her bir kategorik değişken birbirine bağımlı olmalıdır. "
-#~ "Sıfır hipotezini reddedin."
+#~ "%2"
 
 #~ msgid ""
 #~ "At the significance level %1, both categorical variables are independent. "
-#~ "Fail to reject the null Hypothesis"
+#~ "%2"
 #~ msgstr ""
-#~ "%1 önem düzeyinde her bir kategorik değişken bağımsızdır. Sıfır "
-#~ "hipotezini reddetme başarısız."
+#~ "%1 önem düzeyinde her bir kategorik değişken birbirine bağımlı olmalıdır. "
+#~ "%2"
 
 #~ msgid "Three columns are required."
 #~ msgstr "Üç sütun gerekiyor."
@@ -25563,99 +25547,80 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid ""
 #~ "At the significance level %1, the survival curves are significantly "
-#~ "different. Reject the null Hypothesis"
-#~ msgstr ""
-#~ "%1 önem düzeyinde hayatta kalma eğrileri oldukça farklı. Sıfır hipotezini "
-#~ "reddedin."
+#~ "different. %2"
+#~ msgstr "%1 önem düzeyinde hayatta kalma eğrileri oldukça farklı. %2"
 
 #~ msgid ""
 #~ "At the significance level %1, no significant difference between survival "
-#~ "curves. Fail to reject the null Hypothesis"
+#~ "curves. %2"
 #~ msgstr ""
 #~ "%1 önem düzeyinde hayatta kalma eğrileri arasında önemli ölçüde bir fark "
-#~ "yok. Sıfır hipotezini reddetme başarısız."
+#~ "yok. %2"
 
 #~ msgid ""
 #~ "At the significance level %1, there is a significant monotonic trend in "
-#~ "the data. Reject the null hypothesis."
+#~ "the data. %2"
 #~ msgstr ""
-#~ "%1 önem düzeyinde veride oldukça belirgin bir monotonik eğilim var. Sıfır "
-#~ "hipotezini reddedin."
+#~ "%1 önem düzeyinde veride oldukça belirgin bir monotonik eğilim var. %2"
 
 #~ msgid ""
 #~ "At the significance level %1, there is a significant positive monotonic "
-#~ "trend. Reject the null hypothesis."
+#~ "trend. %2"
 #~ msgstr ""
-#~ "%1 önem düzeyinde oldukça belirgin bir pozitif monotonik eğilim var. "
-#~ "Sıfır hipotezini reddedin."
+#~ "%1 önem düzeyinde oldukça belirgin bir pozitif monotonik eğilim var. %2"
 
 #~ msgid ""
 #~ "At the significance level %1, there is a significant negative monotonic "
-#~ "trend. Reject the null hypothesis."
+#~ "trend. %2"
 #~ msgstr ""
-#~ "%1 önem düzeyinde oldukça belirgin bir negatif monotonik eğilim var. "
-#~ "Sıfır hipotezini reddedin."
+#~ "%1 önem düzeyinde oldukça belirgin bir negatif monotonik eğilim var. %2"
 
 #~ msgid ""
-#~ "At the significance level %1, no significant monotonic trend detected. "
-#~ "Fail to reject the null hypothesis."
-#~ msgstr ""
-#~ "%1 önem düzeyinde belirgin bir monotonik trend algılanmadı. Sıfır "
-#~ "hipotezini reddetme başarısız."
+#~ "At the significance level %1, no significant monotonic trend detected. %2"
+#~ msgstr "%1 önem düzeyinde belirgin bir monotonik trend algılanmadı. %2"
 
 #~ msgid ""
-#~ "At the significance level %1, the data are not randomly distributed. "
-#~ "Reject the null hypothesis."
-#~ msgstr ""
-#~ "%1 önem düzeyinde veri rastgele biçimde dağıtılmamış. Sıfır hipotezini "
-#~ "reddedin."
+#~ "At the significance level %1, the data are not randomly distributed. %2"
+#~ msgstr "%1 önem düzeyinde veri rastgele biçimde dağıtılmamış. %2"
 
 #~ msgid ""
 #~ "At the significance level %1, the data show clustering or trend (too few "
-#~ "runs). Reject the null hypothesis."
+#~ "runs). %2"
 #~ msgstr ""
 #~ "%1 önem düzeyinde veri kümelenme veya eğilim gösteriyor (pek az sayıda "
-#~ "çalıştırma). Sıfır hipotezini reddedin."
+#~ "çalıştırma). %2"
 
 #~ msgid ""
-#~ "At the significance level %1, the data show excessive alternation (too "
-#~ "many runs). Reject the null hypothesis."
+#~ "At the significance level %1, the data show oscillation or over-control "
+#~ "(too many runs). %2"
 #~ msgstr ""
-#~ "%1 önem düzeyinde oldukça fazla değişimler var (pek çok sayıda "
-#~ "çalıştırma). Sıfır hipotezini reddedin."
+#~ "%1 önem düzeyinde süreç salınım gösteriyor (pek çok sayıda çalıştırma). %2"
 
 #~ msgid ""
 #~ "At the significance level %1, the data appear to be randomly distributed. "
-#~ "Fail to reject the null hypothesis."
-#~ msgstr ""
-#~ "%1 önem düzeyinde veri rastgele dağıtılmış gibi görünüyor. Sıfır "
-#~ "hipotezini reddetme başarısız."
+#~ "%2"
+#~ msgstr "%1 önem düzeyinde veri rastgele dağıtılmış gibi görünüyor. %2"
 
 #~ msgid ""
-#~ "At the significance level %1, the process is not in control. Reject the "
-#~ "null hypothesis."
-#~ msgstr "%1 önem düzeyinde süreç kontrolde değil. Sıfır hipotezini reddedin."
+#~ "At the significance level %1, the process is unstable (non-homogeneous). "
+#~ "%2"
+#~ msgstr "%1 önem düzeyinde süreç kararsız (homojen değil). %2"
 
 #~ msgid ""
-#~ "At the significance level %1, the process shows clustering (too few "
-#~ "runs). Reject the null hypothesis."
-#~ msgstr ""
-#~ "%1 önem düzeyinde süreç kümelenme gösteriyor (pek az sayıda çalıştırma). "
-#~ "Sıfır hipotezini reddedin."
+#~ "At the significance level %1, the process shows oscillation or over-"
+#~ "control. %2"
+#~ msgstr "%1 önem düzeyinde süreç salınım veya aşırı denetim gösteriyor. %2"
 
 #~ msgid ""
-#~ "At the significance level %1, the process shows oscillation (too many "
-#~ "runs). Reject the null hypothesis."
+#~ "At the significance level %1, the process shows clustering, shifting, or "
+#~ "trends. %2"
 #~ msgstr ""
-#~ "%1 önem düzeyinde süreç salınım gösteriyor (pek çok sayıda çalıştırma). "
-#~ "Sıfır hipotezini reddedin."
+#~ "%1 önem düzeyinde süreç kümelenme, kayma veya eğilimler gösteriyor. %2"
 
 #~ msgid ""
-#~ "At the significance level %1, the process appears to be in control. Fail "
-#~ "to reject the null hypothesis."
-#~ msgstr ""
-#~ "%1 önem düzeyinde süreç kontrolde gibi görünüyor. Sıfır hipotezini "
-#~ "reddetme başarısız."
+#~ "At the significance level %1, the process appears to be stable "
+#~ "(homogeneous). %2"
+#~ msgstr "%1 önem düzeyinde süreç kararlı gibi görünüyor (homojen). %2"
 
 #~ msgid "Non-Parametric"
 #~ msgstr "Parametrik Olmayan"
@@ -25795,6 +25760,9 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Inset Plot Area with Data"
 #~ msgstr "Veri İçeren Ek Çizim Alanı"
 
+#~ msgid "Pareto Chart"
+#~ msgstr "Pareto Grafiği"
+
 #~ msgid "Line Simplification"
 #~ msgstr "Çizgi Basitleştirme"
 
@@ -25810,26 +25778,17 @@ msgstr "Dosya açılamadı:"
 #~ msgid "%1: set y-offset"
 #~ msgstr "%1: Y ofsetini ayarla"
 
-#~ msgid "%1: simplify '%2'"
-#~ msgstr "%1: “%2” basitleştir"
-
 #~ msgid "Simplification of '%1'"
 #~ msgstr "“%1” Basitleştirmesi"
-
-#~ msgid "%1: add line simplification curve"
-#~ msgstr "%1: Çizgi basitleştirme eğrisi ekle"
-
-#~ msgid "Baseline Correction"
-#~ msgstr "Taban Çizgisi Düzeltmesi"
-
-#~ msgid "%1: baseline correction for '%2'"
-#~ msgstr "%1: “%2” için taban çizgisi düzeltmesi"
 
 #~ msgid "Baseline correction for '%1'"
 #~ msgstr "“%1” için taban çizgisi düzeltmesi"
 
-#~ msgid "%1: add baseline correction curve"
-#~ msgstr "%1: Taban çizgisi düzeltme eğrisi ekle"
+#~ msgid "Baseline Correction"
+#~ msgstr "Taban Çizgisi Düzeltmesi"
+
+#~ msgid "text"
+#~ msgstr "metin"
 
 #~ msgid "%1: add inset plot"
 #~ msgstr "%1: Ek çizim ekle"
@@ -25849,11 +25808,25 @@ msgstr "Dosya açılamadı:"
 #~ msgid "%1: set lower limit specification"
 #~ msgstr "%1: Alt sınır belirtimini ayarla"
 
+#~ msgid "Move Reference Line"
+#~ msgstr "Başvuru Çizgisini Taşı"
+
+#~ msgid "Move Reference Range"
+#~ msgstr "Başvuru Erimini Taşı"
+
 #~ msgid "%1: set baseline options and perform correction"
 #~ msgstr "%1: Taban çizgisi seçeneklerini ayarla ve düzeltmeyi gerçekleştir"
 
 #~ msgid "%1: set options and perform the line simplification"
 #~ msgstr "%1: Seçenekleri ayarla ve çizgi basitleştirmesini gerçekleştir"
+
+#~ msgid "Change &Visibility"
+#~ msgstr "&Görünürlüğü Değiştir"
+
+#~ msgid "%1: change visibility"
+#~ msgid_plural "%1: change visibility of %2 elements"
+#~ msgstr[0] "%1: Görünürlüğü değiştir"
+#~ msgstr[1] "%1: %2 ögenin görünürlüğünü değiştir"
 
 #~ msgid "Python scripting support"
 #~ msgstr "Python betik yazımı desteği"
@@ -25866,6 +25839,9 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "Import multiple files from a directory"
 #~ msgstr "Dizinden Birden Çok Dosya İçe Aktar"
+
+#~ msgid "What's New"
+#~ msgstr "Neler Yeni"
 
 #~ msgctxt "@action"
 #~ msgid "New Plot Area"
@@ -25882,6 +25858,12 @@ msgstr "Dosya açılamadı:"
 #~ msgctxt "@action"
 #~ msgid "Add New"
 #~ msgstr "Yeni Ekle"
+
+#~ msgid "Pause"
+#~ msgstr "Duraklat"
+
+#~ msgid "Continue"
+#~ msgstr "Sürdür"
 
 #~ msgid "Invalid data type '%1'"
 #~ msgstr "Geçersiz veri türü “%1”"
@@ -26106,6 +26088,12 @@ msgstr "Dosya açılamadı:"
 #~ "<ul><li>İstatiksel — Değerler, örneklemin istatistiksel değerlerine göre "
 #~ "hesaplanırlar.</li><li>Belirtim — Özel kullanıcı tabanlı değerler "
 #~ "kullanılacaktır.</li></ul>"
+
+#~ msgid "%1 reference lines: orientation changed"
+#~ msgstr "%1 başvuru satırı: Yönelim değiştirildi"
+
+#~ msgid "%1: orientation changed"
+#~ msgstr "%1: Yönelim değiştirildi"
 
 #~ msgid "Copy Name"
 #~ msgstr "Adı Kopyala"
@@ -26349,6 +26337,10 @@ msgstr "Dosya açılamadı:"
 #~ msgstr "Özellikler: Taban Çizgisi Düzeltme"
 
 #~ msgctxt "@title:window"
+#~ msgid "Pareto Chart"
+#~ msgstr "Pareto Grafiği"
+
+#~ msgctxt "@title:window"
 #~ msgid "Properties: Hypothesis Test"
 #~ msgstr "Özellikler: Hipotez Testi"
 
@@ -26369,8 +26361,17 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Select file to save function definition"
 #~ msgstr "İşlev Tanımı Kayıt Yeri Seç"
 
+#~ msgid "Live Data Source Toolbar"
+#~ msgstr "Canlı Veri Kaynağı Araç Çubuğu"
+
 #~ msgid "Script Toolbar"
 #~ msgstr "Betik Araç Çubuğu"
+
+#~ msgid "Saving %1..."
+#~ msgstr "%1 kaydediliyor…"
+
+#~ msgid "Project successfully saved (in %1 seconds)."
+#~ msgstr "Proje başarılı bir biçimde kaydedildi (%1 saniyede)."
 
 #~ msgid "Statistical Analysis"
 #~ msgstr "İstatistiksel Çözümleme"
@@ -26431,6 +26432,12 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "Time Series Analysis"
 #~ msgstr "Zaman Dizisi Çözümlemesi"
+
+#~ msgid "Import Headers"
+#~ msgstr "Başlıklar İçe Aktar"
+
+#~ msgid "Do you want to use the first row as column headers?"
+#~ msgstr "İlk satırı sütun başlıkları için kullanmak istiyor musunuz?"
 
 #~ msgid "Seasonal Decomposition for %1"
 #~ msgstr "%1 için Mevsimsel Ayrıştırma"
@@ -26559,11 +26566,28 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Low-Pass Jump:"
 #~ msgstr "Düşük geçiş atlaması:"
 
+#~ msgid "Sync Rows With:"
+#~ msgstr "Satırları şununla eşzamanla:"
+
 #~ msgid "Statistics:"
 #~ msgstr "İstatistikler:"
 
 #~ msgid "Subtraction"
 #~ msgstr "Çıkarma"
+
+#~ msgid ""
+#~ "<html><head/><body><p>When enabled, parameter uncertainties are scaled "
+#~ "with chi^2/dof which makes them independent of the given uncertainties "
+#~ "(relative σ).</p><p>Otherwise absolute σ is used (no uncertainties "
+#~ "scaling).</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Etkinleştirildiğinde, parametre kesinsizlikleri "
+#~ "chi^2/dof ile ölçeklenir; bu da onları verilen kesinsizliklerden bağımsız "
+#~ "kılar (göreceli σ).</p><p>Aksi taktirde σ mutlağı kullanılır (hiçbir "
+#~ "kesinsizlik ölçeklenmez).</p></body></html>"
+
+#~ msgid "Use relative uncertainties (enable scaling)"
+#~ msgstr "Göreceli kesinsizlikler kullan (ölçeklendirmeyi etkinleştir)"
 
 #~ msgid "Compression:"
 #~ msgstr "Sıkıştırma:"
@@ -26576,6 +26600,77 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "New Plot Areas in Multiple New Worksheets"
 #~ msgstr "Yeni Çalışma Sayfalarındaki Yeni Çizim Alanları"
+
+#~ msgid "What's New in LabPlot %1"
+#~ msgstr "LabPlot %1 sürümünde neler yeni"
+
+#~ msgid ""
+#~ "See the full changelog for LabPlot %1 on our <a href=\"%2\">website</a>."
+#~ msgstr ""
+#~ "LabPlot %1 için olan tam değişiklik günlüğüne <a href=\"%2\">web "
+#~ "sitemizden</a> bir göz atın."
+
+#~ msgid "%1: simplify '%2'"
+#~ msgstr "%1: “%2” basitleştir"
+
+#~ msgid "%1: add line simplification curve"
+#~ msgstr "%1: Çizgi basitleştirme eğrisi ekle"
+
+#~ msgid "%1: baseline correction for '%2'"
+#~ msgstr "%1: “%2” için taban çizgisi düzeltmesi"
+
+#~ msgid "%1: add baseline correction curve"
+#~ msgstr "%1: Taban çizgisi düzeltme eğrisi ekle"
+
+#~ msgid "The data are randomly distributed"
+#~ msgstr "Veri rastgele biçimde dağıtılmamış"
+
+#~ msgid "The data show clustering (too few runs)"
+#~ msgstr "Veride kümelenme var (pek az sayıda çalıştırma)"
+
+#~ msgid "The data show excessive alternation (too many runs)"
+#~ msgstr "Veride aşırı değişim var (pek çok sayıda çalıştırma)"
+
+#~ msgid "Expected Runs"
+#~ msgstr "Beklenen Çalıştırmalar"
+
+#~ msgid "Effective Sample Size"
+#~ msgstr "Efektif Örneklem Boyutu"
+
+#~ msgid ""
+#~ "At the significance level %1, the population mean is not significantly "
+#~ "different from %2. Fail to reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde nüfus ortalaması %2 değerinden pek farklı değil. Sıfır "
+#~ "hipotezini reddetme başarısız."
+
+#~ msgid ""
+#~ "At the significance level %1, the population means are not significantly "
+#~ "different. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde nüfus ortalamaları pek farklı değil. Sıfır hipotezini "
+#~ "reddetme başarısız."
+
+#~ msgid ""
+#~ "At the significance level %1, the observed frequencies follow the "
+#~ "expected frequency distribution. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde gözlenen sıklıklar beklenen sıklık dağılımını "
+#~ "izlemiyor. Sıfır hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, both categorical variables are independent. "
+#~ "Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde her bir kategorik değişken bağımsızdır. Sıfır "
+#~ "hipotezini reddetme başarısız."
+
+#~ msgid ""
+#~ "At the significance level %1, the data show excessive alternation (too "
+#~ "many runs). Reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde oldukça fazla değişimler var (pek çok sayıda "
+#~ "çalıştırma). Sıfır hipotezini reddedin."
 
 #~ msgid "No negative monotonic trend exists"
 #~ msgstr "Var olan negatif monotonik trend yok"
