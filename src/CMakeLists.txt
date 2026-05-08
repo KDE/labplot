@@ -760,6 +760,8 @@ target_link_libraries(labplotlib
     KF${KF_MAJOR_VERSION}::TextWidgets    # KTextEdit
     ${Poppler_LIBRARIES}
     qt${QT_VERSION_MAJOR}advanceddocking
+    KF${KF_MAJOR_VERSION}::TextEditor
+    KF${KF_MAJOR_VERSION}::SyntaxHighlighting
 )
 
 if(ENABLE_SCRIPTING)

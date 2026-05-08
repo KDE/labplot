@@ -82,12 +82,13 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     XmlGui
     NewStuffCore
     NewStuff
+    TextEditor
+    SyntaxHighlighting
 OPTIONAL_COMPONENTS
     DocTools
     Service
     Parts
     Purpose
-    SyntaxHighlighting
 )
 
 # TODO: make NewStuff optional?

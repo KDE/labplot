@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-30 00:39+0000\n"
+"POT-Creation-Date: 2026-05-07 00:39+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -490,7 +490,7 @@ msgstr "Oprettet"
 msgid "Comment"
 msgstr "Kommentar"
 
-#: src/backend/core/AspectTreeModel.cpp:173 src/frontend/MainWin.cpp:1144
+#: src/backend/core/AspectTreeModel.cpp:173 src/frontend/MainWin.cpp:1145
 #, fuzzy, kde-format
 #| msgid "Changed"
 msgid "Changed"
@@ -2026,7 +2026,7 @@ msgid "Unknown"
 msgstr "ukendt"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:232 src/frontend/MainWin.cpp:1236
+#: src/frontend/ActionsManager.cpp:232 src/frontend/MainWin.cpp:1237
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -6723,12 +6723,12 @@ msgstr "&Indsæt tomme kolonner"
 msgid "no note element found"
 msgstr "intet matrice-element fundet"
 
-#: src/backend/notebook/Notebook.cpp:64
+#: src/backend/notebook/Notebook.cpp:68
 #, kde-format
 msgid "Couldn't find the plugin for %1. Please check your installation."
 msgstr ""
 
-#: src/backend/notebook/Notebook.cpp:82
+#: src/backend/notebook/Notebook.cpp:86
 #, kde-format
 msgid "Couldn't create the sessions for %1. Please check your installation."
 msgstr ""
@@ -7720,7 +7720,7 @@ msgid "%1: run %2 script"
 msgstr ""
 
 #: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
-#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1228
+#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1229
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
@@ -8876,7 +8876,7 @@ msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
-#: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1254
+#: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1255
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -12256,7 +12256,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:216 src/frontend/MainWin.cpp:1192
+#: src/frontend/ActionsManager.cpp:216 src/frontend/MainWin.cpp:1193
 #, kde-format
 msgid "Workbook"
 msgstr ""
@@ -12266,7 +12266,7 @@ msgstr ""
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1200
+#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1201
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
@@ -12281,7 +12281,7 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1208 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:66
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -12309,7 +12309,7 @@ msgstr ""
 msgid "Creates a new Python script"
 msgstr "&Regneark"
 
-#: src/frontend/ActionsManager.cpp:264 src/frontend/MainWin.cpp:1262
+#: src/frontend/ActionsManager.cpp:264 src/frontend/MainWin.cpp:1263
 #, fuzzy, kde-format
 #| msgid "Notes"
 msgid "Note"
@@ -12320,7 +12320,7 @@ msgstr "Noter"
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:269 src/frontend/MainWin.cpp:1184
+#: src/frontend/ActionsManager.cpp:269 src/frontend/MainWin.cpp:1185
 #, kde-format
 msgid "Folder"
 msgstr "Mappe"
@@ -12647,7 +12647,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "%1: Klip markerede celler"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:648 src/frontend/MainWin.cpp:1604
+#: src/frontend/ActionsManager.cpp:648 src/frontend/MainWin.cpp:1605
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
@@ -14517,7 +14517,7 @@ msgid "Open LabPlot Project"
 msgstr "Åbn projekt"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:717
+#: src/frontend/MainWin.cpp:718
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -14727,7 +14727,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:2037
+#: src/frontend/MainWin.cpp:2047
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -16316,13 +16316,13 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:38
-#: src/frontend/ProjectExplorer.cpp:747
+#: src/frontend/ProjectExplorer.cpp:749
 #, kde-format
 msgid "Case Sensitive"
 msgstr ""
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:42
-#: src/frontend/ProjectExplorer.cpp:755
+#: src/frontend/ProjectExplorer.cpp:757
 #, kde-format
 msgid "Match Complete Word"
 msgstr ""
@@ -17133,7 +17133,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:194 src/frontend/MainWin.cpp:624
+#: src/frontend/GuiObserver.cpp:194 src/frontend/MainWin.cpp:625
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
@@ -18121,142 +18121,142 @@ msgid "&Windows"
 msgstr "&Vinduer"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:183 src/frontend/ui/settingsworksheetpage.ui:106
+#: src/frontend/MainWin.cpp:184 src/frontend/ui/settingsworksheetpage.ui:106
 #: src/frontend/worksheet/WorksheetView.cpp:291
 #, kde-format
 msgid "Presenter Mode"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:183
+#: src/frontend/MainWin.cpp:184
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:197
+#: src/frontend/MainWin.cpp:198
 #, fuzzy, kde-format
 #| msgid "Welcome to LabPlot"
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Velkommen til LabPlot"
 
-#: src/frontend/MainWin.cpp:486
+#: src/frontend/MainWin.cpp:487
 #, fuzzy, kde-format
 #| msgid "The current project %1 has been modified. Do you want to save it?"
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Det aktuelle projekt %1 er blevet ændret. Vil du gemme det?"
 
-#: src/frontend/MainWin.cpp:487
+#: src/frontend/MainWin.cpp:488
 #, kde-format
 msgid "Save Project"
 msgstr "Gem projekt"
 
-#: src/frontend/MainWin.cpp:583
+#: src/frontend/MainWin.cpp:584
 #, fuzzy, kde-format
 #| msgid "%1: clear"
 msgid "%1: created"
 msgstr "%1: Ryd"
 
-#: src/frontend/MainWin.cpp:611
+#: src/frontend/MainWin.cpp:612
 #, fuzzy, kde-format
 #| msgid "Project Explorer"
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Projektudforsker"
 
-#: src/frontend/MainWin.cpp:636
+#: src/frontend/MainWin.cpp:637
 #, fuzzy, kde-format
 #| msgid "Worksheet printed"
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Arbejdsark udskrevet"
 
-#: src/frontend/MainWin.cpp:645
+#: src/frontend/MainWin.cpp:646
 #, fuzzy, kde-format
 #| msgid "Density"
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Tæthed"
 
-#: src/frontend/MainWin.cpp:722
+#: src/frontend/MainWin.cpp:723
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
 msgstr "Åbn projekt"
 
-#: src/frontend/MainWin.cpp:728
+#: src/frontend/MainWin.cpp:729
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "Luk projekt"
 
-#: src/frontend/MainWin.cpp:729
+#: src/frontend/MainWin.cpp:730
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:736
+#: src/frontend/MainWin.cpp:737
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:740
+#: src/frontend/MainWin.cpp:741
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Åbn projekt"
 
-#: src/frontend/MainWin.cpp:760
+#: src/frontend/MainWin.cpp:761
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Projektfilen %1 er allerede åben."
 
-#: src/frontend/MainWin.cpp:760 src/frontend/MainWin.cpp:768
-#: src/frontend/MainWin.cpp:773
+#: src/frontend/MainWin.cpp:761 src/frontend/MainWin.cpp:769
+#: src/frontend/MainWin.cpp:774
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Open Project"
 msgstr "Åbn projekt"
 
-#: src/frontend/MainWin.cpp:768
+#: src/frontend/MainWin.cpp:769
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "The project file %1 doesn't exist."
 msgstr "Projektfilen %1 er allerede åben."
 
-#: src/frontend/MainWin.cpp:773
+#: src/frontend/MainWin.cpp:774
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't read the project file %1."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/frontend/MainWin.cpp:781
+#: src/frontend/MainWin.cpp:782
 #, kde-format
 msgid "Loading %1..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:832
+#: src/frontend/MainWin.cpp:833
 #, fuzzy, kde-format
 #| msgid "Project %1 opened"
 msgid "%1: opened"
 msgstr "Projektet %1 åbnet"
 
-#: src/frontend/MainWin.cpp:867
+#: src/frontend/MainWin.cpp:868
 #, fuzzy, kde-format
 #| msgid "Project successfully opened."
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projektet blev åbnet."
 
-#: src/frontend/MainWin.cpp:963
+#: src/frontend/MainWin.cpp:964
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Gem projekt"
 
-#: src/frontend/MainWin.cpp:965
+#: src/frontend/MainWin.cpp:966
 #, fuzzy, kde-format
 #| msgid "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"
 msgid ""
@@ -18264,83 +18264,83 @@ msgid ""
 "*.LML.XZ)"
 msgstr "LabPlot-projekter (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"
 
-#: src/frontend/MainWin.cpp:992
+#: src/frontend/MainWin.cpp:993
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for reading!"
 msgid "Couldn't open the temporary file for writing."
 msgstr "Beklager. Kunne ikke åbne filen til læsning!"
 
-#: src/frontend/MainWin.cpp:997
+#: src/frontend/MainWin.cpp:998
 #, kde-format
 msgid "Saving %1..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1075
+#: src/frontend/MainWin.cpp:1076
 #, kde-format
 msgid "Project saved"
 msgstr "Projekt gemt"
 
-#: src/frontend/MainWin.cpp:1090
+#: src/frontend/MainWin.cpp:1091
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1094
+#: src/frontend/MainWin.cpp:1095
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/frontend/MainWin.cpp:1105
+#: src/frontend/MainWin.cpp:1106
 #, fuzzy, kde-format
 #| msgid "Project successfully opened."
 msgid "Project successfully saved (in %1 seconds)."
 msgstr "Projektet blev åbnet."
 
-#: src/frontend/MainWin.cpp:1159 src/frontend/MainWin.cpp:1171
+#: src/frontend/MainWin.cpp:1160 src/frontend/MainWin.cpp:1172
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1161 src/frontend/MainWin.cpp:1173
+#: src/frontend/MainWin.cpp:1162 src/frontend/MainWin.cpp:1174
 #, kde-format
 msgid "%1 printed"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1933
+#: src/frontend/MainWin.cpp:1943
 #, fuzzy, kde-format
 #| msgid "Data options"
 msgid "Kaggle CLI tool not found"
 msgstr "Datatilvalg"
 
-#: src/frontend/MainWin.cpp:1934
+#: src/frontend/MainWin.cpp:1944
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2000
+#: src/frontend/MainWin.cpp:2010
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2007
+#: src/frontend/MainWin.cpp:2017
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2029
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2037
+#: src/frontend/MainWin.cpp:2047
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2041
+#: src/frontend/MainWin.cpp:2051
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"
@@ -18792,6 +18792,7 @@ msgstr "Indlæs fra"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/frontend/PlotTemplateDialog.cpp:44
+#: src/frontend/SettingsNotebookPage.cpp:47
 #: src/frontend/SettingsWorksheetPage.cpp:66
 #: src/frontend/SettingsWorksheetPage.cpp:82
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:94
@@ -18932,28 +18933,28 @@ msgid ""
 "this."
 msgstr ""
 
-#: src/frontend/ProjectExplorer.cpp:764
+#: src/frontend/ProjectExplorer.cpp:766
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr ""
 
-#: src/frontend/ProjectExplorer.cpp:980
+#: src/frontend/ProjectExplorer.cpp:982
 #, kde-format
 msgid "%1 elements: set visible: %2"
 msgstr ""
 
-#: src/frontend/ProjectExplorer.cpp:1008
+#: src/frontend/ProjectExplorer.cpp:1010
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "%1: Klip markerede celler"
 
-#: src/frontend/ProjectExplorer.cpp:1010
+#: src/frontend/ProjectExplorer.cpp:1012
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr ""
 
-#: src/frontend/ProjectExplorer.cpp:1014
+#: src/frontend/ProjectExplorer.cpp:1016
 #: src/frontend/worksheet/WorksheetView.cpp:1459
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
@@ -18962,7 +18963,7 @@ msgid_plural "Delete selected objects"
 msgstr[0] "%1: Klip markerede celler"
 msgstr[1] "%1: Klip markerede celler"
 
-#: src/frontend/ProjectExplorer.cpp:1020
+#: src/frontend/ProjectExplorer.cpp:1022
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "Project Explorer: delete %1 selected object"
@@ -19262,43 +19263,43 @@ msgstr ""
 msgid "If enabled spreadsheet and matrix data is saved in the project file"
 msgstr ""
 
-#: src/frontend/SettingsNotebookPage.cpp:30
+#: src/frontend/SettingsNotebookPage.cpp:35
 #, fuzzy, kde-format
 #| msgid "Height"
 msgid "Enable syntax highlighting"
 msgstr "Højde"
 
-#: src/frontend/SettingsNotebookPage.cpp:31
+#: src/frontend/SettingsNotebookPage.cpp:36
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Enable syntax completion"
 msgstr "Dataformat"
 
-#: src/frontend/SettingsNotebookPage.cpp:32
+#: src/frontend/SettingsNotebookPage.cpp:37
 #, fuzzy, kde-format
 #| msgid "File name"
 msgid "Show line numbers"
 msgstr "Filnavn"
 
-#: src/frontend/SettingsNotebookPage.cpp:33
+#: src/frontend/SettingsNotebookPage.cpp:38
 #, kde-format
 msgid ""
 "Use LaTeX typesetting for the results of calculations, if supported by the "
 "backend system."
 msgstr ""
 
-#: src/frontend/SettingsNotebookPage.cpp:34
+#: src/frontend/SettingsNotebookPage.cpp:39
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Animate transitions"
 msgstr "Rotation"
 
-#: src/frontend/SettingsNotebookPage.cpp:36
+#: src/frontend/SettingsNotebookPage.cpp:41
 #, kde-format
 msgid "Automatically re-evaluate all entries below the current one."
 msgstr ""
 
-#: src/frontend/SettingsNotebookPage.cpp:37
+#: src/frontend/SettingsNotebookPage.cpp:42
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr ""
@@ -21219,7 +21220,7 @@ msgstr ""
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4631
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4650
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to insert values into the table."
@@ -26836,55 +26837,62 @@ msgstr "Åbn projekt"
 msgid "Appearance"
 msgstr "Varians"
 
+#. i18n: ectx: property (text), widget (QLabel, lTheme)
+#: src/frontend/ui/settingsnotebookpage.ui:36
+#: src/frontend/ui/settingsworksheetpage.ui:171
+#, kde-format
+msgid "Theme:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxHighlighting)
-#: src/frontend/ui/settingsnotebookpage.ui:33
+#: src/frontend/ui/settingsnotebookpage.ui:78
 #, fuzzy, kde-format
 #| msgid "Height"
 msgid "Syntax Highlighting"
 msgstr "Højde"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxCompletion)
-#: src/frontend/ui/settingsnotebookpage.ui:40
+#: src/frontend/ui/settingsnotebookpage.ui:85
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Syntax Completion"
 msgstr "Dataformat"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLineNumbers)
-#: src/frontend/ui/settingsnotebookpage.ui:47
+#: src/frontend/ui/settingsnotebookpage.ui:92
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Line Numbers"
 msgstr "Antal punkter"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLatexTypesetting)
-#: src/frontend/ui/settingsnotebookpage.ui:54
+#: src/frontend/ui/settingsnotebookpage.ui:99
 #, kde-format
 msgid "LaTeX Typesetting"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnimations)
-#: src/frontend/ui/settingsnotebookpage.ui:61
+#: src/frontend/ui/settingsnotebookpage.ui:106
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Animations"
 msgstr "Rotation"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: src/frontend/ui/settingsnotebookpage.ui:90
+#: src/frontend/ui/settingsnotebookpage.ui:135
 #, fuzzy, kde-format
 #| msgid "Tab position"
 msgid "Evaluation"
 msgstr "Fanebladsposition"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkReevaluateEntries)
-#: src/frontend/ui/settingsnotebookpage.ui:97
+#: src/frontend/ui/settingsnotebookpage.ui:142
 #, kde-format
 msgid "Re-evaluate entries automatically"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAskConfirmation)
-#: src/frontend/ui/settingsnotebookpage.ui:104
+#: src/frontend/ui/settingsnotebookpage.ui:149
 #, kde-format
 msgid "Ask for confirmation when restarting"
 msgstr ""
@@ -26932,12 +26940,6 @@ msgstr ""
 #: src/frontend/ui/settingsworksheetpage.ui:164
 #, kde-format
 msgid "Double buffering"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lTheme)
-#: src/frontend/ui/settingsworksheetpage.ui:171
-#, kde-format
-msgid "Theme:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPresenterModeInteractive)
