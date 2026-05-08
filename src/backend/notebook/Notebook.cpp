@@ -22,7 +22,7 @@
 #include "frontend/notebook/NotebookView.h"
 #endif
 
-#include <cantor/cantor_version.h>
+#include <cantor/cantorlibs_version.h>
 #include <cantor/panelplugin.h>
 #include <cantor/panelpluginhandler.h>
 #include <cantor/worksheetaccess.h>

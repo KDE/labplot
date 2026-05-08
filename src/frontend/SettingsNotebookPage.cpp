@@ -21,7 +21,7 @@
 #include <KConfigSkeleton>
 #include <KCoreConfigSkeleton>
 #include <cantor/backend.h>
-#include <cantor/cantor_version.h>
+#include <cantor/cantorlibs_version.h>
 #include <cantor/worksheetaccess.h>
 #endif
 

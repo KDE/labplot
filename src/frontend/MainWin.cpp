@@ -100,7 +100,7 @@
 #include "backend/notebook/Notebook.h"
 #include "frontend/notebook/NotebookView.h"
 #include <cantor/backend.h>
-#include <cantor/cantor_version.h>
+#include <cantor/cantorlibs_version.h>
 #endif
 
 
