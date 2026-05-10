@@ -265,21 +265,65 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 
 	// DEBUG("SpreadsheetModel::setData() value = " << STDSTRING(value.toString()))
 
+	// auto-convert the column mode for empty columns if the entered value doesn't match the current mode.
+	// wrap the mode change and the value setting into a single undo macro so they can be undone in one step.
+	bool modeConverted = false;
+	if (role == Qt::EditRole && !value.toString().isEmpty() && !column->hasValues()) {
+		const auto mode = column->columnMode();
+		auto newMode = mode;
+
+		if (mode == AbstractColumn::ColumnMode::Double) {
+			bool ok;
+			QLocale().toDouble(value.toString(), &ok);
+			if (!ok)
+				newMode = AbstractColumn::ColumnMode::Text;
+		} else if (mode == AbstractColumn::ColumnMode::Integer) {
+			bool ok;
+			QLocale().toInt(value.toString(), &ok);
+			if (!ok) {
+				QLocale().toDouble(value.toString(), &ok);
+				newMode = ok ? AbstractColumn::ColumnMode::Double : AbstractColumn::ColumnMode::Text;
+			}
+		} else if (mode == AbstractColumn::ColumnMode::BigInt) {
+			bool ok;
+			QLocale().toLongLong(value.toString(), &ok);
+			if (!ok) {
+				QLocale().toDouble(value.toString(), &ok);
+				newMode = ok ? AbstractColumn::ColumnMode::Double : AbstractColumn::ColumnMode::Text;
+			}
+		}
+
+		if (newMode != mode) {
+			column->beginMacro(i18n("%1: change column type and set value", column->name()));
+			column->setColumnMode(newMode);
+			modeConverted = true;
+		}
+	}
+
 	// don't do anything if no new value was provided
 	if (column->columnMode() == AbstractColumn::ColumnMode::Double) {
 		bool ok;
 		double new_value = QLocale().toDouble(value.toString(), &ok);
 		if (ok) {
-			if (column->valueAt(row) == new_value)
+			if (column->valueAt(row) == new_value) {
+				if (modeConverted)
+					column->endMacro();
 				return false;
+			}
 		} else {
 			// an empty (non-numeric value) was provided
-			if (std::isnan(column->valueAt(row)))
+			if (std::isnan(column->valueAt(row))) {
+				if (modeConverted)
+					column->endMacro();
 				return false;
+			}
 		}
 	} else {
-		if (column->isValid(row) && column->asStringColumn()->textAt(row) == value.toString())
+		if (column->isValid(row) && column->asStringColumn()->textAt(row) == value.toString()) {
+			if (modeConverted)
+				column->endMacro();
 			return false;
+		}
 	}
 
 	switch (role) {
@@ -309,6 +353,8 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 				}
 			}
 		}
+		if (modeConverted)
+			column->endMacro();
 		return true;
 	}
 	case static_cast<int>(CustomDataRole::MaskingRole):
@@ -319,6 +365,8 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 		return true;
 	}
 
+	if (modeConverted)
+		column->endMacro();
 	return false;
 }
 
