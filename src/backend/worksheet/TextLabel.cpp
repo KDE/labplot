@@ -474,8 +474,11 @@ QRectF TextLabelPrivate::size() {
 	double w, h;
 	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
 		// image size is in pixel, convert to scene units
-		w = teXImage.width() * teXImageScaleFactor;
-		h = teXImage.height() * teXImageScaleFactor;
+		const qreal imageDpr = (teXImage.devicePixelRatio() > 0.0) ? teXImage.devicePixelRatio() : 1.0;
+		const qreal effectiveZoom = (zoomFactor > 0.0) ? zoomFactor : 1.0;
+
+		w = (teXImage.width() / imageDpr) * teXImageScaleFactor / effectiveZoom;
+		h = (teXImage.height() / imageDpr) * teXImageScaleFactor / effectiveZoom;
 	} else {
 		// size is in points, convert to scene units
 		//  TODO: the shift and scaling is just a workaround to avoid the big bounding box
@@ -697,8 +700,11 @@ void TextLabelPrivate::updateBoundingRect() {
 		// image size is in pixel, convert to scene units.
 		// the image is scaled so we have a good image quality when the worksheet was zoomed,
 		// for the bounding rect we need to scale back since it's scaled again in paint() when drawing the rect
-		w = teXImage.width() * teXImageScaleFactor / zoomFactor;
-		h = teXImage.height() * teXImageScaleFactor / zoomFactor;
+		const qreal imageDpr = (teXImage.devicePixelRatio() > 0.0) ? teXImage.devicePixelRatio() : 1.0;
+		const qreal effectiveZoom = (zoomFactor > 0.0) ? zoomFactor : 1.0;
+
+		w = (teXImage.width() / imageDpr) * teXImageScaleFactor / effectiveZoom;
+		h = (teXImage.height() / imageDpr) * teXImageScaleFactor / effectiveZoom;
 	} else {
 		// size is in points, convert to scene units
 		// QDEBUG(" BOUNDING RECT = " << m_textItem->scaledBoundingRect())

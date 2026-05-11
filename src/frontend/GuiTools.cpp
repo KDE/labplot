@@ -351,8 +351,25 @@ QImage GuiTools::importPDFFile(const QString& fileName) {
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
-	const static int dpi = QGuiApplication::primaryScreen()->physicalDotsPerInchX();
-	auto image = page->renderToImage(dpi, dpi);
+	QScreen* screen = QGuiApplication::primaryScreen();
+	if (!screen) {
+		WARN("Primary screen is null");
+		return {};
+	}
+
+	const qreal logicalDpi = screen->logicalDotsPerInchX();
+	const qreal pixelRatio = screen->devicePixelRatio();
+	const qreal superSample = 2.0;
+	const qreal totalScale = pixelRatio * superSample;
+
+	auto image = page->renderToImage(logicalDpi * totalScale, logicalDpi * totalScale);
+
+	if (!image.isNull()) {
+		if (image.format() != QImage::Format_ARGB32_Premultiplied)
+			image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+
+		image.setDevicePixelRatio(totalScale);
+	}
 
 	return image;
 #else
@@ -382,8 +399,26 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
-	const static int dpi = QGuiApplication::primaryScreen()->physicalDotsPerInchX();
-	auto image = page->renderToImage(zoomFactor * dpi, zoomFactor * dpi);
+	QScreen* screen = QGuiApplication::primaryScreen();
+	if (!screen) {
+		WARN("Primary screen is null");
+		return {};
+	}
+
+	const qreal logicalDpi = screen->logicalDotsPerInchX();
+	const qreal pixelRatio = screen->devicePixelRatio();
+	const qreal superSample = 2.0;
+	const qreal effectiveZoom = (zoomFactor > 0.0) ? zoomFactor : 1.0;
+	const qreal renderScale = pixelRatio * superSample * effectiveZoom;
+
+	auto image = page->renderToImage(logicalDpi * renderScale, logicalDpi * renderScale);
+
+	if (!image.isNull()) {
+		if (image.format() != QImage::Format_ARGB32_Premultiplied)
+			image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+
+		image.setDevicePixelRatio(pixelRatio * superSample);
+	}
 
 	return image;
 #else
