@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-07 00:39+0000\n"
+"POT-Creation-Date: 2026-05-11 00:39+0000\n"
 "PO-Revision-Date: 2026-04-17 11:40+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -7514,6 +7514,12 @@ msgstr "celda no válida, enmascarada (ignorada en todas las operaciones)"
 #, kde-format
 msgid "invalid cell (ignored in all operations)"
 msgstr "celda no válida (ignorada en todas las operaciones)"
+
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:297
+#, fuzzy, kde-format
+#| msgid "%1: change column type"
+msgid "%1: change column type and set value"
+msgstr "%1: cambiar tipo de columna"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62

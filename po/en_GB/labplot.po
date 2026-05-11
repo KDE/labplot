@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-07 00:39+0000\n"
+"POT-Creation-Date: 2026-05-11 00:39+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -7519,6 +7519,12 @@ msgstr "invalid cell, masked (ignored in all operations)"
 #, kde-format
 msgid "invalid cell (ignored in all operations)"
 msgstr "invalid cell (ignored in all operations)"
+
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:297
+#, fuzzy, kde-format
+#| msgid "%1: change column type"
+msgid "%1: change column type and set value"
+msgstr "%1: change column type"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
