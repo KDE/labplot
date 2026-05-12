@@ -7414,10 +7414,9 @@ msgid "invalid cell (ignored in all operations)"
 msgstr ""
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:297
-#, fuzzy, kde-format
-#| msgid "%1: change column type"
+#, kde-format
 msgid "%1: change column type and set value"
-msgstr "%1：更改列类型"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-11 00:39+0000\n"
-"PO-Revision-Date: 2026-04-17 08:12+0300\n"
+"PO-Revision-Date: 2026-05-11 08:16+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7578,10 +7578,9 @@ msgid "invalid cell (ignored in all operations)"
 msgstr "некоректна комірка (проігноровано у всіх операціях)"
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:297
-#, fuzzy, kde-format
-#| msgid "%1: change column type"
+#, kde-format
 msgid "%1: change column type and set value"
-msgstr "%1: змінити тип стовпчика"
+msgstr "%1: змінити тип стовпчика і встановити значення"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62

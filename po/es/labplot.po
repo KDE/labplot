@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the labplot package.
 # Automatically generated, 2014.
 #
-# SPDX-FileCopyrightText: 2014, 2015, 2017, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2014-2015, 2017, 2019-2026 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019 Javier Vinal <fjvinal@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-11 00:39+0000\n"
-"PO-Revision-Date: 2026-04-17 11:40+0100\n"
+"PO-Revision-Date: 2026-05-11 16:54+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -7516,10 +7516,9 @@ msgid "invalid cell (ignored in all operations)"
 msgstr "celda no válida (ignorada en todas las operaciones)"
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:297
-#, fuzzy, kde-format
-#| msgid "%1: change column type"
+#, kde-format
 msgid "%1: change column type and set value"
-msgstr "%1: cambiar tipo de columna"
+msgstr "%1: cambiar tipo de columna y definir valor"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
