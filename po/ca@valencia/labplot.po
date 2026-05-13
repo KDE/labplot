@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-11 00:39+0000\n"
-"PO-Revision-Date: 2026-04-17 08:53+0200\n"
+"PO-Revision-Date: 2026-05-11 09:26+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -7594,10 +7594,9 @@ msgid "invalid cell (ignored in all operations)"
 msgstr "cel·la no vàlida (ignorada en totes les operacions)"
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:297
-#, fuzzy, kde-format
-#| msgid "%1: change column type"
+#, kde-format
 msgid "%1: change column type and set value"
-msgstr "%1: canvia el tipus de la columna"
+msgstr "%1: canvia el tipus de la columna i establix un valor"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
@@ -11828,7 +11827,7 @@ msgstr "Des de la carpeta…"
 #: src/frontend/ActionsManager.cpp:291
 #, kde-format
 msgid "Import multiple files from a directory"
-msgstr "Importa diversos fitxers des d'una carpeta"
+msgstr "Importa múltiples fitxers des d'una carpeta"
 
 #: src/frontend/ActionsManager.cpp:296
 #, kde-format
