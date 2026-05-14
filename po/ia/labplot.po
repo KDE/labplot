@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-11 00:39+0000\n"
-"PO-Revision-Date: 2026-05-11 11:23+0200\n"
+"POT-Creation-Date: 2026-05-14 00:39+0000\n"
+"PO-Revision-Date: 2026-05-13 15:18+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -9831,7 +9831,7 @@ msgstr "Etiquetta de texto"
 #: src/frontend/worksheet/WorksheetView.cpp:1356
 #, kde-format
 msgid "text"
-msgstr ""
+msgstr "texto"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2470
 #, kde-format
@@ -12123,7 +12123,7 @@ msgstr "Continua"
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
-msgstr ""
+msgstr "Continua a leger"
 
 #: src/frontend/ActionsManager.cpp:1594
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
@@ -15755,7 +15755,7 @@ msgid "Model:"
 msgstr "Modello:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:809
-#: src/frontend/GuiTools.cpp:527
+#: src/frontend/GuiTools.cpp:562
 #, kde-format
 msgid "Description:"
 msgstr "Description:"
@@ -16602,24 +16602,24 @@ msgstr "Aperi file de imagine"
 msgid "Images (%1)"
 msgstr "Images (%1)"
 
-#: src/frontend/GuiTools.cpp:420
+#: src/frontend/GuiTools.cpp:455
 #, kde-format
 msgid "Select file to load function definition"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:437 src/frontend/GuiTools.cpp:516
+#: src/frontend/GuiTools.cpp:472 src/frontend/GuiTools.cpp:551
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:500
+#: src/frontend/GuiTools.cpp:535
 #, kde-format
 msgid "Select file to save function definition"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:528 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:563 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
@@ -19705,7 +19705,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3479
 #, kde-format
 msgid "%1: remove selected rows"
-msgstr ""
+msgstr "%1: Remove Rangos Selectionate"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3534
 #, kde-format

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-11 00:39+0000\n"
+"POT-Creation-Date: 2026-05-14 00:39+0000\n"
 "PO-Revision-Date: 2026-02-18 15:39+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -16210,7 +16210,7 @@ msgid "Model:"
 msgstr "Modell:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:809
-#: src/frontend/GuiTools.cpp:527
+#: src/frontend/GuiTools.cpp:562
 #, kde-format
 msgid "Description:"
 msgstr "Beschreibung:"
@@ -17085,24 +17085,24 @@ msgstr "Bilddatei öffnen"
 msgid "Images (%1)"
 msgstr "Bilder (%1)"
 
-#: src/frontend/GuiTools.cpp:420
+#: src/frontend/GuiTools.cpp:455
 #, kde-format
 msgid "Select file to load function definition"
 msgstr "Datei für Funktionsdefinition auswählen"
 
-#: src/frontend/GuiTools.cpp:437 src/frontend/GuiTools.cpp:516
+#: src/frontend/GuiTools.cpp:472 src/frontend/GuiTools.cpp:551
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr "LabPlot Funktionsdefinition"
 
-#: src/frontend/GuiTools.cpp:500
+#: src/frontend/GuiTools.cpp:535
 #, kde-format
 msgid "Select file to save function definition"
 msgstr "Datei zum Speichern der Funktionsdefinition auswählen"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:528 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:563 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181

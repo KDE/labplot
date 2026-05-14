@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-11 00:39+0000\n"
+"POT-Creation-Date: 2026-05-14 00:39+0000\n"
 "PO-Revision-Date: 2025-02-09 08:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -16254,7 +16254,7 @@ msgid "Model:"
 msgstr "Model:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:809
-#: src/frontend/GuiTools.cpp:527
+#: src/frontend/GuiTools.cpp:562
 #, fuzzy, kde-format
 #| msgid "Description"
 msgid "Description:"
@@ -17124,25 +17124,25 @@ msgstr "Otwórz plik obrazu"
 msgid "Images (%1)"
 msgstr "Obrazy (%1)"
 
-#: src/frontend/GuiTools.cpp:420
+#: src/frontend/GuiTools.cpp:455
 #, fuzzy, kde-format
 #| msgid "Select predefined function"
 msgid "Select file to load function definition"
 msgstr "Wybierz wstępnie określoną funkcję"
 
-#: src/frontend/GuiTools.cpp:437 src/frontend/GuiTools.cpp:516
+#: src/frontend/GuiTools.cpp:472 src/frontend/GuiTools.cpp:551
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:500
+#: src/frontend/GuiTools.cpp:535
 #, kde-format
 msgid "Select file to save function definition"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:528 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:563 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
