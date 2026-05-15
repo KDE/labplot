@@ -2819,6 +2819,9 @@ void CartesianPlot::adjustPadding() {
 	if (isLoading())
 		return;
 
+	if (!graphicsItem()->scene())
+		return;
+
 	Q_D(CartesianPlot);
 	QRectF plotRect = d->mapRectFromScene(d->rect);
 	const auto& axes = children<Axis>();
@@ -2827,7 +2830,8 @@ void CartesianPlot::adjustPadding() {
 		if (a->orientation() == WorksheetElement::Orientation::Vertical) {
 			if (a->position() == Axis::Position::Left) {
 				// left-side vertical axis - check if it extends beyond the left edge of the data rect
-				double delta = d->dataRect.x() - a->graphicsItem()->boundingRect().x();
+				double axisLeft = d->mapRectFromItem(a->graphicsItem(), a->graphicsItem()->boundingRect()).left();
+				double delta = d->dataRect.x() - axisLeft;
 				if (delta > horizontalPadding()) {
 					setUndoAware(false);
 					setSymmetricPadding(false);

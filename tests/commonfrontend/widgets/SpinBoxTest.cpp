@@ -1032,13 +1032,13 @@ void SpinBoxTest::numberSpinBoxFeedbackCursorPosition2() {
 	d.setPlots({p});
 	d.setPlots({p}); // Important to do it a second time to see that the connections are cleared before connecting again
 
-	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.5 cm"));
+	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.7 cm"));
 	d.ui.sbPaddingHorizontal->lineEdit()->setCursorPosition(3);
 
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 	d.ui.sbPaddingHorizontal->keyPressEvent(&event);
 
-	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.6 cm"));
+	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.8 cm"));
 	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->cursorPosition(), 3);
 }
 
