@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-14 00:39+0000\n"
+"POT-Creation-Date: 2026-05-15 00:40+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -6452,7 +6452,7 @@ msgstr "Εκτύπωση"
 msgid "Text file (*.txt)"
 msgstr ""
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:95
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6462,13 +6462,13 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Εξαγωγή σε"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, fuzzy, kde-format
 #| msgid "Export to"
 msgid "Export failed"
 msgstr "Εξαγωγή σε"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for writing."
 msgid "Failed to open '%1' for writing."
@@ -7463,36 +7463,36 @@ msgstr "Ύψος"
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/script/Script.cpp:89
+#: src/backend/script/Script.cpp:93
 #, kde-format
 msgid "Python file (*.py)"
 msgstr ""
 
-#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
+#: src/backend/script/Script.cpp:151 src/backend/script/Script.cpp:343
 #, fuzzy, kde-format
 #| msgid "no simple filter element found"
 msgid "no script element found"
 msgstr "αδυναμία εύρεσης απλού φίλτρου"
 
-#: src/backend/script/Script.cpp:205
+#: src/backend/script/Script.cpp:209
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:323 src/backend/script/Script.cpp:328
 #: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1229
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
 msgstr "&Σενάριο"
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:323
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Failed to run the script."
 msgstr "Σύνδεση:"
 
-#: src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:328
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -8646,7 +8646,7 @@ msgstr ""
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
 #: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1255
-#: src/frontend/SettingsDialog.cpp:61
+#: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
 msgid "Worksheet"
@@ -12021,7 +12021,7 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -18680,8 +18680,8 @@ msgstr "Δεδομένα:"
 msgid "Downloaded files successfully deleted."
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:47 src/frontend/SettingsDialog.cpp:159
-#: src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:173
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -18691,7 +18691,7 @@ msgstr "Προτιμήσεις"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:56
+#: src/frontend/SettingsDialog.cpp:57
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:96
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:102
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -18723,35 +18723,41 @@ msgstr "Προτιμήσεις"
 msgid "General"
 msgstr "Γενικά"
 
-#: src/frontend/SettingsDialog.cpp:72
+#: src/frontend/SettingsDialog.cpp:73
 #, fuzzy, kde-format
 #| msgid "Workbook"
 msgid "Notebook"
 msgstr "Βιβλίο εργασίας"
 
-#: src/frontend/SettingsDialog.cpp:79
+#: src/frontend/SettingsDialog.cpp:80
 #, fuzzy, kde-format
 #| msgid "Data:"
 msgid "Datasets"
 msgstr "Δεδομένα:"
 
-#: src/frontend/SettingsDialog.cpp:94
+#: src/frontend/SettingsDialog.cpp:95
 #, kde-format
 msgid "User Feedback"
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:100
+#: src/frontend/SettingsDialog.cpp:102
 #, fuzzy, kde-format
-#| msgid "Tab position"
-msgid "Script Editor"
-msgstr "Θέση καρτέλας"
+#| msgid "&Script"
+msgid "Scripting"
+msgstr "&Σενάριο"
 
-#: src/frontend/SettingsDialog.cpp:163
+#: src/frontend/SettingsDialog.cpp:107
+#, fuzzy, kde-format
+#| msgid "Edit"
+msgid "Editor"
+msgstr "Επεξεργασία"
+
+#: src/frontend/SettingsDialog.cpp:170
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:174
+#: src/frontend/SettingsDialog.cpp:181
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgctxt "@title:window"
@@ -18968,6 +18974,11 @@ msgstr ""
 #: src/frontend/SettingsNotebookPage.cpp:42
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:45
+#, kde-format
+msgid "System Default"
 msgstr ""
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
@@ -22007,6 +22018,7 @@ msgstr "Δημιουργία νέου χρωματικού χάρτη"
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, SettingsScriptingPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KDEPlotDock)
 #. i18n: ectx: property (windowTitle), widget (QWidget, RunChartDock)
@@ -22037,6 +22049,7 @@ msgstr "Δημιουργία νέου χρωματικού χάρτη"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:14
 #: src/frontend/ui/script/scripteditorwidget.ui:14
 #: src/frontend/ui/settingsnotebookpage.ui:14
+#: src/frontend/ui/settingsscriptingpage.ui:14
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:14
@@ -24680,8 +24693,10 @@ msgstr "Τελευταία αλλαγή"
 msgid "Created:"
 msgstr "Δημιουργήθηκε:"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonVersionTitle)
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:207
+#: src/frontend/ui/settingsscriptingpage.ui:43
 #, fuzzy, kde-format
 #| msgid "Dimensions:"
 msgid "Version:"
@@ -26457,6 +26472,26 @@ msgstr ""
 msgid "TODO"
 msgstr "TODO"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
+#: src/frontend/ui/settingsscriptingpage.ui:36
+#, fuzzy, kde-format
+#| msgid "Comment:"
+msgid "Environment:"
+msgstr "Σχόλιο:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
+#: src/frontend/ui/settingsscriptingpage.ui:74
+#, kde-format
+msgid "Path:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsscriptingpage.ui:99
+#, fuzzy, kde-format
+#| msgid "Number of levels"
+msgid "Python Settings"
+msgstr "Πλήθος επιπέδων"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
 #, fuzzy, kde-format
@@ -28061,6 +28096,11 @@ msgid "Unable to open file:"
 msgstr "Σύνδεση:"
 
 #, fuzzy
+#~| msgid "Tab position"
+#~ msgid "Script Editor"
+#~ msgstr "Θέση καρτέλας"
+
+#, fuzzy
 #~| msgid "%1: set value for row %2"
 #~ msgid "%1: set linking"
 #~ msgstr "%1: ορισμός τιμής για τη γραμμή %2"
@@ -29264,9 +29304,6 @@ msgstr "Σύνδεση:"
 #~| msgid "invalid row value"
 #~ msgid "Divide by Value"
 #~ msgstr "μη έγκυρη τιμή γραμμής"
-
-#~ msgid "Edit"
-#~ msgstr "Επεξεργασία"
 
 #, fuzzy
 #~| msgid "Percentile"

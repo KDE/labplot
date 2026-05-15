@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-14 00:39+0000\n"
+"POT-Creation-Date: 2026-05-15 00:40+0000\n"
 "PO-Revision-Date: 2026-01-21 23:00+0100\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
@@ -6258,7 +6258,7 @@ msgstr "Vytisknout poznámku"
 msgid "Text file (*.txt)"
 msgstr "Textový soubor (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:95
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6267,12 +6267,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exportovat do souboru"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Export failed"
 msgstr "Export selhal"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Nelze otevřít '%1' pro zápis."
@@ -7229,33 +7229,33 @@ msgstr ""
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/script/Script.cpp:89
+#: src/backend/script/Script.cpp:93
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Soubor Pythonu (*.py)"
 
-#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
+#: src/backend/script/Script.cpp:151 src/backend/script/Script.cpp:343
 #, kde-format
 msgid "no script element found"
 msgstr "skriptový element nenalezen"
 
-#: src/backend/script/Script.cpp:205
+#: src/backend/script/Script.cpp:209
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: spustit skript %2"
 
-#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:323 src/backend/script/Script.cpp:328
 #: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1229
 #, kde-format
 msgid "Script"
 msgstr "Skript"
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:323
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Spuštění skriptu selhalo."
 
-#: src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:328
 #, kde-format
 msgid "A script is already running."
 msgstr "Skript již běží."
@@ -8368,7 +8368,7 @@ msgstr ""
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
 #: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1255
-#: src/frontend/SettingsDialog.cpp:61
+#: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
 msgid "Worksheet"
@@ -11520,7 +11520,7 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -17839,8 +17839,8 @@ msgstr ""
 msgid "Downloaded files successfully deleted."
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:47 src/frontend/SettingsDialog.cpp:159
-#: src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:173
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -17850,7 +17850,7 @@ msgstr "Předvolby"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:56
+#: src/frontend/SettingsDialog.cpp:57
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:96
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:102
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -17882,32 +17882,39 @@ msgstr "Předvolby"
 msgid "General"
 msgstr "Obecné"
 
-#: src/frontend/SettingsDialog.cpp:72
+#: src/frontend/SettingsDialog.cpp:73
 #, kde-format
 msgid "Notebook"
 msgstr "Poznámkový blok"
 
-#: src/frontend/SettingsDialog.cpp:79
+#: src/frontend/SettingsDialog.cpp:80
 #, kde-format
 msgid "Datasets"
 msgstr "Soubory dat"
 
-#: src/frontend/SettingsDialog.cpp:94
+#: src/frontend/SettingsDialog.cpp:95
 #, kde-format
 msgid "User Feedback"
 msgstr "Zpětná vazba uživatele"
 
-#: src/frontend/SettingsDialog.cpp:100
-#, kde-format
-msgid "Script Editor"
-msgstr "Editor skriptů"
+#: src/frontend/SettingsDialog.cpp:102
+#, fuzzy, kde-format
+#| msgid "Script"
+msgid "Scripting"
+msgstr "Skript"
 
-#: src/frontend/SettingsDialog.cpp:163
+#: src/frontend/SettingsDialog.cpp:107
+#, fuzzy, kde-format
+#| msgid "&Edit"
+msgid "Editor"
+msgstr "&Upravit"
+
+#: src/frontend/SettingsDialog.cpp:170
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:174
+#: src/frontend/SettingsDialog.cpp:181
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
@@ -18111,6 +18118,12 @@ msgstr ""
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:45
+#, fuzzy, kde-format
+#| msgid "Save Default"
+msgid "System Default"
+msgstr "Uložit výchozí"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -20974,6 +20987,7 @@ msgstr "Vytvořit index sloupce"
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, SettingsScriptingPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KDEPlotDock)
 #. i18n: ectx: property (windowTitle), widget (QWidget, RunChartDock)
@@ -21004,6 +21018,7 @@ msgstr "Vytvořit index sloupce"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:14
 #: src/frontend/ui/script/scripteditorwidget.ui:14
 #: src/frontend/ui/settingsnotebookpage.ui:14
+#: src/frontend/ui/settingsscriptingpage.ui:14
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:14
@@ -23523,8 +23538,10 @@ msgstr "Změněno:"
 msgid "Created:"
 msgstr "Vytvořeno:"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonVersionTitle)
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:207
+#: src/frontend/ui/settingsscriptingpage.ui:43
 #, kde-format
 msgid "Version:"
 msgstr "Verze:"
@@ -25218,6 +25235,26 @@ msgstr "Automatické ukládání"
 msgid "TODO"
 msgstr "Úlohy"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
+#: src/frontend/ui/settingsscriptingpage.ui:36
+#, fuzzy, kde-format
+#| msgid "Increment:"
+msgid "Environment:"
+msgstr "Zvýšení:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
+#: src/frontend/ui/settingsscriptingpage.ui:74
+#, kde-format
+msgid "Path:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsscriptingpage.ui:99
+#, fuzzy, kde-format
+#| msgid "Settings"
+msgid "Python Settings"
+msgstr "Nastavení"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
 #, kde-format
@@ -26744,6 +26781,9 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
+
+#~ msgid "Script Editor"
+#~ msgstr "Editor skriptů"
 
 #, fuzzy
 #~| msgid "%1: smooth '%2'"

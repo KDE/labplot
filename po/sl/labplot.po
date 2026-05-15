@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-14 00:39+0000\n"
+"POT-Creation-Date: 2026-05-15 00:40+0000\n"
 "PO-Revision-Date: 2026-05-11 06:46+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -6363,7 +6363,7 @@ msgstr "Natisni opombo"
 msgid "Text file (*.txt)"
 msgstr "Besedilna datoteka (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:95
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6372,12 +6372,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Izvozi v datoteko"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Export failed"
 msgstr "Izvozi ni uspel"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Datoteke '%1' ni bilo mogoče odpreti za pisanje."
@@ -7334,33 +7334,33 @@ msgstr "Tritežno"
 msgid "Tricube"
 msgstr "Trikubično"
 
-#: src/backend/script/Script.cpp:89
+#: src/backend/script/Script.cpp:93
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Pythonova datoteka (*.py)"
 
-#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
+#: src/backend/script/Script.cpp:151 src/backend/script/Script.cpp:343
 #, kde-format
 msgid "no script element found"
 msgstr "ni najdenega elementa skripta"
 
-#: src/backend/script/Script.cpp:205
+#: src/backend/script/Script.cpp:209
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: poženi %2 skript"
 
-#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:323 src/backend/script/Script.cpp:328
 #: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1229
 #, kde-format
 msgid "Script"
 msgstr "Skript"
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:323
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Skripta ni bilo mogoče zagnati."
 
-#: src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:328
 #, kde-format
 msgid "A script is already running."
 msgstr "Skript se že izvaja."
@@ -8513,7 +8513,7 @@ msgstr "Residual"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
 #: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1255
-#: src/frontend/SettingsDialog.cpp:61
+#: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
 msgid "Worksheet"
@@ -11656,7 +11656,7 @@ msgstr "Ustvari izvlečnik podatkov za pridobivanje podatkov iz slike"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -18271,8 +18271,8 @@ msgstr "Predpomnilnik množic podatkov"
 msgid "Downloaded files successfully deleted."
 msgstr "Prenesene datoteke so uspešno izbrisane."
 
-#: src/frontend/SettingsDialog.cpp:47 src/frontend/SettingsDialog.cpp:159
-#: src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:173
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -18282,7 +18282,7 @@ msgstr "Nastavitve"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:56
+#: src/frontend/SettingsDialog.cpp:57
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:96
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:102
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -18314,34 +18314,41 @@ msgstr "Nastavitve"
 msgid "General"
 msgstr "Splošno"
 
-#: src/frontend/SettingsDialog.cpp:72
+#: src/frontend/SettingsDialog.cpp:73
 #, kde-format
 msgid "Notebook"
 msgstr "Zvezek"
 
-#: src/frontend/SettingsDialog.cpp:79
+#: src/frontend/SettingsDialog.cpp:80
 #, kde-format
 msgid "Datasets"
 msgstr "Množice podatkov"
 
-#: src/frontend/SettingsDialog.cpp:94
+#: src/frontend/SettingsDialog.cpp:95
 #, kde-format
 msgid "User Feedback"
 msgstr "Povratne informacije uporabnika"
 
-#: src/frontend/SettingsDialog.cpp:100
-#, kde-format
-msgid "Script Editor"
-msgstr "Urejevalnik skripta"
+#: src/frontend/SettingsDialog.cpp:102
+#, fuzzy, kde-format
+#| msgid "Script"
+msgid "Scripting"
+msgstr "Skript"
 
-#: src/frontend/SettingsDialog.cpp:163
+#: src/frontend/SettingsDialog.cpp:107
+#, fuzzy, kde-format
+#| msgid "&Edit"
+msgid "Editor"
+msgstr "Ur&edi"
+
+#: src/frontend/SettingsDialog.cpp:170
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "Vse nastavitve bodo ponastavljene na privzete vrednosti. Ali želite "
 "nadaljevati?"
 
-#: src/frontend/SettingsDialog.cpp:174
+#: src/frontend/SettingsDialog.cpp:181
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
@@ -18568,6 +18575,12 @@ msgstr "Samodejno ponovno oceni vse vnose pod trenutnim."
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Ob ponovnem zagonu zalednega sistema prosite za potrditev."
+
+#: src/frontend/SettingsScriptingPage.cpp:45
+#, fuzzy, kde-format
+#| msgid "Save Default"
+msgid "System Default"
+msgstr "Shrani privzeto"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -21443,6 +21456,7 @@ msgstr "Ustvari stolpec indeksa"
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, SettingsScriptingPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KDEPlotDock)
 #. i18n: ectx: property (windowTitle), widget (QWidget, RunChartDock)
@@ -21473,6 +21487,7 @@ msgstr "Ustvari stolpec indeksa"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:14
 #: src/frontend/ui/script/scripteditorwidget.ui:14
 #: src/frontend/ui/settingsnotebookpage.ui:14
+#: src/frontend/ui/settingsscriptingpage.ui:14
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:14
@@ -23992,8 +24007,10 @@ msgstr "Spremenjeno:"
 msgid "Created:"
 msgstr "Ustvarjeno:"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonVersionTitle)
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:207
+#: src/frontend/ui/settingsscriptingpage.ui:43
 #, kde-format
 msgid "Version:"
 msgstr "Različica:"
@@ -25708,6 +25725,27 @@ msgstr "Samodejno shrani"
 msgid "TODO"
 msgstr "NAREDITI"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
+#: src/frontend/ui/settingsscriptingpage.ui:36
+#, fuzzy, kde-format
+#| msgid "Copy Environment"
+msgid "Environment:"
+msgstr "Kopiraj okolje"
+
+#. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
+#: src/frontend/ui/settingsscriptingpage.ui:74
+#, fuzzy, kde-format
+#| msgid "CLI Path:"
+msgid "Path:"
+msgstr "Pot CLI:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsscriptingpage.ui:99
+#, fuzzy, kde-format
+#| msgid "Settings"
+msgid "Python Settings"
+msgstr "Nastavitve"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
 #, kde-format
@@ -27267,6 +27305,9 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "Script Editor"
+#~ msgstr "Urejevalnik skripta"
 
 #~ msgid "%1: set linking"
 #~ msgstr "%1: nastavi povezovanje"

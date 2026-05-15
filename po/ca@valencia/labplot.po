@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-14 00:39+0000\n"
+"POT-Creation-Date: 2026-05-15 00:40+0000\n"
 "PO-Revision-Date: 2026-05-11 09:26+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -6425,7 +6425,7 @@ msgstr "Imprimix la nota"
 msgid "Text file (*.txt)"
 msgstr "Fitxer de text (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:95
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6434,12 +6434,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exporta cap a un fitxer"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Export failed"
 msgstr "L'exportació ha fallat"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Ha fallat mentre s'obria «%1» per a escriptura."
@@ -7404,33 +7404,33 @@ msgstr "Tri-ponderada"
 msgid "Tricube"
 msgstr "Tri-cúbica"
 
-#: src/backend/script/Script.cpp:89
+#: src/backend/script/Script.cpp:93
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Fitxer Python (*.py)"
 
-#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
+#: src/backend/script/Script.cpp:151 src/backend/script/Script.cpp:343
 #, kde-format
 msgid "no script element found"
 msgstr "no s'ha trobat cap element de script"
 
-#: src/backend/script/Script.cpp:205
+#: src/backend/script/Script.cpp:209
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: executa l'script %2"
 
-#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:323 src/backend/script/Script.cpp:328
 #: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1229
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:323
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Ha fallat mentre s'executava l'script."
 
-#: src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:328
 #, kde-format
 msgid "A script is already running."
 msgstr "Ja s'està executant un script."
@@ -8588,7 +8588,7 @@ msgstr "Residual"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
 #: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1255
-#: src/frontend/SettingsDialog.cpp:61
+#: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
 msgid "Worksheet"
@@ -11755,7 +11755,7 @@ msgstr "Crea un extractor de dades per a obtindre dades des d'una imatge"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -18435,8 +18435,8 @@ msgstr "Memòria cau dels conjunts de dades"
 msgid "Downloaded files successfully deleted."
 msgstr "Els fitxers baixats s'han suprimit correctament."
 
-#: src/frontend/SettingsDialog.cpp:47 src/frontend/SettingsDialog.cpp:159
-#: src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:173
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -18446,7 +18446,7 @@ msgstr "Preferències"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:56
+#: src/frontend/SettingsDialog.cpp:57
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:96
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:102
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -18478,34 +18478,41 @@ msgstr "Preferències"
 msgid "General"
 msgstr "General"
 
-#: src/frontend/SettingsDialog.cpp:72
+#: src/frontend/SettingsDialog.cpp:73
 #, kde-format
 msgid "Notebook"
 msgstr "Bloc de notes"
 
-#: src/frontend/SettingsDialog.cpp:79
+#: src/frontend/SettingsDialog.cpp:80
 #, kde-format
 msgid "Datasets"
 msgstr "Conjunts de dades"
 
-#: src/frontend/SettingsDialog.cpp:94
+#: src/frontend/SettingsDialog.cpp:95
 #, kde-format
 msgid "User Feedback"
 msgstr "Comentaris de l'usuari"
 
-#: src/frontend/SettingsDialog.cpp:100
-#, kde-format
-msgid "Script Editor"
-msgstr "Editor de scripts"
+#: src/frontend/SettingsDialog.cpp:102
+#, fuzzy, kde-format
+#| msgid "Script"
+msgid "Scripting"
+msgstr "Script"
 
-#: src/frontend/SettingsDialog.cpp:163
+#: src/frontend/SettingsDialog.cpp:107
+#, fuzzy, kde-format
+#| msgid "&Edit"
+msgid "Editor"
+msgstr "&Edita"
+
+#: src/frontend/SettingsDialog.cpp:170
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "Es reiniciarà tota la configuració als seus valors predeterminats. Voleu "
 "continuar?"
 
-#: src/frontend/SettingsDialog.cpp:174
+#: src/frontend/SettingsDialog.cpp:181
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
@@ -18740,6 +18747,12 @@ msgstr "Torna a avaluar automàticament totes les entrades davall de l'actual."
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Demana confirmació en reiniciar el sistema del dorsal."
+
+#: src/frontend/SettingsScriptingPage.cpp:45
+#, fuzzy, kde-format
+#| msgid "Save Default"
+msgid "System Default"
+msgstr "Guarda al predeterminat"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -21626,6 +21639,7 @@ msgstr "Crea la columna de l'índex"
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, SettingsScriptingPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KDEPlotDock)
 #. i18n: ectx: property (windowTitle), widget (QWidget, RunChartDock)
@@ -21656,6 +21670,7 @@ msgstr "Crea la columna de l'índex"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:14
 #: src/frontend/ui/script/scripteditorwidget.ui:14
 #: src/frontend/ui/settingsnotebookpage.ui:14
+#: src/frontend/ui/settingsscriptingpage.ui:14
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:14
@@ -24185,8 +24200,10 @@ msgstr "Modificat:"
 msgid "Created:"
 msgstr "Creat:"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonVersionTitle)
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:207
+#: src/frontend/ui/settingsscriptingpage.ui:43
 #, kde-format
 msgid "Version:"
 msgstr "Versió:"
@@ -25907,6 +25924,27 @@ msgstr "Guarda automàticament"
 msgid "TODO"
 msgstr "Per fer"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
+#: src/frontend/ui/settingsscriptingpage.ui:36
+#, fuzzy, kde-format
+#| msgid "Copy Environment"
+msgid "Environment:"
+msgstr "Copia l'entorn"
+
+#. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
+#: src/frontend/ui/settingsscriptingpage.ui:74
+#, fuzzy, kde-format
+#| msgid "CLI Path:"
+msgid "Path:"
+msgstr "Camí de CLI:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsscriptingpage.ui:99
+#, fuzzy, kde-format
+#| msgid "Settings"
+msgid "Python Settings"
+msgstr "Configuració"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
 #, kde-format
@@ -27471,3 +27509,6 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
+
+#~ msgid "Script Editor"
+#~ msgstr "Editor de scripts"

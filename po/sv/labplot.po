@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-14 00:39+0000\n"
+"POT-Creation-Date: 2026-05-15 00:40+0000\n"
 "PO-Revision-Date: 2025-11-21 01:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -6349,7 +6349,7 @@ msgstr "Skriv ut anteckning"
 msgid "Text file (*.txt)"
 msgstr "Textfil (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:95
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6358,12 +6358,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exportera till fil"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Export failed"
 msgstr "Export misslyckades"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Misslyckades öppna '%1' för skrivning."
@@ -7323,33 +7323,33 @@ msgstr "Triviktad"
 msgid "Tricube"
 msgstr "Trikubisk"
 
-#: src/backend/script/Script.cpp:89
+#: src/backend/script/Script.cpp:93
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Python-fil (*.py)"
 
-#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
+#: src/backend/script/Script.cpp:151 src/backend/script/Script.cpp:343
 #, kde-format
 msgid "no script element found"
 msgstr "inget skriptelement hittades"
 
-#: src/backend/script/Script.cpp:205
+#: src/backend/script/Script.cpp:209
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: kör skript %2"
 
-#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:323 src/backend/script/Script.cpp:328
 #: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1229
 #, kde-format
 msgid "Script"
 msgstr "Skript"
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:323
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Misslyckades köra skriptet."
 
-#: src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:328
 #, kde-format
 msgid "A script is already running."
 msgstr "Ett skript kör redan."
@@ -8602,7 +8602,7 @@ msgstr ""
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
 #: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1255
-#: src/frontend/SettingsDialog.cpp:61
+#: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
 msgid "Worksheet"
@@ -11777,7 +11777,7 @@ msgstr "Skapar dataextrahering för att hämta data från en bild"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -18368,8 +18368,8 @@ msgstr "Datamängdscache"
 msgid "Downloaded files successfully deleted."
 msgstr "Nerladdade filer borttagna med lyckat resultat."
 
-#: src/frontend/SettingsDialog.cpp:47 src/frontend/SettingsDialog.cpp:159
-#: src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:173
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -18379,7 +18379,7 @@ msgstr "Inställningar"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:56
+#: src/frontend/SettingsDialog.cpp:57
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:96
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:102
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -18411,35 +18411,41 @@ msgstr "Inställningar"
 msgid "General"
 msgstr "Allmänt"
 
-#: src/frontend/SettingsDialog.cpp:72
+#: src/frontend/SettingsDialog.cpp:73
 #, kde-format
 msgid "Notebook"
 msgstr "Anteckningsblock"
 
-#: src/frontend/SettingsDialog.cpp:79
+#: src/frontend/SettingsDialog.cpp:80
 #, kde-format
 msgid "Datasets"
 msgstr "Datamängder"
 
-#: src/frontend/SettingsDialog.cpp:94
+#: src/frontend/SettingsDialog.cpp:95
 #, kde-format
 msgid "User Feedback"
 msgstr "Användaråterkoppling"
 
-#: src/frontend/SettingsDialog.cpp:100
+#: src/frontend/SettingsDialog.cpp:102
 #, fuzzy, kde-format
-#| msgid "Text Editor"
-msgid "Script Editor"
-msgstr "Texteditor"
+#| msgid "Script"
+msgid "Scripting"
+msgstr "Skript"
 
-#: src/frontend/SettingsDialog.cpp:163
+#: src/frontend/SettingsDialog.cpp:107
+#, fuzzy, kde-format
+#| msgid "Edit"
+msgid "Editor"
+msgstr "Redigera"
+
+#: src/frontend/SettingsDialog.cpp:170
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "Alla inställningar kommer att återställas till förvalda värden. Vill du "
 "fortsätta?"
 
-#: src/frontend/SettingsDialog.cpp:174
+#: src/frontend/SettingsDialog.cpp:181
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
@@ -18666,6 +18672,12 @@ msgstr "Utvärdera automatiskt posterna under den nuvarande igen."
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Fråga efter bekräftelse vid omstart av bakgrundssystemet."
+
+#: src/frontend/SettingsScriptingPage.cpp:45
+#, fuzzy, kde-format
+#| msgid "Save Default"
+msgid "System Default"
+msgstr "Spara förval"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -21551,6 +21563,7 @@ msgstr "Skapa indexkolumn"
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, SettingsScriptingPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KDEPlotDock)
 #. i18n: ectx: property (windowTitle), widget (QWidget, RunChartDock)
@@ -21581,6 +21594,7 @@ msgstr "Skapa indexkolumn"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:14
 #: src/frontend/ui/script/scripteditorwidget.ui:14
 #: src/frontend/ui/settingsnotebookpage.ui:14
+#: src/frontend/ui/settingsscriptingpage.ui:14
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:14
@@ -24113,8 +24127,10 @@ msgstr "Ändrad:"
 msgid "Created:"
 msgstr "Skapad:"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonVersionTitle)
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:207
+#: src/frontend/ui/settingsscriptingpage.ui:43
 #, kde-format
 msgid "Version:"
 msgstr "Version:"
@@ -25836,6 +25852,27 @@ msgstr "Spara automatiskt"
 msgid "TODO"
 msgstr "ATT GÖRA"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
+#: src/frontend/ui/settingsscriptingpage.ui:36
+#, fuzzy, kde-format
+#| msgid "Copy Environment"
+msgid "Environment:"
+msgstr "Kopiera miljö"
+
+#. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
+#: src/frontend/ui/settingsscriptingpage.ui:74
+#, fuzzy, kde-format
+#| msgid "CLI Path:"
+msgid "Path:"
+msgstr "Sökväg till kommandoradsverktyg:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsscriptingpage.ui:99
+#, fuzzy, kde-format
+#| msgid "Settings"
+msgid "Python Settings"
+msgstr "Inställningar"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
 #, kde-format
@@ -27396,6 +27433,11 @@ msgstr "convert-processen misslyckades, slutkod ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kan inte öppna fil:"
+
+#, fuzzy
+#~| msgid "Text Editor"
+#~ msgid "Script Editor"
+#~ msgstr "Texteditor"
 
 #~ msgid "%1: set linking"
 #~ msgstr "%1: ställ in länkning"
@@ -29175,9 +29217,6 @@ msgstr "Kan inte öppna fil:"
 
 #~ msgid "Divide by Value"
 #~ msgstr "Dividera med värde"
-
-#~ msgid "Edit"
-#~ msgstr "Redigera"
 
 #~ msgid "Clea&r Selected Rows"
 #~ msgstr "&Rensa markerade rader"

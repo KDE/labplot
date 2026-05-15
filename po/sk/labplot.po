@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-14 00:39+0000\n"
+"POT-Creation-Date: 2026-05-15 00:40+0000\n"
 "PO-Revision-Date: 2026-04-13 12:00+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -6321,7 +6321,7 @@ msgstr "Tlačiť poznámku"
 msgid "Text file (*.txt)"
 msgstr "Textový súbor (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:95
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6330,12 +6330,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exportovať do súboru"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Export failed"
 msgstr "Export zlyhal"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "„%1” sa nepodarilo otvoriť na zápis."
@@ -7292,33 +7292,33 @@ msgstr "váhy"
 msgid "Tricube"
 msgstr "Trikubické"
 
-#: src/backend/script/Script.cpp:89
+#: src/backend/script/Script.cpp:93
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Python file (*.py)"
 
-#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
+#: src/backend/script/Script.cpp:151 src/backend/script/Script.cpp:343
 #, kde-format
 msgid "no script element found"
 msgstr "nenašiel sa žiaden prvok skriptu"
 
-#: src/backend/script/Script.cpp:205
+#: src/backend/script/Script.cpp:209
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: spustiť skript %2"
 
-#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:323 src/backend/script/Script.cpp:328
 #: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1229
 #, kde-format
 msgid "Script"
 msgstr "Skripty"
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:323
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:328
 #, kde-format
 msgid "A script is already running."
 msgstr "Skript už beží."
@@ -8451,7 +8451,7 @@ msgstr "Residual"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
 #: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1255
-#: src/frontend/SettingsDialog.cpp:61
+#: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
 msgid "Worksheet"
@@ -11589,7 +11589,7 @@ msgstr "Vytvorí extraktor dát na získanie dát z obrázka"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -18184,8 +18184,8 @@ msgstr "Vyrovnávacia pamäť množín údajov"
 msgid "Downloaded files successfully deleted."
 msgstr "Stiahnuté súbory úspešne vymazané."
 
-#: src/frontend/SettingsDialog.cpp:47 src/frontend/SettingsDialog.cpp:159
-#: src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:173
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -18195,7 +18195,7 @@ msgstr "Predvoľby"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:56
+#: src/frontend/SettingsDialog.cpp:57
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:96
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:102
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -18227,32 +18227,38 @@ msgstr "Predvoľby"
 msgid "General"
 msgstr "Všeobecné"
 
-#: src/frontend/SettingsDialog.cpp:72
+#: src/frontend/SettingsDialog.cpp:73
 #, kde-format
 msgid "Notebook"
 msgstr "Zápisník"
 
-#: src/frontend/SettingsDialog.cpp:79
+#: src/frontend/SettingsDialog.cpp:80
 #, kde-format
 msgid "Datasets"
 msgstr "Množiny údajov"
 
-#: src/frontend/SettingsDialog.cpp:94
+#: src/frontend/SettingsDialog.cpp:95
 #, kde-format
 msgid "User Feedback"
 msgstr "Používateľská odozva"
 
-#: src/frontend/SettingsDialog.cpp:100
-#, kde-format
-msgid "Script Editor"
-msgstr "Editor skriptov"
+#: src/frontend/SettingsDialog.cpp:102
+#, fuzzy, kde-format
+#| msgid "Script"
+msgid "Scripting"
+msgstr "Skripty"
 
-#: src/frontend/SettingsDialog.cpp:163
+#: src/frontend/SettingsDialog.cpp:107
+#, fuzzy, kde-format
+msgid "Editor"
+msgstr "Upraviť"
+
+#: src/frontend/SettingsDialog.cpp:170
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr "Všetky nastavenia sa obnovia na predvolené hodnoty. Chcete pokračovať?"
 
-#: src/frontend/SettingsDialog.cpp:174
+#: src/frontend/SettingsDialog.cpp:181
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
@@ -18474,6 +18480,12 @@ msgstr "Automaticky prehodnotiť všetky záznamy pod aktuálnym."
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Žiadať potvrdenie pri reštartovaní backendového systému."
+
+#: src/frontend/SettingsScriptingPage.cpp:45
+#, fuzzy, kde-format
+#| msgid "Save Default"
+msgid "System Default"
+msgstr "Uložiť predvolené"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -21341,6 +21353,7 @@ msgstr "Vytvoriť indexový stĺpec"
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, SettingsScriptingPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KDEPlotDock)
 #. i18n: ectx: property (windowTitle), widget (QWidget, RunChartDock)
@@ -21371,6 +21384,7 @@ msgstr "Vytvoriť indexový stĺpec"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:14
 #: src/frontend/ui/script/scripteditorwidget.ui:14
 #: src/frontend/ui/settingsnotebookpage.ui:14
+#: src/frontend/ui/settingsscriptingpage.ui:14
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:14
@@ -23890,8 +23904,10 @@ msgstr "Zmenené:"
 msgid "Created:"
 msgstr "Vytvorené:"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonVersionTitle)
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:207
+#: src/frontend/ui/settingsscriptingpage.ui:43
 #, kde-format
 msgid "Version:"
 msgstr "Verzia:"
@@ -25604,6 +25620,27 @@ msgstr "Automatické ukladanie"
 msgid "TODO"
 msgstr "Úlohy"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
+#: src/frontend/ui/settingsscriptingpage.ui:36
+#, fuzzy, kde-format
+#| msgid "Copy Environment"
+msgid "Environment:"
+msgstr "Copy Environment"
+
+#. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
+#: src/frontend/ui/settingsscriptingpage.ui:74
+#, fuzzy, kde-format
+#| msgid "CLI Path:"
+msgid "Path:"
+msgstr "Cesta CLI:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsscriptingpage.ui:99
+#, fuzzy, kde-format
+#| msgid "Settings"
+msgid "Python Settings"
+msgstr "Nastavenia"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
 #, kde-format
@@ -27161,6 +27198,9 @@ msgstr "proces convert zlyhal, návratový kód ="
 msgid "Unable to open file:"
 msgstr "Unable to open file:"
 
+#~ msgid "Script Editor"
+#~ msgstr "Editor skriptov"
+
 #, fuzzy
 #~ msgid "%1: set linking"
 #~ msgstr "%1: nastaviť vertikálne zarovnanie"
@@ -28459,10 +28499,6 @@ msgstr "Unable to open file:"
 #~ msgctxt "@title:window"
 #~ msgid "File Information"
 #~ msgstr "Informácia o súbore"
-
-#, fuzzy
-#~ msgid "Edit"
-#~ msgstr "Upraviť"
 
 #, fuzzy
 #~ msgid "Clea&r Selected Rows"

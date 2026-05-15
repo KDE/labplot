@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-14 00:39+0000\n"
+"POT-Creation-Date: 2026-05-15 00:40+0000\n"
 "PO-Revision-Date: 2026-02-01 00:20+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -6297,7 +6297,7 @@ msgstr "Inprimatu oharra"
 msgid "Text file (*.txt)"
 msgstr "Testu fitxategia (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:95
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6306,12 +6306,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Esportatu fitxategira"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Export failed"
 msgstr "Esportatzea huts egin du"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "'%1' irakurtzeko irekitzea huts egin du."
@@ -7289,37 +7289,37 @@ msgstr "Altuera:"
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/script/Script.cpp:89
+#: src/backend/script/Script.cpp:93
 #, fuzzy, kde-format
 #| msgid "Text file (*.txt)"
 msgid "Python file (*.py)"
 msgstr "Testu fitxategia (*.txt)"
 
-#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
+#: src/backend/script/Script.cpp:151 src/backend/script/Script.cpp:343
 #, fuzzy, kde-format
 #| msgid "no note element found"
 msgid "no script element found"
 msgstr "ez da ohar elementurik aurkitu"
 
-#: src/backend/script/Script.cpp:205
+#: src/backend/script/Script.cpp:209
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:323 src/backend/script/Script.cpp:328
 #: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1229
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
 msgstr "&Gidoia"
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:323
 #, fuzzy, kde-format
 #| msgid "Failed to open the file."
 msgid "Failed to run the script."
 msgstr "Fitxategia irekitzea huts egin du."
 
-#: src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:328
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -8467,7 +8467,7 @@ msgstr ""
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
 #: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1255
-#: src/frontend/SettingsDialog.cpp:61
+#: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
 msgid "Worksheet"
@@ -11729,7 +11729,7 @@ msgstr "Datu-erauzle bat sortzen du, irudi batetik datuak lortzeko"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -18137,8 +18137,8 @@ msgstr "Datu multzoen cachea"
 msgid "Downloaded files successfully deleted."
 msgstr "Zama-jaitsitako fitxategiak ondo ezabatu dira."
 
-#: src/frontend/SettingsDialog.cpp:47 src/frontend/SettingsDialog.cpp:159
-#: src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:173
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -18148,7 +18148,7 @@ msgstr "Hobespenak"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:56
+#: src/frontend/SettingsDialog.cpp:57
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:96
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:102
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -18180,35 +18180,40 @@ msgstr "Hobespenak"
 msgid "General"
 msgstr "Orokorra"
 
-#: src/frontend/SettingsDialog.cpp:72
+#: src/frontend/SettingsDialog.cpp:73
 #, kde-format
 msgid "Notebook"
 msgstr "Koadernoa"
 
-#: src/frontend/SettingsDialog.cpp:79
+#: src/frontend/SettingsDialog.cpp:80
 #, kde-format
 msgid "Datasets"
 msgstr "Datu-multzoak"
 
-#: src/frontend/SettingsDialog.cpp:94
+#: src/frontend/SettingsDialog.cpp:95
 #, kde-format
 msgid "User Feedback"
 msgstr "Erabiltzaileen erreakzioa"
 
-#: src/frontend/SettingsDialog.cpp:100
+#: src/frontend/SettingsDialog.cpp:102
 #, fuzzy, kde-format
-#| msgid "Text Editor"
-msgid "Script Editor"
-msgstr "Testu-editorea"
+#| msgid "&Script"
+msgid "Scripting"
+msgstr "&Gidoia"
 
-#: src/frontend/SettingsDialog.cpp:163
+#: src/frontend/SettingsDialog.cpp:107
+#, fuzzy, kde-format
+msgid "Editor"
+msgstr "Editatu"
+
+#: src/frontend/SettingsDialog.cpp:170
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "Ezarpen guztiak haien balio lehenetsietan berrezarriko dira. Jarraitu nahi "
 "duzu?"
 
-#: src/frontend/SettingsDialog.cpp:174
+#: src/frontend/SettingsDialog.cpp:181
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
@@ -18425,6 +18430,12 @@ msgstr ""
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Eskatu berrespena bizkarraldeko-sistema berrabiaraztean."
+
+#: src/frontend/SettingsScriptingPage.cpp:45
+#, fuzzy, kde-format
+#| msgid "Save Default"
+msgid "System Default"
+msgstr "Gorde lehenetsia"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -21337,6 +21348,7 @@ msgstr "Sortu indize-zutabea"
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, SettingsScriptingPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KDEPlotDock)
 #. i18n: ectx: property (windowTitle), widget (QWidget, RunChartDock)
@@ -21367,6 +21379,7 @@ msgstr "Sortu indize-zutabea"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:14
 #: src/frontend/ui/script/scripteditorwidget.ui:14
 #: src/frontend/ui/settingsnotebookpage.ui:14
+#: src/frontend/ui/settingsscriptingpage.ui:14
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:14
@@ -23906,8 +23919,10 @@ msgstr "Aldatua:"
 msgid "Created:"
 msgstr "Sorrera:"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonVersionTitle)
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:207
+#: src/frontend/ui/settingsscriptingpage.ui:43
 #, kde-format
 msgid "Version:"
 msgstr "Bertsioa:"
@@ -25644,6 +25659,27 @@ msgstr "Gorde automatikoki"
 msgid "TODO"
 msgstr "ZEREGINA"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
+#: src/frontend/ui/settingsscriptingpage.ui:36
+#, fuzzy, kde-format
+#| msgid "Increment:"
+msgid "Environment:"
+msgstr "Gehikuntza:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
+#: src/frontend/ui/settingsscriptingpage.ui:74
+#, fuzzy, kde-format
+#| msgid "CLI Path:"
+msgid "Path:"
+msgstr "CLI bide-izena:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsscriptingpage.ui:99
+#, fuzzy, kde-format
+#| msgid "Settings"
+msgid "Python Settings"
+msgstr "Ezarpenak"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
 #, kde-format
@@ -27214,6 +27250,11 @@ msgid "Unable to open file:"
 msgstr "Ez da fitxategia irekitzeko gai:"
 
 #, fuzzy
+#~| msgid "Text Editor"
+#~ msgid "Script Editor"
+#~ msgstr "Testu-editorea"
+
+#, fuzzy
 #~ msgid "%1: set linking"
 #~ msgstr "Ezarri lerrokatze bertikala"
 
@@ -28343,10 +28384,6 @@ msgstr "Ez da fitxategia irekitzeko gai:"
 #~ msgctxt "@title:window"
 #~ msgid "File Information"
 #~ msgstr "Fitxategi-informazioa"
-
-#, fuzzy
-#~ msgid "Edit"
-#~ msgstr "Editatu"
 
 #, fuzzy
 #~ msgid "2/98 percentiles"

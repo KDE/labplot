@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-14 00:39+0000\n"
+"POT-Creation-Date: 2026-05-15 00:40+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -6684,7 +6684,7 @@ msgstr "Tulosta"
 msgid "Text file (*.txt)"
 msgstr "LaTeX-tiedostot (*.tex)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:91
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:95
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6693,14 +6693,14 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Vie tiedostoon"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Export to File"
 msgid "Export failed"
 msgstr "Vie tiedostoon"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:105
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to open '%1' for writing."
@@ -7741,37 +7741,37 @@ msgstr "Korkeus"
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/script/Script.cpp:89
+#: src/backend/script/Script.cpp:93
 #, fuzzy, kde-format
 #| msgid "LaTeX files (*.tex)"
 msgid "Python file (*.py)"
 msgstr "LaTeX-tiedostot (*.tex)"
 
-#: src/backend/script/Script.cpp:147 src/backend/script/Script.cpp:337
+#: src/backend/script/Script.cpp:151 src/backend/script/Script.cpp:343
 #, fuzzy, kde-format
 #| msgid "no folder element found"
 msgid "no script element found"
 msgstr "kansioelementtiä ei löytynyt"
 
-#: src/backend/script/Script.cpp:205
+#: src/backend/script/Script.cpp:209
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:317 src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:323 src/backend/script/Script.cpp:328
 #: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1229
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
 msgstr "&Skripti"
 
-#: src/backend/script/Script.cpp:317
+#: src/backend/script/Script.cpp:323
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to run the script."
 msgstr "Avaaminen epäonnistui"
 
-#: src/backend/script/Script.cpp:322
+#: src/backend/script/Script.cpp:328
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -8944,7 +8944,7 @@ msgstr ""
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
 #: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1255
-#: src/frontend/SettingsDialog.cpp:61
+#: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
 msgid "Worksheet"
@@ -12346,7 +12346,7 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -19103,8 +19103,8 @@ msgstr "Datajoukko"
 msgid "Downloaded files successfully deleted."
 msgstr "Ladatut tiedostot poistettu onnistuneesti."
 
-#: src/frontend/SettingsDialog.cpp:47 src/frontend/SettingsDialog.cpp:159
-#: src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:166
+#: src/frontend/SettingsDialog.cpp:173
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -19114,7 +19114,7 @@ msgstr "Asetukset"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:56
+#: src/frontend/SettingsDialog.cpp:57
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:96
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:102
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -19146,35 +19146,41 @@ msgstr "Asetukset"
 msgid "General"
 msgstr "Yleistä"
 
-#: src/frontend/SettingsDialog.cpp:72
+#: src/frontend/SettingsDialog.cpp:73
 #, fuzzy, kde-format
 #| msgid "Note"
 msgid "Notebook"
 msgstr "Huomautus"
 
-#: src/frontend/SettingsDialog.cpp:79
+#: src/frontend/SettingsDialog.cpp:80
 #, fuzzy, kde-format
 #| msgid "Dataset"
 msgid "Datasets"
 msgstr "Datajoukko"
 
-#: src/frontend/SettingsDialog.cpp:94
+#: src/frontend/SettingsDialog.cpp:95
 #, kde-format
 msgid "User Feedback"
 msgstr "Käyttäjäpalaute"
 
-#: src/frontend/SettingsDialog.cpp:100
+#: src/frontend/SettingsDialog.cpp:102
 #, fuzzy, kde-format
-#| msgid "Text position"
-msgid "Script Editor"
-msgstr "Tekstin sijainti"
+#| msgid "&Script"
+msgid "Scripting"
+msgstr "&Skripti"
 
-#: src/frontend/SettingsDialog.cpp:163
+#: src/frontend/SettingsDialog.cpp:107
+#, fuzzy, kde-format
+#| msgid "Edit"
+msgid "Editor"
+msgstr "Muokkaa"
+
+#: src/frontend/SettingsDialog.cpp:170
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr "Kaikki asetukset palautetaan oletusarvoihinsa. Haluatko jatkaa?"
 
-#: src/frontend/SettingsDialog.cpp:174
+#: src/frontend/SettingsDialog.cpp:181
 #, fuzzy, kde-format
 #| msgid "Preferences    [Changed]"
 msgctxt "@title:window"
@@ -19396,6 +19402,12 @@ msgstr "Laske kaikki nykyisen alla olevat tietueet uudelleen automaattisesti."
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Pyydä vahvistus taustajärjestelmän uudelleenkäynnistykseen."
+
+#: src/frontend/SettingsScriptingPage.cpp:45
+#, fuzzy, kde-format
+#| msgid "Save Default"
+msgid "System Default"
+msgstr "Tallenna oletukseksi"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -22414,6 +22426,7 @@ msgstr "Luo indeksisarake"
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, SettingsScriptingPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KDEPlotDock)
 #. i18n: ectx: property (windowTitle), widget (QWidget, RunChartDock)
@@ -22444,6 +22457,7 @@ msgstr "Luo indeksisarake"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:14
 #: src/frontend/ui/script/scripteditorwidget.ui:14
 #: src/frontend/ui/settingsnotebookpage.ui:14
+#: src/frontend/ui/settingsscriptingpage.ui:14
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:14
@@ -25012,8 +25026,10 @@ msgstr "Muutettu:"
 msgid "Created:"
 msgstr "Luotu:"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonVersionTitle)
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:207
+#: src/frontend/ui/settingsscriptingpage.ui:43
 #, kde-format
 msgid "Version:"
 msgstr "Versio:"
@@ -26748,6 +26764,26 @@ msgstr "Automaattitallenna"
 msgid "TODO"
 msgstr "TODO"
 
+#. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
+#: src/frontend/ui/settingsscriptingpage.ui:36
+#, fuzzy, kde-format
+#| msgid "Increment:"
+msgid "Environment:"
+msgstr "Lisäys:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
+#: src/frontend/ui/settingsscriptingpage.ui:74
+#, kde-format
+msgid "Path:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsscriptingpage.ui:99
+#, fuzzy, kde-format
+#| msgid "Settings"
+msgid "Python Settings"
+msgstr "Asetukset"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
 #, kde-format
@@ -28294,6 +28330,11 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Tiedostoa ei voi avata:"
+
+#, fuzzy
+#~| msgid "Text position"
+#~ msgid "Script Editor"
+#~ msgstr "Tekstin sijainti"
 
 #, fuzzy
 #~| msgid "%1: set vertical alignment"
@@ -30016,9 +30057,6 @@ msgstr "Tiedostoa ei voi avata:"
 #~| msgid "invalid row value"
 #~ msgid "Divide by Value"
 #~ msgstr "virheellinen rivin arvo"
-
-#~ msgid "Edit"
-#~ msgstr "Muokkaa"
 
 #, fuzzy
 #~| msgid "Clea&r Selection"
