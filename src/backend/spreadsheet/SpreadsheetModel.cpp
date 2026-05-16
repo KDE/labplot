@@ -268,7 +268,7 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 	if (row < 0 || row >= m_rowCount || col < 0 || col >= m_columnCount)
 		return false;
 
-	const auto* column = m_spreadsheet->column(col);
+	auto* column = m_spreadsheet->column(col);
 
 	// DEBUG("SpreadsheetModel::setData() value = " << STDSTRING(value.toString()))
 
