@@ -127,7 +127,10 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 
 	const int row = index.row();
 	const int col = index.column();
-	const Column* col_ptr = m_spreadsheet->column(col);
+	if (row < 0 || row >= m_rowCount || col < 0 || col >= m_columnCount)
+		return {};
+
+	const auto* col_ptr = m_spreadsheet->column(col);
 
 	if (!col_ptr)
 		return {};
@@ -260,8 +263,12 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 	if (!index.isValid())
 		return false;
 
-	int row = index.row();
-	auto* column = m_spreadsheet->column(index.column());
+	const int row = index.row();
+	const int col = index.column();
+	if (row < 0 || row >= m_rowCount || col < 0 || col >= m_columnCount)
+		return false;
+
+	const auto* column = m_spreadsheet->column(col);
 
 	// DEBUG("SpreadsheetModel::setData() value = " << STDSTRING(value.toString()))
 
@@ -371,6 +378,9 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 }
 
 QModelIndex SpreadsheetModel::index(int row, int column, const QModelIndex& /*parent*/) const {
+	if (row < 0 || row >= m_rowCount || column < 0 || column >= m_columnCount)
+		return QModelIndex();
+
 	return createIndex(row, column);
 }
 
