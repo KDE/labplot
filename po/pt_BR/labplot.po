@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-15 00:40+0000\n"
-"PO-Revision-Date: 2026-05-11 06:55-0300\n"
+"PO-Revision-Date: 2026-05-15 04:50-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -18373,16 +18373,14 @@ msgid "User Feedback"
 msgstr "Comentários do usuário"
 
 #: src/frontend/SettingsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgid "Scripting"
-msgstr "Script"
+msgstr "Scripting"
 
 #: src/frontend/SettingsDialog.cpp:107
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Editor"
-msgstr "&Editar"
+msgstr "Editor"
 
 #: src/frontend/SettingsDialog.cpp:170
 #, kde-format
@@ -18626,10 +18624,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Pede confirmação ao reiniciar o sistema de infraestrutura."
 
 #: src/frontend/SettingsScriptingPage.cpp:45
-#, fuzzy, kde-format
-#| msgid "Save Default"
+#, kde-format
 msgid "System Default"
-msgstr "Salvar como padrão"
+msgstr "Padrão do sistema"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -25765,24 +25762,21 @@ msgstr "A FAZER"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
 #: src/frontend/ui/settingsscriptingpage.ui:36
-#, fuzzy, kde-format
-#| msgid "Copy Environment"
+#, kde-format
 msgid "Environment:"
-msgstr "Copiar ambiente"
+msgstr "Ambiente:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
 #: src/frontend/ui/settingsscriptingpage.ui:74
-#, fuzzy, kde-format
-#| msgid "CLI Path:"
+#, kde-format
 msgid "Path:"
-msgstr "Caminho do CLI:"
+msgstr "Caminho:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsscriptingpage.ui:99
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "Python Settings"
-msgstr "Configurações"
+msgstr "Configurações do Python"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30

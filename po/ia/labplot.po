@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-15 00:40+0000\n"
-"PO-Revision-Date: 2026-05-13 15:18+0200\n"
+"PO-Revision-Date: 2026-05-15 10:37+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -17841,16 +17841,14 @@ msgid "User Feedback"
 msgstr "Responsa del usator"
 
 #: src/frontend/SettingsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgid "Scripting"
-msgstr "Script"
+msgstr "Scripting"
 
 #: src/frontend/SettingsDialog.cpp:107
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Editor"
-msgstr "&Edita"
+msgstr "Editor"
 
 #: src/frontend/SettingsDialog.cpp:170
 #, kde-format
@@ -18062,10 +18060,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr ""
 
 #: src/frontend/SettingsScriptingPage.cpp:45
-#, fuzzy, kde-format
-#| msgid "Save Default"
+#, kde-format
 msgid "System Default"
-msgstr "Salveguarda predefinite"
+msgstr "Predefinite de systema"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -25153,10 +25150,9 @@ msgstr "DE FACER"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
 #: src/frontend/ui/settingsscriptingpage.ui:36
-#, fuzzy, kde-format
-#| msgid "Increment:"
+#, kde-format
 msgid "Environment:"
-msgstr "Augmenta:"
+msgstr "Ambiente:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
 #: src/frontend/ui/settingsscriptingpage.ui:74
@@ -25166,10 +25162,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsscriptingpage.ui:99
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "Python Settings"
-msgstr "Preferentias"
+msgstr "Preferentias de Python"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30

@@ -17898,16 +17898,14 @@ msgid "User Feedback"
 msgstr "Zpětná vazba uživatele"
 
 #: src/frontend/SettingsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgid "Scripting"
-msgstr "Skript"
+msgstr "Skriptování"
 
 #: src/frontend/SettingsDialog.cpp:107
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Editor"
-msgstr "&Upravit"
+msgstr "Editor"
 
 #: src/frontend/SettingsDialog.cpp:170
 #, kde-format
@@ -18120,10 +18118,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr ""
 
 #: src/frontend/SettingsScriptingPage.cpp:45
-#, fuzzy, kde-format
-#| msgid "Save Default"
+#, kde-format
 msgid "System Default"
-msgstr "Uložit výchozí"
+msgstr "Výchozí systémový"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -25237,23 +25234,21 @@ msgstr "Úlohy"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
 #: src/frontend/ui/settingsscriptingpage.ui:36
-#, fuzzy, kde-format
-#| msgid "Increment:"
+#, kde-format
 msgid "Environment:"
-msgstr "Zvýšení:"
+msgstr "Prostředí:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
 #: src/frontend/ui/settingsscriptingpage.ui:74
 #, kde-format
 msgid "Path:"
-msgstr ""
+msgstr "Cesta:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsscriptingpage.ui:99
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "Python Settings"
-msgstr "Nastavení"
+msgstr "Nastavení Pythonu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30

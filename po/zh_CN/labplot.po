@@ -17845,16 +17845,14 @@ msgid "User Feedback"
 msgstr "用户反馈"
 
 #: src/frontend/SettingsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgid "&Script"
+#, kde-format
 msgid "Scripting"
-msgstr "脚本(&S)"
+msgstr ""
 
 #: src/frontend/SettingsDialog.cpp:107
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Editor"
-msgstr "编辑(&E)"
+msgstr ""
 
 #: src/frontend/SettingsDialog.cpp:170
 #, kde-format
@@ -18076,10 +18074,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "重新启动后端时要求确认。"
 
 #: src/frontend/SettingsScriptingPage.cpp:45
-#, fuzzy, kde-format
-#| msgid "Save Default"
+#, kde-format
 msgid "System Default"
-msgstr "保存为默认"
+msgstr ""
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -25162,24 +25159,21 @@ msgstr "待办事项"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
 #: src/frontend/ui/settingsscriptingpage.ui:36
-#, fuzzy, kde-format
-#| msgid "Increment:"
+#, kde-format
 msgid "Environment:"
-msgstr "增量："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
 #: src/frontend/ui/settingsscriptingpage.ui:74
-#, fuzzy, kde-format
-#| msgid "CLI Path:"
+#, kde-format
 msgid "Path:"
-msgstr "命令行工具路径："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsscriptingpage.ui:99
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "Python Settings"
-msgstr "设置"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30

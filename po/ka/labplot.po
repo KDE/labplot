@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-15 00:40+0000\n"
-"PO-Revision-Date: 2026-05-11 05:50+0200\n"
+"PO-Revision-Date: 2026-05-15 04:16+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -18317,16 +18317,14 @@ msgid "User Feedback"
 msgstr "მომხარებლის უკუკავშირი"
 
 #: src/frontend/SettingsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgid "Scripting"
-msgstr "სკრიპტი"
+msgstr "სკრიპტები"
 
 #: src/frontend/SettingsDialog.cpp:107
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Editor"
-msgstr "&რედაქტირება"
+msgstr "რედაქტორი"
 
 #: src/frontend/SettingsDialog.cpp:170
 #, kde-format
@@ -18563,10 +18561,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "დადასტურების თხოვნა უკანაბოლოს სისტემის გადატვირთვისას."
 
 #: src/frontend/SettingsScriptingPage.cpp:45
-#, fuzzy, kde-format
-#| msgid "Save Default"
+#, kde-format
 msgid "System Default"
-msgstr "ნაგულისხმევის შენახვა"
+msgstr "სისტემის ნაგულისხმევი"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -25699,24 +25696,21 @@ msgstr "განრიგის სია"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
 #: src/frontend/ui/settingsscriptingpage.ui:36
-#, fuzzy, kde-format
-#| msgid "Copy Environment"
+#, kde-format
 msgid "Environment:"
-msgstr "გარემოს კოპირება"
+msgstr "გარემო:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
 #: src/frontend/ui/settingsscriptingpage.ui:74
-#, fuzzy, kde-format
-#| msgid "CLI Path:"
+#, kde-format
 msgid "Path:"
-msgstr "CLI ბილიკი:"
+msgstr "ბილიკი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsscriptingpage.ui:99
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "Python Settings"
-msgstr "მორგება"
+msgstr "Python-ის მორგება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
