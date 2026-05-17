@@ -1362,7 +1362,10 @@ void Column::save(QXmlStreamWriter* writer) const {
 			// convert QDateTime values to milliseconds since epoch and serialize them using Base64 encoding
 			QByteArray bytes;
 			for (int i = 0; i < rowCount(); ++i) {
-				qint64 msecs = dateTimeAt(i).toMSecsSinceEpoch();
+				// Store wall-clock date/time as UTC milliseconds to avoid locale-dependent
+				// shifts (e.g., daylight saving) when loading on systems with different timezones.
+				const QDateTime dt = dateTimeAt(i);
+				const qint64 msecs = QDateTime(dt.date(), dt.time(), Qt::UTC).toMSecsSinceEpoch();
 				bytes.append(reinterpret_cast<const char*>(&msecs), sizeof(qint64));
 			}
 			writer->writeCharacters(QLatin1String(bytes.toBase64()));
@@ -1425,7 +1428,8 @@ public:
 			for (int i = 0; i < bytes.size(); i += sizeof(qint64)) {
 				qint64 msecs;
 				memcpy(&msecs, bytes.data() + i, sizeof(qint64));
-				dateTimeVector.append(QDateTime::fromMSecsSinceEpoch(msecs));
+				// Interpret stored milliseconds since epoch as UTC to preserve original timezone
+				dateTimeVector.append(QDateTime::fromMSecsSinceEpoch(msecs, QTimeZone::UTC));
 			}
 			m_private->replaceDateTimes(-1, dateTimeVector);
 			break;
