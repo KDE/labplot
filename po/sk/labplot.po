@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-15 00:40+0000\n"
+"POT-Creation-Date: 2026-05-17 00:39+0000\n"
 "PO-Revision-Date: 2026-04-13 12:00+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -7475,22 +7475,22 @@ msgstr[0] "dáta dátumu a času, %1 prvok"
 msgstr[1] "dáta dátumu a času, %1 prvky"
 msgstr[2] "dáta dátumu a času, %1 prvkov"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:139
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:142
 #, kde-format
 msgid "%1, masked (ignored in all operations)"
 msgstr "%1, maskované (ignorované vo všetkých operáciách)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:144
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:147
 #, kde-format
 msgid "invalid cell, masked (ignored in all operations)"
 msgstr "neplatná bunka, maskovaná (ignorovaná vo všetkých operáciách)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:146
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:149
 #, kde-format
 msgid "invalid cell (ignored in all operations)"
 msgstr "neplatná bunka (ignorovaná vo všetkých operáciách)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:297
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:304
 #, kde-format
 msgid "%1: change column type and set value"
 msgstr "%1: zmeniť typ stĺpca a nastaviť hodnotu"
@@ -18243,15 +18243,14 @@ msgid "User Feedback"
 msgstr "Používateľská odozva"
 
 #: src/frontend/SettingsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgid "Scripting"
-msgstr "Skripty"
+msgstr "Skriptovanie"
 
 #: src/frontend/SettingsDialog.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Editor"
-msgstr "Upraviť"
+msgstr "Editor"
 
 #: src/frontend/SettingsDialog.cpp:170
 #, kde-format
@@ -18482,10 +18481,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Žiadať potvrdenie pri reštartovaní backendového systému."
 
 #: src/frontend/SettingsScriptingPage.cpp:45
-#, fuzzy, kde-format
-#| msgid "Save Default"
+#, kde-format
 msgid "System Default"
-msgstr "Uložiť predvolené"
+msgstr "Predvolené v systéme"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -25622,24 +25620,21 @@ msgstr "Úlohy"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
 #: src/frontend/ui/settingsscriptingpage.ui:36
-#, fuzzy, kde-format
-#| msgid "Copy Environment"
+#, kde-format
 msgid "Environment:"
-msgstr "Copy Environment"
+msgstr "Prostredie:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
 #: src/frontend/ui/settingsscriptingpage.ui:74
-#, fuzzy, kde-format
-#| msgid "CLI Path:"
+#, kde-format
 msgid "Path:"
-msgstr "Cesta CLI:"
+msgstr "Cesta:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsscriptingpage.ui:99
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "Python Settings"
-msgstr "Nastavenia"
+msgstr "Nastavenia Pythonu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30

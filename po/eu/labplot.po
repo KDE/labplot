@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-15 00:40+0000\n"
+"POT-Creation-Date: 2026-05-17 00:39+0000\n"
 "PO-Revision-Date: 2026-02-01 00:20+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -7475,22 +7475,22 @@ msgid_plural "date and time data, %1 elements"
 msgstr[0] "eguna eta ordua datuak, elementu %1"
 msgstr[1] "eguna eta ordua datuak, %1 elementu"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:139
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:142
 #, kde-format
 msgid "%1, masked (ignored in all operations)"
 msgstr "%1, maskaratuta (eragiketa guztietan ezikusia)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:144
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:147
 #, kde-format
 msgid "invalid cell, masked (ignored in all operations)"
 msgstr "gelaxka baliogabea, maskaratuta (eragiketa guztietan ezikusia)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:146
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:149
 #, kde-format
 msgid "invalid cell (ignored in all operations)"
 msgstr "gelaxka baliogabea (eragiketa guztietan ezikusia)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:297
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:304
 #, fuzzy, kde-format
 #| msgid "%1: change column type"
 msgid "%1: change column type and set value"

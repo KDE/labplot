@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-15 00:40+0000\n"
+"POT-Creation-Date: 2026-05-17 00:39+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -7505,22 +7505,22 @@ msgid_plural "date and time data, %1 elements"
 msgstr[0] "date and time data, %1 element"
 msgstr[1] "date and time data, %1 elements"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:139
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:142
 #, kde-format
 msgid "%1, masked (ignored in all operations)"
 msgstr "%1, masked (ignored in all operations)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:144
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:147
 #, kde-format
 msgid "invalid cell, masked (ignored in all operations)"
 msgstr "invalid cell, masked (ignored in all operations)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:146
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:149
 #, kde-format
 msgid "invalid cell (ignored in all operations)"
 msgstr "invalid cell (ignored in all operations)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:297
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:304
 #, fuzzy, kde-format
 #| msgid "%1: change column type"
 msgid "%1: change column type and set value"

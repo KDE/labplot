@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-15 00:40+0000\n"
+"POT-Creation-Date: 2026-05-17 00:39+0000\n"
 "PO-Revision-Date: 2026-05-15 09:57+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -7562,22 +7562,22 @@ msgstr[1] "дані щодо дати і часу, %1 елементи"
 msgstr[2] "дані щодо дати і часу, %1 елементів"
 msgstr[3] "дані щодо дати і часу, один елемент"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:139
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:142
 #, kde-format
 msgid "%1, masked (ignored in all operations)"
 msgstr "%1, замасковано (проігноровано у всіх операціях)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:144
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:147
 #, kde-format
 msgid "invalid cell, masked (ignored in all operations)"
 msgstr "некоректна комірка, замасковано (проігноровано у всіх операціях)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:146
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:149
 #, kde-format
 msgid "invalid cell (ignored in all operations)"
 msgstr "некоректна комірка (проігноровано у всіх операціях)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:297
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:304
 #, kde-format
 msgid "%1: change column type and set value"
 msgstr "%1: змінити тип стовпчика і встановити значення"
