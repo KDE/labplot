@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-15 00:40+0000\n"
+"POT-Creation-Date: 2026-05-17 00:39+0000\n"
 "PO-Revision-Date: 2025-02-09 08:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -7540,22 +7540,22 @@ msgstr[0] "dana daty i czasu, %1 element"
 msgstr[1] "dana daty i czasu, %1 elementy"
 msgstr[2] "dana daty i czasu, %1 elementów"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:139
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:142
 #, kde-format
 msgid "%1, masked (ignored in all operations)"
 msgstr "%1, maskowany (pomijane we wszystkich operacjach)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:144
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:147
 #, kde-format
 msgid "invalid cell, masked (ignored in all operations)"
 msgstr "nieprawidłowa komórka, maskowana (pomijana we wszystkich operacjach)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:146
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:149
 #, kde-format
 msgid "invalid cell (ignored in all operations)"
 msgstr "nieprawidłowa komórka (pomijana we wszystkich operacjach)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:297
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:304
 #, fuzzy, kde-format
 #| msgid "%1: change column type"
 msgid "%1: change column type and set value"

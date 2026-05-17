@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-15 00:40+0000\n"
-"PO-Revision-Date: 2026-05-11 09:26+0200\n"
+"POT-Creation-Date: 2026-05-17 00:39+0000\n"
+"PO-Revision-Date: 2026-05-15 09:26+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -7578,22 +7578,22 @@ msgid_plural "date and time data, %1 elements"
 msgstr[0] "dades de la data i hora, %1 element"
 msgstr[1] "dades de la data i hora, %1 elements"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:139
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:142
 #, kde-format
 msgid "%1, masked (ignored in all operations)"
 msgstr "%1, emmascarada (ignorada en totes les operacions)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:144
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:147
 #, kde-format
 msgid "invalid cell, masked (ignored in all operations)"
 msgstr "cel·la no vàlida, emmascarada (ignorada en totes les operacions)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:146
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:149
 #, kde-format
 msgid "invalid cell (ignored in all operations)"
 msgstr "cel·la no vàlida (ignorada en totes les operacions)"
 
-#: src/backend/spreadsheet/SpreadsheetModel.cpp:297
+#: src/backend/spreadsheet/SpreadsheetModel.cpp:304
 #, kde-format
 msgid "%1: change column type and set value"
 msgstr "%1: canvia el tipus de la columna i establix un valor"
@@ -18494,16 +18494,14 @@ msgid "User Feedback"
 msgstr "Comentaris de l'usuari"
 
 #: src/frontend/SettingsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgid "Scripting"
-msgstr "Script"
+msgstr "Creació de scripts"
 
 #: src/frontend/SettingsDialog.cpp:107
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Editor"
-msgstr "&Edita"
+msgstr "Editor"
 
 #: src/frontend/SettingsDialog.cpp:170
 #, kde-format
@@ -18749,10 +18747,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Demana confirmació en reiniciar el sistema del dorsal."
 
 #: src/frontend/SettingsScriptingPage.cpp:45
-#, fuzzy, kde-format
-#| msgid "Save Default"
+#, kde-format
 msgid "System Default"
-msgstr "Guarda al predeterminat"
+msgstr "Predeterminada del sistema"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -25926,24 +25923,21 @@ msgstr "Per fer"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
 #: src/frontend/ui/settingsscriptingpage.ui:36
-#, fuzzy, kde-format
-#| msgid "Copy Environment"
+#, kde-format
 msgid "Environment:"
-msgstr "Copia l'entorn"
+msgstr "Entorn:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
 #: src/frontend/ui/settingsscriptingpage.ui:74
-#, fuzzy, kde-format
-#| msgid "CLI Path:"
+#, kde-format
 msgid "Path:"
-msgstr "Camí de CLI:"
+msgstr "Camí:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsscriptingpage.ui:99
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "Python Settings"
-msgstr "Configuració"
+msgstr "Configureu Python"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
@@ -27509,6 +27503,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Script Editor"
-#~ msgstr "Editor de scripts"
