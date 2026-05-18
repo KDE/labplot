@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-17 00:39+0000\n"
+"POT-Creation-Date: 2026-05-18 00:40+0000\n"
 "PO-Revision-Date: 2026-02-18 15:39+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -602,14 +602,14 @@ msgstr "Verwendet in Achsen:"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Verwendet in Tabellen-Berechnungen:"
 
-#: src/backend/core/column/Column.cpp:1775
+#: src/backend/core/column/Column.cpp:1779
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "Ungültiger oder fehlender Zeilenindex"
 
-#: src/backend/core/column/Column.cpp:1784
-#: src/backend/core/column/Column.cpp:1793
-#: src/backend/core/column/Column.cpp:1802
+#: src/backend/core/column/Column.cpp:1788
+#: src/backend/core/column/Column.cpp:1797
+#: src/backend/core/column/Column.cpp:1806
 #, kde-format
 msgid "invalid row value"
 msgstr "Ungültiger Zeilenwert"

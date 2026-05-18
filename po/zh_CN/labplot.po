@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-17 00:39+0000\n"
+"POT-Creation-Date: 2026-05-18 00:40+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -594,14 +594,14 @@ msgstr ""
 msgid "Used in Spreadsheet Calculations:"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1775
+#: src/backend/core/column/Column.cpp:1779
 #, kde-format
 msgid "invalid or missing row index"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1784
-#: src/backend/core/column/Column.cpp:1793
-#: src/backend/core/column/Column.cpp:1802
+#: src/backend/core/column/Column.cpp:1788
+#: src/backend/core/column/Column.cpp:1797
+#: src/backend/core/column/Column.cpp:1806
 #, kde-format
 msgid "invalid row value"
 msgstr ""

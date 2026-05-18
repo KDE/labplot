@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-17 00:39+0000\n"
-"PO-Revision-Date: 2026-05-15 04:50-0300\n"
+"POT-Creation-Date: 2026-05-18 00:40+0000\n"
+"PO-Revision-Date: 2026-05-17 07:51-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -603,14 +603,14 @@ msgstr "Usado em eixos:"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Usado em cálculos em planilha:"
 
-#: src/backend/core/column/Column.cpp:1775
+#: src/backend/core/column/Column.cpp:1779
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "índice da linha inválido ou faltando"
 
-#: src/backend/core/column/Column.cpp:1784
-#: src/backend/core/column/Column.cpp:1793
-#: src/backend/core/column/Column.cpp:1802
+#: src/backend/core/column/Column.cpp:1788
+#: src/backend/core/column/Column.cpp:1797
+#: src/backend/core/column/Column.cpp:1806
 #, kde-format
 msgid "invalid row value"
 msgstr "valor da linha inválido"
@@ -18370,7 +18370,7 @@ msgstr "Conjuntos de dados"
 #: src/frontend/SettingsDialog.cpp:95
 #, kde-format
 msgid "User Feedback"
-msgstr "Comentários do usuário"
+msgstr "Feedback do usuário"
 
 #: src/frontend/SettingsDialog.cpp:102
 #, kde-format
