@@ -101,6 +101,7 @@
 #include "frontend/notebook/NotebookView.h"
 #include <cantor/backend.h>
 #include <cantor/cantorlibs_version.h>
+#include <KParts/ReadWritePart>
 #endif
 
 
@@ -1510,6 +1511,19 @@ void MainWin::createFolderContextMenu(const Folder*, QMenu* menu) const {
 }
 
 void MainWin::undo() {
+	#ifdef HAVE_CANTOR_LIBS
+	if (m_currentAspect && m_currentAspect->type() == AspectType::Notebook) {
+		auto* notebook = static_cast<Notebook*>(m_currentAspect);
+		QWidget* focusWidget = QApplication::focusWidget();
+		if (notebook->part() && focusWidget && notebook->part()->widget()->isAncestorOf(focusWidget)) {
+			if (auto* a = notebook->part()->action(QStringLiteral("edit_undo"))) {
+				a->trigger();
+				return;
+			}
+		}
+	}
+	#endif
+
 	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->undo();
 	m_actionsManager->m_redoAction->setEnabled(true);
@@ -1525,6 +1539,19 @@ void MainWin::undo() {
 }
 
 void MainWin::redo() {
+	#ifdef HAVE_CANTOR_LIBS
+	if (m_currentAspect && m_currentAspect->type() == AspectType::Notebook) {
+		auto* notebook = static_cast<Notebook*>(m_currentAspect);
+		QWidget* focusWidget = QApplication::focusWidget();
+		if (notebook->part() && focusWidget && notebook->part()->widget()->isAncestorOf(focusWidget)) {
+			if (auto* a = notebook->part()->action(QStringLiteral("edit_redo"))) {
+				a->trigger();
+				return;
+			}
+		}
+	}
+	#endif
+
 	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->redo();
 	m_actionsManager->m_undoAction->setEnabled(true);
