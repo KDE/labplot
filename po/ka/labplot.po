@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-18 00:40+0000\n"
-"PO-Revision-Date: 2026-05-15 04:16+0200\n"
+"PO-Revision-Date: 2026-05-18 06:00+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -9918,7 +9918,7 @@ msgstr "'%1'-ის ინტერპოლაცია"
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:839
 #, kde-format
 msgid "Smoothing of '%1'"
-msgstr "'%1' - ს მოგლუვება"
+msgstr "'%1'-ის მოგლუვება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2274
 #, kde-format
@@ -13563,7 +13563,7 @@ msgstr "ჩავარდა მიერთება '%1'-თან. შეც
 #: src/frontend/datasources/ImportFileWidget.cpp:2771
 #, kde-format
 msgid "Disconnected from '%1'."
-msgstr "'%1'-დან გათიშულია."
+msgstr "გაითიშა '%1'-დან ."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2837
 #, kde-format
@@ -13604,7 +13604,7 @@ msgstr "შეცდომა."
 #: src/frontend/datasources/ImportFileWidget.cpp:2977
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
-msgstr "'%1:%2' - სთან დაკავშირების მოლოდინის ვადა ამოიწურა."
+msgstr "'%1:%2'-ისთან დაკავშირების მოლოდინის ვადა ამოიწურა."
 
 #: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:36
 #, kde-format
