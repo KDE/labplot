@@ -29,6 +29,9 @@
 
 #ifdef Q_OS_WIN
 #include <windows.h>
+#ifndef PATH_MAX
+#define PATH_MAX MAX_PATH
+#endif
 #endif
 
 #include <KConfigGroup>
@@ -37,7 +40,9 @@
 // PySys_GetObject(), PyImport_AddModule() return a borrowed reference so we create own reference with Py_INCREF() and Py_DECREF(o) when done
 // PyObject_GetAttrString(), Shiboken::Object::newObject() return a new reference
 
-static const wchar_t programName[] = L"labplot";
+static wchar_t programName[] = L"labplot";
+
+static wchar_t* argv[] = {programName};
 
 // The name of our python extension module: pylabplot
 static const char* moduleName = "pylabplot";
@@ -160,50 +165,37 @@ bool PythonScriptRuntime::initPython() {
 		return false;
 	}
 
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
+	// for a change in this config to take effect the application may need to restart, though can reinitialize python without needing restart
+	// (finalize then initialize)
+	const QString pythonExecutable = group.readEntry(QLatin1String("PythonExecutable"), QString());
+	if (!pythonExecutable.isEmpty()) {
+		// need to validate that the provided python executable exists and matches with the python shared library currently linked to
+		static wchar_t interpreter_path[PATH_MAX];
+		const std::wstring widePath = pythonExecutable.toStdWString();
+		wcsncpy(interpreter_path, widePath.c_str(), PATH_MAX - 1);
+		interpreter_path[PATH_MAX - 1] = L'\0';
+		// it is enough to pass the path of the python executable to python and it calculates its search paths correctly from it also
+		// supporting virtual environments
+		// https://github.com/python/cpython/issues/66409#issuecomment-2543996605
+		// https://github.com/python/cpython/blob/main/Modules/getpath.py#L70-L168
+		Py_SetProgramName(interpreter_path);  // this will be removed in python 3.15 but there is an alternative already in python 3.14
+		// https://docs.python.org/3/c-api/init_config.html#pyinitconfig-c-api but need to request for python developers to add the
+		// PyInitConfig C API to the limited API which was already discussed https://discuss.python.org/t/pep-741-python-configuration-c-api-second-version/45403/48
+	}
+
 	// Initialize Python interpreter (stable ABI)
 	// Python auto-detects its prefix. Users can override via the standard
 	// PYTHONHOME environment variable if needed.
 	Py_Initialize();
 
-	// Set sys.argv using stable ABI calls.
-	// PySys_SetArgv() is pending removal in Python 3.14, and PyConfig.argv is not
-	// part of the limited API. Use PySys_SetObject() instead.
-	PyObject* argvList = PyList_New(1);
-	if (argvList) {
-		PyList_SetItem(argvList, 0, PyUnicode_FromWideChar(programName, -1)); // steals reference
-		PySys_SetObject("argv", argvList);
-		Py_DECREF(argvList);
-	}
+	// need to validate that the provided python paths are initialized correctly and possible display them to the user in settings
 
-	// Ensure PySide6's site-packages directory is on sys.path so that the
-	// shiboken-generated pylabplot module can "import PySide6.QtCore" etc.
-	// Use the build-time path as a fallback; the user's PYTHONPATH takes
-	// precedence because Py_Initialize() already processes it.
-	{
-		PyObject* path = PySys_GetObject("path"); // borrowed reference
-		if (path) {
-#ifdef PYSIDE6_SITE_PACKAGES
-			// Append (not insert) so user-supplied paths in PYTHONPATH win
-			PyObject* pySiteDir = PyUnicode_FromString(PYSIDE6_SITE_PACKAGES);
-			if (PySequence_Contains(path, pySiteDir) == 0)
-				PyList_Append(path, pySiteDir);
-			Py_DECREF(pySiteDir);
-#endif
-		}
-	}
+	PySys_SetArgvEx(1, argv, 0); // this will be removed in removed in python 3.15 but there are alternatives
 
-	// Add the user-configured virtual environment's site-packages to sys.path
-	// so that packages from that environment are available for import.
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
-	const QString sitePackages = group.readEntry(QLatin1String("PythonEnvironment"), QString());
-	if (!sitePackages.isEmpty()) {
-		PyObject* path = PySys_GetObject("path"); // borrowed reference
-		if (path) {
-			PyObject* pySitePackages = PyUnicode_FromString(sitePackages.toUtf8().constData());
-			PyList_Insert(path, 1, pySitePackages);
-			Py_DECREF(pySitePackages);
-		}
-	}
+	// need to compile and distribute our own pyside python library to ensure it links with the
+	// same qt6 linked by labplot. then distribute our compiled pyside python library
+	// and add it to sys.path
 
 	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
 	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;
