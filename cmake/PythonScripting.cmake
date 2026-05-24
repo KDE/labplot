@@ -309,10 +309,10 @@ get_filename_component(_pyside6_site_packages "${PySide6_PATH}" DIRECTORY)
 set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY
     COMPILE_DEFINITIONS PYSIDE6_SITE_PACKAGES="${_pyside6_site_packages}")
 
-# Enable Python Stable ABI (Limited API) for Python 3.9+
+# Enable Python Stable ABI (Limited API) for Python
 # Note: We only apply this to our source files, not shiboken-generated sources to avoid redefinition warnings
-set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
-message(STATUS "Python Stable ABI enabled (minimum: Python 3.9)")
+set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=${PYTHON_ABI_VERSION_HEX})
+message(STATUS "Python Stable ABI enabled (minimum: Python ${PYTHON_ABI_VERSION})")
 
 # shiboken generates sources using deprecated code so we remove these deprecation macros to enable the shiboken generated files to compile
 get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)

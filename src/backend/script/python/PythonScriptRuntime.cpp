@@ -38,7 +38,7 @@
 
 // PyObject* handling:
 // PySys_GetObject(), PyImport_AddModule() return a borrowed reference so we create own reference with Py_INCREF() and Py_DECREF(o) when done
-// PyObject_GetAttrString(), Shiboken::Object::newObject() return a new reference
+// PyObject_GetAttrString(), Shiboken::Object::newObject() return a new reference so we Py_DECREF(o) when done
 
 static wchar_t programName[] = L"labplot";
 
@@ -56,6 +56,8 @@ extern PyTypeObject** SbkpylabplotTypes;
 // The python interpreter and pylabplot need to be only initialized once for all python scriptruntimes.
 // So we used this static variable to track if it is done already
 bool PythonScriptRuntime::ready{false};
+
+bool PythonScriptRuntime::needsRestart{false};
 
 // To redirect python stdout and stderr to our output in the ScriptEditor, we temporarily replace the
 // sys.stdout and sys.stderr objects in python with instances of our PythonLogger class. These variables
@@ -94,6 +96,11 @@ PythonScriptRuntime::~PythonScriptRuntime() {
 
 	delete m_loggerStdOut;
 	delete m_loggerStdErr;
+
+	// if (Py_IsInitialized()) {
+	// 	PyGILState_STATE gil = PyGILState_Ensure();
+	// 	Py_Finalize();
+	// }
 }
 
 bool PythonScriptRuntime::init() {
@@ -102,6 +109,11 @@ bool PythonScriptRuntime::init() {
 	bool init = PythonScriptRuntime::initPython();
 	if (!init) {
 		WARN("Failed to initialize python interpreter and pylabplot module")
+		// if (Py_IsInitialized()) {
+		// 	PyGILState_STATE gil = PyGILState_Ensure();
+		// 	Py_Finalize();
+		// }
+		needsRestart = true;
 		return false;
 	}
 
@@ -154,8 +166,15 @@ bool PythonScriptRuntime::init() {
 	return true;
 }
 
+// if this fails, set a variable to disable python until app restart
+// need to have a global minimum supported python version because of pyside and shiboken
+// possibly run in isolated mode
 bool PythonScriptRuntime::initPython() {
 	INFO(Q_FUNC_INFO)
+
+	if (needsRestart)
+		return false;
+
 	// Python interpreter and pylabplot module is already initialized
 	if (Py_IsInitialized() && ready)
 		return true;
@@ -171,25 +190,51 @@ bool PythonScriptRuntime::initPython() {
 	const QString pythonExecutable = group.readEntry(QLatin1String("PythonExecutable"), QString());
 	if (!pythonExecutable.isEmpty()) {
 		// need to validate that the provided python executable exists and matches with the python shared library currently linked to
-		static wchar_t interpreter_path[PATH_MAX];
+		static wchar_t interpreterPath[PATH_MAX];
 		const std::wstring widePath = pythonExecutable.toStdWString();
-		wcsncpy(interpreter_path, widePath.c_str(), PATH_MAX - 1);
-		interpreter_path[PATH_MAX - 1] = L'\0';
+		wcsncpy(interpreterPath, widePath.c_str(), PATH_MAX - 1);
+		interpreterPath[PATH_MAX - 1] = L'\0';
 		// it is enough to pass the path of the python executable to python and it calculates its search paths correctly from it also
 		// supporting virtual environments
 		// https://github.com/python/cpython/issues/66409#issuecomment-2543996605
 		// https://github.com/python/cpython/blob/main/Modules/getpath.py#L70-L168
-		Py_SetProgramName(interpreter_path);  // this will be removed in python 3.15 but there is an alternative already in python 3.14
+		Py_SetProgramName(interpreterPath);  // this will be removed in python 3.15 but there is an alternative already in python 3.14
 		// https://docs.python.org/3/c-api/init_config.html#pyinitconfig-c-api but need to request for python developers to add the
 		// PyInitConfig C API to the limited API which was already discussed https://discuss.python.org/t/pep-741-python-configuration-c-api-second-version/45403/48
+		
+		// Initialize Python interpreter (stable ABI)
+		// Python auto-detects its prefix. Users can override via the standard
+		// PYTHONHOME environment variable if needed.
+		Py_Initialize();
+
+		// need to validate that the provided python paths are initialized correctly and possible display them to the user in settings
+		// confirm sys.executable == interpreterPath
+		static wchar_t sysExecutable[PATH_MAX];
+		PyObject* sysExecutableObj = PySys_GetObject("executable");
+		if (!sysExecutableObj) {
+			WARN("Failed to to load sys.executable")
+			return false;
+		}
+		Py_INCREF(sysExecutableObj); // own it
+
+		if (PyUnicode_AsWideChar(sysExecutableObj, sysExecutable, sizeof(sysExecutable)) == -1) {
+			WARN("Failed to convert sys.executable to wide string")
+			Py_DECREF(sysExecutableObj);
+			return false;
+		}
+
+		if (wcscmp(interpreterPath, sysExecutable) != 0) {
+			WARN("Unexpected sys.executable value")
+			Py_DECREF(sysExecutableObj);
+			return false;
+		}
+		Py_DECREF(sysExecutableObj);
+	} else {
+		// Initialize Python interpreter (stable ABI)
+		// Python auto-detects its prefix. Users can override via the standard
+		// PYTHONHOME environment variable if needed.
+		Py_Initialize();
 	}
-
-	// Initialize Python interpreter (stable ABI)
-	// Python auto-detects its prefix. Users can override via the standard
-	// PYTHONHOME environment variable if needed.
-	Py_Initialize();
-
-	// need to validate that the provided python paths are initialized correctly and possible display them to the user in settings
 
 	PySys_SetArgvEx(1, argv, 0); // this will be removed in removed in python 3.15 but there are alternatives
 

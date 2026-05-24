@@ -746,9 +746,11 @@ endif()
 
 ### Python3 (optional) #############################
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
-    # Require Python 3.9+ for stable ABI compatibility
-    find_package(Python3 3.9 COMPONENTS Development REQUIRED)
-    message(STATUS "Building with Python ${Python3_VERSION} (stable ABI minimum: 3.9)")
+    set(PYTHON_ABI_MAJOR_VERSION "3")
+    set(PYTHON_ABI_MINOR_VERSION "9")
+    set(PYTHON_ABI_VERSION "${PYTHON_ABI_MAJOR_VERSION}.${PYTHON_ABI_MINOR_VERSION}")
+    find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Development REQUIRED)
+    message(STATUS "Building with Python ${Python3_VERSION} (stable ABI minimum: ${PYTHON_ABI_VERSION})")
     find_package(PySide6 QUIET REQUIRED)
     if(PySide6_FOUND)
         message(STATUS "Found PySide6: ${PySide6_PATH}, ${PySide6_INCLUDE_DIRS}, ${PySide6_TYPESYSTEMS}, ${PySide6_ABI3_LIBRARY}")
@@ -760,12 +762,20 @@ if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     endif()
 endif()
 if(ENABLE_PYTHON_SDK)
-    find_package(Python3 3.9 COMPONENTS Interpreter REQUIRED)
+    find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Interpreter REQUIRED)
 endif()
 if(ENABLE_PYTHON_SCRIPTING)
-    find_package(Python3 3.9 COMPONENTS Development.Embed REQUIRED)
+    find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Development.Embed REQUIRED)
     add_definitions(-DHAVE_PYTHON_SCRIPTING)
-    add_definitions(-DPYTHON3_VERSION_STRING=\"${Python3_VERSION}\")
+    math(EXPR PYTHON_ABI_VERSION_HEX
+        "(((${PYTHON_ABI_MAJOR_VERSION}) & 0xff) << 24) |
+        (((${PYTHON_ABI_MINOR_VERSION}) & 0xff) << 16) |
+        (((0) & 0xff) << 8) |
+        (((0) & 0xf) << 4) |
+        (((0) & 0xf) << 0)"
+        OUTPUT_FORMAT HEXADECIMAL
+    )
+    add_definitions(-DPYTHON3_VERSION_STRING="abi${PYTHON_ABI_VERSION}")
 endif()
 
 # Qt Advanced Docking System (required) #####################
