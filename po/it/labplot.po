@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-18 00:40+0000\n"
+"POT-Creation-Date: 2026-05-26 00:40+0000\n"
 "PO-Revision-Date: 2026-04-10 16:02+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -268,7 +268,7 @@ msgstr "Numero intero grande"
 #: src/backend/datasources/filters/AsciiFilter.cpp:681
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
 #: src/frontend/ActionsManager.cpp:547
-#: src/frontend/notebook/NotebookView.cpp:102
+#: src/frontend/notebook/NotebookView.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:634
@@ -464,7 +464,7 @@ msgstr "Creato"
 msgid "Comment"
 msgstr "Commento"
 
-#: src/backend/core/AspectTreeModel.cpp:173 src/frontend/MainWin.cpp:1145
+#: src/backend/core/AspectTreeModel.cpp:173 src/frontend/MainWin.cpp:1146
 #, kde-format
 msgid "Changed"
 msgstr "Modificato"
@@ -1958,7 +1958,7 @@ msgid "Unknown"
 msgstr "Sconosciuta"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:232 src/frontend/MainWin.cpp:1237
+#: src/frontend/ActionsManager.cpp:232 src/frontend/MainWin.cpp:1238
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -7359,7 +7359,7 @@ msgid "%1: run %2 script"
 msgstr "%1: esegui script %2"
 
 #: src/backend/script/Script.cpp:323 src/backend/script/Script.cpp:328
-#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1229
+#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1230
 #, kde-format
 msgid "Script"
 msgstr "Script"
@@ -8475,7 +8475,7 @@ msgstr "Residuo"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
-#: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1255
+#: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1256
 #: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -9409,7 +9409,7 @@ msgstr "Asse verticale"
 #: src/frontend/ActionsManager.cpp:551
 #: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:133
-#: src/frontend/notebook/NotebookView.cpp:115
+#: src/frontend/notebook/NotebookView.cpp:117
 #: src/frontend/widgets/BackgroundWidget.cpp:123
 #: src/frontend/worksheet/WorksheetView.cpp:242
 #: src/frontend/worksheet/WorksheetView.cpp:1361
@@ -9457,7 +9457,7 @@ msgstr "Inserisci area del grafico con dati"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:497
 #: src/frontend/ActionsManager.cpp:899
-#: src/frontend/notebook/NotebookView.cpp:173
+#: src/frontend/notebook/NotebookView.cpp:175
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:442
 #, kde-format
@@ -9884,7 +9884,7 @@ msgstr "Derivata di «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2225
-#: src/frontend/notebook/NotebookView.cpp:154
+#: src/frontend/notebook/NotebookView.cpp:156
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:268
 #, kde-format
 msgid "Differentiation"
@@ -9898,7 +9898,7 @@ msgstr "Integrale di «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2239
-#: src/frontend/notebook/NotebookView.cpp:160
+#: src/frontend/notebook/NotebookView.cpp:162
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:159
 #, kde-format
 msgid "Integration"
@@ -11601,7 +11601,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "Apri esempi&o"
 
-#: src/frontend/ActionsManager.cpp:216 src/frontend/MainWin.cpp:1193
+#: src/frontend/ActionsManager.cpp:216 src/frontend/MainWin.cpp:1194
 #, kde-format
 msgid "Workbook"
 msgstr "Cartella di lavoro"
@@ -11613,7 +11613,7 @@ msgstr ""
 "Crea una nuova cartella di lavoro per raccogliere fogli elettronici, matrici "
 "e grafici"
 
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1201
+#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1202
 #, kde-format
 msgid "Data Extractor"
 msgstr "Estrattore di dati"
@@ -11627,7 +11627,7 @@ msgstr "Crea un estrattore di dati per ottenere i dati da un'immagine"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
-#: src/frontend/MainWin.cpp:1209 src/frontend/SettingsDialog.cpp:67
+#: src/frontend/MainWin.cpp:1210 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
 #, kde-format
@@ -11654,7 +11654,7 @@ msgstr "Crea un nuovo foglio di lavoro per tracciare i dati"
 msgid "Creates a new Python script"
 msgstr "Crea un nuovo script Python"
 
-#: src/frontend/ActionsManager.cpp:264 src/frontend/MainWin.cpp:1263
+#: src/frontend/ActionsManager.cpp:264 src/frontend/MainWin.cpp:1264
 #, kde-format
 msgid "Note"
 msgstr "Nota"
@@ -11664,7 +11664,7 @@ msgstr "Nota"
 msgid "Creates a new note for arbitrary text"
 msgstr "Crea una nuova nota di testo arbitrario"
 
-#: src/frontend/ActionsManager.cpp:269 src/frontend/MainWin.cpp:1185
+#: src/frontend/ActionsManager.cpp:269 src/frontend/MainWin.cpp:1186
 #, kde-format
 msgid "Folder"
 msgstr "Cartella"
@@ -11974,7 +11974,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Seleziona regione y e ingrandisci"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:648 src/frontend/MainWin.cpp:1605
+#: src/frontend/ActionsManager.cpp:648 src/frontend/MainWin.cpp:1632
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
@@ -12002,7 +12002,7 @@ msgstr "Scala Y automatica"
 #: src/frontend/ActionsManager.cpp:669 src/frontend/ActionsManager.cpp:772
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:192
-#: src/frontend/notebook/NotebookView.cpp:59
+#: src/frontend/notebook/NotebookView.cpp:61
 #: src/frontend/worksheet/WorksheetView.cpp:149
 #: src/frontend/worksheet/WorksheetView.cpp:394
 #, kde-format
@@ -12012,7 +12012,7 @@ msgstr "Ingrandisci"
 #: src/frontend/ActionsManager.cpp:673 src/frontend/ActionsManager.cpp:775
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:193
-#: src/frontend/notebook/NotebookView.cpp:63
+#: src/frontend/notebook/NotebookView.cpp:65
 #: src/frontend/worksheet/WorksheetView.cpp:152
 #: src/frontend/worksheet/WorksheetView.cpp:398
 #, kde-format
@@ -12157,22 +12157,22 @@ msgid "Update"
 msgstr "Aggiorna"
 
 #: src/frontend/ActionsManager.cpp:778
-#: src/frontend/notebook/NotebookView.cpp:67
+#: src/frontend/notebook/NotebookView.cpp:69
 #, kde-format
 msgid "Find"
 msgstr "Trova"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
 #: src/frontend/ActionsManager.cpp:781
-#: src/frontend/notebook/NotebookView.cpp:75
+#: src/frontend/notebook/NotebookView.cpp:77
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "Riavvia"
 
 #: src/frontend/ActionsManager.cpp:784
-#: src/frontend/notebook/NotebookView.cpp:78
-#: src/frontend/notebook/NotebookView.cpp:369
+#: src/frontend/notebook/NotebookView.cpp:80
+#: src/frontend/notebook/NotebookView.cpp:398
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "Valuta Notebook"
@@ -12879,7 +12879,7 @@ msgid "Prepend"
 msgstr "Anteponi"
 
 #: src/frontend/datasources/ImportDialog.cpp:106
-#: src/frontend/notebook/NotebookView.cpp:71
+#: src/frontend/notebook/NotebookView.cpp:73
 #, kde-format
 msgid "Replace"
 msgstr "Sostituisci"
@@ -13811,7 +13811,7 @@ msgid "Open LabPlot Project"
 msgstr "Apri progetto di LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:718
+#: src/frontend/MainWin.cpp:719
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Progetti di LabPlot (%1)"
@@ -14014,7 +14014,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:2047
+#: src/frontend/MainWin.cpp:2074
 #, kde-format
 msgid "Warning"
 msgstr "Attenzione"
@@ -16478,7 +16478,7 @@ msgstr ""
 "Impossibile aprire il file della collezioni di esempio %1. Controlla "
 "l'installazione."
 
-#: src/frontend/GuiObserver.cpp:194 src/frontend/MainWin.cpp:625
+#: src/frontend/GuiObserver.cpp:194 src/frontend/MainWin.cpp:626
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -17395,13 +17395,13 @@ msgid "&Windows"
 msgstr "&Finestre"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:184 src/frontend/ui/settingsworksheetpage.ui:106
+#: src/frontend/MainWin.cpp:185 src/frontend/ui/settingsworksheetpage.ui:106
 #: src/frontend/worksheet/WorksheetView.cpp:291
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Modalità di presentazione"
 
-#: src/frontend/MainWin.cpp:184
+#: src/frontend/MainWin.cpp:185
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
@@ -17410,114 +17410,114 @@ msgstr ""
 "Non è disponibile nessun foglio di lavoro nel progetto; la modalità di "
 "presentazione non verrà iniziata."
 
-#: src/frontend/MainWin.cpp:198
+#: src/frontend/MainWin.cpp:199
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Benvenuto in LabPlot %1"
 
-#: src/frontend/MainWin.cpp:487
+#: src/frontend/MainWin.cpp:488
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Il progetto corrente «%1» è stato modificato. Vuoi salvarlo?"
 
-#: src/frontend/MainWin.cpp:488
+#: src/frontend/MainWin.cpp:489
 #, kde-format
 msgid "Save Project"
 msgstr "Salva il progetto"
 
-#: src/frontend/MainWin.cpp:584
+#: src/frontend/MainWin.cpp:585
 #, kde-format
 msgid "%1: created"
 msgstr "%1: creato"
 
-#: src/frontend/MainWin.cpp:612
+#: src/frontend/MainWin.cpp:613
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Esploratore dei progetti"
 
-#: src/frontend/MainWin.cpp:637
+#: src/frontend/MainWin.cpp:638
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Anteprima del foglio di lavoro"
 
-#: src/frontend/MainWin.cpp:646
+#: src/frontend/MainWin.cpp:647
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Continuità"
 
-#: src/frontend/MainWin.cpp:723
+#: src/frontend/MainWin.cpp:724
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Progetto di Origin (%1)"
 
-#: src/frontend/MainWin.cpp:729
+#: src/frontend/MainWin.cpp:730
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Progetti di Cantor (.cws)"
 
-#: src/frontend/MainWin.cpp:730
+#: src/frontend/MainWin.cpp:731
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter Notebooks (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:737
+#: src/frontend/MainWin.cpp:738
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Tutti i file supportati (%1)"
 
-#: src/frontend/MainWin.cpp:741
+#: src/frontend/MainWin.cpp:742
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Apri progetto"
 
-#: src/frontend/MainWin.cpp:761
+#: src/frontend/MainWin.cpp:762
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Il file del progetto %1 è già aperto."
 
-#: src/frontend/MainWin.cpp:761 src/frontend/MainWin.cpp:769
-#: src/frontend/MainWin.cpp:774
+#: src/frontend/MainWin.cpp:762 src/frontend/MainWin.cpp:770
+#: src/frontend/MainWin.cpp:775
 #, kde-format
 msgid "Open Project"
 msgstr "Apri progetto"
 
-#: src/frontend/MainWin.cpp:769
+#: src/frontend/MainWin.cpp:770
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Il file di progetto %1 non esiste."
 
-#: src/frontend/MainWin.cpp:774
+#: src/frontend/MainWin.cpp:775
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Impossibile leggere il file di progetto %1."
 
-#: src/frontend/MainWin.cpp:782
+#: src/frontend/MainWin.cpp:783
 #, kde-format
 msgid "Loading %1..."
 msgstr "Caricamento di %1..."
 
-#: src/frontend/MainWin.cpp:833
+#: src/frontend/MainWin.cpp:834
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: aperto"
 
-#: src/frontend/MainWin.cpp:868
+#: src/frontend/MainWin.cpp:869
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Progetto aperto correttamente (in %1 secondi)."
 
-#: src/frontend/MainWin.cpp:964
+#: src/frontend/MainWin.cpp:965
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Salva il progetto come"
 
-#: src/frontend/MainWin.cpp:966
+#: src/frontend/MainWin.cpp:967
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -17526,52 +17526,52 @@ msgstr ""
 "Progetti LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:993
+#: src/frontend/MainWin.cpp:994
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Impossibile aprire il file temporaneo in scrittura."
 
-#: src/frontend/MainWin.cpp:998
+#: src/frontend/MainWin.cpp:999
 #, kde-format
 msgid "Saving %1..."
 msgstr "Salvataggio di %1..."
 
-#: src/frontend/MainWin.cpp:1076
+#: src/frontend/MainWin.cpp:1077
 #, kde-format
 msgid "Project saved"
 msgstr "Progetto salvato"
 
-#: src/frontend/MainWin.cpp:1091
+#: src/frontend/MainWin.cpp:1092
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Impossibile salvare il file «%1»."
 
-#: src/frontend/MainWin.cpp:1095
+#: src/frontend/MainWin.cpp:1096
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Impossibile aprire il file «%1» in lettura."
 
-#: src/frontend/MainWin.cpp:1106
+#: src/frontend/MainWin.cpp:1107
 #, kde-format
 msgid "Project successfully saved (in %1 seconds)."
 msgstr "Progetto salvato correttamente (in %1 secondi)."
 
-#: src/frontend/MainWin.cpp:1160 src/frontend/MainWin.cpp:1172
+#: src/frontend/MainWin.cpp:1161 src/frontend/MainWin.cpp:1173
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Preparazione della stampa di %1"
 
-#: src/frontend/MainWin.cpp:1162 src/frontend/MainWin.cpp:1174
+#: src/frontend/MainWin.cpp:1163 src/frontend/MainWin.cpp:1175
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 stampato"
 
-#: src/frontend/MainWin.cpp:1943
+#: src/frontend/MainWin.cpp:1970
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Strumento CLI di Kaggle non trovato"
 
-#: src/frontend/MainWin.cpp:1944
+#: src/frontend/MainWin.cpp:1971
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -17580,27 +17580,27 @@ msgstr ""
 "Fornisci il percorso allo strumento CLI di Kaggle nelle impostazioni "
 "dell'applicazione e riprova."
 
-#: src/frontend/MainWin.cpp:2010
+#: src/frontend/MainWin.cpp:2037
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 esportato"
 
-#: src/frontend/MainWin.cpp:2017
+#: src/frontend/MainWin.cpp:2044
 #, kde-format
 msgid "FITS files saved"
 msgstr "File FITS salvati"
 
-#: src/frontend/MainWin.cpp:2029
+#: src/frontend/MainWin.cpp:2056
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Client MQTT %1"
 
-#: src/frontend/MainWin.cpp:2047
+#: src/frontend/MainWin.cpp:2074
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "C'è già un MQTTClient con questo host."
 
-#: src/frontend/MainWin.cpp:2051
+#: src/frontend/MainWin.cpp:2078
 #, kde-format
 msgid "Live data source%1"
 msgstr "Fonte dati attiva%1"
@@ -17875,135 +17875,135 @@ msgstr "%1: rimuovi le righe selezionate"
 msgid "%1: clear selected rows(s)"
 msgstr "%1: pulisci le righe selezionate"
 
-#: src/frontend/notebook/NotebookView.cpp:46
+#: src/frontend/notebook/NotebookView.cpp:48
 #, kde-format
 msgid "Failed to initialize %1."
 msgstr "Impossibile inizializzare %1."
 
-#: src/frontend/notebook/NotebookView.cpp:90
+#: src/frontend/notebook/NotebookView.cpp:92
 #, kde-format
 msgid "Evaluate Entry"
 msgstr "Valuta voce"
 
-#: src/frontend/notebook/NotebookView.cpp:94
+#: src/frontend/notebook/NotebookView.cpp:96
 #, kde-format
 msgid "Remove Current Entry"
 msgstr "Rimuovi la voce corrente"
 
-#: src/frontend/notebook/NotebookView.cpp:98
+#: src/frontend/notebook/NotebookView.cpp:100
 #, kde-format
 msgid "Command"
 msgstr "Comando"
 
-#: src/frontend/notebook/NotebookView.cpp:108
+#: src/frontend/notebook/NotebookView.cpp:110
 #: src/frontend/widgets/LabelWidget.cpp:482
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
 
 #. i18n: ectx: property (text), widget (QLabel, lTex)
-#: src/frontend/notebook/NotebookView.cpp:112
+#: src/frontend/notebook/NotebookView.cpp:114
 #: src/frontend/ui/settingsworksheetpage.ui:65
 #: src/frontend/widgets/LabelWidget.cpp:480
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: src/frontend/notebook/NotebookView.cpp:118
+#: src/frontend/notebook/NotebookView.cpp:120
 #, kde-format
 msgid "Page Break"
 msgstr "Interruzione di pagina"
 
-#: src/frontend/notebook/NotebookView.cpp:130
+#: src/frontend/notebook/NotebookView.cpp:132
 #, kde-format
 msgid "Compute Eigenvectors"
 msgstr "Calcola autovettori"
 
-#: src/frontend/notebook/NotebookView.cpp:136
+#: src/frontend/notebook/NotebookView.cpp:138
 #, kde-format
 msgid "Create Matrix"
 msgstr "Crea matrice"
 
-#: src/frontend/notebook/NotebookView.cpp:142
+#: src/frontend/notebook/NotebookView.cpp:144
 #, kde-format
 msgid "Compute Eigenvalues"
 msgstr "Calcola autovalori"
 
-#: src/frontend/notebook/NotebookView.cpp:148
+#: src/frontend/notebook/NotebookView.cpp:150
 #, kde-format
 msgid "Invert Matrix"
 msgstr "Inverti matrice"
 
-#: src/frontend/notebook/NotebookView.cpp:166
+#: src/frontend/notebook/NotebookView.cpp:168
 #, kde-format
 msgid "Solve Equations"
 msgstr "Risolvi equazioni"
 
-#: src/frontend/notebook/NotebookView.cpp:189
+#: src/frontend/notebook/NotebookView.cpp:191
 #, kde-format
 msgid "Linear Algebra"
 msgstr "Algebra lineare"
 
-#: src/frontend/notebook/NotebookView.cpp:201
+#: src/frontend/notebook/NotebookView.cpp:203
 #, kde-format
 msgid "Calculate"
 msgstr "Calcola"
 
-#: src/frontend/notebook/NotebookView.cpp:211
+#: src/frontend/notebook/NotebookView.cpp:213
 #, kde-format
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: src/frontend/notebook/NotebookView.cpp:260
+#: src/frontend/notebook/NotebookView.cpp:262
 #, kde-format
 msgid "Assistants"
 msgstr "Assistenti"
 
-#: src/frontend/notebook/NotebookView.cpp:301
+#: src/frontend/notebook/NotebookView.cpp:330
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:573
 #, kde-format
 msgid "Plot Data"
 msgstr "Traccia i dati"
 
-#: src/frontend/notebook/NotebookView.cpp:305
+#: src/frontend/notebook/NotebookView.cpp:334
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:605
 #, kde-format
 msgid "Statistical Analysis"
 msgstr "Analisi statistica"
 
-#: src/frontend/notebook/NotebookView.cpp:306
+#: src/frontend/notebook/NotebookView.cpp:335
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:606
 #, kde-format
 msgid "Hypothesis Test"
 msgstr "Test di verifica d'ipotesi"
 
-#: src/frontend/notebook/NotebookView.cpp:312
+#: src/frontend/notebook/NotebookView.cpp:341
 #, kde-format
 msgid "Variable Statistics..."
 msgstr "Statistiche sulla variabile..."
 
-#: src/frontend/notebook/NotebookView.cpp:365
+#: src/frontend/notebook/NotebookView.cpp:394
 #, kde-format
 msgid "Interrupt"
 msgstr "Interrompi"
 
-#: src/frontend/notebook/NotebookView.cpp:367
+#: src/frontend/notebook/NotebookView.cpp:396
 #, kde-format
 msgid "Calculating..."
 msgstr "Calcolo..."
 
-#: src/frontend/notebook/NotebookView.cpp:371
+#: src/frontend/notebook/NotebookView.cpp:400
 #, kde-format
 msgid "Ready"
 msgstr "Pronto"
 
-#: src/frontend/notebook/NotebookView.cpp:390
+#: src/frontend/notebook/NotebookView.cpp:419
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:891
 #, kde-format
 msgid "Hypothesis Test for %1"
 msgstr "Test di verifica d'ipotesi per %1"
 
-#: src/frontend/notebook/NotebookView.cpp:404
+#: src/frontend/notebook/NotebookView.cpp:433
 #, kde-format
 msgid "%1: variable statistics"
 msgstr "%1: statistiche sulla variabile"
