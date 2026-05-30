@@ -522,6 +522,7 @@ void CartesianPlot::initMenus() {
 
 	actionGroup = new QActionGroup(this);
 	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addAnalysisPlot);
+	addNewAnalysisMenu->addSeparator();
 	CartesianPlot::fillAnalysisMenu(addNewAnalysisMenu, actionGroup);
 	m_addNewMenu->addMenu(addNewAnalysisMenu);
 
@@ -556,6 +557,7 @@ void CartesianPlot::initMenus() {
 
 	actionGroup = new QActionGroup(this);
 	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addAnalysisPlot);
+	dataAnalysisMenu->addSeparator();
 	CartesianPlot::fillAnalysisMenu(dataAnalysisMenu, actionGroup);
 
 	// theme menu
@@ -634,6 +636,19 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 	menu->addAction(action);
 	addNewPlotMenu->addMenu(menu);
 
+	// bar plots
+	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), addNewPlotMenu);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::BarPlot));
+	addNewBarPlotsMenu->addAction(action);
+
+	action = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LollipopPlot));
+	addNewBarPlotsMenu->addAction(action);
+
+	addNewPlotMenu->addMenu(addNewBarPlotsMenu);
+
 	// statistical plots
 	menu->addSeparator();
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), addNewPlotMenu);
@@ -655,19 +670,6 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 	addNewStatisticalPlotsMenu->addAction(action);
 
 	addNewPlotMenu->addMenu(addNewStatisticalPlotsMenu);
-
-	// bar plots
-	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), addNewPlotMenu);
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), actionGroup);
-	action->setData(static_cast<int>(Plot::PlotType::BarPlot));
-	addNewBarPlotsMenu->addAction(action);
-
-	action = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), actionGroup);
-	action->setData(static_cast<int>(Plot::PlotType::LollipopPlot));
-	addNewBarPlotsMenu->addAction(action);
-
-	addNewPlotMenu->addMenu(addNewBarPlotsMenu);
 
 	// continuous improvement plots
 	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), addNewPlotMenu);
@@ -740,7 +742,16 @@ void CartesianPlot::fillFitMenu(QMenu* menu, QActionGroup* actionGroup) {
 }
 
 void CartesianPlot::fillAnalysisMenu(QMenu* menu, QActionGroup* actionGroup) {
-	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), actionGroup);
+	// GROUP 1: Preprocessing & Basic Calculus (Most Common)
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Smoothing));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolate"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Interpolation));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Differentiation));
 	menu->addAction(action);
 
@@ -748,50 +759,41 @@ void CartesianPlot::fillAnalysisMenu(QMenu* menu, QActionGroup* actionGroup) {
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Integration));
 	menu->addAction(action);
 
+	// GROUP 2: Frequency Domain Analysis
 	menu->addSeparator();
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolate"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Interpolation));
-	menu->addAction(action);
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Smoothing));
-	menu->addAction(action);
-
-	menu->addSeparator();
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierFilter));
-	menu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierTransform));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierFilter));
 	menu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::HilbertTransform));
 	menu->addAction(action);
 
+	// GROUP 3: Correlation & Convolution
 	menu->addSeparator();
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Convolute/Deconvolute"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Convolution));
-	menu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Correlation));
 	menu->addAction(action);
 
-	menu->addSeparator();
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Line Simplification"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::LineSimplification));
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Convolute/Deconvolute"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Convolution));
 	menu->addAction(action);
 
+	// GROUP 4: Specialized Operations
 	menu->addSeparator();
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Correct Baseline"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::BaselineCorrection));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Line Simplification"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::LineSimplification));
 	menu->addAction(action);
 
 	menu->addSeparator();
