@@ -139,6 +139,7 @@ CartesianPlot::~CartesianPlot() {
 void CartesianPlot::init(bool loading) {
 	// title
 	m_title = new TextLabel(this->name() + QLatin1String(" - ") + i18n("Title"), TextLabel::Type::PlotTitle);
+	m_title->setText(i18n("Title"));
 	addChild(m_title);
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(graphicsItem());
