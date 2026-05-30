@@ -1,6 +1,6 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the labplot package.
-# SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Paolo Zamponi <feus73@gmail.com>
+# SPDX-FileCopyrightText: 2017-2026 Paolo Zamponi <feus73@gmail.com>
 # SPDX-FileCopyrightText: 2020, 2022, 2025 Vincenzo Reale <smart2128vr@gmail.com>
 #
 msgid ""
@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-26 00:40+0000\n"
-"PO-Revision-Date: 2026-04-10 16:02+0200\n"
+"PO-Revision-Date: 2026-05-26 22:57+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.04.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -12525,18 +12525,7 @@ msgid "Custom column data types, comma separated"
 msgstr "Tipi di dati di colonne personalizzate, separati da virgole"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -12559,7 +12548,10 @@ msgstr ""
 "td></tr><tr><td>%3</td><td>Numero in virgola mobile a 64 bit. Risoluzione di "
 "circa 16 cifre.</td></tr><tr><td>%4</td><td>Data e ora in formato di data e "
 "ora testuale se non vuoto, altrimenti viene determinato automaticamente.</"
-"td></tr><tr><td>%5</td><td>Un testo.</td></tr></table>"
+"td></tr><tr><td>%5</td><td>Numero di secondi dal primo gennaio 1970 (UTC), "
+"convertiti in DateTime.</td></tr><tr><td>%6</td><td>Numero di intervalli di "
+"100 nanosecondi dal 1° gennaio 1601 (UTC), convertiti in DateTime.</td></"
+"tr><tr><td>%7</td><td>Un testo.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
@@ -14291,10 +14283,9 @@ msgid "Custom Column Values"
 msgstr "Colonna personalizzata"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:284
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Labels"
-msgstr "Colonna personalizzata"
+msgstr "Etichette personalizzate delle colonne"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:287
 #, kde-format
@@ -15655,10 +15646,9 @@ msgid "%1 reference lines: orientation changed"
 msgstr "%1 linee di riferimento: modello «%2» caricato"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:126
-#, fuzzy, kde-format
-#| msgid "%1: precision changed"
+#, kde-format
 msgid "%1: orientation changed"
-msgstr "%1: precisione modificata"
+msgstr "%1: orientazione modificata"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:246
 #, kde-format
@@ -18279,16 +18269,14 @@ msgid "User Feedback"
 msgstr "Segnalazioni degli utenti"
 
 #: src/frontend/SettingsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgid "Scripting"
 msgstr "Script"
 
 #: src/frontend/SettingsDialog.cpp:107
-#, fuzzy, kde-format
-#| msgid "Edit"
+#, kde-format
 msgid "Editor"
-msgstr "Modifica"
+msgstr "Editor"
 
 #: src/frontend/SettingsDialog.cpp:170
 #, kde-format
@@ -18532,10 +18520,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Chiedi conferma prima di riavviare il motore di sistema."
 
 #: src/frontend/SettingsScriptingPage.cpp:45
-#, fuzzy, kde-format
-#| msgid "Save Default"
+#, kde-format
 msgid "System Default"
-msgstr "Salva predefinito"
+msgstr "Impostazioni predefinite di sistema"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -19998,10 +19985,9 @@ msgid "Unfreeze Column"
 msgstr "Sblocca colonna"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1905
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import Headers"
-msgstr "Importa come:"
+msgstr "Importa intestazioni"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1906
 #, kde-format
@@ -25685,24 +25671,21 @@ msgstr "Da fare"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
 #: src/frontend/ui/settingsscriptingpage.ui:36
-#, fuzzy, kde-format
-#| msgid "Copy Environment"
+#, kde-format
 msgid "Environment:"
-msgstr "Copia ambiente"
+msgstr "Ambiente:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
 #: src/frontend/ui/settingsscriptingpage.ui:74
-#, fuzzy, kde-format
-#| msgid "CLI Path:"
+#, kde-format
 msgid "Path:"
-msgstr "Percorso CLI:"
+msgstr "Percorso:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsscriptingpage.ui:99
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "Python Settings"
-msgstr "Impostazioni"
+msgstr "Impostazioni di Python"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
@@ -26213,11 +26196,9 @@ msgid "Resolution:"
 msgstr "Risoluzione:"
 
 #: src/frontend/WhatsNewDialog.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "%1 is the LabPlot version"
-#| msgid "Welcome to LabPlot %1"
+#, kde-format
 msgid "What's New in LabPlot %1"
-msgstr "Benvenuto in LabPlot %1"
+msgstr "Novità in LabPlot %1"
 
 #: src/frontend/WhatsNewDialog.cpp:54
 #, kde-format
