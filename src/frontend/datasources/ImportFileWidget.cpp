@@ -143,6 +143,13 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_MCAP
 		ui.cbFileType->addItem(i18n("MCAP Data"), static_cast<int>(AbstractFileFilter::FileType::MCAP));
 #endif
+#ifdef HAVE_PARQUET
+		ui.cbFileType->addItem(i18n("Apache Parquet"), static_cast<int>(AbstractFileFilter::FileType::Parquet));
+		ui.cbFileType->addItem(i18n("Arrow IPC (Feather)"), static_cast<int>(AbstractFileFilter::FileType::ArrowIPC));
+#ifdef HAVE_ORC
+		ui.cbFileType->addItem(i18n("Apache ORC"), static_cast<int>(AbstractFileFilter::FileType::ORC));
+#endif
+#endif
 		// hide widgets relevant for live data reading only
 		ui.lRelativePath->hide();
 		ui.chbRelativePath->hide();
@@ -1036,6 +1043,20 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
+	case AbstractFileFilter::FileType::Parquet:
+	case AbstractFileFilter::FileType::ArrowIPC:
+	case AbstractFileFilter::FileType::ORC: {
+		DEBUG(Q_FUNC_INFO << ", Parquet/Arrow IPC/ORC");
+		if (!m_currentFilter)
+			m_currentFilter.reset(new ParquetFilter(fileType));
+		auto filter = static_cast<ParquetFilter*>(m_currentFilter.get());
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
+
+		break;
+	}
 	}
 	ui.sbPreviewPrecision->setValue(m_currentFilter->previewPrecision());
 	return m_currentFilter.get();
@@ -1753,6 +1774,11 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		case AbstractFileFilter::FileType::MATIO:
 			infoStrings << MatioFilter::fileInfoString(fileName);
 			break;
+		case AbstractFileFilter::FileType::Parquet:
+		case AbstractFileFilter::FileType::ArrowIPC:
+		case AbstractFileFilter::FileType::ORC:
+			infoStrings << ParquetFilter::fileInfoString(fileName);
+			break;
 		}
 
 		return infoStrings.join(QLatin1String("<br>"));
@@ -1855,7 +1881,9 @@ void ImportFileWidget::refreshPreview() {
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary || fileType == AbstractFileFilter::FileType::JSON
 		|| fileType == AbstractFileFilter::FileType::MCAP || fileType == AbstractFileFilter::FileType::Spice
-		|| fileType == AbstractFileFilter::FileType::VECTOR_BLF || fileType == AbstractFileFilter::FileType::READSTAT)
+		|| fileType == AbstractFileFilter::FileType::VECTOR_BLF || fileType == AbstractFileFilter::FileType::READSTAT
+		|| fileType == AbstractFileFilter::FileType::Parquet || fileType == AbstractFileFilter::FileType::ArrowIPC
+		|| fileType == AbstractFileFilter::FileType::ORC)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -2158,6 +2186,14 @@ void ImportFileWidget::refreshPreview() {
 		DEBUG(Q_FUNC_INFO << ", got " << columnModes.size() << " columns and " << importedStrings.size() << " rows")
 		break;
 	}
+	case AbstractFileFilter::FileType::Parquet:
+	case AbstractFileFilter::FileType::ArrowIPC:
+	case AbstractFileFilter::FileType::ORC: {
+		ui.tePreview->clear();
+		auto filter = static_cast<ParquetFilter*>(currentFilter);
+		importedStrings = filter->preview(path, lines);
+		break;
+	}
 	case AbstractFileFilter::FileType::MATIO: {
 		auto filter = static_cast<MatioFilter*>(currentFilter);
 		lines = m_matioOptionsWidget->lines();
@@ -2344,6 +2380,9 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::FileType::Spice:
 		case AbstractFileFilter::FileType::READSTAT:
 		case AbstractFileFilter::FileType::VECTOR_BLF:
+		case AbstractFileFilter::FileType::Parquet:
+		case AbstractFileFilter::FileType::ArrowIPC:
+		case AbstractFileFilter::FileType::ORC:
 			break;
 		}
 	}
