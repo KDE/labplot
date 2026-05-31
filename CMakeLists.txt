@@ -775,7 +775,7 @@ if(ENABLE_PYTHON_SCRIPTING)
         (((0) & 0xf) << 0)"
         OUTPUT_FORMAT HEXADECIMAL
     )
-    add_definitions(-DPYTHON3_VERSION_STRING="abi${PYTHON_ABI_VERSION}")
+    add_definitions(-DPYTHON3_VERSION_STRING="${PYTHON_ABI_VERSION}")
 endif()
 
 # Qt Advanced Docking System (required) #####################

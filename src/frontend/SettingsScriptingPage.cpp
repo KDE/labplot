@@ -18,7 +18,11 @@
 
 #include <QDir>
 #include <QDirIterator>
+#include <QFileDialog>
 #include <QFileInfo>
+#include <QIcon>
+#include <QProcess>
+#include <QPushButton>
 #include <QStandardPaths>
 
 /**
@@ -30,25 +34,37 @@ SettingsScriptingPage::SettingsScriptingPage(QWidget* parent)
 
 	// show information about the current python runtime
 #ifdef HAVE_PYTHON_SCRIPTING
+	ui.tbAddPythonEnvironment->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
+	ui.lPythonVersion->setText(QString::fromUtf8(Py_GetVersion()).section(QLatin1Char(' '), 0, 0));
 	if (Py_IsInitialized()) {
-		ui.lPythonVersion->setText(QString::fromUtf8(Py_GetVersion()).section(QLatin1Char(' '), 0, 0));
 		ui.lPythonPath->setText(QString::fromWCharArray(Py_GetPrefix()));
 	} else {
-		// Python not yet initialized — show build-time version, hide path
-		ui.lPythonVersion->setText(QStringLiteral(PYTHON3_VERSION_STRING));
+		// Python not yet initialized — hide path
 		ui.lPythonPathTitle->setVisible(false);
 		ui.lPythonPath->setVisible(false);
 	}
-#endif
 
 	// populate available python environments
-	ui.cbPythonEnvironment->addItem(i18n("System Default"));
+	ui.cbPythonEnvironment->addItem(i18n("System Default"), QString());
 	discoverEnvironments();
-
-	connect(ui.cbPythonEnvironment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsScriptingPage::changed);
 
 	// load the current selected environment
 	loadSettings();
+
+	connect(ui.tbAddPythonEnvironment, &QPushButton::clicked, this, [&] {
+		const QString path = QFileDialog::getExistingDirectory(this, i18nc("@title:window", "Select the Virtual Environment"), QDir::homePath(), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+		if (!path.isEmpty())
+			this->addEnvironment(path, true);
+	});
+	connect(ui.cbPythonEnvironment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsScriptingPage::changed);
+#else
+	ui.lPythonVersion->setText(QLatin1String("<font color=\"red\">") + i18n("missing") + QLatin1String("</font>"));
+	ui.lPythonPathTitle->setVisible(false);
+	ui.lPythonPath->setVisible(false);
+	ui.cbPythonEnvironment->setVisible(false);
+	ui.lPythonEnvironment->setVisible(false);
+	ui.tbAddPythonEnvironment->setVisible(false);
+#endif
 }
 
 QList<Settings::Type> SettingsScriptingPage::applySettings() {
@@ -56,9 +72,9 @@ QList<Settings::Type> SettingsScriptingPage::applySettings() {
 	if (!m_changed)
 		return changes;
 
+	QString executablePath = ui.cbPythonEnvironment->currentData().toString();
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
-	group.writeEntry(QLatin1String("PythonEnvironment"), ui.cbPythonEnvironment->currentData().toString());
-
+	group.writeEntry(QLatin1String("PythonExecutable"), executablePath);
 	return changes;
 }
 
@@ -68,7 +84,7 @@ void SettingsScriptingPage::restoreDefaults() {
 
 void SettingsScriptingPage::loadSettings() {
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
-	const QString savedPath = group.readEntry(QLatin1String("PythonEnvironment"), QString());
+	const QString savedPath = group.readEntry(QLatin1String("PythonExecutable"), QString());
 
 	if (!savedPath.isEmpty()) {
 		for (int i = 0; i < ui.cbPythonEnvironment->count(); ++i) {
@@ -77,6 +93,16 @@ void SettingsScriptingPage::loadSettings() {
 				return;
 			}
 		}
+#ifdef Q_OS_WIN
+		QString executablePath = QStringLiteral("/Scripts/python.exe");
+#else
+		// On Unix, look specifically for lib/python<minor>/site-packages
+		QString executablePath = QStringLiteral("/bin/python");
+#endif
+		if (savedPath.endsWith(executablePath))
+			addEnvironment(savedPath.chopped(executablePath.length()), true, true);
+		else if (savedPath.endsWith(executablePath + QStringLiteral("/")))
+			addEnvironment(savedPath.chopped(executablePath.length() + 1), true, true);
 	}
 }
 
@@ -91,13 +117,8 @@ void SettingsScriptingPage::changed() {
  */
 void SettingsScriptingPage::discoverEnvironments() {
 	// determine the runtime Python minor version for environment compatibility filtering
-#ifdef HAVE_PYTHON_SCRIPTING
-	const QString pyVersion = Py_IsInitialized()
-		? QString::fromUtf8(Py_GetVersion()).section(QLatin1Char(' '), 0, 0)
-		: QStringLiteral(PYTHON3_VERSION_STRING);
-#else
-	const QString pyVersion = QStringLiteral(PYTHON3_VERSION_STRING);
-#endif
+	const QString pyVersion = QString::fromUtf8(Py_GetVersion()).section(QLatin1Char(' '), 0, 0);
+
 	m_pythonMinorVersion = pyVersion.section(QLatin1Char('.'), 0, 1); // e.g. "3.11"
 
 	const QString home = QDir::homePath();
@@ -121,33 +142,6 @@ void SettingsScriptingPage::discoverEnvironments() {
 
 	for (const auto& dir : searchDirs)
 		scanForVenvs(dir);
-
-	// --- Conda environments ---
-	// Read ~/.conda/environments.txt (conda's own registry, cross-platform)
-	const QString condaEnvsFile = home + QStringLiteral("/.conda/environments.txt");
-	if (QFileInfo::exists(condaEnvsFile)) {
-		QFile file(condaEnvsFile);
-		if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-			while (!file.atEnd()) {
-				const QString line = QString::fromUtf8(file.readLine()).trimmed();
-				if (!line.isEmpty() && QDir(line).exists())
-					addEnvironment(line);
-			}
-		}
-	}
-
-	// Also scan standard conda env directories
-	QStringList condaDirs;
-	condaDirs << home + QStringLiteral("/miniconda3/envs");
-	condaDirs << home + QStringLiteral("/anaconda3/envs");
-	condaDirs << home + QStringLiteral("/miniforge3/envs");
-	condaDirs << home + QStringLiteral("/mambaforge/envs");
-#ifdef Q_OS_WIN
-	condaDirs << home + QStringLiteral("/Miniconda3/envs");
-	condaDirs << home + QStringLiteral("/Anaconda3/envs");
-#endif
-	for (const auto& dir : condaDirs)
-		scanForCondaEnvs(dir);
 }
 
 /*!
@@ -174,62 +168,81 @@ void SettingsScriptingPage::scanForVenvs(const QString& dir) {
 }
 
 /*!
- * Scan a conda envs directory for environments (identified by conda-meta/).
- */
-void SettingsScriptingPage::scanForCondaEnvs(const QString& dir) {
-	if (!QDir(dir).exists())
-		return;
-
-	const QDir parent(dir);
-	const auto entries = parent.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-	for (const auto& entry : entries) {
-		const QString path = dir + QLatin1Char('/') + entry;
-		if (QDir(path + QStringLiteral("/conda-meta")).exists())
-			addEnvironment(path);
-	}
-}
-
-/*!
  * Add a discovered environment to the combo box, using the directory name
  * as the display label and the site-packages path as item data.
  * Skips duplicates.
  */
-void SettingsScriptingPage::addEnvironment(const QString& envPath) {
+void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selectAfterAdd, bool blockSignalsDuringSelect) {
 	// Derive site-packages path — only accept environments matching the runtime Python minor version
-	QString sitePackages;
+	const QString envPath = QDir::cleanPath(QFileInfo(rawEnvPath).absoluteFilePath());
+	QString executablePath;
 #ifdef Q_OS_WIN
-	// On Windows, Lib/site-packages doesn't encode the version, so check pyvenv.cfg
-	const QString cfgPath = envPath + QStringLiteral("/pyvenv.cfg");
-	if (QFileInfo::exists(cfgPath)) {
-		QFile cfg(cfgPath);
-		if (cfg.open(QIODevice::ReadOnly | QIODevice::Text)) {
-			while (!cfg.atEnd()) {
-				const QString line = QString::fromUtf8(cfg.readLine()).trimmed();
-				if (line.startsWith(QLatin1String("version"))) {
-					const QString ver = line.section(QLatin1Char('='), 1).trimmed();
-					const QString minor = ver.section(QLatin1Char('.'), 0, 1);
-					if (minor != m_pythonMinorVersion)
-						return; // incompatible Python version
-					break;
-				}
-			}
-		}
-	}
-	sitePackages = envPath + QStringLiteral("/Lib/site-packages");
+	executablePath = envPath + QStringLiteral("/Scripts/python.exe");
 #else
 	// On Unix, look specifically for lib/python<minor>/site-packages
-	sitePackages = envPath + QStringLiteral("/lib/") + m_pythonMinorVersion + QStringLiteral("/site-packages");
+	executablePath = envPath + QStringLiteral("/bin/python");
 #endif
+	QString cfgPath = envPath + QStringLiteral("/pyvenv.cfg");
 
-	if (sitePackages.isEmpty() || !QDir(sitePackages).exists())
+	if (!QFile(executablePath).exists() || !QFile(cfgPath).exists())
 		return;
 
 	// Skip if already added
 	for (int i = 0; i < ui.cbPythonEnvironment->count(); ++i) {
-		if (ui.cbPythonEnvironment->itemData(i).toString() == sitePackages)
+		if (ui.cbPythonEnvironment->itemData(i).toString() == executablePath)
 			return;
 	}
 
-	const QString name = QFileInfo(envPath).fileName();
-	ui.cbPythonEnvironment->addItem(name, sitePackages);
+	// try to read the venv version from pyvenv.cfg file
+	QFile cfgFile(QDir(envPath).absoluteFilePath(QStringLiteral("pyvenv.cfg")));
+	if (cfgFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&cfgFile);
+		while (!in.atEnd()) {
+			const QString line = in.readLine().trimmed();
+			// we found the version line in the pyvenv.cfg file
+			if (line.startsWith(QStringLiteral("version"))) {
+				const QString venvVersion = line.section(QLatin1Char('='), 1).trimmed();
+				if ((venvVersion == m_pythonMinorVersion) || venvVersion.startsWith(m_pythonMinorVersion + QStringLiteral("."))) {
+					ui.cbPythonEnvironment->addItem(envPath, executablePath);
+					if (selectAfterAdd)
+						ui.cbPythonEnvironment->setCurrentText(envPath);
+				}
+				return;
+			}
+		}
+	}
+
+	// fallback to process method if we cannot read venv version from pyvenv.cfg file
+	auto* process = new QProcess(this);
+	connect(process, &QProcess::finished, this, [process, envPath, executablePath, this, selectAfterAdd, blockSignalsDuringSelect](int exitCode, QProcess::ExitStatus exitStatus) {
+		if (exitStatus == QProcess::NormalExit && exitCode == 0) {
+			const QString version = QString::fromUtf8(process->readAllStandardOutput()).trimmed();
+			if (version == m_pythonMinorVersion) {
+				bool alreadyAdded = false;
+				for (int i = 0; i < ui.cbPythonEnvironment->count(); ++i) {
+					if (ui.cbPythonEnvironment->itemData(i).toString() == executablePath)
+						alreadyAdded = true;
+				}
+				if (!alreadyAdded)
+					ui.cbPythonEnvironment->addItem(envPath, executablePath);
+				if (selectAfterAdd) {
+					if (blockSignalsDuringSelect) {
+						ui.cbPythonEnvironment->blockSignals(true);
+						ui.cbPythonEnvironment->setCurrentText(envPath);
+						ui.cbPythonEnvironment->blockSignals(false);
+					} else {
+						ui.cbPythonEnvironment->setCurrentText(envPath);
+					}
+				}
+			}
+		}
+		process->deleteLater();
+	});
+
+	connect(process, &QProcess::errorOccurred, this, [process](QProcess::ProcessError error) {
+		Q_UNUSED(error);
+		process->deleteLater();
+	});
+
+	process->start(executablePath, {QStringLiteral("-c"), QStringLiteral("import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")});
 }

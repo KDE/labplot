@@ -28,7 +28,7 @@ private:
 	void discoverEnvironments();
 	void scanForVenvs(const QString& dir);
 	void scanForCondaEnvs(const QString& dir);
-	void addEnvironment(const QString& envPath);
+	void addEnvironment(const QString& envPath, bool selectAfterAdd = false, bool blockSignalsDuringSelect = false);
 	void changed();
 	bool m_changed{false};
 	QString m_pythonMinorVersion; // e.g. "3.11"
