@@ -198,10 +198,11 @@ bool PythonScriptRuntime::initPython() {
 		// supporting virtual environments
 		// https://github.com/python/cpython/issues/66409#issuecomment-2543996605
 		// https://github.com/python/cpython/blob/main/Modules/getpath.py#L70-L168
-		Py_SetProgramName(interpreterPath);  // this will be removed in python 3.15 but there is an alternative already in python 3.14
+		Py_SetProgramName(interpreterPath); // this will be removed in python 3.15 but there is an alternative already in python 3.14
 		// https://docs.python.org/3/c-api/init_config.html#pyinitconfig-c-api but need to request for python developers to add the
-		// PyInitConfig C API to the limited API which was already discussed https://discuss.python.org/t/pep-741-python-configuration-c-api-second-version/45403/48
-		
+		// PyInitConfig C API to the limited API which was already discussed
+		// https://discuss.python.org/t/pep-741-python-configuration-c-api-second-version/45403/48
+
 		// Initialize Python interpreter (stable ABI)
 		// Python auto-detects its prefix. Users can override via the standard
 		// PYTHONHOME environment variable if needed.
