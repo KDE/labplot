@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-26 00:40+0000\n"
+"POT-Creation-Date: 2026-05-31 00:39+0000\n"
 "PO-Revision-Date: 2026-04-13 12:00+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -75,7 +75,7 @@ msgstr "Dole"
 #: src/backend/core/AbstractAspect.cpp:553
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:216
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2430
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2433
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1: pridať %2"
@@ -263,7 +263,7 @@ msgstr "Veľké celé číslo"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/backend/core/AbstractColumn.cpp:228
 #: src/backend/datasources/filters/AsciiFilter.cpp:681
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
 #: src/frontend/ActionsManager.cpp:547
 #: src/frontend/notebook/NotebookView.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
@@ -818,16 +818,16 @@ msgstr "neznámy prvok zošita „%1”"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:48
 #: src/backend/datapicker/Datapicker.cpp:368
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1916
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1922
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1928
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1934
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1940
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1946
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1952
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1958
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1964
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1970
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1919
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1925
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1931
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1937
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1943
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1949
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1955
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1961
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1967
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
 #: src/frontend/ui/datapickerimagewidget.ui:260
 #, kde-format
 msgid "Plot"
@@ -1887,8 +1887,8 @@ msgstr "UInt64"
 #: src/backend/datasources/filters/MatioFilter.cpp:402
 #: src/backend/datasources/filters/MatioFilter.cpp:452
 #: src/backend/nsl/nsl_interp.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:799
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2344
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:802
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2347
 #, kde-format
 msgid "Function"
 msgstr "Funkcia"
@@ -2679,7 +2679,7 @@ msgid "Stefan-Boltzmann constant"
 msgstr "Stefan-Boltzmannova konštanta"
 
 #: src/backend/gsl/constants.cpp:83
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:713
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:716
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:158
 #, kde-format
 msgid "Gauss"
@@ -6115,7 +6115,7 @@ msgid "ep"
 msgstr "ep"
 
 #: src/backend/lib/Range.h:57 src/backend/nsl/nsl_interp.c:14
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:691
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:694
 #, kde-format
 msgid "Linear"
 msgstr "Lineárny"
@@ -6578,7 +6578,7 @@ msgid "Imaginary Part"
 msgstr "Imaginary Part"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #, kde-format
 msgid "Power"
 msgstr "Sila"
@@ -6614,7 +6614,7 @@ msgid "Raw"
 msgstr "Raw"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2804
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2807
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1108
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:234
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
@@ -6736,7 +6736,7 @@ msgid "Statistics (Distributions)"
 msgstr "Smer"
 
 #: src/backend/nsl/nsl_fit.c:24
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:737
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:740
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
 #: src/frontend/datasources/ImportFileWidget.cpp:1419
 #: src/frontend/dockwidgets/AxisDock.cpp:234
@@ -6748,14 +6748,14 @@ msgid "Custom"
 msgstr "Vlastné"
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:710
 #, kde-format
 msgid "Inverse Exponential"
 msgstr "Inverzná exponenciála"
 
 #: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:22
 #: src/backend/nsl/nsl_sf_stats.c:15
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:809
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:812
 #, kde-format
 msgid "Exponential"
 msgstr "Exponenciála"
@@ -6776,8 +6776,8 @@ msgid "Gaussian (normal)"
 msgstr "Gaussovské (normálne)"
 
 #: src/backend/nsl/nsl_fit.c:31
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:717
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:817
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:720
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:820
 #, kde-format
 msgid "Cauchy-Lorentz"
 msgstr "Cauchy-Lorentz"
@@ -6808,7 +6808,7 @@ msgid "Inverse Tangent"
 msgstr "Inverzný tangens"
 
 #: src/backend/nsl/nsl_fit.c:45
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:727
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:730
 #, kde-format
 msgid "Hyperbolic Tangent"
 msgstr "Hyperbolický tangens"
@@ -6880,7 +6880,7 @@ msgstr "Radiálna vzdialenosť"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2253
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2256
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:272
 #, kde-format
 msgid "Interpolation"
@@ -6987,7 +6987,7 @@ msgid "Integral"
 msgstr "Integrál"
 
 #: src/backend/nsl/nsl_sf_stats.c:13
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:805
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:808
 #, kde-format
 msgid "Gaussian (Normal)"
 msgstr "Gaussovské (normálne)"
@@ -6998,7 +6998,7 @@ msgid "Gaussian Tail"
 msgstr "Gaussovský chvost"
 
 #: src/backend/nsl/nsl_sf_stats.c:16
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:813
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:816
 #, kde-format
 msgid "Laplace"
 msgstr "Laplace"
@@ -7099,7 +7099,7 @@ msgid "Gumbel Type-2"
 msgstr "Gumbel typ 2"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:827
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:830
 #, kde-format
 msgid "Poisson"
 msgstr "Poissonove"
@@ -7110,7 +7110,7 @@ msgid "Bernoulli"
 msgstr "Bernoulli"
 
 #: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:25
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:831
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:834
 #, kde-format
 msgid "Binomial"
 msgstr "Binomická"
@@ -8884,7 +8884,7 @@ msgstr "Orientácia"
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:317
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:586
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:589
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
 #: src/frontend/dockwidgets/XYCurveDock.cpp:434
 #: src/frontend/ui/dockwidgets/axisdock.ui:492
@@ -9326,7 +9326,8 @@ msgstr "Vymazať premennú"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:141
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5520
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5523
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:623
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -9336,8 +9337,8 @@ msgid "Title"
 msgstr "Nadpis"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2360
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2363
 #: src/frontend/ui/dockwidgets/barplotdock.ui:229
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:241
 #: src/frontend/ui/dockwidgets/histogramdock.ui:387
@@ -9366,18 +9367,18 @@ msgstr "Nadpis"
 msgid "Legend"
 msgstr "Vysvetlivky"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
 #, kde-format
 msgid "Horizontal Axis"
 msgstr "horizontálna os"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
 #, kde-format
 msgid "Vertical Axis"
 msgstr "vertikálna os"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2407
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2410
 #: src/frontend/ActionsManager.cpp:551
 #: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:133
@@ -9389,45 +9390,45 @@ msgstr "vertikálna os"
 msgid "Image"
 msgstr "Obrázok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2383
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2386
 #, kde-format
 msgid "Info Element"
 msgstr "Informačný prvok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2427
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2430
 #, kde-format
 msgid "Custom Point"
 msgstr "Vlastný bod"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2452
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:458
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2455
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:180
 #, kde-format
 msgid "Reference Line"
 msgstr "Referenčný riadok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:458
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2511
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2514
 #, kde-format
 msgid "Reference Range"
 msgstr "Referenčný rozsah"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:477
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2471
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2493
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:478
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2474
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2496
 #, kde-format
 msgid "Inset Plot Area"
 msgstr "Vložená oblasť zákresu"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:478
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
 #, kde-format
 msgid "Inset Plot Area with Data"
 msgstr "Vložená oblasť zákresu s dátami"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:497
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:498
 #: src/frontend/ActionsManager.cpp:899
 #: src/frontend/notebook/NotebookView.cpp:175
 #: src/frontend/workbook/WorkbookView.cpp:135
@@ -9436,37 +9437,37 @@ msgstr "Vložená oblasť zákresu s dátami"
 msgid "Add New"
 msgstr "Pridať nový"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:506
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:507
 #, kde-format
 msgid "Formula Plot"
 msgstr "Graf vzorca"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:507
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:508
 #, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr "Pridať nový xy-graf, ktorý je definovaný matematickým výrazom."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:514
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:515
 #, kde-format
 msgid "Analysis Plots"
 msgstr "Analytické grafy"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:516
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:550
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2315
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:517
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2318
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:587
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
 msgstr "Prispôsobiť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:549
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:551
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:188
 #, kde-format
 msgid "Analysis"
 msgstr "Rozbor"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:562
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:565
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:929
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
 #: src/frontend/worksheet/WorksheetView.cpp:546
@@ -9474,109 +9475,75 @@ msgstr "Rozbor"
 msgid "Theme"
 msgstr "Téma"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:584
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:587
 #, kde-format
 msgid "Line Plots"
 msgstr "Čiarové grafy"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:590
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:593
 #, kde-format
 msgid "Horizontal Step"
 msgstr "Horizontálny krok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:594
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:597
 #, kde-format
 msgid "Vertical Step"
 msgstr "Vertikálny krok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:598
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:601
 #, kde-format
 msgid "Spline Interpolated"
 msgstr "Splajnom interpolované"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:605
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:608
 #, kde-format
 msgid "Scatter Plots"
 msgstr "Bodové grafy"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:607
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:610
 #, kde-format
 msgid "Scatter"
 msgstr "Bodový graf"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:611
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:614
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:218
 #, kde-format
 msgid "Y Error"
 msgstr "Chyba Y"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:615
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:618
 #, kde-format
 msgid "XY Error"
 msgstr "Chyba XY"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:622
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:625
 #, kde-format
 msgid "Line and Symbol Plots"
 msgstr "Grafy s čiarou a symbolom"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:624
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:627
 #, kde-format
 msgid "Line + Symbol"
 msgstr "Čiara + symbol"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:628
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:631
 #, kde-format
 msgid "2 Point Segment"
 msgstr "2-bodový segment"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:632
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:635
 #, kde-format
 msgid "3 Point Segment"
 msgstr "3-bodový segment"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:639
-#, kde-format
-msgid "Statistical Plots"
-msgstr "Štatistické grafy"
-
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:641
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1986
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:149
-#, kde-format
-msgid "Histogram"
-msgstr "Histogram"
-
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:645
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1983
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:943
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:152
-#, kde-format
-msgid "Box Plot"
-msgstr "Krabicový graf"
-
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:649
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1989
-#, kde-format
-msgid "Q-Q Plot"
-msgstr "Q-Q graf"
-
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:653
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1992
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:150
-#, kde-format
-msgid "KDE Plot"
-msgstr "KDE graf"
-
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:660
 #, kde-format
 msgid "Bar Plots"
 msgstr "Stĺpcové grafy"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:662
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1997
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:643
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2000
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:945
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:947
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:155
@@ -9584,383 +9551,417 @@ msgstr "Stĺpcové grafy"
 msgid "Bar Plot"
 msgstr "Stĺpcový graf"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:666
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2000
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:647
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2003
 #, kde-format
 msgid "Lollipop Plot"
 msgstr "Lollipop graf"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:673
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:655
+#, kde-format
+msgid "Statistical Plots"
+msgstr "Štatistické grafy"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:657
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1989
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:149
+#, kde-format
+msgid "Histogram"
+msgstr "Histogram"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:661
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1986
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:943
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:152
+#, kde-format
+msgid "Box Plot"
+msgstr "Krabicový graf"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:665
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1992
+#, kde-format
+msgid "Q-Q Plot"
+msgstr "Q-Q graf"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:669
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1995
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:150
+#, kde-format
+msgid "KDE Plot"
+msgstr "KDE graf"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:676
 #, kde-format
 msgid "Continual Improvement Plots"
 msgstr "Grafy neustáleho zlepšovania"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:675
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2008
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:678
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2011
 #, kde-format
 msgid "Run Chart"
 msgstr "Bežecký graf"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:679
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2005
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2008
 #, kde-format
 msgid "Process Behavior Chart"
 msgstr "Diagram správania procesu"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:683
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2011
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:686
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2014
 #, kde-format
 msgid "Pareto Chart"
 msgstr "Paretov diagram"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:702
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr "Exponenciála (stupeň 1)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:703
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:706
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr "Exponenciála (stupeň 2)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:723
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:726
 #, kde-format
 msgid "Arc Tangent"
 msgstr "Arkus tangens"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:731
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:734
 #, kde-format
 msgid "Error Function"
 msgstr "Chybová funkcia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:743
-#, kde-format
-msgid "Differentiate"
-msgstr "Diferencovať"
-
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
-#, kde-format
-msgid "Integrate"
-msgstr "Integrovať"
-
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:753
-#, kde-format
-msgid "Interpolate"
-msgstr "Interpolovať"
-
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:757
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2267
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:72
 #, kde-format
 msgid "Smooth"
 msgstr "Plynulý"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:763
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2332
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:751
 #, kde-format
-msgid "Fourier Filter"
-msgstr "Fourierov filter"
+msgid "Interpolate"
+msgstr "Interpolovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:767
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2055
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:755
+#, kde-format
+msgid "Differentiate"
+msgstr "Diferencovať"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:759
+#, kde-format
+msgid "Integrate"
+msgstr "Integrovať"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:766
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2058
 #, kde-format
 msgid "Fourier Transform"
 msgstr "Fourierova transformácia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:771
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2059
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:770
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2335
+#, kde-format
+msgid "Fourier Filter"
+msgstr "Fourierov filter"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:774
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2062
 #, kde-format
 msgid "Hilbert Transform"
 msgstr "Hilbertova transformácia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:777
-#, kde-format
-msgid "Convolute/Deconvolute"
-msgstr "Konvolovať/dekonvolovať"
-
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:781
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2067
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2070
 #, kde-format
 msgid "Auto-/Cross-Correlation"
 msgstr "Auto-/Krížová korelácia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:787
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2211
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:785
 #, kde-format
-msgid "Line Simplification"
-msgstr "Zjednodušenie čiary"
+msgid "Convolute/Deconvolute"
+msgstr "Konvolovať/dekonvolovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:793
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:792
 #, kde-format
 msgid "Correct Baseline"
 msgstr "Opraviť základnú čiaru"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:821
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:796
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2214
+#, kde-format
+msgid "Line Simplification"
+msgstr "Zjednodušenie čiary"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:824
 #, kde-format
 msgid "Log-normal"
 msgstr "Log-normálne"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:852
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:855
 #, kde-format
 msgid "No curves inside the plot area."
 msgstr "V oblasti grafu nie sú žiadne krivky."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1198
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1232
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1201
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1235
 #, kde-format
 msgid "%1: change geometry rect"
 msgstr "%1: zmeniť geometrický obdĺžnik"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1267
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1270
 #, kde-format
 msgid "%1: set range type"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1274
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1277
 #, kde-format
 msgid "%1: set nice extend"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1281
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1288
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1284
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1291
 #, kde-format
 msgid "%1: set range"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1299
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1302
 #, kde-format
 msgid "%1: change %2-range %3 format"
 msgstr "%1: change %2-range %3 format"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1389
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1392
 #, kde-format
 msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: change %2-range %3 auto scaling"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1640
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1643
 #, kde-format
 msgid "%1: change x-range %2 scale"
 msgstr "%1: change x-range %2 scale"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1768
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1771
 #, kde-format
 msgid "%1: set default plot range"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1786
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1789
 #, kde-format
 msgid "%1: x-range breaking enabled"
 msgstr "%1: prerušovanie rozsahu x povolené"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1795
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1798
 #, kde-format
 msgid "%1: x-range breaks changed"
 msgstr "%1: zmenené prerušenia rozsahu x"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1804
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1807
 #, kde-format
 msgid "%1: y-range breaking enabled"
 msgstr "%1: prerušovanie rozsahu y povolené"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1813
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
 #, kde-format
 msgid "%1: y-range breaks changed"
 msgstr "%1: zmenené prerušenia rozsahu y"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1827
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1830
 #, kde-format
 msgid "%1: Cursor0 enable"
 msgstr "%1: Cursor0 enable"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1839
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1842
 #, kde-format
 msgid "%1: Cursor1 enable"
 msgstr "%1: Cursor1 enable"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1848
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1849
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1851
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1852
 #, kde-format
 msgid "%1: set plot color mode"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1860
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1863
 #: src/backend/worksheet/Worksheet.cpp:892
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: pridať %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1862
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
 #: src/backend/worksheet/Worksheet.cpp:894
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: load default theme"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1864
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5863
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1867
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5866
 #: src/backend/worksheet/Worksheet.cpp:896
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1873
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1874
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1876
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1877
 #, kde-format
 msgid "%1: set plot color map"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1885
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1888
 #, kde-format
 msgid "%1: set y-offset"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1893
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
 #, kde-format
 msgid "%1: border type changed"
 msgstr "%1: typ ohraničenia zmenený"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1900
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1903
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:236
 #, kde-format
 msgid "%1: set border corner radius"
 msgstr "%1: nastaviť polomer rohu okraja"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2063
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2066
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:333
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:338
 #, kde-format
 msgid "Convolution"
 msgstr "Konvolúcia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2156
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2159
 #, kde-format
 msgid "%1: distribution fit to '%2'"
 msgstr "%1: distribution fit to '%2'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2157
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2160
 #, kde-format
 msgid "Distribution Fit to '%1'"
 msgstr "Distribution Fit to '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2204
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2207
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:857
 #, kde-format
 msgid "Simplification of '%1'"
 msgstr "Zjednodušenie '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2218
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2221
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:830
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Derivative of '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2225
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2228
 #: src/frontend/notebook/NotebookView.cpp:156
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:268
 #, kde-format
 msgid "Differentiation"
 msgstr "Derivovanie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2232
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2235
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:833
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Integral of '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2239
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2242
 #: src/frontend/notebook/NotebookView.cpp:162
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:159
 #, kde-format
 msgid "Integration"
 msgstr "Integrácia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2246
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2249
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:836
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Interpolation of '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2260
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2263
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:839
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Smoothing of '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2274
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2277
 #, kde-format
 msgid "Baseline correction for '%1'"
 msgstr "Korekcia základnej línie pre '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2281
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2284
 #, kde-format
 msgid "Baseline Correction"
 msgstr "Korekcia základnej čiary"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2288
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2291
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:826
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "Fit to '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2325
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2328
 #, kde-format
 msgid "Fourier filtering of '%1'"
 msgstr "Fourier filtering of '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2339
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2342
 #, kde-format
 msgid "Function of '%1'"
 msgstr "Funkcia '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2390
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2393
 #: src/frontend/worksheet/WorksheetView.cpp:1355
 #, kde-format
 msgid "Text Label"
 msgstr "Textové pole"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2391
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2394
 #: src/frontend/worksheet/WorksheetView.cpp:1356
 #, kde-format
 msgid "text"
 msgstr "text"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2470
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2473
 #, kde-format
 msgid "%1: add inset plot"
 msgstr "%1: pridať vložený graf"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2484
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2487
 #, kde-format
 msgid "%1: add inset plot with data"
 msgstr "%1: pridať vložený graf s dátami"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2810
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2813
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:635
 #, kde-format
 msgid "Cumulative Percentage"
 msgstr "Kumulatívne percento"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4298
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4301
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Nie je vnútri ohraničujúceho obdĺžnika"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4423
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4444
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4426
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4447
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "od x=%1 do x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4431
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4457
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4434
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4460
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "od y=%1 do y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4476
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4479
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
