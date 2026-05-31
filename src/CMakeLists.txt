@@ -490,6 +490,7 @@ set(LABPLOT_DATASOURCES_SOURCES
     ${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
     ${BACKEND_DIR}/datasources/filters/McapFilter.cpp
     ${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/ParquetFilter.cpp
     ${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
     ${BACKEND_DIR}/datasources/filters/OdsFilter.cpp
     ${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
@@ -730,6 +731,13 @@ target_link_libraries(labplotbackendlib
     ${READSTAT_LIBRARIES}
     qt${QT_VERSION_MAJOR}advanceddocking
 )
+
+if(Arrow_FOUND AND Parquet_FOUND)
+    target_link_libraries(labplotbackendlib Arrow::arrow_shared Parquet::parquet_shared)
+    if(ORC_FOUND)
+        target_link_libraries(labplotbackendlib ${ORC_LIBRARIES})
+    endif()
+endif()
 
 if(ENABLE_SCRIPTING)
 target_link_libraries(labplot_core_obj PRIVATE KF${KF_MAJOR_VERSION}::TextEditor)

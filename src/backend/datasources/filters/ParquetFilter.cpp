@@ -14,8 +14,8 @@
 #include "backend/lib/trace.h"
 
 #ifdef HAVE_PARQUET
-#include <parquet/arrow/reader.h>
 #include <arrow/ipc/reader.h>
+#include <parquet/arrow/reader.h>
 #endif
 
 #ifdef HAVE_ORC
@@ -49,9 +49,7 @@ QString ParquetFilter::fileInfoString(const QString& fileName) {
 
 	auto infile = *infile_result;
 
-	// Try Parquet
-	if (fileName.endsWith(QLatin1String(".parquet"), Qt::CaseInsensitive)
-		|| fileName.endsWith(QLatin1String(".parq"), Qt::CaseInsensitive)) {
+	if (fileName.endsWith(QLatin1String(".parquet"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".parq"), Qt::CaseInsensitive)) {
 		std::unique_ptr<parquet::arrow::FileReader> reader;
 		auto status = parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader);
 		if (status.ok()) {
@@ -68,8 +66,7 @@ QString ParquetFilter::fileInfoString(const QString& fileName) {
 			info += QLatin1Char('\n');
 			info += i18n("Number of row groups: %1", metadata->num_row_groups());
 		}
-	} else if (fileName.endsWith(QLatin1String(".feather"), Qt::CaseInsensitive)
-			   || fileName.endsWith(QLatin1String(".arrow"), Qt::CaseInsensitive)
+	} else if (fileName.endsWith(QLatin1String(".feather"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".arrow"), Qt::CaseInsensitive)
 			   || fileName.endsWith(QLatin1String(".ipc"), Qt::CaseInsensitive)) {
 		auto reader_result = arrow::ipc::RecordBatchFileReader::Open(infile);
 		if (reader_result.ok()) {
@@ -171,6 +168,8 @@ void ParquetFilter::save(QXmlStreamWriter* writer) const {
 }
 
 bool ParquetFilter::load(XmlStreamReader* reader) {
+	//Q_D(ParquetFilter);
+	QString str;
 	const auto& attribs = reader->attributes();
 	READ_INT_VALUE("startRow", startRow, int);
 	READ_INT_VALUE("endRow", endRow, int);
@@ -197,10 +196,9 @@ std::shared_ptr<arrow::Table> ParquetFilterPrivate::readArrowTable(const QString
 
 	std::shared_ptr<arrow::Table> table;
 
-	if (fileType == AbstractFileFilter::FileType::Parquet
-		|| fileName.endsWith(QLatin1String(".parquet"), Qt::CaseInsensitive)
+	if (fileType == AbstractFileFilter::FileType::Parquet || fileName.endsWith(QLatin1String(".parquet"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String(".parq"), Qt::CaseInsensitive)) {
-		// Read Parquet
+		// read Parquet
 		std::unique_ptr<parquet::arrow::FileReader> reader;
 		auto status = parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader);
 		if (!status.ok()) {
@@ -213,11 +211,9 @@ std::shared_ptr<arrow::Table> ParquetFilterPrivate::readArrowTable(const QString
 			return nullptr;
 		}
 		table = *result;
-	} else if (fileType == AbstractFileFilter::FileType::ArrowIPC
-			   || fileName.endsWith(QLatin1String(".feather"), Qt::CaseInsensitive)
-			   || fileName.endsWith(QLatin1String(".arrow"), Qt::CaseInsensitive)
-			   || fileName.endsWith(QLatin1String(".ipc"), Qt::CaseInsensitive)) {
-		// Read Arrow IPC / Feather
+	} else if (fileType == AbstractFileFilter::FileType::ArrowIPC || fileName.endsWith(QLatin1String(".feather"), Qt::CaseInsensitive)
+			   || fileName.endsWith(QLatin1String(".arrow"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".ipc"), Qt::CaseInsensitive)) {
+		// read Arrow IPC / Feather
 		auto reader_result = arrow::ipc::RecordBatchFileReader::Open(infile);
 		if (!reader_result.ok()) {
 			q->setLastError(i18n("Failed to open Arrow IPC file: %1", QString::fromStdString(reader_result.status().ToString())));
@@ -225,7 +221,7 @@ std::shared_ptr<arrow::Table> ParquetFilterPrivate::readArrowTable(const QString
 		}
 		auto reader = *reader_result;
 
-		// Read all record batches into a table
+		// read all record batches into a table
 		std::vector<std::shared_ptr<arrow::RecordBatch>> batches;
 		batches.reserve(reader->num_record_batches());
 		for (int i = 0; i < reader->num_record_batches(); ++i) {
@@ -244,8 +240,7 @@ std::shared_ptr<arrow::Table> ParquetFilterPrivate::readArrowTable(const QString
 		table = *table_result;
 	}
 #ifdef HAVE_ORC
-	else if (fileType == AbstractFileFilter::FileType::ORC
-			 || fileName.endsWith(QLatin1String(".orc"), Qt::CaseInsensitive)) {
+	else if (fileType == AbstractFileFilter::FileType::ORC || fileName.endsWith(QLatin1String(".orc"), Qt::CaseInsensitive)) {
 		// Read ORC
 		auto reader_result = arrow::adapters::orc::ORCFileReader::Open(infile, arrow::default_memory_pool());
 		if (!reader_result.ok()) {
@@ -267,7 +262,6 @@ std::shared_ptr<arrow::Table> ParquetFilterPrivate::readArrowTable(const QString
 		return nullptr;
 	}
 
-	// Cache metadata
 	numColumns = table->num_columns();
 	numRows = (int)table->num_rows();
 	columnNames.clear();
@@ -318,7 +312,9 @@ static QString arrowValueToString(const std::shared_ptr<arrow::Array>& array, in
 	return QString::fromStdString(array->GetScalar(row).ValueOrDie()->ToString());
 }
 
-void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& table, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& table,
+										   AbstractDataSource* dataSource,
+										   AbstractFileFilter::ImportMode importMode) {
 	if (!table || !dataSource)
 		return;
 
@@ -417,8 +413,7 @@ void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& 
 					}
 					case AbstractColumn::ColumnMode::Text: {
 						auto scalar = array->GetScalar(localRow).ValueOrDie();
-						static_cast<QVector<QString>*>(dataContainer[containerIdx])->operator[](destRow) =
-							QString::fromStdString(scalar->ToString());
+						static_cast<QVector<QString>*>(dataContainer[containerIdx])->operator[](destRow) = QString::fromStdString(scalar->ToString());
 						break;
 					}
 					case AbstractColumn::ColumnMode::DateTime: {
@@ -442,17 +437,15 @@ void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& 
 								ms = ts->value / 1000000;
 								break;
 							}
-							static_cast<QVector<QDateTime>*>(dataContainer[containerIdx])->operator[](destRow) =
-								QDateTime::fromMSecsSinceEpoch(ms, Qt::UTC);
+							static_cast<QVector<QDateTime>*>(dataContainer[containerIdx])->operator[](destRow) = QDateTime::fromMSecsSinceEpoch(ms, Qt::UTC);
 						} else {
 							// Date types
 							auto dateScalar = std::dynamic_pointer_cast<arrow::Date32Scalar>(scalar);
-							if (dateScalar) {
+							if (dateScalar)
 								static_cast<QVector<QDateTime>*>(dataContainer[containerIdx])->operator[](destRow) =
 									QDateTime(QDate::fromJulianDay(2440588 + dateScalar->value), QTime(0, 0), Qt::UTC); // days since 1970-01-01
-							} else {
+							else
 								static_cast<QVector<QDateTime>*>(dataContainer[containerIdx])->operator[](destRow) = QDateTime();
-							}
 						}
 						break;
 					}

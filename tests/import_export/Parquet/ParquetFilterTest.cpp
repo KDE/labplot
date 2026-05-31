@@ -100,8 +100,8 @@ void ParquetFilterTest::testParquetTypes() {
 	// bool → Integer
 	QCOMPARE(spreadsheet.column(7)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
-	// spot-check values
-	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);   // int8
+	// check values
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1); // int8
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), -2);
 	QCOMPARE(spreadsheet.column(2)->integerAt(2), 30000); // int32
 	QCOMPARE(spreadsheet.column(3)->bigIntAt(0), (qint64)100000000000LL); // int64
