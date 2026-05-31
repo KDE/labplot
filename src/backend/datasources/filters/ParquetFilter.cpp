@@ -9,6 +9,7 @@
 #include "ParquetFilter.h"
 #include "ParquetFilterPrivate.h"
 #include "backend/core/column/Column.h"
+#include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
@@ -50,9 +51,9 @@ QString ParquetFilter::fileInfoString(const QString& fileName) {
 	auto infile = *infile_result;
 
 	if (fileName.endsWith(QLatin1String(".parquet"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".parq"), Qt::CaseInsensitive)) {
-		std::unique_ptr<parquet::arrow::FileReader> reader;
-		auto status = parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader);
-		if (status.ok()) {
+		auto reader_result = parquet::arrow::OpenFile(infile, arrow::default_memory_pool());
+		if (reader_result.ok()) {
+			auto reader = std::move(*reader_result);
 			auto metadata = reader->parquet_reader()->metadata();
 			info += i18n("Format: Apache Parquet");
 			info += QLatin1Char('\n');
@@ -199,12 +200,12 @@ std::shared_ptr<arrow::Table> ParquetFilterPrivate::readArrowTable(const QString
 	if (fileType == AbstractFileFilter::FileType::Parquet || fileName.endsWith(QLatin1String(".parquet"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String(".parq"), Qt::CaseInsensitive)) {
 		// read Parquet
-		std::unique_ptr<parquet::arrow::FileReader> reader;
-		auto status = parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader);
-		if (!status.ok()) {
-			q->setLastError(i18n("Failed to open Parquet file: %1", QString::fromStdString(status.ToString())));
+		auto reader_result = parquet::arrow::OpenFile(infile, arrow::default_memory_pool());
+		if (!reader_result.ok()) {
+			q->setLastError(i18n("Failed to open Parquet file: %1", QString::fromStdString(reader_result.status().ToString())));
 			return nullptr;
 		}
+		auto reader = std::move(*reader_result);
 		auto result = reader->ReadTable();
 		if (!result.ok()) {
 			q->setLastError(i18n("Failed to read Parquet table: %1", QString::fromStdString(result.status().ToString())));
