@@ -613,6 +613,11 @@ void SpreadsheetView::initMenus() {
 	m_timeSeriesAnalysisMenu->addAction(tsaSeasonalDecompositionAction);
 	m_columnMenu->addMenu(m_timeSeriesAnalysisMenu);
 
+	// column statistics releated actions
+	m_columnMenu->addSeparator();
+	m_columnMenu->addAction(action_statistics_columns);
+	m_columnMenu->addAction(action_statistics_spreadsheet);
+
 	m_columnSetAsMenu = new QMenu(i18n("Set Column As"), this);
 	m_columnMenu->addSeparator();
 	m_columnSetAsMenu->addAction(action_set_as_x);
@@ -732,10 +737,6 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu->addMenu(m_formattingMenu);
 	m_columnMenu->addSeparator();
 	m_columnMenu->addAction(action_freeze_columns);
-	m_columnMenu->addSeparator();
-	m_columnMenu->addAction(action_statistics_spreadsheet);
-	m_columnMenu->addSeparator();
-	m_columnMenu->addAction(action_statistics_columns);
 
 	if (!m_readOnly) {
 		m_columnMenu->addSeparator();
@@ -928,12 +929,20 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 		firstAction = menu->actions().at(1);
 
 	if (m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0) {
+		// plot and analysis actions
 		menu->insertMenu(firstAction, m_plotDataMenu);
 		menu->insertMenu(firstAction, m_analyzePlotMenu);
 		menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
 		menu->insertMenu(firstAction, m_timeSeriesAnalysisMenu);
 		menu->insertSeparator(firstAction);
+
+		// column statistics related actions
+		menu->insertSeparator(firstAction);
+		menu->insertAction(firstAction, action_statistics_all_columns);
+		menu->insertAction(firstAction, action_statistics_spreadsheet);
+		menu->insertSeparator(firstAction);
 	}
+
 	menu->insertMenu(firstAction, m_selectionMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_select_all);
@@ -955,11 +964,6 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_toggle_comments);
 	menu->insertAction(firstAction, action_toggle_sparklines);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_statistics_spreadsheet);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_statistics_all_columns);
-	menu->insertSeparator(firstAction);
 }
 
 /*!
@@ -976,15 +980,23 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	const bool numeric = column->isNumeric();
 	const bool datetime = (column->columnMode() == AbstractColumn::ColumnMode::DateTime);
 
-	QAction* firstAction = menu->actions().at(1);
+	// plot and analysis actions
+	auto* firstAction = menu->actions().at(1);
 	menu->insertMenu(firstAction, m_plotDataMenu);
 	menu->insertMenu(firstAction, m_analyzePlotMenu);
 	menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
 	menu->insertMenu(firstAction, m_timeSeriesAnalysisMenu);
 	menu->insertSeparator(firstAction);
 
-	if (numeric)
+	// column statistics related actions
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_statistics_columns);
+	menu->insertAction(firstAction, action_statistics_spreadsheet);
+
+	if (numeric) {
+		menu->insertSeparator(firstAction);
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
+	}
 
 	if (!m_readOnly) {
 		if (numeric) {
@@ -1007,10 +1019,6 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	menu->insertMenu(firstAction, m_formattingMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_freeze_columns);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_statistics_spreadsheet);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_statistics_columns);
 
 	checkColumnMenus(QVector<Column*>{column});
 }
@@ -4632,6 +4640,10 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 					case AbstractColumn::ColumnMode::BigInt:
 						query += QString::number(col->bigIntAt(row));
 						break;
+					case AbstractColumn::ColumnMode::Text:
+					case AbstractColumn::ColumnMode::Month:
+					case AbstractColumn::ColumnMode::Day:
+					case AbstractColumn::ColumnMode::DateTime:
 					default: {
 						QString text = col->asStringColumn()->textAt(row);
 						text = text.replace(QLatin1String("'"), QLatin1String("''"));
