@@ -53,6 +53,7 @@
 #include <KMessageBox>
 
 #include <QActionGroup>
+#include <QApplication>
 #include <QClipboard>
 #include <QFile>
 #include <QInputDialog>
@@ -66,6 +67,8 @@
 #include <QPrinter>
 #include <QRandomGenerator>
 #include <QScrollBar>
+#include <QSlider>
+#include <QSpinBox>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -111,8 +114,32 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 	, m_readOnly(readOnly) {
 	auto* layout = new QVBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
+	layout->setSpacing(0);
 
 	layout->addWidget(m_tableView);
+
+	// zoom bar at the bottom
+	auto* zoomBarLayout = new QHBoxLayout();
+	zoomBarLayout->setContentsMargins(4, 2, 4, 2);
+	zoomBarLayout->addStretch();
+	m_zoomSlider = new QSlider(Qt::Horizontal, this);
+	m_zoomSlider->setRange(50, 300);
+	m_zoomSlider->setValue(100);
+	m_zoomSlider->setFixedWidth(150);
+	m_zoomSlider->setToolTip(i18n("Zoom level"));
+	m_zoomSpinBox = new QSpinBox(this);
+	m_zoomSpinBox->setRange(50, 300);
+	m_zoomSpinBox->setValue(100);
+	m_zoomSpinBox->setSuffix(QStringLiteral("%"));
+	m_zoomSpinBox->setToolTip(i18n("Zoom level"));
+	m_zoomSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
+	m_zoomSpinBox->setFixedWidth(50);
+	zoomBarLayout->addWidget(m_zoomSlider);
+	zoomBarLayout->addWidget(m_zoomSpinBox);
+	layout->addLayout(zoomBarLayout);
+
+	connect(m_zoomSlider, &QSlider::valueChanged, this, &SpreadsheetView::setZoomLevel);
+	connect(m_zoomSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetView::setZoomLevel);
 	if (m_readOnly)
 		m_tableView->setEditTriggers(QTableView::NoEditTriggers);
 
@@ -170,7 +197,7 @@ void SpreadsheetView::init() {
 	m_horizontalHeader->setSectionsMovable(true);
 	m_horizontalHeader->installEventFilter(this);
 	m_tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-	// 	m_tableView->installEventFilter(this);
+	m_tableView->viewport()->installEventFilter(this);
 
 	resizeHeader();
 
@@ -1066,7 +1093,7 @@ void SpreadsheetView::handleAspectAboutToBeRemoved(int first, int last) {
 		disconnect(children.at(i), nullptr, this, nullptr);
 }
 
-void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /* oldSize */, int newSize) {
+void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /* oldSiz	e */, int newSize) {
 	// save the new size in the column
 	Column* col = m_spreadsheet->child<Column>(logicalIndex);
 	col->setWidth(newSize);
@@ -1421,6 +1448,15 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 		else if (key_event->matches(QKeySequence::Paste)) {
 			if (!m_readOnly)
 				pasteIntoSelection();
+		} else if (key_event->matches(QKeySequence::ZoomIn) || (key_event->modifiers() == Qt::ControlModifier && key_event->key() == Qt::Key_Equal)) {
+			setZoomLevel(m_zoomLevel + 10);
+			return true;
+		} else if (key_event->matches(QKeySequence::ZoomOut)) {
+			setZoomLevel(m_zoomLevel - 10);
+			return true;
+		} else if (key_event->modifiers() == Qt::ControlModifier && key_event->key() == Qt::Key_0) {
+			setZoomLevel(100);
+			return true;
 		} else if (key_event->key() == Qt::Key_Backspace || key_event->matches(QKeySequence::Delete))
 			clearSelectedCells();
 		else if (key_event->key() == Qt::Key_Return || key_event->key() == Qt::Key_Enter) {
@@ -1457,6 +1493,16 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 #endif
 		else if (key_event->matches(QKeySequence::Cut))
 			cutSelection();
+	} else if (event->type() == QEvent::Wheel) {
+		auto* wheelEvent = static_cast<QWheelEvent*>(event);
+		if (wheelEvent->modifiers() == Qt::ControlModifier) {
+			const int delta = wheelEvent->angleDelta().y();
+			if (delta > 0)
+				setZoomLevel(m_zoomLevel + 10);
+			else if (delta < 0)
+				setZoomLevel(m_zoomLevel - 10);
+			return true;
+		}
 	}
 
 	return QWidget::eventFilter(watched, event);
@@ -4670,4 +4716,60 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 	// commit the transaction and close the database
 	q.exec(QLatin1String("COMMIT TRANSACTION;"));
 	db.close();
+}
+
+// ############################################################################
+// ############################# Zoom #########################################
+// ############################################################################
+
+int SpreadsheetView::zoomLevel() const {
+	return m_zoomLevel;
+}
+
+void SpreadsheetView::setZoomLevel(int level) {
+	level = qBound(50, level, 300);
+	if (level == m_zoomLevel)
+		return;
+
+	m_zoomLevel = level;
+
+	// update slider and spinbox without re-entering this slot
+	QSignalBlocker sliderBlocker(m_zoomSlider);
+	QSignalBlocker spinBoxBlocker(m_zoomSpinBox);
+	m_zoomSlider->setValue(m_zoomLevel);
+	m_zoomSpinBox->setValue(m_zoomLevel);
+
+	applyZoom();
+}
+
+void SpreadsheetView::applyZoom() {
+	const double factor = m_zoomLevel / 100.0;
+	const int defaultPointSize = QApplication::font().pointSize();
+	const int newPointSize = qMax(1, static_cast<int>(defaultPointSize * factor));
+
+	// scale the cell font
+	QFont font = QApplication::font();
+	font.setPointSize(newPointSize);
+	m_tableView->setFont(font);
+
+	// scale the row height based on font metrics
+	QFontMetrics fm(font);
+	const int rowHeight = fm.height() + 6; // 6px padding
+
+	// use stylesheet to force header font — some platform styles ignore setFont() on headers
+	const QString fontStyleSheet = QStringLiteral("QHeaderView::section { font-size: %1pt; }").arg(newPointSize);
+
+	auto* v_header = m_tableView->verticalHeader();
+	v_header->setDefaultSectionSize(rowHeight);
+	v_header->setStyleSheet(fontStyleSheet);
+
+	m_horizontalHeader->setStyleSheet(fontStyleSheet);
+
+	// force headers to recalculate geometry and repaint
+	m_horizontalHeader->updateGeometry();
+	m_horizontalHeader->viewport()->update();
+	v_header->viewport()->update();
+
+	// resize columns to account for new font size
+	resizeHeader();
 }

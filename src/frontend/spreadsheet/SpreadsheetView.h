@@ -30,11 +30,14 @@ class QActionGroup;
 class QFrame;
 class QItemSelection;
 class QItemSelectionModel;
+class QLabel;
 class QLineEdit;
 class QMenu;
 class QPrinter;
 class QModelIndex;
 class QResizeEvent;
+class QSlider;
+class QSpinBox;
 class QTableView;
 class QToolBar;
 
@@ -57,6 +60,8 @@ public:
 	void resizeHeader();
 	void setFocus();
 	void setSuppressResizeHeader(bool);
+
+	int zoomLevel() const;
 
 	void createContextMenu(QMenu*);
 	void fillColumnContextMenu(QMenu*, Column*);
@@ -244,6 +249,13 @@ private:
 	QMenu* m_hypothesisTestMenu{nullptr};
 
 	bool m_suppressResize{false};
+
+	// zoom
+	int m_zoomLevel{100}; // percentage, 100 = default
+	void setZoomLevel(int);
+	void applyZoom();
+	QSlider* m_zoomSlider{nullptr};
+	QSpinBox* m_zoomSpinBox{nullptr};
 
 public Q_SLOTS:
 	void handleAspectsAdded(int first, int last);
