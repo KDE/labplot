@@ -114,6 +114,9 @@ void XYFitCurveDock::setupGeneral() {
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 
+	// use bigger height for better quality of the preview pixmap
+	uiGeneralTab.lFuncPic->setMinimumHeight(2 * uiGeneralTab.lModel->height());
+
 	// TODO: setting checked background color to unchecked color
 	//	p = uiGeneralTab.tbData->palette();
 	// QWidget::palette().color(QWidget::backgroundRole())
@@ -1061,6 +1064,7 @@ void XYFitCurveDock::updateModelEquation() {
 			p.setColor(QPalette::Window, palette().color(QPalette::Base));
 			uiGeneralTab.lFuncPic->setAutoFillBackground(true);
 			uiGeneralTab.lFuncPic->setPalette(p);
+			uiGeneralTab.lFuncPic->setScaledContents(false);
 
 			uiGeneralTab.lFuncPic->setPixmap(QPixmap::fromImage(image));
 			uiGeneralTab.lFuncPic->show();
