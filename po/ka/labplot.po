@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-01 00:39+0000\n"
-"PO-Revision-Date: 2026-05-18 06:00+0200\n"
+"PO-Revision-Date: 2026-06-01 05:37+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -18567,11 +18567,10 @@ msgid "System Default"
 msgstr "სისტემის ნაგულისხმევი"
 
 #: src/frontend/SettingsScriptingPage.cpp:55
-#, fuzzy, kde-format
-#| msgid " Select the image file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment"
-msgstr " აირჩიეთ გამოსახულების ფაილი"
+msgstr "აირჩიეთ ვირტუალური გარემო"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -19694,10 +19693,9 @@ msgstr "დალაგება"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:129
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:134
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#, kde-format
 msgid "Zoom level"
-msgstr "ხედის გადიდება"
+msgstr "გადიდების დონე"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format

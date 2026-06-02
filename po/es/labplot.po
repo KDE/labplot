@@ -4,13 +4,13 @@
 # Automatically generated, 2014.
 #
 # SPDX-FileCopyrightText: 2014-2015, 2017, 2019-2026 Eloy Cuadra <ecuadra@eloihr.net>
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019 Javier Vinal <fjvinal@gmail.com>
+# SPDX-FileCopyrightText: 2015-2019 Javier Vinal <fjvinal@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-01 00:39+0000\n"
-"PO-Revision-Date: 2026-05-15 17:55+0100\n"
+"PO-Revision-Date: 2026-06-01 20:01+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -18646,11 +18646,10 @@ msgid "System Default"
 msgstr "Predeterminado del sistema"
 
 #: src/frontend/SettingsScriptingPage.cpp:55
-#, fuzzy, kde-format
-#| msgid " Select the image file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment"
-msgstr "Seleccione el archivo de imagen"
+msgstr "Seleccione el entorno virtual"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -19785,10 +19784,9 @@ msgstr "Ordenar"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:129
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:134
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#, kde-format
 msgid "Zoom level"
-msgstr "Ampliar vista"
+msgstr "Nivel de ampliación"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format

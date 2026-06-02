@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-01 00:39+0000\n"
-"PO-Revision-Date: 2026-05-15 09:57+0300\n"
+"PO-Revision-Date: 2026-06-01 08:40+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -18656,11 +18656,10 @@ msgid "System Default"
 msgstr "Типове для системи"
 
 #: src/frontend/SettingsScriptingPage.cpp:55
-#, fuzzy, kde-format
-#| msgid " Select the image file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment"
-msgstr "Вибрати файл зображення"
+msgstr "Виберіть віртуальне середовище"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -19801,10 +19800,9 @@ msgstr "Упорядкувати"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:129
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:134
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#, kde-format
 msgid "Zoom level"
-msgstr "Масштабувати область перегляду"
+msgstr "Масштабування"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format

@@ -19247,7 +19247,7 @@ msgstr "Seřadit"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:134
 #, kde-format
 msgid "Zoom level"
-msgstr ""
+msgstr "Stupeň přiblížení"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format
