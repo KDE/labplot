@@ -46,6 +46,7 @@
   <name xml:lang="sl">LabPlot</name>
   <name xml:lang="sv">Labplot</name>
   <name xml:lang="tr">LabPlot</name>
+  <name xml:lang="ug">LabPlot</name>
   <name xml:lang="uk">LabPlot</name>
   <name xml:lang="zh-CN">LabPlot</name>
   <name xml:lang="zh-TW">LabPlot</name>
@@ -190,6 +191,7 @@
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="tr">Temel veri görselleştirmesi</caption>
+      <caption xml:lang="ug">سانلىق مەلۇماتنى ئاساسىي كۆرۈنۈشلەشتۈرۈش</caption>
       <caption xml:lang="uk">Базова візуалізація даних</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/01_basic_plots_linux.png</image>
     </screenshot>
@@ -224,6 +226,7 @@
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="tr">Temel veri görselleştirmesi</caption>
+      <caption xml:lang="ug">سانلىق مەلۇماتنى ئاساسىي كۆرۈنۈشلەشتۈرۈش</caption>
       <caption xml:lang="uk">Базова візуалізація даних</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/02_overview_linux.png</image>
     </screenshot>
