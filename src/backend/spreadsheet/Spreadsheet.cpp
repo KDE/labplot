@@ -336,6 +336,21 @@ void Spreadsheet::setRowCount(int new_size) {
 		return;
 
 	int current_size = rowCount();
+	if (children<Column>().isEmpty()) {
+		d_ptr->cachedRowCount = new_size;
+		
+		if (new_size > current_size) {
+			Q_EMIT rowsAboutToBeInserted(current_size, new_size - 1);
+			Q_EMIT rowsInserted(new_size);
+		} 
+		if(new_size < current_size && new_size >= 0) {
+			Q_EMIT rowsAboutToBeRemoved(new_size, current_size - new_size);
+			Q_EMIT rowsRemoved(new_size);
+		}
+		
+		emitRowCountChanged();
+		return;
+	}
 	if (new_size > current_size)
 		insertRows(current_size, new_size - current_size);
 	if (new_size < current_size && new_size >= 0)
@@ -348,11 +363,15 @@ void Spreadsheet::setRowCount(int new_size) {
  */
 int Spreadsheet::rowCount() const {
 	int result = 0;
+	if (children<Column>().isEmpty())
+		return d_ptr->cachedRowCount;
+
 	for (auto* col : children<Column>()) {
 		const int col_rows = col->rowCount();
 		if (col_rows > result)
 			result = col_rows;
 	}
+	d_ptr->cachedRowCount = result;
 	return result;
 }
 
