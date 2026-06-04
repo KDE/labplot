@@ -18080,11 +18080,10 @@ msgid "System Default"
 msgstr ""
 
 #: src/frontend/SettingsScriptingPage.cpp:55
-#, fuzzy, kde-format
-#| msgid " Select the image file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment"
-msgstr " 选择图像文件"
+msgstr ""
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -19196,10 +19195,9 @@ msgstr "排序"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:129
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:134
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#, kde-format
 msgid "Zoom level"
-msgstr "缩放视图"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format

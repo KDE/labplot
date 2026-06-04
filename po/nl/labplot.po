@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-01 00:39+0000\n"
-"PO-Revision-Date: 2026-05-15 14:32+0200\n"
+"PO-Revision-Date: 2026-06-02 10:34+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -18609,11 +18609,10 @@ msgid "System Default"
 msgstr "Systeemstandaard"
 
 #: src/frontend/SettingsScriptingPage.cpp:55
-#, fuzzy, kde-format
-#| msgid " Select the image file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment"
-msgstr "Selecteer het afbeeldingsbestand"
+msgstr "Selecteer de virtuele omgeving"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -19740,10 +19739,9 @@ msgstr "Sorteren"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:129
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:134
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#, kde-format
 msgid "Zoom level"
-msgstr "Zoombeeld"
+msgstr "Zoomniveau"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format
