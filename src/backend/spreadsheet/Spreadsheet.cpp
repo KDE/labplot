@@ -338,16 +338,16 @@ void Spreadsheet::setRowCount(int new_size) {
 	int current_size = rowCount();
 	if (children<Column>().isEmpty()) {
 		d_ptr->cachedRowCount = new_size;
-		
+
 		if (new_size > current_size) {
 			Q_EMIT rowsAboutToBeInserted(current_size, new_size - 1);
 			Q_EMIT rowsInserted(new_size);
-		} 
-		if(new_size < current_size && new_size >= 0) {
+		}
+		if (new_size < current_size && new_size >= 0) {
 			Q_EMIT rowsAboutToBeRemoved(new_size, current_size - new_size);
 			Q_EMIT rowsRemoved(new_size);
 		}
-		
+
 		emitRowCountChanged();
 		return;
 	}

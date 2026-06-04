@@ -17,7 +17,7 @@ public:
 	bool readOnly{false};
 	bool showComments{false};
 	bool showSparklines{false};
-	int cachedRowCount{100};
+	int cachedRowCount{0};
 	const Spreadsheet* linkedSpreadsheet{nullptr};
 	QString linkedSpreadsheetPath;
 	Spreadsheet* q{nullptr};
