@@ -734,6 +734,11 @@ target_link_libraries(labplotbackendlib
 
 if(Arrow_FOUND AND Parquet_FOUND)
     target_link_libraries(labplotbackendlib Arrow::arrow_shared Parquet::parquet_shared)
+    # Suppress -Wundef for Arrow/Parquet headers which use #if _WIN32 instead of #ifdef
+    set_source_files_properties(
+        ${CMAKE_CURRENT_SOURCE_DIR}/backend/datasources/filters/ParquetFilter.cpp
+        PROPERTIES COMPILE_OPTIONS "-Wno-undef"
+    )
     if(ORC_FOUND)
         target_link_libraries(labplotbackendlib ${ORC_LIBRARIES})
     endif()
