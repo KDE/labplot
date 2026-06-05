@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-01-11 16:30+0100\n"
+"PO-Revision-Date: 2026-01-23 07:59+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -4484,14 +4484,14 @@ msgstr "fonction de Clausen"
 #, kde-format
 msgid "Lowest-order normalized hydrogenic bound state radial wavefunction"
 msgstr ""
-"Fonction normalisée d'ondes hydrogénique radiale d'ordre le plus faible pour "
-"un état lié"
+"Fonction normalisée d'ondes hydrogéniques radiales d'ordre le plus faible "
+"pour un état lié"
 
 #: src/backend/gsl/functions.cpp:412
 #, kde-format
 msgid "n-th normalized hydrogenic bound state radial wavefunction"
 msgstr ""
-"Fonction normalisée d'ondes hydrogénique radiale d'ordre n pour un état lié"
+"Fonction normalisée d'ondes hydrogéniques radiales d'ordre n pour un état lié"
 
 #: src/backend/gsl/functions.cpp:415 src/backend/gsl/functions.cpp:452
 #, kde-format
