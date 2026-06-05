@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Parquet/Arrow IPC/ORC I/O-filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "ParquetFilter.h"
@@ -154,6 +154,14 @@ void ParquetFilter::setEndColumn(int c) {
 
 int ParquetFilter::endColumn() const {
 	return d->endColumn;
+}
+
+void ParquetFilter::setSelectedColumnNames(const QStringList& names) {
+	d->selectedColumnNames = names;
+}
+
+QStringList ParquetFilter::selectedColumnNames() const {
+	return d->selectedColumnNames;
 }
 
 // ##############################################################################
@@ -322,14 +330,29 @@ void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& 
 	const int cols = table->num_columns();
 	const int64_t rows = table->num_rows();
 
-	// Determine actual ranges
+	// Determine which columns to import
+	QVector<int> columnIndices;
+	if (!selectedColumnNames.isEmpty()) {
+		// use user-selected columns
+		for (int col = 0; col < cols; ++col) {
+			const auto name = QString::fromStdString(table->schema()->field(col)->name());
+			if (selectedColumnNames.contains(name))
+				columnIndices << col;
+		}
+	} else {
+		// use start/end column range
+		const int actualStartCol = startColumn;
+		const int actualEndCol = (endColumn == -1 || endColumn > cols) ? cols : endColumn;
+		for (int col = actualStartCol - 1; col < actualEndCol; ++col)
+			columnIndices << col;
+	}
+
+	// Determine actual row range
 	const int actualStartRow = startRow;
 	const int actualEndRow = (endRow == -1 || endRow > (int)rows) ? (int)rows : endRow;
-	const int actualStartCol = startColumn;
-	const int actualEndCol = (endColumn == -1 || endColumn > cols) ? cols : endColumn;
 
 	const int actualRows = actualEndRow - actualStartRow + 1;
-	const int actualCols = actualEndCol - actualStartCol + 1;
+	const int actualCols = columnIndices.size();
 
 	if (actualRows <= 0 || actualCols <= 0)
 		return;
@@ -337,7 +360,7 @@ void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& 
 	// Prepare column names and modes
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
-	for (int col = actualStartCol - 1; col < actualEndCol; ++col) {
+	for (int col : columnIndices) {
 		vectorNames << QString::fromStdString(table->schema()->field(col)->name());
 		columnModes << arrowTypeToColumnMode(table->schema()->field(col)->type());
 	}
@@ -352,10 +375,10 @@ void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& 
 	}
 
 	// Fill data
-	for (int col = actualStartCol - 1; col < actualEndCol; ++col) {
-		const int containerIdx = col - actualStartCol + 1;
+	for (int i = 0; i < actualCols; ++i) {
+		const int col = columnIndices[i];
 		auto chunkedArray = table->column(col);
-		auto mode = columnModes[containerIdx];
+		auto mode = columnModes[i];
 
 		int64_t globalRow = 0;
 		int destRow = 0;
@@ -371,19 +394,19 @@ void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& 
 					// Handle null values
 					switch (mode) {
 					case AbstractColumn::ColumnMode::Double:
-						static_cast<QVector<double>*>(dataContainer[containerIdx])->operator[](destRow) = qQNaN();
+						static_cast<QVector<double>*>(dataContainer[i])->operator[](destRow) = qQNaN();
 						break;
 					case AbstractColumn::ColumnMode::Integer:
-						static_cast<QVector<int>*>(dataContainer[containerIdx])->operator[](destRow) = 0;
+						static_cast<QVector<int>*>(dataContainer[i])->operator[](destRow) = 0;
 						break;
 					case AbstractColumn::ColumnMode::BigInt:
-						static_cast<QVector<qint64>*>(dataContainer[containerIdx])->operator[](destRow) = 0;
+						static_cast<QVector<qint64>*>(dataContainer[i])->operator[](destRow) = 0;
 						break;
 					case AbstractColumn::ColumnMode::Text:
-						static_cast<QVector<QString>*>(dataContainer[containerIdx])->operator[](destRow) = QString();
+						static_cast<QVector<QString>*>(dataContainer[i])->operator[](destRow) = QString();
 						break;
 					case AbstractColumn::ColumnMode::DateTime:
-						static_cast<QVector<QDateTime>*>(dataContainer[containerIdx])->operator[](destRow) = QDateTime();
+						static_cast<QVector<QDateTime>*>(dataContainer[i])->operator[](destRow) = QDateTime();
 						break;
 					case AbstractColumn::ColumnMode::Day:
 					case AbstractColumn::ColumnMode::Month:
@@ -395,26 +418,26 @@ void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& 
 						auto scalar = array->GetScalar(localRow).ValueOrDie();
 						auto numericScalar = std::dynamic_pointer_cast<arrow::DoubleScalar>(scalar->CastTo(arrow::float64()).ValueOrDie());
 						double val = numericScalar ? numericScalar->value : qQNaN();
-						static_cast<QVector<double>*>(dataContainer[containerIdx])->operator[](destRow) = val;
+						static_cast<QVector<double>*>(dataContainer[i])->operator[](destRow) = val;
 						break;
 					}
 					case AbstractColumn::ColumnMode::Integer: {
 						auto scalar = array->GetScalar(localRow).ValueOrDie();
 						auto intScalar = std::dynamic_pointer_cast<arrow::Int32Scalar>(scalar->CastTo(arrow::int32()).ValueOrDie());
 						int val = intScalar ? intScalar->value : 0;
-						static_cast<QVector<int>*>(dataContainer[containerIdx])->operator[](destRow) = val;
+						static_cast<QVector<int>*>(dataContainer[i])->operator[](destRow) = val;
 						break;
 					}
 					case AbstractColumn::ColumnMode::BigInt: {
 						auto scalar = array->GetScalar(localRow).ValueOrDie();
 						auto bigIntScalar = std::dynamic_pointer_cast<arrow::Int64Scalar>(scalar->CastTo(arrow::int64()).ValueOrDie());
 						qint64 val = bigIntScalar ? bigIntScalar->value : 0;
-						static_cast<QVector<qint64>*>(dataContainer[containerIdx])->operator[](destRow) = val;
+						static_cast<QVector<qint64>*>(dataContainer[i])->operator[](destRow) = val;
 						break;
 					}
 					case AbstractColumn::ColumnMode::Text: {
 						auto scalar = array->GetScalar(localRow).ValueOrDie();
-						static_cast<QVector<QString>*>(dataContainer[containerIdx])->operator[](destRow) = QString::fromStdString(scalar->ToString());
+						static_cast<QVector<QString>*>(dataContainer[i])->operator[](destRow) = QString::fromStdString(scalar->ToString());
 						break;
 					}
 					case AbstractColumn::ColumnMode::DateTime: {
@@ -438,15 +461,15 @@ void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& 
 								ms = ts->value / 1000000;
 								break;
 							}
-							static_cast<QVector<QDateTime>*>(dataContainer[containerIdx])->operator[](destRow) = QDateTime::fromMSecsSinceEpoch(ms, Qt::UTC);
+							static_cast<QVector<QDateTime>*>(dataContainer[i])->operator[](destRow) = QDateTime::fromMSecsSinceEpoch(ms, Qt::UTC);
 						} else {
 							// Date types
 							auto dateScalar = std::dynamic_pointer_cast<arrow::Date32Scalar>(scalar);
 							if (dateScalar)
-								static_cast<QVector<QDateTime>*>(dataContainer[containerIdx])->operator[](destRow) =
+								static_cast<QVector<QDateTime>*>(dataContainer[i])->operator[](destRow) =
 									QDateTime(QDate::fromJulianDay(2440588 + dateScalar->value), QTime(0, 0), Qt::UTC); // days since 1970-01-01
 							else
-								static_cast<QVector<QDateTime>*>(dataContainer[containerIdx])->operator[](destRow) = QDateTime();
+								static_cast<QVector<QDateTime>*>(dataContainer[i])->operator[](destRow) = QDateTime();
 						}
 						break;
 					}
@@ -461,10 +484,10 @@ void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& 
 				break;
 		}
 
-		Q_EMIT q->completed(100 * (containerIdx + 1) / actualCols);
+		Q_EMIT q->completed(100 * (i + 1) / actualCols);
 	}
 
-	dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
+	dataSource->finalizeImport(columnOffset, 1, actualCols, QStringLiteral("yyyy-MM-dd hh:mm:ss.zzz"), importMode);
 }
 
 QVector<QStringList> ParquetFilterPrivate::previewFromTable(const std::shared_ptr<arrow::Table>& table, int lines) {
@@ -475,8 +498,23 @@ QVector<QStringList> ParquetFilterPrivate::previewFromTable(const std::shared_pt
 	const int cols = table->num_columns();
 	const int64_t rows = table->num_rows();
 
-	const int actualStartCol = startColumn;
-	const int actualEndCol = (endColumn == -1 || endColumn > cols) ? cols : endColumn;
+	// Determine which columns to show
+	QVector<int> columnIndices;
+	if (!selectedColumnNames.isEmpty()) {
+		for (int col = 0; col < cols; ++col) {
+			const auto name = QString::fromStdString(table->schema()->field(col)->name());
+			if (selectedColumnNames.contains(name))
+				columnIndices << col;
+		}
+	} else {
+		const int actualStartCol = startColumn;
+		const int actualEndCol = (endColumn == -1 || endColumn > cols) ? cols : endColumn;
+		for (int col = actualStartCol - 1; col < actualEndCol; ++col)
+			columnIndices << col;
+	}
+
+	if (columnIndices.isEmpty())
+		return dataStrings;
 
 	const int actualStartRow = startRow;
 	const int actualEndRow = (endRow == -1 || endRow > (int)rows) ? (int)rows : endRow;
@@ -484,7 +522,7 @@ QVector<QStringList> ParquetFilterPrivate::previewFromTable(const std::shared_pt
 
 	// Header row
 	QStringList header;
-	for (int col = actualStartCol - 1; col < actualEndCol; ++col)
+	for (int col : columnIndices)
 		header << QString::fromStdString(table->schema()->field(col)->name());
 	dataStrings << header;
 
@@ -492,7 +530,7 @@ QVector<QStringList> ParquetFilterPrivate::previewFromTable(const std::shared_pt
 	for (int row = 0; row < previewRows; ++row) {
 		QStringList rowData;
 		const int64_t tableRow = actualStartRow - 1 + row;
-		for (int col = actualStartCol - 1; col < actualEndCol; ++col) {
+		for (int col : columnIndices) {
 			auto chunkedArray = table->column(col);
 			// Find the right chunk and local index
 			int64_t remaining = tableRow;

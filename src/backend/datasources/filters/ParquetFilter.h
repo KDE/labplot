@@ -44,6 +44,9 @@ public:
 	void setEndColumn(int);
 	int endColumn() const;
 
+	void setSelectedColumnNames(const QStringList&);
+	QStringList selectedColumnNames() const;
+
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
 

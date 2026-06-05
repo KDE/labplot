@@ -31,6 +31,8 @@ public:
 	int startColumn{1};
 	int endColumn{-1};
 
+	QStringList selectedColumnNames; // columns selected by the user (empty = all)
+
 	// cached after reading metadata
 	QStringList columnNames;
 	int numColumns{0};

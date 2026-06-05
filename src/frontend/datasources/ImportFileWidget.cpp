@@ -22,6 +22,7 @@
 #include "McapOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "OdsOptionsWidget.h"
+#include "ParquetOptionsWidget.h"
 #include "ROOTOptionsWidget.h"
 #include "XLSXOptionsWidget.h"
 #include "backend/core/Settings.h"
@@ -1054,6 +1055,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
 		filter->setEndColumn(ui.sbEndColumn->value());
+		if (m_parquetOptionsWidget)
+			filter->setSelectedColumnNames(m_parquetOptionsWidget->selectedColumnNames());
 
 		break;
 	}
@@ -1386,6 +1389,9 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	case AbstractFileFilter::FileType::MATIO:
 	case AbstractFileFilter::FileType::XLSX:
 	case AbstractFileFilter::FileType::Ods:
+	case AbstractFileFilter::FileType::Parquet:
+	case AbstractFileFilter::FileType::ArrowIPC:
+	case AbstractFileFilter::FileType::ORC:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		// hide global preview tab. we have our own
@@ -1613,6 +1619,17 @@ void ImportFileWidget::initOptionsWidget() {
 			m_matioOptionsWidget->clear();
 		ui.swOptions->setCurrentWidget(m_matioOptionsWidget->parentWidget());
 		break;
+	case AbstractFileFilter::FileType::Parquet:
+	case AbstractFileFilter::FileType::ArrowIPC:
+	case AbstractFileFilter::FileType::ORC:
+		if (!m_parquetOptionsWidget) {
+			auto* parquetw = new QWidget();
+			m_parquetOptionsWidget = std::unique_ptr<ParquetOptionsWidget>(new ParquetOptionsWidget(parquetw, this));
+			ui.swOptions->addWidget(parquetw);
+		} else
+			m_parquetOptionsWidget->clear();
+		ui.swOptions->setCurrentWidget(m_parquetOptionsWidget->parentWidget());
+		break;
 	case AbstractFileFilter::FileType::Spice:
 	case AbstractFileFilter::FileType::READSTAT:
 		break;
@@ -1633,6 +1650,10 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 
 const QStringList ImportFileWidget::selectedMatioNames() const {
 	return m_matioOptionsWidget->selectedNames();
+}
+
+const QStringList ImportFileWidget::selectedParquetColumnNames() const {
+	return m_parquetOptionsWidget->selectedColumnNames();
 }
 
 const QStringList ImportFileWidget::selectedROOTNames() const {
@@ -1881,9 +1902,7 @@ void ImportFileWidget::refreshPreview() {
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary || fileType == AbstractFileFilter::FileType::JSON
 		|| fileType == AbstractFileFilter::FileType::MCAP || fileType == AbstractFileFilter::FileType::Spice
-		|| fileType == AbstractFileFilter::FileType::VECTOR_BLF || fileType == AbstractFileFilter::FileType::READSTAT
-		|| fileType == AbstractFileFilter::FileType::Parquet || fileType == AbstractFileFilter::FileType::ArrowIPC
-		|| fileType == AbstractFileFilter::FileType::ORC)
+		|| fileType == AbstractFileFilter::FileType::VECTOR_BLF || fileType == AbstractFileFilter::FileType::READSTAT)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -2191,7 +2210,23 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::ORC: {
 		ui.tePreview->clear();
 		auto filter = static_cast<ParquetFilter*>(currentFilter);
+		if (m_parquetOptionsWidget) {
+			lines = m_parquetOptionsWidget->lines();
+			tmpTableWidget = m_parquetOptionsWidget->previewWidget();
+			// populate column list if empty
+			if (m_parquetOptionsWidget->selectedColumnNames().isEmpty() && filter->columnNames().isEmpty())
+				m_parquetOptionsWidget->updateContent(filter, path);
+			filter->setSelectedColumnNames(m_parquetOptionsWidget->selectedColumnNames());
+		}
 		importedStrings = filter->preview(path, lines);
+		// first row contains column names — use as header, not as data
+		if (!importedStrings.isEmpty()) {
+			vectorNameList = importedStrings.takeFirst();
+			// create matching column modes
+			columnModes.clear();
+			for (int i = 0; i < vectorNameList.size(); ++i)
+				columnModes << AbstractColumn::ColumnMode::Text; // generic, actual mode determined on import
+		}
 		break;
 	}
 	case AbstractFileFilter::FileType::MATIO: {
@@ -2380,9 +2415,13 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::FileType::Spice:
 		case AbstractFileFilter::FileType::READSTAT:
 		case AbstractFileFilter::FileType::VECTOR_BLF:
+			break;
 		case AbstractFileFilter::FileType::Parquet:
 		case AbstractFileFilter::FileType::ArrowIPC:
 		case AbstractFileFilter::FileType::ORC:
+#ifdef HAVE_PARQUET
+			m_parquetOptionsWidget->updateContent(static_cast<ParquetFilter*>(filter), fileName);
+#endif
 			break;
 		}
 	}

@@ -68,6 +68,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
     ${FRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
     ${FRONTEND_DIR}/datasources/McapOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/ParquetOptionsWidget.cpp
     ${FRONTEND_DIR}/dockwidgets/BaseDock.cpp
     ${FRONTEND_DIR}/dockwidgets/AspectDock.cpp
     ${FRONTEND_DIR}/dockwidgets/AxisDock.cpp
@@ -242,6 +243,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/mcapoptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/parquetoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/odsoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/xlsxoptionswidget.ui
     ${FRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
