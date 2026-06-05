@@ -604,8 +604,8 @@ endif()
 
 ### Apache Arrow / Parquet / ORC (optional) #############################
 if(ENABLE_PARQUET)
-    find_package(Arrow 6.0 QUIET)
-    find_package(Parquet 6.0 QUIET)
+    find_package(Arrow QUIET)
+    find_package(Parquet QUIET)
     if(Arrow_FOUND AND Parquet_FOUND)
         add_definitions(-DHAVE_PARQUET)
         message(STATUS "Found Apache Arrow (version \"${Arrow_VERSION}\") and Parquet")
