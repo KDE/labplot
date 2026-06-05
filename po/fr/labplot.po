@@ -4515,14 +4515,14 @@ msgstr "fonction de Clausen"
 #, kde-format
 msgid "Lowest-order normalized hydrogenic bound state radial wavefunction"
 msgstr ""
-"Fonction normalisée d'ondes hydrogénique radiale d'ordre le plus faible pour "
-"un état lié"
+"Fonction normalisée d'ondes hydrogéniques radiales d'ordre le plus faible "
+"pour un état lié"
 
 #: src/backend/gsl/functions.cpp:414
 #, kde-format
 msgid "n-th normalized hydrogenic bound state radial wavefunction"
 msgstr ""
-"Fonction normalisée d'ondes hydrogénique radiale d'ordre n pour un état lié"
+"Fonction normalisée d'ondes hydrogéniques radiales d'ordre n pour un état lié"
 
 #: src/backend/gsl/functions.cpp:417 src/backend/gsl/functions.cpp:454
 #, kde-format
