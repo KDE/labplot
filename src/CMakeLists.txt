@@ -741,9 +741,6 @@ if(Arrow_FOUND AND Parquet_FOUND)
         ${CMAKE_CURRENT_SOURCE_DIR}/backend/datasources/filters/ParquetFilter.cpp
         PROPERTIES COMPILE_OPTIONS "-Wno-undef"
     )
-    if(ORC_FOUND)
-        target_link_libraries(labplotbackendlib ${ORC_LIBRARIES})
-    endif()
 endif()
 
 if(ENABLE_SCRIPTING)

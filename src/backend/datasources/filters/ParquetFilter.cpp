@@ -354,8 +354,11 @@ void ParquetFilterPrivate::importFromTable(const std::shared_ptr<arrow::Table>& 
 	const int actualRows = actualEndRow - actualStartRow + 1;
 	const int actualCols = columnIndices.size();
 
-	if (actualRows <= 0 || actualCols <= 0)
+	if (actualRows <= 0 || actualCols <= 0) {
+		if (rows == 0)
+			q->setLastError(i18n("The file has no data to import."));
 		return;
+	}
 
 	// Prepare column names and modes
 	QStringList vectorNames;

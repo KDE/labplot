@@ -140,7 +140,7 @@ void ParquetFilterTest::testParquetNulls() {
 }
 
 /*!
- * import empty Parquet file (schema only, 0 rows)
+ * import empty Parquet file (schema only, 0 rows) — should report error and not modify spreadsheet
  */
 void ParquetFilterTest::testParquetEmpty() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
@@ -149,8 +149,8 @@ void ParquetFilterTest::testParquetEmpty() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testdata_empty.parquet"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	QCOMPARE(spreadsheet.columnCount(), 3);
-	QCOMPARE(spreadsheet.rowCount(), 0);
+	// empty file: filter reports error, spreadsheet unchanged
+	QVERIFY(!filter.lastError().isEmpty());
 }
 
 /*!
@@ -200,6 +200,50 @@ void ParquetFilterTest::testParquetColumnRange() {
 	// second imported column should be "name" (Text)
 	QCOMPARE(spreadsheet.column(1)->name(), QStringLiteral("name"));
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Text);
+}
+
+/*!
+ * import Parquet file with various timestamp types: timestamp[s], timestamp[ms], timestamp[us], timestamp[ns], date32
+ */
+void ParquetFilterTest::testParquetTimestamps() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	ParquetFilter filter(AbstractFileFilter::FileType::Parquet);
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testdata_timestamps.parquet"));
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// 5 columns (ts_seconds, ts_millis, ts_micros, ts_nanos, date_days), 3 rows
+	QCOMPARE(spreadsheet.columnCount(), 5);
+	QCOMPARE(spreadsheet.rowCount(), 3);
+
+	// All columns should be DateTime mode
+	for (int i = 0; i < 5; ++i)
+		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+
+	// ts_seconds: 2025-01-01 00:00:00, 2025-06-15 12:30:00, 2025-12-31 23:59:59
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), QDateTime(QDate(2025, 1, 1), QTime(0, 0, 0), Qt::UTC));
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(1), QDateTime(QDate(2025, 6, 15), QTime(12, 30, 0), Qt::UTC));
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(2), QDateTime(QDate(2025, 12, 31), QTime(23, 59, 59), Qt::UTC));
+
+	// ts_millis: 2025-01-01 00:00:00.000, 2025-06-15 12:30:00.500, 2025-12-31 23:59:59.999
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(0), QDateTime(QDate(2025, 1, 1), QTime(0, 0, 0, 0), Qt::UTC));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(1), QDateTime(QDate(2025, 6, 15), QTime(12, 30, 0, 500), Qt::UTC));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(2), QDateTime(QDate(2025, 12, 31), QTime(23, 59, 59, 999), Qt::UTC));
+
+	// ts_micros: millisecond precision (microseconds are truncated to ms by QDateTime::fromMSecsSinceEpoch)
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(0), QDateTime(QDate(2025, 1, 1), QTime(0, 0, 0, 0), Qt::UTC));
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(1), QDateTime(QDate(2025, 6, 15), QTime(12, 30, 0, 123), Qt::UTC));
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(2), QDateTime(QDate(2025, 12, 31), QTime(23, 59, 59, 999), Qt::UTC));
+
+	// ts_nanos: 2025-01-01 00:00:00, 2025-06-15 15:10:00, 2025-12-31 23:59:59.999 (ns truncated to ms)
+	QCOMPARE(spreadsheet.column(3)->dateTimeAt(0), QDateTime(QDate(2025, 1, 1), QTime(0, 0, 0), Qt::UTC));
+	QCOMPARE(spreadsheet.column(3)->dateTimeAt(1), QDateTime(QDate(2025, 6, 15), QTime(15, 10, 0), Qt::UTC));
+	QCOMPARE(spreadsheet.column(3)->dateTimeAt(2), QDateTime(QDate(2025, 12, 31), QTime(23, 59, 59, 999), Qt::UTC));
+
+	// date_days (date32): date only, time is 00:00:00
+	QCOMPARE(spreadsheet.column(4)->dateTimeAt(0), QDateTime(QDate(2025, 1, 1), QTime(0, 0, 0), Qt::UTC));
+	QCOMPARE(spreadsheet.column(4)->dateTimeAt(1), QDateTime(QDate(2025, 6, 15), QTime(0, 0, 0), Qt::UTC));
+	QCOMPARE(spreadsheet.column(4)->dateTimeAt(2), QDateTime(QDate(2025, 12, 31), QTime(0, 0, 0), Qt::UTC));
 }
 
 /*!

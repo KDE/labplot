@@ -22,6 +22,7 @@ private Q_SLOTS:
 	void testParquetEmpty();
 	void testParquetRowRange();
 	void testParquetColumnRange();
+	void testParquetTimestamps();
 	void testParquetPreview();
 
 	// Arrow IPC import
