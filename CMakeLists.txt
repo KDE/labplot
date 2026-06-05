@@ -609,9 +609,9 @@ if(ENABLE_PARQUET)
     if(Arrow_FOUND AND Parquet_FOUND)
         add_definitions(-DHAVE_PARQUET)
         message(STATUS "Found Apache Arrow (version \"${Arrow_VERSION}\") and Parquet")
-        # ORC support is optional, requires ArrowORC or the ORC adapter in Arrow
-        find_package(ORC QUIET)
-        if(ORC_FOUND)
+        # ORC support is optional — detect via Arrow's ORC adapter header
+        get_target_property(_arrow_include_dir Arrow::arrow_shared INTERFACE_INCLUDE_DIRECTORIES)
+        if(EXISTS "${_arrow_include_dir}/arrow/adapters/orc/adapter.h")
             add_definitions(-DHAVE_ORC)
             message(STATUS "Found Apache ORC support in Arrow")
         else()
