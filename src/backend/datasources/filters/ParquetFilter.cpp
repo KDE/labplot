@@ -15,7 +15,20 @@
 
 #ifdef HAVE_PARQUET
 #include <arrow/ipc/reader.h>
+#include <arrow/util/config.h> // For ARROW_VERSION_MAJOR/MINOR
 #include <parquet/arrow/reader.h>
+
+// Arrow API compatibility: Check version for Result<T> vs Status API
+// Result<T> was introduced in Arrow 0.21
+// ARROW_VERSION is encoded as MAJOR * 1000000 + MINOR * 1000 + PATCH
+// For versions before 1.0, MAJOR = 0, so check MINOR
+#if !defined(ARROW_VERSION_MAJOR) || ARROW_VERSION_MAJOR < 21
+// Old Arrow (< 0.21): use Status with output parameters
+#define ARROW_USES_OLD_API 1
+#else
+// Arrow >= 0.21: use Result<T> API
+#define ARROW_USES_OLD_API 0
+#endif
 #endif
 
 #ifdef HAVE_ORC
@@ -212,12 +225,27 @@ std::shared_ptr<arrow::Table> ParquetFilterPrivate::readArrowTable(const QString
 			return nullptr;
 		}
 		auto reader = std::move(*reader_result);
+
+#if ARROW_USES_OLD_API
+		// Arrow < 0.21: Status with output parameter API
+		INFO("Using old Arrow API")
+		std::shared_ptr<arrow::Table> temp_table;
+		auto status = reader->ReadTable(&temp_table);
+		if (!status.ok()) {
+			q->setLastError(i18n("Failed to read Parquet table: %1", QString::fromStdString(status.ToString())));
+			return nullptr;
+		}
+		table = temp_table;
+#else
+		// Arrow >= 0.21: Result-based API
+		INFO("Using new Arrow API")
 		auto result = reader->ReadTable();
 		if (!result.ok()) {
 			q->setLastError(i18n("Failed to read Parquet table: %1", QString::fromStdString(result.status().ToString())));
 			return nullptr;
 		}
 		table = *result;
+#endif
 	} else if (fileType == AbstractFileFilter::FileType::ArrowIPC || fileName.endsWith(QLatin1String(".feather"), Qt::CaseInsensitive)
 			   || fileName.endsWith(QLatin1String(".arrow"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".ipc"), Qt::CaseInsensitive)) {
 		// read Arrow IPC / Feather
@@ -255,12 +283,25 @@ std::shared_ptr<arrow::Table> ParquetFilterPrivate::readArrowTable(const QString
 			return nullptr;
 		}
 		auto reader = std::move(*reader_result);
+
+#if ARROW_USES_OLD_API
+		// Arrow < 0.21: Status with output parameter API
+		std::shared_ptr<arrow::Table> temp_table;
+		auto status = reader->Read(&temp_table);
+		if (!status.ok()) {
+			q->setLastError(i18n("Failed to read ORC table: %1", QString::fromStdString(status.ToString())));
+			return nullptr;
+		}
+		table = temp_table;
+#else
+		// Arrow >= 0.21: Result-based API
 		auto result = reader->Read();
 		if (!result.ok()) {
 			q->setLastError(i18n("Failed to read ORC table: %1", QString::fromStdString(result.status().ToString())));
 			return nullptr;
 		}
 		table = *result;
+#endif
 	}
 #endif
 
