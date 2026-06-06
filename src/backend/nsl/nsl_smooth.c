@@ -797,4 +797,3 @@ int nsl_smooth_lowess(const double* xdata, double* ydata, size_t n, double span,
 
 	return 0;
 }
-
