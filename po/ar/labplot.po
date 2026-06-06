@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-01 00:39+0000\n"
-"PO-Revision-Date: 2026-05-21 12:21+0400\n"
+"PO-Revision-Date: 2026-06-05 13:58+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -18477,11 +18477,10 @@ msgid "System Default"
 msgstr "مبدئي النظام"
 
 #: src/frontend/SettingsScriptingPage.cpp:55
-#, fuzzy, kde-format
-#| msgid " Select the image file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment"
-msgstr "اختر ملف الصورة"
+msgstr "حدد بيئة افتراضية"
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -19615,10 +19614,9 @@ msgstr "افرز"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:129
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:134
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#, kde-format
 msgid "Zoom level"
-msgstr "عرض التكبير"
+msgstr "مستوى التكبير"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format
