@@ -303,6 +303,7 @@ void ParquetFilterTest::testArrowIPCBasicImport() {
 /*!
  * import ORC file: same data as basic Parquet test
  */
+#ifdef HAVE_ORC
 void ParquetFilterTest::testORCBasicImport() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ParquetFilter filter(AbstractFileFilter::FileType::ORC);
@@ -321,5 +322,6 @@ void ParquetFilterTest::testORCBasicImport() {
 	QCOMPARE(spreadsheet.column(2)->textAt(0), QStringLiteral("Alice"));
 	QCOMPARE(spreadsheet.column(3)->dateTimeAt(0), QDateTime(QDate(2025, 1, 1), QTime(0, 0, 0), Qt::UTC));
 }
+#endif
 
 QTEST_MAIN(ParquetFilterTest)

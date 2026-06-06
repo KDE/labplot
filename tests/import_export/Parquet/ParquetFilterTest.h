@@ -29,7 +29,9 @@ private Q_SLOTS:
 	void testArrowIPCBasicImport();
 
 	// ORC import
+#ifdef HAVE_ORC
 	void testORCBasicImport();
+#endif
 };
 
 #endif
