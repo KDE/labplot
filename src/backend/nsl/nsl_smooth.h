@@ -12,15 +12,16 @@
 
 #include <gsl/gsl_matrix.h>
 
-#define NSL_SMOOTH_TYPE_COUNT 4
+#define NSL_SMOOTH_TYPE_COUNT 5
 typedef enum {
 	nsl_smooth_type_moving_average,
 	nsl_smooth_type_moving_average_lagged,
 	nsl_smooth_type_percentile,
-	nsl_smooth_type_savitzky_golay
+	nsl_smooth_type_savitzky_golay,
+	nsl_smooth_type_lowess
 } nsl_smooth_type;
 extern const char* nsl_smooth_type_name[];
-/* TODO: LOWESS/etc., Bezier, B-Spline, (FFT Filter) */
+/* TODO: Bezier, B-Spline, (FFT Filter) */
 
 /* mode of extension for padding signal
  *	none: reduce points at edges
@@ -102,6 +103,26 @@ int nsl_smooth_savgol(double* data, size_t n, size_t points, int order, nsl_smoo
 
 /* Savitzky-Golay default smoothing (interp) */
 int nsl_smooth_savgol_default(double* data, size_t n, size_t points, int order);
+
+/* LOWESS (Locally Weighted Scatterplot Smoothing) */
+/**
+ * \brief LOWESS smoothing of data
+ *
+ * LOWESS uses locally weighted polynomial regression to smooth data.
+ * For each point, it fits a polynomial to nearby points weighted by distance.
+ *
+ * \param xdata X coordinates (must be sorted)
+ * \param ydata Y coordinates (will be modified in-place)
+ * \param n Number of data points
+ * \param span Fraction of points used for local regression (0.0 < span <= 1.0)
+ * \param delta Nonnegative parameter which may be used to save computations.
+ *              If delta > 0, values of ydata within delta of each other will use
+ *              interpolation instead of full regression. Typical value: 0.01 * range(xdata)
+ * \param iterations Number of robustifying iterations (typically 0-4)
+ *
+ * \return 0 on success, non-zero on error
+ */
+int nsl_smooth_lowess(const double* xdata, double* ydata, size_t n, double span, double delta, int iterations);
 
 /* TODO SmoothFilter::smoothModifiedSavGol(double *x_in, double *y_inout)
 	see SmoothFilter.cpp of libscidavis

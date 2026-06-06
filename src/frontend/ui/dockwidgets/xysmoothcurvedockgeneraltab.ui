@@ -263,6 +263,93 @@
      </property>
     </widget>
    </item>
+   <item row="16" column="4">
+    <widget class="QLabel" name="lSpan">
+     <property name="text">
+      <string>Span:</string>
+     </property>
+     <property name="toolTip">
+      <string>Fraction of data points used for local regression (0.0 &lt; span ≤ 1.0)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="16" column="5">
+    <widget class="NumberSpinBox" name="sbSpan">
+     <property name="toolTip">
+      <string>Fraction of data points used for local regression</string>
+     </property>
+     <property name="minimum">
+      <double>0.010000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="singleStep">
+      <double>0.050000000000000</double>
+     </property>
+     <property name="value">
+      <double>0.500000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="4">
+    <widget class="QLabel" name="lDelta">
+     <property name="text">
+      <string>Delta:</string>
+     </property>
+     <property name="toolTip">
+      <string>Distance threshold for interpolation optimization (0 = disabled)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="5">
+    <widget class="NumberSpinBox" name="sbDelta">
+     <property name="toolTip">
+      <string>Distance threshold for optimization (0 = compute all points)</string>
+     </property>
+     <property name="decimals">
+      <number>3</number>
+     </property>
+     <property name="minimum">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>1000.000000000000000</double>
+     </property>
+     <property name="singleStep">
+      <double>0.010000000000000</double>
+     </property>
+     <property name="value">
+      <double>0.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="4">
+    <widget class="QLabel" name="lIterations">
+     <property name="text">
+      <string>Iterations:</string>
+     </property>
+     <property name="toolTip">
+      <string>Number of robustifying iterations (0-4, higher = more outlier resistant)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="5">
+    <widget class="QSpinBox" name="sbIterations">
+     <property name="toolTip">
+      <string>Number of robustifying iterations for outlier resistance</string>
+     </property>
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>10</number>
+     </property>
+     <property name="value">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="2" colspan="3">
     <widget class="TimedLineEdit" name="leName"/>
    </item>
