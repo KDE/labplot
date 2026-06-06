@@ -80,6 +80,9 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::modeChanged);
 	connect(uiGeneralTab.sbLeftValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
 	connect(uiGeneralTab.sbRightValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
+	connect(uiGeneralTab.sbSpan, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::spanChanged);
+	connect(uiGeneralTab.sbDelta, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::deltaChanged);
+	connect(uiGeneralTab.sbIterations, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYSmoothCurveDock::iterationsChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYSmoothCurveDock::recalculateClicked);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYSmoothCurveDock::dataSourceCurveChanged);
@@ -135,6 +138,9 @@ void XYSmoothCurveDock::initGeneralTab() {
 	modeChanged(uiGeneralTab.cbMode->currentIndex()); // needed, when mode does not change
 	uiGeneralTab.sbLeftValue->setValue(m_smoothData.lvalue);
 	uiGeneralTab.sbRightValue->setValue(m_smoothData.rvalue);
+	uiGeneralTab.sbSpan->setValue(m_smoothData.span);
+	uiGeneralTab.sbDelta->setValue(m_smoothData.delta);
+	uiGeneralTab.sbIterations->setValue(m_smoothData.iterations);
 	valueChanged();
 	this->showSmoothResult();
 
@@ -339,6 +345,41 @@ void XYSmoothCurveDock::typeChanged(int index) {
 		uiGeneralTab.sbOrder->hide();
 	}
 
+	// LOWESS-specific UI elements
+	if (type == nsl_smooth_type_lowess) {
+		// Hide parameters not applicable to LOWESS
+		uiGeneralTab.lPoints->hide();
+		uiGeneralTab.sbPoints->hide();
+		uiGeneralTab.lMode->hide();
+		uiGeneralTab.cbMode->hide();
+		uiGeneralTab.lLeftValue->hide();
+		uiGeneralTab.sbLeftValue->hide();
+		uiGeneralTab.lRightValue->hide();
+		uiGeneralTab.sbRightValue->hide();
+
+		// Show LOWESS-specific parameters
+		uiGeneralTab.lSpan->show();
+		uiGeneralTab.sbSpan->show();
+		uiGeneralTab.lDelta->show();
+		uiGeneralTab.sbDelta->show();
+		uiGeneralTab.lIterations->show();
+		uiGeneralTab.sbIterations->show();
+	} else {
+		// Show standard parameters for other smooth types
+		uiGeneralTab.lPoints->show();
+		uiGeneralTab.sbPoints->show();
+		uiGeneralTab.lMode->show();
+		uiGeneralTab.cbMode->show();
+
+		// Hide LOWESS-specific parameters
+		uiGeneralTab.lSpan->hide();
+		uiGeneralTab.sbSpan->hide();
+		uiGeneralTab.lDelta->hide();
+		uiGeneralTab.sbDelta->hide();
+		uiGeneralTab.lIterations->hide();
+		uiGeneralTab.sbIterations->hide();
+	}
+
 	enableRecalculate();
 }
 
@@ -390,6 +431,21 @@ void XYSmoothCurveDock::valueChanged() {
 	m_smoothData.lvalue = uiGeneralTab.sbLeftValue->value();
 	m_smoothData.rvalue = uiGeneralTab.sbRightValue->value();
 
+	enableRecalculate();
+}
+
+void XYSmoothCurveDock::spanChanged(double value) {
+	m_smoothData.span = value;
+	enableRecalculate();
+}
+
+void XYSmoothCurveDock::deltaChanged(double value) {
+	m_smoothData.delta = value;
+	enableRecalculate();
+}
+
+void XYSmoothCurveDock::iterationsChanged(int value) {
+	m_smoothData.iterations = value;
 	enableRecalculate();
 }
 
