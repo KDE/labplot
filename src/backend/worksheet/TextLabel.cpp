@@ -161,7 +161,7 @@ void TextLabel::init() {
 	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
-	connect(d->borderLine, &Line::updateRequested, [=] {
+	connect(d->borderLine, &Line::updateRequested, [=, this] {
 		d->recalcShapeAndBoundingRect();
 		Q_EMIT changed();
 	});

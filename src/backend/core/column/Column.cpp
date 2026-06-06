@@ -117,7 +117,7 @@ QMenu* Column::createContextMenu() {
 
 	auto* usedInActionGroup = new QActionGroup(this);
 	connect(usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
-	connect(this, &AbstractColumn::maskingChanged, this, [=] {
+	connect(this, &AbstractColumn::maskingChanged, this, [=, this] {
 		d->invalidate();
 	});
 

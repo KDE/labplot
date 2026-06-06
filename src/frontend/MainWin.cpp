@@ -236,12 +236,12 @@ void MainWin::initGUI(const QString& fileName) {
 	if (!fileName.isEmpty()) {
 		initDocks();
 		if (Project::isSupportedProject(fileName)) {
-			QTimer::singleShot(0, this, [=]() {
+			QTimer::singleShot(0, this, [=, this]() {
 				openProject(fileName);
 			});
 		} else {
 			newProject();
-			QTimer::singleShot(0, this, [=]() {
+			QTimer::singleShot(0, this, [=, this]() {
 				importFileDialog(fileName);
 			});
 		}
@@ -530,7 +530,7 @@ bool MainWin::newProject(bool createInitialContent) {
 		m_actionsManager->m_visibilityAllAction->setChecked(true);
 
 	m_aspectTreeModel = new AspectTreeModel(m_project, this);
-	connect(m_aspectTreeModel, &AspectTreeModel::statusInfo, [=](const QString& text) {
+	connect(m_aspectTreeModel, &AspectTreeModel::statusInfo, [=, this](const QString& text) {
 		statusBar()->showMessage(text);
 	});
 
@@ -1323,7 +1323,7 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 		// 		connect(part, &AbstractPart::importFromFileRequested, this, &MainWin::importFileDialog);
-		connect(part, &AbstractPart::importFromFileRequested, this, [=]() {
+		connect(part, &AbstractPart::importFromFileRequested, this, [=, this]() {
 			importFileDialog();
 		});
 		connect(part, &AbstractPart::importFromSQLDatabaseRequested, this, &MainWin::importSqlDialog);

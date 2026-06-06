@@ -131,7 +131,7 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type
 	ui->chkCreateDataCurve->hide();
 
 	// SIGNALs/SLOTs
-	connect(buttonBox, &QDialogButtonBox::accepted, this, [=]() {
+	connect(buttonBox, &QDialogButtonBox::accepted, this, [=, this]() {
 		hide();
 		plot();
 	});

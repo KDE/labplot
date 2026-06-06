@@ -68,6 +68,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
     ${FRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
     ${FRONTEND_DIR}/datasources/McapOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/ParquetOptionsWidget.cpp
     ${FRONTEND_DIR}/dockwidgets/BaseDock.cpp
     ${FRONTEND_DIR}/dockwidgets/AspectDock.cpp
     ${FRONTEND_DIR}/dockwidgets/AxisDock.cpp
@@ -242,6 +243,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/mcapoptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/parquetoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/odsoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/xlsxoptionswidget.ui
     ${FRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
@@ -490,6 +492,7 @@ set(LABPLOT_DATASOURCES_SOURCES
     ${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
     ${BACKEND_DIR}/datasources/filters/McapFilter.cpp
     ${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/ParquetFilter.cpp
     ${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
     ${BACKEND_DIR}/datasources/filters/OdsFilter.cpp
     ${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
@@ -730,6 +733,15 @@ target_link_libraries(labplotbackendlib
     ${READSTAT_LIBRARIES}
     qt${QT_VERSION_MAJOR}advanceddocking
 )
+
+if(Arrow_FOUND AND Parquet_FOUND)
+    target_link_libraries(labplotbackendlib Arrow::arrow_shared Parquet::parquet_shared)
+    # Suppress -Wundef for Arrow/Parquet headers which use #if _WIN32 instead of #ifdef
+    set_source_files_properties(
+        ${CMAKE_CURRENT_SOURCE_DIR}/backend/datasources/filters/ParquetFilter.cpp
+        PROPERTIES COMPILE_OPTIONS "-Wno-undef"
+    )
+endif()
 
 if(ENABLE_SCRIPTING)
 target_link_libraries(labplot_core_obj PRIVATE KF${KF_MAJOR_VERSION}::TextEditor)

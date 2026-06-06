@@ -52,7 +52,7 @@ void ReferenceLine::init(bool loading) {
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
-	connect(d->line, &Line::updatePixmapRequested, [=] {
+	connect(d->line, &Line::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});

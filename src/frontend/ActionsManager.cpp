@@ -169,7 +169,7 @@ void ActionsManager::init() {
 		// disconnect default slot
 		disconnect(aboutAction, &QAction::triggered, nullptr, nullptr);
 		connect(aboutAction, &QAction::triggered, this,
-		[=]() {
+		[=, this]() {
 			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
 			aboutDialog.exec();
 		});
@@ -187,7 +187,7 @@ void ActionsManager::initActions() {
 	// add some standard actions
 	m_newProjectAction = KStandardAction::openNew(
 		this,
-		[=]() {
+		[=, this]() {
 			m_mainWindow->newProject(true);
 		},
 		collection);
@@ -282,14 +282,14 @@ void ActionsManager::initActions() {
 	collection->addAction(QStringLiteral("import_file"), m_importFileAction);
 	collection->setDefaultShortcut(m_importFileAction, Qt::CTRL | Qt::SHIFT | Qt::Key_I);
 	m_importFileAction->setToolTip(i18n("Import data from a regular file"));
-	connect(m_importFileAction, &QAction::triggered, this, [=]() {
+	connect(m_importFileAction, &QAction::triggered, this, [=, this]() {
 		m_mainWindow->importFileDialog();
 	});
 
 	m_importDirAction = new QAction(QIcon::fromTheme(QStringLiteral("document-import")), i18n("From Directory..."), this);
 	collection->addAction(QStringLiteral("import_dir"), m_importDirAction);
 	m_importDirAction->setToolTip(i18n("Import multiple files from a directory"));
-	connect(m_importDirAction, &QAction::triggered, this, [=]() {
+	connect(m_importDirAction, &QAction::triggered, this, [=, this]() {
 		m_mainWindow->importDirDialog();
 	});
 
@@ -366,7 +366,7 @@ void ActionsManager::initActions() {
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Color Maps Browser"), this);
 	action->setToolTip(i18n("Open dialog to browse through the available color maps."));
 	collection->addAction(QStringLiteral("color_maps"), action);
-	connect(action, &QAction::triggered, this, [=]() {
+	connect(action, &QAction::triggered, this, [=, this]() {
 		auto* dlg = new ColorMapsDialog(m_mainWindow);
 	 	dlg->exec();
 	 	delete dlg;

@@ -148,7 +148,7 @@ void WorksheetPreviewWidget::aspectAdded(const AbstractAspect* aspect) {
 	else {
 		// in case a folder was added (copy&paste, duplicate, project import), or another aspect that can have worksheet as a children (e.g. SeasonalDecomposition),
 		// check whether the added aspect has worksheet children add previews for them
-		QTimer::singleShot(0, this, [=]() {
+		QTimer::singleShot(0, this, [=, this]() {
 			const auto& worksheets = aspect->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (const auto* w : worksheets)
 				addPreview(w, indexOfWorksheet(w));

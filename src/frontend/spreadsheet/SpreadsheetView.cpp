@@ -178,10 +178,10 @@ void SpreadsheetView::init() {
 	m_tableView->setModel(m_model);
 	auto* delegate = new SpreadsheetItemDelegate(this);
 	connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
-	connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=]() {
+	connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=, this]() {
 		m_editorEntered = true;
 	});
-	connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=]() {
+	connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=, this]() {
 		m_editorEntered = false;
 	});
 
@@ -227,11 +227,11 @@ void SpreadsheetView::init() {
 	});
 
 	// react on sparkline toggled
-	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=] {
+	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=, this] {
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
 			SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 			m_horizontalHeader->refresh();
-			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
+			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=, this] {
 				if (m_spreadsheet->showSparklines())
 					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
@@ -239,14 +239,14 @@ void SpreadsheetView::init() {
 		}
 	});
 
-	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, [=] {
+	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, [=, this] {
 		// Disconnect existing connections before creating new ones
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex)
 			disconnect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, nullptr);
 
 		// Establish new connections
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
-			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
+			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=, this] {
 				if (m_spreadsheet->showSparklines())
 					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
@@ -913,7 +913,7 @@ void SpreadsheetView::connectActions() {
 	connect(tsaSeasonalDecompositionAction, &QAction::triggered, this, &SpreadsheetView::addSeasonalDecomposition);
 
 	// statistical analysis
-	connect(addHypothesisTestActionGroup, &QActionGroup::triggered, [=](QAction* action) {
+	connect(addHypothesisTestActionGroup, &QActionGroup::triggered, [=, this](QAction* action) {
 		const auto& columns = selectedColumns();
 		QString name = (columns.size() == 1) ? columns.constFirst()->name() : m_spreadsheet->name();
 		auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", name));
@@ -2821,10 +2821,10 @@ void SpreadsheetView::toggleFreezeColumn() {
 
 		auto* delegate = new SpreadsheetItemDelegate(this);
 		connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
-		connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=]() {
+		connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=, this]() {
 			m_editorEntered = true;
 		});
-		connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=]() {
+		connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=, this]() {
 			m_editorEntered = false;
 		});
 
@@ -3662,7 +3662,7 @@ void SpreadsheetView::showSearchReplace(bool replace) {
 
 	// interrupt the event loop to show/render the widget first and set the focus
 	// after this otherwise the focus in the search field is not set
-	QTimer::singleShot(0, this, [=]() {
+	QTimer::singleShot(0, this, [=, this]() {
 		m_searchReplaceWidget->setFocus();
 	});
 }
