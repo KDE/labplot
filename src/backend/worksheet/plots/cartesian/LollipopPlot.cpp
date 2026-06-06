@@ -376,12 +376,12 @@ Line* LollipopPlotPrivate::addLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -399,12 +399,12 @@ Symbol* LollipopPlotPrivate::addSymbol(const KConfigGroup& group) {
 	if (!q->isLoading())
 		symbol->init(group);
 
-	q->connect(symbol, &Symbol::updateRequested, [=] {
+	q->connect(symbol, &Symbol::updateRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
 
-	q->connect(symbol, &Symbol::updatePixmapRequested, [=] {
+	q->connect(symbol, &Symbol::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -422,11 +422,11 @@ void LollipopPlotPrivate::addValue(const KConfigGroup& group) {
 	if (!q->isLoading())
 		value->init(group);
 
-	q->connect(value, &Value::updatePixmapRequested, [=] {
+	q->connect(value, &Value::updatePixmapRequested, [=, this] {
 		updatePixmap();
 	});
 
-	q->connect(value, &Value::updateRequested, [=] {
+	q->connect(value, &Value::updateRequested, [=, this] {
 		updateValues();
 	});
 }

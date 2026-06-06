@@ -73,11 +73,11 @@ void XYCurve::init(bool loading) {
 	d->line->setCreateXmlElement(false);
 	d->line->setHidden(true);
 	addChild(d->line);
-	connect(d->line, &Line::updatePixmapRequested, [=] {
+	connect(d->line, &Line::updatePixmapRequested, [=, this] {
 		d->updatePixmap();
 		Q_EMIT appearanceChanged();
 	});
-	connect(d->line, &Line::updateRequested, [=] {
+	connect(d->line, &Line::updateRequested, [=, this] {
 		d->recalcShapeAndBoundingRect();
 		Q_EMIT appearanceChanged();
 	});
@@ -101,11 +101,11 @@ void XYCurve::init(bool loading) {
 	d->symbol = new Symbol(QStringLiteral("symbol"));
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
-	connect(d->symbol, &Symbol::updateRequested, [=] {
+	connect(d->symbol, &Symbol::updateRequested, [=, this] {
 		d->updateSymbols();
 		Q_EMIT appearanceChanged();
 	});
-	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
+	connect(d->symbol, &Symbol::updatePixmapRequested, [=, this] {
 		d->updatePixmap();
 		Q_EMIT appearanceChanged();
 	});

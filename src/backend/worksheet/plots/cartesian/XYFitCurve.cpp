@@ -929,7 +929,7 @@ void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 		exec(new XYFitCurveSetXErrorColumnCmd(d, column, ki18n("%1: assign x-error")));
 		handleSourceDataChanged();
 		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, [=]() {
+			connect(column, &AbstractColumn::dataChanged, this, [=, this]() {
 				handleSourceDataChanged();
 			});
 			// TODO: disconnect on undo
@@ -944,7 +944,7 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 		exec(new XYFitCurveSetYErrorColumnCmd(d, column, ki18n("%1: assign y-error")));
 		handleSourceDataChanged();
 		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, [=]() {
+			connect(column, &AbstractColumn::dataChanged, this, [=, this]() {
 				handleSourceDataChanged();
 			});
 			// TODO: disconnect on undo

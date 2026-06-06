@@ -396,7 +396,7 @@ Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
 	if (!q->isLoading())
 		background->init(group);
 
-	q->connect(background, &Background::updateRequested, [=] {
+	q->connect(background, &Background::updateRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -414,12 +414,12 @@ Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -437,11 +437,11 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 	if (!q->isLoading())
 		value->init(group);
 
-	q->connect(value, &Value::updatePixmapRequested, [=] {
+	q->connect(value, &Value::updatePixmapRequested, [=, this] {
 		updatePixmap();
 	});
 
-	q->connect(value, &Value::updateRequested, [=] {
+	q->connect(value, &Value::updateRequested, [=, this] {
 		updateValues();
 	});
 }
@@ -453,11 +453,11 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	if (!q->isLoading())
 		errorBar->init(group);
 
-	q->connect(errorBar, &ErrorBar::updatePixmapRequested, [=] {
+	q->connect(errorBar, &ErrorBar::updatePixmapRequested, [=, this] {
 		updatePixmap();
 	});
 
-	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
+	q->connect(errorBar, &ErrorBar::updateRequested, [=, this] {
 		const int index = errorBars.indexOf(errorBar);
 		if (index != -1)
 			updateErrorBars(index);

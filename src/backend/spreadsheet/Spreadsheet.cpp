@@ -124,19 +124,19 @@ void Spreadsheet::initConnectionsRowCountChanges() {
 	}
 
 	// handle row insertions
-	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=](const AbstractColumn*, int before, int count) {
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=, this](const AbstractColumn*, int before, int count) {
 		Q_EMIT rowsAboutToBeInserted(before, before + count - 1);
 	});
-	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=](const AbstractColumn* sender, int, int) {
+	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=, this](const AbstractColumn* sender, int, int) {
 		Q_EMIT rowsInserted(sender->rowCount());
 		Q_EMIT rowCountChanged(sender->rowCount());
 	});
 
 	// handle row removals
-	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=](const AbstractColumn*, int first, int count) {
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=, this](const AbstractColumn*, int first, int count) {
 		Q_EMIT rowsAboutToBeRemoved(first, first + count - 1);
 	});
-	connect(d->firstColumn, &AbstractColumn::rowsRemoved, this, [=](const AbstractColumn* sender, int, int) {
+	connect(d->firstColumn, &AbstractColumn::rowsRemoved, this, [=, this](const AbstractColumn* sender, int, int) {
 		Q_EMIT rowsRemoved(sender->rowCount());
 		Q_EMIT rowCountChanged(sender->rowCount());
 	});
@@ -909,7 +909,7 @@ QMenu* Spreadsheet::createContextMenu() {
 	else {
 		menu->addSeparator();
 		auto* action = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this);
-		connect(action, &QAction::triggered, this, [=]() {
+		connect(action, &QAction::triggered, this, [=, this]() {
 			auto* parentSpreadsheet = static_cast<Spreadsheet*>(parentAspect());
 			parentSpreadsheet->toggleStatisticsSpreadsheet(false);
 		});

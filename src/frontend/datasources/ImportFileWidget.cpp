@@ -406,7 +406,7 @@ void ImportFileWidget::loadSettings() {
 
 	// all set now, refresh the content of the file and the preview for the selected dataset
 	m_suppressRefresh = false;
-	QTimer::singleShot(100, this, [=]() {
+	QTimer::singleShot(100, this, [=, this]() {
 		WAIT_CURSOR_AUTO_RESET;
 		if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
 			const QString& file = absolutePath(fileName());
@@ -512,7 +512,7 @@ ImportFileWidget::~ImportFileWidget() {
 void ImportFileWidget::initSlots() {
 	// SLOTs for the general part of the data source configuration
 	connect(ui.cbSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&ImportFileWidget::sourceTypeChanged));
-	connect(m_cbFileName, &KUrlComboBox::urlActivated, this, [=](const QUrl& url) {
+	connect(m_cbFileName, &KUrlComboBox::urlActivated, this, [=, this](const QUrl& url) {
 		fileNameChanged(url.toLocalFile());
 	});
 	connect(ui.leHost, &QLineEdit::textChanged, this, &ImportFileWidget::hostChanged);

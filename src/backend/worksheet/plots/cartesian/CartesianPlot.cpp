@@ -565,7 +565,7 @@ void CartesianPlot::initMenus() {
 	themeMenu = new QMenu(i18n("Theme"));
 	themeMenu->setIcon(QIcon::fromTheme(QStringLiteral("color-management")));
 #ifndef SDK
-	connect(themeMenu, &QMenu::aboutToShow, this, [=]() {
+	connect(themeMenu, &QMenu::aboutToShow, this, [=, this]() {
 		if (!themeMenu->isEmpty())
 			return;
 		auto* themeWidget = new ThemesWidget(nullptr);
@@ -2597,7 +2597,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else {
 		// hover events for plots are handled here in CartesianPlot, for other elements in WorksheetElement.
 		// in case a non-plot element like axis, etc. was hovered, unhover the plots
-		connect(elem, &WorksheetElement::hoveredChanged, [=](bool on) {
+		connect(elem, &WorksheetElement::hoveredChanged, [=, this](bool on) {
 			if (on) {
 				for (auto* childPlot : children<Plot>())
 					childPlot->setHover(false);
