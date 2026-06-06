@@ -12,7 +12,6 @@
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
-#include "backend/lib/trace.h"
 
 #ifdef HAVE_PARQUET
 #include <arrow/ipc/reader.h>
@@ -177,7 +176,6 @@ void ParquetFilter::save(QXmlStreamWriter* writer) const {
 }
 
 bool ParquetFilter::load(XmlStreamReader* reader) {
-	//Q_D(ParquetFilter);
 	QString str;
 	const auto& attribs = reader->attributes();
 	READ_INT_VALUE("startRow", startRow, int);

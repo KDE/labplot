@@ -23,12 +23,8 @@ public:
 	void clear();
 	void updateContent(ParquetFilter*, const QString& fileName);
 	QStringList selectedColumnNames() const;
-	int lines() const {
-		return ui.sbPreviewLines->value();
-	}
-	QTableWidget* previewWidget() const {
-		return ui.twPreview;
-	}
+	int lines() const;
+	QTableWidget* previewWidget() const;
 
 private:
 	Ui::ParquetOptionsWidget ui;

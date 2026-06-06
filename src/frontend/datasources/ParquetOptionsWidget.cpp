@@ -50,6 +50,13 @@ void ParquetOptionsWidget::updateContent(ParquetFilter* filter, const QString& f
 	ui.lwColumns->blockSignals(false);
 }
 
+int ParquetOptionsWidget::lines() const {
+	return ui.sbPreviewLines->value();
+}
+QTableWidget* ParquetOptionsWidget::previewWidget() const {
+	return ui.twPreview;
+}
+
 QStringList ParquetOptionsWidget::selectedColumnNames() const {
 	QStringList names;
 	for (int i = 0; i < ui.lwColumns->count(); ++i) {
