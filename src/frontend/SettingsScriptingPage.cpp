@@ -190,16 +190,14 @@ void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selec
 	QString cfgPath = envPath + QStringLiteral("/pyvenv.cfg");
 
 	if (!QFile(executablePath).exists()) {
-		if (isUserSelected) {
+		if (isUserSelected)
 			showErrorMessage(i18n("The selected virtual environment does not contain a python executable."));
-		}
 		return;
 	}
 
 	if (!QFile(cfgPath).exists()) {
-		if (isUserSelected) {
+		if (isUserSelected)
 			showErrorMessage(i18n("The selected virtual environment does not contain a pyvenv.cfg file."));
-		}
 		return;
 	}
 
@@ -226,9 +224,8 @@ void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selec
 					if (selectAfterAdd)
 						ui.cbPythonEnvironment->setCurrentText(envPath);
 				} else {
-					if (isUserSelected) {
+					if (isUserSelected)
 						showErrorMessage(i18n("The selected virtual environment python version does not match the application python version."));
-					}
 				}
 				return;
 			}
@@ -258,9 +255,8 @@ void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selec
 					}
 				}
 			} else {
-				if (isUserSelected) {
+				if (isUserSelected)
 					showErrorMessage(i18n("The selected virtual environment python version does not match the application python version."));
-				}
 			}
 		}
 		process->deleteLater();
