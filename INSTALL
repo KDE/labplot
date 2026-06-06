@@ -33,6 +33,7 @@ optional packages
 	* fast_float, dbc_parser_cpp (can be fetched from git by setting -DLOCAL_DBC_PARSER=ON) and vector_blf (static library from included sources can be built by setting -DLOCAL_VECTOR_BLF=ON) for Vector BLF support
 	* MCAP for MCAP file support (Downloading instead of using local copy can be set by using LOCAL_MCAP_DOWNLOAD=ON)
 	* python3 (required for stable ABI), pyside6 and shiboken6 for python scripting and creating the Python SDK (python3-devel python3-pyside6 python3-pyside6-devel python3-shiboken6 python3-shiboken6-devel)
+	* Apache Parquet/Arrow for importing data from Apache Parquet, Arrow IPC (Feather) and Apache ORC files (apache-arrow-devel and dependencies)
 
 ===============================================================================
 To build LabPlot execute
@@ -68,6 +69,7 @@ To compile LabPlot without optional dependencies even if they are present on the
 -DENABLE_MCAP=OFF
 -DENABLE_TOUCHBAR=OFF
 -DENABLE_PYTHON_SCRIPTING=OFF
+-DENABLE_PARQUET=OFF
 
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
 
