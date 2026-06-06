@@ -68,15 +68,15 @@ QString ParquetFilter::fileInfoString(const QString& fileName) {
 			auto reader = std::move(*reader_result);
 			auto metadata = reader->parquet_reader()->metadata();
 			info += i18n("Format: Apache Parquet");
-			info += QLatin1Char('\n');
+			info += QLatin1String("<br>");
 			info += i18n("Version: %1", metadata->version());
-			info += QLatin1Char('\n');
+			info += QLatin1String("<br>");
 			info += i18n("Created by: %1", QString::fromStdString(metadata->created_by()));
-			info += QLatin1Char('\n');
+			info += QLatin1String("<br>");
 			info += i18n("Number of columns: %1", metadata->num_columns());
-			info += QLatin1Char('\n');
+			info += QLatin1String("<br>");
 			info += i18n("Number of rows: %1", (qlonglong)metadata->num_rows());
-			info += QLatin1Char('\n');
+			info += QLatin1String("<br>");
 			info += i18n("Number of row groups: %1", metadata->num_row_groups());
 		}
 	} else if (fileName.endsWith(QLatin1String(".feather"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".arrow"), Qt::CaseInsensitive)
@@ -85,9 +85,9 @@ QString ParquetFilter::fileInfoString(const QString& fileName) {
 		if (reader_result.ok()) {
 			auto reader = *reader_result;
 			info += i18n("Format: Arrow IPC (Feather)");
-			info += QLatin1Char('\n');
+			info += QLatin1String("<br>");
 			info += i18n("Number of columns: %1", reader->schema()->num_fields());
-			info += QLatin1Char('\n');
+			info += QLatin1String("<br>");
 			info += i18n("Number of record batches: %1", reader->num_record_batches());
 		}
 	}
@@ -97,9 +97,9 @@ QString ParquetFilter::fileInfoString(const QString& fileName) {
 		if (reader_result.ok()) {
 			auto reader = std::move(*reader_result);
 			info += i18n("Format: Apache ORC");
-			info += QLatin1Char('\n');
+			info += QLatin1String("<br>");
 			info += i18n("Number of rows: %1", (qlonglong)reader->NumberOfRows());
-			info += QLatin1Char('\n');
+			info += QLatin1String("<br>");
 			info += i18n("Number of stripes: %1", (qlonglong)reader->NumberOfStripes());
 		}
 	}
