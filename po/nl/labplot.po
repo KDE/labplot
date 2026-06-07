@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-01 00:39+0000\n"
+"POT-Creation-Date: 2026-06-07 00:39+0000\n"
 "PO-Revision-Date: 2026-06-02 10:34+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -410,7 +410,7 @@ msgstr "incompatibel filtertype"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/statistics/HypothesisTest.cpp:1911
+#: src/backend/statistics/HypothesisTest.cpp:1925
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:867
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1926
 #, kde-format
@@ -548,7 +548,7 @@ msgid "%1: set random values"
 msgstr "%1: willekeurige waarden instellen"
 
 #: src/backend/core/column/Column.cpp:1053
-#: src/frontend/datasources/ImportFileWidget.cpp:1698
+#: src/frontend/datasources/ImportFileWidget.cpp:1740
 #, kde-format
 msgid "Size: %1"
 msgstr "Grootte: %1"
@@ -1200,6 +1200,8 @@ msgstr ""
 "wordt dit vanzelf gedetecteerd."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:224
+#: src/backend/datasources/filters/ParquetFilter.cpp:76
+#: src/backend/datasources/filters/ParquetFilter.cpp:89
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Aantal kolommen: %1"
@@ -1293,6 +1295,7 @@ msgstr "Openen van het apparaat/bestand is mislukt of het is leeg."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
 #: src/backend/datasources/filters/OdsFilter.cpp:400
+#: src/backend/datasources/filters/ParquetFilter.cpp:415
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
@@ -1413,7 +1416,7 @@ msgid "Free space: %1 bytes"
 msgstr "Vrije ruimte: %1 bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:199
-#: src/frontend/datasources/ImportFileWidget.cpp:1789
+#: src/frontend/datasources/ImportFileWidget.cpp:1836
 #, kde-format
 msgid "Number of files: %1"
 msgstr "Aantal bestanden: %1"
@@ -1612,7 +1615,7 @@ msgstr "h5dump niet gevonden."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1673
+#: src/frontend/datasources/ImportFileWidget.cpp:1715
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Lezen uit bestand %1 is mislukt."
@@ -2209,6 +2212,127 @@ msgstr "Rekenblad niet gevonden."
 msgid "Invalid sheet index."
 msgstr "Ongeldige index van rekenblad."
 
+#: src/backend/datasources/filters/ParquetFilter.cpp:61
+#, fuzzy, kde-format
+#| msgid "Could not open %1"
+msgid "Could not open file."
+msgstr "Kan %1 niet openen"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:70
+#, kde-format
+msgid "Format: Apache Parquet"
+msgstr ""
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:72
+#, fuzzy, kde-format
+#| msgid "Version:"
+msgid "Version: %1"
+msgstr "Versie:"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:74
+#, fuzzy, kde-format
+#| msgid "Created: %1"
+msgid "Created by: %1"
+msgstr "Aangemaakt: %1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:78
+#: src/backend/datasources/filters/ParquetFilter.cpp:101
+#, fuzzy, kde-format
+#| msgid "Number of rows:"
+msgid "Number of rows: %1"
+msgstr "Aantal rijen:"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:80
+#, fuzzy, kde-format
+#| msgid "Number of groups: %1"
+msgid "Number of row groups: %1"
+msgstr "Aantal groepen: %1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:87
+#, kde-format
+msgid "Format: Arrow IPC (Feather)"
+msgstr ""
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:91
+#, fuzzy, kde-format
+#| msgid "Number of records: %1"
+msgid "Number of record batches: %1"
+msgstr "Aantal records: %1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:99
+#, fuzzy, kde-format
+#| msgid "Format type:"
+msgid "Format: Apache ORC"
+msgstr "Formaattype:"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:103
+#, fuzzy, kde-format
+#| msgid "Number of lines: %1"
+msgid "Number of stripes: %1"
+msgstr "Aantal regels: %1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:212
+#, fuzzy, kde-format
+#| msgid "Could not open %1"
+msgid "Could not open file: %1"
+msgstr "Kan %1 niet openen"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:224
+#, fuzzy, kde-format
+#| msgid "Failed to open the file '%1'."
+msgid "Failed to open Parquet file: %1"
+msgstr "Openen bestand '%1' is mislukt."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:235
+#: src/backend/datasources/filters/ParquetFilter.cpp:244
+#, fuzzy, kde-format
+#| msgid "Failed to read image data"
+msgid "Failed to read Parquet table: %1"
+msgstr "Gegevens van afbeelding inlezen mislukt"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:254
+#, fuzzy, kde-format
+#| msgid "Failed to open the file '%1'."
+msgid "Failed to open Arrow IPC file: %1"
+msgstr "Openen bestand '%1' is mislukt."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:265
+#, fuzzy, kde-format
+#| msgid "Failed to read data."
+msgid "Failed to read record batch %1: %2"
+msgstr "Gegevens inlezen is mislukt."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:272
+#, fuzzy, kde-format
+#| msgid "Failed to initialize %1."
+msgid "Failed to assemble table: %1"
+msgstr "%1 initialiseren niet gelukt."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:282
+#, fuzzy, kde-format
+#| msgid "Failed to open the file '%1'."
+msgid "Failed to open ORC file: %1"
+msgstr "Openen bestand '%1' is mislukt."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:292
+#: src/backend/datasources/filters/ParquetFilter.cpp:300
+#, fuzzy, kde-format
+#| msgid "Failed to read data."
+msgid "Failed to read ORC table: %1"
+msgstr "Gegevens inlezen is mislukt."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:309
+#, fuzzy, kde-format
+#| msgid "unsupported float type for rank 1"
+msgid "Unsupported file format."
+msgstr "Niet ondersteund type drijvende komma voor rank 1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:398
+#, fuzzy, kde-format
+#| msgid "No file provided for import."
+msgid "The file has no data to import."
+msgstr "Geen te importeren bestand geleverd."
+
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:64
 #, kde-format
@@ -2467,47 +2591,47 @@ msgstr "Rekenbladen:"
 msgid "Invalid region specified."
 msgstr "Ongeldig gebied gespecificeerd."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:743
 #, kde-format
 msgid "Device doesn't exist."
 msgstr "Apparaat bestaat niet."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:746
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr "Gebruiker heeft niet genoeg rechten om het apparaat te openen."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:749
 #, kde-format
 msgid "Device already opened."
 msgstr "Apparaat is reeds geopend"
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:752
 #, kde-format
 msgid "Device is not open."
 msgstr "Apparaat is niet open."
 
-#: src/backend/datasources/LiveDataSource.cpp:749
+#: src/backend/datasources/LiveDataSource.cpp:755
 #, kde-format
 msgid "Failed to read data."
 msgstr "Gegevens inlezen is mislukt."
 
-#: src/backend/datasources/LiveDataSource.cpp:752
+#: src/backend/datasources/LiveDataSource.cpp:758
 #, kde-format
 msgid "Device not available."
 msgstr "Apparaat is niet beschikbaar."
 
-#: src/backend/datasources/LiveDataSource.cpp:755
+#: src/backend/datasources/LiveDataSource.cpp:761
 #, kde-format
 msgid "Timeout occurred."
 msgstr "Tijdslimiet is overschreden."
 
-#: src/backend/datasources/LiveDataSource.cpp:760
+#: src/backend/datasources/LiveDataSource.cpp:766
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "De volgende fout is opgetreden: %1"
 
-#: src/backend/datasources/LiveDataSource.cpp:771
+#: src/backend/datasources/LiveDataSource.cpp:777
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Fout seriële poort"
@@ -6762,7 +6886,7 @@ msgstr "Statistieken (verdelingen)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:740
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
-#: src/frontend/datasources/ImportFileWidget.cpp:1419
+#: src/frontend/datasources/ImportFileWidget.cpp:1446
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
@@ -7832,319 +7956,319 @@ msgstr "De grootte van elke bemonstering moet gelijk zijn."
 msgid "Standard Deviation"
 msgstr "Standaarddeviatie"
 
-#: src/backend/statistics/HypothesisTest.cpp:586
+#: src/backend/statistics/HypothesisTest.cpp:585
 #, kde-format
 msgid "Null Hypothesis"
 msgstr "Nulhypothese"
 
-#: src/backend/statistics/HypothesisTest.cpp:587
+#: src/backend/statistics/HypothesisTest.cpp:586
 #, kde-format
 msgid "Alternate Hypothesis"
 msgstr "Alternatieve hypothese"
 
-#: src/backend/statistics/HypothesisTest.cpp:589
+#: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
 msgid "Descriptive Statistics"
 msgstr "Beschrijvende statistiek"
 
-#: src/backend/statistics/HypothesisTest.cpp:590
+#: src/backend/statistics/HypothesisTest.cpp:589
 #, kde-format
 msgid "Test Statistics"
 msgstr "Teststatistieken"
 
-#: src/backend/statistics/HypothesisTest.cpp:590
+#: src/backend/statistics/HypothesisTest.cpp:589
 #, kde-format
 msgid "Significance Level"
 msgstr "Significantieniveau"
 
-#: src/backend/statistics/HypothesisTest.cpp:591
+#: src/backend/statistics/HypothesisTest.cpp:590
 #, kde-format
 msgid "p-Value"
 msgstr "p-Waarde:"
 
-#: src/backend/statistics/HypothesisTest.cpp:594
+#: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
 msgid "Degrees of Freedom Between Groups"
 msgstr "Vrijheidsgraden tussen groepen"
 
-#: src/backend/statistics/HypothesisTest.cpp:595
+#: src/backend/statistics/HypothesisTest.cpp:594
 #, kde-format
 msgid "Degrees of Freedom Within Groups"
 msgstr "Vrijheidsgraden binnen groepen"
 
-#: src/backend/statistics/HypothesisTest.cpp:597
+#: src/backend/statistics/HypothesisTest.cpp:596
 #, kde-format
 msgid "Degrees of Freedom Treatment"
 msgstr "Behandeling van vrijheidsgraden"
 
-#: src/backend/statistics/HypothesisTest.cpp:598
+#: src/backend/statistics/HypothesisTest.cpp:597
 #, kde-format
 msgid "Degrees of Freedom Residuals"
 msgstr "Vrijheidsgraden van restwaarden"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/backend/statistics/HypothesisTest.cpp:600
-#: src/backend/statistics/HypothesisTest.cpp:658
+#: src/backend/statistics/HypothesisTest.cpp:602
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "Vrijheidsgraden"
 
-#: src/backend/statistics/HypothesisTest.cpp:605
-#: src/backend/statistics/HypothesisTest.cpp:609
-#: src/backend/statistics/HypothesisTest.cpp:612
-#: src/backend/statistics/HypothesisTest.cpp:614
-#, kde-format
-msgid "t-Value"
-msgstr "t-Waarde"
-
-#: src/backend/statistics/HypothesisTest.cpp:605
-#, kde-format
-msgid "Test Mean"
-msgstr "Testgemiddelde"
-
-#: src/backend/statistics/HypothesisTest.cpp:606
-#: src/backend/statistics/HypothesisTest.cpp:610
-#: src/backend/statistics/HypothesisTest.cpp:612
-#: src/backend/statistics/HypothesisTest.cpp:614
-#, kde-format
-msgid "Mean Difference"
-msgstr "Gemiddeld verschil"
-
-#: src/backend/statistics/HypothesisTest.cpp:609
-#, kde-format
-msgid "Pooled Variance"
-msgstr "Gepoolde variantie"
-
-#: src/backend/statistics/HypothesisTest.cpp:610
-#: src/backend/statistics/HypothesisTest.cpp:615
-#, kde-format
-msgid "Mean Difference Standard Error"
-msgstr "Standaardfout in gemiddeld verschil"
-
-#: src/backend/statistics/HypothesisTest.cpp:617
-#: src/backend/statistics/HypothesisTest.cpp:623
-#, kde-format
-msgid "F-Statistic"
-msgstr "F-statistiek"
-
-#: src/backend/statistics/HypothesisTest.cpp:617
-#, kde-format
-msgid "Sum of Squares Between Groups"
-msgstr "Som van kwadraten tussen groepen"
-
-#: src/backend/statistics/HypothesisTest.cpp:618
-#, kde-format
-msgid "Sum of Squares Within Groups"
-msgstr "Som van kwadraten binnen groepen"
-
-#: src/backend/statistics/HypothesisTest.cpp:619
-#, kde-format
-msgid "Mean Squares Between Groups"
-msgstr "Kwadratisch gemiddelde tussen groepen"
-
-#: src/backend/statistics/HypothesisTest.cpp:620
-#, kde-format
-msgid "Mean Squares Within Groups"
-msgstr "Kwadratisch gemiddelde binnen groepen"
-
-#: src/backend/statistics/HypothesisTest.cpp:623
-#, kde-format
-msgid "Sum of Squares Treatment"
-msgstr "Behandeling van som van kwadraten"
-
-#: src/backend/statistics/HypothesisTest.cpp:624
-#, kde-format
-msgid "Sum of Squares Residuals"
-msgstr "Som van kwadraten van restwaarden"
-
-#: src/backend/statistics/HypothesisTest.cpp:625
-#, kde-format
-msgid "Sum of Squares Within Subjects"
-msgstr "Som van kwadraten binnen onderwerpen"
-
-#: src/backend/statistics/HypothesisTest.cpp:626
-#, kde-format
-msgid "Mean Squares Treatment"
-msgstr "Behandeling van kwadratisch gemiddelde"
-
-#: src/backend/statistics/HypothesisTest.cpp:626
-#, kde-format
-msgid "Mean Squares Residuals"
-msgstr "Gemiddelde kwadraten van restwaarden"
-
-#: src/backend/statistics/HypothesisTest.cpp:628
-#, kde-format
-msgid "U"
-msgstr "U"
-
-#: src/backend/statistics/HypothesisTest.cpp:628
-#: src/backend/statistics/HypothesisTest.cpp:632
-#: src/backend/statistics/HypothesisTest.cpp:652
-#: src/backend/statistics/HypothesisTest.cpp:655
-#, kde-format
-msgid "z-Value"
-msgstr "z-Waarde"
-
-#: src/backend/statistics/HypothesisTest.cpp:629
-#, kde-format
-msgid "Rank Sum 1"
-msgstr "Rangordesom 1"
-
-#: src/backend/statistics/HypothesisTest.cpp:629
-#, kde-format
-msgid "Mean Rank 1"
-msgstr "Gemiddelde Rangorde 1"
-
-#: src/backend/statistics/HypothesisTest.cpp:630
-#, kde-format
-msgid "Rank Sum 2"
-msgstr "Rangordesom 2"
-
-#: src/backend/statistics/HypothesisTest.cpp:630
-#, kde-format
-msgid "Mean Rank 2"
-msgstr "Gemiddelde Rangorde 2"
-
-#: src/backend/statistics/HypothesisTest.cpp:632
-#, kde-format
-msgid "W"
-msgstr "W"
-
-#: src/backend/statistics/HypothesisTest.cpp:633
-#, kde-format
-msgid "Positive Rank Sum"
-msgstr "Positieve rangordesom"
-
-#: src/backend/statistics/HypothesisTest.cpp:633
-#, kde-format
-msgid "Positive Rank Mean"
-msgstr "Gemiddelde van positieve rangorde"
-
-#: src/backend/statistics/HypothesisTest.cpp:634
-#, kde-format
-msgid "Positive Rank Count"
-msgstr "Positieve rangorde aantal"
-
-#: src/backend/statistics/HypothesisTest.cpp:634
-#, kde-format
-msgid "Negative Rank Sum"
-msgstr "Negatieve rangordesom"
-
-#: src/backend/statistics/HypothesisTest.cpp:635
-#, kde-format
-msgid "Negative Rank Mean"
-msgstr "Negatieve gemiddelde van rangorde"
-
-#: src/backend/statistics/HypothesisTest.cpp:635
-#, kde-format
-msgid "Negative Rank Count"
-msgstr "Negatieve rangordetelling"
-
-#: src/backend/statistics/HypothesisTest.cpp:636
-#, kde-format
-msgid "Tie Count"
-msgstr "Aantal koorden"
-
-#: src/backend/statistics/HypothesisTest.cpp:638
-#: src/backend/statistics/HypothesisTest.cpp:646
-#, kde-format
-msgid "H"
-msgstr "H"
-
-#: src/backend/statistics/HypothesisTest.cpp:640
-#, kde-format
-msgid "Q"
-msgstr "Q"
-
-#: src/backend/statistics/HypothesisTest.cpp:642
-#: src/backend/statistics/HypothesisTest.cpp:644
-#, kde-format
-msgid "Chi2"
-msgstr "Chi2"
-
-#: src/backend/statistics/HypothesisTest.cpp:646
-#, kde-format
-msgid "Event Count 1"
-msgstr "Aantal gebeurtenissen 1"
-
-#: src/backend/statistics/HypothesisTest.cpp:647
-#, kde-format
-msgid "Censored Count 1"
-msgstr "Gecensureerd aantal 1"
-
-#: src/backend/statistics/HypothesisTest.cpp:647
-#, kde-format
-msgid "Total Count 1"
-msgstr "Totaal aantal 1"
-
-#: src/backend/statistics/HypothesisTest.cpp:648
-#, kde-format
-msgid "Event Count 2"
-msgstr "Aantal gebeurtenissen 2"
-
-#: src/backend/statistics/HypothesisTest.cpp:648
-#, kde-format
-msgid "Censored Count 2"
-msgstr "Gecensureerd aantal 2"
-
-#: src/backend/statistics/HypothesisTest.cpp:649
-#, kde-format
-msgid "Total Count 2"
-msgstr "Totaal aantal 2"
-
-#: src/backend/statistics/HypothesisTest.cpp:651
-#, kde-format
-msgid "S"
-msgstr "S"
-
-#: src/backend/statistics/HypothesisTest.cpp:651
-#, kde-format
-msgid "Kendall's Tau"
-msgstr "Kendall's tau"
-
-#: src/backend/statistics/HypothesisTest.cpp:652
-#, kde-format
-msgid "Sen's Slope"
-msgstr "Sen's hellingshoek"
-
-#: src/backend/statistics/HypothesisTest.cpp:653
-#: src/backend/statistics/HypothesisTest.cpp:656
-#, kde-format
-msgid "Sample Size"
-msgstr "Sample-grootte"
-
-#: src/backend/statistics/HypothesisTest.cpp:655
-#, kde-format
-msgid "Number of Runs"
-msgstr "Aantal runs"
-
-#: src/backend/statistics/HypothesisTest.cpp:658
-#, kde-format
-msgid "Stability Ratio"
-msgstr "Stabiliteitsverhouding"
-
-#: src/backend/statistics/HypothesisTest.cpp:659
+#: src/backend/statistics/HypothesisTest.cpp:600
 #, kde-format
 msgid "Effective Degrees of Freedom"
 msgstr "Effectieve vrijheidsgraden"
 
-#: src/backend/statistics/HypothesisTest.cpp:660
+#: src/backend/statistics/HypothesisTest.cpp:607
+#: src/backend/statistics/HypothesisTest.cpp:611
+#: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:616
+#, kde-format
+msgid "t-Value"
+msgstr "t-Waarde"
+
+#: src/backend/statistics/HypothesisTest.cpp:607
+#, kde-format
+msgid "Test Mean"
+msgstr "Testgemiddelde"
+
+#: src/backend/statistics/HypothesisTest.cpp:608
+#: src/backend/statistics/HypothesisTest.cpp:612
+#: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:616
+#, kde-format
+msgid "Mean Difference"
+msgstr "Gemiddeld verschil"
+
+#: src/backend/statistics/HypothesisTest.cpp:611
+#, kde-format
+msgid "Pooled Variance"
+msgstr "Gepoolde variantie"
+
+#: src/backend/statistics/HypothesisTest.cpp:612
+#: src/backend/statistics/HypothesisTest.cpp:617
+#, kde-format
+msgid "Mean Difference Standard Error"
+msgstr "Standaardfout in gemiddeld verschil"
+
+#: src/backend/statistics/HypothesisTest.cpp:619
+#: src/backend/statistics/HypothesisTest.cpp:625
+#, kde-format
+msgid "F-Statistic"
+msgstr "F-statistiek"
+
+#: src/backend/statistics/HypothesisTest.cpp:619
+#, kde-format
+msgid "Sum of Squares Between Groups"
+msgstr "Som van kwadraten tussen groepen"
+
+#: src/backend/statistics/HypothesisTest.cpp:620
+#, kde-format
+msgid "Sum of Squares Within Groups"
+msgstr "Som van kwadraten binnen groepen"
+
+#: src/backend/statistics/HypothesisTest.cpp:621
+#, kde-format
+msgid "Mean Squares Between Groups"
+msgstr "Kwadratisch gemiddelde tussen groepen"
+
+#: src/backend/statistics/HypothesisTest.cpp:622
+#, kde-format
+msgid "Mean Squares Within Groups"
+msgstr "Kwadratisch gemiddelde binnen groepen"
+
+#: src/backend/statistics/HypothesisTest.cpp:625
+#, kde-format
+msgid "Sum of Squares Treatment"
+msgstr "Behandeling van som van kwadraten"
+
+#: src/backend/statistics/HypothesisTest.cpp:626
+#, kde-format
+msgid "Sum of Squares Residuals"
+msgstr "Som van kwadraten van restwaarden"
+
+#: src/backend/statistics/HypothesisTest.cpp:627
+#, kde-format
+msgid "Sum of Squares Within Subjects"
+msgstr "Som van kwadraten binnen onderwerpen"
+
+#: src/backend/statistics/HypothesisTest.cpp:628
+#, kde-format
+msgid "Mean Squares Treatment"
+msgstr "Behandeling van kwadratisch gemiddelde"
+
+#: src/backend/statistics/HypothesisTest.cpp:628
+#, kde-format
+msgid "Mean Squares Residuals"
+msgstr "Gemiddelde kwadraten van restwaarden"
+
+#: src/backend/statistics/HypothesisTest.cpp:630
+#, kde-format
+msgid "U"
+msgstr "U"
+
+#: src/backend/statistics/HypothesisTest.cpp:630
+#: src/backend/statistics/HypothesisTest.cpp:634
+#: src/backend/statistics/HypothesisTest.cpp:654
+#: src/backend/statistics/HypothesisTest.cpp:657
+#, kde-format
+msgid "z-Value"
+msgstr "z-Waarde"
+
+#: src/backend/statistics/HypothesisTest.cpp:631
+#, kde-format
+msgid "Rank Sum 1"
+msgstr "Rangordesom 1"
+
+#: src/backend/statistics/HypothesisTest.cpp:631
+#, kde-format
+msgid "Mean Rank 1"
+msgstr "Gemiddelde Rangorde 1"
+
+#: src/backend/statistics/HypothesisTest.cpp:632
+#, kde-format
+msgid "Rank Sum 2"
+msgstr "Rangordesom 2"
+
+#: src/backend/statistics/HypothesisTest.cpp:632
+#, kde-format
+msgid "Mean Rank 2"
+msgstr "Gemiddelde Rangorde 2"
+
+#: src/backend/statistics/HypothesisTest.cpp:634
+#, kde-format
+msgid "W"
+msgstr "W"
+
+#: src/backend/statistics/HypothesisTest.cpp:635
+#, kde-format
+msgid "Positive Rank Sum"
+msgstr "Positieve rangordesom"
+
+#: src/backend/statistics/HypothesisTest.cpp:635
+#, kde-format
+msgid "Positive Rank Mean"
+msgstr "Gemiddelde van positieve rangorde"
+
+#: src/backend/statistics/HypothesisTest.cpp:636
+#, kde-format
+msgid "Positive Rank Count"
+msgstr "Positieve rangorde aantal"
+
+#: src/backend/statistics/HypothesisTest.cpp:636
+#, kde-format
+msgid "Negative Rank Sum"
+msgstr "Negatieve rangordesom"
+
+#: src/backend/statistics/HypothesisTest.cpp:637
+#, kde-format
+msgid "Negative Rank Mean"
+msgstr "Negatieve gemiddelde van rangorde"
+
+#: src/backend/statistics/HypothesisTest.cpp:637
+#, kde-format
+msgid "Negative Rank Count"
+msgstr "Negatieve rangordetelling"
+
+#: src/backend/statistics/HypothesisTest.cpp:638
+#, kde-format
+msgid "Tie Count"
+msgstr "Aantal koorden"
+
+#: src/backend/statistics/HypothesisTest.cpp:640
+#: src/backend/statistics/HypothesisTest.cpp:648
+#, kde-format
+msgid "H"
+msgstr "H"
+
+#: src/backend/statistics/HypothesisTest.cpp:642
+#, kde-format
+msgid "Q"
+msgstr "Q"
+
+#: src/backend/statistics/HypothesisTest.cpp:644
+#: src/backend/statistics/HypothesisTest.cpp:646
+#, kde-format
+msgid "Chi2"
+msgstr "Chi2"
+
+#: src/backend/statistics/HypothesisTest.cpp:648
+#, kde-format
+msgid "Event Count 1"
+msgstr "Aantal gebeurtenissen 1"
+
+#: src/backend/statistics/HypothesisTest.cpp:649
+#, kde-format
+msgid "Censored Count 1"
+msgstr "Gecensureerd aantal 1"
+
+#: src/backend/statistics/HypothesisTest.cpp:649
+#, kde-format
+msgid "Total Count 1"
+msgstr "Totaal aantal 1"
+
+#: src/backend/statistics/HypothesisTest.cpp:650
+#, kde-format
+msgid "Event Count 2"
+msgstr "Aantal gebeurtenissen 2"
+
+#: src/backend/statistics/HypothesisTest.cpp:650
+#, kde-format
+msgid "Censored Count 2"
+msgstr "Gecensureerd aantal 2"
+
+#: src/backend/statistics/HypothesisTest.cpp:651
+#, kde-format
+msgid "Total Count 2"
+msgstr "Totaal aantal 2"
+
+#: src/backend/statistics/HypothesisTest.cpp:653
+#, kde-format
+msgid "S"
+msgstr "S"
+
+#: src/backend/statistics/HypothesisTest.cpp:653
+#, kde-format
+msgid "Kendall's Tau"
+msgstr "Kendall's tau"
+
+#: src/backend/statistics/HypothesisTest.cpp:654
+#, kde-format
+msgid "Sen's Slope"
+msgstr "Sen's hellingshoek"
+
+#: src/backend/statistics/HypothesisTest.cpp:655
+#: src/backend/statistics/HypothesisTest.cpp:658
+#, kde-format
+msgid "Sample Size"
+msgstr "Sample-grootte"
+
+#: src/backend/statistics/HypothesisTest.cpp:657
+#, kde-format
+msgid "Number of Runs"
+msgstr "Aantal runs"
+
+#: src/backend/statistics/HypothesisTest.cpp:661
+#, kde-format
+msgid "Stability Ratio"
+msgstr "Stabiliteitsverhouding"
+
+#: src/backend/statistics/HypothesisTest.cpp:661
 #, kde-format
 msgid "Average Successive Difference"
 msgstr "Gemiddeld successief verschil"
 
-#: src/backend/statistics/HypothesisTest.cpp:663
+#: src/backend/statistics/HypothesisTest.cpp:664
 #, kde-format
 msgid "Statistical Conclusion"
 msgstr "Statistische conclusie"
 
-#: src/backend/statistics/HypothesisTest.cpp:675
+#: src/backend/statistics/HypothesisTest.cpp:676
 #, kde-format
 msgid "No variable columns provided."
 msgstr "Geen variabele kolommen geleverd."
 
-#: src/backend/statistics/HypothesisTest.cpp:952
+#: src/backend/statistics/HypothesisTest.cpp:966
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
@@ -8153,7 +8277,7 @@ msgstr ""
 "Op het significantieniveau %1, is het gemiddelde van de populatie "
 "significant verschillend van %2. %3"
 
-#: src/backend/statistics/HypothesisTest.cpp:957
+#: src/backend/statistics/HypothesisTest.cpp:971
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
@@ -8162,8 +8286,8 @@ msgstr ""
 "Op het significantieniveau %1, is het gemiddelde van de populatie niet "
 "significant verschillend van %2. %3"
 
-#: src/backend/statistics/HypothesisTest.cpp:1042
-#: src/backend/statistics/HypothesisTest.cpp:1110
+#: src/backend/statistics/HypothesisTest.cpp:1056
+#: src/backend/statistics/HypothesisTest.cpp:1124
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
@@ -8172,8 +8296,8 @@ msgstr ""
 "Op het significantieniveau %1, zijn de gemiddelden van de populatie "
 "significant verschillend. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1045
-#: src/backend/statistics/HypothesisTest.cpp:1113
+#: src/backend/statistics/HypothesisTest.cpp:1059
+#: src/backend/statistics/HypothesisTest.cpp:1127
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
@@ -8182,8 +8306,8 @@ msgstr ""
 "Op het significantieniveau %1, is het gemiddelde van de populatie niet "
 "significant verschillend. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1164
-#: src/backend/statistics/HypothesisTest.cpp:1225
+#: src/backend/statistics/HypothesisTest.cpp:1178
+#: src/backend/statistics/HypothesisTest.cpp:1239
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
@@ -8192,8 +8316,8 @@ msgstr ""
 "Op het significantieniveau %1, is minstens het gemiddelde van één groep "
 "significant verschillend. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1166
-#: src/backend/statistics/HypothesisTest.cpp:1227
+#: src/backend/statistics/HypothesisTest.cpp:1180
+#: src/backend/statistics/HypothesisTest.cpp:1241
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group means. "
@@ -8202,9 +8326,9 @@ msgstr ""
 "Op het significantieniveau %1 is er geen significant verschil tussen "
 "groepsgemiddelden. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1284
-#: src/backend/statistics/HypothesisTest.cpp:1342
-#: src/backend/statistics/HypothesisTest.cpp:1401
+#: src/backend/statistics/HypothesisTest.cpp:1298
+#: src/backend/statistics/HypothesisTest.cpp:1356
+#: src/backend/statistics/HypothesisTest.cpp:1415
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
@@ -8213,9 +8337,9 @@ msgstr ""
 "Op het significantieniveau %1, is minstens één groepsverdeling significant "
 "verschillend. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1287
-#: src/backend/statistics/HypothesisTest.cpp:1345
-#: src/backend/statistics/HypothesisTest.cpp:1404
+#: src/backend/statistics/HypothesisTest.cpp:1301
+#: src/backend/statistics/HypothesisTest.cpp:1359
+#: src/backend/statistics/HypothesisTest.cpp:1418
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
@@ -8224,7 +8348,7 @@ msgstr ""
 "Op het significantieniveau %1 is er geen significant verschil tussen "
 "groepsverdelingen. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1464
+#: src/backend/statistics/HypothesisTest.cpp:1478
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
@@ -8233,7 +8357,7 @@ msgstr ""
 "Op het significantieniveau %1, is minstens één groep significant "
 "verschillend. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1466
+#: src/backend/statistics/HypothesisTest.cpp:1480
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. %2"
@@ -8241,13 +8365,13 @@ msgstr ""
 "Op het significantieniveau %1 is er geen significant verschil tussen "
 "groepen. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1492
-#: src/backend/statistics/HypothesisTest.cpp:1559
+#: src/backend/statistics/HypothesisTest.cpp:1506
+#: src/backend/statistics/HypothesisTest.cpp:1573
 #, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr "Kolom '%1' moet van het type geheel getal zijn."
 
-#: src/backend/statistics/HypothesisTest.cpp:1530
+#: src/backend/statistics/HypothesisTest.cpp:1544
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
@@ -8256,7 +8380,7 @@ msgstr ""
 "Op het significantieniveau %1 volgen de waargenomen frequenties niet de "
 "verwachte frequentieverdeling. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1534
+#: src/backend/statistics/HypothesisTest.cpp:1548
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
@@ -8265,12 +8389,12 @@ msgstr ""
 "Op het significantieniveau %1 volgen de waargenomen frequenties de verwachte "
 "frequentieverdeling. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1579
+#: src/backend/statistics/HypothesisTest.cpp:1593
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
 msgstr "De grootte van elke kolom in de contingentietabel moet gelijk zijn."
 
-#: src/backend/statistics/HypothesisTest.cpp:1595
+#: src/backend/statistics/HypothesisTest.cpp:1609
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are dependent. %2"
@@ -8278,7 +8402,7 @@ msgstr ""
 "Op het significantieniveau %1 zijn beide categoriale variabelen afhankelijk "
 "van elkaar. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1597
+#: src/backend/statistics/HypothesisTest.cpp:1611
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are independent. %2"
@@ -8286,55 +8410,55 @@ msgstr ""
 "Op het significantieniveau %1 zijn beide categoriale variabelen afhankelijk. "
 "%2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1615
+#: src/backend/statistics/HypothesisTest.cpp:1629
 #, kde-format
 msgid "Three columns are required."
 msgstr "Drie kolommen zijn vereist."
 
-#: src/backend/statistics/HypothesisTest.cpp:1624
+#: src/backend/statistics/HypothesisTest.cpp:1638
 #, kde-format
 msgid "Status column should be of integer type."
 msgstr "Statuskolom zou van het type geheel getal moeten zijn."
 
-#: src/backend/statistics/HypothesisTest.cpp:1629
+#: src/backend/statistics/HypothesisTest.cpp:1643
 #, kde-format
 msgid "Group column should be of integer type."
 msgstr "Groepskolom zou van het type geheel getal moeten zijn."
 
-#: src/backend/statistics/HypothesisTest.cpp:1634
+#: src/backend/statistics/HypothesisTest.cpp:1648
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr ""
 "Tijd-, Status- en Groepskolommen zouden gelijke grootten moeten hebben."
 
-#: src/backend/statistics/HypothesisTest.cpp:1653
+#: src/backend/statistics/HypothesisTest.cpp:1667
 #, kde-format
 msgid "Status column values must be either 0 or 1."
 msgstr "Statuskolomwaarden moeten 0 of 1 zijn."
 
-#: src/backend/statistics/HypothesisTest.cpp:1658
+#: src/backend/statistics/HypothesisTest.cpp:1672
 #, kde-format
 msgid "Group column values must be either 0 or 1."
 msgstr "Groepskolomwaarden moeten 0 of 1 zijn."
 
-#: src/backend/statistics/HypothesisTest.cpp:1674
+#: src/backend/statistics/HypothesisTest.cpp:1688
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
 "Tijd-, Status- en Groepskolommen zouden een gelijk aantal waarden moeten "
 "hebben."
 
-#: src/backend/statistics/HypothesisTest.cpp:1682
+#: src/backend/statistics/HypothesisTest.cpp:1696
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
 msgstr "Groep 1 vereist minstens %1 monsters."
 
-#: src/backend/statistics/HypothesisTest.cpp:1687
+#: src/backend/statistics/HypothesisTest.cpp:1701
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
 msgstr "Groep 2 vereist minstens %1 monsters."
 
-#: src/backend/statistics/HypothesisTest.cpp:1697
+#: src/backend/statistics/HypothesisTest.cpp:1711
 #, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
@@ -8343,7 +8467,7 @@ msgstr ""
 "Op het significantieniveau %1, zijn de overlevingskrommen significant "
 "verschillend. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1700
+#: src/backend/statistics/HypothesisTest.cpp:1714
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
@@ -8352,7 +8476,7 @@ msgstr ""
 "Op het significantieniveau %1 is er geen significant verschil tussen "
 "overlevingskrommen. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1740
+#: src/backend/statistics/HypothesisTest.cpp:1754
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
@@ -8361,7 +8485,7 @@ msgstr ""
 "Op het significantieniveau %1, is er een significante monotone trend in de "
 "gegevens. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1742
+#: src/backend/statistics/HypothesisTest.cpp:1756
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
@@ -8370,7 +8494,7 @@ msgstr ""
 "Op het significantieniveau %1, is er een significante positieve monotone "
 "trend. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1744
+#: src/backend/statistics/HypothesisTest.cpp:1758
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
@@ -8379,7 +8503,7 @@ msgstr ""
 "Op het significantieniveau %1, is er een significante negatieve monotone "
 "trend. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1746
+#: src/backend/statistics/HypothesisTest.cpp:1760
 #, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. %2"
@@ -8387,13 +8511,13 @@ msgstr ""
 "Op het significantieniveau %1 is er geen significante monotone trend "
 "gedetecteerd. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1782
+#: src/backend/statistics/HypothesisTest.cpp:1796
 #, kde-format
 msgid "At the significance level %1, the data are not randomly distributed. %2"
 msgstr ""
 "Op het significantieniveau %1, zijn de gegevens niet willekeurig verdeeld. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1784
+#: src/backend/statistics/HypothesisTest.cpp:1798
 #, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
@@ -8402,7 +8526,7 @@ msgstr ""
 "Op het significantieniveau %1, tonen de gegevens clustering of trent (te "
 "weinig runs). %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1787
+#: src/backend/statistics/HypothesisTest.cpp:1801
 #, kde-format
 msgid ""
 "At the significance level %1, the data show oscillation or over-control (too "
@@ -8411,21 +8535,21 @@ msgstr ""
 "Op het significantieniveau %1 toont het proces schommelingen of overmatige "
 "controle (te veel runs). %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1789
+#: src/backend/statistics/HypothesisTest.cpp:1803
 #, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. %2"
 msgstr ""
 "Op het significantieniveau %1 lijken de gegevens willekeurig verdeeld. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1823
+#: src/backend/statistics/HypothesisTest.cpp:1837
 #, kde-format
 msgid ""
 "At the significance level %1, the process is unstable (non-homogeneous). %2"
 msgstr ""
 "Op het significantieniveau %1, is het proces onstabiel (niet-homogeen). %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1825
+#: src/backend/statistics/HypothesisTest.cpp:1839
 #, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation or over-control. "
@@ -8434,7 +8558,7 @@ msgstr ""
 "Op het significantieniveau %1 toont het proces schommelingen of overmatige "
 "controle. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1827
+#: src/backend/statistics/HypothesisTest.cpp:1841
 #, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering, shifting, or "
@@ -8443,20 +8567,20 @@ msgstr ""
 "Op het significantieniveau %1, toont het proces clustering, verschuiving of "
 "trends. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1829
+#: src/backend/statistics/HypothesisTest.cpp:1843
 #, kde-format
 msgid ""
 "At the significance level %1, the process appears to be stable "
 "(homogeneous). %2"
 msgstr "Op het significantieniveau %1 lijkt het proces stabiel (homogeen). %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1921
+#: src/backend/statistics/HypothesisTest.cpp:1935
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
 #, kde-format
 msgid "Parametric"
 msgstr "Parametrisch"
 
-#: src/backend/statistics/HypothesisTest.cpp:1951
+#: src/backend/statistics/HypothesisTest.cpp:1965
 #, kde-format
 msgid "Non-Parametric"
 msgstr "Niet-parametrisch"
@@ -9424,7 +9548,7 @@ msgstr "Verticale as"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2410
 #: src/frontend/ActionsManager.cpp:551
-#: src/frontend/datasources/ImportFileWidget.cpp:113
+#: src/frontend/datasources/ImportFileWidget.cpp:114
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:117
 #: src/frontend/widgets/BackgroundWidget.cpp:123
@@ -11340,120 +11464,120 @@ msgstr "%1: logische coördinaten gebruiken"
 msgid "%1: set logical position"
 msgstr "%1: logische positie instellen"
 
-#: src/frontend/AboutDialog.cpp:93
+#: src/frontend/AboutDialog.cpp:96
 #, kde-format
 msgid "What's new"
 msgstr "Wat is nieuw"
 
-#: src/frontend/AboutDialog.cpp:99
+#: src/frontend/AboutDialog.cpp:102
 #, kde-format
 msgid "Copy Environment"
 msgstr "Omgeving kopiëren"
 
-#: src/frontend/AboutDialog.cpp:104
+#: src/frontend/AboutDialog.cpp:107
 #, kde-format
 msgid "Copy Citation"
 msgstr "Citaat kopiëren"
 
-#: src/frontend/AboutDialog.cpp:108
+#: src/frontend/AboutDialog.cpp:111
 #, kde-format
 msgid "Donate"
 msgstr "Doneren"
 
-#: src/frontend/AboutDialog.cpp:124
+#: src/frontend/AboutDialog.cpp:127
 #, kde-format
 msgid "Copy to Clipboard"
 msgstr "Naar klembord kopiëren"
 
-#: src/frontend/AboutDialog.cpp:150
+#: src/frontend/AboutDialog.cpp:153
 #, kde-format
 msgid "Release build"
 msgstr "Gebouwde voor uitgave"
 
-#: src/frontend/AboutDialog.cpp:152
+#: src/frontend/AboutDialog.cpp:155
 #, kde-format
 msgid "Debug build"
 msgstr "Gebouwd voor foutopsporing (debug)"
 
-#: src/frontend/AboutDialog.cpp:188
+#: src/frontend/AboutDialog.cpp:191
 #, kde-format
 msgid "System:"
 msgstr "Systeem:"
 
-#: src/frontend/AboutDialog.cpp:189
+#: src/frontend/AboutDialog.cpp:192
 #, kde-format
 msgid "Locale:"
 msgstr "Taalcode:"
 
 #. i18n("Used Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
-#: src/frontend/AboutDialog.cpp:191 src/frontend/ui/settingsgeneralpage.ui:183
+#: src/frontend/AboutDialog.cpp:194 src/frontend/ui/settingsgeneralpage.ui:183
 #, kde-format
 msgid "Number Format:"
 msgstr "Getalopmaak:"
 
-#: src/frontend/AboutDialog.cpp:191
+#: src/frontend/AboutDialog.cpp:194
 #, kde-format
 msgid "Updated on restart"
 msgstr "Updates bij herstart"
 
-#: src/frontend/AboutDialog.cpp:192
+#: src/frontend/AboutDialog.cpp:195
 #, kde-format
 msgid "Architecture:"
 msgstr "Architectuur:"
 
-#: src/frontend/AboutDialog.cpp:193
+#: src/frontend/AboutDialog.cpp:196
 #, kde-format
 msgid "Kernel: "
 msgstr "Kernel: "
 
-#: src/frontend/AboutDialog.cpp:201
+#: src/frontend/AboutDialog.cpp:204
 #, kde-format
 msgid "Visit website:"
 msgstr "Bezoek website:"
 
-#: src/frontend/AboutDialog.cpp:203
+#: src/frontend/AboutDialog.cpp:206
 #, kde-format
 msgid "Watch video tutorials:"
 msgstr "Videohandleidingen bekijken:"
 
-#: src/frontend/AboutDialog.cpp:204
+#: src/frontend/AboutDialog.cpp:207
 #, kde-format
 msgid "Discuss on Mastodon:"
 msgstr "Discussie op Mastodon:"
 
-#: src/frontend/AboutDialog.cpp:205
+#: src/frontend/AboutDialog.cpp:208
 #, kde-format
 msgid "Development:"
 msgstr "Ontwikkeling:"
 
-#: src/frontend/AboutDialog.cpp:206
+#: src/frontend/AboutDialog.cpp:209
 #, kde-format
 msgid "Please report bugs to:"
 msgstr "Bugs rapporteren aan:"
 
-#: src/frontend/AboutDialog.cpp:207
+#: src/frontend/AboutDialog.cpp:210
 #, kde-format
 msgid "Partly funded by:"
 msgstr "Gedeeltelijk gefinancierd door:"
 
-#: src/frontend/AboutDialog.cpp:218 src/frontend/AboutDialog.cpp:384
-#: src/frontend/AboutDialog.cpp:385 src/frontend/SettingsScriptingPage.cpp:61
+#: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
 #, kde-format
 msgid "missing"
 msgstr "ontbrekend"
 
-#: src/frontend/AboutDialog.cpp:224
+#: src/frontend/AboutDialog.cpp:227
 #, kde-format
 msgid "Python scripting support"
 msgstr "Pythonscripting-ondersteuning"
 
-#: src/frontend/AboutDialog.cpp:230
+#: src/frontend/AboutDialog.cpp:233
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "Frontend naar wiskundige toepassingen"
 
-#: src/frontend/AboutDialog.cpp:236
+#: src/frontend/AboutDialog.cpp:239
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
@@ -11461,142 +11585,147 @@ msgstr ""
 "Ondersteuning voor gegevensbestanden in gegevensformaat FITS (Flexible Image "
 "Transport System)"
 
-#: src/frontend/AboutDialog.cpp:242
+#: src/frontend/AboutDialog.cpp:245
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "Ondersteuning voor opmaaktaal Markdown"
 
-#: src/frontend/AboutDialog.cpp:248
+#: src/frontend/AboutDialog.cpp:251
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "C++ bibliotheek voor lineaire algebra"
 
-#: src/frontend/AboutDialog.cpp:254
+#: src/frontend/AboutDialog.cpp:257
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr "Snelle fouriertransformatie in het westen"
 
-#: src/frontend/AboutDialog.cpp:255
+#: src/frontend/AboutDialog.cpp:258
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "GNU Scientific Library"
 
-#: src/frontend/AboutDialog.cpp:261
+#: src/frontend/AboutDialog.cpp:264
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "Suite voor gegevensbeheer met hoge prestaties en opslag"
 
-#: src/frontend/AboutDialog.cpp:267
+#: src/frontend/AboutDialog.cpp:270
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "Engine voor accentueren van syntaxis"
 
-#: src/frontend/AboutDialog.cpp:273
+#: src/frontend/AboutDialog.cpp:276
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "Ondersteuning voor verzamelen van terugkoppeling van gebruikers"
 
-#: src/frontend/AboutDialog.cpp:279
+#: src/frontend/AboutDialog.cpp:282
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "Complexe fout en verwante functies"
 
-#: src/frontend/AboutDialog.cpp:285
+#: src/frontend/AboutDialog.cpp:288
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "Bestanden van Origin OPJ-project worden geïmporteerd"
 
-#: src/frontend/AboutDialog.cpp:291
+#: src/frontend/AboutDialog.cpp:294
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "Binaire MATLAB MAT bestanden importeren"
 
-#: src/frontend/AboutDialog.cpp:297
+#: src/frontend/AboutDialog.cpp:300
 #, kde-format
 msgid "MCAP file support"
 msgstr "Ondersteuning voor MCAP-bestand"
 
-#: src/frontend/AboutDialog.cpp:303
+#: src/frontend/AboutDialog.cpp:306
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "Network Common Data Form"
 
-#: src/frontend/AboutDialog.cpp:309
+#: src/frontend/AboutDialog.cpp:312
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "ODS (Open Document Spreadsheet) bestanden importeren"
 
-#: src/frontend/AboutDialog.cpp:315
+#: src/frontend/AboutDialog.cpp:318
 #, kde-format
 msgid "PDF rendering library"
 msgstr "Bibliotheek voor renderen van PDF"
 
-#: src/frontend/AboutDialog.cpp:321
+#: src/frontend/AboutDialog.cpp:324
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "Biedt beschikbare acties voor een specifiek doel"
 
-#: src/frontend/AboutDialog.cpp:322
+#: src/frontend/AboutDialog.cpp:325
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Qt geavanceerd systeem voor vastzetten"
 
-#: src/frontend/AboutDialog.cpp:328
+#: src/frontend/AboutDialog.cpp:331
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "Ondersteuningsgegeven uit MQTT-brokers"
 
-#: src/frontend/AboutDialog.cpp:334
+#: src/frontend/AboutDialog.cpp:337
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "Ondersteuning functionaliteit van seriële poort"
 
-#: src/frontend/AboutDialog.cpp:340
+#: src/frontend/AboutDialog.cpp:343
 #, kde-format
 msgid "SVG export support"
 msgstr "Ondersteuning van SVG exporteren"
 
-#: src/frontend/AboutDialog.cpp:346
+#: src/frontend/AboutDialog.cpp:349
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Excel xlsx-bestanden importeren"
 
-#: src/frontend/AboutDialog.cpp:352
+#: src/frontend/AboutDialog.cpp:355
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "Lezen (en schrijven) van gegevenssets uit SAS, Stata en SPSS"
 
-#: src/frontend/AboutDialog.cpp:358
+#: src/frontend/AboutDialog.cpp:361
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "Ondersteuning voor Binary Log File (BLF) bestand"
 
-#: src/frontend/AboutDialog.cpp:361 src/frontend/AboutDialog.cpp:386
+#: src/frontend/AboutDialog.cpp:367
+#, kde-format
+msgid "Apache Parquet, Arrow IPC (Feather) and Apache ORC file support"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:370 src/frontend/AboutDialog.cpp:395
 #, kde-format
 msgid "C++ Compiler: "
 msgstr "C++ compiler: "
 
-#: src/frontend/AboutDialog.cpp:366 src/frontend/AboutDialog.cpp:386
+#: src/frontend/AboutDialog.cpp:375 src/frontend/AboutDialog.cpp:395
 #, kde-format
 msgid "C++ Compiler Flags:"
 msgstr "Vlaggen van C++ compiler:"
 
-#: src/frontend/AboutDialog.cpp:380
+#: src/frontend/AboutDialog.cpp:389
 #, kde-format
 msgid "Components:"
 msgstr "Componenten:"
 
-#: src/frontend/AboutDialog.cpp:381
+#: src/frontend/AboutDialog.cpp:390
 #, kde-format
 msgid "Qt"
 msgstr "Qt"
 
-#: src/frontend/AboutDialog.cpp:382
+#: src/frontend/AboutDialog.cpp:391
 #, kde-format
 msgid "KDE Frameworks"
 msgstr "KDE Frameworks"
 
-#: src/frontend/AboutDialog.cpp:397
+#: src/frontend/AboutDialog.cpp:406
 #, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
@@ -13079,89 +13208,104 @@ msgstr ""
 "Of er is geen verbinding, of is er geen abonnement, of het bestandsfilter is "
 "niet Ascii."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:111
+#: src/frontend/datasources/ImportFileWidget.cpp:112
 #, kde-format
 msgid "ASCII data"
 msgstr "ASCII-gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:112
+#: src/frontend/datasources/ImportFileWidget.cpp:113
 #, kde-format
 msgid "Binary data"
 msgstr "Binaire gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:115
+#: src/frontend/datasources/ImportFileWidget.cpp:116
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:118
+#: src/frontend/datasources/ImportFileWidget.cpp:119
 #, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
 msgstr "OpenDocument rekenblad (ODS)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:121
+#: src/frontend/datasources/ImportFileWidget.cpp:122
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr "Hierarchical Data Format 5 (HDF5)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:124
+#: src/frontend/datasources/ImportFileWidget.cpp:125
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr "Network Common Data Format (NetCDF)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:127
+#: src/frontend/datasources/ImportFileWidget.cpp:128
 #, kde-format
 msgid "Vector Binary Logfile (BLF)"
 msgstr "Vector binair logbestand (BLF)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:130
+#: src/frontend/datasources/ImportFileWidget.cpp:131
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr "Gegevensformaat Flexible Image Transport System (FITS)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:132
+#: src/frontend/datasources/ImportFileWidget.cpp:133
 #, kde-format
 msgid "JSON Data"
 msgstr "JSON-gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:134
-#: src/frontend/datasources/ImportFileWidget.cpp:156
+#: src/frontend/datasources/ImportFileWidget.cpp:135
+#: src/frontend/datasources/ImportFileWidget.cpp:164
 #, kde-format
 msgid "ROOT (CERN)"
 msgstr "ROOT (CERN)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:136
-#: src/frontend/datasources/ImportFileWidget.cpp:158
+#: src/frontend/datasources/ImportFileWidget.cpp:137
+#: src/frontend/datasources/ImportFileWidget.cpp:166
 #, kde-format
 msgid "Spice"
 msgstr "Spice"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:138
+#: src/frontend/datasources/ImportFileWidget.cpp:139
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr "SAS, Stata of SPSS"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:141
+#: src/frontend/datasources/ImportFileWidget.cpp:142
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr "Bestand MATLAB MAT"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:144
+#: src/frontend/datasources/ImportFileWidget.cpp:145
 #, kde-format
 msgid "MCAP Data"
 msgstr "MCAP-gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:153
+#: src/frontend/datasources/ImportFileWidget.cpp:148
+#, kde-format
+msgid "Apache Parquet"
+msgstr ""
+
+#: src/frontend/datasources/ImportFileWidget.cpp:149
+#, kde-format
+msgid "Arrow IPC (Feather)"
+msgstr ""
+
+#: src/frontend/datasources/ImportFileWidget.cpp:151
+#, kde-format
+msgid "Apache ORC"
+msgstr ""
+
+#: src/frontend/datasources/ImportFileWidget.cpp:161
 #, kde-format
 msgid "ASCII Data"
 msgstr "ASCII-gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:154
+#: src/frontend/datasources/ImportFileWidget.cpp:162
 #, kde-format
 msgid "Binary Data"
 msgstr "Binaire gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:166
+#: src/frontend/datasources/ImportFileWidget.cpp:174
 #, kde-format
 msgid ""
 "If this option is checked, only the link to the file is stored in the "
@@ -13170,7 +13314,7 @@ msgstr ""
 "Als deze optie wordt gekozen, wordt alleen de koppeling naar het bestand "
 "opgeslagen in het projectbestand, maar niet de inhoud."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:167
+#: src/frontend/datasources/ImportFileWidget.cpp:175
 #, kde-format
 msgid ""
 "If this option is checked, the relative path of the file (relative to "
@@ -13180,30 +13324,30 @@ msgstr ""
 "opgeslagen (ten opzichte van de map van het project)."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/frontend/datasources/ImportFileWidget.cpp:175
+#: src/frontend/datasources/ImportFileWidget.cpp:183
 #: src/frontend/ui/dockwidgets/livedatadock.ui:361
 #, kde-format
 msgid "Continuously Fixed"
 msgstr "Continu vast"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/frontend/datasources/ImportFileWidget.cpp:176
+#: src/frontend/datasources/ImportFileWidget.cpp:184
 #: src/frontend/ui/dockwidgets/livedatadock.ui:366
 #, kde-format
 msgid "From End"
 msgstr "Vanaf einde"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:177
+#: src/frontend/datasources/ImportFileWidget.cpp:185
 #, kde-format
 msgid "Till End"
 msgstr "Tot einde"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:178
+#: src/frontend/datasources/ImportFileWidget.cpp:186
 #, kde-format
 msgid "Whole File"
 msgstr "Gehele bestand"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:213
+#: src/frontend/datasources/ImportFileWidget.cpp:221
 #, kde-format
 msgid ""
 "Specify how the data source has to be processed on every read:"
@@ -13223,7 +13367,7 @@ msgstr ""
 "verwerkt. Alleen beschikbaar voor \"Bestands- of Pipe met naam\"-"
 "gegevensbronnen.</li></ul>"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:224
+#: src/frontend/datasources/ImportFileWidget.cpp:232
 #, kde-format
 msgid ""
 "Number of samples (lines) to be processed on every read.\n"
@@ -13234,7 +13378,7 @@ msgstr ""
 "Hoeft alleen te worden opgegeven in leesmodus \"Continu vast\" en \"Vanaf "
 "einde\"."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:230
+#: src/frontend/datasources/ImportFileWidget.cpp:238
 #, kde-format
 msgid ""
 "Specify when and how frequently the data source needs to be read:"
@@ -13247,12 +13391,12 @@ msgstr ""
 "gebruiker opgegeven tijdsinterval.</li><li>Bij nieuwe gegevens - de "
 "gegevensbron wordt gelezen zodra er nieuwe gegevens zijn.</li></ul>"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:238
+#: src/frontend/datasources/ImportFileWidget.cpp:246
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
 msgstr "Geef frequentie op van het lezen van de gegevensbron."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:243
+#: src/frontend/datasources/ImportFileWidget.cpp:251
 #, kde-format
 msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
@@ -13261,7 +13405,7 @@ msgstr ""
 "Geef aantal monsters op dat na lezen moet worden opgeslagen.\n"
 "Gebruik \"Alles\" als alle gegevens moeten worden bewaard."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:248
+#: src/frontend/datasources/ImportFileWidget.cpp:256
 #, kde-format
 msgid ""
 "Enable to use the first row of the selected data region for the column names "
@@ -13270,12 +13414,12 @@ msgstr ""
 "Dit selecteren als de eerste rij van het geselecteerde gegevensgebied moet "
 "worden gebruikt voor de kolomnamen in het rekenblad."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:263
+#: src/frontend/datasources/ImportFileWidget.cpp:271
 #, kde-format
 msgid "Manage MQTT connections"
 msgstr "Verbindingen MQTT beheren"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:265
+#: src/frontend/datasources/ImportFileWidget.cpp:273
 #: src/frontend/dockwidgets/LiveDataDock.cpp:84
 #, kde-format
 msgid ""
@@ -13285,7 +13429,7 @@ msgstr ""
 "Geef het LWT-bericht (\"Last Will and Testament\") op. Hierin moet op "
 "tenminste een onderwerp worden ingeschreven."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:282
+#: src/frontend/datasources/ImportFileWidget.cpp:290
 #, kde-format
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
@@ -13293,30 +13437,30 @@ msgstr ""
 "Het aantal rijen is berekend uit de waarden van het tabblad met het "
 "gegevensgedeelte"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1055
+#: src/frontend/datasources/ImportFileWidget.cpp:1079
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
 msgstr "Selecteer de gegevensbronmap"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1057
+#: src/frontend/datasources/ImportFileWidget.cpp:1081
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Selecteer het gegevensbronbestand"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1087
+#: src/frontend/datasources/ImportFileWidget.cpp:1111
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Het DBC-bestand selecteren"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1087
+#: src/frontend/datasources/ImportFileWidget.cpp:1111
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "DBC-bestand (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1174
+#: src/frontend/datasources/ImportFileWidget.cpp:1198
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
@@ -13324,7 +13468,7 @@ msgstr ""
 "Bestanden van oorspronkelijk project moeten geopend worden met \"Importeren -"
 "> Oorspronkelijk project\"!"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1177
+#: src/frontend/datasources/ImportFileWidget.cpp:1201
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
@@ -13333,7 +13477,7 @@ msgstr ""
 "LabPlot-project\"!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1325
+#: src/frontend/datasources/ImportFileWidget.cpp:1349
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
@@ -13341,7 +13485,7 @@ msgstr "Gegevensopmaak"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1326
+#: src/frontend/datasources/ImportFileWidget.cpp:1350
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -13350,153 +13494,153 @@ msgid "Preview"
 msgstr "Voorbeeld"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1328
+#: src/frontend/datasources/ImportFileWidget.cpp:1352
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Te lezen gegevensgedeelte"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1371
+#: src/frontend/datasources/ImportFileWidget.cpp:1398
 #, kde-format
 msgid "Data format && preview"
 msgstr "Gegevensopmaak && voorbeeld"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1418
+#: src/frontend/datasources/ImportFileWidget.cpp:1445
 #, kde-format
 msgid "Automatic"
 msgstr "Automatisch"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1665
+#: src/frontend/datasources/ImportFileWidget.cpp:1707
 #, kde-format
 msgid "file command not found"
 msgstr "bestandsopdracht niet gevonden"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1676
+#: src/frontend/datasources/ImportFileWidget.cpp:1718
 #, kde-format
 msgid "cannot open"
 msgstr "kan niet openen"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1681
+#: src/frontend/datasources/ImportFileWidget.cpp:1723
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Bestandstype:</b> %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1686
-#: src/frontend/datasources/ImportFileWidget.cpp:1774
+#: src/frontend/datasources/ImportFileWidget.cpp:1728
+#: src/frontend/datasources/ImportFileWidget.cpp:1821
 #, kde-format
 msgid "General:"
 msgstr "Algemeen:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1688
-#: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1690
-#: src/frontend/datasources/ImportFileWidget.cpp:1776
-#: src/frontend/datasources/ImportFileWidget.cpp:1777
-#: src/frontend/datasources/ImportFileWidget.cpp:1778
+#: src/frontend/datasources/ImportFileWidget.cpp:1730
+#: src/frontend/datasources/ImportFileWidget.cpp:1731
+#: src/frontend/datasources/ImportFileWidget.cpp:1732
+#: src/frontend/datasources/ImportFileWidget.cpp:1823
+#: src/frontend/datasources/ImportFileWidget.cpp:1824
+#: src/frontend/datasources/ImportFileWidget.cpp:1825
 #, kde-format
 msgid "yes"
 msgstr "ja"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1688
-#: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1690
-#: src/frontend/datasources/ImportFileWidget.cpp:1776
-#: src/frontend/datasources/ImportFileWidget.cpp:1777
-#: src/frontend/datasources/ImportFileWidget.cpp:1778
+#: src/frontend/datasources/ImportFileWidget.cpp:1730
+#: src/frontend/datasources/ImportFileWidget.cpp:1731
+#: src/frontend/datasources/ImportFileWidget.cpp:1732
+#: src/frontend/datasources/ImportFileWidget.cpp:1823
+#: src/frontend/datasources/ImportFileWidget.cpp:1824
+#: src/frontend/datasources/ImportFileWidget.cpp:1825
 #, kde-format
 msgid "no"
 msgstr "nee"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1688
-#: src/frontend/datasources/ImportFileWidget.cpp:1776
+#: src/frontend/datasources/ImportFileWidget.cpp:1730
+#: src/frontend/datasources/ImportFileWidget.cpp:1823
 #, kde-format
 msgid "Readable: %1"
 msgstr "Leesbaar: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1777
+#: src/frontend/datasources/ImportFileWidget.cpp:1731
+#: src/frontend/datasources/ImportFileWidget.cpp:1824
 #, kde-format
 msgid "Writable: %1"
 msgstr "Beschrijfbaar: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1690
-#: src/frontend/datasources/ImportFileWidget.cpp:1778
+#: src/frontend/datasources/ImportFileWidget.cpp:1732
+#: src/frontend/datasources/ImportFileWidget.cpp:1825
 #, kde-format
 msgid "Executable: %1"
 msgstr "Uitvoerbaar: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1692
-#: src/frontend/datasources/ImportFileWidget.cpp:1780
+#: src/frontend/datasources/ImportFileWidget.cpp:1734
+#: src/frontend/datasources/ImportFileWidget.cpp:1827
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Tijd geboorte: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1693
-#: src/frontend/datasources/ImportFileWidget.cpp:1781
+#: src/frontend/datasources/ImportFileWidget.cpp:1735
+#: src/frontend/datasources/ImportFileWidget.cpp:1828
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Laatste metadata gewijzigd: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1694
-#: src/frontend/datasources/ImportFileWidget.cpp:1782
+#: src/frontend/datasources/ImportFileWidget.cpp:1736
+#: src/frontend/datasources/ImportFileWidget.cpp:1829
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Laatst gewijzigd: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1695
-#: src/frontend/datasources/ImportFileWidget.cpp:1783
+#: src/frontend/datasources/ImportFileWidget.cpp:1737
+#: src/frontend/datasources/ImportFileWidget.cpp:1830
 #, kde-format
 msgid "Last read: %1"
 msgstr "Laatst gelezen: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1696
-#: src/frontend/datasources/ImportFileWidget.cpp:1784
+#: src/frontend/datasources/ImportFileWidget.cpp:1738
+#: src/frontend/datasources/ImportFileWidget.cpp:1831
 #, kde-format
 msgid "Owner: %1"
 msgstr "Eigenaar: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1697
-#: src/frontend/datasources/ImportFileWidget.cpp:1785
+#: src/frontend/datasources/ImportFileWidget.cpp:1739
+#: src/frontend/datasources/ImportFileWidget.cpp:1832
 #, kde-format
 msgid "Group: %1"
 msgstr "Groep: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1698
+#: src/frontend/datasources/ImportFileWidget.cpp:1740
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cBytes"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1701
-#: src/frontend/datasources/ImportFileWidget.cpp:1788
+#: src/frontend/datasources/ImportFileWidget.cpp:1743
+#: src/frontend/datasources/ImportFileWidget.cpp:1835
 #, kde-format
 msgid "Summary:"
 msgstr "Samenvatting:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1724
-#: src/frontend/datasources/ImportFileWidget.cpp:1729
+#: src/frontend/datasources/ImportFileWidget.cpp:1766
+#: src/frontend/datasources/ImportFileWidget.cpp:1771
 #, kde-format
 msgid "Content:"
 msgstr "Inhoud:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1760
+#: src/frontend/datasources/ImportFileWidget.cpp:1807
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Kon bestand %1 niet openen om te lezen."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1790
+#: src/frontend/datasources/ImportFileWidget.cpp:1837
 #, kde-format
 msgid "Number of sub-directories: %1"
 msgstr "Aantal sub-mappen: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1793
+#: src/frontend/datasources/ImportFileWidget.cpp:1840
 #, kde-format
 msgid "Couldn't read the directory %1."
 msgstr "Kon de map %1 niet lezen."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1882
+#: src/frontend/datasources/ImportFileWidget.cpp:1929
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -13505,119 +13649,119 @@ msgstr ""
 "Ongeldig aantal rijen. Controleer 'Eindrij' en 'Beginrij'. 'Eindrij' moet "
 "groter zijn dan 'Beginrij' of -1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1893
+#: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
 msgid "Initialization failed: %1"
 msgstr "Initialisatie is mislukt: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1918
+#: src/frontend/datasources/ImportFileWidget.cpp:1965
 #, kde-format
 msgid "Failed to connect to the local socket: %1"
 msgstr "Verbinden is mislukt met lokale socket: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1935
+#: src/frontend/datasources/ImportFileWidget.cpp:1982
 #, kde-format
 msgid "Failed to connect to the TCP socket. %1"
 msgstr "Verbinden is mislukt met TCP-socket. %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1941
-#: src/frontend/datasources/ImportFileWidget.cpp:1970
+#: src/frontend/datasources/ImportFileWidget.cpp:1988
+#: src/frontend/datasources/ImportFileWidget.cpp:2017
 #, kde-format
 msgid "Socket operation timed out."
 msgstr "Tijdslimiet voor bewerking met socket is verstreken."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1955
+#: src/frontend/datasources/ImportFileWidget.cpp:2002
 #, kde-format
 msgid "Not ready for read after 2s:"
 msgstr "Niet gereed om te lezen na 2 sec:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1974
+#: src/frontend/datasources/ImportFileWidget.cpp:2021
 #, kde-format
 msgid "Unable to bind: "
 msgstr "Kan niet verbinden: "
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1991
+#: src/frontend/datasources/ImportFileWidget.cpp:2038
 #, kde-format
 msgid "Parse Error: %1"
 msgstr "Fout bij ontleden: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1993
+#: src/frontend/datasources/ImportFileWidget.cpp:2040
 #, kde-format
 msgid "Not ready for read after 2 sec"
 msgstr "Niet gereed voor lezen na 2 sec"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1997
+#: src/frontend/datasources/ImportFileWidget.cpp:2044
 #, kde-format
 msgid "Failed to open serial port. error: %1"
 msgstr "Seriële poort openen is mislukt. fout: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2016
+#: src/frontend/datasources/ImportFileWidget.cpp:2063
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Nog geen gegevens aangekomen over geselecteerd onderwerp"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2278
+#: src/frontend/datasources/ImportFileWidget.cpp:2349
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Geen HDF5-bestand: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2336
+#: src/frontend/datasources/ImportFileWidget.cpp:2407
 #, kde-format
 msgid "Parsing ODS file %1 failed."
 msgstr "Ontleden van ODS-bestand %1 is mislukt."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2741
+#: src/frontend/datasources/ImportFileWidget.cpp:2819
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Kon niet inschrijven op alle beschikbare onderwerpen."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2749
+#: src/frontend/datasources/ImportFileWidget.cpp:2827
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "Verbinden met '%1' is mislukt. Fout %2"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2771
+#: src/frontend/datasources/ImportFileWidget.cpp:2849
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Verbinding met '%1' verbroken."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2837
+#: src/frontend/datasources/ImportFileWidget.cpp:2915
 #, kde-format
 msgid "Available (%1)"
 msgstr "Beschikbaar (%1)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2941
+#: src/frontend/datasources/ImportFileWidget.cpp:3019
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Gebruikersnaam of wachtwoord is fout"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2944
+#: src/frontend/datasources/ImportFileWidget.cpp:3022
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "Client-ID niet geaccepteerd"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2948
+#: src/frontend/datasources/ImportFileWidget.cpp:3026
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "De broker %1 is onbereikbaar."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2951
+#: src/frontend/datasources/ImportFileWidget.cpp:3029
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "De client heeft geen permissie te verbinden."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2954
+#: src/frontend/datasources/ImportFileWidget.cpp:3032
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Er is een onbekende fout."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2960
-#: src/frontend/datasources/ImportFileWidget.cpp:2963
+#: src/frontend/datasources/ImportFileWidget.cpp:3038
+#: src/frontend/datasources/ImportFileWidget.cpp:3041
 #, kde-format
 msgid "An error occurred."
 msgstr "Er is een fout."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2977
+#: src/frontend/datasources/ImportFileWidget.cpp:3055
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Verbinden met '%1:%2' kon niet binnen de tijdslimiet."
@@ -14673,9 +14817,11 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #. i18n: ectx: property (text), widget (QLabel, lVariables)
+#. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:269
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:347
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:377
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:80
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:423
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:385
 #: src/frontend/ui/dockwidgets/matrixdock.ui:117
@@ -15212,7 +15358,7 @@ msgstr "Formule toepassen"
 msgid "Delete variable"
 msgstr "Variabele wissen"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:877
+#: src/frontend/dockwidgets/ColumnDock.cpp:880
 #, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
@@ -17739,6 +17885,7 @@ msgstr "Selectie &wissen"
 #. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:361
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:89
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:292
 #: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
@@ -18603,16 +18750,41 @@ msgstr "Alle invoer onder de huidige automatisch herberekenen."
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Bevestiging vragen bij herstarten van de backend."
 
-#: src/frontend/SettingsScriptingPage.cpp:48
+#: src/frontend/SettingsScriptingPage.cpp:39
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Select the Virtual Environment"
+msgid "Select the path to a python virtual environment."
+msgstr "Selecteer de virtuele omgeving"
+
+#: src/frontend/SettingsScriptingPage.cpp:52
 #, kde-format
 msgid "System Default"
 msgstr "Systeemstandaard"
 
-#: src/frontend/SettingsScriptingPage.cpp:55
+#: src/frontend/SettingsScriptingPage.cpp:60
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment"
 msgstr "Selecteer de virtuele omgeving"
+
+#: src/frontend/SettingsScriptingPage.cpp:194
+#, kde-format
+msgid "The selected virtual environment does not contain a python executable."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:200
+#, kde-format
+msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:228
+#: src/frontend/SettingsScriptingPage.cpp:259
+#, kde-format
+msgid ""
+"The selected virtual environment python version does not match the "
+"application python version."
+msgstr ""
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -21705,9 +21877,9 @@ msgid "Collection"
 msgstr "Collectie"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, lPreviewLines)
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #. i18n: ectx: property (text), widget (QLabel, lPreviewRows)
-#. i18n: ectx: property (text), widget (QLabel, lPreviewLines)
 #: src/frontend/ui/datasources/fitsoptionswidget.ui:19
 #: src/frontend/ui/datasources/hdf5optionswidget.ui:41
 #: src/frontend/ui/datasources/importfilewidget.ui:502
@@ -21715,6 +21887,7 @@ msgstr "Collectie"
 #: src/frontend/ui/datasources/matiooptionswidget.ui:80
 #: src/frontend/ui/datasources/netcdfoptionswidget.ui:53
 #: src/frontend/ui/datasources/odsoptionswidget.ui:40
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:19
 #: src/frontend/ui/datasources/rootoptionswidget.ui:114
 #: src/frontend/ui/datasources/xlsxoptionswidget.ui:40
 #, kde-format
@@ -21729,6 +21902,7 @@ msgstr "Aantal rijen in voorbeeld:"
 #: src/frontend/ui/datasources/matiooptionswidget.ui:115
 #: src/frontend/ui/datasources/netcdfoptionswidget.ui:88
 #: src/frontend/ui/datasources/odsoptionswidget.ui:70
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:52
 #: src/frontend/ui/datasources/rootoptionswidget.ui:147
 #: src/frontend/ui/datasources/xlsxoptionswidget.ui:70
 #, kde-format
@@ -22245,6 +22419,20 @@ msgstr "QoS 1"
 #, kde-format
 msgid "QoS 2"
 msgstr "QoS 2"
+
+#. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:96
+#, fuzzy, kde-format
+#| msgid "Select All"
+msgid "Deselect All"
+msgstr "Alles selecteren"
+
+#. i18n: ectx: property (toolTip), widget (QListWidget, lwColumns)
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:105
+#, fuzzy, kde-format
+#| msgid " Select the file to import"
+msgid "Select which columns to import"
+msgstr "Selecteer het te importeren bestand"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30
@@ -28526,9 +28714,6 @@ msgstr "Kon bestand niet openen:"
 #~ msgid "Column Statisti&cs"
 #~ msgstr "&Kolomstatistieken"
 
-#~ msgid "Created: %1"
-#~ msgstr "Aangemaakt: %1"
-
 #~ msgid "Advanced"
 #~ msgstr "Gevorderd"
 
@@ -29428,9 +29613,6 @@ msgstr "Kon bestand niet openen:"
 
 #~ msgid "Full Day Name"
 #~ msgstr "Gehele dagnaam"
-
-#~ msgid "Format type:"
-#~ msgstr "Formaattype:"
 
 #~ msgid "Free ranges"
 #~ msgstr "Bereiken vrijmaken"
@@ -30756,9 +30938,6 @@ msgstr "Kon bestand niet openen:"
 
 #~ msgid "BINARY matrix data"
 #~ msgstr "BINAIRE matrix-gegevens"
-
-#~ msgid "Number of rows:"
-#~ msgstr "Aantal rijen:"
 
 #~ msgid "no plugin to load element '%1' found"
 #~ msgstr "geen plugin voor inlezen element '%1' gevonden"
