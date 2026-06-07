@@ -15,6 +15,7 @@
 #endif
 
 #include <KConfigGroup>
+#include <KMessageWidget>
 
 #include <QDir>
 #include <QDirIterator>
@@ -24,6 +25,7 @@
 #include <QProcess>
 #include <QPushButton>
 #include <QStandardPaths>
+#include <QTimer>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -34,6 +36,8 @@ SettingsScriptingPage::SettingsScriptingPage(QWidget* parent)
 
 	// show information about the current python runtime
 #ifdef HAVE_PYTHON_SCRIPTING
+	ui.tbAddPythonEnvironment->setToolTip(i18n("Select the path to a python virtual environment."));
+
 	ui.tbAddPythonEnvironment->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 	ui.lPythonVersion->setText(QString::fromUtf8(Py_GetVersion()).section(QLatin1Char(' '), 0, 0));
 	if (Py_IsInitialized()) {
@@ -52,9 +56,10 @@ SettingsScriptingPage::SettingsScriptingPage(QWidget* parent)
 	loadSettings();
 
 	connect(ui.tbAddPythonEnvironment, &QPushButton::clicked, this, [&] {
+		showErrorMessage(QString());
 		const QString path = QFileDialog::getExistingDirectory(this, i18nc("@title:window", "Select the Virtual Environment"), QDir::homePath(), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 		if (!path.isEmpty())
-			this->addEnvironment(path, true);
+			this->addEnvironment(path, true, false, true);
 	});
 	connect(ui.cbPythonEnvironment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsScriptingPage::changed);
 #else
@@ -172,7 +177,7 @@ void SettingsScriptingPage::scanForVenvs(const QString& dir) {
  * as the display label and the site-packages path as item data.
  * Skips duplicates.
  */
-void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selectAfterAdd, bool blockSignalsDuringSelect) {
+void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selectAfterAdd, bool blockSignalsDuringSelect, bool isUserSelected) {
 	// Derive site-packages path — only accept environments matching the runtime Python minor version
 	const QString envPath = QDir::cleanPath(QFileInfo(rawEnvPath).absoluteFilePath());
 	QString executablePath;
@@ -184,13 +189,25 @@ void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selec
 #endif
 	QString cfgPath = envPath + QStringLiteral("/pyvenv.cfg");
 
-	if (!QFile(executablePath).exists() || !QFile(cfgPath).exists())
+	if (!QFile(executablePath).exists()) {
+		if (isUserSelected)
+			showErrorMessage(i18n("The selected virtual environment does not contain a python executable."));
 		return;
+	}
+
+	if (!QFile(cfgPath).exists()) {
+		if (isUserSelected)
+			showErrorMessage(i18n("The selected virtual environment does not contain a pyvenv.cfg file."));
+		return;
+	}
 
 	// Skip if already added
 	for (int i = 0; i < ui.cbPythonEnvironment->count(); ++i) {
-		if (ui.cbPythonEnvironment->itemData(i).toString() == executablePath)
+		if (ui.cbPythonEnvironment->itemData(i).toString() == executablePath) {
+			if (selectAfterAdd)
+				ui.cbPythonEnvironment->setCurrentIndex(i);
 			return;
+		}
 	}
 
 	// try to read the venv version from pyvenv.cfg file
@@ -206,6 +223,9 @@ void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selec
 					ui.cbPythonEnvironment->addItem(envPath, executablePath);
 					if (selectAfterAdd)
 						ui.cbPythonEnvironment->setCurrentText(envPath);
+				} else {
+					if (isUserSelected)
+						showErrorMessage(i18n("The selected virtual environment python version does not match the application python version."));
 				}
 				return;
 			}
@@ -214,7 +234,7 @@ void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selec
 
 	// fallback to process method if we cannot read venv version from pyvenv.cfg file
 	auto* process = new QProcess(this);
-	connect(process, &QProcess::finished, this, [process, envPath, executablePath, this, selectAfterAdd, blockSignalsDuringSelect](int exitCode, QProcess::ExitStatus exitStatus) {
+	connect(process, &QProcess::finished, this, [process, envPath, executablePath, this, selectAfterAdd, blockSignalsDuringSelect, isUserSelected](int exitCode, QProcess::ExitStatus exitStatus) {
 		if (exitStatus == QProcess::NormalExit && exitCode == 0) {
 			const QString version = QString::fromUtf8(process->readAllStandardOutput()).trimmed();
 			if (version == m_pythonMinorVersion) {
@@ -234,6 +254,9 @@ void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selec
 						ui.cbPythonEnvironment->setCurrentText(envPath);
 					}
 				}
+			} else {
+				if (isUserSelected)
+					showErrorMessage(i18n("The selected virtual environment python version does not match the application python version."));
 			}
 		}
 		process->deleteLater();
@@ -245,4 +268,23 @@ void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selec
 	});
 
 	process->start(executablePath, {QStringLiteral("-c"), QStringLiteral("import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")});
+}
+
+void SettingsScriptingPage::showErrorMessage(const QString& message) {
+	if (message.isEmpty()) {
+		if (m_messageWidget && m_messageWidget->isVisible())
+			m_messageWidget->close();
+	} else {
+		if (!m_messageWidget) {
+			m_messageWidget = new KMessageWidget(this);
+			m_messageWidget->setMessageType(KMessageWidget::Error);
+			ui.gridLayout->addWidget(m_messageWidget, 6, 0, 1, 4);
+		}
+		m_messageWidget->setText(message);
+		m_messageWidget->animatedShow();
+		QTimer::singleShot(10000, [this] {
+			if (m_messageWidget && m_messageWidget->isVisible())
+				m_messageWidget->close();
+		});
+	}
 }

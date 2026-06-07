@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-01 00:39+0000\n"
+"POT-Creation-Date: 2026-06-07 00:39+0000\n"
 "PO-Revision-Date: 2026-04-03 20:35+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -420,7 +420,7 @@ msgstr "несовместимый тип фильтра"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/statistics/HypothesisTest.cpp:1911
+#: src/backend/statistics/HypothesisTest.cpp:1925
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:867
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1926
 #, kde-format
@@ -561,7 +561,7 @@ msgid "%1: set random values"
 msgstr "%1: задание случайных значений"
 
 #: src/backend/core/column/Column.cpp:1053
-#: src/frontend/datasources/ImportFileWidget.cpp:1698
+#: src/frontend/datasources/ImportFileWidget.cpp:1740
 #, kde-format
 msgid "Size: %1"
 msgstr "Размер: %1"
@@ -1215,6 +1215,8 @@ msgstr ""
 "случае передачи пустого выражения формат определяется автоматически."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:224
+#: src/backend/datasources/filters/ParquetFilter.cpp:76
+#: src/backend/datasources/filters/ParquetFilter.cpp:89
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Число столбцов: %1"
@@ -1308,6 +1310,7 @@ msgstr "Не удалось открыть устройство или файл,
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
 #: src/backend/datasources/filters/OdsFilter.cpp:400
+#: src/backend/datasources/filters/ParquetFilter.cpp:415
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
@@ -1430,7 +1433,7 @@ msgid "Free space: %1 bytes"
 msgstr "Свободное пространство: %1 байт"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:199
-#: src/frontend/datasources/ImportFileWidget.cpp:1789
+#: src/frontend/datasources/ImportFileWidget.cpp:1836
 #, kde-format
 msgid "Number of files: %1"
 msgstr "Число файлов: %1"
@@ -1635,7 +1638,7 @@ msgstr "Не удалось найти h5dump."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1673
+#: src/frontend/datasources/ImportFileWidget.cpp:1715
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Не удалось прочитать файл %1."
@@ -2239,6 +2242,126 @@ msgstr "Лист не найден."
 msgid "Invalid sheet index."
 msgstr "Недопустимый индекс листа."
 
+#: src/backend/datasources/filters/ParquetFilter.cpp:61
+#, fuzzy, kde-format
+#| msgid "Could not open %1"
+msgid "Could not open file."
+msgstr "Не удалось открыть %1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:70
+#, kde-format
+msgid "Format: Apache Parquet"
+msgstr ""
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:72
+#, fuzzy, kde-format
+#| msgid "Version:"
+msgid "Version: %1"
+msgstr "Версия:"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:74
+#, fuzzy, kde-format
+#| msgid "Created: %1"
+msgid "Created by: %1"
+msgstr "Создано: %1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:78
+#: src/backend/datasources/filters/ParquetFilter.cpp:101
+#, fuzzy, kde-format
+#| msgid "Number of groups: %1"
+msgid "Number of rows: %1"
+msgstr "Число групп: %1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:80
+#, fuzzy, kde-format
+#| msgid "Number of groups: %1"
+msgid "Number of row groups: %1"
+msgstr "Число групп: %1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:87
+#, kde-format
+msgid "Format: Arrow IPC (Feather)"
+msgstr ""
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:91
+#, fuzzy, kde-format
+#| msgid "Number of records: %1"
+msgid "Number of record batches: %1"
+msgstr "Число записей: %1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:99
+#, fuzzy, kde-format
+msgid "Format: Apache ORC"
+msgstr "Формат:"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:103
+#, fuzzy, kde-format
+#| msgid "Number of lines: %1"
+msgid "Number of stripes: %1"
+msgstr "Число строк: %1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:212
+#, fuzzy, kde-format
+#| msgid "Could not open %1"
+msgid "Could not open file: %1"
+msgstr "Не удалось открыть %1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:224
+#, fuzzy, kde-format
+#| msgid "Failed to open the file '%1'."
+msgid "Failed to open Parquet file: %1"
+msgstr "Не удалось открыть файл «%1»."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:235
+#: src/backend/datasources/filters/ParquetFilter.cpp:244
+#, fuzzy, kde-format
+#| msgid "Failed to read image data"
+msgid "Failed to read Parquet table: %1"
+msgstr "Ошибка чтения данных изображения"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:254
+#, fuzzy, kde-format
+#| msgid "Failed to open the file '%1'."
+msgid "Failed to open Arrow IPC file: %1"
+msgstr "Не удалось открыть файл «%1»."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:265
+#, fuzzy, kde-format
+#| msgid "Failed to read data."
+msgid "Failed to read record batch %1: %2"
+msgstr "Не удалось считать данные."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:272
+#, fuzzy, kde-format
+#| msgid "Failed to initialize %1."
+msgid "Failed to assemble table: %1"
+msgstr "Не удалось инициализировать %1."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:282
+#, fuzzy, kde-format
+#| msgid "Failed to open the file '%1'."
+msgid "Failed to open ORC file: %1"
+msgstr "Не удалось открыть файл «%1»."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:292
+#: src/backend/datasources/filters/ParquetFilter.cpp:300
+#, fuzzy, kde-format
+#| msgid "Failed to read data."
+msgid "Failed to read ORC table: %1"
+msgstr "Не удалось считать данные."
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:309
+#, fuzzy, kde-format
+#| msgid "unsupported float type for rank 1"
+msgid "Unsupported file format."
+msgstr "неподдерживаемый тип числа с плавающей точкой для ранга 1"
+
+#: src/backend/datasources/filters/ParquetFilter.cpp:398
+#, fuzzy, kde-format
+#| msgid "No file provided for import."
+msgid "The file has no data to import."
+msgstr "Не указан файл для импорта."
+
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:64
 #, kde-format
@@ -2500,47 +2623,47 @@ msgstr "Листы: "
 msgid "Invalid region specified."
 msgstr "Указана недопустимая область."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:743
 #, kde-format
 msgid "Device doesn't exist."
 msgstr "Устройство не существует."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:746
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr "Недостаточно прав для открытия устройства."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:749
 #, kde-format
 msgid "Device already opened."
 msgstr "Устройство уже открыто."
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:752
 #, kde-format
 msgid "Device is not open."
 msgstr "Устройство не открыто."
 
-#: src/backend/datasources/LiveDataSource.cpp:749
+#: src/backend/datasources/LiveDataSource.cpp:755
 #, kde-format
 msgid "Failed to read data."
 msgstr "Не удалось считать данные."
 
-#: src/backend/datasources/LiveDataSource.cpp:752
+#: src/backend/datasources/LiveDataSource.cpp:758
 #, kde-format
 msgid "Device not available."
 msgstr "Устройство недоступно."
 
-#: src/backend/datasources/LiveDataSource.cpp:755
+#: src/backend/datasources/LiveDataSource.cpp:761
 #, kde-format
 msgid "Timeout occurred."
 msgstr "Истекло время ожидания."
 
-#: src/backend/datasources/LiveDataSource.cpp:760
+#: src/backend/datasources/LiveDataSource.cpp:766
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Произошла следующая ошибка: %1."
 
-#: src/backend/datasources/LiveDataSource.cpp:771
+#: src/backend/datasources/LiveDataSource.cpp:777
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Ошибка последовательного порта"
@@ -6876,7 +6999,7 @@ msgstr "Статистика (распределение)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:740
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
-#: src/frontend/datasources/ImportFileWidget.cpp:1419
+#: src/frontend/datasources/ImportFileWidget.cpp:1446
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
@@ -7977,320 +8100,320 @@ msgstr "Размер выборок должен быть одинаковым."
 msgid "Standard Deviation"
 msgstr "Стандартное отклонение"
 
-#: src/backend/statistics/HypothesisTest.cpp:586
+#: src/backend/statistics/HypothesisTest.cpp:585
 #, kde-format
 msgid "Null Hypothesis"
 msgstr "Нулевая гипотеза"
 
-#: src/backend/statistics/HypothesisTest.cpp:587
+#: src/backend/statistics/HypothesisTest.cpp:586
 #, kde-format
 msgid "Alternate Hypothesis"
 msgstr "Альтернативная гипотеза"
 
-#: src/backend/statistics/HypothesisTest.cpp:589
+#: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
 msgid "Descriptive Statistics"
 msgstr "Описательная статистика"
 
-#: src/backend/statistics/HypothesisTest.cpp:590
+#: src/backend/statistics/HypothesisTest.cpp:589
 #, kde-format
 msgid "Test Statistics"
 msgstr "Статистика критерия"
 
-#: src/backend/statistics/HypothesisTest.cpp:590
+#: src/backend/statistics/HypothesisTest.cpp:589
 #, kde-format
 msgid "Significance Level"
 msgstr "Уровень значимости"
 
-#: src/backend/statistics/HypothesisTest.cpp:591
+#: src/backend/statistics/HypothesisTest.cpp:590
 #, kde-format
 msgid "p-Value"
 msgstr "p-значение"
 
-#: src/backend/statistics/HypothesisTest.cpp:594
+#: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
 msgid "Degrees of Freedom Between Groups"
 msgstr "Степени свободы между группами"
 
-#: src/backend/statistics/HypothesisTest.cpp:595
+#: src/backend/statistics/HypothesisTest.cpp:594
 #, kde-format
 msgid "Degrees of Freedom Within Groups"
 msgstr "Степени свободы внутри групп"
 
-#: src/backend/statistics/HypothesisTest.cpp:597
+#: src/backend/statistics/HypothesisTest.cpp:596
 #, kde-format
 msgid "Degrees of Freedom Treatment"
 msgstr "Степени свободы обработки"
 
-#: src/backend/statistics/HypothesisTest.cpp:598
+#: src/backend/statistics/HypothesisTest.cpp:597
 #, kde-format
 msgid "Degrees of Freedom Residuals"
 msgstr "Степени свободы остатков"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/backend/statistics/HypothesisTest.cpp:600
-#: src/backend/statistics/HypothesisTest.cpp:658
+#: src/backend/statistics/HypothesisTest.cpp:602
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "Степени свободы"
 
-#: src/backend/statistics/HypothesisTest.cpp:605
-#: src/backend/statistics/HypothesisTest.cpp:609
-#: src/backend/statistics/HypothesisTest.cpp:612
+#: src/backend/statistics/HypothesisTest.cpp:600
+#, kde-format
+msgid "Effective Degrees of Freedom"
+msgstr "Эффективные степени свободы"
+
+#: src/backend/statistics/HypothesisTest.cpp:607
+#: src/backend/statistics/HypothesisTest.cpp:611
 #: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:616
 #, kde-format
 msgid "t-Value"
 msgstr "t-значение"
 
-#: src/backend/statistics/HypothesisTest.cpp:605
+#: src/backend/statistics/HypothesisTest.cpp:607
 #, kde-format
 msgid "Test Mean"
 msgstr "Среднее значение теста"
 
-#: src/backend/statistics/HypothesisTest.cpp:606
-#: src/backend/statistics/HypothesisTest.cpp:610
+#: src/backend/statistics/HypothesisTest.cpp:608
 #: src/backend/statistics/HypothesisTest.cpp:612
 #: src/backend/statistics/HypothesisTest.cpp:614
+#: src/backend/statistics/HypothesisTest.cpp:616
 #, kde-format
 msgid "Mean Difference"
 msgstr "Средняя разность"
 
-#: src/backend/statistics/HypothesisTest.cpp:609
+#: src/backend/statistics/HypothesisTest.cpp:611
 #, kde-format
 msgid "Pooled Variance"
 msgstr "Объединённая дисперсия"
 
-#: src/backend/statistics/HypothesisTest.cpp:610
-#: src/backend/statistics/HypothesisTest.cpp:615
+#: src/backend/statistics/HypothesisTest.cpp:612
+#: src/backend/statistics/HypothesisTest.cpp:617
 #, kde-format
 msgid "Mean Difference Standard Error"
 msgstr "Средняя разница Стандартная ошибка"
 
-#: src/backend/statistics/HypothesisTest.cpp:617
-#: src/backend/statistics/HypothesisTest.cpp:623
+#: src/backend/statistics/HypothesisTest.cpp:619
+#: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "F-Statistic"
 msgstr "F-статистика"
 
-#: src/backend/statistics/HypothesisTest.cpp:617
+#: src/backend/statistics/HypothesisTest.cpp:619
 #, kde-format
 msgid "Sum of Squares Between Groups"
 msgstr "Сумма квадратов между группами"
 
-#: src/backend/statistics/HypothesisTest.cpp:618
+#: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
 msgid "Sum of Squares Within Groups"
 msgstr "Сумма квадратов внутри групп"
 
-#: src/backend/statistics/HypothesisTest.cpp:619
+#: src/backend/statistics/HypothesisTest.cpp:621
 #, kde-format
 msgid "Mean Squares Between Groups"
 msgstr "Средние квадраты между группами"
 
-#: src/backend/statistics/HypothesisTest.cpp:620
+#: src/backend/statistics/HypothesisTest.cpp:622
 #, kde-format
 msgid "Mean Squares Within Groups"
 msgstr "Средние квадраты внутри групп"
 
-#: src/backend/statistics/HypothesisTest.cpp:623
+#: src/backend/statistics/HypothesisTest.cpp:625
 #, kde-format
 msgid "Sum of Squares Treatment"
 msgstr "Сумма квадратов обработки"
 
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:626
 #, kde-format
 msgid "Sum of Squares Residuals"
 msgstr "Сумма квадратов остатков"
 
-#: src/backend/statistics/HypothesisTest.cpp:625
+#: src/backend/statistics/HypothesisTest.cpp:627
 #, kde-format
 msgid "Sum of Squares Within Subjects"
 msgstr "Сумма квадратов внутри групп"
 
-#: src/backend/statistics/HypothesisTest.cpp:626
+#: src/backend/statistics/HypothesisTest.cpp:628
 #, kde-format
 msgid "Mean Squares Treatment"
 msgstr "Средние квадраты обработки"
 
-#: src/backend/statistics/HypothesisTest.cpp:626
+#: src/backend/statistics/HypothesisTest.cpp:628
 #, kde-format
 msgid "Mean Squares Residuals"
 msgstr "Средние квадраты остатков"
 
-#: src/backend/statistics/HypothesisTest.cpp:628
+#: src/backend/statistics/HypothesisTest.cpp:630
 #, kde-format
 msgid "U"
 msgstr "U"
 
-#: src/backend/statistics/HypothesisTest.cpp:628
-#: src/backend/statistics/HypothesisTest.cpp:632
-#: src/backend/statistics/HypothesisTest.cpp:652
-#: src/backend/statistics/HypothesisTest.cpp:655
+#: src/backend/statistics/HypothesisTest.cpp:630
+#: src/backend/statistics/HypothesisTest.cpp:634
+#: src/backend/statistics/HypothesisTest.cpp:654
+#: src/backend/statistics/HypothesisTest.cpp:657
 #, kde-format
 msgid "z-Value"
 msgstr "z-значение"
 
-#: src/backend/statistics/HypothesisTest.cpp:629
+#: src/backend/statistics/HypothesisTest.cpp:631
 #, kde-format
 msgid "Rank Sum 1"
 msgstr "Сумма рангов 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:629
+#: src/backend/statistics/HypothesisTest.cpp:631
 #, kde-format
 msgid "Mean Rank 1"
 msgstr "Средний ранг 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:630
+#: src/backend/statistics/HypothesisTest.cpp:632
 #, kde-format
 msgid "Rank Sum 2"
 msgstr "Сумма рангов 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:630
+#: src/backend/statistics/HypothesisTest.cpp:632
 #, kde-format
 msgid "Mean Rank 2"
 msgstr "Средний ранг 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:632
+#: src/backend/statistics/HypothesisTest.cpp:634
 #, kde-format
 msgid "W"
 msgstr "W"
 
-#: src/backend/statistics/HypothesisTest.cpp:633
+#: src/backend/statistics/HypothesisTest.cpp:635
 #, kde-format
 msgid "Positive Rank Sum"
 msgstr "Положительная сумма рангов"
 
-#: src/backend/statistics/HypothesisTest.cpp:633
+#: src/backend/statistics/HypothesisTest.cpp:635
 #, kde-format
 msgid "Positive Rank Mean"
 msgstr "Среднее положительных рангов"
 
-#: src/backend/statistics/HypothesisTest.cpp:634
+#: src/backend/statistics/HypothesisTest.cpp:636
 #, kde-format
 msgid "Positive Rank Count"
 msgstr "Количество положительных рангов"
 
-#: src/backend/statistics/HypothesisTest.cpp:634
+#: src/backend/statistics/HypothesisTest.cpp:636
 #, kde-format
 msgid "Negative Rank Sum"
 msgstr "Отрицательная сумма рангов"
 
-#: src/backend/statistics/HypothesisTest.cpp:635
+#: src/backend/statistics/HypothesisTest.cpp:637
 #, kde-format
 msgid "Negative Rank Mean"
 msgstr "Среднее отрицательного рангов"
 
-#: src/backend/statistics/HypothesisTest.cpp:635
+#: src/backend/statistics/HypothesisTest.cpp:637
 #, kde-format
 msgid "Negative Rank Count"
 msgstr "Количество отрицательных рангов"
 
-#: src/backend/statistics/HypothesisTest.cpp:636
+#: src/backend/statistics/HypothesisTest.cpp:638
 #, kde-format
 msgid "Tie Count"
 msgstr "Количество связей"
 
-#: src/backend/statistics/HypothesisTest.cpp:638
-#: src/backend/statistics/HypothesisTest.cpp:646
+#: src/backend/statistics/HypothesisTest.cpp:640
+#: src/backend/statistics/HypothesisTest.cpp:648
 #, kde-format
 msgid "H"
 msgstr "H"
 
-#: src/backend/statistics/HypothesisTest.cpp:640
+#: src/backend/statistics/HypothesisTest.cpp:642
 #, kde-format
 msgid "Q"
 msgstr "Q"
 
-#: src/backend/statistics/HypothesisTest.cpp:642
 #: src/backend/statistics/HypothesisTest.cpp:644
+#: src/backend/statistics/HypothesisTest.cpp:646
 #, kde-format
 msgid "Chi2"
 msgstr "χ²"
 
-#: src/backend/statistics/HypothesisTest.cpp:646
+#: src/backend/statistics/HypothesisTest.cpp:648
 #, kde-format
 msgid "Event Count 1"
 msgstr "Количество событий 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:647
+#: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "Censored Count 1"
 msgstr "Количество цензурированных значений 1"
 
-#: src/backend/statistics/HypothesisTest.cpp:647
+#: src/backend/statistics/HypothesisTest.cpp:649
 #, kde-format
 msgid "Total Count 1"
 msgstr "Общее число: 1"
 
 # BUGME: please add @title:window --aspotashev
-#: src/backend/statistics/HypothesisTest.cpp:648
+#: src/backend/statistics/HypothesisTest.cpp:650
 #, kde-format
 msgid "Event Count 2"
 msgstr "Количество событий 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:648
+#: src/backend/statistics/HypothesisTest.cpp:650
 #, kde-format
 msgid "Censored Count 2"
 msgstr "Количество отфильтрованных значений: 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:649
+#: src/backend/statistics/HypothesisTest.cpp:651
 #, kde-format
 msgid "Total Count 2"
 msgstr "Общее количество: 2"
 
-#: src/backend/statistics/HypothesisTest.cpp:651
+#: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: src/backend/statistics/HypothesisTest.cpp:651
+#: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
 msgid "Kendall's Tau"
 msgstr "Тау Кендалла"
 
-#: src/backend/statistics/HypothesisTest.cpp:652
+#: src/backend/statistics/HypothesisTest.cpp:654
 #, kde-format
 msgid "Sen's Slope"
 msgstr "Наклон Сена"
 
-#: src/backend/statistics/HypothesisTest.cpp:653
-#: src/backend/statistics/HypothesisTest.cpp:656
+#: src/backend/statistics/HypothesisTest.cpp:655
+#: src/backend/statistics/HypothesisTest.cpp:658
 #, kde-format
 msgid "Sample Size"
 msgstr "Размер выборки"
 
-#: src/backend/statistics/HypothesisTest.cpp:655
+#: src/backend/statistics/HypothesisTest.cpp:657
 #, kde-format
 msgid "Number of Runs"
 msgstr "Количество прогонов"
 
-#: src/backend/statistics/HypothesisTest.cpp:658
+#: src/backend/statistics/HypothesisTest.cpp:661
 #, kde-format
 msgid "Stability Ratio"
 msgstr "Коэффициент устойчивости"
 
-#: src/backend/statistics/HypothesisTest.cpp:659
-#, kde-format
-msgid "Effective Degrees of Freedom"
-msgstr "Эффективные степени свободы"
-
-#: src/backend/statistics/HypothesisTest.cpp:660
+#: src/backend/statistics/HypothesisTest.cpp:661
 #, kde-format
 msgid "Average Successive Difference"
 msgstr "Среднее последовательное различие"
 
-#: src/backend/statistics/HypothesisTest.cpp:663
+#: src/backend/statistics/HypothesisTest.cpp:664
 #, kde-format
 msgid "Statistical Conclusion"
 msgstr "Статистический вывод"
 
-#: src/backend/statistics/HypothesisTest.cpp:675
+#: src/backend/statistics/HypothesisTest.cpp:676
 #, kde-format
 msgid "No variable columns provided."
 msgstr "Столбцы переменных не указаны."
 
-#: src/backend/statistics/HypothesisTest.cpp:952
+#: src/backend/statistics/HypothesisTest.cpp:966
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
@@ -8299,7 +8422,7 @@ msgstr ""
 "При уровне значимости %1 среднее значение генеральной совокупности "
 "значительно отличается от %2. %3"
 
-#: src/backend/statistics/HypothesisTest.cpp:957
+#: src/backend/statistics/HypothesisTest.cpp:971
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
@@ -8308,8 +8431,8 @@ msgstr ""
 "При уровне значимости %1 среднее значение генеральной совокупности не "
 "отличается существенно от %2. %3"
 
-#: src/backend/statistics/HypothesisTest.cpp:1042
-#: src/backend/statistics/HypothesisTest.cpp:1110
+#: src/backend/statistics/HypothesisTest.cpp:1056
+#: src/backend/statistics/HypothesisTest.cpp:1124
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
@@ -8318,8 +8441,8 @@ msgstr ""
 "При уровне значимости %1 средние значения генеральной совокупности "
 "значительно различаются. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1045
-#: src/backend/statistics/HypothesisTest.cpp:1113
+#: src/backend/statistics/HypothesisTest.cpp:1059
+#: src/backend/statistics/HypothesisTest.cpp:1127
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
@@ -8328,8 +8451,8 @@ msgstr ""
 "При уровне значимости %1 средние значения совокупностей статистически не "
 "различаются. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1164
-#: src/backend/statistics/HypothesisTest.cpp:1225
+#: src/backend/statistics/HypothesisTest.cpp:1178
+#: src/backend/statistics/HypothesisTest.cpp:1239
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
@@ -8338,8 +8461,8 @@ msgstr ""
 "При уровне значимости %1 по крайней мере одно групповое среднее значительно "
 "отличается. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1166
-#: src/backend/statistics/HypothesisTest.cpp:1227
+#: src/backend/statistics/HypothesisTest.cpp:1180
+#: src/backend/statistics/HypothesisTest.cpp:1241
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group means. "
@@ -8348,9 +8471,9 @@ msgstr ""
 "При уровне значимости %1 значимых различий между средними значениями групп "
 "не выявлено. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1284
-#: src/backend/statistics/HypothesisTest.cpp:1342
-#: src/backend/statistics/HypothesisTest.cpp:1401
+#: src/backend/statistics/HypothesisTest.cpp:1298
+#: src/backend/statistics/HypothesisTest.cpp:1356
+#: src/backend/statistics/HypothesisTest.cpp:1415
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
@@ -8359,9 +8482,9 @@ msgstr ""
 "При уровне значимости %1 распределение в по крайней мере одной группе "
 "значительно отличается. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1287
-#: src/backend/statistics/HypothesisTest.cpp:1345
-#: src/backend/statistics/HypothesisTest.cpp:1404
+#: src/backend/statistics/HypothesisTest.cpp:1301
+#: src/backend/statistics/HypothesisTest.cpp:1359
+#: src/backend/statistics/HypothesisTest.cpp:1418
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
@@ -8370,7 +8493,7 @@ msgstr ""
 "При уровне значимости %1 значимых различий между распределениями групп не "
 "выявлено. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1464
+#: src/backend/statistics/HypothesisTest.cpp:1478
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
@@ -8379,20 +8502,20 @@ msgstr ""
 "При уровне значимости %1 по крайней мере одна группа статистически значимо "
 "отличается. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1466
+#: src/backend/statistics/HypothesisTest.cpp:1480
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. %2"
 msgstr ""
 "При уровне значимости %1 значимых различий между группами не выявлено. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1492
-#: src/backend/statistics/HypothesisTest.cpp:1559
+#: src/backend/statistics/HypothesisTest.cpp:1506
+#: src/backend/statistics/HypothesisTest.cpp:1573
 #, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr "Столбец «%1» должен быть целочисленного типа."
 
-#: src/backend/statistics/HypothesisTest.cpp:1530
+#: src/backend/statistics/HypothesisTest.cpp:1544
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
@@ -8401,7 +8524,7 @@ msgstr ""
 "При уровне значимости %1 наблюдаемые частоты не соответствуют ожидаемому "
 "распределению частот. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1534
+#: src/backend/statistics/HypothesisTest.cpp:1548
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
@@ -8410,79 +8533,79 @@ msgstr ""
 "На уровне значимости %1 наблюдаемые частоты соответствуют ожидаемому "
 "распределению частот. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1579
+#: src/backend/statistics/HypothesisTest.cpp:1593
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
 msgstr "Размер каждого столбца в таблице сопряжённости должен быть одинаковым."
 
-#: src/backend/statistics/HypothesisTest.cpp:1595
+#: src/backend/statistics/HypothesisTest.cpp:1609
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are dependent. %2"
 msgstr "При уровне значимости %1 обе категориальные переменные зависимы. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1597
+#: src/backend/statistics/HypothesisTest.cpp:1611
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are independent. %2"
 msgstr "При уровне значимости %1 обе категориальные переменные независимы. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1615
+#: src/backend/statistics/HypothesisTest.cpp:1629
 #, kde-format
 msgid "Three columns are required."
 msgstr "Требуются три столбца."
 
-#: src/backend/statistics/HypothesisTest.cpp:1624
+#: src/backend/statistics/HypothesisTest.cpp:1638
 #, kde-format
 msgid "Status column should be of integer type."
 msgstr "Столбец состояния должен быть целочисленного типа."
 
-#: src/backend/statistics/HypothesisTest.cpp:1629
+#: src/backend/statistics/HypothesisTest.cpp:1643
 #, kde-format
 msgid "Group column should be of integer type."
 msgstr "Столбец группировки должен быть целого типа."
 
-#: src/backend/statistics/HypothesisTest.cpp:1634
+#: src/backend/statistics/HypothesisTest.cpp:1648
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr ""
 "Столбцы «Время», «Состояние» и «Группа» должны иметь одинаковый размер."
 
-#: src/backend/statistics/HypothesisTest.cpp:1653
+#: src/backend/statistics/HypothesisTest.cpp:1667
 #, kde-format
 msgid "Status column values must be either 0 or 1."
 msgstr "Значения в столбце состояния должны быть либо 0, либо 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1658
+#: src/backend/statistics/HypothesisTest.cpp:1672
 #, kde-format
 msgid "Group column values must be either 0 or 1."
 msgstr "Значения столбца группировки должны быть либо 0, либо 1."
 
-#: src/backend/statistics/HypothesisTest.cpp:1674
+#: src/backend/statistics/HypothesisTest.cpp:1688
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
 "Столбцы «Время», «Статус» и «Группа» должны содержать одинаковое количество "
 "значений."
 
-#: src/backend/statistics/HypothesisTest.cpp:1682
+#: src/backend/statistics/HypothesisTest.cpp:1696
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
 msgstr "Группа 1 требует не менее %1 выборок."
 
-#: src/backend/statistics/HypothesisTest.cpp:1687
+#: src/backend/statistics/HypothesisTest.cpp:1701
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
 msgstr "Группе 2 требуется не менее %1 выборок."
 
-#: src/backend/statistics/HypothesisTest.cpp:1697
+#: src/backend/statistics/HypothesisTest.cpp:1711
 #, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. %2"
 msgstr "При уровне значимости %1 кривые выживания существенно различаются. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1700
+#: src/backend/statistics/HypothesisTest.cpp:1714
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
@@ -8491,7 +8614,7 @@ msgstr ""
 "При уровне значимости %1 значимых различий между кривыми выживания не "
 "обнаружено. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1740
+#: src/backend/statistics/HypothesisTest.cpp:1754
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
@@ -8500,7 +8623,7 @@ msgstr ""
 "При уровне значимости %1 в данных обнаружена значимая монотонная тенденция. "
 "%2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1742
+#: src/backend/statistics/HypothesisTest.cpp:1756
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant positive monotonic "
@@ -8509,7 +8632,7 @@ msgstr ""
 "При уровне значимости %1 выявлен значительный положительный монотонный "
 "тренд. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1744
+#: src/backend/statistics/HypothesisTest.cpp:1758
 #, kde-format
 msgid ""
 "At the significance level %1, there is a significant negative monotonic "
@@ -8518,18 +8641,18 @@ msgstr ""
 "При уровне значимости %1 выявлена значимая отрицательная монотонная "
 "тенденция. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1746
+#: src/backend/statistics/HypothesisTest.cpp:1760
 #, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. %2"
 msgstr "При уровне значимости %1 монотонный тренд не обнаружен. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1782
+#: src/backend/statistics/HypothesisTest.cpp:1796
 #, kde-format
 msgid "At the significance level %1, the data are not randomly distributed. %2"
 msgstr "При уровне значимости %1 данные распределены не случайным образом. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1784
+#: src/backend/statistics/HypothesisTest.cpp:1798
 #, kde-format
 msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
@@ -8538,7 +8661,7 @@ msgstr ""
 "При уровне значимости %1 данные показывают кластеризацию или тренд "
 "(недостаточно серий). %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1787
+#: src/backend/statistics/HypothesisTest.cpp:1801
 #, kde-format
 msgid ""
 "At the significance level %1, the data show oscillation or over-control (too "
@@ -8547,19 +8670,19 @@ msgstr ""
 "При уровне значимости %1 данные показывают колебания или избыточный контроль "
 "(слишком много серий). %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1789
+#: src/backend/statistics/HypothesisTest.cpp:1803
 #, kde-format
 msgid ""
 "At the significance level %1, the data appear to be randomly distributed. %2"
 msgstr "При уровне значимости %1 данные случайно распределены. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1823
+#: src/backend/statistics/HypothesisTest.cpp:1837
 #, kde-format
 msgid ""
 "At the significance level %1, the process is unstable (non-homogeneous). %2"
 msgstr "При уровне значимости %1 процесс нестабилен (неоднородн). %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1825
+#: src/backend/statistics/HypothesisTest.cpp:1839
 #, kde-format
 msgid ""
 "At the significance level %1, the process shows oscillation or over-control. "
@@ -8568,7 +8691,7 @@ msgstr ""
 "При уровне значимости %1 процесс демонстрирует колебания или избыточное "
 "управление. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1827
+#: src/backend/statistics/HypothesisTest.cpp:1841
 #, kde-format
 msgid ""
 "At the significance level %1, the process shows clustering, shifting, or "
@@ -8577,20 +8700,20 @@ msgstr ""
 "При уровне значимости %1 процесс демонстрирует кластеризацию, смещение или "
 "тренды. %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1829
+#: src/backend/statistics/HypothesisTest.cpp:1843
 #, kde-format
 msgid ""
 "At the significance level %1, the process appears to be stable "
 "(homogeneous). %2"
 msgstr "При уровне значимости %1 процесс стабилен (однородный). %2"
 
-#: src/backend/statistics/HypothesisTest.cpp:1921
+#: src/backend/statistics/HypothesisTest.cpp:1935
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
 #, kde-format
 msgid "Parametric"
 msgstr "В параметрической форме"
 
-#: src/backend/statistics/HypothesisTest.cpp:1951
+#: src/backend/statistics/HypothesisTest.cpp:1965
 #, kde-format
 msgid "Non-Parametric"
 msgstr "В непараметрической форме"
@@ -9571,7 +9694,7 @@ msgstr "Вертикальная ось"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2410
 #: src/frontend/ActionsManager.cpp:551
-#: src/frontend/datasources/ImportFileWidget.cpp:113
+#: src/frontend/datasources/ImportFileWidget.cpp:114
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:117
 #: src/frontend/widgets/BackgroundWidget.cpp:123
@@ -11518,265 +11641,270 @@ msgstr "%1: использование логических координат"
 msgid "%1: set logical position"
 msgstr "%1: задание логической позиции"
 
-#: src/frontend/AboutDialog.cpp:93
+#: src/frontend/AboutDialog.cpp:96
 #, kde-format
 msgid "What's new"
 msgstr "Нововведения"
 
-#: src/frontend/AboutDialog.cpp:99
+#: src/frontend/AboutDialog.cpp:102
 #, kde-format
 msgid "Copy Environment"
 msgstr "Копировать переменные окружения"
 
-#: src/frontend/AboutDialog.cpp:104
+#: src/frontend/AboutDialog.cpp:107
 #, kde-format
 msgid "Copy Citation"
 msgstr "Скопировать цитату"
 
-#: src/frontend/AboutDialog.cpp:108
+#: src/frontend/AboutDialog.cpp:111
 #, kde-format
 msgid "Donate"
 msgstr "Поддержать"
 
-#: src/frontend/AboutDialog.cpp:124
+#: src/frontend/AboutDialog.cpp:127
 #, kde-format
 msgid "Copy to Clipboard"
 msgstr "Копировать в буфер обмена"
 
 # BUGME: please add colon (:) --aspotashev
-#: src/frontend/AboutDialog.cpp:150
+#: src/frontend/AboutDialog.cpp:153
 #, kde-format
 msgid "Release build"
 msgstr "Финальная сборка"
 
-#: src/frontend/AboutDialog.cpp:152
+#: src/frontend/AboutDialog.cpp:155
 #, kde-format
 msgid "Debug build"
 msgstr "Отладочная сборка"
 
-#: src/frontend/AboutDialog.cpp:188
+#: src/frontend/AboutDialog.cpp:191
 #, kde-format
 msgid "System:"
 msgstr "Система:"
 
-#: src/frontend/AboutDialog.cpp:189
+#: src/frontend/AboutDialog.cpp:192
 #, kde-format
 msgid "Locale:"
 msgstr "Язык системы:"
 
 #. i18n("Used Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
-#: src/frontend/AboutDialog.cpp:191 src/frontend/ui/settingsgeneralpage.ui:183
+#: src/frontend/AboutDialog.cpp:194 src/frontend/ui/settingsgeneralpage.ui:183
 #, kde-format
 msgid "Number Format:"
 msgstr "Числовой формат:"
 
-#: src/frontend/AboutDialog.cpp:191
+#: src/frontend/AboutDialog.cpp:194
 #, kde-format
 msgid "Updated on restart"
 msgstr "Обновляется при перезапуске"
 
-#: src/frontend/AboutDialog.cpp:192
+#: src/frontend/AboutDialog.cpp:195
 #, kde-format
 msgid "Architecture:"
 msgstr "Архитектура:"
 
-#: src/frontend/AboutDialog.cpp:193
+#: src/frontend/AboutDialog.cpp:196
 #, kde-format
 msgid "Kernel: "
 msgstr "Ядро: "
 
-#: src/frontend/AboutDialog.cpp:201
+#: src/frontend/AboutDialog.cpp:204
 #, kde-format
 msgid "Visit website:"
 msgstr "Перейти на веб-сайт:"
 
-#: src/frontend/AboutDialog.cpp:203
+#: src/frontend/AboutDialog.cpp:206
 #, kde-format
 msgid "Watch video tutorials:"
 msgstr "Просмотр видеоуроков:"
 
-#: src/frontend/AboutDialog.cpp:204
+#: src/frontend/AboutDialog.cpp:207
 #, kde-format
 msgid "Discuss on Mastodon:"
 msgstr "Обсудить в Mastodon:"
 
-#: src/frontend/AboutDialog.cpp:205
+#: src/frontend/AboutDialog.cpp:208
 #, kde-format
 msgid "Development:"
 msgstr "Разработка:"
 
-#: src/frontend/AboutDialog.cpp:206
+#: src/frontend/AboutDialog.cpp:209
 #, kde-format
 msgid "Please report bugs to:"
 msgstr "Сообщения об ошибках отправляйте по адресу:"
 
-#: src/frontend/AboutDialog.cpp:207
+#: src/frontend/AboutDialog.cpp:210
 #, kde-format
 msgid "Partly funded by:"
 msgstr "Частично финансируется:"
 
 # BUGME: please add @title:window --aspotashev
-#: src/frontend/AboutDialog.cpp:218 src/frontend/AboutDialog.cpp:384
-#: src/frontend/AboutDialog.cpp:385 src/frontend/SettingsScriptingPage.cpp:61
+#: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
 #, kde-format
 msgid "missing"
 msgstr "отсутствуют"
 
-#: src/frontend/AboutDialog.cpp:224
+#: src/frontend/AboutDialog.cpp:227
 #, kde-format
 msgid "Python scripting support"
 msgstr "Поддержка сценариев на Python"
 
-#: src/frontend/AboutDialog.cpp:230
+#: src/frontend/AboutDialog.cpp:233
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "Интерфейс для математических приложений"
 
-#: src/frontend/AboutDialog.cpp:236
+#: src/frontend/AboutDialog.cpp:239
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
 msgstr ""
 "Поддержка файлов данных в формате FITS (Flexible Image Transport System)"
 
-#: src/frontend/AboutDialog.cpp:242
+#: src/frontend/AboutDialog.cpp:245
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "Поддержка языка разметки Markdown"
 
-#: src/frontend/AboutDialog.cpp:248
+#: src/frontend/AboutDialog.cpp:251
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "Библиотека C++ для линейной алгебры"
 
-#: src/frontend/AboutDialog.cpp:254
+#: src/frontend/AboutDialog.cpp:257
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr "Быстрое преобразование Фурье в западном полушарии"
 
-#: src/frontend/AboutDialog.cpp:255
+#: src/frontend/AboutDialog.cpp:258
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "Библиотека GNU Scientific"
 
-#: src/frontend/AboutDialog.cpp:261
+#: src/frontend/AboutDialog.cpp:264
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "Высокопроизводительный комплекс управления и хранения данных"
 
-#: src/frontend/AboutDialog.cpp:267
+#: src/frontend/AboutDialog.cpp:270
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "Механизм подсветки синтаксиса"
 
-#: src/frontend/AboutDialog.cpp:273
+#: src/frontend/AboutDialog.cpp:276
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "Сбор отзывов пользователей"
 
-#: src/frontend/AboutDialog.cpp:279
+#: src/frontend/AboutDialog.cpp:282
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "Функции ошибок комплексного аргумента и связанные с ними"
 
 # BUGME: please add @title:window --aspotashev
-#: src/frontend/AboutDialog.cpp:285
+#: src/frontend/AboutDialog.cpp:288
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "Импорт файлов проектов Origin OPJ"
 
-#: src/frontend/AboutDialog.cpp:291
+#: src/frontend/AboutDialog.cpp:294
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "Импорт двоичных файлов MATLAB MAT"
 
-#: src/frontend/AboutDialog.cpp:297
+#: src/frontend/AboutDialog.cpp:300
 #, kde-format
 msgid "MCAP file support"
 msgstr "Поддержка файлов MCAP"
 
-#: src/frontend/AboutDialog.cpp:303
+#: src/frontend/AboutDialog.cpp:306
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "Network Common Data Format (NetCDF)"
 
-#: src/frontend/AboutDialog.cpp:309
+#: src/frontend/AboutDialog.cpp:312
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "Импорт файлов ODS (Open Document Spreadsheet)"
 
-#: src/frontend/AboutDialog.cpp:315
+#: src/frontend/AboutDialog.cpp:318
 #, kde-format
 msgid "PDF rendering library"
 msgstr "Библиотека для отрисовки PDF"
 
-#: src/frontend/AboutDialog.cpp:321
+#: src/frontend/AboutDialog.cpp:324
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "Предоставляет доступные действия для конкретной цели."
 
-#: src/frontend/AboutDialog.cpp:322
+#: src/frontend/AboutDialog.cpp:325
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Система продвинутого закрепления Qt"
 
-#: src/frontend/AboutDialog.cpp:328
+#: src/frontend/AboutDialog.cpp:331
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "Поддержка данных от брокеров MQTT"
 
-#: src/frontend/AboutDialog.cpp:334
+#: src/frontend/AboutDialog.cpp:337
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "Поддержка функциональности последовательного порта"
 
-#: src/frontend/AboutDialog.cpp:340
+#: src/frontend/AboutDialog.cpp:343
 #, kde-format
 msgid "SVG export support"
 msgstr "Поддержка экспорта в SVG"
 
-#: src/frontend/AboutDialog.cpp:346
+#: src/frontend/AboutDialog.cpp:349
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Импорт файлов Excel в формате xlsx"
 
-#: src/frontend/AboutDialog.cpp:352
+#: src/frontend/AboutDialog.cpp:355
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "Чтение и запись наборов данных из SAS, Stata и SPSS"
 
-#: src/frontend/AboutDialog.cpp:358
+#: src/frontend/AboutDialog.cpp:361
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "Поддержка файлов Binary Log File (BLF)"
 
-#: src/frontend/AboutDialog.cpp:361 src/frontend/AboutDialog.cpp:386
+#: src/frontend/AboutDialog.cpp:367
+#, kde-format
+msgid "Apache Parquet, Arrow IPC (Feather) and Apache ORC file support"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:370 src/frontend/AboutDialog.cpp:395
 #, kde-format
 msgid "C++ Compiler: "
 msgstr "Компилятор С++: "
 
-#: src/frontend/AboutDialog.cpp:366 src/frontend/AboutDialog.cpp:386
+#: src/frontend/AboutDialog.cpp:375 src/frontend/AboutDialog.cpp:395
 #, kde-format
 msgid "C++ Compiler Flags:"
 msgstr "Флаги компилятора C++:"
 
-#: src/frontend/AboutDialog.cpp:380
+#: src/frontend/AboutDialog.cpp:389
 #, kde-format
 msgid "Components:"
 msgstr "Компоненты:"
 
-#: src/frontend/AboutDialog.cpp:381
+#: src/frontend/AboutDialog.cpp:390
 #, kde-format
 msgid "Qt"
 msgstr "Qt"
 
-#: src/frontend/AboutDialog.cpp:382
+#: src/frontend/AboutDialog.cpp:391
 #, kde-format
 msgid "KDE Frameworks"
 msgstr "KDE Frameworks"
 
-#: src/frontend/AboutDialog.cpp:397
+#: src/frontend/AboutDialog.cpp:406
 #, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
@@ -13291,93 +13419,108 @@ msgstr ""
 "Либо отсутствует соединение, либо не была оформлена подписка, либо фильтр "
 "файлов не в ASCII-формате."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:111
+#: src/frontend/datasources/ImportFileWidget.cpp:112
 #, kde-format
 msgid "ASCII data"
 msgstr "ASCII-данные"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:112
+#: src/frontend/datasources/ImportFileWidget.cpp:113
 #, kde-format
 msgid "Binary data"
 msgstr "Двоичные данные"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:115
+#: src/frontend/datasources/ImportFileWidget.cpp:116
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:118
+#: src/frontend/datasources/ImportFileWidget.cpp:119
 #, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
 msgstr "Электронная таблица OpenDocument (ODS)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:121
+#: src/frontend/datasources/ImportFileWidget.cpp:122
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr "Hierarchical Data Format 5 (HDF5)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:124
+#: src/frontend/datasources/ImportFileWidget.cpp:125
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr "Network Common Data Format (NetCDF)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:127
+#: src/frontend/datasources/ImportFileWidget.cpp:128
 #, kde-format
 msgid "Vector Binary Logfile (BLF)"
 msgstr "Vector Binary Logfile (BLF)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:130
+#: src/frontend/datasources/ImportFileWidget.cpp:131
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr "Flexible Image Transport System Data Format (FITS)"
 
 # BUGME: please add ctxt --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:132
+#: src/frontend/datasources/ImportFileWidget.cpp:133
 #, kde-format
 msgid "JSON Data"
 msgstr "Данные JSON"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:134
-#: src/frontend/datasources/ImportFileWidget.cpp:156
+#: src/frontend/datasources/ImportFileWidget.cpp:135
+#: src/frontend/datasources/ImportFileWidget.cpp:164
 #, kde-format
 msgid "ROOT (CERN)"
 msgstr "ROOT (CERN)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:136
-#: src/frontend/datasources/ImportFileWidget.cpp:158
+#: src/frontend/datasources/ImportFileWidget.cpp:137
+#: src/frontend/datasources/ImportFileWidget.cpp:166
 #, kde-format
 msgid "Spice"
 msgstr "Spice"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:138
+#: src/frontend/datasources/ImportFileWidget.cpp:139
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr "SAS, Stata или SPSS"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:141
+#: src/frontend/datasources/ImportFileWidget.cpp:142
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr "MAT-файл (MATLAB)"
 
 # BUGME: please add ctxt --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:144
+#: src/frontend/datasources/ImportFileWidget.cpp:145
 #, kde-format
 msgid "MCAP Data"
 msgstr "Данные MCAP"
 
+#: src/frontend/datasources/ImportFileWidget.cpp:148
+#, kde-format
+msgid "Apache Parquet"
+msgstr ""
+
+#: src/frontend/datasources/ImportFileWidget.cpp:149
+#, kde-format
+msgid "Arrow IPC (Feather)"
+msgstr ""
+
+#: src/frontend/datasources/ImportFileWidget.cpp:151
+#, kde-format
+msgid "Apache ORC"
+msgstr ""
+
 # BUGME: please add ctxt --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:153
+#: src/frontend/datasources/ImportFileWidget.cpp:161
 #, kde-format
 msgid "ASCII Data"
 msgstr "Данные ASCII"
 
 # BUGME: please add ctxt --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:154
+#: src/frontend/datasources/ImportFileWidget.cpp:162
 #, kde-format
 msgid "Binary Data"
 msgstr "Двоичные данные"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:166
+#: src/frontend/datasources/ImportFileWidget.cpp:174
 #, kde-format
 msgid ""
 "If this option is checked, only the link to the file is stored in the "
@@ -13386,7 +13529,7 @@ msgstr ""
 "При включении этого параметра в проекте сохраняется только ссылка на файл, "
 "но не сохраняется содержимое."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:167
+#: src/frontend/datasources/ImportFileWidget.cpp:175
 #, kde-format
 msgid ""
 "If this option is checked, the relative path of the file (relative to "
@@ -13396,30 +13539,30 @@ msgstr ""
 "(относительно папки проекта)."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/frontend/datasources/ImportFileWidget.cpp:175
+#: src/frontend/datasources/ImportFileWidget.cpp:183
 #: src/frontend/ui/dockwidgets/livedatadock.ui:361
 #, kde-format
 msgid "Continuously Fixed"
 msgstr "Непрерывно фиксированное число"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/frontend/datasources/ImportFileWidget.cpp:176
+#: src/frontend/datasources/ImportFileWidget.cpp:184
 #: src/frontend/ui/dockwidgets/livedatadock.ui:366
 #, kde-format
 msgid "From End"
 msgstr "С конца"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:177
+#: src/frontend/datasources/ImportFileWidget.cpp:185
 #, kde-format
 msgid "Till End"
 msgstr "До конца"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:178
+#: src/frontend/datasources/ImportFileWidget.cpp:186
 #, kde-format
 msgid "Whole File"
 msgstr "Весь файл"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:213
+#: src/frontend/datasources/ImportFileWidget.cpp:221
 #, kde-format
 msgid ""
 "Specify how the data source has to be processed on every read:"
@@ -13439,7 +13582,7 @@ msgstr ""
 "обрабатывается целый файл. Доступно только для источников данных «Файл или "
 "именованный канал».</li></ul>"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:224
+#: src/frontend/datasources/ImportFileWidget.cpp:232
 #, kde-format
 msgid ""
 "Number of samples (lines) to be processed on every read.\n"
@@ -13450,7 +13593,7 @@ msgstr ""
 "Указывается только в режимах чтения «Фиксированная непрерывная обработка» и "
 "«С конца»."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:230
+#: src/frontend/datasources/ImportFileWidget.cpp:238
 #, kde-format
 msgid ""
 "Specify when and how frequently the data source needs to be read:"
@@ -13464,12 +13607,12 @@ msgstr ""
 "поступлении новых данных — чтение источника данных выполняется при "
 "поступлении новых данных.</li></ul>"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:238
+#: src/frontend/datasources/ImportFileWidget.cpp:246
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
 msgstr "Укажите как часто необходимо выполнять чтение источника данных."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:243
+#: src/frontend/datasources/ImportFileWidget.cpp:251
 #, kde-format
 msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
@@ -13478,7 +13621,7 @@ msgstr ""
 "Укажите количество выборок, которые должны храниться в памяти после чтения.\n"
 "Используйте параметр «Все» при необходимости сохранять все данные."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:248
+#: src/frontend/datasources/ImportFileWidget.cpp:256
 #, kde-format
 msgid ""
 "Enable to use the first row of the selected data region for the column names "
@@ -13488,12 +13631,12 @@ msgstr ""
 "столбцов таблицы"
 
 # BUGME: please add context --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:263
+#: src/frontend/datasources/ImportFileWidget.cpp:271
 #, kde-format
 msgid "Manage MQTT connections"
 msgstr "Управление соединениями MQTT"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:265
+#: src/frontend/datasources/ImportFileWidget.cpp:273
 #: src/frontend/dockwidgets/LiveDataDock.cpp:84
 #, kde-format
 msgid ""
@@ -13503,44 +13646,44 @@ msgstr ""
 "Укажите сообщение LWT (Last Will and Testament). Необходимо подписаться хотя "
 "бы на одну тему."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:282
+#: src/frontend/datasources/ImportFileWidget.cpp:290
 #, kde-format
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr "Количество строк вычисляется из значений на вкладке «Часть данных»"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1055
+#: src/frontend/datasources/ImportFileWidget.cpp:1079
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
 msgstr "Выбор каталога источника данных"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1057
+#: src/frontend/datasources/ImportFileWidget.cpp:1081
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Выбор файла источника данных"
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:1087
+#: src/frontend/datasources/ImportFileWidget.cpp:1111
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Выбор файла DBC"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1087
+#: src/frontend/datasources/ImportFileWidget.cpp:1111
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "Файл DBC (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1174
+#: src/frontend/datasources/ImportFileWidget.cpp:1198
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
 "Файлы проектов Origin следует открывать через «Импорт → Проект Origin»."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1177
+#: src/frontend/datasources/ImportFileWidget.cpp:1201
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
@@ -13548,7 +13691,7 @@ msgstr ""
 "Файлы проекта LabPlot требуется открывать через «Импорт → Проект LabPlot»!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1325
+#: src/frontend/datasources/ImportFileWidget.cpp:1349
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
@@ -13556,7 +13699,7 @@ msgstr "Формат данных"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1326
+#: src/frontend/datasources/ImportFileWidget.cpp:1350
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -13565,120 +13708,120 @@ msgid "Preview"
 msgstr "Предпросмотр"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1328
+#: src/frontend/datasources/ImportFileWidget.cpp:1352
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Фрагмент считываемых данных"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1371
+#: src/frontend/datasources/ImportFileWidget.cpp:1398
 #, kde-format
 msgid "Data format && preview"
 msgstr "Формат и предпросмотр данных"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1418
+#: src/frontend/datasources/ImportFileWidget.cpp:1445
 #, kde-format
 msgid "Automatic"
 msgstr "Автоматически"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1665
+#: src/frontend/datasources/ImportFileWidget.cpp:1707
 #, kde-format
 msgid "file command not found"
 msgstr "Команда «file» не найдена"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1676
+#: src/frontend/datasources/ImportFileWidget.cpp:1718
 #, kde-format
 msgid "cannot open"
 msgstr "cannot open"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1681
+#: src/frontend/datasources/ImportFileWidget.cpp:1723
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Тип файла:</b> %1"
 
 # BUGME: please add @title:tab --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:1686
-#: src/frontend/datasources/ImportFileWidget.cpp:1774
+#: src/frontend/datasources/ImportFileWidget.cpp:1728
+#: src/frontend/datasources/ImportFileWidget.cpp:1821
 #, kde-format
 msgid "General:"
 msgstr "Общие сведения:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1688
-#: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1690
-#: src/frontend/datasources/ImportFileWidget.cpp:1776
-#: src/frontend/datasources/ImportFileWidget.cpp:1777
-#: src/frontend/datasources/ImportFileWidget.cpp:1778
+#: src/frontend/datasources/ImportFileWidget.cpp:1730
+#: src/frontend/datasources/ImportFileWidget.cpp:1731
+#: src/frontend/datasources/ImportFileWidget.cpp:1732
+#: src/frontend/datasources/ImportFileWidget.cpp:1823
+#: src/frontend/datasources/ImportFileWidget.cpp:1824
+#: src/frontend/datasources/ImportFileWidget.cpp:1825
 #, kde-format
 msgid "yes"
 msgstr "да"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1688
-#: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1690
-#: src/frontend/datasources/ImportFileWidget.cpp:1776
-#: src/frontend/datasources/ImportFileWidget.cpp:1777
-#: src/frontend/datasources/ImportFileWidget.cpp:1778
+#: src/frontend/datasources/ImportFileWidget.cpp:1730
+#: src/frontend/datasources/ImportFileWidget.cpp:1731
+#: src/frontend/datasources/ImportFileWidget.cpp:1732
+#: src/frontend/datasources/ImportFileWidget.cpp:1823
+#: src/frontend/datasources/ImportFileWidget.cpp:1824
+#: src/frontend/datasources/ImportFileWidget.cpp:1825
 #, kde-format
 msgid "no"
 msgstr "нет"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1688
-#: src/frontend/datasources/ImportFileWidget.cpp:1776
+#: src/frontend/datasources/ImportFileWidget.cpp:1730
+#: src/frontend/datasources/ImportFileWidget.cpp:1823
 #, kde-format
 msgid "Readable: %1"
 msgstr "Доступен для чтения: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1777
+#: src/frontend/datasources/ImportFileWidget.cpp:1731
+#: src/frontend/datasources/ImportFileWidget.cpp:1824
 #, kde-format
 msgid "Writable: %1"
 msgstr "Доступен для записи: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1690
-#: src/frontend/datasources/ImportFileWidget.cpp:1778
+#: src/frontend/datasources/ImportFileWidget.cpp:1732
+#: src/frontend/datasources/ImportFileWidget.cpp:1825
 #, kde-format
 msgid "Executable: %1"
 msgstr "Исполняемый: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1692
-#: src/frontend/datasources/ImportFileWidget.cpp:1780
+#: src/frontend/datasources/ImportFileWidget.cpp:1734
+#: src/frontend/datasources/ImportFileWidget.cpp:1827
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Время создания: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1693
-#: src/frontend/datasources/ImportFileWidget.cpp:1781
+#: src/frontend/datasources/ImportFileWidget.cpp:1735
+#: src/frontend/datasources/ImportFileWidget.cpp:1828
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Время последнего изменения метаданных: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1694
-#: src/frontend/datasources/ImportFileWidget.cpp:1782
+#: src/frontend/datasources/ImportFileWidget.cpp:1736
+#: src/frontend/datasources/ImportFileWidget.cpp:1829
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Время последнего изменения: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1695
-#: src/frontend/datasources/ImportFileWidget.cpp:1783
+#: src/frontend/datasources/ImportFileWidget.cpp:1737
+#: src/frontend/datasources/ImportFileWidget.cpp:1830
 #, kde-format
 msgid "Last read: %1"
 msgstr "Время последнего чтения: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1696
-#: src/frontend/datasources/ImportFileWidget.cpp:1784
+#: src/frontend/datasources/ImportFileWidget.cpp:1738
+#: src/frontend/datasources/ImportFileWidget.cpp:1831
 #, kde-format
 msgid "Owner: %1"
 msgstr "Владелец: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1697
-#: src/frontend/datasources/ImportFileWidget.cpp:1785
+#: src/frontend/datasources/ImportFileWidget.cpp:1739
+#: src/frontend/datasources/ImportFileWidget.cpp:1832
 #, kde-format
 msgid "Group: %1"
 msgstr "Группа: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1698
+#: src/frontend/datasources/ImportFileWidget.cpp:1740
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
@@ -13687,35 +13830,35 @@ msgstr[1] "%1 байта"
 msgstr[2] "%1 байтов"
 msgstr[3] "%1 байт"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1701
-#: src/frontend/datasources/ImportFileWidget.cpp:1788
+#: src/frontend/datasources/ImportFileWidget.cpp:1743
+#: src/frontend/datasources/ImportFileWidget.cpp:1835
 #, kde-format
 msgid "Summary:"
 msgstr "Описание:"
 
 # BUGME: please add context --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:1724
-#: src/frontend/datasources/ImportFileWidget.cpp:1729
+#: src/frontend/datasources/ImportFileWidget.cpp:1766
+#: src/frontend/datasources/ImportFileWidget.cpp:1771
 #, kde-format
 msgid "Content:"
 msgstr "Содержимое:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1760
+#: src/frontend/datasources/ImportFileWidget.cpp:1807
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Не удалось открыть файл %1 для чтения."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1790
+#: src/frontend/datasources/ImportFileWidget.cpp:1837
 #, kde-format
 msgid "Number of sub-directories: %1"
 msgstr "Количество вложенных папок: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1793
+#: src/frontend/datasources/ImportFileWidget.cpp:1840
 #, kde-format
 msgid "Couldn't read the directory %1."
 msgstr "Не удалось прочитать каталог «%1»."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1882
+#: src/frontend/datasources/ImportFileWidget.cpp:1929
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -13726,120 +13869,120 @@ msgstr ""
 "параметра «Начальная строка» или равно -1."
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:1893
+#: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
 msgid "Initialization failed: %1"
 msgstr "Ошибка инициализации: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1918
+#: src/frontend/datasources/ImportFileWidget.cpp:1965
 #, kde-format
 msgid "Failed to connect to the local socket: %1"
 msgstr "Не удалось подключиться к локальному сокету: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1935
+#: src/frontend/datasources/ImportFileWidget.cpp:1982
 #, kde-format
 msgid "Failed to connect to the TCP socket. %1"
 msgstr "Не удалось подключиться к TCP-сокету. %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1941
-#: src/frontend/datasources/ImportFileWidget.cpp:1970
+#: src/frontend/datasources/ImportFileWidget.cpp:1988
+#: src/frontend/datasources/ImportFileWidget.cpp:2017
 #, kde-format
 msgid "Socket operation timed out."
 msgstr "Время ожидания сокета истекло."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1955
+#: src/frontend/datasources/ImportFileWidget.cpp:2002
 #, kde-format
 msgid "Not ready for read after 2s:"
 msgstr "Не готово к чтению после 2 с:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1974
+#: src/frontend/datasources/ImportFileWidget.cpp:2021
 #, kde-format
 msgid "Unable to bind: "
 msgstr "Не удалось выполнить привязку:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1991
+#: src/frontend/datasources/ImportFileWidget.cpp:2038
 #, kde-format
 msgid "Parse Error: %1"
 msgstr "Ошибка разбора: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1993
+#: src/frontend/datasources/ImportFileWidget.cpp:2040
 #, kde-format
 msgid "Not ready for read after 2 sec"
 msgstr "Не готово к чтению через 2 с"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1997
+#: src/frontend/datasources/ImportFileWidget.cpp:2044
 #, kde-format
 msgid "Failed to open serial port. error: %1"
 msgstr "Не удалось открыть последовательный порт: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2016
+#: src/frontend/datasources/ImportFileWidget.cpp:2063
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Данные по выбранной теме пока не поступили"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2278
+#: src/frontend/datasources/ImportFileWidget.cpp:2349
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Файл не соответствует формату HDF5: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2336
+#: src/frontend/datasources/ImportFileWidget.cpp:2407
 #, kde-format
 msgid "Parsing ODS file %1 failed."
 msgstr "Ошибка при разборе файла ODS «%1»."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2741
+#: src/frontend/datasources/ImportFileWidget.cpp:2819
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Не удалось подписаться на все доступные темы."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2749
+#: src/frontend/datasources/ImportFileWidget.cpp:2827
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "Не удалось подключиться к «%1». Ошибка %2."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2771
+#: src/frontend/datasources/ImportFileWidget.cpp:2849
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Разорвано соединение с «%1»."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2837
+#: src/frontend/datasources/ImportFileWidget.cpp:2915
 #, kde-format
 msgid "Available (%1)"
 msgstr "Доступно (%1)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2941
+#: src/frontend/datasources/ImportFileWidget.cpp:3019
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Неправильное имя пользователя или пароль"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2944
+#: src/frontend/datasources/ImportFileWidget.cpp:3022
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "Идентификатор клиента не был принят"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2948
+#: src/frontend/datasources/ImportFileWidget.cpp:3026
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Брокер %1 недоступен."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2951
+#: src/frontend/datasources/ImportFileWidget.cpp:3029
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "У клиента отсутствуют полномочия на подключение."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2954
+#: src/frontend/datasources/ImportFileWidget.cpp:3032
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Произошла неизвестная ошибка."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2960
-#: src/frontend/datasources/ImportFileWidget.cpp:2963
+#: src/frontend/datasources/ImportFileWidget.cpp:3038
+#: src/frontend/datasources/ImportFileWidget.cpp:3041
 #, kde-format
 msgid "An error occurred."
 msgstr "Произошла ошибка."
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:2977
+#: src/frontend/datasources/ImportFileWidget.cpp:3055
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Истекло время ожидания подключения к «%1:%2»."
@@ -14907,9 +15050,11 @@ msgstr ""
 # BUGME: please split --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #. i18n: ectx: property (text), widget (QLabel, lVariables)
+#. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:269
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:347
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:377
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:80
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:423
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:385
 #: src/frontend/ui/dockwidgets/matrixdock.ui:117
@@ -15445,7 +15590,7 @@ msgstr "Применить формулу"
 msgid "Delete variable"
 msgstr "Удалить переменную"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:877
+#: src/frontend/dockwidgets/ColumnDock.cpp:880
 #, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
@@ -18010,6 +18155,7 @@ msgstr "Сня&ть выделение"
 #. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:361
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:89
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:292
 #: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
@@ -18892,19 +19038,44 @@ msgstr ""
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Запрашивать подтверждение при перезапуске базовой системы."
 
-#: src/frontend/SettingsScriptingPage.cpp:48
+# BUGME: please add semantic ctxt --aspotashev
+#: src/frontend/SettingsScriptingPage.cpp:39
+#, fuzzy, kde-format
+#| msgid " Select the image file"
+msgid "Select the path to a python virtual environment."
+msgstr " Выберите файл изображения"
+
+#: src/frontend/SettingsScriptingPage.cpp:52
 #, fuzzy, kde-format
 #| msgid "Save Default"
 msgid "System Default"
 msgstr "Сохранить по умолчанию"
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/frontend/SettingsScriptingPage.cpp:55
+#: src/frontend/SettingsScriptingPage.cpp:60
 #, fuzzy, kde-format
 #| msgid " Select the image file"
 msgctxt "@title:window"
 msgid "Select the Virtual Environment"
 msgstr " Выберите файл изображения"
+
+#: src/frontend/SettingsScriptingPage.cpp:194
+#, kde-format
+msgid "The selected virtual environment does not contain a python executable."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:200
+#, kde-format
+msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:228
+#: src/frontend/SettingsScriptingPage.cpp:259
+#, kde-format
+msgid ""
+"The selected virtual environment python version does not match the "
+"application python version."
+msgstr ""
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -22082,9 +22253,9 @@ msgid "Collection"
 msgstr "Коллекция"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, lPreviewLines)
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #. i18n: ectx: property (text), widget (QLabel, lPreviewRows)
-#. i18n: ectx: property (text), widget (QLabel, lPreviewLines)
 #: src/frontend/ui/datasources/fitsoptionswidget.ui:19
 #: src/frontend/ui/datasources/hdf5optionswidget.ui:41
 #: src/frontend/ui/datasources/importfilewidget.ui:502
@@ -22092,6 +22263,7 @@ msgstr "Коллекция"
 #: src/frontend/ui/datasources/matiooptionswidget.ui:80
 #: src/frontend/ui/datasources/netcdfoptionswidget.ui:53
 #: src/frontend/ui/datasources/odsoptionswidget.ui:40
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:19
 #: src/frontend/ui/datasources/rootoptionswidget.ui:114
 #: src/frontend/ui/datasources/xlsxoptionswidget.ui:40
 #, kde-format
@@ -22106,6 +22278,7 @@ msgstr "Число строк для просмотра:"
 #: src/frontend/ui/datasources/matiooptionswidget.ui:115
 #: src/frontend/ui/datasources/netcdfoptionswidget.ui:88
 #: src/frontend/ui/datasources/odsoptionswidget.ui:70
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:52
 #: src/frontend/ui/datasources/rootoptionswidget.ui:147
 #: src/frontend/ui/datasources/xlsxoptionswidget.ui:70
 #, kde-format
@@ -22636,6 +22809,21 @@ msgstr "QoS 1"
 #, kde-format
 msgid "QoS 2"
 msgstr "QoS 2"
+
+#. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:96
+#, fuzzy, kde-format
+#| msgid "Select All"
+msgid "Deselect All"
+msgstr "Выбрать всё"
+
+# BUGME: this message should be changed for _export_ dialogs --aspotashev
+#. i18n: ectx: property (toolTip), widget (QListWidget, lwColumns)
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:105
+#, fuzzy, kde-format
+#| msgid " Select the file to import"
+msgid "Select which columns to import"
+msgstr " Выбрать файл для импорта"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30
@@ -28900,9 +29088,6 @@ msgstr "Не удалось открыть файл:"
 #~ msgid "Column Statisti&cs"
 #~ msgstr "Статистика по столбцам"
 
-#~ msgid "Created: %1"
-#~ msgstr "Создано: %1"
-
 #~ msgid "Advanced"
 #~ msgstr "Дополнительно"
 
@@ -29601,10 +29786,6 @@ msgstr "Не удалось открыть файл:"
 #, fuzzy
 #~ msgid "Full Day Name"
 #~ msgstr "Полное название дня недели"
-
-#, fuzzy
-#~ msgid "Format type:"
-#~ msgstr "Формат:"
 
 #, fuzzy
 #~ msgid "Free ranges"
