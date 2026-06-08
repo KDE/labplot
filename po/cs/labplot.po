@@ -2160,10 +2160,9 @@ msgid "Invalid sheet index."
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:61
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file."
-msgstr "Nelze otevřít %1"
+msgstr "Nelze otevřít soubor."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:70
 #, kde-format
@@ -2171,10 +2170,9 @@ msgid "Format: Apache Parquet"
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:72
-#, fuzzy, kde-format
-#| msgid "Version:"
+#, kde-format
 msgid "Version: %1"
-msgstr "Verze:"
+msgstr "Verze: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:74
 #, fuzzy, kde-format
@@ -2218,10 +2216,9 @@ msgid "Number of stripes: %1"
 msgstr "Počet řádků: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:212
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file: %1"
-msgstr "Nelze otevřít %1"
+msgstr "Nelze otevřít soubor: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:224
 #, fuzzy, kde-format
@@ -21933,10 +21930,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:96
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Deselect All"
-msgstr "Vybrat vše"
+msgstr "Zrušit výběr"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, lwColumns)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:105

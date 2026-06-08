@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-07 00:39+0000\n"
-"PO-Revision-Date: 2026-06-01 05:37+0200\n"
+"PO-Revision-Date: 2026-06-07 07:03+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2219,124 +2219,107 @@ msgid "Invalid sheet index."
 msgstr "არასწორი ფურცლის ინდექსი."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:61
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file."
-msgstr "%1-ის გახსნა შეუძლებელია"
+msgstr "ფაილის გახსნის შეცდომა."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:70
 #, kde-format
 msgid "Format: Apache Parquet"
-msgstr ""
+msgstr "ფორმატი: Apache Parquet"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:72
-#, fuzzy, kde-format
-#| msgid "Version:"
+#, kde-format
 msgid "Version: %1"
-msgstr "ვერსია:"
+msgstr "ვერსია: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:74
-#, fuzzy, kde-format
-#| msgid "Created:"
+#, kde-format
 msgid "Created by: %1"
-msgstr "შექმნილია:"
+msgstr "ავტორი: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:78
 #: src/backend/datasources/filters/ParquetFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of rows: %1"
-msgstr "ჯგუფების რაოდენობა: %1"
+msgstr "მწკრივების რაოდენობა: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:80
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of row groups: %1"
-msgstr "ჯგუფების რაოდენობა: %1"
+msgstr "მწკრივის ჯგუფების რაოდენობა: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:87
 #, kde-format
 msgid "Format: Arrow IPC (Feather)"
-msgstr ""
+msgstr "ფორმატი: Arrow IPC (Feather)"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:91
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of record batches: %1"
-msgstr "ჩანაწერების რაოდენობა: %1"
+msgstr "ჩანაწერის პაკეტების რაოდენობა: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:99
 #, kde-format
 msgid "Format: Apache ORC"
-msgstr ""
+msgstr "ფორმატი: Apache ORC"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:103
-#, fuzzy, kde-format
-#| msgid "Number of lines: %1"
+#, kde-format
 msgid "Number of stripes: %1"
-msgstr "ხაზების რაოდენობა: %1"
+msgstr "ზოლების რაოდენობა: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:212
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file: %1"
-msgstr "%1-ის გახსნა შეუძლებელია"
+msgstr "ფაილის გახსნის შეცდომა: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:224
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Parquet file: %1"
-msgstr "ფაილის (\"%1\") გახსნის შეცდომა."
+msgstr "Parquet-ის ფაილის წაკითხვა ჩავარდა: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:235
 #: src/backend/datasources/filters/ParquetFilter.cpp:244
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to read Parquet table: %1"
-msgstr "გამოსახულების მონაცემების წაკითხვს შეცდომა"
+msgstr "Parquet-ის ცხრილის წაკითხვა ჩავარდა: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:254
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Arrow IPC file: %1"
-msgstr "ფაილის (\"%1\") გახსნის შეცდომა."
+msgstr "Arrow IPC ფაილის გახსნა ჩავარდა: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:265
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read record batch %1: %2"
-msgstr "მონაცემების წაკითხვის შეცდომა."
+msgstr "ჩანაწერების ნაკრების %1 წაკითხვა ჩავარდა: %2"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:272
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to assemble table: %1"
-msgstr "%1-ის ინიციალიზაცია ჩავარდა."
+msgstr "ცხრილის აწყობა ჩავარდა: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:282
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open ORC file: %1"
-msgstr "ფაილის (\"%1\") გახსნის შეცდომა."
+msgstr "ORC ფაილის გახსნა ჩავარდა: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:292
 #: src/backend/datasources/filters/ParquetFilter.cpp:300
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read ORC table: %1"
-msgstr "მონაცემების წაკითხვის შეცდომა."
+msgstr "ORC ცხრილის წაკითხვა ჩავარდა: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:309
-#, fuzzy, kde-format
-#| msgid "unsupported float type for rank 1"
+#, kde-format
 msgid "Unsupported file format."
-msgstr "მხარდაუჭერელი მცურავმძიმიანი ტიპი რანგისთვის 1"
+msgstr "ფაილის მხარდაუჭერელი ფორმატი."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:398
-#, fuzzy, kde-format
-#| msgid "No file provided for import."
+#, kde-format
 msgid "The file has no data to import."
-msgstr "შემოსატანად ფაილი მითითებული არაა."
+msgstr "ფალში შემოსატანი მონაცემები აღმოჩენილი არაა."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -11685,6 +11668,7 @@ msgstr "ბინარული ჟურნალის ფაილის (BL
 #, kde-format
 msgid "Apache Parquet, Arrow IPC (Feather) and Apache ORC file support"
 msgstr ""
+"Apache Parquet-ის, Arrow IPC-ის (Feather) და Apache ORC-ის ფაილის მხარდაჭერა"
 
 #: src/frontend/AboutDialog.cpp:370 src/frontend/AboutDialog.cpp:395
 #, kde-format
@@ -13266,17 +13250,17 @@ msgstr "MCAP მონაცემები"
 #: src/frontend/datasources/ImportFileWidget.cpp:148
 #, kde-format
 msgid "Apache Parquet"
-msgstr ""
+msgstr "Apache Parquet"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:149
 #, kde-format
 msgid "Arrow IPC (Feather)"
-msgstr ""
+msgstr "Arrow IPC (Feather)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:151
 #, kde-format
 msgid "Apache ORC"
-msgstr ""
+msgstr "Apache ORC"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:161
 #, kde-format
@@ -18708,11 +18692,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "დადასტურების თხოვნა უკანაბოლოს სისტემის გადატვირთვისას."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the Virtual Environment"
+#, kde-format
 msgid "Select the path to a python virtual environment."
-msgstr "აირჩიეთ ვირტუალური გარემო"
+msgstr "აირჩიეთ ბილიკი python-ის ვირტუალურ გარემომდე."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
 #, kde-format
@@ -18728,12 +18710,12 @@ msgstr "აირჩიეთ ვირტუალური გარემო"
 #: src/frontend/SettingsScriptingPage.cpp:194
 #, kde-format
 msgid "The selected virtual environment does not contain a python executable."
-msgstr ""
+msgstr "არჩეული ვირტუალური გარემო გამშვებ ფაილს python არ შეიცავს."
 
 #: src/frontend/SettingsScriptingPage.cpp:200
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
-msgstr ""
+msgstr "არჩეული ვირტუალური გარემო ფაილს pyvenv.cfg არ შეიცავს."
 
 #: src/frontend/SettingsScriptingPage.cpp:228
 #: src/frontend/SettingsScriptingPage.cpp:259
@@ -18742,6 +18724,8 @@ msgid ""
 "The selected virtual environment python version does not match the "
 "application python version."
 msgstr ""
+"არჩეული ვირტუალური გარემოს python-ის ვერსია აპლიკაციის python-ის ვერსიას არ "
+"ემთხვევა."
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -22375,17 +22359,15 @@ msgstr "QoS 2"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:96
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Deselect All"
-msgstr "ყველას მონიშვნა"
+msgstr "მონიშვნის მოხსნა ყველაფერზე"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, lwColumns)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:105
-#, fuzzy, kde-format
-#| msgid " Select the file to import"
+#, kde-format
 msgid "Select which columns to import"
-msgstr " აირჩიეთ შემოსატანი ფაილი"
+msgstr "აირჩიეთ სასურველი სვეტები შემოსატანად"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30
