@@ -330,7 +330,7 @@ QString GuiTools::openImageFile(const QString& className) {
 }
 
 // convert PDF to QImage using Poppler
-QImage GuiTools::importPDFFile(const QString& fileName) {
+QImage GuiTools::importPDFFile(const QString& fileName, double scale, double renderDpi) {
 	// DEBUG(Q_FUNC_INFO << ", PDF file name = " << STDSTRING(fileName));
 #ifdef HAVE_POPPLER
 	auto document = Poppler::Document::load(fileName);
@@ -359,21 +359,24 @@ QImage GuiTools::importPDFFile(const QString& fileName) {
 
 	const qreal logicalDpi = screen->logicalDotsPerInchX();
 	const qreal pixelRatio = screen->devicePixelRatio();
-	const qreal superSample = 2.0;
-	const qreal totalScale = pixelRatio * superSample;
+	const qreal effectiveScale = (scale > 0.0) ? scale : 1.0;
 
-	auto image = page->renderToImage(logicalDpi * totalScale, logicalDpi * totalScale);
+	const qreal effectiveRenderDpi = (renderDpi > 0.0) ? renderDpi : logicalDpi * pixelRatio * effectiveScale;
+
+	auto image = page->renderToImage(effectiveRenderDpi, effectiveRenderDpi);
 
 	if (!image.isNull()) {
 		if (image.format() != QImage::Format_ARGB32_Premultiplied)
 			image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
 
-		image.setDevicePixelRatio(totalScale);
+		const qreal imageDpr = effectiveRenderDpi / (logicalDpi * effectiveScale);
+		image.setDevicePixelRatio(imageDpr);
 	}
-
 	return image;
 #else
 	Q_UNUSED(fileName)
+	Q_UNUSED(scale)
+	Q_UNUSED(renderDpi)
 	DEBUG(Q_FUNC_INFO << ", POPPLER not available!")
 	return {};
 #endif
@@ -407,17 +410,16 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 
 	const qreal logicalDpi = screen->logicalDotsPerInchX();
 	const qreal pixelRatio = screen->devicePixelRatio();
-	const qreal superSample = 2.0;
 	const qreal effectiveZoom = (zoomFactor > 0.0) ? zoomFactor : 1.0;
-	const qreal renderScale = pixelRatio * superSample * effectiveZoom;
 
-	auto image = page->renderToImage(logicalDpi * renderScale, logicalDpi * renderScale);
+	const qreal renderDpi = logicalDpi * pixelRatio * effectiveZoom;
+	auto image = page->renderToImage(renderDpi, renderDpi);
 
 	if (!image.isNull()) {
 		if (image.format() != QImage::Format_ARGB32_Premultiplied)
 			image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
 
-		image.setDevicePixelRatio(pixelRatio * superSample);
+		image.setDevicePixelRatio(pixelRatio);
 	}
 
 	return image;
@@ -426,6 +428,61 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 	Q_UNUSED(zoomFactor)
 	return {};
 #endif
+}
+
+void GuiTools::setPixmapFromImage(QLabel* label, const QImage& image) {
+	if (!label)
+		return;
+
+	if (image.isNull()) {
+		label->clear();
+		label->hide();
+		return;
+	}
+
+	const qreal imageDpr = (image.devicePixelRatio() > 0.0) ? image.devicePixelRatio() : 1.0;
+	const QSize logicalSize(qCeil(image.width() / imageDpr), qCeil(image.height() / imageDpr));
+
+	QPixmap pixmap = QPixmap::fromImage(image);
+	pixmap.setDevicePixelRatio(imageDpr);
+
+	label->setScaledContents(false);
+	label->setPixmap(pixmap);
+	label->setFixedSize(logicalSize);
+	label->show();
+}
+
+QImage GuiTools::recolorMonochromeImage(const QImage& image, const QColor& foregroundColor, const QColor& backgroundColor) {
+	if (image.isNull())
+		return {};
+
+	QImage source = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+	source.setDevicePixelRatio(image.devicePixelRatio());
+
+	QImage result(source.size(), QImage::Format_ARGB32_Premultiplied);
+	result.setDevicePixelRatio(source.devicePixelRatio());
+
+	const QColor fg = foregroundColor.isValid() ? foregroundColor : QColor(Qt::black);
+	const QColor bg = backgroundColor.isValid() ? backgroundColor : QColor(Qt::white);
+
+	for (int y = 0; y < source.height(); ++y) {
+		for (int x = 0; x < source.width(); ++x) {
+			const QRgb pixel = source.pixel(x, y);
+
+			const int sourceAlpha = qAlpha(pixel);
+			const int gray = qGray(pixel);
+			const int coverage = qBound(0, (255 - gray) * sourceAlpha / 255, 255);
+			const int inverseCoverage = 255 - coverage;
+
+			const int r = (fg.red() * coverage + bg.red() * inverseCoverage + 127) / 255;
+			const int g = (fg.green() * coverage + bg.green() * inverseCoverage + 127) / 255;
+			const int b = (fg.blue() * coverage + bg.blue() * inverseCoverage + 127) / 255;
+
+			result.setPixelColor(x, y, QColor(r, g, b, 255));
+		}
+	}
+
+	return result;
 }
 
 /*
