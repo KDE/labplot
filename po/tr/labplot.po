@@ -1,7 +1,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025, 2026 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022-2026 Emir SARI <emir_sari@icloud.com>
 # Volkan Gezer <volkangezer@gmail.com>, 2021.
 # Emir SARI <emir_sari@icloud.com>, 2023.
 msgid ""
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-05-02 19:07+0300\n"
+"PO-Revision-Date: 2026-06-07 20:19+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.04.0\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -25099,6 +25099,83 @@ msgstr "Dosya açılamadı:"
 #~ "≥ %3 sütun içeriyor. Doğru ayırıcının kullanıldığından ve verinin aynı "
 #~ "sayıda sütun içerdiğinden emin olun."
 
+#~| msgid "Could not open %1"
+#~ msgid "Could not open file."
+#~ msgstr "Dosya açılamadı."
+
+#~ msgid "Format: Apache Parquet"
+#~ msgstr "Biçim: Apache Parquet"
+
+#~| msgid "Version:"
+#~ msgid "Version: %1"
+#~ msgstr "Sürüm: %1"
+
+#~| msgid "Created:"
+#~ msgid "Created by: %1"
+#~ msgstr "Oluşturulma: %1"
+
+#~| msgid "Number of groups: %1"
+#~ msgid "Number of rows: %1"
+#~ msgstr "Satır sayısı: %1"
+
+#~| msgid "Number of groups: %1"
+#~ msgid "Number of row groups: %1"
+#~ msgstr "Satır grupları sayısı: %1"
+
+#~ msgid "Format: Arrow IPC (Feather)"
+#~ msgstr "Biçim: Arrow IPC (Feather)"
+
+#~| msgid "Number of records: %1"
+#~ msgid "Number of record batches: %1"
+#~ msgstr "Kayıt toplu paketleri sayısı: %1"
+
+#~ msgid "Format: Apache ORC"
+#~ msgstr "Biçim: Apache ORC"
+
+#~| msgid "Number of lines: %1"
+#~ msgid "Number of stripes: %1"
+#~ msgstr "Şerit sayısı: %1"
+
+#~| msgid "Could not open %1"
+#~ msgid "Could not open file: %1"
+#~ msgstr "Dosya açılamadı: %1"
+
+#~| msgid "Failed to open the file '%1'."
+#~ msgid "Failed to open Parquet file: %1"
+#~ msgstr "Parquet dosyası açılamadı: %1"
+
+#~| msgid "Failed to read image data"
+#~ msgid "Failed to read Parquet table: %1"
+#~ msgstr "Parquet tablosu okunamadı: %1"
+
+#~| msgid "Failed to open the file '%1'."
+#~ msgid "Failed to open Arrow IPC file: %1"
+#~ msgstr "Arrow IPC dosyası açılamadı: %1"
+
+#~| msgid "Failed to read data."
+#~ msgid "Failed to read record batch %1: %2"
+#~ msgstr "Kayıt toplu paketi %1 okunamadı: %2"
+
+#~| msgid "Failed to initialize %1."
+#~ msgid "Failed to assemble table: %1"
+#~ msgstr "Tablo bir araya getirilemedi: %1"
+
+#~| msgid "Failed to open the file '%1'."
+#~ msgid "Failed to open ORC file: %1"
+#~ msgstr "ORC dosyası açılamadı: %1"
+
+#~| msgid "Failed to read data."
+#~ msgid "Failed to read ORC table: %1"
+#~ msgstr "ORC tablosu okunamadı: %1"
+
+#~| msgid "unsupported float type for rank 1"
+#~ msgid "Unsupported file format."
+#~ msgstr "Desteklenmeyen dosya biçimi"
+
+#~| msgid "No file provided for import."
+#~ msgid "The file has no data to import."
+#~ msgstr "Dosyada içe aktarılacak veri yok"
+
 #~ msgid "End Points"
 #~ msgstr "Bitiş Noktaları"
 
@@ -25140,6 +25217,9 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "Rows: %1"
 #~ msgstr "Satır: %1"
+
+#~ msgid "%1: change column type and set value"
+#~ msgstr "%1: Sütun türünü değiştir ve değeri ayarla"
 
 #~ msgid "One column is required."
 #~ msgid_plural "%1 columns are required."
@@ -25288,6 +25368,9 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Degrees of Freedom Residuals"
 #~ msgstr "Özgürlük Dereceleri Kalıntıları"
 
+#~ msgid "Effective Degrees of Freedom"
+#~ msgstr "Etkili Özgürlük Dereceleri"
+
 #~ msgid "t-Value"
 #~ msgstr "t Değeri"
 
@@ -25419,9 +25502,6 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "Stability Ratio"
 #~ msgstr "Kararlılık Oranı"
-
-#~ msgid "Effective Degrees of Freedom"
-#~ msgstr "Etkili Özgürlük Dereceleri"
 
 #~ msgid "Average Successive Difference"
 #~ msgstr "Ortalama Ardışık Fark"
@@ -25763,11 +25843,11 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Pareto Chart"
 #~ msgstr "Pareto Grafiği"
 
-#~ msgid "Line Simplification"
-#~ msgstr "Çizgi Basitleştirme"
-
 #~ msgid "Correct Baseline"
 #~ msgstr "Taban Çizgisini Düzelt"
+
+#~ msgid "Line Simplification"
+#~ msgstr "Çizgi Basitleştirme"
 
 #~ msgid "%1: set plot color mode"
 #~ msgstr "%1: Çizim renk kipini kullan"
@@ -25831,6 +25911,10 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Python scripting support"
 #~ msgstr "Python betik yazımı desteği"
 
+#~ msgid "Apache Parquet, Arrow IPC (Feather) and Apache ORC file support"
+#~ msgstr ""
+#~ "Apache Parquet, Arrow IPC (Feather) ve Apache ORC dosya biçimi desteği"
+
 #~ msgid "Creates a new Python script"
 #~ msgstr "Yeni bir Python betiği oluşturur"
 
@@ -25879,6 +25963,15 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "%1 files imported in %2 seconds."
 #~ msgstr "%1 dosya %2 saniyede içe aktarıldı."
+
+#~ msgid "Apache Parquet"
+#~ msgstr "Apache Parquet"
+
+#~ msgid "Arrow IPC (Feather)"
+#~ msgstr "Arrow IPC (Feather)"
+
+#~ msgid "Apache ORC"
+#~ msgstr "Apache ORC"
 
 #~ msgctxt "@title:window"
 #~ msgid "Select the Directory Data Source"
@@ -26382,8 +26475,11 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Hypothesis Test for %1"
 #~ msgstr "%1 için Hipotez Testi"
 
-#~ msgid "Script Editor"
-#~ msgstr "Betik Düzenleyicisi"
+#~ msgid "Scripting"
+#~ msgstr "Betik Yazımı"
+
+#~ msgid "Editor"
+#~ msgstr "Düzenleyici"
 
 #~ msgctxt "@label:spinbox Suffix for the auto save interval"
 #~ msgid "%v min"
@@ -26393,6 +26489,31 @@ msgstr "Dosya açılamadı:"
 #~ msgstr ""
 #~ "Etkinleştirilmişse hesap tablosu ve matris verisi proje dosyasına "
 #~ "kaydedilir."
+
+#~| msgctxt "@title:window"
+#~| msgid "Select the Virtual Environment"
+#~ msgid "Select the path to a python virtual environment."
+#~ msgstr "Bir Python sanal ortamına olan yolu seçin."
+
+#~ msgid "System Default"
+#~ msgstr "Sistem Öntanımlısı"
+
+#~ msgctxt "@title:window"
+#~ msgid "Select the Virtual Environment"
+#~ msgstr "Sanal Ortam Seç"
+
+#~ msgid ""
+#~ "The selected virtual environment does not contain a python executable."
+#~ msgstr "Seçili sanal ortam, bir Python yürütülebiliri içermiyor."
+
+#~ msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+#~ msgstr "Seçili sanal ortam, bir pyvenv.cfg dosyası içermiyor."
+
+#~ msgid ""
+#~ "The selected virtual environment python version does not match the "
+#~ "application python version."
+#~ msgstr ""
+#~ "Seçili sanal ortam Python sürümü, uygulama Python sürümüyle eşleşmiyor."
 
 #~ msgid "Delete entire rows in the spreadsheet if the condition is met."
 #~ msgstr "Koşul sağlandıysa hesap tablosundaki tam satırları silin."
@@ -26420,6 +26541,9 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "New Plot Areas in a New Worksheet"
 #~ msgstr "Yeni Çalışma Sayfasında Yeni Çizim Alanları"
+
+#~ msgid "Zoom level"
+#~ msgstr "Yakınlaştırma düzeyi"
 
 #~ msgid "Equidistant Date&Time Values"
 #~ msgstr "Eşit Uzaklıklı Tarih/Zaman Değerleri"
@@ -26472,6 +26596,14 @@ msgstr "Dosya açılamadı:"
 
 #~ msgid "Average 2-Period Moving Range"
 #~ msgstr "Ortalama İki Noktalı Hareketli Erim"
+
+#~| msgid "Select All"
+#~ msgid "Deselect All"
+#~ msgstr "Tümünün Seçimini Kaldır"
+
+#~| msgid " Select the file to import"
+#~ msgid "Select which columns to import"
+#~ msgstr "Hangi sütunların içe aktarılacağını seç"
 
 #~ msgid "Position Column:"
 #~ msgstr "Konum sütunu:"
@@ -26595,6 +26727,15 @@ msgstr "Dosya açılamadı:"
 #~ msgid "Save Data in Project file:"
 #~ msgstr "Veriyi proje dosyasına kaydet:"
 
+#~ msgid "Environment:"
+#~ msgstr "Ortam:"
+
+#~ msgid "Path:"
+#~ msgstr "Yol:"
+
+#~ msgid "Python Settings"
+#~ msgstr "Python Ayarları"
+
 #~ msgid "Delete Rows"
 #~ msgstr "Satırları Sil"
 
@@ -26609,6 +26750,9 @@ msgstr "Dosya açılamadı:"
 #~ msgstr ""
 #~ "LabPlot %1 için olan tam değişiklik günlüğüne <a href=\"%2\">web "
 #~ "sitemizden</a> bir göz atın."
+
+#~ msgid "Script Editor"
+#~ msgstr "Betik Düzenleyicisi"
 
 #~ msgid "%1: simplify '%2'"
 #~ msgstr "%1: “%2” basitleştir"
