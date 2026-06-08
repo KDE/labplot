@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-07 00:39+0000\n"
-"PO-Revision-Date: 2026-06-01 06:41-0300\n"
+"PO-Revision-Date: 2026-06-07 04:41-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.04.1\n"
+"X-Generator: Lokalize 26.04.2\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -2221,125 +2221,107 @@ msgid "Invalid sheet index."
 msgstr "Índice da planilha inválido."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:61
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file."
-msgstr "Não foi possível abrir %1"
+msgstr "Não foi possível abrir o arquivo."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:70
 #, kde-format
 msgid "Format: Apache Parquet"
-msgstr ""
+msgstr "Formato: Apache Parquet"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:72
-#, fuzzy, kde-format
-#| msgid "Version:"
+#, kde-format
 msgid "Version: %1"
-msgstr "Versão:"
+msgstr "Versão: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:74
-#, fuzzy, kde-format
-#| msgid "Created: %1"
+#, kde-format
 msgid "Created by: %1"
-msgstr "Criado em: %1"
+msgstr "Criado por: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:78
 #: src/backend/datasources/filters/ParquetFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of rows: %1"
-msgstr "Número de grupos: %1"
+msgstr "Número de linhas: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:80
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of row groups: %1"
-msgstr "Número de grupos: %1"
+msgstr "Número de grupos de linhas: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:87
 #, kde-format
 msgid "Format: Arrow IPC (Feather)"
-msgstr ""
+msgstr "Formato: Arrow IPC (Feather)"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:91
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of record batches: %1"
-msgstr "Número de registros: %1"
+msgstr "Número de lotes de registros: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:99
-#, fuzzy, kde-format
-#| msgid "Format Type"
+#, kde-format
 msgid "Format: Apache ORC"
-msgstr "Tipo de formato"
+msgstr "Formato: Apache ORC"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:103
-#, fuzzy, kde-format
-#| msgid "Number of lines: %1"
+#, kde-format
 msgid "Number of stripes: %1"
-msgstr "Número de linhas: %1"
+msgstr "Número de faixas: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:212
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file: %1"
-msgstr "Não foi possível abrir %1"
+msgstr "Não foi possível abrir o arquivo: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:224
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Parquet file: %1"
-msgstr "Falha ao abrir o arquivo '%1'."
+msgstr "Falha ao abrir o arquivo Parquet: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:235
 #: src/backend/datasources/filters/ParquetFilter.cpp:244
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to read Parquet table: %1"
-msgstr "Falha ao ler dados da imagem"
+msgstr "Falha ao ler a tabela Parquet: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:254
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Arrow IPC file: %1"
-msgstr "Falha ao abrir o arquivo '%1'."
+msgstr "Falha ao abrir o arquivo Arrow IPC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:265
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read record batch %1: %2"
-msgstr "Falha ao ler dados."
+msgstr "Falha ao ler o lote de registros %1: %2"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:272
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to assemble table: %1"
-msgstr "Falha ao inicializar %1."
+msgstr "Falha ao montar a tabela: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:282
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open ORC file: %1"
-msgstr "Falha ao abrir o arquivo '%1'."
+msgstr "Falha ao abrir o arquivo ORC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:292
 #: src/backend/datasources/filters/ParquetFilter.cpp:300
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read ORC table: %1"
-msgstr "Falha ao ler dados."
+msgstr "Falha ao ler a tabela ORC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:309
-#, fuzzy, kde-format
-#| msgid "unsupported float type for rank 1"
+#, kde-format
 msgid "Unsupported file format."
-msgstr "tipo flutuante não suportado para o rank 1"
+msgstr "Formato de arquivo não suportado."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:398
-#, fuzzy, kde-format
-#| msgid "No file provided for import."
+#, kde-format
 msgid "The file has no data to import."
-msgstr "Nenhum arquivo fornecido para importação."
+msgstr "O arquivo não possui dados para importar."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -11719,7 +11701,7 @@ msgstr "Suporte a arquivo de log binário (BLF)"
 #: src/frontend/AboutDialog.cpp:367
 #, kde-format
 msgid "Apache Parquet, Arrow IPC (Feather) and Apache ORC file support"
-msgstr ""
+msgstr "Suporte a arquivos Apache Parquet, Arrow IPC (Feather) e Apache ORC"
 
 #: src/frontend/AboutDialog.cpp:370 src/frontend/AboutDialog.cpp:395
 #, kde-format
@@ -13304,17 +13286,17 @@ msgstr "Dados MCAP"
 #: src/frontend/datasources/ImportFileWidget.cpp:148
 #, kde-format
 msgid "Apache Parquet"
-msgstr ""
+msgstr "Apache Parquet"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:149
 #, kde-format
 msgid "Arrow IPC (Feather)"
-msgstr ""
+msgstr "Arrow IPC (Feather)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:151
 #, kde-format
 msgid "Apache ORC"
-msgstr ""
+msgstr "Apache ORC"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:161
 #, kde-format
@@ -18772,11 +18754,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Pede confirmação ao reiniciar o sistema de infraestrutura."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the Virtual Environment"
+#, kde-format
 msgid "Select the path to a python virtual environment."
-msgstr "Selecionar o ambiente virtual"
+msgstr "Selecione o caminho para um ambiente virtual Python."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
 #, kde-format
@@ -18792,12 +18772,12 @@ msgstr "Selecionar o ambiente virtual"
 #: src/frontend/SettingsScriptingPage.cpp:194
 #, kde-format
 msgid "The selected virtual environment does not contain a python executable."
-msgstr ""
+msgstr "O ambiente virtual selecionado não contém um executável do Python."
 
 #: src/frontend/SettingsScriptingPage.cpp:200
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
-msgstr ""
+msgstr "O ambiente virtual selecionado não contém um arquivo pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:228
 #: src/frontend/SettingsScriptingPage.cpp:259
@@ -18806,6 +18786,8 @@ msgid ""
 "The selected virtual environment python version does not match the "
 "application python version."
 msgstr ""
+"A versão do Python selecionada para o ambiente virtual não corresponde à "
+"versão do Python da aplicação."
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -22442,17 +22424,15 @@ msgstr "QoS 2"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:96
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Deselect All"
-msgstr "Selecionar tudo"
+msgstr "Desmarcar tudo"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, lwColumns)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:105
-#, fuzzy, kde-format
-#| msgid " Select the file to import"
+#, kde-format
 msgid "Select which columns to import"
-msgstr " Selecione o arquivo a importar"
+msgstr "Selecione quais colunas importar"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30

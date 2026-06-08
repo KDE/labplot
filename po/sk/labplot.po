@@ -2182,124 +2182,107 @@ msgid "Invalid sheet index."
 msgstr "Neplatný index hárka."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:61
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file."
-msgstr "Nepodarilo sa otvoriť %1"
+msgstr "Nepodarilo sa otvoriť súbor."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:70
 #, kde-format
 msgid "Format: Apache Parquet"
-msgstr ""
+msgstr "Formát: Apache Parquet"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:72
-#, fuzzy, kde-format
-#| msgid "Version:"
+#, kde-format
 msgid "Version: %1"
-msgstr "Verzia:"
+msgstr "Verzia: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:74
-#, fuzzy, kde-format
-#| msgid "Created: %1"
+#, kde-format
 msgid "Created by: %1"
-msgstr "Vytvorené: %1"
+msgstr "Vytvoril: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:78
 #: src/backend/datasources/filters/ParquetFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of rows: %1"
-msgstr "Number of groups: %1"
+msgstr "Počet riadkov: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:80
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of row groups: %1"
-msgstr "Number of groups: %1"
+msgstr "Počet skupín riadkov: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:87
 #, kde-format
 msgid "Format: Arrow IPC (Feather)"
-msgstr ""
+msgstr "Formát: Arrow IPC (Feather)"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:91
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of record batches: %1"
-msgstr "Number of records: %1"
+msgstr "Počet dávok záznamov: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Format: Apache ORC"
-msgstr "Formát:"
+msgstr "Formát: Apache ORC"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:103
-#, fuzzy, kde-format
-#| msgid "Number of lines: %1"
+#, kde-format
 msgid "Number of stripes: %1"
-msgstr "Počet riadkov: %1"
+msgstr "Počet pruhov: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:212
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file: %1"
-msgstr "Nepodarilo sa otvoriť %1"
+msgstr "Nepodarilo sa otvoriť súbor: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:224
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Parquet file: %1"
-msgstr "Zlyhalo otvorenie súboru %1"
+msgstr "Zlyhalo otvorenie súboru Parquet: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:235
 #: src/backend/datasources/filters/ParquetFilter.cpp:244
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to read Parquet table: %1"
-msgstr "Nepodarilo sa prečítať obrazové dáta"
+msgstr "Zlyhalo čítanie tabuľky Parquet: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:254
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Arrow IPC file: %1"
-msgstr "Zlyhalo otvorenie súboru %1"
+msgstr "Zlyhalo otvorenie súboru Arrow IPC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:265
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read record batch %1: %2"
-msgstr "Čítanie dát zlyhalo."
+msgstr "Zlyhalo čítanie dávky záznamov %1: %2"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:272
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to assemble table: %1"
-msgstr "Failed to initialize %1."
+msgstr "Zlyhalo zostavenie tabuľky: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:282
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open ORC file: %1"
-msgstr "Zlyhalo otvorenie súboru %1"
+msgstr "Zlyhalo otvorenie súboru ORC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:292
 #: src/backend/datasources/filters/ParquetFilter.cpp:300
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read ORC table: %1"
-msgstr "Čítanie dát zlyhalo."
+msgstr "Zlyhalo čítanie tabuľky ORC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:309
-#, fuzzy, kde-format
-#| msgid "unsupported float type for rank 1"
+#, kde-format
 msgid "Unsupported file format."
-msgstr "nepodporovaný desatinný typ pre rank 1"
+msgstr "Nepodporovaný formát súboru."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:398
-#, fuzzy, kde-format
-#| msgid "No file provided for import."
+#, kde-format
 msgid "The file has no data to import."
-msgstr "Nebol zadaný žiadny súbor na import."
+msgstr "Súbor neobsahuje žiadne dáta na import."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -11651,7 +11634,7 @@ msgstr "Podpora súborov binárneho záznamu (BLF)"
 #: src/frontend/AboutDialog.cpp:367
 #, kde-format
 msgid "Apache Parquet, Arrow IPC (Feather) and Apache ORC file support"
-msgstr ""
+msgstr "Podpora súborov Apache Parquet, Arrow IPC (Feather) a Apache ORC"
 
 #: src/frontend/AboutDialog.cpp:370 src/frontend/AboutDialog.cpp:395
 #, kde-format
@@ -13223,17 +13206,17 @@ msgstr "Dáta MCAP"
 #: src/frontend/datasources/ImportFileWidget.cpp:148
 #, kde-format
 msgid "Apache Parquet"
-msgstr ""
+msgstr "Apache Parquet"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:149
 #, kde-format
 msgid "Arrow IPC (Feather)"
-msgstr ""
+msgstr "Arrow IPC (Feather)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:151
 #, kde-format
 msgid "Apache ORC"
-msgstr ""
+msgstr "Apache ORC"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:161
 #, kde-format
@@ -18628,10 +18611,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Žiadať potvrdenie pri reštartovaní backendového systému."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid " Select the image file"
+#, kde-format
 msgid "Select the path to a python virtual environment."
-msgstr " Vybrať obrázkový súbor"
+msgstr "Vyberte cestu k virtuálnemu prostrediu Pythonu."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
 #, kde-format
@@ -18639,21 +18621,20 @@ msgid "System Default"
 msgstr "Predvolené v systéme"
 
 #: src/frontend/SettingsScriptingPage.cpp:60
-#, fuzzy, kde-format
-#| msgid " Select the image file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment"
-msgstr " Vybrať obrázkový súbor"
+msgstr "Vybrať virtuálne prostredie"
 
 #: src/frontend/SettingsScriptingPage.cpp:194
 #, kde-format
 msgid "The selected virtual environment does not contain a python executable."
-msgstr ""
+msgstr "Vybrané virtuálne prostredie neobsahuje spustiteľný súbor Pythonu."
 
 #: src/frontend/SettingsScriptingPage.cpp:200
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
-msgstr ""
+msgstr "Vybrané virtuálne prostredie neobsahuje súbor pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:228
 #: src/frontend/SettingsScriptingPage.cpp:259
@@ -18662,6 +18643,8 @@ msgid ""
 "The selected virtual environment python version does not match the "
 "application python version."
 msgstr ""
+"Verzia Pythonu vo vybranom virtuálnom prostredí sa nezhoduje s verziou "
+"Pythonu aplikácie."
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -19788,10 +19771,9 @@ msgstr "Triediť"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:129
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:134
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#, kde-format
 msgid "Zoom level"
-msgstr "Priblížiť pohľad"
+msgstr "Úroveň priblíženia"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format
@@ -22302,17 +22284,15 @@ msgstr "QoS 2"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:96
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Deselect All"
-msgstr "Vybrať všetko"
+msgstr "Zrušiť výber všetkého"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, lwColumns)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:105
-#, fuzzy, kde-format
-#| msgid " Select the file to import"
+#, kde-format
 msgid "Select which columns to import"
-msgstr " Vyberte súbor na import"
+msgstr "Vyberte stĺpce, ktoré sa majú importovať"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30
