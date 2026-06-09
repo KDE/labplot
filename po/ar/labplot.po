@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-07 00:39+0000\n"
-"PO-Revision-Date: 2026-06-05 13:58+0400\n"
+"POT-Creation-Date: 2026-06-09 00:39+0000\n"
+"PO-Revision-Date: 2026-06-08 21:42+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -2227,23 +2227,20 @@ msgid "Format: Apache Parquet"
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:72
-#, fuzzy, kde-format
-#| msgid "Version:"
+#, kde-format
 msgid "Version: %1"
-msgstr "الإصدارة:"
+msgstr "الإصدارة: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:74
-#, fuzzy, kde-format
-#| msgid "Created: %1"
+#, kde-format
 msgid "Created by: %1"
-msgstr "أُنشئ: %1"
+msgstr "أنشئ بواسطة: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:78
 #: src/backend/datasources/filters/ParquetFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of rows: %1"
-msgstr "عدد المجموعات: %1"
+msgstr "عدد الصّفوف: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:80
 #, fuzzy, kde-format
@@ -3293,7 +3290,7 @@ msgstr "طاقة 1 إرغ"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2139
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1309
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1294
 #, kde-format
 msgid "Success"
 msgstr "اكتمل"
@@ -3343,7 +3340,7 @@ msgstr "فشل التحليل إلى عوامل"
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:609
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:629
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:664
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:468
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:454
 #, kde-format
 msgid "Failed to allocate memory"
 msgstr "فشل تخصيص الذاكرة"
@@ -12482,18 +12479,18 @@ msgstr "عرض القائمة بالتّفاصيل"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:308
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1439
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1445
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1451
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1424
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1430
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1436
 #, kde-format
 msgid "Copy Selection"
 msgstr "انسخ الاختيار"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:309
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1440
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1446
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1452
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1431
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1437
 #, kde-format
 msgid "Copy All"
 msgstr "انسخ الكلّ"
@@ -14587,7 +14584,7 @@ msgstr "%1 محور: قالب \"%2\" حُمل"
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:204
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:807
-#: src/frontend/dockwidgets/QQPlotDock.cpp:286
+#: src/frontend/dockwidgets/QQPlotDock.cpp:273
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:248
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
@@ -15503,7 +15500,7 @@ msgstr "قيمة مخصصة لعرض نطاق النواة"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:202
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:805
-#: src/frontend/dockwidgets/QQPlotDock.cpp:284
+#: src/frontend/dockwidgets/QQPlotDock.cpp:271
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:681
 #, kde-format
@@ -16259,7 +16256,7 @@ msgid "Model:"
 msgstr "الطّراز:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:812
-#: src/frontend/GuiTools.cpp:562
+#: src/frontend/GuiTools.cpp:619
 #, kde-format
 msgid "Description:"
 msgstr "الوصف:"
@@ -16281,23 +16278,23 @@ msgstr "الدرجة:"
 msgid "Number of peaks:"
 msgstr "عدد القمم:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1310
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1295
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "حالة الملاءمة: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1321
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1306
 #, kde-format
 msgid "No data source available!"
 msgstr "لا يوجد مصدر بيانات متاح!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1491
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1476
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % مستوى ثقة أدنى"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1492
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1477
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % مستوى ثقة أعلى"
@@ -17125,24 +17122,24 @@ msgstr "افتح صورة"
 msgid "Images (%1)"
 msgstr "الصور (%1)"
 
-#: src/frontend/GuiTools.cpp:455
+#: src/frontend/GuiTools.cpp:512
 #, kde-format
 msgid "Select file to load function definition"
 msgstr "اِختر ملفًّا لتحميل تعريف الدالّة"
 
-#: src/frontend/GuiTools.cpp:472 src/frontend/GuiTools.cpp:551
+#: src/frontend/GuiTools.cpp:529 src/frontend/GuiTools.cpp:608
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr "تعريف دالّة LabPlot معمل الرسم"
 
-#: src/frontend/GuiTools.cpp:535
+#: src/frontend/GuiTools.cpp:592
 #, kde-format
 msgid "Select file to save function definition"
 msgstr "اِختر ملفًّا لحفظ تعريف الدالّة"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:563 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:620 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
@@ -17764,7 +17761,7 @@ msgstr "امحُ التّحديد"
 #. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:361
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:89
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:102
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:292
 #: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
@@ -19097,7 +19094,7 @@ msgstr[5] "%1: املأ الأعمدة بأرقام متساوية البعد"
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:609
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:629
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:664
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:468
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:454
 #, kde-format
 msgid "Not enough memory to perform this operation."
 msgstr "لا توجد ذاكرة كافية لأداء هذه العملية."
@@ -19488,7 +19485,7 @@ msgstr ""
 "توزيعات الأعداد العشوائية على النحو المحدد في <a href=\"https://www.gnu.org/"
 "software/gsl/doc/html/randist.html\">توثيق GSL</a>"
 
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:489
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:475
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
@@ -22306,19 +22303,18 @@ msgstr "جودة خدمة 1"
 msgid "QoS 2"
 msgstr "جودة خدمة 2"
 
-#. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:96
-#, fuzzy, kde-format
-#| msgid "Select All"
-msgid "Deselect All"
-msgstr "حدّد الكلّ"
-
 #. i18n: ectx: property (toolTip), widget (QListWidget, lwColumns)
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:105
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:93
 #, fuzzy, kde-format
 #| msgid " Select the file to import"
 msgid "Select which columns to import"
 msgstr "اِختر الملف للاستيراد"
+
+#. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:109
+#, kde-format
+msgid "Deselect All"
+msgstr "ألغِ تحديد الكلّ"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30
