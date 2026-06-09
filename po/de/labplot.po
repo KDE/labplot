@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-07 00:39+0000\n"
+"POT-Creation-Date: 2026-06-09 00:39+0000\n"
 "PO-Revision-Date: 2026-02-18 15:39+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -3277,7 +3277,7 @@ msgstr "Energie 1 erg"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2139
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1309
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1294
 #, kde-format
 msgid "Success"
 msgstr "Erfolg"
@@ -3327,7 +3327,7 @@ msgstr "Faktorisierung fehlgeschlagen"
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:609
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:629
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:664
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:468
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:454
 #, kde-format
 msgid "Failed to allocate memory"
 msgstr "Reservieren von Speicherplatz fehlgeschlagen"
@@ -12483,18 +12483,18 @@ msgstr "Listen-Ansicht mit Details"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:308
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1439
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1445
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1451
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1424
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1430
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1436
 #, kde-format
 msgid "Copy Selection"
 msgstr "Auswahl kopieren"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:309
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1440
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1446
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1452
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1431
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1437
 #, kde-format
 msgid "Copy All"
 msgstr "Alles kopieren"
@@ -14630,7 +14630,7 @@ msgstr "%1-Achsen: Vorlage \"%2\" geladen"
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:204
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:807
-#: src/frontend/dockwidgets/QQPlotDock.cpp:286
+#: src/frontend/dockwidgets/QQPlotDock.cpp:273
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:248
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
@@ -15575,7 +15575,7 @@ msgstr "Eigener Wert für die Bandbreite des Kernel"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:202
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:805
-#: src/frontend/dockwidgets/QQPlotDock.cpp:284
+#: src/frontend/dockwidgets/QQPlotDock.cpp:271
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:681
 #, kde-format
@@ -16357,7 +16357,7 @@ msgid "Model:"
 msgstr "Modell:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:812
-#: src/frontend/GuiTools.cpp:562
+#: src/frontend/GuiTools.cpp:619
 #, kde-format
 msgid "Description:"
 msgstr "Beschreibung:"
@@ -16379,23 +16379,23 @@ msgstr "Grad:"
 msgid "Number of peaks:"
 msgstr "Anzahl der Peaks:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1310
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1295
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Fit-Status: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1321
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1306
 #, kde-format
 msgid "No data source available!"
 msgstr "Keine Datenquelle verfügbar!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1491
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1476
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % untere Vertrauensgrenze"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1492
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1477
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % obere Vertrauensgrenze"
@@ -17232,24 +17232,24 @@ msgstr "Bilddatei öffnen"
 msgid "Images (%1)"
 msgstr "Bilder (%1)"
 
-#: src/frontend/GuiTools.cpp:455
+#: src/frontend/GuiTools.cpp:512
 #, kde-format
 msgid "Select file to load function definition"
 msgstr "Datei für Funktionsdefinition auswählen"
 
-#: src/frontend/GuiTools.cpp:472 src/frontend/GuiTools.cpp:551
+#: src/frontend/GuiTools.cpp:529 src/frontend/GuiTools.cpp:608
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr "LabPlot Funktionsdefinition"
 
-#: src/frontend/GuiTools.cpp:535
+#: src/frontend/GuiTools.cpp:592
 #, kde-format
 msgid "Select file to save function definition"
 msgstr "Datei zum Speichern der Funktionsdefinition auswählen"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:563 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:620 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
@@ -17873,7 +17873,7 @@ msgstr "&Auswahl aufheben"
 #. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:361
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:89
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:102
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:292
 #: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
@@ -19218,7 +19218,7 @@ msgstr[1] "%1: Spalten mit äquidistanten Werten füllen"
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:609
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:629
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:664
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:468
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:454
 #, kde-format
 msgid "Not enough memory to perform this operation."
 msgstr "Nicht genügend Speicher um die Operation durchzuführen."
@@ -19609,7 +19609,7 @@ msgstr ""
 "Zufallszahlenverteilungen wie in der<a href=\"https://www.gnu.org/software/"
 "gsl/doc/html/randist.html\">GSL Dokumentation</a> definiert"
 
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:489
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:475
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
@@ -22413,19 +22413,19 @@ msgstr "QoS 1"
 msgid "QoS 2"
 msgstr "QoS 2"
 
-#. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:96
-#, fuzzy, kde-format
-#| msgid "Select All"
-msgid "Deselect All"
-msgstr "Alles auswählen"
-
 #. i18n: ectx: property (toolTip), widget (QListWidget, lwColumns)
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:105
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:93
 #, fuzzy, kde-format
 #| msgid " Select the file to import"
 msgid "Select which columns to import"
 msgstr " Wählen Sie eine Datei, die importiert werden soll."
+
+#. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:109
+#, fuzzy, kde-format
+#| msgid "Select All"
+msgid "Deselect All"
+msgstr "Alles auswählen"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30

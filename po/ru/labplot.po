@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-07 00:39+0000\n"
+"POT-Creation-Date: 2026-06-09 00:39+0000\n"
 "PO-Revision-Date: 2026-04-03 20:35+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -3332,7 +3332,7 @@ msgstr "Энергия в 1 эрг"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2139
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1309
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1294
 #, kde-format
 msgid "Success"
 msgstr "Успешно"
@@ -3384,7 +3384,7 @@ msgstr "Сбой факторизации"
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:609
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:629
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:664
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:468
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:454
 #, kde-format
 msgid "Failed to allocate memory"
 msgstr "Не удалось выделить память"
@@ -12676,18 +12676,18 @@ msgstr "Представление «Список с подробностями�
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:308
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1439
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1445
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1451
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1424
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1430
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1436
 #, kde-format
 msgid "Copy Selection"
 msgstr "Скопировать выделенный фрагмент"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:309
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1440
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1446
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1452
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1431
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1437
 #, kde-format
 msgid "Copy All"
 msgstr "Скопировать всё"
@@ -14873,7 +14873,7 @@ msgstr "Оси (%1): загрузка шаблона «%2»"
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:204
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:807
-#: src/frontend/dockwidgets/QQPlotDock.cpp:286
+#: src/frontend/dockwidgets/QQPlotDock.cpp:273
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:248
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
@@ -15821,7 +15821,7 @@ msgstr "Указанное значение ширины полосы ядра"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:202
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:805
-#: src/frontend/dockwidgets/QQPlotDock.cpp:284
+#: src/frontend/dockwidgets/QQPlotDock.cpp:271
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:681
 #, kde-format
@@ -16617,7 +16617,7 @@ msgstr "Модель:"
 
 # BUGME: please split --aspotashev
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:812
-#: src/frontend/GuiTools.cpp:562
+#: src/frontend/GuiTools.cpp:619
 #, kde-format
 msgid "Description:"
 msgstr "Описание:"
@@ -16639,23 +16639,23 @@ msgstr "Степень:"
 msgid "Number of peaks:"
 msgstr "Число пиков:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1310
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1295
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Статус подбора: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1321
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1306
 #, kde-format
 msgid "No data source available!"
 msgstr "Источник данных недоступен."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1491
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1476
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % нижний уровень достоверности"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1492
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1477
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % верхний уровень достоверности"
@@ -17505,24 +17505,24 @@ msgid "Images (%1)"
 msgstr "Изображения (%1)"
 
 # BUGME: please add context --aspotashev
-#: src/frontend/GuiTools.cpp:455
+#: src/frontend/GuiTools.cpp:512
 #, kde-format
 msgid "Select file to load function definition"
 msgstr "Выбрать файл для загрузки определения функции"
 
-#: src/frontend/GuiTools.cpp:472 src/frontend/GuiTools.cpp:551
+#: src/frontend/GuiTools.cpp:529 src/frontend/GuiTools.cpp:608
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr "Определение функции LabPlot"
 
-#: src/frontend/GuiTools.cpp:535
+#: src/frontend/GuiTools.cpp:592
 #, kde-format
 msgid "Select file to save function definition"
 msgstr "Выберите файл для сохранения определения функции"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:563 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:620 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
@@ -18155,7 +18155,7 @@ msgstr "Сня&ть выделение"
 #. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:361
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:89
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:102
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:292
 #: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
@@ -19535,7 +19535,7 @@ msgstr[3] "%1: заполнить столбец равноотстоящими 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:609
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:629
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:664
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:468
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:454
 #, kde-format
 msgid "Not enough memory to perform this operation."
 msgstr "Недостаточно памяти для выполнения этой операции."
@@ -19937,7 +19937,7 @@ msgstr ""
 "org/software/gsl/doc/html/randist.html\"><span style=\" text-decoration: "
 "underline; color:#2980b9;\">документацией GSL</a>"
 
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:489
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:475
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
@@ -22810,20 +22810,20 @@ msgstr "QoS 1"
 msgid "QoS 2"
 msgstr "QoS 2"
 
-#. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:96
-#, fuzzy, kde-format
-#| msgid "Select All"
-msgid "Deselect All"
-msgstr "Выбрать всё"
-
 # BUGME: this message should be changed for _export_ dialogs --aspotashev
 #. i18n: ectx: property (toolTip), widget (QListWidget, lwColumns)
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:105
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:93
 #, fuzzy, kde-format
 #| msgid " Select the file to import"
 msgid "Select which columns to import"
 msgstr " Выбрать файл для импорта"
+
+#. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:109
+#, fuzzy, kde-format
+#| msgid "Select All"
+msgid "Deselect All"
+msgstr "Выбрать всё"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30

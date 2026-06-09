@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-07 00:39+0000\n"
+"POT-Creation-Date: 2026-06-09 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -2177,10 +2177,9 @@ msgid "Invalid sheet index."
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:61
-#, fuzzy, kde-format
-#| msgid "Could not open file %1 for reading."
+#, kde-format
 msgid "Could not open file."
-msgstr "无法以读模式打开文件 %1。"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:70
 #, kde-format
@@ -2188,29 +2187,25 @@ msgid "Format: Apache Parquet"
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:72
-#, fuzzy, kde-format
-#| msgid "Version:"
+#, kde-format
 msgid "Version: %1"
-msgstr "版本："
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:74
-#, fuzzy, kde-format
-#| msgid "Created:"
+#, kde-format
 msgid "Created by: %1"
-msgstr "创建时间："
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:78
 #: src/backend/datasources/filters/ParquetFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Number of columns: %1"
+#, kde-format
 msgid "Number of rows: %1"
-msgstr "列数：%1"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:80
-#, fuzzy, kde-format
-#| msgid "Number of columns: %1"
+#, kde-format
 msgid "Number of row groups: %1"
-msgstr "列数：%1"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:87
 #, kde-format
@@ -2218,10 +2213,9 @@ msgid "Format: Arrow IPC (Feather)"
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:91
-#, fuzzy, kde-format
-#| msgid "Number of columns: %1"
+#, kde-format
 msgid "Number of record batches: %1"
-msgstr "列数：%1"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:99
 #, kde-format
@@ -2229,66 +2223,56 @@ msgid "Format: Apache ORC"
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:103
-#, fuzzy, kde-format
-#| msgid "Number of lines: %1"
+#, kde-format
 msgid "Number of stripes: %1"
-msgstr "行数：%1"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:212
-#, fuzzy, kde-format
-#| msgid "Could not open file %1 for reading."
+#, kde-format
 msgid "Could not open file: %1"
-msgstr "无法以读模式打开文件 %1。"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:224
-#, fuzzy, kde-format
-#| msgid "Failed to open the device/file."
+#, kde-format
 msgid "Failed to open Parquet file: %1"
-msgstr "打开设备/文件失败。"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:235
 #: src/backend/datasources/filters/ParquetFilter.cpp:244
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to read Parquet table: %1"
-msgstr "读取图像数据失败"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:254
-#, fuzzy, kde-format
-#| msgid "Failed to open the device/file."
+#, kde-format
 msgid "Failed to open Arrow IPC file: %1"
-msgstr "打开设备/文件失败。"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:265
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read record batch %1: %2"
-msgstr "读取数据失败。"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:272
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to assemble table: %1"
-msgstr "初始化 %1 失败。"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:282
-#, fuzzy, kde-format
-#| msgid "Failed to open the device/file."
+#, kde-format
 msgid "Failed to open ORC file: %1"
-msgstr "打开设备/文件失败。"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:292
 #: src/backend/datasources/filters/ParquetFilter.cpp:300
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read ORC table: %1"
-msgstr "读取数据失败。"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:309
-#, fuzzy, kde-format
-#| msgid "All supported files (%1)"
+#, kde-format
 msgid "Unsupported file format."
-msgstr "所有支持的文件 (%1)"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:398
 #, kde-format
@@ -3253,7 +3237,7 @@ msgstr "1 尔格能量"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2139
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1309
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1294
 #, kde-format
 msgid "Success"
 msgstr "成功"
@@ -3303,7 +3287,7 @@ msgstr ""
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:609
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:629
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:664
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:468
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:454
 #, kde-format
 msgid "Failed to allocate memory"
 msgstr "内存分配失败"
@@ -12316,18 +12300,18 @@ msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:308
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1439
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1445
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1451
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1424
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1430
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1436
 #, kde-format
 msgid "Copy Selection"
 msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:309
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1440
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1446
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1452
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1431
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1437
 #, kde-format
 msgid "Copy All"
 msgstr "全部复制"
@@ -14346,7 +14330,7 @@ msgstr "坐标轴 %1：加载模板“%2”"
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:204
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:807
-#: src/frontend/dockwidgets/QQPlotDock.cpp:286
+#: src/frontend/dockwidgets/QQPlotDock.cpp:273
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:248
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
@@ -15195,7 +15179,7 @@ msgstr ""
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:202
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:805
-#: src/frontend/dockwidgets/QQPlotDock.cpp:284
+#: src/frontend/dockwidgets/QQPlotDock.cpp:271
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:681
 #, kde-format
@@ -15907,7 +15891,7 @@ msgid "Model:"
 msgstr "模式："
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:812
-#: src/frontend/GuiTools.cpp:562
+#: src/frontend/GuiTools.cpp:619
 #, kde-format
 msgid "Description:"
 msgstr ""
@@ -15929,23 +15913,23 @@ msgstr "度"
 msgid "Number of peaks:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1310
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1295
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1321
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1306
 #, kde-format
 msgid "No data source available!"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1491
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1476
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1492
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1477
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -16754,24 +16738,24 @@ msgstr "打开图像文件"
 msgid "Images (%1)"
 msgstr "图像 (%1)"
 
-#: src/frontend/GuiTools.cpp:455
+#: src/frontend/GuiTools.cpp:512
 #, kde-format
 msgid "Select file to load function definition"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:472 src/frontend/GuiTools.cpp:551
+#: src/frontend/GuiTools.cpp:529 src/frontend/GuiTools.cpp:608
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:535
+#: src/frontend/GuiTools.cpp:592
 #, kde-format
 msgid "Select file to save function definition"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:563 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:620 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
@@ -17378,7 +17362,7 @@ msgstr "清除内容(&R)"
 #. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:361
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:89
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:102
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:292
 #: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
@@ -18693,7 +18677,7 @@ msgstr[0] "%1：用等距值填充列"
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:609
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:629
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:664
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:468
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:454
 #, kde-format
 msgid "Not enough memory to perform this operation."
 msgstr "执行此操作内存不足。"
@@ -19083,7 +19067,7 @@ msgstr ""
 "<a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\">GSL 文档</"
 "a>中定义的随机数分布"
 
-#: src/frontend/spreadsheet/RandomValuesDialog.cpp:489
+#: src/frontend/spreadsheet/RandomValuesDialog.cpp:475
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
@@ -21862,19 +21846,17 @@ msgstr ""
 msgid "QoS 2"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:96
-#, fuzzy, kde-format
-#| msgid "Select All"
-msgid "Deselect All"
-msgstr "全部选中"
-
 #. i18n: ectx: property (toolTip), widget (QListWidget, lwColumns)
-#: src/frontend/ui/datasources/parquetoptionswidget.ui:105
-#, fuzzy, kde-format
-#| msgid " Select the file to import"
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:93
+#, kde-format
 msgid "Select which columns to import"
-msgstr "选择要导入的文件"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
+#: src/frontend/ui/datasources/parquetoptionswidget.ui:109
+#, kde-format
+msgid "Deselect All"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30
