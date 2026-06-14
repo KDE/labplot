@@ -322,6 +322,7 @@ void BoxPlot::createDataSpreadsheet() {
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<QString>, dataColumnPaths, dataColumnPaths)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Ordering, ordering, ordering)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, variableWidth, variableWidth)
@@ -408,11 +409,6 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, rugEnabled, rugEnabled)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugLength, rugLength)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugWidth, rugWidth)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugOffset, rugOffset)
-
-QVector<QString>& BoxPlot::dataColumnPaths() const {
-	D(BoxPlot);
-	return d->dataColumnPaths;
-}
 
 bool BoxPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
 	// The values are not important, because they are just passed to minMax() which does not consider the indices
@@ -670,7 +666,7 @@ Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
 	if (!q->isLoading())
 		background->init(group);
 
-	q->connect(background, &Background::updateRequested, [=] {
+	q->connect(background, &Background::updateRequested, [=, this] {
 		updatePixmap();
 		// TODO: Q_EMIT q->updateLegendRequested();
 	});
@@ -688,12 +684,12 @@ Line* BoxPlotPrivate::addBorderLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		// Q_EMIT q->updateLegendRequested();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		// Q_EMIT q->updateLegendRequested();
 	});
@@ -711,12 +707,12 @@ Line* BoxPlotPrivate::addMedianLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		// Q_EMIT q->updateLegendRequested();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		// Q_EMIT q->updateLegendRequested();
 	});

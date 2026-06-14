@@ -83,15 +83,7 @@ void Value::draw(QPainter* painter, const QVector<QPointF>& points, const QVecto
 // ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Value, Value::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(Value, const AbstractColumn*, column, column)
-QString& Value::columnPath() const {
-	D(Value);
-	return d->columnPath;
-}
-void Value::setColumnPath(const QString& path) {
-	D(Value);
-	d->columnPath = path;
-}
-
+BASIC_SHARED_D_READER_IMPL(Value, QString, columnPath, columnPath)
 BASIC_SHARED_D_READER_IMPL(Value, Value::Position, position, position)
 BASIC_SHARED_D_READER_IMPL(Value, bool, centerPositionAvailable, centerPositionAvailable)
 BASIC_SHARED_D_READER_IMPL(Value, double, distance, distance)
@@ -129,6 +121,11 @@ void Value::setColumn(const AbstractColumn* column) {
 			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Value::columnAboutToBeRemoved);
 		}
 	}
+}
+
+void Value::setColumnPath(const QString& path) {
+	Q_D(Value);
+	d->columnPath = path;
 }
 
 STD_SETTER_CMD_IMPL_F_S(Value, SetPosition, Value::Position, position, updateValue)

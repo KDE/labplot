@@ -133,7 +133,7 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 
 	// check whether it contains only digits, letters, -, _ or not
 	const QRegularExpression re(QLatin1String("^[\\w\\d-]+$"));
-	const QRegularExpressionMatch match = re.match(fileName);
+	const auto match = re.match(fileName);
 	bool hasMatch = match.hasMatch();
 
 	if (!hasMatch || fileName.isEmpty()) {
@@ -181,7 +181,7 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 bool DatasetMetadataManagerWidget::urlExists() {
 	// Check whether the given url is acceptable syntactically
 	const QRegularExpression re(QLatin1String(R"(^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$)"));
-	const QRegularExpressionMatch match = re.match(ui.leDownloadURL->text());
+	const auto match = re.match(ui.leDownloadURL->text());
 	bool hasMatch = match.hasMatch();
 	const bool urlExists = hasMatch && !ui.leDownloadURL->text().isEmpty();
 
@@ -252,7 +252,7 @@ bool DatasetMetadataManagerWidget::checkCategories(QComboBox* comboBox) {
 	// Check whether it is a word or not (might contain digits)
 	const QString fileName = comboBox->currentText();
 	const QRegularExpression re(QLatin1String("^[\\w\\d]+$"));
-	const QRegularExpressionMatch match = re.match(fileName);
+	const auto match = re.match(fileName);
 	const bool hasMatch = match.hasMatch();
 
 	if (!hasMatch || fileName.isEmpty()) {

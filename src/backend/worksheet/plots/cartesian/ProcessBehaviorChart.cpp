@@ -756,12 +756,12 @@ void ProcessBehaviorChart::setLabelsBackgroundColor(const QColor& color) {
 // #################################  SLOTS  ####################################
 // ##############################################################################
 void ProcessBehaviorChart::retransform() {
-	D(ProcessBehaviorChart);
+	Q_D(ProcessBehaviorChart);
 	d->retransform();
 }
 
 void ProcessBehaviorChart::recalc() {
-	D(ProcessBehaviorChart);
+	Q_D(ProcessBehaviorChart);
 	d->recalc();
 }
 

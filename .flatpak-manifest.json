@@ -79,8 +79,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-26.03.0.tar.xz",
-                    "sha256": "8b3c5e2a9f2ab4c3ec5029f28af1b433c6b71f0d1e7b3997aa561cf1c0ca4ebe"
+                    "url": "https://poppler.freedesktop.org/poppler-26.06.0.tar.xz",
+                    "sha256": "4cb4e5a3dc8cb5eec751c8a23c8ba19f61f96dedc0cd07d2aee6b0c8e2cf6ba4"
                 }
             ],
             "modules": [
@@ -108,8 +108,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.12.3/src/analitza-25.12.3.tar.xz",
-			    "sha256": "4f0bc01116d61953d9759f91f943eb9da674f1f048a453d55035f4459c3bfdb7"
+			    "url": "https://download.kde.org/stable/release-service/26.04.2/src/analitza-26.04.2.tar.xz",
+			    "sha256": "66e9bcdf400595a03dfadc59b45e380b1a6cbe6fbc3522af0d772edf5c35ed2a"
 		    }
 	    ]
         },
@@ -119,8 +119,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.12.3/src/cantor-25.12.3.tar.xz",
-			    "sha256": "08873503b24e77a2f0d334327d639fb88ca71a4a72f6a92453c0d47f43caae4b"
+			    "url": "https://download.kde.org/stable/release-service/26.04.2/src/cantor-26.04.2.tar.xz",
+			    "sha256": "a1224d780ac8657dfac0f53bfc645aad8bee7f0b2beb9e373212c91dd2f4dcf6"
 		    }
 	    ]
         },
@@ -170,8 +170,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.2.tar.gz",
-                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb"
+                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.4.tar.gz",
+                    "sha256": "227b637b91c9820ea96f39a65eb087f053de567d82f4338e2884f123f8183c55"
                 }
             ]
         },
@@ -194,8 +194,8 @@
 	    "sources": [
 		{
                     "type": "archive",
-		    "url": "https://github.com/qt/qtmqtt/archive/refs/tags/v6.9.0.tar.gz",
-		    "sha256": "7cdec84ca17ad2bd9d47418ca98820705a7798895a2315b5c20c46528a29547e"
+		    "url": "https://github.com/qt/qtmqtt/archive/refs/tags/v6.10.3.tar.gz",
+		    "sha256": "a1759284b332f0b498b725be71addbc7f836b221b0c301d5013255606114c2a7"
 		}
 	    ]
 	},
@@ -230,22 +230,6 @@
                 }
             ]
         },
-        {
-            "name": "Qt-Advanced-Docking-System",
-            "buildsystem": "cmake-ninja",
-            "config-opts": [
-                "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=6",
-                "-DCMAKE_CXX_FLAGS=-I/usr/include/QtGui/6.10.2/QtGui"
-            ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git",
-                    "commit": "a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6"
-                }
-            ]
-        },
 	{
             "name": "discount",
             "buildsystem": "simple",
@@ -269,37 +253,6 @@
                     "type": "archive",
                     "url": "https://github.com/tbeu/matio/archive/v1.5.30.tar.gz",
                     "sha256": "cd514c42e13bb39477e7d8fdeaa1502014c552a6a53f0678809cce6951db2bc1"
-                }
-            ]
-        },
-        {
-            "name": "fast_float",
-            "buildsystem": "cmake-ninja",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/fastfloat/fast_float.git",
-		    "tag": "v8.2.3",
-                    "commit": "01ce95dfe46abccf3264fbccf9f5139ea9016cd2"
-                }
-            ]
-        },
-        {
-            "name": "dbc_parser_cpp",
-            "buildsystem": "cmake-ninja",
-            "config-opts": [
-                "-DDBC_ENABLE_TESTS=OFF"
-            ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/LinuxDevon/dbc_parser_cpp.git",
-		    "tag": "v0.5.0",
-                    "commit": "887d779fbf416032f539675f74360a5a43a93f86"
-                },
-		{
-                    "type": "patch",
-                    "path": "admin/patches/dbc_parser_cpp.patch"
                 }
             ]
         },
@@ -372,8 +325,8 @@
             "buildsystem": "cmake-ninja",
             "config-opts": [
 		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
-		    "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF",
-		    "-DENABLE_TESTS=OFF"
+		    "-DENABLE_TESTS=OFF",
+		    "-DENABLE_COMPILER_OPTIMIZATION=ON"
 	    ],
 	    "build-options": {
 		    "env": {
@@ -384,6 +337,19 @@
                 {
                     "type": "dir",
                     "path": "."
+                }
+	    ],
+	    "modules": [
+                {
+                    "name": "patchelf",
+                    "buildsystem": "autotools",
+                    "sources": [
+                        {
+                            "type": "archive",
+                            "url": "https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0.tar.bz2",
+                            "sha256": "1952b2a782ba576279c211ee942e341748fdb44997f704dd53def46cd055470b"
+                        }
+                    ]
                 }
             ]
         }

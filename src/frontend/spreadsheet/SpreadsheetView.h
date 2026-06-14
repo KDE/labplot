@@ -30,11 +30,14 @@ class QActionGroup;
 class QFrame;
 class QItemSelection;
 class QItemSelectionModel;
+class QLabel;
 class QLineEdit;
 class QMenu;
 class QPrinter;
 class QModelIndex;
 class QResizeEvent;
+class QSlider;
+class QSpinBox;
 class QTableView;
 class QToolBar;
 
@@ -57,6 +60,8 @@ public:
 	void resizeHeader();
 	void setFocus();
 	void setSuppressResizeHeader(bool);
+
+	int zoomLevel() const;
 
 	void createContextMenu(QMenu*);
 	void fillColumnContextMenu(QMenu*, Column*);
@@ -88,6 +93,7 @@ public:
 
 protected:
 	void resizeEvent(QResizeEvent*) override;
+	void showEvent(QShowEvent*) override;
 
 private:
 	void init();
@@ -127,6 +133,7 @@ private:
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
 	bool m_suppressResizeHeader{false};
+	bool m_initialNavigationDone{false};
 
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
@@ -243,6 +250,13 @@ private:
 
 	bool m_suppressResize{false};
 
+	// zoom
+	int m_zoomLevel{100}; // percentage, 100 = default
+	void setZoomLevel(int);
+	void applyZoom();
+	QSlider* m_zoomSlider{nullptr};
+	QSpinBox* m_zoomSpinBox{nullptr};
+
 public Q_SLOTS:
 	void handleAspectsAdded(int first, int last);
 
@@ -334,6 +348,7 @@ private Q_SLOTS:
 	void updateHeaderGeometry(Qt::Orientation, int first, int last);
 
 	void columnClicked(int);
+	void navigateToSpreadsheetOnClick(const QModelIndex& index);
 	void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 	void advanceCell();
 };

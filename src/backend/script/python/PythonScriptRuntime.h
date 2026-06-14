@@ -56,6 +56,7 @@ private:
 	static bool ready;
 	static PyObject* sysStdOut;
 	static PyObject* sysStdErr;
+	static bool needsRestart;
 };
 
 #endif

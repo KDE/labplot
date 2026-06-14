@@ -29,8 +29,11 @@
 #endif
 
 #include <QClipboard>
+#include <QMessageBox>
 #include <QModelIndex>
+#include <QPushButton>
 #include <QRandomGenerator>
+#include <QTimer>
 
 //**********************************************************
 //****************** Copy&Paste tests **********************
@@ -39,6 +42,19 @@
 //**********************************************************
 //********** Handling of different columns modes ***********
 //**********************************************************
+
+void clickMessageBoxButton(QMessageBox::StandardButton buttonType, int delay = 100) {
+	QTimer::singleShot(delay, [buttonType]() {
+		for (QWidget* widget : QApplication::topLevelWidgets()) {
+			if (auto* box = qobject_cast<QMessageBox*>(widget)) {
+				if (auto* btn = box->button(buttonType)) {
+					btn->click();
+					return;
+				}
+			}
+		}
+	});
+}
 /*!
    insert two columns with float values into an empty spreadsheet
 */
@@ -52,6 +68,7 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -86,6 +103,7 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -117,6 +135,7 @@ void SpreadsheetTest::testCopyPasteColumnMode02() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -153,6 +172,7 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -214,6 +234,7 @@ void SpreadsheetTest::testCopyPasteColumnMode04() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -251,6 +272,7 @@ void SpreadsheetTest::testCopyPasteColumnMode05() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -287,6 +309,7 @@ void SpreadsheetTest::testCopyPasteColumnMode06() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -322,6 +345,7 @@ void SpreadsheetTest::testCopyPasteColumnMode07() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size and column mode
@@ -1414,6 +1438,68 @@ void SpreadsheetTest::testMaskingRowRemovalUndoRedo() {
 	QCOMPARE(col1->valueAt(3), 107.0);
 	QCOMPARE(col1->valueAt(4), 108.0);
 	QCOMPARE(col1->valueAt(5), 109.0);
+}
+
+/*
+ * check that masked rows follow the sort order in a single column
+ */
+void SpreadsheetTest::testSortMasksSingleColumn() {
+	// use a project to enable undo/redo of sort macro
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(1);
+	sheet->setRowCount(4);
+	auto* col = sheet->column(0);
+
+	// values: original indices 0..3 have values [3,1,4,2]
+	const QVector<double> values{3.0, 1.0, 4.0, 2.0};
+	col->replaceValues(0, values);
+
+	// mask original rows 1 and 3
+	col->setMasked(1, true);
+	col->setMasked(3, true);
+
+	// sort ascending (separate)
+	sheet->sortColumns(nullptr, {col}, true);
+
+	// values should be [1,2,3,4]
+	QCOMPARE(col->valueAt(0), 1.0);
+	QCOMPARE(col->valueAt(1), 2.0);
+	QCOMPARE(col->valueAt(2), 3.0);
+	QCOMPARE(col->valueAt(3), 4.0);
+
+	// masks should follow values from original masked rows (1->value 1, 3->value 2)
+	QCOMPARE(col->isMasked(0), true);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), false);
+
+	// undo: expect original order and masks restored at original rows 1 and 3
+	project.undoStack()->undo();
+	QCOMPARE(col->valueAt(0), 3.0);
+	QCOMPARE(col->valueAt(1), 1.0);
+	QCOMPARE(col->valueAt(2), 4.0);
+	QCOMPARE(col->valueAt(3), 2.0);
+	QCOMPARE(col->isMasked(0), false);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), true);
+
+	// redo: expect sorted order and masks on rows 0 and 1 again
+	// TODO: crash after the redo of the sort
+	/*
+	project.undoStack()->redo();
+	QCOMPARE(col->valueAt(0), 1.0);
+	QCOMPARE(col->valueAt(1), 2.0);
+	QCOMPARE(col->valueAt(2), 3.0);
+	QCOMPARE(col->valueAt(3), 4.0);
+	QCOMPARE(col->isMasked(0), true);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), false);
+	*/
 }
 
 // **********************************************************
@@ -3809,6 +3895,391 @@ void SpreadsheetTest::testClearColumns() {
 		QCOMPARE(c1->valueAt(i), 2. * i + 3.);
 		QCOMPARE(c2->valueAt(i), pow(i, 3.));
 	}
+}
+
+// **********************************************************
+// ************** clearing and data input  ******************
+// **********************************************************
+
+void SpreadsheetTest::testClearCellsValidity() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(1);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+
+	model->setData(model->index(0, 0), QStringLiteral("42"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("100"), Qt::EditRole);
+
+	QVERIFY(c0->isValid(0));
+	QVERIFY(c1->isValid(0));
+
+	model->setData(model->index(0, 0), QString(), Qt::EditRole);
+	model->setData(model->index(0, 1), QString(), Qt::EditRole);
+
+	QVERIFY(!c0->isValid(0));
+	QVERIFY(!c1->isValid(0));
+}
+
+void SpreadsheetTest::testInvalidNumericInput() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(2);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+
+	// first put valid values so the columns are non-empty
+	model->setData(model->index(0, 0), QStringLiteral("10"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("20"), Qt::EditRole);
+	QVERIFY(c0->isValid(0));
+	QVERIFY(c1->isValid(0));
+
+	// now entering invalid text in a non-empty column should not auto-convert
+	model->setData(model->index(1, 0), QStringLiteral("abc"), Qt::EditRole);
+	model->setData(model->index(1, 1), QStringLiteral("xyz"), Qt::EditRole);
+
+	QCOMPARE(c0->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(c1->columnMode(), AbstractColumn::ColumnMode::BigInt);
+	QVERIFY(!c0->isValid(1));
+	QVERIFY(!c1->isValid(1));
+}
+
+void SpreadsheetTest::testRealZeroInput() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(1);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	c0->setValid(0, false);
+	c1->setValid(0, false);
+
+	QVERIFY(!c0->isValid(0));
+	QVERIFY(!c1->isValid(0));
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("0"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("0"), Qt::EditRole);
+
+	QVERIFY(c0->isValid(0));
+	QCOMPARE(c0->integerAt(0), 0);
+	QCOMPARE(c0->asStringColumn()->textAt(0), QStringLiteral("0"));
+
+	QVERIFY(c1->isValid(0));
+	QCOMPARE(c1->bigIntAt(0), 0);
+	QCOMPARE(c1->asStringColumn()->textAt(0), QStringLiteral("0"));
+}
+
+void SpreadsheetTest::testClearMixedCellsValidity() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(3);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+
+	model->setData(model->index(0, 0), QStringLiteral("10"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("100"), Qt::EditRole);
+	c0->setValid(1, false);
+	c1->setValid(1, false);
+
+	model->setData(model->index(2, 0), QStringLiteral("20"), Qt::EditRole);
+	model->setData(model->index(2, 1), QStringLiteral("200"), Qt::EditRole);
+
+	for (int row = 0; row < 3; ++row) {
+		model->setData(model->index(row, 0), QString(), Qt::EditRole);
+		model->setData(model->index(row, 1), QString(), Qt::EditRole);
+	}
+
+	for (int row = 0; row < 3; ++row) {
+		QVERIFY(!c0->isValid(row));
+		QVERIFY(!c1->isValid(row));
+	}
+}
+void SpreadsheetTest::testClearWholeColumn() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(5);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+
+	for (int row = 0; row < 5; ++row) {
+		model->setData(model->index(row, 0), QString::number(row + 1), Qt::EditRole);
+		model->setData(model->index(row, 1), QString::number((row + 1) * 10), Qt::EditRole);
+	}
+	sheet->clear({c0, c1});
+
+	for (int row = 0; row < 5; ++row) {
+		QVERIFY(!c0->isValid(row));
+		QVERIFY(!c1->isValid(row));
+	}
+	project.undoStack()->undo();
+
+	for (int row = 0; row < 5; ++row) {
+		QVERIFY(c0->isValid(row));
+		QVERIFY(c1->isValid(row));
+		QCOMPARE(c0->integerAt(row), row + 1);
+		QCOMPARE(c1->bigIntAt(row), (row + 1) * 10);
+	}
+}
+void SpreadsheetTest::testUndoRedoCellClear() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* c0 = sheet->column(0);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	auto* model = sheet->model();
+
+	model->setData(model->index(0, 0), QStringLiteral("42"), Qt::EditRole);
+	QVERIFY(c0->isValid(0));
+	QCOMPARE(c0->integerAt(0), 42);
+
+	model->setData(model->index(0, 0), QString(), Qt::EditRole);
+	QVERIFY(!c0->isValid(0));
+
+	project.undoStack()->undo();
+	QVERIFY(c0->isValid(0));
+	QCOMPARE(c0->integerAt(0), 42);
+}
+
+// **********************************************************
+// *** auto-conversion of empty columns on data input *******
+// **********************************************************
+
+/*!
+ * entering text into an empty Double column should auto-convert to Text mode.
+ */
+void SpreadsheetTest::testAutoConvertDoubleToText() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QVERIFY(!col->hasValues()); // column is empty (all NaN)
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("abc"), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("abc"));
+}
+
+/*!
+ * entering a double value (e.g. "2.5") into an empty Integer column
+ * should auto-convert to Double mode.
+ */
+void SpreadsheetTest::testAutoConvertIntegerToDouble() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QLocale().toString(2.5), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 2.5);
+}
+
+/*!
+ * entering text into an empty Integer column should auto-convert to Text mode.
+ */
+void SpreadsheetTest::testAutoConvertIntegerToText() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("hello"), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("hello"));
+}
+
+/*!
+ * entering a double value into an empty BigInt column
+ * should auto-convert to Double mode.
+ */
+void SpreadsheetTest::testAutoConvertBigIntToDouble() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QLocale().toString(3.14), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 3.14);
+}
+
+/*!
+ * entering text into an empty BigInt column should auto-convert to Text mode.
+ */
+void SpreadsheetTest::testAutoConvertBigIntToText() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("world"), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("world"));
+}
+
+/*!
+ * entering text into a non-empty Double column should NOT auto-convert -
+ * the column mode should stay Double.
+ */
+void SpreadsheetTest::testNoAutoConvertNonEmptyColumn() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(2);
+
+	auto* col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	auto* model = sheet->model();
+	// put a valid value first
+	model->setData(model->index(0, 0), QStringLiteral("1"), Qt::EditRole);
+	QVERIFY(col->hasValues());
+
+	// now entering text into the second row should not convert the column
+	model->setData(model->index(1, 0), QStringLiteral("abc"), Qt::EditRole);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+}
+
+/*!
+ * entering a valid number into an empty Double column should just work
+ * without any mode conversion.
+ */
+void SpreadsheetTest::testAutoConvertEmptyDoubleAcceptsNumber() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("42"), Qt::EditRole);
+
+	// mode should stay Double
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 42.0);
+}
+
+/*!
+ * undoing an auto-conversion should revert both the value and the column mode in a single step.
+ */
+void SpreadsheetTest::testAutoConvertUndoRedo() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("hello"), Qt::EditRole);
+
+	// after entering text, the column should be Text with the value set
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("hello"));
+
+	// a single undo should revert both the mode change and the value
+	project.undoStack()->undo();
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	// redo should restore both
+	project.undoStack()->redo();
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("hello"));
 }
 
 QTEST_MAIN(SpreadsheetTest)

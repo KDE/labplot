@@ -11,6 +11,7 @@
 #include "NoteView.h"
 #include "backend/note/Note.h"
 
+#include <QEvent>
 #include <QHBoxLayout>
 #include <QPrinter>
 #include <QTextEdit>
@@ -20,6 +21,7 @@ NoteView::NoteView(Note* note)
 	, m_textEdit(new QTextEdit(this)) {
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
+	m_textEdit->installEventFilter(this);
 
 	QPalette palette = m_textEdit->palette();
 	palette.setColor(QPalette::Base, m_note->backgroundColor());
@@ -94,4 +96,14 @@ void NoteView::noteTextColorChanged(const QColor& color) {
 	auto cursor = m_textEdit->textCursor();
 	cursor.clearSelection();
 	m_textEdit->setTextCursor(cursor);
+}
+
+//*************************************************************
+//************ Project Explorer Sync **************************
+//*************************************************************
+bool NoteView::eventFilter(QObject* obj, QEvent* event) {
+	if (obj == m_textEdit && event->type() == QEvent::FocusIn)
+		m_note->setSelectedInView(true);
+	
+	return QWidget::eventFilter(obj, event);
 }

@@ -31,11 +31,13 @@
 #endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
+#include "frontend/datasources/MQTTErrorWidget.h"
 #endif
 
 #include "frontend/ActionsManager.h"
 #include "frontend/GuiObserver.h"
 #include "frontend/HistoryDialog.h"
+#include "frontend/WhatsNewDialog.h"
 #include "frontend/ProjectExplorer.h"
 #include "frontend/SettingsDialog.h"
 #include "frontend/colormaps/ColorMapsDialog.h"
@@ -98,6 +100,8 @@
 #include "backend/notebook/Notebook.h"
 #include "frontend/notebook/NotebookView.h"
 #include <cantor/backend.h>
+#include <cantor/cantorlibs_version.h>
+#include <KParts/ReadWritePart>
 #endif
 
 
@@ -232,12 +236,12 @@ void MainWin::initGUI(const QString& fileName) {
 	if (!fileName.isEmpty()) {
 		initDocks();
 		if (Project::isSupportedProject(fileName)) {
-			QTimer::singleShot(0, this, [=]() {
+			QTimer::singleShot(0, this, [=, this]() {
 				openProject(fileName);
 			});
 		} else {
 			newProject();
-			QTimer::singleShot(0, this, [=]() {
+			QTimer::singleShot(0, this, [=, this]() {
 				importFileDialog(fileName);
 			});
 		}
@@ -305,6 +309,13 @@ void MainWin::initGUI(const QString& fileName) {
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
+
+	if (m_showWhatsNew) {
+		QTimer::singleShot(0, this, [this]() {
+			auto* dlg = new WhatsNewDialog(this);
+			dlg->exec();
+		});
+	}
 }
 
 /**
@@ -519,7 +530,7 @@ bool MainWin::newProject(bool createInitialContent) {
 		m_actionsManager->m_visibilityAllAction->setChecked(true);
 
 	m_aspectTreeModel = new AspectTreeModel(m_project, this);
-	connect(m_aspectTreeModel, &AspectTreeModel::statusInfo, [=](const QString& text) {
+	connect(m_aspectTreeModel, &AspectTreeModel::statusInfo, [=, this](const QString& text) {
 		statusBar()->showMessage(text);
 	});
 
@@ -1312,7 +1323,7 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 		// 		connect(part, &AbstractPart::importFromFileRequested, this, &MainWin::importFileDialog);
-		connect(part, &AbstractPart::importFromFileRequested, this, [=]() {
+		connect(part, &AbstractPart::importFromFileRequested, this, [=, this]() {
 			importFileDialog();
 		});
 		connect(part, &AbstractPart::importFromSQLDatabaseRequested, this, &MainWin::importSqlDialog);
@@ -1333,6 +1344,15 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	} else if (aspect->type() == AspectType::Folder)
 		for (auto* child : aspect->children<AbstractAspect>())
 			handleAspectAdded(child);
+#ifdef HAVE_MQTT
+	if (aspect->type() == AspectType::MQTTClient) {
+		auto* client = const_cast<MQTTClient*>(static_cast<const MQTTClient*>(aspect));
+		connect(client, &MQTTClient::clientErrorOccurred, this, [client](QMqttClient::ClientError error) {
+			auto* errorWidget = new MQTTErrorWidget(error, client);
+			errorWidget->show();
+		});
+	}
+#endif
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* aspect) {
@@ -1491,6 +1511,19 @@ void MainWin::createFolderContextMenu(const Folder*, QMenu* menu) const {
 }
 
 void MainWin::undo() {
+	#ifdef HAVE_CANTOR_LIBS
+	if (m_currentAspect && m_currentAspect->type() == AspectType::Notebook) {
+		auto* notebook = static_cast<Notebook*>(m_currentAspect);
+		QWidget* focusWidget = QApplication::focusWidget();
+		if (notebook->part() && focusWidget && notebook->part()->widget()->isAncestorOf(focusWidget)) {
+			if (auto* a = notebook->part()->action(QStringLiteral("edit_undo"))) {
+				a->trigger();
+				return;
+			}
+		}
+	}
+	#endif
+
 	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->undo();
 	m_actionsManager->m_redoAction->setEnabled(true);
@@ -1506,6 +1539,19 @@ void MainWin::undo() {
 }
 
 void MainWin::redo() {
+	#ifdef HAVE_CANTOR_LIBS
+	if (m_currentAspect && m_currentAspect->type() == AspectType::Notebook) {
+		auto* notebook = static_cast<Notebook*>(m_currentAspect);
+		QWidget* focusWidget = QApplication::focusWidget();
+		if (notebook->part() && focusWidget && notebook->part()->widget()->isAncestorOf(focusWidget)) {
+			if (auto* a = notebook->part()->action(QStringLiteral("edit_redo"))) {
+				a->trigger();
+				return;
+			}
+		}
+	}
+	#endif
+
 	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->redo();
 	m_actionsManager->m_undoAction->setEnabled(true);
@@ -1680,6 +1726,14 @@ void MainWin::migrateSettings() {
 		group.deleteEntry(QLatin1String("DecimalSeparatorLocale"));
 		group.writeEntry(QLatin1String("NumberFormat"), static_cast<int>(language));
 	}
+
+	// detect first run after a version upgrade and schedule the "What's New" dialog
+	const QString lastVersion = group.readEntry(QLatin1String("lastRunVersion"), QString());
+	if (lastVersion != QLatin1String(LVERSION)) {
+		m_showWhatsNew = true;
+		group.writeEntry(QLatin1String("lastRunVersion"), QString(QLatin1String(LVERSION)));
+		Settings::sync();
+	}
 }
 
 void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
@@ -1806,7 +1860,16 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 
 #ifdef HAVE_CANTOR_LIBS
 	if (changes.contains(Settings::Type::Notebook))
+	{
 		m_actionsManager->updateNotebookActions();
+		#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
+		if (m_project) {
+			const auto& notebooks = m_project->children<Notebook>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* notebook : notebooks)
+				notebook->updateSettings();
+		}
+		#endif
+	}
 #else
 	Q_UNUSED(changes)
 #endif

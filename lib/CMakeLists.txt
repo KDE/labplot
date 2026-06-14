@@ -315,6 +315,19 @@ if(PSAPI)
 endif()
 endif()
 
+# macOS: Make Python library path version-independent for stable ABI compatibility.
+# Same adjustment as for the labplot executable in src/CMakeLists.txt.
+if(APPLE AND ENABLE_PYTHON_SCRIPTING)
+    add_custom_command(TARGET liblabplot POST_BUILD
+        COMMAND install_name_tool -change
+            "@rpath/Python.framework/Versions/${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/Python"
+            "@rpath/Python.framework/Versions/Current/Python"
+            "$<TARGET_FILE:liblabplot>"
+        COMMENT "liblabplot: rewriting Python framework path ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR} -> Current for stable ABI"
+        VERBATIM
+    )
+endif()
+
 ############## installation ################################
 install(TARGETS liblabplot EXPORT LabPlotTargets DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} COMPONENT Devel)
 

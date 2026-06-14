@@ -42,8 +42,7 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(Type, type, Type)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, column, Column)
-	QString& columnPath() const;
-	void setColumnPath(const QString&);
+	CLASS_D_ACCESSOR_DECL(QString, columnPath, ColumnPath)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
 	BASIC_D_ACCESSOR_DECL(bool, centerPositionAvailable, centerPositionAvailable)
 	BASIC_D_ACCESSOR_DECL(double, distance, Distance)

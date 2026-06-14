@@ -190,43 +190,43 @@ QMenu* Histogram::createContextMenu() {
 	// TODO: if there are more actions, add a group for all fit types
 	auto* fitGaussianAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Gaussian (Normal) Distribution"));
 	analysisMenu->addAction(fitGaussianAction);
-	connect(fitGaussianAction, &QAction::triggered, this, [=]() {
+	connect(fitGaussianAction, &QAction::triggered, this, [=, this]() {
 		d->m_plot->addHistogramFit(this, nsl_sf_stats_gaussian);
 	});
 
 	auto* fitExponentialAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Exponential Distribution"));
 	analysisMenu->addAction(fitExponentialAction);
-	connect(fitExponentialAction, &QAction::triggered, this, [=]() {
+	connect(fitExponentialAction, &QAction::triggered, this, [=, this]() {
 		d->m_plot->addHistogramFit(this, nsl_sf_stats_exponential);
 	});
 
 	auto* fitLaplaceAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Laplace Distribution"));
 	analysisMenu->addAction(fitLaplaceAction);
-	connect(fitLaplaceAction, &QAction::triggered, this, [=]() {
+	connect(fitLaplaceAction, &QAction::triggered, this, [=, this]() {
 		d->m_plot->addHistogramFit(this, nsl_sf_stats_laplace);
 	});
 
 	auto* fitCauchyAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Cauchy-Lorentz Distribution"));
 	analysisMenu->addAction(fitCauchyAction);
-	connect(fitCauchyAction, &QAction::triggered, this, [=]() {
+	connect(fitCauchyAction, &QAction::triggered, this, [=, this]() {
 		d->m_plot->addHistogramFit(this, nsl_sf_stats_cauchy_lorentz);
 	});
 
 	auto* fitLognormalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Log-normal Distribution"));
 	analysisMenu->addAction(fitLognormalAction);
-	connect(fitLognormalAction, &QAction::triggered, this, [=]() {
+	connect(fitLognormalAction, &QAction::triggered, this, [=, this]() {
 		d->m_plot->addHistogramFit(this, nsl_sf_stats_lognormal);
 	});
 
 	auto* fitPoissonAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Poisson Distribution"));
 	analysisMenu->addAction(fitPoissonAction);
-	connect(fitPoissonAction, &QAction::triggered, this, [=]() {
+	connect(fitPoissonAction, &QAction::triggered, this, [=, this]() {
 		d->m_plot->addHistogramFit(this, nsl_sf_stats_poisson);
 	});
 
 	auto* fitBinomialAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Binomial Distribution"));
 	analysisMenu->addAction(fitBinomialAction);
-	connect(fitBinomialAction, &QAction::triggered, this, [=]() {
+	connect(fitBinomialAction, &QAction::triggered, this, [=, this]() {
 		d->m_plot->addHistogramFit(this, nsl_sf_stats_binomial);
 	});
 
@@ -395,17 +395,17 @@ QColor Histogram::color() const {
 }
 
 const AbstractColumn* Histogram::bins() const {
-	D(Histogram);
+	Q_D(const Histogram);
 	return d->bins();
 }
 
 const AbstractColumn* Histogram::binValues() const {
-	D(Histogram);
+	Q_D(const Histogram);
 	return d->binValues();
 }
 
 const AbstractColumn* Histogram::binPDValues() const {
-	D(Histogram);
+	Q_D(const Histogram);
 	return d->binPDValues();
 }
 
@@ -568,7 +568,7 @@ void Histogram::retransform() {
 }
 
 void Histogram::recalc() {
-	D(Histogram);
+	Q_D(Histogram);
 	d->recalc();
 }
 
@@ -585,7 +585,7 @@ void Histogram::handleResize(double horizontalRatio, double /*verticalRatio*/, b
 }
 
 void Histogram::updateValues() {
-	D(Histogram);
+	Q_D(Histogram);
 	d->updateValues();
 }
 
@@ -722,7 +722,7 @@ double HistogramPrivate::yMaximum() const {
 	return -INFINITY;
 }
 
-const AbstractColumn* HistogramPrivate::bins() {
+const AbstractColumn* HistogramPrivate::bins() const {
 	if (!m_binsColumn) {
 		m_binsColumn = new Column(QStringLiteral("bins"));
 
@@ -737,7 +737,7 @@ const AbstractColumn* HistogramPrivate::bins() {
 	return m_binsColumn;
 }
 
-const AbstractColumn* HistogramPrivate::binValues() {
+const AbstractColumn* HistogramPrivate::binValues() const {
 	if (!m_binValuesColumn) {
 		m_binValuesColumn = new Column(QStringLiteral("values"));
 
@@ -756,7 +756,7 @@ const AbstractColumn* HistogramPrivate::binValues() {
  * returns a column with the bin values in the probability density normalization
  * \return
  */
-const AbstractColumn* HistogramPrivate::binPDValues() {
+const AbstractColumn* HistogramPrivate::binPDValues() const {
 	if (!m_binPDValuesColumn) {
 		m_binPDValuesColumn = new Column(QStringLiteral("values"));
 

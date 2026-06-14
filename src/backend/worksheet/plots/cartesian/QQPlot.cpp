@@ -293,12 +293,12 @@ void QQPlot::setDistribution(nsl_sf_stats_distribution distribution) {
 // #################################  SLOTS  ####################################
 // ##############################################################################
 void QQPlot::retransform() {
-	D(QQPlot);
+	Q_D(QQPlot);
 	d->retransform();
 }
 
 void QQPlot::recalc() {
-	D(QQPlot);
+	Q_D(QQPlot);
 	d->recalc();
 }
 

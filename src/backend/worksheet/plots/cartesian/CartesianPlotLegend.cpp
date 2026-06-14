@@ -163,7 +163,7 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, lineSymbolWidth, lineSymb
 
 // Title
 TextLabel* CartesianPlotLegend::title() {
-	D(CartesianPlotLegend);
+	Q_D(CartesianPlotLegend);
 	return d->title;
 }
 

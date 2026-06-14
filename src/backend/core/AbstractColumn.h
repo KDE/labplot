@@ -161,7 +161,7 @@ public:
 	virtual bool indicesMinMax(double v1, double v2, int& start, int& end) const;
 	virtual int indexForValue(double x, bool smaller) const;
 
-	bool isValid(int row) const;
+	virtual bool isValid(int row) const;
 
 	bool isMasked(int row) const;
 	bool isMasked(const Interval<int>& i) const;

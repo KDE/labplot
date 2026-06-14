@@ -52,7 +52,7 @@ void ReferenceLine::init(bool loading) {
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
-	connect(d->line, &Line::updatePixmapRequested, [=] {
+	connect(d->line, &Line::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});
@@ -160,6 +160,41 @@ QMenu* ReferenceLine::createContextMenu() {
 	menu->insertSeparator(visibilityAction);
 
 	return menu;
+}
+
+void ReferenceLinePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	m_undoPos = positionLogical;
+	m_isDragged = false;
+
+	WorksheetElementPrivate::mousePressEvent(event);
+}
+
+void ReferenceLinePrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	m_isDragged = true;
+
+	WorksheetElementPrivate::mouseMoveEvent(event);
+}
+
+void ReferenceLinePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	if (m_isDragged) {
+		if (m_undoPos != positionLogical) {
+			QPointF newPos = positionLogical;
+
+			positionLogical = m_undoPos;
+			q->beginMacro(i18n("Move Reference Line"));
+
+			q->setPositionLogical(newPos);
+			WorksheetElementPrivate::mouseReleaseEvent(event);
+
+			q->endMacro();
+
+			m_isDragged = false;
+			return;
+		}
+		m_isDragged = false;
+	}
+
+	WorksheetElementPrivate::mouseReleaseEvent(event);
 }
 
 void ReferenceLine::retransform() {

@@ -117,7 +117,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->line->setHidden(true);
 	d->line->setCreateXmlElement(false); // line properties are written out together with arrow properties in Axis::save()
 	addChild(d->line);
-	connect(d->line, &Line::updatePixmapRequested, [=] {
+	connect(d->line, &Line::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});
@@ -142,7 +142,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->majorTicksLine->setPrefix(QStringLiteral("MajorTicks"));
 	d->majorTicksLine->setCreateXmlElement(false);
 	addChild(d->majorTicksLine);
-	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=] {
+	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});
@@ -156,7 +156,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->minorTicksLine->setPrefix(QStringLiteral("MinorTicks"));
 	d->minorTicksLine->setCreateXmlElement(false);
 	addChild(d->minorTicksLine);
-	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=] {
+	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});
@@ -169,7 +169,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->majorGridLine->setPrefix(QStringLiteral("MajorGrid"));
 	d->majorGridLine->setHidden(true);
 	addChild(d->majorGridLine);
-	connect(d->majorGridLine, &Line::updatePixmapRequested, [=] {
+	connect(d->majorGridLine, &Line::updatePixmapRequested, [=, this] {
 		d->updateGrid();
 		Q_EMIT changed();
 	});
@@ -182,7 +182,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->minorGridLine->setPrefix(QStringLiteral("MinorGrid"));
 	d->minorGridLine->setHidden(true);
 	addChild(d->minorGridLine);
-	connect(d->minorGridLine, &Line::updatePixmapRequested, [=] {
+	connect(d->minorGridLine, &Line::updatePixmapRequested, [=, this] {
 		d->updateGrid();
 		Q_EMIT changed();
 	});
@@ -507,11 +507,11 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsTextType, labelsTextType, labelsTex
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, labelsTextColumn, labelsTextColumn)
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsTextColumnPath, labelsTextColumnPath)
 QVector<double> Axis::tickLabelValues() const {
-	D(Axis);
+	Q_D(const Axis);
 	return d->tickLabelValues;
 }
 QVector<QString> Axis::tickLabelStrings() const {
-	D(Axis);
+	Q_D(const Axis);
 	return d->tickLabelStrings;
 }
 BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor)

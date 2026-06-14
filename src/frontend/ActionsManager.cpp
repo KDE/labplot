@@ -8,6 +8,7 @@
  */
 
 #include "frontend/AboutDialog.h"
+#include "frontend/WhatsNewDialog.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -168,7 +169,7 @@ void ActionsManager::init() {
 		// disconnect default slot
 		disconnect(aboutAction, &QAction::triggered, nullptr, nullptr);
 		connect(aboutAction, &QAction::triggered, this,
-		[=]() {
+		[=, this]() {
 			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
 			aboutDialog.exec();
 		});
@@ -186,7 +187,7 @@ void ActionsManager::initActions() {
 	// add some standard actions
 	m_newProjectAction = KStandardAction::openNew(
 		this,
-		[=]() {
+		[=, this]() {
 			m_mainWindow->newProject(true);
 		},
 		collection);
@@ -281,14 +282,14 @@ void ActionsManager::initActions() {
 	collection->addAction(QStringLiteral("import_file"), m_importFileAction);
 	collection->setDefaultShortcut(m_importFileAction, Qt::CTRL | Qt::SHIFT | Qt::Key_I);
 	m_importFileAction->setToolTip(i18n("Import data from a regular file"));
-	connect(m_importFileAction, &QAction::triggered, this, [=]() {
+	connect(m_importFileAction, &QAction::triggered, this, [=, this]() {
 		m_mainWindow->importFileDialog();
 	});
 
 	m_importDirAction = new QAction(QIcon::fromTheme(QStringLiteral("document-import")), i18n("From Directory..."), this);
 	collection->addAction(QStringLiteral("import_dir"), m_importDirAction);
 	m_importDirAction->setToolTip(i18n("Import multiple files from a directory"));
-	connect(m_importDirAction, &QAction::triggered, this, [=]() {
+	connect(m_importDirAction, &QAction::triggered, this, [=, this]() {
 		m_mainWindow->importDirDialog();
 	});
 
@@ -365,7 +366,7 @@ void ActionsManager::initActions() {
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Color Maps Browser"), this);
 	action->setToolTip(i18n("Open dialog to browse through the available color maps."));
 	collection->addAction(QStringLiteral("color_maps"), action);
-	connect(action, &QAction::triggered, this, [=]() {
+	connect(action, &QAction::triggered, this, [=, this]() {
 		auto* dlg = new ColorMapsDialog(m_mainWindow);
 	 	dlg->exec();
 	 	delete dlg;
@@ -504,6 +505,14 @@ void ActionsManager::initActions() {
 
 	// actions used in the toolbars
 	initSpreadsheetToolbarActions();
+
+	// what's new action
+	m_whatsNewAction = new QAction(QIcon::fromTheme(QStringLiteral("help-whats-new")), i18n("What's New"), this);
+	collection->addAction(QStringLiteral("whats_new"), m_whatsNewAction);
+	connect(m_whatsNewAction, &QAction::triggered, m_mainWindow, [this]() {
+		auto* dlg = new WhatsNewDialog(m_mainWindow);
+		dlg->exec();
+	});
 	initWorksheetToolbarActions();
 	initPlotAreaToolbarActions();
 	initDataExtractorToolbarActions();
@@ -1063,6 +1072,8 @@ void ActionsManager::initMenus() {
     if (helpMenu) {
         auto* whatsThis = collection->action(KStandardAction::name(KStandardAction::WhatsThis));
         helpMenu->insertAction(whatsThis, helpAction);
+        helpMenu->insertAction(whatsThis, m_whatsNewAction);
+        helpMenu->insertSeparator(whatsThis);
     }
 }
 

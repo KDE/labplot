@@ -59,7 +59,6 @@ private:
 								   const QChar separatorCharacter,
 								   QVector<QStringView>& columnValues);
 	static Status determineSeparator(const QString& line, bool removeQuotes, bool simplifyWhiteSpaces, QString& separator);
-	static QVector<AbstractColumn::ColumnMode> determineColumnModes(const QVector<QStringList>&, const AsciiFilter::Properties&, QString& dateTimeFormat);
 	Status getLine(QIODevice&, QString& line);
 
 	template<typename T>

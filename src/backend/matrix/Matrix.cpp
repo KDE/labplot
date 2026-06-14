@@ -31,7 +31,6 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
-#include <QTimer>
 
 /*!
 	This class manages matrix based data (i.e., mathematically
@@ -119,12 +118,6 @@ QWidget* Matrix::view() const {
 		m_model = m_view->model();
 		connect(this, &Matrix::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
-		});
-
-		// navigate to the first cell and set the focus so the user can start directly entering new data
-		QTimer::singleShot(0, this, [=]() {
-			m_view->goToCell(0, 0);
-			m_view->setFocus();
 		});
 	}
 	return m_partView;

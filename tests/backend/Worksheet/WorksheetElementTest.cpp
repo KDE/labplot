@@ -27,6 +27,7 @@
 #include "frontend/widgets/LabelWidget.h"
 
 #include <QAction>
+#include <QGraphicsSceneMouseEvent>
 #include <QItemSelectionModel>
 #include <QMenu>
 #include <QTreeView>
@@ -151,14 +152,38 @@ void WorksheetElementTest::referenceRangeXMouseMove() {
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.55);
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1., 0.55, 0.);
 
+	// Simulate mouse press
+	QGraphicsSceneMouseEvent pressEvent(QEvent::GraphicsSceneMousePress);
+	referenceRange->d_ptr->mousePressEvent(&pressEvent);
+
 	// Simulate mouse move
+	QGraphicsSceneMouseEvent moveEvent(QEvent::GraphicsSceneMouseMove);
+	referenceRange->d_ptr->mouseMoveEvent(&moveEvent);
 	referenceRange->d_ptr->setPos(QPointF(25, -10)); // item change will be called (negative value is up)
+
+	// Simulate mouse release
+	QGraphicsSceneMouseEvent releaseEvent(QEvent::GraphicsSceneMouseRelease);
+	referenceRange->d_ptr->mouseReleaseEvent(&releaseEvent);
+
+	// Verify
 	QCOMPARE(referenceRange->positionLogical().x(), 0.75); // 25/50 * 0.5 + 0.5
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5); // Only horizontal considered
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.7);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.8);
 
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0.7, 1., 0.8, 0.);
+
+	project.undoStack()->undo();
+	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
+	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
+	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.45);
+	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.55);
+
+	project.undoStack()->redo();
+	QCOMPARE(referenceRange->positionLogical().x(), 0.75);
+	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
+	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.7);
+	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.8);
 
 	// Set Logical Start
 	referenceRange->setPositionLogicalStart(QPointF(0.1, 0.5));
@@ -197,13 +222,37 @@ void WorksheetElementTest::referenceRangeYMouseMove() {
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.45);
 
+	// Simulate mouse press
+	QGraphicsSceneMouseEvent pressEvent(QEvent::GraphicsSceneMousePress);
+	referenceRange->d_ptr->mousePressEvent(&pressEvent);
+
 	// Simulate mouse move
+	QGraphicsSceneMouseEvent moveEvent(QEvent::GraphicsSceneMouseMove);
+	referenceRange->d_ptr->mouseMoveEvent(&moveEvent);
 	referenceRange->d_ptr->setPos(QPointF(-10, -25)); // item change will be called (negative value is up)
+
+	// Simulate mouse release
+	QGraphicsSceneMouseEvent releaseEvent(QEvent::GraphicsSceneMouseRelease);
+	referenceRange->d_ptr->mouseReleaseEvent(&releaseEvent);
+
+	// Verify
 	QCOMPARE(referenceRange->positionLogical().y(), 0.75); // 25/50 * 0.5 + 0.5
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only vertical considered
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.7);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.8);
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.8, 1., 0.7);
+
+	project.undoStack()->undo();
+	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
+	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
+	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
+	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
+
+	project.undoStack()->redo();
+	QCOMPARE(referenceRange->positionLogical().y(), 0.75);
+	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
+	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.7);
+	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.8);
 
 	// Set Logical Start
 	referenceRange->setPositionLogicalStart(QPointF(0.5, 0.1));
@@ -659,6 +708,77 @@ void WorksheetElementTest::referenceLineInverseScaling() {
 
 	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
 	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
+}
+
+void WorksheetElementTest::referenceLineXMouseMove() {
+	SETUP_PROJECT
+
+	auto* referenceLine = new ReferenceLine(p, QStringLiteral("line"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Vertical);
+	p->addChild(referenceLine);
+	referenceLine->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	referenceLine->setPositionLogical(QPointF(0.5, 0.5));
+
+	QCOMPARE(referenceLine->positionLogical().x(), 0.5);
+
+	// Simulate mouse press
+	QGraphicsSceneMouseEvent pressEvent(QEvent::GraphicsSceneMousePress);
+	referenceLine->d_ptr->mousePressEvent(&pressEvent);
+
+	// Simulate mouse move to trigger drag state
+	QGraphicsSceneMouseEvent moveEvent(QEvent::GraphicsSceneMouseMove);
+	referenceLine->d_ptr->mouseMoveEvent(&moveEvent);
+	referenceLine->d_ptr->setPos(QPointF(25, 0));
+
+	// Simulate mouse release
+	QGraphicsSceneMouseEvent releaseEvent(QEvent::GraphicsSceneMouseRelease);
+	referenceLine->d_ptr->mouseReleaseEvent(&releaseEvent);
+
+	// Verify
+	QCOMPARE(referenceLine->positionLogical().x(), 0.75);
+
+	project.undoStack()->undo();
+	QCOMPARE(referenceLine->positionLogical().x(), 0.5);
+
+	project.undoStack()->redo();
+	QCOMPARE(referenceLine->positionLogical().x(), 0.75);
+}
+
+void WorksheetElementTest::referenceLineYMouseMove() {
+	SETUP_PROJECT
+
+	auto* referenceLine = new ReferenceLine(p, QStringLiteral("line"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Horizontal);
+	p->addChild(referenceLine);
+	referenceLine->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = referenceLine->position();
+	pp.point = QPointF(0, 0);
+	referenceLine->setPosition(pp);
+	referenceLine->setCoordinateBindingEnabled(true);
+
+	QCOMPARE(referenceLine->positionLogical().y(), 0.5);
+
+	// Simulate mouse press
+	QGraphicsSceneMouseEvent pressEvent(QEvent::GraphicsSceneMousePress);
+	referenceLine->d_ptr->mousePressEvent(&pressEvent);
+
+	// Simulate mouse move
+	QGraphicsSceneMouseEvent moveEvent(QEvent::GraphicsSceneMouseMove);
+	referenceLine->d_ptr->mouseMoveEvent(&moveEvent);
+	referenceLine->d_ptr->setPos(QPointF(0, -25));
+
+	// Simulate mouse release
+	QGraphicsSceneMouseEvent releaseEvent(QEvent::GraphicsSceneMouseRelease);
+	referenceLine->d_ptr->mouseReleaseEvent(&releaseEvent);
+
+	// Verify
+	QCOMPARE(referenceLine->positionLogical().y(), 0.75);
+
+	project.undoStack()->undo();
+	QCOMPARE(referenceLine->positionLogical().y(), 0.5);
+
+	project.undoStack()->redo();
+	QCOMPARE(referenceLine->positionLogical().y(), 0.75);
 }
 
 #define DEBUG_ELEMENT_NAMES(aspectVector)                                                                                                                      \

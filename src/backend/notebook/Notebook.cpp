@@ -22,6 +22,7 @@
 #include "frontend/notebook/NotebookView.h"
 #endif
 
+#include <cantor/cantorlibs_version.h>
 #include <cantor/panelplugin.h>
 #include <cantor/panelpluginhandler.h>
 #include <cantor/worksheetaccess.h>
@@ -34,8 +35,11 @@
 #include <kcoreaddons_version.h>
 
 #include <QAction>
+#include <QApplication>
 #include <QFileInfo>
 #include <QModelIndex>
+#include <QPalette>
+#include <QTimer>
 
 Notebook::Notebook(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Notebook)
@@ -94,6 +98,13 @@ bool Notebook::init(QByteArray* content) {
 
 		// default settings
 		const auto group = Settings::group(QStringLiteral("Settings_Notebook"));
+
+#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
+		QTimer::singleShot(0, this, &Notebook::updateSettings);
+		const QString theme = group.readEntry(QLatin1String("Theme"), QString());
+		if (m_worksheetAccess && !theme.isEmpty())
+			m_worksheetAccess->setTheme(theme);
+#endif
 
 		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
 		// and we need to go through the actions provided in cantor_part.
@@ -270,6 +281,43 @@ QList<Cantor::PanelPlugin*> Notebook::getPlugins() {
 
 	DEBUG(Q_FUNC_INFO << ", DONE")
 	return m_plugins;
+}
+
+void Notebook::updateSettings() {
+	const auto group = Settings::group(QStringLiteral("Settings_Notebook"));
+
+	if (m_part) {
+		auto* action = m_part->action(QStringLiteral("enable_highlighting"));
+		if (action)
+			action->setChecked(group.readEntry(QLatin1String("SyntaxHighlighting"), true));
+
+		action = m_part->action(QStringLiteral("enable_completion"));
+		if (action)
+			action->setChecked(group.readEntry(QLatin1String("SyntaxCompletion"), true));
+
+		action = m_part->action(QStringLiteral("enable_expression_numbers"));
+		if (action)
+			action->setChecked(group.readEntry(QLatin1String("LineNumbers"), false));
+
+		action = m_part->action(QStringLiteral("enable_typesetting"));
+		if (action)
+			action->setChecked(group.readEntry(QLatin1String("LatexTypesetting"), false));
+
+		action = m_part->action(QStringLiteral("enable_animations"));
+		if (action)
+			action->setChecked(group.readEntry(QLatin1String("Animations"), true));
+	}
+
+#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
+	if (m_worksheetAccess) {
+		QString theme = group.readEntry(QLatin1String("Theme"), QString());
+		if (theme.isEmpty()) {
+			const bool isDarkMode = (QApplication::palette().color(QPalette::Base).lightness() < 128);
+			theme = isDarkMode ? QStringLiteral("Breeze Dark") : QStringLiteral("Breeze Light");
+		}
+		m_worksheetAccess->setTheme(theme);
+	}
+#endif
 }
 
 KParts::ReadWritePart* Notebook::part() {

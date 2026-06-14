@@ -17,8 +17,13 @@
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_gamma.h> /* gsl_sf_choose */
+#include <gsl/gsl_sort.h>
 
-const char* nsl_smooth_type_name[] = {i18n("Moving Average (Central)"), i18n("Moving Average (Lagged)"), i18n("Percentile"), i18n("Savitzky-Golay")};
+const char* nsl_smooth_type_name[] = {i18n("Moving Average (Central)"),
+									  i18n("Moving Average (Lagged)"),
+									  i18n("Percentile"),
+									  i18n("Savitzky-Golay"),
+									  i18n("LOWESS")};
 const char* nsl_smooth_pad_mode_name[] = {i18n("None"), i18n("Interpolating"), i18n("Mirror"), i18n("Nearest"), i18n("Constant"), i18n("Periodic")};
 const char* nsl_smooth_weight_type_name[] = {i18n("Uniform (Rectangular)"),
 											 i18n("Triangular"),
@@ -543,4 +548,252 @@ int nsl_smooth_savgol(double* data, size_t n, size_t points, int order, nsl_smoo
 
 int nsl_smooth_savgol_default(double* data, size_t n, size_t points, int order) {
 	return nsl_smooth_savgol(data, n, points, order, nsl_smooth_pad_constant);
+}
+
+/* Helper function for LOWESS: tricube weight function */
+static double nsl_smooth_lowess_tricube(double x) {
+	if (fabs(x) >= 1.0)
+		return 0.0;
+	double tmp = 1.0 - x * x * x;
+	return tmp * tmp * tmp;
+}
+
+/* Helper function for LOWESS: weighted least squares fit */
+static int nsl_smooth_lowess_fit(const double* x, const double* y, const double* w, size_t n, int degree, double x0, double* y0) {
+	/* Fit polynomial of given degree using weighted least squares
+	 * Returns fitted value at x0 */
+
+	if (n == 0 || degree < 0 || degree > 2)
+		return -1;
+
+	/* Build design matrix and solve normal equations */
+	double sumw = 0.0, sumwx = 0.0, sumwx2 = 0.0, sumwx3 = 0.0, sumwx4 = 0.0;
+	double sumwy = 0.0, sumwxy = 0.0, sumwx2y = 0.0;
+
+	for (size_t i = 0; i < n; i++) {
+		double dx = x[i] - x0;
+		double dx2 = dx * dx;
+		double ww = w[i];
+
+		sumw += ww;
+		sumwx += ww * dx;
+		sumwx2 += ww * dx2;
+		sumwy += ww * y[i];
+		sumwxy += ww * dx * y[i];
+
+		if (degree >= 2) {
+			double dx3 = dx2 * dx;
+			double dx4 = dx2 * dx2;
+			sumwx3 += ww * dx3;
+			sumwx4 += ww * dx4;
+			sumwx2y += ww * dx2 * y[i];
+		}
+	}
+
+	if (sumw == 0.0)
+		return -1;
+
+	/* Solve for coefficients */
+	if (degree == 0) {
+		/* Constant fit: y = a0 */
+		*y0 = sumwy / sumw;
+	} else if (degree == 1) {
+		/* Linear fit: y = a0 + a1*(x-x0) */
+		double det = sumw * sumwx2 - sumwx * sumwx;
+		if (fabs(det) < 1e-12)
+			return -1;
+		*y0 = (sumwy * sumwx2 - sumwxy * sumwx) / det;
+	} else {
+		/* Quadratic fit: y = a0 + a1*(x-x0) + a2*(x-x0)^2 */
+		/* Use GSL for 3x3 system */
+		gsl_matrix* A = gsl_matrix_alloc(3, 3);
+		gsl_vector* b = gsl_vector_alloc(3);
+		gsl_vector* coef = gsl_vector_alloc(3);
+
+		gsl_matrix_set(A, 0, 0, sumw);
+		gsl_matrix_set(A, 0, 1, sumwx);
+		gsl_matrix_set(A, 0, 2, sumwx2);
+		gsl_matrix_set(A, 1, 0, sumwx);
+		gsl_matrix_set(A, 1, 1, sumwx2);
+		gsl_matrix_set(A, 1, 2, sumwx3);
+		gsl_matrix_set(A, 2, 0, sumwx2);
+		gsl_matrix_set(A, 2, 1, sumwx3);
+		gsl_matrix_set(A, 2, 2, sumwx4);
+
+		gsl_vector_set(b, 0, sumwy);
+		gsl_vector_set(b, 1, sumwxy);
+		gsl_vector_set(b, 2, sumwx2y);
+
+		gsl_permutation* p = gsl_permutation_alloc(3);
+		int signum;
+		int status = gsl_linalg_LU_decomp(A, p, &signum);
+		if (status == 0)
+			status = gsl_linalg_LU_solve(A, p, b, coef);
+
+		if (status == 0)
+			*y0 = gsl_vector_get(coef, 0);
+		else
+			*y0 = sumwy / sumw; /* Fall back to mean */
+
+		gsl_permutation_free(p);
+		gsl_vector_free(coef);
+		gsl_vector_free(b);
+		gsl_matrix_free(A);
+
+		if (status != 0)
+			return -1;
+	}
+
+	return 0;
+}
+
+int nsl_smooth_lowess(const double* xdata, double* ydata, size_t n, double span, double delta, int iterations) {
+	if (n == 0 || span <= 0.0 || span > 1.0 || iterations < 0)
+		return -1;
+
+	/* Calculate number of points in local neighborhood */
+	size_t nlocal = (size_t)(span * n);
+	if (nlocal < 2)
+		nlocal = 2;
+	if (nlocal > n)
+		nlocal = n;
+
+	/* Allocate working arrays */
+	double* ys = (double*)malloc(n * sizeof(double)); /* smoothed values */
+	double* rw = (double*)malloc(n * sizeof(double)); /* robustness weights */
+	double* res = (double*)malloc(n * sizeof(double)); /* residuals */
+	double* weights = (double*)malloc(nlocal * sizeof(double));
+
+	if (!ys || !rw || !res || !weights) {
+		free(ys);
+		free(rw);
+		free(res);
+		free(weights);
+		return -1;
+	}
+
+	/* Initialize robustness weights to 1 */
+	for (size_t i = 0; i < n; i++)
+		rw[i] = 1.0;
+
+	/* Main LOWESS iterations */
+	for (int iter = 0; iter <= iterations; iter++) {
+		size_t last = 0; /* Last point where full regression was computed */
+
+		for (size_t i = 0; i < n; i++) {
+			double x0 = xdata[i];
+
+			/* Check if we can use interpolation (delta optimization) */
+			if (delta > 0.0 && i > 0 && fabs(x0 - xdata[last]) < delta) {
+				/* Interpolate between last computed point and next point to be computed */
+				size_t next = i;
+				while (next < n - 1 && fabs(xdata[next + 1] - xdata[last]) < delta)
+					next++;
+
+				if (next >= n - 1) {
+					/* Use last computed value */
+					ys[i] = ys[last];
+				} else {
+					/* Linear interpolation */
+					double alpha = (x0 - xdata[last]) / (xdata[next] - xdata[last]);
+					ys[i] = (1.0 - alpha) * ys[last] + alpha * ys[next];
+				}
+				continue;
+			}
+
+			/* Find nlocal nearest neighbors */
+			/* For simplicity, use symmetric neighborhood around i */
+			size_t left = 0, right = n - 1;
+
+			if (nlocal < n) {
+				/* Find the nlocal closest points */
+				if (i < nlocal / 2) {
+					left = 0;
+					right = nlocal - 1;
+				} else if (i >= n - nlocal / 2) {
+					left = n - nlocal;
+					right = n - 1;
+				} else {
+					left = i - nlocal / 2;
+					right = left + nlocal - 1;
+				}
+			}
+
+			/* Calculate distances and find maximum distance */
+			double maxdist = 0.0;
+			for (size_t j = left; j <= right; j++) {
+				double dist = fabs(xdata[j] - x0);
+				if (dist > maxdist)
+					maxdist = dist;
+			}
+
+			/* Calculate tricube weights */
+			if (maxdist > 0.0) {
+				for (size_t j = 0; j < right - left + 1; j++) {
+					double dist = fabs(xdata[left + j] - x0);
+					weights[j] = nsl_smooth_lowess_tricube(dist / maxdist) * rw[left + j];
+				}
+			} else {
+				/* All points at same x location */
+				for (size_t j = 0; j < right - left + 1; j++)
+					weights[j] = rw[left + j];
+			}
+
+			/* Fit polynomial (degree 1: linear regression) */
+			double fitted;
+			int status = nsl_smooth_lowess_fit(&xdata[left], &ydata[left], weights, right - left + 1, 1, x0, &fitted);
+
+			if (status == 0)
+				ys[i] = fitted;
+			else
+				ys[i] = ydata[i]; /* Fall back to original value on error */
+
+			last = i;
+		}
+
+		/* Update robustness weights for next iteration */
+		if (iter < iterations) {
+			/* Calculate residuals */
+			for (size_t i = 0; i < n; i++)
+				res[i] = fabs(ydata[i] - ys[i]);
+
+			/* Find median absolute residual */
+			double* sorted_res = (double*)malloc(n * sizeof(double));
+			if (!sorted_res) {
+				free(ys);
+				free(rw);
+				free(res);
+				free(weights);
+				return -1;
+			}
+
+			for (size_t i = 0; i < n; i++)
+				sorted_res[i] = res[i];
+			gsl_sort(sorted_res, 1, n);
+			double cmad = 6.0 * nsl_stats_median_sorted(sorted_res, 1, n, nsl_stats_quantile_type7);
+			free(sorted_res);
+
+			/* Update robustness weights using bisquare function */
+			if (cmad > 0.0) {
+				for (size_t i = 0; i < n; i++) {
+					double r = res[i] / cmad;
+					if (r < 1.0)
+						rw[i] = (1.0 - r * r) * (1.0 - r * r);
+					else
+						rw[i] = 0.0;
+				}
+			}
+		}
+	}
+
+	/* Copy smoothed values to output */
+	for (size_t i = 0; i < n; i++)
+		ydata[i] = ys[i];
+
+	free(ys);
+	free(rw);
+	free(res);
+	free(weights);
+
+	return 0;
 }

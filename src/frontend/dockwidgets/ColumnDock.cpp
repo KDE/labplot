@@ -837,10 +837,13 @@ void ColumnDock::deleteVariable() {
 void ColumnDock::variableNameChanged() {
 	QStringList vars;
 	QString argText;
-	for (auto* varName : m_variableLineEdits) {
-		QString name = varName->text().simplified();
+    for (int i = 0; i < m_variableLineEdits.size(); i++) {
+		QString name = m_variableLineEdits.at(i)->text().simplified();
 		if (!name.isEmpty()) {
-			vars << name;
+			// only add to the valid 'vars' list if the referenced column actually exists
+			auto* aspect = static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer());
+			if (aspect)
+				vars << name;
 
 			if (argText.isEmpty())
 				argText += name;
@@ -869,7 +872,7 @@ void ColumnDock::variableColumnChanged(const QModelIndex& index) {
 			cb->setStyleSheet(QString());
 	}
 
-	validateFormula();
+	variableNameChanged();
 }
 
 void ColumnDock::applyFormula() {
