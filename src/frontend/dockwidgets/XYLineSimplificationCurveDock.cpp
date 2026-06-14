@@ -169,6 +169,7 @@ void XYLineSimplificationCurveDock::setCurves(QList<XYCurve*> list) {
 void XYLineSimplificationCurveDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 	ui.retranslateUi(this);
+	XYAnalysisCurveDock::retranslateUi();
 
 	uiGeneralTab.cbMethod->clear();
 	for (int i = 0; i < NSL_GEOM_LINESIM_TYPE_COUNT; ++i)

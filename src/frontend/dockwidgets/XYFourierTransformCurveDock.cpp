@@ -41,19 +41,14 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 6, 2, 1, 2);
 
-	for (int i = 0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
-		uiGeneralTab.cbWindowType->addItem(i18n(nsl_sf_window_type_name[i]));
-	for (int i = 0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
-		uiGeneralTab.cbType->addItem(i18n(nsl_dft_result_type_name[i]));
-	for (int i = 0; i < NSL_DFT_XSCALE_COUNT; i++)
-		uiGeneralTab.cbXScale->addItem(i18n(nsl_dft_xscale_name[i]));
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYFourierTransformCurveDock::autoRangeChanged);
@@ -244,4 +239,20 @@ void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTrans
 	this->typeChanged();
 
 	this->showTransformResult();
+}
+
+void XYFourierTransformCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbWindowType->clear();
+	for (int i = 0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
+		uiGeneralTab.cbWindowType->addItem(i18n(nsl_sf_window_type_name[i]));
+
+	uiGeneralTab.cbType->clear();
+	for (int i = 0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_dft_result_type_name[i]));
+
+	uiGeneralTab.cbXScale->clear();
+	for (int i = 0; i < NSL_DFT_XSCALE_COUNT; i++)
+		uiGeneralTab.cbXScale->addItem(i18n(nsl_dft_xscale_name[i]));
 }

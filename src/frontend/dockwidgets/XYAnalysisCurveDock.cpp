@@ -66,6 +66,17 @@ bool XYAnalysisCurveDock::eventFilter(QObject* /* watched */, QEvent* event) {
 	return false;
 }
 
+void XYAnalysisCurveDock::retranslateUi() {
+	if (m_recalculateButton)
+		m_recalculateButton->setToolTip(i18n("Click this button or press Shift+Enter to recalculate the result."));
+
+	if (cbDataSourceType) {
+		cbDataSourceType->clear();
+		cbDataSourceType->addItem(i18n("Spreadsheet"));
+		cbDataSourceType->addItem(i18n("XY-Curve"));
+	}
+}
+
 QString XYAnalysisCurveDock::customText() const {
 	return QStringLiteral("");
 }
@@ -77,13 +88,8 @@ void XYAnalysisCurveDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableText
 	m_recalculateButton = recalculate;
 	Q_ASSERT(m_recalculateButton);
 	m_recalculateButton->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
-	m_recalculateButton->setToolTip(i18n("Click this button or press Shift+Enter to recalculate the result."));
 
 	cbDataSourceType = dataSourceType;
-	if (cbDataSourceType) {
-		cbDataSourceType->addItem(i18n("Spreadsheet"));
-		cbDataSourceType->addItem(i18n("XY-Curve"));
-	}
 
 	BaseDock::setBaseWidgets(nameLabel, commentLabel);
 }

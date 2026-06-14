@@ -49,23 +49,14 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 2);
 
-	for (int i = 0; i < NSL_FILTER_TYPE_COUNT; i++)
-		uiGeneralTab.cbType->addItem(i18n(nsl_filter_type_name[i]));
-
-	for (int i = 0; i < NSL_FILTER_FORM_COUNT; i++)
-		uiGeneralTab.cbForm->addItem(i18n(nsl_filter_form_name[i]));
-
-	for (int i = 0; i < NSL_FILTER_CUTOFF_UNIT_COUNT; i++) {
-		uiGeneralTab.cbUnit->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
-		uiGeneralTab.cbUnit2->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
-	}
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::dataSourceTypeChanged);
@@ -451,4 +442,23 @@ void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve
 	this->typeChanged();
 
 	this->showFilterResult();
+}
+
+void XYFourierFilterCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbType->clear();
+	for (int i = 0; i < NSL_FILTER_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_filter_type_name[i]));
+
+	uiGeneralTab.cbForm->clear();
+	for (int i = 0; i < NSL_FILTER_FORM_COUNT; i++)
+		uiGeneralTab.cbForm->addItem(i18n(nsl_filter_form_name[i]));
+
+	uiGeneralTab.cbUnit->clear();
+	uiGeneralTab.cbUnit2->clear();
+	for (int i = 0; i < NSL_FILTER_CUTOFF_UNIT_COUNT; i++) {
+		uiGeneralTab.cbUnit->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
+		uiGeneralTab.cbUnit2->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
+	}
 }

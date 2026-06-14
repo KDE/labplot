@@ -26,6 +26,8 @@ private:
 	bool eventFilter(QObject* watched, QEvent*) override;
 
 protected:
+	void retranslateUi() override;
+
 	void showResult(const XYAnalysisCurve* curve, QTextEdit* teResult);
 	virtual QString customText() const;
 

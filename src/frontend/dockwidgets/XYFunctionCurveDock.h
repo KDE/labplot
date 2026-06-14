@@ -24,6 +24,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void retranslateUi() override;
 
 	Ui::XYFunctionCurveDockGeneralTab uiGeneralTab;
 	XYFunctionCurve* m_functionCurve{nullptr};

@@ -41,15 +41,14 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 6, 2, 1, 2);
 
-	for (int i = 0; i < NSL_HILBERT_RESULT_TYPE_COUNT; i++)
-		uiGeneralTab.cbType->addItem(i18n(nsl_hilbert_result_type_name[i]));
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::autoRangeChanged);
@@ -192,4 +191,12 @@ void XYHilbertTransformCurveDock::curveTransformDataChanged(const XYHilbertTrans
 	this->typeChanged();
 
 	this->showTransformResult();
+}
+
+void XYHilbertTransformCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbType->clear();
+	for (int i = 0; i < NSL_HILBERT_RESULT_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_hilbert_result_type_name[i]));
 }

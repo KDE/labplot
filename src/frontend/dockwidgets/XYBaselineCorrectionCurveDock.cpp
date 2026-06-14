@@ -165,6 +165,8 @@ void XYBaselineCorrectionCurveDock::updateLocale() {
 }
 
 void XYBaselineCorrectionCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
 	uiGeneralTab.cbMethod->clear();
 	// TODO:
 	// for (int i = 0; i < NSL_BASELINE_SUBTRACTION_METHOD_COUNT; ++i)

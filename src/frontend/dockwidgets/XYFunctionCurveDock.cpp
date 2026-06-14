@@ -69,6 +69,8 @@ void XYFunctionCurveDock::setupGeneral() {
 	uiGeneralTab.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
 	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
+	retranslateUi();
+
 	// Slots
 	connect(uiGeneralTab.bAddVariable, &QPushButton::clicked, this, &XYFunctionCurveDock::addVariable);
 	connect(uiGeneralTab.teFunction, &ExpressionTextEdit::expressionChanged, this, &XYFunctionCurveDock::enableRecalculate);
@@ -359,4 +361,8 @@ void XYFunctionCurveDock::enableRecalculate() const {
 void XYFunctionCurveDock::curveFunctionDataChanged(const XYFunctionCurve::FunctionData&) {
 	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.teFunction->setText(m_functionCurve->function());
+}
+
+void XYFunctionCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
 }

@@ -46,15 +46,14 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
 
-	for (int i = 0; i < NSL_DIFF_DERIV_ORDER_COUNT; ++i)
-		uiGeneralTab.cbDerivOrder->addItem(i18n(nsl_diff_deriv_order_name[i]));
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDifferentiationCurveDock::dataSourceTypeChanged);
@@ -394,4 +393,12 @@ void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDiffere
 	this->accOrderChanged(m_differentiationData.accOrder);
 
 	this->showDifferentiationResult();
+}
+
+void XYDifferentiationCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbDerivOrder->clear();
+	for (int i = 0; i < NSL_DIFF_DERIV_ORDER_COUNT; ++i)
+		uiGeneralTab.cbDerivOrder->addItem(i18n(nsl_diff_deriv_order_name[i]));
 }

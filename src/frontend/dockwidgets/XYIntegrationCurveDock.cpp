@@ -51,15 +51,14 @@ void XYIntegrationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
 
-	for (int i = 0; i < NSL_INT_NETHOD_COUNT; i++)
-		uiGeneralTab.cbMethod->addItem(i18n(nsl_int_method_name[i]));
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYIntegrationCurveDock::dataSourceTypeChanged);
@@ -335,4 +334,12 @@ void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurv
 	this->absoluteChanged();
 
 	this->showIntegrationResult();
+}
+
+void XYIntegrationCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbMethod->clear();
+	for (int i = 0; i < NSL_INT_NETHOD_COUNT; i++)
+		uiGeneralTab.cbMethod->addItem(i18n(nsl_int_method_name[i]));
 }
