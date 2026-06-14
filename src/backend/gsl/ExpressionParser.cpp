@@ -606,11 +606,11 @@ double sma(double x, const std::string_view& variable, const std::weak_ptr<Paylo
 		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
 			const int N = x;
 			DEBUG("N = " << N)
-			if (N < 1)
-				break;
-			// calculate max of last n points
+			if (N < 1 || p->rowIndex < N - 1)
+				return NAN;
+
 			double sum = 0.;
-			for (auto index = std::max((qsizetype)0, p->rowIndex - N + 1); index <= p->rowIndex; index++)
+			for (auto index = p->rowIndex - N + 1; index <= p->rowIndex; index++)
 				sum += p->xVectors->at(i)->at(index);
 			return sum / N;
 		}

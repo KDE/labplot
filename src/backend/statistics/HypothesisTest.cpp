@@ -580,8 +580,7 @@ QString HypothesisTestPrivate::emptyResultColumnStatistics() {
 QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 	bool hasDescriptiveStatistics = (test != HypothesisTest::Test::chisq_independence) && (test != HypothesisTest::Test::log_rank_test);
 	bool hasDegreesOfFreedom = (test != HypothesisTest::Test::mann_whitney_u_test) && (test != HypothesisTest::Test::wilcoxon_test)
-		&& (test != HypothesisTest::Test::mann_kendall_test) && (test != HypothesisTest::Test::wald_wolfowitz_runs_test)
-		&& (test != HypothesisTest::Test::ramirez_runger_test);
+		&& (test != HypothesisTest::Test::mann_kendall_test) && (test != HypothesisTest::Test::wald_wolfowitz_runs_test);
 
 	QString result = (addResultTitle(HypothesisTest::testName(test)) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
 					  + addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")));
@@ -596,6 +595,9 @@ QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 		} else if (test == HypothesisTest::Test::one_way_anova_repeated) {
 			result += (addResultLine(i18n("Degrees of Freedom Treatment"), QStringLiteral("%L6"))
 					   + addResultLine(i18n("Degrees of Freedom Residuals"), QStringLiteral("%L7")));
+		} else if (test == HypothesisTest::Test::ramirez_runger_test) {
+			result +=
+				(addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L6")) + addResultLine(i18n("Effective Degrees of Freedom"), QStringLiteral("%L7")));
 		} else {
 			result += addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L6"));
 		}
@@ -655,9 +657,8 @@ QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 		result += (addResultLine(i18n("Number of Runs"), QStringLiteral("%L20")) + addResultLine(i18n("z-Value"), QStringLiteral("%L21"))
 				   + addResultLine(i18n("Sample Size"), QStringLiteral("%L22")));
 	} else if (test == HypothesisTest::Test::ramirez_runger_test) {
-		result += (addResultLine(i18n("Stability Ratio"), QStringLiteral("%L20")) + addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L21"))
-				   + addResultLine(i18n("Effective Degrees of Freedom"), QStringLiteral("%L22"))
-				   + addResultLine(i18n("Average Successive Difference"), QStringLiteral("%L23")));
+		result +=
+			(addResultLine(i18n("Stability Ratio"), QStringLiteral("%L20")) + addResultLine(i18n("Average Successive Difference"), QStringLiteral("%L23")));
 	}
 
 	result += addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%99");
@@ -911,12 +912,25 @@ void HypothesisTestPrivate::resetResult() {
 						 .arg(notAvailable())
 						 .arg(notAvailable())
 						 .arg(notAvailable())
+						 .arg(notAvailable())
 						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::wald_wolfowitz_runs_test) {
 		resultText = resultTemplate(test)
 						 .arg(notAvailable())
 						 .arg(notAvailable())
 						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
+	} else if (test == HypothesisTest::Test::ramirez_runger_test) {
+		resultText = resultTemplate(test)
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
 						 .arg(notAvailable())
 						 .arg(notAvailable())
 						 .arg(notAvailable())
@@ -1836,9 +1850,9 @@ void HypothesisTestPrivate::performRamirezRungerTest() {
 					 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col})))
 					 .arg(significanceLevel)
 					 .arg(result.p)
-					 .arg(result.stability_ratio)
 					 .arg(result.dof)
 					 .arg(result.eff_dof)
+					 .arg(result.stability_ratio)
 					 .arg(result.mean_diff)
 					 .arg(conclusion);
 }

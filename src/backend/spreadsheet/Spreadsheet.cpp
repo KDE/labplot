@@ -130,19 +130,19 @@ void Spreadsheet::initConnectionsRowCountChanges() {
 	}
 
 	// handle row insertions
-	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=](const AbstractColumn*, int before, int count) {
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=, this](const AbstractColumn*, int before, int count) {
 		Q_EMIT rowsAboutToBeInserted(before, before + count - 1);
 	});
-	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=](const AbstractColumn* sender, int, int) {
+	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=, this](const AbstractColumn* sender, int, int) {
 		Q_EMIT rowsInserted(sender->rowCount());
 		Q_EMIT rowCountChanged(sender->rowCount());
 	});
 
 	// handle row removals
-	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=](const AbstractColumn*, int first, int count) {
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=, this](const AbstractColumn*, int first, int count) {
 		Q_EMIT rowsAboutToBeRemoved(first, first + count - 1);
 	});
-	connect(d->firstColumn, &AbstractColumn::rowsRemoved, this, [=](const AbstractColumn* sender, int, int) {
+	connect(d->firstColumn, &AbstractColumn::rowsRemoved, this, [=, this](const AbstractColumn* sender, int, int) {
 		Q_EMIT rowsRemoved(sender->rowCount());
 		Q_EMIT rowCountChanged(sender->rowCount());
 	});
@@ -173,14 +173,6 @@ QWidget* Spreadsheet::view() const {
 		m_partView = m_view;
 		connect(this, &Spreadsheet::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
-		});
-
-		// navigate to the first cell and set the focus so the user can start directly entering new data
-		QTimer::singleShot(0, this, [=]() {
-			if (m_view) { // we're accessing m_view outside of the event loop, it can be already deleted, check for nulltpr
-				m_view->goToCell(0, 0);
-				m_view->setFocus();
-			}
 		});
 	}
 	return m_partView;
@@ -923,7 +915,7 @@ QMenu* Spreadsheet::createContextMenu() {
 	else {
 		menu->addSeparator();
 		auto* action = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this);
-		connect(action, &QAction::triggered, this, [=]() {
+		connect(action, &QAction::triggered, this, [=, this]() {
 			auto* parentSpreadsheet = static_cast<Spreadsheet*>(parentAspect());
 			parentSpreadsheet->toggleStatisticsSpreadsheet(false);
 		});
@@ -1039,7 +1031,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1059,7 +1051,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1079,7 +1071,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1101,7 +1093,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -1125,13 +1117,19 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
 			}
 			// copy the sorted column
 			col->copy(tempCol.get(), 0, 0, rows);
+			col->clearMasks();
+			// Apply masks to original column from the tempCol
+			for (int i = 0; i < rows; ++i) {
+				if (tempCol->isMasked(i))
+					col->setMasked(i, true);
+			}
 		}
 	} else { // sort with leading column
 		DEBUG("	sort with leading column")
@@ -1163,7 +1161,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 
 				// copy the sorted column
@@ -1179,6 +1177,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+					col->clearMasks();
+					// Apply masks to original column from the tempCol
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < invalidRows; ++i)
+						if (tempInvalidCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
@@ -1202,10 +1208,16 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
 				col->copy(tempCol.get(), 0, 0, rows);
+				col->clearMasks();
+				// Apply masks to original column from the tempCol
+				for (int i = 0; i < rows; ++i) {
+					if (tempCol->isMasked(i))
+						col->setMasked(i, true);
+				}
 			}
 			break;
 		}
@@ -1227,10 +1239,16 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
 				col->copy(tempCol.get(), 0, 0, rows);
+				col->clearMasks();
+				// Apply masks to original column from the tempCol
+				for (int i = 0; i < rows; ++i) {
+					if (tempCol->isMasked(i))
+						col->setMasked(i, true);
+				}
 			}
 			break;
 		}
@@ -1259,7 +1277,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 
 				// copy the sorted column
@@ -1275,6 +1293,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempEmptyCol.get(), 0, filledRows, emptyRows);
+					col->clearMasks();
+					// Apply masks to original column from the tempCol
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < emptyRows; ++i)
+						if (tempEmptyCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
@@ -1305,7 +1331,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
 				if (col == leading) // update all rows
@@ -1320,6 +1346,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+					col->clearMasks();
+					// Apply masks to original column from the tempCol
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < invalidRows; ++i)
+						if (tempInvalidCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
@@ -1816,6 +1850,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		}
 
 		if (columnImportMode == AbstractFileFilter::ImportMode::Replace) {
+			column->setAllValid(); // the data was written directly into the data container without calling the setters, so we have to set all values valid here
 			column->setSuppressDataChangedSignal(true);
 			column->setDataChanged(); // Invalidate properties
 			column->setSuppressDataChangedSignal(false);

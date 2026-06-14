@@ -406,6 +406,72 @@ bool AsciiFilter::validateDataTypes(const QStringView& s, QVector<DataType>& typ
 	return AsciiFilterPrivate::validateDataTypes(s, types, invalidString);
 }
 
+/*!
+ * Determines the column modes from the provided rows
+ *
+ * \brief AsciiFilter::determineColumnModes
+ * \param dateTimeFormat The datetime format will be updated if it is empty by the detected format
+ * \return
+ */
+QVector<AbstractColumn::ColumnMode>
+AsciiFilter::determineColumnModes(const QVector<QStringList>& rows, const AsciiFilter::Properties& properties, QString& dateTimeFormat) {
+	using Mode = AbstractColumn::ColumnMode;
+
+	dateTimeFormat = properties.dateTimeFormat;
+
+	QVector<Mode> modes;
+	if (rows.length() == 0)
+		return modes;
+
+	int columnCount = 0;
+	for (const auto& row : rows)
+		columnCount = qMax(columnCount, (int)row.count());
+
+	for (int i = 0; i < columnCount; i++)
+		modes.append(Mode::Integer);
+
+	bool first = true;
+	for (const auto& row : rows) {
+		int columnIndex = 0;
+		for (auto column : row) {
+			if (columnIndex >= columnCount)
+				break;
+
+			if (properties.simplifyWhitespaces)
+				column = column.simplified();
+			if (properties.removeQuotes)
+				column.remove(QLatin1Char('"'));
+			auto mode = AbstractFileFilter::columnMode(column, dateTimeFormat, properties.locale, properties.intAsDouble, properties.baseYear);
+
+			if (properties.intAsDouble) {
+				if (mode == Mode::Integer || mode == Mode::BigInt)
+					mode = Mode::Double;
+			}
+
+			if (first)
+				modes[columnIndex] = mode;
+			else if (!column.isEmpty()) {
+				if (mode == Mode::Double && modes[columnIndex] == Mode::Integer) {
+					// numeric: integer -> numeric
+					modes[columnIndex] = mode;
+				} else if (mode == Mode::Text && modes[columnIndex] != Mode::Text) {
+					// text: non text -> text
+					modes[columnIndex] = mode;
+				} else if (mode == Mode::BigInt && modes[columnIndex] == Mode::Integer)
+					modes[columnIndex] = mode;
+				/* else if (mode != Mode::Text && modes[columnIndex] == Mode::Text) {
+					// numeric: text -> numeric/integer
+					modes[columnIndex] = mode;
+				}*/
+			}
+			columnIndex++;
+		}
+		first = false;
+	}
+
+	return modes;
+}
+
 // ########################################################################################################################
 // ##  PRIVATE IMPLEMENTATIONS  ###########################################################################################
 // ########################################################################################################################
@@ -569,7 +635,7 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 			i++;
 		}
 		QString dateTimeFormat;
-		auto modes = determineColumnModes(rows, properties, dateTimeFormat);
+		auto modes = AsciiFilter::determineColumnModes(rows, properties, dateTimeFormat);
 		properties.columnModes.append(modes);
 		for (auto mode : modes)
 			properties.dataTypes.append(AsciiFilter::columnModeToDataType(mode));
@@ -955,69 +1021,6 @@ void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const
 		}
 		columnIndex++;
 	}
-}
-
-/*!
- * Determines the column modes from the provided rows
- *
- * \brief AsciiFilterPrivate::determineColumnModes
- * \param dateTimeFormat The datetime format will be updated if it is empty by the detected format
- * \return
- */
-QVector<AbstractColumn::ColumnMode>
-AsciiFilterPrivate::determineColumnModes(const QVector<QStringList>& rows, const AsciiFilter::Properties& properties, QString& dateTimeFormat) {
-	using Mode = AbstractColumn::ColumnMode;
-
-	dateTimeFormat = properties.dateTimeFormat;
-
-	QVector<Mode> modes;
-	if (rows.length() == 0)
-		return modes;
-
-	int columnCount = rows.first().count();
-	for (int i = 0; i < columnCount; i++)
-		modes.append(Mode::Integer);
-
-	bool first = true;
-	for (const auto& row : rows) {
-		int columnIndex = 0;
-		for (auto column : row) {
-			if (columnIndex >= columnCount)
-				break;
-
-			if (properties.simplifyWhitespaces)
-				column = column.simplified();
-			if (properties.removeQuotes)
-				column.remove(QLatin1Char('"'));
-			auto mode = AbstractFileFilter::columnMode(column, dateTimeFormat, properties.locale, properties.intAsDouble, properties.baseYear);
-
-			if (properties.intAsDouble) {
-				if (mode == Mode::Integer || mode == Mode::BigInt)
-					mode = Mode::Double;
-			}
-
-			if (first)
-				modes[columnIndex] = mode;
-			else if (!column.isEmpty()) {
-				if (mode == Mode::Double && modes[columnIndex] == Mode::Integer) {
-					// numeric: integer -> numeric
-					modes[columnIndex] = mode;
-				} else if (mode == Mode::Text && modes[columnIndex] != Mode::Text) {
-					// text: non text -> text
-					modes[columnIndex] = mode;
-				} else if (mode == Mode::BigInt && modes[columnIndex] == Mode::Integer)
-					modes[columnIndex] = mode;
-				/* else if (mode != Mode::Text && modes[columnIndex] == Mode::Text) {
-					// numeric: text -> numeric/integer
-					modes[columnIndex] = mode;
-				}*/
-			}
-			columnIndex++;
-		}
-		first = false;
-	}
-
-	return modes;
 }
 
 QStringList AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(const QStringView& line, const AsciiFilter::Properties& properties) {

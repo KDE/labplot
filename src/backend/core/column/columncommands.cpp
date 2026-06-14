@@ -149,6 +149,7 @@ void ColumnSetModeCmd::redo() {
 		m_old_data = m_col->data();
 		m_old_in_filter = m_col->inputFilter();
 		m_old_out_filter = m_col->outputFilter();
+		m_old_valid = m_col->m_valid;
 
 		// do the conversion
 		m_col->setLabelsMode(m_mode); // must be done before setColumnMode, because setColumnMode() sends signal to dock
@@ -158,10 +159,11 @@ void ColumnSetModeCmd::redo() {
 		m_new_data = m_col->data();
 		m_new_in_filter = m_col->inputFilter();
 		m_new_out_filter = m_col->outputFilter();
+		m_new_valid = m_col->m_valid;
 		m_executed = true;
 	} else {
 		// set to saved new values
-		m_col->replaceModeData(m_mode, m_new_data, m_new_in_filter, m_new_out_filter);
+		m_col->replaceModeData(m_mode, m_new_data, m_new_in_filter, m_new_out_filter, m_new_valid);
 	}
 	m_undone = false;
 }
@@ -171,7 +173,7 @@ void ColumnSetModeCmd::redo() {
  */
 void ColumnSetModeCmd::undo() {
 	// reset to old values
-	m_col->replaceModeData(m_old_mode, m_old_data, m_old_in_filter, m_old_out_filter);
+	m_col->replaceModeData(m_old_mode, m_old_data, m_old_in_filter, m_old_out_filter, m_old_valid);
 	// setLabelsMode will be done in replaceModeData()
 
 	m_undone = true;
@@ -238,6 +240,11 @@ void ColumnFullCopyCmd::redo() {
 		void* data_temp = m_col->data();
 		m_col->replaceData(m_backup->data());
 		m_backup->replaceData(data_temp);
+		if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode())) {
+			QBitArray valid_temp = m_col->m_valid;
+			m_col->m_valid = m_backup->m_valid;
+			m_backup->m_valid = valid_temp;
+		}
 	}
 }
 
@@ -249,6 +256,11 @@ void ColumnFullCopyCmd::undo() {
 	void* data_temp = m_col->data();
 	m_col->replaceData(m_backup->data());
 	m_backup->replaceData(data_temp);
+	if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode())) {
+		QBitArray valid_temp = m_col->m_valid;
+		m_col->m_valid = m_backup->m_valid;
+		m_backup->m_valid = valid_temp;
+	}
 }
 
 /** ***************************************************************************
@@ -659,8 +671,14 @@ void ColumnClearCmd::redo() {
 			break;
 		}
 		m_data = m_col->data();
+		if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode()))
+			m_old_valid = m_col->m_valid;
 	}
 	m_col->replaceData(m_empty_data);
+	if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode())) {
+		m_col->m_valid.resize(m_col->rowCount());
+		m_col->m_valid.fill(false);
+	}
 	m_undone = false;
 }
 
@@ -669,6 +687,8 @@ void ColumnClearCmd::redo() {
  */
 void ColumnClearCmd::undo() {
 	m_col->replaceData(m_data);
+	if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode()))
+		m_col->m_valid = m_old_valid;
 	m_undone = true;
 }
 

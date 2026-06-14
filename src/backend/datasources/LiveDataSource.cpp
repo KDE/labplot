@@ -444,6 +444,9 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::NETCDF:
 	case AbstractFileFilter::FileType::VECTOR_BLF:
 	case AbstractFileFilter::FileType::MCAP:
+	case AbstractFileFilter::FileType::Parquet:
+	case AbstractFileFilter::FileType::ArrowIPC:
+	case AbstractFileFilter::FileType::ORC:
 		break;
 	}
 
@@ -617,6 +620,9 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::FileType::READSTAT:
 		case AbstractFileFilter::FileType::MATIO:
 		case AbstractFileFilter::FileType::MCAP:
+		case AbstractFileFilter::FileType::Parquet:
+		case AbstractFileFilter::FileType::ArrowIPC:
+		case AbstractFileFilter::FileType::ORC:
 			break;
 		}
 		break;

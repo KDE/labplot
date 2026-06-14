@@ -28,5 +28,15 @@
 		"name" : "seaborn",
 		"description" : "<b>seaborn</b> collection is originally provided as a convenient target for the <i>seaborn.load_dataset</i> function to download sample datasets from. Its existence makes it easy to document seaborn without confusing things by spending time loading and munging data. The datasets may change or be removed at any time if they are no longer useful for the seaborn documentation. Some of the datasets have also been modifed from their canonical sources.",
 		"url" : "https://github.com/mwaskom/seaborn-data"
+	},
+	{
+		"name" : "OpenIntro",
+		"description" : "<b>OpenIntro</b> provides free and open-source textbooks for introductory statistics. This collection contains data sets featured across their textbooks, including <i>OpenIntro Statistics</i> and <i>Introduction to Modern Statistics</i>. The datasets cover a wide range of topics from health and medicine to social sciences, sports, demographics, and more. These datasets are also distributed with the openintro R package.",
+		"url" : "https://www.openintro.org/data/"
+	},
+	{
+		"name" : "UCI",
+		"description" : "<b>UCI Machine Learning Repository</b> is a collection of databases, domain theories, and data generators that are used by the machine learning community for the empirical analysis of machine learning algorithms. The archive was created as an FTP archive in 1987 by David Aha and fellow graduate students at UC Irvine. Since that time, it has been widely used by students, educators, and researchers all over the world as a primary source of machine learning data sets.",
+		"url" : "https://archive.ics.uci.edu/"
 	}
 ]

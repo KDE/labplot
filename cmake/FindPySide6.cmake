@@ -18,11 +18,62 @@ if(NOT DEFINED PySide6_PATH)
         COMMAND "${Python3_EXECUTABLE}" -c "import PySide6; print(PySide6.__path__[0])"
 	OUTPUT_VARIABLE PySide6_PYTHONPATH
         OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+        RESULT_VARIABLE _pyside6_import_result
     )
 
     if(PySide6_PYTHONPATH)
 	    message(STATUS "Found PySide6 via Python: ${PySide6_PYTHONPATH}")
-	endif()
+    elseif(_pyside6_import_result)
+        # The Python interpreter may not have PySide6 in its default sys.path
+        # (e.g. Craft on macOS where the Development and Interpreter components
+        # resolve to different Python installations). Search for PySide6 in
+        # site-packages directories relative to the Python library.
+        set(_pyside6_search_bases "")
+        if(Python3_LIBRARY_DIRS)
+            list(APPEND _pyside6_search_bases ${Python3_LIBRARY_DIRS})
+            # On macOS with framework builds, Python3_LIBRARY_DIRS points inside
+            # the framework (e.g. .../lib/Python.framework/Versions/3.11/lib)
+            # but PySide6 may be installed in the outer lib dir (e.g. .../lib/).
+            foreach(_libdir IN LISTS Python3_LIBRARY_DIRS)
+                string(FIND "${_libdir}" "/Python.framework/" _fw_pos)
+                if(NOT _fw_pos EQUAL -1)
+                    string(SUBSTRING "${_libdir}" 0 ${_fw_pos} _outer_lib)
+                    list(APPEND _pyside6_search_bases "${_outer_lib}")
+                endif()
+            endforeach()
+        endif()
+        # Derive from include dir: .../include/python3.X -> .../lib
+        if(Python3_INCLUDE_DIRS)
+            foreach(_inc IN LISTS Python3_INCLUDE_DIRS)
+                get_filename_component(_prefix "${_inc}" DIRECTORY)
+                get_filename_component(_prefix "${_prefix}" DIRECTORY)
+                list(APPEND _pyside6_search_bases "${_prefix}/lib")
+            endforeach()
+        endif()
+        # Derive from interpreter path
+        if(Python3_EXECUTABLE)
+            get_filename_component(_prefix "${Python3_EXECUTABLE}" DIRECTORY)
+            get_filename_component(_prefix "${_prefix}" DIRECTORY)
+            list(APPEND _pyside6_search_bases "${_prefix}/lib")
+        endif()
+        list(REMOVE_DUPLICATES _pyside6_search_bases)
+
+        foreach(_base IN LISTS _pyside6_search_bases)
+            file(GLOB _pyside6_candidates
+                "${_base}/python*/site-packages/PySide6"
+                "${_base}/Python.framework/Versions/*/lib/python*/site-packages/PySide6"
+            )
+            if(_pyside6_candidates)
+                list(GET _pyside6_candidates 0 _pyside6_candidate)
+                if(EXISTS "${_pyside6_candidate}")
+                    set(PySide6_PYTHONPATH "${_pyside6_candidate}")
+                    message(STATUS "Found PySide6 via path search: ${PySide6_PYTHONPATH}")
+                    break()
+                endif()
+            endif()
+        endforeach()
+    endif()
 endif()
 
 if(EXISTS "${PySide6_PYTHONPATH}")

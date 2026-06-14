@@ -143,6 +143,7 @@ public:
 	void setProperties(Properties& p);
 	QStringList columnNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes() const;
+	static QVector<AbstractColumn::ColumnMode> determineColumnModes(const QVector<QStringList>&, const AsciiFilter::Properties&, QString& dateTimeFormat);
 
 private:
 	typedef AsciiFilterPrivate Private;

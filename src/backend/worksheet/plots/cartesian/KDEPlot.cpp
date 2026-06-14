@@ -292,7 +292,7 @@ void KDEPlot::retransform() {
 }
 
 void KDEPlot::recalc() {
-	D(KDEPlot);
+	Q_D(KDEPlot);
 	d->recalc();
 }
 

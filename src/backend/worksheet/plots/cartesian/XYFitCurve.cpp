@@ -929,7 +929,7 @@ void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 		exec(new XYFitCurveSetXErrorColumnCmd(d, column, ki18n("%1: assign x-error")));
 		handleSourceDataChanged();
 		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, [=]() {
+			connect(column, &AbstractColumn::dataChanged, this, [=, this]() {
 				handleSourceDataChanged();
 			});
 			// TODO: disconnect on undo
@@ -944,7 +944,7 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 		exec(new XYFitCurveSetYErrorColumnCmd(d, column, ki18n("%1: assign y-error")));
 		handleSourceDataChanged();
 		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, [=]() {
+			connect(column, &AbstractColumn::dataChanged, this, [=, this]() {
 				handleSourceDataChanged();
 			});
 			// TODO: disconnect on undo
@@ -2719,9 +2719,12 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	fitResult.tdist_tValues.resize(np);
 	fitResult.tdist_pValues.resize(np);
 	fitResult.marginValues.resize(np);
-	// GSL: cerr = GSL_MAX_DBL(1., sqrt(fitResult.rms)); // increase error for poor fit
-	// NIST: cerr = sqrt(fitResult.rms); // increase error for poor fit, decrease for good fit
-	const double cerr = sqrt(fitResult.rms);
+	double cerr = 1.;
+	if (fitData.errorScaling) { // scale parameter uncertainties with sqrt(chi^2/dof) to use scaled/relative sigmas, otherwise unscaled/absolute sigmas are used
+		// GSL: cerr = GSL_MAX_DBL(1., sqrt(fitResult.rms)); // increase error for poor fit
+		// NIST: cerr = sqrt(fitResult.rms); // increase error for poor fit, decrease for good fit
+		cerr = sqrt(fitResult.rms);
+	}
 	// CI = 100 * (1 - alpha)
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
 	for (auto i = 0; i < np; i++) {

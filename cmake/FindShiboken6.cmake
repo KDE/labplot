@@ -13,10 +13,41 @@ if(NOT Shiboken6_FOUND)
         OUTPUT_VARIABLE Shiboken6_PATH
 	OUTPUT_STRIP_TRAILING_WHITESPACE
 	ERROR_QUIET
+        RESULT_VARIABLE _shiboken6_import_result
     )
 
     if(Shiboken6_PATH)
         message(STATUS "Found Shiboken6 via Python: ${Shiboken6_PATH}")
+    elseif(_shiboken6_import_result)
+        # Fallback: search site-packages relative to the Python library.
+        # On macOS framework builds, also check the outer lib directory.
+        set(_shiboken6_search_bases "")
+        if(Python3_LIBRARY_DIRS)
+            list(APPEND _shiboken6_search_bases ${Python3_LIBRARY_DIRS})
+            foreach(_libdir IN LISTS Python3_LIBRARY_DIRS)
+                string(FIND "${_libdir}" "/Python.framework/" _fw_pos)
+                if(NOT _fw_pos EQUAL -1)
+                    string(SUBSTRING "${_libdir}" 0 ${_fw_pos} _outer_lib)
+                    list(APPEND _shiboken6_search_bases "${_outer_lib}")
+                endif()
+            endforeach()
+        endif()
+        list(REMOVE_DUPLICATES _shiboken6_search_bases)
+
+        foreach(_base IN LISTS _shiboken6_search_bases)
+            file(GLOB _shiboken6_candidates
+                "${_base}/python*/site-packages/shiboken6"
+                "${_base}/Python.framework/Versions/*/lib/python*/site-packages/shiboken6"
+            )
+            if(_shiboken6_candidates)
+                list(GET _shiboken6_candidates 0 _shiboken6_candidate)
+                if(EXISTS "${_shiboken6_candidate}")
+                    set(Shiboken6_PATH "${_shiboken6_candidate}")
+                    message(STATUS "Found Shiboken6 via path search: ${Shiboken6_PATH}")
+                    break()
+                endif()
+            endif()
+        endforeach()
     endif()
 endif()
 

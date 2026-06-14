@@ -314,6 +314,7 @@ public:
 	void setFixed(bool);
 	bool isFixed() const;
 	void setSelected(bool);
+	void setSelectedInView(bool selected);
 	void setMoved(bool);
 	bool isMoved() const;
 	void setIsLoading(bool);

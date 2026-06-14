@@ -16,6 +16,7 @@
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/ParetoChart.h"
 #include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
@@ -1341,6 +1342,113 @@ void StatisticalPlotsTest::testParetoChartRanges() {
 	range = p->range(Dimension::Y, 1);
 	QCOMPARE(range.start(), 0);
 	QCOMPARE(range.end(), 100);
+}
+
+/*!
+ * \brief remove a data column used in a BarPlot and check that it doesn't crash.
+ * Regression test for the bug where recalc() used a compacted columnIndex
+ * to resize inner vectors while retransform() used the real dataColumns index.
+ */
+void StatisticalPlotsTest::testBarPlotColumnRemoved() {
+	Project project;
+
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(3);
+	sheet->setRowCount(3);
+	auto* c1 = sheet->column(0);
+	auto* c2 = sheet->column(1);
+	auto* c3 = sheet->column(2);
+	c1->setValueAt(0, 1);
+	c1->setValueAt(1, 2);
+	c1->setValueAt(2, 3);
+	c2->setValueAt(0, 10);
+	c2->setValueAt(1, 20);
+	c2->setValueAt(2, 30);
+	c3->setValueAt(0, 100);
+	c3->setValueAt(1, 200);
+	c3->setValueAt(2, 300);
+
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* barPlot = new BarPlot(QStringLiteral("barplot"));
+	p->addChild(barPlot);
+	barPlot->setDataColumns({c1, c2, c3});
+
+	// remove the first column - this should not crash
+	c1->remove();
+
+	auto dataColumns = barPlot->dataColumns();
+	QCOMPARE(dataColumns.size(), 3);
+	QCOMPARE(dataColumns.at(0), nullptr);
+	QCOMPARE(dataColumns.at(1), c2);
+	QCOMPARE(dataColumns.at(2), c3);
+
+	// undo the removal - the column should be restored
+	project.undoStack()->undo();
+
+	dataColumns = barPlot->dataColumns();
+	QCOMPARE(dataColumns.size(), 3);
+	QCOMPARE(dataColumns.at(0), c1);
+	QCOMPARE(dataColumns.at(1), c2);
+	QCOMPARE(dataColumns.at(2), c3);
+}
+
+/*!
+ * \brief remove a data column used in a LollipopPlot and check that it doesn't crash.
+ * Same regression test as testBarPlotColumnRemoved but for LollipopPlot.
+ */
+void StatisticalPlotsTest::testLollipopPlotColumnRemoved() {
+	Project project;
+
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(3);
+	sheet->setRowCount(3);
+	auto* c1 = sheet->column(0);
+	auto* c2 = sheet->column(1);
+	auto* c3 = sheet->column(2);
+	c1->setValueAt(0, 1);
+	c1->setValueAt(1, 2);
+	c1->setValueAt(2, 3);
+	c2->setValueAt(0, 10);
+	c2->setValueAt(1, 20);
+	c2->setValueAt(2, 30);
+	c3->setValueAt(0, 100);
+	c3->setValueAt(1, 200);
+	c3->setValueAt(2, 300);
+
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* lollipopPlot = new LollipopPlot(QStringLiteral("lollipopplot"));
+	p->addChild(lollipopPlot);
+	lollipopPlot->setDataColumns({c1, c2, c3});
+
+	// remove the first column - this should not crash
+	c1->remove();
+
+	auto dataColumns = lollipopPlot->dataColumns();
+	QCOMPARE(dataColumns.size(), 3);
+	QCOMPARE(dataColumns.at(0), nullptr);
+	QCOMPARE(dataColumns.at(1), c2);
+	QCOMPARE(dataColumns.at(2), c3);
+
+	// undo the removal - the column should be restored
+	project.undoStack()->undo();
+
+	dataColumns = lollipopPlot->dataColumns();
+	QCOMPARE(dataColumns.size(), 3);
+	QCOMPARE(dataColumns.at(0), c1);
+	QCOMPARE(dataColumns.at(1), c2);
+	QCOMPARE(dataColumns.at(2), c3);
 }
 
 QTEST_MAIN(StatisticalPlotsTest)

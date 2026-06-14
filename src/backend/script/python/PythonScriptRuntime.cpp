@@ -11,25 +11,38 @@
 #include "PythonScriptRuntime.h"
 #include "PythonLogger.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/script/Script.h"
 #include "backend/script/ScriptRuntime.h"
+
 #include "pyerrors.h"
 #include "pylabplot/pylabplot_python.h"
 
 #include <sbkconverter.h>
 #include <sbkmodule.h>
 #include <sbkpython.h>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 11, 0)
+#include <basewrapper.h>
+#endif
 
-#include <codecvt>
 #include <string>
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+#ifndef PATH_MAX
+#define PATH_MAX MAX_PATH
+#endif
+#endif
+
+#include <KConfigGroup>
 
 // PyObject* handling:
 // PySys_GetObject(), PyImport_AddModule() return a borrowed reference so we create own reference with Py_INCREF() and Py_DECREF(o) when done
-// PyObject_GetAttrString(), Shiboken::Object::newObject() return a new reference
+// PyObject_GetAttrString(), Shiboken::Object::newObject() return a new reference so we Py_DECREF(o) when done
 
 static wchar_t programName[] = L"labplot";
+
 static wchar_t* argv[] = {programName};
-static const wchar_t* pythonInterpreter = PYTHON3_EXECUTABLE; // PYTHON3_EXECUTABLE is a macro and will be replaced by the actual python executable name
 
 // The name of our python extension module: pylabplot
 static const char* moduleName = "pylabplot";
@@ -43,6 +56,8 @@ extern PyTypeObject** SbkpylabplotTypes;
 // The python interpreter and pylabplot need to be only initialized once for all python scriptruntimes.
 // So we used this static variable to track if it is done already
 bool PythonScriptRuntime::ready{false};
+
+bool PythonScriptRuntime::needsRestart{false};
 
 // To redirect python stdout and stderr to our output in the ScriptEditor, we temporarily replace the
 // sys.stdout and sys.stderr objects in python with instances of our PythonLogger class. These variables
@@ -70,8 +85,9 @@ PythonScriptRuntime::~PythonScriptRuntime() {
 		PyGILState_Release(gil);
 	}
 
-	DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
-	DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
+	// Note: Py_REFCNT is not in stable ABI, debug output disabled
+	// DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
+	// DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
 
 	Py_XDECREF(sysStdOut);
 	Py_XDECREF(sysStdErr);
@@ -80,6 +96,11 @@ PythonScriptRuntime::~PythonScriptRuntime() {
 
 	delete m_loggerStdOut;
 	delete m_loggerStdErr;
+
+	// if (Py_IsInitialized()) {
+	// 	PyGILState_STATE gil = PyGILState_Ensure();
+	// 	Py_Finalize();
+	// }
 }
 
 bool PythonScriptRuntime::init() {
@@ -88,6 +109,11 @@ bool PythonScriptRuntime::init() {
 	bool init = PythonScriptRuntime::initPython();
 	if (!init) {
 		WARN("Failed to initialize python interpreter and pylabplot module")
+		// if (Py_IsInitialized()) {
+		// 	PyGILState_STATE gil = PyGILState_Ensure();
+		// 	Py_Finalize();
+		// }
+		needsRestart = true;
 		return false;
 	}
 
@@ -100,7 +126,7 @@ bool PythonScriptRuntime::init() {
 		}
 
 		Py_INCREF(sysStdOut); // own it
-		DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt now = " << Py_REFCNT(sysStdOut));
+		// DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt now = " << Py_REFCNT(sysStdOut));
 
 		// auto* sysStdOutWrite = PyObject_GetAttrString(sysStdOut, "write"); // owned reference
 		/*if (!sysStdOutWrite) {
@@ -119,7 +145,7 @@ bool PythonScriptRuntime::init() {
 		}
 
 		Py_INCREF(sysStdErr); // own it
-		DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt now = " << Py_REFCNT(sysStdErr));
+		// DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt now = " << Py_REFCNT(sysStdErr));
 
 		// auto* sysStdErrWrite = PyObject_GetAttrString(sysStdErr, "write"); // owned reference
 		/*if (!sysStdErrWrite) {
@@ -140,33 +166,89 @@ bool PythonScriptRuntime::init() {
 	return true;
 }
 
+// if this fails, set a variable to disable python until app restart
+// need to have a global minimum supported python version because of pyside and shiboken
+// possibly run in isolated mode
 bool PythonScriptRuntime::initPython() {
 	INFO(Q_FUNC_INFO)
+
+	if (needsRestart)
+		return false;
+
 	// Python interpreter and pylabplot module is already initialized
 	if (Py_IsInitialized() && ready)
 		return true;
-
-	PyConfig config;
-	PyConfig_InitPythonConfig(&config);
-
-	// TODO: use macro for converting wchar_t
-	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	INFO(Q_FUNC_INFO << ", Python interpreter: " << converter.to_bytes(pythonInterpreter))
-	PyConfig_SetString(&config, &config.program_name, pythonInterpreter);
-	PyConfig_SetArgv(&config, 1, argv);
 
 	if (PyImport_AppendInittab(moduleName, PyInit_pylabplot) == -1) {
 		WARN("Failed to add the pylabplot module to the table of built-in modules")
 		return false;
 	}
 
-	Py_InitializeFromConfig(&config);
-	PyConfig_Clear(&config);
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
+	// for a change in this config to take effect the application may need to restart, though can reinitialize python without needing restart
+	// (finalize then initialize)
+	const QString pythonExecutable = group.readEntry(QLatin1String("PythonExecutable"), QString());
+	if (!pythonExecutable.isEmpty()) {
+		// need to validate that the provided python executable exists and matches with the python shared library currently linked to
+		static wchar_t interpreterPath[PATH_MAX];
+		const std::wstring widePath = pythonExecutable.toStdWString();
+		wcsncpy(interpreterPath, widePath.c_str(), PATH_MAX - 1);
+		interpreterPath[PATH_MAX - 1] = L'\0';
+		// it is enough to pass the path of the python executable to python and it calculates its search paths correctly from it also
+		// supporting virtual environments
+		// https://github.com/python/cpython/issues/66409#issuecomment-2543996605
+		// https://github.com/python/cpython/blob/main/Modules/getpath.py#L70-L168
+		Py_SetProgramName(interpreterPath); // this will be removed in python 3.15 but there is an alternative already in python 3.14
+		// https://docs.python.org/3/c-api/init_config.html#pyinitconfig-c-api but need to request for python developers to add the
+		// PyInitConfig C API to the limited API which was already discussed
+		// https://discuss.python.org/t/pep-741-python-configuration-c-api-second-version/45403/48
+
+		// Initialize Python interpreter (stable ABI)
+		// Python auto-detects its prefix. Users can override via the standard
+		// PYTHONHOME environment variable if needed.
+		Py_Initialize();
+
+		// need to validate that the provided python paths are initialized correctly and possible display them to the user in settings
+		// confirm sys.executable == interpreterPath
+		static wchar_t sysExecutable[PATH_MAX];
+		PyObject* sysExecutableObj = PySys_GetObject("executable");
+		if (!sysExecutableObj) {
+			WARN("Failed to to load sys.executable")
+			return false;
+		}
+		Py_INCREF(sysExecutableObj); // own it
+
+		if (PyUnicode_AsWideChar(sysExecutableObj, sysExecutable, sizeof(sysExecutable)) == -1) {
+			WARN("Failed to convert sys.executable to wide string")
+			Py_DECREF(sysExecutableObj);
+			return false;
+		}
+
+		if (wcscmp(interpreterPath, sysExecutable) != 0) {
+			WARN("Unexpected sys.executable value")
+			Py_DECREF(sysExecutableObj);
+			return false;
+		}
+		Py_DECREF(sysExecutableObj);
+	} else {
+		// Initialize Python interpreter (stable ABI)
+		// Python auto-detects its prefix. Users can override via the standard
+		// PYTHONHOME environment variable if needed.
+		Py_Initialize();
+	}
+
+	PySys_SetArgvEx(1, argv, 0); // this will be removed in removed in python 3.15 but there are alternatives
+
+	// need to compile and distribute our own pyside python library to ensure it links with the
+	// same qt6 linked by labplot. then distribute our compiled pyside python library
+	// and add it to sys.path
 
 	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
 	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;
 	if (!pythonInitialized || pyErrorOccurred) {
 		WARN("Failed to initialize the pylabplot module")
+		if (pyErrorOccurred)
+			PyErr_Print();
 		return false;
 	}
 
@@ -273,8 +355,8 @@ bool PythonScriptRuntime::restoreStream(PyObject* sysModule, const char* streamN
 		return false;
 	}
 
-	DEBUG(Q_FUNC_INFO << ", stream refcnt = " << Py_REFCNT(stream));
-	DEBUG(Q_FUNC_INFO << ", original refcnt = " << Py_REFCNT(original));
+	// DEBUG(Q_FUNC_INFO << ", stream refcnt = " << Py_REFCNT(stream));
+	// DEBUG(Q_FUNC_INFO << ", original refcnt = " << Py_REFCNT(original));
 
 	if (stream == original) { // already restored
 		INFO(Q_FUNC_INFO << ", stream already restored")
@@ -290,8 +372,8 @@ bool PythonScriptRuntime::restoreStream(PyObject* sysModule, const char* streamN
 	}
 
 	Py_DECREF(stream);
-	DEBUG(Q_FUNC_INFO << ", stream refcnt now = " << Py_REFCNT(stream));
-	DEBUG(Q_FUNC_INFO << ", original now = " << Py_REFCNT(original));
+	// DEBUG(Q_FUNC_INFO << ", stream refcnt now = " << Py_REFCNT(stream));
+	// DEBUG(Q_FUNC_INFO << ", original now = " << Py_REFCNT(original));
 
 	PyGILState_Release(gil);
 	return true;
@@ -319,8 +401,8 @@ bool PythonScriptRuntime::unRedirectOutput() {
 		return false;
 	}
 
-	INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
-	INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
+	// INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
+	// INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
 
 	if (sysStdOut)
 		ok &= restoreStream(sysModule, "stdout", sysStdOut);
@@ -330,8 +412,8 @@ bool PythonScriptRuntime::unRedirectOutput() {
 	if (sysStdErr && !stderrEqualStdout)
 		ok &= restoreStream(sysModule, "stderr", sysStdErr);
 
-	INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
-	INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
+	// INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
+	// INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
 
 	Py_DECREF(sysModule);
 	PyGILState_Release(gil);
@@ -612,22 +694,50 @@ bool PythonScriptRuntime::populateVariableInfo() {
 			return false;
 		}
 
-		if (PyModule_Check(valueObj)) {
+		// Use stable ABI: Check type name instead of PyModule_Check
+		auto* typeObj = PyObject_Type(valueObj);
+		if (typeObj) {
+			auto* typeName = PyObject_GetAttrString(typeObj, "__name__");
+			if (typeName) {
+				const QString& name = pyUnicodeToQString(typeName);
+				Py_DECREF(typeName);
+				Py_DECREF(typeObj);
+				if (name == QStringLiteral("module")) {
+					Py_DECREF(item);
+					Py_DECREF(valueObj);
+					continue;
+				}
+			} else {
+				Py_DECREF(typeObj);
+			}
+		}
+
+		// Use stable ABI: PyCallable_Check instead of PyFunction_Check
+		// This filters out functions, methods, and other callables
+		if (PyCallable_Check(valueObj)) {
 			Py_DECREF(item);
 			Py_DECREF(valueObj);
 			continue;
 		}
 
-		if (PyFunction_Check(valueObj)) {
-			Py_DECREF(item);
-			Py_DECREF(valueObj);
-			continue;
-		}
-
-		if (PyType_Check(valueObj)) {
-			Py_DECREF(item);
-			Py_DECREF(valueObj);
-			continue;
+		// Use stable ABI: Check type name instead of PyType_Check
+		{
+			auto* typeObj = PyObject_Type(valueObj);
+			if (typeObj) {
+				auto* typeName = PyObject_GetAttrString(typeObj, "__name__");
+				if (typeName) {
+					const QString& name = pyUnicodeToQString(typeName);
+					Py_DECREF(typeName);
+					Py_DECREF(typeObj);
+					if (name == QStringLiteral("type")) {
+						Py_DECREF(item);
+						Py_DECREF(valueObj);
+						continue;
+					}
+				} else {
+					Py_DECREF(typeObj);
+				}
+			}
 		}
 
 		auto* valueRepr = PyObject_Repr(valueObj);
@@ -651,8 +761,15 @@ bool PythonScriptRuntime::populateVariableInfo() {
 
 		Py_DECREF(valueRepr);
 
+		// Use stable ABI: Py_CompileString + PyEval_EvalCode instead of PyRun_String
 		const QString& typeQuery = QStringLiteral("type(") + key + QStringLiteral(")");
-		auto* typeObj = PyRun_String(qPrintable(typeQuery), Py_eval_input, m_localDict, m_localDict);
+		auto* compiledTypeQuery = Py_CompileString(qPrintable(typeQuery), "<type_check>", Py_eval_input);
+		if (!compiledTypeQuery) {
+			Py_DECREF(items);
+			return false;
+		}
+		typeObj = PyEval_EvalCode(compiledTypeQuery, m_localDict, m_localDict);
+		Py_DECREF(compiledTypeQuery);
 		if (!typeObj) {
 			Py_DECREF(items);
 			return false;

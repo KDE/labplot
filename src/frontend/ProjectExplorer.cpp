@@ -131,7 +131,7 @@ void ProjectExplorer::createActions() {
 	toggleFilterAction = new QAction(QIcon::fromTheme(QLatin1String("view-filter")), i18n("Search/Filter Options"), this);
 	toggleFilterAction->setCheckable(true);
 	toggleFilterAction->setChecked(true);
-	connect(toggleFilterAction, &QAction::triggered, this, [=]() {
+	connect(toggleFilterAction, &QAction::triggered, this, [=, this]() {
 		m_frameFilter->setVisible(!m_frameFilter->isVisible());
 	});
 }
@@ -298,10 +298,10 @@ void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {
 	const auto* tree_model = dynamic_cast<AspectTreeModel*>(m_treeView->model());
 	if (tree_model) {
 		const auto& index = tree_model->modelIndexOfAspect(aspect);
-// TODO: This crashes on Windows in Debug mode
-#if !defined(HAVE_WINDOWS) || defined(NDEBUG)
-		m_treeView->setCurrentIndex(index);
-#endif
+		// Only set current index if the index is valid to avoid crashes
+		// when the aspect is nullptr or not yet in the model
+		if (index.isValid())
+			m_treeView->setCurrentIndex(index);
 	}
 }
 
@@ -368,7 +368,7 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 
 			list_showColumnActions.append(showColumnAction);
 
-			connect(showColumnAction, &QAction::triggered, this, [=] {
+			connect(showColumnAction, &QAction::triggered, this, [=, this] {
 				ProjectExplorer::toggleColumn(i);
 			});
 		}
@@ -665,8 +665,10 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 		return;
 	}
 
-	m_treeView->scrollTo(index);
-	m_treeView->setCurrentIndex(index);
+	if (index.isValid()) {
+		m_treeView->scrollTo(index);
+		m_treeView->setCurrentIndex(index);
+	}
 	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 	m_treeView->header()->resizeSection(0, m_treeView->header()->sectionSize(0) * 1.2);
 }
@@ -747,7 +749,7 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 		caseSensitiveAction = new QAction(i18n("Case Sensitive"), this);
 		caseSensitiveAction->setCheckable(true);
 		caseSensitiveAction->setChecked(false);
-		connect(caseSensitiveAction, &QAction::triggered, this, [=]() {
+		connect(caseSensitiveAction, &QAction::triggered, this, [=, this]() {
 			if (!m_leFilter->text().isEmpty())
 				filterTextChanged(m_leFilter->text());
 		});
@@ -755,7 +757,7 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 		matchCompleteWordAction = new QAction(i18n("Match Complete Word"), this);
 		matchCompleteWordAction->setCheckable(true);
 		matchCompleteWordAction->setChecked(false);
-		connect(matchCompleteWordAction, &QAction::triggered, this, [=]() {
+		connect(matchCompleteWordAction, &QAction::triggered, this, [=, this]() {
 			if (!m_leFilter->text().isEmpty())
 				filterTextChanged(m_leFilter->text());
 		});
@@ -764,7 +766,7 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 		fuzzyMatchingAction = new QAction(i18n("Fuzzy Matching"), this);
 		fuzzyMatchingAction->setCheckable(true);
 		fuzzyMatchingAction->setChecked(true);
-		connect(fuzzyMatchingAction, &QAction::triggered, this, [=]() {
+		connect(fuzzyMatchingAction, &QAction::triggered, this, [=, this]() {
 			bool enabled = !fuzzyMatchingAction->isChecked();
 			caseSensitiveAction->setEnabled(enabled);
 			matchCompleteWordAction->setEnabled(enabled);
@@ -1321,8 +1323,10 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	for (const auto& index : selected)
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 
-	m_treeView->setCurrentIndex(currentIndex);
-	m_treeView->scrollTo(currentIndex);
+	if (currentIndex.isValid()) {
+		m_treeView->setCurrentIndex(currentIndex);
+		m_treeView->scrollTo(currentIndex);
+	}
 	auto* aspect = static_cast<AbstractAspect*>(currentIndex.internalPointer());
 	if (aspect)
 		aspect->setSelected(true);
