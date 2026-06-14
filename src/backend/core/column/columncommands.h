@@ -12,6 +12,8 @@
 #ifndef COLUMNCOMMANDS_H
 #define COLUMNCOMMANDS_H
 
+#include <QBitArray>
+
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/lib/IntervalAttribute.h"
@@ -41,6 +43,8 @@ private:
 	AbstractSimpleFilter* m_new_out_filter{nullptr};
 	AbstractSimpleFilter* m_old_in_filter{nullptr};
 	AbstractSimpleFilter* m_old_out_filter{nullptr};
+	QBitArray m_old_valid;
+	QBitArray m_new_valid;
 	bool m_undone{false};
 	bool m_executed{false};
 };
@@ -136,6 +140,7 @@ private:
 	ColumnPrivate* m_col;
 	void* m_data{nullptr};
 	void* m_empty_data{nullptr};
+	QBitArray m_old_valid;
 	bool m_undone{false};
 };
 
@@ -230,10 +235,14 @@ public:
 
 	void redo() override {
 		m_row_count = m_col->rowCount();
+		if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode()))
+			m_old_valid = (m_row >= 0 && m_row < m_col->m_valid.size()) ? m_col->m_valid.testBit(m_row) : false;
 		m_col->setValueAt(m_row, m_new_value);
 	}
 	void undo() override {
 		m_col->setValueAt(m_row, m_old_value);
+		if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode()) && !m_old_valid && m_row < m_col->m_valid.size())
+			m_col->m_valid.setBit(m_row, false);
 	}
 
 private:
@@ -242,6 +251,7 @@ private:
 	T m_new_value;
 	T m_old_value;
 	int m_row_count{0};
+	bool m_old_valid{true};
 };
 
 template<typename T>
@@ -297,6 +307,10 @@ public:
 		else
 			m_old_values = static_cast<QVector<T>*>(data)->mid(m_first, m_new_values.count());
 
+		// save old validity
+		if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode()))
+			m_old_valid = m_col->m_valid;
+
 		m_col->replaceValues(m_first, m_new_values);
 		m_new_values.clear(); // delete values, because otherwise we use a lot of ram even if we don't need it
 	}
@@ -311,6 +325,8 @@ public:
 			m_new_values = static_cast<QVector<T>*>(data)->mid(m_first, m_old_values.count());
 
 		m_col->replaceValues(m_first, m_old_values);
+		if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode()))
+			m_col->m_valid = m_old_valid;
 		m_old_values.clear();
 	}
 
@@ -319,6 +335,7 @@ private:
 	int m_first;
 	QVector<T> m_new_values;
 	QVector<T> m_old_values;
+	QBitArray m_old_valid;
 };
 
 #endif

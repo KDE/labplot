@@ -131,7 +131,7 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type
 	ui->chkCreateDataCurve->hide();
 
 	// SIGNALs/SLOTs
-	connect(buttonBox, &QDialogButtonBox::accepted, this, [=]() {
+	connect(buttonBox, &QDialogButtonBox::accepted, this, [=, this]() {
 		hide();
 		plot();
 	});
@@ -223,8 +223,18 @@ void PlotDataDialog::setFitDistribution(nsl_sf_stats_distribution distribution) 
 }
 
 void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
+	// for bar plots and lollipop plots, extract the first text column to use as tick labels on the x-axis
+	if (m_plotType == Plot::PlotType::BarPlot || m_plotType == Plot::PlotType::LollipopPlot) {
+		for (auto* col : selectedColumns) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Text) {
+				m_tickLabelsColumn = col;
+				break;
+			}
+		}
+	}
+
 	// skip error and non-plottable columns
-	for (Column* col : selectedColumns) {
+	for (auto* col : selectedColumns) {
 		if ((col->plotDesignation() == AbstractColumn::PlotDesignation::X || col->plotDesignation() == AbstractColumn::PlotDesignation::Y
 			 || col->plotDesignation() == AbstractColumn::PlotDesignation::NoDesignation)
 			&& col->isPlottable())
@@ -356,13 +366,22 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 	ui->spacer->changeSize(0, 0);
 	ui->chkCreateDataCurve->hide();
 
-	// use the already available cbXColumn combo box
-	ui->lXColumn->setText(i18n("Data"));
-	m_columnComboBoxes << ui->cbXColumn;
-	ui->cbXColumn->addItems(columnNames);
-	ui->cbXColumn->setCurrentIndex(0);
+	// for bar/lollipop plots with a text column, show it in the X combobox as "Labels"
+	if (m_tickLabelsColumn && (m_plotType == Plot::PlotType::BarPlot || m_plotType == Plot::PlotType::LollipopPlot)) {
+		ui->lXColumn->setText(i18n("Labels"));
+		ui->cbXColumn->addItem(m_tickLabelsColumn->name());
+		ui->cbXColumn->setCurrentIndex(0);
+		ui->cbXColumn->setEnabled(false);
+		// cbXColumn is not added to m_columnComboBoxes — it's the labels column, not data
+	} else {
+		// use the already available cbXColumn combo box as the first data column
+		ui->lXColumn->setText(i18n("Data"));
+		m_columnComboBoxes << ui->cbXColumn;
+		ui->cbXColumn->addItems(columnNames);
+		ui->cbXColumn->setCurrentIndex(0);
+	}
 
-	if (m_columns.size() == 1) {
+	if (m_columns.size() == 1 && !m_tickLabelsColumn) {
 		// one column provided, only one histogram is possible
 		//-> hide the curve placement options and the scroll areas for further columns
 		ui->lYColumn->hide();
@@ -371,7 +390,18 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		ui->gbCurvePlacement->hide();
 		ui->gbPlotPlacement->setTitle(i18n("Add Plot to"));
 		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	} else if (m_columns.size() == 1 && m_tickLabelsColumn) {
+		// one data column + tick labels column: one plot, but show the data combobox
+		ui->lYColumn->setText(i18n("Data"));
+		m_columnComboBoxes << ui->cbYColumn;
+		ui->cbYColumn->addItems(columnNames);
+		ui->cbYColumn->setCurrentIndex(0);
+		ui->rbCurvePlacementAllInOnePlotArea->setChecked(true);
+		ui->gbCurvePlacement->hide();
+		ui->gbPlotPlacement->setTitle(i18n("Add Plot to"));
+		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	} else {
+		const int firstDataIndex = m_tickLabelsColumn ? 0 : 1;
 		ui->gbPlotPlacement->setTitle(i18n("Add Plots to"));
 		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
@@ -379,15 +409,16 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		ui->lYColumn->setText(i18n("Data"));
 		m_columnComboBoxes << ui->cbYColumn;
 		ui->cbYColumn->addItems(columnNames);
-		ui->cbYColumn->setCurrentIndex(1);
+		ui->cbYColumn->setCurrentIndex(firstDataIndex);
 
 		// add a ComboBox for every further column to be plotted
 		auto* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
-		for (int i = 2; i < m_columns.size(); ++i) {
+		const int rowOffset = m_tickLabelsColumn ? 2 : 1; // row 0: X/Labels, row 1: line, row 2: Y/first data
+		for (int i = firstDataIndex + 1; i < m_columns.size(); ++i) {
 			auto* label = new QLabel(i18n("Data"));
 			auto* comboBox = new QComboBox();
-			gridLayout->addWidget(label, i + 1, 0, 1, 1);
-			gridLayout->addWidget(comboBox, i + 1, 2, 1, 1);
+			gridLayout->addWidget(label, i + rowOffset, 0, 1, 1);
+			gridLayout->addWidget(comboBox, i + rowOffset, 2, 1, 1);
 			comboBox->addItems(columnNames);
 			comboBox->setCurrentIndex(i);
 			m_columnComboBoxes << comboBox;
@@ -1157,8 +1188,12 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 				axis->setMajorTicksType(Axis::TicksType::Spacing);
 				axis->setMajorTickStartOffset(0.5);
 				axis->setMajorTicksSpacing(1.);
-				axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 				axis->setMinorTicksDirection(Axis::noTicks);
+				if (m_tickLabelsColumn) {
+					axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+					axis->setLabelsTextColumn(m_tickLabelsColumn);
+				} else
+					axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 			}
 			axis->title()->setText(QString()); // no title
 		}

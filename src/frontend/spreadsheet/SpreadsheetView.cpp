@@ -40,6 +40,7 @@
 #include "frontend/spreadsheet/SearchReplaceWidget.h"
 #include "frontend/spreadsheet/SortDialog.h"
 #endif
+#include "backend/datasources/filters/AsciiFilter.h"
 #include "frontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "frontend/spreadsheet/GoToDialog.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
@@ -52,6 +53,7 @@
 #include <KMessageBox>
 
 #include <QActionGroup>
+#include <QApplication>
 #include <QClipboard>
 #include <QFile>
 #include <QInputDialog>
@@ -65,6 +67,8 @@
 #include <QPrinter>
 #include <QRandomGenerator>
 #include <QScrollBar>
+#include <QSlider>
+#include <QSpinBox>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -110,8 +114,32 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 	, m_readOnly(readOnly) {
 	auto* layout = new QVBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
+	layout->setSpacing(0);
 
 	layout->addWidget(m_tableView);
+
+	// zoom bar at the bottom
+	auto* zoomBarLayout = new QHBoxLayout();
+	zoomBarLayout->setContentsMargins(4, 2, 4, 2);
+	zoomBarLayout->addStretch();
+	m_zoomSlider = new QSlider(Qt::Horizontal, this);
+	m_zoomSlider->setRange(50, 300);
+	m_zoomSlider->setValue(100);
+	m_zoomSlider->setFixedWidth(150);
+	m_zoomSlider->setToolTip(i18n("Zoom level"));
+	m_zoomSpinBox = new QSpinBox(this);
+	m_zoomSpinBox->setRange(50, 300);
+	m_zoomSpinBox->setValue(100);
+	m_zoomSpinBox->setSuffix(QStringLiteral("%"));
+	m_zoomSpinBox->setToolTip(i18n("Zoom level"));
+	m_zoomSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
+	m_zoomSpinBox->setFixedWidth(50);
+	zoomBarLayout->addWidget(m_zoomSlider);
+	zoomBarLayout->addWidget(m_zoomSpinBox);
+	layout->addLayout(zoomBarLayout);
+
+	connect(m_zoomSlider, &QSlider::valueChanged, this, &SpreadsheetView::setZoomLevel);
+	connect(m_zoomSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetView::setZoomLevel);
 	if (m_readOnly)
 		m_tableView->setEditTriggers(QTableView::NoEditTriggers);
 
@@ -150,10 +178,10 @@ void SpreadsheetView::init() {
 	m_tableView->setModel(m_model);
 	auto* delegate = new SpreadsheetItemDelegate(this);
 	connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
-	connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=]() {
+	connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=, this]() {
 		m_editorEntered = true;
 	});
-	connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=]() {
+	connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=, this]() {
 		m_editorEntered = false;
 	});
 
@@ -169,7 +197,7 @@ void SpreadsheetView::init() {
 	m_horizontalHeader->setSectionsMovable(true);
 	m_horizontalHeader->installEventFilter(this);
 	m_tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-	// 	m_tableView->installEventFilter(this);
+	m_tableView->viewport()->installEventFilter(this);
 
 	resizeHeader();
 
@@ -199,11 +227,11 @@ void SpreadsheetView::init() {
 	});
 
 	// react on sparkline toggled
-	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=] {
+	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=, this] {
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
 			SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 			m_horizontalHeader->refresh();
-			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
+			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=, this] {
 				if (m_spreadsheet->showSparklines())
 					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
@@ -211,14 +239,14 @@ void SpreadsheetView::init() {
 		}
 	});
 
-	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, [=] {
+	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, [=, this] {
 		// Disconnect existing connections before creating new ones
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex)
 			disconnect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, nullptr);
 
 		// Establish new connections
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
-			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
+			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=, this] {
 				if (m_spreadsheet->showSparklines())
 					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
@@ -231,6 +259,7 @@ void SpreadsheetView::init() {
 	showSparklines(m_spreadsheet->showSparklines());
 
 	// selection related connections
+	connect(m_tableView, &QTableView::clicked, this, &SpreadsheetView::navigateToSpreadsheetOnClick);
 	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnSelected, this, &SpreadsheetView::selectColumn);
 	connect(m_spreadsheet, &Spreadsheet::columnDeselected, this, &SpreadsheetView::deselectColumn);
@@ -291,6 +320,20 @@ void SpreadsheetView::setFocus() {
 
 void SpreadsheetView::setSuppressResizeHeader(bool suppress) {
 	m_suppressResizeHeader = suppress;
+}
+
+void SpreadsheetView::showEvent(QShowEvent* event) {
+	QWidget::showEvent(event);
+	if (!m_initialNavigationDone) {
+		m_initialNavigationDone = true;
+		// Navigate to the first cell and set the focus so the user can start directly entering new data.
+		// Defer by one event loop iteration so the native platform widget (Cocoa on macOS) has time
+		// to fully initialize its internal data structures after the widget becomes visible.
+		QTimer::singleShot(0, this, [this]() {
+			goToCell(0, 0);
+			setFocus();
+		});
+	}
 }
 
 void SpreadsheetView::resizeEvent(QResizeEvent* event) {
@@ -597,6 +640,11 @@ void SpreadsheetView::initMenus() {
 	m_timeSeriesAnalysisMenu->addAction(tsaSeasonalDecompositionAction);
 	m_columnMenu->addMenu(m_timeSeriesAnalysisMenu);
 
+	// column statistics releated actions
+	m_columnMenu->addSeparator();
+	m_columnMenu->addAction(action_statistics_columns);
+	m_columnMenu->addAction(action_statistics_spreadsheet);
+
 	m_columnSetAsMenu = new QMenu(i18n("Set Column As"), this);
 	m_columnMenu->addSeparator();
 	m_columnSetAsMenu->addAction(action_set_as_x);
@@ -716,10 +764,6 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu->addMenu(m_formattingMenu);
 	m_columnMenu->addSeparator();
 	m_columnMenu->addAction(action_freeze_columns);
-	m_columnMenu->addSeparator();
-	m_columnMenu->addAction(action_statistics_spreadsheet);
-	m_columnMenu->addSeparator();
-	m_columnMenu->addAction(action_statistics_columns);
 
 	if (!m_readOnly) {
 		m_columnMenu->addSeparator();
@@ -869,7 +913,7 @@ void SpreadsheetView::connectActions() {
 	connect(tsaSeasonalDecompositionAction, &QAction::triggered, this, &SpreadsheetView::addSeasonalDecomposition);
 
 	// statistical analysis
-	connect(addHypothesisTestActionGroup, &QActionGroup::triggered, [=](QAction* action) {
+	connect(addHypothesisTestActionGroup, &QActionGroup::triggered, [=, this](QAction* action) {
 		const auto& columns = selectedColumns();
 		QString name = (columns.size() == 1) ? columns.constFirst()->name() : m_spreadsheet->name();
 		auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", name));
@@ -912,12 +956,20 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 		firstAction = menu->actions().at(1);
 
 	if (m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0) {
+		// plot and analysis actions
 		menu->insertMenu(firstAction, m_plotDataMenu);
 		menu->insertMenu(firstAction, m_analyzePlotMenu);
 		menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
 		menu->insertMenu(firstAction, m_timeSeriesAnalysisMenu);
 		menu->insertSeparator(firstAction);
+
+		// column statistics related actions
+		menu->insertSeparator(firstAction);
+		menu->insertAction(firstAction, action_statistics_all_columns);
+		menu->insertAction(firstAction, action_statistics_spreadsheet);
+		menu->insertSeparator(firstAction);
 	}
+
 	menu->insertMenu(firstAction, m_selectionMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_select_all);
@@ -939,11 +991,6 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_toggle_comments);
 	menu->insertAction(firstAction, action_toggle_sparklines);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_statistics_spreadsheet);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_statistics_all_columns);
-	menu->insertSeparator(firstAction);
 }
 
 /*!
@@ -960,15 +1007,23 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	const bool numeric = column->isNumeric();
 	const bool datetime = (column->columnMode() == AbstractColumn::ColumnMode::DateTime);
 
-	QAction* firstAction = menu->actions().at(1);
+	// plot and analysis actions
+	auto* firstAction = menu->actions().at(1);
 	menu->insertMenu(firstAction, m_plotDataMenu);
 	menu->insertMenu(firstAction, m_analyzePlotMenu);
 	menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
 	menu->insertMenu(firstAction, m_timeSeriesAnalysisMenu);
 	menu->insertSeparator(firstAction);
 
-	if (numeric)
+	// column statistics related actions
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_statistics_columns);
+	menu->insertAction(firstAction, action_statistics_spreadsheet);
+
+	if (numeric) {
+		menu->insertSeparator(firstAction);
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
+	}
 
 	if (!m_readOnly) {
 		if (numeric) {
@@ -991,10 +1046,6 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	menu->insertMenu(firstAction, m_formattingMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_freeze_columns);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_statistics_spreadsheet);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_statistics_columns);
 
 	checkColumnMenus(QVector<Column*>{column});
 }
@@ -1029,7 +1080,8 @@ void SpreadsheetView::handleAspectsAdded(int first, int last) {
 			m_tableView->setColumnWidth(i, col->width());
 	}
 
-	goToCell(0, last);
+	if (m_spreadsheet->rowCount() > 0)
+		goToCell(0, last);
 }
 
 void SpreadsheetView::handleAspectAboutToBeRemoved(int first, int last) {
@@ -1041,7 +1093,7 @@ void SpreadsheetView::handleAspectAboutToBeRemoved(int first, int last) {
 		disconnect(children.at(i), nullptr, this, nullptr);
 }
 
-void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /* oldSize */, int newSize) {
+void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /* oldSiz	e */, int newSize) {
 	// save the new size in the column
 	Column* col = m_spreadsheet->child<Column>(logicalIndex);
 	col->setWidth(newSize);
@@ -1053,13 +1105,20 @@ void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /* ol
 }
 
 void SpreadsheetView::goToCell(int row, int col) {
-	QModelIndex index = m_model->index(row, col);
+	const auto& index = m_model->index(row, col);
+	if (!index.isValid())
+		return;
+
 	m_tableView->scrollTo(index);
 	m_tableView->setCurrentIndex(index);
 }
 
 void SpreadsheetView::selectCell(int row, int col) {
-	m_tableView->selectionModel()->select(m_model->index(row, col), QItemSelectionModel::Select);
+	const auto& index = m_model->index(row, col);
+	if (!index.isValid())
+		return;
+
+	m_tableView->selectionModel()->select(index, QItemSelectionModel::Select);
 }
 
 void SpreadsheetView::clearSelection() {
@@ -1389,6 +1448,15 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 		else if (key_event->matches(QKeySequence::Paste)) {
 			if (!m_readOnly)
 				pasteIntoSelection();
+		} else if (key_event->matches(QKeySequence::ZoomIn) || (key_event->modifiers() == Qt::ControlModifier && key_event->key() == Qt::Key_Equal)) {
+			setZoomLevel(m_zoomLevel + 10);
+			return true;
+		} else if (key_event->matches(QKeySequence::ZoomOut)) {
+			setZoomLevel(m_zoomLevel - 10);
+			return true;
+		} else if (key_event->modifiers() == Qt::ControlModifier && key_event->key() == Qt::Key_0) {
+			setZoomLevel(100);
+			return true;
 		} else if (key_event->key() == Qt::Key_Backspace || key_event->matches(QKeySequence::Delete))
 			clearSelectedCells();
 		else if (key_event->key() == Qt::Key_Return || key_event->key() == Qt::Key_Enter) {
@@ -1425,6 +1493,16 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 #endif
 		else if (key_event->matches(QKeySequence::Cut))
 			cutSelection();
+	} else if (event->type() == QEvent::Wheel) {
+		auto* wheelEvent = static_cast<QWheelEvent*>(event);
+		if (wheelEvent->modifiers() == Qt::ControlModifier) {
+			const int delta = wheelEvent->angleDelta().y();
+			if (delta > 0)
+				setZoomLevel(m_zoomLevel + 10);
+			else if (delta < 0)
+				setZoomLevel(m_zoomLevel - 10);
+			return true;
+		}
 	}
 
 	return QWidget::eventFilter(watched, event);
@@ -1549,8 +1627,8 @@ void SpreadsheetView::checkSpreadsheetSelectionMenu() {
 
 void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 	bool numeric = true;
-	bool plottable = true;
-	bool datetime = false;
+	bool plottable = false; // true if at least one column is plottable (numeric or datetime), non-plottable columns will be ignored in the plot data dialog or used as text labels
+	bool datetime = true; // true if all columns are numeric or datetime
 	bool text = false;
 	bool hasValues = false;
 	bool hasFormat = false;
@@ -1558,13 +1636,12 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 
 	for (const auto* col : columns) {
 		if (!col->isNumeric()) {
-			datetime = (col->columnMode() == AbstractColumn::ColumnMode::DateTime);
-			if (!datetime)
-				plottable = false;
-
 			numeric = false;
-			break;
+			if (col->columnMode() != AbstractColumn::ColumnMode::DateTime)
+				datetime = false;
 		}
+		if (col->isPlottable())
+			plottable = true;
 	}
 
 	for (const auto* col : columns) {
@@ -1799,6 +1876,8 @@ void SpreadsheetView::pasteIntoSelection() {
 		// TEST ' ' as group separator:
 		for (int i = 0; i < input_row_count; i++) {
 			const auto& rowText = input_rows.at(i).trimmed();
+			if (rowText.trimmed().isEmpty())
+				continue;
 			if (hasTabs)
 				cellTexts.append(rowText.split(QLatin1Char('\t')));
 			else if (numberLocale.groupSeparator().trimmed().isEmpty()
@@ -1807,10 +1886,14 @@ void SpreadsheetView::pasteIntoSelection() {
 			else
 				cellTexts.append(rowText.split(QRegularExpression(QStringLiteral("\\s+"))));
 
-			if (cellTexts.at(i).count() > input_col_count)
-				input_col_count = cellTexts.at(i).count();
+			if (cellTexts.last().count() > input_col_count)
+				input_col_count = cellTexts.last().count();
 		}
-
+		input_row_count = cellTexts.count();
+		if (input_row_count == 0) {
+			m_spreadsheet->endMacro();
+			return;
+		}
 		input_rows.clear(); // not needed anymore, release memory
 
 		// when pasting DateTime data in the format 'yyyy-MM-dd hh:mm:ss' and similar, it gets split above because of the space separator.
@@ -1832,8 +1915,10 @@ void SpreadsheetView::pasteIntoSelection() {
 				if (newMode == AbstractColumn::ColumnMode::DateTime) {
 					// merge the first two columns
 					for (auto& row : cellTexts) {
-						row[1] = row.at(0) + QLatin1Char(' ') + row.at(1);
-						row.takeFirst();
+						if (row.size() > 1) {
+							row[1] = row.at(0) + QLatin1Char(' ') + row.at(1);
+							row.takeFirst();
+						}
 					}
 					--input_col_count;
 				}
@@ -1848,6 +1933,40 @@ void SpreadsheetView::pasteIntoSelection() {
 		// 3. the whole column is selected (the use clicked on the header)
 		// Also, set the proper column mode if the target column doesn't have any values yet
 		// and set the proper column mode if the column is empty
+
+		int check_row = first_row;
+		if (check_row == -1) {
+			int current_row, current_col;
+			getCurrentCell(&current_row, &current_col);
+			check_row = (current_row == -1) ? 0 : current_row;
+		}
+
+		bool firstRowIsHeader = false;
+		QStringList headerValues;
+
+		if (check_row == 0 && cellTexts.size() > 1 && this->isVisible()) {
+			bool isTextRow = false;
+			QString tempFormat;
+			for (const QString& cell : cellTexts.constFirst()) {
+				if (AbstractFileFilter::columnMode(cell.trimmed(), tempFormat, numberLocale) == AbstractColumn::ColumnMode::Text) {
+					isTextRow = true;
+					break;
+				}
+			}
+
+			if (isTextRow) {
+			auto reply = QMessageBox::question(this,
+			i18n("Import Headers"),
+			i18n("Do you want to use the first row as column headers?"),
+			QMessageBox::Yes | QMessageBox::No);
+				if (reply == QMessageBox::Yes) {
+					firstRowIsHeader = true;
+					headerValues = cellTexts.takeFirst();
+					input_row_count--;
+				}
+			}
+		}
+
 		if ((first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col)
 			|| (first_row == 0 && last_row == m_spreadsheet->rowCount() - 1)) {
 			int current_row, current_col;
@@ -1862,32 +1981,34 @@ void SpreadsheetView::pasteIntoSelection() {
 			last_row = first_row + input_row_count - 1;
 			last_col = first_col + input_col_count - 1;
 			const int columnCount = m_spreadsheet->columnCount();
-			// if the target columns that are already available don't have any values yet,
-			// convert their mode to the mode of the data to be pasted
+
+			// get baseline modes from the first 10 rows
+			const int sampleSize = qMin(10, (int)cellTexts.size());
+			QVector<QStringList> sampleRows = cellTexts.mid(0, sampleSize);
+
+			AsciiFilter::Properties props;
+			props.locale = numberLocale;
+			props.simplifyWhitespaces = true;
+			props.removeQuotes = true;
+			props.intAsDouble = false;
+			props.dateTimeFormat.clear();
+			
+			QString globalDateTimeFormat;
+			QVector<AbstractColumn::ColumnMode> baselineModes = AsciiFilter::determineColumnModes(sampleRows, props, globalDateTimeFormat);
+
+			// Update existing columns
 			for (int c = first_col; c <= last_col && c < columnCount; ++c) {
 				Column* col = m_spreadsheet->column(c);
-				if (col->hasValues())
-					continue;
-
-				// first non-empty value in the column to paste determines the column mode/type of the new column to be added
 				const int curCol = c - first_col;
-				QString nonEmptyValue;
-				for (auto& r : cellTexts) {
-					if (curCol < r.count() && !r.at(curCol).isEmpty()) {
-						nonEmptyValue = r.at(curCol);
-						break;
+				auto currentMode = col->columnMode();
+				auto mode = (curCol < baselineModes.size()) ? baselineModes.at(curCol) : AbstractColumn::ColumnMode::Double;
+				QString dateTimeFormat = globalDateTimeFormat;
+				if (mode != currentMode) {
+					col->setColumnMode(mode);
+					if (mode == AbstractColumn::ColumnMode::DateTime && !dateTimeFormat.isEmpty()) {
+						auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+						filter->setFormat(dateTimeFormat);
 					}
-				}
-
-				// 			if (!localeDetermined)
-				// 				localeDetermined = determineLocale(nonEmptyValue, locale);
-
-				QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
-				const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
-				col->setColumnMode(mode);
-				if (mode == AbstractColumn::ColumnMode::DateTime) {
-					auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-					filter->setFormat(dateTimeFormat);
 				}
 			}
 
@@ -1895,22 +2016,11 @@ void SpreadsheetView::pasteIntoSelection() {
 			if (last_col >= columnCount) {
 				for (int c = 0; c < last_col - (columnCount - 1); ++c) {
 					const int curCol = columnCount - first_col + c;
-					// first non-empty value in the column to paste determines the column mode/type of the new column to be added
-					QString nonEmptyValue;
-					for (auto& r : cellTexts) {
-						if (curCol < r.count() && !r.at(curCol).isEmpty()) {
-							nonEmptyValue = r.at(curCol);
-							break;
-						}
-					}
+					QString dateTimeFormat = globalDateTimeFormat;
 
-					// 				if (!localeDetermined)
-					// 					localeDetermined = determineLocale(nonEmptyValue, locale);
-
-					QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
-					const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
-					Column* new_col = new Column(QString::number(curCol), mode);
-					if (mode == AbstractColumn::ColumnMode::DateTime) {
+					auto mode = (curCol < baselineModes.size()) ? baselineModes.at(curCol) : AbstractColumn::ColumnMode::Double;
+					Column* new_col = new Column(QString::number(curCol + 1), mode);
+					if (mode == AbstractColumn::ColumnMode::DateTime && !dateTimeFormat.isEmpty()) {
 						auto* filter = static_cast<DateTime2StringFilter*>(new_col->outputFilter());
 						filter->setFormat(dateTimeFormat);
 					}
@@ -1926,6 +2036,14 @@ void SpreadsheetView::pasteIntoSelection() {
 
 			// select the rectangle to be pasted in
 			setCellsSelected(first_row, first_col, last_row, last_col);
+		}
+
+		if (firstRowIsHeader) {
+			for (int c = 0; c < headerValues.size(); ++c) {
+				int targetColIndex = first_col + c;
+				if (targetColIndex < m_spreadsheet->columnCount())
+					m_spreadsheet->column(targetColIndex)->setName(headerValues.at(c));
+			}
 		}
 
 		const int rows = last_row - first_row + 1;
@@ -2703,10 +2821,10 @@ void SpreadsheetView::toggleFreezeColumn() {
 
 		auto* delegate = new SpreadsheetItemDelegate(this);
 		connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
-		connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=]() {
+		connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=, this]() {
 			m_editorEntered = true;
 		});
-		connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=]() {
+		connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=, this]() {
 			m_editorEntered = false;
 		});
 
@@ -3482,8 +3600,11 @@ void SpreadsheetView::clearSelectedCells() {
 			column->clear();
 		} else {
 			for (const auto& index : indexes) {
-				if (index.column() == colIndex)
-					columns.at(colIndex)->asStringColumn()->setTextAt(index.row(), QString());
+				if (index.column() == colIndex) {
+					column->asStringColumn()->setTextAt(index.row(), QString());
+					if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt)
+						column->setValid(index.row(), false);
+				}
 			}
 		}
 
@@ -3541,7 +3662,7 @@ void SpreadsheetView::showSearchReplace(bool replace) {
 
 	// interrupt the event loop to show/render the widget first and set the focus
 	// after this otherwise the focus in the search field is not set
-	QTimer::singleShot(0, this, [=]() {
+	QTimer::singleShot(0, this, [=, this]() {
 		m_searchReplaceWidget->setFocus();
 	});
 }
@@ -3692,6 +3813,15 @@ void SpreadsheetView::deselectColumn(int column) {
 */
 void SpreadsheetView::columnClicked(int column) {
 	m_spreadsheet->setColumnSelectedInView(column, true);
+}
+
+/*!
+  called when the user presses inside the table view.
+  Navigates to this \c Spreadsheet in the project explorer and ensures the table view receives focus.
+*/
+void SpreadsheetView::navigateToSpreadsheetOnClick(const QModelIndex&) {
+	m_spreadsheet->setSelectedInView(true);
+	setFocus(); 
 }
 
 /*!
@@ -4541,9 +4671,32 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 					if (j != 0)
 						query += QLatin1String(", ");
 
-					QString text = col->asStringColumn()->textAt(row);
-					text = text.replace(QLatin1String("'"), QLatin1String("''"));
-					query += QLatin1Char('\'') + text + QLatin1Char('\'');
+					switch (col->columnMode()) {
+					case AbstractColumn::ColumnMode::Double: {
+						double value = col->valueAt(row);
+						if (std::isnan(value))
+							query += QLatin1String("NULL");
+						else
+							query += QString::number(value, 'g', 15);
+						break;
+					}
+					case AbstractColumn::ColumnMode::Integer:
+						query += QString::number(col->integerAt(row));
+						break;
+					case AbstractColumn::ColumnMode::BigInt:
+						query += QString::number(col->bigIntAt(row));
+						break;
+					case AbstractColumn::ColumnMode::Text:
+					case AbstractColumn::ColumnMode::Month:
+					case AbstractColumn::ColumnMode::Day:
+					case AbstractColumn::ColumnMode::DateTime:
+					default: {
+						QString text = col->asStringColumn()->textAt(row);
+						text = text.replace(QLatin1String("'"), QLatin1String("''"));
+						query += QLatin1Char('\'') + text + QLatin1Char('\'');
+						break;
+					}
+					}
 				}
 				query += QLatin1String(")");
 			}
@@ -4563,4 +4716,60 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 	// commit the transaction and close the database
 	q.exec(QLatin1String("COMMIT TRANSACTION;"));
 	db.close();
+}
+
+// ############################################################################
+// ############################# Zoom #########################################
+// ############################################################################
+
+int SpreadsheetView::zoomLevel() const {
+	return m_zoomLevel;
+}
+
+void SpreadsheetView::setZoomLevel(int level) {
+	level = qBound(50, level, 300);
+	if (level == m_zoomLevel)
+		return;
+
+	m_zoomLevel = level;
+
+	// update slider and spinbox without re-entering this slot
+	QSignalBlocker sliderBlocker(m_zoomSlider);
+	QSignalBlocker spinBoxBlocker(m_zoomSpinBox);
+	m_zoomSlider->setValue(m_zoomLevel);
+	m_zoomSpinBox->setValue(m_zoomLevel);
+
+	applyZoom();
+}
+
+void SpreadsheetView::applyZoom() {
+	const double factor = m_zoomLevel / 100.0;
+	const int defaultPointSize = QApplication::font().pointSize();
+	const int newPointSize = qMax(1, static_cast<int>(defaultPointSize * factor));
+
+	// scale the cell font
+	QFont font = QApplication::font();
+	font.setPointSize(newPointSize);
+	m_tableView->setFont(font);
+
+	// scale the row height based on font metrics
+	QFontMetrics fm(font);
+	const int rowHeight = fm.height() + 6; // 6px padding
+
+	// use stylesheet to force header font — some platform styles ignore setFont() on headers
+	const QString fontStyleSheet = QStringLiteral("QHeaderView::section { font-size: %1pt; }").arg(newPointSize);
+
+	auto* v_header = m_tableView->verticalHeader();
+	v_header->setDefaultSectionSize(rowHeight);
+	v_header->setStyleSheet(fontStyleSheet);
+
+	m_horizontalHeader->setStyleSheet(fontStyleSheet);
+
+	// force headers to recalculate geometry and repaint
+	m_horizontalHeader->updateGeometry();
+	m_horizontalHeader->viewport()->update();
+	v_header->viewport()->update();
+
+	// resize columns to account for new font size
+	resizeHeader();
 }

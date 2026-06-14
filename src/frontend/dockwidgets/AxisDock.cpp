@@ -45,6 +45,7 @@ AxisDock::AxisDock(QWidget* parent)
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible);
+	ui.kfrLabelsFont->setFixedHeight(ui.leName->sizeHint().height());
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);

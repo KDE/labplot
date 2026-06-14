@@ -9,6 +9,7 @@
 */
 
 #include "NotebookView.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/notebook/Notebook.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
@@ -17,10 +18,13 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <QActionGroup>
+#include <QEvent>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMenu>
 #include <QTimer>
+#include <QKeyEvent>
+#include <QKeySequence>
 
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
@@ -33,6 +37,10 @@ NotebookView::NotebookView(Notebook* worksheet)
 	m_part = worksheet->part();
 	if (m_part) {
 		layout->addWidget(m_part->widget());
+		m_part->widget()->installEventFilter(this);
+		for (auto* child : m_part->widget()->findChildren<QWidget*>())
+			child->installEventFilter(this);
+		
 		initActions();
 		connect(m_notebook, &Notebook::requestProjectContextMenu, this, &NotebookView::createContextMenu);
 		connect(m_notebook, &Notebook::statusChanged, this, &NotebookView::statusChanged);
@@ -272,6 +280,42 @@ void NotebookView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_restartAction);
 	menu->insertSeparator(firstAction);
+}
+
+bool NotebookView::eventFilter(QObject* watched, QEvent* event) {
+	if (event->type() == QEvent::MouseButtonPress) {
+		m_notebook->setSelectedInView(true);
+		if (auto* w = qobject_cast<QWidget*>(watched))
+			w->setFocus();
+	}
+	else if (event->type() == QEvent::ShortcutOverride) {
+		auto* keyEvent = static_cast<QKeyEvent*>(event);
+
+		if (keyEvent->matches(QKeySequence::Copy)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_copy"))) a->trigger();
+				keyEvent->accept();
+			return true;
+		} else if (keyEvent->matches(QKeySequence::Paste)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_paste"))) a->trigger();
+				keyEvent->accept();
+			return true;
+		} else if (keyEvent->matches(QKeySequence::Cut)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_cut"))) a->trigger();
+				keyEvent->accept();
+			return true;
+		}
+		else if (keyEvent->matches(QKeySequence::Undo)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_undo"))) a->trigger();
+			keyEvent->accept();
+			return true;
+		} else if (keyEvent->matches(QKeySequence::Redo)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_redo"))) a->trigger();
+			keyEvent->accept();
+			return true;
+		}
+	}
+
+	return QWidget::eventFilter(watched, event);
 }
 
 /*!

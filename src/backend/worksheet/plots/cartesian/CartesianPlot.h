@@ -333,6 +333,7 @@ private Q_SLOTS:
 	void childAdded(const AbstractAspect*);
 	void childAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void childMoved();
 	void childHovered();
 
 	void dataChanged(WorksheetElement*);

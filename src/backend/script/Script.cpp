@@ -58,6 +58,10 @@ Script::Script(const QString& name, const QString& lang)
 
 	m_language = lang;
 	m_scriptRuntime = Script::newScriptRuntime(m_language, this);
+	if (!m_scriptRuntime) {
+		m_initialized = false;
+		return;
+	}
 	m_kTextEditorDocument->setMode(m_language);
 	m_initialized = true;
 	prepareDocument();
@@ -216,6 +220,8 @@ void Script::runScript() {
 }
 
 QAbstractItemModel* Script::variableModel() {
+	if (!m_scriptRuntime)
+		return nullptr;
 	return m_scriptRuntime->variableModel();
 }
 

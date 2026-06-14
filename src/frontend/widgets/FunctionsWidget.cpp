@@ -49,7 +49,7 @@ FunctionsWidget::FunctionsWidget(QWidget* parent)
 	connect(ui.lwFunctions, &QListWidget::itemDoubleClicked, this, &FunctionsWidget::insertClicked);
 
 	// set the focus to the search field and select the first group after the widget is shown
-	QTimer::singleShot(0, this, [=]() {
+	QTimer::singleShot(0, this, [=, this]() {
 		ui.leFilter->setFocus();
 		this->groupChanged(0);
 	});

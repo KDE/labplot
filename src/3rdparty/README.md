@@ -52,8 +52,54 @@ ReadStat is a command-line tool and MIT-licensed C library for reading files fro
 ## Vector BLF
 
 A library to access Binary Log File (BLF) files from Vector Informatik ([link](https://github.com/Murmele/vector_blf)).
-Depends on fast_float ([link](https://github.com/fastfloat/fast_float.git)) and C++ DBC Parser ([link](https://github.com/Murmele/dbc_parser_cpp))
+Depends on fast_float ([link](https://github.com/fastfloat/fast_float.git)) and C++ DBC Parser (see below).
 Included Vector BLF commit SHA 5fe16eb200a476a38fbe3f1d4281432ea5e6b976
+
+## C++ DBC Parser
+
+A library for parsing CAN DBC files from [LinuxDevon](https://github.com/LinuxDevon/dbc_parser_cpp).
+Used by Vector BLF for decoding CAN messages. Depends on FastFloat (see below).
+Included commit SHA 2c8acdbd54a638e3c4ab8f0d3815f7db4dd59afc (latest master as of 2026-05-24, v0.5.0)
+
+How to update:
+```bash
+cd src/3rdparty
+rm -rf dbc_parser_cpp
+git clone https://github.com/LinuxDevon/dbc_parser_cpp.git
+cd dbc_parser_cpp
+# Use latest master or checkout specific commit/tag
+# Record the commit hash here for documentation
+rm -rf .git .github .gitignore .gitmodules
+# Convert to Unix line endings
+find . -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.h" -o -name "CMakeLists.txt" \) -exec perl -pi -e 's/\r\n/\n/g' {} \;
+cd ..
+```
+
+**Modified files:**
+- `CMakeLists.txt`:
+  - Changed `option(DBC_ENABLE_TESTS ...)` from `ON` to `OFF` (tests require Catch2 via FetchContent)
+  - Replaced FetchContent for FastFloat with `add_subdirectory(../fast_float ...)` to use local copy
+
+## FastFloat
+
+A fast and exact float parser ([link](https://github.com/fastfloat/fast_float)).
+Header-only library used by C++ DBC Parser.
+Included commit SHA 1ea4f27 (v6.0.0)
+
+How to update:
+```bash
+cd src/3rdparty
+rm -rf fast_float
+git clone https://github.com/fastfloat/fast_float.git
+cd fast_float
+git checkout <desired-commit-or-tag>
+rm -rf .git
+# Convert to Unix line endings
+find . -type f \( -name "*.h" -o -name "*.cpp" -o -name "CMakeLists.txt" -o -name "*.md" \) -exec perl -pi -e 's/\r\n/\n/g' {} \;
+cd ..
+```
+
+**No modifications needed** - used as-is from upstream.
 
 ## preview.sty
 

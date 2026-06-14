@@ -62,6 +62,8 @@ private Q_SLOTS:
 	void referenceLineSquareScaling();
 	void referenceLineSqrtScaling();
 	void referenceLineInverseScaling();
+	void referenceLineXMouseMove();
+	void referenceLineYMouseMove();
 
 	// general tests
 	void moveElementBefore();

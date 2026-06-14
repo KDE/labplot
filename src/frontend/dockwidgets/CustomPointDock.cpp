@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for CustomPoint properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,6 +14,7 @@
 #include "frontend/widgets/SymbolWidget.h"
 
 #include <KConfig>
+#include <KLocalization>
 #include <KLocalizedString>
 
 CustomPointDock::CustomPointDock(QWidget* parent)
@@ -40,6 +41,15 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
+
+	QString suffix;
+	if (m_units == BaseDock::Units::Metric)
+		suffix = i18n("%v cm");
+	else
+		suffix = i18n("%v in");
+
+	KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position", qPrintable(suffix)));
 
 	updateLocale();
 	retranslateUi();

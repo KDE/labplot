@@ -22,6 +22,7 @@ class NoteView : public QWidget {
 
 public:
 	explicit NoteView(Note*);
+	bool eventFilter(QObject*, QEvent*) override;
 
 public Q_SLOTS:
 	void print(QPrinter*) const;

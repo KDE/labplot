@@ -38,6 +38,10 @@ private Q_SLOTS:
 	void testBarPlotInit();
 	void testBarPlotDuplicate();
 	void testBarPlotRange();
+	void testBarPlotColumnRemoved();
+
+	// Lollipop plot
+	void testLollipopPlotColumnRemoved();
 
 	// process behavior chart
 	void testPBChartInit();

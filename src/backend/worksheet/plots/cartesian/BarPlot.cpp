@@ -396,7 +396,7 @@ Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
 	if (!q->isLoading())
 		background->init(group);
 
-	q->connect(background, &Background::updateRequested, [=] {
+	q->connect(background, &Background::updateRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -414,12 +414,12 @@ Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -437,11 +437,11 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 	if (!q->isLoading())
 		value->init(group);
 
-	q->connect(value, &Value::updatePixmapRequested, [=] {
+	q->connect(value, &Value::updatePixmapRequested, [=, this] {
 		updatePixmap();
 	});
 
-	q->connect(value, &Value::updateRequested, [=] {
+	q->connect(value, &Value::updateRequested, [=, this] {
 		updateValues();
 	});
 }
@@ -453,11 +453,11 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	if (!q->isLoading())
 		errorBar->init(group);
 
-	q->connect(errorBar, &ErrorBar::updatePixmapRequested, [=] {
+	q->connect(errorBar, &ErrorBar::updatePixmapRequested, [=, this] {
 		updatePixmap();
 	});
 
-	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
+	q->connect(errorBar, &ErrorBar::updateRequested, [=, this] {
 		const int index = errorBars.indexOf(errorBar);
 		if (index != -1)
 			updateErrorBars(index);
@@ -578,17 +578,15 @@ void BarPlotPrivate::recalc() {
 	// this number is equal to the max number of non-empty
 	// values in the provided datasets
 	int barGroupsCount = 0;
-	int columnIndex = 0;
-	for (auto* column : std::as_const(dataColumns)) {
+	for (int i = 0; i < newSize; ++i) {
+		const auto* column = dataColumns.at(i);
 		if (!column)
 			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
-		m_barLines[columnIndex].resize(size);
-		m_fillPolygons[columnIndex].resize(size);
+		m_barLines[i].resize(size);
+		m_fillPolygons[i].resize(size);
 		if (size > barGroupsCount)
 			barGroupsCount = size;
-
-		++columnIndex;
 	}
 
 	m_stackedBarPositiveOffsets.resize(barGroupsCount);

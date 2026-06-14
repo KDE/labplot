@@ -54,7 +54,7 @@ void ReferenceRange::init(bool loading) {
 	d->background->setEnabledAvailable(true);
 	addChild(d->background);
 	d->background->setHidden(true);
-	connect(d->background, &Background::updateRequested, [=] {
+	connect(d->background, &Background::updateRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});
@@ -63,7 +63,7 @@ void ReferenceRange::init(bool loading) {
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
-	connect(d->line, &Line::updatePixmapRequested, [=] {
+	connect(d->line, &Line::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});
@@ -419,7 +419,6 @@ void ReferenceRangePrivate::updatePositionLimit() {
  * Here we update the logical coordinates for the start and end points based on the new value for the logical
  * position \c newPosition of the item's center and notify the dock widget.
  */
-// TODO: make this undo/redo-able
 void ReferenceRange::updateStartEndPositions() {
 	Q_D(ReferenceRange);
 	if (d->orientation == WorksheetElement::Orientation::Horizontal) {
@@ -437,6 +436,50 @@ void ReferenceRange::updateStartEndPositions() {
 
 	Q_EMIT positionLogicalStartChanged(d->positionLogicalStart);
 	Q_EMIT positionLogicalEndChanged(d->positionLogicalEnd);
+}
+
+void ReferenceRangePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	m_undoPosStart = positionLogicalStart;
+	m_undoPosEnd = positionLogicalEnd;
+	m_isDragged = false;
+
+	WorksheetElementPrivate::mousePressEvent(event);
+}
+
+void ReferenceRangePrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	m_isDragged = true;
+
+	WorksheetElementPrivate::mouseMoveEvent(event);
+}
+
+void ReferenceRangePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	if (m_isDragged) {
+		if (m_undoPosStart != positionLogicalStart || m_undoPosEnd != positionLogicalEnd) {
+			// store the new dragged positions
+			QPointF newStart = positionLogicalStart;
+			QPointF newEnd = positionLogicalEnd;
+
+			// revert back to old position and set new position through setters
+			positionLogicalStart = m_undoPosStart;
+			positionLogicalEnd = m_undoPosEnd;
+
+			q->beginMacro(i18n("Move Reference Range"));
+
+			if (m_undoPosStart != newStart)
+				q->setPositionLogicalStart(newStart);
+			if (m_undoPosEnd != newEnd)
+				q->setPositionLogicalEnd(newEnd);
+			WorksheetElementPrivate::mouseReleaseEvent(event);
+
+			q->endMacro();
+
+			m_isDragged = false;
+			return;
+		}
+		m_isDragged = false;
+	}
+
+	WorksheetElementPrivate::mouseReleaseEvent(event);
 }
 
 /*!

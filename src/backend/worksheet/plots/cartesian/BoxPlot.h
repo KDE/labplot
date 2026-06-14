@@ -42,7 +42,7 @@ public:
 
 	// general
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
-	QVector<QString>& dataColumnPaths() const;
+	CLASS_D_ACCESSOR_DECL(QVector<QString>, dataColumnPaths, DataColumnPaths)
 	BASIC_D_ACCESSOR_DECL(BoxPlot::Ordering, ordering, Ordering)
 	BASIC_D_ACCESSOR_DECL(BoxPlot::Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(bool, variableWidth, VariableWidth)

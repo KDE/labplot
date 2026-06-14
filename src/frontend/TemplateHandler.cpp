@@ -312,7 +312,7 @@ void TemplateHandler::saveMenu() {
 
 	auto* leFilename = new QLineEdit(QString(), frame);
 	layout->addWidget(leFilename);
-	connect(leFilename, &QLineEdit::returnPressed, this, [=]() {
+	connect(leFilename, &QLineEdit::returnPressed, this, [=, this]() {
 		saveNewSelected(leFilename->text());
 	});
 	connect(leFilename, &QLineEdit::returnPressed, &menu, &QMenu::close);

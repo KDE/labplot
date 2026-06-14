@@ -17,6 +17,7 @@ class ExpressionTextEdit;
 
 class QComboBox;
 class QColor;
+class QLabel;
 class QLineEdit;
 class QMenu;
 class QActionGroup;
@@ -44,8 +45,10 @@ public:
 	static void highlight(QWidget*, bool);
 
 	static QString openImageFile(const QString&);
-	static QImage importPDFFile(const QString&);
+	static QImage importPDFFile(const QString&, double scale = 1., double renderDpi = 0.);
 	static QImage imageFromPDFData(const QByteArray&, double zoomFactor = 1.);
+	static void setPixmapFromImage(QLabel*, const QImage&);
+	static QImage recolorMonochromeImage(const QImage&, const QColor& foregroundColor, const QColor& backgroundColor);
 
 	static QString replaceExtension(const QString& fileName, const QString& extension);
 

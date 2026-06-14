@@ -10,6 +10,7 @@
 */
 
 #include "frontend/matrix/MatrixView.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/lib/hostprocess.h"
@@ -44,6 +45,7 @@
 #include <QStackedWidget>
 #include <QTableView>
 #include <QThreadPool>
+#include <QTimer>
 
 #include <cfloat>
 #include <cmath>
@@ -194,6 +196,7 @@ void MatrixView::initActions() {
 	// connections
 
 	// selection related actions
+	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MatrixView::navigateToMatrixOnClick);
 	connect(action_cut_selection, &QAction::triggered, this, &MatrixView::cutSelection);
 	connect(action_copy_selection, &QAction::triggered, this, &MatrixView::copySelection);
 	connect(action_paste_into_selection, &QAction::triggered, this, &MatrixView::pasteIntoSelection);
@@ -565,6 +568,20 @@ void MatrixView::wheelEvent(QWheelEvent* event) {
 		QWidget::wheelEvent(event);
 }
 
+void MatrixView::showEvent(QShowEvent* event) {
+	QWidget::showEvent(event);
+	if (!m_initialNavigationDone) {
+		m_initialNavigationDone = true;
+		// Navigate to the first cell and set the focus so the user can start directly entering new data.
+		// Defer by one event loop iteration so the native platform widget (Cocoa on macOS) has time
+		// to fully initialize its internal data structures after the widget becomes visible.
+		QTimer::singleShot(0, this, [this]() {
+			goToCell(0, 0);
+			setFocus();
+		});
+	}
+}
+
 // ##############################################################################
 // ####################################  SLOTs   ################################
 // ##############################################################################
@@ -593,6 +610,9 @@ void MatrixView::goToCell() {
 
 void MatrixView::goToCell(int row, int col) {
 	const auto& index = m_model->index(row, col);
+	if (!index.isValid())
+		return;
+
 	m_tableView->scrollTo(index);
 	m_tableView->setCurrentIndex(index);
 }
@@ -628,6 +648,11 @@ void MatrixView::fillWithConstValues() {
 }
 
 // ############################ selection related slots #########################
+void MatrixView::navigateToMatrixOnClick() {
+	m_matrix->setSelectedInView(true);
+	m_tableView->setFocus();
+}
+
 void MatrixView::cutSelection() {
 	if (firstSelectedRow() < 0)
 		return;

@@ -73,11 +73,11 @@ void XYCurve::init(bool loading) {
 	d->line->setCreateXmlElement(false);
 	d->line->setHidden(true);
 	addChild(d->line);
-	connect(d->line, &Line::updatePixmapRequested, [=] {
+	connect(d->line, &Line::updatePixmapRequested, [=, this] {
 		d->updatePixmap();
 		Q_EMIT appearanceChanged();
 	});
-	connect(d->line, &Line::updateRequested, [=] {
+	connect(d->line, &Line::updateRequested, [=, this] {
 		d->recalcShapeAndBoundingRect();
 		Q_EMIT appearanceChanged();
 	});
@@ -101,11 +101,11 @@ void XYCurve::init(bool loading) {
 	d->symbol = new Symbol(QStringLiteral("symbol"));
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
-	connect(d->symbol, &Symbol::updateRequested, [=] {
+	connect(d->symbol, &Symbol::updateRequested, [=, this] {
 		d->updateSymbols();
 		Q_EMIT appearanceChanged();
 	});
-	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
+	connect(d->symbol, &Symbol::updatePixmapRequested, [=, this] {
 		d->updatePixmap();
 		Q_EMIT appearanceChanged();
 	});
@@ -518,7 +518,7 @@ QColor XYCurve::color() const {
 	if (d->lineType != XYCurve::LineType::NoLine)
 		return d->line->pen().color();
 	else if (d->symbol->style() != Symbol::Style::NoSymbols)
-		return d->symbol->pen().color();
+		return d->symbol->brush().color();
 	return QColor();
 }
 
@@ -960,10 +960,10 @@ void XYCurvePrivate::recalc() {
 				tempPoint.setY(yColumn->doubleAt(row) + yOffset);
 				break;
 			case AbstractColumn::ColumnMode::Integer:
-				tempPoint.setY(yColumn->integerAt(row));
+				tempPoint.setY(yColumn->integerAt(row) + (int)yOffset);
 				break;
 			case AbstractColumn::ColumnMode::BigInt:
-				tempPoint.setY(yColumn->bigIntAt(row));
+				tempPoint.setY(yColumn->bigIntAt(row) + (int)yOffset);
 				break;
 			case AbstractColumn::ColumnMode::DateTime:
 				tempPoint.setY(yColumn->dateTimeAt(row).toMSecsSinceEpoch());
@@ -1945,7 +1945,7 @@ void XYCurvePrivate::updateFilling() {
 	//  - no filling was enabled
 	//  - the number of visible points on the scene is too high
 	//  - no scene points available, everything outside of the plot region or no scene points calculated yet
-	auto fillingPosition = background->position();
+	const auto fillingPosition = background->position();
 	if (fillingPosition == Background::Position::No) {
 		recalcShapeAndBoundingRect();
 		return;

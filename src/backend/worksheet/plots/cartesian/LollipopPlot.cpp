@@ -160,6 +160,7 @@ void LollipopPlot::updateLocale() {
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<QString>, dataColumnPaths, dataColumnPaths)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, LollipopPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QString, xColumnPath, xColumnPath)
@@ -178,11 +179,6 @@ Symbol* LollipopPlot::symbolAt(int index) const {
 		return d->symbols.at(index);
 	else
 		return nullptr;
-}
-
-QVector<QString>& LollipopPlot::dataColumnPaths() const {
-	D(LollipopPlot);
-	return d->dataColumnPaths;
 }
 
 bool LollipopPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
@@ -380,12 +376,12 @@ Line* LollipopPlotPrivate::addLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -403,12 +399,12 @@ Symbol* LollipopPlotPrivate::addSymbol(const KConfigGroup& group) {
 	if (!q->isLoading())
 		symbol->init(group);
 
-	q->connect(symbol, &Symbol::updateRequested, [=] {
+	q->connect(symbol, &Symbol::updateRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
 
-	q->connect(symbol, &Symbol::updatePixmapRequested, [=] {
+	q->connect(symbol, &Symbol::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -426,11 +422,11 @@ void LollipopPlotPrivate::addValue(const KConfigGroup& group) {
 	if (!q->isLoading())
 		value->init(group);
 
-	q->connect(value, &Value::updatePixmapRequested, [=] {
+	q->connect(value, &Value::updatePixmapRequested, [=, this] {
 		updatePixmap();
 	});
 
-	q->connect(value, &Value::updateRequested, [=] {
+	q->connect(value, &Value::updateRequested, [=, this] {
 		updateValues();
 	});
 }
@@ -523,17 +519,15 @@ void LollipopPlotPrivate::recalc() {
 	// this number is equal to the max number of non-empty
 	// values in the provided datasets
 	int barGroupsCount = 0;
-	int columnIndex = 0;
-	for (auto* column : std::as_const(dataColumns)) {
+	for (int i = 0; i < newSize; ++i) {
+		const auto* column = dataColumns.at(i);
 		if (!column)
 			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
-		m_barLines[columnIndex].resize(size);
-		m_symbolPoints[columnIndex].resize(size);
+		m_barLines[i].resize(size);
+		m_symbolPoints[i].resize(size);
 		if (size > barGroupsCount)
 			barGroupsCount = size;
-
-		++columnIndex;
 	}
 
 	// if an x-column was provided and it has less values than the count determined

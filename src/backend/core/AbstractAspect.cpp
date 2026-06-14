@@ -390,42 +390,45 @@ QMenu* AbstractAspect::createContextMenu() {
 			menu->insertAction(actionDuplicate, action);
 		else
 			menu->addAction(action);
-		connect(action, &QAction::triggered, [=]() {
+		connect(action, &QAction::triggered, [=, this]() {
 			paste();
 		});
 	}
 	menu->addSeparator();
 
 	// action to create data spreadsheet based on the results of the calculations for types that support it
-	QAction* actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+	if (inherits<XYAnalysisCurve>() || m_type == AspectType::XYEquationCurve || m_type == AspectType::Histogram || m_type == AspectType::BoxPlot) {
+		auto* action = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
 
-	// handle types that support it
-	bool dataAvailable = false;
-	if (const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this)) {
-		if (analysisCurve->resultAvailable()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
-			dataAvailable = true;
+		// handle types that support it
+		bool dataAvailable = false;
+		if (const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this)) {
+			if (analysisCurve->resultAvailable()) {
+				connect(action, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
+				dataAvailable = true;
+			}
+		} else if (const auto* equationCurve = dynamic_cast<XYEquationCurve*>(this)) {
+			if (equationCurve->dataAvailable()) {
+				connect(action, &QAction::triggered, static_cast<XYEquationCurve*>(this), &XYEquationCurve::createDataSpreadsheet);
+				dataAvailable = true;
+			}
+		} else if (const auto* histogram = dynamic_cast<Histogram*>(this)) {
+			if (histogram->bins()) {
+				connect(action, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
+				dataAvailable = true;
+			}
+		} else if (const auto* boxPlot = dynamic_cast<BoxPlot*>(this)) {
+			if (!boxPlot->dataColumns().isEmpty()) {
+				connect(action, &QAction::triggered, static_cast<BoxPlot*>(this), &BoxPlot::createDataSpreadsheet);
+				dataAvailable = true;
+			}
 		}
-	} else if (const auto* equationCurve = dynamic_cast<XYEquationCurve*>(this)) {
-		if (equationCurve->dataAvailable()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYEquationCurve*>(this), &XYEquationCurve::createDataSpreadsheet);
-			dataAvailable = true;
-		}
-	} else if (const auto* histogram = dynamic_cast<Histogram*>(this)) {
-		if (histogram->bins()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
-			dataAvailable = true;
-		}
-	} else if (const auto* boxPlot = dynamic_cast<BoxPlot*>(this)) {
-		if (!boxPlot->dataColumns().isEmpty()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<BoxPlot*>(this), &BoxPlot::createDataSpreadsheet);
-			dataAvailable = true;
-		}
-	}
 
-	if (dataAvailable) {
-		menu->addAction(actionDataSpreadsheet);
-		menu->addSeparator();
+		if (dataAvailable) {
+			menu->addAction(action);
+			menu->addSeparator();
+		} else
+			delete action; // no results available yet, no need to show in the menu
 	}
 
 	// don't allow to rename and delete fixed objects and
@@ -1133,6 +1136,17 @@ void AbstractAspect::endMacro() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ * this function is called when the selection in the UI view was changed.
+ * forwards the selection/deselection to the ProjectExplorer via emitting a signal
+ * and triggers the navigation to this aspect's path in the project tree.
+ */
+void AbstractAspect::setSelectedInView(bool selected) {
+	if (selected)
+		Q_EMIT childAspectSelectedInView(this);
+	else
+		Q_EMIT childAspectDeselectedInView(this);
+}
 
 /*!
  * this function is called when the selection in ProjectExplorer was changed.
