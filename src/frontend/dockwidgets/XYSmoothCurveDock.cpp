@@ -125,7 +125,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 	typeChanged(uiGeneralTab.cbType->currentIndex()); // needed, when type does not change
 	uiGeneralTab.sbPoints->setValue((int)m_smoothData.points);
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
-	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
+	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile * 100);
 	uiGeneralTab.sbOrder->setValue((int)m_smoothData.order);
 	uiGeneralTab.cbMode->setCurrentIndex(m_smoothData.mode);
 	modeChanged(uiGeneralTab.cbMode->currentIndex()); // needed, when mode does not change
@@ -209,7 +209,7 @@ void XYSmoothCurveDock::retranslateUi() {
 	uiGeneralTab.cbWeight->setToolTip(info);
 	uiGeneralTab.cbMode->setToolTip(info);
 
-	info = i18n("p-th quantile (0.0 .. 1.0) of the points in the moving window");
+	info = i18n("Percentile of the points in the moving window");
 	uiGeneralTab.lPercentile->setToolTip(info);
 	uiGeneralTab.sbPercentile->setToolTip(info);
 
@@ -457,7 +457,7 @@ void XYSmoothCurveDock::weightChanged(int index) {
 }
 
 void XYSmoothCurveDock::percentileChanged(double value) {
-	m_smoothData.percentile = value;
+	m_smoothData.percentile = value / 100;
 	enableRecalculate();
 }
 
