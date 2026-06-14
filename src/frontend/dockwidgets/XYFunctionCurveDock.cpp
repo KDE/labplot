@@ -39,7 +39,7 @@ void XYFunctionCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	m_gridLayoutVariables = new QGridLayout(uiGeneralTab.frameVariables);
@@ -348,7 +348,7 @@ void XYFunctionCurveDock::insertConstant(const QString& constantsName) {
 	uiGeneralTab.teFunction->insertPlainText(constantsName);
 }
 
-void XYFunctionCurveDock::enableRecalculate() const {
+void XYFunctionCurveDock::enableRecalculate() {
 	// check whether the formula expressions are correct
 	const bool valid = uiGeneralTab.teFunction->isValid();
 	uiGeneralTab.pbRecalculate->setEnabled(valid);

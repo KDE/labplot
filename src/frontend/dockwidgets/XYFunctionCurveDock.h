@@ -36,7 +36,7 @@ private Q_SLOTS:
 	void showFunctions();
 	void insertFunction(const QString&);
 	void insertConstant(const QString&);
-	void enableRecalculate() const override;
+	void enableRecalculate() override;
 	void addVariable();
 	void removeAllVariableWidgets();
 	void deleteVariable();

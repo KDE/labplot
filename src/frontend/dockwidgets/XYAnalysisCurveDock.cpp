@@ -11,6 +11,7 @@
 
 #include "frontend/widgets/TreeViewComboBox.h"
 
+#include <QCheckBox>
 #include <QKeyEvent>
 #include <QPushButton>
 
@@ -81,7 +82,7 @@ QString XYAnalysisCurveDock::customText() const {
 	return QStringLiteral("");
 }
 
-void XYAnalysisCurveDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, QComboBox* dataSourceType) {
+void XYAnalysisCurveDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, QCheckBox* cbAutoRecalculate, QComboBox* dataSourceType) {
 	if (m_recalculateButton)
 		disconnect(m_recalculateButton, nullptr, this, nullptr);
 
@@ -90,6 +91,10 @@ void XYAnalysisCurveDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableText
 	m_recalculateButton->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	cbDataSourceType = dataSourceType;
+
+	m_cbAutoRecalculate = cbAutoRecalculate;
+	if (m_cbAutoRecalculate)
+		connect(m_cbAutoRecalculate, &QCheckBox::toggled, this, &XYAnalysisCurveDock::autoRecalculateChanged);
 
 	BaseDock::setBaseWidgets(nameLabel, commentLabel);
 }
@@ -101,8 +106,15 @@ void XYAnalysisCurveDock::setAnalysisCurves(const QList<XYCurve*>& curves) {
 	for (auto* curve : curves)
 		m_analysisCurves << static_cast<XYAnalysisCurve*>(curve);
 
-	if (!curves.isEmpty())
+	if (!curves.isEmpty()) {
 		m_analysisCurve = m_analysisCurves.first();
+		if (m_cbAutoRecalculate) {
+			m_cbAutoRecalculate->blockSignals(true);
+			m_cbAutoRecalculate->setChecked(m_analysisCurve->autoRecalculate());
+			m_cbAutoRecalculate->blockSignals(false);
+		}
+		connect(m_analysisCurve, &XYAnalysisCurve::autoRecalculateChanged, this, &XYAnalysisCurveDock::curveAutoRecalculateChanged);
+	}
 
 	setModel();
 }
@@ -195,7 +207,7 @@ void XYAnalysisCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 	enableRecalculate();
 }
 
-void XYAnalysisCurveDock::enableRecalculate() const {
+void XYAnalysisCurveDock::enableRecalculate() {
 	// enable the recalculate button if all required data source columns were provided, disable otherwise
 	bool hasSourceData = false;
 	if (m_analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
@@ -233,7 +245,11 @@ void XYAnalysisCurveDock::enableRecalculate() const {
 	} else
 		hasSourceData = (m_analysisCurve->dataSourceCurve() != nullptr);
 
-	m_recalculateButton->setEnabled(hasSourceData);
+	if (m_cbAutoRecalculate && m_cbAutoRecalculate->isChecked()) {
+		if (hasSourceData)
+			recalculateClicked();
+	} else
+		m_recalculateButton->setEnabled(hasSourceData);
 }
 
 //**************************************************************
@@ -261,4 +277,22 @@ void XYAnalysisCurveDock::curveYDataColumnChanged(const AbstractColumn* column) 
 	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setAspect(column, m_analysisCurve->yDataColumnPath());
 	enableRecalculate();
+}
+
+void XYAnalysisCurveDock::autoRecalculateChanged(bool value) {
+	for (auto* curve : m_analysisCurves)
+		curve->setAutoRecalculate(value);
+
+	m_recalculateButton->setEnabled(!value);
+
+	// if just enabled, trigger a recalculation immediately
+	if (value)
+		recalculateClicked();
+}
+
+void XYAnalysisCurveDock::curveAutoRecalculateChanged(bool value) {
+	CONDITIONAL_LOCK_RETURN;
+	if (m_cbAutoRecalculate)
+		m_cbAutoRecalculate->setChecked(value);
+	m_recalculateButton->setEnabled(!value);
 }
