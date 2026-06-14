@@ -48,21 +48,14 @@ void XYSmoothCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
 
-	for (int i = 0; i < NSL_SMOOTH_TYPE_COUNT; i++)
-		uiGeneralTab.cbType->addItem(i18n(nsl_smooth_type_name[i]));
-
-	for (int i = 0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
-		uiGeneralTab.cbWeight->addItem(i18n(nsl_smooth_weight_type_name[i]));
-
-	for (int i = 0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
-		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::dataSourceTypeChanged);
@@ -178,6 +171,75 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 	setSymbols(list);
 
 	updatePlotRangeList();
+}
+
+void XYSmoothCurveDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	uiGeneralTab.cbType->clear();
+	for (int i = 0; i < NSL_SMOOTH_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_smooth_type_name[i]));
+
+	uiGeneralTab.cbWeight->clear();
+	for (int i = 0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
+		uiGeneralTab.cbWeight->addItem(i18n(nsl_smooth_weight_type_name[i]));
+
+	uiGeneralTab.cbMode->clear();
+	for (int i = 0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
+		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
+
+	// tooltips
+	QString info = i18n("Method used to smooth the data:"
+	"<ul>"
+	"<li>Moving Average (Central) - smoothing using the average of a fixed number of points, the average is centered on the current point.</li>"
+	"<li>Moving Average (Lagged) - smoothing using the average of a fixed number of points, the average is lagged behind the current point.</li>"
+	"<li>Percentile - smoothing using the percentile of a fixed number of points.</li>"
+	"<li>Savitzky-Golay - smooothing using least-squares fitting of polynomials to segments of the data.</li>"
+	"<li>LOWESS - locally weighted scatterplot smoothing.</li>"
+	"</ul>"
+	);
+	uiGeneralTab.lType->setToolTip(info);
+	uiGeneralTab.cbType->setToolTip(info);
+
+	info = i18n("Number of points in the moving window");
+	uiGeneralTab.lPoints->setToolTip(info);
+	uiGeneralTab.sbPoints->setToolTip(info);
+
+	info = i18n("Weightning type to define different weights for the points in the moving window");
+	uiGeneralTab.cbWeight->setToolTip(info);
+	uiGeneralTab.cbMode->setToolTip(info);
+
+	info = i18n("p-th quantile (0.0 .. 1.0) of the points in the moving window");
+	uiGeneralTab.lPercentile->setToolTip(info);
+	uiGeneralTab.sbPercentile->setToolTip(info);
+
+	info = i18n("The order of the polynomial used to fit the points in the moving window");
+	uiGeneralTab.lOrder->setToolTip(info);
+	uiGeneralTab.sbOrder->setToolTip(info);
+
+	info = i18n("The fraction of the data used to perform the local fit.");
+	uiGeneralTab.lSpan->setToolTip(info);
+	uiGeneralTab.sbSpan->setToolTip(info);
+
+	info = i18n("If delta > 0, values of y-data within delta of each other will use interpolation instead of full regression.");
+	uiGeneralTab.lDelta->setToolTip(info);
+	uiGeneralTab.sbDelta->setToolTip(info);
+
+	info = i18n("The number of robustifying iterations");
+	uiGeneralTab.lIterations->setToolTip(info);
+	uiGeneralTab.sbIterations->setToolTip(info);
+
+	info = i18n("Padding mode to handle the edges of the data set");
+	uiGeneralTab.lMode->setToolTip(info);
+	uiGeneralTab.cbMode->setToolTip(info);
+
+	info = i18n("The value for constant padding at the left edge");
+	uiGeneralTab.lLeftValue->setToolTip(info);
+	uiGeneralTab.sbLeftValue->setToolTip(info);
+
+	info = i18n("The value for constant padding at the right edge");
+	uiGeneralTab.lRightValue->setToolTip(info);
+	uiGeneralTab.sbRightValue->setToolTip(info);
 }
 
 //*************************************************************

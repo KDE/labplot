@@ -22,6 +22,7 @@ public:
 	explicit XYSmoothCurveDock(QWidget* parent);
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
+	void retranslateUi() override;
 
 private:
 	void initGeneralTab() override;
