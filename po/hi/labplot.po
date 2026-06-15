@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-09 00:39+0000\n"
+"POT-Creation-Date: 2026-06-15 00:39+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -172,7 +172,7 @@ msgstr "दिन"
 #. i18n: ectx: property (text), widget (QRadioButton, rbNone)
 #: src/backend/core/AbstractColumn.cpp:158 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
-#: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:275
+#: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/AxisDock.cpp:275
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:214
 #: src/frontend/dockwidgets/XYCurveDock.cpp:433 src/frontend/GuiTools.cpp:159
@@ -875,7 +875,7 @@ msgstr "अज्ञात डेटापिकर तत्व '%1'"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:204
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:131
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:354
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:457
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:68
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:23
 #, kde-format
 msgid "Data"
@@ -4081,7 +4081,7 @@ msgstr "एन्ट्रापी"
 msgid "Quantile"
 msgstr "क्वांटाइल"
 
-#: src/backend/gsl/functions.cpp:287 src/backend/nsl/nsl_smooth.c:21
+#: src/backend/gsl/functions.cpp:287 src/backend/nsl/nsl_smooth.c:24
 #, kde-format
 msgid "Percentile"
 msgstr "प्रतिशतता"
@@ -5287,7 +5287,7 @@ msgid "Sine"
 msgstr "उसका"
 
 #: src/backend/gsl/functions.cpp:618 src/backend/nsl/nsl_interp.c:21
-#: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:30
+#: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:35
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:165
 #, kde-format
 msgid "Cosine"
@@ -6578,7 +6578,7 @@ msgstr "परिपत्र"
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:118
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:149
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:405
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:112
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:148
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:75
 #, kde-format
 msgid "Auto"
@@ -7221,7 +7221,7 @@ msgstr "प्वासों"
 msgid "Bernoulli"
 msgstr "Bernoulli"
 
-#: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:25
+#: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:30
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:834
 #, kde-format
 msgid "Binomial"
@@ -7268,7 +7268,7 @@ msgid "Frechet (Inverse Weibull)"
 msgstr "फ़्रेचेट (उलटा वेइबुल)"
 
 #: src/backend/nsl/nsl_sf_stats.c:48 src/backend/nsl/nsl_sf_window.c:16
-#: src/backend/nsl/nsl_smooth.c:24 src/frontend/dockwidgets/KDEPlotDock.cpp:160
+#: src/backend/nsl/nsl_smooth.c:29 src/frontend/dockwidgets/KDEPlotDock.cpp:160
 #, kde-format
 msgid "Triangular"
 msgstr "त्रिकोणीय"
@@ -7338,68 +7338,73 @@ msgstr "बार्टलेट-वह"
 msgid "Lanczos"
 msgstr "लांक्ज़ोस"
 
-#: src/backend/nsl/nsl_smooth.c:21
+#: src/backend/nsl/nsl_smooth.c:22
 #, kde-format
 msgid "Moving Average (Central)"
 msgstr "मूविंग एवरेज (केन्द्रीय)"
 
-#: src/backend/nsl/nsl_smooth.c:21
+#: src/backend/nsl/nsl_smooth.c:23
 #, kde-format
 msgid "Moving Average (Lagged)"
 msgstr "मूविंग एवरेज (विलंबित)"
 
-#: src/backend/nsl/nsl_smooth.c:21
+#: src/backend/nsl/nsl_smooth.c:25
 #, kde-format
 msgid "Savitzky-Golay"
 msgstr "Savitzky-Golay"
 
-#: src/backend/nsl/nsl_smooth.c:22
+#: src/backend/nsl/nsl_smooth.c:26
+#, kde-format
+msgid "LOWESS"
+msgstr ""
+
+#: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
 msgid "Interpolating"
 msgstr "अंतर्वेशन"
 
-#: src/backend/nsl/nsl_smooth.c:22
+#: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
 msgid "Mirror"
 msgstr "आईना"
 
-#: src/backend/nsl/nsl_smooth.c:22
+#: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
 msgid "Nearest"
 msgstr "निकटतम"
 
-#: src/backend/nsl/nsl_smooth.c:22
+#: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
 msgid "Constant"
 msgstr "स्थिर"
 
-#: src/backend/nsl/nsl_smooth.c:22
+#: src/backend/nsl/nsl_smooth.c:27
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:44
 #, kde-format
 msgid "Periodic"
 msgstr "सामयिक"
 
-#: src/backend/nsl/nsl_smooth.c:23 src/frontend/dockwidgets/KDEPlotDock.cpp:159
+#: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:159
 #, kde-format
 msgid "Uniform (Rectangular)"
 msgstr "वर्दी (आयताकार)"
 
-#: src/backend/nsl/nsl_smooth.c:26 src/frontend/dockwidgets/KDEPlotDock.cpp:161
+#: src/backend/nsl/nsl_smooth.c:31 src/frontend/dockwidgets/KDEPlotDock.cpp:161
 #, kde-format
 msgid "Parabolic (Epanechnikov)"
 msgstr "परवलयिक (एपेनेचनिकोव)"
 
-#: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/KDEPlotDock.cpp:162
+#: src/backend/nsl/nsl_smooth.c:32 src/frontend/dockwidgets/KDEPlotDock.cpp:162
 #, kde-format
 msgid "Quartic (Biweight)"
 msgstr "क्वार्टिक (द्विभार)"
 
-#: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:163
+#: src/backend/nsl/nsl_smooth.c:33 src/frontend/dockwidgets/KDEPlotDock.cpp:163
 #, kde-format
 msgid "Triweight"
 msgstr "ट्राइवेट"
 
-#: src/backend/nsl/nsl_smooth.c:29 src/frontend/dockwidgets/KDEPlotDock.cpp:164
+#: src/backend/nsl/nsl_smooth.c:34 src/frontend/dockwidgets/KDEPlotDock.cpp:164
 #, kde-format
 msgid "Tricube"
 msgstr "ट्राइक्यूब"
@@ -9520,7 +9525,7 @@ msgstr "शीर्षक"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:397
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:570
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:513
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:582
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:536
 #, kde-format
 msgid "Legend"
 msgstr "दंतकथा"
@@ -9812,7 +9817,7 @@ msgstr "त्रुटि फ़ंक्शन"
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:72
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:294
 #, kde-format
 msgid "Smooth"
 msgstr "चिकना"
@@ -11447,7 +11452,7 @@ msgstr "%1: अनलॉक"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:47
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:103
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:81
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:243
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:549
 #: src/frontend/ui/labelwidget.ui:722
 #, kde-format
 msgid "Visible"
@@ -14938,7 +14943,7 @@ msgstr "प्लॉट रेंज:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:54
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:86
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:470
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:105
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:158
 #, kde-format
 msgid "Plot Range:"
 msgstr "प्लॉट रेंज:"
@@ -16262,7 +16267,7 @@ msgstr "टी सांख्यिकी"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:390
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:165
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:453
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:511
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:108
 #, kde-format
 msgid "Curve:"
 msgstr "वक्र:"
@@ -16572,7 +16577,76 @@ msgstr "स्थितीय वर्ग त्रुटि: %1"
 msgid "area error: %1"
 msgstr "क्षेत्र त्रुटि: %1"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:401
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:192
+#, kde-format
+msgid ""
+"Method used to smooth the data:<ul><li>Moving Average (Central) - smoothing "
+"using the average of a fixed number of points, the average is centered on "
+"the current point.</li><li>Moving Average (Lagged) - smoothing using the "
+"average of a fixed number of points, the average is lagged behind the "
+"current point.</li><li>Percentile - smoothing using the percentile of a "
+"fixed number of points.</li><li>Savitzky-Golay - smooothing using least-"
+"squares fitting of polynomials to segments of the data.</li><li>LOWESS - "
+"locally weighted scatterplot smoothing.</li></ul>"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:204
+#, fuzzy, kde-format
+#| msgid "The number of vectors in the file"
+msgid "Number of points in the moving window"
+msgstr "फ़ाइल में वैक्टर की संख्या"
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:208
+#, kde-format
+msgid ""
+"Weightning type to define different weights for the points in the moving "
+"window"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:212
+#, kde-format
+msgid "Percentile of the points in the moving window"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:216
+#, kde-format
+msgid "The order of the polynomial used to fit the points in the moving window"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:220
+#, kde-format
+msgid "The fraction of the data used to perform the local fit."
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:224
+#, kde-format
+msgid ""
+"If delta > 0, values of y-data within delta of each other will use "
+"interpolation instead of full regression."
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:228
+#, fuzzy, kde-format
+#| msgid "Exceeded max number of iterations"
+msgid "The number of robustifying iterations"
+msgstr "पुनरावृत्तियों की अधिकतम संख्या पार हो गई"
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:232
+#, kde-format
+msgid "Padding mode to handle the edges of the data set"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:236
+#, kde-format
+msgid "The value for constant padding at the left edge"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:240
+#, kde-format
+msgid "The value for constant padding at the right edge"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:519
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr "स्मूथिंग स्थिति: %1"
@@ -17209,7 +17283,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:130
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:40
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:443
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:525
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:661
 #: src/frontend/ui/fitsheadereditnewkeywordwidget.ui:27
 #: src/frontend/ui/labelwidget.ui:326
 #, kde-format
@@ -20809,7 +20883,7 @@ msgstr "Y-त्रुटि प्रकार:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:373
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:260
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:42
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:555
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:454
 #: src/frontend/ui/labelwidget.ui:222
 #, kde-format
 msgid "Name:"
@@ -21073,8 +21147,8 @@ msgstr "आकार:"
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:134
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:421
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:196
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:209
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:439
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:222
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:257
 #: src/frontend/ui/fitoptionswidget.ui:119 src/frontend/ui/labelwidget.ui:126
 #: src/frontend/ui/labelwidget.ui:181 src/frontend/ui/labelwidget.ui:212
 #: src/frontend/ui/labelwidget.ui:352 src/frontend/ui/labelwidget.ui:399
@@ -21324,7 +21398,7 @@ msgstr "तुलनात्मक पथ"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:196
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:432
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:33
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:535
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:690
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:538
 #, kde-format
 msgid "Type:"
@@ -21956,7 +22030,7 @@ msgstr "फ़ाइल जानकारी दिखाएँ"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:147
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:419
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:49
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:542
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:654
 #, kde-format
 msgid "Source:"
 msgstr "स्रोत:"
@@ -23215,7 +23289,7 @@ msgstr "y श्रेणियों की सूची"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:489
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:426
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:497
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:500
 #, kde-format
 msgid "Points:"
 msgstr "अंक:"
@@ -23666,8 +23740,8 @@ msgstr "टोपी का आकार:"
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:382
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:248
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:267
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:340
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:359
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:372
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:391
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:24
 #, kde-format
 msgid "Minimum:"
@@ -23714,8 +23788,8 @@ msgstr "तरीका:"
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:344
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:210
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:229
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:302
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:321
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:334
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:353
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:145
 #, kde-format
 msgid "Maximum:"
@@ -23778,7 +23852,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:123
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:563
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:17
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:229
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:600
 #, kde-format
 msgid "Recalculate"
 msgstr "पुनर्गणना"
@@ -24266,7 +24340,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:166
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:433
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:159
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:518
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:49
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:74
 #, kde-format
 msgid "X-Data:"
@@ -24284,7 +24358,7 @@ msgstr "एक्स-डेटा:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:40
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:151
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:506
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:504
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:56
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:114
 #, kde-format
 msgid "Y-Data:"
@@ -24319,8 +24393,10 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #. i18n: ectx: property (text), widget (QLabel, lARPLSIterations)
 #. i18n: ectx: property (text), widget (QLabel, lMSTLIterations)
+#. i18n: ectx: property (text), widget (QLabel, lIterations)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:190
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:418
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:118
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:257
 #, kde-format
 msgid "Iterations:"
@@ -24503,7 +24579,7 @@ msgstr "समाप्ति अनुपात:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:61
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:412
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:368
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:464
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:91
 #, kde-format
 msgid "X-Range:"
 msgstr "एक्स-रेंज:"
@@ -24522,7 +24598,7 @@ msgstr "एक्स-रेंज:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:106
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:553
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:61
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:426
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:628
 #, kde-format
 msgid "Results:"
 msgstr "परिणाम:"
@@ -25067,41 +25143,92 @@ msgstr "सरलीकरण"
 msgid "Option:"
 msgstr "विकल्प:"
 
+#. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbDelta)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:27
+#, kde-format
+msgid "Distance threshold for optimization (0 = compute all points)"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lSpan)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:98
+#, kde-format
+msgid "Fraction of data points used for local regression (0.0 < span ≤ 1.0)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lSpan)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:101
+#, kde-format
+msgid "Span:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lIterations)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:115
+#, kde-format
+msgid ""
+"Number of robustifying iterations (0-4, higher = more outlier resistant)"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lPercentile)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:17
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:135
 #, kde-format
 msgid "Percentile:"
 msgstr "प्रतिशत:"
 
-#. i18n: ectx: property (text), widget (QLabel, lMode)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:50
-#, kde-format
-msgid "Padding Mode:"
-msgstr "पैडिंग मोड:"
-
 #. i18n: ectx: property (text), widget (QLabel, lLeftValue)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:179
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:186
 #, kde-format
 msgid "Left value:"
 msgstr "बायाँ मान:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightValue)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:186
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:206
 #, kde-format
 msgid "Right value:"
 msgstr "सही मूल्य:"
 
+#. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbSpan)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:270
+#, kde-format
+msgid "Fraction of data points used for local regression"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lMode)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:493
+#, fuzzy, kde-format
+#| msgid "Padding"
+msgid "Padding:"
+msgstr "पैडिंग"
+
+#. i18n: ectx: property (text), widget (QLabel, lOrder)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
+#, fuzzy, kde-format
+#| msgid "Order:"
+msgid " Order:"
+msgstr "आदेश देना:"
+
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:236
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:556
 #, kde-format
 msgid "Weight:"
 msgstr "वज़न:"
 
-#. i18n: ectx: property (text), widget (QLabel, lOrder)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:490
+#. i18n: ectx: property (toolTip), widget (QLabel, lDelta)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:613
 #, kde-format
-msgid "Polynom Order:"
-msgstr "बहुपद क्रम:"
+msgid "Distance threshold for interpolation optimization (0 = disabled)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lDelta)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:616
+#, kde-format
+msgid "Delta:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, sbIterations)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:697
+#, kde-format
+msgid "Number of robustifying iterations for outlier resistance"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColormap)
 #: src/frontend/ui/exampleswidget.ui:73
@@ -27469,6 +27596,12 @@ msgstr "रूपांतरण प्रक्रिया विफल, न�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "फाइल खोलने में असमर्थ:"
+
+#~ msgid "Padding Mode:"
+#~ msgstr "पैडिंग मोड:"
+
+#~ msgid "Polynom Order:"
+#~ msgstr "बहुपद क्रम:"
 
 #, fuzzy
 #~| msgid "Text position"

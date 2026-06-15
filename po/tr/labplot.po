@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-09 00:39+0000\n"
+"POT-Creation-Date: 2026-06-15 00:39+0000\n"
 "PO-Revision-Date: 2026-06-07 20:19+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -173,7 +173,7 @@ msgstr "Gün"
 #. i18n: ectx: property (text), widget (QRadioButton, rbNone)
 #: src/backend/core/AbstractColumn.cpp:158 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
-#: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:275
+#: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/AxisDock.cpp:275
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:214
 #: src/frontend/dockwidgets/XYCurveDock.cpp:433 src/frontend/GuiTools.cpp:159
@@ -873,7 +873,7 @@ msgstr "geçersiz veri seçici ögesi “%1”"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:204
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:131
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:354
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:457
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:68
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:23
 #, kde-format
 msgid "Data"
@@ -4066,7 +4066,7 @@ msgstr "Dağıntı"
 msgid "Quantile"
 msgstr "Dağılım Dilimi"
 
-#: src/backend/gsl/functions.cpp:287 src/backend/nsl/nsl_smooth.c:21
+#: src/backend/gsl/functions.cpp:287 src/backend/nsl/nsl_smooth.c:24
 #, kde-format
 msgid "Percentile"
 msgstr "Persantil"
@@ -5303,7 +5303,7 @@ msgid "Sine"
 msgstr "Sinüs"
 
 #: src/backend/gsl/functions.cpp:618 src/backend/nsl/nsl_interp.c:21
-#: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:30
+#: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:35
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:165
 #, kde-format
 msgid "Cosine"
@@ -6592,7 +6592,7 @@ msgstr "Dairesel"
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:118
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:149
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:405
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:112
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:148
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:75
 #, kde-format
 msgid "Auto"
@@ -7235,7 +7235,7 @@ msgstr "Poisson"
 msgid "Bernoulli"
 msgstr "Bernoulli"
 
-#: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:25
+#: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:30
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:834
 #, kde-format
 msgid "Binomial"
@@ -7282,7 +7282,7 @@ msgid "Frechet (Inverse Weibull)"
 msgstr "Frechet (Ters Weibull)"
 
 #: src/backend/nsl/nsl_sf_stats.c:48 src/backend/nsl/nsl_sf_window.c:16
-#: src/backend/nsl/nsl_smooth.c:24 src/frontend/dockwidgets/KDEPlotDock.cpp:160
+#: src/backend/nsl/nsl_smooth.c:29 src/frontend/dockwidgets/KDEPlotDock.cpp:160
 #, kde-format
 msgid "Triangular"
 msgstr "Üçgensel"
@@ -7352,68 +7352,73 @@ msgstr "Bartlett–Hann"
 msgid "Lanczos"
 msgstr "Lanczos"
 
-#: src/backend/nsl/nsl_smooth.c:21
+#: src/backend/nsl/nsl_smooth.c:22
 #, kde-format
 msgid "Moving Average (Central)"
 msgstr "Hareket Ortalaması (Merkezi)"
 
-#: src/backend/nsl/nsl_smooth.c:21
+#: src/backend/nsl/nsl_smooth.c:23
 #, kde-format
 msgid "Moving Average (Lagged)"
 msgstr "Hareket Ortalaması (Gecikmeli)"
 
-#: src/backend/nsl/nsl_smooth.c:21
+#: src/backend/nsl/nsl_smooth.c:25
 #, kde-format
 msgid "Savitzky-Golay"
 msgstr "Savitzky–Golay"
 
-#: src/backend/nsl/nsl_smooth.c:22
+#: src/backend/nsl/nsl_smooth.c:26
+#, kde-format
+msgid "LOWESS"
+msgstr ""
+
+#: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
 msgid "Interpolating"
 msgstr "Aradeğerleme"
 
-#: src/backend/nsl/nsl_smooth.c:22
+#: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
 msgid "Mirror"
 msgstr "Ayna"
 
-#: src/backend/nsl/nsl_smooth.c:22
+#: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
 msgid "Nearest"
 msgstr "En Yakın"
 
-#: src/backend/nsl/nsl_smooth.c:22
+#: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
 msgid "Constant"
 msgstr "Sabit"
 
-#: src/backend/nsl/nsl_smooth.c:22
+#: src/backend/nsl/nsl_smooth.c:27
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:44
 #, kde-format
 msgid "Periodic"
 msgstr "Periyodik"
 
-#: src/backend/nsl/nsl_smooth.c:23 src/frontend/dockwidgets/KDEPlotDock.cpp:159
+#: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:159
 #, kde-format
 msgid "Uniform (Rectangular)"
 msgstr "Tekdüze (Dikdörtgen)"
 
-#: src/backend/nsl/nsl_smooth.c:26 src/frontend/dockwidgets/KDEPlotDock.cpp:161
+#: src/backend/nsl/nsl_smooth.c:31 src/frontend/dockwidgets/KDEPlotDock.cpp:161
 #, kde-format
 msgid "Parabolic (Epanechnikov)"
 msgstr "Parabolik (Epaneçnikov)"
 
-#: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/KDEPlotDock.cpp:162
+#: src/backend/nsl/nsl_smooth.c:32 src/frontend/dockwidgets/KDEPlotDock.cpp:162
 #, kde-format
 msgid "Quartic (Biweight)"
 msgstr "Dörtlenik (İkili Ağırlık)"
 
-#: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:163
+#: src/backend/nsl/nsl_smooth.c:33 src/frontend/dockwidgets/KDEPlotDock.cpp:163
 #, kde-format
 msgid "Triweight"
 msgstr "Üçlü Ağırlık"
 
-#: src/backend/nsl/nsl_smooth.c:29 src/frontend/dockwidgets/KDEPlotDock.cpp:164
+#: src/backend/nsl/nsl_smooth.c:34 src/frontend/dockwidgets/KDEPlotDock.cpp:164
 #, kde-format
 msgid "Tricube"
 msgstr "Üçlü Küp"
@@ -9468,7 +9473,7 @@ msgstr "Başlık"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:397
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:570
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:513
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:582
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:536
 #, kde-format
 msgid "Legend"
 msgstr "Lejant"
@@ -9743,7 +9748,7 @@ msgstr "Hata İşlevi"
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:72
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:294
 #, kde-format
 msgid "Smooth"
 msgstr "Pürüzsüzleştir"
@@ -11352,7 +11357,7 @@ msgstr "%1: Kilidi aç"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:47
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:103
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:81
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:243
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:549
 #: src/frontend/ui/labelwidget.ui:722
 #, kde-format
 msgid "Visible"
@@ -14843,7 +14848,7 @@ msgstr "Çizim erimleri:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:54
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:86
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:470
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:105
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:158
 #, kde-format
 msgid "Plot Range:"
 msgstr "Çizim erimi:"
@@ -16242,7 +16247,7 @@ msgstr "t istatistiği"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:390
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:165
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:453
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:511
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:108
 #, kde-format
 msgid "Curve:"
 msgstr "Eğri:"
@@ -16565,7 +16570,76 @@ msgstr "Konumsal karekök hatası: %1"
 msgid "area error: %1"
 msgstr "Alan hatası: %1"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:401
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:192
+#, kde-format
+msgid ""
+"Method used to smooth the data:<ul><li>Moving Average (Central) - smoothing "
+"using the average of a fixed number of points, the average is centered on "
+"the current point.</li><li>Moving Average (Lagged) - smoothing using the "
+"average of a fixed number of points, the average is lagged behind the "
+"current point.</li><li>Percentile - smoothing using the percentile of a "
+"fixed number of points.</li><li>Savitzky-Golay - smooothing using least-"
+"squares fitting of polynomials to segments of the data.</li><li>LOWESS - "
+"locally weighted scatterplot smoothing.</li></ul>"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:204
+#, fuzzy, kde-format
+#| msgid "Target number of points in the simplified line"
+msgid "Number of points in the moving window"
+msgstr "Basitleştirilmiş çizgideki hedef nokta sayısı"
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:208
+#, kde-format
+msgid ""
+"Weightning type to define different weights for the points in the moving "
+"window"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:212
+#, kde-format
+msgid "Percentile of the points in the moving window"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:216
+#, kde-format
+msgid "The order of the polynomial used to fit the points in the moving window"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:220
+#, kde-format
+msgid "The fraction of the data used to perform the local fit."
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:224
+#, kde-format
+msgid ""
+"If delta > 0, values of y-data within delta of each other will use "
+"interpolation instead of full regression."
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:228
+#, fuzzy, kde-format
+#| msgid "Exceeded max number of iterations"
+msgid "The number of robustifying iterations"
+msgstr "Yinelemenin en yüksek sayısına ulaşıldı"
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:232
+#, kde-format
+msgid "Padding mode to handle the edges of the data set"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:236
+#, kde-format
+msgid "The value for constant padding at the left edge"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:240
+#, kde-format
+msgid "The value for constant padding at the right edge"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:519
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr "Yumuşatma durumu: %1"
@@ -17190,7 +17264,7 @@ msgstr "İşlev Tanımı Kayıt Yeri Seç"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:130
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:40
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:443
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:525
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:661
 #: src/frontend/ui/fitsheadereditnewkeywordwidget.ui:27
 #: src/frontend/ui/labelwidget.ui:326
 #, kde-format
@@ -20768,7 +20842,7 @@ msgstr "Y hatası türü:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:373
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:260
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:42
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:555
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:454
 #: src/frontend/ui/labelwidget.ui:222
 #, kde-format
 msgid "Name:"
@@ -21032,8 +21106,8 @@ msgstr "Boyut:"
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:134
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:421
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:196
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:209
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:439
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:222
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:257
 #: src/frontend/ui/fitoptionswidget.ui:119 src/frontend/ui/labelwidget.ui:126
 #: src/frontend/ui/labelwidget.ui:181 src/frontend/ui/labelwidget.ui:212
 #: src/frontend/ui/labelwidget.ui:352 src/frontend/ui/labelwidget.ui:399
@@ -21282,7 +21356,7 @@ msgstr "Göreceli Yol"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:196
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:432
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:33
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:535
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:690
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:538
 #, kde-format
 msgid "Type:"
@@ -21912,7 +21986,7 @@ msgstr "Dosya bilgisini göster"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:147
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:419
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:49
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:542
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:654
 #, kde-format
 msgid "Source:"
 msgstr "Kaynak:"
@@ -23170,7 +23244,7 @@ msgstr "y erimlerinin listesi"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:489
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:426
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:497
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:500
 #, kde-format
 msgid "Points:"
 msgstr "Noktalar:"
@@ -23615,8 +23689,8 @@ msgstr "Kap boyutu:"
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:382
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:248
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:267
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:340
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:359
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:372
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:391
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:24
 #, kde-format
 msgid "Minimum:"
@@ -23663,8 +23737,8 @@ msgstr "Yöntem:"
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:344
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:210
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:229
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:302
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:321
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:334
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:353
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:145
 #, kde-format
 msgid "Maximum:"
@@ -23726,7 +23800,7 @@ msgstr "Önem düzeyi α:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:123
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:563
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:17
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:229
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:600
 #, kde-format
 msgid "Recalculate"
 msgstr "Yeniden Hesapla"
@@ -24203,7 +24277,7 @@ msgstr "Çalışma zamanı:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:166
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:433
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:159
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:518
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:49
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:74
 #, kde-format
 msgid "X-Data:"
@@ -24221,7 +24295,7 @@ msgstr "X verisi:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:40
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:151
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:506
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:504
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:56
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:114
 #, kde-format
 msgid "Y-Data:"
@@ -24255,8 +24329,10 @@ msgstr "Lambda:"
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #. i18n: ectx: property (text), widget (QLabel, lARPLSIterations)
 #. i18n: ectx: property (text), widget (QLabel, lMSTLIterations)
+#. i18n: ectx: property (text), widget (QLabel, lIterations)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:190
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:418
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:118
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:257
 #, kde-format
 msgid "Iterations:"
@@ -24429,7 +24505,7 @@ msgstr "Sonlandırma oranı:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:61
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:412
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:368
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:464
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:91
 #, kde-format
 msgid "X-Range:"
 msgstr "X erimi:"
@@ -24448,7 +24524,7 @@ msgstr "X erimi:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:106
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:553
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:61
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:426
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:628
 #, kde-format
 msgid "Results:"
 msgstr "Sonuçlar:"
@@ -24993,41 +25069,93 @@ msgstr "Basitleştirme"
 msgid "Option:"
 msgstr "Seçenek:"
 
+#. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbDelta)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:27
+#, fuzzy, kde-format
+#| msgid "Minimum distance threshold from retained point"
+msgid "Distance threshold for optimization (0 = compute all points)"
+msgstr "Korunan noktadan en küçük uzaklık eşiği"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lSpan)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:98
+#, kde-format
+msgid "Fraction of data points used for local regression (0.0 < span ≤ 1.0)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lSpan)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:101
+#, kde-format
+msgid "Span:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lIterations)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:115
+#, kde-format
+msgid ""
+"Number of robustifying iterations (0-4, higher = more outlier resistant)"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lPercentile)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:17
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:135
 #, kde-format
 msgid "Percentile:"
 msgstr "Persantil:"
 
-#. i18n: ectx: property (text), widget (QLabel, lMode)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:50
-#, kde-format
-msgid "Padding Mode:"
-msgstr "Dolgu kipi:"
-
 #. i18n: ectx: property (text), widget (QLabel, lLeftValue)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:179
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:186
 #, kde-format
 msgid "Left value:"
 msgstr "Sol değer:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightValue)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:186
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:206
 #, kde-format
 msgid "Right value:"
 msgstr "Sağ değer:"
 
+#. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbSpan)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:270
+#, kde-format
+msgid "Fraction of data points used for local regression"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lMode)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:493
+#, fuzzy, kde-format
+#| msgid "Padding"
+msgid "Padding:"
+msgstr "Doldurma"
+
+#. i18n: ectx: property (text), widget (QLabel, lOrder)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
+#, fuzzy, kde-format
+#| msgid "Order:"
+msgid " Order:"
+msgstr "Sıralama:"
+
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:236
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:556
 #, kde-format
 msgid "Weight:"
 msgstr "Ağırlık:"
 
-#. i18n: ectx: property (text), widget (QLabel, lOrder)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:490
+#. i18n: ectx: property (toolTip), widget (QLabel, lDelta)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:613
 #, kde-format
-msgid "Polynom Order:"
-msgstr "Polinom sırası:"
+msgid "Distance threshold for interpolation optimization (0 = disabled)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lDelta)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:616
+#, kde-format
+msgid "Delta:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, sbIterations)
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:697
+#, kde-format
+msgid "Number of robustifying iterations for outlier resistance"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColormap)
 #: src/frontend/ui/exampleswidget.ui:73
@@ -27393,6 +27521,12 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
+
+#~ msgid "Padding Mode:"
+#~ msgstr "Dolgu kipi:"
+
+#~ msgid "Polynom Order:"
+#~ msgstr "Polinom sırası:"
 
 #~ msgid "Script Editor"
 #~ msgstr "Betik Düzenleyicisi"
