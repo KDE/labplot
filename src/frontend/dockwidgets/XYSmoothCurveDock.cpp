@@ -194,7 +194,7 @@ void XYSmoothCurveDock::retranslateUi() {
 	"<li>Moving Average (Central) - smoothing using the average of a fixed number of points, the average is centered on the current point.</li>"
 	"<li>Moving Average (Lagged) - smoothing using the average of a fixed number of points, the average is lagged behind the current point.</li>"
 	"<li>Percentile - smoothing using the percentile of a fixed number of points.</li>"
-	"<li>Savitzky-Golay - smooothing using least-squares fitting of polynomials to segments of the data.</li>"
+	"<li>Savitzky-Golay - smoothing using least-squares fitting of polynomials to segments of the data.</li>"
 	"<li>LOWESS - locally weighted scatterplot smoothing.</li>"
 	"</ul>"
 	);
@@ -205,7 +205,7 @@ void XYSmoothCurveDock::retranslateUi() {
 	uiGeneralTab.lPoints->setToolTip(info);
 	uiGeneralTab.sbPoints->setToolTip(info);
 
-	info = i18n("Weightning type to define different weights for the points in the moving window");
+	info = i18n("Weighting type to define different weights for the points in the moving window");
 	uiGeneralTab.cbWeight->setToolTip(info);
 	uiGeneralTab.cbMode->setToolTip(info);
 
