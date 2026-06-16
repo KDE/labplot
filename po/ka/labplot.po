@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-15 00:39+0000\n"
-"PO-Revision-Date: 2026-06-07 07:03+0200\n"
+"POT-Creation-Date: 2026-06-16 00:39+0000\n"
+"PO-Revision-Date: 2026-06-15 06:29+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -861,17 +861,17 @@ msgstr "უცნობი ელემენტი '%1' ელემენტ�
 #: src/frontend/ui/dockwidgets/columndock.ui:84
 #: src/frontend/ui/dockwidgets/livedatadock.ui:419
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:81
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:211
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:412
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:71
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:87
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:442
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:390
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:60
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:313
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:330
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:37
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:65
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:204
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:131
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:354
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:71
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:190
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:69
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:221
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:122
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:145
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:133
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:68
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:23
 #, kde-format
@@ -1836,9 +1836,9 @@ msgstr "ცვლადების რაოდენობა: "
 #: src/frontend/dockwidgets/ColumnDock.cpp:371
 #: src/frontend/dockwidgets/ColumnDock.cpp:808
 #: src/frontend/dockwidgets/ColumnDock.cpp:833
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:231
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:98
 #, kde-format
 msgid "Variables:"
 msgstr "ცვლადები:"
@@ -3842,7 +3842,7 @@ msgstr "ჯამი"
 #: src/backend/gsl/functions.cpp:260 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:570
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:173
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:104
@@ -3858,7 +3858,7 @@ msgstr "მინიმუმი"
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #: src/backend/statistics/HypothesisTest.cpp:570
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:174
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:105
@@ -3885,7 +3885,7 @@ msgstr "საშუალო არითმეტიკული"
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:178
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:134
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:525
@@ -4221,8 +4221,8 @@ msgstr "და"
 
 #. i18n: ectx: property (text), widget (QLabel, l2SamplingInterval)
 #: src/backend/gsl/functions.cpp:340
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:269
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:24
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:452
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:106
 #, kde-format
 msgid "or"
 msgstr "ან"
@@ -6513,7 +6513,7 @@ msgstr "%1-სთვის სესიის შექმნა შეუძლ
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/statistics/HypothesisTest.cpp:570
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:515
 #, kde-format
@@ -6521,13 +6521,13 @@ msgid "Mean"
 msgstr "მნიშვნელობა"
 
 #: src/backend/nsl/nsl_baseline.cpp:47
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:179
 #, kde-format
 msgid "End Points"
 msgstr "ბოლო წერტილები"
 
 #: src/backend/nsl/nsl_baseline.cpp:47
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:178
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:180
 #, kde-format
 msgid "Linear Regression"
 msgstr "წრფივი რეგრესია"
@@ -6557,13 +6557,14 @@ msgstr "წრიული"
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoRange)
+#. i18n: ectx: property (text), widget (QCheckBox, cbAutoRecalculate)
 #. i18n: ectx: property (text), widget (QCheckBox, cbRangeScale)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMajorTicksAutoNumber)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinorTicksAutoNumber)
 #. i18n: ectx: property (text), widget (QCheckBox, chkLabelsAutoPrecision)
 #. i18n: ectx: property (text), widget (QCheckBox, chkLabelsFormatAuto)
-#. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoBinRanges)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSTLTrendLengthAuto)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSTLLowPassLengthAuto)
@@ -6588,19 +6589,31 @@ msgstr "წრიული"
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:420
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:454
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:488
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:270
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:352
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:224
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:361
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:368
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:318
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:50
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:84
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:195
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:118
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:149
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:405
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:139
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:476
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:84
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:275
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:200
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:260
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:123
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:355
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:489
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:68
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:492
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:186
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:404
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:371
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:111
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:190
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:136
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:207
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:107
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:255
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:154
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:340
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:438
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:148
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:607
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:75
 #, kde-format
 msgid "Auto"
@@ -6876,7 +6889,7 @@ msgstr "სტატისტიკა (გადანაწილებებ�
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:565
 #, kde-format
 msgid "Custom"
 msgstr "ხელით"
@@ -7015,7 +7028,7 @@ msgstr "რადიალური მანძილი"
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2256
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:272
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:455
 #, kde-format
 msgid "Interpolation"
 msgstr "ინტერპოლაცია"
@@ -7380,7 +7393,7 @@ msgstr "სავიცკი-გოლეის"
 #: src/backend/nsl/nsl_smooth.c:26
 #, kde-format
 msgid "LOWESS"
-msgstr ""
+msgstr "ლოუესი"
 
 #: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
@@ -9352,7 +9365,7 @@ msgstr "%1: სიგანის ფაქტორი შეიცვალა
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:162
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:339
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:348
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:109
 #, kde-format
 msgid "%1 - Data"
@@ -9490,20 +9503,20 @@ msgstr "სათაური"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:156
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:172
 #: src/frontend/ui/dockwidgets/runchartdock.ui:63
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:280
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:445
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:399
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:528
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:462
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:397
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:150
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:419
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:251
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:375
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:296
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:458
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:487
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:352
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:333
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:314
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:397
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:570
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:513
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:61
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:39
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:63
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:176
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:110
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:282
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:114
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:536
 #, kde-format
 msgid "Legend"
@@ -9970,8 +9983,8 @@ msgid "%1: set border corner radius"
 msgstr "%1: საზღვრის კუთხის რადიუსის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2066
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:333
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:338
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:322
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:327
 #, kde-format
 msgid "Convolution"
 msgstr "კონვოლუცია"
@@ -10001,7 +10014,7 @@ msgstr "'%1'-ის წარმოებული"
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2228
 #: src/frontend/notebook/NotebookView.cpp:156
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:268
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:255
 #, kde-format
 msgid "Differentiation"
 msgstr "დიფერენციაცია"
@@ -10015,7 +10028,7 @@ msgstr "'%1'-ის ინტეგრალი"
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2242
 #: src/frontend/notebook/NotebookView.cpp:162
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:159
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:424
 #, kde-format
 msgid "Integration"
 msgstr "ინტეგრაცია"
@@ -10880,27 +10893,33 @@ msgstr "%1: მნიშვნელობების ფონტის და
 msgid "%1: set values color"
 msgstr "%1: მნიშვნელობების ფერის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:210
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:212
+#, fuzzy, kde-format
+#| msgid "%1: save calculation changed"
+msgid "%1: auto recalculate changed"
+msgstr "%1: შეცვლილი გამოთვლის შენახვა"
+
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:219
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: მონაცემების წყაროს ტიპი შეიცვალა"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:217
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:226
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: მონაცემების წყაროს მრუდი შეიცვალა"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:225
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:234
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: X-მონაცემების მინიჭება"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:233
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:242
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: Y-მონაცემების მინიჭება"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:241
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:250
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: მეორე Y მონაცემების მინიჭება"
@@ -11374,19 +11393,19 @@ msgstr "%1: განბლოკვა"
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:215
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:94
 #: src/frontend/ui/dockwidgets/runchartdock.ui:30
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:358
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:279
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:353
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:535
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:251
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:270
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:67
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:246
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:161
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:382
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:232
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:451
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:38
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:112
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:340
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:145
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:47
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:103
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:411
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:120
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:40
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:183
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:217
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:56
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:81
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:549
 #: src/frontend/ui/labelwidget.ui:722
@@ -11740,7 +11759,7 @@ msgstr "შექმნის გამომღებს მონაცმე�
 
 #: src/frontend/ActionsManager.cpp:226
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:84
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:76
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:401
 #: src/frontend/MainWin.cpp:1210 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
@@ -14889,20 +14908,20 @@ msgstr "გრაფიკის დიაპაზონები:"
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:197
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:182
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:235
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:250
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:262
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:234
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:502
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:409
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:253
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:117
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:33
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:306
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:365
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:132
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:878
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:337
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:253
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:313
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:79
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:54
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:86
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:470
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:306
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:137
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:200
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:53
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:247
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:248
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:192
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:158
 #, kde-format
 msgid "Plot Range:"
@@ -15156,7 +15175,7 @@ msgstr "ავტომატური (E)"
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/ColumnDock.cpp:371
 #: src/frontend/dockwidgets/ColumnDock.cpp:833
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:244
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/columndock.ui:42
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
 #, kde-format
@@ -15297,7 +15316,7 @@ msgstr "მონიშნეთ სწორი სვეტი"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:658
 #: src/frontend/dockwidgets/ColumnDock.cpp:756
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:178
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:180
 #, kde-format
 msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
@@ -15312,7 +15331,7 @@ msgid "Apply Formula"
 msgstr "ფორმულის გადატარება"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:802
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:212
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:214
 #, kde-format
 msgid "Delete variable"
 msgstr "ცვლადის წაშლა"
@@ -16055,22 +16074,22 @@ msgstr ""
 msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "%1 სამუშაო ფურცელი: ნიმუში \"%2\" ჩაიტვირთა"
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:32
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:33
 #, kde-format
 msgid "status: %1"
 msgstr "სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:41
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:42
 #, kde-format
 msgid "calculation time: %1 s"
 msgstr "გამოთვლის დრო: %1 წმ"
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:43
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:44
 #, kde-format
 msgid "calculation time: %1 ms"
 msgstr "გამოთვლის დრო: %1 მწმ"
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:80
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:72
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
 #, kde-format
@@ -16079,13 +16098,13 @@ msgstr ""
 "შედეგის თავიდან გამოსათვლელად დააწკაპუნეთ ამ ღილაკზე, ან დააჭირეთ Shift"
 "+Enter."
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:85
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:77
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:402
 #, kde-format
 msgid "XY-Curve"
 msgstr "XY-მრუდი"
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:182
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:184
 #, kde-format
 msgid ""
 "Method used to calculate the baseline correction:<ul><li>arPLS - "
@@ -16105,7 +16124,7 @@ msgstr ""
 "ბოლოების ჩატარება და მისი გამოკლება.</li><li>წრფივი რეგრესია - წრფივი "
 "რეგრესიის ჩატარება მონაცემებზე და მისი გამოკლება.</li><ul>"
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:195
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:197
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:162
 #, kde-format
 msgid ""
@@ -16113,7 +16132,7 @@ msgid ""
 "background."
 msgstr "სიგლუვის პარამეტრი - რაც დიდია მნიშვნელობა, მით გლუვია მიღებული ფონი."
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:199
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:201
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:166
 #, kde-format
 msgid ""
@@ -16123,46 +16142,46 @@ msgstr ""
 "აწონვის შეწყვეტის ფარდობა - მნიშვნელობა შუალედიდან 0-1. რაც პატარაა "
 "მნიშვნელობა, მით ნაკლები უარყოფითი მნიშვნელობაა დაშვებული."
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:203
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:205
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:170
 #, kde-format
 msgid "Number of iterations to perform."
 msgstr "მოსახდენი იტერაციების რიცხვი."
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:299
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:301
 #, kde-format
 msgid "Baseline correction status: %1"
 msgstr "საბაზისო ხაზის შესწორების სტატუსი: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:180
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:20
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:169
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:30
 #, kde-format
 msgid "or Kernel/Size:"
 msgstr "ან ბირთვი/ზომა:"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:194
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:183
 #, kde-format
 msgid "with Kernel/Size:"
 msgstr "ბირთვით/ზომით:"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:334
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:337
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:323
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:326
 #, kde-format
 msgid "Deconvolution"
 msgstr "დეკონვოლუცია"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:372
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:361
 #, kde-format
 msgid "Convolution status: %1"
 msgstr "კონვოლუციის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:374
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:363
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr "დეკონვოლუციის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:278
+#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:274
 #, kde-format
 msgid "Correlation status: %1"
 msgstr "კორელაციის სტატუსი: %1"
@@ -16225,7 +16244,7 @@ msgid ""
 msgstr ""
 "თუ ჩართულია, მონაცემთა წერტილების, მხოლოდ, X-ის ზრდად მნიშვნელობებზე მიერთება"
 
-#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:374
+#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:373
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "სხვაობის პოვნის სტატუსი: %1"
@@ -16262,14 +16281,14 @@ msgstr "φ, მაქს"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:192
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:228
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:397
 #, kde-format
 msgid "t, min"
 msgstr "t, მინ"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:193
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:258
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:118
 #, kde-format
 msgid "t, max"
 msgstr "t, მაქს"
@@ -16301,15 +16320,15 @@ msgstr "t-სტატისტიკა"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:439
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:20
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:360
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:56
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:111
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:353
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:217
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:95
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:366
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:480
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:390
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:165
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:453
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:418
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:63
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:443
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:199
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:108
 #, kde-format
 msgid "Curve:"
@@ -16372,29 +16391,29 @@ msgid "%1 % upper confidence level"
 msgstr "%1 % მაღალი ნდობის დონე"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:281
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:24
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:272
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:266
 #, kde-format
 msgid "Cutoff:"
 msgstr "ჭრილი:"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:289
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:280
 #, kde-format
 msgid "Lower cutoff:"
 msgstr "ქვედა ზღვარი:"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:290
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:281
 #, kde-format
 msgid "Upper cutoff:"
 msgstr "ზედა ზღვარი:"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:359
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:350
 #, kde-format
 msgctxt "@label:spinbox Suffix for the frequency"
 msgid "%v Hz"
 msgstr "%v ჰც"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:424
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:415
 #, kde-format
 msgid ""
 "The band width is <= 0 since lower cutoff value is not smaller than upper "
@@ -16403,22 +16422,22 @@ msgstr ""
 "ჯგუფის სიგანე არის <= 0, რადგან ქვედა ათვლის მნიშვნელობა არ არის პატარა, "
 "ვიდრე ზედა ათვლის მნიშვნელობა. გთხოვთ გაასწოროთ ეს."
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:425
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:416
 #, kde-format
 msgid "band width <= 0"
 msgstr "ზოლის სიგანე <= 0"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:433
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:424
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr "ფურიეს ფილტრის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:226
+#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:221
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr "ფურიეს გარდაქმნის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:123
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:125
 #, kde-format
 msgid ""
 "The curve \"%1\"\n"
@@ -16428,32 +16447,37 @@ msgstr ""
 "რკალი \"%1\"\n"
 "ხელმისაწვდომი აღარაა. ის ავტომატურად იქნება გამოყენებული, როცა მას შექმნით."
 
-#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:174
+#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:173
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr "ჰილბერტის ტრანსფორმაციის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:310
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:309
 #, kde-format
 msgid "Integration status: %1"
 msgstr "ინტეგრალის გამოთვლის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:322
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:321
 #, kde-format
 msgid "value: %1"
 msgstr "მნიშვნელობა: %1"
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:79
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:519
+#, kde-format
+msgid "Interpolation status: %1"
+msgstr "ინტერპოლაციის სტატუსი: %1"
+
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:563
 #, kde-format
 msgid "Auto (5x data points)"
 msgstr "ავტო (5x მონაცემის წერტილი)"
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:80
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:564
 #, kde-format
 msgid "Multiple of data points"
 msgstr "რამდენიმე მონაცემის წერტილი"
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:91
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:567
 #, kde-format
 msgid ""
 "The number of the interpolation points should be bigger than the total "
@@ -16462,18 +16486,13 @@ msgstr ""
 "ინტერპოლაციის წერტილების რაოდენობა მონაცემების წყაროში არსებული წერტილების "
 "საერთო რაოდენობას უნდა აღემატებოდეს."
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:538
-#, kde-format
-msgid "Interpolation status: %1"
-msgstr "ინტერპოლაციის სტატუსი: %1"
-
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:176
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:177
 #, kde-format
 msgid "This method is much slower than any other"
 msgstr "ეს მეთოდი ბევრად უფრო ნელია, ვიდრე ნებისმიერი სხვა"
 
 #. i18n-team: some algorithm are named after their creators like Douglas and Peucker, Visvalingam and Whyatt, Opheim, Lang
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:180
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:181
 #, kde-format
 msgid ""
 "Method to simplify the line:<ul><li>Douglas-Peucker - recursively divides "
@@ -16510,126 +16529,126 @@ msgstr ""
 "მინიმუმ განსაზღვრული მანძილია და უზრუნველყოფს, რომ არცერთი წერტილი არ "
 "გადაუხვევს გამარტივებულ ხაზს დადგენილ ტოლერანტობას.</li></ul>"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:208
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:212
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:217
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:229
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:209
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:213
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:246
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "დასაშვები გადახრა (მანძილი):"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:209
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:210
 #, kde-format
 msgid "Maximum perpendicular distance from the connecting line segment"
 msgstr "მაქსიმალური პერპენდიკულარული მანძილი დამაკავშირებელი ხაზის სეგმენტიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:213
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:214
 #, kde-format
 msgid "Maximum radial distance from the previous retained point"
 msgstr "მაქსიმალური რადიალური მანძილი წინა შენარჩუნებული წერტილიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:219
 #, kde-format
 msgid "Maximum perpendicular distance from the line segment"
 msgstr "მაქსიმალური პერპენდიკულარული მანძილი ხაზის სეგმენტიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:221
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
 #, kde-format
 msgid "Number of points:"
 msgstr "წერტილების რაოდენობა:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:223
 #, kde-format
 msgid "Target number of points in the simplified line"
 msgstr "წერტილების სამიზნე რაოდენობა გამარტივებულ ხაზში"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:225
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:226
 #, kde-format
 msgid "Step size:"
 msgstr "ბიჯის ზომა:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:226
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
 #, kde-format
 msgid "Keep every n-th point (n is the step size)"
 msgstr "შეინახეთ ყოველი n-ე წერტილი (n არის ნაბიჯის ზომა)"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
 #, kde-format
 msgid "Repeats:"
 msgstr "გამეორება:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:232
 #, kde-format
 msgid "Maximum perpendicular distance from the reference line"
 msgstr "მაქსიმალური პერპენდიკულარული მანძილი მიმართვის ხაზიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:232
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:233
 #, kde-format
 msgid "Number of iterations to apply the simplification"
 msgstr "იტერაციების რაოდენობა გამარტივების გადასატარებლად"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "დასაშვები გადახრა (ფართობი):"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:237
 #, kde-format
 msgid "Minimum area contribution threshold for retaining points"
 msgstr "მინიმალური ფართობის შენატანის ბარიერი შენარჩუნების წერტილებისთვის"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "მინიმალური დასაშვები გადახრა:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "მაქსიმალური დასაშვები გადახრა:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:242
 #, kde-format
 msgid "Minimum distance threshold from retained point"
 msgstr "მინიმალური მანძილის ბარიერი შენარჩუნებული წერტილიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:242
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:243
 #, kde-format
 msgid "Maximum distance threshold from retained point"
 msgstr "მაქსიმალური მანძილის ზღვარი შენარჩუნებული წერტილიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:246
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:247
 #, kde-format
 msgid "Search region:"
 msgstr "ძებნის რეგიონი:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:247
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
 msgid "Minimum point spacing distance"
 msgstr "წერტილების მანძილის მინიმალური მანძილი"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:249
 #, kde-format
 msgid "Search region size in units of points"
 msgstr "რეგიონის ზომის ძებნა წერტილის ერთეულებში"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:569
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:570
 #, kde-format
 msgid "Status: %1"
 msgstr "სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:584
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:585
 #, kde-format
 msgid "number of points: %1"
 msgstr "წერტილების რაოდენობა: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:585
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:586
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "პოზიციური კვადრატის შეცდომა: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:586
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:587
 #, kde-format
 msgid "area error: %1"
 msgstr "შეცდომის ფართობი: %1"
@@ -16646,34 +16665,44 @@ msgid ""
 "squares fitting of polynomials to segments of the data.</li><li>LOWESS - "
 "locally weighted scatterplot smoothing.</li></ul>"
 msgstr ""
+"მონაცემების მოგლუვებისთვის გამოყენებული მეთოდი:<ul><li>მოძრავი საშუალო "
+"(ცენტრალური) - მოგლუვება ფიქსირებული რაოდენობის წერტილების საშუალოს "
+"გამოყენებით. საშუალო დაცენტრებულია მიმდინარე წერტილზე.</li><li>მოძრავი "
+"საშუალო (ჩამორჩენილი) - მოგლუვება წერტილების ფიქსირებული რაოდენობის "
+"საშუალოთი. საშუალო ჩამორჩება მიმდინარე წერტილს.</li><li>პროცენტილი - "
+"მოგლუვება ფიქსირებული რაოდენობის წერტილების პროცენტილით.</li><li>სავიცკი-"
+"გოლეი - მოგლუვება მონაცემთა სეგმენტების პოლინომების ყველაზე ნაკლებად "
+"ოთხკუთხედის გამოყენებით.</li><li>ლოუესი - ლოკალურად აწონილი გაფანტული "
+"მოგლუვება.</li></ul>"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:204
-#, fuzzy, kde-format
-#| msgid "Target number of points in the simplified line"
+#, kde-format
 msgid "Number of points in the moving window"
-msgstr "წერტილების სამიზნე რაოდენობა გამარტივებულ ხაზში"
+msgstr "წერტილების რაოდენობა მოძრავ ფანჯარაში"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:208
 #, kde-format
 msgid ""
 "Weightning type to define different weights for the points in the moving "
 "window"
-msgstr ""
+msgstr "აწონვის ტიპი მოძრავი ფანჯრის წერტილების სხვადასხვა წონის დასადგენად"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:212
 #, kde-format
 msgid "Percentile of the points in the moving window"
-msgstr ""
+msgstr "წერტილების პროცენტილი მოძრავ ფანჯარაში"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:216
 #, kde-format
 msgid "The order of the polynomial used to fit the points in the moving window"
 msgstr ""
+"პოლინომების მიმდევრობა, რომელიც გამოყენებულია მოძრავ ფანჯარაში წერტილების "
+"აპროქსიმაციისთვის"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:220
 #, kde-format
 msgid "The fraction of the data used to perform the local fit."
-msgstr ""
+msgstr "ლოკალური აპროქსიმაციის შესასრულებლად გამოყენებული მონაცემთა ნაწილი."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:224
 #, kde-format
@@ -16681,27 +16710,28 @@ msgid ""
 "If delta > 0, values of y-data within delta of each other will use "
 "interpolation instead of full regression."
 msgstr ""
+"თუ დელტა > 0, თავის დელტაში y-მონაცემთა მნიშვნელობები სრული რეგრესიის მაგიერ "
+"ინტერპოლაციას გამოიყენებენ."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:228
-#, fuzzy, kde-format
-#| msgid "Exceeded max number of iterations"
+#, kde-format
 msgid "The number of robustifying iterations"
-msgstr "იტერაციების მაქსიმალური რაოდენობა გადაჭარბებულია"
+msgstr "გამაძლიერებელი გამეორებების რაოდენობა"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:232
 #, kde-format
 msgid "Padding mode to handle the edges of the data set"
-msgstr ""
+msgstr "შევსების რეჟიმი მონაცემთა ნაკრების წიბოების დასამუშავებლად"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:236
 #, kde-format
 msgid "The value for constant padding at the left edge"
-msgstr ""
+msgstr "მნიშვნელობა მარცხენა წიბოსთან მუდმივი შევსებისთვის"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:240
 #, kde-format
 msgid "The value for constant padding at the right edge"
-msgstr ""
+msgstr "მნიშვნელობა მარჯვენა წიბოსთან მუდმივი შევსებისთვის"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:519
 #, kde-format
@@ -17315,21 +17345,21 @@ msgstr "აირჩიეთ ფაილი ფუნქციის აღწ
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:43
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:210
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:153
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:184
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:276
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:49
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:285
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:404
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:124
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:253
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:313
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:49
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:354
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:288
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:410
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:51
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:196
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:288
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:130
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:40
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:443
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:661
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:246
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:334
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:124
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:43
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:93
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:238
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:104
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:668
 #: src/frontend/ui/fitsheadereditnewkeywordwidget.ui:27
 #: src/frontend/ui/labelwidget.ui:326
 #, kde-format
@@ -20681,7 +20711,7 @@ msgstr "პროცენტი"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbLoadFunction)
 #: src/frontend/TemplateHandler.cpp:181
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:447
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:257
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:64
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:86
 #, kde-format
@@ -20695,7 +20725,7 @@ msgstr "თვისებების ჩატვირთვა ნიმუ�
 
 #. i18n: ectx: property (text), widget (QPushButton, pbSaveFunction)
 #: src/frontend/TemplateHandler.cpp:183
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:460
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:270
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:77
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:99
 #, kde-format
@@ -20892,20 +20922,20 @@ msgstr "Y- შეცდომის ტიპი:"
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:17
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:127
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:46
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:395
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:181
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:292
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:23
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:311
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:149
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:32
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:341
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:189
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:23
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:118
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:101
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:243
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:122
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:72
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:373
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:260
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:42
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:33
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:304
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:304
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:121
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:39
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:123
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:356
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:454
 #: src/frontend/ui/labelwidget.ui:222
 #, kde-format
@@ -21019,8 +21049,8 @@ msgstr "ზომა:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPaddingBottom)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBorderCornerRadius)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPosition)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbCutoff2)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbCutoff)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbCutoff2)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRugLength)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRugWidth)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRugOffset)
@@ -21038,8 +21068,8 @@ msgstr "ზომა:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMajorTicksLength)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMinorTicksLength)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLabelsOffset)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTolerance2)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTolerance)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTolerance2)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbDistance)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbSamplingInterval)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionEnd)
@@ -21156,19 +21186,19 @@ msgstr "ზომა:"
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:533
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:552
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:571
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:483
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:204
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:167
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:346
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:235
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:77
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:355
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:371
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:387
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:73
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:240
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:461
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:490
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:519
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:134
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:421
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:202
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:340
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:320
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:349
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:378
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:170
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:454
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:196
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:222
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:257
@@ -21414,13 +21444,13 @@ msgstr "შეფარდებითი ბილიკი"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:223
 #: src/frontend/ui/dockwidgets/valuewidget.ui:48
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:305
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:302
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:17
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:194
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:116
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:42
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:196
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:432
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:33
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:690
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:289
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:299
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:433
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:697
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:538
 #, kde-format
 msgid "Type:"
@@ -22041,16 +22071,16 @@ msgstr "ფაილის ინფორმაციის ჩვენებ�
 #. i18n: ectx: property (text), widget (QLabel, lSourceType)
 #: src/frontend/ui/datasources/importfilewidget.ui:273
 #: src/frontend/ui/dockwidgets/livedatadock.ui:24
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:60
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:188
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:217
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:73
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:94
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:265
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:133
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:78
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:324
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:61
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:147
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:419
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:49
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:654
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:292
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:103
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:579
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:121
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:661
 #, kde-format
 msgid "Source:"
 msgstr "წყარო:"
@@ -22676,7 +22706,7 @@ msgstr "მდებარეობის სვეტი:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1079
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:35
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:124
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:124
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:423
 #, kde-format
 msgid "Direction:"
 msgstr "მიმართულება:"
@@ -23231,7 +23261,7 @@ msgstr "ამჟამად მონიშნული x შუალედ�
 #: src/frontend/ui/dockwidgets/columndock.ui:147
 #: src/frontend/ui/dockwidgets/columndock.ui:170
 #: src/frontend/ui/dockwidgets/scriptdock.ui:138
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:179
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:171
 #: src/frontend/ui/settingsscriptingpage.ui:125
 #, kde-format
 msgid "..."
@@ -23309,8 +23339,8 @@ msgstr "y დიაპაზონების სია"
 #. i18n: ectx: property (text), widget (QLabel, lPoints)
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:489
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:17
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:426
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:380
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:171
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:500
 #, kde-format
 msgid "Points:"
@@ -23546,7 +23576,7 @@ msgstr "ხაზი + სიმბოლოს სიგანე:"
 #. i18n: ectx: property (text), widget (QLabel, lOrdering)
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:350
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:210
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:386
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:20
 #: src/frontend/ui/spreadsheet/sortdialogwidget.ui:30
 #, kde-format
@@ -23584,20 +23614,22 @@ msgstr "გრაფიკის ფერი:"
 msgid "Corner radius:"
 msgstr "კუთხის რადიუსი:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, cbAutoRecalculate)
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoUpdate)
 #: src/frontend/ui/dockwidgets/columndock.ui:65
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:407
 #, kde-format
 msgid "Auto-Update"
 msgstr "ავტომატური განახლება"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants)
-#. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants1)
+#. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
 #: src/frontend/ui/dockwidgets/columndock.ui:134
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:115
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:388
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:105
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:207
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:621
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:60
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:265
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:84
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:172
 #, kde-format
@@ -23607,7 +23639,7 @@ msgstr "კონსტანტები"
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbLoadFunction)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbLoadFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:144
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:444
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:254
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
 #, kde-format
@@ -23615,13 +23647,13 @@ msgid "Load a custom function"
 msgstr "მომხმარებლის ფუნქციის ჩატვირთვა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFunctions)
-#. i18n: ectx: property (toolTip), widget (QToolButton, tbFunctions2)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFunctions1)
+#. i18n: ectx: property (toolTip), widget (QToolButton, tbFunctions2)
 #: src/frontend/ui/dockwidgets/columndock.ui:157
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:105
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:378
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:95
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:197
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:608
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:70
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:275
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:74
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:182
 #, kde-format
@@ -23631,7 +23663,7 @@ msgstr "ფუნქციები"
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbSaveFunction)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSaveFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:167
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:457
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:267
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:74
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:96
 #, kde-format
@@ -23646,7 +23678,7 @@ msgstr "ზომის ავტომატური შეცვლა"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:273
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:287
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:212
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:162
 #, kde-format
 msgid "f(x) = "
@@ -23740,22 +23772,22 @@ msgstr "თავის ზომა:"
 #. i18n: ectx: property (text), widget (QLabel, lBinRangesMinDateTime)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:63
 #: src/frontend/ui/dockwidgets/histogramdock.ui:227
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:135
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:154
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:395
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:51
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:171
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:190
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:138
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:176
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:215
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:196
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:315
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:334
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:363
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:382
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:248
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:267
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:217
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:236
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:127
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:241
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:201
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:220
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:118
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:156
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:158
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:293
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:329
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:348
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:530
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:549
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:281
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:300
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:372
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:391
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:24
@@ -23773,9 +23805,9 @@ msgstr "დაჯგუფება"
 #. i18n: ectx: property (text), widget (QLabel, lBinningMethod)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:173
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:130
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:441
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:140
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:173
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:294
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:156
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:417
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:47
 #, kde-format
 msgid "Method:"
@@ -23788,22 +23820,22 @@ msgstr "მეთოდი:"
 #. i18n: ectx: property (text), widget (QLabel, lBinRangesMax)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:180
 #: src/frontend/ui/dockwidgets/histogramdock.ui:380
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:97
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:116
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:86
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:139
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:133
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:152
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:160
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:192
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:100
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:38
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:277
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:296
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:325
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:344
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:210
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:229
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:179
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:198
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:397
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:334
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:163
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:182
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:140
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:172
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:264
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:31
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:291
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:310
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:492
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:511
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:243
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:262
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:334
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:353
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:145
@@ -23855,18 +23887,18 @@ msgstr "მნიშვნელობის დონე α:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:95
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:382
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:241
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:320
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:412
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:182
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:354
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:122
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:203
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:281
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:123
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:563
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:17
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:469
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:77
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:193
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:348
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:482
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:485
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:397
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:364
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:104
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:200
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:100
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:400
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:600
 #, kde-format
 msgid "Recalculate"
@@ -24332,18 +24364,18 @@ msgstr "გაშვების გარემო:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:88
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:34
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:131
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:346
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:118
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:258
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:126
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:74
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:405
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:102
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:888
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:361
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:175
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:93
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:166
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:433
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:159
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:358
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:107
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:135
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:224
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:426
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:501
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:49
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:74
 #, kde-format
@@ -24352,16 +24384,16 @@ msgstr "X-მონაცემები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:95
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:368
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:125
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:110
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:354
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:109
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:376
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:308
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:345
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:17
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:40
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:151
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:506
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:441
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:196
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:60
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:129
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:181
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:494
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:56
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:114
 #, kde-format
@@ -24373,8 +24405,8 @@ msgstr "Y-მონაცემები:"
 #. i18n: ectx: property (text), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:123
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:102
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:187
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:228
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:281
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:240
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:75
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:93
 #, kde-format
@@ -24398,7 +24430,7 @@ msgstr "ლამბდა:"
 #. i18n: ectx: property (text), widget (QLabel, lMSTLIterations)
 #. i18n: ectx: property (text), widget (QLabel, lIterations)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:190
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:418
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:368
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:118
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:257
 #, kde-format
@@ -24539,15 +24571,31 @@ msgstr "გვერდი:"
 msgid "Scale content:"
 msgstr "შემცველობის მასშტაბი:"
 
+#. i18n: ectx: property (text), widget (QLabel, lXRange)
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:132
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:416
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:378
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:116
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:47
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:327
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:351
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:378
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:292
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:540
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:91
+#, kde-format
+msgid "X-Range:"
+msgstr "X-დიაპაზონი:"
+
 #. i18n: ectx: property (text), widget (QLabel, lSubtraction)
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:199
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:287
 #, kde-format
 msgid "Subtraction"
 msgstr "გამოკლება"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #. i18n: ectx: property (text), widget (QLabel, lARPLSSmoothness)
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:263
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:310
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
 #, kde-format
 msgid "Smoothness (Power of 10):"
@@ -24555,109 +24603,93 @@ msgstr "სიგლუვე (10-ის ხარისხი):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #. i18n: ectx: property (text), widget (QLabel, lARPLSTerminationRatio)
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:293
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:330
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
 #, kde-format
 msgid "Termination Ratio:"
 msgstr "შეწყვეტის პროპორცია:"
 
-#. i18n: ectx: property (text), widget (QLabel, lXRange)
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:323
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:138
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:299
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:371
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:17
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:338
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:238
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:61
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:412
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:368
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:91
-#, kde-format
-msgid "X-Range:"
-msgstr "X-დიაპაზონი:"
-
 #. i18n: ectx: property (text), widget (QLabel, lResults)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QToolButton, tbResults)
-#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:348
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:339
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:83
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:325
+#: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:415
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:206
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:39
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:294
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:495
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:454
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:22
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:213
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:106
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:553
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:61
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:628
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:325
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:54
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:166
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:390
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:591
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:38
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:635
 #, kde-format
 msgid "Results:"
 msgstr "შედეგები:"
 
+#. i18n: ectx: property (text), widget (QLabel, lYColumn)
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:187
+#, kde-format
+msgid "Y-Data Signal:"
+msgstr "Y-მონაცემების სიგნალი:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNormResponse)
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:298
+#, kde-format
+msgid "Norm. Response:"
+msgstr "ნორმა პასუხი:"
+
 #. i18n: ectx: property (text), widget (QLabel, lSamplingInterval)
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:62
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:313
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:334
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:303
 #, kde-format
 msgid "Sampling Interval:"
 msgstr "შერჩევის ინტერვალი:"
 
+#. i18n: ectx: property (text), widget (QLabel, lConvolution)
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:346
+#, kde-format
+msgid "(De-)Convolution"
+msgstr "(დე-)კონვოლუცია"
+
 #. i18n: ectx: property (text), widget (QLabel, lWrap)
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:117
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:373
 #, kde-format
 msgid "Wrap Response:"
 msgstr "გადატანის პასუხი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:145
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:430
 #, kde-format
 msgid "Y-Data Response:"
 msgstr "Y-მონაცემების პასუხი:"
 
-#. i18n: ectx: property (text), widget (QLabel, lYColumn)
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:248
-#, kde-format
-msgid "Y-Data Signal:"
-msgstr "Y-მონაცემების სიგნალი:"
-
-#. i18n: ectx: property (text), widget (QLabel, lConvolution)
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:314
-#, kde-format
-msgid "(De-)Convolution"
-msgstr "(დე-)კონვოლუცია"
-
-#. i18n: ectx: property (text), widget (QLabel, lNormResponse)
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:425
-#, kde-format
-msgid "Norm. Response:"
-msgstr "ნორმა პასუხი:"
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#. i18n: ectx: property (text), widget (QLabel, lConvolution)
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:98
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1212
-#, kde-format
-msgid "Correlation"
-msgstr "კორელაცია"
-
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:151
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:17
 #, kde-format
 msgid "Y-Data Signal 2:"
 msgstr "Y-მონაცემების სიგნალი 2:"
 
+#. i18n: ectx: property (text), widget (QLabel, lNormalize)
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:296
+#, kde-format
+msgid "Normalize:"
+msgstr "ნორმალიზაცია:"
+
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:203
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:310
 #, kde-format
 msgid "Y-Data Signal 1:"
 msgstr "Y-მონაცემების სიგნალი 1:"
 
-#. i18n: ectx: property (text), widget (QLabel, lNormalize)
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:210
+#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
+#. i18n: ectx: property (text), widget (QLabel, lConvolution)
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:442
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1212
 #, kde-format
-msgid "Normalize:"
-msgstr "ნორმალიზაცია:"
+msgid "Correlation"
+msgstr "კორელაცია"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLineInterpolationPointsCount)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:78
@@ -24696,34 +24728,34 @@ msgid "Monoton incr. X:"
 msgstr "მონოტონური ზრდადი X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDerivative)
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:291
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:262
 #, kde-format
 msgid "Derivative:"
 msgstr "წარმოებული:"
 
 #. i18n: ectx: property (text), widget (QLabel, lAccuracyOrder)
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:385
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:272
 #, kde-format
 msgid "Accuracy Order:"
 msgstr "სიზუსტის მიმდევრობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation1)
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:24
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:125
 #, kde-format
 msgid "x=f(t)"
 msgstr "x=f(t)"
 
-#. i18n: ectx: property (text), widget (QLabel, lEquation2)
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:168
-#, kde-format
-msgid "y=g(t)"
-msgstr "y=g(t)"
-
 #. i18n: ectx: property (text), widget (QLabel, lEquation)
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:422
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:225
 #, kde-format
 msgid "Equation"
 msgstr "ტოლობა"
+
+#. i18n: ectx: property (text), widget (QLabel, lEquation2)
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:282
+#, kde-format
+msgid "y=g(t)"
+msgstr "y=g(t)"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
@@ -25024,136 +25056,137 @@ msgstr "გამოთვლის დრო"
 msgid "X range"
 msgstr "X დიაპაზონი"
 
-#. i18n: ectx: property (text), widget (QLabel, lForm)
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:31
-#, kde-format
-msgid "Form:"
-msgstr "ფორმა:"
-
 #. i18n: ectx: property (text), widget (QLabel, lCutoff2)
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:301
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:54
 #, kde-format
 msgid "Cutoff2:"
 msgstr "ამოჭრა2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilter)
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:425
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:285
 #, kde-format
 msgid "Filter"
 msgstr "ფილტრი"
 
-#. i18n: ectx: property (text), widget (QLabel, lType)
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:44
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:152
+#. i18n: ectx: property (text), widget (QLabel, lForm)
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:313
 #, kde-format
-msgid "Output:"
-msgstr "გამოტანა:"
+msgid "Form:"
+msgstr "ფორმა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTwoSided)
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:70
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:84
 #, kde-format
 msgid "Two Sided"
 msgstr "ორმხრივი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbShifted)
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:77
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:91
 #, kde-format
 msgid "Shifted"
 msgstr "გადატანილი"
 
-#. i18n: ectx: property (text), widget (QLabel, lXScale)
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:129
-#, kde-format
-msgid "X-Axis Scale:"
-msgstr "X-ღერძის მასშტაბი:"
-
 #. i18n: ectx: property (text), widget (QLabel, lWindow)
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:194
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:203
 #, kde-format
 msgid "Window:"
 msgstr "ფანჯარა:"
 
+#. i18n: ectx: property (text), widget (QLabel, lType)
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:229
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:305
+#, kde-format
+msgid "Output:"
+msgstr "გამოტანა:"
+
+#. i18n: ectx: property (text), widget (QLabel, lXScale)
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:236
+#, kde-format
+msgid "X-Axis Scale:"
+msgstr "X-ღერძის მასშტაბი:"
+
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:275
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:186
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:63
 #, kde-format
 msgid "Function:"
 msgstr "ფუნქცია:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAbsolute)
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:173
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:146
 #, kde-format
 msgid "Absolute area"
 msgstr "ფართობის აბსოლუტური მნიშვნელობა"
 
-#. i18n: ectx: property (text), widget (QLabel, lVariant)
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:93
-#, kde-format
-msgid "Variant:"
-msgstr "ვარიანტი:"
-
 #. i18n: ectx: property (text), widget (QLabel, lParameter)
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:158
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:49
 #, kde-format
 msgid "Parameter:"
 msgstr "Პარამეტრი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEval)
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:188
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:275
 #, kde-format
 msgid "Evaluate:"
 msgstr "გადათვლა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTension)
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:442
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:301
 #, kde-format
 msgid "Tension:"
 msgstr "დაძაბულობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lContinuity)
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:471
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:330
 #, kde-format
 msgid "Continuity:"
 msgstr "უწყვეტობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBias)
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:500
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:359
 #, kde-format
 msgid "Bias:"
 msgstr "დახრა:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSimplification)
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:29
+#. i18n: ectx: property (text), widget (QLabel, lVariant)
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:403
 #, kde-format
-msgid "Simplification"
-msgstr "გამარტივება"
+msgid "Variant:"
+msgstr "ვარიანტი:"
 
-#. i18n: ectx: property (text), widget (QLabel, lOption2)
 #. i18n: ectx: property (text), widget (QLabel, lOption)
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:166
-#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:326
+#. i18n: ectx: property (text), widget (QLabel, lOption2)
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:74
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:469
 #, kde-format
 msgid "Option:"
 msgstr "პარამეტრი:"
 
+#. i18n: ectx: property (text), widget (QLabel, lSimplification)
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:484
+#, kde-format
+msgid "Simplification"
+msgstr "გამარტივება"
+
 #. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbDelta)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:27
-#, fuzzy, kde-format
-#| msgid "Minimum distance threshold from retained point"
+#, kde-format
 msgid "Distance threshold for optimization (0 = compute all points)"
-msgstr "მინიმალური მანძილის ბარიერი შენარჩუნებული წერტილიდან"
+msgstr "მანძილის ზღვარი ოპტიმიზაციისთვის (0 = ყველა წერტილის გამოთვლა)"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lSpan)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:98
 #, kde-format
 msgid "Fraction of data points used for local regression (0.0 < span ≤ 1.0)"
 msgstr ""
+"ლოკალური რეგრესიისთვის გამოყენებული მონაცემთა წერტილების ნაწილი (0.0 < span "
+"≤ 1.0)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpan)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:101
 #, kde-format
 msgid "Span:"
-msgstr ""
+msgstr "ინტერვალი:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lIterations)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:115
@@ -25161,6 +25194,8 @@ msgstr ""
 msgid ""
 "Number of robustifying iterations (0-4, higher = more outlier resistant)"
 msgstr ""
+"გამაძლიერებელი გამეორებების რაოდენობა (0-4, უფრო მაღალი = უფრო გამონაკლისი "
+"რეზისტენტული)"
 
 #. i18n: ectx: property (text), widget (QLabel, lPercentile)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:135
@@ -25184,21 +25219,19 @@ msgstr "მარჯვენა მნიშვნელობა:"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:270
 #, kde-format
 msgid "Fraction of data points used for local regression"
-msgstr ""
+msgstr "ლოკალური რეგრესიისთვის გამოყენებული მონაცემთა წერტილების ნაწილი"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:493
-#, fuzzy, kde-format
-#| msgid "Padding"
+#, kde-format
 msgid "Padding:"
-msgstr "შევსება"
+msgstr "შევსება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
-#, fuzzy, kde-format
-#| msgid "Order:"
+#, kde-format
 msgid " Order:"
-msgstr "მიმდევრობა:"
+msgstr " მიმდევრობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:556
@@ -25207,22 +25240,22 @@ msgid "Weight:"
 msgstr "წონა:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDelta)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:613
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:620
 #, kde-format
 msgid "Distance threshold for interpolation optimization (0 = disabled)"
-msgstr ""
+msgstr "მანძილის ზღვარი ინტერპოლაციის ოპტიმიზაციისთვის (0 = გათიშულია)"
 
 #. i18n: ectx: property (text), widget (QLabel, lDelta)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:616
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:623
 #, kde-format
 msgid "Delta:"
-msgstr ""
+msgstr "დელტა:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbIterations)
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:697
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:704
 #, kde-format
 msgid "Number of robustifying iterations for outlier resistance"
-msgstr ""
+msgstr "გამაძლიერებელი იტერაციების რაოდენობა კონტურის სინააღმდეგობისთვის"
 
 #. i18n: ectx: property (text), widget (QLabel, lColormap)
 #: src/frontend/ui/exampleswidget.ui:73
