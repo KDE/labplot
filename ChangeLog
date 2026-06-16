@@ -6,6 +6,7 @@ New features:
 		* Add possibility to skip storing the data from columns and matrices in the saved file
 		* Improve spinbox localization
 		* New column "Changed" in the project explorer to inform about which objects were changed since the last save
+		* Markdown support in Notes
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
 		* Add option to enable/disable parameter error scaling (relative vs. absolute sigma)
