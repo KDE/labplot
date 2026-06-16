@@ -33,7 +33,7 @@ NoteDock::NoteDock(QWidget* parent)
 	connect(ui.cbMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &NoteDock::modeChanged);
 
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("Note"));
-	ui.gridLayout->addWidget(templateHandler, 8, 3);
+	ui.gridLayout->addWidget(templateHandler, 9, 3);
 	templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &NoteDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &NoteDock::saveConfigAsTemplate);
@@ -85,9 +85,16 @@ void NoteDock::textFontChanged(const QFont& font) {
 }
 
 void NoteDock::modeChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
 	auto mode = static_cast<Note::Mode>(ui.cbMode->itemData(index).toInt());
+	const bool enabled = mode == Note::Mode::PlainText;
+	ui.lBgColor->setEnabled(enabled);
+	ui.kcbBgColor->setEnabled(enabled);
+	ui.lTextColor->setEnabled(enabled);
+	ui.kcbTextColor->setEnabled(enabled);
+	ui.lTextFont->setEnabled(enabled);
+	ui.kfrTextFont->setEnabled(enabled);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* note : m_notesList)
 		note->setMode(mode);
