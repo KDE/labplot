@@ -23,9 +23,14 @@ NoteDock::NoteDock(QWidget* parent)
 	setBaseWidgets(ui.leName, ui.teComment);
 	ui.kfrTextFont->setFixedHeight(ui.kcbTextColor->sizeHint().height());
 
+	// Setup mode combobox
+	ui.cbMode->addItem(i18n("Plain Text"), static_cast<int>(Note::Mode::PlainText));
+	ui.cbMode->addItem(i18n("Markdown"), static_cast<int>(Note::Mode::Markdown));
+
 	connect(ui.kcbBgColor, &KColorButton::changed, this, &NoteDock::backgroundColorChanged);
 	connect(ui.kcbTextColor, &KColorButton::changed, this, &NoteDock::textColorChanged);
 	connect(ui.kfrTextFont, &KFontRequester::fontSelected, this, &NoteDock::textFontChanged);
+	connect(ui.cbMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &NoteDock::modeChanged);
 
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("Note"));
 	ui.gridLayout->addWidget(templateHandler, 8, 3);
@@ -42,12 +47,14 @@ void NoteDock::setNotesList(QList<Note*> list) {
 	connect(m_note, &Note::backgroundColorChanged, this, &NoteDock::noteBackgroundColorChanged);
 	connect(m_note, &Note::textColorChanged, this, &NoteDock::noteTextColorChanged);
 	connect(m_note, &Note::textFontChanged, this, &NoteDock::noteTextFontChanged);
+	connect(m_note, &Note::modeChanged, this, &NoteDock::noteModeChanged);
 
 	CONDITIONAL_LOCK_RETURN;
 
 	ui.kcbBgColor->setColor(m_note->backgroundColor());
 	ui.kcbTextColor->setColor(m_note->textColor());
 	ui.kfrTextFont->setFont(m_note->textFont());
+	ui.cbMode->setCurrentIndex(static_cast<int>(m_note->mode()));
 }
 
 void NoteDock::retranslateUi() {
@@ -77,6 +84,15 @@ void NoteDock::textFontChanged(const QFont& font) {
 		note->setTextFont(font);
 }
 
+void NoteDock::modeChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
+
+	auto mode = static_cast<Note::Mode>(ui.cbMode->itemData(index).toInt());
+
+	for (auto* note : m_notesList)
+		note->setMode(mode);
+}
+
 //*************************************************************
 //************ SLOTs for changes triggered in Note ************
 //*************************************************************
@@ -93,6 +109,11 @@ void NoteDock::noteTextColorChanged(const QColor& color) {
 void NoteDock::noteTextFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.kfrTextFont->setFont(font);
+}
+
+void NoteDock::noteModeChanged(Note::Mode mode) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbMode->setCurrentIndex(static_cast<int>(mode));
 }
 
 //*************************************************************

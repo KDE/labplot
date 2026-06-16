@@ -4,17 +4,21 @@
 	Description          : Notes View for taking notes
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef NOTEVIEW_H
 #define NOTEVIEW_H
 
+#include "backend/note/Note.h"
 #include <QWidget>
 
-class Note;
 class QTextEdit;
+class QTextBrowser;
+class QToolButton;
+class QStackedWidget;
+class QToolBar;
 class QPrinter;
 
 class NoteView : public QWidget {
@@ -33,14 +37,29 @@ private Q_SLOTS:
 	void noteBackgroundColorChanged(const QColor&);
 	void noteTextColorChanged(const QColor&);
 	void noteTextFontChanged(const QFont&);
+	void noteModeChanged(Note::Mode);
+
+	void showEditMode();
+	void showPreviewMode();
+	void textEditChanged();
 
 private:
 	Note* m_note;
 	QTextEdit* m_textEdit;
+	QTextBrowser* m_preview;
+	QToolButton* m_editButton;
+	QToolButton* m_previewButton;
+	QStackedWidget* m_stack;
+	QToolBar* m_toolbar;
 	bool m_initializing{false};
+	bool m_viewMode{false}; // false = edit, true = preview
 
 	int m_textChangedTimerId{-1};
 	void timerEvent(QTimerEvent*) override;
+
+	void setupToolbar();
+	QString renderMarkdown(const QString& markdown);
+	void updatePreview();
 };
 
 #endif // NOTEVIEW_H
