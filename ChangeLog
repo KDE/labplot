@@ -6,20 +6,25 @@ New features:
 		* Add possibility to skip storing the data from columns and matrices in the saved file
 		* Improve spinbox localization
 		* New column "Changed" in the project explorer to inform about which objects were changed since the last save
+		* Markdown support in Notes
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
 		* Add option to enable/disable parameter error scaling (relative vs. absolute sigma)
 		* Baseline correction analysis in the plot
+		* LOWESS (Locally Weighted Scatterplot Smoothing) smooth method
+		* Auto-recalculate option for analysis curves - automatically re-run the analysis on algorithm parameter changes
 	* [time series analysis]
 		* seasonal decomposition with STL and MSTL methods
 	* [spreadsheet]
+		* Zoom in the spreadsheet view (Ctrl+Mouse Wheel, Ctrl+Plus/Minus, slider in the status bar)
 		* allow to drop entire rows in the spreadsheet if the condition was met in the "Drop Values Dialog" for the selected columns
 		* more informative tooltip texts for spreadsheets and columns showing the usage of the column in other places in the project
 		* show the average 2-period moving range in the column statistics
 		* in the plot data dialog allow to create plot areas on separate worksheets, one worksheet with plot area per column
 		* transposition of columns and rows
 		* move the definition of the column formula directly to the dock widget
-		*  support empty values in integers columns (BUG: 502706)
+		* support empty values in integers columns (BUG: 502706)
+		* when entering new values, automatically convert to the requried column mode if the column is still empty
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)
@@ -32,6 +37,7 @@ New features:
 		* Import directories - import multiple files in a directory in one single step
 		* Support Unix timestamps (number of seconds since January 1, 1970 (UTC)) and Windows timestamps (number of 100-nanosecond intervals since January 1, 1601 (UTC)) in ASCII files, ms precision only
 		* Allow to import arrays in JSON files that contain plain data only
+		* Import data from Apache Parquet, Arrow IPC (Feather) and Apache ORC files
 	* [examples]
 		* Added "All" in the examples dialog to navigate and search in the example projects from _all_ collections
 	* [datasets]

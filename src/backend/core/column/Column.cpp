@@ -117,7 +117,7 @@ QMenu* Column::createContextMenu() {
 
 	auto* usedInActionGroup = new QActionGroup(this);
 	connect(usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
-	connect(this, &AbstractColumn::maskingChanged, this, [=] {
+	connect(this, &AbstractColumn::maskingChanged, this, [=, this] {
 		d->invalidate();
 	});
 
@@ -1362,7 +1362,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 			// convert QDateTime values to milliseconds since epoch and serialize them using Base64 encoding
 			QByteArray bytes;
 			for (int i = 0; i < rowCount(); ++i) {
-				QDateTime dt = dateTimeAt(i);
+				auto dt = dateTimeAt(i);
 				// If DateTime is not in UTC, convert it to UTC preserving the date/time values
 				// This ensures DateTimes created without explicit UTC timezone are treated consistently
 				if (dt.timeZone() != QTimeZone::UTC)
@@ -1431,6 +1431,7 @@ public:
 			for (int i = 0; i < bytes.size(); i += sizeof(qint64)) {
 				qint64 msecs;
 				memcpy(&msecs, bytes.data() + i, sizeof(qint64));
+				// Interpret stored milliseconds since epoch as UTC to preserve original timezone
 				dateTimeVector.append(QDateTime::fromMSecsSinceEpoch(msecs, QTimeZone::UTC));
 			}
 			m_private->replaceDateTimes(-1, dateTimeVector);

@@ -35,6 +35,7 @@
   <name xml:lang="id">LabPlot</name>
   <name xml:lang="it">LabPlot</name>
   <name xml:lang="ka">LabPlot</name>
+  <name xml:lang="ko">LabPlot</name>
   <name xml:lang="nl">LabPlot</name>
   <name xml:lang="nn">LabPlot</name>
   <name xml:lang="pl">LabPlot</name>
@@ -46,6 +47,7 @@
   <name xml:lang="sl">LabPlot</name>
   <name xml:lang="sv">Labplot</name>
   <name xml:lang="tr">LabPlot</name>
+  <name xml:lang="ug">LabPlot</name>
   <name xml:lang="uk">LabPlot</name>
   <name xml:lang="zh-CN">LabPlot</name>
   <name xml:lang="zh-TW">LabPlot</name>
@@ -64,6 +66,7 @@
   <summary xml:lang="ia">Visualisa e analysa datos</summary>
   <summary xml:lang="it">Visualizza e analizza i dati</summary>
   <summary xml:lang="ka">მონაცემების ვიზუალიზაცია და ანალიზი</summary>
+  <summary xml:lang="ko">데이터 분석 및 시각화</summary>
   <summary xml:lang="nl">Gegevens visualiseren en analyseren</summary>
   <summary xml:lang="pt-BR">Visualize e analise dados</summary>
   <summary xml:lang="ru">Визуализация и анализ данных</summary>
@@ -96,6 +99,7 @@
     <p xml:lang="id">LabPlot adalah perangkat lunak Analisis dan Visualisasi Data open source dan lintas platform GRATIS yang bisa diakses oleh semua orang.</p>
     <p xml:lang="it">LabPlot è un software GRATUITO, open source e multi piattaforma per la visualizzazione e per l'analisi dei dati accessibile da chiunque.</p>
     <p xml:lang="ka">Labplot-ი ყველასთვის ხელმისაწვდომი, უფასო, ღია კოდის და პლატფორმათაშორისი, მონაცემების ვიზუალიზაციისა და ანალიზის პროგრამაა.</p>
+    <p xml:lang="ko">LabPlot은 누구나 사용할 수 있는 자유 오픈 소스 크로스 플랫폼 데이터 시각화 및 분석 소프트웨어입니다.</p>
     <p xml:lang="nl">LabPlot is VRIJE open source software voor Datavisualisatie en Analyse, voor meerdere soorten computers, die iedereen kan gebruiken.</p>
     <p xml:lang="pl">LabPlot jest oprogramowaniem darmowym, o otwartym kodzie, wieloplatformowym do obrazowania i analizy danych, który jest dostępny dla każdego.</p>
     <p xml:lang="pt">O LabPlot é uma aplicação GRATUITA, de código aberto e multi-plataforma de Visualização e Análise de Dados acessível para todos.</p>
@@ -190,6 +194,7 @@
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="tr">Temel veri görselleştirmesi</caption>
+      <caption xml:lang="ug">سانلىق مەلۇماتنى ئاساسىي كۆرۈنۈشلەشتۈرۈش</caption>
       <caption xml:lang="uk">Базова візуалізація даних</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/01_basic_plots_linux.png</image>
     </screenshot>
@@ -224,6 +229,7 @@
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="tr">Temel veri görselleştirmesi</caption>
+      <caption xml:lang="ug">سانلىق مەلۇماتنى ئاساسىي كۆرۈنۈشلەشتۈرۈش</caption>
       <caption xml:lang="uk">Базова візуалізація даних</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/02_overview_linux.png</image>
     </screenshot>
@@ -282,6 +288,7 @@
       <caption xml:lang="id">Penemaan</caption>
       <caption xml:lang="it">Temi</caption>
       <caption xml:lang="ka">თემები</caption>
+      <caption xml:lang="ko">테마</caption>
       <caption xml:lang="nl">Thema's</caption>
       <caption xml:lang="pl">Dostosowywanie wyglądu</caption>
       <caption xml:lang="pt">Suporte para temas</caption>
@@ -316,6 +323,7 @@
       <caption xml:lang="id">Visualisasi fungsi matematika</caption>
       <caption xml:lang="it">Visualizzazione di funzioni matematiche</caption>
       <caption xml:lang="ka">მათემატიკური ფუნქციების ვიზუალიზაცია</caption>
+      <caption xml:lang="ko">수학 함수의 시각화</caption>
       <caption xml:lang="nl">Wiskundige functies visualiseren</caption>
       <caption xml:lang="pl">Obrazowanie funkcji matematycznych</caption>
       <caption xml:lang="pt">Visualização das funções matemáticas</caption>
@@ -418,6 +426,7 @@
       <caption xml:lang="id">Antarmuka notebook untuk sesi interaktif di Maxima, Octave, R, Sage, Scilab, Python, Julia, dll</caption>
       <caption xml:lang="it">Interfaccia a taccuino per sessioni integrate in Maxima, Octave, R, Sage, Scilab, Python, Julia, eccetera</caption>
       <caption xml:lang="ka">წიგნაკის ინტერფეისი Maxima, Octave, R, Sage, Scilab, Python, Julia-ის და სხვების ინტერაქტიური სესიებისთვის</caption>
+      <caption xml:lang="ko">Maxima, Octave, R, Sage, Scilab, Python, Julia 등의 인터랙티브 세션을 위한 Notebook 인터페이스</caption>
       <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="pl">Interfejs zeszytu dla interaktywnych posiedzeń w programach takich jak: Maxima, Octave, R, Sage, Scilab, Python, Julia, itp.</caption>
       <caption xml:lang="pt">Interface de blocos de notas para sessões interactivas no Maxima, Octave, R, Sage, Scilab, Python, Julia, etc</caption>
@@ -452,6 +461,7 @@
       <caption xml:lang="id">Analisis sinyal</caption>
       <caption xml:lang="it">Analisi del segnale</caption>
       <caption xml:lang="ka">სიგნალის ანალიზი</caption>
+      <caption xml:lang="ko">신호 분석</caption>
       <caption xml:lang="nl">Signaalanalyse</caption>
       <caption xml:lang="pl">Analiza sygnałów</caption>
       <caption xml:lang="pt">Análise de sinais</caption>
@@ -486,6 +496,7 @@
       <caption xml:lang="id">Diagram Hertzsprung-Russell di LabPlot</caption>
       <caption xml:lang="it">Diagramma Hertzsprung-Russell in LabPlot</caption>
       <caption xml:lang="ka">ჰერცშპრუნგ-რასელის დიაგრამა LabPlot-ში</caption>
+      <caption xml:lang="ko">LabPlot의 헤르츠스프룽-러셀 다이어그램</caption>
       <caption xml:lang="nl">Herzsprung-Russel-diagram in LabPlot</caption>
       <caption xml:lang="pl">Diagram Herzsprung-Russel w LabPlocie</caption>
       <caption xml:lang="pt">Diagrama de Herzsprung-Russel no LabPlot</caption>
@@ -520,6 +531,7 @@
       <caption xml:lang="id">Visualisasi data yang dihitung dalam sesi Maxima interaktif</caption>
       <caption xml:lang="it">Visualizzazione dei dati calcolati in una sessione interattiva di Maxima</caption>
       <caption xml:lang="ka">Maxima-ის ინტერაქტიურ სესიაში გამოთვლილი მონაცემების ვიზუალიზაცია</caption>
+      <caption xml:lang="ko">인터랙티브 Maxima 세션에서 계산한 데이터의 시각화</caption>
       <caption xml:lang="nl">Visualiseren van gegevens, berekend in een interactieve sessie in Maxima</caption>
       <caption xml:lang="pl">Obrazowanie danych obliczonych w interaktywnym posiedzeniu Maximy</caption>
       <caption xml:lang="pt">Visualização dos dados calculados numa sessão interactiva do Maxima</caption>

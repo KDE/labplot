@@ -101,6 +101,7 @@
 #include "frontend/notebook/NotebookView.h"
 #include <cantor/backend.h>
 #include <cantor/cantorlibs_version.h>
+#include <KParts/ReadWritePart>
 #endif
 
 
@@ -235,12 +236,12 @@ void MainWin::initGUI(const QString& fileName) {
 	if (!fileName.isEmpty()) {
 		initDocks();
 		if (Project::isSupportedProject(fileName)) {
-			QTimer::singleShot(0, this, [=]() {
+			QTimer::singleShot(0, this, [=, this]() {
 				openProject(fileName);
 			});
 		} else {
 			newProject();
-			QTimer::singleShot(0, this, [=]() {
+			QTimer::singleShot(0, this, [=, this]() {
 				importFileDialog(fileName);
 			});
 		}
@@ -529,7 +530,7 @@ bool MainWin::newProject(bool createInitialContent) {
 		m_actionsManager->m_visibilityAllAction->setChecked(true);
 
 	m_aspectTreeModel = new AspectTreeModel(m_project, this);
-	connect(m_aspectTreeModel, &AspectTreeModel::statusInfo, [=](const QString& text) {
+	connect(m_aspectTreeModel, &AspectTreeModel::statusInfo, [=, this](const QString& text) {
 		statusBar()->showMessage(text);
 	});
 
@@ -1322,7 +1323,7 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 		// 		connect(part, &AbstractPart::importFromFileRequested, this, &MainWin::importFileDialog);
-		connect(part, &AbstractPart::importFromFileRequested, this, [=]() {
+		connect(part, &AbstractPart::importFromFileRequested, this, [=, this]() {
 			importFileDialog();
 		});
 		connect(part, &AbstractPart::importFromSQLDatabaseRequested, this, &MainWin::importSqlDialog);
@@ -1510,6 +1511,19 @@ void MainWin::createFolderContextMenu(const Folder*, QMenu* menu) const {
 }
 
 void MainWin::undo() {
+	#ifdef HAVE_CANTOR_LIBS
+	if (m_currentAspect && m_currentAspect->type() == AspectType::Notebook) {
+		auto* notebook = static_cast<Notebook*>(m_currentAspect);
+		QWidget* focusWidget = QApplication::focusWidget();
+		if (notebook->part() && focusWidget && notebook->part()->widget()->isAncestorOf(focusWidget)) {
+			if (auto* a = notebook->part()->action(QStringLiteral("edit_undo"))) {
+				a->trigger();
+				return;
+			}
+		}
+	}
+	#endif
+
 	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->undo();
 	m_actionsManager->m_redoAction->setEnabled(true);
@@ -1525,6 +1539,19 @@ void MainWin::undo() {
 }
 
 void MainWin::redo() {
+	#ifdef HAVE_CANTOR_LIBS
+	if (m_currentAspect && m_currentAspect->type() == AspectType::Notebook) {
+		auto* notebook = static_cast<Notebook*>(m_currentAspect);
+		QWidget* focusWidget = QApplication::focusWidget();
+		if (notebook->part() && focusWidget && notebook->part()->widget()->isAncestorOf(focusWidget)) {
+			if (auto* a = notebook->part()->action(QStringLiteral("edit_redo"))) {
+				a->trigger();
+				return;
+			}
+		}
+	}
+	#endif
+
 	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->redo();
 	m_actionsManager->m_undoAction->setEnabled(true);

@@ -38,11 +38,13 @@ private Q_SLOTS:
 	void backgroundColorChanged(const QColor&);
 	void textColorChanged(const QColor&);
 	void textFontChanged(const QFont&);
+	void modeChanged(int);
 
 	// SLOTs for changes triggered in Note
 	void noteBackgroundColorChanged(const QColor&);
 	void noteTextColorChanged(const QColor&);
 	void noteTextFontChanged(const QFont&);
+	void noteModeChanged(Note::Mode);
 
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);

@@ -3935,7 +3935,7 @@ void SpreadsheetTest::testInvalidNumericInput() {
 	project.addChild(sheet);
 	new SpreadsheetModel(sheet);
 	sheet->setColumnCount(2);
-	sheet->setRowCount(1);
+	sheet->setRowCount(2);
 
 	auto* c0 = sheet->column(0);
 	auto* c1 = sheet->column(1);
@@ -3943,11 +3943,21 @@ void SpreadsheetTest::testInvalidNumericInput() {
 	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
 
 	auto* model = sheet->model();
-	model->setData(model->index(0, 0), QStringLiteral("abc"), Qt::EditRole);
-	model->setData(model->index(0, 1), QStringLiteral("xyz"), Qt::EditRole);
 
-	QVERIFY(!c0->isValid(0));
-	QVERIFY(!c1->isValid(0));
+	// first put valid values so the columns are non-empty
+	model->setData(model->index(0, 0), QStringLiteral("10"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("20"), Qt::EditRole);
+	QVERIFY(c0->isValid(0));
+	QVERIFY(c1->isValid(0));
+
+	// now entering invalid text in a non-empty column should not auto-convert
+	model->setData(model->index(1, 0), QStringLiteral("abc"), Qt::EditRole);
+	model->setData(model->index(1, 1), QStringLiteral("xyz"), Qt::EditRole);
+
+	QCOMPARE(c0->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(c1->columnMode(), AbstractColumn::ColumnMode::BigInt);
+	QVERIFY(!c0->isValid(1));
+	QVERIFY(!c1->isValid(1));
 }
 
 void SpreadsheetTest::testRealZeroInput() {
@@ -4072,6 +4082,204 @@ void SpreadsheetTest::testUndoRedoCellClear() {
 	project.undoStack()->undo();
 	QVERIFY(c0->isValid(0));
 	QCOMPARE(c0->integerAt(0), 42);
+}
+
+// **********************************************************
+// *** auto-conversion of empty columns on data input *******
+// **********************************************************
+
+/*!
+ * entering text into an empty Double column should auto-convert to Text mode.
+ */
+void SpreadsheetTest::testAutoConvertDoubleToText() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QVERIFY(!col->hasValues()); // column is empty (all NaN)
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("abc"), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("abc"));
+}
+
+/*!
+ * entering a double value (e.g. "2.5") into an empty Integer column
+ * should auto-convert to Double mode.
+ */
+void SpreadsheetTest::testAutoConvertIntegerToDouble() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QLocale().toString(2.5), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 2.5);
+}
+
+/*!
+ * entering text into an empty Integer column should auto-convert to Text mode.
+ */
+void SpreadsheetTest::testAutoConvertIntegerToText() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("hello"), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("hello"));
+}
+
+/*!
+ * entering a double value into an empty BigInt column
+ * should auto-convert to Double mode.
+ */
+void SpreadsheetTest::testAutoConvertBigIntToDouble() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QLocale().toString(3.14), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 3.14);
+}
+
+/*!
+ * entering text into an empty BigInt column should auto-convert to Text mode.
+ */
+void SpreadsheetTest::testAutoConvertBigIntToText() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("world"), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("world"));
+}
+
+/*!
+ * entering text into a non-empty Double column should NOT auto-convert -
+ * the column mode should stay Double.
+ */
+void SpreadsheetTest::testNoAutoConvertNonEmptyColumn() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(2);
+
+	auto* col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	auto* model = sheet->model();
+	// put a valid value first
+	model->setData(model->index(0, 0), QStringLiteral("1"), Qt::EditRole);
+	QVERIFY(col->hasValues());
+
+	// now entering text into the second row should not convert the column
+	model->setData(model->index(1, 0), QStringLiteral("abc"), Qt::EditRole);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+}
+
+/*!
+ * entering a valid number into an empty Double column should just work
+ * without any mode conversion.
+ */
+void SpreadsheetTest::testAutoConvertEmptyDoubleAcceptsNumber() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("42"), Qt::EditRole);
+
+	// mode should stay Double
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 42.0);
+}
+
+/*!
+ * undoing an auto-conversion should revert both the value and the column mode in a single step.
+ */
+void SpreadsheetTest::testAutoConvertUndoRedo() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("hello"), Qt::EditRole);
+
+	// after entering text, the column should be Text with the value set
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("hello"));
+
+	// a single undo should revert both the mode change and the value
+	project.undoStack()->undo();
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	// redo should restore both
+	project.undoStack()->redo();
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("hello"));
 }
 
 QTEST_MAIN(SpreadsheetTest)

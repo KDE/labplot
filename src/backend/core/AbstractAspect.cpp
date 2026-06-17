@@ -390,7 +390,7 @@ QMenu* AbstractAspect::createContextMenu() {
 			menu->insertAction(actionDuplicate, action);
 		else
 			menu->addAction(action);
-		connect(action, &QAction::triggered, [=]() {
+		connect(action, &QAction::triggered, [=, this]() {
 			paste();
 		});
 	}

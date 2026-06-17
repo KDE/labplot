@@ -35,7 +35,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate, uiGeneralTab.cbDataSourceType);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -52,25 +52,14 @@ void XYConvolutionCurveDock::setupGeneral() {
 	cbY2DataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbY2DataColumn, 9, 2, 1, 3);
 
-	for (int i = 0; i < NSL_CONV_KERNEL_COUNT; i++)
-		uiGeneralTab.cbKernel->addItem(i18n(nsl_conv_kernel_name[i]));
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
-
-	for (int i = 0; i < NSL_CONV_DIRECTION_COUNT; i++)
-		uiGeneralTab.cbDirection->addItem(i18n(nsl_conv_direction_name[i]));
-	for (int i = 0; i < NSL_CONV_TYPE_COUNT; i++)
-		uiGeneralTab.cbType->addItem(i18n(nsl_conv_type_name[i]));
-	// nsl_conv_method_type not exposed to user
-	for (int i = 0; i < NSL_CONV_NORM_COUNT; i++)
-		uiGeneralTab.cbNorm->addItem(i18n(nsl_conv_norm_name[i]));
-	for (int i = 0; i < NSL_CONV_WRAP_COUNT; i++)
-		uiGeneralTab.cbWrap->addItem(i18n(nsl_conv_wrap_name[i]));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::dataSourceTypeChanged);
@@ -431,4 +420,29 @@ void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurv
 	this->directionChanged();
 
 	this->showConvolutionResult();
+}
+
+void XYConvolutionCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbKernel->clear();
+	for (int i = 0; i < NSL_CONV_KERNEL_COUNT; i++)
+		uiGeneralTab.cbKernel->addItem(i18n(nsl_conv_kernel_name[i]));
+
+	uiGeneralTab.cbDirection->clear();
+	for (int i = 0; i < NSL_CONV_DIRECTION_COUNT; i++)
+		uiGeneralTab.cbDirection->addItem(i18n(nsl_conv_direction_name[i]));
+
+	uiGeneralTab.cbType->clear();
+	for (int i = 0; i < NSL_CONV_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_conv_type_name[i]));
+
+	// nsl_conv_method_type not exposed to user
+	uiGeneralTab.cbNorm->clear();
+	for (int i = 0; i < NSL_CONV_NORM_COUNT; i++)
+		uiGeneralTab.cbNorm->addItem(i18n(nsl_conv_norm_name[i]));
+
+	uiGeneralTab.cbWrap->clear();
+	for (int i = 0; i < NSL_CONV_WRAP_COUNT; i++)
+		uiGeneralTab.cbWrap->addItem(i18n(nsl_conv_wrap_name[i]));
 }

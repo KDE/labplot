@@ -127,7 +127,10 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 
 	const int row = index.row();
 	const int col = index.column();
-	const Column* col_ptr = m_spreadsheet->column(col);
+	if (row < 0 || row >= m_rowCount || col < 0 || col >= m_columnCount)
+		return {};
+
+	const auto* col_ptr = m_spreadsheet->column(col);
 
 	if (!col_ptr)
 		return {};
@@ -260,26 +263,74 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 	if (!index.isValid())
 		return false;
 
-	int row = index.row();
-	auto* column = m_spreadsheet->column(index.column());
+	const int row = index.row();
+	const int col = index.column();
+	if (row < 0 || row >= m_rowCount || col < 0 || col >= m_columnCount)
+		return false;
+
+	auto* column = m_spreadsheet->column(col);
 
 	// DEBUG("SpreadsheetModel::setData() value = " << STDSTRING(value.toString()))
+
+	// auto-convert the column mode for empty columns if the entered value doesn't match the current mode.
+	// wrap the mode change and the value setting into a single undo macro so they can be undone in one step.
+	bool modeConverted = false;
+	if (role == Qt::EditRole && !value.toString().isEmpty() && !column->hasValues()) {
+		const auto mode = column->columnMode();
+		auto newMode = mode;
+
+		if (mode == AbstractColumn::ColumnMode::Double) {
+			bool ok;
+			QLocale().toDouble(value.toString(), &ok);
+			if (!ok)
+				newMode = AbstractColumn::ColumnMode::Text;
+		} else if (mode == AbstractColumn::ColumnMode::Integer) {
+			bool ok;
+			QLocale().toInt(value.toString(), &ok);
+			if (!ok) {
+				QLocale().toDouble(value.toString(), &ok);
+				newMode = ok ? AbstractColumn::ColumnMode::Double : AbstractColumn::ColumnMode::Text;
+			}
+		} else if (mode == AbstractColumn::ColumnMode::BigInt) {
+			bool ok;
+			QLocale().toLongLong(value.toString(), &ok);
+			if (!ok) {
+				QLocale().toDouble(value.toString(), &ok);
+				newMode = ok ? AbstractColumn::ColumnMode::Double : AbstractColumn::ColumnMode::Text;
+			}
+		}
+
+		if (newMode != mode) {
+			column->beginMacro(i18n("%1: change column type and set value", column->name()));
+			column->setColumnMode(newMode);
+			modeConverted = true;
+		}
+	}
 
 	// don't do anything if no new value was provided
 	if (column->columnMode() == AbstractColumn::ColumnMode::Double) {
 		bool ok;
 		double new_value = QLocale().toDouble(value.toString(), &ok);
 		if (ok) {
-			if (column->valueAt(row) == new_value)
+			if (column->valueAt(row) == new_value) {
+				if (modeConverted)
+					column->endMacro();
 				return false;
+			}
 		} else {
 			// an empty (non-numeric value) was provided
-			if (std::isnan(column->valueAt(row)))
+			if (std::isnan(column->valueAt(row))) {
+				if (modeConverted)
+					column->endMacro();
 				return false;
+			}
 		}
 	} else {
-		if (column->isValid(row) && column->asStringColumn()->textAt(row) == value.toString())
+		if (column->isValid(row) && column->asStringColumn()->textAt(row) == value.toString()) {
+			if (modeConverted)
+				column->endMacro();
 			return false;
+		}
 	}
 
 	switch (role) {
@@ -304,11 +355,13 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 					isValidNumber = false; // empty strings are not valid
 
 				if (!isValidNumber) {
-					if (auto* col = dynamic_cast<Column*>(column))
-						col->setValid(row, false);
+					if (auto* c = dynamic_cast<Column*>(column))
+						c->setValid(row, false);
 				}
 			}
 		}
+		if (modeConverted)
+			column->endMacro();
 		return true;
 	}
 	case static_cast<int>(CustomDataRole::MaskingRole):
@@ -319,10 +372,15 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 		return true;
 	}
 
+	if (modeConverted)
+		column->endMacro();
 	return false;
 }
 
 QModelIndex SpreadsheetModel::index(int row, int column, const QModelIndex& /*parent*/) const {
+	if (row < 0 || row >= m_rowCount || column < 0 || column >= m_columnCount)
+		return QModelIndex();
+
 	return createIndex(row, column);
 }
 

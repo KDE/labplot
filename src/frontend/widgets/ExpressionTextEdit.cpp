@@ -51,7 +51,7 @@ ExpressionTextEdit::ExpressionTextEdit(QWidget* parent)
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 
 	connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &ExpressionTextEdit::insertCompletion);
-	connect(this, &ExpressionTextEdit::textChanged, this, [=]() {
+	connect(this, &ExpressionTextEdit::textChanged, this, [=, this]() {
 		validateExpression();
 	});
 	connect(this, &ExpressionTextEdit::cursorPositionChanged, m_highlighter, &EquationHighlighter::rehighlight);

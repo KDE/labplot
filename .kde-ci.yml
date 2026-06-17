@@ -41,6 +41,8 @@ Dependencies:
 
 Environment:
   KDECI_BUILD: "TRUE"
+  CODESIGN_ALLOCATE_DEBUG: "1"
+  VERBOSE: "1"
 
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/config/global.yml
 Options:

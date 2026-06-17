@@ -132,6 +132,16 @@ private Q_SLOTS:
 	void testRealZeroInput();
 	void testUndoRedoCellClear();
 
+	// auto-conversion of empty columns
+	void testAutoConvertDoubleToText();
+	void testAutoConvertIntegerToDouble();
+	void testAutoConvertIntegerToText();
+	void testAutoConvertBigIntToDouble();
+	void testAutoConvertBigIntToText();
+	void testNoAutoConvertNonEmptyColumn();
+	void testAutoConvertEmptyDoubleAcceptsNumber();
+	void testAutoConvertUndoRedo();
+
 #ifdef HAVE_VECTOR_BLF
 	void testLinkSpreadSheetImportBLF();
 #endif // HAVE_VECTOR_BLF

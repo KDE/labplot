@@ -149,7 +149,7 @@ void JSONFilterTest::testArrayPlainImport() {
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
 	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
-	QCOMPARE(spreadsheet.column(0)->name(), QStringLiteral("index"));
+	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
 	QCOMPARE(spreadsheet.column(1)->name(), QStringLiteral("1"));
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);

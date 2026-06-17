@@ -48,7 +48,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate, uiGeneralTab.cbDataSourceType);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -63,23 +63,6 @@ void XYInterpolationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 2);
 
-	for (int i = 0; i < NSL_INTERP_TYPE_COUNT; i++)
-		uiGeneralTab.cbType->addItem(i18n(nsl_interp_type_name[i]));
-#if GSL_MAJOR_VERSION < 2
-	// disable Steffen spline item
-	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
-	auto* item = model->item(nsl_interp_type_steffen);
-	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-#endif
-	for (int i = 0; i < NSL_INTERP_PCH_VARIANT_COUNT; i++)
-		uiGeneralTab.cbVariant->addItem(i18n(nsl_interp_pch_variant_name[i]));
-	for (int i = 0; i < NSL_INTERP_EVALUATE_COUNT; i++)
-		uiGeneralTab.cbEval->addItem(i18n(nsl_interp_evaluate_name[i]));
-
-	uiGeneralTab.cbPointsMode->addItem(i18n("Auto (5x data points)"));
-	uiGeneralTab.cbPointsMode->addItem(i18n("Multiple of data points"));
-	uiGeneralTab.cbPointsMode->addItem(i18n("Custom"));
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
@@ -87,9 +70,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
-	// tooltip texts
-	QString info = i18n("The number of the interpolation points should be bigger than the total number of points in the data source.");
-	uiGeneralTab.sbPoints->setToolTip(info);
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::dataSourceTypeChanged);
@@ -556,4 +537,33 @@ void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolati
 	this->typeChanged(m_interpolationData.type);
 
 	this->showInterpolationResult();
+}
+
+void XYInterpolationCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbType->clear();
+	for (int i = 0; i < NSL_INTERP_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_interp_type_name[i]));
+#if GSL_MAJOR_VERSION < 2
+	// disable Steffen spline item
+	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
+	auto* item = model->item(nsl_interp_type_steffen);
+	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+#endif
+	uiGeneralTab.cbVariant->clear();
+	for (int i = 0; i < NSL_INTERP_PCH_VARIANT_COUNT; i++)
+		uiGeneralTab.cbVariant->addItem(i18n(nsl_interp_pch_variant_name[i]));
+
+	uiGeneralTab.cbEval->clear();
+	for (int i = 0; i < NSL_INTERP_EVALUATE_COUNT; i++)
+		uiGeneralTab.cbEval->addItem(i18n(nsl_interp_evaluate_name[i]));
+
+	uiGeneralTab.cbPointsMode->clear();
+	uiGeneralTab.cbPointsMode->addItem(i18n("Auto (5x data points)"));
+	uiGeneralTab.cbPointsMode->addItem(i18n("Multiple of data points"));
+	uiGeneralTab.cbPointsMode->addItem(i18n("Custom"));
+
+	const QString info = i18n("The number of the interpolation points should be bigger than the total number of points in the data source.");
+	uiGeneralTab.sbPoints->setToolTip(info);
 }

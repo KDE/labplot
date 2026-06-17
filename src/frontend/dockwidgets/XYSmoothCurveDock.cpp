@@ -33,7 +33,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate, uiGeneralTab.cbDataSourceType);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -48,21 +48,14 @@ void XYSmoothCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
 
-	for (int i = 0; i < NSL_SMOOTH_TYPE_COUNT; i++)
-		uiGeneralTab.cbType->addItem(i18n(nsl_smooth_type_name[i]));
-
-	for (int i = 0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
-		uiGeneralTab.cbWeight->addItem(i18n(nsl_smooth_weight_type_name[i]));
-
-	for (int i = 0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
-		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::dataSourceTypeChanged);
@@ -80,6 +73,9 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::modeChanged);
 	connect(uiGeneralTab.sbLeftValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
 	connect(uiGeneralTab.sbRightValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
+	connect(uiGeneralTab.sbSpan, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::spanChanged);
+	connect(uiGeneralTab.sbDelta, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::deltaChanged);
+	connect(uiGeneralTab.sbIterations, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYSmoothCurveDock::iterationsChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYSmoothCurveDock::recalculateClicked);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYSmoothCurveDock::dataSourceCurveChanged);
@@ -129,12 +125,15 @@ void XYSmoothCurveDock::initGeneralTab() {
 	typeChanged(uiGeneralTab.cbType->currentIndex()); // needed, when type does not change
 	uiGeneralTab.sbPoints->setValue((int)m_smoothData.points);
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
-	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
+	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile * 100);
 	uiGeneralTab.sbOrder->setValue((int)m_smoothData.order);
 	uiGeneralTab.cbMode->setCurrentIndex(m_smoothData.mode);
 	modeChanged(uiGeneralTab.cbMode->currentIndex()); // needed, when mode does not change
 	uiGeneralTab.sbLeftValue->setValue(m_smoothData.lvalue);
 	uiGeneralTab.sbRightValue->setValue(m_smoothData.rvalue);
+	uiGeneralTab.sbSpan->setValue(m_smoothData.span);
+	uiGeneralTab.sbDelta->setValue(m_smoothData.delta);
+	uiGeneralTab.sbIterations->setValue(m_smoothData.iterations);
 	valueChanged();
 	this->showSmoothResult();
 
@@ -172,6 +171,75 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 	setSymbols(list);
 
 	updatePlotRangeList();
+}
+
+void XYSmoothCurveDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	uiGeneralTab.cbType->clear();
+	for (int i = 0; i < NSL_SMOOTH_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_smooth_type_name[i]));
+
+	uiGeneralTab.cbWeight->clear();
+	for (int i = 0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
+		uiGeneralTab.cbWeight->addItem(i18n(nsl_smooth_weight_type_name[i]));
+
+	uiGeneralTab.cbMode->clear();
+	for (int i = 0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
+		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
+
+	// tooltips
+	QString info = i18n("Method used to smooth the data:"
+	"<ul>"
+	"<li>Moving Average (Central) - smoothing using the average of a fixed number of points, the average is centered on the current point.</li>"
+	"<li>Moving Average (Lagged) - smoothing using the average of a fixed number of points, the average is lagged behind the current point.</li>"
+	"<li>Percentile - smoothing using the percentile of a fixed number of points.</li>"
+	"<li>Savitzky-Golay - smoothing using least-squares fitting of polynomials to segments of the data.</li>"
+	"<li>LOWESS - locally weighted scatterplot smoothing.</li>"
+	"</ul>"
+	);
+	uiGeneralTab.lType->setToolTip(info);
+	uiGeneralTab.cbType->setToolTip(info);
+
+	info = i18n("Number of points in the moving window");
+	uiGeneralTab.lPoints->setToolTip(info);
+	uiGeneralTab.sbPoints->setToolTip(info);
+
+	info = i18n("Weighting type to define different weights for the points in the moving window");
+	uiGeneralTab.cbWeight->setToolTip(info);
+	uiGeneralTab.cbMode->setToolTip(info);
+
+	info = i18n("Percentile of the points in the moving window");
+	uiGeneralTab.lPercentile->setToolTip(info);
+	uiGeneralTab.sbPercentile->setToolTip(info);
+
+	info = i18n("The order of the polynomial used to fit the points in the moving window");
+	uiGeneralTab.lOrder->setToolTip(info);
+	uiGeneralTab.sbOrder->setToolTip(info);
+
+	info = i18n("The fraction of the data used to perform the local fit.");
+	uiGeneralTab.lSpan->setToolTip(info);
+	uiGeneralTab.sbSpan->setToolTip(info);
+
+	info = i18n("If delta > 0, values of y-data within delta of each other will use interpolation instead of full regression.");
+	uiGeneralTab.lDelta->setToolTip(info);
+	uiGeneralTab.sbDelta->setToolTip(info);
+
+	info = i18n("The number of robustifying iterations");
+	uiGeneralTab.lIterations->setToolTip(info);
+	uiGeneralTab.sbIterations->setToolTip(info);
+
+	info = i18n("Padding mode to handle the edges of the data set");
+	uiGeneralTab.lMode->setToolTip(info);
+	uiGeneralTab.cbMode->setToolTip(info);
+
+	info = i18n("The value for constant padding at the left edge");
+	uiGeneralTab.lLeftValue->setToolTip(info);
+	uiGeneralTab.sbLeftValue->setToolTip(info);
+
+	info = i18n("The value for constant padding at the right edge");
+	uiGeneralTab.lRightValue->setToolTip(info);
+	uiGeneralTab.sbRightValue->setToolTip(info);
 }
 
 //*************************************************************
@@ -339,6 +407,41 @@ void XYSmoothCurveDock::typeChanged(int index) {
 		uiGeneralTab.sbOrder->hide();
 	}
 
+	// LOWESS-specific UI elements
+	if (type == nsl_smooth_type_lowess) {
+		// Hide parameters not applicable to LOWESS
+		uiGeneralTab.lPoints->hide();
+		uiGeneralTab.sbPoints->hide();
+		uiGeneralTab.lMode->hide();
+		uiGeneralTab.cbMode->hide();
+		uiGeneralTab.lLeftValue->hide();
+		uiGeneralTab.sbLeftValue->hide();
+		uiGeneralTab.lRightValue->hide();
+		uiGeneralTab.sbRightValue->hide();
+
+		// Show LOWESS-specific parameters
+		uiGeneralTab.lSpan->show();
+		uiGeneralTab.sbSpan->show();
+		uiGeneralTab.lDelta->show();
+		uiGeneralTab.sbDelta->show();
+		uiGeneralTab.lIterations->show();
+		uiGeneralTab.sbIterations->show();
+	} else {
+		// Show standard parameters for other smooth types
+		uiGeneralTab.lPoints->show();
+		uiGeneralTab.sbPoints->show();
+		uiGeneralTab.lMode->show();
+		uiGeneralTab.cbMode->show();
+
+		// Hide LOWESS-specific parameters
+		uiGeneralTab.lSpan->hide();
+		uiGeneralTab.sbSpan->hide();
+		uiGeneralTab.lDelta->hide();
+		uiGeneralTab.sbDelta->hide();
+		uiGeneralTab.lIterations->hide();
+		uiGeneralTab.sbIterations->hide();
+	}
+
 	enableRecalculate();
 }
 
@@ -354,7 +457,7 @@ void XYSmoothCurveDock::weightChanged(int index) {
 }
 
 void XYSmoothCurveDock::percentileChanged(double value) {
-	m_smoothData.percentile = value;
+	m_smoothData.percentile = value / 100;
 	enableRecalculate();
 }
 
@@ -390,6 +493,21 @@ void XYSmoothCurveDock::valueChanged() {
 	m_smoothData.lvalue = uiGeneralTab.sbLeftValue->value();
 	m_smoothData.rvalue = uiGeneralTab.sbRightValue->value();
 
+	enableRecalculate();
+}
+
+void XYSmoothCurveDock::spanChanged(double value) {
+	m_smoothData.span = value;
+	enableRecalculate();
+}
+
+void XYSmoothCurveDock::deltaChanged(double value) {
+	m_smoothData.delta = value;
+	enableRecalculate();
+}
+
+void XYSmoothCurveDock::iterationsChanged(int value) {
+	m_smoothData.iterations = value;
 	enableRecalculate();
 }
 

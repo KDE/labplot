@@ -31,7 +31,7 @@ void XYBaselineCorrectionCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate, uiGeneralTab.cbDataSourceType);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -165,6 +165,8 @@ void XYBaselineCorrectionCurveDock::updateLocale() {
 }
 
 void XYBaselineCorrectionCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
 	uiGeneralTab.cbMethod->clear();
 	// TODO:
 	// for (int i = 0; i < NSL_BASELINE_SUBTRACTION_METHOD_COUNT; ++i)
