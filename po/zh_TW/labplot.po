@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-16 00:39+0000\n"
+"POT-Creation-Date: 2026-06-17 00:40+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -6577,18 +6577,18 @@ msgstr "水平映射"
 msgid "%1: mirror vertically"
 msgstr "垂直映射"
 
-#: src/backend/note/Note.cpp:74
+#: src/backend/note/Note.cpp:75
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "列印"
 
-#: src/backend/note/Note.cpp:99
+#: src/backend/note/Note.cpp:100
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr ""
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:95
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6598,39 +6598,44 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "匯出到檔案"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:109
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Export failed"
 msgstr "匯出到檔案"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:109
 #, fuzzy, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/backend/note/Note.cpp:138
+#: src/backend/note/Note.cpp:140
 #, fuzzy, kde-format
 msgid "%1: set text"
 msgstr "設定佈局"
 
-#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:282
+#: src/backend/note/Note.cpp:147 src/backend/worksheet/TextLabel.cpp:282
 #: src/backend/worksheet/TextLabel.cpp:334
 #, fuzzy, kde-format
 msgid "%1: set background color"
 msgstr "設定背景影像..."
 
-#: src/backend/note/Note.cpp:152
+#: src/backend/note/Note.cpp:154
 #, fuzzy, kde-format
 msgid "%1: set text color"
 msgstr "設定字型"
 
-#: src/backend/note/Note.cpp:159
+#: src/backend/note/Note.cpp:161
 #, fuzzy, kde-format
 msgid "%1: set text font"
 msgstr "設定字型"
 
-#: src/backend/note/Note.cpp:201
+#: src/backend/note/Note.cpp:168
+#, fuzzy, kde-format
+msgid "%1: set mode"
+msgstr "設定佈局"
+
+#: src/backend/note/Note.cpp:211
 #, kde-format
 msgid "no note element found"
 msgstr ""
@@ -13735,6 +13740,7 @@ msgstr "資料格式"
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
 #: src/frontend/datasources/ImportFileWidget.cpp:1350
+#: src/frontend/note/NoteView.cpp:101
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -15775,6 +15781,18 @@ msgstr ""
 msgid "File Browser"
 msgstr ""
 
+#: src/frontend/dockwidgets/NoteDock.cpp:27
+#, kde-format
+msgid "Plain Text"
+msgstr ""
+
+#: src/frontend/dockwidgets/NoteDock.cpp:28
+#: src/frontend/notebook/NotebookView.cpp:110
+#: src/frontend/widgets/LabelWidget.cpp:482
+#, kde-format
+msgid "Markdown"
+msgstr ""
+
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
 #, fuzzy, kde-format
 #| msgid "Statistics"
@@ -16744,7 +16762,7 @@ msgid ""
 "the current point.</li><li>Moving Average (Lagged) - smoothing using the "
 "average of a fixed number of points, the average is lagged behind the "
 "current point.</li><li>Percentile - smoothing using the percentile of a "
-"fixed number of points.</li><li>Savitzky-Golay - smooothing using least-"
+"fixed number of points.</li><li>Savitzky-Golay - smoothing using least-"
 "squares fitting of polynomials to segments of the data.</li><li>LOWESS - "
 "locally weighted scatterplot smoothing.</li></ul>"
 msgstr ""
@@ -16757,7 +16775,7 @@ msgstr "欄數："
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:208
 #, kde-format
 msgid ""
-"Weightning type to define different weights for the points in the moving "
+"Weighting type to define different weights for the points in the moving "
 "window"
 msgstr ""
 
@@ -17424,7 +17442,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:92
 #: src/frontend/ui/dockwidgets/matrixdock.ui:43
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
-#: src/frontend/ui/dockwidgets/notedock.ui:43
+#: src/frontend/ui/dockwidgets/notedock.ui:20
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:90
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:237
 #: src/frontend/ui/dockwidgets/projectdock.ui:184
@@ -18243,6 +18261,22 @@ msgstr ""
 msgid "%1: clear selected rows(s)"
 msgstr ""
 
+#: src/frontend/note/NoteView.cpp:94
+#, fuzzy, kde-format
+#| msgid "&Edit"
+msgid "Edit"
+msgstr "編輯(&E)"
+
+#: src/frontend/note/NoteView.cpp:98
+#, kde-format
+msgid "Edit markdown source"
+msgstr ""
+
+#: src/frontend/note/NoteView.cpp:104
+#, kde-format
+msgid "Preview rendered output"
+msgstr ""
+
 #: src/frontend/notebook/NotebookView.cpp:48
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -18263,12 +18297,6 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Command"
 msgstr "註解"
-
-#: src/frontend/notebook/NotebookView.cpp:110
-#: src/frontend/widgets/LabelWidget.cpp:482
-#, kde-format
-msgid "Markdown"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:114
@@ -21058,7 +21086,7 @@ msgstr "格式"
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:112
 #: src/frontend/ui/dockwidgets/matrixdock.ui:17
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
-#: src/frontend/ui/dockwidgets/notedock.ui:17
+#: src/frontend/ui/dockwidgets/notedock.ui:108
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:133
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:56
 #: src/frontend/ui/dockwidgets/projectdock.ui:141
@@ -22990,10 +23018,11 @@ msgstr "位置"
 #. i18n: ectx: property (text), widget (QLabel, lFont)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFont)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, lTextFont)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1290
 #: src/frontend/ui/dockwidgets/axisdock.ui:1424
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:126
-#: src/frontend/ui/dockwidgets/notedock.ui:96
+#: src/frontend/ui/dockwidgets/notedock.ui:75
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:551
 #: src/frontend/ui/dockwidgets/valuewidget.ui:310
 #: src/frontend/ui/labelwidget.ui:629
@@ -24360,17 +24389,25 @@ msgstr "資料格式"
 msgid "Evaluate"
 msgstr "值"
 
-#. i18n: ectx: property (text), widget (QLabel, bgcolor)
-#: src/frontend/ui/dockwidgets/notedock.ui:76
+#. i18n: ectx: property (text), widget (QLabel, lBgColor)
+#: src/frontend/ui/dockwidgets/notedock.ui:82
 #, kde-format
 msgid "Background color:"
 msgstr "背景色彩："
 
-#. i18n: ectx: property (text), widget (QLabel, textcolor)
-#: src/frontend/ui/dockwidgets/notedock.ui:86
+#. i18n: ectx: property (text), widget (QLabel, lTextColor)
+#: src/frontend/ui/dockwidgets/notedock.ui:115
 #, kde-format
 msgid "Text color:"
 msgstr "文字色彩："
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, lMode)
+#: src/frontend/ui/dockwidgets/notedock.ui:122
+#: src/frontend/ui/labelwidget.ui:246
+#, kde-format
+msgid "Mode:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:46
@@ -25718,12 +25755,6 @@ msgstr ""
 #| msgid "Offset"
 msgid "Offset X:"
 msgstr "位移"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/labelwidget.ui:246
-#, kde-format
-msgid "Mode:"
-msgstr ""
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:275

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-16 00:39+0000\n"
+"POT-Creation-Date: 2026-06-17 00:40+0000\n"
 "PO-Revision-Date: 2026-01-23 07:59+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
@@ -6514,18 +6514,18 @@ msgstr "%1 : miroir horizontal"
 msgid "%1: mirror vertically"
 msgstr "%1 : miroir vertical"
 
-#: src/backend/note/Note.cpp:74
+#: src/backend/note/Note.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Imprimer une note"
 
-#: src/backend/note/Note.cpp:99
+#: src/backend/note/Note.cpp:100
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr "Fichiers Texte (*.tex)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:95
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6534,38 +6534,44 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exporter vers un fichier"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Export failed"
 msgstr "Échec de l'exportation"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Impossible d'ouvrir « %1 » en écriture."
 
-#: src/backend/note/Note.cpp:138
+#: src/backend/note/Note.cpp:140
 #, kde-format
 msgid "%1: set text"
 msgstr "%1 : définir un texte"
 
-#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:282
+#: src/backend/note/Note.cpp:147 src/backend/worksheet/TextLabel.cpp:282
 #: src/backend/worksheet/TextLabel.cpp:334
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1 : définir la couleur de l'arrière-plan"
 
-#: src/backend/note/Note.cpp:152
+#: src/backend/note/Note.cpp:154
 #, kde-format
 msgid "%1: set text color"
 msgstr "%1 : définir une couleur de texte"
 
-#: src/backend/note/Note.cpp:159
+#: src/backend/note/Note.cpp:161
 #, kde-format
 msgid "%1: set text font"
 msgstr "%1 : définir une police de texte"
 
-#: src/backend/note/Note.cpp:201
+#: src/backend/note/Note.cpp:168
+#, fuzzy, kde-format
+#| msgid "%1: set method"
+msgid "%1: set mode"
+msgstr "%1 : définir la méthode"
+
+#: src/backend/note/Note.cpp:211
 #, kde-format
 msgid "no note element found"
 msgstr "Aucun élément note trouvé"
@@ -13713,6 +13719,7 @@ msgstr "Format de données"
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
 #: src/frontend/datasources/ImportFileWidget.cpp:1350
+#: src/frontend/note/NoteView.cpp:101
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -15918,6 +15925,18 @@ msgstr "%1 matrices : modèle « %2 » chargé"
 msgid "File Browser"
 msgstr "Navigateur de fichiers"
 
+#: src/frontend/dockwidgets/NoteDock.cpp:27
+#, kde-format
+msgid "Plain Text"
+msgstr ""
+
+#: src/frontend/dockwidgets/NoteDock.cpp:28
+#: src/frontend/notebook/NotebookView.cpp:110
+#: src/frontend/widgets/LabelWidget.cpp:482
+#, kde-format
+msgid "Markdown"
+msgstr "Markdown"
+
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
 #, kde-format
 msgid "Statistical"
@@ -16976,7 +16995,7 @@ msgid ""
 "the current point.</li><li>Moving Average (Lagged) - smoothing using the "
 "average of a fixed number of points, the average is lagged behind the "
 "current point.</li><li>Percentile - smoothing using the percentile of a "
-"fixed number of points.</li><li>Savitzky-Golay - smooothing using least-"
+"fixed number of points.</li><li>Savitzky-Golay - smoothing using least-"
 "squares fitting of polynomials to segments of the data.</li><li>LOWESS - "
 "locally weighted scatterplot smoothing.</li></ul>"
 msgstr ""
@@ -16990,7 +17009,7 @@ msgstr "Nombre cible de points dans la ligne simplifiée"
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:208
 #, kde-format
 msgid ""
-"Weightning type to define different weights for the points in the moving "
+"Weighting type to define different weights for the points in the moving "
 "window"
 msgstr ""
 
@@ -17641,7 +17660,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:92
 #: src/frontend/ui/dockwidgets/matrixdock.ui:43
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
-#: src/frontend/ui/dockwidgets/notedock.ui:43
+#: src/frontend/ui/dockwidgets/notedock.ui:20
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:90
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:237
 #: src/frontend/ui/dockwidgets/projectdock.ui:184
@@ -18462,6 +18481,22 @@ msgstr "%1 : supprimer les lignes sélectionnés"
 msgid "%1: clear selected rows(s)"
 msgstr "%1 : effacer les lignes sélectionnés"
 
+#: src/frontend/note/NoteView.cpp:94
+#, fuzzy, kde-format
+#| msgid "&Edit"
+msgid "Edit"
+msgstr "&Édition"
+
+#: src/frontend/note/NoteView.cpp:98
+#, kde-format
+msgid "Edit markdown source"
+msgstr ""
+
+#: src/frontend/note/NoteView.cpp:104
+#, kde-format
+msgid "Preview rendered output"
+msgstr ""
+
 #: src/frontend/notebook/NotebookView.cpp:48
 #, kde-format
 msgid "Failed to initialize %1."
@@ -18481,12 +18516,6 @@ msgstr "Supprimer l'entrée courante"
 #, kde-format
 msgid "Command"
 msgstr "Commande"
-
-#: src/frontend/notebook/NotebookView.cpp:110
-#: src/frontend/widgets/LabelWidget.cpp:482
-#, kde-format
-msgid "Markdown"
-msgstr "Markdown"
 
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:114
@@ -21269,7 +21298,7 @@ msgstr "Type d'erreur en Y :"
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:112
 #: src/frontend/ui/dockwidgets/matrixdock.ui:17
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
-#: src/frontend/ui/dockwidgets/notedock.ui:17
+#: src/frontend/ui/dockwidgets/notedock.ui:108
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:133
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:56
 #: src/frontend/ui/dockwidgets/projectdock.ui:141
@@ -23171,10 +23200,11 @@ msgstr "Position"
 #. i18n: ectx: property (text), widget (QLabel, lFont)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFont)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, lTextFont)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1290
 #: src/frontend/ui/dockwidgets/axisdock.ui:1424
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:126
-#: src/frontend/ui/dockwidgets/notedock.ui:96
+#: src/frontend/ui/dockwidgets/notedock.ui:75
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:551
 #: src/frontend/ui/dockwidgets/valuewidget.ui:310
 #: src/frontend/ui/labelwidget.ui:629
@@ -24502,17 +24532,25 @@ msgstr "En-tête :"
 msgid "Evaluate"
 msgstr "Évaluer"
 
-#. i18n: ectx: property (text), widget (QLabel, bgcolor)
-#: src/frontend/ui/dockwidgets/notedock.ui:76
+#. i18n: ectx: property (text), widget (QLabel, lBgColor)
+#: src/frontend/ui/dockwidgets/notedock.ui:82
 #, kde-format
 msgid "Background color:"
 msgstr "Couleur d'arrière plan : "
 
-#. i18n: ectx: property (text), widget (QLabel, textcolor)
-#: src/frontend/ui/dockwidgets/notedock.ui:86
+#. i18n: ectx: property (text), widget (QLabel, lTextColor)
+#: src/frontend/ui/dockwidgets/notedock.ui:115
 #, kde-format
 msgid "Text color:"
 msgstr "Couleur du texte : "
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, lMode)
+#: src/frontend/ui/dockwidgets/notedock.ui:122
+#: src/frontend/ui/labelwidget.ui:246
+#, kde-format
+msgid "Mode:"
+msgstr "Mode :"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:46
@@ -25593,10 +25631,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:493
-#, fuzzy, kde-format
-#| msgid "Padding"
+#, kde-format
 msgid "Padding:"
-msgstr "Remplissage"
+msgstr "Espace par rapport au bord :"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
@@ -25825,12 +25862,6 @@ msgstr "Distance des étiquettes des graduations à l'axe"
 #, kde-format
 msgid "Offset X:"
 msgstr "Décalage X :"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/labelwidget.ui:246
-#, kde-format
-msgid "Mode:"
-msgstr "Mode :"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:275

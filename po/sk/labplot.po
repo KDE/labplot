@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-16 00:39+0000\n"
+"POT-Creation-Date: 2026-06-17 00:40+0000\n"
 "PO-Revision-Date: 2026-04-13 12:00+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -6416,18 +6416,18 @@ msgstr "%1: zrkadliť horizontálne"
 msgid "%1: mirror vertically"
 msgstr "%1: zrkadliť vertikálne"
 
-#: src/backend/note/Note.cpp:74
+#: src/backend/note/Note.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Tlačiť poznámku"
 
-#: src/backend/note/Note.cpp:99
+#: src/backend/note/Note.cpp:100
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr "Textový súbor (*.txt)"
 
-#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:95
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6436,38 +6436,44 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exportovať do súboru"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Export failed"
 msgstr "Export zlyhal"
 
-#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:109
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "„%1” sa nepodarilo otvoriť na zápis."
 
-#: src/backend/note/Note.cpp:138
+#: src/backend/note/Note.cpp:140
 #, kde-format
 msgid "%1: set text"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:282
+#: src/backend/note/Note.cpp:147 src/backend/worksheet/TextLabel.cpp:282
 #: src/backend/worksheet/TextLabel.cpp:334
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: set background color"
 
-#: src/backend/note/Note.cpp:152
+#: src/backend/note/Note.cpp:154
 #, kde-format
 msgid "%1: set text color"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/note/Note.cpp:159
+#: src/backend/note/Note.cpp:161
 #, kde-format
 msgid "%1: set text font"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/note/Note.cpp:201
+#: src/backend/note/Note.cpp:168
+#, fuzzy, kde-format
+#| msgid "%1: set method"
+msgid "%1: set mode"
+msgstr "%1: nastaviť rozloženie"
+
+#: src/backend/note/Note.cpp:211
 #, kde-format
 msgid "no note element found"
 msgstr "nenájdený žiadny prvok poznámky"
@@ -13427,6 +13433,7 @@ msgstr "Dátový formát"
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
 #: src/frontend/datasources/ImportFileWidget.cpp:1350
+#: src/frontend/note/NoteView.cpp:101
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -15562,6 +15569,18 @@ msgstr "%1 matice: šablóna \"%2\" načítaná"
 msgid "File Browser"
 msgstr "Prehliadač súborov"
 
+#: src/frontend/dockwidgets/NoteDock.cpp:27
+#, kde-format
+msgid "Plain Text"
+msgstr ""
+
+#: src/frontend/dockwidgets/NoteDock.cpp:28
+#: src/frontend/notebook/NotebookView.cpp:110
+#: src/frontend/widgets/LabelWidget.cpp:482
+#, kde-format
+msgid "Markdown"
+msgstr "Markdown"
+
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
 #, kde-format
 msgid "Statistical"
@@ -16582,7 +16601,7 @@ msgid ""
 "the current point.</li><li>Moving Average (Lagged) - smoothing using the "
 "average of a fixed number of points, the average is lagged behind the "
 "current point.</li><li>Percentile - smoothing using the percentile of a "
-"fixed number of points.</li><li>Savitzky-Golay - smooothing using least-"
+"fixed number of points.</li><li>Savitzky-Golay - smoothing using least-"
 "squares fitting of polynomials to segments of the data.</li><li>LOWESS - "
 "locally weighted scatterplot smoothing.</li></ul>"
 msgstr ""
@@ -16596,7 +16615,7 @@ msgstr "Target number of points in the simplified line"
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:208
 #, kde-format
 msgid ""
-"Weightning type to define different weights for the points in the moving "
+"Weighting type to define different weights for the points in the moving "
 "window"
 msgstr ""
 
@@ -17244,7 +17263,7 @@ msgstr "Vybrať súbor na uloženie definície funkcie"
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:92
 #: src/frontend/ui/dockwidgets/matrixdock.ui:43
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
-#: src/frontend/ui/dockwidgets/notedock.ui:43
+#: src/frontend/ui/dockwidgets/notedock.ui:20
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:90
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:237
 #: src/frontend/ui/dockwidgets/projectdock.ui:184
@@ -18062,6 +18081,22 @@ msgstr "%1: odstrániť vybrané riadky"
 msgid "%1: clear selected rows(s)"
 msgstr "%1: clear selected riadoks(s)"
 
+#: src/frontend/note/NoteView.cpp:94
+#, fuzzy, kde-format
+#| msgid "&Edit"
+msgid "Edit"
+msgstr "&Upraviť"
+
+#: src/frontend/note/NoteView.cpp:98
+#, kde-format
+msgid "Edit markdown source"
+msgstr ""
+
+#: src/frontend/note/NoteView.cpp:104
+#, kde-format
+msgid "Preview rendered output"
+msgstr ""
+
 #: src/frontend/notebook/NotebookView.cpp:48
 #, kde-format
 msgid "Failed to initialize %1."
@@ -18081,12 +18116,6 @@ msgstr "Odstrániť súčasnú položku"
 #, kde-format
 msgid "Command"
 msgstr "Príkaz"
-
-#: src/frontend/notebook/NotebookView.cpp:110
-#: src/frontend/widgets/LabelWidget.cpp:482
-#, kde-format
-msgid "Markdown"
-msgstr "Markdown"
 
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:114
@@ -20826,7 +20855,7 @@ msgstr "Typ Y-chyby:"
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:112
 #: src/frontend/ui/dockwidgets/matrixdock.ui:17
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
-#: src/frontend/ui/dockwidgets/notedock.ui:17
+#: src/frontend/ui/dockwidgets/notedock.ui:108
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:133
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:56
 #: src/frontend/ui/dockwidgets/projectdock.ui:141
@@ -22718,10 +22747,11 @@ msgstr "Umiestnenie"
 #. i18n: ectx: property (text), widget (QLabel, lFont)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFont)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, lTextFont)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1290
 #: src/frontend/ui/dockwidgets/axisdock.ui:1424
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:126
-#: src/frontend/ui/dockwidgets/notedock.ui:96
+#: src/frontend/ui/dockwidgets/notedock.ui:75
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:551
 #: src/frontend/ui/dockwidgets/valuewidget.ui:310
 #: src/frontend/ui/labelwidget.ui:629
@@ -24045,17 +24075,25 @@ msgstr "Hlavička:"
 msgid "Evaluate"
 msgstr "Vyhodnotiť"
 
-#. i18n: ectx: property (text), widget (QLabel, bgcolor)
-#: src/frontend/ui/dockwidgets/notedock.ui:76
+#. i18n: ectx: property (text), widget (QLabel, lBgColor)
+#: src/frontend/ui/dockwidgets/notedock.ui:82
 #, kde-format
 msgid "Background color:"
 msgstr "Farba pozadia:"
 
-#. i18n: ectx: property (text), widget (QLabel, textcolor)
-#: src/frontend/ui/dockwidgets/notedock.ui:86
+#. i18n: ectx: property (text), widget (QLabel, lTextColor)
+#: src/frontend/ui/dockwidgets/notedock.ui:115
 #, kde-format
 msgid "Text color:"
 msgstr "Farba textu:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, lMode)
+#: src/frontend/ui/dockwidgets/notedock.ui:122
+#: src/frontend/ui/labelwidget.ui:246
+#, kde-format
+msgid "Mode:"
+msgstr "Režim:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:46
@@ -25362,12 +25400,6 @@ msgstr "Vzdialenosť k menovkám značiek osi"
 #, kde-format
 msgid "Offset X:"
 msgstr "Posun X:"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/labelwidget.ui:246
-#, kde-format
-msgid "Mode:"
-msgstr "Režim:"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:275
