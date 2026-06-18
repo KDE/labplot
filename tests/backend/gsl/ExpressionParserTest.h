@@ -46,6 +46,7 @@ private Q_SLOTS:
 	void testTodayExpression();
 	void testNowExpression();
 	void testDateExpression();
+	void testDateTimeVariableExpression();
 	void testDatedifExpression();
 	void testEomonthExpression();
 	void testWeekdayExpression();

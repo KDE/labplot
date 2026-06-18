@@ -570,6 +570,25 @@ void ExpressionParserTest::testWeeknumExpression() {
 	QCOMPARE(yVector.at(0), 16.0); // April 19, 2026 is in week 16
 }
 
+void ExpressionParserTest::testDateTimeVariableExpression() {
+	const QString expr = QStringLiteral("day(x) + month(x) * 100 + year(x) * 10000");
+	const QStringList vars = {QStringLiteral("x")};
+	QVector<QVector<double>*> xVectors;
+
+	double dateTimeValue = dateFunction(2026, 4, 19);
+
+	auto* xVector = new QVector<double>({dateTimeValue});
+	xVectors << xVector;
+	QVector<double> yVector({0.});
+	auto* parser = ExpressionParser::getInstance();
+	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 1);
+	QCOMPARE(yVector.at(0), 20260419.0);
+
+	delete xVector;
+}
+
 void ExpressionParserTest::testRoundn() {
 	auto fnct = getFunction2(QStringLiteral("roundn"));
 	QVERIFY(fnct);
