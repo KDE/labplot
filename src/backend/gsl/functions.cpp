@@ -18,6 +18,7 @@
 
 #include <QDateTime>
 
+#include <cmath>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_randist.h>
@@ -962,8 +963,10 @@ double dateFunction(const double year, const double month, const double day) {
 enum class DateDifUnit { Days = 0, Months = 1, Years = 2, MonthsIgnoringYears = 3, DaysIgnoringYears = 4, DaysIgnoringMonthsAndYears = 5 };
 
 double datedifFunction(const double start_date, const double end_date, const double unit) {
-	const QDate start = QDate(1900, 1, 1).addDays(qRound(start_date));
-	const QDate end = QDate(1900, 1, 1).addDays(qRound(end_date));
+	if (std::isnan(start_date) || std::isnan(end_date) || std::isnan(unit))
+		return NAN;
+	const QDate start = QDate(1900, 1, 1).addDays(qint64(std::round(start_date)));
+	const QDate end = QDate(1900, 1, 1).addDays(qint64(std::round(end_date)));
 	const DateDifUnit unit_code = static_cast<DateDifUnit>(qRound(unit));
 
 	if (!start.isValid() || !end.isValid() || start > end)
@@ -1009,7 +1012,9 @@ double datedifFunction(const double start_date, const double end_date, const dou
 }
 
 double eomonthFunction(const double start_date, const double months) {
-	const QDate start = QDate(1900, 1, 1).addDays(qRound(start_date));
+	if (std::isnan(start_date) || std::isnan(months))
+		return NAN;
+	const QDate start = QDate(1900, 1, 1).addDays(qint64(std::round(start_date)));
 	if (!start.isValid())
 		return NAN;
 
@@ -1025,7 +1030,9 @@ double eomonthFunction(const double start_date, const double months) {
 }
 
 double weekdayFunction(const double date) {
-	const QDate d = QDate(1900, 1, 1).addDays(qRound(date));
+	if (std::isnan(date))
+		return NAN;
+	const QDate d = QDate(1900, 1, 1).addDays(qint64(std::round(date)));
 	if (!d.isValid())
 		return NAN;
 
@@ -1035,8 +1042,10 @@ double weekdayFunction(const double date) {
 }
 
 double networkdaysFunction(const double start_date, const double end_date) {
-	const QDate start = QDate(1900, 1, 1).addDays(qRound(start_date));
-	const QDate end = QDate(1900, 1, 1).addDays(qRound(end_date));
+	if (std::isnan(start_date) || std::isnan(end_date))
+		return NAN;
+	const QDate start = QDate(1900, 1, 1).addDays(qint64(std::round(start_date)));
+	const QDate end = QDate(1900, 1, 1).addDays(qint64(std::round(end_date)));
 
 	if (!start.isValid() || !end.isValid() || start > end)
 		return NAN;
@@ -1058,28 +1067,36 @@ double networkdaysFunction(const double start_date, const double end_date) {
 }
 
 double yearFunction(const double date) {
-	const QDate d = QDate(1900, 1, 1).addDays(qRound(date));
+	if (std::isnan(date))
+		return NAN;
+	const QDate d = QDate(1900, 1, 1).addDays(qint64(std::round(date)));
 	if (!d.isValid())
 		return NAN;
 	return double(d.year());
 }
 
 double monthFunction(const double date) {
-	const QDate d = QDate(1900, 1, 1).addDays(qRound(date));
+	if (std::isnan(date))
+		return NAN;
+	const QDate d = QDate(1900, 1, 1).addDays(qint64(std::round(date)));
 	if (!d.isValid())
 		return NAN;
 	return double(d.month());
 }
 
 double dayFunction(const double date) {
-	const QDate d = QDate(1900, 1, 1).addDays(qRound(date));
+	if (std::isnan(date))
+		return NAN;
+	const QDate d = QDate(1900, 1, 1).addDays(qint64(std::round(date)));
 	if (!d.isValid())
 		return NAN;
 	return double(d.day());
 }
 
 double weeknumFunction(const double date) {
-	const QDate d = QDate(1900, 1, 1).addDays(qRound(date));
+	if (std::isnan(date))
+		return NAN;
+	const QDate d = QDate(1900, 1, 1).addDays(qint64(std::round(date)));
 	if (!d.isValid())
 		return NAN;
 	return double(d.weekNumber());
