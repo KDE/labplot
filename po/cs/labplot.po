@@ -15330,7 +15330,7 @@ msgstr "Prohlížeč souborů"
 #: src/frontend/dockwidgets/NoteDock.cpp:27
 #, kde-format
 msgid "Plain Text"
-msgstr ""
+msgstr "Prostý text"
 
 #: src/frontend/dockwidgets/NoteDock.cpp:28
 #: src/frontend/notebook/NotebookView.cpp:110
@@ -17749,10 +17749,9 @@ msgid "%1: clear selected rows(s)"
 msgstr ""
 
 #: src/frontend/note/NoteView.cpp:94
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Edit"
-msgstr "&Upravit"
+msgstr "Upravit"
 
 #: src/frontend/note/NoteView.cpp:98
 #, kde-format
