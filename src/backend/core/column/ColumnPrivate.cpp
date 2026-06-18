@@ -3244,10 +3244,8 @@ void ColumnPrivate::setValueAt(int row, double new_value) {
  */
 void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) {
 	// DEBUG(Q_FUNC_INFO);
-	if (m_columnMode != AbstractColumn::ColumnMode::Double
-		&& m_columnMode != AbstractColumn::ColumnMode::DateTime
-		&& m_columnMode != AbstractColumn::ColumnMode::Integer
-		&& m_columnMode != AbstractColumn::ColumnMode::BigInt)
+	if (m_columnMode != AbstractColumn::ColumnMode::Double && m_columnMode != AbstractColumn::ColumnMode::DateTime
+		&& m_columnMode != AbstractColumn::ColumnMode::Integer && m_columnMode != AbstractColumn::ColumnMode::BigInt)
 		return;
 
 	if (!m_data) {

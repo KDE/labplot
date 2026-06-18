@@ -86,11 +86,11 @@ MQTTSubscriptionWidget::MQTTSubscriptionWidget(QWidget* parent)
 	connect(ui.twSubscriptions, &QTreeWidget::itemDoubleClicked, this, &MQTTSubscriptionWidget::mqttSubscribedTopicDoubleClicked);
 	connect(ui.twSubscriptions, &QTreeWidget::currentItemChanged, this, &MQTTSubscriptionWidget::subscriptionChanged);
 
-	connect(ui.twTopics, &QTreeWidget::itemSelectionChanged, this, [=]() {
+	connect(ui.twTopics, &QTreeWidget::itemSelectionChanged, this, [=, this]() {
 		ui.bSubscribe->setEnabled(!ui.twTopics->selectedItems().isEmpty());
 	});
 
-	connect(ui.twSubscriptions, &QTreeWidget::itemSelectionChanged, this, [=]() {
+	connect(ui.twSubscriptions, &QTreeWidget::itemSelectionChanged, this, [=, this]() {
 		ui.bUnsubscribe->setEnabled(!ui.twSubscriptions->selectedItems().isEmpty());
 	});
 }
