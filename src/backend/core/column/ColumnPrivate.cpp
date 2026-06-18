@@ -2618,6 +2618,7 @@ void ColumnPrivate::updateFormula() {
 	DEBUG(Q_FUNC_INFO)
 	// determine variable names and the data vectors of the specified columns
 	QVector<QVector<double>*> xVectors;
+	QVector<bool> xVectorAllocated; // Track which vectors were allocated and need to be freed
 
 	bool valid = true;
 	QStringList formulaVariableNames;
@@ -2635,15 +2636,17 @@ void ColumnPrivate::updateFormula() {
 		}
 		formulaVariableNames << formulaData.variableName();
 
-		if (column->columnMode() == AbstractColumn::ColumnMode::Double)
+		if (column->columnMode() == AbstractColumn::ColumnMode::Double) {
 			xVectors << static_cast<QVector<double>*>(column->data());
-		else {
+			xVectorAllocated << false;
+		} else {
 			// convert integers to doubles first
 			auto* xVector = new QVector<double>(column->rowCount());
 			for (int i = 0; i < column->rowCount(); ++i)
 				(*xVector)[i] = column->valueAt(i);
 
 			xVectors << xVector;
+			xVectorAllocated << true;
 		}
 
 		if (column->rowCount() > maxRowCount)
@@ -2709,6 +2712,12 @@ void ColumnPrivate::updateFormula() {
 			DEBUG(Q_FUNC_INFO << ", Failed parsing formula!")
 		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")
 		replaceValues(-1, new_data);
+
+		// Clean up allocated xVectors
+		for (int i = 0; i < xVectors.size(); ++i) {
+			if (xVectorAllocated.at(i))
+				delete xVectors.at(i);
+		}
 
 		// initialize remaining rows with NAN
 		// This will be done already in evaluateCartesian()
@@ -3218,13 +3227,27 @@ void ColumnPrivate::setValueAt(int row, double new_value) {
 }
 
 /**
- * \brief Replace a range of values
+ * \brief Replace a range of values, converting from double to the column's native type
  *
- * Use this only when columnMode() is Numeric or DateTime
+ * This function accepts QVector<double> and converts to the target column's native type.
+ * Primary callers:
+ * - updateFormula(): formula evaluation always produces doubles
+ * - Column::setValues(): public API for bulk value assignment
+ * - Analysis functions (QQPlot, etc.): numerical results
+ *
+ * Type conversion handling:
+ * - Double: direct assignment
+ * - Integer/BigInt: round and convert, update validity bitmap (NAN → invalid cell)
+ * - DateTime: convert days-since-1900 to QDateTime
+ *
+ * Use this only when columnMode() is Double, Integer, BigInt or DateTime
  */
 void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) {
 	// DEBUG(Q_FUNC_INFO);
-	if (m_columnMode != AbstractColumn::ColumnMode::Double && m_columnMode != AbstractColumn::ColumnMode::DateTime)
+	if (m_columnMode != AbstractColumn::ColumnMode::Double
+		&& m_columnMode != AbstractColumn::ColumnMode::DateTime
+		&& m_columnMode != AbstractColumn::ColumnMode::Integer
+		&& m_columnMode != AbstractColumn::ColumnMode::BigInt)
 		return;
 
 	if (!m_data) {
@@ -3245,6 +3268,54 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 			double* ptr = static_cast<QVector<double>*>(m_data)->data();
 			for (int i = 0; i < num_rows; ++i)
 				ptr[first + i] = new_values.at(i);
+		}
+	} else if (m_columnMode == AbstractColumn::ColumnMode::Integer) {
+		if (first < 0) {
+			resizeTo(new_values.size());
+			int* ptr = static_cast<QVector<int>*>(m_data)->data();
+			for (int i = 0; i < new_values.size(); ++i)
+				ptr[i] = qRound(new_values.at(i));
+		} else {
+			const int num_rows = new_values.size();
+			resizeTo(first + num_rows);
+			int* ptr = static_cast<QVector<int>*>(m_data)->data();
+			for (int i = 0; i < num_rows; ++i)
+				ptr[first + i] = qRound(new_values.at(i));
+		}
+		// Update validity bitmap for Integer columns
+		if (first < 0) {
+			m_valid.resize(new_values.size());
+			for (int i = 0; i < new_values.size(); ++i)
+				m_valid.setBit(i, !std::isnan(new_values.at(i)));
+		} else {
+			for (int i = 0; i < new_values.size(); ++i) {
+				if (first + i < m_valid.size())
+					m_valid.setBit(first + i, !std::isnan(new_values.at(i)));
+			}
+		}
+	} else if (m_columnMode == AbstractColumn::ColumnMode::BigInt) {
+		if (first < 0) {
+			resizeTo(new_values.size());
+			qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
+			for (int i = 0; i < new_values.size(); ++i)
+				ptr[i] = qint64(std::round(new_values.at(i)));
+		} else {
+			const int num_rows = new_values.size();
+			resizeTo(first + num_rows);
+			qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
+			for (int i = 0; i < num_rows; ++i)
+				ptr[first + i] = qint64(std::round(new_values.at(i)));
+		}
+		// Update validity bitmap for BigInt columns
+		if (first < 0) {
+			m_valid.resize(new_values.size());
+			for (int i = 0; i < new_values.size(); ++i)
+				m_valid.setBit(i, !std::isnan(new_values.at(i)));
+		} else {
+			for (int i = 0; i < new_values.size(); ++i) {
+				if (first + i < m_valid.size())
+					m_valid.setBit(first + i, !std::isnan(new_values.at(i)));
+			}
 		}
 	} else if (m_columnMode == AbstractColumn::ColumnMode::DateTime) {
 		QDateTime start(QDate(1900, 1, 1).startOfDay());
