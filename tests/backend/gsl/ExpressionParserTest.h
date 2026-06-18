@@ -43,6 +43,10 @@ private Q_SLOTS:
 	void testMonthFunction();
 	void testDayFunction();
 	void testWeeknumFunction();
+	void testHourFunction();
+	void testMinuteFunction();
+	void testSecondFunction();
+	void testTimeFunction();
 	void testTodayExpression();
 	void testNowExpression();
 	void testDateExpression();

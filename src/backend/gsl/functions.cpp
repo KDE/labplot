@@ -357,6 +357,10 @@ const char* cell_curr_column_default = "cell_curr_column_with_default";
 		{[]() { return i18n("month(date)"); }, "month", monthFunction, 1, nullptr, FunctionGroups::DatetimeFunctions},
 		{[]() { return i18n("day(date)"); }, "day", dayFunction, 1, nullptr, FunctionGroups::DatetimeFunctions},
 		{[]() { return i18n("weeknum(date)"); }, "weeknum", weeknumFunction, 1, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("hour(dateTime)"); }, "hour", hourFunction, 1, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("minute(dateTime)"); }, "minute", minuteFunction, 1, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("second(dateTime)"); }, "second", secondFunction, 1, nullptr, FunctionGroups::DatetimeFunctions},
+		{[]() { return i18n("time(hour; minute; second)"); }, "time", timeFunction, 3, nullptr, FunctionGroups::DatetimeFunctions},
 
 		// https://www.gnu.org/software/gsl/doc/html/specfunc.html
 		// Airy Functions and Derivatives
@@ -1079,6 +1083,42 @@ double weeknumFunction(const double date) {
 	if (!d.isValid())
 		return NAN;
 	return double(d.weekNumber());
+}
+
+double hourFunction(const double dateTime) {
+	// Extract the fractional part (time portion of the day)
+	const double fractionalDay = dateTime - std::floor(dateTime);
+	// Convert to milliseconds within the day
+	const qint64 msecsInDay = qRound(fractionalDay * 86400000.0);
+	// Extract hours (3600000 ms per hour)
+	return double((msecsInDay / 3600000) % 24);
+}
+
+double minuteFunction(const double dateTime) {
+	// Extract the fractional part (time portion of the day)
+	const double fractionalDay = dateTime - std::floor(dateTime);
+	// Convert to milliseconds within the day
+	const qint64 msecsInDay = qRound(fractionalDay * 86400000.0);
+	// Extract minutes (60000 ms per minute)
+	return double((msecsInDay / 60000) % 60);
+}
+
+double secondFunction(const double dateTime) {
+	// Extract the fractional part (time portion of the day)
+	const double fractionalDay = dateTime - std::floor(dateTime);
+	// Convert to milliseconds within the day
+	const qint64 msecsInDay = qRound(fractionalDay * 86400000.0);
+	// Extract seconds (1000 ms per second)
+	return double((msecsInDay / 1000) % 60);
+}
+
+double timeFunction(const double hour, const double minute, const double second) {
+	const int h = qRound(hour) % 24;
+	const int m = qRound(minute) % 60;
+	const int s = qRound(second) % 60;
+	// Convert to fraction of a day
+	const qint64 msecsInDay = (qint64(h) * 3600000) + (qint64(m) * 60000) + (qint64(s) * 1000);
+	return double(msecsInDay) / 86400000.0;
 }
 
 ////////////////////////////////////////////////////////////////////////

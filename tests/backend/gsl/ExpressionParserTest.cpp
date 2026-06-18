@@ -438,6 +438,56 @@ void ExpressionParserTest::testWeeknumFunction() {
 	QVERIFY(weeknumFunction(date) >= 1.0);
 }
 
+void ExpressionParserTest::testHourFunction() {
+	// Test with different hours: 12:34:56
+	const double timeValue = timeFunction(12, 34, 56);
+	QCOMPARE(hourFunction(timeValue), 12.0);
+
+	// Test with edge cases
+	QCOMPARE(hourFunction(timeFunction(0, 0, 0)), 0.0); // Midnight
+	QCOMPARE(hourFunction(timeFunction(23, 59, 59)), 23.0); // Just before midnight
+}
+
+void ExpressionParserTest::testMinuteFunction() {
+	// Test with different minutes: 12:34:56
+	const double timeValue = timeFunction(12, 34, 56);
+	QCOMPARE(minuteFunction(timeValue), 34.0);
+
+	// Test with edge cases
+	QCOMPARE(minuteFunction(timeFunction(0, 0, 0)), 0.0); // Midnight
+	QCOMPARE(minuteFunction(timeFunction(23, 59, 59)), 59.0); // Just before midnight
+}
+
+void ExpressionParserTest::testSecondFunction() {
+	// Test with different seconds: 12:34:56
+	const double timeValue = timeFunction(12, 34, 56);
+	QCOMPARE(secondFunction(timeValue), 56.0);
+
+	// Test with edge cases
+	QCOMPARE(secondFunction(timeFunction(0, 0, 0)), 0.0); // Midnight
+	QCOMPARE(secondFunction(timeFunction(23, 59, 59)), 59.0); // Just before midnight
+}
+
+void ExpressionParserTest::testTimeFunction() {
+	// Test time construction
+	double timeValue = timeFunction(12, 34, 56);
+	QVERIFY(timeValue > 0.0);
+	QVERIFY(timeValue < 1.0); // Should be a fraction of a day
+
+	// Test round-trip: construct time and extract components
+	QCOMPARE(hourFunction(timeValue), 12.0);
+	QCOMPARE(minuteFunction(timeValue), 34.0);
+	QCOMPARE(secondFunction(timeValue), 56.0);
+
+	// Test edge cases
+	double midnight = timeFunction(0, 0, 0);
+	QCOMPARE(midnight, 0.0);
+
+	double almostMidnight = timeFunction(23, 59, 59);
+	QVERIFY(almostMidnight > 0.0);
+	QVERIFY(almostMidnight < 1.0);
+}
+
 void ExpressionParserTest::testTodayExpression() {
 	const QString expr = QStringLiteral("today()");
 	const QStringList vars = {};
