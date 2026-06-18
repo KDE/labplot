@@ -6409,10 +6409,9 @@ msgid "%1: set text font"
 msgstr ""
 
 #: src/backend/note/Note.cpp:168
-#, fuzzy, kde-format
-#| msgid "%1: set image"
+#, kde-format
 msgid "%1: set mode"
-msgstr "%1：设置图像"
+msgstr ""
 
 #: src/backend/note/Note.cpp:211
 #, kde-format
@@ -16231,10 +16230,9 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:204
-#, fuzzy, kde-format
-#| msgid "Number of seconds in 1 minute"
+#, kde-format
 msgid "Number of points in the moving window"
-msgstr "1 分钟内秒数"
+msgstr ""
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:208
 #, kde-format
@@ -16266,10 +16264,9 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:228
-#, fuzzy, kde-format
-#| msgid "The number of vectors in the file"
+#, kde-format
 msgid "The number of robustifying iterations"
-msgstr "文件所表示数据的列数"
+msgstr ""
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:232
 #, kde-format
@@ -17688,10 +17685,9 @@ msgid "%1: clear selected rows(s)"
 msgstr ""
 
 #: src/frontend/note/NoteView.cpp:94
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Edit"
-msgstr "编辑(&E)"
+msgstr ""
 
 #: src/frontend/note/NoteView.cpp:98
 #, kde-format
@@ -24729,17 +24725,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:493
-#, fuzzy, kde-format
-#| msgid "Padding"
+#, kde-format
 msgid "Padding:"
-msgstr "边距"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
-#, fuzzy, kde-format
-#| msgid "Order:"
+#, kde-format
 msgid " Order:"
-msgstr "次序："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:556
