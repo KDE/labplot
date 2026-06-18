@@ -2919,8 +2919,14 @@ double ColumnPrivate::valueAt(int index) const {
 		return static_cast<QVector<int>*>(m_data)->value(index, 0);
 	case AbstractColumn::ColumnMode::BigInt:
 		return static_cast<QVector<qint64>*>(m_data)->value(index, 0);
-	case AbstractColumn::ColumnMode::DateTime:
-		return static_cast<QVector<QDateTime>*>(m_data)->value(index).toMSecsSinceEpoch();
+	case AbstractColumn::ColumnMode::DateTime: {
+		const auto dt = static_cast<QVector<QDateTime>*>(m_data)->value(index);
+		if (!dt.isValid())
+			return NAN;
+
+		const QDateTime epoch(QDate(1900, 1, 1), QTime(0, 0, 0, 0));
+		return double(epoch.msecsTo(dt)) / 86400000.0; // Days since 1900
+	}
 	case AbstractColumn::ColumnMode::Month: // Fall through
 	case AbstractColumn::ColumnMode::Day: // Fall through
 	case AbstractColumn::ColumnMode::Text: // Fall through
