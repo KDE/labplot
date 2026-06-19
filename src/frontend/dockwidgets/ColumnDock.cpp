@@ -773,7 +773,7 @@ void ColumnDock::addVariable() {
 
 	auto* model = aspectModel();
 	model->setSelectableAspects({AspectType::Column});
-	model->enableNumericColumnsOnly(true);
+	model->enablePlottableColumnsOnly(true); // Allow numeric (Double, Integer, BigInt) and DateTime columns
 	cb->setModel(model);
 	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 
