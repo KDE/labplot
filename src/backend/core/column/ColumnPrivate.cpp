@@ -3271,14 +3271,18 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 		if (first < 0) {
 			resizeTo(new_values.size());
 			int* ptr = static_cast<QVector<int>*>(m_data)->data();
-			for (int i = 0; i < new_values.size(); ++i)
-				ptr[i] = qRound(new_values.at(i));
+			for (int i = 0; i < new_values.size(); ++i) {
+				const double val = new_values.at(i);
+				ptr[i] = std::isnan(val) ? 0 : qRound(val);
+			}
 		} else {
 			const int num_rows = new_values.size();
 			resizeTo(first + num_rows);
 			int* ptr = static_cast<QVector<int>*>(m_data)->data();
-			for (int i = 0; i < num_rows; ++i)
-				ptr[first + i] = qRound(new_values.at(i));
+			for (int i = 0; i < num_rows; ++i) {
+				const double val = new_values.at(i);
+				ptr[first + i] = std::isnan(val) ? 0 : qRound(val);
+			}
 		}
 		// Update validity bitmap for Integer columns
 		if (first < 0) {
@@ -3295,14 +3299,18 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 		if (first < 0) {
 			resizeTo(new_values.size());
 			qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
-			for (int i = 0; i < new_values.size(); ++i)
-				ptr[i] = qint64(std::round(new_values.at(i)));
+			for (int i = 0; i < new_values.size(); ++i) {
+				const double val = new_values.at(i);
+				ptr[i] = std::isnan(val) ? 0 : qint64(std::round(val));
+			}
 		} else {
 			const int num_rows = new_values.size();
 			resizeTo(first + num_rows);
 			qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
-			for (int i = 0; i < num_rows; ++i)
-				ptr[first + i] = qint64(std::round(new_values.at(i)));
+			for (int i = 0; i < num_rows; ++i) {
+				const double val = new_values.at(i);
+				ptr[first + i] = std::isnan(val) ? 0 : qint64(std::round(val));
+			}
 		}
 		// Update validity bitmap for BigInt columns
 		if (first < 0) {
@@ -3322,12 +3330,16 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 			auto* data = static_cast<QVector<QDateTime>*>(m_data);
 			for (int i = 0; i < new_values.size(); ++i) {
 				double value = new_values.at(i);
-				int days = std::floor(value);
-				double frac = value - days;
-				QDateTime date = start.addDays(days);
-				int msecs = std::round(frac * 86400000.0);
-				date = date.addMSecs(msecs);
-				data->replace(i, date);
+				if (std::isnan(value)) {
+					data->replace(i, QDateTime()); // Invalid QDateTime for empty cells
+				} else {
+					int days = std::floor(value);
+					double frac = value - days;
+					QDateTime date = start.addDays(days);
+					int msecs = std::round(frac * 86400000.0);
+					date = date.addMSecs(msecs);
+					data->replace(i, date);
+				}
 			}
 		} else {
 			const int num_rows = new_values.size();
@@ -3335,12 +3347,16 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 			auto* data = static_cast<QVector<QDateTime>*>(m_data);
 			for (int i = 0; i < num_rows; ++i) {
 				double value = new_values.at(i);
-				int days = std::floor(value);
-				double frac = value - days;
-				QDateTime date = start.addDays(days);
-				int msecs = std::round(frac * 86400000.0);
-				date = date.addMSecs(msecs);
-				data->replace(first + i, date);
+				if (std::isnan(value)) {
+					data->replace(first + i, QDateTime()); // Invalid QDateTime for empty cells
+				} else {
+					int days = std::floor(value);
+					double frac = value - days;
+					QDateTime date = start.addDays(days);
+					int msecs = std::round(frac * 86400000.0);
+					date = date.addMSecs(msecs);
+					data->replace(first + i, date);
+				}
 			}
 		}
 	}
