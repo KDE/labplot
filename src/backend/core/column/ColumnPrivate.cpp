@@ -2933,8 +2933,10 @@ double ColumnPrivate::valueAt(int index) const {
 		if (!dt.isValid())
 			return NAN;
 
-		const QDateTime epoch(QDate(1900, 1, 1), QTime(0, 0, 0, 0));
-		return double(epoch.msecsTo(dt)) / 86400000.0; // Days since 1900
+		// Use daysTo() for date part to ensure consistency with QDate::addDays() used in datetime functions
+		// This avoids rounding issues that can occur when converting via milliseconds
+		const QDate epoch(1900, 1, 1);
+		return double(epoch.daysTo(dt.date())) + dt.time().msecsSinceStartOfDay() / 86400000.0;
 	}
 	case AbstractColumn::ColumnMode::Month: // Fall through
 	case AbstractColumn::ColumnMode::Day: // Fall through

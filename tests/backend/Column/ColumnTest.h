@@ -148,6 +148,13 @@ private Q_SLOTS:
 	void integerValiditySaveLoad();
 	void integerValidityHasValues();
 	void integerValidityCopyColumn();
+
+	// DateTime formula tests
+	void testFormulaDateTimeExtraction();
+	void testFormulaDateTimeExtractionInteger();
+	void testFormulaDateTimeToDateTime();
+	void testFormulaDateTimeDatedif();
+	void testFormulaDateTimeEmptyCells();
 };
 
 #endif // COLUMNTEST_H

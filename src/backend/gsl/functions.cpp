@@ -1032,7 +1032,7 @@ double eomonthFunction(const double start_date, const double months) {
 double weekdayFunction(const double date) {
 	if (std::isnan(date))
 		return NAN;
-	const QDate d = QDate(1900, 1, 1).addDays(qint64(std::round(date)));
+	const QDate d = QDate(1900, 1, 1).addDays(qint64(date)); // Truncate fractional part (time)
 	if (!d.isValid())
 		return NAN;
 
@@ -1069,7 +1069,7 @@ double networkdaysFunction(const double start_date, const double end_date) {
 double yearFunction(const double date) {
 	if (std::isnan(date))
 		return NAN;
-	const QDate d = QDate(1900, 1, 1).addDays(qint64(std::round(date)));
+	const QDate d = QDate(1900, 1, 1).addDays(qint64(date)); // Truncate fractional part (time)
 	if (!d.isValid())
 		return NAN;
 	return double(d.year());
@@ -1078,7 +1078,7 @@ double yearFunction(const double date) {
 double monthFunction(const double date) {
 	if (std::isnan(date))
 		return NAN;
-	const QDate d = QDate(1900, 1, 1).addDays(qint64(std::round(date)));
+	const QDate d = QDate(1900, 1, 1).addDays(qint64(date)); // Truncate fractional part (time)
 	if (!d.isValid())
 		return NAN;
 	return double(d.month());
@@ -1087,7 +1087,7 @@ double monthFunction(const double date) {
 double dayFunction(const double date) {
 	if (std::isnan(date))
 		return NAN;
-	const QDate d = QDate(1900, 1, 1).addDays(qint64(std::round(date)));
+	const QDate d = QDate(1900, 1, 1).addDays(qint64(date)); // Truncate fractional part (time)
 	if (!d.isValid())
 		return NAN;
 	return double(d.day());
@@ -1096,7 +1096,7 @@ double dayFunction(const double date) {
 double weeknumFunction(const double date) {
 	if (std::isnan(date))
 		return NAN;
-	const QDate d = QDate(1900, 1, 1).addDays(qint64(std::round(date)));
+	const QDate d = QDate(1900, 1, 1).addDays(qint64(date)); // Truncate fractional part (time)
 	if (!d.isValid())
 		return NAN;
 	return double(d.weekNumber());
