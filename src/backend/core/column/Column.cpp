@@ -28,6 +28,8 @@
 #include "backend/worksheet/plots/cartesian/Plot.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"
 
+#include <limits>
+
 #include <QActionGroup>
 #include <QClipboard>
 #include <QIcon>
@@ -1360,15 +1362,20 @@ void Column::save(QXmlStreamWriter* writer) const {
 		case ColumnMode::Day:
 		case ColumnMode::DateTime: {
 			// convert QDateTime values to milliseconds since epoch and serialize them using Base64 encoding
+			// Use std::numeric_limits<qint64>::min() as sentinel for invalid/empty DateTimes
 			QByteArray bytes;
 			for (int i = 0; i < rowCount(); ++i) {
 				auto dt = dateTimeAt(i);
-				// If DateTime is not in UTC, convert it to UTC preserving the date/time values
-				// This ensures DateTimes created without explicit UTC timezone are treated consistently
-				if (dt.timeZone() != QTimeZone::UTC)
-					dt = QDateTime(dt.date(), dt.time(), QTimeZone::UTC);
-
-				qint64 msecs = dt.toMSecsSinceEpoch();
+				qint64 msecs;
+				if (!dt.isValid()) {
+					msecs = std::numeric_limits<qint64>::min(); // Sentinel for empty cells
+				} else {
+					// If DateTime is not in UTC, convert it to UTC preserving the date/time values
+					// This ensures DateTimes created without explicit UTC timezone are treated consistently
+					if (dt.timeZone() != QTimeZone::UTC)
+						dt = QDateTime(dt.date(), dt.time(), QTimeZone::UTC);
+					msecs = dt.toMSecsSinceEpoch();
+				}
 				bytes.append(reinterpret_cast<const char*>(&msecs), sizeof(qint64));
 			}
 			writer->writeCharacters(QLatin1String(bytes.toBase64()));
@@ -1427,12 +1434,17 @@ public:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
 			// deserialize QDateTime values from milliseconds since epoch
+			// std::numeric_limits<qint64>::min() is sentinel for invalid/empty DateTimes
 			QVector<QDateTime> dateTimeVector;
 			for (int i = 0; i < bytes.size(); i += sizeof(qint64)) {
 				qint64 msecs;
 				memcpy(&msecs, bytes.data() + i, sizeof(qint64));
-				// Interpret stored milliseconds since epoch as UTC to preserve original timezone
-				dateTimeVector.append(QDateTime::fromMSecsSinceEpoch(msecs, QTimeZone::UTC));
+				if (msecs == std::numeric_limits<qint64>::min()) {
+					dateTimeVector.append(QDateTime()); // Invalid QDateTime for empty cells
+				} else {
+					// Interpret stored milliseconds since epoch as UTC to preserve original timezone
+					dateTimeVector.append(QDateTime::fromMSecsSinceEpoch(msecs, QTimeZone::UTC));
+				}
 			}
 			m_private->replaceDateTimes(-1, dateTimeVector);
 			break;
