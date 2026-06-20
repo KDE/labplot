@@ -1,0 +1,1962 @@
+{
+  "name": "UCI",
+  "categories": [
+    {
+      "name": "Health and Medicine",
+      "subcategories": [
+        {
+          "name": "Classification",
+          "datasets": [
+            {
+              "name": "Acute Inflammations",
+              "description": "The data was created by a medical expert as a data set to test the expert system, \nwhich will perform the presumptive diagnosis of two diseases of the urinary system.",
+              "filename": "184",
+              "url": "https://archive.ics.uci.edu/static/public/184/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/184/acute+inflammations"
+            },
+            {
+              "name": "Audiology (Standardized)",
+              "description": "Standardized version of the original audiology database",
+              "filename": "8",
+              "url": "https://archive.ics.uci.edu/static/public/8/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/8/audiology+standardized"
+            },
+            {
+              "name": "Autistic Spectrum Disorder Screening Data for Children  ",
+              "description": "Children screening data for autism suitable for classification and predictive tasks",
+              "filename": "419",
+              "url": "https://archive.ics.uci.edu/static/public/419/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/419/autistic+spectrum+disorder+screening+data+for+children"
+            },
+            {
+              "name": "Breast Cancer",
+              "description": "This breast cancer domain was obtained from the University Medical Centre, Institute of Oncology, Ljubljana, Yugoslavia. This is one of three domains provided by the Oncology Institute that has repeatedly appeared in the machine learning literature. (See also lymphography and primary-tumor.)",
+              "filename": "14",
+              "url": "https://archive.ics.uci.edu/static/public/14/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/14/breast+cancer"
+            },
+            {
+              "name": "Breast Cancer Coimbra",
+              "description": "Clinical features were observed or measured for 64 patients with breast cancer and 52 healthy controls.",
+              "filename": "451",
+              "url": "https://archive.ics.uci.edu/static/public/451/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/451/breast+cancer+coimbra"
+            },
+            {
+              "name": "Breast Cancer Wisconsin (Diagnostic)",
+              "description": "Diagnostic Wisconsin Breast Cancer Database.",
+              "filename": "17",
+              "url": "https://archive.ics.uci.edu/static/public/17/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic"
+            },
+            {
+              "name": "Breast Cancer Wisconsin (Original)",
+              "description": "Original Wisconsin Breast Cancer Database",
+              "filename": "15",
+              "url": "https://archive.ics.uci.edu/static/public/15/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/15/breast+cancer+wisconsin+original"
+            },
+            {
+              "name": "CDC Diabetes Health Indicators",
+              "description": "The Diabetes Health Indicators Dataset contains healthcare statistics and lifestyle survey information about people in general along with their diagnosis of diabetes. The 35 features consist of some demographics, lab test results, and answers to survey questions for each patient. The target varia...",
+              "filename": "891",
+              "url": "https://archive.ics.uci.edu/static/public/891/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators"
+            },
+            {
+              "name": "Cardiotocography",
+              "description": "The dataset consists of measurements of fetal heart rate (FHR) and uterine contraction (UC) features on cardiotocograms classified by expert obstetricians.",
+              "filename": "193",
+              "url": "https://archive.ics.uci.edu/static/public/193/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/193/cardiotocography"
+            },
+            {
+              "name": "Cervical Cancer (Risk Factors)",
+              "description": "This dataset focuses on the prediction of indicators/diagnosis of cervical cancer. The features cover demographic information, habits, and historic medical records.",
+              "filename": "383",
+              "url": "https://archive.ics.uci.edu/static/public/383/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/383/cervical+cancer+risk+factors"
+            },
+            {
+              "name": "Cirrhosis Patient Survival Prediction",
+              "description": "Utilize 17 clinical features for predicting survival state of patients with liver cirrhosis. The survival states include 0 = D (death), 1 = C (censored), 2 = CL (censored due to liver transplantation).",
+              "filename": "878",
+              "url": "https://archive.ics.uci.edu/static/public/878/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/878/cirrhosis+patient+survival+prediction+dataset-1"
+            },
+            {
+              "name": "Contraceptive Method Choice",
+              "description": "Dataset is a subset of the 1987 National Indonesia Contraceptive Prevalence Survey.",
+              "filename": "30",
+              "url": "https://archive.ics.uci.edu/static/public/30/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/30/contraceptive+method+choice"
+            },
+            {
+              "name": "DARWIN",
+              "description": "The DARWIN dataset includes handwriting data from 174 participants. The classification task consists in distinguishing Alzheimer’s disease patients from healthy people.",
+              "filename": "732",
+              "url": "https://archive.ics.uci.edu/static/public/732/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/732/darwin"
+            },
+            {
+              "name": "Dermatology",
+              "description": "Aim for this dataset is to determine the type of Eryhemato-Squamous Disease.",
+              "filename": "33",
+              "url": "https://archive.ics.uci.edu/static/public/33/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/33/dermatology"
+            },
+            {
+              "name": "Diabetic Retinopathy Debrecen",
+              "description": "This dataset contains features extracted from the Messidor image set to predict whether an image contains signs of diabetic retinopathy or not.",
+              "filename": "329",
+              "url": "https://archive.ics.uci.edu/static/public/329/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/329/diabetic+retinopathy+debrecen"
+            },
+            {
+              "name": "Differentiated Thyroid Cancer Recurrence",
+              "description": "This data set contains 13 clinicopathologic features aiming to predict recurrence of well differentiated thyroid cancer. The data set was collected in duration of 15 years and each patient was followed for at least 10 years.",
+              "filename": "915",
+              "url": "https://archive.ics.uci.edu/static/public/915/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/915/differentiated+thyroid+cancer+recurrence"
+            },
+            {
+              "name": "EEG Eye State",
+              "description": "The data set consists of 14 EEG values and a value indicating the eye state.",
+              "filename": "264",
+              "url": "https://archive.ics.uci.edu/static/public/264/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/264/eeg+eye+state"
+            },
+            {
+              "name": "Echocardiogram",
+              "description": "Data for classifying if patients will survive for at least one year after a heart attack",
+              "filename": "38",
+              "url": "https://archive.ics.uci.edu/static/public/38/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/38/echocardiogram"
+            },
+            {
+              "name": "Haberman's Survival",
+              "description": "Dataset contains cases from study conducted on the survival of patients who had undergone surgery for breast cancer",
+              "filename": "43",
+              "url": "https://archive.ics.uci.edu/static/public/43/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/43/haberman+s+survival"
+            },
+            {
+              "name": "Heart Disease",
+              "description": "4 databases: Cleveland, Hungary, Switzerland, and the VA Long Beach",
+              "filename": "45",
+              "url": "https://archive.ics.uci.edu/static/public/45/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/45/heart+disease"
+            },
+            {
+              "name": "Hepatitis",
+              "description": "From G.Gong: CMU; Mostly Boolean or numeric-valued attribute types; Includes cost data (donated by Peter Turney)",
+              "filename": "46",
+              "url": "https://archive.ics.uci.edu/static/public/46/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/46/hepatitis"
+            },
+            {
+              "name": "Hepatitis C Virus (HCV) for Egyptian patients",
+              "description": "Egyptian patients who underwent treatment dosages for HCV about 18 months. Discretization should be applied based on expert recommendations; there is an attached file shows how.",
+              "filename": "503",
+              "url": "https://archive.ics.uci.edu/static/public/503/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/503/hepatitis+c+virus+hcv+for+egyptian+patients"
+            },
+            {
+              "name": "ILPD (Indian Liver Patient Dataset)",
+              "description": "Death by liver cirrhosis continues to increase, given the increase in alcohol consumption rates, chronic hepatitis infections, and obesity-related liver disease. Notwithstanding the high mortality of this disease, liver diseases do not affect all sub-populations equally. The early detection of pa...",
+              "filename": "225",
+              "url": "https://archive.ics.uci.edu/static/public/225/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/225/ilpd+indian+liver+patient+dataset"
+            },
+            {
+              "name": "Lung Cancer",
+              "description": "Lung cancer data; no attribute definitions",
+              "filename": "62",
+              "url": "https://archive.ics.uci.edu/static/public/62/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/62/lung+cancer"
+            },
+            {
+              "name": "Lymphography",
+              "description": "This lymphography domain was obtained from the University Medical Centre, Institute of Oncology, Ljubljana, Yugoslavia.  (Restricted access)",
+              "filename": "63",
+              "url": "https://archive.ics.uci.edu/static/public/63/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/63/lymphography"
+            },
+            {
+              "name": "Mammographic Mass",
+              "description": "Discrimination of benign and malignant mammographic masses based on BI-RADS attributes and the patient's age.",
+              "filename": "161",
+              "url": "https://archive.ics.uci.edu/static/public/161/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/161/mammographic+mass"
+            },
+            {
+              "name": "Maternal Health Risk",
+              "description": "Data has been collected from different hospitals, community clinics, maternal health cares from the rural areas of Bangladesh through the IoT based risk monitoring system.",
+              "filename": "863",
+              "url": "https://archive.ics.uci.edu/static/public/863/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/863/maternal+health+risk"
+            },
+            {
+              "name": "Myocardial infarction complications",
+              "description": "Prediction of myocardial infarction complications",
+              "filename": "579",
+              "url": "https://archive.ics.uci.edu/static/public/579/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/579/myocardial+infarction+complications"
+            },
+            {
+              "name": "National Health and Nutrition Health Survey 2013-2014 (NHANES) Age Prediction Subset",
+              "description": "The National Health and Nutrition Examination Survey (NHANES), administered by the Centers for Disease Control and Prevention (CDC), collects extensive health and nutritional information from a diverse U.S. population. Though expansive, the dataset is often too broad for specific analytical purpo...",
+              "filename": "887",
+              "url": "https://archive.ics.uci.edu/static/public/887/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/887/national+health+and+nutrition+health+survey+2013-2014+(nhanes)+age+prediction+subset"
+            },
+            {
+              "name": "National Poll on Healthy Aging (NPHA)",
+              "description": "This is a subset of the NPHA dataset filtered down to develop and validate machine learning algorithms for predicting the number of doctors a survey respondent sees in a year. This dataset’s records represent seniors who responded to the NPHA survey.",
+              "filename": "936",
+              "url": "https://archive.ics.uci.edu/static/public/936/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/936/national+poll+on+healthy+aging+(npha)"
+            },
+            {
+              "name": "Parkinsons",
+              "description": "Oxford Parkinson's Disease Detection Dataset",
+              "filename": "174",
+              "url": "https://archive.ics.uci.edu/static/public/174/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/174/parkinsons"
+            },
+            {
+              "name": "Post-Operative Patient",
+              "description": "Dataset of patient features",
+              "filename": "82",
+              "url": "https://archive.ics.uci.edu/static/public/82/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/82/post+operative+patient"
+            },
+            {
+              "name": "Primary Tumor",
+              "description": "From Ljubljana Oncology Institute",
+              "filename": "83",
+              "url": "https://archive.ics.uci.edu/static/public/83/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/83/primary+tumor"
+            },
+            {
+              "name": "Regensburg Pediatric Appendicitis",
+              "description": "This repository holds the data from a cohort of pediatric patients with suspected appendicitis admitted with abdominal pain to Children’s Hospital St. Hedwig in Regensburg, Germany, between 2016 and 2021. Each patient has (potentially multiple) ultrasound (US) images, aka views, tabular data comp...",
+              "filename": "938",
+              "url": "https://archive.ics.uci.edu/static/public/938/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/938/regensburg+pediatric+appendicitis"
+            },
+            {
+              "name": "SPECT Heart",
+              "description": "Data on cardiac Single Proton Emission Computed Tomography (SPECT) images. Each patient classified into two categories: normal and abnormal.",
+              "filename": "95",
+              "url": "https://archive.ics.uci.edu/static/public/95/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/95/spect+heart"
+            },
+            {
+              "name": "SPECTF Heart",
+              "description": "Data on cardiac Single Proton Emission Computed Tomography (SPECT) images. Each patient classified into two categories: normal and abnormal.",
+              "filename": "96",
+              "url": "https://archive.ics.uci.edu/static/public/96/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/96/spectf+heart"
+            },
+            {
+              "name": "Sepsis Survival Minimal Clinical Records",
+              "description": "The dataset consists of 110,204 admissions of 84,811 hospitalized subjects between 2011 and 2012 in Norway who were diagnosed with infections, systemic inflammatory response syndrome, sepsis by causative microbes, or septic shock.  The prediction task is to determine whether a patient survived or...",
+              "filename": "827",
+              "url": "https://archive.ics.uci.edu/static/public/827/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/827/sepsis+survival+minimal+clinical+records"
+            },
+            {
+              "name": "Statlog (Heart)",
+              "description": "This dataset is a heart disease database similar to a database already present in the repository (Heart Disease databases) but in a slightly different form",
+              "filename": "145",
+              "url": "https://archive.ics.uci.edu/static/public/145/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/145/statlog+heart"
+            },
+            {
+              "name": "Thoracic Surgery Data",
+              "description": "The data is dedicated to classification problem related to the post-operative life expectancy in the lung cancer patients: class 1 - death within one year after surgery, class 2 - survival.",
+              "filename": "277",
+              "url": "https://archive.ics.uci.edu/static/public/277/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/277/thoracic+surgery+data"
+            },
+            {
+              "name": "Vertebral Column",
+              "description": "Data set containing values for six biomechanical features used to classify orthopaedic patients into 3 classes (normal, disk hernia or spondilolysthesis) or 2 classes (normal or abnormal).",
+              "filename": "212",
+              "url": "https://archive.ics.uci.edu/static/public/212/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/212/vertebral+column"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering",
+          "datasets": [
+            {
+              "name": "Cervical Cancer Behavior Risk",
+              "description": "The dataset contains 19 attributes regarding ca cervix behavior risk with class label is ca_cervix with 1 and 0 as values which means the respondent with and without ca cervix, respectively.",
+              "filename": "537",
+              "url": "https://archive.ics.uci.edu/static/public/537/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/537/cervical+cancer+behavior+risk"
+            },
+            {
+              "name": "Diabetes 130-US Hospitals for Years 1999-2008",
+              "description": "The dataset represents ten years (1999-2008) of clinical care at 130 US hospitals and integrated delivery networks. Each row concerns hospital records of patients diagnosed with diabetes, who underwent laboratory, medications, and stayed up to 14 days. The goal is to determine the early readmissi...",
+              "filename": "296",
+              "url": "https://archive.ics.uci.edu/static/public/296/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008"
+            },
+            {
+              "name": "HCV data",
+              "description": "The data set contains laboratory values of blood donors and Hepatitis C patients and demographic values like age.",
+              "filename": "571",
+              "url": "https://archive.ics.uci.edu/static/public/571/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/571/hcv+data"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering, Regression",
+          "datasets": [
+            {
+              "name": "Drug Reviews (Druglib.com)",
+              "description": "The dataset provides patient reviews on specific drugs along with related conditions. Reviews and ratings are grouped into reports on the three aspects benefits, side effects and overall comment.",
+              "filename": "461",
+              "url": "https://archive.ics.uci.edu/static/public/461/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/461/drug+review+dataset+druglib+com"
+            },
+            {
+              "name": "Estimation of Obesity Levels Based On Eating Habits and Physical Condition ",
+              "description": "This dataset include data for the estimation of obesity levels in individuals from the countries of Mexico, Peru and Colombia, based on their eating habits and physical condition.",
+              "filename": "544",
+              "url": "https://archive.ics.uci.edu/static/public/544/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/544/estimation+of+obesity+levels+based+on+eating+habits+and+physical+condition"
+            },
+            {
+              "name": "Heart Failure Clinical Records",
+              "description": "This dataset contains the medical records of 299 patients who had heart failure, collected during their follow-up period, where each patient profile has 13 clinical features.",
+              "filename": "519",
+              "url": "https://archive.ics.uci.edu/static/public/519/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/519/heart+failure+clinical+records"
+            },
+            {
+              "name": "Multivariate Gait Data",
+              "description": "Bilateral (left, right) joint angle (ankle, knee, hip) times series data collected from 10 healthy subjects under 3 walking conditions (unbraced, knee braced, ankle braced). For each condition, each subject’s data consists of 10 consecutive gait cycles.",
+              "filename": "760",
+              "url": "https://archive.ics.uci.edu/static/public/760/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/760/multivariate+gait+data"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Other",
+          "datasets": [
+            {
+              "name": "Glioma Grading Clinical and Mutation Features",
+              "description": "Gliomas are the most common primary tumors of the brain. They can be graded as LGG (Lower-Grade Glioma) or GBM (Glioblastoma Multiforme) depending on the histological/imaging criteria. Clinical and molecular/mutation factors are also very crucial for the grading process. Molecular tests are expen...",
+              "filename": "759",
+              "url": "https://archive.ics.uci.edu/static/public/759/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/759/glioma+grading+clinical+and+mutation+features+dataset"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Other, Regression",
+          "datasets": [
+            {
+              "name": "SUPPORT2",
+              "description": "This dataset comprises 9105 individual critically ill patients across 5 United States medical centers, accessioned throughout 1989-1991 and 1992-1994.\nEach row concerns hospitalized patient records who met the inclusion and exclusion criteria for nine disease categories: acute respiratory failure...",
+              "filename": "880",
+              "url": "https://archive.ics.uci.edu/static/public/880/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/880/support2"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Regression",
+          "datasets": [
+            {
+              "name": "AIDS Clinical Trials Group Study 175",
+              "description": "The AIDS Clinical Trials Group Study 175 Dataset contains healthcare statistics and categorical information about patients who have been diagnosed with AIDS. This dataset was initially published in 1996. The prediction task is to predict whether or not each patient died within a certain window of...",
+              "filename": "890",
+              "url": "https://archive.ics.uci.edu/static/public/890/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/890/aids+clinical+trials+group+study+175"
+            },
+            {
+              "name": "Bone marrow transplant: children",
+              "description": "The data set describes pediatric patients with several hematologic diseases, who were subject to the unmanipulated allogeneic unrelated donor hematopoietic stem cell transplantation.",
+              "filename": "565",
+              "url": "https://archive.ics.uci.edu/static/public/565/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/565/bone+marrow+transplant+children"
+            },
+            {
+              "name": "Breast Cancer Wisconsin (Prognostic)",
+              "description": "Prognostic Wisconsin Breast Cancer Database",
+              "filename": "16",
+              "url": "https://archive.ics.uci.edu/static/public/16/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/16/breast+cancer+wisconsin+prognostic"
+            },
+            {
+              "name": "Fertility",
+              "description": "100 volunteers provide a semen sample analyzed according to the WHO 2010 criteria. Sperm concentration are related to socio-demographic data, environmental factors, health status, and life habits",
+              "filename": "244",
+              "url": "https://archive.ics.uci.edu/static/public/244/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/244/fertility"
+            },
+            {
+              "name": "Risk Factor Prediction of Chronic Kidney Disease",
+              "description": "Chronic kidney disease (CKD) is an increasing medical issue that declines the productivity of renal capacities and subsequently damages the kidneys.",
+              "filename": "857",
+              "url": "https://archive.ics.uci.edu/static/public/857/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/857/risk+factor+prediction+of+chronic+kidney+disease"
+            }
+          ]
+        },
+        {
+          "name": "Regression",
+          "datasets": [
+            {
+              "name": "Infrared Thermography Temperature",
+              "description": "The Infrared Thermography Temperature Dataset contains temperatures read from various locations of inferred images about patients, with the addition of oral temperatures measured for each individual. The 33 features consist of gender, age, ethnicity, ambiant temperature, humidity, distance, and o...",
+              "filename": "925",
+              "url": "https://archive.ics.uci.edu/static/public/925/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/925/infrared+thermography+temperature+dataset"
+            },
+            {
+              "name": "Liver Disorders",
+              "description": "BUPA Medical Research Ltd. database donated by Richard S. Forsyth",
+              "filename": "60",
+              "url": "https://archive.ics.uci.edu/static/public/60/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/60/liver+disorders"
+            },
+            {
+              "name": "Parkinsons Telemonitoring",
+              "description": "Oxford Parkinson's Disease Telemonitoring Dataset",
+              "filename": "189",
+              "url": "https://archive.ics.uci.edu/static/public/189/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/189/parkinsons+telemonitoring"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Computer Science",
+      "subcategories": [
+        {
+          "name": "Causa, Classification, Clustering, Regression",
+          "datasets": [
+            {
+              "name": "Gas Sensor Array Drift at Different Concentrations",
+              "description": "This archive contains 13910 measurements from 16 chemical sensors exposed to 6 different gases at various concentration levels.",
+              "filename": "270",
+              "url": "https://archive.ics.uci.edu/static/public/270/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/270/gas+sensor+array+drift+dataset+at+different+concentrations"
+            }
+          ]
+        },
+        {
+          "name": "Causal-Discovery, Classification, Regression",
+          "datasets": [
+            {
+              "name": "AI4I 2020 Predictive Maintenance Dataset",
+              "description": "The AI4I 2020 Predictive Maintenance Dataset is a synthetic dataset that reflects real predictive maintenance data encountered in industry.",
+              "filename": "601",
+              "url": "https://archive.ics.uci.edu/static/public/601/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/601/ai4i+2020+predictive+maintenance+dataset"
+            },
+            {
+              "name": "Pedestrians in Traffic",
+              "description": "This data-set contains a number of pedestrian tracks recorded from a vehicle driving in a town in southern Germany. The data is particularly well-suited for multi-agent motion prediction tasks.",
+              "filename": "536",
+              "url": "https://archive.ics.uci.edu/static/public/536/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/536/pedestrian+in+traffic+dataset"
+            }
+          ]
+        },
+        {
+          "name": "Classification",
+          "datasets": [
+            {
+              "name": "Accelerometer Gyro Mobile Phone",
+              "description": "data collected on 2022, in King Saud University in riyadh for recognizing human activities using mobile phone IMU sensors (Accelerometer, and Gyroscope). these activity is calssified to standing(stop), or walking.",
+              "filename": "755",
+              "url": "https://archive.ics.uci.edu/static/public/755/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/755/accelerometer+gyro+mobile+phone+dataset"
+            },
+            {
+              "name": "Banknote Authentication",
+              "description": "Data were extracted from images that were taken for the evaluation of an authentication procedure for banknotes.",
+              "filename": "267",
+              "url": "https://archive.ics.uci.edu/static/public/267/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/267/banknote+authentication"
+            },
+            {
+              "name": "COVID-19 Surveillance",
+              "description": "Coronavirus Disease (COVID-19) Surveillance.",
+              "filename": "567",
+              "url": "https://archive.ics.uci.edu/static/public/567/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/567/covid+19+surveillance"
+            },
+            {
+              "name": "Early Stage Diabetes Risk Prediction",
+              "description": "This dataset contains the sign and symptpom data of newly diabetic or would be diabetic patient.",
+              "filename": "529",
+              "url": "https://archive.ics.uci.edu/static/public/529/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/529/early+stage+diabetes+risk+prediction+dataset"
+            },
+            {
+              "name": "ISOLET",
+              "description": "Goal: Predict which letter-name was spoken--a simple classification task.",
+              "filename": "54",
+              "url": "https://archive.ics.uci.edu/static/public/54/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/54/isolet"
+            },
+            {
+              "name": "Letter Recognition",
+              "description": "Database of character image features; try to identify the letter",
+              "filename": "59",
+              "url": "https://archive.ics.uci.edu/static/public/59/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/59/letter+recognition"
+            },
+            {
+              "name": "NATICUSdroid (Android Permissions)",
+              "description": "Contains permissions extracted from more than 29000 benign & malware Android apps released between 2010-2019.",
+              "filename": "722",
+              "url": "https://archive.ics.uci.edu/static/public/722/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/722/naticusdroid+android+permissions+dataset"
+            },
+            {
+              "name": "Occupancy Detection ",
+              "description": "Experimental data used for binary classification (room occupancy) from Temperature,Humidity,Light and CO2. Ground-truth occupancy was obtained from time stamped pictures that were taken every minute.",
+              "filename": "357",
+              "url": "https://archive.ics.uci.edu/static/public/357/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/357/occupancy+detection"
+            },
+            {
+              "name": "Optical Recognition of Handwritten Digits",
+              "description": "Two versions of this database available; see folder",
+              "filename": "80",
+              "url": "https://archive.ics.uci.edu/static/public/80/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits"
+            },
+            {
+              "name": "Page Blocks Classification",
+              "description": "The problem consists of classifying all the blocks of the page layout of a document that has been detected by a segmentation process.",
+              "filename": "78",
+              "url": "https://archive.ics.uci.edu/static/public/78/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/78/page+blocks+classification"
+            },
+            {
+              "name": "Pen-Based Recognition of Handwritten Digits",
+              "description": "Digit database of 250 samples from 44 writers",
+              "filename": "81",
+              "url": "https://archive.ics.uci.edu/static/public/81/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/81/pen+based+recognition+of+handwritten+digits"
+            },
+            {
+              "name": "PhiUSIIL Phishing URL (Website)",
+              "description": "PhiUSIIL Phishing URL Dataset is a substantial dataset comprising 134,850 legitimate and 100,945 phishing URLs. Most of the URLs we analyzed, while constructing the dataset, are the latest URLs. Features are extracted from the source code of the webpage and URL. Features such as CharContinuationR...",
+              "filename": "967",
+              "url": "https://archive.ics.uci.edu/static/public/967/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/967/phiusiil+phishing+url+dataset"
+            },
+            {
+              "name": "Phishing Websites",
+              "description": "This dataset collected mainly from: PhishTank archive, MillerSmiles archive, Googleâ€™s searching operators.",
+              "filename": "327",
+              "url": "https://archive.ics.uci.edu/static/public/327/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/327/phishing+websites"
+            },
+            {
+              "name": "Room Occupancy Estimation",
+              "description": "Data set for estimating the precise number of occupants in a room using multiple non-intrusive environmental sensors like temperature, light, sound, CO2 and PIR.",
+              "filename": "864",
+              "url": "https://archive.ics.uci.edu/static/public/864/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/864/room+occupancy+estimation"
+            },
+            {
+              "name": "Skin Segmentation",
+              "description": "The Skin Segmentation dataset is constructed over B, G, R color space. Skin and Nonskin dataset is generated using skin textures from face images of diversity of age, gender, and race people.",
+              "filename": "229",
+              "url": "https://archive.ics.uci.edu/static/public/229/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/229/skin+segmentation"
+            },
+            {
+              "name": "Spambase",
+              "description": "Classifying Email as Spam or Non-Spam",
+              "filename": "94",
+              "url": "https://archive.ics.uci.edu/static/public/94/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/94/spambase"
+            },
+            {
+              "name": "Student Academics Performance",
+              "description": "The dataset tried to find the end semester percentage prediction based on different social, economic and academic attributes.",
+              "filename": "467",
+              "url": "https://archive.ics.uci.edu/static/public/467/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/467/student+academics+performance"
+            },
+            {
+              "name": "Student Performance on an Entrance Examination",
+              "description": "This dataset contains data of the candidates who qualified the medical entrance examination for admission to medical colleges of Assam of a particular year and collected by Prof. Jiten Hazarika.",
+              "filename": "582",
+              "url": "https://archive.ics.uci.edu/static/public/582/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/582/student+performance+on+an+entrance+examination"
+            },
+            {
+              "name": "Website Phishing",
+              "description": "",
+              "filename": "379",
+              "url": "https://archive.ics.uci.edu/static/public/379/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/379/website+phishing"
+            },
+            {
+              "name": "YouTube Spam Collection",
+              "description": "It is a public set of comments collected for spam research. It has five datasets composed by 1,956 real messages extracted from five videos that were among the 10 most viewed on the collection period.",
+              "filename": "380",
+              "url": "https://archive.ics.uci.edu/static/public/380/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/380/youtube+spam+collection"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering",
+          "datasets": [
+            {
+              "name": "User Knowledge Modeling",
+              "description": "It is the real dataset about the students' knowledge status about the subject of Electrical DC Machines. The dataset had been obtained from Ph.D. Thesis.",
+              "filename": "257",
+              "url": "https://archive.ics.uci.edu/static/public/257/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/257/user+knowledge+modeling"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Other",
+          "datasets": [
+            {
+              "name": "Recipe Reviews and User Feedback",
+              "description": "The \"Recipe Reviews and User Feedback Dataset\" is a comprehensive repository of data encompassing various aspects of recipe reviews and user interactions. It includes essential information such as the recipe name, its ranking on the top 100 recipes list, a unique recipe code, and user details lik...",
+              "filename": "911",
+              "url": "https://archive.ics.uci.edu/static/public/911/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/911/recipe+reviews+and+user+feedback+dataset"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Regression",
+          "datasets": [
+            {
+              "name": "Auction Verification",
+              "description": "We modeled a simultaneous multi-round auction with BPMN models, transformed the latter to Petri nets, and used a model checker to verify whether certain outcomes of the auction are possible or not.",
+              "filename": "713",
+              "url": "https://archive.ics.uci.edu/static/public/713/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/713/auction+verification"
+            },
+            {
+              "name": "Energy Efficiency",
+              "description": "This study looked into assessing the heating load and cooling load requirements of buildings (that is, energy efficiency) as a function of building parameters.",
+              "filename": "242",
+              "url": "https://archive.ics.uci.edu/static/public/242/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/242/energy+efficiency"
+            }
+          ]
+        },
+        {
+          "name": "Clustering, Regression",
+          "datasets": [
+            {
+              "name": "Gas Turbine CO and NOx Emission Data Set",
+              "description": "The dataset contains 36733 instances of 11 sensor measures aggregated over one hour, from a gas turbine located in Turkey for the purpose of studying flue gas emissions, namely CO and NOx.",
+              "filename": "551",
+              "url": "https://archive.ics.uci.edu/static/public/551/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set"
+            }
+          ]
+        },
+        {
+          "name": "Regression",
+          "datasets": [
+            {
+              "name": "Air Quality",
+              "description": "Contains the responses of a gas multisensor device deployed on the field in an Italian city. Hourly responses averages are recorded along with gas concentrations references from a certified analyzer.",
+              "filename": "360",
+              "url": "https://archive.ics.uci.edu/static/public/360/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/360/air+quality"
+            },
+            {
+              "name": "Appliances Energy Prediction",
+              "description": "Experimental data used to create regression models of appliances energy use in a low energy building.",
+              "filename": "374",
+              "url": "https://archive.ics.uci.edu/static/public/374/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction"
+            },
+            {
+              "name": "Combined Cycle Power Plant",
+              "description": "The dataset contains 9568 data points collected from a Combined Cycle Power Plant over 6 years (2006-2011), when the plant was set to work with full load.",
+              "filename": "294",
+              "url": "https://archive.ics.uci.edu/static/public/294/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/294/combined+cycle+power+plant"
+            },
+            {
+              "name": "Computer Hardware",
+              "description": "Relative CPU Performance Data, described in terms of its cycle time, memory size, etc.",
+              "filename": "29",
+              "url": "https://archive.ics.uci.edu/static/public/29/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/29/computer+hardware"
+            },
+            {
+              "name": "Servo",
+              "description": "Data was from a simulation of a servo system",
+              "filename": "87",
+              "url": "https://archive.ics.uci.edu/static/public/87/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/87/servo"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Business",
+      "subcategories": [
+        {
+          "name": "Classification",
+          "datasets": [
+            {
+              "name": "Bank Marketing",
+              "description": "The data is related with direct marketing campaigns (phone calls) of a Portuguese banking institution. The classification goal is to predict if the client will subscribe a term deposit (variable y).",
+              "filename": "222",
+              "url": "https://archive.ics.uci.edu/static/public/222/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/222/bank+marketing"
+            },
+            {
+              "name": "Blood Transfusion Service Center",
+              "description": "Data taken from the Blood Transfusion Service Center in Hsin-Chu City in Taiwan -- this is a classification problem.",
+              "filename": "176",
+              "url": "https://archive.ics.uci.edu/static/public/176/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/176/blood+transfusion+service+center"
+            },
+            {
+              "name": "Credit Approval",
+              "description": "This data concerns credit card applications; good mix of attributes",
+              "filename": "27",
+              "url": "https://archive.ics.uci.edu/static/public/27/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/27/credit+approval"
+            },
+            {
+              "name": "Default of Credit Card Clients",
+              "description": "This research aimed at the case of customers' default payments in Taiwan and compares the predictive accuracy of probability of default among six data mining methods.",
+              "filename": "350",
+              "url": "https://archive.ics.uci.edu/static/public/350/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients"
+            },
+            {
+              "name": "In-Vehicle Coupon Recommendation",
+              "description": "This data studies whether a person will accept the coupon recommended to him in different driving scenarios",
+              "filename": "603",
+              "url": "https://archive.ics.uci.edu/static/public/603/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/603/in+vehicle+coupon+recommendation"
+            },
+            {
+              "name": "Japanese Credit Screening",
+              "description": "Includes domain theory (generated by talking to Japanese domain experts); data in Lisp",
+              "filename": "28",
+              "url": "https://archive.ics.uci.edu/static/public/28/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/28/japanese+credit+screening"
+            },
+            {
+              "name": "Polish Companies Bankruptcy",
+              "description": "The dataset is about bankruptcy prediction of Polish companies.The bankrupt companies were analyzed in the period 2000-2012, while the still operating companies were evaluated from 2007 to 2013.",
+              "filename": "365",
+              "url": "https://archive.ics.uci.edu/static/public/365/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/365/polish+companies+bankruptcy+data"
+            },
+            {
+              "name": "Statlog (Australian Credit Approval)",
+              "description": "This file concerns credit card applications. This database exists elsewhere in the repository (Credit Screening Database) in a slightly different form",
+              "filename": "143",
+              "url": "https://archive.ics.uci.edu/static/public/143/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/143/statlog+australian+credit+approval"
+            },
+            {
+              "name": "Taiwanese Bankruptcy Prediction",
+              "description": "The data were collected from the Taiwan Economic Journal  for the years 1999 to 2009. Company bankruptcy was defined based on the business regulations of the Taiwan Stock Exchange.",
+              "filename": "572",
+              "url": "https://archive.ics.uci.edu/static/public/572/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/572/taiwanese+bankruptcy+prediction"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering",
+          "datasets": [
+            {
+              "name": "Absenteeism at work",
+              "description": "The database was created with records of absenteeism at work from July 2007 to July 2010 at a courier company in Brazil.",
+              "filename": "445",
+              "url": "https://archive.ics.uci.edu/static/public/445/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/445/absenteeism+at+work"
+            },
+            {
+              "name": "Dow Jones Index",
+              "description": "This dataset contains weekly data for the Dow Jones Industrial Index.  It has been used in computational investing research.",
+              "filename": "312",
+              "url": "https://archive.ics.uci.edu/static/public/312/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/312/dow+jones+index"
+            },
+            {
+              "name": "Online Retail",
+              "description": "This is a transactional data set which contains all the transactions occurring between 01/12/2010 and 09/12/2011 for a UK-based and registered non-store online retail.",
+              "filename": "352",
+              "url": "https://archive.ics.uci.edu/static/public/352/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/352/online+retail"
+            },
+            {
+              "name": "Online Shoppers Purchasing Intention Dataset",
+              "description": "Of the 12,330 sessions in the dataset,\n84.5% (10,422) were negative class samples that did not\nend with shopping, and the rest (1908) were positive class\nsamples ending with shopping.",
+              "filename": "468",
+              "url": "https://archive.ics.uci.edu/static/public/468/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset"
+            },
+            {
+              "name": "Wholesale customers",
+              "description": "The data set refers to clients of a wholesale distributor. It includes the annual spending in monetary units (m.u.) on diverse product categories",
+              "filename": "292",
+              "url": "https://archive.ics.uci.edu/static/public/292/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/292/wholesale+customers"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering, Regression",
+          "datasets": [
+            {
+              "name": "Apartment for Rent Classified",
+              "description": "This is a dataset of classified for apartments for rent in USA.",
+              "filename": "555",
+              "url": "https://archive.ics.uci.edu/static/public/555/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/555/apartment+for+rent+classified"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Regression",
+          "datasets": [
+            {
+              "name": "ISTANBUL STOCK EXCHANGE",
+              "description": "Data sets includes returns of Istanbul Stock Exchange with seven other international index; SP, DAX, FTSE, NIKKEI, BOVESPA, MSCE_EU, MSCI_EM from Jun 5, 2009 to Feb 22, 2011.",
+              "filename": "247",
+              "url": "https://archive.ics.uci.edu/static/public/247/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/247/istanbul+stock+exchange"
+            },
+            {
+              "name": "Iranian Churn",
+              "description": "This dataset is randomly collected from an Iranian telecom company's database over a period of 12 months.",
+              "filename": "563",
+              "url": "https://archive.ics.uci.edu/static/public/563/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/563/iranian+churn+dataset"
+            },
+            {
+              "name": "Online News Popularity",
+              "description": "This dataset summarizes a heterogeneous set of features about articles published by Mashable in a period of two years. The goal is to predict the number of shares in social networks (popularity).",
+              "filename": "332",
+              "url": "https://archive.ics.uci.edu/static/public/332/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/332/online+news+popularity"
+            },
+            {
+              "name": "Productivity Prediction of Garment Employees",
+              "description": "This dataset includes important attributes of the garment manufacturing process and the productivity of the employees which had been collected manually and also been validated by the industry experts.",
+              "filename": "597",
+              "url": "https://archive.ics.uci.edu/static/public/597/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/597/productivity+prediction+of+garment+employees"
+            },
+            {
+              "name": "Wine Quality",
+              "description": "Two datasets are included, related to red and white vinho verde wine samples, from the north of Portugal. The goal is to model wine quality based on physicochemical tests (see [Cortez et al., 2009], http://www3.dsi.uminho.pt/pcortez/wine/).",
+              "filename": "186",
+              "url": "https://archive.ics.uci.edu/static/public/186/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/186/wine+quality"
+            }
+          ]
+        },
+        {
+          "name": "Clustering",
+          "datasets": [
+            {
+              "name": "Facebook Live Sellers in Thailand",
+              "description": "Facebook pages of 10 Thai fashion and cosmetics retail sellers. Posts of a different nature (video, photos, statuses, and links). Engagement metrics consist of comments, shares, and reactions.",
+              "filename": "488",
+              "url": "https://archive.ics.uci.edu/static/public/488/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/488/facebook+live+sellers+in+thailand"
+            },
+            {
+              "name": "Sales Transactions Weekly",
+              "description": "Contains weekly purchased quantities of 800 over products over 52 weeks. Normalised values are provided too.",
+              "filename": "396",
+              "url": "https://archive.ics.uci.edu/static/public/396/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/396/sales+transactions+dataset+weekly"
+            }
+          ]
+        },
+        {
+          "name": "Regression",
+          "datasets": [
+            {
+              "name": "Daily Demand Forecasting Orders",
+              "description": "The dataset was collected during 60 days, this is a real database of a brazilian logistics company.",
+              "filename": "409",
+              "url": "https://archive.ics.uci.edu/static/public/409/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/409/daily+demand+forecasting+orders"
+            },
+            {
+              "name": "Facebook Metrics",
+              "description": "Facebook performance metrics of a renowned cosmetic's brand Facebook page.",
+              "filename": "368",
+              "url": "https://archive.ics.uci.edu/static/public/368/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/368/facebook+metrics"
+            },
+            {
+              "name": "Real Estate Valuation",
+              "description": "The real estate valuation is a regression problem. The market historical data set of real estate valuation are collected from Sindian Dist., New Taipei City, Taiwan.",
+              "filename": "477",
+              "url": "https://archive.ics.uci.edu/static/public/477/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/477/real+estate+valuation+data+set"
+            },
+            {
+              "name": "Seoul Bike Sharing Demand",
+              "description": "The dataset contains count of public bicycles rented per hour in the Seoul Bike Sharing System, with corresponding weather data and holiday information",
+              "filename": "560",
+              "url": "https://archive.ics.uci.edu/static/public/560/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/560/seoul+bike+sharing+demand"
+            },
+            {
+              "name": "Stock Portfolio Performance",
+              "description": "The data set of performances of weighted scoring stock portfolios are obtained with mixture design from the US stock market historical database.",
+              "filename": "390",
+              "url": "https://archive.ics.uci.edu/static/public/390/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/390/stock+portfolio+performance"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Physics and Chemistry",
+      "subcategories": [
+        {
+          "name": "Classification",
+          "datasets": [
+            {
+              "name": "Annealing",
+              "description": "Steel annealing data",
+              "filename": "3",
+              "url": "https://archive.ics.uci.edu/static/public/3/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/3/annealing"
+            },
+            {
+              "name": "Connectionist Bench (Sonar, Mines vs. Rocks)",
+              "description": "The task is to train a network to discriminate between sonar signals bounced off a metal cylinder and those bounced off a roughly cylindrical rock.",
+              "filename": "151",
+              "url": "https://archive.ics.uci.edu/static/public/151/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/151/connectionist+bench+sonar+mines+vs+rocks"
+            },
+            {
+              "name": "Cylinder Bands",
+              "description": "Used in decision tree induction for mitigating process delays known as cylinder bands\" in rotogravure printing\"",
+              "filename": "32",
+              "url": "https://archive.ics.uci.edu/static/public/32/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/32/cylinder+bands"
+            },
+            {
+              "name": "Glass Identification",
+              "description": "From USA Forensic Science Service; 6 types of glass; defined in terms of their oxide content (i.e. Na, Fe, K, etc)",
+              "filename": "42",
+              "url": "https://archive.ics.uci.edu/static/public/42/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/42/glass+identification"
+            },
+            {
+              "name": "Ionosphere",
+              "description": "Classification of radar returns from the ionosphere",
+              "filename": "52",
+              "url": "https://archive.ics.uci.edu/static/public/52/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/52/ionosphere"
+            },
+            {
+              "name": "MAGIC Gamma Telescope",
+              "description": "Data are MC generated to simulate registration of high energy gamma particles in an atmospheric Cherenkov telescope",
+              "filename": "159",
+              "url": "https://archive.ics.uci.edu/static/public/159/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/159/magic+gamma+telescope"
+            },
+            {
+              "name": "Musk (Version 1)",
+              "description": "The goal is to learn to predict whether new molecules will be musks or non-musks",
+              "filename": "74",
+              "url": "https://archive.ics.uci.edu/static/public/74/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/74/musk+version+1"
+            },
+            {
+              "name": "Musk (Version 2)",
+              "description": "The goal is to learn to predict whether new molecules will be musks or non-musks",
+              "filename": "75",
+              "url": "https://archive.ics.uci.edu/static/public/75/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/75/musk+version+2"
+            },
+            {
+              "name": "Shuttle Landing Control",
+              "description": "Tiny database; all nominal values",
+              "filename": "88",
+              "url": "https://archive.ics.uci.edu/static/public/88/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/88/shuttle+landing+control"
+            },
+            {
+              "name": "Statlog (Shuttle)",
+              "description": "The shuttle dataset contains 9 attributes all of which are numerical. Approximately 80% of the data belongs to class 1",
+              "filename": "148",
+              "url": "https://archive.ics.uci.edu/static/public/148/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/148/statlog+shuttle"
+            },
+            {
+              "name": "Steel Plates Faults",
+              "description": "A dataset of steel platesâ€™ faults, classified into 7 different types. \nThe goal was to train machine learning for automatic pattern recognition.",
+              "filename": "198",
+              "url": "https://archive.ics.uci.edu/static/public/198/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/198/steel+plates+faults"
+            },
+            {
+              "name": "Waveform Database Generator (Version 1)",
+              "description": "CART book's waveform domains",
+              "filename": "107",
+              "url": "https://archive.ics.uci.edu/static/public/107/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/107/waveform+database+generator+version+1"
+            },
+            {
+              "name": "Wine",
+              "description": "Using chemical analysis to determine the origin of wines",
+              "filename": "109",
+              "url": "https://archive.ics.uci.edu/static/public/109/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/109/wine"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering",
+          "datasets": [
+            {
+              "name": "HTRU2",
+              "description": "Pulsar candidates collected during the HTRU survey. Pulsars are a type of star, of considerable scientific interest. Candidates must be classified in to pulsar and non-pulsar classes to aid discovery.",
+              "filename": "372",
+              "url": "https://archive.ics.uci.edu/static/public/372/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/372/htru2"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Regression",
+          "datasets": [
+            {
+              "name": "Electrical Grid Stability Simulated Data ",
+              "description": "The local stability analysis of the 4-node star system (electricity producer is in the center) implementing Decentral Smart Grid Control concept.",
+              "filename": "471",
+              "url": "https://archive.ics.uci.edu/static/public/471/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/471/electrical+grid+stability+simulated+data"
+            }
+          ]
+        },
+        {
+          "name": "Clustering, Regression",
+          "datasets": [
+            {
+              "name": "Individual Household Electric Power Consumption",
+              "description": "Measurements of electric power consumption in one household with a one-minute sampling rate over a period of almost 4 years. Different electrical quantities and some sub-metering values are available.",
+              "filename": "235",
+              "url": "https://archive.ics.uci.edu/static/public/235/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/235/individual+household+electric+power+consumption"
+            }
+          ]
+        },
+        {
+          "name": "Regression",
+          "datasets": [
+            {
+              "name": "Airfoil Self-Noise",
+              "description": "NASA data set, obtained from a series of aerodynamic and acoustic tests of two and three-dimensional airfoil blade sections conducted in an anechoic wind tunnel.",
+              "filename": "291",
+              "url": "https://archive.ics.uci.edu/static/public/291/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/291/airfoil+self+noise"
+            },
+            {
+              "name": "Challenger USA Space Shuttle O-Ring",
+              "description": "Task: predict the number of O-rings that experience thermal distress on a flight at 31 degrees F given data on the previous 23 shuttle flights",
+              "filename": "92",
+              "url": "https://archive.ics.uci.edu/static/public/92/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/92/challenger+usa+space+shuttle+o+ring"
+            },
+            {
+              "name": "Concrete Compressive Strength",
+              "description": "Concrete is the most important material in civil engineering. The concrete compressive strength is a highly nonlinear function of age and ingredients.",
+              "filename": "165",
+              "url": "https://archive.ics.uci.edu/static/public/165/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/165/concrete+compressive+strength"
+            },
+            {
+              "name": "Solar Flare",
+              "description": "Each class attribute counts the number of solar flares of a certain class that occur in a 24 hour period",
+              "filename": "89",
+              "url": "https://archive.ics.uci.edu/static/public/89/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/89/solar+flare"
+            },
+            {
+              "name": "Steel Industry Energy Consumption",
+              "description": "The data is collected from a smart small-scale steel industry in South Korea.",
+              "filename": "851",
+              "url": "https://archive.ics.uci.edu/static/public/851/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/851/steel+industry+energy+consumption"
+            },
+            {
+              "name": "Superconductivty Data",
+              "description": "Two file s contain data on 21263 superconductors and their relevant features.",
+              "filename": "464",
+              "url": "https://archive.ics.uci.edu/static/public/464/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/464/superconductivty+data"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Social Science",
+      "subcategories": [
+        {
+          "name": "Classification",
+          "datasets": [
+            {
+              "name": "Adult",
+              "description": "Predict whether annual income of an individual exceeds $50K/yr based on census data. Also known as \"Census Income\" dataset.",
+              "filename": "2",
+              "url": "https://archive.ics.uci.edu/static/public/2/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/2/adult"
+            },
+            {
+              "name": "Autism Screening Adult",
+              "description": "Autistic Spectrum Disorder Screening Data for Adult. This dataset is related to classification and predictive tasks.",
+              "filename": "426",
+              "url": "https://archive.ics.uci.edu/static/public/426/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/426/autism+screening+adult"
+            },
+            {
+              "name": "Balance Scale",
+              "description": "Balance scale weight & distance database",
+              "filename": "12",
+              "url": "https://archive.ics.uci.edu/static/public/12/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/12/balance+scale"
+            },
+            {
+              "name": "Balloons",
+              "description": "Data previously used in cognitive psychology experiment; 4 data sets represent different conditions of an experiment",
+              "filename": "13",
+              "url": "https://archive.ics.uci.edu/static/public/13/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/13/balloons"
+            },
+            {
+              "name": "Census Income",
+              "description": "Predict whether income exceeds $50K/yr based on census data.  Also known as Adult dataset.",
+              "filename": "20",
+              "url": "https://archive.ics.uci.edu/static/public/20/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/20/census+income"
+            },
+            {
+              "name": "Census-Income (KDD)",
+              "description": "This data set contains weighted census data extracted from the 1994 and 1995 current population surveys conducted by the U.S. Census Bureau.",
+              "filename": "117",
+              "url": "https://archive.ics.uci.edu/static/public/117/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/117/census+income+kdd"
+            },
+            {
+              "name": "Congressional Voting Records",
+              "description": "1984 United Stated Congressional Voting Records; Classify as Republican or Democrat",
+              "filename": "105",
+              "url": "https://archive.ics.uci.edu/static/public/105/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/105/congressional+voting+records"
+            },
+            {
+              "name": "Drug Consumption (Quantified)",
+              "description": "Classify type of drug consumer by personality data",
+              "filename": "373",
+              "url": "https://archive.ics.uci.edu/static/public/373/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/373/drug+consumption+quantified"
+            },
+            {
+              "name": "Hayes-Roth",
+              "description": "Topic: human subjects study",
+              "filename": "44",
+              "url": "https://archive.ics.uci.edu/static/public/44/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/44/hayes+roth"
+            },
+            {
+              "name": "Higher Education Students Performance Evaluation",
+              "description": "The data was collected from the Faculty of Engineering and Faculty of Educational Sciences students in 2019. The purpose is to predict students' end-of-term performances using ML techniques.",
+              "filename": "856",
+              "url": "https://archive.ics.uci.edu/static/public/856/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/856/higher+education+students+performance+evaluation"
+            },
+            {
+              "name": "Nursery",
+              "description": "Nursery Database was derived from a hierarchical decision model originally developed to rank applications for nursery schools.",
+              "filename": "76",
+              "url": "https://archive.ics.uci.edu/static/public/76/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/76/nursery"
+            },
+            {
+              "name": "Predict Students' Dropout and Academic Success",
+              "description": "A dataset created from a higher education institution (acquired from several disjoint databases) related to students enrolled in different undergraduate degrees, such as agronomy, design, education, nursing, journalism, management, social service, and technologies.\nThe dataset includes informatio...",
+              "filename": "697",
+              "url": "https://archive.ics.uci.edu/static/public/697/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success"
+            },
+            {
+              "name": "Statlog (German Credit Data)",
+              "description": "This dataset classifies people described by a set of attributes as good or bad credit risks. Comes in two formats (one all numeric). Also comes with a cost matrix",
+              "filename": "144",
+              "url": "https://archive.ics.uci.edu/static/public/144/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/144/statlog+german+credit+data"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering",
+          "datasets": [
+            {
+              "name": "Gender by Name",
+              "description": "This dataset attributes first names to genders, giving counts and probabilities.  It combines open-source government data from the US, UK, Canada, and Australia.",
+              "filename": "591",
+              "url": "https://archive.ics.uci.edu/static/public/591/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/591/gender+by+name"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Regression",
+          "datasets": [
+            {
+              "name": "Student Performance",
+              "description": "Predict student performance in secondary education (high school).",
+              "filename": "320",
+              "url": "https://archive.ics.uci.edu/static/public/320/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/320/student+performance"
+            }
+          ]
+        },
+        {
+          "name": "Clustering",
+          "datasets": [
+            {
+              "name": "US Census Data (1990)",
+              "description": "The USCensus1990raw data set contains a one percent sample of the Public Use Microdata Samples (PUMS) person records drawn from the full 1990 census sample.",
+              "filename": "116",
+              "url": "https://archive.ics.uci.edu/static/public/116/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/116/us+census+data+1990"
+            }
+          ]
+        },
+        {
+          "name": "Regression",
+          "datasets": [
+            {
+              "name": "Bike Sharing",
+              "description": "This dataset contains the hourly and daily count of rental bikes between years 2011 and 2012 in Capital bikeshare system with the corresponding weather and seasonal information.",
+              "filename": "275",
+              "url": "https://archive.ics.uci.edu/static/public/275/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset"
+            },
+            {
+              "name": "Communities and Crime",
+              "description": "Communities within the United States. The data combines socio-economic data from the 1990 US Census, law enforcement data from the 1990 US LEMAS survey, and crime data from the 1995 FBI UCR.",
+              "filename": "183",
+              "url": "https://archive.ics.uci.edu/static/public/183/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/183/communities+and+crime"
+            },
+            {
+              "name": "Communities and Crime Unnormalized",
+              "description": "Communities in the US. Data combines socio-economic data from the '90 Census, law enforcement data from the 1990 Law Enforcement Management and Admin Stats survey, and crime data from the 1995 FBI UCR",
+              "filename": "211",
+              "url": "https://archive.ics.uci.edu/static/public/211/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/211/communities+and+crime+unnormalized"
+            },
+            {
+              "name": "Power Consumption of Tetouan City",
+              "description": "This dataset is related to power consumption of three different distribution networks of Tetouan city which is located in north Morocco.",
+              "filename": "849",
+              "url": "https://archive.ics.uci.edu/static/public/849/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/849/power+consumption+of+tetouan+city"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Biology",
+      "subcategories": [
+        {
+          "name": "Classification",
+          "datasets": [
+            {
+              "name": "Covertype",
+              "description": "Classification of pixels into 7 forest cover types based on attributes such as elevation, aspect, slope, hillshade, soil-type, and more.",
+              "filename": "31",
+              "url": "https://archive.ics.uci.edu/static/public/31/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/31/covertype"
+            },
+            {
+              "name": "Dry Bean",
+              "description": "Images of 13,611 grains of 7 different registered dry beans were taken with a high-resolution camera. A total of 16 features; 12 dimensions and 4 shape forms, were obtained from the grains.",
+              "filename": "602",
+              "url": "https://archive.ics.uci.edu/static/public/602/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/602/dry+bean+dataset"
+            },
+            {
+              "name": "Ecoli",
+              "description": "This data contains protein localization sites",
+              "filename": "39",
+              "url": "https://archive.ics.uci.edu/static/public/39/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/39/ecoli"
+            },
+            {
+              "name": "Horse Colic",
+              "description": "Well documented attributes; 368 instances with 28 attributes (continuous, discrete, and nominal); 30% missing values",
+              "filename": "47",
+              "url": "https://archive.ics.uci.edu/static/public/47/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/47/horse+colic"
+            },
+            {
+              "name": "Iris",
+              "description": "A small classic dataset from Fisher, 1936. One of the earliest known datasets used for evaluating classification methods.",
+              "filename": "53",
+              "url": "https://archive.ics.uci.edu/static/public/53/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/53/iris"
+            },
+            {
+              "name": "Molecular Biology (Splice-junction Gene Sequences)",
+              "description": "Primate splice-junction gene sequences (DNA) with associated imperfect domain theory",
+              "filename": "69",
+              "url": "https://archive.ics.uci.edu/static/public/69/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/69/molecular+biology+splice+junction+gene+sequences"
+            },
+            {
+              "name": "Mushroom",
+              "description": "From Audobon Society Field Guide; mushrooms described in terms of physical characteristics; classification: poisonous or edible",
+              "filename": "73",
+              "url": "https://archive.ics.uci.edu/static/public/73/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/73/mushroom"
+            },
+            {
+              "name": "Raisin",
+              "description": "Images of the Kecimen and Besni raisin varieties were obtained with CVS. A total of 900 raisins were used, including 450 from both varieties, and 7 morphological features were extracted.",
+              "filename": "850",
+              "url": "https://archive.ics.uci.edu/static/public/850/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/850/raisin"
+            },
+            {
+              "name": "Rice (Cammeo and Osmancik)",
+              "description": "A total of 3810 rice grain's images were taken for the two species, processed and feature inferences were made. 7 morphological features were obtained for each grain of rice.",
+              "filename": "545",
+              "url": "https://archive.ics.uci.edu/static/public/545/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/545/rice+cammeo+and+osmancik"
+            },
+            {
+              "name": "Secondary Mushroom",
+              "description": "Dataset of simulated mushrooms for binary classification into edible and poisonous.",
+              "filename": "848",
+              "url": "https://archive.ics.uci.edu/static/public/848/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/848/secondary+mushroom+dataset"
+            },
+            {
+              "name": "Soybean (Large)",
+              "description": "Michalski's famous soybean disease database",
+              "filename": "90",
+              "url": "https://archive.ics.uci.edu/static/public/90/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/90/soybean+large"
+            },
+            {
+              "name": "Soybean (Small)",
+              "description": "Michalski's famous soybean disease database",
+              "filename": "91",
+              "url": "https://archive.ics.uci.edu/static/public/91/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/91/soybean+small"
+            },
+            {
+              "name": "Toxicity",
+              "description": "The dataset includes 171 molecules designed for functional domains of a core clock protein, CRY1, responsible for generating circadian rhythm. 56 of the molecules are toxic and the rest are non-toxic.",
+              "filename": "728",
+              "url": "https://archive.ics.uci.edu/static/public/728/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/728/toxicity-2"
+            },
+            {
+              "name": "Yeast",
+              "description": "Predicting the Cellular Localization Sites of Proteins",
+              "filename": "110",
+              "url": "https://archive.ics.uci.edu/static/public/110/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/110/yeast"
+            },
+            {
+              "name": "Zoo",
+              "description": "Artificial, 7 classes of animals",
+              "filename": "111",
+              "url": "https://archive.ics.uci.edu/static/public/111/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/111/zoo"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering",
+          "datasets": [
+            {
+              "name": "Mice Protein Expression",
+              "description": "Expression levels of 77 proteins measured in the cerebral cortex of 8 classes of control and Down syndrome mice exposed to context fear conditioning, a task used to assess associative learning.",
+              "filename": "342",
+              "url": "https://archive.ics.uci.edu/static/public/342/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/342/mice+protein+expression"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Regression",
+          "datasets": [
+            {
+              "name": "Abalone",
+              "description": "Predict the age of abalone from physical measurements",
+              "filename": "1",
+              "url": "https://archive.ics.uci.edu/static/public/1/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/1/abalone"
+            },
+            {
+              "name": "Algerian Forest Fires",
+              "description": "The dataset includes 244 instances that regroup a data of two regions of Algeria.",
+              "filename": "547",
+              "url": "https://archive.ics.uci.edu/static/public/547/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/547/algerian+forest+fires+dataset"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Other",
+      "subcategories": [
+        {
+          "name": "Classification",
+          "datasets": [
+            {
+              "name": "Car Evaluation",
+              "description": "Derived from simple hierarchical decision model, this database may be useful for testing constructive induction and structure discovery methods.",
+              "filename": "19",
+              "url": "https://archive.ics.uci.edu/static/public/19/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/19/car+evaluation"
+            },
+            {
+              "name": "Chronic Kidney Disease",
+              "description": "This dataset can be used to predict the chronic kidney disease and it can be collected from the hospital nearly 2 months of period.",
+              "filename": "336",
+              "url": "https://archive.ics.uci.edu/static/public/336/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/336/chronic+kidney+disease"
+            },
+            {
+              "name": "Flags",
+              "description": "From Collins Gem Guide to Flags, 1986",
+              "filename": "40",
+              "url": "https://archive.ics.uci.edu/static/public/40/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/40/flags"
+            },
+            {
+              "name": "Image Segmentation",
+              "description": "Image data described by high-level numeric-valued attributes, 7 classes",
+              "filename": "50",
+              "url": "https://archive.ics.uci.edu/static/public/50/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/50/image+segmentation"
+            },
+            {
+              "name": "Lenses",
+              "description": "Database for fitting contact lenses",
+              "filename": "58",
+              "url": "https://archive.ics.uci.edu/static/public/58/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/58/lenses"
+            },
+            {
+              "name": "MONK's Problems",
+              "description": "A set of three artificial domains over the same attribute space; Used to test a wide range of induction algorithms",
+              "filename": "70",
+              "url": "https://archive.ics.uci.edu/static/public/70/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/70/monk+s+problems"
+            },
+            {
+              "name": "Pittsburgh Bridges",
+              "description": "Bridges database that has original and numeric-discretized datasets",
+              "filename": "18",
+              "url": "https://archive.ics.uci.edu/static/public/18/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/18/pittsburgh+bridges"
+            },
+            {
+              "name": "Statlog (Image Segmentation)",
+              "description": "This dataset is an image segmentation database similar to a database already present in the repository (Image segmentation database) but in a slightly different form.",
+              "filename": "147",
+              "url": "https://archive.ics.uci.edu/static/public/147/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/147/statlog+image+segmentation"
+            },
+            {
+              "name": "Statlog (Vehicle Silhouettes)",
+              "description": "3D objects within a 2D image by application of an ensemble of shape feature extractors to the 2D silhouettes of the objects.",
+              "filename": "149",
+              "url": "https://archive.ics.uci.edu/static/public/149/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/149/statlog+vehicle+silhouettes"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering",
+          "datasets": [
+            {
+              "name": "Travel Review Ratings",
+              "description": "Google reviews on attractions from 24 categories across Europe are considered. Google user rating ranges from 1 to 5 and average user rating per category is calculated.",
+              "filename": "485",
+              "url": "https://archive.ics.uci.edu/static/public/485/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/485/tarvel+review+ratings"
+            },
+            {
+              "name": "Travel Reviews",
+              "description": "Reviews on destinations in 10 categories mentioned across East Asia. Each traveler rating is mapped as Excellent(4), Very Good(3), Average(2), Poor(1), and Terrible(0) and average rating is used.",
+              "filename": "484",
+              "url": "https://archive.ics.uci.edu/static/public/484/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/484/travel+reviews"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering, Other, Regression",
+          "datasets": [
+            {
+              "name": "Forty Soybean Cultivars from Subsequent Harvests",
+              "description": "Soybean cultivation is one of the most important because it is used in several segments of the food industry. The evaluation of soybean cultivars subject to different planting and harvesting characteristics is an ongoing field of research. We present a dataset obtained from forty soybean cultivar...",
+              "filename": "913",
+              "url": "https://archive.ics.uci.edu/static/public/913/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/913/forty+soybean+cultivars+from+subsequent+harvests"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering, Regression",
+          "datasets": [
+            {
+              "name": "Tennis Major Tournament Match Statistics",
+              "description": "This is a collection of 8 files containing the match statistics for both women and men at the four major tennis tournaments of the year 2013. Each file has 42 columns and a minimum of 76 rows.",
+              "filename": "300",
+              "url": "https://archive.ics.uci.edu/static/public/300/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/300/tennis+major+tournament+match+statistics"
+            }
+          ]
+        },
+        {
+          "name": "General",
+          "datasets": [
+            {
+              "name": "Drug Reviews (Drugs.com)",
+              "description": "",
+              "filename": "462",
+              "url": "https://archive.ics.uci.edu/static/public/462/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/462"
+            }
+          ]
+        },
+        {
+          "name": "Regression",
+          "datasets": [
+            {
+              "name": "Auto MPG",
+              "description": "Revised from CMU StatLib library, data concerns city-cycle fuel consumption",
+              "filename": "9",
+              "url": "https://archive.ics.uci.edu/static/public/9/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/9/auto+mpg"
+            },
+            {
+              "name": "Automobile",
+              "description": "From 1985 Ward's Automotive Yearbook",
+              "filename": "10",
+              "url": "https://archive.ics.uci.edu/static/public/10/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/10/automobile"
+            },
+            {
+              "name": "Metro Interstate Traffic Volume",
+              "description": "Hourly Minneapolis-St Paul, MN traffic volume for westbound I-94. Includes weather and holiday features from 2012-2018.",
+              "filename": "492",
+              "url": "https://archive.ics.uci.edu/static/public/492/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/492/metro+interstate+traffic+volume"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Games",
+      "subcategories": [
+        {
+          "name": "Classification",
+          "datasets": [
+            {
+              "name": "Chess (King-Rook vs. King)",
+              "description": "Chess Endgame Database for White King and Rook against Black King (KRK).",
+              "filename": "23",
+              "url": "https://archive.ics.uci.edu/static/public/23/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/23/chess+king+rook+vs+king"
+            },
+            {
+              "name": "Chess (King-Rook vs. King-Pawn)",
+              "description": "King+Rook versus King+Pawn on a7 (usually abbreviated KRKPA7).",
+              "filename": "22",
+              "url": "https://archive.ics.uci.edu/static/public/22/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/22/chess+king+rook+vs+king+pawn"
+            },
+            {
+              "name": "Connect-4",
+              "description": "Contains connect-4 positions",
+              "filename": "26",
+              "url": "https://archive.ics.uci.edu/static/public/26/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/26/connect+4"
+            },
+            {
+              "name": "Dota2 Games Results",
+              "description": "Dota 2 is a popular computer game with two teams of 5 players. At the start of the game each player chooses a unique hero with different strengths and weaknesses.",
+              "filename": "367",
+              "url": "https://archive.ics.uci.edu/static/public/367/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/367/dota2+games+results"
+            },
+            {
+              "name": "Poker Hand",
+              "description": "Purpose is to predict poker hands",
+              "filename": "158",
+              "url": "https://archive.ics.uci.edu/static/public/158/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/158/poker+hand"
+            },
+            {
+              "name": "Tic-Tac-Toe Endgame",
+              "description": "Binary classification task on possible configurations of tic-tac-toe game",
+              "filename": "101",
+              "url": "https://archive.ics.uci.edu/static/public/101/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/101/tic+tac+toe+endgame"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Climate and Environment",
+      "subcategories": [
+        {
+          "name": "Classification",
+          "datasets": [
+            {
+              "name": "Ozone Level Detection",
+              "description": "Two ground ozone level data sets are included in this collection. One is the eight hour peak set (eighthr.data), the other is the one hour peak set (onehr.data). Those data were collected from 1998 to 2004 at the Houston, Galveston and Brazoria area.",
+              "filename": "172",
+              "url": "https://archive.ics.uci.edu/static/public/172/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/172/ozone+level+detection"
+            },
+            {
+              "name": "Statlog (Landsat Satellite)",
+              "description": "Multi-spectral values of pixels in 3x3 neighbourhoods in a satellite image, and the classification associated with the central pixel in each neighbourhood",
+              "filename": "146",
+              "url": "https://archive.ics.uci.edu/static/public/146/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/146/statlog+landsat+satellite"
+            }
+          ]
+        },
+        {
+          "name": "Other",
+          "datasets": [
+            {
+              "name": "Cloud",
+              "description": "Little Documentation",
+              "filename": "155",
+              "url": "https://archive.ics.uci.edu/static/public/155/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/155/cloud"
+            },
+            {
+              "name": "El Nino",
+              "description": "The data set contains oceanographic and surface meteorological readings taken from a series of buoys positioned throughout the equatorial Pacific.",
+              "filename": "122",
+              "url": "https://archive.ics.uci.edu/static/public/122/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/122/el+nino"
+            }
+          ]
+        },
+        {
+          "name": "Regression",
+          "datasets": [
+            {
+              "name": "Beijing PM2.5",
+              "description": "This hourly data set contains the PM2.5 data of US Embassy in Beijing. Meanwhile, meteorological data from Beijing Capital International Airport are also included.",
+              "filename": "381",
+              "url": "https://archive.ics.uci.edu/static/public/381/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/381/beijing+pm2+5+data"
+            },
+            {
+              "name": "Forest Fires",
+              "description": "This is a difficult regression task, where the aim is to predict the burned area of forest fires, in the northeast region of Portugal, by using meteorological and other data (see details at: http://www.dsi.uminho.pt/~pcortez/forestfires).",
+              "filename": "162",
+              "url": "https://archive.ics.uci.edu/static/public/162/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/162/forest+fires"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Engineering",
+      "subcategories": [
+        {
+          "name": "Classification",
+          "datasets": [
+            {
+              "name": "Single Elder Home Monitoring: Gas and Position",
+              "description": "This dataset contains gas and temperature sensors as well as movement infra-red sensors from the monitoring of an elder person living alone in their own home from 2019-11-06 to 2020-02-13. The measurings have a temporal resolution of 20 seconds. The air and gas sensors measure temperature, humidi...",
+              "filename": "799",
+              "url": "https://archive.ics.uci.edu/static/public/799/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/799/single+elder+home+monitoring+gas+and+position"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering",
+          "datasets": [
+            {
+              "name": "Land Mines",
+              "description": "Detection of mines buried in the ground is very important in terms of safety of life and property. Many different methods have been used in this regard; however, it has not yet been possible to achieve 100% success. Mine detection process consists of sensor design, data analysis and decision algo...",
+              "filename": "763",
+              "url": "https://archive.ics.uci.edu/static/public/763/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/763/land+mines-1"
+            }
+          ]
+        },
+        {
+          "name": "Classification, Clustering, Regression",
+          "datasets": [
+            {
+              "name": "RT-IoT2022 ",
+              "description": "The RT-IoT2022, a proprietary dataset derived from a real-time IoT infrastructure, is introduced as a comprehensive resource integrating a diverse range of IoT devices and sophisticated network attack methodologies. This dataset encompasses both normal and adversarial network behaviours, providin...",
+              "filename": "942",
+              "url": "https://archive.ics.uci.edu/static/public/942/data.csv",
+              "use_first_row_for_vectorname": true,
+              "description_url": "https://archive.ics.uci.edu/dataset/942/rt-iot2022"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
