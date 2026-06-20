@@ -254,11 +254,8 @@ bool PythonScriptRuntime::initPython() {
 	// We need to inject the bundled site-packages path into sys.path before importing pylabplot.
 	{
 		const QString appDir = QCoreApplication::applicationDirPath(); // .../Contents/MacOS
-		const QString sitePkgsPath = appDir
-			+ QStringLiteral("/../Frameworks/Python.framework/Versions/Current/lib/python")
-			+ QString::number(PY_MAJOR_VERSION) + QLatin1Char('.')
-			+ QString::number(PY_MINOR_VERSION)
-			+ QStringLiteral("/site-packages");
+		const QString sitePkgsPath = appDir + QStringLiteral("/../Frameworks/Python.framework/Versions/Current/lib/python") + QString::number(PY_MAJOR_VERSION)
+			+ QLatin1Char('.') + QString::number(PY_MINOR_VERSION) + QStringLiteral("/site-packages");
 		const QString canonicalPath = QDir(sitePkgsPath).canonicalPath();
 		if (!canonicalPath.isEmpty()) {
 			PyObject* sysPath = PySys_GetObject("path"); // borrowed reference
