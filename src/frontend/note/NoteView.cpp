@@ -11,6 +11,7 @@
 #include "NoteView.h"
 #include "backend/note/Note.h"
 
+#include <QApplication>
 #include <QButtonGroup>
 #include <QEvent>
 #include <QPrinter>
@@ -59,6 +60,7 @@ NoteView::NoteView(Note* note)
 	m_preview = new QTextBrowser(m_stack);
 	m_preview->setOpenExternalLinks(true);
 	m_preview->setReadOnly(true);
+	m_preview->viewport()->setAutoFillBackground(true);
 
 	m_stack->addWidget(m_textEdit); // index 0 = edit
 	m_stack->addWidget(m_preview); // index 1 = preview
@@ -135,22 +137,66 @@ void NoteView::showPreviewMode() {
 
 void NoteView::updatePreview() {
 	QString html = renderMarkdown(m_textEdit->toPlainText());
+	QFont font = m_note->textFont();
+	int fontSize = font.pointSize();
+	if (fontSize <= 0)
+		fontSize = QApplication::font().pointSize();
+	if (fontSize <= 0)
+		fontSize = 10;
 
-	// Apply note styling to preview
+	// escape single quotes in the font family name for use in CSS
+	QString fontFamily = font.family();
+	fontFamily.replace(QLatin1Char('\''), QStringLiteral("\\'"));
+
+	// apply styling to the QTextBrowser itself (background, text color, font)
+	auto palette = m_preview->palette();
+	palette.setColor(QPalette::Base, m_note->backgroundColor());
+	palette.setColor(QPalette::Text, m_note->textColor());
+	palette.setColor(QPalette::Window, m_note->backgroundColor());
+	palette.setColor(QPalette::WindowText, m_note->textColor());
+	m_preview->setPalette(palette);
+
+	auto viewportPalette = m_preview->viewport()->palette();
+	viewportPalette.setColor(QPalette::Base, m_note->backgroundColor());
+	viewportPalette.setColor(QPalette::Text, m_note->textColor());
+	viewportPalette.setColor(QPalette::Window, m_note->backgroundColor());
+	viewportPalette.setColor(QPalette::WindowText, m_note->textColor());
+	m_preview->viewport()->setPalette(viewportPalette);
+	m_preview->setFont(font);
+
+	// apply styling to the HTML content
+	QString wrappedHtml = QStringLiteral(
+		"<html><head><style>"
+		"html, body { "
+		"  margin: 0; "
+		"  padding: 0; "
+		"  background-color: %1; "
+		"  color: %2; "
+		"  font-family: '%3'; "
+		"  font-size: %4pt; "
+		"}"
+		"</style></head><body>%5</body></html>")
+		.arg(m_note->backgroundColor().name())
+		.arg(m_note->textColor().name())
+		.arg(fontFamily)
+		.arg(fontSize)
+		.arg(html);
+
+	// update the preview's default style sheet and set the new HTML content
 	QString style = QStringLiteral(
 						"body { "
 						"  background-color: %1; "
 						"  color: %2; "
-						"  font-family: %3; "
+						"  font-family: '%3'; "
 						"  font-size: %4pt; "
 						"}")
 						.arg(m_note->backgroundColor().name())
 						.arg(m_note->textColor().name())
-						.arg(m_note->textFont().family())
-						.arg(m_note->textFont().pointSize());
+						.arg(fontFamily)
+						.arg(fontSize);
 
 	m_preview->document()->setDefaultStyleSheet(style);
-	m_preview->setHtml(html);
+	m_preview->setHtml(wrappedHtml);
 }
 
 QString NoteView::renderMarkdown(const QString& markdown) {

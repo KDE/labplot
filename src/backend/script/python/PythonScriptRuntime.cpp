@@ -34,6 +34,9 @@
 #endif
 #endif
 
+#include <QCoreApplication>
+#include <QDir>
+
 #include <KConfigGroup>
 
 // PyObject* handling:
@@ -242,6 +245,30 @@ bool PythonScriptRuntime::initPython() {
 	// need to compile and distribute our own pyside python library to ensure it links with the
 	// same qt6 linked by labplot. then distribute our compiled pyside python library
 	// and add it to sys.path
+
+#ifdef Q_OS_MACOS
+	// When running from the macOS app bundle, ensure the bundled PySide6/shiboken6
+	// site-packages is in sys.path. This is required when the user selects a virtual
+	// environment and Python initializes with the venv's sys.path that does not necessarily have PySide6 installed.
+	// Without this, PyInit_pylabplot() fails with "could not import module 'PySide6.QtCore'".
+	// We need to inject the bundled site-packages path into sys.path before importing pylabplot.
+	{
+		const QString appDir = QCoreApplication::applicationDirPath(); // .../Contents/MacOS
+		const QString sitePkgsPath = appDir + QStringLiteral("/../Frameworks/Python.framework/Versions/Current/lib/python") + QString::number(PY_MAJOR_VERSION)
+			+ QLatin1Char('.') + QString::number(PY_MINOR_VERSION) + QStringLiteral("/site-packages");
+		const QString canonicalPath = QDir(sitePkgsPath).canonicalPath();
+		if (!canonicalPath.isEmpty()) {
+			PyObject* sysPath = PySys_GetObject("path"); // borrowed reference
+			if (sysPath) {
+				PyObject* entry = PyUnicode_FromString(canonicalPath.toUtf8().constData());
+				if (entry) {
+					PyList_Insert(sysPath, 0, entry);
+					Py_DECREF(entry);
+				}
+			}
+		}
+	}
+#endif
 
 	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
 	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;

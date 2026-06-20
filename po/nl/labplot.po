@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-17 00:40+0000\n"
-"PO-Revision-Date: 2026-06-16 11:20+0200\n"
+"PO-Revision-Date: 2026-06-18 14:34+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -6492,10 +6492,9 @@ msgid "%1: set text font"
 msgstr "%1: lettertype van tekst instellen"
 
 #: src/backend/note/Note.cpp:168
-#, fuzzy, kde-format
-#| msgid "%1: set method"
+#, kde-format
 msgid "%1: set mode"
-msgstr "%1: methode instellen"
+msgstr "%1: modus instellen"
 
 #: src/backend/note/Note.cpp:211
 #, kde-format
@@ -15669,7 +15668,7 @@ msgstr "Browser voor bestanden"
 #: src/frontend/dockwidgets/NoteDock.cpp:27
 #, kde-format
 msgid "Plain Text"
-msgstr ""
+msgstr "Platte tekst"
 
 #: src/frontend/dockwidgets/NoteDock.cpp:28
 #: src/frontend/notebook/NotebookView.cpp:110
@@ -16710,16 +16709,7 @@ msgid "area error: %1"
 msgstr "fout in gebied: %1"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:192
-#, fuzzy, kde-format
-#| msgid ""
-#| "Method used to smooth the data:<ul><li>Moving Average (Central) - "
-#| "smoothing using the average of a fixed number of points, the average is "
-#| "centered on the current point.</li><li>Moving Average (Lagged) - "
-#| "smoothing using the average of a fixed number of points, the average is "
-#| "lagged behind the current point.</li><li>Percentile - smoothing using the "
-#| "percentile of a fixed number of points.</li><li>Savitzky-Golay - "
-#| "smooothing using least-squares fitting of polynomials to segments of the "
-#| "data.</li><li>LOWESS - locally weighted scatterplot smoothing.</li></ul>"
+#, kde-format
 msgid ""
 "Method used to smooth the data:<ul><li>Moving Average (Central) - smoothing "
 "using the average of a fixed number of points, the average is centered on "
@@ -16747,10 +16737,7 @@ msgid "Number of points in the moving window"
 msgstr "Aantal punten in het bewegende venster"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:208
-#, fuzzy, kde-format
-#| msgid ""
-#| "Weightning type to define different weights for the points in the moving "
-#| "window"
+#, kde-format
 msgid ""
 "Weighting type to define different weights for the points in the moving "
 "window"
@@ -18222,20 +18209,19 @@ msgid "%1: clear selected rows(s)"
 msgstr "%1: geselecteerde rij(en) wissen"
 
 #: src/frontend/note/NoteView.cpp:94
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Edit"
-msgstr "Be&werken"
+msgstr "Bewerken"
 
 #: src/frontend/note/NoteView.cpp:98
 #, kde-format
 msgid "Edit markdown source"
-msgstr ""
+msgstr "Markdownbron bewerken"
 
 #: src/frontend/note/NoteView.cpp:104
 #, kde-format
 msgid "Preview rendered output"
-msgstr ""
+msgstr "Voorbeeld van gerenderde uitvoer"
 
 #: src/frontend/notebook/NotebookView.cpp:48
 #, kde-format
