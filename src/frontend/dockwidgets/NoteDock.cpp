@@ -85,17 +85,8 @@ void NoteDock::textFontChanged(const QFont& font) {
 }
 
 void NoteDock::modeChanged(int index) {
-	auto mode = static_cast<Note::Mode>(ui.cbMode->itemData(index).toInt());
-	const bool enabled = mode == Note::Mode::PlainText;
-	ui.lBgColor->setEnabled(enabled);
-	ui.kcbBgColor->setEnabled(enabled);
-	ui.lTextColor->setEnabled(enabled);
-	ui.kcbTextColor->setEnabled(enabled);
-	ui.lTextFont->setEnabled(enabled);
-	ui.kfrTextFont->setEnabled(enabled);
-
 	CONDITIONAL_LOCK_RETURN;
-
+	const auto mode = static_cast<Note::Mode>(ui.cbMode->itemData(index).toInt());
 	for (auto* note : m_notesList)
 		note->setMode(mode);
 }
