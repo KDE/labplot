@@ -181,10 +181,8 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	// show value labels of the first column if all selected columns have the same mode
 	if (sameMode)
 		showValueLabels();
-	else {
-		for (int i = 0; i < ui.twLabels->rowCount(); ++i)
-			ui.twLabels->removeRow(0);
-	}
+	else
+		ui.twLabels->clearContents();
 
 	// formula, available only for columns in a spreadsheet
 	m_spreadsheet = dynamic_cast<Spreadsheet*>(m_column->parentAspect());
@@ -257,8 +255,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 }
 
 void ColumnDock::showValueLabels() {
-	while (ui.twLabels->rowCount() > 0)
-		ui.twLabels->removeRow(0);
+	ui.twLabels->clearContents();
 
 	if (m_column->valueLabelsInitialized()) {
 		auto mode = m_column->labelsMode();
