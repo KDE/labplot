@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-17 00:40+0000\n"
+"POT-Creation-Date: 2026-06-21 00:39+0000\n"
 "PO-Revision-Date: 2026-06-17 05:27+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -488,32 +488,32 @@ msgstr "%1:    (მნიშვნელობების გარეშე)"
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "სახელი \"%1\" უკვე გამოიყენება. სხვა აირჩიეთ."
 
-#: src/backend/core/column/Column.cpp:112
+#: src/backend/core/column/Column.cpp:114
 #, kde-format
 msgid "Copy Data"
 msgstr "მონაცემების კოპირება"
 
-#: src/backend/core/column/Column.cpp:115
+#: src/backend/core/column/Column.cpp:117
 #, kde-format
 msgid "Paste Data"
 msgstr "მონაცემების ჩასმა"
 
-#: src/backend/core/column/Column.cpp:149
+#: src/backend/core/column/Column.cpp:151
 #, kde-format
 msgid "Used in"
 msgstr "გამოყენებული"
 
-#: src/backend/core/column/Column.cpp:166
+#: src/backend/core/column/Column.cpp:168
 #, kde-format
 msgid "Plots"
 msgstr "გრაფიკები"
 
-#: src/backend/core/column/Column.cpp:184
+#: src/backend/core/column/Column.cpp:186
 #, kde-format
 msgid "Axes"
 msgstr "ღერძები"
 
-#: src/backend/core/column/Column.cpp:210
+#: src/backend/core/column/Column.cpp:212
 #, kde-format
 msgid "Calculations"
 msgstr "გამოთვლები"
@@ -528,84 +528,84 @@ msgstr "გამოთვლები"
 #. else	// Cancel
 #. return;
 #. }
-#: src/backend/core/column/Column.cpp:337
+#: src/backend/core/column/Column.cpp:339
 #: src/backend/core/column/columncommands.cpp:89
-#: src/frontend/dockwidgets/ColumnDock.cpp:415
-#: src/frontend/dockwidgets/ColumnDock.cpp:439
-#: src/frontend/dockwidgets/ColumnDock.cpp:474
+#: src/frontend/dockwidgets/ColumnDock.cpp:412
+#: src/frontend/dockwidgets/ColumnDock.cpp:436
+#: src/frontend/dockwidgets/ColumnDock.cpp:471
 #, kde-format
 msgid "%1: change column type"
 msgstr "%1: სვეტის ტიპის შეცვლა"
 
-#: src/backend/core/column/Column.cpp:469
+#: src/backend/core/column/Column.cpp:471
 #: src/backend/core/column/columncommands.cpp:590
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: სვეტის გასუფთავება"
 
-#: src/backend/core/column/Column.cpp:562
+#: src/backend/core/column/Column.cpp:564
 #, kde-format
 msgid "%1: set random values"
 msgstr "%1: შემთხვევითი მნიშვნელობების დაყენება"
 
-#: src/backend/core/column/Column.cpp:1053
+#: src/backend/core/column/Column.cpp:1055
 #: src/frontend/datasources/ImportFileWidget.cpp:1740
 #, kde-format
 msgid "Size: %1"
 msgstr "ზომა: %1"
 
 #. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/column/Column.cpp:1056
+#: src/backend/core/column/Column.cpp:1058
 #, kde-format
 msgid "Type: %1"
 msgstr "ტიპი: %1"
 
-#: src/backend/core/column/Column.cpp:1057
+#: src/backend/core/column/Column.cpp:1059
 #, kde-format
 msgid "Plot Designation: %1"
 msgstr "გრაფიკის დანიშნულება: %1"
 
-#: src/backend/core/column/Column.cpp:1061
+#: src/backend/core/column/Column.cpp:1063
 #, kde-format
 msgid "Formula:"
 msgstr "ფორმულა:"
 
-#: src/backend/core/column/Column.cpp:1083
+#: src/backend/core/column/Column.cpp:1085
 #, kde-format
 msgid "auto update: true"
 msgstr "ავტომატური განახლება: დიახ"
 
-#: src/backend/core/column/Column.cpp:1085
+#: src/backend/core/column/Column.cpp:1087
 #, kde-format
 msgid "auto update: false"
 msgstr "ავტომატური განახლება: არა"
 
-#: src/backend/core/column/Column.cpp:1098
+#: src/backend/core/column/Column.cpp:1100
 #: src/backend/spreadsheet/Spreadsheet.cpp:233
 #, kde-format
 msgid "Used in Plots:"
 msgstr "გამოიყენება გრაფიკებში:"
 
-#: src/backend/core/column/Column.cpp:1113
+#: src/backend/core/column/Column.cpp:1115
 #: src/backend/spreadsheet/Spreadsheet.cpp:250
 #, kde-format
 msgid "Used in Axes:"
 msgstr "გამოიყენება ღერძებში:"
 
-#: src/backend/core/column/Column.cpp:1136
+#: src/backend/core/column/Column.cpp:1138
 #: src/backend/spreadsheet/Spreadsheet.cpp:271
 #, kde-format
 msgid "Used in Spreadsheet Calculations:"
 msgstr "გამოიყენება ელცხრილის გამოთვლებში:"
 
-#: src/backend/core/column/Column.cpp:1779
+#: src/backend/core/column/Column.cpp:1794
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "მწკრივის ინდექსის შეცდომა ან არ არსებობს"
 
-#: src/backend/core/column/Column.cpp:1788
-#: src/backend/core/column/Column.cpp:1797
-#: src/backend/core/column/Column.cpp:1806
+#: src/backend/core/column/Column.cpp:1803
+#: src/backend/core/column/Column.cpp:1812
+#: src/backend/core/column/Column.cpp:1821
 #, kde-format
 msgid "invalid row value"
 msgstr "მწკრივის არასწორი მნიშვნელობა"
@@ -656,13 +656,13 @@ msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: %2-დან %3-მდე მწკრივის მნიშვნელობების ჩანაცვლება"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:55
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:132
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:131
 #, kde-format
 msgid "%1: set date-time format to %2"
 msgstr "%1: დროისა და თარიღის ფორმატის %2-ზე დაყენება"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:57
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:134
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:133
 #, kde-format
 msgid "set date-time format to %1"
 msgstr "დროისა და თარიღის ფორმატის %1-ზე დაყენება"
@@ -1275,7 +1275,7 @@ msgid "Data selection empty."
 msgstr "მონაცემების არჩევანი ცარიელია."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
-#: src/backend/datasources/filters/McapFilter.cpp:196
+#: src/backend/datasources/filters/McapFilter.cpp:197
 #, kde-format
 msgid "Failed to open the device/file or it's empty."
 msgstr "მოწყობილობის/ფაილის გახსნა ჩავარდა ან ის ცარიელია."
@@ -1757,7 +1757,7 @@ msgid "Valid JSON document"
 msgstr "სწორი JSON დოკუმენტი"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:224
-#: src/backend/datasources/filters/McapFilter.cpp:295
+#: src/backend/datasources/filters/McapFilter.cpp:296
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
@@ -1833,9 +1833,9 @@ msgstr "ცვლადების რაოდენობა: "
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
-#: src/frontend/dockwidgets/ColumnDock.cpp:371
-#: src/frontend/dockwidgets/ColumnDock.cpp:808
-#: src/frontend/dockwidgets/ColumnDock.cpp:833
+#: src/frontend/dockwidgets/ColumnDock.cpp:368
+#: src/frontend/dockwidgets/ColumnDock.cpp:805
+#: src/frontend/dockwidgets/ColumnDock.cpp:830
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:98
@@ -2015,58 +2015,58 @@ msgstr "ამ ცვლადის ტიპის მხარდაჭერ
 msgid "Variables with rank greater than 2 not supported yet."
 msgstr "2-ზე მეტი რანგის მქონე ცვლადები ჯერ მხარდაჭერილი არაა."
 
-#: src/backend/datasources/filters/McapFilter.cpp:204
+#: src/backend/datasources/filters/McapFilter.cpp:205
 #, kde-format
 msgid "Valid MCAP file"
 msgstr "არასწორი MCAP ფაილი"
 
-#: src/backend/datasources/filters/McapFilter.cpp:209
+#: src/backend/datasources/filters/McapFilter.cpp:210
 #, kde-format
 msgid "Message count: "
 msgstr "შეტყობინებების რაოდენობა: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:211
+#: src/backend/datasources/filters/McapFilter.cpp:212
 #, kde-format
 msgid "Schema count: "
 msgstr "სქემების რაოდენობა: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:213
+#: src/backend/datasources/filters/McapFilter.cpp:214
 #, kde-format
 msgid "Channel count: "
 msgstr "არხების რაოდენობა: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:215
+#: src/backend/datasources/filters/McapFilter.cpp:216
 #, kde-format
 msgid "Attachment count: "
 msgstr "მიმაგრებული ფაილები რაოდენობა: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:217
+#: src/backend/datasources/filters/McapFilter.cpp:218
 #, kde-format
 msgid "Metadata count: "
 msgstr "მეტამონაცემების რაოდენობა: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:219
+#: src/backend/datasources/filters/McapFilter.cpp:220
 #, kde-format
 msgid "Message Start Time: "
 msgstr "შეტყობინების დაწყების დრო: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:221
+#: src/backend/datasources/filters/McapFilter.cpp:222
 #, kde-format
 msgid "Message End Time: "
 msgstr "შეტყობინების დასრულების დრო: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:223
+#: src/backend/datasources/filters/McapFilter.cpp:224
 #, kde-format
 msgid "No Statistics found."
 msgstr "სტატისტიკა ვერ მოიძებნა."
 
-#: src/backend/datasources/filters/McapFilter.cpp:477
-#: src/backend/datasources/filters/McapFilter.cpp:974
+#: src/backend/datasources/filters/McapFilter.cpp:478
+#: src/backend/datasources/filters/McapFilter.cpp:1010
 #, kde-format
 msgid "Failed to read the file. Reason: %1"
 msgstr "ფაილის წაკითხვა ჩავარდა. მიზეზი: %1"
 
-#: src/backend/datasources/filters/McapFilter.cpp:485
+#: src/backend/datasources/filters/McapFilter.cpp:486
 #, kde-format
 msgid "No JSON encoded topics found."
 msgstr "JSON-ით დაშიფრული თემები ვერ მოიძებნა."
@@ -3454,374 +3454,380 @@ msgstr "გრადიენტში მითითებული გად�
 msgid "End of file"
 msgstr "ფაილის ბოლო"
 
-#: src/backend/gsl/functions.cpp:59
+#: src/backend/gsl/functions.cpp:62
 #, kde-format
 msgid "Standard Mathematical Functions"
 msgstr "სტანდარტული მათემატიკური ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:61
+#: src/backend/gsl/functions.cpp:64
 #, kde-format
 msgid "Comparison Functions"
 msgstr "შედარების ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:63
+#: src/backend/gsl/functions.cpp:66
 #, kde-format
 msgid "Logical Functions"
 msgstr "ლოგიკური ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:65
+#: src/backend/gsl/functions.cpp:68
+#, fuzzy, kde-format
+#| msgid "Mathieu Functions"
+msgid "Datetime Functions"
+msgstr "მათიეს ფუნქციები"
+
+#: src/backend/gsl/functions.cpp:70
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:29
 #, kde-format
 msgid "Column Statistics"
 msgstr "სვეტის სტატისტიკა"
 
-#: src/backend/gsl/functions.cpp:67
+#: src/backend/gsl/functions.cpp:72
 #, kde-format
 msgid "Moving Statistics"
 msgstr "მოძრავი სტატისტიკა"
 
-#: src/backend/gsl/functions.cpp:69
+#: src/backend/gsl/functions.cpp:74
 #, kde-format
 msgid "Airy Functions and Derivatives"
 msgstr "ეირის ფუნქციები და ნაშთები"
 
-#: src/backend/gsl/functions.cpp:71
+#: src/backend/gsl/functions.cpp:76
 #, kde-format
 msgid "Bessel Functions"
 msgstr "ბესელის ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:73
+#: src/backend/gsl/functions.cpp:78
 #, kde-format
 msgid "Clausen Functions"
 msgstr "კლაუზენის ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:75
+#: src/backend/gsl/functions.cpp:80
 #, kde-format
 msgid "Coulomb Functions"
 msgstr "კოლუმბის ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:77
+#: src/backend/gsl/functions.cpp:82
 #, kde-format
 msgid "Dawson Function"
 msgstr "დოუსონის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:79
+#: src/backend/gsl/functions.cpp:84
 #, kde-format
 msgid "Debye Functions"
 msgstr "დებაის ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:81
+#: src/backend/gsl/functions.cpp:86
 #, kde-format
 msgid "Dilogarithm"
 msgstr "დილოგარითმი"
 
-#: src/backend/gsl/functions.cpp:83
+#: src/backend/gsl/functions.cpp:88
 #, kde-format
 msgid "Elliptic Integrals"
 msgstr "ელიპტიკური ინტეგრალი"
 
-#: src/backend/gsl/functions.cpp:87
+#: src/backend/gsl/functions.cpp:92
 #, kde-format
 msgid "Error Functions and Related Functions"
 msgstr "შეცდომის და მასთან დაკავშირებული ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:90
+#: src/backend/gsl/functions.cpp:95
 #, kde-format
 msgid "Error Functions"
 msgstr "შეცდომის ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:93
+#: src/backend/gsl/functions.cpp:98
 #, kde-format
 msgid "Exponential Functions"
 msgstr "ექსპონენტური ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:95
+#: src/backend/gsl/functions.cpp:100
 #, kde-format
 msgid "Exponential Integrals"
 msgstr "ექსპონენტური ინტეგრალები"
 
-#: src/backend/gsl/functions.cpp:97
+#: src/backend/gsl/functions.cpp:102
 #, kde-format
 msgid "Fermi-Dirac Function"
 msgstr "ფერმი-დირაკის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:99
+#: src/backend/gsl/functions.cpp:104
 #, kde-format
 msgid "Gamma and Beta Functions"
 msgstr "გამა და ბეტა ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:101
+#: src/backend/gsl/functions.cpp:106
 #, kde-format
 msgid "Gegenbauer Functions"
 msgstr "გეგენბაუერის ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:104
+#: src/backend/gsl/functions.cpp:109
 #, kde-format
 msgid "Hermite Polynomials and Functions"
 msgstr "ჰერმიტის პოლინომები და ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:107
+#: src/backend/gsl/functions.cpp:112
 #, kde-format
 msgid "Hypergeometric Functions"
 msgstr "ჰიპერგეომეტრიული ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:109
+#: src/backend/gsl/functions.cpp:114
 #, kde-format
 msgid "Laguerre Functions"
 msgstr "ლაგერის ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:111
+#: src/backend/gsl/functions.cpp:116
 #, kde-format
 msgid "Lambert W Functions"
 msgstr "Lambert W ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:113
+#: src/backend/gsl/functions.cpp:118
 #, kde-format
 msgid "Legendre Functions and Spherical Harmonics"
 msgstr "ლაჟენდრის ფუნქციები და სფერული ჰარმონიკები"
 
-#: src/backend/gsl/functions.cpp:115
+#: src/backend/gsl/functions.cpp:120
 #, kde-format
 msgid "Logarithm and Related Functions"
 msgstr "ლოგარითმი და მასთან დაკავშირებული ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:118
+#: src/backend/gsl/functions.cpp:123
 #, kde-format
 msgid "Mathieu Functions"
 msgstr "მათიეს ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:121
+#: src/backend/gsl/functions.cpp:126
 #, kde-format
 msgid "Power Function"
 msgstr "ხარისხის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:123
+#: src/backend/gsl/functions.cpp:128
 #, kde-format
 msgid "Psi (Digamma) Function"
 msgstr "ფსის (დიგამა) ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:125
+#: src/backend/gsl/functions.cpp:130
 #, kde-format
 msgid "Synchrotron Functions"
 msgstr "სინქროტრონის ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:127
+#: src/backend/gsl/functions.cpp:132
 #, kde-format
 msgid "Transport Functions"
 msgstr "ტრანსპორტის ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:129
+#: src/backend/gsl/functions.cpp:134
 #, kde-format
 msgid "Trigonometric Functions"
 msgstr "ტრიგონომეტრიული ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:131
+#: src/backend/gsl/functions.cpp:136
 #, kde-format
 msgid "Zeta Functions"
 msgstr "ზეტა ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:133
+#: src/backend/gsl/functions.cpp:138
 #, kde-format
 msgid "Random number generator"
 msgstr "შემთხვევითი რიცხვების გენერატორი"
 
-#: src/backend/gsl/functions.cpp:135
+#: src/backend/gsl/functions.cpp:140
 #, kde-format
 msgid "Gaussian Distribution"
 msgstr "გაუსის განაწილება"
 
-#: src/backend/gsl/functions.cpp:137
+#: src/backend/gsl/functions.cpp:142
 #, kde-format
 msgid "Exponential Distribution"
 msgstr "ექსპონენტური განაწილება"
 
-#: src/backend/gsl/functions.cpp:139
+#: src/backend/gsl/functions.cpp:144
 #, kde-format
 msgid "Laplace Distribution"
 msgstr "ლაპლასის განაწლება"
 
-#: src/backend/gsl/functions.cpp:141
+#: src/backend/gsl/functions.cpp:146
 #, kde-format
 msgid "Exponential Power Distribution"
 msgstr "ექსპონენტური ხარისხის განაწილება"
 
-#: src/backend/gsl/functions.cpp:143
+#: src/backend/gsl/functions.cpp:148
 #, kde-format
 msgid "Cauchy Distribution"
 msgstr "კოშის განაწილება"
 
-#: src/backend/gsl/functions.cpp:145
+#: src/backend/gsl/functions.cpp:150
 #, kde-format
 msgid "Rayleigh Distribution"
 msgstr "რელეის განაწილება"
 
-#: src/backend/gsl/functions.cpp:147
+#: src/backend/gsl/functions.cpp:152
 #, kde-format
 msgid "Landau Distribution"
 msgstr "ლანდაუს განაწილება"
 
-#: src/backend/gsl/functions.cpp:149
+#: src/backend/gsl/functions.cpp:154
 #, kde-format
 msgid "Gamma Distribution"
 msgstr "გამა განაწილება"
 
-#: src/backend/gsl/functions.cpp:151
+#: src/backend/gsl/functions.cpp:156
 #, kde-format
 msgid "Flat (Uniform) Distribution"
 msgstr "ბრტყელი (ერთგვაროვანი) განაწილება"
 
-#: src/backend/gsl/functions.cpp:153
+#: src/backend/gsl/functions.cpp:158
 #, kde-format
 msgid "Lognormal Distribution"
 msgstr "ლოგნორმალური განაწილება"
 
-#: src/backend/gsl/functions.cpp:155
+#: src/backend/gsl/functions.cpp:160
 #, kde-format
 msgid "Chi-squared Distribution"
 msgstr "ხი-კვადრატის განაწილება"
 
-#: src/backend/gsl/functions.cpp:157
+#: src/backend/gsl/functions.cpp:162
 #, kde-format
 msgid "F-distribution"
 msgstr "F- განაწილება"
 
-#: src/backend/gsl/functions.cpp:159
+#: src/backend/gsl/functions.cpp:164
 #, kde-format
 msgid "t-distribution"
 msgstr "t- განაწილება"
 
-#: src/backend/gsl/functions.cpp:161
+#: src/backend/gsl/functions.cpp:166
 #, kde-format
 msgid "Beta Distribution"
 msgstr "ბეტა განაწილება"
 
-#: src/backend/gsl/functions.cpp:163
+#: src/backend/gsl/functions.cpp:168
 #, kde-format
 msgid "Logistic Distribution"
 msgstr "ლოგისტიკური განაწილება"
 
-#: src/backend/gsl/functions.cpp:165
+#: src/backend/gsl/functions.cpp:170
 #, kde-format
 msgid "Pareto Distribution"
 msgstr "პარეტოს განაწილება"
 
-#: src/backend/gsl/functions.cpp:167
+#: src/backend/gsl/functions.cpp:172
 #, kde-format
 msgid "Weibull Distribution"
 msgstr "ვეიბულის განაწილება"
 
-#: src/backend/gsl/functions.cpp:169
+#: src/backend/gsl/functions.cpp:174
 #, kde-format
 msgid "Gumbel Distribution"
 msgstr "გუმბელის განაწილება"
 
-#: src/backend/gsl/functions.cpp:171
+#: src/backend/gsl/functions.cpp:176
 #, kde-format
 msgid "Poisson Distribution"
 msgstr "პუასონის განაწილება"
 
-#: src/backend/gsl/functions.cpp:173
+#: src/backend/gsl/functions.cpp:178
 #, kde-format
 msgid "Bernoulli Distribution"
 msgstr "ბერნულის განაწილება"
 
-#: src/backend/gsl/functions.cpp:175
+#: src/backend/gsl/functions.cpp:180
 #, kde-format
 msgid "Binomial Distribution"
 msgstr "ბინომური განაწილება"
 
-#: src/backend/gsl/functions.cpp:177
+#: src/backend/gsl/functions.cpp:182
 #, kde-format
 msgid "Pascal Distribution"
 msgstr "პასკალის განაწილება"
 
-#: src/backend/gsl/functions.cpp:179
+#: src/backend/gsl/functions.cpp:184
 #, kde-format
 msgid "Geometric Distribution"
 msgstr "გეომეტრიული განაწილება"
 
-#: src/backend/gsl/functions.cpp:181
+#: src/backend/gsl/functions.cpp:186
 #, kde-format
 msgid "Hypergeometric Distribution"
 msgstr "ჰიპერგეომეტრიული განაწილება"
 
-#: src/backend/gsl/functions.cpp:183
+#: src/backend/gsl/functions.cpp:188
 #, kde-format
 msgid "Logarithmic Distribution"
 msgstr "ლოგარითმული განაწილება"
 
-#: src/backend/gsl/functions.cpp:185
+#: src/backend/gsl/functions.cpp:190
 #, kde-format
 msgid "Triangular Distribution"
 msgstr "სამკუთხედი განაწილება"
 
-#: src/backend/gsl/functions.cpp:189
+#: src/backend/gsl/functions.cpp:194
 #, kde-format
 msgid "Unknown Function"
 msgstr "უცნობი ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:242
+#: src/backend/gsl/functions.cpp:247
 #, kde-format
 msgid "Cell (index; variable)"
 msgstr "უჯრედი (ინდექსი; ცვლადი)"
 
-#: src/backend/gsl/functions.cpp:243
+#: src/backend/gsl/functions.cpp:248
 #, kde-format
 msgid "Cell (index; default_value; variable)"
 msgstr "უჯრედი (ინდექსი; ნაგულისხმევი_მნიშვნელობა; ცვლადი)"
 
-#: src/backend/gsl/functions.cpp:244
+#: src/backend/gsl/functions.cpp:249
 #, kde-format
 msgid "Moving Average"
 msgstr "მცოცავი საშუალო"
 
-#: src/backend/gsl/functions.cpp:245
+#: src/backend/gsl/functions.cpp:250
 #, kde-format
 msgid "Moving Range"
 msgstr "მცოცავი დიაპაზონი"
 
-#: src/backend/gsl/functions.cpp:246
+#: src/backend/gsl/functions.cpp:251
 #, kde-format
 msgid "Simple Moving Minimum"
 msgstr "მარტივი მცოცავი მინიმუმი"
 
-#: src/backend/gsl/functions.cpp:247
+#: src/backend/gsl/functions.cpp:252
 #, kde-format
 msgid "Simple Moving Maximum"
 msgstr "მარტივი მცოცავი მაქსიმუმი"
 
-#: src/backend/gsl/functions.cpp:248
+#: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Simple Moving Average"
 msgstr "მარტივი მოძრავი საშუალო"
 
-#: src/backend/gsl/functions.cpp:249
+#: src/backend/gsl/functions.cpp:254
 #, kde-format
 msgid "Simple Moving Range"
 msgstr "მარტივი მცოცავი დიაპაზონი"
 
-#: src/backend/gsl/functions.cpp:250
+#: src/backend/gsl/functions.cpp:255
 #, kde-format
 msgid "Period sample"
 msgstr "პერიოდის ნიმუში"
 
-#: src/backend/gsl/functions.cpp:251
+#: src/backend/gsl/functions.cpp:256
 #, kde-format
 msgid "Random sample"
 msgstr "შემთხვევითი სემპლები"
 
-#: src/backend/gsl/functions.cpp:253
+#: src/backend/gsl/functions.cpp:258
 #, kde-format
 msgid "Current column cell (index)"
 msgstr "მიმდინარე სვეტის უჯრედი (ინდექსი)"
 
-#: src/backend/gsl/functions.cpp:254
+#: src/backend/gsl/functions.cpp:259
 #, kde-format
 msgid "Current column cell (index; default_value)"
 msgstr "მიმდინარე სვეტის უჯრედი (ინდექსი; ნაგულისხმევი_მნიშვნელობა)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
-#: src/backend/gsl/functions.cpp:258
+#: src/backend/gsl/functions.cpp:263
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/ui/dockwidgets/imagedock.ui:492
 #, kde-format
@@ -3829,7 +3835,7 @@ msgid "Size"
 msgstr "ზომა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbSum)
-#: src/backend/gsl/functions.cpp:259 src/backend/nsl/nsl_conv.c:22
+#: src/backend/gsl/functions.cpp:264 src/backend/nsl/nsl_conv.c:22
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:64
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:42
@@ -3839,7 +3845,7 @@ msgstr "ჯამი"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
-#: src/backend/gsl/functions.cpp:260 src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
@@ -3854,7 +3860,7 @@ msgstr "მინიმუმი"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
-#: src/backend/gsl/functions.cpp:261 src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #: src/backend/statistics/HypothesisTest.cpp:570
@@ -3870,7 +3876,7 @@ msgstr "მაქსიმუმი"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbArithmeticMean)
-#: src/backend/gsl/functions.cpp:262
+#: src/backend/gsl/functions.cpp:267
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:69
 #: src/frontend/ui/mqttwillsettingswidget.ui:53
 #, kde-format
@@ -3880,7 +3886,7 @@ msgstr "საშუალო არითმეტიკული"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
-#: src/backend/gsl/functions.cpp:263 src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:47
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
@@ -3897,7 +3903,7 @@ msgstr "საშუალო"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbStandardDeviation)
-#: src/backend/gsl/functions.cpp:264
+#: src/backend/gsl/functions.cpp:269
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:180
 #: src/frontend/ui/mqttwillsettingswidget.ui:119
 #, kde-format
@@ -3906,7 +3912,7 @@ msgstr "სტანდარტული გადახრა"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
-#: src/backend/gsl/functions.cpp:265
+#: src/backend/gsl/functions.cpp:270
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:170
@@ -3917,7 +3923,7 @@ msgstr "ცვალებადობა"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbGeometricMean)
-#: src/backend/gsl/functions.cpp:266
+#: src/backend/gsl/functions.cpp:271
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:79
 #: src/frontend/ui/mqttwillsettingswidget.ui:64
 #, kde-format
@@ -3926,7 +3932,7 @@ msgstr "საშუალო გეომეტრიული"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbHarmonicMean)
-#: src/backend/gsl/functions.cpp:267
+#: src/backend/gsl/functions.cpp:272
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:86
 #: src/frontend/ui/mqttwillsettingswidget.ui:75
 #, kde-format
@@ -3935,7 +3941,7 @@ msgstr "საშუალო ჰარმონიული"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbContraharmonicMean)
-#: src/backend/gsl/functions.cpp:268
+#: src/backend/gsl/functions.cpp:273
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:93
 #: src/frontend/ui/mqttwillsettingswidget.ui:86
 #, kde-format
@@ -3943,7 +3949,7 @@ msgid "Contraharmonic mean"
 msgstr "საშუალო კონტრჰარმონიული"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMode)
-#: src/backend/gsl/functions.cpp:269
+#: src/backend/gsl/functions.cpp:274
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:71
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:100
@@ -3952,58 +3958,58 @@ msgid "Mode"
 msgstr "რეჟიმი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFirstQuartile)
-#: src/backend/gsl/functions.cpp:270
+#: src/backend/gsl/functions.cpp:275
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:107
 #, kde-format
 msgid "First quartile"
 msgstr "პირველი კვარტილი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbThirdQuartile)
-#: src/backend/gsl/functions.cpp:271
+#: src/backend/gsl/functions.cpp:276
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:121
 #, kde-format
 msgid "Third quartile"
 msgstr "მესამე კვარტილი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbIQR)
-#: src/backend/gsl/functions.cpp:272
+#: src/backend/gsl/functions.cpp:277
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:211
 #, kde-format
 msgid "Interquartile range"
 msgstr "კვარტილთშორისი დიაპაზონი"
 
-#: src/backend/gsl/functions.cpp:273
+#: src/backend/gsl/functions.cpp:278
 #, kde-format
 msgid "1st percentile"
 msgstr "პირველი პროცენტულობა"
 
-#: src/backend/gsl/functions.cpp:274
+#: src/backend/gsl/functions.cpp:279
 #, kde-format
 msgid "5th percentile"
 msgstr "მეხუთე პროცენტულობა"
 
-#: src/backend/gsl/functions.cpp:275
+#: src/backend/gsl/functions.cpp:280
 #, kde-format
 msgid "10th percentile"
 msgstr "მეათე პროცენტულობა"
 
-#: src/backend/gsl/functions.cpp:276
+#: src/backend/gsl/functions.cpp:281
 #, kde-format
 msgid "90th percentile"
 msgstr "90-ე პროცენტულობა"
 
-#: src/backend/gsl/functions.cpp:277
+#: src/backend/gsl/functions.cpp:282
 #, kde-format
 msgid "95th percentile"
 msgstr "95-ე პროცენტულობა"
 
-#: src/backend/gsl/functions.cpp:278
+#: src/backend/gsl/functions.cpp:283
 #, kde-format
 msgid "99th percentile"
 msgstr "99-ე პროცენტულობა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
-#: src/backend/gsl/functions.cpp:279
+#: src/backend/gsl/functions.cpp:284
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:75
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:128
@@ -4011,20 +4017,20 @@ msgstr "99-ე პროცენტულობა"
 msgid "Trimean"
 msgstr "Trimean"
 
-#: src/backend/gsl/functions.cpp:280
+#: src/backend/gsl/functions.cpp:285
 #, kde-format
 msgid "Mean absolute deviation"
 msgstr "საშუალო აბსოლუტური აცდენა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviationAroundMedian)
-#: src/backend/gsl/functions.cpp:281
+#: src/backend/gsl/functions.cpp:286
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:197
 #, kde-format
 msgid "Mean absolute deviation around median"
 msgstr "საშუალო აბსოლუტური გადახრა მედიანის გარშემო"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedianDeviation)
-#: src/backend/gsl/functions.cpp:282
+#: src/backend/gsl/functions.cpp:287
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:204
 #, kde-format
 msgid "Median absolute deviation"
@@ -4032,7 +4038,7 @@ msgstr "მედიანის აბსოლუტური გადახ�
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
-#: src/backend/gsl/functions.cpp:283
+#: src/backend/gsl/functions.cpp:288
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:246
@@ -4043,7 +4049,7 @@ msgstr "სიმრუდე"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
-#: src/backend/gsl/functions.cpp:284
+#: src/backend/gsl/functions.cpp:289
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:91
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:253
@@ -4054,7 +4060,7 @@ msgstr "ექსცესი"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbEntropy)
-#: src/backend/gsl/functions.cpp:285
+#: src/backend/gsl/functions.cpp:290
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:90
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:92
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:260
@@ -4063,154 +4069,154 @@ msgstr "ექსცესი"
 msgid "Entropy"
 msgstr "ენტროპია"
 
-#: src/backend/gsl/functions.cpp:286
+#: src/backend/gsl/functions.cpp:291
 #, kde-format
 msgid "Quantile"
 msgstr "კვანტილი"
 
-#: src/backend/gsl/functions.cpp:287 src/backend/nsl/nsl_smooth.c:24
+#: src/backend/gsl/functions.cpp:292 src/backend/nsl/nsl_smooth.c:24
 #, kde-format
 msgid "Percentile"
 msgstr "პროცენტული"
 
-#: src/backend/gsl/functions.cpp:294
+#: src/backend/gsl/functions.cpp:299
 #, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
 msgstr "ფსევდო-შემთხვევითი მთელი რიცხვი [0, RAND_MAX]"
 
-#: src/backend/gsl/functions.cpp:295
+#: src/backend/gsl/functions.cpp:300
 #, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
 msgstr "არაწრფივი დამატებითი უკუკავშირის შრგ [0, RAND_MAX]"
 
-#: src/backend/gsl/functions.cpp:296
+#: src/backend/gsl/functions.cpp:301
 #, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
 msgstr "არაწრფივი დამატებითი უკუკავშირის შრგ [0, 1]"
 
-#: src/backend/gsl/functions.cpp:297
+#: src/backend/gsl/functions.cpp:302
 #, kde-format
 msgid "Smallest integral value not less"
 msgstr "უმცირესი მთელი მნიშვნელობა არანაკლებ"
 
-#: src/backend/gsl/functions.cpp:298
+#: src/backend/gsl/functions.cpp:303
 #, kde-format
 msgid "Absolute value"
 msgstr "აბსოლუტური მნიშვნელობა"
 
-#: src/backend/gsl/functions.cpp:300
+#: src/backend/gsl/functions.cpp:305
 #, kde-format
 msgid "Base 10 logarithm"
 msgstr "ლოგარითმი ბაზით 10"
 
-#: src/backend/gsl/functions.cpp:301
+#: src/backend/gsl/functions.cpp:306
 #, kde-format
 msgid "Power function [x^y]"
 msgstr "ხარისხის ფუნქცია [x^y]"
 
-#: src/backend/gsl/functions.cpp:302
+#: src/backend/gsl/functions.cpp:307
 #, kde-format
 msgid "Nonnegative square root"
 msgstr "არაუარყოფითი კვადრატული ფესვი"
 
-#: src/backend/gsl/functions.cpp:303
+#: src/backend/gsl/functions.cpp:308
 #, kde-format
 msgid "Sign function"
 msgstr "ნიშნის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:304
+#: src/backend/gsl/functions.cpp:309
 #, kde-format
 msgid "Heavyside theta function"
 msgstr "ჰევისაიდის თეტა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:305
+#: src/backend/gsl/functions.cpp:310
 #, kde-format
 msgid "Harmonic number function"
 msgstr "ჰარმონიული რიცხვის გამოსათვლელი ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:307
+#: src/backend/gsl/functions.cpp:312
 #, kde-format
 msgid "Cube root"
 msgstr "კუბური ფესვი"
 
-#: src/backend/gsl/functions.cpp:308
+#: src/backend/gsl/functions.cpp:313
 #, kde-format
 msgid "Extract the exponent"
 msgstr "ექსპონენტის გამოყოფა"
 
-#: src/backend/gsl/functions.cpp:309
+#: src/backend/gsl/functions.cpp:314
 #, kde-format
 msgid "Round to an integer value"
 msgstr "მთელ რიცხვამდე დამრგვალება"
 
-#: src/backend/gsl/functions.cpp:310 src/backend/gsl/functions.cpp:311
+#: src/backend/gsl/functions.cpp:315 src/backend/gsl/functions.cpp:316
 #, kde-format
 msgid "Round to the nearest integer"
 msgstr "უახლოეს მთელ რიცხვამდე დამრგვალება"
 
-#: src/backend/gsl/functions.cpp:312
+#: src/backend/gsl/functions.cpp:317
 #, kde-format
 msgid "Round to y decimal places"
 msgstr "დამრგვალება y წილად ადგილამდე"
 
-#: src/backend/gsl/functions.cpp:326
+#: src/backend/gsl/functions.cpp:331
 #, kde-format
 msgid "greaterThan"
 msgstr "მეტივიდრე"
 
-#: src/backend/gsl/functions.cpp:327
+#: src/backend/gsl/functions.cpp:332
 #, kde-format
 msgid "lessThan"
 msgstr "ნაკლებიციდრე"
 
-#: src/backend/gsl/functions.cpp:328
+#: src/backend/gsl/functions.cpp:333
 #, kde-format
 msgid "greaterEqualThan"
 msgstr "მეტიანტოლივიდრე"
 
-#: src/backend/gsl/functions.cpp:329
+#: src/backend/gsl/functions.cpp:334
 #, kde-format
 msgid "lessEqualThan"
 msgstr "ნაკლებიანტოლივიდრე"
 
-#: src/backend/gsl/functions.cpp:330
+#: src/backend/gsl/functions.cpp:335
 #, kde-format
 msgid "equal"
 msgstr "უდრის"
 
-#: src/backend/gsl/functions.cpp:331
+#: src/backend/gsl/functions.cpp:336
 #, kde-format
 msgid "equal with epsilon"
 msgstr "უდრის ეპსილონს"
 
-#: src/backend/gsl/functions.cpp:332
+#: src/backend/gsl/functions.cpp:337
 #, kde-format
 msgid "between with boundaries included"
 msgstr "შუაში საზღვრების ჩათვლით"
 
-#: src/backend/gsl/functions.cpp:333
+#: src/backend/gsl/functions.cpp:338
 #, kde-format
 msgid "outside with boundaries included"
 msgstr "გარეთ საზღვრების ჩათვლით"
 
-#: src/backend/gsl/functions.cpp:334
+#: src/backend/gsl/functions.cpp:339
 #, kde-format
 msgid "between with boundaries excluded"
 msgstr "შუაში საზღვრების არჩათვლით"
 
-#: src/backend/gsl/functions.cpp:335
+#: src/backend/gsl/functions.cpp:340
 #, kde-format
 msgid "outside with boundaries excluded"
 msgstr "გარეთ საზღვრების არჩათვლით"
 
-#: src/backend/gsl/functions.cpp:338
+#: src/backend/gsl/functions.cpp:343
 #, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
 msgstr "if(პირობა; თუჭეშმარიტია; თუცრუა)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
-#: src/backend/gsl/functions.cpp:339 src/backend/lib/XmlStreamReader.cpp:58
+#: src/backend/gsl/functions.cpp:344 src/backend/lib/XmlStreamReader.cpp:58
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:73
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:217
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:354
@@ -4220,129 +4226,207 @@ msgid "and"
 msgstr "და"
 
 #. i18n: ectx: property (text), widget (QLabel, l2SamplingInterval)
-#: src/backend/gsl/functions.cpp:340
+#: src/backend/gsl/functions.cpp:345
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:452
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:106
 #, kde-format
 msgid "or"
 msgstr "ან"
 
-#: src/backend/gsl/functions.cpp:341
+#: src/backend/gsl/functions.cpp:346
 #, kde-format
 msgid "xor"
 msgstr "არ-ან"
 
-#: src/backend/gsl/functions.cpp:342
+#: src/backend/gsl/functions.cpp:347
 #, kde-format
 msgid "not"
 msgstr "არ"
 
-#: src/backend/gsl/functions.cpp:346
+#: src/backend/gsl/functions.cpp:350
+#, kde-format
+msgid "today"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:351
+#, fuzzy, kde-format
+#| msgid "no"
+msgid "now"
+msgstr "არა"
+
+#: src/backend/gsl/functions.cpp:352
+#, kde-format
+msgid "date(year; month; day)"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:353
+#, kde-format
+msgid "datedif(start_date; end_date; unit)"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:354
+#, kde-format
+msgid "eomonth(start_date; months)"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:355
+#, kde-format
+msgid "weekday(date)"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:356
+#, kde-format
+msgid "networkdays(start_date; end_date)"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:357
+#, kde-format
+msgid "year(date)"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:358
+#, fuzzy, kde-format
+#| msgid "month"
+msgid "month(date)"
+msgstr "თვე"
+
+#: src/backend/gsl/functions.cpp:359
+#, kde-format
+msgid "day(date)"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:360
+#, kde-format
+msgid "weeknum(date)"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:361
+#, fuzzy, kde-format
+#| msgid "DateTime"
+msgid "hour(dateTime)"
+msgstr "თარიღი და დრო"
+
+#: src/backend/gsl/functions.cpp:362
+#, kde-format
+msgid "minute(dateTime)"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:363
+#, kde-format
+msgid "second(dateTime)"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:364
+#, kde-format
+msgid "time(hour; minute; second)"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:368
 #, kde-format
 msgid "Airy function of the first kind"
 msgstr "პირველი ტიპის ეირის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:347
+#: src/backend/gsl/functions.cpp:369
 #, kde-format
 msgid "Airy function of the second kind"
 msgstr "მეორე ტიპის ეირის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:348
+#: src/backend/gsl/functions.cpp:370
 #, kde-format
 msgid "Scaled Airy function of the first kind"
 msgstr "პირველი ტიპის მქონე დამასშტაბებული ეირის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:349
+#: src/backend/gsl/functions.cpp:371
 #, kde-format
 msgid "Scaled Airy function of the second kind"
 msgstr "მეორე ტიპის მქონე დამასშტაბებული ეირის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:350
+#: src/backend/gsl/functions.cpp:372
 #, kde-format
 msgid "Airy function derivative of the first kind"
 msgstr "პირველი ტიპის ეირის ფუნქციის ნაშთი"
 
-#: src/backend/gsl/functions.cpp:351
+#: src/backend/gsl/functions.cpp:373
 #, kde-format
 msgid "Airy function derivative of the second kind"
 msgstr "მეორე ტიპის ეირის ფუნქციის ნაშთი"
 
-#: src/backend/gsl/functions.cpp:352
+#: src/backend/gsl/functions.cpp:374
 #, kde-format
 msgid "Scaled Airy function derivative of the first kind"
 msgstr "პირველი ტიპის დამასშტაბებული ეირის ფუნქციის ნაშთი"
 
-#: src/backend/gsl/functions.cpp:353
+#: src/backend/gsl/functions.cpp:375
 #, kde-format
 msgid "Scaled Airy function derivative of the second kind"
 msgstr "მეორე ტიპის დამასშტაბებული ეირის ფუნქციის ნაშთი"
 
-#: src/backend/gsl/functions.cpp:354
+#: src/backend/gsl/functions.cpp:376
 #, kde-format
 msgid "n-th zero of the Airy function of the first kind"
 msgstr "პირველი ტიპის ეირის ფუნქციის მე-n ნული"
 
-#: src/backend/gsl/functions.cpp:355
+#: src/backend/gsl/functions.cpp:377
 #, kde-format
 msgid "n-th zero of the Airy function of the second kind"
 msgstr "მეორე ტიპის ეირის ფუნქციის მე-n ნული"
 
-#: src/backend/gsl/functions.cpp:356
+#: src/backend/gsl/functions.cpp:378
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the first kind"
 msgstr "პირველი ტიპის ეირის ფუნქცის წარმოებულის მე-n ნული"
 
-#: src/backend/gsl/functions.cpp:357
+#: src/backend/gsl/functions.cpp:379
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the second kind"
 msgstr "მეორე ტიპის ეირის ფუნქცის წარმოებულის მე-n ნული"
 
-#: src/backend/gsl/functions.cpp:360
+#: src/backend/gsl/functions.cpp:382
 #, kde-format
 msgid "Regular cylindrical Bessel function of zeroth order"
 msgstr "მენულე გვარის რეგულარული ცილინდრული ბესელის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:361
+#: src/backend/gsl/functions.cpp:383
 #, kde-format
 msgid "Regular cylindrical Bessel function of first order"
 msgstr "პირველი გვარის რეგულარული ცილინდრული ბესელის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:362
+#: src/backend/gsl/functions.cpp:384
 #, kde-format
 msgid "Regular cylindrical Bessel function of order n"
 msgstr "მე-n გვარის რეგულარული ცილინდრული ბესელის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:363
+#: src/backend/gsl/functions.cpp:385
 #, kde-format
 msgid "Irregular cylindrical Bessel function of zeroth order"
 msgstr "მენულე გვარის არარეგულარული ცილინდრული ბესელის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:364
+#: src/backend/gsl/functions.cpp:386
 #, kde-format
 msgid "Irregular cylindrical Bessel function of first order"
 msgstr "პირველი გვარის არარეგულარული ცილინდრული ბესელის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:365
+#: src/backend/gsl/functions.cpp:387
 #, kde-format
 msgid "Irregular cylindrical Bessel function of order n"
 msgstr "მე-n გვარის არარეგულარული ცილინდრული ბესელის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:366
+#: src/backend/gsl/functions.cpp:388
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of zeroth order"
 msgstr "მენულე გვარის არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:367
+#: src/backend/gsl/functions.cpp:389
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of first order"
 msgstr "პირველი გვარის არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:368
+#: src/backend/gsl/functions.cpp:390
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of order n"
 msgstr "მე-n გვარის არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:369
+#: src/backend/gsl/functions.cpp:391
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of zeroth order exp(-|"
@@ -4351,7 +4435,7 @@ msgstr ""
 "დამასშტაბებული რეგულარული შეცვლილი ცილინფრული ბესელის ფუნქცია მენულე რიგით "
 "exp(-|x|) I0(x)"
 
-#: src/backend/gsl/functions.cpp:371
+#: src/backend/gsl/functions.cpp:393
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of first order exp(-|x|) "
@@ -4360,7 +4444,7 @@ msgstr ""
 "დამასშტაბებული რეგულარული შეცვლილი ცილინფრული ბესელის ფუნქცია პირველი რიგით "
 "exp(-|x|) I1(x)"
 
-#: src/backend/gsl/functions.cpp:372
+#: src/backend/gsl/functions.cpp:394
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of order n exp(-|x|) "
@@ -4369,22 +4453,22 @@ msgstr ""
 "დამასშტაბებული რეგულარული შეცვლილი ცილინფრული ბესელის ფუნქცია მე-n რიგით "
 "exp(-|x|) In(x)"
 
-#: src/backend/gsl/functions.cpp:373
+#: src/backend/gsl/functions.cpp:395
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of zeroth order"
 msgstr "არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია მენულე რიგით"
 
-#: src/backend/gsl/functions.cpp:374
+#: src/backend/gsl/functions.cpp:396
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of first order"
 msgstr "არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია პირველი რიგით"
 
-#: src/backend/gsl/functions.cpp:375
+#: src/backend/gsl/functions.cpp:397
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of order n"
 msgstr "არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია მე-n რიგით"
 
-#: src/backend/gsl/functions.cpp:376
+#: src/backend/gsl/functions.cpp:398
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of zeroth order exp(x) "
@@ -4393,7 +4477,7 @@ msgstr ""
 "დამასშტაბებული არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია მენულე "
 "რიგით exp(x) K0(x)"
 
-#: src/backend/gsl/functions.cpp:377
+#: src/backend/gsl/functions.cpp:399
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of first order exp(x) "
@@ -4402,7 +4486,7 @@ msgstr ""
 "დამასშტაბებული არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია პირველი "
 "რიგით exp(x) K1(x)"
 
-#: src/backend/gsl/functions.cpp:378
+#: src/backend/gsl/functions.cpp:400
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of order n exp(x) Kn(x)"
@@ -4410,47 +4494,47 @@ msgstr ""
 "დამასშტაბებული არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია მე-n რიგით "
 "exp(x) Kn(x)"
 
-#: src/backend/gsl/functions.cpp:379
+#: src/backend/gsl/functions.cpp:401
 #, kde-format
 msgid "Regular spherical Bessel function of zeroth order"
 msgstr "რეგულარული სფერული ბესელის ფუნქცია მენულე რიგით"
 
-#: src/backend/gsl/functions.cpp:380
+#: src/backend/gsl/functions.cpp:402
 #, kde-format
 msgid "Regular spherical Bessel function of first order"
 msgstr "რეგულარული სფერული ბესელის ფუნქცია პირველი რიგით"
 
-#: src/backend/gsl/functions.cpp:382
+#: src/backend/gsl/functions.cpp:404
 #, kde-format
 msgid "Regular spherical Bessel function of second order"
 msgstr "რეგულარული სფერული ბესელის ფუნქცია მეორე რიგით"
 
-#: src/backend/gsl/functions.cpp:383
+#: src/backend/gsl/functions.cpp:405
 #, kde-format
 msgid "Regular spherical Bessel function of order l"
 msgstr "რეგულარული სფერული ბესელის ფუნქცია რიგით l"
 
-#: src/backend/gsl/functions.cpp:384
+#: src/backend/gsl/functions.cpp:406
 #, kde-format
 msgid "Irregular spherical Bessel function of zeroth order"
 msgstr "არარეგულარული სფერული ბესელის ფუნქცია მენულე რიგით"
 
-#: src/backend/gsl/functions.cpp:385
+#: src/backend/gsl/functions.cpp:407
 #, kde-format
 msgid "Irregular spherical Bessel function of first order"
 msgstr "არარეგულარული სფერული ბესელის ფუნქცია პირველი რიგით"
 
-#: src/backend/gsl/functions.cpp:386
+#: src/backend/gsl/functions.cpp:408
 #, kde-format
 msgid "Irregular spherical Bessel function of second order"
 msgstr "არარეგულარული სფერული ბესელის ფუნქცია მეორე რიგით"
 
-#: src/backend/gsl/functions.cpp:387
+#: src/backend/gsl/functions.cpp:409
 #, kde-format
 msgid "Irregular spherical Bessel function of order l"
 msgstr "არარეგულარული სფერული ბესელის ფუნქცია რიგით l"
 
-#: src/backend/gsl/functions.cpp:388
+#: src/backend/gsl/functions.cpp:410
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) "
@@ -4459,7 +4543,7 @@ msgstr ""
 "დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია მენულე რიგით. "
 "exp(-|x|) i0(x)"
 
-#: src/backend/gsl/functions.cpp:389
+#: src/backend/gsl/functions.cpp:411
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of first order, exp(-|x|) "
@@ -4468,7 +4552,7 @@ msgstr ""
 "დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია პირველი რიგით. "
 "exp(-|x|) i1(x)"
 
-#: src/backend/gsl/functions.cpp:390
+#: src/backend/gsl/functions.cpp:412
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of second order, exp(-|x|) "
@@ -4477,7 +4561,7 @@ msgstr ""
 "დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია მეორე რიგით. "
 "exp(-|x|) i2(x)"
 
-#: src/backend/gsl/functions.cpp:391
+#: src/backend/gsl/functions.cpp:413
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of order l, exp(-|x|) il(x)"
@@ -4485,7 +4569,7 @@ msgstr ""
 "დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია რიგით l. exp(-|"
 "x|) il(x)"
 
-#: src/backend/gsl/functions.cpp:393
+#: src/backend/gsl/functions.cpp:415
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of zeroth order, exp(x) "
@@ -4494,7 +4578,7 @@ msgstr ""
 "დამასშტაბებული არარეგულარული შეცვლილი სფერული ბესელის ფუნქცია მენულე რიგით. "
 "exp(x) k0(x)"
 
-#: src/backend/gsl/functions.cpp:394
+#: src/backend/gsl/functions.cpp:416
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of first order, exp(-|"
@@ -4503,7 +4587,7 @@ msgstr ""
 "დამასშტაბებული არარეგულარული შეცვლილი სფერული ბესელის ფუნქცია პირველი რიგით. "
 "exp(-|x|) k1(x)"
 
-#: src/backend/gsl/functions.cpp:395
+#: src/backend/gsl/functions.cpp:417
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of second order, exp(-|"
@@ -4512,7 +4596,7 @@ msgstr ""
 "დამასშტაბებული არარეგულარული შეცვლილი სფერული ბესელის ფუნქცია მეორე რიგით. "
 "exp(-|x|) k2(x)"
 
-#: src/backend/gsl/functions.cpp:396
+#: src/backend/gsl/functions.cpp:418
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of order l, exp(-|x|) "
@@ -4521,209 +4605,209 @@ msgstr ""
 "დამასშტაბებული არარეგულარული შეცვლილი სფერული ბესელის ფუნქცია რიგით l. exp(-|"
 "x|) kl(x)"
 
-#: src/backend/gsl/functions.cpp:397
+#: src/backend/gsl/functions.cpp:419
 #, kde-format
 msgid "Regular cylindrical Bessel function of fractional order"
 msgstr "რეგულარული ცილინდრული ბესელის ფუნქცია ნაწილობრივი რიგით"
 
-#: src/backend/gsl/functions.cpp:398
+#: src/backend/gsl/functions.cpp:420
 #, kde-format
 msgid "Irregular cylindrical Bessel function of fractional order"
 msgstr "არარეგულარული ცილინდრული ბესელის ფუნქცია ნაწილობრივი რიგით"
 
-#: src/backend/gsl/functions.cpp:399
+#: src/backend/gsl/functions.cpp:421
 #, kde-format
 msgid "Regular modified Bessel function of fractional order"
 msgstr "რეგულარული შეცვლილი ბესელის ფუნქცია ნაწილობრივი რიგით"
 
-#: src/backend/gsl/functions.cpp:400
+#: src/backend/gsl/functions.cpp:422
 #, kde-format
 msgid "Scaled regular modified Bessel function of fractional order"
 msgstr "დამასშტაბებული რეგულარული შეცვლილი ბესელის ფუნქცია ნაწილობრივი რიგით"
 
-#: src/backend/gsl/functions.cpp:401
+#: src/backend/gsl/functions.cpp:423
 #, kde-format
 msgid "Irregular modified Bessel function of fractional order"
 msgstr "არარეგულარული შეცვლილი ბესელის ფუნქცია ნაწილობრივი რიგით"
 
-#: src/backend/gsl/functions.cpp:402
+#: src/backend/gsl/functions.cpp:424
 #, kde-format
 msgid "Logarithm of irregular modified Bessel function of fractional order"
 msgstr "ნაწილობრივი რიგის არარეგულარული შეცვლილი ბესელის ფუნქციის ლოგარითმი"
 
-#: src/backend/gsl/functions.cpp:404
+#: src/backend/gsl/functions.cpp:426
 #, kde-format
 msgid "Scaled irregular modified Bessel function of fractional order"
 msgstr ""
 "დამასშტაბებული არარეგულარული შეცვლილი ბესელის ფუნქცია ნაწილობრივი რიგით"
 
-#: src/backend/gsl/functions.cpp:405
+#: src/backend/gsl/functions.cpp:427
 #, kde-format
 msgid "n-th positive zero of the Bessel function J0"
 msgstr "ბესელის ფუნქცია J0-ის მე-n დადებითი ნული"
 
-#: src/backend/gsl/functions.cpp:406
+#: src/backend/gsl/functions.cpp:428
 #, kde-format
 msgid "n-th positive zero of the Bessel function J1"
 msgstr "ბესელის ფუნქცია J1-ის მე-n დადებითი ნული"
 
-#: src/backend/gsl/functions.cpp:407
+#: src/backend/gsl/functions.cpp:429
 #, kde-format
 msgid "n-th positive zero of the Bessel function Jnu"
 msgstr "ბესელის ფუნქცია Jnu-ის მე-n დადებითი ნული"
 
-#: src/backend/gsl/functions.cpp:410
+#: src/backend/gsl/functions.cpp:432
 #, kde-format
 msgid "Clausen function"
 msgstr "კლაუზენის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:413
+#: src/backend/gsl/functions.cpp:435
 #, kde-format
 msgid "Lowest-order normalized hydrogenic bound state radial wavefunction"
 msgstr ""
 "წყალბადის ძირითადი მდგომარეობის ნორმალიზებული რადიალური ტალღური ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:414
+#: src/backend/gsl/functions.cpp:436
 #, kde-format
 msgid "n-th normalized hydrogenic bound state radial wavefunction"
 msgstr "წყალბადის მე-n მდგომარეობის ნორმალიზებული რადიალური ტალღური ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:417 src/backend/gsl/functions.cpp:454
+#: src/backend/gsl/functions.cpp:439 src/backend/gsl/functions.cpp:476
 #, kde-format
 msgid "Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 msgstr "დოუსონის ინტეგრალი D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 
-#: src/backend/gsl/functions.cpp:420
+#: src/backend/gsl/functions.cpp:442
 #, kde-format
 msgid "First-order Debye function"
 msgstr "პირველი რიგის დებაის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:421
+#: src/backend/gsl/functions.cpp:443
 #, kde-format
 msgid "Second-order Debye function"
 msgstr "მეორე რიგის დებაის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:422
+#: src/backend/gsl/functions.cpp:444
 #, kde-format
 msgid "Third-order Debye function"
 msgstr "მესამე რიგის დებაის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:423
+#: src/backend/gsl/functions.cpp:445
 #, kde-format
 msgid "Fourth-order Debye function"
 msgstr "მეოთხე რიგის დებაის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:424
+#: src/backend/gsl/functions.cpp:446
 #, kde-format
 msgid "Fifth-order Debye function"
 msgstr "მეხუთე რიგის დებაის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:425
+#: src/backend/gsl/functions.cpp:447
 #, kde-format
 msgid "Sixth-order Debye function"
 msgstr "მეექვსე რიგის დებაის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:428
+#: src/backend/gsl/functions.cpp:450
 #, kde-format
 msgid "Dilogarithm for a real argument"
 msgstr "დილოგარითმი რეალური არგუმენტისთვის"
 
-#: src/backend/gsl/functions.cpp:431
+#: src/backend/gsl/functions.cpp:453
 #, kde-format
 msgid "Legendre form of complete elliptic integral K"
 msgstr "სრული ელიპტიკური ინტეგრალის K ლაჟენდრის ფორმა"
 
-#: src/backend/gsl/functions.cpp:432
+#: src/backend/gsl/functions.cpp:454
 #, kde-format
 msgid "Legendre form of complete elliptic integral E"
 msgstr "სრული ელიპტიკური ინტეგრალის E ლაჟენდრის ფორმა"
 
-#: src/backend/gsl/functions.cpp:433
+#: src/backend/gsl/functions.cpp:455
 #, kde-format
 msgid "Legendre form of complete elliptic integral Pi"
 msgstr "სრული ელიპტიკური ინტეგრალის Pi ლაჟენდრის ფორმა"
 
-#: src/backend/gsl/functions.cpp:434
+#: src/backend/gsl/functions.cpp:456
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral F"
 msgstr "სრული ელიპტიკური ინტეგრალის F ლაჟენდრის ფორმა"
 
-#: src/backend/gsl/functions.cpp:435
+#: src/backend/gsl/functions.cpp:457
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral E"
 msgstr "სრული ელიპტიკური ინტეგრალის E ლაჟენდრის ფორმა"
 
-#: src/backend/gsl/functions.cpp:436
+#: src/backend/gsl/functions.cpp:458
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral P"
 msgstr "სრული ელიპტიკური ინტეგრალის P ლაჟენდრის ფორმა"
 
-#: src/backend/gsl/functions.cpp:437
+#: src/backend/gsl/functions.cpp:459
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral D"
 msgstr "სრული ელიპტიკური ინტეგრალის D ლაჟენდრის ფორმა"
 
-#: src/backend/gsl/functions.cpp:438
+#: src/backend/gsl/functions.cpp:460
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RC"
 msgstr "არასრული ელიპტიკური ინტეგრალის RC კარლსონის ფორმა"
 
-#: src/backend/gsl/functions.cpp:439
+#: src/backend/gsl/functions.cpp:461
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RD"
 msgstr "არასრული ელიპტიკური ინტეგრალის RD კარლსონის ფორმა"
 
-#: src/backend/gsl/functions.cpp:440
+#: src/backend/gsl/functions.cpp:462
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RF"
 msgstr "არასრული ელიპტიკური ინტეგრალის RF კარლსონის ფორმა"
 
-#: src/backend/gsl/functions.cpp:441
+#: src/backend/gsl/functions.cpp:463
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RJ"
 msgstr "არასრული ელიპტიკური ინტეგრალის RJ კარლსონის ფორმა"
 
-#: src/backend/gsl/functions.cpp:444
+#: src/backend/gsl/functions.cpp:466
 #, kde-format
 msgid "Error function"
 msgstr "შეცდომის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:445
+#: src/backend/gsl/functions.cpp:467
 #, kde-format
 msgid "Complementary error function"
 msgstr "დამატებითი შეცდომის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:446
+#: src/backend/gsl/functions.cpp:468
 #, kde-format
 msgid "Logarithm of complementary error function"
 msgstr "დამატებითი შეცდომის ფუნქციის ლოგარითმი"
 
-#: src/backend/gsl/functions.cpp:447
+#: src/backend/gsl/functions.cpp:469
 #, kde-format
 msgid "Gaussian probability density function Z"
 msgstr "გაუსის ალბათობის სიმკვრივის ფუნქცია Z"
 
-#: src/backend/gsl/functions.cpp:448
+#: src/backend/gsl/functions.cpp:470
 #, kde-format
 msgid "Upper tail of the Gaussian probability function Q"
 msgstr "გაუსის ალბათობის ფუნქციის ზედა კუდი Q"
 
-#: src/backend/gsl/functions.cpp:449
+#: src/backend/gsl/functions.cpp:471
 #, kde-format
 msgid "Hazard function for the normal distribution Z/Q"
 msgstr "საფრთხის ფუნქცია ნორმალური განაწილებისთვის Z / Q"
 
-#: src/backend/gsl/functions.cpp:451
+#: src/backend/gsl/functions.cpp:473
 #, kde-format
 msgid "Underflow-compensating function exp(x^2) erfc(x) for real x"
 msgstr "არშევსების კომპენსაციის ფუნქცია exp(x^2) erfc(x) ნამდვილი x-სთვის"
 
-#: src/backend/gsl/functions.cpp:452
+#: src/backend/gsl/functions.cpp:474
 #, kde-format
 msgid "Imaginary error function erfi(x) = -i erf(ix) for real x"
 msgstr "წარმოსახვითი შეცდომს ფუნქცია erfi(x) = -i erf(ix) რეალური x-სთვის"
 
-#: src/backend/gsl/functions.cpp:453
+#: src/backend/gsl/functions.cpp:475
 #, kde-format
 msgid ""
 "Imaginary part of Faddeeva's scaled complex error function w(x) = exp(-x^2) "
@@ -4732,442 +4816,442 @@ msgstr ""
 "ფადეევას დამასშტაბებული კომპლექსური შეცდომის ფუნქციის w(x) = exp(-x^2) erfc(-"
 "ix) წარმოსახვითი ნაწილი რეალური x-სთვის"
 
-#: src/backend/gsl/functions.cpp:455
+#: src/backend/gsl/functions.cpp:477
 #, kde-format
 msgid "Voigt profile"
 msgstr "ფოიგტის პროფილი"
 
-#: src/backend/gsl/functions.cpp:457
+#: src/backend/gsl/functions.cpp:479
 #, kde-format
 msgid "Pseudo-Voigt profile (same width)"
 msgstr "ფსევდო-ვოიგტის პროფილი (იგივე სიგანე)"
 
-#: src/backend/gsl/functions.cpp:460
+#: src/backend/gsl/functions.cpp:482
 #, kde-format
 msgid "Exponential function"
 msgstr "ექსპონენტური ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:461
+#: src/backend/gsl/functions.cpp:483
 #, kde-format
 msgid "exponentiate x and multiply by y"
 msgstr "x ხარისხში აყვანა და y-ზე გამრავლება"
 
-#: src/backend/gsl/functions.cpp:465
+#: src/backend/gsl/functions.cpp:487
 #, kde-format
 msgid "n-relative exponential"
 msgstr "ექსპონენტური ფუნქცია მე-n შედარებითი აცდენით"
 
-#: src/backend/gsl/functions.cpp:468
+#: src/backend/gsl/functions.cpp:490
 #, kde-format
 msgid "Exponential integral"
 msgstr "ექსპონენტური ინტეგრალ"
 
-#: src/backend/gsl/functions.cpp:469
+#: src/backend/gsl/functions.cpp:491
 #, kde-format
 msgid "Second order exponential integral"
 msgstr "მეორე რიგის ხარისხის ინტეგრალი"
 
-#: src/backend/gsl/functions.cpp:470
+#: src/backend/gsl/functions.cpp:492
 #, kde-format
 msgid "Exponential integral of order n"
 msgstr "მე-n რიგის ხარისხის ინტეგრალი"
 
-#: src/backend/gsl/functions.cpp:471
+#: src/backend/gsl/functions.cpp:493
 #, kde-format
 msgid "Exponential integral Ei"
 msgstr "Ei-ის ხარისხის ინტეგრალი"
 
-#: src/backend/gsl/functions.cpp:472
+#: src/backend/gsl/functions.cpp:494
 #, kde-format
 msgid "Hyperbolic integral Shi"
 msgstr "ჰიპერბოლური ინტეგრალი ში"
 
-#: src/backend/gsl/functions.cpp:473
+#: src/backend/gsl/functions.cpp:495
 #, kde-format
 msgid "Hyperbolic integral Chi"
 msgstr "ჰიპერბოლური ინტეგრალი ჩი"
 
-#: src/backend/gsl/functions.cpp:474
+#: src/backend/gsl/functions.cpp:496
 #, kde-format
 msgid "Third-order exponential integral"
 msgstr "მესამე რიგის ექსპონენციალური ინტეგრალი"
 
-#: src/backend/gsl/functions.cpp:475
+#: src/backend/gsl/functions.cpp:497
 #, kde-format
 msgid "Sine integral"
 msgstr "სინუსის ინტეგრალი"
 
-#: src/backend/gsl/functions.cpp:476
+#: src/backend/gsl/functions.cpp:498
 #, kde-format
 msgid "Cosine integral"
 msgstr "კოსინუსის ინტეგრალი"
 
-#: src/backend/gsl/functions.cpp:477
+#: src/backend/gsl/functions.cpp:499
 #, kde-format
 msgid "Arctangent integral"
 msgstr "არკტანგენსის ინტეგრალი"
 
-#: src/backend/gsl/functions.cpp:480
+#: src/backend/gsl/functions.cpp:502
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1"
 msgstr "სრული ფერმი-დირაკის ინტეგრალი ინდექსით -1"
 
-#: src/backend/gsl/functions.cpp:481
+#: src/backend/gsl/functions.cpp:503
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 0"
 msgstr "სრული ფერმი-დირაკის ინტეგრალი ინდექსით 0"
 
-#: src/backend/gsl/functions.cpp:482
+#: src/backend/gsl/functions.cpp:504
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1"
 msgstr "სრული ფერმი-დირაკის ინტეგრალი ინდექსით 1"
 
-#: src/backend/gsl/functions.cpp:483
+#: src/backend/gsl/functions.cpp:505
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 2"
 msgstr "სრული ფერმი-დირაკის ინტეგრალი ინდექსით 2"
 
-#: src/backend/gsl/functions.cpp:484
+#: src/backend/gsl/functions.cpp:506
 #, kde-format
 msgid "Complete Fermi-Dirac integral with integer index j"
 msgstr "ფერმი-დირაკის სრული ინტეგრალი მთელრიცხვიანი ინდექსით j"
 
-#: src/backend/gsl/functions.cpp:485
+#: src/backend/gsl/functions.cpp:507
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1/2"
 msgstr "სრული ფერმი-დირაკის ინტეგრალი ინდექსით -1/2"
 
-#: src/backend/gsl/functions.cpp:486
+#: src/backend/gsl/functions.cpp:508
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1/2"
 msgstr "სრული ფერმი-დირაკის ინტეგრალი ინდექსით 1/2"
 
-#: src/backend/gsl/functions.cpp:487
+#: src/backend/gsl/functions.cpp:509
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 3/2"
 msgstr "სრული ფერმი-დირაკის ინტეგრალი ინდექსით 3/2"
 
-#: src/backend/gsl/functions.cpp:488
+#: src/backend/gsl/functions.cpp:510
 #, kde-format
 msgid "Incomplete Fermi-Dirac integral with index zero"
 msgstr "ფერმი დირაკლი არასრული ინტეგრალი ნულოვანი ინდექსით"
 
-#: src/backend/gsl/functions.cpp:491 src/backend/gsl/functions.cpp:492
+#: src/backend/gsl/functions.cpp:513 src/backend/gsl/functions.cpp:514
 #, kde-format
 msgid "Gamma function"
 msgstr "გამა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:493
+#: src/backend/gsl/functions.cpp:515
 #, kde-format
 msgid "Logarithm of the gamma function"
 msgstr "გამა ფუნქციის ლოგარითმი"
 
-#: src/backend/gsl/functions.cpp:494
+#: src/backend/gsl/functions.cpp:516
 #, kde-format
 msgid "Logarithm naturalis of the gamma function"
 msgstr "გამა ფუნქციის ლოგარითმის ნატურალები"
 
-#: src/backend/gsl/functions.cpp:495
+#: src/backend/gsl/functions.cpp:517
 #, kde-format
 msgid "Regulated gamma function"
 msgstr "რეგულირებული გამა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:496
+#: src/backend/gsl/functions.cpp:518
 #, kde-format
 msgid "Reciprocal of the gamma function"
 msgstr "შებრუნებული გამა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:497
+#: src/backend/gsl/functions.cpp:519
 #, kde-format
 msgid "Factorial n!"
 msgstr "ფაქტორიალი n!"
 
-#: src/backend/gsl/functions.cpp:498
+#: src/backend/gsl/functions.cpp:520
 #, kde-format
 msgid "Double factorial n!!"
 msgstr "ორმაგი ფაქტორიალი n!!"
 
-#: src/backend/gsl/functions.cpp:499
+#: src/backend/gsl/functions.cpp:521
 #, kde-format
 msgid "Logarithm of the factorial"
 msgstr "ფაქტორიალის ლოგარითმი"
 
-#: src/backend/gsl/functions.cpp:500
+#: src/backend/gsl/functions.cpp:522
 #, kde-format
 msgid "Logarithm of the double factorial"
 msgstr "ორმაგი ფაქტორიალის ლოგარითმი"
 
-#: src/backend/gsl/functions.cpp:502
+#: src/backend/gsl/functions.cpp:524
 #, kde-format
 msgid "Combinatorial factor"
 msgstr "კომბინატორული ფაქტორი"
 
-#: src/backend/gsl/functions.cpp:503
+#: src/backend/gsl/functions.cpp:525
 #, kde-format
 msgid "Logarithm of the combinatorial factor"
 msgstr "კომბინატორული ფაქტორის ლოგარითმი"
 
-#: src/backend/gsl/functions.cpp:504
+#: src/backend/gsl/functions.cpp:526
 #, kde-format
 msgid "Taylor coefficient"
 msgstr "ტეილორის კოეფიციენტი"
 
-#: src/backend/gsl/functions.cpp:505
+#: src/backend/gsl/functions.cpp:527
 #, kde-format
 msgid "Pochhammer symbol"
 msgstr "პოხჰამერის სიმბოლო"
 
-#: src/backend/gsl/functions.cpp:506
+#: src/backend/gsl/functions.cpp:528
 #, kde-format
 msgid "Logarithm of the Pochhammer symbol"
 msgstr "პოხჰამერის სიმბოლოს ლოგარითმი"
 
-#: src/backend/gsl/functions.cpp:507
+#: src/backend/gsl/functions.cpp:529
 #, kde-format
 msgid "Relative Pochhammer symbol"
 msgstr "შედარებითი პოხჰამერის სიმბოლო"
 
-#: src/backend/gsl/functions.cpp:508
+#: src/backend/gsl/functions.cpp:530
 #, kde-format
 msgid "Unnormalized incomplete gamma function"
 msgstr "არანორმალიზებული არასრული გამა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:509
+#: src/backend/gsl/functions.cpp:531
 #, kde-format
 msgid "Normalized incomplete gamma function"
 msgstr "ნორმალიზებული არასრული გამა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:510
+#: src/backend/gsl/functions.cpp:532
 #, kde-format
 msgid "Complementary normalized incomplete gamma function"
 msgstr "დამატებითი ნორმალიზებული არასრული გამა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:511
+#: src/backend/gsl/functions.cpp:533
 #, kde-format
 msgid "Beta function"
 msgstr "ბეტა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:513
+#: src/backend/gsl/functions.cpp:535
 #, kde-format
 msgid "Logarithm of the beta function"
 msgstr "ბეტა ფუნქციის ლოგარითმი"
 
-#: src/backend/gsl/functions.cpp:514
+#: src/backend/gsl/functions.cpp:536
 #, kde-format
 msgid "Normalized incomplete beta function"
 msgstr "ნორმალიზებული არასრული ბეტა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:517
+#: src/backend/gsl/functions.cpp:539
 #, kde-format
 msgid "Gegenbauer polynomial C_1"
 msgstr "გეგენბაუერის მრავალწევრი C_1"
 
-#: src/backend/gsl/functions.cpp:518
+#: src/backend/gsl/functions.cpp:540
 #, kde-format
 msgid "Gegenbauer polynomial C_2"
 msgstr "გეგენბაუერის მრავალწევრი C_2"
 
-#: src/backend/gsl/functions.cpp:519
+#: src/backend/gsl/functions.cpp:541
 #, kde-format
 msgid "Gegenbauer polynomial C_3"
 msgstr "გეგენბაუერის მრავალწევრი C_3"
 
-#: src/backend/gsl/functions.cpp:520
+#: src/backend/gsl/functions.cpp:542
 #, kde-format
 msgid "Gegenbauer polynomial C_n"
 msgstr "გეგენბაუერის მრავალწევრი C_n"
 
-#: src/backend/gsl/functions.cpp:524
+#: src/backend/gsl/functions.cpp:546
 #, kde-format
 msgid "Hermite polynomials physicists version"
 msgstr "ჰერმიტი მრავალწევრები ფიზიკოსებისთვის"
 
-#: src/backend/gsl/functions.cpp:525
+#: src/backend/gsl/functions.cpp:547
 #, kde-format
 msgid "Hermite polynomials probabilists version"
 msgstr "ჰერმიტის მრავალწევრები ალბათობის თეორიიდან"
 
-#: src/backend/gsl/functions.cpp:526
+#: src/backend/gsl/functions.cpp:548
 #, kde-format
 msgid "Hermite functions"
 msgstr "ჰერმიტის ფუნქციები"
 
-#: src/backend/gsl/functions.cpp:528
+#: src/backend/gsl/functions.cpp:550
 #, kde-format
 msgid "Hermite functions (fast version)"
 msgstr "ჰერმიტის ფუნქციები (სწრაფი ვერსია)"
 
-#: src/backend/gsl/functions.cpp:530
+#: src/backend/gsl/functions.cpp:552
 #, kde-format
 msgid "Derivatives of Hermite polynomials physicists version"
 msgstr "ჰერმიტი მრავალწევრების წარმოებული ფიზიკოსებისთვის"
 
-#: src/backend/gsl/functions.cpp:531
+#: src/backend/gsl/functions.cpp:553
 #, kde-format
 msgid "Derivatives of Hermite polynomials probabilists version"
 msgstr "ჰერმიტის მრავალწევრების წარმოებული ალბათობის თეორიიდან"
 
-#: src/backend/gsl/functions.cpp:532
+#: src/backend/gsl/functions.cpp:554
 #, kde-format
 msgid "Derivatives of Hermite functions"
 msgstr "ჰერმიტის ფუნქციების წარმოებულები"
 
-#: src/backend/gsl/functions.cpp:536
+#: src/backend/gsl/functions.cpp:558
 #, kde-format
 msgid "Hypergeometric function 0F1"
 msgstr "ჰიპერგეომეტრიული ფუნქცია 0F1"
 
-#: src/backend/gsl/functions.cpp:537
+#: src/backend/gsl/functions.cpp:559
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for integer parameters"
 msgstr "შერწყმადი ჰიპერგეომეტრიულ ფუნქცია 1F1 მთელრიცხვიანი პარამეტრებისთვის"
 
-#: src/backend/gsl/functions.cpp:538
+#: src/backend/gsl/functions.cpp:560
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for general parameters"
 msgstr "შერწყმადი ჰიპერგეომეტრიულ ფუნქცია 1F1 ზოგადი პარამეტრებისთვის"
 
-#: src/backend/gsl/functions.cpp:539
+#: src/backend/gsl/functions.cpp:561
 #, kde-format
 msgid "Confluent hypergeometric function U for integer parameters"
 msgstr "შერწყმადი ჰიპერგეომეტრიულ ფუნქცია U მთელრიცხვიანი პარამეტრებისთვის"
 
-#: src/backend/gsl/functions.cpp:540
+#: src/backend/gsl/functions.cpp:562
 #, kde-format
 msgid "Confluent hypergeometric function U"
 msgstr "შერწყმადი ჰიპერგეომეტრიულ ფუნქცია U"
 
-#: src/backend/gsl/functions.cpp:541
+#: src/backend/gsl/functions.cpp:563
 #, kde-format
 msgid "Gauss hypergeometric function 2F1"
 msgstr "გაუსის ჰიპერგეომეტრიული ფუნქცია 2F1"
 
-#: src/backend/gsl/functions.cpp:542
+#: src/backend/gsl/functions.cpp:564
 #, kde-format
 msgid "Gauss hypergeometric function 2F1 with complex parameters"
 msgstr "გაუსის ჰიპერგეომეტრიული ფუნქცია 2F1 კომპლექსური პარამეტრებით"
 
-#: src/backend/gsl/functions.cpp:543
+#: src/backend/gsl/functions.cpp:565
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1"
 msgstr "რენორმალიზებული გაუსის ჰიპერგეომეტრიული ფუნქცია 2F1"
 
-#: src/backend/gsl/functions.cpp:544
+#: src/backend/gsl/functions.cpp:566
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1 with complex parameters"
 msgstr "რენორმალიზებული გაუსის ჰიპერგეომეტრიული ფუნქცია 2F1 რთული პარამეტრებით"
 
-#: src/backend/gsl/functions.cpp:545
+#: src/backend/gsl/functions.cpp:567
 #, kde-format
 msgid "Hypergeometric function 2F0"
 msgstr "ჰიპერგეომეტრიული ფუნქცია 2F0"
 
-#: src/backend/gsl/functions.cpp:548
+#: src/backend/gsl/functions.cpp:570
 #, kde-format
 msgid "generalized Laguerre polynomials L_1"
 msgstr "განზოგადებული ლაგერის მრავალწევრებ L_1"
 
-#: src/backend/gsl/functions.cpp:549
+#: src/backend/gsl/functions.cpp:571
 #, kde-format
 msgid "generalized Laguerre polynomials L_2"
 msgstr "განზოგადებული ლაგერის მრავალწევრებ L_2"
 
-#: src/backend/gsl/functions.cpp:550
+#: src/backend/gsl/functions.cpp:572
 #, kde-format
 msgid "generalized Laguerre polynomials L_3"
 msgstr "განზოგადებული ლაგერის მრავალწევრებ L_3"
 
-#: src/backend/gsl/functions.cpp:551
+#: src/backend/gsl/functions.cpp:573
 #, kde-format
 msgid "generalized Laguerre polynomials L_n"
 msgstr "განზოგადებული ლაგერის მრავალწევრებ L_n"
 
-#: src/backend/gsl/functions.cpp:554
+#: src/backend/gsl/functions.cpp:576
 #, kde-format
 msgid "Principal branch of the Lambert W function"
 msgstr "ლამბერტის W ფუნქციის ძირითადი ტოტი"
 
-#: src/backend/gsl/functions.cpp:555
+#: src/backend/gsl/functions.cpp:577
 #, kde-format
 msgid "Secondary real-valued branch of the Lambert W function"
 msgstr "ლამბერტის W ფუნქციის მეორადი რეალურმნიშვნელობიანი ტოტი"
 
-#: src/backend/gsl/functions.cpp:558
+#: src/backend/gsl/functions.cpp:580
 #, kde-format
 msgid "Legendre polynomial P_1"
 msgstr "ლეჟანდრის პოლინომური P_1"
 
-#: src/backend/gsl/functions.cpp:559
+#: src/backend/gsl/functions.cpp:581
 #, kde-format
 msgid "Legendre polynomial P_2"
 msgstr "ლეჟანდრის პოლინომური P_2"
 
-#: src/backend/gsl/functions.cpp:560
+#: src/backend/gsl/functions.cpp:582
 #, kde-format
 msgid "Legendre polynomial P_3"
 msgstr "ლეჟანდრის პოლინომური P_3"
 
-#: src/backend/gsl/functions.cpp:561
+#: src/backend/gsl/functions.cpp:583
 #, kde-format
 msgid "Legendre polynomial P_l"
 msgstr "ლეჟანდრის პოლინომური P_l"
 
-#: src/backend/gsl/functions.cpp:562
+#: src/backend/gsl/functions.cpp:584
 #, kde-format
 msgid "Legendre function Q_0"
 msgstr "ლეჟანდრის ფუნქცია Q_0"
 
-#: src/backend/gsl/functions.cpp:563
+#: src/backend/gsl/functions.cpp:585
 #, kde-format
 msgid "Legendre function Q_1"
 msgstr "ლეჟანდრის ფუნქცია Q_1"
 
-#: src/backend/gsl/functions.cpp:564
+#: src/backend/gsl/functions.cpp:586
 #, kde-format
 msgid "Legendre function Q_l"
 msgstr "ლეჟანდრის ფუნქცია Q_l"
 
-#: src/backend/gsl/functions.cpp:565
+#: src/backend/gsl/functions.cpp:587
 #, kde-format
 msgid "Associated Legendre polynomial"
 msgstr "მიერთებული ლეჟანდრის მრავალწევრი"
 
-#: src/backend/gsl/functions.cpp:566
+#: src/backend/gsl/functions.cpp:588
 #, kde-format
 msgid "Normalized associated Legendre polynomial"
 msgstr "ნორმალიზებული მიერთებული ლეჟანდრის მრავალწევრი"
 
-#: src/backend/gsl/functions.cpp:567
+#: src/backend/gsl/functions.cpp:589
 #, kde-format
 msgid "Irregular spherical conical function P^1/2"
 msgstr "არარეგულარული სფერულ-კონუსური ფუნქცია P^1/2"
 
-#: src/backend/gsl/functions.cpp:569
+#: src/backend/gsl/functions.cpp:591
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2)"
 msgstr "რეგულარული სფერულ-კონუსური ფუნქცია P^(-1/2)"
 
-#: src/backend/gsl/functions.cpp:570
+#: src/backend/gsl/functions.cpp:592
 #, kde-format
 msgid "Conical function P^0"
 msgstr "კონუსური ფუნქცია P^0"
 
-#: src/backend/gsl/functions.cpp:571
+#: src/backend/gsl/functions.cpp:593
 #, kde-format
 msgid "Conical function P^1"
 msgstr "კონუსური ფუნქცია P^1"
 
-#: src/backend/gsl/functions.cpp:572
+#: src/backend/gsl/functions.cpp:594
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2-l)"
 msgstr "რეგულარული სფერულ-კონუსური ფუნქცია P^(-1/2-l)"
 
-#: src/backend/gsl/functions.cpp:573
+#: src/backend/gsl/functions.cpp:595
 #, kde-format
 msgid "Regular cylindrical conical function P^(-m)"
 msgstr "რეგულარული სფერულ-კონუსური ფუნქცია P^(-m)"
 
-#: src/backend/gsl/functions.cpp:574
+#: src/backend/gsl/functions.cpp:596
 #, kde-format
 msgid ""
 "Zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -5176,7 +5260,7 @@ msgstr ""
 "ლაპლასიანის მენულე რადიალური საკუთარი ფუნქცია 3-განზომილებიან ჰიპერბოლურ "
 "სივრცეზე"
 
-#: src/backend/gsl/functions.cpp:575
+#: src/backend/gsl/functions.cpp:597
 #, kde-format
 msgid ""
 "First radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -5185,7 +5269,7 @@ msgstr ""
 "ლაპლასიანის პირველი რადიალური საკუთარი ფუნქცია 3-განზომილებიან ჰიპერბოლურ "
 "სივრცეზე"
 
-#: src/backend/gsl/functions.cpp:576
+#: src/backend/gsl/functions.cpp:598
 #, kde-format
 msgid ""
 "l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -5194,1061 +5278,1061 @@ msgstr ""
 "ლაპლასიანის მე-l რადიალური საკუთარი ფუნქცია 3-განზომილებიან ჰიპერბოლურ "
 "სივრცეზე"
 
-#: src/backend/gsl/functions.cpp:579
+#: src/backend/gsl/functions.cpp:601
 #, kde-format
 msgid "Logarithm"
 msgstr "ლოგარითმი"
 
-#: src/backend/gsl/functions.cpp:580
+#: src/backend/gsl/functions.cpp:602
 #, kde-format
 msgid "Base 2 logarithm"
 msgstr "ბინარული ლოგარითმი"
 
-#: src/backend/gsl/functions.cpp:581
+#: src/backend/gsl/functions.cpp:603
 #, kde-format
 msgid "Logarithm of the magnitude"
 msgstr "ამპლიტუდის ლოგარითმი"
 
-#: src/backend/gsl/functions.cpp:587
+#: src/backend/gsl/functions.cpp:609
 #, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
 msgstr "მათიუს ფუნქციების ce_n(q, x) საკუთარი მნიშვნელობები a_n(q)"
 
-#: src/backend/gsl/functions.cpp:588
+#: src/backend/gsl/functions.cpp:610
 #, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
 msgstr "მათიუს ფუნქციების se_n(q, x) საკუთარი მნიშვნელობები b_n(q)"
 
-#: src/backend/gsl/functions.cpp:589
+#: src/backend/gsl/functions.cpp:611
 #, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
 msgstr "კუთხური მათიეს ფუნქციები ce_n(q, x)"
 
-#: src/backend/gsl/functions.cpp:590
+#: src/backend/gsl/functions.cpp:612
 #, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
 msgstr "კუთხური მათიეს ფუნქციები se_n(q, x)"
 
-#: src/backend/gsl/functions.cpp:591
+#: src/backend/gsl/functions.cpp:613
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
 msgstr "რადიალური მე-j რიგის მათიუს ფუნქციები Mc_n^{(j)}(q, x)"
 
-#: src/backend/gsl/functions.cpp:592
+#: src/backend/gsl/functions.cpp:614
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
 msgstr "რადიალური მე-j რიგის მათიუს ფუნქციები Ms_n^{(j)}(q, x)"
 
-#: src/backend/gsl/functions.cpp:596
+#: src/backend/gsl/functions.cpp:618
 #, kde-format
 msgid "x^n for integer n with an error estimate"
 msgstr "x^n მთელი რიცხვი n-სთვის შეცდომის შეფასებით"
 
-#: src/backend/gsl/functions.cpp:599
+#: src/backend/gsl/functions.cpp:621
 #, kde-format
 msgid "Digamma function for positive integer n"
 msgstr "დიგამა ფუნქცია დადებითი მთელი n-სთვის"
 
-#: src/backend/gsl/functions.cpp:600
+#: src/backend/gsl/functions.cpp:622
 #, kde-format
 msgid "Digamma function"
 msgstr "დიგამა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:601
+#: src/backend/gsl/functions.cpp:623
 #, kde-format
 msgid "Real part of the digamma function on the line 1+i y"
 msgstr "დიგამა ფუნქციის რეალური ნაწილი ხაზზე 1+i y"
 
-#: src/backend/gsl/functions.cpp:602
+#: src/backend/gsl/functions.cpp:624
 #, kde-format
 msgid "Trigamma function psi' for positive integer n"
 msgstr "ტრიგამა ფუნქცია psi' დადებითი მთელი n-სთვის"
 
-#: src/backend/gsl/functions.cpp:603
+#: src/backend/gsl/functions.cpp:625
 #, kde-format
 msgid "Trigamma function psi'"
 msgstr "ტრიგამა ფუნქცია psi'"
 
-#: src/backend/gsl/functions.cpp:604
+#: src/backend/gsl/functions.cpp:626
 #, kde-format
 msgid "Polygamma function psi^(n)"
 msgstr "პოლიგამა ფუნქცია psi^(n)"
 
-#: src/backend/gsl/functions.cpp:607
+#: src/backend/gsl/functions.cpp:629
 #, kde-format
 msgid "First synchrotron function"
 msgstr "სინქროტრონის პირველი ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:608
+#: src/backend/gsl/functions.cpp:630
 #, kde-format
 msgid "Second synchrotron function"
 msgstr "სინქროტრონის მეორე ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:611
+#: src/backend/gsl/functions.cpp:633
 #, kde-format
 msgid "Transport function J2"
 msgstr "ტრანსპორტის ფუნქცია J2"
 
-#: src/backend/gsl/functions.cpp:612
+#: src/backend/gsl/functions.cpp:634
 #, kde-format
 msgid "Transport function J3"
 msgstr "ტრანსპორტის ფუნქცია J3"
 
-#: src/backend/gsl/functions.cpp:613
+#: src/backend/gsl/functions.cpp:635
 #, kde-format
 msgid "Transport function J4"
 msgstr "ტრანსპორტის ფუნქცია J4"
 
-#: src/backend/gsl/functions.cpp:614
+#: src/backend/gsl/functions.cpp:636
 #, kde-format
 msgid "Transport function J5"
 msgstr "ტრანსპორტის ფუნქცია J5"
 
-#: src/backend/gsl/functions.cpp:617
+#: src/backend/gsl/functions.cpp:639
 #, kde-format
 msgid "Sine"
 msgstr "სინუსიოდი"
 
-#: src/backend/gsl/functions.cpp:618 src/backend/nsl/nsl_interp.c:21
+#: src/backend/gsl/functions.cpp:640 src/backend/nsl/nsl_interp.c:21
 #: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:35
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:165
 #, kde-format
 msgid "Cosine"
 msgstr "Cosine"
 
-#: src/backend/gsl/functions.cpp:619
+#: src/backend/gsl/functions.cpp:641
 #, kde-format
 msgid "Tangent"
 msgstr "ტანგენსი"
 
-#: src/backend/gsl/functions.cpp:620
+#: src/backend/gsl/functions.cpp:642
 #, kde-format
 msgid "Inverse sine"
 msgstr "ინვერსიული სინუსი"
 
-#: src/backend/gsl/functions.cpp:621
+#: src/backend/gsl/functions.cpp:643
 #, kde-format
 msgid "Inverse cosine"
 msgstr "ინვერსიული კოსინუსი"
 
-#: src/backend/gsl/functions.cpp:622
+#: src/backend/gsl/functions.cpp:644
 #, kde-format
 msgid "Inverse tangent"
 msgstr "ინვერსიული ტანგენსი"
 
-#: src/backend/gsl/functions.cpp:623
+#: src/backend/gsl/functions.cpp:645
 #, kde-format
 msgid "Inverse tangent using sign"
 msgstr "არკტანგენსი ნიშნის გათვალისწინებით"
 
-#: src/backend/gsl/functions.cpp:624
+#: src/backend/gsl/functions.cpp:646
 #, kde-format
 msgid "Hyperbolic sine"
 msgstr "ჰიპერბოლური სინუსი"
 
-#: src/backend/gsl/functions.cpp:625
+#: src/backend/gsl/functions.cpp:647
 #, kde-format
 msgid "Hyperbolic cosine"
 msgstr "ჰიპერბოლური კოსინუსი"
 
-#: src/backend/gsl/functions.cpp:626
+#: src/backend/gsl/functions.cpp:648
 #, kde-format
 msgid "Hyperbolic tangent"
 msgstr "ჰიპერბოლური ტანგენსი"
 
-#: src/backend/gsl/functions.cpp:627
+#: src/backend/gsl/functions.cpp:649
 #, kde-format
 msgid "Inverse hyperbolic cosine"
 msgstr "ინვერსიული ჰიპერბოლური კოსინუსი"
 
-#: src/backend/gsl/functions.cpp:628
+#: src/backend/gsl/functions.cpp:650
 #, kde-format
 msgid "Inverse hyperbolic sine"
 msgstr "ინვერსიული ჰიპერბოლური სინუსი"
 
-#: src/backend/gsl/functions.cpp:629
+#: src/backend/gsl/functions.cpp:651
 #, kde-format
 msgid "Inverse hyperbolic tangent"
 msgstr "ინვერსიული ჰიპერბოლური ტანგენსი"
 
-#: src/backend/gsl/functions.cpp:630
+#: src/backend/gsl/functions.cpp:652
 #, kde-format
 msgid "Secant"
 msgstr "სეკანტი"
 
-#: src/backend/gsl/functions.cpp:631
+#: src/backend/gsl/functions.cpp:653
 #, kde-format
 msgid "Cosecant"
 msgstr "კოსეკანტი"
 
-#: src/backend/gsl/functions.cpp:632
+#: src/backend/gsl/functions.cpp:654
 #, kde-format
 msgid "Cotangent"
 msgstr "კოტანგენსი"
 
-#: src/backend/gsl/functions.cpp:633
+#: src/backend/gsl/functions.cpp:655
 #, kde-format
 msgid "Inverse secant"
 msgstr "ინვერსიული სეკანსი"
 
-#: src/backend/gsl/functions.cpp:634
+#: src/backend/gsl/functions.cpp:656
 #, kde-format
 msgid "Inverse cosecant"
 msgstr "ინვერსიული კოსეკანსი"
 
-#: src/backend/gsl/functions.cpp:635
+#: src/backend/gsl/functions.cpp:657
 #, kde-format
 msgid "Inverse cotangent"
 msgstr "ინვერსიული კოსეკანსი"
 
-#: src/backend/gsl/functions.cpp:636
+#: src/backend/gsl/functions.cpp:658
 #, kde-format
 msgid "Hyperbolic secant"
 msgstr "ჰიპერბოლური სეკანსი"
 
-#: src/backend/gsl/functions.cpp:637
+#: src/backend/gsl/functions.cpp:659
 #, kde-format
 msgid "Hyperbolic cosecant"
 msgstr "ჰიპერბოლური კოსეკანსი"
 
-#: src/backend/gsl/functions.cpp:638
+#: src/backend/gsl/functions.cpp:660
 #, kde-format
 msgid "Hyperbolic cotangent"
 msgstr "ჰიპერბოლური კოტანგენსი"
 
-#: src/backend/gsl/functions.cpp:639
+#: src/backend/gsl/functions.cpp:661
 #, kde-format
 msgid "Inverse hyperbolic secant"
 msgstr "ინვერსიული ჰიპერბოლური სეკანსი"
 
-#: src/backend/gsl/functions.cpp:640
+#: src/backend/gsl/functions.cpp:662
 #, kde-format
 msgid "Inverse hyperbolic cosecant"
 msgstr "ინვერსიული ჰიპერბოლური კოსეკანსი"
 
-#: src/backend/gsl/functions.cpp:641
+#: src/backend/gsl/functions.cpp:663
 #, kde-format
 msgid "Inverse hyperbolic cotangent"
 msgstr "ინვერსიული ჰიპერბოლური კოტანგენსი"
 
-#: src/backend/gsl/functions.cpp:642
+#: src/backend/gsl/functions.cpp:664
 #, kde-format
 msgid "Sinc function sin(x)/x"
 msgstr "Sinc ფუნქცია sin(x)/x"
 
-#: src/backend/gsl/functions.cpp:645
+#: src/backend/gsl/functions.cpp:667
 #, kde-format
 msgid "Hypotenuse function"
 msgstr "ჰიპოტენუზის ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:646
+#: src/backend/gsl/functions.cpp:668
 #, kde-format
 msgid "Three component hypotenuse function"
 msgstr "ჰიპოტენუზის სამკომპონენტიანი ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:647
+#: src/backend/gsl/functions.cpp:669
 #, kde-format
 msgid "restrict to [-pi, pi]"
 msgstr "[-pi,pi]-ზე შეზღუდვა"
 
-#: src/backend/gsl/functions.cpp:648
+#: src/backend/gsl/functions.cpp:670
 #, kde-format
 msgid "restrict to [0, 2 pi]"
 msgstr "[0,2 pi]-ზე სეზღუდვა"
 
-#: src/backend/gsl/functions.cpp:651
+#: src/backend/gsl/functions.cpp:673
 #, kde-format
 msgid "Riemann zeta function for integer n"
 msgstr "რიმანის ძეტა ფუნქცია მთელი n-სთვის"
 
-#: src/backend/gsl/functions.cpp:652
+#: src/backend/gsl/functions.cpp:674
 #, kde-format
 msgid "Riemann zeta function"
 msgstr "რირმანის ზეტა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:653
+#: src/backend/gsl/functions.cpp:675
 #, kde-format
 msgid "zeta(n)-1 for integer n"
 msgstr "zeta(n)-1 მთელი რიცხვისთვის n"
 
-#: src/backend/gsl/functions.cpp:654
+#: src/backend/gsl/functions.cpp:676
 #, kde-format
 msgid "zeta(x)-1"
 msgstr "ზეტა(x)-1"
 
-#: src/backend/gsl/functions.cpp:655
+#: src/backend/gsl/functions.cpp:677
 #, kde-format
 msgid "Hurwitz zeta function"
 msgstr "ჰურვიცის ზეტა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:656
+#: src/backend/gsl/functions.cpp:678
 #, kde-format
 msgid "Eta function for integer n"
 msgstr "ეტა ფუნქცია მთელი რიცხვისთვის n"
 
-#: src/backend/gsl/functions.cpp:657
+#: src/backend/gsl/functions.cpp:679
 #, kde-format
 msgid "Eta function"
 msgstr "ეტა ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:661
+#: src/backend/gsl/functions.cpp:683
 #, kde-format
 msgid "Gaussian random numbers"
 msgstr "გაუსის შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:662
+#: src/backend/gsl/functions.cpp:684
 #, kde-format
 msgid "Exponential random numbers"
 msgstr "ექსპონენტური შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:663
+#: src/backend/gsl/functions.cpp:685
 #, kde-format
 msgid "Laplacian random numbers"
 msgstr "ლაპლასის შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:664
+#: src/backend/gsl/functions.cpp:686
 #, kde-format
 msgid "Cauchy/Lorentz random numbers"
 msgstr "კოში/ლორენცის შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:665
+#: src/backend/gsl/functions.cpp:687
 #, kde-format
 msgid "Rayleigh random numbers"
 msgstr "რელეის შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:666
+#: src/backend/gsl/functions.cpp:688
 #, kde-format
 msgid "Landau random numbers"
 msgstr "ლანდაუს შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:667
+#: src/backend/gsl/functions.cpp:689
 #, kde-format
 msgid "Levy alpha-stable random numbers"
 msgstr "ლევის ალფა-სტაბილური შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:668
+#: src/backend/gsl/functions.cpp:690
 #, kde-format
 msgid "Gamma random numbers"
 msgstr "გამას შემთხვევით რიცხვები"
 
-#: src/backend/gsl/functions.cpp:669
+#: src/backend/gsl/functions.cpp:691
 #, kde-format
 msgid "Flat random numbers"
 msgstr "ბრტყელი შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:670
+#: src/backend/gsl/functions.cpp:692
 #, kde-format
 msgid "Lognormal random numbers"
 msgstr "ლოგნორმალური შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:672
+#: src/backend/gsl/functions.cpp:694
 #, kde-format
 msgid "Chi-squared random numbers"
 msgstr "ხი-კვადრატის შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:673
+#: src/backend/gsl/functions.cpp:695
 #, kde-format
 msgid "t-distributed random numbers"
 msgstr "t-განაწილების შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:674
+#: src/backend/gsl/functions.cpp:696
 #, kde-format
 msgid "Logistic random numbers"
 msgstr "ლოჯისტიკური შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:675
+#: src/backend/gsl/functions.cpp:697
 #, kde-format
 msgid "Poisson random numbers"
 msgstr "პუასონის შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:676
+#: src/backend/gsl/functions.cpp:698
 #, kde-format
 msgid "Bernoulli random numbers"
 msgstr "ბერნულის შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:677
+#: src/backend/gsl/functions.cpp:699
 #, kde-format
 msgid "Binomial random numbers"
 msgstr "ბინომური შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:680
+#: src/backend/gsl/functions.cpp:702
 #, kde-format
 msgid "Triangular random numbers"
 msgstr "სამკუთხედი შემთხვევითი რიცხვები"
 
-#: src/backend/gsl/functions.cpp:684
+#: src/backend/gsl/functions.cpp:706
 #, kde-format
 msgid "Probability density for a Gaussian distribution"
 msgstr "ალბათობის სიმკვრივე გაუსის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:685
+#: src/backend/gsl/functions.cpp:707
 #, kde-format
 msgid "Probability density for a unit Gaussian distribution"
 msgstr "ალბათობის სიმკვრივე გაუსის ნორმირებული განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:686
+#: src/backend/gsl/functions.cpp:708
 #, kde-format
 msgid "Cumulative distribution function P"
 msgstr "P განაწილების ინტეგრალური ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:687
+#: src/backend/gsl/functions.cpp:709
 #, kde-format
 msgid "Cumulative distribution function Q"
 msgstr "Q განაწილების ინტეგრალური ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:688
+#: src/backend/gsl/functions.cpp:710
 #, kde-format
 msgid "Inverse cumulative distribution function P"
 msgstr "P განაწილების ინტეგრალური ინვერსიული ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:689
+#: src/backend/gsl/functions.cpp:711
 #, kde-format
 msgid "Inverse cumulative distribution function Q"
 msgstr "Q განაწილების ინტეგრალური ინვერსიული ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:690
+#: src/backend/gsl/functions.cpp:712
 #, kde-format
 msgid "Cumulative unit distribution function P"
 msgstr "ნორმალიზებული P განაწილების ინტეგრალური ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:691
+#: src/backend/gsl/functions.cpp:713
 #, kde-format
 msgid "Cumulative unit distribution function Q"
 msgstr "ნორმალიზებული Q განაწილების ინტეგრალური ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:692
+#: src/backend/gsl/functions.cpp:714
 #, kde-format
 msgid "Inverse cumulative unit distribution function P"
 msgstr "ნორმალიზებული P განაწილების ინტეგრალური ინვერსიული ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:693
+#: src/backend/gsl/functions.cpp:715
 #, kde-format
 msgid "Inverse cumulative unit distribution function Q"
 msgstr "ნორმალიზებული Q განაწილების ინტეგრალური ინვერსიული ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:695
+#: src/backend/gsl/functions.cpp:717
 #, kde-format
 msgid "Probability density for Gaussian tail distribution"
 msgstr "ალბათობის სიმკვრივე გაუსის კუდის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:696
+#: src/backend/gsl/functions.cpp:718
 #, kde-format
 msgid "Probability density for unit Gaussian tail distribution"
 msgstr "გაუსის ნორმირებული განაწილების კუდის ალბათობის სიმკვრივე"
 
-#: src/backend/gsl/functions.cpp:697
+#: src/backend/gsl/functions.cpp:719
 #, kde-format
 msgid "Probability density for a bivariate Gaussian distribution"
 msgstr "გაუსის ორზომიანი განაწილების კუდის ალბათობის სიმკვრივე"
 
-#: src/backend/gsl/functions.cpp:700
+#: src/backend/gsl/functions.cpp:722
 #, kde-format
 msgid "Probability density for an exponential distribution"
 msgstr "ალბათობის სიმკვრივე ექსპონენციალური განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:701
+#: src/backend/gsl/functions.cpp:723
 #, kde-format
 msgid "Cumulative exponential distribution function P"
 msgstr "კუმულატიური ექსპონენტური განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:702
+#: src/backend/gsl/functions.cpp:724
 #, kde-format
 msgid "Cumulative exponential distribution function Q"
 msgstr "კუმულატიური ექსპონენტური განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:703
+#: src/backend/gsl/functions.cpp:725
 #, kde-format
 msgid "Inverse cumulative exponential distribution function P"
 msgstr "ნორმირებული P განაწილების შებრუნებული ინტეგრალური ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:704
+#: src/backend/gsl/functions.cpp:726
 #, kde-format
 msgid "Inverse cumulative exponential distribution function Q"
 msgstr "ნორმირებული Q განაწილების შებრუნებული ინტეგრალური ფუნქცია"
 
-#: src/backend/gsl/functions.cpp:707
+#: src/backend/gsl/functions.cpp:729
 #, kde-format
 msgid "Probability density for a Laplace distribution"
 msgstr "ალბათობის სიმკვრივე ლაპლასის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:708
+#: src/backend/gsl/functions.cpp:730
 #, kde-format
 msgid "Cumulative Laplace distribution function P"
 msgstr "კუმულატიური ლაპლასი განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:709
+#: src/backend/gsl/functions.cpp:731
 #, kde-format
 msgid "Cumulative Laplace distribution function Q"
 msgstr "კუმულატიური ლაპლასი განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:710
+#: src/backend/gsl/functions.cpp:732
 #, kde-format
 msgid "Inverse cumulative Laplace distribution function P"
 msgstr "შებრუნებული ინტეგრალური ლაპლასის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:711
+#: src/backend/gsl/functions.cpp:733
 #, kde-format
 msgid "Inverse cumulative Laplace distribution function Q"
 msgstr "შებრუნებული ინტეგრალური ლაპლასის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:714
+#: src/backend/gsl/functions.cpp:736
 #, kde-format
 msgid "Probability density for an exponential power distribution"
 msgstr "ალბათობის სიმკვრივე ექსპონენციალური ხარისხის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:715
+#: src/backend/gsl/functions.cpp:737
 #, kde-format
 msgid "cumulative exponential power distribution function P"
 msgstr "კუმულატიური ექსპონენტური ხარისხის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:716
+#: src/backend/gsl/functions.cpp:738
 #, kde-format
 msgid "Cumulative exponential power distribution function Q"
 msgstr "კუმულატიური ექსპონენტური ხარისხის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:719
+#: src/backend/gsl/functions.cpp:741
 #, kde-format
 msgid "Probability density for a Cauchy distribution"
 msgstr "ალბათობის სიმკვრივე კოშის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:720
+#: src/backend/gsl/functions.cpp:742
 #, kde-format
 msgid "Cumulative Cauchy distribution function P"
 msgstr "კუმულატიური კოშის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:721
+#: src/backend/gsl/functions.cpp:743
 #, kde-format
 msgid "Cumulative Cauchy distribution function Q"
 msgstr "კუმულატიური კოშის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:722
+#: src/backend/gsl/functions.cpp:744
 #, kde-format
 msgid "Inverse cumulative Cauchy distribution function P"
 msgstr "შებრუნებული ინტეგრალური კოშის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:723
+#: src/backend/gsl/functions.cpp:745
 #, kde-format
 msgid "Inverse cumulative Cauchy distribution function Q"
 msgstr "შებრუნებული ინტეგრალური კოშის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:726
+#: src/backend/gsl/functions.cpp:748
 #, kde-format
 msgid "Probability density for a Rayleigh distribution"
 msgstr "ალბათობის სიმკვრივე რეილეის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:727
+#: src/backend/gsl/functions.cpp:749
 #, kde-format
 msgid "Cumulative Rayleigh distribution function P"
 msgstr "კუმულატიური რელეის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:728
+#: src/backend/gsl/functions.cpp:750
 #, kde-format
 msgid "Cumulative Rayleigh distribution function Q"
 msgstr "კუმულატიური რელეის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:729
+#: src/backend/gsl/functions.cpp:751
 #, kde-format
 msgid "Inverse cumulative Rayleigh distribution function P"
 msgstr "შებრუნებული ინტეგრალური რელეის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:730
+#: src/backend/gsl/functions.cpp:752
 #, kde-format
 msgid "Inverse cumulative Rayleigh distribution function Q"
 msgstr "შებრუნებული ინტეგრალური რელეის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:731
+#: src/backend/gsl/functions.cpp:753
 #, kde-format
 msgid "Probability density for a Rayleigh tail distribution"
 msgstr "ალბათობის სიმკვრივე რეილეის კუდის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:734
+#: src/backend/gsl/functions.cpp:756
 #, kde-format
 msgid "Probability density for a Landau distribution"
 msgstr "ალბათობის სიმკვრივე ლანდაუს განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:737
+#: src/backend/gsl/functions.cpp:759
 #, kde-format
 msgid "Probability density for a gamma distribution"
 msgstr "ალბათობის სიმკვრივე გამა განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:738
+#: src/backend/gsl/functions.cpp:760
 #, kde-format
 msgid "Cumulative gamma distribution function P"
 msgstr "კუმულატიური გამა განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:739
+#: src/backend/gsl/functions.cpp:761
 #, kde-format
 msgid "Cumulative gamma distribution function Q"
 msgstr "კუმულატიური გამა განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:740
+#: src/backend/gsl/functions.cpp:762
 #, kde-format
 msgid "Inverse cumulative gamma distribution function P"
 msgstr "შებრუნებული ინტეგრალური გამა განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:741
+#: src/backend/gsl/functions.cpp:763
 #, kde-format
 msgid "Inverse cumulative gamma distribution function Q"
 msgstr "შებრუნებული ინტეგრალური გამა განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:744
+#: src/backend/gsl/functions.cpp:766
 #, kde-format
 msgid "Probability density for a uniform distribution"
 msgstr "ალბათობის სიმკვრივე ერთგვაროვანი განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:745
+#: src/backend/gsl/functions.cpp:767
 #, kde-format
 msgid "Cumulative uniform distribution function P"
 msgstr "კუმულატიური ერთგვაროვანი განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:746
+#: src/backend/gsl/functions.cpp:768
 #, kde-format
 msgid "Cumulative uniform distribution function Q"
 msgstr "კუმულატიური ერთგვაროვანი განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:747
+#: src/backend/gsl/functions.cpp:769
 #, kde-format
 msgid "Inverse cumulative uniform distribution function P"
 msgstr "შებრუნებული ინტეგრალური ერთგვაროვანი განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:748
+#: src/backend/gsl/functions.cpp:770
 #, kde-format
 msgid "Inverse cumulative uniform distribution function Q"
 msgstr "შებრუნებული ინტეგრალური ერთგვაროვანი განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:751
+#: src/backend/gsl/functions.cpp:773
 #, kde-format
 msgid "Probability density for a lognormal distribution"
 msgstr "ალბათობის სიმკვრივე ლოგნორმალური განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:752
+#: src/backend/gsl/functions.cpp:774
 #, kde-format
 msgid "Cumulative lognormal distribution function P"
 msgstr "კუმულატიური ლოგნორმალური განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:753
+#: src/backend/gsl/functions.cpp:775
 #, kde-format
 msgid "Cumulative lognormal distribution function Q"
 msgstr "კუმულატიური ლოგნორმალური განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:754
+#: src/backend/gsl/functions.cpp:776
 #, kde-format
 msgid "Inverse cumulative lognormal distribution function P"
 msgstr "შებრუნებული ინტეგრალური ლოგნორმალური განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:755
+#: src/backend/gsl/functions.cpp:777
 #, kde-format
 msgid "Inverse cumulative lognormal distribution function Q"
 msgstr "შებრუნებული ინტეგრალური ლოგნორმალური განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:758
+#: src/backend/gsl/functions.cpp:780
 #, kde-format
 msgid "Probability density for a chi squared distribution"
 msgstr "ალბათობის სიმკვრივე ხი-კვადრატის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:759
+#: src/backend/gsl/functions.cpp:781
 #, kde-format
 msgid "Cumulative chi squared distribution function P"
 msgstr "კუმულატიური ხი-კვადრატის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:760
+#: src/backend/gsl/functions.cpp:782
 #, kde-format
 msgid "Cumulative chi squared distribution function Q"
 msgstr "კუმულატიური ხი-კვადრატის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:761
+#: src/backend/gsl/functions.cpp:783
 #, kde-format
 msgid "Inverse cumulative chi squared distribution function P"
 msgstr "შებრუნებული ინტეგრალური ხი-კვადრატის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:762
+#: src/backend/gsl/functions.cpp:784
 #, kde-format
 msgid "Inverse cumulative chi squared distribution function Q"
 msgstr "შებრუნებული ინტეგრალური ხი-კვადრატის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:765
+#: src/backend/gsl/functions.cpp:787
 #, kde-format
 msgid "Probability density for a F-distribution"
 msgstr "ალბათობის სიმკვრივე F-განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:766
+#: src/backend/gsl/functions.cpp:788
 #, kde-format
 msgid "Cumulative F-distribution function P"
 msgstr "კუმულაციური F-განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:767
+#: src/backend/gsl/functions.cpp:789
 #, kde-format
 msgid "Cumulative F-distribution function Q"
 msgstr "კუმულაციური F-განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:768
+#: src/backend/gsl/functions.cpp:790
 #, kde-format
 msgid "Inverse cumulative F-distribution function P"
 msgstr "შებრუნებული ინტეგრალური F-განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:769
+#: src/backend/gsl/functions.cpp:791
 #, kde-format
 msgid "Inverse cumulative F-distribution function Q"
 msgstr "შებრუნებული ინტეგრალური F-განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:772
+#: src/backend/gsl/functions.cpp:794
 #, kde-format
 msgid "Probability density for a t-distribution"
 msgstr "ალბათობის სიმკვრივე t-განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:773
+#: src/backend/gsl/functions.cpp:795
 #, kde-format
 msgid "Cumulative t-distribution function P"
 msgstr "t-განაწილების ინტეგრალური ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:774
+#: src/backend/gsl/functions.cpp:796
 #, kde-format
 msgid "Cumulative t-distribution function Q"
 msgstr "t-განაწილების ინტეგრალური ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:775
+#: src/backend/gsl/functions.cpp:797
 #, kde-format
 msgid "Inverse cumulative t-distribution function P"
 msgstr "შებრუნებული ინტეგრალური t-განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:776
+#: src/backend/gsl/functions.cpp:798
 #, kde-format
 msgid "Inverse cumulative t-distribution function Q"
 msgstr "შებრუნებული ინტეგრალური t-განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:779
+#: src/backend/gsl/functions.cpp:801
 #, kde-format
 msgid "Probability density for a beta distribution"
 msgstr "ალბათობის სიმკვრივე ბეტა განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:780
+#: src/backend/gsl/functions.cpp:802
 #, kde-format
 msgid "Cumulative beta distribution function P"
 msgstr "ბეტა-განაწილების ინტეგრალური ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:781
+#: src/backend/gsl/functions.cpp:803
 #, kde-format
 msgid "Cumulative beta distribution function Q"
 msgstr "ბეტა-განაწილების ინტეგრალური ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:782
+#: src/backend/gsl/functions.cpp:804
 #, kde-format
 msgid "Inverse cumulative beta distribution function P"
 msgstr "შებრუნებული ინტეგრალური ბეტა განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:783
+#: src/backend/gsl/functions.cpp:805
 #, kde-format
 msgid "Inverse cumulative beta distribution function Q"
 msgstr "შებრუნებული ინტეგრალური ბეტა განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:786
+#: src/backend/gsl/functions.cpp:808
 #, kde-format
 msgid "Probability density for a logistic distribution"
 msgstr "ალბათობის სიმკვრივე ლოგისტიკური განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:787
+#: src/backend/gsl/functions.cpp:809
 #, kde-format
 msgid "Cumulative logistic distribution function P"
 msgstr "ლოგისტიკური განაწილების ინტეგრალური ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:788
+#: src/backend/gsl/functions.cpp:810
 #, kde-format
 msgid "Cumulative logistic distribution function Q"
 msgstr "ლოგისტიკური განაწილების ინტეგრალური ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:789
+#: src/backend/gsl/functions.cpp:811
 #, kde-format
 msgid "Inverse cumulative logistic distribution function P"
 msgstr "შებრუნებული ინტეგრალური ლოგისტიკური განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:790
+#: src/backend/gsl/functions.cpp:812
 #, kde-format
 msgid "Inverse cumulative logistic distribution function Q"
 msgstr "შებრუნებული ინტეგრალური ლოგისტიკური განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:793
+#: src/backend/gsl/functions.cpp:815
 #, kde-format
 msgid "Probability density for a Pareto distribution"
 msgstr "ალბათობის სიმკვრივე პარეტოს განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:794
+#: src/backend/gsl/functions.cpp:816
 #, kde-format
 msgid "Cumulative Pareto distribution function P"
 msgstr "კუმულატიური პარეტოს განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:795
+#: src/backend/gsl/functions.cpp:817
 #, kde-format
 msgid "Cumulative Pareto distribution function Q"
 msgstr "კუმულატიური პარეტოს განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:796
+#: src/backend/gsl/functions.cpp:818
 #, kde-format
 msgid "Inverse cumulative Pareto distribution function P"
 msgstr "შებრუნებული ინტეგრალური პარეტოს განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:797
+#: src/backend/gsl/functions.cpp:819
 #, kde-format
 msgid "Inverse cumulative Pareto distribution function Q"
 msgstr "შებრუნებული ინტეგრალური პარეტოს განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:800
+#: src/backend/gsl/functions.cpp:822
 #, kde-format
 msgid "Probability density for a Weibull distribution"
 msgstr "ალბათობის სიმკვრივე ვეიბულის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:801
+#: src/backend/gsl/functions.cpp:823
 #, kde-format
 msgid "Cumulative Weibull distribution function P"
 msgstr "კუმულატიური ვეიბულის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:802
+#: src/backend/gsl/functions.cpp:824
 #, kde-format
 msgid "Cumulative Weibull distribution function Q"
 msgstr "კუმულატიური ვეიბულის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:803
+#: src/backend/gsl/functions.cpp:825
 #, kde-format
 msgid "Inverse cumulative Weibull distribution function P"
 msgstr "შებრუნებული ინტეგრალური ვეიბულის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:804
+#: src/backend/gsl/functions.cpp:826
 #, kde-format
 msgid "Inverse cumulative Weibull distribution function Q"
 msgstr "შებრუნებული ინტეგრალური ვეიბულის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:807
+#: src/backend/gsl/functions.cpp:829
 #, kde-format
 msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "ალბათობის სიმკვრივე პირველი ტიპის გუმბელის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:808
+#: src/backend/gsl/functions.cpp:830
 #, kde-format
 msgid "Cumulative Type-1 Gumbel distribution function P"
 msgstr "პირველი ტიპის გუმბელის განაწილების ინტეგრალური ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:809
+#: src/backend/gsl/functions.cpp:831
 #, kde-format
 msgid "Cumulative Type-1 Gumbel distribution function Q"
 msgstr "პირველი ტიპის გუმბელის განაწილების ინტეგრალური ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:810
+#: src/backend/gsl/functions.cpp:832
 #, kde-format
 msgid "Inverse cumulative Type-1 Gumbel distribution function P"
 msgstr "შებრუნებული ინტეგრალური პირველი ტიპის გამბელის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:811
+#: src/backend/gsl/functions.cpp:833
 #, kde-format
 msgid "Inverse cumulative Type-1 Gumbel distribution function Q"
 msgstr "შებრუნებული ინტეგრალური პირველი ტიპის გამბელის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:812
+#: src/backend/gsl/functions.cpp:834
 #, kde-format
 msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "ალბათობის სიმკვრივე მეორე ტიპის გუმბელის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:813
+#: src/backend/gsl/functions.cpp:835
 #, kde-format
 msgid "Cumulative Type-2 Gumbel distribution function P"
 msgstr "მეორე ტიპის გუმბელის განაწილების ინტეგრალური ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:814
+#: src/backend/gsl/functions.cpp:836
 #, kde-format
 msgid "Cumulative Type-2 Gumbel distribution function Q"
 msgstr "მეორე ტიპის გუმბელის განაწილების ინტეგრალური ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:815
+#: src/backend/gsl/functions.cpp:837
 #, kde-format
 msgid "Inverse cumulative Type-2 Gumbel distribution function P"
 msgstr "შებრუნებული ინტეგრალური მეორე ტიპის გამბელის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:816
+#: src/backend/gsl/functions.cpp:838
 #, kde-format
 msgid "Inverse cumulative Type-2 Gumbel distribution function Q"
 msgstr "შებრუნებული ინტეგრალური მეორე ტიპის გამბელის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:819
+#: src/backend/gsl/functions.cpp:841
 #, kde-format
 msgid "Probability density for a Poisson distribution"
 msgstr "ალბათობის სიმკვრივე პუასონის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:820
+#: src/backend/gsl/functions.cpp:842
 #, kde-format
 msgid "Cumulative Poisson distribution function P"
 msgstr "კუმულატიური პუასონის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:821
+#: src/backend/gsl/functions.cpp:843
 #, kde-format
 msgid "Cumulative Poisson distribution function Q"
 msgstr "კუმულატიური პუასონის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:824
+#: src/backend/gsl/functions.cpp:846
 #, kde-format
 msgid "Probability density for a Bernoulli distribution"
 msgstr "ალბათობის სიმკვრივე ბერნულის განაწილებსთვის"
 
-#: src/backend/gsl/functions.cpp:827
+#: src/backend/gsl/functions.cpp:849
 #, kde-format
 msgid "Probability density for a binomial distribution"
 msgstr "ალბათობის სიმკვრივე ბინომური განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:828
+#: src/backend/gsl/functions.cpp:850
 #, kde-format
 msgid "Cumulative binomial distribution function P"
 msgstr "კუმულატიური ბინომური განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:829
+#: src/backend/gsl/functions.cpp:851
 #, kde-format
 msgid "Cumulative binomial distribution function Q"
 msgstr "კუმულატიური ბინომური განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:830
+#: src/backend/gsl/functions.cpp:852
 #, kde-format
 msgid "Probability density for a negative binomial distribution"
 msgstr "ალბათობის სიმკვრივე უარყოფითი ბინომური განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:831
+#: src/backend/gsl/functions.cpp:853
 #, kde-format
 msgid "Cumulative negative binomial distribution function P"
 msgstr "კუმულაციური უარყოფითი ბინომური განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:832
+#: src/backend/gsl/functions.cpp:854
 #, kde-format
 msgid "Cumulative negative binomial distribution function Q"
 msgstr "კუმულაციური უარყოფითი ბინომური განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:835
+#: src/backend/gsl/functions.cpp:857
 #, kde-format
 msgid "Probability density for a Pascal distribution"
 msgstr "ალბათობის სიმკვრივე პასკალის განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:836
+#: src/backend/gsl/functions.cpp:858
 #, kde-format
 msgid "Cumulative Pascal distribution function P"
 msgstr "კუმულატიური პასკალის განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:837
+#: src/backend/gsl/functions.cpp:859
 #, kde-format
 msgid "Cumulative Pascal distribution function Q"
 msgstr "კუმულატიური პასკალის განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:840
+#: src/backend/gsl/functions.cpp:862
 #, kde-format
 msgid "Probability density for a geometric distribution"
 msgstr "ალბათობის სიმკვრივე გეომეტრიული განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:841
+#: src/backend/gsl/functions.cpp:863
 #, kde-format
 msgid "Cumulative geometric distribution function P"
 msgstr "კუმულატიური გეომეტრიული განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:842
+#: src/backend/gsl/functions.cpp:864
 #, kde-format
 msgid "Cumulative geometric distribution function Q"
 msgstr "კუმულატიური გეომეტრიული განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:845
+#: src/backend/gsl/functions.cpp:867
 #, kde-format
 msgid "Probability density for a hypergeometric distribution"
 msgstr "ალბათობის სიმკვრივე ჰიპერგეომეტრიული განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:846
+#: src/backend/gsl/functions.cpp:868
 #, kde-format
 msgid "Cumulative hypergeometric distribution function P"
 msgstr "კუმულატიური ჰიპერგეომეტრიული განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:847
+#: src/backend/gsl/functions.cpp:869
 #, kde-format
 msgid "Cumulative hypergeometric distribution function Q"
 msgstr "კუმულატიური ჰიპერგეომეტრიული განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:850
+#: src/backend/gsl/functions.cpp:872
 #, kde-format
 msgid "Probability density for a logarithmic distribution"
 msgstr "ალბათობის სიმკვრივე ლოგარითმული განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:854
+#: src/backend/gsl/functions.cpp:876
 #, kde-format
 msgid "Probability density for a triangular distribution"
 msgstr "ალბათობის სიმკვრივე სამკუთხა განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:855
+#: src/backend/gsl/functions.cpp:877
 #, kde-format
 msgid "Cumulative triangular distribution function P"
 msgstr "კუმულატიური სამკუთხედი განაწილების ფუნქცია P"
 
-#: src/backend/gsl/functions.cpp:856
+#: src/backend/gsl/functions.cpp:878
 #, kde-format
 msgid "Cumulative triangular distribution function Q"
 msgstr "კუმულატიური სამკუთხედი განაწილების ფუნქცია Q"
 
-#: src/backend/gsl/functions.cpp:857
+#: src/backend/gsl/functions.cpp:879
 #, kde-format
 msgid "p-th quantile for triangular distribution"
 msgstr "მე-P-ე კვანტილი სამკუთხედი განაწილებისთვის"
 
-#: src/backend/gsl/functions.cpp:963 src/backend/gsl/functions.cpp:975
-#: src/backend/gsl/functions.cpp:989 src/backend/gsl/functions.cpp:1001
-#: src/backend/gsl/functions.cpp:1013
+#: src/backend/gsl/functions.cpp:1188 src/backend/gsl/functions.cpp:1200
+#: src/backend/gsl/functions.cpp:1214 src/backend/gsl/functions.cpp:1226
+#: src/backend/gsl/functions.cpp:1238
 #, kde-format
 msgid "Invalid"
 msgstr "არასწორი"
 
-#: src/backend/gsl/functions.cpp:969
+#: src/backend/gsl/functions.cpp:1194
 #, kde-format
 msgid "condition"
 msgstr "მდგომარეობა"
 
-#: src/backend/gsl/functions.cpp:971
+#: src/backend/gsl/functions.cpp:1196
 #, kde-format
 msgid "trueValue"
 msgstr "ჭეშმარიტიმნიშვნელობა"
 
-#: src/backend/gsl/functions.cpp:973
+#: src/backend/gsl/functions.cpp:1198
 #, kde-format
 msgid "falseValue"
 msgstr "არაჭეშმარიტიმნიშვნელობა"
 
-#: src/backend/gsl/functions.cpp:981
+#: src/backend/gsl/functions.cpp:1206
 #, kde-format
 msgid "n"
 msgstr "n"
 
-#: src/backend/gsl/functions.cpp:983
+#: src/backend/gsl/functions.cpp:1208
 #, kde-format
 msgid "j"
 msgstr "j"
 
-#: src/backend/gsl/functions.cpp:985
+#: src/backend/gsl/functions.cpp:1210
 #, kde-format
 msgid "q"
 msgstr "q"
 
-#: src/backend/gsl/functions.cpp:987 src/backend/gsl/functions.cpp:995
+#: src/backend/gsl/functions.cpp:1212 src/backend/gsl/functions.cpp:1220
 #, kde-format
 msgid "x"
 msgstr "x"
 
-#: src/backend/gsl/functions.cpp:997
+#: src/backend/gsl/functions.cpp:1222
 #, kde-format
 msgid "min"
 msgstr "წთ"
 
-#: src/backend/gsl/functions.cpp:999
+#: src/backend/gsl/functions.cpp:1224
 #, kde-format
 msgid "max"
 msgstr "მაქს"
 
-#: src/backend/gsl/functions.cpp:1007
+#: src/backend/gsl/functions.cpp:1232
 #, kde-format
 msgid "v1"
 msgstr "v1"
 
-#: src/backend/gsl/functions.cpp:1009
+#: src/backend/gsl/functions.cpp:1234
 #, kde-format
 msgid "v2"
 msgstr "v2"
 
-#: src/backend/gsl/functions.cpp:1011
+#: src/backend/gsl/functions.cpp:1236
 #, kde-format
 msgid "ep"
 msgstr "ep"
@@ -6454,7 +6538,7 @@ msgstr "შენიშვნის დაბეჭდვა"
 msgid "Text file (*.txt)"
 msgstr "ტექსტური ფაილი (*.txt)"
 
-#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:95
+#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:98
 #: src/backend/statistics/HypothesisTest.cpp:144
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6463,12 +6547,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "ფაილში გატანა"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:109
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:112
 #, kde-format
 msgid "Export failed"
 msgstr "გატანის შეცდომა"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:109
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:112
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "'%1'-ის ჩასაწერად გახსნის შეცდომა."
@@ -7451,33 +7535,33 @@ msgstr "სამწონიანი"
 msgid "Tricube"
 msgstr "ტრიკუბიკური"
 
-#: src/backend/script/Script.cpp:93
+#: src/backend/script/Script.cpp:96
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Python-ის ფაილი (*.py)"
 
-#: src/backend/script/Script.cpp:151 src/backend/script/Script.cpp:343
+#: src/backend/script/Script.cpp:154 src/backend/script/Script.cpp:346
 #, kde-format
 msgid "no script element found"
 msgstr "სკრიპტის ელემენტი აღმოჩენილი არაა"
 
-#: src/backend/script/Script.cpp:209
+#: src/backend/script/Script.cpp:212
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: %2 სკრიპტის გაშვება"
 
-#: src/backend/script/Script.cpp:323 src/backend/script/Script.cpp:328
+#: src/backend/script/Script.cpp:326 src/backend/script/Script.cpp:331
 #: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1230
 #, kde-format
 msgid "Script"
 msgstr "სკრიპტი"
 
-#: src/backend/script/Script.cpp:323
+#: src/backend/script/Script.cpp:326
 #, kde-format
 msgid "Failed to run the script."
 msgstr "სკრიპტის გაშვება ჩავარდა."
 
-#: src/backend/script/Script.cpp:328
+#: src/backend/script/Script.cpp:331
 #, kde-format
 msgid "A script is already running."
 msgstr "სკრიპტი უკვე გაშვებულია."
@@ -13482,7 +13566,7 @@ msgstr "მონაცემების ფორმატი"
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
 #: src/frontend/datasources/ImportFileWidget.cpp:1350
-#: src/frontend/note/NoteView.cpp:101
+#: src/frontend/note/NoteView.cpp:103
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -15144,42 +15228,42 @@ msgstr "%v%"
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
 msgstr "დეკარტის კოორდინატების გრაფიკის აღწერა %1: ნიმუში \"%2\" ჩაიტვირთა"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:365
+#: src/frontend/dockwidgets/ColumnDock.cpp:362
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
 #: src/frontend/widgets/ValueWidget.cpp:50
 #, kde-format
 msgid "Decimal"
 msgstr "ათობითი"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:366
+#: src/frontend/dockwidgets/ColumnDock.cpp:363
 #: src/frontend/dockwidgets/MatrixDock.cpp:82
 #: src/frontend/widgets/ValueWidget.cpp:51
 #, kde-format
 msgid "Scientific (e)"
 msgstr "სამეცნიერო (e)"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:367
+#: src/frontend/dockwidgets/ColumnDock.cpp:364
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
 #: src/frontend/widgets/ValueWidget.cpp:52
 #, kde-format
 msgid "Scientific (E)"
 msgstr "სამეცნიერო (E)"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:368
+#: src/frontend/dockwidgets/ColumnDock.cpp:365
 #: src/frontend/widgets/ValueWidget.cpp:53
 #, kde-format
 msgid "Automatic (e)"
 msgstr "ავტომატური (e)"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:369
+#: src/frontend/dockwidgets/ColumnDock.cpp:366
 #: src/frontend/widgets/ValueWidget.cpp:54
 #, kde-format
 msgid "Automatic (E)"
 msgstr "ავტომატური (E)"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
-#: src/frontend/dockwidgets/ColumnDock.cpp:371
-#: src/frontend/dockwidgets/ColumnDock.cpp:833
+#: src/frontend/dockwidgets/ColumnDock.cpp:368
+#: src/frontend/dockwidgets/ColumnDock.cpp:830
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/columndock.ui:42
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
@@ -15187,7 +15271,7 @@ msgstr "ავტომატური (E)"
 msgid "Variable:"
 msgstr "ცვლადი:"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:375
+#: src/frontend/dockwidgets/ColumnDock.cpp:372
 #, kde-format
 msgid ""
 "Specifies how numeric values are formatted in the spreadsheet:"
@@ -15204,7 +15288,7 @@ msgstr ""
 "აირჩევს უფრო ზუსტს.</li><li>ავტომატური (E) აირჩევს 'ათობითსა' და "
 "'სამეცნიეროს (E)' შორის და აირჩევს უფრო ზუსტს.</li><li>"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:387
+#: src/frontend/dockwidgets/ColumnDock.cpp:384
 #, kde-format
 msgid ""
 "For the  'Decimal', 'Scientific (e)', and 'Scientific (E)' formats, the "
@@ -15218,27 +15302,27 @@ msgstr ""
 "\"ავტომატური (e\" და \"ავტომატური (E)\" ფორმატებისთვის სიზუსტე წარმოადგენს "
 "მნიშვნელოვანი ციფრების მაქსიმალურ რიცხვს (ბოლო ნულები ამოღებულია)."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:392
+#: src/frontend/dockwidgets/ColumnDock.cpp:389
 #, kde-format
 msgid "Add a new value label"
 msgstr "ახალი მნიშვნელობის ჭდის დამატება"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:393
+#: src/frontend/dockwidgets/ColumnDock.cpp:390
 #, kde-format
 msgid "Remove the selected value label"
 msgstr "მონიშნული მნიშვნელობის ჭდის წაშლა"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:394
+#: src/frontend/dockwidgets/ColumnDock.cpp:391
 #, kde-format
 msgid "Modify multiple values labels in a batch mode"
 msgstr "ერთზე მეტი მნიშვნელობის ჭდის შეცვლა პაკეტურ რეჟიმში"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:396
+#: src/frontend/dockwidgets/ColumnDock.cpp:393
 #, kde-format
 msgid "Add new variable"
 msgstr "ახალი ცვლადის დამატება"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:397
+#: src/frontend/dockwidgets/ColumnDock.cpp:394
 #, kde-format
 msgid ""
 "Automatically update the calculated values in the target column on changes "
@@ -15247,7 +15331,7 @@ msgstr ""
 "გამოთვლილი მნიშვნელობები ავტომატური განახლება სამიზნე სვეტში ცვლადი სვეტების "
 "ცვლილებისას"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:398
+#: src/frontend/dockwidgets/ColumnDock.cpp:395
 #, kde-format
 msgid ""
 "Automatically resize the target column to fit the size of the variable "
@@ -15255,7 +15339,7 @@ msgid ""
 msgstr ""
 "სამიზნე სვეტების ზომის ავტომატური შეცვლა, რომ ცვლადი სვეტების ზომაში ჩაეტიოს"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:570
+#: src/frontend/dockwidgets/ColumnDock.cpp:567
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -15266,7 +15350,7 @@ msgstr ""
 "ხელმისაწვდომი აღარაა. ის ავტომატურად იქნება გამოყენებული, როცა მას თავიდან "
 "შექმნით."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:588
+#: src/frontend/dockwidgets/ColumnDock.cpp:585
 #, kde-format
 msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
@@ -15275,7 +15359,7 @@ msgstr ""
 "აქტიურია ელცხრილებს მიბმა. სამიზნე ელცხრილის ზომა მიბმული ელცხრილის მიერ "
 "იმართება."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:601
+#: src/frontend/dockwidgets/ColumnDock.cpp:598
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
@@ -15284,7 +15368,7 @@ msgstr ""
 "შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც მუდმივის სახელი. გამოიყენეთ "
 "სხვა."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:604
+#: src/frontend/dockwidgets/ColumnDock.cpp:601
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
@@ -15293,34 +15377,34 @@ msgstr ""
 "შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც ფუნქციის სახელი. გამოიყენეთ "
 "სხვა."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:607
+#: src/frontend/dockwidgets/ColumnDock.cpp:604
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr "ცვლადის სახელი \"i\" დაცულია სვეტის მწკრივის ინდექსისთვის."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:610
+#: src/frontend/dockwidgets/ColumnDock.cpp:607
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr "მოწოდებული ცვლადი სახელი იწყება ციფრით ან შეიცავს სპეციალურ სიმბოლოს."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:625
+#: src/frontend/dockwidgets/ColumnDock.cpp:622
 #, kde-format
 msgid "Empty formula expression"
 msgstr "ცარიელი ფორმულის გამოსახულება"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:632
+#: src/frontend/dockwidgets/ColumnDock.cpp:629
 #, kde-format
 msgid "Incorrect formula syntax: "
 msgstr "არასწორი ფორმულის სინტაქსი: "
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:651
+#: src/frontend/dockwidgets/ColumnDock.cpp:648
 #, kde-format
 msgid "Select a valid column"
 msgstr "მონიშნეთ სწორი სვეტი"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:658
-#: src/frontend/dockwidgets/ColumnDock.cpp:756
+#: src/frontend/dockwidgets/ColumnDock.cpp:655
+#: src/frontend/dockwidgets/ColumnDock.cpp:753
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:180
 #, kde-format
 msgid ""
@@ -15330,18 +15414,18 @@ msgstr ""
 "ცვლადის სახელი, შეიძლება, ასოებს, ციფრებს და სიმბოლო '_'-ს შეიცავდეს, "
 "მაგრამ, მხოლოდ, ასოთი შეიძლება, იწყებოდეს"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:665
+#: src/frontend/dockwidgets/ColumnDock.cpp:662
 #, kde-format
 msgid "Apply Formula"
 msgstr "ფორმულის გადატარება"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:802
+#: src/frontend/dockwidgets/ColumnDock.cpp:799
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:214
 #, kde-format
 msgid "Delete variable"
 msgstr "ცვლადის წაშლა"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:880
+#: src/frontend/dockwidgets/ColumnDock.cpp:877
 #, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
@@ -18167,17 +18251,17 @@ msgstr "%1: მონიშნული მწკრივების წაშ
 msgid "%1: clear selected rows(s)"
 msgstr "%1: მონიშნული მწკრივების გასუფთავება"
 
-#: src/frontend/note/NoteView.cpp:94
+#: src/frontend/note/NoteView.cpp:96
 #, kde-format
 msgid "Edit"
 msgstr "ჩასწორება"
 
-#: src/frontend/note/NoteView.cpp:98
+#: src/frontend/note/NoteView.cpp:100
 #, kde-format
 msgid "Edit markdown source"
 msgstr "Markdown-ის წყაროს ჩასწორება"
 
-#: src/frontend/note/NoteView.cpp:104
+#: src/frontend/note/NoteView.cpp:106
 #, kde-format
 msgid "Preview rendered output"
 msgstr "დარენდერებული გამოტანის გადახედვა"
