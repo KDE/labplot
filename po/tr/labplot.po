@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-21 00:39+0000\n"
-"PO-Revision-Date: 2026-06-17 09:34+0300\n"
+"PO-Revision-Date: 2026-06-21 18:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.04.2\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
@@ -3468,10 +3468,9 @@ msgid "Logical Functions"
 msgstr "Mantıksal İşlevler"
 
 #: src/backend/gsl/functions.cpp:68
-#, fuzzy, kde-format
-#| msgid "Mathieu Functions"
+#, kde-format
 msgid "Datetime Functions"
-msgstr "Mathieu İşlevleri"
+msgstr "Tarih ve Zaman İşlevleri"
 
 #: src/backend/gsl/functions.cpp:70
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:29
@@ -4244,80 +4243,77 @@ msgstr "değil"
 #: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "today"
-msgstr ""
+msgstr "today"
 
 #: src/backend/gsl/functions.cpp:351
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "now"
-msgstr "hayır"
+msgstr "now"
 
 #: src/backend/gsl/functions.cpp:352
 #, kde-format
 msgid "date(year; month; day)"
-msgstr ""
+msgstr "date(yıl; ay; gün)"
 
 #: src/backend/gsl/functions.cpp:353
 #, kde-format
 msgid "datedif(start_date; end_date; unit)"
-msgstr ""
+msgstr "datedif(başlangıç_date; bitiş_tarihi; birim)"
 
 #: src/backend/gsl/functions.cpp:354
 #, kde-format
 msgid "eomonth(start_date; months)"
-msgstr ""
+msgstr "eomonth(başlangıç_tarihi; ay)"
 
 #: src/backend/gsl/functions.cpp:355
 #, kde-format
 msgid "weekday(date)"
-msgstr ""
+msgstr "weekday(tarih)"
 
 #: src/backend/gsl/functions.cpp:356
 #, kde-format
 msgid "networkdays(start_date; end_date)"
-msgstr ""
+msgstr "networkdays(başlangıç_tarihi; bitiş_tarihi)"
 
 #: src/backend/gsl/functions.cpp:357
 #, kde-format
 msgid "year(date)"
-msgstr ""
+msgstr "year(tarih)"
 
 #: src/backend/gsl/functions.cpp:358
-#, fuzzy, kde-format
-#| msgid "month"
+#, kde-format
 msgid "month(date)"
-msgstr "ay"
+msgstr "month(tarih)"
 
 #: src/backend/gsl/functions.cpp:359
 #, kde-format
 msgid "day(date)"
-msgstr ""
+msgstr "day(tarih)"
 
 #: src/backend/gsl/functions.cpp:360
 #, kde-format
 msgid "weeknum(date)"
-msgstr ""
+msgstr "weeknum(tarih)"
 
 #: src/backend/gsl/functions.cpp:361
-#, fuzzy, kde-format
-#| msgid "DateTime"
+#, kde-format
 msgid "hour(dateTime)"
-msgstr "Tarih–zaman:"
+msgstr "saat(tarih_zaman)"
 
 #: src/backend/gsl/functions.cpp:362
 #, kde-format
 msgid "minute(dateTime)"
-msgstr ""
+msgstr "minute(tarih_zaman)"
 
 #: src/backend/gsl/functions.cpp:363
 #, kde-format
 msgid "second(dateTime)"
-msgstr ""
+msgstr "second(tarih_zaman)"
 
 #: src/backend/gsl/functions.cpp:364
 #, kde-format
 msgid "time(hour; minute; second)"
-msgstr ""
+msgstr "zaman(saat; dakika; saniye)"
 
 #: src/backend/gsl/functions.cpp:368
 #, kde-format

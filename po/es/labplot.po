@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-21 00:39+0000\n"
-"PO-Revision-Date: 2026-06-17 12:01+0100\n"
+"PO-Revision-Date: 2026-06-21 12:11+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -3479,10 +3479,9 @@ msgid "Logical Functions"
 msgstr "Funciones lógicas"
 
 #: src/backend/gsl/functions.cpp:68
-#, fuzzy, kde-format
-#| msgid "Mathieu Functions"
+#, kde-format
 msgid "Datetime Functions"
-msgstr "Funciones de Mathieu"
+msgstr "Funciones de fecha y hora"
 
 #: src/backend/gsl/functions.cpp:70
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:29
@@ -4255,80 +4254,77 @@ msgstr "no"
 #: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "today"
-msgstr ""
+msgstr "hoy"
 
 #: src/backend/gsl/functions.cpp:351
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "now"
-msgstr "no"
+msgstr "ahora"
 
 #: src/backend/gsl/functions.cpp:352
 #, kde-format
 msgid "date(year; month; day)"
-msgstr ""
+msgstr "fecha(año; mes; día)"
 
 #: src/backend/gsl/functions.cpp:353
 #, kde-format
 msgid "datedif(start_date; end_date; unit)"
-msgstr ""
+msgstr "fechadif(fecha_inicio; fecha_fin; unidad)"
 
 #: src/backend/gsl/functions.cpp:354
 #, kde-format
 msgid "eomonth(start_date; months)"
-msgstr ""
+msgstr "finmes(fecha_inicio; meses)"
 
 #: src/backend/gsl/functions.cpp:355
 #, kde-format
 msgid "weekday(date)"
-msgstr ""
+msgstr "diasemana(fecha)"
 
 #: src/backend/gsl/functions.cpp:356
 #, kde-format
 msgid "networkdays(start_date; end_date)"
-msgstr ""
+msgstr "diasred(fecha_inicio; fecha_fin)"
 
 #: src/backend/gsl/functions.cpp:357
 #, kde-format
 msgid "year(date)"
-msgstr ""
+msgstr "año(fecha)"
 
 #: src/backend/gsl/functions.cpp:358
-#, fuzzy, kde-format
-#| msgid "month"
+#, kde-format
 msgid "month(date)"
-msgstr "mes"
+msgstr "mes(fecha)"
 
 #: src/backend/gsl/functions.cpp:359
 #, kde-format
 msgid "day(date)"
-msgstr ""
+msgstr "día(fecha)"
 
 #: src/backend/gsl/functions.cpp:360
 #, kde-format
 msgid "weeknum(date)"
-msgstr ""
+msgstr "numsemana(fecha)"
 
 #: src/backend/gsl/functions.cpp:361
-#, fuzzy, kde-format
-#| msgid "DateTime"
+#, kde-format
 msgid "hour(dateTime)"
-msgstr "Fecha y hora"
+msgstr "hora(fechaHora)"
 
 #: src/backend/gsl/functions.cpp:362
 #, kde-format
 msgid "minute(dateTime)"
-msgstr ""
+msgstr "minuto(fechaHora)"
 
 #: src/backend/gsl/functions.cpp:363
 #, kde-format
 msgid "second(dateTime)"
-msgstr ""
+msgstr "segundo(fechaHora)"
 
 #: src/backend/gsl/functions.cpp:364
 #, kde-format
 msgid "time(hour; minute; second)"
-msgstr ""
+msgstr "hora(hora; minuto; segundo)"
 
 #: src/backend/gsl/functions.cpp:368
 #, kde-format

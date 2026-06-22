@@ -4201,13 +4201,12 @@ msgstr "ne"
 #: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "today"
-msgstr ""
+msgstr "dnes"
 
 #: src/backend/gsl/functions.cpp:351
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "now"
-msgstr "ne"
+msgstr "nyní"
 
 #: src/backend/gsl/functions.cpp:352
 #, kde-format

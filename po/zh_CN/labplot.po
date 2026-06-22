@@ -3428,10 +3428,9 @@ msgid "Logical Functions"
 msgstr "逻辑函数"
 
 #: src/backend/gsl/functions.cpp:68
-#, fuzzy, kde-format
-#| msgid "Mathieu Functions"
+#, kde-format
 msgid "Datetime Functions"
-msgstr "马蒂厄函数"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:70
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:29
@@ -4207,10 +4206,9 @@ msgid "today"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:351
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "now"
-msgstr "否"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:352
 #, kde-format
@@ -4258,10 +4256,9 @@ msgid "weeknum(date)"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:361
-#, fuzzy, kde-format
-#| msgid "DateTime:"
+#, kde-format
 msgid "hour(dateTime)"
-msgstr "日期时间格式："
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:362
 #, kde-format
