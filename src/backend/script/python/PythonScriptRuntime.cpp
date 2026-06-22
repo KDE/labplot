@@ -253,8 +253,8 @@ bool PythonScriptRuntime::initPython() {
 	// install and fail library validation due to mismatched Team IDs.
 	{
 		const QString appDir = QCoreApplication::applicationDirPath(); // .../Contents/MacOS
-		const QString pythonBasePath = appDir + QStringLiteral("/../Frameworks/Python.framework/Versions/Current/lib/python") + QString::number(PY_MAJOR_VERSION)
-			+ QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
+		const QString pythonBasePath = appDir + QStringLiteral("/../Frameworks/Python.framework/Versions/Current/lib/python")
+			+ QString::number(PY_MAJOR_VERSION) + QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
 		const QString stdLibPath = QDir(pythonBasePath).canonicalPath();
 		const QString libDynLoadPath = QDir(pythonBasePath + QStringLiteral("/lib-dynload")).canonicalPath();
 		const QString sitePkgsPath = QDir(pythonBasePath + QStringLiteral("/site-packages")).canonicalPath();
