@@ -247,25 +247,37 @@ bool PythonScriptRuntime::initPython() {
 	// and add it to sys.path
 
 #ifdef Q_OS_MACOS
-	// When running from the macOS app bundle, ensure the bundled PySide6/shiboken6
-	// site-packages is in sys.path. This is required when the user selects a virtual
-	// environment and Python initializes with the venv's sys.path that does not necessarily have PySide6 installed.
-	// Without this, PyInit_pylabplot() fails with "could not import module 'PySide6.QtCore'".
-	// We need to inject the bundled site-packages path into sys.path before importing pylabplot.
+	// When running from the macOS app bundle with a user-selected virtual environment,
+	// force bundled stdlib/lib-dynload/site-packages ahead of venv paths.
+	// Otherwise Python may load extension modules (e.g. binascii) from the venv base
+	// install and fail library validation due to mismatched Team IDs.
 	{
 		const QString appDir = QCoreApplication::applicationDirPath(); // .../Contents/MacOS
-		const QString sitePkgsPath = appDir + QStringLiteral("/../Frameworks/Python.framework/Versions/Current/lib/python") + QString::number(PY_MAJOR_VERSION)
-			+ QLatin1Char('.') + QString::number(PY_MINOR_VERSION) + QStringLiteral("/site-packages");
-		const QString canonicalPath = QDir(sitePkgsPath).canonicalPath();
-		if (!canonicalPath.isEmpty()) {
-			PyObject* sysPath = PySys_GetObject("path"); // borrowed reference
-			if (sysPath) {
-				PyObject* entry = PyUnicode_FromString(canonicalPath.toUtf8().constData());
-				if (entry) {
+		const QString pythonBasePath = appDir + QStringLiteral("/../Frameworks/Python.framework/Versions/Current/lib/python") + QString::number(PY_MAJOR_VERSION)
+			+ QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
+		const QString stdLibPath = QDir(pythonBasePath).canonicalPath();
+		const QString libDynLoadPath = QDir(pythonBasePath + QStringLiteral("/lib-dynload")).canonicalPath();
+		const QString sitePkgsPath = QDir(pythonBasePath + QStringLiteral("/site-packages")).canonicalPath();
+
+		PyObject* sysPath = PySys_GetObject("path"); // borrowed reference
+		if (sysPath && PyList_Check(sysPath)) {
+			auto prependPath = [sysPath](const QString& path) {
+				if (path.isEmpty())
+					return;
+				PyObject* entry = PyUnicode_FromString(path.toUtf8().constData());
+				if (!entry)
+					return;
+				const int contains = PySequence_Contains(sysPath, entry);
+				if (contains < 0)
+					PyErr_Clear();
+				if (contains != 1)
 					PyList_Insert(sysPath, 0, entry);
-					Py_DECREF(entry);
-				}
-			}
+				Py_DECREF(entry);
+			};
+
+			prependPath(sitePkgsPath);
+			prependPath(libDynLoadPath);
+			prependPath(stdLibPath);
 		}
 	}
 #endif
