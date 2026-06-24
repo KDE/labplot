@@ -16,6 +16,7 @@
 
 #include <gsl/gsl_fit.h>
 #include <gsl/gsl_statistics_double.h>
+#include <math.h>
 
 // macOS builds on gitlab CI complain about missing Eigen/Sparse while having Eigen3	-> disable EIGEN3 on macOS for the moment
 #if defined(Q_OS_MACOS)
@@ -47,20 +48,55 @@ const char* nsl_baseline_subtraction_method_name[] =
 	{"arPLS", i18n("Minimum"), i18n("Maximum"), i18n("Mean"), i18n("Median"), i18n("End Points"), i18n("Linear Regression")};
 
 void nsl_baseline_remove_minimum(double* data, const size_t n) {
+	// Handle empty data
+	if (n == 0) {
+		return;
+	}
+
 	const double min = nsl_stats_minimum(data, n, nullptr);
 
-	for (size_t i = 0; i < n; i++)
-		data[i] -= min;
+	// Check for NaN or all-NaN case
+	if (isnan(min)) {
+		return;
+	}
+
+	for (size_t i = 0; i < n; i++) {
+		// Skip NaN values to avoid propagating NaN
+		if (!isnan(data[i])) {
+			data[i] -= min;
+		}
+	}
 }
 
 void nsl_baseline_remove_maximum(double* data, const size_t n) {
+	// Handle empty data
+	if (n == 0) {
+		return;
+	}
+
 	const double max = nsl_stats_maximum(data, n, nullptr);
 
-	for (size_t i = 0; i < n; i++)
-		data[i] -= max;
+	// Check for NaN or all-NaN case
+	if (isnan(max)) {
+		return;
+	}
+
+	for (size_t i = 0; i < n; i++) {
+		// Skip NaN values to avoid propagating NaN
+		if (!isnan(data[i])) {
+			data[i] -= max;
+		}
+	}
 }
 
 void nsl_baseline_remove_mean(double* data, const size_t n) {
+	// Check for NaN values before computing mean
+	for (size_t i = 0; i < n; i++) {
+		if (isnan(data[i])) {
+			return; // Can't compute mean with NaN values
+		}
+	}
+
 	const double mean = gsl_stats_mean(data, 1, n);
 
 	for (size_t i = 0; i < n; i++)
@@ -68,14 +104,32 @@ void nsl_baseline_remove_mean(double* data, const size_t n) {
 }
 
 void nsl_baseline_remove_median(double* data, const size_t n) {
+	// Handle empty data
+	if (n == 0) {
+		return;
+	}
+
+	// Check for NaN values
+	for (size_t i = 0; i < n; i++) {
+		if (isnan(data[i])) {
+			return; // Can't compute median with NaN values
+		}
+	}
+
 	// copy data
 	double* tmp_data = (double*)malloc(n * sizeof(double));
-	if (!tmp_data)
-		return;
+	if (!tmp_data) {
+		return; // malloc failed, silently return (no error propagation)
+	}
 	memcpy(tmp_data, data, n * sizeof(double));
 
 	const double median = gsl_stats_median(tmp_data, 1, n); // rearranges tmp_data
-	// printf("MEDIAN = %g\n", median);
+
+	// Check for NaN median (shouldn't happen if we checked above, but be safe)
+	if (isnan(median)) {
+		free(tmp_data);
+		return;
+	}
 
 	for (size_t i = 0; i < n; i++)
 		data[i] -= median;
@@ -85,6 +139,16 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 
 /* do a linear interpolation using first and last point and subtract that */
 int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size_t n) {
+	// Handle empty data
+	if (n == 0) {
+		return -1;
+	}
+
+	// Single point: nothing to subtract
+	if (n == 1) {
+		return 0;
+	}
+
 	// not possible
 	if (xdata[0] == xdata[n - 1])
 		return -1;
@@ -100,6 +164,18 @@ int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size
 
 /* do a linear regression and subtract that */
 int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
+	// Need at least 2 points for linear regression
+	if (n < 2) {
+		return -1;
+	}
+
+	// Validate inputs - check for NaN and Infinity
+	for (size_t i = 0; i < n; i++) {
+		if (!isfinite(xdata[i]) || !isfinite(ydata[i])) {
+			return -1;
+		}
+	}
+
 	double c0, c1, cov00, cov01, cov11, chisq;
 	gsl_fit_linear(xdata, 1, ydata, 1, n, &c0, &c1, &cov00, &cov01, &cov11, &chisq);
 
@@ -116,6 +192,24 @@ int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 /* see https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract */
 double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, double lambda, int niter) {
 	double crit = 1.;
+
+	// Validate inputs
+	if (n < 3) {
+		return -1.; // Need at least 3 points for D differences
+	}
+	if (p <= 0 || lambda <= 0) {
+		return -1.;
+	}
+	if (niter < 1) {
+		return -1.;
+	}
+
+	// Validate data - check for NaN and Infinity
+	for (size_t i = 0; i < n; i++) {
+		if (!isfinite(data[i])) {
+			return -1.;
+		}
+	}
 
 #ifdef HAVE_EIGEN3
 	typedef Eigen::SparseMatrix<double> SMat; // declares a column-major sparse matrix type of double
@@ -159,12 +253,16 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 		// solve (W+H)z = W*data
 		Eigen::SimplicialLDLT<SMat> solver;
 		solver.compute(W + H);
-		if (solver.info() != Eigen::Success)
+		if (solver.info() != Eigen::Success) {
 			puts("compute(): decomposition failed\n");
+			return -1.;
+		}
 
 		z = solver.solve(W * d);
-		if (solver.info() != Eigen::Success)
+		if (solver.info() != Eigen::Success) {
 			puts("solve(): solving failed\n");
+			return -1.;
+		}
 
 		// std::cout << "z = " << z << std::endl;
 
@@ -197,8 +295,15 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 
 		// w_new = 1 / (1 + np.exp(2 * (d - (2*s - m))/s))
 		SVec wn(n);
-		for (size_t i = 0; i < n; ++i)
-			wn.insert(i) = 1. / (1. + exp(2. * (diff.coeffRef(i) - (2. * s - m)) / s));
+		for (size_t i = 0; i < n; ++i) {
+			// Check for division by zero or invalid values
+			if (s == 0 || isnan(s) || isinf(m)) {
+				// Use default weight if calculation would be invalid
+				wn.insert(i) = 1.;
+			} else {
+				wn.insert(i) = 1. / (1. + exp(2. * (diff.coeffRef(i) - (2. * s - m)) / s));
+			}
+		}
 		// std::cout << "wnvec = " << wnvec << std::endl;
 
 		// crit = norm(w_new - w) / norm(w)
@@ -262,6 +367,24 @@ void show_vector(gsl_vector* v, size_t n, char name) {
 // GSL version of ARPLS (much slower than Eigen3 version)
 double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, double lambda, int niter) {
 	double crit = 1.;
+
+	// Validate inputs
+	if (n < 3) {
+		return -1.; // Need at least 3 points for D differences
+	}
+	if (p <= 0 || lambda <= 0) {
+		return -1.;
+	}
+	if (niter < 1) {
+		return -1.;
+	}
+
+	// Validate data - check for NaN and Infinity
+	for (size_t i = 0; i < n; i++) {
+		if (!isfinite(data[i])) {
+			return -1.;
+		}
+	}
 
 #ifndef HAVE_EIGEN3
 	gsl_spmatrix* D = gsl_spmatrix_alloc(n, n - 2);
@@ -349,13 +472,13 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 		// gsl_linalg_HH_solve(AA, b, z);
 		//  sparse iterative solver: not working
 		/*		int iter = 0, maxiter = 10, status;
-				double tol = 1.0e-3;
-				do {
-					status = gsl_splinalg_itersolve_iterate(A, b, tol, z, work);
+			double tol = 1.0e-3;
+			do {
+				status = gsl_splinalg_itersolve_iterate(A, b, tol, z, work);
 
-					double residual = gsl_splinalg_itersolve_normr(work);
-					fprintf(stderr, "iter %d residual = %.12e\n", iter, residual);
-				} while (status == GSL_CONTINUE && ++iter < maxiter);
+				double residual = gsl_splinalg_itersolve_normr(work);
+				fprintf(stderr, "iter %d residual = %.12e\n", iter, residual);
+			} while (status == GSL_CONTINUE && ++iter < maxiter);
 		*/
 		// show_vector(z, n, 'z');
 
@@ -388,11 +511,15 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 		// printf("s = %g\n", s);
 
 		// w_new = 1 / (1 + np.exp(2 * (d - (2*s - m))/s))
-		for (size_t i = 0; i < n; ++i)
-			gsl_vector_set(w_new, i, 1. / (1. + exp(2. * (gsl_vector_get(diff, i) - (2. * s - m)) / s)));
-		// show_vector(w_new, n, 'n');
-
-		// crit = norm(w_new - w) / norm(w)
+		for (size_t i = 0; i < n; ++i) {
+			// Check for division by zero or invalid values
+			if (s == 0 || isnan(s) || isinf(m)) {
+				// Use default weight if calculation would be invalid
+				gsl_vector_set(w_new, i, 1.);
+			} else {
+				gsl_vector_set(w_new, i, 1. / (1. + exp(2. * (gsl_vector_get(diff, i) - (2. * s - m)) / s)));
+			}
+		}
 		double norm = 0.;
 		for (size_t i = 0; i < n; ++i) {
 			norm += gsl_pow_2(gsl_vector_get(w_new, i) - gsl_vector_get(w, i));

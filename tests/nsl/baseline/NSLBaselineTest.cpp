@@ -192,4 +192,158 @@ void NSLBaselineTest::testBaselineARPLS_XRD() {
 	}
 }
 
+// Test the Eigen3 implementation directly
+void NSLBaselineTest::testBaselineARPLSEigen3() {
+	double data[] = {1, 2, 3, 2, 4, 1, 3, 2, 3, 2};
+	double result[] = {-0.584766396744723,
+					   0.3178780697516,
+					   1.2204997307991,
+					   0.123162244333425,
+					   2.02576532689042,
+					   -1.07157429017768,
+					   0.831071565574356,
+					   -0.266275685377669,
+					   0.636358665771434,
+					   -0.460995612379269};
+
+	const size_t N = 10;
+
+// Test the Eigen3 implementation directly
+#ifdef HAVE_EIGEN3
+	double tol = nsl_baseline_remove_arpls_Eigen3(data, N, 1.e-3, 1.e6, 20);
+	WARN("TOL = " << tol)
+
+	FuzzyCompare(tol, 0.0008774583012132667, 1.e-6);
+	for (size_t i = 0; i < N; ++i) {
+		FuzzyCompare(data[i], result[i], 2.e-5);
+	}
+#else
+	QSKIP("Eigen3 not available");
+#endif
+}
+
+// Test the GSL implementation directly
+void NSLBaselineTest::testBaselineARPLSGSL() {
+#ifndef HAVE_EIGEN3
+	double data[] = {1, 2, 3, 2, 4, 1, 3, 2, 3, 2};
+	double result[] = {-0.605556598278328,
+					   0.29922426449953,
+					   1.20406568260443,
+					   0.108998357316374,
+					   2.0139914015879,
+					   -1.0809969643924,
+					   0.823990535656255,
+					   -0.270980722318351,
+					   0.634078132872751,
+					   -0.460816930930479};
+
+	const size_t N = 10;
+
+	// Test the GSL implementation directly
+	double tol = nsl_baseline_remove_arpls_GSL(data, N, 1.e-3, 1.e6, 20);
+	WARN("TOL = " << tol)
+
+	FuzzyCompare(tol, 0.0068956252520988, 1.e-6); // GSL value
+	for (size_t i = 0; i < N; ++i) {
+		FuzzyCompare(data[i], result[i], 2.e-5);
+	}
+#endif
+}
+
+// Test the Eigen3 implementation with spectrum data
+void NSLBaselineTest::testBaselineARPLSEigen3Spectrum() {
+	std::ifstream d(QFINDTESTDATA(QLatin1String("data/spectrum.dat")).toStdString());
+	std::ifstream r(QFINDTESTDATA(QLatin1String("data/spectrum_arpls.dat")).toStdString());
+	const size_t N = 1000;
+
+	double data[N], result[N];
+	for (size_t i = 0; i < N; i++) {
+		d >> data[i];
+		r >> result[i];
+	}
+
+#ifdef HAVE_EIGEN3
+	double tol = nsl_baseline_remove_arpls_Eigen3(data, N, 1.e-2, 1.e4, 10);
+	WARN("TOL = " << tol)
+
+	FuzzyCompare(tol, 0.108167623062361, 1.e-9); // GSL value
+	for (size_t i = 0; i < N; ++i) {
+		FuzzyCompare(data[i], result[i], 2.e-5);
+	}
+#else
+	QSKIP("Eigen3 not available");
+#endif
+}
+
+// Test the GSL implementation with spectrum data
+void NSLBaselineTest::testBaselineARPLSGSLSpectrum() {
+#ifndef HAVE_EIGEN3
+	std::ifstream d(QFINDTESTDATA(QLatin1String("data/spectrum.dat")).toStdString());
+	std::ifstream r(QFINDTESTDATA(QLatin1String("data/spectrum_arpls.dat")).toStdString());
+	const size_t N = 1000;
+
+	double data[N], result[N];
+	for (size_t i = 0; i < N; i++) {
+		d >> data[i];
+		r >> result[i];
+	}
+
+	double tol = nsl_baseline_remove_arpls_GSL(data, N, 1.e-2, 1.e4, 10);
+	WARN("TOL = " << tol)
+
+	FuzzyCompare(tol, 0.108167623062361, 1.e-9); // GSL value
+	for (size_t i = 0; i < N; ++i) {
+		FuzzyCompare(data[i], result[i], 2.e-5);
+	}
+#endif
+}
+
+// Test the Eigen3 implementation with XRD data
+void NSLBaselineTest::testBaselineARPLSEigen3XRD() {
+	std::ifstream d(QFINDTESTDATA(QLatin1String("data/XRD.dat")).toStdString());
+	std::ifstream r(QFINDTESTDATA(QLatin1String("data/XRD_arpls.dat")).toStdString());
+	const size_t N = 1764;
+
+	double data[N], result[N];
+	for (size_t i = 0; i < N; i++) {
+		d >> data[i];
+		r >> result[i];
+	}
+
+#ifdef HAVE_EIGEN3
+	double tol = nsl_baseline_remove_arpls_Eigen3(data, N, 1.e-3, 1.e6, 20);
+	WARN("TOL = " << tol)
+
+	FuzzyCompare(tol, 0.0068956252520988, 1.e-6); // GSL value
+	for (size_t i = 0; i < N; ++i) {
+		FuzzyCompare(data[i], result[i], 2.e-5);
+	}
+#else
+	QSKIP("Eigen3 not available");
+#endif
+}
+
+// Test the GSL implementation with XRD data
+void NSLBaselineTest::testBaselineARPLSGSLXRD() {
+#ifndef HAVE_EIGEN3
+	std::ifstream d(QFINDTESTDATA(QLatin1String("data/XRD.dat")).toStdString());
+	std::ifstream r(QFINDTESTDATA(QLatin1String("data/XRD_arpls.dat")).toStdString());
+	const size_t N = 1764;
+
+	double data[N], result[N];
+	for (size_t i = 0; i < N; i++) {
+		d >> data[i];
+		r >> result[i];
+	}
+
+	double tol = nsl_baseline_remove_arpls_GSL(data, N, 1.e-3, 1.e6, 20);
+	WARN("TOL = " << tol)
+
+	FuzzyCompare(tol, 0.0068956252520988, 1.e-6); // GSL value
+	for (size_t i = 0; i < N; ++i) {
+		FuzzyCompare(data[i], result[i], 2.e-5);
+	}
+#endif
+}
+
 QTEST_MAIN(NSLBaselineTest)

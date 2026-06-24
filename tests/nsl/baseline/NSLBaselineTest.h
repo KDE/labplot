@@ -31,6 +31,12 @@ private Q_SLOTS:
 	void testBaselineARPLS();
 	void testBaselineARPLSSpectrum();
 	void testBaselineARPLS_XRD();
+	void testBaselineARPLSEigen3();
+	void testBaselineARPLSEigen3Spectrum();
+	void testBaselineARPLSEigen3XRD();
+	void testBaselineARPLSGSL();
+	void testBaselineARPLSGSLSpectrum();
+	void testBaselineARPLSGSLXRD();
 	// performance
 	// void testPerformance();
 };

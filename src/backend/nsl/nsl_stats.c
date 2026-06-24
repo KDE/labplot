@@ -17,12 +17,37 @@
 double nsl_stats_minimum(const double data[], const size_t n, size_t* index) {
 	size_t i;
 
-	double min = data[0];
-	if (index != NULL)
-		*index = 0;
+	// Handle empty data
+	if (n == 0) {
+		if (index != NULL)
+			*index = 0;
+		return NAN;
+	}
 
-	for (i = 1; i < n; i++) {
-		if (data[i] < min) {
+	// Find first non-NaN value
+	double min = NAN;
+	size_t min_idx = 0;
+	for (i = 0; i < n; i++) {
+		if (!isnan(data[i])) {
+			min = data[i];
+			min_idx = i;
+			break;
+		}
+	}
+
+	// All NaN case
+	if (isnan(min)) {
+		if (index != NULL)
+			*index = 0;
+		return NAN;
+	}
+
+	// Find minimum, skipping NaN values
+	if (index != NULL)
+		*index = min_idx;
+
+	for (i = min_idx + 1; i < n; i++) {
+		if (!isnan(data[i]) && data[i] < min) {
 			min = data[i];
 			if (index != NULL)
 				*index = i;
@@ -35,12 +60,37 @@ double nsl_stats_minimum(const double data[], const size_t n, size_t* index) {
 double nsl_stats_maximum(const double data[], const size_t n, size_t* index) {
 	size_t i;
 
-	double max = data[0];
-	if (index != NULL)
-		*index = 0;
+	// Handle empty data
+	if (n == 0) {
+		if (index != NULL)
+			*index = 0;
+		return NAN;
+	}
 
-	for (i = 1; i < n; i++) {
-		if (data[i] > max) {
+	// Find first non-NaN value
+	double max = NAN;
+	size_t max_idx = 0;
+	for (i = 0; i < n; i++) {
+		if (!isnan(data[i])) {
+			max = data[i];
+			max_idx = i;
+			break;
+		}
+	}
+
+	// All NaN case
+	if (isnan(max)) {
+		if (index != NULL)
+			*index = 0;
+		return NAN;
+	}
+
+	// Find maximum, skipping NaN values
+	if (index != NULL)
+		*index = max_idx;
+
+	for (i = max_idx + 1; i < n; i++) {
+		if (!isnan(data[i]) && data[i] > max) {
 			max = data[i];
 			if (index != NULL)
 				*index = i;
