@@ -78,8 +78,16 @@ QList<Settings::Type> SettingsScriptingPage::applySettings() {
 		return changes;
 
 	QString executablePath = ui.cbPythonEnvironment->currentData().toString();
+	QStringList executablePaths;
+	for (int i = 0; i < ui.cbPythonEnvironment->count(); ++i) {
+		const QString path = ui.cbPythonEnvironment->itemData(i).toString();
+		if (!path.isEmpty() && !executablePaths.contains(path))
+			executablePaths << path;
+	}
+
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
-	group.writeEntry(QLatin1String("PythonExecutable"), executablePath);
+	group.writeEntry(QLatin1String("PythonExecutable"), executablePath); // save the python path for the currently selected environment
+	group.writeEntry(QLatin1String("PythonExecutables"), executablePaths); // save the python paths for all discovered and user-provided environments
 	return changes;
 }
 
@@ -89,8 +97,36 @@ void SettingsScriptingPage::restoreDefaults() {
 
 void SettingsScriptingPage::loadSettings() {
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
-	const QString savedPath = group.readEntry(QLatin1String("PythonExecutable"), QString());
+	const QStringList savedPaths = group.readEntry(QLatin1String("PythonExecutables"), QStringList());
+	const QString savedPath = group.readEntry(QLatin1String("PythonExecutable"), QString()); // load the currently selected environment
 
+	// show all saved environments that were discovered and user-provided before
+	for (const auto& path : savedPaths) {
+		if (path.isEmpty())
+			continue;
+
+		bool exists = false;
+		for (int i = 0; i < ui.cbPythonEnvironment->count(); ++i) {
+			if (ui.cbPythonEnvironment->itemData(i).toString() == path) {
+				exists = true;
+				break;
+			}
+		}
+		if (exists)
+			continue;
+
+#ifdef Q_OS_WIN
+		QString executablePath = QStringLiteral("/Scripts/python.exe");
+#else
+		QString executablePath = QStringLiteral("/bin/python");
+#endif
+		if (path.endsWith(executablePath))
+			addEnvironment(path.chopped(executablePath.length()), false, true);
+		else if (path.endsWith(executablePath + QStringLiteral("/")))
+			addEnvironment(path.chopped(executablePath.length() + 1), false, true);
+	}
+
+	// show the last selected environment if it is still available, otherwise show "System Default"
 	if (!savedPath.isEmpty()) {
 		for (int i = 0; i < ui.cbPythonEnvironment->count(); ++i) {
 			if (ui.cbPythonEnvironment->itemData(i).toString() == savedPath) {
