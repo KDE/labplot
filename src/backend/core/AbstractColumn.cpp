@@ -5,12 +5,13 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractColumnPrivate.h"
+#include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/abstractcolumncommands.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -404,21 +405,45 @@ bool AbstractColumn::isValid(int row) const {
  * \brief Return whether a certain row is masked
  */
 bool AbstractColumn::isMasked(int row) const {
-	return d->m_masking.isSet(row);
+	return row < d->m_masking.size() && d->m_masking.testBit(row);
 }
 
 /**
  * \brief Return whether a certain interval of rows is fully masked
  */
 bool AbstractColumn::isMasked(const Interval<int>& i) const {
-	return d->m_masking.isSet(i);
+	for (int row = i.start(); row <= i.end(); ++row) {
+		if (row >= d->m_masking.size() || !d->m_masking.testBit(row))
+			return false;
+	}
+	return true;
 }
 
 /**
  * \brief Return all intervals of masked rows
  */
 QVector<Interval<int>> AbstractColumn::maskedIntervals() const {
-	return d->m_masking.intervals();
+	QVector<Interval<int>> intervals;
+	int intervalStart = -1;
+
+	for (int row = 0; row < d->m_masking.size(); ++row) {
+		if (d->m_masking.testBit(row)) {
+			if (intervalStart == -1)
+				intervalStart = row; // Start new interval
+		} else {
+			if (intervalStart != -1) {
+				// End current interval
+				intervals.append(Interval<int>(intervalStart, row - 1));
+				intervalStart = -1;
+			}
+		}
+	}
+
+	// Close any open interval
+	if (intervalStart != -1)
+		intervals.append(Interval<int>(intervalStart, d->m_masking.size() - 1));
+
+	return intervals;
 }
 
 /**
@@ -890,17 +915,36 @@ int AbstractColumn::indexForValue(double /*x*/, bool /* smaller */) const {
 bool AbstractColumn::XmlReadMask(XmlStreamReader* reader) {
 	Q_ASSERT(reader->isStartElement() && reader->name() == QLatin1String("mask"));
 
-	bool ok1, ok2;
-	int start, end;
-	start = reader->readAttributeInt(QStringLiteral("start_row"), &ok1);
-	end = reader->readAttributeInt(QStringLiteral("end_row"), &ok2);
-	if (!ok1 || !ok2) {
-		reader->raiseError(i18n("invalid or missing start or end row"));
-		return false;
+	if (Project::xmlVersion() >= 22) {
+		// new format (version 22+): base64-encoded raw bitmap
+		QString bitmapData = reader->attributes().value(QStringLiteral("bitmap")).toString();
+		const auto bytes = QByteArray::fromBase64(bitmapData.toLatin1());
+
+		// Reconstruct QBitArray from raw bits
+		const int numBits = bytes.size() * 8;
+		d->m_masking = QBitArray(numBits);
+		const auto* bits = reinterpret_cast<const uchar*>(bytes.constData());
+		for (int i = 0; i < numBits; ++i) {
+			if (bits[i / 8] & (1 << (i % 8)))
+				d->m_masking.setBit(i, true);
+		}
+
+		if (!reader->skipToEndElement())
+			return false;
+	} else {
+		// old format (version < 22): interval-based (for backward compatibility)
+		bool ok1, ok2;
+		int start, end;
+		start = reader->readAttributeInt(QStringLiteral("start_row"), &ok1);
+		end = reader->readAttributeInt(QStringLiteral("end_row"), &ok2);
+		if (!ok1 || !ok2) {
+			reader->raiseError(i18n("invalid or missing start or end row"));
+			return false;
+		}
+		setMasked(Interval<int>(start, end));
+		if (!reader->skipToEndElement())
+			return false;
 	}
-	setMasked(Interval<int>(start, end));
-	if (!reader->skipToEndElement())
-		return false;
 
 	return true;
 }
@@ -909,10 +953,12 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader* reader) {
  * \brief Write XML mask element
  */
 void AbstractColumn::XmlWriteMask(QXmlStreamWriter* writer) const {
-	for (const auto& interval : maskedIntervals()) {
+	// Write bitmap format (same format as validity bitmap for consistency)
+	if (!d->m_masking.isEmpty()) {
 		writer->writeStartElement(QStringLiteral("mask"));
-		writer->writeAttribute(QStringLiteral("start_row"), QString::number(interval.start()));
-		writer->writeAttribute(QStringLiteral("end_row"), QString::number(interval.end()));
+		const QByteArray bytes(reinterpret_cast<const char*>(d->m_masking.bits()), (d->m_masking.size() + 7) / 8);
+		writer->writeAttribute(QStringLiteral("bitmap"), QString::fromLatin1(bytes.toBase64()));
+
 		writer->writeEndElement();
 	}
 }

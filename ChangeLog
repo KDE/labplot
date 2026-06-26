@@ -53,6 +53,7 @@ Performance improvements:
 		* Faster save/load of text columns
 		* Faster save/load of datetime columns (BUG 478508)
 		* Faster cutting of cells in the spreadsheet (BUG 513574)
+		* Faster handling of masked values in the spreadsheet with reduced memory consumption (BUG 521940)
 
 Bug fixes:
 	* Fix displayed locale of constants

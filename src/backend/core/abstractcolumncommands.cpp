@@ -130,7 +130,26 @@ void AbstractColumnSetMaskedCmd::redo() {
 		m_masking = m_col->m_masking;
 		m_copied = true;
 	}
-	m_col->m_masking.setValue(m_interval, m_masked);
+
+	// Set or clear bits for the interval
+	int endRow = m_interval.end();
+	if (m_masked) {
+		// Ensure bitmap is large enough
+		if (endRow >= m_col->m_masking.size())
+			m_col->m_masking.resize(endRow + 1);
+
+		// Set bits in interval
+		for (int row = m_interval.start(); row <= endRow; ++row)
+			m_col->m_masking.setBit(row, true);
+	} else {
+		// Clear bits in interval (only if within bounds)
+		if (m_interval.start() < m_col->m_masking.size()) {
+			int actualEnd = qMin(endRow, m_col->m_masking.size() - 1);
+			for (int row = m_interval.start(); row <= actualEnd; ++row)
+				m_col->m_masking.setBit(row, false);
+		}
+	}
+
 	m_col->owner()->setDataChanged();
 }
 
@@ -177,12 +196,34 @@ AbstractColumnInsertRowsCmd::AbstractColumnInsertRowsCmd(AbstractColumn* col, in
 AbstractColumnInsertRowsCmd::~AbstractColumnInsertRowsCmd() = default;
 
 void AbstractColumnInsertRowsCmd::redo() {
-	m_col->m_masking.insertRows(m_before, m_count);
+	// Insert rows into bitmap - shift bits after insertion point
+	if (m_before < m_col->m_masking.size()) {
+		QBitArray newMasking(m_col->m_masking.size() + m_count);
+		// Copy bits before insertion point
+		for (int i = 0; i < m_before; ++i)
+			newMasking.setBit(i, m_col->m_masking.testBit(i));
+		// New bits [m_before, m_before+m_count) are false by default
+		// Copy bits after insertion point (shifted by m_count)
+		for (int i = m_before; i < m_col->m_masking.size(); ++i)
+			newMasking.setBit(i + m_count, m_col->m_masking.testBit(i));
+		m_col->m_masking = newMasking;
+	}
+	// else: inserting at or beyond current size, nothing to do
 	m_col->owner()->setChanged();
 }
 
 void AbstractColumnInsertRowsCmd::undo() {
-	m_col->m_masking.removeRows(m_before, m_count);
+	// Remove the inserted rows - shift bits back
+	if (m_before < m_col->m_masking.size()) {
+		QBitArray newMasking(qMax(0, m_col->m_masking.size() - m_count));
+		// Copy bits before removal point
+		for (int i = 0; i < m_before && i < newMasking.size(); ++i)
+			newMasking.setBit(i, m_col->m_masking.testBit(i));
+		// Copy bits after removal point (shifted back by m_count)
+		for (int i = m_before + m_count; i < m_col->m_masking.size() && i - m_count < newMasking.size(); ++i)
+			newMasking.setBit(i - m_count, m_col->m_masking.testBit(i));
+		m_col->m_masking = newMasking;
+	}
 	m_col->owner()->setChanged();
 }
 
@@ -224,7 +265,24 @@ AbstractColumnRemoveRowsCmd::~AbstractColumnRemoveRowsCmd() = default;
 
 void AbstractColumnRemoveRowsCmd::redo() {
 	m_masking = m_col->m_masking;
-	m_col->m_masking.removeRows(m_first, m_count);
+
+	// Remove rows from bitmap - clear bits and shift remaining bits
+	if (m_first < m_col->m_masking.size()) {
+		int removeEnd = qMin(m_first + m_count, m_col->m_masking.size());
+		int newSize = qMax(0, m_col->m_masking.size() - m_count);
+		QBitArray newMasking(newSize);
+
+		// Copy bits before removal point
+		for (int i = 0; i < m_first && i < newSize; ++i)
+			newMasking.setBit(i, m_col->m_masking.testBit(i));
+
+		// Copy bits after removal point (shifted back by m_count)
+		for (int i = removeEnd; i < m_col->m_masking.size() && i - m_count < newSize; ++i)
+			newMasking.setBit(i - m_count, m_col->m_masking.testBit(i));
+
+		m_col->m_masking = newMasking;
+	}
+
 	m_col->owner()->setChanged();
 }
 
