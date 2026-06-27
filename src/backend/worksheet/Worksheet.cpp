@@ -328,7 +328,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(Worksheet);
 	const auto* scriptButton = dynamic_cast<const ScriptButton*>(aspect);
-	if (scriptButton){
+	if (scriptButton) {
 		auto* proxy = d->m_scene->addWidget(scriptButton->widget());
 		return;
 	}
