@@ -314,7 +314,7 @@ void SettingsScriptingPage::showErrorMessage(const QString& message) {
 		if (!m_messageWidget) {
 			m_messageWidget = new KMessageWidget(this);
 			m_messageWidget->setMessageType(KMessageWidget::Error);
-			ui.gridLayout->addWidget(m_messageWidget, 6, 0, 1, 4);
+			ui.gridLayout->addWidget(m_messageWidget, 7, 0, 1, 4);
 		}
 		m_messageWidget->setText(message);
 		m_messageWidget->animatedShow();
