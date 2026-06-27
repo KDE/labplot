@@ -457,7 +457,10 @@ void AbstractColumn::clearMasks() {
  * \param mask true: mask, false: unmask
  */
 void AbstractColumn::setMasked(int row, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(d, row, row, mask), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
+	exec(new AbstractColumnSetMaskedCmd(d, row, row, mask),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -468,7 +471,10 @@ void AbstractColumn::setMasked(int row, bool mask) {
  * \param mask true: mask, false: unmask
  */
 void AbstractColumn::setMaskedRange(int startRow, int endRow, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(d, startRow, endRow, mask), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
+	exec(new AbstractColumnSetMaskedCmd(d, startRow, endRow, mask),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
