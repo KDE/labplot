@@ -20,7 +20,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/ScriptButton.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TreeModel.h"
 #include "frontend/ThemeHandler.h"
@@ -327,11 +326,6 @@ bool Worksheet::printPreview() const {
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(Worksheet);
-	const auto* scriptButton = dynamic_cast<const ScriptButton*>(aspect);
-	if (scriptButton) {
-		auto* proxy = d->m_scene->addWidget(scriptButton->widget());
-		return;
-	}
 
 	const auto* addedElement = dynamic_cast<const WorksheetElement*>(aspect);
 	if (!addedElement)
