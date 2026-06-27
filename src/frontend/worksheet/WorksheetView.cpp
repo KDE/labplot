@@ -1386,7 +1386,7 @@ void WorksheetView::addNew(QAction* action) {
 
 	// labels and images with their initial positions need to be retransformed
 	// after they have gotten a parent
-	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image /* || aspect->type() == AspectType::ScriptButton */) {
+	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image || aspect->type() == AspectType::ScriptButton) {
 		auto* element = static_cast<WorksheetElement*>(aspect);
 		if (m_calledFromContextMenu) {
 			// must be done after add Child, because otherwise the parentData rect is not available
