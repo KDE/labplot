@@ -1432,7 +1432,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 
 			checkColumnMenus(selectedColumns());
 			m_columnMenu->exec(global_pos);
-		} else if (watched == this) {
+		} else if (watched == this || watched == m_tableView->viewport() || (m_frozenTableView && watched == m_frozenTableView->viewport())) {
 			// the cursor position is in one of the cells and no full columns are selected,
 			// show the global spreadsheet context menu in this case
 			// TODO: deactivate the "selection" menu if there are no values in the selected cells
@@ -2835,6 +2835,7 @@ void SpreadsheetView::toggleFreezeColumn() {
 		m_frozenTableView->verticalHeader()->hide();
 		m_frozenTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 		m_frozenTableView->horizontalHeader()->installEventFilter(this);
+		m_frozenTableView->viewport()->installEventFilter(this);
 		m_tableView->viewport()->stackUnder(m_frozenTableView);
 
 		// 	m_frozenTableView->setStyleSheet("QTableView { border: none;"
