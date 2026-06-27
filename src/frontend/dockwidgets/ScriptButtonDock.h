@@ -15,8 +15,10 @@
 #include "ui_scriptbuttondock.h"
 
 class ScriptButton;
+class Script;
 class TreeViewComboBox;
 class KConfig;
+class QModelIndex;
 
 class ScriptButtonDock : public BaseDock {
 	Q_OBJECT
@@ -37,10 +39,15 @@ private:
 
 	void load();
 	void loadConfig(KConfig&);
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in ScriptButtonDock
 	void textChanged();
+	void scriptChanged(const QModelIndex&);
+	void fontChanged(const QFont&);
+	void fontColorChanged(const QColor&);
+	void backgroundColorChanged(const QColor&);
 
 	// geometry
 	void widthChanged(double);
@@ -55,6 +62,10 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in ScriptButton
 	void buttonTextChanged(const QString&);
+	void buttonScriptChanged(Script*);
+	void buttonFontChanged(const QFont&);
+	void buttonTextColorChanged(const QColor&);
+	void buttonBackgroundColorChanged(const QColor&);
 	void buttonWidthChanged(int);
 	void buttonHeightChanged(int);
 

@@ -15,6 +15,8 @@
 #include "backend/script/Script.h"
 
 #include <QPushButton>
+#include <QGraphicsProxyWidget>
+#include <QGraphicsSceneMouseEvent>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -46,9 +48,10 @@ void ScriptButton::init() {
 	d->textColor = group.readEntry(QStringLiteral("textColor"), d->textColor);
 
 	d->borderWidth = group.readEntry(QStringLiteral("borderWidth"), d->borderWidth);
-	d->borderColor = group.readEntry(QStringLiteral("borderWidth"), d->borderWidth);
+	d->borderColor = group.readEntry(QStringLiteral("borderColor"), d->borderColor);
 
 	// geometry
+	d->update();
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -92,9 +95,12 @@ BASIC_SHARED_D_READER_IMPL(ScriptButton, QFont, font, font)
 // ##############################################################################
 // STD_SETTER_CMD_IMPL_F_S(ScriptButton, SetScript, Script, script, update)
 void ScriptButton::setScript(const Script* script) {
-	// Q_D(ScriptButton);
-	// if (script != d->script)
-	// 	exec(new ScriptButtonSetScriptCmd(d, script, ki18n("%1: set script")));
+	Q_D(ScriptButton);
+	if (script != d->script) {
+		d->script = const_cast<Script*>(script);
+		Q_EMIT scriptChanged(const_cast<Script*>(script));
+		Q_EMIT changed();
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(ScriptButton, SetText, QString, text, update)
@@ -153,13 +159,19 @@ void ScriptButton::setTextColor(const QColor& color) {
 ScriptButtonPrivate::ScriptButtonPrivate(ScriptButton* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
-	
+	setFlag(QGraphicsItem::ItemIsSelectable);
+	setFlag(QGraphicsItem::ItemIsMovable);
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+	setFlag(QGraphicsItem::ItemIsFocusable);
+	setAcceptHoverEvents(true);
+
 	button = new QPushButton();
-	button->setText(text);
-	button->setFixedSize(width, height);
+	button->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+	proxy = new QGraphicsProxyWidget(this);
+	proxy->setWidget(button);
+	proxy->setAcceptedMouseButtons(Qt::NoButton);
 	
-	// Connect button click to script execution
-	// connect(button, &QPushButton::clicked, this, &ScriptButtonPrivate::clicked);
+	// Parent item handles click/drag interactions.
 }
 
 QString ScriptButtonPrivate::name() const {
@@ -172,11 +184,35 @@ void ScriptButtonPrivate::clicked() {
 }
 
 void ScriptButtonPrivate::retransform() {
+	const bool suppress = suppressRetransform || q->isLoading();
+	trackRetransformCalled(suppress);
+	if (suppress)
+		return;
 
+	m_boundingRectangle.setX(-width / 2.0);
+	m_boundingRectangle.setY(-height / 2.0);
+	m_boundingRectangle.setWidth(width);
+	m_boundingRectangle.setHeight(height);
+
+	if (proxy)
+		proxy->setPos(m_boundingRectangle.topLeft());
+
+	recalcShapeAndBoundingRect();
+	updatePosition();
 }
 
 void ScriptButtonPrivate::recalcShapeAndBoundingRect() {
+	prepareGeometryChange();
+	m_shape = QPainterPath();
+	m_shape.addRect(m_boundingRectangle);
+}
 
+void ScriptButtonPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	const bool moveStarted = m_moveStarted;
+	WorksheetElementPrivate::mouseReleaseEvent(event);
+
+	if (!moveStarted && event->button() == Qt::LeftButton)
+		clicked();
 }
 
 void ScriptButtonPrivate::update() {
@@ -194,8 +230,8 @@ void ScriptButtonPrivate::update() {
 							.arg(borderWidth)
 							.arg(borderColor.name());
 	button->setStyleSheet(styleSheet);
-	
-	// updatePosition();
+
+	retransform();
 }
 
 //##############################################################################
@@ -275,15 +311,16 @@ bool ScriptButton::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	// Resolve script reference after loading
-	// if (!scriptPath.isEmpty() && !preview) {
-	// 	auto* project = this->project();
-	// 	if (project) {
-	// 		auto* aspect = project->child<AbstractAspect>(scriptPath, AbstractAspect::ChildIndexFlag::Recursive);
-	// 		if (aspect && aspect->type() == AspectType::Script)
-	// 			setScript(static_cast<Script*>(aspect));
-	// 	}
-	// }
-
+	/*
+	if (!scriptPath.isEmpty() && !preview) {
+		auto* proj = project();
+		if (proj) {
+			auto* aspect = proj->child<AbstractAspect>(scriptPath, AbstractAspect::ChildIndexFlag::Recursive);
+			if (aspect && aspect->type() == AspectType::Script)
+				setScript(static_cast<Script*>(aspect));
+		}
+	}
+	*/
 	if (!preview) {
 		d->update();
 		// retransform();

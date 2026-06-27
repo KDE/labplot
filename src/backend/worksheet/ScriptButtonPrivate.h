@@ -16,6 +16,7 @@
 
 class Script;
 class QGraphicsSceneMouseEvent;
+class QGraphicsProxyWidget;
 class QPushButton;
 
 class ScriptButtonPrivate : public WorksheetElementPrivate {
@@ -27,6 +28,7 @@ public:
 	void update();
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 
 	QString text{i18n("Execute")};
 	int width{100};
@@ -39,6 +41,7 @@ public:
 
 	Script* script{nullptr};
 	QPushButton* button{nullptr};
+	QGraphicsProxyWidget* proxy{nullptr};
 
 	ScriptButton* const q{nullptr};
 

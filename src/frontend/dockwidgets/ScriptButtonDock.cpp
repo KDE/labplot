@@ -8,7 +8,9 @@
 */
 
 #include "ScriptButtonDock.h"
+#include "backend/core/AbstractAspect.h"
 #include "backend/core/Settings.h"
+#include "backend/script/Script.h"
 #include "backend/worksheet/ScriptButton.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
@@ -52,6 +54,10 @@ ScriptButtonDock::ScriptButtonDock(QWidget* parent)
 	// SLOTs
 	// General
 	connect(ui.leText, &TimedLineEdit::textEdited, this, &ScriptButtonDock::textChanged);
+	connect(cbScript, &TreeViewComboBox::currentModelIndexChanged, this, &ScriptButtonDock::scriptChanged);
+	connect(ui.kfontRequester, &KFontRequester::fontSelected, this, &ScriptButtonDock::fontChanged);
+	connect(ui.kcbFontColor, &KColorButton::changed, this, &ScriptButtonDock::fontColorChanged);
+	connect(ui.kcbBackgroundColor, &KColorButton::changed, this, &ScriptButtonDock::backgroundColorChanged);
 
 	// Size
 	connect(ui.sbWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ScriptButtonDock::widthChanged);
@@ -66,17 +72,31 @@ ScriptButtonDock::ScriptButtonDock(QWidget* parent)
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ScriptButtonDock::verticalAlignmentChanged);
 }
 
+void ScriptButtonDock::setModel() {
+	auto* model = aspectModel();
+	model->setSelectableAspects({AspectType::Script});
+	cbScript->setTopLevelClasses({AspectType::Script});
+	cbScript->setModel(model);
+}
+
 void ScriptButtonDock::setScriptButtons(QList<ScriptButton*> list) {
 	CONDITIONAL_LOCK_RETURN;
 	m_scriptButtons = list;
 	m_scriptButton = list.first();
 	setAspects(list);
+	setModel();
 
 
 	// show the properties of the first button
 	this->load();
 
 	// init connections
+	connect(m_scriptButton, &ScriptButton::scriptChanged, this, &ScriptButtonDock::buttonScriptChanged);
+	connect(m_scriptButton, &ScriptButton::textChanged, this, &ScriptButtonDock::buttonTextChanged);
+	connect(m_scriptButton, &ScriptButton::fontChanged, this, &ScriptButtonDock::buttonFontChanged);
+	connect(m_scriptButton, &ScriptButton::textColorChanged, this, &ScriptButtonDock::buttonTextColorChanged);
+	connect(m_scriptButton, &ScriptButton::backgroundColorChanged, this, &ScriptButtonDock::buttonBackgroundColorChanged);
+
 	// Size
 	connect(m_scriptButton, &ScriptButton::widthChanged, this, &ScriptButtonDock::buttonWidthChanged);
 	connect(m_scriptButton, &ScriptButton::heightChanged, this, &ScriptButtonDock::buttonHeightChanged);
@@ -166,6 +186,32 @@ void ScriptButtonDock::textChanged() {
 		button->setText(text);
 }
 
+void ScriptButtonDock::scriptChanged(const QModelIndex&) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	auto* script = dynamic_cast<Script*>(cbScript->currentAspect());
+	for (auto* button : m_scriptButtons)
+		button->setScript(script);
+}
+
+void ScriptButtonDock::fontChanged(const QFont& font) {
+	CONDITIONAL_RETURN_NO_LOCK;
+	for (auto* button : m_scriptButtons)
+		button->setFont(font);
+}
+
+void ScriptButtonDock::fontColorChanged(const QColor& color) {
+	CONDITIONAL_RETURN_NO_LOCK;
+	for (auto* button : m_scriptButtons)
+		button->setTextColor(color);
+}
+
+void ScriptButtonDock::backgroundColorChanged(const QColor& color) {
+	CONDITIONAL_RETURN_NO_LOCK;
+	for (auto* button : m_scriptButtons)
+		button->setBackgroundColor(color);
+}
+
 // Size
 void ScriptButtonDock::widthChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
@@ -251,6 +297,26 @@ void ScriptButtonDock::buttonTextChanged(const QString& text) {
 	ui.leText->setText(text);
 }
 
+void ScriptButtonDock::buttonScriptChanged(Script*) {
+	CONDITIONAL_LOCK_RETURN;
+	cbScript->setAspect(m_scriptButton->script());
+}
+
+void ScriptButtonDock::buttonFontChanged(const QFont& font) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kfontRequester->setFont(font);
+}
+
+void ScriptButtonDock::buttonTextColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kcbFontColor->setColor(color);
+}
+
+void ScriptButtonDock::buttonBackgroundColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kcbBackgroundColor->setColor(color);
+}
+
 // Size
 void ScriptButtonDock::buttonWidthChanged(int width) {
 	CONDITIONAL_LOCK_RETURN;
@@ -289,7 +355,11 @@ void ScriptButtonDock::load() {
 	if (!m_scriptButton)
 		return;
 
+	cbScript->setAspect(m_scriptButton->script());
 	ui.leText->setText(m_scriptButton->text());
+	ui.kfontRequester->setFont(m_scriptButton->font());
+	ui.kcbFontColor->setColor(m_scriptButton->textColor());
+	ui.kcbBackgroundColor->setColor(m_scriptButton->backgroundColor());
 
 	// Size
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_scriptButton->width(), m_worksheetUnit));

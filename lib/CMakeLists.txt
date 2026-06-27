@@ -53,7 +53,7 @@ set(WORKSHEET_ELEMENT_SOURCES
     ${BACKEND_DIR}/worksheet/TextLabel.cpp
     ${BACKEND_DIR}/worksheet/InfoElement.cpp
     ${BACKEND_DIR}/worksheet/Image.cpp
-    ${BACKEND_DIR}/worksheet/ScriptWorksheetElement.cpp
+    ${BACKEND_DIR}/worksheet/ScriptButton.cpp
 )
 
 set(WORKSHEET_ELEMENT_CONTAINER_SOURCES
