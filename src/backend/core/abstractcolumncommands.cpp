@@ -106,9 +106,10 @@ void AbstractColumnClearMasksCmd::finalize() const {
 /**
  * \brief Ctor
  */
-AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumnPrivate* col, const Interval<int>& interval, bool masked)
+AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumnPrivate* col, int startRow, int endRow, bool masked)
 	: m_col(col)
-	, m_interval(interval)
+	, m_startRow(startRow)
+	, m_endRow(endRow)
 	, m_masked(masked) {
 	if (masked)
 		setText(i18n("%1: mask cells", col->name()));
@@ -131,21 +132,20 @@ void AbstractColumnSetMaskedCmd::redo() {
 		m_copied = true;
 	}
 
-	// Set or clear bits for the interval
-	int endRow = m_interval.end();
+	// Set or clear bits for the range
 	if (m_masked) {
 		// Ensure bitmap is large enough
-		if (endRow >= m_col->m_masking.size())
-			m_col->m_masking.resize(endRow + 1);
+		if (m_endRow >= m_col->m_masking.size())
+			m_col->m_masking.resize(m_endRow + 1);
 
-		// Set bits in interval
-		for (int row = m_interval.start(); row <= endRow; ++row)
+		// Set bits in range
+		for (int row = m_startRow; row <= m_endRow; ++row)
 			m_col->m_masking.setBit(row, true);
 	} else {
-		// Clear bits in interval (only if within bounds)
-		if (m_interval.start() < m_col->m_masking.size()) {
-			int actualEnd = qMin(endRow, m_col->m_masking.size() - 1);
-			for (int row = m_interval.start(); row <= actualEnd; ++row)
+		// Clear bits in range (only if within bounds)
+		if (m_startRow < m_col->m_masking.size()) {
+			int actualEnd = qMin(m_endRow, m_col->m_masking.size() - 1);
+			for (int row = m_startRow; row <= actualEnd; ++row)
 				m_col->m_masking.setBit(row, false);
 		}
 	}

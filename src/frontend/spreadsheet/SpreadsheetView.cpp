@@ -1545,7 +1545,7 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	// deactivate the "Clear masks" action if there are no masked cells
 	bool hasMasked = false;
 	for (auto* column : columns) {
-		if (column->maskedIntervals().size() > 0) {
+		if (column->hasMaskedCells()) {
 			hasMasked = true;
 			break;
 		}
@@ -2127,6 +2127,7 @@ void SpreadsheetView::pasteIntoSelection() {
 }
 
 void SpreadsheetView::maskSelection() {
+	PERFTRACE(QStringLiteral("mask selection"));
 	int first = firstSelectedRow();
 	if (first < 0)
 		return;
@@ -2140,12 +2141,27 @@ void SpreadsheetView::maskSelection() {
 	for (auto* column : columns)
 		column->setSuppressDataChangedSignal(true);
 
-	// mask the selected cells
+	// mask the selected cells - collect contiguous ranges for efficient bulk operations
 	for (auto* column : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
-		for (int row = first; row <= last; row++)
-			if (isCellSelected(row, col))
-				column->setMasked(row);
+		int rangeStart = -1;
+
+		for (int row = first; row <= last; row++) {
+			if (isCellSelected(row, col)) {
+				if (rangeStart == -1)
+					rangeStart = row; // Start new range
+			} else {
+				if (rangeStart != -1) {
+					// End current range
+					column->setMaskedRange(rangeStart, row - 1, true);
+					rangeStart = -1;
+				}
+			}
+		}
+
+		// Close any open range
+		if (rangeStart != -1)
+			column->setMaskedRange(rangeStart, last, true);
 
 		column->setSuppressDataChangedSignal(false);
 		column->setDataChanged();
@@ -2158,6 +2174,7 @@ void SpreadsheetView::maskSelection() {
 }
 
 void SpreadsheetView::unmaskSelection() {
+	PERFTRACE(QStringLiteral("unmask selection"));
 	int first = firstSelectedRow();
 	if (first < 0)
 		return;
@@ -2171,12 +2188,27 @@ void SpreadsheetView::unmaskSelection() {
 	for (auto* column : columns)
 		column->setSuppressDataChangedSignal(true);
 
-	// unmask the selected cells
+	// unmask the selected cells - collect contiguous ranges for efficient bulk operations
 	for (auto* column : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
-		for (int row = first; row <= last; row++)
-			if (isCellSelected(row, col))
-				column->setMasked(row, false);
+		int rangeStart = -1;
+
+		for (int row = first; row <= last; row++) {
+			if (isCellSelected(row, col)) {
+				if (rangeStart == -1)
+					rangeStart = row; // Start new range
+			} else {
+				if (rangeStart != -1) {
+					// End current range
+					column->setMaskedRange(rangeStart, row - 1, false);
+					rangeStart = -1;
+				}
+			}
+		}
+
+		// Close any open range
+		if (rangeStart != -1)
+			column->setMaskedRange(rangeStart, last, false);
 
 		column->setSuppressDataChangedSignal(false);
 		column->setDataChanged();

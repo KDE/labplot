@@ -14,6 +14,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/abstractcolumncommands.h"
+#include "backend/lib/Interval.h"
 #include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
@@ -409,18 +410,14 @@ bool AbstractColumn::isMasked(int row) const {
 }
 
 /**
- * \brief Return whether a certain interval of rows is fully masked
+ * \brief Return whether the column has any masked cells
  */
-bool AbstractColumn::isMasked(const Interval<int>& i) const {
-	for (int row = i.start(); row <= i.end(); ++row) {
-		if (row >= d->m_masking.size() || !d->m_masking.testBit(row))
-			return false;
-	}
-	return true;
+bool AbstractColumn::hasMaskedCells() const {
+	return !d->m_masking.isEmpty() && d->m_masking.count(true) > 0;
 }
 
 /**
- * \brief Return all intervals of masked rows
+ * \brief Return all intervals of masked rows (for internal use only - XML serialization)
  */
 QVector<Interval<int>> AbstractColumn::maskedIntervals() const {
 	QVector<Interval<int>> intervals;
@@ -454,20 +451,24 @@ void AbstractColumn::clearMasks() {
 }
 
 /**
- * \brief Set an interval masked
+ * \brief Set a single row masked
  *
- * \param i the interval
+ * \param row the row index
  * \param mask true: mask, false: unmask
  */
-void AbstractColumn::setMasked(const Interval<int>& i, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
+void AbstractColumn::setMasked(int row, bool mask) {
+	exec(new AbstractColumnSetMaskedCmd(d, row, row, mask), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
- * \brief Overloaded function for convenience
+ * \brief Set a range of rows masked (efficient bulk operation)
+ *
+ * \param startRow the first row index
+ * \param endRow the last row index (inclusive)
+ * \param mask true: mask, false: unmask
  */
-void AbstractColumn::setMasked(int row, bool mask) {
-	setMasked(Interval<int>(row, row), mask);
+void AbstractColumn::setMaskedRange(int startRow, int endRow, bool mask) {
+	exec(new AbstractColumnSetMaskedCmd(d, startRow, endRow, mask), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -941,7 +942,7 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader* reader) {
 			reader->raiseError(i18n("invalid or missing start or end row"));
 			return false;
 		}
-		setMasked(Interval<int>(start, end));
+		setMaskedRange(start, end, true);
 		if (!reader->skipToEndElement())
 			return false;
 	}
