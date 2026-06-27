@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-21 00:39+0000\n"
+"POT-Creation-Date: 2026-06-27 00:40+0000\n"
 "PO-Revision-Date: 2026-06-21 12:11+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -3853,7 +3853,7 @@ msgstr "Suma"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
-#: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:48
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
@@ -3868,7 +3868,7 @@ msgstr "Mínimo"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
-#: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:48
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #: src/backend/statistics/HypothesisTest.cpp:570
@@ -3894,7 +3894,7 @@ msgstr "Media aritmética"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
-#: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:48
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
@@ -6602,7 +6602,7 @@ msgid "Couldn't create the sessions for %1. Please check your installation."
 msgstr "No se han podido crear las sesiones para %1. Compruebe su instalación."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/nsl/nsl_baseline.cpp:48
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
@@ -6611,13 +6611,13 @@ msgstr "No se han podido crear las sesiones para %1. Compruebe su instalación."
 msgid "Mean"
 msgstr "Media"
 
-#: src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/nsl/nsl_baseline.cpp:48
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:179
 #, kde-format
 msgid "End Points"
 msgstr "Puntos extremos"
 
-#: src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/nsl/nsl_baseline.cpp:48
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:180
 #, kde-format
 msgid "Linear Regression"

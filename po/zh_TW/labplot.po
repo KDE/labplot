@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-21 00:39+0000\n"
+"POT-Creation-Date: 2026-06-27 00:40+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -3931,7 +3931,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
-#: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:48
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
@@ -3946,7 +3946,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
-#: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:48
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #: src/backend/statistics/HypothesisTest.cpp:570
@@ -3972,7 +3972,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
-#: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:48
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
@@ -6736,7 +6736,7 @@ msgid "Couldn't create the sessions for %1. Please check your installation."
 msgstr "無法開啟色彩映射集合檔 %1。請檢查您的安裝。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/nsl/nsl_baseline.cpp:48
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
@@ -6745,14 +6745,14 @@ msgstr "無法開啟色彩映射集合檔 %1。請檢查您的安裝。"
 msgid "Mean"
 msgstr ""
 
-#: src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/nsl/nsl_baseline.cpp:48
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:179
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "End Points"
 msgstr "點數"
 
-#: src/backend/nsl/nsl_baseline.cpp:47
+#: src/backend/nsl/nsl_baseline.cpp:48
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:180
 #, kde-format
 msgid "Linear Regression"
