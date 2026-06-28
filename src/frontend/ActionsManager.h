@@ -31,7 +31,6 @@ class KActionMenu;
 class KHamburgerMenu;
 class KRecentFilesAction;
 class KToggleAction;
-class KToggleFullScreenAction;
 
 #ifdef HAVE_PURPOSE
 namespace Purpose {
@@ -144,7 +143,7 @@ private:
 	QAction* m_worksheetPreviewAction;
 	KToggleAction* m_statusBarAction;
 	QAction* m_memoryInfoAction;
-	KToggleFullScreenAction* m_fullScreenAction;
+	QAction* m_fullScreenAction;
 	QAction* m_configureNotebookAction;
 
 	// window visibility

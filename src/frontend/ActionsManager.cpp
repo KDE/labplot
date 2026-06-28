@@ -44,6 +44,7 @@
 #include <QJsonArray>
 #include <QMenuBar>
 #include <QStatusBar>
+#include <QWindow>
 
 #include <KActionCollection>
 #include <KActionMenu>
@@ -146,6 +147,14 @@ void ActionsManager::init() {
 	// load recently used projects
 	m_recentProjectsAction->loadEntries(Settings::group(QStringLiteral("Recent Files")));
 
+	#ifdef Q_OS_MAC
+	if (auto* windowHandle = m_mainWindow->windowHandle()) {
+		connect(windowHandle, &QWindow::windowStateChanged, this, [this](Qt::WindowState state) {
+			m_fullScreenAction->setChecked(state == Qt::WindowFullScreen);
+		});
+	}
+	#endif
+
 	// show memory info
 	m_memoryInfoAction->setEnabled(m_mainWindow->statusBar()->isEnabled()); // disable/enable menu with statusbar
 	const auto& groupMainWin = Settings::group(QStringLiteral("MainWin"));
@@ -159,21 +168,6 @@ void ActionsManager::init() {
 	auto* donateAction = collection->action(QStringLiteral("help_donate"));
 	if (donateAction)
 		collection->removeAction(donateAction);
-
-	// custom about dialog
-	auto* aboutAction = collection->action(QStringLiteral("help_about_app"));
-	if (aboutAction) {
-		// set menu icon
-		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
-
-		// disconnect default slot
-		disconnect(aboutAction, &QAction::triggered, nullptr, nullptr);
-		connect(aboutAction, &QAction::triggered, this,
-		[=, this]() {
-			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
-			aboutDialog.exec();
-		});
-	}
 }
 
 ActionsManager::~ActionsManager() {
@@ -205,12 +199,27 @@ void ActionsManager::initActions() {
 	collection->addAction(QStringLiteral("file_example_open"), openExample);
 	connect(openExample, &QAction::triggered, m_mainWindow, &MainWin::exampleProjectsDialog);
 
+	#ifdef Q_OS_MAC
+	m_fullScreenAction = new QAction(QIcon::fromTheme(QStringLiteral("view-fullscreen")), i18n("&Full Screen Mode"), collection);
+	m_fullScreenAction->setCheckable(true);
+	collection->setDefaultShortcuts(m_fullScreenAction, KStandardShortcut::shortcut(KStandardShortcut::FullScreen));
+	collection->addAction(KStandardAction::name(KStandardAction::FullScreen), m_fullScreenAction);
+	connect(m_fullScreenAction, &QAction::triggered, this, &ActionsManager::toggleFullScreen);
+	#else
 	m_fullScreenAction = KStandardAction::fullScreen(m_mainWindow, &ActionsManager::toggleFullScreen, m_mainWindow, collection);
+	#endif
 
-	// QDEBUG(Q_FUNC_INFO << ", preferences action name:" << KStandardAction::name(KStandardAction::Preferences))
 	KStandardAction::preferences(m_mainWindow, &MainWin::settingsDialog, collection);
-	// QAction* action = collection->action(KStandardAction::name(KStandardAction::Preferences)));
 	KStandardAction::quit(m_mainWindow, &MainWin::close, collection);
+
+	// custom about dialog
+	auto* aboutAction = KStandardAction::aboutApp(this,
+		[=, this]() {
+			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
+			aboutDialog.exec();
+		},
+		collection);
+	aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
 
 	// New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-workbook-new")), i18n("Workbook"), this);
@@ -1462,7 +1471,7 @@ void ActionsManager::toggleMenuBar(bool checked) {
 }
 
 void ActionsManager::toggleFullScreen(bool t) {
-	m_fullScreenAction->setFullScreen(m_mainWindow, t);
+	KToggleFullScreenAction::setFullScreen(m_mainWindow, t);
 }
 
 void ActionsManager::toggleDockWidget(QAction* action) {
