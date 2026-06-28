@@ -168,21 +168,6 @@ void ActionsManager::init() {
 	auto* donateAction = collection->action(QStringLiteral("help_donate"));
 	if (donateAction)
 		collection->removeAction(donateAction);
-
-	// custom about dialog
-	auto* aboutAction = collection->action(QStringLiteral("help_about_app"));
-	if (aboutAction) {
-		// set menu icon
-		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
-
-		// disconnect default slot
-		aboutAction->disconnect();
-		connect(aboutAction, &QAction::triggered, this,
-		[=, this]() {
-			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
-			aboutDialog.exec();
-		});
-	}
 }
 
 ActionsManager::~ActionsManager() {
@@ -224,10 +209,17 @@ void ActionsManager::initActions() {
 	m_fullScreenAction = KStandardAction::fullScreen(m_mainWindow, &ActionsManager::toggleFullScreen, m_mainWindow, collection);
 	#endif
 
-	// QDEBUG(Q_FUNC_INFO << ", preferences action name:" << KStandardAction::name(KStandardAction::Preferences))
 	KStandardAction::preferences(m_mainWindow, &MainWin::settingsDialog, collection);
-	// QAction* action = collection->action(KStandardAction::name(KStandardAction::Preferences)));
 	KStandardAction::quit(m_mainWindow, &MainWin::close, collection);
+
+	// custom about dialog
+	auto* aboutAction = KStandardAction::aboutApp(this,
+		[=, this]() {
+			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
+			aboutDialog.exec();
+		},
+		collection);
+	aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
 
 	// New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-workbook-new")), i18n("Workbook"), this);
