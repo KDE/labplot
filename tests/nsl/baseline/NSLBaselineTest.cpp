@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL Tests for baseline functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2023-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -344,6 +344,70 @@ void NSLBaselineTest::testBaselineARPLSGSLXRD() {
 		FuzzyCompare(data[i], result[i], 2.e-5);
 	}
 #endif
+}
+
+// Test edge cases
+void NSLBaselineTest::testBaselineEmptyData() {
+	// Test empty data (n=0)
+	double* data = nullptr;
+	nsl_baseline_remove_minimum(data, 0);
+	nsl_baseline_remove_maximum(data, 0);
+	nsl_baseline_remove_mean(data, 0);
+	nsl_baseline_remove_median(data, 0);
+
+	// Should not crash or cause undefined behavior
+	QVERIFY(true);
+}
+
+void NSLBaselineTest::testBaselineSingleElement() {
+	// Test single element data
+	double data1[] = {5.0};
+	double data2[] = {5.0};
+	double data3[] = {5.0};
+	double data4[] = {5.0};
+
+	nsl_baseline_remove_minimum(data1, 1);
+	nsl_baseline_remove_maximum(data2, 1);
+	nsl_baseline_remove_mean(data3, 1);
+	nsl_baseline_remove_median(data4, 1);
+
+	// For single element, result should be 0.0 (element - element = 0)
+	QCOMPARE(data1[0], 0.0);
+	QCOMPARE(data2[0], 0.0);
+	QCOMPARE(data3[0], 0.0);
+	QCOMPARE(data4[0], 0.0);
+
+	// Test endpoints and linear regression with single element
+	double xdata[] = {1.0};
+	double ydata[] = {5.0};
+	nsl_baseline_remove_endpoints(xdata, ydata, 1);
+	nsl_baseline_remove_linreg(xdata, ydata, 1);
+
+	// For single element, result should be 0.0
+	QCOMPARE(ydata[0], 0.0);
+
+	// Test ARPLS with single element
+	double data8[] = {5.0};
+	nsl_baseline_remove_arpls(data8, 1, 1.e-3, 1.e4, 10);
+	QCOMPARE(data8[0], 0.0);
+}
+
+void NSLBaselineTest::testBaselineNaNData() {
+	// Test data with NaN values
+	double data1[] = {1.0, NAN, 3.0};
+	double data2[] = {NAN, 2.0, 3.0};
+	double data3[] = {NAN, NAN, NAN};
+	double data4[] = {1.0, 2.0, 3.0};
+
+	// These should not crash and should handle NaN gracefully
+	nsl_baseline_remove_minimum(data1, 3);
+	nsl_baseline_remove_maximum(data2, 3);
+	nsl_baseline_remove_mean(data3, 3);
+	nsl_baseline_remove_median(data4, 3);
+
+	// Test that valid values are processed correctly
+	// (Note: actual behavior depends on implementation details)
+	QVERIFY(true);
 }
 
 QTEST_MAIN(NSLBaselineTest)

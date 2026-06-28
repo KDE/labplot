@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL baseline detection and subtraction functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2023-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -53,6 +53,15 @@ void nsl_baseline_remove_minimum(double* data, const size_t n) {
 		return;
 	}
 
+	// Handle single element case
+	if (n == 1) {
+		// For single element, subtracting minimum (which is the element itself) results in 0
+		if (!isnan(data[0])) {
+			data[0] = 0.0;
+		}
+		return;
+	}
+
 	const double min = nsl_stats_minimum(data, n, nullptr);
 
 	// Check for NaN or all-NaN case
@@ -74,6 +83,15 @@ void nsl_baseline_remove_maximum(double* data, const size_t n) {
 		return;
 	}
 
+	// Handle single element case
+	if (n == 1) {
+		// For single element, subtracting maximum (which is the element itself) results in 0
+		if (!isnan(data[0])) {
+			data[0] = 0.0;
+		}
+		return;
+	}
+
 	const double max = nsl_stats_maximum(data, n, nullptr);
 
 	// Check for NaN or all-NaN case
@@ -90,6 +108,20 @@ void nsl_baseline_remove_maximum(double* data, const size_t n) {
 }
 
 void nsl_baseline_remove_mean(double* data, const size_t n) {
+	// Handle empty data
+	if (n == 0) {
+		return;
+	}
+
+	// Handle single element case
+	if (n == 1) {
+		// For single element, subtracting mean (which is the element itself) results in 0
+		if (!isnan(data[0])) {
+			data[0] = 0.0;
+		}
+		return;
+	}
+
 	// Check for NaN values before computing mean
 	for (size_t i = 0; i < n; i++) {
 		if (isnan(data[i])) {
@@ -109,6 +141,15 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 		return;
 	}
 
+	// Handle single element case
+	if (n == 1) {
+		// For single element, subtracting median (which is the element itself) results in 0
+		if (!isnan(data[0])) {
+			data[0] = 0.0;
+		}
+		return;
+	}
+
 	// Check for NaN values
 	for (size_t i = 0; i < n; i++) {
 		if (isnan(data[i])) {
@@ -119,7 +160,9 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 	// copy data
 	double* tmp_data = (double*)malloc(n * sizeof(double));
 	if (!tmp_data) {
-		return; // malloc failed, silently return (no error propagation)
+		// malloc failed - silently return (no error propagation)
+		// In a real implementation, this should be handled by returning an error code
+		return;
 	}
 	memcpy(tmp_data, data, n * sizeof(double));
 
@@ -144,8 +187,12 @@ int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size
 		return -1;
 	}
 
-	// Single point: nothing to subtract
+	// Handle single point case
 	if (n == 1) {
+		// For single point, subtracting baseline (which is the point itself) results in 0
+		if (!isnan(ydata[0])) {
+			ydata[0] = 0.0;
+		}
 		return 0;
 	}
 
@@ -164,6 +211,20 @@ int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size
 
 /* do a linear regression and subtract that */
 int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
+	// Handle empty data
+	if (n == 0) {
+		return -1;
+	}
+
+	// Handle single point case
+	if (n == 1) {
+		// For single point, subtracting baseline (which is the point itself) results in 0
+		if (!isnan(ydata[0])) {
+			ydata[0] = 0.0;
+		}
+		return 0;
+	}
+
 	// Need at least 2 points for linear regression
 	if (n < 2) {
 		return -1;
@@ -192,6 +253,34 @@ int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 /* see https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract */
 double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, double lambda, int niter) {
 	double crit = 1.;
+
+	// Handle empty data
+	if (n == 0) {
+		return -1.; // Need at least 1 point
+	}
+
+	// Handle single point case
+	if (n == 1) {
+		// For single point, subtracting baseline (which is the point itself) results in 0
+		if (!isnan(data[0])) {
+			data[0] = 0.0;
+		}
+		return 0.;
+	}
+
+	// Handle two point case
+	if (n == 2) {
+		// For two points, subtracting the line through them results in 0 for both points
+		// This is a simple linear interpolation
+		double y0 = data[0];
+		double y1 = data[1];
+		if (!isnan(y0) && !isnan(y1)) {
+			double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
+			data[0] -= y0;
+			data[1] -= (y0 + slope);
+		}
+		return 0.;
+	}
 
 	// Validate inputs
 	if (n < 3) {
@@ -367,6 +456,34 @@ void show_vector(gsl_vector* v, size_t n, char name) {
 // GSL version of ARPLS (much slower than Eigen3 version)
 double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, double lambda, int niter) {
 	double crit = 1.;
+
+	// Handle empty data
+	if (n == 0) {
+		return -1.; // Need at least 1 point
+	}
+
+	// Handle single point case
+	if (n == 1) {
+		// For single point, subtracting baseline (which is the point itself) results in 0
+		if (!isnan(data[0])) {
+			data[0] = 0.0;
+		}
+		return 0.;
+	}
+
+	// Handle two point case
+	if (n == 2) {
+		// For two points, subtracting the line through them results in 0 for both points
+		// This is a simple linear interpolation
+		double y0 = data[0];
+		double y1 = data[1];
+		if (!isnan(y0) && !isnan(y1)) {
+			double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
+			data[0] -= y0;
+			data[1] -= (y0 + slope);
+		}
+		return 0.;
+	}
 
 	// Validate inputs
 	if (n < 3) {
@@ -575,6 +692,34 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 }
 
 double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double lambda, int niter) {
+	// Handle empty data
+	if (n == 0) {
+		return -1.; // Need at least 1 point
+	}
+
+	// Handle single point case
+	if (n == 1) {
+		// For single point, subtracting baseline (which is the point itself) results in 0
+		if (!isnan(data[0])) {
+			data[0] = 0.0;
+		}
+		return 0.;
+	}
+
+	// Handle two point case
+	if (n == 2) {
+		// For two points, subtracting the line through them results in 0 for both points
+		// This is a simple linear interpolation
+		double y0 = data[0];
+		double y1 = data[1];
+		if (!isnan(y0) && !isnan(y1)) {
+			double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
+			data[0] -= y0;
+			data[1] -= (y0 + slope);
+		}
+		return 0.;
+	}
+
 	// default values
 	if (p == 0)
 		p = 0.001;
