@@ -1077,7 +1077,7 @@ msgstr ""
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr ""
-"Ha fallat mentre es creava el directori %1 per a guardar-hi el conjunt de "
+"Ha fallat mentre es creava la carpeta %1 per a guardar-hi el conjunt de "
 "dades."
 
 #: src/backend/datasources/DatasetHandler.cpp:248
@@ -1106,7 +1106,7 @@ msgstr "Nombre de línies: %1"
 #: src/backend/datasources/filters/AsciiFilter.cpp:2054
 #, kde-format
 msgid "Timestamp"
-msgstr "Marca horària"
+msgstr "Marca de temps"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:549
 #: src/backend/datasources/filters/AsciiFilter.cpp:748
@@ -1649,7 +1649,7 @@ msgstr "Índex"
 #: src/backend/datasources/filters/JsonFilter.cpp:269
 #, kde-format
 msgid "timestamp"
-msgstr "marca horària"
+msgstr "marca de temps"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:271
 #, kde-format
@@ -7884,7 +7884,7 @@ msgstr "%1: s'ha canviat el factor d'amplària"
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
-msgstr "%1 - Dades"
+msgstr "%1 – Dades"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
@@ -10998,7 +10998,7 @@ msgstr "IQR = 0"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, kde-format
 msgid "Max - Min = 0"
-msgstr "Màx. - Mín. = 0"
+msgstr "Màx. – Mín. = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3152
 #, kde-format
@@ -12658,8 +12658,8 @@ msgstr ""
 "com/doc/Origin-Help/MultiLayer-Graph\">Documentació d'Origin</a> per a més "
 "detalls). LabPlot només pot processar un tipus a la vegada."
 "<br><br>Especifiqueu com importar gràfiques de capes múltiples en el "
-"projecte seleccionat:<ul><li>Com a àrea del diagrama - es crea una àrea nova "
-"de diagrama per a cada capa.</li><li>Com a sistema de coordenades - es crea "
+"projecte seleccionat:<ul><li>Com a àrea del diagrama – es crea una àrea nova "
+"de diagrama per a cada capa.</li><li>Com a sistema de coordenades – es crea "
 "un sistema nou de coordenades (interval de dades) en la mateixa àrea del "
 "diagrama per a cada capa</li></ul>"
 
@@ -13156,11 +13156,11 @@ msgid ""
 "points, respectively</li><li>Custom - manually specify the start and end "
 "points of the axis</li></ul>"
 msgstr ""
-"Interval dels eixos:<ul><li>Automàtic - establix automàticament els punts "
+"Interval dels eixos:<ul><li>Automàtic – establix automàticament els punts "
 "d'inici i finals dels eixos segons els intervals del diagrama actual</"
-"li><li>Segons les dades - establix automàticament els punts d'inici i final "
+"li><li>Segons les dades – establix automàticament els punts d'inici i final "
 "dels eixos als punts mínims i màxims dels punts de dades dibuixats, "
-"respectivament</li><li>A mida - especifica manualment els punts d'inici i "
+"respectivament</li><li>A mida – especifica manualment els punts d'inici i "
 "finals dels eixos</li></ul>"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:263
@@ -13689,9 +13689,9 @@ msgid ""
 "specified number of last points is plotted</li><li>First Points - specified "
 "number of first points is plotted</li></ul>"
 msgstr ""
-"Interval de dades:<ul><li>Lliure - es dibuixa l'interval complet de dades</"
-"li><li>Darrers punts - es dibuixa el nombre especificat dels darrers punts</"
-"li><li>Primers punts - es dibuixa el nombre especificat dels primers punts</"
+"Interval de dades:<ul><li>Lliure – es dibuixa l'interval complet de dades</"
+"li><li>Darrers punts – es dibuixa el nombre especificat dels darrers punts</"
+"li><li>Primers punts – es dibuixa el nombre especificat dels primers punts</"
 "li></ul>"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:884
@@ -16054,23 +16054,23 @@ msgstr "Neteja els fitxers baixats"
 #: src/kdefrontend/SettingsDatasetsPage.cpp:45
 #, kde-format
 msgid "Files - %1"
-msgstr "Fitxers - %1"
+msgstr "Fitxers – %1"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:68
 #, kde-format
 msgid "Total size - %1"
-msgstr "Mida total - %1"
+msgstr "Mida total – %1"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:70
 #: src/kdefrontend/SettingsDatasetsPage.cpp:86
 #, kde-format
 msgid "Total size - 0B"
-msgstr "Mida total - 0 B"
+msgstr "Mida total – 0 B"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:85
 #, kde-format
 msgid "Files - 0"
-msgstr "Fitxers - 0"
+msgstr "Fitxers – 0"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:88
 #, kde-format
@@ -16939,7 +16939,7 @@ msgstr "Categoria"
 #, kde-format
 msgctxt "@title:window"
 msgid "Conditional Formatting - Heatmap"
-msgstr "Format condicional - Gràfic d'intensitat de colors"
+msgstr "Format condicional – Gràfic d'intensitat de colors"
 
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:47
 #, kde-format
@@ -17137,13 +17137,13 @@ msgstr "Afig diagrames a"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:499
 #, kde-format
 msgid "Plot Area - %1"
-msgstr "Àrea del diagrama - %1"
+msgstr "Àrea del diagrama – %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:465
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:494
 #, kde-format
 msgid "Worksheet - %1"
-msgstr "Full de treball - %1"
+msgstr "Full de treball – %1"
 
 # skip-rule: t-sc-plot
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:493
@@ -17228,7 +17228,7 @@ msgstr ""
 "Valor de la llavor per a restablir el generador de nombres aleatoris.\n"
 "Si el generador s'alimenta amb el mateix valor, es generarà el mateix flux "
 "de nombres aleatoris en crides successives.\n"
-"Si no s'especifica cap valor, s'utilitzarà la marca horària actual per a "
+"Si no s'especifica cap valor, s'utilitzarà la marca de temps actual per a "
 "alimentar el generador."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:91
@@ -18523,7 +18523,7 @@ msgstr "Separador de columna:"
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:182
 #, kde-format
 msgid "Create Timestamp "
-msgstr "Crea una marca horària "
+msgstr "Crea una marca de temps "
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:189
@@ -22221,13 +22221,13 @@ msgstr "Memòria cau:"
 #: src/kdefrontend/ui/settingsdatasetspage.ui:30
 #, kde-format
 msgid "Files - "
-msgstr "Fitxers - "
+msgstr "Fitxers – "
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:37
 #, kde-format
 msgid "Total size - "
-msgstr "Mida total - "
+msgstr "Mida total – "
 
 #. i18n: ectx: property (text), widget (QPushButton, bClearCache)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:57
@@ -23587,9 +23587,9 @@ msgid ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
-"Mode d'establir el text:<ul><li>Text - s'establix el text utilitzant el "
-"format de text enriquit</li><li>LaTeX - s'establix el text utilitzant LaTeX, "
-"es requerix la instal·lació de LaTeX</li><li>Markdown - s'establix el text "
+"Mode d'establir el text:<ul><li>Text – s'establix el text utilitzant el "
+"format de text enriquit</li><li>LaTeX – s'establix el text utilitzant LaTeX, "
+"es requerix la instal·lació de LaTeX</li><li>Markdown – s'establix el text "
 "utilitzant el llenguatge de marcadors Markdown</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:224
@@ -23599,8 +23599,8 @@ msgid ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li></ul>"
 msgstr ""
-"Mode d'establir el text:<ul><li>Text - s'establix el text utilitzant el "
-"format de text enriquit</li><li>LaTeX - s'establix el text utilitzant LaTeX, "
+"Mode d'establir el text:<ul><li>Text – s'establix el text utilitzant el "
+"format de text enriquit</li><li>LaTeX – s'establix el text utilitzant LaTeX, "
 "es requerix la instal·lació de LaTeX</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:922
