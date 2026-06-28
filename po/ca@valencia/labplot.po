@@ -1074,7 +1074,7 @@ msgstr ""
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr ""
-"Ha fallat mentre es creava el directori %1 per a guardar-hi el conjunt de "
+"Ha fallat mentre es creava la carpeta %1 per a guardar-hi el conjunt de "
 "dades."
 
 #: src/backend/datasources/DatasetHandler.cpp:259
@@ -1244,7 +1244,7 @@ msgstr "Columna %1"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1332
 #, kde-format
 msgid "Timestamp"
-msgstr "Marca horària"
+msgstr "Marca de temps"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:598
 #: src/backend/datasources/filters/AsciiFilter.cpp:1336
@@ -1772,7 +1772,7 @@ msgstr "Índex"
 #: src/backend/datasources/filters/JsonFilter.cpp:269
 #, kde-format
 msgid "timestamp"
-msgstr "marca horària"
+msgstr "marca de temps"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:271
 #, kde-format
@@ -8155,7 +8155,7 @@ msgstr "%1: s'ha canviat el factor d'amplària"
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:109
 #, kde-format
 msgid "%1 - Data"
-msgstr "%1 - Dades"
+msgstr "%1 – Dades"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:306
 #, kde-format
@@ -11729,15 +11729,15 @@ msgstr "Fitxer DBC (*.dbc)"
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
-"Els fitxers dels projectes Origin cal que s'òbriguen amb «Importa -> "
-"Projecte d'Origin»!"
+"Els fitxers dels projectes Origin cal que s'òbriguen amb «Importa → Projecte "
+"d'Origin»!"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1131
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
-"Els fitxers dels projectes LabPlot cal que s'òbriguen amb «Importa -> "
+"Els fitxers dels projectes LabPlot cal que s'òbriguen amb «Importa → "
 "Projecte de LabPlot»!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
@@ -12080,8 +12080,8 @@ msgstr ""
 "com/doc/Origin-Help/MultiLayer-Graph\">Documentació d'Origin</a> per a més "
 "detalls).<br>LabPlot només pot processar un tipus a la vegada."
 "<br><br>Especifiqueu com importar gràfiques de capes múltiples en el "
-"projecte seleccionat:<ul><li>Com a àrea del diagrama - es crea una àrea nova "
-"de diagrama per a cada capa.</li><li>Com a sistema de coordenades - es crea "
+"projecte seleccionat:<ul><li>Com a àrea del diagrama – es crea una àrea nova "
+"de diagrama per a cada capa.</li><li>Com a sistema de coordenades – es crea "
 "un sistema nou de coordenades (interval de dades) en la mateixa àrea del "
 "diagrama per a cada capa.</li></ul>"
 
@@ -12650,11 +12650,11 @@ msgid ""
 "points, respectively</li><li>Custom - manually specify the start and end "
 "points of the axis</li></ul>"
 msgstr ""
-"Interval dels eixos:<ul><li>Automàtic - establix automàticament els punts "
+"Interval dels eixos:<ul><li>Automàtic – establix automàticament els punts "
 "d'inici i finals dels eixos segons els intervals del diagrama actual</"
-"li><li>Segons les dades - establix automàticament els punts d'inici i final "
+"li><li>Segons les dades – establix automàticament els punts d'inici i final "
 "dels eixos als punts mínims i màxims dels punts de dades dibuixats, "
-"respectivament</li><li>A mida - especifica manualment els punts d'inici i "
+"respectivament</li><li>A mida – especifica manualment els punts d'inici i "
 "finals dels eixos</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:260
@@ -13188,9 +13188,9 @@ msgid ""
 "specified number of last points is plotted</li><li>First Points - specified "
 "number of first points is plotted</li></ul>"
 msgstr ""
-"Interval de dades:<ul><li>Lliure - es dibuixa l'interval complet de dades</"
-"li><li>Darrers punts - es dibuixa el nombre especificat dels darrers punts</"
-"li><li>Primers punts - es dibuixa el nombre especificat dels primers punts</"
+"Interval de dades:<ul><li>Lliure – es dibuixa l'interval complet de dades</"
+"li><li>Darrers punts – es dibuixa el nombre especificat dels darrers punts</"
+"li><li>Primers punts – es dibuixa el nombre especificat dels primers punts</"
 "li></ul>"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:923
@@ -13512,7 +13512,7 @@ msgstr ""
 "seua amplària <i>h</i> per a <i>n</i> valors:<ul> <li>Per nombre: el nombre "
 "de compartiments s'especifica manualment</li><li>Per amplària: el nombre de "
 "compartiments es calcula en funció de l'amplària de compartiment "
-"especificada mitjançant <i>k = (max(x) - min(x) / h</i>)</li><li>Arrel "
+"especificada mitjançant <i>k = (max(x) – min(x) / h</i>)</li><li>Arrel "
 "quadrada: <i>k = sqrt(n)</i></li><li>Rice: <i>k = 2 * pow(n, 3/2)</i>, una "
 "alternativa més senzilla del mètode Sturges</li><li>Sturges: <i>k = log2(n) "
 "+ 1</i>, assumix aproximadament una distribució normal</li><li>Doane: versió "
@@ -13571,8 +13571,8 @@ msgid ""
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
-"Mètode per a seleccionar l'amplada de banda del nucli:<ul><li>Silverman -  "
-"0.9 * min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * "
+"Mètode per a seleccionar l'amplada de banda del nucli:<ul><li>Silverman –  "
+"0.9 * min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott –  1.059 * sigma * "
 "n^(-0.2)</li><li>Personalitzada: valor personalitzat per a l'amplada de "
 "banda del nucli</li></ul>"
 
@@ -13763,16 +13763,16 @@ msgstr ""
 "Els tipus de diagrames admesos s'agrupen segons l'estadística dibuixada i a "
 "la mètrica que definix els límits.<br><br>Valors individuals i intervals "
 "mòbils, límits basats en la mitjana o interval de mediana mòbil:<ul><li>X "
-"(XmR) - dibuixa les <b>etiquetes individuals</b>.</li><li>mR - dibuixa els "
+"(XmR) – dibuixa les <b>etiquetes individuals</b>.</li><li>mR – dibuixa els "
 "<b>intervals mòbils</b>.</li></ul>Mitjanes i intervals, límits basats en "
-"interval de la mitjana o mediana:<ul><li>X̅  (X̅R) - dibuixa les <b>mitjanes "
-"de cada mostra</b> .</li><li>R (X̅R) - dibuixa els <b>intervals de cada "
+"interval de la mitjana o mediana:<ul><li>X̅  (X̅R) – dibuixa les <b>mitjanes "
+"de cada mostra</b> .</li><li>R (X̅R) – dibuixa els <b>intervals de cada "
 "mostra</b>.</li></ul>Mitjanes i desviacions estàndard, límits basats en les "
-"desviacions estàndard:<ul><li>X̅ (X̅S) - dibuixa les <b>mitjanes de cada "
-"mostra</b>.</li><li>S (X̅S) - dibuixa les <b>desviacions estàndard de cada "
-"mostra</b>.</li></ul>Atributs:<ul><li>P - dibuixa les <b>proporcions "
-"binomials</b>.</li><li>NP - dibuixa els <b>comptadors binomials</b>.</"
-"li><li>C - dibuixa els <b>comptadors de Poisson</b>.</li><li>U - dibuixa les "
+"desviacions estàndard:<ul><li>X̅ (X̅S) – dibuixa les <b>mitjanes de cada "
+"mostra</b>.</li><li>S (X̅S) – dibuixa les <b>desviacions estàndard de cada "
+"mostra</b>.</li></ul>Atributs:<ul><li>P – dibuixa les <b>proporcions "
+"binomials</b>.</li><li>NP – dibuixa els <b>comptadors binomials</b>.</"
+"li><li>C – dibuixa els <b>comptadors de Poisson</b>.</li><li>U – dibuixa les "
 "<b>ràtios de Poisson</b>.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
@@ -16308,22 +16308,22 @@ msgstr "Com utilitzar Kaggle"
 #: src/frontend/SettingsDatasetsPage.cpp:85
 #, kde-format
 msgid "Files - %1"
-msgstr "Fitxers - %1"
+msgstr "Fitxers – %1"
 
 #: src/frontend/SettingsDatasetsPage.cpp:99
 #, kde-format
 msgid "Total size - %1"
-msgstr "Mida total - %1"
+msgstr "Mida total – %1"
 
 #: src/frontend/SettingsDatasetsPage.cpp:109
 #, kde-format
 msgid "Files - 0"
-msgstr "Fitxers - 0"
+msgstr "Fitxers – 0"
 
 #: src/frontend/SettingsDatasetsPage.cpp:110
 #, kde-format
 msgid "Total size - 0B"
-msgstr "Mida total - 0 B"
+msgstr "Mida total – 0 B"
 
 #: src/frontend/SettingsDatasetsPage.cpp:112
 #, kde-format
@@ -17236,7 +17236,7 @@ msgstr "Categoria"
 #, kde-format
 msgctxt "@title:window"
 msgid "Conditional Formatting - Heatmap"
-msgstr "Format condicional - Gràfic d'intensitat de colors"
+msgstr "Format condicional – Gràfic d'intensitat de colors"
 
 #: src/frontend/spreadsheet/FormattingHeatmapDialog.cpp:47
 #, kde-format
@@ -17420,13 +17420,13 @@ msgstr "Afig diagrames a"
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:440
 #, kde-format
 msgid "Plot Area - %1"
-msgstr "Àrea del diagrama - %1"
+msgstr "Àrea del diagrama – %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:406
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:435
 #, kde-format
 msgid "Worksheet - %1"
-msgstr "Full de treball - %1"
+msgstr "Full de treball – %1"
 
 # skip-rule: t-sc-plot
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:434
@@ -17527,7 +17527,7 @@ msgstr ""
 "Valor de la llavor per a restablir el generador de nombres aleatoris.\n"
 "Si el generador s'alimenta amb el mateix valor, es generarà el mateix flux "
 "de nombres aleatoris en crides successives.\n"
-"Si no s'especifica cap valor, s'utilitzarà la marca horària actual per a "
+"Si no s'especifica cap valor, s'utilitzarà la marca de temps actual per a "
 "alimentar el generador."
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:91
@@ -18356,7 +18356,7 @@ msgstr "IQR = 0"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3085
 #, kde-format
 msgid "Max - Min = 0"
-msgstr "Màx. - Mín. = 0"
+msgstr "Màx. – Mín. = 0"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3104
 #, kde-format
@@ -19491,7 +19491,7 @@ msgstr "Separador de columna:"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:73
 #, kde-format
 msgid "Create Timestamp "
-msgstr "Crea una marca horària "
+msgstr "Crea una marca de temps "
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:80
@@ -23404,13 +23404,13 @@ msgstr "Camí de CLI:"
 #: src/frontend/ui/settingsdatasetspage.ui:66
 #, kde-format
 msgid "Total size - "
-msgstr "Mida total - "
+msgstr "Mida total – "
 
 #. i18n: ectx: property (text), widget (QLabel, lFiles)
 #: src/frontend/ui/settingsdatasetspage.ui:73
 #, kde-format
 msgid "Files - "
-msgstr "Fitxers - "
+msgstr "Fitxers – "
 
 #. i18n: ectx: property (text), widget (QPushButton, bClearCache)
 #: src/frontend/ui/settingsdatasetspage.ui:93
@@ -24635,9 +24635,9 @@ msgid ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
-"Mode d'establir el text:<ul><li>Text - s'establix el text utilitzant el "
-"format de text enriquit</li><li>LaTeX - s'establix el text utilitzant LaTeX, "
-"es requerix la instal·lació de LaTeX</li><li>Markdown - s'establix el text "
+"Mode d'establir el text:<ul><li>Text – s'establix el text utilitzant el "
+"format de text enriquit</li><li>LaTeX – s'establix el text utilitzant LaTeX, "
+"es requerix la instal·lació de LaTeX</li><li>Markdown – s'establix el text "
 "utilitzant el llenguatge de marcadors Markdown</li></ul>"
 
 #: src/frontend/widgets/LabelWidget.cpp:535
@@ -24647,8 +24647,8 @@ msgid ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li></ul>"
 msgstr ""
-"Mode d'establir el text:<ul><li>Text - s'establix el text utilitzant el "
-"format de text enriquit</li><li>LaTeX - s'establix el text utilitzant LaTeX, "
+"Mode d'establir el text:<ul><li>Text – s'establix el text utilitzant el "
+"format de text enriquit</li><li>LaTeX – s'establix el text utilitzant LaTeX, "
 "es requerix la instal·lació de LaTeX</li></ul>"
 
 #: src/frontend/widgets/LabelWidget.cpp:543
