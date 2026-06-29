@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-28 00:39+0000\n"
+"POT-Creation-Date: 2026-06-29 00:40+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -266,7 +266,7 @@ msgstr "बड़ा पूर्णांक"
 #: src/backend/core/AbstractColumn.cpp:230
 #: src/backend/datasources/filters/AsciiFilter.cpp:681
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
-#: src/frontend/ActionsManager.cpp:547
+#: src/frontend/ActionsManager.cpp:556
 #: src/frontend/notebook/NotebookView.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
@@ -360,12 +360,12 @@ msgstr "%1 में"
 msgid "Import Data"
 msgstr "डेटा आयात करें"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:290
 #, kde-format
 msgid "From File..."
 msgstr "लेख्यपत्र से..."
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:301
+#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:310
 #, kde-format
 msgid "From SQL Database..."
 msgstr "SQL डाटाबेस से..."
@@ -390,7 +390,7 @@ msgstr "छाप"
 msgid "Print Preview"
 msgstr "मुद्रण पूर्वावलोकन"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:404
+#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:413
 #, kde-format
 msgid "&Close"
 msgstr "&बंद करना"
@@ -1945,7 +1945,7 @@ msgid "Unknown"
 msgstr "अज्ञात"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:232 src/frontend/MainWin.cpp:1238
+#: src/frontend/ActionsManager.cpp:241 src/frontend/MainWin.cpp:1238
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -7530,7 +7530,7 @@ msgid "%1: run %2 script"
 msgstr ""
 
 #: src/backend/script/Script.cpp:326 src/backend/script/Script.cpp:331
-#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1230
+#: src/frontend/ActionsManager.cpp:254 src/frontend/MainWin.cpp:1230
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
@@ -8691,7 +8691,7 @@ msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
-#: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1256
+#: src/frontend/ActionsManager.cpp:247 src/frontend/MainWin.cpp:1256
 #: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -9645,7 +9645,7 @@ msgstr "ऊर्ध्वाधर अक्ष"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2410
-#: src/frontend/ActionsManager.cpp:551
+#: src/frontend/ActionsManager.cpp:560
 #: src/frontend/datasources/ImportFileWidget.cpp:114
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:117
@@ -9697,7 +9697,7 @@ msgid "Inset Plot Area with Data"
 msgstr "प्रति प्लॉट एक प्लॉट क्षेत्र"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:498
-#: src/frontend/ActionsManager.cpp:899
+#: src/frontend/ActionsManager.cpp:908
 #: src/frontend/notebook/NotebookView.cpp:175
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:442
@@ -11889,32 +11889,37 @@ msgstr ""
 "लैबप्लॉट एक निःशुल्क, ओपन-सोर्स और क्रॉस-प्लेटफॉर्म डेटा विज़ुअलाइज़ेशन और विश्लेषण सॉफ्टवेयर "
 "है जो सभी के लिए सुलभ है।"
 
-#: src/frontend/ActionsManager.cpp:203
+#: src/frontend/ActionsManager.cpp:197
 #, kde-format
 msgid "&Open Example"
 msgstr "&उदाहरण खोलें"
 
-#: src/frontend/ActionsManager.cpp:216 src/frontend/MainWin.cpp:1194
+#: src/frontend/ActionsManager.cpp:203
+#, kde-format
+msgid "&Full Screen Mode"
+msgstr ""
+
+#: src/frontend/ActionsManager.cpp:225 src/frontend/MainWin.cpp:1194
 #, kde-format
 msgid "Workbook"
 msgstr "वर्कबुक"
 
-#: src/frontend/ActionsManager.cpp:218
+#: src/frontend/ActionsManager.cpp:227
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "संग्रह स्प्रेडशीट, मैट्रिसेस और प्लॉट के लिए एक नई कार्यपुस्तिका बनाता है"
 
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1202
+#: src/frontend/ActionsManager.cpp:230 src/frontend/MainWin.cpp:1202
 #, kde-format
 msgid "Data Extractor"
 msgstr "डेटा एक्सट्रैक्टर"
 
-#: src/frontend/ActionsManager.cpp:222
+#: src/frontend/ActionsManager.cpp:231
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "चित्र से डेटा प्राप्त करने के लिए डेटा एक्सट्रैक्टर बनाता है"
 
-#: src/frontend/ActionsManager.cpp:226
+#: src/frontend/ActionsManager.cpp:235
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:76
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:401
@@ -11925,236 +11930,236 @@ msgstr "चित्र से डेटा प्राप्त करने �
 msgid "Spreadsheet"
 msgstr "स्प्रेडशीट"
 
-#: src/frontend/ActionsManager.cpp:228
+#: src/frontend/ActionsManager.cpp:237
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "डेटा संपादन के लिए एक नई स्प्रेडशीट बनाता है"
 
-#: src/frontend/ActionsManager.cpp:234
+#: src/frontend/ActionsManager.cpp:243
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "डेटा संपादन के लिए एक नया मैट्रिक्स बनाता है"
 
-#: src/frontend/ActionsManager.cpp:240
+#: src/frontend/ActionsManager.cpp:249
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "डेटा प्लॉटिंग के लिए एक नई वर्कशीट बनाता है"
 
-#: src/frontend/ActionsManager.cpp:246
+#: src/frontend/ActionsManager.cpp:255
 #, fuzzy, kde-format
 #| msgid "Creates a new %1 notebook"
 msgid "Creates a new Python script"
 msgstr "एक नया %1 नोटबुक बनाता है"
 
-#: src/frontend/ActionsManager.cpp:264 src/frontend/MainWin.cpp:1264
+#: src/frontend/ActionsManager.cpp:273 src/frontend/MainWin.cpp:1264
 #, kde-format
 msgid "Note"
 msgstr "टिप्पणी"
 
-#: src/frontend/ActionsManager.cpp:265
+#: src/frontend/ActionsManager.cpp:274
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "मनमाने पाठ के लिए एक नया नोट बनाता है"
 
-#: src/frontend/ActionsManager.cpp:269 src/frontend/MainWin.cpp:1186
+#: src/frontend/ActionsManager.cpp:278 src/frontend/MainWin.cpp:1186
 #, kde-format
 msgid "Folder"
 msgstr "फ़ोल्डर"
 
-#: src/frontend/ActionsManager.cpp:270
+#: src/frontend/ActionsManager.cpp:279
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "शीट और अन्य तत्वों को एकत्रित करने के लिए एक नया फ़ोल्डर बनाता है"
 
-#: src/frontend/ActionsManager.cpp:275
+#: src/frontend/ActionsManager.cpp:284
 #, fuzzy, kde-format
 #| msgid "Live Data Source..."
 msgid "From Live Data Source..."
 msgstr "लाइव डेटा स्रोत..."
 
-#: src/frontend/ActionsManager.cpp:276
+#: src/frontend/ActionsManager.cpp:285
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr "वास्तविक समय डिवाइस से डेटा पढ़ने के लिए एक लाइव डेटा स्रोत बनाता है"
 
-#: src/frontend/ActionsManager.cpp:284
+#: src/frontend/ActionsManager.cpp:293
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "नियमित फ़ाइल से डेटा आयात करें"
 
-#: src/frontend/ActionsManager.cpp:289
+#: src/frontend/ActionsManager.cpp:298
 #, fuzzy, kde-format
 #| msgid "From File..."
 msgid "From Directory..."
 msgstr "लेख्यपत्र से..."
 
-#: src/frontend/ActionsManager.cpp:291
+#: src/frontend/ActionsManager.cpp:300
 #, kde-format
 msgid "Import multiple files from a directory"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:296
+#: src/frontend/ActionsManager.cpp:305
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "Kaggle.com से..."
 
-#: src/frontend/ActionsManager.cpp:297
+#: src/frontend/ActionsManager.cpp:306
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "kaggle.com से डेटा आयात करें"
 
-#: src/frontend/ActionsManager.cpp:302
+#: src/frontend/ActionsManager.cpp:311
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "SQL डेटाबेस से डेटा आयात करें"
 
-#: src/frontend/ActionsManager.cpp:306
+#: src/frontend/ActionsManager.cpp:315
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "डेटासेट संग्रह से..."
 
-#: src/frontend/ActionsManager.cpp:307
+#: src/frontend/ActionsManager.cpp:316
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "ऑनलाइन डेटासेट से डेटा आयात करें"
 
-#: src/frontend/ActionsManager.cpp:311
+#: src/frontend/ActionsManager.cpp:320
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "लैबप्लॉट परियोजना..."
 
-#: src/frontend/ActionsManager.cpp:312
+#: src/frontend/ActionsManager.cpp:321
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "LabPlot प्रोजेक्ट फ़ाइल (.lml) से प्रोजेक्ट आयात करें"
 
-#: src/frontend/ActionsManager.cpp:317
+#: src/frontend/ActionsManager.cpp:326
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "ओरिजिन प्रोजेक्ट (ओपीजे)..."
 
-#: src/frontend/ActionsManager.cpp:318
+#: src/frontend/ActionsManager.cpp:327
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "OriginLab Origin प्रोजेक्ट फ़ाइल (.opj) से प्रोजेक्ट आयात करें"
 
-#: src/frontend/ActionsManager.cpp:354
+#: src/frontend/ActionsManager.cpp:363
 #, kde-format
 msgid "Export..."
 msgstr "निर्यात करना..."
 
-#: src/frontend/ActionsManager.cpp:355
+#: src/frontend/ActionsManager.cpp:364
 #, kde-format
 msgid "Export selected element"
 msgstr "चयनित तत्व निर्यात करें"
 
-#: src/frontend/ActionsManager.cpp:361 src/frontend/ActionsManager.cpp:1427
-#: src/frontend/ActionsManager.cpp:1435
+#: src/frontend/ActionsManager.cpp:370 src/frontend/ActionsManager.cpp:1436
+#: src/frontend/ActionsManager.cpp:1444
 #, kde-format
 msgid "Share"
 msgstr "शेयर करना"
 
-#: src/frontend/ActionsManager.cpp:366
+#: src/frontend/ActionsManager.cpp:375
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "रंग मानचित्र ब्राउज़र"
 
-#: src/frontend/ActionsManager.cpp:367
+#: src/frontend/ActionsManager.cpp:376
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "उपलब्ध रंग मानचित्रों को ब्राउज़ करने के लिए संवाद खोलें।"
 
-#: src/frontend/ActionsManager.cpp:376
+#: src/frontend/ActionsManager.cpp:385
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS मेटाडेटा संपादक..."
 
-#: src/frontend/ActionsManager.cpp:377
+#: src/frontend/ActionsManager.cpp:386
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "FITS मेटा डेटा संपादित करने के लिए संपादक खोलें"
 
-#: src/frontend/ActionsManager.cpp:386
+#: src/frontend/ActionsManager.cpp:395
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "इतिहास पूर्ववत करें/पुनः करें..."
 
-#: src/frontend/ActionsManager.cpp:406
+#: src/frontend/ActionsManager.cpp:415
 #, kde-format
 msgid "Close the active window"
 msgstr "सक्रिय विंडो बंद करें"
 
-#: src/frontend/ActionsManager.cpp:409
+#: src/frontend/ActionsManager.cpp:418
 #, kde-format
 msgid "Close &All"
 msgstr "बंद करें &सभी"
 
-#: src/frontend/ActionsManager.cpp:410
+#: src/frontend/ActionsManager.cpp:419
 #, kde-format
 msgid "Close all the windows"
 msgstr "सभी खिड़कियाँ बंद कर दें"
 
-#: src/frontend/ActionsManager.cpp:413
+#: src/frontend/ActionsManager.cpp:422
 #, kde-format
 msgid "Ne&xt"
 msgstr "अगला"
 
-#: src/frontend/ActionsManager.cpp:415
+#: src/frontend/ActionsManager.cpp:424
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "फोकस को अगली विंडो पर ले जाएं"
 
-#: src/frontend/ActionsManager.cpp:418
+#: src/frontend/ActionsManager.cpp:427
 #, kde-format
 msgid "Pre&vious"
 msgstr "पहले का"
 
-#: src/frontend/ActionsManager.cpp:420
+#: src/frontend/ActionsManager.cpp:429
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "फ़ोकस को पिछली विंडो पर ले जाएँ"
 
-#: src/frontend/ActionsManager.cpp:427
+#: src/frontend/ActionsManager.cpp:436
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "वर्तमान &फ़ोल्डर केवल"
 
-#: src/frontend/ActionsManager.cpp:432
+#: src/frontend/ActionsManager.cpp:441
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "वर्तमान फ़ोल्डर और &सबफ़ोल्डर्स"
 
-#: src/frontend/ActionsManager.cpp:436
+#: src/frontend/ActionsManager.cpp:445
 #, kde-format
 msgid "&All"
 msgstr "&सभी"
 
-#: src/frontend/ActionsManager.cpp:458
+#: src/frontend/ActionsManager.cpp:467
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "मेमोरी उपयोग दिखाएँ"
 
-#: src/frontend/ActionsManager.cpp:466
+#: src/frontend/ActionsManager.cpp:475
 #, kde-format
 msgid "Project Explorer"
 msgstr "प्रोजेक्ट एक्सप्लोरर"
 
-#: src/frontend/ActionsManager.cpp:471
+#: src/frontend/ActionsManager.cpp:480
 #, kde-format
 msgid "Properties Explorer"
 msgstr "गुण एक्सप्लोरर"
 
-#: src/frontend/ActionsManager.cpp:476
+#: src/frontend/ActionsManager.cpp:485
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "वर्कशीट पूर्वावलोकन"
 
-#: src/frontend/ActionsManager.cpp:499
+#: src/frontend/ActionsManager.cpp:508
 #, kde-format
 msgid "Configure CAS..."
 msgstr "CAS कॉन्फ़िगर करें..."
 
-#: src/frontend/ActionsManager.cpp:500
+#: src/frontend/ActionsManager.cpp:509
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -12163,139 +12168,139 @@ msgstr ""
 "उपलब्ध प्रणालियों को संशोधित करने या नई प्रणालियों को सक्षम करने के लिए कंप्यूटर बीजगणित "
 "प्रणालियों की सेटिंग्स खोलता है"
 
-#: src/frontend/ActionsManager.cpp:510
+#: src/frontend/ActionsManager.cpp:519
 #, kde-format
 msgid "What's New"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:542
+#: src/frontend/ActionsManager.cpp:551
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgctxt "@action"
 msgid "New Plot Area"
 msgstr "निश्चित भूभाग का क्षेत्रफल"
 
-#: src/frontend/ActionsManager.cpp:558
+#: src/frontend/ActionsManager.cpp:567
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:251
 #, kde-format
 msgid "Vertical Layout"
 msgstr "ऊर्ध्वाधर लेआउट"
 
-#: src/frontend/ActionsManager.cpp:563
+#: src/frontend/ActionsManager.cpp:572
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:255
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "क्षैतिज लेआउट"
 
-#: src/frontend/ActionsManager.cpp:568
+#: src/frontend/ActionsManager.cpp:577
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
 #: src/frontend/worksheet/WorksheetView.cpp:259
 #, kde-format
 msgid "Grid Layout"
 msgstr "ग्रिड लेआउट"
 
-#: src/frontend/ActionsManager.cpp:573
+#: src/frontend/ActionsManager.cpp:582
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
 msgid "No Layout"
 msgstr "कोई लेआउट नहीं"
 
-#: src/frontend/ActionsManager.cpp:581 src/frontend/ActionsManager.cpp:622
+#: src/frontend/ActionsManager.cpp:590 src/frontend/ActionsManager.cpp:631
 #: src/frontend/worksheet/WorksheetView.cpp:187
 #: src/frontend/worksheet/WorksheetView.cpp:349
 #, kde-format
 msgid "Select and Edit"
 msgstr "चयन करें और संपादित करें"
 
-#: src/frontend/ActionsManager.cpp:586 src/frontend/ActionsManager.cpp:813
+#: src/frontend/ActionsManager.cpp:595 src/frontend/ActionsManager.cpp:822
 #: src/frontend/datapicker/DatapickerImageView.cpp:132
 #: src/frontend/worksheet/WorksheetView.cpp:192
 #, kde-format
 msgid "Navigate"
 msgstr "नेविगेट"
 
-#: src/frontend/ActionsManager.cpp:591 src/frontend/ActionsManager.cpp:818
+#: src/frontend/ActionsManager.cpp:600 src/frontend/ActionsManager.cpp:827
 #: src/frontend/datapicker/DatapickerImageView.cpp:136
 #: src/frontend/worksheet/WorksheetView.cpp:196
 #, kde-format
 msgid "Select and Zoom"
 msgstr "चयन करें और ज़ूम करें"
 
-#: src/frontend/ActionsManager.cpp:597 src/frontend/ActionsManager.cpp:847
+#: src/frontend/ActionsManager.cpp:606 src/frontend/ActionsManager.cpp:856
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgctxt "@action"
 msgid "Zoom"
 msgstr "ज़ूम"
 
-#: src/frontend/ActionsManager.cpp:603 src/frontend/ActionsManager.cpp:853
+#: src/frontend/ActionsManager.cpp:612 src/frontend/ActionsManager.cpp:862
 #, fuzzy, kde-format
 #| msgid "Magnification"
 msgctxt "@action"
 msgid "Magnification"
 msgstr "बढ़ाई"
 
-#: src/frontend/ActionsManager.cpp:616
+#: src/frontend/ActionsManager.cpp:625
 #, fuzzy, kde-format
 #| msgid "Add New"
 msgctxt "@action"
 msgid "Add New"
 msgstr "नया जोड़ो"
 
-#: src/frontend/ActionsManager.cpp:628
+#: src/frontend/ActionsManager.cpp:637
 #: src/frontend/worksheet/WorksheetView.cpp:354
 #, kde-format
 msgid "Crosshair"
 msgstr "क्रॉसहेयर"
 
-#: src/frontend/ActionsManager.cpp:633
+#: src/frontend/ActionsManager.cpp:642
 #: src/frontend/worksheet/WorksheetView.cpp:359
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "क्षेत्र चुनें और ज़ूम इन करें"
 
-#: src/frontend/ActionsManager.cpp:638
+#: src/frontend/ActionsManager.cpp:647
 #: src/frontend/worksheet/WorksheetView.cpp:364
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "X-क्षेत्र का चयन करें और ज़ूम इन करें"
 
-#: src/frontend/ActionsManager.cpp:643
+#: src/frontend/ActionsManager.cpp:652
 #: src/frontend/worksheet/WorksheetView.cpp:369
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Y-क्षेत्र चुनें और ज़ूम इन करें"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:648 src/frontend/MainWin.cpp:1632
+#: src/frontend/ActionsManager.cpp:657 src/frontend/MainWin.cpp:1632
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Cursor"
 msgstr "कर्सर"
 
-#: src/frontend/ActionsManager.cpp:656
+#: src/frontend/ActionsManager.cpp:665
 #: src/frontend/worksheet/WorksheetView.cpp:382
 #, kde-format
 msgid "Auto Scale"
 msgstr "कार स्केल"
 
-#: src/frontend/ActionsManager.cpp:660
+#: src/frontend/ActionsManager.cpp:669
 #: src/frontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Auto Scale X"
 msgstr "ऑटो स्केल X"
 
-#: src/frontend/ActionsManager.cpp:664
+#: src/frontend/ActionsManager.cpp:673
 #: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "ऑटो स्केल वाई"
 
-#: src/frontend/ActionsManager.cpp:669 src/frontend/ActionsManager.cpp:772
+#: src/frontend/ActionsManager.cpp:678 src/frontend/ActionsManager.cpp:781
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:61
@@ -12305,7 +12310,7 @@ msgstr "ऑटो स्केल वाई"
 msgid "Zoom In"
 msgstr "ज़ूम इन"
 
-#: src/frontend/ActionsManager.cpp:673 src/frontend/ActionsManager.cpp:775
+#: src/frontend/ActionsManager.cpp:682 src/frontend/ActionsManager.cpp:784
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:65
@@ -12315,128 +12320,128 @@ msgstr "ज़ूम इन"
 msgid "Zoom Out"
 msgstr "ज़ूम आउट"
 
-#: src/frontend/ActionsManager.cpp:677
+#: src/frontend/ActionsManager.cpp:686
 #: src/frontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Zoom In X"
 msgstr "ज़ूम इन X"
 
-#: src/frontend/ActionsManager.cpp:681
+#: src/frontend/ActionsManager.cpp:690
 #: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Zoom Out X"
 msgstr "ज़ूम आउट X"
 
-#: src/frontend/ActionsManager.cpp:685
+#: src/frontend/ActionsManager.cpp:694
 #: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Zoom In Y"
 msgstr "ज़ूम इन करें Y"
 
-#: src/frontend/ActionsManager.cpp:689
+#: src/frontend/ActionsManager.cpp:698
 #: src/frontend/worksheet/WorksheetView.cpp:414
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "ज़ूम आउट करें Y"
 
-#: src/frontend/ActionsManager.cpp:694
+#: src/frontend/ActionsManager.cpp:703
 #: src/frontend/worksheet/WorksheetView.cpp:418
 #, kde-format
 msgid "Shift Left X"
 msgstr "बाएँ X शिफ्ट करें"
 
-#: src/frontend/ActionsManager.cpp:698
+#: src/frontend/ActionsManager.cpp:707
 #: src/frontend/worksheet/WorksheetView.cpp:420
 #, kde-format
 msgid "Shift Right X"
 msgstr "दायाँ X शिफ्ट करें"
 
-#: src/frontend/ActionsManager.cpp:702
+#: src/frontend/ActionsManager.cpp:711
 #: src/frontend/worksheet/WorksheetView.cpp:422
 #, kde-format
 msgid "Shift Up Y"
 msgstr "शिफ्ट अप वाई"
 
-#: src/frontend/ActionsManager.cpp:706
+#: src/frontend/ActionsManager.cpp:715
 #: src/frontend/worksheet/WorksheetView.cpp:424
 #, kde-format
 msgid "Shift Down Y"
 msgstr "नीचे शिफ्ट Y"
 
-#: src/frontend/ActionsManager.cpp:718
+#: src/frontend/ActionsManager.cpp:727
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:543
 #, kde-format
 msgid "Insert Row Above"
 msgstr "ऊपर पंक्ति डालें"
 
-#: src/frontend/ActionsManager.cpp:721
+#: src/frontend/ActionsManager.cpp:730
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:544
 #, kde-format
 msgid "Insert Row Below"
 msgstr "नीचे पंक्ति डालें"
 
-#: src/frontend/ActionsManager.cpp:724
+#: src/frontend/ActionsManager.cpp:733
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:547
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "चयनित पंक्ति(पंक्तियाँ) हटाएं"
 
-#: src/frontend/ActionsManager.cpp:728
+#: src/frontend/ActionsManager.cpp:737
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:396
 #, kde-format
 msgid "Insert Column Left"
 msgstr "स्तंभ बाएँ डालें"
 
-#: src/frontend/ActionsManager.cpp:731
+#: src/frontend/ActionsManager.cpp:740
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:397
 #, kde-format
 msgid "Insert Column Right"
 msgstr "कॉलम दायाँ डालें"
 
-#: src/frontend/ActionsManager.cpp:734
+#: src/frontend/ActionsManager.cpp:743
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:400
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "चयनित कॉलम हटाएं"
 
-#: src/frontend/ActionsManager.cpp:738
+#: src/frontend/ActionsManager.cpp:747
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:530
 #, kde-format
 msgid "&Sort..."
 msgstr "&क्रम से लगाना..."
 
-#: src/frontend/ActionsManager.cpp:739
+#: src/frontend/ActionsManager.cpp:748
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:531
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "एकाधिक कॉलम को एक साथ क्रमबद्ध करें"
 
-#: src/frontend/ActionsManager.cpp:742
+#: src/frontend/ActionsManager.cpp:751
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:532
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "छोटे से बड़े क्रम में क्रमबद्ध करें"
 
-#: src/frontend/ActionsManager.cpp:743
+#: src/frontend/ActionsManager.cpp:752
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:533
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "चयनित स्तंभों को अलग-अलग आरोही क्रम में क्रमबद्ध करें"
 
-#: src/frontend/ActionsManager.cpp:746
+#: src/frontend/ActionsManager.cpp:755
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:534
 #, kde-format
 msgid "Sort &Descending"
 msgstr "अवरोही छांट"
 
-#: src/frontend/ActionsManager.cpp:747
+#: src/frontend/ActionsManager.cpp:756
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:535
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "चयनित स्तंभों को अवरोही क्रम में अलग-अलग क्रमबद्ध करें"
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/ActionsManager.cpp:758 src/frontend/ActionsManager.cpp:1593
+#: src/frontend/ActionsManager.cpp:767 src/frontend/ActionsManager.cpp:1602
 #: src/frontend/dockwidgets/LiveDataDock.cpp:239
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
@@ -12445,126 +12450,126 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #. i18n: ectx: property (text), widget (QLabel, lUpdate)
-#: src/frontend/ActionsManager.cpp:761
+#: src/frontend/ActionsManager.cpp:770
 #: src/frontend/ui/dockwidgets/livedatadock.ui:172
 #: src/frontend/ui/dockwidgets/livedatadock.ui:187
 #, kde-format
 msgid "Update"
 msgstr "अद्यतन"
 
-#: src/frontend/ActionsManager.cpp:778
+#: src/frontend/ActionsManager.cpp:787
 #: src/frontend/notebook/NotebookView.cpp:69
 #, kde-format
 msgid "Find"
 msgstr "खोजो"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/frontend/ActionsManager.cpp:781
+#: src/frontend/ActionsManager.cpp:790
 #: src/frontend/notebook/NotebookView.cpp:77
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "पुनः आरंभ करें"
 
-#: src/frontend/ActionsManager.cpp:784
+#: src/frontend/ActionsManager.cpp:793
 #: src/frontend/notebook/NotebookView.cpp:80
 #: src/frontend/notebook/NotebookView.cpp:398
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "मूल्यांकन नोटबुक"
 
-#: src/frontend/ActionsManager.cpp:798
+#: src/frontend/ActionsManager.cpp:807
 #: src/frontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
 msgstr "अक्ष बिंदु सेट करें"
 
-#: src/frontend/ActionsManager.cpp:803
+#: src/frontend/ActionsManager.cpp:812
 #: src/frontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Curve Points"
 msgstr "वक्र बिंदु निर्धारित करें"
 
-#: src/frontend/ActionsManager.cpp:808
+#: src/frontend/ActionsManager.cpp:817
 #: src/frontend/datapicker/DatapickerImageView.cpp:148
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "वक्र खंड चुनें"
 
-#: src/frontend/ActionsManager.cpp:824
+#: src/frontend/ActionsManager.cpp:833
 #: src/frontend/datapicker/DatapickerImageView.cpp:153
 #, kde-format
 msgid "New Curve"
 msgstr "नया वक्र"
 
-#: src/frontend/ActionsManager.cpp:830
+#: src/frontend/ActionsManager.cpp:839
 #: src/frontend/datapicker/DatapickerImageView.cpp:156
 #, kde-format
 msgid "Shift Left"
 msgstr "बाईं ओर शिफ्ट करें"
 
-#: src/frontend/ActionsManager.cpp:834
+#: src/frontend/ActionsManager.cpp:843
 #: src/frontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
 msgid "Shift Right"
 msgstr "दांयी ओर शिफ्ट करें"
 
-#: src/frontend/ActionsManager.cpp:838
+#: src/frontend/ActionsManager.cpp:847
 #: src/frontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Up"
 msgstr "ऊपर बदलाव"
 
-#: src/frontend/ActionsManager.cpp:842
+#: src/frontend/ActionsManager.cpp:851
 #: src/frontend/datapicker/DatapickerImageView.cpp:168
 #, kde-format
 msgid "Shift Down"
 msgstr "नीचे खिसकाओ"
 
-#: src/frontend/ActionsManager.cpp:938
+#: src/frontend/ActionsManager.cpp:947
 #, kde-format
 msgid "Window Visibility"
 msgstr "विंडो दृश्यता"
 
-#: src/frontend/ActionsManager.cpp:955
+#: src/frontend/ActionsManager.cpp:964
 #, kde-format
 msgid "Color Scheme"
 msgstr "रंग योजना"
 
-#: src/frontend/ActionsManager.cpp:1393
+#: src/frontend/ActionsManager.cpp:1402
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "एक नया %1 नोटबुक बनाता है"
 
-#: src/frontend/ActionsManager.cpp:1427
+#: src/frontend/ActionsManager.cpp:1436
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "प्रोजेक्ट साझा करने में समस्या हुई: %1"
 
-#: src/frontend/ActionsManager.cpp:1431
+#: src/frontend/ActionsManager.cpp:1440
 #, kde-format
 msgid "Project shared successfully"
 msgstr "प्रोजेक्ट सफलतापूर्वक साझा किया गया"
 
-#: src/frontend/ActionsManager.cpp:1434
+#: src/frontend/ActionsManager.cpp:1443
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "आप साझा प्रोजेक्ट यहां पा सकते हैं: <a href=\"%1\">%1</a>"
 
-#: src/frontend/ActionsManager.cpp:1589
+#: src/frontend/ActionsManager.cpp:1598
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, fuzzy, kde-format
 #| msgid "Contains"
 msgid "Continue"
 msgstr "रोकना"
 
-#: src/frontend/ActionsManager.cpp:1590
+#: src/frontend/ActionsManager.cpp:1599
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
 msgstr "जारी रखें पढ़ रहे हैं"
 
-#: src/frontend/ActionsManager.cpp:1594
+#: src/frontend/ActionsManager.cpp:1603
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
 #, kde-format
 msgid "Pause Reading"
