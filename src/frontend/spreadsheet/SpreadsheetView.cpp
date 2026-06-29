@@ -780,10 +780,6 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addAction(action_mask_missing_value_rows);
 	}
 
-	// Spreadsheet menu
-	m_spreadsheetMenu = new QMenu(this);
-	createContextMenu(m_spreadsheetMenu);
-
 	// Row menu
 	m_rowMenu = new QMenu(this);
 	if (!m_readOnly) {
@@ -1435,8 +1431,10 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 		} else if (watched == this || watched == m_tableView->viewport() || (m_frozenTableView && watched == m_frozenTableView->viewport())) {
 			// the cursor position is in one of the cells and no full columns are selected,
 			// show the global spreadsheet context menu in this case
-			// TODO: deactivate the "selection" menu if there are no values in the selected cells
-			checkSpreadsheetMenu();
+			if (!m_spreadsheetMenu) {
+				m_spreadsheetMenu = new QMenu(this);
+				createContextMenu(m_spreadsheetMenu);
+			}
 			m_spreadsheetMenu->exec(global_pos);
 		}
 
