@@ -353,6 +353,9 @@ private:
 	// Panning undo grouping
 	QMap<QPair<Dimension, int>, Range<double>> m_panningInitialRanges;
 
+	// Zoom selection undo grouping
+	QMap<QPair<Dimension, int>, Range<double>> m_zoomSelectionInitialRanges;
+
 	friend class MultiRangeTest;
 	friend class CartesianPlotTest;
 };
