@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-29 00:40+0000\n"
-"PO-Revision-Date: 2026-06-21 17:36+0300\n"
+"PO-Revision-Date: 2026-06-29 08:53+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -11887,7 +11887,7 @@ msgstr "Від&крити приклад"
 #: src/frontend/ActionsManager.cpp:203
 #, kde-format
 msgid "&Full Screen Mode"
-msgstr ""
+msgstr "&Повноекранний режим"
 
 #: src/frontend/ActionsManager.cpp:225 src/frontend/MainWin.cpp:1194
 #, kde-format

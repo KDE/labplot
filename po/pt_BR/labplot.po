@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-29 00:40+0000\n"
-"PO-Revision-Date: 2026-06-21 08:09-0300\n"
+"PO-Revision-Date: 2026-06-29 08:28-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -11855,7 +11855,7 @@ msgstr "&Abrir exemplo"
 #: src/frontend/ActionsManager.cpp:203
 #, kde-format
 msgid "&Full Screen Mode"
-msgstr ""
+msgstr "Modo de tela &cheia"
 
 #: src/frontend/ActionsManager.cpp:225 src/frontend/MainWin.cpp:1194
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-29 00:40+0000\n"
-"PO-Revision-Date: 2026-06-21 05:36+0200\n"
+"PO-Revision-Date: 2026-06-29 06:28+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -11822,7 +11822,7 @@ msgstr "&მაგალითის გახსნა"
 #: src/frontend/ActionsManager.cpp:203
 #, kde-format
 msgid "&Full Screen Mode"
-msgstr ""
+msgstr "სრულეკრანიანი რე&ჟიმი"
 
 #: src/frontend/ActionsManager.cpp:225 src/frontend/MainWin.cpp:1194
 #, kde-format
