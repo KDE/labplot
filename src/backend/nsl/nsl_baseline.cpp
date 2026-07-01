@@ -17,6 +17,7 @@
 #include <gsl/gsl_fit.h>
 #include <gsl/gsl_statistics_double.h>
 #include <math.h>
+#include <vector>
 
 // macOS builds on gitlab CI complain about missing Eigen/Sparse while having Eigen3	-> disable EIGEN3 on macOS for the moment
 #if defined(Q_OS_MACOS)
@@ -56,24 +57,23 @@ void nsl_baseline_remove_minimum(double* data, const size_t n) {
 	// Handle single element case
 	if (n == 1) {
 		// For single element, subtracting minimum (which is the element itself) results in 0
-		if (!isnan(data[0])) {
+		if (isfinite(data[0])) {
 			data[0] = 0.0;
 		}
 		return;
 	}
 
-	const double min = nsl_stats_minimum(data, n, nullptr);
-
-	// Check for NaN or all-NaN case
-	if (isnan(min)) {
-		return;
+	// Validate values before computing minimum
+	for (size_t i = 0; i < n; i++) {
+		if (!isfinite(data[i])) {
+			return; // Can't compute minimum with NaN or Infinity values
+		}
 	}
 
+	const double min = nsl_stats_minimum(data, n, nullptr);
+
 	for (size_t i = 0; i < n; i++) {
-		// Skip NaN values to avoid propagating NaN
-		if (!isnan(data[i])) {
-			data[i] -= min;
-		}
+		data[i] -= min;
 	}
 }
 
@@ -86,24 +86,23 @@ void nsl_baseline_remove_maximum(double* data, const size_t n) {
 	// Handle single element case
 	if (n == 1) {
 		// For single element, subtracting maximum (which is the element itself) results in 0
-		if (!isnan(data[0])) {
+		if (isfinite(data[0])) {
 			data[0] = 0.0;
 		}
 		return;
 	}
 
-	const double max = nsl_stats_maximum(data, n, nullptr);
-
-	// Check for NaN or all-NaN case
-	if (isnan(max)) {
-		return;
+	// Validate values before computing maximum
+	for (size_t i = 0; i < n; i++) {
+		if (!isfinite(data[i])) {
+			return; // Can't compute maximum with NaN or Infinity values
+		}
 	}
 
+	const double max = nsl_stats_maximum(data, n, nullptr);
+
 	for (size_t i = 0; i < n; i++) {
-		// Skip NaN values to avoid propagating NaN
-		if (!isnan(data[i])) {
-			data[i] -= max;
-		}
+		data[i] -= max;
 	}
 }
 
@@ -116,20 +115,23 @@ void nsl_baseline_remove_mean(double* data, const size_t n) {
 	// Handle single element case
 	if (n == 1) {
 		// For single element, subtracting mean (which is the element itself) results in 0
-		if (!isnan(data[0])) {
+		if (isfinite(data[0])) {
 			data[0] = 0.0;
 		}
 		return;
 	}
 
-	// Check for NaN values before computing mean
+	// Validate values before computing mean
 	for (size_t i = 0; i < n; i++) {
-		if (isnan(data[i])) {
-			return; // Can't compute mean with NaN values
+		if (!isfinite(data[i])) {
+			return; // Can't compute mean with NaN or Infinity values
 		}
 	}
 
 	const double mean = gsl_stats_mean(data, 1, n);
+	if (!isfinite(mean)) {
+		return;
+	}
 
 	for (size_t i = 0; i < n; i++)
 		data[i] -= mean;
@@ -144,40 +146,31 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 	// Handle single element case
 	if (n == 1) {
 		// For single element, subtracting median (which is the element itself) results in 0
-		if (!isnan(data[0])) {
+		if (isfinite(data[0])) {
 			data[0] = 0.0;
 		}
 		return;
 	}
 
-	// Check for NaN values
+	// Validate values before computing median
 	for (size_t i = 0; i < n; i++) {
-		if (isnan(data[i])) {
-			return; // Can't compute median with NaN values
+		if (!isfinite(data[i])) {
+			return; // Can't compute median with NaN or Infinity values
 		}
 	}
 
-	// copy data
-	double* tmp_data = (double*)malloc(n * sizeof(double));
-	if (!tmp_data) {
-		// malloc failed - silently return (no error propagation)
-		// In a real implementation, this should be handled by returning an error code
-		return;
-	}
-	memcpy(tmp_data, data, n * sizeof(double));
+	// copy data using vector to avoid manual malloc/free handling
+	std::vector<double> tmp_data(data, data + n);
 
-	const double median = gsl_stats_median(tmp_data, 1, n); // rearranges tmp_data
+	const double median = gsl_stats_median(tmp_data.data(), 1, n); // rearranges tmp_data
 
-	// Check for NaN median (shouldn't happen if we checked above, but be safe)
-	if (isnan(median)) {
-		free(tmp_data);
+	// Check for invalid median result
+	if (!isfinite(median)) {
 		return;
 	}
 
 	for (size_t i = 0; i < n; i++)
 		data[i] -= median;
-
-	free(tmp_data);
 }
 
 /* do a linear interpolation using first and last point and subtract that */
@@ -187,10 +180,17 @@ int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size
 		return -1;
 	}
 
+	// Validate values
+	for (size_t i = 0; i < n; i++) {
+		if (!isfinite(xdata[i]) || !isfinite(ydata[i])) {
+			return -1;
+		}
+	}
+
 	// Handle single point case
 	if (n == 1) {
 		// For single point, subtracting baseline (which is the point itself) results in 0
-		if (!isnan(ydata[0])) {
+		if (isfinite(ydata[0])) {
 			ydata[0] = 0.0;
 		}
 		return 0;
@@ -219,7 +219,7 @@ int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 	// Handle single point case
 	if (n == 1) {
 		// For single point, subtracting baseline (which is the point itself) results in 0
-		if (!isnan(ydata[0])) {
+		if (isfinite(ydata[0])) {
 			ydata[0] = 0.0;
 		}
 		return 0;
@@ -262,9 +262,10 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 	// Handle single point case
 	if (n == 1) {
 		// For single point, subtracting baseline (which is the point itself) results in 0
-		if (!isnan(data[0])) {
-			data[0] = 0.0;
+		if (!isfinite(data[0])) {
+			return -1.;
 		}
+		data[0] = 0.0;
 		return 0.;
 	}
 
@@ -274,11 +275,12 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 		// This is a simple linear interpolation
 		double y0 = data[0];
 		double y1 = data[1];
-		if (!isnan(y0) && !isnan(y1)) {
-			double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
-			data[0] -= y0;
-			data[1] -= (y0 + slope);
+		if (!isfinite(y0) || !isfinite(y1)) {
+			return -1.;
 		}
+		double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
+		data[0] -= y0;
+		data[1] -= (y0 + slope);
 		return 0.;
 	}
 
@@ -465,9 +467,10 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 	// Handle single point case
 	if (n == 1) {
 		// For single point, subtracting baseline (which is the point itself) results in 0
-		if (!isnan(data[0])) {
-			data[0] = 0.0;
+		if (!isfinite(data[0])) {
+			return -1.;
 		}
+		data[0] = 0.0;
 		return 0.;
 	}
 
@@ -477,11 +480,12 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 		// This is a simple linear interpolation
 		double y0 = data[0];
 		double y1 = data[1];
-		if (!isnan(y0) && !isnan(y1)) {
-			double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
-			data[0] -= y0;
-			data[1] -= (y0 + slope);
+		if (!isfinite(y0) || !isfinite(y1)) {
+			return -1.;
 		}
+		double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
+		data[0] -= y0;
+		data[1] -= (y0 + slope);
 		return 0.;
 	}
 
@@ -700,9 +704,10 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 	// Handle single point case
 	if (n == 1) {
 		// For single point, subtracting baseline (which is the point itself) results in 0
-		if (!isnan(data[0])) {
-			data[0] = 0.0;
+		if (!isfinite(data[0])) {
+			return -1.;
 		}
+		data[0] = 0.0;
 		return 0.;
 	}
 
@@ -712,11 +717,12 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 		// This is a simple linear interpolation
 		double y0 = data[0];
 		double y1 = data[1];
-		if (!isnan(y0) && !isnan(y1)) {
-			double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
-			data[0] -= y0;
-			data[1] -= (y0 + slope);
+		if (!isfinite(y0) || !isfinite(y1)) {
+			return -1.;
 		}
+		double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
+		data[0] -= y0;
+		data[1] -= (y0 + slope);
 		return 0.;
 	}
 

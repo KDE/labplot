@@ -12,6 +12,7 @@
 #include "backend/nsl/nsl_baseline.h"
 
 #include <fstream>
+#include <limits>
 
 // ##############################################################################
 // #################  constant base lines
@@ -407,6 +408,28 @@ void NSLBaselineTest::testBaselineNaNData() {
 
 	// Test that valid values are processed correctly
 	// (Note: actual behavior depends on implementation details)
+	QVERIFY(true);
+}
+
+void NSLBaselineTest::testBaselineInfinityData() {
+	double data1[] = {1.0, std::numeric_limits<double>::infinity(), 3.0};
+	double data2[] = {-1.0, -std::numeric_limits<double>::infinity(), 3.0};
+	double data3[] = {1.0, 2.0, std::numeric_limits<double>::infinity()};
+	double data4[] = {1.0, 2.0, 3.0};
+	double xdata[] = {1.0, 2.0, std::numeric_limits<double>::infinity()};
+	double ydata[] = {4.0, 5.0, 6.0};
+
+	// Should not crash or produce undefined behavior with Infinity values
+	nsl_baseline_remove_minimum(data1, 3);
+	nsl_baseline_remove_maximum(data2, 3);
+	nsl_baseline_remove_mean(data3, 3);
+	nsl_baseline_remove_median(data4, 3);
+	QCOMPARE(nsl_baseline_remove_endpoints(xdata, ydata, 3), -1);
+
+	// ARPLS should also exit safely on Infinity inputs
+	double arplsData[] = {1.0, std::numeric_limits<double>::infinity(), 3.0};
+	QCOMPARE(nsl_baseline_remove_arpls(arplsData, 3, 1.e-3, 1.e4, 10), -1.);
+
 	QVERIFY(true);
 }
 

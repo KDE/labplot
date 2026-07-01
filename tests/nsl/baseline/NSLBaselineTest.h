@@ -43,5 +43,6 @@ private Q_SLOTS:
 	void testBaselineEmptyData();
 	void testBaselineSingleElement();
 	void testBaselineNaNData();
+	void testBaselineInfinityData();
 };
 #endif
