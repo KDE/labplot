@@ -268,7 +268,7 @@ void HistogramDock::retranslateUi() {
 	ui.cbNormalization->addItem(i18n("Count Density"));
 	ui.cbNormalization->addItem(i18n("Probability Density"));
 
-	// TODO lineWidget->retranslateUi();
+	lineWidget->retranslateUi();
 
 	// tooltip texts
 	QString info = i18n(

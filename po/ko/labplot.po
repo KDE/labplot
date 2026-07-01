@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-28 00:39+0000\n"
+"POT-Creation-Date: 2026-07-01 00:41+0000\n"
 "PO-Revision-Date: 2026-06-09 01:31+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -176,7 +176,7 @@ msgstr ""
 #: src/frontend/dockwidgets/XYCurveDock.cpp:433 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
-#: src/frontend/widgets/LineWidget.cpp:47
+#: src/frontend/widgets/LineWidget.cpp:112
 #, kde-format
 msgid "None"
 msgstr ""
@@ -264,7 +264,7 @@ msgstr ""
 #: src/backend/core/AbstractColumn.cpp:230
 #: src/backend/datasources/filters/AsciiFilter.cpp:681
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
-#: src/frontend/ActionsManager.cpp:547
+#: src/frontend/ActionsManager.cpp:556
 #: src/frontend/notebook/NotebookView.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
@@ -336,13 +336,13 @@ msgid "%1: unmask cells"
 msgstr ""
 
 #: src/backend/core/abstractcolumncommands.cpp:301
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2727
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2725
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr ""
 
 #: src/backend/core/abstractcolumncommands.cpp:327
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2745
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2743
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr ""
@@ -358,12 +358,12 @@ msgstr ""
 msgid "Import Data"
 msgstr ""
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:290
 #, kde-format
 msgid "From File..."
 msgstr ""
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:301
+#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:310
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
@@ -388,7 +388,7 @@ msgstr ""
 msgid "Print Preview"
 msgstr ""
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:404
+#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:413
 #, kde-format
 msgid "&Close"
 msgstr ""
@@ -615,7 +615,7 @@ msgid "%1: change cell values"
 msgstr ""
 
 #: src/backend/core/column/columncommands.cpp:541
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2901
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2899
 #, kde-format
 msgid "%1: set plot designation"
 msgstr ""
@@ -1885,7 +1885,7 @@ msgid "Unknown"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:232 src/frontend/MainWin.cpp:1238
+#: src/frontend/ActionsManager.cpp:241 src/frontend/MainWin.cpp:1238
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2268,10 +2268,10 @@ msgstr ""
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #: src/frontend/matrix/MatrixView.cpp:638
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:187
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2633
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2653
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2670
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2686
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2631
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2651
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2668
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2684
 #: src/frontend/ui/dockwidgets/columndock.ui:542
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:65
 #, kde-format
@@ -6282,13 +6282,13 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:136
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3954
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3952
 #, kde-format
 msgid "FITS image"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:136
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3954
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3952
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -7023,7 +7023,7 @@ msgstr ""
 msgid "Lang"
 msgstr ""
 
-#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:49
+#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:114
 #, kde-format
 msgid "Envelope"
 msgstr ""
@@ -7440,7 +7440,7 @@ msgid "%1: run %2 script"
 msgstr ""
 
 #: src/backend/script/Script.cpp:326 src/backend/script/Script.cpp:331
-#: src/frontend/ActionsManager.cpp:245 src/frontend/MainWin.cpp:1230
+#: src/frontend/MainWin.cpp:1230
 #, kde-format
 msgid "Script"
 msgstr ""
@@ -8505,7 +8505,7 @@ msgid ""
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1935
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:150
 #, kde-format
 msgid "Parametric"
 msgstr ""
@@ -8548,7 +8548,7 @@ msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
-#: src/frontend/ActionsManager.cpp:238 src/frontend/MainWin.cpp:1256
+#: src/frontend/ActionsManager.cpp:247 src/frontend/MainWin.cpp:1256
 #: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -9477,7 +9477,7 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2410
-#: src/frontend/ActionsManager.cpp:551
+#: src/frontend/ActionsManager.cpp:560
 #: src/frontend/datasources/ImportFileWidget.cpp:114
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:117
@@ -9527,7 +9527,7 @@ msgid "Inset Plot Area with Data"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:498
-#: src/frontend/ActionsManager.cpp:899
+#: src/frontend/ActionsManager.cpp:908
 #: src/frontend/notebook/NotebookView.cpp:175
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:442
@@ -11660,32 +11660,37 @@ msgid ""
 "[Computer software]. %3."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:203
+#: src/frontend/ActionsManager.cpp:197
 #, kde-format
 msgid "&Open Example"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:216 src/frontend/MainWin.cpp:1194
+#: src/frontend/ActionsManager.cpp:203
+#, kde-format
+msgid "&Full Screen Mode"
+msgstr ""
+
+#: src/frontend/ActionsManager.cpp:225 src/frontend/MainWin.cpp:1194
 #, kde-format
 msgid "Workbook"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:218
+#: src/frontend/ActionsManager.cpp:227
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1202
+#: src/frontend/ActionsManager.cpp:230 src/frontend/MainWin.cpp:1202
 #, kde-format
 msgid "Data Extractor"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:222
+#: src/frontend/ActionsManager.cpp:231
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:226
+#: src/frontend/ActionsManager.cpp:235
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:76
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:401
@@ -11696,368 +11701,373 @@ msgstr ""
 msgid "Spreadsheet"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:228
+#: src/frontend/ActionsManager.cpp:237
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:234
+#: src/frontend/ActionsManager.cpp:243
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:240
+#: src/frontend/ActionsManager.cpp:249
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:246
+#: src/frontend/ActionsManager.cpp:254
+#, kde-format
+msgid "Python Script"
+msgstr ""
+
+#: src/frontend/ActionsManager.cpp:255
 #, kde-format
 msgid "Creates a new Python script"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:264 src/frontend/MainWin.cpp:1264
+#: src/frontend/ActionsManager.cpp:273 src/frontend/MainWin.cpp:1264
 #, kde-format
 msgid "Note"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:265
+#: src/frontend/ActionsManager.cpp:274
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:269 src/frontend/MainWin.cpp:1186
+#: src/frontend/ActionsManager.cpp:278 src/frontend/MainWin.cpp:1186
 #, kde-format
 msgid "Folder"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:270
+#: src/frontend/ActionsManager.cpp:279
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:275
+#: src/frontend/ActionsManager.cpp:284
 #, kde-format
 msgid "From Live Data Source..."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:276
+#: src/frontend/ActionsManager.cpp:285
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:284
+#: src/frontend/ActionsManager.cpp:293
 #, kde-format
 msgid "Import data from a regular file"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:289
+#: src/frontend/ActionsManager.cpp:298
 #, kde-format
 msgid "From Directory..."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:291
+#: src/frontend/ActionsManager.cpp:300
 #, kde-format
 msgid "Import multiple files from a directory"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:296
+#: src/frontend/ActionsManager.cpp:305
 #, kde-format
 msgid "From kaggle.com..."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:297
+#: src/frontend/ActionsManager.cpp:306
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:302
+#: src/frontend/ActionsManager.cpp:311
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:306
+#: src/frontend/ActionsManager.cpp:315
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:307
+#: src/frontend/ActionsManager.cpp:316
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:311
+#: src/frontend/ActionsManager.cpp:320
 #, kde-format
 msgid "LabPlot Project..."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:312
+#: src/frontend/ActionsManager.cpp:321
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:317
+#: src/frontend/ActionsManager.cpp:326
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:318
+#: src/frontend/ActionsManager.cpp:327
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:354
+#: src/frontend/ActionsManager.cpp:363
 #, kde-format
 msgid "Export..."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:355
+#: src/frontend/ActionsManager.cpp:364
 #, kde-format
 msgid "Export selected element"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:361 src/frontend/ActionsManager.cpp:1427
-#: src/frontend/ActionsManager.cpp:1435
+#: src/frontend/ActionsManager.cpp:370 src/frontend/ActionsManager.cpp:1436
+#: src/frontend/ActionsManager.cpp:1444
 #, kde-format
 msgid "Share"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:366
+#: src/frontend/ActionsManager.cpp:375
 #, kde-format
 msgid "Color Maps Browser"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:367
+#: src/frontend/ActionsManager.cpp:376
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:376
+#: src/frontend/ActionsManager.cpp:385
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:377
+#: src/frontend/ActionsManager.cpp:386
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:386
+#: src/frontend/ActionsManager.cpp:395
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:406
+#: src/frontend/ActionsManager.cpp:415
 #, kde-format
 msgid "Close the active window"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:409
+#: src/frontend/ActionsManager.cpp:418
 #, kde-format
 msgid "Close &All"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:410
+#: src/frontend/ActionsManager.cpp:419
 #, kde-format
 msgid "Close all the windows"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:413
+#: src/frontend/ActionsManager.cpp:422
 #, kde-format
 msgid "Ne&xt"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:415
+#: src/frontend/ActionsManager.cpp:424
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:418
+#: src/frontend/ActionsManager.cpp:427
 #, kde-format
 msgid "Pre&vious"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:420
+#: src/frontend/ActionsManager.cpp:429
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:427
+#: src/frontend/ActionsManager.cpp:436
 #, kde-format
 msgid "Current &Folder Only"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:432
+#: src/frontend/ActionsManager.cpp:441
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:436
+#: src/frontend/ActionsManager.cpp:445
 #, kde-format
 msgid "&All"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:458
+#: src/frontend/ActionsManager.cpp:467
 #, kde-format
 msgid "Show Memory Usage"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:466
+#: src/frontend/ActionsManager.cpp:475
 #, kde-format
 msgid "Project Explorer"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:471
+#: src/frontend/ActionsManager.cpp:480
 #, kde-format
 msgid "Properties Explorer"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:476
+#: src/frontend/ActionsManager.cpp:485
 #, kde-format
 msgid "Worksheet Preview"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:499
+#: src/frontend/ActionsManager.cpp:508
 #, kde-format
 msgid "Configure CAS..."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:500
+#: src/frontend/ActionsManager.cpp:509
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:510
+#: src/frontend/ActionsManager.cpp:519
 #, kde-format
 msgid "What's New"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:542
+#: src/frontend/ActionsManager.cpp:551
 #, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:558
+#: src/frontend/ActionsManager.cpp:567
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:251
 #, kde-format
 msgid "Vertical Layout"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:563
+#: src/frontend/ActionsManager.cpp:572
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:255
 #, kde-format
 msgid "Horizontal Layout"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:568
+#: src/frontend/ActionsManager.cpp:577
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
 #: src/frontend/worksheet/WorksheetView.cpp:259
 #, kde-format
 msgid "Grid Layout"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:573
+#: src/frontend/ActionsManager.cpp:582
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
 msgid "No Layout"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:581 src/frontend/ActionsManager.cpp:622
+#: src/frontend/ActionsManager.cpp:590 src/frontend/ActionsManager.cpp:631
 #: src/frontend/worksheet/WorksheetView.cpp:187
 #: src/frontend/worksheet/WorksheetView.cpp:349
 #, kde-format
 msgid "Select and Edit"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:586 src/frontend/ActionsManager.cpp:813
+#: src/frontend/ActionsManager.cpp:595 src/frontend/ActionsManager.cpp:822
 #: src/frontend/datapicker/DatapickerImageView.cpp:132
 #: src/frontend/worksheet/WorksheetView.cpp:192
 #, kde-format
 msgid "Navigate"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:591 src/frontend/ActionsManager.cpp:818
+#: src/frontend/ActionsManager.cpp:600 src/frontend/ActionsManager.cpp:827
 #: src/frontend/datapicker/DatapickerImageView.cpp:136
 #: src/frontend/worksheet/WorksheetView.cpp:196
 #, kde-format
 msgid "Select and Zoom"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:597 src/frontend/ActionsManager.cpp:847
+#: src/frontend/ActionsManager.cpp:606 src/frontend/ActionsManager.cpp:856
 #, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:603 src/frontend/ActionsManager.cpp:853
+#: src/frontend/ActionsManager.cpp:612 src/frontend/ActionsManager.cpp:862
 #, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:616
+#: src/frontend/ActionsManager.cpp:625
 #, kde-format
 msgctxt "@action"
 msgid "Add New"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:628
+#: src/frontend/ActionsManager.cpp:637
 #: src/frontend/worksheet/WorksheetView.cpp:354
 #, kde-format
 msgid "Crosshair"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:633
+#: src/frontend/ActionsManager.cpp:642
 #: src/frontend/worksheet/WorksheetView.cpp:359
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:638
+#: src/frontend/ActionsManager.cpp:647
 #: src/frontend/worksheet/WorksheetView.cpp:364
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:643
+#: src/frontend/ActionsManager.cpp:652
 #: src/frontend/worksheet/WorksheetView.cpp:369
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:648 src/frontend/MainWin.cpp:1632
+#: src/frontend/ActionsManager.cpp:657 src/frontend/MainWin.cpp:1632
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Cursor"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:656
+#: src/frontend/ActionsManager.cpp:665
 #: src/frontend/worksheet/WorksheetView.cpp:382
 #, kde-format
 msgid "Auto Scale"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:660
+#: src/frontend/ActionsManager.cpp:669
 #: src/frontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Auto Scale X"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:664
+#: src/frontend/ActionsManager.cpp:673
 #: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Auto Scale Y"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:669 src/frontend/ActionsManager.cpp:772
+#: src/frontend/ActionsManager.cpp:678 src/frontend/ActionsManager.cpp:781
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:61
@@ -12067,7 +12077,7 @@ msgstr ""
 msgid "Zoom In"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:673 src/frontend/ActionsManager.cpp:775
+#: src/frontend/ActionsManager.cpp:682 src/frontend/ActionsManager.cpp:784
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:65
@@ -12077,128 +12087,128 @@ msgstr ""
 msgid "Zoom Out"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:677
+#: src/frontend/ActionsManager.cpp:686
 #: src/frontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Zoom In X"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:681
+#: src/frontend/ActionsManager.cpp:690
 #: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Zoom Out X"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:685
+#: src/frontend/ActionsManager.cpp:694
 #: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Zoom In Y"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:689
+#: src/frontend/ActionsManager.cpp:698
 #: src/frontend/worksheet/WorksheetView.cpp:414
 #, kde-format
 msgid "Zoom Out Y"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:694
+#: src/frontend/ActionsManager.cpp:703
 #: src/frontend/worksheet/WorksheetView.cpp:418
 #, kde-format
 msgid "Shift Left X"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:698
+#: src/frontend/ActionsManager.cpp:707
 #: src/frontend/worksheet/WorksheetView.cpp:420
 #, kde-format
 msgid "Shift Right X"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:702
+#: src/frontend/ActionsManager.cpp:711
 #: src/frontend/worksheet/WorksheetView.cpp:422
 #, kde-format
 msgid "Shift Up Y"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:706
+#: src/frontend/ActionsManager.cpp:715
 #: src/frontend/worksheet/WorksheetView.cpp:424
 #, kde-format
 msgid "Shift Down Y"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:718
+#: src/frontend/ActionsManager.cpp:727
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:543
 #, kde-format
 msgid "Insert Row Above"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:721
+#: src/frontend/ActionsManager.cpp:730
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:544
 #, kde-format
 msgid "Insert Row Below"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:724
+#: src/frontend/ActionsManager.cpp:733
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:547
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:728
+#: src/frontend/ActionsManager.cpp:737
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:396
 #, kde-format
 msgid "Insert Column Left"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:731
+#: src/frontend/ActionsManager.cpp:740
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:397
 #, kde-format
 msgid "Insert Column Right"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:734
+#: src/frontend/ActionsManager.cpp:743
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:400
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:738
+#: src/frontend/ActionsManager.cpp:747
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:530
 #, kde-format
 msgid "&Sort..."
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:739
+#: src/frontend/ActionsManager.cpp:748
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:531
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:742
+#: src/frontend/ActionsManager.cpp:751
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:532
 #, kde-format
 msgid "Sort &Ascending"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:743
+#: src/frontend/ActionsManager.cpp:752
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:533
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:746
+#: src/frontend/ActionsManager.cpp:755
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:534
 #, kde-format
 msgid "Sort &Descending"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:747
+#: src/frontend/ActionsManager.cpp:756
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:535
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/ActionsManager.cpp:758 src/frontend/ActionsManager.cpp:1593
+#: src/frontend/ActionsManager.cpp:767 src/frontend/ActionsManager.cpp:1602
 #: src/frontend/dockwidgets/LiveDataDock.cpp:239
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
@@ -12207,125 +12217,125 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #. i18n: ectx: property (text), widget (QLabel, lUpdate)
-#: src/frontend/ActionsManager.cpp:761
+#: src/frontend/ActionsManager.cpp:770
 #: src/frontend/ui/dockwidgets/livedatadock.ui:172
 #: src/frontend/ui/dockwidgets/livedatadock.ui:187
 #, kde-format
 msgid "Update"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:778
+#: src/frontend/ActionsManager.cpp:787
 #: src/frontend/notebook/NotebookView.cpp:69
 #, kde-format
 msgid "Find"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/frontend/ActionsManager.cpp:781
+#: src/frontend/ActionsManager.cpp:790
 #: src/frontend/notebook/NotebookView.cpp:77
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:784
+#: src/frontend/ActionsManager.cpp:793
 #: src/frontend/notebook/NotebookView.cpp:80
 #: src/frontend/notebook/NotebookView.cpp:398
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:798
+#: src/frontend/ActionsManager.cpp:807
 #: src/frontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:803
+#: src/frontend/ActionsManager.cpp:812
 #: src/frontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Curve Points"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:808
+#: src/frontend/ActionsManager.cpp:817
 #: src/frontend/datapicker/DatapickerImageView.cpp:148
 #, kde-format
 msgid "Select Curve Segments"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:824
+#: src/frontend/ActionsManager.cpp:833
 #: src/frontend/datapicker/DatapickerImageView.cpp:153
 #, kde-format
 msgid "New Curve"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:830
+#: src/frontend/ActionsManager.cpp:839
 #: src/frontend/datapicker/DatapickerImageView.cpp:156
 #, kde-format
 msgid "Shift Left"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:834
+#: src/frontend/ActionsManager.cpp:843
 #: src/frontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
 msgid "Shift Right"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:838
+#: src/frontend/ActionsManager.cpp:847
 #: src/frontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Up"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:842
+#: src/frontend/ActionsManager.cpp:851
 #: src/frontend/datapicker/DatapickerImageView.cpp:168
 #, kde-format
 msgid "Shift Down"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:938
+#: src/frontend/ActionsManager.cpp:947
 #, kde-format
 msgid "Window Visibility"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:955
+#: src/frontend/ActionsManager.cpp:964
 #, kde-format
 msgid "Color Scheme"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1393
+#: src/frontend/ActionsManager.cpp:1402
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1427
+#: src/frontend/ActionsManager.cpp:1436
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1431
+#: src/frontend/ActionsManager.cpp:1440
 #, kde-format
 msgid "Project shared successfully"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1434
+#: src/frontend/ActionsManager.cpp:1443
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1589
+#: src/frontend/ActionsManager.cpp:1598
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, kde-format
 msgid "Continue"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1590
+#: src/frontend/ActionsManager.cpp:1599
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1594
+#: src/frontend/ActionsManager.cpp:1603
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
 #, kde-format
 msgid "Pause Reading"
@@ -12523,16 +12533,16 @@ msgid "Curve"
 msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4197
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4252
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4195
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4250
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to export"
 msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4197
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4252
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4195
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4250
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -15742,8 +15752,10 @@ msgstr ""
 msgid "calculation time: %1 ms"
 msgstr ""
 
+#. i18n("Implicit"));
+#. tooltip texts
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:72
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:75
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:154
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
@@ -15887,45 +15899,45 @@ msgstr ""
 msgid "Differentiation status: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:69
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:148
 #, kde-format
 msgid "Cartesian"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:70
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:149
 #, kde-format
 msgid "Polar"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:167
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:172
 #, kde-format
 msgid "x, min"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:168
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:173
 #, kde-format
 msgid "x, max"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:179
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:184
 #, kde-format
 msgid "φ, min"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:180
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:185
 #, kde-format
 msgid "φ, max"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:192
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:197
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:397
 #, kde-format
 msgid "t, min"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:193
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:198
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:118
 #, kde-format
 msgid "t, max"
@@ -17696,7 +17708,7 @@ msgid "%1: cut selected cell(s)"
 msgstr ""
 
 #: src/frontend/matrix/MatrixView.cpp:710
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1847
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1845
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr ""
@@ -17868,7 +17880,7 @@ msgid "Ready"
 msgstr ""
 
 #: src/frontend/notebook/NotebookView.cpp:419
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:919
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:915
 #, kde-format
 msgid "Hypothesis Test for %1"
 msgstr ""
@@ -17990,7 +18002,7 @@ msgid "Search/Filter Options"
 msgstr ""
 
 #: src/frontend/ProjectExplorer.cpp:274 src/frontend/ProjectExplorer.cpp:432
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1060
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1056
 #, kde-format
 msgid "Columns"
 msgstr ""
@@ -19562,15 +19574,15 @@ msgid "Flatten Columns"
 msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:379
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1169
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1573
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1165
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1571
 #, kde-format
 msgid "Show Comments"
 msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:380
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1180
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1578
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1176
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1576
 #, kde-format
 msgid "Show Sparklines"
 msgstr ""
@@ -19624,7 +19636,7 @@ msgid "Insert Multiple Columns Right"
 msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:402
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1679
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1677
 #, kde-format
 msgid "Freeze Column"
 msgstr ""
@@ -19777,7 +19789,7 @@ msgid "Row Statisti&cs"
 msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:558
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2350
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2348
 #, kde-format
 msgid "Seasonal Decomposition"
 msgstr ""
@@ -19818,342 +19830,342 @@ msgstr ""
 msgid "Ladder of Powers"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1167
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1571
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1163
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1569
 #, kde-format
 msgid "Hide Comments"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1178
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1576
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1174
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1574
 #, kde-format
 msgid "Hide Sparklines"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1683
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1681
 #, kde-format
 msgid "Unfreeze Column"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1959
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1957
 #, kde-format
 msgid "Import Headers"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1960
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1958
 #, kde-format
 msgid "Do you want to use the first row as column headers?"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2123
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2121
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2137
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2135
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2184
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2182
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2358
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2369
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2356
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2367
 #, kde-format
 msgid "Seasonal Decomposition for %1"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2390
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2388
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2454
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2452
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2497
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2495
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2622
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2620
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2632
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2653
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2670
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2686
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2630
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2651
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2668
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2684
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2765
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2803
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2763
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2801
 #, kde-format
 msgid "Insert empty columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2766
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2804
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2764
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2802
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2837
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2835
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2934
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2932
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3006
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3004
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3020
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3018
 #, kde-format
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3021
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3019
 #, kde-format
 msgid "Transpose Spreadsheet"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3057
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3055
 #, kde-format
 msgid "%1: normalize columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3077
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3075
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3088
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3086
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3099
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3097
 #, kde-format
 msgid "Max = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3110
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3108
 #, kde-format
 msgid "Count = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3121
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3119
 #, kde-format
 msgid "Mean = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3132
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3130
 #, kde-format
 msgid "Median = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3144
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3142
 #, kde-format
 msgid "Mode = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3146
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3144
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3157
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3155
 #, kde-format
 msgid "Range = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3168
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3202
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3166
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3200
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3179
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3214
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3177
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3212
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3190
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3226
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3188
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3224
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3238
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3236
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3257
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3255
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3269
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3267
 #, kde-format
 msgid "%1: power transform columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3385
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3383
 #, kde-format
 msgid "%1: column statistics"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3416
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3414
 #, kde-format
 msgid "Selection in %1"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3459
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3457
 #, kde-format
 msgid "%1: row statistics"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3469
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3467
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3494
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3530
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3492
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3528
 #, kde-format
 msgid "Insert multiple rows"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3495
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3531
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3493
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3529
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3566
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3564
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3621
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3619
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3889
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3887
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3898
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3896
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3917
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3915
 #, kde-format
 msgid "row"
 msgid_plural "rows"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3918
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3916
 #, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3919
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3917
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3918
 #, kde-format
 msgid "masked value"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3918
 #, kde-format
 msgid "masked values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3919
 #, kde-format
 msgid "missing value"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3919
 #, kde-format
 msgid "missing values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3922
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3922
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3923
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
 #, kde-format
 msgid "%1"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3923
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
 #, kde-format
 msgid ", "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3927
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3925
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3937
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3935
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4016
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4014
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4631
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4629
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4663
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4661
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4741
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4739
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr ""
@@ -22557,7 +22569,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/barplotdock.ui:237
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:164
 #: src/frontend/widgets/ErrorBarWidget.cpp:86
-#: src/frontend/widgets/LineWidget.cpp:48
+#: src/frontend/widgets/LineWidget.cpp:113
 #, kde-format
 msgid "Bars"
 msgstr ""
@@ -26619,47 +26631,47 @@ msgstr ""
 msgid "Date and Time"
 msgstr ""
 
-#: src/frontend/widgets/LineWidget.cpp:50
+#: src/frontend/widgets/LineWidget.cpp:115
 #, kde-format
 msgid "Drop Lines"
 msgstr ""
 
-#: src/frontend/widgets/LineWidget.cpp:51
+#: src/frontend/widgets/LineWidget.cpp:116
 #, kde-format
 msgid "Half-Bars"
 msgstr ""
 
-#: src/frontend/widgets/LineWidget.cpp:58
+#: src/frontend/widgets/LineWidget.cpp:121
 #, kde-format
 msgid "No Drop Lines"
 msgstr ""
 
-#: src/frontend/widgets/LineWidget.cpp:59
+#: src/frontend/widgets/LineWidget.cpp:122
 #, kde-format
 msgid "Drop Lines, X"
 msgstr ""
 
-#: src/frontend/widgets/LineWidget.cpp:60
+#: src/frontend/widgets/LineWidget.cpp:123
 #, kde-format
 msgid "Drop Lines, Y"
 msgstr ""
 
-#: src/frontend/widgets/LineWidget.cpp:61
+#: src/frontend/widgets/LineWidget.cpp:124
 #, kde-format
 msgid "Drop Lines, XY"
 msgstr ""
 
-#: src/frontend/widgets/LineWidget.cpp:62
+#: src/frontend/widgets/LineWidget.cpp:125
 #, kde-format
 msgid "Drop Lines, X, Zero Baseline"
 msgstr ""
 
-#: src/frontend/widgets/LineWidget.cpp:63
+#: src/frontend/widgets/LineWidget.cpp:126
 #, kde-format
 msgid "Drop Lines, X, Min Baseline"
 msgstr ""
 
-#: src/frontend/widgets/LineWidget.cpp:64
+#: src/frontend/widgets/LineWidget.cpp:127
 #, kde-format
 msgid "Drop Lines, X, Max Baseline"
 msgstr ""

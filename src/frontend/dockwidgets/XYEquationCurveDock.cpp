@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for editing properties of equation curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -65,15 +65,9 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.tbConstants2->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
 	uiGeneralTab.tbFunctions2->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
-	// TODO: move to retranslateUi()
-	uiGeneralTab.cbType->addItem(i18n("Cartesian"));
-	uiGeneralTab.cbType->addItem(i18n("Polar"));
-	uiGeneralTab.cbType->addItem(i18n("Parametric"));
-	// 	uiGeneralTab.cbType->addItem(i18n("Implicit"));
+
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
-	uiGeneralTab.pbRecalculate->setToolTip(i18n("Click this button or press Shift+Enter to recalculate the result."));
-
 	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::EquationType::Parametric);
 
 	// 	uiGeneralTab.teEquation1->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
@@ -147,6 +141,17 @@ bool XYEquationCurveDock::eventFilter(QObject* /* watched */, QEvent* event) {
 	}
 
 	return false;
+}
+
+void XYEquationCurveDock::retranslateUi() {
+	uiGeneralTab.cbType->clear();
+	uiGeneralTab.cbType->addItem(i18n("Cartesian"));
+	uiGeneralTab.cbType->addItem(i18n("Polar"));
+	uiGeneralTab.cbType->addItem(i18n("Parametric"));
+	// 	uiGeneralTab.cbType->addItem(i18n("Implicit"));
+
+	// tooltip texts
+	uiGeneralTab.pbRecalculate->setToolTip(i18n("Click this button or press Shift+Enter to recalculate the result."));
 }
 
 //*************************************************************

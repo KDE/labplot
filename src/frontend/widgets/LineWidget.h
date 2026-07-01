@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : line settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -25,6 +25,7 @@ public:
 	void setLines(const QList<Line*>&);
 	void setEnabled(bool);
 	void updateLocale();
+	void retranslateUi();
 
 	void load();
 	void loadConfig(const KConfigGroup&);

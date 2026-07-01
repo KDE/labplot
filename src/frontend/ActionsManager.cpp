@@ -251,7 +251,7 @@ void ActionsManager::initActions() {
 	connect(m_newWorksheetAction, &QAction::triggered, m_mainWindow, &MainWin::newWorksheet);
 
 #ifdef HAVE_SCRIPTING
-	m_newPythonScriptAction = new QAction(Script::icon(QStringLiteral("Python")), i18n("Script"), this);
+	m_newPythonScriptAction = new QAction(Script::icon(QStringLiteral("Python")), i18n("Python Script"), this);
 	m_newPythonScriptAction->setToolTip(i18n("Creates a new Python script"));
 	m_newPythonScriptAction->setData(QStringLiteral("Python"));
 	collection->addAction(QStringLiteral("new_python_script"), m_newPythonScriptAction);
