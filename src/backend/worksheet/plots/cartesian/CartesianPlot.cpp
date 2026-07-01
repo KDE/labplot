@@ -4741,9 +4741,6 @@ void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int
 	}
 	m_wheelZoomTimer->start(); // Restart timer on each wheel event
 
-	// Disable undo for individual operations since they're in a macro
-	q->setUndoAware(false);
-
 	if (considerDimension) {
 		// Only one dimension
 		switch (dim) {
@@ -4760,8 +4757,6 @@ void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int
 		else
 			q->zoomOut(xIndex, yIndex, sceneRelPos);
 	}
-
-	q->setUndoAware(true);
 }
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
