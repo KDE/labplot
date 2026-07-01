@@ -1216,18 +1216,19 @@ void DatapickerTest::datapickerDateTime() {
 	const qint64 dt3_ms = dt3.toMSecsSinceEpoch();
 	const qint64 expected_ms = dt1_ms + (dt3_ms - dt1_ms) / 2; // midpoint
 	const qint64 actual_ms = curve->posXColumn()->dateTimeAt(0).toMSecsSinceEpoch();
-	
+
 	// The actual DateTime value should be close to the expected midpoint
 	// (allowing some tolerance for timezone handling in Transform code)
 	const qint64 tolerance_ms = 3600000; // 1 hour tolerance
-	QVERIFY2(qAbs(actual_ms - expected_ms) <= tolerance_ms, 
+	QVERIFY2(qAbs(actual_ms - expected_ms) <= tolerance_ms,
 			 qPrintable(QStringLiteral("DateTime interpolation error: expected ~%1 ms, got %2 ms (diff: %3 ms)")
-						.arg(expected_ms).arg(actual_ms).arg(actual_ms - expected_ms)));
-	
+							.arg(expected_ms)
+							.arg(actual_ms)
+							.arg(actual_ms - expected_ms)));
+
 	// Verify the interpolated time is actually between dt1 and dt3
 	QVERIFY2(actual_ms >= dt1_ms && actual_ms <= dt3_ms,
-			 qPrintable(QStringLiteral("DateTime interpolation out of range: %1, should be between %2 and %3")
-						.arg(actual_ms).arg(dt1_ms).arg(dt3_ms)));
+			 qPrintable(QStringLiteral("DateTime interpolation out of range: %1, should be between %2 and %3").arg(actual_ms).arg(dt1_ms).arg(dt3_ms)));
 #endif
 	QCOMPARE(curve->posYColumn()->rowCount(), 1);
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6.); // logical coordinates
