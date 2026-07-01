@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-29 00:40+0000\n"
+"POT-Creation-Date: 2026-07-01 00:41+0000\n"
 "PO-Revision-Date: 2025-11-21 01:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -176,7 +176,7 @@ msgstr "Dagar"
 #: src/frontend/dockwidgets/XYCurveDock.cpp:433 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
-#: src/frontend/widgets/LineWidget.cpp:47
+#: src/frontend/widgets/LineWidget.cpp:112
 #, kde-format
 msgid "None"
 msgstr "Inget"
@@ -336,13 +336,13 @@ msgid "%1: unmask cells"
 msgstr "%1: avmaskera celler"
 
 #: src/backend/core/abstractcolumncommands.cpp:301
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2727
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2725
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: ställ in värmeavbildningsformat"
 
 #: src/backend/core/abstractcolumncommands.cpp:327
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2745
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2743
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: ta bort värmeavbildningsformat"
@@ -618,7 +618,7 @@ msgid "%1: change cell values"
 msgstr "%1: ändra cellvärden"
 
 #: src/backend/core/column/columncommands.cpp:541
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2901
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2899
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: ställ in diagrambenämning"
@@ -2352,10 +2352,10 @@ msgstr "Nyckel"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #: src/frontend/matrix/MatrixView.cpp:638
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:187
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2633
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2653
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2670
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2686
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2631
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2651
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2668
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2684
 #: src/frontend/ui/dockwidgets/columndock.ui:542
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:65
 #, kde-format
@@ -6409,13 +6409,13 @@ msgid "unexpected end of document"
 msgstr "oväntat dokumentslut"
 
 #: src/backend/matrix/Matrix.cpp:136
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3954
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3952
 #, kde-format
 msgid "FITS image"
 msgstr "FITS-bild"
 
 #: src/backend/matrix/Matrix.cpp:136
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3954
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3952
 #, kde-format
 msgid "FITS table"
 msgstr "FITS-tabell"
@@ -7154,7 +7154,7 @@ msgstr "Opheim"
 msgid "Lang"
 msgstr "Lang"
 
-#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:49
+#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:114
 #, kde-format
 msgid "Envelope"
 msgstr "Inneslutning"
@@ -7571,7 +7571,7 @@ msgid "%1: run %2 script"
 msgstr "%1: kör skript %2"
 
 #: src/backend/script/Script.cpp:326 src/backend/script/Script.cpp:331
-#: src/frontend/ActionsManager.cpp:254 src/frontend/MainWin.cpp:1230
+#: src/frontend/MainWin.cpp:1230
 #, kde-format
 msgid "Script"
 msgstr "Skript"
@@ -8788,7 +8788,7 @@ msgstr ""
 "Misslyckades med att förkasta nollhypotesen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1935
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:150
 #, kde-format
 msgid "Parametric"
 msgstr "Parametrisk"
@@ -12048,6 +12048,12 @@ msgstr "Skapar en ny matris för dataredigering"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Skapar ett nytt kalkylark för datauppritning"
 
+#: src/frontend/ActionsManager.cpp:254
+#, fuzzy, kde-format
+#| msgid "Python scripting support"
+msgid "Python Script"
+msgstr "Stöd för Python-skript"
+
 #: src/frontend/ActionsManager.cpp:255
 #, fuzzy, kde-format
 #| msgid "Creates a new %1 script"
@@ -12867,16 +12873,16 @@ msgid "Curve"
 msgstr "Kurva"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4197
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4252
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4195
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4250
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to export"
 msgstr "Misslyckades exportera"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4197
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4252
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4195
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4250
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -16333,8 +16339,10 @@ msgstr "beräkningstid: %1 s"
 msgid "calculation time: %1 ms"
 msgstr "beräkningstid: %1 ms"
 
+#. i18n("Implicit"));
+#. tooltip texts
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:72
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:75
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:154
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
@@ -16486,45 +16494,45 @@ msgstr "Om markerad, anslut bara datapunkter för strikt ökande X-värden"
 msgid "Differentiation status: %1"
 msgstr "Deriveringsstatus: %1"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:69
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:148
 #, kde-format
 msgid "Cartesian"
 msgstr "Kartesisk"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:70
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:149
 #, kde-format
 msgid "Polar"
 msgstr "Polär"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:167
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:172
 #, kde-format
 msgid "x, min"
 msgstr "x, min"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:168
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:173
 #, kde-format
 msgid "x, max"
 msgstr "x, max"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:179
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:184
 #, kde-format
 msgid "φ, min"
 msgstr "φ, min"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:180
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:185
 #, kde-format
 msgid "φ, max"
 msgstr "φ, max"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:192
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:197
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:397
 #, kde-format
 msgid "t, min"
 msgstr "t, min"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:193
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:198
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:118
 #, kde-format
 msgid "t, max"
@@ -18335,7 +18343,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: klipp ut markerad(e) cell(er)"
 
 #: src/frontend/matrix/MatrixView.cpp:710
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1847
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1845
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: klistra in från klippbordet"
@@ -18508,7 +18516,7 @@ msgid "Ready"
 msgstr "Klar"
 
 #: src/frontend/notebook/NotebookView.cpp:419
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:919
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:915
 #, kde-format
 msgid "Hypothesis Test for %1"
 msgstr "Hypotestest för %1"
@@ -18630,7 +18638,7 @@ msgid "Search/Filter Options"
 msgstr "Sök- och filtreringsalternativ"
 
 #: src/frontend/ProjectExplorer.cpp:274 src/frontend/ProjectExplorer.cpp:432
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1060
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1056
 #, kde-format
 msgid "Columns"
 msgstr "Kolumner"
@@ -20264,15 +20272,15 @@ msgid "Flatten Columns"
 msgstr "Platta ut kolumner"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:379
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1169
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1573
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1165
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1571
 #, kde-format
 msgid "Show Comments"
 msgstr "Visa kommentarer"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:380
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1180
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1578
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1176
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1576
 #, kde-format
 msgid "Show Sparklines"
 msgstr "Visa små linjediagram"
@@ -20328,7 +20336,7 @@ msgid "Insert Multiple Columns Right"
 msgstr "Infoga flera kolumner till höger"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:402
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1679
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1677
 #, kde-format
 msgid "Freeze Column"
 msgstr "Frys kolumn"
@@ -20481,7 +20489,7 @@ msgid "Row Statisti&cs"
 msgstr "Radstatisti&k"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:558
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2350
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2348
 #, kde-format
 msgid "Seasonal Decomposition"
 msgstr ""
@@ -20523,110 +20531,110 @@ msgstr "Normalisera"
 msgid "Ladder of Powers"
 msgstr "Potensstege"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1167
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1571
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1163
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1569
 #, kde-format
 msgid "Hide Comments"
 msgstr "Dölj kommentarer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1178
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1576
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1174
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1574
 #, kde-format
 msgid "Hide Sparklines"
 msgstr "Dölj små linjediagram"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1683
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1681
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "Ta bort frysning av kolumn"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1959
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1957
 #, fuzzy, kde-format
 #| msgid "Import as:"
 msgid "Import Headers"
 msgstr "Importera som:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1960
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1958
 #, kde-format
 msgid "Do you want to use the first row as column headers?"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2123
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2121
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Inte tillräckligt med minne för att slutföra operationen."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2137
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2135
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: maskera markerade celler"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2184
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2182
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: avmaskera markerade celler"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2358
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2369
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2356
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2367
 #, kde-format
 msgid "Seasonal Decomposition for %1"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2390
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2388
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: fyll celler med radnummer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2454
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2452
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: fyll kolumn med radnummer"
 msgstr[1] "%1: fyll kolumner med radnummer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2497
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2495
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: fyll celler med slumpvärden"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2622
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2620
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: fyll celler med konstantvärden"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2632
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2653
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2670
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2686
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2630
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2651
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2668
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2684
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Fyll markering med konstant värde"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2765
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2803
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2763
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2801
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Infoga tomma kolumner"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2766
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2804
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2764
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2802
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Ange antal kolumner att infoga"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2837
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2835
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: ta bort markerade kolumner"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2934
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2932
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: vänd kolumn"
 msgstr[1] "%1: vänd kolumner"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3006
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3004
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -20634,236 +20642,236 @@ msgid ""
 msgstr ""
 "De markerade kolumnerna har olika datatyper och kan därför inte plattas ut."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3020
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3018
 #, fuzzy, kde-format
 #| msgid "The file already exists. Do you really want to overwrite it?"
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr "Filen finns redan. Vill du verkligen skriva över den?"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3021
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3019
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Print Spreadsheet"
 msgid "Transpose Spreadsheet"
 msgstr "Skriv ut kalkylark"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3057
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3055
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: normalisera kolumner"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3077
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3075
 #, kde-format
 msgid "Sum = 0"
 msgstr "Summa = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3088
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3086
 #, kde-format
 msgid "Min = 0"
 msgstr "Min = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3099
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3097
 #, kde-format
 msgid "Max = 0"
 msgstr "Max = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3110
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3108
 #, kde-format
 msgid "Count = 0"
 msgstr "Antal = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3121
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3119
 #, kde-format
 msgid "Mean = 0"
 msgstr "Medelvärde = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3132
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3130
 #, kde-format
 msgid "Median = 0"
 msgstr "Median = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3144
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3142
 #, kde-format
 msgid "Mode = 0"
 msgstr "Läge = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3146
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3144
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "'Läge ej angivet'"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3157
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3155
 #, kde-format
 msgid "Range = 0"
 msgstr "Intervall = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3168
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3202
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3166
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3200
 #, kde-format
 msgid "SD = 0"
 msgstr "SA = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3179
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3214
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3177
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3212
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3190
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3226
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3188
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3224
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3238
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3236
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "Max - Min = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3257
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3255
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normalisering ej möjlig"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3269
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3267
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: potenstransformera kolumner"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3385
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3383
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: kolumnstatistik"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3416
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3414
 #, kde-format
 msgid "Selection in %1"
 msgstr "Markering i %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3459
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3457
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: radstatistik"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3469
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3467
 #, kde-format
 msgid "Row %1"
 msgstr "Rad %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3494
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3530
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3492
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3528
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Infoga flera rader"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3495
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3531
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3493
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3529
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Ange antal rader att infoga"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3566
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3564
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: ta bort markerade rader"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3621
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3619
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: rensa markerade celler"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3889
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3887
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr "Markerade 1: %1 rader, %2 kolumner"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3898
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3896
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr "Markerade: %1 celler"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3917
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3915
 #, kde-format
 msgid "row"
 msgid_plural "rows"
 msgstr[0] "rad"
 msgstr[1] "rader"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3918
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3916
 #, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "kolumn"
 msgstr[1] "kolumner"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3919
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3917
 #, kde-format
 msgid "cells"
 msgstr "celler"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3918
 #, kde-format
 msgid "masked value"
 msgstr "maskerat värde"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3918
 #, kde-format
 msgid "masked values"
 msgstr "maskerade värden"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3919
 #, kde-format
 msgid "missing value"
 msgstr "saknat värde"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3919
 #, kde-format
 msgid "missing values"
 msgstr "saknade värden"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3922
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
 #, kde-format
 msgid " , "
 msgstr " , "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3922
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3923
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3923
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
 #, kde-format
 msgid ", "
 msgstr ", "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3927
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3925
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr "Markerade: %1 %2, %3 %4%5 %6 %7 %8"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3937
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3935
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Valda: %1 %2%3 %4 %5 %6"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4016
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4014
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Skriv ut kalkylark"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4631
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4629
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Kunde inte skapa SQLite-databasen %1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4663
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4661
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Misslyckades skapa tabell i SQLite-databasen %1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4741
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4739
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Misslyckades infoga värde i tabellen."
@@ -23289,7 +23297,7 @@ msgstr "y:"
 #: src/frontend/ui/dockwidgets/barplotdock.ui:237
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:164
 #: src/frontend/widgets/ErrorBarWidget.cpp:86
-#: src/frontend/widgets/LineWidget.cpp:48
+#: src/frontend/widgets/LineWidget.cpp:113
 #, kde-format
 msgid "Bars"
 msgstr "Staplar"
@@ -27432,47 +27440,47 @@ msgstr "Datum"
 msgid "Date and Time"
 msgstr "Datum och tid"
 
-#: src/frontend/widgets/LineWidget.cpp:50
+#: src/frontend/widgets/LineWidget.cpp:115
 #, kde-format
 msgid "Drop Lines"
 msgstr "Markeringslinjer"
 
-#: src/frontend/widgets/LineWidget.cpp:51
+#: src/frontend/widgets/LineWidget.cpp:116
 #, kde-format
 msgid "Half-Bars"
 msgstr "Halvstaplar"
 
-#: src/frontend/widgets/LineWidget.cpp:58
+#: src/frontend/widgets/LineWidget.cpp:121
 #, kde-format
 msgid "No Drop Lines"
 msgstr "Inga markeringslinjer"
 
-#: src/frontend/widgets/LineWidget.cpp:59
+#: src/frontend/widgets/LineWidget.cpp:122
 #, kde-format
 msgid "Drop Lines, X"
 msgstr "Markeringslinjer, X"
 
-#: src/frontend/widgets/LineWidget.cpp:60
+#: src/frontend/widgets/LineWidget.cpp:123
 #, kde-format
 msgid "Drop Lines, Y"
 msgstr "Markeringslinjer, Y"
 
-#: src/frontend/widgets/LineWidget.cpp:61
+#: src/frontend/widgets/LineWidget.cpp:124
 #, kde-format
 msgid "Drop Lines, XY"
 msgstr "Markeringslinjer, XY"
 
-#: src/frontend/widgets/LineWidget.cpp:62
+#: src/frontend/widgets/LineWidget.cpp:125
 #, kde-format
 msgid "Drop Lines, X, Zero Baseline"
 msgstr "Markeringslinjer, X, noll-baslinje"
 
-#: src/frontend/widgets/LineWidget.cpp:63
+#: src/frontend/widgets/LineWidget.cpp:126
 #, kde-format
 msgid "Drop Lines, X, Min Baseline"
 msgstr "Markeringslinjer, X, min-baslinje"
 
-#: src/frontend/widgets/LineWidget.cpp:64
+#: src/frontend/widgets/LineWidget.cpp:127
 #, kde-format
 msgid "Drop Lines, X, Max Baseline"
 msgstr "Markeringslinjer, X, max-baslinje"

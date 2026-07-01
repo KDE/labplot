@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-29 00:40+0000\n"
+"POT-Creation-Date: 2026-07-01 00:41+0000\n"
 "PO-Revision-Date: 2026-03-15 15:36+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -181,7 +181,7 @@ msgstr "Laethanta"
 #: src/frontend/dockwidgets/XYCurveDock.cpp:433 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
-#: src/frontend/widgets/LineWidget.cpp:47
+#: src/frontend/widgets/LineWidget.cpp:112
 #, kde-format
 msgid "None"
 msgstr "Dada"
@@ -347,13 +347,13 @@ msgid "%1: unmask cells"
 msgstr "%1: cealla dímhasc"
 
 #: src/backend/core/abstractcolumncommands.cpp:301
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2727
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2725
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: socraigh formáid léarscáile teasa"
 
 #: src/backend/core/abstractcolumncommands.cpp:327
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2745
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2743
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: bain formáid léarscáil teasa"
@@ -626,7 +626,7 @@ msgid "%1: change cell values"
 msgstr "%1: athraigh luachanna na gcealla"
 
 #: src/backend/core/column/columncommands.cpp:541
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2901
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2899
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: socraigh ainmniú plota"
@@ -2362,10 +2362,10 @@ msgstr "Eochair"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #: src/frontend/matrix/MatrixView.cpp:638
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:187
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2633
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2653
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2670
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2686
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2631
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2651
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2668
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2684
 #: src/frontend/ui/dockwidgets/columndock.ui:542
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:65
 #, kde-format
@@ -6424,13 +6424,13 @@ msgid "unexpected end of document"
 msgstr "deireadh gan choinne an doiciméid"
 
 #: src/backend/matrix/Matrix.cpp:136
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3954
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3952
 #, kde-format
 msgid "FITS image"
 msgstr "Íomhá FITS"
 
 #: src/backend/matrix/Matrix.cpp:136
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3954
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3952
 #, kde-format
 msgid "FITS table"
 msgstr "Tábla FITS"
@@ -7187,7 +7187,7 @@ msgstr "Opheim"
 msgid "Lang"
 msgstr "Lang"
 
-#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:49
+#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:114
 #, kde-format
 msgid "Envelope"
 msgstr "Clúdach"
@@ -7604,7 +7604,7 @@ msgid "%1: run %2 script"
 msgstr "%1: rith script %2"
 
 #: src/backend/script/Script.cpp:326 src/backend/script/Script.cpp:331
-#: src/frontend/ActionsManager.cpp:254 src/frontend/MainWin.cpp:1230
+#: src/frontend/MainWin.cpp:1230
 #, kde-format
 msgid "Script"
 msgstr "Script"
@@ -8754,7 +8754,7 @@ msgstr ""
 "(aonchineálach). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1935
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:150
 #, kde-format
 msgid "Parametric"
 msgstr "Paraiméadrach"
@@ -11983,6 +11983,12 @@ msgstr "Cruthaíonn maitrís nua le haghaidh eagarthóireacht sonraí"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Cruthaíonn bileog oibre nua le haghaidh plota sonraí"
 
+#: src/frontend/ActionsManager.cpp:254
+#, fuzzy, kde-format
+#| msgid "Python scripting support"
+msgid "Python Script"
+msgstr "Tacaíocht scriptithe Python"
+
 #: src/frontend/ActionsManager.cpp:255
 #, kde-format
 msgid "Creates a new Python script"
@@ -12801,16 +12807,16 @@ msgid "Curve"
 msgstr "Cuar"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4197
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4252
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4195
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4250
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to export"
 msgstr "Theip ar an onnmhairiú"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:884
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4197
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4252
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4195
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4250
 #: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -16344,8 +16350,10 @@ msgstr "am ríofa: %1 s"
 msgid "calculation time: %1 ms"
 msgstr "am ríofa: %1 ms"
 
+#. i18n("Implicit"));
+#. tooltip texts
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:72
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:75
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:154
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
@@ -16506,45 +16514,45 @@ msgstr ""
 msgid "Differentiation status: %1"
 msgstr "Stádas difreála: %1"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:69
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:148
 #, kde-format
 msgid "Cartesian"
 msgstr "Cairtéiseach"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:70
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:149
 #, kde-format
 msgid "Polar"
 msgstr "Polach"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:167
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:172
 #, kde-format
 msgid "x, min"
 msgstr "x, íosmhéid"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:168
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:173
 #, kde-format
 msgid "x, max"
 msgstr "x, uasmhéid"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:179
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:184
 #, kde-format
 msgid "φ, min"
 msgstr "φ, íosmhéid"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:180
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:185
 #, kde-format
 msgid "φ, max"
 msgstr "φ, uasmhéid"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:192
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:197
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:397
 #, kde-format
 msgid "t, min"
 msgstr "t, íosmhéid"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:193
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:198
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:118
 #, kde-format
 msgid "t, max"
@@ -18363,7 +18371,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: gearr an cill(í) roghnaithe"
 
 #: src/frontend/matrix/MatrixView.cpp:710
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1847
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1845
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: greamaigh ón ngearrthaisce"
@@ -18536,7 +18544,7 @@ msgid "Ready"
 msgstr "Réidh"
 
 #: src/frontend/notebook/NotebookView.cpp:419
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:919
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:915
 #, kde-format
 msgid "Hypothesis Test for %1"
 msgstr "Tástáil Hipitéise do %1"
@@ -18658,7 +18666,7 @@ msgid "Search/Filter Options"
 msgstr "Roghanna Cuardaigh/Scagaire"
 
 #: src/frontend/ProjectExplorer.cpp:274 src/frontend/ProjectExplorer.cpp:432
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1060
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1056
 #, kde-format
 msgid "Columns"
 msgstr "Colúin"
@@ -20313,15 +20321,15 @@ msgid "Flatten Columns"
 msgstr "Leacaigh Colúin"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:379
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1169
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1573
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1165
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1571
 #, kde-format
 msgid "Show Comments"
 msgstr "Taispeáin Tráchtanna"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:380
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1180
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1578
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1176
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1576
 #, kde-format
 msgid "Show Sparklines"
 msgstr "Taispeáin Línte Sparkle"
@@ -20375,7 +20383,7 @@ msgid "Insert Multiple Columns Right"
 msgstr "Cuir Ilcholúin Ar Dheis"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:402
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1679
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1677
 #, kde-format
 msgid "Freeze Column"
 msgstr "Colún Reoite"
@@ -20528,7 +20536,7 @@ msgid "Row Statisti&cs"
 msgstr "Staitisti&cí Ró"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:558
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2350
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2348
 #, kde-format
 msgid "Seasonal Decomposition"
 msgstr "Dianscaoileadh Séasúrach"
@@ -20569,61 +20577,61 @@ msgstr "Normalú"
 msgid "Ladder of Powers"
 msgstr "Dréimire na gCumhachtaí"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1167
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1571
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1163
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1569
 #, kde-format
 msgid "Hide Comments"
 msgstr "Folaigh Tráchtanna"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1178
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1576
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1174
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1574
 #, kde-format
 msgid "Hide Sparklines"
 msgstr "Folaigh Línte Spark"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1683
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1681
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "Díreoigh an Colún"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1959
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1957
 #, fuzzy, kde-format
 #| msgid "Import as:"
 msgid "Import Headers"
 msgstr "Iompórtáil mar:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1960
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1958
 #, kde-format
 msgid "Do you want to use the first row as column headers?"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2123
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2121
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Níl dóthain cuimhne ann chun an oibríocht seo a chríochnú."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2137
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2135
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: cuir cealla roghnaithe i bhfolach"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2184
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2182
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: dímhasc na gcealla roghnaithe"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2358
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2369
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2356
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2367
 #, kde-format
 msgid "Seasonal Decomposition for %1"
 msgstr "Dianscaoileadh Séasúrach do %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2390
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2388
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: líon na cealla le huimhreacha sraithe"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2454
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2452
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
@@ -20633,42 +20641,42 @@ msgstr[2] "%1: líon na colúin le huimhreacha sraithe"
 msgstr[3] "%1: líon na colúin le huimhreacha sraithe"
 msgstr[4] "%1: líon na colúin le huimhreacha sraithe"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2497
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2495
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: líon cealla le luachanna randamacha"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2622
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2620
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: líon cealla le luachanna tairiseacha"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2632
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2653
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2670
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2686
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2630
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2651
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2668
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2684
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Líon an rogha le luach tairiseach"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2765
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2803
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2763
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2801
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Cuir colúin folamha isteach"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2766
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2804
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2764
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2802
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Cuir isteach líon na gcolún le cur isteach"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2837
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2835
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: bain na colúin roghnaithe"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2934
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2932
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
@@ -20678,7 +20686,7 @@ msgstr[2] "%1: colúin droim ar ais"
 msgstr[3] "%1: colúin droim ar ais"
 msgstr[4] "%1: colúin droim ar ais"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3006
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3004
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -20687,154 +20695,154 @@ msgstr ""
 "Tá cineálacha sonraí difriúla ag na colúin roghnaithe agus ní féidir iad a "
 "leacú mar gheall air seo. "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3020
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3018
 #, kde-format
 msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
 msgstr ""
 "Tá %1 sraitheanna sa scarbhileog. An bhfuil tú cinnte gur mhaith leat é a "
 "thraschur?"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3021
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3019
 #, kde-format
 msgid "Transpose Spreadsheet"
 msgstr "Scarbhileog Traschur"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3057
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3055
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: colúin a normalú"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3077
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3075
 #, kde-format
 msgid "Sum = 0"
 msgstr "Suim = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3088
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3086
 #, kde-format
 msgid "Min = 0"
 msgstr "Íosmhéid = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3099
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3097
 #, kde-format
 msgid "Max = 0"
 msgstr "Uasmhéid = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3110
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3108
 #, kde-format
 msgid "Count = 0"
 msgstr "Líon = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3121
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3119
 #, kde-format
 msgid "Mean = 0"
 msgstr "Meán = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3132
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3130
 #, kde-format
 msgid "Median = 0"
 msgstr "Airmheánach = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3144
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3142
 #, kde-format
 msgid "Mode = 0"
 msgstr "Mód = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3146
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3144
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "'Níl an mód sainmhínithe'"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3157
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3155
 #, kde-format
 msgid "Range = 0"
 msgstr "Raon = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3168
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3202
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3166
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3200
 #, kde-format
 msgid "SD = 0"
 msgstr "SD = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3179
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3214
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3177
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3212
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3190
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3226
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3188
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3224
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3238
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3236
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "Uasmhéid - Íosmhéid = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3257
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3255
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Ní féidir normalú"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3269
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3267
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: colúin chlaochlaithe cumhachta"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3385
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3383
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: staitisticí colún"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3416
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3414
 #, kde-format
 msgid "Selection in %1"
 msgstr "Rogha i %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3459
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3457
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: staitisticí ró"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3469
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3467
 #, kde-format
 msgid "Row %1"
 msgstr "Ró %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3494
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3530
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3492
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3528
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Cuir isteach iliomad sraitheanna"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3495
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3531
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3493
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3529
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Cuir isteach líon na sraitheanna le cur isteach"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3566
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3564
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: bain na sraitheanna roghnaithe"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3621
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3619
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: glan cealla roghnaithe"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3889
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3887
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr "Roghnaithe 1: %1 sraitheanna, %2 colúin"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3898
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3896
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr "Roghnaithe: %1 cealla"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3917
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3915
 #, kde-format
 msgid "row"
 msgid_plural "rows"
@@ -20844,7 +20852,7 @@ msgstr[2] "sraitheanna"
 msgstr[3] "sraitheanna"
 msgstr[4] "sraitheanna"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3918
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3916
 #, kde-format
 msgid "column"
 msgid_plural "columns"
@@ -20854,74 +20862,74 @@ msgstr[2] "colúin"
 msgstr[3] "colúin"
 msgstr[4] "colúin"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3919
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3917
 #, kde-format
 msgid "cells"
 msgstr "cealla"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3918
 #, kde-format
 msgid "masked value"
 msgstr "luach masctha"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3918
 #, kde-format
 msgid "masked values"
 msgstr "luachanna masctha"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3919
 #, kde-format
 msgid "missing value"
 msgstr "luach atá ar iarraidh"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3919
 #, kde-format
 msgid "missing values"
 msgstr "luachanna atá ar iarraidh"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3922
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
 #, kde-format
 msgid " , "
 msgstr " , "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3922
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3923
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3920
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3923
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
 #, kde-format
 msgid ", "
 msgstr ", "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3927
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3925
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr "Roghnaithe: %1 %2, %3 %4%5 %6 %7 %8"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3937
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3935
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Roghnaithe: %1 %2%3 %4 %5 %6"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4016
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4014
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Priontáil Scarbhileog"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4631
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4629
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Níorbh fhéidir bunachar sonraí SQLite %1 a chruthú."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4663
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4661
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Theip ar chruthú tábla sa bhunachar sonraí SQLite %1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4741
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4739
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Theip ar luachanna a chur isteach sa tábla."
@@ -23343,7 +23351,7 @@ msgstr "y:"
 #: src/frontend/ui/dockwidgets/barplotdock.ui:237
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:164
 #: src/frontend/widgets/ErrorBarWidget.cpp:86
-#: src/frontend/widgets/LineWidget.cpp:48
+#: src/frontend/widgets/LineWidget.cpp:113
 #, kde-format
 msgid "Bars"
 msgstr "Barraí"
@@ -27468,47 +27476,47 @@ msgstr "Dáta"
 msgid "Date and Time"
 msgstr "Dáta agus Am"
 
-#: src/frontend/widgets/LineWidget.cpp:50
+#: src/frontend/widgets/LineWidget.cpp:115
 #, kde-format
 msgid "Drop Lines"
 msgstr "Línte titim"
 
-#: src/frontend/widgets/LineWidget.cpp:51
+#: src/frontend/widgets/LineWidget.cpp:116
 #, kde-format
 msgid "Half-Bars"
 msgstr "Leathbharraí"
 
-#: src/frontend/widgets/LineWidget.cpp:58
+#: src/frontend/widgets/LineWidget.cpp:121
 #, kde-format
 msgid "No Drop Lines"
 msgstr "Gan Línte Titim"
 
-#: src/frontend/widgets/LineWidget.cpp:59
+#: src/frontend/widgets/LineWidget.cpp:122
 #, kde-format
 msgid "Drop Lines, X"
 msgstr "Línte titim, X"
 
-#: src/frontend/widgets/LineWidget.cpp:60
+#: src/frontend/widgets/LineWidget.cpp:123
 #, kde-format
 msgid "Drop Lines, Y"
 msgstr "Línte titim, Y"
 
-#: src/frontend/widgets/LineWidget.cpp:61
+#: src/frontend/widgets/LineWidget.cpp:124
 #, kde-format
 msgid "Drop Lines, XY"
 msgstr "Línte titim, XY"
 
-#: src/frontend/widgets/LineWidget.cpp:62
+#: src/frontend/widgets/LineWidget.cpp:125
 #, kde-format
 msgid "Drop Lines, X, Zero Baseline"
 msgstr "Línte titim, X, Bonnlíne nialasach"
 
-#: src/frontend/widgets/LineWidget.cpp:63
+#: src/frontend/widgets/LineWidget.cpp:126
 #, kde-format
 msgid "Drop Lines, X, Min Baseline"
 msgstr "Línte Titim, X, Bonnlíne Íosta"
 
-#: src/frontend/widgets/LineWidget.cpp:64
+#: src/frontend/widgets/LineWidget.cpp:127
 #, kde-format
 msgid "Drop Lines, X, Max Baseline"
 msgstr "Línte Titim, X, Bonnlíne Uasta"
