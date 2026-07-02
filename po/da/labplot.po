@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-01 00:41+0000\n"
+"POT-Creation-Date: 2026-07-02 00:40+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -4093,7 +4093,7 @@ msgstr "Sum"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
-#: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
@@ -4108,7 +4108,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
-#: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #: src/backend/statistics/HypothesisTest.cpp:570
@@ -4134,7 +4134,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
-#: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
@@ -6946,7 +6946,7 @@ msgid "Couldn't create the sessions for %1. Please check your installation."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
@@ -6956,14 +6956,14 @@ msgstr ""
 msgid "Mean"
 msgstr "Gennemsnit"
 
-#: src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/nsl/nsl_baseline.cpp:49
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:179
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "End Points"
 msgstr "Antal punkter"
 
-#: src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/nsl/nsl_baseline.cpp:49
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:180
 #, kde-format
 msgid "Linear Regression"

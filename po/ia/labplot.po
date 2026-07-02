@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-01 00:41+0000\n"
-"PO-Revision-Date: 2026-05-15 10:37+0200\n"
+"POT-Creation-Date: 2026-07-02 00:40+0000\n"
+"PO-Revision-Date: 2026-07-01 16:32+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -2168,10 +2168,9 @@ msgid "Invalid sheet index."
 msgstr "Invalide indice de folio."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:61
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file."
-msgstr "Non pote aperir %1."
+msgstr "Non poteva aperir file."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:70
 #, kde-format
@@ -2179,29 +2178,25 @@ msgid "Format: Apache Parquet"
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:72
-#, fuzzy, kde-format
-#| msgid "Version:"
+#, kde-format
 msgid "Version: %1"
-msgstr "Version:"
+msgstr "Version:%1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:74
-#, fuzzy, kde-format
-#| msgid "Created:"
+#, kde-format
 msgid "Created by: %1"
-msgstr "Create:"
+msgstr "Create per: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:78
 #: src/backend/datasources/filters/ParquetFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of rows: %1"
-msgstr "Numero de gruppos: %1"
+msgstr "Numero de rangos: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:80
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of row groups: %1"
-msgstr "Numero de gruppos: %1"
+msgstr "Numero de gruppos de rango: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:87
 #, kde-format
@@ -2209,10 +2204,9 @@ msgid "Format: Arrow IPC (Feather)"
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:91
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of record batches: %1"
-msgstr "Numero de registros (records): %1"
+msgstr "Numero de lots de registro (record batche): %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:99
 #, kde-format
@@ -2220,66 +2214,56 @@ msgid "Format: Apache ORC"
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:103
-#, fuzzy, kde-format
-#| msgid "Number of lines: %1"
+#, kde-format
 msgid "Number of stripes: %1"
-msgstr "Numero de lineas: %1"
+msgstr "Numero de strias: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:212
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file: %1"
-msgstr "Non pote aperir %1."
+msgstr "Non pote aperir le file %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:224
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Parquet file: %1"
-msgstr "Falleva a aperir le file '%1'."
+msgstr "Falleva a aperir le file de Parquet : %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:235
 #: src/backend/datasources/filters/ParquetFilter.cpp:244
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to read Parquet table: %1"
-msgstr "Falleva a leger datos de imagine"
+msgstr "Falleva a leger tabella de Parquet : %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:254
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Arrow IPC file: %1"
-msgstr "Falleva a aperir le file '%1'."
+msgstr "Falleva a aperir le file de  Arrow IPC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:265
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read record batch %1: %2"
-msgstr "Il falleva leger datos."
+msgstr "Il falleva leger lot de registro (record batch) %1: %2"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:272
-#, fuzzy, kde-format
-#| msgid "Failed to parse the file."
+#, kde-format
 msgid "Failed to assemble table: %1"
-msgstr "Falleva a analysar le file."
+msgstr "Falleva a assemblar tabella:  %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:282
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open ORC file: %1"
-msgstr "Falleva a aperir le file '%1'."
+msgstr "Falleva a aperir le file  de ORC : %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:292
 #: src/backend/datasources/filters/ParquetFilter.cpp:300
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read ORC table: %1"
-msgstr "Il falleva leger datos."
+msgstr "Falleva a leger   tabella de ORC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:309
-#, fuzzy, kde-format
-#| msgid "Unsupported data source"
+#, kde-format
 msgid "Unsupported file format."
-msgstr "Fonte da datos non supportate"
+msgstr "Formato de file non supportate."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:398
 #, kde-format
@@ -3435,10 +3419,9 @@ msgid "Logical Functions"
 msgstr "Functiones Logic"
 
 #: src/backend/gsl/functions.cpp:68
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgid "Datetime Functions"
-msgstr "Functiones"
+msgstr "Functiones de Datetime (DataTempore)"
 
 #: src/backend/gsl/functions.cpp:70
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:29
@@ -3810,7 +3793,7 @@ msgstr "Summa"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
-#: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
@@ -3825,7 +3808,7 @@ msgstr "Minime"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
-#: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #: src/backend/statistics/HypothesisTest.cpp:570
@@ -3851,7 +3834,7 @@ msgstr "Arithmetic Medie"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
-#: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
@@ -4214,10 +4197,9 @@ msgid "today"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:351
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "now"
-msgstr "no"
+msgstr "ora"
 
 #: src/backend/gsl/functions.cpp:352
 #, kde-format
@@ -4250,10 +4232,9 @@ msgid "year(date)"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:358
-#, fuzzy, kde-format
-#| msgid "month"
+#, kde-format
 msgid "month(date)"
-msgstr "mense"
+msgstr "mense(date)"
 
 #: src/backend/gsl/functions.cpp:359
 #, kde-format
@@ -4266,10 +4247,9 @@ msgid "weeknum(date)"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:361
-#, fuzzy, kde-format
-#| msgid "DateTime"
+#, kde-format
 msgid "hour(dateTime)"
-msgstr "Tempore de Data"
+msgstr "hora(dateTime)"
 
 #: src/backend/gsl/functions.cpp:362
 #, kde-format
@@ -6506,10 +6486,9 @@ msgid "%1: set text font"
 msgstr "%1: assigna font de texto"
 
 #: src/backend/note/Note.cpp:168
-#, fuzzy, kde-format
-#| msgid "%1: set method"
+#, kde-format
 msgid "%1: set mode"
-msgstr "%1: assigna methodo"
+msgstr "%1: assigna modo"
 
 #: src/backend/note/Note.cpp:211
 #, kde-format
@@ -6529,7 +6508,7 @@ msgstr ""
 "Non poteva crear le session per %1. Pro favor tu verifica tu installation."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
@@ -6538,13 +6517,13 @@ msgstr ""
 msgid "Mean"
 msgstr "Media"
 
-#: src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/nsl/nsl_baseline.cpp:49
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:179
 #, kde-format
 msgid "End Points"
 msgstr "Punctos de fin:"
 
-#: src/backend/nsl/nsl_baseline.cpp:48
+#: src/backend/nsl/nsl_baseline.cpp:49
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:180
 #, kde-format
 msgid "Linear Regression"
@@ -10872,10 +10851,9 @@ msgid "%1: set values color"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:212
-#, fuzzy, kde-format
-#| msgid "%1: save calculation changed"
+#, kde-format
 msgid "%1: auto recalculate changed"
-msgstr "%1: salveguarda calculation modificate"
+msgstr "%1: auto recalculation modificate"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:219
 #, kde-format
@@ -11759,10 +11737,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:254
-#, fuzzy, kde-format
-#| msgid "Python Settings"
+#, kde-format
 msgid "Python Script"
-msgstr "Preferentias de Python"
+msgstr "Script de Python"
 
 #: src/frontend/ActionsManager.cpp:255
 #, kde-format
@@ -17794,10 +17771,9 @@ msgid "%1: clear selected rows(s)"
 msgstr ""
 
 #: src/frontend/note/NoteView.cpp:96
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Edit"
-msgstr "&Edita"
+msgstr "Modifica"
 
 #: src/frontend/note/NoteView.cpp:100
 #, kde-format
@@ -22073,10 +22049,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:109
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Deselect All"
-msgstr "Selige toto"
+msgstr "De-selectiona toto"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30
@@ -24824,17 +24799,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:493
-#, fuzzy, kde-format
-#| msgid "Padding"
+#, kde-format
 msgid "Padding:"
-msgstr "Borrar (Padding)"
+msgstr "Borrar (Padding):"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
-#, fuzzy, kde-format
-#| msgid "Order:"
+#, kde-format
 msgid " Order:"
-msgstr "Ordine:"
+msgstr " Ordine:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:556
