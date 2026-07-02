@@ -108,8 +108,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/26.04.2/src/analitza-26.04.2.tar.xz",
-			    "sha256": "66e9bcdf400595a03dfadc59b45e380b1a6cbe6fbc3522af0d772edf5c35ed2a"
+			    "url": "https://download.kde.org/stable/release-service/26.04.3/src/analitza-26.04.3.tar.xz",
+			    "sha256": "615b7c244a5baee0be5214c53b8ce37d0a54e69a6fd6b8438c30d7fda45b0746"
 		    }
 	    ]
         },
@@ -119,8 +119,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/26.04.2/src/cantor-26.04.2.tar.xz",
-			    "sha256": "a1224d780ac8657dfac0f53bfc645aad8bee7f0b2beb9e373212c91dd2f4dcf6"
+			    "url": "https://download.kde.org/stable/release-service/26.04.3/src/cantor-26.04.3.tar.xz",
+			    "sha256": "f0e9734410070b6ecb54dfe042862405b4ef01d65533c0be0386d13b9fdf7250"
 		    }
 	    ]
         },
