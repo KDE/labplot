@@ -176,6 +176,8 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 void XYSmoothCurveDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
+	XYAnalysisCurveDock::retranslateUi();
+
 	uiGeneralTab.cbType->clear();
 	for (int i = 0; i < NSL_SMOOTH_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_smooth_type_name[i]));
@@ -345,15 +347,11 @@ void XYSmoothCurveDock::xRangeMaxChanged() {
 }
 
 void XYSmoothCurveDock::xRangeMinDateTimeChanged(qint64 value) {
-	CONDITIONAL_LOCK_RETURN;
-
 	m_smoothData.xRange.first() = value;
 	enableRecalculate();
 }
 
 void XYSmoothCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
-	CONDITIONAL_LOCK_RETURN;
-
 	m_smoothData.xRange.last() = value;
 	enableRecalculate();
 }
@@ -512,6 +510,7 @@ void XYSmoothCurveDock::iterationsChanged(int value) {
 }
 
 void XYSmoothCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setSmoothData(m_smoothData);
 

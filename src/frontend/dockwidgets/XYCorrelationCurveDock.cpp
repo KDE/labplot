@@ -267,6 +267,7 @@ void XYCorrelationCurveDock::normChanged() {
 }
 
 void XYCorrelationCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setCorrelationData(m_correlationData);
 

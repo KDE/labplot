@@ -512,6 +512,7 @@ void XYInterpolationCurveDock::numberOfPointsChanged() {
 }
 
 void XYInterpolationCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
 

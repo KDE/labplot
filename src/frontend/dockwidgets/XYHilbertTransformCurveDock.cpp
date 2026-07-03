@@ -166,6 +166,7 @@ void XYHilbertTransformCurveDock::typeChanged() {
 }
 
 void XYHilbertTransformCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYHilbertTransformCurve*>(curve)->setTransformData(m_transformData);
 
