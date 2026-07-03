@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-02 00:40+0000\n"
-"PO-Revision-Date: 2026-06-29 08:53+0300\n"
+"PO-Revision-Date: 2026-07-01 13:32+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -11937,10 +11937,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Створює робочий аркуш для креслення графіків даних"
 
 #: src/frontend/ActionsManager.cpp:254
-#, fuzzy, kde-format
-#| msgid "Python scripting support"
+#, kde-format
 msgid "Python Script"
-msgstr "Підтримка скриптів мовою Python"
+msgstr "Скрипт Python"
 
 #: src/frontend/ActionsManager.cpp:255
 #, kde-format

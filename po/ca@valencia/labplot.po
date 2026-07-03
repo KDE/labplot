@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-02 00:40+0000\n"
-"PO-Revision-Date: 2026-06-29 11:45+0200\n"
+"PO-Revision-Date: 2026-07-01 09:30+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -12004,10 +12004,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Crea un full de treball nou per al traçat de les dades"
 
 #: src/frontend/ActionsManager.cpp:254
-#, fuzzy, kde-format
-#| msgid "Python scripting support"
+#, kde-format
 msgid "Python Script"
-msgstr "Implementació de creació de scripts en Python"
+msgstr "Script en Python"
 
 #: src/frontend/ActionsManager.cpp:255
 #, kde-format

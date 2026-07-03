@@ -11724,10 +11724,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "创建新的工作表，用于数据绘图"
 
 #: src/frontend/ActionsManager.cpp:254
-#, fuzzy, kde-format
-#| msgid "&Script"
+#, kde-format
 msgid "Python Script"
-msgstr "脚本(&S)"
+msgstr ""
 
 #: src/frontend/ActionsManager.cpp:255
 #, kde-format
