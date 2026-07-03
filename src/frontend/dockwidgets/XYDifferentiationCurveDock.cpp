@@ -4,7 +4,7 @@
 	Description      : widget for editing properties of differentiation curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -366,6 +366,7 @@ void XYDifferentiationCurveDock::accOrderChanged(int value) {
 }
 
 void XYDifferentiationCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
 

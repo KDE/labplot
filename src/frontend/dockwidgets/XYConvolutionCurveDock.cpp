@@ -353,6 +353,7 @@ void XYConvolutionCurveDock::wrapChanged() {
 }
 
 void XYConvolutionCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setConvolutionData(m_convolutionData);
 

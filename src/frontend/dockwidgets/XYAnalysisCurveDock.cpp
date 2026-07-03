@@ -252,6 +252,17 @@ void XYAnalysisCurveDock::enableRecalculate() {
 		m_recalculateButton->setEnabled(hasSourceData);
 }
 
+void XYAnalysisCurveDock::autoRecalculateChanged(bool value) {
+	for (auto* curve : m_analysisCurves)
+		curve->setAutoRecalculate(value);
+
+	m_recalculateButton->setEnabled(!value);
+
+	// if just enabled, trigger a recalculation immediately
+	if (value)
+		recalculateClicked();
+}
+
 //**************************************************************
 //***** SLOTs for changes triggered in the analysis curve ******
 //**************************************************************
@@ -277,17 +288,6 @@ void XYAnalysisCurveDock::curveYDataColumnChanged(const AbstractColumn* column) 
 	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setAspect(column, m_analysisCurve->yDataColumnPath());
 	enableRecalculate();
-}
-
-void XYAnalysisCurveDock::autoRecalculateChanged(bool value) {
-	for (auto* curve : m_analysisCurves)
-		curve->setAutoRecalculate(value);
-
-	m_recalculateButton->setEnabled(!value);
-
-	// if just enabled, trigger a recalculation immediately
-	if (value)
-		recalculateClicked();
 }
 
 void XYAnalysisCurveDock::curveAutoRecalculateChanged(bool value) {

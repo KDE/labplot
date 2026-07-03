@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for editing properties of baseline correction curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -294,6 +294,7 @@ void XYBaselineCorrectionCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 }
 
 void XYBaselineCorrectionCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYBaselineCorrectionCurve*>(curve)->setBaselineData(m_data);
 

@@ -563,6 +563,7 @@ void XYLineSimplificationCurveDock::tolerance2Changed(double value) {
 }
 
 void XYLineSimplificationCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYLineSimplificationCurve*>(curve)->setLineSimplificationData(m_lineSimplificationData);
 

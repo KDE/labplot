@@ -37,9 +37,9 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	gridLayout->setVerticalSpacing(2);
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 5, 2, 1, 2);
+	gridLayout->addWidget(cbXDataColumn, 4, 2, 1, 2);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 6, 2, 1, 2);
+	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 2);
 
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
@@ -214,6 +214,7 @@ void XYFourierTransformCurveDock::xScaleChanged() {
 }
 
 void XYFourierTransformCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYFourierTransformCurve*>(curve)->setTransformData(m_transformData);
 

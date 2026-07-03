@@ -407,6 +407,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 }
 
 void XYFourierFilterCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	m_filterData.cutoff = uiGeneralTab.sbCutoff->value();
 	m_filterData.cutoff2 = uiGeneralTab.sbCutoff2->value();
 

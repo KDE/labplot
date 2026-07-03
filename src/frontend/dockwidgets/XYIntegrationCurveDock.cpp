@@ -302,6 +302,7 @@ void XYIntegrationCurveDock::absoluteChanged() {
 }
 
 void XYIntegrationCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
 

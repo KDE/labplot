@@ -286,6 +286,7 @@ void XYFunctionCurveDock::variableColumnChanged(const QModelIndex& index) {
 }
 
 void XYFunctionCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	const auto& function = uiGeneralTab.teFunction->document()->toPlainText();
 
 	// determine variable names and data vectors of the specified curves
