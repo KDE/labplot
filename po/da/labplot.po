@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-02 00:40+0000\n"
+"POT-Creation-Date: 2026-07-04 00:39+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -919,7 +919,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:60
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:71
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:190
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:69
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:81
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:221
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:122
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:145
@@ -7039,8 +7039,8 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:489
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:68
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:492
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:186
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:404
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:109
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:336
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:371
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:111
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:190
@@ -7345,7 +7345,7 @@ msgstr "Retning"
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:565
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:566
 #, kde-format
 msgid "Custom"
 msgstr ""
@@ -10095,7 +10095,7 @@ msgstr "Titel"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:296
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:458
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:61
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:39
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:394
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:63
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:176
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:110
@@ -12161,7 +12161,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:232
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:451
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:411
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:120
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:407
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:40
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:183
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:217
@@ -15742,7 +15742,7 @@ msgstr "Data, -"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:132
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:878
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:306
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:137
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:362
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:200
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:53
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:247
@@ -16886,7 +16886,7 @@ msgstr ""
 msgid "Number of iterations to perform."
 msgstr "Antal rækker"
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:301
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:302
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Baseline correction status: %1"
@@ -16911,19 +16911,19 @@ msgstr ""
 msgid "Deconvolution"
 msgstr "Forbindelse:"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:361
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:362
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Convolution status: %1"
 msgstr "Rotation"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:363
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:364
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Deconvolution status: %1"
 msgstr "Rotation"
 
-#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:274
+#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:275
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Correlation status: %1"
@@ -16988,7 +16988,7 @@ msgid ""
 "If checked, connect data points only for strictly increasing values of X"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:373
+#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:374
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Differentiation status: %1"
@@ -17171,25 +17171,25 @@ msgctxt "@label:spinbox Suffix for the frequency"
 msgid "%v Hz"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:415
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:416
 #, kde-format
 msgid ""
 "The band width is <= 0 since lower cutoff value is not smaller than upper "
 "cutoff value. Please fix this."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:416
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:417
 #, kde-format
 msgid "band width <= 0"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:424
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:425
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgid "Fourier-Filter status: %1"
 msgstr "Filter"
 
-#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:221
+#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:222
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgid "Fourier transformation status: %1"
@@ -17203,43 +17203,43 @@ msgid ""
 "again."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:173
+#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:174
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgid "Hilbert transformation status: %1"
 msgstr "Filter"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:309
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:310
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Integration status: %1"
 msgstr "Rotation"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:321
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:322
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "value: %1"
 msgstr "Værdier"
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:519
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:520
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Interpolation status: %1"
 msgstr "Rotation"
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:563
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:564
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Auto (5x data points)"
 msgstr "Antal punkter"
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:564
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:565
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Multiple of data points"
 msgstr "Antal punkter"
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:567
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:568
 #, kde-format
 msgid ""
 "The number of the interpolation points should be bigger than the total "
@@ -17381,30 +17381,30 @@ msgstr ""
 msgid "Search region size in units of points"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:570
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:571
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Status: %1"
 msgstr "Statistik"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:585
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:586
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "number of points: %1"
 msgstr "Antal punkter"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:586
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:587
 #, kde-format
 msgid "positional squared error: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:587
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:588
 #, fuzzy, kde-format
 #| msgid "Created"
 msgid "area error: %1"
 msgstr "Oprettet"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:192
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
 #, kde-format
 msgid ""
 "Method used to smooth the data:<ul><li>Moving Average (Central) - smoothing "
@@ -17417,63 +17417,63 @@ msgid ""
 "locally weighted scatterplot smoothing.</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:204
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:206
 #, fuzzy, kde-format
 #| msgid "Number of columns"
 msgid "Number of points in the moving window"
 msgstr "Antal kolonner"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:208
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:210
 #, kde-format
 msgid ""
 "Weighting type to define different weights for the points in the moving "
 "window"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:212
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:214
 #, kde-format
 msgid "Percentile of the points in the moving window"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:216
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:218
 #, kde-format
 msgid "The order of the polynomial used to fit the points in the moving window"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:220
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:222
 #, kde-format
 msgid "The fraction of the data used to perform the local fit."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:224
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:226
 #, kde-format
 msgid ""
 "If delta > 0, values of y-data within delta of each other will use "
 "interpolation instead of full regression."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:228
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:230
 #, fuzzy, kde-format
 #| msgid "Enter number of rows"
 msgid "The number of robustifying iterations"
 msgstr "Angiv antal rækker"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:232
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:234
 #, kde-format
 msgid "Padding mode to handle the edges of the data set"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:238
 #, kde-format
 msgid "The value for constant padding at the left edge"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:240
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:242
 #, kde-format
 msgid "The value for constant padding at the right edge"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:519
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:518
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Smoothing status: %1"
@@ -18158,7 +18158,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:354
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:288
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:246
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:334
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:43
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:124
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:43
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:93
@@ -21987,7 +21987,7 @@ msgstr "Format:"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:118
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:33
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:304
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:304
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:121
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:39
@@ -24998,7 +24998,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:220
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:118
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:156
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:158
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:133
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:293
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:329
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:348
@@ -25046,7 +25046,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:182
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:140
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:172
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:264
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:159
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:31
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:291
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:310
@@ -25115,7 +25115,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:348
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:482
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:485
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:397
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:329
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:364
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:104
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:200
@@ -25654,7 +25654,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:102
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:888
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:358
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:107
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:88
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:135
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:224
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:426
@@ -25673,7 +25673,7 @@ msgstr "Data, -"
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:109
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:376
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:441
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:196
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:95
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:60
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:129
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:181
@@ -25690,7 +25690,7 @@ msgstr "Data, -"
 #. i18n: ectx: property (text), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:123
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:102
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:281
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:192
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:240
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:75
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:93
@@ -25876,7 +25876,7 @@ msgstr "konstanter"
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:378
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:116
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:47
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:327
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:102
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:351
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:378
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:292
@@ -25921,7 +25921,7 @@ msgstr "Retning"
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:294
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:495
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:325
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:54
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:275
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:166
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:390
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:591
@@ -26411,35 +26411,35 @@ msgstr "Filter"
 msgid "Form:"
 msgstr "Format"
 
-#. i18n: ectx: property (text), widget (QCheckBox, cbTwoSided)
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:84
-#, kde-format
-msgid "Two Sided"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, cbShifted)
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:91
-#, fuzzy, kde-format
-#| msgid "Right"
-msgid "Shifted"
-msgstr "Højre"
-
 #. i18n: ectx: property (text), widget (QLabel, lWindow)
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:203
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:199
 #, fuzzy, kde-format
 #| msgid "&Windows"
 msgid "Window:"
 msgstr "&Vinduer"
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:229
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:209
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:305
 #, kde-format
 msgid "Output:"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QCheckBox, cbTwoSided)
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:228
+#, kde-format
+msgid "Two Sided"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbShifted)
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:235
+#, fuzzy, kde-format
+#| msgid "Right"
+msgid "Shifted"
+msgstr "Højre"
+
 #. i18n: ectx: property (text), widget (QLabel, lXScale)
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:236
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:244
 #, fuzzy, kde-format
 #| msgid "Scale"
 msgid "X-Axis Scale:"
