@@ -36,6 +36,7 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QFileInfo>
 
 #include <KConfigGroup>
 
@@ -46,6 +47,52 @@
 static wchar_t programName[] = L"labplot";
 
 static wchar_t* argv[] = {programName};
+
+QString detectBundledPythonPrefix(const QString& appDirPath) {
+	const QString pythonVersion = QStringLiteral("/lib/python%1.%2").arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION);
+	const QString pythonVersionWithUsr = QStringLiteral("/usr/lib/python%1.%2").arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION);
+
+	QStringList candidatePrefixes;
+	const QString appImageDir = QString::fromLocal8Bit(qgetenv("APPDIR"));
+	for (const QString& base :
+		 {appImageDir, appDirPath, QDir(appDirPath).absoluteFilePath(QStringLiteral("..")), QDir(appDirPath).absoluteFilePath(QStringLiteral("../.."))}) {
+		if (base.isEmpty())
+			continue;
+		candidatePrefixes << base;
+		candidatePrefixes << QDir(base).absoluteFilePath(QStringLiteral("usr"));
+	}
+#ifdef Q_OS_MACOS
+	candidatePrefixes << QDir(appDirPath).absoluteFilePath(QStringLiteral("../Frameworks/Python.framework/Versions/Current"));
+#endif
+	candidatePrefixes.removeDuplicates();
+
+	for (const QString& prefix : std::as_const(candidatePrefixes)) {
+		if (QFileInfo::exists(prefix + pythonVersion))
+			return prefix;
+		if (QFileInfo::exists(prefix + pythonVersionWithUsr))
+			return prefix + QStringLiteral("/usr");
+	}
+
+	return {};
+}
+
+QString detectBundledPythonExecutable(const QString& prefix) {
+	const QStringList candidateExecutables = {
+		QDir(prefix).absoluteFilePath(QStringLiteral("bin/python%1.%2")).arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION),
+		QDir(prefix).absoluteFilePath(QStringLiteral("bin/python%1")).arg(PY_MAJOR_VERSION),
+		QDir(prefix).absoluteFilePath(QStringLiteral("bin/python")),
+		QDir(prefix).absoluteFilePath(QStringLiteral("usr/bin/python%1.%2")).arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION),
+		QDir(prefix).absoluteFilePath(QStringLiteral("usr/bin/python%1")).arg(PY_MAJOR_VERSION),
+		QDir(prefix).absoluteFilePath(QStringLiteral("usr/bin/python")),
+	};
+
+	for (const QString& candidate : candidateExecutables) {
+		if (QFileInfo::exists(candidate))
+			return candidate;
+	}
+
+	return {};
+}
 
 // The name of our python extension module: pylabplot
 static const char* moduleName = "pylabplot";
@@ -191,10 +238,22 @@ bool PythonScriptRuntime::initPython() {
 	// for a change in this config to take effect the application may need to restart, though can reinitialize python without needing restart
 	// (finalize then initialize)
 	const QString pythonExecutable = group.readEntry(QLatin1String("PythonExecutable"), QString());
-	if (!pythonExecutable.isEmpty()) {
+	QString selectedExecutable = pythonExecutable.trimmed(); // empty string means use system default python, otherwise use the provided path
+	QString selectedPrefix;
+
+	// if running from a bundled python (AppImage/macOS), detect the bundled python prefix and executable
+	const QString appDirPath = QCoreApplication::applicationDirPath();
+	const bool isBundledBuild = !qEnvironmentVariableIsEmpty("APPDIR") || appDirPath.contains(QStringLiteral("Contents/MacOS"));
+	if (selectedExecutable.isEmpty() && isBundledBuild) {
+		selectedPrefix = detectBundledPythonPrefix(appDirPath);
+		if (!selectedPrefix.isEmpty())
+			selectedExecutable = detectBundledPythonExecutable(selectedPrefix);
+	}
+
+	if (!selectedExecutable.isEmpty()) {
 		// need to validate that the provided python executable exists and matches with the python shared library currently linked to
 		static wchar_t interpreterPath[PATH_MAX];
-		const std::wstring widePath = pythonExecutable.toStdWString();
+		const std::wstring widePath = selectedExecutable.toStdWString();
 		wcsncpy(interpreterPath, widePath.c_str(), PATH_MAX - 1);
 		interpreterPath[PATH_MAX - 1] = L'\0';
 		// it is enough to pass the path of the python executable to python and it calculates its search paths correctly from it also
@@ -240,21 +299,15 @@ bool PythonScriptRuntime::initPython() {
 		Py_Initialize();
 	}
 
-	PySys_SetArgvEx(1, argv, 0); // this will be removed in removed in python 3.15 but there are alternatives
-
 	// need to compile and distribute our own pyside python library to ensure it links with the
 	// same qt6 linked by labplot. then distribute our compiled pyside python library
 	// and add it to sys.path
 
-#ifdef Q_OS_MACOS
-	// When running from the macOS app bundle with a user-selected virtual environment,
-	// force bundled stdlib/lib-dynload/site-packages ahead of venv paths.
-	// Otherwise Python may load extension modules (e.g. binascii) from the venv base
-	// install and fail library validation due to mismatched Team IDs.
-	{
-		const QString appDir = QCoreApplication::applicationDirPath(); // .../Contents/MacOS
-		const QString pythonBasePath = appDir + QStringLiteral("/../Frameworks/Python.framework/Versions/Current/lib/python")
-			+ QString::number(PY_MAJOR_VERSION) + QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
+	// When running from a bundled Python (AppImage/macOS), prepend bundled paths ahead of system paths.
+	// This ensures extension modules and stdlib are loaded from the bundle, not from the system or venv.
+	if (!selectedPrefix.isEmpty() && isBundledBuild) {
+		const QString pythonBasePath =
+			selectedPrefix + QStringLiteral("/lib/python") + QString::number(PY_MAJOR_VERSION) + QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
 		const QString stdLibPath = QDir(pythonBasePath).canonicalPath();
 		const QString libDynLoadPath = QDir(pythonBasePath + QStringLiteral("/lib-dynload")).canonicalPath();
 		const QString sitePkgsPath = QDir(pythonBasePath + QStringLiteral("/site-packages")).canonicalPath();
@@ -280,7 +333,8 @@ bool PythonScriptRuntime::initPython() {
 			prependPath(stdLibPath);
 		}
 	}
-#endif
+
+	PySys_SetArgvEx(1, argv, 0); // this will be removed in removed in python 3.15 but there are alternatives
 
 	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
 	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;
