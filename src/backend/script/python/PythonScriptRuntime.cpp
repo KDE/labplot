@@ -48,18 +48,14 @@ static wchar_t programName[] = L"labplot";
 
 static wchar_t* argv[] = {programName};
 
-namespace {
 QString detectBundledPythonPrefix(const QString& appDirPath) {
-	const QString pythonVersion = QStringLiteral("/lib/python%1.%2")
-		.arg(PY_MAJOR_VERSION)
-		.arg(PY_MINOR_VERSION);
-	const QString pythonVersionWithUsr = QStringLiteral("/usr/lib/python%1.%2")
-		.arg(PY_MAJOR_VERSION)
-		.arg(PY_MINOR_VERSION);
++	const QString pythonVersion = QStringLiteral("/lib/python%1.%2").arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION);
++	const QString pythonVersionWithUsr = QStringLiteral("/usr/lib/python%1.%2").arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION);
 
 	QStringList candidatePrefixes;
 	const QString appImageDir = QString::fromLocal8Bit(qgetenv("APPDIR"));
-	for (const QString& base : {appImageDir, appDirPath, QDir(appDirPath).absoluteFilePath(QStringLiteral("..")), QDir(appDirPath).absoluteFilePath(QStringLiteral("../.."))}) {
+	for (const QString& base :
+		 {appImageDir, appDirPath, QDir(appDirPath).absoluteFilePath(QStringLiteral("..")), QDir(appDirPath).absoluteFilePath(QStringLiteral("../.."))}) {
 		if (base.isEmpty())
 			continue;
 		candidatePrefixes << base;
@@ -242,7 +238,7 @@ bool PythonScriptRuntime::initPython() {
 	// for a change in this config to take effect the application may need to restart, though can reinitialize python without needing restart
 	// (finalize then initialize)
 	const QString pythonExecutable = group.readEntry(QLatin1String("PythonExecutable"), QString());
-	QString selectedExecutable = pythonExecutable.trimmed(); // empty string means use system default python, otherwise use the provided path to the python executable
+	QString selectedExecutable = pythonExecutable.trimmed(); // empty string means use system default python, otherwise use the provided path
 	QString selectedPrefix;
 
 	// if running from a bundled python (AppImage/macOS), detect the bundled python prefix and executable
@@ -310,8 +306,8 @@ bool PythonScriptRuntime::initPython() {
 	// When running from a bundled Python (AppImage/macOS), prepend bundled paths ahead of system paths.
 	// This ensures extension modules and stdlib are loaded from the bundle, not from the system or venv.
 	if (!selectedPrefix.isEmpty() && isBundledBuild) {
-		const QString pythonBasePath = selectedPrefix + QStringLiteral("/lib/python")
-			+ QString::number(PY_MAJOR_VERSION) + QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
+		const QString pythonBasePath =
+			selectedPrefix + QStringLiteral("/lib/python") + QString::number(PY_MAJOR_VERSION) + QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
 		const QString stdLibPath = QDir(pythonBasePath).canonicalPath();
 		const QString libDynLoadPath = QDir(pythonBasePath + QStringLiteral("/lib-dynload")).canonicalPath();
 		const QString sitePkgsPath = QDir(pythonBasePath + QStringLiteral("/site-packages")).canonicalPath();
