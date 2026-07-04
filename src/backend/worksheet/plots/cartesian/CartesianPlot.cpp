@@ -959,6 +959,22 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	}
 
 	if (op == NavigationOperation::ScaleAuto) {
+		bool createsUndoCommand = false;
+		if (!ics) { // all csystems
+			for (int i = 0; i < coordinateSystemCount(); i++) {
+				const auto* cs = coordinateSystem(i);
+				if (!autoScale(Dimension::X, cs->index(Dimension::X)) || !autoScale(Dimension::Y, cs->index(Dimension::Y))) {
+					createsUndoCommand = true;
+					break;
+				}
+			}
+		} else {
+			createsUndoCommand = !autoScale(Dimension::X, xIndex) || !autoScale(Dimension::Y, yIndex);
+		}
+
+		if (createsUndoCommand)
+			beginMacro(i18n("%1: auto scale", name()));
+
 		if (!ics) { // all csystems
 			for (int i = 0; i < coordinateSystemCount(); i++) {
 				const auto* cs = coordinateSystem(i);
@@ -999,6 +1015,9 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				scaleAuto(Dimension::Y, ics->index(Dimension::Y), true);
 			WorksheetElementContainer::retransform();
 		}
+
+		if (createsUndoCommand)
+			endMacro();
 	} else if (op == NavigationOperation::ScaleAutoX) {
 		bool update = rangeDirty(Dimension::X, xIndex);
 		if (!autoScale(Dimension::X, xIndex)) {
@@ -1400,6 +1419,7 @@ public:
 			m_oldRange = m_private->range(m_dimension, m_index);
 			m_private->q->scaleAuto(m_dimension, m_index, m_fullRange);
 		}
+		m_private->q->WorksheetElementContainer::retransform();
 		Q_EMIT m_private->q->autoScaleChanged(m_dimension, m_index, m_autoScale);
 	}
 
@@ -1409,6 +1429,7 @@ public:
 			m_private->retransformScale(m_dimension, m_index);
 		}
 		m_private->enableAutoScale(m_dimension, m_index, m_autoScaleOld);
+		m_private->q->WorksheetElementContainer::retransform();
 		Q_EMIT m_private->q->autoScaleChanged(m_dimension, m_index, m_autoScaleOld);
 	}
 
@@ -1495,8 +1516,11 @@ public:
 				auto index_other = cs->index(dim_other);
 				if (cs->index(m_dimension) == m_index && scaledIndices.indexOf(index_other) == -1) {
 					scaledIndices << index_other;
-					if (m_target->q->autoScale(dim_other, index_other) && m_target->q->scaleAuto(dim_other, index_other, false))
-						m_target->retransformScale(dim_other, index_other);
+					if (m_target->q->autoScale(dim_other, index_other)) {
+						m_target->setRangeDirty(dim_other, index_other, true);
+						if (m_target->q->scaleAuto(dim_other, index_other, false))
+							m_target->retransformScale(dim_other, index_other);
+					}
 				}
 			}
 			m_target->q->WorksheetElementContainer::retransform();
