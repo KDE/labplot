@@ -460,10 +460,10 @@ void PlotDataDialog::plot() {
 	} else if (ui->rbPlotPlacementNewWorksheet->isChecked()) { // add curves to a new plot in a new worksheet
 		// determine the parent folder first where the worksheet will be added as a child
 		auto* parent = m_parentAspect->parentAspect();
-		if (parent->type() == AspectType::DatapickerCurve)
-			parent = parent->parentAspect()->parentAspect();
-		else if (parent->type() == AspectType::Workbook)
+		if (parent->type() == AspectType::Spreadsheet || parent->type() == AspectType::Workbook)
 			parent = parent->parentAspect();
+		else if (parent->type() == AspectType::DatapickerCurve)
+			parent = parent->parentAspect()->parentAspect();
 #ifdef HAVE_MQTT
 		else if (dynamic_cast<MQTTTopic*>(m_parentAspect))
 			parent = m_parentAspect->project();
@@ -499,10 +499,10 @@ void PlotDataDialog::plot() {
 	} else if (ui->rbPlotPlacementNewWorksheets->isChecked()) { // add curves to a new plot in a new worksheet for each of them
 		// determine the parent folder first where the new worksheets will be added as children
 		auto* parent = m_parentAspect->parentAspect();
-		if (parent->type() == AspectType::DatapickerCurve)
-			parent = parent->parentAspect()->parentAspect();
-		else if (parent->type() == AspectType::Workbook)
+		if (parent->type() == AspectType::Spreadsheet || parent->type() == AspectType::Workbook)
 			parent = parent->parentAspect();
+		else if (parent->type() == AspectType::DatapickerCurve)
+			parent = parent->parentAspect()->parentAspect();
 #ifdef HAVE_MQTT
 		else if (dynamic_cast<MQTTTopic*>(m_parentAspect))
 			parent = m_parentAspect->project();
