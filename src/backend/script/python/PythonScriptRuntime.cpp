@@ -49,8 +49,8 @@ static wchar_t programName[] = L"labplot";
 static wchar_t* argv[] = {programName};
 
 QString detectBundledPythonPrefix(const QString& appDirPath) {
-+	const QString pythonVersion = QStringLiteral("/lib/python%1.%2").arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION);
-+	const QString pythonVersionWithUsr = QStringLiteral("/usr/lib/python%1.%2").arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION);
+	const QString pythonVersion = QStringLiteral("/lib/python%1.%2").arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION);
+	const QString pythonVersionWithUsr = QStringLiteral("/usr/lib/python%1.%2").arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION);
 
 	QStringList candidatePrefixes;
 	const QString appImageDir = QString::fromLocal8Bit(qgetenv("APPDIR"));
