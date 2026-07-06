@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-05 00:39+0000\n"
-"PO-Revision-Date: 2026-07-01 06:21+0200\n"
+"PO-Revision-Date: 2026-07-05 07:54+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -9979,10 +9979,9 @@ msgid "No curves inside the plot area."
 msgstr "Ni krivulj znotraj območja risanja."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:975
-#, fuzzy, kde-format
-#| msgid "%1: set scale"
+#, kde-format
 msgid "%1: auto scale"
-msgstr "%1: nastavi merilo"
+msgstr "%1: samodejno merilo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1254
@@ -9993,18 +9992,18 @@ msgstr "%1: sprememba geometrije pravok"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1289
 #, kde-format
 msgid "%1: set range type"
-msgstr "%1: določite vrsto obsega"
+msgstr "%1: določi vrsto obsega"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1296
 #, kde-format
 msgid "%1: set nice extend"
-msgstr "%1: nastavite lepo razširitev"
+msgstr "%1: nastavi lepo razširitev"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1303
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1310
 #, kde-format
 msgid "%1: set range"
-msgstr "%1: določite obseg"
+msgstr "%1: določi obseg"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1321
 #, kde-format
@@ -10017,20 +10016,19 @@ msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: spremeni %2-obseg %3 samodejno merilo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1491
-#, fuzzy, kde-format
-#| msgid "%1: change %2-range %3 format"
+#, kde-format
 msgid "%1: change %2-range %3"
-msgstr "%1: spremeni %2-obseg %3 format"
+msgstr "%1: spremeni %2-obseg %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1668
 #, kde-format
 msgid "%1: change x-range %2 scale"
-msgstr "%1: spremenite merilo %2 x-obsega"
+msgstr "%1: spremeni merilo %2 x-obsega"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1796
 #, kde-format
 msgid "%1: set default plot range"
-msgstr "%1: nastavite privzeti obseg izrisa"
+msgstr "%1: nastavi privzeti obseg izrisa"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1814
 #, kde-format
@@ -10055,12 +10053,12 @@ msgstr "%1: prelomi y-obsega so spremenjeni"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1855
 #, kde-format
 msgid "%1: Cursor0 enable"
-msgstr "%1: omogočite Kazalec0"
+msgstr "%1: omogoči Kazalec0"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1867
 #, kde-format
 msgid "%1: Cursor1 enable"
-msgstr "%1: omogočite Kazalec1"
+msgstr "%1: omogoči Kazalec1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1876
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1877
@@ -10072,20 +10070,20 @@ msgstr "%1: nastavi barvni način risanja"
 #: src/backend/worksheet/Worksheet.cpp:892
 #, kde-format
 msgid "%1: load theme %2"
-msgstr "%1: naložite temo %2"
+msgstr "%1: naloži temo %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1890
 #: src/backend/worksheet/Worksheet.cpp:894
 #, kde-format
 msgid "%1: load default theme"
-msgstr "%1: naložite privzeto temo"
+msgstr "%1: naloži privzeto temo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1892
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5994
 #: src/backend/worksheet/Worksheet.cpp:896
 #, kde-format
 msgid "%1: set theme"
-msgstr "%1: določite temo"
+msgstr "%1: določi temo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1901
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1902
@@ -10228,34 +10226,29 @@ msgid "Cumulative Percentage"
 msgstr "Kumulativni odstotki"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3454
-#, fuzzy, kde-format
-#| msgid "%1: set bottom padding"
+#, kde-format
 msgid "%1: zoom in"
-msgstr "%1: nastavite spodnje oblazinjenje"
+msgstr "%1: približaj"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3469
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1: zoom out"
-msgstr "%1: nastavite postavitev"
+msgstr "%1: oddalji"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "min"
+#, kde-format
 msgid "in"
-msgstr "min"
+msgstr "v"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "out"
-msgstr "Števec"
+msgstr "iz"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "%1: move %2 to %3."
+#, kde-format
 msgid "%1: zoom %2 %3"
-msgstr "%1: premakni %2 na %3."
+msgstr "%1: zoom %2 %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4351
 #, kde-format
@@ -10280,22 +10273,19 @@ msgid "x=%1"
 msgstr "x=%1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4546
-#, fuzzy, kde-format
-#| msgid "%1: pasted"
+#, kde-format
 msgid "%1: pan"
-msgstr "%1: prilepljeno"
+msgstr "%1: pomakni"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4624
-#, fuzzy, kde-format
-#| msgid "%1: set function"
+#, kde-format
 msgid "%1: zoom selection"
-msgstr "%1: nastavi funkcijo"
+msgstr "%1: izbira povećave"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4747
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: wheel zoom"
-msgstr "%1: določi barvo oznake"
+msgstr "%1: kolesce za povečavo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:200
 #, kde-format

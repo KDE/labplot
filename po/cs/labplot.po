@@ -10126,16 +10126,14 @@ msgid "%1: zoom out"
 msgstr "%1: nastavit rozvržení"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "min"
+#, kde-format
 msgid "in"
-msgstr "min"
+msgstr "uvnitř"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "out"
-msgstr "Počet"
+msgstr "výdech"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
 #, fuzzy, kde-format

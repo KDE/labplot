@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-05 00:39+0000\n"
-"PO-Revision-Date: 2026-07-01 19:37+0300\n"
+"PO-Revision-Date: 2026-07-05 19:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9917,10 +9917,9 @@ msgid "No curves inside the plot area."
 msgstr "Çizim alanı içinde eğri yok."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:975
-#, fuzzy, kde-format
-#| msgid "%1: set scale"
+#, kde-format
 msgid "%1: auto scale"
-msgstr "%1: Ölçeği ayarla"
+msgstr "%1: Kendiliğinden ölçek"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1254
@@ -9955,10 +9954,9 @@ msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: %2 erimi %3 kendiliğinden ölçeklemeyi değiştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1491
-#, fuzzy, kde-format
-#| msgid "%1: change %2-range %3 format"
+#, kde-format
 msgid "%1: change %2-range %3"
-msgstr "%1: %2 erimi %3 biçimi değiştir"
+msgstr "%1: Değiştir: %2 erimli %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1668
 #, kde-format
@@ -10166,34 +10164,29 @@ msgid "Cumulative Percentage"
 msgstr "Kümülatif Yüzde"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3454
-#, fuzzy, kde-format
-#| msgid "%1: set bottom padding"
+#, kde-format
 msgid "%1: zoom in"
-msgstr "%1: Alt boşluğu ayarla"
+msgstr "%1: Yakınlaştır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3469
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1: zoom out"
-msgstr "%1: Yerleşimi ayarla"
+msgstr "%1: Uzaklaştır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "min"
+#, kde-format
 msgid "in"
-msgstr "en küçük"
+msgstr "gir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "out"
-msgstr "Sayım"
+msgstr "çık"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "%1: move %2 to %3."
+#, kde-format
 msgid "%1: zoom %2 %3"
-msgstr "%1: %2 ögesini %3 konumuna taşı."
+msgstr "%1: Yakınlaştır: %2 %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4351
 #, kde-format
@@ -10218,22 +10211,19 @@ msgid "x=%1"
 msgstr "x=%1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4546
-#, fuzzy, kde-format
-#| msgid "%1: pasted"
+#, kde-format
 msgid "%1: pan"
-msgstr "%1: Yapıştırıldı"
+msgstr "%1: Kaydır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4624
-#, fuzzy, kde-format
-#| msgid "%1: set function"
+#, kde-format
 msgid "%1: zoom selection"
-msgstr "%1: İşlev ayarla"
+msgstr "%1: Seçime yakınlaştır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4747
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: wheel zoom"
-msgstr "%1: Etiket rengini ayarla"
+msgstr "%1: Tekerlekle yakınlaştır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:200
 #, kde-format

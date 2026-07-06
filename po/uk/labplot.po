@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-05 00:39+0000\n"
-"PO-Revision-Date: 2026-07-01 13:32+0300\n"
+"PO-Revision-Date: 2026-07-05 13:10+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -10010,10 +10010,9 @@ msgid "No curves inside the plot area."
 msgstr "Немає кривих в області креслення."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:975
-#, fuzzy, kde-format
-#| msgid "%1: set scale"
+#, kde-format
 msgid "%1: auto scale"
-msgstr "%1: встановити масштаб"
+msgstr "%1: автомасштаб"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1254
@@ -10048,10 +10047,9 @@ msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: змінити автоматичне масштабування %2-діапазону %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1491
-#, fuzzy, kde-format
-#| msgid "%1: change %2-range %3 format"
+#, kde-format
 msgid "%1: change %2-range %3"
-msgstr "%1: змінити формат %2-діапазону %3"
+msgstr "%1: змінити %2-діапазон %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1668
 #, kde-format
@@ -10259,34 +10257,29 @@ msgid "Cumulative Percentage"
 msgstr "Накопичувальна частка"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3454
-#, fuzzy, kde-format
-#| msgid "%1: set bottom padding"
+#, kde-format
 msgid "%1: zoom in"
-msgstr "%1: встановити нижню фаску"
+msgstr "%1: збільшити"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3469
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1: zoom out"
-msgstr "%1: встановити компонування"
+msgstr "%1: зменшити"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "min"
+#, kde-format
 msgid "in"
-msgstr "min"
+msgstr "всередині"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "out"
-msgstr "Кількість"
+msgstr "ззовні"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "%1: move %2 to %3."
+#, kde-format
 msgid "%1: zoom %2 %3"
-msgstr "%1: пересунути %2 до %3."
+msgstr "%1: масштаб %2 %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4351
 #, kde-format
@@ -10311,22 +10304,19 @@ msgid "x=%1"
 msgstr "x=%1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4546
-#, fuzzy, kde-format
-#| msgid "%1: pasted"
+#, kde-format
 msgid "%1: pan"
-msgstr "%1: вставлено"
+msgstr "%1: панорамування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4624
-#, fuzzy, kde-format
-#| msgid "%1: set function"
+#, kde-format
 msgid "%1: zoom selection"
-msgstr "%1: встановити функцію"
+msgstr "%1: вибір масштабу"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4747
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: wheel zoom"
-msgstr "%1: встановити колір міток"
+msgstr "%1: масштабування коліщатком"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:200
 #, kde-format

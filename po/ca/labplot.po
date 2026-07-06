@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-05 00:39+0000\n"
-"PO-Revision-Date: 2026-07-01 09:30+0200\n"
+"PO-Revision-Date: 2026-07-05 10:51+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -10066,10 +10066,9 @@ msgid "No curves inside the plot area."
 msgstr "No hi ha corbes dins de l'àrea del diagrama."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:975
-#, fuzzy, kde-format
-#| msgid "%1: set scale"
+#, kde-format
 msgid "%1: auto scale"
-msgstr "%1: estableix l'escala"
+msgstr "%1: escala automàtica"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1254
@@ -10104,10 +10103,9 @@ msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: canvia l'escalat automàtic %3 de l'interval de %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1491
-#, fuzzy, kde-format
-#| msgid "%1: change %2-range %3 format"
+#, kde-format
 msgid "%1: change %2-range %3"
-msgstr "%1: canvia el format %3 de l'interval de %2"
+msgstr "%1: canvia %3 de l'interval de %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1668
 #, kde-format
@@ -10315,34 +10313,29 @@ msgid "Cumulative Percentage"
 msgstr "Percentatge acumulatiu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3454
-#, fuzzy, kde-format
-#| msgid "%1: set bottom padding"
+#, kde-format
 msgid "%1: zoom in"
-msgstr "%1: estableix un farciment a la part inferior"
+msgstr "%1: apropa"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3469
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1: zoom out"
-msgstr "%1: estableix la disposició"
+msgstr "%1: allunya"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "min"
+#, kde-format
 msgid "in"
-msgstr "min"
+msgstr "d'apropament"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "out"
-msgstr "Comptador"
+msgstr "d'allunyament"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "%1: move %2 to %3."
+#, kde-format
 msgid "%1: zoom %2 %3"
-msgstr "%1: mou %2 cap a %3."
+msgstr "%1: zoom de %2 %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4351
 #, kde-format
@@ -10367,22 +10360,19 @@ msgid "x=%1"
 msgstr "x=%1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4546
-#, fuzzy, kde-format
-#| msgid "%1: pasted"
+#, kde-format
 msgid "%1: pan"
-msgstr "%1: s'ha enganxat"
+msgstr "%1: panorama"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4624
-#, fuzzy, kde-format
-#| msgid "%1: set function"
+#, kde-format
 msgid "%1: zoom selection"
-msgstr "%1: estableix una funció"
+msgstr "%1: selecció de zoom"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4747
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: wheel zoom"
-msgstr "%1: estableix el color de les etiquetes"
+msgstr "%1: roda de zoom"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:200
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-05 00:39+0000\n"
-"PO-Revision-Date: 2026-07-01 05:24+0200\n"
+"PO-Revision-Date: 2026-07-05 06:31+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -9949,10 +9949,9 @@ msgid "No curves inside the plot area."
 msgstr "რკალების გარეშე გრაფიკის ალაგის შიგნით."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:975
-#, fuzzy, kde-format
-#| msgid "%1: set scale"
+#, kde-format
 msgid "%1: auto scale"
-msgstr "%1: მასშტაბის დაყენება"
+msgstr "%1: ავტომასშტაბი"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1254
@@ -9987,10 +9986,9 @@ msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: %2-დიაპაზონის %3 ავტომასშტაბის შეცვლა"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1491
-#, fuzzy, kde-format
-#| msgid "%1: change %2-range %3 format"
+#, kde-format
 msgid "%1: change %2-range %3"
-msgstr "%1: %2 დიაპაზონის შეცვლა %3 ფორმატი"
+msgstr "%1: %2 დიაპაზონის შეცვლა %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1668
 #, kde-format
@@ -10198,34 +10196,29 @@ msgid "Cumulative Percentage"
 msgstr "კუმულატიური პროცენტულობა"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3454
-#, fuzzy, kde-format
-#| msgid "%1: set bottom padding"
+#, kde-format
 msgid "%1: zoom in"
-msgstr "%1: ქვედა შევსების დაყენება"
+msgstr "%1: გადიდება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3469
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1: zoom out"
-msgstr "%1: განლაგების დაყენება"
+msgstr "%1: დაპატარავება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "min"
+#, kde-format
 msgid "in"
-msgstr "წთ"
+msgstr "გადიდება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "out"
-msgstr "რაოდენობა"
+msgstr "დაპატარავება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "%1: move %2 to %3."
+#, kde-format
 msgid "%1: zoom %2 %3"
-msgstr "%1: %2-ის %3-ზე გადატანა."
+msgstr "%1: %2-ის გადიდება %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4351
 #, kde-format
@@ -10250,22 +10243,19 @@ msgid "x=%1"
 msgstr "x=%1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4546
-#, fuzzy, kde-format
-#| msgid "%1: pasted"
+#, kde-format
 msgid "%1: pan"
-msgstr "%1: ჩასმულია"
+msgstr "%1: პანინგი"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4624
-#, fuzzy, kde-format
-#| msgid "%1: set function"
+#, kde-format
 msgid "%1: zoom selection"
-msgstr "%1: ფუნქციის დაყენება"
+msgstr "%1: მონიშნულის გადიდება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4747
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: wheel zoom"
-msgstr "%1: ჭდის ფერის დაყენება"
+msgstr "%1: ბორბლით გადიდება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:200
 #, kde-format
