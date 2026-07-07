@@ -10414,10 +10414,9 @@ msgid "in"
 msgstr "min."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "out"
-msgstr "Numéro"
+msgstr "sortie"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
 #, fuzzy, kde-format
