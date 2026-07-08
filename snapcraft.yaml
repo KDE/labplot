@@ -309,6 +309,7 @@ parts:
       - libnsl-dev
       - libnsl2
       - patchelf
+      - python3-build
     stage-packages:
       - bison
       - discount
