@@ -272,22 +272,68 @@ bool PythonScriptRuntime::initPython() {
 			WARN(Q_FUNC_INFO << ", bundled build detected but no Python prefix found!")
 	}
 
-	// AppImage bundles need PYTHONHOME to point at the bundled prefix.
+	// AppImage bundles need special Python environment isolation.
+	// CRITICAL: Setting PYTHONHOME can cause crashes if LabPlot is linked against
+	// a different libpython than the bundled one. Instead, rely on Py_SetProgramName()
+	// which makes Python calculate paths from the executable location.
+	// We DO set PYTHONPATH and PYTHONNOUSERSITE to prevent system interference.
 	if (isAppImageBuild && !selectedPrefix.isEmpty()) {
-		const QByteArray pythonHomeValue = selectedPrefix.toLocal8Bit();
-		INFO(Q_FUNC_INFO << ", setting PYTHONHOME = " << pythonHomeValue.constData())
-		qputenv("PYTHONHOME", pythonHomeValue);
+		// DO NOT set PYTHONHOME - it conflicts with dynamically linked libpython
+		// const QByteArray pythonHomeValue = selectedPrefix.toLocal8Bit();
+		// INFO(Q_FUNC_INFO << ", setting PYTHONHOME = " << pythonHomeValue.constData())
+		// qputenv("PYTHONHOME", pythonHomeValue);
+		INFO(Q_FUNC_INFO << ", NOT setting PYTHONHOME (AppImage) - relying on Py_SetProgramName instead")
 
-		// Verify it was set
-		const QByteArray actualPythonHome = qgetenv("PYTHONHOME");
-		if (actualPythonHome != pythonHomeValue)
-			WARN(Q_FUNC_INFO << ", PYTHONHOME mismatch! Expected: " << pythonHomeValue.constData() << ", actual: " << actualPythonHome.constData())
+		// Set PYTHONPATH to ensure Python only looks in the bundled directories
+		const QString pythonVersion = QString::number(PY_MAJOR_VERSION) + QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
+		const QString pythonLibPath = selectedPrefix + QStringLiteral("/lib/python") + pythonVersion;
+		const QString pythonPathValue = pythonLibPath + QStringLiteral(":") + pythonLibPath + QStringLiteral("/lib-dynload:") + pythonLibPath
+			+ QStringLiteral("/site-packages");
+		INFO(Q_FUNC_INFO << ", setting PYTHONPATH = " << STDSTRING(pythonPathValue))
+		qputenv("PYTHONPATH", pythonPathValue.toLocal8Bit());
+
+		// Prevent Python from looking at user site-packages which might conflict
+		INFO(Q_FUNC_INFO << ", setting PYTHONNOUSERSITE = 1")
+		qputenv("PYTHONNOUSERSITE", "1");
+
+		// Clear any existing PYTHONSTARTUP that might interfere
+		if (qEnvironmentVariableIsSet("PYTHONSTARTUP")) {
+			INFO(Q_FUNC_INFO << ", clearing PYTHONSTARTUP")
+			qunsetenv("PYTHONSTARTUP");
+		}
+
+		// Diagnostic: Check if the bundled libpython exists
+		const QString libPythonPath =
+			selectedPrefix + QStringLiteral("/lib/libpython") + pythonVersion + QStringLiteral(".so.1.0");
+		if (QFileInfo::exists(libPythonPath))
+			INFO(Q_FUNC_INFO << ", found bundled libpython: " << STDSTRING(libPythonPath))
 		else
-			INFO(Q_FUNC_INFO << ", PYTHONHOME verified: " << actualPythonHome.constData())
+			WARN(Q_FUNC_INFO << ", bundled libpython NOT found at: " << STDSTRING(libPythonPath))
+
+		// Check critical stdlib modules exist
+		const QString osModulePath = pythonLibPath + QStringLiteral("/os.py");
+		const QString sysConfigPath = pythonLibPath + QStringLiteral("/_sysconfigdata__linux_x86_64-linux-gnu.py");
+		if (!QFileInfo::exists(osModulePath))
+			WARN(Q_FUNC_INFO << ", os.py NOT found at: " << STDSTRING(osModulePath))
+		if (!QFileInfo::exists(sysConfigPath))
+			DEBUG(Q_FUNC_INFO << ", _sysconfigdata NOT found (might be elsewhere)")
 	}
 
 	INFO(Q_FUNC_INFO << ", selectedPrefix = " << STDSTRING(selectedPrefix))
 	INFO(Q_FUNC_INFO << ", selectedExecutable = " << STDSTRING(selectedExecutable))
+
+	// CRITICAL APPIMAGE ISSUE WARNING:
+	// If LabPlot is dynamically linked against libpython3.11.so at compile time,
+	// and we try to initialize with a different bundled Python at runtime,
+	// the dynamic linker might have already loaded the system libpython.
+	// This causes ABI conflicts and crashes during Py_Initialize().
+	// The solution is to either:
+	// 1. Build LabPlot with -DENABLE_PYTHON_SCRIPTING=OFF for AppImage and load Python dynamically
+	// 2. Ensure the bundled libpython matches what LabPlot was compiled against
+	// 3. Use LD_PRELOAD to force the bundled libpython before any system libraries
+	if (isAppImageBuild && !selectedPrefix.isEmpty()) {
+		INFO(Q_FUNC_INFO << ", WARNING: AppImage with bundled Python - verify libpython compatibility")
+	}
 
 	if (!selectedExecutable.isEmpty()) {
 		INFO(Q_FUNC_INFO << ", using custom Python executable: " << STDSTRING(selectedExecutable))
