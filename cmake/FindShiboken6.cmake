@@ -60,7 +60,7 @@ endif()
 # Find the executable
 find_program(Shiboken6_EXECUTABLE
     NAMES shiboken6
-    HINTS "${CMAKE_INSTALL_PREFIX}/bin" "${CMAKE_PREFIX_PATH}/bin" "${PySide6_PATH}/../shiboken6_generator" /usr/bin /usr/local/bin /app/bin
+    HINTS "${CMAKE_INSTALL_PREFIX}/bin" "${CMAKE_PREFIX_PATH}/bin" "${PySide6_PATH}/../shiboken6/bin" "${PySide6_PATH}/../shiboken6_generator" /usr/bin /usr/local/bin /usr/local/shiboken6/bin /app/bin
 )
 
 # find header
