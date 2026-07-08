@@ -308,6 +308,7 @@ parts:
       - libhdf5-dev
       - libnsl-dev
       - libnsl2
+      - patchelf
     stage-packages:
       - bison
       - discount
