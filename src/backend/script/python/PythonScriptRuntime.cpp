@@ -287,8 +287,8 @@ bool PythonScriptRuntime::initPython() {
 		// Set PYTHONPATH to ensure Python only looks in the bundled directories
 		const QString pythonVersion = QString::number(PY_MAJOR_VERSION) + QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
 		const QString pythonLibPath = selectedPrefix + QStringLiteral("/lib/python") + pythonVersion;
-		const QString pythonPathValue = pythonLibPath + QStringLiteral(":") + pythonLibPath + QStringLiteral("/lib-dynload:") + pythonLibPath
-			+ QStringLiteral("/site-packages");
+		const QString pythonPathValue =
+			pythonLibPath + QStringLiteral(":") + pythonLibPath + QStringLiteral("/lib-dynload:") + pythonLibPath + QStringLiteral("/site-packages");
 		INFO(Q_FUNC_INFO << ", setting PYTHONPATH = " << STDSTRING(pythonPathValue))
 		qputenv("PYTHONPATH", pythonPathValue.toLocal8Bit());
 
@@ -303,8 +303,7 @@ bool PythonScriptRuntime::initPython() {
 		}
 
 		// Diagnostic: Check if the bundled libpython exists
-		const QString libPythonPath =
-			selectedPrefix + QStringLiteral("/lib/libpython") + pythonVersion + QStringLiteral(".so.1.0");
+		const QString libPythonPath = selectedPrefix + QStringLiteral("/lib/libpython") + pythonVersion + QStringLiteral(".so.1.0");
 		if (QFileInfo::exists(libPythonPath))
 			INFO(Q_FUNC_INFO << ", found bundled libpython: " << STDSTRING(libPythonPath))
 		else
