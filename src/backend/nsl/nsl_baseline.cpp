@@ -14,9 +14,9 @@
 
 #include <QtGlobal>
 
+#include <cmath>
 #include <gsl/gsl_fit.h>
 #include <gsl/gsl_statistics_double.h>
-#include <math.h>
 #include <vector>
 
 // macOS builds on gitlab CI complain about missing Eigen/Sparse while having Eigen3	-> disable EIGEN3 on macOS for the moment
@@ -57,7 +57,7 @@ void nsl_baseline_remove_minimum(double* data, const size_t n) {
 	// Handle single element case
 	if (n == 1) {
 		// For single element, subtracting minimum (which is the element itself) results in 0
-		if (isfinite(data[0])) {
+		if (std::isfinite(data[0])) {
 			data[0] = 0.0;
 		}
 		return;
@@ -65,7 +65,7 @@ void nsl_baseline_remove_minimum(double* data, const size_t n) {
 
 	// Validate values before computing minimum
 	for (size_t i = 0; i < n; i++) {
-		if (!isfinite(data[i])) {
+		if (!std::isfinite(data[i])) {
 			return; // Can't compute minimum with NaN or Infinity values
 		}
 	}
@@ -86,7 +86,7 @@ void nsl_baseline_remove_maximum(double* data, const size_t n) {
 	// Handle single element case
 	if (n == 1) {
 		// For single element, subtracting maximum (which is the element itself) results in 0
-		if (isfinite(data[0])) {
+		if (std::isfinite(data[0])) {
 			data[0] = 0.0;
 		}
 		return;
@@ -94,7 +94,7 @@ void nsl_baseline_remove_maximum(double* data, const size_t n) {
 
 	// Validate values before computing maximum
 	for (size_t i = 0; i < n; i++) {
-		if (!isfinite(data[i])) {
+		if (!std::isfinite(data[i])) {
 			return; // Can't compute maximum with NaN or Infinity values
 		}
 	}
@@ -115,7 +115,7 @@ void nsl_baseline_remove_mean(double* data, const size_t n) {
 	// Handle single element case
 	if (n == 1) {
 		// For single element, subtracting mean (which is the element itself) results in 0
-		if (isfinite(data[0])) {
+		if (std::isfinite(data[0])) {
 			data[0] = 0.0;
 		}
 		return;
@@ -123,13 +123,13 @@ void nsl_baseline_remove_mean(double* data, const size_t n) {
 
 	// Validate values before computing mean
 	for (size_t i = 0; i < n; i++) {
-		if (!isfinite(data[i])) {
+		if (!std::isfinite(data[i])) {
 			return; // Can't compute mean with NaN or Infinity values
 		}
 	}
 
 	const double mean = gsl_stats_mean(data, 1, n);
-	if (!isfinite(mean)) {
+	if (!std::isfinite(mean)) {
 		return;
 	}
 
@@ -146,7 +146,7 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 	// Handle single element case
 	if (n == 1) {
 		// For single element, subtracting median (which is the element itself) results in 0
-		if (isfinite(data[0])) {
+		if (std::isfinite(data[0])) {
 			data[0] = 0.0;
 		}
 		return;
@@ -154,7 +154,7 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 
 	// Validate values before computing median
 	for (size_t i = 0; i < n; i++) {
-		if (!isfinite(data[i])) {
+		if (!std::isfinite(data[i])) {
 			return; // Can't compute median with NaN or Infinity values
 		}
 	}
@@ -165,7 +165,7 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 	const double median = gsl_stats_median(tmp_data.data(), 1, n); // rearranges tmp_data
 
 	// Check for invalid median result
-	if (!isfinite(median)) {
+	if (!std::isfinite(median)) {
 		return;
 	}
 
@@ -182,7 +182,7 @@ int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size
 
 	// Validate values
 	for (size_t i = 0; i < n; i++) {
-		if (!isfinite(xdata[i]) || !isfinite(ydata[i])) {
+		if (!std::isfinite(xdata[i]) || !std::isfinite(ydata[i])) {
 			return -1;
 		}
 	}
@@ -190,7 +190,7 @@ int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size
 	// Handle single point case
 	if (n == 1) {
 		// For single point, subtracting baseline (which is the point itself) results in 0
-		if (isfinite(ydata[0])) {
+		if (std::isfinite(ydata[0])) {
 			ydata[0] = 0.0;
 		}
 		return 0;
@@ -219,7 +219,7 @@ int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 	// Handle single point case
 	if (n == 1) {
 		// For single point, subtracting baseline (which is the point itself) results in 0
-		if (isfinite(ydata[0])) {
+		if (std::isfinite(ydata[0])) {
 			ydata[0] = 0.0;
 		}
 		return 0;
@@ -232,7 +232,7 @@ int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 
 	// Validate inputs - check for NaN and Infinity
 	for (size_t i = 0; i < n; i++) {
-		if (!isfinite(xdata[i]) || !isfinite(ydata[i])) {
+		if (!std::isfinite(xdata[i]) || !std::isfinite(ydata[i])) {
 			return -1;
 		}
 	}
@@ -262,7 +262,7 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 	// Handle single point case
 	if (n == 1) {
 		// For single point, subtracting baseline (which is the point itself) results in 0
-		if (!isfinite(data[0])) {
+		if (!std::isfinite(data[0])) {
 			return -1.;
 		}
 		data[0] = 0.0;
@@ -275,7 +275,7 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 		// This is a simple linear interpolation
 		double y0 = data[0];
 		double y1 = data[1];
-		if (!isfinite(y0) || !isfinite(y1)) {
+		if (!std::isfinite(y0) || !std::isfinite(y1)) {
 			return -1.;
 		}
 		double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
@@ -297,7 +297,7 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 
 	// Validate data - check for NaN and Infinity
 	for (size_t i = 0; i < n; i++) {
-		if (!isfinite(data[i])) {
+		if (!std::isfinite(data[i])) {
 			return -1.;
 		}
 	}
@@ -388,7 +388,7 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 		SVec wn(n);
 		for (size_t i = 0; i < n; ++i) {
 			// Check for division by zero or invalid values
-			if (s == 0 || isnan(s) || isinf(m)) {
+			if (s == 0 || std::isnan(s) || std::isinf(m)) {
 				// Use default weight if calculation would be invalid
 				wn.insert(i) = 1.;
 			} else {
@@ -467,7 +467,7 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 	// Handle single point case
 	if (n == 1) {
 		// For single point, subtracting baseline (which is the point itself) results in 0
-		if (!isfinite(data[0])) {
+		if (!std::isfinite(data[0])) {
 			return -1.;
 		}
 		data[0] = 0.0;
@@ -480,7 +480,7 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 		// This is a simple linear interpolation
 		double y0 = data[0];
 		double y1 = data[1];
-		if (!isfinite(y0) || !isfinite(y1)) {
+		if (!std::isfinite(y0) || !std::isfinite(y1)) {
 			return -1.;
 		}
 		double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
@@ -502,7 +502,7 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 
 	// Validate data - check for NaN and Infinity
 	for (size_t i = 0; i < n; i++) {
-		if (!isfinite(data[i])) {
+		if (!std::isfinite(data[i])) {
 			return -1.;
 		}
 	}
@@ -634,7 +634,7 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 		// w_new = 1 / (1 + np.exp(2 * (d - (2*s - m))/s))
 		for (size_t i = 0; i < n; ++i) {
 			// Check for division by zero or invalid values
-			if (s == 0 || isnan(s) || isinf(m)) {
+			if (s == 0 || std::isnan(s) || std::sinf(m)) {
 				// Use default weight if calculation would be invalid
 				gsl_vector_set(w_new, i, 1.);
 			} else {
@@ -704,7 +704,7 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 	// Handle single point case
 	if (n == 1) {
 		// For single point, subtracting baseline (which is the point itself) results in 0
-		if (!isfinite(data[0])) {
+		if (!std::isfinite(data[0])) {
 			return -1.;
 		}
 		data[0] = 0.0;
@@ -717,7 +717,7 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 		// This is a simple linear interpolation
 		double y0 = data[0];
 		double y1 = data[1];
-		if (!isfinite(y0) || !isfinite(y1)) {
+		if (!std::isfinite(y0) || !std::isfinite(y1)) {
 			return -1.;
 		}
 		double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
