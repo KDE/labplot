@@ -18,8 +18,6 @@
 #include <KConfigGroup>
 #include <KMessageBox>
 
-#include <kcoreaddons_version.h>
-
 #include <QContextMenuEvent>
 #include <QFileDialog>
 #include <QMenu>

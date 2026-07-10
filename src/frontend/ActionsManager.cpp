@@ -64,7 +64,6 @@
 #include <Purpose/AlternativesModel>
 #include <Purpose/Menu>
 #include <QMimeType>
-#include <purpose_version.h>
 #endif
 
 #ifdef HAVE_TOUCHBAR
