@@ -21,7 +21,6 @@
 #include <KIconTheme>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kcoreaddons_version.h>
 
 #define HAVE_STYLE_MANAGER __has_include(<KStyleManager>)
 #if HAVE_STYLE_MANAGER

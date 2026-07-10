@@ -32,7 +32,6 @@
 #include <KParts/ReadWritePart>
 #include <KPluginFactory>
 #include <KPluginMetaData>
-#include <kcoreaddons_version.h>
 
 #include <QAction>
 #include <QApplication>
