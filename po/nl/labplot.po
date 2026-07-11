@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-05 00:39+0000\n"
+"POT-Creation-Date: 2026-07-11 00:39+0000\n"
 "PO-Revision-Date: 2026-07-05 19:08+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -52,7 +52,7 @@ msgstr "Hernoemen"
 #: src/backend/core/AbstractAspect.cpp:453
 #: src/backend/spreadsheet/Spreadsheet.cpp:911
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:540
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:266
 #: src/frontend/worksheet/WorksheetView.cpp:139
 #, kde-format
 msgid "Delete"
@@ -265,7 +265,7 @@ msgstr "Groot geheel getal"
 #: src/backend/core/AbstractColumn.cpp:230
 #: src/backend/datasources/filters/AsciiFilter.cpp:681
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
-#: src/frontend/ActionsManager.cpp:556
+#: src/frontend/ActionsManager.cpp:555
 #: src/frontend/notebook/NotebookView.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
@@ -359,12 +359,12 @@ msgstr "In%1"
 msgid "Import Data"
 msgstr "Gegevens importeren"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:290
+#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:289
 #, kde-format
 msgid "From File..."
 msgstr "Uit bestand..."
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:310
+#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:309
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Uit SQL-database..."
@@ -389,7 +389,7 @@ msgstr "Afdrukken"
 msgid "Print Preview"
 msgstr "Afdrukvoorbeeld"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:413
+#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:412
 #, kde-format
 msgid "&Close"
 msgstr "&Sluiten"
@@ -405,7 +405,7 @@ msgid "incompatible filter type"
 msgstr "incompatibel filtertype"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:158 src/backend/core/Project.cpp:710
+#: src/backend/core/Folder.cpp:158 src/backend/core/Project.cpp:709
 #: src/backend/datasources/MQTTClient.cpp:1364
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
@@ -457,7 +457,7 @@ msgid "Created"
 msgstr "Aangemaakt"
 
 #: src/backend/core/AspectTreeModel.cpp:171
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:66
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:64
 #, kde-format
 msgid "Comment"
 msgstr "Toelichting"
@@ -698,53 +698,53 @@ msgid "Not yet loaded."
 msgstr "Nog niet ingelezen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:178
+#: src/backend/core/Project.cpp:177
 #: src/frontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Project"
 
-#: src/backend/core/Project.cpp:296
+#: src/backend/core/Project.cpp:295
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: auteur instellen"
 
-#: src/backend/core/Project.cpp:303
+#: src/backend/core/Project.cpp:302
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1: gewijzigde vastzetstatus opslaan"
 
-#: src/backend/core/Project.cpp:310
+#: src/backend/core/Project.cpp:309
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: berekening opslaan gewijzigd"
 
-#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:584
+#: src/backend/core/Project.cpp:553 src/backend/core/Project.cpp:583
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Jammer. Kon bestand niet openen voor lezen."
 
-#: src/backend/core/Project.cpp:565 src/backend/core/Project.cpp:591
+#: src/backend/core/Project.cpp:564 src/backend/core/Project.cpp:590
 #, kde-format
 msgid "The project file is empty."
 msgstr "Het projectbestand is leeg."
 
-#: src/backend/core/Project.cpp:565 src/backend/core/Project.cpp:591
+#: src/backend/core/Project.cpp:564 src/backend/core/Project.cpp:590
 #, kde-format
 msgid "Error opening project"
 msgstr "Fout bij openen project"
 
-#: src/backend/core/Project.cpp:610
+#: src/backend/core/Project.cpp:609
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Onbekende fout bij openen project %1."
 
-#: src/backend/core/Project.cpp:611
+#: src/backend/core/Project.cpp:610
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Fout bij openen project"
 
-#: src/backend/core/Project.cpp:631
+#: src/backend/core/Project.cpp:630
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -763,43 +763,43 @@ msgstr ""
 "\n"
 "Wilt u verder gaan?"
 
-#: src/backend/core/Project.cpp:637
+#: src/backend/core/Project.cpp:636
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Ondersteuning voor CAS ontbreekt"
 
-#: src/backend/core/Project.cpp:667
+#: src/backend/core/Project.cpp:666
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Attribuut 'versie' ontbreekt."
 
-#: src/backend/core/Project.cpp:717
+#: src/backend/core/Project.cpp:716
 #, kde-format
 msgid "no project element found"
 msgstr "geen projectelement gevonden"
 
-#: src/backend/core/Project.cpp:719
+#: src/backend/core/Project.cpp:718
 #, kde-format
 msgid "no valid XML document found"
 msgstr "geen geldig XML-document gevonden"
 
-#: src/backend/core/Project.cpp:769 src/backend/core/Project.cpp:775
-#: src/backend/core/Project.cpp:826
+#: src/backend/core/Project.cpp:768 src/backend/core/Project.cpp:774
+#: src/backend/core/Project.cpp:825
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Openen bestand '%1' is mislukt."
 
-#: src/backend/core/Project.cpp:832
+#: src/backend/core/Project.cpp:831
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Verwerken inhoud bestand '%1' is mislukt."
 
-#: src/backend/core/Project.cpp:835
+#: src/backend/core/Project.cpp:834
 #, kde-format
 msgid "Failed to open project"
 msgstr "Project openen is mislukt"
 
-#: src/backend/core/Project.cpp:1346
+#: src/backend/core/Project.cpp:1345
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Tijd van wijziging project is ongeldig. Huidige tijd wordt gebruikt."
@@ -1945,7 +1945,7 @@ msgid "Unknown"
 msgstr "Onbekend"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:241 src/frontend/MainWin.cpp:1238
+#: src/frontend/ActionsManager.cpp:240 src/frontend/MainWin.cpp:1238
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2316,7 +2316,7 @@ msgid "The file has no data to import."
 msgstr "Het bestand heeft geen te importeren gegevens."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:64
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:62
 #, kde-format
 msgid "Key"
 msgstr "Sleutel"
@@ -2333,7 +2333,7 @@ msgstr "Sleutel"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2668
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2684
 #: src/frontend/ui/dockwidgets/columndock.ui:542
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:65
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:63
 #, kde-format
 msgid "Value"
 msgstr "Waarde"
@@ -6581,12 +6581,12 @@ msgstr "%1: modus instellen"
 msgid "no note element found"
 msgstr "geen notitie-element gevonden"
 
-#: src/backend/notebook/Notebook.cpp:68
+#: src/backend/notebook/Notebook.cpp:67
 #, kde-format
 msgid "Couldn't find the plugin for %1. Please check your installation."
 msgstr "Kon de plugin voor %1 niet vinden.  Controleer uw installatie."
 
-#: src/backend/notebook/Notebook.cpp:86
+#: src/backend/notebook/Notebook.cpp:85
 #, kde-format
 msgid "Couldn't create the sessions for %1. Please check your installation."
 msgstr "Kon de sessie voor %1 niet aanmaken.  Controleer uw installatie."
@@ -8703,7 +8703,7 @@ msgstr "Restwaarde"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
-#: src/frontend/ActionsManager.cpp:247 src/frontend/MainWin.cpp:1256
+#: src/frontend/ActionsManager.cpp:246 src/frontend/MainWin.cpp:1256
 #: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -9632,7 +9632,7 @@ msgstr "Verticale as"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2435
-#: src/frontend/ActionsManager.cpp:560
+#: src/frontend/ActionsManager.cpp:559
 #: src/frontend/datasources/ImportFileWidget.cpp:114
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:117
@@ -9682,7 +9682,7 @@ msgid "Inset Plot Area with Data"
 msgstr "Inzet in plotgebied met gegevens"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
-#: src/frontend/ActionsManager.cpp:908
+#: src/frontend/ActionsManager.cpp:907
 #: src/frontend/notebook/NotebookView.cpp:175
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:442
@@ -11877,40 +11877,40 @@ msgstr ""
 "computers, software voor Datavisualisatie en Analyse, die iedereen kan "
 "gebruiken, (Versie %2) [Computersoftware]. %3."
 
-#: src/frontend/ActionsManager.cpp:197
+#: src/frontend/ActionsManager.cpp:196
 #, kde-format
 msgid "&Open Example"
 msgstr "Voorbeeld  &Openen"
 
-#: src/frontend/ActionsManager.cpp:203
+#: src/frontend/ActionsManager.cpp:202
 #, kde-format
 msgid "&Full Screen Mode"
 msgstr "Modus &Volledig scherm"
 
-#: src/frontend/ActionsManager.cpp:225 src/frontend/MainWin.cpp:1194
+#: src/frontend/ActionsManager.cpp:224 src/frontend/MainWin.cpp:1194
 #, kde-format
 msgid "Workbook"
 msgstr "Werkboek"
 
-#: src/frontend/ActionsManager.cpp:227
+#: src/frontend/ActionsManager.cpp:226
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Maakt een nieuw werkblad aan voor collectie werkbladen, matrices en plots"
 
-#: src/frontend/ActionsManager.cpp:230 src/frontend/MainWin.cpp:1202
+#: src/frontend/ActionsManager.cpp:229 src/frontend/MainWin.cpp:1202
 #, kde-format
 msgid "Data Extractor"
 msgstr "Gegevens verkrijgen"
 
-#: src/frontend/ActionsManager.cpp:231
+#: src/frontend/ActionsManager.cpp:230
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr ""
 "Maakt een nieuwe mogelijkheid aan voor het verkrijgen van gegevens uit een "
 "afbeelding"
 
-#: src/frontend/ActionsManager.cpp:235
+#: src/frontend/ActionsManager.cpp:234
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:76
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:401
@@ -11921,241 +11921,241 @@ msgstr ""
 msgid "Spreadsheet"
 msgstr "Rekenblad"
 
-#: src/frontend/ActionsManager.cpp:237
+#: src/frontend/ActionsManager.cpp:236
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Maakt een nieuw rekenblad aan voor bewerken gegevens"
 
-#: src/frontend/ActionsManager.cpp:243
+#: src/frontend/ActionsManager.cpp:242
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Maakt een nieuwe matrix aan voor bewerken gegevens"
 
-#: src/frontend/ActionsManager.cpp:249
+#: src/frontend/ActionsManager.cpp:248
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Maakt een nieuw werkblad aan voor plotten van gegevens"
 
-#: src/frontend/ActionsManager.cpp:254
+#: src/frontend/ActionsManager.cpp:253
 #, kde-format
 msgid "Python Script"
 msgstr "Python-script"
 
-#: src/frontend/ActionsManager.cpp:255
+#: src/frontend/ActionsManager.cpp:254
 #, kde-format
 msgid "Creates a new Python script"
 msgstr "Maakt een nieuw Python-script aan"
 
-#: src/frontend/ActionsManager.cpp:273 src/frontend/MainWin.cpp:1264
+#: src/frontend/ActionsManager.cpp:272 src/frontend/MainWin.cpp:1264
 #, kde-format
 msgid "Note"
 msgstr "Notitie"
 
-#: src/frontend/ActionsManager.cpp:274
+#: src/frontend/ActionsManager.cpp:273
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Maakt een nieuwe notitie aan voor willekeurige tekst"
 
-#: src/frontend/ActionsManager.cpp:278 src/frontend/MainWin.cpp:1186
+#: src/frontend/ActionsManager.cpp:277 src/frontend/MainWin.cpp:1186
 #, kde-format
 msgid "Folder"
 msgstr "Map"
 
-#: src/frontend/ActionsManager.cpp:279
+#: src/frontend/ActionsManager.cpp:278
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Maakt een nieuwe map aan voor bladen en andere elementen"
 
-#: src/frontend/ActionsManager.cpp:284
+#: src/frontend/ActionsManager.cpp:283
 #, kde-format
 msgid "From Live Data Source..."
 msgstr "Uit actieve gegevensbron..."
 
-#: src/frontend/ActionsManager.cpp:285
+#: src/frontend/ActionsManager.cpp:284
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Maakt een actieve gegevensbron aan om gegevens te lezen uit een reëel "
 "tijdapparaat"
 
-#: src/frontend/ActionsManager.cpp:293
+#: src/frontend/ActionsManager.cpp:292
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Gegevens importeren uit regulier bestand"
 
-#: src/frontend/ActionsManager.cpp:298
+#: src/frontend/ActionsManager.cpp:297
 #, kde-format
 msgid "From Directory..."
 msgstr "Uit map..."
 
-#: src/frontend/ActionsManager.cpp:300
+#: src/frontend/ActionsManager.cpp:299
 #, kde-format
 msgid "Import multiple files from a directory"
 msgstr "Meerdere bestanden uit een map importeren"
 
-#: src/frontend/ActionsManager.cpp:305
+#: src/frontend/ActionsManager.cpp:304
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "Uit kaggle.com..."
 
-#: src/frontend/ActionsManager.cpp:306
+#: src/frontend/ActionsManager.cpp:305
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Gegevens importeren uit kaggle.com"
 
-#: src/frontend/ActionsManager.cpp:311
+#: src/frontend/ActionsManager.cpp:310
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Gegevens importeren uit SQL-database"
 
-#: src/frontend/ActionsManager.cpp:315
+#: src/frontend/ActionsManager.cpp:314
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Uit collectie gegevensverzamelingen..."
 
-#: src/frontend/ActionsManager.cpp:316
+#: src/frontend/ActionsManager.cpp:315
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Gegevens importeren uit een online gegevensset"
 
-#: src/frontend/ActionsManager.cpp:320
+#: src/frontend/ActionsManager.cpp:319
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot-project..."
 
-#: src/frontend/ActionsManager.cpp:321
+#: src/frontend/ActionsManager.cpp:320
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Een project importeren uit een projectbestand van LabPlot (.lml)"
 
-#: src/frontend/ActionsManager.cpp:326
+#: src/frontend/ActionsManager.cpp:325
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Origin Project (OPJ)..."
 
-#: src/frontend/ActionsManager.cpp:327
+#: src/frontend/ActionsManager.cpp:326
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 "Een project importeren uit een projectbestand van OriginLab Origin (.lml)"
 
-#: src/frontend/ActionsManager.cpp:363
+#: src/frontend/ActionsManager.cpp:362
 #, kde-format
 msgid "Export..."
 msgstr "Exporteren..."
 
-#: src/frontend/ActionsManager.cpp:364
+#: src/frontend/ActionsManager.cpp:363
 #, kde-format
 msgid "Export selected element"
 msgstr "Geselecteerd element exporteren"
 
-#: src/frontend/ActionsManager.cpp:370 src/frontend/ActionsManager.cpp:1436
-#: src/frontend/ActionsManager.cpp:1444
+#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1435
+#: src/frontend/ActionsManager.cpp:1443
 #, kde-format
 msgid "Share"
 msgstr "Delen"
 
-#: src/frontend/ActionsManager.cpp:375
+#: src/frontend/ActionsManager.cpp:374
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Browser voor kleurkaarten"
 
-#: src/frontend/ActionsManager.cpp:376
+#: src/frontend/ActionsManager.cpp:375
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Dialoog openen voor het bladeren door de beschikbare kleurkaarten."
 
-#: src/frontend/ActionsManager.cpp:385
+#: src/frontend/ActionsManager.cpp:384
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Editor metagegevens van FITS..."
 
-#: src/frontend/ActionsManager.cpp:386
+#: src/frontend/ActionsManager.cpp:385
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Editor openen voor bewerken FITS-metadata"
 
-#: src/frontend/ActionsManager.cpp:395
+#: src/frontend/ActionsManager.cpp:394
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Geschiedenis ongedaan/opnieuw..."
 
-#: src/frontend/ActionsManager.cpp:415
+#: src/frontend/ActionsManager.cpp:414
 #, kde-format
 msgid "Close the active window"
 msgstr "Actieve venster sluiten"
 
-#: src/frontend/ActionsManager.cpp:418
+#: src/frontend/ActionsManager.cpp:417
 #, kde-format
 msgid "Close &All"
 msgstr "&Alle sluiten"
 
-#: src/frontend/ActionsManager.cpp:419
+#: src/frontend/ActionsManager.cpp:418
 #, kde-format
 msgid "Close all the windows"
 msgstr "Alle vensters sluiten"
 
-#: src/frontend/ActionsManager.cpp:422
+#: src/frontend/ActionsManager.cpp:421
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Volgende"
 
-#: src/frontend/ActionsManager.cpp:424
+#: src/frontend/ActionsManager.cpp:423
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Focus naar volgend venster verplaatsen"
 
-#: src/frontend/ActionsManager.cpp:427
+#: src/frontend/ActionsManager.cpp:426
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Vorige"
 
-#: src/frontend/ActionsManager.cpp:429
+#: src/frontend/ActionsManager.cpp:428
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Focus naar vorig venster verplaatsen"
 
-#: src/frontend/ActionsManager.cpp:436
+#: src/frontend/ActionsManager.cpp:435
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Alleen huidige &map"
 
-#: src/frontend/ActionsManager.cpp:441
+#: src/frontend/ActionsManager.cpp:440
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Huidige map en &submappen"
 
-#: src/frontend/ActionsManager.cpp:445
+#: src/frontend/ActionsManager.cpp:444
 #, kde-format
 msgid "&All"
 msgstr "&Alle"
 
-#: src/frontend/ActionsManager.cpp:467
+#: src/frontend/ActionsManager.cpp:466
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Geheugengebruik tonen"
 
-#: src/frontend/ActionsManager.cpp:475
+#: src/frontend/ActionsManager.cpp:474
 #, kde-format
 msgid "Project Explorer"
 msgstr "Projectverkenner"
 
-#: src/frontend/ActionsManager.cpp:480
+#: src/frontend/ActionsManager.cpp:479
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Eigenschappen verkenner"
 
-#: src/frontend/ActionsManager.cpp:485
+#: src/frontend/ActionsManager.cpp:484
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Werkbladvoorbeeld"
 
-#: src/frontend/ActionsManager.cpp:508
+#: src/frontend/ActionsManager.cpp:507
 #, kde-format
 msgid "Configure CAS..."
 msgstr "CAS instellen..."
 
-#: src/frontend/ActionsManager.cpp:509
+#: src/frontend/ActionsManager.cpp:508
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -12164,135 +12164,135 @@ msgstr ""
 "Opent de instellingen voor Computer Algebra Systemen om de beschikbare "
 "systemen te wijzigen of nieuwe beschikbaar te maken"
 
-#: src/frontend/ActionsManager.cpp:519
+#: src/frontend/ActionsManager.cpp:518
 #, kde-format
 msgid "What's New"
 msgstr "Wat is nieuw"
 
-#: src/frontend/ActionsManager.cpp:551
+#: src/frontend/ActionsManager.cpp:550
 #, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
 msgstr "Nieuw plotgebied"
 
-#: src/frontend/ActionsManager.cpp:567
+#: src/frontend/ActionsManager.cpp:566
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:251
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Verticale indeling"
 
-#: src/frontend/ActionsManager.cpp:572
+#: src/frontend/ActionsManager.cpp:571
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:255
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Horizontale indeling"
 
-#: src/frontend/ActionsManager.cpp:577
+#: src/frontend/ActionsManager.cpp:576
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
 #: src/frontend/worksheet/WorksheetView.cpp:259
 #, kde-format
 msgid "Grid Layout"
 msgstr "Roosterindeling"
 
-#: src/frontend/ActionsManager.cpp:582
+#: src/frontend/ActionsManager.cpp:581
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
 msgid "No Layout"
 msgstr "Geen opmaak"
 
-#: src/frontend/ActionsManager.cpp:590 src/frontend/ActionsManager.cpp:631
+#: src/frontend/ActionsManager.cpp:589 src/frontend/ActionsManager.cpp:630
 #: src/frontend/worksheet/WorksheetView.cpp:187
 #: src/frontend/worksheet/WorksheetView.cpp:349
 #, kde-format
 msgid "Select and Edit"
 msgstr "Selecteren en bewerken"
 
-#: src/frontend/ActionsManager.cpp:595 src/frontend/ActionsManager.cpp:822
+#: src/frontend/ActionsManager.cpp:594 src/frontend/ActionsManager.cpp:821
 #: src/frontend/datapicker/DatapickerImageView.cpp:132
 #: src/frontend/worksheet/WorksheetView.cpp:192
 #, kde-format
 msgid "Navigate"
 msgstr "Navigeren"
 
-#: src/frontend/ActionsManager.cpp:600 src/frontend/ActionsManager.cpp:827
+#: src/frontend/ActionsManager.cpp:599 src/frontend/ActionsManager.cpp:826
 #: src/frontend/datapicker/DatapickerImageView.cpp:136
 #: src/frontend/worksheet/WorksheetView.cpp:196
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Selecteren en zoomen"
 
-#: src/frontend/ActionsManager.cpp:606 src/frontend/ActionsManager.cpp:856
+#: src/frontend/ActionsManager.cpp:605 src/frontend/ActionsManager.cpp:855
 #, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "Zoomen"
 
-#: src/frontend/ActionsManager.cpp:612 src/frontend/ActionsManager.cpp:862
+#: src/frontend/ActionsManager.cpp:611 src/frontend/ActionsManager.cpp:861
 #, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr "Vergroting"
 
-#: src/frontend/ActionsManager.cpp:625
+#: src/frontend/ActionsManager.cpp:624
 #, kde-format
 msgctxt "@action"
 msgid "Add New"
 msgstr "Nieuw toevoegen"
 
-#: src/frontend/ActionsManager.cpp:637
+#: src/frontend/ActionsManager.cpp:636
 #: src/frontend/worksheet/WorksheetView.cpp:354
 #, kde-format
 msgid "Crosshair"
 msgstr "Kruisdraad"
 
-#: src/frontend/ActionsManager.cpp:642
+#: src/frontend/ActionsManager.cpp:641
 #: src/frontend/worksheet/WorksheetView.cpp:359
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Regio selecteren en inzoomen"
 
-#: src/frontend/ActionsManager.cpp:647
+#: src/frontend/ActionsManager.cpp:646
 #: src/frontend/worksheet/WorksheetView.cpp:364
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "X-regio selecteren en inzoomen"
 
-#: src/frontend/ActionsManager.cpp:652
+#: src/frontend/ActionsManager.cpp:651
 #: src/frontend/worksheet/WorksheetView.cpp:369
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Y-regio selecteren en inzoomen"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:657 src/frontend/MainWin.cpp:1632
+#: src/frontend/ActionsManager.cpp:656 src/frontend/MainWin.cpp:1632
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Cursor"
 msgstr "Muisaanwijzer"
 
-#: src/frontend/ActionsManager.cpp:665
+#: src/frontend/ActionsManager.cpp:664
 #: src/frontend/worksheet/WorksheetView.cpp:382
 #, kde-format
 msgid "Auto Scale"
 msgstr "Autoschalen"
 
-#: src/frontend/ActionsManager.cpp:669
+#: src/frontend/ActionsManager.cpp:668
 #: src/frontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Autoschalen X"
 
-#: src/frontend/ActionsManager.cpp:673
+#: src/frontend/ActionsManager.cpp:672
 #: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Autoschalen Y"
 
-#: src/frontend/ActionsManager.cpp:678 src/frontend/ActionsManager.cpp:781
+#: src/frontend/ActionsManager.cpp:677 src/frontend/ActionsManager.cpp:780
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:61
@@ -12302,7 +12302,7 @@ msgstr "Autoschalen Y"
 msgid "Zoom In"
 msgstr "Inzoomen"
 
-#: src/frontend/ActionsManager.cpp:682 src/frontend/ActionsManager.cpp:784
+#: src/frontend/ActionsManager.cpp:681 src/frontend/ActionsManager.cpp:783
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:65
@@ -12312,128 +12312,128 @@ msgstr "Inzoomen"
 msgid "Zoom Out"
 msgstr "Uitzoomen"
 
-#: src/frontend/ActionsManager.cpp:686
+#: src/frontend/ActionsManager.cpp:685
 #: src/frontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Zoom In X"
 msgstr "Inzoomen X"
 
-#: src/frontend/ActionsManager.cpp:690
+#: src/frontend/ActionsManager.cpp:689
 #: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Uitzoomen X"
 
-#: src/frontend/ActionsManager.cpp:694
+#: src/frontend/ActionsManager.cpp:693
 #: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Inzoomen Y"
 
-#: src/frontend/ActionsManager.cpp:698
+#: src/frontend/ActionsManager.cpp:697
 #: src/frontend/worksheet/WorksheetView.cpp:414
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Uitzoomen Y"
 
-#: src/frontend/ActionsManager.cpp:703
+#: src/frontend/ActionsManager.cpp:702
 #: src/frontend/worksheet/WorksheetView.cpp:418
 #, kde-format
 msgid "Shift Left X"
 msgstr "Links schuiven X"
 
-#: src/frontend/ActionsManager.cpp:707
+#: src/frontend/ActionsManager.cpp:706
 #: src/frontend/worksheet/WorksheetView.cpp:420
 #, kde-format
 msgid "Shift Right X"
 msgstr "Rechts schuiven X"
 
-#: src/frontend/ActionsManager.cpp:711
+#: src/frontend/ActionsManager.cpp:710
 #: src/frontend/worksheet/WorksheetView.cpp:422
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Omhoog schuiven Y"
 
-#: src/frontend/ActionsManager.cpp:715
+#: src/frontend/ActionsManager.cpp:714
 #: src/frontend/worksheet/WorksheetView.cpp:424
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Omlaag schuiven Y"
 
-#: src/frontend/ActionsManager.cpp:727
+#: src/frontend/ActionsManager.cpp:726
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:543
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Voeg rij boven in"
 
-#: src/frontend/ActionsManager.cpp:730
+#: src/frontend/ActionsManager.cpp:729
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:544
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Voeg rij onder in"
 
-#: src/frontend/ActionsManager.cpp:733
+#: src/frontend/ActionsManager.cpp:732
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:547
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "Geselecteerde rij(en) verwijderen"
 
-#: src/frontend/ActionsManager.cpp:737
+#: src/frontend/ActionsManager.cpp:736
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:396
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Voeg kolom links in"
 
-#: src/frontend/ActionsManager.cpp:740
+#: src/frontend/ActionsManager.cpp:739
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:397
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Voeg kolom rechts in"
 
-#: src/frontend/ActionsManager.cpp:743
+#: src/frontend/ActionsManager.cpp:742
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:400
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "Geselecteerde kolom(men) verwijderen"
 
-#: src/frontend/ActionsManager.cpp:747
+#: src/frontend/ActionsManager.cpp:746
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:530
 #, kde-format
 msgid "&Sort..."
 msgstr "&Sorteren..."
 
-#: src/frontend/ActionsManager.cpp:748
+#: src/frontend/ActionsManager.cpp:747
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:531
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "Meerdere kolommen samen sorteren"
 
-#: src/frontend/ActionsManager.cpp:751
+#: src/frontend/ActionsManager.cpp:750
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:532
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "&Oplopend sorteren"
 
-#: src/frontend/ActionsManager.cpp:752
+#: src/frontend/ActionsManager.cpp:751
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:533
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "De geselecteerde kolommen gescheiden in oplopende volgorde sorteren"
 
-#: src/frontend/ActionsManager.cpp:755
+#: src/frontend/ActionsManager.cpp:754
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:534
 #, kde-format
 msgid "Sort &Descending"
 msgstr "Aflopen&d sorteren"
 
-#: src/frontend/ActionsManager.cpp:756
+#: src/frontend/ActionsManager.cpp:755
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:535
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "De geselecteerde kolommen gescheiden in aflopende volgorde sorteren"
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/ActionsManager.cpp:767 src/frontend/ActionsManager.cpp:1602
+#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1601
 #: src/frontend/dockwidgets/LiveDataDock.cpp:239
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
@@ -12442,125 +12442,125 @@ msgstr "Pauzeren"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #. i18n: ectx: property (text), widget (QLabel, lUpdate)
-#: src/frontend/ActionsManager.cpp:770
+#: src/frontend/ActionsManager.cpp:769
 #: src/frontend/ui/dockwidgets/livedatadock.ui:172
 #: src/frontend/ui/dockwidgets/livedatadock.ui:187
 #, kde-format
 msgid "Update"
 msgstr "Bijwerken"
 
-#: src/frontend/ActionsManager.cpp:787
+#: src/frontend/ActionsManager.cpp:786
 #: src/frontend/notebook/NotebookView.cpp:69
 #, kde-format
 msgid "Find"
 msgstr "Zoeken"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/frontend/ActionsManager.cpp:790
+#: src/frontend/ActionsManager.cpp:789
 #: src/frontend/notebook/NotebookView.cpp:77
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "Herstarten"
 
-#: src/frontend/ActionsManager.cpp:793
+#: src/frontend/ActionsManager.cpp:792
 #: src/frontend/notebook/NotebookView.cpp:80
 #: src/frontend/notebook/NotebookView.cpp:398
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "Notebook berekenen"
 
-#: src/frontend/ActionsManager.cpp:807
+#: src/frontend/ActionsManager.cpp:806
 #: src/frontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Aspunten instellen"
 
-#: src/frontend/ActionsManager.cpp:812
+#: src/frontend/ActionsManager.cpp:811
 #: src/frontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Punten kromme instellen"
 
-#: src/frontend/ActionsManager.cpp:817
+#: src/frontend/ActionsManager.cpp:816
 #: src/frontend/datapicker/DatapickerImageView.cpp:148
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Stukken kromme selecteren"
 
-#: src/frontend/ActionsManager.cpp:833
+#: src/frontend/ActionsManager.cpp:832
 #: src/frontend/datapicker/DatapickerImageView.cpp:153
 #, kde-format
 msgid "New Curve"
 msgstr "Nieuwe kromme"
 
-#: src/frontend/ActionsManager.cpp:839
+#: src/frontend/ActionsManager.cpp:838
 #: src/frontend/datapicker/DatapickerImageView.cpp:156
 #, kde-format
 msgid "Shift Left"
 msgstr "Links schuiven"
 
-#: src/frontend/ActionsManager.cpp:843
+#: src/frontend/ActionsManager.cpp:842
 #: src/frontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
 msgid "Shift Right"
 msgstr "Rechts schuiven"
 
-#: src/frontend/ActionsManager.cpp:847
+#: src/frontend/ActionsManager.cpp:846
 #: src/frontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Up"
 msgstr "omhoog schuiven"
 
-#: src/frontend/ActionsManager.cpp:851
+#: src/frontend/ActionsManager.cpp:850
 #: src/frontend/datapicker/DatapickerImageView.cpp:168
 #, kde-format
 msgid "Shift Down"
 msgstr "Omlaag schuiven"
 
-#: src/frontend/ActionsManager.cpp:947
+#: src/frontend/ActionsManager.cpp:946
 #, kde-format
 msgid "Window Visibility"
 msgstr "Zichtbaarheid venster"
 
-#: src/frontend/ActionsManager.cpp:964
+#: src/frontend/ActionsManager.cpp:963
 #, kde-format
 msgid "Color Scheme"
 msgstr "Kleurenschema"
 
-#: src/frontend/ActionsManager.cpp:1402
+#: src/frontend/ActionsManager.cpp:1401
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Maakt een nieuw %1 notitieboek aan"
 
-#: src/frontend/ActionsManager.cpp:1436
+#: src/frontend/ActionsManager.cpp:1435
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Er was een probleem bij delen van het project: %1"
 
-#: src/frontend/ActionsManager.cpp:1440
+#: src/frontend/ActionsManager.cpp:1439
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Project succesvol gedeeld"
 
-#: src/frontend/ActionsManager.cpp:1443
+#: src/frontend/ActionsManager.cpp:1442
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "U kunt het gedeelde project vinden op: <a href=\"%1\">%1</a>"
 
-#: src/frontend/ActionsManager.cpp:1598
+#: src/frontend/ActionsManager.cpp:1597
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, kde-format
 msgid "Continue"
 msgstr "Doorgaan"
 
-#: src/frontend/ActionsManager.cpp:1599
+#: src/frontend/ActionsManager.cpp:1598
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
 msgstr "Doorgaan met lezen"
 
-#: src/frontend/ActionsManager.cpp:1603
+#: src/frontend/ActionsManager.cpp:1602
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
 #, kde-format
 msgid "Pause Reading"
@@ -13016,7 +13016,7 @@ msgstr "Beschrijving kolom %1"
 
 #: src/frontend/datasources/FITSOptionsWidget.cpp:22
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:98
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:63
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:61
 #, kde-format
 msgid "Content"
 msgstr "Inhoud"
@@ -16031,13 +16031,13 @@ msgstr ""
 "geplaatst moet worden"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:38
-#: src/frontend/ProjectExplorer.cpp:749
+#: src/frontend/ProjectExplorer.cpp:748
 #, kde-format
 msgid "Case Sensitive"
 msgstr "Hoofdlettergevoelig"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:42
-#: src/frontend/ProjectExplorer.cpp:757
+#: src/frontend/ProjectExplorer.cpp:756
 #, kde-format
 msgid "Match Complete Word"
 msgstr "Op hele woord zoeken"
@@ -17567,7 +17567,7 @@ msgstr "Selecteer bestand om functiedefinitie op te slaan"
 msgid "Comment:"
 msgstr "Toelichting:"
 
-#: src/frontend/HistoryDialog.cpp:40
+#: src/frontend/HistoryDialog.cpp:39
 #, kde-format
 msgid ""
 "List of all performed steps/actions.\n"
@@ -17576,18 +17576,18 @@ msgstr ""
 "Lijst van alle gedane stappen/acties.\n"
 "Selecteer stap in de lijst"
 
-#: src/frontend/HistoryDialog.cpp:44
+#: src/frontend/HistoryDialog.cpp:43
 #, kde-format
 msgctxt "@title:window"
 msgid "Undo/Redo History"
 msgstr "Gesch ongedaan/opnieuw"
 
-#: src/frontend/HistoryDialog.cpp:56
+#: src/frontend/HistoryDialog.cpp:55
 #, kde-format
 msgid "&Clear"
 msgstr "&Wissen"
 
-#: src/frontend/HistoryDialog.cpp:57
+#: src/frontend/HistoryDialog.cpp:56
 #, kde-format
 msgid ""
 "Clears the undo history. Commands are not undone or redone; the state of the "
@@ -17596,17 +17596,17 @@ msgstr ""
 "Wist de geschiedenis ongedaan maken. Opdrachten worden niet ongedaan "
 "gemaakt  of opnieuw gedaan; de staat van het project blijft ongewijzigd."
 
-#: src/frontend/HistoryDialog.cpp:92
+#: src/frontend/HistoryDialog.cpp:91
 #, kde-format
 msgid "Do you really want to clear the undo history?"
 msgstr "Wilt u werkelijk de geschiedenis ongedaan wissen?"
 
-#: src/frontend/HistoryDialog.cpp:93
+#: src/frontend/HistoryDialog.cpp:92
 #, kde-format
 msgid "Clear History"
 msgstr "Geschiedenis wissen"
 
-#: src/frontend/LabPlot.cpp:72
+#: src/frontend/LabPlot.cpp:71
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
@@ -17615,61 +17615,61 @@ msgstr ""
 "LabPlot is VRIJE opensource software voor Datavisualisatie en Analyse, voor "
 "meerdere soorten computers, die iedereen kan gebruiken."
 
-#: src/frontend/LabPlot.cpp:74
+#: src/frontend/LabPlot.cpp:73
 #, kde-format
 msgid "(c) 2007-%1 LabPlot Team"
 msgstr "(c) 2007-%1 LabPlot-team"
 
-#: src/frontend/LabPlot.cpp:75
+#: src/frontend/LabPlot.cpp:74
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "Stefan Gerlach"
 
-#: src/frontend/LabPlot.cpp:75 src/frontend/LabPlot.cpp:76
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:74 src/frontend/LabPlot.cpp:75
+#: src/frontend/LabPlot.cpp:76
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Ontwikkelaar"
 
-#: src/frontend/LabPlot.cpp:76
+#: src/frontend/LabPlot.cpp:75
 #, kde-format
 msgid "Alexander Semke"
 msgstr "Alexander Semke"
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:76
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr "Martin Marmsoler"
 
-#: src/frontend/LabPlot.cpp:78
+#: src/frontend/LabPlot.cpp:77
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "Dariusz Laska"
 
-#: src/frontend/LabPlot.cpp:79
+#: src/frontend/LabPlot.cpp:78
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr "Ideeën, documentatie, voorbeeldprojecten"
 
-#: src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:84
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "Andreas Kainz"
 
-#: src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:84
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "Maakte pictogrammen"
 
-#: src/frontend/LabPlot.cpp:86
+#: src/frontend/LabPlot.cpp:85
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
-#: src/frontend/LabPlot.cpp:87
+#: src/frontend/LabPlot.cpp:86
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -17678,55 +17678,55 @@ msgid ""
 msgstr ""
 "Help voor vele vragen over de infrastructuur van KDE en over vertalingen"
 
-#: src/frontend/LabPlot.cpp:90
+#: src/frontend/LabPlot.cpp:89
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
-#: src/frontend/LabPlot.cpp:90
+#: src/frontend/LabPlot.cpp:89
 #, kde-format
 msgctxt "@info:credit"
 msgid "FITS Filter"
 msgstr "FITS-filter"
 
-#: src/frontend/LabPlot.cpp:91
+#: src/frontend/LabPlot.cpp:90
 #, kde-format
 msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
-#: src/frontend/LabPlot.cpp:92
+#: src/frontend/LabPlot.cpp:91
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr "Overbrengen van LabPlot naar KF5 en integreren met Cantor"
 
-#: src/frontend/LabPlot.cpp:95
+#: src/frontend/LabPlot.cpp:94
 #, kde-format
 msgid "Christoph Roick"
 msgstr "Christoph Roick"
 
-#: src/frontend/LabPlot.cpp:96
+#: src/frontend/LabPlot.cpp:95
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Ondersteuning voor ROOT (CERN) TH1 histogrammen"
 
-#: src/frontend/LabPlot.cpp:127
+#: src/frontend/LabPlot.cpp:126
 #, kde-format
 msgid "Disable splash screen"
 msgstr "splash screen uitschakelen"
 
-#: src/frontend/LabPlot.cpp:130
+#: src/frontend/LabPlot.cpp:129
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "In presentatiemodus starten"
 
-#: src/frontend/LabPlot.cpp:133
+#: src/frontend/LabPlot.cpp:132
 #, kde-format
 msgid "Open a project file."
 msgstr "Een projectbestand openen"
 
-#: src/frontend/LabPlot.cpp:154
+#: src/frontend/LabPlot.cpp:153
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -17735,7 +17735,7 @@ msgstr ""
 "Kon bestand '%1' niet openen. Klik op 'Verder' om verder te gaan, en op "
 "'Annuleren' als u de toepassing wilt verlaten."
 
-#: src/frontend/LabPlot.cpp:155
+#: src/frontend/LabPlot.cpp:154
 #, kde-format
 msgid "Failed to Open"
 msgstr "Openen is mislukt"
@@ -18567,59 +18567,59 @@ msgid "XML error: No cartesianPlot found"
 msgstr "XML-fout: geen cartesische plot gevonden"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
-#: src/frontend/ProjectExplorer.cpp:70
+#: src/frontend/ProjectExplorer.cpp:69
 #: src/frontend/ui/dockwidgets/scriptdock.ui:131
 #, kde-format
 msgid "Search/Filter"
 msgstr "Zoek/Filter"
 
-#: src/frontend/ProjectExplorer.cpp:116
+#: src/frontend/ProjectExplorer.cpp:115
 #, kde-format
 msgid "Expand All"
 msgstr "Alles uitvouwen"
 
-#: src/frontend/ProjectExplorer.cpp:119
+#: src/frontend/ProjectExplorer.cpp:118
 #, kde-format
 msgid "Expand Selected"
 msgstr "Uitvouwen geselecteerd"
 
-#: src/frontend/ProjectExplorer.cpp:122
+#: src/frontend/ProjectExplorer.cpp:121
 #, kde-format
 msgid "Collapse All"
 msgstr "Alles invouwen"
 
-#: src/frontend/ProjectExplorer.cpp:125
+#: src/frontend/ProjectExplorer.cpp:124
 #, kde-format
 msgid "Collapse Selected"
 msgstr "Invouwen geselecteerd"
 
-#: src/frontend/ProjectExplorer.cpp:128
+#: src/frontend/ProjectExplorer.cpp:127
 #, kde-format
 msgid "Delete Selected"
 msgstr "Wissen geselecteerd"
 
-#: src/frontend/ProjectExplorer.cpp:131
+#: src/frontend/ProjectExplorer.cpp:130
 #, kde-format
 msgid "Search/Filter Options"
 msgstr "Opties voor zoeken/filteren"
 
-#: src/frontend/ProjectExplorer.cpp:274 src/frontend/ProjectExplorer.cpp:432
+#: src/frontend/ProjectExplorer.cpp:273 src/frontend/ProjectExplorer.cpp:431
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1056
 #, kde-format
 msgid "Columns"
 msgstr "Kolommen"
 
-#: src/frontend/ProjectExplorer.cpp:335
+#: src/frontend/ProjectExplorer.cpp:334
 #, kde-format
 msgid "Show All"
 msgstr "Alles tonen"
 
-#: src/frontend/ProjectExplorer.cpp:584
+#: src/frontend/ProjectExplorer.cpp:583
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr "'%1' kan niet in '%2' geplakt worden."
 
-#: src/frontend/ProjectExplorer.cpp:598
+#: src/frontend/ProjectExplorer.cpp:597
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
@@ -18628,27 +18628,27 @@ msgstr ""
 "Gegevens kunnen niet direct in '%1' worden geplakt. Selecteer hiervoor een "
 "kolom in het rekenblad."
 
-#: src/frontend/ProjectExplorer.cpp:766
+#: src/frontend/ProjectExplorer.cpp:765
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr "Vage overeenkomst"
 
-#: src/frontend/ProjectExplorer.cpp:982
+#: src/frontend/ProjectExplorer.cpp:981
 #, kde-format
 msgid "%1 elements: set visible: %2"
 msgstr "%1 elementen: zichtbaar maken: %2"
 
-#: src/frontend/ProjectExplorer.cpp:1010
+#: src/frontend/ProjectExplorer.cpp:1009
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "Wilt u werkelijk de geselecteerde %1 objecten wissen?"
 
-#: src/frontend/ProjectExplorer.cpp:1012
+#: src/frontend/ProjectExplorer.cpp:1011
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "Wilt u werkelijk %1 wissen?"
 
-#: src/frontend/ProjectExplorer.cpp:1016
+#: src/frontend/ProjectExplorer.cpp:1015
 #: src/frontend/worksheet/WorksheetView.cpp:1459
 #, kde-format
 msgid "Delete selected object"
@@ -18656,7 +18656,7 @@ msgid_plural "Delete selected objects"
 msgstr[0] "Geselecteerd object wissen"
 msgstr[1] "Geselecteerde objecten wissen"
 
-#: src/frontend/ProjectExplorer.cpp:1022
+#: src/frontend/ProjectExplorer.cpp:1021
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
@@ -19546,7 +19546,7 @@ msgid "LaTeX files (*.tex)"
 msgstr "LaTeX-bestanden (*.tex)"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:388
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:173
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:171
 #, kde-format
 msgid "FITS files (*.fits *.fit *.fts)"
 msgstr "FITS-bestanden (*.fits *.fit *.fts)"
@@ -27138,129 +27138,129 @@ msgctxt "@title:window"
 msgid "FITS Metadata Editor  [Changed]"
 msgstr "Editor metagegevens van FITS [Gewijzigd]"
 
-#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:43
+#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:42
 #, kde-format
 msgid "&Add Keyword"
 msgstr "Trefwoord &toevoegen"
 
-#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:47
+#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:46
 #, kde-format
 msgctxt "@title:window"
 msgid "Specify the New Keyword"
 msgstr "Het nieuwe trefwoord opgeven"
 
-#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:54
+#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:53
 #, kde-format
 msgid "Specify the name"
 msgstr "De naam invullen"
 
-#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:55
+#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:54
 #, kde-format
 msgid "Specify the value"
 msgstr "De waarde opgeven"
 
-#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:56
+#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:55
 #, kde-format
 msgid "Specify the comment"
 msgstr "Het commentaar specificeren"
 
-#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:87
+#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:86
 #, kde-format
 msgid "Cannot add new keyword without key, would you like to try again?"
 msgstr ""
 "Kan geen nieuw sleutelwoord toevoegen zonder sleutel, wilt u het nog eens "
 "proberen?"
 
-#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:88
+#: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:87
 #, kde-format
 msgid "Cannot add empty key"
 msgstr "Leeg sleutelwoord toevoegen kan niet"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:47
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:45
 #, kde-format
 msgid "Add new keyword"
 msgstr "Nieuw sleutelwoord toevoegen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:51
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:49
 #, kde-format
 msgid "Remove selected keyword"
 msgstr "Geselecteerd sleutelwoord verwijderen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:55
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:53
 #, kde-format
 msgid "Add unit to keyword"
 msgstr "Eenheid aan sleutelwoord toevoegen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:59
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:57
 #, kde-format
 msgid "Close file"
 msgstr "Bestand sluiten"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:173
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:171
 #, kde-format
 msgctxt "@title:window"
 msgid "Open FITS File"
 msgstr "FITS-bestand openen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:208
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:206
 #, kde-format
 msgid "Cannot open file, file already opened."
 msgstr "Kan bestand niet openen, bestand is reeds geopend."
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:208
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:206
 #, kde-format
 msgid "File already opened"
 msgstr "Bestand is reeds geopend"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:266
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:264
 #, kde-format
 msgid "Add New Keyword"
 msgstr "Nieuw sleutelwoord toevoegen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:267
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:265
 #, kde-format
 msgid "Remove Keyword"
 msgstr "Sleutelwoord verwijderen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:269
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:267
 #, kde-format
 msgid "Add Unit"
 msgstr "Eenheid toevoegen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:317
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:324
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:315
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
 #, kde-format
 msgid "Cannot add keyword, keyword already added"
 msgstr "Kan geen sleutelwoord toevoegen, sleutelwoord is al toegevoegd"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:317
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:324
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:331
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:315
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
 #, kde-format
 msgid "Cannot Add Keyword"
 msgstr "Kan geen sleutelwoord toevoegen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:331
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
 #, kde-format
 msgid "Cannot add mandatory keyword, they are already present"
 msgstr "Kan geen vereist sleutelwoord toevoegen, deze is al toegevoegd"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:375
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:373
 #, kde-format
 msgid "Are you sure you want to delete the keyword '%1'?"
 msgstr "Wilt u werkelijk het geselecteerde sleutelwoord '%1' wissen?"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:376
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:374
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Wissen bevestigen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:396
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:394
 #, kde-format
 msgid "Cannot remove mandatory keyword."
 msgstr "Kan geen vereist sleutelwoord verwijderen."
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:396
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:394
 #, kde-format
 msgid "Removing Keyword"
 msgstr "Sleutelwoord wordt verwijderd"
