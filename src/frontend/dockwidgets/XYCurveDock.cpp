@@ -449,6 +449,11 @@ void XYCurveDock::retranslateUi() {
 	ui.cbRugOrientation->addItem(i18n("Horizontal"));
 	ui.cbRugOrientation->addItem(i18n("Both"));
 
+	lineWidget->retranslateUi();
+	dropLineWidget->retranslateUi();
+	errorBarWidget->retranslateUi();
+	valueWidget->retranslateUi();
+
 	// tooltip texts
 	ui.lLineSkipGaps->setToolTip(i18n("If checked, connect neighbour points with lines even if there are gaps (invalid or masked values) between them"));
 	ui.chkLineSkipGaps->setToolTip(i18n("If checked, connect neighbour points with lines even if there are gaps (invalid or masked values) between them"));

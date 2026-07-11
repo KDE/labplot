@@ -141,16 +141,20 @@ void ParetoChartDock::setPlots(QList<ParetoChart*> list) {
 }
 
 void ParetoChartDock::retranslateUi() {
-
+	barBackgroundWidget->retranslateUi();
+	barLineWidget->retranslateUi();
+	valueWidget->retranslateUi();
+	lineWidget->retranslateUi();
 }
 
 /*
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void ParetoChartDock::updateLocale() {
-	// dataLineWidget->updateLocale();
-	// dataSymbolWidget->updateLocale();
-	// centerLineWidget->updateLocale();
+	barLineWidget->updateLocale();
+	valueWidget->updateLocale();
+	lineWidget->updateLocale();
+	symbolWidget->updateLocale();
 }
 
 //*************************************************************

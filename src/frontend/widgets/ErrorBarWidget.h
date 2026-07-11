@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : error bar widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -28,6 +28,7 @@ public:
 	void setErrorBars(const QList<ErrorBar*>&);
 	void setModel(AspectTreeModel*);
 	void updateLocale();
+	void retranslateUi();
 
 	void load();
 	void loadConfig(const KConfigGroup&);
@@ -39,6 +40,7 @@ private:
 	ErrorBar* m_errorBar{nullptr};
 	QList<ErrorBar*> m_errorBars;
 	bool m_initializing{false};
+	bool m_poissonAvailable{false};
 	TreeViewComboBox* cbXPlusColumn{nullptr};
 	TreeViewComboBox* cbXMinusColumn{nullptr};
 	TreeViewComboBox* cbYPlusColumn{nullptr};
