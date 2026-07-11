@@ -60,7 +60,7 @@ struct AutoHideDockContainerPrivate;
 
 /**
  * Container that manages a number of dock areas with single dock widgets
- * or tabyfied dock widgets in each area.
+ * or tabified dock widgets in each area.
  * Each window that support docking has a DockContainerWidget. That means
  * the main application window and all floating windows contain a 
  * DockContainerWidget instance.
@@ -86,11 +86,62 @@ private:
 	friend AutoHideDockContainerPrivate;
 	friend CAutoHideSideBar;
 
+private Q_SLOTS:
+	void removeFromDockManager();
+
 protected:
 	/**
 	 * Handles activation events to update zOrderIndex
 	 */
 	virtual bool event(QEvent *e) override;
+
+	/**
+	 * The drag and drop events below implement docking of floating widgets
+	 * on Wayland, where CFloatingDockContainer::startPlatformDrag() executes
+	 * a compositor driven drag instead of the mouse tracked dragging that is
+	 * used on the other platforms.
+	 * Accepts the drag, if it transports a floating widget of the same
+	 * dock manager
+	 */
+	virtual void dragEnterEvent(QDragEnterEvent* e) override;
+
+	/**
+	 * Updates the drop overlays for the drag position
+	 */
+	virtual void dragMoveEvent(QDragMoveEvent* e) override;
+
+	/**
+	 * Hides the drop overlays, if the drag leaves this container
+	 */
+	virtual void dragLeaveEvent(QDragLeaveEvent* e) override;
+
+	/**
+	 * Docks the dragged floating widget into the drop area under the drop
+	 * position
+	 */
+	virtual void dropEvent(QDropEvent* e) override;
+
+	/**
+	 * Returns the floating widget transported by the given platform drag
+	 * and drop event, if the drag was started by this application and the
+	 * floating widget belongs to the given dock manager; otherwise nullptr.
+	 * The floating widget pointer from the mime data is only dereferenced
+	 * after it was found in the dock manager floating widget list, so drags
+	 * from other applications cannot inject an invalid pointer
+	 */
+	static CFloatingDockContainer* floatingWidgetFromDropEvent(QDropEvent* e,
+		CDockManager* DockManager);
+
+	/**
+	 * Configures and shows the container and dock area drop overlays for a
+	 * drag that hovers over TopContainer at the given global position.
+	 * Shared by the mouse tracked dragging (CFloatingDragPreview /
+	 * CFloatingDockContainer) and the Wayland platform drag and drop.
+	 * ContentPinnable is true, if the dragged content can be auto hidden.
+	 */
+	static void showDropOverlays(CDockManager* DockManager,
+		CDockContainerWidget* TopContainer, const QPoint& GlobalPos,
+		bool ContentPinnable);
 
 	/**
 	 * Access function for the internal root splitter
@@ -219,7 +270,7 @@ public:
 	/**
 	 * Virtual Destructor
 	 */
-	virtual ~CDockContainerWidget();
+    ~CDockContainerWidget() override;
 
 	/**
 	 * Adds dockwidget into the given area.

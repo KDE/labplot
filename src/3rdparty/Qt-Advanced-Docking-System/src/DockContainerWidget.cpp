@@ -42,6 +42,7 @@
 #include <QTimer>
 #include <QMetaObject>
 #include <QMetaType>
+#include <QMimeData>
 #include <QApplication>
 
 #include "DockManager.h"
@@ -185,6 +186,13 @@ public:
 	 * Drop floating widget into auto hide side bar
 	 */
 	void dropIntoAutoHideSideBar(CFloatingDockContainer* FloatingWidget, DockWidgetArea area);
+
+	/**
+	 * Shows the drop overlays for the given floating widget that is dragged
+	 * over this container by a drag and drop operation (Wayland platform
+	 * drag)
+	 */
+	void updateDropOverlays(const QPoint& GlobalPos, CFloatingDockContainer* FloatingWidget);
 
 	/**
 	 * Creates a new tab for a widget dropped into the center of a section
@@ -518,6 +526,80 @@ void DockContainerWidgetPrivate::dropIntoContainer(CFloatingDockContainer* Float
 		Splitter->show();
     }
 	_this->dumpLayout();
+}
+
+
+//============================================================================
+void DockContainerWidgetPrivate::updateDropOverlays(const QPoint& GlobalPos,
+	CFloatingDockContainer* FloatingWidget)
+{
+	if (!DockManager)
+	{
+		return;
+	}
+
+	// This container received the drag move event, so it is the drop target -
+	// unlike the mouse tracked dragging, there is no need to search the
+	// container under the cursor
+	bool ContentPinnable = FloatingWidget->dockContainer()->features().testFlag(
+		CDockWidget::DockWidgetPinnable);
+	CDockContainerWidget::showDropOverlays(DockManager, _this, GlobalPos, ContentPinnable);
+}
+
+
+//============================================================================
+void CDockContainerWidget::showDropOverlays(CDockManager* DockManager,
+	CDockContainerWidget* TopContainer, const QPoint& GlobalPos,
+	bool ContentPinnable)
+{
+	auto ContainerOverlay = DockManager->containerOverlay();
+	auto DockAreaOverlay = DockManager->dockAreaOverlay();
+	int VisibleDockAreas = TopContainer->visibleDockAreaCount();
+	DockWidgetAreas AllowedContainerAreas = (VisibleDockAreas > 1) ? OuterDockAreas : AllDockAreas;
+	auto DockArea = TopContainer->dockAreaAt(GlobalPos);
+	// If the dock container contains only one single DockArea, then we need
+	// to respect the allowed areas - only the center area is relevant here because
+	// all other allowed areas are from the container
+	if (VisibleDockAreas == 1 && DockArea)
+	{
+		AllowedContainerAreas.setFlag(CenterDockWidgetArea, DockArea->allowedAreas().testFlag(CenterDockWidgetArea));
+	}
+
+	if (ContentPinnable)
+	{
+		AllowedContainerAreas |= AutoHideDockAreas;
+	}
+
+	ContainerOverlay->setAllowedAreas(AllowedContainerAreas);
+
+	DockWidgetArea ContainerArea = ContainerOverlay->showOverlay(TopContainer, GlobalPos);
+	ContainerOverlay->enableDropPreview(ContainerArea != InvalidDockWidgetArea);
+	if (DockArea && DockArea->isVisible() && VisibleDockAreas > 0)
+	{
+		DockAreaOverlay->enableDropPreview(true);
+		DockAreaOverlay->setAllowedAreas(
+		    (VisibleDockAreas == 1) ? NoDockWidgetArea : DockArea->allowedAreas());
+		DockWidgetArea Area = DockAreaOverlay->showOverlay(DockArea, GlobalPos);
+
+		// A CenterDockWidgetArea for the dockAreaOverlay() indicates that
+		// the mouse is in the title bar. If the ContainerArea is valid
+		// then we ignore the dock area of the dockAreaOverlay() and disable
+		// the drop preview
+		if ((Area == CenterDockWidgetArea)
+		    && (ContainerArea != InvalidDockWidgetArea))
+		{
+			DockAreaOverlay->enableDropPreview(false);
+			ContainerOverlay->enableDropPreview(true);
+		}
+		else
+		{
+			ContainerOverlay->enableDropPreview(InvalidDockWidgetArea == Area);
+		}
+	}
+	else
+	{
+		DockAreaOverlay->hideOverlay();
+	}
 }
 
 
@@ -907,6 +989,7 @@ void DockContainerWidgetPrivate::addDockAreasToList(const QList<CDockAreaWidget*
 	{
 		DockArea->titleBarButton(TitleBarButtonClose)->setVisible(true);
 		DockArea->titleBarButton(TitleBarButtonAutoHide)->setVisible(true);
+		DockArea->titleBarButton(TitleBarButtonUndock)->setVisible(true);
 	}
 
 	// We need to ensure, that the dock area title bar is visible. The title bar
@@ -961,7 +1044,7 @@ void DockContainerWidgetPrivate::saveChildNodesState(QXmlStreamWriter& s, QWidge
 			s.writeStartElement("Sizes");
 			for (auto Size : Splitter->sizes())
 			{
-				s.writeCharacters(QString::number(Size) + QStringLiteral(" "));
+				s.writeCharacters(QString::number(Size) + " ");
 			}
 			s.writeEndElement();
 		s.writeEndElement();
@@ -1000,14 +1083,14 @@ bool DockContainerWidgetPrivate::restoreSplitter(CDockingStateReader& s,
 	QString OrientationStr = s.attributes().value("Orientation").toString();
 
 	// Check if the orientation string is right
-	if (!OrientationStr.startsWith(QStringLiteral("|")) && !OrientationStr.startsWith(QStringLiteral("-")))
+	if (!OrientationStr.startsWith("|") && !OrientationStr.startsWith("-"))
 	{
 		return false;
 	}
 
 	// The "|" shall indicate a vertical splitter handle which in turn means
 	// a Horizontal orientation of the splitter layout.
-	bool HorizontalSplitter = OrientationStr.startsWith(QStringLiteral("|"));
+	bool HorizontalSplitter = OrientationStr.startsWith("|");
 	// In version 0 we had a small bug. The "|" indicated a vertical orientation,
 	// but this is wrong, because only the splitter handle is vertical, the
 	// layout of the splitter is a horizontal layout. We fix this here
@@ -1424,6 +1507,14 @@ CDockContainerWidget::CDockContainerWidget(CDockManager* DockManager, QWidget *p
 		createRootSplitter();
 		createSideTabBarWidgets();
 	}
+
+	// On Wayland, floating widgets are docked via drag and drop events
+	// because the mouse tracked dragging that is used on the other platforms
+	// requires the global cursor position, which Wayland does not provide
+	if (internal::isWayland())
+	{
+		setAcceptDrops(true);
+	}
 }
 
 
@@ -1537,6 +1628,105 @@ bool CDockContainerWidget::event(QEvent *e)
 
 
 //============================================================================
+/**
+ * Returns the drop position of the given drop event in global coordinates
+ */
+static QPoint dropEventGlobalPos(QDropEvent* e, QWidget* Widget)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	return Widget->mapToGlobal(e->position().toPoint());
+#else
+	return Widget->mapToGlobal(e->pos());
+#endif
+}
+
+
+//============================================================================
+CFloatingDockContainer* CDockContainerWidget::floatingWidgetFromDropEvent(
+	QDropEvent* e, CDockManager* DockManager)
+{
+	auto FloatingWidget = CFloatingDockContainer::floatingWidgetFromMimeData(e->mimeData());
+	if (!FloatingWidget || !DockManager
+	 || !DockManager->floatingWidgets().contains(FloatingWidget))
+	{
+		return nullptr;
+	}
+
+	return FloatingWidget;
+}
+
+
+//============================================================================
+void CDockContainerWidget::dragEnterEvent(QDragEnterEvent* e)
+{
+	auto FloatingWidget = floatingWidgetFromDropEvent(e, d->DockManager);
+	if (!FloatingWidget || FloatingWidget->dockContainer() == this)
+	{
+		QFrame::dragEnterEvent(e);
+		return;
+	}
+
+	e->acceptProposedAction();
+}
+
+
+//============================================================================
+void CDockContainerWidget::dragMoveEvent(QDragMoveEvent* e)
+{
+	auto FloatingWidget = floatingWidgetFromDropEvent(e, d->DockManager);
+	if (!FloatingWidget || FloatingWidget->dockContainer() == this)
+	{
+		QFrame::dragMoveEvent(e);
+		return;
+	}
+
+	e->acceptProposedAction();
+	const QPoint GlobalPos = dropEventGlobalPos(e, this);
+	d->updateDropOverlays(GlobalPos, FloatingWidget);
+
+	// Record the drop candidate so the drag source can dock the floating
+	// widget if the compositor does not deliver a drop event (see
+	// CFloatingDockContainer::startPlatformDrag)
+	bool ValidDropArea =
+		(d->DockManager->containerOverlay()->visibleDropAreaUnderCursor(GlobalPos) != InvalidDockWidgetArea)
+		|| (d->DockManager->dockAreaOverlay()->visibleDropAreaUnderCursor(GlobalPos) != InvalidDockWidgetArea);
+	CFloatingDockContainer::platformDragUpdateDropCandidate(this, GlobalPos, ValidDropArea);
+}
+
+
+//============================================================================
+void CDockContainerWidget::dragLeaveEvent(QDragLeaveEvent* e)
+{
+	Q_UNUSED(e)
+	if (!d->DockManager)
+	{
+		return;
+	}
+
+	d->DockManager->containerOverlay()->hideOverlay();
+	d->DockManager->dockAreaOverlay()->hideOverlay();
+}
+
+
+//============================================================================
+void CDockContainerWidget::dropEvent(QDropEvent* e)
+{
+	auto FloatingWidget = floatingWidgetFromDropEvent(e, d->DockManager);
+	if (!FloatingWidget || FloatingWidget->dockContainer() == this)
+	{
+		QFrame::dropEvent(e);
+		return;
+	}
+
+	CFloatingDockContainer::platformDragNotifyDropHandled();
+	dropFloatingWidget(FloatingWidget, dropEventGlobalPos(e, this));
+	d->DockManager->containerOverlay()->hideOverlay();
+	d->DockManager->dockAreaOverlay()->hideOverlay();
+	e->acceptProposedAction();
+}
+
+
+//============================================================================
 QList<CAutoHideDockContainer*> CDockContainerWidget::autoHideWidgets() const
 {
 	return d->AutoHideWidgets;
@@ -1572,9 +1762,21 @@ void CDockContainerWidget::removeDockArea(CDockAreaWidget* area)
 	d->DockAreas.removeAll(area);
 	auto Splitter = area->parentSplitter();
 
-	// Remove are from parent splitter and recursively hide tree of parent
-	// splitters if it has no visible content
-	area->setParent(nullptr);
+	// Remove area from parent splitter and recursively hide tree of parent
+	// splitters if it has no visible content.
+	// Use internalWinId() rather than testAttribute(WA_NativeWindow) because
+	// WA_NativeWindow is only set when a widget is *explicitly* made native
+	// (e.g. winId() called directly on it). Widgets that became native through
+	// propagation from a child calling winId() (e.g. a VTK/OpenGL widget) also
+	// hold a real native window handle but may not have WA_NativeWindow set.
+	// Setting the parent of such a native window to nullptr would make it an
+	// invisible top-level OS window, causing drawing artifacts. Reparent to
+	// the dock manager instead so the window stays off-screen but within the
+	// application's window hierarchy.
+	if (area->internalWinId())
+		area->setParent(d->DockManager);
+	else
+		area->setParent(nullptr);
 	internal::hideEmptyParentSplitters(Splitter);
 
 	// Remove this area from cached areas
@@ -1713,7 +1915,7 @@ void CDockContainerWidget::dropFloatingWidget(CFloatingDockContainer* FloatingWi
 	CDockWidget* SingleDroppedDockWidget = FloatingWidget->topLevelDockWidget();
 	CDockWidget* SingleDockWidget = topLevelDockWidget();
 	auto dropArea = InvalidDockWidgetArea;
-	auto ContainerDropArea = d->DockManager->containerOverlay()->dropAreaUnderCursor();
+	auto ContainerDropArea = d->DockManager->containerOverlay()->dropAreaUnderCursor(TargetPos);
 	bool Dropped = false;
 
 	CDockAreaWidget* DockArea = dockAreaAt(TargetPos);
@@ -1722,7 +1924,7 @@ void CDockContainerWidget::dropFloatingWidget(CFloatingDockContainer* FloatingWi
 	{
 		auto dropOverlay = d->DockManager->dockAreaOverlay();
 		dropOverlay->setAllowedAreas(DockArea->allowedAreas());
-		dropArea = dropOverlay->showOverlay(DockArea);
+		dropArea = dropOverlay->showOverlay(DockArea, TargetPos);
 		if (ContainerDropArea != InvalidDockWidgetArea &&
 			ContainerDropArea != dropArea)
 		{
@@ -2201,6 +2403,17 @@ QRect CDockContainerWidget::contentRectGlobal() const
 CDockManager* CDockContainerWidget::dockManager() const
 {
 	return d->DockManager;
+}
+
+
+//===========================================================================
+void CDockContainerWidget::removeFromDockManager()
+{
+	if (d->DockManager)
+	{
+		d->DockManager->removeDockContainer(this);
+		d->DockManager.clear();
+	}
 }
 
 

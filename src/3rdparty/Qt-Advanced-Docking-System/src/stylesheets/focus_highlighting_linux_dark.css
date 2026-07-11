@@ -19,7 +19,7 @@ ads--CDockContainerWidget > QSplitter{
 
 
 ads--CDockContainerWidget ads--CDockSplitter::handle {
-        background: palette(dark);
+        background: palette(light);
 }
 
 
@@ -47,21 +47,21 @@ ads--CTitleBarButton {
 
 
 #tabsMenuButton {
-        qproperty-icon: url(:/ads/images/tabs-menu-button.svg);
+        qproperty-icon: url(:/ads/images/tabs-menu-button_dark.svg);
         qproperty-iconSize: 16px;
 }
 
 
 #dockAreaCloseButton {
-        qproperty-icon: url(:/ads/images/close-button.svg),
-                url(:/ads/images/close-button-disabled.svg) disabled;
+        qproperty-icon: url(:/ads/images/close-button_dark.svg),
+                url(:/ads/images/close-button-disabled_dark.svg) disabled;
         qproperty-iconSize: 16px;
 }
 
 
 #detachGroupButton {
-        qproperty-icon: url(:/ads/images/detach-button.svg),
-                url(:/ads/images/detach-button-disabled.svg) disabled;
+        qproperty-icon: url(:/ads/images/detach-button_dark.svg),
+                url(:/ads/images/detach-button-disabled_dark.svg) disabled;
         qproperty-iconSize: 16px;
 }
 
@@ -72,7 +72,7 @@ ads--CTitleBarButton {
  *****************************************************************************/
 ads--CDockAreaTitleBar {
         background: transparent;
-        border-bottom: 2px solid palette(light);
+        border-bottom: 2px solid palette(dark);
         padding-bottom: 0px;
 }
 
@@ -88,7 +88,7 @@ ads--CDockAreaWidget[focused="true"] ads--CDockAreaTitleBar {
  *****************************************************************************/
 ads--CDockWidgetTab {
         background: palette(window);
-        border-color: palette(light);
+        border-color: palette(dark);
         border-style: solid;
         border-width: 0 1px 0 0;
         padding: 0 0px;
@@ -96,12 +96,12 @@ ads--CDockWidgetTab {
 
 ads--CDockWidgetTab[activeTab="true"] {
         background: qlineargradient(spread : pad, x1 : 0, y1 : 0, x2 : 0, y2 : 0.5, stop : 0
-                palette(window), stop:1 palette(light));
+                palette(window), stop:1 palette(dark));
         /*background: palette(highlight);*/
 }
 
 ads--CDockWidgetTab QLabel {
-        color: palette(text);
+        color: palette(light);
 }
 
 ads--CDockWidgetTab[activeTab="true"] QLabel {
@@ -114,18 +114,18 @@ ads--CDockWidgetTab[activeTab="true"] QLabel {
         background: none;
         border: none;
         padding: 0px -2px;
-        qproperty-icon: url(:/ads/images/close-button.svg),
-                url(:/ads/images/close-button-disabled.svg) disabled;
+        qproperty-icon: url(:/ads/images/close-button_dark.svg),
+                url(:/ads/images/close-button-disabled_dark.svg) disabled;
         qproperty-iconSize: 16px;
 }
 
 #tabCloseButton:hover {
         /*border: 1px solid rgba(0, 0, 0, 32);*/
-        background: rgba(0, 0, 0, 24);
+        background: rgba(255, 255, 255, 24);
 }
 
 #tabCloseButton:pressed {
-        background: rgba(0, 0, 0, 48);
+        background: rgba(255, 255, 255, 48);
 }
 
 
@@ -136,15 +136,15 @@ ads--CDockWidgetTab[focused="true"] {
 }
 
 ads--CDockWidgetTab[focused="true"] > #tabCloseButton {
-        qproperty-icon: url(:/ads/images/close-button-focused.svg)
+        qproperty-icon: url(:/ads/images/close-button-focused_dark.svg)
 }
 
 ads--CDockWidgetTab[focused="true"] > #tabCloseButton:hover {
-        background: rgba(255, 255, 255, 48);
+        background: rgba(0, 0, 0, 48);
 }
 
 ads--CDockWidgetTab[focused="true"] > #tabCloseButton:pressed {
-        background: rgba(255, 255, 255, 92);
+        background: rgba(0, 0, 0, 92);
 }
 
 ads--CDockWidgetTab[focused="true"] QLabel {
@@ -156,8 +156,8 @@ ads--CDockWidgetTab[focused="true"] QLabel {
  * CDockWidget
  *****************************************************************************/
 ads--CDockWidget {
-        background: palette(light);
-        border-color: palette(light);
+        background: palette(dark);
+        border-color: palette(dark);
         border-style: solid;
         border-width: 1px 0 0 0;
 }
@@ -174,16 +174,16 @@ QScrollArea#dockWidgetScrollArea {
  * Floating widget styling
  *****************************************************************************/
 ads--CFloatingWidgetTitleBar {
-    qproperty-maximizeIcon: url(:/ads/images/maximize-button.svg);
-    qproperty-normalIcon: url(:/ads/images/restore-button.svg);
+    qproperty-maximizeIcon: url(:/ads/images/maximize-button_dark.svg);
+    qproperty-normalIcon: url(:/ads/images/restore-button_dark.svg);
 }
 
 
 /* does not properly work on KDE
 ads--CFloatingDockContainer[isActiveWindow="true"] ads--CFloatingWidgetTitleBar {
         background: palette(highlight);
-        qproperty-maximizeIcon: url(:/ads/images/maximize-button-focused.svg);
-        qproperty-normalIcon: url(:/ads/images/restore-button-focused.svg);
+        qproperty-maximizeIcon: url(:/ads/images/maximize-button-focused_dark.svg);
+        qproperty-normalIcon: url(:/ads/images/restore-button-focused_dark.svg);
 }
 
 ads--CFloatingDockContainer[isActiveWindow="true"] #floatingTitleLabel {
@@ -199,18 +199,18 @@ ads--CFloatingDockContainer[isActiveWindow="true"] #floatingTitleLabel {
 
 
 #floatingTitleCloseButton {
-   qproperty-icon: url(:/ads/images/close-button.svg);
+   qproperty-icon: url(:/ads/images/close-button_dark.svg);
 }
 
 
 #floatingTitleCloseButton:hover, #floatingTitleMaximizeButton:hover {
-    background: rgba(0, 0, 0, 24);
+    background: rgba(255, 255, 255, 24);
     border: none;
 }
 
 
 #floatingTitleCloseButton:pressed, #floatingTitleMaximizeButton:pressed {
-    background: rgba(0, 0, 0, 48);
+    background: rgba(255, 255, 255, 48);
 }
 
 
@@ -221,7 +221,7 @@ ads--CFloatingDockContainer[isActiveWindow="true"] #floatingTitleMaximizeButton 
 
 /* does not properly work on KDE
 ads--CFloatingDockContainer[isActiveWindow="true"] #floatingTitleCloseButton {
-    qproperty-icon: url(:/ads/images/close-button-focused.svg);
+    qproperty-icon: url(:/ads/images/close-button-focused_dark.svg);
     qproperty-iconSize: 16px;
 }
 
@@ -268,13 +268,13 @@ ads--CAutoHideTab:hover
 
 ads--CAutoHideTab[iconOnly="false"][sideBarLocation="0"],
 ads--CAutoHideTab[iconOnly="false"][sideBarLocation="2"]  {
-        border-top: 6px solid rgba(0, 0, 0, 48);
+        border-top: 6px solid rgba(255, 255, 255, 48);
 }
 
 
 ads--CAutoHideTab[iconOnly="false"][sideBarLocation="1"],
 ads--CAutoHideTab[iconOnly="false"][sideBarLocation="3"] {
-        border-bottom: 6px solid rgba(0, 0, 0, 48);
+        border-bottom: 6px solid rgba(255, 255, 255, 48);
 }
 
 
@@ -299,19 +299,19 @@ ads--CAutoHideTab[iconOnly="false"][sideBarLocation="3"][activeTab="true"] {
  * Auto hide tabs with icon only
  */
 ads--CAutoHideTab[iconOnly="true"][sideBarLocation="0"] {
-        border-top: 6px solid rgba(0, 0, 0, 48);
+        border-top: 6px solid rgba(255, 255, 255, 48);
 }
 
 ads--CAutoHideTab[iconOnly="true"][sideBarLocation="1"] {
-        border-left: 6px solid rgba(0, 0, 0, 48);
+        border-left: 6px solid rgba(255, 255, 255, 48);
 }
 
 ads--CAutoHideTab[iconOnly="true"][sideBarLocation="2"] {
-        border-right: 6px solid rgba(0, 0, 0, 48);
+        border-right: 6px solid rgba(255, 255, 255, 48);
 }
 
 ads--CAutoHideTab[iconOnly="true"][sideBarLocation="3"] {
-        border-bottom: 6px solid rgba(0, 0, 0, 48);
+        border-bottom: 6px solid rgba(255, 255, 255, 48);
 }
 
 
@@ -355,19 +355,19 @@ ads--CAutoHideSideBar{
 
 
 ads--CAutoHideSideBar[sideBarLocation="0"] {
-        border-bottom: 1px solid palette(dark);
+        border-bottom: 1px solid palette(light);
 }
 
 ads--CAutoHideSideBar[sideBarLocation="1"] {
-        border-right: 1px solid palette(dark);
+        border-right: 1px solid palette(light);
 }
 
 ads--CAutoHideSideBar[sideBarLocation="2"] {
-        border-left: 1px solid palette(dark);
+        border-left: 1px solid palette(light);
 }
 
 ads--CAutoHideSideBar[sideBarLocation="3"] {
-        border-top: 1px solid palette(dark);
+        border-top: 1px solid palette(light);
 }
 
 
@@ -399,7 +399,7 @@ ads--CAutoHideDockContainer ads--CDockAreaWidget[focused="true"] ads--CDockAreaT
 
 ads--CAutoHideDockContainer #autoHideTitleLabel {
         padding-left: 4px;
-        color: palette(light);
+        color: palette(dark);
 }
 
 
@@ -407,25 +407,25 @@ ads--CAutoHideDockContainer #autoHideTitleLabel {
  * CAutoHideDockContainer titlebar buttons
  *****************************************************************************/
 #dockAreaAutoHideButton {
-	qproperty-icon: url(:/ads/images/vs-pin-button.svg),
-		url(:/ads/images/vs-pin-button-disabled.svg) disabled;
+	qproperty-icon: url(:/ads/images/vs-pin-button_dark.svg),
+		url(:/ads/images/vs-pin-button-disabled_dark.svg) disabled;
 	qproperty-iconSize: 16px;
 }
 
 ads--CAutoHideDockContainer #dockAreaAutoHideButton {
-        qproperty-icon: url(:/ads/images/vs-pin-button-pinned-focused.svg);
+        qproperty-icon: url(:/ads/images/vs-pin-button-pinned-focused_dark.svg);
         qproperty-iconSize: 16px;
 }
 
 
 ads--CAutoHideDockContainer #dockAreaMinimizeButton {
-	qproperty-icon: url(:/ads/images/minimize-button-focused.svg);
+	qproperty-icon: url(:/ads/images/minimize-button-focused_dark.svg);
 	qproperty-iconSize: 16px;	
 }
 
 
 ads--CAutoHideDockContainer #dockAreaCloseButton{
-        qproperty-icon: url(:/ads/images/close-button-focused.svg)
+        qproperty-icon: url(:/ads/images/close-button-focused_dark.svg)
 }
 
 
@@ -453,18 +453,18 @@ ads--CResizeHandle {
 
 
 ads--CAutoHideDockContainer[sideBarLocation="0"] ads--CResizeHandle {
-    border-top: 1px solid palette(dark);
+    border-top: 1px solid palette(light);
 }
 
 ads--CAutoHideDockContainer[sideBarLocation="1"] ads--CResizeHandle {
-    border-left: 1px solid palette(dark);
+    border-left: 1px solid palette(light);
 }
 
 ads--CAutoHideDockContainer[sideBarLocation="2"] ads--CResizeHandle {
-    border-right: 1px solid palette(dark);
+    border-right: 1px solid palette(light);
 }
 
 ads--CAutoHideDockContainer[sideBarLocation="3"] ads--CResizeHandle {
-    border-top: 1px solid palette(dark);
+    border-top: 1px solid palette(light);
 }
 

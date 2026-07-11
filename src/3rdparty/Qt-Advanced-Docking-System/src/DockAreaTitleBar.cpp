@@ -159,6 +159,14 @@ struct DockAreaTitleBarPrivate
 	IFloatingWidget* makeAreaFloating(const QPoint& Offset, eDragState DragState);
 
 	/**
+	 * Wayland hybrid drag: drive the in-window drag preview from reliable event
+	 * coordinates and, when the cursor leaves the source top-level window,
+	 * convert the in-window drag into a native compositor platform drag
+	 * (mirrors CDockWidgetTab).
+	 */
+	void waylandPreviewMove(QMouseEvent* ev);
+
+	/**
 	 * Helper function to create and initialize the menu entries for
 	 * the "Auto Hide Group To..." menu
 	 */
@@ -258,12 +266,12 @@ void DockAreaTitleBarPrivate::createButtons()
 //============================================================================
 void DockAreaTitleBarPrivate::createAutoHideTitleLabel()
 {
-	AutoHideTitleLabel = new CElidingLabel(QStringLiteral(""));
+	AutoHideTitleLabel = new CElidingLabel("");
 	AutoHideTitleLabel->setObjectName("autoHideTitleLabel");
-	// At position 0 is the tab bar - insert behind tab bar
-	Layout->insertWidget(1, AutoHideTitleLabel);
-	AutoHideTitleLabel->setVisible(false); // Default hidden
-	Layout->insertWidget(2 ,new CSpacerWidget(_this));
+	// When the tabs are at the top, they will be at position 0, insert the label behind them, and hide it.
+	Layout->addWidget(AutoHideTitleLabel);
+	AutoHideTitleLabel->setVisible(CDockManager::testConfigFlag(CDockManager::TabsAtBottom));
+	Layout->addWidget(new CSpacerWidget(_this));
 }
 
 
@@ -272,7 +280,9 @@ void DockAreaTitleBarPrivate::createTabBar()
 {
 	TabBar = componentsFactory()->createDockAreaTabBar(DockArea);
     TabBar->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
-	Layout->addWidget(TabBar);
+	if (!CDockManager::testConfigFlag(CDockManager::TabsAtBottom))
+		Layout->addWidget(TabBar);
+
 	_this->connect(TabBar, SIGNAL(tabClosed(int)), SLOT(markTabsMenuOutdated()));
 	_this->connect(TabBar, SIGNAL(tabOpened(int)), SLOT(markTabsMenuOutdated()));
 	_this->connect(TabBar, SIGNAL(tabInserted(int)), SLOT(markTabsMenuOutdated()));
@@ -289,6 +299,10 @@ IFloatingWidget* DockAreaTitleBarPrivate::makeAreaFloating(const QPoint& Offset,
 {
 	QSize Size = DockArea->size();
 	this->DragState = DragState;
+	// Wayland hybrid drag: start an in-window drag preview (driven by event
+	// coordinates, confined to the source container) rather than an immediate
+	// platform drag. The drag converts to a native compositor platform drag
+	// only when the cursor leaves the source window (see waylandPreviewMove()).
 	bool CreateFloatingDockContainer = (DraggingFloatingWidget != DragState);
 	CFloatingDockContainer* FloatingDockContainer = nullptr;
 	IFloatingWidget* FloatingWidget;
@@ -303,14 +317,21 @@ IFloatingWidget* DockAreaTitleBarPrivate::makeAreaFloating(const QPoint& Offset,
 	else
 	{
 		auto w = new CFloatingDragPreview(DockArea);
-		QObject::connect(w, &CFloatingDragPreview::draggingCanceled, [=]()
+		QObject::connect(w, &CFloatingDragPreview::draggingCanceled, [this]()
 		{
 			this->DragState = DraggingInactive;
 		});
+		if (internal::isWayland())
+		{
+			// Confine the in-window preview to the source container; its
+			// position and the drop overlays are driven by event coordinates
+			// delivered to the title bar (see waylandPreviewMove()).
+			w->setSourceContainer(DockArea->dockContainer());
+		}
 		FloatingWidget = w;
 	}
 
-    FloatingWidget->startFloating(Offset, Size, DragState, nullptr);
+	FloatingWidget->startFloating(Offset, Size, DragState, nullptr);
     if (FloatingDockContainer)
     {
 		auto TopLevelDockWidget = FloatingDockContainer->topLevelDockWidget();
@@ -332,7 +353,46 @@ void DockAreaTitleBarPrivate::startFloating(const QPoint& Offset)
 		DockArea->autoHideDockContainer()->hide();
 	}
 	FloatingWidget = makeAreaFloating(Offset, DraggingFloatingWidget);
+	// On Wayland the hybrid drag now starts an in-window preview (it no longer
+	// blocks on a platform drag here), so the drag-start event is reported like
+	// on every other platform.
 	qApp->postEvent(DockArea, new QEvent((QEvent::Type)internal::DockedWidgetDragStartEvent));
+}
+
+
+//============================================================================
+void DockAreaTitleBarPrivate::waylandPreviewMove(QMouseEvent* ev)
+{
+	const QPoint GlobalPos = internal::globalPositionOf(ev);
+
+	// FloatingWidget is a CFloatingDragPreview during the in-window phase
+	// (DraggingFloatingWidget state on Wayland; see makeAreaFloating()). While
+	// the cursor stays inside the source window the preview just follows it.
+	auto Preview = static_cast<CFloatingDragPreview*>(FloatingWidget);
+	if (CFloatingDockContainer::waylandMoveOrLeaveInWindowPreview(
+			Preview, _this->window(), GlobalPos))
+	{
+		return;
+	}
+
+	// Boundary cross: the preview was torn down, convert the gesture into a
+	// native compositor platform drag of a freshly created floating widget.
+	FloatingWidget = nullptr;
+	DragState = DraggingInactive;
+
+	if (DockArea->autoHideDockContainer())
+	{
+		DockArea->autoHideDockContainer()->cleanupAndDelete();
+	}
+	auto FloatingDockContainer = new CFloatingDockContainer(DockArea);
+	auto TopLevelDockWidget = FloatingDockContainer->topLevelDockWidget();
+	if (TopLevelDockWidget)
+	{
+		TopLevelDockWidget->emitTopLevelChanged(true);
+	}
+	CFloatingDockContainer::startPlatformDragForFloatingWidget(
+		FloatingDockContainer, DragStartMousePos, DockArea->size(),
+		_this->mapToGlobal(DragStartMousePos), _this);
 }
 
 
@@ -351,8 +411,8 @@ CDockAreaTitleBar::CDockAreaTitleBar(CDockAreaWidget* parent) :
 	setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
 	d->createTabBar();
-	d->createButtons();
 	d->createAutoHideTitleLabel();
+	d->createButtons();
 
     setFocusPolicy(Qt::NoFocus);
 }
@@ -689,7 +749,16 @@ void CDockAreaTitleBar::mouseMoveEvent(QMouseEvent* ev)
     // move floating window
     if (d->isDraggingState(DraggingFloatingWidget))
     {
-        d->FloatingWidget->moveFloating();
+        if (internal::isWayland())
+        {
+            // Wayland hybrid drag: in-window preview until the cursor leaves
+            // the source window, then convert to a native platform drag.
+            d->waylandPreviewMove(ev);
+        }
+        else
+        {
+            d->FloatingWidget->moveFloating();
+        }
         return;
     }
 
@@ -697,9 +766,24 @@ void CDockAreaTitleBar::mouseMoveEvent(QMouseEvent* ev)
 	// sense to move it to a new floating widget and leave this one
 	// empty
 	if (d->DockArea->dockContainer()->isFloating()
-	 && d->DockArea->dockContainer()->visibleDockAreaCount() == 1 
+	 && d->DockArea->dockContainer()->visibleDockAreaCount() == 1
      && !d->DockArea->isAutoHide())
 	{
+		// On Wayland, dragging the title bar of the last dock area of a
+		// floating widget drags the existing floating widget, so the user
+		// can dock it into another container
+		int DragDistanceWayland = (d->DragStartMousePos - ev->pos()).manhattanLength();
+		if (internal::isWayland()
+		 && DragDistanceWayland >= CDockManager::startDragDistance())
+		{
+			auto FloatingContainer = d->DockArea->dockContainer()->floatingWidget();
+			if (FloatingContainer)
+			{
+				d->DragState = DraggingInactive;
+				CFloatingDockContainer::startPlatformDrag(FloatingContainer,
+					mapToGlobal(d->DragStartMousePos), this);
+			}
+		}
 		return;
 	}
 
@@ -900,9 +984,10 @@ QString CDockAreaTitleBar::titleBarButtonToolTip(TitleBarButton Button) const
 //============================================================================
 void CDockAreaTitleBar::showAutoHideControls(bool Show)
 {
-	d->TabBar->setVisible(!Show); // Auto hide toolbar never has tabs
+    d->TabBar->setVisible(!Show); // Auto hide toolbar never has tabs
 	d->MinimizeButton->setVisible(Show);
-	d->AutoHideTitleLabel->setVisible(Show);
+	if (!CDockManager::testConfigFlag(CDockManager::TabsAtBottom))
+		d->AutoHideTitleLabel->setVisible(Show);
 }
 
 

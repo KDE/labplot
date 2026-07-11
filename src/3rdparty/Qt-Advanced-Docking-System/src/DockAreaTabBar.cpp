@@ -111,7 +111,7 @@ void DockAreaTabBarPrivate::updateTabs()
 			// Sometimes the synchronous calculation of the rectangular area fails
 			// Therefore we use QTimer::singleShot here to execute the call
 			// within the event loop - see #520
-			QTimer::singleShot(0, TabWidget, [&, TabWidget]
+			QTimer::singleShot(0, _this, [&, TabWidget]
 			{
 				_this->ensureWidgetVisible(TabWidget);
 			});
@@ -334,27 +334,13 @@ void CDockAreaTabBar::onTabCloseRequested()
 void CDockAreaTabBar::onCloseOtherTabsRequested()
 {
 	auto Sender = qobject_cast<CDockWidgetTab*>(sender());
-	for (int i = 0; i < count(); ++i)
-	{
-		auto Tab = tab(i);
-		if (Tab->isClosable() && !Tab->isHidden() && Tab != Sender)
-		{
-			// If the dock widget is deleted with the closeTab() call, its tab
-			// it will no longer be in the layout, and thus the index needs to
-			// be updated to not skip any tabs
-			int Offset = Tab->dockWidget()->features().testFlag(
-				CDockWidget::DockWidgetDeleteOnClose) ? 1 : 0;
-			closeTab(i);
 
-			// If the dock widget blocks closing, i.e. if the flag
-			// CustomCloseHandling is set, and the dock widget is still open,
-			// then we do not need to correct the index
-			if (Tab->dockWidget()->isClosed())
-			{
-				i -= Offset;
-			}
-		}
-	}
+    for (int i = count() - 1; i >= 0; --i) {
+        auto Tab = tab(i);
+        if (Tab->isClosable() && !Tab->isHidden() && Tab != Sender) {
+            closeTab(i);
+        }
+    }
 }
 
 

@@ -50,7 +50,6 @@
 #include "FloatingDockContainer.h"
 #include "DockOverlay.h"
 #include "DockManager.h"
-#include "IconProvider.h"
 #include "DockFocusController.h"
 
 
@@ -109,6 +108,14 @@ struct DockWidgetTabPrivate
 	 * is not possible for any reason
 	 */
 	bool startFloating(eDragState DraggingState = DraggingFloatingWidget);
+
+	/**
+	 * Wayland hybrid drag: drive the in-window drag preview from reliable
+	 * event coordinates and, when the cursor leaves the source top-level
+	 * window, convert the in-window drag into a native compositor platform
+	 * drag.
+	 */
+	void waylandPreviewMove(QMouseEvent* ev);
 
 	/**
 	 * Returns true if the given config flag is set
@@ -170,7 +177,7 @@ struct DockWidgetTabPrivate
 		else
 		{
 			auto w = new CFloatingDragPreview(Widget);
-			_this->connect(w, &CFloatingDragPreview::draggingCanceled, [=]()
+			_this->connect(w, &CFloatingDragPreview::draggingCanceled, [this]()
 			{
 				DragState = DraggingInactive;
 			});
@@ -312,12 +319,30 @@ bool DockWidgetTabPrivate::startFloating(eDragState DraggingState)
 	 && (dockContainer->visibleDockAreaCount() == 1)
 	 && (DockWidget->dockAreaWidget()->dockWidgetsCount() == 1))
 	{
+		// On Wayland, dragging the tab of the single dock widget of a
+		// floating widget drags the existing floating widget, so the user
+		// can dock it into another container
+		if (internal::isWayland() && (DraggingFloatingWidget == DraggingState))
+		{
+			auto FloatingContainer = dockContainer->floatingWidget();
+			if (FloatingContainer)
+			{
+				DragState = DraggingInactive;
+				CFloatingDockContainer::startPlatformDrag(FloatingContainer,
+					GlobalDragStartMousePosition, _this);
+				return true;
+			}
+		}
 		return false;
 	}
 
     ADS_PRINT("startFloating");
 	DragState = DraggingState;
 	IFloatingWidget* FloatingWidget = nullptr;
+	// On Wayland the drag preview is an in-window child widget (driven by event
+	// coordinates, confined to the source container); it converts to a native
+	// compositor platform drag only when the cursor leaves the source window
+	// (see waylandPreviewMove()). So a drag uses a preview on every platform.
 	bool CreateContainer = (DraggingFloatingWidget != DraggingState);
 
 	// If section widget has multiple tabs, we take only one tab
@@ -342,6 +367,15 @@ bool DockWidgetTabPrivate::startFloating(eDragState DraggingState)
     	auto Overlay = DockManager->containerOverlay();
     	Overlay->setAllowedAreas(OuterDockAreas);
     	this->FloatingWidget = FloatingWidget;
+    	if (internal::isWayland())
+    	{
+    		// Confine the in-window preview to the source container; its
+    		// position and the drop overlays are driven by event coordinates
+    		// delivered to the tab (see waylandPreviewMove()). FloatingWidget is
+    		// a CFloatingDragPreview here because CreateContainer was false.
+    		auto Preview = static_cast<CFloatingDragPreview*>(FloatingWidget);
+    		Preview->setSourceContainer(dockContainer);
+    	}
     	qApp->postEvent(DockWidget, new QEvent((QEvent::Type)internal::DockedWidgetDragStartEvent));
     }
     else
@@ -350,6 +384,43 @@ bool DockWidgetTabPrivate::startFloating(eDragState DraggingState)
     }
 
 	return true;
+}
+
+
+//============================================================================
+void DockWidgetTabPrivate::waylandPreviewMove(QMouseEvent* ev)
+{
+	const QPoint GlobalPos = internal::globalPositionOf(ev);
+
+	// FloatingWidget is a CFloatingDragPreview during the in-window phase
+	// (DraggingFloatingWidget state on Wayland; see startFloating()). While the
+	// cursor stays inside the source window the preview just follows it.
+	auto Preview = static_cast<CFloatingDragPreview*>(FloatingWidget);
+	if (CFloatingDockContainer::waylandMoveOrLeaveInWindowPreview(
+			Preview, _this->window(), GlobalPos))
+	{
+		return;
+	}
+
+	// Boundary cross: the preview was torn down, convert the gesture into a
+	// native compositor platform drag of a freshly created floating widget.
+	FloatingWidget = nullptr;
+	DragState = DraggingInactive;
+
+	QSize Size;
+	IFloatingWidget* RealFloating = nullptr;
+	if (DockArea->dockWidgetsCount() > 1)
+	{
+		RealFloating = createFloatingWidget(DockWidget, true);
+		Size = DockWidget->size();
+	}
+	else
+	{
+		RealFloating = createFloatingWidget(DockArea, true);
+		Size = DockArea->size();
+	}
+	CFloatingDockContainer::startPlatformDragForFloatingWidget(RealFloating,
+		DragStartMousePosition, Size, GlobalDragStartMousePosition, _this);
 }
 
 
@@ -458,7 +529,16 @@ void CDockWidgetTab::mouseMoveEvent(QMouseEvent* ev)
     // move floating window
     if (d->isDraggingState(DraggingFloatingWidget))
     {
-        d->FloatingWidget->moveFloating();
+        if (internal::isWayland())
+        {
+            // Wayland hybrid drag: in-window preview until the cursor leaves
+            // the source window, then convert to a native platform drag.
+            d->waylandPreviewMove(ev);
+        }
+        else
+        {
+            d->FloatingWidget->moveFloating();
+        }
         Super::mouseMoveEvent(ev);
         return;
     }
@@ -479,10 +559,14 @@ void CDockWidgetTab::mouseMoveEvent(QMouseEvent* ev)
 	{
 		// If this is the last dock area in a dock container with only
     	// one single dock widget it does not make  sense to move it to a new
-    	// floating widget and leave this one empty
+    	// floating widget and leave this one empty.
+    	// On Wayland we fall through, because dragging the tab drags the
+    	// existing floating widget so the user can dock it into another
+    	// container
 		if (d->DockArea->dockContainer()->isFloating()
 		 && d->DockArea->openDockWidgetsCount() == 1
-		 && d->DockArea->dockContainer()->visibleDockAreaCount() == 1)
+		 && d->DockArea->dockContainer()->visibleDockAreaCount() == 1
+		 && !internal::isWayland())
 		{
 			return;
 		}
@@ -540,13 +624,14 @@ QMenu* CDockWidgetTab::buildContextMenu(QMenu *Menu)
         Menu = new QMenu(this);
     }
     
+    ADS_PRINT("CDockWidgetTab::buildContextMenu");
     const bool isFloatable = d->DockWidget->features().testFlag(CDockWidget::DockWidgetFloatable);
-    const bool isNotOnlyTabInContainer =  !d->DockArea->dockContainer()->hasTopLevelDockWidget();
     const bool isTopLevelArea = d->DockArea->isTopLevelArea();
-    const bool isDetachable = isFloatable && isNotOnlyTabInContainer;
+    const bool isFloating = d->DockWidget->isFloating();
+    const bool isDetachable = isFloatable && !isFloating;
 	QAction* Action;
 
-    if (!isTopLevelArea)
+    if (!(isTopLevelArea && isFloating))
     {
 		Action = Menu->addAction(tr("Detach"), this, SLOT(detachDockWidget()));
 		Action->setEnabled(isDetachable);
@@ -570,7 +655,7 @@ QMenu* CDockWidgetTab::buildContextMenu(QMenu *Menu)
 	Action->setEnabled(isClosable());
 	if (d->DockArea->openDockWidgetsCount() > 1)
 	{
-		Action = Menu->addAction(tr("Close Others"), this, SIGNAL(closeOtherTabsRequested()));
+        Menu->addAction(tr("Close Others"), this, SIGNAL(closeOtherTabsRequested()));
 	}
 
     return Menu;
@@ -599,9 +684,9 @@ void CDockWidgetTab::setActiveTab(bool active)
 	if (CDockManager::testConfigFlag(CDockManager::FocusHighlighting) && !d->DockWidget->dockManager()->isRestoringState())
 	{
 		bool UpdateFocusStyle = false;
-		if (active && !hasFocus())
-		{
-			//setFocus(Qt::OtherFocusReason);
+        // Update the focus only, if this the dock area of this tab is the focused dock area
+        if (active && !hasFocus() && (d->focusController()->focusedDockArea() == this->dockAreaWidget()))
+		{            
 			d->focusController()->setDockWidgetTabFocused(this);
 			UpdateFocusStyle = true;
 		}
