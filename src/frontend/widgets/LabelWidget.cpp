@@ -520,6 +520,8 @@ void LabelWidget::retranslateUi() {
 	ui.cbBorderShape->addItem(i18n("Left pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
 	ui.cbBorderShape->addItem(i18n("Right pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
 
+	borderLineWidget->retranslateUi();
+
 	// tooltip texts
 	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");
 	ui.chbBindLogicalPos->setToolTip(msg);

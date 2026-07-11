@@ -29,6 +29,7 @@ public:
 	void setXColumn(const AbstractColumn*);
 	void setYColumn(const AbstractColumn*);
 	void updateLocale();
+	void retranslateUi();
 
 	void load();
 	void loadConfig(const KConfigGroup&);
@@ -43,6 +44,7 @@ private:
 	AspectTreeModel* m_aspectModel{nullptr};
 	const AbstractColumn* m_xColumn{nullptr};
 	const AbstractColumn* m_yColumn{nullptr};
+	bool m_xy{false};
 
 	void updateWidgets();
 

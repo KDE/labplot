@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : error bar widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -24,7 +24,7 @@
 	\ingroup frontend
  */
 ErrorBarWidget::ErrorBarWidget(QWidget* parent, bool poissonAvailable)
-	: QWidget(parent) {
+	: QWidget(parent), m_poissonAvailable(poissonAvailable) {
 	ui.setupUi(this);
 
 	cbXPlusColumn = new TreeViewComboBox(this);
@@ -39,39 +39,6 @@ ErrorBarWidget::ErrorBarWidget(QWidget* parent, bool poissonAvailable)
 	gridLayout->addWidget(cbYPlusColumn, 7, 2, 1, 1);
 	gridLayout->addWidget(cbYMinusColumn, 8, 2, 1, 1);
 	gridLayout->addWidget(lineWidget, 13, 0, 1, 3);
-
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
-	if (group.readEntry("GUMTerms", false)) {
-		// x
-		ui.lXError->setText(i18n("X Uncertainty"));
-		ui.cbXErrorType->addItem(i18n("No Uncertainties"), static_cast<int>(ErrorBar::ErrorType::NoError));
-		if (poissonAvailable)
-			ui.cbXErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::ErrorType::Poisson));
-		ui.cbXErrorType->addItem(i18n("Custom Uncertainty Values, symmetric"), static_cast<int>(ErrorBar::ErrorType::Symmetric));
-		ui.cbXErrorType->addItem(i18n("Custom Uncertainty Values, asymmetric"), static_cast<int>(ErrorBar::ErrorType::Asymmetric));
-
-		// y
-		ui.lYError->setText(i18n("Y Uncertainty"));
-		ui.cbYErrorType->addItem(i18n("No Uncertainties"), static_cast<int>(ErrorBar::ErrorType::NoError));
-		if (poissonAvailable)
-			ui.cbYErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::ErrorType::Poisson));
-		ui.cbYErrorType->addItem(i18n("Custom Uncertainty Values, symmetric"), static_cast<int>(ErrorBar::ErrorType::Symmetric));
-		ui.cbYErrorType->addItem(i18n("Custom Uncertainty Values, asymmetric"), static_cast<int>(ErrorBar::ErrorType::Asymmetric));
-	} else {
-		// x
-		ui.cbXErrorType->addItem(i18n("No Errors"), static_cast<int>(ErrorBar::ErrorType::NoError));
-		if (poissonAvailable)
-			ui.cbXErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::ErrorType::Poisson));
-		ui.cbXErrorType->addItem(i18n("Custom Error Values, symmetric"), static_cast<int>(ErrorBar::ErrorType::Symmetric));
-		ui.cbXErrorType->addItem(i18n("Custom Error Values, asymmetric"), static_cast<int>(ErrorBar::ErrorType::Asymmetric));
-
-		// y
-		ui.cbYErrorType->addItem(i18n("No Errors"), static_cast<int>(ErrorBar::ErrorType::NoError));
-		if (poissonAvailable)
-			ui.cbYErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::ErrorType::Poisson));
-		ui.cbYErrorType->addItem(i18n("Custom Error Values, symmetric"), static_cast<int>(ErrorBar::ErrorType::Symmetric));
-		ui.cbYErrorType->addItem(i18n("Custom Error Values, asymmetric"), static_cast<int>(ErrorBar::ErrorType::Asymmetric));
-	}
 
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
@@ -205,6 +172,48 @@ void ErrorBarWidget::adjustLayout() {
 
 void ErrorBarWidget::updateLocale() {
 	ui.sbCapSize->setLocale(QLocale());
+	lineWidget->updateLocale();
+}
+
+void ErrorBarWidget::retranslateUi() {
+	ui.cbXErrorType->clear();
+	ui.cbYErrorType->clear();
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
+	if (group.readEntry("GUMTerms", false)) {
+		// x
+		ui.lXError->setText(i18n("X Uncertainty"));
+		ui.cbXErrorType->addItem(i18n("No Uncertainties"), static_cast<int>(ErrorBar::ErrorType::NoError));
+		if (m_poissonAvailable)
+			ui.cbXErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::ErrorType::Poisson));
+		ui.cbXErrorType->addItem(i18n("Custom Uncertainty Values, symmetric"), static_cast<int>(ErrorBar::ErrorType::Symmetric));
+		ui.cbXErrorType->addItem(i18n("Custom Uncertainty Values, asymmetric"), static_cast<int>(ErrorBar::ErrorType::Asymmetric));
+
+		// y
+		ui.lYError->setText(i18n("Y Uncertainty"));
+		ui.cbYErrorType->addItem(i18n("No Uncertainties"), static_cast<int>(ErrorBar::ErrorType::NoError));
+		if (m_poissonAvailable)
+			ui.cbYErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::ErrorType::Poisson));
+		ui.cbYErrorType->addItem(i18n("Custom Uncertainty Values, symmetric"), static_cast<int>(ErrorBar::ErrorType::Symmetric));
+		ui.cbYErrorType->addItem(i18n("Custom Uncertainty Values, asymmetric"), static_cast<int>(ErrorBar::ErrorType::Asymmetric));
+	} else {
+		// x
+		ui.cbXErrorType->addItem(i18n("No Errors"), static_cast<int>(ErrorBar::ErrorType::NoError));
+		if (m_poissonAvailable)
+			ui.cbXErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::ErrorType::Poisson));
+		ui.cbXErrorType->addItem(i18n("Custom Error Values, symmetric"), static_cast<int>(ErrorBar::ErrorType::Symmetric));
+		ui.cbXErrorType->addItem(i18n("Custom Error Values, asymmetric"), static_cast<int>(ErrorBar::ErrorType::Asymmetric));
+
+		// y
+		ui.cbYErrorType->addItem(i18n("No Errors"), static_cast<int>(ErrorBar::ErrorType::NoError));
+		if (m_poissonAvailable)
+			ui.cbYErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::ErrorType::Poisson));
+		ui.cbYErrorType->addItem(i18n("Custom Error Values, symmetric"), static_cast<int>(ErrorBar::ErrorType::Symmetric));
+		ui.cbYErrorType->addItem(i18n("Custom Error Values, asymmetric"), static_cast<int>(ErrorBar::ErrorType::Asymmetric));
+	}
+
+	ui.cbType->setItemText(0, i18n("Bars"));
+	ui.cbType->setItemText(1, i18n("Bars with Ends"));
+
 	lineWidget->updateLocale();
 }
 

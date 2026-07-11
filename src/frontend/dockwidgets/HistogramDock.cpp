@@ -269,6 +269,8 @@ void HistogramDock::retranslateUi() {
 	ui.cbNormalization->addItem(i18n("Probability Density"));
 
 	lineWidget->retranslateUi();
+	valueWidget->retranslateUi();
+	errorBarWidget->retranslateUi();
 
 	// tooltip texts
 	QString info = i18n(
@@ -296,6 +298,7 @@ void HistogramDock::retranslateUi() {
 void HistogramDock::updateLocale() {
 	lineWidget->updateLocale();
 	symbolWidget->updateLocale();
+	valueWidget->updateLocale();
 	errorBarWidget->updateLocale();
 }
 

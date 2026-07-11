@@ -929,6 +929,8 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbPlotColorMode->addItem(i18n("Theme"));
 	ui.cbPlotColorMode->addItem(i18n("Color Map"));
 
+	borderLineWidget->retranslateUi();
+
 	// tooltip texts
 	QString msg = i18n(
 		"Data Range:"

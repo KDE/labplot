@@ -245,6 +245,12 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.cbLabelsBorderShape->addItem(i18n("Left pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
 	ui.cbLabelsBorderShape->addItem(i18n("Right pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
 
+	dataLineWidget->retranslateUi();
+	centerLineWidget->retranslateUi();
+	upperLimitLineWidget->retranslateUi();
+	lowerLimitLineWidget->retranslateUi();
+	labelsBorderLineWidget->retranslateUi();
+
 	// tooltips
 	QString info = i18n(
 		"The supported chart types are grouped according to the plotted statistics and to the metric defining the limits.<br><br>"

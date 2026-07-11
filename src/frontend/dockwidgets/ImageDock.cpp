@@ -197,6 +197,8 @@ void ImageDock::retranslateUi() {
 	ui.cbVerticalAlignment->addItem(i18n("Top"));
 	ui.cbVerticalAlignment->addItem(i18n("Center"));
 	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
+
+	borderLineWidget->retranslateUi();
 }
 
 //*************************************************************
