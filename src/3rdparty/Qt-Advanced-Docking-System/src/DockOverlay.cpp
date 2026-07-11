@@ -447,7 +447,7 @@ CDockOverlay::CDockOverlay(QWidget* parent, eMode Mode) :
 		setWindowOpacity(1);
 		setAttribute(Qt::WA_TranslucentBackground);
 	}
-	setWindowTitle("DockOverlay");
+	setWindowTitle(QStringLiteral("DockOverlay"));
 	setAttribute(Qt::WA_NoSystemBackground);
 
 	d->Cross->setVisible(false);
@@ -856,7 +856,7 @@ CDockOverlayCross::CDockOverlayCross(CDockOverlay* overlay) :
 #endif
 		setAttribute(Qt::WA_TranslucentBackground);
 	}
-	setWindowTitle("DockOverlayCross");
+	setWindowTitle(QStringLiteral("DockOverlayCross"));
 
 	d->GridLayout = new QGridLayout();
 	d->GridLayout->setSpacing(0);
@@ -1087,21 +1087,20 @@ void CDockOverlayCross::reset()
 void CDockOverlayCross::setIconColors(const QString& Colors)
 {
 	static const QMap<QString, int> ColorCompenentStringMap{
-		{"Frame", CDockOverlayCross::FrameColor},
-		{"Background", CDockOverlayCross::WindowBackgroundColor},
-		{"Overlay", CDockOverlayCross::OverlayColor},
-		{"Arrow", CDockOverlayCross::ArrowColor},
-		{"Shadow", CDockOverlayCross::ShadowColor}};
-
+		{QStringLiteral("Frame"), CDockOverlayCross::FrameColor},
+		{QStringLiteral("Background"), CDockOverlayCross::WindowBackgroundColor},
+		{QStringLiteral("Overlay"), CDockOverlayCross::OverlayColor},
+		{QStringLiteral("Arrow"), CDockOverlayCross::ArrowColor},
+		{QStringLiteral("Shadow"), CDockOverlayCross::ShadowColor}};
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
     auto SkipEmptyParts = QString::SkipEmptyParts;
 #else
     auto SkipEmptyParts = Qt::SkipEmptyParts;
 #endif
-    auto ColorList = Colors.split(' ', SkipEmptyParts);
+    auto ColorList = Colors.split(QLatin1Char(' '), SkipEmptyParts);
 	for (const auto& ColorListEntry : ColorList)
 	{
-        auto ComponentColor = ColorListEntry.split('=', SkipEmptyParts);
+        auto ComponentColor = ColorListEntry.split(QLatin1Char('='), SkipEmptyParts);
 		int Component = ColorCompenentStringMap.value(ComponentColor[0], -1);
 		if (Component < 0)
 		{

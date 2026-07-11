@@ -266,7 +266,7 @@ void DockAreaTitleBarPrivate::createButtons()
 //============================================================================
 void DockAreaTitleBarPrivate::createAutoHideTitleLabel()
 {
-	AutoHideTitleLabel = new CElidingLabel("");
+	AutoHideTitleLabel = new CElidingLabel(QString());
 	AutoHideTitleLabel->setObjectName("autoHideTitleLabel");
 	// When the tabs are at the top, they will be at position 0, insert the label behind them, and hide it.
 	Layout->addWidget(AutoHideTitleLabel);

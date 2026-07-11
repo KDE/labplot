@@ -1044,7 +1044,7 @@ void DockContainerWidgetPrivate::saveChildNodesState(QXmlStreamWriter& s, QWidge
 			s.writeStartElement("Sizes");
 			for (auto Size : Splitter->sizes())
 			{
-				s.writeCharacters(QString::number(Size) + " ");
+				s.writeCharacters(QString::number(Size) + QLatin1Char(' '));
 			}
 			s.writeEndElement();
 		s.writeEndElement();
@@ -1083,14 +1083,14 @@ bool DockContainerWidgetPrivate::restoreSplitter(CDockingStateReader& s,
 	QString OrientationStr = s.attributes().value("Orientation").toString();
 
 	// Check if the orientation string is right
-	if (!OrientationStr.startsWith("|") && !OrientationStr.startsWith("-"))
+	if (!OrientationStr.startsWith(QLatin1Char('|')) && !OrientationStr.startsWith(QLatin1Char('-')))
 	{
 		return false;
 	}
 
 	// The "|" shall indicate a vertical splitter handle which in turn means
 	// a Horizontal orientation of the splitter layout.
-	bool HorizontalSplitter = OrientationStr.startsWith("|");
+	bool HorizontalSplitter = OrientationStr.startsWith(QLatin1Char('|'));
 	// In version 0 we had a small bug. The "|" indicated a vertical orientation,
 	// but this is wrong, because only the splitter handle is vertical, the
 	// layout of the splitter is a horizontal layout. We fix this here

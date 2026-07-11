@@ -635,12 +635,12 @@ target_include_directories(labplotbackendlib PUBLIC ${FRONTEND_DIR}/widgets) # s
 target_include_directories(labplotlib PUBLIC ${FRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 
 # add system QADS include path
-# Note: ads::qt6advanceddocking is always available (either found as a system package
+# Note: ads::qtadvanceddocking-qt6 is always available (either found as a system package
 # or built as a bundled target via add_subdirectory(3rdparty)). When using the bundled
-# version, qt${QT_VERSION_MAJOR}advanceddocking_FOUND is FALSE, so we must NOT guard
+# version, qtadvanceddocking-qt${QT_VERSION_MAJOR}_FOUND is FALSE, so we must NOT guard
 # this with if(_FOUND). labplotbackendlib and labplotlib also link it unconditionally.
-if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
-    get_target_property(QADS_LIBRARIES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_LINK_LIBRARIES)
+if(qtadvanceddocking-qt${QT_VERSION_MAJOR}_FOUND)
+    get_target_property(QADS_LIBRARIES ads::qtadvanceddocking-qt${QT_VERSION_MAJOR} INTERFACE_LINK_LIBRARIES)
     message(STATUS "QADS Found: ${QADS_LIBRARIES}")
 endif()
 # Apply compile definitions and Qt/KF link targets (for include paths) to all OBJECT libs
@@ -660,7 +660,7 @@ foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj lab
         KF${KF_MAJOR_VERSION}::Archive
         KF${KF_MAJOR_VERSION}::TextWidgets
         KF${KF_MAJOR_VERSION}::CoreAddons
-        qt${QT_VERSION_MAJOR}advanceddocking
+        qtadvanceddocking-qt${QT_VERSION_MAJOR}
     )
 
     # Precompiled headers: parse common Qt/KF and LabPlot lib/ headers once per OBJECT lib.
@@ -731,7 +731,7 @@ target_link_libraries(labplotbackendlib
     ${LIBCERF_LIBRARIES}
     ${MATIO_LIBRARIES}
     ${READSTAT_LIBRARIES}
-    qt${QT_VERSION_MAJOR}advanceddocking
+    qtadvanceddocking-qt${QT_VERSION_MAJOR}
 )
 
 if(Arrow_FOUND AND Parquet_FOUND)
@@ -778,7 +778,7 @@ target_link_libraries(labplotlib
     KF${KF_MAJOR_VERSION}::Archive    # KFilterDev
     KF${KF_MAJOR_VERSION}::TextWidgets    # KTextEdit
     ${Poppler_LIBRARIES}
-    qt${QT_VERSION_MAJOR}advanceddocking
+    qtadvanceddocking-qt${QT_VERSION_MAJOR}
     KF${KF_MAJOR_VERSION}::TextEditor
     KF${KF_MAJOR_VERSION}::SyntaxHighlighting
 )
