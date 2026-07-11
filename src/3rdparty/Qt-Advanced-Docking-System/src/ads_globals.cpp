@@ -86,7 +86,7 @@ xcb_atom_t xcb_get_atom(const char *name)
 	{
 		return XCB_ATOM_NONE;
 	}
-	auto key = QString(name);
+	auto key = QString(QLatin1String(name));
 	if(_xcb_atom_cache.contains(key))
 	{
 		return _xcb_atom_cache[key];
