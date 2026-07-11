@@ -4,12 +4,14 @@ if (POLICY CMP0091)
   cmake_policy(SET CMP0091 NEW)
 endif (POLICY CMP0091)
 
+# Set CMAKE_MODULE_PATH to find our custom modules
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
+
 # By default, the version information is extracted from the git index. However,
 # we can override this behavior by explicitly setting ADS_VERSION and
 # skipping the git checks. This is useful for cases where this project is being
 # used independently of its original git repo (e.g. vendored in another project)
 if(NOT ADS_VERSION)
-    set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
     include(GetGitRevisionDescription)
     git_describe(GitTagVersion --tags)
     string(REGEX REPLACE "^([0-9]+)\\..*" "\\1" VERSION_MAJOR "${GitTagVersion}")
@@ -21,10 +23,14 @@ else()
     list(LENGTH VERSION_DOT_MATCHES VERSION_DOT_COUNT)
     if(VERSION_DOT_COUNT EQUAL 2)
         set(VERSION_SHORT ${ADS_VERSION})
+        string(REGEX REPLACE "^([0-9]+)\\..*" "\\1" VERSION_MAJOR "${ADS_VERSION}")
     else()
         message(FATAL_ERROR "ADS_VERSION must be in major.minor.patch format, e.g. 3.8.1. Got ${ADS_VERSION}")
     endif()
 endif()
+
+# Set SOVERSION to major version for shared library compatibility
+set(VERSION_SONAME "${VERSION_MAJOR}")
 
 
 project(QtADS LANGUAGES CXX VERSION ${VERSION_SHORT})

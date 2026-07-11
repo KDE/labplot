@@ -212,7 +212,7 @@ elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
     target_include_directories(labplot_core_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
     target_include_directories(labplot_data_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
 
-    get_target_property(QADS_VERSION qt${QT_VERSION_MAJOR}advanceddocking VERSION)
+    get_target_property(QADS_VERSION "qtadvanceddocking-qt${QT_VERSION_MAJOR}" VERSION)
     message(STATUS "QADS VERSION ${QADS_VERSION}")
     target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"${QADS_VERSION}\")
 else()
