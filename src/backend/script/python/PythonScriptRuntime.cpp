@@ -263,33 +263,7 @@ bool PythonScriptRuntime::initPython() {
 	INFO(Q_FUNC_INFO << ", isMacOsBundle = " << isMacOsBundle)
 	INFO(Q_FUNC_INFO << ", pythonExecutable from config = " << STDSTRING(pythonExecutable))
 
-	// CRITICAL APPIMAGE FIX:
-	// LabPlot is dynamically linked to libpython at build time. The dynamic linker loads
-	// this libpython when LabPlot starts, BEFORE we can control anything. If we try to
-	// redirect Python to a bundled stdlib at runtime via Py_SetProgramName/PYTHONPATH,
-	// we get ABI crashes because the already-loaded libpython doesn't match the stdlib.
-	//
-	// SOLUTION: For AppImage:
-	// 1. Use system Python (already loaded libpython) for the interpreter - NO Py_SetProgramName
-	// 2. Still detect bundled prefix to find our bundled shiboken/PySide/pylabplot
-	// 3. Add bundled site-packages to sys.path AFTER Py_Initialize() succeeds
-	// This avoids ABI conflicts during init while still making bundled modules available.
-
-	QString bundledSitePackages; // For AppImage: track this separately from selectedPrefix
-
-	if (isAppImageBuild) {
-		INFO(Q_FUNC_INFO << ", AppImage: detecting bundled site-packages (will use system Python for interpreter)")
-		const QString detectedPrefix = detectBundledPythonPrefix(appDirPath);
-		if (!detectedPrefix.isEmpty()) {
-			const QString pythonVersion = QString::number(PY_MAJOR_VERSION) + QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
-			bundledSitePackages = detectedPrefix + QStringLiteral("/lib/python") + pythonVersion + QStringLiteral("/site-packages");
-			INFO(Q_FUNC_INFO << ", will add bundled site-packages to sys.path: " << STDSTRING(bundledSitePackages))
-		} else {
-			WARN(Q_FUNC_INFO << ", AppImage: bundled site-packages not found - shiboken/PySide may not be available!")
-		}
-		// Don't set selectedExecutable - let it use system Python
-	} else if (selectedExecutable.isEmpty() && isBundledBuild) {
-		// Only for macOS bundles (not AppImage)
+	if (selectedExecutable.isEmpty() && isBundledBuild) {
 		INFO(Q_FUNC_INFO << ", detecting bundled Python...")
 		selectedPrefix = detectBundledPythonPrefix(appDirPath);
 		if (!selectedPrefix.isEmpty())
@@ -298,8 +272,12 @@ bool PythonScriptRuntime::initPython() {
 			WARN(Q_FUNC_INFO << ", bundled build detected but no Python prefix found!")
 	}
 
-	// For macOS bundles (not AppImage), set up Python environment
-	if (isMacOsBundle && !selectedPrefix.isEmpty()) {
+	// AppImage bundles need special Python environment isolation.
+	// CRITICAL: Setting PYTHONHOME can cause crashes if LabPlot is linked against
+	// a different libpython than the bundled one. Instead, rely on Py_SetProgramName()
+	// which makes Python calculate paths from the executable location.
+	// We DO set PYTHONPATH and PYTHONNOUSERSITE to prevent system interference.
+	if (isAppImageBuild && !selectedPrefix.isEmpty()) {
 		// DO NOT set PYTHONHOME - it conflicts with dynamically linked libpython
 		// const QByteArray pythonHomeValue = selectedPrefix.toLocal8Bit();
 		// INFO(Q_FUNC_INFO << ", setting PYTHONHOME = " << pythonHomeValue.constData())
@@ -342,6 +320,19 @@ bool PythonScriptRuntime::initPython() {
 
 	INFO(Q_FUNC_INFO << ", selectedPrefix = " << STDSTRING(selectedPrefix))
 	INFO(Q_FUNC_INFO << ", selectedExecutable = " << STDSTRING(selectedExecutable))
+
+	// CRITICAL APPIMAGE ISSUE WARNING:
+	// If LabPlot is dynamically linked against libpython3.11.so at compile time,
+	// and we try to initialize with a different bundled Python at runtime,
+	// the dynamic linker might have already loaded the system libpython.
+	// This causes ABI conflicts and crashes during Py_Initialize().
+	// The solution is to either:
+	// 1. Build LabPlot with -DENABLE_PYTHON_SCRIPTING=OFF for AppImage and load Python dynamically
+	// 2. Ensure the bundled libpython matches what LabPlot was compiled against
+	// 3. Use LD_PRELOAD to force the bundled libpython before any system libraries
+	if (isAppImageBuild && !selectedPrefix.isEmpty()) {
+		INFO(Q_FUNC_INFO << ", WARNING: AppImage with bundled Python - verify libpython compatibility")
+	}
 
 	if (!selectedExecutable.isEmpty()) {
 		INFO(Q_FUNC_INFO << ", using custom Python executable: " << STDSTRING(selectedExecutable))
@@ -404,33 +395,9 @@ bool PythonScriptRuntime::initPython() {
 	// same qt6 linked by labplot. then distribute our compiled pyside python library
 	// and add it to sys.path
 
-	// For AppImage: add bundled site-packages (shiboken/PySide/pylabplot) to sys.path
-	// after Py_Initialize() has succeeded with system Python
-	if (isAppImageBuild && !bundledSitePackages.isEmpty()) {
-		INFO(Q_FUNC_INFO << ", AppImage: adding bundled site-packages to sys.path")
-		PyObject* sysPath = PySys_GetObject("path"); // borrowed reference
-		if (sysPath && PyList_Check(sysPath)) {
-			if (QFileInfo::exists(bundledSitePackages)) {
-				PyObject* entry = PyUnicode_FromString(bundledSitePackages.toUtf8().constData());
-				if (entry) {
-					// Insert at position 0 so our bundled modules are found first
-					PyList_Insert(sysPath, 0, entry);
-					Py_DECREF(entry);
-					INFO(Q_FUNC_INFO << ", added to sys.path[0]: " << STDSTRING(bundledSitePackages))
-				} else {
-					WARN(Q_FUNC_INFO << ", failed to create Python string for bundled site-packages path")
-				}
-			} else {
-				WARN(Q_FUNC_INFO << ", bundled site-packages path does not exist: " << STDSTRING(bundledSitePackages))
-			}
-		} else {
-			WARN(Q_FUNC_INFO << ", failed to get sys.path for adding bundled site-packages")
-		}
-	}
-
-	// When running from a bundled Python (macOS only now), prepend bundled paths ahead of system paths.
+	// When running from a bundled Python (AppImage/macOS), prepend bundled paths ahead of system paths.
 	// This ensures extension modules and stdlib are loaded from the bundle, not from the system or venv.
-	if (!selectedPrefix.isEmpty() && isMacOsBundle) {
+	if (!selectedPrefix.isEmpty() && isBundledBuild) {
 		INFO(Q_FUNC_INFO << ", prepending bundled paths to sys.path for prefix: " << STDSTRING(selectedPrefix))
 		const QString pythonBasePath =
 			selectedPrefix + QStringLiteral("/lib/python") + QString::number(PY_MAJOR_VERSION) + QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
