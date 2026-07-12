@@ -243,18 +243,12 @@ bool PythonScriptRuntime::initPython() {
 
 	// if running from a bundled python (AppImage/macOS), detect the bundled python prefix and executable
 	const QString appDirPath = QCoreApplication::applicationDirPath();
-	const bool isAppImageBuild = !qEnvironmentVariableIsEmpty("APPDIR");
-	const bool isMacOsBundle = appDirPath.contains(QStringLiteral("Contents/MacOS"));
-	const bool isBundledBuild = isAppImageBuild || isMacOsBundle;
+	const bool isBundledBuild = !qEnvironmentVariableIsEmpty("APPDIR") || appDirPath.contains(QStringLiteral("Contents/MacOS"));
 	if (selectedExecutable.isEmpty() && isBundledBuild) {
 		selectedPrefix = detectBundledPythonPrefix(appDirPath);
 		if (!selectedPrefix.isEmpty())
 			selectedExecutable = detectBundledPythonExecutable(selectedPrefix);
 	}
-
-	// AppImage bundles need PYTHONHOME to point at the bundled prefix.
-	if (isAppImageBuild && !selectedPrefix.isEmpty())
-		qputenv("PYTHONHOME", selectedPrefix.toLocal8Bit());
 
 	if (!selectedExecutable.isEmpty()) {
 		// need to validate that the provided python executable exists and matches with the python shared library currently linked to
