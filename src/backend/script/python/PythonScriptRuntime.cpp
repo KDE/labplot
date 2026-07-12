@@ -54,10 +54,6 @@ QString detectBundledPythonPrefix(const QString& appDirPath) {
 
 	QStringList candidatePrefixes;
 	const QString appImageDir = QString::fromLocal8Bit(qgetenv("APPDIR"));
-	DEBUG(Q_FUNC_INFO << ", appDirPath = " << STDSTRING(appDirPath))
-	DEBUG(Q_FUNC_INFO << ", APPDIR env = " << STDSTRING(appImageDir))
-	DEBUG(Q_FUNC_INFO << ", looking for python" << PY_MAJOR_VERSION << "." << PY_MINOR_VERSION)
-
 	for (const QString& base :
 		 {appImageDir, appDirPath, QDir(appDirPath).absoluteFilePath(QStringLiteral("..")), QDir(appDirPath).absoluteFilePath(QStringLiteral("../.."))}) {
 		if (base.isEmpty())
@@ -70,29 +66,17 @@ QString detectBundledPythonPrefix(const QString& appDirPath) {
 #endif
 	candidatePrefixes.removeDuplicates();
 
-	DEBUG(Q_FUNC_INFO << ", checking " << candidatePrefixes.size() << " candidate prefixes")
 	for (const QString& prefix : std::as_const(candidatePrefixes)) {
-		const QString path1 = prefix + pythonVersion;
-		const QString path2 = prefix + pythonVersionWithUsr;
-		DEBUG(Q_FUNC_INFO << ", checking: " << STDSTRING(path1))
-		if (QFileInfo::exists(path1)) {
-			INFO(Q_FUNC_INFO << ", FOUND bundled Python prefix: " << STDSTRING(prefix))
+		if (QFileInfo::exists(prefix + pythonVersion))
 			return prefix;
-		}
-		DEBUG(Q_FUNC_INFO << ", checking: " << STDSTRING(path2))
-		if (QFileInfo::exists(path2)) {
-			const QString result = prefix + QStringLiteral("/usr");
-			INFO(Q_FUNC_INFO << ", FOUND bundled Python prefix: " << STDSTRING(result))
-			return result;
-		}
+		if (QFileInfo::exists(prefix + pythonVersionWithUsr))
+			return prefix + QStringLiteral("/usr");
 	}
 
-	WARN(Q_FUNC_INFO << ", no bundled Python prefix found")
 	return {};
 }
 
 QString detectBundledPythonExecutable(const QString& prefix) {
-	DEBUG(Q_FUNC_INFO << ", looking for python executable in prefix: " << STDSTRING(prefix))
 	const QStringList candidateExecutables = {
 		QDir(prefix).absoluteFilePath(QStringLiteral("bin/python%1.%2")).arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION),
 		QDir(prefix).absoluteFilePath(QStringLiteral("bin/python%1")).arg(PY_MAJOR_VERSION),
@@ -103,14 +87,10 @@ QString detectBundledPythonExecutable(const QString& prefix) {
 	};
 
 	for (const QString& candidate : candidateExecutables) {
-		DEBUG(Q_FUNC_INFO << ", checking: " << STDSTRING(candidate))
-		if (QFileInfo::exists(candidate)) {
-			INFO(Q_FUNC_INFO << ", FOUND bundled Python executable: " << STDSTRING(candidate))
+		if (QFileInfo::exists(candidate))
 			return candidate;
-		}
 	}
 
-	WARN(Q_FUNC_INFO << ", no bundled Python executable found in prefix: " << STDSTRING(prefix))
 	return {};
 }
 
@@ -147,22 +127,30 @@ PythonScriptRuntime::~PythonScriptRuntime() {
 		PyGILState_STATE gil = PyGILState_Ensure();
 		// allow python garbage collection
 		Py_XDECREF(m_localDict);
-		m_localDict = nullptr;
 
-		// Note: sysStdOut/sysStdErr are shared static singletons owned by all runtimes.
-		// They are INCREF'd only once (in init()) and are still used by other live
-		// runtimes, so they must NOT be released here. They live for the lifetime of
-		// the interpreter. Releasing them per-instance (previously also done outside
-		// the GIL) over-decref'd the shared objects and can lead to crashes when other
-		// runtimes try to use them after one runtime is destroyed.
+		m_loggerStdOut = nullptr;
+		m_loggerStdErr = nullptr;
+		m_localDict = nullptr;
 
 		PyGILState_Release(gil);
 	}
 
+	// Note: Py_REFCNT is not in stable ABI, debug output disabled
+	// DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
+	// DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
+
+	Py_XDECREF(sysStdOut);
+	Py_XDECREF(sysStdErr);
+	sysStdOut = nullptr;
+	sysStdErr = nullptr;
+
 	delete m_loggerStdOut;
 	delete m_loggerStdErr;
-	m_loggerStdOut = nullptr;
-	m_loggerStdErr = nullptr;
+
+	// if (Py_IsInitialized()) {
+	// 	PyGILState_STATE gil = PyGILState_Ensure();
+	// 	Py_Finalize();
+	// }
 }
 
 bool PythonScriptRuntime::init() {
@@ -258,39 +246,17 @@ bool PythonScriptRuntime::initPython() {
 	const bool isAppImageBuild = !qEnvironmentVariableIsEmpty("APPDIR");
 	const bool isMacOsBundle = appDirPath.contains(QStringLiteral("Contents/MacOS"));
 	const bool isBundledBuild = isAppImageBuild || isMacOsBundle;
-	INFO(Q_FUNC_INFO << ", appDirPath = " << STDSTRING(appDirPath))
-	INFO(Q_FUNC_INFO << ", isAppImageBuild = " << isAppImageBuild)
-	INFO(Q_FUNC_INFO << ", isMacOsBundle = " << isMacOsBundle)
-	INFO(Q_FUNC_INFO << ", pythonExecutable from config = " << STDSTRING(pythonExecutable))
-
 	if (selectedExecutable.isEmpty() && isBundledBuild) {
-		INFO(Q_FUNC_INFO << ", detecting bundled Python...")
 		selectedPrefix = detectBundledPythonPrefix(appDirPath);
 		if (!selectedPrefix.isEmpty())
 			selectedExecutable = detectBundledPythonExecutable(selectedPrefix);
-		else
-			WARN(Q_FUNC_INFO << ", bundled build detected but no Python prefix found!")
 	}
 
 	// AppImage bundles need PYTHONHOME to point at the bundled prefix.
-	if (isAppImageBuild && !selectedPrefix.isEmpty()) {
-		const QByteArray pythonHomeValue = selectedPrefix.toLocal8Bit();
-		INFO(Q_FUNC_INFO << ", setting PYTHONHOME = " << pythonHomeValue.constData())
-		qputenv("PYTHONHOME", pythonHomeValue);
-
-		// Verify it was set
-		const QByteArray actualPythonHome = qgetenv("PYTHONHOME");
-		if (actualPythonHome != pythonHomeValue)
-			WARN(Q_FUNC_INFO << ", PYTHONHOME mismatch! Expected: " << pythonHomeValue.constData() << ", actual: " << actualPythonHome.constData())
-		else
-			INFO(Q_FUNC_INFO << ", PYTHONHOME verified: " << actualPythonHome.constData())
-	}
-
-	INFO(Q_FUNC_INFO << ", selectedPrefix = " << STDSTRING(selectedPrefix))
-	INFO(Q_FUNC_INFO << ", selectedExecutable = " << STDSTRING(selectedExecutable))
+	if (isAppImageBuild && !selectedPrefix.isEmpty())
+		qputenv("PYTHONHOME", selectedPrefix.toLocal8Bit());
 
 	if (!selectedExecutable.isEmpty()) {
-		INFO(Q_FUNC_INFO << ", using custom Python executable: " << STDSTRING(selectedExecutable))
 		// need to validate that the provided python executable exists and matches with the python shared library currently linked to
 		static wchar_t interpreterPath[PATH_MAX];
 		const std::wstring widePath = selectedExecutable.toStdWString();
@@ -305,12 +271,10 @@ bool PythonScriptRuntime::initPython() {
 		// PyInitConfig C API to the limited API which was already discussed
 		// https://discuss.python.org/t/pep-741-python-configuration-c-api-second-version/45403/48
 
-		INFO(Q_FUNC_INFO << ", calling Py_Initialize() with custom executable...")
 		// Initialize Python interpreter (stable ABI)
 		// Python auto-detects its prefix. Users can override via the standard
 		// PYTHONHOME environment variable if needed.
 		Py_Initialize();
-		INFO(Q_FUNC_INFO << ", Py_Initialize() completed successfully")
 
 		// need to validate that the provided python paths are initialized correctly and possible display them to the user in settings
 		// confirm sys.executable == interpreterPath
@@ -329,21 +293,16 @@ bool PythonScriptRuntime::initPython() {
 		}
 
 		if (wcscmp(interpreterPath, sysExecutable) != 0) {
-			WARN(Q_FUNC_INFO << ", Unexpected sys.executable value")
-			WARN(Q_FUNC_INFO << ", expected interpreterPath, got: " << STDSTRING(QString::fromWCharArray(sysExecutable)))
+			WARN("Unexpected sys.executable value")
 			Py_DECREF(sysExecutableObj);
 			return false;
 		}
-		INFO(Q_FUNC_INFO << ", sys.executable matches interpreterPath: " << STDSTRING(QString::fromWCharArray(sysExecutable)))
 		Py_DECREF(sysExecutableObj);
 	} else {
-		INFO(Q_FUNC_INFO << ", using default Python (no custom executable)")
-		INFO(Q_FUNC_INFO << ", calling Py_Initialize() with defaults...")
 		// Initialize Python interpreter (stable ABI)
 		// Python auto-detects its prefix. Users can override via the standard
 		// PYTHONHOME environment variable if needed.
 		Py_Initialize();
-		INFO(Q_FUNC_INFO << ", Py_Initialize() completed successfully")
 	}
 
 	// need to compile and distribute our own pyside python library to ensure it links with the
@@ -353,25 +312,11 @@ bool PythonScriptRuntime::initPython() {
 	// When running from a bundled Python (AppImage/macOS), prepend bundled paths ahead of system paths.
 	// This ensures extension modules and stdlib are loaded from the bundle, not from the system or venv.
 	if (!selectedPrefix.isEmpty() && isBundledBuild) {
-		INFO(Q_FUNC_INFO << ", prepending bundled paths to sys.path for prefix: " << STDSTRING(selectedPrefix))
 		const QString pythonBasePath =
 			selectedPrefix + QStringLiteral("/lib/python") + QString::number(PY_MAJOR_VERSION) + QLatin1Char('.') + QString::number(PY_MINOR_VERSION);
 		const QString stdLibPath = QDir(pythonBasePath).canonicalPath();
 		const QString libDynLoadPath = QDir(pythonBasePath + QStringLiteral("/lib-dynload")).canonicalPath();
 		const QString sitePkgsPath = QDir(pythonBasePath + QStringLiteral("/site-packages")).canonicalPath();
-
-		DEBUG(Q_FUNC_INFO << ", pythonBasePath = " << STDSTRING(pythonBasePath))
-		DEBUG(Q_FUNC_INFO << ", stdLibPath = " << STDSTRING(stdLibPath))
-		DEBUG(Q_FUNC_INFO << ", libDynLoadPath = " << STDSTRING(libDynLoadPath))
-		DEBUG(Q_FUNC_INFO << ", sitePkgsPath = " << STDSTRING(sitePkgsPath))
-
-		// Check if paths exist
-		if (!QFileInfo::exists(stdLibPath))
-			WARN(Q_FUNC_INFO << ", stdLibPath does not exist: " << STDSTRING(stdLibPath))
-		if (!QFileInfo::exists(libDynLoadPath))
-			WARN(Q_FUNC_INFO << ", libDynLoadPath does not exist: " << STDSTRING(libDynLoadPath))
-		if (!QFileInfo::exists(sitePkgsPath))
-			WARN(Q_FUNC_INFO << ", sitePkgsPath does not exist: " << STDSTRING(sitePkgsPath))
 
 		PyObject* sysPath = PySys_GetObject("path"); // borrowed reference
 		if (sysPath && PyList_Check(sysPath)) {
@@ -392,60 +337,19 @@ bool PythonScriptRuntime::initPython() {
 			prependPath(sitePkgsPath);
 			prependPath(libDynLoadPath);
 			prependPath(stdLibPath);
-			INFO(Q_FUNC_INFO << ", bundled paths prepended to sys.path")
-		} else {
-			WARN(Q_FUNC_INFO << ", failed to get sys.path for prepending bundled paths")
-		}
-	}
-
-	// Log the final sys.path for diagnostics
-	{
-		PyObject* sysPath = PySys_GetObject("path"); // borrowed reference
-		if (sysPath && PyList_Check(sysPath)) {
-			const Py_ssize_t pathSize = PyList_Size(sysPath);
-			INFO(Q_FUNC_INFO << ", sys.path has " << pathSize << " entries:")
-			for (Py_ssize_t i = 0; i < pathSize && i < 10; ++i) { // Log first 10 entries
-				PyObject* entry = PyList_GetItem(sysPath, i); // borrowed
-				if (entry && PyUnicode_Check(entry)) {
-					QString pathStr = pyUnicodeToQString(entry);
-					if (!pathStr.isEmpty())
-						INFO(Q_FUNC_INFO << ", sys.path[" << i << "] = " << qPrintable(pathStr))
-				}
-			}
-			if (pathSize > 10)
-				INFO(Q_FUNC_INFO << ", ... (" << (pathSize - 10) << " more entries)")
-		}
-
-		// Log sys.prefix and sys.exec_prefix
-		PyObject* sysPrefix = PySys_GetObject("prefix"); // borrowed
-		if (sysPrefix && PyUnicode_Check(sysPrefix)) {
-			QString prefixStr = pyUnicodeToQString(sysPrefix);
-			if (!prefixStr.isEmpty())
-				INFO(Q_FUNC_INFO << ", sys.prefix = " << qPrintable(prefixStr))
-		}
-
-		PyObject* sysExecPrefix = PySys_GetObject("exec_prefix"); // borrowed
-		if (sysExecPrefix && PyUnicode_Check(sysExecPrefix)) {
-			QString execPrefixStr = pyUnicodeToQString(sysExecPrefix);
-			if (!execPrefixStr.isEmpty())
-				INFO(Q_FUNC_INFO << ", sys.exec_prefix = " << qPrintable(execPrefixStr))
 		}
 	}
 
 	PySys_SetArgvEx(1, argv, 0); // this will be removed in python 3.15 but there are alternatives
 
-	INFO(Q_FUNC_INFO << ", initializing pylabplot module...")
 	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
 	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;
 	if (!pythonInitialized || pyErrorOccurred) {
 		WARN("Failed to initialize the pylabplot module")
-		if (pyErrorOccurred) {
-			WARN(Q_FUNC_INFO << ", Python error occurred during pylabplot initialization:")
+		if (pyErrorOccurred)
 			PyErr_Print();
-		}
 		return false;
 	}
-	INFO(Q_FUNC_INFO << ", pylabplot module initialized successfully")
 
 	ready = true;
 	return true;
