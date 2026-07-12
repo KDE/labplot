@@ -280,8 +280,7 @@ bool PythonScriptRuntime::initPython() {
 			prependPath(stdLibPath);
 		}
 	}
-
-	PySys_SetArgvEx(1, argv, 0); // this will be removed in python 3.15 but there are alternatives
+#endif
 
 	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
 	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;
