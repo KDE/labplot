@@ -64,6 +64,7 @@ Bug fixes:
 	* Fix appending data to spreadsheets from XLSX files
 	* Fix the bar chart with log-scales
 	* Undo background color of text label (#1171)
+	* On Linux, run on Wayland natively without enforcing XCB/X11 (BuG 512058)
 
 -----2.12.1 (2025-08-15) -----
 Bug fixes:
