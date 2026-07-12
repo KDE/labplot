@@ -90,6 +90,10 @@ else()
     target_compile_definitions( ${library_name} PRIVATE ADS_SHARED_EXPORT)
 endif()
 
+if(NOT MSVC_FOUND)
+    target_compile_options(${library_name} PRIVATE -Wno-switch-enum -Wno-shadow -Wno-deprecated-declarations -Wno-unused-but-set-variable)
+endif()
+
 add_library(ads::${library_name} ALIAS ${library_name})
 
 target_link_libraries(${library_name} PUBLIC Qt${QT_VERSION_MAJOR}::Core 
