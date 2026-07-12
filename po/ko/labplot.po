@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-11 00:39+0000\n"
+"POT-Creation-Date: 2026-07-12 00:39+0000\n"
 "PO-Revision-Date: 2026-06-09 01:31+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -67,12 +67,12 @@ msgstr "이동"
 msgid "Up"
 msgstr "위"
 
-#: src/backend/core/AbstractAspect.cpp:467
+#: src/backend/core/AbstractAspect.cpp:469
 #, kde-format
 msgid "Down"
 msgstr "아래"
 
-#: src/backend/core/AbstractAspect.cpp:553
+#: src/backend/core/AbstractAspect.cpp:557
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:216
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2458
@@ -80,59 +80,59 @@ msgstr "아래"
 msgid "%1: add %2"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:555
-#: src/backend/core/AbstractAspect.cpp:592
+#: src/backend/core/AbstractAspect.cpp:559
+#: src/backend/core/AbstractAspect.cpp:596
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:590
+#: src/backend/core/AbstractAspect.cpp:594
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:590
+#: src/backend/core/AbstractAspect.cpp:594
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:625
+#: src/backend/core/AbstractAspect.cpp:629
 #: src/backend/core/aspectcommands.h:102
 #, kde-format
 msgid "%1: remove %2"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:638
+#: src/backend/core/AbstractAspect.cpp:642
 #, kde-format
 msgid "%1: remove all children"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:750
+#: src/backend/core/AbstractAspect.cpp:754
 #, kde-format
 msgid "%1: pasted"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:845
+#: src/backend/core/AbstractAspect.cpp:849
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:847
+#: src/backend/core/AbstractAspect.cpp:851
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:848
+#: src/backend/core/AbstractAspect.cpp:852
 #, kde-format
 msgid "Copy of '%1'"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:991
+#: src/backend/core/AbstractAspect.cpp:995
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:997
+#: src/backend/core/AbstractAspect.cpp:1001
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
@@ -172,7 +172,7 @@ msgstr ""
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
 #: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/AxisDock.cpp:275
 #: src/frontend/dockwidgets/AxisDock.cpp:291
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:214
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:215
 #: src/frontend/dockwidgets/XYCurveDock.cpp:433 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
@@ -6553,7 +6553,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chbSTLLowPassJumpAuto)
 #: src/backend/nsl/nsl_conv.c:21 src/frontend/dockwidgets/AxisDock.cpp:232
 #: src/frontend/dockwidgets/InfoElementDock.cpp:126
-#: src/frontend/dockwidgets/InfoElementDock.cpp:285
+#: src/frontend/dockwidgets/InfoElementDock.cpp:288
 #: src/frontend/ui/dockwidgets/axisdock.ui:477
 #: src/frontend/ui/dockwidgets/axisdock.ui:674
 #: src/frontend/ui/dockwidgets/axisdock.ui:908
@@ -6747,7 +6747,7 @@ msgstr ""
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:492
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:630
-#: src/frontend/widgets/ValueWidget.cpp:40
+#: src/frontend/widgets/ValueWidget.cpp:130
 #, kde-format
 msgid "Frequency"
 msgstr ""
@@ -8906,13 +8906,13 @@ msgstr ""
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:93
 #: src/backend/worksheet/plots/AbstractPlot.cpp:121
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1400
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1402
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr ""
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1426
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1428
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr ""
@@ -8934,10 +8934,10 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:98
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:119
 #: src/frontend/dockwidgets/AxisDock.cpp:254
-#: src/frontend/dockwidgets/BarPlotDock.cpp:181
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:210
+#: src/frontend/dockwidgets/BarPlotDock.cpp:183
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:211
 #: src/frontend/dockwidgets/HistogramDock.cpp:262
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:157
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:159
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:90
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
 #: src/frontend/dockwidgets/XYCurveDock.cpp:449
@@ -8952,12 +8952,12 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:101
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:122
 #: src/frontend/dockwidgets/AxisDock.cpp:255
-#: src/frontend/dockwidgets/BarPlotDock.cpp:182
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:211
+#: src/frontend/dockwidgets/BarPlotDock.cpp:184
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:212
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:921
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:925
 #: src/frontend/dockwidgets/HistogramDock.cpp:261
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:158
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:160
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
 #: src/frontend/dockwidgets/XYCurveDock.cpp:448
@@ -9026,7 +9026,7 @@ msgid "%1: set axis range type"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:570
-#: src/frontend/dockwidgets/AxisDock.cpp:676
+#: src/frontend/dockwidgets/AxisDock.cpp:680
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr ""
@@ -14130,10 +14130,10 @@ msgstr ""
 #. i18n("Center") ); // must not updated
 #: src/frontend/dockwidgets/AxisDock.cpp:225
 #: src/frontend/dockwidgets/AxisDock.cpp:304
-#: src/frontend/dockwidgets/AxisDock.cpp:543
-#: src/frontend/dockwidgets/AxisDock.cpp:546
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:271
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:282
+#: src/frontend/dockwidgets/AxisDock.cpp:547
+#: src/frontend/dockwidgets/AxisDock.cpp:550
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:273
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:284
 #: src/frontend/dockwidgets/CustomPointDock.cpp:144
 #: src/frontend/dockwidgets/ImageDock.cpp:187
 #: src/frontend/dockwidgets/ImageDock.cpp:197
@@ -14145,10 +14145,10 @@ msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:226
 #: src/frontend/dockwidgets/AxisDock.cpp:305
-#: src/frontend/dockwidgets/AxisDock.cpp:544
-#: src/frontend/dockwidgets/AxisDock.cpp:547
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:273
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:284
+#: src/frontend/dockwidgets/AxisDock.cpp:548
+#: src/frontend/dockwidgets/AxisDock.cpp:551
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:275
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:286
 #: src/frontend/dockwidgets/CustomPointDock.cpp:146
 #: src/frontend/dockwidgets/ImageDock.cpp:189
 #: src/frontend/dockwidgets/ImageDock.cpp:199
@@ -14230,34 +14230,34 @@ msgid "Semi-filled, Big"
 msgstr ""
 
 #: src/frontend/dockwidgets/AxisDock.cpp:270
-#: src/frontend/dockwidgets/AxisDock.cpp:551
 #: src/frontend/dockwidgets/AxisDock.cpp:555
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:265
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:277
+#: src/frontend/dockwidgets/AxisDock.cpp:559
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:267
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:279
 #: src/frontend/dockwidgets/CustomPointDock.cpp:139
 #: src/frontend/dockwidgets/ImageDock.cpp:182
 #: src/frontend/dockwidgets/ImageDock.cpp:192
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
-#: src/frontend/widgets/ValueWidget.cpp:46
+#: src/frontend/widgets/ValueWidget.cpp:137
 #, kde-format
 msgid "Left"
 msgstr ""
 
 #. i18n("Center") ); // must not updated
 #: src/frontend/dockwidgets/AxisDock.cpp:271
-#: src/frontend/dockwidgets/AxisDock.cpp:552
-#: src/frontend/dockwidgets/AxisDock.cpp:554
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:267
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:279
+#: src/frontend/dockwidgets/AxisDock.cpp:556
+#: src/frontend/dockwidgets/AxisDock.cpp:558
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:269
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:281
 #: src/frontend/dockwidgets/CustomPointDock.cpp:141
 #: src/frontend/dockwidgets/ImageDock.cpp:184
 #: src/frontend/dockwidgets/ImageDock.cpp:194
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:489
 #: src/frontend/widgets/LabelWidget.cpp:501
-#: src/frontend/widgets/ValueWidget.cpp:47
+#: src/frontend/widgets/ValueWidget.cpp:138
 #, kde-format
 msgid "Right"
 msgstr ""
@@ -14379,7 +14379,7 @@ msgstr ""
 msgid "Transparent"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:328
+#: src/frontend/dockwidgets/AxisDock.cpp:335
 #, kde-format
 msgid ""
 "Defines how and where to position the major ticks on the axis:<ul><li>Number "
@@ -14391,7 +14391,7 @@ msgid ""
 "the value labels in the custom column provided below.</li></ul></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:340
+#: src/frontend/dockwidgets/AxisDock.cpp:347
 #, kde-format
 msgid ""
 "Defines where to position the first major tick:<ul><li>Absolute Value - the "
@@ -14400,14 +14400,14 @@ msgid ""
 "beginning of the axis range.</li></ul></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:349
+#: src/frontend/dockwidgets/AxisDock.cpp:356
 #, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:353
+#: src/frontend/dockwidgets/AxisDock.cpp:360
 #, kde-format
 msgid ""
 "Defines which text labels to show for the major ticks:<ul><li>Position "
@@ -14416,14 +14416,14 @@ msgid ""
 "labels.</li></ul></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:362
+#: src/frontend/dockwidgets/AxisDock.cpp:369
 #, kde-format
 msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:368
+#: src/frontend/dockwidgets/AxisDock.cpp:375
 #, kde-format
 msgid ""
 "Defines how and where to position the minor ticks on the axis:<ul><li>Number "
@@ -14434,57 +14434,57 @@ msgid ""
 "provided below.</li></ul></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:378
+#: src/frontend/dockwidgets/AxisDock.cpp:385
 #, kde-format
 msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:631
+#: src/frontend/dockwidgets/AxisDock.cpp:635
 #, kde-format
 msgid "%1: set axis color"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:633
+#: src/frontend/dockwidgets/AxisDock.cpp:637
 #, kde-format
 msgid "%1 axes: set color"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:1655
+#: src/frontend/dockwidgets/AxisDock.cpp:1659
 #, kde-format
 msgid "Scale is in sync with the plot scale"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:1658
+#: src/frontend/dockwidgets/AxisDock.cpp:1662
 #, kde-format
 msgid "Scale is async with the plot"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2112
+#: src/frontend/dockwidgets/AxisDock.cpp:2116
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2114
-#: src/frontend/dockwidgets/BarPlotDock.cpp:403
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:634
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1930
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:808
+#: src/frontend/dockwidgets/AxisDock.cpp:2118
+#: src/frontend/dockwidgets/BarPlotDock.cpp:410
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:641
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1932
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:814
 #: src/frontend/dockwidgets/CustomPointDock.cpp:395
-#: src/frontend/dockwidgets/HistogramDock.cpp:573
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:332
+#: src/frontend/dockwidgets/HistogramDock.cpp:576
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:376
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:337
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ParetoChartDock.cpp:204
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:807
-#: src/frontend/dockwidgets/QQPlotDock.cpp:273
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:248
-#: src/frontend/dockwidgets/RunChartDock.cpp:229
+#: src/frontend/dockwidgets/ParetoChartDock.cpp:208
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:813
+#: src/frontend/dockwidgets/QQPlotDock.cpp:275
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:250
+#: src/frontend/dockwidgets/RunChartDock.cpp:232
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
-#: src/frontend/dockwidgets/XYCurveDock.cpp:683
+#: src/frontend/dockwidgets/XYCurveDock.cpp:688
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr ""
@@ -14496,37 +14496,37 @@ msgstr ""
 msgid "Uncertainty Bars"
 msgstr ""
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:176
+#: src/frontend/dockwidgets/BarPlotDock.cpp:178
 #, kde-format
 msgid "Grouped"
 msgstr ""
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:177
+#: src/frontend/dockwidgets/BarPlotDock.cpp:179
 #, kde-format
 msgid "Stacked"
 msgstr ""
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:178
+#: src/frontend/dockwidgets/BarPlotDock.cpp:180
 #, kde-format
 msgid "Stacked 100%"
 msgstr ""
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:185
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:234
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:160
+#: src/frontend/dockwidgets/BarPlotDock.cpp:192
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:241
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:165
 #, kde-format
 msgid ""
 "Select the data column for which the properties should be shown and edited"
 msgstr ""
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:191
+#: src/frontend/dockwidgets/BarPlotDock.cpp:198
 #, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
 "its default value, applying to all bars"
 msgstr ""
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:401
+#: src/frontend/dockwidgets/BarPlotDock.cpp:408
 #, kde-format
 msgid "%1 bar plots: template \"%2\" loaded"
 msgstr ""
@@ -14536,102 +14536,102 @@ msgstr ""
 msgid "Please choose another name, because this is already in use."
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:205
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:206
 #, kde-format
 msgid "10/90 percentiles"
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:206
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:207
 #, kde-format
 msgid "5/95 percentiles"
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:207
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:208
 #, kde-format
 msgid "1/99 percentiles"
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:215
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:216
 #, kde-format
 msgid "By Median, Ascending"
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:216
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:217
 #, kde-format
 msgid "By Median, Descending"
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:217
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:218
 #, kde-format
 msgid "By Mean, Ascending"
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:218
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:219
 #, kde-format
 msgid "By Mean, Descending"
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:221
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:228
 #, kde-format
 msgid ""
 "If multiple data sets are provided, define how they should be ordered or use "
 "'None' to keep the original order."
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:225
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:232
 #, kde-format
 msgid ""
 "If checked, the box width is made proportional to the square root of the "
 "number of data points."
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:229
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:236
 #, kde-format
 msgid "Parameter controlling the range of the inner fences of the box plot."
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:238
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:245
 #, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the box relative to "
 "its default value."
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:242
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:249
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:245
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:252
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:248
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:255
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:251
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:258
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:254
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:261
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:257
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:264
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:260
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:267
 #, kde-format
 msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
@@ -14641,7 +14641,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #. i18n: ectx: property (text), widget (QLabel, lVariables)
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:269
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:276
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:347
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:377
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:80
@@ -14656,7 +14656,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:273
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:280
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:349
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:379
 #: src/frontend/spreadsheet/GoToDialog.cpp:49
@@ -14666,7 +14666,7 @@ msgstr ""
 msgid "Column:"
 msgstr ""
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:632
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:639
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr ""
@@ -14674,9 +14674,9 @@ msgstr ""
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:142
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:570
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:56
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:206
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:367
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:405
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:208
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:373
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:411
 #: src/frontend/dockwidgets/CustomPointDock.cpp:47
 #: src/frontend/dockwidgets/ImageDock.cpp:54
 #: src/frontend/dockwidgets/ImageDock.cpp:144
@@ -14684,8 +14684,8 @@ msgstr ""
 #: src/frontend/dockwidgets/WorksheetDock.cpp:171
 #: src/frontend/widgets/LabelWidget.cpp:112
 #: src/frontend/widgets/LabelWidget.cpp:444
-#: src/frontend/widgets/LabelWidget.cpp:979
-#: src/frontend/widgets/LabelWidget.cpp:1017
+#: src/frontend/widgets/LabelWidget.cpp:981
+#: src/frontend/widgets/LabelWidget.cpp:1019
 #, kde-format
 msgid "%v cm"
 msgstr ""
@@ -14693,9 +14693,9 @@ msgstr ""
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:144
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:583
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:58
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:222
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:369
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:407
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:224
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:375
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:413
 #: src/frontend/dockwidgets/CustomPointDock.cpp:49
 #: src/frontend/dockwidgets/ImageDock.cpp:56
 #: src/frontend/dockwidgets/ImageDock.cpp:152
@@ -14703,8 +14703,8 @@ msgstr ""
 #: src/frontend/dockwidgets/WorksheetDock.cpp:183
 #: src/frontend/widgets/LabelWidget.cpp:114
 #: src/frontend/widgets/LabelWidget.cpp:452
-#: src/frontend/widgets/LabelWidget.cpp:981
-#: src/frontend/widgets/LabelWidget.cpp:1019
+#: src/frontend/widgets/LabelWidget.cpp:983
+#: src/frontend/widgets/LabelWidget.cpp:1021
 #, kde-format
 msgid "%v in"
 msgstr ""
@@ -14798,7 +14798,7 @@ msgstr ""
 msgid "Color Map"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:934
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:936
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -14806,12 +14806,12 @@ msgid ""
 "number of first points is plotted</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:943
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:945
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:948
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:950
 #, kde-format
 msgid ""
 "Defines which colors to use for plots:<ul><li>Theme - colors are taken from "
@@ -14819,25 +14819,25 @@ msgid ""
 "from the specified color map</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1225
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1227
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1226
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1279
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1228
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1281
 #, kde-format
 msgid "Really remove it?"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1279
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1281
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1372
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1374
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:641
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:772
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:344
@@ -14847,7 +14847,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1373
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1375
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:942
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:727
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:429
@@ -14857,7 +14857,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1375
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1377
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:877
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:720
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:415
@@ -14867,7 +14867,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1376
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1378
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:884
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:669
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:408
@@ -14875,39 +14875,39 @@ msgstr ""
 msgid "Top:"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1722
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1724
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1724
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1726
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1928
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1930
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:260
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:262
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:247
 #, kde-format
 msgid "Column Major"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:261
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:263
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:248
 #, kde-format
 msgid "Row Major"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:266
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:272
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:278
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:283
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:268
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:274
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:280
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:285
 #: src/frontend/dockwidgets/CustomPointDock.cpp:140
 #: src/frontend/dockwidgets/CustomPointDock.cpp:145
 #: src/frontend/dockwidgets/ImageDock.cpp:183
@@ -14919,84 +14919,84 @@ msgstr ""
 #: src/frontend/widgets/LabelWidget.cpp:494
 #: src/frontend/widgets/LabelWidget.cpp:500
 #: src/frontend/widgets/LabelWidget.cpp:505
-#: src/frontend/widgets/LabelWidget.cpp:552
-#: src/frontend/widgets/ValueWidget.cpp:103
-#: src/frontend/widgets/ValueWidget.cpp:104
+#: src/frontend/widgets/LabelWidget.cpp:554
+#: src/frontend/widgets/ValueWidget.cpp:77
+#: src/frontend/widgets/ValueWidget.cpp:78
 #, kde-format
 msgid "Center"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:268
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:274
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:270
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:276
 #: src/frontend/widgets/LabelWidget.cpp:490
 #: src/frontend/widgets/LabelWidget.cpp:496
 #, kde-format
 msgid "Relative to plot"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:287
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:293
 #, kde-format
 msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:363
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:618
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:720
-#: src/frontend/widgets/LabelWidget.cpp:975
-#: src/frontend/widgets/LabelWidget.cpp:1269
-#: src/frontend/widgets/LabelWidget.cpp:1429
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:369
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:624
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:726
+#: src/frontend/widgets/LabelWidget.cpp:977
+#: src/frontend/widgets/LabelWidget.cpp:1271
+#: src/frontend/widgets/LabelWidget.cpp:1431
 #, kde-format
 msgctxt "@label:spinbox Suffix for the X position in %"
 msgid "%v%"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:401
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:624
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:727
-#: src/frontend/widgets/LabelWidget.cpp:1013
-#: src/frontend/widgets/LabelWidget.cpp:1275
-#: src/frontend/widgets/LabelWidget.cpp:1436
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:407
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:630
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:733
+#: src/frontend/widgets/LabelWidget.cpp:1015
+#: src/frontend/widgets/LabelWidget.cpp:1277
+#: src/frontend/widgets/LabelWidget.cpp:1438
 #, kde-format
 msgctxt "@label:spinbox Suffix for the Y position in %"
 msgid "%v%"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:806
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:812
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
 msgstr ""
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:362
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
-#: src/frontend/widgets/ValueWidget.cpp:50
+#: src/frontend/widgets/ValueWidget.cpp:142
 #, kde-format
 msgid "Decimal"
 msgstr ""
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:363
 #: src/frontend/dockwidgets/MatrixDock.cpp:82
-#: src/frontend/widgets/ValueWidget.cpp:51
+#: src/frontend/widgets/ValueWidget.cpp:143
 #, kde-format
 msgid "Scientific (e)"
 msgstr ""
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:364
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
-#: src/frontend/widgets/ValueWidget.cpp:52
+#: src/frontend/widgets/ValueWidget.cpp:144
 #, kde-format
 msgid "Scientific (E)"
 msgstr ""
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:365
-#: src/frontend/widgets/ValueWidget.cpp:53
+#: src/frontend/widgets/ValueWidget.cpp:145
 #, kde-format
 msgid "Automatic (e)"
 msgstr ""
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:366
-#: src/frontend/widgets/ValueWidget.cpp:54
+#: src/frontend/widgets/ValueWidget.cpp:146
 #, kde-format
 msgid "Automatic (E)"
 msgstr ""
@@ -15224,7 +15224,7 @@ msgstr ""
 msgid "Probability Density"
 msgstr ""
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:275
+#: src/frontend/dockwidgets/HistogramDock.cpp:277
 #, kde-format
 msgid ""
 "Method used to determine the number of bins <i>k</i> and their width <i>h</"
@@ -15239,7 +15239,7 @@ msgid ""
 "normally distributed data</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:288
+#: src/frontend/dockwidgets/HistogramDock.cpp:290
 #, kde-format
 msgid ""
 "Use 'Auto' to automatically determine the minimal and maximal values of the "
@@ -15249,7 +15249,7 @@ msgid ""
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:571
+#: src/frontend/dockwidgets/HistogramDock.cpp:574
 #, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr ""
@@ -15289,12 +15289,12 @@ msgstr ""
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
 
-#: src/frontend/dockwidgets/InfoElementDock.cpp:227
+#: src/frontend/dockwidgets/InfoElementDock.cpp:230
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
 msgstr ""
 
-#: src/frontend/dockwidgets/InfoElementDock.cpp:229
+#: src/frontend/dockwidgets/InfoElementDock.cpp:232
 #, kde-format
 msgid "%1: curve \"%2\" removed"
 msgstr ""
@@ -15304,13 +15304,13 @@ msgstr ""
 msgid "Silverman"
 msgstr ""
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:173
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:176
 #, kde-format
 msgid ""
 "The window function (\"kernel\") used to estimate the probability density"
 msgstr ""
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:180
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:183
 #, kde-format
 msgid ""
 "Method to select the bandwidth of the kernel:<ul><li>Silverman -  0.9 * "
@@ -15318,17 +15318,17 @@ msgid ""
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:189
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:192
 #, kde-format
 msgid "Custom value for the kernel bandwidth"
 msgstr ""
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:371
-#: src/frontend/dockwidgets/ParetoChartDock.cpp:202
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:805
-#: src/frontend/dockwidgets/QQPlotDock.cpp:271
-#: src/frontend/dockwidgets/RunChartDock.cpp:227
-#: src/frontend/dockwidgets/XYCurveDock.cpp:681
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:374
+#: src/frontend/dockwidgets/ParetoChartDock.cpp:206
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:811
+#: src/frontend/dockwidgets/QQPlotDock.cpp:273
+#: src/frontend/dockwidgets/RunChartDock.cpp:230
+#: src/frontend/dockwidgets/XYCurveDock.cpp:686
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr ""
@@ -15348,7 +15348,7 @@ msgstr ""
 msgid "Couldn't subscribe to all available topics. Something went wrong"
 msgstr ""
 
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:330
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:335
 #, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
 msgstr ""
@@ -15491,7 +15491,7 @@ msgstr ""
 msgid "Right pointing rectangle"
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:250
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:256
 #, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
@@ -15509,7 +15509,7 @@ msgid ""
 "</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:277
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:283
 #, kde-format
 msgid ""
 "Determine which values to use for the center and limit lines:"
@@ -15518,17 +15518,17 @@ msgid ""
 "are used.</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:285
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:291
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:289
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:295
 #, kde-format
 msgid "Minimal value for the lower control limit. No constraint, if empty."
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:293
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:299
 #, kde-format
 msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
@@ -15551,29 +15551,29 @@ msgid ""
 "longer project load times."
 msgstr ""
 
-#: src/frontend/dockwidgets/QQPlotDock.cpp:173
+#: src/frontend/dockwidgets/QQPlotDock.cpp:175
 #, kde-format
 msgid ""
 "Distribution used to calculate the percentiles to be compared with the "
 "percentiles of the provided data"
 msgstr ""
 
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:124
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:126
 #, kde-format
 msgid "%1 reference lines: orientation changed"
 msgstr ""
 
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:126
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:128
 #, kde-format
 msgid "%1: orientation changed"
 msgstr ""
 
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:246
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:248
 #, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr ""
 
-#: src/frontend/dockwidgets/RunChartDock.cpp:150
+#: src/frontend/dockwidgets/RunChartDock.cpp:153
 #, kde-format
 msgid ""
 "Metric of the dataset used to determine where the center line should be "
@@ -15930,16 +15930,16 @@ msgstr ""
 msgid "Akima-spline (Periodic)"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:453
-#: src/frontend/dockwidgets/XYCurveDock.cpp:454
+#: src/frontend/dockwidgets/XYCurveDock.cpp:458
+#: src/frontend/dockwidgets/XYCurveDock.cpp:459
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
 "(invalid or masked values) between them"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:455
-#: src/frontend/dockwidgets/XYCurveDock.cpp:456
+#: src/frontend/dockwidgets/XYCurveDock.cpp:460
+#: src/frontend/dockwidgets/XYCurveDock.cpp:461
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -22619,7 +22619,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tabBars)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:237
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:164
-#: src/frontend/widgets/ErrorBarWidget.cpp:86
+#: src/frontend/widgets/ErrorBarWidget.cpp:53
+#: src/frontend/widgets/ErrorBarWidget.cpp:214
 #: src/frontend/widgets/LineWidget.cpp:113
 #, kde-format
 msgid "Bars"
@@ -23346,8 +23347,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lYDataPlus)
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:96
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:123
-#: src/frontend/widgets/ErrorBarWidget.cpp:261
-#: src/frontend/widgets/ErrorBarWidget.cpp:317
+#: src/frontend/widgets/ErrorBarWidget.cpp:270
+#: src/frontend/widgets/ErrorBarWidget.cpp:326
 #, kde-format
 msgid "Data, +:"
 msgstr ""
@@ -26142,13 +26143,13 @@ msgid ""
 msgstr ""
 
 #: src/frontend/widgets/BackgroundWidget.cpp:115
-#: src/frontend/widgets/ValueWidget.cpp:44
+#: src/frontend/widgets/ValueWidget.cpp:135
 #, kde-format
 msgid "Above"
 msgstr ""
 
 #: src/frontend/widgets/BackgroundWidget.cpp:116
-#: src/frontend/widgets/ValueWidget.cpp:45
+#: src/frontend/widgets/ValueWidget.cpp:136
 #, kde-format
 msgid "Below"
 msgstr ""
@@ -26363,67 +26364,68 @@ msgstr ""
 msgid "Invalid image"
 msgstr ""
 
-#: src/frontend/widgets/ErrorBarWidget.cpp:46
-#, kde-format
-msgid "X Uncertainty"
-msgstr ""
-
-#: src/frontend/widgets/ErrorBarWidget.cpp:47
-#: src/frontend/widgets/ErrorBarWidget.cpp:55
-#, kde-format
-msgid "No Uncertainties"
-msgstr ""
-
-#: src/frontend/widgets/ErrorBarWidget.cpp:49
-#: src/frontend/widgets/ErrorBarWidget.cpp:57
-#: src/frontend/widgets/ErrorBarWidget.cpp:64
-#: src/frontend/widgets/ErrorBarWidget.cpp:71
-#, kde-format
-msgid "Poisson variance, sqrt(N)"
-msgstr ""
-
-#: src/frontend/widgets/ErrorBarWidget.cpp:50
-#: src/frontend/widgets/ErrorBarWidget.cpp:58
-#, kde-format
-msgid "Custom Uncertainty Values, symmetric"
-msgstr ""
-
-#: src/frontend/widgets/ErrorBarWidget.cpp:51
-#: src/frontend/widgets/ErrorBarWidget.cpp:59
-#, kde-format
-msgid "Custom Uncertainty Values, asymmetric"
-msgstr ""
-
-#: src/frontend/widgets/ErrorBarWidget.cpp:54
-#, kde-format
-msgid "Y Uncertainty"
-msgstr ""
-
-#: src/frontend/widgets/ErrorBarWidget.cpp:62
-#: src/frontend/widgets/ErrorBarWidget.cpp:69
-#, kde-format
-msgid "No Errors"
-msgstr ""
-
-#: src/frontend/widgets/ErrorBarWidget.cpp:65
-#: src/frontend/widgets/ErrorBarWidget.cpp:72
-#, kde-format
-msgid "Custom Error Values, symmetric"
-msgstr ""
-
-#: src/frontend/widgets/ErrorBarWidget.cpp:66
-#: src/frontend/widgets/ErrorBarWidget.cpp:73
-#, kde-format
-msgid "Custom Error Values, asymmetric"
-msgstr ""
-
-#: src/frontend/widgets/ErrorBarWidget.cpp:100
+#: src/frontend/widgets/ErrorBarWidget.cpp:67
+#: src/frontend/widgets/ErrorBarWidget.cpp:215
 #, kde-format
 msgid "Bars with Ends"
 msgstr ""
 
-#: src/frontend/widgets/ErrorBarWidget.cpp:254
-#: src/frontend/widgets/ErrorBarWidget.cpp:310
+#: src/frontend/widgets/ErrorBarWidget.cpp:184
+#, kde-format
+msgid "X Uncertainty"
+msgstr ""
+
+#: src/frontend/widgets/ErrorBarWidget.cpp:185
+#: src/frontend/widgets/ErrorBarWidget.cpp:193
+#, kde-format
+msgid "No Uncertainties"
+msgstr ""
+
+#: src/frontend/widgets/ErrorBarWidget.cpp:187
+#: src/frontend/widgets/ErrorBarWidget.cpp:195
+#: src/frontend/widgets/ErrorBarWidget.cpp:202
+#: src/frontend/widgets/ErrorBarWidget.cpp:209
+#, kde-format
+msgid "Poisson variance, sqrt(N)"
+msgstr ""
+
+#: src/frontend/widgets/ErrorBarWidget.cpp:188
+#: src/frontend/widgets/ErrorBarWidget.cpp:196
+#, kde-format
+msgid "Custom Uncertainty Values, symmetric"
+msgstr ""
+
+#: src/frontend/widgets/ErrorBarWidget.cpp:189
+#: src/frontend/widgets/ErrorBarWidget.cpp:197
+#, kde-format
+msgid "Custom Uncertainty Values, asymmetric"
+msgstr ""
+
+#: src/frontend/widgets/ErrorBarWidget.cpp:192
+#, kde-format
+msgid "Y Uncertainty"
+msgstr ""
+
+#: src/frontend/widgets/ErrorBarWidget.cpp:200
+#: src/frontend/widgets/ErrorBarWidget.cpp:207
+#, kde-format
+msgid "No Errors"
+msgstr ""
+
+#: src/frontend/widgets/ErrorBarWidget.cpp:203
+#: src/frontend/widgets/ErrorBarWidget.cpp:210
+#, kde-format
+msgid "Custom Error Values, symmetric"
+msgstr ""
+
+#: src/frontend/widgets/ErrorBarWidget.cpp:204
+#: src/frontend/widgets/ErrorBarWidget.cpp:211
+#, kde-format
+msgid "Custom Error Values, asymmetric"
+msgstr ""
+
+#: src/frontend/widgets/ErrorBarWidget.cpp:263
+#: src/frontend/widgets/ErrorBarWidget.cpp:319
 #, kde-format
 msgid "Data, +-:"
 msgstr ""
@@ -26592,14 +26594,14 @@ msgstr ""
 msgid "Removing Keyword"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:524
+#: src/frontend/widgets/LabelWidget.cpp:526
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
 "plot"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:529
+#: src/frontend/widgets/LabelWidget.cpp:531
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -26607,7 +26609,7 @@ msgid ""
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:537
+#: src/frontend/widgets/LabelWidget.cpp:539
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -26615,69 +26617,69 @@ msgid ""
 "li></ul>"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:545
+#: src/frontend/widgets/LabelWidget.cpp:547
 #, kde-format
 msgid "Bold"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:546
+#: src/frontend/widgets/LabelWidget.cpp:548
 #, kde-format
 msgid "Italic"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:547
+#: src/frontend/widgets/LabelWidget.cpp:549
 #, kde-format
 msgid "Underline"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:548
+#: src/frontend/widgets/LabelWidget.cpp:550
 #, kde-format
 msgid "Strike Out"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:549
+#: src/frontend/widgets/LabelWidget.cpp:551
 #, kde-format
 msgid "Super Script"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:550
+#: src/frontend/widgets/LabelWidget.cpp:552
 #, kde-format
 msgid "Sub-Script"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:551
+#: src/frontend/widgets/LabelWidget.cpp:553
 #, kde-format
 msgid "Left Align"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:553
+#: src/frontend/widgets/LabelWidget.cpp:555
 #, kde-format
 msgid "Right Align"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:554
+#: src/frontend/widgets/LabelWidget.cpp:556
 #, kde-format
 msgid "Justify"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:555
+#: src/frontend/widgets/LabelWidget.cpp:557
 #, kde-format
 msgid "Insert Symbol"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:556
+#: src/frontend/widgets/LabelWidget.cpp:558
 #, kde-format
 msgid "Insert Date/Time"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:901
-#: src/frontend/widgets/LabelWidget.cpp:927
+#: src/frontend/widgets/LabelWidget.cpp:903
+#: src/frontend/widgets/LabelWidget.cpp:929
 #, kde-format
 msgid "Date"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:909
-#: src/frontend/widgets/LabelWidget.cpp:935
+#: src/frontend/widgets/LabelWidget.cpp:911
+#: src/frontend/widgets/LabelWidget.cpp:937
 #, kde-format
 msgid "Date and Time"
 msgstr ""
@@ -26775,14 +26777,14 @@ msgid ""
 "again."
 msgstr ""
 
-#: src/frontend/widgets/ValueWidget.cpp:32
-#: src/frontend/widgets/ValueWidget.cpp:39
+#: src/frontend/widgets/ValueWidget.cpp:122
+#: src/frontend/widgets/ValueWidget.cpp:129
 #, kde-format
 msgid "No Values"
 msgstr ""
 
-#: src/frontend/widgets/ValueWidget.cpp:37
-#: src/frontend/widgets/ValueWidget.cpp:41
+#: src/frontend/widgets/ValueWidget.cpp:127
+#: src/frontend/widgets/ValueWidget.cpp:131
 #, kde-format
 msgid "Custom Column"
 msgstr ""
