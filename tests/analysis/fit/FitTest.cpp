@@ -4927,7 +4927,7 @@ void FitTest::testFitLog() {
 	fitCurveLog->setXDataColumn(&xDataColumn);
 	fitCurveLog->setYDataColumn(&yDataColumn);
 
-	// Modified Hill equation: a + (b-a) * (x^n / (x^n + K^n)) 
+	// Modified Hill equation: a + (b-a) * (x^n / (x^n + K^n))
 	XYFitCurve::FitData fitDataLog = fitCurveLog->fitData();
 	fitDataLog.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitDataLog);
