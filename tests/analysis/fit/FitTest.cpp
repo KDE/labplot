@@ -15,8 +15,10 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/gsl/ExpressionParser.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
@@ -24,6 +26,8 @@
 
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
+
+#include <cmath>
 
 // Print value and relative deviation from exact value
 // also check with relative tolerance tol
@@ -4804,6 +4808,280 @@ void FitTest::testHistogramBinomialML() {
 	QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 0.503287947118723);
 
 	QCOMPARE(fitResult.paramValues.at(2), spreadsheet.rowCount());
+}
+
+// ##############################################################################
+// ##################  Logarithmic Range/Axis Spacing Tests  ####################
+// ##############################################################################
+
+void FitTest::testLogSpacingLog10() {
+	// Test that ExpressionParser generates logarithmically-spaced points for Log10 scale
+	auto* parser = ExpressionParser::getInstance();
+	Range<double> range{0.0001, 10000.0}; // 8 orders of magnitude (10^-4 to 10^4)
+	int count = 9; // 9 points to span 8 orders = 1 point per order of magnitude
+
+	QVector<double> xVector(count);
+	QVector<double> yVector(count);
+
+	// Simple identity function y = x
+	bool valid = parser->tryEvaluateCartesian(QStringLiteral("x"), range, count, &xVector, &yVector, QStringList(), QVector<double>(), RangeT::Scale::Log10);
+
+	QCOMPARE(valid, true);
+
+	// Check points are logarithmically spaced (each ~10x the previous)
+	// With count-1 intervals, step in log space = (log10(end) - log10(start)) / (count - 1)
+	// = (4 - (-4)) / 8 = 1.0 decade per step
+	VALUES_EQUAL(xVector[0], 0.0001); // 10^-4
+	VALUES_EQUAL(xVector[1], 0.001); // 10^-3
+	VALUES_EQUAL(xVector[2], 0.01); // 10^-2
+	VALUES_EQUAL(xVector[3], 0.1); // 10^-1
+	VALUES_EQUAL(xVector[4], 1.0); // 10^0
+	VALUES_EQUAL(xVector[5], 10.0); // 10^1
+	VALUES_EQUAL(xVector[6], 100.0); // 10^2
+	VALUES_EQUAL(xVector[7], 1000.0); // 10^3
+	VALUES_EQUAL(xVector[8], 10000.0); // 10^4
+
+	// Verify y = x (identity function)
+	for (int i = 0; i < count; ++i)
+		VALUES_EQUAL(yVector[i], xVector[i]);
+}
+
+void FitTest::testLogSpacingLog2() {
+	// Test Log2 scale spacing
+	auto* parser = ExpressionParser::getInstance();
+	Range<double> range{1.0, 256.0}; // 2^0 to 2^8 (8 doublings)
+	int count = 9; // 9 points for 8 intervals
+
+	QVector<double> xVector(count);
+	QVector<double> yVector(count);
+
+	bool valid = parser->tryEvaluateCartesian(QStringLiteral("x"), range, count, &xVector, &yVector, QStringList(), QVector<double>(), RangeT::Scale::Log2);
+
+	QCOMPARE(valid, true);
+
+	// Each point should be 2x the previous
+	VALUES_EQUAL(xVector[0], 1.0); // 2^0
+	VALUES_EQUAL(xVector[1], 2.0); // 2^1
+	VALUES_EQUAL(xVector[2], 4.0); // 2^2
+	VALUES_EQUAL(xVector[3], 8.0); // 2^3
+	VALUES_EQUAL(xVector[4], 16.0); // 2^4
+	VALUES_EQUAL(xVector[5], 32.0); // 2^5
+	VALUES_EQUAL(xVector[6], 64.0); // 2^6
+	VALUES_EQUAL(xVector[7], 128.0); // 2^7
+	VALUES_EQUAL(xVector[8], 256.0); // 2^8
+}
+
+void FitTest::testLogSpacingLn() {
+	// Test natural log (Ln) scale spacing
+	auto* parser = ExpressionParser::getInstance();
+	const double e = M_E;
+	Range<double> range{1.0, e * e * e * e}; // e^0 to e^4
+	int count = 5; // 5 points for 4 intervals
+
+	QVector<double> xVector(count);
+	QVector<double> yVector(count);
+
+	bool valid = parser->tryEvaluateCartesian(QStringLiteral("x"), range, count, &xVector, &yVector, QStringList(), QVector<double>(), RangeT::Scale::Ln);
+
+	QCOMPARE(valid, true);
+
+	// Each point should be e times the previous
+	VALUES_EQUAL(xVector[0], 1.0); // e^0
+	VALUES_EQUAL(xVector[1], e); // e^1
+	VALUES_EQUAL(xVector[2], e * e); // e^2
+	VALUES_EQUAL(xVector[3], e * e * e); // e^3
+	VALUES_EQUAL(xVector[4], e * e * e * e); // e^4
+}
+
+void FitTest::testFitLog() {
+	// Regression test for BUG 75408: fit on log axis spanning multiple orders
+	// of magnitude should produce good fit quality with reasonable point counts.
+	// Bug: Previously required 100 million points to properly visualize the curve.
+	// Fix: Uses logarithmic spacing, so 1000 points (default) is sufficient.
+
+	// Test data from the bug report (modified Hill equation data)
+	QVector<double> xData = {0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000};
+	QVector<double> yData = {12, 9, 15, 35, 70, 85, 91, 89, 94};
+
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
+	yDataColumn.replaceValues(0, yData);
+
+	// Create a project with a plot that has a log x-axis
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	plot->setType(CartesianPlot::Type::FourAxes);
+	ws->addChild(plot);
+
+	// Set x-axis to logarithmic scale (this is the key to the bug)
+	plot->setXRangeScale(RangeT::Scale::Log10);
+
+	// Create fit curve with LOG axis and modified Hill equation (from bug report)
+	auto* fitCurveLog = new XYFitCurve(QStringLiteral("fit_log"));
+	plot->addChild(fitCurveLog);
+	fitCurveLog->setXDataColumn(&xDataColumn);
+	fitCurveLog->setYDataColumn(&yDataColumn);
+
+	// Modified Hill equation: a + (b-a) * (x^n / (x^n + K^n)) 
+	XYFitCurve::FitData fitDataLog = fitCurveLog->fitData();
+	fitDataLog.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitDataLog);
+	fitDataLog.model = QStringLiteral("a + (b-a) * (x^n / (x^n + K^n))");
+	fitDataLog.paramNames << QStringLiteral("a") << QStringLiteral("b") << QStringLiteral("n") << QStringLiteral("K");
+	fitDataLog.paramStartValues << 10.0 << 90.0 << 2.0 << 1.0; // reasonable start values
+	fitDataLog.paramLowerLimits << 0.0 << 0.0 << 0.1 << 0.0001; // reasonable bounds
+	fitDataLog.paramUpperLimits << 100.0 << 100.0 << 10.0 << 10000.0;
+	fitDataLog.evaluatedPoints = 1000; // Reasonable default, not 100 million!
+	fitCurveLog->setFitData(fitDataLog);
+
+	fitCurveLog->recalculate();
+
+	// Fit should produce valid results
+	const XYFitCurve::FitResult& fitResultLog = fitCurveLog->fitResult();
+	QCOMPARE(fitResultLog.available, true);
+	QCOMPARE(fitResultLog.valid, true);
+
+	// Now test with LINEAR axis for comparison
+	auto* plot2 = new CartesianPlot(QStringLiteral("plot2"));
+	plot2->setType(CartesianPlot::Type::FourAxes);
+	ws->addChild(plot2);
+	plot2->setXRangeScale(RangeT::Scale::Linear); // LINEAR axis
+
+	auto* fitCurveLinear = new XYFitCurve(QStringLiteral("fit_linear"));
+	plot2->addChild(fitCurveLinear);
+	fitCurveLinear->setXDataColumn(&xDataColumn);
+	fitCurveLinear->setYDataColumn(&yDataColumn);
+
+	// Same modified Hill equation with same start values
+	XYFitCurve::FitData fitDataLinear = fitCurveLinear->fitData();
+	fitDataLinear.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitDataLinear);
+	fitDataLinear.model = QStringLiteral("a + (b-a) * (x^n / (x^n + K^n))");
+	fitDataLinear.paramNames << QStringLiteral("a") << QStringLiteral("b") << QStringLiteral("n") << QStringLiteral("K");
+	fitDataLinear.paramStartValues << 10.0 << 90.0 << 2.0 << 1.0;
+	fitDataLinear.paramLowerLimits << 0.0 << 0.0 << 0.1 << 0.0001;
+	fitDataLinear.paramUpperLimits << 100.0 << 100.0 << 10.0 << 10000.0;
+	fitDataLinear.evaluatedPoints = 1000; // Same number of points
+	fitCurveLinear->setFitData(fitDataLinear);
+
+	fitCurveLinear->recalculate();
+
+	const XYFitCurve::FitResult& fitResultLinear = fitCurveLinear->fitResult();
+	QCOMPARE(fitResultLinear.available, true);
+	QCOMPARE(fitResultLinear.valid, true);
+
+	// The fit parameters should be identical (they're computed from the same data)
+	QCOMPARE(fitResultLog.paramValues.size(), 4);
+	QCOMPARE(fitResultLinear.paramValues.size(), 4);
+	for (int i = 0; i < 4; ++i)
+		VALUES_EQUAL(fitResultLog.paramValues.at(i), fitResultLinear.paramValues.at(i));
+
+	// Fit quality should be identical for the actual data fit
+	VALUES_EQUAL(fitResultLog.rsquare, fitResultLinear.rsquare);
+	VALUES_EQUAL(fitResultLog.sse, fitResultLinear.sse);
+
+	// Modified Hill equation should fit this sigmoidal data very well
+	QVERIFY(fitResultLog.rsquare > 0.95); // good fit
+
+	// verify the evaluation points are distributed correctly
+	const auto* xColumnLog = fitCurveLog->xColumn();
+	const auto* xColumnLinear = fitCurveLinear->xColumn();
+	QVERIFY(xColumnLog != nullptr);
+	QVERIFY(xColumnLinear != nullptr);
+	QCOMPARE(xColumnLog->rowCount(), 1000);
+	QCOMPARE(xColumnLinear->rowCount(), 1000);
+
+	// For LOG axis: check that points are logarithmically distributed
+	// Calculate coefficient of variation for step ratios
+	QVector<double> ratiosLog;
+	for (int i = 1; i < xColumnLog->rowCount(); ++i) {
+		double x_prev = xColumnLog->valueAt(i - 1);
+		double x_curr = xColumnLog->valueAt(i);
+		if (x_prev > 0 && x_curr > 0)
+			ratiosLog.append(x_curr / x_prev);
+	}
+
+	double sumLog = 0, sumSqLog = 0;
+	for (double r : ratiosLog) {
+		sumLog += r;
+		sumSqLog += r * r;
+	}
+	double meanLog = sumLog / ratiosLog.size();
+	double varianceLog = (sumSqLog / ratiosLog.size()) - (meanLog * meanLog);
+	double cvLog = sqrt(varianceLog) / meanLog;
+
+	// For logarithmic spacing, ratios should be very consistent (low CV)
+	QVERIFY(cvLog < 0.01); // Less than 1% variation in step ratios
+
+	// For LINEAR axis: ratios should vary wildly (high CV)
+	QVector<double> ratiosLinear;
+	for (int i = 1; i < xColumnLinear->rowCount(); ++i) {
+		double x_prev = xColumnLinear->valueAt(i - 1);
+		double x_curr = xColumnLinear->valueAt(i);
+		if (x_prev > 0 && x_curr > 0)
+			ratiosLinear.append(x_curr / x_prev);
+	}
+
+	double sumLinear = 0, sumSqLinear = 0;
+	for (double r : ratiosLinear) {
+		sumLinear += r;
+		sumSqLinear += r * r;
+	}
+	double meanLinear = sumLinear / ratiosLinear.size();
+	double varianceLinear = (sumSqLinear / ratiosLinear.size()) - (meanLinear * meanLinear);
+	double cvLinear = sqrt(varianceLinear) / meanLinear;
+
+	// Linear spacing should have much higher CV
+	QVERIFY(cvLinear > cvLog * 10); // At least 10x more variation
+
+	// Check distribution across ranges for LOG axis
+	int pointsInLowRangeLog = 0; // 0.0001 to 0.1 (3 decades)
+	int pointsInMidRangeLog = 0; // 0.1 to 100 (3 decades)
+	int pointsInHighRangeLog = 0; // 100 to 10000 (2 decades)
+
+	for (int i = 0; i < xColumnLog->rowCount(); ++i) {
+		double x = xColumnLog->valueAt(i);
+		if (x >= 0.0001 && x < 0.1)
+			pointsInLowRangeLog++;
+		else if (x >= 0.1 && x < 100)
+			pointsInMidRangeLog++;
+		else if (x >= 100 && x <= 10000)
+			pointsInHighRangeLog++;
+	}
+
+	// With log spacing, points should be distributed proportionally to decades
+	// Low: 3 decades, Mid: 3 decades, High: 2 decades = ratio 3:3:2
+	double totalDecades = 3.0 + 3.0 + 2.0;
+	double expectedLow = 1000.0 * (3.0 / totalDecades);
+	double expectedMid = 1000.0 * (3.0 / totalDecades);
+	double expectedHigh = 1000.0 * (2.0 / totalDecades);
+
+	QVERIFY(pointsInLowRangeLog > expectedLow * 0.9);
+	QVERIFY(pointsInLowRangeLog < expectedLow * 1.1);
+	QVERIFY(pointsInMidRangeLog > expectedMid * 0.9);
+	QVERIFY(pointsInMidRangeLog < expectedMid * 1.1);
+	QVERIFY(pointsInHighRangeLog > expectedHigh * 0.9);
+	QVERIFY(pointsInHighRangeLog < expectedHigh * 1.1);
+
+	// Check distribution for LINEAR axis - should be heavily skewed to high range
+	int pointsInLowRangeLinear = 0;
+	int pointsInHighRangeLinear = 0;
+
+	for (int i = 0; i < xColumnLinear->rowCount(); ++i) {
+		double x = xColumnLinear->valueAt(i);
+		if (x >= 0.0001 && x < 0.1)
+			pointsInLowRangeLinear++;
+		else if (x >= 100 && x <= 10000)
+			pointsInHighRangeLinear++;
+	}
+
+	// Linear spacing clusters most points at high end (low range is 0.001% of total range)
+	QVERIFY(pointsInHighRangeLinear > pointsInLowRangeLinear * 50);
 }
 
 QTEST_MAIN(FitTest)
