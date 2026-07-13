@@ -352,10 +352,11 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 											QVector<double>* xVector,
 											QVector<double>* yVector,
 											const QStringList& paramNames,
-											const QVector<double>& paramValues) {
+											const QVector<double>& paramValues,
+											RangeT::Scale scale) {
 	DEBUG(Q_FUNC_INFO << ", v0: range = " << range.toStdString())
 	const double step = range.stepSize(count);
-	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step)
+	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step << ", scale = " << (int)scale)
 
 	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
@@ -365,8 +366,52 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 
 	const auto numberLocale = QLocale();
 	gsl_set_error_handler_off();
+
+	// Generate points based on the axis scale
 	for (int i = 0; i < count; i++) {
-		const double x{range.start() + step * i};
+		double x;
+
+		// Use logarithmic spacing for log scales, linear spacing otherwise
+		switch (scale) {
+		case RangeT::Scale::Log10:
+			if (range.start() > 0 && range.end() > 0) {
+				const double logStart = log10(range.start());
+				const double logEnd = log10(range.end());
+				const double logStep = (logEnd - logStart) / (count - 1);
+				x = pow(10.0, logStart + logStep * i);
+			} else {
+				x = range.start() + step * i; // fallback to linear
+			}
+			break;
+		case RangeT::Scale::Log2:
+			if (range.start() > 0 && range.end() > 0) {
+				const double logStart = log2(range.start());
+				const double logEnd = log2(range.end());
+				const double logStep = (logEnd - logStart) / (count - 1);
+				x = exp2(logStart + logStep * i);
+			} else {
+				x = range.start() + step * i; // fallback to linear
+			}
+			break;
+		case RangeT::Scale::Ln:
+			if (range.start() > 0 && range.end() > 0) {
+				const double logStart = log(range.start());
+				const double logEnd = log(range.end());
+				const double logStep = (logEnd - logStart) / (count - 1);
+				x = exp(logStart + logStep * i);
+			} else {
+				x = range.start() + step * i; // fallback to linear
+			}
+			break;
+		case RangeT::Scale::Linear:
+		case RangeT::Scale::Sqrt:
+		case RangeT::Scale::Square:
+		case RangeT::Scale::Inverse:
+			// Linear spacing for these scales
+			x = range.start() + step * i;
+			break;
+		}
+
 		parser.assign_symbol("x", x);
 
 		double y = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));

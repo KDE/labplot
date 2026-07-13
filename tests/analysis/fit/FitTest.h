@@ -109,5 +109,11 @@ private Q_SLOTS:
 	void testHistogramLognormalML();
 	void testHistogramPoissonML();
 	void testHistogramBinomialML();
+
+	// logarithmic axis spacing
+	void testLogSpacingLog10();
+	void testLogSpacingLog2();
+	void testLogSpacingLn();
+	void testFitLog();
 };
 #endif
