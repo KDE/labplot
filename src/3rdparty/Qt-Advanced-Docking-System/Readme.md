@@ -15,4 +15,4 @@ Steps to update the library:
 
 Our Modifications:
 * CMakeLists.txt.patch
-* The 4.4.0 version introduced a regression which we reverted in our copy. See https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/pull/640 - still required with v5.0?
+* The 4.4.0 version introduced a regression which we reverted in our copy. See https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/pull/640.
