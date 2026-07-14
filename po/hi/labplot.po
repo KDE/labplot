@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-13 00:39+0000\n"
+"POT-Creation-Date: 2026-07-14 00:39+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -11394,7 +11394,7 @@ msgstr ""
 msgid "Fit model not specified!"
 msgstr "फिट मॉडल निर्दिष्ट नहीं!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3170
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3181
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
