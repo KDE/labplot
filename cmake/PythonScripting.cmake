@@ -252,7 +252,7 @@ set(python_scripting_includes
 #   macOS:  handled via install_name_tool, no change needed
 set(_python_lib ${Python3_LIBRARIES})
 if(WIN32)
-    string(REGEX REPLACE "python3[0-9]+\\.lib" "python3.lib" _python_sabi_lib "${_python_sabi_lib}")
+    string(REGEX REPLACE "python3[0-9]+\\.lib" "python3.lib" _python_sabi_lib "${Python3_LIBRARIES}")
     if(NOT "${_python_sabi_lib}" STREQUAL "${Python3_LIBRARIES}" AND EXISTS "${_python_sabi_lib}")
         message(STATUS "Python stable ABI library: ${_python_sabi_lib}")
         set(_python_lib ${_python_sabi_lib})
