@@ -11,7 +11,14 @@
 #ifndef CONTENTDOCKWIDGET_H
 #define CONTENTDOCKWIDGET_H
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <DockWidget.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 class AbstractAspect;
 class AbstractPart;

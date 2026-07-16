@@ -45,6 +45,7 @@ public:
 	~Column() override;
 
 	QIcon icon() const override;
+	QString caption() const override;
 	QMenu* createContextMenu() override;
 
 	void updateLocale();
@@ -65,6 +66,9 @@ public:
 	void setPlotDesignation(AbstractColumn::PlotDesignation) override;
 
 	bool isReadOnly() const override;
+	bool isValid(int row) const override;
+	void setValid(int row, bool valid);
+	void setAllValid();
 	void resizeTo(int);
 	int rowCount() const override;
 	int rowCount(double min, double max) const override;
@@ -253,10 +257,6 @@ private:
 
 	void handleRowInsertion(int before, int count) override;
 	void handleRowRemoval(int first, int count) override;
-
-	QAction* m_copyDataAction{nullptr};
-	QAction* m_pasteDataAction{nullptr};
-	QActionGroup* m_usedInActionGroup{nullptr};
 
 	ColumnPrivate* d;
 	ColumnStringIO* m_string_io;

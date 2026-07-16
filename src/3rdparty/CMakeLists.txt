@@ -57,6 +57,10 @@ if(BUILD_QXLSX)
     set(BUILD_SHARED_LIBS OFF)
     add_subdirectory(QXlsx EXCLUDE_FROM_ALL)
     set_property(TARGET QXlsx PROPERTY POSITION_INDEPENDENT_CODE ON)
+    # disable shadow warnings
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+        target_compile_options(QXlsx PRIVATE -Wno-shadow -Wno-switch-enum -Wno-deprecated-declarations)
+    endif()
 
     get_target_property(QXLSX_VERSION QXlsx VERSION)
     message(STATUS "QXlsx VERSION ${QXLSX_VERSION}")
@@ -73,51 +77,73 @@ else()
 endif()
 
 Include(FetchContent)
+# Prevent FetchContent from redirecting to find_package (CMake 3.24+ behavior)
+set(FETCHCONTENT_TRY_FIND_PACKAGE_MODE NEVER)
 
 ### Vector BLF ###############################
 FIND_PACKAGE(PkgConfig REQUIRED)
-# git download is not allowed on all system (set to ON if needed)
-option(LOCAL_DBC_PARSER "Use local build of dbc parser" OFF)
-option(LOCAL_VECTOR_BLF "Use local build of Vector BLF" OFF)
+# LOCAL means use the local copy in src/3rdparty/
+option(LOCAL_DBC_PARSER "Use local build of dbc parser from src/3rdparty/dbc_parser_cpp" ON)
+option(LOCAL_VECTOR_BLF "Use local build of Vector BLF from src/3rdparty/vector_blf" OFF)
 if(ENABLE_VECTOR_BLF)
   set(OPTION_RUN_DOXYGEN OFF CACHE BOOL "" FORCE) # disable running doxygen
   if(${LOCAL_DBC_PARSER})
-      FetchContent_Declare(
-        dbc_parser_cpp
-        GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
-        GIT_TAG cc4e80c7b6e1f7a13cc47b45f226756f823888e2 # v0.4.0
-      )
       # fix missing variable and keyword for fast_float
+      # NOTE: Must be set BEFORE add_subdirectory(dbc_parser_cpp) which internally adds fast_float
       if(NOT MSVC_FOUND)
-          add_definitions (-DFASTFLOAT_VISUAL_STUDIO=0)
-          add_definitions (-D__forceinline=inline)
+        # get version of fast_float
+        set(FASTFLOAT_HEADER_PATH "/usr/include/fast_float/float_common.h")
+        if (EXISTS "${FASTFLOAT_HEADER_PATH}")
+          file(READ "${FASTFLOAT_HEADER_PATH}" _ff_header)
+          string(REGEX MATCH "#define FASTFLOAT_VERSION_MAJOR ([0-9]+)" _ ${_ff_header})
+          set(FF_MAJOR ${CMAKE_MATCH_1})
+          string(REGEX MATCH "#define FASTFLOAT_VERSION_MINOR ([0-9]+)" _ ${_ff_header})
+          set(FF_MINOR ${CMAKE_MATCH_1})
+          string(REGEX MATCH "#define FASTFLOAT_VERSION_PATCH ([0-9]+)" _ ${_ff_header})
+          set(FF_PATCH ${CMAKE_MATCH_1})
+          set(FastFloat_VERSION "${FF_MAJOR}.${FF_MINOR}.${FF_PATCH}")
+          message(STATUS "FastFloat version: ${FastFloat_VERSION}")
+        endif()
+        if(FastFloat_VERSION VERSION_GREATER_EQUAL "6.1.4")
+              add_definitions (-UFASTFLOAT_VISUAL_STUDIO)
+        else()
+              add_definitions (-DFASTFLOAT_VISUAL_STUDIO=0)
+        endif()
+
+        add_definitions (-D__forceinline=inline)
       endif()
       # disable -Werror=maybe-uninitialized since gcc gives false positive warnings when address sanitizer is used
-      if("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
+      if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
           set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=maybe-uninitialized")
       endif()
-      # dbc is the root project name
-      # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
-      set(CMAKE_PROJECT_dbc_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dbc_database_parser_disableTests.cmake")
-      # don't install dbc_parser_cpp
-      # see https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
-      # FetchContent_MakeAvailable(dbc_parser_cpp)
-      FetchContent_GetProperties(dbc_parser_cpp)
-      if(NOT dbc_parser_cpp_POPULATED)
-          FetchContent_Populate(dbc_parser_cpp)
-          add_subdirectory(${dbc_parser_cpp_SOURCE_DIR} ${dbc_parser_cpp_BINARY_DIR} EXCLUDE_FROM_ALL)
+      # disable shadow warnings treated as error
+      if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-shadow")
       endif()
+
+      # Use local copy from src/3rdparty/dbc_parser_cpp
+      set(CMAKE_PROJECT_dbc_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dbc_database_parser_disableTests.cmake")
+      # Force disable tests - they require Catch2 via FetchContent
+      set(DBC_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
+      add_subdirectory(dbc_parser_cpp EXCLUDE_FROM_ALL)
+
       # headerfiles of the projects are referring to <libdbc/someheader.h> and therefore
       # the path must be added
-      target_include_directories(labplotbackendlib PUBLIC ${dbc_parser_cpp_SOURCE_DIR}/include)
+      target_include_directories(labplot_datasources_obj PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dbc_parser_cpp/include)
+      target_include_directories(labplotbackendlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/dbc_parser_cpp/include)
+      target_link_libraries(labplot_datasources_obj PRIVATE dbc)
       target_link_libraries(labplotbackendlib dbc)
+      target_compile_definitions(labplot_datasources_obj PRIVATE HAVE_DBC_PARSER)
       target_compile_definitions(labplotbackendlib PRIVATE HAVE_DBC_PARSER)
       target_compile_definitions(labplotlib PUBLIC HAVE_DBC_PARSER)
       add_definitions(-DHAVE_DBC_PARSER)
   else ()
+    # Try to find system package
     pkg_check_modules(dbc IMPORTED_TARGET GLOBAL dbc)
     if(dbc_FOUND)
+        target_link_libraries(labplot_datasources_obj PRIVATE PkgConfig::dbc)
         target_link_libraries(labplotbackendlib PkgConfig::dbc)
+        target_compile_definitions(labplot_datasources_obj PRIVATE HAVE_DBC_PARSER)
         target_compile_definitions(labplotbackendlib PRIVATE HAVE_DBC_PARSER)
         target_compile_definitions(labplotlib PUBLIC HAVE_DBC_PARSER)
         add_definitions(-DHAVE_DBC_PARSER)
@@ -127,10 +153,17 @@ if(ENABLE_VECTOR_BLF)
   if(${LOCAL_VECTOR_BLF})
     add_subdirectory(vector_blf EXCLUDE_FROM_ALL)
     set_property(TARGET Vector_BLF PROPERTY AUTOMOC OFF)
+    # disable warning _FORTIFY_SOURCE requires compiling with optimization (-O)
+    # disable shadow warnings
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+        target_compile_options(Vector_BLF PRIVATE -Wno-cpp -Wno-shadow)
+    endif()
     target_include_directories(Vector_BLF PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/vector_blf/src ${CMAKE_CURRENT_BINARY_DIR}/vector_blf/src)
     list(APPEND CMAKE_SYSTEM_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/vector_blf/src ${CMAKE_CURRENT_BINARY_DIR}/vector_blf/src)
 
+    target_link_libraries(labplot_datasources_obj PRIVATE Vector_BLF)
     target_link_libraries(labplotbackendlib Vector_BLF)
+    target_compile_definitions(labplot_datasources_obj PRIVATE HAVE_VECTOR_BLF)
     target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
     target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
     add_definitions(-DHAVE_VECTOR_BLF)
@@ -145,7 +178,9 @@ if(ENABLE_VECTOR_BLF)
   else()
     pkg_check_modules(Vector_BLF IMPORTED_TARGET GLOBAL Vector_BLF)
     if(Vector_BLF_FOUND)
+      target_link_libraries(labplot_datasources_obj PRIVATE ${Vector_BLF_LIBRARIES})
       target_link_libraries(labplotbackendlib ${Vector_BLF_LIBRARIES})
+      target_compile_definitions(labplot_datasources_obj PRIVATE HAVE_VECTOR_BLF)
       target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
       target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
       add_definitions(-DHAVE_VECTOR_BLF)
@@ -161,24 +196,23 @@ if(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
         qt_advanced_dock
         GIT_REPOSITORY https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git
         GIT_TAG a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6
+        EXCLUDE_FROM_ALL
+        OVERRIDE_FIND_PACKAGE
     )
     set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
-    # don't install qt_advanced_dock
-    # see https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
-    # FetchContent_MakeAvailable(qt_advanced_dock)
-    FetchContent_GetProperties(qt_advanced_dock)
-    if(NOT qt_advanced_dock_POPULATED)
-        FetchContent_Populate(qt_advanced_dock)
-        add_subdirectory(${qt_advanced_dock_SOURCE_DIR} ${qt_advanced_dock_BINARY_DIR} EXCLUDE_FROM_ALL)
-    endif()
+    FetchContent_MakeAvailable(qt_advanced_dock)
     target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"git\")
 elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
     # https://cmake.org/cmake/help/latest/variable/CMAKE_PROJECT_INCLUDE.html
+    # src/3rdparty/cmake/QtADS_config.cmake
     set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
     set(ADS_VERSION ${labplot_VERSION})
     add_subdirectory(Qt-Advanced-Docking-System EXCLUDE_FROM_ALL)
+    target_include_directories(labplotlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
+    target_include_directories(labplot_core_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
+    target_include_directories(labplot_data_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
 
-    get_target_property(QADS_VERSION qt${QT_VERSION_MAJOR}advanceddocking VERSION)
+    get_target_property(QADS_VERSION "qtadvanceddocking-qt${QT_VERSION_MAJOR}" VERSION)
     message(STATUS "QADS VERSION ${QADS_VERSION}")
     target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"${QADS_VERSION}\")
 else()
@@ -190,18 +224,14 @@ if(LOCAL_MCAP_DOWNLOAD)
     FetchContent_Declare(mcap
         URL https://github.com/foxglove/mcap/archive/refs/tags/releases/cpp/v1.4.0.tar.gz
         URL_HASH SHA256=64ff3e51119f37ffcfaf9deecbd987a7cb4d4d9035d74a3fd3773395a470fda1 # v1.4.0
+        EXCLUDE_FROM_ALL
+        OVERRIDE_FIND_PACKAGE
     )
     FetchContent_MakeAvailable(mcap)
     #set(_mcap_include_dir ${mcap_SOURCE_DIR}/cpp/mcap/include)
+    target_include_directories(labplot_datasources_obj PRIVATE ${mcap_SOURCE_DIR}/cpp/mcap/include)
     target_include_directories(labplotbackendlib PUBLIC ${mcap_SOURCE_DIR}/cpp/mcap/include)
 else ()
+    target_include_directories(labplot_datasources_obj PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/mcap/include)
     target_include_directories(labplotbackendlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/mcap/include)
-endif()
-
-if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
-    if(Qt6_VERSION VERSION_LESS "6.10.0")
-        target_include_directories(labplotbackendlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shiboken6-6.9/include ${Python3_INCLUDE_DIRS})
-    else()
-        target_include_directories(labplotbackendlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shiboken6-6.10/include ${Python3_INCLUDE_DIRS})
-    endif()
 endif()

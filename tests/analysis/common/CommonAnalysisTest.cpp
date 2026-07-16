@@ -348,19 +348,19 @@ void CommonAnalysisTest::dataImportRecalculationAnalysisCurveColumnDependency() 
 	integrationCurve->setYDataColumn(sheet->column(1));
 
 	// prepare the integration
-	XYIntegrationCurve::IntegrationData integrationData = integrationCurve->integrationData();
+	auto integrationData = integrationCurve->integrationData();
 	integrationCurve->setIntegrationData(integrationData);
 
 	// perform the integration
 	integrationCurve->recalculate();
-	const XYIntegrationCurve::IntegrationResult& integrationResult = integrationCurve->integrationResult();
+	const auto& integrationResult = integrationCurve->integrationResult();
 
 	// check the results
 	QCOMPARE(integrationResult.available, true);
 	QCOMPARE(integrationResult.valid, true);
 
-	const AbstractColumn* resultXDataColumn = integrationCurve->xColumn();
-	const AbstractColumn* resultYDataColumn = integrationCurve->yColumn();
+	const auto* resultXDataColumn = integrationCurve->xColumn();
+	const auto* resultYDataColumn = integrationCurve->yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);

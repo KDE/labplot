@@ -108,10 +108,10 @@ protected:
 	struct ParseState {
 		ParseState() {
 		}
-		ParseState(int requestedLines, int readLines)
+		ParseState(int linesRequested, int linesRead)
 			: ready(true)
-			, requestedLines(requestedLines)
-			, readLines(readLines) {
+			, requestedLines(linesRequested)
+			, readLines(linesRead) {
 		}
 		bool ready{false}; // If true m_DataContainer is up to date and it is not needed to update
 		int requestedLines{0}; // Lines requested during read

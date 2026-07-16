@@ -63,6 +63,7 @@ set(PLOT_AREA_ELEMENT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/Axis.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/PlotAreaBackground.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceRange.cpp
 )
@@ -73,9 +74,11 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/KDEPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/LollipopPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/ParetoChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ProcessBehaviorChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/QQPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/RunChart.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
@@ -162,7 +165,6 @@ set(SDK_DEPENDENCY_SOURCES
     ${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
     ${BACKEND_DIR}/worksheet/Background.cpp
     ${BACKEND_DIR}/worksheet/Line.cpp
-    ${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBar.cpp
     ${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
@@ -229,6 +231,7 @@ set(SDK_INTERNAL_SOURCES
     ${FRONTEND_DIR}/widgets/TextPreview.cpp
     ${FRONTEND_DIR}/GuiTools.cpp
     ${FRONTEND_DIR}/ThemeHandler.cpp
+    ${TOOLS_DIR}/ColorMapsManager.cpp
     ${TOOLS_DIR}/ImageTools.cpp
     ${TOOLS_DIR}/TeXRenderer.cpp
     ${BACKEND_DIR}/core/abstractcolumncommands.cpp
@@ -302,6 +305,19 @@ if(WIN32)
 if(PSAPI)
     target_link_libraries(liblabplot PRIVATE ${PSAPI})
 endif()
+endif()
+
+# macOS: Make Python library path version-independent for stable ABI compatibility.
+# Same adjustment as for the labplot executable in src/CMakeLists.txt.
+if(APPLE AND ENABLE_PYTHON_SCRIPTING)
+    add_custom_command(TARGET liblabplot POST_BUILD
+        COMMAND install_name_tool -change
+            "@rpath/Python.framework/Versions/${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/Python"
+            "@rpath/Python.framework/Versions/Current/Python"
+            "$<TARGET_FILE:liblabplot>"
+        COMMENT "liblabplot: rewriting Python framework path ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR} -> Current for stable ABI"
+        VERBATIM
+    )
 endif()
 
 ############## installation ################################

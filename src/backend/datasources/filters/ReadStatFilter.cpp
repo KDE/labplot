@@ -81,11 +81,11 @@ int ReadStatFilter::endColumn() const {
 	return d->endColumn;
 }
 
-QStringList ReadStatFilter::vectorNames() const {
+const QStringList& ReadStatFilter::vectorNames() const {
 	return d->varNames;
 }
 
-QVector<AbstractColumn::ColumnMode> ReadStatFilter::columnModes() const {
+const QVector<AbstractColumn::ColumnMode>& ReadStatFilter::columnModes() const {
 	return d->columnModes;
 }
 

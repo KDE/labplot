@@ -15,6 +15,7 @@
 #include "frontend/MainWin.h" // LoadOnStart
 
 #include <KConfigGroup>
+#include <KLocalization>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -23,7 +24,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent, const QLocale& locale)
 	: SettingsPage(parent)
 	, m_defaultSystemLocale(locale) {
 	ui.setupUi(this);
-	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
+	KLocalization::setupSpinBoxFormatString(ui.sbAutoSaveInterval, ki18nc("@label:spinbox Suffix for the auto save interval", "%v min"));
 #ifdef NDEBUG
 	ui.chkDebugTrace->setVisible(false);
 #endif
@@ -45,7 +46,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent, const QLocale& locale)
 	connect(ui.chkAutoSave, &QCheckBox::toggled, this, &SettingsGeneralPage::autoSaveChanged);
 	connect(ui.chkSaveDockStates, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
-	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkCompressed, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkSaveData, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkInfoTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkDebugTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
@@ -115,7 +116,7 @@ QList<Settings::Type> SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 	group.writeEntry(QLatin1String("SaveDockStates"), ui.chkSaveDockStates->isChecked());
 	group.writeEntry(QLatin1String("SaveCalculations"), ui.chkSaveCalculations->isChecked());
-	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
+	group.writeEntry(QLatin1String("Compressed"), ui.chkCompressed->isChecked());
 	group.writeEntry(QLatin1String("SaveData"), ui.chkSaveData->isChecked());
 	const bool infoTraceEnabled = ui.chkInfoTrace->isChecked();
 	group.writeEntry(QLatin1String("InfoTrace"), infoTraceEnabled);
@@ -148,7 +149,7 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.sbAutoSaveInterval->setValue(5);
 	ui.chkSaveDockStates->setChecked(false);
 	ui.chkSaveCalculations->setChecked(true);
-	ui.chkCompatible->setChecked(false);
+	ui.chkCompressed->setChecked(false);
 	ui.chkInfoTrace->setChecked(false);
 	ui.chkDebugTrace->setChecked(false);
 	ui.chkPerfTrace->setChecked(false);
@@ -200,12 +201,12 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 	ui.chkSaveDockStates->setChecked(group.readEntry<bool>(QLatin1String("SaveDockStates"), false));
+	ui.chkSaveData->setChecked(group.readEntry<bool>(QLatin1String("SaveData"), true));
 	ui.chkSaveCalculations->setChecked(group.readEntry<bool>(QLatin1String("SaveCalculations"), true));
-	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
+	ui.chkCompressed->setChecked(group.readEntry<bool>(QLatin1String("Compressed"), !group.readEntry("CompatibleSave", false)));
 	ui.chkInfoTrace->setChecked(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
 	ui.chkDebugTrace->setChecked(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
 	ui.chkPerfTrace->setChecked(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
-	ui.chkSaveData->setChecked(group.readEntry<bool>(QLatin1String("SaveData"), true));
 
 	m_changed = false;
 }

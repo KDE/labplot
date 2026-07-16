@@ -33,12 +33,12 @@ int main(int argc, char* argv[]) {
     auto* plotArea = new CartesianPlot("xy-plot");
 	plotArea->setType(CartesianPlot::Type::FourAxes);
     
-    PlotArea::BorderType border = plotArea->plotArea()->borderType();
-    border.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	border.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	border.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	border.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea->plotArea()->setBorderType(border);
+    CartesianPlot::BorderType border = plotArea->borderType();
+    border.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, true);
+	border.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, true);
+	border.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, true);
+	border.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, true);
+    plotArea->setBorderType(border);
 
     plotArea->setSymmetricPadding(true);
     plotArea->setHorizontalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
@@ -109,12 +109,12 @@ int main(int argc, char* argv[]) {
     auto* plotArea1= new CartesianPlot("xy-plot 1");
 	plotArea1->setType(CartesianPlot::Type::FourAxes);
     
-    PlotArea::BorderType border1 = plotArea1->plotArea()->borderType();
-    border1.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	border1.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	border1.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	border1.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea1->plotArea()->setBorderType(border1);
+    CartesianPlot::BorderType border1 = plotArea1->borderType();
+    border1.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, true);
+	border1.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, true);
+	border1.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, true);
+	border1.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, true);
+    plotArea1->setBorderType(border1);
 
     plotArea1->setSymmetricPadding(true);
     plotArea1->setHorizontalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
@@ -186,12 +186,12 @@ int main(int argc, char* argv[]) {
     auto* plotArea2= new CartesianPlot("xy-plot 2");
 	plotArea2->setType(CartesianPlot::Type::FourAxes);
     
-    PlotArea::BorderType border2 = plotArea2->plotArea()->borderType();
-    border2.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	border2.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	border2.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	border2.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea2->plotArea()->setBorderType(border2);
+    CartesianPlot::BorderType border2 = plotArea2->borderType();
+    border2.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, true);
+	border2.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, true);
+	border2.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, true);
+	border2.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, true);
+    plotArea2->setBorderType(border2);
 
     plotArea2->setSymmetricPadding(true);
     plotArea2->setHorizontalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
@@ -263,12 +263,12 @@ int main(int argc, char* argv[]) {
     auto* plotArea3= new CartesianPlot("xy-plot 3");
 	plotArea3->setType(CartesianPlot::Type::FourAxes);
     
-    PlotArea::BorderType border3 = plotArea3->plotArea()->borderType();
-    border3.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	border3.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	border3.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	border3.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea3->plotArea()->setBorderType(border3);
+    CartesianPlot::BorderType border3 = plotArea3->borderType();
+    border3.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, true);
+	border3.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, true);
+	border3.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, true);
+	border3.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, true);
+    plotArea3->setBorderType(border3);
 
     plotArea3->setSymmetricPadding(true);
     plotArea3->setHorizontalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));

@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for editing properties of equation curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -26,19 +26,10 @@
 #include <QWidgetAction>
 
 /*!
-  \class XYEquationCurveDock
-  \brief  Provides a widget for editing the properties of the XYEquationCurves
-		(2D-curves defined by a mathematical equation) currently selected in
-		the project explorer.
-
-  If more than one curves are set, the properties of the first column are shown.
-  The changes of the properties are applied to all curves.
-  The exclusions are the name, the comment and the datasets (columns) of
-  the curves  - these properties can only be changed if there is only one single curve.
-
-  \ingroup frontend
+	\class XYEquationCurveDock
+	\brief  Provides a widget for editing the properties of \c XYEquationCurve.
+	\ingroup frontend
 */
-
 XYEquationCurveDock::XYEquationCurveDock(QWidget* parent)
 	: XYCurveDock(parent) {
 	// remove the tab "Error bars"
@@ -74,15 +65,9 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.tbConstants2->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
 	uiGeneralTab.tbFunctions2->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
-	// TODO: move to retranslateUi()
-	uiGeneralTab.cbType->addItem(i18n("Cartesian"));
-	uiGeneralTab.cbType->addItem(i18n("Polar"));
-	uiGeneralTab.cbType->addItem(i18n("Parametric"));
-	// 	uiGeneralTab.cbType->addItem(i18n("Implicit"));
+
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
-	uiGeneralTab.pbRecalculate->setToolTip(i18n("Click this button or press Shift+Enter to recalculate the result."));
-
 	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::EquationType::Parametric);
 
 	// 	uiGeneralTab.teEquation1->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
@@ -110,14 +95,14 @@ void XYEquationCurveDock::initGeneralTab() {
 	// show the properties of the first curve
 	const auto* equationCurve = static_cast<const XYEquationCurve*>(m_curve);
 	Q_ASSERT(equationCurve);
-	const XYEquationCurve::EquationData& data = equationCurve->equationData();
-	uiGeneralTab.cbType->setCurrentIndex(static_cast<int>(data.type));
-	this->typeChanged(static_cast<int>(data.type));
-	uiGeneralTab.teEquation1->setText(data.expression1);
-	uiGeneralTab.teEquation2->setText(data.expression2);
-	uiGeneralTab.teMin->setText(data.min);
-	uiGeneralTab.teMax->setText(data.max);
-	uiGeneralTab.sbCount->setValue(data.count);
+	const XYEquationCurve::EquationData& edata = equationCurve->equationData();
+	uiGeneralTab.cbType->setCurrentIndex(static_cast<int>(edata.type));
+	this->typeChanged(static_cast<int>(edata.type));
+	uiGeneralTab.teEquation1->setText(edata.expression1);
+	uiGeneralTab.teEquation2->setText(edata.expression2);
+	uiGeneralTab.teMin->setText(edata.min);
+	uiGeneralTab.teMax->setText(edata.max);
+	uiGeneralTab.sbCount->setValue(edata.count);
 
 	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
@@ -156,6 +141,17 @@ bool XYEquationCurveDock::eventFilter(QObject* /* watched */, QEvent* event) {
 	}
 
 	return false;
+}
+
+void XYEquationCurveDock::retranslateUi() {
+	uiGeneralTab.cbType->clear();
+	uiGeneralTab.cbType->addItem(i18n("Cartesian"));
+	uiGeneralTab.cbType->addItem(i18n("Polar"));
+	uiGeneralTab.cbType->addItem(i18n("Parametric"));
+	// 	uiGeneralTab.cbType->addItem(i18n("Implicit"));
+
+	// tooltip texts
+	uiGeneralTab.pbRecalculate->setToolTip(i18n("Click this button or press Shift+Enter to recalculate the result."));
 }
 
 //*************************************************************
@@ -217,16 +213,16 @@ void XYEquationCurveDock::typeChanged(int index) {
 }
 
 void XYEquationCurveDock::recalculateClicked() {
-	XYEquationCurve::EquationData data;
-	data.type = (XYEquationCurve::EquationType)uiGeneralTab.cbType->currentIndex();
-	data.expression1 = uiGeneralTab.teEquation1->document()->toPlainText();
-	data.expression2 = uiGeneralTab.teEquation2->document()->toPlainText();
-	data.min = uiGeneralTab.teMin->document()->toPlainText();
-	data.max = uiGeneralTab.teMax->document()->toPlainText();
-	data.count = uiGeneralTab.sbCount->value();
+	XYEquationCurve::EquationData edata;
+	edata.type = (XYEquationCurve::EquationType)uiGeneralTab.cbType->currentIndex();
+	edata.expression1 = uiGeneralTab.teEquation1->document()->toPlainText();
+	edata.expression2 = uiGeneralTab.teEquation2->document()->toPlainText();
+	edata.min = uiGeneralTab.teMin->document()->toPlainText();
+	edata.max = uiGeneralTab.teMax->document()->toPlainText();
+	edata.count = uiGeneralTab.sbCount->value();
 
 	for (auto* curve : m_curvesList)
-		static_cast<XYEquationCurve*>(curve)->setEquationData(data);
+		static_cast<XYEquationCurve*>(curve)->setEquationData(edata);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	updatePlotRangeList(); // axes range may change when range on auto scale
@@ -353,12 +349,12 @@ void XYEquationCurveDock::enableRecalculate() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::EquationData& data) {
+void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::EquationData& edata) {
 	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.cbType->setCurrentIndex(static_cast<int>(data.type));
-	uiGeneralTab.teEquation1->setText(data.expression1);
-	uiGeneralTab.teEquation2->setText(data.expression2);
-	uiGeneralTab.teMin->setText(data.min);
-	uiGeneralTab.teMax->setText(data.max);
-	uiGeneralTab.sbCount->setValue(data.count);
+	uiGeneralTab.cbType->setCurrentIndex(static_cast<int>(edata.type));
+	uiGeneralTab.teEquation1->setText(edata.expression1);
+	uiGeneralTab.teEquation2->setText(edata.expression2);
+	uiGeneralTab.teMin->setText(edata.min);
+	uiGeneralTab.teMax->setText(edata.max);
+	uiGeneralTab.sbCount->setValue(edata.count);
 }

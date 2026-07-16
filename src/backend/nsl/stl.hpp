@@ -71,7 +71,7 @@ bool est(const std::vector<T>& y, size_t n, size_t len, int ideg, T xs, T* ys, s
         }
 
         if (h > 0.0 && ideg > 0) { // use linear fit
-            auto a = 0.0;
+            a = 0.0;
             for (auto j = nleft; j <= nright; j++) { // weighted center of x values
                 a += w[j - 1] * ((T) j);
             }

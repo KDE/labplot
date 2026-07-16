@@ -1,5 +1,5 @@
 
-# SPDX-FileCopyrightText: 2023-2025 Scarlett Moore <sgmoore@kde.org>
+# SPDX-FileCopyrightText: 2023-2026 Scarlett Moore <sgmoore@kde.org>
 #
 # SPDX-License-Identifier: CC0-1.0
 ---
@@ -17,20 +17,16 @@ apps:
     plugs:
       - cups
       - home
-    # command-chain:
-    #   - bin/tmpdir
     environment:
       QTWEBENGINE_DISABLE_SANDBOX: 1
 parts:
-  # launchers:
-  #   source: snap/local/launchers
-  #   plugin: dump
-  #   organize:
-  #       '*': bin/
   analitza:
     source: https://invent.kde.org/education/analitza.git
-    source-branch: release/25.04
+    source-branch: master
     plugin: cmake
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
     build-packages:
       - libxslt1-dev
       - libpulse0
@@ -43,25 +39,17 @@ parts:
       - -DQT_MAJOR_VERSION=6
       - -DBUILD_WITH_QT6=ON
       - -DBUILD_TESTING=OFF
-      - -DQT_DEBUG_FIND_PACKAGE=ON
-      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-    build-environment: &build_env
-      - PATH: /snap/kf6-core24-sdk/current/usr/bin:/snap/kde-qt6-core24-sdk/current/usr/bin${PATH:+:$PATH}
-      - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig:/snap/kf6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
-      - XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf6-core24-sdk/current/usr/share:/snap/kde-qt6-core24-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
-      - XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf6-core24-sdk/current/etc/xdg:/snap/kde-qt6-core24-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
-      - LD_LIBRARY_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:/snap/kde-qt6-core24-sdk/current/usr/lib:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kf6-core24-sdk/current/usr/lib:$CRAFT_STAGE/usr/lib:$CRAFT_STAGE/lib/:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-      - LDFLAGS: "-L$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR"
-      - CFLAGS: "-I$CRAFT_STAGE/usr/include"
     override-stage: |
         craftctl default
         rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /
   qxlsx:
     plugin: cmake
     source: https://github.com/QtExcel/QXlsx.git
-    source-tag: v1.4.6
+    source-branch: master
     source-subdir: QXlsx
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
     build-packages:
       - cmake
       - rsync
@@ -71,9 +59,9 @@ parts:
       - -DQT_MAJOR_VERSION=6
       - -DBUILD_WITH_QT6=ON
       - -DBUILD_TESTING=OFF
-      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-    build-environment: *build_env
+    build-environment:
+      - LD_LIBRARY_PATH: $LD_LIBRARY_PATH:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/usr
+      - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
     override-stage: |
         craftctl default
         rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /
@@ -83,6 +71,9 @@ parts:
     source: https://github.com/qt/qtmqtt.git
     source-tag: v6.7.2
     plugin: cmake
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
     build-packages:
       - cmake
     cmake-parameters:
@@ -91,21 +82,19 @@ parts:
       - -DQT_MAJOR_VERSION=6
       - -DBUILD_WITH_QT6=ON
       - -DBUILD_TESTING=OFF
-      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-    build-environment: *build_env
   gsl:
     after:
       - qxlsx
-    source: http://ftp.gnu.org/gnu/gsl/gsl-2.8.tar.gz
-    source-checksum: sha256/6a99eeed15632c6354895b1dd542ed5a855c0f15d9ad1326c6fe2b2c9e423190
+    source: https://ftpmirror.gnu.org/gsl/gsl-2.8.tar.gz
+    source-checksum: md5/182ec03204f164e67238c9116591a37d
     plugin: autotools
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
     autotools-configure-parameters:
       - --prefix=/usr
+      - --disable-static
       - --enable-fixed-path=/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-    build-environment:
-      - LD_LIBRARY_PATH: $LD_LIBRARY_PATH:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/usr
-      - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
     override-build: |
       craftctl default
       rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /
@@ -114,6 +103,9 @@ parts:
     source: https://github.com/Qalculate/libqalculate/releases/download/v5.5.0/libqalculate-5.5.0.tar.gz
     autotools-configure-parameters:
       - --prefix=/usr
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
     build-packages:
       - autotools-dev
       - intltool
@@ -140,12 +132,15 @@ parts:
     source: https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-1.23.2.tar.bz2
     source-checksum: sha256/9499e8b1f33cccb6815527a1bc16049d35a6198a6c5fae0185f2bd561bce5224
     plugin: autotools
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
     autotools-configure-parameters:
       - --disable-gpgsm-test
       - --enable-languages=cpp,qt6
       - --prefix=/usr
       - --enable-fixed-path=/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-    build-environment: &buildenvironment
+    build-environment:
       - LD_LIBRARY_PATH: $LD_LIBRARY_PATH:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/usr
       - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
     override-build: |
@@ -156,6 +151,9 @@ parts:
       - libgpgmepp-qt6
     plugin: cmake
     source: https://poppler.freedesktop.org/poppler-25.06.0.tar.xz
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
     build-packages:
       - cmake
       - libfreetype6-dev
@@ -221,11 +219,6 @@ parts:
       - -DBUILD_CPP_TESTS=OFF
       - -DBUILD_MANUAL_TESTS=OFF
       - -DENABLE_NSS3=OFF
-      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-    build-environment:
-      - LD_LIBRARY_PATH: $LD_LIBRARY_PATH:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/usr
-      - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
     override-build: |
       craftctl default
       rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /
@@ -238,8 +231,18 @@ parts:
       - usr/share/metainfo/org.kde.cantor.appdata.xml
     plugin: cmake
     source: https://invent.kde.org/education/cantor.git
-    source-branch: release/25.04
+    source-branch: master
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
     build-packages:
+      - libxml2-dev
+      - gettext
+      - doxygen
+      - graphviz
+      - libxml2-utils
+      - docbook-xml
+      - docbook-xsl
       - libmarkdown2-dev
       - libglib2.0-dev
       - liblapack-dev
@@ -267,14 +270,6 @@ parts:
       - -DQT_MAJOR_VERSION=6
       - -DBUILD_WITH_QT6=ON
       - -DBUILD_TESTING=OFF
-      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-    build-environment:
-      - PATH: /snap/kf6-core24-sdk/current/usr/bin:/snap/kde-qt6-core24-sdk/current/usr/bin${PATH:+:$PATH}
-      - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig:/snap/kf6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
-      - XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf6-core24-sdk/current/usr/share:/snap/kde-qt6-core24-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
-      - XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf6-core24-sdk/current/etc/xdg:/snap/kde-qt6-core24-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
-      - LD_LIBRARY_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:/snap/kde-qt6-core24-sdk/current/usr/lib:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kf6-core24-sdk/current/usr/lib:$CRAFT_STAGE/usr/lib:$CRAFT_STAGE/lib/:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
   labplot:
     after:
       - qxlsx
@@ -286,6 +281,10 @@ parts:
     parse-info:
       - usr/share/metainfo/org.kde.labplot.appdata.xml
     plugin: cmake
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/stable
+      - kf6-core24-sdk/latest/stable
+      - kde-pyside6-core24-sdk/latest/stable
     build-packages:
       - libhdf5-dev
       - libboost-all-dev
@@ -309,6 +308,8 @@ parts:
       - libhdf5-dev
       - libnsl-dev
       - libnsl2
+      - patchelf
+      - python3-build
     stage-packages:
       - bison
       - discount
@@ -364,14 +365,32 @@ parts:
     source: .
     source-type: local
     cmake-parameters:
-      - -DCMAKE_INSTALL_PREFIX=/usr
-      - -DCMAKE_BUILD_TYPE=Releaselibhdf5-dev
-      - -DQT_MAJOR_VERSION=6
+      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current\\;/snap/kde-pyside6-core24-sdk/current\\;/usr"
+      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\:/snap/kde-qt6-core24-sdk/current\\:/snap/kf6-core24-sdk/current\\:/snap/kde-pyside6-core24-sdk/current\\:/usr"
+      - -DBUILD_TESTING=OFF
       - -DBUILD_WITH_QT6=ON
-      - -DENABLE_TESTS=OFF
-      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
-    build-environment: *build_env
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DQT_MAJOR_VERSION=6
+    build-environment:
+      - CC: /usr/bin/gcc
+      - CXX: /usr/bin/g++
+      - CLANG_INSTALL_DIR: /snap/kde-qt6-core24-sdk/current/usr/lib/llvm-19
+      - CMAKE_PREFIX_PATH: /snap/kde-qt6-core24-sdk/current/usr:/snap/ffmpeg-2404-sdk/current/usr:/snap/kde-pyside6-core24-sdk/current/usr${CMAKE_PREFIX_PATH:+:$CMAKE_PREFIX_PATH}
+      - CPATH: /snap/kde-qt6-core24-sdk/current/usr/include:/snap/kde-pyside6-core24-sdk/current/usr/include:$CRAFT_STAGE/usr/include/python3.12${CPATH:+:$CPATH}
+      - C_INCLUDE_PATH: /snap/kde-qt6-core24-sdk/current/usr/include/python3.12:/snap/kde-pyside6-core24-sdk/current/usr/include/python3.12:$CRAFT_STAGE/usr/include/python3.12${C_INCLUDE_PATH:+:$C_INCLUDE_PATH}
+      - CPLUS_INCLUDE_PATH: /snap/kde-qt6-core24-sdk/current/usr/include:/snap/kde-pyside6-core24-sdk/current/usr/include:/snap/kde-pyside6-core24-sdk/current/usr/include/PySide6:/snap/kde-pyside6-core24-sdk/current/usr/include/python3.12:/snap/kde-pyside6-core24-sdk/current/usr/include/shiboken6:$CRAFT_STAGE/usr/include${CPLUS_INCLUDE_PATH:+:$CPLUS_INCLUDE_PATH}
+      - DICPATH: "$CRAFT_STAGE/usr/share/hunspell"
+      - LD_LIBRARY_PATH: "/snap/kde-qt6-core24-sdk/current/usr/lib:/snap/kde-qt6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}:/snap/kde-qt6-core24-sdk/current/usr/lib:/snap/kde-qt6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}:/snap/kde-pyside6-core24-sdk/current/usr/lib:/snap/kde-qt6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/libproxy:/snap/ffmpeg-2404-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/:$CRAFT_STAGE/lib:$CRAFT_STAGE/usr/lib:$CRAFT_STAGE/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+      - LIBCLANG_LIBDIR: /snap/kde-qt6-core24-sdk/current/usr/lib/llvm-19/lib
+      - LIBCLANG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/llvm-19/bin
+      - LLVM_INSTALL_DIR: /snap/kde-qt6-core24-sdk/current/usr/lib/llvm-19
+      - PATH: /snap/kde-qt6-core24-sdk/current/usr/bin:/snap/kde-qt6-core24-sdk/current/usr/lib/llvm-19/bin:/snap/kde-pyside6-core24-sdk/current/usr/bin${PATH:+:$PATH}
+      - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig:/snap/kde-pyside6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig:/snap/ffmpeg-2404-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
+      - PYSIDE_DESIGNER_PLUGINS: /snap/kde-pyside6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/qt6/plugins/designer
+      - PYTHONPATH: /snap/kde-qt6-core24-sdk/current/usr/lib/python3.12:/snap/kde-qt6-core24-sdk/current/usr/lib/python3/dist-packages:/snap/kde-pyside6-core24-sdk/current/usr/lib/python3.12:/snap/kde-pyside6-core24-sdk/current/usr/lib/python3/dist-packages${PYTHONPATH:+:$PYTHONPATH}
+      - XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kde-qt6-core24-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
+      - XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kde-qt6-core24-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
     prime:
       - -usr/lib/*/cmake/*
       - -usr/include/*

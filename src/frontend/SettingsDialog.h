@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : application settings dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -22,6 +22,7 @@ class SettingsNotebookPage;
 // class SettingsWelcomePage;
 class SettingsDatasetsPage;
 #ifdef HAVE_SCRIPTING
+class SettingsScriptingPage;
 class SettingsEditorPage;
 #endif
 
@@ -47,20 +48,28 @@ private:
 	bool m_changed{false};
 
 	SettingsGeneralPage* m_generalPage{nullptr};
+
 	SettingsWorksheetPage* m_worksheetPage{nullptr};
 	KPageWidgetItem* m_worksheetPageItem{nullptr};
+
 	SettingsSpreadsheetPage* m_spreadsheetPage{nullptr};
 	KPageWidgetItem* m_spreadsheetPageItem{nullptr};
+
 #ifdef HAVE_CANTOR_LIBS
 	SettingsNotebookPage* m_notebookPage{nullptr};
 	KPageWidgetItem* m_notebookPageItem{nullptr};
 #endif
+
 	SettingsDatasetsPage* m_datasetsPage{nullptr};
+	KPageWidgetItem* m_datasetsPageItem{nullptr};
+
 #ifdef HAVE_SCRIPTING
+	SettingsScriptingPage* m_scriptingPage{nullptr};
+	KPageWidgetItem* m_scriptingPageItem{nullptr};
+
 	SettingsEditorPage* m_editorRootPage{nullptr};
 	KPageWidgetItem* m_editorRootItem{nullptr};
 #endif
-	KPageWidgetItem* m_datasetsPageItem{nullptr};
 
 #ifdef HAVE_KUSERFEEDBACK
 	KUserFeedback::FeedbackConfigWidget* m_userFeedbackWidget{nullptr};

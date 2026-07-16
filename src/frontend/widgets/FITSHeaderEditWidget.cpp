@@ -18,8 +18,6 @@
 #include <KConfigGroup>
 #include <KMessageBox>
 
-#include <kcoreaddons_version.h>
-
 #include <QContextMenuEvent>
 #include <QFileDialog>
 #include <QMenu>
@@ -219,20 +217,20 @@ void FITSHeaderEditWidget::openFile() {
 bool FITSHeaderEditWidget::save() {
 	bool saved = false;
 
-	QMap<QString, ExtensionData>::const_iterator it = m_extensionData.constBegin();
+	auto it = m_extensionData.constBegin();
 	while (it != m_extensionData.constEnd()) {
 		const QString& fileName = it.key();
-		const auto& data = it.value();
-		if (data.updates.newKeywords.size() > 0) {
-			m_fitsFilter->addNewKeyword(fileName, data.updates.newKeywords);
+		const auto& hdata = it.value();
+		if (hdata.updates.newKeywords.size() > 0) {
+			m_fitsFilter->addNewKeyword(fileName, hdata.updates.newKeywords);
 			saved = true;
 		}
-		if (data.updates.removedKeywords.size() > 0) {
-			m_fitsFilter->deleteKeyword(fileName, data.updates.removedKeywords);
+		if (hdata.updates.removedKeywords.size() > 0) {
+			m_fitsFilter->deleteKeyword(fileName, hdata.updates.removedKeywords);
 			saved = true;
 		}
 		if (!saved) {
-			for (const FITSFilter::Keyword& key : data.updates.updatedKeywords) {
+			for (const FITSFilter::Keyword& key : hdata.updates.updatedKeywords) {
 				if (!key.isEmpty()) {
 					saved = true;
 					break;
@@ -240,9 +238,9 @@ bool FITSHeaderEditWidget::save() {
 			}
 		}
 
-		m_fitsFilter->updateKeywords(fileName, data.keywords, data.updates.updatedKeywords);
-		m_fitsFilter->addKeywordUnit(fileName, data.keywords);
-		m_fitsFilter->addKeywordUnit(fileName, data.updates.newKeywords);
+		m_fitsFilter->updateKeywords(fileName, hdata.keywords, hdata.updates.updatedKeywords);
+		m_fitsFilter->addKeywordUnit(fileName, hdata.keywords);
+		m_fitsFilter->addKeywordUnit(fileName, hdata.updates.newKeywords);
 
 		++it;
 	}
@@ -273,16 +271,16 @@ void FITSHeaderEditWidget::initActions() {
  * \brief Connects signals of the actions to the appropriate slots.
  */
 void FITSHeaderEditWidget::connectActions() {
-	connect(m_actionAddKeyword, &QAction::triggered, this, [=]() {
+	connect(m_actionAddKeyword, &QAction::triggered, this, [=, this]() {
 		addKeyword();
 	});
-	connect(m_actionRemoveKeyword, &QAction::triggered, this, [=]() {
+	connect(m_actionRemoveKeyword, &QAction::triggered, this, [=, this]() {
 		removeKeyword();
 	});
-	connect(m_actionRemoveExtension, &QAction::triggered, this, [=]() {
+	connect(m_actionRemoveExtension, &QAction::triggered, this, [=, this]() {
 		removeExtension();
 	});
-	connect(m_actionAddmodifyUnit, &QAction::triggered, this, [=]() {
+	connect(m_actionAddmodifyUnit, &QAction::triggered, this, [=, this]() {
 		addModifyKeywordUnit();
 	});
 }

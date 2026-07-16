@@ -223,7 +223,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 			column->setUndoAware(true);
 			if (mode == AbstractFileFilter::ImportMode::Replace) {
 				column->setSuppressDataChangedSignal(false);
-				column->setChanged();
+				column->setDataChanged();
 			}
 		}
 	}

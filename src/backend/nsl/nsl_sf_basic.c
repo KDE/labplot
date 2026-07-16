@@ -322,7 +322,7 @@ double nsl_sf_voigt(double x, double sigma, double gamma) {
 #elif defined(_MSC_VER)
 	return 0.; // not supported yet
 #else
-	COMPLEX z = (x + I * gamma) / (M_SQRT2 * sigma);
+	COMPLEX z = (x + _Complex_I * gamma) / (M_SQRT2 * sigma);
 	return creal(Faddeeva_w(z, 0)) / (M_SQRT2 * M_SQRTPI * sigma);
 #endif
 }

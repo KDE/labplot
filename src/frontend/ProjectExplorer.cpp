@@ -4,7 +4,7 @@
 	Description       	 : A tree view for displaying and editing an AspectTreeModel.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,7 +17,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/notebook/Notebook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/Worksheet.h"
 #include "frontend/core/ContentDockWidget.h"
 
 #include <KConfig>
@@ -26,7 +27,6 @@
 #include <KMessageBox>
 #include <KMessageWidget>
 
-#include <kcoreaddons_version.h>
 #define HAS_FUZZY_MATCHER true
 #include <KFuzzyMatcher>
 
@@ -85,6 +85,7 @@ ProjectExplorer::ProjectExplorer(QWidget* parent)
 	m_treeView->viewport()->installEventFilter(this);
 	m_treeView->header()->setStretchLastSection(true);
 	m_treeView->header()->installEventFilter(this);
+	m_treeView->installEventFilter(this);
 	m_treeView->setDragEnabled(true);
 	m_treeView->setAcceptDrops(true);
 	m_treeView->setDropIndicatorShown(true);
@@ -129,7 +130,7 @@ void ProjectExplorer::createActions() {
 	toggleFilterAction = new QAction(QIcon::fromTheme(QLatin1String("view-filter")), i18n("Search/Filter Options"), this);
 	toggleFilterAction->setCheckable(true);
 	toggleFilterAction->setChecked(true);
-	connect(toggleFilterAction, &QAction::triggered, this, [=]() {
+	connect(toggleFilterAction, &QAction::triggered, this, [=, this]() {
 		m_frameFilter->setVisible(!m_frameFilter->isVisible());
 	});
 }
@@ -154,8 +155,8 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 	const int selectedAspectsCount = items.size() / 4; // 4 columns in the tree view, divide by 4 to get the number of rows/aspects
 	QVector<AbstractAspect*> selectedAspects;
 	for (int i = 0; i < selectedAspectsCount; ++i) {
-		const auto& index = items.at(i * 4);
-		selectedAspects << static_cast<AbstractAspect*>(index.internalPointer());
+		const auto& item = items.at(i * 4);
+		selectedAspects << static_cast<AbstractAspect*>(item.internalPointer());
 	}
 
 	QMenu* menu = nullptr;
@@ -173,43 +174,43 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 		}
 	} else if (selectedAspectsCount > 1) { // multiple aspects are selected
 		menu = new QMenu(this);
-		// add "expand/collapse" actions if the selected aspects have children
-		bool hasChildren = false;
+
+		// check if the selected objects have the same parent and 
+		// show parent's context menu for columns to allow plot data, etc.
+		bool sameParent = true;
+		AbstractAspect* parentAspect = nullptr;
 		for (const auto* aspect : selectedAspects) {
-			if (aspect->childCount<AbstractAspect>()) {
-				hasChildren = true;
-				break;
+			if (!parentAspect)
+				parentAspect = aspect->parentAspect();
+			else {
+				if (aspect->parentAspect() != parentAspect) {
+					sameParent = false;
+					break;
+				}
+				parentAspect = aspect->parentAspect();
 			}
 		}
 
-		if (hasChildren) {
-			menu->addAction(expandSelectedTreeAction);
-			menu->addAction(collapseSelectedTreeAction);
-			menu->addSeparator();
-		} else {
-			// check if columns from the same parent were selected only
-			// and show parent's context menu for columns to allow plot data, etc.
-			bool columnsOnly = true;
-			bool sameParent = true;
-			AbstractAspect* parentAspect = nullptr;
-			for (const auto* aspect : selectedAspects) {
-				if (aspect->type() != AspectType::Column) {
-					columnsOnly = false;
-					break;
-				}
-
-				if (!parentAspect)
-					parentAspect = aspect->parentAspect();
-				else {
-					if (aspect->parentAspect() != parentAspect) {
-						sameParent = false;
-						break;
+		if (sameParent && parentAspect) {
+			// lambda function to check if all selected aspects are of a specific type
+			auto checkAspectType = [&selectedAspects](AspectType type) -> bool {
+				// for WorksheetElements, check the inheritance and not the exact type
+				if (type == AspectType::WorksheetElement) {
+					for (const auto* aspect : selectedAspects) {
+						if (!aspect->inherits<WorksheetElement>())
+							return false;
 					}
-					parentAspect = aspect->parentAspect();
+					return true;
 				}
-			}
 
-			if (columnsOnly && sameParent) {
+				for (const auto* aspect : selectedAspects) {
+					if (aspect->type() != type)
+						return false;
+				}
+				return true;
+			};
+
+			if (checkAspectType(AspectType::Column)) { // check columns
 				if (parentAspect->type() == AspectType::Spreadsheet) {
 					auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
 					spreadsheet->fillColumnsContextMenu(menu);
@@ -225,6 +226,32 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 #endif
 				}
 				menu->addSeparator();
+			} else if (checkAspectType(AspectType::WorksheetElement)) { // check worksheet elements
+				if (checkAspectType(AspectType::XYCurve)) { // check xy-curves
+					auto* plotArea = dynamic_cast<CartesianPlot*>(parentAspect);
+					if (plotArea) {
+						menu->addMenu(plotArea->analysisMenu());
+						menu->addSeparator();
+					}
+				}
+
+				auto* worksheet = dynamic_cast<Worksheet*>(parentAspect);
+				if (!worksheet)
+					worksheet = parentAspect->parent<Worksheet>();
+				if (worksheet) {
+					worksheet->fillElementsContextMenu(menu);
+					menu->addSeparator();
+				}
+			}
+		}
+
+		// add "expand/collapse" actions if the selected aspects have children
+		for (const auto* aspect : selectedAspects) {
+			if (aspect->childCount<AbstractAspect>()) {
+				menu->addAction(expandSelectedTreeAction);
+				menu->addAction(collapseSelectedTreeAction);
+				menu->addSeparator();
+				break;
 			}
 		}
 
@@ -270,10 +297,10 @@ void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {
 	const auto* tree_model = dynamic_cast<AspectTreeModel*>(m_treeView->model());
 	if (tree_model) {
 		const auto& index = tree_model->modelIndexOfAspect(aspect);
-// TODO: This crashes on Windows in Debug mode
-#if !defined(HAVE_WINDOWS) || defined(NDEBUG)
-		m_treeView->setCurrentIndex(index);
-#endif
+		// Only set current index if the index is valid to avoid crashes
+		// when the aspect is nullptr or not yet in the model
+		if (index.isValid())
+			m_treeView->setCurrentIndex(index);
 	}
 }
 
@@ -340,7 +367,7 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 
 			list_showColumnActions.append(showColumnAction);
 
-			connect(showColumnAction, &QAction::triggered, this, [=] {
+			connect(showColumnAction, &QAction::triggered, this, [=, this] {
 				ProjectExplorer::toggleColumn(i);
 			});
 		}
@@ -388,7 +415,17 @@ void ProjectExplorer::search() {
 	Provides a menu for selective showing and hiding of columns.
 */
 bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
-	if (obj == m_treeView->header() && event->type() == QEvent::ContextMenu) {
+	if (obj == m_treeView && event->type() == QEvent::KeyPress) { // forward custom key shortcuts from the tree view to ProjectExplorer
+		auto* keyEvent = static_cast<QKeyEvent*>(event);
+		if (keyEvent->matches(QKeySequence::Delete) || keyEvent->matches(QKeySequence::Copy) || keyEvent->matches(QKeySequence::Paste)
+			|| ((keyEvent->modifiers() & Qt::ControlModifier)
+				&& (keyEvent->key() == Qt::Key_D || keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down))
+			|| keyEvent->key() == Qt::Key_Space) {
+			keyPressEvent(keyEvent);
+			return true;
+		}
+		return false;
+	} else if (obj == m_treeView->header() && event->type() == QEvent::ContextMenu) {
 		// Menu for showing/hiding the columns in the tree view
 		QMenu* columnsMenu = new QMenu(m_treeView->header());
 		columnsMenu->addSection(i18n("Columns"));
@@ -437,12 +474,12 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 					vec << (quintptr)aspect;
 				}
 
-				QByteArray data;
-				QDataStream stream(&data, QIODevice::WriteOnly);
+				QByteArray mdata;
+				QDataStream stream(&mdata, QIODevice::WriteOnly);
 				stream << (quintptr)m_project; // serialize the project pointer first, will be used as the unique identifier
 				stream << vec;
 
-				mimeData->setData(QStringLiteral("labplot-dnd"), data);
+				mimeData->setData(QStringLiteral("labplot-dnd"), mdata);
 				drag->setMimeData(mimeData);
 				drag->exec();
 			}
@@ -461,8 +498,8 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			} else {
 				// drad&drop between the different project windows is not supported yet.
 				// check whether we're dragging inside of the same project.
-				QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
-				QDataStream stream(&data, QIODevice::ReadOnly);
+				QByteArray mdata = mimeData->data(QLatin1String("labplot-dnd"));
+				QDataStream stream(&mdata, QIODevice::ReadOnly);
 				quintptr ptr = 0;
 				stream >> ptr;
 				auto* project = reinterpret_cast<Project*>(ptr);
@@ -561,13 +598,15 @@ void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 				showErrorMessage(msg);
 			}
 		}
-	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) {
-		// duplicate
-		if (aspect != m_project) {
-			aspect->copy();
-			aspect->parentAspect()->paste(true);
-			showErrorMessage(QString());
-		}
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) { // duplicate
+		deselectIndex(m_treeView->currentIndex()); // deselect the current aspect first, the new one will be selected when added
+		aspect->duplicate();
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Up)) { // move up
+		aspect->moveUp();
+		m_treeView->setCurrentIndex(dynamic_cast<AspectTreeModel*>(m_treeView->model())->modelIndexOfAspect(aspect));
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Down)) { // move down
+		aspect->moveDown();
+		m_treeView->setCurrentIndex(dynamic_cast<AspectTreeModel*>(m_treeView->model())->modelIndexOfAspect(aspect));
 	} else if (event->key() == 32) {
 		// space key - hide/show the current object
 		changeSelectedVisible();
@@ -625,8 +664,10 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 		return;
 	}
 
-	m_treeView->scrollTo(index);
-	m_treeView->setCurrentIndex(index);
+	if (index.isValid()) {
+		m_treeView->scrollTo(index);
+		m_treeView->setCurrentIndex(index);
+	}
 	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 	m_treeView->header()->resizeSection(0, m_treeView->header()->sectionSize(0) * 1.2);
 }
@@ -707,7 +748,7 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 		caseSensitiveAction = new QAction(i18n("Case Sensitive"), this);
 		caseSensitiveAction->setCheckable(true);
 		caseSensitiveAction->setChecked(false);
-		connect(caseSensitiveAction, &QAction::triggered, this, [=]() {
+		connect(caseSensitiveAction, &QAction::triggered, this, [=, this]() {
 			if (!m_leFilter->text().isEmpty())
 				filterTextChanged(m_leFilter->text());
 		});
@@ -715,7 +756,7 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 		matchCompleteWordAction = new QAction(i18n("Match Complete Word"), this);
 		matchCompleteWordAction->setCheckable(true);
 		matchCompleteWordAction->setChecked(false);
-		connect(matchCompleteWordAction, &QAction::triggered, this, [=]() {
+		connect(matchCompleteWordAction, &QAction::triggered, this, [=, this]() {
 			if (!m_leFilter->text().isEmpty())
 				filterTextChanged(m_leFilter->text());
 		});
@@ -724,7 +765,7 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 		fuzzyMatchingAction = new QAction(i18n("Fuzzy Matching"), this);
 		fuzzyMatchingAction->setCheckable(true);
 		fuzzyMatchingAction->setChecked(true);
-		connect(fuzzyMatchingAction, &QAction::triggered, this, [=]() {
+		connect(fuzzyMatchingAction, &QAction::triggered, this, [=, this]() {
 			bool enabled = !fuzzyMatchingAction->isChecked();
 			caseSensitiveAction->setEnabled(enabled);
 			matchCompleteWordAction->setEnabled(enabled);
@@ -878,8 +919,8 @@ void ProjectExplorer::selectionChanged(const QItemSelection& selected, const QIt
 
 	const auto& items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	for (const auto& index : items) {
-		aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	for (const auto& item : items) {
+		aspect = static_cast<AbstractAspect*>(item.internalPointer());
 		QDEBUG("items ASPECT =" << aspect)
 		selectedAspects << aspect;
 	}
@@ -1062,20 +1103,20 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 			writer->writeEndElement();
 		}
 
-		const auto& index = model->modelIndexOfAspect(aspect);
-		if (model->rowCount(index) > 0 && m_treeView->isExpanded(index)) {
+		const auto& aindex = model->modelIndexOfAspect(aspect);
+		if (model->rowCount(aindex) > 0 && m_treeView->isExpanded(aindex)) {
 			writer->writeStartElement(QStringLiteral("expanded"));
 			writer->writeAttribute(QStringLiteral("path"), path);
 			writer->writeEndElement();
 		}
 
-		if (selectedRows.indexOf(index) != -1) {
+		if (selectedRows.indexOf(aindex) != -1) {
 			writer->writeStartElement(QStringLiteral("selected"));
 			writer->writeAttribute(QStringLiteral("path"), path);
 			writer->writeEndElement();
 		}
 
-		if (index == m_treeView->currentIndex()) {
+		if (aindex == m_treeView->currentIndex()) {
 			writer->writeStartElement(QStringLiteral("current"));
 			writer->writeAttribute(QStringLiteral("path"), path);
 			writer->writeEndElement();
@@ -1281,8 +1322,10 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	for (const auto& index : selected)
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 
-	m_treeView->setCurrentIndex(currentIndex);
-	m_treeView->scrollTo(currentIndex);
+	if (currentIndex.isValid()) {
+		m_treeView->setCurrentIndex(currentIndex);
+		m_treeView->scrollTo(currentIndex);
+	}
 	auto* aspect = static_cast<AbstractAspect*>(currentIndex.internalPointer());
 	if (aspect)
 		aspect->setSelected(true);

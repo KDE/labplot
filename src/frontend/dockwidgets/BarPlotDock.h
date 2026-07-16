@@ -15,6 +15,7 @@
 #include "ui_barplotdock.h"
 
 class BackgroundWidget;
+class DataColumnsWidget;
 class ErrorBarWidget;
 class LineWidget;
 class TreeViewComboBox;
@@ -40,16 +41,11 @@ private:
 	QList<BarPlot*> m_barPlots;
 	BarPlot* m_barPlot{nullptr};
 	TreeViewComboBox* cbXColumn{nullptr};
-
-	QGridLayout* m_gridLayout;
-	QPushButton* m_buttonNew;
-	QVector<TreeViewComboBox*> m_dataComboBoxes;
-	QVector<QPushButton*> m_removeButtons;
+	DataColumnsWidget* m_dataColumnsWidget{nullptr};
 
 	void setModel();
 	void load();
 	void loadConfig(KConfig&);
-	void setDataColumns() const;
 	void loadDataColumns();
 
 private Q_SLOTS:
@@ -57,9 +53,7 @@ private Q_SLOTS:
 	//"General"-tab
 	void xColumnChanged(const QModelIndex&);
 	void removeXColumn();
-	void addDataColumn();
-	void removeDataColumn();
-	void dataColumnChanged(const QModelIndex&);
+	void dataColumnsChanged(QVector<const AbstractColumn*>);
 	void typeChanged(int);
 	void orientationChanged(int);
 

@@ -16,21 +16,16 @@
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <QCompleter>
-#include <QKeyEvent>
 #include <QMenu>
 #include <QWidgetAction>
 
 #include <KLocalizedString>
 
 /*!
-  \class XYFunctionCurveDock
-  \brief Provides a widget for editing the properties of the XYFunctionCurves
-		(2D-curves defined by a mathematical function) currently selected in
-		the project explorer.
-
-  \ingroup frontend
+	\class XYFunctionCurveDock
+	\brief Provides a widget for editing the properties of \c XYFunctionCurve.
+	\ingroup frontend
 */
-
 XYFunctionCurveDock::XYFunctionCurveDock(QWidget* parent)
 	: XYAnalysisCurveDock(parent) {
 	// remove the tab "Error bars"
@@ -44,7 +39,7 @@ void XYFunctionCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	m_gridLayoutVariables = new QGridLayout(uiGeneralTab.frameVariables);
@@ -73,6 +68,8 @@ void XYFunctionCurveDock::setupGeneral() {
 	uiGeneralTab.bAddVariable->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	uiGeneralTab.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
 	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.bAddVariable, &QPushButton::clicked, this, &XYFunctionCurveDock::addVariable);
@@ -183,14 +180,12 @@ void XYFunctionCurveDock::addVariable() {
 	le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 	auto* validator = new QRegularExpressionValidator(QRegularExpression(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
 	le->setValidator(validator);
-	le->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding));
 	connect(le, &QLineEdit::textChanged, this, &XYFunctionCurveDock::variableNameChanged);
 	m_gridLayoutVariables->addWidget(le, row, 0, 1, 1);
 	m_variableLineEdits << le;
 
 	// combo box for the data column
 	auto* cb{new TreeViewComboBox()};
-	cb->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &XYFunctionCurveDock::variableColumnChanged);
 	m_gridLayoutCurves->addWidget(cb, row, 2, 1, 1);
 	m_variableComboBoxes << cb;
@@ -291,6 +286,7 @@ void XYFunctionCurveDock::variableColumnChanged(const QModelIndex& index) {
 }
 
 void XYFunctionCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	const auto& function = uiGeneralTab.teFunction->document()->toPlainText();
 
 	// determine variable names and data vectors of the specified curves
@@ -353,7 +349,7 @@ void XYFunctionCurveDock::insertConstant(const QString& constantsName) {
 	uiGeneralTab.teFunction->insertPlainText(constantsName);
 }
 
-void XYFunctionCurveDock::enableRecalculate() const {
+void XYFunctionCurveDock::enableRecalculate() {
 	// check whether the formula expressions are correct
 	const bool valid = uiGeneralTab.teFunction->isValid();
 	uiGeneralTab.pbRecalculate->setEnabled(valid);
@@ -366,4 +362,8 @@ void XYFunctionCurveDock::enableRecalculate() const {
 void XYFunctionCurveDock::curveFunctionDataChanged(const XYFunctionCurve::FunctionData&) {
 	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.teFunction->setText(m_functionCurve->function());
+}
+
+void XYFunctionCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
 }

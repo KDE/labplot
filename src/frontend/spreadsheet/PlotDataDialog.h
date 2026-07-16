@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for generating plots for the spreadsheet data
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -52,6 +52,7 @@ private:
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
 	AbstractAspect* m_lastAddedCurve{nullptr};
+	Column* m_tickLabelsColumn{nullptr};
 	Plot::PlotType m_plotType;
 	bool m_basicPlotType{false};
 
@@ -67,6 +68,7 @@ private:
 
 	void addCurvesToPlot(CartesianPlot*);
 	void addCurvesToPlots(Worksheet*);
+	void addCurvesToWorksheets(AbstractAspect*);
 
 	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*);
 	void addSingleSourceColumnPlot(const Column* column, CartesianPlot*);
@@ -75,6 +77,7 @@ private:
 	Column* columnFromName(const QString&) const;
 	void adjustWorksheetSize(Worksheet*) const;
 	void setAxesTitles(CartesianPlot*, const QString& yColumnName = QString()) const;
+	void adjustPadding(CartesianPlot*, const QString& yColumnName, bool firstColumn = false, bool lastColumn = false) const;
 
 	void setAxesColumnLabels(CartesianPlot*, const QString& columnName);
 	void setAxesColumnLabels(CartesianPlot*, const Column*);

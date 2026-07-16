@@ -25,6 +25,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
@@ -463,7 +464,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: check more curve properties
 
 	auto* symbol = curve->symbol();
@@ -523,7 +524,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: check more curve properties
 
 	symbol = curve->symbol();
@@ -596,7 +597,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: more curve properties
 
 	auto* symbol = curve->symbol();
@@ -646,7 +647,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
-	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	QCOMPARE(curve->value()->type(), Value::Type::NoValues);
 	// TODO: more curve properties
 
 	symbol = curve->symbol();
@@ -791,6 +792,35 @@ void ProjectImportTest::testOriginBarPlot() {
 	QCOMPARE(barPlot->coordinateSystemIndex(), plot->defaultCoordinateSystemIndex());
 	QCOMPARE(barPlot->orientation(), BarPlot::Orientation::Vertical);
 	// TODO: check more properties of the barPlot
+}
+
+/*!
+ * test the import of "stacked plots",
+ * the test file was taken from https://blog.originlab.com/stack-lines-in-groups-with-y-offset.
+ */
+void ProjectImportTest::testOriginStackedPlots() {
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/Stack_lines_with_Y_offset.opj")));
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	// check the project tree for the imported project
+	// spreadsheet
+	auto* sheet = dynamic_cast<Spreadsheet*>(project.child<AbstractAspect>(0));
+	QVERIFY(sheet != nullptr);
+	QCOMPARE(sheet->columnCount(), 81);
+	QCOMPARE(sheet->rowCount(), 300);
+
+	// worksheet
+	auto* ws = dynamic_cast<Worksheet*>(project.child<AbstractAspect>(1));
+	QVERIFY(ws != nullptr);
+	QCOMPARE(ws->name(), QLatin1String("Graph1"));
+
+	auto* plot = dynamic_cast<CartesianPlot*>(ws->child<CartesianPlot>(0));
+	QVERIFY(plot != nullptr);
+	QCOMPARE(plot->name(), i18n("Plot%1", QString::number(1)));
+
+	// TODO: add more check for the created line plots and also check the stacked offset property
 }
 
 /*!
@@ -1120,38 +1150,27 @@ void ProjectImportTest::testParseOriginTags_data() {
 	QTest::addColumn<QString>("originTag");
 	QTest::addColumn<QString>("labPlotHTML");
 
-	QTest::newRow("bold") << "\\b(bold)"
-						  << "<b>bold</b>";
+	QTest::newRow("bold") << "\\b(bold)" << "<b>bold</b>";
 
-	QTest::newRow("italic") << "\\i(italic)"
-							<< "<i>italic</i>";
+	QTest::newRow("italic") << "\\i(italic)" << "<i>italic</i>";
 
-	QTest::newRow("strike through") << "\\s(strike through)"
-									<< "<s>strike through</s>";
+	QTest::newRow("strike through") << "\\s(strike through)" << "<s>strike through</s>";
 
-	QTest::newRow("underlined") << "\\u(underlined)"
-								<< "<u>underlined</u>";
+	QTest::newRow("underlined") << "\\u(underlined)" << "<u>underlined</u>";
 
-	QTest::newRow("greek char") << "\\g(a)"
-								<< "&alpha;";
+	QTest::newRow("greek char") << "\\g(a)" << "&alpha;";
 
-	QTest::newRow("sub-script") << "a\\-(b)"
-								<< "a<sub>b</sub>";
+	QTest::newRow("sub-script") << "a\\-(b)" << "a<sub>b</sub>";
 
-	QTest::newRow("super-script") << "a\\+(b)"
-								  << "a<sup>b</sup>";
+	QTest::newRow("super-script") << "a\\+(b)" << "a<sup>b</sup>";
 
-	QTest::newRow("set-font") << "\\f:dejavu sans(text)"
-							  << "<font face=\"dejavu sans\">text</font>";
+	QTest::newRow("set-font") << "\\f:dejavu sans(text)" << "<font face=\"dejavu sans\">text</font>";
 
-	QTest::newRow("font-size") << "some \\p200(big) text"
-							   << "some <span style=\"font-size: 200%\">big</span> text";
+	QTest::newRow("font-size") << "some \\p200(big) text" << "some <span style=\"font-size: 200%\">big</span> text";
 
-	QTest::newRow("color") << "some \\c15(colored) text"
-						   << "some <span style=\"color: #8000ff\">colored</span> text";
+	QTest::newRow("color") << "some \\c15(colored) text" << "some <span style=\"color: #8000ff\">colored</span> text";
 
-	QTest::newRow("nested-non-tag-parenthesis") << "\\b(text (c) and (fh) and a(t) and empty ())"
-												<< "<b>text (c) and (fh) and a(t) and empty ()</b>";
+	QTest::newRow("nested-non-tag-parenthesis") << "\\b(text (c) and (fh) and a(t) and empty ())" << "<b>text (c) and (fh) and a(t) and empty ()</b>";
 
 	QTest::newRow("nested-tags") << "\\b(bold text with some \\i(italic) bits and some \\c15(color)) "
 									"then a change of \\f:dejavu sans(font)"

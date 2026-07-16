@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -61,7 +61,7 @@ public:
 	void setPlotInteractive(bool);
 	void suppressSelectionChangedEvent(bool);
 	WorksheetElement* selectedElement() const;
-	QList<QGraphicsItem*> selectedItems() const;
+	const QList<QGraphicsItem*>& selectedItems() const;
 	double zoomFactor() const;
 	void processResize();
 
@@ -205,6 +205,7 @@ private:
 	QAction* customGridAction{nullptr};
 	QAction* snapToGridAction{nullptr};
 
+	QActionGroup* zoomFitActionGroup{nullptr};
 	QActionGroup* magnificationActionGroup{nullptr};
 
 	QAction* plotsInteractiveAction{nullptr};

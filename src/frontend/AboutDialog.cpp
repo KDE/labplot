@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Custom about dialog
     --------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -53,7 +53,14 @@
 #endif
 #include <gsl/gsl_version.h>
 #ifdef HAVE_LIBORIGIN
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include <OriginFile.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #endif
 #ifdef HAVE_HDF5
 #include <H5public.h>
@@ -64,8 +71,18 @@
 #ifdef HAVE_MATIO
 #include <matio_pubconf.h>
 #endif
+#ifdef HAVE_PARQUET
+#include <arrow/util/config.h>
+#endif
 #ifdef HAVE_MCAP
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include "mcap/types.hpp"
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 /*!
@@ -102,7 +119,7 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	linkCopyLayout->addWidget(copyCiteButton);
 	linkCopyLayout->addWidget(donateButton);
 
-	((QVBoxLayout *)layout())->insertLayout(1, linkCopyLayout);
+	static_cast<QVBoxLayout *>(layout())->insertLayout(1, linkCopyLayout);
 
 	// Find and hide the "Copy to Clipboard" button
 	auto buttons = findChildren<QPushButton *>();
@@ -138,8 +155,8 @@ QString AboutDialog::systemInfo() {
 	const QString buildType(i18n("Debug build") + QLatin1Char(' ') + QLatin1String(GIT_COMMIT));
 #endif
 
-	QLocale locale = QLocale();
-	const QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(", ") + QLocale::countryToString(locale.country());
+	//QLocale locale = QLocale();
+	// const QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(", ") + QLocale::countryToString(locale.country());
 
 	QLocale systemLocale = QLocale::system();
 	const QString systemLanguage = QLocale::languageToString(systemLocale.language()) + QStringLiteral(", ") + QLocale::countryToString(systemLocale.country());
@@ -342,6 +359,12 @@ QVector<QStringList> AboutDialog::components() {
 	version = missing;
 #endif
 	components << (QStringList() << QLatin1String("Vector BLF") << i18n("Binary Log File (BLF) file support") << version << QStringLiteral("https://github.com/Technica-Engineering/vector_blf"));
+#ifdef HAVE_PARQUET
+	version = QLatin1String(ARROW_VERSION_STRING);
+#else
+	version = missing;
+#endif
+	components << (QStringList() << QLatin1String("Apache Parquet/Arrow") << i18n("Apache Parquet, Arrow IPC (Feather) and Apache ORC file support") << version << QStringLiteral("https://arrow.apache.org"));
 
 	// compiler info
 	components << (QStringList() << i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER_ID) << QLatin1String(CXX_COMPILER_VERSION) << QString() << QString());

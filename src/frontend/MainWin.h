@@ -98,6 +98,7 @@ private:
 	QTimer m_autoSaveTimer;
 	// bool m_showWelcomeScreen{false};
 	// bool m_saveWelcomeScreen{true};
+	bool m_showWhatsNew{false};
 	int undoStackIndexLastSave{0};
 	MemoryWidget* m_memoryInfoWidget{nullptr};
 	// QQuickWidget* m_welcomeWidget{nullptr};
@@ -152,7 +153,7 @@ private Q_SLOTS:
 
 	bool newProject(bool createInitialContent = true);
 	void openProject();
-	void openProject(const QString&);
+	bool openProject(const QString&);
 	void openRecentProject(const QUrl&);
 	bool closeProject();
 	bool saveProject();

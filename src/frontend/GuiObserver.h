@@ -27,6 +27,7 @@ class LollipopPlotDock;
 class BoxPlotDock;
 class KDEPlotDock;
 class QQPlotDock;
+class ParetoChartDock;
 class ProcessBehaviorChartDock;
 class HypothesisTestDock;
 class CartesianPlotLegendDock;
@@ -54,6 +55,7 @@ class XYFourierTransformCurveDock;
 class XYHilbertTransformCurveDock;
 class XYConvolutionCurveDock;
 class XYCorrelationCurveDock;
+class XYBaselineCorrectionCurveDock;
 class WorksheetDock;
 class ImageDock;
 class LabelWidget;
@@ -120,6 +122,7 @@ private:
 	// continuous improvement plots
 	ProcessBehaviorChartDock* m_processBehaviorChartDock{nullptr};
 	RunChartDock* m_runChartDock{nullptr};
+	ParetoChartDock* m_paretoChartDock{nullptr};
 
 	// analysis plots
 	XYLineSimplificationCurveDock* m_xyLineSimplificationCurveDock{nullptr};
@@ -133,6 +136,7 @@ private:
 	XYHilbertTransformCurveDock* m_xyHilbertTransformCurveDock{nullptr};
 	XYConvolutionCurveDock* m_xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
+	XYBaselineCorrectionCurveDock* m_xyBaselineCorrectionCurveDock{nullptr};
 
 	// statistical analysis
 	HypothesisTestDock* m_hypothesisTestDock{nullptr};

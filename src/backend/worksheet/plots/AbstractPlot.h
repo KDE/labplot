@@ -15,7 +15,6 @@
 #include "backend/worksheet/WorksheetElementContainer.h"
 
 class AbstractCoordinateSystem;
-class PlotArea;
 class TextLabel;
 class AbstractPlotPrivate;
 
@@ -34,7 +33,6 @@ public:
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	AbstractCoordinateSystem* coordinateSystem(int index) const;
 	QVector<AbstractCoordinateSystem*> coordinateSystems() const;
-	PlotArea* plotArea();
 	TextLabel* title();
 
 	BASIC_D_ACCESSOR_DECL(double, horizontalPadding, HorizontalPadding)
@@ -55,7 +53,6 @@ Q_SIGNALS:
 protected:
 	AbstractPlot(const QString&, AbstractPlotPrivate*, AspectType);
 	QVector<AbstractCoordinateSystem*> m_coordinateSystems;
-	PlotArea* m_plotArea{nullptr};
 	TextLabel* m_title{nullptr};
 
 private:

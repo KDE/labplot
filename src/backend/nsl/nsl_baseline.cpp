@@ -3,17 +3,21 @@
 	Project              : LabPlot
 	Description          : NSL baseline detection and subtraction functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2023-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "nsl_baseline.h"
+#include "nsl_common.h"
 #include "nsl_stats.h"
 
 #include <QtGlobal>
 
+#include <cmath>
 #include <gsl/gsl_fit.h>
 #include <gsl/gsl_statistics_double.h>
+#include <vector>
 
 // macOS builds on gitlab CI complain about missing Eigen/Sparse while having Eigen3	-> disable EIGEN3 on macOS for the moment
 #if defined(Q_OS_MACOS)
@@ -24,6 +28,7 @@
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif
 #include <Eigen/Sparse>
 #include <Eigen/SparseCholesky>
@@ -40,47 +45,157 @@
 #include <cstring> // memcpy
 #endif
 
-#include <iostream>
+const char* nsl_baseline_subtraction_method_name[] =
+	{"arPLS", i18n("Minimum"), i18n("Maximum"), i18n("Mean"), i18n("Median"), i18n("End Points"), i18n("Linear Regression")};
 
 void nsl_baseline_remove_minimum(double* data, const size_t n) {
+	// Handle empty data
+	if (n == 0) {
+		return;
+	}
+
+	// Handle single element case
+	if (n == 1) {
+		// For single element, subtracting minimum (which is the element itself) results in 0
+		if (std::isfinite(data[0])) {
+			data[0] = 0.0;
+		}
+		return;
+	}
+
+	// Validate values before computing minimum
+	for (size_t i = 0; i < n; i++) {
+		if (!std::isfinite(data[i])) {
+			return; // Can't compute minimum with NaN or Infinity values
+		}
+	}
+
 	const double min = nsl_stats_minimum(data, n, nullptr);
 
-	for (size_t i = 0; i < n; i++)
+	for (size_t i = 0; i < n; i++) {
 		data[i] -= min;
+	}
 }
 
 void nsl_baseline_remove_maximum(double* data, const size_t n) {
+	// Handle empty data
+	if (n == 0) {
+		return;
+	}
+
+	// Handle single element case
+	if (n == 1) {
+		// For single element, subtracting maximum (which is the element itself) results in 0
+		if (std::isfinite(data[0])) {
+			data[0] = 0.0;
+		}
+		return;
+	}
+
+	// Validate values before computing maximum
+	for (size_t i = 0; i < n; i++) {
+		if (!std::isfinite(data[i])) {
+			return; // Can't compute maximum with NaN or Infinity values
+		}
+	}
+
 	const double max = nsl_stats_maximum(data, n, nullptr);
 
-	for (size_t i = 0; i < n; i++)
+	for (size_t i = 0; i < n; i++) {
 		data[i] -= max;
+	}
 }
 
 void nsl_baseline_remove_mean(double* data, const size_t n) {
+	// Handle empty data
+	if (n == 0) {
+		return;
+	}
+
+	// Handle single element case
+	if (n == 1) {
+		// For single element, subtracting mean (which is the element itself) results in 0
+		if (std::isfinite(data[0])) {
+			data[0] = 0.0;
+		}
+		return;
+	}
+
+	// Validate values before computing mean
+	for (size_t i = 0; i < n; i++) {
+		if (!std::isfinite(data[i])) {
+			return; // Can't compute mean with NaN or Infinity values
+		}
+	}
+
 	const double mean = gsl_stats_mean(data, 1, n);
+	if (!std::isfinite(mean)) {
+		return;
+	}
 
 	for (size_t i = 0; i < n; i++)
 		data[i] -= mean;
 }
 
 void nsl_baseline_remove_median(double* data, const size_t n) {
-	// copy data
-	double* tmp_data = (double*)malloc(n * sizeof(double));
-	if (!tmp_data)
+	// Handle empty data
+	if (n == 0) {
 		return;
-	memcpy(tmp_data, data, n * sizeof(double));
+	}
 
-	const double median = gsl_stats_median(tmp_data, 1, n); // rearranges tmp_data
-	// printf("MEDIAN = %g\n", median);
+	// Handle single element case
+	if (n == 1) {
+		// For single element, subtracting median (which is the element itself) results in 0
+		if (std::isfinite(data[0])) {
+			data[0] = 0.0;
+		}
+		return;
+	}
+
+	// Validate values before computing median
+	for (size_t i = 0; i < n; i++) {
+		if (!std::isfinite(data[i])) {
+			return; // Can't compute median with NaN or Infinity values
+		}
+	}
+
+	// copy data using vector to avoid manual malloc/free handling
+	std::vector<double> tmp_data(data, data + n);
+
+	const double median = gsl_stats_median(tmp_data.data(), 1, n); // rearranges tmp_data
+
+	// Check for invalid median result
+	if (!std::isfinite(median)) {
+		return;
+	}
 
 	for (size_t i = 0; i < n; i++)
 		data[i] -= median;
-
-	free(tmp_data);
 }
 
 /* do a linear interpolation using first and last point and subtract that */
 int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size_t n) {
+	// Handle empty data
+	if (n == 0) {
+		return -1;
+	}
+
+	// Validate values
+	for (size_t i = 0; i < n; i++) {
+		if (!std::isfinite(xdata[i]) || !std::isfinite(ydata[i])) {
+			return -1;
+		}
+	}
+
+	// Handle single point case
+	if (n == 1) {
+		// For single point, subtracting baseline (which is the point itself) results in 0
+		if (std::isfinite(ydata[0])) {
+			ydata[0] = 0.0;
+		}
+		return 0;
+	}
+
 	// not possible
 	if (xdata[0] == xdata[n - 1])
 		return -1;
@@ -96,6 +211,32 @@ int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size
 
 /* do a linear regression and subtract that */
 int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
+	// Handle empty data
+	if (n == 0) {
+		return -1;
+	}
+
+	// Handle single point case
+	if (n == 1) {
+		// For single point, subtracting baseline (which is the point itself) results in 0
+		if (std::isfinite(ydata[0])) {
+			ydata[0] = 0.0;
+		}
+		return 0;
+	}
+
+	// Need at least 2 points for linear regression
+	if (n < 2) {
+		return -1;
+	}
+
+	// Validate inputs - check for NaN and Infinity
+	for (size_t i = 0; i < n; i++) {
+		if (!std::isfinite(xdata[i]) || !std::isfinite(ydata[i])) {
+			return -1;
+		}
+	}
+
 	double c0, c1, cov00, cov01, cov11, chisq;
 	gsl_fit_linear(xdata, 1, ydata, 1, n, &c0, &c1, &cov00, &cov01, &cov11, &chisq);
 
@@ -112,6 +253,54 @@ int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 /* see https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract */
 double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, double lambda, int niter) {
 	double crit = 1.;
+
+	// Handle empty data
+	if (n == 0) {
+		return -1.; // Need at least 1 point
+	}
+
+	// Handle single point case
+	if (n == 1) {
+		// For single point, subtracting baseline (which is the point itself) results in 0
+		if (!std::isfinite(data[0])) {
+			return -1.;
+		}
+		data[0] = 0.0;
+		return 0.;
+	}
+
+	// Handle two point case
+	if (n == 2) {
+		// For two points, subtracting the line through them results in 0 for both points
+		// This is a simple linear interpolation
+		double y0 = data[0];
+		double y1 = data[1];
+		if (!std::isfinite(y0) || !std::isfinite(y1)) {
+			return -1.;
+		}
+		double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
+		data[0] -= y0;
+		data[1] -= (y0 + slope);
+		return 0.;
+	}
+
+	// Validate inputs
+	if (n < 3) {
+		return -1.; // Need at least 3 points for D differences
+	}
+	if (p <= 0 || lambda <= 0) {
+		return -1.;
+	}
+	if (niter < 1) {
+		return -1.;
+	}
+
+	// Validate data - check for NaN and Infinity
+	for (size_t i = 0; i < n; i++) {
+		if (!std::isfinite(data[i])) {
+			return -1.;
+		}
+	}
 
 #ifdef HAVE_EIGEN3
 	typedef Eigen::SparseMatrix<double> SMat; // declares a column-major sparse matrix type of double
@@ -155,12 +344,16 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 		// solve (W+H)z = W*data
 		Eigen::SimplicialLDLT<SMat> solver;
 		solver.compute(W + H);
-		if (solver.info() != Eigen::Success)
+		if (solver.info() != Eigen::Success) {
 			puts("compute(): decomposition failed\n");
+			return -1.;
+		}
 
 		z = solver.solve(W * d);
-		if (solver.info() != Eigen::Success)
+		if (solver.info() != Eigen::Success) {
 			puts("solve(): solving failed\n");
+			return -1.;
+		}
 
 		// std::cout << "z = " << z << std::endl;
 
@@ -193,8 +386,15 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 
 		// w_new = 1 / (1 + np.exp(2 * (d - (2*s - m))/s))
 		SVec wn(n);
-		for (size_t i = 0; i < n; ++i)
-			wn.insert(i) = 1. / (1. + exp(2. * (diff.coeffRef(i) - (2. * s - m)) / s));
+		for (size_t i = 0; i < n; ++i) {
+			// Check for division by zero or invalid values
+			if (s == 0 || std::isnan(s) || std::isinf(m)) {
+				// Use default weight if calculation would be invalid
+				wn.insert(i) = 1.;
+			} else {
+				wn.insert(i) = 1. / (1. + exp(2. * (diff.coeffRef(i) - (2. * s - m)) / s));
+			}
+		}
 		// std::cout << "wnvec = " << wnvec << std::endl;
 
 		// crit = norm(w_new - w) / norm(w)
@@ -258,6 +458,54 @@ void show_vector(gsl_vector* v, size_t n, char name) {
 // GSL version of ARPLS (much slower than Eigen3 version)
 double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, double lambda, int niter) {
 	double crit = 1.;
+
+	// Handle empty data
+	if (n == 0) {
+		return -1.; // Need at least 1 point
+	}
+
+	// Handle single point case
+	if (n == 1) {
+		// For single point, subtracting baseline (which is the point itself) results in 0
+		if (!std::isfinite(data[0])) {
+			return -1.;
+		}
+		data[0] = 0.0;
+		return 0.;
+	}
+
+	// Handle two point case
+	if (n == 2) {
+		// For two points, subtracting the line through them results in 0 for both points
+		// This is a simple linear interpolation
+		double y0 = data[0];
+		double y1 = data[1];
+		if (!std::isfinite(y0) || !std::isfinite(y1)) {
+			return -1.;
+		}
+		double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
+		data[0] -= y0;
+		data[1] -= (y0 + slope);
+		return 0.;
+	}
+
+	// Validate inputs
+	if (n < 3) {
+		return -1.; // Need at least 3 points for D differences
+	}
+	if (p <= 0 || lambda <= 0) {
+		return -1.;
+	}
+	if (niter < 1) {
+		return -1.;
+	}
+
+	// Validate data - check for NaN and Infinity
+	for (size_t i = 0; i < n; i++) {
+		if (!std::isfinite(data[i])) {
+			return -1.;
+		}
+	}
 
 #ifndef HAVE_EIGEN3
 	gsl_spmatrix* D = gsl_spmatrix_alloc(n, n - 2);
@@ -345,13 +593,13 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 		// gsl_linalg_HH_solve(AA, b, z);
 		//  sparse iterative solver: not working
 		/*		int iter = 0, maxiter = 10, status;
-				double tol = 1.0e-3;
-				do {
-					status = gsl_splinalg_itersolve_iterate(A, b, tol, z, work);
+			double tol = 1.0e-3;
+			do {
+				status = gsl_splinalg_itersolve_iterate(A, b, tol, z, work);
 
-					double residual = gsl_splinalg_itersolve_normr(work);
-					fprintf(stderr, "iter %d residual = %.12e\n", iter, residual);
-				} while (status == GSL_CONTINUE && ++iter < maxiter);
+				double residual = gsl_splinalg_itersolve_normr(work);
+				fprintf(stderr, "iter %d residual = %.12e\n", iter, residual);
+			} while (status == GSL_CONTINUE && ++iter < maxiter);
 		*/
 		// show_vector(z, n, 'z');
 
@@ -384,11 +632,15 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 		// printf("s = %g\n", s);
 
 		// w_new = 1 / (1 + np.exp(2 * (d - (2*s - m))/s))
-		for (size_t i = 0; i < n; ++i)
-			gsl_vector_set(w_new, i, 1. / (1. + exp(2. * (gsl_vector_get(diff, i) - (2. * s - m)) / s)));
-		// show_vector(w_new, n, 'n');
-
-		// crit = norm(w_new - w) / norm(w)
+		for (size_t i = 0; i < n; ++i) {
+			// Check for division by zero or invalid values
+			if (s == 0 || std::isnan(s) || std::sinf(m)) {
+				// Use default weight if calculation would be invalid
+				gsl_vector_set(w_new, i, 1.);
+			} else {
+				gsl_vector_set(w_new, i, 1. / (1. + exp(2. * (gsl_vector_get(diff, i) - (2. * s - m)) / s)));
+			}
+		}
 		double norm = 0.;
 		for (size_t i = 0; i < n; ++i) {
 			norm += gsl_pow_2(gsl_vector_get(w_new, i) - gsl_vector_get(w, i));
@@ -444,6 +696,36 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 }
 
 double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double lambda, int niter) {
+	// Handle empty data
+	if (n == 0) {
+		return -1.; // Need at least 1 point
+	}
+
+	// Handle single point case
+	if (n == 1) {
+		// For single point, subtracting baseline (which is the point itself) results in 0
+		if (!std::isfinite(data[0])) {
+			return -1.;
+		}
+		data[0] = 0.0;
+		return 0.;
+	}
+
+	// Handle two point case
+	if (n == 2) {
+		// For two points, subtracting the line through them results in 0 for both points
+		// This is a simple linear interpolation
+		double y0 = data[0];
+		double y1 = data[1];
+		if (!std::isfinite(y0) || !std::isfinite(y1)) {
+			return -1.;
+		}
+		double slope = (y1 - y0) / (1.0); // assuming x positions are 0 and 1
+		data[0] -= y0;
+		data[1] -= (y0 + slope);
+		return 0.;
+	}
+
 	// default values
 	if (p == 0)
 		p = 0.001;

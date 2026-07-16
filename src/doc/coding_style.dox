@@ -120,7 +120,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 	QString string;
 	DEBUG(" string : " << STDSTRING(string))
 @endcode
-* Use Qt functions for user messages: qDebug(), qWarning(), qCritical(), qFatal(). Check conditions with Q_ASSERT(cond) or Q_ASSERT_X(cond, where, what) and pointers with Q_CHECK_PTR(ptr).
+* Use Qt functions for user messages: qDebug(), qWarning(), qCritical(), qFatal(). Check conditions with Q_ASSERT(cond) or Q_ASSERT_X(cond, where, what), pointers in general with Q_ASSERT(ptr) and pointers with results of memory allocations with Q_CHECK_PTR(ptr).
 * Numeric limits should be using cmath +/-INFINITY and NAN for floating point types and C++ +/-std::numeric_limits<T>::min() & +/-std::numeric_limits<T>::max() for all types
 * Import C header (from GSL etc.) with extern statement. We use "std::" prefix (C++11) and try to use c-header <cmath> (std::abs(), DBL_MAX -> std::numeric_limits<double>::max(), std::round(), max() -> std::max(), std::isfinite(), std::isnan(), std::isinf()). Example:
 @code

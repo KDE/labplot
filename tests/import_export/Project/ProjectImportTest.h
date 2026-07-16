@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for project imports
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -30,6 +30,7 @@ private Q_SLOTS:
 	void testOrigin_2graphs();
 	void testOriginHistogram();
 	void testOriginBarPlot();
+	void testOriginStackedPlots();
 
 	// signgle/multi graph layers
 	void testOriginSingleLayerTwoAxes();

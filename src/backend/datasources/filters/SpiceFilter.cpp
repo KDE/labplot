@@ -81,11 +81,11 @@ int SpiceFilter::endRow() const {
 	return d->endRow;
 }
 
-QStringList SpiceFilter::vectorNames() const {
+const QStringList& SpiceFilter::vectorNames() const {
 	return d->vectorNames;
 }
 
-QVector<AbstractColumn::ColumnMode> SpiceFilter::columnModes() {
+const QVector<AbstractColumn::ColumnMode>& SpiceFilter::columnModes() {
 	return d->columnModes;
 }
 
@@ -188,7 +188,7 @@ void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 		return;
 	}
 
-	q->connect(&reader, &SpiceFileReader::processed, [=](double processed) {
+	q->connect(&reader, &SpiceFileReader::processed, [=, this](double processed) {
 		Q_EMIT q->completed(processed);
 	});
 

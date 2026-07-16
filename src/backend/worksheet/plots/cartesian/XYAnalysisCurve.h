@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all analysis curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -27,11 +27,6 @@ public:
 	enum class DataSourceType { Spreadsheet, Curve, Histogram };
 	Q_ENUM(DataSourceType)
 	enum class AnalysisAction {
-		LineSimplification,
-		Differentiation,
-		Integration,
-		Interpolation,
-		Smoothing,
 		FitLinear,
 		FitPower,
 		FitExp1,
@@ -43,7 +38,23 @@ public:
 		FitTanh,
 		FitErrFunc,
 		FitCustom,
-		FourierFilter
+		// ----
+		Differentiation,
+		Integration,
+		// ----
+		Interpolation,
+		Smoothing,
+		// ----
+		FourierFilter,
+		FourierTransform,
+		HilbertTransform,
+		// ----
+		Convolution,
+		Correlation,
+		// ----
+		LineSimplification,
+		BaselineCorrection,
+		Function
 	};
 	Q_ENUM(AnalysisAction)
 
@@ -79,6 +90,8 @@ public:
 	BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
 	POINTER_D_ACCESSOR_DECL(const XYCurve, dataSourceCurve, DataSourceCurve)
 	CLASS_D_ACCESSOR_DECL(QString, dataSourceCurvePath, DataSourceCurvePath)
+
+	BASIC_D_ACCESSOR_DECL(bool, autoRecalculate, AutoRecalculate)
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
@@ -116,6 +129,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void sourceDataChanged(); // emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
+	void autoRecalculateChanged(bool);
 	void dataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void dataSourceCurveChanged(const XYCurve*);
 	void xDataColumnChanged(const AbstractColumn*);

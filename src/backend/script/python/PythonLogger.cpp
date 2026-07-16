@@ -1,3 +1,14 @@
+/*
+	File                 : PythonLogger.cpp
+	Project              : LabPlot
+	Description          : Python Logger
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
+#include <backend/lib/macros.h>
+
 #include "PythonLogger.h"
 #include "PythonScriptRuntime.h"
 

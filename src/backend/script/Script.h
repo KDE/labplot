@@ -1,3 +1,12 @@
+/*
+	File                 : Script.h
+	Project              : LabPlot
+	Description          : Script
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #ifndef SCRIPT_H
 #define SCRIPT_H
 

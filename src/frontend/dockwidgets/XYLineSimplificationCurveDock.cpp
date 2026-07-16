@@ -16,22 +16,12 @@
 #include <QStatusBar>
 
 /*!
-  \class XYLineSimplificationCurveDock
- \brief  Provides a widget for editing the properties of the XYLineSimplificationCurves
-		(2D-curves defined by an line simplification) currently selected in
-		the project explorer.
-
-  If more than one curves are set, the properties of the first column are shown.
-  The changes of the properties are applied to all curves.
-  The exclusions are the name, the comment and the datasets (columns) of
-  the curves  - these properties can only be changed if there is only one single curve.
-
-  \ingroup frontend
+	\class XYLineSimplificationCurveDock
+	\brief  Provides a widget for editing the properties of \c XYLineSimplificationCurve.
+	\ingroup frontend
 */
-
-XYLineSimplificationCurveDock::XYLineSimplificationCurveDock(QWidget* parent, QStatusBar* sb)
-	: XYAnalysisCurveDock(parent)
-	, statusBar(sb) {
+XYLineSimplificationCurveDock::XYLineSimplificationCurveDock(QWidget* parent)
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -41,7 +31,7 @@ void XYLineSimplificationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate, uiGeneralTab.cbDataSourceType);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -179,6 +169,7 @@ void XYLineSimplificationCurveDock::setCurves(QList<XYCurve*> list) {
 void XYLineSimplificationCurveDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 	ui.retranslateUi(this);
+	XYAnalysisCurveDock::retranslateUi();
 
 	uiGeneralTab.cbMethod->clear();
 	for (int i = 0; i < NSL_GEOM_LINESIM_TYPE_COUNT; ++i)
@@ -365,6 +356,9 @@ void XYLineSimplificationCurveDock::updateTolerance() {
 	// m_lineSimplificationData.tolerance = nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	uiGeneralTab.sbTolerance->setValue(m_lineSimplificationData.tolerance);
 	DEBUG(Q_FUNC_INFO << ", tolerance value = " << m_lineSimplificationData.tolerance)
+
+	CONDITIONAL_LOCK_RETURN;
+
 	// update data of curves
 	for (auto* curve : m_curvesList)
 		static_cast<XYLineSimplificationCurve*>(curve)->setLineSimplificationData(m_lineSimplificationData);
@@ -569,18 +563,9 @@ void XYLineSimplificationCurveDock::tolerance2Changed(double value) {
 }
 
 void XYLineSimplificationCurveDock::recalculateClicked() {
-	// show a progress bar in the status bar
-	auto* progressBar = new QProgressBar();
-	progressBar->setMinimum(0);
-	progressBar->setMaximum(100);
-	connect(m_curve, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
-	statusBar->clearMessage();
-	statusBar->addWidget(progressBar, 1);
-
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYLineSimplificationCurve*>(curve)->setLineSimplificationData(m_lineSimplificationData);
-
-	statusBar->removeWidget(progressBar);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Status: %1", m_lineSimplificationCurve->lineSimplificationResult().status));

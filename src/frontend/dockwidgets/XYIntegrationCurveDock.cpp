@@ -21,19 +21,10 @@ extern "C" {
 }
 
 /*!
-  \class XYIntegrationCurveDock
- \brief  Provides a widget for editing the properties of the XYIntegrationCurves
-		(2D-curves defined by a integration) currently selected in
-		the project explorer.
-
-  If more than one curves are set, the properties of the first column are shown.
-  The changes of the properties are applied to all curves.
-  The exclusions are the name, the comment and the datasets (columns) of
-  the curves  - these properties can only be changed if there is only one single curve.
-
-  \ingroup frontend
+	\class XYIntegrationCurveDock
+	\brief  Provides a widget for editing the properties of \c XYIntegrationCurve.
+	\ingroup frontend
 */
-
 XYIntegrationCurveDock::XYIntegrationCurveDock(QWidget* parent)
 	: XYAnalysisCurveDock(parent) {
 }
@@ -45,7 +36,7 @@ void XYIntegrationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate, uiGeneralTab.cbDataSourceType);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -60,15 +51,14 @@ void XYIntegrationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
 
-	for (int i = 0; i < NSL_INT_NETHOD_COUNT; i++)
-		uiGeneralTab.cbMethod->addItem(i18n(nsl_int_method_name[i]));
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYIntegrationCurveDock::dataSourceTypeChanged);
@@ -312,6 +302,7 @@ void XYIntegrationCurveDock::absoluteChanged() {
 }
 
 void XYIntegrationCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
 
@@ -344,4 +335,12 @@ void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurv
 	this->absoluteChanged();
 
 	this->showIntegrationResult();
+}
+
+void XYIntegrationCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbMethod->clear();
+	for (int i = 0; i < NSL_INT_NETHOD_COUNT; i++)
+		uiGeneralTab.cbMethod->addItem(i18n(nsl_int_method_name[i]));
 }

@@ -304,19 +304,19 @@ void ErrorBarPrivate::painterPathForX(QPainterPath& path, const QVector<QPointF>
 	cSystem->mapLogicalToSceneDefaultMapping(elines);
 
 	// new painter path for the error bars
-	for (const auto& line : std::as_const(elines)) {
-		path.moveTo(line.p1());
-		path.lineTo(line.p2());
+	for (const auto& eline : std::as_const(elines)) {
+		path.moveTo(eline.p1());
+		path.lineTo(eline.p2());
 	}
 
 	// add caps for error bars
 	if (type == ErrorBar::Type::WithEnds) {
-		for (const auto& line : std::as_const(elines)) {
-			const auto& p1 = line.p1();
+		for (const auto& eline : std::as_const(elines)) {
+			const auto& p1 = eline.p1();
 			path.moveTo(QPointF(p1.x(), p1.y() - capSize / 2.));
 			path.lineTo(QPointF(p1.x(), p1.y() + capSize / 2.));
 
-			const auto& p2 = line.p2();
+			const auto& p2 = eline.p2();
 			path.moveTo(QPointF(p2.x(), p2.y() - capSize / 2.));
 			path.lineTo(QPointF(p2.x(), p2.y() + capSize / 2.));
 		}
@@ -415,30 +415,30 @@ void ErrorBarPrivate::painterPathForY(QPainterPath& path,
 	cSystem->mapLogicalToSceneDefaultMapping(elines);
 
 	// new painter path for the error bars
-	for (const auto& line : std::as_const(elines)) {
-		path.moveTo(line.p1());
-		path.lineTo(line.p2());
+	for (const auto& eline : std::as_const(elines)) {
+		path.moveTo(eline.p1());
+		path.lineTo(eline.p2());
 	}
 
 	// add caps for error bars
 	if (type == ErrorBar::Type::WithEnds) {
 		if (orientation == WorksheetElement::Orientation::Vertical) {
-			for (const auto& line : std::as_const(elines)) {
-				const auto& p1 = line.p1();
+			for (const auto& eline : std::as_const(elines)) {
+				const auto& p1 = eline.p1();
 				path.moveTo(QPointF(p1.x() - capSize / 2., p1.y()));
 				path.lineTo(QPointF(p1.x() + capSize / 2., p1.y()));
 
-				const auto& p2 = line.p2();
+				const auto& p2 = eline.p2();
 				path.moveTo(QPointF(p2.x() - capSize / 2., p2.y()));
 				path.lineTo(QPointF(p2.x() + capSize / 2., p2.y()));
 			}
 		} else {
-			for (const auto& line : std::as_const(elines)) {
-				const auto& p1 = line.p1();
+			for (const auto& eline : std::as_const(elines)) {
+				const auto& p1 = eline.p1();
 				path.moveTo(QPointF(p1.x(), p1.y() - capSize / 2.));
 				path.lineTo(QPointF(p1.x(), p1.y() + capSize / 2.));
 
-				const auto& p2 = line.p2();
+				const auto& p2 = eline.p2();
 				path.moveTo(QPointF(p2.x(), p2.y() - capSize / 2.));
 				path.lineTo(QPointF(p2.x(), p2.y() + capSize / 2.));
 			}

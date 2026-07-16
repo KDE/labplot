@@ -161,7 +161,7 @@ void TextLabel::init() {
 	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
-	connect(d->borderLine, &Line::updateRequested, [=] {
+	connect(d->borderLine, &Line::updateRequested, [=, this] {
 		d->recalcShapeAndBoundingRect();
 		Q_EMIT changed();
 	});
@@ -274,7 +274,7 @@ Line* TextLabel::borderLine() const {
 }
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateText)
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateTeXImage)
 void TextLabel::setBackgroundColor(const QColor color) {
 	QDEBUG(Q_FUNC_INFO << ", color = " << color)
 	Q_D(TextLabel);
@@ -474,8 +474,11 @@ QRectF TextLabelPrivate::size() {
 	double w, h;
 	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
 		// image size is in pixel, convert to scene units
-		w = teXImage.width() * teXImageScaleFactor;
-		h = teXImage.height() * teXImageScaleFactor;
+		const qreal imageDpr = (teXImage.devicePixelRatio() > 0.0) ? teXImage.devicePixelRatio() : 1.0;
+		const qreal effectiveZoom = (zoomFactor > 0.0) ? zoomFactor : 1.0;
+
+		w = (teXImage.width() / imageDpr) * teXImageScaleFactor / effectiveZoom;
+		h = (teXImage.height() / imageDpr) * teXImageScaleFactor / effectiveZoom;
 	} else {
 		// size is in points, convert to scene units
 		//  TODO: the shift and scaling is just a workaround to avoid the big bounding box
@@ -697,8 +700,11 @@ void TextLabelPrivate::updateBoundingRect() {
 		// image size is in pixel, convert to scene units.
 		// the image is scaled so we have a good image quality when the worksheet was zoomed,
 		// for the bounding rect we need to scale back since it's scaled again in paint() when drawing the rect
-		w = teXImage.width() * teXImageScaleFactor / zoomFactor;
-		h = teXImage.height() * teXImageScaleFactor / zoomFactor;
+		const qreal imageDpr = (teXImage.devicePixelRatio() > 0.0) ? teXImage.devicePixelRatio() : 1.0;
+		const qreal effectiveZoom = (zoomFactor > 0.0) ? zoomFactor : 1.0;
+
+		w = (teXImage.width() / imageDpr) * teXImageScaleFactor / effectiveZoom;
+		h = (teXImage.height() / imageDpr) * teXImageScaleFactor / effectiveZoom;
 	} else {
 		// size is in points, convert to scene units
 		// QDEBUG(" BOUNDING RECT = " << m_textItem->scaledBoundingRect())
@@ -725,6 +731,10 @@ void TextLabelPrivate::updateBoundingRect() {
 }
 
 void TextLabelPrivate::updateTeXImage() {
+	DEBUG(Q_FUNC_INFO)
+	if (textWrapper.mode != TextLabel::Mode::LaTeX)
+		return;
+
 	if (zoomFactor == -1.0) {
 		// the view was not zoomed after the label was added so the zoom factor is not set yet.
 		// determine the current zoom factor in the view and use it
@@ -1142,6 +1152,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool TextLabel::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	if (!readBasicAttributes(reader))
 		return false;
 
@@ -1245,7 +1256,8 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("Label"));
 	// TODO: dark mode support?
 	d->fontColor = group.readEntry(QStringLiteral("FontColor"), QColor(Qt::black)); // used when it's latex text
-	d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::transparent)); // used when it's latex text
+	setBackgroundColor(group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::transparent))); // used when it's latex text
+
 	if (d->textWrapper.mode == TextLabel::Mode::Text && !d->textWrapper.text.isEmpty()) {
 		// To set the color in a html text, a QTextEdit must be used, QTextDocument is not enough
 		QTextEdit te;

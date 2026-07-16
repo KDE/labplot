@@ -56,7 +56,6 @@
 #include "src/backend/core/column/ColumnStringIO.h"
 #include "src/backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "src/backend/worksheet/Line.h"
-#include "src/backend/worksheet/plots/PlotArea.h"
 #include "src/backend/lib/Range.h"
 #include "src/backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "src/backend/worksheet/plots/cartesian/Symbol.h"

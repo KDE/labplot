@@ -196,19 +196,6 @@ bool DatapickerImage::printPreview() const {
 	return dlg->exec();
 }
 
-/*!
-	Selects or deselects the Datapicker/DatapickerImage in the project explorer.
-	This function is called in \c DatapickerImageView.
-	The DatapickerImage gets deselected if there are selected items in the view,
-	and selected if there are no selected items in the view.
-*/
-void DatapickerImage::setSelectedInView(const bool b) {
-	if (b)
-		Q_EMIT childAspectSelectedInView(this);
-	else
-		Q_EMIT childAspectDeselectedInView(this);
-}
-
 void DatapickerImage::setSegmentsHoverEvent(const bool on) {
 	m_segments->setAcceptHoverEvents(on);
 }
@@ -509,7 +496,7 @@ bool DatapickerImage::addChild(AbstractAspect* child) {
 
 void DatapickerImage::datapickerPointChanged(const DatapickerPoint* point) {
 	const auto index = indexOfChild<DatapickerPoint>(point, AbstractAspect::ChildIndexFlag::IncludeHidden);
-	assert(index < 3);
+	Q_ASSERT(index < 3);
 	if (index >= 0 && index < 3) {
 		auto axisPoints = this->axisPoints();
 		axisPoints.scenePos[index].setX(point->position().x());

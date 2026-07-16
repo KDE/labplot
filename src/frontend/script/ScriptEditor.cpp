@@ -1,6 +1,21 @@
+/*
+	File                 : ScriptEditor.cpp
+	Project              : LabPlot
+	Description          : Script editor
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
+#include "ScriptEditor.h"
+#include "backend/script/Script.h"
+#include <backend/lib/macros.h>
+
 #include <KTextEditor/Editor>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
+#include <KConfig>
+#include <KConfigGroup>
 
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -14,137 +29,133 @@
 #include <QObject>
 #include <QPlainTextEdit>
 
-#include <KConfig>
-#include <KConfigGroup>
-
-#include "ScriptEditor.h"
-#include "backend/script/Script.h"
-
 ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
-    : QWidget(parent)
-    , m_script(script) {
+	: QWidget(parent), m_script(script) {
 
-    ui.setupUi(this);
-    m_kTextEditorView = m_script->kTextEditorDocument()->createView(this);
-    m_kTextEditorView->setContextMenu(m_kTextEditorView->defaultContextMenu(nullptr));
-    ui.editorParent->layout()->addWidget(m_kTextEditorView);
-    
-    KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("ScriptEditor"));
+	ui.setupUi(this);
+	m_kTextEditorView = m_script->kTextEditorDocument()->createView(this);
+	m_kTextEditorView->setContextMenu(m_kTextEditorView->defaultContextMenu(nullptr));
+	ui.editorParent->layout()->addWidget(m_kTextEditorView);
+
+	KConfig config;
+	auto group = config.group(QStringLiteral("ScriptEditor"));
 	// we dont manage default editor font or themes ourselves, so no need to check our config
-    setOutputFont(group.readEntry(QStringLiteral("OutputFont"), QFont(QStringLiteral("monospace"), 10)));
-    setSplitterState(group.readEntry(QStringLiteral("SplitterState"), splitterState())); // need reasonable default for splitter
+	setOutputFont(group.readEntry(QStringLiteral("OutputFont"), QFont(QStringLiteral("monospace"), 10)));
+	setSplitterState(group.readEntry(QStringLiteral("SplitterState"), splitterState())); // need reasonable default for splitter
 
-    initActions();
-    
-    connect(m_script, &Script::requestProjectContextMenu, this, &ScriptEditor::createContextMenu);
-    connect(m_script, &Script::viewPrint, [kTextEditorView = m_kTextEditorView] {
-        kTextEditorView->print();
-    });
-    connect(m_script, &Script::viewPrintPreview, [kTextEditorView = m_kTextEditorView] {
-        kTextEditorView->printPreview();
-    });
+	initActions();
 
-    ui.output->setReadOnly(true);
+	connect(m_script, &Script::requestProjectContextMenu, this, &ScriptEditor::createContextMenu);
+	connect(m_script, &Script::viewPrint, [kTextEditorView = m_kTextEditorView] {
+			kTextEditorView->print();
+		});
+	connect(m_script, &Script::viewPrintPreview, [kTextEditorView = m_kTextEditorView] {
+			kTextEditorView->printPreview();
+		});
+
+	ui.output->setReadOnly(true);
 }
 
 ScriptEditor::~ScriptEditor() {    
-    KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("ScriptEditor"));
-    // we dont manage default editor font or themes ourselves, so no need to save in our config
-    group.writeEntry(QStringLiteral("OutputFont"), outputFont());
-    group.writeEntry(QStringLiteral("SplitterState"), splitterState());
+	KConfig config;
+	auto group = config.group(QStringLiteral("ScriptEditor"));
+	// we dont manage default editor font or themes ourselves, so no need to save in our config
+	group.writeEntry(QStringLiteral("OutputFont"), outputFont());
+	group.writeEntry(QStringLiteral("SplitterState"), splitterState());
 }
 
 bool ScriptEditor::isInitialized() const {
-    if (!m_script)
-        return false;
-    return m_script->isInitialized();
+	if (!m_script)
+		return false;
+	return m_script->isInitialized();
 }
 
 void ScriptEditor::createContextMenu(QMenu* menu) {
 	Q_ASSERT(menu);
-    if (!m_script)
-        return;
+	if (!m_script)
+		return;
 
-    if (!m_script->isInitialized()) {
-        m_runScriptAction->setEnabled(false);
-        m_clearOutputAction->setEnabled(false);
-    } else {
-        m_runScriptAction->setEnabled(true);
-        m_clearOutputAction->setEnabled(true);
-    }
+	if (!m_script->isInitialized()) {
+		m_runScriptAction->setEnabled(false);
+		m_clearOutputAction->setEnabled(false);
+	} else {
+		m_runScriptAction->setEnabled(true);
+		m_clearOutputAction->setEnabled(true);
+	}
 
-    QAction* firstAction = nullptr;
+	QAction* firstAction = nullptr;
 
-    if (menu->actions().size() > 1)
-        firstAction = menu->actions().at(1);
+	if (menu->actions().size() > 1)
+		firstAction = menu->actions().at(1);
 
-    menu->insertAction(firstAction, m_runScriptAction);
+	menu->insertAction(firstAction, m_runScriptAction);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, m_clearOutputAction);
 
-    menu->insertSeparator(firstAction);
-
-    menu->insertAction(firstAction, m_clearOutputAction);
-
-    if (firstAction)
-        menu->insertSeparator(firstAction);
+	if (firstAction)
+		menu->insertSeparator(firstAction);
 }
 
 void ScriptEditor::initActions() {
-    m_runScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), QStringLiteral("Run"), this);
+	m_runScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), QStringLiteral("Run"), this);
 	m_runScriptAction->setWhatsThis(QStringLiteral("Run the script"));
 	connect(m_runScriptAction, &QAction::triggered, this, &ScriptEditor::run);
 
-    m_clearOutputAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), QStringLiteral("Clear Output"), this);
+	m_clearOutputAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), QStringLiteral("Clear Output"), this);
 	m_clearOutputAction->setWhatsThis(QStringLiteral("Clear the output of the script editor"));
 	connect(m_clearOutputAction, &QAction::triggered, this, &ScriptEditor::clearOutput);
 }
 
 void ScriptEditor::writeOutput(bool /*isErr*/, const QString& msg) {
-    if (msg.trimmed().isEmpty())
-        return;
+	DEBUG(Q_FUNC_INFO << ", text = '" << msg.toStdString() << "'")
+	if (msg.isEmpty())
+		return;
 
-    ui.output->setPlainText(msg);
+	// avoid additional newlines by using a cursor
+	auto cursor = ui.output->textCursor();
+	cursor.movePosition(QTextCursor::End);
+	cursor.insertText(msg);
+	ui.output->setTextCursor(cursor);
+
 }
 
 void ScriptEditor::setSplitterState(const QByteArray& state) {
-    ui.splitter->restoreState(state);
+	ui.splitter->restoreState(state);
 }
 
 QByteArray ScriptEditor::splitterState() {
-    return ui.splitter->saveState();
+	return ui.splitter->saveState();
 }
 
 QString ScriptEditor::outputText() {
-    return ui.output->toPlainText();
+	return ui.output->toPlainText();
 }
 
 void ScriptEditor::setOutputFont(const QFont& font) {
-    ui.output->setFont(font);
+	ui.output->setFont(font);
 }
 
 QFont ScriptEditor::outputFont() {
-    return ui.output->font();
+	return ui.output->font();
 }
 
 void ScriptEditor::registerShortcuts() {
-
 }
 
 void ScriptEditor::unregisterShortcuts() {
-
 }
 
 // ##############################################################################
 // ####################################  SLOTs   ################################
 // ##############################################################################
 void ScriptEditor::run() {
-    m_script->runScript();
+	m_script->runScript();
 }
 
 void ScriptEditor::clearOutput() {
-    QFont currentOutputFont = outputFont();
-    ui.output->clear();
-    ui.output->setReadOnly(true);
-    setOutputFont(currentOutputFont);
+	INFO(Q_FUNC_INFO)
+	QFont currentOutputFont = outputFont();
+	ui.output->clear();
+	ui.output->setReadOnly(true);
+	setOutputFont(currentOutputFont);
 }

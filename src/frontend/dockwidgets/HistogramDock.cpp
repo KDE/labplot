@@ -71,7 +71,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	layout->insertWidget(0, backgroundWidget);
 
 	// Tab "Error Bars"
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
 	if (group.readEntry(QStringLiteral("GUMTerms"), false))
 		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
 
@@ -81,13 +81,13 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
-		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
-		if (!layout)
+		auto* tabLayout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		if (!tabLayout)
 			continue;
 
-		layout->setContentsMargins(2, 2, 2, 2);
-		layout->setHorizontalSpacing(2);
-		layout->setVerticalSpacing(2);
+		tabLayout->setContentsMargins(2, 2, 2, 2);
+		tabLayout->setHorizontalSpacing(2);
+		tabLayout->setVerticalSpacing(2);
 	}
 
 	updateLocale();
@@ -268,7 +268,9 @@ void HistogramDock::retranslateUi() {
 	ui.cbNormalization->addItem(i18n("Count Density"));
 	ui.cbNormalization->addItem(i18n("Probability Density"));
 
-	// TODO lineWidget->retranslateUi();
+	lineWidget->retranslateUi();
+	valueWidget->retranslateUi();
+	errorBarWidget->retranslateUi();
 
 	// tooltip texts
 	QString info = i18n(
@@ -296,6 +298,7 @@ void HistogramDock::retranslateUi() {
 void HistogramDock::updateLocale() {
 	lineWidget->updateLocale();
 	symbolWidget->updateLocale();
+	valueWidget->updateLocale();
 	errorBarWidget->updateLocale();
 }
 

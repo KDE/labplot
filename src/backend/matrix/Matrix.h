@@ -65,7 +65,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, formula, Formula)
 
 	void setSuppressDataChangedSignal(bool);
-	void setChanged();
+	void setDataChanged();
 
 	int rowHeight(int row) const;
 	void setRowHeight(int row, int height);

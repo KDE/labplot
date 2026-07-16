@@ -81,7 +81,7 @@ void FourierTest::addCurve() {
 	plot->addChild(curve);
 
 	curve->d_func()->setSelected(true);
-	QCOMPARE(plot->currentCurve(), curve);
+	QCOMPARE(plot->selectedCurves().first(), curve);
 
 	plot->addFourierFilterCurve(); // Should not crash and curve should be assigned accordingly
 
@@ -98,7 +98,7 @@ void FourierTest::lowPassButterWorth() {
 	// data
 	const auto xData = data.at(0);
 	const auto yData = data.at(1);
-	const auto filteredDataRef = data.at(2);
+	// const auto filteredDataRef = data.at(2);
 
 	// data source columns
 	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);

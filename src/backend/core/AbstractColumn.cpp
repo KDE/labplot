@@ -5,14 +5,16 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractColumnPrivate.h"
+#include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/abstractcolumncommands.h"
+#include "backend/lib/Interval.h"
 #include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
@@ -116,9 +118,7 @@ QStringList AbstractColumn::dateTimeFormats() {
 	dateTimes << timeFormats();
 	// any combination of date and times
 	for (const auto& d : dateFormats()) {
-		dateTimes << d;
 		for (const auto& t : timeFormats()) {
-			dateTimes << t;
 			dateTimes << d + QLatin1Char(' ') + t;
 		}
 	}
@@ -327,7 +327,10 @@ void AbstractColumn::insertRows(int before, int count) {
 }
 
 void AbstractColumn::handleRowInsertion(int before, int count) {
-	new AbstractColumnInsertRowsCmd(this, before, count);
+	exec(new AbstractColumnInsertRowsCmd(this, before, count),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -340,7 +343,10 @@ void AbstractColumn::removeRows(int first, int count) {
 }
 
 void AbstractColumn::handleRowRemoval(int first, int count) {
-	new AbstractColumnRemoveRowsCmd(this, first, count);
+	exec(new AbstractColumnRemoveRowsCmd(this, first, count),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -377,7 +383,7 @@ bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 	case ColumnMode::Double:
 		return std::isfinite(doubleAt(row));
-	case ColumnMode::Integer: // there is no invalid integer
+	case ColumnMode::Integer:
 	case ColumnMode::BigInt:
 		return true;
 	case ColumnMode::Text:
@@ -400,21 +406,41 @@ bool AbstractColumn::isValid(int row) const {
  * \brief Return whether a certain row is masked
  */
 bool AbstractColumn::isMasked(int row) const {
-	return d->m_masking.isSet(row);
+	return row < d->m_masking.size() && d->m_masking.testBit(row);
 }
 
 /**
- * \brief Return whether a certain interval of rows is fully masked
+ * \brief Return whether the column has any masked cells
  */
-bool AbstractColumn::isMasked(const Interval<int>& i) const {
-	return d->m_masking.isSet(i);
+bool AbstractColumn::hasMaskedCells() const {
+	return !d->m_masking.isEmpty() && d->m_masking.count(true) > 0;
 }
 
 /**
- * \brief Return all intervals of masked rows
+ * \brief Return all intervals of masked rows (for internal use only - XML serialization)
  */
 QVector<Interval<int>> AbstractColumn::maskedIntervals() const {
-	return d->m_masking.intervals();
+	QVector<Interval<int>> intervals;
+	int intervalStart = -1;
+
+	for (int row = 0; row < d->m_masking.size(); ++row) {
+		if (d->m_masking.testBit(row)) {
+			if (intervalStart == -1)
+				intervalStart = row; // Start new interval
+		} else {
+			if (intervalStart != -1) {
+				// End current interval
+				intervals.append(Interval<int>(intervalStart, row - 1));
+				intervalStart = -1;
+			}
+		}
+	}
+
+	// Close any open interval
+	if (intervalStart != -1)
+		intervals.append(Interval<int>(intervalStart, d->m_masking.size() - 1));
+
+	return intervals;
 }
 
 /**
@@ -425,20 +451,30 @@ void AbstractColumn::clearMasks() {
 }
 
 /**
- * \brief Set an interval masked
+ * \brief Set a single row masked
  *
- * \param i the interval
+ * \param row the row index
  * \param mask true: mask, false: unmask
  */
-void AbstractColumn::setMasked(const Interval<int>& i, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
+void AbstractColumn::setMasked(int row, bool mask) {
+	exec(new AbstractColumnSetMaskedCmd(d, row, row, mask),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
- * \brief Overloaded function for convenience
+ * \brief Set a range of rows masked (efficient bulk operation)
+ *
+ * \param startRow the first row index
+ * \param endRow the last row index (inclusive)
+ * \param mask true: mask, false: unmask
  */
-void AbstractColumn::setMasked(int row, bool mask) {
-	setMasked(Interval<int>(row, row), mask);
+void AbstractColumn::setMaskedRange(int startRow, int endRow, bool mask) {
+	exec(new AbstractColumnSetMaskedCmd(d, startRow, endRow, mask),
+		 "maskingAboutToChange",
+		 "maskingChanged",
+		 QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -530,7 +566,7 @@ void AbstractColumn::reset() {
  * and not via the setValueAt() or when multiple cells are being notified and the signal \c dataChanged()
  * is suppressed for performance reasons and this function needs to be called after all cells were modified.
  */
-void AbstractColumn::setChanged() {
+void AbstractColumn::setDataChanged() {
 	invalidateProperties();
 	if (!d->m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
@@ -540,7 +576,7 @@ void AbstractColumn::setChanged() {
  * suppresses the \c dataChanged signal if \c value is \c true, enables it otherwise.
  *
  * used when multiple cells are being modified and the signal needs to be suppressed for performance reasons,
- * \sa setChanged().
+ * \sa setDataChanged().
  */
 void AbstractColumn::setSuppressDataChangedSignal(bool value) {
 	d->m_suppressDataChangedSignal = value;
@@ -886,17 +922,36 @@ int AbstractColumn::indexForValue(double /*x*/, bool /* smaller */) const {
 bool AbstractColumn::XmlReadMask(XmlStreamReader* reader) {
 	Q_ASSERT(reader->isStartElement() && reader->name() == QLatin1String("mask"));
 
-	bool ok1, ok2;
-	int start, end;
-	start = reader->readAttributeInt(QStringLiteral("start_row"), &ok1);
-	end = reader->readAttributeInt(QStringLiteral("end_row"), &ok2);
-	if (!ok1 || !ok2) {
-		reader->raiseError(i18n("invalid or missing start or end row"));
-		return false;
+	if (Project::xmlVersion() >= 22) {
+		// new format (version 22+): base64-encoded raw bitmap
+		QString bitmapData = reader->attributes().value(QStringLiteral("bitmap")).toString();
+		const auto bytes = QByteArray::fromBase64(bitmapData.toLatin1());
+
+		// Reconstruct QBitArray from raw bits
+		const int numBits = bytes.size() * 8;
+		d->m_masking = QBitArray(numBits);
+		const auto* bits = reinterpret_cast<const uchar*>(bytes.constData());
+		for (int i = 0; i < numBits; ++i) {
+			if (bits[i / 8] & (1 << (i % 8)))
+				d->m_masking.setBit(i, true);
+		}
+
+		if (!reader->skipToEndElement())
+			return false;
+	} else {
+		// old format (version < 22): interval-based (for backward compatibility)
+		bool ok1, ok2;
+		int start, end;
+		start = reader->readAttributeInt(QStringLiteral("start_row"), &ok1);
+		end = reader->readAttributeInt(QStringLiteral("end_row"), &ok2);
+		if (!ok1 || !ok2) {
+			reader->raiseError(i18n("invalid or missing start or end row"));
+			return false;
+		}
+		setMaskedRange(start, end, true);
+		if (!reader->skipToEndElement())
+			return false;
 	}
-	setMasked(Interval<int>(start, end));
-	if (!reader->skipToEndElement())
-		return false;
 
 	return true;
 }
@@ -905,10 +960,12 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader* reader) {
  * \brief Write XML mask element
  */
 void AbstractColumn::XmlWriteMask(QXmlStreamWriter* writer) const {
-	for (const auto& interval : maskedIntervals()) {
+	// Write bitmap format (same format as validity bitmap for consistency)
+	if (!d->m_masking.isEmpty()) {
 		writer->writeStartElement(QStringLiteral("mask"));
-		writer->writeAttribute(QStringLiteral("start_row"), QString::number(interval.start()));
-		writer->writeAttribute(QStringLiteral("end_row"), QString::number(interval.end()));
+		const QByteArray bytes(reinterpret_cast<const char*>(d->m_masking.bits()), (d->m_masking.size() + 7) / 8);
+		writer->writeAttribute(QStringLiteral("bitmap"), QString::fromLatin1(bytes.toBase64()));
+
 		writer->writeEndElement();
 	}
 }

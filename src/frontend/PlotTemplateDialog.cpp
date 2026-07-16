@@ -236,7 +236,7 @@ void PlotTemplateDialog::updateErrorMessage(const QString& message) {
 		ui->teMessage->hide();
 		m_worksheetView->show();
 		auto* button = ui->buttonBox->button(QDialogButtonBox::StandardButton::Ok);
-		assert(button);
+		Q_ASSERT(button);
 		button->setEnabled(true);
 		return;
 	}
@@ -245,7 +245,7 @@ void PlotTemplateDialog::updateErrorMessage(const QString& message) {
 	ui->teMessage->setText(message);
 	ui->teMessage->show();
 	auto* button = ui->buttonBox->button(QDialogButtonBox::StandardButton::Ok);
-	assert(button);
+	Q_ASSERT(button);
 	button->setEnabled(false);
 }
 

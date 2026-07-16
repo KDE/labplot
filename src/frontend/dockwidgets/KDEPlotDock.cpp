@@ -109,8 +109,6 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	// initialize widgets for common properties
 	QList<Line*> estimationLines;
 	QList<Background*> estimationBackgrounds;
-	//QList<Line*> histogramLines;
-	//QList<Background*> histogramBackgrounds;
 	for (auto* plot : m_plots) {
 		estimationLines << plot->estimationCurve()->line();
 		estimationBackgrounds << plot->estimationCurve()->background();
@@ -170,6 +168,9 @@ void KDEPlotDock::retranslateUi() {
 	ui.cbBandwidthType->addItem(i18n("Silverman"), static_cast<int>(nsl_kde_bandwidth_silverman));
 	ui.cbBandwidthType->addItem(i18n("Scott"), static_cast<int>(nsl_kde_bandwidth_scott));
 	ui.cbBandwidthType->addItem(i18n("Custom"), static_cast<int>(nsl_kde_bandwidth_custom));
+
+	estimationLineWidget->retranslateUi();
+	estimationBackgroundWidget->retranslateUi();
 
 	// tooltip texts
 	QString info = i18n("The window function (\"kernel\") used to estimate the probability density");

@@ -52,6 +52,7 @@
 #include "frontend/dockwidgets/LollipopPlotDock.h"
 #include "frontend/dockwidgets/MatrixDock.h"
 #include "frontend/dockwidgets/NoteDock.h"
+#include "frontend/dockwidgets/ParetoChartDock.h"
 #include "frontend/dockwidgets/ProcessBehaviorChartDock.h"
 #include "frontend/dockwidgets/ProjectDock.h"
 #include "frontend/dockwidgets/QQPlotDock.h"
@@ -67,6 +68,7 @@
 #include "frontend/dockwidgets/WorksheetDock.h"
 #include "frontend/dockwidgets/XYConvolutionCurveDock.h"
 #include "frontend/dockwidgets/XYCorrelationCurveDock.h"
+#include "frontend/dockwidgets/XYBaselineCorrectionCurveDock.h"
 #include "frontend/dockwidgets/XYCurveDock.h"
 #include "frontend/dockwidgets/XYLineSimplificationCurveDock.h"
 #include "frontend/dockwidgets/XYDifferentiationCurveDock.h"
@@ -86,7 +88,14 @@
 #include "frontend/widgets/DatapickerImageWidget.h"
 #include "frontend/widgets/LabelWidget.h"
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <DockWidget.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #include <KLocalizedString>
 #include <QStackedWidget>
 #include <QStatusBar>
@@ -288,19 +297,8 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		break;
 	case AspectType::XYLineSimplificationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Line Simplification"));
-		if (!m_xyLineSimplificationCurveDock) {
-			m_xyLineSimplificationCurveDock = new XYLineSimplificationCurveDock(m_mainWindow->stackedWidget, m_mainWindow->statusBar());
-			m_xyLineSimplificationCurveDock->setupGeneral();
-			connect(m_xyLineSimplificationCurveDock, &XYLineSimplificationCurveDock::info, [&](const QString& text) {
-				m_mainWindow->statusBar()->showMessage(text);
-			});
-			m_mainWindow->stackedWidget->addWidget(m_xyLineSimplificationCurveDock);
-		}
-
-		initializedDocks << m_xyLineSimplificationCurveDock;
+		raiseDockSetupConnect(m_xyLineSimplificationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyLineSimplificationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_xyLineSimplificationCurveDock);
 		break;
 	case AspectType::XYDifferentiationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Differentiation"));
@@ -346,6 +344,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Convolution/Deconvolution"));
 		raiseDockSetupConnect(m_xyConvolutionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyConvolutionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYBaselineCorrectionCurve:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Baseline Correction"));
+		raiseDockSetupConnect(m_xyBaselineCorrectionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_xyBaselineCorrectionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYCorrelationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Auto-/Cross-Correlation"));
@@ -394,6 +397,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Run Chart"));
 		raiseDock(m_runChartDock, m_mainWindow->stackedWidget);
 		m_runChartDock->setPlots(castList<RunChart>(selectedAspects));
+		break;
+	case AspectType::ParetoChart:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Pareto Chart"));
+		raiseDock(m_paretoChartDock, m_mainWindow->stackedWidget);
+		m_paretoChartDock->setPlots(castList<ParetoChart>(selectedAspects));
 		break;
 	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Text Label"));

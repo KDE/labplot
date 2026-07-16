@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,11 +13,12 @@
 #define CARTESIANPLOT_H
 
 #include "backend/lib/Range.h"
+#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
-#include "backend/nsl/nsl_sf_stats.h"
-
+class Background;
 class CartesianCoordinateSystem;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
@@ -61,6 +62,11 @@ public:
 	enum class RangeType { Free, Last, First };
 	Q_ENUM(RangeType)
 	enum class RangeBreakStyle { Simple, Vertical, Sloped };
+	enum class PlotColorMode { Theme, ColorMap };
+
+	// Border type flags for plot area
+	enum class BorderTypeFlags { NoBorder = 0x0, BorderLeft = 0x1, BorderTop = 0x2, BorderRight = 0x4, BorderBottom = 0x8 };
+	Q_DECLARE_FLAGS(BorderType, BorderTypeFlags)
 
 	struct RangeBreak {
 		RangeBreak()
@@ -96,6 +102,9 @@ public:
 	QIcon icon() const override;
 	virtual QMenu* createContextMenu() override;
 	static void fillAddNewPlotMenu(QMenu*, QActionGroup*);
+	static void fillFitMenu(QMenu*, QActionGroup*);
+	static void fillAnalysisMenu(QMenu*, QActionGroup*);
+	static void fillDistributionFitMenu(QMenu*, QActionGroup*);
 	QMenu* addNewMenu();
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;
@@ -108,8 +117,8 @@ public:
 	MouseMode mouseMode() const;
 	BASIC_D_ACCESSOR_DECL(bool, isInteractive, Interactive)
 	void navigate(int cSystemIndex, NavigationOperation);
-	const QList<QColor>& themeColorPalette() const;
-	const QColor themeColorPalette(int index) const;
+	const QList<QColor>& plotColors() const;
+	const QColor plotColor(int index) const;
 	void processDropEvent(const QVector<quintptr>&) override;
 	bool isPanningActive() const;
 	bool isPrinted() const;
@@ -137,6 +146,9 @@ public:
 	void mouseReleaseZoomSelectionMode(int cSystemIndex);
 	void mouseHoverZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mouseHoverOutsideDataRect();
+
+	BASIC_D_ACCESSOR_DECL(PlotColorMode, plotColorMode, PlotColorMode)
+	BASIC_D_ACCESSOR_DECL(QString, plotColorMap, PlotColorMap)
 
 	const QString rangeDateTimeFormat(const Dimension) const;
 	const QString rangeDateTimeFormat(const Dimension, const int index) const;
@@ -186,6 +198,15 @@ public:
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks)
 
+	// stacking
+	BASIC_D_ACCESSOR_DECL(double, stackYOffset, StackYOffset)
+
+	// plot area
+	Background* background() const;
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::BorderType, borderType, BorderType)
+	Line* borderLine() const;
+	BASIC_D_ACCESSOR_DECL(qreal, borderCornerRadius, BorderCornerRadius)
+
 	// cursor
 	Line* cursorLine() const;
 	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable)
@@ -217,31 +238,17 @@ private:
 	void init(bool loading);
 	void initActions();
 	void initMenus();
-	void setColorPalette(const KConfig&);
-	const XYCurve* currentCurve() const;
+
+	QVector<XYCurve*> selectedCurves() const;
 	void zoom(int index, const Dimension, bool in, const double relPosSceneRange);
 	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, WorksheetElement::Orientation);
+	void adjustPadding();
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
 	int curveTotalCount() const;
 
 	CartesianPlotLegend* m_legend{nullptr};
 	double m_zoomFactor{1.2};
-	QList<QColor> m_themeColorPalette;
 	bool m_menusInitialized{false};
-
-	// analysis curves actions
-	QAction* addLineSimplificationCurveAction{nullptr};
-	QAction* addDifferentiationCurveAction{nullptr};
-	QAction* addIntegrationCurveAction{nullptr};
-	QAction* addInterpolationCurveAction{nullptr};
-	QAction* addSmoothCurveAction{nullptr};
-	QAction* addFitCurveAction{nullptr};
-	QAction* addFourierFilterCurveAction{nullptr};
-	QAction* addFourierTransformCurveAction{nullptr};
-	QAction* addHilbertTransformCurveAction{nullptr};
-	QAction* addConvolutionCurveAction{nullptr};
-	QAction* addCorrelationCurveAction{nullptr};
-	QAction* addFunctionCurveAction{nullptr};
 
 	QAction* addHorizontalAxisAction{nullptr};
 	QAction* addVerticalAxisAction{nullptr};
@@ -254,20 +261,6 @@ private:
 	QAction* addReferenceRangeAction{nullptr};
 	QAction* addInsetPlotAction{nullptr};
 	QAction* addInsetPlotWithDataAction{nullptr};
-
-	// analysis menu actions
-	QAction* addDataOperationAction{nullptr};
-	QAction* addLineSimplificationAction{nullptr};
-	QAction* addDifferentiationAction{nullptr};
-	QAction* addIntegrationAction{nullptr};
-	QAction* addInterpolationAction{nullptr};
-	QAction* addSmoothAction{nullptr};
-	QVector<QAction*> addFitActions;
-	QAction* addFourierFilterAction{nullptr};
-	QAction* addFourierTransformAction{nullptr};
-	QAction* addHilbertTransformAction{nullptr};
-	QAction* addConvolutionAction{nullptr};
-	QAction* addCorrelationAction{nullptr};
 
 	QMenu* m_addNewMenu{nullptr};
 	QMenu* addNewAnalysisMenu{nullptr};
@@ -312,16 +305,18 @@ public Q_SLOTS:
 	void dataChanged(int xIndex = -1, int yIndex = -1, WorksheetElement* sender = nullptr);
 
 private Q_SLOTS:
-	void addPlot(QAction*);
+	void addPlot(const QAction*);
+	void addAnalysisPlot(const QAction*);
 
 	void addLineSimplificationCurve();
 	void addDifferentiationCurve();
 	void addIntegrationCurve();
 	void addInterpolationCurve();
 	void addSmoothCurve();
-	void addFitCurve();
+	void addFitCurve(const QAction* action = nullptr);
 	void addFourierFilterCurve();
 	void addFunctionCurve();
+	void addBaselineCorrectionCurve();
 
 	void addHorizontalAxis();
 	void addVerticalAxis();
@@ -336,7 +331,9 @@ private Q_SLOTS:
 
 	void updateLegend();
 	void childAdded(const AbstractAspect*);
+	void childAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void childMoved();
 	void childHovered();
 
 	void dataChanged(WorksheetElement*);
@@ -352,6 +349,9 @@ protected:
 	CartesianPlot(const QString& name, CartesianPlotPrivate* dd);
 
 Q_SIGNALS:
+	void plotColorModeChanged(PlotColorMode);
+	void plotColorMapChanged(const QString&);
+
 	void rangeTypeChanged(CartesianPlot::RangeType);
 	void niceExtendChanged(bool);
 	void rangeFormatChanged(const Dimension, int rangeIndex, RangeT::Format);
@@ -364,12 +364,18 @@ Q_SIGNALS:
 	void maxChanged(const Dimension, int rangeIndex, double);
 	void scaleChanged(const Dimension, int rangeIndex, RangeT::Scale);
 	void defaultCoordinateSystemIndexChanged(int);
+
 	void xRangeBreakingEnabledChanged(bool);
 	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void yRangeBreakingEnabledChanged(bool);
 	void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+
+	void borderTypeChanged(CartesianPlot::BorderType);
+	void borderCornerRadiusChanged(qreal);
+
 	void themeChanged(const QString&);
 	void axisShiftSignal(int delta, Dimension dim, int index);
+
 	void mousePressZoomSelectionModeSignal(QPointF logicPos);
 	void mousePressCursorModeSignal(int cursorNumber, QPointF logicPos);
 	void mouseMoveSelectionModeSignal(QPointF logicalStart, QPointF logicalEnd);
@@ -380,6 +386,9 @@ Q_SIGNALS:
 	void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
 	void mouseHoverOutsideDataRectSignal();
 	void wheelEventSignal(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+
+	void stackYOffsetChanged(double);
+
 	void curveNameChanged(const AbstractAspect* curve);
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);
@@ -397,5 +406,7 @@ Q_SIGNALS:
 	friend class FitTest;
 	friend class FourierTest;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(CartesianPlot::BorderType)
 
 #endif

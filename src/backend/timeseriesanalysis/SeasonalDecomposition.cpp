@@ -9,9 +9,9 @@
  */
 
 #include "SeasonalDecomposition.h"
-#include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/ScopedUndoDisabler.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
@@ -452,12 +452,7 @@ QString SeasonalDecompositionPrivate::name() const {
 void SeasonalDecompositionPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
-	// set the columns in the curves, no need to put this onto the undo stack
-	curveOriginal->setUndoAware(false);
-	curveTrend->setUndoAware(false);
-	for (auto* curve : curvesSeasonal)
-		curve->setUndoAware(false);
-	curveResidual->setUndoAware(false);
+	ScopedUndoDisabler undoDisabler(q->project()); // internal changes only, don't pollute the undo stack
 
 	curveOriginal->setXColumn(xColumn);
 	curveOriginal->setYColumn(yColumn);
@@ -465,12 +460,6 @@ void SeasonalDecompositionPrivate::recalc() {
 	for (auto* curve : curvesSeasonal)
 		curve->setXColumn(xColumn);
 	curveResidual->setXColumn(xColumn);
-
-	curveOriginal->setUndoAware(true);
-	curveTrend->setUndoAware(true);
-	for (auto* curve : curvesSeasonal)
-		curve->setUndoAware(true);
-	curveResidual->setUndoAware(true);
 
 	if (!xColumn || !yColumn)
 		return;
@@ -510,6 +499,7 @@ void SeasonalDecompositionPrivate::recalc() {
 void SeasonalDecompositionPrivate::recalcDecomposition() {
 	Q_EMIT q->statusError(QString());
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+	ScopedUndoDisabler undoDisabler(q->project()); // internal changes only, don't pollute the undo stack
 
 	QVector<double> trendData;
 	QVector<QVector<double>> seasonalData; // vector of vectors for multiple seasonal components, one element for methods supporting one single component only
@@ -587,11 +577,9 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			trendData.resize(size);
 			seasonalDataSingle.resize(size);
 			residualData.resize(size);
-			for (size_t i = 0; i < size; ++i) {
-				trendData[i] = result.trend[i];
-				seasonalDataSingle[i] = result.seasonal[i];
-				residualData[i] = result.remainder[i];
-			}
+			memcpy(trendData.data(), result.trend.data(), size * sizeof(double));
+			memcpy(seasonalDataSingle.data(), result.seasonal.data(), size * sizeof(double));
+			memcpy(residualData.data(), result.remainder.data(), size * sizeof(double));
 
 			seasonalData << seasonalDataSingle;
 		} else {
@@ -659,12 +647,10 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			for (int i = 0; i < (int)columnsSeasonal.size(); ++i)
 				seasonalData[i].resize(size);
 
-			for (size_t i = 0; i < size; ++i) {
-				trendData[i] = result.trend[i];
-				residualData[i] = result.remainder[i];
-				for (int j = 0; j < (int)columnsSeasonal.size(); ++j)
-					seasonalData[j][i] = result.seasonal.at(j)[i];
-			}
+			memcpy(trendData.data(), result.trend.data(), size * sizeof(double));
+			memcpy(residualData.data(), result.remainder.data(), size * sizeof(double));
+			for (int j = 0; j < (int)columnsSeasonal.size(); ++j)
+				memcpy(seasonalData[j].data(), result.seasonal.at(j).data(), size * sizeof(double));
 		}
 
 		break;
@@ -689,9 +675,6 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 				auto plotArea = std::unique_ptr<CartesianPlot>(plotAreasSeasonal.takeLast());
 				curvesSeasonal.takeLast(); // Curve is a child of the plot area, so we don't have to explicitly delete it
 				columnsSeasonal.takeLast(); // Column is a child of the spreadsheet, so we don't have to explicitly delete it
-				AutoRestore cleanup(false, [this](bool value) {
-					worksheet->setUndoAware(value);
-				});
 				worksheet->removeChild(plotArea.get());
 			}
 
@@ -701,9 +684,9 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 		}
 	} else { // multiple periods, MSTL is being used
 		// adjust the result spreadsheet
-		const int columnCount = 2 + mstlPeriods.size(); // trend, residual + seasonal components
-		if (resultSpreadsheet->columnCount() != columnCount) {
-			resultSpreadsheet->setColumnCount(2 + mstlPeriods.size());
+		const auto columnCount = 2 + mstlPeriods.size(); // trend, residual + seasonal components
+		if (resultSpreadsheet->columnCount() != (int)columnCount) {
+			resultSpreadsheet->setColumnCount(2 + (int)mstlPeriods.size());
 			columnsSeasonal.clear();
 			for (int i = 1; i < resultSpreadsheet->columnCount() - 1; i++) {
 				auto* column = resultSpreadsheet->column(i);
@@ -727,19 +710,16 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 					worksheet->insertChildBeforeFast(plotArea, plotAreaResidual);
 					plotAreasSeasonal << plotArea;
 
-					auto* curveSeasonal = new XYCurve(i18n("Seasonal"));
-					curveSeasonal->setFixed(true);
-					plotArea->addChildFast(curveSeasonal);
-					curvesSeasonal << curveSeasonal;
+					auto* curve = new XYCurve(i18n("Seasonal"));
+					curve->setFixed(true);
+					plotArea->addChildFast(curve);
+					curvesSeasonal << curve;
 				}
 			} else {
 				// remove extra plot areas and curves
 				while (plotAreasSeasonal.size() > (int)mstlPeriods.size()) {
 					auto plotArea = std::unique_ptr<CartesianPlot>(plotAreasSeasonal.takeLast());
 					curvesSeasonal.takeLast(); // Curve is a child of the plot area, so we don't have to explicitly delete it
-					AutoRestore undo(false, [this](bool value) {
-						worksheet->setUndoAware(value);
-					});
 					worksheet->removeChild(plotArea.get());
 				}
 			}
@@ -747,9 +727,6 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 
 		// adjust the plot titles for seasonal components to reflect new periods
 		for (size_t i = 0; i < mstlPeriods.size(); i++) {
-			AutoRestore undo(false, [this, i](bool value) {
-				plotAreasSeasonal.at(i)->setUndoAware(value);
-			});
 			plotAreasSeasonal.at(i)->title()->setText(i18n("Seasonal Component (Period: %1)", mstlPeriods.at(i)));
 			columnsSeasonal.at(i)->setName(i18n("Seasonal, Period: %1", mstlPeriods.at(i)));
 			curvesSeasonal.at(i)->setYColumn(columnsSeasonal.at(i));

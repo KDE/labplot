@@ -55,6 +55,7 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
+	void fillElementsContextMenu(QMenu*);
 	QWidget* view() const override;
 
 	QVector<AbstractAspect*> dependsOn() const override;
@@ -82,7 +83,6 @@ public:
 	void setPrinting(bool) const;
 
 	void setItemSelectedInView(const QGraphicsItem*, const bool);
-	void setSelectedInView(const bool);
 	void deleteAspectFromGraphicsItem(const QGraphicsItem*);
 	void setIsClosing();
 	void suppressSelectionChangedEvent(bool);
@@ -160,6 +160,7 @@ private Q_SLOTS:
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void handleAspectMoved();
+	void changeSelectedVisibility();
 
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;

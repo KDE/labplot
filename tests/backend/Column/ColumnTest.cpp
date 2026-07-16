@@ -18,7 +18,8 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
+#include <cmath>
 
 #define SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)                                                                                                                \
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);                                                                                \
@@ -138,7 +139,7 @@ void ColumnTest::statisticsDouble() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({1.0, 1.0, 2.0, 5.0});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, 1.);
@@ -173,7 +174,7 @@ void ColumnTest::statisticsDoubleNegative() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 0.0, 2.0, 5.0});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, -1.);
@@ -208,7 +209,7 @@ void ColumnTest::statisticsDoubleBigNegative() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-100.0, 0.0, 2.0, 5.0});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, -100.);
@@ -243,7 +244,7 @@ void ColumnTest::statisticsDoubleZero() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({1.0, 0.0, 2.0, 5.0});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, 0.);
@@ -279,7 +280,7 @@ void ColumnTest::statisticsInt() {
 	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1, 1, 2, 5});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, 1.);
@@ -314,7 +315,7 @@ void ColumnTest::statisticsIntNegative() {
 	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-1, 0, 2, 5});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, -1.);
@@ -349,7 +350,7 @@ void ColumnTest::statisticsIntBigNegative() {
 	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-100, 0, 2, 5});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, -100.);
@@ -384,7 +385,7 @@ void ColumnTest::statisticsIntZero() {
 	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1, 0, 2, 5});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, 0.);
@@ -419,7 +420,7 @@ void ColumnTest::statisticsIntOverflow() {
 	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1000000000, 1100000000, 1200000000, 1300000000});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, 1000000000);
@@ -454,7 +455,7 @@ void ColumnTest::statisticsBigInt() {
 	Column c(QStringLiteral("BigInt column"), Column::ColumnMode::BigInt);
 	c.setBigInts({-10000000000, 0, 1000000000, 10000000000});
 
-	auto& stats = c.statistics();
+	const auto& stats = c.statistics();
 
 	QCOMPARE(stats.size, 4);
 	QCOMPARE(stats.minimum, -10000000000);
@@ -510,28 +511,28 @@ void ColumnTest::statisticsMaskValues() {
 	project.addChild(c);
 
 	// check the statistics
-	auto& stats1 = c->statistics();
+	const auto& stats1 = c->statistics();
 	QCOMPARE(stats1.size, 3);
 	QCOMPARE(stats1.minimum, 1.);
 	QCOMPARE(stats1.maximum, 3.);
 
 	// mask the last value and check the statistics
 	c->setMasked(2);
-	auto& stats2 = c->statistics();
+	const auto& stats2 = c->statistics();
 	QCOMPARE(stats2.size, 2);
 	QCOMPARE(stats2.minimum, 1.);
 	QCOMPARE(stats2.maximum, 2.);
 
 	// undo the masking change and check the statistics
 	project.undoStack()->undo();
-	auto& stats3 = c->statistics();
+	const auto& stats3 = c->statistics();
 	QCOMPARE(stats3.size, 3);
 	QCOMPARE(stats3.minimum, 1.);
 	QCOMPARE(stats3.maximum, 3.);
 
 	// redo the masking change and check the statistics
 	project.undoStack()->redo();
-	auto& stats4 = c->statistics();
+	const auto& stats4 = c->statistics();
 	QCOMPARE(stats4.size, 2);
 	QCOMPARE(stats4.minimum, 1.);
 	QCOMPARE(stats4.maximum, 2.);
@@ -548,35 +549,35 @@ void ColumnTest::statisticsClearSpreadsheetMasks() {
 	c->setValues({1., 2., 3.});
 
 	// check the statistics
-	auto& stats1 = c->statistics();
+	const auto& stats1 = c->statistics();
 	QCOMPARE(stats1.size, 3);
 	QCOMPARE(stats1.minimum, 1.);
 	QCOMPARE(stats1.maximum, 3.);
 
 	// mask the last value and check the statistics
 	c->setMasked(2);
-	auto& stats2 = c->statistics();
+	const auto& stats2 = c->statistics();
 	QCOMPARE(stats2.size, 2);
 	QCOMPARE(stats2.minimum, 1.);
 	QCOMPARE(stats2.maximum, 2.);
 
 	// clear the masked values in the spreadsheet
 	spreadsheet->clearMasks();
-	auto& stats3 = c->statistics();
+	const auto& stats3 = c->statistics();
 	QCOMPARE(stats3.size, 3);
 	QCOMPARE(stats3.minimum, 1.);
 	QCOMPARE(stats3.maximum, 3.);
 
 	// undo the "clear masked values"-change and check the statistics
 	project.undoStack()->undo();
-	auto& stats4 = c->statistics();
+	const auto& stats4 = c->statistics();
 	QCOMPARE(stats4.size, 2);
 	QCOMPARE(stats4.minimum, 1.);
 	QCOMPARE(stats4.maximum, 2.);
 
 	// redo the "clear masked values"-change and check the statistics
 	project.undoStack()->redo();
-	auto& stats5 = c->statistics();
+	const auto& stats5 = c->statistics();
 	QCOMPARE(stats5.size, 3);
 	QCOMPARE(stats5.minimum, 1.);
 	QCOMPARE(stats5.maximum, 3.);
@@ -791,6 +792,9 @@ void ColumnTest::saveLoadDateTime() {
 	}
 	QCOMPARE(found, true);
 	QCOMPARE(c2.load(&reader, false), true);
+
+	// wait until all columns are decoded from base64-encoded data
+	QThreadPool::globalInstance()->waitForDone();
 
 	QCOMPARE(c2.rowCount(), 4);
 	QCOMPARE(c2.dateTimeAt(0).isValid(), true);
@@ -1632,8 +1636,9 @@ void ColumnTest::testFormulasma() {
 	c2.setFormula(QStringLiteral("sma(3; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
-	VALUES_EQUAL(c2.valueAt(0), 1. / 3.);
-	VALUES_EQUAL(c2.valueAt(1), 0.);
+	QVERIFY(std::isnan(c2.valueAt(0)));
+	QVERIFY(std::isnan(c2.valueAt(1)));
+
 	VALUES_EQUAL(c2.valueAt(2), 5. / 3.);
 	VALUES_EQUAL(c2.valueAt(3), 3.);
 	VALUES_EQUAL(c2.valueAt(4), 13. / 3.);
@@ -1698,6 +1703,11 @@ void ColumnTest::testFormulasSize() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
 	COLUMN2_SET_FORMULA_AND_EVALUATE("size(x)", 5.)
+}
+void ColumnTest::testFormulasSum() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("sum(x)", 13.)
 }
 void ColumnTest::testFormulasMin() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
@@ -2072,6 +2082,437 @@ void ColumnTest::testLoadSaveWithData() {
 		for (int i = 0; i < column->rowCount(); i++)
 			QCOMPARE(column->valueAt(i), i);
 	}
+}
+
+// ======================================================================
+// Integer validity bitmap tests
+// ======================================================================
+
+void ColumnTest::integerValidityInitEmpty() {
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
+	c.resizeTo(5);
+	QCOMPARE(c.rowCount(), 5);
+
+	// all cells should be invalid (empty) after initialization
+	for (int i = 0; i < 5; i++)
+		QCOMPARE(c.isValid(i), false);
+}
+
+void ColumnTest::integerValiditySetValue() {
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
+	c.resizeTo(5);
+
+	// set value at row 2
+	c.setIntegerAt(2, 42);
+
+	QCOMPARE(c.isValid(0), false);
+	QCOMPARE(c.isValid(1), false);
+	QCOMPARE(c.isValid(2), true);
+	QCOMPARE(c.integerAt(2), 42);
+	QCOMPARE(c.isValid(3), false);
+	QCOMPARE(c.isValid(4), false);
+}
+
+void ColumnTest::integerValidityUndoRedo() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
+	project.addChild(c);
+	c->resizeTo(5);
+
+	// initially empty
+	QCOMPARE(c->isValid(2), false);
+
+	// set a value
+	c->setIntegerAt(2, 42);
+	QCOMPARE(c->isValid(2), true);
+	QCOMPARE(c->integerAt(2), 42);
+
+	// undo should restore the cell to empty
+	c->undoStack()->undo();
+	QCOMPARE(c->isValid(2), false);
+
+	// redo should restore the value
+	c->undoStack()->redo();
+	QCOMPARE(c->isValid(2), true);
+	QCOMPARE(c->integerAt(2), 42);
+}
+
+void ColumnTest::integerValidityClear() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
+	project.addChild(c);
+	c->setIntegers({10, 20, 30});
+
+	// all values should be valid after setIntegers
+	for (int i = 0; i < 3; i++)
+		QCOMPARE(c->isValid(i), true);
+
+	c->clear();
+
+	// all cells should be invalid after clear
+	for (int i = 0; i < 3; i++)
+		QCOMPARE(c->isValid(i), false);
+
+	// undo should restore validity
+	c->undoStack()->undo();
+	for (int i = 0; i < 3; i++)
+		QCOMPARE(c->isValid(i), true);
+	QCOMPARE(c->integerAt(0), 10);
+	QCOMPARE(c->integerAt(1), 20);
+	QCOMPARE(c->integerAt(2), 30);
+}
+
+void ColumnTest::integerValidityInsertRows() {
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
+	c.setIntegers({10, 20, 30});
+
+	QCOMPARE(c.isValid(0), true);
+	QCOMPARE(c.isValid(1), true);
+	QCOMPARE(c.isValid(2), true);
+
+	// insert 2 rows before row 1
+	c.insertRows(1, 2);
+	QCOMPARE(c.rowCount(), 5);
+
+	QCOMPARE(c.isValid(0), true); // original row 0
+	QCOMPARE(c.integerAt(0), 10);
+	QCOMPARE(c.isValid(1), false); // inserted
+	QCOMPARE(c.isValid(2), false); // inserted
+	QCOMPARE(c.isValid(3), true); // original row 1
+	QCOMPARE(c.integerAt(3), 20);
+	QCOMPARE(c.isValid(4), true); // original row 2
+	QCOMPARE(c.integerAt(4), 30);
+}
+
+void ColumnTest::integerValidityRemoveRows() {
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
+	c.resizeTo(5);
+	c.setIntegerAt(0, 10);
+	c.setIntegerAt(2, 30);
+	c.setIntegerAt(4, 50);
+
+	QCOMPARE(c.isValid(0), true);
+	QCOMPARE(c.isValid(1), false);
+	QCOMPARE(c.isValid(2), true);
+	QCOMPARE(c.isValid(3), false);
+	QCOMPARE(c.isValid(4), true);
+
+	// remove rows 1 and 2
+	c.removeRows(1, 2);
+	QCOMPARE(c.rowCount(), 3);
+
+	QCOMPARE(c.isValid(0), true); // original row 0
+	QCOMPARE(c.integerAt(0), 10);
+	QCOMPARE(c.isValid(1), false); // original row 3
+	QCOMPARE(c.isValid(2), true); // original row 4
+	QCOMPARE(c.integerAt(2), 50);
+}
+
+void ColumnTest::integerValidityModeConversionDoubleToInt() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Double column"), Column::ColumnMode::Double);
+	project.addChild(c);
+	c->resizeTo(4);
+	c->setValueAt(0, 1.5);
+	c->setValueAt(1, 2.7);
+	// rows 2 and 3 left as NaN
+
+	QCOMPARE(c->isValid(0), true);
+	QCOMPARE(c->isValid(1), true);
+	QCOMPARE(c->isValid(2), false); // NaN
+	QCOMPARE(c->isValid(3), false); // NaN
+
+	c->setColumnMode(Column::ColumnMode::Integer);
+
+	QCOMPARE(c->columnMode(), Column::ColumnMode::Integer);
+	QCOMPARE(c->isValid(0), true);
+	QCOMPARE(c->integerAt(0), 2); // round(1.5)
+	QCOMPARE(c->isValid(1), true);
+	QCOMPARE(c->integerAt(1), 3); // round(2.7)
+	QCOMPARE(c->isValid(2), false); // was NaN → empty
+	QCOMPARE(c->isValid(3), false); // was NaN → empty
+}
+
+void ColumnTest::integerValidityModeConversionIntToDouble() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
+	project.addChild(c);
+	c->resizeTo(3);
+	c->setIntegerAt(0, 42);
+	// rows 1 and 2 left empty
+
+	c->setColumnMode(Column::ColumnMode::Double);
+
+	QCOMPARE(c->columnMode(), Column::ColumnMode::Double);
+	QCOMPARE(c->isValid(0), true);
+	QCOMPARE(c->valueAt(0), 42.0);
+	QCOMPARE(c->isValid(1), false); // was empty → NaN
+	QCOMPARE(std::isnan(c->valueAt(1)), true);
+	QCOMPARE(c->isValid(2), false); // was empty → NaN
+	QCOMPARE(std::isnan(c->valueAt(2)), true);
+}
+
+void ColumnTest::integerValiditySaveLoad() {
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
+	c.resizeTo(5);
+	c.setIntegerAt(0, 10);
+	c.setIntegerAt(2, 30);
+	c.setIntegerAt(4, 50);
+	// rows 1 and 3 left empty
+
+	// save
+	QByteArray array;
+	QXmlStreamWriter writer(&array);
+	c.save(&writer);
+
+	// load
+	Column c2(QStringLiteral("Loaded column"), Column::ColumnMode::Integer);
+	XmlStreamReader reader(array);
+	bool found = false;
+	while (!reader.atEnd()) {
+		reader.readNext();
+		if (reader.isStartElement() && reader.name() == QLatin1String("column")) {
+			found = true;
+			break;
+		}
+	}
+	QCOMPARE(found, true);
+	QCOMPARE(c2.load(&reader, false), true);
+
+	// wait for async decode
+	QThreadPool::globalInstance()->waitForDone();
+
+	QCOMPARE(c2.rowCount(), 5);
+	QCOMPARE(c2.isValid(0), true);
+	QCOMPARE(c2.integerAt(0), 10);
+	QCOMPARE(c2.isValid(1), false);
+	QCOMPARE(c2.isValid(2), true);
+	QCOMPARE(c2.integerAt(2), 30);
+	QCOMPARE(c2.isValid(3), false);
+	QCOMPARE(c2.isValid(4), true);
+	QCOMPARE(c2.integerAt(4), 50);
+}
+
+void ColumnTest::integerValidityHasValues() {
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
+	c.resizeTo(3);
+
+	// no values set → hasValues should be false
+	QCOMPARE(c.hasValues(), false);
+	QCOMPARE(c.hasValueAt(0), false);
+	QCOMPARE(c.hasValueAt(1), false);
+
+	c.setIntegerAt(1, 42);
+
+	QCOMPARE(c.hasValues(), true);
+	QCOMPARE(c.hasValueAt(0), false);
+	QCOMPARE(c.hasValueAt(1), true);
+	QCOMPARE(c.hasValueAt(2), false);
+}
+
+void ColumnTest::integerValidityCopyColumn() {
+	Column src(QStringLiteral("Source"), Column::ColumnMode::Integer);
+	src.resizeTo(4);
+	src.setIntegerAt(0, 10);
+	src.setIntegerAt(2, 30);
+	// rows 1 and 3 left empty
+
+	Column dst(QStringLiteral("Dest"), Column::ColumnMode::Integer);
+	dst.copy(&src);
+
+	QCOMPARE(dst.rowCount(), 4);
+	QCOMPARE(dst.isValid(0), true);
+	QCOMPARE(dst.integerAt(0), 10);
+	QCOMPARE(dst.isValid(1), false);
+	QCOMPARE(dst.isValid(2), true);
+	QCOMPARE(dst.integerAt(2), 30);
+	QCOMPARE(dst.isValid(3), false);
+}
+
+// ##############################################################################
+// ################### DateTime Formula Tests ###################################
+// ##############################################################################
+
+/*!
+ * \brief Test date component extraction functions (day, month, year) with DateTime variable
+ * Tests that DateTime columns can be used as formula variables and date components are extracted correctly
+ */
+void ColumnTest::testFormulaDateTimeExtraction() {
+	// Create source DateTime column with sample dates
+	Column dateCol(QStringLiteral("Dates"), Column::ColumnMode::DateTime);
+	QVector<QDateTime> dates = {
+		QDateTime(QDate(2026, 6, 18), QTime(14, 30, 0)),
+		QDateTime(QDate(2025, 12, 25), QTime(0, 0, 0)),
+		QDateTime(QDate(2024, 2, 29), QTime(12, 0, 0)), // Leap year
+	};
+	dateCol.replaceDateTimes(-1, dates);
+	QCOMPARE(dateCol.rowCount(), 3);
+
+	// Test day() extraction
+	Column dayCol(QStringLiteral("Day"), Column::ColumnMode::Double);
+	dayCol.replaceValues(-1, {0., 0., 0.}); // Initialize with dummy values
+	dayCol.setFormula(QStringLiteral("day(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	dayCol.updateFormula();
+	QCOMPARE(dayCol.rowCount(), 3);
+	VALUES_EQUAL(dayCol.valueAt(0), 18.0);
+	VALUES_EQUAL(dayCol.valueAt(1), 25.0);
+	VALUES_EQUAL(dayCol.valueAt(2), 29.0);
+
+	// Test month() extraction
+	Column monthCol(QStringLiteral("Month"), Column::ColumnMode::Double);
+	monthCol.replaceValues(-1, {0., 0., 0.}); // Initialize with dummy values
+	monthCol.setFormula(QStringLiteral("month(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	monthCol.updateFormula();
+	QCOMPARE(monthCol.rowCount(), 3);
+	VALUES_EQUAL(monthCol.valueAt(0), 6.0);
+	VALUES_EQUAL(monthCol.valueAt(1), 12.0);
+	VALUES_EQUAL(monthCol.valueAt(2), 2.0);
+
+	// Test year() extraction
+	Column yearCol(QStringLiteral("Year"), Column::ColumnMode::Double);
+	yearCol.replaceValues(-1, {0., 0., 0.}); // Initialize with dummy values
+	yearCol.setFormula(QStringLiteral("year(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	yearCol.updateFormula();
+	QCOMPARE(yearCol.rowCount(), 3);
+	VALUES_EQUAL(yearCol.valueAt(0), 2026.0);
+	VALUES_EQUAL(yearCol.valueAt(1), 2025.0);
+	VALUES_EQUAL(yearCol.valueAt(2), 2024.0);
+}
+
+/*!
+ * \brief Test DateTime extraction to Integer column
+ * Verifies that formula results can be written to Integer columns with proper type conversion
+ */
+void ColumnTest::testFormulaDateTimeExtractionInteger() {
+	// Create source DateTime column
+	Column dateCol(QStringLiteral("Dates"), Column::ColumnMode::DateTime);
+	QVector<QDateTime> dates = {
+		QDateTime(QDate(2026, 1, 15), QTime(0, 0, 0)),
+		QDateTime(QDate(2026, 7, 4), QTime(0, 0, 0)),
+	};
+	dateCol.replaceDateTimes(-1, dates);
+
+	// Extract to Integer column (primary use case from bug #497924)
+	Column dayCol(QStringLiteral("Day"), Column::ColumnMode::Integer);
+	dayCol.setIntegers({0, 0}); // Initialize with dummy values
+	dayCol.setFormula(QStringLiteral("day(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	dayCol.updateFormula();
+
+	QCOMPARE(dayCol.rowCount(), 2);
+	QCOMPARE(dayCol.columnMode(), Column::ColumnMode::Integer);
+	QCOMPARE(dayCol.integerAt(0), 15);
+	QCOMPARE(dayCol.integerAt(1), 4);
+	QCOMPARE(dayCol.isValid(0), true);
+	QCOMPARE(dayCol.isValid(1), true);
+}
+
+/*!
+ * \brief Test DateTime-to-DateTime formula (eomonth)
+ * Tests that formulas producing DateTime values can be written to DateTime columns
+ */
+void ColumnTest::testFormulaDateTimeToDateTime() {
+	// Create source DateTime column
+	Column dateCol(QStringLiteral("Dates"), Column::ColumnMode::DateTime);
+	QVector<QDateTime> dates = {
+		QDateTime(QDate(2026, 6, 18), QTime(0, 0, 0)),
+		QDateTime(QDate(2026, 2, 15), QTime(0, 0, 0)),
+	};
+	dateCol.replaceDateTimes(-1, dates);
+
+	// Apply eomonth() formula to get end-of-month dates
+	Column eomCol(QStringLiteral("EndOfMonth"), Column::ColumnMode::DateTime);
+	eomCol.replaceDateTimes(-1, {QDateTime(), QDateTime()}); // Initialize with dummy values
+	eomCol.setFormula(QStringLiteral("eomonth(x; 0)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	eomCol.updateFormula();
+
+	QCOMPARE(eomCol.rowCount(), 2);
+	QCOMPARE(eomCol.columnMode(), Column::ColumnMode::DateTime);
+
+	// Check results
+	QDateTime result1 = eomCol.dateTimeAt(0);
+	QCOMPARE(result1.date(), QDate(2026, 6, 30)); // End of June
+
+	QDateTime result2 = eomCol.dateTimeAt(1);
+	QCOMPARE(result2.date(), QDate(2026, 2, 28)); // End of February (non-leap year)
+}
+
+/*!
+ * \brief Test datedif() function for age calculation
+ * Tests the primary use case from bug #497924: calculate age in days from birth dates
+ */
+void ColumnTest::testFormulaDateTimeDatedif() {
+	// Create birth dates column
+	Column birthCol(QStringLiteral("BirthDates"), Column::ColumnMode::DateTime);
+	QVector<QDateTime> birthDates = {
+		QDateTime(QDate(2020, 1, 15), QTime(0, 0, 0)),
+		QDateTime(QDate(2021, 5, 20), QTime(0, 0, 0)),
+		QDateTime(QDate(2022, 12, 1), QTime(0, 0, 0)),
+	};
+	birthCol.replaceDateTimes(-1, birthDates);
+
+	// Calculate age in days using datedif(birth, today, 0)
+	// For testing, use a fixed reference date instead of today()
+	QDate referenceDate(2026, 6, 19);
+	QDateTime epoch(QDate(1900, 1, 1), QTime(0, 0, 0, 0));
+	double referenceDays = epoch.daysTo(QDateTime(referenceDate, QTime(0, 0, 0))) + epoch.time().msecsTo(QTime(0, 0, 0)) / 86400000.0;
+
+	Column ageCol(QStringLiteral("AgeInDays"), Column::ColumnMode::Integer);
+	ageCol.setIntegers({0, 0, 0}); // Initialize with dummy values
+	ageCol.setFormula(QStringLiteral("datedif(x; %1; 0)").arg(referenceDays), {QStringLiteral("x")}, QVector<Column*>({&birthCol}), true);
+	ageCol.updateFormula();
+
+	QCOMPARE(ageCol.rowCount(), 3);
+	QCOMPARE(ageCol.columnMode(), Column::ColumnMode::Integer);
+
+	// Verify ages (approximate - actual values depend on reference date)
+	// 2020-01-15 to 2026-06-19 = ~2347 days
+	QCOMPARE(ageCol.integerAt(0), 2347);
+	// 2021-05-20 to 2026-06-19 = ~1856 days
+	QCOMPARE(ageCol.integerAt(1), 1856);
+	// 2022-12-01 to 2026-06-19 = ~1296 days
+	QCOMPARE(ageCol.integerAt(2), 1296);
+}
+
+/*!
+ * \brief Test that empty DateTime cells propagate as NAN through formulas
+ * Verifies bug fix: empty cells should remain empty, not become 1970-01-01
+ */
+void ColumnTest::testFormulaDateTimeEmptyCells() {
+	// Create DateTime column with some empty cells
+	Column dateCol(QStringLiteral("Dates"), Column::ColumnMode::DateTime);
+	QVector<QDateTime> dates = {
+		QDateTime(QDate(2026, 6, 18), QTime(0, 0, 0)),
+		QDateTime(), // Empty cell (invalid DateTime)
+		QDateTime(QDate(2026, 7, 4), QTime(0, 0, 0)),
+		QDateTime(), // Empty cell
+	};
+	dateCol.replaceDateTimes(-1, dates);
+
+	// Extract day - empty cells should produce NAN
+	Column dayCol(QStringLiteral("Day"), Column::ColumnMode::Double);
+	dayCol.replaceValues(-1, {0., 0., 0., 0.}); // Initialize with dummy values
+	dayCol.setFormula(QStringLiteral("day(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	dayCol.updateFormula();
+
+	QCOMPARE(dayCol.rowCount(), 4);
+	VALUES_EQUAL(dayCol.valueAt(0), 18.0);
+	VALUES_EQUAL(dayCol.valueAt(1), NAN); // Empty cell → NAN
+	VALUES_EQUAL(dayCol.valueAt(2), 4.0);
+	VALUES_EQUAL(dayCol.valueAt(3), NAN); // Empty cell → NAN
+
+	// Test Integer column with empty source cells - should mark as invalid
+	Column dayIntCol(QStringLiteral("DayInt"), Column::ColumnMode::Integer);
+	dayIntCol.setIntegers({0, 0, 0, 0}); // Initialize with dummy values
+	dayIntCol.setFormula(QStringLiteral("day(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	dayIntCol.updateFormula();
+
+	QCOMPARE(dayIntCol.rowCount(), 4);
+	QCOMPARE(dayIntCol.isValid(0), true);
+	QCOMPARE(dayIntCol.integerAt(0), 18);
+	QCOMPARE(dayIntCol.isValid(1), false); // Empty → invalid
+	QCOMPARE(dayIntCol.isValid(2), true);
+	QCOMPARE(dayIntCol.integerAt(2), 4);
+	QCOMPARE(dayIntCol.isValid(3), false); // Empty → invalid
 }
 
 QTEST_MAIN(ColumnTest)

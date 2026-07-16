@@ -288,7 +288,6 @@ void XLSXFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 		}
 	}
 
-	int startRow = 1;
 	int startCol = 1;
 
 	// we're exporting in an existing sheet

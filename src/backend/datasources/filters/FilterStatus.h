@@ -81,7 +81,7 @@ struct Status {
 	Type type() const {
 		return m_status;
 	}
-	QString message() const {
+	const QString& message() const {
 		return m_statusMessage;
 	}
 	bool success() const {

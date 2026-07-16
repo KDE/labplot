@@ -91,6 +91,7 @@ private Q_SLOTS:
 	void testFormulasMinColumnInvalid();
 
 	void testFormulasSize();
+	void testFormulasSum();
 	void testFormulasMin();
 	void testFormulasMax();
 	void testFormulasMean();
@@ -134,6 +135,26 @@ private Q_SLOTS:
 
 	void testLoadSaveNoData();
 	void testLoadSaveWithData();
+
+	// integer validity bitmap tests
+	void integerValidityInitEmpty();
+	void integerValiditySetValue();
+	void integerValidityUndoRedo();
+	void integerValidityClear();
+	void integerValidityInsertRows();
+	void integerValidityRemoveRows();
+	void integerValidityModeConversionDoubleToInt();
+	void integerValidityModeConversionIntToDouble();
+	void integerValiditySaveLoad();
+	void integerValidityHasValues();
+	void integerValidityCopyColumn();
+
+	// DateTime formula tests
+	void testFormulaDateTimeExtraction();
+	void testFormulaDateTimeExtractionInteger();
+	void testFormulaDateTimeToDateTime();
+	void testFormulaDateTimeDatedif();
+	void testFormulaDateTimeEmptyCells();
 };
 
 #endif // COLUMNTEST_H

@@ -36,7 +36,7 @@ public:
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	void setCurrentVarName(const QString&);
-	const QString currentVarName() const;
+	const QString& currentVarName() const;
 
 	void setStartRow(const int);
 	int startRow() const;

@@ -157,13 +157,9 @@ namespace {
 %right '^' '!'
 
 %%
-input:   /* empty */
-	| input line
-;
-
-line:	T_EOF
-        | expr T_EOF   { p->result = $1; }
-        | error T_EOF { yyerrok; }
+input:	%empty
+	| expr T_EOF   { p->result = $1; }
+	| error T_EOF { yyerrok; }
 ;
 
 expr:      NUM       { $$ = $1;                            }
@@ -318,7 +314,7 @@ namespace Parsing {
                         }
                 }
 
-                /* do not assign value if symbol already exits as function */
+                /* do not assign value if symbol already exists as function */
                 if (ptr->type == VAR)
                         ptr->value = value;
 

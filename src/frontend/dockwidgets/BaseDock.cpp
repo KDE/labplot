@@ -96,7 +96,7 @@ void BaseDock::updatePlotRangeList() {
 	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex + 1)
 
 	if (!m_cbPlotRangeList) {
-		assert(false);
+		Q_ASSERT(false);
 		DEBUG(Q_FUNC_INFO << ", ERROR: no plot range combo box")
 		return;
 	}
@@ -173,18 +173,18 @@ void BaseDock::plotRangeChanged(int index) {
 	// Retransform all changed indices and the new indices
 	if (!xRangesChanged.contains(xIndexNew) && xIndexNewDifferent)
 		xRangesChanged.append(xIndexNew);
-	for (const int index : xRangesChanged) {
-		plot->setRangeDirty(Dimension::X, index, true);
-		if (plot->autoScale(Dimension::X, index))
-			plot->scaleAuto(Dimension::X, index);
+	for (const int i : xRangesChanged) {
+		plot->setRangeDirty(Dimension::X, i, true);
+		if (plot->autoScale(Dimension::X, i))
+			plot->scaleAuto(Dimension::X, i);
 	}
 
 	if (!yRangesChanged.contains(yIndexNew) && yIndexNewDifferent)
 		yRangesChanged.append(yIndexNew);
-	for (const int index : yRangesChanged) {
-		plot->setRangeDirty(Dimension::Y, index, true);
-		if (plot->autoScale(Dimension::Y, index))
-			plot->scaleAuto(Dimension::Y, index);
+	for (const int i : yRangesChanged) {
+		plot->setRangeDirty(Dimension::Y, i, true);
+		if (plot->autoScale(Dimension::Y, i))
+			plot->scaleAuto(Dimension::Y, i);
 	}
 
 	plot->WorksheetElementContainer::retransform();

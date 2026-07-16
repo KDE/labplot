@@ -48,8 +48,8 @@ typedef struct param {
 } param;
 
 struct Payload {
-	explicit Payload(bool constant = false)
-		: constant(constant) {
+	explicit Payload(bool con = false)
+		: constant(con) {
 	}
 	virtual ~Payload() {
 	}

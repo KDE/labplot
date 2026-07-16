@@ -45,9 +45,9 @@ worksheet.setLayoutVerticalSpacing(ms)
 plotArea = CartesianPlot("xy-plot")
 plotArea.setType(CartesianPlot.Type.FourAxes)
 plotArea.title().setText("El Niño-Southern Oscillation")
-border = plotArea.plotArea().borderType()
-border = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
-plotArea.plotArea().setBorderType(border)
+border = plotArea.borderType()
+border = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
+plotArea.setBorderType(border)
 worksheet.addChild(plotArea)
 
 for axis in plotArea.children(AspectType.Axis):

@@ -35,6 +35,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
+	ui.kfrLabelsFont->setFixedHeight(ui.leName->sizeHint().height());
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
@@ -243,6 +244,12 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.cbLabelsBorderShape->addItem(i18n("Down pointing rectangle"), static_cast<int>(TextLabel::BorderShape::DownPointingRectangle));
 	ui.cbLabelsBorderShape->addItem(i18n("Left pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
 	ui.cbLabelsBorderShape->addItem(i18n("Right pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
+
+	dataLineWidget->retranslateUi();
+	centerLineWidget->retranslateUi();
+	upperLimitLineWidget->retranslateUi();
+	lowerLimitLineWidget->retranslateUi();
+	labelsBorderLineWidget->retranslateUi();
 
 	// tooltips
 	QString info = i18n(

@@ -17,7 +17,8 @@ public:
 	bool readOnly{false};
 	bool showComments{false};
 	bool showSparklines{false};
-	Spreadsheet::Linking linking;
+	const Spreadsheet* linkedSpreadsheet{nullptr};
+	QString linkedSpreadsheetPath;
 	Spreadsheet* q{nullptr};
 	Column* firstColumn{nullptr}; // used to connect to the signals related to the row count changes
 	StatisticsSpreadsheet* statisticsSpreadsheet{nullptr};

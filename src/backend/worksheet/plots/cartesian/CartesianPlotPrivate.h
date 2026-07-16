@@ -19,6 +19,8 @@
 #include <QPen>
 #include <QStaticText>
 
+class PlotAreaBackgroundPrivate;
+
 class CartesianPlotPrivate : public AbstractPlotPrivate {
 public:
 	explicit CartesianPlotPrivate(CartesianPlot*);
@@ -29,8 +31,8 @@ public:
 	void retransformScales(int xIndex, int yIndex);
 	void rangeChanged();
 	void niceExtendChanged();
-	void rangeFormatChanged(const Dimension dim);
-	void wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+	void rangeFormatChanged(const Dimension);
+	void wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension);
 	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
@@ -42,9 +44,15 @@ public:
 	void updateCursor();
 	void setZoomSelectionBandShow(bool show);
 	bool translateRange(int xIndex, int yIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY);
+	void updatePlotColorPalette();
+	void updateStackYOffset();
 
 	CartesianPlot::Type type{CartesianPlot::Type::FourAxes};
+	CartesianPlot::PlotColorMode plotColorMode{CartesianPlot::PlotColorMode::Theme};
 	QString theme;
+	QList<QColor> plotColors;
+	QString plotColorMap{QStringLiteral("batlowS10")};
+
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
@@ -284,6 +292,16 @@ public:
 	QPointF logicalPos; // current position under the mouse cursor in plot coordinates
 	bool calledFromContextMenu{false}; // we set the current position under the cursor when "add new" is called via the context menu
 
+	// stacking
+	double stackYOffset{0.0};
+
+	// Plot area
+	Background* background{nullptr};
+	CartesianPlot::BorderType borderType;
+	Line* borderLine{nullptr};
+	qreal borderCornerRadius{0.0};
+	PlotAreaBackgroundPrivate* plotAreaBackgroundItem{nullptr};
+
 	// Cursor
 	bool cursor0Enable{false};
 	int selectedCursor{0};
@@ -327,6 +345,16 @@ private:
 
 	QStaticText m_cursor0Text{QStringLiteral("1")};
 	QStaticText m_cursor1Text{QStringLiteral("2")};
+
+	// Wheel zoom undo grouping
+	bool m_wheelZoomMacroActive{false};
+	QTimer* m_wheelZoomTimer{nullptr};
+
+	// Panning undo grouping
+	QMap<QPair<Dimension, int>, Range<double>> m_panningInitialRanges;
+
+	// Zoom selection undo grouping
+	QMap<QPair<Dimension, int>, Range<double>> m_zoomSelectionInitialRanges;
 
 	friend class MultiRangeTest;
 	friend class CartesianPlotTest;

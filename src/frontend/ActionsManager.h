@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Class managing all actions and their containers (menus and toolbars) in MainWin
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,6 +13,7 @@
 #include <QObject>
 
 class DatapickerImageView;
+class LiveDataSource;
 class NotebookView;
 class MainWin;
 #ifdef HAVE_SCRIPTING
@@ -30,7 +31,6 @@ class KActionMenu;
 class KHamburgerMenu;
 class KRecentFilesAction;
 class KToggleAction;
-class KToggleFullScreenAction;
 
 #ifdef HAVE_PURPOSE
 namespace Purpose {
@@ -63,6 +63,10 @@ private:
 	void initSpreadsheetToolbarActions();
 	void connectSpreadsheetToolbarActions(const SpreadsheetView*);
 
+	void initLiveDataToolbarActions();
+	void connectLiveDataToolbarActions(LiveDataSource*);
+	void updateLiveDataPauseActionIcon(bool);
+
 	void initDataExtractorToolbarActions();
 	void connectDataExtractorToolbarActions(DatapickerImageView *);
 
@@ -90,6 +94,7 @@ private:
 	// main menu and toolbar
 	KRecentFilesAction* m_recentProjectsAction{nullptr};
 	QAction* m_searchAction{nullptr};
+	QAction* m_whatsNewAction{nullptr};
 	QAction* m_saveAction{nullptr};
 	QAction* m_saveAsAction{nullptr};
 	QAction* m_printAction{nullptr};
@@ -108,7 +113,8 @@ private:
 	QAction* m_newMatrixAction{nullptr};
 	QAction* m_newWorksheetAction{nullptr};
 #ifdef HAVE_SCRIPTING
-	QList<QAction*> m_newScriptActions;
+	QAction* m_newPythonScriptAction{nullptr};
+	// QList<QAction*> m_newScriptActions;
 #endif
 	QAction* m_newNotesAction{nullptr};
 	QAction* m_newLiveDataSourceAction{nullptr};
@@ -126,9 +132,9 @@ private:
 	QAction* m_lastUsedNotebookAction{nullptr};
 	ToggleActionMenu* m_tbNotebook{nullptr};
 #endif
-#ifdef HAVE_SCRIPTING
-	ToggleActionMenu* m_tbScript{nullptr};
-#endif
+// #ifdef HAVE_SCRIPTING
+// 	ToggleActionMenu* m_tbScript{nullptr};
+// #endif
 	ToggleActionMenu* m_tbImport{nullptr};
 
 	// toggling dock widgets, status bar and full screen
@@ -137,7 +143,7 @@ private:
 	QAction* m_worksheetPreviewAction;
 	KToggleAction* m_statusBarAction;
 	QAction* m_memoryInfoAction;
-	KToggleFullScreenAction* m_fullScreenAction;
+	QAction* m_fullScreenAction;
 	QAction* m_configureNotebookAction;
 
 	// window visibility
@@ -176,6 +182,10 @@ private:
 	ToggleActionMenu* m_dataExtractorZoomMenu{nullptr};
 	ToggleActionMenu* m_dataExtractorMagnificationMenu{nullptr};
 
+	// live data
+	QAction* m_liveDataPauseAction{nullptr};
+	QAction* m_liveDataUpdateAction{nullptr};
+
 	// notebook
 #ifdef HAVE_CANTOR_LIBS
 	QAction* m_notebookRestartAction{nullptr};
@@ -208,6 +218,7 @@ private:
 #endif
 
 private Q_SLOTS:
+	void showHelp();
 	void toggleDockWidget(QAction*);
 	void toggleStatusBar(bool);
 	void toggleMenuBar(bool);

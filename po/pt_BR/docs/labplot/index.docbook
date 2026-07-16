@@ -1303,13 +1303,13 @@
 > <guimenu
 >Configurações</guimenu
 ><guimenuitem
->Modo de tela inteira</guimenuitem
+>Modo de tela cheia</guimenuitem
 > </menuchoice
 ></term>
 <listitem
 ><para
 ><action
->Mostra o espaço de trabalho no modo de tela inteira.</action
+>Mostra o espaço de trabalho no modo de tela cheia.</action
 ></para>
 </listitem>
 </varlistentry>

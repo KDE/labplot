@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>437</width>
+    <width>440</width>
     <height>948</height>
    </rect>
   </property>
@@ -712,7 +712,7 @@
        <item row="19" column="0">
         <widget class="QLabel" name="lMinorTicksType">
          <property name="text">
-          <string>Type:</string>
+          <string>Position:</string>
          </property>
         </widget>
        </item>
@@ -805,7 +805,7 @@
        <item row="23" column="0">
         <widget class="QLabel" name="lMinorTicksColumn">
          <property name="text">
-          <string>Column:</string>
+          <string>Position Column:</string>
          </property>
         </widget>
        </item>
@@ -1099,7 +1099,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lMajorTicksType">
          <property name="text">
-          <string>Type:</string>
+          <string>Position:</string>
          </property>
         </widget>
        </item>
@@ -1113,7 +1113,7 @@
        <item row="10" column="0">
         <widget class="QLabel" name="lMajorTicksColumn">
          <property name="text">
-          <string>Column:</string>
+          <string>Position Column:</string>
          </property>
         </widget>
        </item>

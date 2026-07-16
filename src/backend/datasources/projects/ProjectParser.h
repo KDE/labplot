@@ -32,7 +32,7 @@ public:
 	QAbstractItemModel* model();
 	void importTo(Folder*, const QStringList&);
 
-	QList<AspectType> topLevelClasses() const;
+	const QList<AspectType>& topLevelClasses() const;
 
 protected:
 	virtual bool load(Project*, bool preview) = 0;

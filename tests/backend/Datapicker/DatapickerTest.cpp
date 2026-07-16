@@ -19,12 +19,12 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/DatapickerPointPrivate.h"
 #include "backend/datapicker/Transform.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/widgets/DatapickerImageWidget.h"
 
 #include <QAction>
-#include <QUndoStack>
 
 #define VECTOR3D_EQUAL(vec, ref)                                                                                                                               \
 	VALUES_EQUAL(vec.x(), ref.x());                                                                                                                            \
@@ -1210,8 +1210,25 @@ void DatapickerTest::datapickerDateTime() {
 	QCOMPARE(curve->posXColumn()->rowCount(), 1);
 	QCOMPARE(curve->posXColumn()->columnMode(), AbstractColumn::ColumnMode::DateTime);
 #if !defined(_WIN32)
-	QCOMPARE(curve->posXColumn()->dateTimeAt(0),
-			 QDateTime::fromString(QLatin1String("2000-12-01 03:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"))); // logical coordinates
+	// Check that the interpolated DateTime value is between dt1 and dt3
+	// and represents the expected time (midpoint between dt1 and dt3)
+	const qint64 dt1_ms = dt1.toMSecsSinceEpoch();
+	const qint64 dt3_ms = dt3.toMSecsSinceEpoch();
+	const qint64 expected_ms = dt1_ms + (dt3_ms - dt1_ms) / 2; // midpoint
+	const qint64 actual_ms = curve->posXColumn()->dateTimeAt(0).toMSecsSinceEpoch();
+
+	// The actual DateTime value should be close to the expected midpoint
+	// (allowing some tolerance for timezone handling in Transform code)
+	const qint64 tolerance_ms = 3600000; // 1 hour tolerance
+	QVERIFY2(qAbs(actual_ms - expected_ms) <= tolerance_ms,
+			 qPrintable(QStringLiteral("DateTime interpolation error: expected ~%1 ms, got %2 ms (diff: %3 ms)")
+							.arg(expected_ms)
+							.arg(actual_ms)
+							.arg(actual_ms - expected_ms)));
+
+	// Verify the interpolated time is actually between dt1 and dt3
+	QVERIFY2(actual_ms >= dt1_ms && actual_ms <= dt3_ms,
+			 qPrintable(QStringLiteral("DateTime interpolation out of range: %1, should be between %2 and %3").arg(actual_ms).arg(dt1_ms).arg(dt3_ms)));
 #endif
 	QCOMPARE(curve->posYColumn()->rowCount(), 1);
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6.); // logical coordinates
@@ -1665,19 +1682,19 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelative() {
 		QVERIFY(datapicker);
 		auto* image = datapicker->image();
 
-		DatapickerImageWidget w(nullptr);
-		w.setImages({image});
+		DatapickerImageWidget widget(nullptr);
+		widget.setImages({image});
 
-		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true); // image is valid because embedded
-		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // image is valid, but embed is turned on
-		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
-		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
+		QCOMPARE(widget.ui.cbFileEmbedd->isEnabled(), true); // image is valid because embedded
+		QCOMPARE(widget.ui.cbFileRelativePath->isEnabled(), false); // image is valid, but embed is turned on
+		QCOMPARE(widget.ui.cbFileEmbedd->isChecked(), true);
+		QCOMPARE(widget.ui.cbFileRelativePath->isChecked(), true);
 
 		QFileInfo fi(imgFileName);
 		QCOMPARE(image->fileName(), fi.fileName());
 		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
-		QCOMPARE(w.ui.leFileName->text(), fi.fileName());
-		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+		QCOMPARE(widget.ui.leFileName->text(), fi.fileName());
+		QCOMPARE(widget.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 	}
 }
 

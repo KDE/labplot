@@ -193,7 +193,7 @@ bool QJsonModel::load(QIODevice* device) {
 bool QJsonModel::loadJson(const QByteArray& json) {
 	QJsonParseError jsonError;
 
-	const QJsonDocument& doc = QJsonDocument::fromJson(json, &jsonError);
+	const auto& doc = QJsonDocument::fromJson(json, &jsonError);
 	if (jsonError.error == QJsonParseError::NoError) {
 		const bool rc = loadJson(doc);
 		if (!rc)
@@ -304,7 +304,7 @@ QModelIndex QJsonModel::index(int row, int column, const QModelIndex& parent) co
 	else
 		parentItem = static_cast<QJsonTreeItem*>(parent.internalPointer());
 
-	QJsonTreeItem* childItem = parentItem->child(row);
+	auto* childItem = parentItem->child(row);
 	if (childItem)
 		return createIndex(row, column, childItem);
 
@@ -316,7 +316,7 @@ QModelIndex QJsonModel::parent(const QModelIndex& index) const {
 		return QModelIndex{};
 
 	auto* childItem = static_cast<QJsonTreeItem*>(index.internalPointer());
-	QJsonTreeItem* parentItem = childItem->parent();
+	auto* parentItem = childItem->parent();
 
 	if (parentItem == mHeadItem)
 		return QModelIndex{};
@@ -325,7 +325,7 @@ QModelIndex QJsonModel::parent(const QModelIndex& index) const {
 }
 
 int QJsonModel::rowCount(const QModelIndex& parent) const {
-	QJsonTreeItem* parentItem;
+	const QJsonTreeItem* parentItem;
 	if (parent.column() > 0)
 		return 0;
 

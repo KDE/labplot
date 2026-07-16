@@ -296,7 +296,7 @@ int SpiceFileReader::parseFlags(const QString& s) {
 	value |= sl.contains(QLatin1String("real")) ? Flags::real : 0;
 	value |= sl.contains(QLatin1String("complex")) ? (value & ~Flags::real) : Flags::real; // TODO: check that real and complex are not in the same data
 	value |= sl.contains(QLatin1String("forward")) ? Flags::forward : 0;
-	value |= sl.contains(QLatin1String("log")) ? Flags::log : 0;
+	value |= sl.contains(QLatin1String("log")) ? Flags::logarithmic : 0;
 	value |= sl.contains(QLatin1String("double")) ? Flags::yDouble : 0;
 	return value;
 }

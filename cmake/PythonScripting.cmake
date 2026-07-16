@@ -93,8 +93,6 @@ set(shiboken_scripting_generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/doublerange_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/doublerange_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/intrange_wrapper.cpp
@@ -248,10 +246,43 @@ set(python_scripting_includes
     ${PySide6_PYTHONPATH}/include/QtGui
     ${PySide6_PYTHONPATH}/include/QtCore
 )
+# Derive the stable ABI library from the versioned library path:
+#   Linux:  libpython3.XX.so  -> libpython3.so
+#   Windows: python3XX.lib    -> python3.lib
+#   macOS:  handled via install_name_tool, no change needed
+set(_python_lib ${Python3_LIBRARIES})
+if(WIN32)
+    string(REGEX REPLACE "python3[0-9]+\\.lib" "python3.lib" _python_sabi_lib "${Python3_LIBRARIES}")
+    if(NOT "${_python_sabi_lib}" STREQUAL "${Python3_LIBRARIES}" AND EXISTS "${_python_sabi_lib}")
+        message(STATUS "Python stable ABI library: ${_python_sabi_lib}")
+        set(_python_lib ${_python_sabi_lib})
+    endif()
+endif()
+set(_python_soname "")
+if(UNIX AND NOT APPLE)
+    foreach(_lib IN LISTS Python3_LIBRARIES)
+        if(NOT _lib)
+            continue()
+        endif()
+        get_filename_component(_real_lib "${_lib}" REALPATH)
+        get_filename_component(_lib_name "${_real_lib}" NAME)
+        if(_lib_name MATCHES "^libpython3(\\.[0-9]+[a-zA-Z]*)?\\.so(\\.[0-9]+)*$")
+            set(_python_soname "${_lib_name}")
+            break()
+        endif()
+    endforeach()
+    if(NOT _python_soname)
+        message(FATAL_ERROR
+            "Could not extract Python shared library name from Python3_LIBRARIES.\n"
+            "Python3_LIBRARIES = ${Python3_LIBRARIES}"
+        )
+    endif()
+    message(STATUS "Python library soname: ${_python_soname}")
+endif()
 set(python_scripting_link_libraries
     PySide6::pyside6
     Shiboken6::libshiboken
-    ${Python3_LIBRARIES}
+    ${_python_lib}
 )
 if(PySide6_ABI3_LIBRARY)
     list(APPEND python_scripting_link_libraries ${PySide6_ABI3_LIBRARY})
@@ -271,13 +302,17 @@ set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_b
 # shiboken generated sources since they are the ones who require the includes
 set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY INCLUDE_DIRECTORIES ${python_scripting_includes})
 
-# Shiboken internally defines the Py_LIMITED_API to 3.8 and we also define the Py_LIMITED_API but to 3.9 so the compiler warns about a macro redefinition. Now we apply our
-# definition to only our source files
-# Full API needed for PyFunction_Check() and PyRun_String()
-#set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
+# Pass the PySide6 site-packages directory to PythonScriptRuntime so it can add it
+# to sys.path at runtime. This makes the embedded Python find PySide6 without requiring
+# the user to set PYTHONPATH. The user's PYTHONPATH is still respected if set.
+get_filename_component(_pyside6_site_packages "${PySide6_PATH}" DIRECTORY)
+set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY
+    COMPILE_DEFINITIONS PYSIDE6_SITE_PACKAGES="${_pyside6_site_packages}")
 
-# PYTHON3_EXECUTABLE is the python executable path and is needed when initializing the python scripting interpreter
-set_property(SOURCE ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp APPEND PROPERTY COMPILE_DEFINITIONS -DPYTHON3_EXECUTABLE=${Python3_EXECUTABLE})
+# Enable Python Stable ABI (Limited API) for Python
+# Note: We only apply this to our source files, not shiboken-generated sources to avoid redefinition warnings
+set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=${PYTHON_ABI_VERSION_HEX})
+message(STATUS "Python Stable ABI enabled (minimum: Python ${PYTHON_ABI_VERSION})")
 
 # shiboken generates sources using deprecated code so we remove these deprecation macros to enable the shiboken generated files to compile
 get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)

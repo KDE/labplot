@@ -4,7 +4,7 @@
 	Description          : A xy-curve defined by a line simplification
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,7 +14,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
@@ -133,8 +132,6 @@ bool XYLineSimplificationCurvePrivate::recalculateSpecific(const AbstractColumn*
 	DEBUG(Q_FUNC_INFO << ", tolerance2/repeat/maxtol/region: " << tol2);
 
 	///////////////////////////////////////////////////////////
-	Q_EMIT q->completed(10);
-
 	size_t npoints = 0;
 	double calcTolerance = 0; // calculated tolerance from Douglas-Peucker variant
 	size_t* index = (size_t*)malloc(n * sizeof(size_t));
@@ -178,16 +175,12 @@ bool XYLineSimplificationCurvePrivate::recalculateSpecific(const AbstractColumn*
 	} else
 		Q_UNUSED(calcTolerance);
 
-	Q_EMIT q->completed(80);
-
 	xVector->resize((int)npoints);
 	yVector->resize((int)npoints);
 	for (int i = 0; i < (int)npoints; i++) {
 		(*xVector)[i] = xdata[index[i]];
 		(*yVector)[i] = ydata[index[i]];
 	}
-
-	Q_EMIT q->completed(90);
 
 	const double posError = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
 	const double areaError = nsl_geom_linesim_area_error(xdata, ydata, n, index);
@@ -208,7 +201,6 @@ bool XYLineSimplificationCurvePrivate::recalculateSpecific(const AbstractColumn*
 	lineSimplificationResult.posError = posError;
 	lineSimplificationResult.areaError = areaError;
 
-	Q_EMIT q->completed(100);
 	return true;
 }
 
@@ -259,6 +251,7 @@ void XYLineSimplificationCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYLineSimplificationCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYLineSimplificationCurve);
 
 	QXmlStreamAttributes attribs;

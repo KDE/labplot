@@ -196,21 +196,52 @@ public:
 		setText(i18n("%1: move %2 to %3.", m_target->m_name, m_child->name(), m_new_parent->m_name));
 	}
 
-	// calling redo transfers ownership of m_child to the new parent aspect
+	// calling redo transfers ownership of m_child to the new parent aspect.
+	// Signal sequence:
+	//   1. Remove from old parent (m_target): aboutToBeRemoved → removeChild → removed
+	//   2. Add to new parent (m_new_parent): aboutToBeAdded → insertChild → added
+	// Signals must be emitted on the respective parent (not on m_child) so they
+	// propagate up to the root via connectChild() and reach the AspectTreeModel.
+	// The "before" sibling is resolved from the target index so the model calls
+	// beginInsertRows at the correct position rather than always at the end.
 	void redo() override {
-		Q_EMIT m_child->childAspectAboutToBeRemoved(m_child);
+		if (!m_child->isHidden() || m_child->type() == AspectType::DatapickerPoint)
+			Q_EMIT m_target->q->childAspectAboutToBeRemoved(m_child);
+		Q_EMIT m_child->aspectAboutToBeRemoved(m_child);
+
 		m_index = removeChild(m_target, m_child);
+
+		Q_EMIT m_target->q->childAspectRemoved(m_target->q, nullptr, m_child);
+
+		auto* beforeRedo = m_new_index < m_new_parent->m_children.count() ? m_new_parent->m_children.at(m_new_index) : nullptr;
+		Q_EMIT m_new_parent->q->childAspectAboutToBeAdded(m_new_parent->q, beforeRedo, m_child);
+		Q_EMIT m_new_parent->q->childAspectAboutToBeAdded(m_new_parent->q, m_new_index, m_child);
+
 		m_new_parent->insertChild(m_new_index, m_child);
-		Q_EMIT m_child->childAspectAdded(m_child);
+
+		Q_EMIT m_new_parent->q->childAspectAdded(m_child);
 	}
 
-	// calling undo transfers ownership of m_child back to its previous parent aspect
+	// calling undo transfers ownership of m_child back to its previous parent aspect.
+	// Mirror of redo(): remove from new parent, re-add to old parent at the saved index.
 	void undo() override {
 		Q_ASSERT(m_index != -1);
-		Q_EMIT m_child->childAspectAboutToBeRemoved(m_child);
+
+		if (!m_child->isHidden() || m_child->type() == AspectType::DatapickerPoint)
+			Q_EMIT m_new_parent->q->childAspectAboutToBeRemoved(m_child);
+		Q_EMIT m_child->aspectAboutToBeRemoved(m_child);
+
 		removeChild(m_new_parent, m_child);
+
+		Q_EMIT m_new_parent->q->childAspectRemoved(m_new_parent->q, nullptr, m_child);
+
+		auto* beforeUndo = m_index < m_target->m_children.count() ? m_target->m_children.at(m_index) : nullptr;
+		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, beforeUndo, m_child);
+		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, m_index, m_child);
+
 		m_target->insertChild(m_index, m_child);
-		Q_EMIT m_child->childAspectAdded(m_child);
+
+		Q_EMIT m_target->q->childAspectAdded(m_child);
 	}
 
 protected:

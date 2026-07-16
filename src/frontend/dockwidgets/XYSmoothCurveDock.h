@@ -15,8 +15,6 @@
 #include "frontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xysmoothcurvedockgeneraltab.h"
 
-class TreeViewComboBox;
-
 class XYSmoothCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
@@ -24,6 +22,7 @@ public:
 	explicit XYSmoothCurveDock(QWidget* parent);
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
+	void retranslateUi() override;
 
 private:
 	void initGeneralTab() override;
@@ -52,6 +51,9 @@ private Q_SLOTS:
 	void orderChanged(int);
 	void modeChanged(int);
 	void valueChanged();
+	void spanChanged(double);
+	void deltaChanged(double);
+	void iterationsChanged(int);
 	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYCurve

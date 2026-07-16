@@ -1,3 +1,12 @@
+/*
+	File                 : Script.h
+	Project              : LabPlot
+	Description          : Script Runtime
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #ifndef SCRIPTRUNTIME_H
 #define SCRIPTRUNTIME_H
 

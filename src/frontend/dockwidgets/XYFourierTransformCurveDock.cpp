@@ -13,19 +13,10 @@
 #include "frontend/widgets/TreeViewComboBox.h"
 
 /*!
-  \class XYFourierTransformCurveDock
- \brief  Provides a widget for editing the properties of the XYFourierTransformCurves
-		(2D-curves defined by a Fourier transform) currently selected in
-		the project explorer.
-
-  If more than one curves are set, the properties of the first column are shown.
-  The changes of the properties are applied to all curves.
-  The exclusions are the name, the comment and the datasets (columns) of
-  the curves  - these properties can only be changed if there is only one single curve.
-
-  \ingroup frontend
+	\class XYFourierTransformCurveDock
+	\brief  Provides a widget for editing the properties of \c XYFourierTransformCurve.
+	\ingroup frontend
 */
-
 XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget* parent)
 	: XYAnalysisCurveDock(parent) {
 }
@@ -37,7 +28,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -46,16 +37,9 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	gridLayout->setVerticalSpacing(2);
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 5, 2, 1, 2);
+	gridLayout->addWidget(cbXDataColumn, 4, 2, 1, 2);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 6, 2, 1, 2);
-
-	for (int i = 0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
-		uiGeneralTab.cbWindowType->addItem(i18n(nsl_sf_window_type_name[i]));
-	for (int i = 0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
-		uiGeneralTab.cbType->addItem(i18n(nsl_dft_result_type_name[i]));
-	for (int i = 0; i < NSL_DFT_XSCALE_COUNT; i++)
-		uiGeneralTab.cbXScale->addItem(i18n(nsl_dft_xscale_name[i]));
+	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 2);
 
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
@@ -63,6 +47,8 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYFourierTransformCurveDock::autoRangeChanged);
@@ -228,6 +214,7 @@ void XYFourierTransformCurveDock::xScaleChanged() {
 }
 
 void XYFourierTransformCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYFourierTransformCurve*>(curve)->setTransformData(m_transformData);
 
@@ -253,4 +240,20 @@ void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTrans
 	this->typeChanged();
 
 	this->showTransformResult();
+}
+
+void XYFourierTransformCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbWindowType->clear();
+	for (int i = 0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
+		uiGeneralTab.cbWindowType->addItem(i18n(nsl_sf_window_type_name[i]));
+
+	uiGeneralTab.cbType->clear();
+	for (int i = 0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_dft_result_type_name[i]));
+
+	uiGeneralTab.cbXScale->clear();
+	for (int i = 0; i < NSL_DFT_XSCALE_COUNT; i++)
+		uiGeneralTab.cbXScale->addItem(i18n(nsl_dft_xscale_name[i]));
 }

@@ -4,7 +4,7 @@
 	Description          : A xy-curve defined by a line simplification
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -69,7 +69,6 @@ private:
 
 Q_SIGNALS:
 	void lineSimplificationDataChanged(const XYLineSimplificationCurve::LineSimplificationData&);
-	void completed(int); //!< int ranging from 0 to 100 notifies about the status of the analysis process
 };
 
 #endif

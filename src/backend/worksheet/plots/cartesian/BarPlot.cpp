@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Bar Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -175,6 +175,19 @@ ErrorBar* BarPlot::errorBarAt(int index) const {
 		return nullptr;
 }
 
+bool BarPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	// The values are not important, because they are just passed to minMax() which does not consider the indices
+	start = 0;
+	end = 0;
+	return true;
+}
+
+bool BarPlot::minMax(const Dimension dim, const Range<int>&, Range<double>& r, bool) const {
+	r.setStart(minimum(dim));
+	r.setEnd(maximum(dim));
+	return true;
+}
+
 double BarPlot::minimum(const Dimension dim) const {
 	Q_D(const BarPlot);
 	switch (dim) {
@@ -200,6 +213,13 @@ double BarPlot::maximum(const Dimension dim) const {
 bool BarPlot::hasData() const {
 	Q_D(const BarPlot);
 	return !d->dataColumns.isEmpty();
+}
+
+int BarPlot::dataCount(Dimension) const {
+	Q_D(const BarPlot);
+	if (!hasData())
+		return -1;
+	return d->dataColumns.count();
 }
 
 bool BarPlot::usingColumn(const AbstractColumn* column, bool) const {
@@ -376,7 +396,7 @@ Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
 	if (!q->isLoading())
 		background->init(group);
 
-	q->connect(background, &Background::updateRequested, [=] {
+	q->connect(background, &Background::updateRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -394,12 +414,12 @@ Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -417,11 +437,11 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 	if (!q->isLoading())
 		value->init(group);
 
-	q->connect(value, &Value::updatePixmapRequested, [=] {
+	q->connect(value, &Value::updatePixmapRequested, [=, this] {
 		updatePixmap();
 	});
 
-	q->connect(value, &Value::updateRequested, [=] {
+	q->connect(value, &Value::updateRequested, [=, this] {
 		updateValues();
 	});
 }
@@ -433,11 +453,11 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	if (!q->isLoading())
 		errorBar->init(group);
 
-	q->connect(errorBar, &ErrorBar::updatePixmapRequested, [=] {
+	q->connect(errorBar, &ErrorBar::updatePixmapRequested, [=, this] {
 		updatePixmap();
 	});
 
-	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
+	q->connect(errorBar, &ErrorBar::updateRequested, [=, this] {
 		const int index = errorBars.indexOf(errorBar);
 		if (index != -1)
 			updateErrorBars(index);
@@ -454,7 +474,7 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void BarPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || !isVisible() || q->isLoading();
+	const bool suppressed = retransformSuppressed();
 	Q_EMIT trackRetransformCalled(suppressed);
 	if (suppressed)
 		return;
@@ -532,7 +552,7 @@ void BarPlotPrivate::recalc() {
 		// one more bar needs to be added
 		KConfig config;
 		KConfigGroup group = config.group(QLatin1String("BarPlot"));
-		const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
+		const auto* plot = q->parent<CartesianPlot>();
 
 		for (int i = 0; i < diff; ++i) {
 			// box filling and border line
@@ -541,10 +561,10 @@ void BarPlotPrivate::recalc() {
 			auto* errorBar = addErrorBar(group);
 
 			if (plot) {
-				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
-				background->setFirstColor(themeColor);
-				line->setColor(themeColor);
-				errorBar->line()->setColor(themeColor);
+				const auto& color = plot->plotColor(backgrounds.count() - 1);
+				background->setFirstColor(color);
+				line->setColor(color);
+				errorBar->line()->setColor(color);
 			}
 		}
 	} else if (diff < 0) {
@@ -558,17 +578,15 @@ void BarPlotPrivate::recalc() {
 	// this number is equal to the max number of non-empty
 	// values in the provided datasets
 	int barGroupsCount = 0;
-	int columnIndex = 0;
-	for (auto* column : std::as_const(dataColumns)) {
+	for (int i = 0; i < newSize; ++i) {
+		const auto* column = dataColumns.at(i);
 		if (!column)
 			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
-		m_barLines[columnIndex].resize(size);
-		m_fillPolygons[columnIndex].resize(size);
+		m_barLines[i].resize(size);
+		m_fillPolygons[i].resize(size);
 		if (size > barGroupsCount)
 			barGroupsCount = size;
-
-		++columnIndex;
 	}
 
 	m_stackedBarPositiveOffsets.resize(barGroupsCount);
@@ -598,11 +616,11 @@ void BarPlotPrivate::recalc() {
 				if (!column->isValid(i) || column->isMasked(i))
 					continue;
 
-				double value = column->valueAt(i);
-				if (value > 0)
-					barMaxs[valueIndex] += value;
-				if (value < 0)
-					barMins[valueIndex] += value;
+				double v = column->valueAt(i);
+				if (v > 0)
+					barMaxs[valueIndex] += v;
+				if (v < 0)
+					barMins[valueIndex] += v;
 
 				++valueIndex;
 			}
@@ -746,7 +764,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			const double value = column->valueAt(i);
+			const double v = column->valueAt(i);
 			double x;
 
 			// translate to the beginning of the group
@@ -759,12 +777,12 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			x += m_groupGap + scalingOffset + (width + barGap + 2 * scalingOffset) * columnIndex;
 
 			lines.clear();
-			lines << QLineF(x, value, x + width, value);
-			lines << QLineF(x + width, value, x + width, m_zero);
+			lines << QLineF(x, v, x + width, v);
+			lines << QLineF(x + width, v, x + width, m_zero);
 			lines << QLineF(x + width, m_zero, x, m_zero);
-			lines << QLineF(x, m_zero, x, value);
+			lines << QLineF(x, m_zero, x, v);
 
-			valuesPointsLogical << QPointF(x + width / 2, value);
+			valuesPointsLogical << QPointF(x + width / 2, v);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -783,9 +801,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			const double value = column->valueAt(i);
+			const double v = column->valueAt(i);
 			double offset;
-			if (value > 0)
+			if (v > 0)
 				offset = m_stackedBarPositiveOffsets.at(valueIndex);
 			else
 				offset = m_stackedBarNegativeOffsets.at(valueIndex);
@@ -801,16 +819,16 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			x += m_groupGap + scalingOffset;
 
 			lines.clear();
-			lines << QLineF(x, value + offset, x + width, value + offset);
-			lines << QLineF(x + width, value + offset, x + width, offset);
+			lines << QLineF(x, v + offset, x + width, v + offset);
+			lines << QLineF(x + width, v + offset, x + width, offset);
 			lines << QLineF(x + width, offset, x, offset);
-			lines << QLineF(x, offset, x, value + offset);
+			lines << QLineF(x, offset, x, v + offset);
 
-			if (value > 0) {
-				m_stackedBarPositiveOffsets[valueIndex] += value;
+			if (v > 0) {
+				m_stackedBarPositiveOffsets[valueIndex] += v;
 				valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
 			} else {
-				m_stackedBarNegativeOffsets[valueIndex] += value;
+				m_stackedBarNegativeOffsets[valueIndex] += v;
 				valuesPointsLogical << QPointF(x + width / 2, m_stackedBarNegativeOffsets.at(valueIndex));
 			}
 
@@ -831,11 +849,11 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			double value = column->valueAt(i);
-			if (value < 0)
+			double v = column->valueAt(i);
+			if (v < 0)
 				continue;
 
-			value = value * 100 / m_stackedBar100PercentValues.at(valueIndex);
+			v *= 100. / m_stackedBar100PercentValues.at(valueIndex);
 			const double offset = m_stackedBarPositiveOffsets.at(valueIndex);
 
 			// translate to the beginning of the group
@@ -849,12 +867,12 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			x += m_groupGap + scalingOffset;
 
 			lines.clear();
-			lines << QLineF(x, value + offset, x + width, value + offset);
-			lines << QLineF(x + width, value + offset, x + width, offset);
+			lines << QLineF(x, v + offset, x + width, v + offset);
+			lines << QLineF(x + width, v + offset, x + width, offset);
 			lines << QLineF(x + width, offset, x, offset);
-			lines << QLineF(x, offset, x, value + offset);
+			lines << QLineF(x, offset, x, v + offset);
 
-			m_stackedBarPositiveOffsets[valueIndex] += value;
+			m_stackedBarPositiveOffsets[valueIndex] += v;
 
 			valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
 
@@ -894,7 +912,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			const double value = column->valueAt(i);
+			const double v = column->valueAt(i);
 			double y;
 
 			// translate to the beginning of the group
@@ -907,12 +925,12 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			y += m_groupGap + scalingOffset + (width + barGap + 2 * scalingOffset) * columnIndex;
 
 			lines.clear();
-			lines << QLineF(value, y, value, y + width);
-			lines << QLineF(value, y + width, m_zero, y + width);
+			lines << QLineF(v, y, v, y + width);
+			lines << QLineF(v, y + width, m_zero, y + width);
 			lines << QLineF(m_zero, y + width, m_zero, y);
-			lines << QLineF(m_zero, y, value, y);
+			lines << QLineF(m_zero, y, v, y);
 
-			valuesPointsLogical << QPointF(value, y + width / 2);
+			valuesPointsLogical << QPointF(v, y + width / 2);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -930,9 +948,9 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			const double value = column->valueAt(i);
+			const double v = column->valueAt(i);
 			double offset;
-			if (value > 0)
+			if (v > 0)
 				offset = m_stackedBarPositiveOffsets.at(valueIndex);
 			else
 				offset = m_stackedBarNegativeOffsets.at(valueIndex);
@@ -948,16 +966,16 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			y += m_groupGap + scalingOffset;
 
 			lines.clear();
-			lines << QLineF(value + offset, y, value + offset, y + width);
-			lines << QLineF(value + offset, y + width, offset, y + width);
+			lines << QLineF(v + offset, y, v + offset, y + width);
+			lines << QLineF(v + offset, y + width, offset, y + width);
 			lines << QLineF(offset, y + width, offset, y);
-			lines << QLineF(offset, y, value + offset, y);
+			lines << QLineF(offset, y, v + offset, y);
 
-			if (value > 0) {
-				m_stackedBarPositiveOffsets[valueIndex] += value;
+			if (v > 0) {
+				m_stackedBarPositiveOffsets[valueIndex] += v;
 				valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
 			} else {
-				m_stackedBarNegativeOffsets[valueIndex] += value;
+				m_stackedBarNegativeOffsets[valueIndex] += v;
 				valuesPointsLogical << QPointF(m_stackedBarNegativeOffsets.at(valueIndex), y + width / 2);
 			}
 			barLines << q->cSystem->mapLogicalToScene(lines);
@@ -977,11 +995,11 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
 
-			double value = column->valueAt(i);
-			if (value < 0)
+			double v = column->valueAt(i);
+			if (v < 0)
 				continue;
 
-			value = value * 100 / m_stackedBar100PercentValues.at(valueIndex);
+			v *= 100. / m_stackedBar100PercentValues.at(valueIndex);
 			const double offset = m_stackedBarPositiveOffsets.at(valueIndex);
 
 			double y;
@@ -994,12 +1012,12 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			y += m_groupGap + scalingOffset;
 
 			lines.clear();
-			lines << QLineF(value + offset, y, value + offset, y + width);
-			lines << QLineF(value + offset, y + width, offset, y + width);
+			lines << QLineF(v + offset, y, v + offset, y + width);
+			lines << QLineF(v + offset, y + width, offset, y + width);
 			lines << QLineF(offset, y + width, offset, y);
-			lines << QLineF(offset, y, value + offset, y);
+			lines << QLineF(offset, y, v + offset, y);
 
-			m_stackedBarPositiveOffsets[valueIndex] += value;
+			m_stackedBarPositiveOffsets[valueIndex] += v;
 			valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
@@ -1027,7 +1045,10 @@ void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QV
 	// clip the points to the plot data rect and create a new polygon
 	// out of them that will be filled out.
 	QPolygonF polygon;
-	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
+	const auto* plot = q->parent<CartesianPlot>();
+	if (!plot)
+		return;
+	const QRectF& dataRect = plot->dataRect();
 	int i = 0;
 	for (const auto& line : unclippedLines) {
 		// clip the first point of the line
@@ -1165,12 +1186,12 @@ void BarPlotPrivate::updateValues() {
 		break;
 	case Value::Center: {
 		QVector<qreal> listBarWidth;
-		for (int i = 0, j = 0; i < m_barLines.size(); i++) {
+		for (int i = 0; i < m_barLines.size(); i++) {
 			auto& columnBarLines = m_barLines.at(i);
 
-			for (int i = 0; i < columnBarLines.size(); i++, j++) { // loop over the different data columns
+			for (int j = 0; j < columnBarLines.size(); j++) { // loop over the different data columns
 				if (visiblePoints.at(j) == true)
-					listBarWidth.append(columnBarLines.at(i).at(1).length());
+					listBarWidth.append(columnBarLines.at(j).at(1).length());
 			}
 		}
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
@@ -1445,6 +1466,7 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool BarPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(BarPlot);
 
 	if (!readBasicAttributes(reader))
@@ -1555,12 +1577,12 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(BarPlot);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = d->m_plot->themeColorPalette(index);
+	const QColor themeColor = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {
-		const auto& color = plot->themeColorPalette(i);
+		const auto& color = plot->plotColor(i);
 
 		// box filling
 		auto* background = d->backgrounds.at(i);

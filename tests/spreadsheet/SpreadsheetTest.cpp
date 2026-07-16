@@ -14,6 +14,7 @@
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
@@ -28,9 +29,11 @@
 #endif
 
 #include <QClipboard>
+#include <QMessageBox>
 #include <QModelIndex>
+#include <QPushButton>
 #include <QRandomGenerator>
-#include <QUndoStack>
+#include <QTimer>
 
 //**********************************************************
 //****************** Copy&Paste tests **********************
@@ -39,6 +42,19 @@
 //**********************************************************
 //********** Handling of different columns modes ***********
 //**********************************************************
+
+void clickMessageBoxButton(QMessageBox::StandardButton buttonType, int delay = 100) {
+	QTimer::singleShot(delay, [buttonType]() {
+		for (QWidget* widget : QApplication::topLevelWidgets()) {
+			if (auto* box = qobject_cast<QMessageBox*>(widget)) {
+				if (auto* btn = box->button(buttonType)) {
+					btn->click();
+					return;
+				}
+			}
+		}
+	});
+}
 /*!
    insert two columns with float values into an empty spreadsheet
 */
@@ -52,6 +68,7 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -86,6 +103,7 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -117,6 +135,7 @@ void SpreadsheetTest::testCopyPasteColumnMode02() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -153,6 +172,7 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -214,6 +234,7 @@ void SpreadsheetTest::testCopyPasteColumnMode04() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -251,6 +272,7 @@ void SpreadsheetTest::testCopyPasteColumnMode05() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -287,6 +309,7 @@ void SpreadsheetTest::testCopyPasteColumnMode06() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -322,6 +345,7 @@ void SpreadsheetTest::testCopyPasteColumnMode07() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
+	clickMessageBoxButton(QMessageBox::No);
 	view.pasteIntoSelection();
 
 	// spreadsheet size and column mode
@@ -1282,6 +1306,206 @@ void SpreadsheetTest::testMaskRowsWithMissingValues() {
 	QCOMPARE(col1->isMasked(4), true);
 }
 
+void SpreadsheetTest::testMaskingRowRemovalUndoRedo() {
+	// prepare project and spreadsheet to enable undo/redo
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(2);
+	sheet->setRowCount(10);
+
+	auto* col0 = sheet->column(0);
+	auto* col1 = sheet->column(1);
+	col0->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col1->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	// populate initial values
+	for (int r = 0; r < 10; ++r) {
+		col0->setValueAt(r, static_cast<double>(r)); // 0..9
+		col1->setValueAt(r, static_cast<double>(100 + r)); // 100..109
+	}
+
+	// set masking intervals on both columns: [2,4] and [7,8]
+	for (int row = 2; row <= 4; ++row) {
+		col0->setMasked(row, true);
+		col1->setMasked(row, true);
+	}
+	for (int row = 7; row <= 8; ++row) {
+		col0->setMasked(row, true);
+		col1->setMasked(row, true);
+	}
+
+	// pre-check masks and values
+	QCOMPARE(sheet->rowCount(), 10);
+	// masks col0
+	QCOMPARE(col0->isMasked(0), false);
+	QCOMPARE(col0->isMasked(1), false);
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(5), false);
+	QCOMPARE(col0->isMasked(6), false);
+	QCOMPARE(col0->isMasked(7), true);
+	QCOMPARE(col0->isMasked(8), true);
+	QCOMPARE(col0->isMasked(9), false);
+	// masks col1 (same intervals)
+	QCOMPARE(col1->isMasked(0), false);
+	QCOMPARE(col1->isMasked(1), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(5), false);
+	QCOMPARE(col1->isMasked(6), false);
+	QCOMPARE(col1->isMasked(7), true);
+	QCOMPARE(col1->isMasked(8), true);
+	QCOMPARE(col1->isMasked(9), false);
+	// values
+	QCOMPARE(col0->valueAt(0), 0.0);
+	QCOMPARE(col0->valueAt(9), 9.0);
+	QCOMPARE(col1->valueAt(0), 100.0);
+	QCOMPARE(col1->valueAt(9), 109.0);
+
+	// remove rows [3..6] (count=4 starting at first=3); overlaps with masked [3,4]
+	sheet->removeRows(3, 4);
+
+	// after removal, rowCount decreases and masks adjust: expected masks [2,2] and [3,4]
+	QCOMPARE(sheet->rowCount(), 6);
+	// masks col0
+	QCOMPARE(col0->isMasked(0), false);
+	QCOMPARE(col0->isMasked(1), false);
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(5), false);
+	// masks col1
+	QCOMPARE(col1->isMasked(0), false);
+	QCOMPARE(col1->isMasked(1), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(5), false);
+	// values after removal: rows now map to original [0,1,2,7,8,9]
+	QCOMPARE(col0->valueAt(0), 0.0);
+	QCOMPARE(col0->valueAt(1), 1.0);
+	QCOMPARE(col0->valueAt(2), 2.0);
+	QCOMPARE(col0->valueAt(3), 7.0);
+	QCOMPARE(col0->valueAt(4), 8.0);
+	QCOMPARE(col0->valueAt(5), 9.0);
+	QCOMPARE(col1->valueAt(0), 100.0);
+	QCOMPARE(col1->valueAt(1), 101.0);
+	QCOMPARE(col1->valueAt(2), 102.0);
+	QCOMPARE(col1->valueAt(3), 107.0);
+	QCOMPARE(col1->valueAt(4), 108.0);
+	QCOMPARE(col1->valueAt(5), 109.0);
+
+	// undo: restore rows and original masks/values
+	project.undoStack()->undo();
+
+	QCOMPARE(sheet->rowCount(), 10);
+	// masks
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(7), true);
+	QCOMPARE(col0->isMasked(8), true);
+	QCOMPARE(col0->isMasked(5), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(7), true);
+	QCOMPARE(col1->isMasked(8), true);
+	QCOMPARE(col1->isMasked(5), false);
+	// values restored
+	QCOMPARE(col0->valueAt(0), 0.0);
+	QCOMPARE(col0->valueAt(9), 9.0);
+	QCOMPARE(col1->valueAt(0), 100.0);
+	QCOMPARE(col1->valueAt(9), 109.0);
+
+	// redo: apply removal again and verify adjusted masks/values
+	project.undoStack()->redo();
+
+	QCOMPARE(sheet->rowCount(), 6);
+	// masks
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), true);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col0->isMasked(5), false);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), true);
+	QCOMPARE(col1->isMasked(4), true);
+	QCOMPARE(col1->isMasked(5), false);
+	// values
+	QCOMPARE(col0->valueAt(3), 7.0);
+	QCOMPARE(col0->valueAt(4), 8.0);
+	QCOMPARE(col0->valueAt(5), 9.0);
+	QCOMPARE(col1->valueAt(3), 107.0);
+	QCOMPARE(col1->valueAt(4), 108.0);
+	QCOMPARE(col1->valueAt(5), 109.0);
+}
+
+/*
+ * check that masked rows follow the sort order in a single column
+ */
+void SpreadsheetTest::testSortMasksSingleColumn() {
+	// use a project to enable undo/redo of sort macro
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(1);
+	sheet->setRowCount(4);
+	auto* col = sheet->column(0);
+
+	// values: original indices 0..3 have values [3,1,4,2]
+	const QVector<double> values{3.0, 1.0, 4.0, 2.0};
+	col->replaceValues(0, values);
+
+	// mask original rows 1 and 3
+	col->setMasked(1, true);
+	col->setMasked(3, true);
+
+	// sort ascending (separate)
+	sheet->sortColumns(nullptr, {col}, true);
+
+	// values should be [1,2,3,4]
+	QCOMPARE(col->valueAt(0), 1.0);
+	QCOMPARE(col->valueAt(1), 2.0);
+	QCOMPARE(col->valueAt(2), 3.0);
+	QCOMPARE(col->valueAt(3), 4.0);
+
+	// masks should follow values from original masked rows (1->value 1, 3->value 2)
+	QCOMPARE(col->isMasked(0), true);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), false);
+
+	// undo: expect original order and masks restored at original rows 1 and 3
+	project.undoStack()->undo();
+	QCOMPARE(col->valueAt(0), 3.0);
+	QCOMPARE(col->valueAt(1), 1.0);
+	QCOMPARE(col->valueAt(2), 4.0);
+	QCOMPARE(col->valueAt(3), 2.0);
+	QCOMPARE(col->isMasked(0), false);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), true);
+
+	// redo: expect sorted order and masks on rows 0 and 1 again
+	// TODO: crash after the redo of the sort
+	/*
+	project.undoStack()->redo();
+	QCOMPARE(col->valueAt(0), 1.0);
+	QCOMPARE(col->valueAt(1), 2.0);
+	QCOMPARE(col->valueAt(2), 3.0);
+	QCOMPARE(col->valueAt(3), 4.0);
+	QCOMPARE(col->isMasked(0), true);
+	QCOMPARE(col->isMasked(1), true);
+	QCOMPARE(col->isMasked(2), false);
+	QCOMPARE(col->isMasked(3), false);
+	*/
+}
+
 // **********************************************************
 // ********************* flattening  ************************
 // **********************************************************
@@ -1621,6 +1845,177 @@ void SpreadsheetTest::testFlatten03() {
 	QCOMPARE(col2->integerAt(3), 10);
 	QCOMPARE(col2->integerAt(4), 20);
 	QCOMPARE(col2->integerAt(5), 30);
+}
+
+// **********************************************************
+// ********************* transposing  ***********************
+// **********************************************************
+/*!
+ * transpose a spreadsheet with two integer columns, still integer columns after transposing
+ */
+void SpreadsheetTest::testTranspose00() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(4);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col->setIntegerAt(0, 1);
+	col->setIntegerAt(1, 2);
+	col->setIntegerAt(2, 3);
+	col->setIntegerAt(3, 4);
+
+	col = sheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col->setIntegerAt(0, 10);
+	col->setIntegerAt(1, 20);
+	col->setIntegerAt(2, 30);
+	col->setIntegerAt(3, 40);
+
+	// transpose
+	sheet->transpose();
+
+	// checks
+	QCOMPARE(sheet->columnCount(), 4);
+	QCOMPARE(sheet->rowCount(), 2);
+
+	col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(col->valueAt(0), 1);
+	QCOMPARE(col->valueAt(1), 10);
+
+	col = sheet->column(1);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(col->valueAt(0), 2);
+	QCOMPARE(col->valueAt(1), 20);
+
+	col = sheet->column(2);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(col->valueAt(0), 3);
+	QCOMPARE(col->valueAt(1), 30);
+
+	col = sheet->column(3);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(col->valueAt(0), 4);
+	QCOMPARE(col->valueAt(1), 40);
+}
+
+/*!
+ * transpose a spreadsheet with one integer and one double column, two double columns after transposing
+ */
+void SpreadsheetTest::testTranspose01() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(4);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col->setIntegerAt(0, 1);
+	col->setIntegerAt(1, 2);
+	col->setIntegerAt(2, 3);
+	col->setIntegerAt(3, 4);
+
+	col = sheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+	col->setValueAt(3, 40.);
+
+	// transpose
+	sheet->transpose();
+
+	// checks
+	QCOMPARE(sheet->columnCount(), 4);
+	QCOMPARE(sheet->rowCount(), 2);
+
+	// check values
+	col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 1.);
+	QCOMPARE(col->valueAt(1), 10.);
+
+	col = sheet->column(1);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 2.);
+	QCOMPARE(col->valueAt(1), 20.);
+
+	col = sheet->column(2);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 3.);
+	QCOMPARE(col->valueAt(1), 30.);
+
+	col = sheet->column(3);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 4.);
+	QCOMPARE(col->valueAt(1), 40.);
+}
+
+/*!
+ * transpose a spreadsheet with text, integer and double column, two double columns after transposing, text values as column names.
+ */
+void SpreadsheetTest::testTranspose02() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(3);
+	sheet->setRowCount(4);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col->setTextAt(0, QLatin1String("A"));
+	col->setTextAt(1, QLatin1String("B"));
+	col->setTextAt(2, QLatin1String("C"));
+	col->setTextAt(3, QLatin1String("D"));
+
+	col = sheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col->setIntegerAt(0, 1);
+	col->setIntegerAt(1, 2);
+	col->setIntegerAt(2, 3);
+	col->setIntegerAt(3, 4);
+
+	col = sheet->column(2);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+	col->setValueAt(3, 40.);
+
+	// transpose
+	sheet->transpose();
+
+	// checks
+	QCOMPARE(sheet->columnCount(), 4);
+	QCOMPARE(sheet->rowCount(), 2);
+
+	col = sheet->column(0);
+	QCOMPARE(col->name(), QStringLiteral("A"));
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 1.);
+	QCOMPARE(col->valueAt(1), 10.);
+
+	col = sheet->column(1);
+	QCOMPARE(col->name(), QStringLiteral("B"));
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 2.);
+	QCOMPARE(col->valueAt(1), 20.);
+
+	col = sheet->column(2);
+	QCOMPARE(col->name(), QStringLiteral("C"));
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 3.);
+	QCOMPARE(col->valueAt(1), 30.);
+
+	col = sheet->column(3);
+	QCOMPARE(col->name(), QStringLiteral("D"));
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 4.);
+	QCOMPARE(col->valueAt(1), 40.);
 }
 
 // **********************************************************
@@ -2753,17 +3148,9 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	dock.setSpreadsheets({sheetCalculations});
 	auto* modelSheetCalculations = new SpreadsheetModel(sheetCalculations);
 
-	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
-	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
-	QCOMPARE(dock.m_spreadsheet->linking(), false);
+	QCOMPARE(dock.m_spreadsheet->linkedSpreadsheet(), nullptr);
 
-	dock.ui.cbLinkingEnabled->toggled(true);
-
-	// QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), true); // does not work here. Don't know why
-	// QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), true);
-	// QCOMPARE(dock.ui.sbRowCount->isEnabled(), false);
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
 	QCOMPARE(sheetCalculations->rowCount(), 2);
@@ -2781,7 +3168,6 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData2);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData2);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData2->path());
 	QCOMPARE(sheetCalculations->rowCount(), 100);
@@ -2789,7 +3175,6 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 
 	sheetCalculations->undoStack()->undo();
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -2797,14 +3182,12 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 
 	sheetCalculations->undoStack()->redo();
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData2);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData2->path());
 	QCOMPARE(sheetCalculations->rowCount(), 100);
 	QCOMPARE(modelSheetCalculations->rowCount(), 100);
 
 	sheetCalculations->undoStack()->undo(); // first undo
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -2812,17 +3195,9 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 
 	sheetCalculations->undoStack()->undo();
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr); // No linked spreadsheet anymore
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
 	QCOMPARE(sheetCalculations->rowCount(), 2); // Go back to original row count
-	QCOMPARE(modelSheetCalculations->rowCount(), 2);
-
-	sheetCalculations->undoStack()->undo();
-	QCOMPARE(sheetCalculations->linking(), false);
-	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
-	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
-	QCOMPARE(sheetCalculations->rowCount(), 2);
 	QCOMPARE(modelSheetCalculations->rowCount(), 2);
 }
 
@@ -2844,16 +3219,11 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
-	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
-	QCOMPARE(sheetCalculations->linking(), false);
-
-	Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -2861,7 +3231,6 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 	sheetData->remove();
 	sheetData->setRowCount(100);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), i18n("Project") + QStringLiteral("/data"));
 	QCOMPARE(sheetCalculations->rowCount(), 10); // does not change
@@ -2871,7 +3240,6 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 	sheetDataNew->setRowCount(12);
 	project.addChild(sheetDataNew);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetDataNew);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetDataNew->path());
 	QCOMPARE(sheetCalculations->rowCount(), 12);
@@ -2895,16 +3263,11 @@ void SpreadsheetTest::testLinkSpreadsheetAddRow() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
-	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
-	QCOMPARE(sheetCalculations->linking(), false);
-
-	Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -2912,7 +3275,6 @@ void SpreadsheetTest::testLinkSpreadsheetAddRow() {
 	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
 	sheetData->setRowCount(13);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 13);
@@ -2936,16 +3298,11 @@ void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
-	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
-	QCOMPARE(sheetCalculations->linking(), false);
-
-	dock.ui.cbLinkingEnabled->toggled(true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -2953,7 +3310,6 @@ void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
 	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
 	sheetData->setRowCount(7);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 7);
@@ -2990,10 +3346,8 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
 		for (int i = 0; i < 10; i++)
 			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
 	}
-	sheetCalculations->setLinking(true);
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -3039,10 +3393,8 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculateRowCountChange() {
 		for (int i = 0; i < 2; i++)
 			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
 	}
-	sheetCalculations->setLinking(true);
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -3103,16 +3455,11 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 		SpreadsheetDock dock(nullptr);
 		dock.setSpreadsheets({sheetCalculations});
 
-		QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
-		QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 		QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
-		QCOMPARE(sheetCalculations->linking(), false);
-
-		Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
+		QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 
 		sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-		QCOMPARE(sheetCalculations->linking(), true);
 		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 		QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -3129,14 +3476,12 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 		auto sheetCalculations = project.child<Spreadsheet>(1);
 		QVERIFY(sheetCalculations);
 
-		QCOMPARE(sheetCalculations->linking(), true);
 		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 		QCOMPARE(sheetCalculations->rowCount(), 10);
 
 		sheetData->setRowCount(11); // Changing shall also update sheetCalculations also after loading
 
-		QCOMPARE(sheetCalculations->linking(), true);
 		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 		QCOMPARE(sheetCalculations->rowCount(), 11);
@@ -3160,10 +3505,8 @@ void SpreadsheetTest::testLinkSpreadsheetsModelDockUpdateCheckRemoveRows() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	sheetCalculations->setLinking(true);
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 20);
@@ -3188,10 +3531,8 @@ void SpreadsheetTest::testLinkSpreadsheetsModelDockUpdateCheckInsertRows() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	sheetCalculations->setLinking(true);
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 100);
@@ -3336,6 +3677,7 @@ BU_: DBG DRIVER IO MOTOR SENSOR
 
 void createDBCFile(const QString& filename, const std::string& content) {
 	auto* file = std::fopen(filename.toStdString().c_str(), "w");
+	DEBUG("Trying to open file " << filename.toStdString())
 	QVERIFY(file);
 	std::fputs(PRIMITIVE_DBC.c_str(), file);
 	std::fputs(content.c_str(), file);
@@ -3447,10 +3789,8 @@ BO_ 541 MSG2: 8 Vector__XXX
 			VALUES_EQUAL(sheetCalculationsColumn1->doubleAt(i), ref.at(i));
 	}
 
-	sheetCalculations->setLinking(true);
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
@@ -3559,6 +3899,391 @@ void SpreadsheetTest::testClearColumns() {
 		QCOMPARE(c1->valueAt(i), 2. * i + 3.);
 		QCOMPARE(c2->valueAt(i), pow(i, 3.));
 	}
+}
+
+// **********************************************************
+// ************** clearing and data input  ******************
+// **********************************************************
+
+void SpreadsheetTest::testClearCellsValidity() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(1);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+
+	model->setData(model->index(0, 0), QStringLiteral("42"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("100"), Qt::EditRole);
+
+	QVERIFY(c0->isValid(0));
+	QVERIFY(c1->isValid(0));
+
+	model->setData(model->index(0, 0), QString(), Qt::EditRole);
+	model->setData(model->index(0, 1), QString(), Qt::EditRole);
+
+	QVERIFY(!c0->isValid(0));
+	QVERIFY(!c1->isValid(0));
+}
+
+void SpreadsheetTest::testInvalidNumericInput() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(2);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+
+	// first put valid values so the columns are non-empty
+	model->setData(model->index(0, 0), QStringLiteral("10"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("20"), Qt::EditRole);
+	QVERIFY(c0->isValid(0));
+	QVERIFY(c1->isValid(0));
+
+	// now entering invalid text in a non-empty column should not auto-convert
+	model->setData(model->index(1, 0), QStringLiteral("abc"), Qt::EditRole);
+	model->setData(model->index(1, 1), QStringLiteral("xyz"), Qt::EditRole);
+
+	QCOMPARE(c0->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(c1->columnMode(), AbstractColumn::ColumnMode::BigInt);
+	QVERIFY(!c0->isValid(1));
+	QVERIFY(!c1->isValid(1));
+}
+
+void SpreadsheetTest::testRealZeroInput() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(1);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	c0->setValid(0, false);
+	c1->setValid(0, false);
+
+	QVERIFY(!c0->isValid(0));
+	QVERIFY(!c1->isValid(0));
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("0"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("0"), Qt::EditRole);
+
+	QVERIFY(c0->isValid(0));
+	QCOMPARE(c0->integerAt(0), 0);
+	QCOMPARE(c0->asStringColumn()->textAt(0), QStringLiteral("0"));
+
+	QVERIFY(c1->isValid(0));
+	QCOMPARE(c1->bigIntAt(0), 0);
+	QCOMPARE(c1->asStringColumn()->textAt(0), QStringLiteral("0"));
+}
+
+void SpreadsheetTest::testClearMixedCellsValidity() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(3);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+
+	model->setData(model->index(0, 0), QStringLiteral("10"), Qt::EditRole);
+	model->setData(model->index(0, 1), QStringLiteral("100"), Qt::EditRole);
+	c0->setValid(1, false);
+	c1->setValid(1, false);
+
+	model->setData(model->index(2, 0), QStringLiteral("20"), Qt::EditRole);
+	model->setData(model->index(2, 1), QStringLiteral("200"), Qt::EditRole);
+
+	for (int row = 0; row < 3; ++row) {
+		model->setData(model->index(row, 0), QString(), Qt::EditRole);
+		model->setData(model->index(row, 1), QString(), Qt::EditRole);
+	}
+
+	for (int row = 0; row < 3; ++row) {
+		QVERIFY(!c0->isValid(row));
+		QVERIFY(!c1->isValid(row));
+	}
+}
+void SpreadsheetTest::testClearWholeColumn() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(5);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	c1->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	auto* model = sheet->model();
+
+	for (int row = 0; row < 5; ++row) {
+		model->setData(model->index(row, 0), QString::number(row + 1), Qt::EditRole);
+		model->setData(model->index(row, 1), QString::number((row + 1) * 10), Qt::EditRole);
+	}
+	sheet->clear({c0, c1});
+
+	for (int row = 0; row < 5; ++row) {
+		QVERIFY(!c0->isValid(row));
+		QVERIFY(!c1->isValid(row));
+	}
+	project.undoStack()->undo();
+
+	for (int row = 0; row < 5; ++row) {
+		QVERIFY(c0->isValid(row));
+		QVERIFY(c1->isValid(row));
+		QCOMPARE(c0->integerAt(row), row + 1);
+		QCOMPARE(c1->bigIntAt(row), (row + 1) * 10);
+	}
+}
+void SpreadsheetTest::testUndoRedoCellClear() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* c0 = sheet->column(0);
+	c0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	auto* model = sheet->model();
+
+	model->setData(model->index(0, 0), QStringLiteral("42"), Qt::EditRole);
+	QVERIFY(c0->isValid(0));
+	QCOMPARE(c0->integerAt(0), 42);
+
+	model->setData(model->index(0, 0), QString(), Qt::EditRole);
+	QVERIFY(!c0->isValid(0));
+
+	project.undoStack()->undo();
+	QVERIFY(c0->isValid(0));
+	QCOMPARE(c0->integerAt(0), 42);
+}
+
+// **********************************************************
+// *** auto-conversion of empty columns on data input *******
+// **********************************************************
+
+/*!
+ * entering text into an empty Double column should auto-convert to Text mode.
+ */
+void SpreadsheetTest::testAutoConvertDoubleToText() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QVERIFY(!col->hasValues()); // column is empty (all NaN)
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("abc"), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("abc"));
+}
+
+/*!
+ * entering a double value (e.g. "2.5") into an empty Integer column
+ * should auto-convert to Double mode.
+ */
+void SpreadsheetTest::testAutoConvertIntegerToDouble() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QLocale().toString(2.5), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 2.5);
+}
+
+/*!
+ * entering text into an empty Integer column should auto-convert to Text mode.
+ */
+void SpreadsheetTest::testAutoConvertIntegerToText() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("hello"), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("hello"));
+}
+
+/*!
+ * entering a double value into an empty BigInt column
+ * should auto-convert to Double mode.
+ */
+void SpreadsheetTest::testAutoConvertBigIntToDouble() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QLocale().toString(3.14), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 3.14);
+}
+
+/*!
+ * entering text into an empty BigInt column should auto-convert to Text mode.
+ */
+void SpreadsheetTest::testAutoConvertBigIntToText() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("world"), Qt::EditRole);
+
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("world"));
+}
+
+/*!
+ * entering text into a non-empty Double column should NOT auto-convert -
+ * the column mode should stay Double.
+ */
+void SpreadsheetTest::testNoAutoConvertNonEmptyColumn() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(2);
+
+	auto* col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	auto* model = sheet->model();
+	// put a valid value first
+	model->setData(model->index(0, 0), QStringLiteral("1"), Qt::EditRole);
+	QVERIFY(col->hasValues());
+
+	// now entering text into the second row should not convert the column
+	model->setData(model->index(1, 0), QStringLiteral("abc"), Qt::EditRole);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+}
+
+/*!
+ * entering a valid number into an empty Double column should just work
+ * without any mode conversion.
+ */
+void SpreadsheetTest::testAutoConvertEmptyDoubleAcceptsNumber() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("42"), Qt::EditRole);
+
+	// mode should stay Double
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 42.0);
+}
+
+/*!
+ * undoing an auto-conversion should revert both the value and the column mode in a single step.
+ */
+void SpreadsheetTest::testAutoConvertUndoRedo() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	new SpreadsheetModel(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(1);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	auto* model = sheet->model();
+	model->setData(model->index(0, 0), QStringLiteral("hello"), Qt::EditRole);
+
+	// after entering text, the column should be Text with the value set
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("hello"));
+
+	// a single undo should revert both the mode change and the value
+	project.undoStack()->undo();
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QVERIFY(!col->hasValues());
+
+	// redo should restore both
+	project.undoStack()->redo();
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(col->textAt(0), QStringLiteral("hello"));
 }
 
 QTEST_MAIN(SpreadsheetTest)

@@ -181,6 +181,13 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 			nsl_smooth_pad_constant_set(lvalue, rvalue);
 		status = nsl_smooth_savgol(ydata, n, points, order, padMode);
 		break;
+	case nsl_smooth_type_lowess: {
+		const double span = smoothData.span;
+		const double delta = smoothData.delta;
+		const int iterations = smoothData.iterations;
+		status = nsl_smooth_lowess(xdata, ydata, n, span, delta, iterations);
+		break;
+	}
 	}
 
 	xVector->resize((int)n);
@@ -234,6 +241,9 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("mode"), QString::number(d->smoothData.mode));
 	writer->writeAttribute(QStringLiteral("lvalue"), QString::number(d->smoothData.lvalue));
 	writer->writeAttribute(QStringLiteral("rvalue"), QString::number(d->smoothData.rvalue));
+	writer->writeAttribute(QStringLiteral("span"), QString::number(d->smoothData.span));
+	writer->writeAttribute(QStringLiteral("delta"), QString::number(d->smoothData.delta));
+	writer->writeAttribute(QStringLiteral("iterations"), QString::number(d->smoothData.iterations));
 	writer->writeEndElement(); // smoothData
 
 	// smooth results (generated columns)
@@ -259,6 +269,7 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYSmoothCurve);
 
 	QXmlStreamAttributes attribs;
@@ -288,6 +299,9 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("mode", smoothData.mode, nsl_smooth_pad_mode);
 			READ_DOUBLE_VALUE("lvalue", smoothData.lvalue);
 			READ_DOUBLE_VALUE("rvalue", smoothData.rvalue);
+			READ_DOUBLE_VALUE("span", smoothData.span);
+			READ_DOUBLE_VALUE("delta", smoothData.delta);
+			READ_INT_VALUE("iterations", smoothData.iterations, int);
 		} else if (!preview && reader->name() == QLatin1String("smoothResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", smoothResult.available, int);

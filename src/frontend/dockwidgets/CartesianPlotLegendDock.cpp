@@ -16,6 +16,8 @@
 #include "frontend/widgets/LabelWidget.h"
 #include "frontend/widgets/LineWidget.h"
 
+#include <KLocalization>
+
 #include <gsl/gsl_const_cgs.h>
 
 /*!
@@ -29,6 +31,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible);
+	ui.kfrLabelFont->setFixedHeight(ui.leName->sizeHint().height());
 
 	//"Title"-tab
 	auto hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -50,20 +53,20 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	// "Layout"-tab
 	QString suffix;
 	if (m_units == Units::Metric)
-		suffix = QLatin1String(" cm");
+		suffix = i18n("%v cm");
 	else
-		suffix = QLatin1String(" in");
+		suffix = i18n("%v in");
 
-	ui.sbLineSymbolWidth->setSuffix(suffix);
-	ui.sbPositionX->setSuffix(suffix);
-	ui.sbPositionY->setSuffix(suffix);
-	ui.sbBorderCornerRadius->setSuffix(suffix);
-	ui.sbLayoutTopMargin->setSuffix(suffix);
-	ui.sbLayoutBottomMargin->setSuffix(suffix);
-	ui.sbLayoutLeftMargin->setSuffix(suffix);
-	ui.sbLayoutRightMargin->setSuffix(suffix);
-	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
-	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
+	KLocalization::setupSpinBoxFormatString(ui.sbLineSymbolWidth, ki18nc("@label:spinbox Suffix for the symbol width", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbBorderCornerRadius, ki18nc("@label:spinbox Suffix for the border corner radius", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutTopMargin, ki18nc("@label:spinbox Suffix for the top margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutBottomMargin, ki18nc("@label:spinbox Suffix for the bottom margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutLeftMargin, ki18nc("@label:spinbox Suffix for the left margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutRightMargin, ki18nc("@label:spinbox Suffix for the right margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutHorizontalSpacing, ki18nc("@label:spinbox Suffix for the horizontal spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutVerticalSpacing, ki18nc("@label:spinbox Suffix for the vertical spacing", qPrintable(suffix)));
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -183,7 +186,9 @@ void CartesianPlotLegendDock::updateLocale() {
 	ui.sbLayoutBottomMargin->setLocale(numberLocale);
 	ui.sbLayoutLeftMargin->setLocale(numberLocale);
 	ui.sbLayoutRightMargin->setLocale(numberLocale);
+
 	borderLineWidget->updateLocale();
+	labelWidget->updateLocale();
 }
 
 void CartesianPlotLegendDock::updateUnits() {
@@ -200,7 +205,7 @@ void CartesianPlotLegendDock::updateUnits() {
 	if (m_units == Units::Metric) {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QLatin1String(" cm");
+		suffix = i18n("%v cm");
 		ui.sbLineSymbolWidth->setValue(roundValue(ui.sbLineSymbolWidth->value() * GSL_CONST_CGS_INCH));
 		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
 			ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH));
@@ -216,7 +221,7 @@ void CartesianPlotLegendDock::updateUnits() {
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QLatin1String(" in");
+		suffix = i18n("%v in");
 		ui.sbLineSymbolWidth->setValue(roundValue(ui.sbLineSymbolWidth->value() / GSL_CONST_CGS_INCH));
 		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
 			ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH));
@@ -231,18 +236,18 @@ void CartesianPlotLegendDock::updateUnits() {
 		ui.sbLayoutVerticalSpacing->setValue(roundValue(ui.sbLayoutVerticalSpacing->value() / GSL_CONST_CGS_INCH));
 	}
 
-	ui.sbLineSymbolWidth->setSuffix(suffix);
+	KLocalization::setupSpinBoxFormatString(ui.sbLineSymbolWidth, ki18nc("@label:spinbox Suffix for the symbol width", qPrintable(suffix)));
 	if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
-		ui.sbPositionX->setSuffix(suffix);
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position", qPrintable(suffix)));
 	if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
-		ui.sbPositionY->setSuffix(suffix);
-	ui.sbBorderCornerRadius->setSuffix(suffix);
-	ui.sbLayoutTopMargin->setSuffix(suffix);
-	ui.sbLayoutBottomMargin->setSuffix(suffix);
-	ui.sbLayoutLeftMargin->setSuffix(suffix);
-	ui.sbLayoutRightMargin->setSuffix(suffix);
-	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
-	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbBorderCornerRadius, ki18nc("@label:spinbox Suffix for the border corner radius", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutTopMargin, ki18nc("@label:spinbox Suffix for the top margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutBottomMargin, ki18nc("@label:spinbox Suffix for the bottom margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutLeftMargin, ki18nc("@label:spinbox Suffix for the left margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutRightMargin, ki18nc("@label:spinbox Suffix for the right margin", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutHorizontalSpacing, ki18nc("@label:spinbox Suffix for the horizontal spacing", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbLayoutVerticalSpacing, ki18nc("@label:spinbox Suffix for the vertical spacing", qPrintable(suffix)));
 
 	labelWidget->updateUnits();
 }
@@ -279,6 +284,10 @@ void CartesianPlotLegendDock::retranslateUi() {
 	ui.cbVerticalAlignment->addItem(i18n("Top"));
 	ui.cbVerticalAlignment->addItem(i18n("Center"));
 	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
+
+	backgroundWidget->retranslateUi();
+	borderLineWidget->retranslateUi();
+	labelWidget->retranslateUi();
 
 	// tooltip texts
 	QString info = i18n("Use the main color of the plot (line, symbol, etc.) for the color of the name in the legend.");
@@ -357,12 +366,14 @@ void CartesianPlotLegendDock::positionXChanged(int index) {
 		case WorksheetElement::HorizontalPosition::Right:
 			x = 1.0;
 		}
-		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position in %", "%v%"));
 	} else {
+		QString suffix;
 		if (m_units == Units::Metric)
-			ui.sbPositionX->setSuffix(QStringLiteral(" cm"));
+			suffix = i18n("%v cm");
 		else
-			ui.sbPositionX->setSuffix(QStringLiteral(" in"));
+			suffix = i18n("%v in");
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position", qPrintable(suffix)));
 	}
 
 	position.point.setX(x);
@@ -393,12 +404,14 @@ void CartesianPlotLegendDock::positionYChanged(int index) {
 		case WorksheetElement::VerticalPosition::Bottom:
 			y = 1.0;
 		}
-		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position in %", "%v%"));
 	} else {
+		QString suffix;
 		if (m_units == Units::Metric)
-			ui.sbPositionY->setSuffix(QStringLiteral(" cm"));
+			suffix = i18n("%v cm");
 		else
-			ui.sbPositionY->setSuffix(QStringLiteral(" in"));
+			suffix = i18n("%v in");
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position", qPrintable(suffix)));
 	}
 
 	position.point.setY(y);
@@ -608,13 +621,13 @@ void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::P
 	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
 	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
 		ui.sbPositionX->setValue(std::round(position.point.x() * 100.));
-		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position in %", "%v%"));
 	} else
 		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.x(), m_units), m_worksheetUnit));
 
 	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative) {
 		ui.sbPositionY->setValue(std::round(position.point.y() * 100.));
-		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position in %", "%v%"));
 	} else
 		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.y(), m_units), m_worksheetUnit));
 }
@@ -710,14 +723,14 @@ void CartesianPlotLegendDock::load() {
 	// positionXChanged(ui.cbPositionX->currentIndex());
 	if (m_legend->position().horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
 		ui.sbPositionX->setValue(std::round(m_legend->position().point.x() * 100.));
-		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position in %", "%v%"));
 	} else
 		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->position().point.x(), m_units), m_worksheetUnit));
 	ui.cbPositionY->setCurrentIndex((int)m_legend->position().verticalPosition);
 	// positionYChanged(ui.cbPositionY->currentIndex());
 	if (m_legend->position().verticalPosition == WorksheetElement::VerticalPosition::Relative) {
 		ui.sbPositionY->setValue(std::round(m_legend->position().point.y() * 100.));
-		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
+		KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position in %", "%v%"));
 	} else
 		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->position().point.y(), m_units), m_worksheetUnit));
 

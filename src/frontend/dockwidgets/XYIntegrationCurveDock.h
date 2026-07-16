@@ -15,8 +15,6 @@
 #include "frontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyintegrationcurvedockgeneraltab.h"
 
-class TreeViewComboBox;
-
 class XYIntegrationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
@@ -27,6 +25,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void retranslateUi() override;
 	void updateSettings(const AbstractColumn*) override;
 	void showIntegrationResult();
 	virtual QString customText() const override;

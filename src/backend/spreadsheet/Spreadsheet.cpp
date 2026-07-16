@@ -28,7 +28,6 @@
 #include <KConfigGroup>
 
 #include <QMenu>
-#include <QTimer>
 #include <QXmlStreamWriter>
 
 /*!
@@ -125,19 +124,19 @@ void Spreadsheet::initConnectionsRowCountChanges() {
 	}
 
 	// handle row insertions
-	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=](const AbstractColumn*, int before, int count) {
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=, this](const AbstractColumn*, int before, int count) {
 		Q_EMIT rowsAboutToBeInserted(before, before + count - 1);
 	});
-	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=](const AbstractColumn* sender, int, int) {
+	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=, this](const AbstractColumn* sender, int, int) {
 		Q_EMIT rowsInserted(sender->rowCount());
 		Q_EMIT rowCountChanged(sender->rowCount());
 	});
 
 	// handle row removals
-	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=](const AbstractColumn*, int first, int count) {
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=, this](const AbstractColumn*, int first, int count) {
 		Q_EMIT rowsAboutToBeRemoved(first, first + count - 1);
 	});
-	connect(d->firstColumn, &AbstractColumn::rowsRemoved, this, [=](const AbstractColumn* sender, int, int) {
+	connect(d->firstColumn, &AbstractColumn::rowsRemoved, this, [=, this](const AbstractColumn* sender, int, int) {
 		Q_EMIT rowsRemoved(sender->rowCount());
 		Q_EMIT rowCountChanged(sender->rowCount());
 	});
@@ -168,14 +167,6 @@ QWidget* Spreadsheet::view() const {
 		m_partView = m_view;
 		connect(this, &Spreadsheet::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
-		});
-
-		// navigate to the first cell and set the focus so the user can start directly entering new data
-		QTimer::singleShot(0, this, [=]() {
-			if (m_view) { // we're accessing m_view outside of the event loop, it can be already deleted, check for nulltpr
-				m_view->goToCell(0, 0);
-				m_view->setFocus();
-			}
 		});
 	}
 	return m_partView;
@@ -216,6 +207,73 @@ void Spreadsheet::setReadOnly(const bool value) {
 bool Spreadsheet::readOnly() const {
 	Q_D(const Spreadsheet);
 	return d->readOnly;
+}
+
+QString Spreadsheet::caption() const {
+	QString caption = AbstractAspect::caption();
+	caption += QLatin1String("<br><br>") + i18n("Columns: %1", columnCount());
+	caption += QLatin1String("<br>") + i18n("Rows: %1", rowCount());
+
+	// add the information about the usage of spreadsheet columns in other places
+	const auto* project = this->project();
+	const auto& columns = children<Column>();
+	QSet<const AbstractAspect*> usedInAspects;
+
+	// add plots where the column is currently in use
+	const auto& plots = project->children<Plot>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* col : columns) {
+		for (const auto* plot : plots) {
+			const bool used = plot->usingColumn(col, true);
+			if (used)
+				usedInAspects << plot;
+		}
+	}
+
+	if (!usedInAspects.isEmpty()) {
+		caption += QStringLiteral("<br><br><b>") + i18n("Used in Plots:") + QStringLiteral("</b>");
+		for (auto* aspect : usedInAspects)
+			caption += QStringLiteral("<br>") + aspect->path();
+	}
+
+	// add axes where the column is used as a custom column for ticks positions or labels
+	usedInAspects.clear();
+	const auto& axes = project->children<Axis>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* col : columns) {
+		for (const auto* axis : axes) {
+			const bool used = (axis->majorTicksColumn() == col || axis->minorTicksColumn() == col || axis->labelsTextColumn() == col);
+			if (used)
+				usedInAspects << axis;
+		}
+	}
+
+	if (!usedInAspects.isEmpty()) {
+		caption += QStringLiteral("<br><br><b>") + i18n("Used in Axes:") + QStringLiteral("</b>");
+		for (auto* aspect : usedInAspects)
+			caption += QStringLiteral("<br>") + aspect->path();
+	}
+
+	// add calculated columns where the column is used in formula variables
+	usedInAspects.clear();
+	const auto& columnsAll = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* col : columns) {
+		const QString& path = col->path();
+		for (const auto* colOther : columnsAll) {
+			for (int i = 0; i < colOther->formulaData().count(); i++) {
+				if (path == colOther->formulaData().at(i).columnName()) {
+					usedInAspects << colOther;
+					break;
+				}
+			}
+		}
+	}
+
+	if (!usedInAspects.isEmpty()) {
+		caption += QStringLiteral("<br><br><b>") + i18n("Used in Spreadsheet Calculations:") + QStringLiteral("</b>");
+		for (auto* aspect : usedInAspects)
+			caption += QStringLiteral("<br>") + aspect->path();
+	}
+
+	return caption;
 }
 
 /*!
@@ -439,27 +497,25 @@ void Spreadsheet::initConnectionsLinking(const Spreadsheet* sender, const Spread
 class SpreadsheetSetLinkingCmd : public QUndoCommand {
 public:
 	SpreadsheetSetLinkingCmd(Spreadsheet::Private* target,
-							 const Spreadsheet::Linking& newValue,
+							 const Spreadsheet* linkedSpreadsheet,
 							 const KLocalizedString& description,
 							 QUndoCommand* parent = nullptr)
 		: QUndoCommand(parent)
 		, m_target(target)
-		, m_linking(newValue) {
+		, m_linkedSpreadsheet(linkedSpreadsheet) {
 		setText(description.subs(m_target->name()).toString());
 	}
 
 	void execute() {
-		if (m_target->linking.linkedSpreadsheet)
-			QObject::disconnect(m_target->linking.linkedSpreadsheet, nullptr, m_target->q, nullptr);
+		if (m_target->linkedSpreadsheet)
+			QObject::disconnect(m_target->linkedSpreadsheet, nullptr, m_target->q, nullptr);
 
-		if (m_linking.linkedSpreadsheet) {
-			m_linking.linkedSpreadsheetPath = m_linking.linkedSpreadsheet->path();
-			m_target->q->initConnectionsLinking(m_linking.linkedSpreadsheet, m_target->q);
-		}
+		if (m_linkedSpreadsheet)
+			m_target->q->initConnectionsLinking(m_linkedSpreadsheet, m_target->q);
 
-		const auto l = m_target->linking;
-		m_target->linking = m_linking;
-		m_linking = l;
+		const auto* spreadsheet = m_target->linkedSpreadsheet;
+		m_target->linkedSpreadsheet = m_linkedSpreadsheet;
+		m_linkedSpreadsheet = spreadsheet;
 	}
 
 	virtual void redo() override {
@@ -475,59 +531,40 @@ public:
 	}
 
 	void finalize() const {
-		Q_EMIT m_target->q->linkingChanged(m_target->linking.linking);
-		Q_EMIT m_target->q->linkedSpreadsheetChanged(m_target->linking.linkedSpreadsheet);
+		Q_EMIT m_target->q->linkedSpreadsheetChanged(m_target->linkedSpreadsheet);
 	}
 
 private:
 	Spreadsheet::Private* m_target;
-	Spreadsheet::Linking m_linking;
+	const Spreadsheet* m_linkedSpreadsheet;
 };
 
-BASIC_SHARED_D_READER_IMPL(Spreadsheet, bool, linking, linking.linking)
-void Spreadsheet::setLinking(bool linking) {
-	Q_D(Spreadsheet);
-	if (linking != d->linking.linking) {
-		Linking l = d->linking;
-		l.linking = linking;
-
-		if (linking && d->linking.linkedSpreadsheet) {
-			beginMacro(i18n("%1: set linking", name()));
-			exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linking")));
-			setRowCount(d->linking.linkedSpreadsheet->rowCount());
-			endMacro();
-		} else
-			exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linking")));
-	}
-}
-
-BASIC_SHARED_D_READER_IMPL(Spreadsheet, const Spreadsheet*, linkedSpreadsheet, linking.linkedSpreadsheet)
+BASIC_SHARED_D_READER_IMPL(Spreadsheet, const Spreadsheet*, linkedSpreadsheet, linkedSpreadsheet)
 void Spreadsheet::setLinkedSpreadsheet(const Spreadsheet* linkedSpreadsheet, bool skipUndo) {
 	Q_D(Spreadsheet);
-	if (!d->linking.linking)
-		return; // Do not allow setting a spreadsheet when linking is disabled
 
-	if (linkedSpreadsheet != d->linking.linkedSpreadsheet) {
+	if (linkedSpreadsheet != d->linkedSpreadsheet) {
 		if (skipUndo) {
-			d->linking.linkedSpreadsheet = linkedSpreadsheet;
+			d->linkedSpreadsheet = linkedSpreadsheet;
 			initConnectionsLinking(linkedSpreadsheet, this);
 		} else {
-			Linking l = d->linking;
-			l.linkedSpreadsheet = linkedSpreadsheet;
-			if (d->linking.linking && linkedSpreadsheet) {
+			if (linkedSpreadsheet) {
 				beginMacro(i18n("%1: set linked spreadsheet", name()));
 				setRowCount(linkedSpreadsheet->rowCount());
-				exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linked spreadsheet")));
+				exec(new SpreadsheetSetLinkingCmd(d, linkedSpreadsheet, ki18n("%1: set linked spreadsheet")));
 				endMacro();
 			} else
-				exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linked spreadsheet")));
+				exec(new SpreadsheetSetLinkingCmd(d, linkedSpreadsheet, ki18n("%1: set linked spreadsheet")));
 		}
 	}
 }
 
 QString Spreadsheet::linkedSpreadsheetPath() const {
 	Q_D(const Spreadsheet);
-	return d->linking.spreadsheetPath();
+	if (d->linkedSpreadsheet)
+		return d->linkedSpreadsheet->path();
+	else
+		return d->linkedSpreadsheetPath;
 }
 
 /*!
@@ -676,9 +713,8 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 	// 	if (formulaModeActive()) {
 	// 		for (auto* col : selectedColumns()) {
 	// 			col->setSuppressDataChangedSignal(true);
-	// 			col->clearFormulas();
-	// 			col->setSuppressDataChangedSignal(false);
-	// 			col->setChanged();
+	// 			col->clearFormulas();	// 			col->setSuppressDataChangedSignal(false);
+	// 			col->setDataChanged();
 	// 		}
 	// 	} else {
 	WAIT_CURSOR_AUTO_RESET;
@@ -688,7 +724,7 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 		col->setSuppressDataChangedSignal(true);
 		col->clear();
 		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
+		col->setDataChanged();
 	}
 	endMacro();
 }
@@ -706,6 +742,163 @@ void Spreadsheet::clearMasks() {
 }
 
 /*!
+ * Transposes the spreadsheet. Possible for numeric data only and also for spreadsheets having a text column as first column
+ * and numeric data in the other columns - the first column will be used to name the new transposed columns.
+ * The column mode of the new columns is determined automatically to hold all data without loss (choosing the "largest" mode of all original columns).
+ */
+void Spreadsheet::transpose() {
+	WAIT_CURSOR_AUTO_RESET;
+
+	const auto& columns = children<Column>();
+	const int cols = columns.count();
+	const int rows = rowCount();
+
+	if (cols == 0 || rows == 0)
+		return;
+
+	// determine the new column mode which can hold all data without loss
+	bool hasInt = false;
+	bool hasBigInt = false;
+	bool hasDouble = false;
+	for (auto* col : columns) {
+		const auto mode = col->columnMode();
+		if (mode == AbstractColumn::ColumnMode::Integer)
+			hasInt = true;
+		else if (mode == AbstractColumn::ColumnMode::BigInt)
+			hasBigInt = true;
+		else if (mode == AbstractColumn::ColumnMode::Double)
+			hasDouble = true;
+	}
+
+	AbstractColumn::ColumnMode newMode = AbstractColumn::ColumnMode::Double;
+	if (!hasDouble && hasBigInt)
+		newMode = AbstractColumn::ColumnMode::BigInt;
+	else if (!hasDouble && !hasBigInt && hasInt)
+		newMode = AbstractColumn::ColumnMode::Integer;
+
+	// create a copy of the current column data
+	struct ColumnData {
+		AbstractColumn::ColumnMode mode;
+		QVector<double> numericData;
+		QVector<int> integerData;
+		QVector<qint64> bigIntData;
+		QVector<QString> textData;
+	};
+
+	QVector<ColumnData> originalData;
+	originalData.reserve(cols);
+
+	for (int col = 0; col < cols; ++col) {
+		Column* column = columns.at(col);
+		ColumnData data;
+		data.mode = column->columnMode();
+
+		switch (data.mode) {
+		case AbstractColumn::ColumnMode::Double: {
+			auto* vec = static_cast<QVector<double>*>(column->data());
+			data.numericData.resize(rows);
+			if (vec && !vec->isEmpty())
+				memcpy(data.numericData.data(), vec->constData(), rows * sizeof(double));
+			break;
+		}
+		case AbstractColumn::ColumnMode::Integer: {
+			auto* vec = static_cast<QVector<int>*>(column->data());
+			data.integerData.resize(rows);
+			if (vec && !vec->isEmpty())
+				memcpy(data.integerData.data(), vec->constData(), rows * sizeof(int));
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			auto* vec = static_cast<QVector<qint64>*>(column->data());
+			data.bigIntData.resize(rows);
+			if (vec && !vec->isEmpty())
+				memcpy(data.bigIntData.data(), vec->constData(), rows * sizeof(qint64));
+			break;
+		}
+		case AbstractColumn::ColumnMode::Text:
+			data.textData.reserve(rows);
+			for (int row = 0; row < rows; ++row)
+				data.textData << column->textAt(row);
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+			break;
+		}
+
+		originalData << data;
+	}
+
+	beginMacro(i18n("%1: transpose", name()));
+
+	// if the first column is text, use its values to name the new columns
+	auto* firstCol = columns.first();
+	const bool useFirstColAsNames = (firstCol->columnMode() == AbstractColumn::ColumnMode::Text);
+	if (useFirstColAsNames) {
+		setRowCount(cols - 1);
+		setColumnCount(rows);
+
+		const auto& newColumns = children<Column>();
+		const auto& textData = originalData.first().textData;
+		for (int i = 0; i < rows; ++i)
+			newColumns.at(i)->setName(textData.at(i));
+	} else {
+		setRowCount(cols);
+		setColumnCount(rows);
+	}
+
+	const auto& newColumns = children<Column>();
+	const int newCols = columnCount();
+	const int newRows = rowCount();
+
+	// fill new columns with transposed data
+	for (int col = 0; col < newCols; ++col) {
+		auto* column = newColumns.at(col);
+		column->setColumnMode(newMode);
+
+		int offset = useFirstColAsNames ? 1 : 0;
+		for (int row = 0; row < newRows; ++row) {
+			const ColumnData& srcData = originalData.at(row + offset);
+
+			switch (column->columnMode()) {
+			case AbstractColumn::ColumnMode::Double:
+				if (srcData.mode == AbstractColumn::ColumnMode::Double) {
+					if (col < srcData.numericData.size())
+						column->setValueAt(row, srcData.numericData.at(col));
+				} else if (srcData.mode == AbstractColumn::ColumnMode::Integer) {
+					if (col < srcData.integerData.size())
+						column->setValueAt(row, srcData.integerData.at(col));
+				} else if (srcData.mode == AbstractColumn::ColumnMode::BigInt) {
+					if (col < srcData.bigIntData.size())
+						column->setValueAt(row, srcData.bigIntData.at(col));
+				}
+				break;
+			case AbstractColumn::ColumnMode::Integer:
+				if (col < srcData.integerData.size())
+					column->setIntegerAt(row, srcData.integerData.at(col));
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				if (srcData.mode == AbstractColumn::ColumnMode::BigInt) {
+					if (col < srcData.bigIntData.size())
+						column->setBigIntAt(row, srcData.bigIntData.at(col));
+				} else if (srcData.mode == AbstractColumn::ColumnMode::Integer) {
+					if (col < srcData.integerData.size())
+						column->setBigIntAt(row, srcData.integerData.at(col));
+				}
+				break;
+			case AbstractColumn::ColumnMode::Text:
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+				break;
+			}
+		}
+	}
+
+	endMacro();
+}
+
+/*!
   Returns a new context menu. The caller takes ownership of the menu.
 */
 QMenu* Spreadsheet::createContextMenu() {
@@ -716,7 +909,7 @@ QMenu* Spreadsheet::createContextMenu() {
 	else {
 		menu->addSeparator();
 		auto* action = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this);
-		connect(action, &QAction::triggered, this, [=]() {
+		connect(action, &QAction::triggered, this, [=, this]() {
 			auto* parentSpreadsheet = static_cast<Spreadsheet*>(parentAspect());
 			parentSpreadsheet->toggleStatisticsSpreadsheet(false);
 		});
@@ -832,7 +1025,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -852,7 +1045,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -872,7 +1065,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -894,7 +1087,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
@@ -918,13 +1111,19 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				break;
 			}
 			}
 			// copy the sorted column
 			col->copy(tempCol.get(), 0, 0, rows);
+			col->clearMasks();
+			// Apply masks to original column from the tempCol
+			for (int i = 0; i < rows; ++i) {
+				if (tempCol->isMasked(i))
+					col->setMasked(i, true);
+			}
 		}
 	} else { // sort with leading column
 		DEBUG("	sort with leading column")
@@ -956,7 +1155,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 
 				// copy the sorted column
@@ -972,6 +1171,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+					col->clearMasks();
+					// Apply masks to original column from the tempCol
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < invalidRows; ++i)
+						if (tempInvalidCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
@@ -995,10 +1202,16 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
 				col->copy(tempCol.get(), 0, 0, rows);
+				col->clearMasks();
+				// Apply masks to original column from the tempCol
+				for (int i = 0; i < rows; ++i) {
+					if (tempCol->isMasked(i))
+						col->setMasked(i, true);
+				}
 			}
 			break;
 		}
@@ -1020,10 +1233,16 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
 				col->copy(tempCol.get(), 0, 0, rows);
+				col->clearMasks();
+				// Apply masks to original column from the tempCol
+				for (int i = 0; i < rows; ++i) {
+					if (tempCol->isMasked(i))
+						col->setMasked(i, true);
+				}
 			}
 			break;
 		}
@@ -1052,7 +1271,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 
 				// copy the sorted column
@@ -1068,6 +1287,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempEmptyCol.get(), 0, filledRows, emptyRows);
+					col->clearMasks();
+					// Apply masks to original column from the tempCol
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < emptyRows; ++i)
+						if (tempEmptyCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
@@ -1098,7 +1325,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					int idx = map.at(i).second;
 					// too slow: tempCol->copy(col, idx, i, 1);
 					tempCol->setFromColumn(i, col, idx);
-					tempCol->setMasked(col->isMasked(idx));
+					tempCol->setMasked(i, col->isMasked(idx));
 				}
 				// copy the sorted column
 				if (col == leading) // update all rows
@@ -1113,6 +1340,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					}
 					col->copy(tempCol.get(), 0, 0, filledRows);
 					col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+					col->clearMasks();
+					// Apply masks to original column from the tempCol
+					for (int i = 0; i < filledRows; ++i)
+						if (tempCol->isMasked(i))
+							col->setMasked(i, true);
+					for (int i = 0; i < invalidRows; ++i)
+						if (tempInvalidCol->isMasked(i))
+							col->setMasked(filledRows + i, true);
 				}
 			}
 			break;
@@ -1170,9 +1405,12 @@ void Spreadsheet::childDeselected(const AbstractAspect* aspect) {
 
 void Spreadsheet::linkedSpreadsheetDeleted() {
 	Q_D(Spreadsheet);
-	Linking l = d->linking;
-	l.linkedSpreadsheet = nullptr;
-	exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: linked spreadsheet removed")));
+	// preserve the path before unlinking so re-linking works if a new spreadsheet
+	// with the same path is added later. Must be done here — the command does not
+	// write linkedSpreadsheetPath, and after execute() the pointer is already null.
+	if (d->linkedSpreadsheet)
+		d->linkedSpreadsheetPath = d->linkedSpreadsheet->path();
+	exec(new SpreadsheetSetLinkingCmd(d, nullptr, ki18n("%1: linked spreadsheet removed")));
 }
 
 void Spreadsheet::linkedSpreadsheetNewRowCount(int rowCount) {
@@ -1234,6 +1472,8 @@ void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
 		setUndoAware(true);
 		d->statisticsSpreadsheet = nullptr;
 	}
+
+	Q_EMIT statisticsSpreadsheetChanged(on);
 }
 
 // ##############################################################################
@@ -1250,13 +1490,9 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement(QLatin1String("general"));
 	writer->writeAttribute(QStringLiteral("readOnly"), QString::number(d->readOnly));
+	WRITE_PATH(d->linkedSpreadsheet, linkedSpreadsheet);
 	writer->writeAttribute(QStringLiteral("showComments"), QString::number(d->showComments));
 	writer->writeAttribute(QStringLiteral("showSparklines"), QString::number(d->showSparklines));
-	writer->writeEndElement();
-
-	writer->writeStartElement(QLatin1String("linking"));
-	writer->writeAttribute(QStringLiteral("enabled"), QString::number(d->linking.linking));
-	writer->writeAttribute(QStringLiteral("spreadsheet"), d->linking.spreadsheetPath());
 	writer->writeEndElement();
 
 	// columns
@@ -1298,13 +1534,13 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 				READ_INT_VALUE("readOnly", readOnly, bool);
 				READ_INT_VALUE("showComments", showComments, bool);
 				READ_INT_VALUE("showSparklines", showSparklines, bool);
+				READ_PATH(linkedSpreadsheet);
 			} else if (reader->name() == QLatin1String("linking")) {
+				// old format for xmlVersion < 17
 				attribs = reader->attributes();
-				READ_INT_VALUE("enabled", linking.linking, bool);
-				d->linking.linkedSpreadsheetPath = attribs.value(QStringLiteral("spreadsheet")).toString();
+				d->linkedSpreadsheetPath = attribs.value(QStringLiteral("spreadsheet")).toString();
 			} else if (reader->name() == QLatin1String("column")) {
-				Column* column = new Column(QString());
-				column->setIsLoading(true);
+				auto* column = new Column(QString());
 				if (!column->load(reader, preview)) {
 					delete column;
 					setColumnCount(0);
@@ -1346,7 +1582,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
-	assert(d->m_usedInPlots.size() == 0);
+	Q_ASSERT(d->m_usedInPlots.size() == 0);
 	int columnOffset = 0;
 	setUndoAware(false);
 	if (m_model != nullptr)
@@ -1548,7 +1784,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 								 AbstractFileFilter::ImportMode columnImportMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	Q_D(Spreadsheet);
-	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn <<", row count = " << rowCount());
+	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn << ", row count = " << rowCount());
 
 	CleanupNoArguments cleanup([d]() {
 		d->m_usedInPlots.clear();
@@ -1577,8 +1813,8 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	const int rows = rowCount();
 	for (size_t col = startColumn; col <= endColumn; col++) {
 		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
-		Column* column = this->column((int)(columnOffset + col - startColumn));
-		// DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
+		auto* column = this->column((int)(columnOffset + col - startColumn));
+		// DEBUG(Q_FUNC_INFO << ", column mode " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
 		if (!d->suppressSetCommentFinalizeImport) {
 			QString comment;
@@ -1611,8 +1847,9 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		}
 
 		if (columnImportMode == AbstractFileFilter::ImportMode::Replace) {
+			column->setAllValid(); // the data was written directly into the data container without calling the setters, so we have to set all values valid here
 			column->setSuppressDataChangedSignal(true);
-			column->setChanged(); // Invalidate properties
+			column->setDataChanged(); // Invalidate properties
 			column->setSuppressDataChangedSignal(false);
 		}
 	}

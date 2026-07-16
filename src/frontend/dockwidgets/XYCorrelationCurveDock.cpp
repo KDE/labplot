@@ -46,7 +46,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate, uiGeneralTab.cbDataSourceType);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -66,15 +66,11 @@ void XYCorrelationCurveDock::setupGeneral() {
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
-	for (int i = 0; i < NSL_CORR_TYPE_COUNT; i++)
-		uiGeneralTab.cbType->addItem(i18n(nsl_corr_type_name[i]));
-	// nsl_corr_method_type not exposed to user
-	for (int i = 0; i < NSL_CORR_NORM_COUNT; i++)
-		uiGeneralTab.cbNorm->addItem(i18n(nsl_corr_norm_name[i]));
-
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::dataSourceTypeChanged);
@@ -271,6 +267,7 @@ void XYCorrelationCurveDock::normChanged() {
 }
 
 void XYCorrelationCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setCorrelationData(m_correlationData);
 
@@ -322,4 +319,17 @@ void XYCorrelationCurveDock::curveCorrelationDataChanged(const XYCorrelationCurv
 	m_correlationData = correlationData;
 
 	this->showCorrelationResult();
+}
+
+void XYCorrelationCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbType->clear();
+	for (int i = 0; i < NSL_CORR_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_corr_type_name[i]));
+
+	// nsl_corr_method_type not exposed to user
+	uiGeneralTab.cbNorm->clear();
+	for (int i = 0; i < NSL_CORR_NORM_COUNT; i++)
+		uiGeneralTab.cbNorm->addItem(i18n(nsl_corr_norm_name[i]));
 }

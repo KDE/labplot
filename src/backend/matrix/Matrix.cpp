@@ -31,7 +31,6 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
-#include <QTimer>
 
 /*!
 	This class manages matrix based data (i.e., mathematically
@@ -119,12 +118,6 @@ QWidget* Matrix::view() const {
 		m_model = m_view->model();
 		connect(this, &Matrix::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
-		});
-
-		// navigate to the first cell and set the focus so the user can start directly entering new data
-		QTimer::singleShot(0, this, [=]() {
-			m_view->goToCell(0, 0);
-			m_view->setFocus();
 		});
 	}
 	return m_partView;
@@ -235,7 +228,7 @@ void Matrix::setSuppressDataChangedSignal(bool b) {
 		m_model->setSuppressDataChangedSignal(b);
 }
 
-void Matrix::setChanged() {
+void Matrix::setDataChanged() {
 	if (m_model)
 		m_model->setChanged();
 }
@@ -1135,7 +1128,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	// vector with row heights
 	writer->writeStartElement(QStringLiteral("row_heights"));
 	const char* data = reinterpret_cast<const char*>(d->rowHeights.constData());
-	int size = d->rowHeights.size() * sizeof(int);
+	auto size = d->rowHeights.size() * sizeof(int);
 	writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
 	writer->writeEndElement();
 
@@ -1289,14 +1282,14 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
-			int count = bytes.size() / sizeof(int);
+			auto count = bytes.size() / sizeof(int);
 			d->rowHeights.resize(count);
 			memcpy(d->rowHeights.data(), bytes.data(), count * sizeof(int));
 		} else if (!preview && reader->name() == QLatin1String("column_widths")) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
-			int count = bytes.size() / sizeof(int);
+			auto count = bytes.size() / sizeof(int);
 			d->columnWidths.resize(count);
 			memcpy(d->columnWidths.data(), bytes.data(), count * sizeof(int));
 		} else if (!preview && reader->name() == QLatin1String("column")) {
@@ -1308,7 +1301,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 
 				switch (d->mode) {
 				case AbstractColumn::ColumnMode::Double: {
-					int count = bytes.size() / sizeof(double);
+					auto count = bytes.size() / sizeof(double);
 					QVector<double> column;
 					column.resize(count);
 					memcpy(column.data(), bytes.data(), count * sizeof(double));
@@ -1316,7 +1309,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 					break;
 				}
 				case AbstractColumn::ColumnMode::Text: {
-					int count = bytes.size() / sizeof(char);
+					auto count = bytes.size() / sizeof(char);
 					QVector<QString> column;
 					column.resize(count);
 					// TODO: warning (GCC8): writing to an object of type 'class QString' with no trivial copy-assignment; use copy-assignment or
@@ -1325,7 +1318,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 					break;
 				}
 				case AbstractColumn::ColumnMode::Integer: {
-					int count = bytes.size() / sizeof(int);
+					auto count = bytes.size() / sizeof(int);
 					QVector<int> column;
 					column.resize(count);
 					memcpy(column.data(), bytes.data(), count * sizeof(int));
@@ -1333,7 +1326,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 					break;
 				}
 				case AbstractColumn::ColumnMode::BigInt: {
-					int count = bytes.size() / sizeof(qint64);
+					auto count = bytes.size() / sizeof(qint64);
 					QVector<qint64> column;
 					column.resize(count);
 					memcpy(column.data(), bytes.data(), count * sizeof(qint64));
@@ -1343,7 +1336,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 				case AbstractColumn::ColumnMode::Day:
 				case AbstractColumn::ColumnMode::Month:
 				case AbstractColumn::ColumnMode::DateTime: {
-					int count = bytes.size() / sizeof(QDateTime);
+					auto count = bytes.size() / sizeof(QDateTime);
 					QVector<QDateTime> column;
 					column.resize(count);
 					// TODO: warning (GCC8): writing to an object of type 'class QDateTime' with no trivial copy-assignment; use copy-assignment or

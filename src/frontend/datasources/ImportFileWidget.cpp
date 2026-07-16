@@ -22,6 +22,7 @@
 #include "McapOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "OdsOptionsWidget.h"
+#include "ParquetOptionsWidget.h"
 #include "ROOTOptionsWidget.h"
 #include "XLSXOptionsWidget.h"
 #include "backend/core/Settings.h"
@@ -142,6 +143,13 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #endif
 #ifdef HAVE_MCAP
 		ui.cbFileType->addItem(i18n("MCAP Data"), static_cast<int>(AbstractFileFilter::FileType::MCAP));
+#endif
+#ifdef HAVE_PARQUET
+		ui.cbFileType->addItem(i18n("Apache Parquet"), static_cast<int>(AbstractFileFilter::FileType::Parquet));
+		ui.cbFileType->addItem(i18n("Arrow IPC (Feather)"), static_cast<int>(AbstractFileFilter::FileType::ArrowIPC));
+#ifdef HAVE_ORC
+		ui.cbFileType->addItem(i18n("Apache ORC"), static_cast<int>(AbstractFileFilter::FileType::ORC));
+#endif
 #endif
 		// hide widgets relevant for live data reading only
 		ui.lRelativePath->hide();
@@ -398,7 +406,7 @@ void ImportFileWidget::loadSettings() {
 
 	// all set now, refresh the content of the file and the preview for the selected dataset
 	m_suppressRefresh = false;
-	QTimer::singleShot(100, this, [=]() {
+	QTimer::singleShot(100, this, [=, this]() {
 		WAIT_CURSOR_AUTO_RESET;
 		if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
 			const QString& file = absolutePath(fileName());
@@ -504,7 +512,7 @@ ImportFileWidget::~ImportFileWidget() {
 void ImportFileWidget::initSlots() {
 	// SLOTs for the general part of the data source configuration
 	connect(ui.cbSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&ImportFileWidget::sourceTypeChanged));
-	connect(m_cbFileName, &KUrlComboBox::urlActivated, this, [=](const QUrl& url) {
+	connect(m_cbFileName, &KUrlComboBox::urlActivated, this, [=, this](const QUrl& url) {
 		fileNameChanged(url.toLocalFile());
 	});
 	connect(ui.leHost, &QLineEdit::textChanged, this, &ImportFileWidget::hostChanged);
@@ -1036,6 +1044,22 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
+	case AbstractFileFilter::FileType::Parquet:
+	case AbstractFileFilter::FileType::ArrowIPC:
+	case AbstractFileFilter::FileType::ORC: {
+		DEBUG(Q_FUNC_INFO << ", Parquet/Arrow IPC/ORC");
+		if (!m_currentFilter)
+			m_currentFilter.reset(new ParquetFilter(fileType));
+		auto filter = static_cast<ParquetFilter*>(m_currentFilter.get());
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
+		if (m_parquetOptionsWidget)
+			filter->setSelectedColumnNames(m_parquetOptionsWidget->selectedColumnNames());
+
+		break;
+	}
 	}
 	ui.sbPreviewPrecision->setValue(m_currentFilter->previewPrecision());
 	return m_currentFilter.get();
@@ -1365,6 +1389,9 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	case AbstractFileFilter::FileType::MATIO:
 	case AbstractFileFilter::FileType::XLSX:
 	case AbstractFileFilter::FileType::Ods:
+	case AbstractFileFilter::FileType::Parquet:
+	case AbstractFileFilter::FileType::ArrowIPC:
+	case AbstractFileFilter::FileType::ORC:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		// hide global preview tab. we have our own
@@ -1592,6 +1619,17 @@ void ImportFileWidget::initOptionsWidget() {
 			m_matioOptionsWidget->clear();
 		ui.swOptions->setCurrentWidget(m_matioOptionsWidget->parentWidget());
 		break;
+	case AbstractFileFilter::FileType::Parquet:
+	case AbstractFileFilter::FileType::ArrowIPC:
+	case AbstractFileFilter::FileType::ORC:
+		if (!m_parquetOptionsWidget) {
+			auto* parquetw = new QWidget();
+			m_parquetOptionsWidget = std::unique_ptr<ParquetOptionsWidget>(new ParquetOptionsWidget(parquetw, this));
+			ui.swOptions->addWidget(parquetw);
+		} else
+			m_parquetOptionsWidget->clear();
+		ui.swOptions->setCurrentWidget(m_parquetOptionsWidget->parentWidget());
+		break;
 	case AbstractFileFilter::FileType::Spice:
 	case AbstractFileFilter::FileType::READSTAT:
 		break;
@@ -1612,6 +1650,10 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 
 const QStringList ImportFileWidget::selectedMatioNames() const {
 	return m_matioOptionsWidget->selectedNames();
+}
+
+const QStringList ImportFileWidget::selectedParquetColumnNames() const {
+	return m_parquetOptionsWidget->selectedColumnNames();
 }
 
 const QStringList ImportFileWidget::selectedROOTNames() const {
@@ -1752,6 +1794,11 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 			break;
 		case AbstractFileFilter::FileType::MATIO:
 			infoStrings << MatioFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::Parquet:
+		case AbstractFileFilter::FileType::ArrowIPC:
+		case AbstractFileFilter::FileType::ORC:
+			infoStrings << ParquetFilter::fileInfoString(fileName);
 			break;
 		}
 
@@ -2158,6 +2205,30 @@ void ImportFileWidget::refreshPreview() {
 		DEBUG(Q_FUNC_INFO << ", got " << columnModes.size() << " columns and " << importedStrings.size() << " rows")
 		break;
 	}
+	case AbstractFileFilter::FileType::Parquet:
+	case AbstractFileFilter::FileType::ArrowIPC:
+	case AbstractFileFilter::FileType::ORC: {
+		ui.tePreview->clear();
+		auto filter = static_cast<ParquetFilter*>(currentFilter);
+		if (m_parquetOptionsWidget) {
+			lines = m_parquetOptionsWidget->lines();
+			tmpTableWidget = m_parquetOptionsWidget->previewWidget();
+			// populate column list if empty
+			if (m_parquetOptionsWidget->selectedColumnNames().isEmpty() && filter->columnNames().isEmpty())
+				m_parquetOptionsWidget->updateContent(filter, path);
+			filter->setSelectedColumnNames(m_parquetOptionsWidget->selectedColumnNames());
+		}
+		importedStrings = filter->preview(path, lines);
+		// first row contains column names — use as header, not as data
+		if (!importedStrings.isEmpty()) {
+			vectorNameList = importedStrings.takeFirst();
+			// create matching column modes
+			columnModes.clear();
+			for (int i = 0; i < vectorNameList.size(); ++i)
+				columnModes << AbstractColumn::ColumnMode::Text; // generic, actual mode determined on import
+		}
+		break;
+	}
 	case AbstractFileFilter::FileType::MATIO: {
 		auto filter = static_cast<MatioFilter*>(currentFilter);
 		lines = m_matioOptionsWidget->lines();
@@ -2344,6 +2415,13 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::FileType::Spice:
 		case AbstractFileFilter::FileType::READSTAT:
 		case AbstractFileFilter::FileType::VECTOR_BLF:
+			break;
+		case AbstractFileFilter::FileType::Parquet:
+		case AbstractFileFilter::FileType::ArrowIPC:
+		case AbstractFileFilter::FileType::ORC:
+#ifdef HAVE_PARQUET
+			m_parquetOptionsWidget->updateContent(static_cast<ParquetFilter*>(filter), fileName);
+#endif
 			break;
 		}
 	}
@@ -2606,8 +2684,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		//"whole file" read option is available for file or pipe only, disable it
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-		auto* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
-		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+		auto* readitem = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+		readitem->setFlags(readitem->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 		if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::ReadingType::WholeFile)
 			ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 
@@ -2617,8 +2695,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	} else {
 		// enable "whole file" item for file or pipe
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-		auto* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
-		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+		auto* readitem = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+		readitem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	}
 
 	updateFilterHandlingSettings(sourceType);

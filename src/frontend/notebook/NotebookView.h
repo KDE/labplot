@@ -64,16 +64,19 @@ private:
 
 	QMenu* m_addNewMenu{nullptr};
 	QMenu* m_plotDataMenu{nullptr};
+	QMenu* m_statisticalAnalysisMenu{nullptr};
 	QMenu* m_linearAlgebraMenu{nullptr};
 	QMenu* m_calculateMenu{nullptr};
 	QMenu* m_settingsMenu{nullptr};
 
 	void initActions();
 	void initMenus();
+	bool eventFilter(QObject*, QEvent*) override;
 
 private Q_SLOTS:
 	void statusChanged(Cantor::Session::Status);
 	void plotData(QAction*);
+	void hypothesisTest(QAction*);
 	void showStatistics();
 };
 

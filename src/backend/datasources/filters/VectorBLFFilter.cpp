@@ -22,8 +22,15 @@
 #include <QDateTime>
 
 #ifdef HAVE_VECTOR_BLF
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include <Vector/BLF/Exceptions.h>
 #include <Vector/BLF/File.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 //////////////////////////////////////////////////////////////////////
@@ -298,7 +305,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 			int id;
 			if (objectHeader->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_cast<Vector::BLF::CanMessage2*>(objectHeader);
+				const auto* message = reinterpret_cast<Vector::BLF::CanMessage2*>(objectHeader);
 				id = message->id;
 			} else
 				return 0;

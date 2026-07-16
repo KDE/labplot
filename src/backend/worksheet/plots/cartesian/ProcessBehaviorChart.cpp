@@ -3,13 +3,14 @@
 	Project              : LabPlot
 	Description          : ProcessBehaviorChart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ProcessBehaviorChart.h"
 #include "ProcessBehaviorChartPrivate.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/ScopedUndoDisabler.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
@@ -195,6 +196,7 @@ void ProcessBehaviorChart::init(bool loading) {
 void ProcessBehaviorChart::finalizeAdd() {
 	Q_D(ProcessBehaviorChart);
 	WorksheetElement::finalizeAdd();
+	ScopedUndoDisabler undoDisabler(project()); // internal changes only, don't pollute the undo stack
 
 	// curves
 	addChildFast(d->centerCurve);
@@ -425,6 +427,12 @@ bool ProcessBehaviorChart::minMax(const Dimension dim, const Range<int>& indexRa
 	return false;
 }
 
+bool ProcessBehaviorChart::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	start = 0;
+	end = xIndexCount() - 1;
+	return true;
+}
+
 double ProcessBehaviorChart::minimum(const Dimension dim) const {
 	Q_D(const ProcessBehaviorChart);
 	switch (dim) {
@@ -450,6 +458,13 @@ double ProcessBehaviorChart::maximum(const Dimension dim) const {
 bool ProcessBehaviorChart::hasData() const {
 	Q_D(const ProcessBehaviorChart);
 	return (d->dataColumn != nullptr);
+}
+
+int ProcessBehaviorChart::dataCount(Dimension) const {
+	Q_D(const ProcessBehaviorChart);
+	if (!d->dataColumn)
+		return -1;
+	return d->dataColumn->rowCount();
 }
 
 bool ProcessBehaviorChart::usingColumn(const AbstractColumn* column, bool) const {
@@ -741,12 +756,12 @@ void ProcessBehaviorChart::setLabelsBackgroundColor(const QColor& color) {
 // #################################  SLOTS  ####################################
 // ##############################################################################
 void ProcessBehaviorChart::retransform() {
-	D(ProcessBehaviorChart);
+	Q_D(ProcessBehaviorChart);
 	d->retransform();
 }
 
 void ProcessBehaviorChart::recalc() {
-	D(ProcessBehaviorChart);
+	Q_D(ProcessBehaviorChart);
 	d->recalc();
 }
 
@@ -833,10 +848,7 @@ ProcessBehaviorChartPrivate::~ProcessBehaviorChartPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void ProcessBehaviorChartPrivate::retransform() {
-	if (suppressRetransform || q->isLoading())
-		return;
-
-	if (!isVisible())
+	if (retransformSuppressed())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
@@ -1597,6 +1609,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(ProcessBehaviorChart);
 
 	if (!readBasicAttributes(reader))
@@ -1722,23 +1735,23 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	Q_D(ProcessBehaviorChart);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	QColor themeColor = plot->themeColorPalette(index);
+	QColor color = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
-	d->dataCurve->line()->loadThemeConfig(group, themeColor);
-	d->dataCurve->symbol()->loadThemeConfig(group, themeColor);
+	d->dataCurve->line()->loadThemeConfig(group, color);
+	d->dataCurve->symbol()->loadThemeConfig(group, color);
 
-	themeColor = plot->themeColorPalette(index + 1);
+	color = plot->plotColor(index + 1);
 
-	d->centerCurve->line()->loadThemeConfig(group, themeColor);
+	d->centerCurve->line()->loadThemeConfig(group, color);
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
-	d->upperLimitCurve->line()->loadThemeConfig(group, themeColor);
+	d->upperLimitCurve->line()->loadThemeConfig(group, color);
 	d->upperLimitCurve->line()->setStyle(Qt::DashLine);
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
-	d->lowerLimitCurve->line()->loadThemeConfig(group, themeColor);
+	d->lowerLimitCurve->line()->loadThemeConfig(group, color);
 	d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 

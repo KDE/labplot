@@ -1,0 +1,96 @@
+digraph codeviz {
+    splines=true
+    sep="+15,15"
+    overlap=scalexy
+
+    node [shape=Mrecord, fontsize=12]
+
+    node [fillcolor="#ff9999", style=filled] "frontend/AboutDialog.cpp"             [label = "frontend/AboutDialog.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/AboutDialog.h"               [label = "frontend/AboutDialog.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/ActionsManager.cpp"          [label = "frontend/ActionsManager.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/ActionsManager.h"            [label = "frontend/ActionsManager.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/DatasetModel.cpp"            [label = "frontend/DatasetModel.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/DatasetModel.h"              [label = "frontend/DatasetModel.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/GuiObserver.cpp"             [label = "frontend/GuiObserver.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/GuiObserver.h"               [label = "frontend/GuiObserver.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/GuiTools.cpp"                [label = "frontend/GuiTools.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/GuiTools.h"                  [label = "frontend/GuiTools.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/HistoryDialog.cpp"           [label = "frontend/HistoryDialog.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/HistoryDialog.h"             [label = "frontend/HistoryDialog.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/LabPlot.cpp"                 [label = "frontend/LabPlot.cpp"]
+    node [fillcolor="#ff9999", style=filled] "frontend/MainWin.cpp"                 [label = "frontend/MainWin.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/MainWin.h"                   [label = "frontend/MainWin.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/PlotTemplateDialog.cpp"      [label = "frontend/PlotTemplateDialog.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/PlotTemplateDialog.h"        [label = "frontend/PlotTemplateDialog.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/ProjectExplorer.cpp"         [label = "frontend/ProjectExplorer.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/ProjectExplorer.h"           [label = "frontend/ProjectExplorer.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/SettingsDatasetsPage.cpp"    [label = "frontend/SettingsDatasetsPage.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/SettingsDatasetsPage.h"      [label = "frontend/SettingsDatasetsPage.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/SettingsDialog.cpp"          [label = "frontend/SettingsDialog.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/SettingsDialog.h"            [label = "frontend/SettingsDialog.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/SettingsEditorPage.cpp"      [label = "frontend/SettingsEditorPage.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/SettingsEditorPage.h"        [label = "frontend/SettingsEditorPage.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/SettingsGeneralPage.cpp"     [label = "frontend/SettingsGeneralPage.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/SettingsGeneralPage.h"       [label = "frontend/SettingsGeneralPage.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/SettingsNotebookPage.cpp"    [label = "frontend/SettingsNotebookPage.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/SettingsNotebookPage.h"      [label = "frontend/SettingsNotebookPage.h"]
+    node [fillcolor="#ccccff", style=filled] "frontend/SettingsPage.h"              [label = "frontend/SettingsPage.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/SettingsSpreadsheetPage.cpp" [label = "frontend/SettingsSpreadsheetPage.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/SettingsSpreadsheetPage.h"   [label = "frontend/SettingsSpreadsheetPage.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/SettingsWelcomePage.cpp"     [label = "frontend/SettingsWelcomePage.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/SettingsWelcomePage.h"       [label = "frontend/SettingsWelcomePage.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/SettingsWorksheetPage.cpp"   [label = "frontend/SettingsWorksheetPage.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/SettingsWorksheetPage.h"     [label = "frontend/SettingsWorksheetPage.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/TemplateHandler.cpp"         [label = "frontend/TemplateHandler.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/TemplateHandler.h"           [label = "frontend/TemplateHandler.h"]
+    node [fillcolor="#ff9999", style=filled] "frontend/ThemeHandler.cpp"            [label = "frontend/ThemeHandler.cpp"]
+    node [fillcolor="#ccccff", style=filled] "frontend/ThemeHandler.h"              [label = "frontend/ThemeHandler.h"]
+
+    "frontend/AboutDialog.cpp"             -> "frontend/AboutDialog.h"
+    "frontend/ActionsManager.cpp"          -> "frontend/AboutDialog.h"
+    "frontend/ActionsManager.cpp"          -> "frontend/ActionsManager.h"
+    "frontend/ActionsManager.cpp"          -> "frontend/MainWin.h"
+    "frontend/DatasetModel.cpp"            -> "frontend/DatasetModel.h"
+    "frontend/GuiObserver.cpp"             -> "frontend/GuiObserver.h"
+    "frontend/GuiObserver.cpp"             -> "frontend/ProjectExplorer.h"
+    "frontend/GuiObserver.cpp"             -> "frontend/MainWin.h"
+    "frontend/GuiTools.cpp"                -> "frontend/GuiTools.h"
+    "frontend/HistoryDialog.cpp"           -> "frontend/HistoryDialog.h"
+    "frontend/LabPlot.cpp"                 -> "frontend/MainWin.h"
+    "frontend/LabPlot.cpp"                 -> "frontend/AboutDialog.h"
+    "frontend/MainWin.cpp"                 -> "frontend/MainWin.h"
+    "frontend/MainWin.cpp"                 -> "frontend/ActionsManager.h"
+    "frontend/MainWin.cpp"                 -> "frontend/GuiObserver.h"
+    "frontend/MainWin.cpp"                 -> "frontend/HistoryDialog.h"
+    "frontend/MainWin.cpp"                 -> "frontend/ProjectExplorer.h"
+    "frontend/MainWin.cpp"                 -> "frontend/SettingsDialog.h"
+    "frontend/MainWin.h"                   -> "frontend/SettingsDialog.h"
+    "frontend/PlotTemplateDialog.cpp"      -> "frontend/PlotTemplateDialog.h"
+    "frontend/ProjectExplorer.cpp"         -> "frontend/ProjectExplorer.h"
+    "frontend/SettingsDatasetsPage.cpp"    -> "frontend/SettingsDatasetsPage.h"
+    "frontend/SettingsDatasetsPage.cpp"    -> "frontend/GuiTools.h"
+    "frontend/SettingsDatasetsPage.h"      -> "frontend/SettingsPage.h"
+    "frontend/SettingsDialog.cpp"          -> "frontend/SettingsDialog.h"
+    "frontend/SettingsDialog.cpp"          -> "frontend/MainWin.h"
+    "frontend/SettingsDialog.cpp"          -> "frontend/SettingsDatasetsPage.h"
+    "frontend/SettingsDialog.cpp"          -> "frontend/SettingsGeneralPage.h"
+    "frontend/SettingsDialog.cpp"          -> "frontend/SettingsSpreadsheetPage.h"
+    "frontend/SettingsDialog.cpp"          -> "frontend/SettingsWorksheetPage.h"
+    "frontend/SettingsDialog.cpp"          -> "frontend/SettingsEditorPage.h"
+    "frontend/SettingsDialog.cpp"          -> "frontend/SettingsNotebookPage.h"
+    "frontend/SettingsEditorPage.cpp"      -> "frontend/SettingsEditorPage.h"
+    "frontend/SettingsEditorPage.h"        -> "frontend/SettingsPage.h"
+    "frontend/SettingsGeneralPage.cpp"     -> "frontend/SettingsGeneralPage.h"
+    "frontend/SettingsGeneralPage.cpp"     -> "frontend/MainWin.h"
+    "frontend/SettingsGeneralPage.h"       -> "frontend/SettingsPage.h"
+    "frontend/SettingsNotebookPage.cpp"    -> "frontend/SettingsNotebookPage.h"
+    "frontend/SettingsNotebookPage.h"      -> "frontend/SettingsPage.h"
+    "frontend/SettingsSpreadsheetPage.cpp" -> "frontend/SettingsSpreadsheetPage.h"
+    "frontend/SettingsSpreadsheetPage.h"   -> "frontend/SettingsPage.h"
+    "frontend/SettingsWelcomePage.cpp"     -> "frontend/SettingsWelcomePage.h"
+    "frontend/SettingsWelcomePage.h"       -> "frontend/SettingsPage.h"
+    "frontend/SettingsWorksheetPage.cpp"   -> "frontend/SettingsWorksheetPage.h"
+    "frontend/SettingsWorksheetPage.h"     -> "frontend/SettingsPage.h"
+    "frontend/TemplateHandler.cpp"         -> "frontend/TemplateHandler.h"
+    "frontend/ThemeHandler.cpp"            -> "frontend/ThemeHandler.h"
+}

@@ -1,3 +1,13 @@
+/*
+	File                 : Script.cpp
+	Project              : LabPlot
+	Description          : Script
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #include <QDir>
 #include <QFileDialog>
 #include <QIcon>
@@ -42,12 +52,19 @@ Script::Script(const QString& name, const QString& lang)
 	: AbstractPart(name, AspectType::Script)
 	, m_kTextEditorDocument(KTextEditor::Editor::instance()->createDocument(this)) {
 	if (!Script::languages.contains(lang, Qt::CaseInsensitive)) {
+		WARN("Unsupported scripting language: " << STDSTRING(lang))
 		m_initialized = false;
 		return;
 	}
 
 	m_language = lang;
 	m_scriptRuntime = Script::newScriptRuntime(m_language, this);
+	if (!m_scriptRuntime) {
+		WARN("Failed to initialize the " << STDSTRING(m_language) << " script runtime. Check that the interpreter is available.")
+		m_initialized = false;
+		return;
+	}
+
 	m_kTextEditorDocument->setMode(m_language);
 	m_initialized = true;
 	prepareDocument();
@@ -74,7 +91,7 @@ bool Script::printPreview() const {
 }
 
 bool Script::exportView() const {
-	KConfigGroup conf = Settings::group(QStringLiteral("ExportScript"));
+	auto conf = Settings::group(QStringLiteral("ExportScript"));
 	QString dir = conf.readEntry("LastDir", "");
 	QString extensions = i18n("Python file (*.py)");
 
@@ -142,7 +159,6 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 		return false;
 
 	QXmlStreamAttributes attribs;
-	QString str;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -178,7 +194,7 @@ void Script::runScript() {
 	if (!m_initialized)
 		return;
 
-	ScriptEditor* scriptView = static_cast<ScriptEditor*>(view());
+	auto* scriptView = static_cast<ScriptEditor*>(view());
 
 	m_kTextEditorDocument->clearMarks();
 	m_scriptRuntime->clearErrorLine();
@@ -189,10 +205,14 @@ void Script::runScript() {
 		scriptView->writeOutput(isErr, msg); // write the output to the scripteditor output
 	});
 
+	// since we're potentially creating multiple new objects or modifying existing objects when executing the script,
+	// suppress the aspect change signal in the project explorer to avoid to many aspect changes and
 	// push all changes at once to undo stack
+	project()->setSuppressAspectAddedSignal(true);
 	beginMacro(i18n("%1: run %2 script", name(), m_language));
 	Script::runScript(this, m_kTextEditorDocument->text()); // run the script
 	endMacro();
+	project()->setSuppressAspectAddedSignal(false);
 
 	// disconnect from writeOutput signal
 	disconnect(conn);
@@ -203,6 +223,8 @@ void Script::runScript() {
 }
 
 QAbstractItemModel* Script::variableModel() {
+	if (!m_scriptRuntime)
+		return nullptr;
 	return m_scriptRuntime->variableModel();
 }
 
@@ -325,7 +347,7 @@ QString Script::readRuntime(XmlStreamReader* reader) {
 		return {};
 	}
 
-	QXmlStreamAttributes attribs = reader->attributes();
+	auto attribs = reader->attributes();
 	QString str = attribs.value(QStringLiteral("runtime")).toString();
 
 	if (str.isEmpty()) {

@@ -203,17 +203,6 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 }
 
 /*!
-	Selects or deselects the datapicker or its current active curve in the project explorer.
-	This function is called in \c DatapickerImageView.
-*/
-void Datapicker::setSelectedInView(const bool b) {
-	if (b)
-		Q_EMIT childAspectSelectedInView(this);
-	else
-		Q_EMIT childAspectDeselectedInView(this);
-}
-
-/*!
  * \brief Datapicker::addNewPoint
  * \param pos position in scene coordinates
  * \param parentAspect
@@ -295,8 +284,8 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 	for (auto* point : points)
 		point->graphicsItem()->setZValue(zVal++);
 
-	for (const auto* curve : children<DatapickerCurve>()) {
-		for (auto* point : curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
+	for (const auto* childCurve : children<DatapickerCurve>()) {
+		for (auto* point : childCurve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
 			point->graphicsItem()->setZValue(zVal++);
 	}
 

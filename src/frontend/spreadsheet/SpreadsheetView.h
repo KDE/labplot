@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -30,11 +30,14 @@ class QActionGroup;
 class QFrame;
 class QItemSelection;
 class QItemSelectionModel;
+class QLabel;
 class QLineEdit;
 class QMenu;
 class QPrinter;
 class QModelIndex;
 class QResizeEvent;
+class QSlider;
+class QSpinBox;
 class QTableView;
 class QToolBar;
 
@@ -57,6 +60,8 @@ public:
 	void resizeHeader();
 	void setFocus();
 	void setSuppressResizeHeader(bool);
+
+	int zoomLevel() const;
 
 	void createContextMenu(QMenu*);
 	void fillColumnContextMenu(QMenu*, Column*);
@@ -88,6 +93,7 @@ public:
 
 protected:
 	void resizeEvent(QResizeEvent*) override;
+	void showEvent(QShowEvent*) override;
 
 private:
 	void init();
@@ -127,6 +133,7 @@ private:
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
 	bool m_suppressResizeHeader{false};
+	bool m_initialNavigationDone{false};
 
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
@@ -145,9 +152,9 @@ private:
 	QAction* action_fill_row_numbers{nullptr};
 	QAction* action_fill_random{nullptr};
 	QAction* action_fill_equidistant{nullptr};
+	QAction* action_fill_equidistant_datetime{nullptr};
 	QAction* action_fill_random_nonuniform{nullptr};
 	QAction* action_fill_const{nullptr};
-	QAction* action_fill_function{nullptr};
 
 	// spreadsheet related actions
 	QAction* action_toggle_comments{nullptr};
@@ -155,6 +162,7 @@ private:
 	QAction* action_select_all{nullptr};
 	QAction* action_clear_spreadsheet{nullptr};
 	QAction* action_clear_masks{nullptr};
+	QAction* action_transpose{nullptr};
 	QAction* action_formatting_heatmap{nullptr};
 	QAction* action_formatting_remove{nullptr};
 	QAction* action_go_to_cell{nullptr};
@@ -213,12 +221,6 @@ private:
 	// analysis and plot data menu actions
 	QActionGroup* plotDataActionGroup{nullptr};
 	QAction* addDataOperationAction{nullptr};
-	QAction* addLineSimplificationAction{nullptr};
-	QAction* addDifferentiationAction{nullptr};
-	QAction* addIntegrationAction{nullptr};
-	QAction* addInterpolationAction{nullptr};
-	QAction* addSmoothAction{nullptr};
-	QAction* addFourierFilterAction{nullptr};
 	QActionGroup* addAnalysisActionGroup{nullptr};
 	QActionGroup* addFitActionGroup{nullptr};
 	QActionGroup* addDistributionFitActionGroup{nullptr};
@@ -247,6 +249,13 @@ private:
 	QMenu* m_hypothesisTestMenu{nullptr};
 
 	bool m_suppressResize{false};
+
+	// zoom
+	int m_zoomLevel{100}; // percentage, 100 = default
+	void setZoomLevel(int);
+	void applyZoom();
+	QSlider* m_zoomSlider{nullptr};
+	QSpinBox* m_zoomSpinBox{nullptr};
 
 public Q_SLOTS:
 	void handleAspectsAdded(int first, int last);
@@ -303,7 +312,7 @@ private Q_SLOTS:
 	void fillSelectedCellsWithRandomNumbers();
 	void fillWithRandomValues();
 	void fillWithEquidistantValues();
-	void fillWithFunctionValues();
+	void fillWithEquidistantDateTimeValues();
 	void fillSelectedCellsWithConstValues();
 
 	void insertRowsAbove();
@@ -320,6 +329,7 @@ private Q_SLOTS:
 	void maskColumnValues();
 	void sampleColumnValues();
 	void flattenColumns();
+	void transpose();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
 
@@ -338,6 +348,7 @@ private Q_SLOTS:
 	void updateHeaderGeometry(Qt::Orientation, int first, int last);
 
 	void columnClicked(int);
+	void navigateToSpreadsheetOnClick(const QModelIndex& index);
 	void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 	void advanceCell();
 };

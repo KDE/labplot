@@ -329,11 +329,11 @@ void ImportFileDialog::importFile(const QString& fileName, AbstractAspect* aspec
 				if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::Ods)
 					sheetName = sheetName.split(QLatin1Char('/')).last();
 
-				auto* spreadsheet = new Spreadsheet(sheetName);
+				auto* newSpreadsheet = new Spreadsheet(sheetName);
 				if (mode == AbstractFileFilter::ImportMode::Prepend && !sheets.isEmpty())
-					workbook->insertChildBefore(spreadsheet, sheets.at(0));
+					workbook->insertChildBefore(newSpreadsheet, sheets.at(0));
 				else
-					workbook->addChildFast(spreadsheet);
+					workbook->addChildFast(newSpreadsheet);
 			}
 
 			// start at offset for append, else at 0
@@ -368,10 +368,10 @@ void ImportFileDialog::importFile(const QString& fileName, AbstractAspect* aspec
 		} else { // single import file types
 			// workbook selected -> create a new spreadsheet in the workbook
 			workbook->setUndoAware(true);
-			auto* spreadsheet = new Spreadsheet(fileName);
-			workbook->addChild(spreadsheet);
+			auto* newSpreadsheet = new Spreadsheet(fileName);
+			workbook->addChild(newSpreadsheet);
 			workbook->setUndoAware(false);
-			filter->readDataFromFile(fileName, spreadsheet, mode);
+			filter->readDataFromFile(fileName, newSpreadsheet, mode);
 		}
 	}
 }

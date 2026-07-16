@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private data managed by AbstractAspect.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -35,6 +35,7 @@ public:
 	bool m_hidden{false};
 	bool m_fixed{false};
 	bool m_moved{false};
+	bool m_changed{false};
 	AbstractAspect* const q;
 	AbstractAspect* m_parent{nullptr};
 	bool m_undoAware{true};

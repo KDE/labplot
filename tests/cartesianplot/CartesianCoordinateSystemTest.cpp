@@ -15,8 +15,6 @@
 #include <chrono>
 
 void CartesianCoordinateSystemTest::testMapLogicalToSceneLines() {
-	using Dimension = CartesianCoordinateSystem::Dimension;
-
 	CartesianPlot plot(QStringLiteral("plot"));
 
 	CartesianCoordinateSystem cSystem(&plot);
@@ -66,8 +64,6 @@ void CartesianCoordinateSystemTest::testMapLogicalToSceneLines() {
 }
 
 void CartesianCoordinateSystemTest::testMapLogicalToSceneLinesClipping() {
-	using Dimension = CartesianCoordinateSystem::Dimension;
-
 	CartesianPlot plot(QStringLiteral("plot"));
 	plot.setSymmetricPadding(true);
 	plot.setHorizontalPadding(0.);
@@ -140,8 +136,6 @@ void CartesianCoordinateSystemTest::testMapLogicalToSceneLinesClipping() {
 }
 
 void CartesianCoordinateSystemTest::testMapLogicalToSceneLinesPerformance() {
-	using Dimension = CartesianCoordinateSystem::Dimension;
-
 	const size_t NUM_ITERATIONS = 100000;
 
 	CartesianPlot plot(QStringLiteral("plot"));

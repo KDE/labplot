@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all analysis curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 
@@ -71,7 +72,7 @@ QVector<const Plot*> XYAnalysisCurve::dependingPlots() const {
 	case DataSourceType::Histogram:
 		return {}; // TODO: Histograms not yet implemented
 	}
-	assert(false);
+	Q_ASSERT(false);
 	return {};
 }
 
@@ -85,6 +86,9 @@ void XYAnalysisCurve::copyData(QVector<double>& xData,
 							   double xMin,
 							   double xMax,
 							   bool avgUniqueX) {
+	if (!xDataColumn || !yDataColumn)
+		return;
+
 	const int rowCount = std::min(xDataColumn->rowCount(), yDataColumn->rowCount());
 	bool uniqueX = true;
 	for (int row = 0; row < rowCount; ++row) {
@@ -185,6 +189,8 @@ BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, XYAnalysisCurve::DataSourceType, dat
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const XYCurve*, dataSourceCurve, dataSourceCurve)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, QString, dataSourceCurvePath, dataSourceCurvePath)
 
+BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, bool, autoRecalculate, autoRecalculate)
+
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, xDataColumn, xDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, yDataColumn, yDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, y2DataColumn, y2DataColumn)
@@ -199,6 +205,13 @@ bool XYAnalysisCurve::saveCalculations() const {
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
+STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetAutoRecalculate, bool, autoRecalculate)
+void XYAnalysisCurve::setAutoRecalculate(bool value) {
+	Q_D(XYAnalysisCurve);
+	if (value != d->autoRecalculate)
+		exec(new XYAnalysisCurveSetAutoRecalculateCmd(d, value, ki18n("%1: auto recalculate changed")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(XYAnalysisCurve, SetDataSourceType, XYAnalysisCurve::DataSourceType, dataSourceType, sourceChanged)
 void XYAnalysisCurve::setDataSourceType(DataSourceType type) {
 	Q_D(XYAnalysisCurve);
@@ -380,8 +393,8 @@ void XYAnalysisCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 			setY2DataColumn(column);
 
 		// From XYCurve
-		if (valuesColumnPath() == aspectPath)
-			setValuesColumn(column);
+		if (value()->columnPath() == aspectPath)
+			value()->setColumn(column);
 	} else if (curve) {
 		if (dataSourceCurvePath() == aspectPath)
 			setDataSourceCurve(curve);
@@ -543,9 +556,9 @@ void XYAnalysisCurvePrivate::recalculate() {
 		yVector = static_cast<QVector<double>*>(yColumn->data());
 
 		xColumn->setHidden(true);
-		q->addChild(xColumn);
+		q->addChildFast(xColumn);
 		yColumn->setHidden(true);
-		q->addChild(yColumn);
+		q->addChildFast(yColumn);
 
 		q->setUndoAware(false);
 		q->setXColumn(xColumn); // pass the column to the xycurve
@@ -601,6 +614,7 @@ void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 	// write data source specific information
 	writer->writeStartElement(QStringLiteral("dataSource"));
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->dataSourceType)));
+	writer->writeAttribute(QStringLiteral("autoRecalculate"), QString::number(static_cast<int>(d->autoRecalculate)));
 	WRITE_PATH(d->dataSourceCurve, dataSourceCurve);
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
@@ -631,6 +645,7 @@ bool XYAnalysisCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == QLatin1String("dataSource")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("type", dataSourceType, XYAnalysisCurve::DataSourceType);
+			READ_INT_VALUE("autoRecalculate", autoRecalculate, bool);
 			READ_PATH(dataSourceCurve);
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
