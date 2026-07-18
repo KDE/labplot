@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-14 00:39+0000\n"
-"PO-Revision-Date: 2026-07-01 16:32+0200\n"
+"PO-Revision-Date: 2026-07-17 15:49+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -4194,7 +4194,7 @@ msgstr "not"
 #: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "today"
-msgstr ""
+msgstr "hodie"
 
 #: src/backend/gsl/functions.cpp:351
 #, kde-format
@@ -4229,7 +4229,7 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:357
 #, kde-format
 msgid "year(date)"
-msgstr ""
+msgstr "year(date)"
 
 #: src/backend/gsl/functions.cpp:358
 #, kde-format
@@ -4239,7 +4239,7 @@ msgstr "mense(date)"
 #: src/backend/gsl/functions.cpp:359
 #, kde-format
 msgid "day(date)"
-msgstr ""
+msgstr "day(date)"
 
 #: src/backend/gsl/functions.cpp:360
 #, kde-format
@@ -9823,10 +9823,9 @@ msgid "No curves inside the plot area."
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:975
-#, fuzzy, kde-format
-#| msgid "%1: set scale"
+#, kde-format
 msgid "%1: auto scale"
-msgstr "%1: assigna scala"
+msgstr "%1: auto scala"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1254
@@ -9861,10 +9860,9 @@ msgid "%1: change %2-range %3 auto scaling"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1491
-#, fuzzy, kde-format
-#| msgid "%1: insert %2 before %3"
+#, kde-format
 msgid "%1: change %2-range %3"
-msgstr "%1: Inserta  %2 ante %3"
+msgstr "%1: cambia %2-extension %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1668
 #, kde-format
@@ -10074,31 +10072,27 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3454
 #, kde-format
 msgid "%1: zoom in"
-msgstr ""
+msgstr "%1: zoom in"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3469
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1: zoom out"
-msgstr "%1: assigna disposition"
+msgstr "%1: zoom Out (Diminuer)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "min"
+#, kde-format
 msgid "in"
-msgstr "min"
+msgstr "in"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "out"
-msgstr "Computo"
+msgstr "fora"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "%1: move %2 to %3."
+#, kde-format
 msgid "%1: zoom %2 %3"
-msgstr "%1: Move %2 a %3."
+msgstr "%1: zoom %2 %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4351
 #, kde-format
@@ -10123,16 +10117,14 @@ msgid "x=%1"
 msgstr "x=%1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4546
-#, fuzzy, kde-format
-#| msgid "%1: pasted"
+#, kde-format
 msgid "%1: pan"
-msgstr "%1: collate"
+msgstr "%1: pan"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4624
-#, fuzzy, kde-format
-#| msgid "%1: set function"
+#, kde-format
 msgid "%1: zoom selection"
-msgstr "%1: assigna function"
+msgstr "%1: selection de zoom"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4747
 #, kde-format
@@ -11746,7 +11738,7 @@ msgstr "&Aperi Exemplo"
 #: src/frontend/ActionsManager.cpp:202
 #, kde-format
 msgid "&Full Screen Mode"
-msgstr ""
+msgstr "Modo de Schermo &Integre"
 
 #: src/frontend/ActionsManager.cpp:224 src/frontend/MainWin.cpp:1194
 #, kde-format
@@ -15421,7 +15413,7 @@ msgstr "Cerca de file"
 #: src/frontend/dockwidgets/NoteDock.cpp:27
 #, kde-format
 msgid "Plain Text"
-msgstr ""
+msgstr "Texto simplice"
 
 #: src/frontend/dockwidgets/NoteDock.cpp:28
 #: src/frontend/notebook/NotebookView.cpp:110
@@ -16435,7 +16427,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Example Projects"
-msgstr ""
+msgstr "Projectos de exemplo"
 
 #: src/frontend/examples/ExamplesManager.cpp:193
 #, kde-format
@@ -19598,7 +19590,7 @@ msgstr "Ordina"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:134
 #, kde-format
 msgid "Zoom level"
-msgstr ""
+msgstr "Nivello de zoom"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format
@@ -24884,7 +24876,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:623
 #, kde-format
 msgid "Delta:"
-msgstr ""
+msgstr "Delta:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbIterations)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:704
@@ -25663,7 +25655,7 @@ msgstr "Ambiente:"
 #: src/frontend/ui/settingsscriptingpage.ui:63
 #, kde-format
 msgid "Path:"
-msgstr ""
+msgstr "Percurso:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsscriptingpage.ui:118
@@ -26829,7 +26821,7 @@ msgstr "Necun Valores"
 #: src/frontend/widgets/ValueWidget.cpp:131
 #, kde-format
 msgid "Custom Column"
-msgstr ""
+msgstr "Columna personalisate"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:49
 #, kde-format
