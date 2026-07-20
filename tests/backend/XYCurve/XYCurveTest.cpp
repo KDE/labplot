@@ -19,6 +19,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 
@@ -2005,6 +2006,17 @@ void XYCurveTest::updateLinesWithGapSegments3() {
  */
 void XYCurveTest::updateLinesLog10() {
 	LOAD_PROJECT
+
+	// Disable automatic point calculation for this test to get predictable point count
+	// The test expects exactly 10 points from the equation evaluation
+	auto* equationCurve = dynamic_cast<XYEquationCurve*>(linear);
+	if (equationCurve) {
+		auto edata = equationCurve->equationData();
+		edata.autoPointsCount = false;
+		edata.count = 10;
+		equationCurve->setEquationData(edata);
+	}
+
 	bool updateLinesCalled = false;
 	connect(linear, &XYCurve::linesUpdated, [linearPrivate, &updateLinesCalled](const XYCurve* /*curve*/, const QVector<QLineF>& /*lines*/) {
 		updateLinesCalled = true;
@@ -2019,6 +2031,7 @@ void XYCurveTest::updateLinesLog10() {
 			QLineF(QPointF(7.8, 7.8), QPointF(8.9, 8.9)),
 			QLineF(QPointF(8.9, 8.9), QPointF(10, 10)),
 		};
+		QCOMPARE(linearPrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be omitted
 		auto test_lines = linearPrivate->m_lines;
 		QCOMPARE(refLines.size(), test_lines.size());
 		for (int i = 0; i < test_lines.size(); i++)
