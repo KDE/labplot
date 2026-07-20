@@ -298,20 +298,43 @@
     </widget>
    </item>
    <item row="10" column="4" colspan="2">
-    <widget class="QSpinBox" name="sbCount">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximum">
-      <number>999999999</number>
-     </property>
-     <property name="value">
-      <number>100</number>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayoutPoints">
+     <item>
+      <widget class="QSpinBox" name="sbCount">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Number of points to evaluate</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>999999999</number>
+       </property>
+       <property name="value">
+        <number>1000</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="cbAutoPoints">
+       <property name="toolTip">
+        <string>Automatically calculate the number of points based on plot pixel width</string>
+       </property>
+       <property name="text">
+        <string>Auto</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item row="5" column="4" colspan="2">
     <widget class="KComboBox" name="cbType">

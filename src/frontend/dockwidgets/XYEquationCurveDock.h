@@ -36,6 +36,7 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurveDock
 	void typeChanged(int);
 	void recalculateClicked();
+	void autoPointsChanged(bool);
 	void loadFunction();
 	void saveFunction();
 	void showConstants();

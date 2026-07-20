@@ -90,7 +90,8 @@ STD_SETTER_CMD_IMPL_F_S(XYEquationCurve, SetEquationData, XYEquationCurve::Equat
 void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equationData) {
 	Q_D(XYEquationCurve);
 	if ((equationData.expression1 != d->equationData.expression1) || (equationData.expression2 != d->equationData.expression2)
-		|| (equationData.min != d->equationData.min) || (equationData.max != d->equationData.max) || (equationData.count != d->equationData.count))
+		|| (equationData.min != d->equationData.min) || (equationData.max != d->equationData.max) || (equationData.count != d->equationData.count)
+		|| (equationData.autoPointsCount != d->equationData.autoPointsCount))
 		exec(new XYEquationCurveSetEquationDataCmd(d, equationData, ki18n("%1: set equation")));
 }
 
@@ -143,38 +144,54 @@ XYEquationCurvePrivate::XYEquationCurvePrivate(XYEquationCurve* owner)
 XYEquationCurvePrivate::~XYEquationCurvePrivate() = default;
 
 void XYEquationCurvePrivate::recalculate() {
-	// resize the vector if a new number of point to calculate was provided
-	if (equationData.count != xVector->size()) {
-		if (equationData.count >= 1) {
-			xVector->resize(equationData.count);
-			yVector->resize(equationData.count);
-		} else {
-			// invalid number of points provided
-			xVector->clear();
-			yVector->clear();
-			recalc();
-			Q_EMIT q->dataChanged();
-			return;
-		}
+	int pointCount = equationData.count; // number of points of the curve to be calculated and plotted
+
+	if (equationData.autoPointsCount) { // auto-calculate number of points based on plot width
+		if (m_plot && m_plot->dataRect().width() > 0) {
+			// Base calculation: oversampling factor × pixel width
+			// Using 2.5 points per pixel as a good balance between quality and performance
+			const double OVERSAMPLING_FACTOR = 2.5;
+			int pixelWidth = m_plot->dataRect().width();
+			pointCount = static_cast<int>(pixelWidth * OVERSAMPLING_FACTOR);
+
+			// Parametric and polar functions have more complex curves and need more points
+			if (equationData.type == XYEquationCurve::EquationType::Parametric ||
+				equationData.type == XYEquationCurve::EquationType::Polar) {
+				pointCount *= 5; // 5x more points for parametric/polar
+			}
+
+			// Minimum 100 points for basic smoothness, maximum 10000 to avoid excessive computation
+			pointCount = qBound(100, pointCount, 10000);
+		} else
+			pointCount = 1000; // default to 1000 points if plot is not available or has zero width
+	} else if (pointCount < 1) { // invalid number provided, safety check
+		xVector->clear();
+		yVector->clear();
+		recalc();
+		Q_EMIT q->dataChanged();
+		return;
+	}
+
+	// Resize the vector if the calculated number of points differs from current size
+	if (pointCount != xVector->size()) {
+		xVector->resize(pointCount);
+		yVector->resize(pointCount);
 		xColumn->invalidateProperties();
 		yColumn->invalidateProperties();
-	} else {
-		if (equationData.count < 1)
-			return;
 	}
 
 	auto* parser = ExpressionParser::getInstance();
 	bool valid = false;
 	if (equationData.type == XYEquationCurve::EquationType::Cartesian) {
-		valid = parser->tryEvaluateCartesian(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
+		valid = parser->tryEvaluateCartesian(equationData.expression1, equationData.min, equationData.max, pointCount, xVector, yVector);
 	} else if (equationData.type == XYEquationCurve::EquationType::Polar) {
-		valid = parser->tryEvaluatePolar(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
+		valid = parser->tryEvaluatePolar(equationData.expression1, equationData.min, equationData.max, pointCount, xVector, yVector);
 	} else if (equationData.type == XYEquationCurve::EquationType::Parametric) {
 		valid = parser->tryEvaluateParametric(equationData.expression1,
 											  equationData.expression2,
 											  equationData.min,
 											  equationData.max,
-											  equationData.count,
+											  pointCount,
 											  xVector,
 											  yVector);
 	}
@@ -210,6 +227,7 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("min"), d->equationData.min);
 	writer->writeAttribute(QStringLiteral("max"), d->equationData.max);
 	writer->writeAttribute(QStringLiteral("count"), QString::number(d->equationData.count));
+	writer->writeAttribute(QStringLiteral("autoPointsCount"), QString::number(d->equationData.autoPointsCount));
 	writer->writeEndElement();
 
 	writer->writeEndElement();
@@ -243,6 +261,7 @@ bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("min", equationData.min);
 			READ_STRING_VALUE("max", equationData.max);
 			READ_INT_VALUE("count", equationData.count, int);
+			READ_INT_VALUE("autoPointsCount", equationData.autoPointsCount, bool);
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
