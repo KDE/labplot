@@ -1085,4 +1085,100 @@ void ExpressionParserTest::testPolarSpiral() {
 		VALUES_EQUAL(sqrt(xVector.at(i) * xVector.at(i) + yVector.at(i) * yVector.at(i)), (i + 1) / 100.);
 }
 
+// r(phi) = 1 + sin(phi), uses both "sin" and the constant/index symbols so the used-symbols
+// cache of the underlying high-performance parser needs to keep working across the whole range.
+void ExpressionParserTest::testPolarCardioid() {
+	auto* parser = ExpressionParser::getInstance();
+	constexpr auto numElements = 100;
+	const double min = 0.0;
+	const double max = 6.28;
+	const double step = (max - min) / (numElements - 1);
+
+	QVector<double> xVector(numElements);
+	QVector<double> yVector(numElements);
+
+	QVERIFY(parser->tryEvaluatePolar(QStringLiteral("1+sin(phi)"), QStringLiteral("0.0"), QStringLiteral("6.28"), numElements, &xVector, &yVector));
+
+	QCOMPARE(xVector.size(), numElements);
+	QCOMPARE(yVector.size(), numElements);
+
+	for (int i = 0; i < numElements; i++) {
+		const double phi = min + step * i;
+		const double r = 1. + sin(phi);
+		VALUES_EQUAL(xVector.at(i), r * cos(phi));
+		VALUES_EQUAL(yVector.at(i), r * sin(phi));
+	}
+}
+
+// Regression test for the min/max/count based tryEvaluateCartesian() overload (used e.g. for
+// simple function plots), separate from the vars/xVectors based overload tested above.
+void ExpressionParserTest::testEvaluateCartesianRange() {
+	auto* parser = ExpressionParser::getInstance();
+	constexpr auto numElements = 5;
+	QVector<double> xVector(numElements);
+	QVector<double> yVector(numElements);
+
+	QVERIFY(parser->tryEvaluateCartesian(QStringLiteral("x^2"), QStringLiteral("0"), QStringLiteral("4"), numElements, &xVector, &yVector));
+
+	QCOMPARE(xVector.size(), numElements);
+	QCOMPARE(yVector.size(), numElements);
+
+	const QVector<double> xRef({0., 1., 2., 3., 4.});
+	const QVector<double> yRef({0., 1., 4., 9., 16.});
+	COMPARE_DOUBLE_VECTORS(xVector, xRef);
+	COMPARE_DOUBLE_VECTORS(yVector, yRef);
+}
+
+void ExpressionParserTest::testEvaluateParametricCircle() {
+	auto* parser = ExpressionParser::getInstance();
+	constexpr auto numElements = 100;
+	QVector<double> xVector(numElements);
+	QVector<double> yVector(numElements);
+
+	QVERIFY(parser->tryEvaluateParametric(QStringLiteral("cos(t)"),
+										  QStringLiteral("sin(t)"),
+										  QStringLiteral("0.0"),
+										  QStringLiteral("6.28"),
+										  numElements,
+										  &xVector,
+										  &yVector));
+
+	QCOMPARE(xVector.size(), numElements);
+	QCOMPARE(yVector.size(), numElements);
+
+	for (int i = 0; i < numElements; i++)
+		VALUES_EQUAL(sqrt(xVector.at(i) * xVector.at(i) + yVector.at(i) * yVector.at(i)), 1.);
+}
+
+// Regression test: expr1 and expr2 use different sets of symbols/functions ("sin" only vs.
+// "sin" and "cos"). Since tryEvaluateParametric() parses both expressions internally, each one
+// must resolve its own symbols correctly regardless of what the other expression used.
+void ExpressionParserTest::testEvaluateParametricMismatchedSymbols() {
+	auto* parser = ExpressionParser::getInstance();
+	constexpr auto numElements = 100;
+	const double min = 0.0;
+	const double max = 6.28;
+	const double step = (max - min) / (numElements - 1);
+
+	QVector<double> xVector(numElements);
+	QVector<double> yVector(numElements);
+
+	QVERIFY(parser->tryEvaluateParametric(QStringLiteral("1+sin(t)"),
+										  QStringLiteral("cos(t)*(1+sin(t))"),
+										  QStringLiteral("0.0"),
+										  QStringLiteral("6.28"),
+										  numElements,
+										  &xVector,
+										  &yVector));
+
+	QCOMPARE(xVector.size(), numElements);
+	QCOMPARE(yVector.size(), numElements);
+
+	for (int i = 0; i < numElements; i++) {
+		const double t = min + step * i;
+		VALUES_EQUAL(xVector.at(i), 1. + sin(t));
+		VALUES_EQUAL(yVector.at(i), cos(t) * (1. + sin(t)));
+	}
+}
+
 QTEST_MAIN(ExpressionParserTest)

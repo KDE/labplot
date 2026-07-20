@@ -849,25 +849,38 @@ bool ExpressionParser::tryEvaluateParametric(const QString& xexpr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	Parser parser(true);
-	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
+	// use two separate parser instances for the x- and y-expressions:
+	// the "high performance" mode of the parser records, on its very first parse() call,
+	// which symbols are actually used and restricts all subsequent parse() calls to only
+	// those symbols. since xexpr and yexpr are generally different expressions that may use
+	// different sets of symbols/functions (e.g. xexpr = "1+sin(t)", yexpr = "cos(t)*(1+sin(t))"),
+	// sharing a single parser between them would incorrectly reject symbols in yexpr that
+	// don't happen to appear in xexpr (and vice versa).
+	Parser xParser(true);
+	Parser yParser(true);
 
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
-		parser.assign_symbol("t", range.start() + step * i);
-		parser.assign_symbol("i", i + 1);
+		xParser.assign_symbol("t", range.start() + step * i);
+		xParser.assign_symbol("i", i + 1);
+		yParser.assign_symbol("t", range.start() + step * i);
+		yParser.assign_symbol("i", i + 1);
 
-		double x = parser.parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
-		if (parser.parseErrors() > 0) // try default locale if failing
-			x = parser.parse(qPrintable(xexpr), "en_US");
-		if (parser.parseErrors() > 0)
+		double x = xParser.parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
+		if (xParser.parseErrors() > 0) // try default locale if failing
+			x = xParser.parse(qPrintable(xexpr), "en_US");
+		if (xParser.parseErrors() > 0) {
+			m_lastErrorMessage = QString::fromStdString(xParser.lastErrorMessage());
 			return false;
+		}
 
-		double y = parser.parse(qPrintable(yexpr), qPrintable(numberLocale.name()));
-		if (parser.parseErrors() > 0) // try default locale if failing
-			y = parser.parse(qPrintable(yexpr), "en_US");
-		if (parser.parseErrors() > 0)
+		double y = yParser.parse(qPrintable(yexpr), qPrintable(numberLocale.name()));
+		if (yParser.parseErrors() > 0) // try default locale if failing
+			y = yParser.parse(qPrintable(yexpr), "en_US");
+		if (yParser.parseErrors() > 0) {
+			m_lastErrorMessage = QString::fromStdString(yParser.lastErrorMessage());
 			return false;
+		}
 
 		if (std::isnan(x))
 			WARN(Q_FUNC_INFO << ", WARNING: X expression " << STDSTRING(xexpr) << " evaluated @ " << range.start() + step * i << " is NAN")
