@@ -1203,6 +1203,7 @@ void CartesianPlotTest::wheelEventNotCenter() {
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 10;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x");
 	equationCurve->setEquationData(data);
 	equationCurve->recalculate();

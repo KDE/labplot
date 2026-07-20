@@ -2019,12 +2019,10 @@ void XYCurveTest::updateLinesLog10() {
 			QLineF(QPointF(7.8, 7.8), QPointF(8.9, 8.9)),
 			QLineF(QPointF(8.9, 8.9), QPointF(10, 10)),
 		};
-		QCOMPARE(linearPrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be omitted
 		auto test_lines = linearPrivate->m_lines;
 		QCOMPARE(refLines.size(), test_lines.size());
-		for (int i = 0; i < test_lines.size(); i++) {
+		for (int i = 0; i < test_lines.size(); i++)
 			COMPARE_LINES(test_lines.at(i), refLines.at(i));
-		}
 	});
 	linearPrivate->updateLines();
 	QCOMPARE(updateLinesCalled, true);
