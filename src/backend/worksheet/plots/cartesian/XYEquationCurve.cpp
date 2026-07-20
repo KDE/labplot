@@ -155,8 +155,7 @@ void XYEquationCurvePrivate::recalculate() {
 			pointCount = static_cast<int>(pixelWidth * OVERSAMPLING_FACTOR);
 
 			// Parametric and polar functions have more complex curves and need more points
-			if (equationData.type == XYEquationCurve::EquationType::Parametric ||
-				equationData.type == XYEquationCurve::EquationType::Polar) {
+			if (equationData.type == XYEquationCurve::EquationType::Parametric || equationData.type == XYEquationCurve::EquationType::Polar) {
 				pointCount *= 5; // 5x more points for parametric/polar
 			}
 
@@ -187,13 +186,8 @@ void XYEquationCurvePrivate::recalculate() {
 	} else if (equationData.type == XYEquationCurve::EquationType::Polar) {
 		valid = parser->tryEvaluatePolar(equationData.expression1, equationData.min, equationData.max, pointCount, xVector, yVector);
 	} else if (equationData.type == XYEquationCurve::EquationType::Parametric) {
-		valid = parser->tryEvaluateParametric(equationData.expression1,
-											  equationData.expression2,
-											  equationData.min,
-											  equationData.max,
-											  pointCount,
-											  xVector,
-											  yVector);
+		valid =
+			parser->tryEvaluateParametric(equationData.expression1, equationData.expression2, equationData.min, equationData.max, pointCount, xVector, yVector);
 	}
 
 	if (!valid) {
