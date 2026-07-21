@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-14 00:39+0000\n"
+"POT-Creation-Date: 2026-07-21 00:39+0000\n"
 "PO-Revision-Date: 2026-06-02 18:00+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -6696,6 +6696,7 @@ msgstr "Circolare"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoBinRanges)
+#. i18n: ectx: property (text), widget (QCheckBox, cbAutoPoints)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSTLTrendLengthAuto)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSTLLowPassLengthAuto)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSTLSeasonalJumpAuto)
@@ -6727,7 +6728,8 @@ msgstr "Circolare"
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:260
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:123
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:355
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:489
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:330
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:512
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:68
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:492
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:109
@@ -8688,7 +8690,7 @@ msgstr ""
 "Al livello di significatività %1, il processo sembra stabile (omogeneo). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1935
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:150
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:153
 #, kde-format
 msgid "Parametric"
 msgstr "Parametrico"
@@ -9494,7 +9496,7 @@ msgstr "%1: fattore di larghezza modificato"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:162
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:348
-#: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:109
+#: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:110
 #, kde-format
 msgid "%1 - Data"
 msgstr "Dati - %1"
@@ -11190,7 +11192,7 @@ msgstr "Errore: %1"
 msgid "%1: set options and perform the differentiation"
 msgstr "%1: imposta le opzioni ed esegui la derivazione"
 
-#: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:94
+#: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:95
 #, kde-format
 msgid "%1: set equation"
 msgstr "%1: imposta l'equazione"
@@ -16281,7 +16283,7 @@ msgstr "tempo di calcolo: %1 ms"
 #. i18n("Implicit"));
 #. tooltip texts
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:72
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:154
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:157
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
@@ -16435,45 +16437,45 @@ msgstr ""
 msgid "Differentiation status: %1"
 msgstr "Stato della derivazione: %1"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:148
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:151
 #, kde-format
 msgid "Cartesian"
 msgstr "Cartesiano"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:149
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:152
 #, kde-format
 msgid "Polar"
 msgstr "Polare"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:172
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:175
 #, kde-format
 msgid "x, min"
 msgstr "x, minimo"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:173
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:176
 #, kde-format
 msgid "x, max"
 msgstr "x, massimo"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:184
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:187
 #, kde-format
 msgid "φ, min"
 msgstr "φ, minimo"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:185
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:188
 #, kde-format
 msgid "φ, max"
 msgstr "φ, massimo"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:197
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:397
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:200
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:420
 #, kde-format
 msgid "t, min"
 msgstr "t, minimo"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:198
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:201
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:118
 #, kde-format
 msgid "t, max"
@@ -17512,7 +17514,7 @@ msgstr "Seleziona file per salvare la definizione della funzione"
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:404
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:124
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:49
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:354
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:377
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:288
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:246
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:43
@@ -23539,7 +23541,7 @@ msgstr "Elenco degli intervalli y"
 #. i18n: ectx: property (text), widget (QLabel, lPoints)
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:489
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:380
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:403
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:171
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:500
 #, kde-format
@@ -24091,7 +24093,7 @@ msgstr "Livello di significatività α:"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:77
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:193
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:348
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:482
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:505
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:485
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:329
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:364
@@ -24964,6 +24966,23 @@ msgstr "Equazione"
 #, kde-format
 msgid "y=g(t)"
 msgstr "y=g(t)"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, sbCount)
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:311
+#, fuzzy, kde-format
+#| msgid "Number of points:"
+msgid "Number of points to evaluate"
+msgstr "Numero di punti:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoPoints)
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:327
+#, fuzzy, kde-format
+#| msgid ""
+#| "Automatically determine the optimal number of digits after the decimal "
+#| "point"
+msgid "Automatically calculate the number of points based on plot pixel width"
+msgstr ""
+"Determina automaticamente il numero ottimale di cifre dopo il punto decimale"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
