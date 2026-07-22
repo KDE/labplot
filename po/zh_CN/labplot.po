@@ -24410,19 +24410,15 @@ msgstr "y = g(t)"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbCount)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:311
-#, fuzzy, kde-format
-#| msgid "Number of rows to preview:"
+#, kde-format
 msgid "Number of points to evaluate"
-msgstr "预览行数："
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoPoints)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:327
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically determine the optimal number of digits after the decimal "
-#| "point"
+#, kde-format
 msgid "Automatically calculate the number of points based on plot pixel width"
-msgstr "自动确定小数点后数字位数的最佳值"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93

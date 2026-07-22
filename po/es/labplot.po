@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-21 00:39+0000\n"
-"PO-Revision-Date: 2026-07-06 00:51+0100\n"
+"PO-Revision-Date: 2026-07-21 21:28+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -25031,20 +25031,17 @@ msgstr "y=g(t)"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbCount)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:311
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of points to evaluate"
-msgstr "Número de puntos:"
+msgstr "Número de puntos a evaluar"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoPoints)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:327
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically determine the optimal number of digits after the decimal "
-#| "point"
+#, kde-format
 msgid "Automatically calculate the number of points based on plot pixel width"
 msgstr ""
-"Determinar automáticamente el número óptimo de dígitos tras la coma decimal"
+"Calcular automáticamente el número de puntos según la anchura de píxeles del "
+"gráfico"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93

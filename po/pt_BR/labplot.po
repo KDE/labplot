@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-21 00:39+0000\n"
-"PO-Revision-Date: 2026-07-05 07:06-0300\n"
+"PO-Revision-Date: 2026-07-21 06:39-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -25003,19 +25003,17 @@ msgstr "y=g(t)"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbCount)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:311
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of points to evaluate"
-msgstr "Número de pontos:"
+msgstr "Número de pontos a avaliar"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoPoints)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:327
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically determine the optimal number of digits after the decimal "
-#| "point"
+#, kde-format
 msgid "Automatically calculate the number of points based on plot pixel width"
-msgstr "Define automaticamente o número de casas decimais"
+msgstr ""
+"Calcule automaticamente o número de pontos com base na largura do gráfico em "
+"pixels"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
