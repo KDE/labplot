@@ -7,12 +7,12 @@
     <x>0</x>
     <y>0</y>
     <width>419</width>
-    <height>873</height>
+    <height>897</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
-    <number>0</number>
+    <number>6</number>
    </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
@@ -141,6 +141,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="tabChangesFocus">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -891,9 +894,9 @@
    <header>frontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>NumberSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>NumberSpinBox.h</header>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>UTCDateTimeEdit</class>
@@ -901,9 +904,9 @@
    <header>UTCDateTimeEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>TimedLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>frontend/widgets/TimedLineEdit.h</header>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -911,17 +914,31 @@
   <tabstop>leName</tabstop>
   <tabstop>teComment</tabstop>
   <tabstop>kfrLabelFont</tabstop>
+  <tabstop>chkUsePlotColor</tabstop>
   <tabstop>kcbLabelColor</tabstop>
   <tabstop>sbLayoutColumnCount</tabstop>
   <tabstop>cbOrder</tabstop>
+  <tabstop>sbLineSymbolWidth</tabstop>
   <tabstop>chbBindLogicalPos</tabstop>
   <tabstop>cbPositionX</tabstop>
+  <tabstop>sbPositionX</tabstop>
   <tabstop>cbPositionY</tabstop>
+  <tabstop>sbPositionY</tabstop>
+  <tabstop>sbPositionXLogical</tabstop>
+  <tabstop>sbPositionYLogical</tabstop>
   <tabstop>dtePositionXLogical</tabstop>
   <tabstop>sbRotation</tabstop>
   <tabstop>cbHorizontalAlignment</tabstop>
   <tabstop>cbVerticalAlignment</tabstop>
+  <tabstop>chbLock</tabstop>
   <tabstop>chkVisible</tabstop>
+  <tabstop>sbBorderCornerRadius</tabstop>
+  <tabstop>sbLayoutBottomMargin</tabstop>
+  <tabstop>sbLayoutRightMargin</tabstop>
+  <tabstop>sbLayoutLeftMargin</tabstop>
+  <tabstop>sbLayoutHorizontalSpacing</tabstop>
+  <tabstop>sbLayoutTopMargin</tabstop>
+  <tabstop>sbLayoutVerticalSpacing</tabstop>
  </tabstops>
  <resources/>
  <connections/>

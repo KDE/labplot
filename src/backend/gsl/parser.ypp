@@ -157,13 +157,9 @@ namespace {
 %right '^' '!'
 
 %%
-input:   /* empty */
-	| input line
-;
-
-line:	T_EOF
-        | expr T_EOF   { p->result = $1; }
-        | error T_EOF { yyerrok; }
+input:	%empty
+	| expr T_EOF   { p->result = $1; }
+	| error T_EOF { yyerrok; }
 ;
 
 expr:      NUM       { $$ = $1;                            }
@@ -229,7 +225,7 @@ expr:      NUM       { $$ = $1;                            }
                                 if (res != 0)
                                     return res;
                             }
-/* TTested in void ParserTest::testFunction3Arguments() */
+/* Tested in void ParserTest::testFunction3Arguments() */
 | FNCT '(' expr ',' expr ',' expr ')'  {
                                             const auto res = evaluateFunction<Parsing::func_t3>(p, 3, $1, $$, $3, $5, $7);
                                             if (res != 0)
@@ -318,7 +314,7 @@ namespace Parsing {
                         }
                 }
 
-                /* do not assign value if symbol already exits as function */
+                /* do not assign value if symbol already exists as function */
                 if (ptr->type == VAR)
                         ptr->value = value;
 
@@ -373,11 +369,11 @@ namespace Parsing {
                 DEBUG_PARSER("PARSER: init_table()\n");
 
                 if (static_symbols.empty()) {
-                        // Only once neccessary
+                        // Only necessary once
                         init_static_symbols();
                 }
 
-                           // Must be done every time to reinit
+                // Must be done every time to reinit
                 clear_variable_symbols();
                 variable_symbols.reserve(_number_specialfunctions);
 

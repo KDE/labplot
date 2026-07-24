@@ -19,7 +19,9 @@ enum class Type {
 #ifdef HAVE_KUSERFEEDBACK
 	Feedback,
 #endif
+#ifdef HAVE_SCRIPTING
 	ScriptEditor
+#endif
 };
 
 KConfigGroup group(const QString& name);

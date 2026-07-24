@@ -59,6 +59,7 @@ private:
 	void loadConfig(KConfig&);
 	void updatePositionText(Axis::Orientation);
 	void updateLabelsPosition(Axis::LabelsPosition);
+	void updateLabelsFormatWidgets(Axis::LabelsFormat format);
 	void updateAxisColor();
 	void updateScale();
 
@@ -216,7 +217,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void info(const QString&);
 
-	friend class AxisTest2;
+	friend class AxisTest;
 };
 
 #endif

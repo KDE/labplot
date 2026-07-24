@@ -20,13 +20,19 @@
  */
 class TreeItem {
 public:
-	explicit TreeItem(const QVector<QVariant>& data, TreeItem* parent = nullptr);
+	struct Data {
+		QVariant value;
+		QVariant userData;
+	};
+
+	explicit TreeItem(const QVector<Data>& data, TreeItem* parent = nullptr);
+	TreeItem() = delete;
 	~TreeItem();
 
 	TreeItem* child(int number);
 	int childCount() const;
 	int columnCount() const;
-	QVariant data(int column) const;
+	QVariant data(int column, bool userData) const;
 	QVariant backgroundColor() const;
 	bool insertChildren(int position, int count, int columns);
 	bool insertColumns(int position, int columns);
@@ -34,13 +40,13 @@ public:
 	bool removeChildren(int position, int count);
 	bool removeColumns(int position, int columns);
 	int childNumber() const;
-	bool setData(int column, const QVariant& value);
+	bool setData(int column, const QVariant& value, bool userData);
 	bool setBackgroundColor(int column, const QVariant& value);
 
 private:
 	QList<TreeItem*> childItems;
-	QVector<QVariant> itemData;
-	QColor m_backgroundColor{QColor(0, 0, 0, 0)};
+	QVector<Data> itemData; // Every element is a part of a column
+	QColor m_backgroundColor{QColor(0, 0, 0, 0)}; // The complete row has the same color
 	TreeItem* parentItem{nullptr};
 };
 /*!

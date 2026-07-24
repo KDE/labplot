@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget showing the available color maps
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -18,8 +18,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QMessageBox>
-#include <QPainter>
-#include <QPixmap>
 #include <QStandardPaths>
 #include <QXmlStreamReader>
 
@@ -57,9 +55,29 @@ QString ExamplesManager::collectionInfo(const QString& name) const {
 }
 
 /*!
- * \brief returns the list of names of the example projects for the collection \c collecitonName
+ * \brief returns the list of names of the example projects for the collection \c collecitonName.
+ * In case the name is empty, the list of the names for all collections is returned.
  */
 QStringList ExamplesManager::exampleNames(const QString& collectionName) {
+	if (!collectionName.isEmpty()) {
+		// load and return the examples for the specified name
+		loadExamples(collectionName);
+		return m_examples[collectionName];
+	} else {
+		// empty connection name, load and return the examples for all connections
+		for (const auto& name : m_collections.keys())
+			loadExamples(name);
+		QStringList names;
+		for (const auto& list : m_examples)
+			names << list;
+		return names;
+	}
+}
+
+/*!
+ * \brief Loads the example projects for the specified collection \c collectionName.
+ */
+void ExamplesManager::loadExamples(const QString& collectionName) {
 	// load the collection if not done yet
 	if (!m_examples.contains(collectionName)) {
 		// example projects of the currently selected collection not loaded yet -> load them
@@ -128,7 +146,6 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 		m_examples[collectionName] = std::move(names);
 	}
 
-	return m_examples[collectionName];
 }
 
 /*!

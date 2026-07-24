@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : GUI observer
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -27,7 +27,9 @@ class LollipopPlotDock;
 class BoxPlotDock;
 class KDEPlotDock;
 class QQPlotDock;
+class ParetoChartDock;
 class ProcessBehaviorChartDock;
+class HypothesisTestDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ReferenceLineDock;
@@ -42,7 +44,7 @@ class StatisticsSpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
 class XYFunctionCurveDock;
-class XYDataReductionCurveDock;
+class XYLineSimplificationCurveDock;
 class XYDifferentiationCurveDock;
 class XYIntegrationCurveDock;
 class XYInterpolationCurveDock;
@@ -53,6 +55,7 @@ class XYFourierTransformCurveDock;
 class XYHilbertTransformCurveDock;
 class XYConvolutionCurveDock;
 class XYCorrelationCurveDock;
+class XYBaselineCorrectionCurveDock;
 class WorksheetDock;
 class ImageDock;
 class LabelWidget;
@@ -61,7 +64,7 @@ class DatapickerCurveWidget;
 #ifdef HAVE_SCRIPTING
 class ScriptDock;
 #endif
-
+class SeasonalDecompositionDock;
 #ifdef HAVE_CANTOR_LIBS
 class NotebookDock;
 #endif
@@ -119,9 +122,10 @@ private:
 	// continuous improvement plots
 	ProcessBehaviorChartDock* m_processBehaviorChartDock{nullptr};
 	RunChartDock* m_runChartDock{nullptr};
+	ParetoChartDock* m_paretoChartDock{nullptr};
 
 	// analysis plots
-	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};
+	XYLineSimplificationCurveDock* m_xyLineSimplificationCurveDock{nullptr};
 	XYDifferentiationCurveDock* m_xyDifferentiationCurveDock{nullptr};
 	XYIntegrationCurveDock* m_xyIntegrationCurveDock{nullptr};
 	XYInterpolationCurveDock* m_xyInterpolationCurveDock{nullptr};
@@ -132,6 +136,13 @@ private:
 	XYHilbertTransformCurveDock* m_xyHilbertTransformCurveDock{nullptr};
 	XYConvolutionCurveDock* m_xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
+	XYBaselineCorrectionCurveDock* m_xyBaselineCorrectionCurveDock{nullptr};
+
+	// statistical analysis
+	HypothesisTestDock* m_hypothesisTestDock{nullptr};
+
+	// time series analysis
+	SeasonalDecompositionDock* m_seasonalDecompositionDock{nullptr};
 
 #ifdef HAVE_SCRIPTING
 	ScriptDock* m_scriptDock{nullptr};

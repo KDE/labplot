@@ -74,7 +74,7 @@ extern const char* nsl_sf_stats_distribution_equation[];
 
 /* distribution supports random number generation? */
 bool nsl_sf_stats_distribution_supports_RNG(nsl_sf_stats_distribution);
-/* distribution supports maximum likelyhood estimation? */
+/* distribution supports maximum likelihood estimation? */
 bool nsl_sf_stats_distribution_supports_ML(nsl_sf_stats_distribution);
 
 __END_DECLS

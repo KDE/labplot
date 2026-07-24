@@ -3,7 +3,7 @@
 	Project		: LabPlot
 	Description	: Represents live data source
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
@@ -12,6 +12,7 @@
 
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
@@ -19,7 +20,6 @@
 #include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"
 
@@ -58,7 +58,8 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading)
 	connect(this, &AbstractAspect::aspectAboutToBeRemoved, [this](const AbstractAspect* aspect) {
 		if (aspect == this) {
 			pauseReading();
-			m_device->close();
+			if (m_device)
+				m_device->close();
 		}
 	});
 
@@ -149,6 +150,8 @@ void LiveDataSource::continueReading() {
 		m_pending = false;
 		updateNow();
 	}
+
+	Q_EMIT pausedChanged(false);
 }
 
 /*!
@@ -160,6 +163,8 @@ void LiveDataSource::pauseReading() {
 		m_pending = true;
 		m_updateTimer->stop();
 	}
+
+	Q_EMIT pausedChanged(true);
 }
 
 void LiveDataSource::setFileName(const QString& name) {
@@ -439,6 +444,9 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::NETCDF:
 	case AbstractFileFilter::FileType::VECTOR_BLF:
 	case AbstractFileFilter::FileType::MCAP:
+	case AbstractFileFilter::FileType::Parquet:
+	case AbstractFileFilter::FileType::ArrowIPC:
+	case AbstractFileFilter::FileType::ORC:
 		break;
 	}
 
@@ -455,6 +463,9 @@ QIcon LiveDataSource::icon() const {
  */
 void LiveDataSource::readOnUpdate() {
 	DEBUG(Q_FUNC_INFO)
+	// This can happen when the update type gets changed to periodically during a livedata is running
+	if (!m_fileSystemWatcher)
+		return;
 	if (!m_fileSystemWatcher->files().contains(m_fileName)) {
 		m_fileSystemWatcher->addPath(m_fileName);
 		QFileInfo file(m_fileName);
@@ -561,8 +572,6 @@ void LiveDataSource::read() {
 	if (m_reading)
 		return;
 
-	static bool firstRead = true;
-
 	m_reading = true;
 
 	// initialize the device (file, socket, serial port) when calling this function for the first time
@@ -611,6 +620,9 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::FileType::READSTAT:
 		case AbstractFileFilter::FileType::MATIO:
 		case AbstractFileFilter::FileType::MCAP:
+		case AbstractFileFilter::FileType::Parquet:
+		case AbstractFileFilter::FileType::ArrowIPC:
+		case AbstractFileFilter::FileType::ORC:
 			break;
 		}
 		break;
@@ -635,6 +647,7 @@ void LiveDataSource::read() {
 #ifdef HAVE_QTSERIALPORT
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii) {
+			static bool firstRead = true;
 			if (firstRead)
 				static_cast<AsciiFilter*>(m_filter)->clearLastError();
 			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device,
@@ -745,7 +758,7 @@ QString LiveDataSource::serialPortErrorEnumToString(QSerialPort::SerialPortError
 		msg = i18n("Device not available.");
 		break;
 	case QSerialPort::TimeoutError:
-		msg = i18n("Timeout occured.");
+		msg = i18n("Timeout occurred.");
 		break;
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:

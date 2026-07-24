@@ -12,25 +12,17 @@
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
+#include <KLocalization>
 #include <KMessageBox>
 
 #include <QMenu>
 #include <QWidgetAction>
 
 /*!
-  \class XYFourierFilterCurveDock
- \brief  Provides a widget for editing the properties of the XYFourierFilterCurves
-		(2D-curves defined by a Fourier filter) currently selected in
-		the project explorer.
-
-  If more than one curves are set, the properties of the first column are shown.
-  The changes of the properties are applied to all curves.
-  The exclusions are the name, the comment and the datasets (columns) of
-  the curves  - these properties can only be changed if there is only one single curve.
-
-  \ingroup frontend
+	\class XYFourierFilterCurveDock
+	\brief  Provides a widget for editing the properties of \c XYFourierFilterCurve.
+	\ingroup frontend
 */
-
 XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget* parent)
 	: XYAnalysisCurveDock(parent) {
 }
@@ -42,7 +34,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate, uiGeneralTab.cbDataSourceType);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -57,23 +49,14 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 2);
 
-	for (int i = 0; i < NSL_FILTER_TYPE_COUNT; i++)
-		uiGeneralTab.cbType->addItem(i18n(nsl_filter_type_name[i]));
-
-	for (int i = 0; i < NSL_FILTER_FORM_COUNT; i++)
-		uiGeneralTab.cbForm->addItem(i18n(nsl_filter_form_name[i]));
-
-	for (int i = 0; i < NSL_FILTER_CUTOFF_UNIT_COUNT; i++) {
-		uiGeneralTab.cbUnit->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
-		uiGeneralTab.cbUnit2->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
-	}
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::dataSourceTypeChanged);
@@ -364,7 +347,7 @@ void XYFourierFilterCurveDock::updateCutoffSpinBoxes(NumberSpinBox* sb, nsl_filt
 	switch (newUnit) {
 	case nsl_filter_cutoff_unit_frequency:
 		sb->setMaximum(f);
-		sb->setSuffix(QStringLiteral(" Hz"));
+		KLocalization::setupSpinBoxFormatString(sb, ki18nc("@label:spinbox Suffix for the frequency", "%v Hz"));
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			break;
@@ -424,6 +407,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 }
 
 void XYFourierFilterCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	m_filterData.cutoff = uiGeneralTab.sbCutoff->value();
 	m_filterData.cutoff2 = uiGeneralTab.sbCutoff2->value();
 
@@ -459,4 +443,23 @@ void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve
 	this->typeChanged();
 
 	this->showFilterResult();
+}
+
+void XYFourierFilterCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbType->clear();
+	for (int i = 0; i < NSL_FILTER_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_filter_type_name[i]));
+
+	uiGeneralTab.cbForm->clear();
+	for (int i = 0; i < NSL_FILTER_FORM_COUNT; i++)
+		uiGeneralTab.cbForm->addItem(i18n(nsl_filter_form_name[i]));
+
+	uiGeneralTab.cbUnit->clear();
+	uiGeneralTab.cbUnit2->clear();
+	for (int i = 0; i < NSL_FILTER_CUTOFF_UNIT_COUNT; i++) {
+		uiGeneralTab.cbUnit->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
+		uiGeneralTab.cbUnit2->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
+	}
 }

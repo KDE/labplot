@@ -24,6 +24,9 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updateOrientation();
 	void updatePositionLimit();
+	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 
 	bool m_visible{true}; // point inside the plot (visible) or not
 
@@ -46,6 +49,9 @@ private:
 	bool m_topClipped{false};
 	bool m_leftClipped{false};
 	bool m_rightClipped{false};
+	QPointF m_undoPosStart;
+	QPointF m_undoPosEnd;
+	bool m_isDragged{false};
 };
 
 #endif

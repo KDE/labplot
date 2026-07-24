@@ -529,7 +529,7 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 #ifdef HAVE_MATIO
 	DEBUG(Q_FUNC_INFO << ", fileName = " << qPrintable(fileName));
 
-	mat_t* matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
+	matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
 	if (!matfp) {
 		DEBUG(Q_FUNC_INFO << ", ERROR getting file info")
 		return;

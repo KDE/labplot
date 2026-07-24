@@ -24,18 +24,19 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void retranslateUi() override;
 
 	Ui::XYFunctionCurveDockGeneralTab uiGeneralTab;
 	XYFunctionCurve* m_functionCurve{nullptr};
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurveDock
-	void recalculateClicked();
+	void recalculateClicked() override;
 	void showConstants();
 	void showFunctions();
 	void insertFunction(const QString&);
 	void insertConstant(const QString&);
-	void enableRecalculate() const override;
+	void enableRecalculate() override;
 	void addVariable();
 	void removeAllVariableWidgets();
 	void deleteVariable();

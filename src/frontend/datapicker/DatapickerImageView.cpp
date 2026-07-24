@@ -14,11 +14,9 @@
 #include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/Transform.h"
-#include <frontend/GuiTools.h>
+#include "frontend/GuiTools.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/widgets/toggleactionmenu.h"
-
-#include <KLocalizedString>
 
 #include <QActionGroup>
 #include <QClipboard>
@@ -599,6 +597,9 @@ bool DatapickerImageView::changeMouseMode(QAction* action) {
 		setCursor(Qt::CrossCursor);
 		if (m_mouseMode != mode) {
 			switch (mode) {
+				case DatapickerImageView::MouseMode::Navigation:
+				case DatapickerImageView::MouseMode::ZoomSelection:
+					break;
 				case DatapickerImageView::MouseMode::ReferencePointsEntry: {
 					int count = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 					if (count) {
@@ -660,7 +661,7 @@ void DatapickerImageView::changeZoom(QAction* action) {
 	}
 	}
 
-	// change and set angle if tranform reset
+	// change and set angle if transform reset
 	changeRotationAngle();
 }
 

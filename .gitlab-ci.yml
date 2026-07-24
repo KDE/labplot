@@ -9,8 +9,9 @@ include:
 # reuse-lint fails
 #      - /gitlab-templates/reuse-lint.yml
       - /gitlab-templates/clang-format.yml
+      - /gitlab-templates/cppcheck.yml
       - /gitlab-templates/linux-qt6.yml
-# Fails finding ECM (2025-02-13)
+# can't find ECMConfig.cmake (2025-10-21)
 #      - /gitlab-templates/linux-qt6-next.yml
       - /gitlab-templates/windows-qt6.yml
       - /gitlab-templates/freebsd-qt6.yml
@@ -18,6 +19,8 @@ include:
       - /gitlab-templates/craft-appimage-qt6.yml
 # see below for flatpak variables
       - /gitlab-templates/flatpak.yml
+# enable when needed
+#      - /gitlab-templates/flatpak-arm64.yml
       - /gitlab-templates/craft-windows-x86-64-qt6.yml
       - /gitlab-templates/craft-macos-x86-64-qt6.yml
       - /gitlab-templates/craft-macos-arm64-qt6.yml
@@ -25,6 +28,7 @@ include:
 #      - /gitlab-templates/craft-windows-appx-qt6.yml
 # MinGW fails linking tests due to undefined references to GSL functions
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
+      - /gitlab-templates/snap-snapcraft-lxd.yml
 
 # can't extend job without running it
 # "only: []" not supported anymore
@@ -34,7 +38,7 @@ include:
 #  script:
 #    - !reference [freebsd14_qt68, script]
 #    - mkdir -p build_examples && cd build_examples
-#    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+#    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ../lib/examples
 #    - ninja
 
 # can't extend job without running it
@@ -45,7 +49,7 @@ include:
 #  script:
 #    - !reference [suse_tumbleweed_qt69, script]
 #    - mkdir -p build_examples && cd build_examples
-#    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+#    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ../lib/examples
 #    - ninja
 
 # can't extend job without running it
@@ -58,7 +62,7 @@ include:
     # disable the build of the sdk examples on windows since it is flaky. fails with a linker error sometimes
     # - mkdir -p build_examples && cd build_examples
     # - $env:Path = 'C:\Craft\windows-msvc2022_64-cl\bin;C:\Craft\windows-msvc2022_64-cl\lib;C:\Craft\windows-msvc2022_64-cl\dev-utils\bin;' + $env:Path
-    # - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+    # - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ../lib/examples
     # - ninja
 
 craft_appimage_qt6_x86_64:
@@ -85,6 +89,18 @@ craft_macos_qt6_arm64:
       when: manual
       allow_failure: true
 
+snap_snapcraft_lxd:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
+      allow_failure: true
+
+snap_snapcraft_lxd_arm64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
+      allow_failure: true
+
 clang_format:
   stage: validate
   image: debian:bookworm
@@ -96,7 +112,7 @@ clang_format:
     git diff --exit-code
 
 # see above
-flatpak:
+flatpak-amd64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: manual
@@ -107,13 +123,13 @@ variables:
 
 ########################################################
 # test builds (prepend '.' to temporary disable):
-## Ubuntu 22.04 min (Debug)
+## Ubuntu 22.04 min (Release)
 ## Ubuntu 22.04 full (Release)
-## Fedora 38 min (Debug)
+## Fedora 38 min (Release)
 ## Fedora 38 full (Release)
 ## OS 15.5 min (Release)
-## OS 15.5 full (Debug)
-## Tumbleweed full (Debug)
+## OS 15.5 full (Release)
+## Tumbleweed full (Release)
 
 .ubuntu_22.04_min:
   stage: build
@@ -127,7 +143,7 @@ variables:
     - eatmydata apt install --yes --no-install-recommends locales-all ninja-build git cmake make g++ extra-cmake-modules xvfb libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev pkg-config ca-certificates zlib1g-dev qtbase5-private-dev
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
     - ninja
 # 1 test fails: FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
@@ -161,7 +177,7 @@ variables:
     - mkdir -p build && cd build
 # readstat disabled until fixed for GCC 13
 # dbc_parser fails with GCC 13 atm (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_READSTAT=OFF -G Ninja ..
+    - cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
 # FAIL!  : ParserTest::testLocale() Compared doubles are not the same (fuzzy compare)
 #   Actual   (parse(qPrintable(expr.first), "de_DE")): nan
@@ -221,7 +237,7 @@ variables:
     - mkdir -p build && cd build
 # readstat disabled until fixed for GCC 13
 # could not find git for clone of dbc_parser_cpp-populate (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_READSTAT=OFF -G Ninja ..
+    - cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
@@ -242,7 +258,7 @@ variables:
     - mkdir -p build && cd build
 # readstat disabled until fixed for GCC 13
 # Vector BLF fails compiling (<cstdint> missing)
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_READSTAT=OFF -G Ninja ..
+    - cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure

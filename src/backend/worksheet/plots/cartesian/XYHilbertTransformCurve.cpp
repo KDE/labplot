@@ -14,7 +14,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <KLocalizedString>
 #include <QDebug> // qWarning()
 #include <QElapsedTimer>
 #include <QIcon>
@@ -205,6 +204,7 @@ void XYHilbertTransformCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYHilbertTransformCurve);
 
 	QXmlStreamAttributes attribs;

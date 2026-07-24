@@ -1,3 +1,15 @@
+/*
+	File                 : Script.cpp
+	Project              : LabPlot
+	Description          : Script
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
+#include <QDir>
+#include <QFileDialog>
 #include <QIcon>
 #include <QMessageBox>
 #include <QWidget>
@@ -9,6 +21,7 @@
 #include <KTextEditor/View>
 
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
@@ -39,12 +52,19 @@ Script::Script(const QString& name, const QString& lang)
 	: AbstractPart(name, AspectType::Script)
 	, m_kTextEditorDocument(KTextEditor::Editor::instance()->createDocument(this)) {
 	if (!Script::languages.contains(lang, Qt::CaseInsensitive)) {
+		WARN("Unsupported scripting language: " << STDSTRING(lang))
 		m_initialized = false;
 		return;
 	}
 
 	m_language = lang;
 	m_scriptRuntime = Script::newScriptRuntime(m_language, this);
+	if (!m_scriptRuntime) {
+		WARN("Failed to initialize the " << STDSTRING(m_language) << " script runtime. Check that the interpreter is available.")
+		m_initialized = false;
+		return;
+	}
+
 	m_kTextEditorDocument->setMode(m_language);
 	m_initialized = true;
 	prepareDocument();
@@ -71,7 +91,33 @@ bool Script::printPreview() const {
 }
 
 bool Script::exportView() const {
-	return false;
+	auto conf = Settings::group(QStringLiteral("ExportScript"));
+	QString dir = conf.readEntry("LastDir", "");
+	QString extensions = i18n("Python file (*.py)");
+
+	const QString path = QFileDialog::getSaveFileName(view(), i18nc("@title:window", "Export to File"), dir, extensions);
+
+	if (path.isEmpty())
+		return false;
+
+	int pos = path.lastIndexOf(QStringLiteral("/"));
+	if (pos != -1) {
+		QString newDir = path.left(pos);
+		if (newDir != dir)
+			conf.writeEntry(QStringLiteral("LastDir"), newDir);
+	}
+
+	QFile file(path);
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+		QMessageBox::critical(view(), i18n("Export failed"), i18n("Failed to open '%1' for writing.", QDir::toNativeSeparators(path)));
+		return false;
+	}
+
+	QTextStream out(&file);
+	out << m_kTextEditorDocument->text();
+	file.close();
+
+	return true;
 }
 
 QWidget* Script::view() const {
@@ -94,16 +140,7 @@ void Script::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	writer->writeStartElement(QStringLiteral("editor"));
-	QFont peditorFont = editorFont();
-	WRITE_QFONT(peditorFont);
-	writer->writeAttribute(QStringLiteral("theme"), editorTheme());
 	writer->writeAttribute(QStringLiteral("text"), m_kTextEditorDocument->text());
-	writer->writeEndElement();
-
-	writer->writeStartElement(QStringLiteral("output"));
-	QFont poutputFont = outputFont();
-	WRITE_QFONT(poutputFont);
-	writer->writeAttribute(QStringLiteral("text"), dynamic_cast<ScriptEditor*>(view())->outputText());
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "script" section
@@ -122,7 +159,6 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 		return false;
 
 	QXmlStreamAttributes attribs;
-	QString str;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -138,26 +174,8 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("editor")) {
 			attribs = reader->attributes();
 
-			// editor font
-			QFont editorFont;
-			READ_QFONT(editorFont);
-			setEditorFont(editorFont);
-
-			// editor theme
-			setEditorTheme(attribs.value(QStringLiteral("theme")).toString());
-
 			// editor text
 			m_kTextEditorDocument->setText(attribs.value(QStringLiteral("text")).toString());
-		} else if (!preview && reader->name() == QLatin1String("output")) {
-			attribs = reader->attributes();
-
-			// output font
-			QFont outputFont;
-			READ_QFONT(outputFont);
-			setOutputFont(outputFont);
-
-			// output text
-			dynamic_cast<ScriptEditor*>(view())->writeOutput(false, attribs.value(QStringLiteral("text")).toString());
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
@@ -176,19 +194,38 @@ void Script::runScript() {
 	if (!m_initialized)
 		return;
 
+	auto* scriptView = static_cast<ScriptEditor*>(view());
+
+	m_kTextEditorDocument->clearMarks();
+	m_scriptRuntime->clearErrorLine();
+	scriptView->clearOutput();
+
 	// connect to the writeOutput signal from the script runtime
-	auto conn = connect(m_scriptRuntime, &ScriptRuntime::writeOutput, [&](bool isErr, const QString& msg) {
-		ScriptEditor* p_view = dynamic_cast<ScriptEditor*>(view());
-		p_view->writeOutput(isErr, msg); // write the output to the scripteditor output
+	auto conn = connect(m_scriptRuntime, &ScriptRuntime::writeOutput, [scriptView](bool isErr, const QString& msg) {
+		scriptView->writeOutput(isErr, msg); // write the output to the scripteditor output
 	});
 
+	// since we're potentially creating multiple new objects or modifying existing objects when executing the script,
+	// suppress the aspect change signal in the project explorer to avoid to many aspect changes and
 	// push all changes at once to undo stack
+	project()->setSuppressAspectAddedSignal(true);
 	beginMacro(i18n("%1: run %2 script", name(), m_language));
 	Script::runScript(this, m_kTextEditorDocument->text()); // run the script
 	endMacro();
+	project()->setSuppressAspectAddedSignal(false);
 
 	// disconnect from writeOutput signal
 	disconnect(conn);
+
+	const int errorLine = m_scriptRuntime->errorLine();
+	if (errorLine != -1)
+		m_kTextEditorDocument->addMark(errorLine, KTextEditor::Document::MarkTypes::Error);
+}
+
+QAbstractItemModel* Script::variableModel() {
+	if (!m_scriptRuntime)
+		return nullptr;
+	return m_scriptRuntime->variableModel();
 }
 
 KTextEditor::Document* Script::kTextEditorDocument() const {
@@ -242,28 +279,12 @@ QMenu* Script::createContextMenu() {
 	return menu;
 }
 
-void Script::setEditorFont(const QFont& font) {
-	dynamic_cast<ScriptEditor*>(view())->setEditorFont(font);
+void Script::registerShortcuts() {
+	static_cast<ScriptEditor*>(view())->registerShortcuts();
 }
 
-void Script::setOutputFont(const QFont& font) {
-	dynamic_cast<ScriptEditor*>(view())->setOutputFont(font);
-}
-
-QFont Script::editorFont() const {
-	return dynamic_cast<ScriptEditor*>(view())->editorFont();
-}
-
-QFont Script::outputFont() const {
-	return dynamic_cast<ScriptEditor*>(view())->outputFont();
-}
-
-void Script::setEditorTheme(const QString& theme) {
-	dynamic_cast<ScriptEditor*>(view())->setEditorTheme(theme);
-}
-
-QString Script::editorTheme() const {
-	return dynamic_cast<ScriptEditor*>(view())->editorTheme();
+void Script::unregisterShortcuts() {
+	static_cast<ScriptEditor*>(view())->unregisterShortcuts();
 }
 
 // static data members
@@ -326,7 +347,7 @@ QString Script::readRuntime(XmlStreamReader* reader) {
 		return {};
 	}
 
-	QXmlStreamAttributes attribs = reader->attributes();
+	auto attribs = reader->attributes();
 	QString str = attribs.value(QStringLiteral("runtime")).toString();
 
 	if (str.isEmpty()) {

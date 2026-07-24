@@ -11,10 +11,10 @@
 #ifndef NOTEBOOK_H
 #define NOTEBOOK_H
 
-#include <backend/core/AbstractPart.h>
 #ifdef HAVE_CANTOR_LIBS
+
+#include <backend/core/AbstractPart.h>
 #include <cantor/session.h>
-#endif
 
 namespace Cantor {
 class PanelPlugin;
@@ -58,6 +58,9 @@ public:
 	KParts::ReadWritePart* part();
 	QList<Cantor::PanelPlugin*> getPlugins();
 
+public Q_SLOTS:
+	void updateSettings();
+
 private:
 	mutable NotebookView* m_view{nullptr};
 	QString m_backendName;
@@ -86,5 +89,7 @@ Q_SIGNALS:
 	void statusChanged(Cantor::Session::Status);
 #endif
 };
+
+#endif // HAVE_CANTOR_LIBS
 
 #endif // NOTEBOOK_H

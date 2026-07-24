@@ -11,7 +11,6 @@
 #include "ImportFileDialog.h"
 #include "ImportFileWidget.h"
 #include "ImportWarningsDialog.h"
-#include "backend/core/AspectTreeModel.h"
 #include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
@@ -47,16 +46,17 @@
 	\ingroup frontend
  */
 
-ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const QString& fileName)
+ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const QString& path, bool importDir)
 	: ImportDialog(parent)
-	, m_importFileWidget(new ImportFileWidget(this, liveDataSource, fileName)) {
+	, m_importFileWidget(new ImportFileWidget(this, liveDataSource, path, false /* embedded */, importDir)) {
 	vLayout->addWidget(m_importFileWidget);
 	m_liveDataSource = liveDataSource;
+	m_importDir = importDir;
 
 	// dialog buttons
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset | QDialogButtonBox::Cancel);
 	okButton = buttonBox->button(QDialogButtonBox::Ok);
-	m_optionsButton = buttonBox->button(QDialogButtonBox::Reset); // we highjack the default "Reset" button and use if for showing/hiding the options
+	m_optionsButton = buttonBox->button(QDialogButtonBox::Reset); // we hijack the default "Reset" button and use if for showing/hiding the options
 	okButton->setEnabled(false); // ok is only available if a valid container was selected
 	vLayout->addWidget(buttonBox);
 
@@ -139,7 +139,8 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
-	WAIT_CURSOR;
+
+	WAIT_CURSOR_AUTO_RESET;
 
 	QElapsedTimer timer;
 	timer.start();
@@ -147,7 +148,6 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 	source->read();
 	statusBar->showMessage(i18n("Live data source created in %1 seconds.", (float)timer.elapsed() / 1000));
 
-	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 }
 
@@ -166,9 +166,8 @@ void ImportFileDialog::importToMQTT(MQTTClient* client) const {
   triggers data import to the currently selected data container
 */
 bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
-	DEBUG(Q_FUNC_INFO);
-	QDEBUG("	cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+	// a target aspect is required, do this check first
+	auto* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: No aspect available");
 		DEBUG("	cbAddTo->currentModelIndex().isValid() = " << cbAddTo->currentModelIndex().isValid());
@@ -177,41 +176,98 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		return false;
 	}
 
-	QString fileName = m_importFileWidget->fileName();
-	auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
-
 	// show a progress bar in the status bar
 	auto* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
+	const auto& path = m_importFileWidget->path();
 	auto* filter = m_importFileWidget->currentFileFilter();
-	filter->setLastError(QString()); // clear the previos error, if any available
-	filter->clearLastWarnings(); // clear the previos warnings, if any available
-	connect(filter, &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
-
+	filter->setLastError(QString()); // clear the previous error, if any available
+	filter->clearLastWarnings(); // clear the previous warnings, if any available
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
 
-	WAIT_CURSOR;
-	QApplication::processEvents(QEventLoop::AllEvents, 100);
+	{
+		WAIT_CURSOR_AUTO_RESET;
+		QApplication::processEvents(QEventLoop::AllEvents, 100);
+		QElapsedTimer timer;
+		timer.start();
 
-	QElapsedTimer timer;
-	timer.start();
+		if (!m_importDir) { // import a single file
+			connect(filter, &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
+			const auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
+			importFile(path, aspect, filter, mode);
+			statusBar->showMessage(i18n("File %1 imported in %2 seconds.", path, (float)timer.elapsed() / 1000));
+		} else { // import all files from a directory
+			QDir dir(path);
+			if (!dir.exists()) {
+				const_cast<ImportFileDialog*>(this)->showErrorMessage(i18n("The directory %1 doesn't exist.", path));
+				statusBar->removeWidget(progressBar);
+				return false;
+			}
 
-	if (aspect->inherits(AspectType::Matrix)) {
+			const auto files = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
+			const int totalCount = files.count();
+			int count = 0;
+
+			// iterate over all files in the directory and import them one by one.
+			// we import into spreadsheets only at the moment and re-use existing sheets if the name matches
+			const auto& sheets = aspect->children<Spreadsheet>();
+			for (const auto& fileName : files) {
+				// if there's already a sheet with the same name, use it
+				Spreadsheet* sheet = nullptr;
+				for (const auto& s : sheets) {
+					if (s->name() == fileName) {
+						sheet = s;
+						break;
+					}
+				}
+				if (!sheet) {
+					sheet = new Spreadsheet(fileName);
+					aspect->addChild(sheet);
+				}
+				importFile(dir.absoluteFilePath(fileName), sheet, filter);
+				++count;
+				progressBar->setValue(count/totalCount * 100);
+			}
+
+			statusBar->showMessage(i18n("%1 files imported in %2 seconds.", count, (float)timer.elapsed() / 1000));
+		}
+	}
+
+	// handle errors
+	if (!filter->lastError().isEmpty()) {
+		const_cast<ImportFileDialog*>(this)->showErrorMessage(filter->lastError());
+		return false;
+	}
+
+	// show warnings, if available
+	const auto& warnings = filter->lastWarnings();
+	if (!warnings.isEmpty()) {
+		auto* d = new ImportWarningsDialog(warnings, m_mainWin);
+		d->show();
+	}
+
+	statusBar->removeWidget(progressBar);
+	DEBUG(Q_FUNC_INFO << ", DONE")
+	return true;
+}
+
+void ImportFileDialog::importFile(const QString& fileName, AbstractAspect* aspect, AbstractFileFilter* filter, AbstractFileFilter::ImportMode mode) const {
+	DEBUG(Q_FUNC_INFO << ", file name: " << fileName.toStdString());
+	if (auto* matrix = aspect->castTo<Matrix>()) {
 		DEBUG(Q_FUNC_INFO << ", to Matrix");
-		auto* matrix = qobject_cast<Matrix*>(aspect);
 		filter->readDataFromFile(fileName, matrix, mode);
-	} else if (aspect->inherits(AspectType::Spreadsheet)) {
+	} else if (auto* spreadsheet = aspect->castTo<Spreadsheet>()) {
 		DEBUG(Q_FUNC_INFO << ", to Spreadsheet");
-		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
+		DEBUG("CALLING filter->readDataFromFile()")
+		// TODO: which extension (table) is imported?
 		filter->readDataFromFile(fileName, spreadsheet, mode);
-	} else if (aspect->inherits(AspectType::Workbook)) {
+	} else if (auto* workbook = aspect->castTo<Workbook>()) {
 		DEBUG(Q_FUNC_INFO << ", to Workbook");
-		auto* workbook = static_cast<Workbook*>(aspect);
 		workbook->setUndoAware(false);
 		auto sheets = workbook->children<AbstractAspect>();
 
-		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
+		auto fileType = m_importFileWidget->currentFileType();
 		// types supporting multiple data sets/variables
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF || fileType == AbstractFileFilter::FileType::ROOT
 			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::XLSX
@@ -273,11 +329,11 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::Ods)
 					sheetName = sheetName.split(QLatin1Char('/')).last();
 
-				auto* spreadsheet = new Spreadsheet(sheetName);
+				auto* newSpreadsheet = new Spreadsheet(sheetName);
 				if (mode == AbstractFileFilter::ImportMode::Prepend && !sheets.isEmpty())
-					workbook->insertChildBefore(spreadsheet, sheets.at(0));
+					workbook->insertChildBefore(newSpreadsheet, sheets.at(0));
 				else
-					workbook->addChildFast(spreadsheet);
+					workbook->addChildFast(newSpreadsheet);
 			}
 
 			// start at offset for append, else at 0
@@ -312,32 +368,12 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		} else { // single import file types
 			// workbook selected -> create a new spreadsheet in the workbook
 			workbook->setUndoAware(true);
-			auto* spreadsheet = new Spreadsheet(fileName);
-			workbook->addChild(spreadsheet);
+			auto* newSpreadsheet = new Spreadsheet(fileName);
+			workbook->addChild(newSpreadsheet);
 			workbook->setUndoAware(false);
-			filter->readDataFromFile(fileName, spreadsheet, mode);
+			filter->readDataFromFile(fileName, newSpreadsheet, mode);
 		}
 	}
-	statusBar->showMessage(i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed() / 1000));
-
-	RESET_CURSOR;
-
-	// handle errors
-	if (!filter->lastError().isEmpty()) {
-		const_cast<ImportFileDialog*>(this)->showErrorMessage(filter->lastError());
-		return false;
-	}
-
-	// show warnings, if available
-	const auto& warnings = filter->lastWarnings();
-	if (!warnings.isEmpty()) {
-		auto* d = new ImportWarningsDialog(warnings, m_mainWin);
-		d->show();
-	}
-
-	statusBar->removeWidget(progressBar);
-	DEBUG(Q_FUNC_INFO << ", DONE")
-	return true;
 }
 
 void ImportFileDialog::toggleOptions() {
@@ -359,7 +395,7 @@ void ImportFileDialog::enableImportToMatrix(const bool enable) {
 			return;
 		}
 
-		if (aspect->inherits(AspectType::Matrix)) {
+		if (aspect->inherits<Matrix>()) {
 			okButton->setEnabled(enable);
 			if (enable)
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
@@ -377,17 +413,12 @@ void ImportFileDialog::checkOkButton() {
 		if (!aspect) {
 			okButton->setEnabled(false);
 			okButton->setToolTip(i18n("Select a data container where the data has to be imported into."));
-			lPosition->setEnabled(false);
-			cbPosition->setEnabled(false);
 			cbAddTo->setFocus(); // set the focus to make the user aware about the fact that a data container needs to be provided
 			return;
-		} else {
-			lPosition->setEnabled(true);
-			cbPosition->setEnabled(true);
 		}
 	}
 
-	QString fileName = ImportFileWidget::absolutePath(m_importFileWidget->fileName());
+	QString fileName = ImportFileWidget::absolutePath(m_importFileWidget->path());
 	const auto sourceType = m_importFileWidget->currentSourceType();
 	switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: // fall through

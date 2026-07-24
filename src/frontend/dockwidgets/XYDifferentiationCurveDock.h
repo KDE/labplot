@@ -16,8 +16,6 @@
 #include "frontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xydifferentiationcurvedockgeneraltab.h"
 
-class TreeViewComboBox;
-
 class XYDifferentiationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
@@ -28,6 +26,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void retranslateUi() override;
 	void updateSettings(const AbstractColumn*) override;
 	void showDifferentiationResult();
 
@@ -47,7 +46,7 @@ private Q_SLOTS:
 	void xRangeMaxDateTimeChanged(qint64);
 	void derivOrderChanged(int);
 	void accOrderChanged(int);
-	void recalculateClicked();
+	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYDifferentiationCurve
 	// General-Tab

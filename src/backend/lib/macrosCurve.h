@@ -37,7 +37,7 @@
 
 /*!
  * This macro is used to connect and disconnect the column from the curve
- * The new column is connected to the curve and the old column is diconnected
+ * The new column is connected to the curve and the old column is disconnected
  * The columnPath is updated
  */
 #define CURVE_COLUMN_SETTER_CMD_IMPL_F_S(class_name, Prefix, prefix, finalize_method)                                                                          \

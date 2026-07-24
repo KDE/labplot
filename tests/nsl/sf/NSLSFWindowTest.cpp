@@ -21,7 +21,7 @@ extern "C" {
 void NSLSFWindowTest::testWindowTypes() {
 	const int N = 10;
 	double data[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-	double result[][N] = {
+	const double result[][N] = {
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 		{0.1, 0.3, 0.5, 0.7, 0.9, 0.9, 0.7, 0.5, 0.3, 0.1},
 		{0, 2 / 9., 4 / 9., 6 / 9., 8 / 9., 8 / 9., 6 / 9., 4 / 9., 2 / 9., 0},

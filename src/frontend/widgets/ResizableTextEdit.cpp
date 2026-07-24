@@ -14,6 +14,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QStyleOption>
+#include <QMimeData>
 
 GrabBar::GrabBar(ResizableTextEdit* parent, bool vertResizeOnly)
 	: QWidget(parent)
@@ -139,4 +140,11 @@ void ResizableTextEdit::resizeEvent(QResizeEvent* e) {
 
 	QTextEdit::resizeEvent(e);
 	e->accept();
+}
+
+void ResizableTextEdit::insertFromMimeData(const QMimeData* source) {
+	if (source->hasText())
+		insertPlainText(source->text());
+	else
+		QTextEdit::insertFromMimeData(source);
 }

@@ -39,6 +39,34 @@ private Q_SLOTS:
 	void tickSpacingUpdateDockMajorTicks();
 
 	void testComputeMajorTickStart();
+
+	void columnLabelValues();
+	void columnLabelValuesMaxValues();
+	void columnLabelValuesMoreTicksThanLabels();
+
+	void customTextLabels();
+	void customTextLabelsMoreTicksThanLabels();
+
+	void dateTime();
+	void dateTimeSpacing();
+	void dateTimeSpacingOffsetNonZero();
+	void dateTimeSpacingStartValueNonZero();
+
+	void numeric();
+	void numericSpacing();
+	void numericSpacingOffsetNonZero();
+	void numericSpacingStartValueNonZero();
+
+	void customColumnNumeric();
+	void customColumnNumericMaxValues();
+	void customColumnNumericMaxValuesLimitedRange();
+	void customColumnNumericMaxValuesLimitedRangeNotCompleteRange();
+	void customColumnNonMonotonicColumnValues();
+	void customColumnDateTime();
+
+	void autoScaleLog10();
+	void autoScaleLog102();
+	void autoScaleLog102Vertical();
 };
 
 #endif // AXISTEST_H

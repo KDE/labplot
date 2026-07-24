@@ -115,7 +115,7 @@ size_t nsl_geom_linesim_perpdist_auto(const double xdata[], const double ydata[]
  */
 size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata[], const size_t n, const double tol, const size_t repeat, size_t index[]);
 
-/* line simplification by nearest neigbor interpolation	(idea from xmgrace)
+/* line simplification by nearest neighbor interpolation (idea from xmgrace)
 	xdata, ydata: data points
 	n: number of points
 	tol: tolerance (perp. distance)

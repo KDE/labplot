@@ -73,7 +73,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 		auto* plot = dynamic_cast<Plot*>(elem);
 		if (plot) {
 			// making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
-			// this should be avoided by supressing the retransformation in the curves.
+			// this should be avoided by suppressing the retransformation in the curves.
 			plot->setSuppressRetransform(true);
 			elem->setVisible(on);
 			plot->setSuppressRetransform(false);

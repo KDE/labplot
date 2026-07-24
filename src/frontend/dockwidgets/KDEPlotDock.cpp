@@ -76,7 +76,7 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	// template handler
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
-	layout->setContentsMargins(0, 11, 0, 11);
+	layout->setContentsMargins(0, 0, 0, 0);
 
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("KDEPlot"));
 	layout->addWidget(templateHandler);
@@ -109,8 +109,6 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	// initialize widgets for common properties
 	QList<Line*> estimationLines;
 	QList<Background*> estimationBackgrounds;
-	QList<Line*> histogramLines;
-	QList<Background*> histogramBackgrounds;
 	for (auto* plot : m_plots) {
 		estimationLines << plot->estimationCurve()->line();
 		estimationBackgrounds << plot->estimationCurve()->background();
@@ -171,6 +169,9 @@ void KDEPlotDock::retranslateUi() {
 	ui.cbBandwidthType->addItem(i18n("Scott"), static_cast<int>(nsl_kde_bandwidth_scott));
 	ui.cbBandwidthType->addItem(i18n("Custom"), static_cast<int>(nsl_kde_bandwidth_custom));
 
+	estimationLineWidget->retranslateUi();
+	estimationBackgroundWidget->retranslateUi();
+
 	// tooltip texts
 	QString info = i18n("The window function (\"kernel\") used to estimate the probability density");
 	ui.lKernelType->setToolTip(info);
@@ -194,7 +195,7 @@ void KDEPlotDock::retranslateUi() {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void KDEPlotDock::updateLocale() {
 	estimationLineWidget->updateLocale();

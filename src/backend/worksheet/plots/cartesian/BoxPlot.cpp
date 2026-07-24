@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Box Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,6 +12,7 @@
 #include "BoxPlotPrivate.h"
 #include "backend/core/Folder.h"
 #include "backend/core/Settings.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
@@ -24,7 +25,6 @@
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
-#include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
 
@@ -322,6 +322,7 @@ void BoxPlot::createDataSpreadsheet() {
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<QString>, dataColumnPaths, dataColumnPaths)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Ordering, ordering, ordering)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, variableWidth, variableWidth)
@@ -409,9 +410,17 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugLength, rugLength)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugWidth, rugWidth)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugOffset, rugOffset)
 
-QVector<QString>& BoxPlot::dataColumnPaths() const {
-	D(BoxPlot);
-	return d->dataColumnPaths;
+bool BoxPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	// The values are not important, because they are just passed to minMax() which does not consider the indices
+	start = 0;
+	end = 0;
+	return true;
+}
+
+bool BoxPlot::minMax(const Dimension dim, const Range<int>&, Range<double>& r, bool) const {
+	r.setStart(minimum(dim));
+	r.setEnd(maximum(dim));
+	return true;
 }
 
 double BoxPlot::minimum(const Dimension dim) const {
@@ -439,6 +448,13 @@ double BoxPlot::maximum(const Dimension dim) const {
 bool BoxPlot::hasData() const {
 	Q_D(const BoxPlot);
 	return !d->dataColumns.isEmpty();
+}
+
+int BoxPlot::dataCount(Dimension) const {
+	Q_D(const BoxPlot);
+	if (!hasData())
+		return -1;
+	return d->dataColumns.count();
 }
 
 bool BoxPlot::usingColumn(const AbstractColumn* column, bool) const {
@@ -571,7 +587,7 @@ STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetJitteringEnabled, bool, jitteringEnabled, re
 void BoxPlot::setJitteringEnabled(bool enabled) {
 	Q_D(BoxPlot);
 	if (enabled != d->jitteringEnabled)
-		exec(new BoxPlotSetJitteringEnabledCmd(d, enabled, ki18n("%1: jitterring changed")));
+		exec(new BoxPlotSetJitteringEnabledCmd(d, enabled, ki18n("%1: jittering changed")));
 }
 
 // margin plots
@@ -650,7 +666,7 @@ Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
 	if (!q->isLoading())
 		background->init(group);
 
-	q->connect(background, &Background::updateRequested, [=] {
+	q->connect(background, &Background::updateRequested, [=, this] {
 		updatePixmap();
 		// TODO: Q_EMIT q->updateLegendRequested();
 	});
@@ -668,12 +684,12 @@ Line* BoxPlotPrivate::addBorderLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		// Q_EMIT q->updateLegendRequested();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		// Q_EMIT q->updateLegendRequested();
 	});
@@ -691,12 +707,12 @@ Line* BoxPlotPrivate::addMedianLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		// Q_EMIT q->updateLegendRequested();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		// Q_EMIT q->updateLegendRequested();
 	});
@@ -752,7 +768,7 @@ void BoxPlotPrivate::adjustPropertiesContainers() {
 			auto* medianLine = addMedianLine(group);
 
 			if (plot) {
-				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
+				const auto& themeColor = plot->plotColor(backgrounds.count() - 1);
 				background->setFirstColor(themeColor);
 				borderLine->setColor(themeColor);
 				medianLine->setColor(themeColor);
@@ -767,7 +783,7 @@ void BoxPlotPrivate::adjustPropertiesContainers() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void BoxPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || !isVisible() || q->isLoading();
+	const bool suppressed = retransformSuppressed();
 	Q_EMIT trackRetransformCalled(suppressed);
 	if (suppressed)
 		return;
@@ -1159,7 +1175,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		lines << QLineF(xMinBox + 0.1 * width, median, m_xMaxBox.at(index) - 0.1 * width, median);
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines);
+	q->cSystem->mapLogicalToSceneDefaultMapping(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
@@ -1167,7 +1183,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	lines.clear();
 	lines << QLineF(x, m_yMaxBox.at(index), x, m_whiskerMax.at(index)); // upper whisker
 	lines << QLineF(x, m_yMinBox.at(index), x, m_whiskerMin.at(index)); // lower whisker
-	lines = q->cSystem->mapLogicalToScene(lines);
+	q->cSystem->mapLogicalToSceneDefaultMapping(lines);
 	for (const auto& line : std::as_const(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
@@ -1247,7 +1263,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		lines << QLineF(median, yMinBox + 0.1 * width, median, yMaxBox - 0.1 * width);
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines);
+	q->cSystem->mapLogicalToSceneDefaultMapping(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
@@ -1255,7 +1271,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	lines.clear();
 	lines << QLineF(m_xMaxBox.at(index), y, m_whiskerMax.at(index), y); // upper whisker
 	lines << QLineF(m_xMinBox.at(index), y, m_whiskerMin.at(index), y); // lower whisker
-	lines = q->cSystem->mapLogicalToScene(lines);
+	q->cSystem->mapLogicalToSceneDefaultMapping(lines);
 	for (const auto& line : std::as_const(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
@@ -1292,10 +1308,9 @@ void BoxPlotPrivate::updateRug() {
 	}
 
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double xMin = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
-	const double yMin = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
+	const double xmin = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double ymin = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
 
-	QPainterPath rugPath;
 	QVector<QPointF> points;
 
 	for (int i = 0; i < q->dataColumns().count(); ++i) {
@@ -1306,7 +1321,7 @@ void BoxPlotPrivate::updateRug() {
 		if (orientation == BoxPlot::Orientation::Horizontal) {
 			for (int row = 0; row < column->rowCount(); ++row) {
 				if (column->isValid(row) && !column->isMasked(row))
-					points << QPointF(column->valueAt(row), yMin);
+					points << QPointF(column->valueAt(row), ymin);
 			}
 
 			// map the points to scene coordinates
@@ -1320,7 +1335,7 @@ void BoxPlotPrivate::updateRug() {
 		} else { // horizontal
 			for (int row = 0; row < column->rowCount(); ++row) {
 				if (column->isValid(row) && !column->isMasked(row))
-					points << QPointF(xMin, column->valueAt(row));
+					points << QPointF(xmin, column->valueAt(row));
 			}
 
 			// map the points to scene coordinates
@@ -1799,6 +1814,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(BoxPlot);
 
 	if (!readBasicAttributes(reader))
@@ -1969,12 +1985,12 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(BoxPlot);
 	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	const QColor themeColor = plot->plotColor(index);
 
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {
-		const auto& color = plot->themeColorPalette(i);
+		const auto& color = plot->plotColor(i);
 
 		// box fillings
 		auto* background = d->backgrounds.at(i);

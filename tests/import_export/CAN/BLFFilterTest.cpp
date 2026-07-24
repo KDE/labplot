@@ -9,6 +9,7 @@
 */
 
 #include "BLFFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/CANFilterPrivate.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -35,6 +36,7 @@ BU_: DBG DRIVER IO MOTOR SENSOR
 // ##########################################################################################################
 void BLFFilterTest::createDBCFile(const QString& filename, const std::string& content) {
 	auto* file = std::fopen(filename.toStdString().c_str(), "w");
+	DEBUG("Opening " << filename.toStdString())
 	QVERIFY(file);
 	std::fputs(PRIMITIVE_DBC.c_str(), file);
 	std::fputs(content.c_str(), file);
@@ -58,7 +60,7 @@ Vector::BLF::CanMessage2* BLFFilterTest::createCANMessage(uint32_t id, uint64_t 
 	return canMessage;
 }
 
-void BLFFilterTest::createBLFFile(const QString& filename, QVector<Vector::BLF::CanMessage2*> messages) {
+void BLFFilterTest::createBLFFile(const QString& filename, const QVector<Vector::BLF::CanMessage2*>& messages) {
 	Vector::BLF::File blfFile;
 	blfFile.open(filename.toStdString().c_str(), std::ios_base::out);
 	QVERIFY(blfFile.is_open());

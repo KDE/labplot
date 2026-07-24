@@ -22,7 +22,7 @@ public:
 	static bool processedPixelIsOn(const QImage&, int, int);
 	static QRgb findBackgroundColor(const QImage*);
 	static int colorAttributeMax(DatapickerImage::ColorAttributes);
-	static void uploadHistogram(int*, QImage*, QColor, DatapickerImage::ColorAttributes);
+	static void uploadHistogram(int*, const QImage*, QColor, DatapickerImage::ColorAttributes);
 	static int discretizeValueForeground(int, int, DatapickerImage::ColorAttributes, const QColor, const QImage*);
 	static bool pixelIsOn(int, DatapickerImage::ColorAttributes, const DatapickerImage::EditorSettings&);
 

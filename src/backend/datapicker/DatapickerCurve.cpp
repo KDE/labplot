@@ -5,27 +5,25 @@
 	of datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "DatapickerCurve.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerCurvePrivate.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <QIcon>
 #include <QVector3D>
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
 
 /**
  * \class DatapickerCurve
@@ -175,6 +173,7 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	Q_D(DatapickerCurve);
 
 	m_datasheet = new Spreadsheet(i18n("Data"));
+	m_datasheet->setReadOnly(true);
 	m_datasheet->setFixed(true);
 	m_datasheet->setRowCount(0);
 	addChild(m_datasheet);
@@ -235,7 +234,7 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	}
 	}
 
-	// the default spreadsheet can have arbitrary number of colums as per user's default template.
+	// the default spreadsheet can have arbitrary number of columns as per user's default template.
 	// make sure we have the columns for x and y only
 	if (m_datasheet->columnCount() < 1)
 		appendColumn(xLabel);
@@ -396,17 +395,6 @@ void DatapickerCurve::setPointVisibility(bool on) {
 void DatapickerCurve::setPrinting(bool on) {
 	for (auto* point : children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden))
 		point->setPrinting(on);
-}
-
-/*!
-	Selects or deselects the Datapicker/Curve in the project explorer.
-	This function is called in \c DatapickerImageView.
-*/
-void DatapickerCurve::setSelectedInView(bool b) {
-	if (b)
-		Q_EMIT childAspectSelectedInView(this);
-	else
-		Q_EMIT childAspectDeselectedInView(this);
 }
 
 // ##############################################################################

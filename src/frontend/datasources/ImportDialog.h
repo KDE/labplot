@@ -53,6 +53,7 @@ protected:
 	AspectTreeModel* m_aspectTreeModel;
 	KMessageWidget* m_messageWidget{nullptr};
 	bool m_liveDataSource{false};
+	bool m_importDir{false};
 
 public Q_SLOTS:
 	void accept() override;

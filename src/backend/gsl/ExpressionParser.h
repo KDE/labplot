@@ -39,7 +39,8 @@ public:
 							  QVector<double>* xVector,
 							  QVector<double>* yVector,
 							  const QStringList& paramNames,
-							  const QVector<double>& paramValues);
+							  const QVector<double>& paramValues,
+							  RangeT::Scale scale = RangeT::Scale::Linear);
 	bool tryEvaluateCartesian(const QString& expr,
 							  const QString& min,
 							  const QString& max,
@@ -49,7 +50,6 @@ public:
 							  const QStringList& paramNames,
 							  const QVector<double>& paramValues);
 	bool tryEvaluateCartesian(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
-	bool tryEvaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector);
 	bool tryEvaluateCartesian(const QString& expr,
 							  const QVector<double>* xVector,
 							  QVector<double>* yVector,

@@ -21,8 +21,7 @@ class JsonFilterPrivate {
 public:
 	explicit JsonFilterPrivate(JsonFilter* owner);
 
-	int checkRow(QJsonValueRef value, int& countCols);
-	int parseColumnModes(const QJsonValue& row, const QString& rowName = QString());
+	bool parseColumnModes(const QJsonValue& row, const QString& rowName = QString());
 	void setEmptyValue(int column, int row);
 	void setValueFromString(int column, int row, const QString& value);
 

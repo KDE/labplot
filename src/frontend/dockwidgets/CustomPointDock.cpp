@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for CustomPoint properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,6 +14,7 @@
 #include "frontend/widgets/SymbolWidget.h"
 
 #include <KConfig>
+#include <KLocalization>
 #include <KLocalizedString>
 
 CustomPointDock::CustomPointDock(QWidget* parent)
@@ -41,6 +42,15 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
+	QString suffix;
+	if (m_units == BaseDock::Units::Metric)
+		suffix = i18n("%v cm");
+	else
+		suffix = i18n("%v in");
+
+	KLocalization::setupSpinBoxFormatString(ui.sbPositionX, ki18nc("@label:spinbox Suffix for the X position", qPrintable(suffix)));
+	KLocalization::setupSpinBoxFormatString(ui.sbPositionY, ki18nc("@label:spinbox Suffix for the Y position", qPrintable(suffix)));
+
 	updateLocale();
 	retranslateUi();
 
@@ -62,7 +72,7 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 	// Template handler
 	auto* frame = new QFrame(this);
 	auto* hlayout = new QHBoxLayout(frame);
-	hlayout->setContentsMargins(0, 11, 0, 11);
+	hlayout->setContentsMargins(0, 0, 0, 0);
 
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("CustomPoint"));
 	hlayout->addWidget(templateHandler);
@@ -110,7 +120,7 @@ void CustomPointDock::initConnections() const {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void CustomPointDock::updateLocale() {
 	const auto numberLocale = QLocale();
@@ -251,7 +261,7 @@ void CustomPointDock::bindingChanged(bool checked) {
 	ui.sbPositionY->setVisible(!checked);
 
 	// widgets for positioning using logical plot coordinates
-	const auto* plot = static_cast<const CartesianPlot*>(m_point->parent(AspectType::CartesianPlot));
+	const auto* plot = static_cast<const CartesianPlot*>(m_point->parent<CartesianPlot>());
 	if (plot) {
 		// x
 		bool numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);

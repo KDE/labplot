@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2013-2015 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,16 +21,16 @@
 #include "Debug.h"
 
 struct Lock {
-	inline explicit Lock(bool& variable)
-		: variable(variable) {
+	inline explicit Lock(bool& var, bool firstValue = true)
+		: variable(var) {
 		// Make sure it is not already locked
 		// somewhere else
 		assert(!variable);
-		this->variable = true;
+		this->variable = firstValue;
 	}
 
 	inline ~Lock() {
-		variable = false;
+		variable = !variable;
 	}
 
 private:
@@ -38,7 +38,7 @@ private:
 };
 
 /*
- * Cleanup class which can be used to automatically cleaning up after desctruction using a lambda
+ * Cleanup class which can be used to automatically cleaning up after destruction using a lambda
  * Example:
  *    CleanupNoArguments cleanup([](){
  *        // Cleanup code
@@ -59,6 +59,34 @@ private:
 };
 
 /*!
+ * \brief The AutoRestore class
+ * Cleanup class which passes during construction the value \p startValue to the function \p func and
+ * when the object goes out of scope function \p func is called with the inverted value of \p startValue
+ *
+ * @param startValue: Value which shall be passed in the constructor to the function \p func and in the
+ *					  destructor inverted
+ * @param func: function which shall be called in the constructor and the destructor of this object when it goes out of scope
+ *
+ * Example (Supressing AspectAdded signal as long as this object is in scope):
+ *	AutoRestore cleanup(true, [this](bool value) {q->project()->setSuppressAspectAddedSignal(value);});
+ */
+class AutoRestore {
+public:
+	AutoRestore(bool startValue, std::function<void(bool)> func)
+		: m_function(func)
+		, m_startValue(startValue) {
+		m_function(m_startValue);
+	}
+	~AutoRestore() {
+		m_function(!m_startValue);
+	}
+
+private:
+	std::function<void(bool)> m_function;
+	bool m_startValue;
+};
+
+/*!
  * Used for example for connections with NumberSpinbox because those are using
  * a feedback and so breaking the connection dock -> element -> dock is not desired
  */
@@ -76,9 +104,9 @@ private:
 
 // Automatically reset cursor when going out of scope
 #define WAIT_CURSOR_AUTO_RESET                                                                                                                                 \
-	WAIT_CURSOR;                                                                                                                                               \
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));                                                                                                  \
 	CleanupNoArguments cleanup([]() {                                                                                                                          \
-		RESET_CURSOR;                                                                                                                                          \
+		QApplication::restoreOverrideCursor();                                                                                                                 \
 	});
 
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
@@ -543,13 +571,21 @@ private:
 								: QFont::Black)
 
 // uses font.setLegacyWeight(int)
+// "MS Shell Dlg 2" is a logical font on Windows (mapped to Tahoma) not used in Qt6 anymore
 #define READ_QFONT(font)                                                                                                                                       \
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral("fontFamily")).toString();                                                                                          \
 		if (str.isEmpty())                                                                                                                                     \
 			reader->raiseMissingAttributeWarning(QStringLiteral("fontFamily"));                                                                                \
-		else                                                                                                                                                   \
+		else {                                                                                                                                                 \
+			if (str == QStringLiteral("MS Shell Dlg 2")) {                                                                                                     \
+				if (QSysInfo::productType() == QStringLiteral("windows"))                                                                                      \
+					str = QStringLiteral("Tahoma");                                                                                                            \
+				else                                                                                                                                           \
+					str = QStringLiteral("Sans Serif");                                                                                                        \
+			}                                                                                                                                                  \
 			font.setFamily(str);                                                                                                                               \
+		}                                                                                                                                                      \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("fontSize")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
@@ -721,12 +757,12 @@ private:
 
 #define RESTORE_POINTER(obj, name, Name, Type, list)                                                                                                           \
 	if (!obj->name##Path().isEmpty()) {                                                                                                                        \
-		for (auto* aspect : list) {                                                                                                                            \
-			if (aspect->path() == obj->name##Path()) {                                                                                                         \
-				auto a = dynamic_cast<Type*>(aspect);                                                                                                          \
-				if (!a)                                                                                                                                        \
+		for (auto* asp : list) {                                                                                                                               \
+			if (asp->path() == obj->name##Path()) {                                                                                                            \
+				auto t = dynamic_cast<Type*>(asp);                                                                                                             \
+				if (!t)                                                                                                                                        \
 					continue;                                                                                                                                  \
-				obj->set##Name(a);                                                                                                                             \
+				obj->set##Name(t);                                                                                                                             \
 				break;                                                                                                                                         \
 			}                                                                                                                                                  \
 		}                                                                                                                                                      \

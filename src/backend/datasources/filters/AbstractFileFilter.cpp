@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : file I/O-filter related interface
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -119,8 +119,74 @@ QStringList AbstractFileFilter::numberFormats() {
 	return formats;
 }
 
+QString AbstractFileFilter::textNumberFormatShort() {
+	return i18n("This option determines how the imported strings have to be converted to numbers.");
+}
+
+QString AbstractFileFilter::textNumberFormat() {
+	return AbstractFileFilter::textNumberFormatShort() + QStringLiteral("<br><br>")
+		+ i18n("When point character is used for the decimal separator, the valid number representations are:"
+			   "<ul>"
+			   "<li>1234.56</li>"
+			   "<li>1,234.56</li>"
+			   "<li>etc.</li>"
+			   "</ul>"
+			   "For comma as the decimal separator, the valid number representations are:"
+			   "<ul>"
+			   "<li>1234,56</li>"
+			   "<li>1.234,56</li>"
+			   "<li>etc.</li>"
+			   "</ul>");
+}
+
+QString AbstractFileFilter::textDateTimeFormatShort() {
+	return i18n(
+		"This option determines how the imported strings have to be converted to calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
+		"and to time.");
+}
+
+QString AbstractFileFilter::textDateTimeFormat() {
+	return AbstractFileFilter::textDateTimeFormatShort() + QStringLiteral("<br><br>")
+		+ i18n("Expressions that may be used for the date part of format string:"
+			   "<table>"
+			   "<tr><td>d</td><td>the day as number without a leading zero (1 to 31).</td></tr>"
+			   "<tr><td>dd</td><td>the day as number with a leading zero (01 to 31).</td></tr>"
+			   "<tr><td>ddd</td><td>the abbreviated localized day name (e.g. 'Mon' to 'Sun'). Uses the system locale to localize the name.</td></tr>"
+			   "<tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to 'Sunday'). Uses the system locale to localize the name.</td></tr>"
+			   "<tr><td>M</td><td>the month as number without a leading zero (1 to 12).</td></tr>"
+			   "<tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</td></tr>"
+			   "<tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' to 'Dec'). Uses the system locale to localize the name.</td></tr>"
+			   "<tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to 'December'). Uses the system locale to localize the name.</td></tr>"
+			   "<tr><td>yy</td><td>the year as two digit number (00 to 99).</td></tr>"
+			   "<tr><td>yyyy</td><td>the year as four digit number. If the year is negative, a minus sign is prepended in addition.</td></tr>"
+			   "</table><br><br>"
+			   "Expressions that may be used for the time part of the format string:"
+			   "<table>"
+			   "<tr><td>h</td><td>the hour without a leading zero (0 to 23 or 1 to 12 if AM/PM display)</td></tr>"
+			   "<tr><td>hh</td><td>the hour with a leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr>"
+			   "<tr><td>H</td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</td></tr>"
+			   "<tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with AM/PM display)</td></tr>"
+			   "<tr><td>m</td><td>the minute without a leading zero (0 to 59)</td></tr>"
+			   "<tr><td>mm</td><td>the minute with a leading zero (00 to 59)</td></tr>"
+			   "<tr><td>s</td><td>the second without a leading zero (0 to 59)</td></tr>"
+			   "<tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></tr>"
+			   "<tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</td></tr>"
+			   "<tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to 999)</td></tr>"
+			   "<tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be either 'AM' or 'PM'.</td></tr>"
+			   "<tr><td>ap or a</td><td>Interpret as an AM/PM time. ap must be either 'am' or 'pm'.</td></tr>"
+			   "</table><br><br>"
+			   "Examples are:"
+			   "<table>"
+			   "<tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr>"
+			   "<tr><td>ddd MMMM d yy</td><td>Sun July 20 69</td></tr>"
+			   "<tr><td>'The day is' dddd</td><td>The day is Sunday</td></tr>"
+			   "</table>"
+			   "<br><br>"
+			   "In case the provided expression is empty, the format will be auto-detected.");
+}
+
 /*!
- * Returns the last error that occured during the last parse step.
+ * Returns the last error that occurred during the last parse step.
  */
 QString AbstractFileFilter::lastError() const {
 	return m_lastError;
@@ -135,7 +201,7 @@ void AbstractFileFilter::clearLastError() {
 }
 
 /*!
- * Returns the list of warnings that occured during the last parse step.
+ * Returns the list of warnings that occurred during the last parse step.
  */
 QStringList AbstractFileFilter::lastWarnings() const {
 	return m_lastWarnings;
@@ -165,6 +231,9 @@ bool AbstractFileFilter::exclusiveFileType(const AbstractFileFilter::FileType ty
 	case FileType::MATIO:
 	case FileType::VECTOR_BLF:
 	case FileType::MCAP:
+	case FileType::Parquet:
+	case FileType::ArrowIPC:
+	case FileType::ORC:
 		return true;
 	case FileType::Ascii:
 	case FileType::Binary:
@@ -265,6 +334,16 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 #ifdef HAVE_MCAP
 	else if (fileInfo.contains(QLatin1String("mcap")) || fileName.endsWith(QLatin1String(".mcap")))
 		fileType = FileType::MCAP;
+#endif
+#ifdef HAVE_PARQUET
+	else if (fileInfo.contains(QLatin1String("Apache Parquet")) || fileName.endsWith(QLatin1String(".parquet"), Qt::CaseInsensitive)
+			 || fileName.endsWith(QLatin1String(".parq"), Qt::CaseInsensitive))
+		fileType = FileType::Parquet;
+	else if (fileName.endsWith(QLatin1String(".feather"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".arrow"), Qt::CaseInsensitive)
+			 || fileName.endsWith(QLatin1String(".ipc"), Qt::CaseInsensitive))
+		fileType = FileType::ArrowIPC;
+	else if (fileName.endsWith(QLatin1String(".orc"), Qt::CaseInsensitive))
+		fileType = FileType::ORC;
 #endif
 	else
 		fileType = FileType::Binary;

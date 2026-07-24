@@ -184,7 +184,7 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 
 	--index; //-1 because of the first tab in the view being reserved for the plot image and curves
 
-	// select/deselect the data spreadhseets
+	// select/deselect the data spreadsheets
 	auto spreadsheets = children<const Spreadsheet>(ChildIndexFlag::Recursive);
 	const AbstractAspect* aspect = spreadsheets.at(index);
 	if (selected) {
@@ -200,17 +200,6 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 		for (const auto* child : aspect->children<const AbstractAspect>())
 			Q_EMIT childAspectDeselectedInView(child);
 	}
-}
-
-/*!
-	Selects or deselects the datapicker or its current active curve in the project explorer.
-	This function is called in \c DatapickerImageView.
-*/
-void Datapicker::setSelectedInView(const bool b) {
-	if (b)
-		Q_EMIT childAspectSelectedInView(this);
-	else
-		Q_EMIT childAspectDeselectedInView(this);
 }
 
 /*!
@@ -295,8 +284,8 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 	for (auto* point : points)
 		point->graphicsItem()->setZValue(zVal++);
 
-	for (const auto* curve : children<DatapickerCurve>()) {
-		for (auto* point : curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
+	for (const auto* childCurve : children<DatapickerCurve>()) {
+		for (auto* point : childCurve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
 			point->graphicsItem()->setZValue(zVal++);
 	}
 

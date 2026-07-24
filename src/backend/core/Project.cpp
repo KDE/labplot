@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -12,24 +12,19 @@
 */
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
+#include "backend/core/column/Column.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#ifndef SDK
+#include "backend/statistics/HypothesisTest.h"
+#endif
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/ErrorBar.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/KDEPlot.h"
-#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
-#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
-#include "backend/worksheet/plots/cartesian/QQPlot.h"
-#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
-#include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
+#include "backend/worksheet/plots/cartesian/plots.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
@@ -47,7 +42,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kwidgetsaddons_version.h>
 
 #include <QBuffer>
 #include <QDateTime>
@@ -56,7 +50,6 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QThreadPool>
-#include <QUndoStack>
 
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
@@ -71,9 +64,9 @@
 namespace {
 // xmlVersion of this labplot version
 // the project version will be compared with this.
-// if you make any imcompatible changes to the xmlfile
+// if you make any incompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 16;
+int buildXmlVersion = 22;
 }
 
 /**
@@ -157,13 +150,14 @@ public:
 	}
 
 	Project::DockVisibility dockVisibility{Project::DockVisibility::folderOnly};
-	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
 
 	static int m_versionNumber;
 	static int mXmlVersion;
 	static QString versionString;
 
+	bool saveData{true}; // Save column and matrix data in the file. If false, the data gets not stored in the saved file
+	bool fileCompression{true};
 	QDateTime modificationTime;
 	Project* const q;
 	QString fileName;
@@ -172,7 +166,7 @@ public:
 	bool saveDefaultDockWidgetState{false};
 	QString defaultDockWidgetState;
 	bool saveCalculations{true};
-	QUndoStack undo_stack;
+	UndoStack undo_stack;
 };
 
 int ProjectPrivate::m_versionNumber = 0;
@@ -199,12 +193,13 @@ Project::Project()
 	setIsLoading(true);
 
 	const auto& group = Settings::group(QStringLiteral("Settings_General"));
-	setSaveDefaultDockWidgetState(group.readEntry(QStringLiteral("SaveDefaultDockWidgetState"), false));
-	setSaveCalculations(group.readEntry(QStringLiteral("SaveCalculations"), true));
+	setSaveDefaultDockWidgetState(group.readEntry(QStringLiteral("SaveDefaultDockWidgetState"), saveDefaultDockWidgetState()));
+	setSaveCalculations(group.readEntry(QStringLiteral("SaveCalculations"), saveCalculations()));
+	setFileCompression(group.readEntry("Compressed", !group.readEntry("CompatibleSave", !fileCompression()))); // CompatibleSave was the old name
+	setSaveData(group.readEntry("SaveData", saveData()));
 
 	setUndoAware(true);
 	setIsLoading(false);
-	d->changed = false;
 
 	connect(this, &Project::aspectDescriptionChanged, this, &Project::descriptionChanged);
 	connect(this, &Project::childAspectAdded, this, &Project::aspectAddedSlot);
@@ -255,7 +250,7 @@ int Project::currentBuildXmlVersion() {
 	return buildXmlVersion;
 }
 
-QUndoStack* Project::undoStack() const {
+UndoStack* Project::undoStack() const {
 	// Q_D(const Project);
 	return &d_ptr->undo_stack;
 }
@@ -290,6 +285,8 @@ CLASS_D_ACCESSOR_IMPL(Project, QString, dockWidgetState, DockWidgetState, dockWi
 BASIC_D_READER_IMPL(Project, bool, saveDefaultDockWidgetState, saveDefaultDockWidgetState)
 CLASS_D_ACCESSOR_IMPL(Project, QString, defaultDockWidgetState, DefaultDockWidgetState, defaultDockWidgetState)
 BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
+BASIC_D_READER_IMPL(Project, bool, fileCompression, fileCompression)
+BASIC_D_READER_IMPL(Project, bool, saveData, saveData)
 
 STD_SETTER_CMD_IMPL_S(Project, SetAuthor, QString, author)
 void Project::setAuthor(const QString& author) {
@@ -312,16 +309,32 @@ void Project::setSaveCalculations(bool save) {
 		exec(new ProjectSetSaveCalculationsCmd(d, save, ki18n("%1: save calculation changed")));
 }
 
-void Project::setChanged(const bool value) {
+void Project::setFileCompression(bool compression) {
+	Q_D(Project);
+	// No Undo command, because we don't have this on the stack since it could be changed easily unintentionally
+	d->fileCompression = compression;
+	setProjectChanged(true);
+}
+
+void Project::setSaveData(bool save) {
+	Q_D(Project);
+	// No Undo command, because we don't have this on the stack since it could be changed easily unintentionally
+	d->saveData = save;
+	setProjectChanged(true);
+}
+
+void Project::setChanged(bool value) {
 	if (isLoading())
 		return;
 
-	Q_D(Project);
+	AbstractAspect::setChanged(value);
 
-	d->changed = value;
-
-	if (value)
-		Q_EMIT changed();
+	// when resetting the status of the project after load (changed = false), also recusively update all children
+	if (!value) {
+		const auto& children = this->children<AbstractAspect>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+		for (auto* child : children)
+			child->setChanged(false);
+	}
 }
 
 void Project::setSuppressAspectAddedSignal(bool value) {
@@ -334,11 +347,6 @@ bool Project::aspectAddedSignalSuppressed() const {
 	return d->aspectAddedSignalSuppressed;
 }
 
-bool Project::hasChanged() const {
-	Q_D(const Project);
-	return d->changed;
-}
-
 /*!
  * \brief Project::updateDependencies
  * Notify that WorksheetElements are updated. This is required if the element
@@ -348,7 +356,7 @@ bool Project::hasChanged() const {
 template<typename T>
 void Project::updateDependencies(const QVector<const AbstractAspect*> changedAspects) {
 	if (!changedAspects.isEmpty()) {
-		// if a new aspect was addded, check whether the aspect names match the missing
+		// if a new aspect was added, check whether the aspect names match the missing
 		// names in the other aspects and update the dependencies
 		const auto& children = this->children<T>(ChildIndexFlag::Recursive);
 
@@ -377,9 +385,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	updateDependencies<WorksheetElement>({aspect}); // notify all worksheetelements
 	updateDependencies<Spreadsheet>({aspect}); // notify all spreadsheets. Linked spreadsheets
 
-	Q_D(Project);
-	d->changed = true;
-	Q_EMIT changed();
+	setChanged();
 }
 
 /*!
@@ -395,10 +401,8 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	updateDependencies<WorksheetElement>({aspect});
 	updateDependencies<Spreadsheet>({aspect});
 
-	if (aspect->inherits(AspectType::Spreadsheet)) {
-		const auto* spreadsheet = static_cast<const Spreadsheet*>(aspect);
-
-		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
+	if (const auto* spreadsheet = aspect->castTo<const Spreadsheet>()) {
+		// if a new spreadsheet was added, check whether the spreadsheet name match the missing
 		// name in a linked spreadsheet, etc. and update the dependencies
 		connect(spreadsheet, &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
@@ -423,7 +427,7 @@ void Project::navigateTo(const QString& path) {
 }
 
 /*!
- * returns \c true if the project file \fileName has a supported format and can be openned in LabPlot directly,
+ * returns \c true if the project file \fileName has a supported format and can be opened in LabPlot directly,
  * returns \c false otherwise.
  */
 bool Project::isSupportedProject(const QString& fileName) {
@@ -488,6 +492,8 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
 	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
+	writer->writeAttribute(QStringLiteral("compressed"), QString::number(d->fileCompression));
+	writer->writeAttribute(QStringLiteral("saveData"), QString::number(d->saveData));
 
 	// save the state of the content dock widgets
 	writer->writeAttribute(QStringLiteral("dockWidgetState"), d->dockWidgetState);
@@ -848,6 +854,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	for (auto* child : aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden))
 		child->setIsLoading(false);
 
+	// set "isLoading" to false for all columns
 	for (auto& column : aspect->project()->children<Column>(ChildIndexFlag::Recursive))
 		column->setIsLoading(false);
 
@@ -867,9 +874,9 @@ void Project::retransformElements(AbstractAspect* aspect) {
 		}
 	} else {
 		QVector<CartesianPlot*> plots;
-		if (aspect->type() == AspectType::CartesianPlot)
-			plots << static_cast<CartesianPlot*>(aspect);
-		else if (dynamic_cast<Plot*>(aspect))
+		if (auto* plot = aspect->castTo<CartesianPlot>())
+			plots << plot;
+		else if (aspect->inherits<Plot>())
 			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
 
 		if (!plots.isEmpty()) {
@@ -878,8 +885,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 		} else {
 			// worksheet element is being copied alone without its parent plot object
 			// so the plot retransform is not called above. we need to call it for the aspect.
-			auto* e = dynamic_cast<WorksheetElement*>(aspect);
-			if (e)
+			if (auto* e = aspect->castTo<WorksheetElement>())
 				e->retransform();
 		}
 	}
@@ -908,7 +914,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 				}
 			}
 
-			column->setChanged();
+			column->setDataChanged();
 		}
 	}
 
@@ -935,7 +941,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	// all its children and restore the pointers for all of them. Analysis curves, for example XYFitCurve, can also
 	// children (residuals column, note) but there is no need to check the children, the pointers need to be restored
 	// for the analysis curve itself.
-	bool hasChildren = (aspect->childCount<AbstractAspect>() > 0 && !aspect->inherits(AspectType::XYAnalysisCurve));
+	bool hasChildren = (aspect->childCount<AbstractAspect>() > 0 && !aspect->inherits<XYAnalysisCurve>());
 
 #ifndef SDK
 	// LiveDataSource:
@@ -960,11 +966,12 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<XYCurve*> curves;
 	if (hasChildren)
 		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
-	else if (aspect->inherits(AspectType::XYCurve) || aspect->inherits(AspectType::XYAnalysisCurve))
+	else if (auto* curve = aspect->castTo<XYCurve>()) {
 		// the object doesn't have any children -> one single aspect is being pasted.
 		// check whether the object being pasted is a XYCurve and add it to the
 		// list of curves to be retransformed
-		curves << static_cast<XYCurve*>(aspect);
+		curves << curve;
+	}
 
 	for (auto* curve : std::as_const(curves)) {
 		if (!curve)
@@ -985,7 +992,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		} else {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 			RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
-			RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
+			RESTORE_COLUMN_POINTER(curve->value(), column, Column);
 			RESTORE_COLUMN_POINTER(curve->errorBar(), xPlusColumn, XPlusColumn);
 			RESTORE_COLUMN_POINTER(curve->errorBar(), xMinusColumn, XMinusColumn);
 			RESTORE_COLUMN_POINTER(curve->errorBar(), yPlusColumn, YPlusColumn);
@@ -1000,8 +1007,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 
 	// assign to all markers the curves they need
 	QVector<InfoElement*> elements;
-	if (aspect->type() == AspectType::InfoElement) // check for the type first. InfoElement has children, but they are not relevant here
-		elements << static_cast<InfoElement*>(aspect);
+	if (auto* infoElement = aspect->castTo<InfoElement>()) // check for the type first. InfoElement has children, but they are not relevant here
+		elements << infoElement;
 	else if (hasChildren)
 		elements = aspect->children<InfoElement>(ChildIndexFlag::Recursive);
 
@@ -1009,8 +1016,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		element->assignCurve(curves);
 
 	QVector<XYFunctionCurve*> functionCurves;
-	if (aspect->type() == AspectType::XYFunctionCurve) // check for the type first. InfoElement has children, but they are not relevant here
-		functionCurves << static_cast<XYFunctionCurve*>(aspect);
+	if (auto* curve = aspect->castTo<XYFunctionCurve>()) // check for the type first. InfoElement has children, but they are not relevant here
+		functionCurves << curve;
 	else if (hasChildren)
 		functionCurves = aspect->children<XYFunctionCurve>(ChildIndexFlag::Recursive);
 
@@ -1023,8 +1030,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<Axis*> axes;
 	if (hasChildren)
 		axes = aspect->children<Axis>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::Axis)
-		axes << static_cast<Axis*>(aspect);
+	else if (auto* axis = aspect->castTo<Axis>())
+		axes << axis;
 
 	for (auto* axis : axes) {
 		if (!axis)
@@ -1038,8 +1045,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<Histogram*> hists;
 	if (hasChildren)
 		hists = aspect->children<Histogram>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::Histogram)
-		hists << static_cast<Histogram*>(aspect);
+	else if (auto* histogram = aspect->castTo<Histogram>())
+		hists << histogram;
 
 	for (auto* hist : hists) {
 		if (!hist)
@@ -1055,8 +1062,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<QQPlot*> qqPlots;
 	if (hasChildren)
 		qqPlots = aspect->children<QQPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::QQPlot)
-		qqPlots << static_cast<QQPlot*>(aspect);
+	else if (auto* qqPlot = aspect->castTo<QQPlot>())
+		qqPlots << qqPlot;
 
 	for (auto* plot : qqPlots) {
 		if (!plot)
@@ -1068,8 +1075,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<KDEPlot*> kdePlots;
 	if (hasChildren)
 		kdePlots = aspect->children<KDEPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::KDEPlot)
-		kdePlots << static_cast<KDEPlot*>(aspect);
+	else if (auto* kdePlot = aspect->castTo<KDEPlot>())
+		kdePlots << kdePlot;
 
 	for (auto* plot : kdePlots) {
 		if (!plot)
@@ -1081,8 +1088,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<BoxPlot*> boxPlots;
 	if (hasChildren)
 		boxPlots = aspect->children<BoxPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::BoxPlot)
-		boxPlots << static_cast<BoxPlot*>(aspect);
+	else if (auto* boxPlot = aspect->castTo<BoxPlot>())
+		boxPlots << boxPlot;
 
 	for (auto* boxPlot : boxPlots) {
 		if (!boxPlot)
@@ -1115,8 +1122,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<BarPlot*> barPlots;
 	if (hasChildren)
 		barPlots = aspect->children<BarPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::BarPlot)
-		barPlots << static_cast<BarPlot*>(aspect);
+	else if (auto* barPlot = aspect->castTo<BarPlot>())
+		barPlots << barPlot;
 
 	for (auto* barPlot : barPlots) {
 		if (!barPlot)
@@ -1160,8 +1167,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<LollipopPlot*> lollipopPlots;
 	if (hasChildren)
 		lollipopPlots = aspect->children<LollipopPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::BoxPlot)
-		lollipopPlots << static_cast<LollipopPlot*>(aspect);
+	else if (auto* lollipopPlot = aspect->castTo<LollipopPlot>())
+		lollipopPlots << lollipopPlot;
 
 	for (auto* lollipopPlot : lollipopPlots) {
 		if (!lollipopPlot)
@@ -1196,8 +1203,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<ProcessBehaviorChart*> pbPlots;
 	if (hasChildren)
 		pbPlots = aspect->children<ProcessBehaviorChart>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::ProcessBehaviorChart)
-		pbPlots << static_cast<ProcessBehaviorChart*>(aspect);
+	else if (auto* pbPlot = aspect->castTo<ProcessBehaviorChart>())
+		pbPlots << pbPlot;
 
 	for (auto* plot : pbPlots) {
 		if (!plot)
@@ -1210,10 +1217,23 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<RunChart*> runPlots;
 	if (hasChildren)
 		runPlots = aspect->children<RunChart>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::RunChart)
-		runPlots << static_cast<RunChart*>(aspect);
+	else if (auto* runPlot = aspect->castTo<RunChart>())
+		runPlots << runPlot;
 
 	for (auto* plot : runPlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
+	}
+
+	// Pareto charts/plots
+	QVector<ParetoChart*> paretoPlots;
+	if (hasChildren)
+		paretoPlots = aspect->children<ParetoChart>(ChildIndexFlag::Recursive);
+	else if (auto* paretoPlot = aspect->castTo<ParetoChart>())
+		paretoPlots << paretoPlot;
+
+	for (auto* plot : paretoPlots) {
 		if (!plot)
 			continue;
 		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
@@ -1224,13 +1244,62 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	if (hasChildren)
 		spreadsheets = aspect->children<Spreadsheet>(ChildIndexFlag::Recursive);
 	for (auto* linkingSpreadsheet : spreadsheets) {
-		if (!linkingSpreadsheet->linking())
+		if (linkingSpreadsheet->linkedSpreadsheetPath().isEmpty())
 			continue;
 		for (const auto* toLinkedSpreadsheet : spreadsheets) {
-			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path()) {
+			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path())
 				linkingSpreadsheet->setLinkedSpreadsheet(toLinkedSpreadsheet, true);
+		}
+	}
+
+#ifndef SDK
+	// hypothesis tests
+	QVector<HypothesisTest*> tests;
+	if (hasChildren)
+		tests = aspect->children<HypothesisTest>(ChildIndexFlag::Recursive);
+	else if (auto* hypTest = aspect->castTo<HypothesisTest>())
+		tests << hypTest;
+
+	for (auto* test : tests) {
+		if (!test)
+			continue;
+
+		// initialize the array for the column pointers
+		const auto& paths = test->dataColumnPaths();
+		int count = paths.count();
+		QVector<const AbstractColumn*> dataColumns;
+		dataColumns.resize(count);
+
+		// restore the pointers
+		for (int i = 0; i < count; ++i) {
+			dataColumns[i] = nullptr;
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
+				if (!column)
+					continue;
+				if (column->path() == path) {
+					dataColumns[i] = column;
+					break;
+				}
 			}
 		}
+
+		test->setDataColumns(std::move(dataColumns));
+	}
+#endif
+
+	// seasonal decompositions
+	QVector<SeasonalDecomposition*> decompositions;
+	if (hasChildren)
+		decompositions = aspect->children<SeasonalDecomposition>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::SeasonalDecomposition)
+		decompositions << static_cast<SeasonalDecomposition*>(aspect);
+
+	for (auto* decomposition : decompositions) {
+		if (!decomposition)
+			continue;
+		RESTORE_COLUMN_POINTER(decomposition, xColumn, XColumn);
+		RESTORE_COLUMN_POINTER(decomposition, yColumn, YColumn);
 	}
 
 	// if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
@@ -1243,8 +1312,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	if (hasChildren && Project::xmlVersion() < 9) {
 		const auto& plots = aspect->children<CartesianPlot>(ChildIndexFlag::Recursive);
 		for (const auto* plot : plots) {
-			const auto& axes = plot->children<Axis>(ChildIndexFlag::Recursive);
-			for (auto* axis : axes) {
+			const auto& childAxes = plot->children<Axis>(ChildIndexFlag::Recursive);
+			for (auto* axis : childAxes) {
 				const auto cSystem = plot->coordinateSystem(axis->coordinateSystemIndex());
 				RangeT::Scale scale{RangeT::Scale::Linear};
 				switch (axis->orientation()) {
@@ -1292,9 +1361,9 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 			d->defaultDockWidgetState = attribs.value(QStringLiteral("defaultDockWidgetState")).toString();
 	}
 
-	str = attribs.value(QStringLiteral("saveCalculations")).toString();
-	if (!str.isEmpty())
-		d->saveCalculations = str.toInt();
+	READ_INT_VALUE("compressed", fileCompression, bool);
+	READ_INT_VALUE("saveData", saveData, bool);
+	READ_INT_VALUE("saveCalculations", saveCalculations, bool);
 
 	return true;
 }

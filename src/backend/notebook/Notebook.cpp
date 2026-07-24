@@ -9,6 +9,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#ifdef HAVE_CANTOR_LIBS
+
 #include "Notebook.h"
 #include "VariableParser.h"
 #include "backend/core/Project.h"
@@ -20,6 +22,7 @@
 #include "frontend/notebook/NotebookView.h"
 #endif
 
+#include <cantor/cantorlibs_version.h>
 #include <cantor/panelplugin.h>
 #include <cantor/panelpluginhandler.h>
 #include <cantor/worksheetaccess.h>
@@ -29,11 +32,13 @@
 #include <KParts/ReadWritePart>
 #include <KPluginFactory>
 #include <KPluginMetaData>
-#include <kcoreaddons_version.h>
 
 #include <QAction>
+#include <QApplication>
 #include <QFileInfo>
 #include <QModelIndex>
+#include <QPalette>
+#include <QTimer>
 
 Notebook::Notebook(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Notebook)
@@ -74,7 +79,6 @@ bool Notebook::init(QByteArray* content) {
 		connect(m_worksheetAccess, SIGNAL(modified()), this, SLOT(modified()));
 
 		// Cantor's session
-#ifdef HAVE_CANTOR_LIBS
 		m_session = m_worksheetAccess->session();
 		if (!m_session) {
 			WARN("Could not create the session for backend " << STDSTRING(m_backendName))
@@ -93,6 +97,13 @@ bool Notebook::init(QByteArray* content) {
 
 		// default settings
 		const auto group = Settings::group(QStringLiteral("Settings_Notebook"));
+
+#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
+		QTimer::singleShot(0, this, &Notebook::updateSettings);
+		const QString theme = group.readEntry(QLatin1String("Theme"), QString());
+		if (m_worksheetAccess && !theme.isEmpty())
+			m_worksheetAccess->setTheme(theme);
+#endif
 
 		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
 		// and we need to go through the actions provided in cantor_part.
@@ -129,7 +140,6 @@ bool Notebook::init(QByteArray* content) {
 
 		// bool value = group.readEntry(QLatin1String("ReevaluateEntries"), false);
 		// value = group.readEntry(QLatin1String("AskConfirmation"), true);
-#endif
 	}
 
 	return true;
@@ -272,15 +282,50 @@ QList<Cantor::PanelPlugin*> Notebook::getPlugins() {
 	return m_plugins;
 }
 
+void Notebook::updateSettings() {
+	const auto group = Settings::group(QStringLiteral("Settings_Notebook"));
+
+	if (m_part) {
+		auto* action = m_part->action(QStringLiteral("enable_highlighting"));
+		if (action)
+			action->setChecked(group.readEntry(QLatin1String("SyntaxHighlighting"), true));
+
+		action = m_part->action(QStringLiteral("enable_completion"));
+		if (action)
+			action->setChecked(group.readEntry(QLatin1String("SyntaxCompletion"), true));
+
+		action = m_part->action(QStringLiteral("enable_expression_numbers"));
+		if (action)
+			action->setChecked(group.readEntry(QLatin1String("LineNumbers"), false));
+
+		action = m_part->action(QStringLiteral("enable_typesetting"));
+		if (action)
+			action->setChecked(group.readEntry(QLatin1String("LatexTypesetting"), false));
+
+		action = m_part->action(QStringLiteral("enable_animations"));
+		if (action)
+			action->setChecked(group.readEntry(QLatin1String("Animations"), true));
+	}
+
+#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
+	if (m_worksheetAccess) {
+		QString theme = group.readEntry(QLatin1String("Theme"), QString());
+		if (theme.isEmpty()) {
+			const bool isDarkMode = (QApplication::palette().color(QPalette::Base).lightness() < 128);
+			theme = isDarkMode ? QStringLiteral("Breeze Dark") : QStringLiteral("Breeze Light");
+		}
+		m_worksheetAccess->setTheme(theme);
+	}
+#endif
+}
+
 KParts::ReadWritePart* Notebook::part() {
 	return m_part;
 }
 
 QIcon Notebook::icon() const {
-#ifdef HAVE_CANTOR_LIBS
 	if (m_session)
 		return QIcon::fromTheme(m_session->backend()->icon());
-#endif
 	return {};
 }
 
@@ -296,7 +341,6 @@ QWidget* Notebook::view() const {
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 
 		// set the current path in the session to the path of the project file
-#ifdef HAVE_CANTOR_LIBS
 		if (m_session) {
 			const Project* project = const_cast<Notebook*>(this)->project();
 			const QString& fileName = project->fileName();
@@ -305,7 +349,6 @@ QWidget* Notebook::view() const {
 				m_session->setWorksheetPath(fi.filePath());
 			}
 		}
-#endif
 	}
 #endif
 	return m_partView;
@@ -473,3 +516,5 @@ bool Notebook::load(XmlStreamReader* reader, bool preview) {
 
 	return true;
 }
+
+#endif // HAVE_CANTOR_LIBS

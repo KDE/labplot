@@ -33,21 +33,8 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 	ui.cbDecimalSeparator->addItem(i18n("Comma ','"));
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
-	const QString textNumberFormatShort = i18n("This option determines how the imported strings have to be converted to numbers.");
-	const QString textNumberFormat = textNumberFormatShort + QStringLiteral("<br><br>")
-		+ i18n("When point character is used for the decimal separator, the valid number representations are:"
-			   "<ul>"
-			   "<li>1234.56</li>"
-			   "<li>1,234.56</li>"
-			   "<li>etc.</li>"
-			   "</ul>"
-			   "For comma as the decimal separator, the valid number representations are:"
-			   "<ul>"
-			   "<li>1234,56</li>"
-			   "<li>1.234,56</li>"
-			   "<li>etc.</li>"
-			   "</ul>");
-
+	const QString textNumberFormatShort = AbstractFileFilter::textNumberFormatShort();
+	const QString textNumberFormat = AbstractFileFilter::textNumberFormat();
 	ui.lDecimalSeparator->setToolTip(textNumberFormatShort);
 	ui.lDecimalSeparator->setWhatsThis(textNumberFormat);
 	ui.cbDecimalSeparator->setToolTip(textNumberFormatShort);
@@ -56,47 +43,8 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 	// only available for live data, will be activated explicitly
 	ui.chbCreateTimestamp->setVisible(false);
 
-	const QString textDateTimeFormatShort = i18n(
-		"This option determines how the imported strings have to be converted to calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
-		"and to time.");
-	const QString textDateTimeFormat = textDateTimeFormatShort + QStringLiteral("<br><br>")
-		+ i18n("Expressions that may be used for the date part of format string:"
-			   "<table>"
-			   "<tr><td>d</td><td>the day as number without a leading zero (1 to 31).</td></tr>"
-			   "<tr><td>dd</td><td>the day as number with a leading zero (01 to 31).</td></tr>"
-			   "<tr><td>ddd</td><td>the abbreviated localized day name (e.g. 'Mon' to 'Sun'). Uses the system locale to localize the name.</td></tr>"
-			   "<tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to 'Sunday'). Uses the system locale to localize the name.</td></tr>"
-			   "<tr><td>M</td><td>the month as number without a leading zero (1 to 12).</td></tr>"
-			   "<tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</td></tr>"
-			   "<tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' to 'Dec'). Uses the system locale to localize the name.</td></tr>"
-			   "<tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to 'December'). Uses the system locale to localize the name.</td></tr>"
-			   "<tr><td>yy</td><td>the year as two digit number (00 to 99).</td></tr>"
-			   "<tr><td>yyyy</td><td>the year as four digit number. If the year is negative, a minus sign is prepended in addition.</td></tr>"
-			   "</table><br><br>"
-			   "Expressions that may be used for the time part of the format string:"
-			   "<table>"
-			   "<tr><td>h</td><td>the hour without a leading zero (0 to 23 or 1 to 12 if AM/PM display)</td></tr>"
-			   "<tr><td>hh</td><td>the hour with a leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr>"
-			   "<tr><td>H</td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</td></tr>"
-			   "<tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with AM/PM display)</td></tr>"
-			   "<tr><td>m</td><td>the minute without a leading zero (0 to 59)</td></tr>"
-			   "<tr><td>mm</td><td>the minute with a leading zero (00 to 59)</td></tr>"
-			   "<tr><td>s</td><td>the second without a leading zero (0 to 59)</td></tr>"
-			   "<tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></tr>"
-			   "<tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</td></tr>"
-			   "<tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to 999)</td></tr>"
-			   "<tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be either 'AM' or 'PM'.</td></tr>"
-			   "<tr><td>ap or a</td><td>Interpret as an AM/PM time. ap must be either 'am' or 'pm'.</td></tr>"
-			   "</table><br><br>"
-			   "Examples are:"
-			   "<table>"
-			   "<tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr>"
-			   "<tr><td>ddd MMMM d yy</td><td>Sun July 20 69</td></tr>"
-			   "<tr><td>'The day is' dddd</td><td>The day is Sunday</td></tr>"
-			   "</table>"
-			   "<br><br>"
-			   "In case the provided expression is empty, the format will be auto-detected.");
-
+	const QString textDateTimeFormatShort = AbstractFileFilter::textDateTimeFormatShort();
+	const QString textDateTimeFormat = AbstractFileFilter::textDateTimeFormat();
 	ui.lDateTimeFormat->setToolTip(textDateTimeFormatShort);
 	ui.lDateTimeFormat->setWhatsThis(textDateTimeFormat);
 	ui.cbDateTimeFormat->setToolTip(textDateTimeFormatShort);
@@ -126,11 +74,13 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 			   "<tr><td>%2</td><td>Integer number with 64bit size (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</td></tr>"
 			   "<tr><td>%3</td><td>Floating point number 64bit size. Resolution of around 16 digits.</td></tr>"
 			   "<tr><td>%4</td><td>Datetime with the format from the datetime text box if not empty, otherwise automatically determined.</td></tr>"
-			   "<tr><td>%5</td><td>A text.</td></tr>"
+			   "<tr><td>%5</td><td>Number of seconds since January 1, 1970 (UTC), converted to DateTime.</td></tr>"
+			   "<tr><td>%6</td><td>Number of 100-nanosecond intervals since January 1, 1601 (UTC), converted to DateTime.</td></tr>"
+			   "<tr><td>%7</td><td>A text.</td></tr>"
 			   "</table>");
-	using Mode = AbstractColumn::ColumnMode;
-	const QVector<Mode> vec = {Mode::Integer, Mode::BigInt, Mode::Double, Mode::DateTime, Mode::Text};
-	for (const auto m: vec) {
+	using Type = AsciiFilter::DataType;
+	const QVector<Type> vec = {Type::Integer, Type::BigInt, Type::Double, Type::DateTime, Type::TimestampUnix, Type::TimestampWindows, Type::Text};
+	for (const auto m : vec) {
 		const auto& s = AsciiFilter::dataTypeString(m);
 		if (s.first == s.second)
 			info = info.arg(s.first);
@@ -197,8 +147,8 @@ void AsciiOptionsWidget::updateWidgets(const AsciiFilter::Properties& properties
 	ui.chbSkipEmptyParts->setChecked(properties.skipEmptyParts);
 	ui.chbHeader->setChecked(properties.headerEnabled);
 	ui.sbHeaderLine->setValue(properties.headerLine);
-	ui.kleVectorNames->setText(properties.columnNamesRaw);
-	ui.kleColumnMode->setText(properties.columnModesString);
+	ui.kleVectorNames->setText(properties.columnNamesString);
+	ui.kleColumnMode->setText(properties.dataTypesString);
 	ui.chbIntAsDouble->setChecked(properties.intAsDouble);
 }
 
@@ -230,11 +180,11 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter::Properties& properties
 	properties.nanValue = ui.chbConvertNaNToZero->isChecked() ? 0.0 : std::numeric_limits<double>::quiet_NaN();
 	properties.removeQuotes = ui.chbRemoveQuotes->isChecked();
 	properties.skipEmptyParts = ui.chbSkipEmptyParts->isChecked();
-	properties.columnNamesRaw = ui.kleVectorNames->text();
+	properties.columnNamesString = ui.kleVectorNames->text();
 	properties.headerEnabled = ui.chbHeader->isChecked();
 	properties.headerLine = ui.sbHeaderLine->value();
 	properties.baseYear = ui.sbYearBase->value();
-	properties.columnModesString = ui.kleColumnMode->text();
+	properties.dataTypesString = ui.kleColumnMode->text();
 	properties.intAsDouble = ui.chbIntAsDouble->isChecked();
 }
 
@@ -244,9 +194,9 @@ void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {
 
 bool AsciiOptionsWidget::isValid(QString& errorMessage) {
 	QString invalidString;
-	QVector<AbstractColumn::ColumnMode> s;
-	if (!AsciiFilter::determineColumnModes(ui.kleColumnMode->text(), s, invalidString)) {
-		errorMessage = i18n("Datatype not found: %1").arg(invalidString);
+	QVector<AsciiFilter::DataType> s;
+	if (!AsciiFilter::validateDataTypes(ui.kleColumnMode->text(), s, invalidString)) {
+		errorMessage = i18n("Invalid data type '%1'").arg(invalidString);
 		return false;
 	}
 	return true;

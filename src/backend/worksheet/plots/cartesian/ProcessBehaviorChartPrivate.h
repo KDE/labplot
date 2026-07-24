@@ -26,9 +26,11 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updateLimitConstraints();
 	void updateControlLimits();
+	void updateSpecifications();
 	void updateLabels();
 
 	ProcessBehaviorChart::Type type{ProcessBehaviorChart::Type::XmR};
+	ProcessBehaviorChart::LimitsType limitsType{ProcessBehaviorChart::LimitsType::Statistical};
 	ProcessBehaviorChart::LimitsMetric limitsMetric{ProcessBehaviorChart::LimitsMetric::Average};
 
 	XYCurve* dataCurve{nullptr};
@@ -79,6 +81,9 @@ public:
 	double maxUpperLimit{INFINITY};
 	double minLowerLimit{-INFINITY};
 	bool exactLimitsEnabled{true};
+	double centerSpecification{NAN};
+	double lowerLimitSpecification{NAN};
+	double upperLimitSpecification{NAN};
 
 	ProcessBehaviorChart* const q;
 

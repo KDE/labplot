@@ -21,7 +21,6 @@
 #include <KIconTheme>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kcoreaddons_version.h>
 
 #define HAVE_STYLE_MANAGER __has_include(<KStyleManager>)
 #if HAVE_STYLE_MANAGER
@@ -41,13 +40,6 @@
 #endif
 
 int main(int argc, char* argv[]) {
-#if defined(Q_OS_UNIX) && !defined(Q_OS_DARWIN)
-	// the qads library has issues on wayland so we force qt to use x11 instead
-	// see https://invent.kde.org/education/labplot/-/issues/1067
-	QByteArray xcbQtQpaEnvVar("xcb");
-	qputenv("QT_QPA_PLATFORM", xcbQtQpaEnvVar);
-#endif
-
 	// trigger initialisation of proper icon theme
 	KIconTheme::initTheme();
 
@@ -194,14 +186,14 @@ int main(int argc, char* argv[]) {
 	// debugging paths
 	const auto& appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
 	INFO("AppDataLocation paths:")
-	for (const auto& path : appdatapaths)
-		WARN("	" << STDSTRING(path))
+	for (const auto& p : appdatapaths)
+		WARN("	" << STDSTRING(p))
 	INFO("Icon theme search paths:")
-	for (const auto& path : QIcon::themeSearchPaths())
-		WARN("	" << STDSTRING(path))
+	for (const auto& p : QIcon::themeSearchPaths())
+		WARN("	" << STDSTRING(p))
 	INFO("Library search paths:")
-	for (const auto& path : QCoreApplication::libraryPaths())
-		WARN("	" << STDSTRING(path))
+	for (const auto& p : QCoreApplication::libraryPaths())
+		WARN("	" << STDSTRING(p))
 #endif
 
 	QString schemeName = group.readEntry("ColorScheme");

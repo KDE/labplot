@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for generating equidistant numbers
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -31,9 +31,10 @@
 	\ingroup frontend
  */
 
-EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent)
+EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent, bool dateTimeMode)
 	: QDialog(parent)
-	, m_spreadsheet(s) {
+	, m_spreadsheet(s)
+	, m_dateTimeMode(dateTimeMode) {
 	Q_ASSERT(m_spreadsheet);
 
 	auto* mainWidget = new QWidget(this);
@@ -150,25 +151,31 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	ui.leNumber->setText(QLocale().toString(m_columns.first()->rowCount()));
 	QString dateTimeFormat;
 
-	for (auto* col : m_columns) {
-		const auto mode = col->columnMode();
-		if (!m_hasDouble && mode == AbstractColumn::ColumnMode::Double)
-			m_hasDouble = true;
+	// if the datetime mode is not forced, check the column modes to see what kind of data we have
+	if (!m_dateTimeMode) {
+		for (auto* col : m_columns) {
+			const auto mode = col->columnMode();
+			if (!m_hasDouble && mode == AbstractColumn::ColumnMode::Double)
+				m_hasDouble = true;
 
-		if (!m_hasInteger && mode == AbstractColumn::ColumnMode::Integer)
-			m_hasInteger = true;
+			if (!m_hasInteger && mode == AbstractColumn::ColumnMode::Integer)
+				m_hasInteger = true;
 
-		if (!m_hasBigInteger && mode == AbstractColumn::ColumnMode::BigInt)
-			m_hasBigInteger = true;
+			if (!m_hasBigInteger && mode == AbstractColumn::ColumnMode::BigInt)
+				m_hasBigInteger = true;
 
-		if (!m_hasDateTime && mode == AbstractColumn::ColumnMode::DateTime) {
-			m_hasDateTime = true;
-			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-			dateTimeFormat = filter->format();
+			if (!m_hasDateTime && mode == AbstractColumn::ColumnMode::DateTime) {
+				m_hasDateTime = true;
+				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+				dateTimeFormat = filter->format();
+			}
 		}
-	}
 
-	m_hasNumeric = m_hasDouble || m_hasInteger || m_hasBigInteger;
+		m_hasNumeric = m_hasDouble || m_hasInteger || m_hasBigInteger;
+	} else {
+		m_hasNumeric = false;
+		m_hasDateTime = true;
+	}
 
 	ui.lNumeric->setVisible(m_hasNumeric);
 	ui.lIncrement->setVisible(m_hasNumeric);
@@ -214,7 +221,7 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 
 /*!
  * \brief called when the method type to generate values (fixed number of fixed increment)
- * was called. Shows/hides the corresponding widgets depending on the type and on the colomn modes.
+ * was called. Shows/hides the corresponding widgets depending on the type and on the column modes.
  */
 void EquidistantValuesDialog::typeChanged(int) {
 	const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
@@ -254,7 +261,7 @@ void EquidistantValuesDialog::checkValues() const {
 
 		const double end = numberLocale.toDouble(ui.leTo->text(), &ok);
 		if (!ok || end < start) {
-			m_okButton->setToolTip(i18n("Invalid end value, must be bigger than the start value"));
+			m_okButton->setToolTip(i18n("Invalid end value, must be greater than the start value"));
 			m_okButton->setEnabled(false);
 			return;
 		}
@@ -290,14 +297,14 @@ void EquidistantValuesDialog::checkValues() const {
 }
 
 /*!
- * checks whether a valid integer value biger than 1 was provided for the parameter 'number'
+ * checks whether a valid integer value greater than 1 was provided for the parameter 'number'
  */
 bool EquidistantValuesDialog::checkNumberValue() const {
 	bool ok;
 	const auto numberLocale = QLocale();
 	const int number = numberLocale.toDouble(ui.leNumber->text(), &ok);
 	if (!ok || number < 1) {
-		m_okButton->setToolTip(i18n("The number of values to be generated must be bigger than one"));
+		m_okButton->setToolTip(i18n("The number of values to be generated must be greater than one"));
 		m_okButton->setEnabled(false);
 		return false;
 	}
@@ -314,7 +321,7 @@ bool EquidistantValuesDialog::checkIncrementValue() const {
 	if (m_hasNumeric) {
 		const double increment = numberLocale.toDouble(ui.leIncrement->text(), &ok);
 		if (!ok || increment == 0.) {
-			m_okButton->setToolTip(i18n("Invalid numeric increment value, must be bigger than zero"));
+			m_okButton->setToolTip(i18n("Invalid numeric increment value, must be greater than zero"));
 			m_okButton->setEnabled(false);
 			return false;
 		}
@@ -323,7 +330,7 @@ bool EquidistantValuesDialog::checkIncrementValue() const {
 	if (m_hasDateTime) {
 		const int increment = numberLocale.toInt(ui.leIncrementDateTime->text(), &ok);
 		if (!ok || increment == 0) {
-			m_okButton->setToolTip(i18n("Invalid Date&Time increment value, must be bigger than zero"));
+			m_okButton->setToolTip(i18n("Invalid Date&Time increment value, must be greater than zero"));
 			m_okButton->setEnabled(false);
 			return false;
 		}
@@ -340,7 +347,7 @@ void EquidistantValuesDialog::generate() {
 	bool integerModePossible = false;
 	bool bigIntRequired = false;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	bool rc = true;
 	if (m_hasNumeric) {
 		int number{0};
@@ -352,7 +359,6 @@ void EquidistantValuesDialog::generate() {
 		const double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
 		if (!ok) {
 			DEBUG("Invalid double value for 'start'!")
-			RESET_CURSOR;
 			return;
 		}
 
@@ -362,7 +368,6 @@ void EquidistantValuesDialog::generate() {
 			end = numberLocale.toDouble(ui.leTo->text(), &ok);
 			if (!ok) {
 				DEBUG("Invalid double value for 'end'!")
-				RESET_CURSOR;
 				return;
 			}
 		}
@@ -373,7 +378,6 @@ void EquidistantValuesDialog::generate() {
 			number = QLocale().toInt(ui.leNumber->text(), &ok);
 			if (!ok || number == 1) {
 				DEBUG("Invalid integer value for 'number'!")
-				RESET_CURSOR;
 				return;
 			}
 
@@ -392,14 +396,12 @@ void EquidistantValuesDialog::generate() {
 			number = QLocale().toInt(ui.leNumber->text(), &ok);
 			if (!ok || number == 1) {
 				DEBUG("Invalid integer value for 'number'!")
-				RESET_CURSOR;
 				return;
 			}
 
 			increment = QLocale().toDouble(ui.leIncrement->text(), &ok);
 			if (!ok) {
 				DEBUG("Invalid integer value for 'increment'!")
-				RESET_CURSOR;
 				return;
 			}
 
@@ -423,14 +425,12 @@ void EquidistantValuesDialog::generate() {
 			}
 
 			if (!rc) {
-				RESET_CURSOR;
 				return;
 			}
 		}
 		if (m_hasDouble || ((m_hasInteger || m_hasBigInteger) && !integerModePossible)) {
 			rc = generateDouble(newDoubleData, start, increment, number);
 			if (!rc) {
-				RESET_CURSOR;
 				return;
 			}
 		}
@@ -478,7 +478,6 @@ void EquidistantValuesDialog::generate() {
 
 		rc = generateDateTime(newDateTimeData, type, start, end, number, increment, unit);
 		if (!rc) {
-			RESET_CURSOR;
 			return;
 		}
 	}
@@ -530,6 +529,12 @@ void EquidistantValuesDialog::generate() {
 	for (auto* col : m_columns) {
 		col->clearFormula(); // clear the potentially available column formula
 
+		if (m_dateTimeMode) {
+			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+			col->setDateTimes(newDateTimeData);
+			continue;
+		}
+
 		switch (col->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 			col->setValues(newDoubleData);
@@ -569,7 +574,6 @@ void EquidistantValuesDialog::generate() {
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -649,9 +653,9 @@ bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData,
 	case Type::FixedNumber: {
 		const auto startValue = start.toMSecsSinceEpoch();
 		const auto endValue = end.toMSecsSinceEpoch();
-		int increment = 1;
+		int incr = 1;
 		if (number != 1)
-			increment = (endValue - startValue) / (number - 1);
+			incr = (endValue - startValue) / (number - 1);
 
 		try {
 			newData.resize(number);
@@ -662,7 +666,7 @@ bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData,
 		}
 
 		for (int i = 0; i < number; ++i)
-			newData[i] = QDateTime::fromMSecsSinceEpoch(startValue + increment * i, Qt::UTC);
+			newData[i] = QDateTime::fromMSecsSinceEpoch(startValue + incr * i, Qt::UTC);
 
 		break;
 	}

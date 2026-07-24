@@ -9,8 +9,10 @@
 
 #include "LiveDataTest.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/FilterStatus.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -48,11 +50,9 @@ void LiveDataTest::initTestCase() {
 			delete m_tcpSocket;
 			m_tcpSocket = nullptr;
 		}
-		QByteArray block = QStringLiteral("1,2\n").toLatin1();
+		auto block = QStringLiteral("1,2\n").toLatin1();
 		m_tcpSocket->write(block);
 	});
-
-	int udpNewDataUpdateTimeMs = PUBLISH_TIME_MS;
 
 	// initialize the UDP socket
 	m_udpSocket = new QUdpSocket(this);
@@ -61,7 +61,7 @@ void LiveDataTest::initTestCase() {
 	QCoreApplication::connect(timer, &QTimer::timeout, [this]() {
 		this->m_udpSocket->writeDatagram("1,2", QHostAddress(QStringLiteral(HOSTNAME)), UDP_PORT);
 	});
-	timer->start(udpNewDataUpdateTimeMs);
+	timer->start(PUBLISH_TIME_MS);
 }
 
 void LiveDataTest::cleanupTestCase() {
@@ -100,13 +100,13 @@ void LiveDataTest::testReadContinuousFixed00() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 
-	// QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	// QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -184,11 +184,11 @@ void LiveDataTest::testReadContinuousFixed01() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -275,11 +275,11 @@ void LiveDataTest::testReadContinuousFixed02() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -361,12 +361,12 @@ void LiveDataTest::testReadContinuousFixedWithIndex() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	properties.createIndex = true;
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -451,12 +451,12 @@ void LiveDataTest::testReadContinuousFixedWithTimestamp() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	properties.createTimestamp = true;
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -541,13 +541,13 @@ void LiveDataTest::testReadContinuousFixedWithIndexTimestamp() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	properties.createIndex = true;
 	properties.createTimestamp = true;
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -644,11 +644,11 @@ void LiveDataTest::testReadFromEnd00() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -725,11 +725,11 @@ void LiveDataTest::testReadFromEnd01() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -836,11 +836,11 @@ void LiveDataTest::testReadFromEnd02() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -932,11 +932,11 @@ void LiveDataTest::testReadTillEnd00() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks
@@ -1013,11 +1013,11 @@ void LiveDataTest::testReadTillEnd01() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks
@@ -1091,11 +1091,11 @@ void LiveDataTest::testReadWholeFile00() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks
@@ -1162,11 +1162,11 @@ void LiveDataTest::testReadWholeFile01() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks
@@ -1233,11 +1233,11 @@ void LiveDataTest::testReadWholeFileSameContentSize() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	properties.columnNamesRaw = QStringLiteral("x, y");
-	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.columnNamesString = QStringLiteral("x, y");
+	properties.dataTypesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks
@@ -1291,11 +1291,11 @@ void LiveDataTest::testPlotting() {
 	dataSource->setRowCount(11);
 	project.addChild(dataSource);
 
-	auto* c1 = static_cast<Column*>(dataSource->child<Column>(0));
+	auto* c1 = dataSource->child<Column>(0);
 	QVERIFY(c1 != nullptr);
 	QCOMPARE(c1->name(), QLatin1String("1"));
 	QVERIFY(c1->columnMode() == AbstractColumn::ColumnMode::Double);
-	auto* c2 = static_cast<Column*>(dataSource->child<Column>(1));
+	auto* c2 = dataSource->child<Column>(1);
 	QVERIFY(c2 != nullptr);
 	QCOMPARE(c2->name(), QLatin1String("2"));
 	QVERIFY(c2->columnMode() == AbstractColumn::ColumnMode::Double);
@@ -1328,11 +1328,11 @@ void LiveDataTest::testPlotting() {
 	auto* filter = new AsciiFilter();
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
-	properties.columnNamesRaw = QStringLiteral("1, 2");
-	properties.columnModesString = QStringLiteral("Double, Double");
+	properties.columnNamesString = QStringLiteral("1, 2");
+	properties.dataTypesString = QStringLiteral("Double, Double");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource->setFilter(filter);
 
 	QCOMPARE(dataSource->column(0)->minimum(), 0.);
@@ -1514,11 +1514,11 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	auto properties = filter->defaultProperties();                                                                                                             \
 	properties.headerEnabled = false;                                                                                                                          \
 	properties.intAsDouble = false;                                                                                                                            \
-	properties.columnNamesRaw = QStringLiteral("x, y");                                                                                                        \
-	properties.columnModesString = QStringLiteral("Int, Int");                                                                                                 \
+	properties.columnNamesString = QStringLiteral("x, y");                                                                                                     \
+	properties.dataTypesString = QStringLiteral("Int, Int");                                                                                                   \
 	properties.automaticSeparatorDetection = false;                                                                                                            \
 	properties.separator = QStringLiteral(",");                                                                                                                \
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);                                                                                    \
+	QCOMPARE(filter->initialize(properties).success(), true);                                                                                                  \
                                                                                                                                                                \
 	dataSource->setFilter(filter);                                                                                                                             \
                                                                                                                                                                \
@@ -1553,11 +1553,11 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 
 void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileExists() {
 	// create a temp file and write some data into it
-	QTemporaryFile tempFile;
-	if (!tempFile.open())
+	QTemporaryFile tempDataFile;
+	if (!tempDataFile.open())
 		QFAIL("failed to create the temp file for writing");
 
-	QFile file(tempFile.fileName());
+	QFile file(tempDataFile.fileName());
 	if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
 		QFAIL("failed to open the temp file for writing");
 
@@ -1605,11 +1605,11 @@ void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExists() {
 	QString importFilename;
 	{
 		// create a temp file and write some data into it
-		QTemporaryFile tempFile;
-		if (!tempFile.open())
+		QTemporaryFile tempDataFile;
+		if (!tempDataFile.open())
 			QFAIL("failed to create the temp file for writing");
 
-		importFilename = tempFile.fileName();
+		importFilename = tempDataFile.fileName();
 		QFile file(importFilename);
 		if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
 			QFAIL("failed to open the temp file for writing");
@@ -1659,15 +1659,56 @@ void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExists() {
 	QCOMPARE(curve->yColumn(), dataSource->column(1));
 }
 
+void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExistsRemoveLivedata() {
+	QString savePath;
+	{
+		// create a temp file and write some data into it
+		QTemporaryFile tempDataFile;
+		if (!tempDataFile.open())
+			QFAIL("failed to create the temp file for writing");
+
+		QString importFilename = tempDataFile.fileName();
+		QFile file(importFilename);
+		if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
+			QFAIL("failed to open the temp file for writing");
+
+		file.write("1,2\n3,4\n");
+		file.flush();
+
+		Project project;
+		CREATE_DUMMY_LIVEDATA_PROJECT(project, importFilename);
+		dataSource->setFileLinked(true); // Not linked, the column data is stored in the file
+
+		SAVE_PROJECT("testLoadSaveLiveDataSource");
+	}
+
+	Project project;
+	project.load(savePath);
+	const auto curves = project.children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(curves.count(), 1);
+	const auto* curve = curves.first();
+
+	const auto children = project.children<LiveDataSource>();
+	QCOMPARE(children.count(), 1);
+	auto* dataSource = children.first();
+
+	QCOMPARE(dataSource->columnCount(), 0);
+	QCOMPARE(dataSource->rowCount(), 0);
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->yColumn(), nullptr);
+
+	dataSource->remove(); // Should not lead to a crash!
+}
+
 void LiveDataTest::testLoadSaveLiveDataNoLinkedFile() {
 	QString savePath;
 	{
 		// create a temp file and write some data into it
-		QTemporaryFile tempFile;
-		if (!tempFile.open())
+		QTemporaryFile tempDataFile;
+		if (!tempDataFile.open())
 			QFAIL("failed to create the temp file for writing");
 
-		QFile file(tempFile.fileName());
+		QFile file(tempDataFile.fileName());
 		if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
 			QFAIL("failed to open the temp file for writing");
 

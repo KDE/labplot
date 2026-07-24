@@ -17,8 +17,9 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
+#include <QBrush>
+
 class DatapickerPoint;
-class QAction;
 class DatapickerCurvePrivate;
 class Column;
 class Spreadsheet;
@@ -39,7 +40,6 @@ public:
 
 	QIcon icon() const override;
 	void setPrinting(bool);
-	void setSelectedInView(bool);
 	void addDatasheet(DatapickerImage::GraphType);
 	void updatePoints();
 	void updatePoint(const DatapickerPoint*);

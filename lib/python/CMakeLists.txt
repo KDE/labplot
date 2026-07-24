@@ -2,10 +2,18 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 find_package(Python3 COMPONENTS Development Interpreter REQUIRED)
-find_package(PySide6 REQUIRED)
-find_package(Shiboken6 REQUIRED)
+find_package(PySide6 QUIET)
+find_package(Shiboken6 QUIET)
 
-include(ECMGeneratePythonBindings)
+# If still not found, report and allow user to continue (they may just not want Python support)
+if(NOT Shiboken6_FOUND)
+	message(WARNING "Shiboken6 not found. Python scripting support will be disabled.")
+endif()
+if(NOT PySide6_FOUND)
+	message(WARNING "PySide6 not found. Python scripting support will be disabled.")
+endif()
+
+include(GeneratePythonBindings)
 
 set(bindings_library "pylabplot")
 
@@ -32,8 +40,8 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plot_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.h
+#    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.cpp
+#    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyanalysiscurve_wrapper.cpp
@@ -98,14 +106,10 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/background_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesiancoordinatesystem_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesiancoordinatesystem_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/columnstringio_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/columnstringio_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/doublerange_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/doublerange_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/intrange_wrapper.cpp
@@ -164,12 +168,12 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_differentiationdata_wrapper.cpp
@@ -220,12 +224,18 @@ set(generated_sources
     # worksheet element containers
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreak_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreak_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreaks_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreaks_wrapper.h
 
     # worksheet elements
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/image_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/image_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_markerpoints_t_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_markerpoints_t_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_textwrapper_wrapper.cpp
@@ -243,7 +253,7 @@ get_property(_defs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINI
 list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_UP_TO=]])
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
 
-ecm_generate_python_bindings(
+generate_python_bindings(
     PACKAGE_NAME ${bindings_library}
     VERSION ${PROJECT_VERSION}
     WRAPPED_HEADER ${wrapped_header}
@@ -257,8 +267,33 @@ ecm_generate_python_bindings(
     README ../../README.md
 )
 
+if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
+    # Only proceed if we actually found the Python packages
+    if(NOT Shiboken6_INCLUDE_DIRS)
+    	message(FATAL_ERROR "Python package support requested (ENABLE_PYTHON_SDK or ENABLE_PYTHON_SCRIPTING) but Shiboken6 not found. Please install or disable Python support.")
+    endif()
+    if (NOT PySide6_INCLUDE_DIRS)
+    	message(FATAL_ERROR "Python package support requested (ENABLE_PYTHON_SDK or ENABLE_PYTHON_SCRIPTING) but PySide6 not found. Please install or disable Python support.")
+    endif()
+	target_include_directories(${bindings_library} PUBLIC
+	    ${Python3_INCLUDE_DIRS}
+	    ${PySide6_INCLUDE_DIRS}
+	    ${Shiboken6_INCLUDE_DIRS}
+	)
+
+    if(PySide6_ABI3_LIBRARY)
+	target_link_libraries(${bindings_library} PRIVATE ${PySide6_ABI3_LIBRARY})
+    endif()
+    if(Shiboken6_LIBRARY)
+	target_link_libraries(${bindings_library} PRIVATE ${Shiboken6_LIBRARY})
+    endif()
+    if(Shiboken6_ABI3_LIBRARY)
+	target_link_libraries(${bindings_library} PRIVATE ${Shiboken6_ABI3_LIBRARY})
+    endif()
+endif()
+
 target_link_libraries(${bindings_library} PRIVATE LabPlot::SDK)
-target_compile_definitions(${bindings_library} PRIVATE -DSDK)
+target_compile_definitions(${bindings_library} PRIVATE SDK)
 
 execute_process(
     COMMAND ${Python_EXECUTABLE} -Esc "import sysconfig; print(sysconfig.get_path('platlib', vars={'platbase': '${CMAKE_INSTALL_PREFIX}', 'base': '${CMAKE_INSTALL_PREFIX}'}))"

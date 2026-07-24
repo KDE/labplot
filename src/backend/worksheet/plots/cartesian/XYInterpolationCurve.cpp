@@ -426,6 +426,7 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYInterpolationCurve);
 
 	QXmlStreamAttributes attribs;

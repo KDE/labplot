@@ -14,9 +14,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <gsl/gsl_errno.h>
-
-#include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
@@ -201,6 +198,7 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYIntegrationCurve);
 
 	QXmlStreamAttributes attribs;

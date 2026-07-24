@@ -174,7 +174,7 @@ private:
 };
 
 void SampleValuesDialog::sampleValues() const {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const auto method = static_cast<Method>(ui.cbMethod->currentIndex());
 
 	QVector<int> rows;
@@ -229,5 +229,4 @@ void SampleValuesDialog::sampleValues() const {
 	m_spreadsheet->parentAspect()->addChild(targetSpreadsheet);
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }

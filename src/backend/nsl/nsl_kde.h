@@ -27,7 +27,7 @@ __BEGIN_DECLS
 #define NSL_KDE_BANDWITH_TYPE_COUNT 2
 typedef enum { nsl_kde_bandwidth_silverman, nsl_kde_bandwidth_scott, nsl_kde_bandwidth_custom } nsl_kde_bandwidth_type;
 
-/* calculates the density at point x for the sample data with the bandwith h */
+/* calculates the density at point x for the sample data with the bandwidth h */
 double nsl_kde(const double data[], double x, nsl_kernel_type kernel, double h, size_t n);
 
 /*!

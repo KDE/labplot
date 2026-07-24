@@ -27,7 +27,6 @@ public:
 	bool importTo(QStatusBar*) const override;
 
 private:
-	MainWin* m_mainWin{nullptr};
 	ImportDatasetWidget* m_importDatasetWidget;
 	enum class Status { SUCCESS = 0, FAILURE = 1 };
 

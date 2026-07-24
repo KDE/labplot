@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for spreadsheet properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -17,6 +17,7 @@
 
 class KConfig;
 class Spreadsheet;
+class TemplateHandler;
 
 class SpreadsheetDock : public BaseDock {
 	Q_OBJECT
@@ -28,8 +29,9 @@ public:
 
 private:
 	Ui::SpreadsheetDock ui;
-	QList<Spreadsheet*> m_spreadsheetList;
+	QList<Spreadsheet*> m_spreadsheets;
 	Spreadsheet* m_spreadsheet{nullptr};
+	TemplateHandler* m_templateHandler{nullptr};
 
 	void load();
 	void loadConfig(KConfig&);
@@ -40,16 +42,16 @@ private Q_SLOTS:
 	void columnCountChanged(int);
 	void commentsShownChanged(bool);
 	void sparklinesShownChanged(bool);
-	void linkingChanged(bool);
 	void linkedSpreadsheetChanged(const QModelIndex&);
+	void toggleStatisticsSpreadsheet(bool);
 
 	// SLOTs for changes triggered in Spreadsheet
 	void spreadsheetRowCountChanged(int);
 	void spreadsheetColumnCountChanged(int);
 	void spreadsheetShowCommentsChanged(bool);
 	void spreadsheetShowSparklinesChanged(bool);
-	void spreadsheetLinkingChanged(bool);
 	void spreadsheetLinkedSpreadsheetChanged(const Spreadsheet*);
+	void spreadsheetStatisticsSpreadsheetChanged(bool);
 
 	// save/load template
 	void loadConfigFromTemplate(KConfig&);

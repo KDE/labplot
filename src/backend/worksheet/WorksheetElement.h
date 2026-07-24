@@ -16,8 +16,6 @@
 #include "backend/lib/macros.h"
 #include <QPainterPath>
 
-#define D(obj_class) auto* d = static_cast<obj_class##Private*>(d_ptr)
-
 class CartesianPlot;
 class CartesianCoordinateSystem;
 class WorksheetElementPrivate;
@@ -188,6 +186,7 @@ Q_SIGNALS:
 
 	friend class WorksheetElementTest;
 	friend class SetCoordinateSystemIndexCmd;
+	friend class DecompositionTest;
 };
 
 #endif

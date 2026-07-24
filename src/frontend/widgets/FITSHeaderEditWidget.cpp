@@ -18,8 +18,6 @@
 #include <KConfigGroup>
 #include <KMessageBox>
 
-#include <kcoreaddons_version.h>
-
 #include <QContextMenuEvent>
 #include <QFileDialog>
 #include <QMenu>
@@ -128,7 +126,7 @@ void FITSHeaderEditWidget::fillTable() {
  * \param col the column of the selected item
  */
 void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const QString& itemText = item->text(col);
 	QString selectedExtension;
 	int extType = 0;
@@ -160,7 +158,6 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
 			fillTable();
 		}
 	}
-	RESET_CURSOR;
 }
 
 /*!
@@ -182,7 +179,7 @@ void FITSHeaderEditWidget::openFile() {
 			conf.writeEntry("LastDir", newDir);
 	}
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QTreeWidgetItem* root = ui->twExtensions->invisibleRootItem();
 	const int childCount = root->childCount();
 	bool opened = false;
@@ -209,7 +206,6 @@ void FITSHeaderEditWidget::openFile() {
 		KMessageBox::information(this, i18n("Cannot open file, file already opened."), i18n("File already opened"));
 	}
 	enableButtonAddUnit();
-	RESET_CURSOR;
 }
 
 /*!
@@ -221,22 +217,20 @@ void FITSHeaderEditWidget::openFile() {
 bool FITSHeaderEditWidget::save() {
 	bool saved = false;
 
-	QMap<QString, ExtensionData>::const_iterator it = m_extensionData.constBegin();
+	auto it = m_extensionData.constBegin();
 	while (it != m_extensionData.constEnd()) {
 		const QString& fileName = it.key();
-		const auto& data = it.value();
-		if (data.updates.newKeywords.size() > 0) {
-			m_fitsFilter->addNewKeyword(fileName, data.updates.newKeywords);
-			if (!saved)
-				saved = true;
+		const auto& hdata = it.value();
+		if (hdata.updates.newKeywords.size() > 0) {
+			m_fitsFilter->addNewKeyword(fileName, hdata.updates.newKeywords);
+			saved = true;
 		}
-		if (data.updates.removedKeywords.size() > 0) {
-			m_fitsFilter->deleteKeyword(fileName, data.updates.removedKeywords);
-			if (!saved)
-				saved = true;
+		if (hdata.updates.removedKeywords.size() > 0) {
+			m_fitsFilter->deleteKeyword(fileName, hdata.updates.removedKeywords);
+			saved = true;
 		}
 		if (!saved) {
-			for (const FITSFilter::Keyword& key : data.updates.updatedKeywords) {
+			for (const FITSFilter::Keyword& key : hdata.updates.updatedKeywords) {
 				if (!key.isEmpty()) {
 					saved = true;
 					break;
@@ -244,17 +238,16 @@ bool FITSHeaderEditWidget::save() {
 			}
 		}
 
-		m_fitsFilter->updateKeywords(fileName, data.keywords, data.updates.updatedKeywords);
-		m_fitsFilter->addKeywordUnit(fileName, data.keywords);
-		m_fitsFilter->addKeywordUnit(fileName, data.updates.newKeywords);
+		m_fitsFilter->updateKeywords(fileName, hdata.keywords, hdata.updates.updatedKeywords);
+		m_fitsFilter->addKeywordUnit(fileName, hdata.keywords);
+		m_fitsFilter->addKeywordUnit(fileName, hdata.updates.newKeywords);
 
 		++it;
 	}
 
 	if (m_removedExtensions.size() > 0) {
 		m_fitsFilter->removeExtensions(m_removedExtensions);
-		if (!saved)
-			saved = true;
+		saved = true;
 	}
 	if (saved) {
 		// to reset the window title
@@ -278,16 +271,16 @@ void FITSHeaderEditWidget::initActions() {
  * \brief Connects signals of the actions to the appropriate slots.
  */
 void FITSHeaderEditWidget::connectActions() {
-	connect(m_actionAddKeyword, &QAction::triggered, this, [=]() {
+	connect(m_actionAddKeyword, &QAction::triggered, this, [=, this]() {
 		addKeyword();
 	});
-	connect(m_actionRemoveKeyword, &QAction::triggered, this, [=]() {
+	connect(m_actionRemoveKeyword, &QAction::triggered, this, [=, this]() {
 		removeKeyword();
 	});
-	connect(m_actionRemoveExtension, &QAction::triggered, this, [=]() {
+	connect(m_actionRemoveExtension, &QAction::triggered, this, [=, this]() {
 		removeExtension();
 	});
-	connect(m_actionAddmodifyUnit, &QAction::triggered, this, [=]() {
+	connect(m_actionAddmodifyUnit, &QAction::triggered, this, [=, this]() {
 		addModifyKeywordUnit();
 	});
 }
@@ -405,7 +398,7 @@ void FITSHeaderEditWidget::removeKeyword() {
 }
 
 /*!
- * \brief Trigggered when an item was updated by the user in the tablewidget
+ * \brief Triggered when an item was updated by the user in the tablewidget
  * \param item the item which was updated
  */
 void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem* item) {

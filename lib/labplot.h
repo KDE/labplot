@@ -50,6 +50,5 @@
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
-#include "backend/worksheet/plots/PlotArea.h"
 
 #endif

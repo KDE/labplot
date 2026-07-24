@@ -4,7 +4,7 @@
 	Description          : definition of functions
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2014-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2014-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -76,6 +76,7 @@ enum class FunctionGroups : int {
 	StandardMathematicalFunctions,
 	ComparisonFunctions,
 	LogicalFunctions,
+	DatetimeFunctions,
 	ColumnStatistics,
 	MovingStatistics,
 	AiryFunctionsAndDerivatives,
@@ -147,6 +148,7 @@ enum class FunctionGroups : int {
 QString FunctionGroupsToString(FunctionGroups group);
 
 extern const char* colfun_size;
+extern const char* colfun_sum;
 extern const char* colfun_min;
 extern const char* colfun_max;
 extern const char* colfun_mean;
@@ -192,6 +194,21 @@ extern const char* specialfun_rsample;
 double andFunction(const double v1, const double v2);
 double orFunction(const double v1, const double v2);
 double notFunction(const double v);
+double todayFunction();
+double nowFunction();
+double dateFunction(const double year, const double month, const double day);
+double datedifFunction(const double start_date, const double end_date, const double unit);
+double eomonthFunction(const double start_date, const double months);
+double weekdayFunction(const double date);
+double networkdaysFunction(const double start_date, const double end_date);
+double yearFunction(const double date);
+double monthFunction(const double date);
+double dayFunction(const double date);
+double weeknumFunction(const double date);
+double hourFunction(const double dateTime);
+double minuteFunction(const double dateTime);
+double secondFunction(const double dateTime);
+double timeFunction(const double hour, const double minute, const double second);
 double greaterThan(const double v1, const double v2);
 double greaterEqualThan(const double v1, const double v2);
 double lessThan(const double v1, const double v2);

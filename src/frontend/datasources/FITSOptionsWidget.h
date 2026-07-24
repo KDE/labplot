@@ -4,7 +4,7 @@
 	Description          : Widget providing options for the import of FITS data
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -24,7 +24,6 @@ public:
 	void clear();
 	QString currentExtensionName();
 	void updateContent(FITSFilter*, const QString& fileName);
-	const QStringList selectedExtensions() const;
 	int lines() const {
 		return ui.sbPreviewLines->value();
 	}
@@ -34,6 +33,7 @@ public:
 	const QString extensionName(bool* ok);
 
 private:
+	enum class ExtensionType {UNKNOWN, IMAGE_OR_TBL, PRIMARY};
 	Ui::FITSOptionsWidget ui;
 	ImportFileWidget* m_fileWidget;
 

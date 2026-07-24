@@ -2,13 +2,16 @@
     "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "6.9",
-    "base": "io.qt.qtwebengine.BaseApp",
-    "base-version": "6.9",
+    "runtime-version": "6.11",
+    "base": "io.qt.PySide.BaseApp",
+    "base-version": "6.11",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
     "tags": ["nightly"],
     "desktop-file-name-suffix": " (Nightly)",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.llvm21"
+    ],
     "finish-args": [
         "--share=network",
         "--share=ipc",
@@ -22,12 +25,6 @@
         "--system-talk-name=org.freedesktop.UDisks2",
         "--talk-name=org.freedesktop.Flatpak"
     ],
-    "build-args": [
-        "--share=network"
-    ],
-    "extensions": {
-        "org.freedesktop.Sdk.Extension.python3": {}
-    },
     "cleanup": [
         "/include",
         "/lib/cmake",
@@ -37,14 +34,20 @@
         "/mkspecs",
         "/share/aclocal",
         "/share/info",
-        "/share/man"
+        "/share/doc",
+        "/share/man",
+        "/share/qlogging-categories6"
+    ],
+    "cleanup-commands": [
+        "/app/cleanup-BaseApp.sh"
     ],
     "modules": [
-        {
-            "name": "python-modules",
+         {
+            "name": "clang-headers",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app PySide6"
+                "mkdir -p ${FLATPAK_DEST}/lib/clang/21/include",
+                "cp -r /usr/lib/sdk/llvm21/lib/clang/21/include ${FLATPAK_DEST}/lib/clang/21/"
             ]
         },
         {
@@ -54,8 +57,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2",
-                    "sha256": "b4c198460eba6f28d34894e3a5710998818515104d6e74e5cc331ce31e46e626"
+                    "url": "https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.bz2",
+                    "sha256": "e4de6b08f33fd8b8985d2f204381408c660bffa6170ac65b68ae1bd3cd575c0a"
                 }
             ]
         },
@@ -76,8 +79,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.06.0.tar.xz",
-                    "sha256": "8199532d38984fab46dbd0020ec9c40f20e928e33e9b4cc6043572603a821d83"
+                    "url": "https://poppler.freedesktop.org/poppler-26.07.0.tar.xz",
+                    "sha256": "304832f48f8a47fdca90c6b6d1f684e68f37c10c9a0726f345f4ca9df4ca01e2"
                 }
             ],
             "modules": [
@@ -95,19 +98,6 @@
                             "sha256": "46d9d2c06637b219270877c9e16155cbd015b6dc84349af064c088e9b5b12f7b"
                         }
                     ]
-                },
-                {
-                    "name": "openjpeg2",
-                    "buildsystem": "cmake-ninja",
-                    "builddir": true,
-                    "sources": [
-                        {
-                            "type": "archive",
-                            "url": "https://github.com/uclouvain/openjpeg/archive/v2.5.3.tar.gz",
-                            "sha256": "368fe0468228e767433c9ebdea82ad9d801a3ad1e4234421f352c8b06e7aa707"
-                        }
-                    ],
-                    "cleanup": [ "/bin", "/include", "/lib/openjpeg-*", "/lib/pkgconfig" ]
                 }
             ],
             "cleanup": [ "/include", "/lib/pkgconfig" ]
@@ -118,8 +108,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.04.2/src/analitza-25.04.2.tar.xz",
-			    "sha256": "47177e0a8400e108491b769b825ef4990f3dd97b3348eec182da3e65e5704db7"
+			    "url": "https://download.kde.org/stable/release-service/26.04.3/src/analitza-26.04.3.tar.xz",
+			    "sha256": "615b7c244a5baee0be5214c53b8ce37d0a54e69a6fd6b8438c30d7fda45b0746"
 		    }
 	    ]
         },
@@ -129,8 +119,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.04.2/src/cantor-25.04.2.tar.xz",
-			    "sha256": "8cb744b18da22de4315b300f88b3e580eb2af559918187a73b78b3948615be74"
+			    "url": "https://download.kde.org/stable/release-service/26.04.3/src/cantor-26.04.3.tar.xz",
+			    "sha256": "f0e9734410070b6ecb54dfe042862405b4ef01d65533c0be0386d13b9fdf7250"
 		    }
 	    ]
         },
@@ -153,6 +143,7 @@
                 "-DHDF5_BUILD_TOOLS=OFF"
 	    ],
             "cleanup": [
+                "/cmake",
                 "/share/hdf5_examples"
             ],
             "sources": [
@@ -169,8 +160,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.9.3.tar.gz",
-                    "sha256": "990f46d49525d6ab5dc4249f8684c6deeaf54de6fec63a187e9fb382cc0ffdff"
+                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.10.1.tar.gz",
+                    "sha256": "33c27231c478c3b35da7c7758fbdd02da1fe407abcb16ddfe195f69d164f930d"
                 }
             ]
         },
@@ -179,9 +170,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://fossies.org/linux/misc/cfitsio-4.6.2.tar.gz",
-                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb",
-		    "disable-http-decompression": true
+                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.4.tar.gz",
+                    "sha256": "227b637b91c9820ea96f39a65eb087f053de567d82f4338e2884f123f8183c55"
                 }
             ]
         },
@@ -192,8 +182,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v3.0/libcerf-v3.0.tar.gz",
-                    "sha256": "c6108fbda89af37f588119c0c542b6c1e824845a36bea2fa31f7ed2cc1a246db"
+                    "url": "https://jugit.fz-juelich.de/mlz/lib/cerf/-/archive/v3.3/libcerf-v3.3.tar.gz",
+                    "sha256": "7cbece26ad94bd375eb81fee2b540d0ef68bbeb0994358e57bd588173f96b8ec"
                 }
             ]
         },
@@ -204,8 +194,8 @@
 	    "sources": [
 		{
                     "type": "archive",
-		    "url": "https://github.com/qt/qtmqtt/archive/refs/tags/v6.9.0.tar.gz",
-		    "sha256": "7cdec84ca17ad2bd9d47418ca98820705a7798895a2315b5c20c46528a29547e"
+		    "url": "https://github.com/qt/qtmqtt/archive/refs/tags/v6.10.3.tar.gz",
+		    "sha256": "a1759284b332f0b498b725be71addbc7f836b221b0c301d5013255606114c2a7"
 		}
 	    ]
 	},
@@ -217,13 +207,17 @@
                 {
                     "type": "archive",
                     "url": "https://download.kde.org/stable/frameworks/6.13/kuserfeedback-6.13.0.tar.xz",
-                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a",
-		    "_comment": "requires minimum ecm version provided by runtime"
+                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a"
                 }
             ]
         },
         {
             "name": "readstat",
+            "build-options": {
+                "env": {
+                    "ACLOCAL_PATH": "/usr/share/gettext/m4:/usr/share/aclocal:/app/share/aclocal"
+                }
+            },
             "sources": [
                 {
                     "type": "archive",
@@ -233,21 +227,6 @@
 		{
                     "type": "patch",
                     "path": "admin/patches/readstat-1.1.9.patch"
-                }
-            ]
-        },
-        {
-            "name": "Qt-Advanced-Docking-System",
-            "buildsystem": "cmake-ninja",
-            "config-opts": [
-                "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=6"
-            ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git",
-                    "commit": "a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6"
                 }
             ]
         },
@@ -272,37 +251,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/tbeu/matio/archive/v1.5.28.tar.gz",
-                    "sha256": "04d14160a637ea822593c336b231227372179f650250c98024a8a2b744afef25"
-                }
-            ]
-        },
-        {
-            "name": "fast_float",
-            "buildsystem": "cmake-ninja",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/fastfloat/fast_float.git",
-                    "tag": "1ea4f27b2aeee2859a1354a3c24cff52a116cad1"
-                }
-            ]
-        },
-        {
-            "name": "dbc_parser_cpp",
-            "buildsystem": "cmake-ninja",
-            "config-opts": [
-                "-DDBC_ENABLE_TESTS=OFF"
-            ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/LinuxDevon/dbc_parser_cpp.git",
-                    "tag": "cc4e80c7b6e1f7a13cc47b45f226756f823888e2"
-                },
-		{
-                    "type": "patch",
-                    "path": "admin/patches/dbc_parser_cpp.patch"
+                    "url": "https://github.com/tbeu/matio/archive/v1.5.30.tar.gz",
+                    "sha256": "cd514c42e13bb39477e7d8fdeaa1502014c552a6a53f0678809cce6951db2bc1"
                 }
             ]
         },
@@ -313,7 +263,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Murmele/vector_blf.git",
-                    "tag": "2c1a8e649328f2e06ce4d45c6223628bc39fd178"
+                    "tag": "2c1a8e649328f2e06ce4d45c6223628bc39fd178",
+                    "commit": "2c1a8e649328f2e06ce4d45c6223628bc39fd178"
                 }
             ]
         },
@@ -322,13 +273,16 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.0.0/mdds-3.0.0.tar.xz",
-                    "sha256": "9b077e8d929050e9a432cc131beed2380ac85cfe98b17fc26d01d0ed532129c8"
+                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.2.1/mdds-3.2.1.tar.xz",
+                    "sha256": "673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc936432f6b0687c112"
                 }
             ]
         },
         {
             "name": "ixion",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
@@ -339,22 +293,63 @@
         },
         {
             "name": "orcus",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.20.1/orcus-0.20.1.tar.bz2",
-                    "sha256": "f15e22d055b199299986a0de01864592a2b1caba57413d79969d1794128ef08a"
+                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.21.0/orcus-0.21.0.tar.bz2",
+                    "sha256": "3555660197d6d38d720643f430804bb0f95a484c1fe6c28c00808ae67f978d15"
+                }
+            ]
+        },
+        {
+            "name": "QXlsx",
+            "buildsystem": "cmake-ninja",
+            "subdir": "QXlsx",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/QtExcel/QXlsx/archive/refs/tags/v1.5.0.tar.gz",
+                    "sha256": "4461bb0fc9b88b6a970520e8b32eb7d2fc391a1a5c326b139a0af836278cdb09"
+                },
+                {
+                    "type": "patch",
+                    "path": "admin/patches/QXlsx-1.5.0.patch"
                 }
             ]
         },
         {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
-            "config-opts": [ "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF", "-DENABLE_TESTS=OFF"],
+            "config-opts": [
+		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
+		    "-DENABLE_TESTS=OFF",
+		    "-DENABLE_COMPILER_OPTIMIZATION=ON"
+	    ],
+	    "build-options": {
+		    "env": {
+			    "CLANG_INSTALL_DIR": "/app"
+		    }
+	    },
 	    "sources": [
                 {
                     "type": "dir",
                     "path": "."
+                }
+	    ],
+	    "modules": [
+                {
+                    "name": "patchelf",
+                    "buildsystem": "autotools",
+                    "sources": [
+                        {
+                            "type": "archive",
+                            "url": "https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0.tar.bz2",
+                            "sha256": "1952b2a782ba576279c211ee942e341748fdb44997f704dd53def46cd055470b"
+                        }
+                    ]
                 }
             ]
         }

@@ -27,7 +27,6 @@ public:
 	static bool checkKaggle();
 
 private:
-	MainWin* m_mainWin{nullptr};
 	ImportKaggleDatasetWidget* m_importKaggleDatasetWidget;
 	QPushButton* m_optionsButton{nullptr};
 

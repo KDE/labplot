@@ -65,7 +65,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, formula, Formula)
 
 	void setSuppressDataChangedSignal(bool);
-	void setChanged();
+	void setDataChanged();
 
 	int rowHeight(int row) const;
 	void setRowHeight(int row, int height);
@@ -152,7 +152,7 @@ Q_SIGNALS:
 	void headerFormatChanged(Matrix::HeaderFormat);
 
 private:
-	void init();
+	void init(int rows, int cols);
 
 	Q_DECLARE_PRIVATE(Matrix)
 	MatrixPrivate* const d_ptr;

@@ -224,7 +224,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	connect(ui.chbSymbolVisible, &QCheckBox::clicked, this, &DatapickerImageWidget::pointsVisibilityChanged);
 }
 
-void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
+void DatapickerImageWidget::setImages(const QList<DatapickerImage*>& list) {
 	CONDITIONAL_LOCK_RETURN;
 	m_imagesList = list;
 	m_image = list.first();

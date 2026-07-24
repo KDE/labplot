@@ -50,6 +50,9 @@ private Q_SLOTS:
 	void testSG_mode_constant();
 	void testSG_mode_periodic();
 
+	// LOWESS tests
+	void testLOWESS_basic();
+
 	// performance
 	void testPerformance_interp();
 	void testPerformance_mirror();

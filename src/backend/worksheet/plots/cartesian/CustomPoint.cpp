@@ -63,7 +63,7 @@ void CustomPoint::init(bool loading) {
 	connect(d->symbol, &Symbol::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
 	});
-	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
+	connect(d->symbol, &Symbol::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});
@@ -232,6 +232,7 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(CustomPoint);
 
 	if (!readBasicAttributes(reader))

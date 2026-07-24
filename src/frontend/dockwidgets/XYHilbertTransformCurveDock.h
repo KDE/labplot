@@ -25,6 +25,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void retranslateUi() override;
 	void showTransformResult();
 
 	Ui::XYHilbertTransformCurveDockGeneralTab uiGeneralTab;
@@ -39,7 +40,7 @@ private Q_SLOTS:
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
 	void typeChanged();
-	void recalculateClicked();
+	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

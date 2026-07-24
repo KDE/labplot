@@ -248,6 +248,7 @@ void XYCorrelationCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYCorrelationCurve);
 
 	QXmlStreamAttributes attribs;

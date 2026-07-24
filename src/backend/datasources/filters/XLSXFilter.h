@@ -10,11 +10,8 @@
 
 #ifndef XLSXFILTER_H
 #define XLSXFILTER_H
+
 #include "backend/datasources/filters/AbstractFileFilter.h"
-
-#include <QObject>
-
-#include <memory>
 
 class XLSXFilterPrivate;
 class QTreeWidgetItem;

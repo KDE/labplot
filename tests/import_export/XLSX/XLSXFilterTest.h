@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the XLSX filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -22,6 +22,7 @@ private Q_SLOTS:
 	void importFile3ColsStartEndColumn();
 	void importFileEmptyCells();
 	void importFileDatetime();
+	void importFileAppend();
 	void importFormula();
 };
 #endif

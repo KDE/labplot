@@ -12,7 +12,6 @@
 #ifndef WORKSHEETDOCK_H
 #define WORKSHEETDOCK_H
 
-#include "backend/worksheet/Worksheet.h"
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_worksheetdock.h"
 

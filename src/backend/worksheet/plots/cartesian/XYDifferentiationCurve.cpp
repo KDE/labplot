@@ -13,7 +13,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
@@ -208,6 +207,7 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYDifferentiationCurve);
 
 	QXmlStreamAttributes attribs;

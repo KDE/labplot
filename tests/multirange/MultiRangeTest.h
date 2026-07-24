@@ -48,5 +48,20 @@ private Q_SLOTS:
 	void shiftDown_SingleRange();
 	void shiftUp_AllRanges();
 	void shiftDown_AllRanges();
+
+	void autoScaleYAfterZoomInX();
+	void autoScaleXAfterZoomInY();
+
+	void mouseWheelXAxisApplyToAllX();
+	void mouseWheelTanCurveApplyToAllX();
+	void mouseWheelXAxisApplyToSelected();
+
+	void axisMouseMoveApplyToAllX();
+	void axisMouseMoveApplyToSelection();
+
+	void baseDockSetAspects_NoPlotRangeChange();
+
+	void curveRangeChange();
+	void loadLegacyProject();
 };
 #endif

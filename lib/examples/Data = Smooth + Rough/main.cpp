@@ -63,12 +63,12 @@ int main(int argc, char* argv[]) {
     plotArea1->setRightPadding(Worksheet::convertToSceneUnits(0.8, Worksheet::Unit::Centimeter));
     plotArea1->setBottomPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
 
-    PlotArea::BorderType border1 = plotArea1->plotArea()->borderType();
-    border1.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	border1.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	border1.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	border1.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea1->plotArea()->setBorderType(border1);
+    CartesianPlot::BorderType border1 = plotArea1->borderType();
+    border1.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, true);
+	border1.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, true);
+	border1.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, true);
+	border1.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, true);
+    plotArea1->setBorderType(border1);
 
     plotArea1->enableAutoScale(CartesianCoordinateSystem::Dimension::X, 0, true);
 
@@ -154,12 +154,12 @@ int main(int argc, char* argv[]) {
     plotArea2->setRightPadding(Worksheet::convertToSceneUnits(0.8, Worksheet::Unit::Centimeter));
     plotArea2->setBottomPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
 
-    PlotArea::BorderType border2 = plotArea2->plotArea()->borderType();
-    border2.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	border2.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	border2.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	border2.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea2->plotArea()->setBorderType(border2);
+    CartesianPlot::BorderType border2 = plotArea2->borderType();
+    border2.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, true);
+	border2.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, true);
+	border2.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, true);
+	border2.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, true);
+    plotArea2->setBorderType(border2);
 
     plotArea2->enableAutoScale(CartesianCoordinateSystem::Dimension::X, 0, true);
 

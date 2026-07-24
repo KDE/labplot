@@ -1,12 +1,20 @@
 # see https://community.kde.org/Policies/CMake_Coding_Style
-cmake_minimum_required(VERSION 3.17.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.17.0)
 project(labplot VERSION 2.12.80 LANGUAGES CXX C)
 set(YEAR 2025)
+
+# Use ccache if available to speed up incremental builds by caching compiled objects
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    message(STATUS "Using ccache: ${CCACHE_PROGRAM}")
+endif()
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -16,12 +24,14 @@ set(QT_VERSION_MAJOR ${QT_MAJOR_VERSION}) # used by QADS
 add_definitions(-DQT_DISABLE_DEPRECATED_UP_TO=0x60000)
 
 set(KF_MAJOR_VERSION "6")
-set(KF_MIN_VERSION "6.3.0")
+set(KF_MIN_VERSION "6.5.0")
 
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
 find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH})
+# used by modern fnd_package (<Pkg>Config.cmake)
+#set(CMAKE_PREFIX_PATH ${CMAKE_MODULE_PATH})
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
@@ -51,7 +61,11 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 )
 
 # building QADS or Xlsx requires Qt${QT_VERSION_MAJOR}GuiPrivate (QADS is required, Xlsx is optional)
-find_package(Qt${QT_MAJOR_VERSION}Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
+if (Qt6Gui_VERSION VERSION_GREATER_EQUAL 6.10.0)
+    find_package(Qt6GuiPrivate ${QT_MIN_VERSION} CONFIG REQUIRED)
+else()
+    find_package(Qt${QT_MAJOR_VERSION}Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
+endif()
 
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     Archive
@@ -68,12 +82,13 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     XmlGui
     NewStuffCore
     NewStuff
+    TextEditor
+    SyntaxHighlighting
 OPTIONAL_COMPONENTS
     DocTools
     Service
     Parts
     Purpose
-    SyntaxHighlighting
 )
 
 # TODO: make NewStuff optional?
@@ -112,13 +127,17 @@ endif()
 find_package(BISON REQUIRED)
 
 ### compiler flags ######################################
-option (ENABLE_COMPILER_OPTIMIZATION "Optimization: -OX" true)
+if(CMAKE_BUILD_TYPE STREQUAL "debug")
+    option (ENABLE_COMPILER_OPTIMIZATION "Optimization: -OX" OFF)
+else ()
+    option (ENABLE_COMPILER_OPTIMIZATION "Optimization: -OX" ON)
+endif()
 if(${ENABLE_COMPILER_OPTIMIZATION})
     set(COMPILER_OPTIMIZATION_FLAG "-O2")
 else()
     set(COMPILER_OPTIMIZATION_FLAG "-O0")
 endif()
-set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector-strong")
+set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -Wshadow -fno-omit-frame-pointer -fstack-protector-strong")
 #set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
 set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic -ffunction-sections -fdata-sections -pipe")
 if(NOT APPLE)
@@ -139,7 +158,7 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
         set(DONT_BUILD_READSTAT TRUE)
     endif()
     if(CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # overwrite -Werror=hardened to not fail
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=hardened")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=hardened -gdwarf-5 -gsplit-dwarf")
     endif()
 elseif("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
@@ -158,7 +177,7 @@ elseif("${CMAKE_C_COMPILER_ID}" MATCHES "PGI")
 elseif(("${CMAKE_C_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
     message(STATUS "MSVC C compiler detected, adding compile flags")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -W3")
-    if(CMAKE_BUILD_TYPE STREQUAL Debug)
+    if(CMAKE_BUILD_TYPE STREQUAL "debug")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Od")
     else()
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
@@ -180,7 +199,7 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 	# see linker flags of gcc
     endif()
     if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # overwrite -Werror=hardened to not fail
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=hardened")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=hardened -gdwarf-5 -gsplit-dwarf")
     endif()
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
@@ -199,7 +218,7 @@ elseif(("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
     message(STATUS "MSVC C++ compiler detected, adding compile flags")
     # -D_ALLOW_KEYWORD_MACROS for "#define private public" in MultiRangeTest.cpp
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W3 -DPSAPI_VERSION=1 /Zc:externC-")
-    if(CMAKE_BUILD_TYPE STREQUAL Debug)
+    if(CMAKE_BUILD_TYPE STREQUAL "debug")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Od")
     else()
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
@@ -209,7 +228,6 @@ else()
     message(STATUS "UNKNOWN C++ compiler, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
 endif()
-message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")
 
 ##########################################################
 
@@ -303,6 +321,7 @@ option(ENABLE_XLSX "Build with XLSX (Excel) support" ON)
 option(ENABLE_MCAP "Build with MCAP support" ON)
 option(ENABLE_ORCUS "Build with Orcus support" ON)
 option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" ON)
+option(ENABLE_PARQUET "Build with Apache Parquet/Arrow IPC/ORC support" ON)
 option(ENABLE_EIGEN3 "Build with Eigen3 support" ON)
 if(APPLE)
     # touch bar is Qt5 only
@@ -327,6 +346,17 @@ if(WIN32)
 option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" OFF)
 else()
 option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" ON)
+endif()
+
+#################################################
+if(ENABLE_REPRODUCIBLE)
+    add_definitions(-DREPRODUCIBLE_BUILD)
+    message(STATUS "Reproducable build ENABLED")
+else()
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-date-time")
+    endif()
+    message(STATUS "Reproducable build DISABLED")
 endif()
 
 ### OS macros ####################################
@@ -572,6 +602,28 @@ else()
     message(STATUS "MCAP DISABLED")
 endif()
 
+### Apache Arrow / Parquet / ORC (optional) #############################
+if(ENABLE_PARQUET)
+    find_package(Arrow QUIET)
+    find_package(Parquet QUIET)
+    if(Arrow_FOUND AND Parquet_FOUND)
+        add_definitions(-DHAVE_PARQUET)
+        message(STATUS "Found Apache Arrow (version \"${Arrow_VERSION}\") and Parquet")
+        # ORC support is optional — detect via Arrow's ORC adapter header
+        get_target_property(_arrow_include_dir Arrow::arrow_shared INTERFACE_INCLUDE_DIRECTORIES)
+        if(EXISTS "${_arrow_include_dir}/arrow/adapters/orc/adapter.h")
+            add_definitions(-DHAVE_ORC)
+            message(STATUS "Found Apache ORC support in Arrow")
+        else()
+            message(STATUS "Apache ORC support NOT FOUND (ORC import disabled)")
+        endif()
+    else()
+        message(STATUS "Apache Arrow/Parquet libraries NOT FOUND.")
+    endif()
+else()
+    message(STATUS "Apache Parquet/Arrow IPC/ORC support DISABLED")
+endif()
+
 ### ROOT (optional) #############################
 if(ENABLE_ROOT)
     if(ZLIB_FOUND AND LZ4_FOUND)
@@ -702,10 +754,11 @@ endif()
 ### Eigen (optional) #############################
 if(ENABLE_EIGEN3)
     find_package(Eigen3 QUIET)
-    if(EIGEN3_FOUND)
-	    message(STATUS "Found Eigen3 library: ${EIGEN3_INCLUDE_DIR} (version \"${EIGEN3_VERSION_STRING}\")")
+    if(Eigen3_FOUND)
+        get_target_property(EIGEN3_INCLUDE_DIR Eigen3::Eigen INTERFACE_INCLUDE_DIRECTORIES)
+        message(STATUS "Found Eigen3 library: ${EIGEN3_INCLUDE_DIR} (version \"${Eigen3_VERSION}\")")
         add_definitions(-DHAVE_EIGEN3)
-	add_definitions(-DEIGEN3_VERSION_STRING=\"${EIGEN3_VERSION_STRING}\")
+	add_definitions(-DEIGEN3_VERSION_STRING=\"${Eigen3_VERSION}\")
         include_directories(${EIGEN3_INCLUDE_DIR})
     else()
         message(STATUS "Eigen3 library NOT FOUND.")
@@ -716,25 +769,44 @@ endif()
 
 ### Python3 (optional) #############################
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
-    find_package(Python3 COMPONENTS Development REQUIRED)
-    find_package(PySide6 REQUIRED)
-    find_package(Shiboken6 REQUIRED)
+    set(PYTHON_ABI_MAJOR_VERSION "3")
+    set(PYTHON_ABI_MINOR_VERSION "9")
+    set(PYTHON_ABI_VERSION "${PYTHON_ABI_MAJOR_VERSION}.${PYTHON_ABI_MINOR_VERSION}")
+    find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Development REQUIRED)
+    message(STATUS "Building with Python ${Python3_VERSION} (stable ABI minimum: ${PYTHON_ABI_VERSION})")
+    find_package(PySide6 QUIET REQUIRED)
+    if(PySide6_FOUND)
+        message(STATUS "Found PySide6: ${PySide6_PATH}, ${PySide6_INCLUDE_DIRS}, ${PySide6_TYPESYSTEMS}, ${PySide6_ABI3_LIBRARY}")
+    endif()
+    find_package(Shiboken6 QUIET REQUIRED)
+    if(Shiboken6_FOUND)
+        get_target_property(Shiboken6_LIBRARY Shiboken6::libshiboken IMPORTED_LOCATION)
+	message(STATUS "Found Shiboken6: ${Shiboken6_PATH}, ${Shiboken6_INCLUDE_DIRS}, ${Shiboken6_EXECUTABLE}, ${Shiboken6_LIBRARY}")
+    endif()
 endif()
 if(ENABLE_PYTHON_SDK)
-    find_package(Python3 COMPONENTS Interpreter REQUIRED)
+    find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Interpreter REQUIRED)
 endif()
 if(ENABLE_PYTHON_SCRIPTING)
-    find_package(Python3 COMPONENTS Development.Embed REQUIRED)
+    find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Development.Embed REQUIRED)
     add_definitions(-DHAVE_PYTHON_SCRIPTING)
-    add_definitions(-DPYTHON3_VERSION_STRING=\"${Python3_VERSION}\")
+    math(EXPR PYTHON_ABI_VERSION_HEX
+        "(((${PYTHON_ABI_MAJOR_VERSION}) & 0xff) << 24) |
+        (((${PYTHON_ABI_MINOR_VERSION}) & 0xff) << 16) |
+        (((0) & 0xff) << 8) |
+        (((0) & 0xf) << 4) |
+        (((0) & 0xf) << 0)"
+        OUTPUT_FORMAT HEXADECIMAL
+    )
+    add_definitions(-DPYTHON3_VERSION_STRING="${PYTHON_ABI_VERSION}")
 endif()
 
 # Qt Advanced Docking System (required) #####################
-find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG QUIET NAMES qt${QT_VERSION_MAJOR}advanceddocking qtadvanceddocking-qt${QT_VERSION_MAJOR})
-if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND AND NOT TARGET ads::qt${QT_VERSION_MAJOR}advanceddocking)
-    add_library(ads::qt${QT_VERSION_MAJOR}advanceddocking ALIAS ads::qtadvanceddocking-qt${QT_VERSION_MAJOR})
-endif()
-if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
+#find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG QUIET NAMES qt${QT_VERSION_MAJOR}advanceddocking qtadvanceddocking-qt${QT_VERSION_MAJOR})
+#if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND AND NOT TARGET ads::qt${QT_VERSION_MAJOR}advanceddocking)
+#    add_library(ads::qt${QT_VERSION_MAJOR}advanceddocking ALIAS ads::qtadvanceddocking-qt${QT_VERSION_MAJOR})
+#endif()
+#if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
     option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
     if(TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
@@ -742,7 +814,7 @@ if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     else ()
         message(FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
     endif()
-endif()
+#endif()
 
 ### Touch bar on macOS (optional) #############################
 if(APPLE AND ENABLE_TOUCHBAR)
@@ -758,13 +830,7 @@ else()
     set(ENABLE_SCRIPTING OFF) # no scripting runtime is enabled
 endif()
 
-#################################################
-if(ENABLE_REPRODUCIBLE)
-    add_definitions(-DREPRODUCIBLE_BUILD)
-    message(STATUS "Reproducable build ENABLED")
-else()
-    message(STATUS "Reproducable build DISABLED")
-endif()
+message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")
 #################################################
 #################################################
 include(CheckFunctionExists)

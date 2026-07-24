@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/Range.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
@@ -20,15 +21,15 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
 #include <QFile>
-#include <QUndoStack>
 
 #define GET_CURVE_PRIVATE(plot, child_index, column_name, curve_variable_name)                                                                                 \
 	auto* curve_variable_name = plot->child<XYCurve>(child_index);                                                                                             \
 	QVERIFY(curve_variable_name != nullptr);                                                                                                                   \
 	QCOMPARE(curve_variable_name->name(), QLatin1String(column_name));                                                                                         \
-	QCOMPARE(curve_variable_name->inherits(AspectType::XYCurve), true);                                                                                        \
+	QCOMPARE(curve_variable_name->inherits<XYCurve>(), true);                                                                                                  \
 	auto* curve_variable_name##Private = curve_variable_name->d_func();                                                                                        \
 	Q_UNUSED(curve_variable_name##Private)
 
@@ -783,7 +784,7 @@ void addUniqueLine_double_vector_last_point_vector(double* p,
 	}
 }
 
-void addUniqueLine_double_vector_last_point_vector_lines_vector(double* p,
+void addUniqueLine_double_vector_last_point_vector_lines_vector(const double* p,
 																double& minY,
 																double& maxY,
 																double* lastPoint,
@@ -832,7 +833,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector(double* p,
 	}
 }
 
-void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(double* p,
+void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(const double* p,
 																	 double& minY,
 																	 double& maxY,
 																	 double* lastPoint,
@@ -881,7 +882,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(double* p,
 	}
 }
 
-void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_last_point(double* p,
+void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_last_point(const double* p,
 																						  double& minY,
 																						  double& maxY,
 																						  double** lastPoint,
@@ -951,6 +952,58 @@ void addUniqueLine02(QPointF p, double x, double& minY, double& maxY, QPointF& l
 	}
 }
 
+void XYCurveTest::lineVertical() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	const QVector<double> xValues = {10., 10., 10.};
+
+	const QVector<double> yValues = {10., 10., 0.};
+
+	xColumn->replaceValues(-1, xValues);
+	yColumn->replaceValues(-1, yValues);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	curve->setLineType(XYCurve::LineType::Line);
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+
+	int callCounter = 0;
+	connect(curve, &XYCurve::linesUpdated, [&callCounter, xValues, yValues](const XYCurve*, const QVector<QLineF>& lines) {
+		QCOMPARE(xValues.size(), yValues.size());
+		QCOMPARE(lines.size(), 1); // We have only one vertical line
+
+		VALUES_EQUAL(lines.at(0).p1().x(), 10.);
+		VALUES_EQUAL(lines.at(0).p1().y(), 0.);
+		VALUES_EQUAL(lines.at(0).p2().x(), 10.);
+		VALUES_EQUAL(lines.at(0).p2().y(), 10.);
+
+		callCounter++;
+	});
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 9., 11.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0, 10.);
+
+	QCOMPARE(callCounter, 1);
+}
+
 void XYCurveTest::updateLinesNoGapDirectConnection() {
 	LOAD_PROJECT
 	bool updateLinesCalled = false;
@@ -969,7 +1022,7 @@ void XYCurveTest::updateLinesNoGapDirectConnection() {
 					QLineF(QPointF(8, 0), QPointF(9, 5)),
 					QLineF(QPointF(9, 5), QPointF(10, 8)),
 				};
-				QCOMPARE(lastValueInvalidCurvePrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be ommitted
+				QCOMPARE(lastValueInvalidCurvePrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be omitted
 				auto test_lines = lastValueInvalidCurvePrivate->m_lines;
 				QCOMPARE(refLines.size(), test_lines.size());
 				for (int i = 0; i < test_lines.size(); i++) {
@@ -1219,7 +1272,7 @@ void XYCurveTest::updateLinesNoGapDirectConnectionLastVertical() {
 					QLineF(QPointF(8, 0), QPointF(9, 5)),
 					QLineF(QPointF(9, 5), QPointF(9, 8)),
 				};
-				QCOMPARE(lastVerticalCurvePrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be ommitted
+				QCOMPARE(lastVerticalCurvePrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be omitted
 				auto test_lines = lastVerticalCurvePrivate->m_lines;
 				QCOMPARE(refLines.size(), test_lines.size());
 				for (int i = 0; i < test_lines.size(); i++) {
@@ -1485,7 +1538,7 @@ void XYCurveTest::updateLinesWithGapLineSkipDirectConnection2() {
 			QLineF(QPointF(8, 0), QPointF(9, 5)),
 			QLineF(QPointF(9, 5), QPointF(10, 8)),
 		};
-		QCOMPARE(withGapCurve2Private->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be ommitted
+		QCOMPARE(withGapCurve2Private->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be omitted
 		auto test_lines = withGapCurve2Private->m_lines;
 		QCOMPARE(refLines.size(), test_lines.size());
 		for (int i = 0; i < test_lines.size(); i++) {
@@ -1953,6 +2006,17 @@ void XYCurveTest::updateLinesWithGapSegments3() {
  */
 void XYCurveTest::updateLinesLog10() {
 	LOAD_PROJECT
+
+	// Disable automatic point calculation for this test to get predictable point count
+	// The test expects exactly 10 points from the equation evaluation
+	auto* equationCurve = dynamic_cast<XYEquationCurve*>(linear);
+	if (equationCurve) {
+		auto edata = equationCurve->equationData();
+		edata.autoPointsCount = false;
+		edata.count = 10;
+		equationCurve->setEquationData(edata);
+	}
+
 	bool updateLinesCalled = false;
 	connect(linear, &XYCurve::linesUpdated, [linearPrivate, &updateLinesCalled](const XYCurve* /*curve*/, const QVector<QLineF>& /*lines*/) {
 		updateLinesCalled = true;
@@ -1967,12 +2031,11 @@ void XYCurveTest::updateLinesLog10() {
 			QLineF(QPointF(7.8, 7.8), QPointF(8.9, 8.9)),
 			QLineF(QPointF(8.9, 8.9), QPointF(10, 10)),
 		};
-		QCOMPARE(linearPrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be ommitted
+		QCOMPARE(linearPrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be omitted
 		auto test_lines = linearPrivate->m_lines;
 		QCOMPARE(refLines.size(), test_lines.size());
-		for (int i = 0; i < test_lines.size(); i++) {
+		for (int i = 0; i < test_lines.size(); i++)
 			COMPARE_LINES(test_lines.at(i), refLines.at(i));
-		}
 	});
 	linearPrivate->updateLines();
 	QCOMPARE(updateLinesCalled, true);

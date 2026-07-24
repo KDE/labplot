@@ -77,6 +77,13 @@ void BarPlotTest::testRange02() {
 	QCOMPARE(barPlot->maximum(Dimension::X), 4.0);
 	QCOMPARE(barPlot->minimum(Dimension::Y), -6.);
 	QCOMPARE(barPlot->maximum(Dimension::Y), 12.);
+
+	QCOMPARE(p->rangeCount(Dimension::X), 1);
+	QCOMPARE(p->rangeCount(Dimension::Y), 1);
+	QCOMPARE(p->range(Dimension::X, 0).start(), 0.0);
+	QCOMPARE(p->range(Dimension::X, 0).end(), 4.0);
+	QCOMPARE(p->range(Dimension::Y, 0).start(), -6.);
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 12.0);
 }
 
 /*!
@@ -118,6 +125,13 @@ void BarPlotTest::testRange03() {
 	QCOMPARE(barPlot->maximum(Dimension::X), 4.);
 	QCOMPARE(barPlot->minimum(Dimension::Y), 0.);
 	QCOMPARE(barPlot->maximum(Dimension::Y), 23.);
+
+	QCOMPARE(p->rangeCount(Dimension::X), 1);
+	QCOMPARE(p->rangeCount(Dimension::Y), 1);
+	QCOMPARE(p->range(Dimension::X, 0).start(), 0.0);
+	QCOMPARE(p->range(Dimension::X, 0).end(), 4.0);
+	QCOMPARE(p->range(Dimension::Y, 0).start(), 0.);
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 23.0);
 }
 
 /*!
@@ -203,7 +217,7 @@ void BarPlotTest::testRange05() {
 }
 
 /*!
- * \brief lollipop plot wiht one dataset, horizontal
+ * \brief lollipop plot with one dataset, horizontal
  */
 void BarPlotTest::testRangeLollipopPlot01() {
 	Project project;
@@ -232,10 +246,17 @@ void BarPlotTest::testRangeLollipopPlot01() {
 	QCOMPARE(barPlot->maximum(Dimension::X), 4.0);
 	QCOMPARE(barPlot->minimum(Dimension::Y), 0.);
 	QCOMPARE(barPlot->maximum(Dimension::Y), 12.);
+
+	QCOMPARE(p->rangeCount(Dimension::X), 1);
+	QCOMPARE(p->rangeCount(Dimension::Y), 1);
+	QCOMPARE(p->range(Dimension::X, 0).start(), 0.0);
+	QCOMPARE(p->range(Dimension::X, 0).end(), 4.0);
+	QCOMPARE(p->range(Dimension::Y, 0).start(), 0.);
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 12.0);
 }
 
 /*!
- * \brief lollipop plot wiht one dataset, vertical
+ * \brief lollipop plot with one dataset, vertical
  */
 void BarPlotTest::testRangeLollipopPlot02() {
 	Project project;

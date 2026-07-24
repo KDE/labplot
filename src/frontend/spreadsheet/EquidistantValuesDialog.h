@@ -20,13 +20,11 @@ class QPushButton;
 class EquidistantValuesDialog : public QDialog {
 	Q_OBJECT
 
-	friend class SpreadsheetGenerateDataTest;
-
 public:
 	enum class Type { FixedNumber, FixedIncrement, FixedNumberIncrement };
 	enum class DateTimeUnit { Year, Month, Day, Hour, Minute, Second, Millisecond };
 
-	explicit EquidistantValuesDialog(Spreadsheet*, QWidget* parent = nullptr);
+	explicit EquidistantValuesDialog(Spreadsheet*, QWidget* parent = nullptr, bool dateTimeMode = false);
 	~EquidistantValuesDialog() override;
 	void setColumns(const QVector<Column*>&);
 
@@ -40,6 +38,7 @@ private:
 	bool m_hasInteger{false};
 	bool m_hasBigInteger{false};
 	bool m_hasDateTime{false};
+	bool m_dateTimeMode{false};
 
 	void setNumericValue(double, QLineEdit*) const;
 	bool generateDouble(QVector<double>&, double start, double increment, int number);
@@ -64,6 +63,9 @@ private Q_SLOTS:
 	void checkValues() const;
 	bool checkNumberValue() const;
 	bool checkIncrementValue() const;
+
+	friend class SpreadsheetGenerateDataTest;
+	friend class FITSFilterTest;
 };
 
 #endif

@@ -6,7 +6,7 @@
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -68,7 +68,7 @@ LiveDataDock::LiveDataDock(QWidget* parent)
 
 #ifdef HAVE_MQTT
 LiveDataDock::~LiveDataDock() {
-	for (auto& host : m_hosts)
+	for (const auto& host : m_hosts)
 		delete host.client;
 
 	delete m_subscriptionWidget;
@@ -232,10 +232,12 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 void LiveDataDock::updatePlayPauseButtonText(bool pause) {
 	if (pause) {
-		ui.bPausePlayReading->setText(i18n("Continue Reading"));
+		ui.bPausePlayReading->setText(i18n("Continue"));
+		ui.bPausePlayReading->setToolTip(i18n("Continue Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
-		ui.bPausePlayReading->setText(i18n("Pause Reading"));
+		ui.bPausePlayReading->setText(i18n("Pause"));
+		ui.bPausePlayReading->setToolTip(i18n("Pause Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 }
@@ -533,7 +535,7 @@ void LiveDataDock::pauseContinueReading() {
  *\brief called when use will message checkbox's state is changed in the will settings widget,
  * Sets the mqttUseWill according to state for the m_mqttClient
  *
- * \param state the state of the checbox
+ * \param state the state of the checkbox
  */
 void LiveDataDock::useWillMessage(bool use) {
 	if (use) {
@@ -560,7 +562,7 @@ void LiveDataDock::willQoSChanged(int QoS) {
  *\brief called when will message's retain flag is changed in the will settings widget
  * sets the retain flag for the will message in in m_mqttClient
  *
- * \param state the state of the will retain chechbox
+ * \param state the state of the will retain checkbox
  */
 void LiveDataDock::willRetainChanged(bool useWillRetainMessages) {
 	if (useWillRetainMessages)

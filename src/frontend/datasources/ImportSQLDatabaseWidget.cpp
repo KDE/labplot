@@ -14,11 +14,6 @@
 #include "backend/core/Settings.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
-#include "frontend/GuiTools.h"
-
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/Definition>
@@ -32,8 +27,6 @@
 #include <QSqlRecord>
 #include <QStandardItem>
 #include <QTimer>
-
-#include <cmath>
 
 ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 	: QWidget(parent) {
@@ -50,67 +43,15 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 	ui.cbDecimalSeparator->addItem(i18n("Comma ','"));
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
-	const QString textNumberFormatShort = i18n("This option determines how the imported strings have to be converted to numbers.");
-	const QString textNumberFormat = textNumberFormatShort + QStringLiteral("<br><br>")
-		+ i18n("When point character is used for the decimal separator, the valid number representations are:"
-			   "<ul>"
-			   "<li>1234.56</li>"
-			   "<li>1,234.56</li>"
-			   "<li>etc.</li>"
-			   "</ul>"
-			   "For comma as the decimal separator, the valid number representations are:"
-			   "<ul>"
-			   "<li>1234,56</li>"
-			   "<li>1.234,56</li>"
-			   "<li>etc.</li>"
-			   "</ul>");
-
+	const QString textNumberFormatShort = AbstractFileFilter::textNumberFormatShort();
+	const QString textNumberFormat = AbstractFileFilter::textNumberFormat();
 	ui.lDecimalSeparator->setToolTip(textNumberFormatShort);
 	ui.lDecimalSeparator->setWhatsThis(textNumberFormat);
 	ui.cbDecimalSeparator->setToolTip(textNumberFormatShort);
 	ui.cbDecimalSeparator->setWhatsThis(textNumberFormat);
 
-	const QString textDateTimeFormatShort = i18n(
-		"This option determines how the imported strings have to be converted to calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
-		"and to time.");
-	const QString textDateTimeFormat = textDateTimeFormatShort + QStringLiteral("<br><br>")
-		+ i18n("Expressions that may be used for the date part of format string:"
-			   "<table>"
-			   "<tr><td>d</td><td>the day as number without a leading zero (1 to 31).</td></tr>"
-			   "<tr><td>dd</td><td>the day as number with a leading zero (01 to 31).</td></tr>"
-			   "<tr><td>ddd</td><td>the abbreviated localized day name (e.g. 'Mon' to 'Sun'). Uses the system locale to localize the name.</td></tr>"
-			   "<tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to 'Sunday'). Uses the system locale to localize the name.</td></tr>"
-			   "<tr><td>M</td><td>the month as number without a leading zero (1 to 12).</td></tr>"
-			   "<tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</td></tr>"
-			   "<tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' to 'Dec'). Uses the system locale to localize the name.</td></tr>"
-			   "<tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to 'December'). Uses the system locale to localize the name.</td></tr>"
-			   "<tr><td>yy</td><td>the year as two digit number (00 to 99).</td></tr>"
-			   "<tr><td>yyyy</td><td>the year as four digit number. If the year is negative, a minus sign is prepended in addition.</td></tr>"
-			   "</table><br><br>"
-			   "Expressions that may be used for the time part of the format string:"
-			   "<table>"
-			   "<tr><td>h</td><td>the hour without a leading zero (0 to 23 or 1 to 12 if AM/PM display)</td></tr>"
-			   "<tr><td>hh</td><td>the hour with a leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr>"
-			   "<tr><td>H</td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</td></tr>"
-			   "<tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with AM/PM display)</td></tr>"
-			   "<tr><td>m</td><td>the minute without a leading zero (0 to 59)</td></tr>"
-			   "<tr><td>mm</td><td>the minute with a leading zero (00 to 59)</td></tr>"
-			   "<tr><td>s</td><td>the second without a leading zero (0 to 59)</td></tr>"
-			   "<tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></tr>"
-			   "<tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</td></tr>"
-			   "<tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to 999)</td></tr>"
-			   "<tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be either 'AM' or 'PM'.</td></tr>"
-			   "<tr><td>ap or a</td><td>Interpret as an AM/PM time. ap must be either 'am' or 'pm'.</td></tr>"
-			   "</table><br><br>"
-			   "Examples are:"
-			   "<table>"
-			   "<tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr>"
-			   "<tr><td>ddd MMMM d yy</td><td>Sun July 20 69</td></tr>"
-			   "<tr><td>'The day is' dddd</td><td>The day is Sunday</td></tr>"
-			   "</table>"
-			   "<br><br>"
-			   "In case the provided expression is empty, the format will be auto-detected.");
-
+	const QString textDateTimeFormatShort = AbstractFileFilter::textDateTimeFormatShort();
+	const QString textDateTimeFormat = AbstractFileFilter::textDateTimeFormat();
 	ui.lDateTimeFormat->setToolTip(textDateTimeFormatShort);
 	ui.lDateTimeFormat->setWhatsThis(textDateTimeFormat);
 	ui.cbDateTimeFormat->setToolTip(textDateTimeFormatShort);
@@ -266,9 +207,8 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 		m_db.setPassword(group.readEntry("Password"));
 	}
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	if (!m_db.open()) {
-		RESET_CURSOR;
 		Q_EMIT error(i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText())
 					 + QStringLiteral("\n\n") + m_db.lastError().databaseText());
 		setInvalid();
@@ -288,7 +228,6 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	ui.teQuery->setText(group.readEntry("Query"));
 
 	Q_EMIT error(QString());
-	RESET_CURSOR;
 }
 
 void ImportSQLDatabaseWidget::refreshPreview() {
@@ -297,7 +236,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		return;
 	}
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	ui.twPreview->clear();
 	bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
 
@@ -311,21 +250,17 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	// execute the current query (select on a table or a custom query)
 	const QString& query = currentQuery(true);
 	if (query.isEmpty()) {
-		RESET_CURSOR;
 		setInvalid();
 		return;
 	}
 
 	QSqlQuery q;
 	if (!q.prepare(query)) {
-		RESET_CURSOR;
 		setInvalid();
 		return;
 	}
 	q.setForwardOnly(true);
-	q.exec();
-	if (!q.isActive() || !q.next()) { // check if query was successful and got to first record
-		RESET_CURSOR;
+	if (!q.exec() || !q.isActive() || !q.next()) { // check if query was successful and got to first record
 		if (!q.lastError().databaseText().isEmpty())
 			Q_EMIT error(i18n("Failed to execute the query for the preview") + QStringLiteral(" \n") + q.lastError().databaseText());
 		else
@@ -395,7 +330,6 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	}
 
 	Q_EMIT error(QString());
-	RESET_CURSOR;
 }
 
 void ImportSQLDatabaseWidget::importFromChanged(int index) {
@@ -525,10 +459,8 @@ bool ImportSQLDatabaseWidget::prepareAndExecute(QSqlQuery& q) {
 	if (!customQuery)
 		q.setForwardOnly(true);
 
-	WAIT_CURSOR;
-	q.prepare(currentQuery());
-	if (!q.exec() || !q.isActive()) {
-		RESET_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+	if (!q.prepare(currentQuery()) || !q.exec() || !q.isActive()) {
 		if (!q.lastError().databaseText().isEmpty())
 			Q_EMIT error(i18n("Failed to execute the query") + QStringLiteral(" \n") + q.lastError().databaseText());
 		else
@@ -684,7 +616,7 @@ void ImportSQLDatabaseWidget::setValid() {
 }
 
 // ##############################################################################
-// ###################### heper functions for unit tests  #######################
+// ###################### helper functions for unit tests #######################
 // ##############################################################################
 void ImportSQLDatabaseWidget::setCustomQuery(bool custom) {
 	if (custom)

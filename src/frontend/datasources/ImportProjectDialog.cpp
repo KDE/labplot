@@ -91,7 +91,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
 	// Signals/Slots
-	connect(m_cbFileName, &KUrlComboBox::urlActivated, this, [=](const QUrl& url) {
+	connect(m_cbFileName, &KUrlComboBox::urlActivated, this, [=, this](const QUrl& url) {
 		fileNameChanged(url.path());
 	});
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportProjectDialog::selectFile);
@@ -231,13 +231,13 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 
 	const auto& indexes = ui.tvPreview->selectionModel()->selectedIndexes();
 
-	// convert the model indexes to string pathes:
+	// convert the model indexes to string paths:
 	QStringList selectedPathes;
 	for (int i = 0; i < indexes.size() / 4; ++i) {
 		const auto& index = indexes.at(i * 4);
 		const auto* aspect = static_cast<const AbstractAspect*>(index.internalPointer());
 
-		// path of the current aspect and the pathes of all aspects it depends on
+		// path of the current aspect and the paths of all aspects it depends on
 		selectedPathes << aspect->path();
 		QDEBUG(" aspect path: " << aspect->path());
 		for (const auto* depAspect : aspect->dependsOn())
@@ -373,7 +373,7 @@ void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 */
 bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
 	for (auto type : m_projectParser->topLevelClasses()) {
-		if (aspect->inherits(type))
+		if (aspect->inherits(AbstractAspect::typeName(type).data()))
 			return true;
 	}
 	return false;
@@ -391,11 +391,11 @@ void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const
 	// for the just selected aspect, determine all the objects it depends on and select them, too
 	// TODO: we need a better "selection", maybe with tri-state check boxes in the tree view
 	const auto* aspect = static_cast<const AbstractAspect*>(indexes.at(0).internalPointer());
-	const QVector<AbstractAspect*> aspects = aspect->dependsOn();
+	const QVector<AbstractAspect*> dependAspects = aspect->dependsOn();
 
 	const auto* model = reinterpret_cast<AspectTreeModel*>(ui.tvPreview->model());
-	for (const auto* aspect : aspects) {
-		QModelIndex index = model->modelIndexOfAspect(aspect, 0);
+	for (const auto* dependAspect : dependAspects) {
+		QModelIndex index = model->modelIndexOfAspect(dependAspect, 0);
 		ui.tvPreview->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 	}
 

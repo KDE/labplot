@@ -13,10 +13,12 @@
 
 #ifdef HAVE_MQTT
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/FilterStatus.h"
 #include "frontend/dockwidgets/LiveDataDock.h"
 
 #include <QDebug>
@@ -148,9 +150,9 @@ void MQTTTest::testIntegerMessage() {
 	auto properties = filter->properties();
 	properties.automaticSeparatorDetection = false;
 	properties.headerEnabled = false;
-	properties.columnModesString = QStringLiteral("Int");
+	properties.dataTypesString = QStringLiteral("Int");
 	properties.intAsDouble = false;
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Livedata must be initialized!
+	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
 
 	auto* project = new Project();
 
@@ -267,9 +269,9 @@ void MQTTTest::testNumericMessage() {
 	auto properties = filter->properties();
 	properties.automaticSeparatorDetection = false;
 	properties.headerEnabled = false;
-	properties.columnModesString = QStringLiteral("Double");
+	properties.dataTypesString = QStringLiteral("Double");
 	properties.intAsDouble = false;
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Livedata must be initialized!
+	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
 
 	Project* project = new Project();
 
@@ -398,10 +400,10 @@ void MQTTTest::testTextMessage() {
 	auto properties = filter->properties();
 	properties.automaticSeparatorDetection = false;
 	properties.headerEnabled = false;
-	properties.columnModesString = QStringLiteral("Text");
+	properties.dataTypesString = QStringLiteral("Text");
 	properties.intAsDouble = false;
 	properties.commentCharacter = QStringLiteral("#");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Livedata must be initialized!
+	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
 
 	Project* project = new Project();
 

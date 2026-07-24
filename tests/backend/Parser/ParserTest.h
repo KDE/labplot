@@ -28,6 +28,8 @@ private Q_SLOTS:
 
 	void testPerformance1();
 	void testPerformance2();
+
+	void testRangeParsing();
 };
 
 #endif

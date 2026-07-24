@@ -1,8 +1,8 @@
 include(GenerateShibokenSources)
 
 set(scripting_library "pylabplot")
-set(scripting_wrapped_header ${CMAKE_CURRENT_SOURCE_DIR}/../lib/python/bindings_script.h)
-set(scripting_typesystem_file ${CMAKE_CURRENT_SOURCE_DIR}/../lib/python/bindings_script.xml)
+set(scripting_wrapped_header ${CMAKE_CURRENT_SOURCE_DIR}/../lib/python/bindings.h)
+set(scripting_typesystem_file ${CMAKE_CURRENT_SOURCE_DIR}/../lib/python/bindings.xml)
 set(shiboken_scripting_generated_sources
     # abstract classes
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/abstractaspect_wrapper.cpp
@@ -23,8 +23,8 @@ set(shiboken_scripting_generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plot_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.h
+#    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.cpp
+#    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyanalysiscurve_wrapper.cpp
@@ -89,14 +89,10 @@ set(shiboken_scripting_generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/background_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesiancoordinatesystem_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesiancoordinatesystem_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/columnstringio_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/columnstringio_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/doublerange_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/doublerange_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/intrange_wrapper.cpp
@@ -155,12 +151,12 @@ set(shiboken_scripting_generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xycorrelationcurve_correlationdata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xylinesimplificationcurve_linesimplificationresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_differentiationdata_wrapper.cpp
@@ -211,12 +207,18 @@ set(shiboken_scripting_generated_sources
     # worksheet element containers
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreak_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreak_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreaks_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreaks_wrapper.h
 
     # worksheet elements
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/image_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/image_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_markerpoints_t_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_markerpoints_t_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_textwrapper_wrapper.cpp
@@ -234,32 +236,83 @@ set(python_scripting_backend_sources
     ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp
     ${BACKEND_DIR}/script/python/PythonLogger.cpp
 )
-get_target_property(shiboken6_INCLUDE_DIRECTORIES Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
-get_target_property(pyside6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(PySide6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
 set(python_scripting_includes
     ${PYSIDE_PYTHONPATH}/include
+    ${PySide6_INCLUDE_DIRECTORIES}
     ${SHIBOKEN_PYTHON_INCLUDE_DIRS}
-    ${shiboken6_INCLUDE_DIRECTORIES}
-    ${pyside6_INCLUDE_DIRECTORIES}
+    ${Shiboken6_INCLUDE_DIRECTORIES}
+    ${PySide6_PYTHONPATH}/include/QtWidgets
+    ${PySide6_PYTHONPATH}/include/QtGui
+    ${PySide6_PYTHONPATH}/include/QtCore
 )
+# Derive the stable ABI library from the versioned library path:
+#   Linux:  libpython3.XX.so  -> libpython3.so
+#   Windows: python3XX.lib    -> python3.lib
+#   macOS:  handled via install_name_tool, no change needed
+set(_python_lib ${Python3_LIBRARIES})
+if(WIN32)
+    string(REGEX REPLACE "python3[0-9]+\\.lib" "python3.lib" _python_sabi_lib "${Python3_LIBRARIES}")
+    if(NOT "${_python_sabi_lib}" STREQUAL "${Python3_LIBRARIES}" AND EXISTS "${_python_sabi_lib}")
+        message(STATUS "Python stable ABI library: ${_python_sabi_lib}")
+        set(_python_lib ${_python_sabi_lib})
+    endif()
+endif()
+set(_python_soname "")
+if(UNIX AND NOT APPLE)
+    foreach(_lib IN LISTS Python3_LIBRARIES)
+        if(NOT _lib)
+            continue()
+        endif()
+        get_filename_component(_real_lib "${_lib}" REALPATH)
+        get_filename_component(_lib_name "${_real_lib}" NAME)
+        if(_lib_name MATCHES "^libpython3(\\.[0-9]+[a-zA-Z]*)?\\.so(\\.[0-9]+)*$")
+            set(_python_soname "${_lib_name}")
+            break()
+        endif()
+    endforeach()
+    if(NOT _python_soname)
+        message(FATAL_ERROR
+            "Could not extract Python shared library name from Python3_LIBRARIES.\n"
+            "Python3_LIBRARIES = ${Python3_LIBRARIES}"
+        )
+    endif()
+    message(STATUS "Python library soname: ${_python_soname}")
+endif()
 set(python_scripting_link_libraries
     PySide6::pyside6
     Shiboken6::libshiboken
-    ${Python3_LIBRARIES}
+    ${_python_lib}
 )
+if(PySide6_ABI3_LIBRARY)
+    list(APPEND python_scripting_link_libraries ${PySide6_ABI3_LIBRARY})
+endif()
+get_target_property(Shiboken6_LIBRARY Shiboken6::libshiboken IMPORTED_LOCATION)
+if(Shiboken6_LIBRARY)
+    list(APPEND python_scripting_link_libraries ${Shiboken6_LIBRARY})
+endif()
 
 # Hide noisy warnings in shiboken scripting generated sources
 # 1. Wno-missing-include-dirs : pyside6 declares an include directory in the INTERFACE_INCLUDE_DIRECTORIES which doesn't actually exist and thus the compiler complains
 # 2. Wno-cast-function-type: the shiboken6 generated files contain weird but correct function casts which the compiler complains about
-set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_OPTIONS -Wno-cast-function-type -Wno-missing-include-dirs)
+# 3. O to avoid warning: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Wcpp]
+set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_OPTIONS -Wno-cast-function-type -Wno-missing-include-dirs -O)
 
 # Previously, we were adding the python_scripting_includes to the liblabplotbackendlib target, but we can actually restrict things further and add these includes to only the
 # shiboken generated sources since they are the ones who require the includes
 set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY INCLUDE_DIRECTORIES ${python_scripting_includes})
 
-# Shiboken internally defines the Py_LIMITED_API to 3.8 and we also define the Py_LIMITED_API but to 3.9 so the compiler warns about a macro redefinition. Now we apply our
-# definition to only our source files
-set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
+# Pass the PySide6 site-packages directory to PythonScriptRuntime so it can add it
+# to sys.path at runtime. This makes the embedded Python find PySide6 without requiring
+# the user to set PYTHONPATH. The user's PYTHONPATH is still respected if set.
+get_filename_component(_pyside6_site_packages "${PySide6_PATH}" DIRECTORY)
+set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY
+    COMPILE_DEFINITIONS PYSIDE6_SITE_PACKAGES="${_pyside6_site_packages}")
+
+# Enable Python Stable ABI (Limited API) for Python
+# Note: We only apply this to our source files, not shiboken-generated sources to avoid redefinition warnings
+set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=${PYTHON_ABI_VERSION_HEX})
+message(STATUS "Python Stable ABI enabled (minimum: Python ${PYTHON_ABI_VERSION})")
 
 # shiboken generates sources using deprecated code so we remove these deprecation macros to enable the shiboken generated files to compile
 get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)

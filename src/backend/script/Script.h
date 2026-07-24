@@ -1,3 +1,12 @@
+/*
+	File                 : Script.h
+	Project              : LabPlot
+	Description          : Script
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
@@ -9,6 +18,7 @@ namespace KTextEditor {
 class Document;
 }
 class ScriptRuntime;
+class QAbstractItemModel;
 
 class Script : public AbstractPart {
 	Q_OBJECT
@@ -29,18 +39,17 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
+	void registerShortcuts() override;
+	void unregisterShortcuts() override;
+
 	ScriptRuntime* scriptRuntime() const;
 	int scriptErrorLine() const;
 	KTextEditor::Document* kTextEditorDocument() const;
 	QString language() const;
-	void setEditorFont(const QFont&);
-	QFont editorFont() const;
-	void setOutputFont(const QFont&);
-	QFont outputFont() const;
-	void setEditorTheme(const QString&);
-	QString editorTheme() const;
 
 	bool isInitialized();
+
+	QAbstractItemModel* variableModel();
 
 private:
 	QString m_language;

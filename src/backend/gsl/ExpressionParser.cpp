@@ -4,7 +4,7 @@
 	Description      : C++ wrapper for the bison generated parser.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2014-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2014-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -71,11 +71,12 @@ void ExpressionParser::initFunctions() {
 
 // TODO: decide whether we want to have i18n here in the backend part of the code
 void ExpressionParser::initConstants() {
+	const auto numberLocale = QLocale();
 	for (int i = 0; i < _number_constants; i++) {
 		const auto& constant = _constants[i];
 		m_constantsDescription << constant.description();
 		m_constants << QLatin1String(constant.name);
-		m_constantsValues << QString::number(constant.value, 'g', 15);
+		m_constantsValues << numberLocale.toString(constant.value, 'g', 15);
 		m_constantsUnits << QLatin1String(constant.unit);
 		m_constantsGroupIndex << constant.group;
 	}
@@ -291,7 +292,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 
 	gsl_set_error_handler_off();
 
-	Parser parser;
+	Parser parser(false);
 	parser.setSkipSpecialFunctionEvaluation(true);
 
 	for (const auto& var : vars)
@@ -351,12 +352,13 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 											QVector<double>* xVector,
 											QVector<double>* yVector,
 											const QStringList& paramNames,
-											const QVector<double>& paramValues) {
+											const QVector<double>& paramValues,
+											RangeT::Scale scale) {
 	DEBUG(Q_FUNC_INFO << ", v0: range = " << range.toStdString())
 	const double step = range.stepSize(count);
-	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step)
+	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step << ", scale = " << (int)scale)
 
-	Parser parser;
+	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	for (int i = 0; i < paramNames.size(); ++i)
@@ -364,8 +366,52 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 
 	const auto numberLocale = QLocale();
 	gsl_set_error_handler_off();
+
+	// Generate points based on the axis scale
 	for (int i = 0; i < count; i++) {
-		const double x{range.start() + step * i};
+		double x;
+
+		// Use logarithmic spacing for log scales, linear spacing otherwise
+		switch (scale) {
+		case RangeT::Scale::Log10:
+			if (range.start() > 0 && range.end() > 0) {
+				const double logStart = log10(range.start());
+				const double logEnd = log10(range.end());
+				const double logStep = (logEnd - logStart) / (count - 1);
+				x = pow(10.0, logStart + logStep * i);
+			} else {
+				x = range.start() + step * i; // fallback to linear
+			}
+			break;
+		case RangeT::Scale::Log2:
+			if (range.start() > 0 && range.end() > 0) {
+				const double logStart = log2(range.start());
+				const double logEnd = log2(range.end());
+				const double logStep = (logEnd - logStart) / (count - 1);
+				x = exp2(logStart + logStep * i);
+			} else {
+				x = range.start() + step * i; // fallback to linear
+			}
+			break;
+		case RangeT::Scale::Ln:
+			if (range.start() > 0 && range.end() > 0) {
+				const double logStart = log(range.start());
+				const double logEnd = log(range.end());
+				const double logStep = (logEnd - logStart) / (count - 1);
+				x = exp(logStart + logStep * i);
+			} else {
+				x = range.start() + step * i; // fallback to linear
+			}
+			break;
+		case RangeT::Scale::Linear:
+		case RangeT::Scale::Sqrt:
+		case RangeT::Scale::Square:
+		case RangeT::Scale::Inverse:
+			// Linear spacing for these scales
+			x = range.start() + step * i;
+			break;
+		}
+
 		parser.assign_symbol("x", x);
 
 		double y = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
@@ -407,61 +453,8 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 											int count,
 											QVector<double>* xVector,
 											QVector<double>* yVector) {
-	DEBUG(Q_FUNC_INFO << ", v2")
-	gsl_set_error_handler_off();
-
 	const Range<double> range{min, max};
-	const double step = range.stepSize(count);
-
-	Parser parser;
-	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
-
-	const auto numberLocale = QLocale();
-	for (int i = 0; i < count; i++) {
-		const double x{range.start() + step * i};
-		parser.assign_symbol("x", x);
-
-		double y = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
-		if (parser.parseErrors() > 0) { // try default locale if failing
-			y = parser.parse(qPrintable(expr), "en_US");
-			// DEBUG(Q_FUNC_INFO << ", WARNING: PARSER failed, trying default locale: y = " << y)
-		}
-		if (parser.parseErrors() > 0)
-			return false;
-
-		if (std::isnan(y))
-			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << x << " is NAN")
-
-		(*xVector)[i] = x;
-		(*yVector)[i] = y;
-	}
-
-	return true;
-}
-
-bool ExpressionParser::tryEvaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector) {
-	DEBUG(Q_FUNC_INFO << ", v3")
-	gsl_set_error_handler_off();
-
-	Parser parser;
-	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
-
-	const auto numberLocale = QLocale();
-	for (int i = 0; i < xVector->count(); i++) {
-		parser.assign_symbol("x", xVector->at(i));
-		double y = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
-		if (parser.parseErrors() > 0) // try default locale if failing
-			y = parser.parse(qPrintable(expr), "en_US");
-		if (parser.parseErrors() > 0)
-			return false;
-
-		if (std::isnan(y))
-			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << xVector->at(i) << " is NAN")
-
-		(*yVector)[i] = y;
-	}
-
-	return true;
+	return tryEvaluateCartesian(expr, range, count, xVector, yVector, QStringList(), QVector<double>());
 }
 
 bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
@@ -472,7 +465,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	DEBUG(Q_FUNC_INFO << ", v4")
 	gsl_set_error_handler_off();
 
-	Parser parser;
+	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	for (int i = 0; i < paramNames.size(); ++i)
@@ -500,28 +493,35 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 struct PayloadExpressionParser : public Payload {
 	PayloadExpressionParser() {
 	}
-	PayloadExpressionParser(const QStringList* vars, const QVector<QVector<double>*>* xVectors, bool constant = false)
-		: Payload(constant)
-		, vars(vars)
-		, xVectors(xVectors) {
+	PayloadExpressionParser(const QStringList* variables, const QVector<QVector<double>*>* xDataVectors, bool constantPayload = false)
+		: Payload(constantPayload)
+		, vars(variables)
+		, xVectors(xDataVectors) {
 	}
 	const QStringList* vars{nullptr};
-	int row{0};
+	qsizetype rowIndex{0};
 	const QVector<QVector<double>*>* xVectors{nullptr};
 };
 
-double cell(double x, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+/*!
+ * \brief cell
+ * Returns the cell at row index \p rowIndex
+ * \param rowIndex Index starting at 0
+ * \param variable
+ * \param payload
+ * \return
+ */
+double cell(qsizetype rowIndex, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
-	const int index = (int)x - 1;
 	for (int i = 0; i < p->vars->length(); i++) {
 		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
-			if (index >= 0 && index < p->xVectors->at(i)->length())
-				return p->xVectors->at(i)->at(index);
+			if (rowIndex >= 0 && rowIndex < p->xVectors->at(i)->length())
+				return p->xVectors->at(i)->at(rowIndex);
 			else
 				break;
 		}
@@ -530,14 +530,34 @@ double cell(double x, const std::string_view& variable, const std::weak_ptr<Payl
 	return NAN;
 }
 
-double cell_default_value(double x, double defaultValue, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+/*!
+ * \brief cellRowNumber
+ * Returns the cell at row \p rowNumber
+ * \param rowNumber Values are starting with 1
+ * \param variable
+ * \param payload
+ * \return
+ */
+double cellRowNumber(double rowNumber, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	return cell((qsizetype)rowNumber - 1, variable, payload);
+}
+
+/*!
+ * \brief cellRowNumber
+ * Returns the cell at row \p rowNumber if available, otherwise the default value \p defaultValue
+ * \param rowNumber Values are starting with 1
+ * \param variable
+ * \param payload
+ * \return
+ */
+double cell_default_value(double rowNumber, double defaultValue, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
-	const int index = (int)x - 1;
+	const auto index = (qsizetype)rowNumber - 1;
 	for (int i = 0; i < p->vars->length(); i++) {
 		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
 			if (index >= 0 && index < p->xVectors->at(i)->length())
@@ -553,25 +573,25 @@ double cell_default_value(double x, double defaultValue, const std::string_view&
 double ma(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
-	return (cell(p->row, variable, payload) + cell(p->row + 1, variable, payload)) / 2.;
+	return (cell(p->rowIndex - 1, variable, payload) + cell(p->rowIndex, variable, payload)) / 2.;
 }
 
 double mr(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
-	return fabs(cell(p->row + 1, variable, payload) - cell(p->row + 1 - 1, variable, payload));
+	return fabs(cell(p->rowIndex, variable, payload) - cell(p->rowIndex - 1, variable, payload));
 }
 
 double smmin(double x, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
@@ -583,8 +603,7 @@ double smmin(double x, const std::string_view& variable, const std::weak_ptr<Pay
 				break;
 			// calculate min of last n points
 			double min = INFINITY;
-			const int row = p->row;
-			for (int index = std::max(0, row - N + 1); index <= row; index++) {
+			for (auto index = std::max((qsizetype)0, p->rowIndex - N + 1); index <= p->rowIndex; index++) {
 				const double v = p->xVectors->at(i)->at(index);
 				if (v < min)
 					min = v;
@@ -598,7 +617,7 @@ double smmin(double x, const std::string_view& variable, const std::weak_ptr<Pay
 double smmax(double x, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
@@ -610,8 +629,7 @@ double smmax(double x, const std::string_view& variable, const std::weak_ptr<Pay
 				break;
 			// calculate max of last n points
 			double max = -INFINITY;
-			const int row = p->row;
-			for (int index = std::max(0, row - N + 1); index <= row; index++) {
+			for (auto index = std::max((qsizetype)0, p->rowIndex - N + 1); index <= p->rowIndex; index++) {
 				const double v = p->xVectors->at(i)->at(index);
 				if (v > max)
 					max = v;
@@ -625,7 +643,7 @@ double smmax(double x, const std::string_view& variable, const std::weak_ptr<Pay
 double sma(double x, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
@@ -633,12 +651,11 @@ double sma(double x, const std::string_view& variable, const std::weak_ptr<Paylo
 		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
 			const int N = x;
 			DEBUG("N = " << N)
-			if (N < 1)
-				break;
-			// calculate max of last n points
+			if (N < 1 || p->rowIndex < N - 1)
+				return NAN;
+
 			double sum = 0.;
-			const int row = p->row;
-			for (int index = std::max(0, row - N + 1); index <= row; index++)
+			for (auto index = p->rowIndex - N + 1; index <= p->rowIndex; index++)
 				sum += p->xVectors->at(i)->at(index);
 			return sum / N;
 		}
@@ -653,18 +670,18 @@ double smr(double x, const std::string_view& variable, const std::weak_ptr<Paylo
 double psample(double n, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
 	// every n-th value, starting @ first
-	return cell((int)n * p->row + 1, variable, payload);
+	return cell((qsizetype)n * p->rowIndex, variable, payload);
 }
 
 double rsample(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
-		assert(p); // Debug build
+		Q_ASSERT(p);
 		return NAN;
 	}
 
@@ -677,7 +694,7 @@ double rsample(const std::string_view& variable, const std::weak_ptr<Payload> pa
 	double value;
 	do { // loop until valid index generated
 		int randomIndex = dist(gen);
-		value = cell(randomIndex + 1, variable, payload);
+		value = cell(randomIndex, variable, payload);
 	} while (std::isnan(value));
 
 	return value;
@@ -717,7 +734,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	gsl_set_error_handler_off();
 
 	// determine the minimal size of involved vectors
-	int minSize{std::numeric_limits<int>::max()};
+	qsizetype minSize{std::numeric_limits<qsizetype>::max()};
 	for (auto* xVector : xVectors) {
 		if (xVector->size() < minSize)
 			minSize = xVector->size();
@@ -734,7 +751,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 
 	Parser parser(performanceOptimization);
 
-	parser.set_specialfunctionValueVariablePayload(specialfun_cell, cell, payloadConst);
+	parser.set_specialfunctionValueVariablePayload(specialfun_cell, cellRowNumber, payloadConst);
 	parser.set_specialfunction2ValueVariablePayload(specialfun_cell_default_value, cell_default_value, payloadConst);
 	parser.set_specialfunctionVariablePayload(specialfun_ma, ma, payload);
 	parser.set_specialfunctionVariablePayload(specialfun_mr, mr, payload);
@@ -746,10 +763,10 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	parser.set_specialfunctionVariablePayload(specialfun_rsample, rsample, payload);
 
 	bool constExpression = false;
-	for (int i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {
+	for (qsizetype i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {
 		QString tmpExpr = expr;
 
-		payload->row = i; // all special functions contain pointer to payload so they get this information
+		payload->rowIndex = i; // all special functions contain pointer to payload so they get this information
 		parser.assign_symbol("i", i + 1);
 
 		for (int n = 0; n < vars.size(); ++n) {
@@ -777,7 +794,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 
 	// if the y-vector is longer than the x-vector(s), set all exceeding elements to NaN
 	if (!constExpression) {
-		for (int i = minSize; i < yVector->size(); ++i)
+		for (qsizetype i = minSize; i < yVector->size(); ++i)
 			(*yVector)[i] = NAN;
 	}
 
@@ -795,13 +812,14 @@ bool ExpressionParser::tryEvaluatePolar(const QString& expr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	Parser parser;
+	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
 		const double phi = range.start() + step * i;
 		parser.assign_symbol("phi", phi);
+		parser.assign_symbol("i", i + 1);
 
 		double r = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
 		if (parser.parseErrors() > 0) // try default locale if failing
@@ -831,24 +849,38 @@ bool ExpressionParser::tryEvaluateParametric(const QString& xexpr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	Parser parser;
-	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
+	// use two separate parser instances for the x- and y-expressions:
+	// the "high performance" mode of the parser records, on its very first parse() call,
+	// which symbols are actually used and restricts all subsequent parse() calls to only
+	// those symbols. since xexpr and yexpr are generally different expressions that may use
+	// different sets of symbols/functions (e.g. xexpr = "1+sin(t)", yexpr = "cos(t)*(1+sin(t))"),
+	// sharing a single parser between them would incorrectly reject symbols in yexpr that
+	// don't happen to appear in xexpr (and vice versa).
+	Parser xParser(true);
+	Parser yParser(true);
 
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
-		parser.assign_symbol("t", range.start() + step * i);
+		xParser.assign_symbol("t", range.start() + step * i);
+		xParser.assign_symbol("i", i + 1);
+		yParser.assign_symbol("t", range.start() + step * i);
+		yParser.assign_symbol("i", i + 1);
 
-		double x = parser.parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
-		if (parser.parseErrors() > 0) // try default locale if failing
-			x = parser.parse(qPrintable(xexpr), "en_US");
-		if (parser.parseErrors() > 0)
+		double x = xParser.parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
+		if (xParser.parseErrors() > 0) // try default locale if failing
+			x = xParser.parse(qPrintable(xexpr), "en_US");
+		if (xParser.parseErrors() > 0) {
+			m_lastErrorMessage = QString::fromStdString(xParser.lastErrorMessage());
 			return false;
+		}
 
-		double y = parser.parse(qPrintable(yexpr), qPrintable(numberLocale.name()));
-		if (parser.parseErrors() > 0) // try default locale if failing
-			y = parser.parse(qPrintable(yexpr), "en_US");
-		if (parser.parseErrors() > 0)
+		double y = yParser.parse(qPrintable(yexpr), qPrintable(numberLocale.name()));
+		if (yParser.parseErrors() > 0) // try default locale if failing
+			y = yParser.parse(qPrintable(yexpr), "en_US");
+		if (yParser.parseErrors() > 0) {
+			m_lastErrorMessage = QString::fromStdString(yParser.lastErrorMessage());
 			return false;
+		}
 
 		if (std::isnan(x))
 			WARN(Q_FUNC_INFO << ", WARNING: X expression " << STDSTRING(xexpr) << " evaluated @ " << range.start() + step * i << " is NAN")

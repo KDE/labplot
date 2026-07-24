@@ -9,6 +9,7 @@
 */
 
 #include "SearchReplaceWidget.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/Settings.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
@@ -174,25 +175,25 @@ void SearchReplaceWidget::initSearchWidget() {
 	uiSearch.tbMatchCase->setChecked(conf.readEntry(QLatin1String("SimpleMatchCase"), false));
 
 	// connections
-	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=, this]() {
 		findNextSimple(true);
 		addCurrentTextToHistory(uiSearch.cbFind);
 	});
-	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=]() {
+	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=, this]() {
 		m_patternFound = false;
 		findNextSimple(false);
 	});
 
-	connect(uiSearch.tbFindNext, &QToolButton::clicked, this, [=]() {
+	connect(uiSearch.tbFindNext, &QToolButton::clicked, this, [=, this]() {
 		findNextSimple(true);
 		addCurrentTextToHistory(uiSearch.cbFind);
 	});
-	connect(uiSearch.tbFindPrev, &QToolButton::clicked, this, [=]() {
+	connect(uiSearch.tbFindPrev, &QToolButton::clicked, this, [=, this]() {
 		findPreviousSimple(true);
 		addCurrentTextToHistory(uiSearch.cbFind);
 	});
 
-	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, [=]() {
+	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, [=, this]() {
 		findNextSimple(false);
 	});
 	connect(uiSearch.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
@@ -287,32 +288,32 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	connect(uiSearchReplace.cbDataType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::dataTypeChanged);
 
 	connect(uiSearchReplace.cbOperator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::operatorChanged);
-	connect(uiSearchReplace.cbOperatorText, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=]() {
+	connect(uiSearchReplace.cbOperatorText, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=, this]() {
 		findNext(true);
 	});
 	connect(uiSearchReplace.cbOperatorDateTime, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::operatorDateTimeChanged);
 
-	connect(uiSearchReplace.cbValue1->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+	connect(uiSearchReplace.cbValue1->lineEdit(), &QLineEdit::returnPressed, this, [=, this]() {
 		findNext(true);
 	});
-	connect(uiSearchReplace.cbValue2->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+	connect(uiSearchReplace.cbValue2->lineEdit(), &QLineEdit::returnPressed, this, [=, this]() {
 		findNext(true);
 	});
-	connect(uiSearchReplace.cbValueText->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+	connect(uiSearchReplace.cbValueText->lineEdit(), &QLineEdit::returnPressed, this, [=, this]() {
 		findNext(true);
 	});
-	connect(uiSearchReplace.dteValue1, &QDateTimeEdit::dateTimeChanged, this, [=]() {
+	connect(uiSearchReplace.dteValue1, &QDateTimeEdit::dateTimeChanged, this, [=, this]() {
 		m_patternFound = false;
 		findNext(false);
 	});
-	connect(uiSearchReplace.dteValue2, &QDateTimeEdit::dateTimeChanged, this, [=]() {
+	connect(uiSearchReplace.dteValue2, &QDateTimeEdit::dateTimeChanged, this, [=, this]() {
 		m_patternFound = false;
 		findNext(false);
 	});
-	connect(uiSearchReplace.tbFindNext, &QToolButton::clicked, this, [=]() {
+	connect(uiSearchReplace.tbFindNext, &QToolButton::clicked, this, [=, this]() {
 		findNext(true);
 	});
-	connect(uiSearchReplace.tbFindPrev, &QToolButton::clicked, this, [=]() {
+	connect(uiSearchReplace.tbFindPrev, &QToolButton::clicked, this, [=, this]() {
 		findPrevious(true);
 	});
 	connect(uiSearchReplace.bFindAll, &QPushButton::clicked, this, &SearchReplaceWidget::findAll);
@@ -320,7 +321,7 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	connect(uiSearchReplace.cbReplace->lineEdit(), &QLineEdit::returnPressed, this, &SearchReplaceWidget::replaceNext);
 	connect(uiSearchReplace.bReplaceNext, &QPushButton::clicked, this, &SearchReplaceWidget::replaceNext);
 	connect(uiSearchReplace.bReplaceAll, &QPushButton::clicked, this, &SearchReplaceWidget::replaceAll);
-	connect(uiSearchReplace.tbMatchCase, &QToolButton::toggled, this, [=]() {
+	connect(uiSearchReplace.tbMatchCase, &QToolButton::toggled, this, [=, this]() {
 		findNext(false);
 	});
 
@@ -393,7 +394,7 @@ void SearchReplaceWidget::setReplaceText(const QString& text) {
 // ************************* SLOTs **************************
 // **********************************************************
 void SearchReplaceWidget::cancel() {
-	m_spreadsheet->model()->setSearchText(QString()); // clear the global search text that was potentialy set during "find all"
+	m_spreadsheet->model()->setSearchText(QString()); // clear the global search text that was potentially set during "find all"
 	showMessage(QString());
 	close();
 }
@@ -587,7 +588,7 @@ void SearchReplaceWidget::switchFindReplace() {
 /*!
  * search the next cell in the column-major order that matches
  * to the specified pattern. The search is done ignoring the data type
- * and iterpreting everything as text. Used in the "simple search"-mode.
+ * and interpreting everything as text. Used in the "simple search"-mode.
  */
 bool SearchReplaceWidget::findNextSimple(bool proceed) {
 	const QString& pattern = uiSearch.cbFind->currentText();
@@ -627,7 +628,7 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 	bool startRow = true;
 
 	// search in the column-major order ignoring the data type
-	// and iterpreting everything as text
+	// and interpreting everything as text
 	for (int col = 0; col < colCount; ++col) {
 		if (startCol && col < curCol)
 			continue;
@@ -659,7 +660,7 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 /*!
  * search the previous cell in the column-major order that matches
  * to the specified pattern. The search is done ignoring the data type
- * and iterpreting everything as text. Used in the "simple search"-mode.
+ * and interpreting everything as text. Used in the "simple search"-mode.
  */
 bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
 	const QString& pattern = uiSearch.cbFind->currentText();
@@ -1046,7 +1047,7 @@ void SearchReplaceWidget::findAll() {
 		break;
 	case DataType::DateTime:
 		pattern1 = uiSearchReplace.dteValue1->text();
-		pattern1 = uiSearchReplace.dteValue2->text();
+		pattern2 = uiSearchReplace.dteValue2->text();
 		break;
 	}
 
@@ -1198,7 +1199,7 @@ bool SearchReplaceWidget::checkColumnRow(Column* column,
 										 Operator opNumeric,
 										 Operator opDateTime,
 										 const QString& pattern1,
-										 const QString pattern2,
+										 const QString& pattern2,
 										 Qt::CaseSensitivity cs) {
 	bool match = false;
 	switch (type) {
@@ -1654,7 +1655,7 @@ QVector<QString> SearchReplaceWidget::capturePatterns(const QString& pattern) co
 
 			case L')':
 				if (!parInfos.empty()) {
-					ParInfo& top = parInfos.top();
+					const auto& top = parInfos.top();
 					if (top.capturing && (top.captureNumber <= 9)) {
 						const int start = top.openIndex + 1;
 						const int len = input - start;

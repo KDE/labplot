@@ -13,7 +13,7 @@
  * \brief The action to be used for making new parts.
  *
  * The caller takes care of connecting the action. If the parent argument is zero, it
- * also recieves ownership of the action.
+ * also receives ownership of the action.
  * Implementations should only set things like name and icon.
  */
 

@@ -69,8 +69,8 @@ public:
 		m_start += offset;
 		m_end += offset;
 	}
-	bool operator==(const Interval<T>& other) const {
-		return (m_start == other.start() && m_end == other.end());
+	bool operator==(const IntervalBase<T>& other) const {
+		return (m_start == other.m_start && m_end == other.m_end);
 	}
 	Interval<T>& operator=(const Interval<T>& other) {
 		m_start = other.start();

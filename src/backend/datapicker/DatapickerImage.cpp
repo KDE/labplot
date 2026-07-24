@@ -18,8 +18,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "frontend/GuiTools.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/worksheet/ExportWorksheetDialog.h"
 
@@ -35,9 +34,6 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
-
-#include <frontend/GuiTools.h>
 
 void DatapickerImage::ReferencePoints::clearPoints() {
 	scenePos[0] = QPointF(std::nan("0"), std::nan("0"));
@@ -175,9 +171,8 @@ bool DatapickerImage::exportView() const {
 		const auto format = dlg->exportFormat();
 		const int resolution = dlg->exportResolution();
 
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		m_view->exportToFile(path, format, resolution);
-		RESET_CURSOR;
 	}
 	delete dlg;
 	return ret;
@@ -199,19 +194,6 @@ bool DatapickerImage::printPreview() const {
 	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &DatapickerImageView::print);
 	return dlg->exec();
-}
-
-/*!
-	Selects or deselects the Datapicker/DatapickerImage in the project explorer.
-	This function is called in \c DatapickerImageView.
-	The DatapickerImage gets deselected if there are selected items in the view,
-	and selected if there are no selected items in the view.
-*/
-void DatapickerImage::setSelectedInView(const bool b) {
-	if (b)
-		Q_EMIT childAspectSelectedInView(this);
-	else
-		Q_EMIT childAspectDeselectedInView(this);
 }
 
 void DatapickerImage::setSegmentsHoverEvent(const bool on) {
@@ -514,7 +496,7 @@ bool DatapickerImage::addChild(AbstractAspect* child) {
 
 void DatapickerImage::datapickerPointChanged(const DatapickerPoint* point) {
 	const auto index = indexOfChild<DatapickerPoint>(point, AbstractAspect::ChildIndexFlag::IncludeHidden);
-	assert(index < 3);
+	Q_ASSERT(index < 3);
 	if (index >= 0 && index < 3) {
 		auto axisPoints = this->axisPoints();
 		axisPoints.scenePos[index].setX(point->position().x());
@@ -602,7 +584,8 @@ DatapickerImagePrivate::~DatapickerImagePrivate() {
 }
 
 void DatapickerImagePrivate::updateImage() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	q->isLoaded = false;
 
 	if (q->originalPlotImage.isNull()) {
@@ -619,7 +602,6 @@ void DatapickerImagePrivate::updateImage() {
 
 	Q_EMIT q->requestUpdate();
 	Q_EMIT q->requestUpdateActions();
-	RESET_CURSOR;
 }
 
 // ##############################################################################

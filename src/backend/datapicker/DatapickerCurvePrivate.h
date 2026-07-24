@@ -12,10 +12,8 @@
 #define DATAPICKERCURVEPRIVATE_H
 
 #include "backend/worksheet/Worksheet.h"
-
+#include <QPen>
 class Symbol;
-class QBrush;
-class QPen;
 
 class DatapickerCurvePrivate {
 public:

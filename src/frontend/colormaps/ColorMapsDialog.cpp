@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : dialog showing the available color maps
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -55,14 +55,9 @@ ColorMapsDialog::~ColorMapsDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-QPixmap ColorMapsDialog::previewPixmap() const {
-	return m_colorMapsWidget->previewPixmap();
-}
-
+/*!
+ * returns the name of the currently selected color map.
+ */
 QString ColorMapsDialog::name() const {
 	return m_colorMapsWidget->name();
-}
-
-QVector<QColor> ColorMapsDialog::colors() const {
-	return m_colorMapsWidget->colors();
 }

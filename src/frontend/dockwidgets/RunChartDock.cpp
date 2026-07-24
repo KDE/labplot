@@ -71,7 +71,7 @@ RunChartDock::RunChartDock(QWidget* parent)
 	// template handler
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
-	layout->setContentsMargins(0, 11, 0, 11);
+	layout->setContentsMargins(0, 0, 0, 0);
 
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("RunChart"));
 	layout->addWidget(templateHandler);
@@ -146,6 +146,9 @@ void RunChartDock::retranslateUi() {
 	ui.cbCenterMetric->addItem(i18n("Average"), static_cast<int>(RunChart::CenterMetric::Average));
 	ui.cbCenterMetric->addItem(i18n("Median"), static_cast<int>(RunChart::CenterMetric::Median));
 
+	dataLineWidget->retranslateUi();
+	centerLineWidget->retranslateUi();
+
 	// tooltip texts
 	QString info = i18n("Metric of the dataset used to determine where the center line should be placed at");
 	ui.lCenterMetric->setToolTip(info);
@@ -153,7 +156,7 @@ void RunChartDock::retranslateUi() {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void RunChartDock::updateLocale() {
 	dataLineWidget->updateLocale();

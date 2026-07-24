@@ -144,7 +144,7 @@ QRgb ImageEditor::findBackgroundColor(const QImage* plotImage) {
 	return cMax.color.rgb();
 }
 
-void ImageEditor::uploadHistogram(int* bins, QImage* originalImage, QColor background, DatapickerImage::ColorAttributes type) {
+void ImageEditor::uploadHistogram(int* bins, const QImage* originalImage, QColor background, DatapickerImage::ColorAttributes type) {
 	// reset bin
 	for (int i = 0; i <= colorAttributeMax(type); ++i)
 		bins[i] = 0;

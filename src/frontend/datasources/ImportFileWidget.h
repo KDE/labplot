@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import file data widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2009-2025 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
@@ -37,6 +37,7 @@ class McapOptionsWidget;
 class MatioOptionsWidget;
 class NetCDFOptionsWidget;
 class OdsOptionsWidget;
+class ParquetOptionsWidget;
 class ROOTOptionsWidget;
 class TemplateHandler;
 class ImportKaggleDatasetWidget;
@@ -55,7 +56,7 @@ class ImportFileWidget : public QWidget {
 public:
 	static QString absolutePath(const QString& fileName);
 
-	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString(), bool embedded = false);
+	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString(), bool embedded = false, bool importDir = false);
 	~ImportFileWidget() override;
 
 	void showOptions(bool);
@@ -64,6 +65,7 @@ public:
 	AbstractFileFilter::FileType currentFileType() const;
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
+	QString path() const;
 	QString fileName() const;
 	QString dbcFileName() const;
 	QString selectedObject() const;
@@ -75,9 +77,9 @@ public:
 	const QStringList selectedOdsSheetNames() const;
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;
-	const QStringList selectedFITSExtensions() const;
 	const QStringList selectedROOTNames() const;
 	const QStringList selectedMatioNames() const;
+	const QStringList selectedParquetColumnNames() const;
 	//	const QStringList selectedVectorBLFNames() const;
 
 	QString host() const;
@@ -97,6 +99,7 @@ private:
 	void initOptionsWidget();
 	void initSlots();
 	QString fileInfoString(const QString&) const;
+	QString dirInfoString(const QString&) const;
 	void showJsonModel(bool);
 	void enableFirstRowAsColNames(bool enable); // used by XLSX and Ods
 	void updateHeaderOptions();
@@ -115,6 +118,7 @@ private:
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	std::unique_ptr<JsonOptionsWidget> m_jsonOptionsWidget;
 	std::unique_ptr<McapOptionsWidget> m_mcapOptionsWidget;
+	std::unique_ptr<ParquetOptionsWidget> m_parquetOptionsWidget;
 
 	std::unique_ptr<ROOTOptionsWidget> m_rootOptionsWidget;
 
@@ -129,6 +133,7 @@ private:
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
 	bool m_embedded{false};
+	bool m_importDir{false};
 	TemplateHandler* m_templateHandler{nullptr};
 	bool mcapTopicsInitialized{false};
 
@@ -154,7 +159,7 @@ private Q_SLOTS:
 	void filterChanged(int);
 	void selectFile();
 	void selectDBCFile();
-	void showFileInfo();
+	void showInfo();
 	void refreshPreview();
 	void updateStartRow(int);
 	void enableDataPortionSelection(bool);
@@ -170,6 +175,7 @@ private Q_SLOTS:
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
 	friend class McapOptionsWidget;
+	friend class ParquetOptionsWidget; // to access refreshPreview()
 	friend class ROOTOptionsWidget; // to access refreshPreview() and others
 	friend class OdsOptionsWidget; // to access refreshPreview()
 	friend class XLSXOptionsWidget; // to access refreshPreview()

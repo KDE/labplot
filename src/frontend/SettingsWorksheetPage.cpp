@@ -97,7 +97,7 @@ void SettingsWorksheetPage::restoreDefaults() {
 }
 
 void SettingsWorksheetPage::loadSettings() {
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	m_cbThemes->setItemText(0, group.readEntry(QLatin1String("Theme"), ""));
 	ui.chkPresenterModeInteractive->setChecked(group.readEntry(QLatin1String("PresenterModeInteractive"), false));
 	ui.chkDoubleBuffering->setChecked(group.readEntry(QLatin1String("DoubleBuffering"), true));
@@ -109,7 +109,6 @@ void SettingsWorksheetPage::loadSettings() {
 		ui.cbPreviewThumbnailSize->setCurrentIndex(1); // medium
 
 	QString engine = group.readEntry(QLatin1String("LaTeXEngine"), "");
-	index = -1;
 	if (engine.isEmpty()) {
 		// empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
 		//->check whether the latex environment was installed in the meantime
@@ -125,7 +124,6 @@ void SettingsWorksheetPage::loadSettings() {
 
 		if (index != -1) {
 			// one of the tex engines was found -> automatically save it in the settings without any user action
-			KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
 			group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(index));
 		}
 	} else

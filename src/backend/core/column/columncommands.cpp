@@ -149,6 +149,7 @@ void ColumnSetModeCmd::redo() {
 		m_old_data = m_col->data();
 		m_old_in_filter = m_col->inputFilter();
 		m_old_out_filter = m_col->outputFilter();
+		m_old_valid = m_col->m_valid;
 
 		// do the conversion
 		m_col->setLabelsMode(m_mode); // must be done before setColumnMode, because setColumnMode() sends signal to dock
@@ -158,10 +159,11 @@ void ColumnSetModeCmd::redo() {
 		m_new_data = m_col->data();
 		m_new_in_filter = m_col->inputFilter();
 		m_new_out_filter = m_col->outputFilter();
+		m_new_valid = m_col->m_valid;
 		m_executed = true;
 	} else {
 		// set to saved new values
-		m_col->replaceModeData(m_mode, m_new_data, m_new_in_filter, m_new_out_filter);
+		m_col->replaceModeData(m_mode, m_new_data, m_new_in_filter, m_new_out_filter, m_new_valid);
 	}
 	m_undone = false;
 }
@@ -171,7 +173,7 @@ void ColumnSetModeCmd::redo() {
  */
 void ColumnSetModeCmd::undo() {
 	// reset to old values
-	m_col->replaceModeData(m_old_mode, m_old_data, m_old_in_filter, m_old_out_filter);
+	m_col->replaceModeData(m_old_mode, m_old_data, m_old_in_filter, m_old_out_filter, m_old_valid);
 	// setLabelsMode will be done in replaceModeData()
 
 	m_undone = true;
@@ -238,6 +240,11 @@ void ColumnFullCopyCmd::redo() {
 		void* data_temp = m_col->data();
 		m_col->replaceData(m_backup->data());
 		m_backup->replaceData(data_temp);
+		if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode())) {
+			QBitArray valid_temp = m_col->m_valid;
+			m_col->m_valid = m_backup->m_valid;
+			m_backup->m_valid = valid_temp;
+		}
 	}
 }
 
@@ -249,6 +256,11 @@ void ColumnFullCopyCmd::undo() {
 	void* data_temp = m_col->data();
 	m_col->replaceData(m_backup->data());
 	m_backup->replaceData(data_temp);
+	if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode())) {
+		QBitArray valid_temp = m_col->m_valid;
+		m_col->m_valid = m_backup->m_valid;
+		m_backup->m_valid = valid_temp;
+	}
 }
 
 /** ***************************************************************************
@@ -390,7 +402,7 @@ void ColumnInsertRowsCmd::redo() {
 	Q_EMIT m_col->q->rowsAboutToBeInserted(m_col->q, m_before, m_count);
 	m_col->insertRows(m_before, m_count);
 	m_col->q->updateFormula(); // only needed in redo
-	m_col->owner()->setChanged();
+	m_col->owner()->setDataChanged();
 	Q_EMIT m_col->q->rowsInserted(m_col->q, m_before, m_count);
 }
 
@@ -400,7 +412,7 @@ void ColumnInsertRowsCmd::redo() {
 void ColumnInsertRowsCmd::undo() {
 	Q_EMIT m_col->q->rowsAboutToBeRemoved(m_col->q, m_before, m_count);
 	m_col->removeRows(m_before, m_count);
-	m_col->owner()->setChanged();
+	m_col->owner()->setDataChanged();
 	Q_EMIT m_col->q->rowsRemoved(m_col->q, m_before, m_count);
 }
 
@@ -482,7 +494,7 @@ void ColumnRemoveRowsCmd::redo() {
 	}
 	Q_EMIT m_col->q->rowsAboutToBeRemoved(m_col->q, m_first, m_count);
 	m_col->removeRows(m_first, m_count);
-	m_col->owner()->setChanged();
+	m_col->owner()->setDataChanged();
 	Q_EMIT m_col->q->rowsRemoved(m_col->q, m_first, m_count);
 }
 
@@ -495,7 +507,7 @@ void ColumnRemoveRowsCmd::undo() {
 	m_col->copy(m_backup, 0, m_first, m_data_row_count);
 	m_col->resizeTo(m_old_size);
 	m_col->replaceFormulas(m_formulas);
-	m_col->owner()->setChanged();
+	m_col->owner()->setDataChanged();
 	Q_EMIT m_col->q->rowsInserted(m_col->q, m_first, m_count);
 }
 
@@ -633,46 +645,40 @@ ColumnClearCmd::~ColumnClearCmd() {
  * \brief Execute the command
  */
 void ColumnClearCmd::redo() {
+	// TODO: replace this logic with m_col->deleteData() so we can avoid these allocations below
 	if (!m_empty_data) {
 		const int rowCount = m_col->rowCount();
 		switch (m_col->columnMode()) {
 		case AbstractColumn::ColumnMode::Double: {
-			auto* vec = new QVector<double>(rowCount);
-			m_empty_data = vec;
-			for (int i = 0; i < rowCount; ++i)
-				vec->operator[](i) = NAN;
+			m_empty_data = new QVector<double>(rowCount, NAN);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			auto* vec = new QVector<int>(rowCount);
-			m_empty_data = vec;
-			for (int i = 0; i < rowCount; ++i)
-				vec->operator[](i) = 0;
+			m_empty_data = new QVector<int>(rowCount, 0);
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			auto* vec = new QVector<qint64>(rowCount);
-			m_empty_data = vec;
-			for (int i = 0; i < rowCount; ++i)
-				vec->operator[](i) = 0;
+			m_empty_data = new QVector<qint64>(rowCount, 0);
 			break;
 		}
 		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
-			m_empty_data = new QVector<QDateTime>();
-			for (int i = 0; i < rowCount; ++i)
-				static_cast<QVector<QDateTime>*>(m_empty_data)->append(QDateTime());
+			m_empty_data = new QVector<QDateTime>(rowCount);
 			break;
 		case AbstractColumn::ColumnMode::Text:
-			m_empty_data = new QVector<QString>();
-			for (int i = 0; i < rowCount; ++i)
-				static_cast<QVector<QString>*>(m_empty_data)->append(QString());
+			m_empty_data = new QVector<QString>(rowCount);
 			break;
 		}
 		m_data = m_col->data();
+		if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode()))
+			m_old_valid = m_col->m_valid;
 	}
 	m_col->replaceData(m_empty_data);
+	if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode())) {
+		m_col->m_valid.resize(m_col->rowCount());
+		m_col->m_valid.fill(false);
+	}
 	m_undone = false;
 }
 
@@ -681,6 +687,8 @@ void ColumnClearCmd::redo() {
  */
 void ColumnClearCmd::undo() {
 	m_col->replaceData(m_data);
+	if (AbstractColumnPrivate::needsValidityTracking(m_col->columnMode()))
+		m_col->m_valid = m_old_valid;
 	m_undone = true;
 }
 
@@ -708,9 +716,9 @@ ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col,
 void ColumnSetGlobalFormulaCmd::redo() {
 	if (!m_copied) {
 		m_formula = m_col->formula();
-		for (auto& d : m_col->formulaData()) {
-			m_variableNames << d.variableName();
-			m_variableColumns << d.m_column;
+		for (auto& data : m_col->formulaData()) {
+			m_variableNames << data.variableName();
+			m_variableColumns << data.m_column;
 		}
 		m_autoUpdate = m_col->formulaAutoUpdate();
 		m_autoResize = m_col->formulaAutoResize();

@@ -86,6 +86,7 @@ private:
 	double m_widthScaleFactor{1.0};
 	double m_groupWidth{1.0}; // width of a bar group
 	double m_groupGap{0.0}; // gap around a group of bars
+	double m_zero{0.0}; // zero baseline used to draw the bars, has non-zero values for log-scales
 };
 
 #endif

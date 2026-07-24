@@ -10,12 +10,14 @@
 #ifndef SETTINGEDITORPAGE_H
 #define SETTINGEDITORPAGE_H
 
-#include <KTextEditor/ConfigPage>
-
 #include "SettingsPage.h"
 
 class KPageWidgetItem;
 class KPageDialog;
+
+namespace KTextEditor {
+	class ConfigPage;
+}
 
 class SettingsEditorPage : public SettingsPage {
 	Q_OBJECT

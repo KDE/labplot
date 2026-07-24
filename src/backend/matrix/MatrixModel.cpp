@@ -89,10 +89,10 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 	}
 	case Qt::BackgroundRole:
 		// use bluish background color to distinguish Matrix from Spreadsheet
-		return {QColor(192, 255, 255)};
+		return QColor(192, 255, 255);
 	case Qt::ForegroundRole:
 		// ignore current theme settings and always use black foreground color so Matrix is usable with dark themes, too.
-		return {QColor(Qt::black)};
+		return QColor(Qt::black);
 	}
 
 	return {};

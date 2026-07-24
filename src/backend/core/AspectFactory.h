@@ -10,7 +10,9 @@
 #ifndef ASPECTFACTORY_H
 
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
@@ -21,7 +23,6 @@
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/plots.h"
-
 #ifndef SDK
 #include "backend/core/Workbook.h"
 #include "backend/datapicker/Datapicker.h"
@@ -65,14 +66,16 @@ public:
 			return new Axis(QString());
 		else if (type == AspectType::XYCurve)
 			return new XYCurve(QString());
+		else if (type == AspectType::XYBaselineCorrectionCurve)
+			return new XYBaselineCorrectionCurve(QString());
 		else if (type == AspectType::XYEquationCurve)
 			return new XYEquationCurve(QString());
 		else if (type == AspectType::XYConvolutionCurve)
 			return new XYConvolutionCurve(QString());
 		else if (type == AspectType::XYCorrelationCurve)
 			return new XYCorrelationCurve(QString());
-		else if (type == AspectType::XYDataReductionCurve)
-			return new XYDataReductionCurve(QString());
+		else if (type == AspectType::XYLineSimplificationCurve)
+			return new XYLineSimplificationCurve(QString());
 		else if (type == AspectType::XYDifferentiationCurve)
 			return new XYDifferentiationCurve(QString());
 		else if (type == AspectType::XYFitCurve)
@@ -111,6 +114,8 @@ public:
 			return new ProcessBehaviorChart(QString(), true /*loading*/);
 		else if (type == AspectType::RunChart)
 			return new RunChart(QString());
+		else if (type == AspectType::ParetoChart)
+			return new ParetoChart(QString());
 
 		/* data containers */
 		else if (type == AspectType::Spreadsheet)
@@ -118,6 +123,9 @@ public:
 		else if (type == AspectType::Column)
 			return new Column(QString());
 
+		/* time series analysis */
+		else if (type == AspectType::SeasonalDecomposition)
+			return new SeasonalDecomposition(QString(), true /*loading*/);
 #ifndef SDK
 		else if (type == AspectType::Matrix)
 			return new Matrix(QString(), true /*loading*/);

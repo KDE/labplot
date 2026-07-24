@@ -274,7 +274,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 		QStringLiteral("Project/Worksheet/xy-plot/cos"),
 		QStringLiteral("Project/Worksheet/xy-plot/tan"),
 		QStringLiteral("Project/Worksheet/xy-plot/y-axis"),
-		// not neccesary to retransform legend, but is difficult to
+		// not necessary to retransform legend, but is difficult to
 		// distinguish so let it in, because it does not cost that much performance
 		QStringLiteral("Project/Worksheet/xy-plot/legend"),
 		QStringLiteral("Project/Worksheet/xy-plot/plotText"),
@@ -285,7 +285,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 		QStringLiteral("Project/Worksheet/plot2/xy-curve"),
 	};
 	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list)
+	for (const auto& s : list)
 		QCOMPARE(c.callCount(s), 1);
 
 	c.resetRetransformCount();
@@ -294,7 +294,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	view->changePlotNavigation(&a);
 
 	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list)
+	for (const auto& s : list)
 		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are called only once
@@ -577,7 +577,7 @@ void RetransformTest::TestPadding() {
 	plot->setHorizontalPadding(hPad + 10);
 
 	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list)
+	for (const auto& s : list)
 		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are called only once
@@ -606,7 +606,7 @@ void RetransformTest::TestPadding() {
 	plot->navigate(-1, CartesianPlot::NavigationOperation::ScaleAuto);
 
 	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list)
+	for (const auto& s : list)
 		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are already scaled due to the change of padding
@@ -1013,7 +1013,7 @@ void RetransformTest::TestImportCSVInvalidateCurve() {
 	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
 	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
 
-	// the curve that lost the column assignemnt should be retransformed
+	// the curve that lost the column assignment should be retransformed
 	QCOMPARE(c.elementLogCount(false), 1);
 	QCOMPARE(c.callCount(i18n("Project") + QStringLiteral("/plot/curve")), 1);
 }
@@ -1191,7 +1191,7 @@ void RetransformTest::TestChangePlotRange() {
 	COMPARE_DOUBLE_VECTORS(yAxis->tickLabelValues(), ref);
 
 	int linesUpdatedCounter = 0;
-	connect(curve, &XYCurve::linesUpdated, [&linesUpdatedCounter](const XYCurve*, const QVector<QLineF> lines) {
+	connect(curve, &XYCurve::linesUpdated, [&linesUpdatedCounter](const XYCurve*, const QVector<QLineF>& lines) {
 		// One point before and one point after is used therefore it is not 10, 20
 		// se XYCurvePrivate::updateLines() startIndex--; and endIndex++;
 		QCOMPARE(lines.at(0).p1().x(), 9);
@@ -1993,6 +1993,7 @@ void RetransformTest::xyFunctionCurve() {
 	auto* equationCurve = static_cast<XYEquationCurve*>(equationCurves.at(0));
 	XYEquationCurve::EquationData data;
 	data.count = 100;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x");
 	data.expression2 = QString();
 	data.min = QStringLiteral("1");
@@ -2017,14 +2018,21 @@ void RetransformTest::xyFunctionCurve() {
 
 	{
 		const auto stat = c.statistic(false);
-		QCOMPARE(stat.count(), 4); // equationCurve, functionCurve, xAxis and yAxis are inside
+		// equationCurve, functionCurve, xAxis and yAxis are inside as well as plot itself (padding was adjusted)
+		QCOMPARE(stat.count(), 5);
 		QCOMPARE(stat.contains(equationCurve->path()), true);
 		QCOMPARE(stat.contains(functionCurve->path()), true);
 		QCOMPARE(stat.contains(axes.at(0)->path()), true);
 		QCOMPARE(stat.contains(axes.at(1)->path()), true);
-		QVERIFY(c.calledExact(1, false));
-		QCOMPARE(c.logsXScaleRetransformed.count(), 0); // only the y range changed
-		QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+
+		// children were retransfomed twice - initially and after the padding was adjusted
+		QCOMPARE(c.callCount(equationCurve->path()), 2);
+		QCOMPARE(c.callCount(functionCurve->path()), 2);
+		QCOMPARE(c.callCount(axes.at(0)->path()), 2);
+		QCOMPARE(c.callCount(axes.at(1)->path()), 2);
+
+		QCOMPARE(c.logsXScaleRetransformed.count(), 1); // x was also changed after padding adjustment
+		QCOMPARE(c.logsYScaleRetransformed.count(), 2); // initial change, one more after padding adjustment
 	}
 
 	{
@@ -2047,13 +2055,13 @@ void RetransformTest::xyFunctionCurve() {
 
 	{
 		const auto stat = c.statistic(false);
-		QCOMPARE(stat.count(), 4); // equationCurve, functionCurve, xAxis and yAxis are inside
+		QCOMPARE(stat.count(), 5); // equationCurve, functionCurve, xAxis and yAxis are inside
 		QCOMPARE(stat.contains(equationCurve->path()), true);
 		QCOMPARE(stat.contains(functionCurve->path()), true);
 		QCOMPARE(stat.contains(axes.at(0)->path()), true);
 		QCOMPARE(stat.contains(axes.at(1)->path()), true);
 		// QVERIFY(c.calledExact(1, false)); // TODO: how to verify that retransform gets called only once?
-		QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+		QCOMPARE(c.logsXScaleRetransformed.count(), 3); // initially 1, +1 after the curve was updates, +1 after padding adjustement
 		QVERIFY(c.logsYScaleRetransformed.count() >= 1);
 		// QCOMPARE(c.logsYScaleRetransformed.count(), 1);
 	}
@@ -2134,7 +2142,7 @@ int RetransformCallCounter::callCount(const QString& path) {
  * \brief RetransformCallCounter::callCount
  * Returns the number of retransform called for a specific object. This counter contains
  * all retransforms from the beginning when the object was created and not yet connected
- * to the RetransformCallCounter object. This is usefull when checking the retransform
+ * to the RetransformCallCounter object. This is useful when checking the retransform
  * counts during loading of a project or during creation of an aspect
  * \param aspect
  * \return

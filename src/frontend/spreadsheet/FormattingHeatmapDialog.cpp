@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for the conditional formatting according to a heatmap
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -15,15 +15,11 @@
 #include "tools/ColorMapsManager.h"
 
 #include <KLocalizedString>
-
 #include <KWindowConfig>
 
 #include <QDialogButtonBox>
-#include <QDir>
 #include <QPushButton>
 #include <QWindow>
-
-#include <cmath>
 
 /*!
 	\class FormattingHeatmapDialog
@@ -126,9 +122,8 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 		}
 	}
 
-	QPixmap pixmap;
-	ColorMapsManager::instance()->render(pixmap, m_name);
-	ui.lColorMapPreview->setPixmap(pixmap);
+	ui.lColorMapName->setText(m_name);
+	ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(m_name));
 
 	if (hasNumeric) {
 		ui.leMinimum->setText(qIsFinite(min) ? QString::number(min) : QString());
@@ -165,8 +160,10 @@ void FormattingHeatmapDialog::selectColorMap() {
 	auto* dlg = new ColorMapsDialog(this);
 	if (dlg->exec() == QDialog::Accepted) {
 		m_name = dlg->name();
-		ui.lColorMapPreview->setPixmap(dlg->previewPixmap());
-		m_colors = dlg->colors(); // fetch the colors _after_ the preview pixmap was fetched to get the proper colors from the color manager
+		auto* manager = ColorMapsManager::instance();
+		ui.lColorMapName->setText(m_name);
+		ui.lColorMapPreview->setPixmap(manager->previewPixmap(m_name));
+		m_colors = manager->colors(m_name);
 		ui.lColorMapPreview->setFocus();
 	}
 	delete dlg;

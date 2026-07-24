@@ -174,7 +174,7 @@ size_t nsl_geom_linesim_douglas_peucker_auto(const double xdata[], const double 
 
 /*
  * Douglas-Peucker variant:
- * The key of all egdes of the current simplified line is calculated and only the
+ * The key of all edges of the current simplified line is calculated and only the
  * largest is added. This is repeated until nout is reached.
  * */
 double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const double ydata[], const size_t n, const size_t nout, size_t index[]) {
@@ -474,7 +474,7 @@ size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double yd
 		index[minindex + 1] = 0;
 		area[minindex] = DBL_MAX;
 		double tmparea;
-		/* update area of neigbor points */
+		/* update area of neighbor points */
 		size_t before = minindex, after = minindex + 2; /* find index before and after */
 		while (index[before] == 0 && before > 0)
 			before--;

@@ -25,6 +25,7 @@ extern "C" {
 }
 
 #include <QDebug> // qWarning()
+#include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
 
@@ -282,6 +283,7 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYFourierFilterCurve);
 
 	QXmlStreamAttributes attribs;

@@ -1,5 +1,5 @@
 # Datasets
-This directory containts the description of collections of datasets publically available on the internet. At the moment reading of text (ASCII) files only is supported.
+This directory contains the description of collections of datasets publicly available on the internet. At the moment, reading of text (ASCII) files are only supported.
 
 To add a new collection of datasets, two steps are required.
 
@@ -11,7 +11,7 @@ To register a new collection, add the required information to the file *DatasetC
 [
 	{
 		"name" : "unique name of the collection",
-		"description" : "description of the colleciton, can contain basic html-tags like <b>, etc. to format the text.",
+		"description" : "description of the collection, can contain basic html-tags like <b>, etc. to format the text.",
 		"url" : "URL of the collection to document where the data is taken from"
 	},
 	...
@@ -91,4 +91,4 @@ The only required parameters are *'description'*, *'filename'*, *'name'* and *'u
 "DateTime_format": ""
 ```
 
-So, ommiting these parameters in the specification of the data set completely  still results in a complete description of the data set. The meaning of this parameters and their possible values are described in LabPlot's documentation.
+So, omitting these parameters in the specification of the data set completely still results in a complete description of the data set. The meaning of these parameters and their possible values are described in LabPlot's documentation.

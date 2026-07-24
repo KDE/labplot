@@ -32,7 +32,7 @@ public:
 	nsl_kernel_type kernelType{nsl_kernel_gauss};
 	nsl_kde_bandwidth_type bandwidthType{nsl_kde_bandwidth_silverman};
 	double bandwidth{0.1};
-	int gridPointsCount{200}; // number of equaly spaced points at which the density is to be evaluated
+	int gridPointsCount{200}; // number of equally spaced points at which the density is to be evaluated
 
 	// KDE curve
 	XYCurve* estimationCurve{nullptr};

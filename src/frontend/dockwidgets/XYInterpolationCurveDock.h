@@ -28,6 +28,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void retranslateUi() override;
 	void updateSettings(const AbstractColumn*) override;
 	void showInterpolationResult();
 
@@ -54,7 +55,7 @@ private Q_SLOTS:
 	void evaluateChanged(int);
 	void numberOfPointsChanged();
 	void pointsModeChanged(int);
-	void recalculateClicked();
+	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

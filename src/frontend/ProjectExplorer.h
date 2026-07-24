@@ -19,7 +19,6 @@ class Project;
 class XmlStreamReader;
 
 class QFrame;
-class QLabel;
 class QLineEdit;
 class QModelIndex;
 class QPushButton;
@@ -27,7 +26,6 @@ class QSignalMapper;
 class QTreeView;
 class QXmlStreamWriter;
 class QItemSelection;
-class QMenu;
 
 class KMessageWidget;
 

@@ -3,29 +3,22 @@
 	Project              : LabPlot
 	Description          : export spreadsheet dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ExportSpreadsheetDialog.h"
 #include "backend/core/Settings.h"
-#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "frontend/GuiTools.h"
 #include "ui_exportspreadsheetwidget.h"
 
-#include <KConfigGroup>
-#include <KLocalizedString>
 #include <KMessageBox>
-
 #include <KWindowConfig>
-#include <kcoreaddons_version.h>
 
 #include <QCompleter>
 #include <QDialogButtonBox>
-
-#include <QDebug>
 #include <QFileDialog>
 #include <QFileSystemModel>
 #include <QSqlDatabase>
@@ -443,7 +436,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 			path = path.left(i) + extensions.at(index);
 	}
 
-	const auto format = Format(ui->cbFormat->itemData(ui->cbFormat->currentIndex()).toInt());
+	const auto format = static_cast<Format>(ui->cbFormat->currentData().toInt());
 	QString extension;
 	switch (format) {
 	case Format::LaTeX:
@@ -644,8 +637,6 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportHeader->show();
 	}
 
-	setFormat(static_cast<Format>(index));
-
 	// add/replace the file extension for the current file format
 	if (!path.isEmpty())
 		ui->leFileName->setText(GuiTools::replaceExtension(path, extension));
@@ -659,16 +650,12 @@ void ExportSpreadsheetDialog::setExportSelection(bool enable) {
 	}
 }
 
-void ExportSpreadsheetDialog::setFormat(Format format) {
-	m_format = format;
-}
-
 void ExportSpreadsheetDialog::setExportTo(const QStringList& to) {
 	ui->cbExportToFITS->addItems(to);
 }
 
 ExportSpreadsheetDialog::Format ExportSpreadsheetDialog::format() const {
-	return m_format;
+	return static_cast<Format>(ui->cbFormat->currentData().toInt());;
 }
 
 void ExportSpreadsheetDialog::fileNameChanged(const QString& name) {

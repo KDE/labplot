@@ -15,10 +15,8 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"
 #include "frontend/widgets/ErrorBarWidget.h"
@@ -26,11 +24,6 @@
 #include "frontend/widgets/SymbolWidget.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 #include "frontend/widgets/ValueWidget.h"
-
-#include <QCompleter>
-
-#include <KConfig>
-#include <KLocalizedString>
 
 /*!
   \class HistogramDock
@@ -78,7 +71,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	layout->insertWidget(0, backgroundWidget);
 
 	// Tab "Error Bars"
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
 	if (group.readEntry(QStringLiteral("GUMTerms"), false))
 		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
 
@@ -88,13 +81,13 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
-		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
-		if (!layout)
+		auto* tabLayout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		if (!tabLayout)
 			continue;
 
-		layout->setContentsMargins(2, 2, 2, 2);
-		layout->setHorizontalSpacing(2);
-		layout->setVerticalSpacing(2);
+		tabLayout->setContentsMargins(2, 2, 2, 2);
+		tabLayout->setHorizontalSpacing(2);
+		tabLayout->setVerticalSpacing(2);
 	}
 
 	updateLocale();
@@ -124,7 +117,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	// template handler
 	auto* frame = new QFrame(this);
 	layout = new QHBoxLayout(frame);
-	layout->setContentsMargins(0, 11, 0, 11);
+	layout->setContentsMargins(0, 0, 0, 0);
 
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("Histogram"));
 	layout->addWidget(templateHandler);
@@ -200,7 +193,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	// handle numeric vs. datetime widgets
 	// TODO: we need to react on range format changes in the plot in general,
 	// add signal-slot connection for this
-	const auto* plot = static_cast<const CartesianPlot*>(m_curve->parent(AspectType::CartesianPlot));
+	const auto* plot = static_cast<const CartesianPlot*>(m_curve->parent<CartesianPlot>());
 	ui.dteBinRangesMin->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
 	ui.dteBinRangesMax->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
 	ui.dteBinRangesMin->setMSecsSinceEpochUTC(m_curve->binRangesMin());
@@ -275,7 +268,9 @@ void HistogramDock::retranslateUi() {
 	ui.cbNormalization->addItem(i18n("Count Density"));
 	ui.cbNormalization->addItem(i18n("Probability Density"));
 
-	// TODO lineWidget->retranslateUi();
+	lineWidget->retranslateUi();
+	valueWidget->retranslateUi();
+	errorBarWidget->retranslateUi();
 
 	// tooltip texts
 	QString info = i18n(
@@ -303,6 +298,7 @@ void HistogramDock::retranslateUi() {
 void HistogramDock::updateLocale() {
 	lineWidget->updateLocale();
 	symbolWidget->updateLocale();
+	valueWidget->updateLocale();
 	errorBarWidget->updateLocale();
 }
 

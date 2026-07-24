@@ -15,8 +15,6 @@
 #include "frontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyfourierfiltercurvedockgeneraltab.h"
 
-class TreeViewComboBox;
-
 class XYFourierFilterCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
@@ -27,6 +25,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void retranslateUi() override;
 	void updateSettings(const AbstractColumn*) override;
 	void showFilterResult();
 	void updateCutoffSpinBoxes(NumberSpinBox* sb, nsl_filter_cutoff_unit newUnit, nsl_filter_cutoff_unit oldUnit, double oldValue);
@@ -51,7 +50,7 @@ private Q_SLOTS:
 	void orderChanged();
 	void unitChanged();
 	void unit2Changed();
-	void recalculateClicked();
+	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

@@ -16,6 +16,7 @@
 
 class Script;
 class KConfig;
+class QAction;
 
 class ScriptDock : public BaseDock {
 	Q_OBJECT
@@ -30,15 +31,17 @@ private:
 	Script* m_script{nullptr};
 	QList<Script*> m_scriptsList;
 
-private Q_SLOTS:
-	void loadConfigFromTemplate(KConfig&);
-	void saveConfigAsTemplate(KConfig&);
-    void setEditorFont(const QFont&);
-    void setOutputFont(const QFont&);
-    void setScriptEditorFont(const QFont&);
-    void setScriptOutputFont(const QFont&);
-    void setEditorTheme(const QString&);
-    void setScriptEditorTheme(const QString&);
+	QAction* m_caseSensitiveAction{nullptr};
+	QAction* m_matchCompleteWordAction{nullptr};
+
+	QAction* m_copyNameAction{nullptr};
+	QAction* m_copyValueAction{nullptr};
+	QAction* m_copyNameValueAction{nullptr};
+
+	void toggleFilterOptionsMenu(bool);
+	void filterTextChanged(const QString&);
+	void copy(const QAction*) const;
+	void contextMenuEvent(QContextMenuEvent*) override;
 
 Q_SIGNALS:
     void info(const QString&);

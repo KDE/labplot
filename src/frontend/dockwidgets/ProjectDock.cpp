@@ -31,6 +31,8 @@ ProjectDock::ProjectDock(QWidget* parent)
 	connect(ui.leAuthor, &QLineEdit::textChanged, this, &ProjectDock::authorChanged);
 	connect(ui.chkSaveDockStates, &QCheckBox::toggled, this, &ProjectDock::saveDockStatesChanged);
 	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &ProjectDock::saveCalculationsChanged);
+	connect(ui.chkCompressFile, &QCheckBox::toggled, this, &ProjectDock::compressFileChanged);
+	connect(ui.chkSaveData, &QCheckBox::toggled, this, &ProjectDock::saveDataChanged);
 }
 
 void ProjectDock::setProject(Project* project) {
@@ -50,6 +52,9 @@ void ProjectDock::setProject(Project* project) {
 	ui.lSaveCalculations->setVisible(visible);
 	ui.chkSaveCalculations->setVisible(visible);
 	ui.chkSaveCalculations->setChecked(project->saveCalculations());
+
+	ui.chkCompressFile->setChecked(project->fileCompression());
+	ui.chkSaveData->setChecked(project->saveData());
 
 	// resize the height of the comment field to fit the content (word wrap is ignored)
 	const double height = ui.teComment->document()->size().height() + ui.teComment->contentsMargins().top() * 2;
@@ -93,6 +98,16 @@ void ProjectDock::saveDockStatesChanged(bool state) {
 void ProjectDock::saveCalculationsChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 	m_project->setSaveCalculations(state);
+}
+
+void ProjectDock::compressFileChanged(bool compress) {
+	CONDITIONAL_LOCK_RETURN;
+	m_project->setFileCompression(compress);
+}
+
+void ProjectDock::saveDataChanged(bool save) {
+	CONDITIONAL_LOCK_RETURN;
+	m_project->setSaveData(save);
 }
 
 //*************************************************************

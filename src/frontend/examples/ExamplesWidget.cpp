@@ -3,21 +3,18 @@
 	Project              : LabPlot
 	Description          : widget showing the available color maps
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/Settings.h"
-#include "backend/lib/macros.h"
 #include "frontend/examples/ExamplesManager.h"
 #include "frontend/examples/ExamplesWidget.h"
 
 #include <QCompleter>
-#include <QMessageBox>
 #include <QStandardItemModel>
 #include <QWhatsThis>
 
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 /*!
@@ -56,6 +53,8 @@ ExamplesWidget::ExamplesWidget(QWidget* parent)
 
 	m_manager = ExamplesManager::instance();
 	ui.cbCollections->addItems(m_manager->collectionNames());
+	ui.cbCollections->insertSeparator(ui.cbCollections->count());
+	ui.cbCollections->addItem(i18n("All"));
 
 	connect(ui.cbCollections, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExamplesWidget::collectionChanged);
 	connect(ui.bInfo, &QPushButton::clicked, this, &ExamplesWidget::showInfo);
@@ -89,7 +88,7 @@ ExamplesWidget::ExamplesWidget(QWidget* parent)
 
 ExamplesWidget::~ExamplesWidget() {
 	// save the selected collection
-	KConfigGroup conf = Settings::group(QStringLiteral("ExamplesWidget"));
+	auto conf = Settings::group(QStringLiteral("ExamplesWidget"));
 	conf.writeEntry("Collection", ui.cbCollections->currentText());
 	conf.writeEntry("ViewIndex", ui.stackedWidget->currentIndex());
 	if (ui.lwExamples->currentItem())
@@ -99,8 +98,10 @@ ExamplesWidget::~ExamplesWidget() {
 /**
  * Shows all categories and sub-categories for the currently selected collection
  */
-void ExamplesWidget::collectionChanged(int) {
-	const QString& collection = ui.cbCollections->currentText();
+void ExamplesWidget::collectionChanged(int index) {
+	QString collection;
+	if (index != ui.cbCollections->count() - 1)
+		collection = ui.cbCollections->currentText();
 
 	// populate the list view for the icon mode
 	if (m_model)

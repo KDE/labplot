@@ -25,6 +25,7 @@ public:
 	XYAnalysisCurve::DataSourceType dataSourceType{XYAnalysisCurve::DataSourceType::Spreadsheet};
 	const XYCurve* dataSourceCurve{nullptr};
 	QString dataSourceCurvePath;
+	bool autoRecalculate{true};
 
 	void recalculate();
 	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) = 0;

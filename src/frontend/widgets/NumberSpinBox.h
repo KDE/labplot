@@ -58,6 +58,10 @@ public:
 	void setMinimum(double min);
 	double maximum() const;
 	void setMaximum(double max);
+	double minimumNotEqual() const;
+	void setMinimumNotEqual(double min);
+	double maximumNotEqual() const;
+	void setMaximumNotEqual(double max);
 	void setLocale(const QLocale& l) {
 		if (locale() != l) {
 			QDoubleSpinBox::setLocale(l);
@@ -106,6 +110,8 @@ private:
 	double m_value{0};
 	double m_maximum{std::numeric_limits<double>::max()};
 	double m_minimum{std::numeric_limits<double>::lowest()};
+	double m_maximumNotEqual{std::numeric_limits<double>::max()};
+	double m_minimumNotEqual{std::numeric_limits<double>::lowest()};
 
 	friend class SpinBoxTest;
 };

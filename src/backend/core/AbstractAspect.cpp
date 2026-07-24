@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -18,10 +18,13 @@
 #include "backend/core/aspectcommands.h"
 #include "backend/lib/PropertyChangeCommand.h"
 #include "backend/lib/SignallingUndoCommand.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/lib/trace.h"
+#ifdef HAVE_CANTOR_LIBS
+#include "backend/notebook/Notebook.h"
+#endif
 
 #include <KStandardAction>
 #include <QClipboard>
@@ -43,9 +46,7 @@
  * In contrast to the similar feature of QObject, Aspect trees are fully undo/redo aware and provide
  * signals around object adding/removal.
  *
- * AbstractAspect manages for every Aspect the properties #name, #comment, #captionSpec and
- * #creationTime. All of these translate into the caption() as described in the documentation
- * of setCaptionSpec().
+ * AbstractAspect manages for every Aspect the properties #name, #comment and #creationTime.
  *
  * If an undoStack() can be found (usually it is managed by Project), changes to the properties
  * as well as adding/removing children support multi-level undo/redo. In order to support undo/redo
@@ -159,6 +160,11 @@
  */
 
 /**
+ * \fn void AbstractAspect::statusInfo(const QString &text)
+ * \brief Emitted whenever some aspect in the tree wants to notify the user about an error
+ */
+
+/**
  * \fn protected void AbstractAspect::info(const QString &text)
  * \brief Implementations should call this whenever status information should be given to the user.
  *
@@ -259,6 +265,13 @@ QDateTime AbstractAspect::creationTime() const {
 	return d->m_creation_time;
 }
 
+QString AbstractAspect::caption() const {
+	QString caption = QLatin1String("<b>") + d->m_name + QLatin1String("</b>");
+	if (!d->m_comment.isEmpty())
+		caption += QLatin1String("<br><br>") + d->m_comment.replace(QLatin1Char('\n'), QLatin1String("<br>"));
+	return caption;
+}
+
 bool AbstractAspect::isHidden() const {
 	return d->m_hidden;
 }
@@ -273,7 +286,14 @@ void AbstractAspect::setHidden(bool value) {
 }
 
 /**
- * \brief Set "fixed" property which defines whether the object can be renamed, deleted, etc.
+ * \brief Set "fixed" property which is used to define internal created aspects used by other aspects
+ * It defines whether the object properties can be modified. If false any of the below data shall be
+ * modifyable (Must be done by the developer):
+ * - deleting
+ * - moving (order of the objects)
+ * - data changed (Column: row values changing, XYCurve: Changing the data columns, ...)
+ *
+ * Other properties like appearance properties shall still be modifyable
  */
 void AbstractAspect::setFixed(bool value) {
 	if (value == d->m_fixed)
@@ -299,6 +319,25 @@ void AbstractAspect::setIsLoading(bool load) {
 
 bool AbstractAspect::isLoading() const {
 	return d->m_isLoading;
+}
+
+void AbstractAspect::setChanged(bool changed) {
+	if (d->m_changed == changed || d->m_isLoading)
+		return;
+
+	d->m_changed = changed;
+
+	// update the status for the parent aspect if the current aspect is hidden
+	// to properly show the changed status in the aspect tree model
+	if (d->m_hidden && changed)
+		if (auto* p = parentAspect())
+			p->setChanged(true);
+
+	Q_EMIT aspectChangedStatusChanged(this);
+}
+
+bool AbstractAspect::isChanged() const {
+	return d->m_changed;
 }
 
 /**
@@ -351,42 +390,45 @@ QMenu* AbstractAspect::createContextMenu() {
 			menu->insertAction(actionDuplicate, action);
 		else
 			menu->addAction(action);
-		connect(action, &QAction::triggered, [=]() {
+		connect(action, &QAction::triggered, [=, this]() {
 			paste();
 		});
 	}
 	menu->addSeparator();
 
 	// action to create data spreadsheet based on the results of the calculations for types that support it
-	QAction* actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+	if (inherits<XYAnalysisCurve>() || m_type == AspectType::XYEquationCurve || m_type == AspectType::Histogram || m_type == AspectType::BoxPlot) {
+		auto* action = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
 
-	// handle types that support it
-	bool dataAvailable = false;
-	if (const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this)) {
-		if (analysisCurve->resultAvailable()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
-			dataAvailable = true;
+		// handle types that support it
+		bool dataAvailable = false;
+		if (const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this)) {
+			if (analysisCurve->resultAvailable()) {
+				connect(action, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
+				dataAvailable = true;
+			}
+		} else if (const auto* equationCurve = dynamic_cast<XYEquationCurve*>(this)) {
+			if (equationCurve->dataAvailable()) {
+				connect(action, &QAction::triggered, static_cast<XYEquationCurve*>(this), &XYEquationCurve::createDataSpreadsheet);
+				dataAvailable = true;
+			}
+		} else if (const auto* histogram = dynamic_cast<Histogram*>(this)) {
+			if (histogram->bins()) {
+				connect(action, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
+				dataAvailable = true;
+			}
+		} else if (const auto* boxPlot = dynamic_cast<BoxPlot*>(this)) {
+			if (!boxPlot->dataColumns().isEmpty()) {
+				connect(action, &QAction::triggered, static_cast<BoxPlot*>(this), &BoxPlot::createDataSpreadsheet);
+				dataAvailable = true;
+			}
 		}
-	} else if (const auto* equationCurve = dynamic_cast<XYEquationCurve*>(this)) {
-		if (equationCurve->dataAvailable()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYEquationCurve*>(this), &XYEquationCurve::createDataSpreadsheet);
-			dataAvailable = true;
-		}
-	} else if (const auto* histogram = dynamic_cast<Histogram*>(this)) {
-		if (histogram->bins()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
-			dataAvailable = true;
-		}
-	} else if (const auto* boxPlot = dynamic_cast<BoxPlot*>(this)) {
-		if (!boxPlot->dataColumns().isEmpty()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<BoxPlot*>(this), &BoxPlot::createDataSpreadsheet);
-			dataAvailable = true;
-		}
-	}
 
-	if (dataAvailable) {
-		menu->addAction(actionDataSpreadsheet);
-		menu->addSeparator();
+		if (dataAvailable) {
+			menu->addAction(action);
+			menu->addSeparator();
+		} else
+			delete action; // no results available yet, no need to show in the menu
 	}
 
 	// don't allow to rename and delete fixed objects and
@@ -418,11 +460,15 @@ QMenu* AbstractAspect::createContextMenu() {
 		if (count > 1) {
 			auto* moveMenu = new QMenu(i18n("Move"), menu);
 			moveMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
-			if (parent->indexOfChild<AbstractAspect>(this) != 0)
-				moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
+			if (parent->indexOfChild<AbstractAspect>(this) != 0) {
+				auto* action = moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
+				action->setShortcut(Qt::CTRL | Qt::Key_Up);
+			}
 
-			if (parent->indexOfChild<AbstractAspect>(this) != count - 1)
-				moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-down")), i18n("Down"), this, &AbstractAspect::moveDown);
+			if (parent->indexOfChild<AbstractAspect>(this) != count - 1) {
+				auto* action = moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-down")), i18n("Down"), this, &AbstractAspect::moveDown);
+				action->setShortcut(Qt::CTRL | Qt::Key_Down);
+			}
 			menu->addSeparator();
 			menu->addMenu(moveMenu);
 		}
@@ -433,24 +479,6 @@ QMenu* AbstractAspect::createContextMenu() {
 
 AspectType AbstractAspect::type() const {
 	return m_type;
-}
-
-bool AbstractAspect::inherits(AspectType type) const {
-	return (static_cast<quint64>(m_type) & static_cast<quint64>(type)) == static_cast<quint64>(type);
-}
-
-/**
- * \brief In the parent-child hierarchy, return the first parent of type \param type or null pointer if there is none.
- */
-AbstractAspect* AbstractAspect::parent(AspectType type) const {
-	AbstractAspect* parent = parentAspect();
-	if (!parent)
-		return nullptr;
-
-	if (parent->inherits(type))
-		return parent;
-
-	return parent->parent(type);
 }
 
 /**
@@ -470,10 +498,10 @@ void AbstractAspect::setParentAspect(AbstractAspect* parent) {
  * The returned folder may be the aspect itself if it inherits Folder.
  */
 Folder* AbstractAspect::folder() {
-	if (inherits(AspectType::Folder))
-		return static_cast<class Folder*>(this);
+	if (auto* f = castTo<Folder>())
+		return f;
 	AbstractAspect* parent_aspect = parentAspect();
-	while (parent_aspect && !parent_aspect->inherits(AspectType::Folder))
+	while (parent_aspect && !parent_aspect->inherits<Folder>())
 		parent_aspect = parent_aspect->parentAspect();
 	return static_cast<class Folder*>(parent_aspect);
 }
@@ -502,6 +530,10 @@ Project* AbstractAspect::project() {
 	return parentAspect() ? parentAspect()->project() : nullptr;
 }
 
+const Project* AbstractAspect::project() const {
+	return parentAspect() ? parentAspect()->project() : nullptr;
+}
+
 void AbstractAspect::setProjectChanged(bool changed) {
 	auto* p = project();
 	if (p)
@@ -519,7 +551,7 @@ QString AbstractAspect::path() const {
  * \brief Add the given Aspect to my list of children.
  */
 bool AbstractAspect::addChild(AbstractAspect* child) {
-	Q_CHECK_PTR(child);
+	Q_ASSERT(child);
 
 	const QString new_name = uniqueNameFor(child->name());
 	beginMacro(i18n("%1: add %2", name(), new_name));
@@ -553,7 +585,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 }
 
 void AbstractAspect::insertChild(AbstractAspect* child, int index) {
-	Q_CHECK_PTR(child);
+	Q_ASSERT(child);
 	if (index == -1)
 		index = d->m_children.count();
 
@@ -658,7 +690,7 @@ QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFla
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
 		if (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) {
-			if (child->inherits(type))
+			if (child->inherits(typeName(type).data()))
 				result << child;
 
 			if (flags & ChildIndexFlag::Recursive)
@@ -684,13 +716,13 @@ void AbstractAspect::remove() {
 
 void AbstractAspect::moveUp() {
 	auto* parent = parentAspect();
-	if (parent)
+	if (parent && parent->indexOfChild<AbstractAspect>(this) > 0)
 		parent->moveChild(this, -1);
 }
 
 void AbstractAspect::moveDown() {
 	auto* parent = parentAspect();
-	if (parent)
+	if (parent && parent->indexOfChild<AbstractAspect>(this) < parent->childCount<AbstractAspect>() - 1)
 		parent->moveChild(this, 1);
 }
 
@@ -745,7 +777,7 @@ void AbstractAspect::copy() {
 	writer.writeEndElement();
 
 	setSuppressWriteUuid(true);
-	const auto& children = this->children(AspectType::AbstractAspect, {ChildIndexFlag::IncludeHidden, ChildIndexFlag::Recursive});
+	const auto& children = this->children<AbstractAspect>({ChildIndexFlag::IncludeHidden, ChildIndexFlag::Recursive});
 	for (const auto& child : children)
 		child->setSuppressWriteUuid(true);
 
@@ -773,7 +805,7 @@ void AbstractAspect::duplicate() {
 }
 
 /*!
- * in case the clipboard containts a LabPlot's specific copy&paste content,
+ * in case the clipboard contains LabPlot's specific copy&paste content,
  * this function deserializes the XML string and adds the created aspect as
  * a child to the current aspect ("paste").
  */
@@ -787,7 +819,8 @@ void AbstractAspect::paste(bool duplicate, int index) {
 	if (!xml.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	AbstractAspect* aspect = nullptr;
 	XmlStreamReader reader(xml);
 	while (!reader.atEnd()) {
@@ -844,14 +877,13 @@ void AbstractAspect::paste(bool duplicate, int index) {
 		aspect->setPasted(false);
 		endMacro();
 	}
-	RESET_CURSOR;
 }
 
 /*!
  * helper function determining whether the current content of the clipboard
- * contants the labplot specific copy&paste XML content. In case a valid content
+ * contains the labplot specific copy&paste XML content. In case valid content
  * is available, the aspect type of the object to be pasted is returned.
- * AspectType::AbstractAspect is returned otherwise.
+ * otherwise, AspectType::AbstractAspect is returned.
  */
 AspectType AbstractAspect::clipboardAspectType(QString& name) {
 	AspectType type = AspectType::AbstractAspect;
@@ -943,6 +975,8 @@ bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
 void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QLatin1String("creation_time"), creationTime().toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QLatin1String("name"), name());
+	writer->writeAttribute(QLatin1String("fixed"), QString::number(isFixed()));
+	writer->writeAttribute(QLatin1String("undoAware"), QString::number(isUndoAware()));
 	if (!d->m_suppressWriteUuid)
 		writer->writeAttribute(QLatin1String("uuid"), uuid().toString());
 }
@@ -959,7 +993,6 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 	QString str = attribs.value(QLatin1String("name")).toString();
 	if (str.isEmpty())
 		reader->raiseWarning(i18n("Attribute 'name' is missing or empty."));
-
 	d->m_name = str;
 
 	// creation time
@@ -975,10 +1008,18 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 			d->m_creation_time = QDateTime::currentDateTime();
 	}
 
+	str = attribs.value(QLatin1String("fixed")).toString();
+	if (!str.isEmpty())
+		d->m_fixed = static_cast<bool>(str.toInt());
+
+	str = attribs.value(QLatin1String("undoAware")).toString();
+	if (!str.isEmpty())
+		d->m_undoAware = static_cast<bool>(str.toInt());
+
 	str = attribs.value(QLatin1String("uuid")).toString();
-	if (!str.isEmpty()) {
+	if (!str.isEmpty())
 		d->m_uuid = QUuid(str);
-	}
+
 	return true;
 }
 
@@ -990,13 +1031,21 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 //! \name undo related
 //@{
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void AbstractAspect::setUndoAware(bool b) {
-	d->m_undoAware = b;
 
-	// propagate the value to the internal and hidden aspects, if available (Line, Background, etc.)
-	const auto& children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
-	for (auto* child : children)
-		child->setUndoAware(b);
+/*!
+ * enables the undo awareness of the aspect (modifications are put onto the undo stack) if \c value is set to \c true,
+ * disables it otherwise. Note, this function doesn't modify the behavior of aspects's children, the behavior of the children
+ * needs to be handled separately, if needed.
+ */
+void AbstractAspect::setUndoAware(bool value) {
+	d->m_undoAware = value;
+}
+
+/*!
+ * returns \c true if the aspect is undo aware (modifications are put onto the undo stack), returns \c false otherwise.
+ */
+bool AbstractAspect::isUndoAware() const {
+	return d->m_undoAware;
 }
 
 /**
@@ -1006,7 +1055,7 @@ void AbstractAspect::setUndoAware(bool b) {
  * The only requirement is that the root Aspect reimplements undoStack() to get the
  * undo stack from somewhere (the default implementation just delegates to parentAspect()).
  */
-QUndoStack* AbstractAspect::undoStack() const {
+UndoStack* AbstractAspect::undoStack() const {
 	return parentAspect() ? parentAspect()->undoStack() : nullptr;
 }
 
@@ -1014,9 +1063,9 @@ QUndoStack* AbstractAspect::undoStack() const {
  * \brief Execute the given command, pushing it on the undoStack() if available.
  */
 void AbstractAspect::exec(QUndoCommand* cmd) {
-	Q_CHECK_PTR(cmd);
-	if (d->m_undoAware) {
-		QUndoStack* stack = undoStack();
+	Q_ASSERT(cmd);
+	if (d->m_undoAware && (project() && project()->isUndoAware())) {
+		auto* stack = undoStack();
 		if (stack)
 			stack->push(cmd);
 		else {
@@ -1030,6 +1079,8 @@ void AbstractAspect::exec(QUndoCommand* cmd) {
 		cmd->redo();
 		delete cmd;
 	}
+
+	setChanged(true);
 }
 
 /**
@@ -1066,7 +1117,7 @@ void AbstractAspect::exec(QUndoCommand* command,
  * \brief Begin an undo stack macro (series of commands)
  */
 void AbstractAspect::beginMacro(const QString& text) {
-	if (!d->m_undoAware)
+	if (!d->m_undoAware || (project() && !project()->isUndoAware()))
 		return;
 
 	auto* stack = undoStack();
@@ -1078,7 +1129,7 @@ void AbstractAspect::beginMacro(const QString& text) {
  * \brief End the current undo stack macro
  */
 void AbstractAspect::endMacro() {
-	if (!d->m_undoAware)
+	if (!d->m_undoAware || (project() && !project()->isUndoAware()))
 		return;
 
 	auto* stack = undoStack();
@@ -1089,6 +1140,17 @@ void AbstractAspect::endMacro() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ * this function is called when the selection in the UI view was changed.
+ * forwards the selection/deselection to the ProjectExplorer via emitting a signal
+ * and triggers the navigation to this aspect's path in the project tree.
+ */
+void AbstractAspect::setSelectedInView(bool selected) {
+	if (selected)
+		Q_EMIT childAspectSelectedInView(this);
+	else
+		Q_EMIT childAspectDeselectedInView(this);
+}
 
 /*!
  * this function is called when the selection in ProjectExplorer was changed.
@@ -1110,8 +1172,11 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//* XYSmouthCurve with the child column for calculated rough values
 	//* CantorWorksheet with the child columns for CAS variables
 	auto* parent = this->parentAspect();
-	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
-		&& !parent->inherits(AspectType::Notebook))
+	if (parent && !parent->inherits<Folder>() && !parent->inherits<XYFitCurve>() && !parent->inherits<XYSmoothCurve>()
+#ifdef HAVE_CANTOR_LIBS
+		&& !parent->inherits(AbstractAspect::typeName(AspectType::Notebook).data())
+#endif
+	)
 		Q_EMIT this->selected(aspect);
 }
 
@@ -1124,8 +1189,11 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//* XYSmouthCurve with the child column for calculated rough values
 	//* CantorWorksheet with the child columns for CAS variables
 	auto* parent = this->parentAspect();
-	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
-		&& !parent->inherits(AspectType::Notebook))
+	if (parent && !parent->inherits<Folder>() && !parent->inherits<XYFitCurve>() && !parent->inherits<XYSmoothCurve>()
+#ifdef HAVE_CANTOR_LIBS
+		&& !parent->inherits(AbstractAspect::typeName(AspectType::Notebook).data())
+#endif
+	)
 		Q_EMIT this->deselected(aspect);
 }
 
@@ -1183,6 +1251,7 @@ QString AbstractAspect::uniqueNameFor(const QString& name, const QStringList& na
 void AbstractAspect::connectChild(AbstractAspect* child) {
 	connect(child, &AbstractAspect::aspectDescriptionAboutToChange, this, &AbstractAspect::aspectDescriptionAboutToChange);
 	connect(child, &AbstractAspect::aspectDescriptionChanged, this, &AbstractAspect::aspectDescriptionChanged);
+	connect(child, &AbstractAspect::aspectChangedStatusChanged, this, &AbstractAspect::aspectChangedStatusChanged);
 	connect(child,
 			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
 			this,

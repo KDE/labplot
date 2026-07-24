@@ -47,7 +47,7 @@ that will be used to build the shared library.
 
 ``DEPENDENCIES`` is the list of dependencies that the bindings uses.
 
-``HOMEPAGE_URL`` is a URL to the proyect homepage.
+``HOMEPAGE_URL`` is a URL to the project homepage.
 
 ``ISSUES_URL` is a URL where users can report bugs and feature requests.
 
@@ -117,11 +117,13 @@ function(generate_shiboken_sources)
 
     # Set up the options to pass to shiboken.
     set(shiboken_options --enable-pyside-extensions
+        --keywords=scripting
+        --clang-option=-DSCRIPTING
         "${INCLUDES}${PATH_SEP}${PBC_INCLUDES}"
         --include-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths="${CMAKE_INSTALL_PREFIX}/share/PySide${QT_MAJOR_VERSION}/typesystems"
-        --typesystem-paths=${PYSIDE_TYPESYSTEMS}
+	--typesystem-paths="${PySide6_TYPESYSTEMS}"
         --output-directory=${CMAKE_CURRENT_BINARY_DIR})
 
     set(generated_sources_dependencies ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM})
@@ -129,10 +131,18 @@ function(generate_shiboken_sources)
     # Add custom target to run shiboken to generate the binding cpp files.
     add_custom_command(
         OUTPUT ${PB_GENERATED_SOURCES}
-        COMMAND shiboken6 ${shiboken_options} ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM}
+        COMMAND ${Shiboken6_EXECUTABLE} ${shiboken_options} ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM}
         DEPENDS ${generated_sources_dependencies}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Running generator for ${PB_TYPESYSTEM}"
+        COMMENT "Running generator \"${Shiboken6_EXECUTABLE}\" for ${PB_TYPESYSTEM}"
+    )
+
+    set_source_files_properties(
+	    ${PB_GENERATED_SOURCES}
+	    PROPERTIES
+	        GENERATED TRUE
+		COMPILE_FLAGS
+		    "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wno-keyword-macro -Wno-shadow -Wno-cast-function-type -Wno-zero-as-null-pointer-constant>"
     )
 
     # # Set the cpp files which will be used for the bindings library.

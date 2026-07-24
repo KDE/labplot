@@ -3,13 +3,12 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2018 Stefan-Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "WorksheetView.h"
-#include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -32,7 +31,6 @@
 #include "frontend/worksheet/PresenterWidget.h"
 #endif
 #include <frontend/GuiTools.h>
-#include <frontend/widgets/toggleactionmenu.h>
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
@@ -48,7 +46,6 @@
 #include <QGraphicsOpacityEffect>
 #include <QGraphicsPixmapItem>
 #include <QImage>
-#include <QMdiArea>
 #include <QMenu>
 #include <QMimeData>
 #include <QPrinter>
@@ -61,8 +58,6 @@
 #ifdef HAVE_QTSVG
 #include <QSvgGenerator>
 #endif
-
-#include <limits>
 
 #include <gsl/gsl_const_cgs.h>
 
@@ -103,8 +98,9 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	connect(m_worksheet, &Worksheet::requestUpdate, this, &WorksheetView::updateBackground);
 	connect(m_worksheet, &Worksheet::childAspectAboutToBeRemoved, this, &WorksheetView::aspectAboutToBeRemoved);
 	connect(m_worksheet, &Worksheet::useViewSizeChanged, this, &WorksheetView::useViewSizeChanged);
+	connect(m_worksheet, &Worksheet::pageRectChanged, this, &WorksheetView::updateFit);
 	connect(m_worksheet, &Worksheet::layoutChanged, this, &WorksheetView::layoutChanged);
-	connect(m_worksheet, &Worksheet::changed, this, [=] {
+	connect(m_worksheet, &Worksheet::changed, this, [=, this] {
 		if (m_magnificationWindow && m_magnificationWindow->isVisible())
 			updateMagnificationWindow(mapToScene(mapFromGlobal(QCursor::pos())));
 	});
@@ -168,22 +164,22 @@ void WorksheetView::initActions() {
 	gridActionGroup->setExclusive(true);
 	magnificationActionGroup = new QActionGroup(this);
 
-	auto* fitActionGroup = new QActionGroup(zoomActionGroup);
-	fitActionGroup->setExclusive(true);
-	zoomFitNoneAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18nc("Zoom", "No fit"), fitActionGroup);
+	zoomFitActionGroup = new QActionGroup(zoomActionGroup);
+	zoomFitActionGroup->setExclusive(true);
+	zoomFitNoneAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18nc("Zoom", "No fit"), zoomFitActionGroup);
 	zoomFitNoneAction->setCheckable(true);
 	zoomFitNoneAction->setChecked(true);
 	zoomFitNoneAction->setData((int)Worksheet::ZoomFit::None);
-	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18nc("Zoom", "Fit to Height"), fitActionGroup);
+	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18nc("Zoom", "Fit to Height"), zoomFitActionGroup);
 	zoomFitPageHeightAction->setCheckable(true);
 	zoomFitPageHeightAction->setData((int)Worksheet::ZoomFit::FitToHeight);
-	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18nc("Zoom", "Fit to Width"), fitActionGroup);
+	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18nc("Zoom", "Fit to Width"), zoomFitActionGroup);
 	zoomFitPageWidthAction->setCheckable(true);
 	zoomFitPageWidthAction->setData((int)Worksheet::ZoomFit::FitToWidth);
-	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18nc("Zoom", "Fit to Selection"), fitActionGroup);
+	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18nc("Zoom", "Fit to Selection"), zoomFitActionGroup);
 	zoomFitSelectionAction->setCheckable(true);
 	zoomFitSelectionAction->setData((int)Worksheet::ZoomFit::FitToSelection);
-	zoomFitAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18nc("Zoom", "Fit"), fitActionGroup);
+	zoomFitAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18nc("Zoom", "Fit"), zoomFitActionGroup);
 	zoomFitAction->setCheckable(true);
 	zoomFitAction->setData((int)Worksheet::ZoomFit::Fit);
 
@@ -249,8 +245,8 @@ void WorksheetView::initActions() {
 	// Layout actions
 	// TODO: the icons labplot-editvlayout and labplot-edithlayout are confusing for the user.
 	// the orientation is visualized as a horizontal or vertical line on the icon, but the user
-	// percieves the two objects (resembles plots on the worksheet) separated by this line much stronger than the line itself.
-	// with this, the two objects separated by a vertical line are perceived to be layed out in a _horizontal_ order and the
+	// perceives the two objects (resembles plots on the worksheet) separated by this line much stronger than the line itself.
+	// with this, the two objects separated by a vertical line are perceived to be laid out in a _horizontal_ order and the
 	// same for the vertical line. Because of this we change the icons here. We can rename the icons later in the breeze icon set.
 	verticalLayoutAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-edithlayout")), i18n("Vertical Layout"), layoutActionGroup);
 	verticalLayoutAction->setData(static_cast<int>(Worksheet::Layout::VerticalLayout));
@@ -300,7 +296,7 @@ void WorksheetView::initActions() {
 
 	connect(addNewActionGroup, &QActionGroup::triggered, this, &WorksheetView::addNew);
 	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeMouseMode);
-	connect(fitActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoomFit);
+	connect(zoomFitActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoomFit);
 	connect(zoomActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoom);
 	connect(magnificationActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeMagnification);
 	connect(layoutActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeLayout);
@@ -550,7 +546,7 @@ void WorksheetView::initMenus() {
 	m_themeMenu = new QMenu(i18n("Theme"), this);
 	m_themeMenu->setIcon(QIcon::fromTheme(QStringLiteral("color-management")));
 #ifndef SDK
-	connect(m_themeMenu, &QMenu::aboutToShow, this, [=]() {
+	connect(m_themeMenu, &QMenu::aboutToShow, this, [=, this]() {
 		if (!m_themeMenu->isEmpty())
 			return;
 		auto* themeWidget = new ThemesWidget(nullptr);
@@ -632,6 +628,9 @@ void WorksheetView::fillZoomMenu(ToggleActionMenu* menu) const {
 	menu->addAction(zoomFitPageHeightAction);
 	menu->addAction(zoomFitPageWidthAction);
 	menu->addAction(zoomFitSelectionAction);
+	for (auto* action : zoomFitActionGroup->actions())
+		if (static_cast<Worksheet::ZoomFit>(action->data().toInt()) == m_worksheet->zoomFit())
+			action->setChecked(true);
 }
 
 void WorksheetView::fillMagnificationMenu(ToggleActionMenu* menu) const {
@@ -806,11 +805,11 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 }
 
 CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
-	QGraphicsItem* item = itemAt(pos);
+	auto* item = itemAt(pos);
 	if (!item)
 		return nullptr;
 
-	QGraphicsItem* plotItem = nullptr;
+	const QGraphicsItem* plotItem = nullptr;
 	if (item->data(0).toInt() == static_cast<int>(AspectType::CartesianPlot))
 		plotItem = item;
 	else {
@@ -1042,7 +1041,7 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 	// determine the currently selected aspect
 	AbstractAspect* aspect = nullptr;
 	if (m_selectedItems.count() == 1) {
-		// at the moment we allow to copy/paste/duplicate one single selcted object only
+		// at the moment we allow to copy/paste/duplicate one single selected object only
 		const auto children = m_worksheet->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 		const auto* item = m_selectedItems.constFirst();
 		for (auto* child : children) {
@@ -1141,7 +1140,8 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 	plot->processDropEvent(plot->project()->droppedAspects(mimeData));
 
 	// select the worksheet in the project explorer and bring the view to the foreground
-	m_worksheet->setSelectedInView(true); // FIXME: doesn't work
+	m_worksheet->setSelectedInView(true);
+	this->setFocus();
 }
 
 // ##############################################################################
@@ -1252,10 +1252,10 @@ double WorksheetView::zoomFactor() const {
 }
 
 void WorksheetView::updateLabelsZoom() const {
-	const double zoom = zoomFactor();
+	const double factor = zoomFactor();
 	const auto& labels = m_worksheet->children<TextLabel>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* label : labels)
-		label->setZoomFactor(zoom);
+		label->setZoomFactor(factor);
 }
 
 void WorksheetView::changeMagnification(QAction* action) {
@@ -1352,8 +1352,8 @@ void WorksheetView::addNew(QAction* action) {
 		break;
 	}
 	case AddNewMode::TextLabel: {
-		auto* l = new TextLabel(i18n("Text Label"));
-		l->setText(i18n("Text Label"));
+		auto* l = new TextLabel(i18n("Text Label"));\
+		l->setText(TextLabel::TextWrapper(i18n("text")));
 		aspect = l;
 		break;
 	}
@@ -1511,8 +1511,8 @@ void WorksheetView::fadeOut(qreal value) {
  * sets the layout in Worksheet and enables/disables the layout actions.
  */
 void WorksheetView::changeLayout(QAction* action) const {
-	const auto layout = static_cast<Worksheet::Layout>(action->data().toInt());
-	m_worksheet->setLayout(layout);
+	const auto wsLayout = static_cast<Worksheet::Layout>(action->data().toInt());
+	m_worksheet->setLayout(wsLayout);
 }
 
 Worksheet::Layout WorksheetView::layout() const {
@@ -1623,7 +1623,6 @@ void WorksheetView::selectionChanged() {
 	if (items.isEmpty()) {
 		// no items selected -> select the worksheet again.
 		m_worksheet->setSelectedInView(true);
-
 		// if one of the "zoom&select" plot mouse modes was selected before, activate the default "selection mode" again
 		// since no plots are selected now.
 		if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection) {
@@ -1647,11 +1646,15 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 	/* Action to All: action is applied to all ranges in all dimensions
 	 *	- Applied to all plots and all ranges
 	 * Action to X: action is applied to all x ranges
-	 *	- x zoom selection: zooming into all x ranges of all plots (Normaly all plots will have the same x ranges so it makes sense
+	 *	- x zoom selection: zooming into all x ranges of all plots (Normally all plots will have the same x ranges so it makes sense
 	 *  - y zoom selection: makes no sense. disable
+	 *  - x autozoom: doing on all ranges of all plots
+	 *  - y autozoom: doing on all ranges of selected plot
 	 * Action to Y: action is applied to all y ranges
 	 *  - x zoom selection: makes no sense. disable
 	 *  - y zoom selection: zooming into all y ranges of all plots
+	 *  - x autozoom: doing on all ranges of selected plot
+	 *  - y autozoom: doing on all ranges of all plots
 	 * Action to Selection
 	 * - x zoom selection: makes no sense, because the range is unknown, disable
 	 * - y zoom selection: makes no sense, because the range is unknown, disable
@@ -1691,44 +1694,70 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 			action->setEnabled(true);
 		break;
 	}
-	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX: {
+		const bool singleYRange = plot->rangeCount(Dimension::Y) == 1;
 		// mouse mode actions
 		for (auto* action : mouseModeActionGroup->actions()) {
-			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
-			if (mode == CartesianPlot::MouseMode::ZoomSelection)
+			switch (static_cast<CartesianPlot::MouseMode>(action->data().toInt())) {
+			case CartesianPlot::MouseMode::ZoomSelection:
 				action->setEnabled(false);
-			else if (mode == CartesianPlot::MouseMode::ZoomXSelection || mode == CartesianPlot::MouseMode::ZoomYSelection)
+				break;
+			case CartesianPlot::MouseMode::ZoomXSelection:
 				action->setEnabled(true);
+				break;
+			case CartesianPlot::MouseMode::ZoomYSelection:
+				action->setEnabled(singleYRange);
+				break;
+			case CartesianPlot::MouseMode::Selection:
+			case CartesianPlot::MouseMode::Cursor:
+			case CartesianPlot::MouseMode::Crosshair:
+				break;
+			}
 		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
 			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
-			const bool x = (op == CartesianPlot::NavigationOperation::ZoomInX ||op == CartesianPlot::NavigationOperation::ZoomOutX
-				||  op == CartesianPlot::NavigationOperation::ShiftLeftX ||  op == CartesianPlot::NavigationOperation::ShiftRightX
-				||  op == CartesianPlot::NavigationOperation::ScaleAutoX);
-			action->setEnabled(x);
+			const bool enableShift = singleYRange && (op == CartesianPlot::NavigationOperation::ShiftUpY || op == CartesianPlot::NavigationOperation::ShiftDownY);
+			const bool enable = (op != CartesianPlot::NavigationOperation::ScaleAuto && op != CartesianPlot::NavigationOperation::ZoomIn
+				&&  op != CartesianPlot::NavigationOperation::ZoomOut
+				&&  op != CartesianPlot::NavigationOperation::ShiftUpY &&  op != CartesianPlot::NavigationOperation::ShiftDownY) || enableShift;
+			action->setEnabled(enable);
 		}
 		break;
-	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
+	}
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY: {
+		const bool singleXRange = plot->rangeCount(Dimension::X) == 1;
 		// mouse mode actions
 		for (auto* action : mouseModeActionGroup->actions()) {
-			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
-			if (mode == CartesianPlot::MouseMode::ZoomSelection)
+			switch (static_cast<CartesianPlot::MouseMode>(action->data().toInt())) {
+			case CartesianPlot::MouseMode::ZoomSelection:
 				action->setEnabled(false);
-			else if (mode == CartesianPlot::MouseMode::ZoomXSelection || mode == CartesianPlot::MouseMode::ZoomYSelection)
+				break;
+			case CartesianPlot::MouseMode::ZoomYSelection:
 				action->setEnabled(true);
+				break;
+			case CartesianPlot::MouseMode::ZoomXSelection:
+				action->setEnabled(singleXRange);
+				break;
+			case CartesianPlot::MouseMode::Selection:
+			case CartesianPlot::MouseMode::Cursor:
+			case CartesianPlot::MouseMode::Crosshair:
+				break;
+			}
 		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
 			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
-			const bool y = (op == CartesianPlot::NavigationOperation::ZoomInY ||op == CartesianPlot::NavigationOperation::ZoomOutY
-				||  op == CartesianPlot::NavigationOperation::ShiftUpY ||  op == CartesianPlot::NavigationOperation::ShiftDownY
-				||  op == CartesianPlot::NavigationOperation::ScaleAutoY);
-			action->setEnabled(y);
+			const bool enableShift = singleXRange && (op == CartesianPlot::NavigationOperation::ShiftLeftX || op == CartesianPlot::NavigationOperation::ShiftRightX);
+			const bool enable = (op != CartesianPlot::NavigationOperation::ScaleAuto && op != CartesianPlot::NavigationOperation::ZoomIn
+								 &&  op != CartesianPlot::NavigationOperation::ZoomOut
+								 &&  op != CartesianPlot::NavigationOperation::ShiftLeftX &&  op != CartesianPlot::NavigationOperation::ShiftRightX) || enableShift;
+			action->setEnabled(enable);
 		}
 		break;
+	}
 	}
 }
 
@@ -2331,7 +2360,7 @@ void WorksheetView::suppressSelectionChangedEvent(bool value) {
 WorksheetElement* WorksheetView::selectedElement() const {
 	return m_selectedElement;
 }
-QList<QGraphicsItem*> WorksheetView::selectedItems() const {
+const QList<QGraphicsItem*>& WorksheetView::selectedItems() const {
 	return m_selectedItems;
 }
 
@@ -2456,10 +2485,10 @@ void WorksheetView::changePlotNavigation(QAction* action) {
 					   || op == CartesianPlot::NavigationOperation::ShiftDownY || op == CartesianPlot::NavigationOperation::ZoomInY
 					   || op == CartesianPlot::NavigationOperation::ZoomOutY))) {
 		int cSystemIndex = CartesianPlot::cSystemIndex(m_selectedElement);
-		if (m_selectedElement->type() == AspectType::CartesianPlot)
-			static_cast<CartesianPlot*>(m_selectedElement)->navigate(-1, op);
+		if (auto* plot = m_selectedElement->castTo<CartesianPlot>())
+			plot->navigate(-1, op);
 		else {
-			auto parentPlot = static_cast<CartesianPlot*>(m_selectedElement->parent(AspectType::CartesianPlot));
+			auto parentPlot = m_selectedElement->parent<CartesianPlot>();
 			if (parentPlot) // really needed?
 				parentPlot->navigate(cSystemIndex, op);
 		}

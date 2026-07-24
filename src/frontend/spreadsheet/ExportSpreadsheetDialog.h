@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : export spreadsheet dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -51,7 +51,6 @@ public:
 
 	std::pair<int, int> getMcapSettings();
 
-	// Todo: Get rid of order matters. Fits need to be at the end.
 	enum class Format { ASCII, LaTeX, XLSX, SQLite, MCAP, FITS };
 
 	Format format() const;
@@ -60,7 +59,6 @@ private:
 	Ui::ExportSpreadsheetWidget* ui;
 	bool m_showOptions{true};
 	bool m_matrixMode{false};
-	Format m_format{Format::ASCII};
 	QString m_projectPath;
 
 	QPushButton* m_showOptionsButton;
@@ -68,7 +66,6 @@ private:
 	QPushButton* m_cancelButton;
 
 private Q_SLOTS:
-	void setFormat(ExportSpreadsheetDialog::Format);
 	void slotButtonClicked(QAbstractButton*);
 	void okClicked();
 	void toggleOptions();

@@ -9,6 +9,7 @@
 */
 #include "backend/datasources/MQTTTopic.h"
 
+#include "backend/core/column/Column.h"
 #include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/filters/AsciiFilter.h"

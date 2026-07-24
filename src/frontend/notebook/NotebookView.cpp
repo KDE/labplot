@@ -9,17 +9,22 @@
 */
 
 #include "NotebookView.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/notebook/Notebook.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
 #include "frontend/spreadsheet/StatisticsDialog.h"
+#include "backend/statistics/HypothesisTest.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <QActionGroup>
+#include <QEvent>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMenu>
 #include <QTimer>
+#include <QKeyEvent>
+#include <QKeySequence>
 
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
@@ -32,6 +37,10 @@ NotebookView::NotebookView(Notebook* worksheet)
 	m_part = worksheet->part();
 	if (m_part) {
 		layout->addWidget(m_part->widget());
+		m_part->widget()->installEventFilter(this);
+		for (auto* child : m_part->widget()->findChildren<QWidget*>())
+			child->installEventFilter(this);
+		
 		initActions();
 		connect(m_notebook, &Notebook::requestProjectContextMenu, this, &NotebookView::createContextMenu);
 		connect(m_notebook, &Notebook::statusChanged, this, &NotebookView::statusChanged);
@@ -273,6 +282,42 @@ void NotebookView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 }
 
+bool NotebookView::eventFilter(QObject* watched, QEvent* event) {
+	if (event->type() == QEvent::MouseButtonPress) {
+		m_notebook->setSelectedInView(true);
+		if (auto* w = qobject_cast<QWidget*>(watched))
+			w->setFocus();
+	}
+	else if (event->type() == QEvent::ShortcutOverride) {
+		auto* keyEvent = static_cast<QKeyEvent*>(event);
+
+		if (keyEvent->matches(QKeySequence::Copy)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_copy"))) a->trigger();
+				keyEvent->accept();
+			return true;
+		} else if (keyEvent->matches(QKeySequence::Paste)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_paste"))) a->trigger();
+				keyEvent->accept();
+			return true;
+		} else if (keyEvent->matches(QKeySequence::Cut)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_cut"))) a->trigger();
+				keyEvent->accept();
+			return true;
+		}
+		else if (keyEvent->matches(QKeySequence::Undo)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_undo"))) a->trigger();
+			keyEvent->accept();
+			return true;
+		} else if (keyEvent->matches(QKeySequence::Redo)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_redo"))) a->trigger();
+			keyEvent->accept();
+			return true;
+		}
+	}
+
+	return QWidget::eventFilter(watched, event);
+}
+
 /*!
  * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer.
  */
@@ -285,13 +330,21 @@ void NotebookView::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& c
 		m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
 		CartesianPlot::fillAddNewPlotMenu(m_plotDataMenu, plotDataActionGroup);
 
+		// statistical analysis
+		m_statisticalAnalysisMenu = new QMenu(i18n("Statistical Analysis"), this);
+		auto* hypothesisTestMenu = new QMenu(i18n("Hypothesis Test"), this);
+		auto* hypothesisTestActionGroup = new QActionGroup(this);
+		connect(hypothesisTestActionGroup, &QActionGroup::triggered, this, &NotebookView::hypothesisTest);
+		HypothesisTest::fillAddNewHypothesisTest(hypothesisTestMenu, hypothesisTestActionGroup);
+		m_statisticalAnalysisMenu->addMenu(hypothesisTestMenu);
+
 		m_statisticsAction = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Variable Statistics..."), this);
 		connect(m_statisticsAction, &QAction::triggered, this, &NotebookView::showStatistics);
 	}
 
 	QAction* firstAction = nullptr;
 	if (!menu->actions().isEmpty())
-		firstAction = menu->actions().at(1); // called for a menu that has already actions, prepend notbook's actions here
+		firstAction = menu->actions().at(1); // called for a menu that has already actions, prepend notebook's actions here
 
 	bool plottable = false;
 	for (const auto* col : columns) {
@@ -310,6 +363,7 @@ void NotebookView::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& c
 	}
 
 	menu->insertMenu(firstAction, m_plotDataMenu);
+	menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
 	menu->insertSeparator(firstAction);
 	m_plotDataMenu->setEnabled(plottable && hasValues);
 
@@ -324,9 +378,9 @@ void NotebookView::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& c
 void NotebookView::triggerAction(QAction* action) {
 	const auto& name = action->data().toString();
 	if (!name.isEmpty()) {
-		auto* action = m_part->action(name);
-		if (action)
-			action->trigger();
+		auto* a = m_part->action(name);
+		if (a)
+			a->trigger();
 	}
 }
 
@@ -355,6 +409,21 @@ void NotebookView::plotData(QAction* action) {
 	auto* dlg = new PlotDataDialog(m_notebook, type);
 	dlg->setSelectedColumns(m_contextMenuColumns);
 	dlg->exec();
+}
+
+void NotebookView::hypothesisTest(QAction* action) {
+	if (m_contextMenuColumns.isEmpty())
+		return;
+
+	QString name = (m_contextMenuColumns.size() == 1) ? m_contextMenuColumns.constFirst()->name() : m_notebook->name();
+	auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", name));
+	test->setTest(static_cast<HypothesisTest::Test>(action->data().toInt()));
+	QVector<const AbstractColumn*> dataColumns;
+	for (const auto* column : m_contextMenuColumns)
+		dataColumns << column;
+	test->setDataColumns(dataColumns);
+	test->recalculate();
+	m_notebook->parentAspect()->addChild(test);
 }
 
 void NotebookView::showStatistics() {

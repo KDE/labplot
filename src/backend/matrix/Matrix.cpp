@@ -13,6 +13,7 @@
 #include "Matrix.h"
 #include "MatrixPrivate.h"
 #include "backend/core/Folder.h"
+#include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/matrix/MatrixModel.h"
@@ -30,7 +31,6 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
-#include <QTimer>
 
 /*!
 	This class manages matrix based data (i.e., mathematically
@@ -45,32 +45,31 @@
 Matrix::Matrix(int rows, int cols, const QString& name, const AbstractColumn::ColumnMode mode)
 	: AbstractDataSource(name, AspectType::Matrix)
 	, d_ptr(new MatrixPrivate(this, mode)) {
-	// set initial number of rows and columns
-	appendColumns(cols);
-	appendRows(rows);
-
-	init();
+	init(rows, cols);
 }
 
 Matrix::Matrix(const QString& name, bool loading, const AbstractColumn::ColumnMode mode)
 	: AbstractDataSource(name, AspectType::Matrix)
 	, d_ptr(new MatrixPrivate(this, mode)) {
-	if (!loading)
-		init();
+	if (!loading) {
+		KConfig config;
+		KConfigGroup group = config.group(QStringLiteral("Matrix"));
+		int rows = group.readEntry(QStringLiteral("RowCount"), 10);
+		int cols = group.readEntry(QStringLiteral("ColumnCount"), 10);
+		init(rows, cols);
+	}
 }
 
 Matrix::~Matrix() {
 	delete d_ptr;
 }
 
-void Matrix::init() {
+void Matrix::init(int rows, int cols) {
 	Q_D(Matrix);
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("Matrix"));
 
 	// matrix dimension
-	int rows = group.readEntry(QStringLiteral("RowCount"), 10);
-	int cols = group.readEntry(QStringLiteral("ColumnCount"), 10);
 	appendColumns(cols); // First the columns, otherwise the datacontainer is empty
 	appendRows(rows);
 
@@ -120,12 +119,6 @@ QWidget* Matrix::view() const {
 		connect(this, &Matrix::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
 		});
-
-		// navigate to the first cell and set the focus so the user can start directly entering new data
-		QTimer::singleShot(0, this, [=]() {
-			m_view->goToCell(0, 0);
-			m_view->setFocus();
-		});
 	}
 	return m_partView;
 #else
@@ -147,7 +140,8 @@ bool Matrix::exportView() const {
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted))) {
 		const QString path = dlg->path();
-		WAIT_CURSOR;
+
+		WAIT_CURSOR_AUTO_RESET;
 
 		if (dlg->format() == ExportSpreadsheetDialog::Format::LaTeX) {
 			const bool verticalHeader = dlg->matrixVerticalHeader();
@@ -165,7 +159,6 @@ bool Matrix::exportView() const {
 			const QLocale::Language format = dlg->numberFormat();
 			m_view->exportToFile(path, separator, format);
 		}
-		RESET_CURSOR;
 	}
 	delete dlg;
 
@@ -235,7 +228,7 @@ void Matrix::setSuppressDataChangedSignal(bool b) {
 		m_model->setSuppressDataChangedSignal(b);
 }
 
-void Matrix::setChanged() {
+void Matrix::setDataChanged() {
 	if (m_model)
 		m_model->setChanged();
 }
@@ -330,9 +323,8 @@ void Matrix::insertColumns(int before, int count) {
 	Q_D(Matrix);
 	if (count < 1 || before < 0 || before > columnCount())
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	exec(new MatrixInsertColumnsCmd(d, before, count));
-	RESET_CURSOR;
 }
 
 void Matrix::appendColumns(int count) {
@@ -343,7 +335,7 @@ void Matrix::removeColumns(int first, int count) {
 	Q_D(Matrix);
 	if (count < 1 || first < 0 || first + count > columnCount())
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixRemoveColumnsCmd<double>(d, first, count));
@@ -363,11 +355,10 @@ void Matrix::removeColumns(int first, int count) {
 		exec(new MatrixRemoveColumnsCmd<QDateTime>(d, first, count));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 void Matrix::clearColumn(int c) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -388,7 +379,6 @@ void Matrix::clearColumn(int c) {
 		exec(new MatrixClearColumnCmd<QDateTime>(d, c));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 // rows
@@ -396,9 +386,8 @@ void Matrix::insertRows(int before, int count) {
 	Q_D(Matrix);
 	if (count < 1 || before < 0 || before > rowCount())
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	exec(new MatrixInsertRowsCmd(d, before, count));
-	RESET_CURSOR;
 }
 
 void Matrix::appendRows(int count) {
@@ -408,7 +397,7 @@ void Matrix::appendRows(int count) {
 void Matrix::removeRows(int first, int count) {
 	if (count < 1 || first < 0 || first + count > rowCount())
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -429,7 +418,6 @@ void Matrix::removeRows(int first, int count) {
 		exec(new MatrixRemoveRowsCmd<QDateTime>(d, first, count));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 void Matrix::clearRow(int r) {
@@ -533,7 +521,7 @@ void Matrix::setDimensions(int rows, int cols) {
 	if ((rows < 0) || (cols < 0) || (rows == rowCount() && cols == columnCount()))
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	beginMacro(i18n("%1: set matrix size to %2x%3", name(), rows, cols));
 
 	int col_diff = cols - columnCount();
@@ -549,7 +537,6 @@ void Matrix::setDimensions(int rows, int cols) {
 		removeRows(rowCount() + row_diff, -row_diff);
 
 	endMacro();
-	RESET_CURSOR;
 }
 
 void Matrix::addRows() {
@@ -557,12 +544,11 @@ void Matrix::addRows() {
 	Q_D(Matrix);
 	if (!m_view)
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	int count = m_view->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 row", "%1: add %2 rows", name(), count));
 	exec(new MatrixInsertRowsCmd(d, rowCount(), count));
 	endMacro();
-	RESET_CURSOR;
 #endif
 }
 
@@ -571,12 +557,11 @@ void Matrix::addColumns() {
 	Q_D(Matrix);
 	if (!m_view)
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	int count = m_view->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 column", "%1: add %2 columns", name(), count));
 	exec(new MatrixInsertColumnsCmd(d, columnCount(), count));
 	endMacro();
-	RESET_CURSOR;
 #endif
 }
 
@@ -628,10 +613,9 @@ QVector<T> Matrix::columnCells(int col, int first_row, int last_row) {
 //! Set the values in the given cells from a type T vector
 template<typename T>
 void Matrix::setColumnCells(int col, int first_row, int last_row, const QVector<T>& values) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	exec(new MatrixSetColumnCellsCmd<T>(d, col, first_row, last_row, values));
-	RESET_CURSOR;
 }
 
 //! Return the values in the given cells as vector (needs explicit instantiation)
@@ -648,10 +632,9 @@ template QVector<QDateTime> Matrix::rowCells<QDateTime>(int row, int first_colum
 //! Set the values in the given cells from a type T vector
 template<typename T>
 void Matrix::setRowCells(int row, int first_column, int last_column, const QVector<T>& values) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	exec(new MatrixSetRowCellsCmd<T>(d, row, first_column, last_column, values));
-	RESET_CURSOR;
 }
 
 void Matrix::setData(void* data) {
@@ -697,7 +680,7 @@ QVector<AspectType> Matrix::dropableOn() const {
 // ##############################################################################
 //! Clear the whole matrix (i.e. reset all cells)
 void Matrix::clear() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	if (columnCount() == 0)
 		return; // Nothing to do
 	Q_D(Matrix);
@@ -722,11 +705,10 @@ void Matrix::clear() {
 		break;
 	}
 	endMacro();
-	RESET_CURSOR;
 }
 
 void Matrix::transpose() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -747,11 +729,10 @@ void Matrix::transpose() {
 		exec(new MatrixTransposeCmd<QDateTime>(d));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 void Matrix::mirrorHorizontally() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -772,11 +753,10 @@ void Matrix::mirrorHorizontally() {
 		exec(new MatrixMirrorHorizontallyCmd<QDateTime>(d));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 void Matrix::mirrorVertically() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -797,7 +777,6 @@ void Matrix::mirrorVertically() {
 		exec(new MatrixMirrorVerticallyCmd<QDateTime>(d));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 // ##############################################################################
@@ -1114,6 +1093,12 @@ void MatrixPrivate::clearColumn(int col) {
 // ##############################################################################
 void Matrix::save(QXmlStreamWriter* writer) const {
 	Q_D(const Matrix);
+
+	bool saveData = true;
+	if (project() && !project()->saveData()) {
+		saveData = false;
+	}
+
 	DEBUG(Q_FUNC_INFO);
 	writer->writeStartElement(QStringLiteral("matrix"));
 	writeBasicAttributes(writer);
@@ -1143,7 +1128,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	// vector with row heights
 	writer->writeStartElement(QStringLiteral("row_heights"));
 	const char* data = reinterpret_cast<const char*>(d->rowHeights.constData());
-	int size = d->rowHeights.size() * sizeof(int);
+	auto size = d->rowHeights.size() * sizeof(int);
 	writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
 	writer->writeEndElement();
 
@@ -1157,56 +1142,58 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	const auto columnCount = this->columnCount();
 
 	// columns
-	DEBUG("	mode = " << static_cast<int>(d->mode))
-	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Double:
-		size = d->rowCount() * sizeof(double);
-		for (int i = 0; i < columnCount; ++i) {
-			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<double>>*>(d->data)->at(i).constData());
-			writer->writeStartElement(QStringLiteral("column"));
-			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
-			writer->writeEndElement();
+	if (saveData) {
+		DEBUG("	mode = " << static_cast<int>(d->mode))
+		switch (d->mode) {
+		case AbstractColumn::ColumnMode::Double:
+			size = d->rowCount() * sizeof(double);
+			for (int i = 0; i < columnCount; ++i) {
+				data = reinterpret_cast<const char*>(static_cast<QVector<QVector<double>>*>(d->data)->at(i).constData());
+				writer->writeStartElement(QStringLiteral("column"));
+				writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
+				writer->writeEndElement();
+			}
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			size = d->rowCount() * sizeof(QString);
+			for (int i = 0; i < columnCount; ++i) {
+				QDEBUG("	string: " << static_cast<QVector<QVector<QString>>*>(d->data)->at(i));
+				data = reinterpret_cast<const char*>(static_cast<QVector<QVector<QString>>*>(d->data)->at(i).constData());
+				writer->writeStartElement(QStringLiteral("column"));
+				writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
+				writer->writeEndElement();
+			}
+			break;
+		case AbstractColumn::ColumnMode::Integer:
+			size = d->rowCount() * sizeof(int);
+			for (int i = 0; i < columnCount; ++i) {
+				data = reinterpret_cast<const char*>(static_cast<QVector<QVector<int>>*>(d->data)->at(i).constData());
+				writer->writeStartElement(QStringLiteral("column"));
+				writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
+				writer->writeEndElement();
+			}
+			break;
+		case AbstractColumn::ColumnMode::BigInt:
+			size = d->rowCount() * sizeof(qint64);
+			for (int i = 0; i < columnCount; ++i) {
+				data = reinterpret_cast<const char*>(static_cast<QVector<QVector<qint64>>*>(d->data)->at(i).constData());
+				writer->writeStartElement(QStringLiteral("column"));
+				writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
+				writer->writeEndElement();
+			}
+			break;
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::DateTime:
+			size = d->rowCount() * sizeof(QDateTime);
+			for (int i = 0; i < columnCount; ++i) {
+				data = reinterpret_cast<const char*>(static_cast<QVector<QVector<QDateTime>>*>(d->data)->at(i).constData());
+				writer->writeStartElement(QStringLiteral("column"));
+				writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
+				writer->writeEndElement();
+			}
+			break;
 		}
-		break;
-	case AbstractColumn::ColumnMode::Text:
-		size = d->rowCount() * sizeof(QString);
-		for (int i = 0; i < columnCount; ++i) {
-			QDEBUG("	string: " << static_cast<QVector<QVector<QString>>*>(d->data)->at(i));
-			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<QString>>*>(d->data)->at(i).constData());
-			writer->writeStartElement(QStringLiteral("column"));
-			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
-			writer->writeEndElement();
-		}
-		break;
-	case AbstractColumn::ColumnMode::Integer:
-		size = d->rowCount() * sizeof(int);
-		for (int i = 0; i < columnCount; ++i) {
-			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<int>>*>(d->data)->at(i).constData());
-			writer->writeStartElement(QStringLiteral("column"));
-			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
-			writer->writeEndElement();
-		}
-		break;
-	case AbstractColumn::ColumnMode::BigInt:
-		size = d->rowCount() * sizeof(qint64);
-		for (int i = 0; i < columnCount; ++i) {
-			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<qint64>>*>(d->data)->at(i).constData());
-			writer->writeStartElement(QStringLiteral("column"));
-			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
-			writer->writeEndElement();
-		}
-		break;
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::DateTime:
-		size = d->rowCount() * sizeof(QDateTime);
-		for (int i = 0; i < columnCount; ++i) {
-			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<QDateTime>>*>(d->data)->at(i).constData());
-			writer->writeStartElement(QStringLiteral("column"));
-			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
-			writer->writeEndElement();
-		}
-		break;
 	}
 
 	writer->writeEndElement(); // "matrix"
@@ -1295,67 +1282,69 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
-			int count = bytes.size() / sizeof(int);
+			auto count = bytes.size() / sizeof(int);
 			d->rowHeights.resize(count);
 			memcpy(d->rowHeights.data(), bytes.data(), count * sizeof(int));
 		} else if (!preview && reader->name() == QLatin1String("column_widths")) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
-			int count = bytes.size() / sizeof(int);
+			auto count = bytes.size() / sizeof(int);
 			d->columnWidths.resize(count);
 			memcpy(d->columnWidths.data(), bytes.data(), count * sizeof(int));
 		} else if (!preview && reader->name() == QLatin1String("column")) {
 			// TODO: parallelize reading of columns?
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
-			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
+			if (!content.isEmpty()) {
+				QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
 
-			switch (d->mode) {
-			case AbstractColumn::ColumnMode::Double: {
-				int count = bytes.size() / sizeof(double);
-				QVector<double> column;
-				column.resize(count);
-				memcpy(column.data(), bytes.data(), count * sizeof(double));
-				static_cast<QVector<QVector<double>>*>(d->data)->append(column);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Text: {
-				int count = bytes.size() / sizeof(char);
-				QVector<QString> column;
-				column.resize(count);
-				// TODO: warning (GCC8): writing to an object of type 'class QString' with no trivial copy-assignment; use copy-assignment or
-				// copy-initialization instead memcpy(column.data(), bytes.data(), count*sizeof(QString)); QDEBUG("	string: " << column.data());
-				static_cast<QVector<QVector<QString>>*>(d->data)->append(column);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Integer: {
-				int count = bytes.size() / sizeof(int);
-				QVector<int> column;
-				column.resize(count);
-				memcpy(column.data(), bytes.data(), count * sizeof(int));
-				static_cast<QVector<QVector<int>>*>(d->data)->append(column);
-				break;
-			}
-			case AbstractColumn::ColumnMode::BigInt: {
-				int count = bytes.size() / sizeof(qint64);
-				QVector<qint64> column;
-				column.resize(count);
-				memcpy(column.data(), bytes.data(), count * sizeof(qint64));
-				static_cast<QVector<QVector<qint64>>*>(d->data)->append(column);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Day:
-			case AbstractColumn::ColumnMode::Month:
-			case AbstractColumn::ColumnMode::DateTime: {
-				int count = bytes.size() / sizeof(QDateTime);
-				QVector<QDateTime> column;
-				column.resize(count);
-				// TODO: warning (GCC8): writing to an object of type 'class QDateTime' with no trivial copy-assignment; use copy-assignment or
-				// copy-initialization instead memcpy(column.data(), bytes.data(), count*sizeof(QDateTime));
-				static_cast<QVector<QVector<QDateTime>>*>(d->data)->append(column);
-				break;
-			}
+				switch (d->mode) {
+				case AbstractColumn::ColumnMode::Double: {
+					auto count = bytes.size() / sizeof(double);
+					QVector<double> column;
+					column.resize(count);
+					memcpy(column.data(), bytes.data(), count * sizeof(double));
+					static_cast<QVector<QVector<double>>*>(d->data)->append(column);
+					break;
+				}
+				case AbstractColumn::ColumnMode::Text: {
+					auto count = bytes.size() / sizeof(char);
+					QVector<QString> column;
+					column.resize(count);
+					// TODO: warning (GCC8): writing to an object of type 'class QString' with no trivial copy-assignment; use copy-assignment or
+					// copy-initialization instead memcpy(column.data(), bytes.data(), count*sizeof(QString)); QDEBUG("	string: " << column.data());
+					static_cast<QVector<QVector<QString>>*>(d->data)->append(column);
+					break;
+				}
+				case AbstractColumn::ColumnMode::Integer: {
+					auto count = bytes.size() / sizeof(int);
+					QVector<int> column;
+					column.resize(count);
+					memcpy(column.data(), bytes.data(), count * sizeof(int));
+					static_cast<QVector<QVector<int>>*>(d->data)->append(column);
+					break;
+				}
+				case AbstractColumn::ColumnMode::BigInt: {
+					auto count = bytes.size() / sizeof(qint64);
+					QVector<qint64> column;
+					column.resize(count);
+					memcpy(column.data(), bytes.data(), count * sizeof(qint64));
+					static_cast<QVector<QVector<qint64>>*>(d->data)->append(column);
+					break;
+				}
+				case AbstractColumn::ColumnMode::Day:
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::DateTime: {
+					auto count = bytes.size() / sizeof(QDateTime);
+					QVector<QDateTime> column;
+					column.resize(count);
+					// TODO: warning (GCC8): writing to an object of type 'class QDateTime' with no trivial copy-assignment; use copy-assignment or
+					// copy-initialization instead memcpy(column.data(), bytes.data(), count*sizeof(QDateTime));
+					static_cast<QVector<QVector<QDateTime>>*>(d->data)->append(column);
+					break;
+				}
+				}
 			}
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();

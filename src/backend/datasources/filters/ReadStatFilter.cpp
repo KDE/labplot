@@ -81,11 +81,11 @@ int ReadStatFilter::endColumn() const {
 	return d->endColumn;
 }
 
-QStringList ReadStatFilter::vectorNames() const {
+const QStringList& ReadStatFilter::vectorNames() const {
 	return d->varNames;
 }
 
-QVector<AbstractColumn::ColumnMode> ReadStatFilter::columnModes() const {
+const QVector<AbstractColumn::ColumnMode>& ReadStatFilter::columnModes() const {
 	return d->columnModes;
 }
 
@@ -162,7 +162,7 @@ QString ReadStatFilter::fileInfoString(const QString& fileName) {
 			endian = QStringLiteral("big");
 			break;
 		}
-		info += i18n("Endianess: %1", endian);
+		info += i18n("Endianness: %1", endian);
 		info += QLatin1String("<br>");
 		info += i18n("Table name: %1", QLatin1String(metadata.table_name));
 		info += QLatin1String("<br>");

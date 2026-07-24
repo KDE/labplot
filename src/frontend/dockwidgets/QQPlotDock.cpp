@@ -74,7 +74,7 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 	// template handler
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
-	layout->setContentsMargins(0, 11, 0, 11);
+	layout->setContentsMargins(0, 0, 0, 0);
 
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("QQPlot"));
 	layout->addWidget(templateHandler);
@@ -138,7 +138,7 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void QQPlotDock::updateLocale() {
 	lineWidget->updateLocale();
@@ -168,6 +168,8 @@ void QQPlotDock::retranslateUi() {
 
 		ui.cbDistribution->addItem(d.first, d.second);
 	}
+
+	lineWidget->retranslateUi();
 
 	// tooltip texts
 	QString info = i18n("Distribution used to calculate the percentiles to be compared with the percentiles of the provided data");
@@ -201,23 +203,12 @@ void QQPlotDock::distributionChanged(int index) {
 	QString file =
 		QStandardPaths::locate(QStandardPaths::AppDataLocation,
 							   QStringLiteral("pics/gsl_distributions/") + QLatin1String(nsl_sf_stats_distribution_pic_name[dist]) + QStringLiteral(".pdf"));
-	QImage image = GuiTools::importPDFFile(file);
+	const double previewScale = 2.0;
+	const double previewRenderDpi = 1200.0;
+	QImage image = GuiTools::importPDFFile(file, previewScale, previewRenderDpi);
 
 	// use system palette for background
-	if (GuiTools::isDarkMode()) {
-		// invert image if in dark mode
-		image.invertPixels();
-
-		for (int i = 0; i < image.size().width(); i++)
-			for (int j = 0; j < image.size().height(); j++)
-				if (qGray(image.pixel(i, j)) < 64) // 0-255: 0-64 covers all dark pixel
-					image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
-	} else {
-		for (int i = 0; i < image.size().width(); i++)
-			for (int j = 0; j < image.size().height(); j++)
-				if (qGray(image.pixel(i, j)) > 192) // 0-255: 224-255 covers all light pixel
-					image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
-	}
+	image = GuiTools::recolorMonochromeImage(image, palette().color(QPalette::Text), palette().color(QPalette::Base));
 
 	if (image.isNull()) {
 		ui.lFunc->hide();
@@ -228,10 +219,8 @@ void QQPlotDock::distributionChanged(int index) {
 		p.setColor(QPalette::Window, palette().color(QPalette::Base));
 		ui.lFuncPic->setAutoFillBackground(true);
 		ui.lFuncPic->setPalette(p);
-		ui.lFuncPic->setScaledContents(false);
 
-		ui.lFuncPic->setPixmap(QPixmap::fromImage(image));
-		ui.lFuncPic->show();
+		GuiTools::setPixmapFromImage(ui.lFuncPic, image);
 	}
 
 	CONDITIONAL_LOCK_RETURN;

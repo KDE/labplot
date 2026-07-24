@@ -7,13 +7,15 @@
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
+
 #include "backend/datasources/MQTTClient.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "frontend/datasources/MQTTErrorWidget.h"
 
+#include <QIcon>
 #include <QTimer>
 #include <QtMqtt/QMqttSubscription>
 #include <QtMqtt/QMqttTopicName>
@@ -826,7 +828,7 @@ QString MQTTClient::statistics(const MQTTTopic* topic) const {
 
 	QVector<bool> willStatistics = topic->mqttClient()->willStatistics();
 	// Add every statistical data to the string, the flag of which is set true
-	for (int i = 0; i <= willStatistics.size(); i++) {
+	for (int i = 0; i < willStatistics.size(); i++) {
 		if (willStatistics[i]) {
 			switch (static_cast<MQTTClient::WillStatisticsType>(i)) {
 			case MQTTClient::WillStatisticsType::ArithmeticMean:
@@ -1071,21 +1073,17 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 }
 
 /*!
- *\brief Handles some of the possible errors of the client, using MQTTErrorWidget
+ *\brief Handles some of the possible errors of the client by emitting clientErrorOccurred.
  */
 void MQTTClient::MQTTErrorChanged(QMqttClient::ClientError clientError) {
-	if (clientError != QMqttClient::ClientError::NoError) {
-		auto* errorWidget = new MQTTErrorWidget(clientError, this);
-		errorWidget->show();
-	}
+	if (clientError != QMqttClient::ClientError::NoError)
+		Q_EMIT clientErrorOccurred(clientError);
 }
 
 void MQTTClient::disconnected() {
 	auto error = m_client->error();
-	if (error != QMqttClient::ClientError::NoError) {
-		auto* errorWidget = new MQTTErrorWidget(error, this);
-		errorWidget->show();
-	}
+	if (error != QMqttClient::ClientError::NoError)
+		Q_EMIT clientErrorOccurred(error);
 }
 
 /*!

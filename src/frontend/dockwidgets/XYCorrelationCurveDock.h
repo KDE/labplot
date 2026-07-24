@@ -27,6 +27,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void retranslateUi() override;
 	void showCorrelationResult();
 
 	Ui::XYCorrelationCurveDockGeneralTab uiGeneralTab;
@@ -44,7 +45,7 @@ private Q_SLOTS:
 	void xRangeMaxChanged();
 	void typeChanged();
 	void normChanged();
-	void recalculateClicked();
+	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

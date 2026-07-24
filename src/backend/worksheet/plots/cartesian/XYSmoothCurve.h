@@ -38,6 +38,10 @@ public:
 		int order{2}; // order for Savitzky-Golay filter
 		nsl_smooth_pad_mode mode{nsl_smooth_pad_none}; // mode of padding for edges
 		double lvalue{0.0}, rvalue{0.0}; // values for constant padding
+		// LOWESS-specific parameters
+		double span{0.5}; // fraction of points for LOWESS (0.0 < span <= 1.0)
+		double delta{0.0}; // distance threshold for interpolation optimization (0 = disable)
+		int iterations{2}; // number of robustifying iterations for LOWESS
 		bool autoRange{true}; // use all data?
 		// TODO: use Range
 		QVector<double> xRange{0., 0.}; // x range for integration

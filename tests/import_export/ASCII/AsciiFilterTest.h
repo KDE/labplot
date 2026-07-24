@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the ascii filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -85,7 +85,7 @@ private Q_SLOTS:
 	void testSpaceSeparator();
 	void testSpaceSeparatorSimplifyWhiteSpace();
 
-	// qouted strings
+	// quoted strings
 	void testQuotedStrings00();
 	void testQuotedStrings01();
 	void testQuotedStrings02();
@@ -109,6 +109,7 @@ private Q_SLOTS:
 	void testDateTimeDefaultDateTimeFormat();
 	void testDateTimeAutodetect();
 	void testDateTimeHex();
+	void testTimestamp();
 
 	// matrix import
 	void testMatrixHeader();
@@ -145,6 +146,8 @@ private Q_SLOTS:
 	void saveLoad();
 
 	void bufferReader();
+
+	void invalidDataColumnCount();
 
 private:
 	QString benchDataFileName;

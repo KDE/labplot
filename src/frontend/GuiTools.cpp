@@ -1,19 +1,24 @@
 /*
 	File                 : GuiTools.cpp
 	Project              : LabPlot
-	Description          :  contains several static functions which are used on frequently throughout the kde frontend.
+	Description          : contains several static functions which are used frequently throughout the kde frontend
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2011-2013 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2021-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "GuiTools.h"
 #include "backend/core/Settings.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "frontend/widgets/TextPreview.h"
+#include "frontend/widgets/ExpressionTextEdit.h"
 
 #include <KConfigGroup>
+#include <KFileWidget>
+#include <KLineEdit>
 #include <KLocalizedString>
+#include <KUrlComboBox>
 
 #include <QActionGroup>
 #include <QApplication>
@@ -21,12 +26,16 @@
 #include <QComboBox>
 #include <QFileDialog>
 #include <QImageReader>
+#include <QCheckBox>
+#include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
 #include <QPainter>
 #include <QScreen>
 #include <QWidget>
 #include <QWindow>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 #ifdef HAVE_POPPLER
 #include <poppler-qt6.h>
@@ -65,7 +74,7 @@ void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color) {
 	comboBox->setIconSize(QSize(w, h));
 
 	// loop over six possible Qt-PenStyles, draw on the pixmap and insert it
-	// TODO: avoid copy-paste in all finctions!
+	// TODO: avoid copy-paste in all functions!
 	static std::array<QString, 6> list =
 		{i18n("No Line"), i18n("Solid Line"), i18n("Dash Line"), i18n("Dot Line"), i18n("Dash-dot Line"), i18n("Dash-dot-dot Line")};
 	for (int i = 0; i < 6; i++) {
@@ -200,7 +209,7 @@ void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup) {
 }
 
 /*!
- * Selects (checks) the action in the group \c actionGroup hat corresponds to the color \c color.
+ * Selects (checks) the action in the group \c actionGroup that corresponds to the color \c color.
  * Unchecks the previously checked action if the color
  * was not found in the list of predefined colors.
  */
@@ -244,6 +253,7 @@ QPair<float, float> GuiTools::dpi(const QWidget* widget) {
 		WARN("Widget is null, falling back to primary screen");
 
 	// Fallback to the primary screen if the widget's screen is not valid
+
 	if (!screen)
 		screen = QApplication::primaryScreen();
 
@@ -320,7 +330,7 @@ QString GuiTools::openImageFile(const QString& className) {
 }
 
 // convert PDF to QImage using Poppler
-QImage GuiTools::importPDFFile(const QString& fileName) {
+QImage GuiTools::importPDFFile(const QString& fileName, double scale, double renderDpi) {
 	// DEBUG(Q_FUNC_INFO << ", PDF file name = " << STDSTRING(fileName));
 #ifdef HAVE_POPPLER
 	auto document = Poppler::Document::load(fileName);
@@ -341,12 +351,32 @@ QImage GuiTools::importPDFFile(const QString& fileName) {
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
-	const static int dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
-	auto image = page->renderToImage(dpi, dpi);
+	QScreen* screen = QGuiApplication::primaryScreen();
+	if (!screen) {
+		WARN("Primary screen is null");
+		return {};
+	}
 
+	const qreal logicalDpi = screen->logicalDotsPerInchX();
+	const qreal pixelRatio = screen->devicePixelRatio();
+	const qreal effectiveScale = (scale > 0.0) ? scale : 1.0;
+
+	const qreal effectiveRenderDpi = (renderDpi > 0.0) ? renderDpi : logicalDpi * pixelRatio * effectiveScale;
+
+	auto image = page->renderToImage(effectiveRenderDpi, effectiveRenderDpi);
+
+	if (!image.isNull()) {
+		if (image.format() != QImage::Format_ARGB32_Premultiplied)
+			image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+
+		const qreal imageDpr = effectiveRenderDpi / (logicalDpi * effectiveScale);
+		image.setDevicePixelRatio(imageDpr);
+	}
 	return image;
 #else
 	Q_UNUSED(fileName)
+	Q_UNUSED(scale)
+	Q_UNUSED(renderDpi)
 	DEBUG(Q_FUNC_INFO << ", POPPLER not available!")
 	return {};
 #endif
@@ -372,8 +402,25 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
-	const static int dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
-	auto image = page->renderToImage(zoomFactor * dpi, zoomFactor * dpi);
+	QScreen* screen = QGuiApplication::primaryScreen();
+	if (!screen) {
+		WARN("Primary screen is null");
+		return {};
+	}
+
+	const qreal logicalDpi = screen->logicalDotsPerInchX();
+	const qreal pixelRatio = screen->devicePixelRatio();
+	const qreal effectiveZoom = (zoomFactor > 0.0) ? zoomFactor : 1.0;
+
+	const qreal renderDpi = logicalDpi * pixelRatio * effectiveZoom;
+	auto image = page->renderToImage(renderDpi, renderDpi);
+
+	if (!image.isNull()) {
+		if (image.format() != QImage::Format_ARGB32_Premultiplied)
+			image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+
+		image.setDevicePixelRatio(pixelRatio);
+	}
 
 	return image;
 #else
@@ -381,6 +428,61 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 	Q_UNUSED(zoomFactor)
 	return {};
 #endif
+}
+
+void GuiTools::setPixmapFromImage(QLabel* label, const QImage& image) {
+	if (!label)
+		return;
+
+	if (image.isNull()) {
+		label->clear();
+		label->hide();
+		return;
+	}
+
+	const qreal imageDpr = (image.devicePixelRatio() > 0.0) ? image.devicePixelRatio() : 1.0;
+	const QSize logicalSize(qCeil(image.width() / imageDpr), qCeil(image.height() / imageDpr));
+
+	QPixmap pixmap = QPixmap::fromImage(image);
+	pixmap.setDevicePixelRatio(imageDpr);
+
+	label->setScaledContents(false);
+	label->setPixmap(pixmap);
+	label->setFixedSize(logicalSize);
+	label->show();
+}
+
+QImage GuiTools::recolorMonochromeImage(const QImage& image, const QColor& foregroundColor, const QColor& backgroundColor) {
+	if (image.isNull())
+		return {};
+
+	QImage source = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+	source.setDevicePixelRatio(image.devicePixelRatio());
+
+	QImage result(source.size(), QImage::Format_ARGB32_Premultiplied);
+	result.setDevicePixelRatio(source.devicePixelRatio());
+
+	const QColor fg = foregroundColor.isValid() ? foregroundColor : QColor(Qt::black);
+	const QColor bg = backgroundColor.isValid() ? backgroundColor : QColor(Qt::white);
+
+	for (int y = 0; y < source.height(); ++y) {
+		for (int x = 0; x < source.width(); ++x) {
+			const QRgb pixel = source.pixel(x, y);
+
+			const int sourceAlpha = qAlpha(pixel);
+			const int gray = qGray(pixel);
+			const int coverage = qBound(0, (255 - gray) * sourceAlpha / 255, 255);
+			const int inverseCoverage = 255 - coverage;
+
+			const int r = (fg.red() * coverage + bg.red() * inverseCoverage + 127) / 255;
+			const int g = (fg.green() * coverage + bg.green() * inverseCoverage + 127) / 255;
+			const int b = (fg.blue() * coverage + bg.blue() * inverseCoverage + 127) / 255;
+
+			result.setPixelColor(x, y, QColor(r, g, b, 255));
+		}
+	}
+
+	return result;
 }
 
 /*
@@ -396,4 +498,201 @@ QString GuiTools::replaceExtension(const QString& path, const QString& extension
 		newPath = path.left(index) + extension;
 
 	return newPath;
+}
+
+/*
+ * load custom function from file
+ * using TextEdit. Only FitCurve used cbCategory and cbModel
+ * returns config file name if accepted (for loading specific options)
+ */
+QString GuiTools::loadFunction(ExpressionTextEdit* te, KComboBox* cbCategory, KComboBox* cbModel) {
+	//easy alternative: const QString& fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select file to load function definition"), dir, filter);
+
+	QDialog dialog;
+	dialog.setWindowTitle(i18n("Select file to load function definition"));
+	auto* layout = new QVBoxLayout(&dialog);
+
+	// use last open dir from MainWin (project dir)
+	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
+	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
+
+	//using KFileWidget to add custom widgets
+	auto* fileWidget = new KFileWidget(QUrl(dir), &dialog);
+	fileWidget->setOperationMode(KFileWidget::Opening);
+	fileWidget->setMode(KFile::File);
+
+	// preview
+	auto* preview = new TextPreview();
+	fileWidget->setPreviewWidget(preview);
+
+	auto filterList = QList<KFileFilter>();
+	filterList << KFileFilter(i18n("LabPlot Function Definition"), {QLatin1String("*.lfd"), QLatin1String("*.LFD")}, {});
+	fileWidget->setFilters(filterList);
+
+	fileWidget->okButton()->show();
+	fileWidget->okButton()->setEnabled(false);
+	fileWidget->cancelButton()->show();
+	QObject::connect(fileWidget->okButton(), &QPushButton::clicked, &dialog, &QDialog::accept);
+	QObject::connect(fileWidget, &KFileWidget::selectionChanged, &dialog, [=]() {
+		QString fileName = fileWidget->locationEdit()->currentText();
+		auto currentDir = fileWidget->baseUrl().toLocalFile();
+		fileName.prepend(currentDir);
+		if (QFile::exists(fileName))
+			fileWidget->okButton()->setEnabled(true);
+	});
+	QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, &dialog, &QDialog::reject);
+	layout->addWidget(fileWidget);
+
+	if (dialog.exec() == QDialog::Accepted) {
+		QString fileName = fileWidget->locationEdit()->currentText();
+		auto currentDir = fileWidget->baseUrl().toLocalFile();
+		fileName.prepend(currentDir);
+
+		//load config from file if accepted
+		QDEBUG(Q_FUNC_INFO << ", load function from file" << fileName)
+
+		KConfig config(fileName);
+		auto general = config.group(QLatin1String("General"));
+		te->setPlainText(general.readEntry("Function", ""));
+		// switch to custom model
+		if (cbCategory)
+			cbCategory->setCurrentIndex(cbCategory->count() - 1);
+
+		auto description = general.readEntry("Description", "");
+		auto comment = general.readEntry("Comment", "");
+		QDEBUG(Q_FUNC_INFO << ", description:" << description)
+		QDEBUG(Q_FUNC_INFO << ", comment:" << comment)
+		if (cbModel) {	// model ComboBox available (FitCurveDock style)
+			if (!description.isEmpty()) {
+				cbModel->clear();
+				cbModel->addItem(description);
+			}
+			if (!comment.isEmpty())
+				te->viewport()->setToolTip(comment);
+		} else {	// normal style (FunctionValuesDialog)
+			if (!description.isEmpty())
+				te->viewport()->setToolTip(description);
+			if (!comment.isEmpty())
+				te->viewport()->setWhatsThis(comment);
+		}
+
+		return fileName;
+	}
+
+	return {};
+}
+
+/*
+ * save custom function to file
+ * using TextEdit. Only FitCurve used cb
+ * returning config file name if accepted (for saving specific options)
+ */
+QString GuiTools::saveFunction(ExpressionTextEdit* te, KComboBox* cb) {
+	QDialog dialog;
+	dialog.setWindowTitle(i18n("Select file to save function definition"));
+	auto* layout = new QVBoxLayout(&dialog);
+
+	// use last open dir from MainWin (project dir)
+	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
+	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
+
+	//using KFileWidget to add custom widgets
+	auto* fileWidget = new KFileWidget(QUrl(dir), &dialog);
+	fileWidget->setOperationMode(KFileWidget::Saving);
+	fileWidget->setMode(KFile::File);
+	// preview
+	auto* preview = new TextPreview();
+	fileWidget->setPreviewWidget(preview);
+
+	auto filterList = QList<KFileFilter>();
+	filterList << KFileFilter(i18n("LabPlot Function Definition"), {QLatin1String("*.lfd"), QLatin1String("*.LFD")}, {});
+	fileWidget->setFilters(filterList);
+
+	fileWidget->okButton()->show();
+	fileWidget->okButton()->setEnabled(false);
+	fileWidget->cancelButton()->show();
+	QObject::connect(fileWidget->okButton(), &QPushButton::clicked, &dialog, &QDialog::accept);
+	QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, &dialog, &QDialog::reject);
+	layout->addWidget(fileWidget);
+
+	// custom widgets
+	auto* lDescription = new QLabel(i18n("Description:"));
+	auto* lComment = new QLabel(i18n("Comment:"));
+	// normal style (FunctionValuesDialog)
+	auto* leDescription = new KLineEdit(te->viewport()->toolTip());
+	auto* leComment = new KLineEdit(te->viewport()->whatsThis());
+	if (cb) {	// FitCurveDock style
+		leDescription->setText(cb->currentText());
+		leComment->setText(te->viewport()->toolTip());
+	}
+
+	// update description and comment when selection changes
+	QObject::connect(fileWidget, &KFileWidget::fileHighlighted, fileWidget, [=]() {
+		QString fileName = fileWidget->locationEdit()->currentText();
+		auto currentDir = fileWidget->baseUrl().toLocalFile();
+		fileName.prepend(currentDir);
+		QDEBUG(Q_FUNC_INFO << ", file selected:" << fileName)
+		if (QFile::exists(fileName)) {
+			KConfig config(fileName);
+			auto group = config.group(QLatin1String("General"));
+			const QString& description = group.readEntry("Description", "");
+			const QString& comment = group.readEntry("Comment", "");
+			if (!description.isEmpty())
+				leDescription->setText(description);
+			if (!comment.isEmpty())
+				leComment->setText(comment);
+		}
+	});
+
+	auto* grid = new QGridLayout;
+	grid->addWidget(lDescription, 0, 0);
+	grid->addWidget(leDescription, 0, 1);
+	grid->addWidget(lComment, 1, 0);
+	grid->addWidget(leComment, 1, 1);
+	layout->addLayout(grid);
+
+	dialog.adjustSize();
+	if (dialog.exec() == QDialog::Accepted) {
+		fileWidget->slotOk();
+
+		QString fileName = fileWidget->selectedFile();
+		if (fileName.isEmpty()) {	// if entered directly and not selected (also happens when selected!)
+			// DEBUG(Q_FUNC_INFO << ", no file selected")
+			fileName = fileWidget->locationEdit()->currentText();
+			auto* cbExtension = fileWidget->findChild<QCheckBox*>();
+			if (cbExtension) {
+				bool checked = cbExtension->isChecked();
+				if (checked && ! (fileName.endsWith(QLatin1String(".lfd")) || fileName.endsWith(QLatin1String(".LFD"))))
+							fileName.append(QLatin1String(".lfd"));
+			}
+			// add current folder
+			auto currentDir = fileWidget->baseUrl().toLocalFile();
+			fileName.prepend(currentDir);
+		}
+		// save current model (with description and comment)
+		// FORMAT: LFD - LabPlot Function Definition
+		KConfig config(fileName);	// selected lfd file
+		auto group = config.group(QLatin1String("General"));
+		auto description = leDescription->text();
+		auto comment = leComment->text();
+		group.writeEntry("Function", te->toPlainText());	// model function
+		group.writeEntry("Description", description);
+		group.writeEntry("Comment", comment);
+		config.sync();
+		QDEBUG(Q_FUNC_INFO << ", saved function to" << fileName)
+
+		// set description and comment in Dock (even when empty)
+		if (cb) {	// FitCurveDock style
+			cb->clear();
+			cb->addItem(description);
+			te->viewport()->setToolTip(comment);
+		} else {	// normal style (FunctionValuesDialog)
+			te->viewport()->setToolTip(description);
+			te->viewport()->setWhatsThis(comment);
+		}
+
+		return fileName;	// for saving specific options
+	}
+
+	return {};
 }

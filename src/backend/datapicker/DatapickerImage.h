@@ -17,8 +17,6 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-#include <QPen>
-
 class DatapickerImagePrivate;
 class DatapickerImageView;
 class DatapickerPoint;
@@ -26,6 +24,7 @@ class Segments;
 
 class QGraphicsScene;
 class QGraphicsPixmapItem;
+class QPen;
 
 class DatapickerImage : public AbstractPart {
 	Q_OBJECT
@@ -78,7 +77,6 @@ public:
 	void setPageRect(const QRectF&);
 	QGraphicsScene* scene() const;
 	void setPrinting(bool) const;
-	void setSelectedInView(const bool);
 	void setSegmentsHoverEvent(const bool);
 	int currentSelectedReferencePoint() const;
 

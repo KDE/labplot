@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2020-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -11,6 +11,7 @@
 
 #include "SpreadsheetView.h"
 #include "SpreadsheetItemDelegate.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
@@ -22,6 +23,8 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
+#include "backend/statistics/HypothesisTest.h"
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/spreadsheet/SpreadsheetHeaderView.h"
 
@@ -31,13 +34,13 @@
 #include "frontend/spreadsheet/EquidistantValuesDialog.h"
 #include "frontend/spreadsheet/FlattenColumnsDialog.h"
 #include "frontend/spreadsheet/FormattingHeatmapDialog.h"
-#include "frontend/spreadsheet/FunctionValuesDialog.h"
 #include "frontend/spreadsheet/RandomValuesDialog.h"
 #include "frontend/spreadsheet/RescaleDialog.h"
 #include "frontend/spreadsheet/SampleValuesDialog.h"
 #include "frontend/spreadsheet/SearchReplaceWidget.h"
 #include "frontend/spreadsheet/SortDialog.h"
 #endif
+#include "backend/datasources/filters/AsciiFilter.h"
 #include "frontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "frontend/spreadsheet/GoToDialog.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
@@ -47,11 +50,10 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
-#include <KConfigGroup>
-#include <KLocalizedString>
 #include <KMessageBox>
 
 #include <QActionGroup>
+#include <QApplication>
 #include <QClipboard>
 #include <QFile>
 #include <QInputDialog>
@@ -65,6 +67,8 @@
 #include <QPrinter>
 #include <QRandomGenerator>
 #include <QScrollBar>
+#include <QSlider>
+#include <QSpinBox>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -72,7 +76,6 @@
 #include <QTextStream>
 #include <QTimer>
 #include <QToolBar>
-#include <QVBoxLayout>
 
 #include <algorithm> //for std::reverse
 
@@ -111,8 +114,32 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 	, m_readOnly(readOnly) {
 	auto* layout = new QVBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
+	layout->setSpacing(0);
 
 	layout->addWidget(m_tableView);
+
+	// zoom bar at the bottom
+	auto* zoomBarLayout = new QHBoxLayout();
+	zoomBarLayout->setContentsMargins(4, 2, 4, 2);
+	zoomBarLayout->addStretch();
+	m_zoomSlider = new QSlider(Qt::Horizontal, this);
+	m_zoomSlider->setRange(50, 300);
+	m_zoomSlider->setValue(100);
+	m_zoomSlider->setFixedWidth(150);
+	m_zoomSlider->setToolTip(i18n("Zoom level"));
+	m_zoomSpinBox = new QSpinBox(this);
+	m_zoomSpinBox->setRange(50, 300);
+	m_zoomSpinBox->setValue(100);
+	m_zoomSpinBox->setSuffix(QStringLiteral("%"));
+	m_zoomSpinBox->setToolTip(i18n("Zoom level"));
+	m_zoomSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
+	m_zoomSpinBox->setFixedWidth(50);
+	zoomBarLayout->addWidget(m_zoomSlider);
+	zoomBarLayout->addWidget(m_zoomSpinBox);
+	layout->addLayout(zoomBarLayout);
+
+	connect(m_zoomSlider, &QSlider::valueChanged, this, &SpreadsheetView::setZoomLevel);
+	connect(m_zoomSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetView::setZoomLevel);
 	if (m_readOnly)
 		m_tableView->setEditTriggers(QTableView::NoEditTriggers);
 
@@ -151,10 +178,10 @@ void SpreadsheetView::init() {
 	m_tableView->setModel(m_model);
 	auto* delegate = new SpreadsheetItemDelegate(this);
 	connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
-	connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=]() {
+	connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=, this]() {
 		m_editorEntered = true;
 	});
-	connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=]() {
+	connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=, this]() {
 		m_editorEntered = false;
 	});
 
@@ -162,7 +189,7 @@ void SpreadsheetView::init() {
 	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 	// horizontal header
-	m_horizontalHeader = new SpreadsheetHeaderView(this);
+	m_horizontalHeader = new SpreadsheetHeaderView(this, m_spreadsheet);
 
 	m_horizontalHeader->setSectionsClickable(true);
 	m_horizontalHeader->setHighlightSections(true);
@@ -170,7 +197,7 @@ void SpreadsheetView::init() {
 	m_horizontalHeader->setSectionsMovable(true);
 	m_horizontalHeader->installEventFilter(this);
 	m_tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-	// 	m_tableView->installEventFilter(this);
+	m_tableView->viewport()->installEventFilter(this);
 
 	resizeHeader();
 
@@ -200,11 +227,11 @@ void SpreadsheetView::init() {
 	});
 
 	// react on sparkline toggled
-	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=] {
+	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=, this] {
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
 			SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 			m_horizontalHeader->refresh();
-			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
+			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=, this] {
 				if (m_spreadsheet->showSparklines())
 					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
@@ -212,14 +239,14 @@ void SpreadsheetView::init() {
 		}
 	});
 
-	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, [=] {
+	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, [=, this] {
 		// Disconnect existing connections before creating new ones
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex)
 			disconnect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, nullptr);
 
 		// Establish new connections
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
-			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
+			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=, this] {
 				if (m_spreadsheet->showSparklines())
 					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
@@ -232,9 +259,17 @@ void SpreadsheetView::init() {
 	showSparklines(m_spreadsheet->showSparklines());
 
 	// selection related connections
+	connect(m_tableView, &QTableView::clicked, this, &SpreadsheetView::navigateToSpreadsheetOnClick);
 	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnSelected, this, &SpreadsheetView::selectColumn);
 	connect(m_spreadsheet, &Spreadsheet::columnDeselected, this, &SpreadsheetView::deselectColumn);
+
+	// connect the corner button (top-left button where headers meet) to selectAll,
+	// this is required since SpreadsheetView uses a custom header and the default behavior of QTableView to select all cells
+	// when clicking the corner button doesn't work anymore.
+	auto* cornerButton = m_tableView->findChild<QAbstractButton*>();
+	if (cornerButton)
+		connect(cornerButton, &QAbstractButton::clicked, this, &SpreadsheetView::selectAll);
 }
 
 bool SpreadsheetView::isReadOnly() const {
@@ -287,6 +322,20 @@ void SpreadsheetView::setSuppressResizeHeader(bool suppress) {
 	m_suppressResizeHeader = suppress;
 }
 
+void SpreadsheetView::showEvent(QShowEvent* event) {
+	QWidget::showEvent(event);
+	if (!m_initialNavigationDone) {
+		m_initialNavigationDone = true;
+		// Navigate to the first cell and set the focus so the user can start directly entering new data.
+		// Defer by one event loop iteration so the native platform widget (Cocoa on macOS) has time
+		// to fully initialize its internal data structures after the widget becomes visible.
+		QTimer::singleShot(0, this, [this]() {
+			goToCell(0, 0);
+			setFocus();
+		});
+	}
+}
+
 void SpreadsheetView::resizeEvent(QResizeEvent* event) {
 	QWidget::resizeEvent(event);
 	if (m_frozenTableView)
@@ -310,6 +359,8 @@ void SpreadsheetView::initActions() {
 	action_reverse_selection = new QAction(QIcon::fromTheme(QStringLiteral("reverse")), i18n("&Reverse"), this);
 	action_clear_selection = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clea&r Content"), this);
 	action_select_all = new QAction(QIcon::fromTheme(QStringLiteral("edit-select-all")), i18n("Select All"), this);
+	// the shortcut needs to be set explicitly because eventFilter() interferes with the default shortcut handling of QTableView
+	action_select_all->setShortcut(QKeySequence::SelectAll);
 
 	// 	action_set_formula = new QAction(QIcon::fromTheme(QString()), i18n("Assign &Formula"), this);
 	// 	action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
@@ -318,7 +369,7 @@ void SpreadsheetView::initActions() {
 	action_fill_random = new QAction(QIcon::fromTheme(QString()), i18n("Uniform Random Values"), this);
 	action_fill_random_nonuniform = new QAction(QIcon::fromTheme(QString()), i18n("Random Values"), this);
 	action_fill_equidistant = new QAction(QIcon::fromTheme(QString()), i18n("Equidistant Values"), this);
-	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
+	action_fill_equidistant_datetime = new QAction(QIcon::fromTheme(QString()), i18n("Equidistant Date&Time Values"), this);
 	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
 
 	action_sample_values = new QAction(QIcon::fromTheme(QStringLiteral("view-list-details")), i18n("Sample Values"), this);
@@ -330,6 +381,7 @@ void SpreadsheetView::initActions() {
 
 	action_clear_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Spreadsheet"), this);
 	action_clear_masks = new QAction(QIcon::fromTheme(QStringLiteral("format-remove-node")), i18n("Clear Masks"), this);
+	action_transpose = new QAction(QIcon::fromTheme(QStringLiteral("object-flip-vertical")), i18n("Transpose"), this);
 	action_go_to_cell = new QAction(QIcon::fromTheme(QStringLiteral("go-jump")), i18n("&Go to Cell..."), this);
 	action_search = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Search"), this);
 	action_search->setShortcut(QKeySequence::Find);
@@ -337,7 +389,7 @@ void SpreadsheetView::initActions() {
 	action_search_replace->setShortcut(QKeySequence::Replace);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
 
-	action_statistics_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics Spreadsheet"), this);
+	action_statistics_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Columns Statistics Spreadsheet"), this);
 	action_statistics_spreadsheet->setCheckable(true);
 
 	// column related actions
@@ -499,79 +551,14 @@ void SpreadsheetView::initActions() {
 
 	// Analyze and plot menu actions
 	addAnalysisActionGroup = new QActionGroup(this);
-	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Reduce Data"), addAnalysisActionGroup);
-	//	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve")), i18n("Reduce Data"), this);
-	addDataReductionAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::DataReduction));
-	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), addAnalysisActionGroup);
-	//	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-differentiation-curve")), i18n("Differentiate"), this);
-	addDifferentiationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Differentiation));
-	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integrate"), addAnalysisActionGroup);
-	//	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-integration-curve")), i18n("Integrate"), this);
-	addIntegrationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Integration));
-	addInterpolationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolate"), addAnalysisActionGroup);
-	addInterpolationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Interpolation));
-	addSmoothAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), addAnalysisActionGroup);
-	addSmoothAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Smoothing));
-	addFourierFilterAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), addAnalysisActionGroup);
-	addFourierFilterAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierFilter));
-
-	// data fit actions
 	addFitActionGroup = new QActionGroup(this);
-	QAction* fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Linear"), addFitActionGroup);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitLinear));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Power"), addFitActionGroup);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPower));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential (degree 1)"), addFitActionGroup);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp1));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential (degree 2)"), addFitActionGroup);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp2));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Inverse Exponential"), addFitActionGroup);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitInvExp));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Gauss"), addFitActionGroup);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitGauss));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Cauchy-Lorentz"), addFitActionGroup);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCauchyLorentz));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Arc Tangent"), addFitActionGroup);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTan));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Hyperbolic Tangent"), addFitActionGroup);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTanh));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Error Function"), addFitActionGroup);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitErrFunc));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Custom"), addFitActionGroup);
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCustom));
-
-	// distribution fit actions
 	addDistributionFitActionGroup = new QActionGroup(this);
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Gaussian (Normal)"), addDistributionFitActionGroup);
-	fitAction->setData(static_cast<int>(nsl_sf_stats_gaussian));
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential"), addDistributionFitActionGroup);
-	fitAction->setData(static_cast<int>(nsl_sf_stats_exponential));
+	// time series analysis
+	tsaSeasonalDecompositionAction = new QAction(QIcon::fromTheme(QStringLiteral("preferences-system-time")), i18n("Seasonal Decomposition"), this);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Laplace"), addDistributionFitActionGroup);
-	fitAction->setData(static_cast<int>(nsl_sf_stats_laplace));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Cauchy-Lorentz"), addDistributionFitActionGroup);
-	fitAction->setData(static_cast<int>(nsl_sf_stats_cauchy_lorentz));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Log-normal"), addDistributionFitActionGroup);
-	fitAction->setData(static_cast<int>(nsl_sf_stats_lognormal));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Poisson"), addDistributionFitActionGroup);
-	fitAction->setData(static_cast<int>(nsl_sf_stats_poisson));
-
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Binomial"), addDistributionFitActionGroup);
-	fitAction->setData(static_cast<int>(nsl_sf_stats_binomial));
+	// statistical analysis
+	addHypothesisTestActionGroup = new QActionGroup(this);
 
 	connectActions();
 }
@@ -623,54 +610,40 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu = new QMenu(this);
 	m_columnMenu->addMenu(m_plotDataMenu);
 
-	// Data fit sub-menu
-	QMenu* dataFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), this);
-	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
-	const auto& addFitActions = addFitActionGroup->actions();
-	dataFitMenu->addAction(addFitActions.at(0));
-	dataFitMenu->addAction(addFitActions.at(1));
-	dataFitMenu->addAction(addFitActions.at(2));
-	dataFitMenu->addAction(addFitActions.at(3));
-	dataFitMenu->addAction(addFitActions.at(4));
-	dataFitMenu->addSeparator();
-	dataFitMenu->addAction(addFitActions.at(5));
-	dataFitMenu->addAction(addFitActions.at(6));
-	dataFitMenu->addSeparator();
-	dataFitMenu->addAction(addFitActions.at(7));
-	dataFitMenu->addAction(addFitActions.at(8));
-	dataFitMenu->addAction(addFitActions.at(9));
-	dataFitMenu->addSeparator();
-	dataFitMenu->addAction(addFitActions.at(10));
+	// fit sub-menu
+	QMenu* fitMenu = new QMenu(i18nc("Curve fitting", "Fit"), this);
+	fitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
+	CartesianPlot::fillFitMenu(fitMenu, addFitActionGroup);
 
 	// distribution fit sub-menu
 	QMenu* distributionFitMenu = new QMenu(i18nc("Curve fitting", "Fit Distribution"), this);
 	distributionFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
-	const auto& addDistributionFitActions = addDistributionFitActionGroup->actions();
-	distributionFitMenu->addAction(addDistributionFitActions.at(0));
-	distributionFitMenu->addAction(addDistributionFitActions.at(1));
-	distributionFitMenu->addAction(addDistributionFitActions.at(2));
-	distributionFitMenu->addAction(addDistributionFitActions.at(3));
-	distributionFitMenu->addAction(addDistributionFitActions.at(4));
-	dataFitMenu->addSeparator();
-	distributionFitMenu->addAction(addDistributionFitActions.at(5));
-	distributionFitMenu->addAction(addDistributionFitActions.at(6));
-	dataFitMenu->addSeparator();
+	CartesianPlot::fillDistributionFitMenu(distributionFitMenu, addDistributionFitActionGroup);
 
 	// analyze and plot data menu
 	m_analyzePlotMenu = new QMenu(i18n("Analyze and Plot Data"), this);
-	m_analyzePlotMenu->addMenu(dataFitMenu);
+	m_analyzePlotMenu->addMenu(fitMenu);
 	m_analyzePlotMenu->addMenu(distributionFitMenu);
 	m_analyzePlotMenu->addSeparator();
-	m_analyzePlotMenu->addAction(addDifferentiationAction);
-	m_analyzePlotMenu->addAction(addIntegrationAction);
-	m_analyzePlotMenu->addSeparator();
-	m_analyzePlotMenu->addAction(addInterpolationAction);
-	m_analyzePlotMenu->addAction(addSmoothAction);
-	m_analyzePlotMenu->addSeparator();
-	m_analyzePlotMenu->addAction(addFourierFilterAction);
-	m_analyzePlotMenu->addSeparator();
-	m_analyzePlotMenu->addAction(addDataReductionAction);
+	CartesianPlot::fillAnalysisMenu(m_analyzePlotMenu, addAnalysisActionGroup);
 	m_columnMenu->addMenu(m_analyzePlotMenu);
+
+	// statistical analysis
+	m_statisticalAnalysisMenu = new QMenu(i18n("Statistical Analysis"), this);
+	m_hypothesisTestMenu = new QMenu(i18n("Hypothesis Test"), this);
+	HypothesisTest::fillAddNewHypothesisTest(m_hypothesisTestMenu, addHypothesisTestActionGroup);
+	m_statisticalAnalysisMenu->addMenu(m_hypothesisTestMenu);
+	m_columnMenu->addMenu(m_statisticalAnalysisMenu);
+
+	// time series analysis
+	m_timeSeriesAnalysisMenu = new QMenu(i18n("Time Series Analysis"), this);
+	m_timeSeriesAnalysisMenu->addAction(tsaSeasonalDecompositionAction);
+	m_columnMenu->addMenu(m_timeSeriesAnalysisMenu);
+
+	// column statistics releated actions
+	m_columnMenu->addSeparator();
+	m_columnMenu->addAction(action_statistics_columns);
+	m_columnMenu->addAction(action_statistics_spreadsheet);
 
 	m_columnSetAsMenu = new QMenu(i18n("Set Column As"), this);
 	m_columnMenu->addSeparator();
@@ -695,8 +668,8 @@ void SpreadsheetView::initMenus() {
 		m_columnGenerateDataMenu->addAction(action_fill_const);
 		m_columnGenerateDataMenu->addSeparator();
 		m_columnGenerateDataMenu->addAction(action_fill_equidistant);
+		m_columnGenerateDataMenu->addAction(action_fill_equidistant_datetime);
 		m_columnGenerateDataMenu->addAction(action_fill_random_nonuniform);
-		m_columnGenerateDataMenu->addAction(action_fill_function);
 		m_columnGenerateDataMenu->addSeparator();
 		m_columnGenerateDataMenu->addAction(action_sample_values);
 		m_columnGenerateDataMenu->addAction(action_flatten_columns);
@@ -791,8 +764,6 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu->addMenu(m_formattingMenu);
 	m_columnMenu->addSeparator();
 	m_columnMenu->addAction(action_freeze_columns);
-	m_columnMenu->addSeparator();
-	m_columnMenu->addAction(action_statistics_columns);
 
 	if (!m_readOnly) {
 		m_columnMenu->addSeparator();
@@ -808,10 +779,6 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addAction(action_remove_missing_value_rows);
 		m_columnMenu->addAction(action_mask_missing_value_rows);
 	}
-
-	// Spreadsheet menu
-	m_spreadsheetMenu = new QMenu(this);
-	createContextMenu(m_spreadsheetMenu);
 
 	// Row menu
 	m_rowMenu = new QMenu(this);
@@ -859,11 +826,12 @@ void SpreadsheetView::connectActions() {
 	// 	connect(action_fill_random, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithRandomNumbers);
 	connect(action_fill_random_nonuniform, &QAction::triggered, this, &SpreadsheetView::fillWithRandomValues);
 	connect(action_fill_equidistant, &QAction::triggered, this, &SpreadsheetView::fillWithEquidistantValues);
-	connect(action_fill_function, &QAction::triggered, this, &SpreadsheetView::fillWithFunctionValues);
+	connect(action_fill_equidistant_datetime, &QAction::triggered, this, &SpreadsheetView::fillWithEquidistantDateTimeValues);
 	connect(action_fill_const, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithConstValues);
 	connect(action_select_all, &QAction::triggered, this, &SpreadsheetView::selectAll);
 	connect(action_clear_spreadsheet, &QAction::triggered, m_spreadsheet, QOverload<>::of(&Spreadsheet::clear));
 	connect(action_clear_masks, &QAction::triggered, m_spreadsheet, &Spreadsheet::clearMasks);
+	connect(action_transpose, &QAction::triggered, this, &SpreadsheetView::transpose);
 	connect(action_go_to_cell, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
 	connect(action_search, &QAction::triggered, this, &SpreadsheetView::searchReplace);
 	connect(action_search_replace, &QAction::triggered, this, &SpreadsheetView::searchReplace);
@@ -936,6 +904,23 @@ void SpreadsheetView::connectActions() {
 	connect(addAnalysisActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addDistributionFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotDataDistributionFit);
+
+	// time series analysis
+	connect(tsaSeasonalDecompositionAction, &QAction::triggered, this, &SpreadsheetView::addSeasonalDecomposition);
+
+	// statistical analysis
+	connect(addHypothesisTestActionGroup, &QActionGroup::triggered, [=, this](QAction* action) {
+		const auto& columns = selectedColumns();
+		QString name = (columns.size() == 1) ? columns.constFirst()->name() : m_spreadsheet->name();
+		auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", name));
+		test->setTest(static_cast<HypothesisTest::Test>(action->data().toInt()));
+		QVector<const AbstractColumn*> dataColumns;
+		for (const auto* column : columns)
+			dataColumns << column;
+		test->setDataColumns(dataColumns);
+		test->recalculate();
+		m_spreadsheet->parentAspect()->addChild(test);
+	});
 }
 
 #ifdef HAVE_TOUCHBAR
@@ -967,10 +952,20 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 		firstAction = menu->actions().at(1);
 
 	if (m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0) {
+		// plot and analysis actions
 		menu->insertMenu(firstAction, m_plotDataMenu);
 		menu->insertMenu(firstAction, m_analyzePlotMenu);
+		menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
+		menu->insertMenu(firstAction, m_timeSeriesAnalysisMenu);
+		menu->insertSeparator(firstAction);
+
+		// column statistics related actions
+		menu->insertSeparator(firstAction);
+		menu->insertAction(firstAction, action_statistics_all_columns);
+		menu->insertAction(firstAction, action_statistics_spreadsheet);
 		menu->insertSeparator(firstAction);
 	}
+
 	menu->insertMenu(firstAction, m_selectionMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_select_all);
@@ -988,13 +983,10 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	if (!m_readOnly)
 		menu->insertAction(firstAction, action_search_replace);
 	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_transpose);
+	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_toggle_comments);
 	menu->insertAction(firstAction, action_toggle_sparklines);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_statistics_spreadsheet);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_statistics_all_columns);
-	menu->insertSeparator(firstAction);
 }
 
 /*!
@@ -1011,13 +1003,23 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	const bool numeric = column->isNumeric();
 	const bool datetime = (column->columnMode() == AbstractColumn::ColumnMode::DateTime);
 
-	QAction* firstAction = menu->actions().at(1);
+	// plot and analysis actions
+	auto* firstAction = menu->actions().at(1);
 	menu->insertMenu(firstAction, m_plotDataMenu);
 	menu->insertMenu(firstAction, m_analyzePlotMenu);
+	menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
+	menu->insertMenu(firstAction, m_timeSeriesAnalysisMenu);
 	menu->insertSeparator(firstAction);
 
-	if (numeric)
+	// column statistics related actions
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_statistics_columns);
+	menu->insertAction(firstAction, action_statistics_spreadsheet);
+
+	if (numeric) {
+		menu->insertSeparator(firstAction);
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
+	}
 
 	if (!m_readOnly) {
 		if (numeric) {
@@ -1040,8 +1042,6 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	menu->insertMenu(firstAction, m_formattingMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_freeze_columns);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_statistics_columns);
 
 	checkColumnMenus(QVector<Column*>{column});
 }
@@ -1076,7 +1076,8 @@ void SpreadsheetView::handleAspectsAdded(int first, int last) {
 			m_tableView->setColumnWidth(i, col->width());
 	}
 
-	goToCell(0, last);
+	if (m_spreadsheet->rowCount() > 0)
+		goToCell(0, last);
 }
 
 void SpreadsheetView::handleAspectAboutToBeRemoved(int first, int last) {
@@ -1088,7 +1089,7 @@ void SpreadsheetView::handleAspectAboutToBeRemoved(int first, int last) {
 		disconnect(children.at(i), nullptr, this, nullptr);
 }
 
-void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /* oldSize */, int newSize) {
+void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /* oldSiz	e */, int newSize) {
 	// save the new size in the column
 	Column* col = m_spreadsheet->child<Column>(logicalIndex);
 	col->setWidth(newSize);
@@ -1100,13 +1101,20 @@ void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /* ol
 }
 
 void SpreadsheetView::goToCell(int row, int col) {
-	QModelIndex index = m_model->index(row, col);
+	const auto& index = m_model->index(row, col);
+	if (!index.isValid())
+		return;
+
 	m_tableView->scrollTo(index);
 	m_tableView->setCurrentIndex(index);
 }
 
 void SpreadsheetView::selectCell(int row, int col) {
-	m_tableView->selectionModel()->select(m_model->index(row, col), QItemSelectionModel::Select);
+	const auto& index = m_model->index(row, col);
+	if (!index.isValid())
+		return;
+
+	m_tableView->selectionModel()->select(index, QItemSelectionModel::Select);
 }
 
 void SpreadsheetView::clearSelection() {
@@ -1420,11 +1428,13 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 
 			checkColumnMenus(selectedColumns());
 			m_columnMenu->exec(global_pos);
-		} else if (watched == this) {
+		} else if (watched == this || watched == m_tableView->viewport() || (m_frozenTableView && watched == m_frozenTableView->viewport())) {
 			// the cursor position is in one of the cells and no full columns are selected,
 			// show the global spreadsheet context menu in this case
-			// TODO: deactivate the "selection" menu if there are no values in the selected cells
-			checkSpreadsheetMenu();
+			if (!m_spreadsheetMenu) {
+				m_spreadsheetMenu = new QMenu(this);
+				createContextMenu(m_spreadsheetMenu);
+			}
 			m_spreadsheetMenu->exec(global_pos);
 		}
 
@@ -1436,6 +1446,15 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 		else if (key_event->matches(QKeySequence::Paste)) {
 			if (!m_readOnly)
 				pasteIntoSelection();
+		} else if (key_event->matches(QKeySequence::ZoomIn) || (key_event->modifiers() == Qt::ControlModifier && key_event->key() == Qt::Key_Equal)) {
+			setZoomLevel(m_zoomLevel + 10);
+			return true;
+		} else if (key_event->matches(QKeySequence::ZoomOut)) {
+			setZoomLevel(m_zoomLevel - 10);
+			return true;
+		} else if (key_event->modifiers() == Qt::ControlModifier && key_event->key() == Qt::Key_0) {
+			setZoomLevel(100);
+			return true;
 		} else if (key_event->key() == Qt::Key_Backspace || key_event->matches(QKeySequence::Delete))
 			clearSelectedCells();
 		else if (key_event->key() == Qt::Key_Return || key_event->key() == Qt::Key_Enter) {
@@ -1472,8 +1491,16 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 #endif
 		else if (key_event->matches(QKeySequence::Cut))
 			cutSelection();
-		else if (key_event->matches(QKeySequence::SelectAll)) // TODO: doesn't work
-			selectAll();
+	} else if (event->type() == QEvent::Wheel) {
+		auto* wheelEvent = static_cast<QWheelEvent*>(event);
+		if (wheelEvent->modifiers() == Qt::ControlModifier) {
+			const int delta = wheelEvent->angleDelta().y();
+			if (delta > 0)
+				setZoomLevel(m_zoomLevel + 10);
+			else if (delta < 0)
+				setZoomLevel(m_zoomLevel - 10);
+			return true;
+		}
 	}
 
 	return QWidget::eventFilter(watched, event);
@@ -1505,8 +1532,10 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	bool hasValues = this->hasValues(columns);
 	m_plotDataMenu->setEnabled(hasValues);
 	m_analyzePlotMenu->setEnabled(hasValues);
+	m_statisticalAnalysisMenu->setEnabled(hasValues);
+	m_timeSeriesAnalysisMenu->setEnabled(hasValues);
 	m_selectionMenu->setEnabled(hasValues);
-	action_select_all->setEnabled(hasValues);
+	action_select_all->setEnabled(cellsAvail);
 	action_clear_spreadsheet->setEnabled(hasValues);
 	action_statistics_all_columns->setEnabled(hasValues);
 	action_go_to_cell->setEnabled(cellsAvail);
@@ -1514,7 +1543,7 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	// deactivate the "Clear masks" action if there are no masked cells
 	bool hasMasked = false;
 	for (auto* column : columns) {
-		if (column->maskedIntervals().size() > 0) {
+		if (column->hasMaskedCells()) {
 			hasMasked = true;
 			break;
 		}
@@ -1545,6 +1574,23 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 		action_toggle_sparklines->setText(i18n("Hide Sparklines"));
 	else
 		action_toggle_sparklines->setText(i18n("Show Sparklines"));
+
+	// column transpose is only possible if all columns are numeric or the first column is text (used for column names after transposition) and all others are numeric
+	bool canTranspose = false;
+	if (m_spreadsheet->columnCount() > 0) {
+		const auto* firstCol = columns.constFirst();
+		if (firstCol->columnMode() == AbstractColumn::ColumnMode::Text || firstCol->isNumeric()) {
+			canTranspose = true;
+			for (int i = 1; i < columns.count(); i++) {
+				const auto* col = columns.at(i);
+				if (!col->isNumeric()) {
+					canTranspose = false;
+					break;;
+				}
+			}
+		}
+	}
+	action_transpose->setEnabled(canTranspose);
 }
 
 void SpreadsheetView::checkSpreadsheetSelectionMenu() {
@@ -1579,8 +1625,8 @@ void SpreadsheetView::checkSpreadsheetSelectionMenu() {
 
 void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 	bool numeric = true;
-	bool plottable = true;
-	bool datetime = false;
+	bool plottable = false; // true if at least one column is plottable (numeric or datetime), non-plottable columns will be ignored in the plot data dialog or used as text labels
+	bool datetime = true; // true if all columns are numeric or datetime
 	bool text = false;
 	bool hasValues = false;
 	bool hasFormat = false;
@@ -1588,13 +1634,12 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 
 	for (const auto* col : columns) {
 		if (!col->isNumeric()) {
-			datetime = (col->columnMode() == AbstractColumn::ColumnMode::DateTime);
-			if (!datetime)
-				plottable = false;
-
 			numeric = false;
-			break;
+			if (col->columnMode() != AbstractColumn::ColumnMode::DateTime)
+				datetime = false;
 		}
+		if (col->isPlottable())
+			plottable = true;
 	}
 
 	for (const auto* col : columns) {
@@ -1643,6 +1688,9 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 
 	m_plotDataMenu->setEnabled(plottable && hasValues);
 	m_analyzePlotMenu->setEnabled(numeric && hasValues);
+	m_statisticalAnalysisMenu->setEnabled(numeric && hasValues);
+	m_timeSeriesAnalysisMenu->setEnabled(numeric && hasValues);
+
 	m_columnSetAsMenu->setEnabled(numeric);
 	action_statistics_columns->setEnabled(hasEnoughValues);
 	action_clear_columns->setEnabled(hasValues);
@@ -1659,8 +1707,8 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 	action_fill_row_numbers->setEnabled(numeric);
 	action_fill_const->setEnabled(numeric);
 	action_fill_equidistant->setEnabled(numeric || datetime);
+	// TODO
 	action_fill_random_nonuniform->setEnabled(numeric);
-	action_fill_function->setEnabled(numeric);
 	action_sample_values->setEnabled(hasValues);
 	action_flatten_columns->setEnabled(hasValues);
 
@@ -1715,12 +1763,9 @@ void SpreadsheetView::cutSelection() {
 	if (firstSelectedRow() < 0)
 		return;
 
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: cut selected cells", m_spreadsheet->name()));
+	WAIT_CURSOR_AUTO_RESET;
 	copySelection();
 	clearSelectedCells();
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::copySelection() {
@@ -1740,7 +1785,7 @@ void SpreadsheetView::copySelection() {
 	const int cols = last_col - first_col + 1;
 	const int rows = last_row - first_row + 1;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QString output_str;
 
 	QVector<Column*> columns;
@@ -1760,9 +1805,10 @@ void SpreadsheetView::copySelection() {
 				// 				if (formulaModeActive())
 				// 					output_str += col_ptr->formula(first_row + r);
 				// 				else
-				if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Double)
+				const auto mode = col_ptr->columnMode();
+				if (mode == AbstractColumn::ColumnMode::Double)
 					output_str += numberLocale.toString(col_ptr->valueAt(first_row + r), formats.at(c), 16); // copy with max. precision
-				else if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Integer || col_ptr->columnMode() == AbstractColumn::ColumnMode::BigInt)
+				else if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
 					output_str += numberLocale.toString(col_ptr->valueAt(first_row + r));
 				else
 					output_str += col_ptr->asStringColumn()->textAt(first_row + r);
@@ -1775,8 +1821,8 @@ void SpreadsheetView::copySelection() {
 	}
 
 	QApplication::clipboard()->setText(output_str);
-	RESET_CURSOR;
 }
+
 /*
 bool determineLocale(const QString& value, QLocale& locale) {
 	int pointIndex = value.indexOf(QLatin1Char('.'));
@@ -1796,7 +1842,6 @@ void SpreadsheetView::pasteIntoSelection() {
 		return;
 
 	PERFTRACE(QStringLiteral("paste selected cells"));
-	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: paste from clipboard", m_spreadsheet->name()));
 
 	int first_col = firstSelectedColumn();
@@ -1808,6 +1853,8 @@ void SpreadsheetView::pasteIntoSelection() {
 	QVector<QStringList> cellTexts;
 
 	try {
+		WAIT_CURSOR_AUTO_RESET;
+
 		QString input_str = QString::fromUtf8(mime_data->data(QStringLiteral("text/plain"))).trimmed();
 		QString separator;
 		if (input_str.indexOf(QLatin1String("\r\n")) != -1)
@@ -1827,6 +1874,8 @@ void SpreadsheetView::pasteIntoSelection() {
 		// TEST ' ' as group separator:
 		for (int i = 0; i < input_row_count; i++) {
 			const auto& rowText = input_rows.at(i).trimmed();
+			if (rowText.trimmed().isEmpty())
+				continue;
 			if (hasTabs)
 				cellTexts.append(rowText.split(QLatin1Char('\t')));
 			else if (numberLocale.groupSeparator().trimmed().isEmpty()
@@ -1835,13 +1884,17 @@ void SpreadsheetView::pasteIntoSelection() {
 			else
 				cellTexts.append(rowText.split(QRegularExpression(QStringLiteral("\\s+"))));
 
-			if (cellTexts.at(i).count() > input_col_count)
-				input_col_count = cellTexts.at(i).count();
+			if (cellTexts.last().count() > input_col_count)
+				input_col_count = cellTexts.last().count();
 		}
-
+		input_row_count = cellTexts.count();
+		if (input_row_count == 0) {
+			m_spreadsheet->endMacro();
+			return;
+		}
 		input_rows.clear(); // not needed anymore, release memory
 
-		// when pasting DateTime data in the format 'yyyy-MM-dd hh:mm:ss' and similar, it get's split above because of the space separator.
+		// when pasting DateTime data in the format 'yyyy-MM-dd hh:mm:ss' and similar, it gets split above because of the space separator.
 		// here we check whether we have such a situation and merge the first two columns to get the proper value,
 		// for example "2018-03-21 10:00:00" and not "2018-03-21" and "10:00:00"
 		if (!cellTexts.isEmpty() && cellTexts.constFirst().size() > 1) {
@@ -1858,10 +1911,12 @@ void SpreadsheetView::pasteIntoSelection() {
 				const QString newCell = firstCell + QLatin1Char(' ') + secondCell;
 				const auto newMode = AbstractFileFilter::columnMode(newCell, dateTimeFormat, numberLocale);
 				if (newMode == AbstractColumn::ColumnMode::DateTime) {
-					// merge the first two colums
+					// merge the first two columns
 					for (auto& row : cellTexts) {
-						row[1] = row.at(0) + QLatin1Char(' ') + row.at(1);
-						row.takeFirst();
+						if (row.size() > 1) {
+							row[1] = row.at(0) + QLatin1Char(' ') + row.at(1);
+							row.takeFirst();
+						}
 					}
 					--input_col_count;
 				}
@@ -1876,6 +1931,40 @@ void SpreadsheetView::pasteIntoSelection() {
 		// 3. the whole column is selected (the use clicked on the header)
 		// Also, set the proper column mode if the target column doesn't have any values yet
 		// and set the proper column mode if the column is empty
+
+		int check_row = first_row;
+		if (check_row == -1) {
+			int current_row, current_col;
+			getCurrentCell(&current_row, &current_col);
+			check_row = (current_row == -1) ? 0 : current_row;
+		}
+
+		bool firstRowIsHeader = false;
+		QStringList headerValues;
+
+		if (check_row == 0 && cellTexts.size() > 1 && this->isVisible()) {
+			bool isTextRow = false;
+			QString tempFormat;
+			for (const QString& cell : cellTexts.constFirst()) {
+				if (AbstractFileFilter::columnMode(cell.trimmed(), tempFormat, numberLocale) == AbstractColumn::ColumnMode::Text) {
+					isTextRow = true;
+					break;
+				}
+			}
+
+			if (isTextRow) {
+			auto reply = QMessageBox::question(this,
+			i18n("Import Headers"),
+			i18n("Do you want to use the first row as column headers?"),
+			QMessageBox::Yes | QMessageBox::No);
+				if (reply == QMessageBox::Yes) {
+					firstRowIsHeader = true;
+					headerValues = cellTexts.takeFirst();
+					input_row_count--;
+				}
+			}
+		}
+
 		if ((first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col)
 			|| (first_row == 0 && last_row == m_spreadsheet->rowCount() - 1)) {
 			int current_row, current_col;
@@ -1890,32 +1979,34 @@ void SpreadsheetView::pasteIntoSelection() {
 			last_row = first_row + input_row_count - 1;
 			last_col = first_col + input_col_count - 1;
 			const int columnCount = m_spreadsheet->columnCount();
-			// if the target columns that are already available don't have any values yet,
-			// convert their mode to the mode of the data to be pasted
+
+			// get baseline modes from the first 10 rows
+			const int sampleSize = qMin(10, (int)cellTexts.size());
+			QVector<QStringList> sampleRows = cellTexts.mid(0, sampleSize);
+
+			AsciiFilter::Properties props;
+			props.locale = numberLocale;
+			props.simplifyWhitespaces = true;
+			props.removeQuotes = true;
+			props.intAsDouble = false;
+			props.dateTimeFormat.clear();
+			
+			QString globalDateTimeFormat;
+			QVector<AbstractColumn::ColumnMode> baselineModes = AsciiFilter::determineColumnModes(sampleRows, props, globalDateTimeFormat);
+
+			// Update existing columns
 			for (int c = first_col; c <= last_col && c < columnCount; ++c) {
 				Column* col = m_spreadsheet->column(c);
-				if (col->hasValues())
-					continue;
-
-				// first non-empty value in the column to paste determines the column mode/type of the new column to be added
 				const int curCol = c - first_col;
-				QString nonEmptyValue;
-				for (auto& r : cellTexts) {
-					if (curCol < r.count() && !r.at(curCol).isEmpty()) {
-						nonEmptyValue = r.at(curCol);
-						break;
+				auto currentMode = col->columnMode();
+				auto mode = (curCol < baselineModes.size()) ? baselineModes.at(curCol) : AbstractColumn::ColumnMode::Double;
+				QString dateTimeFormat = globalDateTimeFormat;
+				if (mode != currentMode) {
+					col->setColumnMode(mode);
+					if (mode == AbstractColumn::ColumnMode::DateTime && !dateTimeFormat.isEmpty()) {
+						auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+						filter->setFormat(dateTimeFormat);
 					}
-				}
-
-				// 			if (!localeDetermined)
-				// 				localeDetermined = determineLocale(nonEmptyValue, locale);
-
-				QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
-				const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
-				col->setColumnMode(mode);
-				if (mode == AbstractColumn::ColumnMode::DateTime) {
-					auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-					filter->setFormat(dateTimeFormat);
 				}
 			}
 
@@ -1923,22 +2014,11 @@ void SpreadsheetView::pasteIntoSelection() {
 			if (last_col >= columnCount) {
 				for (int c = 0; c < last_col - (columnCount - 1); ++c) {
 					const int curCol = columnCount - first_col + c;
-					// first non-empty value in the column to paste determines the column mode/type of the new column to be added
-					QString nonEmptyValue;
-					for (auto& r : cellTexts) {
-						if (curCol < r.count() && !r.at(curCol).isEmpty()) {
-							nonEmptyValue = r.at(curCol);
-							break;
-						}
-					}
+					QString dateTimeFormat = globalDateTimeFormat;
 
-					// 				if (!localeDetermined)
-					// 					localeDetermined = determineLocale(nonEmptyValue, locale);
-
-					QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
-					const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
-					Column* new_col = new Column(QString::number(curCol), mode);
-					if (mode == AbstractColumn::ColumnMode::DateTime) {
+					auto mode = (curCol < baselineModes.size()) ? baselineModes.at(curCol) : AbstractColumn::ColumnMode::Double;
+					Column* new_col = new Column(QString::number(curCol + 1), mode);
+					if (mode == AbstractColumn::ColumnMode::DateTime && !dateTimeFormat.isEmpty()) {
 						auto* filter = static_cast<DateTime2StringFilter*>(new_col->outputFilter());
 						filter->setFormat(dateTimeFormat);
 					}
@@ -1954,6 +2034,14 @@ void SpreadsheetView::pasteIntoSelection() {
 
 			// select the rectangle to be pasted in
 			setCellsSelected(first_row, first_col, last_row, last_col);
+		}
+
+		if (firstRowIsHeader) {
+			for (int c = 0; c < headerValues.size(); ++c) {
+				int targetColIndex = first_col + c;
+				if (targetColIndex < m_spreadsheet->columnCount())
+					m_spreadsheet->column(targetColIndex)->setName(headerValues.at(c));
+			}
 		}
 
 		const int rows = last_row - first_row + 1;
@@ -2025,26 +2113,25 @@ void SpreadsheetView::pasteIntoSelection() {
 			}
 
 			col->setSuppressDataChangedSignal(false);
-			col->setChanged();
+			col->setDataChanged();
 		} // end of for-loop
 	} catch (std::bad_alloc&) {
 		cellTexts.clear();
 		m_spreadsheet->endMacro();
-		RESET_CURSOR;
 		KMessageBox::error(this, i18n("Not enough memory to finalize this operation."));
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::maskSelection() {
+	PERFTRACE(QStringLiteral("mask selection"));
 	int first = firstSelectedRow();
 	if (first < 0)
 		return;
 	int last = lastSelectedRow();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: mask selected cells", m_spreadsheet->name()));
 
 	// suppress the data changed signal in all selected columns, will be emitted once per column at the end
@@ -2052,31 +2139,46 @@ void SpreadsheetView::maskSelection() {
 	for (auto* column : columns)
 		column->setSuppressDataChangedSignal(true);
 
-	// mask the selected cells
+	// mask the selected cells - collect contiguous ranges for efficient bulk operations
 	for (auto* column : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
-		for (int row = first; row <= last; row++)
-			if (isCellSelected(row, col))
-				column->setMasked(row);
+		int rangeStart = -1;
+
+		for (int row = first; row <= last; row++) {
+			if (isCellSelected(row, col)) {
+				if (rangeStart == -1)
+					rangeStart = row; // Start new range
+			} else {
+				if (rangeStart != -1) {
+					// End current range
+					column->setMaskedRange(rangeStart, row - 1, true);
+					rangeStart = -1;
+				}
+			}
+		}
+
+		// Close any open range
+		if (rangeStart != -1)
+			column->setMaskedRange(rangeStart, last, true);
 
 		column->setSuppressDataChangedSignal(false);
-		column->setChanged();
+		column->setDataChanged();
 	}
 
 	// some cells were masked, enable the "clear masks" action
 	action_clear_masks->setEnabled(true);
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::unmaskSelection() {
+	PERFTRACE(QStringLiteral("unmask selection"));
 	int first = firstSelectedRow();
 	if (first < 0)
 		return;
 	int last = lastSelectedRow();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: unmask selected cells", m_spreadsheet->name()));
 
 	// suppress the data changed signal in all selected columns, will be emitted once per column at the end
@@ -2084,19 +2186,33 @@ void SpreadsheetView::unmaskSelection() {
 	for (auto* column : columns)
 		column->setSuppressDataChangedSignal(true);
 
-	// unmask the selected cells
+	// unmask the selected cells - collect contiguous ranges for efficient bulk operations
 	for (auto* column : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
-		for (int row = first; row <= last; row++)
-			if (isCellSelected(row, col))
-				column->setMasked(row, false);
+		int rangeStart = -1;
+
+		for (int row = first; row <= last; row++) {
+			if (isCellSelected(row, col)) {
+				if (rangeStart == -1)
+					rangeStart = row; // Start new range
+			} else {
+				if (rangeStart != -1) {
+					// End current range
+					column->setMaskedRange(rangeStart, row - 1, false);
+					rangeStart = -1;
+				}
+			}
+		}
+
+		// Close any open range
+		if (rangeStart != -1)
+			column->setMaskedRange(rangeStart, last, false);
 
 		column->setSuppressDataChangedSignal(false);
-		column->setChanged();
+		column->setDataChanged();
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::reverseSelection() {
@@ -2224,6 +2340,40 @@ void SpreadsheetView::plotDataDistributionFit(QAction* action) {
 	dlg->exec();
 }
 
+void SpreadsheetView::addSeasonalDecomposition() {
+	const auto& columns = selectedColumns(false);
+	if (columns.isEmpty())
+		return;
+
+	auto* decomp = new SeasonalDecomposition(i18n("Seasonal Decomposition"));
+
+	if (columns.size() == 1) {
+		auto* col = columns.constFirst();
+		if (col->plotDesignation() == AbstractColumn::PlotDesignation::X)
+			decomp->setXColumn(col);
+		else {
+			decomp->setYColumn(col);
+			decomp->setName(i18n("Seasonal Decomposition for %1", col->name()));
+		}
+	} else {
+		// more than one column were selected, identifiy the first X and the first Y columns in the selection.
+		AbstractColumn* colX{nullptr};
+		AbstractColumn* colY{nullptr};
+		for (auto* col : columns) {
+			if (!colX && col->plotDesignation() == AbstractColumn::PlotDesignation::X)
+				colX = col;
+			else if (!colY && col->plotDesignation() == AbstractColumn::PlotDesignation::Y) {
+				colY = col;
+				decomp->setName(i18n("Seasonal Decomposition for %1", col->name()));
+			}
+		}
+		decomp->setXColumn(colX);
+		decomp->setYColumn(colY);
+	}
+
+	m_spreadsheet->parentAspect()->addChild(decomp);
+}
+
 void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 	const auto& columns = selectedColumns(false);
 	if (columns.isEmpty())
@@ -2234,7 +2384,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 		return;
 	int last = lastSelectedRow();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with row numbers", m_spreadsheet->name()));
 	for (auto* col_ptr : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
@@ -2288,10 +2438,9 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
-		col_ptr->setChanged();
+		col_ptr->setDataChanged();
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::fillWithRowNumbers() {
@@ -2299,7 +2448,7 @@ void SpreadsheetView::fillWithRowNumbers() {
 	if (columns.isEmpty())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18np("%1: fill column with row numbers", "%1: fill columns with row numbers", m_spreadsheet->name(), columns.count()));
 
 	const int rows = m_spreadsheet->rowCount();
@@ -2329,7 +2478,6 @@ void SpreadsheetView::fillWithRowNumbers() {
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 // TODO: this function is not used currently.
@@ -2343,7 +2491,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 	if (first < 0)
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with random values", m_spreadsheet->name()));
 	QRandomGenerator rng(QTime::currentTime().msec());
 	for (auto* col_ptr : columns) {
@@ -2409,10 +2557,9 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
-		col_ptr->setChanged();
+		col_ptr->setDataChanged();
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::fillWithRandomValues() {
@@ -2433,19 +2580,19 @@ void SpreadsheetView::fillWithEquidistantValues() {
 	if (columns.isEmpty())
 		return;
 
-	auto* dlg = new EquidistantValuesDialog(m_spreadsheet);
+	auto* dlg = new EquidistantValuesDialog(m_spreadsheet, this);
 	dlg->setColumns(columns);
 	dlg->exec();
 #endif
 }
 
-void SpreadsheetView::fillWithFunctionValues() {
+void SpreadsheetView::fillWithEquidistantDateTimeValues() {
 #ifndef SDK
 	const auto& columns = selectedColumns();
 	if (columns.isEmpty())
 		return;
 
-	auto* dlg = new FunctionValuesDialog(m_spreadsheet);
+	auto* dlg = new EquidistantValuesDialog(m_spreadsheet, this, true /* datatime */);
 	dlg->setColumns(columns);
 	dlg->exec();
 #endif
@@ -2488,7 +2635,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 													  6,
 													  &doubleOk);
 			if (doubleOk) {
-				WAIT_CURSOR;
+				WAIT_CURSOR_AUTO_RESET;
 				QVector<double> results(last - first + 1);
 				for (int row = first; row <= last; row++) {
 					if (isCellSelected(row, col))
@@ -2497,14 +2644,13 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 						results[row - first] = col_ptr->valueAt(row);
 				}
 				col_ptr->replaceValues(first, results);
-				RESET_CURSOR;
 			}
 			break;
 		case AbstractColumn::ColumnMode::Integer:
 			if (!intOk)
 				intValue = QInputDialog::getInt(this, i18n("Fill the selection with constant value"), i18n("Value"), 0, -2147483647, 2147483647, 1, &intOk);
 			if (intOk) {
-				WAIT_CURSOR;
+				WAIT_CURSOR_AUTO_RESET;
 				QVector<int> results(last - first + 1);
 				for (int row = first; row <= last; row++) {
 					if (isCellSelected(row, col))
@@ -2513,7 +2659,6 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 						results[row - first] = col_ptr->integerAt(row);
 				}
 				col_ptr->replaceInteger(first, results);
-				RESET_CURSOR;
 			}
 			break;
 		case AbstractColumn::ColumnMode::BigInt:
@@ -2522,7 +2667,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 				bigIntValue =
 					QInputDialog::getInt(this, i18n("Fill the selection with constant value"), i18n("Value"), 0, -2147483647, 2147483647, 1, &bigIntOk);
 			if (bigIntOk) {
-				WAIT_CURSOR;
+				WAIT_CURSOR_AUTO_RESET;
 				QVector<qint64> results(last - first + 1);
 				for (int row = first; row <= last; row++) {
 					if (isCellSelected(row, col))
@@ -2531,7 +2676,6 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 						results[row - first] = col_ptr->bigIntAt(row);
 				}
 				col_ptr->replaceBigInt(first, results);
-				RESET_CURSOR;
 			}
 			break;
 		case AbstractColumn::ColumnMode::Text:
@@ -2539,7 +2683,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 				stringValue =
 					QInputDialog::getText(this, i18n("Fill the selection with constant value"), i18n("Value"), QLineEdit::Normal, QString(), &stringOk);
 			if (stringOk && !stringValue.isEmpty()) {
-				WAIT_CURSOR;
+				WAIT_CURSOR_AUTO_RESET;
 				QVector<QString> results;
 				for (int row = first; row <= last; row++) {
 					if (isCellSelected(row, col))
@@ -2548,7 +2692,6 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 						results << col_ptr->textAt(row);
 				}
 				col_ptr->replaceTexts(first, results);
-				RESET_CURSOR;
 			}
 			break;
 		// TODO: handle other modes
@@ -2559,7 +2702,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
-		col_ptr->setChanged();
+		col_ptr->setDataChanged();
 	}
 	m_spreadsheet->endMacro();
 }
@@ -2612,7 +2755,7 @@ void SpreadsheetView::insertColumnLeft() {
 }
 
 /*!
-  Insert multiple empty columns left to the firt selected column
+  Insert multiple empty columns left to the first selected column
 */
 void SpreadsheetView::insertColumnsLeft() {
 	bool ok = false;
@@ -2688,14 +2831,13 @@ void SpreadsheetView::insertColumnsRight(int count) {
 }
 
 void SpreadsheetView::removeSelectedColumns() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: remove selected columns", m_spreadsheet->name()));
 
 	for (auto* column : selectedColumns())
 		m_spreadsheet->removeChild(column);
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::clearSelectedColumns() {
@@ -2709,10 +2851,10 @@ void SpreadsheetView::toggleFreezeColumn() {
 
 		auto* delegate = new SpreadsheetItemDelegate(this);
 		connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
-		connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=]() {
+		connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=, this]() {
 			m_editorEntered = true;
 		});
-		connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=]() {
+		connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=, this]() {
 			m_editorEntered = false;
 		});
 
@@ -2723,6 +2865,7 @@ void SpreadsheetView::toggleFreezeColumn() {
 		m_frozenTableView->verticalHeader()->hide();
 		m_frozenTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 		m_frozenTableView->horizontalHeader()->installEventFilter(this);
+		m_frozenTableView->viewport()->installEventFilter(this);
 		m_tableView->viewport()->stackUnder(m_frozenTableView);
 
 		// 	m_frozenTableView->setStyleSheet("QTableView { border: none;"
@@ -2740,7 +2883,7 @@ void SpreadsheetView::toggleFreezeColumn() {
 
 		updateFrozenTableGeometry();
 
-		// synchronize the sroll bars across the main and the frozen views
+		// synchronize the scroll bars across the main and the frozen views
 		connect(m_frozenTableView->verticalScrollBar(), &QAbstractSlider::valueChanged, m_tableView->verticalScrollBar(), &QAbstractSlider::setValue);
 		connect(m_tableView->verticalScrollBar(), &QAbstractSlider::valueChanged, m_frozenTableView->verticalScrollBar(), &QAbstractSlider::setValue);
 	}
@@ -2785,39 +2928,38 @@ void SpreadsheetView::reverseColumns() {
 	if (columns.isEmpty())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18np("%1: reverse column", "%1: reverse columns", m_spreadsheet->name(), columns.size()));
 	for (auto* col : columns) {
 		if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 			// determine the last row containing a valid value,
 			// ignore all following empty rows when doing the reverse
-			auto* data = static_cast<QVector<double>*>(col->data());
-			QVector<double> new_data(*data);
-			auto itEnd = new_data.begin();
-			auto it = new_data.begin();
-			while (it != new_data.end()) {
+			auto* oldData = static_cast<QVector<double>*>(col->data());
+			QVector<double> newData(*oldData);
+			auto itEnd = newData.begin();
+			auto it = newData.begin();
+			while (it != newData.end()) {
 				if (!std::isnan(*it))
 					itEnd = it;
 				++it;
 			}
 			++itEnd;
 
-			std::reverse(new_data.begin(), itEnd);
-			col->setValues(new_data);
+			std::reverse(newData.begin(), itEnd);
+			col->setValues(newData);
 		} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
-			auto* data = static_cast<QVector<int>*>(col->data());
-			QVector<int> new_data(*data);
-			std::reverse(new_data.begin(), new_data.end());
-			col->setIntegers(new_data);
+			auto* oldData = static_cast<QVector<int>*>(col->data());
+			QVector<int> newData(*oldData);
+			std::reverse(newData.begin(), newData.end());
+			col->setIntegers(newData);
 		} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
-			auto* data = static_cast<QVector<qint64>*>(col->data());
-			QVector<qint64> new_data(*data);
-			std::reverse(new_data.begin(), new_data.end());
-			col->setBigInts(new_data);
+			auto* oldData = static_cast<QVector<qint64>*>(col->data());
+			QVector<qint64> newData(*oldData);
+			std::reverse(newData.begin(), newData.end());
+			col->setBigInts(newData);
 		}
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::dropColumnValues() {
@@ -2869,6 +3011,21 @@ void SpreadsheetView::flattenColumns() {
 	dlg->exec();
 }
 
+void SpreadsheetView::transpose() {
+	if (m_spreadsheet->rowCount() > 500) {
+		auto status = KMessageBox::warningTwoActions(
+			this,
+			i18n("The spreadsheet has %1 rows. Do you really want to transpose it?", m_spreadsheet->rowCount()),
+			i18n("Transpose Spreadsheet"),
+			KStandardGuiItem::cont(),
+			KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
+			return;
+	}
+
+	m_spreadsheet->transpose();
+}
+
 void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 	auto columns = selectedColumns();
 	if (columns.isEmpty())
@@ -2890,201 +3047,203 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 		delete dlg;
 	}
 
-	WAIT_CURSOR;
+
 	QStringList messages;
-	auto* message = "Normalization of the column <i>%1</i> was not possible because of %2.";
-	m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
+	{
+		WAIT_CURSOR_AUTO_RESET;
+		auto* message = "Normalization of the column <i>%1</i> was not possible because of %2.";
+		m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
 
-	for (auto* col : columns) {
-		if (col->columnMode() != AbstractColumn::ColumnMode::Double && col->columnMode() != AbstractColumn::ColumnMode::Integer
-			&& col->columnMode() != AbstractColumn::ColumnMode::BigInt)
-			continue;
+		for (auto* col : columns) {
+			if (col->columnMode() != AbstractColumn::ColumnMode::Double && col->columnMode() != AbstractColumn::ColumnMode::Integer
+				&& col->columnMode() != AbstractColumn::ColumnMode::BigInt)
+				continue;
 
-		if (col->columnMode() == AbstractColumn::ColumnMode::Integer || col->columnMode() == AbstractColumn::ColumnMode::BigInt)
-			col->setColumnMode(AbstractColumn::ColumnMode::Double);
+			if (col->columnMode() == AbstractColumn::ColumnMode::Integer || col->columnMode() == AbstractColumn::ColumnMode::BigInt)
+				col->setColumnMode(AbstractColumn::ColumnMode::Double);
 
-		auto* data = static_cast<QVector<double>*>(col->data());
-		QVector<double> new_data(col->rowCount());
+			auto* oldData = static_cast<QVector<double>*>(col->data());
+			QVector<double> newData(col->rowCount());
 
-		switch (method) {
-		case DivideBySum: {
-			double sum = std::accumulate(data->begin(), data->end(), 0);
-			if (sum != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / sum;
-			} else {
-				messages << i18n(message, col->name(), i18n("Sum = 0"));
-				continue;
+			switch (method) {
+			case DivideBySum: {
+				double sum = std::accumulate(oldData->begin(), oldData->end(), 0);
+				if (sum != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = oldData->operator[](i) / sum;
+				} else {
+					messages << i18n(message, col->name(), i18n("Sum = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMin: {
-			double min = col->minimum();
-			if (min != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / min;
-			} else {
-				messages << i18n(message, col->name(), i18n("Min = 0"));
-				continue;
+			case DivideByMin: {
+				double min = col->minimum();
+				if (min != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = oldData->operator[](i) / min;
+				} else {
+					messages << i18n(message, col->name(), i18n("Min = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMax: {
-			double max = col->maximum();
-			if (max != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / max;
-			} else {
-				messages << i18n(message, col->name(), i18n("Max = 0"));
-				continue;
+			case DivideByMax: {
+				double max = col->maximum();
+				if (max != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = oldData->operator[](i) / max;
+				} else {
+					messages << i18n(message, col->name(), i18n("Max = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByCount: {
-			int count = data->size();
-			if (count != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / count;
-			} else {
-				messages << i18n(message, col->name(), i18n("Count = 0"));
-				continue;
+			case DivideByCount: {
+				int count = oldData->size();
+				if (count != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = oldData->operator[](i) / count;
+				} else {
+					messages << i18n(message, col->name(), i18n("Count = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMean: {
-			double mean = col->statistics().arithmeticMean;
-			if (mean != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / mean;
-			} else {
-				messages << i18n(message, col->name(), i18n("Mean = 0"));
-				continue;
+			case DivideByMean: {
+				double mean = col->statistics().arithmeticMean;
+				if (mean != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = oldData->operator[](i) / mean;
+				} else {
+					messages << i18n(message, col->name(), i18n("Mean = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMedian: {
-			double median = col->statistics().median;
-			if (median != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / median;
-			} else {
-				messages << i18n(message, col->name(), i18n("Median = 0"));
-				continue;
+			case DivideByMedian: {
+				double median = col->statistics().median;
+				if (median != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = oldData->operator[](i) / median;
+				} else {
+					messages << i18n(message, col->name(), i18n("Median = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMode: {
-			double mode = col->statistics().mode;
-			if (mode != 0.0 && !std::isnan(mode)) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / mode;
-			} else {
-				if (mode == 0.0)
-					messages << i18n(message, col->name(), i18n("Mode = 0"));
-				else
-					messages << i18n(message, col->name(), i18n("'Mode not defined'"));
-				continue;
+			case DivideByMode: {
+				double mode = col->statistics().mode;
+				if (mode != 0.0 && !std::isnan(mode)) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = oldData->operator[](i) / mode;
+				} else {
+					if (mode == 0.0)
+						messages << i18n(message, col->name(), i18n("Mode = 0"));
+					else
+						messages << i18n(message, col->name(), i18n("'Mode not defined'"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByRange: {
-			double range = col->statistics().maximum - col->statistics().minimum;
-			if (range != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / range;
-			} else {
-				messages << i18n(message, col->name(), i18n("Range = 0"));
-				continue;
+			case DivideByRange: {
+				double range = col->statistics().maximum - col->statistics().minimum;
+				if (range != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = oldData->operator[](i) / range;
+				} else {
+					messages << i18n(message, col->name(), i18n("Range = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideBySD: {
-			double std = col->statistics().standardDeviation;
-			if (std != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / std;
-			} else {
-				messages << i18n(message, col->name(), i18n("SD = 0"));
-				continue;
+			case DivideBySD: {
+				double std = col->statistics().standardDeviation;
+				if (std != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = oldData->operator[](i) / std;
+				} else {
+					messages << i18n(message, col->name(), i18n("SD = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMAD: {
-			double mad = col->statistics().medianDeviation;
-			if (mad != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / mad;
-			} else {
-				messages << i18n(message, col->name(), i18n("MAD = 0"));
-				continue;
+			case DivideByMAD: {
+				double mad = col->statistics().medianDeviation;
+				if (mad != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = oldData->operator[](i) / mad;
+				} else {
+					messages << i18n(message, col->name(), i18n("MAD = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByIQR: {
-			double iqr = col->statistics().iqr;
-			if (iqr != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / iqr;
-			} else {
-				messages << i18n(message, col->name(), i18n("IQR = 0"));
-				continue;
+			case DivideByIQR: {
+				double iqr = col->statistics().iqr;
+				if (iqr != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = oldData->operator[](i) / iqr;
+				} else {
+					messages << i18n(message, col->name(), i18n("IQR = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case ZScoreSD: {
-			double mean = col->statistics().arithmeticMean;
-			double std = col->statistics().standardDeviation;
-			if (std != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = (data->operator[](i) - mean) / std;
-			} else {
-				messages << i18n(message, col->name(), i18n("SD = 0"));
-				continue;
+			case ZScoreSD: {
+				double mean = col->statistics().arithmeticMean;
+				double std = col->statistics().standardDeviation;
+				if (std != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = (oldData->operator[](i) - mean) / std;
+				} else {
+					messages << i18n(message, col->name(), i18n("SD = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case ZScoreMAD: {
-			double median = col->statistics().median;
-			double mad = col->statistics().medianDeviation;
-			if (mad != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = (data->operator[](i) - median) / mad;
-			} else {
-				messages << i18n(message, col->name(), i18n("MAD = 0"));
-				continue;
+			case ZScoreMAD: {
+				double median = col->statistics().median;
+				double mad = col->statistics().medianDeviation;
+				if (mad != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = (oldData->operator[](i) - median) / mad;
+				} else {
+					messages << i18n(message, col->name(), i18n("MAD = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case ZScoreIQR: {
-			double median = col->statistics().median;
-			double iqr = col->statistics().thirdQuartile - col->statistics().firstQuartile;
-			if (iqr != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = (data->operator[](i) - median) / iqr;
-			} else {
-				messages << i18n(message, col->name(), i18n("IQR = 0"));
-				continue;
+			case ZScoreIQR: {
+				double median = col->statistics().median;
+				double iqr = col->statistics().thirdQuartile - col->statistics().firstQuartile;
+				if (iqr != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = (oldData->operator[](i) - median) / iqr;
+				} else {
+					messages << i18n(message, col->name(), i18n("IQR = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case Rescale: {
-			double min = col->statistics().minimum;
-			double max = col->statistics().maximum;
-			if (max - min != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = rescaleIntervalMin + (data->operator[](i) - min) / (max - min) * (rescaleIntervalMax - rescaleIntervalMin);
-			} else {
-				messages << i18n(message, col->name(), i18n("Max - Min = 0"));
-				continue;
+			case Rescale: {
+				double min = col->statistics().minimum;
+				double max = col->statistics().maximum;
+				if (max - min != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						newData[i] = rescaleIntervalMin + (oldData->operator[](i) - min) / (max - min) * (rescaleIntervalMax - rescaleIntervalMin);
+				} else {
+					messages << i18n(message, col->name(), i18n("Max - Min = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		}
+			}
 
-		col->setValues(new_data);
+			col->setValues(newData);
+		}
+		m_spreadsheet->endMacro();
 	}
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 
 	if (!messages.isEmpty()) {
 		QString info;
@@ -3104,7 +3263,7 @@ void SpreadsheetView::powerTransformSelectedColumns(QAction* action) {
 
 	auto power = static_cast<TukeyLadderPower>(action->data().toInt());
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: power transform columns", m_spreadsheet->name()));
 
 	for (auto* col : columns) {
@@ -3115,87 +3274,86 @@ void SpreadsheetView::powerTransformSelectedColumns(QAction* action) {
 		if (col->columnMode() == AbstractColumn::ColumnMode::Integer || col->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			col->setColumnMode(AbstractColumn::ColumnMode::Double);
 
-		auto* data = static_cast<QVector<double>*>(col->data());
-		QVector<double> new_data(col->rowCount());
+		auto* oldData = static_cast<QVector<double>*>(col->data());
+		QVector<double> newData(col->rowCount());
 
 		switch (power) {
 		case InverseSquared: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
+				double x =oldData->operator[](i);
 				if (x != 0.0)
-					new_data[i] = 1 / gsl_pow_2(x);
+					newData[i] = 1 / gsl_pow_2(x);
 				else
-					new_data[i] = NAN;
+					newData[i] = NAN;
 			}
 			break;
 		}
 		case Inverse: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
+				double x = oldData->operator[](i);
 				if (x != 0.0)
-					new_data[i] = 1 / x;
+					newData[i] = 1 / x;
 				else
-					new_data[i] = NAN;
+					newData[i] = NAN;
 			}
 			break;
 		}
 		case InverseSquareRoot: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
+				double x = oldData->operator[](i);
 				if (x >= 0.0)
-					new_data[i] = 1 / std::sqrt(x);
+					newData[i] = 1 / std::sqrt(x);
 				else
-					new_data[i] = NAN;
+					newData[i] = NAN;
 			}
 			break;
 		}
 		case Log: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
+				double x = oldData->operator[](i);
 				if (x >= 0.0)
-					new_data[i] = log10(x);
+					newData[i] = log10(x);
 				else
-					new_data[i] = NAN;
+					newData[i] = NAN;
 			}
 			break;
 		}
 		case SquareRoot: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
+				double x = oldData->operator[](i);
 				if (x >= 0.0)
-					new_data[i] = std::sqrt(x);
+					newData[i] = std::sqrt(x);
 				else
-					new_data[i] = NAN;
+					newData[i] = NAN;
 			}
 			break;
 		}
 		case Squared: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
-				new_data[i] = gsl_pow_2(x);
+				double x = oldData->operator[](i);
+				newData[i] = gsl_pow_2(x);
 			}
 			break;
 		}
 		case Cube: {
 			for (int i = 0; i < col->rowCount(); ++i) {
-				double x = data->operator[](i);
-				new_data[i] = gsl_pow_3(x);
+				double x = oldData->operator[](i);
+				newData[i] = gsl_pow_3(x);
 			}
 			break;
 		}
 		}
 
-		col->setValues(new_data);
+		col->setValues(newData);
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 // TODO: either make this complete (support all column modes and normalization methods) or remove this code completely.
 /*
 void SpreadsheetView::normalizeSelection() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: normalize selection", m_spreadsheet->name()));
 	double max = 0.0;
 	for (int col = firstSelectedColumn(); col <= lastSelectedColumn(); col++)
@@ -3215,7 +3373,6 @@ void SpreadsheetView::normalizeSelection() {
 				}
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }*/
 
 void SpreadsheetView::showAllColumnsStatistics() {
@@ -3228,7 +3385,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 
 	// Column statistics can be shown for:
 	// * all columns in the spreadsheet - called via the action_statistics_all_columns or when one single cell is selected (=no selection)
-	// * all selected columns in the speadsheet - called via the context menu of the header
+	// * all selected columns in the spreadsheet - called via the context menu of the header
 	// * selected column cells - called via the context menu in the spreadsheet with multiple selected cells
 	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
 	if (forAll || indexes.size() <= 1) {
@@ -3244,7 +3401,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 		if (columns.isEmpty()) {
 			const auto& children = m_spreadsheet->children<Column>();
 			Column* targetColumn{nullptr};
-			QMap<int, int> columnMappings; // key = child column index in the spreadsheet, value = column index in the vector of new colums
+			QMap<int, int> columnMappings; // key = child column index in the spreadsheet, value = column index in the vector of new columns
 			QMap<int, int> rowMappings; // key = child column index in the spreadsheet, value = last row index
 			for (const auto& index : indexes) {
 				int col = index.column();
@@ -3402,7 +3559,7 @@ void SpreadsheetView::removeSelectedRows() {
 	if (firstSelectedRow() < 0)
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const auto& columns = m_spreadsheet->children<Column>();
 	m_spreadsheet->beginMacro(i18n("%1: remove selected rows", m_spreadsheet->name()));
 	// suppress the dataChanged signal, will be emitted at the end after all rows were removed
@@ -3416,21 +3573,22 @@ void SpreadsheetView::removeSelectedRows() {
 	// emit the dataChanged signal
 	for (auto* column : columns) {
 		column->setSuppressDataChangedSignal(false);
-		column->setChanged();
+		column->setDataChanged();
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::clearSelectedCells() {
+	PERFTRACE(QStringLiteral("clear selected cells"));
+
 	// don't try to clear values if the selected cells don't have any values at all
 	bool empty = true;
 
-	const auto& columns = m_spreadsheet->children<Column>();
+	const auto& allColumns = m_spreadsheet->children<Column>();
 	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
 	for (const auto& index : indexes) {
-		if (columns.at(index.column())->isValid(index.row())) {
+		if (allColumns.at(index.column())->isValid(index.row())) {
 			empty = false;
 			break;
 		}
@@ -3439,7 +3597,25 @@ void SpreadsheetView::clearSelectedCells() {
 	if (empty)
 		return;
 
-	WAIT_CURSOR;
+	// determine the columns with selection
+	const int first_col = firstSelectedColumn();
+	if (first_col == -1)
+		return;
+	const int last_col = lastSelectedColumn();
+	if (last_col == -2)
+		return;
+	const int cols = last_col - first_col + 1;
+
+	if (cols == 0)
+		return;
+
+	QVector<Column*> columns;
+	for (int c = 0; c < cols; c++)
+		columns << m_spreadsheet->column(first_col + c);
+
+	// delete values, iterate column by column to potentially benefit from the direct column->clear() below.
+	WAIT_CURSOR_AUTO_RESET;
+
 	m_spreadsheet->beginMacro(i18n("%1: clear selected cells", m_spreadsheet->name()));
 	for (auto* column : columns) {
 		column->setSuppressDataChangedSignal(true);
@@ -3449,20 +3625,24 @@ void SpreadsheetView::clearSelectedCells() {
 		// 				if (isCellSelected(row, col))
 		// 					column->setFormula(row, QString());
 		// 		} else {
-		int index = m_spreadsheet->indexOfChild<Column>(column);
-		if (isColumnSelected(index, true)) {
+		const int colIndex = m_spreadsheet->indexOfChild<Column>(column);
+		if (isColumnSelected(colIndex, true)) {
 			// if the whole column is selected, clear directly instead of looping over the rows
 			column->clear();
 		} else {
-			for (const auto& index : indexes)
-				columns.at(index.column())->asStringColumn()->setTextAt(index.row(), QString());
+			for (const auto& index : indexes) {
+				if (index.column() == colIndex) {
+					column->asStringColumn()->setTextAt(index.row(), QString());
+					if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt)
+						column->setValid(index.row(), false);
+				}
+			}
 		}
 
 		column->setSuppressDataChangedSignal(false);
-		column->setChanged();
+		column->setDataChanged();
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::goToCell() {
@@ -3513,7 +3693,7 @@ void SpreadsheetView::showSearchReplace(bool replace) {
 
 	// interrupt the event loop to show/render the widget first and set the focus
 	// after this otherwise the focus in the search field is not set
-	QTimer::singleShot(0, this, [=]() {
+	QTimer::singleShot(0, this, [=, this]() {
 		m_searchReplaceWidget->setFocus();
 	});
 }
@@ -3531,7 +3711,7 @@ void SpreadsheetView::sortAscending() {
 	m_spreadsheet->sortColumns(nullptr, cols, true);
 	for (auto* col : cols) {
 		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
+		col->setDataChanged();
 	}
 }
 
@@ -3548,7 +3728,7 @@ void SpreadsheetView::sortDescending() {
 	m_spreadsheet->sortColumns(nullptr, cols, false);
 	for (auto* col : cols) {
 		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
+		col->setDataChanged();
 	}
 }
 
@@ -3592,7 +3772,7 @@ void SpreadsheetView::sortCustom() {
 	for (auto* col : columnsToSort) {
 		col->setSuppressDataChangedSignal(false);
 		if (rc == QDialog::Accepted)
-			col->setChanged();
+			col->setDataChanged();
 	}
 }
 
@@ -3636,7 +3816,7 @@ void SpreadsheetView::selectAll() {
 }
 
 /*!
-  selects the column \c column in the speadsheet view .
+  selects the column \c column in the spreadsheet view.
 */
 void SpreadsheetView::selectColumn(int column) {
 	const auto& index = m_model->index(0, column);
@@ -3648,7 +3828,7 @@ void SpreadsheetView::selectColumn(int column) {
 }
 
 /*!
-  deselects the column \c column in the speadsheet view .
+  deselects the column \c column in the spreadsheet view.
 */
 void SpreadsheetView::deselectColumn(int column) {
 	QItemSelection selection(m_model->index(0, column), m_model->index(m_spreadsheet->rowCount() - 1, column));
@@ -3658,12 +3838,21 @@ void SpreadsheetView::deselectColumn(int column) {
 }
 
 /*!
-  called when a column in the speadsheet view was clicked (click in the header).
+  called when a column in the spreadsheet view was clicked (click in the header).
   Propagates the selection of the column to the \c Spreadsheet object
   (a click in the header always selects the column).
 */
 void SpreadsheetView::columnClicked(int column) {
 	m_spreadsheet->setColumnSelectedInView(column, true);
+}
+
+/*!
+  called when the user presses inside the table view.
+  Navigates to this \c Spreadsheet in the project explorer and ensures the table view receives focus.
+*/
+void SpreadsheetView::navigateToSpreadsheetOnClick(const QModelIndex&) {
+	m_spreadsheet->setSelectedInView(true);
+	setFocus(); 
 }
 
 /*!
@@ -3675,7 +3864,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 
-	// reset the column that was previosly selected from the context menu, if any
+	// reset the column that was previously selected from the context menu, if any
 	m_selectedColumnFromContextMenu = -1;
 
 	// determine the columns that were fully selected or deselected in the spreadsheet to also select/deselect them in the project explorer
@@ -3703,8 +3892,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	if (indexes.empty() || indexes.count() == 1) {
 		Q_EMIT m_spreadsheet->statusInfo(QString());
 		return;
-	}
-	else if (indexes.count() > 10000) { // more than 10k selected cells, skip the expensive logic below to check for maskes values, etc.
+	} else if (indexes.count() > 10000) { // more than 10k selected cells, skip the expensive logic below to check for maskes values, etc.
 		Q_EMIT m_spreadsheet->statusInfo(i18n("Selected: %1 cells", indexes.count()));
 		return;
 	}
@@ -3775,7 +3963,7 @@ bool SpreadsheetView::exportView() {
 	if ((ret = dlg->exec()) == QDialog::Accepted) {
 		const QString path = dlg->path();
 		const bool exportHeader = dlg->exportHeader();
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		switch (dlg->format()) {
 		case ExportSpreadsheetDialog::Format::ASCII: {
 			const QString separator = dlg->separator();
@@ -3814,8 +4002,6 @@ bool SpreadsheetView::exportView() {
 			break;
 		}
 		}
-
-		RESET_CURSOR;
 	}
 	delete dlg;
 
@@ -3845,7 +4031,7 @@ bool SpreadsheetView::printPreview() {
   prints the complete spreadsheet to \c printer.
  */
 void SpreadsheetView::print(QPrinter* printer) const {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QPainter painter(printer);
 
 	const int dpiy = printer->logicalDpiY();
@@ -3960,7 +4146,6 @@ void SpreadsheetView::print(QPrinter* printer) const {
 			}
 		}
 	}
-	RESET_CURSOR;
 }
 
 /*!
@@ -3984,7 +4169,7 @@ int SpreadsheetView::maxRowToExport() const {
 			// TODO:
 			// integer column found. Since empty integer cells are equal to 0
 			// at the moment, we need to export the whole column.
-			// this logic needs to be adjusted once we're able to descriminate
+			// this logic needs to be adjusted once we're able to discriminate
 			// between empty and 0 values for integer columns
 			maxRow = m_spreadsheet->rowCount() - 1;
 			break;
@@ -4007,10 +4192,11 @@ int SpreadsheetView::maxRowToExport() const {
 void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
-		RESET_CURSOR;
 		QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 		return;
 	}
+
+	WAIT_CURSOR_AUTO_RESET;
 
 	PERFTRACE(QStringLiteral("export spreadsheet to file"));
 	QTextStream out(&file);
@@ -4061,10 +4247,11 @@ void SpreadsheetView::exportToLaTeX(const QString& path,
 									const bool exportEntire) const {
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
-		RESET_CURSOR;
 		QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 		return;
 	}
+
+	WAIT_CURSOR_AUTO_RESET;
 
 	QList<Column*> toExport;
 	int cols;
@@ -4391,6 +4578,7 @@ void SpreadsheetView::exportToLaTeX(const QString& path,
 }
 
 void SpreadsheetView::exportToFits(const QString& fileName, const int exportTo, const bool commentsAsUnits) const {
+	PERFTRACE(QStringLiteral("export spreadsheet to FITS"));
 	auto* filter = new FITSFilter;
 
 	filter->setExportTo(exportTo);
@@ -4401,6 +4589,7 @@ void SpreadsheetView::exportToFits(const QString& fileName, const int exportTo, 
 }
 
 void SpreadsheetView::exportToMCAP(const QString& fileName, int compressionMode, int compressionLevel) const {
+	PERFTRACE(QStringLiteral("export spreadsheet to MCAP"));
 	auto* filter = new McapFilter;
 	filter->writeWithOptions(fileName, m_spreadsheet, compressionMode, compressionLevel);
 
@@ -4408,9 +4597,9 @@ void SpreadsheetView::exportToMCAP(const QString& fileName, int compressionMode,
 }
 
 void SpreadsheetView::exportToXLSX(const QString& fileName, const bool exportHeader) const {
+	PERFTRACE(QStringLiteral("export spreadsheet to XLSL"));
 	auto* filter = new XLSXFilter;
 
-	DEBUG("EXPORT HEADER = " << exportHeader)
 	filter->setColumnNamesAsFirstRow(exportHeader);
 	filter->write(fileName, m_spreadsheet);
 
@@ -4513,7 +4702,32 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 					if (j != 0)
 						query += QLatin1String(", ");
 
-					query += QLatin1Char('\'') + col->asStringColumn()->textAt(row) + QLatin1Char('\'');
+					switch (col->columnMode()) {
+					case AbstractColumn::ColumnMode::Double: {
+						double value = col->valueAt(row);
+						if (std::isnan(value))
+							query += QLatin1String("NULL");
+						else
+							query += QString::number(value, 'g', 15);
+						break;
+					}
+					case AbstractColumn::ColumnMode::Integer:
+						query += QString::number(col->integerAt(row));
+						break;
+					case AbstractColumn::ColumnMode::BigInt:
+						query += QString::number(col->bigIntAt(row));
+						break;
+					case AbstractColumn::ColumnMode::Text:
+					case AbstractColumn::ColumnMode::Month:
+					case AbstractColumn::ColumnMode::Day:
+					case AbstractColumn::ColumnMode::DateTime:
+					default: {
+						QString text = col->asStringColumn()->textAt(row);
+						text = text.replace(QLatin1String("'"), QLatin1String("''"));
+						query += QLatin1Char('\'') + text + QLatin1Char('\'');
+						break;
+					}
+					}
 				}
 				query += QLatin1String(")");
 			}
@@ -4528,10 +4742,65 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 				return;
 			}
 		}
-
 	} // end of perf-trace scope
 
 	// commit the transaction and close the database
 	q.exec(QLatin1String("COMMIT TRANSACTION;"));
 	db.close();
+}
+
+// ############################################################################
+// ############################# Zoom #########################################
+// ############################################################################
+
+int SpreadsheetView::zoomLevel() const {
+	return m_zoomLevel;
+}
+
+void SpreadsheetView::setZoomLevel(int level) {
+	level = qBound(50, level, 300);
+	if (level == m_zoomLevel)
+		return;
+
+	m_zoomLevel = level;
+
+	// update slider and spinbox without re-entering this slot
+	QSignalBlocker sliderBlocker(m_zoomSlider);
+	QSignalBlocker spinBoxBlocker(m_zoomSpinBox);
+	m_zoomSlider->setValue(m_zoomLevel);
+	m_zoomSpinBox->setValue(m_zoomLevel);
+
+	applyZoom();
+}
+
+void SpreadsheetView::applyZoom() {
+	const double factor = m_zoomLevel / 100.0;
+	const int defaultPointSize = QApplication::font().pointSize();
+	const int newPointSize = qMax(1, static_cast<int>(defaultPointSize * factor));
+
+	// scale the cell font
+	QFont font = QApplication::font();
+	font.setPointSize(newPointSize);
+	m_tableView->setFont(font);
+
+	// scale the row height based on font metrics
+	QFontMetrics fm(font);
+	const int rowHeight = fm.height() + 6; // 6px padding
+
+	// use stylesheet to force header font — some platform styles ignore setFont() on headers
+	const QString fontStyleSheet = QStringLiteral("QHeaderView::section { font-size: %1pt; }").arg(newPointSize);
+
+	auto* v_header = m_tableView->verticalHeader();
+	v_header->setDefaultSectionSize(rowHeight);
+	v_header->setStyleSheet(fontStyleSheet);
+
+	m_horizontalHeader->setStyleSheet(fontStyleSheet);
+
+	// force headers to recalculate geometry and repaint
+	m_horizontalHeader->updateGeometry();
+	m_horizontalHeader->viewport()->update();
+	v_header->viewport()->update();
+
+	// resize columns to account for new font size
+	resizeHeader();
 }

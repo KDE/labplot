@@ -3,6 +3,7 @@
 
 #include "Spreadsheet.h"
 
+class CartesianPlot;
 class StatisticsSpreadsheet;
 
 class SpreadsheetPrivate : public QObject {
@@ -13,9 +14,11 @@ public:
 
 public:
 	bool suppressSetCommentFinalizeImport{false};
+	bool readOnly{false};
 	bool showComments{false};
 	bool showSparklines{false};
-	Spreadsheet::Linking linking;
+	const Spreadsheet* linkedSpreadsheet{nullptr};
+	QString linkedSpreadsheetPath;
 	Spreadsheet* q{nullptr};
 	Column* firstColumn{nullptr}; // used to connect to the signals related to the row count changes
 	StatisticsSpreadsheet* statisticsSpreadsheet{nullptr};

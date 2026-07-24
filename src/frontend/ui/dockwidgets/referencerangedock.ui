@@ -56,17 +56,17 @@
           <string>Comment:</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -80,7 +80,6 @@
         <widget class="QLabel" name="lPosition">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -116,10 +115,10 @@
        <item row="15" column="0">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -139,10 +138,10 @@
        <item row="13" column="0">
         <spacer name="verticalSpacer_18">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -159,6 +158,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="tabChangesFocus">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -197,7 +199,7 @@
        <item row="19" column="0">
         <spacer name="verticalSpacer_17">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -211,7 +213,6 @@
         <widget class="QLabel" name="lBackground">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -223,10 +224,10 @@
        <item row="2" column="0">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -239,10 +240,10 @@
        <item row="10" column="0">
         <spacer name="verticalSpacer_16">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -255,10 +256,10 @@
        <item row="12" column="0">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -271,7 +272,7 @@
        <item row="16" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -295,7 +296,6 @@
         <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -352,9 +352,9 @@
    <header>frontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>NumberSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>NumberSpinBox.h</header>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>UTCDateTimeEdit</class>
@@ -362,11 +362,24 @@
    <header>UTCDateTimeEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>TimedLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>frontend/widgets/TimedLineEdit.h</header>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>teComment</tabstop>
+  <tabstop>cbOrientation</tabstop>
+  <tabstop>sbPositionStart</tabstop>
+  <tabstop>sbPositionEnd</tabstop>
+  <tabstop>dtePositionStart</tabstop>
+  <tabstop>dtePositionEnd</tabstop>
+  <tabstop>cbPlotRanges</tabstop>
+  <tabstop>chbLock</tabstop>
+  <tabstop>chkVisible</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

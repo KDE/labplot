@@ -88,6 +88,10 @@ private:
 	QStringList m_horizontal_header_data;
 	int m_defaultHeaderHeight;
 	bool m_suppressSignals{false};
+	// Used to speed up changing column count
+	// This will be set before the first column gets removed/inserted
+	// And reset after the action is finished
+	// Without this aspectRemoved for every column gets processed
 	bool m_spreadsheetColumnCountChanging{false};
 	int m_rowCount{0};
 	int m_verticalHeaderCount{0};

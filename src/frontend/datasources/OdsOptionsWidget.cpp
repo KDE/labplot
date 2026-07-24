@@ -65,7 +65,7 @@ bool OdsOptionsWidget::updateContent(OdsFilter* filter, const QString& fileName)
 void OdsOptionsWidget::sheetSelectionChanged() {
 	DEBUG(Q_FUNC_INFO)
 #ifdef HAVE_ORCUS
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 
 	const auto& selectedItems = ui.twDataRegions->selectedItems();
 	if (selectedItems.isEmpty()) {
@@ -114,31 +114,29 @@ void OdsOptionsWidget::sheetSelectionChanged() {
 				// set column header
 				if (firstRowAsHeader) {
 					for (int col = 0; col < colCount; ++col) {
-						auto* item = new QTableWidgetItem(lineString.at(col));
-						ui.twPreview->setHorizontalHeaderItem(col, item);
+						auto* newItem = new QTableWidgetItem(lineString.at(col));
+						ui.twPreview->setHorizontalHeaderItem(col, newItem);
 					}
 				} else {
 					for (int col = 0; col < colCount; ++col) {
 						auto colName = AbstractFileFilter::convertFromNumberToColumn(col + filter->firstColumn());
-						auto* item = new QTableWidgetItem(colName);
+						auto* newItem = new QTableWidgetItem(colName);
 
-						ui.twPreview->setHorizontalHeaderItem(col, item);
+						ui.twPreview->setHorizontalHeaderItem(col, newItem);
 					}
 				}
 			}
 
-			auto* item = new QTableWidgetItem(QString::number(row - firstRowAsHeader + 1));
-			ui.twPreview->setVerticalHeaderItem(row - firstRowAsHeader, item);
+			auto* newHeaderItem = new QTableWidgetItem(QString::number(row - firstRowAsHeader + 1));
+			ui.twPreview->setVerticalHeaderItem(row - firstRowAsHeader, newHeaderItem);
 
 			for (int col = 0; col < colCount; ++col) {
-				auto* item = new QTableWidgetItem(lineString.at(col));
-				ui.twPreview->setItem(row - firstRowAsHeader, col, item);
+				auto* newItem = new QTableWidgetItem(lineString.at(col));
+				ui.twPreview->setItem(row - firstRowAsHeader, col, newItem);
 			}
 		}
 		ui.twPreview->resizeColumnsToContents();
 	}
-
-	RESET_CURSOR;
 #endif
 }
 

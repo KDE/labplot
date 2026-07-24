@@ -94,7 +94,7 @@ double nsl_math_places(double value, int n, int method) {
 		return value;
 	}
 
-	double scale = gsl_pow_int(10., n);
+	double scale = n == 1 ? 10. : gsl_pow_int(10., n);
 	double scaled_value = value * scale;
 	if (fabs(scaled_value) > 1.e16)
 		return value;

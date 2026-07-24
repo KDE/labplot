@@ -21,7 +21,6 @@ extern "C" {
 #include "backend/nsl/nsl_sf_poly.h"
 }
 
-#include <KLocalizedString>
 #include <QDebug> // qWarning()
 #include <QElapsedTimer>
 #include <QIcon>
@@ -251,6 +250,7 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYFourierTransformCurve);
 
 	QXmlStreamAttributes attribs;

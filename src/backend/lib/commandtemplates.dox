@@ -20,7 +20,7 @@ class MyClassSetMyValueCmd: public StandardClassSetterCmd<MyClass::Private, TheV
 		virtual void finalize() { emit m_target->q->myValueChanged(); }
 };
  * \endcode
- * When instanciating the class, use 
+ * When instantiating the class, use 
  * \code tr("%1: what the command does") \endcode for the description argument. The "%1" will automatically be replaced by 
  * the aspect name (the private class must implement "QString name() const").
  * Example: \code

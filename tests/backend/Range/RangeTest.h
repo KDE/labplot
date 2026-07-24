@@ -34,6 +34,8 @@ private Q_SLOTS:
 	void zoomInOutIncreasingLinearRangeNotCenter();
 	void zoomInOutDecreasingLinearRangeNotCenter();
 
+	void checkRangeLog();
+
 	//	void testPerformance();
 };
 

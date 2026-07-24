@@ -31,15 +31,13 @@ public:
 	}
 
 	virtual void redo() override {
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		QUndoCommand::redo();
-		RESET_CURSOR;
 	}
 
 	virtual void undo() override {
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		QUndoCommand::undo();
-		RESET_CURSOR;
 	}
 };
 
@@ -68,7 +66,7 @@ public:
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
 		m_otherValue = std::move(tmp);
-		QUndoCommand::redo(); // redo all childs
+		QUndoCommand::redo(); // redo all children
 		finalize();
 	}
 

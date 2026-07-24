@@ -18,6 +18,8 @@ class WorksheetTest : public CommonTest {
 
 private Q_SLOTS:
 	void cursorCurveColor();
+	void cursorNotAllPlotsVisible();
+	void applyCursorToSelected();
 	void exportReplaceExtension();
 	void zValueAfterAddMoveRemove();
 };

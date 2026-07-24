@@ -19,7 +19,7 @@
 \class SpreadsheetItemDelegate
 \brief Item delegate for SpreadsheetView.
 
-Overides QItemDelegate::paint() and provides shaded representation
+Overrides QItemDelegate::paint() and provides shaded representation
 of masked cells used in SpreadsheetView.
 
 \ingroup frontend

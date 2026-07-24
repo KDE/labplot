@@ -34,7 +34,6 @@
  */
 ImportDatasetDialog::ImportDatasetDialog(MainWin* parent)
 	: ImportDialog(parent)
-	, m_mainWin(parent)
 	, m_importDatasetWidget(new ImportDatasetWidget(this)) {
 	vLayout->addWidget(m_importDatasetWidget);
 	connect(m_importDatasetWidget, &ImportDatasetWidget::datasetSelected, this, &ImportDatasetDialog::checkOkButton);
@@ -116,7 +115,7 @@ bool ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	timer.start(duration);
@@ -132,7 +131,6 @@ bool ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 
 	delete datasetHandler;
 
-	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 	return success;
 }

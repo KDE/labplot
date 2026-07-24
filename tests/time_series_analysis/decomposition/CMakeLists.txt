@@ -1,0 +1,5 @@
+add_executable(DecompositionTest DecompositionTest.cpp)
+
+target_link_libraries(DecompositionTest labplotbackendlib labplotlib labplottest)
+
+add_test(NAME DecompositionTest COMMAND DecompositionTest)

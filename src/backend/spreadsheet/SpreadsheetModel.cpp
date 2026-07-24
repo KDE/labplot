@@ -5,12 +5,13 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2009 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/core/Settings.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
@@ -126,7 +127,10 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 
 	const int row = index.row();
 	const int col = index.column();
-	const Column* col_ptr = m_spreadsheet->column(col);
+	if (row < 0 || row >= m_rowCount || col < 0 || col >= m_columnCount)
+		return {};
+
+	const auto* col_ptr = m_spreadsheet->column(col);
 
 	if (!col_ptr)
 		return {};
@@ -184,7 +188,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		return {col_ptr->asStringColumn()->textAt(row)};
 	case Qt::ForegroundRole:
 		if (!col_ptr->isValid(row))
-			return {QBrush(Qt::red)};
+			return QBrush(Qt::red);
 		return color(col_ptr, row, AbstractColumn::Formatting::Foreground);
 	case Qt::BackgroundRole:
 		if (m_searchText.isEmpty())
@@ -193,7 +197,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			if (col_ptr->asStringColumn()->textAt(row).indexOf(m_searchText) == -1)
 				return color(col_ptr, row, AbstractColumn::Formatting::Background);
 			else
-				return {QApplication::palette().color(QPalette::Highlight)};
+				return QApplication::palette().color(QPalette::Highlight);
 		}
 	case static_cast<int>(CustomDataRole::MaskingRole):
 		return {col_ptr->isMasked(row)};
@@ -259,36 +263,107 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 	if (!index.isValid())
 		return false;
 
-	int row = index.row();
-	auto* column = m_spreadsheet->column(index.column());
+	const int row = index.row();
+	const int col = index.column();
+	if (row < 0 || row >= m_rowCount || col < 0 || col >= m_columnCount)
+		return false;
+
+	auto* column = m_spreadsheet->column(col);
 
 	// DEBUG("SpreadsheetModel::setData() value = " << STDSTRING(value.toString()))
+
+	// auto-convert the column mode for empty columns if the entered value doesn't match the current mode.
+	// wrap the mode change and the value setting into a single undo macro so they can be undone in one step.
+	bool modeConverted = false;
+	if (role == Qt::EditRole && !value.toString().isEmpty() && !column->hasValues()) {
+		const auto mode = column->columnMode();
+		auto newMode = mode;
+
+		if (mode == AbstractColumn::ColumnMode::Double) {
+			bool ok;
+			QLocale().toDouble(value.toString(), &ok);
+			if (!ok)
+				newMode = AbstractColumn::ColumnMode::Text;
+		} else if (mode == AbstractColumn::ColumnMode::Integer) {
+			bool ok;
+			QLocale().toInt(value.toString(), &ok);
+			if (!ok) {
+				QLocale().toDouble(value.toString(), &ok);
+				newMode = ok ? AbstractColumn::ColumnMode::Double : AbstractColumn::ColumnMode::Text;
+			}
+		} else if (mode == AbstractColumn::ColumnMode::BigInt) {
+			bool ok;
+			QLocale().toLongLong(value.toString(), &ok);
+			if (!ok) {
+				QLocale().toDouble(value.toString(), &ok);
+				newMode = ok ? AbstractColumn::ColumnMode::Double : AbstractColumn::ColumnMode::Text;
+			}
+		}
+
+		if (newMode != mode) {
+			column->beginMacro(i18n("%1: change column type and set value", column->name()));
+			column->setColumnMode(newMode);
+			modeConverted = true;
+		}
+	}
 
 	// don't do anything if no new value was provided
 	if (column->columnMode() == AbstractColumn::ColumnMode::Double) {
 		bool ok;
 		double new_value = QLocale().toDouble(value.toString(), &ok);
 		if (ok) {
-			if (column->valueAt(row) == new_value)
+			if (column->valueAt(row) == new_value) {
+				if (modeConverted)
+					column->endMacro();
 				return false;
+			}
 		} else {
 			// an empty (non-numeric value) was provided
-			if (std::isnan(column->valueAt(row)))
+			if (std::isnan(column->valueAt(row))) {
+				if (modeConverted)
+					column->endMacro();
 				return false;
+			}
 		}
 	} else {
-		if (column->asStringColumn()->textAt(row) == value.toString())
+		if (column->isValid(row) && column->asStringColumn()->textAt(row) == value.toString()) {
+			if (modeConverted)
+				column->endMacro();
 			return false;
+		}
 	}
 
 	switch (role) {
-	case Qt::EditRole:
-		// remark: the validity of the cell is determined by the input filter
+	case Qt::EditRole: {
+		QString text = value.toString();
+
 		if (m_formula_mode)
-			column->setFormula(row, value.toString());
-		else
-			column->asStringColumn()->setTextAt(row, value.toString());
+			column->setFormula(row, text);
+		else {
+			column->asStringColumn()->setTextAt(row, text);
+
+			// check if the text is a valid number.
+			if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+				bool isValidNumber = true;
+
+				if (!text.isEmpty()) {
+					if (column->columnMode() == AbstractColumn::ColumnMode::Integer)
+						QLocale().toInt(text, &isValidNumber);
+					else
+						QLocale().toLongLong(text, &isValidNumber);
+				} else
+					isValidNumber = false; // empty strings are not valid
+
+				if (!isValidNumber) {
+					if (auto* c = dynamic_cast<Column*>(column))
+						c->setValid(row, false);
+				}
+			}
+		}
+		if (modeConverted)
+			column->endMacro();
 		return true;
+	}
 	case static_cast<int>(CustomDataRole::MaskingRole):
 		m_spreadsheet->column(index.column())->setMasked(row, value.toBool());
 		return true;
@@ -297,10 +372,15 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 		return true;
 	}
 
+	if (modeConverted)
+		column->endMacro();
 	return false;
 }
 
 QModelIndex SpreadsheetModel::index(int row, int column, const QModelIndex& /*parent*/) const {
+	if (row < 0 || row >= m_rowCount || column < 0 || column >= m_columnCount)
+		return QModelIndex();
+
 	return createIndex(row, column);
 }
 
@@ -341,7 +421,7 @@ void SpreadsheetModel::handleAspectsInserted(int first, int last) {
 		connect(col, &Column::formatChanged, this, &SpreadsheetModel::handleDataChange);
 		connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleModeChange);
 		connect(col, &Column::maskingChanged, this, &SpreadsheetModel::handleDataChange);
-		connect(col, &Column::formulaChanged, this, &SpreadsheetModel::handlePlotDesignationChange); // we can re-use the same slot to update the header here
+		connect(col, &Column::formulaChanged, this, &SpreadsheetModel::handlePlotDesignationChange); // we can reuse the same slot to update the header here
 		connect(col->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 	}
 
@@ -589,7 +669,7 @@ QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, Abstract
 	}
 
 	if (index < format.colors.count())
-		return {QColor(format.colors.at(index))};
+		return QColor(format.colors.at(index));
 	else
-		return {QColor(format.colors.constLast())};
+		return QColor(format.colors.constLast());
 }

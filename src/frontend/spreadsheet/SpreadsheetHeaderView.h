@@ -14,6 +14,8 @@
 #include "SpreadsheetSparkLineHeaderModel.h"
 #include <QHeaderView>
 
+class Spreadsheet;
+
 class SpreadsheetCommentsHeaderView : public QHeaderView {
 	Q_OBJECT
 
@@ -43,9 +45,7 @@ class SpreadsheetHeaderView : public QHeaderView {
 	Q_OBJECT
 
 public:
-	SpreadsheetCommentsHeaderView* m_commentSlave;
-	SpreadsheetSparkLineHeaderView* m_sparklineSlave;
-	explicit SpreadsheetHeaderView(QWidget* parent = nullptr);
+	explicit SpreadsheetHeaderView(QWidget* parent, const Spreadsheet*);
 	~SpreadsheetHeaderView() override;
 
 	void setModel(QAbstractItemModel*) override;
@@ -63,15 +63,21 @@ public Q_SLOTS:
 	void refresh();
 
 private:
+	const Spreadsheet* m_spreadsheet{nullptr};
 	bool m_showComments{false};
 	bool m_showSparklines{false};
 	bool m_sparklineCalled{false};
+	SpreadsheetCommentsHeaderView* m_commentSlave;
+	SpreadsheetSparkLineHeaderView* m_sparklineSlave;
 
 private Q_SLOTS:
 	void headerDataChanged(Qt::Orientation, int logicalFirst, int logicalLast);
 
 protected:
 	void paintSection(QPainter*, const QRect&, int logicalIndex) const override;
+	bool viewportEvent(QEvent* e) override;
+
+	friend class SpreadsheetView;
 };
 
 #endif
