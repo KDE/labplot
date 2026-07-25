@@ -27,6 +27,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void retranslateUi() override;
 	void showCorrelationResult();
 
 	Ui::XYCorrelationCurveDockGeneralTab uiGeneralTab;

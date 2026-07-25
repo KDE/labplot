@@ -148,6 +148,8 @@ void LollipopPlotDock::setModel() {
  */
 void LollipopPlotDock::updateLocale() {
 	lineWidget->updateLocale();
+	symbolWidget->updateLocale();
+	valueWidget->updateLocale();
 }
 
 void LollipopPlotDock::retranslateUi() {
@@ -156,6 +158,9 @@ void LollipopPlotDock::retranslateUi() {
 	ui.cbOrientation->clear();
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
+
+	lineWidget->retranslateUi();
+	valueWidget->retranslateUi();
 
 	QString msg = i18n("Select the data column for which the properties should be shown and edited");
 	ui.lNumberLine->setToolTip(msg);

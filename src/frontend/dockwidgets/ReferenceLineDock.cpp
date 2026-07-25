@@ -89,6 +89,8 @@ void ReferenceLineDock::retranslateUi() {
 	ui.cbOrientation->clear();
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
+
+	lineWidget->retranslateUi();
 }
 
 void ReferenceLineDock::updateWidgetsOrientation(ReferenceLine::Orientation orientation) {

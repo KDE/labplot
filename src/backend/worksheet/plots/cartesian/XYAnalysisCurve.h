@@ -91,6 +91,8 @@ public:
 	POINTER_D_ACCESSOR_DECL(const XYCurve, dataSourceCurve, DataSourceCurve)
 	CLASS_D_ACCESSOR_DECL(QString, dataSourceCurvePath, DataSourceCurvePath)
 
+	BASIC_D_ACCESSOR_DECL(bool, autoRecalculate, AutoRecalculate)
+
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, y2DataColumn, Y2DataColumn) // optional
@@ -127,6 +129,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void sourceDataChanged(); // emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
+	void autoRecalculateChanged(bool);
 	void dataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void dataSourceCurveChanged(const XYCurve*);
 	void xDataColumnChanged(const AbstractColumn*);

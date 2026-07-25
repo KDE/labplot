@@ -355,8 +355,8 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 					isValidNumber = false; // empty strings are not valid
 
 				if (!isValidNumber) {
-					if (auto* col = dynamic_cast<Column*>(column))
-						col->setValid(row, false);
+					if (auto* c = dynamic_cast<Column*>(column))
+						c->setValid(row, false);
 				}
 			}
 		}

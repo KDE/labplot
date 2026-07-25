@@ -14,7 +14,6 @@
 #include <KMessageBox>
 
 #include <KWindowConfig>
-#include <kcoreaddons_version.h>
 
 #include <QDialogButtonBox>
 #include <QPushButton>

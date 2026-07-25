@@ -6,11 +6,14 @@ New features:
 		* Add possibility to skip storing the data from columns and matrices in the saved file
 		* Improve spinbox localization
 		* New column "Changed" in the project explorer to inform about which objects were changed since the last save
+		* Markdown support in Notes
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
 		* Add option to enable/disable parameter error scaling (relative vs. absolute sigma)
 		* Baseline correction analysis in the plot
 		* LOWESS (Locally Weighted Scatterplot Smoothing) smooth method
+		* Auto-recalculate option for analysis curves - automatically re-run the analysis on algorithm parameter changes
+		* Use logarithmic spacing to evaluate the result fit curves on log axes (BUG 475408)
 	* [time series analysis]
 		* seasonal decomposition with STL and MSTL methods
 	* [spreadsheet]
@@ -23,6 +26,7 @@ New features:
 		* move the definition of the column formula directly to the dock widget
 		* support empty values in integers columns (BUG: 502706)
 		* when entering new values, automatically convert to the requried column mode if the column is still empty
+		* DateTime functions (today, now, date, datedif, year, month, day, hour, minute, second, etc.) for column formulas (BUG: 497924)
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)
@@ -31,6 +35,8 @@ New features:
 		* Stacked line plots
 		* Allow to do analysis (fit, smoothe, etc.) on multiple curves simultaneously
 		* Pareto Chart
+		* Made all plot navigations (zoom, shift, pan) undo-/redoable (BUG 470792)
+		* Automatically calculate the number of points to plot for equation curves, optional, default ON (BUG 431534)
 	* [import]
 		* Import directories - import multiple files in a directory in one single step
 		* Support Unix timestamps (number of seconds since January 1, 1970 (UTC)) and Windows timestamps (number of 100-nanosecond intervals since January 1, 1601 (UTC)) in ASCII files, ms precision only
@@ -50,6 +56,7 @@ Performance improvements:
 		* Faster save/load of text columns
 		* Faster save/load of datetime columns (BUG 478508)
 		* Faster cutting of cells in the spreadsheet (BUG 513574)
+		* Faster handling of masked values in the spreadsheet with reduced memory consumption (BUG 521940)
 
 Bug fixes:
 	* Fix displayed locale of constants
@@ -59,6 +66,7 @@ Bug fixes:
 	* Fix appending data to spreadsheets from XLSX files
 	* Fix the bar chart with log-scales
 	* Undo background color of text label (#1171)
+	* On Linux, run on Wayland natively without enforcing XCB/X11 (BuG 512058)
 
 -----2.12.1 (2025-08-15) -----
 Bug fixes:

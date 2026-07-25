@@ -2329,4 +2329,190 @@ void ColumnTest::integerValidityCopyColumn() {
 	QCOMPARE(dst.isValid(3), false);
 }
 
+// ##############################################################################
+// ################### DateTime Formula Tests ###################################
+// ##############################################################################
+
+/*!
+ * \brief Test date component extraction functions (day, month, year) with DateTime variable
+ * Tests that DateTime columns can be used as formula variables and date components are extracted correctly
+ */
+void ColumnTest::testFormulaDateTimeExtraction() {
+	// Create source DateTime column with sample dates
+	Column dateCol(QStringLiteral("Dates"), Column::ColumnMode::DateTime);
+	QVector<QDateTime> dates = {
+		QDateTime(QDate(2026, 6, 18), QTime(14, 30, 0)),
+		QDateTime(QDate(2025, 12, 25), QTime(0, 0, 0)),
+		QDateTime(QDate(2024, 2, 29), QTime(12, 0, 0)), // Leap year
+	};
+	dateCol.replaceDateTimes(-1, dates);
+	QCOMPARE(dateCol.rowCount(), 3);
+
+	// Test day() extraction
+	Column dayCol(QStringLiteral("Day"), Column::ColumnMode::Double);
+	dayCol.replaceValues(-1, {0., 0., 0.}); // Initialize with dummy values
+	dayCol.setFormula(QStringLiteral("day(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	dayCol.updateFormula();
+	QCOMPARE(dayCol.rowCount(), 3);
+	VALUES_EQUAL(dayCol.valueAt(0), 18.0);
+	VALUES_EQUAL(dayCol.valueAt(1), 25.0);
+	VALUES_EQUAL(dayCol.valueAt(2), 29.0);
+
+	// Test month() extraction
+	Column monthCol(QStringLiteral("Month"), Column::ColumnMode::Double);
+	monthCol.replaceValues(-1, {0., 0., 0.}); // Initialize with dummy values
+	monthCol.setFormula(QStringLiteral("month(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	monthCol.updateFormula();
+	QCOMPARE(monthCol.rowCount(), 3);
+	VALUES_EQUAL(monthCol.valueAt(0), 6.0);
+	VALUES_EQUAL(monthCol.valueAt(1), 12.0);
+	VALUES_EQUAL(monthCol.valueAt(2), 2.0);
+
+	// Test year() extraction
+	Column yearCol(QStringLiteral("Year"), Column::ColumnMode::Double);
+	yearCol.replaceValues(-1, {0., 0., 0.}); // Initialize with dummy values
+	yearCol.setFormula(QStringLiteral("year(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	yearCol.updateFormula();
+	QCOMPARE(yearCol.rowCount(), 3);
+	VALUES_EQUAL(yearCol.valueAt(0), 2026.0);
+	VALUES_EQUAL(yearCol.valueAt(1), 2025.0);
+	VALUES_EQUAL(yearCol.valueAt(2), 2024.0);
+}
+
+/*!
+ * \brief Test DateTime extraction to Integer column
+ * Verifies that formula results can be written to Integer columns with proper type conversion
+ */
+void ColumnTest::testFormulaDateTimeExtractionInteger() {
+	// Create source DateTime column
+	Column dateCol(QStringLiteral("Dates"), Column::ColumnMode::DateTime);
+	QVector<QDateTime> dates = {
+		QDateTime(QDate(2026, 1, 15), QTime(0, 0, 0)),
+		QDateTime(QDate(2026, 7, 4), QTime(0, 0, 0)),
+	};
+	dateCol.replaceDateTimes(-1, dates);
+
+	// Extract to Integer column (primary use case from bug #497924)
+	Column dayCol(QStringLiteral("Day"), Column::ColumnMode::Integer);
+	dayCol.setIntegers({0, 0}); // Initialize with dummy values
+	dayCol.setFormula(QStringLiteral("day(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	dayCol.updateFormula();
+
+	QCOMPARE(dayCol.rowCount(), 2);
+	QCOMPARE(dayCol.columnMode(), Column::ColumnMode::Integer);
+	QCOMPARE(dayCol.integerAt(0), 15);
+	QCOMPARE(dayCol.integerAt(1), 4);
+	QCOMPARE(dayCol.isValid(0), true);
+	QCOMPARE(dayCol.isValid(1), true);
+}
+
+/*!
+ * \brief Test DateTime-to-DateTime formula (eomonth)
+ * Tests that formulas producing DateTime values can be written to DateTime columns
+ */
+void ColumnTest::testFormulaDateTimeToDateTime() {
+	// Create source DateTime column
+	Column dateCol(QStringLiteral("Dates"), Column::ColumnMode::DateTime);
+	QVector<QDateTime> dates = {
+		QDateTime(QDate(2026, 6, 18), QTime(0, 0, 0)),
+		QDateTime(QDate(2026, 2, 15), QTime(0, 0, 0)),
+	};
+	dateCol.replaceDateTimes(-1, dates);
+
+	// Apply eomonth() formula to get end-of-month dates
+	Column eomCol(QStringLiteral("EndOfMonth"), Column::ColumnMode::DateTime);
+	eomCol.replaceDateTimes(-1, {QDateTime(), QDateTime()}); // Initialize with dummy values
+	eomCol.setFormula(QStringLiteral("eomonth(x; 0)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	eomCol.updateFormula();
+
+	QCOMPARE(eomCol.rowCount(), 2);
+	QCOMPARE(eomCol.columnMode(), Column::ColumnMode::DateTime);
+
+	// Check results
+	QDateTime result1 = eomCol.dateTimeAt(0);
+	QCOMPARE(result1.date(), QDate(2026, 6, 30)); // End of June
+
+	QDateTime result2 = eomCol.dateTimeAt(1);
+	QCOMPARE(result2.date(), QDate(2026, 2, 28)); // End of February (non-leap year)
+}
+
+/*!
+ * \brief Test datedif() function for age calculation
+ * Tests the primary use case from bug #497924: calculate age in days from birth dates
+ */
+void ColumnTest::testFormulaDateTimeDatedif() {
+	// Create birth dates column
+	Column birthCol(QStringLiteral("BirthDates"), Column::ColumnMode::DateTime);
+	QVector<QDateTime> birthDates = {
+		QDateTime(QDate(2020, 1, 15), QTime(0, 0, 0)),
+		QDateTime(QDate(2021, 5, 20), QTime(0, 0, 0)),
+		QDateTime(QDate(2022, 12, 1), QTime(0, 0, 0)),
+	};
+	birthCol.replaceDateTimes(-1, birthDates);
+
+	// Calculate age in days using datedif(birth, today, 0)
+	// For testing, use a fixed reference date instead of today()
+	QDate referenceDate(2026, 6, 19);
+	QDateTime epoch(QDate(1900, 1, 1), QTime(0, 0, 0, 0));
+	double referenceDays = epoch.daysTo(QDateTime(referenceDate, QTime(0, 0, 0))) + epoch.time().msecsTo(QTime(0, 0, 0)) / 86400000.0;
+
+	Column ageCol(QStringLiteral("AgeInDays"), Column::ColumnMode::Integer);
+	ageCol.setIntegers({0, 0, 0}); // Initialize with dummy values
+	ageCol.setFormula(QStringLiteral("datedif(x; %1; 0)").arg(referenceDays), {QStringLiteral("x")}, QVector<Column*>({&birthCol}), true);
+	ageCol.updateFormula();
+
+	QCOMPARE(ageCol.rowCount(), 3);
+	QCOMPARE(ageCol.columnMode(), Column::ColumnMode::Integer);
+
+	// Verify ages (approximate - actual values depend on reference date)
+	// 2020-01-15 to 2026-06-19 = ~2347 days
+	QCOMPARE(ageCol.integerAt(0), 2347);
+	// 2021-05-20 to 2026-06-19 = ~1856 days
+	QCOMPARE(ageCol.integerAt(1), 1856);
+	// 2022-12-01 to 2026-06-19 = ~1296 days
+	QCOMPARE(ageCol.integerAt(2), 1296);
+}
+
+/*!
+ * \brief Test that empty DateTime cells propagate as NAN through formulas
+ * Verifies bug fix: empty cells should remain empty, not become 1970-01-01
+ */
+void ColumnTest::testFormulaDateTimeEmptyCells() {
+	// Create DateTime column with some empty cells
+	Column dateCol(QStringLiteral("Dates"), Column::ColumnMode::DateTime);
+	QVector<QDateTime> dates = {
+		QDateTime(QDate(2026, 6, 18), QTime(0, 0, 0)),
+		QDateTime(), // Empty cell (invalid DateTime)
+		QDateTime(QDate(2026, 7, 4), QTime(0, 0, 0)),
+		QDateTime(), // Empty cell
+	};
+	dateCol.replaceDateTimes(-1, dates);
+
+	// Extract day - empty cells should produce NAN
+	Column dayCol(QStringLiteral("Day"), Column::ColumnMode::Double);
+	dayCol.replaceValues(-1, {0., 0., 0., 0.}); // Initialize with dummy values
+	dayCol.setFormula(QStringLiteral("day(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	dayCol.updateFormula();
+
+	QCOMPARE(dayCol.rowCount(), 4);
+	VALUES_EQUAL(dayCol.valueAt(0), 18.0);
+	VALUES_EQUAL(dayCol.valueAt(1), NAN); // Empty cell → NAN
+	VALUES_EQUAL(dayCol.valueAt(2), 4.0);
+	VALUES_EQUAL(dayCol.valueAt(3), NAN); // Empty cell → NAN
+
+	// Test Integer column with empty source cells - should mark as invalid
+	Column dayIntCol(QStringLiteral("DayInt"), Column::ColumnMode::Integer);
+	dayIntCol.setIntegers({0, 0, 0, 0}); // Initialize with dummy values
+	dayIntCol.setFormula(QStringLiteral("day(x)"), {QStringLiteral("x")}, QVector<Column*>({&dateCol}), true);
+	dayIntCol.updateFormula();
+
+	QCOMPARE(dayIntCol.rowCount(), 4);
+	QCOMPARE(dayIntCol.isValid(0), true);
+	QCOMPARE(dayIntCol.integerAt(0), 18);
+	QCOMPARE(dayIntCol.isValid(1), false); // Empty → invalid
+	QCOMPARE(dayIntCol.isValid(2), true);
+	QCOMPARE(dayIntCol.integerAt(2), 4);
+	QCOMPARE(dayIntCol.isValid(3), false); // Empty → invalid
+}
+
 QTEST_MAIN(ColumnTest)

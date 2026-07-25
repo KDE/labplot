@@ -28,6 +28,7 @@
 #include <thread>
 
 #include <cmath>
+#include <limits>
 
 #ifndef HAVE_LZ4
 #define MCAP_COMPRESSION_NO_LZ4
@@ -375,7 +376,7 @@ void McapFilterPrivate::setValueFromString(int column, int row, const QString& v
 	}
 	case AbstractColumn::ColumnMode::DateTime: {
 		if (vectorNames[column] == QLatin1String("publishTime") || vectorNames[column] == QLatin1String("logTime")) {
-			static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) = QDateTime::fromMSecsSinceEpoch(valueString.toLong());
+			static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) = QDateTime::fromMSecsSinceEpoch(valueString.toLongLong());
 			break;
 		}
 		const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
@@ -488,6 +489,16 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 		current_topic = topics[0];
 	}
 
+	auto status = reader.readSummary(mcap::ReadSummaryMethod::NoFallbackScan);
+	Q_UNUSED(status)
+
+	mcap::Timestamp timeOffset = 0;
+	auto stats = reader.statistics();
+	if (stats.has_value())
+		timeOffset = stats->messageStartTime;
+
+	mcap::Timestamp minTime = std::numeric_limits<mcap::Timestamp>::max();
+
 	mcap::ReadMessageOptions opt;
 
 	std::function<bool(std::string_view)> lambda2 = [this](std::string_view v) {
@@ -532,6 +543,11 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 			obj.insert(QLatin1String("publishTime"),
 					   QJsonValue::fromVariant(QString::number(it->message.publishTime / 1000000))); // nano to milli otherwise value is 0
 
+			if (timeOffset == std::numeric_limits<mcap::Timestamp>::max()) {
+				minTime = std::min(minTime, it->message.logTime);
+				minTime = std::min(minTime, it->message.publishTime);
+			}
+
 			if (error.error != QJsonParseError::NoError) {
 				qWarning() << "Error parsing JSON string:" << asString << error.errorString();
 				continue;
@@ -553,6 +569,26 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 			if (msg_count == lines) {
 				qDebug() << "Stop reading MCAP file. Requested number of " << lines << "lines reached.";
 				break;
+			}
+		}
+
+		if (timeOffset == std::numeric_limits<mcap::Timestamp>::max() && minTime != std::numeric_limits<mcap::Timestamp>::max()) {
+			timeOffset = minTime;
+		}
+
+		if (timeOffset != 0 && timeOffset != std::numeric_limits<mcap::Timestamp>::max()) {
+			const qint64 timeOffsetMs = static_cast<qint64>(timeOffset / 1000000);
+			for (int index = 0; index < jsonArray.count(); ++index) {
+				auto obj = jsonArray[index].toObject();
+				if (obj.contains(QLatin1String("logTime"))) {
+					const qint64 value = obj.value(QLatin1String("logTime")).toString().toLongLong();
+					obj.insert(QLatin1String("logTime"), QJsonValue::fromVariant(QString::number(value - timeOffsetMs)));
+				}
+				if (obj.contains(QLatin1String("publishTime"))) {
+					const qint64 value = obj.value(QLatin1String("publishTime")).toString().toLongLong();
+					obj.insert(QLatin1String("publishTime"), QJsonValue::fromVariant(QString::number(value - timeOffsetMs)));
+				}
+				jsonArray[index] = obj;
 			}
 		}
 	} catch (const std::exception& e) {
