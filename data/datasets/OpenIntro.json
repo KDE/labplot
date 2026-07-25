@@ -1,0 +1,2492 @@
+{
+    "name": "OpenIntro",
+    "categories": [
+        {
+            "name": "Health & Medicine",
+            "subcategories": [
+                {
+                    "name": "Clinical Trials & Experiments",
+                    "datasets": [
+                        {
+                            "name": "Avandia",
+                            "description": "Cardiovascular problems for two types of Diabetes medicines.",
+                            "filename": "avandia",
+                            "url": "https://www.openintro.org/data/csv/avandia.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=avandia"
+                        },
+                        {
+                            "name": "BioNTech Adolescents",
+                            "description": "Efficacy of Pfizer-BioNTech COVID-19 vaccine on adolescents.",
+                            "filename": "biontech_adolescents",
+                            "url": "https://www.openintro.org/data/csv/biontech_adolescents.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=biontech_adolescents"
+                        },
+                        {
+                            "name": "CPR",
+                            "description": "CPR data set on survival after cardiac arrest.",
+                            "filename": "cpr",
+                            "url": "https://www.openintro.org/data/csv/cpr.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=cpr"
+                        },
+                        {
+                            "name": "Dengue Vaccine",
+                            "description": "Dengue Vaccine clinical trial data.",
+                            "filename": "dengue",
+                            "url": "https://www.openintro.org/data/csv/dengue.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=dengue"
+                        },
+                        {
+                            "name": "Diabetes2",
+                            "description": "Type 2 Diabetes Clinical Trial for Patients 10-17 Years Old.",
+                            "filename": "diabetes2",
+                            "url": "https://www.openintro.org/data/csv/diabetes2.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=diabetes2"
+                        },
+                        {
+                            "name": "Ethanol Treatment",
+                            "description": "Ethanol Treatment for Tumors Experiment.",
+                            "filename": "ethanol",
+                            "url": "https://www.openintro.org/data/csv/ethanol.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ethanol"
+                        },
+                        {
+                            "name": "Heart Transplant",
+                            "description": "Heart Transplant Data from the Stanford Heart Transplant Study.",
+                            "filename": "heart_transplant",
+                            "url": "https://www.openintro.org/data/csv/heart_transplant.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=heart_transplant"
+                        },
+                        {
+                            "name": "LEAP",
+                            "description": "Learning Early about Peanut Allergy clinical trial.",
+                            "filename": "LEAP",
+                            "url": "https://www.openintro.org/data/csv/LEAP.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=LEAP"
+                        },
+                        {
+                            "name": "Malaria Vaccine Trial",
+                            "description": "Malaria Vaccine Trial results.",
+                            "filename": "malaria",
+                            "url": "https://www.openintro.org/data/csv/malaria.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=malaria"
+                        },
+                        {
+                            "name": "Mammogram",
+                            "description": "Experiment with Mammogram Randomized trial.",
+                            "filename": "mammogram",
+                            "url": "https://www.openintro.org/data/csv/mammogram.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=mammogram"
+                        },
+                        {
+                            "name": "Migraine",
+                            "description": "Migraines and acupuncture treatment study.",
+                            "filename": "migraine",
+                            "url": "https://www.openintro.org/data/csv/migraine.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=migraine"
+                        },
+                        {
+                            "name": "Peanut Allergy",
+                            "description": "Peanut Allergy Experiment in Young Children.",
+                            "filename": "peanut_allergy",
+                            "url": "https://www.openintro.org/data/csv/peanut_allergy.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=peanut_allergy"
+                        },
+                        {
+                            "name": "Sinusitis",
+                            "description": "Sinusitis and antibiotic experiment.",
+                            "filename": "sinusitis",
+                            "url": "https://www.openintro.org/data/csv/sinusitis.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sinusitis"
+                        },
+                        {
+                            "name": "Smallpox",
+                            "description": "Smallpox vaccine results.",
+                            "filename": "smallpox",
+                            "url": "https://www.openintro.org/data/csv/smallpox.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=smallpox"
+                        },
+                        {
+                            "name": "Stem Cell",
+                            "description": "Embryonic stem cells to treat heart attack (in sheep).",
+                            "filename": "stem_cell",
+                            "url": "https://www.openintro.org/data/csv/stem_cell.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=stem_cell"
+                        },
+                        {
+                            "name": "Stent (30 days)",
+                            "description": "Stents for the treatment of stroke, 30-day results.",
+                            "filename": "stent30",
+                            "url": "https://www.openintro.org/data/csv/stent30.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=stent30"
+                        },
+                        {
+                            "name": "Stent (365 days)",
+                            "description": "Stents for the treatment of stroke, 365-day results.",
+                            "filename": "stent365",
+                            "url": "https://www.openintro.org/data/csv/stent365.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=stent365"
+                        },
+                        {
+                            "name": "Sulphinpyrazone",
+                            "description": "Treating heart attacks with sulphinpyrazone.",
+                            "filename": "sulphinpyrazone",
+                            "url": "https://www.openintro.org/data/csv/sulphinpyrazone.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sulphinpyrazone"
+                        },
+                        {
+                            "name": "Wound",
+                            "description": "Soap or Saline: Which is better for cleaning wounds?",
+                            "filename": "wound",
+                            "url": "https://www.openintro.org/data/csv/wound.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=wound"
+                        }
+                    ]
+                },
+                {
+                    "name": "Public Health & Epidemiology",
+                    "datasets": [
+                        {
+                            "name": "AMI Occurrences",
+                            "description": "Acute Myocardial Infarction (Heart Attack) Events.",
+                            "filename": "ami_occurrences",
+                            "url": "https://www.openintro.org/data/csv/ami_occurrences.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ami_occurrences"
+                        },
+                        {
+                            "name": "Antibiotics",
+                            "description": "Pre-existing conditions in 92 children.",
+                            "filename": "antibiotics",
+                            "url": "https://www.openintro.org/data/csv/antibiotics.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=antibiotics"
+                        },
+                        {
+                            "name": "Cancer in Dogs",
+                            "description": "Cancer in dogs data.",
+                            "filename": "cancer_in_dogs",
+                            "url": "https://www.openintro.org/data/csv/cancer_in_dogs.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=cancer_in_dogs"
+                        },
+                        {
+                            "name": "Climber Drugs",
+                            "description": "Climber Drugs Data.",
+                            "filename": "climber_drugs",
+                            "url": "https://www.openintro.org/data/csv/climber_drugs.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=climber_drugs"
+                        },
+                        {
+                            "name": "Diabetes Prevalence",
+                            "description": "Diabetes Prevalence Data (CDC).",
+                            "filename": "diabetes.prev",
+                            "url": "https://www.openintro.org/data/csv/diabetes.prev.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=diabetes.prev"
+                        },
+                        {
+                            "name": "Health Coverage",
+                            "description": "Health Coverage and Health Status.",
+                            "filename": "health_coverage",
+                            "url": "https://www.openintro.org/data/csv/health_coverage.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=health_coverage"
+                        },
+                        {
+                            "name": "Rosling Responses",
+                            "description": "Sample Responses to Two Public Health Questions.",
+                            "filename": "rosling_responses",
+                            "url": "https://www.openintro.org/data/csv/rosling_responses.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=rosling_responses"
+                        },
+                        {
+                            "name": "Simpson's Paradox: Covid",
+                            "description": "Simpson's Paradox illustrated with Covid vaccination data.",
+                            "filename": "simpsons_paradox_covid",
+                            "url": "https://www.openintro.org/data/csv/simpsons_paradox_covid.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=simpsons_paradox_covid"
+                        },
+                        {
+                            "name": "Smoking",
+                            "description": "UK Smoking Data.",
+                            "filename": "smoking",
+                            "url": "https://www.openintro.org/data/csv/smoking.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=smoking"
+                        },
+                        {
+                            "name": "SOWC Child Mortality",
+                            "description": "State of the World's Children (SOWC) Child Mortality Data.",
+                            "filename": "sowc_child_mortality",
+                            "url": "https://www.openintro.org/data/csv/sowc_child_mortality.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sowc_child_mortality"
+                        },
+                        {
+                            "name": "SOWC Maternal & Newborn",
+                            "description": "SOWC Maternal and Newborn Health Data.",
+                            "filename": "sowc_maternal_newborn",
+                            "url": "https://www.openintro.org/data/csv/sowc_maternal_newborn.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sowc_maternal_newborn"
+                        },
+                        {
+                            "name": "Thermometry",
+                            "description": "Normal Body Temperature data.",
+                            "filename": "thermometry",
+                            "url": "https://www.openintro.org/data/csv/thermometry.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=thermometry"
+                        },
+                        {
+                            "name": "YRBSS",
+                            "description": "Youth Risk Behavior Surveillance System (YRBSS).",
+                            "filename": "yrbss",
+                            "url": "https://www.openintro.org/data/csv/yrbss.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=yrbss"
+                        },
+                        {
+                            "name": "YRBSS Sample",
+                            "description": "Sample of Youth Risk Behavior Surveillance System (YRBSS).",
+                            "filename": "yrbss_samp",
+                            "url": "https://www.openintro.org/data/csv/yrbss_samp.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=yrbss_samp"
+                        }
+                    ]
+                },
+                {
+                    "name": "Biomedical Research",
+                    "datasets": [
+                        {
+                            "name": "Blood Serum",
+                            "description": "Acute Exercise, Prostate Cancer Cell Growth, and Immune System Cell Growth.",
+                            "filename": "blood_serum",
+                            "url": "https://www.openintro.org/data/csv/blood_serum.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=blood_serum"
+                        },
+                        {
+                            "name": "Coding mRNA",
+                            "description": "Transcript Length for Protein-Coding Transcripts.",
+                            "filename": "coding.mrna",
+                            "url": "https://www.openintro.org/data/csv/coding.mrna.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=coding.mrna"
+                        },
+                        {
+                            "name": "FAMuSS",
+                            "description": "Functional SNPs Associated with Muscle Size and Strength (FAMuSS).",
+                            "filename": "famuss",
+                            "url": "https://www.openintro.org/data/csv/famuss.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=famuss"
+                        },
+                        {
+                            "name": "Fish Oil",
+                            "description": "Findings on n-3 Fatty Acid Supplement Health Benefits.",
+                            "filename": "fish_oil_18",
+                            "url": "https://www.openintro.org/data/csv/fish_oil_18.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=fish_oil_18"
+                        },
+                        {
+                            "name": "Golub",
+                            "description": "Golub gene expression data for leukemia classification.",
+                            "filename": "golub",
+                            "url": "https://www.openintro.org/data/csv/golub.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=golub"
+                        },
+                        {
+                            "name": "Golub (small)",
+                            "description": "Small version of golub dataset.",
+                            "filename": "golub.small",
+                            "url": "https://www.openintro.org/data/csv/golub.small.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=golub.small"
+                        },
+                        {
+                            "name": "Golub Test",
+                            "description": "Golub Test (10 observations from golub matrix).",
+                            "filename": "golub.test",
+                            "url": "https://www.openintro.org/data/csv/golub.test.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=golub.test"
+                        },
+                        {
+                            "name": "Golub Train",
+                            "description": "Golub Train (62 observations from golub matrix).",
+                            "filename": "golub.train",
+                            "url": "https://www.openintro.org/data/csv/golub.train.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=golub.train"
+                        },
+                        {
+                            "name": "MTL",
+                            "description": "Medial temporal lobe (MTL) and other data for 26 participants.",
+                            "filename": "mtl",
+                            "url": "https://www.openintro.org/data/csv/mtl.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=mtl"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Education",
+            "subcategories": [
+                {
+                    "name": "Student Performance",
+                    "datasets": [
+                        {
+                            "name": "Class Data",
+                            "description": "Simulated class data for statistics exercises.",
+                            "filename": "classdata",
+                            "url": "https://www.openintro.org/data/csv/classdata.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=classdata"
+                        },
+                        {
+                            "name": "Credits",
+                            "description": "College credits data.",
+                            "filename": "credits",
+                            "url": "https://www.openintro.org/data/csv/credits.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=credits"
+                        },
+                        {
+                            "name": "Exam Grades",
+                            "description": "Exam and course grades for statistics students.",
+                            "filename": "exam_grades",
+                            "url": "https://www.openintro.org/data/csv/exam_grades.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=exam_grades"
+                        },
+                        {
+                            "name": "Exams",
+                            "description": "Exam scores.",
+                            "filename": "exams",
+                            "url": "https://www.openintro.org/data/csv/exams.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=exams"
+                        },
+                        {
+                            "name": "GPA",
+                            "description": "Survey of Duke students on GPA, studying, and more.",
+                            "filename": "gpa",
+                            "url": "https://www.openintro.org/data/csv/gpa.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gpa"
+                        },
+                        {
+                            "name": "GPA and IQ",
+                            "description": "Sample of students and their GPA and IQ.",
+                            "filename": "gpa_iq",
+                            "url": "https://www.openintro.org/data/csv/gpa_iq.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gpa_iq"
+                        },
+                        {
+                            "name": "GPA Study Hours",
+                            "description": "GPA and study hours data.",
+                            "filename": "gpa_study_hours",
+                            "url": "https://www.openintro.org/data/csv/gpa_study_hours.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gpa_study_hours"
+                        },
+                        {
+                            "name": "Grades and TV",
+                            "description": "Simulated data for analyzing the relationship between watching TV and grades.",
+                            "filename": "gradestv",
+                            "url": "https://www.openintro.org/data/csv/gradestv.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gradestv"
+                        },
+                        {
+                            "name": "High School and Beyond",
+                            "description": "High School and Beyond survey.",
+                            "filename": "hsb2",
+                            "url": "https://www.openintro.org/data/csv/hsb2.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=hsb2"
+                        },
+                        {
+                            "name": "SAT Improvement",
+                            "description": "Simulated data for SAT score improvement.",
+                            "filename": "sat_improve",
+                            "url": "https://www.openintro.org/data/csv/sat_improve.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sat_improve"
+                        },
+                        {
+                            "name": "SAT and GPA",
+                            "description": "SAT and GPA data.",
+                            "filename": "satgpa",
+                            "url": "https://www.openintro.org/data/csv/satgpa.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=satgpa"
+                        },
+                        {
+                            "name": "Stats Scores",
+                            "description": "Final exam scores for twenty students.",
+                            "filename": "stats_scores",
+                            "url": "https://www.openintro.org/data/csv/stats_scores.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=stats_scores"
+                        }
+                    ]
+                },
+                {
+                    "name": "Higher Education",
+                    "datasets": [
+                        {
+                            "name": "CC Housing",
+                            "description": "Community college housing (simulated data).",
+                            "filename": "cchousing",
+                            "url": "https://www.openintro.org/data/csv/cchousing.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=cchousing"
+                        },
+                        {
+                            "name": "Elmhurst",
+                            "description": "Elmhurst College gift aid.",
+                            "filename": "elmhurst",
+                            "url": "https://www.openintro.org/data/csv/elmhurst.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=elmhurst"
+                        },
+                        {
+                            "name": "Professor Evaluations",
+                            "description": "Professor evaluations and beauty.",
+                            "filename": "evals",
+                            "url": "https://www.openintro.org/data/csv/evals.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=evals"
+                        },
+                        {
+                            "name": "Gifted",
+                            "description": "Analytical skills of young gifted children.",
+                            "filename": "gifted",
+                            "url": "https://www.openintro.org/data/csv/gifted.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gifted"
+                        },
+                        {
+                            "name": "Housing",
+                            "description": "Simulated data set on student housing.",
+                            "filename": "housing",
+                            "url": "https://www.openintro.org/data/csv/housing.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=housing"
+                        },
+                        {
+                            "name": "Major Survey",
+                            "description": "Survey of Duke students and the area of their major.",
+                            "filename": "major_survey",
+                            "url": "https://www.openintro.org/data/csv/major_survey.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=major_survey"
+                        },
+                        {
+                            "name": "Student Housing",
+                            "description": "Community college housing (simulated data, 2015).",
+                            "filename": "student_housing",
+                            "url": "https://www.openintro.org/data/csv/student_housing.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=student_housing"
+                        },
+                        {
+                            "name": "Student Sleep",
+                            "description": "Sleep for 110 students (simulated).",
+                            "filename": "student_sleep",
+                            "url": "https://www.openintro.org/data/csv/student_sleep.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=student_sleep"
+                        },
+                        {
+                            "name": "Textbooks",
+                            "description": "Textbook data for UCLA Bookstore and Amazon.",
+                            "filename": "textbooks",
+                            "url": "https://www.openintro.org/data/csv/textbooks.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=textbooks"
+                        },
+                        {
+                            "name": "UCLA Fall 2018",
+                            "description": "UCLA courses in Fall 2018.",
+                            "filename": "ucla_f18",
+                            "url": "https://www.openintro.org/data/csv/ucla_f18.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ucla_f18"
+                        },
+                        {
+                            "name": "UCLA Textbooks F18",
+                            "description": "Sample of UCLA course textbooks for Fall 2018.",
+                            "filename": "ucla_textbooks_f18",
+                            "url": "https://www.openintro.org/data/csv/ucla_textbooks_f18.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ucla_textbooks_f18"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Sports",
+            "subcategories": [
+                {
+                    "name": "Running & Endurance",
+                    "datasets": [
+                        {
+                            "name": "Get It Dunn Run",
+                            "description": "Get it Dunn Run, Race Times.",
+                            "filename": "get_it_dunn_run",
+                            "url": "https://www.openintro.org/data/csv/get_it_dunn_run.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=get_it_dunn_run"
+                        },
+                        {
+                            "name": "Marathon",
+                            "description": "New York City Marathon Times (outdated).",
+                            "filename": "marathon",
+                            "url": "https://www.openintro.org/data/csv/marathon.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=marathon"
+                        },
+                        {
+                            "name": "NYC Marathon",
+                            "description": "New York City Marathon Times.",
+                            "filename": "nyc_marathon",
+                            "url": "https://www.openintro.org/data/csv/nyc_marathon.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=nyc_marathon"
+                        },
+                        {
+                            "name": "Cherry Blossom Run 2009",
+                            "description": "Cherry Blossom Run data, 2009.",
+                            "filename": "run09",
+                            "url": "https://www.openintro.org/data/csv/run09.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=run09"
+                        },
+                        {
+                            "name": "Cherry Blossom 10mi 2009",
+                            "description": "Cherry Blossom 10 mile run data, 2009.",
+                            "filename": "run10",
+                            "url": "https://www.openintro.org/data/csv/run10.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=run10"
+                        },
+                        {
+                            "name": "Cherry Blossom Run 10 (2009 alternate)",
+                            "description": "Cherry Blossom 10 mile run data, alternate 2009 version.",
+                            "filename": "run10_09",
+                            "url": "https://www.openintro.org/data/csv/run10_09.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=run10_09"
+                        },
+                        {
+                            "name": "Cherry Blossom 10mi Sample",
+                            "description": "Sample of Cherry Blossom 10 mile run data, 2009.",
+                            "filename": "run10samp",
+                            "url": "https://www.openintro.org/data/csv/run10samp.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=run10samp"
+                        },
+                        {
+                            "name": "Cherry Blossom Run 2012",
+                            "description": "Cherry Blossom Run data, 2012.",
+                            "filename": "run12",
+                            "url": "https://www.openintro.org/data/csv/run12.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=run12"
+                        },
+                        {
+                            "name": "Cherry Blossom Run 2017",
+                            "description": "Cherry Blossom Run data, 2017.",
+                            "filename": "run17",
+                            "url": "https://www.openintro.org/data/csv/run17.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=run17"
+                        },
+                        {
+                            "name": "Cherry Blossom Run 2017 Sample",
+                            "description": "Sample of Cherry Blossom 10 mile run data, 2017.",
+                            "filename": "run17samp",
+                            "url": "https://www.openintro.org/data/csv/run17samp.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=run17samp"
+                        },
+                        {
+                            "name": "Swim",
+                            "description": "Swim Velocities Using Different Suit Types.",
+                            "filename": "swim",
+                            "url": "https://www.openintro.org/data/csv/swim.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=swim"
+                        }
+                    ]
+                },
+                {
+                    "name": "Team Sports",
+                    "datasets": [
+                        {
+                            "name": "Kobe Basket",
+                            "description": "Kobe Bryant basketball performance.",
+                            "filename": "kobe_basket",
+                            "url": "https://www.openintro.org/data/csv/kobe_basket.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=kobe_basket"
+                        },
+                        {
+                            "name": "MLB Salaries",
+                            "description": "Salary data for Major League Baseball (2010).",
+                            "filename": "mlb",
+                            "url": "https://www.openintro.org/data/csv/mlb.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=mlb"
+                        },
+                        {
+                            "name": "MLB Players 2018",
+                            "description": "Batter Statistics for 2018 Major League Baseball (MLB) Season.",
+                            "filename": "mlb_players_18",
+                            "url": "https://www.openintro.org/data/csv/mlb_players_18.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=mlb_players_18"
+                        },
+                        {
+                            "name": "MLB Teams",
+                            "description": "Major League Baseball Teams Data.",
+                            "filename": "mlb_teams",
+                            "url": "https://www.openintro.org/data/csv/mlb_teams.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=mlb_teams"
+                        },
+                        {
+                            "name": "MLB Batting 2010",
+                            "description": "Major League Baseball Player Hitting Statistics for 2010.",
+                            "filename": "mlbbat10",
+                            "url": "https://www.openintro.org/data/csv/mlbbat10.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=mlbbat10"
+                        },
+                        {
+                            "name": "NBA Heights",
+                            "description": "NBA Player heights from 2008-9.",
+                            "filename": "nba_heights",
+                            "url": "https://www.openintro.org/data/csv/nba_heights.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=nba_heights"
+                        },
+                        {
+                            "name": "NBA Players 2018-19",
+                            "description": "NBA Players for the 2018-2019 season.",
+                            "filename": "nba_players_19",
+                            "url": "https://www.openintro.org/data/csv/nba_players_19.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=nba_players_19"
+                        }
+                    ]
+                },
+                {
+                    "name": "Other",
+                    "datasets": [
+                        {
+                            "name": "Helium Football",
+                            "description": "Helium football experiment.",
+                            "filename": "helium",
+                            "url": "https://www.openintro.org/data/csv/helium.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=helium"
+                        },
+                        {
+                            "name": "Pokemon Go",
+                            "description": "Pokemon Go evolutions data.",
+                            "filename": "pokemon_go",
+                            "url": "https://www.openintro.org/data/csv/pokemon_go.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=pokemon_go"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Demographics & Population",
+            "subcategories": [
+                {
+                    "name": "US Census & Surveys",
+                    "datasets": [
+                        {
+                            "name": "ACS 2012",
+                            "description": "American Community Survey, 2012.",
+                            "filename": "acs12",
+                            "url": "https://www.openintro.org/data/csv/acs12.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=acs12"
+                        },
+                        {
+                            "name": "Census",
+                            "description": "Random sample of 2000 U.S. Census Data.",
+                            "filename": "census",
+                            "url": "https://www.openintro.org/data/csv/census.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=census"
+                        },
+                        {
+                            "name": "Census 2010",
+                            "description": "Infant Mortality and Number of Doctors by State, 2010.",
+                            "filename": "census.2010",
+                            "url": "https://www.openintro.org/data/csv/census.2010.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=census.2010"
+                        },
+                        {
+                            "name": "County",
+                            "description": "United States Counties data.",
+                            "filename": "county",
+                            "url": "https://www.openintro.org/data/csv/county.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=county"
+                        },
+                        {
+                            "name": "County 2019",
+                            "description": "American Community Survey 2019.",
+                            "filename": "county_2019",
+                            "url": "https://www.openintro.org/data/csv/county_2019.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=county_2019"
+                        },
+                        {
+                            "name": "County Complete",
+                            "description": "United States Counties data (comprehensive).",
+                            "filename": "county_complete",
+                            "url": "https://www.openintro.org/data/csv/county_complete.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=county_complete"
+                        },
+                        {
+                            "name": "County (Smoking Ban)",
+                            "description": "County data set with smoking ban.",
+                            "filename": "county_w_sm_ban",
+                            "url": "https://www.openintro.org/data/csv/county_w_sm_ban.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=county_w_sm_ban"
+                        },
+                        {
+                            "name": "GSS 2010",
+                            "description": "2010 General Social Survey.",
+                            "filename": "gss2010",
+                            "url": "https://www.openintro.org/data/csv/gss2010.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gss2010"
+                        },
+                        {
+                            "name": "State Stats",
+                            "description": "State-level data.",
+                            "filename": "state_stats",
+                            "url": "https://www.openintro.org/data/csv/state_stats.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=state_stats"
+                        },
+                        {
+                            "name": "Urban Owner",
+                            "description": "Summary of many state-level variables.",
+                            "filename": "urban_owner",
+                            "url": "https://www.openintro.org/data/csv/urban_owner.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=urban_owner"
+                        },
+                        {
+                            "name": "Urban vs Rural Population",
+                            "description": "State summary info on urban and rural population.",
+                            "filename": "urban_rural_pop",
+                            "url": "https://www.openintro.org/data/csv/urban_rural_pop.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=urban_rural_pop"
+                        },
+                        {
+                            "name": "US Time Survey",
+                            "description": "American Time Survey 2009 - 2019.",
+                            "filename": "us_time_survey",
+                            "url": "https://www.openintro.org/data/csv/us_time_survey.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=us_time_survey"
+                        }
+                    ]
+                },
+                {
+                    "name": "Births & Population",
+                    "datasets": [
+                        {
+                            "name": "Age at Marriage",
+                            "description": "Age at first marriage of 5,534 US women.",
+                            "filename": "age_at_mar",
+                            "url": "https://www.openintro.org/data/csv/age_at_mar.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=age_at_mar"
+                        },
+                        {
+                            "name": "Arbuthnot",
+                            "description": "Male and female births in London.",
+                            "filename": "arbuthnot",
+                            "url": "https://www.openintro.org/data/csv/arbuthnot.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=arbuthnot"
+                        },
+                        {
+                            "name": "Babies",
+                            "description": "The Child Health and Development Studies.",
+                            "filename": "babies",
+                            "url": "https://www.openintro.org/data/csv/babies.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=babies"
+                        },
+                        {
+                            "name": "Baby Names",
+                            "description": "Baby Names Data.",
+                            "filename": "baby_names",
+                            "url": "https://www.openintro.org/data/csv/baby_names.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=baby_names"
+                        },
+                        {
+                            "name": "Births (100 cases)",
+                            "description": "North Carolina births, 100 cases.",
+                            "filename": "births",
+                            "url": "https://www.openintro.org/data/csv/births.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=births"
+                        },
+                        {
+                            "name": "Births 2014",
+                            "description": "US births in 2014.",
+                            "filename": "births14",
+                            "url": "https://www.openintro.org/data/csv/births14.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=births14"
+                        },
+                        {
+                            "name": "Infant Mortality Rate",
+                            "description": "Infant Mortality Rates, 2012.",
+                            "filename": "infmortrate",
+                            "url": "https://www.openintro.org/data/csv/infmortrate.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=infmortrate"
+                        },
+                        {
+                            "name": "NC Births",
+                            "description": "North Carolina births, 1000 cases.",
+                            "filename": "ncbirths",
+                            "url": "https://www.openintro.org/data/csv/ncbirths.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ncbirths"
+                        },
+                        {
+                            "name": "Population Age 2019",
+                            "description": "Population Age 2019 Data.",
+                            "filename": "pop_age_2019",
+                            "url": "https://www.openintro.org/data/csv/pop_age_2019.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=pop_age_2019"
+                        },
+                        {
+                            "name": "Population Race 2019",
+                            "description": "Population Race 2019 Data.",
+                            "filename": "pop_race_2019",
+                            "url": "https://www.openintro.org/data/csv/pop_race_2019.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=pop_race_2019"
+                        },
+                        {
+                            "name": "Present (Birth Counts)",
+                            "description": "Birth counts.",
+                            "filename": "present",
+                            "url": "https://www.openintro.org/data/csv/present.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=present"
+                        },
+                        {
+                            "name": "SOWC Demographics",
+                            "description": "State of the World's Children (SOWC) Demographics Data.",
+                            "filename": "sowc_demographics",
+                            "url": "https://www.openintro.org/data/csv/sowc_demographics.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sowc_demographics"
+                        },
+                        {
+                            "name": "World Population",
+                            "description": "World Population Data.",
+                            "filename": "world_pop",
+                            "url": "https://www.openintro.org/data/csv/world_pop.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=world_pop"
+                        }
+                    ]
+                },
+                {
+                    "name": "Body Measurements",
+                    "datasets": [
+                        {
+                            "name": "Babies Crawl",
+                            "description": "Crawling age data.",
+                            "filename": "babies_crawl",
+                            "url": "https://www.openintro.org/data/csv/babies_crawl.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=babies_crawl"
+                        },
+                        {
+                            "name": "Body Dimensions",
+                            "description": "Body measurements of 507 physically active individuals.",
+                            "filename": "bdims",
+                            "url": "https://www.openintro.org/data/csv/bdims.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=bdims"
+                        },
+                        {
+                            "name": "FCID Male Heights",
+                            "description": "Summary of male heights from USDA Food Commodity Intake Database.",
+                            "filename": "fcid",
+                            "url": "https://www.openintro.org/data/csv/fcid.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=fcid"
+                        },
+                        {
+                            "name": "Female Heights",
+                            "description": "Female college student heights, in inches.",
+                            "filename": "fheights",
+                            "url": "https://www.openintro.org/data/csv/fheights.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=fheights"
+                        },
+                        {
+                            "name": "Male Heights",
+                            "description": "Sample of 100 male heights.",
+                            "filename": "male_heights",
+                            "url": "https://www.openintro.org/data/csv/male_heights.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=male_heights"
+                        },
+                        {
+                            "name": "Male Heights FCID",
+                            "description": "Random sample of adult male heights.",
+                            "filename": "male_heights_fcid",
+                            "url": "https://www.openintro.org/data/csv/male_heights_fcid.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=male_heights_fcid"
+                        },
+                        {
+                            "name": "Speed, Gender, Height",
+                            "description": "Speed, gender, and height of 1325 students.",
+                            "filename": "speed_gender_height",
+                            "url": "https://www.openintro.org/data/csv/speed_gender_height.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=speed_gender_height"
+                        }
+                    ]
+                },
+                {
+                    "name": "Global Indicators",
+                    "datasets": [
+                        {
+                            "name": "CIA Factbook",
+                            "description": "CIA Factbook Details on Countries.",
+                            "filename": "cia_factbook",
+                            "url": "https://www.openintro.org/data/csv/cia_factbook.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=cia_factbook"
+                        },
+                        {
+                            "name": "Country ISO",
+                            "description": "Country ISO information.",
+                            "filename": "country_iso",
+                            "url": "https://www.openintro.org/data/csv/country_iso.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=country_iso"
+                        },
+                        {
+                            "name": "GDP Countries",
+                            "description": "GDP Countries Data.",
+                            "filename": "gdp_countries",
+                            "url": "https://www.openintro.org/data/csv/gdp_countries.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gdp_countries"
+                        },
+                        {
+                            "name": "Human Freedom Index",
+                            "description": "Human Freedom Index.",
+                            "filename": "hfi",
+                            "url": "https://www.openintro.org/data/csv/hfi.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=hfi"
+                        },
+                        {
+                            "name": "SA GDP & Electricity",
+                            "description": "Sustainability and Economic Indicators for South Africa.",
+                            "filename": "sa_gdp_elec",
+                            "url": "https://www.openintro.org/data/csv/sa_gdp_elec.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sa_gdp_elec"
+                        },
+                        {
+                            "name": "UK Demographics",
+                            "description": "United Kingdom Demographic Data.",
+                            "filename": "ukdemo",
+                            "url": "https://www.openintro.org/data/csv/ukdemo.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ukdemo"
+                        },
+                        {
+                            "name": "WDI 2011",
+                            "description": "World Development Indicators, 2011.",
+                            "filename": "wdi.2011",
+                            "url": "https://www.openintro.org/data/csv/wdi.2011.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=wdi.2011"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Social Sciences",
+            "subcategories": [
+                {
+                    "name": "Behavioral Experiments",
+                    "datasets": [
+                        {
+                            "name": "Ask",
+                            "description": "How important is it to ask pointed questions?",
+                            "filename": "ask",
+                            "url": "https://www.openintro.org/data/csv/ask.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ask"
+                        },
+                        {
+                            "name": "Drug Use",
+                            "description": "Drug use of students and parents.",
+                            "filename": "drug_use",
+                            "url": "https://www.openintro.org/data/csv/drug_use.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=drug_use"
+                        },
+                        {
+                            "name": "Exclusive Relationship",
+                            "description": "Number of Exclusive Relationships.",
+                            "filename": "exclusive_relationship",
+                            "url": "https://www.openintro.org/data/csv/exclusive_relationship.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=exclusive_relationship"
+                        },
+                        {
+                            "name": "Mail Me",
+                            "description": "Influence of a Good Mood on Helpfulness.",
+                            "filename": "mail_me",
+                            "url": "https://www.openintro.org/data/csv/mail_me.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=mail_me"
+                        },
+                        {
+                            "name": "Opportunity Cost",
+                            "description": "Opportunity cost of purchases experiment.",
+                            "filename": "opportunity_cost",
+                            "url": "https://www.openintro.org/data/csv/opportunity_cost.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=opportunity_cost"
+                        },
+                        {
+                            "name": "Prison",
+                            "description": "Prison isolation experiment.",
+                            "filename": "prison",
+                            "url": "https://www.openintro.org/data/csv/prison.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=prison"
+                        },
+                        {
+                            "name": "Social Experiment",
+                            "description": "Social experiment data.",
+                            "filename": "socialexp",
+                            "url": "https://www.openintro.org/data/csv/socialexp.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=socialexp"
+                        },
+                        {
+                            "name": "Yawn",
+                            "description": "Contagiousness of yawning experiment.",
+                            "filename": "yawn",
+                            "url": "https://www.openintro.org/data/csv/yawn.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=yawn"
+                        }
+                    ]
+                },
+                {
+                    "name": "Public Opinion Polls",
+                    "datasets": [
+                        {
+                            "name": "DREAM Act",
+                            "description": "Survey on views of the DREAM Act.",
+                            "filename": "dream",
+                            "url": "https://www.openintro.org/data/csv/dream.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=dream"
+                        },
+                        {
+                            "name": "Ebola Survey",
+                            "description": "Survey on Ebola quarantine.",
+                            "filename": "ebola_survey",
+                            "url": "https://www.openintro.org/data/csv/ebola_survey.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ebola_survey"
+                        },
+                        {
+                            "name": "Environmental Regulation",
+                            "description": "American Adults on Regulation and Renewable Energy.",
+                            "filename": "env_regulation",
+                            "url": "https://www.openintro.org/data/csv/env_regulation.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=env_regulation"
+                        },
+                        {
+                            "name": "Fact vs Opinion",
+                            "description": "Can Americans categorize facts and opinions?",
+                            "filename": "fact_opinion",
+                            "url": "https://www.openintro.org/data/csv/fact_opinion.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=fact_opinion"
+                        },
+                        {
+                            "name": "Full Body Scan",
+                            "description": "Poll about use of full-body airport scanners.",
+                            "filename": "full_body_scan",
+                            "url": "https://www.openintro.org/data/csv/full_body_scan.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=full_body_scan"
+                        },
+                        {
+                            "name": "Global Warming (Pew)",
+                            "description": "Pew survey on global warming.",
+                            "filename": "global_warming_pew",
+                            "url": "https://www.openintro.org/data/csv/global_warming_pew.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=global_warming_pew"
+                        },
+                        {
+                            "name": "Government Approval",
+                            "description": "Pew Research poll on government approval ratings.",
+                            "filename": "gov_poll",
+                            "url": "https://www.openintro.org/data/csv/gov_poll.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gov_poll"
+                        },
+                        {
+                            "name": "Healthcare Law Survey",
+                            "description": "Pew Research Center poll on health care, including question variants.",
+                            "filename": "healthcare_law_survey",
+                            "url": "https://www.openintro.org/data/csv/healthcare_law_survey.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=healthcare_law_survey"
+                        },
+                        {
+                            "name": "Immigration",
+                            "description": "Poll on illegal workers in the US.",
+                            "filename": "immigration",
+                            "url": "https://www.openintro.org/data/csv/immigration.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=immigration"
+                        },
+                        {
+                            "name": "Marijuana Legalization",
+                            "description": "Legalization of Marijuana Support in 2010 California Survey.",
+                            "filename": "leg_mari",
+                            "url": "https://www.openintro.org/data/csv/leg_mari.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=leg_mari"
+                        },
+                        {
+                            "name": "Nuclear Survey",
+                            "description": "Nuclear Arms Reduction Survey.",
+                            "filename": "nuclear_survey",
+                            "url": "https://www.openintro.org/data/csv/nuclear_survey.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=nuclear_survey"
+                        },
+                        {
+                            "name": "Offshore Drilling",
+                            "description": "California poll on drilling off the California coast.",
+                            "filename": "offshore_drilling",
+                            "url": "https://www.openintro.org/data/csv/offshore_drilling.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=offshore_drilling"
+                        },
+                        {
+                            "name": "Pew Energy 2018",
+                            "description": "Pew Survey on Energy Sources in 2018.",
+                            "filename": "pew_energy_2018",
+                            "url": "https://www.openintro.org/data/csv/pew_energy_2018.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=pew_energy_2018"
+                        },
+                        {
+                            "name": "Piracy",
+                            "description": "Piracy and PIPA/SOPA.",
+                            "filename": "piracy",
+                            "url": "https://www.openintro.org/data/csv/piracy.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=piracy"
+                        },
+                        {
+                            "name": "PPP 2015-03",
+                            "description": "US Poll on who it is better to raise taxes on.",
+                            "filename": "ppp_201503",
+                            "url": "https://www.openintro.org/data/csv/ppp_201503.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ppp_201503"
+                        },
+                        {
+                            "name": "Race and Justice",
+                            "description": "Yahoo! News Race and Justice poll results.",
+                            "filename": "race_justice",
+                            "url": "https://www.openintro.org/data/csv/race_justice.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=race_justice"
+                        },
+                        {
+                            "name": "Russian Influence 2016",
+                            "description": "Russians' Opinions on US Election Influence in 2016.",
+                            "filename": "russian_influence_on_us_election_2016",
+                            "url": "https://www.openintro.org/data/csv/russian_influence_on_us_election_2016.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=russian_influence_on_us_election_2016"
+                        },
+                        {
+                            "name": "SCOTUS Healthcare",
+                            "description": "Public Opinion with SCOTUS ruling on American Healthcare Act.",
+                            "filename": "scotus_healthcare",
+                            "url": "https://www.openintro.org/data/csv/scotus_healthcare.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=scotus_healthcare"
+                        },
+                        {
+                            "name": "Sleep Deprivation",
+                            "description": "Survey on sleep deprivation and transportation workers.",
+                            "filename": "sleep_deprivation",
+                            "url": "https://www.openintro.org/data/csv/sleep_deprivation.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sleep_deprivation"
+                        },
+                        {
+                            "name": "Supreme Court",
+                            "description": "Supreme Court approval rating.",
+                            "filename": "supreme_court",
+                            "url": "https://www.openintro.org/data/csv/supreme_court.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=supreme_court"
+                        },
+                        {
+                            "name": "NSA Surveillance Vote",
+                            "description": "Predicting who would vote for NSA Mass Surveillance.",
+                            "filename": "vote_nsa",
+                            "url": "https://www.openintro.org/data/csv/vote_nsa.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=vote_nsa"
+                        },
+                        {
+                            "name": "Voter Count",
+                            "description": "US Voter Turnout Data.",
+                            "filename": "voter_count",
+                            "url": "https://www.openintro.org/data/csv/voter_count.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=voter_count"
+                        }
+                    ]
+                },
+                {
+                    "name": "Discrimination & Employment",
+                    "datasets": [
+                        {
+                            "name": "DDS Discrimination",
+                            "description": "Discrimination in Developmental Disability Support.",
+                            "filename": "dds.discr",
+                            "url": "https://www.openintro.org/data/csv/dds.discr.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=dds.discr"
+                        },
+                        {
+                            "name": "Gender Discrimination",
+                            "description": "Bank manager recommendations based on gender.",
+                            "filename": "gender_discrimination",
+                            "url": "https://www.openintro.org/data/csv/gender_discrimination.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gender_discrimination"
+                        },
+                        {
+                            "name": "Labor Market Discrimination",
+                            "description": "Are Emily and Greg More Employable Than Lakisha and Jamal?",
+                            "filename": "labor_market_discrimination",
+                            "url": "https://www.openintro.org/data/csv/labor_market_discrimination.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=labor_market_discrimination"
+                        },
+                        {
+                            "name": "Lakisha",
+                            "description": "Are Emily and Greg More Employable Than Lakisha and Jamal?",
+                            "filename": "lakisha",
+                            "url": "https://www.openintro.org/data/csv/lakisha.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=lakisha"
+                        },
+                        {
+                            "name": "Law Resume",
+                            "description": "Gender, Socioeconomic Class, and Interview Invites.",
+                            "filename": "law_resume",
+                            "url": "https://www.openintro.org/data/csv/law_resume.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=law_resume"
+                        },
+                        {
+                            "name": "Resume",
+                            "description": "Which resume attributes drive job callbacks?",
+                            "filename": "resume",
+                            "url": "https://www.openintro.org/data/csv/resume.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=resume"
+                        },
+                        {
+                            "name": "Sex Discrimination",
+                            "description": "Bank manager recommendations based on sex.",
+                            "filename": "sex_discrimination",
+                            "url": "https://www.openintro.org/data/csv/sex_discrimination.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sex_discrimination"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Economics & Finance",
+            "subcategories": [
+                {
+                    "name": "Stock Markets",
+                    "datasets": [
+                        {
+                            "name": "Google Stock",
+                            "description": "Google stock data.",
+                            "filename": "goog",
+                            "url": "https://www.openintro.org/data/csv/goog.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=goog"
+                        },
+                        {
+                            "name": "S&P 500",
+                            "description": "Financial information for 50 S&P 500 companies.",
+                            "filename": "sp500",
+                            "url": "https://www.openintro.org/data/csv/sp500.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sp500"
+                        },
+                        {
+                            "name": "S&P 500 (1950-2018)",
+                            "description": "Daily observations for the S&P 500.",
+                            "filename": "sp500_1950_2018",
+                            "url": "https://www.openintro.org/data/csv/sp500_1950_2018.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sp500_1950_2018"
+                        },
+                        {
+                            "name": "S&P 500 Sequential",
+                            "description": "S&P 500 stock data, sequential format.",
+                            "filename": "sp500_seq",
+                            "url": "https://www.openintro.org/data/csv/sp500_seq.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=sp500_seq"
+                        },
+                        {
+                            "name": "Stocks 2018",
+                            "description": "Monthly Returns for a few stocks.",
+                            "filename": "stocks_18",
+                            "url": "https://www.openintro.org/data/csv/stocks_18.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=stocks_18"
+                        },
+                        {
+                            "name": "Exxon Mobil",
+                            "description": "Exxon Mobil stock data.",
+                            "filename": "xom",
+                            "url": "https://www.openintro.org/data/csv/xom.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=xom"
+                        }
+                    ]
+                },
+                {
+                    "name": "Loans & Business",
+                    "datasets": [
+                        {
+                            "name": "IPO",
+                            "description": "Facebook, Google, and LinkedIn IPO filings.",
+                            "filename": "ipo",
+                            "url": "https://www.openintro.org/data/csv/ipo.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ipo"
+                        },
+                        {
+                            "name": "Loan 50",
+                            "description": "Loan data for 50 loans from Lending Club.",
+                            "filename": "loan50",
+                            "url": "https://www.openintro.org/data/csv/loan50.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=loan50"
+                        },
+                        {
+                            "name": "Loans Full Schema",
+                            "description": "Loan data from Lending Club.",
+                            "filename": "loans_full_schema",
+                            "url": "https://www.openintro.org/data/csv/loans_full_schema.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=loans_full_schema"
+                        }
+                    ]
+                },
+                {
+                    "name": "Employment & Wages",
+                    "datasets": [
+                        {
+                            "name": "Blizzard Salary",
+                            "description": "Blizzard Employee Voluntary Salary Info.",
+                            "filename": "blizzard_salary",
+                            "url": "https://www.openintro.org/data/csv/blizzard_salary.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=blizzard_salary"
+                        },
+                        {
+                            "name": "Teacher",
+                            "description": "Teacher Salaries in St. Louis, Michigan.",
+                            "filename": "teacher",
+                            "url": "https://www.openintro.org/data/csv/teacher.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=teacher"
+                        },
+                        {
+                            "name": "Unemployment",
+                            "description": "Annual unemployment since 1890.",
+                            "filename": "unempl",
+                            "url": "https://www.openintro.org/data/csv/unempl.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=unempl"
+                        }
+                    ]
+                },
+                {
+                    "name": "Consumer & Marketplace",
+                    "datasets": [
+                        {
+                            "name": "Daycare Fines",
+                            "description": "Daycare fines study.",
+                            "filename": "daycare_fines",
+                            "url": "https://www.openintro.org/data/csv/daycare_fines.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=daycare_fines"
+                        },
+                        {
+                            "name": "Lego Population",
+                            "description": "Population of Lego Sets for Sale between Jan. 1, 2018 and Sept. 11, 2020.",
+                            "filename": "lego_population",
+                            "url": "https://www.openintro.org/data/csv/lego_population.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=lego_population"
+                        },
+                        {
+                            "name": "Lego Sample",
+                            "description": "Sample of Lego Sets.",
+                            "filename": "lego_sample",
+                            "url": "https://www.openintro.org/data/csv/lego_sample.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=lego_sample"
+                        },
+                        {
+                            "name": "Mario Kart",
+                            "description": "Wii Mario Kart auctions from Ebay.",
+                            "filename": "mariokart",
+                            "url": "https://www.openintro.org/data/csv/mariokart.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=mariokart"
+                        },
+                        {
+                            "name": "Poker",
+                            "description": "Poker winnings during 50 sessions.",
+                            "filename": "poker",
+                            "url": "https://www.openintro.org/data/csv/poker.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=poker"
+                        },
+                        {
+                            "name": "Reddit Finance",
+                            "description": "Reddit Survey on Financial Independence.",
+                            "filename": "reddit_finance",
+                            "url": "https://www.openintro.org/data/csv/reddit_finance.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=reddit_finance"
+                        },
+                        {
+                            "name": "Thanksgiving Spending",
+                            "description": "Thanksgiving spending, simulated based on Gallup poll.",
+                            "filename": "thanksgiving_spend",
+                            "url": "https://www.openintro.org/data/csv/thanksgiving_spend.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=thanksgiving_spend"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Science & Environment",
+            "subcategories": [
+                {
+                    "name": "Biology & Ecology",
+                    "datasets": [
+                        {
+                            "name": "Arabidopsis Arenosa",
+                            "description": "Cold-response genes in Arabidopsis arenosa.",
+                            "filename": "arenosa",
+                            "url": "https://www.openintro.org/data/csv/arenosa.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=arenosa"
+                        },
+                        {
+                            "name": "Cherry Trees",
+                            "description": "Summary information for 31 cherry trees.",
+                            "filename": "cherry",
+                            "url": "https://www.openintro.org/data/csv/cherry.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=cherry"
+                        },
+                        {
+                            "name": "Forest Birds",
+                            "description": "Abundance of forest birds in 56 forest patches in Australia.",
+                            "filename": "forest.birds",
+                            "url": "https://www.openintro.org/data/csv/forest.birds.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=forest.birds"
+                        },
+                        {
+                            "name": "Frog",
+                            "description": "Frog Maternal Investment Based on Altitude in Tibetan Plateau.",
+                            "filename": "frog",
+                            "url": "https://www.openintro.org/data/csv/frog.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=frog"
+                        },
+                        {
+                            "name": "Lizard Habitat",
+                            "description": "Field data on lizards observed in their natural habitat.",
+                            "filename": "lizard_habitat",
+                            "url": "https://www.openintro.org/data/csv/lizard_habitat.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=lizard_habitat"
+                        },
+                        {
+                            "name": "Lizard Run",
+                            "description": "Lizard speeds.",
+                            "filename": "lizard_run",
+                            "url": "https://www.openintro.org/data/csv/lizard_run.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=lizard_run"
+                        },
+                        {
+                            "name": "Mammals",
+                            "description": "Sleep in Mammals.",
+                            "filename": "mammals",
+                            "url": "https://www.openintro.org/data/csv/mammals.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=mammals"
+                        },
+                        {
+                            "name": "Possum",
+                            "description": "Possums in Australia and New Guinea.",
+                            "filename": "possum",
+                            "url": "https://www.openintro.org/data/csv/possum.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=possum"
+                        }
+                    ]
+                },
+                {
+                    "name": "Environment & Climate",
+                    "datasets": [
+                        {
+                            "name": "Climate 70",
+                            "description": "Temperature Summary Data, Geography Limited.",
+                            "filename": "climate70",
+                            "url": "https://www.openintro.org/data/csv/climate70.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=climate70"
+                        },
+                        {
+                            "name": "Earthquakes",
+                            "description": "Earthquakes data.",
+                            "filename": "earthquakes",
+                            "url": "https://www.openintro.org/data/csv/earthquakes.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=earthquakes"
+                        },
+                        {
+                            "name": "ESI 2005",
+                            "description": "Environmental Sustainability Index 2005.",
+                            "filename": "esi",
+                            "url": "https://www.openintro.org/data/csv/esi.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=esi"
+                        },
+                        {
+                            "name": "Flow Rates",
+                            "description": "River Flow Data.",
+                            "filename": "flow_rates",
+                            "url": "https://www.openintro.org/data/csv/flow_rates.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=flow_rates"
+                        },
+                        {
+                            "name": "Major Earthquakes",
+                            "description": "Major Earthquakes data.",
+                            "filename": "major_earthquakes",
+                            "url": "https://www.openintro.org/data/csv/major_earthquakes.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=major_earthquakes"
+                        },
+                        {
+                            "name": "PM2.5 Durham",
+                            "description": "Air quality for Durham, NC.",
+                            "filename": "pm25_2011_durham",
+                            "url": "https://www.openintro.org/data/csv/pm25_2011_durham.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=pm25_2011_durham"
+                        },
+                        {
+                            "name": "Salinity",
+                            "description": "Salinity data.",
+                            "filename": "salinity",
+                            "url": "https://www.openintro.org/data/csv/salinity.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=salinity"
+                        },
+                        {
+                            "name": "Snowfall",
+                            "description": "Snowfall data.",
+                            "filename": "snowfall",
+                            "url": "https://www.openintro.org/data/csv/snowfall.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=snowfall"
+                        },
+                        {
+                            "name": "Solar",
+                            "description": "Energy Output From Two Solar Arrays in San Francisco.",
+                            "filename": "solar",
+                            "url": "https://www.openintro.org/data/csv/solar.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=solar"
+                        }
+                    ]
+                },
+                {
+                    "name": "Engineering & Technology",
+                    "datasets": [
+                        {
+                            "name": "Ball Bearing",
+                            "description": "Lifespan of ball bearings.",
+                            "filename": "ball_bearing",
+                            "url": "https://www.openintro.org/data/csv/ball_bearing.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ball_bearing"
+                        },
+                        {
+                            "name": "CPU",
+                            "description": "CPUs Released between 2010 and 2020.",
+                            "filename": "cpu",
+                            "url": "https://www.openintro.org/data/csv/cpu.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=cpu"
+                        },
+                        {
+                            "name": "Drone Blades",
+                            "description": "Quadcopter Drone Blades.",
+                            "filename": "drone_blades",
+                            "url": "https://www.openintro.org/data/csv/drone_blades.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=drone_blades"
+                        },
+                        {
+                            "name": "O-Rings",
+                            "description": "1986 Challenger disaster and O-rings.",
+                            "filename": "orings",
+                            "url": "https://www.openintro.org/data/csv/orings.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=orings"
+                        },
+                        {
+                            "name": "Penetrating Oil",
+                            "description": "What's the best way to loosen a rusty bolt?",
+                            "filename": "penetrating_oil",
+                            "url": "https://www.openintro.org/data/csv/penetrating_oil.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=penetrating_oil"
+                        },
+                        {
+                            "name": "Prius MPG",
+                            "description": "User reported fuel efficiency for 2017 Toyota Prius Prime.",
+                            "filename": "prius_mpg",
+                            "url": "https://www.openintro.org/data/csv/prius_mpg.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=prius_mpg"
+                        },
+                        {
+                            "name": "SSD Speed",
+                            "description": "SSD Speed data.",
+                            "filename": "ssd_speed",
+                            "url": "https://www.openintro.org/data/csv/ssd_speed.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ssd_speed"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Politics & Government",
+            "subcategories": [
+                {
+                    "name": "Elections",
+                    "datasets": [
+                        {
+                            "name": "Gerrymander",
+                            "description": "Gerrymander data.",
+                            "filename": "gerrymander",
+                            "url": "https://www.openintro.org/data/csv/gerrymander.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gerrymander"
+                        },
+                        {
+                            "name": "Governor Race 2010",
+                            "description": "Election results for 2010 Governor races in the U.S.",
+                            "filename": "govrace10",
+                            "url": "https://www.openintro.org/data/csv/govrace10.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=govrace10"
+                        },
+                        {
+                            "name": "US House",
+                            "description": "United States House of Representatives historical make-up.",
+                            "filename": "house",
+                            "url": "https://www.openintro.org/data/csv/house.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=house"
+                        },
+                        {
+                            "name": "House Race 2010",
+                            "description": "Election results for the 2010 U.S. House of Representatives races.",
+                            "filename": "houserace10",
+                            "url": "https://www.openintro.org/data/csv/houserace10.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=houserace10"
+                        },
+                        {
+                            "name": "Midterms House",
+                            "description": "President's party performance and unemployment rate.",
+                            "filename": "midterms_house",
+                            "url": "https://www.openintro.org/data/csv/midterms_house.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=midterms_house"
+                        },
+                        {
+                            "name": "Presidential Race 2008",
+                            "description": "Election results for the 2008 U.S. Presidential race.",
+                            "filename": "prrace08",
+                            "url": "https://www.openintro.org/data/csv/prrace08.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=prrace08"
+                        },
+                        {
+                            "name": "Senate Race 2010",
+                            "description": "Election results for the 2010 U.S. Senate races.",
+                            "filename": "senaterace10",
+                            "url": "https://www.openintro.org/data/csv/senaterace10.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=senaterace10"
+                        },
+                        {
+                            "name": "Unemployment & President",
+                            "description": "President's party performance and unemployment rate.",
+                            "filename": "unemploy_pres",
+                            "url": "https://www.openintro.org/data/csv/unemploy_pres.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=unemploy_pres"
+                        }
+                    ]
+                },
+                {
+                    "name": "Government & Public Safety",
+                    "datasets": [
+                        {
+                            "name": "Fatal Police Shootings",
+                            "description": "Fatal Police Shootings data.",
+                            "filename": "fatal_police_shootings",
+                            "url": "https://www.openintro.org/data/csv/fatal_police_shootings.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=fatal_police_shootings"
+                        },
+                        {
+                            "name": "Military",
+                            "description": "US Military Demographics.",
+                            "filename": "military",
+                            "url": "https://www.openintro.org/data/csv/military.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=military"
+                        },
+                        {
+                            "name": "MN Police Use of Force",
+                            "description": "Minneapolis police use of force data.",
+                            "filename": "mn_police_use_of_force",
+                            "url": "https://www.openintro.org/data/csv/mn_police_use_of_force.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=mn_police_use_of_force"
+                        },
+                        {
+                            "name": "Murders",
+                            "description": "Data for 20 metropolitan areas.",
+                            "filename": "murders",
+                            "url": "https://www.openintro.org/data/csv/murders.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=murders"
+                        },
+                        {
+                            "name": "President",
+                            "description": "United States Presidential History.",
+                            "filename": "president",
+                            "url": "https://www.openintro.org/data/csv/president.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=president"
+                        },
+                        {
+                            "name": "Presidential Power",
+                            "description": "Presidential Power data.",
+                            "filename": "prez_pwr",
+                            "url": "https://www.openintro.org/data/csv/prez_pwr.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=prez_pwr"
+                        },
+                        {
+                            "name": "US Crime Rates",
+                            "description": "US Crime Rates data.",
+                            "filename": "us_crime_rates",
+                            "url": "https://www.openintro.org/data/csv/us_crime_rates.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=us_crime_rates"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Transportation & Real Estate",
+            "subcategories": [
+                {
+                    "name": "Aviation & Transportation",
+                    "datasets": [
+                        {
+                            "name": "Airline Delay",
+                            "description": "Airline Delays for December 2019 and 2020.",
+                            "filename": "airline_delay",
+                            "url": "https://www.openintro.org/data/csv/airline_delay.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=airline_delay"
+                        },
+                        {
+                            "name": "Birds (Aircraft-Wildlife)",
+                            "description": "Aircraft-Wildlife Collisions.",
+                            "filename": "birds",
+                            "url": "https://www.openintro.org/data/csv/birds.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=birds"
+                        },
+                        {
+                            "name": "Coast Starlight",
+                            "description": "Coast Starlight Amtrak train.",
+                            "filename": "coast_starlight",
+                            "url": "https://www.openintro.org/data/csv/coast_starlight.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=coast_starlight"
+                        },
+                        {
+                            "name": "NYC Flights",
+                            "description": "Flights data from New York City airports.",
+                            "filename": "nycflights",
+                            "url": "https://www.openintro.org/data/csv/nycflights.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=nycflights"
+                        },
+                        {
+                            "name": "Tourism",
+                            "description": "Turkey tourism data.",
+                            "filename": "tourism",
+                            "url": "https://www.openintro.org/data/csv/tourism.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=tourism"
+                        },
+                        {
+                            "name": "US Airports",
+                            "description": "US Airports data.",
+                            "filename": "usairports",
+                            "url": "https://www.openintro.org/data/csv/usairports.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=usairports"
+                        }
+                    ]
+                },
+                {
+                    "name": "Vehicles",
+                    "datasets": [
+                        {
+                            "name": "Cars",
+                            "description": "Cars data.",
+                            "filename": "cars",
+                            "url": "https://www.openintro.org/data/csv/cars.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=cars"
+                        },
+                        {
+                            "name": "Cars93",
+                            "description": "Cars93 data (1993 model year).",
+                            "filename": "cars93",
+                            "url": "https://www.openintro.org/data/csv/cars93.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=cars93"
+                        },
+                        {
+                            "name": "EPA 2012",
+                            "description": "Vehicle info from the EPA for 2012.",
+                            "filename": "epa2012",
+                            "url": "https://www.openintro.org/data/csv/epa2012.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=epa2012"
+                        },
+                        {
+                            "name": "EPA 2021",
+                            "description": "Vehicle info from the EPA for 2021.",
+                            "filename": "epa2021",
+                            "url": "https://www.openintro.org/data/csv/epa2021.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=epa2021"
+                        }
+                    ]
+                },
+                {
+                    "name": "Real Estate",
+                    "datasets": [
+                        {
+                            "name": "Ames Housing",
+                            "description": "Housing prices in Ames, Iowa. Data from the Ames Assessor's Office for residential property sales, 2006-2010.",
+                            "filename": "ames",
+                            "url": "https://www.openintro.org/data/csv/ames.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ames"
+                        },
+                        {
+                            "name": "Duke Forest",
+                            "description": "Sale prices of houses in Duke Forest, Durham, NC.",
+                            "filename": "duke_forest",
+                            "url": "https://www.openintro.org/data/csv/duke_forest.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=duke_forest"
+                        },
+                        {
+                            "name": "London Boroughs",
+                            "description": "London Borough Boundaries.",
+                            "filename": "london_boroughs",
+                            "url": "https://www.openintro.org/data/csv/london_boroughs.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=london_boroughs"
+                        },
+                        {
+                            "name": "London Murders",
+                            "description": "London Murders, 2006-2011.",
+                            "filename": "london_murders",
+                            "url": "https://www.openintro.org/data/csv/london_murders.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=london_murders"
+                        },
+                        {
+                            "name": "Pierce County House Sales",
+                            "description": "Pierce County House Sales Data for 2020.",
+                            "filename": "pierce_county_house_sales",
+                            "url": "https://www.openintro.org/data/csv/pierce_county_house_sales.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=pierce_county_house_sales"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Food & Lifestyle",
+            "subcategories": [
+                {
+                    "name": "Food & Nutrition",
+                    "datasets": [
+                        {
+                            "name": "BAC",
+                            "description": "Beer and blood alcohol content.",
+                            "filename": "bac",
+                            "url": "https://www.openintro.org/data/csv/bac.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=bac"
+                        },
+                        {
+                            "name": "Burger",
+                            "description": "Burger preferences.",
+                            "filename": "burger",
+                            "url": "https://www.openintro.org/data/csv/burger.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=burger"
+                        },
+                        {
+                            "name": "Fast Food",
+                            "description": "Nutrition in fast food.",
+                            "filename": "fastfood",
+                            "url": "https://www.openintro.org/data/csv/fastfood.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=fastfood"
+                        },
+                        {
+                            "name": "Starbucks",
+                            "description": "Starbucks nutrition data.",
+                            "filename": "starbucks",
+                            "url": "https://www.openintro.org/data/csv/starbucks.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=starbucks"
+                        },
+                        {
+                            "name": "Tips",
+                            "description": "Tip data.",
+                            "filename": "tips",
+                            "url": "https://www.openintro.org/data/csv/tips.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=tips"
+                        }
+                    ]
+                },
+                {
+                    "name": "Lifestyle & Culture",
+                    "datasets": [
+                        {
+                            "name": "Absenteeism",
+                            "description": "Absenteeism from school in New South Wales. Data from 146 randomly sampled students in rural New South Wales, Australia.",
+                            "filename": "absenteeism",
+                            "url": "https://www.openintro.org/data/csv/absenteeism.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=absenteeism"
+                        },
+                        {
+                            "name": "Books",
+                            "description": "Sample of books on a shelf.",
+                            "filename": "books",
+                            "url": "https://www.openintro.org/data/csv/books.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=books"
+                        },
+                        {
+                            "name": "China Child Care",
+                            "description": "Child care hours data from China.",
+                            "filename": "china",
+                            "url": "https://www.openintro.org/data/csv/china.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=china"
+                        },
+                        {
+                            "name": "Family College",
+                            "description": "Simulated sample of parent / teen college attendance.",
+                            "filename": "family_college",
+                            "url": "https://www.openintro.org/data/csv/family_college.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=family_college"
+                        },
+                        {
+                            "name": "Friday the 13th",
+                            "description": "Friday the 13th data.",
+                            "filename": "friday",
+                            "url": "https://www.openintro.org/data/csv/friday.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=friday"
+                        },
+                        {
+                            "name": "Helmet",
+                            "description": "Socioeconomic status and reduced-fee school lunches.",
+                            "filename": "helmet",
+                            "url": "https://www.openintro.org/data/csv/helmet.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=helmet"
+                        },
+                        {
+                            "name": "Husbands & Wives",
+                            "description": "Great Britain: husband and wife pairs.",
+                            "filename": "husbands_wives",
+                            "url": "https://www.openintro.org/data/csv/husbands_wives.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=husbands_wives"
+                        },
+                        {
+                            "name": "iPod",
+                            "description": "Length of songs on an iPod.",
+                            "filename": "ipod",
+                            "url": "https://www.openintro.org/data/csv/ipod.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=ipod"
+                        },
+                        {
+                            "name": "MCU Films",
+                            "description": "Marvel Cinematic Universe Films.",
+                            "filename": "mcu_films",
+                            "url": "https://www.openintro.org/data/csv/mcu_films.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=mcu_films"
+                        },
+                        {
+                            "name": "Oscars",
+                            "description": "Oscar winners, 1929 to 2018.",
+                            "filename": "oscars",
+                            "url": "https://www.openintro.org/data/csv/oscars.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=oscars"
+                        },
+                        {
+                            "name": "Penelope",
+                            "description": "Guesses at the weight of Penelope (a cow).",
+                            "filename": "penelope",
+                            "url": "https://www.openintro.org/data/csv/penelope.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=penelope"
+                        },
+                        {
+                            "name": "Penny Ages",
+                            "description": "Penny Ages data.",
+                            "filename": "penny_ages",
+                            "url": "https://www.openintro.org/data/csv/penny_ages.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=penny_ages"
+                        },
+                        {
+                            "name": "Photo Classify",
+                            "description": "Photo classifications: fashion or not.",
+                            "filename": "photo_classify",
+                            "url": "https://www.openintro.org/data/csv/photo_classify.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=photo_classify"
+                        },
+                        {
+                            "name": "Seattle Pets",
+                            "description": "Names of pets in Seattle.",
+                            "filename": "seattlepets",
+                            "url": "https://www.openintro.org/data/csv/seattlepets.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=seattlepets"
+                        },
+                        {
+                            "name": "Winery Cars",
+                            "description": "Time Between Gondola Cars at Sterling Winery.",
+                            "filename": "winery_cars",
+                            "url": "https://www.openintro.org/data/csv/winery_cars.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=winery_cars"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Statistics & Simulated Data",
+            "subcategories": [
+                {
+                    "name": "Simulated Datasets",
+                    "datasets": [
+                        {
+                            "name": "Association",
+                            "description": "Simulated data for association plots.",
+                            "filename": "association",
+                            "url": "https://www.openintro.org/data/csv/association.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=association"
+                        },
+                        {
+                            "name": "Correlation Match",
+                            "description": "Sample data sets for correlation problems.",
+                            "filename": "corr_match",
+                            "url": "https://www.openintro.org/data/csv/corr_match.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=corr_match"
+                        },
+                        {
+                            "name": "Datasaurus Dozen",
+                            "description": "The Datasaurus Dozen.",
+                            "filename": "datasaurus",
+                            "url": "https://www.openintro.org/data/csv/datasaurus.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=datasaurus"
+                        },
+                        {
+                            "name": "Demo Data",
+                            "description": "Demo data.",
+                            "filename": "demo_data",
+                            "url": "https://www.openintro.org/data/csv/demo_data.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=demo_data"
+                        },
+                        {
+                            "name": "Gear Company",
+                            "description": "Fake data for a gear company example.",
+                            "filename": "gear_company",
+                            "url": "https://www.openintro.org/data/csv/gear_company.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gear_company"
+                        },
+                        {
+                            "name": "Google Search Experiment",
+                            "description": "Simulated Google search experiment.",
+                            "filename": "gsearch",
+                            "url": "https://www.openintro.org/data/csv/gsearch.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=gsearch"
+                        },
+                        {
+                            "name": "Jury",
+                            "description": "Simulated juror data set.",
+                            "filename": "jury",
+                            "url": "https://www.openintro.org/data/csv/jury.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=jury"
+                        },
+                        {
+                            "name": "Outliers",
+                            "description": "Simulated data sets for different types of outliers.",
+                            "filename": "outliers",
+                            "url": "https://www.openintro.org/data/csv/outliers.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=outliers"
+                        },
+                        {
+                            "name": "Residuals Demo 1",
+                            "description": "Simulated data for regression residuals.",
+                            "filename": "res_demo_1",
+                            "url": "https://www.openintro.org/data/csv/res_demo_1.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=res_demo_1"
+                        },
+                        {
+                            "name": "Residuals Demo 2",
+                            "description": "Simulated data for regression residuals.",
+                            "filename": "res_demo_2",
+                            "url": "https://www.openintro.org/data/csv/res_demo_2.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=res_demo_2"
+                        },
+                        {
+                            "name": "Simulated Distributions",
+                            "description": "Simulated data sets, not necessarily drawn from a normal distribution.",
+                            "filename": "simulated_dist",
+                            "url": "https://www.openintro.org/data/csv/simulated_dist.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=simulated_dist"
+                        },
+                        {
+                            "name": "Simulated Normal",
+                            "description": "Simulated data sets, drawn from a normal distribution.",
+                            "filename": "simulated_normal",
+                            "url": "https://www.openintro.org/data/csv/simulated_normal.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=simulated_normal"
+                        },
+                        {
+                            "name": "Simulated Scatter",
+                            "description": "Simulated data for sample scatterplots.",
+                            "filename": "simulated_scatter",
+                            "url": "https://www.openintro.org/data/csv/simulated_scatter.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=simulated_scatter"
+                        },
+                        {
+                            "name": "Toohey",
+                            "description": "Simulated polling data set.",
+                            "filename": "toohey",
+                            "url": "https://www.openintro.org/data/csv/toohey.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=toohey"
+                        },
+                        {
+                            "name": "Toy ANOVA",
+                            "description": "Simulated data set for ANOVA.",
+                            "filename": "toy_anova",
+                            "url": "https://www.openintro.org/data/csv/toy_anova.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=toy_anova"
+                        },
+                        {
+                            "name": "Transplant",
+                            "description": "Transplant consultant success rate (simulated data).",
+                            "filename": "transplant",
+                            "url": "https://www.openintro.org/data/csv/transplant.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=transplant"
+                        }
+                    ]
+                },
+                {
+                    "name": "Reference Tables",
+                    "datasets": [
+                        {
+                            "name": "Cards",
+                            "description": "Deck of cards.",
+                            "filename": "cards",
+                            "url": "https://www.openintro.org/data/csv/cards.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=cards"
+                        },
+                        {
+                            "name": "COL",
+                            "description": "OpenIntro Statistics colors.",
+                            "filename": "COL",
+                            "url": "https://www.openintro.org/data/csv/COL.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=COL"
+                        },
+                        {
+                            "name": "IMSCOL",
+                            "description": "Introduction to Modern Statistics (IMS) Colors.",
+                            "filename": "IMSCOL",
+                            "url": "https://www.openintro.org/data/csv/IMSCOL.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=IMSCOL"
+                        },
+                        {
+                            "name": "Playing Cards",
+                            "description": "Table of Playing Cards in 52-Card Deck.",
+                            "filename": "playing_cards",
+                            "url": "https://www.openintro.org/data/csv/playing_cards.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=playing_cards"
+                        }
+                    ]
+                },
+                {
+                    "name": "Sample Surveys & Datasets",
+                    "datasets": [
+                        {
+                            "name": "Assortative Mating",
+                            "description": "Eye color of couples.",
+                            "filename": "assortative_mating",
+                            "url": "https://www.openintro.org/data/csv/assortative_mating.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=assortative_mating"
+                        },
+                        {
+                            "name": "Assortive Mating",
+                            "description": "Eye color of couples (alternate spelling).",
+                            "filename": "assortive_mating",
+                            "url": "https://www.openintro.org/data/csv/assortive_mating.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=assortive_mating"
+                        },
+                        {
+                            "name": "CDC Sample",
+                            "description": "Sample of 60 individuals from the CDC BRFSS survey.",
+                            "filename": "cdc.samp",
+                            "url": "https://www.openintro.org/data/csv/cdc.samp.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=cdc.samp"
+                        },
+                        {
+                            "name": "Email",
+                            "description": "Data frame representing information about a collection of emails.",
+                            "filename": "email",
+                            "url": "https://www.openintro.org/data/csv/email.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=email"
+                        },
+                        {
+                            "name": "Email 50",
+                            "description": "Sample of 50 emails.",
+                            "filename": "email50",
+                            "url": "https://www.openintro.org/data/csv/email50.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=email50"
+                        },
+                        {
+                            "name": "NHANES Sample",
+                            "description": "A sample of 200 observations from NHANES.",
+                            "filename": "nhanes.samp",
+                            "url": "https://www.openintro.org/data/csv/nhanes.samp.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=nhanes.samp"
+                        },
+                        {
+                            "name": "NHANES Adult Sample",
+                            "description": "A subset of nhanes.samp of individuals 21 years of age and older.",
+                            "filename": "nhanes.samp.adult",
+                            "url": "https://www.openintro.org/data/csv/nhanes.samp.adult.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=nhanes.samp.adult"
+                        },
+                        {
+                            "name": "NHANES Adult 500",
+                            "description": "A sample of 500 adults from NHANES.",
+                            "filename": "nhanes.samp.adult.500",
+                            "url": "https://www.openintro.org/data/csv/nhanes.samp.adult.500.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=nhanes.samp.adult.500"
+                        },
+                        {
+                            "name": "PREVEND",
+                            "description": "PREVEND dataset.",
+                            "filename": "prevend",
+                            "url": "https://www.openintro.org/data/csv/prevend.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=prevend"
+                        },
+                        {
+                            "name": "PREVEND Sample",
+                            "description": "A sample of 500 individuals from PREVEND.",
+                            "filename": "prevend.samp",
+                            "url": "https://www.openintro.org/data/csv/prevend.samp.csv",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://www.openintro.org/data/index.php?data=prevend.samp"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

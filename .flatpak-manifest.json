@@ -2,9 +2,9 @@
     "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "6.10",
+    "runtime-version": "6.11",
     "base": "io.qt.PySide.BaseApp",
-    "base-version": "6.10",
+    "base-version": "6.11",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
     "tags": ["nightly"],
@@ -79,8 +79,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-26.06.0.tar.xz",
-                    "sha256": "4cb4e5a3dc8cb5eec751c8a23c8ba19f61f96dedc0cd07d2aee6b0c8e2cf6ba4"
+                    "url": "https://poppler.freedesktop.org/poppler-26.07.0.tar.xz",
+                    "sha256": "304832f48f8a47fdca90c6b6d1f684e68f37c10c9a0726f345f4ca9df4ca01e2"
                 }
             ],
             "modules": [
@@ -108,8 +108,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/26.04.2/src/analitza-26.04.2.tar.xz",
-			    "sha256": "66e9bcdf400595a03dfadc59b45e380b1a6cbe6fbc3522af0d772edf5c35ed2a"
+			    "url": "https://download.kde.org/stable/release-service/26.04.3/src/analitza-26.04.3.tar.xz",
+			    "sha256": "615b7c244a5baee0be5214c53b8ce37d0a54e69a6fd6b8438c30d7fda45b0746"
 		    }
 	    ]
         },
@@ -119,8 +119,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/26.04.2/src/cantor-26.04.2.tar.xz",
-			    "sha256": "a1224d780ac8657dfac0f53bfc645aad8bee7f0b2beb9e373212c91dd2f4dcf6"
+			    "url": "https://download.kde.org/stable/release-service/26.04.3/src/cantor-26.04.3.tar.xz",
+			    "sha256": "f0e9734410070b6ecb54dfe042862405b4ef01d65533c0be0386d13b9fdf7250"
 		    }
 	    ]
         },
@@ -160,8 +160,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.10.0.tar.gz",
-                    "sha256": "ce160f9c1483b32d1ba8b7633d7984510259e4e439c48a218b95a023dc02fd4c"
+                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.10.1.tar.gz",
+                    "sha256": "33c27231c478c3b35da7c7758fbdd02da1fe407abcb16ddfe195f69d164f930d"
                 }
             ]
         },
@@ -182,8 +182,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v3.3/libcerf-v3.3.tar.gz",
-                    "sha256": "ea2910085448e269b5f0f0fabe51ffd846ac68881904be99669d94dc0cc09765"
+                    "url": "https://jugit.fz-juelich.de/mlz/lib/cerf/-/archive/v3.3/libcerf-v3.3.tar.gz",
+                    "sha256": "7cbece26ad94bd375eb81fee2b540d0ef68bbeb0994358e57bd588173f96b8ec"
                 }
             ]
         },

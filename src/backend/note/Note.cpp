@@ -44,6 +44,7 @@ public:
 	QColor textColor;
 	QFont textFont;
 	QString text;
+	Note::Mode mode{Note::Mode::PlainText};
 	Note* const q{nullptr};
 };
 
@@ -129,6 +130,7 @@ BASIC_SHARED_D_READER_IMPL(Note, QString, text, text)
 BASIC_SHARED_D_READER_IMPL(Note, QColor, backgroundColor, backgroundColor)
 BASIC_SHARED_D_READER_IMPL(Note, QColor, textColor, textColor)
 BASIC_SHARED_D_READER_IMPL(Note, QFont, textFont, textFont)
+BASIC_SHARED_D_READER_IMPL(Note, Note::Mode, mode, mode)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_S(Note, SetText, QString, text)
@@ -157,6 +159,13 @@ void Note::setTextFont(const QFont& font) {
 	Q_D(Note);
 	if (font != d->textFont)
 		exec(new NoteSetTextFontCmd(d, font, ki18n("%1: set text font")));
+}
+
+STD_SETTER_CMD_IMPL_S(Note, SetMode, Note::Mode, mode)
+void Note::setMode(const Note::Mode& mode) {
+	Q_D(Note);
+	if (mode != d->mode)
+		exec(new NoteSetModeCmd(d, mode, ki18n("%1: set mode")));
 }
 
 QWidget* Note::view() const {
@@ -189,6 +198,7 @@ void Note::save(QXmlStreamWriter* writer) const {
 	WRITE_QCOLOR(d->textColor);
 	WRITE_QFONT(d->textFont);
 	writer->writeAttribute(QStringLiteral("text"), d->text);
+	writer->writeAttribute(QStringLiteral("mode"), QString::number(static_cast<int>(d->mode)));
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "note" section
@@ -227,6 +237,10 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 			READ_QCOLOR(d->textColor);
 			READ_QFONT(d->textFont);
 			d->text = attribs.value(QStringLiteral("text")).toString();
+
+			str = attribs.value(QStringLiteral("mode")).toString();
+			if (!str.isEmpty())
+				d->mode = static_cast<Note::Mode>(str.toInt());
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())

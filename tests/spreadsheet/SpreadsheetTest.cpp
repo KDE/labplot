@@ -1327,10 +1327,14 @@ void SpreadsheetTest::testMaskingRowRemovalUndoRedo() {
 	}
 
 	// set masking intervals on both columns: [2,4] and [7,8]
-	col0->setMasked(Interval<int>(2, 4), true);
-	col0->setMasked(Interval<int>(7, 8), true);
-	col1->setMasked(Interval<int>(2, 4), true);
-	col1->setMasked(Interval<int>(7, 8), true);
+	for (int row = 2; row <= 4; ++row) {
+		col0->setMasked(row, true);
+		col1->setMasked(row, true);
+	}
+	for (int row = 7; row <= 8; ++row) {
+		col0->setMasked(row, true);
+		col1->setMasked(row, true);
+	}
 
 	// pre-check masks and values
 	QCOMPARE(sheet->rowCount(), 10);

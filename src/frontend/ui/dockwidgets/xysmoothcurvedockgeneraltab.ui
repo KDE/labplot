@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>454</width>
-    <height>1220</height>
+    <height>1232</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -567,19 +567,19 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
-       <number>0</number>
+       <number>6</number>
       </property>
       <property name="leftMargin">
-       <number>0</number>
+       <number>6</number>
       </property>
       <property name="topMargin">
-       <number>0</number>
+       <number>6</number>
       </property>
       <property name="rightMargin">
-       <number>0</number>
+       <number>6</number>
       </property>
       <property name="bottomMargin">
-       <number>0</number>
+       <number>6</number>
       </property>
       <item>
        <spacer name="horizontalSpacer_2">
@@ -598,6 +598,13 @@
        <widget class="QPushButton" name="pbRecalculate">
         <property name="text">
          <string>Recalculate</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbAutoRecalculate">
+        <property name="text">
+         <string>Auto</string>
         </property>
        </widget>
       </item>

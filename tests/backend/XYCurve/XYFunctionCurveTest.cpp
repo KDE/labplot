@@ -41,6 +41,7 @@ void XYFunctionCurveTest::setCurves() {
 	auto* equationCurve = static_cast<XYEquationCurve*>(equationCurves.at(0));
 	XYEquationCurve::EquationData data;
 	data.count = 100;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x");
 	data.expression2 = QString();
 	data.min = QStringLiteral("1");
@@ -231,6 +232,7 @@ void XYFunctionCurveTest::removeCurveRenameAutomaticAdd() {
 	auto* equationCurve = static_cast<XYEquationCurve*>(equationCurves.at(0));
 	XYEquationCurve::EquationData data;
 	data.count = 100;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x");
 	data.expression2 = QString();
 	data.min = QStringLiteral("1");
@@ -314,6 +316,7 @@ void XYFunctionCurveTest::saveLoad() {
 		auto* equationCurve = static_cast<XYEquationCurve*>(equationCurves.at(0));
 		XYEquationCurve::EquationData data;
 		data.count = 100;
+		data.autoPointsCount = false;
 		data.expression1 = QStringLiteral("x");
 		data.expression2 = QString();
 		data.min = QStringLiteral("1");

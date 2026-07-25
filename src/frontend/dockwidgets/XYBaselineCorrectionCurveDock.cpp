@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for editing properties of baseline correction curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -31,7 +31,7 @@ void XYBaselineCorrectionCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate, uiGeneralTab.cbDataSourceType);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -165,6 +165,8 @@ void XYBaselineCorrectionCurveDock::updateLocale() {
 }
 
 void XYBaselineCorrectionCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
 	uiGeneralTab.cbMethod->clear();
 	// TODO:
 	// for (int i = 0; i < NSL_BASELINE_SUBTRACTION_METHOD_COUNT; ++i)
@@ -292,6 +294,7 @@ void XYBaselineCorrectionCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 }
 
 void XYBaselineCorrectionCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYBaselineCorrectionCurve*>(curve)->setBaselineData(m_data);
 

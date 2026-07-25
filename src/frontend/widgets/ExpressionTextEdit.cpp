@@ -129,7 +129,9 @@ void ExpressionTextEdit::validateExpression(bool force) {
 	if (textChanged || force) {
 		auto parser = ExpressionParser::getInstance();
 		m_isValid = parser->isValid(text, m_variables);
-		if (!m_isValid) {
+		// only show warning style for non-empty invalid expressions
+		// empty expressions are valid but shouldn't show the warning color
+		if (!m_isValid && !text.isEmpty()) {
 			setToolTip(parser->errorMessage());
 			SET_WARNING_STYLE(this)
 		} else {
