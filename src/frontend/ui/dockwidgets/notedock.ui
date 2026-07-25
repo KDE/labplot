@@ -11,12 +11,47 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="lName">
+   <item row="4" column="3">
+    <widget class="KColorButton" name="kcbBgColor"/>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="lComment">
      <property name="text">
-      <string>Name:</string>
+      <string>Comment:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
+   </item>
+   <item row="8" column="0">
+    <spacer name="verticalSpacerGeneral">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::MinimumExpanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>24</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="3">
+    <widget class="ResizableTextEdit" name="teComment">
+     <property name="tabChangesFocus">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="3">
+    <widget class="KFontRequester" name="kfrTextFont"/>
+   </item>
+   <item row="0" column="3">
+    <widget class="TimedLineEdit" name="leName"/>
    </item>
    <item row="0" column="2">
     <spacer name="horizontalSpacer_5">
@@ -34,25 +69,22 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="3">
-    <widget class="TimedLineEdit" name="leName"/>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QLabel" name="lComment">
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="lTextFont">
      <property name="text">
-      <string>Comment:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+      <string>Font:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="3">
-    <widget class="ResizableTextEdit" name="teComment">
-     <property name="tabChangesFocus">
-      <bool>true</bool>
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="lBgColor">
+     <property name="text">
+      <string>Background color:</string>
      </property>
     </widget>
+   </item>
+   <item row="5" column="3">
+    <widget class="KColorButton" name="kcbTextColor"/>
    </item>
    <item row="2" column="1">
     <spacer name="verticalSpacer_8">
@@ -70,51 +102,36 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QLabel" name="bgcolor">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="lName">
      <property name="text">
-      <string>Background color:</string>
+      <string>Name:</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="3">
-    <widget class="KColorButton" name="kcbBgColor"/>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QLabel" name="textcolor">
+   <item row="5" column="0" colspan="2">
+    <widget class="QLabel" name="lTextColor">
      <property name="text">
       <string>Text color:</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="3">
-    <widget class="KColorButton" name="kcbTextColor"/>
-   </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QLabel" name="lLabelsFont">
+   <item row="3" column="0">
+    <widget class="QLabel" name="lMode">
      <property name="text">
-      <string>Font:</string>
+      <string>Mode:</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="3">
-    <widget class="KFontRequester" name="kfrTextFont"/>
-   </item>
-   <item row="6" column="0">
-    <spacer name="verticalSpacerGeneral">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
+   <item row="3" column="3">
+    <widget class="QComboBox" name="cbMode">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Policy::MinimumExpanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>24</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
   </layout>
  </widget>

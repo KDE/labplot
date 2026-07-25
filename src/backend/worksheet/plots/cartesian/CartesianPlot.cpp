@@ -47,6 +47,7 @@
 #include <QKeyEvent>
 #include <QMenu>
 #include <QPainter>
+#include <QTimer>
 #include <QWidgetAction>
 
 namespace {
@@ -958,6 +959,21 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	}
 
 	if (op == NavigationOperation::ScaleAuto) {
+		bool createsUndoCommand = false;
+		if (!ics) { // all csystems
+			for (int i = 0; i < coordinateSystemCount(); i++) {
+				const auto* cs = coordinateSystem(i);
+				if (!autoScale(Dimension::X, cs->index(Dimension::X)) || !autoScale(Dimension::Y, cs->index(Dimension::Y))) {
+					createsUndoCommand = true;
+					break;
+				}
+			}
+		} else
+			createsUndoCommand = !autoScale(Dimension::X, xIndex) || !autoScale(Dimension::Y, yIndex);
+
+		if (createsUndoCommand)
+			beginMacro(i18n("%1: auto scale", name()));
+
 		if (!ics) { // all csystems
 			for (int i = 0; i < coordinateSystemCount(); i++) {
 				const auto* cs = coordinateSystem(i);
@@ -998,6 +1014,9 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				scaleAuto(Dimension::Y, ics->index(Dimension::Y), true);
 			WorksheetElementContainer::retransform();
 		}
+
+		if (createsUndoCommand)
+			endMacro();
 	} else if (op == NavigationOperation::ScaleAutoX) {
 		bool update = rangeDirty(Dimension::X, xIndex);
 		if (!autoScale(Dimension::X, xIndex)) {
@@ -1469,10 +1488,11 @@ public:
 		, m_index(index)
 		, m_dimension(dim)
 		, m_otherValue(newValue) {
+		setText(i18n("%1: change %2-range %3", m_target->name(), CartesianCoordinateSystem::dimensionToString(dim), m_index + 1));
 	}
 	void redo() override {
 		m_target->setRangeDirty(m_dimension, m_index, true);
-		const auto& tmp = m_target->rangeConst(m_dimension, m_index);
+		const auto tmp = m_target->rangeConst(m_dimension, m_index); // Copy, not reference!
 		m_target->setRange(m_dimension, m_index, m_otherValue);
 		m_otherValue = tmp;
 		finalize();
@@ -1481,22 +1501,27 @@ public:
 		redo();
 	}
 	virtual void finalize() {
-		m_target->retransformScale(m_dimension, m_index, true);
-		Dimension dim_other = Dimension::Y;
-		if (m_dimension == Dimension::Y)
-			dim_other = Dimension::X;
+		if (!m_target->suppressRetransform) {
+			m_target->retransformScale(m_dimension, m_index, true);
+			Dimension dim_other = Dimension::Y;
+			if (m_dimension == Dimension::Y)
+				dim_other = Dimension::X;
 
-		QVector<int> scaledIndices;
-		for (int i = 0; i < m_target->q->coordinateSystemCount(); i++) {
-			auto cs = m_target->q->coordinateSystem(i);
-			auto index_other = cs->index(dim_other);
-			if (cs->index(m_dimension) == m_index && scaledIndices.indexOf(index_other) == -1) {
-				scaledIndices << index_other;
-				if (m_target->q->autoScale(dim_other, index_other) && m_target->q->scaleAuto(dim_other, index_other, false))
-					m_target->retransformScale(dim_other, index_other);
+			QVector<int> scaledIndices;
+			for (int i = 0; i < m_target->q->coordinateSystemCount(); i++) {
+				auto cs = m_target->q->coordinateSystem(i);
+				auto index_other = cs->index(dim_other);
+				if (cs->index(m_dimension) == m_index && scaledIndices.indexOf(index_other) == -1) {
+					scaledIndices << index_other;
+					if (m_target->q->autoScale(dim_other, index_other)) {
+						m_target->setRangeDirty(dim_other, index_other, true);
+						if (m_target->q->scaleAuto(dim_other, index_other, false))
+							m_target->retransformScale(dim_other, index_other);
+					}
+				}
 			}
+			m_target->q->WorksheetElementContainer::retransform();
 		}
-		m_target->q->WorksheetElementContainer::retransform();
 		Q_EMIT m_target->q->rangeChanged(m_dimension, m_index, m_target->rangeConst(m_dimension, m_index));
 	}
 
@@ -3425,31 +3450,31 @@ void CartesianPlot::retransformScale(Dimension dim, int index) {
 // zoom
 
 void CartesianPlot::zoomIn(int xIndex, int yIndex, const QPointF& sceneRelPos) {
-	setUndoAware(false);
+	Q_D(CartesianPlot);
+	beginMacro(i18n("%1: zoom in", name()));
 	enableAutoScale(Dimension::X, xIndex, false);
 	enableAutoScale(Dimension::Y, yIndex, false);
-	setUndoAware(true);
-	setRangeDirty(Dimension::X, xIndex, true);
-	setRangeDirty(Dimension::Y, yIndex, true);
+	d->suppressRetransform = true;
 	zoom(xIndex, Dimension::X, true, sceneRelPos.x()); // zoom in x
 	zoom(yIndex, Dimension::Y, true, sceneRelPos.y()); // zoom in y
-
-	Q_D(CartesianPlot);
+	d->suppressRetransform = false;
+	endMacro();
+	// Manually retransform once at the end
 	d->retransformScales(xIndex, yIndex);
 	WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::zoomOut(int xIndex, int yIndex, const QPointF& sceneRelPos) {
-	setUndoAware(false);
+	Q_D(CartesianPlot);
+	beginMacro(i18n("%1: zoom out", name()));
 	enableAutoScale(Dimension::X, xIndex, false);
 	enableAutoScale(Dimension::Y, yIndex, false);
-	setUndoAware(true);
-	setRangeDirty(Dimension::X, xIndex, true);
-	setRangeDirty(Dimension::Y, yIndex, true);
+	d->suppressRetransform = true;
 	zoom(xIndex, Dimension::X, false, sceneRelPos.x()); // zoom out x
 	zoom(yIndex, Dimension::Y, false, sceneRelPos.y()); // zoom out y
-
-	Q_D(CartesianPlot);
+	d->suppressRetransform = false;
+	endMacro();
+	// Manually retransform once at the end
 	d->retransformScales(xIndex, yIndex);
 	WorksheetElementContainer::retransform();
 }
@@ -3471,15 +3496,20 @@ void CartesianPlot::zoomOutY(int index) {
 }
 
 void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool zoomIn, const double relScenePosRange) {
+	const QString dimStr = CartesianCoordinateSystem::dimensionToString(dim);
+	beginMacro(i18n("%1: zoom %2 %3", name(), zoomIn ? i18n("in") : i18n("out"), dimStr));
+
 	Dimension dim_other = Dimension::Y;
 	if (dim == Dimension::Y)
 		dim_other = Dimension::X;
 
-	setUndoAware(false);
+	Q_D(CartesianPlot);
 	enableAutoScale(dim, index, false);
-	setUndoAware(true);
 	setRangeDirty(dim_other, index, true);
+	d->suppressRetransform = true;
 	zoom(index, dim, zoomIn, relScenePosRange);
+	d->suppressRetransform = false;
+	endMacro();
 
 	bool retrans = false;
 	for (int i = 0; i < m_coordinateSystems.count(); i++) {
@@ -3491,7 +3521,6 @@ void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool z
 		}
 	}
 
-	Q_D(CartesianPlot);
 	if (retrans) {
 		// If the other dimension is autoScale it will be scaled and then
 		// retransformScale() will be called. So here we just have to do
@@ -3534,7 +3563,7 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in, const dou
 	range.zoom(factor, d->niceExtend, relPosSceneRange);
 
 	if (range.finite())
-		d->setRange(dim, index, range);
+		setRange(dim, index, range);
 }
 
 /*!
@@ -3614,7 +3643,7 @@ void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
 	}
 
 	if (range.finite())
-		d->setRange(dim, index, range);
+		setRange(dim, index, range);
 
 	d->retransformScale(dim, index);
 
@@ -3726,9 +3755,21 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot)
 
 	m_cursor0Text.prepare();
 	m_cursor1Text.prepare();
+
+	// Initialize wheel zoom timer (no parent, will be deleted in destructor)
+	m_wheelZoomTimer = new QTimer();
+	m_wheelZoomTimer->setSingleShot(true);
+	m_wheelZoomTimer->setInterval(1000); // 1000ms delay after last wheel event
+	QObject::connect(m_wheelZoomTimer, &QTimer::timeout, [this]() {
+		if (m_wheelZoomMacroActive) {
+			q->endMacro();
+			m_wheelZoomMacroActive = false;
+		}
+	});
 }
 
 CartesianPlotPrivate::~CartesianPlotPrivate() {
+	delete m_wheelZoomTimer;
 	delete plotAreaBackgroundItem;
 }
 
@@ -4166,6 +4207,15 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 			panningStarted = true;
 			m_panningStart = event->pos();
 			setCursor(Qt::ClosedHandCursor);
+			// Store initial ranges for undo
+			m_panningInitialRanges.clear();
+			for (int i = 0; i < q->m_coordinateSystems.count(); i++) {
+				auto cs = q->coordinateSystem(i);
+				int xIndex = cs->index(Dimension::X);
+				int yIndex = cs->index(Dimension::Y);
+				m_panningInitialRanges.insert(qMakePair(Dimension::X, xIndex), range(Dimension::X, xIndex));
+				m_panningInitialRanges.insert(qMakePair(Dimension::Y, yIndex), range(Dimension::Y, yIndex));
+			}
 		}
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomXSelection
 			   || mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
@@ -4322,7 +4372,6 @@ bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF&
 
 	if (translateY && logicalStart.y() - logicalEnd.y() != 0) {
 		translatedY = true;
-		// handle the change in y
 		range(Dimension::Y, yIndex).translate(logicalStart.y(), logicalEnd.y());
 	}
 
@@ -4484,6 +4533,35 @@ void CartesianPlotPrivate::mouseMoveCursorMode(int cursorNumber, QPointF logical
 void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
 		setCursor(Qt::ArrowCursor);
+
+		// create undo commands for panning if ranges changed
+		if (panningStarted && !m_panningInitialRanges.isEmpty()) {
+			// capture the final (panned) ranges first
+			QMap<QPair<Dimension, int>, Range<double>> finalRanges;
+			for (auto it = m_panningInitialRanges.constBegin(); it != m_panningInitialRanges.constEnd(); ++it) {
+				const auto key = it.key();
+				finalRanges.insert(key, range(key.first, key.second));
+			}
+
+			q->beginMacro(i18n("%1: pan", q->name()));
+			// restore to initial ranges without undo, then create commands to go to final ranges
+			q->setUndoAware(false);
+			for (auto it = m_panningInitialRanges.constBegin(); it != m_panningInitialRanges.constEnd(); ++it)
+				setRange(it.key().first, it.key().second, it.value());
+
+			// create undo-aware commands to set to final ranges
+			q->setUndoAware(true);
+			for (auto it = finalRanges.constBegin(); it != finalRanges.constEnd(); ++it) {
+				const auto key = it.key();
+				const auto& initialRange = m_panningInitialRanges.value(key);
+				const auto& finalRange = it.value();
+				if (initialRange != finalRange)
+					q->setRange(key.first, key.second, finalRange);
+			}
+			q->endMacro();
+			m_panningInitialRanges.clear();
+		}
+
 		panningStarted = false;
 
 		// TODO: why do we do this all the time?!?!
@@ -4522,10 +4600,48 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 
 	int xIndex = -1, yIndex = -1;
 	if (cSystemIndex == -1 || cSystemIndex >= q->m_coordinateSystems.count()) {
+		// Store initial ranges before zoom
+		m_zoomSelectionInitialRanges.clear();
+		for (int i = 0; i < q->m_coordinateSystems.count(); i++) {
+			auto cs = q->coordinateSystem(i);
+			int xIdx = cs->index(Dimension::X);
+			int yIdx = cs->index(Dimension::Y);
+			m_zoomSelectionInitialRanges.insert(qMakePair(Dimension::X, xIdx), range(Dimension::X, xIdx));
+			m_zoomSelectionInitialRanges.insert(qMakePair(Dimension::Y, yIdx), range(Dimension::Y, yIdx));
+		}
+
+		// Do the zoom (modifies ranges directly)
 		for (int i = 0; i < q->m_coordinateSystems.count(); i++)
 			mouseReleaseZoomSelectionMode(i, true);
+
+		// Create undo commands for changed ranges
+		if (!m_zoomSelectionInitialRanges.isEmpty()) {
+			// Capture final ranges
+			QMap<QPair<Dimension, int>, Range<double>> finalRanges;
+			for (auto it = m_zoomSelectionInitialRanges.constBegin(); it != m_zoomSelectionInitialRanges.constEnd(); ++it)
+				finalRanges.insert(it.key(), range(it.key().first, it.key().second));
+
+			q->beginMacro(i18n("%1: zoom selection", q->name()));
+			// Restore to initial ranges without undo
+			q->setUndoAware(false);
+			for (auto it = m_zoomSelectionInitialRanges.constBegin(); it != m_zoomSelectionInitialRanges.constEnd(); ++it)
+				setRange(it.key().first, it.key().second, it.value());
+			q->setUndoAware(true);
+			// Create undo-aware commands to set to final ranges (suppress retransform since we already did it)
+			suppressRetransform = true;
+			for (auto it = finalRanges.constBegin(); it != finalRanges.constEnd(); ++it) {
+				const auto key = it.key();
+				const Range<double>& initialRange = m_zoomSelectionInitialRanges.value(key);
+				const Range<double>& finalRange = it.value();
+				if (initialRange != finalRange)
+					q->setRange(key.first, key.second, finalRange);
+			}
+			suppressRetransform = false;
+			q->endMacro();
+			m_zoomSelectionInitialRanges.clear();
+		}
 	} else {
-		auto cSystem = coordinateSystem(cSystemIndex);
+		const auto cSystem = coordinateSystem(cSystemIndex);
 		xIndex = cSystem->index(Dimension::X);
 		yIndex = cSystem->index(Dimension::Y);
 
@@ -4558,18 +4674,24 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 			q->setRangeDirty(Dimension::X, xIndex, true);
 			q->setRangeDirty(Dimension::Y, yIndex, true);
+			q->setUndoAware(false);
 			q->enableAutoScale(Dimension::X, xIndex, false);
 			q->enableAutoScale(Dimension::Y, yIndex, false);
+			q->setUndoAware(true);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
 			q->setRangeDirty(Dimension::X, xIndex, true);
 			q->setRangeDirty(Dimension::Y, yIndex, true);
+			q->setUndoAware(false);
 			q->enableAutoScale(Dimension::X, xIndex, false);
+			q->setUndoAware(true);
 			if (q->autoScale(Dimension::Y, yIndex))
 				q->scaleAuto(Dimension::Y, yIndex, false, true);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 			q->setRangeDirty(Dimension::X, xIndex, true);
 			q->setRangeDirty(Dimension::Y, yIndex, true);
+			q->setUndoAware(false);
 			q->enableAutoScale(Dimension::Y, yIndex, false);
+			q->setUndoAware(true);
 			if (q->autoScale(Dimension::X, xIndex))
 				q->scaleAuto(Dimension::X, xIndex, false, true);
 		}
@@ -4620,6 +4742,13 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 }
 
 void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+	// Start or extend wheel zoom macro
+	if (!m_wheelZoomMacroActive) {
+		q->beginMacro(i18n("%1: wheel zoom", q->name()));
+		m_wheelZoomMacroActive = true;
+	}
+	m_wheelZoomTimer->start(); // Restart timer on each wheel event
+
 	if (considerDimension) {
 		// Only one dimension
 		switch (dim) {
@@ -4630,13 +4759,12 @@ void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int
 			q->zoomInOut(yIndex, dim, delta > 0, sceneRelPos.y());
 			break;
 		}
-		return;
+	} else {
+		if (delta > 0)
+			q->zoomIn(xIndex, yIndex, sceneRelPos);
+		else
+			q->zoomOut(xIndex, yIndex, sceneRelPos);
 	}
-
-	if (delta > 0)
-		q->zoomIn(xIndex, yIndex, sceneRelPos);
-	else
-		q->zoomOut(xIndex, yIndex, sceneRelPos);
 }
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {

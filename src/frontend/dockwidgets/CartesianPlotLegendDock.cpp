@@ -186,7 +186,9 @@ void CartesianPlotLegendDock::updateLocale() {
 	ui.sbLayoutBottomMargin->setLocale(numberLocale);
 	ui.sbLayoutLeftMargin->setLocale(numberLocale);
 	ui.sbLayoutRightMargin->setLocale(numberLocale);
+
 	borderLineWidget->updateLocale();
+	labelWidget->updateLocale();
 }
 
 void CartesianPlotLegendDock::updateUnits() {
@@ -282,6 +284,10 @@ void CartesianPlotLegendDock::retranslateUi() {
 	ui.cbVerticalAlignment->addItem(i18n("Top"));
 	ui.cbVerticalAlignment->addItem(i18n("Center"));
 	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
+
+	backgroundWidget->retranslateUi();
+	borderLineWidget->retranslateUi();
+	labelWidget->retranslateUi();
 
 	// tooltip texts
 	QString info = i18n("Use the main color of the plot (line, symbol, etc.) for the color of the name in the legend.");

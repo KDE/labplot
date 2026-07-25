@@ -323,6 +323,13 @@ void AxisDock::retranslateUi() {
 	ui.cbLabelsBackgroundType->addItem(i18n("Transparent"));
 	ui.cbLabelsBackgroundType->addItem(i18n("Color"));
 
+	labelWidget->retranslateUi();
+	lineWidget->retranslateUi();
+	majorTicksLineWidget->retranslateUi();
+	minorTicksLineWidget->retranslateUi();
+	majorGridLineWidget->retranslateUi();
+	minorGridLineWidget->retranslateUi();
+
 	// tooltip texts
 	QString info = i18n(
 		"Defines how and where to position the major ticks on the axis:"
@@ -377,9 +384,6 @@ void AxisDock::retranslateUi() {
 
 	info = i18n("Column with the values that should be used as the positions of the minor ticks.");
 	ui.lMinorTicksColumn->setToolTip(info);
-
-	labelWidget->retranslateUi();
-	// TODO: lineWidget->retranslateUi();
 }
 
 void AxisDock::setModel() {

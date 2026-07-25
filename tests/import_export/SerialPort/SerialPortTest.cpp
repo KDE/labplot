@@ -4,6 +4,7 @@
 	Description          : Tests for Serial Port related features
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
  SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -38,24 +39,39 @@ void SerialPortTest::initTestCase() {
 	m_process_socat.start();
 	QVERIFY(m_process_socat.waitForStarted()); //, STDSTRING(m_process_socat.errorString()).data());
 
-	QVERIFY(waitForSignal(&m_process_socat, &QProcess::readyReadStandardError, 5000));
-
 	enableInfoTrace(true);
-	const auto se = UTF8_QSTRING(m_process_socat.readAllStandardError()); // Socat uses stderr for output by default
-	DEBUG(Q_FUNC_INFO << ", Output:" << std::endl << "\"" << STDSTRING(se) << "\"");
 
-	QRegularExpression re(QStringLiteral(".*(?<device>/dev/[a-zA-z0-9]*/[0-9]*)$"));
+	// Match any /dev path with alphanumeric/special characters (e.g., /dev/pts/0, /dev/ttyp0, /dev/ptyXX)
+	QRegularExpression re(QStringLiteral(".*(?<device>/dev/[a-zA-Z0-9/_-]+)$"));
 
-	const auto f = se.split(QStringLiteral("\n"));
-	QVERIFY(f.size() >= 2);
-	auto m = re.match(f.at(0));
-	QVERIFY(m.hasMatch());
-	m_senderDevice = m.captured(QStringLiteral("device"));
+	// Collect all "PTY is" lines from socat output
+	QStringList matchedDevices;
+	int attempts = 0;
+	while (matchedDevices.size() < 2 && attempts < 10) {
+		if (!waitForSignal(&m_process_socat, &QProcess::readyReadStandardError, 1000))
+			break;
+
+		const auto se = UTF8_QSTRING(m_process_socat.readAllStandardError());
+		if (!se.isEmpty()) {
+			DEBUG(Q_FUNC_INFO << ", Output chunk " << attempts << ":" << std::endl << "\"" << STDSTRING(se) << "\"");
+			const auto lines = se.split(QStringLiteral("\n"));
+			for (const auto& line : lines) {
+				auto m = re.match(line);
+				if (m.hasMatch()) {
+					const auto device = m.captured(QStringLiteral("device"));
+					matchedDevices.append(device);
+					DEBUG(Q_FUNC_INFO << ", found device: " << device.toStdString());
+				}
+			}
+		}
+		++attempts;
+	}
+
+	QVERIFY2(matchedDevices.size() >= 2, "Failed to extract both PTY devices from socat output");
+	m_senderDevice = matchedDevices.at(0);
 	DEBUG(Q_FUNC_INFO << ", sender device: " << m_senderDevice.toStdString())
 
-	m = re.match(f.at(1));
-	QVERIFY(m.hasMatch());
-	m_receiverDevice = m.captured(QStringLiteral("device"));
+	m_receiverDevice = matchedDevices.at(1);
 	DEBUG(Q_FUNC_INFO << ", receiver device: " << m_receiverDevice.toStdString())
 
 	// brackets are required around the command!

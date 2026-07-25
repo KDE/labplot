@@ -1863,23 +1863,36 @@ void AxisPrivate::retransformTicks() {
 
 		int columnIndex = iMajor; // iMajor used if for the labels a custom column is used.
 		if (majorTicksType == Axis::TicksType::CustomColumn) {
+			const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 			if (tmpMajorTicksNumberLimited) {
 				// Do not use all values of the column, but just a portion of it
 				columnIndex = majorTicksColumn->indexForValue(majorTickPos, true);
 				Q_ASSERT(columnIndex >= 0);
-				majorTickPos = majorTicksColumn->valueAt(columnIndex);
+				if (c && c->columnMode() == AbstractColumn::ColumnMode::DateTime)
+					majorTickPos = c->dateTimeAt(columnIndex).toMSecsSinceEpoch();
+				else
+					majorTickPos = majorTicksColumn->valueAt(columnIndex);
 
 				const auto columnIndexNextMajor = majorTicksColumn->indexForValue(nextMajorTickPos, true);
 				Q_ASSERT(columnIndexNextMajor >= 0);
-				nextMajorTickPos = majorTicksColumn->valueAt(columnIndexNextMajor);
+				if (c && c->columnMode() == AbstractColumn::ColumnMode::DateTime)
+					nextMajorTickPos = c->dateTimeAt(columnIndexNextMajor).toMSecsSinceEpoch();
+				else
+					nextMajorTickPos = majorTicksColumn->valueAt(columnIndexNextMajor);
 				if (majorTickPos == nextMajorTickPos && iMajor + 1 < tmpMajorTicksNumber)
 					continue; // No need to draw majorTicksPos, because NextMajorTicksPos will completely overlap. Only for the last one
 			} else {
 				columnIndex = firstIndexCustomColumn + columnIndex;
-				majorTickPos = majorTicksColumn->valueAt(columnIndex);
-				if (majorTicksColumn->rowCount() > columnIndex + 1)
-					nextMajorTickPos = majorTicksColumn->valueAt(columnIndex + 1);
+				if (c && c->columnMode() == AbstractColumn::ColumnMode::DateTime)
+					majorTickPos = c->dateTimeAt(columnIndex).toMSecsSinceEpoch();
 				else
+					majorTickPos = majorTicksColumn->valueAt(columnIndex);
+				if (majorTicksColumn->rowCount() > columnIndex + 1) {
+					if (c && c->columnMode() == AbstractColumn::ColumnMode::DateTime)
+						nextMajorTickPos = c->dateTimeAt(columnIndex + 1).toMSecsSinceEpoch();
+					else
+						nextMajorTickPos = majorTicksColumn->valueAt(columnIndex + 1);
+				} else
 					nextMajorTickPos = majorTickPos;
 			}
 		} else if (majorTicksType == Axis::TicksType::CustomColumnLabels) {
@@ -1975,9 +1988,20 @@ void AxisPrivate::retransformTicks() {
 					}
 				} else {
 					switch (labelsTextType) {
-					case Axis::LabelsTextType::PositionValues:
-						tickLabelValues << value;
+					case Axis::LabelsTextType::PositionValues: {
+						// If the major ticks are taken from a DateTime column,
+						// use the actual QDateTime ms value for label generation
+						// (tickLabelStrings expects msecs since epoch for datetime).
+						const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
+						if (c && c->columnMode() == AbstractColumn::ColumnMode::DateTime) {
+							if (columnIndex >= 0 && columnIndex < c->rowCount())
+								tickLabelValues << c->dateTimeAt(columnIndex).toMSecsSinceEpoch();
+							else
+								tickLabelValues << value;
+						} else
+							tickLabelValues << value;
 						break;
+					}
 					case Axis::LabelsTextType::CustomValues: {
 						if (labelsTextColumn && columnIndex < labelsTextColumn->rowCount()) {
 							switch (labelsTextColumn->columnMode()) {

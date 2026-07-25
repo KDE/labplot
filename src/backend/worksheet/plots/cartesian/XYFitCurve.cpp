@@ -2824,7 +2824,18 @@ bool XYFitCurvePrivate::evaluate(bool preview) {
 	if (preview) // results not available yet
 		paramValues = fitData.paramStartValues;
 
-	bool valid = parser->tryEvaluateCartesian(fitData.model, xRange, nrPoints, xVector, yVector, fitData.paramNames, paramValues);
+	// check the axis scale from the parent plot to enable logarithmic spacing, if needed
+	RangeT::Scale xScale = RangeT::Scale::Linear; // default to linear
+	auto* parentPlot = q->plot();
+	if (parentPlot) {
+		auto cs = parentPlot->coordinateSystem(q->coordinateSystemIndex());
+		if (cs) {
+			xScale = parentPlot->xRangeScale(cs->index(Dimension::X));
+			DEBUG(Q_FUNC_INFO << ", use x-axis scale = " << (int)xScale);
+		}
+	}
+
+	bool valid = parser->tryEvaluateCartesian(fitData.model, xRange, nrPoints, xVector, yVector, fitData.paramNames, paramValues, xScale);
 
 	if (!valid) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Parsing fit function failed")

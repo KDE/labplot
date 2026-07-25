@@ -420,12 +420,12 @@ void NSLSmoothTest::testPerformance_periodic() {
 
 void NSLSmoothTest::testLOWESS_basic() {
 	// Test data: noisy parabola y = x^2 with some noise
-	const int n = 20;
-	double xdata[n];
-	double ydata[n];
+	const int l = 20;
+	double xdata[l];
+	double ydata[l];
 
 	// Generate test data
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < l; i++) {
 		xdata[i] = (double)i / 10.0; // 0.0, 0.1, 0.2, ..., 1.9
 		ydata[i] = xdata[i] * xdata[i]; // parabola
 	}
@@ -439,12 +439,12 @@ void NSLSmoothTest::testLOWESS_basic() {
 	const double delta = 0.0; // No optimization
 	const int iterations = 2; // Two robustifying iterations
 
-	int status = nsl_smooth_lowess(xdata, ydata, n, span, delta, iterations);
+	int status = nsl_smooth_lowess(xdata, ydata, l, span, delta, iterations);
 	QCOMPARE(status, 0);
 
 	// Verify that smoothed values are close to the original parabola
 	// (allowing some tolerance for the smoothing effect)
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < l; i++) {
 		double expected = xdata[i] * xdata[i];
 		double diff = fabs(ydata[i] - expected);
 		QVERIFY(diff < 0.15); // Smoothed value should be reasonably close

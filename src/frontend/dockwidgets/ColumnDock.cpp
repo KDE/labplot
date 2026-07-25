@@ -181,10 +181,8 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	// show value labels of the first column if all selected columns have the same mode
 	if (sameMode)
 		showValueLabels();
-	else {
-		for (int i = 0; i < ui.twLabels->rowCount(); ++i)
-			ui.twLabels->removeRow(0);
-	}
+	else
+		ui.twLabels->clearContents();
 
 	// formula, available only for columns in a spreadsheet
 	m_spreadsheet = dynamic_cast<Spreadsheet*>(m_column->parentAspect());
@@ -257,8 +255,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 }
 
 void ColumnDock::showValueLabels() {
-	while (ui.twLabels->rowCount() > 0)
-		ui.twLabels->removeRow(0);
+	ui.twLabels->clearContents();
 
 	if (m_column->valueLabelsInitialized()) {
 		auto mode = m_column->labelsMode();
@@ -773,7 +770,7 @@ void ColumnDock::addVariable() {
 
 	auto* model = aspectModel();
 	model->setSelectableAspects({AspectType::Column});
-	model->enableNumericColumnsOnly(true);
+	model->enablePlottableColumnsOnly(true); // Allow numeric (Double, Integer, BigInt) and DateTime columns
 	cb->setModel(model);
 	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 
@@ -898,7 +895,7 @@ void ColumnDock::applyFormula() {
 	bool autoUpdate{(ui.chkFormulaAutoUpdate->checkState() == Qt::Checked)};
 	bool autoResize{(ui.chkFormulaAutoResize->checkState() == Qt::Checked)};
 	for (auto* col : m_columns) {
-		col->setColumnMode(AbstractColumn::ColumnMode::Double);
+		// preserve the original column mode (e.g., DateTime) instead of forcing Double
 		col->setFormula(expression, variableNames, variableColumns, autoUpdate, autoResize);
 		col->updateFormula();
 	}

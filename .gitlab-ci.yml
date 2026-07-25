@@ -89,6 +89,18 @@ craft_macos_qt6_arm64:
       when: manual
       allow_failure: true
 
+snap_snapcraft_lxd:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
+      allow_failure: true
+
+snap_snapcraft_lxd_arm64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
+      allow_failure: true
+
 clang_format:
   stage: validate
   image: debian:bookworm

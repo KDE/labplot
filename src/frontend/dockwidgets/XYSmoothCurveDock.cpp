@@ -33,7 +33,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate, uiGeneralTab.cbDataSourceType);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -176,6 +176,8 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 void XYSmoothCurveDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
+	XYAnalysisCurveDock::retranslateUi();
+
 	uiGeneralTab.cbType->clear();
 	for (int i = 0; i < NSL_SMOOTH_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_smooth_type_name[i]));
@@ -194,7 +196,7 @@ void XYSmoothCurveDock::retranslateUi() {
 	"<li>Moving Average (Central) - smoothing using the average of a fixed number of points, the average is centered on the current point.</li>"
 	"<li>Moving Average (Lagged) - smoothing using the average of a fixed number of points, the average is lagged behind the current point.</li>"
 	"<li>Percentile - smoothing using the percentile of a fixed number of points.</li>"
-	"<li>Savitzky-Golay - smooothing using least-squares fitting of polynomials to segments of the data.</li>"
+	"<li>Savitzky-Golay - smoothing using least-squares fitting of polynomials to segments of the data.</li>"
 	"<li>LOWESS - locally weighted scatterplot smoothing.</li>"
 	"</ul>"
 	);
@@ -205,7 +207,7 @@ void XYSmoothCurveDock::retranslateUi() {
 	uiGeneralTab.lPoints->setToolTip(info);
 	uiGeneralTab.sbPoints->setToolTip(info);
 
-	info = i18n("Weightning type to define different weights for the points in the moving window");
+	info = i18n("Weighting type to define different weights for the points in the moving window");
 	uiGeneralTab.cbWeight->setToolTip(info);
 	uiGeneralTab.cbMode->setToolTip(info);
 
@@ -345,15 +347,11 @@ void XYSmoothCurveDock::xRangeMaxChanged() {
 }
 
 void XYSmoothCurveDock::xRangeMinDateTimeChanged(qint64 value) {
-	CONDITIONAL_LOCK_RETURN;
-
 	m_smoothData.xRange.first() = value;
 	enableRecalculate();
 }
 
 void XYSmoothCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
-	CONDITIONAL_LOCK_RETURN;
-
 	m_smoothData.xRange.last() = value;
 	enableRecalculate();
 }
@@ -512,6 +510,7 @@ void XYSmoothCurveDock::iterationsChanged(int value) {
 }
 
 void XYSmoothCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setSmoothData(m_smoothData);
 

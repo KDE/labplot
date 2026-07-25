@@ -169,6 +169,9 @@ void KDEPlotDock::retranslateUi() {
 	ui.cbBandwidthType->addItem(i18n("Scott"), static_cast<int>(nsl_kde_bandwidth_scott));
 	ui.cbBandwidthType->addItem(i18n("Custom"), static_cast<int>(nsl_kde_bandwidth_custom));
 
+	estimationLineWidget->retranslateUi();
+	estimationBackgroundWidget->retranslateUi();
+
 	// tooltip texts
 	QString info = i18n("The window function (\"kernel\") used to estimate the probability density");
 	ui.lKernelType->setToolTip(info);

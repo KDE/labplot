@@ -20,38 +20,13 @@
 	\ingroup frontend
  */
 ValueWidget::ValueWidget(QWidget* parent, bool xy)
-	: QWidget(parent) {
+	: QWidget(parent), m_xy(xy) {
 	ui.setupUi(this);
 	ui.kfrFont->setFixedHeight(ui.lColor->sizeHint().height());
 
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	cbColumn = new TreeViewComboBox(this);
 	gridLayout->addWidget(cbColumn, 2, 2, 1, 1);
-
-	if (xy) {
-		ui.cbType->addItem(i18n("No Values"), static_cast<int>(Value::Type::NoValues));
-		ui.cbType->addItem(QStringLiteral("x"), static_cast<int>(Value::Type::X));
-		ui.cbType->addItem(QStringLiteral("y"), static_cast<int>(Value::Type::Y));
-		ui.cbType->addItem(QStringLiteral("x, y"), static_cast<int>(Value::Type::XY));
-		ui.cbType->addItem(QStringLiteral("(x, y)"), static_cast<int>(Value::Type::XYBracketed));
-		ui.cbType->addItem(i18n("Custom Column"), static_cast<int>(Value::Type::CustomColumn));
-	} else {
-		ui.cbType->addItem(i18n("No Values"), static_cast<int>(Value::Type::NoValues));
-		ui.cbType->addItem(i18n("Frequency"), static_cast<int>(Value::Type::BinEntries));
-		ui.cbType->addItem(i18n("Custom Column"), static_cast<int>(Value::Type::CustomColumn));
-	}
-
-	ui.cbPosition->addItem(i18n("Above"), static_cast<int>(Value::Position::Above));
-	ui.cbPosition->addItem(i18n("Below"), static_cast<int>(Value::Position::Under));
-	ui.cbPosition->addItem(i18n("Left"), static_cast<int>(Value::Position::Left));
-	ui.cbPosition->addItem(i18n("Right"), static_cast<int>(Value::Position::Right));
-
-	// add formats for numeric values
-	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
-	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
-	ui.cbNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
-	ui.cbNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
-	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 
 	// add format for date, time and datetime values
 	for (const auto& s : AbstractColumn::dateFormats())
@@ -99,9 +74,8 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	}
 
 	// add center value if position is available
-	if (m_value->centerPositionAvailable())
-		if (!ui.cbPosition->contains(i18n("Center")))
-			ui.cbPosition->addItem(i18n("Center"), static_cast<int>(Value::Position::Center));
+	if (m_value->centerPositionAvailable() && !ui.cbPosition->contains(i18n("Center")))
+		ui.cbPosition->addItem(i18n("Center"), static_cast<int>(Value::Position::Center));
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
@@ -140,6 +114,36 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 
 void ValueWidget::updateLocale() {
 	ui.sbDistance->setLocale(QLocale());
+}
+
+void ValueWidget::retranslateUi() {
+	ui.cbType->clear();
+	if (m_xy) {
+		ui.cbType->addItem(i18n("No Values"), static_cast<int>(Value::Type::NoValues));
+		ui.cbType->addItem(QStringLiteral("x"), static_cast<int>(Value::Type::X));
+		ui.cbType->addItem(QStringLiteral("y"), static_cast<int>(Value::Type::Y));
+		ui.cbType->addItem(QStringLiteral("x, y"), static_cast<int>(Value::Type::XY));
+		ui.cbType->addItem(QStringLiteral("(x, y)"), static_cast<int>(Value::Type::XYBracketed));
+		ui.cbType->addItem(i18n("Custom Column"), static_cast<int>(Value::Type::CustomColumn));
+	} else {
+		ui.cbType->addItem(i18n("No Values"), static_cast<int>(Value::Type::NoValues));
+		ui.cbType->addItem(i18n("Frequency"), static_cast<int>(Value::Type::BinEntries));
+		ui.cbType->addItem(i18n("Custom Column"), static_cast<int>(Value::Type::CustomColumn));
+	}
+
+	ui.cbPosition->clear();
+	ui.cbPosition->addItem(i18n("Above"), static_cast<int>(Value::Position::Above));
+	ui.cbPosition->addItem(i18n("Below"), static_cast<int>(Value::Position::Under));
+	ui.cbPosition->addItem(i18n("Left"), static_cast<int>(Value::Position::Left));
+	ui.cbPosition->addItem(i18n("Right"), static_cast<int>(Value::Position::Right));
+
+	// add formats for numeric values
+	ui.cbNumericFormat->clear();
+	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
+	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+	ui.cbNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+	ui.cbNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
+	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 }
 
 void ValueWidget::setXColumn(const AbstractColumn* column) {

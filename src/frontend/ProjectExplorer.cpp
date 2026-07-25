@@ -27,7 +27,6 @@
 #include <KMessageBox>
 #include <KMessageWidget>
 
-#include <kcoreaddons_version.h>
 #define HAS_FUZZY_MATCHER true
 #include <KFuzzyMatcher>
 
