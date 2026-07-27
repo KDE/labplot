@@ -1004,6 +1004,12 @@ if(APPLE) # Apple app package
     MACOSX_BUNDLE_LONG_VERSION_STRING "${labplot_VERSION}"
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${labplot_VERSION}"
     MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.labplot")
+
+    # Add entitlements for code signing to allow loading Python packages with different signatures
+    # Required for user-installed scientific packages (numpy, scipy, etc.) on hardened runtime
+    set_target_properties(labplot PROPERTIES
+        XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${CMAKE_SOURCE_DIR}/labplot.entitlements"
+    )
 endif()
 
 ############## installation ################################

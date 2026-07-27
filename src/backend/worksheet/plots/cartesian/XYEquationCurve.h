@@ -38,6 +38,7 @@ public:
 		QString min; // localized strings to support expressions
 		QString max;
 		int count{1000}; // number of points of the curve
+		bool autoPointsCount{true}; // automatically calculate point count based on plot size
 	};
 
 	explicit XYEquationCurve(const QString& name);

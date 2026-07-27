@@ -87,6 +87,11 @@ private Q_SLOTS:
 
 	void testPolarCircle();
 	void testPolarSpiral();
+	void testPolarCardioid();
+
+	void testEvaluateCartesianRange();
+	void testEvaluateParametricCircle();
+	void testEvaluateParametricMismatchedSymbols();
 };
 
 #endif // EXPRESSIONPARSERTEST_H

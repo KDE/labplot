@@ -65,7 +65,7 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.tbConstants2->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
 	uiGeneralTab.tbFunctions2->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
-
+	retranslateUi();
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::EquationType::Parametric);
@@ -88,6 +88,7 @@ void XYEquationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.teMin, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.teMax, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.sbCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYEquationCurveDock::enableRecalculate);
+	connect(uiGeneralTab.cbAutoPoints, &QCheckBox::toggled, this, &XYEquationCurveDock::autoPointsChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYEquationCurveDock::recalculateClicked);
 }
 
@@ -103,6 +104,8 @@ void XYEquationCurveDock::initGeneralTab() {
 	uiGeneralTab.teMin->setText(edata.min);
 	uiGeneralTab.teMax->setText(edata.max);
 	uiGeneralTab.sbCount->setValue(edata.count);
+	uiGeneralTab.cbAutoPoints->setChecked(edata.autoPointsCount);
+	uiGeneralTab.sbCount->setEnabled(!edata.autoPointsCount);
 
 	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
@@ -220,6 +223,7 @@ void XYEquationCurveDock::recalculateClicked() {
 	edata.min = uiGeneralTab.teMin->document()->toPlainText();
 	edata.max = uiGeneralTab.teMax->document()->toPlainText();
 	edata.count = uiGeneralTab.sbCount->value();
+	edata.autoPointsCount = uiGeneralTab.cbAutoPoints->isChecked();
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYEquationCurve*>(curve)->setEquationData(edata);
@@ -345,6 +349,12 @@ void XYEquationCurveDock::enableRecalculate() {
 	updatePlotRangeList();
 }
 
+void XYEquationCurveDock::autoPointsChanged(bool checked) {
+	// Enable/disable manual point count spinbox based on auto checkbox state
+	uiGeneralTab.sbCount->setEnabled(!checked);
+	enableRecalculate();
+}
+
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
@@ -357,4 +367,6 @@ void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::Equati
 	uiGeneralTab.teMin->setText(edata.min);
 	uiGeneralTab.teMax->setText(edata.max);
 	uiGeneralTab.sbCount->setValue(edata.count);
+	uiGeneralTab.cbAutoPoints->setChecked(edata.autoPointsCount);
+	uiGeneralTab.sbCount->setEnabled(!edata.autoPointsCount);
 }
