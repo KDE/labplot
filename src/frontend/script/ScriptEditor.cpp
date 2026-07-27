@@ -188,19 +188,18 @@ void ScriptEditor::clearOutput() {
 }
 
 QString ScriptEditor::processOutputText(bool isErr, const QString& text) {
-	QString html;
-	QString escapedText = text.toHtmlEscaped();
+	DEBUG(Q_FUNC_INFO << ", isErr = " << isErr << ", text = '" << text.toStdString() << "'")
 
-	// Detect and format Python traceback patterns
-	// Pattern 1: "File "<string>", line 5, in <module>"
+	// Detect and format Python traceback patterns BEFORE HTML escaping
+	// Pattern 1: "File "<string>", line 5, in <module>" or "File "somefile.py", line 5"
 	static QRegularExpression fileLinePattern(
 		QStringLiteral(R"(File\s+"[^"]*",\s+line\s+(\d+))"),
 		QRegularExpression::CaseInsensitiveOption
 	);
 
-	// Pattern 2: Error/Exception names (e.g., "NameError:", "ValueError:", "TypeError:")
+	// Pattern 2: Error/Exception names (e.g., "NameError:", "ValueError:", "IndentationError:", "Traceback:")
 	static QRegularExpression errorPattern(
-		QStringLiteral(R"(^(\w+Error|\w+Exception|Traceback):)"),
+		QStringLiteral(R"(^(\w+Error|\w+Exception|Traceback)(\s*\(.*\))?:)"),
 		QRegularExpression::MultilineOption
 	);
 
@@ -210,37 +209,72 @@ QString ScriptEditor::processOutputText(bool isErr, const QString& text) {
 		QRegularExpression::CaseInsensitiveOption
 	);
 
-	QString processedText = escapedText;
+	// Parse line references BEFORE escaping HTML
+	struct LineMatch {
+		int start;
+		int length;
+		QString lineNum;
+		QString matchedText;
+	};
 
-	// Add clickable links for line references
-	QRegularExpressionMatchIterator it = fileLinePattern.globalMatch(processedText);
-	int offset = 0;
+	QList<LineMatch> matches;
+	QRegularExpressionMatchIterator it = fileLinePattern.globalMatch(text);
 	while (it.hasNext()) {
 		QRegularExpressionMatch match = it.next();
-		QString lineNum = match.captured(1);
-		QString matchedText = match.captured(0);
-		QString link = QStringLiteral("<a href=\"line:%1\">%2</a>").arg(lineNum, matchedText);
+		LineMatch lm;
+		lm.start = match.capturedStart(0);
+		lm.length = match.capturedLength(0);
+		lm.lineNum = match.captured(1);
+		lm.matchedText = match.captured(0);
+		matches.append(lm);
 
-		int startPos = match.capturedStart(0) + offset;
-		int length = match.capturedLength(0);
-		processedText.replace(startPos, length, link);
-		offset += link.length() - length;
+		DEBUG(Q_FUNC_INFO << ", Found line reference: " << lm.matchedText.toStdString() << " at line " << lm.lineNum.toStdString())
 	}
+
+	// Now escape HTML
+	QString processedText = text.toHtmlEscaped();
+
+	// Replace matches in reverse order to preserve positions
+	for (int i = matches.size() - 1; i >= 0; --i) {
+		const LineMatch& lm = matches[i];
+
+		// Escape the matched text for HTML
+		QString escapedMatch = lm.matchedText.toHtmlEscaped();
+
+		// Create clickable link with blue underlined style
+		QString link = QStringLiteral("<a href=\"line:%1\" style=\"color: #1976d2; text-decoration: underline;\">%2</a>")
+			.arg(lm.lineNum, escapedMatch);
+
+		// Replace in the escaped text
+		int startPos = lm.start;
+		int length = lm.matchedText.length();
+
+		// Find the escaped version in processedText
+		QString searchText = lm.matchedText.toHtmlEscaped();
+		int pos = processedText.indexOf(searchText, startPos);
+		if (pos != -1) {
+			processedText.replace(pos, searchText.length(), link);
+		}
+	}
+
+	QString html;
 
 	// Apply color formatting
 	if (isErr) {
 		// Error output - make it red
 		html = QStringLiteral("<span style=\"color: #d32f2f;\">%1</span>").arg(processedText);
-	} else if (warningPattern.match(processedText).hasMatch()) {
+	} else if (warningPattern.match(text).hasMatch()) {
 		// Warning - make it orange
 		html = QStringLiteral("<span style=\"color: #f57c00;\">%1</span>").arg(processedText);
-	} else if (errorPattern.match(processedText).hasMatch()) {
+	} else if (errorPattern.match(text).hasMatch()) {
 		// Exception names - make them red
 		html = QStringLiteral("<span style=\"color: #d32f2f;\">%1</span>").arg(processedText);
 	} else {
 		// Normal output
 		html = processedText;
 	}
+
+	DEBUG(Q_FUNC_INFO << ", Generated HTML: " << html.toStdString())
 
 	return html;
 }
