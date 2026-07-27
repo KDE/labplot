@@ -267,17 +267,17 @@ QString ScriptEditor::processOutputText(bool isErr, const QString& text) {
 
 	// Apply color formatting
 	if (isErr) {
-		// Error output - make it red
-		html = QStringLiteral("<span style=\"color: #d32f2f;\">%1</span>").arg(processedText);
+		// Error output - make it red with line breaks preserved
+		html = QStringLiteral("<span style=\"color: #d32f2f; white-space: pre-wrap;\">%1</span>").arg(processedText);
 	} else if (warningPattern.match(text).hasMatch()) {
 		// Warning - make it orange
-		html = QStringLiteral("<span style=\"color: #f57c00;\">%1</span>").arg(processedText);
+		html = QStringLiteral("<span style=\"color: #f57c00; white-space: pre-wrap;\">%1</span>").arg(processedText);
 	} else if (errorPattern.match(text).hasMatch()) {
 		// Exception names - make them red
-		html = QStringLiteral("<span style=\"color: #d32f2f;\">%1</span>").arg(processedText);
+		html = QStringLiteral("<span style=\"color: #d32f2f; white-space: pre-wrap;\">%1</span>").arg(processedText);
 	} else {
-		// Normal output
-		html = processedText;
+		// Normal output - wrap in span to ensure consistent rendering
+		html = QStringLiteral("<span style=\"white-space: pre-wrap;\">%1</span>").arg(processedText);
 	}
 
 	DEBUG(Q_FUNC_INFO << ", Generated HTML: " << html.toStdString())
