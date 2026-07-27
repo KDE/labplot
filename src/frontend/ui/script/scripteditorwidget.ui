@@ -99,12 +99,15 @@
         </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="output">
+        <widget class="QTextBrowser" name="output">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="openLinks">
+          <bool>false</bool>
          </property>
         </widget>
        </item>

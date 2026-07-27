@@ -37,6 +37,10 @@ public:
 	void registerShortcuts();
 	void unregisterShortcuts();
 
+private Q_SLOTS:
+	void handleAnchorClicked(const QUrl&);
+	void showOutputContextMenu(const QPoint&);
+
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void run();
@@ -48,6 +52,8 @@ private:
 	KTextEditor::View* m_kTextEditorView{nullptr};
 	QAction* m_runScriptAction{nullptr};
 	QAction* m_clearOutputAction{nullptr};
+	QAction* m_copySelectedAction{nullptr};
+	QAction* m_copyAllOutputAction{nullptr};
 
 	void initActions();
 	void initMenus();
@@ -55,5 +61,8 @@ private:
 	QByteArray splitterState();
 	void setOutputFont(const QFont&);
 	QFont outputFont();
+
+	QString processOutputText(bool isErr, const QString& text);
+	void applyOutputFormatting(const QString& html, bool isErr);
 };
 #endif
