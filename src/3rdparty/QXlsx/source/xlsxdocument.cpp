@@ -20,6 +20,8 @@
 #include "xlsxzipreader_p.h"
 #include "xlsxzipwriter_p.h"
 
+#include "xlsxreadsax.h"
+
 #include <QBuffer>
 #include <QDebug>
 #include <QDir>
@@ -98,7 +100,7 @@ std::string copyTag(const std::string &sFrom, const std::string &sTo, const std:
 
     if (!sFromData.empty()) { // tag found in 'from'?
                               // search all occurrences of tag in 'sOut' and delete them
-        int firstPosTag = -1;
+        std::size_t firstPosTag = std::string::npos;
         while (true) {
             std::size_t startPos = sOut.find(tagToFindStart);
             if (startPos != std::string::npos) {
@@ -110,7 +112,7 @@ std::string copyTag(const std::string &sFrom, const std::string &sTo, const std:
                     tagEndTmp = "/>";
                 }
                 if (endPos != std::string::npos) {
-                    if (firstPosTag < 0)
+                    if (firstPosTag == std::string::npos)
                         firstPosTag = startPos;
                     std::string stringBefore = sOut.substr(0, startPos);
                     endPos += strlen(tagEndTmp.c_str());
@@ -124,7 +126,7 @@ std::string copyTag(const std::string &sFrom, const std::string &sTo, const std:
             }
         }
 
-        if (firstPosTag == -1) {
+        if (firstPosTag == std::string::npos) {
             // tag not found in 'sTo' file
             // try to find a default pos using standard tags
             std::vector<std::string> defaultPos{"</styleSheet>", "<pageMargins", "</workbook>"};
@@ -139,7 +141,7 @@ std::string copyTag(const std::string &sFrom, const std::string &sTo, const std:
 
         // add the tag extracted from 'sFrom' in 'sOut'
         // add in the position of the first tag found in 'sOut' ('firstPosTag')
-        if (firstPosTag >= 0) {
+        if (firstPosTag != std::string::npos) {
             std::string stringBefore = sOut.substr(0, firstPosTag);
             std::string stringAfter  = sOut.substr(firstPosTag, strlen(sOut.c_str()) - firstPosTag);
             sOut                     = stringBefore + sFromData + stringAfter;
@@ -498,6 +500,9 @@ bool DocumentPrivate::saveCsv(QString mainCSVFileName) const
 
         QString strSheetName = wsheet->sheetName(); // sheet name
 
+        // Fix bug: Invalid function call order. I am sorry.
+        const QVector<CellLocation> clList = wsheet->getFullCells(&maxRow, &maxCol);
+
         QVector<QVector<QString>> cellValues;
         for (int rc = 0; rc < maxRow; rc++) {
             QVector<QString> tempValue;
@@ -509,7 +514,7 @@ bool DocumentPrivate::saveCsv(QString mainCSVFileName) const
             cellValues.push_back(tempValue);
         }
 
-        const QVector<CellLocation> clList = wsheet->getFullCells(&maxRow, &maxCol);
+        // const QVector<CellLocation> clList = wsheet->getFullCells(&maxRow, &maxCol);
         for (const auto &cl : clList) {
             int row = cl.row - 1;
             int col = cl.col - 1;
@@ -563,71 +568,72 @@ bool DocumentPrivate::copyStyle(const QString &from, const QString &to)
 {
     // create a temp file because the zip writer cannot modify already existing zips
     QTemporaryFile tempFile;
-    tempFile.open();
-    tempFile.close();
-    QString temFilePath = QFileInfo(tempFile).absoluteFilePath();
+    if (!tempFile.open()) {
+        return false;
+    }
+    tempFile.setAutoRemove(false);
 
-    ZipWriter temporalZip(temFilePath);
+    ZipWriter temporalZip(&tempFile);
 
     ZipReader zipReader(from);
-    QStringList filePaths = zipReader.filePaths();
+    const QStringList filePaths = zipReader.filePaths();
 
-    auto toReader = std::make_shared<ZipReader>(to);
+    {
+        ZipReader toReader(to);
 
-    QStringList toFilePaths = toReader->filePaths();
+        const QStringList toFilePaths = toReader.filePaths();
 
-    // copy all files from "to" zip except those related to style
-    for (int i = 0; i < toFilePaths.size(); i++) {
-        if (toFilePaths[i].contains(QLatin1String("xl/styles"))) {
-            if (filePaths.contains(toFilePaths[i])) { // style file exist in 'from' as well
+        // copy all files from "to" zip except those related to style
+        for (const QString &toFilePath : toFilePaths) {
+            if (toFilePath.contains(QLatin1String("xl/styles"))) {
+                if (filePaths.contains(toFilePath)) { // style file exist in 'from' as well
                                                       // modify style file
-                std::string fromData =
-                    QString::fromUtf8(zipReader.fileData(toFilePaths[i])).toStdString();
-                std::string toData =
-                    QString::fromUtf8(toReader->fileData(toFilePaths[i])).toStdString();
-                // copy default theme style from 'from' to 'to'
-                toData = xlsxDocumentCpp::copyTag(fromData, toData, "dxfs");
-                temporalZip.addFile(toFilePaths.at(i), QString::fromUtf8(toData.c_str()).toUtf8());
+                    std::string fromData =
+                        QString::fromUtf8(zipReader.fileData(toFilePath)).toStdString();
+                    std::string toData =
+                        QString::fromUtf8(toReader.fileData(toFilePath)).toStdString();
+                    // copy default theme style from 'from' to 'to'
+                    toData = xlsxDocumentCpp::copyTag(fromData, toData, "dxfs");
+                    temporalZip.addFile(toFilePath, QString::fromUtf8(toData.c_str()).toUtf8());
 
-                continue;
+                    continue;
+                }
             }
-        }
 
-        if (toFilePaths[i].contains(QLatin1String("xl/workbook"))) {
-            if (filePaths.contains(toFilePaths[i])) { // workbook file exist in 'from' as well
+            if (toFilePath.contains(QLatin1String("xl/workbook"))) {
+                if (filePaths.contains(toFilePath)) { // workbook file exist in 'from' as well
                                                       // modify workbook file
-                std::string fromData =
-                    QString::fromUtf8(zipReader.fileData(toFilePaths[i])).toStdString();
-                std::string toData =
-                    QString::fromUtf8(toReader->fileData(toFilePaths[i])).toStdString();
-                // copy default theme style from 'from' to 'to'
-                toData = xlsxDocumentCpp::copyTag(fromData, toData, "workbookPr");
-                temporalZip.addFile(toFilePaths.at(i), QString::fromUtf8(toData.c_str()).toUtf8());
-                continue;
+                    std::string fromData =
+                        QString::fromUtf8(zipReader.fileData(toFilePath)).toStdString();
+                    std::string toData =
+                        QString::fromUtf8(toReader.fileData(toFilePath)).toStdString();
+                    // copy default theme style from 'from' to 'to'
+                    toData = xlsxDocumentCpp::copyTag(fromData, toData, "workbookPr");
+                    temporalZip.addFile(toFilePath, QString::fromUtf8(toData.c_str()).toUtf8());
+                    continue;
+                }
             }
-        }
 
-        if (toFilePaths[i].contains(QLatin1String("xl/worksheets/sheet"))) {
-            if (filePaths.contains(toFilePaths[i])) { // sheet file exist in 'from' as well
+            if (toFilePath.contains(QLatin1String("xl/worksheets/sheet"))) {
+                if (filePaths.contains(toFilePath)) { // sheet file exist in 'from' as well
                                                       // modify sheet file
-                std::string fromData =
-                    QString::fromUtf8(zipReader.fileData(toFilePaths[i])).toStdString();
-                std::string toData =
-                    QString::fromUtf8(toReader->fileData(toFilePaths[i])).toStdString();
-                // copy "conditionalFormatting" from 'from' to 'to'
-                toData = xlsxDocumentCpp::copyTag(fromData, toData, "conditionalFormatting");
-                temporalZip.addFile(toFilePaths.at(i), QString::fromUtf8(toData.c_str()).toUtf8());
-                continue;
+                    std::string fromData =
+                        QString::fromUtf8(zipReader.fileData(toFilePath)).toStdString();
+                    std::string toData =
+                        QString::fromUtf8(toReader.fileData(toFilePath)).toStdString();
+                    // copy "conditionalFormatting" from 'from' to 'to'
+                    toData = xlsxDocumentCpp::copyTag(fromData, toData, "conditionalFormatting");
+                    temporalZip.addFile(toFilePath, QString::fromUtf8(toData.c_str()).toUtf8());
+                    continue;
+                }
             }
-        }
 
-        QByteArray data = toReader->fileData(toFilePaths.at(i));
-        temporalZip.addFile(toFilePaths.at(i), data);
+            QByteArray data = toReader.fileData(toFilePath);
+            temporalZip.addFile(toFilePath, data);
+        }
     }
 
     temporalZip.close();
-
-    toReader.reset();
 
     tempFile.close();
 
@@ -846,7 +852,7 @@ bool Document::setColumnFormat(const CellRange &range, const Format &format)
 bool Document::setColumnHidden(const CellRange &range, bool hidden)
 {
     if (Worksheet *sheet = currentWorksheet())
-        return sheet->setColumnWidth(range, hidden);
+        return sheet->setColumnHidden(range, hidden);
     return false;
 }
 
@@ -1552,5 +1558,68 @@ bool Document::autosizeColumnWidth()
 
     return erg;
 }
+
+/////////////////////////////////////////////////////////////////////
+// ======================= SAX streaming API =========================
+bool Document::read_sheet_sax(int sheet_index,
+                              const sax_options& opt,
+                              const sax_cell_callback& on_cell)
+{
+    if (!d_ptr || !d_ptr->workbook)
+        return false;
+
+           // Open zip (supports both file path and QIODevice based)
+    std::unique_ptr<QIODevice> owned_device;
+
+    if (!d_ptr->packageName.isEmpty()) {
+        std::unique_ptr<QFile> f(new QFile(d_ptr->packageName));
+        if (!f->open(QIODevice::ReadOnly))
+            return false;
+        owned_device = std::move(f);
+    } else if (d_ptr->package_bytes && !d_ptr->package_bytes->isEmpty()) {
+        std::unique_ptr<QBuffer> b(new QBuffer(d_ptr->package_bytes.get()));
+        if (!b->open(QIODevice::ReadOnly))
+            return false;
+        owned_device = std::move(b);
+    } else {
+        return false;
+    }
+
+    ZipReader zip(owned_device.get());
+
+           // shared strings (optional)
+    QStringList shared_strings;
+    if (opt.resolve_shared_strings) {
+        shared_strings = QXlsx::load_shared_strings_all(zip);
+    }
+
+           // sheet XML path: workbook already has filePath (actual path determined by relationship (rels))
+    AbstractSheet *abs_sheet = d_ptr->workbook->sheet(sheet_index);
+    if (!abs_sheet)
+        return false;
+
+    const QString sheet_path = abs_sheet->filePath();
+    const QByteArray sheet_xml = zip.fileData(sheet_path);
+
+    if (sheet_xml.isEmpty())
+        return false;
+
+    return QXlsx::read_sheet_xml_sax(sheet_xml, opt,
+                                     opt.resolve_shared_strings ? &shared_strings : nullptr,
+                                     on_cell);
+}
+
+bool Document::read_sheet_sax(const QString& sheet_name,
+                              const sax_options& opt,
+                              const sax_cell_callback& on_cell)
+{
+    const QStringList names = d_ptr->workbook->worksheetNames();
+    const int idx = names.indexOf(sheet_name);
+    if (idx < 0)
+        return false;
+    return read_sheet_sax(idx, opt, on_cell);
+}
+//////////////////////////////////////////////////////////////////////
+
 
 QT_END_NAMESPACE_XLSX
