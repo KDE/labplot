@@ -144,6 +144,9 @@ void ScriptEditor::writeOutput(bool isErr, const QString& msg) {
 	cursor.movePosition(QTextCursor::End);
 	ui.output->setTextCursor(cursor);
 	ui.output->insertHtml(processedHtml);
+
+	// Ensure we scroll to the bottom
+	ui.output->ensureCursorVisible();
 }
 
 void ScriptEditor::setSplitterState(const QByteArray& state) {
@@ -233,6 +236,9 @@ QString ScriptEditor::processOutputText(bool isErr, const QString& text) {
 
 	// Now escape HTML
 	QString processedText = text.toHtmlEscaped();
+
+	// Convert newlines to <br> tags for proper line breaks in HTML
+	processedText.replace(QLatin1String("\n"), QLatin1String("<br>"));
 
 	// Replace matches in reverse order to preserve positions
 	for (int i = matches.size() - 1; i >= 0; --i) {
