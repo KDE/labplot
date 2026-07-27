@@ -76,7 +76,7 @@ find_library(Shiboken6_LIBRARY
 )
 
 find_library(Shiboken6_ABI3_LIBRARY
-    NAMES shiboken6.abi3 libshiboken6.abi3 libshiboken6.abi3.so.6.10 libshiboken6.abi3.6.10 libshiboken6.abi3.6.10.dylib libshiboken6.abi3.so.6.9 libshiboken6.abi3.6.9 libshiboken6.abi3.6.9.dylib
+    NAMES shiboken6.abi3 libshiboken6.abi3 libshiboken6.abi3.so.6.11 libshiboken6.abi3.6.11 libshiboken6.abi3.6.11.dylib libshiboken6.abi3.so.6.10 libshiboken6.abi3.6.10 libshiboken6.abi3.6.10.dylib libshiboken6.abi3.so.6.9 libshiboken6.abi3.6.9 libshiboken6.abi3.6.9.dylib
     PATHS "${Shiboken6_PATH}" "${PySide6_PATH}/../shiboken6" /usr/lib64 /usr/lib /app/lib
 )
 
