@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-02-21 09:58+0100\n"
+"PO-Revision-Date: 2026-07-26 11:04+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -23815,7 +23815,7 @@ msgstr "&Nuova area del grafico in un foglio di lavoro esistente"
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:203
 #, kde-format
 msgid "New Plot Area in a new Worksheet"
-msgstr "Nuovo area del grafico in un nuovo foglio di lavoro"
+msgstr "Nuova area del grafico in un nuovo foglio di lavoro"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateDataCurve)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:226
