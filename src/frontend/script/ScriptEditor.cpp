@@ -190,7 +190,37 @@ void ScriptEditor::clearOutput() {
 	setOutputFont(currentOutputFont);
 }
 
+/*!
+* Processes the output text to detect line references, errors, and warnings, and formats them as HTML for display in the output QTextBrowser.
+* - Detects line references in the format "File "<string>", line 5, in <module>" or "File "somefile.py", line 5" 
+	and converts them into clickable links that navigate to the corresponding line in the script editor.
+* - Detects error and exception names (e.g., "NameError:", "ValueError:", "IndentationError:", "Traceback:") and formats them in red.
+* - Detects warning patterns (e.g., "Warning", "UserWarning", "DeprecationWarning", "WARN") and formats them in orange.
+* - Normal output is displayed in the default text color.
+* - The output text is HTML-escaped to prevent HTML injection and ensure proper rendering.
+* - Newlines are converted to <br> tags for proper line breaks in HTML.
+* @param isErr Indicates whether the output is from stderr (true) or stdout (false).
+* @param text The output text to process.
+* @return The processed HTML string ready for display in the output QTextBrowser.
+*/
 QString ScriptEditor::processOutputText(bool isErr, const QString& text) {
+	// Example code covering varios cases:
+	/*
+	print("Normal output")
+	print("Warning: something might be wrong")
+	print("Another WARN message")
+	print("Regular output again")
+
+	import warnings
+	print("great text")
+	warnings.warn("a simple test")
+
+	my_list = [1, 2, 3]
+	print("List contents:", my_list)
+	print("Accessing invalid index...")
+	value = my_list[10]  # IndexError: list index out of range
+	*/
+
 	DEBUG(Q_FUNC_INFO << ", isErr = " << isErr << ", text = '" << text.toStdString() << "'")
 
 	// Detect and format Python traceback patterns BEFORE HTML escaping
@@ -206,9 +236,9 @@ QString ScriptEditor::processOutputText(bool isErr, const QString& text) {
 		QRegularExpression::MultilineOption
 	);
 
-	// Pattern 3: Warning patterns
+	// Pattern 3: Warning patterns - matches "Warning", "UserWarning", "DeprecationWarning", "WARN", etc.
 	static QRegularExpression warningPattern(
-		QStringLiteral(R"(\bwarning\b|\bWARN\b)"),
+		QStringLiteral(R"([Ww]arning|WARN)"),
 		QRegularExpression::CaseInsensitiveOption
 	);
 
@@ -253,27 +283,21 @@ QString ScriptEditor::processOutputText(bool isErr, const QString& text) {
 
 		// Replace in the escaped text
 		int startPos = lm.start;
-		int length = lm.matchedText.length();
-
-		// Find the escaped version in processedText
 		QString searchText = lm.matchedText.toHtmlEscaped();
 		int pos = processedText.indexOf(searchText, startPos);
-		if (pos != -1) {
+		if (pos != -1)
 			processedText.replace(pos, searchText.length(), link);
-		}
 	}
 
 	QString html;
 
-	// Apply color formatting
-	if (isErr) {
-		// Error output - make it red with line breaks preserved
-		html = QStringLiteral("<span style=\"color: #d32f2f; white-space: pre-wrap;\">%1</span>").arg(processedText);
-	} else if (warningPattern.match(text).hasMatch()) {
+	// Apply color formatting - check warnings FIRST before checking isErr flag
+	// because warnings.warn() writes to stderr but should be orange, not red
+	if (warningPattern.match(text).hasMatch()) {
 		// Warning - make it orange
 		html = QStringLiteral("<span style=\"color: #f57c00; white-space: pre-wrap;\">%1</span>").arg(processedText);
-	} else if (errorPattern.match(text).hasMatch()) {
-		// Exception names - make them red
+	} else if (isErr || errorPattern.match(text).hasMatch()) {
+		// Error output or Exception names - make them red
 		html = QStringLiteral("<span style=\"color: #d32f2f; white-space: pre-wrap;\">%1</span>").arg(processedText);
 	} else {
 		// Normal output - wrap in span to ensure consistent rendering
