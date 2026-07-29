@@ -88,6 +88,24 @@ craft_macos_qt6_arm64:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: manual
       allow_failure: true
+  script:          
+    - craft --package labplot
+ 
+    # Re-sign with entitlements (Craft doesn't pick them up automatically yet)
+    - |
+      APP_PATH="archive/Applications/KDE/LabPlot.app"
+      ENTITLEMENTS="$APP_PATH/Contents/Resources/labplot.entitlements"
+      if [ -f "$ENTITLEMENTS" ]; then
+        echo "Applying entitlements to LabPlot.app"
+        codesign --force --deep --sign - \
+          --entitlements "$ENTITLEMENTS" \
+          "$APP_PATH"
+      
+        echo "Verifying entitlements:"
+        codesign -d --entitlements - "$APP_PATH/Contents/MacOS/labplot"
+      else
+        echo "Warning: Entitlements file not found at $ENTITLEMENTS"
+      fi
 
 snap_snapcraft_lxd:
   rules:
