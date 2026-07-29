@@ -4,10 +4,12 @@
 	Description          : Script editor
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ScriptEditor.h"
+#include "ScriptCompletionModel.h"
 #include "backend/script/Script.h"
 #include <backend/lib/macros.h>
 
@@ -67,9 +69,18 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 	// Setup context menu for output
 	ui.output->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(ui.output, &QTextBrowser::customContextMenuRequested, this, &ScriptEditor::showOutputContextMenu);
+
+	// Create and register code completion model in KTextEditor view
+	m_completionModel = new ScriptCompletionModel(this);
+	m_kTextEditorView->registerCompletionModel(m_completionModel);
+	m_kTextEditorView->setAutomaticInvocationEnabled(true);
 }
 
-ScriptEditor::~ScriptEditor() {    
+ScriptEditor::~ScriptEditor() {
+	// Unregister completion model
+	if (m_completionModel && m_kTextEditorView)
+		m_kTextEditorView->unregisterCompletionModel(m_completionModel);
+
 	KConfig config;
 	auto group = config.group(QStringLiteral("ScriptEditor"));
 	// we dont manage default editor font or themes ourselves, so no need to save in our config

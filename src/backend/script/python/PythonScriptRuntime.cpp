@@ -861,3 +861,50 @@ QString PythonScriptRuntime::pyUnicodeToQString(PyObject* obj) {
 	Py_DECREF(bytes);
 	return QString::fromUtf8(charPtr);
 }
+
+// Global helper function for code completion (avoids Python.h in frontend)
+QStringList getPylabplotSymbolsHelper() {
+	return PythonScriptRuntime::getPylabplotSymbols();
+}
+
+QStringList PythonScriptRuntime::getPylabplotSymbols() {
+	QStringList symbols;
+
+	// Check if Python is initialized
+	if (!Py_IsInitialized())
+		return symbols;
+
+	PyGILState_STATE gil = PyGILState_Ensure();
+
+	// Import pylabplot module
+	PyObject* module = PyImport_ImportModule("pylabplot");
+	if (!module) {
+		PyErr_Clear();
+		PyGILState_Release(gil);
+		return symbols;
+	}
+
+	// Get all symbols from module using dir()
+	PyObject* dirList = PyObject_Dir(module);
+	if (dirList && PyList_Check(dirList)) {
+		Py_ssize_t size = PyList_Size(dirList);
+		for (Py_ssize_t i = 0; i < size; ++i) {
+			PyObject* item = PyList_GetItem(dirList, i); // Borrowed reference
+			if (PyUnicode_Check(item)) {
+				QString name = PythonScriptRuntime::pyUnicodeToQString(item);
+				if (!name.isEmpty()) {
+					// Skip private symbols
+					if (!name.startsWith(QLatin1Char('_'))) {
+						symbols.append(name);
+					}
+				}
+			}
+		}
+		Py_DECREF(dirList);
+	}
+
+	Py_DECREF(module);
+	PyGILState_Release(gil);
+
+	return symbols;
+}

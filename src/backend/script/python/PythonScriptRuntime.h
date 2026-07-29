@@ -27,6 +27,9 @@ public:
 	virtual bool cancel() override;
 	virtual bool exec(const QString&) override;
 
+	// Static helper for code completion
+	static QStringList getPylabplotSymbols();
+
 private:
 	PythonLogger* m_loggerStdOut{nullptr}; // PythonLogger instance to replace sys.stdout in the python interpreter
 	PythonLogger* m_loggerStdErr{nullptr}; // PythonLogger instance to replace sys.stderr in the python interpreter

@@ -4,6 +4,7 @@
 	Description          : Script editor
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -18,6 +19,7 @@ class QMenu;
 class Script;
 class QToolBar;
 class QToolButton;
+class ScriptCompletionModel;
 namespace KTextEditor{
 class View;
 }
@@ -54,6 +56,7 @@ private:
 	QAction* m_clearOutputAction{nullptr};
 	QAction* m_copySelectedAction{nullptr};
 	QAction* m_copyAllOutputAction{nullptr};
+	ScriptCompletionModel* m_completionModel{nullptr};
 
 	void initActions();
 	void initMenus();

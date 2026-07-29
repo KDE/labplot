@@ -186,6 +186,7 @@ if(ENABLE_SCRIPTING)
     list(APPEND GUI_SOURCES
         ${FRONTEND_DIR}/dockwidgets/ScriptDock.cpp
         ${FRONTEND_DIR}/script/ScriptEditor.cpp
+        ${FRONTEND_DIR}/script/ScriptCompletionModel.cpp
         ${FRONTEND_DIR}/SettingsEditorPage.cpp
         ${FRONTEND_DIR}/SettingsScriptingPage.cpp)
 endif()
@@ -1005,8 +1006,9 @@ if(APPLE) # Apple app package
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${labplot_VERSION}"
     MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.labplot")
 
-    # Add entitlements for code signing to allow loading Python packages with different signatures
-    # Required for user-installed scientific packages (numpy, scipy, etc.) on hardened runtime
+    # Add entitlements for code signing to allow loading Python packages with different signatures.
+    # Required to be able to install user-specific packages (numpy, etc.) and not being blocked by the
+    # check for the TeamID created during the signing step.
     set_target_properties(labplot PROPERTIES
         XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${CMAKE_SOURCE_DIR}/labplot.entitlements"
     )
