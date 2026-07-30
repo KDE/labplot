@@ -102,7 +102,7 @@ craft_macos_qt6_arm64:
     # Build the actual application
     - craftmaster -c --no-cache --options $CI_PROJECT_NAME.srcDir=$CI_PROJECT_DIR/src/ $CI_PROJECT_NAME
     # Re-sign with entitlements (Craft doesn't pick them up automatically yet)
-    - APP_PATH=$CraftRoot/Applications/KDE/LabPlot.app
+    - APP_PATH=$CRAFT_ROOT/Applications/KDE/LabPlot.app
     - echo "Applying entitlements to LabPlot.app"
     - codesign --force --deep --sign - --entitlements $CI_PROJECT_DIR/src/labplot.entitlements $APP_PATH
     - echo "Verifying entitlements:"
