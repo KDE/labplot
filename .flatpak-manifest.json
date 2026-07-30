@@ -94,8 +94,8 @@
                     "sources": [
                         {
                             "type": "archive",
-                            "url": "https://archives.boost.io/release/1.88.0/source/boost_1_88_0.tar.bz2",
-                            "sha256": "46d9d2c06637b219270877c9e16155cbd015b6dc84349af064c088e9b5b12f7b"
+                            "url": "https://archives.boost.io/release/1.91.0/source/boost_1_91_0.tar.bz2",
+                            "sha256": "de5e6b0e4913395c6bdfa90537febd9028ea4c0735d2cdb0cd9b45d5f51264f5"
                         }
                     ]
                 }
@@ -263,8 +263,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Murmele/vector_blf.git",
-                    "tag": "2c1a8e649328f2e06ce4d45c6223628bc39fd178",
-                    "commit": "2c1a8e649328f2e06ce4d45c6223628bc39fd178"
+                    "tag": "5fe16eb200a476a38fbe3f1d4281432ea5e6b976",
+                    "commit": "5fe16eb200a476a38fbe3f1d4281432ea5e6b976"
                 }
             ]
         },
