@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2025-11-02 00:27+0100\n"
+"PO-Revision-Date: 2026-02-18 15:39+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -3170,12 +3170,12 @@ msgstr "Iteration hat nicht konvergiert"
 #: src/backend/gsl/errors.h:26
 #, kde-format
 msgid "Input domain error, e.g sqrt(-1)"
-msgstr "Eingabe-Bereichsfehler, z.B. sqrt(-1)"
+msgstr "Eingabe-Bereichsfehler, z. B. sqrt(-1)"
 
 #: src/backend/gsl/errors.h:28
 #, kde-format
 msgid "Output range error, e.g. exp(1e100)"
-msgstr "Ausgabe-Bereichsfehler, z.B. exp(1e100)"
+msgstr "Ausgabe-Bereichsfehler, z. B. exp(1e100)"
 
 #: src/backend/gsl/errors.h:30
 #, kde-format
@@ -10775,7 +10775,7 @@ msgid ""
 "and to time."
 msgstr ""
 "Diese Option bestimmt, wie importierte Zeichenfolgen in Kalenderdaten "
-"konvertiertwerden sollen, d.h. Jahr, Monta und Tagesnummer im "
+"konvertiertwerden sollen, d. h. Jahr, Monta und Tagesnummer im "
 "Gregorianischen Kalender und in Zeit."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:63
@@ -10821,14 +10821,14 @@ msgstr ""
 "Ausdrücke, die für den Datumsanteil der Formatierung verwendet werden können:"
 "<table><tr><td>d</td><td>Der Tag als Zahl ohne Null (1 bis 31).</td></"
 "tr><tr><td>dd</td><td>Der Tag als Zahl mit Null (01 bis 31).</td></"
-"tr><tr><td>ddd</td><td>Der abgekürzte Tag als lokalisierter Name (z.B. 'Mon' "
-"bis 'Son'). Verwendet die Systemlokalisierung.</td></tr><tr><td>dddd</"
+"tr><tr><td>ddd</td><td>Der abgekürzte Tag als lokalisierter Name (z. B. "
+"'Mon' bis 'Son'). Verwendet die Systemlokalisierung.</td></tr><tr><td>dddd</"
 "td><td>Der lokale Langname des Tages (e.g. 'Montag' bis 'Sonntag'). "
 "Verwendet die Systemlokalisierung.</td></tr><tr><td>M</td><td>Der Monat ohne "
 "Null (1 bis 12).</td></tr><tr><td>MM</td><td>Der Monat mit Null (01 bis 12)."
-"</td></tr><tr><td>MMM</td><td>Der abgekürzte lokalisierte Monatsname (z.B. "
+"</td></tr><tr><td>MMM</td><td>Der abgekürzte lokalisierte Monatsname (z. B. "
 "'Jan' bis 'Dez'). Verwendet die Systemlokalisierung.</td></tr><tr><td>MMMM</"
-"td><td>Die Langform des lokalisierten Monatsnamen (z.B. 'Januar' bis "
+"td><td>Die Langform des lokalisierten Monatsnamen (z. B. 'Januar' bis "
 "'Dezember'). Verwendet die Systemlokalisierung.</td></tr><tr><td>yy</"
 "td><td>Das Jahr mit zwei Ziffern (00 bis 99).</td></tr><tr><td>yyyy</"
 "td><td>Das Jahr als vier Ziffern. Ist das Jahr negativ wird ein Minuszeichen "
@@ -12037,7 +12037,7 @@ msgstr[1] ""
 #: src/frontend/datasources/ImportProjectDialog.cpp:277
 #, kde-format
 msgid "Do you want to proceed?"
-msgstr "Wollen Sie fortfahren="
+msgstr "Möchten Sie fortfahren="
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:280
 #, kde-format
@@ -12179,7 +12179,7 @@ msgstr ""
 "Im 'C-Format' wird ein Punkt als Dezimaltrenner und ein Komma als "
 "Tausendertrenner verwendet.Valide Zahlenwerte sind: <ul><li>1234.56</"
 "li><li>1,234.56</li><li>etc.</li></ul>Bei 'System locale' werden die "
-"Systemeinstellungen verwendet, z.B. sind für Deutschdie folgenden "
+"Systemeinstellungen verwendet, z. B. sind für Deutschdie folgenden "
 "Zahlenwerte möglich: <ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
 
 #: src/frontend/datasources/JsonOptionsWidget.cpp:144
@@ -12223,14 +12223,14 @@ msgstr ""
 "Ausdrücke, die für den Datumsanteil der Formatierung verwendet werden können:"
 "<table><tr><td>d</td><td>Der Tag als Zahl ohne Null (1 bis 31).</td></"
 "tr><tr><td>dd</td><td>Der Tag als Zahl mit Null (01 bis 31).</td></"
-"tr><tr><td>ddd</td><td>Der abgekürzte Tag als lokalisierter Name (z.B. 'Mon' "
-"bis 'Son'). Verwendet die Systemlokalisierung.</td></tr><tr><td>dddd</"
+"tr><tr><td>ddd</td><td>Der abgekürzte Tag als lokalisierter Name (z. B. "
+"'Mon' bis 'Son'). Verwendet die Systemlokalisierung.</td></tr><tr><td>dddd</"
 "td><td>Der lokale Langname des Tages (e.g. 'Montag' bis 'Sonntag'). "
 "Verwendet die Systemlokalisierung.</td></tr><tr><td>M</td><td>Der Monat ohne "
 "Null (1 bis 12).</td></tr><tr><td>MM</td><td>Der Monat mit Null (01 bis 12)."
-"</td></tr><tr><td>MMM</td><td>Der abgekürzte lokalisierte Monatsname (z.B. "
+"</td></tr><tr><td>MMM</td><td>Der abgekürzte lokalisierte Monatsname (z. B. "
 "'Jan' bis 'Dez'). Verwendet die Systemlokalisierung.</td></tr><tr><td>MMMM</"
-"td><td>Die Langform des lokalisierten Monatsnamen (z.B. 'Januar' bis "
+"td><td>Die Langform des lokalisierten Monatsnamen (z. B. 'Januar' bis "
 "'Dezember'). Verwendet die Systemlokalisierung.</td></tr><tr><td>yy</"
 "td><td>Das Jahr mit zwei Ziffern (00 bis 99).</td></tr><tr><td>yyyy</"
 "td><td>Das Jahr als vier Ziffern. Ist das Jahr negativ wird ein Minuszeichen "
@@ -12811,7 +12811,8 @@ msgstr "%1 Bar-Plot: Vorlage \"%2\" geladen"
 #, kde-format
 msgid "Please choose another name, because this is already in use."
 msgstr ""
-"Bitte wählen Sie einen anderen Namen, weil dieser Name bereits benutzt wird."
+"Bitte wählen Sie einen anderen Namen, weil dieser Name bereits verwendet "
+"wird."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:278
 #, kde-format
