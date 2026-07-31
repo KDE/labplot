@@ -1126,7 +1126,7 @@ msgid ""
 "and to time."
 msgstr ""
 "Diese Option bestimmt, wie importierte Zeichenfolgen in Kalenderdaten "
-"konvertiertwerden sollen, d.h. Jahr, Monta und Tagesnummer im "
+"konvertiertwerden sollen, d. h. Jahr, Monta und Tagesnummer im "
 "Gregorianischen Kalender und in Zeit."
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:150
@@ -1171,14 +1171,14 @@ msgstr ""
 "Ausdrücke, die für den Datumsanteil der Formatierung verwendet werden können:"
 "<table><tr><td>d</td><td>Der Tag als Zahl ohne Null (1 bis 31).</td></"
 "tr><tr><td>dd</td><td>Der Tag als Zahl mit Null (01 bis 31).</td></"
-"tr><tr><td>ddd</td><td>Der abgekürzte Tag als lokalisierter Name (z.B. 'Mon' "
-"bis 'Son'). Verwendet die Systemlokalisierung.</td></tr><tr><td>dddd</"
+"tr><tr><td>ddd</td><td>Der abgekürzte Tag als lokalisierter Name (z. B. "
+"'Mon' bis 'Son'). Verwendet die Systemlokalisierung.</td></tr><tr><td>dddd</"
 "td><td>Der lokale Langname des Tages (e.g. 'Montag' bis 'Sonntag'). "
 "Verwendet die Systemlokalisierung.</td></tr><tr><td>M</td><td>Der Monat ohne "
 "Null (1 bis 12).</td></tr><tr><td>MM</td><td>Der Monat mit Null (01 bis 12)."
-"</td></tr><tr><td>MMM</td><td>Der abgekürzte lokalisierte Monatsname (z.B. "
+"</td></tr><tr><td>MMM</td><td>Der abgekürzte lokalisierte Monatsname (z. B. "
 "'Jan' bis 'Dez'). Verwendet die Systemlokalisierung.</td></tr><tr><td>MMMM</"
-"td><td>Die Langform des lokalisierten Monatsnamen (z.B. 'Januar' bis "
+"td><td>Die Langform des lokalisierten Monatsnamen (z. B. 'Januar' bis "
 "'Dezember'). Verwendet die Systemlokalisierung.</td></tr><tr><td>yy</"
 "td><td>Das Jahr mit zwei Ziffern (00 bis 99).</td></tr><tr><td>yyyy</"
 "td><td>Das Jahr als vier Ziffern. Ist das Jahr negativ wird ein Minuszeichen "
@@ -3295,12 +3295,12 @@ msgstr "Iteration hat nicht konvergiert"
 #: src/backend/gsl/errors.h:26
 #, kde-format
 msgid "Input domain error, e.g sqrt(-1)"
-msgstr "Eingabe-Bereichsfehler, z.B. sqrt(-1)"
+msgstr "Eingabe-Bereichsfehler, z. B. sqrt(-1)"
 
 #: src/backend/gsl/errors.h:28
 #, kde-format
 msgid "Output range error, e.g. exp(1e100)"
-msgstr "Ausgabe-Bereichsfehler, z.B. exp(1e100)"
+msgstr "Ausgabe-Bereichsfehler, z. B. exp(1e100)"
 
 #: src/backend/gsl/errors.h:30
 #, kde-format
@@ -14111,7 +14111,7 @@ msgstr[1] ""
 #: src/frontend/datasources/ImportProjectDialog.cpp:277
 #, kde-format
 msgid "Do you want to proceed?"
-msgstr "Wollen Sie fortfahren="
+msgstr "Möchten Sie fortfahren="
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:280
 #, kde-format
@@ -14877,7 +14877,8 @@ msgstr "%1 Bar-Plot: Vorlage \"%2\" geladen"
 #, kde-format
 msgid "Please choose another name, because this is already in use."
 msgstr ""
-"Bitte wählen Sie einen anderen Namen, weil dieser Name bereits benutzt wird."
+"Bitte wählen Sie einen anderen Namen, weil dieser Name bereits verwendet "
+"wird."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:206
 #, kde-format
