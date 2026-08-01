@@ -35,8 +35,6 @@
 #include <QTextCharFormat>
 #include <QClipboard>
 #include <QApplication>
-#include <QListWidget>
-#include <QKeyEvent>
 
 ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 	: QWidget(parent), m_script(script) {
@@ -77,8 +75,24 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 	m_kTextEditorView->registerCompletionModel(m_completionModel);
 	m_kTextEditorView->setAutomaticInvocationEnabled(true);
 
-	// Connect to show custom popup (no parameter needed - we'll query the model)
-	connect(m_completionModel, &ScriptCompletionModel::modelIsReady, this, &ScriptEditor::showCustomCompleter);
+	// Setup manual code completion shortcut
+	// Use Ctrl+Shift+Space on macOS (Ctrl+Space conflicts with keyboard language switching)
+	// Use Ctrl+Space on other platforms (standard KTextEditor shortcut)
+	m_codeCompletionAction = new QAction(QStringLiteral("Code Completion"), this);
+#ifdef Q_OS_MACOS
+	m_codeCompletionAction->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_Space);
+#else
+	m_codeCompletionAction->setShortcut(Qt::CTRL | Qt::Key_Space);
+#endif
+	m_codeCompletionAction->setWhatsThis(QStringLiteral("Manually trigger code completion"));
+	connect(m_codeCompletionAction, &QAction::triggered, [this]() {
+		if (m_completionModel && m_kTextEditorView) {
+			auto cursor = m_kTextEditorView->cursorPosition();
+			auto wordRange = m_kTextEditorView->document()->wordRangeAt(cursor);
+			m_kTextEditorView->startCompletion(wordRange, m_completionModel);
+		}
+	});
+	m_kTextEditorView->addAction(m_codeCompletionAction);
 }
 
 ScriptEditor::~ScriptEditor() {
@@ -353,153 +367,4 @@ void ScriptEditor::showOutputContextMenu(const QPoint& pos) {
 	menu.addAction(m_clearOutputAction);
 
 	menu.exec(ui.output->mapToGlobal(pos));
-}
-
-void ScriptEditor::showCustomCompleter() {
-	if (!m_completionModel)
-		return;
-
-	// Get matches from the completion model
-	const auto& matches = m_completionModel->matches();
-
-	// Hide completer if no matches
-	if (matches.isEmpty()) {
-		if (m_customCompleter && m_customCompleter->isVisible())
-			m_customCompleter->hide();
-		return;
-	}
-
-	// Create completer widget on first use
-	if (!m_customCompleter) {
-		m_customCompleter = new QListWidget();
-		m_customCompleter->setWindowFlags(Qt::Popup);
-		m_customCompleter->setFocusPolicy(Qt::NoFocus);
-		m_customCompleter->setFocusProxy(m_kTextEditorView);
-		m_customCompleter->installEventFilter(this);
-
-		connect(m_customCompleter, &QListWidget::itemActivated, this, &ScriptEditor::onCompleterItemSelected);
-		connect(m_customCompleter, &QListWidget::itemClicked, this, &ScriptEditor::onCompleterItemSelected);
-	}
-
-	// Populate with matches
-	m_customCompleter->clear();
-	for (const auto& item : matches) {
-		QString displayText = item.name;
-		// Add icon or indicator for type
-		if (item.isClass)
-			displayText += QStringLiteral("  [class]");
-		else if (item.isFunction)
-			displayText += QStringLiteral("  [function]");
-		else if (item.isVariable)
-			displayText += QStringLiteral("  [variable]");
-
-		auto* listItem = new QListWidgetItem(displayText, m_customCompleter);
-		listItem->setData(Qt::UserRole, item.name); // Store clean name for insertion
-
-		// Set tooltip with signature and docstring if available
-		QString tooltip;
-		if (!item.signature.isEmpty())
-			tooltip = item.signature;
-		else if (item.isFunction || item.isClass)
-			tooltip = item.name + QStringLiteral("()");
-
-		if (!item.docstring.isEmpty()) {
-			if (!tooltip.isEmpty())
-				tooltip += QStringLiteral("\n\n");
-			tooltip += item.docstring;
-		}
-
-		if (!tooltip.isEmpty())
-			listItem->setToolTip(tooltip);
-	}
-	m_customCompleter->setCurrentRow(0);
-
-	// Position below cursor
-	KTextEditor::Cursor cursor = m_kTextEditorView->cursorPosition();
-	QPoint cursorPos = m_kTextEditorView->cursorPositionCoordinates();
-	QPoint globalPos = m_kTextEditorView->mapToGlobal(cursorPos);
-
-	// Move below cursor line
-	globalPos.setY(globalPos.y() + m_kTextEditorView->fontMetrics().height());
-
-	m_customCompleter->move(globalPos);
-	m_customCompleter->setMinimumWidth(200);
-	m_customCompleter->setMaximumHeight(200);
-	m_customCompleter->show();
-}
-
-void ScriptEditor::onCompleterItemSelected() {
-	if (!m_customCompleter || !m_kTextEditorView)
-		return;
-
-	QListWidgetItem* item = m_customCompleter->currentItem();
-	if (!item)
-		return;
-
-	// Get clean name from UserRole data
-	QString textToInsert = item->data(Qt::UserRole).toString();
-
-	// Check if it's a function or class by looking at the display text
-	QString displayText = item->text();
-	bool isFunction = displayText.contains(QStringLiteral("[function]"));
-	bool isClass = displayText.contains(QStringLiteral("[class]"));
-
-	// Add parentheses for functions and classes
-	if (isFunction || isClass)
-		textToInsert += QStringLiteral("()");
-
-	// Replace current word with completion
-	KTextEditor::Cursor currentPos = m_kTextEditorView->cursorPosition();
-	KTextEditor::Range wordRange = m_kTextEditorView->document()->wordRangeAt(currentPos);
-	m_kTextEditorView->document()->replaceText(wordRange, textToInsert);
-
-	// Position cursor inside parentheses for functions/classes
-	if (isFunction || isClass) {
-		KTextEditor::Cursor newCursorPos = wordRange.start();
-		newCursorPos.setColumn(newCursorPos.column() + textToInsert.length() - 1); // -1 to be inside ()
-		m_kTextEditorView->setCursorPosition(newCursorPos);
-	}
-
-	// Hide completer
-	m_customCompleter->hide();
-
-	// Return focus to editor
-	m_kTextEditorView->setFocus();
-}
-
-bool ScriptEditor::eventFilter(QObject* obj, QEvent* event) {
-	if (obj == m_customCompleter && m_customCompleter->isVisible()) {
-		if (event->type() == QEvent::KeyPress) {
-			auto* keyEvent = static_cast<QKeyEvent*>(event);
-			switch (keyEvent->key()) {
-			case Qt::Key_Return:
-			case Qt::Key_Enter:
-				// Accept current selection
-				onCompleterItemSelected();
-				return true;
-
-			case Qt::Key_Escape:
-				// Hide completer
-				m_customCompleter->hide();
-				m_kTextEditorView->setFocus();
-				return true;
-
-			case Qt::Key_Up:
-			case Qt::Key_Down:
-			case Qt::Key_PageUp:
-			case Qt::Key_PageDown:
-				// Let the list widget handle navigation
-				return false;
-
-			default:
-				// Pass other keys to editor and hide completer
-				m_customCompleter->hide();
-				m_kTextEditorView->setFocus();
-				QApplication::sendEvent(m_kTextEditorView, event);
-				return true;
-			}
-		}
-	}
-
-	return QWidget::eventFilter(obj, event);
 }

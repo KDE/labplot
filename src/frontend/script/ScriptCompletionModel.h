@@ -46,10 +46,6 @@ public:
 	void abortCompletion();
 
 	bool initPylabplotSymbols();
-	const QList<CompletionItem>& matches() const { return m_matches; }
-
-Q_SIGNALS:
-	void modelIsReady(const QList<CompletionItem>&);
 
 private Q_SLOTS:
 	void startCompletionRequest();

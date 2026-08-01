@@ -226,11 +226,6 @@ void ScriptCompletionModel::startCompletionRequest() {
 
 	setRowCount(m_matches.size());
 	endResetModel();
-
-	// Emit signal for custom popup
-	Q_EMIT modelIsReady(m_matches);
-
-	// DEBUG(Q_FUNC_INFO << ", Showing " << m_matches.size() << " completions for prefix '" << prefix << "'")
 }
 
 QVariant ScriptCompletionModel::data(const QModelIndex& index, int role) const {
