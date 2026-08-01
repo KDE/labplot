@@ -25,10 +25,13 @@ class ScriptCompletionModel : public KTextEditor::CodeCompletionModel,
 public:
 	struct CompletionItem {
 		QString name;
+		QString signature;  // For methods: "method(arg1, arg2)"
+		QString docstring;  // Brief documentation
 		bool isFunction = false;
 		bool isClass = false;
 		bool isEnum = false;
 		bool isVariable = false;
+		bool isMember = false;  // Is a class member
 	};
 
 	explicit ScriptCompletionModel(ScriptEditor* parent);
@@ -52,11 +55,17 @@ private Q_SLOTS:
 	void startCompletionRequest();
 
 private:
+	enum class CompletionContext {
+		Global,      // Normal completion (variables, functions, classes)
+		Member,      // After '.' - show members
+	};
+
 	ScriptEditor* m_editor{nullptr};
 	QList<CompletionItem> m_matches;
 	QList<CompletionItem> m_pylabplotSymbols;
 	QStringList m_userVariables;
 	QStringList m_pythonBuiltins;
+	QMap<QString, QList<CompletionItem>> m_memberCache;  // Class -> members map
 
 	QTimer* m_debounceTimer{nullptr};
 	KTextEditor::View* m_pendingView{nullptr};
@@ -64,6 +73,9 @@ private:
 
 	void updateUserVariables(const QString& scriptText);
 	void initPythonBuiltins();
+	CompletionContext detectContext(KTextEditor::View* view, const KTextEditor::Cursor& cursor, QString& objectName);
+	QList<CompletionItem> getMembersForType(const QString& typeName);
+	QString inferType(const QString& varName, const QString& scriptText);
 };
 
 #endif // SCRIPTCOMPLETIONMODEL_H

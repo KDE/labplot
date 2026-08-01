@@ -29,6 +29,7 @@ public:
 
 	// Static helper for code completion
 	static QStringList getPylabplotSymbols();
+	static QString pyUnicodeToQString(PyObject*);
 
 private:
 	PythonLogger* m_loggerStdOut{nullptr}; // PythonLogger instance to replace sys.stdout in the python interpreter
@@ -53,7 +54,6 @@ private:
 	static PyTypeObject* getPythonLoggerType();
 	static PyObject* shibokenConvertToPyObject(PythonLogger*);
 	static int getPyErrorLine();
-	static QString pyUnicodeToQString(PyObject*);
 
 	// singletons (shared between PythonScripts)
 	static bool ready;

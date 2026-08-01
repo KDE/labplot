@@ -12,8 +12,20 @@
 
 #include <QStringList>
 
+struct PylabplotMemberInfo {
+	QString name;
+	bool isMethod;
+	bool isProperty;
+	QString signature;    // For methods: "method(arg1, arg2)"
+	QString docstring;    // Brief documentation
+	QString returnType;   // Return type annotation if available
+};
+
 // Helper function to get pylabplot symbols without requiring Python.h
 // This allows frontend code to query symbols without Python header dependencies
 QStringList getPylabplotSymbolsHelper();
+
+// Get members (methods and properties) of a specific pylabplot class
+QList<PylabplotMemberInfo> getPylabplotClassMembersHelper(const QString& className);
 
 #endif // PYTHONSCRIPTINGHELPER_H

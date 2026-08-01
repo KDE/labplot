@@ -10,6 +10,7 @@
 
 #include "PythonScriptRuntime.h"
 #include "PythonLogger.h"
+#include "PythonScriptingHelper.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/script/Script.h"
@@ -907,4 +908,113 @@ QStringList PythonScriptRuntime::getPylabplotSymbols() {
 	PyGILState_Release(gil);
 
 	return symbols;
+}
+
+// Global helper to get class members (avoids Python.h in frontend)
+QList<PylabplotMemberInfo> getPylabplotClassMembersHelper(const QString& className) {
+	QList<PylabplotMemberInfo> members;
+
+	if (!Py_IsInitialized())
+		return members;
+
+	PyGILState_STATE gil = PyGILState_Ensure();
+
+	// Import pylabplot module
+	PyObject* module = PyImport_ImportModule("pylabplot");
+	if (!module) {
+		PyErr_Clear();
+		PyGILState_Release(gil);
+		return members;
+	}
+
+	// Get the class object
+	QByteArray classNameBytes = className.toUtf8();
+	PyObject* classObj = PyObject_GetAttrString(module, classNameBytes.constData());
+	Py_DECREF(module);
+
+	if (!classObj) {
+		PyErr_Clear();
+		PyGILState_Release(gil);
+		return members;
+	}
+
+	// Check if it's actually a class
+	if (!PyType_Check(classObj)) {
+		Py_DECREF(classObj);
+		PyGILState_Release(gil);
+		return members;
+	}
+
+	// Get all attributes using dir()
+	PyObject* dirList = PyObject_Dir(classObj);
+	if (dirList && PyList_Check(dirList)) {
+		Py_ssize_t size = PyList_Size(dirList);
+		for (Py_ssize_t i = 0; i < size; ++i) {
+			PyObject* nameObj = PyList_GetItem(dirList, i); // Borrowed reference
+			if (!PyUnicode_Check(nameObj))
+				continue;
+
+			QString name = PythonScriptRuntime::pyUnicodeToQString(nameObj);
+			if (name.isEmpty() || name.startsWith(QLatin1Char('_')))
+				continue; // Skip private/special methods
+
+			// Get the attribute object
+			QByteArray nameBytes = name.toUtf8();
+			PyObject* attr = PyObject_GetAttrString(classObj, nameBytes.constData());
+			if (!attr) {
+				PyErr_Clear();
+				continue;
+			}
+
+			PylabplotMemberInfo info;
+			info.name = name;
+
+			// Check if it's a callable (method)
+			info.isMethod = PyCallable_Check(attr);
+			info.isProperty = !info.isMethod;
+
+			// Try to extract signature and docstring
+			if (info.isMethod) {
+				// Get __doc__ if available
+				PyObject* docObj = PyObject_GetAttrString(attr, "__doc__");
+				if (docObj && PyUnicode_Check(docObj)) {
+					QString doc = PythonScriptRuntime::pyUnicodeToQString(docObj);
+					// Extract first line as brief doc
+					int newlinePos = doc.indexOf(QLatin1Char('\n'));
+					if (newlinePos > 0)
+						info.docstring = doc.left(newlinePos).trimmed();
+					else
+						info.docstring = doc.trimmed();
+
+					// Try to extract signature from docstring
+					// Common format: "method(arg1, arg2) -> returnType"
+					static QRegularExpression sigPattern(QStringLiteral(R"((\w+\([^)]*\)))"));
+					QRegularExpressionMatch match = sigPattern.match(info.docstring);
+					if (match.hasMatch())
+						info.signature = match.captured(1);
+				}
+				if (docObj)
+					Py_DECREF(docObj);
+
+				// Try to get return type from __annotations__
+				PyObject* annotationsObj = PyObject_GetAttrString(attr, "__annotations__");
+				if (annotationsObj && PyDict_Check(annotationsObj)) {
+					PyObject* returnObj = PyDict_GetItemString(annotationsObj, "return"); // Borrowed ref
+					if (returnObj && PyUnicode_Check(returnObj))
+						info.returnType = PythonScriptRuntime::pyUnicodeToQString(returnObj);
+				}
+				if (annotationsObj)
+					Py_DECREF(annotationsObj);
+			}
+
+			Py_DECREF(attr);
+			members.append(info);
+		}
+		Py_DECREF(dirList);
+	}
+
+	Py_DECREF(classObj);
+	PyGILState_Release(gil);
+
+	return members;
 }

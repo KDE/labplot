@@ -395,6 +395,22 @@ void ScriptEditor::showCustomCompleter() {
 
 		auto* listItem = new QListWidgetItem(displayText, m_customCompleter);
 		listItem->setData(Qt::UserRole, item.name); // Store clean name for insertion
+
+		// Set tooltip with signature and docstring if available
+		QString tooltip;
+		if (!item.signature.isEmpty())
+			tooltip = item.signature;
+		else if (item.isFunction || item.isClass)
+			tooltip = item.name + QStringLiteral("()");
+
+		if (!item.docstring.isEmpty()) {
+			if (!tooltip.isEmpty())
+				tooltip += QStringLiteral("\n\n");
+			tooltip += item.docstring;
+		}
+
+		if (!tooltip.isEmpty())
+			listItem->setToolTip(tooltip);
 	}
 	m_customCompleter->setCurrentRow(0);
 

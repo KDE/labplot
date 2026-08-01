@@ -147,57 +147,75 @@ void ScriptCompletionModel::startCompletionRequest() {
 
 	auto currentPos = m_pendingView->cursorPosition();
 
-	// Get current word being typed
+	// Detect completion context (global vs member)
+	QString objectName;
+	CompletionContext context = detectContext(m_pendingView, currentPos, objectName);
+
+	// Get current word being typed (the filter text)
 	auto currentWordRange = m_pendingView->document()->wordRangeAt(currentPos);
 	QString prefix = m_pendingView->document()->text(currentWordRange);
 
-	// Update user variables from current script
+	// Get current script text
 	QString scriptText = m_pendingView->document()->text();
 	updateUserVariables(scriptText);
 
-	// Collect all completion candidates
-	QSet<QString> allSymbolsSet;
-
-	// Add pylabplot symbols
-	for (const auto& item : m_pylabplotSymbols)
-		allSymbolsSet.insert(item.name);
-
-	// Add Python built-ins
-	for (const auto& builtin : m_pythonBuiltins)
-		allSymbolsSet.insert(builtin);
-
-	// Add user variables
-	for (const auto& var : m_userVariables)
-		allSymbolsSet.insert(var);
-
-	// Filter by prefix
+	// Collect completion candidates based on context
 	beginResetModel();
 	m_matches.clear();
 
-	for (const QString& symbol : allSymbolsSet) {
-		if (prefix.isEmpty() || symbol.startsWith(prefix, Qt::CaseInsensitive)) {
-			CompletionItem item;
-			item.name = symbol;
-
-			// Determine type
-			for (const auto& pylabplotItem : m_pylabplotSymbols) {
-				if (pylabplotItem.name == symbol) {
-					item.isClass = pylabplotItem.isClass;
-					item.isFunction = pylabplotItem.isFunction;
-					item.isEnum = pylabplotItem.isEnum;
-					break;
-				}
+	if (context == CompletionContext::Member) {
+		// Member completion - get members of the object
+		QString typeName = inferType(objectName, scriptText);
+		if (!typeName.isEmpty()) {
+			QList<CompletionItem> members = getMembersForType(typeName);
+			// Filter by prefix
+			for (const auto& member : members) {
+				if (prefix.isEmpty() || member.name.startsWith(prefix, Qt::CaseInsensitive))
+					m_matches.append(member);
 			}
+		}
+	} else {
+		// Global completion - collect all symbols
+		QSet<QString> allSymbolsSet;
 
-			// Check if it's a Python built-in
-			if (m_pythonBuiltins.contains(symbol))
-				item.isFunction = true;
+		// Add pylabplot symbols
+		for (const auto& item : m_pylabplotSymbols)
+			allSymbolsSet.insert(item.name);
 
-			// Check if it's a user variable
-			if (m_userVariables.contains(symbol))
-				item.isVariable = true;
+		// Add Python built-ins
+		for (const auto& builtin : m_pythonBuiltins)
+			allSymbolsSet.insert(builtin);
 
-			m_matches.append(item);
+		// Add user variables
+		for (const auto& var : m_userVariables)
+			allSymbolsSet.insert(var);
+
+		// Filter by prefix
+		for (const QString& symbol : allSymbolsSet) {
+			if (prefix.isEmpty() || symbol.startsWith(prefix, Qt::CaseInsensitive)) {
+				CompletionItem item;
+				item.name = symbol;
+
+				// Determine type
+				for (const auto& pylabplotItem : m_pylabplotSymbols) {
+					if (pylabplotItem.name == symbol) {
+						item.isClass = pylabplotItem.isClass;
+						item.isFunction = pylabplotItem.isFunction;
+						item.isEnum = pylabplotItem.isEnum;
+						break;
+					}
+				}
+
+				// Check if it's a Python built-in
+				if (m_pythonBuiltins.contains(symbol))
+					item.isFunction = true;
+
+				// Check if it's a user variable
+				if (m_userVariables.contains(symbol))
+					item.isVariable = true;
+
+				m_matches.append(item);
+			}
 		}
 	}
 
@@ -279,8 +297,8 @@ bool ScriptCompletionModel::shouldStartCompletion(KTextEditor::View* view, const
 
 	if (!insertedText.isEmpty()) {
 		const QChar lastChar = insertedText.back();
-		// Start completion after typing a letter or underscore
-		if (lastChar.isLetter() || lastChar == QLatin1Char('_'))
+		// Start completion after typing a letter, underscore, or dot (for member access)
+		if (lastChar.isLetter() || lastChar == QLatin1Char('_') || lastChar == QLatin1Char('.'))
 			return true;
 	}
 
@@ -290,4 +308,83 @@ bool ScriptCompletionModel::shouldStartCompletion(KTextEditor::View* view, const
 void ScriptCompletionModel::abortCompletion() {
 	if (m_debounceTimer && m_debounceTimer->isActive())
 		m_debounceTimer->stop();
+}
+
+ScriptCompletionModel::CompletionContext ScriptCompletionModel::detectContext(KTextEditor::View* view,
+																				const KTextEditor::Cursor& cursor,
+																				QString& objectName) {
+	if (!view || !view->document())
+		return CompletionContext::Global;
+
+	// Get the line up to the cursor
+	QString line = view->document()->line(cursor.line()).left(cursor.column());
+
+	// Check for member access: "object." or "object.prefix"
+	static QRegularExpression memberPattern(QStringLiteral(R"((\w+)\.(\w*)$)"));
+	QRegularExpressionMatch match = memberPattern.match(line);
+
+	if (match.hasMatch()) {
+		objectName = match.captured(1);
+		return CompletionContext::Member;
+	}
+
+	return CompletionContext::Global;
+}
+
+QString ScriptCompletionModel::inferType(const QString& varName, const QString& scriptText) {
+	// Simple type inference based on assignment patterns
+	// Look for patterns like: varName = ClassName(...) or varName = module.ClassName(...)
+
+	// Pattern 1: Direct class instantiation - varName = ClassName()
+	QString pattern1 = QStringLiteral(R"(\b%1\s*=\s*(\w+)\s*\()").arg(QRegularExpression::escape(varName));
+	QRegularExpression directPattern(pattern1);
+	QRegularExpressionMatch match = directPattern.match(scriptText);
+
+	if (match.hasMatch())
+		return match.captured(1); // Return the class name
+
+	// Pattern 2: Module member access - varName = module.ClassName()
+	QString pattern2 = QStringLiteral(R"(\b%1\s*=\s*\w+\.(\w+)\s*\()").arg(QRegularExpression::escape(varName));
+	QRegularExpression modulePattern(pattern2);
+	match = modulePattern.match(scriptText);
+
+	if (match.hasMatch())
+		return match.captured(1); // Return the class name
+
+	return QString(); // Unknown type
+}
+
+QList<ScriptCompletionModel::CompletionItem> ScriptCompletionModel::getMembersForType(const QString& typeName) {
+	QList<CompletionItem> members;
+
+	if (typeName.isEmpty())
+		return members;
+
+	// Check cache first
+	if (m_memberCache.contains(typeName))
+		return m_memberCache[typeName];
+
+	// Use runtime introspection to get real class members from Python
+	QList<PylabplotMemberInfo> pylabplotMembers = getPylabplotClassMembersHelper(typeName);
+
+	// Convert to CompletionItem format
+	for (const auto& memberInfo : pylabplotMembers) {
+		CompletionItem item;
+		item.name = memberInfo.name;
+		item.signature = memberInfo.signature;
+		item.docstring = memberInfo.docstring;
+		item.isFunction = memberInfo.isMethod;
+		item.isVariable = memberInfo.isProperty;
+		item.isMember = true;
+		item.isClass = false;
+		item.isEnum = false;
+
+		members.append(item);
+	}
+
+	// Cache the results
+	if (!members.isEmpty())
+		m_memberCache[typeName] = members;
+
+	return members;
 }
