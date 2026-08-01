@@ -40,8 +40,13 @@ public:
 
 	KTextEditor::Range completionRange(KTextEditor::View*, const KTextEditor::Cursor&) override;
 	bool shouldStartCompletion(KTextEditor::View*, const QString&, bool, const KTextEditor::Cursor&) override;
+	void abortCompletion();
 
 	bool initPylabplotSymbols();
+	const QList<CompletionItem>& matches() const { return m_matches; }
+
+Q_SIGNALS:
+	void modelIsReady(const QList<CompletionItem>&);
 
 private Q_SLOTS:
 	void startCompletionRequest();

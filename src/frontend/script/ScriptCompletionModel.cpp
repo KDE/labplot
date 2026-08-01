@@ -209,6 +209,9 @@ void ScriptCompletionModel::startCompletionRequest() {
 	setRowCount(m_matches.size());
 	endResetModel();
 
+	// Emit signal for custom popup
+	Q_EMIT modelIsReady(m_matches);
+
 	// DEBUG(Q_FUNC_INFO << ", Showing " << m_matches.size() << " completions for prefix '" << prefix << "'")
 }
 
@@ -282,4 +285,9 @@ bool ScriptCompletionModel::shouldStartCompletion(KTextEditor::View* view, const
 	}
 
 	return false;
+}
+
+void ScriptCompletionModel::abortCompletion() {
+	if (m_debounceTimer && m_debounceTimer->isActive())
+		m_debounceTimer->stop();
 }

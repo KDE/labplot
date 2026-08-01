@@ -19,7 +19,9 @@ class QMenu;
 class Script;
 class QToolBar;
 class QToolButton;
+class QListWidget;
 class ScriptCompletionModel;
+
 namespace KTextEditor{
 class View;
 }
@@ -39,9 +41,14 @@ public:
 	void registerShortcuts();
 	void unregisterShortcuts();
 
+protected:
+	bool eventFilter(QObject* obj, QEvent* event) override;
+
 private Q_SLOTS:
 	void handleAnchorClicked(const QUrl&);
 	void showOutputContextMenu(const QPoint&);
+	void showCustomCompleter();
+	void onCompleterItemSelected();
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
@@ -57,6 +64,7 @@ private:
 	QAction* m_copySelectedAction{nullptr};
 	QAction* m_copyAllOutputAction{nullptr};
 	ScriptCompletionModel* m_completionModel{nullptr};
+	QListWidget* m_customCompleter{nullptr};
 
 	void initActions();
 	void initMenus();
