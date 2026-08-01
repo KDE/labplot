@@ -958,6 +958,56 @@ QList<PylabplotMemberInfo> getPylabplotClassMembersHelper(const QString& classNa
 			if (name.isEmpty() || name.startsWith(QLatin1Char('_')))
 				continue; // Skip private/special methods
 
+			// Filter out Qt/QObject internal methods that shouldn't be part of the public API
+			// shown in the completion box. For now, the user still will be able to call them, 
+			// but they won't be suggested in the completion box.
+			// TODO: decide if we want to remove them from the public API completely, if possible,
+			// by filtering them out in the shiboken binding generation.
+			static const QStringList qtInternalMethods = {
+				QStringLiteral("connect"),
+				QStringLiteral("connectNotify"),
+				QStringLiteral("customEvent"),
+				QStringLiteral("deleteLater"),
+				QStringLiteral("disconnect"),
+				QStringLiteral("disconnectNotify"),
+				QStringLiteral("dumpObjectInfo"),
+				QStringLiteral("dumpObjectTree"),
+				QStringLiteral("dynamicPropertyNames"),
+				QStringLiteral("emit"),
+				QStringLiteral("event"),
+				QStringLiteral("eventFilter"),
+				QStringLiteral("findChild"),
+				QStringLiteral("findChildren"),
+				QStringLiteral("inherits"),
+				QStringLiteral("installEventFilter"),
+				QStringLiteral("isSignalConnected"),
+				QStringLiteral("isWidgetType"),
+				QStringLiteral("isWindowType"),
+				QStringLiteral("killTimer"),
+				QStringLiteral("metaObject"),
+				QStringLiteral("moveToThread"),
+				QStringLiteral("objectName"),
+				QStringLiteral("objectNameChanged"),
+				QStringLiteral("parent"),
+				QStringLiteral("property"),
+				QStringLiteral("receivers"),
+				QStringLiteral("removeEventFilter"),
+				QStringLiteral("sender"),
+				QStringLiteral("senderSignalIndex"),
+				QStringLiteral("setObjectName"),
+				QStringLiteral("setParent"),
+				QStringLiteral("setProperty"),
+				QStringLiteral("signalsBlocked"),
+				QStringLiteral("startTimer"),
+				QStringLiteral("thread"),
+				QStringLiteral("timerEvent"),
+				QStringLiteral("tr"),
+				QStringLiteral("destroyed"),
+			};
+
+			if (qtInternalMethods.contains(name))
+				continue; // Skip Qt internal methods
+
 			// Get the attribute object
 			QByteArray nameBytes = name.toUtf8();
 			PyObject* attr = PyObject_GetAttrString(classObj, nameBytes.constData());
