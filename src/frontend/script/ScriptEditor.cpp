@@ -19,22 +19,8 @@
 #include <KConfig>
 #include <KConfigGroup>
 
-#include <QPushButton>
-#include <QHBoxLayout>
 #include <QMenu>
-#include <QAction>
-#include <QToolBar>
-#include <QString>
-#include <QToolButton>
-#include <QVariant>
-#include <QFont>
-#include <QObject>
-#include <QTextBrowser>
-#include <QRegularExpression>
-#include <QTextCursor>
-#include <QTextCharFormat>
 #include <QClipboard>
-#include <QApplication>
 
 ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 	: QWidget(parent), m_script(script) {

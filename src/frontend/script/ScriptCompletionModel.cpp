@@ -17,9 +17,7 @@
 #include <KTextEditor/Document>
 
 #include <QTimer>
-#include <QSet>
 #include <QRegularExpression>
-#include <algorithm>
 
 ScriptCompletionModel::ScriptCompletionModel(ScriptEditor* parent)
 	: KTextEditor::CodeCompletionModel(parent)
@@ -111,7 +109,7 @@ void ScriptCompletionModel::updateUserVariables(const QString& scriptText) {
 	static QRegularExpression assignPattern(QStringLiteral(R"(^(\w+)\s*=)"), QRegularExpression::MultilineOption);
 
 	QSet<QString> variables;
-	QRegularExpressionMatchIterator it = assignPattern.globalMatch(scriptText);
+	auto it = assignPattern.globalMatch(scriptText);
 
 	while (it.hasNext()) {
 		QRegularExpressionMatch match = it.next();
@@ -232,7 +230,7 @@ QVariant ScriptCompletionModel::data(const QModelIndex& index, int role) const {
 	if (!index.isValid() || index.row() >= m_matches.count())
 		return QVariant();
 
-	const CompletionItem& item = m_matches.at(index.row());
+	const auto& item = m_matches.at(index.row());
 
 	switch (role) {
 	case Qt::DisplayRole:
@@ -258,11 +256,11 @@ QVariant ScriptCompletionModel::data(const QModelIndex& index, int role) const {
 	return QVariant();
 }
 
-void ScriptCompletionModel::executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& word, const QModelIndex& index) const {
+void ScriptCompletionModel::executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& /* word */, const QModelIndex& index) const {
 	if (!index.isValid() || !view)
 		return;
 
-	const CompletionItem& item = m_matches.at(index.row());
+	const auto& item = m_matches.at(index.row());
 	QString textToInsert = item.name;
 
 	// Add parentheses for functions and classes
@@ -360,7 +358,7 @@ QList<ScriptCompletionModel::CompletionItem> ScriptCompletionModel::getMembersFo
 		return m_memberCache[typeName];
 
 	// Use runtime introspection to get real class members from Python
-	QList<PylabplotMemberInfo> pylabplotMembers = getPylabplotClassMembersHelper(typeName);
+	auto pylabplotMembers = getPylabplotClassMembersHelper(typeName);
 
 	// Convert to CompletionItem format
 	for (const auto& memberInfo : pylabplotMembers) {
