@@ -959,7 +959,7 @@ QList<PylabplotMemberInfo> getPylabplotClassMembersHelper(const QString& classNa
 				continue; // Skip private/special methods
 
 			// Filter out Qt/QObject internal methods that shouldn't be part of the public API
-			// shown in the completion box. For now, the user still will be able to call them, 
+			// shown in the completion box. For now, the user still will be able to call them,
 			// but they won't be suggested in the completion box.
 			// TODO: decide if we want to remove them from the public API completely, if possible,
 			// by filtering them out in the shiboken binding generation.

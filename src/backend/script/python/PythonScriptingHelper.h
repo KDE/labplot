@@ -16,9 +16,9 @@ struct PylabplotMemberInfo {
 	QString name;
 	bool isMethod;
 	bool isProperty;
-	QString signature;    // For methods: "method(arg1, arg2)"
-	QString docstring;    // Brief documentation
-	QString returnType;   // Return type annotation if available
+	QString signature; // For methods: "method(arg1, arg2)"
+	QString docstring; // Brief documentation
+	QString returnType; // Return type annotation if available
 };
 
 // Helper function to get pylabplot symbols without requiring Python.h

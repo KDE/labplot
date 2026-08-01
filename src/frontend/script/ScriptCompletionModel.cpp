@@ -236,6 +236,13 @@ QVariant ScriptCompletionModel::data(const QModelIndex& index, int role) const {
 	case Qt::DisplayRole:
 		if (index.column() == Name)
 			return item.name;
+		else if (index.column() == Prefix) {
+			// Show signature or type indicator
+			if (!item.signature.isEmpty())
+				return item.signature;
+			else if (item.isFunction)
+				return QStringLiteral("()");
+		}
 		break;
 
 	case Qt::DecorationRole:
@@ -250,6 +257,12 @@ QVariant ScriptCompletionModel::data(const QModelIndex& index, int role) const {
 			else if (item.isVariable)
 				return QIcon::fromTheme(QStringLiteral("code-variable"));
 		}
+		break;
+
+	case ItemSelected:
+		// Show docstring in the status bar or completion widget when item is selected
+		if (!item.docstring.isEmpty())
+			return item.docstring;
 		break;
 	}
 
