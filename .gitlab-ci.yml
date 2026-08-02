@@ -89,33 +89,6 @@ craft_macos_qt6_arm64:
       when: manual
       allow_failure: true
 
-# extend macos base with re-sign step
-# see https://invent.kde.org/sysadmin/craft-ci/-/blob/master/gitlab-templates/blocks/macos-base.yml?ref_type=heads
-.craft_macos_base:
-  script:
-    # Set up craft settings and blueprint settings
-    - craftmaster --setup
-    # Get Craft itself ready
-    - craftmaster -c -i --options virtual.ignored=True --update craft
-    # Install all of our dependencies
-    - craftmaster -c --install-deps $CI_PROJECT_NAME
-    # Build the actual application
-    - craftmaster -c --no-cache --options $CI_PROJECT_NAME.srcDir=$CI_PROJECT_DIR/src/ $CI_PROJECT_NAME
-    # Re-sign with entitlements (Craft doesn't pick them up automatically yet)
-    - printenv
-    - APP_PATH=$CRAFT_ROOT/Applications/KDE/LabPlot.app
-    - echo "Applying entitlements to LabPlot.app"
-    - codesign --force --deep --sign - --entitlements $CI_PROJECT_DIR/src/labplot.entitlements $APP_PATH
-    - echo "Verifying entitlements:"
-    - codesign -d --entitlements - $APP_PATH/Contents/MacOS/labplot
-    # Package it up!
-    - craftmaster -c --package --options $CI_PROJECT_NAME.srcDir=$CI_PROJECT_DIR/src/ $CI_PROJECT_NAME
-    # Save our package
-    - packageDir=$(craftmaster -c -q --get "packageDestinationDir()" virtual/base)
-    - mkdir $CI_PROJECT_DIR/kde-ci-packages/
-    - cp -vf $packageDir/*.dmg $CI_PROJECT_DIR/kde-ci-packages/
-    - python3 ci-notary-service/notarizemacapp.py -v --config $KDECI_NOTARIZEMACAPP_CONFIG $CI_PROJECT_DIR/kde-ci-packages/*.dmg
-
 snap_snapcraft_lxd:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
