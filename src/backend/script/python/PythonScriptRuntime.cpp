@@ -1069,11 +1069,11 @@ QList<PylabplotMemberInfo> pylabplotClassMembersHelper(const QString& className)
 						// Clean up: remove self, type hints, arg__N placeholders
 						rawSig.remove(QStringLiteral("self, "));
 						rawSig.remove(QStringLiteral("self"));
-						rawSig.remove(QRegularExpression(QStringLiteral(R"(arg__\d+)")));  // Remove arg__1, arg__2, etc
-						rawSig.remove(QRegularExpression(QStringLiteral(R"(:\s*\w+)")));   // Remove type hints like ": int"
+						rawSig.remove(QRegularExpression(QStringLiteral(R"(arg__\d+)"))); // Remove arg__1, arg__2, etc
+						rawSig.remove(QRegularExpression(QStringLiteral(R"(:\s*\w+)"))); // Remove type hints like ": int"
 						rawSig.remove(QStringLiteral(", /"));
 						rawSig.remove(QStringLiteral("/"));
-						rawSig.remove(QStringLiteral(", ,"));  // Clean up double commas
+						rawSig.remove(QStringLiteral(", ,")); // Clean up double commas
 
 						info.signature = rawSig.simplified();
 					}

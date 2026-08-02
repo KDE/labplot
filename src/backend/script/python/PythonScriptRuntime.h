@@ -27,7 +27,7 @@ public:
 	virtual bool cancel() override;
 	virtual bool exec(const QString&) override;
 
-	// Static helper for code completion
+	// Static helpers for code completion
 	static QStringList getPylabplotSymbols();
 	static QString pyUnicodeToQString(PyObject*);
 
