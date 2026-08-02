@@ -864,7 +864,7 @@ QString PythonScriptRuntime::pyUnicodeToQString(PyObject* obj) {
 }
 
 // Global helper function for code completion (avoids Python.h in frontend)
-QStringList getPylabplotSymbolsHelper() {
+QStringList pylabplotSymbolsHelper() {
 	return PythonScriptRuntime::getPylabplotSymbols();
 }
 
@@ -911,7 +911,7 @@ QStringList PythonScriptRuntime::getPylabplotSymbols() {
 }
 
 // Global helper to get class members (avoids Python.h in frontend)
-QList<PylabplotMemberInfo> getPylabplotClassMembersHelper(const QString& className) {
+QList<PylabplotMemberInfo> pylabplotClassMembersHelper(const QString& className) {
 	QList<PylabplotMemberInfo> members;
 
 	if (!Py_IsInitialized())
@@ -1019,6 +1019,27 @@ QList<PylabplotMemberInfo> getPylabplotClassMembersHelper(const QString& classNa
 			PylabplotMemberInfo info;
 			info.name = name;
 
+			// Check if it's an enum type - enums are classes that inherit from enum.Enum
+			PyObject* typeObj = PyObject_Type(attr);
+			if (typeObj) {
+				PyObject* typeNameObj = PyObject_GetAttrString(typeObj, "__name__");
+				if (typeNameObj && PyUnicode_Check(typeNameObj)) {
+					QString typeName = PythonScriptRuntime::pyUnicodeToQString(typeNameObj);
+					// Check if it's an enum class (EnumType or EnumMeta)
+					if (typeName.contains(QLatin1String("Enum")) && !name.contains(QLatin1String("Enum"))) {
+						info.isProperty = true;
+						info.isMethod = false;
+						Py_DECREF(typeNameObj);
+						Py_DECREF(typeObj);
+						Py_DECREF(attr);
+						members.append(info);
+						continue;
+					}
+					Py_DECREF(typeNameObj);
+				}
+				Py_DECREF(typeObj);
+			}
+
 			// Check if it's a callable (method)
 			info.isMethod = PyCallable_Check(attr);
 			info.isProperty = !info.isMethod;
@@ -1029,19 +1050,44 @@ QList<PylabplotMemberInfo> getPylabplotClassMembersHelper(const QString& classNa
 				PyObject* docObj = PyObject_GetAttrString(attr, "__doc__");
 				if (docObj && PyUnicode_Check(docObj)) {
 					QString doc = PythonScriptRuntime::pyUnicodeToQString(docObj);
-					// Extract first line as brief doc
-					int newlinePos = doc.indexOf(QLatin1Char('\n'));
-					if (newlinePos > 0)
-						info.docstring = doc.left(newlinePos).trimmed();
-					else
-						info.docstring = doc.trimmed();
 
-					// Try to extract signature from docstring
-					// Common format: "method(arg1, arg2) -> returnType"
-					static QRegularExpression sigPattern(QStringLiteral(R"((\w+\([^)]*\)))"));
-					QRegularExpressionMatch match = sigPattern.match(info.docstring);
-					if (match.hasMatch())
-						info.signature = match.captured(1);
+					// Clean up the signature: remove 'self', 'arg__N', type hints, '/'
+					// Example: "setColumnCount(self, arg__1: int, /) setColumn..."
+					// Should become: "setColumnCount(count)"
+
+					// Extract first line as signature
+					int newlinePos = doc.indexOf(QLatin1Char('\n'));
+					QString firstLine = (newlinePos > 0) ? doc.left(newlinePos).trimmed() : doc.trimmed();
+
+					// Try to extract just the method signature part
+					static QRegularExpression sigPattern(QStringLiteral(R"(^(\w+)\s*\([^)]*\))"));
+					QRegularExpressionMatch match = sigPattern.match(firstLine);
+
+					if (match.hasMatch()) {
+						QString rawSig = match.captured(0);
+
+						// Clean up: remove self, type hints, arg__N placeholders
+						rawSig.remove(QStringLiteral("self, "));
+						rawSig.remove(QStringLiteral("self"));
+						rawSig.remove(QRegularExpression(QStringLiteral(R"(arg__\d+)")));  // Remove arg__1, arg__2, etc
+						rawSig.remove(QRegularExpression(QStringLiteral(R"(:\s*\w+)")));   // Remove type hints like ": int"
+						rawSig.remove(QStringLiteral(", /"));
+						rawSig.remove(QStringLiteral("/"));
+						rawSig.remove(QStringLiteral(", ,"));  // Clean up double commas
+
+						info.signature = rawSig.simplified();
+					}
+
+					// Extract docstring (skip first line if it's the signature)
+					if (newlinePos > 0) {
+						QString remainingDoc = doc.mid(newlinePos + 1).trimmed();
+						// Take first meaningful line as docstring
+						int nextNewline = remainingDoc.indexOf(QLatin1Char('\n'));
+						if (nextNewline > 0)
+							info.docstring = remainingDoc.left(nextNewline).trimmed();
+						else
+							info.docstring = remainingDoc;
+					}
 				}
 				if (docObj)
 					Py_DECREF(docObj);

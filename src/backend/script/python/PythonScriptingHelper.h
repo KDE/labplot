@@ -23,9 +23,9 @@ struct PylabplotMemberInfo {
 
 // Helper function to get pylabplot symbols without requiring Python.h
 // This allows frontend code to query symbols without Python header dependencies
-QStringList getPylabplotSymbolsHelper();
+QStringList pylabplotSymbolsHelper();
 
 // Get members (methods and properties) of a specific pylabplot class
-QList<PylabplotMemberInfo> getPylabplotClassMembersHelper(const QString& className);
+QList<PylabplotMemberInfo> pylabplotClassMembersHelper(const QString& className);
 
 #endif // PYTHONSCRIPTINGHELPER_H

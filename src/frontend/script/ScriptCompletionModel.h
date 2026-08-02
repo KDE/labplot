@@ -69,8 +69,8 @@ private:
 
 	void updateUserVariables(const QString& scriptText);
 	void initPythonBuiltins();
-	CompletionContext detectContext(KTextEditor::View* view, const KTextEditor::Cursor& cursor, QString& objectName);
-	QList<CompletionItem> getMembersForType(const QString& typeName);
+	CompletionContext detectContext(KTextEditor::View*, const KTextEditor::Cursor&, QString& objectName);
+	QList<CompletionItem> membersForType(const QString& typeName);
 	QString inferType(const QString& varName, const QString& scriptText);
 };
 

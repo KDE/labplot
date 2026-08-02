@@ -72,7 +72,7 @@ bool ScriptCompletionModel::initPylabplotSymbols() {
 	DEBUG(Q_FUNC_INFO)
 
 	// Get pylabplot symbols via global helper (avoids Python.h dependency)
-	QStringList symbolNames = getPylabplotSymbolsHelper();
+	QStringList symbolNames = pylabplotSymbolsHelper();
 
 	if (symbolNames.isEmpty()) {
 		WARN("No pylabplot symbols extracted - Python may not be initialized")
@@ -165,7 +165,7 @@ void ScriptCompletionModel::startCompletionRequest() {
 		// Member completion - get members of the object
 		QString typeName = inferType(objectName, scriptText);
 		if (!typeName.isEmpty()) {
-			QList<CompletionItem> members = getMembersForType(typeName);
+			QList<CompletionItem> members = membersForType(typeName);
 			// Filter by prefix
 			for (const auto& member : members) {
 				if (prefix.isEmpty() || member.name.startsWith(prefix, Qt::CaseInsensitive))
@@ -234,14 +234,16 @@ QVariant ScriptCompletionModel::data(const QModelIndex& index, int role) const {
 
 	switch (role) {
 	case Qt::DisplayRole:
-		if (index.column() == Name)
-			return item.name;
-		else if (index.column() == Prefix) {
-			// Show signature or type indicator
-			if (!item.signature.isEmpty())
-				return item.signature;
-			else if (item.isFunction)
-				return QStringLiteral("()");
+		if (index.column() == Name) {
+			// Show name with type indicator or signature
+			QString display = item.name;
+
+			// Add simple indicator based on type
+			if (item.isFunction || item.isClass) {
+				display += QStringLiteral("()");
+			}
+
+			return display;
 		}
 		break;
 
@@ -360,7 +362,7 @@ QString ScriptCompletionModel::inferType(const QString& varName, const QString& 
 	return QString(); // Unknown type
 }
 
-QList<ScriptCompletionModel::CompletionItem> ScriptCompletionModel::getMembersForType(const QString& typeName) {
+QList<ScriptCompletionModel::CompletionItem> ScriptCompletionModel::membersForType(const QString& typeName) {
 	QList<CompletionItem> members;
 
 	if (typeName.isEmpty())
@@ -371,7 +373,7 @@ QList<ScriptCompletionModel::CompletionItem> ScriptCompletionModel::getMembersFo
 		return m_memberCache[typeName];
 
 	// Use runtime introspection to get real class members from Python
-	auto pylabplotMembers = getPylabplotClassMembersHelper(typeName);
+	auto pylabplotMembers = pylabplotClassMembersHelper(typeName);
 
 	// Convert to CompletionItem format
 	for (const auto& memberInfo : pylabplotMembers) {
