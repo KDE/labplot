@@ -290,7 +290,7 @@ void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
 	if (m_basicPlotType && !m_fitDistributionMode)
 		processColumnsForXYCurve(columnNames, xColumnName);
 	else
-		processColumnsForHistogram(columnNames);
+		processColumnsForHistogram();
 
 	// resize the scroll area to show five ComboBoxes at maximum without showing the scroll bars
 	int size = m_columnComboBoxes.size() >= 5 ? 5 : m_columnComboBoxes.size();
@@ -327,33 +327,33 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 		ui->gbPlotPlacement->setTitle(i18n("Add Plot to"));
 	}
 
-	// show all selected/available column names in the data comboboxes
+	// show all selected/available columns in the data comboboxes.
+	// the columns are attached to the items as data (in addition to the column names) since
+	// column names alone are not guaranteed to be unique, e.g. when plotting columns
+	// coming from different spreadsheets that happen to have columns with identical names.
 	for (auto* const comboBox : m_columnComboBoxes)
-		comboBox->addItems(columnNames);
+		populateColumnComboBox(comboBox);
 
 	if (!xColumnName.isEmpty()) {
 		// show in the X-data combobox the first column having X as the plot designation
-		ui->cbXColumn->setCurrentIndex(ui->cbXColumn->findText(xColumnName));
+		const int xColumnIndex = columnNames.indexOf(xColumnName);
+		ui->cbXColumn->setCurrentIndex(xColumnIndex);
 
-		// for the remaining columns, show the names in the comboboxes for the Y-data
+		// for the remaining columns, show them in the comboboxes for the Y-data
 		// TODO: handle columns with error-designations
 		int yColumnIndex = 1; // the index of the first Y-data comboBox in m_columnComboBoxes
-		for (const QString& name : columnNames) {
-			if (name != xColumnName) {
+		for (int i = 0; i < columnNames.size(); ++i) {
+			if (i != xColumnIndex) {
 				QComboBox* comboBox = m_columnComboBoxes[yColumnIndex];
-				comboBox->setCurrentIndex(comboBox->findText(name));
+				comboBox->setCurrentIndex(i);
 				yColumnIndex++;
 			}
 		}
 	} else {
 		// no column with "x plot designation" is selected, simply show all columns in the order they were selected.
 		// first selected column will serve as the x-column.
-		int yColumnIndex = 0;
-		for (const QString& name : columnNames) {
-			QComboBox* comboBox = m_columnComboBoxes[yColumnIndex];
-			comboBox->setCurrentIndex(comboBox->findText(name));
-			yColumnIndex++;
-		}
+		for (int i = 0; i < columnNames.size(); ++i)
+			m_columnComboBoxes[i]->setCurrentIndex(i);
 	}
 }
 
@@ -361,7 +361,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
  * processes columns for cases where one single column
  * is required per "plot" (histogram, boxplot, etc.)
  * */
-void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) {
+void PlotDataDialog::processColumnsForHistogram() {
 	ui->line->hide();
 	ui->spacer->changeSize(0, 0);
 	ui->chkCreateDataCurve->hide();
@@ -377,7 +377,7 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		// use the already available cbXColumn combo box as the first data column
 		ui->lXColumn->setText(i18n("Data"));
 		m_columnComboBoxes << ui->cbXColumn;
-		ui->cbXColumn->addItems(columnNames);
+		populateColumnComboBox(ui->cbXColumn);
 		ui->cbXColumn->setCurrentIndex(0);
 	}
 
@@ -394,7 +394,7 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		// one data column + tick labels column: one plot, but show the data combobox
 		ui->lYColumn->setText(i18n("Data"));
 		m_columnComboBoxes << ui->cbYColumn;
-		ui->cbYColumn->addItems(columnNames);
+		populateColumnComboBox(ui->cbYColumn);
 		ui->cbYColumn->setCurrentIndex(0);
 		ui->rbCurvePlacementAllInOnePlotArea->setChecked(true);
 		ui->gbCurvePlacement->hide();
@@ -408,7 +408,7 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		// use the already available cbYColumn combo box
 		ui->lYColumn->setText(i18n("Data"));
 		m_columnComboBoxes << ui->cbYColumn;
-		ui->cbYColumn->addItems(columnNames);
+		populateColumnComboBox(ui->cbYColumn);
 		ui->cbYColumn->setCurrentIndex(firstDataIndex);
 
 		// add a ComboBox for every further column to be plotted
@@ -419,7 +419,7 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 			auto* comboBox = new QComboBox();
 			gridLayout->addWidget(label, i + rowOffset, 0, 1, 1);
 			gridLayout->addWidget(comboBox, i + rowOffset, 2, 1, 1);
-			comboBox->addItems(columnNames);
+			populateColumnComboBox(comboBox);
 			comboBox->setCurrentIndex(i);
 			m_columnComboBoxes << comboBox;
 		}
@@ -448,7 +448,7 @@ void PlotDataDialog::plot() {
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			if (m_columnComboBoxes.count() == 2)
-				setAxesColumnLabels(plot, m_columnComboBoxes.at(1)->currentText());
+				setAxesColumnLabels(plot, columnFromComboBox(m_columnComboBoxes.at(1)));
 
 			addCurvesToPlot(plot);
 			setAxesTitles(plot);
@@ -459,15 +459,7 @@ void PlotDataDialog::plot() {
 		worksheet->endMacro();
 	} else if (ui->rbPlotPlacementNewWorksheet->isChecked()) { // add curves to a new plot in a new worksheet
 		// determine the parent folder first where the worksheet will be added as a child
-		auto* parent = m_parentAspect->parentAspect();
-		if (parent->type() == AspectType::Spreadsheet || parent->type() == AspectType::Workbook)
-			parent = parent->parentAspect();
-		else if (parent->type() == AspectType::DatapickerCurve)
-			parent = parent->parentAspect()->parentAspect();
-#ifdef HAVE_MQTT
-		else if (dynamic_cast<MQTTTopic*>(m_parentAspect))
-			parent = m_parentAspect->project();
-#endif
+		auto* parent = determineParentFolder();
 		parent->beginMacro(i18n("Plot data from %1", m_parentAspect->name()));
 		auto* worksheet = new Worksheet(i18n("Worksheet - %1", m_parentAspect->name()));
 		parent->addChild(worksheet);
@@ -478,7 +470,7 @@ void PlotDataDialog::plot() {
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			if (m_columnComboBoxes.count() == 2)
-				setAxesColumnLabels(plot, m_columnComboBoxes.at(1)->currentText());
+				setAxesColumnLabels(plot, columnFromComboBox(m_columnComboBoxes.at(1)));
 			addCurvesToPlot(plot);
 			setAxesTitles(plot);
 		} else {
@@ -498,15 +490,7 @@ void PlotDataDialog::plot() {
 		parent->endMacro();
 	} else if (ui->rbPlotPlacementNewWorksheets->isChecked()) { // add curves to a new plot in a new worksheet for each of them
 		// determine the parent folder first where the new worksheets will be added as children
-		auto* parent = m_parentAspect->parentAspect();
-		if (parent->type() == AspectType::Spreadsheet || parent->type() == AspectType::Workbook)
-			parent = parent->parentAspect();
-		else if (parent->type() == AspectType::DatapickerCurve)
-			parent = parent->parentAspect()->parentAspect();
-#ifdef HAVE_MQTT
-		else if (dynamic_cast<MQTTTopic*>(m_parentAspect))
-			parent = m_parentAspect->project();
-#endif
+		auto* parent = determineParentFolder();
 
 		parent->beginMacro(i18n("Plot data from %1", m_parentAspect->name()));
 		addCurvesToWorksheets(parent);
@@ -531,12 +515,42 @@ void PlotDataDialog::plot() {
 	}
 }
 
-Column* PlotDataDialog::columnFromName(const QString& name) const {
-	for (auto* column : m_columns) {
-		if (column->name() == name)
-			return column;
+Column* PlotDataDialog::columnFromComboBox(const QComboBox* comboBox) const {
+	return static_cast<Column*>(comboBox->currentData().value<void*>());
+}
+
+/*!
+ * determines the parent folder where new worksheet(s) created by this dialog should be added as children.
+ */
+AbstractAspect* PlotDataDialog::determineParentFolder() const {
+	auto* parent = m_parentAspect->parentAspect();
+	if (!parent) {
+		// m_parentAspect doesn't have a parent, e.g. it's the top level project itself
+		// (used when plotting columns coming from different spreadsheets) -> add the new
+		// worksheet(s) as a child of m_parentAspect directly.
+		return m_parentAspect;
 	}
-	return nullptr;
+
+	if (parent->type() == AspectType::Spreadsheet || parent->type() == AspectType::Workbook)
+		parent = parent->parentAspect();
+	else if (parent->type() == AspectType::DatapickerCurve)
+		parent = parent->parentAspect()->parentAspect();
+#ifdef HAVE_MQTT
+	else if (dynamic_cast<MQTTTopic*>(m_parentAspect))
+		parent = m_parentAspect->project();
+#endif
+	return parent;
+}
+
+/*!
+ * populates \c comboBox with the names of all selected columns in \c m_columns.
+ * the column pointer is attached to every item as data since column names alone
+ * are not guaranteed to be unique, e.g. when plotting columns coming from
+ * different spreadsheets that happen to have columns with identical names.
+ */
+void PlotDataDialog::populateColumnComboBox(QComboBox* comboBox) const {
+	for (auto* column : m_columns)
+		comboBox->addItem(column->name(), QVariant::fromValue(static_cast<void*>(column)));
 }
 
 /*!
@@ -556,10 +570,10 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	case Plot::PlotType::LineSymbol2PointSegment:
 	case Plot::PlotType::LineSymbol3PointSegment:
 	case Plot::PlotType::Formula: {
-		Column* xColumn = columnFromName(ui->cbXColumn->currentText());
+		Column* xColumn = columnFromComboBox(ui->cbXColumn);
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
-			Column* yColumn = columnFromName(name);
+			Column* yColumn = columnFromComboBox(comboBox);
 
 			// if only one column was selected, allow to use this column for x and for y.
 			// otherwise, don't assign xColumn to y
@@ -582,8 +596,7 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	case Plot::PlotType::RunChart:
 	case Plot::PlotType::ParetoChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
-			const auto& name = comboBox->currentText();
-			const auto* column = columnFromName(name);
+			const auto* column = columnFromComboBox(comboBox);
 			addSingleSourceColumnPlot(column, plot);
 		}
 		break;
@@ -593,7 +606,7 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	case Plot::PlotType::LollipopPlot: {
 		QVector<const AbstractColumn*> columns;
 		for (auto* comboBox : m_columnComboBoxes)
-			columns << columnFromName(comboBox->currentText());
+			columns << columnFromComboBox(comboBox);
 
 		addMultiSourceColumnsPlot(columns, plot);
 		break;
@@ -623,11 +636,10 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	case Plot::PlotType::LineSymbol2PointSegment:
 	case Plot::PlotType::LineSymbol3PointSegment:
 	case Plot::PlotType::Formula: {
-		const QString& xColumnName = ui->cbXColumn->currentText();
-		auto* xColumn = columnFromName(xColumnName);
+		auto* xColumn = columnFromComboBox(ui->cbXColumn);
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
-			auto* yColumn = columnFromName(name);
+			auto* yColumn = columnFromComboBox(comboBox);
 			if (yColumn == xColumn)
 				continue;
 
@@ -654,7 +666,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	case Plot::PlotType::ParetoChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const auto& name = comboBox->currentText();
-			const auto* column = columnFromName(name);
+			const auto* column = columnFromComboBox(comboBox);
 
 			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
@@ -675,7 +687,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	case Plot::PlotType::LollipopPlot: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
-			auto* column = columnFromName(name);
+			auto* column = columnFromComboBox(comboBox);
 
 			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
@@ -715,11 +727,10 @@ void PlotDataDialog::addCurvesToWorksheets(AbstractAspect* parent) {
 	case Plot::PlotType::LineSymbol2PointSegment:
 	case Plot::PlotType::LineSymbol3PointSegment:
 	case Plot::PlotType::Formula: {
-		const QString& xColumnName = ui->cbXColumn->currentText();
-		Column* xColumn = columnFromName(xColumnName);
+		Column* xColumn = columnFromComboBox(ui->cbXColumn);
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
-			Column* yColumn = columnFromName(name);
+			Column* yColumn = columnFromComboBox(comboBox);
 			if (yColumn == xColumn)
 				continue;
 
@@ -745,7 +756,7 @@ void PlotDataDialog::addCurvesToWorksheets(AbstractAspect* parent) {
 	case Plot::PlotType::ParetoChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
-			const auto* column = columnFromName(name);
+			const auto* column = columnFromComboBox(comboBox);
 
 			auto* worksheet = new Worksheet(i18n("Worksheet - %1", name));
 			parent->addChild(worksheet);
@@ -765,7 +776,7 @@ void PlotDataDialog::addCurvesToWorksheets(AbstractAspect* parent) {
 	case Plot::PlotType::LollipopPlot: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
-			Column* column = columnFromName(name);
+			Column* column = columnFromComboBox(comboBox);
 
 			auto* worksheet = new Worksheet(i18n("Worksheet - %1", name));
 			parent->addChild(worksheet);
@@ -1042,11 +1053,6 @@ void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const Column* colu
 			axis->setMajorTicksColumn(column);
 		}
 	}
-}
-
-void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const QString& columnName) {
-	const auto* column = columnFromName(columnName);
-	setAxesColumnLabels(plot, column);
 }
 
 /*!
