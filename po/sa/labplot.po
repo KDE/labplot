@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:39+0000\n"
+"POT-Creation-Date: 2026-08-03 00:38+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -6831,7 +6831,7 @@ msgstr "अपक्व"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2832
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1108
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1114
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:234
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:492
@@ -9813,8 +9813,8 @@ msgstr "बार प्लॉट्स"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:644
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2025
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:945
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:947
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:956
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:958
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:155
 #, kde-format
 msgid "Bar Plot"
@@ -9841,7 +9841,7 @@ msgstr "हिस्टोग्राम"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:662
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2011
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:943
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:954
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:152
 #, kde-format
 msgid "Box Plot"
@@ -10131,14 +10131,14 @@ msgid "Distribution Fit to '%1'"
 msgstr "वितरणं '%1' कृते उपयुक्तम्।"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2232
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:857
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:868
 #, fuzzy, kde-format
 #| msgid "Simplification"
 msgid "Simplification of '%1'"
 msgstr "सरलीकरणम्"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2246
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:830
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:841
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "'%1' इत्यस्य व्युत्पन्नम् ।"
@@ -10152,7 +10152,7 @@ msgid "Differentiation"
 msgstr "भेदः"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2260
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:833
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:844
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "'%1' इत्यस्य अभिन्नम् ।"
@@ -10166,13 +10166,13 @@ msgid "Integration"
 msgstr "एकीकरणम्"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2274
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:836
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:847
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "'%1' इत्यस्य प्रक्षेपः ।"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2288
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:839
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:850
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "'%1' इत्यस्य स्निग्धीकरणम् ।"
@@ -10189,7 +10189,7 @@ msgid "Baseline Correction"
 msgstr "संयोजनं विलोपयन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2316
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:826
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:837
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
@@ -15972,13 +15972,13 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:38
-#: src/frontend/ProjectExplorer.cpp:748
+#: src/frontend/ProjectExplorer.cpp:780
 #, kde-format
 msgid "Case Sensitive"
 msgstr "प्रकरणसंवेदनशीलम्"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:42
-#: src/frontend/ProjectExplorer.cpp:756
+#: src/frontend/ProjectExplorer.cpp:788
 #, kde-format
 msgid "Match Complete Word"
 msgstr "मेल सम्पूर्ण शब्द"
@@ -18340,6 +18340,7 @@ msgid "Assistants"
 msgstr "सहायकाः"
 
 #: src/frontend/notebook/NotebookView.cpp:330
+#: src/frontend/ProjectExplorer.cpp:266
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:600
 #, kde-format
 msgid "Plot Data"
@@ -18464,86 +18465,86 @@ msgid "XML error: No cartesianPlot found"
 msgstr "XML त्रुटिः: cartesianPlot न प्राप्तम्"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
-#: src/frontend/ProjectExplorer.cpp:69
+#: src/frontend/ProjectExplorer.cpp:71
 #: src/frontend/ui/dockwidgets/scriptdock.ui:131
 #, kde-format
 msgid "Search/Filter"
 msgstr "अन्वेषण/छननम्"
 
-#: src/frontend/ProjectExplorer.cpp:115
+#: src/frontend/ProjectExplorer.cpp:117
 #, kde-format
 msgid "Expand All"
 msgstr "सर्वं विस्तारयतु"
 
-#: src/frontend/ProjectExplorer.cpp:118
+#: src/frontend/ProjectExplorer.cpp:120
 #, kde-format
 msgid "Expand Selected"
 msgstr "चयनितं विस्तारयतु"
 
-#: src/frontend/ProjectExplorer.cpp:121
+#: src/frontend/ProjectExplorer.cpp:123
 #, kde-format
 msgid "Collapse All"
 msgstr "ध्वस्तं कुर्वन्तु सर्वे"
 
-#: src/frontend/ProjectExplorer.cpp:124
+#: src/frontend/ProjectExplorer.cpp:126
 #, kde-format
 msgid "Collapse Selected"
 msgstr "संकुचितं चयनितम्"
 
-#: src/frontend/ProjectExplorer.cpp:127
+#: src/frontend/ProjectExplorer.cpp:129
 #, kde-format
 msgid "Delete Selected"
 msgstr "चयनितं विलोपयतु"
 
-#: src/frontend/ProjectExplorer.cpp:130
+#: src/frontend/ProjectExplorer.cpp:132
 #, kde-format
 msgid "Search/Filter Options"
 msgstr "अन्वेषण/छनन विकल्प"
 
-#: src/frontend/ProjectExplorer.cpp:273 src/frontend/ProjectExplorer.cpp:431
+#: src/frontend/ProjectExplorer.cpp:305 src/frontend/ProjectExplorer.cpp:463
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1056
 #, kde-format
 msgid "Columns"
 msgstr "स्तम्भाः"
 
-#: src/frontend/ProjectExplorer.cpp:334
+#: src/frontend/ProjectExplorer.cpp:366
 #, kde-format
 msgid "Show All"
 msgstr "सर्वाणि दर्शयतु"
 
-#: src/frontend/ProjectExplorer.cpp:583
+#: src/frontend/ProjectExplorer.cpp:615
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr "'%1' '%2' मध्ये चिनोतुं न शक्यते ।"
 
-#: src/frontend/ProjectExplorer.cpp:597
+#: src/frontend/ProjectExplorer.cpp:629
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
 "this."
 msgstr "दत्तांशं प्रत्यक्षतया '%1' इत्यत्र चिनोतुं न शक्यते । अस्य कृते स्प्रेड्शीट् स्तम्भं चिनोतु ।"
 
-#: src/frontend/ProjectExplorer.cpp:765
+#: src/frontend/ProjectExplorer.cpp:797
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr "फजी मिलान"
 
-#: src/frontend/ProjectExplorer.cpp:981
+#: src/frontend/ProjectExplorer.cpp:1014
 #, kde-format
 msgid "%1 elements: set visible: %2"
 msgstr "%1 तत्त्वानि: दृश्यमानं सेट् कुर्वन्तु: %2"
 
-#: src/frontend/ProjectExplorer.cpp:1009
+#: src/frontend/ProjectExplorer.cpp:1042
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "किं भवान् वास्तवमेव चयनितानि %1 वस्तुनि विलोपयितुम् इच्छति?"
 
-#: src/frontend/ProjectExplorer.cpp:1011
+#: src/frontend/ProjectExplorer.cpp:1044
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "किं भवान् वास्तवमेव %1 विलोपयितुम् इच्छति?"
 
-#: src/frontend/ProjectExplorer.cpp:1015
+#: src/frontend/ProjectExplorer.cpp:1048
 #: src/frontend/worksheet/WorksheetView.cpp:1459
 #, kde-format
 msgid "Delete selected object"
@@ -18551,7 +18552,7 @@ msgid_plural "Delete selected objects"
 msgstr[0] "चयनितं वस्तु विलोपयन्तु"
 msgstr[1] "चयनितवस्तूनि विलोपयन्तु"
 
-#: src/frontend/ProjectExplorer.cpp:1021
+#: src/frontend/ProjectExplorer.cpp:1055
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
@@ -19593,149 +19594,149 @@ msgstr "प्लॉट् योजयतु"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:437
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:447
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:477
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:469
 #, kde-format
 msgid "Plot Area - %1"
 msgstr "प्लॉट क्षेत्रफल - %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:443
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:472
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:726
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:750
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:770
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:464
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:737
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:761
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:781
 #, kde-format
 msgid "Worksheet - %1"
 msgstr "कार्यपत्रकम् - %1"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:471
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:511
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:463
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:495
 #, kde-format
 msgid "Plot data from %1"
 msgstr "%1 तः दत्तांशं प्लॉट् कुर्वन्तु"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:634
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:659
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:680
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:729
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:753
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:773
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:646
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:671
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:692
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:740
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:764
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:784
 #, kde-format
 msgid "Plot Area %1"
 msgstr "प्लॉट क्षेत्रफल %1"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:842
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:853
 #, kde-format
 msgid "Fourier Filter of '%1'"
 msgstr "'%1' इत्यस्य फूरियर फ़िल्टर ।"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:845
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:856
 #, fuzzy, kde-format
 #| msgid "Fourier Transform"
 msgid "Fourier Transform of '%1'"
 msgstr "फूरियर परिवर्तन"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:848
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:859
 #, fuzzy, kde-format
 #| msgid "Hilbert Transform"
 msgid "Hilbert Transform of '%1'"
 msgstr "हिल्बर्ट परिवर्तन"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:851
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:862
 #, fuzzy, kde-format
 #| msgid "Interpolation of '%1'"
 msgid "Convolution of '%1'"
 msgstr "'%1' इत्यस्य प्रक्षेपः ।"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:854
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:865
 #, fuzzy, kde-format
 #| msgid "Interpolation of '%1'"
 msgid "Correlation of '%1'"
 msgstr "'%1' इत्यस्य प्रक्षेपः ।"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:860
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:871
 #, fuzzy, kde-format
 #| msgid "Delete Connection"
 msgid "Baseline Correction of '%1'"
 msgstr "संयोजनं विलोपयन्तु"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:891
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:902
 #, kde-format
 msgid "Probability Density of '%1'"
 msgstr "'%1' इत्यस्य संभाव्यता घनत्वम् ।"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:897
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:908
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
 msgstr "वितरणं '%1' कृते उपयुक्तम्।"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1110
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1116
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:356
 #: src/frontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "घनत्व"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1116
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1122
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:386
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "सैद्धांतिक क्वांटाइल"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1119
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1125
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:388
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "नमूना मात्रा"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1208
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1214
 #, kde-format
 msgid "Sample"
 msgstr "प्रतिदर्श"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1251
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1257
 #, fuzzy, kde-format
 #| msgid "&New Plot Area in an existing Worksheet"
 msgid "New Plot Area in an Existing Worksheet"
 msgstr "&विद्यमानकार्यपत्रके नवीनं प्लॉटक्षेत्रम्"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1252
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1258
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:202
 #, fuzzy, kde-format
 #| msgid "New Plot Area in a new Worksheet"
 msgid "New Plot Area in a New Worksheet"
 msgstr "नूतनं कार्यपत्रकं नूतनं प्लॉट् क्षेत्रम्"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1259
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1265
 #, fuzzy, kde-format
 #| msgid "&New Plot Area in an existing Worksheet"
 msgid "New Plot Areas in an Existing Worksheet"
 msgstr "&विद्यमानकार्यपत्रके नवीनं प्लॉटक्षेत्रम्"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1260
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1266
 #, fuzzy, kde-format
 #| msgid "New Plot Area in a new Worksheet"
 msgid "New Plot Areas in a New Worksheet"
 msgstr "नूतनं कार्यपत्रकं नूतनं प्लॉट् क्षेत्रम्"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1287
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1293
 #, kde-format
 msgid "No data selected to plot."
 msgstr "प्लॉट् कर्तुं कोऽपि दत्तांशः चयनितः नास्ति।"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1291
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1297
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "पूर्वमेव विद्यमानं भूखण्डक्षेत्रं चयनं कर्तव्यम् अस्ति ।"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1295
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1301
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "पूर्वमेव विद्यमानं कार्यपत्रकं चयनं कर्तव्यम् अस्ति ।"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1301
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1307
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "संवादं पिधाय दत्तांशं प्लॉट् कुर्वन्तु ।"
