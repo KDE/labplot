@@ -162,15 +162,14 @@
         <enum-type name="HorizontalAlignment"/>
         <enum-type name="VerticalAlignment"/>
         <enum-type name="PositionLimit"/>
-        <!-- fails finding QPointF for constructor with flatpak-builder -->
+        <!-- PositionWrapper cannot be bound - nested struct with QPointF causes shiboken issues -->
         <!-- <value-type name="PositionWrapper" disable-wrapper="yes"/> -->
-        <modify-function signature="position()" return-type="PositionWrapper"/>
-        <modify-function signature="setPosition(PositionWrapper)" return-type="void"/>
-        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
-        <modify-function signature="setPosition(QPointF)" return-type="void"/>
+        <!-- <declare-function signature="position()const" return-type="PositionWrapper"/> -->
+        <!-- <declare-function signature="setPosition(const PositionWrapper&amp;)" return-type="void"/> -->
         <declare-function signature="positionLogical()" return-type="QPointF"/>
-        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
-        <modify-function signature="setPositionLogical(QPointF)" return-type="void"/>
+        <declare-function signature="setPositionLogical(const QPointF)" return-type="void"/>
+        <declare-function signature="positionScene()" return-type="QPointF"/>
+        <declare-function signature="setPositionScene(const QPointF)" return-type="void"/>
         <declare-function signature="horizontalAlignment()" return-type="WorksheetElement::HorizontalAlignment"/>
         <declare-function signature="setHorizontalAlignment(WorksheetElement::HorizontalAlignment)" return-type="void"/>
         <declare-function signature="verticalAlignment()" return-type="WorksheetElement::VerticalAlignment"/>
@@ -195,8 +194,7 @@
     <object-type name="WorksheetElementContainer" force-abstract="yes" disable-wrapper="yes">
         <declare-function signature="retransform()" return-type="void"/>
         <declare-function signature="rect()const" return-type="QRectF"/>
-        <!-- Could not find a minimal constructor for type 'QRectF': Could not find class "QRectF" in the code model -->
-        <modify-function signature="setRect(QRectF)" return-type="void"/>
+        <declare-function signature="setRect(const QRectF&amp;)" return-type="void"/>
     </object-type>
     <rejection class="XYAnalysisCurve" field-name="*"/>
     <rejection class="XYAnalysisCurve" function-name="*"/>
@@ -797,11 +795,9 @@
         <declare-function signature="background()const" return-type="Background*"/>
         <declare-function signature="line()const" return-type="Line*"/>
         <declare-function signature="positionLogicalStart()const" return-type="QPointF"/>
-        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
-        <modify-function signature="setPositionLogicalStart(QPointF)" return-type="void"/>
+        <declare-function signature="setPositionLogicalStart(const QPointF)" return-type="void"/>
         <declare-function signature="positionLogicalEnd()const" return-type="QPointF"/>
-        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
-        <modify-function signature="setPositionLogicalEnd(QPointF)" return-type="void"/>
+        <declare-function signature="setPositionLogicalEnd(const QPointF)" return-type="void"/>
         <declare-function signature="orientation()const" return-type="WorksheetElement::Orientation"/>
         <declare-function signature="setOrientation(WorksheetElement::Orientation)" return-type="void"/>
     </object-type>
@@ -1368,8 +1364,7 @@
             </modify-argument>
         </declare-function>
         <declare-function signature="pageRect()const" return-type="QRectF"/>
-        <!-- Could not find a minimal constructor for type 'QRectF': Could not find class "QRectF" in the code model -->
-        <modify-function signature="setPageRect(QRectF)" return-type="void"/>
+        <declare-function signature="setPageRect(const QRectF&amp;)" return-type="void"/>
         <declare-function signature="scaleContent()const" return-type="bool"/>
         <declare-function signature="setScaleContent(bool)" return-type="void"/>
         <declare-function signature="useViewSize()const" return-type="bool"/>

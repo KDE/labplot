@@ -2970,12 +2970,12 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 				offsetY -= titleRect.height() * title->scale() / 2.;
 				if (labelsPosition == Axis::LabelsPosition::Out)
 					offsetY -= labelsOffset + tickLabelsPath.boundingRect().height();
-				title->setPosition(QPointF((rect.topLeft().x() + rect.topRight().x()) / 2. + titleOffsetX, rect.bottomLeft().y() - offsetY));
+				title->setPositionScene(QPointF((rect.topLeft().x() + rect.topRight().x()) / 2. + titleOffsetX, rect.bottomLeft().y() - offsetY));
 			} else {
 				offsetX -= titleRect.height() * title->scale() / 2.;
 				if (labelsPosition == Axis::LabelsPosition::Out)
 					offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
-				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
+				title->setPositionScene(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
 
 			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);

@@ -808,15 +808,24 @@ void WorksheetElement::setPositionLogical(QPointF pos) {
 
 /*!
  * \brief WorksheetElement::setPosition
- * sets the position without undo/redo-stuff
+ * Sets the position in scene coordinates without undo/redo-functionality.
+ * This function is not undo-aware and is used internally only and in python bindings.
  * \param point point in scene coordinates
  */
-void WorksheetElement::setPosition(QPointF point) {
+void WorksheetElement::setPositionScene(QPointF point) {
+	// TODO: this function is not undo-aware and is used internally in AxisPrivat only 
+	// and in python bindings since we have problems to expose PositionWrapper.
+	// redesign this later - either do it undo-aware or switch to setPosition(PositionWrapper).
 	Q_D(WorksheetElement);
 	if (point != d->position.point) {
 		d->position.point = point;
 		retransform();
 	}
+}
+
+QPointF WorksheetElement::positionScene() const {
+	Q_D(const WorksheetElement);
+	return d->position.point;
 }
 
 /*!
