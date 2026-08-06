@@ -522,6 +522,11 @@ if(ENABLE_PYTHON_SCRIPTING)
     # the PCH built for labplot_core_obj.  Skip PCH for those files only.
     set_source_files_properties(${shiboken_scripting_generated_sources} ${python_scripting_backend_sources}
         PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+    # Suppress shiboken-generated code warnings
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+        set_source_files_properties(${shiboken_scripting_generated_sources}
+            PROPERTIES COMPILE_FLAGS "-Wno-keyword-macro -Wno-shadow")
+    endif()
 endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
