@@ -513,6 +513,10 @@
         <declare-function signature="setRotationAngle(qreal)" return-type="void"/>
         <declare-function signature="size()const" return-type="qreal"/>
         <declare-function signature="setSize(qreal)" return-type="void"/>
+        <declare-function signature="brush()const" return-type="QBrush"/>
+        <declare-function signature="setBrush(const QBrush&amp;)" return-type="void"/>
+        <declare-function signature="pen()const" return-type="QPen"/>
+        <declare-function signature="setPen(const QPen&amp;)" return-type="void"/>
     </object-type>
     <rejection class="Value" field-name="*"/>
     <rejection class="Value" function-name="*"/>
@@ -1540,6 +1544,9 @@
                 <replace-default-expression with="-1"/>
             </modify-argument>
         </declare-function>
+
+        <declare-function signature="horizontalAxis()const" return-type="Axis*"/>
+        <declare-function signature="verticalAxis()const" return-type="Axis*"/>
     </object-type>
 
     <!-- Worksheet Elements -->
