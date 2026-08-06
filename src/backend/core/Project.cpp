@@ -444,6 +444,11 @@ bool Project::isSupportedProject(const QString& fileName) {
 	}
 #endif
 
+#ifdef HAVE_SCRIPTING
+	if (!open)
+		open = fileName.endsWith(QLatin1String(".py"), Qt::CaseInsensitive);
+#endif
+
 	return open;
 }
 

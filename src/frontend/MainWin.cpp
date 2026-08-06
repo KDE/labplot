@@ -739,6 +739,12 @@ void MainWin::openProject() {
 	supportOthers = true;
 #endif
 
+#ifdef HAVE_SCRIPTING
+	extensions += QLatin1String(";;") + i18n("Python Scripts (*.py)");
+	allExtensions += QLatin1String(" *.py");
+	supportOthers = true;
+#endif
+
 	// add an entry for "All supported files" if we support more than labplot
 	if (supportOthers)
 		extensions = i18n("All supported files (%1)", allExtensions) + QLatin1String(";;") + extensions;
@@ -826,6 +832,20 @@ bool MainWin::openProject(const QString& fileName) {
 	else if (fileName.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
 		WAIT_CURSOR_AUTO_RESET;
 		rc = m_project->loadNotebook(fileName);
+	}
+#endif
+
+#ifdef HAVE_SCRIPTING
+	else if (fileName.endsWith(QLatin1String(".py"), Qt::CaseInsensitive)) {
+		WAIT_CURSOR_AUTO_RESET;
+		auto* script = new Script(QFileInfo(fileName).fileName(), QStringLiteral("Python"));
+		if (script->isInitialized() && script->kTextEditorDocument()->openUrl(QUrl::fromLocalFile(fileName))) {
+			addAspectToProject(script);
+			rc = true;
+		} else {
+			delete script;
+			rc = false;
+		}
 	}
 #endif
 
