@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-03 00:38+0000\n"
+"POT-Creation-Date: 2026-08-06 00:39+0000\n"
 "PO-Revision-Date: 2026-07-21 06:31+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -983,7 +983,7 @@ msgid "%1: upload new image"
 msgstr "%1: ახალი გამოსახულების ატვირთვა"
 
 #: src/backend/datapicker/DatapickerImage.cpp:378
-#: src/backend/worksheet/WorksheetElement.cpp:837
+#: src/backend/worksheet/WorksheetElement.cpp:846
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: მობრუნების კუთხის დაყენება"

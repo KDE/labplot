@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-03 00:38+0000\n"
+"POT-Creation-Date: 2026-08-06 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -972,7 +972,7 @@ msgid "%1: upload new image"
 msgstr "%1：上传新图像"
 
 #: src/backend/datapicker/DatapickerImage.cpp:378
-#: src/backend/worksheet/WorksheetElement.cpp:837
+#: src/backend/worksheet/WorksheetElement.cpp:846
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr ""

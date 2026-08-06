@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-03 00:38+0000\n"
+"POT-Creation-Date: 2026-08-06 00:39+0000\n"
 "PO-Revision-Date: 2026-07-21 06:39-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -988,7 +988,7 @@ msgid "%1: upload new image"
 msgstr "%1: enviar nova imagem"
 
 #: src/backend/datapicker/DatapickerImage.cpp:378
-#: src/backend/worksheet/WorksheetElement.cpp:837
+#: src/backend/worksheet/WorksheetElement.cpp:846
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: definir o ângulo da rotação"

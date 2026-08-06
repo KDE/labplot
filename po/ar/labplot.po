@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-03 00:38+0000\n"
+"POT-Creation-Date: 2026-08-06 00:39+0000\n"
 "PO-Revision-Date: 2026-07-09 11:31+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -989,7 +989,7 @@ msgid "%1: upload new image"
 msgstr "‏%1: ارفع صورة جديدة"
 
 #: src/backend/datapicker/DatapickerImage.cpp:378
-#: src/backend/worksheet/WorksheetElement.cpp:837
+#: src/backend/worksheet/WorksheetElement.cpp:846
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "‏%1: اضبط زاوية الدوران"
