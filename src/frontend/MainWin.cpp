@@ -578,6 +578,12 @@ bool MainWin::newProject(bool createInitialContent) {
 #endif
 			break;
 		}
+		case NewProject::WithScript: {
+#ifdef HAVE_SCRIPTING
+			addAspectToProject(new Script(i18n("Script"), QStringLiteral("Python")));
+#endif
+			break;
+		}
 		}
 
 		m_project->setUndoAware(true);
