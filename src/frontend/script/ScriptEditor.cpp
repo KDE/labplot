@@ -195,6 +195,8 @@ void ScriptEditor::unregisterShortcuts() {
 // ####################################  SLOTs   ################################
 // ##############################################################################
 void ScriptEditor::run() {
+	WAIT_CURSOR_AUTO_RESET;
+	QApplication::processEvents(QEventLoop::ExcludeUserInputEvents); // make sure the wait cursor is shown right away, before the blocking script execution starts
 	m_script->runScript();
 }
 
