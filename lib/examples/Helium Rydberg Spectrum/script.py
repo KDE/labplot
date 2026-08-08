@@ -57,12 +57,8 @@ plotArea.setBottomPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Cent
 
 worksheet.addChild(plotArea)
 
-for axis in plotArea.children(AspectType.Axis):
-    if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-        axis.title().setText("wavelength (nm)")
-    elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-        axis.title().setText("Count")
-
+plotArea.horizontalAxis().title().setText("wavelength (nm)")
+plotArea.verticalAxis().title().setText("Count")
 config1 = XYCurve("config1")
 plotArea.addChild(config1)
 config1.setPlotType(Plot.PlotType.Line)

@@ -47,11 +47,8 @@ border = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlag
 plotArea.setBorderType(border)
 worksheet.addChild(plotArea)
 
-for axis in plotArea.children(AspectType.Axis):
-    if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-        axis.title().setText("Month")
-    elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-        axis.title().setText("Atmospheric Pressure")
+plotArea.horizontalAxis().title().setText("Month")
+plotArea.verticalAxis().title().setText("Atmospheric Pressure")
 
 data = XYCurve("data")
 data.setPlotType(Plot.PlotType.Scatter)

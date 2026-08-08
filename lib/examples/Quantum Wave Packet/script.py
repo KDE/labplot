@@ -132,11 +132,8 @@ if create_objects:
 	plotArea.title().setText("Quantum Wave Packet Evolution")
 
 	# Configure axes
-	for axis in plotArea.children(AspectType.Axis):
-		if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-			axis.title().setText("Position x")
-		elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-			axis.title().setText("ψ(x,t)")
+	plotArea.horizontalAxis().title().setText("Position x")
+	plotArea.verticalAxis().title().setText("ψ(x,t)")
 
 	worksheet.addChild(plotArea)
 

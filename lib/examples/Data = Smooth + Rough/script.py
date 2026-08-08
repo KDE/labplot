@@ -67,19 +67,18 @@ rangeY1.setRange(300, 650)
 plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
 plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
 
-for axis in plotArea1.children(AspectType.Axis):
-    if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-        te10.setText("index")
-        axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
-        axis.setLabelsFont(fo7)
-    elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-        te10.setText("data")
-        axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
-        axis.setLabelsFont(fo7)
+x_axis = plotArea1.horizontalAxis()
+te10.setText("index")
+x_axis.title().setText(te10.toHtml())
+x_axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
+x_axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
+x_axis.setLabelsFont(fo7)
+y_axis = plotArea1.verticalAxis()
+te10.setText("data")
+y_axis.title().setText(te10.toHtml())
+y_axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
+y_axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
+y_axis.setLabelsFont(fo7)
 
 worksheet.addChild(plotArea1)
 
@@ -153,19 +152,18 @@ rangeY2.setRange(-120, 100)
 plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY2)
 plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
 
-for axis in plotArea2.children(AspectType.Axis):
-    if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-        te10.setText("index")
-        axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
-        axis.setLabelsFont(fo7)
-    elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-        te10.setText("rough")
-        axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
-        axis.setLabelsFont(fo7)
+x_axis = plotArea2.horizontalAxis()
+te10.setText("index")
+x_axis.title().setText(te10.toHtml())
+x_axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
+x_axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
+x_axis.setLabelsFont(fo7)
+y_axis = plotArea2.verticalAxis()
+te10.setText("rough")
+y_axis.title().setText(te10.toHtml())
+y_axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
+y_axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
+y_axis.setLabelsFont(fo7)
 
 worksheet.addChild(plotArea2)
 

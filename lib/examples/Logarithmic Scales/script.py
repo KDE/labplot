@@ -45,11 +45,8 @@ plotArea.title().setPosition(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.
 
 worksheet.addChild(plotArea)
 
-for axis in plotArea.children(AspectType.Axis):
-    if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-        axis.title().setText("x")
-    elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-        axis.title().setText("f(x)")
+plotArea.horizontalAxis().title().setText("x")
+plotArea.verticalAxis().title().setText("f(x)")
 
 config11 = XYEquationCurve("f(x)=10^x")
 plotArea.addChild(config11)
@@ -115,11 +112,8 @@ plotArea1.title().setPosition(QPointF(Worksheet.convertToSceneUnits(0, Worksheet
 
 worksheet.addChild(plotArea1)
 
-for axis in plotArea1.children(AspectType.Axis):
-    if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-        axis.title().setText("x")
-    elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-        axis.title().setText("f(x)")
+plotArea1.horizontalAxis().title().setText("x")
+plotArea1.verticalAxis().title().setText("f(x)")
 
 config21 = XYEquationCurve("f(x)=10^x")
 plotArea1.addChild(config21)
@@ -186,11 +180,8 @@ plotArea2.title().setPosition(QPointF(Worksheet.convertToSceneUnits(0, Worksheet
 
 worksheet.addChild(plotArea2)
 
-for axis in plotArea2.children(AspectType.Axis):
-    if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-        axis.title().setText("x")
-    elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-        axis.title().setText("f(x)")
+plotArea2.horizontalAxis().title().setText("x")
+plotArea2.verticalAxis().title().setText("f(x)")
 
 config31 = XYEquationCurve("f(x)=10^x")
 plotArea2.addChild(config31)
@@ -257,12 +248,8 @@ plotArea3.title().setPosition(QPointF(Worksheet.convertToSceneUnits(0, Worksheet
 
 worksheet.addChild(plotArea3)
 
-for axis in plotArea3.children(AspectType.Axis):
-    axis.setMinorTicksLength(0)
-    if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-        axis.title().setText("x")
-    elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-        axis.title().setText("f(x)")
+plotArea3.horizontalAxis().title().setText("x")
+plotArea3.verticalAxis().title().setText("f(x)")
 
 config41 = XYEquationCurve("f(x)=10^x")
 plotArea3.addChild(config41)
