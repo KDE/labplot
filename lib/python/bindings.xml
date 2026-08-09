@@ -509,6 +509,7 @@
         <declare-function signature="dataColumns()const" return-type="QVector&lt;const AbstractColumn*&gt;"/>
         <declare-function signature="setDataColumns(const QVector&lt;const AbstractColumn*&gt;&amp;)" return-type="void"/>
         <declare-function signature="resultHtml()const" return-type="QString"/>
+        <declare-function signature="resultText()const" return-type="QString"/>
         <declare-function signature="setTestMean(double)" return-type="void"/>
         <declare-function signature="testMean()const" return-type="double"/>
         <declare-function signature="setSignificanceLevel(double)" return-type="void"/>
