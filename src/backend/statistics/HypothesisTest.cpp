@@ -54,8 +54,10 @@ QString HypothesisTest::resultText() const {
 
 	// Convert HTML to plain text
 	// Replace headers
-	text.replace(QRegularExpression(QStringLiteral("<h1>(.*?)</h1>")), QStringLiteral("\\1\n") + QString(QStringLiteral("=")).repeated(40) + QStringLiteral("\n"));
-	text.replace(QRegularExpression(QStringLiteral("<h2>(.*?)</h2>")), QStringLiteral("\n\\1\n") + QString(QStringLiteral("-")).repeated(40) + QStringLiteral("\n"));
+	text.replace(QRegularExpression(QStringLiteral("<h1>(.*?)</h1>")),
+				 QStringLiteral("\\1\n") + QString(QStringLiteral("=")).repeated(40) + QStringLiteral("\n"));
+	text.replace(QRegularExpression(QStringLiteral("<h2>(.*?)</h2>")),
+				 QStringLiteral("\n\\1\n") + QString(QStringLiteral("-")).repeated(40) + QStringLiteral("\n"));
 
 	// Replace bold tags
 	text.replace(QStringLiteral("<b>"), QString());
@@ -90,7 +92,6 @@ QString HypothesisTest::resultText() const {
 
 	return text.trimmed();
 }
-
 
 void HypothesisTest::setDataColumns(const QVector<const AbstractColumn*>& cols) {
 	Q_D(HypothesisTest);
