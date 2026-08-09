@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-08 00:40+0000\n"
-"PO-Revision-Date: 2026-07-21 06:31+0200\n"
+"PO-Revision-Date: 2026-08-08 06:56+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17900,10 +17900,9 @@ msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter-ის ბლოკნოტები (*.ipynb)"
 
 #: src/frontend/MainWin.cpp:743
-#, fuzzy, kde-format
-#| msgid "Python file (*.py)"
+#, kde-format
 msgid "Python Scripts (*.py)"
-msgstr "Python-ის ფაილი (*.py)"
+msgstr "Python-ის სკრიპტები (*.py)"
 
 #: src/frontend/MainWin.cpp:750
 #, kde-format
@@ -18786,10 +18785,9 @@ msgid "With Notebook"
 msgstr "ნოუთბუქით"
 
 #: src/frontend/SettingsGeneralPage.cpp:228
-#, fuzzy, kde-format
-#| msgid "Python Script"
+#, kde-format
 msgid "With Python Script"
-msgstr "Python-ის სკრიპტი"
+msgstr "Python-ის სკრიპტით"
 
 #: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format

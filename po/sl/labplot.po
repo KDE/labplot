@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-08 00:40+0000\n"
-"PO-Revision-Date: 2026-07-21 06:48+0200\n"
+"PO-Revision-Date: 2026-08-08 07:01+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17903,10 +17903,9 @@ msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Zvezki Jupyter (*.ipynb)"
 
 #: src/frontend/MainWin.cpp:743
-#, fuzzy, kde-format
-#| msgid "Python file (*.py)"
+#, kde-format
 msgid "Python Scripts (*.py)"
-msgstr "Pythonova datoteka (*.py)"
+msgstr "Pythonovi skripti (*.py)"
 
 #: src/frontend/MainWin.cpp:750
 #, kde-format
@@ -18797,10 +18796,9 @@ msgid "With Notebook"
 msgstr "Z zvezkom"
 
 #: src/frontend/SettingsGeneralPage.cpp:228
-#, fuzzy, kde-format
-#| msgid "Python Script"
+#, kde-format
 msgid "With Python Script"
-msgstr "Pythonov skript"
+msgstr "S Pythonovo skripto"
 
 #: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format

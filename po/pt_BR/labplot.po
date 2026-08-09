@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-08 00:40+0000\n"
-"PO-Revision-Date: 2026-07-21 06:39-0300\n"
+"PO-Revision-Date: 2026-08-08 07:48-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -17953,10 +17953,9 @@ msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Blocos de notas Jupyter (*.ipynb)"
 
 #: src/frontend/MainWin.cpp:743
-#, fuzzy, kde-format
-#| msgid "Python file (*.py)"
+#, kde-format
 msgid "Python Scripts (*.py)"
-msgstr "Arquivo python (*.py)"
+msgstr "Scripts Python (*.py)"
 
 #: src/frontend/MainWin.cpp:750
 #, kde-format
@@ -18842,10 +18841,9 @@ msgid "With Notebook"
 msgstr "Com bloco de notas"
 
 #: src/frontend/SettingsGeneralPage.cpp:228
-#, fuzzy, kde-format
-#| msgid "Python Script"
+#, kde-format
 msgid "With Python Script"
-msgstr "Script Python"
+msgstr "Com Script Python"
 
 #: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format
