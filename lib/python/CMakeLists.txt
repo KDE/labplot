@@ -118,6 +118,8 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/ranget_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/statisticsspreadsheet_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/statisticsspreadsheet_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/hypothesistest_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/hypothesistest_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/symbol_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/symbol_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/value_wrapper.cpp

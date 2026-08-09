@@ -24,6 +24,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QRegularExpression>
 #include <QtConcurrent/QtConcurrent>
 
 #include <KConfig>
@@ -46,6 +47,50 @@ QString HypothesisTest::resultHtml() const {
 	Q_D(const HypothesisTest);
 	return d->resultText;
 }
+
+QString HypothesisTest::resultText() const {
+	Q_D(const HypothesisTest);
+	QString text = d->resultText;
+
+	// Convert HTML to plain text
+	// Replace headers
+	text.replace(QRegularExpression(QStringLiteral("<h1>(.*?)</h1>")), QStringLiteral("\\1\n") + QString(QStringLiteral("=")).repeated(40) + QStringLiteral("\n"));
+	text.replace(QRegularExpression(QStringLiteral("<h2>(.*?)</h2>")), QStringLiteral("\n\\1\n") + QString(QStringLiteral("-")).repeated(40) + QStringLiteral("\n"));
+
+	// Replace bold tags
+	text.replace(QStringLiteral("<b>"), QString());
+	text.replace(QStringLiteral("</b>"), QString());
+
+	// Replace line breaks
+	text.replace(QStringLiteral("<br>"), QStringLiteral("\n"));
+
+	// Remove table tags and format as plain text
+	text.remove(QRegularExpression(QStringLiteral("</?table[^>]*>")));
+	text.remove(QRegularExpression(QStringLiteral("</?thead[^>]*>")));
+	text.remove(QRegularExpression(QStringLiteral("</?tbody[^>]*>")));
+	text.replace(QRegularExpression(QStringLiteral("<tr[^>]*>")), QString());
+	text.replace(QStringLiteral("</tr>"), QStringLiteral("\n"));
+	text.replace(QRegularExpression(QStringLiteral("<th[^>]*>")), QString());
+	text.replace(QStringLiteral("</th>"), QStringLiteral("\t"));
+	text.replace(QRegularExpression(QStringLiteral("<td[^>]*>")), QString());
+	text.replace(QStringLiteral("</td>"), QStringLiteral("\t"));
+
+	// Clean up any remaining HTML tags
+	text.remove(QRegularExpression(QStringLiteral("<[^>]*>")));
+
+	// Convert HTML entities
+	text.replace(QStringLiteral("&nbsp;"), QStringLiteral(" "));
+	text.replace(QStringLiteral("&lt;"), QStringLiteral("<"));
+	text.replace(QStringLiteral("&gt;"), QStringLiteral(">"));
+	text.replace(QStringLiteral("&amp;"), QStringLiteral("&"));
+
+	// Clean up excessive whitespace
+	text.replace(QRegularExpression(QStringLiteral("[ \\t]+\n")), QStringLiteral("\n")); // trailing spaces
+	text.replace(QRegularExpression(QStringLiteral("\n{3,}")), QStringLiteral("\n\n")); // multiple blank lines
+
+	return text.trimmed();
+}
+
 
 void HypothesisTest::setDataColumns(const QVector<const AbstractColumn*>& cols) {
 	Q_D(HypothesisTest);

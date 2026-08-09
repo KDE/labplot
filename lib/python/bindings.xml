@@ -29,6 +29,7 @@
         <reject-enum-value name="AbstractAspect"/>
         <reject-enum-value name="Script"/>
         <reject-enum-value name="StatisticsSpreadsheet"/>
+        <reject-enum-value name="HypothesisTest"/>
     </enum-type>
     <?if scripting ?>
     <function signature="project()"/>
@@ -499,6 +500,24 @@
         <enum-type name="Metric" flags="yes"/>
         <declare-function signature="metrics()const" return-type="StatisticsSpreadsheet::Metrics"/>
         <declare-function signature="setMetrics(StatisticsSpreadsheet::Metrics)" return-type="void"/>
+    </object-type>
+    <rejection class="HypothesisTest" field-name="*"/>
+    <rejection class="HypothesisTest" function-name="*"/>
+    <object-type name="HypothesisTest" disable-wrapper="yes">
+        <enum-type name="Test"/>
+        <declare-function signature="HypothesisTest(const QString&amp;)" return-type="void"/>
+        <declare-function signature="dataColumns()const" return-type="QVector&lt;const AbstractColumn*&gt;"/>
+        <declare-function signature="setDataColumns(const QVector&lt;const AbstractColumn*&gt;&amp;)" return-type="void"/>
+        <declare-function signature="resultHtml()const" return-type="QString"/>
+        <declare-function signature="setTestMean(double)" return-type="void"/>
+        <declare-function signature="testMean()const" return-type="double"/>
+        <declare-function signature="setSignificanceLevel(double)" return-type="void"/>
+        <declare-function signature="significanceLevel()const" return-type="double"/>
+        <declare-function signature="setTail(nsl_stats_tail_type)" return-type="void"/>
+        <declare-function signature="tail()const" return-type="nsl_stats_tail_type"/>
+        <declare-function signature="setTest(HypothesisTest::Test)" return-type="void"/>
+        <declare-function signature="test()const" return-type="HypothesisTest::Test"/>
+        <declare-function signature="recalculate()" return-type="void"/>
     </object-type>
     <rejection class="Symbol" field-name="*"/>
     <rejection class="Symbol" function-name="*"/>
@@ -1679,4 +1698,5 @@
     <enum-type name="nsl_smooth_type"/>
     <enum-type name="nsl_smooth_pad_mode"/>
     <enum-type name="nsl_smooth_weight_type"/>
+    <enum-type name="nsl_stats_tail_type"/>
 </typesystem>

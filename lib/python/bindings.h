@@ -58,6 +58,7 @@
 #include "src/backend/worksheet/Line.h"
 #include "src/backend/lib/Range.h"
 #include "src/backend/spreadsheet/StatisticsSpreadsheet.h"
+#include "src/backend/statistics/HypothesisTest.h"
 #include "src/backend/worksheet/plots/cartesian/Symbol.h"
 #include "src/backend/worksheet/plots/cartesian/Value.h"
 
