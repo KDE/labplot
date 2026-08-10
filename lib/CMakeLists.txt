@@ -95,6 +95,10 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
 )
 
+set(STATISTICS_SOURCES
+    ${BACKEND_DIR}/statistics/HypothesisTest.h
+)
+
 set(TIME_SERIES_ANALYSIS_SOURCES
     ${BACKEND_DIR}/timeseriesanalysis/SeasonalDecomposition.cpp
 )
@@ -109,6 +113,7 @@ set(SDK_SOURCES
     ${WORKSHEET_ELEMENT_CONTAINER_SOURCES}
     ${PLOT_AREA_ELEMENT_SOURCES}
     ${PLOT_SOURCES}
+    ${STATISTICS_SOURCES}
     ${TIME_SERIES_ANALYSIS_SOURCES}
 )
 
