@@ -983,7 +983,8 @@ void AbstractAspectTest::loadExampleProjects() {
 
 	for (const auto& fi : files) {
 		// skip project that require python or Maxima runtimes that are not available in the CI environment
-		if (fi.fileName() == QLatin1String("Seasonal Decomposition with STL and MSTL.lml") || fi.fileName() == QLatin1String("Maxima Tutorial for Beginners.lml"))
+		if (fi.fileName() == QLatin1String("Seasonal Decomposition with STL and MSTL.lml")
+			|| fi.fileName() == QLatin1String("Maxima Tutorial for Beginners.lml"))
 			continue;
 
 		Project project;
