@@ -142,6 +142,7 @@ set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_sf_window.c
     ${BACKEND_DIR}/nsl/nsl_smooth.c
     ${BACKEND_DIR}/nsl/nsl_sort.c
+    ${BACKEND_DIR}/nsl/nsl_statistical_test.c
     ${BACKEND_DIR}/nsl/nsl_stats.c
 )
 
@@ -180,6 +181,7 @@ set(SDK_DEPENDENCY_SOURCES
 
 set(SDK_INTERNAL_SOURCES
     ${FRONTEND_DIR}/worksheet/WorksheetView.cpp
+    ${FRONTEND_DIR}/statistics/HypothesisTestView.cpp
     ${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
     ${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
     ${BACKEND_DIR}/core/datatypes/Double2IntegerFilter.h
