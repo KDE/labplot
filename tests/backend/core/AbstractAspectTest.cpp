@@ -4,7 +4,7 @@
 	Description          : Tests for AbstractAspect
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -22,6 +22,8 @@
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
 #include "backend/lib/UndoStack.h"
+
+#include <QDir>
 
 void AbstractAspectTest::name() {
 	Project project;
@@ -961,6 +963,33 @@ void AbstractAspectTest::reparentPreservesOrder() {
 	QCOMPARE(project.childCount<AbstractAspect>(), 1);
 	QCOMPARE(treeModel.rowCount(projectIdx), 1);
 	QCOMPARE(treeModel.data(treeModel.index(0, 0, projectIdx)).toString(), QStringLiteral("Folder"));
+}
+
+/*!
+* \brief AbstractAspectTest::loadExampleProjects
+ * Load all example projects in the examples directory and verify that they can be loaded without errors.
+*/
+void AbstractAspectTest::loadExampleProjects() {
+	const QDir examplesDir(QStringLiteral(LABPLOT_DATA_DIR "/examples"));
+	QVERIFY2(examplesDir.exists(), "examples directory not found");
+
+	// collect .lml files from all subdirectories
+	QFileInfoList files;
+	QDirIterator it(examplesDir.absolutePath(), {QStringLiteral("*.lml")}, QDir::Files, QDirIterator::Subdirectories);
+	while (it.hasNext())
+		files << QFileInfo(it.next());
+
+	QVERIFY2(!files.isEmpty(), "no .lml example files found");
+
+	for (const auto& fi : files) {
+		// skip project that require python or Maxima runtimes that are not available in the CI environment
+		if (fi.fileName() == QLatin1String("Seasonal Decomposition with STL and MSTL.lml") || fi.fileName() == QLatin1String("Maxima Tutorial for Beginners.lml"))
+			continue;
+
+		Project project;
+		const bool ok = project.load(fi.absoluteFilePath());
+		QVERIFY2(ok, qPrintable(QStringLiteral("failed to load: ") + fi.fileName()));
+	}
 }
 
 QTEST_MAIN(AbstractAspectTest)
