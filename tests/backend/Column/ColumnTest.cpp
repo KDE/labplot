@@ -2515,4 +2515,411 @@ void ColumnTest::testFormulaDateTimeEmptyCells() {
 	QCOMPARE(dayIntCol.isValid(3), false); // Empty → invalid
 }
 
+// ############################################################################
+// setColumnMode conversion tests
+// ############################################################################
+
+void ColumnTest::columnModeDoubleToBigInt() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Double);
+	c.setValues({1.5, 2.7, NAN});
+
+	c.setColumnMode(Column::ColumnMode::BigInt);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::BigInt);
+	QCOMPARE(c.bigIntAt(0), (qint64)2); // round(1.5)
+	QCOMPARE(c.bigIntAt(1), (qint64)3); // round(2.7)
+	QCOMPARE(c.bigIntAt(2), (qint64)0); // NaN → 0
+	QCOMPARE(c.isValid(2), false); // NaN
+}
+
+void ColumnTest::columnModeDoubleToDateTime() {
+	// Double2DateTimeFilter interprets doubles as fractional days since 1900-01-01
+	Column c(QStringLiteral("col"), Column::ColumnMode::Double);
+	c.setValues({0.0, 1.0}); // day 0 and day 1 relative to 1900-01-01
+
+	c.setColumnMode(Column::ColumnMode::DateTime);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::DateTime);
+	QCOMPARE(c.dateTimeAt(0), QDateTime(QDate(1900, 1, 1), QTime(0, 0, 0)));
+	QCOMPARE(c.dateTimeAt(1), QDateTime(QDate(1900, 1, 2), QTime(0, 0, 0)));
+}
+
+void ColumnTest::columnModeDoubleToMonth() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Double);
+	c.setValues({1.0});
+
+	c.setColumnMode(Column::ColumnMode::Month);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Month);
+	QVERIFY(c.dateTimeAt(0).isValid());
+}
+
+void ColumnTest::columnModeDoubleToDay() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Double);
+	c.setValues({1.0});
+
+	c.setColumnMode(Column::ColumnMode::Day);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Day);
+	QVERIFY(c.dateTimeAt(0).isValid());
+}
+
+void ColumnTest::columnModeIntegerToBigInt() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Integer);
+	c.setIntegers({42, -7, 0});
+
+	c.setColumnMode(Column::ColumnMode::BigInt);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::BigInt);
+	QCOMPARE(c.bigIntAt(0), (qint64)42);
+	QCOMPARE(c.bigIntAt(1), (qint64)-7);
+	QCOMPARE(c.bigIntAt(2), (qint64)0);
+}
+
+void ColumnTest::columnModeIntegerToDateTime() {
+	// Integer2DateTimeFilter: epoch.addMSecs(value)
+	Column c(QStringLiteral("col"), Column::ColumnMode::Integer);
+	c.setIntegers({0, 1000});
+
+	c.setColumnMode(Column::ColumnMode::DateTime);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::DateTime);
+	const QDateTime epoch = QDateTime::fromSecsSinceEpoch(0, QTimeZone::UTC);
+	QCOMPARE(c.dateTimeAt(0), epoch);
+	QCOMPARE(c.dateTimeAt(1), epoch.addMSecs(1000));
+}
+
+void ColumnTest::columnModeBigIntToDouble() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::BigInt);
+	c.setBigInts({42LL, -7LL, 0LL});
+
+	c.setColumnMode(Column::ColumnMode::Double);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Double);
+	QCOMPARE(c.valueAt(0), 42.0);
+	QCOMPARE(c.valueAt(1), -7.0);
+	QCOMPARE(c.valueAt(2), 0.0);
+}
+
+void ColumnTest::columnModeBigIntToInteger() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::BigInt);
+	c.setBigInts({42LL, -7LL, 0LL});
+
+	c.setColumnMode(Column::ColumnMode::Integer);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Integer);
+	QCOMPARE(c.integerAt(0), 42);
+	QCOMPARE(c.integerAt(1), -7);
+	QCOMPARE(c.integerAt(2), 0);
+}
+
+void ColumnTest::columnModeBigIntToText() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::BigInt);
+	c.setBigInts({42LL});
+
+	c.setColumnMode(Column::ColumnMode::Text);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Text);
+	QCOMPARE(c.textAt(0), QLocale().toString((qint64)42));
+}
+
+void ColumnTest::columnModeBigIntToDateTime() {
+	// BigInt2DateTimeFilter: epoch.addMSecs(value)
+	Column c(QStringLiteral("col"), Column::ColumnMode::BigInt);
+	const qint64 ms = 1'000'000LL;
+	c.setBigInts({0LL, ms});
+
+	c.setColumnMode(Column::ColumnMode::DateTime);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::DateTime);
+	const QDateTime epoch = QDateTime::fromSecsSinceEpoch(0, QTimeZone::UTC);
+	QCOMPARE(c.dateTimeAt(0), epoch);
+	QCOMPARE(c.dateTimeAt(1), epoch.addMSecs(ms));
+}
+
+void ColumnTest::columnModeDateTimeToDouble() {
+	// DateTime2DoubleFilter: fractional days since 1900-01-01
+	Column c(QStringLiteral("col"), Column::ColumnMode::DateTime);
+	c.setDateTimes({QDateTime(QDate(1900, 1, 1), QTime(0, 0, 0)), QDateTime(QDate(1900, 1, 2), QTime(0, 0, 0))});
+
+	c.setColumnMode(Column::ColumnMode::Double);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Double);
+	QCOMPARE(c.valueAt(0), 0.0);
+	QCOMPARE(c.valueAt(1), 1.0);
+}
+
+void ColumnTest::columnModeDateTimeToInteger() {
+	// DateTime2IntegerFilter: toMSecsSinceEpoch() cast to int
+	Column c(QStringLiteral("col"), Column::ColumnMode::DateTime);
+	const QDateTime epoch = QDateTime::fromSecsSinceEpoch(0, QTimeZone::UTC);
+	c.setDateTimes({epoch, epoch.addMSecs(500)});
+
+	c.setColumnMode(Column::ColumnMode::Integer);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Integer);
+	QCOMPARE(c.integerAt(0), 0);
+	QCOMPARE(c.integerAt(1), 500);
+}
+
+void ColumnTest::columnModeDateTimeToBigInt() {
+	// DateTime2BigIntFilter: toMSecsSinceEpoch()
+	Column c(QStringLiteral("col"), Column::ColumnMode::DateTime);
+	const QDateTime epoch = QDateTime::fromSecsSinceEpoch(0, QTimeZone::UTC);
+	const qint64 ms = 1'000'000LL;
+	c.setDateTimes({epoch, epoch.addMSecs(ms)});
+
+	c.setColumnMode(Column::ColumnMode::BigInt);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::BigInt);
+	QCOMPARE(c.bigIntAt(0), (qint64)0);
+	QCOMPARE(c.bigIntAt(1), ms);
+}
+
+void ColumnTest::columnModeDateTimeToText() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::DateTime);
+	c.setDateTimes({QDateTime(QDate(2024, 3, 15), QTime(0, 0, 0))});
+
+	c.setColumnMode(Column::ColumnMode::Text);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Text);
+	QVERIFY(!c.textAt(0).isEmpty());
+}
+
+void ColumnTest::columnModeTextToDateTime() {
+	// String2DateTimeFilter default format: "yyyy-MM-dd hh:mm:ss.zzz"
+	Column c(QStringLiteral("col"), Column::ColumnMode::Text);
+	c.setText({QStringLiteral("2024-03-15 00:00:00.000"), QStringLiteral("not-a-date")});
+
+	c.setColumnMode(Column::ColumnMode::DateTime);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::DateTime);
+	QCOMPARE(c.dateTimeAt(0), QDateTime(QDate(2024, 3, 15), QTime(0, 0, 0)));
+	QVERIFY(!c.dateTimeAt(1).isValid()); // unparseable string → invalid
+}
+
+// ############################################################################
+// value label tests
+// ############################################################################
+
+void ColumnTest::valueLabelsIntegerColumnBasic() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Integer);
+	c.addValueLabel(1, QStringLiteral("one"));
+	c.addValueLabel(2, QStringLiteral("two"));
+	c.addValueLabel(3, QStringLiteral("three"));
+
+	QCOMPARE(c.valueLabelsCount(), 3);
+	QVERIFY(c.valueLabelsInitialized());
+
+	const auto* labels = c.intValueLabels();
+	QVERIFY(labels != nullptr);
+	QCOMPARE(labels->size(), 3);
+	QCOMPARE(labels->at(0).value, 1);
+	QCOMPARE(labels->at(0).label, QStringLiteral("one"));
+	QCOMPARE(labels->at(2).value, 3);
+	QCOMPARE(labels->at(2).label, QStringLiteral("three"));
+}
+
+void ColumnTest::valueLabelsBigIntColumn() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::BigInt);
+	c.addValueLabel((qint64)100, QStringLiteral("hundred"));
+	c.addValueLabel((qint64)200, QStringLiteral("two hundred"));
+
+	QCOMPARE(c.valueLabelsCount(), 2);
+
+	const auto* labels = c.bigIntValueLabels();
+	QVERIFY(labels != nullptr);
+	QCOMPARE(labels->size(), 2);
+	QCOMPARE(labels->at(0).value, (qint64)100);
+	QCOMPARE(labels->at(0).label, QStringLiteral("hundred"));
+	QCOMPARE(labels->at(1).value, (qint64)200);
+
+	// wrong-type accessor returns null
+	QCOMPARE(c.intValueLabels(), nullptr);
+	QCOMPARE(c.valueLabels(), nullptr);
+}
+
+void ColumnTest::valueLabelsTextColumn() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Text);
+	c.addValueLabel(QStringLiteral("low"), QStringLiteral("Low state"));
+	c.addValueLabel(QStringLiteral("high"), QStringLiteral("High state"));
+
+	QCOMPARE(c.valueLabelsCount(), 2);
+
+	const auto* labels = c.textValueLabels();
+	QVERIFY(labels != nullptr);
+	QCOMPARE(labels->size(), 2);
+	QCOMPARE(labels->at(0).value, QStringLiteral("low"));
+	QCOMPARE(labels->at(0).label, QStringLiteral("Low state"));
+
+	// wrong-type accessors return null
+	QCOMPARE(c.intValueLabels(), nullptr);
+	QCOMPARE(c.valueLabels(), nullptr);
+}
+
+void ColumnTest::valueLabelsMigrateDoubleToInteger() {
+	// Double labels are truncated (cast) when migrating to Integer
+	Column c(QStringLiteral("col"), Column::ColumnMode::Double);
+	c.addValueLabel(1.9, QStringLiteral("almost two"));
+	c.addValueLabel(5.0, QStringLiteral("five"));
+
+	c.setColumnMode(Column::ColumnMode::Integer);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Integer);
+	QCOMPARE(c.valueLabelsCount(), 2);
+
+	const auto* labels = c.intValueLabels();
+	QVERIFY(labels != nullptr);
+	QCOMPARE(labels->at(0).value, 1); // (int)1.9 = 1 (truncation)
+	QCOMPARE(labels->at(0).label, QStringLiteral("almost two"));
+	QCOMPARE(labels->at(1).value, 5);
+	QCOMPARE(labels->at(1).label, QStringLiteral("five"));
+}
+
+void ColumnTest::valueLabelsMigrateDoubleToBigInt() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Double);
+	c.addValueLabel(42.0, QStringLiteral("forty-two"));
+	c.addValueLabel(-7.0, QStringLiteral("minus seven"));
+
+	c.setColumnMode(Column::ColumnMode::BigInt);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::BigInt);
+	const auto* labels = c.bigIntValueLabels();
+	QVERIFY(labels != nullptr);
+	QCOMPARE(labels->size(), 2);
+	QCOMPARE(labels->at(0).value, (qint64)42);
+	QCOMPARE(labels->at(1).value, (qint64)-7);
+}
+
+void ColumnTest::valueLabelsMigrateDoubleToText() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Double);
+	c.addValueLabel(1.0, QStringLiteral("one"));
+	c.addValueLabel(2.0, QStringLiteral("two"));
+
+	c.setColumnMode(Column::ColumnMode::Text);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Text);
+	const auto* labels = c.textValueLabels();
+	QVERIFY(labels != nullptr);
+	QCOMPARE(labels->size(), 2);
+	QCOMPARE(labels->at(0).label, QStringLiteral("one"));
+	QCOMPARE(labels->at(1).label, QStringLiteral("two"));
+}
+
+void ColumnTest::valueLabelsMigrateIntegerToDouble() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Integer);
+	c.addValueLabel(10, QStringLiteral("ten"));
+	c.addValueLabel(20, QStringLiteral("twenty"));
+
+	c.setColumnMode(Column::ColumnMode::Double);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Double);
+	const auto* labels = c.valueLabels();
+	QVERIFY(labels != nullptr);
+	QCOMPARE(labels->size(), 2);
+	QCOMPARE(labels->at(0).value, 10.0);
+	QCOMPARE(labels->at(0).label, QStringLiteral("ten"));
+	QCOMPARE(labels->at(1).value, 20.0);
+}
+
+void ColumnTest::valueLabelsMigrateIntegerToBigInt() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Integer);
+	c.addValueLabel(7, QStringLiteral("seven"));
+
+	c.setColumnMode(Column::ColumnMode::BigInt);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::BigInt);
+	const auto* labels = c.bigIntValueLabels();
+	QVERIFY(labels != nullptr);
+	QCOMPARE(labels->size(), 1);
+	QCOMPARE(labels->at(0).value, (qint64)7);
+	QCOMPARE(labels->at(0).label, QStringLiteral("seven"));
+}
+
+void ColumnTest::valueLabelsMigrateBigIntToDouble() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::BigInt);
+	c.addValueLabel((qint64)1000, QStringLiteral("thousand"));
+
+	c.setColumnMode(Column::ColumnMode::Double);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Double);
+	const auto* labels = c.valueLabels();
+	QVERIFY(labels != nullptr);
+	QCOMPARE(labels->size(), 1);
+	QCOMPARE(labels->at(0).value, 1000.0);
+	QCOMPARE(labels->at(0).label, QStringLiteral("thousand"));
+}
+
+void ColumnTest::valueLabelsMigrateBigIntToInteger() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::BigInt);
+	c.addValueLabel((qint64)99, QStringLiteral("ninety-nine"));
+
+	c.setColumnMode(Column::ColumnMode::Integer);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Integer);
+	const auto* labels = c.intValueLabels();
+	QVERIFY(labels != nullptr);
+	QCOMPARE(labels->size(), 1);
+	QCOMPARE(labels->at(0).value, 99);
+	QCOMPARE(labels->at(0).label, QStringLiteral("ninety-nine"));
+}
+
+void ColumnTest::valueLabelsMigrateTextToDouble() {
+	// Parseable strings become double values; unparseable ones are dropped
+	Column c(QStringLiteral("col"), Column::ColumnMode::Text);
+	c.addValueLabel(QStringLiteral("3.14"), QStringLiteral("pi-ish"));
+	c.addValueLabel(QStringLiteral("not-a-number"), QStringLiteral("invalid"));
+
+	c.setColumnMode(Column::ColumnMode::Double);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Double);
+	const auto* labels = c.valueLabels();
+	QVERIFY(labels != nullptr);
+	QCOMPARE(labels->size(), 1); // "not-a-number" is dropped
+	QCOMPARE(labels->at(0).label, QStringLiteral("pi-ish"));
+}
+
+void ColumnTest::valueLabelsMigrateDateTimeToDouble() {
+	// DateTime → Double migration is not supported; all labels are dropped
+	Column c(QStringLiteral("col"), Column::ColumnMode::DateTime);
+	c.addValueLabel(QDateTime(QDate(2024, 1, 1), QTime(0, 0, 0)), QStringLiteral("new year"));
+	QCOMPARE(c.valueLabelsCount(), 1);
+
+	c.setColumnMode(Column::ColumnMode::Double);
+
+	QCOMPARE(c.columnMode(), Column::ColumnMode::Double);
+	// labels are re-initialized empty after migration
+	QCOMPARE(c.valueLabelsCount(), 0);
+}
+
+void ColumnTest::valueLabelsRemoveAll() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Double);
+	c.addValueLabel(1.0, QStringLiteral("one"));
+	c.addValueLabel(2.0, QStringLiteral("two"));
+	c.addValueLabel(3.0, QStringLiteral("three"));
+	QCOMPARE(c.valueLabelsCount(), 3);
+
+	c.valueLabelsRemoveAll();
+
+	QCOMPARE(c.valueLabelsCount(), 0);
+	QVERIFY(c.valueLabelsInitialized()); // still initialized, just empty
+}
+
+void ColumnTest::valueLabelsRemoveSingle() {
+	Column c(QStringLiteral("col"), Column::ColumnMode::Integer);
+	c.addValueLabel(1, QStringLiteral("one"));
+	c.addValueLabel(2, QStringLiteral("two"));
+	c.addValueLabel(3, QStringLiteral("three"));
+	QCOMPARE(c.valueLabelsCount(), 3);
+
+	c.removeValueLabel(QLocale().toString(2)); // key is locale-formatted value
+
+	QCOMPARE(c.valueLabelsCount(), 2);
+	const auto* labels = c.intValueLabels();
+	QVERIFY(labels != nullptr);
+	// value 2 is gone, 1 and 3 remain
+	QCOMPARE(labels->at(0).value, 1);
+	QCOMPARE(labels->at(1).value, 3);
+}
+
 QTEST_MAIN(ColumnTest)
