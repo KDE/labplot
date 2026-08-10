@@ -966,9 +966,9 @@ void AbstractAspectTest::reparentPreservesOrder() {
 }
 
 /*!
-* \brief AbstractAspectTest::loadExampleProjects
+ * \brief AbstractAspectTest::loadExampleProjects
  * Load all example projects in the examples directory and verify that they can be loaded without errors.
-*/
+ */
 void AbstractAspectTest::loadExampleProjects() {
 	const QDir examplesDir(QStringLiteral(LABPLOT_DATA_DIR "/examples"));
 	QVERIFY2(examplesDir.exists(), "examples directory not found");
