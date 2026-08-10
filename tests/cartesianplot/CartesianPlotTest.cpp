@@ -21,6 +21,7 @@
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotPrivate.h"
 #include "backend/worksheet/plots/cartesian/plots.h"
 #include "frontend/dockwidgets/XYFitCurveDock.h"
@@ -1794,6 +1795,25 @@ void CartesianPlotTest::zValueAfterAddMoveRemove() {
 	zValueHistogram = h->graphicsItem()->zValue();
 	zValueCurve1 = curve1->graphicsItem()->zValue();
 	QVERIFY(zValueCurve1 < zValueHistogram);
+}
+
+void CartesianPlotTest::legendSingleInstance() {
+	auto* project = new Project();
+	auto* worksheet = new Worksheet(QStringLiteral("ws"));
+	project->addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+
+	// first call creates the legend
+	plot->addLegend();
+	QCOMPARE(plot->childCount<CartesianPlotLegend>(), 1);
+
+	// second call must be a no-op — only one legend is allowed
+	plot->addLegend();
+	QCOMPARE(plot->childCount<CartesianPlotLegend>(), 1);
+
+	delete project;
 }
 
 QTEST_MAIN(CartesianPlotTest)
