@@ -96,7 +96,7 @@ set(PLOT_SOURCES
 )
 
 set(STATISTICS_SOURCES
-    ${BACKEND_DIR}/statistics/HypothesisTest.h
+    ${BACKEND_DIR}/statistics/HypothesisTest.cpp
 )
 
 set(TIME_SERIES_ANALYSIS_SOURCES
