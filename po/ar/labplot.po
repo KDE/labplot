@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-10 00:40+0000\n"
-"PO-Revision-Date: 2026-07-09 11:31+0400\n"
+"PO-Revision-Date: 2026-08-10 18:05+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -2584,7 +2584,7 @@ msgstr "الجهاز غير موجود."
 #: src/backend/datasources/LiveDataSource.cpp:746
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr "ليس للمستخدم صلاحيات كافية لفتح الجهاز."
+msgstr "ليس للمستخدم أذون كافية لفتح الجهاز."
 
 #: src/backend/datasources/LiveDataSource.cpp:749
 #, kde-format
@@ -17808,10 +17808,9 @@ msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "كُرّاسات Jupyter ‏(*.ipynb)"
 
 #: src/frontend/MainWin.cpp:743
-#, fuzzy, kde-format
-#| msgid "Python file (*.py)"
+#, kde-format
 msgid "Python Scripts (*.py)"
-msgstr "ملف بايثون (*.py)"
+msgstr "سكربتات بايثون (*.py)"
 
 #: src/frontend/MainWin.cpp:750
 #, kde-format
@@ -18704,10 +18703,9 @@ msgid "With Notebook"
 msgstr "مع كُرّاس"
 
 #: src/frontend/SettingsGeneralPage.cpp:228
-#, fuzzy, kde-format
-#| msgid "Python Script"
+#, kde-format
 msgid "With Python Script"
-msgstr "سكربت بايثون"
+msgstr "مع سكربت بايثون"
 
 #: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format
@@ -24876,19 +24874,15 @@ msgstr "y=g(t)"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbCount)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:311
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of points to evaluate"
-msgstr "عدد النقاط:"
+msgstr "عدد النقاط المطلوب تقييمها"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoPoints)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:327
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically determine the optimal number of digits after the decimal "
-#| "point"
+#, kde-format
 msgid "Automatically calculate the number of points based on plot pixel width"
-msgstr "حدد آليًا العدد الأمثل من الأرقام بعد الفاصلة العشرية"
+msgstr "حساب عدد النقاط آليًا بناءً على عرض بكسل الرسم البياني"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
