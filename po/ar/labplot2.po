@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 16:18+0000\n"
-"PO-Revision-Date: 2026-03-24 10:43+0400\n"
+"PO-Revision-Date: 2026-08-10 18:05+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2290,7 +2290,7 @@ msgstr "فشل فتح الجهاز."
 #, kde-format
 msgid ""
 "Failed to open the device. Please check your permissions on this device."
-msgstr "فشل فتح الجهاز. رجاءً راجع صلاحياتك على هذا الجهاز."
+msgstr "فشل فتح الجهاز. رجاءً راجع أذونك على هذا الجهاز."
 
 #: src/backend/datasources/LiveDataSource.cpp:732
 #, kde-format
