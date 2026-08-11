@@ -7,7 +7,9 @@
     "base-version": "6.11",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
-    "tags": ["nightly"],
+    "tags": [
+        "nightly"
+    ],
     "desktop-file-name-suffix": " (Nightly)",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.llvm21"
@@ -16,8 +18,8 @@
         "--share=network",
         "--share=ipc",
         "--socket=x11",
-	"--socket=cups",
-	"--socket=session-bus",
+        "--socket=cups",
+        "--socket=session-bus",
         "--device=dri",
         "--filesystem=host",
         "--filesystem=/tmp",
@@ -42,7 +44,7 @@
         "/app/cleanup-BaseApp.sh"
     ],
     "modules": [
-         {
+        {
             "name": "clang-headers",
             "buildsystem": "simple",
             "build-commands": [
@@ -100,29 +102,32 @@
                     ]
                 }
             ],
-            "cleanup": [ "/include", "/lib/pkgconfig" ]
+            "cleanup": [
+                "/include",
+                "/lib/pkgconfig"
+            ]
         },
         {
             "name": "analitza",
             "buildsystem": "cmake-ninja",
             "sources": [
-		    {
-			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/26.04.3/src/analitza-26.04.3.tar.xz",
-			    "sha256": "615b7c244a5baee0be5214c53b8ce37d0a54e69a6fd6b8438c30d7fda45b0746"
-		    }
-	    ]
+                {
+                    "type": "archive",
+                    "url": "https://download.kde.org/stable/release-service/26.04.3/src/analitza-26.04.3.tar.xz",
+                    "sha256": "615b7c244a5baee0be5214c53b8ce37d0a54e69a6fd6b8438c30d7fda45b0746"
+                }
+            ]
         },
         {
             "name": "cantor",
             "buildsystem": "cmake-ninja",
             "sources": [
-		    {
-			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/26.04.3/src/cantor-26.04.3.tar.xz",
-			    "sha256": "f0e9734410070b6ecb54dfe042862405b4ef01d65533c0be0386d13b9fdf7250"
-		    }
-	    ]
+                {
+                    "type": "archive",
+                    "url": "https://download.kde.org/stable/release-service/26.04.3/src/cantor-26.04.3.tar.xz",
+                    "sha256": "f0e9734410070b6ecb54dfe042862405b4ef01d65533c0be0386d13b9fdf7250"
+                }
+            ]
         },
         {
             "name": "gsl",
@@ -141,7 +146,7 @@
             "config-opts": [
                 "-DBUILD_TESTING=OFF",
                 "-DHDF5_BUILD_TOOLS=OFF"
-	    ],
+            ],
             "cleanup": [
                 "/cmake",
                 "/share/hdf5_examples"
@@ -151,7 +156,7 @@
                     "type": "archive",
                     "url": "https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_6/downloads/hdf5-1.14.6.tar.gz",
                     "sha256": "e4defbac30f50d64e1556374aa49e574417c9e72c6b1de7a4ff88c4b1bea6e9b",
-		    "strip-components": 2
+                    "strip-components": 2
                 }
             ]
         },
@@ -177,8 +182,8 @@
         },
         {
             "name": "libcerf",
-	    "buildsystem": "cmake-ninja",
-	    "builddir": true,
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
             "sources": [
                 {
                     "type": "archive",
@@ -189,20 +194,23 @@
         },
         {
             "name": "qtmqtt",
-	    "buildsystem": "cmake-ninja",
-	    "builddir": true,
-	    "sources": [
-		{
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "sources": [
+                {
                     "type": "archive",
-		    "url": "https://github.com/qt/qtmqtt/archive/refs/tags/v6.10.3.tar.gz",
-		    "sha256": "a1759284b332f0b498b725be71addbc7f836b221b0c301d5013255606114c2a7"
-		}
-	    ]
-	},
+                    "url": "https://github.com/qt/qtmqtt/archive/refs/tags/v6.10.3.tar.gz",
+                    "sha256": "a1759284b332f0b498b725be71addbc7f836b221b0c301d5013255606114c2a7"
+                }
+            ]
+        },
         {
             "name": "kuserfeedback",
-	    "buildsystem": "cmake-ninja",
-	    "config-opts": [ "-DBUILD_TESTING=OFF", "-DENABLE_DOCS=OFF" ],
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DBUILD_TESTING=OFF",
+                "-DENABLE_DOCS=OFF"
+            ],
             "sources": [
                 {
                     "type": "archive",
@@ -224,13 +232,13 @@
                     "url": "https://github.com/WizardMac/ReadStat/archive/v1.1.9.tar.gz",
                     "sha256": "89af7c785a7ae3d9a7af6e64a69028829a429f66a14b1b913be22816dc07ddca"
                 },
-		{
+                {
                     "type": "patch",
                     "path": "admin/patches/readstat-1.1.9.patch"
                 }
             ]
         },
-	{
+        {
             "name": "discount",
             "buildsystem": "simple",
             "build-commands": [
@@ -324,22 +332,22 @@
             "name": "labplot",
             "buildsystem": "cmake-ninja",
             "config-opts": [
-		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
-		    "-DENABLE_TESTS=OFF",
-		    "-DENABLE_COMPILER_OPTIMIZATION=ON"
-	    ],
-	    "build-options": {
-		    "env": {
-			    "CLANG_INSTALL_DIR": "/app"
-		    }
-	    },
-	    "sources": [
+                "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
+                "-DENABLE_TESTS=OFF",
+                "-DENABLE_COMPILER_OPTIMIZATION=ON"
+            ],
+            "build-options": {
+                "env": {
+                    "CLANG_INSTALL_DIR": "/app"
+                }
+            },
+            "sources": [
                 {
                     "type": "dir",
                     "path": "."
                 }
-	    ],
-	    "modules": [
+            ],
+            "modules": [
                 {
                     "name": "patchelf",
                     "buildsystem": "autotools",
