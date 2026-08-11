@@ -37,9 +37,6 @@ public:
 	void writeOutput(bool, const QString&);
 	QString outputText();
 
-	void registerShortcuts();
-	void unregisterShortcuts();
-
 private Q_SLOTS:
 	void handleAnchorClicked(const QUrl&);
 	void showOutputContextMenu(const QPoint&);

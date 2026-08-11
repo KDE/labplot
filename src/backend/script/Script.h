@@ -39,9 +39,6 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	void registerShortcuts() override;
-	void unregisterShortcuts() override;
-
 	ScriptRuntime* scriptRuntime() const;
 	int scriptErrorLine() const;
 	KTextEditor::Document* kTextEditorDocument() const;

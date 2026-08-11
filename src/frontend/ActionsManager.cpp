@@ -1343,11 +1343,14 @@ void ActionsManager::updateGUI() {
 		// deactivate the shortcuts for the undo/redo action so those shortcuts can be used in the text editor
 		m_undoAction->setShortcut(QKeySequence());
 		m_redoAction->setShortcut(QKeySequence());
+		// script editor has its own search, unregister the shortcut for the global search here
+		m_searchAction->setShortcut(QKeySequence());
 	} else {
 		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
 		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->setVisible(false);
 		m_undoAction->setShortcut(QKeySequence::Undo);
 		m_redoAction->setShortcut(QKeySequence::Redo);
+		m_searchAction->setShortcut(QKeySequence::Find);
 	}
 #endif
 

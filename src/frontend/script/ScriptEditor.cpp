@@ -145,6 +145,17 @@ void ScriptEditor::initActions() {
 	connect(m_copyAllOutputAction, &QAction::triggered, [this]() {
 		QApplication::clipboard()->setText(ui.output->toPlainText());
 	});
+
+	// Local search action to override global Ctrl+F and delegate to KTextEditor
+	auto* m_searchAction = new QAction(this);
+	connect(m_searchAction, &QAction::triggered, [this]() {
+		if (m_kTextEditorView) {
+			auto* action = m_kTextEditorView->action(QStringLiteral("edit_find"));
+			if (action)
+				action->trigger();
+		}
+	});
+	addAction(m_searchAction);
 }
 
 void ScriptEditor::writeOutput(bool isErr, const QString& msg) {
@@ -183,12 +194,6 @@ void ScriptEditor::setOutputFont(const QFont& font) {
 
 QFont ScriptEditor::outputFont() {
 	return ui.output->font();
-}
-
-void ScriptEditor::registerShortcuts() {
-}
-
-void ScriptEditor::unregisterShortcuts() {
 }
 
 // ##############################################################################

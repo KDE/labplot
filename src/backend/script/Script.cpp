@@ -279,14 +279,6 @@ QMenu* Script::createContextMenu() {
 	return menu;
 }
 
-void Script::registerShortcuts() {
-	static_cast<ScriptEditor*>(view())->registerShortcuts();
-}
-
-void Script::unregisterShortcuts() {
-	static_cast<ScriptEditor*>(view())->unregisterShortcuts();
-}
-
 // static data members
 QStringList Script::languages = {
 #ifdef HAVE_PYTHON_SCRIPTING
