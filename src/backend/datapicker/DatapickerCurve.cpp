@@ -583,6 +583,8 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
+	Lock lock(m_supressResizeDatasheet);
+
 	QXmlStreamAttributes attribs;
 	QString str;
 
