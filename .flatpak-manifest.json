@@ -271,7 +271,6 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Murmele/vector_blf.git",
-                    "tag": "5fe16eb200a476a38fbe3f1d4281432ea5e6b976",
                     "commit": "5fe16eb200a476a38fbe3f1d4281432ea5e6b976"
                 }
             ]
