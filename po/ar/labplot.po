@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-03-24 10:43+0400\n"
+"PO-Revision-Date: 2026-08-10 18:05+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2470,7 +2470,7 @@ msgstr "الجهاز غير موجود."
 #: src/backend/datasources/LiveDataSource.cpp:734
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr "ليس للمستخدم صلاحيات كافية لفتح الجهاز."
+msgstr "ليس للمستخدم أذون كافية لفتح الجهاز."
 
 #: src/backend/datasources/LiveDataSource.cpp:737
 #, kde-format
