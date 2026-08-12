@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-10 00:40+0000\n"
+"POT-Creation-Date: 2026-08-12 00:41+0000\n"
 "PO-Revision-Date: 2026-08-10 18:05+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -2760,7 +2760,7 @@ msgstr "ثابتة أويلر-ماسكيروني"
 #: src/backend/gsl/constants.cpp:69
 #, kde-format
 msgid "Not a number"
-msgstr "ليس عدداً"
+msgstr "ليس عددًا"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:72
@@ -3424,7 +3424,7 @@ msgstr "تجاوز حد الجدول"
 #: src/backend/gsl/errors.h:76
 #, kde-format
 msgid "Iteration is not making progress towards solution"
-msgstr "التكرار لا يحرز تقدماً نحو الحل"
+msgstr "التكرار لا يحرز تقدمًا نحو الحل"
 
 #: src/backend/gsl/errors.h:78
 #, kde-format
@@ -7544,7 +7544,7 @@ msgstr "مكعب ثلاثي"
 msgid "Python file (*.py)"
 msgstr "ملف بايثون (*.py)"
 
-#: src/backend/script/Script.cpp:154 src/backend/script/Script.cpp:346
+#: src/backend/script/Script.cpp:154 src/backend/script/Script.cpp:338
 #, kde-format
 msgid "no script element found"
 msgstr "لا يوجد عنصر سكريبت"
@@ -7554,18 +7554,18 @@ msgstr "لا يوجد عنصر سكريبت"
 msgid "%1: run %2 script"
 msgstr "%1: نفذ سكريبت %2"
 
-#: src/backend/script/Script.cpp:326 src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:318 src/backend/script/Script.cpp:323
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "سكربت"
 
-#: src/backend/script/Script.cpp:326
+#: src/backend/script/Script.cpp:318
 #, kde-format
 msgid "Failed to run the script."
 msgstr "فشل تنفيذ السكريبت."
 
-#: src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:323
 #, kde-format
 msgid "A script is already running."
 msgstr "هناك سكريبت قيد التشغيل بالفعل."
@@ -7956,7 +7956,7 @@ msgstr "البيانات ليست موزعة عشوائيًا"
 #: src/backend/statistics/HypothesisTest.cpp:317
 #, kde-format
 msgid "The process shows shifting or clustering"
-msgstr "تُظهر العملية انزياحًا أو تكتلاً"
+msgstr "تُظهر العملية انزياحًا أو تكتلًا"
 
 #: src/backend/statistics/HypothesisTest.cpp:311
 #: src/backend/statistics/HypothesisTest.cpp:316
@@ -8623,7 +8623,7 @@ msgid ""
 "At the significance level %1, the data show clustering or trend (too few "
 "runs). %2"
 msgstr ""
-"عند مستوى الدلالة %1، تُظهر البيانات تكتلاً أو اتجاهًا (عدد سلاسل قليل جدًا). %2"
+"عند مستوى الدلالة %1، تُظهر البيانات تكتلًا أو اتجاهًا (عدد سلاسل قليل جدًا). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1847
 #, kde-format
@@ -8658,7 +8658,7 @@ msgstr "عند مستوى الدلالة %1، تُظهر العملية تذبذ
 msgid ""
 "At the significance level %1, the process shows clustering, shifting, or "
 "trends. %2"
-msgstr "عند مستوى الدلالة %1، تُظهر العملية تكتلاً أو انزياحًا أو اتجاهات. %2"
+msgstr "عند مستوى الدلالة %1، تُظهر العملية تكتلًا أو انزياحًا أو اتجاهات. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1889
 #, kde-format
@@ -9360,7 +9360,7 @@ msgstr "%1: اضبط تنسيق اللصائق"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:927
 #, kde-format
 msgid "%1: set labels format automatic"
-msgstr "%1: اضبط تنسيق اللصائق آلياً"
+msgstr "%1: اضبط تنسيق اللصائق آليًا"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:934
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:941
@@ -9515,7 +9515,7 @@ msgstr "عدد القيم الشاذة"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:313
 #, kde-format
 msgid "far out points count"
-msgstr "عدد النقاط البعيدة جداً"
+msgstr "عدد النقاط البعيدة جدًا"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
 #, kde-format
@@ -9706,7 +9706,7 @@ msgstr "رسم بياني من صيغة"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:509
 #, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
-msgstr "أضف رسم س-ص بياني جديداً معرّفاً عبر تعبير رياضي."
+msgstr "أضف رسم س-ص بياني جديدًا معرّفًا عبر تعبير رياضي."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:516
 #, kde-format
@@ -9987,7 +9987,7 @@ msgstr "%1: اضبط نوع النطاق"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1296
 #, kde-format
 msgid "%1: set nice extend"
-msgstr "%1: اضبط تمديداً ملائماً"
+msgstr "%1: اضبط تمديدًا ملائمًا"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1303
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1310
@@ -11707,7 +11707,7 @@ msgstr "رجاءً الإبلاغ عن الأخطاء إلى:"
 #: src/frontend/AboutDialog.cpp:210
 #, kde-format
 msgid "Partly funded by:"
-msgstr "مُموَّل جزئياً بواسطة:"
+msgstr "مُموَّل جزئيًا بواسطة:"
 
 #: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
 #: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
@@ -12048,8 +12048,8 @@ msgstr "صدّر..."
 msgid "Export selected element"
 msgstr "اِصدِر العنصر المُحدد"
 
-#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1435
-#: src/frontend/ActionsManager.cpp:1443
+#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1438
+#: src/frontend/ActionsManager.cpp:1446
 #, kde-format
 msgid "Share"
 msgstr "شارك"
@@ -12432,7 +12432,7 @@ msgid "Sort the selected columns separately in descending order"
 msgstr "افرز الأَعمدة المختارة على حدة بترتيب تنازليّ"
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1601
+#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1604
 #: src/frontend/dockwidgets/LiveDataDock.cpp:239
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
@@ -12527,39 +12527,39 @@ msgstr "إظهار النّافذة"
 msgid "Color Scheme"
 msgstr "مخطّط الألوان"
 
-#: src/frontend/ActionsManager.cpp:1401
+#: src/frontend/ActionsManager.cpp:1404
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "ينشئ مفكرة %1 جديدة"
 
-#: src/frontend/ActionsManager.cpp:1435
+#: src/frontend/ActionsManager.cpp:1438
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "حدثت مشكلة أثناء مشاركة المشروع: %1"
 
-#: src/frontend/ActionsManager.cpp:1439
+#: src/frontend/ActionsManager.cpp:1442
 #, kde-format
 msgid "Project shared successfully"
 msgstr "شارك المشروع بنجاح"
 
-#: src/frontend/ActionsManager.cpp:1442
+#: src/frontend/ActionsManager.cpp:1445
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "بإمكانك إيجاد المشروع المُشارَك على: <a href=\"%1\">%1</a>"
 
-#: src/frontend/ActionsManager.cpp:1597
+#: src/frontend/ActionsManager.cpp:1600
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, kde-format
 msgid "Continue"
 msgstr "تابع"
 
-#: src/frontend/ActionsManager.cpp:1598
+#: src/frontend/ActionsManager.cpp:1601
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
 msgstr "استأنف القراءة"
 
-#: src/frontend/ActionsManager.cpp:1602
+#: src/frontend/ActionsManager.cpp:1605
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
 #, kde-format
 msgid "Pause Reading"
@@ -13189,7 +13189,7 @@ msgstr "اسم المصفوفة:"
 #: src/frontend/datasources/ImportDialog.cpp:148
 #, kde-format
 msgid "Add a new Folder"
-msgstr "أضف مجلداً جديداً"
+msgstr "أضف مجلدًا جديدًا"
 
 #: src/frontend/datasources/ImportDialog.cpp:149
 #: src/frontend/datasources/ImportProjectDialog.cpp:512
@@ -13200,7 +13200,7 @@ msgstr "اسم المجلد:"
 #: src/frontend/datasources/ImportDialog.cpp:181
 #, kde-format
 msgid "New Folder"
-msgstr "مجلّداً جديداً"
+msgstr "مجلّدًا جديدًا"
 
 #: src/frontend/datasources/ImportDialog.cpp:185
 #: src/frontend/datasources/ImportDialog.cpp:189
@@ -13991,7 +13991,7 @@ msgstr "كنظام إحداثيّ"
 #: src/frontend/datasources/ImportProjectDialog.cpp:512
 #, kde-format
 msgid "Add new folder"
-msgstr "أضف مجلداً جديداً"
+msgstr "أضف مجلدًا جديدًا"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:106
 #, kde-format
@@ -15340,7 +15340,7 @@ msgstr "عدل لصائق قيم متعددة في وضع الدُفعات"
 #: src/frontend/dockwidgets/ColumnDock.cpp:393
 #, kde-format
 msgid "Add new variable"
-msgstr "أضف متغيراً جديداً"
+msgstr "أضف متغيرًا جديدًا"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:394
 #, kde-format
@@ -15348,14 +15348,14 @@ msgid ""
 "Automatically update the calculated values in the target column on changes "
 "in the variable columns"
 msgstr ""
-"حدِّث آلياً القيم المحسوبة في العمود الهدف عند حدوث تغييرات في أعمدة المتغيرات"
+"حدِّث آليًا القيم المحسوبة في العمود الهدف عند حدوث تغييرات في أعمدة المتغيرات"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:395
 #, kde-format
 msgid ""
 "Automatically resize the target column to fit the size of the variable "
 "columns"
-msgstr "غيِّر آلياً حجم العمود الهدف ليناسب حجم أعمدة المتغيرات"
+msgstr "غيِّر آليًا حجم العمود الهدف ليناسب حجم أعمدة المتغيرات"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:567
 #, kde-format
@@ -15365,7 +15365,7 @@ msgid ""
 "again."
 msgstr ""
 "العمود \"%1\"\n"
-"لم يعد متاحاً. سوف يستخدم آلياً بمجرد إنشائه مرة أخرى."
+"لم يعد متاحًا. سوف يستخدم آليًا بمجرد إنشائه مرة أخرى."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:585
 #, kde-format
@@ -15413,7 +15413,7 @@ msgstr "صيغة غير صحيحة: "
 #: src/frontend/dockwidgets/ColumnDock.cpp:648
 #, kde-format
 msgid "Select a valid column"
-msgstr "اختر عموداً صالحاً"
+msgstr "اختر عمودًا صالحًا"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:655
 #: src/frontend/dockwidgets/ColumnDock.cpp:753
@@ -16784,7 +16784,7 @@ msgid ""
 "interpolation instead of full regression."
 msgstr ""
 "إذا كانت دلتا > 0، فستستخدم قيم بيانات y الواقعة ضمن دلتا من بعضها البعض "
-"الاستيفاء بدلاً من الانحدار الكامل."
+"الاستيفاء بدلًا من الانحدار الكامل."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:230
 #, kde-format
@@ -17757,7 +17757,7 @@ msgstr "لا توجد أوراق عمل متوفّرة في المشروع. لن
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
-msgstr "أهلاً بك في LabPlot معمل الرسم %1"
+msgstr "أهلًا بك في LabPlot معمل الرسم %1"
 
 #: src/frontend/MainWin.cpp:488
 #, kde-format
@@ -19704,12 +19704,12 @@ msgstr "لم تحدد بيانات للرسم."
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1297
 #, kde-format
 msgid "An already existing plot area has to be selected."
-msgstr "يجب اختيار منطقة رسم موجودة مسبقاً."
+msgstr "يجب اختيار منطقة رسم موجودة مسبقًا."
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1301
 #, kde-format
 msgid "An already existing worksheet has to be selected."
-msgstr "يجب اختيار ورقة عمل موجودة مسبقاً."
+msgstr "يجب اختيار ورقة عمل موجودة مسبقًا."
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1307
 #, kde-format
@@ -19725,7 +19725,7 @@ msgstr "قيم عشوائية"
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:53
 #, kde-format
 msgid "Generate random values according to the selected distribution"
-msgstr "ولِّد قيماً عشوائية وفقاً للتوزيع المحدد"
+msgstr "ولِّد قيمًا عشوائية وفقًا للتوزيع المحدد"
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:88
 #, kde-format
@@ -19796,8 +19796,8 @@ msgid ""
 "specified interval.</li><li>Random - samples are created randomly based on "
 "the uniform distribution. </li></ul>"
 msgstr ""
-"طريقة المعاينة:<ul><li>دورية - تنشأ العينات وفقاً للمجال المحدد.</"
-"li><li>عشوائية - تنشأ العينات عشوائياً بناءً على التوزيع الموحد. </li></ul>"
+"طريقة المعاينة:<ul><li>دورية - تنشأ العينات وفقًا للمجال المحدد.</"
+"li><li>عشوائية - تنشأ العينات عشوائيًا بناءً على التوزيع الموحد. </li></ul>"
 
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:62
 #, kde-format
@@ -19886,7 +19886,7 @@ msgstr "نهاية السطر"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1542
 #, kde-format
 msgid "Match any character excluding new line (by default)"
-msgstr "طابق أي حرف باستثناء السطر الجديد (افتراضياً)"
+msgstr "طابق أي حرف باستثناء السطر الجديد (افتراضيًا)"
 
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1543
 #, kde-format
@@ -20630,7 +20630,7 @@ msgid_plural "rows"
 msgstr[0] "صف"
 msgstr[1] "صفان"
 msgstr[2] "صفوف"
-msgstr[3] "صفاً"
+msgstr[3] "صفًا"
 msgstr[4] "صف"
 msgstr[5] "صف"
 
@@ -20641,7 +20641,7 @@ msgid_plural "columns"
 msgstr[0] "عمود"
 msgstr[1] "عمودان"
 msgstr[2] "أعمدة"
-msgstr[3] "عموداً"
+msgstr[3] "عمودًا"
 msgstr[4] "عمود"
 msgstr[5] "عمود"
 
@@ -22442,7 +22442,7 @@ msgstr "تحذيرات الاستيراد"
 #: src/frontend/ui/datasources/importwarningsdialog.ui:38
 #, kde-format
 msgid "OK"
-msgstr "حسناً"
+msgstr "حسنًا"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbImportObjectNames)
 #: src/frontend/ui/datasources/jsonoptionswidget.ui:99
@@ -23240,7 +23240,7 @@ msgstr "بعيد جدا"
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:546
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
-msgstr "بيانات (باستثناء القيم الشاذة والبعيدة جداً)"
+msgstr "بيانات (باستثناء القيم الشاذة والبعيدة جدًا)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:553
@@ -23352,7 +23352,7 @@ msgstr "<html><head/><body><p>أضف نطاق x جديد</p></body></html>"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:201
 #, kde-format
 msgid "Remove the current selected x range"
-msgstr "أزل نطاق x المحدد حالياً"
+msgstr "أزل نطاق x المحدد حاليًا"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbAddPythonEnvironment)
 #. i18n: ectx: property (text), widget (QToolButton, tbRemoveXRange)
@@ -23463,7 +23463,7 @@ msgstr "أضف نطاق ص جديد"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:550
 #, kde-format
 msgid "remove the current selected y range"
-msgstr "أزل نطاق ص المحدد حالياً"
+msgstr "أزل نطاق ص المحدد حاليًا"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
@@ -25996,7 +25996,7 @@ msgstr "شريط العنوان:"
 #: src/frontend/ui/settingsgeneralpage.ui:204
 #, kde-format
 msgid "Use Hyphen '-' instead of Minus '–'"
-msgstr "استخدِم الواصلة '-' بدلاً من علامة الطرح '–'"
+msgstr "استخدِم الواصلة '-' بدلًا من علامة الطرح '–'"
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoSave)
 #: src/frontend/ui/settingsgeneralpage.ui:243
@@ -26680,7 +26680,7 @@ msgstr "الدقّة:"
 #: src/frontend/WhatsNewDialog.cpp:36
 #, kde-format
 msgid "What's New in LabPlot %1"
-msgstr "أهلاً بك في معمل الرسم %1"
+msgstr "أهلًا بك في معمل الرسم %1"
 
 #: src/frontend/WhatsNewDialog.cpp:54
 #, kde-format
@@ -27160,7 +27160,7 @@ msgstr "إزالة كلمة مفتاحية"
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
 "plot"
-msgstr "استخدم إحداثيات منطقية بدلاً من المطلقة لتحديد الموضع في معمل الرسم"
+msgstr "استخدم إحداثيات منطقية بدلًا من المطلقة لتحديد الموضع في معمل الرسم"
 
 #: src/frontend/widgets/LabelWidget.cpp:531
 #, kde-format
@@ -27660,12 +27660,12 @@ msgstr "تكبير/تصفح"
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
-msgstr[0] "أترغب حقاً بحذف الكائن المنتقى؟"
-msgstr[1] "أترغب حقاً بحذف الكائنات الـ %1 المنتقاة؟"
-msgstr[2] "أترغب حقاً بحذف الكائنات الـ %1 المنتقاة؟"
-msgstr[3] "أترغب حقاً بحذف الكائنات الـ %1 المنتقاة؟"
-msgstr[4] "أترغب حقاً بحذف الكائنات الـ %1 المنتقاة؟"
-msgstr[5] "أترغب حقاً بحذف الكائنات الـ %1 المنتقاة؟"
+msgstr[0] "أترغب حقًا بحذف الكائن المنتقى؟"
+msgstr[1] "أترغب حقًا بحذف الكائنات الـ %1 المنتقاة؟"
+msgstr[2] "أترغب حقًا بحذف الكائنات الـ %1 المنتقاة؟"
+msgstr[3] "أترغب حقًا بحذف الكائنات الـ %1 المنتقاة؟"
+msgstr[4] "أترغب حقًا بحذف الكائنات الـ %1 المنتقاة؟"
+msgstr[5] "أترغب حقًا بحذف الكائنات الـ %1 المنتقاة؟"
 
 #: src/frontend/worksheet/WorksheetView.cpp:1466
 #, kde-format

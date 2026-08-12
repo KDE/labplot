@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-10 00:40+0000\n"
+"POT-Creation-Date: 2026-08-12 00:41+0000\n"
 "PO-Revision-Date: 2026-05-31 20:13-0400\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
@@ -7439,7 +7439,7 @@ msgstr ""
 msgid "Python file (*.py)"
 msgstr ""
 
-#: src/backend/script/Script.cpp:154 src/backend/script/Script.cpp:346
+#: src/backend/script/Script.cpp:154 src/backend/script/Script.cpp:338
 #, kde-format
 msgid "no script element found"
 msgstr ""
@@ -7449,18 +7449,18 @@ msgstr ""
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:326 src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:318 src/backend/script/Script.cpp:323
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "قوليازما"
 
-#: src/backend/script/Script.cpp:326
+#: src/backend/script/Script.cpp:318
 #, kde-format
 msgid "Failed to run the script."
 msgstr ""
 
-#: src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:323
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -11879,8 +11879,8 @@ msgstr "چىقار…"
 msgid "Export selected element"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1435
-#: src/frontend/ActionsManager.cpp:1443
+#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1438
+#: src/frontend/ActionsManager.cpp:1446
 #, kde-format
 msgid "Share"
 msgstr "ھەمبەھىر"
@@ -12261,7 +12261,7 @@ msgid "Sort the selected columns separately in descending order"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1601
+#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1604
 #: src/frontend/dockwidgets/LiveDataDock.cpp:239
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
@@ -12356,39 +12356,39 @@ msgstr ""
 msgid "Color Scheme"
 msgstr "رەڭ لايىھەسى"
 
-#: src/frontend/ActionsManager.cpp:1401
+#: src/frontend/ActionsManager.cpp:1404
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1435
+#: src/frontend/ActionsManager.cpp:1438
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1439
+#: src/frontend/ActionsManager.cpp:1442
 #, kde-format
 msgid "Project shared successfully"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1442
+#: src/frontend/ActionsManager.cpp:1445
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1597
+#: src/frontend/ActionsManager.cpp:1600
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, kde-format
 msgid "Continue"
 msgstr "داۋاملاشتۇر"
 
-#: src/frontend/ActionsManager.cpp:1598
+#: src/frontend/ActionsManager.cpp:1601
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1602
+#: src/frontend/ActionsManager.cpp:1605
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
 #, kde-format
 msgid "Pause Reading"

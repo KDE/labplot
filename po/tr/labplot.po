@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-10 00:40+0000\n"
+"POT-Creation-Date: 2026-08-12 00:41+0000\n"
 "PO-Revision-Date: 2026-08-08 19:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -7528,7 +7528,7 @@ msgstr "Üçlü Küp"
 msgid "Python file (*.py)"
 msgstr "Python dosyası (*.py)"
 
-#: src/backend/script/Script.cpp:154 src/backend/script/Script.cpp:346
+#: src/backend/script/Script.cpp:154 src/backend/script/Script.cpp:338
 #, kde-format
 msgid "no script element found"
 msgstr "Bulunan betik ögesi yok"
@@ -7538,18 +7538,18 @@ msgstr "Bulunan betik ögesi yok"
 msgid "%1: run %2 script"
 msgstr "%1: %2 betiğini çalıştır"
 
-#: src/backend/script/Script.cpp:326 src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:318 src/backend/script/Script.cpp:323
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Betik"
 
-#: src/backend/script/Script.cpp:326
+#: src/backend/script/Script.cpp:318
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Betik çalıştırılamadı."
 
-#: src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:323
 #, kde-format
 msgid "A script is already running."
 msgstr "Bir betik hâlihazırda çalışıyor."
@@ -12003,8 +12003,8 @@ msgstr "Dışa Aktar…"
 msgid "Export selected element"
 msgstr "Seçili ögeyi dışa aktar"
 
-#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1435
-#: src/frontend/ActionsManager.cpp:1443
+#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1438
+#: src/frontend/ActionsManager.cpp:1446
 #, kde-format
 msgid "Share"
 msgstr "Paylaş"
@@ -12387,7 +12387,7 @@ msgid "Sort the selected columns separately in descending order"
 msgstr "Seçili sütunları ayrı ayrı azalan düzende sırala"
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1601
+#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1604
 #: src/frontend/dockwidgets/LiveDataDock.cpp:239
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
@@ -12482,39 +12482,39 @@ msgstr "Pencere Görünürlüğü"
 msgid "Color Scheme"
 msgstr "Renk Şeması"
 
-#: src/frontend/ActionsManager.cpp:1401
+#: src/frontend/ActionsManager.cpp:1404
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Yeni bir %1 defteri oluşturur"
 
-#: src/frontend/ActionsManager.cpp:1435
+#: src/frontend/ActionsManager.cpp:1438
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Projeyi paylaşırken bir sorun oluştu: %1"
 
-#: src/frontend/ActionsManager.cpp:1439
+#: src/frontend/ActionsManager.cpp:1442
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Proje başarıyla paylaşıldı"
 
-#: src/frontend/ActionsManager.cpp:1442
+#: src/frontend/ActionsManager.cpp:1445
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Paylaşılan projeyi şurada bulabilirsiniz: <a href=\"%1\">%1</a>"
 
-#: src/frontend/ActionsManager.cpp:1597
+#: src/frontend/ActionsManager.cpp:1600
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, kde-format
 msgid "Continue"
 msgstr "Sürdür"
 
-#: src/frontend/ActionsManager.cpp:1598
+#: src/frontend/ActionsManager.cpp:1601
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
 msgstr "Okumayı Sürdür"
 
-#: src/frontend/ActionsManager.cpp:1602
+#: src/frontend/ActionsManager.cpp:1605
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
 #, kde-format
 msgid "Pause Reading"
