@@ -26,7 +26,7 @@ class Value : public AbstractAspect {
 	Q_OBJECT
 
 public:
-	enum Type { NoValues, BinEntries, CustomColumn, X, Y, XY, XYBracketed };
+	enum Type { NoValues, BinEntries, CustomColumn, X, Y, XY, XYBracketed, Values };
 	enum Position { Above, Under, Left, Right, Center };
 
 	explicit Value(const QString& name);

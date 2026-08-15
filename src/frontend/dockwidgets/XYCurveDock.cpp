@@ -376,6 +376,8 @@ void XYCurveDock::setSymbols(const QList<XYCurve*>& curves) {
 	dropLineWidget->setLines(dropLines);
 	errorBarWidget->setErrorBars(errorBars);
 	valueWidget->setValues(values);
+	valueWidget->setXColumn(m_curve->xColumn());
+	valueWidget->setYColumn(m_curve->yColumn());
 }
 
 void XYCurveDock::initGeneralTab() {

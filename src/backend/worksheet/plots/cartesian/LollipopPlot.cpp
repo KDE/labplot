@@ -712,16 +712,16 @@ void LollipopPlotPrivate::updateValues() {
 	const auto& prefix = value->prefix();
 	const auto& suffix = value->suffix();
 	const auto numberLocale = QLocale();
-	if (value->type() == Value::BinEntries) {
+	if (value->type() == Value::Values) {
 		for (int i = 0; i < m_valuesPointsLogical.count(); ++i) {
 			if (!visiblePoints[i])
 				continue;
 
 			auto& point = m_valuesPointsLogical.at(i);
 			if (orientation == LollipopPlot::Orientation::Vertical)
-				m_valuesStrings << prefix + numberToString(point.y(), numberLocale) + suffix;
+				m_valuesStrings << prefix + numberToString(point.y(), numberLocale, value->numericFormat(), value->precision()) + suffix;
 			else
-				m_valuesStrings << prefix + numberToString(point.x(), numberLocale) + suffix;
+				m_valuesStrings << prefix + numberToString(point.x(), numberLocale, value->numericFormat(), value->precision()) + suffix;
 		}
 	} else if (value->type() == Value::CustomColumn) {
 		const auto* valuesColumn = value->column();
