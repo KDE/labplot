@@ -3433,10 +3433,9 @@ msgid "Logical Functions"
 msgstr "Logické funkcie"
 
 #: src/backend/gsl/functions.cpp:68
-#, fuzzy, kde-format
-#| msgid "Mathieu Functions"
+#, kde-format
 msgid "Datetime Functions"
-msgstr "Funkcie"
+msgstr "Funkcie dátumu a času"
 
 #: src/backend/gsl/functions.cpp:70
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:29
@@ -4209,13 +4208,12 @@ msgstr "nie"
 #: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "today"
-msgstr ""
+msgstr "dnes"
 
 #: src/backend/gsl/functions.cpp:351
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "now"
-msgstr "nie"
+msgstr "teraz"
 
 #: src/backend/gsl/functions.cpp:352
 #, kde-format
@@ -4248,10 +4246,9 @@ msgid "year(date)"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:358
-#, fuzzy, kde-format
-#| msgid "month"
+#, kde-format
 msgid "month(date)"
-msgstr "Opustiť kanál"
+msgstr "month(date)"
 
 #: src/backend/gsl/functions.cpp:359
 #, kde-format
@@ -4264,10 +4261,9 @@ msgid "weeknum(date)"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:361
-#, fuzzy, kde-format
-#| msgid "DateTime"
+#, kde-format
 msgid "hour(dateTime)"
-msgstr "DátumČas"
+msgstr "hour(dateTime)"
 
 #: src/backend/gsl/functions.cpp:362
 #, kde-format
@@ -6552,10 +6548,9 @@ msgid "%1: set text font"
 msgstr "%1: nastaviť písmo"
 
 #: src/backend/note/Note.cpp:168
-#, fuzzy, kde-format
-#| msgid "%1: set method"
+#, kde-format
 msgid "%1: set mode"
-msgstr "%1: nastaviť rozloženie"
+msgstr "%1: nastaviť režim"
 
 #: src/backend/note/Note.cpp:211
 #, kde-format
@@ -9924,10 +9919,9 @@ msgid "No curves inside the plot area."
 msgstr "V oblasti grafu nie sú žiadne krivky."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:975
-#, fuzzy, kde-format
-#| msgid "%1: set scale"
+#, kde-format
 msgid "%1: auto scale"
-msgstr "%1: nastaviť písmo"
+msgstr "%1: automatická mierka"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1254
@@ -9962,10 +9956,9 @@ msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: change %2-range %3 auto scaling"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1491
-#, fuzzy, kde-format
-#| msgid "%1: change %2-range %3 format"
+#, kde-format
 msgid "%1: change %2-range %3"
-msgstr "%1: change %2-range %3 format"
+msgstr "%1: zmeniť rozsah %2 %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1668
 #, kde-format
@@ -10173,33 +10166,29 @@ msgid "Cumulative Percentage"
 msgstr "Kumulatívne percento"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3454
-#, fuzzy, kde-format
-#| msgid "zoom in"
+#, kde-format
 msgid "%1: zoom in"
-msgstr "priblížiť"
+msgstr "%1: priblížiť"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3469
-#, fuzzy, kde-format
-#| msgid "zoom out"
+#, kde-format
 msgid "%1: zoom out"
-msgstr "oddialiť"
+msgstr "%1: oddialiť"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "min"
+#, kde-format
 msgid "in"
-msgstr "min"
+msgstr "dnu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "out"
-msgstr "Počítadlo"
+msgstr "von"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3500
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: zoom %2 %3"
-msgstr "%1: presunúť %2 do %3."
+msgstr "%1: priblíženie %2 %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4351
 #, kde-format
@@ -10224,22 +10213,19 @@ msgid "x=%1"
 msgstr "x=%1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4546
-#, fuzzy, kde-format
-#| msgid "%1: pasted"
+#, kde-format
 msgid "%1: pan"
-msgstr "%1: vložené"
+msgstr "%1: posun"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4624
-#, fuzzy, kde-format
-#| msgid "%1: set function"
+#, kde-format
 msgid "%1: zoom selection"
-msgstr "%1: nastaviť písmo"
+msgstr "%1: priblížiť výber"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4747
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: wheel zoom"
-msgstr "%1: nastaviť farbu menovky"
+msgstr "%1: priblíženie kolieskom"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:200
 #, kde-format
@@ -11013,10 +10999,9 @@ msgid "%1: set values color"
 msgstr "%1: nastaviť farbu hodnôt"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:212
-#, fuzzy, kde-format
-#| msgid "%1: save calculation changed"
+#, kde-format
 msgid "%1: auto recalculate changed"
-msgstr "%1: ukladanie výpočtu zmené"
+msgstr "%1: zmenený automatický prepočet"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:219
 #, kde-format
@@ -11904,10 +11889,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Vytvorí nový pracovný hárok na vykresľovanie dát"
 
 #: src/frontend/ActionsManager.cpp:253
-#, fuzzy, kde-format
-#| msgid "Python scripting support"
+#, kde-format
 msgid "Python Script"
-msgstr "Podpora skriptovania v Pythone"
+msgstr "Skript Python"
 
 #: src/frontend/ActionsManager.cpp:254
 #, kde-format
@@ -16765,10 +16749,9 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:206
-#, fuzzy, kde-format
-#| msgid "Target number of points in the simplified line"
+#, kde-format
 msgid "Number of points in the moving window"
-msgstr "Target number of points in the simplified line"
+msgstr "Počet bodov v pohyblivom okne"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:210
 #, kde-format
@@ -16800,10 +16783,9 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:230
-#, fuzzy, kde-format
-#| msgid "Exceeded max number of iterations"
+#, kde-format
 msgid "The number of robustifying iterations"
-msgstr "Prekročený maximálny počet iterácií"
+msgstr "Počet robustifikačných iterácií"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:234
 #, kde-format
@@ -17827,10 +17809,9 @@ msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter zápisníky (*.ipynb)"
 
 #: src/frontend/MainWin.cpp:743
-#, fuzzy, kde-format
-#| msgid "Python file (*.py)"
+#, kde-format
 msgid "Python Scripts (*.py)"
-msgstr "Python file (*.py)"
+msgstr "Skripty Python (*.py)"
 
 #: src/frontend/MainWin.cpp:750
 #, kde-format
@@ -18246,10 +18227,9 @@ msgid "%1: clear selected rows(s)"
 msgstr "%1: clear selected riadoks(s)"
 
 #: src/frontend/note/NoteView.cpp:96
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Edit"
-msgstr "&Upraviť"
+msgstr "Upraviť"
 
 #: src/frontend/note/NoteView.cpp:100
 #, kde-format
@@ -18717,10 +18697,9 @@ msgid "With Notebook"
 msgstr "So zápisníkom"
 
 #: src/frontend/SettingsGeneralPage.cpp:228
-#, fuzzy, kde-format
-#| msgid "Python scripting support"
+#, kde-format
 msgid "With Python Script"
-msgstr "Podpora skriptovania v Pythone"
+msgstr "So skriptom Python"
 
 #: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format
@@ -24881,19 +24860,15 @@ msgstr "y=g(t)"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbCount)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:311
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of points to evaluate"
-msgstr "Počet bodov:"
+msgstr "Počet bodov na vyhodnotenie"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoPoints)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:327
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically determine the optimal number of digits after the decimal "
-#| "point"
+#, kde-format
 msgid "Automatically calculate the number of points based on plot pixel width"
-msgstr "Automaticky určiť optimálny počet číslic za desatinnou bodkou"
+msgstr "Automaticky vypočítať počet bodov podľa šírky grafu v pixeloch"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
@@ -25308,10 +25283,9 @@ msgstr "Zjednodušenie"
 
 #. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbDelta)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:27
-#, fuzzy, kde-format
-#| msgid "Minimum distance threshold from retained point"
+#, kde-format
 msgid "Distance threshold for optimization (0 = compute all points)"
-msgstr "Minimum distance threshold from retained point"
+msgstr "Prah vzdialenosti pre optimalizáciu (0 = počítať všetky body)"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lSpan)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:98
@@ -25358,15 +25332,13 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:493
-#, fuzzy, kde-format
-#| msgid "Padding"
+#, kde-format
 msgid "Padding:"
-msgstr "Výplň okrajov"
+msgstr "Výplň okrajov:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
-#, fuzzy, kde-format
-#| msgid "Order:"
+#, kde-format
 msgid " Order:"
 msgstr "Poradie:"
 
