@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-12 00:41+0000\n"
+"POT-Creation-Date: 2026-08-16 00:39+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -175,7 +175,7 @@ msgstr "दिन"
 #: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/AxisDock.cpp:275
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:215
-#: src/frontend/dockwidgets/XYCurveDock.cpp:433 src/frontend/GuiTools.cpp:159
+#: src/frontend/dockwidgets/XYCurveDock.cpp:435 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:112
@@ -6837,7 +6837,7 @@ msgstr "कच्चा"
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:492
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:630
-#: src/frontend/widgets/ValueWidget.cpp:130
+#: src/frontend/widgets/ValueWidget.cpp:129
 #, kde-format
 msgid "Frequency"
 msgstr "आवृत्ति"
@@ -7138,12 +7138,12 @@ msgstr "सिम्पसन (3-पॉइंट)"
 msgid "Simpson's 3/8 (4-point)"
 msgstr "सिम्पसन का 3/8 (4-पॉइंट)"
 
-#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:441
+#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:443
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr "क्यूबिक स्प्लाइन (प्राकृतिक)"
 
-#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:442
+#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:444
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr "घनीय स्पलाइन (आवधिक)"
@@ -9109,7 +9109,7 @@ msgstr "%1: नीचे पैडिंग सेट करें"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:159
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:90
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
-#: src/frontend/dockwidgets/XYCurveDock.cpp:449
+#: src/frontend/dockwidgets/XYCurveDock.cpp:451
 #, kde-format
 msgid "Horizontal"
 msgstr "क्षैतिज"
@@ -9129,7 +9129,7 @@ msgstr "क्षैतिज"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:160
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
-#: src/frontend/dockwidgets/XYCurveDock.cpp:448
+#: src/frontend/dockwidgets/XYCurveDock.cpp:450
 #, kde-format
 msgid "Vertical"
 msgstr "खड़ा"
@@ -9153,7 +9153,7 @@ msgstr "अभिविन्यास"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:317
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:590
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
-#: src/frontend/dockwidgets/XYCurveDock.cpp:434
+#: src/frontend/dockwidgets/XYCurveDock.cpp:436
 #: src/frontend/ui/dockwidgets/axisdock.ui:492
 #: src/frontend/ui/dockwidgets/axisdock.ui:632
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:674
@@ -14416,6 +14416,7 @@ msgstr "उपलब्ध"
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:397
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:266
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:223
+#: src/frontend/widgets/ValueWidget.cpp:131
 #, kde-format
 msgid "Values"
 msgstr "मान"
@@ -14587,7 +14588,7 @@ msgstr "अर्द्ध-भरा, बड़ा"
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
-#: src/frontend/widgets/ValueWidget.cpp:137
+#: src/frontend/widgets/ValueWidget.cpp:138
 #, kde-format
 msgid "Left"
 msgstr "बाएं"
@@ -14604,13 +14605,13 @@ msgstr "बाएं"
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:489
 #: src/frontend/widgets/LabelWidget.cpp:501
-#: src/frontend/widgets/ValueWidget.cpp:138
+#: src/frontend/widgets/ValueWidget.cpp:139
 #, kde-format
 msgid "Right"
 msgstr "सही"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:272
-#: src/frontend/dockwidgets/XYCurveDock.cpp:450
+#: src/frontend/dockwidgets/XYCurveDock.cpp:452
 #, kde-format
 msgid "Both"
 msgstr "दोनों"
@@ -14837,7 +14838,7 @@ msgstr "%1 अक्ष: टेम्पलेट \"%2\" लोड किया 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
-#: src/frontend/dockwidgets/XYCurveDock.cpp:688
+#: src/frontend/dockwidgets/XYCurveDock.cpp:690
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: टेम्पलेट \"%2\" लोड किया गया"
@@ -15289,8 +15290,8 @@ msgstr "पंक्ति प्रमुख"
 #: src/frontend/widgets/LabelWidget.cpp:500
 #: src/frontend/widgets/LabelWidget.cpp:505
 #: src/frontend/widgets/LabelWidget.cpp:554
-#: src/frontend/widgets/ValueWidget.cpp:77
-#: src/frontend/widgets/ValueWidget.cpp:78
+#: src/frontend/widgets/ValueWidget.cpp:75
+#: src/frontend/widgets/ValueWidget.cpp:76
 #, kde-format
 msgid "Center"
 msgstr "केंद्र"
@@ -15339,33 +15340,33 @@ msgstr "%1 कार्टेशियन प्लॉट लेजेंड्�
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:362
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
-#: src/frontend/widgets/ValueWidget.cpp:142
+#: src/frontend/widgets/ValueWidget.cpp:143
 #, kde-format
 msgid "Decimal"
 msgstr "दशमलव"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:363
 #: src/frontend/dockwidgets/MatrixDock.cpp:82
-#: src/frontend/widgets/ValueWidget.cpp:143
+#: src/frontend/widgets/ValueWidget.cpp:144
 #, kde-format
 msgid "Scientific (e)"
 msgstr "वैज्ञानिक (ई)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:364
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
-#: src/frontend/widgets/ValueWidget.cpp:144
+#: src/frontend/widgets/ValueWidget.cpp:145
 #, kde-format
 msgid "Scientific (E)"
 msgstr "वैज्ञानिक (ई)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:365
-#: src/frontend/widgets/ValueWidget.cpp:145
+#: src/frontend/widgets/ValueWidget.cpp:146
 #, kde-format
 msgid "Automatic (e)"
 msgstr "स्वचालित (ई)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:366
-#: src/frontend/widgets/ValueWidget.cpp:146
+#: src/frontend/widgets/ValueWidget.cpp:147
 #, kde-format
 msgid "Automatic (E)"
 msgstr "स्वचालित (ई)"
@@ -15709,7 +15710,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:811
 #: src/frontend/dockwidgets/QQPlotDock.cpp:273
 #: src/frontend/dockwidgets/RunChartDock.cpp:230
-#: src/frontend/dockwidgets/XYCurveDock.cpp:686
+#: src/frontend/dockwidgets/XYCurveDock.cpp:688
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1 xy-curves: टेम्पलेट \"%2\" लोड किया गया"
@@ -16322,48 +16323,48 @@ msgstr "विसंक्रांति स्थितिः %1"
 msgid "Correlation status: %1"
 msgstr "सहसंबंध स्थिति: %1"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:435
+#: src/frontend/dockwidgets/XYCurveDock.cpp:437
 #, kde-format
 msgid "Horiz. Start"
 msgstr "पीले रंग में शुरू"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:436
+#: src/frontend/dockwidgets/XYCurveDock.cpp:438
 #, kde-format
 msgid "Vert. Start"
 msgstr "एड. जाना"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:437
+#: src/frontend/dockwidgets/XYCurveDock.cpp:439
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr "पीले रंग में मध्य"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:438
+#: src/frontend/dockwidgets/XYCurveDock.cpp:440
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr "ऊर्ध्वाधर मध्यबिंदु"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:439
+#: src/frontend/dockwidgets/XYCurveDock.cpp:441
 #, kde-format
 msgid "2-segments"
 msgstr "2-खंड"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:440
+#: src/frontend/dockwidgets/XYCurveDock.cpp:442
 #, kde-format
 msgid "3-segments"
 msgstr "3-खंड"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:443
+#: src/frontend/dockwidgets/XYCurveDock.cpp:445
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr "अकीमा-तख़्ता (प्राकृतिक)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:444
+#: src/frontend/dockwidgets/XYCurveDock.cpp:446
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr "अकिमा-स्पलाइन (आवधिक)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:458
-#: src/frontend/dockwidgets/XYCurveDock.cpp:459
+#: src/frontend/dockwidgets/XYCurveDock.cpp:460
+#: src/frontend/dockwidgets/XYCurveDock.cpp:461
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -16372,8 +16373,8 @@ msgstr ""
 "यदि चेक किया गया है, तो पड़ोसी बिंदुओं को लाइनों से जोड़ें, भले ही उनके बीच अंतराल (अमान्य "
 "या छिपे हुए मान) हों"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:460
-#: src/frontend/dockwidgets/XYCurveDock.cpp:461
+#: src/frontend/dockwidgets/XYCurveDock.cpp:462
+#: src/frontend/dockwidgets/XYCurveDock.cpp:463
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -26809,13 +26810,13 @@ msgid ""
 msgstr ""
 
 #: src/frontend/widgets/BackgroundWidget.cpp:115
-#: src/frontend/widgets/ValueWidget.cpp:135
+#: src/frontend/widgets/ValueWidget.cpp:136
 #, kde-format
 msgid "Above"
 msgstr "ऊपर"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:116
-#: src/frontend/widgets/ValueWidget.cpp:136
+#: src/frontend/widgets/ValueWidget.cpp:137
 #, kde-format
 msgid "Below"
 msgstr "नीचे"
@@ -27462,14 +27463,14 @@ msgstr ""
 "पहलू \"%1\"\n"
 "अब उपलब्ध नहीं है। इसे फिर से बनाए जाने पर यह स्वचालित रूप से उपयोग किया जाएगा।"
 
-#: src/frontend/widgets/ValueWidget.cpp:122
-#: src/frontend/widgets/ValueWidget.cpp:129
+#: src/frontend/widgets/ValueWidget.cpp:120
+#: src/frontend/widgets/ValueWidget.cpp:127
 #, kde-format
 msgid "No Values"
 msgstr "कोई मान नहीं"
 
-#: src/frontend/widgets/ValueWidget.cpp:127
-#: src/frontend/widgets/ValueWidget.cpp:131
+#: src/frontend/widgets/ValueWidget.cpp:125
+#: src/frontend/widgets/ValueWidget.cpp:132
 #, kde-format
 msgid "Custom Column"
 msgstr "कस्टम कॉलम"

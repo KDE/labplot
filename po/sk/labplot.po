@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-12 00:41+0000\n"
+"POT-Creation-Date: 2026-08-16 00:39+0000\n"
 "PO-Revision-Date: 2026-04-13 12:00+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -173,7 +173,7 @@ msgstr "Dni"
 #: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/AxisDock.cpp:275
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:215
-#: src/frontend/dockwidgets/XYCurveDock.cpp:433 src/frontend/GuiTools.cpp:159
+#: src/frontend/dockwidgets/XYCurveDock.cpp:435 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:112
@@ -4218,32 +4218,32 @@ msgstr "teraz"
 #: src/backend/gsl/functions.cpp:352
 #, kde-format
 msgid "date(year; month; day)"
-msgstr ""
+msgstr "date(rok; mesiac; deň)"
 
 #: src/backend/gsl/functions.cpp:353
 #, kde-format
 msgid "datedif(start_date; end_date; unit)"
-msgstr ""
+msgstr "datedif(začiatočný_dátum; koncový_dátum; jednotka)"
 
 #: src/backend/gsl/functions.cpp:354
 #, kde-format
 msgid "eomonth(start_date; months)"
-msgstr ""
+msgstr "eomonth(začiatočný_dátum; mesiace)"
 
 #: src/backend/gsl/functions.cpp:355
 #, kde-format
 msgid "weekday(date)"
-msgstr ""
+msgstr "weekday(dátum)"
 
 #: src/backend/gsl/functions.cpp:356
 #, kde-format
 msgid "networkdays(start_date; end_date)"
-msgstr ""
+msgstr "networkdays(začiatočný_dátum; koncový_dátum)"
 
 #: src/backend/gsl/functions.cpp:357
 #, kde-format
 msgid "year(date)"
-msgstr ""
+msgstr "year(dátum)"
 
 #: src/backend/gsl/functions.cpp:358
 #, kde-format
@@ -4253,12 +4253,12 @@ msgstr "month(date)"
 #: src/backend/gsl/functions.cpp:359
 #, kde-format
 msgid "day(date)"
-msgstr ""
+msgstr "day(dátum)"
 
 #: src/backend/gsl/functions.cpp:360
 #, kde-format
 msgid "weeknum(date)"
-msgstr ""
+msgstr "weeknum(dátum)"
 
 #: src/backend/gsl/functions.cpp:361
 #, kde-format
@@ -4268,17 +4268,17 @@ msgstr "hour(dateTime)"
 #: src/backend/gsl/functions.cpp:362
 #, kde-format
 msgid "minute(dateTime)"
-msgstr ""
+msgstr "minute(dátumČas)"
 
 #: src/backend/gsl/functions.cpp:363
 #, kde-format
 msgid "second(dateTime)"
-msgstr ""
+msgstr "second(dátumČas)"
 
 #: src/backend/gsl/functions.cpp:364
 #, kde-format
 msgid "time(hour; minute; second)"
-msgstr ""
+msgstr "time(hodina; minúta; sekunda)"
 
 #: src/backend/gsl/functions.cpp:368
 #, kde-format
@@ -6826,7 +6826,7 @@ msgstr "Raw"
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:492
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:630
-#: src/frontend/widgets/ValueWidget.cpp:130
+#: src/frontend/widgets/ValueWidget.cpp:129
 #, kde-format
 msgid "Frequency"
 msgstr "Frekvencia"
@@ -7127,12 +7127,12 @@ msgstr "Simpsonov (3-bodový)"
 msgid "Simpson's 3/8 (4-point)"
 msgstr "Simpsonov 3/8 (4-bodový)"
 
-#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:441
+#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:443
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr "Kubický splajn (prirodzený)"
 
-#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:442
+#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:444
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr "Kubický splajn (periodický)"
@@ -7450,7 +7450,7 @@ msgstr "Savitzky-Golay"
 #: src/backend/nsl/nsl_smooth.c:26
 #, kde-format
 msgid "LOWESS"
-msgstr ""
+msgstr "LOWESS"
 
 #: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
@@ -9053,7 +9053,7 @@ msgstr "%1: nastaviť nepriehľadnosť"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:159
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:90
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
-#: src/frontend/dockwidgets/XYCurveDock.cpp:449
+#: src/frontend/dockwidgets/XYCurveDock.cpp:451
 #, kde-format
 msgid "Horizontal"
 msgstr "Horizontálne"
@@ -9073,7 +9073,7 @@ msgstr "Horizontálne"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:160
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
-#: src/frontend/dockwidgets/XYCurveDock.cpp:448
+#: src/frontend/dockwidgets/XYCurveDock.cpp:450
 #, kde-format
 msgid "Vertical"
 msgstr "Vertikálne"
@@ -9097,7 +9097,7 @@ msgstr "Orientácia"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:317
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:590
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
-#: src/frontend/dockwidgets/XYCurveDock.cpp:434
+#: src/frontend/dockwidgets/XYCurveDock.cpp:436
 #: src/frontend/ui/dockwidgets/axisdock.ui:492
 #: src/frontend/ui/dockwidgets/axisdock.ui:632
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:674
@@ -11840,7 +11840,7 @@ msgstr "Otvoriť príklad"
 #: src/frontend/ActionsManager.cpp:202
 #, kde-format
 msgid "&Full Screen Mode"
-msgstr ""
+msgstr "Režim &celej obrazovky"
 
 #: src/frontend/ActionsManager.cpp:224 src/frontend/MainWin.cpp:1220
 #, kde-format
@@ -14275,6 +14275,7 @@ msgstr "Dostupné"
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:397
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:266
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:223
+#: src/frontend/widgets/ValueWidget.cpp:131
 #, kde-format
 msgid "Values"
 msgstr "Hodnoty"
@@ -14449,7 +14450,7 @@ msgstr "Poloplná, veľká"
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
-#: src/frontend/widgets/ValueWidget.cpp:137
+#: src/frontend/widgets/ValueWidget.cpp:138
 #, kde-format
 msgid "Left"
 msgstr "Vľavo"
@@ -14466,13 +14467,13 @@ msgstr "Vľavo"
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:489
 #: src/frontend/widgets/LabelWidget.cpp:501
-#: src/frontend/widgets/ValueWidget.cpp:138
+#: src/frontend/widgets/ValueWidget.cpp:139
 #, kde-format
 msgid "Right"
 msgstr "Vpravo"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:272
-#: src/frontend/dockwidgets/XYCurveDock.cpp:450
+#: src/frontend/dockwidgets/XYCurveDock.cpp:452
 #, kde-format
 msgid "Both"
 msgstr "Obe"
@@ -14720,7 +14721,7 @@ msgstr "%1 osi: šablóna \"%2\" načítaná"
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
-#: src/frontend/dockwidgets/XYCurveDock.cpp:688
+#: src/frontend/dockwidgets/XYCurveDock.cpp:690
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: šablóna \"%2\" načítaná"
@@ -15173,8 +15174,8 @@ msgstr "Riadkové poradie"
 #: src/frontend/widgets/LabelWidget.cpp:500
 #: src/frontend/widgets/LabelWidget.cpp:505
 #: src/frontend/widgets/LabelWidget.cpp:554
-#: src/frontend/widgets/ValueWidget.cpp:77
-#: src/frontend/widgets/ValueWidget.cpp:78
+#: src/frontend/widgets/ValueWidget.cpp:75
+#: src/frontend/widgets/ValueWidget.cpp:76
 #, kde-format
 msgid "Center"
 msgstr "Vycentrovať"
@@ -15224,33 +15225,33 @@ msgstr "%1 legendy karteziánskych grafov: šablóna \"%2\" načítaná"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:362
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
-#: src/frontend/widgets/ValueWidget.cpp:142
+#: src/frontend/widgets/ValueWidget.cpp:143
 #, kde-format
 msgid "Decimal"
 msgstr "Dekadický"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:363
 #: src/frontend/dockwidgets/MatrixDock.cpp:82
-#: src/frontend/widgets/ValueWidget.cpp:143
+#: src/frontend/widgets/ValueWidget.cpp:144
 #, kde-format
 msgid "Scientific (e)"
 msgstr "Vedecký (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:364
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
-#: src/frontend/widgets/ValueWidget.cpp:144
+#: src/frontend/widgets/ValueWidget.cpp:145
 #, kde-format
 msgid "Scientific (E)"
 msgstr "Vedecký (E)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:365
-#: src/frontend/widgets/ValueWidget.cpp:145
+#: src/frontend/widgets/ValueWidget.cpp:146
 #, kde-format
 msgid "Automatic (e)"
 msgstr "Automatický (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:366
-#: src/frontend/widgets/ValueWidget.cpp:146
+#: src/frontend/widgets/ValueWidget.cpp:147
 #, kde-format
 msgid "Automatic (E)"
 msgstr "Automatický (E)"
@@ -15646,7 +15647,7 @@ msgstr "Vlastná hodnota šírky pásma jadra"
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:811
 #: src/frontend/dockwidgets/QQPlotDock.cpp:273
 #: src/frontend/dockwidgets/RunChartDock.cpp:230
-#: src/frontend/dockwidgets/XYCurveDock.cpp:686
+#: src/frontend/dockwidgets/XYCurveDock.cpp:688
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1 xy-krivky: šablóna \"%2\" načítaná"
@@ -15712,7 +15713,7 @@ msgstr "Prehliadač súborov"
 #: src/frontend/dockwidgets/NoteDock.cpp:27
 #, kde-format
 msgid "Plain Text"
-msgstr ""
+msgstr "Obyčajný text"
 
 #: src/frontend/dockwidgets/NoteDock.cpp:28
 #: src/frontend/notebook/NotebookView.cpp:110
@@ -16269,48 +16270,48 @@ msgstr "Deconvolution status: %1"
 msgid "Correlation status: %1"
 msgstr "Correlation status: %1"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:435
+#: src/frontend/dockwidgets/XYCurveDock.cpp:437
 #, kde-format
 msgid "Horiz. Start"
 msgstr "Horiz. začiatok"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:436
+#: src/frontend/dockwidgets/XYCurveDock.cpp:438
 #, kde-format
 msgid "Vert. Start"
 msgstr "Vert. začiatok"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:437
+#: src/frontend/dockwidgets/XYCurveDock.cpp:439
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr "Horiz. stredový bod"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:438
+#: src/frontend/dockwidgets/XYCurveDock.cpp:440
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr "Vert. stredový bod"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:439
+#: src/frontend/dockwidgets/XYCurveDock.cpp:441
 #, kde-format
 msgid "2-segments"
 msgstr "2 segmenty"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:440
+#: src/frontend/dockwidgets/XYCurveDock.cpp:442
 #, kde-format
 msgid "3-segments"
 msgstr "3 segmenty"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:443
+#: src/frontend/dockwidgets/XYCurveDock.cpp:445
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr "Akima-splajn (prirodzený)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:444
+#: src/frontend/dockwidgets/XYCurveDock.cpp:446
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr "Akima-splajn (periodický)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:458
-#: src/frontend/dockwidgets/XYCurveDock.cpp:459
+#: src/frontend/dockwidgets/XYCurveDock.cpp:460
+#: src/frontend/dockwidgets/XYCurveDock.cpp:461
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -16318,8 +16319,8 @@ msgid ""
 msgstr ""
 "Ak je zaškrtnuté, spojiť susedné body čiarami aj keď sú medzi nimi medzery"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:460
-#: src/frontend/dockwidgets/XYCurveDock.cpp:461
+#: src/frontend/dockwidgets/XYCurveDock.cpp:462
+#: src/frontend/dockwidgets/XYCurveDock.cpp:463
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -16747,6 +16748,13 @@ msgid ""
 "squares fitting of polynomials to segments of the data.</li><li>LOWESS - "
 "locally weighted scatterplot smoothing.</li></ul>"
 msgstr ""
+"Metóda použitá na vyhladenie údajov:<ul><li>Kĺzavý priemer (centrálny) – "
+"vyhladenie priemerom z pevného počtu bodov, priemer je vycentrovaný na "
+"aktuálny bod.</li><li>Kĺzavý priemer (oneskorený) – vyhladenie priemerom z "
+"pevného počtu bodov, priemer zaostáva za aktuálnym bodom.</li><li>Percentil "
+"– vyhladenie percentilom z pevného počtu bodov.</li><li>Savitzky-Golay – "
+"vyhladenie prokladaním polynómov úsekmi údajov metódou najmenších štvorcov.</"
+"li><li>LOWESS – lokálne vážené vyhladenie bodového grafu.</li></ul>"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:206
 #, kde-format
@@ -16758,22 +16766,22 @@ msgstr "Počet bodov v pohyblivom okne"
 msgid ""
 "Weighting type to define different weights for the points in the moving "
 "window"
-msgstr ""
+msgstr "Typ váženia, ktorý určuje rôzne váhy bodov v pohyblivom okne"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:214
 #, kde-format
 msgid "Percentile of the points in the moving window"
-msgstr ""
+msgstr "Percentil bodov v pohyblivom okne"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:218
 #, kde-format
 msgid "The order of the polynomial used to fit the points in the moving window"
-msgstr ""
+msgstr "Stupeň polynómu použitého na preloženie bodov v pohyblivom okne"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:222
 #, kde-format
 msgid "The fraction of the data used to perform the local fit."
-msgstr ""
+msgstr "Podiel údajov použitých na lokálne preloženie."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:226
 #, kde-format
@@ -16781,6 +16789,8 @@ msgid ""
 "If delta > 0, values of y-data within delta of each other will use "
 "interpolation instead of full regression."
 msgstr ""
+"Ak je delta > 0, hodnoty údajov y vzdialené od seba menej než delta sa "
+"namiesto plnej regresie interpolujú."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:230
 #, kde-format
@@ -16790,17 +16800,17 @@ msgstr "Počet robustifikačných iterácií"
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:234
 #, kde-format
 msgid "Padding mode to handle the edges of the data set"
-msgstr ""
+msgstr "Režim doplnenia na spracovanie okrajov množiny údajov"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:238
 #, kde-format
 msgid "The value for constant padding at the left edge"
-msgstr ""
+msgstr "Hodnota konštantného doplnenia na ľavom okraji"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:242
 #, kde-format
 msgid "The value for constant padding at the right edge"
-msgstr ""
+msgstr "Hodnota konštantného doplnenia na pravom okraji"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:518
 #, kde-format
@@ -18234,12 +18244,12 @@ msgstr "Upraviť"
 #: src/frontend/note/NoteView.cpp:100
 #, kde-format
 msgid "Edit markdown source"
-msgstr ""
+msgstr "Upraviť zdroj v Markdowne"
 
 #: src/frontend/note/NoteView.cpp:106
 #, kde-format
 msgid "Preview rendered output"
-msgstr ""
+msgstr "Náhľad vykresleného výstupu"
 
 #: src/frontend/notebook/NotebookView.cpp:48
 #, kde-format
@@ -25292,12 +25302,13 @@ msgstr "Prah vzdialenosti pre optimalizáciu (0 = počítať všetky body)"
 #, kde-format
 msgid "Fraction of data points used for local regression (0.0 < span ≤ 1.0)"
 msgstr ""
+"Podiel údajových bodov použitých na lokálnu regresiu (0,0 < rozpätie ≤ 1,0)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpan)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:101
 #, kde-format
 msgid "Span:"
-msgstr ""
+msgstr "Rozpätie:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lIterations)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:115
@@ -25305,6 +25316,8 @@ msgstr ""
 msgid ""
 "Number of robustifying iterations (0-4, higher = more outlier resistant)"
 msgstr ""
+"Počet robustifikačných iterácií (0 – 4, viac = odolnejšie voči odľahlým "
+"hodnotám)"
 
 #. i18n: ectx: property (text), widget (QLabel, lPercentile)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:135
@@ -25328,7 +25341,7 @@ msgstr "svetlomodrá"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:270
 #, kde-format
 msgid "Fraction of data points used for local regression"
-msgstr ""
+msgstr "Podiel údajových bodov použitých na lokálnu regresiu"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:493
@@ -25352,19 +25365,19 @@ msgstr "Hrúbka:"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:620
 #, kde-format
 msgid "Distance threshold for interpolation optimization (0 = disabled)"
-msgstr ""
+msgstr "Prah vzdialenosti pre optimalizáciu interpolácie (0 = vypnuté)"
 
 #. i18n: ectx: property (text), widget (QLabel, lDelta)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:623
 #, kde-format
 msgid "Delta:"
-msgstr ""
+msgstr "Delta:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbIterations)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:704
 #, kde-format
 msgid "Number of robustifying iterations for outlier resistance"
-msgstr ""
+msgstr "Počet robustifikačných iterácií na odolnosť voči odľahlým hodnotám"
 
 #. i18n: ectx: property (text), widget (QLabel, lColormap)
 #: src/frontend/ui/exampleswidget.ui:73
@@ -26677,13 +26690,13 @@ msgstr ""
 "See the full changelog for LabPlot %1 on our <a href=\"%2\">website</a>."
 
 #: src/frontend/widgets/BackgroundWidget.cpp:115
-#: src/frontend/widgets/ValueWidget.cpp:135
+#: src/frontend/widgets/ValueWidget.cpp:136
 #, kde-format
 msgid "Above"
 msgstr "Nad"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:116
-#: src/frontend/widgets/ValueWidget.cpp:136
+#: src/frontend/widgets/ValueWidget.cpp:137
 #, kde-format
 msgid "Below"
 msgstr "Pod"
@@ -27334,14 +27347,14 @@ msgstr ""
 "Aspekt \"%1\"\n"
 "už nie je dostupný. Bude automaticky použitý, keď bude znova vytvorený."
 
-#: src/frontend/widgets/ValueWidget.cpp:122
-#: src/frontend/widgets/ValueWidget.cpp:129
+#: src/frontend/widgets/ValueWidget.cpp:120
+#: src/frontend/widgets/ValueWidget.cpp:127
 #, kde-format
 msgid "No Values"
 msgstr "Žiadne hodnoty"
 
-#: src/frontend/widgets/ValueWidget.cpp:127
-#: src/frontend/widgets/ValueWidget.cpp:131
+#: src/frontend/widgets/ValueWidget.cpp:125
+#: src/frontend/widgets/ValueWidget.cpp:132
 #, kde-format
 msgid "Custom Column"
 msgstr "Vlastný stĺpec"
