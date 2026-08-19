@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-16 00:39+0000\n"
+"POT-Creation-Date: 2026-08-19 16:01+0000\n"
 "PO-Revision-Date: 2026-08-08 07:01+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -836,6 +836,7 @@ msgstr "neznan element delovnega zvezka »%1«"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1986
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1992
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1998
+#: src/frontend/CLIProcessor.cpp:114 src/frontend/CLIProcessor.cpp:116
 #: src/frontend/ui/datapickerimagewidget.ui:260
 #, kde-format
 msgid "Plot"
@@ -1780,6 +1781,7 @@ msgid "day"
 msgstr "dan"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:238
+#: src/frontend/CLIProcessor.cpp:271
 #, kde-format
 msgid "name"
 msgstr "ime"
@@ -8723,8 +8725,8 @@ msgstr "Residual"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
-#: src/frontend/ActionsManager.cpp:246 src/frontend/MainWin.cpp:1282
-#: src/frontend/SettingsDialog.cpp:62
+#: src/frontend/ActionsManager.cpp:246 src/frontend/CLIProcessor.cpp:161
+#: src/frontend/MainWin.cpp:1282 src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
 msgid "Worksheet"
@@ -10206,6 +10208,8 @@ msgid "Text Label"
 msgstr "Besedilna oznaka"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2419
+#: src/frontend/CLIProcessor.cpp:275 src/frontend/CLIProcessor.cpp:276
+#: src/frontend/CLIProcessor.cpp:277
 #: src/frontend/worksheet/WorksheetView.cpp:1356
 #, kde-format
 msgid "text"
@@ -12582,6 +12586,132 @@ msgstr "Nadaljuj s branjem"
 #, kde-format
 msgid "Pause Reading"
 msgstr "Zaustavi branje"
+
+#: src/frontend/CLIProcessor.cpp:106
+#, fuzzy, kde-format
+#| msgid "Import Data"
+msgid "Imported Data"
+msgstr "Uvoz podatkov"
+
+#: src/frontend/CLIProcessor.cpp:144
+#, fuzzy, kde-format
+#| msgid "Empty file"
+msgid "Template file"
+msgstr "Prazna datoteka"
+
+#: src/frontend/CLIProcessor.cpp:264
+#, fuzzy, kde-format
+#| msgid "Disable splash screen"
+msgid "Disable splash screen (GUI mode only)."
+msgstr "Onemogoči pojavni zaslon"
+
+#: src/frontend/CLIProcessor.cpp:265
+#, fuzzy, kde-format
+#| msgid "Start in the presenter mode"
+msgid "Start in presenter mode (GUI mode only)."
+msgstr "Zaženi v načinu predstavitve"
+
+#: src/frontend/CLIProcessor.cpp:266
+#, kde-format
+msgid "Input data file (CSV, HDF5, etc.) or project file (.lml)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:266 src/frontend/CLIProcessor.cpp:267
+#: src/frontend/CLIProcessor.cpp:274
+#, kde-format
+msgid "file"
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:267
+#, kde-format
+msgid "Output file for export (PDF, PNG, SVG, EPS)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:268
+#, kde-format
+msgid ""
+"Output format: pdf, png, svg, or eps (auto-detected from output extension if "
+"not specified)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:268
+#, fuzzy, kde-format
+#| msgid "data type"
+msgid "type"
+msgstr "vrsta podatkov"
+
+#: src/frontend/CLIProcessor.cpp:269
+#, kde-format
+msgid "Output resolution in DPI for raster formats (default: 300)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:269
+#, fuzzy, kde-format
+#| msgid "Value"
+msgid "value"
+msgstr "Vrednost"
+
+#: src/frontend/CLIProcessor.cpp:270
+#, kde-format
+msgid "Run in headless mode without GUI, exit after operations complete."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:271
+#, kde-format
+msgid "Export a specific worksheet by name."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:272
+#, kde-format
+msgid "Export all worksheets and spreadsheets in the project."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:273
+#, kde-format
+msgid "Output directory for multiple exported files (used with --export-all)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:273
+#, fuzzy, kde-format
+#| msgid "Direct"
+msgid "directory"
+msgstr "Neposredno"
+
+#: src/frontend/CLIProcessor.cpp:274
+#, kde-format
+msgid "Apply a plot style template file (.labplot_template)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:275
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Select the DBC file"
+msgid "Set the plot title."
+msgstr "Izberite datoteko DBC"
+
+#: src/frontend/CLIProcessor.cpp:276
+#, fuzzy, kde-format
+#| msgid "Distance to the axis tick labels"
+msgid "Set the X-axis label."
+msgstr "Razdalja do oznak osi"
+
+#: src/frontend/CLIProcessor.cpp:277
+#, fuzzy, kde-format
+#| msgid "Distance to the axis tick labels"
+msgid "Set the Y-axis label."
+msgstr "Razdalja do oznak osi"
+
+#: src/frontend/CLIProcessor.cpp:278
+#, fuzzy, kde-format
+#| msgid "The project file %1 is already opened."
+msgid "Input project file or data file to open."
+msgstr "Projektna datoteka %1 je že odprta."
+
+#: src/frontend/CLIProcessor.cpp:299
+#, fuzzy, kde-format
+#| msgid "Empty file"
+msgid "Input file"
+msgstr "Prazna datoteka"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -17570,7 +17700,7 @@ msgstr "Ali res želite počistiti zgodovino razveljavitev?"
 msgid "Clear History"
 msgstr "Počisti zgodovino"
 
-#: src/frontend/LabPlot.cpp:64
+#: src/frontend/LabPlot.cpp:65
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
@@ -17579,61 +17709,61 @@ msgstr ""
 "LabPlot je PROSTA, odprtokodna in večplatformska programska oprema za "
 "vizualizacijo in analizo podatkov, ki je dostopna vsem."
 
-#: src/frontend/LabPlot.cpp:66
+#: src/frontend/LabPlot.cpp:67
 #, kde-format
 msgid "(c) 2007-%1 LabPlot Team"
 msgstr "(c) 2007-%1 LabPlot Team"
 
-#: src/frontend/LabPlot.cpp:67
+#: src/frontend/LabPlot.cpp:68
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "Stefan Gerlach"
 
-#: src/frontend/LabPlot.cpp:67 src/frontend/LabPlot.cpp:68
-#: src/frontend/LabPlot.cpp:69
+#: src/frontend/LabPlot.cpp:68 src/frontend/LabPlot.cpp:69
+#: src/frontend/LabPlot.cpp:70
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Razvijalec"
 
-#: src/frontend/LabPlot.cpp:68
+#: src/frontend/LabPlot.cpp:69
 #, kde-format
 msgid "Alexander Semke"
 msgstr "Alexander Semke"
 
-#: src/frontend/LabPlot.cpp:69
+#: src/frontend/LabPlot.cpp:70
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr "Martin Marmsoler"
 
-#: src/frontend/LabPlot.cpp:70
+#: src/frontend/LabPlot.cpp:71
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "Dariusz Laska"
 
-#: src/frontend/LabPlot.cpp:71
+#: src/frontend/LabPlot.cpp:72
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr "Idejna dela, dokumentacija, vzorčni projekti"
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:78
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "Andreas Kainz"
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:78
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "Oblikovalec ikon"
 
-#: src/frontend/LabPlot.cpp:78
+#: src/frontend/LabPlot.cpp:79
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
-#: src/frontend/LabPlot.cpp:79
+#: src/frontend/LabPlot.cpp:80
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -17643,55 +17773,40 @@ msgstr ""
 "Pomoč pri številnih vprašanjih o infrastrukturi KDE in temah, povezanih s "
 "prevajanjem"
 
-#: src/frontend/LabPlot.cpp:82
+#: src/frontend/LabPlot.cpp:83
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
-#: src/frontend/LabPlot.cpp:82
+#: src/frontend/LabPlot.cpp:83
 #, kde-format
 msgctxt "@info:credit"
 msgid "FITS Filter"
 msgstr "Filter FITS"
 
-#: src/frontend/LabPlot.cpp:83
+#: src/frontend/LabPlot.cpp:84
 #, kde-format
 msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
-#: src/frontend/LabPlot.cpp:84
+#: src/frontend/LabPlot.cpp:85
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr "Prenos LabPlot na KF5 in integracija s Cantorjem"
 
-#: src/frontend/LabPlot.cpp:87
+#: src/frontend/LabPlot.cpp:88
 #, kde-format
 msgid "Christoph Roick"
 msgstr "Christoph Roick"
 
-#: src/frontend/LabPlot.cpp:88
+#: src/frontend/LabPlot.cpp:89
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Podpora uvoza histogramov ROOT (CERN) TH1"
 
-#: src/frontend/LabPlot.cpp:119
-#, kde-format
-msgid "Disable splash screen"
-msgstr "Onemogoči pojavni zaslon"
-
-#: src/frontend/LabPlot.cpp:122
-#, kde-format
-msgid "Start in the presenter mode"
-msgstr "Zaženi v načinu predstavitve"
-
-#: src/frontend/LabPlot.cpp:125
-#, kde-format
-msgid "Open a project file."
-msgstr "Odprite projektno datoteko."
-
-#: src/frontend/LabPlot.cpp:146
+#: src/frontend/LabPlot.cpp:142
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -17700,7 +17815,7 @@ msgstr ""
 "Datoteke »%1« ni bilo mogoče odpreti. Kliknite »Nadaljuj«, če želite "
 "nadaljevati z zagonom, ali »Prekliči«, da zapustite program."
 
-#: src/frontend/LabPlot.cpp:147
+#: src/frontend/LabPlot.cpp:143
 #, kde-format
 msgid "Failed to Open"
 msgstr "Odpiranje ni uspelo"
@@ -18509,34 +18624,31 @@ msgid "Select template search path"
 msgstr "Izberi pot iskanja predlog"
 
 #: src/frontend/PlotTemplateDialog.cpp:143
-#, kde-format
-msgid "No templates found."
-msgstr "Ni najdenih predlog."
+#, fuzzy, kde-format
+#| msgid "No valid data provided."
+msgid "No template path provided."
+msgstr "Ni podanih veljavnih podatkov."
 
-#: src/frontend/PlotTemplateDialog.cpp:149
+#: src/frontend/PlotTemplateDialog.cpp:150
 #, kde-format
 msgid "File does not exist."
 msgstr "Datoteka ne obstaja."
 
-#: src/frontend/PlotTemplateDialog.cpp:154
+#: src/frontend/PlotTemplateDialog.cpp:156
 #, kde-format
 msgid "Unable to read the file"
 msgstr "Datoteke ni mogoče brati"
 
-#: src/frontend/PlotTemplateDialog.cpp:165
-#: src/frontend/PlotTemplateDialog.cpp:172
-#: src/frontend/PlotTemplateDialog.cpp:179
-#: src/frontend/PlotTemplateDialog.cpp:187
-#: src/frontend/PlotTemplateDialog.cpp:198
-#: src/frontend/PlotTemplateDialog.cpp:206
-#, kde-format
-msgid "Failed to load the selected plot template"
+#: src/frontend/PlotTemplateDialog.cpp:168
+#: src/frontend/PlotTemplateDialog.cpp:176
+#: src/frontend/PlotTemplateDialog.cpp:184
+#: src/frontend/PlotTemplateDialog.cpp:193
+#: src/frontend/PlotTemplateDialog.cpp:205
+#: src/frontend/PlotTemplateDialog.cpp:214
+#, fuzzy, kde-format
+#| msgid "Failed to load the selected plot template"
+msgid "Failed to load the plot template"
 msgstr "Izbrane predloge grafikona in bilo mogoče naložiti"
-
-#: src/frontend/PlotTemplateDialog.cpp:197
-#, kde-format
-msgid "XML error: No cartesianPlot found"
-msgstr "Napaka XML: ni najdenega kartezičnega grafikona"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71
@@ -27838,6 +27950,15 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "Open a project file."
+#~ msgstr "Odprite projektno datoteko."
+
+#~ msgid "No templates found."
+#~ msgstr "Ni najdenih predlog."
+
+#~ msgid "XML error: No cartesianPlot found"
+#~ msgstr "Napaka XML: ni najdenega kartezičnega grafikona"
 
 #~ msgid "Padding Mode:"
 #~ msgstr "Način oblazinjenja:"

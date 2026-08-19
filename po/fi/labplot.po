@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-16 00:39+0000\n"
+"POT-Creation-Date: 2026-08-19 16:01+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -895,6 +895,7 @@ msgstr "tuntematon elementti ”%1”"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1986
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1992
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1998
+#: src/frontend/CLIProcessor.cpp:114 src/frontend/CLIProcessor.cpp:116
 #: src/frontend/ui/datapickerimagewidget.ui:260
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
@@ -1862,6 +1863,7 @@ msgid "day"
 msgstr "päivä"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:238
+#: src/frontend/CLIProcessor.cpp:271
 #, kde-format
 msgid "name"
 msgstr "nimi"
@@ -9177,8 +9179,8 @@ msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
-#: src/frontend/ActionsManager.cpp:246 src/frontend/MainWin.cpp:1282
-#: src/frontend/SettingsDialog.cpp:62
+#: src/frontend/ActionsManager.cpp:246 src/frontend/CLIProcessor.cpp:161
+#: src/frontend/MainWin.cpp:1282 src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
 msgid "Worksheet"
@@ -10801,6 +10803,8 @@ msgid "Text Label"
 msgstr "Tekstikenttä"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2419
+#: src/frontend/CLIProcessor.cpp:275 src/frontend/CLIProcessor.cpp:276
+#: src/frontend/CLIProcessor.cpp:277
 #: src/frontend/worksheet/WorksheetView.cpp:1356
 #, kde-format
 msgid "text"
@@ -13338,6 +13342,130 @@ msgstr "Jatka lukemista"
 #, kde-format
 msgid "Pause Reading"
 msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:106
+#, fuzzy, kde-format
+#| msgid "Import To"
+msgid "Imported Data"
+msgstr "Tuo kohteeseen"
+
+#: src/frontend/CLIProcessor.cpp:144
+#, fuzzy, kde-format
+#| msgid "Export to file"
+msgid "Template file"
+msgstr "Vie tiedostoon"
+
+#: src/frontend/CLIProcessor.cpp:264
+#, fuzzy, kde-format
+#| msgid "disable splash screen"
+msgid "Disable splash screen (GUI mode only)."
+msgstr "älä näytä tervetuloikkunaa"
+
+#: src/frontend/CLIProcessor.cpp:265
+#, kde-format
+msgid "Start in presenter mode (GUI mode only)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:266
+#, kde-format
+msgid "Input data file (CSV, HDF5, etc.) or project file (.lml)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:266 src/frontend/CLIProcessor.cpp:267
+#: src/frontend/CLIProcessor.cpp:274
+#, kde-format
+msgid "file"
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:267
+#, kde-format
+msgid "Output file for export (PDF, PNG, SVG, EPS)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:268
+#, kde-format
+msgid ""
+"Output format: pdf, png, svg, or eps (auto-detected from output extension if "
+"not specified)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:268
+#, fuzzy, kde-format
+#| msgid "Data:"
+msgid "type"
+msgstr "Data:"
+
+#: src/frontend/CLIProcessor.cpp:269
+#, kde-format
+msgid "Output resolution in DPI for raster formats (default: 300)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:269
+#, fuzzy, kde-format
+#| msgid "Value"
+msgid "value"
+msgstr "Arvo"
+
+#: src/frontend/CLIProcessor.cpp:270
+#, kde-format
+msgid "Run in headless mode without GUI, exit after operations complete."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:271
+#, kde-format
+msgid "Export a specific worksheet by name."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:272
+#, kde-format
+msgid "Export all worksheets and spreadsheets in the project."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:273
+#, kde-format
+msgid "Output directory for multiple exported files (used with --export-all)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:273
+#, fuzzy, kde-format
+#| msgid "Direction"
+msgid "directory"
+msgstr "Suunta"
+
+#: src/frontend/CLIProcessor.cpp:274
+#, kde-format
+msgid "Apply a plot style template file (.labplot_template)."
+msgstr ""
+
+#: src/frontend/CLIProcessor.cpp:275
+#, fuzzy, kde-format
+#| msgid "Select the image file"
+msgid "Set the plot title."
+msgstr "Valitse kuvatiedosto"
+
+#: src/frontend/CLIProcessor.cpp:276
+#, fuzzy, kde-format
+#| msgid "Distance to the axis tick labels"
+msgid "Set the X-axis label."
+msgstr "Etäisyys akselin merkkeihin"
+
+#: src/frontend/CLIProcessor.cpp:277
+#, fuzzy, kde-format
+#| msgid "Distance to the axis tick labels"
+msgid "Set the Y-axis label."
+msgstr "Etäisyys akselin merkkeihin"
+
+#: src/frontend/CLIProcessor.cpp:278
+#, fuzzy, kde-format
+#| msgid "The project file %1 is already opened."
+msgid "Input project file or data file to open."
+msgstr "Projektitiedosto %1 on jo avattu."
+
+#: src/frontend/CLIProcessor.cpp:299
+#, fuzzy, kde-format
+#| msgid "Export to file"
+msgid "Input file"
+msgstr "Vie tiedostoon"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -18372,69 +18500,69 @@ msgstr "Haluatko varmasti tyhjentää toimintohistorian?"
 msgid "Clear History"
 msgstr "Tyhjennä historia"
 
-#: src/frontend/LabPlot.cpp:64
+#: src/frontend/LabPlot.cpp:65
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
 "Analysis software accessible to everyone."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:66
+#: src/frontend/LabPlot.cpp:67
 #, fuzzy, kde-format
 #| msgid "(c) 2007-2019"
 msgid "(c) 2007-%1 LabPlot Team"
 msgstr "© 2007-2019"
 
-#: src/frontend/LabPlot.cpp:67
+#: src/frontend/LabPlot.cpp:68
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "Stefan Gerlach"
 
-#: src/frontend/LabPlot.cpp:67 src/frontend/LabPlot.cpp:68
-#: src/frontend/LabPlot.cpp:69
+#: src/frontend/LabPlot.cpp:68 src/frontend/LabPlot.cpp:69
+#: src/frontend/LabPlot.cpp:70
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Kehittäjä"
 
-#: src/frontend/LabPlot.cpp:68
+#: src/frontend/LabPlot.cpp:69
 #, kde-format
 msgid "Alexander Semke"
 msgstr "Alexander Semke"
 
-#: src/frontend/LabPlot.cpp:69
+#: src/frontend/LabPlot.cpp:70
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr "Martin Marmsoler"
 
-#: src/frontend/LabPlot.cpp:70
+#: src/frontend/LabPlot.cpp:71
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "Dariusz Laska"
 
-#: src/frontend/LabPlot.cpp:71
+#: src/frontend/LabPlot.cpp:72
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:78
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "Andreas Kainz"
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:78
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "Kuvakkeiden suunnittelija"
 
-#: src/frontend/LabPlot.cpp:78
+#: src/frontend/LabPlot.cpp:79
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
-#: src/frontend/LabPlot.cpp:79
+#: src/frontend/LabPlot.cpp:80
 #, fuzzy, kde-format
 #| msgid ""
 #| "Help on many questions about the KDE-infrastructure and translation "
@@ -18446,12 +18574,12 @@ msgid ""
 msgstr ""
 "Apu monissa KDE:n infrastruktuuriin ja kääntämiseen liittyvissä kysymyksissä"
 
-#: src/frontend/LabPlot.cpp:82
+#: src/frontend/LabPlot.cpp:83
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
-#: src/frontend/LabPlot.cpp:82
+#: src/frontend/LabPlot.cpp:83
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Open FITS File"
@@ -18459,46 +18587,29 @@ msgctxt "@info:credit"
 msgid "FITS Filter"
 msgstr "Avaa FITS-tiedosto"
 
-#: src/frontend/LabPlot.cpp:83
+#: src/frontend/LabPlot.cpp:84
 #, kde-format
 msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
-#: src/frontend/LabPlot.cpp:84
+#: src/frontend/LabPlot.cpp:85
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:87
+#: src/frontend/LabPlot.cpp:88
 #, kde-format
 msgid "Christoph Roick"
 msgstr "Christoph Roick"
 
-#: src/frontend/LabPlot.cpp:88
+#: src/frontend/LabPlot.cpp:89
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:119
-#, fuzzy, kde-format
-#| msgid "disable splash screen"
-msgid "Disable splash screen"
-msgstr "älä näytä tervetuloikkunaa"
-
-#: src/frontend/LabPlot.cpp:122
-#, kde-format
-msgid "Start in the presenter mode"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:125
-#, fuzzy, kde-format
-#| msgid "open a project file"
-msgid "Open a project file."
-msgstr "avaa projektitiedosto"
-
-#: src/frontend/LabPlot.cpp:146
+#: src/frontend/LabPlot.cpp:142
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -18507,7 +18618,7 @@ msgstr ""
 "Ei voitu avata tiedostoa ”%1”. Jatka käynnistämistä napsauttamalla ”Jatka” "
 "tai lopeta sovellus napsauttamalla ”Peru”."
 
-#: src/frontend/LabPlot.cpp:147
+#: src/frontend/LabPlot.cpp:143
 #, kde-format
 msgid "Failed to Open"
 msgstr "Avaaminen epäonnistui"
@@ -19359,37 +19470,32 @@ msgstr "Aseta mallien hakupolku"
 
 #: src/frontend/PlotTemplateDialog.cpp:143
 #, fuzzy, kde-format
-#| msgid "no folder element found"
-msgid "No templates found."
-msgstr "kansioelementtiä ei löytynyt"
+#| msgid "How to weight the data points"
+msgid "No template path provided."
+msgstr "Miten datapisteitä painotetaan"
 
-#: src/frontend/PlotTemplateDialog.cpp:149
+#: src/frontend/PlotTemplateDialog.cpp:150
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "File does not exist."
 msgstr "Projektitiedosto %1 on jo avattu."
 
-#: src/frontend/PlotTemplateDialog.cpp:154
+#: src/frontend/PlotTemplateDialog.cpp:156
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Unable to read the file"
 msgstr "Avaaminen epäonnistui"
 
-#: src/frontend/PlotTemplateDialog.cpp:165
-#: src/frontend/PlotTemplateDialog.cpp:172
-#: src/frontend/PlotTemplateDialog.cpp:179
-#: src/frontend/PlotTemplateDialog.cpp:187
-#: src/frontend/PlotTemplateDialog.cpp:198
-#: src/frontend/PlotTemplateDialog.cpp:206
+#: src/frontend/PlotTemplateDialog.cpp:168
+#: src/frontend/PlotTemplateDialog.cpp:176
+#: src/frontend/PlotTemplateDialog.cpp:184
+#: src/frontend/PlotTemplateDialog.cpp:193
+#: src/frontend/PlotTemplateDialog.cpp:205
+#: src/frontend/PlotTemplateDialog.cpp:214
 #, fuzzy, kde-format
 #| msgid "Failed to open"
-msgid "Failed to load the selected plot template"
+msgid "Failed to load the plot template"
 msgstr "Avaaminen epäonnistui"
-
-#: src/frontend/PlotTemplateDialog.cpp:197
-#, kde-format
-msgid "XML error: No cartesianPlot found"
-msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71
@@ -28905,6 +29011,16 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Tiedostoa ei voi avata:"
+
+#, fuzzy
+#~| msgid "open a project file"
+#~ msgid "Open a project file."
+#~ msgstr "avaa projektitiedosto"
+
+#, fuzzy
+#~| msgid "no folder element found"
+#~ msgid "No templates found."
+#~ msgstr "kansioelementtiä ei löytynyt"
 
 #, fuzzy
 #~| msgid "Padding:"
