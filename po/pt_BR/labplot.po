@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-19 16:01+0000\n"
-"PO-Revision-Date: 2026-08-08 07:48-0300\n"
+"PO-Revision-Date: 2026-08-19 16:11-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -12591,44 +12591,41 @@ msgid "Pause Reading"
 msgstr "Pausar leitura"
 
 #: src/frontend/CLIProcessor.cpp:106
-#, fuzzy, kde-format
-#| msgid "Import Data"
+#, kde-format
 msgid "Imported Data"
-msgstr "Importar dados"
+msgstr "Dados importados"
 
 #: src/frontend/CLIProcessor.cpp:144
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Template file"
-msgstr "Arquivo vazio"
+msgstr "Arquivo de modelo"
 
 #: src/frontend/CLIProcessor.cpp:264
-#, fuzzy, kde-format
-#| msgid "Disable splash screen"
+#, kde-format
 msgid "Disable splash screen (GUI mode only)."
-msgstr "Desabilitar a tela de apresentação"
+msgstr "Desabilitar a tela de apresentação (somente no modo gráfico)."
 
 #: src/frontend/CLIProcessor.cpp:265
-#, fuzzy, kde-format
-#| msgid "Start in the presenter mode"
+#, kde-format
 msgid "Start in presenter mode (GUI mode only)."
-msgstr "Iniciar no modo de apresentação"
+msgstr "Iniciar no modo de apresentação (somente no modo gráfico)."
 
 #: src/frontend/CLIProcessor.cpp:266
 #, kde-format
 msgid "Input data file (CSV, HDF5, etc.) or project file (.lml)."
 msgstr ""
+"Arquivo de dados de entrada (CSV, HDF5, etc.) ou arquivo de projeto (.lml)."
 
 #: src/frontend/CLIProcessor.cpp:266 src/frontend/CLIProcessor.cpp:267
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "file"
-msgstr ""
+msgstr "arquivo"
 
 #: src/frontend/CLIProcessor.cpp:267
 #, kde-format
 msgid "Output file for export (PDF, PNG, SVG, EPS)."
-msgstr ""
+msgstr "Arquivo de saída para exportação (PDF, PNG, SVG, EPS)."
 
 #: src/frontend/CLIProcessor.cpp:268
 #, kde-format
@@ -12636,85 +12633,82 @@ msgid ""
 "Output format: pdf, png, svg, or eps (auto-detected from output extension if "
 "not specified)."
 msgstr ""
+"Formato de saída: pdf, png, svg ou eps (detectado automaticamente pela "
+"extensão de saída, se não especificado)."
 
 #: src/frontend/CLIProcessor.cpp:268
-#, fuzzy, kde-format
-#| msgid "data type"
+#, kde-format
 msgid "type"
-msgstr "tipo de dados"
+msgstr "tipo"
 
 #: src/frontend/CLIProcessor.cpp:269
 #, kde-format
 msgid "Output resolution in DPI for raster formats (default: 300)."
-msgstr ""
+msgstr "Resolução de saída em DPI para formatos raster (padrão: 300)."
 
 #: src/frontend/CLIProcessor.cpp:269
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "value"
-msgstr "Valor"
+msgstr "valor"
 
 #: src/frontend/CLIProcessor.cpp:270
 #, kde-format
 msgid "Run in headless mode without GUI, exit after operations complete."
 msgstr ""
+"Executar em modo *headless* (sem interface gráfica) e encerrar após a "
+"conclusão das operações."
 
 #: src/frontend/CLIProcessor.cpp:271
 #, kde-format
 msgid "Export a specific worksheet by name."
-msgstr ""
+msgstr "Exportar uma planilha específica pelo nome."
 
 #: src/frontend/CLIProcessor.cpp:272
 #, kde-format
 msgid "Export all worksheets and spreadsheets in the project."
-msgstr ""
+msgstr "Exportar todas as planilhas do projeto."
 
 #: src/frontend/CLIProcessor.cpp:273
 #, kde-format
 msgid "Output directory for multiple exported files (used with --export-all)."
 msgstr ""
+"Diretório de saída para múltiplos arquivos exportados (usado com --export-"
+"all)."
 
 #: src/frontend/CLIProcessor.cpp:273
-#, fuzzy, kde-format
-#| msgid "Direct"
+#, kde-format
 msgid "directory"
-msgstr "Direta"
+msgstr "pasta"
 
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "Apply a plot style template file (.labplot_template)."
-msgstr ""
+msgstr "Aplique um arquivo de modelo de estilo de gráfico (.labplot_template)."
 
 #: src/frontend/CLIProcessor.cpp:275
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the DBC file"
+#, kde-format
 msgid "Set the plot title."
-msgstr "Selecionar o arquivo DBC"
+msgstr "Definir o título do gráfico."
 
 #: src/frontend/CLIProcessor.cpp:276
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the X-axis label."
-msgstr "Distância das legendas dos traços do eixo"
+msgstr "Definir a legenda do eixo X."
 
 #: src/frontend/CLIProcessor.cpp:277
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the Y-axis label."
-msgstr "Distância das legendas dos traços do eixo"
+msgstr "Definir a legenda do eixo Y."
 
 #: src/frontend/CLIProcessor.cpp:278
-#, fuzzy, kde-format
-#| msgid "The project file %1 is already opened."
+#, kde-format
 msgid "Input project file or data file to open."
-msgstr "O arquivo de projeto %1 já está aberto."
+msgstr "Arquivo de entrada do projeto ou arquivo de dados a ser aberto."
 
 #: src/frontend/CLIProcessor.cpp:299
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Input file"
-msgstr "Arquivo vazio"
+msgstr "Arquivo de entrada"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -18673,10 +18667,9 @@ msgid "Select template search path"
 msgstr "Selecionar o caminho de pesquisa do modelo"
 
 #: src/frontend/PlotTemplateDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "No valid data provided."
+#, kde-format
 msgid "No template path provided."
-msgstr "Não há dados fornecidos válidos."
+msgstr "Nenhum caminho de modelo foi fornecido."
 
 #: src/frontend/PlotTemplateDialog.cpp:150
 #, kde-format
@@ -18694,10 +18687,9 @@ msgstr "Não foi possível ler o arquivo"
 #: src/frontend/PlotTemplateDialog.cpp:193
 #: src/frontend/PlotTemplateDialog.cpp:205
 #: src/frontend/PlotTemplateDialog.cpp:214
-#, fuzzy, kde-format
-#| msgid "Failed to load the selected plot template"
+#, kde-format
 msgid "Failed to load the plot template"
-msgstr "Falha ao carregar o modelo de plotagem selecionado"
+msgstr "Falha ao carregar o modelo de gráfico"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71
