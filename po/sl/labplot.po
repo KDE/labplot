@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-19 16:01+0000\n"
-"PO-Revision-Date: 2026-08-08 07:01+0200\n"
+"PO-Revision-Date: 2026-08-20 06:51+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -10301,7 +10301,7 @@ msgstr "%1: nastavi pisavo"
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:207
 #, kde-format
 msgid "%1: use plot's color"
-msgstr "%1: uporabi barvo risbe"
+msgstr "%1: uporabi barvo grafikona"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
 #: src/backend/worksheet/TextLabel.cpp:408
@@ -12588,44 +12588,44 @@ msgid "Pause Reading"
 msgstr "Zaustavi branje"
 
 #: src/frontend/CLIProcessor.cpp:106
-#, fuzzy, kde-format
-#| msgid "Import Data"
+#, kde-format
 msgid "Imported Data"
-msgstr "Uvoz podatkov"
+msgstr "Uvoženi podatki"
 
 #: src/frontend/CLIProcessor.cpp:144
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Template file"
-msgstr "Prazna datoteka"
+msgstr "Datoteka predloge"
 
 #: src/frontend/CLIProcessor.cpp:264
-#, fuzzy, kde-format
-#| msgid "Disable splash screen"
+#, kde-format
 msgid "Disable splash screen (GUI mode only)."
-msgstr "Onemogoči pojavni zaslon"
+msgstr ""
+"Onemogoči pozdravni zaslon (samo v načinu grafičnega uporabniškega vmesnika)."
 
 #: src/frontend/CLIProcessor.cpp:265
-#, fuzzy, kde-format
-#| msgid "Start in the presenter mode"
+#, kde-format
 msgid "Start in presenter mode (GUI mode only)."
-msgstr "Zaženi v načinu predstavitve"
+msgstr ""
+"Začni v načinu predstavitve (samo v načinu grafičnega uporabniškega "
+"vmesnika)."
 
 #: src/frontend/CLIProcessor.cpp:266
 #, kde-format
 msgid "Input data file (CSV, HDF5, etc.) or project file (.lml)."
 msgstr ""
+"Vhodna podatkovna datoteka (CSV, HDF5 itd.) ali projektna datoteka (.lml)."
 
 #: src/frontend/CLIProcessor.cpp:266 src/frontend/CLIProcessor.cpp:267
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "file"
-msgstr ""
+msgstr "datoteka"
 
 #: src/frontend/CLIProcessor.cpp:267
 #, kde-format
 msgid "Output file for export (PDF, PNG, SVG, EPS)."
-msgstr ""
+msgstr "Izhodna datoteka za izvoz (PDF, PNG, SVG, EPS)."
 
 #: src/frontend/CLIProcessor.cpp:268
 #, kde-format
@@ -12633,85 +12633,80 @@ msgid ""
 "Output format: pdf, png, svg, or eps (auto-detected from output extension if "
 "not specified)."
 msgstr ""
+"Izhodni format: pdf, png, svg ali eps (samodejno zaznano iz izhodne "
+"končnice, če ni določen)."
 
 #: src/frontend/CLIProcessor.cpp:268
-#, fuzzy, kde-format
-#| msgid "data type"
+#, kde-format
 msgid "type"
-msgstr "vrsta podatkov"
+msgstr "zvrst"
 
 #: src/frontend/CLIProcessor.cpp:269
 #, kde-format
 msgid "Output resolution in DPI for raster formats (default: 300)."
-msgstr ""
+msgstr "Izhodna ločljivost v DPI za rastrske formate (privzeto: 300)."
 
 #: src/frontend/CLIProcessor.cpp:269
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "value"
-msgstr "Vrednost"
+msgstr "vrednost"
 
 #: src/frontend/CLIProcessor.cpp:270
 #, kde-format
 msgid "Run in headless mode without GUI, exit after operations complete."
 msgstr ""
+"Zaženi v načinu brez glave brez grafičnega uporabniškega vmesnika, zapusti "
+"po končanih operacijah."
 
 #: src/frontend/CLIProcessor.cpp:271
 #, kde-format
 msgid "Export a specific worksheet by name."
-msgstr ""
+msgstr "Izvozi določen delovni list po imenu."
 
 #: src/frontend/CLIProcessor.cpp:272
 #, kde-format
 msgid "Export all worksheets and spreadsheets in the project."
-msgstr ""
+msgstr "Izvozi vse delovne liste in preglednice v projektu."
 
 #: src/frontend/CLIProcessor.cpp:273
 #, kde-format
 msgid "Output directory for multiple exported files (used with --export-all)."
-msgstr ""
+msgstr "Izhodni imenik za več izvoženih datotek (uporablja se z --export-all)."
 
 #: src/frontend/CLIProcessor.cpp:273
-#, fuzzy, kde-format
-#| msgid "Direct"
+#, kde-format
 msgid "directory"
-msgstr "Neposredno"
+msgstr "imenik"
 
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "Apply a plot style template file (.labplot_template)."
-msgstr ""
+msgstr "Uporabi datoteko predloge sloga risanja (.labplot_template)."
 
 #: src/frontend/CLIProcessor.cpp:275
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the DBC file"
+#, kde-format
 msgid "Set the plot title."
-msgstr "Izberite datoteko DBC"
+msgstr "Nastavi naslov grafikona."
 
 #: src/frontend/CLIProcessor.cpp:276
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the X-axis label."
-msgstr "Razdalja do oznak osi"
+msgstr "Nastavi oznako osi X."
 
 #: src/frontend/CLIProcessor.cpp:277
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the Y-axis label."
-msgstr "Razdalja do oznak osi"
+msgstr "Nastavi oznako osi Y."
 
 #: src/frontend/CLIProcessor.cpp:278
-#, fuzzy, kde-format
-#| msgid "The project file %1 is already opened."
+#, kde-format
 msgid "Input project file or data file to open."
-msgstr "Projektna datoteka %1 je že odprta."
+msgstr "Vhodna projektna datoteka ali podatkovna datoteka za odpiranje."
 
 #: src/frontend/CLIProcessor.cpp:299
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Input file"
-msgstr "Prazna datoteka"
+msgstr "Vhodna datoteka"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -15404,7 +15399,7 @@ msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
-"Uporabi glavno barvo risbe (črta, simbol itd.) za barvo imena v legendi."
+"Uporabi glavno barvo grafikona (črta, simbol itd.) za barvo imena v legendi."
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:369
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:624
@@ -18624,10 +18619,9 @@ msgid "Select template search path"
 msgstr "Izberi pot iskanja predlog"
 
 #: src/frontend/PlotTemplateDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "No valid data provided."
+#, kde-format
 msgid "No template path provided."
-msgstr "Ni podanih veljavnih podatkov."
+msgstr "Ni podana pot predloge."
 
 #: src/frontend/PlotTemplateDialog.cpp:150
 #, kde-format
@@ -18645,10 +18639,9 @@ msgstr "Datoteke ni mogoče brati"
 #: src/frontend/PlotTemplateDialog.cpp:193
 #: src/frontend/PlotTemplateDialog.cpp:205
 #: src/frontend/PlotTemplateDialog.cpp:214
-#, fuzzy, kde-format
-#| msgid "Failed to load the selected plot template"
+#, kde-format
 msgid "Failed to load the plot template"
-msgstr "Izbrane predloge grafikona in bilo mogoče naložiti"
+msgstr "Neuspelo nalaganje predloge za grafikon"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71
@@ -23924,7 +23917,7 @@ msgstr "Vodor. poravnava:"
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
 #, kde-format
 msgid "Plot's Color:"
-msgstr "Barva risbe:"
+msgstr "Barva grafikona:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:555

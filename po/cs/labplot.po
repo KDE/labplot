@@ -12507,7 +12507,7 @@ msgstr ""
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "file"
-msgstr ""
+msgstr "soubor"
 
 #: src/frontend/CLIProcessor.cpp:267
 #, kde-format
@@ -12522,10 +12522,9 @@ msgid ""
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:268
-#, fuzzy, kde-format
-#| msgid "data type"
+#, kde-format
 msgid "type"
-msgstr "datový typ"
+msgstr "typ"
 
 #: src/frontend/CLIProcessor.cpp:269
 #, kde-format
@@ -12533,10 +12532,9 @@ msgid "Output resolution in DPI for raster formats (default: 300)."
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:269
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "value"
-msgstr "Hodnota"
+msgstr "hodnota"
 
 #: src/frontend/CLIProcessor.cpp:270
 #, kde-format
@@ -12559,10 +12557,9 @@ msgid "Output directory for multiple exported files (used with --export-all)."
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:273
-#, fuzzy, kde-format
-#| msgid "Direct"
+#, kde-format
 msgid "directory"
-msgstr "Přímé"
+msgstr "adresář"
 
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
@@ -12592,10 +12589,9 @@ msgid "Input project file or data file to open."
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:299
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Input file"
-msgstr "Prázdný soubor"
+msgstr "Vstupní soubor"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
