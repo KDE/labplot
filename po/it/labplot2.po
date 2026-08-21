@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 16:18+0000\n"
-"PO-Revision-Date: 2026-07-26 11:04+0200\n"
+"PO-Revision-Date: 2026-08-20 10:11+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -226,7 +226,7 @@ msgstr "Errore X"
 #: src/backend/core/AbstractColumn.cpp:178
 #, kde-format
 msgid "X-Uncertainty +"
-msgstr "X-Uncertainty +"
+msgstr "X-Incertezza +"
 
 #: src/backend/core/AbstractColumn.cpp:180
 #, kde-format
@@ -256,7 +256,7 @@ msgstr "Errore Y"
 #: src/backend/core/AbstractColumn.cpp:196
 #, kde-format
 msgid "Y-Uncertainty +"
-msgstr "Y-Uncertainty +"
+msgstr "Y-Incertezza +"
 
 #: src/backend/core/AbstractColumn.cpp:198
 #, kde-format
@@ -266,7 +266,7 @@ msgstr "Y-Error +"
 #: src/backend/core/AbstractColumn.cpp:202
 #, kde-format
 msgid "Y-Uncertainty -"
-msgstr "Y-Uncertainty -"
+msgstr "Y-Incertezza -"
 
 #: src/backend/core/AbstractColumn.cpp:204
 #, kde-format
@@ -7620,12 +7620,12 @@ msgstr "%1: imposta la dimensione della freccia"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:749
 #, kde-format
 msgid "%1: set major ticks direction"
-msgstr "%1: imposta i marcatori principali di direzione"
+msgstr "%1: imposta le tacche principali di direzione"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:756
 #, kde-format
 msgid "%1: set major ticks type"
-msgstr "%1: imposta il tipo dei marcatori principali"
+msgstr "%1: imposta il tipo di tacche principali"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:764
 #, kde-format
@@ -7636,7 +7636,7 @@ msgstr "%1: abilita/disabilita i numeri di tacca principali automatici"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:781
 #, kde-format
 msgid "%1: set the total number of the major ticks"
-msgstr "%1: imposta il numero totale dei marcatori principali"
+msgstr "%1: imposta il numero totale di tacche principali"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:783
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:865
@@ -7647,27 +7647,27 @@ msgstr "%1: disabilita i numeri di tacca principali automatici"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:806
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
-msgstr "%1: imposta la spaziatura dei marcatori principali"
+msgstr "%1: imposta la spaziatura di tacche principali"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:813
 #, kde-format
 msgid "%1: assign major ticks' values"
-msgstr "%1: assegna i valori dei marcatori principali"
+msgstr "%1: assegna i valori di tacche principali"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:827
 #, kde-format
 msgid "%1: set major ticks length"
-msgstr "%1: imposta la lunghezza dei marcatori principali"
+msgstr "%1: imposta la lunghezza di tacche principali"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:835
 #, kde-format
 msgid "%1: set minor ticks direction"
-msgstr "%1: imposta la direzione dei marcatori secondari"
+msgstr "%1: imposta la direzione delle tacche secondarie"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:842
 #, kde-format
 msgid "%1: set minor ticks type"
-msgstr "%1: imposta il tipo dei marcatori secondari"
+msgstr "%1: imposta il tipo delle tacche secondarie"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:850
 #, kde-format
@@ -7678,22 +7678,22 @@ msgstr "%1: abilita/disabilita i numeri di tacca secondari automatici"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:864
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
-msgstr "%1: imposta il numero totale dei marcatori secondari"
+msgstr "%1: imposta il numero totale delle tacche secondarie"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:895
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
-msgstr "%1: imposta la spaziatura dei marcatori secondari"
+msgstr "%1: imposta la spaziatura delle tacche secondarie"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:902
 #, kde-format
 msgid "%1: assign minor ticks' values"
-msgstr "%1: assegna i valori dei marcatori secondari"
+msgstr "%1: assegna i valori delle tacche secondarie"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:916
 #, kde-format
 msgid "%1: set minor ticks length"
-msgstr "%1: imposta la lunghezza dei marcatori secondari"
+msgstr "%1: imposta la lunghezza delle tacche secondarie"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:925
 #, kde-format
@@ -15236,7 +15236,7 @@ msgstr "Disabilita la schermata iniziale"
 #: src/kdefrontend/LabPlot.cpp:137
 #, kde-format
 msgid "Start in the presenter mode"
-msgstr "Inizia in modalità di presentazione"
+msgstr "Avvia in modalità di presentazione"
 
 #: src/kdefrontend/LabPlot.cpp:140
 #, kde-format
@@ -16083,7 +16083,7 @@ msgstr "Con il foglio di lavoro"
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "With Spreadsheet and Worksheet"
-msgstr "Con il Foglio elettronico e il foglio di lavoro"
+msgstr "Con il foglio elettronico e il foglio di lavoro"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
@@ -17184,7 +17184,7 @@ msgstr "&Campiona"
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:63
 #, kde-format
 msgid "Sample values in the selected spreadsheet columns"
-msgstr "Valori campione nelle colonne del foglio di calcolo selezionate"
+msgstr "Valori campione nelle colonne del foglio elettronico selezionate"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:64
 #, kde-format
@@ -19405,7 +19405,7 @@ msgstr "Spaziatura:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:760
 #, kde-format
 msgid "Major Ticks"
-msgstr "Marcatori principali"
+msgstr "Tacche principali"
 
 #. i18n: ectx: property (text), widget (QLabel, lIncrementDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lIncrement)
@@ -19482,7 +19482,7 @@ msgstr "Lunghezza:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:993
 #, kde-format
 msgid "Minor Ticks"
-msgstr "Marcatori secondari"
+msgstr "Tacche secondarie"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1033
