@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-19 16:01+0000\n"
-"PO-Revision-Date: 2026-08-08 19:58+0300\n"
+"PO-Revision-Date: 2026-08-21 19:33+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12525,44 +12525,40 @@ msgid "Pause Reading"
 msgstr "Okumayı Duraklat"
 
 #: src/frontend/CLIProcessor.cpp:106
-#, fuzzy, kde-format
-#| msgid "Import Data"
+#, kde-format
 msgid "Imported Data"
-msgstr "Veri İçe Aktar"
+msgstr "İçe aktarılmış veri"
 
 #: src/frontend/CLIProcessor.cpp:144
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Template file"
-msgstr "Boş dosya"
+msgstr "Şablon dosyası"
 
 #: src/frontend/CLIProcessor.cpp:264
-#, fuzzy, kde-format
-#| msgid "Disable splash screen"
+#, kde-format
 msgid "Disable splash screen (GUI mode only)."
-msgstr "Açılış ekranını devre dışı bırak"
+msgstr "Açılış ekranını devre dışı bırak (yalnızca grafik arayüz kipinde)."
 
 #: src/frontend/CLIProcessor.cpp:265
-#, fuzzy, kde-format
-#| msgid "Start in the presenter mode"
+#, kde-format
 msgid "Start in presenter mode (GUI mode only)."
-msgstr "Sunum kipinde başlat"
+msgstr "Sunu kipinde başlat (yalnızca grafik arayüz kipinde)."
 
 #: src/frontend/CLIProcessor.cpp:266
 #, kde-format
 msgid "Input data file (CSV, HDF5, etc.) or project file (.lml)."
-msgstr ""
+msgstr "Girdi veri dosyası (CSV, HDF5 vb.) veya proje dosyası (.lml)."
 
 #: src/frontend/CLIProcessor.cpp:266 src/frontend/CLIProcessor.cpp:267
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "file"
-msgstr ""
+msgstr "dosya"
 
 #: src/frontend/CLIProcessor.cpp:267
 #, kde-format
 msgid "Output file for export (PDF, PNG, SVG, EPS)."
-msgstr ""
+msgstr "Dışa aktarılacak çıktı dosyası (PDF, PNG, SVG, EPS)."
 
 #: src/frontend/CLIProcessor.cpp:268
 #, kde-format
@@ -12570,85 +12566,79 @@ msgid ""
 "Output format: pdf, png, svg, or eps (auto-detected from output extension if "
 "not specified)."
 msgstr ""
+"Çıktı: PDF, PNG, SVG veya EPS (yoksa uzantıdan kendiliğinden algılanır)."
 
 #: src/frontend/CLIProcessor.cpp:268
-#, fuzzy, kde-format
-#| msgid "data type"
+#, kde-format
 msgid "type"
-msgstr "veri türü"
+msgstr "tür"
 
 #: src/frontend/CLIProcessor.cpp:269
 #, kde-format
 msgid "Output resolution in DPI for raster formats (default: 300)."
-msgstr ""
+msgstr "Raster biçimler için DPI türünde çıktı biçimi (öntanımlı: 300)."
 
 #: src/frontend/CLIProcessor.cpp:269
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "value"
-msgstr "Değer"
+msgstr "değer"
 
 #: src/frontend/CLIProcessor.cpp:270
 #, kde-format
 msgid "Run in headless mode without GUI, exit after operations complete."
 msgstr ""
+"Grafik arayüz olmadan kafasız kipte çalış, işlemler bittikten sonra çık."
 
 #: src/frontend/CLIProcessor.cpp:271
 #, kde-format
 msgid "Export a specific worksheet by name."
-msgstr ""
+msgstr "Belirli bir çalışma sayfasını adıyla dışa aktar."
 
 #: src/frontend/CLIProcessor.cpp:272
 #, kde-format
 msgid "Export all worksheets and spreadsheets in the project."
-msgstr ""
+msgstr "Projedeki tüm çalışma sayfalarını ve tabloları dışa aktar."
 
 #: src/frontend/CLIProcessor.cpp:273
 #, kde-format
 msgid "Output directory for multiple exported files (used with --export-all)."
 msgstr ""
+"Çoklu dışa aktarılmış dosyaların çıkış dizini (--export-all ile kullanılır)."
 
 #: src/frontend/CLIProcessor.cpp:273
-#, fuzzy, kde-format
-#| msgid "Direct"
+#, kde-format
 msgid "directory"
-msgstr "Doğrudan"
+msgstr "dizin"
 
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "Apply a plot style template file (.labplot_template)."
-msgstr ""
+msgstr "Çizim tarzı şablon dosyası uygula (.labplot_template)."
 
 #: src/frontend/CLIProcessor.cpp:275
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the DBC file"
+#, kde-format
 msgid "Set the plot title."
-msgstr "DBC dosyasını seç"
+msgstr "Çizim başlığını ayarla."
 
 #: src/frontend/CLIProcessor.cpp:276
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the X-axis label."
-msgstr "Eksen im etiketlerine uzaklık"
+msgstr "X ekseni etiketini ayarla."
 
 #: src/frontend/CLIProcessor.cpp:277
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the Y-axis label."
-msgstr "Eksen im etiketlerine uzaklık"
+msgstr "Y ekseni etiketini ayarla."
 
 #: src/frontend/CLIProcessor.cpp:278
-#, fuzzy, kde-format
-#| msgid "The project file %1 is already opened."
+#, kde-format
 msgid "Input project file or data file to open."
-msgstr "%1 proje dosyası hâlihazırda açık."
+msgstr "Girdi proje dosyası veya açılacak dosya."
 
 #: src/frontend/CLIProcessor.cpp:299
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Input file"
-msgstr "Boş dosya"
+msgstr "Girdi dosyası"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -18553,10 +18543,9 @@ msgid "Select template search path"
 msgstr "Şablon arama yolu seç"
 
 #: src/frontend/PlotTemplateDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "No valid data provided."
+#, kde-format
 msgid "No template path provided."
-msgstr "Sağlanan geçerli veri yok."
+msgstr "Sağlanan şablon yolu yok"
 
 #: src/frontend/PlotTemplateDialog.cpp:150
 #, kde-format
@@ -18574,10 +18563,9 @@ msgstr "Dosya okunamıyor"
 #: src/frontend/PlotTemplateDialog.cpp:193
 #: src/frontend/PlotTemplateDialog.cpp:205
 #: src/frontend/PlotTemplateDialog.cpp:214
-#, fuzzy, kde-format
-#| msgid "Failed to load the selected plot template"
+#, kde-format
 msgid "Failed to load the plot template"
-msgstr "Seçili çizim şablonun yüklenemedi"
+msgstr "Çizim şablonun yüklenemedi"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71

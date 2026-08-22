@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-19 16:01+0000\n"
-"PO-Revision-Date: 2026-08-08 07:50+0200\n"
+"PO-Revision-Date: 2026-08-21 19:39+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -12543,44 +12543,40 @@ msgid "Pause Reading"
 msgstr "Pausa läsning"
 
 #: src/frontend/CLIProcessor.cpp:106
-#, fuzzy, kde-format
-#| msgid "Import Data"
+#, kde-format
 msgid "Imported Data"
-msgstr "Importera data"
+msgstr "Importerade data"
 
 #: src/frontend/CLIProcessor.cpp:144
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Template file"
-msgstr "Tom fil"
+msgstr "Mallfil"
 
 #: src/frontend/CLIProcessor.cpp:264
-#, fuzzy, kde-format
-#| msgid "Disable splash screen"
+#, kde-format
 msgid "Disable splash screen (GUI mode only)."
-msgstr "Inaktivera startskärm"
+msgstr "Inaktivera startskärm (bara grafiskt användargränssnittsläge)"
 
 #: src/frontend/CLIProcessor.cpp:265
-#, fuzzy, kde-format
-#| msgid "Start in the presenter mode"
+#, kde-format
 msgid "Start in presenter mode (GUI mode only)."
-msgstr "Starta i presentationsläge"
+msgstr "Starta i presentationsläge (bara grafiskt användargränssnittsläge)"
 
 #: src/frontend/CLIProcessor.cpp:266
 #, kde-format
 msgid "Input data file (CSV, HDF5, etc.) or project file (.lml)."
-msgstr ""
+msgstr "Indatafil (CSV, HDF5, etc.) eller projektfil (.lml)."
 
 #: src/frontend/CLIProcessor.cpp:266 src/frontend/CLIProcessor.cpp:267
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "file"
-msgstr ""
+msgstr "fil"
 
 #: src/frontend/CLIProcessor.cpp:267
 #, kde-format
 msgid "Output file for export (PDF, PNG, SVG, EPS)."
-msgstr ""
+msgstr "Utdatafil för export (PDF, PNG, SVG, EPS)."
 
 #: src/frontend/CLIProcessor.cpp:268
 #, kde-format
@@ -12588,85 +12584,81 @@ msgid ""
 "Output format: pdf, png, svg, or eps (auto-detected from output extension if "
 "not specified)."
 msgstr ""
+"Utdataformat: pdf, png, svg eller eps (automatiskt detekterad från "
+"utdatafilens ändelse om inget anges)."
 
 #: src/frontend/CLIProcessor.cpp:268
-#, fuzzy, kde-format
-#| msgid "data type"
+#, kde-format
 msgid "type"
-msgstr "datatyp"
+msgstr "typ"
 
 #: src/frontend/CLIProcessor.cpp:269
 #, kde-format
 msgid "Output resolution in DPI for raster formats (default: 300)."
 msgstr ""
+"Utdataupplösning i punkter/tum för rastreringsformat (standardvärde: 300)"
 
 #: src/frontend/CLIProcessor.cpp:269
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "value"
-msgstr "Värde"
+msgstr "värde"
 
 #: src/frontend/CLIProcessor.cpp:270
 #, kde-format
 msgid "Run in headless mode without GUI, exit after operations complete."
 msgstr ""
+"Kör utan skärm och grafiskt användargränssnitt, avsluta efter åtgärder är "
+"färdiga."
 
 #: src/frontend/CLIProcessor.cpp:271
 #, kde-format
 msgid "Export a specific worksheet by name."
-msgstr ""
+msgstr "Exportera ett specifikt arbetsblad enligt namn."
 
 #: src/frontend/CLIProcessor.cpp:272
 #, kde-format
 msgid "Export all worksheets and spreadsheets in the project."
-msgstr ""
+msgstr "Exportera alla arbetsblad och kalkylark i projektet."
 
 #: src/frontend/CLIProcessor.cpp:273
 #, kde-format
 msgid "Output directory for multiple exported files (used with --export-all)."
-msgstr ""
+msgstr "Utdatakatalog för flera exporterade filer (används med --export-all)."
 
 #: src/frontend/CLIProcessor.cpp:273
-#, fuzzy, kde-format
-#| msgid "Direct"
+#, kde-format
 msgid "directory"
-msgstr "Direkt"
+msgstr "katalog"
 
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "Apply a plot style template file (.labplot_template)."
-msgstr ""
+msgstr "Använd en mallfil med diagramstil (.labplot_template)."
 
 #: src/frontend/CLIProcessor.cpp:275
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the DBC file"
+#, kde-format
 msgid "Set the plot title."
-msgstr "Välj DBC-filen"
+msgstr "Ange diagramrubriken."
 
 #: src/frontend/CLIProcessor.cpp:276
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the X-axis label."
-msgstr "Avstånd till axelns graderingsbeteckningar"
+msgstr "Ange x-axelns beteckning."
 
 #: src/frontend/CLIProcessor.cpp:277
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the Y-axis label."
-msgstr "Avstånd till axelns graderingsbeteckningar"
+msgstr "Ange y-axelns beteckning."
 
 #: src/frontend/CLIProcessor.cpp:278
-#, fuzzy, kde-format
-#| msgid "The project file %1 is already opened."
+#, kde-format
 msgid "Input project file or data file to open."
-msgstr "Projektfilen %1 är redan öppen."
+msgstr "Projektfil eller datafil att öppna."
 
 #: src/frontend/CLIProcessor.cpp:299
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Input file"
-msgstr "Tom fil"
+msgstr "Indatafil"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -18578,10 +18570,9 @@ msgid "Select template search path"
 msgstr "Välj sökväg för mallar"
 
 #: src/frontend/PlotTemplateDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "No valid data provided."
+#, kde-format
 msgid "No template path provided."
-msgstr "Ingen giltig data angiven."
+msgstr "Ingen mallsökväg angiven."
 
 #: src/frontend/PlotTemplateDialog.cpp:150
 #, kde-format
@@ -18599,10 +18590,9 @@ msgstr "Kan inte läsa filen"
 #: src/frontend/PlotTemplateDialog.cpp:193
 #: src/frontend/PlotTemplateDialog.cpp:205
 #: src/frontend/PlotTemplateDialog.cpp:214
-#, fuzzy, kde-format
-#| msgid "Failed to load the selected plot template"
+#, kde-format
 msgid "Failed to load the plot template"
-msgstr "Misslyckades läsa in vald diagrammall"
+msgstr "Misslyckades läsa in diagrammallen"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71

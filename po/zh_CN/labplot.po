@@ -12405,17 +12405,14 @@ msgid "Pause Reading"
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:106
-#, fuzzy, kde-format
-#| msgid "Import Data"
+#, kde-format
 msgid "Imported Data"
-msgstr "导入数据"
+msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:144
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Choose Template Save File"
+#, kde-format
 msgid "Template file"
-msgstr "选择模板保存文件"
+msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:264
 #, kde-format
@@ -12451,10 +12448,9 @@ msgid ""
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:268
-#, fuzzy, kde-format
-#| msgid "data type"
+#, kde-format
 msgid "type"
-msgstr "数据类型"
+msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:269
 #, kde-format
@@ -12462,10 +12458,9 @@ msgid "Output resolution in DPI for raster formats (default: 300)."
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:269
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "value"
-msgstr "值"
+msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:270
 #, kde-format
@@ -12488,10 +12483,9 @@ msgid "Output directory for multiple exported files (used with --export-all)."
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:273
-#, fuzzy, kde-format
-#| msgid "Direction:"
+#, kde-format
 msgid "directory"
-msgstr "方向："
+msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
@@ -12499,11 +12493,9 @@ msgid "Apply a plot style template file (.labplot_template)."
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:275
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the DBC file"
+#, kde-format
 msgid "Set the plot title."
-msgstr "选择 DBC 文件"
+msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:276
 #, kde-format
@@ -12516,16 +12508,14 @@ msgid "Set the Y-axis label."
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:278
-#, fuzzy, kde-format
-#| msgid "The project file %1 is already opened."
+#, kde-format
 msgid "Input project file or data file to open."
-msgstr "工程文件 %1 已经处于打开状态。"
+msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:299
-#, fuzzy, kde-format
-#| msgid "Invalid file."
+#, kde-format
 msgid "Input file"
-msgstr "无效的文件。"
+msgstr ""
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -18134,10 +18124,9 @@ msgid "Select template search path"
 msgstr ""
 
 #: src/frontend/PlotTemplateDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "New template \"%1\" was saved."
+#, kde-format
 msgid "No template path provided."
-msgstr "新模板“%1”已保存。"
+msgstr ""
 
 #: src/frontend/PlotTemplateDialog.cpp:150
 #, kde-format
@@ -18155,10 +18144,9 @@ msgstr ""
 #: src/frontend/PlotTemplateDialog.cpp:193
 #: src/frontend/PlotTemplateDialog.cpp:205
 #: src/frontend/PlotTemplateDialog.cpp:214
-#, fuzzy, kde-format
-#| msgid "Failed to allocate memory"
+#, kde-format
 msgid "Failed to load the plot template"
-msgstr "内存分配失败"
+msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71
