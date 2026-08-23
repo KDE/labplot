@@ -3665,27 +3665,27 @@ msgstr "1r percentil"
 #: src/backend/gsl/functions.cpp:259
 #, kde-format
 msgid "5th percentile"
-msgstr "5è percentil"
+msgstr "5é percentil"
 
 #: src/backend/gsl/functions.cpp:260
 #, kde-format
 msgid "10th percentile"
-msgstr "10è percentil"
+msgstr "10é percentil"
 
 #: src/backend/gsl/functions.cpp:261
 #, kde-format
 msgid "90th percentile"
-msgstr "90è percentil"
+msgstr "90é percentil"
 
 #: src/backend/gsl/functions.cpp:262
 #, kde-format
 msgid "95th percentile"
-msgstr "95è percentil"
+msgstr "95é percentil"
 
 #: src/backend/gsl/functions.cpp:263
 #, kde-format
 msgid "99th percentile"
-msgstr "99è percentil"
+msgstr "99é percentil"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
 #: src/backend/gsl/functions.cpp:264
@@ -4316,12 +4316,12 @@ msgstr "Funció de Debye de quart ordre"
 #: src/backend/gsl/functions.cpp:409
 #, kde-format
 msgid "Fifth-order Debye function"
-msgstr "Funció de Debye de cinquè ordre"
+msgstr "Funció de Debye de cinqué ordre"
 
 #: src/backend/gsl/functions.cpp:410
 #, kde-format
 msgid "Sixth-order Debye function"
-msgstr "Funció de Debye de sisè ordre"
+msgstr "Funció de Debye de sisé ordre"
 
 #: src/backend/gsl/functions.cpp:413
 #, kde-format
@@ -5904,7 +5904,7 @@ msgstr "Funció de distribució triangular acumulada Q"
 #: src/backend/gsl/functions.cpp:842
 #, kde-format
 msgid "p-th quantile for triangular distribution"
-msgstr "Quantil p-è per a una distribució triangular"
+msgstr "Quantil p-é per a una distribució triangular"
 
 #: src/backend/gsl/functions.cpp:948 src/backend/gsl/functions.cpp:960
 #: src/backend/gsl/functions.cpp:974 src/backend/gsl/functions.cpp:986
@@ -6446,12 +6446,12 @@ msgstr "Quart"
 #: src/backend/nsl/nsl_diff.c:19
 #, kde-format
 msgid "Fifth"
-msgstr "Cinquè"
+msgstr "Cinqué"
 
 #: src/backend/nsl/nsl_diff.c:19
 #, kde-format
 msgid "Sixth"
-msgstr "Sisè"
+msgstr "Sisé"
 
 #: src/backend/nsl/nsl_filter.c:20
 #, kde-format
