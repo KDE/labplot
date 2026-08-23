@@ -3017,22 +3017,64 @@ void SpreadsheetTest::testRemoveAllColumnsRowCount() {
 
 	auto* model = new SpreadsheetModel(sheet);
 
+	qDebug() << "Qt version:" << qVersion();
+
+	qDebug() << "[1] Initial state:"
+			 << "sheet columns =" << sheet->columnCount()
+			 << "sheet rows =" << sheet->rowCount()
+			 << "model rows =" << model->rowCount();
+
 	// initial state: 2 columns, 100 rows
 	QCOMPARE(sheet->columnCount(), 2);
 	QCOMPARE(sheet->rowCount(), 100);
 	QCOMPARE(model->rowCount(), 100);
 
-	// remove all columns
+	qDebug() << "[2] Initial QCOMPAREs passed";
+
+	qDebug() << "[3] BEFORE setColumnCount(0):"
+			 << "sheet columns =" << sheet->columnCount()
+			 << "sheet rows =" << sheet->rowCount()
+			 << "model rows =" << model->rowCount();
+
+	qDebug() << "[4] Calling sheet->setColumnCount(0)";
+
+	fprintf(stderr, "[BEFORE] columns=%d rows=%d modelRows=%d\n",
+			sheet->columnCount(),
+			sheet->rowCount(),
+			model->rowCount());
+
 	sheet->setColumnCount(0);
+
+	fprintf(stderr, "[AFTER] columns=%d rows=%d modelRows=%d\n",
+			sheet->columnCount(),
+			sheet->rowCount(),
+			model->rowCount());
+
+	qDebug() << "[5] AFTER setColumnCount(0):"
+			 << "sheet columns =" << sheet->columnCount()
+			 << "sheet rows =" << sheet->rowCount()
+			 << "model rows =" << model->rowCount();
+
 	QCOMPARE(sheet->columnCount(), 0);
 	QCOMPARE(sheet->rowCount(), 0);
 	QCOMPARE(model->rowCount(), 0);
 
-	// add new columns — they start with 100 rows by default
+	qDebug() << "[6] All zero-state checks passed";
+
+	qDebug() << "[7] Calling setColumnCount(2)";
+
 	sheet->setColumnCount(2);
+
+	qDebug() << "[8] AFTER setColumnCount(2):"
+			 << "sheet columns =" << sheet->columnCount()
+			 << "sheet rows =" << sheet->rowCount()
+			 << "model rows =" << model->rowCount();
+
 	QCOMPARE(sheet->columnCount(), 2);
 	QCOMPARE(sheet->rowCount(), 100);
 	QCOMPARE(model->rowCount(), 100);
+
+	qDebug() << "=== testRemoveAllColumnsRowCount PASSED ===";
 }
 
 /*!
