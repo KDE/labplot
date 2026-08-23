@@ -31,12 +31,12 @@
 #include <QXmlStreamWriter>
 
 namespace {
-	// Returns the default number of rows for new columns
-	int defaultRowCount() {
-		KConfig config;
-		KConfigGroup group = config.group(QLatin1String("Spreadsheet"));
-		return group.readEntry(QLatin1String("RowCount"), 100);
-	}
+// Returns the default number of rows for new columns
+int defaultRowCount() {
+	KConfig config;
+	KConfigGroup group = config.group(QLatin1String("Spreadsheet"));
+	return group.readEntry(QLatin1String("RowCount"), 100);
+}
 }
 
 /*!

@@ -603,14 +603,15 @@ void SpreadsheetModel::updateRowCount() {
 		return;
 
 	const int oldRowCount = m_rowCount;
-	m_rowCount = newRowCount;
 	updateVerticalHeader();
-	
+
 	if (newRowCount > oldRowCount) {
 		beginInsertRows(QModelIndex(), oldRowCount, newRowCount - 1);
+		m_rowCount = newRowCount;
 		endInsertRows();
 	} else {
 		beginRemoveRows(QModelIndex(), newRowCount, oldRowCount - 1);
+		m_rowCount = newRowCount;
 		endRemoveRows();
 	}
 }
