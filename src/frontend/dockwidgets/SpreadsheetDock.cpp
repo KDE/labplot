@@ -128,6 +128,8 @@ void SpreadsheetDock::columnCountChanged(int columns) {
 
 	for (auto* spreadsheet : m_spreadsheets)
 		spreadsheet->setColumnCount(columns);
+
+	updateRowCountSpinbox();
 }
 
 /*!
@@ -151,7 +153,7 @@ void SpreadsheetDock::sparklinesShownChanged(bool state) {
 
 void SpreadsheetDock::linkedSpreadsheetChanged(const QModelIndex& index) {
 	auto* aspect{static_cast<AbstractAspect*>(index.internalPointer())};
-	ui.sbRowCount->setEnabled(aspect == nullptr);
+	ui.sbRowCount->setEnabled(aspect == nullptr && m_spreadsheet->columnCount() > 0);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -186,6 +188,7 @@ void SpreadsheetDock::spreadsheetRowCountChanged(int count) {
 void SpreadsheetDock::spreadsheetColumnCountChanged(int count) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbColumnCount->setValue(count);
+	updateRowCountSpinbox();
 }
 
 void SpreadsheetDock::spreadsheetShowCommentsChanged(bool checked) {
@@ -216,7 +219,12 @@ void SpreadsheetDock::load() {
 	ui.cbShowComments->setChecked(m_spreadsheet->showComments());
 	ui.cbShowSparklines->setChecked(m_spreadsheet->showSparklines());
 	ui.cbLinkedSpreadsheet->setAspect(m_spreadsheet->linkedSpreadsheet());
-	ui.sbRowCount->setEnabled(m_spreadsheet->linkedSpreadsheet() == nullptr);
+	updateRowCountSpinbox();
+}
+
+void SpreadsheetDock::updateRowCountSpinbox() {
+	ui.sbRowCount->setEnabled(m_spreadsheet->linkedSpreadsheet() == nullptr && m_spreadsheet->columnCount() > 0);
+	ui.sbRowCount->setValue(m_spreadsheet->rowCount());
 }
 
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {

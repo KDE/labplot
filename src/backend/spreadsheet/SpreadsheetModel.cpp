@@ -429,6 +429,7 @@ void SpreadsheetModel::handleAspectsInserted(int first, int last) {
 	if (!m_suppressSignals)
 		endInsertColumns();
 	m_spreadsheetColumnCountChanging = false;
+	updateRowCount();
 }
 
 void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
@@ -476,6 +477,7 @@ void SpreadsheetModel::handleAspectsRemoved() {
 	handleAspectCountChanged();
 	endRemoveColumns();
 	m_spreadsheetColumnCountChanging = false;
+	updateRowCount();
 }
 
 void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* child) {
@@ -587,6 +589,30 @@ void SpreadsheetModel::handleRowCountChanged(int newRowCount) {
 
 void SpreadsheetModel::updateVerticalHeader() {
 	m_verticalHeaderCount = m_rowCount;
+}
+
+void SpreadsheetModel::updateRowCount() {
+	if (m_suppressSignals) {
+		m_rowCount = m_spreadsheet->rowCount();
+		updateVerticalHeader();
+		return;
+	}
+
+	const int newRowCount = m_spreadsheet->rowCount();
+	if (newRowCount == m_rowCount)
+		return;
+
+	const int oldRowCount = m_rowCount;
+	m_rowCount = newRowCount;
+	updateVerticalHeader();
+	
+	if (newRowCount > oldRowCount) {
+		beginInsertRows(QModelIndex(), oldRowCount, newRowCount - 1);
+		endInsertRows();
+	} else {
+		beginRemoveRows(QModelIndex(), newRowCount, oldRowCount - 1);
+		endRemoveRows();
+	}
 }
 
 void SpreadsheetModel::updateHorizontalHeader(bool sendSignal) {

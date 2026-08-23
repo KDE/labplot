@@ -3007,6 +3007,35 @@ void SpreadsheetTest::testRemoveColumns2() {
 }
 
 /*!
+ * Test that removing all columns resets the row count to 0 in both the spreadsheet
+ * and the model, and that adding new columns afterwards works correctly.
+ */
+void SpreadsheetTest::testRemoveAllColumnsRowCount() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+
+	// initial state: 2 columns, 100 rows
+	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+
+	// remove all columns
+	sheet->setColumnCount(0);
+	QCOMPARE(sheet->columnCount(), 0);
+	QCOMPARE(sheet->rowCount(), 0);
+	QCOMPARE(model->rowCount(), 0);
+
+	// add new columns — they start with 100 rows by default
+	sheet->setColumnCount(2);
+	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+}
+
+/*!
  * \brief testInsertRowsSuppressUpdate
  * It shall not crash
  * Testing if in the model begin and end are used properly
