@@ -64,8 +64,11 @@ class DatapickerImageWidget;
 class DatapickerCurveWidget;
 class Axis3DDock;
 class Bar3DPlotDock;
+class Bar3DSceneDock;
 class Scatter3DPlotDock;
+class Scatter3DSceneDock;
 class Surface3DPlotDock;
+class Surface3DSceneDock;
 
 #ifdef HAVE_SCRIPTING
 class ScriptDock;
@@ -150,9 +153,12 @@ private:
 
 	// 3D plots
 	Surface3DPlotDock* m_surfacePlotDock{nullptr};
+	Surface3DSceneDock* m_surface3DSceneDock{nullptr};
 	Axis3DDock* m_axis3dDock{nullptr};
 	Scatter3DPlotDock* m_scatter3DPlotDock{nullptr};
+	Scatter3DSceneDock* m_scatter3DSceneDock{nullptr};
 	Bar3DPlotDock* m_bar3DPlotDock{nullptr};
+	Bar3DSceneDock* m_bar3DSceneDock{nullptr};
 
 	// time series analysis
 	SeasonalDecompositionDock* m_seasonalDecompositionDock{nullptr};

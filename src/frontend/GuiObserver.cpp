@@ -18,6 +18,12 @@
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
+#include "backend/worksheet/plots/3d/Bar3DPlot.h"
+#include "backend/worksheet/plots/3d/Bar3DScene.h"
+#include "backend/worksheet/plots/3d/Scatter3DPlot.h"
+#include "backend/worksheet/plots/3d/Scatter3DScene.h"
+#include "backend/worksheet/plots/3d/Surface3DPlot.h"
+#include "backend/worksheet/plots/3d/Surface3DScene.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
 #endif
@@ -89,8 +95,11 @@
 // 3d docks
 #include "frontend/dockwidgets/Axis3DDock.h"
 #include "frontend/dockwidgets/Bar3DPlotDock.h"
+#include "frontend/dockwidgets/Bar3DSceneDock.h"
 #include "frontend/dockwidgets/Scatter3DPlotDock.h"
+#include "frontend/dockwidgets/Scatter3DSceneDock.h"
 #include "frontend/dockwidgets/Surface3DPlotDock.h"
+#include "frontend/dockwidgets/Surface3DSceneDock.h"
 
 #include "frontend/widgets/DatapickerCurveWidget.h"
 #include "frontend/widgets/DatapickerImageWidget.h"
@@ -418,14 +427,24 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		break;
 	// 3d
 	case AspectType::Surface3DScene:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Surface Plot"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "3D Surface Scene"));
+		raiseDock(m_surface3DSceneDock, m_mainWindow->stackedWidget);
+		m_surface3DSceneDock->setScenes(castList<Surface3DScene>(selectedAspects));
+		break;
+	case AspectType::Surface3DPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "3D Surface Plot"));
 		raiseDock(m_surfacePlotDock, m_mainWindow->stackedWidget);
-		m_surfacePlotDock->setSurfaces(castList<Surface3DScene>(selectedAspects));
+		m_surfacePlotDock->setPlots(castList<Surface3DPlot>(selectedAspects));
 		break;
 	case AspectType::Scatter3DScene:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Scatter 3D Plot"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "3D Scatter Scene"));
+		raiseDock(m_scatter3DSceneDock, m_mainWindow->stackedWidget);
+		m_scatter3DSceneDock->setScenes(castList<Scatter3DScene>(selectedAspects));
+		break;
+	case AspectType::Scatter3DPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "3D Scatter Plot"));
 		raiseDock(m_scatter3DPlotDock, m_mainWindow->stackedWidget);
-		m_scatter3DPlotDock->setScatters(castList<Scatter3DScene>(selectedAspects));
+		m_scatter3DPlotDock->setPlots(castList<Scatter3DPlot>(selectedAspects));
 		break;
 	case AspectType::Axis3D:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Axis 3D"));
@@ -433,9 +452,14 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_axis3dDock->setAxes(castList<Axis3D>(selectedAspects));
 		break;
 	case AspectType::Bar3DScene:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Bar 3D"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "3D Bar Scene"));
+		raiseDock(m_bar3DSceneDock, m_mainWindow->stackedWidget);
+		m_bar3DSceneDock->setScenes(castList<Bar3DScene>(selectedAspects));
+		break;
+	case AspectType::Bar3DPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "3D Bar Plot"));
 		raiseDock(m_bar3DPlotDock, m_mainWindow->stackedWidget);
-		m_bar3DPlotDock->setBars(castList<Bar3DScene>(selectedAspects));
+		m_bar3DPlotDock->setPlots(castList<Bar3DPlot>(selectedAspects));
 		break;
 	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Text Label"));

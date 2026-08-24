@@ -36,8 +36,18 @@ public:
 	void setPrevRect(const QRectF&) override;
 	typedef Bar3DScenePrivate Private;
 
+	QMenu* createContextMenu() override;
+
+public Q_SLOTS:
+	void addPlot();
+
 private:
 	Q_DECLARE_PRIVATE(Bar3DScene)
+	void initMenus();
+	void handleChildAdded(const AbstractAspect*);
+	QMenu* m_addNewMenu{nullptr};
+	bool m_menusInitialized{false};
+
 protected:
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
 private Q_SLOTS:

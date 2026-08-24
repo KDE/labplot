@@ -1,7 +1,7 @@
 /***************************************************************************
 	File                 : Surface3DPlotDock.h
 	Project              : LabPlot
-	Description          : widget for Surface3DScene properties
+	Description          : widget for Surface3DPlot properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2024 Kuntal Bar <barkuntal6@gmail.com>
@@ -12,15 +12,14 @@
 #define SURFACE3DPLOTDOCK_H
 
 #include "BaseDock.h"
-#include "backend/worksheet/plots/3d/Surface3DScene.h"
+#include "backend/worksheet/plots/3d/Surface3DPlot.h"
 
 #include "ui_surface3dplotdock.h"
 
-class Surface3DScene;
+class Surface3DPlot;
 class Matrix;
 class AbstractColumn;
 class AspectTreeModel;
-class ColorMapSelector;
 class TreeViewComboBox;
 
 class Surface3DPlotDock : public BaseDock {
@@ -28,12 +27,9 @@ class Surface3DPlotDock : public BaseDock {
 
 public:
 	explicit Surface3DPlotDock(QWidget*);
-	void setSurfaces(const QList<Surface3DScene*>&);
+	void setPlots(const QList<Surface3DPlot*>&);
 
 private:
-	void showTriangleInfo(bool pred);
-	void showItem(QWidget* label, QWidget* comboBox, bool pred);
-
 	void updateUiVisibility();
 
 private Q_SLOTS:
@@ -45,45 +41,32 @@ private Q_SLOTS:
 	void yColumnChanged(const QModelIndex&);
 	void zColumnChanged(const QModelIndex&);
 	void matrixChanged(const QModelIndex&);
-
-	// Appearance properties
 	void drawModeChanged(int);
-	void shadowQualityChanged(int);
 	void flatShadingChanged(bool);
-	void zoomLevelChanged(int);
-	void xRotationChanged(int);
-	void yRotationChanged(int);
-	void themeChanged(int);
 	void smoothChanged(bool);
 	void colorChanged(QColor);
 
-	// SLOTs for changes triggered in Surface3DPlotDock
-	void surfaceDrawModeChanged(Surface3DScene::DrawMode);
-	void surfaceThemeChanged(Base3DPlot::Theme);
-	void surfaceFlatShadingChanged(bool);
-	void surfaceShadowsQualityChanged(Base3DPlot::ShadowQuality);
-	void surfaceSourceTypeChanged(Surface3DScene::DataSource);
-	void surfaceXColumnChanged(const AbstractColumn*);
-	void surfaceYColumnChanged(const AbstractColumn*);
-	void surfaceZColumnChanged(const AbstractColumn*);
-	void surfaceMatrixChanged(const Matrix*);
-	void surfaceXRotationChanged(int);
-	void surfaceYRotationChanged(int);
-	void surfaceSmoothChanged(bool);
-	void surfaceZoomChanged(int);
-	void surfaceColorChanged(QColor);
+	// SLOTs for changes triggered in Surface3DPlot
+	void plotDrawModeChanged(Surface3DPlot::DrawMode);
+	void plotFlatShadingChanged(bool);
+	void plotSourceTypeChanged(Surface3DPlot::DataSource);
+	void plotXColumnChanged(const AbstractColumn*);
+	void plotYColumnChanged(const AbstractColumn*);
+	void plotZColumnChanged(const AbstractColumn*);
+	void plotMatrixChanged(const Matrix*);
+	void plotSmoothChanged(bool);
+	void plotColorChanged(QColor);
 
 private:
 	Ui::Surface3DPlotDock ui;
-	QList<Surface3DScene*> m_surfaces;
-	Surface3DScene* m_surface{nullptr};
+	QList<Surface3DPlot*> m_plots;
+	Surface3DPlot* m_plot{nullptr};
 
 	void load();
 	void loadConfig(KConfig&);
 
 Q_SIGNALS:
 	void info(const QString&);
-	void elementVisibilityChanged();
 };
 
 #endif // SURFACE3DPLOTDOCK_H

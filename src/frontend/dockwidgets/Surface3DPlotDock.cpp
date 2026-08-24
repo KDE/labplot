@@ -1,7 +1,7 @@
 /***************************************************************************
 	File                 : Surface3DPlotDock.cpp
 	Project              : LabPlot
-	Description          : widget for Surface3DScene properties
+	Description          : widget for Surface3DPlot properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2024 Kuntal Bar <barkuntal6@gmail.com>
@@ -13,7 +13,8 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/matrix/Matrix.h"
 #include <backend/core/AspectTreeModel.h>
-// #include <kdefrontend/TemplateHandler.h>
+
+#include <KLocalizedString>
 
 Surface3DPlotDock::Surface3DPlotDock(QWidget* parent)
 	: BaseDock(parent) {
@@ -39,117 +40,77 @@ Surface3DPlotDock::Surface3DPlotDock(QWidget* parent)
 	connect(ui.cbMatrix, &TreeViewComboBox::currentModelIndexChanged, this, &Surface3DPlotDock::matrixChanged);
 
 	// Mesh
-	connect(ui.cbDrawType, SIGNAL(currentIndexChanged(int)), SLOT(drawModeChanged(int)));
-	connect(ui.chkFlatShading, SIGNAL(toggled(bool)), SLOT(flatShadingChanged(bool)));
-	connect(ui.cbShadowQuality, SIGNAL(currentIndexChanged(int)), SLOT(shadowQualityChanged(int)));
-	connect(ui.chkSmooth, SIGNAL(toggled(bool)), SLOT(smoothChanged(bool)));
-	connect(ui.slXRot, &QSlider::sliderMoved, this, &Surface3DPlotDock::xRotationChanged);
-	connect(ui.slYRot, &QSlider::sliderMoved, this, &Surface3DPlotDock::yRotationChanged);
-	connect(ui.slZoom, &QSlider::sliderMoved, this, &Surface3DPlotDock::zoomLevelChanged);
+	connect(ui.cbDrawType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Surface3DPlotDock::drawModeChanged);
+	connect(ui.chkFlatShading, &QCheckBox::toggled, this, &Surface3DPlotDock::flatShadingChanged);
+	connect(ui.chkSmooth, &QCheckBox::toggled, this, &Surface3DPlotDock::smoothChanged);
 	connect(ui.kcbColor, &KColorButton::changed, this, &Surface3DPlotDock::colorChanged);
-	connect(ui.cbTheme, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Surface3DPlotDock::themeChanged);
 }
 
-void Surface3DPlotDock::setSurfaces(const QList<Surface3DScene*>& surfaces) {
+void Surface3DPlotDock::setPlots(const QList<Surface3DPlot*>& plots) {
 	CONDITIONAL_LOCK_RETURN;
-	m_surfaces = surfaces;
-	m_surface = m_surfaces.first();
-	setAspects(surfaces);
+	m_plots = plots;
+	m_plot = m_plots.first();
+	setAspects(plots);
 	auto* model = aspectModel();
 
 	model->enablePlottableColumnsOnly(true);
 	model->enableShowPlotDesignation(true);
-	if (m_surface->dataSource() == Surface3DScene::DataSource::DataSource_Spreadsheet)
+	if (m_plot->dataSource() == Surface3DPlot::DataSource_Spreadsheet)
 		model->setSelectableAspects({AspectType::Column});
 
 	ui.cbXColumn->setModel(model);
 	ui.cbYColumn->setModel(model);
 	ui.cbZColumn->setModel(model);
-	if (m_surface->dataSource() == Surface3DScene::DataSource::DataSource_Matrix)
+	if (m_plot->dataSource() == Surface3DPlot::DataSource_Matrix)
 		model->setSelectableAspects({AspectType::Matrix});
 
 	ui.cbMatrix->setModel(model);
 
-	// show the properties of the first surface
+	// show the properties of the first plot
 	// tab "General"
-	ui.cbDataSourceType->setCurrentIndex(static_cast<int>(m_surface->dataSource()));
-	ui.cbXColumn->setAspect(m_surface->xColumn(), m_surface->xColumnPath());
-	ui.cbYColumn->setAspect(m_surface->yColumn(), m_surface->yColumnPath());
-	ui.cbZColumn->setAspect(m_surface->zColumn(), m_surface->zColumnPath());
-	ui.cbMatrix->setAspect(m_surface->matrix(), m_surface->matrixPath());
+	ui.cbDataSourceType->setCurrentIndex(static_cast<int>(m_plot->dataSource()));
+	ui.cbXColumn->setAspect(m_plot->xColumn());
+	ui.cbYColumn->setAspect(m_plot->yColumn());
+	ui.cbZColumn->setAspect(m_plot->zColumn());
+	ui.cbMatrix->setAspect(m_plot->matrix());
+
 	// tab "Mesh"
+	ui.cbDrawType->setCurrentIndex(static_cast<int>(m_plot->drawMode()) - 1);
+	ui.chkFlatShading->setChecked(m_plot->flatShading());
+	ui.chkSmooth->setChecked(m_plot->smooth());
+	ui.kcbColor->setColor(m_plot->color());
 
-	ui.cbShadowQuality->setCurrentIndex(static_cast<int>(m_surface->shadowQuality()));
-	ui.cbDrawType->setCurrentIndex(static_cast<int>(m_surface->drawMode() - 1));
+	dataSourceTypeChanged(m_plot->dataSource());
 
-	dataSourceTypeChanged(m_surface->dataSource());
+	// Connect to plot signals
+	for (auto* plot : m_plots) {
+		connect(plot, &Surface3DPlot::drawModeChanged, this, &Surface3DPlotDock::plotDrawModeChanged);
+		connect(plot, &Surface3DPlot::sourceTypeChanged, this, &Surface3DPlotDock::plotSourceTypeChanged);
+		connect(plot, &Surface3DPlot::flatShadingChanged, this, &Surface3DPlotDock::plotFlatShadingChanged);
+		connect(plot, &Surface3DPlot::smoothChanged, this, &Surface3DPlotDock::plotSmoothChanged);
+		connect(plot, &Surface3DPlot::colorChanged, this, &Surface3DPlotDock::plotColorChanged);
+		connect(plot, &Surface3DPlot::matrixChanged, this, &Surface3DPlotDock::plotMatrixChanged);
+		connect(plot, &Surface3DPlot::xColumnChanged, this, &Surface3DPlotDock::plotXColumnChanged);
+		connect(plot, &Surface3DPlot::yColumnChanged, this, &Surface3DPlotDock::plotYColumnChanged);
+		connect(plot, &Surface3DPlot::zColumnChanged, this, &Surface3DPlotDock::plotZColumnChanged);
+	}
 
-	ui.slXRot->setRange(0, 90);
-	ui.slXRot->setValue(m_surface->xRotation());
-	ui.slYRot->setRange(0, 90);
-	ui.slYRot->setValue(m_surface->yRotation());
-	ui.slZoom->setRange(100, 400);
-	ui.slZoom->setValue(m_surface->zoomLevel());
-
-	ui.cbTheme->setCurrentIndex(static_cast<int>(m_surface->theme()));
-	ui.kcbColor->setColor(Qt::green);
-
-	connect(m_surface, &Surface3DScene::drawModeChanged, this, &Surface3DPlotDock::surfaceDrawModeChanged);
-	connect(m_surface, &Surface3DScene::sourceTypeChanged, this, &Surface3DPlotDock::surfaceSourceTypeChanged);
-	connect(m_surface, &Surface3DScene::flatShadingChanged, this, &Surface3DPlotDock::surfaceFlatShadingChanged);
-	connect(m_surface, &Surface3DScene::shadowQualityChanged, this, &Surface3DPlotDock::surfaceShadowsQualityChanged);
-	connect(m_surface, &Surface3DScene::smoothChanged, this, &Surface3DPlotDock::surfaceSmoothChanged);
-	connect(m_surface, &Surface3DScene::zoomLevelChanged, this, &Surface3DPlotDock::surfaceZoomChanged);
-	connect(m_surface, &Surface3DScene::xRotationChanged, this, &Surface3DPlotDock::surfaceXRotationChanged);
-	connect(m_surface, &Surface3DScene::yRotationChanged, this, &Surface3DPlotDock::surfaceYRotationChanged);
-	connect(m_surface, &Surface3DScene::themeChanged, this, &Surface3DPlotDock::surfaceThemeChanged);
-	connect(m_surface, &Surface3DScene::colorChanged, this, &Surface3DPlotDock::colorChanged);
-	connect(m_surface, &Surface3DScene::matrixChanged, this, &Surface3DPlotDock::surfaceMatrixChanged);
-	connect(m_surface, &Surface3DScene::xColumnChanged, this, &Surface3DPlotDock::surfaceXColumnChanged);
-	connect(m_surface, &Surface3DScene::yColumnChanged, this, &Surface3DPlotDock::surfaceYColumnChanged);
-	connect(m_surface, &Surface3DScene::zColumnChanged, this, &Surface3DPlotDock::surfaceZColumnChanged);
-}
-
-void Surface3DPlotDock::showItem(QWidget* label, QWidget* comboBox, bool pred) {
-	label->setVisible(pred);
-	comboBox->setVisible(pred);
-}
-
-void Surface3DPlotDock::showTriangleInfo(bool pred) {
-	if (m_initializing)
-		return;
-
-	showItem(ui.lXColumn, ui.cbXColumn, pred);
-	showItem(ui.lYColumn, ui.cbYColumn, pred);
-	showItem(ui.lZColumn, ui.cbZColumn, pred);
-
-	Q_EMIT elementVisibilityChanged();
+	CONDITIONAL_RETURN_NO_LOCK;
+	load();
 }
 
 void Surface3DPlotDock::retranslateUi() {
-	ui.cbDataSourceType->insertItem(Surface3DScene::DataSource_Spreadsheet, i18n("Spreadsheet"));
-	ui.cbDataSourceType->insertItem(Surface3DScene::DataSource_Matrix, i18n("Matrix"));
-	ui.cbDataSourceType->insertItem(Surface3DScene::DataSource_Empty, i18n("Demo"));
+	CONDITIONAL_LOCK_RETURN;
 
-	ui.cbDrawType->insertItem(Surface3DScene::DrawWireframe, i18n("Wireframe"));
-	ui.cbDrawType->insertItem(Surface3DScene::DrawSurface, i18n("Surface"));
-	ui.cbDrawType->insertItem(Surface3DScene::DrawWireframeSurface, i18n("Wireframe & Surface"));
+	ui.cbDataSourceType->clear();
+	ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
+	ui.cbDataSourceType->addItem(i18n("Matrix"));
+	ui.cbDataSourceType->addItem(i18n("Demo"));
 
-	ui.cbShadowQuality->insertItem(Surface3DScene::None, i18n("None"));
-	ui.cbShadowQuality->insertItem(Surface3DScene::Low, i18n("Low"));
-	ui.cbShadowQuality->insertItem(Surface3DScene::Medium, i18n("Medium"));
-	ui.cbShadowQuality->insertItem(Surface3DScene::High, i18n("High"));
-	ui.cbShadowQuality->insertItem(Surface3DScene::SoftLow, i18n("Soft Low"));
-	ui.cbShadowQuality->insertItem(Surface3DScene::SoftMedium, i18n("Soft Medium"));
-	ui.cbShadowQuality->insertItem(Surface3DScene::SoftHigh, i18n("Soft High"));
-
-	ui.cbTheme->insertItem(Surface3DScene::Theme::Qt, i18n("Qt"));
-	ui.cbTheme->insertItem(Surface3DScene::Theme::PrimaryColors, i18n("Primary Colors"));
-	ui.cbTheme->insertItem(Surface3DScene::Theme::StoneMoss, i18n("Stone Moss"));
-	ui.cbTheme->insertItem(Surface3DScene::Theme::ArmyBlue, i18n("Army Blue"));
-	ui.cbTheme->insertItem(Surface3DScene::Theme::Retro, i18n("Retro"));
-	ui.cbTheme->insertItem(Surface3DScene::Theme::Ebony, i18n("Ebony"));
-	ui.cbTheme->insertItem(Surface3DScene::Theme::Isabelle, i18n("Isabelle"));
+	ui.cbDrawType->clear();
+	ui.cbDrawType->addItem(i18n("Wireframe"));
+	ui.cbDrawType->addItem(i18n("Surface"));
+	ui.cbDrawType->addItem(i18n("Wireframe & Surface"));
 }
 
 //*************************************************************
@@ -158,9 +119,9 @@ void Surface3DPlotDock::retranslateUi() {
 // Tab "General"
 
 void Surface3DPlotDock::dataSourceTypeChanged(int index) {
-	const auto type = static_cast<Surface3DScene::DataSource>(index);
-	const bool spreadsheet = (type == Surface3DScene::DataSource::DataSource_Spreadsheet);
-	const bool matrix = (type == Surface3DScene::DataSource::DataSource_Matrix);
+	const auto type = static_cast<Surface3DPlot::DataSource>(index);
+	const bool spreadsheet = (type == Surface3DPlot::DataSource_Spreadsheet);
+	const bool matrix = (type == Surface3DPlot::DataSource_Matrix);
 
 	ui.lXColumn->setVisible(spreadsheet);
 	ui.cbXColumn->setVisible(spreadsheet);
@@ -176,8 +137,8 @@ void Surface3DPlotDock::dataSourceTypeChanged(int index) {
 
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* surface : m_surfaces)
-		surface->setDataSource(type);
+	for (auto* plot : m_plots)
+		plot->setDataSource(type);
 }
 
 void Surface3DPlotDock::xColumnChanged(const QModelIndex& index) {
@@ -190,8 +151,8 @@ void Surface3DPlotDock::xColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	for (auto* surface : m_surfaces)
-		surface->setXColumn(column);
+	for (auto* plot : m_plots)
+		plot->setXColumn(column);
 }
 
 void Surface3DPlotDock::yColumnChanged(const QModelIndex& index) {
@@ -204,8 +165,8 @@ void Surface3DPlotDock::yColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	for (auto* curve : m_surfaces)
-		curve->setYColumn(column);
+	for (auto* plot : m_plots)
+		plot->setYColumn(column);
 }
 
 void Surface3DPlotDock::zColumnChanged(const QModelIndex& index) {
@@ -218,28 +179,8 @@ void Surface3DPlotDock::zColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	for (auto* curve : m_surfaces)
-		curve->setZColumn(column);
-}
-
-void Surface3DPlotDock::xRotationChanged(int value) {
-	CONDITIONAL_LOCK_RETURN;
-	m_surface->setXRotation(value);
-}
-
-void Surface3DPlotDock::yRotationChanged(int value) {
-	CONDITIONAL_LOCK_RETURN;
-	m_surface->setYRotation(value);
-}
-
-void Surface3DPlotDock::themeChanged(int value) {
-	CONDITIONAL_LOCK_RETURN;
-	m_surface->setTheme(static_cast<Base3DPlot::Theme>(value));
-}
-
-void Surface3DPlotDock::zoomLevelChanged(int value) {
-	CONDITIONAL_LOCK_RETURN;
-	m_surface->setZoomLevel(value);
+	for (auto* plot : m_plots)
+		plot->setZColumn(column);
 }
 
 void Surface3DPlotDock::matrixChanged(const QModelIndex& index) {
@@ -252,122 +193,97 @@ void Surface3DPlotDock::matrixChanged(const QModelIndex& index) {
 		Q_ASSERT(matrix);
 	}
 
-	for (auto* surface : m_surfaces)
-		surface->setMatrix(matrix);
+	for (auto* plot : m_plots)
+		plot->setMatrix(matrix);
 }
 
 void Surface3DPlotDock::updateUiVisibility() {
-	const int type = ui.cbDrawType->currentIndex();
 	const int dataType = ui.cbDataSourceType->currentIndex();
-	if (type == Surface3DScene::DrawMode::DrawSurface || type == Surface3DScene::DrawMode::DrawWireframe) {
-		showItem(ui.lDataSourceType, ui.cbDataSourceType, true);
-		showItem(ui.lMatrix, ui.cbMatrix, false);
-		showTriangleInfo(dataType == Surface3DScene::DataSource_Spreadsheet);
-	} else {
-		showItem(ui.lDataSourceType, ui.cbDataSourceType, false);
-		showTriangleInfo(false);
-	}
+	const bool spreadsheet = (dataType == Surface3DPlot::DataSource_Spreadsheet);
+	const bool matrix = (dataType == Surface3DPlot::DataSource_Matrix);
 
-	Q_EMIT elementVisibilityChanged();
+	ui.lXColumn->setVisible(spreadsheet);
+	ui.cbXColumn->setVisible(spreadsheet);
+	ui.lYColumn->setVisible(spreadsheet);
+	ui.cbYColumn->setVisible(spreadsheet);
+	ui.lZColumn->setVisible(spreadsheet);
+	ui.cbZColumn->setVisible(spreadsheet);
+
+	ui.lMatrix->setVisible(matrix);
+	ui.cbMatrix->setVisible(matrix);
 }
 
 // Tab "Mesh"
 void Surface3DPlotDock::drawModeChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
-	for (auto* surface : m_surfaces)
-		surface->setDrawMode(static_cast<Surface3DScene::DrawMode>(index + 1));
+	for (auto* plot : m_plots)
+		plot->setDrawMode(static_cast<Surface3DPlot::DrawMode>(index + 1));
 }
 
-void Surface3DPlotDock::flatShadingChanged(bool vis) {
+void Surface3DPlotDock::flatShadingChanged(bool checked) {
 	CONDITIONAL_LOCK_RETURN;
-	for (auto* surface : m_surfaces)
-		surface->setFlatShading(vis);
+	for (auto* plot : m_plots)
+		plot->setFlatShading(checked);
 }
 
-void Surface3DPlotDock::shadowQualityChanged(int index) {
+void Surface3DPlotDock::smoothChanged(bool checked) {
 	CONDITIONAL_LOCK_RETURN;
-	for (auto* surface : m_surfaces)
-		surface->setShadowQuality(static_cast<Surface3DScene::ShadowQuality>(index));
+	for (auto* plot : m_plots)
+		plot->setSmooth(checked);
 }
 
-void Surface3DPlotDock::smoothChanged(bool vis) {
-	CONDITIONAL_LOCK_RETURN;
-	for (auto* surface : m_surfaces)
-		surface->setSmooth(vis);
-}
 void Surface3DPlotDock::colorChanged(QColor color) {
 	CONDITIONAL_LOCK_RETURN;
-	for (auto* surface : m_surfaces)
-		surface->setColor(color);
+	for (auto* plot : m_plots)
+		plot->setColor(color);
 }
 
 //*************************************************************
-//******* SLOTs for changes triggered in Surface3DScene ********
+//******* SLOTs for changes triggered in Surface3DPlot ********
 //*************************************************************
 // Tab "General"
-void Surface3DPlotDock::surfaceMatrixChanged(const Matrix* matrix) {
+void Surface3DPlotDock::plotMatrixChanged(const Matrix* matrix) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbMatrix->setAspect(matrix, m_surface->matrixPath());
+	ui.cbMatrix->setAspect(matrix);
 }
 
-void Surface3DPlotDock::surfaceXColumnChanged(const AbstractColumn* column) {
+void Surface3DPlotDock::plotXColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbXColumn->setAspect(column, m_surface->xColumnPath());
+	ui.cbXColumn->setAspect(column);
 }
 
-void Surface3DPlotDock::surfaceYColumnChanged(const AbstractColumn* column) {
+void Surface3DPlotDock::plotYColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbYColumn->setAspect(column, m_surface->yColumnPath());
+	ui.cbYColumn->setAspect(column);
 }
 
-void Surface3DPlotDock::surfaceZColumnChanged(const AbstractColumn* column) {
+void Surface3DPlotDock::plotZColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbZColumn->setAspect(column, m_surface->zColumnPath());
+	ui.cbZColumn->setAspect(column);
 }
 
 // Tab "Mesh"
-void Surface3DPlotDock::surfaceDrawModeChanged(Surface3DScene::DrawMode mode) {
+void Surface3DPlotDock::plotDrawModeChanged(Surface3DPlot::DrawMode mode) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbDrawType->setCurrentIndex(mode - 1);
+	ui.cbDrawType->setCurrentIndex(static_cast<int>(mode) - 1);
 }
 
-void Surface3DPlotDock::surfaceThemeChanged(Base3DPlot::Theme theme) {
+void Surface3DPlotDock::plotFlatShadingChanged(bool checked) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbTheme->setCurrentIndex(theme);
+	ui.chkFlatShading->setChecked(checked);
 }
 
-void Surface3DPlotDock::surfaceFlatShadingChanged(bool vis) {
+void Surface3DPlotDock::plotSourceTypeChanged(Surface3DPlot::DataSource type) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.chkFlatShading->setEnabled(vis);
+	ui.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 }
 
-void Surface3DPlotDock::surfaceShadowsQualityChanged(Base3DPlot::ShadowQuality quality) {
+void Surface3DPlotDock::plotSmoothChanged(bool checked) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbShadowQuality->setCurrentIndex(quality);
+	ui.chkSmooth->setChecked(checked);
 }
 
-void Surface3DPlotDock::surfaceSourceTypeChanged(Surface3DScene::DataSource type) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbDataSourceType->setCurrentIndex(type);
-}
-void Surface3DPlotDock::surfaceZoomChanged(int val) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.slZoom->setValue(val);
-}
-
-void Surface3DPlotDock::surfaceXRotationChanged(int val) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.slXRot->setValue(val);
-}
-void Surface3DPlotDock::surfaceYRotationChanged(int val) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.slYRot->setValue(val);
-}
-void Surface3DPlotDock::surfaceSmoothChanged(bool vis) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkSmooth->setEnabled(vis);
-}
-void Surface3DPlotDock::surfaceColorChanged(QColor color) {
+void Surface3DPlotDock::plotColorChanged(QColor color) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.kcbColor->setColor(color);
 }
@@ -376,9 +292,10 @@ void Surface3DPlotDock::surfaceColorChanged(QColor color) {
 //************************* Settings **************************
 //*************************************************************
 void Surface3DPlotDock::load() {
-	// TODO
+	// Nothing to load from config for now
 }
 
 void Surface3DPlotDock::loadConfig(KConfig& config) {
-	// TODO
+	Q_UNUSED(config)
+	// Future: load default plot settings
 }

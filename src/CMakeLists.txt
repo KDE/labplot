@@ -118,9 +118,12 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/HypothesisTestDock.cpp
     ${FRONTEND_DIR}/dockwidgets/Surface3DPlotDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/Surface3DSceneDock.cpp
     ${FRONTEND_DIR}/dockwidgets/Axis3DDock.cpp
     ${FRONTEND_DIR}/dockwidgets/Scatter3DPlotDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/Scatter3DSceneDock.cpp
     ${FRONTEND_DIR}/dockwidgets/Bar3DPlotDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/Bar3DSceneDock.cpp
     ${FRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
     ${FRONTEND_DIR}/matrix/MatrixView.cpp
     ${FRONTEND_DIR}/note/NoteView.cpp
@@ -327,8 +330,11 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
     ${FRONTEND_DIR}/ui/dockwidgets/axis3ddock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/bar3dplotdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/bar3dscenedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/scatter3dplotdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/scatter3dscenedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/surface3dplotdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/surface3dscenedock.ui
 )
 
 if(ENABLE_SCRIPTING)

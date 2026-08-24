@@ -3,6 +3,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/matrix/Matrix.h"
 
+#include <KConfig>
 #include <QtGraphs/QSurface3DSeries>
 
 Surface3DPlot::Surface3DPlot(const QString& name)
@@ -123,4 +124,21 @@ void Surface3DPlot::setMatrix(const Matrix* matrix) {
 		d->matrix = matrix;
 		Q_EMIT matrixChanged(matrix);
 	}
+}
+
+void Surface3DPlot::loadThemeConfig(const KConfig& config) {
+	Q_UNUSED(config)
+}
+
+void Surface3DPlot::saveThemeConfig(const KConfig& config) {
+	Q_UNUSED(config)
+}
+
+void Surface3DPlot::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	Q_UNUSED(horizontalRatio)
+	Q_UNUSED(verticalRatio)
+	Q_UNUSED(pageResize)
+}
+
+void Surface3DPlot::retransform() {
 }
