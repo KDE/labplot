@@ -10,10 +10,10 @@
 
 #include "MouseInteractor.h"
 
-#include <QtDataVisualization/Q3DCamera>
-#include <QtDataVisualization/Q3DScene>
 #include <QMouseEvent>
 #include <QWheelEvent>
+#include <QtDataVisualization/Q3DCamera>
+#include <QtDataVisualization/Q3DScene>
 
 const int MouseInteractor::deltaZoom = 1;
 
