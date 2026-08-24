@@ -6,6 +6,7 @@
 class Bar3DPlotPrivate;
 class AbstractColumn;
 class QBar3DSeries;
+class KConfig;
 
 class Bar3DPlot : public WorksheetElement {
 	Q_OBJECT
@@ -19,6 +20,12 @@ public:
 	void setDataColumns(const QVector<const AbstractColumn*>&);
 
 	QBar3DSeries* series() const;
+
+	void loadThemeConfig(const KConfig&) override;
+	void saveThemeConfig(const KConfig&) override;
+
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
+	void retransform() override;
 
 	typedef Bar3DPlotPrivate Private;
 
