@@ -62,6 +62,11 @@ class ImageDock;
 class LabelWidget;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
+class Axis3DDock;
+class Bar3DPlotDock;
+class Scatter3DPlotDock;
+class Surface3DPlotDock;
+
 #ifdef HAVE_SCRIPTING
 class ScriptDock;
 #endif
@@ -142,6 +147,12 @@ private:
 
 	// statistical analysis
 	HypothesisTestDock* m_hypothesisTestDock{nullptr};
+
+	// 3D plots
+	Surface3DPlotDock* m_surfacePlotDock{nullptr};
+	Axis3DDock* m_axis3dDock{nullptr};
+	Scatter3DPlotDock* m_scatter3DPlotDock{nullptr};
+	Bar3DPlotDock* m_bar3DPlotDock{nullptr};
 
 	// time series analysis
 	SeasonalDecompositionDock* m_seasonalDecompositionDock{nullptr};
