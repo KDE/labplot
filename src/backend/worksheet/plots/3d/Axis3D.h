@@ -11,8 +11,8 @@
 #ifndef AXIS3D_H
 #define AXIS3D_H
 
-#include <backend/core/AbstractAspect.h>
 #include "backend/lib/macros.h"
+#include <backend/core/AbstractAspect.h>
 
 class QValue3DAxis;
 class Axis3DPrivate;
