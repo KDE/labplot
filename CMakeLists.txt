@@ -58,6 +58,8 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
     Sql
     Widgets
     Test
+    Graphs
+    GraphsWidgets
 )
 
 # building QADS or Xlsx requires Qt${QT_VERSION_MAJOR}GuiPrivate (QADS is required, Xlsx is optional)
