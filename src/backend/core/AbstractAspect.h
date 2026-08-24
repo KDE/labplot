@@ -54,6 +54,15 @@ enum class AspectType : quint64 {
 	ReferenceRange,
 	InfoElement,
 
+	// 3D plots
+	Axis3D = 0x0210091,
+	Surface3DScene = 0x0210090,
+	Scatter3DScene = 0x0210092,
+	Bar3DScene = 0x0210093,
+	Surface3DPlot = 0x0210094,
+	Scatter3DPlot = 0x0210095,
+	Bar3DPlot = 0x0210096,
+
 	// bar plots
 	BarPlot,
 	LollipopPlot,
@@ -143,6 +152,7 @@ public:
 	friend class AbstractAspectPrivate;
 
 	AbstractAspect(const QString& name, AspectType type);
+	AbstractAspect(AbstractAspectPrivate*, AspectType type);
 	~AbstractAspect() override;
 
 	enum class NameHandling {
@@ -244,6 +254,20 @@ public:
 			return std::string_view("ProcessBehaviorChart");
 		case AspectType::RunChart:
 			return std::string_view("RunChart");
+		case AspectType::Axis3D:
+			return std::string_view("Axis3D");
+		case AspectType::Surface3DScene:
+			return std::string_view("Surface Plot");
+		case AspectType::Scatter3DScene:
+			return std::string_view("Scatter3DScene");
+		case AspectType::Bar3DScene:
+			return std::string_view("Bar3DScene");
+		case AspectType::Surface3DPlot:
+			return std::string_view("Surface3DPlot");
+		case AspectType::Scatter3DPlot:
+			return std::string_view("Scatter3DPlot");
+		case AspectType::Bar3DPlot:
+			return std::string_view("Bar3DPlot");
 		case AspectType::AbstractPart:
 			return std::string_view("AbstractPart");
 		case AspectType::AbstractDataSource:

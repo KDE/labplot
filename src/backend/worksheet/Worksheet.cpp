@@ -22,6 +22,9 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TreeModel.h"
+#include "backend/worksheet/plots/3d/Bar3DScene.h"
+#include "backend/worksheet/plots/3d/Scatter3DScene.h"
+#include "backend/worksheet/plots/3d/Surface3DScene.h"
 #include "frontend/ThemeHandler.h"
 #include "frontend/worksheet/ExportWorksheetDialog.h"
 #include "frontend/worksheet/WorksheetView.h"
@@ -40,7 +43,18 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+/*
+#include <QGraphicsProxyWidget>
+#include <QtDataVisualization/Q3DBars>
+#include <QtDataVisualization/Q3DScatter>
+#include <QtDataVisualization/Q3DSurface>
 
+#include <backend/worksheet/plots/3d/Bar3DScene.h>
+#include <backend/worksheet/plots/3d/Scatter3DScene.h>
+#include <backend/worksheet/plots/3d/Bar3DScene.h>
+#include <backend/worksheet/plots/3d/Scatter3DScene.h>
+#include <backend/worksheet/plots/3d/Surface3DScene.h>
+*/
 namespace {
 constexpr auto CURSOR_UUID_EDIT_ROLE = Qt::UserRole;
 }
@@ -330,11 +344,6 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	if (!addedElement)
 		return;
 
-	if (aspect->parentAspect() != this)
-		return;
-
-	// add the GraphicsItem of the added child to the scene
-	DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
 	auto* item = addedElement->graphicsItem();
 	d->m_scene->addItem(item);
 
@@ -404,6 +413,21 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 
 				// make the newly added plot resizable
 				const_cast<CartesianPlot*>(plot)->setResizeEnabled(true);
+			}
+		}
+
+		// Initialize 3D scenes after layout has set the rect
+		auto* surface3DScene = dynamic_cast<Surface3DScene*>(const_cast<AbstractAspect*>(aspect));
+		if (surface3DScene) {
+			surface3DScene->init();
+		} else {
+			auto* scatter3DScene = dynamic_cast<Scatter3DScene*>(const_cast<AbstractAspect*>(aspect));
+			if (scatter3DScene) {
+				scatter3DScene->init();
+			} else {
+				auto* bar3DScene = dynamic_cast<Bar3DScene*>(const_cast<AbstractAspect*>(aspect));
+				if (bar3DScene)
+					bar3DScene->init();
 			}
 		}
 	}
@@ -1869,6 +1893,27 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			} else
 				addChildFast(plot);
+		} else if (reader->name() == QLatin1String("surface3DScene")) {
+			auto* scene = new Surface3DScene(QString());
+			if (!scene->load(reader, preview)) {
+				delete scene;
+				return false;
+			} else
+				addChildFast(scene);
+		} else if (reader->name() == QLatin1String("scatter3DScene")) {
+			auto* scene = new Scatter3DScene(QString());
+			if (!scene->load(reader, preview)) {
+				delete scene;
+				return false;
+			} else
+				addChildFast(scene);
+		} else if (reader->name() == QLatin1String("bar3DScene")) {
+			auto* scene = new Bar3DScene(QString());
+			if (!scene->load(reader, preview)) {
+				delete scene;
+				return false;
+			} else
+				addChildFast(scene);
 		} else if (!preview && reader->name() == QLatin1String("textLabel")) {
 			auto* label = new TextLabel(QString());
 			if (!label->load(reader, preview)) {
