@@ -325,11 +325,10 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/fitsheadereditwidget.ui
     ${FRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
     ${FRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
-    ${FRONTEND_DIR}/ui/dockwidgets/surface3dplotdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/axis3ddock.ui
-    ${FRONTEND_DIR}/ui/dockwidgets/scatter3dplotdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/bar3dplotdock.ui
-    ${FRONTEND_DIR}/ui/dockwidgets/plot3dareadock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/scatter3dplotdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/surface3dplotdock.ui
 )
 
 if(ENABLE_SCRIPTING)
@@ -725,13 +724,12 @@ if(NOT APPLE)
 endif()
 target_link_libraries(labplotnsllib
     Qt${QT_MAJOR_VERSION}::Core
-    Qt${QT_MAJOR_VERSION}::Widgets
-    Qt${QT_MAJOR_VERSION}::Graphs
+    Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
     ${TURN_OFF_AS_NEEDED}
     ${GSL_LIBRARIES}
     ${ICONV_LIBRARIES}
     ${TURN_ON_AS_NEEDED}
-    ${LIBCERF_LIBRARIES}	
+    ${LIBCERF_LIBRARIES}
     ${FFTW3_LIBRARIES}
 )
 target_link_libraries(labplotbackendlib
