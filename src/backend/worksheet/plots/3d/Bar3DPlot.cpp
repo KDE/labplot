@@ -2,6 +2,7 @@
 #include "Bar3DPlotPrivate.h"
 #include "backend/core/AbstractColumn.h"
 
+#include <KConfig>
 #include <QtGraphs/QBar3DSeries>
 
 Bar3DPlot::Bar3DPlot(const QString& name)
@@ -47,4 +48,21 @@ void Bar3DPlot::setDataColumns(const QVector<const AbstractColumn*>& columns) {
 		d->dataColumns = columns;
 		Q_EMIT dataColumnsChanged(columns);
 	}
+}
+
+void Bar3DPlot::loadThemeConfig(const KConfig& config) {
+	Q_UNUSED(config)
+}
+
+void Bar3DPlot::saveThemeConfig(const KConfig& config) {
+	Q_UNUSED(config)
+}
+
+void Bar3DPlot::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	Q_UNUSED(horizontalRatio)
+	Q_UNUSED(verticalRatio)
+	Q_UNUSED(pageResize)
+}
+
+void Bar3DPlot::retransform() {
 }

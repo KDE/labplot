@@ -2,6 +2,7 @@
 #include "Scatter3DPlotPrivate.h"
 #include "backend/core/AbstractColumn.h"
 
+#include <KConfig>
 #include <QtGraphs/QScatter3DSeries>
 
 Scatter3DPlot::Scatter3DPlot(const QString& name)
@@ -82,4 +83,21 @@ void Scatter3DPlot::setZColumn(const AbstractColumn* column) {
 		d->zColumn = column;
 		Q_EMIT zColumnChanged(column);
 	}
+}
+
+void Scatter3DPlot::loadThemeConfig(const KConfig& config) {
+	Q_UNUSED(config)
+}
+
+void Scatter3DPlot::saveThemeConfig(const KConfig& config) {
+	Q_UNUSED(config)
+}
+
+void Scatter3DPlot::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	Q_UNUSED(horizontalRatio)
+	Q_UNUSED(verticalRatio)
+	Q_UNUSED(pageResize)
+}
+
+void Scatter3DPlot::retransform() {
 }
