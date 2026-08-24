@@ -85,6 +85,13 @@
 #ifdef HAVE_CANTOR_LIBS
 #include "frontend/dockwidgets/NotebookDock.h"
 #endif
+
+// 3d docks
+#include "frontend/dockwidgets/Axis3DDock.h"
+#include "frontend/dockwidgets/Bar3DPlotDock.h"
+#include "frontend/dockwidgets/Scatter3DPlotDock.h"
+#include "frontend/dockwidgets/Surface3DPlotDock.h"
+
 #include "frontend/widgets/DatapickerCurveWidget.h"
 #include "frontend/widgets/DatapickerImageWidget.h"
 #include "frontend/widgets/LabelWidget.h"
@@ -408,6 +415,27 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Pareto Chart"));
 		raiseDock(m_paretoChartDock, m_mainWindow->stackedWidget);
 		m_paretoChartDock->setPlots(castList<ParetoChart>(selectedAspects));
+		break;
+	// 3d
+	case AspectType::Surface3DScene:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Surface Plot"));
+		raiseDock(m_surfacePlotDock, m_mainWindow->stackedWidget);
+		m_surfacePlotDock->setSurfaces(castList<Surface3DScene>(selectedAspects));
+		break;
+	case AspectType::Scatter3DScene:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Scatter 3D Plot"));
+		raiseDock(m_scatter3DPlotDock, m_mainWindow->stackedWidget);
+		m_scatter3DPlotDock->setScatters(castList<Scatter3DScene>(selectedAspects));
+		break;
+	case AspectType::Axis3D:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Axis 3D"));
+		raiseDock(m_axis3dDock, m_mainWindow->stackedWidget);
+		m_axis3dDock->setAxes(castList<Axis3D>(selectedAspects));
+		break;
+	case AspectType::Bar3DScene:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Bar 3D"));
+		raiseDock(m_bar3DPlotDock, m_mainWindow->stackedWidget);
+		m_bar3DPlotDock->setBars(castList<Bar3DScene>(selectedAspects));
 		break;
 	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Text Label"));

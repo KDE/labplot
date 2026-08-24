@@ -39,7 +39,7 @@ public:
 	enum class ExportArea { BoundingBox, Selection, Worksheet };
 	enum class ZoomMode { ZoomIn, ZoomOut, ZoomOrigin };
 	enum class MouseMode { Selection, Navigation, ZoomSelection };
-	enum class AddNewMode { PlotAreaFourAxes, PlotAreaTwoAxes, PlotAreaTwoAxesCentered, PlotAreaTwoAxesCenteredZero, PlotAreaFromTemplate, TextLabel, Image};
+	enum class AddNewMode { PlotAreaFourAxes, PlotAreaTwoAxes, PlotAreaTwoAxesCentered, PlotAreaTwoAxesCenteredZero, PlotAreaFromTemplate, TextLabel, Image, Scatter3D, Surface3D, Bar3D };
 
 	struct GridSettings {
 		GridStyle style;
@@ -163,7 +163,6 @@ private:
 	QMenu* m_plotZoomMenu{nullptr};
 	QMenu* m_plotActionModeMenu{nullptr};
 	QMenu* m_plotCursorModeMenu{nullptr};
-	QToolButton* tbNewPlot{nullptr};
 
 	// Actions
 	QAction* selectAllAction{nullptr};
@@ -191,6 +190,9 @@ private:
 	QAction* addCartesianPlotTemplateAction{nullptr};
 	QAction* addTextLabelAction{nullptr};
 	QAction* addImageAction{nullptr};
+	QAction* add3DScatterAction{nullptr};
+	QAction* add3DSurfaceAction{nullptr};
+	QAction* add3DBarAction{nullptr};
 
 	QAction* verticalLayoutAction{nullptr};
 	QAction* horizontalLayoutAction{nullptr};

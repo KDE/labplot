@@ -17,6 +17,9 @@
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/plots/3d/Surface3DScene.h"
+#include "backend/worksheet/plots/3d/Scatter3DScene.h"
+#include "backend/worksheet/plots/3d/Bar3DScene.h"
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h" // TODO: redesign, don't depend on the private class
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
@@ -236,6 +239,15 @@ void WorksheetView::initActions() {
 	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new-from-template")), i18n("Load from Template"), addNewActionGroup);
 	addCartesianPlotTemplateAction->setData(static_cast<int>(AddNewMode::PlotAreaFromTemplate));
 
+	add3DScatterAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("3D Scatter Scene"), addNewActionGroup);
+	add3DScatterAction->setData(static_cast<int>(AddNewMode::Scatter3D));
+
+	add3DSurfaceAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("3D Surface Scene"), addNewActionGroup);
+	add3DSurfaceAction->setData(static_cast<int>(AddNewMode::Surface3D));
+
+	add3DBarAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("3D Bar Scene"), addNewActionGroup);
+	add3DBarAction->setData(static_cast<int>(AddNewMode::Bar3D));
+
 	addTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), addNewActionGroup);
 	addTextLabelAction->setData(static_cast<int>(AddNewMode::TextLabel));
 
@@ -431,17 +443,21 @@ void WorksheetView::initMenus() {
 	if (!m_actionsInitialized)
 		initActions();
 
-	m_addNewPlotMenu = new QMenu(i18n("Plot Area"), this);
+	m_addNewPlotMenu = new QMenu(i18n("2D Plot Area"), this);
 	m_addNewPlotMenu->addAction(addCartesianPlot1Action);
 	m_addNewPlotMenu->addAction(addCartesianPlot2Action);
 	m_addNewPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewPlotMenu->addAction(addCartesianPlot4Action);
 	m_addNewPlotMenu->addSeparator();
 	m_addNewPlotMenu->addAction(addCartesianPlotTemplateAction);
+	m_addNewPlotMenu->addSeparator();
 
 	m_addNewMenu = new QMenu(i18n("Add New"), this);
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	m_addNewMenu->addMenu(m_addNewPlotMenu)->setIcon(QIcon::fromTheme(QStringLiteral("office-chart-line")));
+	m_addNewMenu->addAction(add3DScatterAction);
+	m_addNewMenu->addAction(add3DSurfaceAction);
+	m_addNewMenu->addAction(add3DBarAction);
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 	m_addNewMenu->addAction(addImageAction);
@@ -1302,8 +1318,6 @@ void WorksheetView::addNew(QAction* action) {
 		plot->setType(CartesianPlot::Type::FourAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
-		if (tbNewPlot)
-			tbNewPlot->setDefaultAction(addCartesianPlot1Action);
 		break;
 	}
 	case AddNewMode::PlotAreaTwoAxes: {
@@ -1311,8 +1325,6 @@ void WorksheetView::addNew(QAction* action) {
 		plot->setType(CartesianPlot::Type::TwoAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
-		if (tbNewPlot)
-			tbNewPlot->setDefaultAction(addCartesianPlot2Action);
 		break;
 	}
 	case AddNewMode::PlotAreaTwoAxesCentered: {
@@ -1320,8 +1332,6 @@ void WorksheetView::addNew(QAction* action) {
 		plot->setType(CartesianPlot::Type::TwoAxesCentered);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
-		if (tbNewPlot)
-			tbNewPlot->setDefaultAction(addCartesianPlot3Action);
 		break;
 	}
 	case AddNewMode::PlotAreaTwoAxesCenteredZero: {
@@ -1329,8 +1339,6 @@ void WorksheetView::addNew(QAction* action) {
 		plot->setType(CartesianPlot::Type::TwoAxesCenteredZero);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
-		if (tbNewPlot)
-			tbNewPlot->setDefaultAction(addCartesianPlot4Action);
 		break;
 	}
 	case AddNewMode::PlotAreaFromTemplate: {
@@ -1346,8 +1354,6 @@ void WorksheetView::addNew(QAction* action) {
 
 		restorePointers = true;
 		aspect = plot;
-		if (tbNewPlot)
-			tbNewPlot->setDefaultAction(addCartesianPlotTemplateAction);
 #endif
 		break;
 	}
@@ -1360,6 +1366,21 @@ void WorksheetView::addNew(QAction* action) {
 	case AddNewMode::Image: {
 		Image* image = new Image(i18n("Image"));
 		aspect = image;
+		break;
+	}
+	case AddNewMode::Surface3D: {
+		auto* scene = new Surface3DScene(i18n("3D Surface"));
+		aspect = scene;
+		break;
+	}
+	case AddNewMode::Scatter3D: {
+		auto* scene = new Scatter3DScene(i18n("3D Scatter"));
+		aspect = scene;
+		break;
+	}
+	case AddNewMode::Bar3D: {
+		auto* scene = new Bar3DScene(i18n("3D Bars"));
+		aspect = scene;
 		break;
 	}
 	}
@@ -2191,12 +2212,15 @@ void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	w = w * GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 	h = h * GuiTools::dpi(this).second / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 	pixmap = pixmap.scaled(w, h);
-	QRectF targetRect(0, 0, w, h);
+	pixmap.fill(Qt::transparent);
 
+	QRectF targetRect(0, 0, w, h);
 	QPainter painter;
 	painter.begin(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing);
+
 	exportPaint(&painter, targetRect, sourceRect, true /* export background */, true /* export selection */);
+
 	painter.end();
 }
 
@@ -2244,18 +2268,22 @@ void WorksheetView::exportToClipboard() {
 	}
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
+	// Calculate the width and height in pixels
 	w = w * GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 	h = h * GuiTools::dpi(this).second / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+
+	// Create an image with the calculated size
 	QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
 	image.fill(Qt::transparent);
 	QRectF targetRect(0, 0, w, h);
 
+	// Use a QPainter to draw onto the image
 	QPainter painter;
 	painter.begin(&image);
 	painter.setRenderHint(QPainter::Antialiasing);
-	exportPaint(&painter, targetRect, sourceRect, true);
+	exportPaint(&painter, targetRect, sourceRect, true); // Export with background
 	painter.end();
-
+	// Set the image to the clipboard
 	QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
 }
 
