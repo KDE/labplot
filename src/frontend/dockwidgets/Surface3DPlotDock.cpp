@@ -76,7 +76,7 @@ void Surface3DPlotDock::setSurfaces(const QList<Surface3DScene*>& surfaces) {
 	ui.cbXColumn->setAspect(m_surface->xColumn(), m_surface->xColumnPath());
 	ui.cbYColumn->setAspect(m_surface->yColumn(), m_surface->yColumnPath());
 	ui.cbZColumn->setAspect(m_surface->zColumn(), m_surface->zColumnPath());
-	ui.cbMatrix->setMatrix(m_surface->matrix(), m_surface->matrixPath());
+	ui.cbMatrix->setAspect(m_surface->matrix(), m_surface->matrixPath());
 	// tab "Mesh"
 
 	ui.cbShadowQuality->setCurrentIndex(static_cast<int>(m_surface->shadowQuality()));
@@ -307,7 +307,7 @@ void Surface3DPlotDock::colorChanged(QColor color) {
 // Tab "General"
 void Surface3DPlotDock::surfaceMatrixChanged(const Matrix* matrix) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbMatrix->setMatrix(matrix, m_surface->matrixPath());
+	ui.cbMatrix->setAspect(matrix, m_surface->matrixPath());
 }
 
 void Surface3DPlotDock::surfaceXColumnChanged(const AbstractColumn* column) {
