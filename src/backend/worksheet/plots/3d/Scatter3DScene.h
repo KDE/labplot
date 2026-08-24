@@ -56,6 +56,18 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, zColumnPath, ZColumnPath)
 	typedef Scatter3DScenePrivate Private;
 	void recalc();
+
+	QMenu* createContextMenu() override;
+
+public Q_SLOTS:
+	void addPlot();
+
+private:
+	void initMenus();
+	void handleChildAdded(const AbstractAspect*);
+	QMenu* m_addNewMenu{nullptr};
+	bool m_menusInitialized{false};
+
 private Q_SLOTS:
 	void xColumnAboutToBeRemoved(const AbstractAspect*);
 	void yColumnAboutToBeRemoved(const AbstractAspect*);

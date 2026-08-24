@@ -10,6 +10,7 @@
 
 #include "Surface3DScene.h"
 #include "Axis3D.h"
+#include "Surface3DPlot.h"
 #include "Surface3DScenePrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -18,6 +19,8 @@
 
 #include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
+#include <QIcon>
+#include <QMenu>
 #include <QtGraphsWidgets/Q3DSurfaceWidgetItem>
 
 #include <KLocalizedString>
@@ -35,6 +38,9 @@ Surface3DScene::Surface3DScene(const QString& name)
 	m_surface->setCameraXRotation(d->xRotation);
 	m_surface->setCameraYRotation(d->yRotation);
 	m_surface->setCameraZoomLevel(d->zoomLevel);
+
+	// Listen for child Plot additions
+	connect(this, &AbstractAspect::childAspectAdded, this, &Surface3DScene::handleChildAdded);
 
 	// Only create default axes when NOT loading from file
 	// Check parent too - if Scene is loading, axes come as separate children
@@ -167,6 +173,28 @@ void Surface3DScene::show(bool visible) {
 void Surface3DScene::recalc() {
 	Q_D(Surface3DScene);
 	d->recalc();
+}
+
+void Surface3DScene::handleChildAdded(const AbstractAspect* child) {
+	auto* plot = dynamic_cast<const Surface3DPlot*>(child);
+	if (!plot)
+		return;
+
+	// Connect to Plot changes to trigger recalc
+	connect(plot, &Surface3DPlot::sourceTypeChanged, this, &Surface3DScene::recalc);
+	connect(plot, &Surface3DPlot::xColumnChanged, this, &Surface3DScene::recalc);
+	connect(plot, &Surface3DPlot::yColumnChanged, this, &Surface3DScene::recalc);
+	connect(plot, &Surface3DPlot::zColumnChanged, this, &Surface3DScene::recalc);
+	connect(plot, &Surface3DPlot::matrixChanged, this, &Surface3DScene::recalc);
+
+	// Trigger immediate recalc if data is already set
+	if (plot->dataSource() == Surface3DPlot::DataSource_Spreadsheet) {
+		if (plot->xColumn() && plot->yColumn() && plot->zColumn())
+			recalc();
+	} else if (plot->dataSource() == Surface3DPlot::DataSource_Matrix) {
+		if (plot->matrix())
+			recalc();
+	}
 }
 
 // ##############################################################################
@@ -623,4 +651,37 @@ bool Surface3DScene::load(XmlStreamReader* reader, bool preview) {
 	finalizeLoad();
 
 	return true;
+}
+
+// ##############################################################################
+// ######################### Context Menu  ######################################
+// ##############################################################################
+
+void Surface3DScene::initMenus() {
+	m_addNewMenu = new QMenu(i18n("Add New"));
+	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-3d-plot")), i18n("3D Surface"), this);
+	connect(action, &QAction::triggered, this, &Surface3DScene::addPlot);
+	m_addNewMenu->addAction(action);
+
+	m_menusInitialized = true;
+}
+
+QMenu* Surface3DScene::createContextMenu() {
+	if (!m_menusInitialized)
+		initMenus();
+
+	QMenu* menu = WorksheetElement::createContextMenu();
+	QAction* visibilityAction = this->visibilityAction();
+
+	menu->insertMenu(visibilityAction, m_addNewMenu);
+	menu->insertSeparator(visibilityAction);
+
+	return menu;
+}
+
+void Surface3DScene::addPlot() {
+	auto* plot = new Surface3DPlot(i18n("Surface Plot"));
+	addChild(plot);
 }

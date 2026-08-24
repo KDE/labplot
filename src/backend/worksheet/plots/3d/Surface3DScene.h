@@ -56,10 +56,20 @@ public:
 	void show(bool visible);
 	void recalc();
 
+	QMenu* createContextMenu() override;
+
 	typedef Surface3DScenePrivate Private;
+
+public Q_SLOTS:
+	void addPlot();
 
 private:
 	Q_DECLARE_PRIVATE(Surface3DScene)
+	void initMenus();
+	void handleChildAdded(const AbstractAspect*);
+	QMenu* m_addNewMenu{nullptr};
+	bool m_menusInitialized{false};
+
 private Q_SLOTS:
 	// Spreadsheet slots
 	void xColumnAboutToBeRemoved(const AbstractAspect*);

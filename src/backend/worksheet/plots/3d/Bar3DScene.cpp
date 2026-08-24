@@ -10,14 +10,21 @@
 
 #include "Bar3DScene.h"
 #include "Axis3D.h"
+#include "Bar3DPlot.h"
 #include "Bar3DScenePrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/3d/Bar3DPlot.h"
 
 #include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
+#include <QIcon>
+#include <QMenu>
+#include <QtGraphsWidgets/Q3DBarsWidgetItem>
+
+#include <KLocalizedString>
 #include <QtGraphsWidgets/Q3DBarsWidgetItem>
 
 #include <KLocalizedString>
@@ -35,6 +42,9 @@ Bar3DScene::Bar3DScene(const QString& name)
 	m_bar->setCameraXRotation(d->xRotation);
 	m_bar->setCameraYRotation(d->yRotation);
 	m_bar->setCameraZoomLevel(d->zoomLevel);
+
+	// Listen for child Plot additions
+	connect(this, &AbstractAspect::childAspectAdded, this, &Bar3DScene::handleChildAdded);
 }
 
 void Bar3DScene::finalizeAdd() {
@@ -73,6 +83,19 @@ void Bar3DScene::retransform() {
 void Bar3DScene::recalc() {
 	Q_D(Bar3DScene);
 	d->recalc();
+}
+
+void Bar3DScene::handleChildAdded(const AbstractAspect* child) {
+	auto* plot = dynamic_cast<const Bar3DPlot*>(child);
+	if (!plot)
+		return;
+
+	// Connect to Plot column changes to trigger recalc
+	connect(plot, &Bar3DPlot::dataColumnsChanged, this, &Bar3DScene::recalc);
+
+	// Trigger immediate recalc if columns are already set
+	if (!plot->dataColumns().isEmpty())
+		recalc();
 }
 
 // ##############################################################################
@@ -356,4 +379,37 @@ bool Bar3DScene::load(XmlStreamReader* reader, bool preview) {
 	d->dataColumns.resize(d->columnPaths.size());
 
 	return true;
+}
+
+// ##############################################################################
+// ######################### Context Menu  ######################################
+// ##############################################################################
+
+void Bar3DScene::initMenus() {
+	m_addNewMenu = new QMenu(i18n("Add New"));
+	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-3d-plot")), i18n("3D Bar"), this);
+	connect(action, &QAction::triggered, this, &Bar3DScene::addPlot);
+	m_addNewMenu->addAction(action);
+
+	m_menusInitialized = true;
+}
+
+QMenu* Bar3DScene::createContextMenu() {
+	if (!m_menusInitialized)
+		initMenus();
+
+	QMenu* menu = WorksheetElement::createContextMenu();
+	QAction* visibilityAction = this->visibilityAction();
+
+	menu->insertMenu(visibilityAction, m_addNewMenu);
+	menu->insertSeparator(visibilityAction);
+
+	return menu;
+}
+
+void Bar3DScene::addPlot() {
+	auto* plot = new Bar3DPlot(i18n("Bar Plot"));
+	addChild(plot);
 }
