@@ -1,5 +1,6 @@
 #include "Scatter3DScene.h"
 #include "Axis3D.h"
+#include "Scatter3DPlot.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
@@ -8,6 +9,8 @@
 
 #include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
+#include <QIcon>
+#include <QMenu>
 #include <QXmlStreamAttributes>
 #include <QtGraphsWidgets/Q3DScatterWidgetItem>
 
@@ -26,6 +29,9 @@ Scatter3DScene::Scatter3DScene(const QString& name)
 	m_scatter->setCameraXRotation(d->xRotation);
 	m_scatter->setCameraYRotation(d->yRotation);
 	m_scatter->setCameraZoomLevel(d->zoomLevel);
+
+	// Listen for child Plot additions
+	connect(this, &AbstractAspect::childAspectAdded, this, &Scatter3DScene::handleChildAdded);
 
 	// Only create default axes when NOT loading from file
 	// Check parent too - if Scene is loading, axes come as separate children
@@ -174,6 +180,21 @@ void Scatter3DScene::recalc() {
 	d->recalc();
 }
 
+void Scatter3DScene::handleChildAdded(const AbstractAspect* child) {
+	auto* plot = dynamic_cast<const Scatter3DPlot*>(child);
+	if (!plot)
+		return;
+
+	// Connect to Plot column changes to trigger recalc
+	connect(plot, &Scatter3DPlot::xColumnChanged, this, &Scatter3DScene::recalc);
+	connect(plot, &Scatter3DPlot::yColumnChanged, this, &Scatter3DScene::recalc);
+	connect(plot, &Scatter3DPlot::zColumnChanged, this, &Scatter3DScene::recalc);
+
+	// Trigger immediate recalc if columns are already set
+	if (plot->xColumn() && plot->yColumn() && plot->zColumn())
+		recalc();
+}
+
 // #####################################################################
 // ################### Private implementation ##########################
 // #####################################################################
@@ -203,12 +224,22 @@ void Scatter3DScenePrivate::retransform() {
 void Scatter3DScenePrivate::recalcShapeAndBoundingRect() {
 }
 void Scatter3DScenePrivate::recalc() {
-	if (xColumn == nullptr || yColumn == nullptr || zColumn == nullptr)
+	// Get columns from first child Scatter3DPlot
+	auto plots = q->children<Scatter3DPlot>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	if (plots.isEmpty())
+		return;
+
+	auto* plot = plots.first();
+	const AbstractColumn* xCol = plot->xColumn();
+	const AbstractColumn* yCol = plot->yColumn();
+	const AbstractColumn* zCol = plot->zColumn();
+
+	if (!xCol || !yCol || !zCol)
 		return;
 
 	qDebug() << Q_FUNC_INFO << "Columns have been set";
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	const int numPoints = std::min(xColumn->availableRowCount(), std::min(yColumn->availableRowCount(), zColumn->availableRowCount()));
+	const int numPoints = std::min(xCol->availableRowCount(), std::min(yCol->availableRowCount(), zCol->availableRowCount()));
 	if (numPoints == 0)
 		return;
 
@@ -217,9 +248,9 @@ void Scatter3DScenePrivate::recalc() {
 
 	QScatterDataItem* ptrToDataArray = &data->first();
 	for (int i = 0; i < numPoints; ++i) {
-		const float x = static_cast<float>(xColumn->valueAt(i));
-		const float y = static_cast<float>(yColumn->valueAt(i));
-		const float z = static_cast<float>(zColumn->valueAt(i));
+		const float x = static_cast<float>(xCol->valueAt(i));
+		const float y = static_cast<float>(yCol->valueAt(i));
+		const float z = static_cast<float>(zCol->valueAt(i));
 
 		ptrToDataArray->setPosition(QVector3D(x, y, z));
 		++ptrToDataArray;
@@ -350,4 +381,37 @@ bool Scatter3DScene::load(XmlStreamReader* reader, bool preview) {
 	finalizeLoad();
 
 	return true;
+}
+
+// ##############################################################################
+// ######################### Context Menu  ######################################
+// ##############################################################################
+
+void Scatter3DScene::initMenus() {
+	m_addNewMenu = new QMenu(i18n("Add New"));
+	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-3d-plot")), i18n("3D Scatter"), this);
+	connect(action, &QAction::triggered, this, &Scatter3DScene::addPlot);
+	m_addNewMenu->addAction(action);
+
+	m_menusInitialized = true;
+}
+
+QMenu* Scatter3DScene::createContextMenu() {
+	if (!m_menusInitialized)
+		initMenus();
+
+	QMenu* menu = WorksheetElement::createContextMenu();
+	QAction* visibilityAction = this->visibilityAction();
+
+	menu->insertMenu(visibilityAction, m_addNewMenu);
+	menu->insertSeparator(visibilityAction);
+
+	return menu;
+}
+
+void Scatter3DScene::addPlot() {
+	auto* plot = new Scatter3DPlot(i18n("Scatter Plot"));
+	addChild(plot);
 }

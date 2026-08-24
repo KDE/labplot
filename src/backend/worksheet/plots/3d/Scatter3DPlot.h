@@ -6,6 +6,7 @@
 class Scatter3DPlotPrivate;
 class AbstractColumn;
 class QScatter3DSeries;
+class KConfig;
 
 class Scatter3DPlot : public WorksheetElement {
 	Q_OBJECT
@@ -28,6 +29,12 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, zColumn, ZColumn)
 
 	QScatter3DSeries* series() const;
+
+	void loadThemeConfig(const KConfig&) override;
+	void saveThemeConfig(const KConfig&) override;
+
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
+	void retransform() override;
 
 	typedef Scatter3DPlotPrivate Private;
 

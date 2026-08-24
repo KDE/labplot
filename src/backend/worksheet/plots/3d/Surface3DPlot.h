@@ -7,6 +7,7 @@ class Surface3DPlotPrivate;
 class AbstractColumn;
 class Matrix;
 class QSurface3DSeries;
+class KConfig;
 
 class Surface3DPlot : public WorksheetElement {
 	Q_OBJECT
@@ -38,6 +39,12 @@ public:
 	POINTER_D_ACCESSOR_DECL(const Matrix, matrix, Matrix)
 
 	QSurface3DSeries* series() const;
+
+	void loadThemeConfig(const KConfig&) override;
+	void saveThemeConfig(const KConfig&) override;
+
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
+	void retransform() override;
 
 	typedef Surface3DPlotPrivate Private;
 
