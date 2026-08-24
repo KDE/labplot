@@ -94,6 +94,14 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Axis3D.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Base3DPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Bar3DScene.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Bar3DPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Scatter3DScene.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Scatter3DPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Surface3DScene.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlot.cpp
 )
 
 set(STATISTICS_SOURCES
@@ -308,6 +316,7 @@ target_link_libraries(liblabplot
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Gui
     Qt${QT_MAJOR_VERSION}::Widgets
+    Qt${QT_MAJOR_VERSION}::Graphs
 )
 
 if(WIN32)
