@@ -24,8 +24,10 @@ public:
 
 	Surface3DPlot* const q;
 
-	void retransform() override {}
-	void recalcShapeAndBoundingRect() override {}
+	void retransform() override {
+	}
+	void recalcShapeAndBoundingRect() override {
+	}
 };
 
 #endif // SURFACE3DPLOTPRIVATE_H

@@ -20,8 +20,10 @@ public:
 
 	Scatter3DPlot* const q;
 
-	void retransform() override {}
-	void recalcShapeAndBoundingRect() override {}
+	void retransform() override {
+	}
+	void recalcShapeAndBoundingRect() override {
+	}
 };
 
 #endif // SCATTER3DPLOTPRIVATE_H

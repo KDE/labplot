@@ -16,11 +16,9 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElementPrivate.h"
 
-#include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
+#include <QGraphicsScene>
 #include <QtGraphsWidgets/Q3DSurfaceWidgetItem>
-//#include <QtGraphs/QAbstract3DSeries>
-//#include <QXmlStreamAttributes>
 
 #include <KLocalizedString>
 
@@ -75,7 +73,7 @@ void Surface3DScene::init(bool transform) {
 
 		// Size from rect
 		QRectF rect = d->rect;
-		proxy->setGeometry(QRectF(-rect.width()/2, -rect.height()/2, rect.width(), rect.height()));
+		proxy->setGeometry(QRectF(-rect.width() / 2, -rect.height() / 2, rect.width(), rect.height()));
 		widget->resize(rect.width(), rect.height());
 		widget->show();
 	}

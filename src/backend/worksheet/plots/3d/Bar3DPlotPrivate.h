@@ -16,8 +16,10 @@ public:
 
 	Bar3DPlot* const q;
 
-	void retransform() override {}
-	void recalcShapeAndBoundingRect() override {}
+	void retransform() override {
+	}
+	void recalcShapeAndBoundingRect() override {
+	}
 };
 
 #endif // BAR3DPLOTPRIVATE_H

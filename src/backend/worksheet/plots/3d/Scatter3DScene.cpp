@@ -3,11 +3,11 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
-#include "backend/worksheet/plots/3d/Scatter3DScenePrivate.h"
 #include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/3d/Scatter3DScenePrivate.h"
 
-#include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
+#include <QGraphicsScene>
 #include <QXmlStreamAttributes>
 #include <QtGraphsWidgets/Q3DScatterWidgetItem>
 
@@ -62,7 +62,7 @@ void Scatter3DScene::init(bool transform) {
 
 		// Size from rect
 		QRectF rect = d->rect;
-		proxy->setGeometry(QRectF(-rect.width()/2, -rect.height()/2, rect.width(), rect.height()));
+		proxy->setGeometry(QRectF(-rect.width() / 2, -rect.height() / 2, rect.width(), rect.height()));
 		widget->resize(rect.width(), rect.height());
 		widget->show();
 	}
