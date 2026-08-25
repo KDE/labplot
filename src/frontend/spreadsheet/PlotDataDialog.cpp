@@ -837,6 +837,9 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			analysisCurve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", name));
 			static_cast<XYFitCurve*>(analysisCurve)->initFitData(m_analysisAction);
 			break;
+		case XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear:
+			analysisCurve = new XYPiecewiseLinearFitCurve(i18nc("Curve fitting", "Piecewise Linear Fit to '%1'", name));
+			break;
 		case XYAnalysisCurve::AnalysisAction::Differentiation:
 			analysisCurve = new XYDifferentiationCurve(i18n("Derivative of '%1'", name));
 			break;

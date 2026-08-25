@@ -696,6 +696,10 @@ void CartesianPlot::fillFitMenu(QMenu* menu, QActionGroup* actionGroup) {
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitLinear));
 	menu->addAction(action);
 
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Piecewise Linear"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear));
+	menu->addAction(action);
+
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Power"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPower));
 	menu->addAction(action);
@@ -2046,6 +2050,7 @@ void CartesianPlot::addAnalysisPlot(const QAction* action) {
 	const auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	switch (type) {
 	case XYAnalysisCurve::AnalysisAction::FitLinear:
+	case XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear:
 	case XYAnalysisCurve::AnalysisAction::FitPower:
 	case XYAnalysisCurve::AnalysisAction::FitExp1:
 	case XYAnalysisCurve::AnalysisAction::FitExp2:
@@ -2310,39 +2315,51 @@ void CartesianPlot::addBaselineCorrectionCurve() {
 }
 
 void CartesianPlot::addFitCurve(const QAction* action) {
+	if (!action)
+		return;
+
+	const auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	const auto& selectedCurves = this->selectedCurves();
 	if (!selectedCurves.isEmpty()) {
 		for (const auto* curCurve : selectedCurves) {
-			auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
-			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
-			curve->setDataSourceCurve(curCurve);
+			XYAnalysisCurve* analysisCurve = nullptr;
+			if (type != XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear) {
+				auto* fitCurve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
+				analysisCurve = fitCurve;
 
-			// set the fit model category and type
-			if (action) {
-				auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
-				curve->initFitData(type);
-			} else
-				DEBUG(Q_FUNC_INFO << "WARNING: no action found!")
+				fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+				fitCurve->setDataSourceCurve(curCurve);
+				fitCurve->initFitData(type); // set the fit model category and type
 
-			// fit with weights for y if the curve has error bars for y
-			if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
-				auto fitData = curve->fitData();
-				fitData.yWeightsType = nsl_fit_weight_instrumental;
-				curve->setFitData(fitData);
-				curve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
+				// fit with weights for y if the curve has error bars for y
+				if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
+					auto fitData = fitCurve->fitData();
+					fitData.yWeightsType = nsl_fit_weight_instrumental;
+					fitCurve->setFitData(fitData);
+					fitCurve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
+				}
+			} else {
+				auto* fitCurve = new XYPiecewiseLinearFitCurve(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
+				analysisCurve = fitCurve;
+				fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+				fitCurve->setDataSourceCurve(curCurve);
 			}
 
-			curve->recalculate();
+			analysisCurve->recalculate();
 
 			// add the child after the fit was calculated so the dock widgets gets the fit results
 			// and call retransform() after this to calculate and to paint the data points of the fit-curve
-			this->addChild(curve);
-			curve->retransform();
+			this->addChild(analysisCurve);
+			analysisCurve->retransform();
 		}
 	} else {
-		auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
-		curve->initFitData(XYAnalysisCurve::AnalysisAction::FitLinear);
-		this->addChild(curve);
+		if (type == XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear)
+			this->addChild(new XYPiecewiseLinearFitCurve(i18nc("Curve fitting", "Fit")));
+		else {
+			auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
+			curve->initFitData(type);
+			this->addChild(curve);
+		}
 	}
 }
 

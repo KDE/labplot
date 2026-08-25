@@ -28,6 +28,7 @@ public:
 	Q_ENUM(DataSourceType)
 	enum class AnalysisAction {
 		FitLinear,
+		FitPiecewiseLinear,
 		FitPower,
 		FitExp1,
 		FitExp2,

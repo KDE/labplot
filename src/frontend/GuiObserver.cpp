@@ -74,6 +74,7 @@
 #include "frontend/dockwidgets/XYDifferentiationCurveDock.h"
 #include "frontend/dockwidgets/XYEquationCurveDock.h"
 #include "frontend/dockwidgets/XYFitCurveDock.h"
+#include "frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.h"
 #include "frontend/dockwidgets/XYFourierFilterCurveDock.h"
 #include "frontend/dockwidgets/XYFourierTransformCurveDock.h"
 #include "frontend/dockwidgets/XYFunctionCurveDock.h"
@@ -324,6 +325,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Fit"));
 		raiseDockSetupConnect(m_xyFitCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyFitCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYPiecewiseLinearFitCurve:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Piecewise Linear Fit"));
+		raiseDockSetupConnect(m_xyPiecewiseLinearFitCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_xyPiecewiseLinearFitCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYFourierTransformCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Fourier Transform"));
