@@ -72,15 +72,15 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 
 	if (fitData.changepointMethod == nsl_changepoint_method_binary_segmentation) {
 		numChangepoints = nsl_changepoint_binary_segmentation(xData.data(),
-			yData.data(),
-			validPoints,
-			fitData.penalty,
-			fitData.minSegmentSize,
-			changepoints,
-			fitData.maxChangepoints);
-	} else {
-		numChangepoints = nsl_changepoint_pelt(xData.data(), yData.data(), validPoints, fitData.penalty, fitData.minSegmentSize, changepoints, fitData.maxChangepoints);
-	}
+															  yData.data(),
+															  validPoints,
+															  fitData.penalty,
+															  fitData.minSegmentSize,
+															  changepoints,
+															  fitData.maxChangepoints);
+	} else
+		numChangepoints =
+			nsl_changepoint_pelt(xData.data(), yData.data(), validPoints, fitData.penalty, fitData.minSegmentSize, changepoints, fitData.maxChangepoints);
 
 	fitResult.numSegments = numChangepoints + 1;
 	fitResult.changepoints.resize(numChangepoints);

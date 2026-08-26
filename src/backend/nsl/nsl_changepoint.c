@@ -12,10 +12,7 @@
 #include <math.h>
 #include <string.h>
 
-const char* nsl_changepoint_method_name[] = {
-	"Binary Segmentation",
-	"PELT"
-};
+const char* nsl_changepoint_method_name[] = { "Binary Segmentation", "PELT" };
 
 /* linear regression cost for segment [start, end) */
 static double segment_cost(const double x[], const double y[], size_t start, size_t end) {
@@ -67,9 +64,15 @@ static size_t find_best_split(const double x[], const double y[], size_t start, 
 }
 
 /* recursive binary segmentation helper */
-static size_t binary_seg_recursive(const double x[], const double y[], size_t start, size_t end,
-	double penalty, size_t min_size, size_t changepoints[], size_t max_cp, size_t current_cp) {
-
+static size_t binary_seg_recursive(const double x[],
+								   const double y[],
+								   size_t start,
+								   size_t end,
+								   double penalty,
+								   size_t min_size,
+								   size_t changepoints[],
+								   size_t max_cp,
+								   size_t current_cp) {
 	if (end - start < 2 * min_size || current_cp >= max_cp)
 		return current_cp;
 
@@ -95,9 +98,13 @@ static int compare_size_t(const void* a, const void* b) {
 	return (ia > ib) - (ia < ib);
 }
 
-size_t nsl_changepoint_binary_segmentation(const double x[], const double y[], size_t n,
-	double penalty, size_t min_segment_size, size_t changepoints[], size_t max_changepoints) {
-
+size_t nsl_changepoint_binary_segmentation(const double x[],
+										   const double y[],
+										   size_t n,
+										   double penalty,
+										   size_t min_segment_size,
+										   size_t changepoints[],
+										   size_t max_changepoints) {
 	if (!x || !y || n < 2 * min_segment_size || !changepoints || max_changepoints == 0)
 		return 0;
 
@@ -109,9 +116,7 @@ size_t nsl_changepoint_binary_segmentation(const double x[], const double y[], s
 	return count;
 }
 
-size_t nsl_changepoint_pelt(const double x[], const double y[], size_t n,
-	double penalty, size_t min_segment_size, size_t changepoints[], size_t max_changepoints) {
-
+nsl_changepoint_pelt(const double x[], const double y[], size_t n, double penalty, size_t min_segment_size, size_t changepoints[], size_t max_changepoints) {
 	if (!x || !y || n < 2 * min_segment_size || !changepoints || max_changepoints == 0)
 		return 0;
 

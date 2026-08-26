@@ -24,10 +24,7 @@ __BEGIN_DECLS
 #include <stdlib.h>
 
 #define NSL_CHANGEPOINT_METHOD_COUNT 2
-typedef enum {
-	nsl_changepoint_method_binary_segmentation,
-	nsl_changepoint_method_pelt
-} nsl_changepoint_method;
+typedef enum { nsl_changepoint_method_binary_segmentation, nsl_changepoint_method_pelt } nsl_changepoint_method;
 extern const char* nsl_changepoint_method_name[];
 
 /* Binary Segmentation: recursive splitting at point of max cost reduction
@@ -38,9 +35,13 @@ extern const char* nsl_changepoint_method_name[];
    changepoints - output array of changepoint indices (caller allocates)
    max_changepoints - size of changepoints array
    returns: number of changepoints found */
-size_t nsl_changepoint_binary_segmentation(const double x[], const double y[], size_t n,
-	double penalty, size_t min_segment_size,
-	size_t changepoints[], size_t max_changepoints);
+size_t nsl_changepoint_binary_segmentation(const double x[],
+										   const double y[],
+										   size_t n,
+										   double penalty,
+										   size_t min_segment_size,
+										   size_t changepoints[],
+										   size_t max_changepoints);
 
 /* PELT (Pruned Exact Linear Time): optimal segmentation with pruning
    x, y - data arrays
@@ -50,9 +51,8 @@ size_t nsl_changepoint_binary_segmentation(const double x[], const double y[], s
    changepoints - output array of changepoint indices
    max_changepoints - size of changepoints array
    returns: number of changepoints found */
-size_t nsl_changepoint_pelt(const double x[], const double y[], size_t n,
-	double penalty, size_t min_segment_size,
-	size_t changepoints[], size_t max_changepoints);
+size_t
+nsl_changepoint_pelt(const double x[], const double y[], size_t n, double penalty, size_t min_segment_size, size_t changepoints[], size_t max_changepoints);
 
 __END_DECLS
 
