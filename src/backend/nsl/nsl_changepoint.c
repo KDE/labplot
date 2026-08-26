@@ -12,7 +12,7 @@
 #include <math.h>
 #include <string.h>
 
-const char* nsl_changepoint_method_name[] = { "Binary Segmentation", "PELT" };
+const char* nsl_changepoint_method_name[] = {"Binary Segmentation", "PELT"};
 
 /* linear regression cost for segment [start, end) */
 static double segment_cost(const double x[], const double y[], size_t start, size_t end) {
