@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-19 16:01+0000\n"
+"POT-Creation-Date: 2026-08-27 00:40+0000\n"
 "PO-Revision-Date: 2026-03-15 15:36+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -53,7 +53,7 @@ msgid "Rename"
 msgstr "Athainmnigh"
 
 #: src/backend/core/AbstractAspect.cpp:453
-#: src/backend/spreadsheet/Spreadsheet.cpp:911
+#: src/backend/spreadsheet/Spreadsheet.cpp:921
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:540
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:266
 #: src/frontend/worksheet/WorksheetView.cpp:139
@@ -305,7 +305,7 @@ msgid "UNDEFINED"
 msgstr "GAN SHAINMHÍNIÚ"
 
 #: src/backend/core/AbstractColumn.cpp:324
-#: src/backend/spreadsheet/Spreadsheet.cpp:375
+#: src/backend/spreadsheet/Spreadsheet.cpp:378
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -316,7 +316,7 @@ msgstr[3] "%1: ionsáigh %2 sraitheanna"
 msgstr[4] "%1: ionsáigh %2 sraitheanna"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:358
+#: src/backend/spreadsheet/Spreadsheet.cpp:361
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -6499,7 +6499,7 @@ msgstr[3] "%1: cuir %2 colúin leis"
 msgstr[4] "%1: cuir %2 colúin leis"
 
 #: src/backend/matrix/Matrix.cpp:687 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:701
+#: src/backend/spreadsheet/Spreadsheet.cpp:711
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: glan"
@@ -6566,7 +6566,7 @@ msgid "%1: set cell values"
 msgstr "%1: socraigh luachanna na gcealla"
 
 #: src/backend/matrix/matrixcommands.h:316
-#: src/backend/spreadsheet/Spreadsheet.cpp:832
+#: src/backend/spreadsheet/Spreadsheet.cpp:842
 #, kde-format
 msgid "%1: transpose"
 msgstr "%1: traschur"
@@ -7651,34 +7651,34 @@ msgstr "Colúin: %1"
 msgid "Rows: %1"
 msgstr "Sraitheanna: %1"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:406
+#: src/backend/spreadsheet/Spreadsheet.cpp:409
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: bain sraitheanna a bhfuil luachanna ar iarraidh orthu"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:424
+#: src/backend/spreadsheet/Spreadsheet.cpp:427
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: sraitheanna maisc le luachanna ar iarraidh"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:481
+#: src/backend/spreadsheet/Spreadsheet.cpp:484
 #, kde-format
 msgid "%1: toggle comments header"
 msgstr "%1: ceanntásc tráchtanna a athrú"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:489
+#: src/backend/spreadsheet/Spreadsheet.cpp:492
 #, kde-format
 msgid "%1: toggle sparklines header"
 msgstr "%1: ceanntásc sparklines a athrú"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:552
-#: src/backend/spreadsheet/Spreadsheet.cpp:554
+#: src/backend/spreadsheet/Spreadsheet.cpp:555
 #: src/backend/spreadsheet/Spreadsheet.cpp:557
+#: src/backend/spreadsheet/Spreadsheet.cpp:560
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: socraigh scarbhileog nasctha"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:659
+#: src/backend/spreadsheet/Spreadsheet.cpp:662
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
@@ -7688,7 +7688,7 @@ msgstr[2] "%1: bain %2 colúin"
 msgstr[3] "%1: bain %2 colúin"
 msgstr[4] "%1: bain %2 colúin"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:678
+#: src/backend/spreadsheet/Spreadsheet.cpp:681
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
@@ -7698,32 +7698,32 @@ msgstr[2] "%1: ionsáigh %2 colúin"
 msgstr[3] "%1: ionsáigh %2 colúin"
 msgstr[4] "%1: ionsáigh %2 colúin"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:722
+#: src/backend/spreadsheet/Spreadsheet.cpp:732
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: glan na colúin roghnaithe"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:738
+#: src/backend/spreadsheet/Spreadsheet.cpp:748
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: glan na maisc go léir"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:948
+#: src/backend/spreadsheet/Spreadsheet.cpp:958
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: bog colún %2 ó shuíomh %3 go %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1001
+#: src/backend/spreadsheet/Spreadsheet.cpp:1011
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: sórtáil colúin"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1413
+#: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: scarbhileog nasctha bainte"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1823
+#: src/backend/spreadsheet/Spreadsheet.cpp:1833
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -7733,7 +7733,7 @@ msgstr[2] "sonraí uimhriúla, %1 eilimintí"
 msgstr[3] "sonraí uimhriúla, %1 eilimintí"
 msgstr[4] "sonraí uimhriúla, %1 eilimintí"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1826
+#: src/backend/spreadsheet/Spreadsheet.cpp:1836
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -7743,7 +7743,7 @@ msgstr[2] "sonraí slánuimhir, %1 eilimintí"
 msgstr[3] "sonraí slánuimhir, %1 eilimintí"
 msgstr[4] "sonraí slánuimhir, %1 eilimintí"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1829
+#: src/backend/spreadsheet/Spreadsheet.cpp:1839
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -7753,7 +7753,7 @@ msgstr[2] "sonraí slánuimhir mhóra, %1 eilimintí"
 msgstr[3] "sonraí slánuimhir mhóra, %1 eilimintí"
 msgstr[4] "sonraí slánuimhir mhóra, %1 eilimintí"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1832
+#: src/backend/spreadsheet/Spreadsheet.cpp:1842
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -7763,7 +7763,7 @@ msgstr[2] "sonraí téacs, %1 eilimintí"
 msgstr[3] "sonraí téacs, %1 eilimintí"
 msgstr[4] "sonraí téacs, %1 eilimintí"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1835
+#: src/backend/spreadsheet/Spreadsheet.cpp:1845
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -7773,7 +7773,7 @@ msgstr[2] "sonraí míosa, eilimintí %1"
 msgstr[3] "sonraí míosa, eilimintí %1"
 msgstr[4] "sonraí míosa, eilimintí %1"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1838
+#: src/backend/spreadsheet/Spreadsheet.cpp:1848
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -7783,7 +7783,7 @@ msgstr[2] "sonraí lae, eilimintí %1"
 msgstr[3] "sonraí lae, eilimintí %1"
 msgstr[4] "sonraí lae, eilimintí %1"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1841
+#: src/backend/spreadsheet/Spreadsheet.cpp:1851
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -15050,7 +15050,7 @@ msgstr "%1 ais: luchtaíodh teimpléad \"%2\""
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:250
 #: src/frontend/dockwidgets/RunChartDock.cpp:232
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:690
 #, kde-format
@@ -16489,7 +16489,7 @@ msgstr "Scarbhileog chun líon na sraitheanna a shioncrónú le"
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "Taispeáin Scarbhileog Staitisticí Colúin"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:226
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 scarbhileog: luchtaíodh teimpléad \"%2\""

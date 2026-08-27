@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-19 16:01+0000\n"
+"POT-Creation-Date: 2026-08-27 00:40+0000\n"
 "PO-Revision-Date: 2026-08-20 10:11+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -52,7 +52,7 @@ msgid "Rename"
 msgstr "Rinomina"
 
 #: src/backend/core/AbstractAspect.cpp:453
-#: src/backend/spreadsheet/Spreadsheet.cpp:911
+#: src/backend/spreadsheet/Spreadsheet.cpp:921
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:540
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:266
 #: src/frontend/worksheet/WorksheetView.cpp:139
@@ -303,7 +303,7 @@ msgid "UNDEFINED"
 msgstr "INDEFINITO"
 
 #: src/backend/core/AbstractColumn.cpp:324
-#: src/backend/spreadsheet/Spreadsheet.cpp:375
+#: src/backend/spreadsheet/Spreadsheet.cpp:378
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -311,7 +311,7 @@ msgstr[0] "%1: inserisci una riga"
 msgstr[1] "%1: inserisci %2 righe"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:358
+#: src/backend/spreadsheet/Spreadsheet.cpp:361
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -6478,7 +6478,7 @@ msgstr[0] "%1: aggiungi %2 colonna"
 msgstr[1] "%1: aggiungi %2 colonne"
 
 #: src/backend/matrix/Matrix.cpp:687 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:701
+#: src/backend/spreadsheet/Spreadsheet.cpp:711
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: pulisci"
@@ -6533,7 +6533,7 @@ msgid "%1: set cell values"
 msgstr "%1: imposta i valori della cella"
 
 #: src/backend/matrix/matrixcommands.h:316
-#: src/backend/spreadsheet/Spreadsheet.cpp:832
+#: src/backend/spreadsheet/Spreadsheet.cpp:842
 #, kde-format
 msgid "%1: transpose"
 msgstr "%1: trasponi"
@@ -7614,115 +7614,115 @@ msgstr "Colonne: %1"
 msgid "Rows: %1"
 msgstr "Righe: %1"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:406
+#: src/backend/spreadsheet/Spreadsheet.cpp:409
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: rimuovi le righe con valori mancanti"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:424
+#: src/backend/spreadsheet/Spreadsheet.cpp:427
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: maschera le righe con valori mancanti"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:481
+#: src/backend/spreadsheet/Spreadsheet.cpp:484
 #, kde-format
 msgid "%1: toggle comments header"
 msgstr "%1: attiva/disattiva intestazione dei commenti"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:489
+#: src/backend/spreadsheet/Spreadsheet.cpp:492
 #, kde-format
 msgid "%1: toggle sparklines header"
 msgstr "%1: attiva/disattiva intestazione delle sparkline"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:552
-#: src/backend/spreadsheet/Spreadsheet.cpp:554
+#: src/backend/spreadsheet/Spreadsheet.cpp:555
 #: src/backend/spreadsheet/Spreadsheet.cpp:557
+#: src/backend/spreadsheet/Spreadsheet.cpp:560
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: imposta foglio elettronico collegato"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:659
+#: src/backend/spreadsheet/Spreadsheet.cpp:662
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: elimina una colonna"
 msgstr[1] "%1: elimina %2 colonne"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:678
+#: src/backend/spreadsheet/Spreadsheet.cpp:681
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: inserisci una colonna"
 msgstr[1] "%1: inserisci %2 colonne"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:722
+#: src/backend/spreadsheet/Spreadsheet.cpp:732
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: pulisci le colonne selezionate"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:738
+#: src/backend/spreadsheet/Spreadsheet.cpp:748
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: cancella tutte le maschere"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:948
+#: src/backend/spreadsheet/Spreadsheet.cpp:958
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: sposta la colonna %2 dalla posizione %3 alla %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1001
+#: src/backend/spreadsheet/Spreadsheet.cpp:1011
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: ordina le colonne"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1413
+#: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: foglio elettronico collegato rimosso"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1823
+#: src/backend/spreadsheet/Spreadsheet.cpp:1833
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "dato a doppia precisione, %1 elemento"
 msgstr[1] "dato numerico, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1826
+#: src/backend/spreadsheet/Spreadsheet.cpp:1836
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "dato intero, %1 elemento"
 msgstr[1] "dato intero, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1829
+#: src/backend/spreadsheet/Spreadsheet.cpp:1839
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "numero intero grande, 1 elemento"
 msgstr[1] "numero intero grande, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1832
+#: src/backend/spreadsheet/Spreadsheet.cpp:1842
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "dato testuale, %1 elemento"
 msgstr[1] "dato testuale, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1835
+#: src/backend/spreadsheet/Spreadsheet.cpp:1845
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "mese, %1 elemento"
 msgstr[1] "mese, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1838
+#: src/backend/spreadsheet/Spreadsheet.cpp:1848
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "giorno, %1 elemento"
 msgstr[1] "giorno, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1841
+#: src/backend/spreadsheet/Spreadsheet.cpp:1851
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -14950,7 +14950,7 @@ msgstr "%1 assi: modello «%2» caricato"
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:250
 #: src/frontend/dockwidgets/RunChartDock.cpp:232
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:690
 #, kde-format
@@ -16383,7 +16383,7 @@ msgstr "Foglio elettronico per sincronizzare il numero di righe con"
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "Mostra foglio elettronico delle statistiche delle colonne"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:226
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 fogli elettronici: modello «%2» caricato"

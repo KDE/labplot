@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-19 16:01+0000\n"
+"POT-Creation-Date: 2026-08-27 00:40+0000\n"
 "PO-Revision-Date: 2025-03-23 07:29+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -51,7 +51,7 @@ msgid "Rename"
 msgstr "Alinomi"
 
 #: src/backend/core/AbstractAspect.cpp:453
-#: src/backend/spreadsheet/Spreadsheet.cpp:911
+#: src/backend/spreadsheet/Spreadsheet.cpp:921
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:540
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:266
 #: src/frontend/worksheet/WorksheetView.cpp:139
@@ -302,7 +302,7 @@ msgid "UNDEFINED"
 msgstr "NEDEFINITO"
 
 #: src/backend/core/AbstractColumn.cpp:324
-#: src/backend/spreadsheet/Spreadsheet.cpp:375
+#: src/backend/spreadsheet/Spreadsheet.cpp:378
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -310,7 +310,7 @@ msgstr[0] "%1: enmeti 1 vicon"
 msgstr[1] "%1: enmeti %2 vicojn"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:358
+#: src/backend/spreadsheet/Spreadsheet.cpp:361
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -6458,7 +6458,7 @@ msgstr[0] "%1: aldoni %2 kolumnon"
 msgstr[1] "%1: aldoni %2 kolumnojn"
 
 #: src/backend/matrix/Matrix.cpp:687 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:701
+#: src/backend/spreadsheet/Spreadsheet.cpp:711
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: klara"
@@ -6513,7 +6513,7 @@ msgid "%1: set cell values"
 msgstr "%1: starigis ĉelvalorojn"
 
 #: src/backend/matrix/matrixcommands.h:316
-#: src/backend/spreadsheet/Spreadsheet.cpp:832
+#: src/backend/spreadsheet/Spreadsheet.cpp:842
 #, kde-format
 msgid "%1: transpose"
 msgstr "%1: transponi"
@@ -7607,117 +7607,117 @@ msgstr "Kolumno %1"
 msgid "Rows: %1"
 msgstr "Vicoj:"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:406
+#: src/backend/spreadsheet/Spreadsheet.cpp:409
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: forigi vicojn kun mankantaj valoroj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:424
+#: src/backend/spreadsheet/Spreadsheet.cpp:427
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: maski vicojn kun mankantaj valoroj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:481
+#: src/backend/spreadsheet/Spreadsheet.cpp:484
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: toggle comments header"
 msgstr "%1: ŝanĝi komenton"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:489
+#: src/backend/spreadsheet/Spreadsheet.cpp:492
 #, fuzzy, kde-format
 #| msgid "Unable to parse header"
 msgid "%1: toggle sparklines header"
 msgstr "Ne eblas analizi kaplinion"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:552
-#: src/backend/spreadsheet/Spreadsheet.cpp:554
+#: src/backend/spreadsheet/Spreadsheet.cpp:555
 #: src/backend/spreadsheet/Spreadsheet.cpp:557
+#: src/backend/spreadsheet/Spreadsheet.cpp:560
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: meti ligitan kalkultabelon"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:659
+#: src/backend/spreadsheet/Spreadsheet.cpp:662
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: forigi 1 kolumnon"
 msgstr[1] "%1: forigi %2 kolumnojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:678
+#: src/backend/spreadsheet/Spreadsheet.cpp:681
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: enmeti 1 kolumnon"
 msgstr[1] "%1: enmeti %2 kolumnojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:722
+#: src/backend/spreadsheet/Spreadsheet.cpp:732
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: forigi elektitajn kolumnojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:738
+#: src/backend/spreadsheet/Spreadsheet.cpp:748
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: forigi ĉiujn maskojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:948
+#: src/backend/spreadsheet/Spreadsheet.cpp:958
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: movi kolumnon %2 de pozicio %3 al %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1001
+#: src/backend/spreadsheet/Spreadsheet.cpp:1011
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: ordigi kolumnojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1413
+#: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: forigis ligitan kalkultabelon"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1823
+#: src/backend/spreadsheet/Spreadsheet.cpp:1833
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "duoble precizaj datenoj, %1 elemento"
 msgstr[1] "duoble precizaj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1826
+#: src/backend/spreadsheet/Spreadsheet.cpp:1836
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "entjeraj datenoj, %1 elemento"
 msgstr[1] "entjeraj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1829
+#: src/backend/spreadsheet/Spreadsheet.cpp:1839
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "entjeregaj datenoj, %1 elemento"
 msgstr[1] "entjeregaj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1832
+#: src/backend/spreadsheet/Spreadsheet.cpp:1842
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "tekstdatenoj, %1 elemento"
 msgstr[1] "tekstdatenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1835
+#: src/backend/spreadsheet/Spreadsheet.cpp:1845
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "monataj datenoj, %1 elemento"
 msgstr[1] "monataj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1838
+#: src/backend/spreadsheet/Spreadsheet.cpp:1848
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "tagaj datenoj, %1 elemento"
 msgstr[1] "tagaj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1841
+#: src/backend/spreadsheet/Spreadsheet.cpp:1851
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -14981,7 +14981,7 @@ msgstr "%1 aksoj: ŝablono \"%2\" ŝargita"
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:250
 #: src/frontend/dockwidgets/RunChartDock.cpp:232
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:690
 #, kde-format
@@ -16329,7 +16329,7 @@ msgstr "Kalkultabelo kun kiu sinkronigi la nombron da vicoj"
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "Kolumnostatistika Tabelfolio"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:226
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 kalkultabeloj: ŝablono \"%2\" ŝargita"

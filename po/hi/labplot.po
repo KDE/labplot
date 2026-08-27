@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-19 16:01+0000\n"
+"POT-Creation-Date: 2026-08-27 00:40+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -50,7 +50,7 @@ msgid "Rename"
 msgstr "नाम बदलें"
 
 #: src/backend/core/AbstractAspect.cpp:453
-#: src/backend/spreadsheet/Spreadsheet.cpp:911
+#: src/backend/spreadsheet/Spreadsheet.cpp:921
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:540
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:266
 #: src/frontend/worksheet/WorksheetView.cpp:139
@@ -302,7 +302,7 @@ msgid "UNDEFINED"
 msgstr "अपरिभाषित"
 
 #: src/backend/core/AbstractColumn.cpp:324
-#: src/backend/spreadsheet/Spreadsheet.cpp:375
+#: src/backend/spreadsheet/Spreadsheet.cpp:378
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -310,7 +310,7 @@ msgstr[0] "%1: %2 पंक्तियाँ डालें"
 msgstr[1] "%1: %2 पंक्तियाँ डालें"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:358
+#: src/backend/spreadsheet/Spreadsheet.cpp:361
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -6436,7 +6436,7 @@ msgstr[0] "%1: %2 कॉलम जोड़ें"
 msgstr[1] "%1: %2 कॉलम जोड़ें"
 
 #: src/backend/matrix/Matrix.cpp:687 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:701
+#: src/backend/spreadsheet/Spreadsheet.cpp:711
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: साफ़ करें"
@@ -6491,7 +6491,7 @@ msgid "%1: set cell values"
 msgstr "%1: सेल मान सेट करें"
 
 #: src/backend/matrix/matrixcommands.h:316
-#: src/backend/spreadsheet/Spreadsheet.cpp:832
+#: src/backend/spreadsheet/Spreadsheet.cpp:842
 #, kde-format
 msgid "%1: transpose"
 msgstr "%1: ट्रांसपोज़"
@@ -7584,117 +7584,117 @@ msgstr "स्तंभ %1"
 msgid "Rows: %1"
 msgstr "पंक्तियाँ:"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:406
+#: src/backend/spreadsheet/Spreadsheet.cpp:409
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: लुप्त मानों वाली पंक्तियाँ हटाएँ"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:424
+#: src/backend/spreadsheet/Spreadsheet.cpp:427
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: लुप्त मानों वाली पंक्तियों को मास्क करें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:481
+#: src/backend/spreadsheet/Spreadsheet.cpp:484
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: toggle comments header"
 msgstr "%1: कैसे बदलें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:489
+#: src/backend/spreadsheet/Spreadsheet.cpp:492
 #, fuzzy, kde-format
 #| msgid "Unable to parse header"
 msgid "%1: toggle sparklines header"
 msgstr "हेडर पार्स करने में असमर्थ"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:552
-#: src/backend/spreadsheet/Spreadsheet.cpp:554
+#: src/backend/spreadsheet/Spreadsheet.cpp:555
 #: src/backend/spreadsheet/Spreadsheet.cpp:557
+#: src/backend/spreadsheet/Spreadsheet.cpp:560
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: लिंक की गई स्प्रेडशीट सेट करें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:659
+#: src/backend/spreadsheet/Spreadsheet.cpp:662
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: %2 कॉलम हटाएँ"
 msgstr[1] "%1: %2 कॉलम हटाएँ"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:678
+#: src/backend/spreadsheet/Spreadsheet.cpp:681
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: %2 कॉलम डालें"
 msgstr[1] "%1: %2 कॉलम डालें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:722
+#: src/backend/spreadsheet/Spreadsheet.cpp:732
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: चयनित कॉलम साफ़ करें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:738
+#: src/backend/spreadsheet/Spreadsheet.cpp:748
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: सभी मास्क साफ़ करें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:948
+#: src/backend/spreadsheet/Spreadsheet.cpp:958
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: स्तंभ %2 को स्थिति %3 से %4 पर ले जाएँ।"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1001
+#: src/backend/spreadsheet/Spreadsheet.cpp:1011
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: कॉलम सॉर्ट करें"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1413
+#: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: लिंक की गई स्प्रेडशीट हटा दी गई"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1823
+#: src/backend/spreadsheet/Spreadsheet.cpp:1833
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "संख्यात्मक डेटा, %1 तत्व"
 msgstr[1] "संख्यात्मक डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1826
+#: src/backend/spreadsheet/Spreadsheet.cpp:1836
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "पूर्णांक डेटा, %1 तत्व"
 msgstr[1] "पूर्णांक डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1829
+#: src/backend/spreadsheet/Spreadsheet.cpp:1839
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "बड़ा पूर्णांक डेटा, %1 तत्व"
 msgstr[1] "बड़ा पूर्णांक डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1832
+#: src/backend/spreadsheet/Spreadsheet.cpp:1842
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "पाठ डेटा, %1 तत्व"
 msgstr[1] "पाठ डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1835
+#: src/backend/spreadsheet/Spreadsheet.cpp:1845
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "महीने का डेटा, %1 तत्व"
 msgstr[1] "महीने का डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1838
+#: src/backend/spreadsheet/Spreadsheet.cpp:1848
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "दिन डेटा, %1 तत्व"
 msgstr[1] "दिन डेटा, %1 तत्व"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1841
+#: src/backend/spreadsheet/Spreadsheet.cpp:1851
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -14966,7 +14966,7 @@ msgstr "%1 अक्ष: टेम्पलेट \"%2\" लोड किया 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:250
 #: src/frontend/dockwidgets/RunChartDock.cpp:232
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:690
 #, kde-format
@@ -16308,7 +16308,7 @@ msgstr "पंक्तियों की संख्या को सिं�
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "कॉलम सांख्यिकी स्प्रेडशीट"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:226
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1स्प्रेडशीट:टेम्पलेट \"%2\" लोड किया गया"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-19 16:01+0000\n"
+"POT-Creation-Date: 2026-08-27 00:40+0000\n"
 "PO-Revision-Date: 2026-01-21 23:00+0100\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
@@ -51,7 +51,7 @@ msgid "Rename"
 msgstr "Přejmenovat"
 
 #: src/backend/core/AbstractAspect.cpp:453
-#: src/backend/spreadsheet/Spreadsheet.cpp:911
+#: src/backend/spreadsheet/Spreadsheet.cpp:921
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:540
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:266
 #: src/frontend/worksheet/WorksheetView.cpp:139
@@ -303,7 +303,7 @@ msgid "UNDEFINED"
 msgstr "NEDEFINOVANÝ"
 
 #: src/backend/core/AbstractColumn.cpp:324
-#: src/backend/spreadsheet/Spreadsheet.cpp:375
+#: src/backend/spreadsheet/Spreadsheet.cpp:378
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -312,7 +312,7 @@ msgstr[1] "%1: vložit %2 řádky"
 msgstr[2] "%1: vložit %2 řádků"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:358
+#: src/backend/spreadsheet/Spreadsheet.cpp:361
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -6377,7 +6377,7 @@ msgstr[1] "%1: přidat %2 sloupce"
 msgstr[2] "%1: přidat %2 sloupců"
 
 #: src/backend/matrix/Matrix.cpp:687 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:701
+#: src/backend/spreadsheet/Spreadsheet.cpp:711
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: vyprázdnit"
@@ -6436,7 +6436,7 @@ msgid "%1: set cell values"
 msgstr ""
 
 #: src/backend/matrix/matrixcommands.h:316
-#: src/backend/spreadsheet/Spreadsheet.cpp:832
+#: src/backend/spreadsheet/Spreadsheet.cpp:842
 #, kde-format
 msgid "%1: transpose"
 msgstr "%1: transponovat"
@@ -7518,34 +7518,34 @@ msgstr "Sloupce: %1"
 msgid "Rows: %1"
 msgstr "Řádky: %1"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:406
+#: src/backend/spreadsheet/Spreadsheet.cpp:409
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:424
+#: src/backend/spreadsheet/Spreadsheet.cpp:427
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:481
+#: src/backend/spreadsheet/Spreadsheet.cpp:484
 #, kde-format
 msgid "%1: toggle comments header"
 msgstr "%1: přepnout hlavičku komentářů"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:489
+#: src/backend/spreadsheet/Spreadsheet.cpp:492
 #, kde-format
 msgid "%1: toggle sparklines header"
 msgstr "%1: přepnout hlavičku malých čárových grafů"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:552
-#: src/backend/spreadsheet/Spreadsheet.cpp:554
+#: src/backend/spreadsheet/Spreadsheet.cpp:555
 #: src/backend/spreadsheet/Spreadsheet.cpp:557
+#: src/backend/spreadsheet/Spreadsheet.cpp:560
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:659
+#: src/backend/spreadsheet/Spreadsheet.cpp:662
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
@@ -7553,7 +7553,7 @@ msgstr[0] "%1: odstranit 1 sloupec"
 msgstr[1] "%1: odstranit %2 sloupce"
 msgstr[2] "%1: odstranit %2 sloupců"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:678
+#: src/backend/spreadsheet/Spreadsheet.cpp:681
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
@@ -7561,32 +7561,32 @@ msgstr[0] "%1: vložit 1 sloupec"
 msgstr[1] "%1: vložit %2 sloupce"
 msgstr[2] "%1: vložit %2 sloupců"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:722
+#: src/backend/spreadsheet/Spreadsheet.cpp:732
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:738
+#: src/backend/spreadsheet/Spreadsheet.cpp:748
 #, kde-format
 msgid "%1: clear all masks"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:948
+#: src/backend/spreadsheet/Spreadsheet.cpp:958
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1001
+#: src/backend/spreadsheet/Spreadsheet.cpp:1011
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: seřadit sloupce"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1413
+#: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1823
+#: src/backend/spreadsheet/Spreadsheet.cpp:1833
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -7594,7 +7594,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1826
+#: src/backend/spreadsheet/Spreadsheet.cpp:1836
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -7602,7 +7602,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1829
+#: src/backend/spreadsheet/Spreadsheet.cpp:1839
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -7610,7 +7610,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1832
+#: src/backend/spreadsheet/Spreadsheet.cpp:1842
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -7618,7 +7618,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1835
+#: src/backend/spreadsheet/Spreadsheet.cpp:1845
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -7626,7 +7626,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1838
+#: src/backend/spreadsheet/Spreadsheet.cpp:1848
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -7634,7 +7634,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1841
+#: src/backend/spreadsheet/Spreadsheet.cpp:1851
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -14690,7 +14690,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:250
 #: src/frontend/dockwidgets/RunChartDock.cpp:232
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:228
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:690
 #, kde-format
@@ -15966,7 +15966,7 @@ msgstr ""
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "Statistika sloupce"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:226
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr ""
