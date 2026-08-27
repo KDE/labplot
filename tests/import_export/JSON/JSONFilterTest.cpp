@@ -16,6 +16,9 @@
 
 #include <KLocalizedString>
 
+#include <QBuffer>
+#include <cmath>
+
 /*!
  * import an array with an additional column for the index
  */
@@ -210,6 +213,71 @@ void JSONFilterTest::testArrayObjectsImport() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0.0);
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 17.0);
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 5.0);
+}
+
+void JSONFilterTest::testArrayPreview() {
+	JsonFilter filter;
+	filter.setCreateIndexEnabled(true);
+	filter.setDataRowType(QJsonValue::Array);
+
+	QBuffer buffer;
+	buffer.setData(QByteArrayLiteral("[[1, 2], [3, 4], [5, 6]]"));
+	const auto preview = filter.preview(buffer, 2);
+	const QStringList expectedFirst{QStringLiteral("1"), QStringLiteral("1"), QStringLiteral("2")};
+	const QStringList expectedSecond{QStringLiteral("2"), QStringLiteral("3"), QStringLiteral("4")};
+
+	QCOMPARE(preview.size(), 2);
+	QCOMPARE(preview.at(0), expectedFirst);
+	QCOMPARE(preview.at(1), expectedSecond);
+}
+
+void JSONFilterTest::testInvalidJsonImport() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	JsonFilter filter;
+	QBuffer buffer;
+	buffer.setData(QByteArrayLiteral("{invalid json}"));
+	const auto initialColumnCount = spreadsheet.columnCount();
+	const auto initialRowCount = spreadsheet.rowCount();
+
+	filter.readDataFromDevice(buffer, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), initialColumnCount);
+	QCOMPARE(spreadsheet.rowCount(), initialRowCount);
+	QVERIFY(!filter.lastError().isEmpty());
+}
+
+void JSONFilterTest::testNullValueImport() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	JsonFilter filter;
+	filter.setDataRowType(QJsonValue::Array);
+	QBuffer buffer;
+	buffer.setData(QByteArrayLiteral("[[1], [null], [3]]"));
+
+	filter.readDataFromDevice(buffer, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.);
+	QVERIFY(std::isnan(spreadsheet.column(0)->valueAt(1)));
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3.);
+}
+
+void JSONFilterTest::testNullValueImportNaNToZero() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	JsonFilter filter;
+	filter.setDataRowType(QJsonValue::Array);
+	filter.setNaNValueToZero(true);
+	QBuffer buffer;
+	buffer.setData(QByteArrayLiteral("[[1], [null], [3]]"));
+
+	filter.readDataFromDevice(buffer, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 0.);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3.);
 }
 
 /*!

@@ -15,8 +15,20 @@ bool nsl_math_approximately_equal(double a, double b) {
 	return nsl_math_approximately_equal_eps(a, b, 1.e-7);
 }
 
+/*
+ * Hybrid absolute/relative comparison. Near zero uses absolute tolerance
+ * (since relative error is undefined at zero). For values >= 1.0, uses
+ * relative tolerance scaled to the larger magnitude.
+ * Examples with epsilon = 1e-7:
+ *   0.0 and 5e-8 → equal (absolute: 5e-8 <= 1e-7)
+ *   100.0 and 100.00001 → equal (relative: 1e-5/100 = 1e-7)
+ *   1.0 and 1.0 + 2e-7 → not equal (2e-7 > max(1.0, 1.0) * 1e-7)
+ */
 bool nsl_math_approximately_equal_eps(double a, double b, double epsilon) {
-	return fabs(a - b) <= ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+	const double difference = fabs(a - b);
+	const double scale = fabs(a) < fabs(b) ? fabs(b) : fabs(a);
+	const double threshold = scale < 1.0 ? 1.0 : scale;
+	return difference <= threshold * epsilon;
 }
 
 bool nsl_math_essentially_equal(double a, double b) {

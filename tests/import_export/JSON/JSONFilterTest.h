@@ -24,6 +24,10 @@ private Q_SLOTS:
 	void testArrayImport03();
 	void testArrayPlainImport();
 	void testArrayObjectsImport();
+	void testArrayPreview();
+	void testInvalidJsonImport();
+	void testNullValueImport();
+	void testNullValueImportNaNToZero();
 
 	// import of objects
 	void testObjectImport01();

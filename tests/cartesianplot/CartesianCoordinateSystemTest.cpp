@@ -195,4 +195,98 @@ void CartesianCoordinateSystemTest::testMapLogicalToSceneLinesPerformance() {
 	}
 }
 
+void CartesianCoordinateSystemTest::testMapLogicalToScenePoints() {
+	CartesianPlot plot(QStringLiteral("plot"));
+	plot.setHorizontalPadding(0.);
+	plot.setVerticalPadding(0.);
+	plot.setRightPadding(0.);
+	plot.setBottomPadding(0.);
+	plot.setRect(QRectF(0., 0., 100., 100.));
+	CartesianCoordinateSystem cSystem(&plot);
+
+	const Range<double> range(-100., 100.);
+	cSystem.setScales(Dimension::X, {CartesianScale::createLinearScale(range, Range<double>(0., 100.), Range<double>(0., 10.))});
+	cSystem.setScales(Dimension::Y, {CartesianScale::createLinearScale(range, Range<double>(0., 100.), Range<double>(0., 10.))});
+
+	const Points points{QPointF(2., 3.), QPointF(-6., 3.), QPointF(2., 16.)};
+	const auto mapped = cSystem.mapLogicalToScene(points);
+	QCOMPARE(mapped.size(), 1);
+	VALUES_EQUAL(mapped.at(0).x(), 20.);
+	VALUES_EQUAL(mapped.at(0).y(), 30.);
+
+	const auto mappedWithoutClipping = cSystem.mapLogicalToScene(points, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	QCOMPARE(mappedWithoutClipping.size(), 3);
+	VALUES_EQUAL(mappedWithoutClipping.at(1).x(), -60.);
+	VALUES_EQUAL(mappedWithoutClipping.at(2).y(), 160.);
+
+	const auto mappedWithoutY = cSystem.mapLogicalToScene(points, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingY);
+	QCOMPARE(mappedWithoutY.size(), 2);
+	const auto dataRectCenterY = plot.dataRect().y() + plot.dataRect().height() / 2.;
+	VALUES_EQUAL(mappedWithoutY.at(0).y(), dataRectCenterY);
+	VALUES_EQUAL(mappedWithoutY.at(1).y(), dataRectCenterY);
+
+	bool visible = true;
+	const auto mappedPoint = cSystem.mapLogicalToScene(QPointF(16., 3.), visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
+	VALUES_EQUAL(mappedPoint.x(), 160.);
+	VALUES_EQUAL(mappedPoint.y(), 30.);
+	QCOMPARE(visible, false);
+}
+
+void CartesianCoordinateSystemTest::testMapSceneToLogicalPoints() {
+	CartesianPlot plot(QStringLiteral("plot"));
+	plot.setHorizontalPadding(0.);
+	plot.setVerticalPadding(0.);
+	plot.setRightPadding(0.);
+	plot.setBottomPadding(0.);
+	plot.setRect(QRectF(0., 0., 100., 100.));
+	CartesianCoordinateSystem cSystem(&plot);
+
+	const Range<double> range(-100., 100.);
+	cSystem.setScales(Dimension::X, {CartesianScale::createLinearScale(range, Range<double>(0., 100.), Range<double>(0., 10.))});
+	cSystem.setScales(Dimension::Y, {CartesianScale::createLinearScale(range, Range<double>(0., 100.), Range<double>(0., 10.))});
+
+	const Points scenePoints{QPointF(20., 30.), QPointF(-100., 30.), QPointF(200., 30.)};
+	const auto logicalPoints = cSystem.mapSceneToLogical(scenePoints);
+	QCOMPARE(logicalPoints.size(), 1);
+	VALUES_EQUAL(logicalPoints.at(0).x(), 2.);
+	VALUES_EQUAL(logicalPoints.at(0).y(), 3.);
+
+	const auto logicalPointsLimited = cSystem.mapSceneToLogical(scenePoints, AbstractCoordinateSystem::MappingFlag::Limit);
+	QCOMPARE(logicalPointsLimited.size(), 3);
+	VALUES_EQUAL(logicalPointsLimited.at(0).x(), 2.);
+	VALUES_EQUAL(logicalPointsLimited.at(1).x(), plot.dataRect().left() / 10.);
+	VALUES_EQUAL(logicalPointsLimited.at(2).x(), plot.dataRect().right() / 10.);
+
+	const auto logicalPoint = cSystem.mapSceneToLogical(QPointF(20., 30.));
+	VALUES_EQUAL(logicalPoint.x(), 2.);
+	VALUES_EQUAL(logicalPoint.y(), 3.);
+}
+
+void CartesianCoordinateSystemTest::testScalePropertiesAndValidity() {
+	CartesianPlot plot(QStringLiteral("plot"));
+	CartesianCoordinateSystem cSystem(&plot);
+
+	QCOMPARE(cSystem.isValid(), false);
+	QCOMPARE(CartesianCoordinateSystem::dimensionToString(Dimension::X), QStringLiteral("x"));
+	QCOMPARE(CartesianCoordinateSystem::dimensionToString(Dimension::Y), QStringLiteral("y"));
+	QCOMPARE(cSystem.direction(Dimension::X), 1);
+	QCOMPARE(cSystem.direction(Dimension::Y), 1);
+
+	cSystem.setIndex(Dimension::X, 2);
+	cSystem.setIndex(Dimension::Y, 3);
+	QCOMPARE(cSystem.index(Dimension::X), 2);
+	QCOMPARE(cSystem.index(Dimension::Y), 3);
+
+	auto* xScale = CartesianScale::createLinearScale(Range<double>(-10., 10.), Range<double>(0., 1.), Range<double>(0., 10.));
+	auto* yScale = CartesianScale::createLinearScale(Range<double>(-10., 10.), Range<double>(0., 1.), Range<double>(0., 10.));
+	QVERIFY(cSystem.setScales(Dimension::X, {xScale}));
+	QVERIFY(cSystem.setScales(Dimension::Y, {yScale}));
+	QCOMPARE(cSystem.scales(Dimension::X).size(), 1);
+	QCOMPARE(cSystem.scales(Dimension::Y).size(), 1);
+	QCOMPARE(cSystem.isValid(), true);
+	QCOMPARE(cSystem.info().isEmpty(), false);
+	cSystem.setName(QStringLiteral("test"));
+	QCOMPARE(cSystem.info(), QStringLiteral("test"));
+}
+
 QTEST_MAIN(CartesianCoordinateSystemTest)

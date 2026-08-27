@@ -52,5 +52,5 @@ Options:
   require-passing-tests-on: ['@all']
   release-build: True
   cmake-options: '-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON'
-  gcovr-arguments: '--exclude /src/3rdparty/* --gcov-ignore-parse-errors=suspicious_hits.warn'
+  gcovr-arguments: '--exclude src/3rdparty/* --exclude tests/* --gcov-ignore-parse-errors=suspicious_hits.warn'
 

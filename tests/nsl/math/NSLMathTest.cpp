@@ -37,6 +37,12 @@ void NSLMathTest::mathMultiple() {
 	QCOMPARE(nsl_math_trunc_multiple(value, multiple), 0.);
 }
 
+void NSLMathTest::approximatelyEqual() {
+	QVERIFY(nsl_math_approximately_equal_eps(0., 2.8e-17, 1.e-12));
+	QVERIFY(nsl_math_approximately_equal_eps(100., 100.00005, 1.e-6));
+	QVERIFY(!nsl_math_approximately_equal_eps(0., 2.e-6, 1.e-7));
+}
+
 // ##############################################################################
 // #################  performance
 // ##############################################################################
