@@ -474,7 +474,6 @@ set(LABPLOT_WORKSHEET_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp
-    ${BACKEND_DIR}/worksheet/plots/cartesian/XYPiecewiseLinearFitCurvePrivate.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierTransformCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp

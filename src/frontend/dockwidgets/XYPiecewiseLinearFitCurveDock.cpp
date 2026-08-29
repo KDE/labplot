@@ -27,7 +27,7 @@
 #include <QVBoxLayout>
 
 XYPiecewiseLinearFitCurveDock::XYPiecewiseLinearFitCurveDock(QWidget* parent)
-	: XYAnalysisCurveDock(parent, XYAnalysisCurveDock::RequiredDataSource::XY) {
+	: XYAnalysisCurveDock(parent) {
 }
 
 void XYPiecewiseLinearFitCurveDock::setupGeneral() {
@@ -55,7 +55,10 @@ void XYPiecewiseLinearFitCurveDock::setupGeneral() {
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
+	retranslateUi();
+
 	// Slots
+	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYPiecewiseLinearFitCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYPiecewiseLinearFitCurveDock::methodChanged);
 	connect(uiGeneralTab.sbPenalty, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::penaltyChanged);
 	connect(uiGeneralTab.sbMinSegmentSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::minSegmentSizeChanged);
@@ -75,6 +78,10 @@ void XYPiecewiseLinearFitCurveDock::setupGeneral() {
 }
 
 void XYPiecewiseLinearFitCurveDock::initGeneralTab() {
+	// show the properties of the first curve
+	// data source
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_fitCurve->dataSourceType()));
+	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_fitCurve->dataSourceCurve());
 	cbXDataColumn->setAspect(m_fitCurve->xDataColumn(), m_fitCurve->xDataColumnPath());
 	cbYDataColumn->setAspect(m_fitCurve->yDataColumn(), m_fitCurve->yDataColumnPath());
@@ -140,12 +147,36 @@ void XYPiecewiseLinearFitCurveDock::showFitResult() {
 	html += QStringLiteral("<tr><td><b>SSE:</b></td><td>") + QString::number(fitResult.sse, 'g', 4) + QStringLiteral("</td></tr>");
 	html += QStringLiteral("</table>");
 
+	if (!fitResult.changepoints.isEmpty()) {
+		html += QStringLiteral("<h4>Changepoints</h4>");
+		html += QStringLiteral("<table border='1' cellpadding='3'>");
+		html += QStringLiteral("<tr><th>Index</th><th>X-Position</th></tr>");
+
+		const auto* xColumn = m_fitCurve->xDataColumn();
+		for (int i = 0; i < fitResult.changepoints.size(); ++i) {
+			size_t idx = fitResult.changepoints[i];
+			html += QStringLiteral("<tr>");
+			html += QStringLiteral("<td>") + QString::number(idx) + QStringLiteral("</td>");
+			if (xColumn && idx < static_cast<size_t>(xColumn->rowCount()))
+				html += QStringLiteral("<td>") + QString::number(xColumn->valueAt(idx), 'g', 6) + QStringLiteral("</td>");
+			else
+				html += QStringLiteral("<td>-</td>");
+			html += QStringLiteral("</tr>");
+		}
+		html += QStringLiteral("</table>");
+	}
+
 	if (fitResult.numSegments > 0) {
 		html += QStringLiteral("<h4>Segments</h4>");
 		html += QStringLiteral("<table border='1' cellpadding='3'>");
 		html += QStringLiteral("<tr><th>Segment</th><th>Slope</th><th>Intercept</th><th>R²</th></tr>");
 
 		for (size_t i = 0; i < fitResult.numSegments; ++i) {
+			if (i >= static_cast<size_t>(fitResult.slopes.size()) || i >= static_cast<size_t>(fitResult.intercepts.size()) 
+				|| i >= static_cast<size_t>(fitResult.rsquares.size())) {
+				DEBUG(Q_FUNC_INFO << ", invalid segment index: " << i);
+				break;
+			}
 			html += QStringLiteral("<tr>");
 			html += QStringLiteral("<td>") + QString::number(i + 1) + QStringLiteral("</td>");
 			html += QStringLiteral("<td>") + QString::number(fitResult.slopes[i], 'g', 4) + QStringLiteral("</td>");
@@ -158,25 +189,35 @@ void XYPiecewiseLinearFitCurveDock::showFitResult() {
 
 	uiGeneralTab.teResults->setHtml(html);
 }
-
+/*
 bool XYPiecewiseLinearFitCurveDock::eventFilter(QObject* watched, QEvent* event) {
 	return XYCurveDock::eventFilter(watched, event);
 }
-
+*/
 // slots for changes triggered in XYPiecewiseLinearFitCurveDock
+void XYPiecewiseLinearFitCurveDock::dataSourceTypeChanged(int index) {
+	const auto type = (XYAnalysisCurve::DataSourceType)index;
+	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+		uiGeneralTab.lDataSourceCurve->hide();
+		cbDataSourceCurve->hide();
+		uiGeneralTab.lXColumn->show();
+		cbXDataColumn->show();
+		uiGeneralTab.lYColumn->show();
+		cbYDataColumn->show();
+	} else {
+		uiGeneralTab.lDataSourceCurve->show();
+		cbDataSourceCurve->show();
+		uiGeneralTab.lXColumn->hide();
+		cbXDataColumn->hide();
+		uiGeneralTab.lYColumn->hide();
+		cbYDataColumn->hide();
+	}
 
-void XYPiecewiseLinearFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	XYAnalysisCurveDock::dataSourceCurveChanged(index);
-	enableRecalculate();
-}
+	CONDITIONAL_LOCK_RETURN;
 
-void XYPiecewiseLinearFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	XYAnalysisCurveDock::xDataColumnChanged(index);
-	enableRecalculate();
-}
+	for (auto* curve : m_curvesList)
+		static_cast<XYPiecewiseLinearFitCurve*>(curve)->setDataSourceType(type);
 
-void XYPiecewiseLinearFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	XYAnalysisCurveDock::yDataColumnChanged(index);
 	enableRecalculate();
 }
 
@@ -257,6 +298,20 @@ void XYPiecewiseLinearFitCurveDock::evalRangeMaxChanged() {
 void XYPiecewiseLinearFitCurveDock::recalculateClicked() {
 	m_fitCurve->setFitData(m_fitData);
 	showFitResult();
+}
+
+void XYPiecewiseLinearFitCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	// tooltips
+	QString info = i18n("Method for detecting changepoints.");
+	uiGeneralTab.cbMethod->setToolTip(info);
+
+	info = i18n("Minimum number of data points in a segment. Segments with fewer data points are merged with neighboring segments.");
+	uiGeneralTab.sbMinSegmentSize->setToolTip(info);
+
+	info = i18n("Cost for adding a changepoint. Must be exceeded by the fit improvement (SSE reduction) to justify splitting.\nLower values detect more changepoints, higher values detect fewer.\nScale with your data: ~1 for Y-values near 1, ~10-100 for large values, ~0.01-0.1 for small values.");
+	uiGeneralTab.sbPenalty->setToolTip(info);
 }
 
 void XYPiecewiseLinearFitCurveDock::showOptions(bool) {

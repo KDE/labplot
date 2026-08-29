@@ -18,14 +18,14 @@ class XYPiecewiseLinearFitCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYPiecewiseLinearFitCurveDock(QWidget* parent);
+	explicit XYPiecewiseLinearFitCurveDock(QWidget*);
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
 
 private:
 	void initGeneralTab() override;
 	void showFitResult();
-	bool eventFilter(QObject*, QEvent*) override;
+	void retranslateUi() override;
 
 	Ui::XYPiecewiseLinearFitCurveDockGeneralTab uiGeneralTab;
 	XYPiecewiseLinearFitCurve* m_fitCurve{nullptr};
@@ -33,9 +33,7 @@ private:
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYPiecewiseLinearFitCurveDock
-	void dataSourceCurveChanged(const QModelIndex&);
-	void xDataColumnChanged(const QModelIndex&);
-	void yDataColumnChanged(const QModelIndex&);
+	void dataSourceTypeChanged(int);
 	void methodChanged(int);
 	void penaltyChanged();
 	void minSegmentSizeChanged();

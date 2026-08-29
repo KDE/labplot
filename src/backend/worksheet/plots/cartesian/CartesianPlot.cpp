@@ -5858,6 +5858,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete curve;
 				return false;
 			}
+		} else if (reader->name() == QLatin1String("xyPiecewiseLinearFitCurve")) {
+			auto* curve = new XYPiecewiseLinearFitCurve(QString());
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
+				delete curve;
+				return false;
+			}
 		} else if (!preview && reader->name() == QLatin1String("cartesianPlotLegend")) {
 			m_legend = new CartesianPlotLegend(QString());
 			if (m_legend->load(reader, preview))

@@ -31,10 +31,10 @@ public:
 		FitData() {
 		}
 
-		nsl_changepoint_method changepointMethod{nsl_changepoint_method_pelt};
-		double penalty{1.0};
-		size_t minSegmentSize{2};
-		size_t maxChangepoints{2};
+		nsl_changepoint_method changepointMethod{nsl_changepoint_method_binary_segmentation};
+		double penalty{1.0}; // Penalty for adding changepoints - higher values = fewer segments
+		size_t minSegmentSize{2}; // Minimum number of points per segment
+		size_t maxChangepoints{1}; // Maximum number of changepoints to detect
 
 		bool autoRange{true};
 		bool autoEvalRange{true};
