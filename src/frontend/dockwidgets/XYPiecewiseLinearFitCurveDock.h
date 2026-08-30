@@ -38,6 +38,7 @@ private Q_SLOTS:
 	void penaltyChanged();
 	void minSegmentSizeChanged();
 	void maxChangepointsChanged();
+	void changepointLinesEnabledChanged();
 	void autoRangeChanged();
 	void fitRangeMinChanged();
 	void fitRangeMaxChanged();

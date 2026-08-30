@@ -9,11 +9,13 @@
 
 #include "XYPiecewiseLinearFitCurve.h"
 #include "XYPiecewiseLinearFitCurvePrivate.h"
-#include "XYPiecewiseLinearFitCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 
+#include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
@@ -49,6 +51,11 @@ void XYPiecewiseLinearFitCurve::setFitData(const XYPiecewiseLinearFitCurve::FitD
 	Q_D(XYPiecewiseLinearFitCurve);
 	exec(new XYPiecewiseLinearFitCurveSetFitDataCmd(d, fitData, ki18n("%1: set fit options and perform the fit")));
 }
+
+QVector<ReferenceLine*> XYPiecewiseLinearFitCurve::changepointLines() const {
+	return children<ReferenceLine>(ChildIndexFlag::IncludeHidden);
+}
+
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
@@ -206,6 +213,9 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 		}
 	}
 
+	// Update changepoint reference lines before deleting changepoints array
+	updateChangepointLines(xData, numChangepoints, changepoints);
+
 	delete[] changepoints;
 
 	xColumn->setValues(*xVector);
@@ -262,6 +272,31 @@ void XYPiecewiseLinearFitCurvePrivate::fitSegment(const QVector<double>& x, cons
 	rsquare = (sst > 0.) ? (1. - sse / sst) : 0.;
 }
 
+void XYPiecewiseLinearFitCurvePrivate::updateChangepointLines(const QVector<double>& xData, size_t numChangepoints, const size_t* changepoints) {
+	// Remove existing changepoint lines
+	auto existingLines = q->changepointLines();
+	for (auto* line : existingLines)
+		q->removeChild(line);
+
+	// Create new lines if enabled
+	if (!fitData.changepointLinesEnabled || numChangepoints == 0)
+		return;
+
+	auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
+	if (!plot)
+		return;
+
+	for (size_t i = 0; i < numChangepoints; ++i) {
+		double xPos = xData[changepoints[i]];
+		auto* line = new ReferenceLine(plot, QStringLiteral("Changepoint %1").arg(i + 1), false);
+		line->setCoordinateSystemIndex(q->coordinateSystemIndex());
+		line->setOrientation(ReferenceLine::Orientation::Vertical);
+		line->setPositionLogical(QPointF(xPos, 0));
+		q->addChildFast(line);
+		line->retransform();
+	}
+}
+
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
@@ -279,6 +314,7 @@ void XYPiecewiseLinearFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("penalty"), QString::number(d->fitData.penalty));
 	writer->writeAttribute(QStringLiteral("minSegmentSize"), QString::number(d->fitData.minSegmentSize));
 	writer->writeAttribute(QStringLiteral("maxChangepoints"), QString::number(d->fitData.maxChangepoints));
+	writer->writeAttribute(QStringLiteral("changepointLinesEnabled"), QString::number(d->fitData.changepointLinesEnabled));
 	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->fitData.autoRange));
 	writer->writeAttribute(QStringLiteral("autoEvalRange"), QString::number(d->fitData.autoEvalRange));
 	writer->writeAttribute(QStringLiteral("fitRangeMin"), QString::number(d->fitData.fitRange.start()));
@@ -332,6 +368,7 @@ bool XYPiecewiseLinearFitCurve::load(XmlStreamReader* reader, bool preview) {
 			d->fitData.penalty = attribs.value(QStringLiteral("penalty")).toDouble();
 			d->fitData.minSegmentSize = attribs.value(QStringLiteral("minSegmentSize")).toULongLong();
 			d->fitData.maxChangepoints = attribs.value(QStringLiteral("maxChangepoints")).toULongLong();
+			d->fitData.changepointLinesEnabled = attribs.value(QStringLiteral("changepointLinesEnabled")).toInt();
 			d->fitData.autoRange = attribs.value(QStringLiteral("autoRange")).toInt();
 			d->fitData.autoEvalRange = attribs.value(QStringLiteral("autoEvalRange")).toInt();
 			d->fitData.fitRange.setStart(attribs.value(QStringLiteral("fitRangeMin")).toDouble());

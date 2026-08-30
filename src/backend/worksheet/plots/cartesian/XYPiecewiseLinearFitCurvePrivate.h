@@ -30,6 +30,7 @@ public:
 
 private:
 	void fitSegment(const QVector<double>& x, const QVector<double>& y, double& slope, double& intercept, double& rsquare);
+	void updateChangepointLines(const QVector<double>& xData, size_t numChangepoints, const size_t* changepoints);
 };
 
 #endif

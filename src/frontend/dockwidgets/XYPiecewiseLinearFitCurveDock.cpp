@@ -64,6 +64,7 @@ void XYPiecewiseLinearFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.sbMinSegmentSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::minSegmentSizeChanged);
 	connect(uiGeneralTab.sbMaxChangepoints, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::maxChangepointsChanged);
 	connect(uiGeneralTab.sbEvaluatedPoints, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::evaluatedPointsChanged);
+	connect(uiGeneralTab.chkChangepointLines, &QCheckBox::toggled, this, &XYPiecewiseLinearFitCurveDock::changepointLinesEnabledChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::toggled, this, &XYPiecewiseLinearFitCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leFitRangeMin, &QLineEdit::textChanged, this, &XYPiecewiseLinearFitCurveDock::fitRangeMinChanged);
 	connect(uiGeneralTab.leFitRangeMax, &QLineEdit::textChanged, this, &XYPiecewiseLinearFitCurveDock::fitRangeMaxChanged);
@@ -91,6 +92,7 @@ void XYPiecewiseLinearFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbMinSegmentSize->setValue(m_fitData.minSegmentSize);
 	uiGeneralTab.sbMaxChangepoints->setValue(m_fitData.maxChangepoints);
 	uiGeneralTab.sbEvaluatedPoints->setValue(m_fitData.evaluatedPoints);
+	uiGeneralTab.chkChangepointLines->setChecked(m_fitData.changepointLinesEnabled);
 	uiGeneralTab.cbAutoRange->setChecked(m_fitData.autoRange);
 	uiGeneralTab.leFitRangeMin->setText(QString::number(m_fitData.fitRange.start()));
 	uiGeneralTab.leFitRangeMax->setText(QString::number(m_fitData.fitRange.end()));
@@ -248,6 +250,12 @@ void XYPiecewiseLinearFitCurveDock::maxChangepointsChanged() {
 void XYPiecewiseLinearFitCurveDock::evaluatedPointsChanged() {
 	CONDITIONAL_LOCK_RETURN;
 	m_fitData.evaluatedPoints = uiGeneralTab.sbEvaluatedPoints->value();
+	enableRecalculate();
+}
+
+void XYPiecewiseLinearFitCurveDock::changepointLinesEnabledChanged() {
+	CONDITIONAL_LOCK_RETURN;
+	m_fitData.changepointLinesEnabled = uiGeneralTab.chkChangepointLines->isChecked();
 	enableRecalculate();
 }
 
