@@ -9,6 +9,8 @@
 */
 
 #include "NSLFilterTest.h"
+#include <cmath>
+#include <limits>
 
 extern "C" {
 #include "backend/nsl/nsl_filter.h"
@@ -22,6 +24,21 @@ void NSLFilterTest::initTestCase() {
 // ##############################################################################
 // #################  form test
 // ##############################################################################
+
+void NSLFilterTest::testNaNInfHandling() {
+	double data[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
+	double nan = std::numeric_limits<double>::quiet_NaN();
+	double inf = std::numeric_limits<double>::infinity();
+
+	QCOMPARE(nsl_filter_gain_bessel(3, nan), std::numeric_limits<double>::quiet_NaN());
+	QCOMPARE(nsl_filter_gain_bessel(3, inf), std::numeric_limits<double>::quiet_NaN());
+
+	for (int i = 0; i < 10; ++i)
+		data[i] = (double)i + 1.0;
+	data[2] = nan;
+	QCOMPARE(nsl_filter_apply(data, 10, nsl_filter_type_low_pass, nsl_filter_form_butterworth, 2, 4.0, 2.0), -1);
+	QCOMPARE(nsl_filter_fourier(data, 10, nsl_filter_type_high_pass, nsl_filter_form_ideal, 0, 3, 2), -1);
+}
 
 void NSLFilterTest::testForm() {
 	const int N = 1000;

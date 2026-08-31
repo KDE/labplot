@@ -10,6 +10,8 @@
 
 #include "NSLDFTTest.h"
 #include "backend/lib/macros.h"
+#include <cmath>
+#include <limits>
 
 extern "C" {
 #include "backend/nsl/nsl_dft.h"
@@ -18,6 +20,27 @@ extern "C" {
 #define ONESIDED 0
 #define TWOSIDED 1
 const int N = 10;
+
+void NSLDFTTest::testNaNInfHandling() {
+	double data[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
+	double nan = std::numeric_limits<double>::quiet_NaN();
+	double inf = std::numeric_limits<double>::infinity();
+
+	data[0] = nan;
+	QCOMPARE(nsl_dft_transform(data, 1, N, ONESIDED, nsl_dft_result_magnitude), 1);
+
+	for (int i = 0; i < N; ++i)
+		data[i] = (double)i + 1.0;
+	data[3] = inf;
+	QCOMPARE(nsl_dft_transform(data, 1, N, ONESIDED, nsl_dft_result_magnitude), 1);
+
+	for (int i = 0; i < N; ++i)
+		data[i] = (double)i + 1.0;
+	data[4] = nan;
+	QCOMPARE(nsl_dft_transform_window(data, 1, N, ONESIDED, nsl_dft_result_real, nsl_sf_window_hann), 1);
+
+	QCOMPARE(nsl_dft_transform(NULL, 1, N, ONESIDED, nsl_dft_result_real), 1);
+}
 
 // ##############################################################################
 // #################  one sided tests

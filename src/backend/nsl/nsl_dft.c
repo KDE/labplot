@@ -11,6 +11,7 @@
 #include "nsl_common.h"
 #include <gsl/gsl_fft_halfcomplex.h>
 #include <gsl/gsl_fft_real.h>
+#include <math.h>
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif
@@ -29,6 +30,12 @@ const char* nsl_dft_result_type_name[] = {i18n("Magnitude"),
 const char* nsl_dft_xscale_name[] = {i18n("Frequency"), i18n("Index"), i18n("Period")};
 
 int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window_type) {
+	if (data == NULL || n < 2)
+		return 1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(data[i]))
+			return 1;
+	}
 	/* apply window function */
 	if (window_type != nsl_sf_window_uniform)
 		nsl_sf_apply_window(data, n, window_type);
@@ -40,8 +47,12 @@ int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sid
 }
 
 int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type) {
-	if (n < 2) // we need at least 2 points
+	if (data == NULL || n < 2) // we need at least 2 points
 		return 1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(data[i]))
+			return 1;
+	}
 	size_t i;
 	double* result = (double*)malloc(2 * n * sizeof(double));
 	size_t N = n / 2; /* number of resulting data points */
