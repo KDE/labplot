@@ -295,29 +295,29 @@ public:
 			break;
 		case Scale::Log10:
 			if (m_end <= 0)
-				m_end = 10.;
+				m_end = static_cast<T>(10.0);
 			if (m_start <= 0)
-				m_start = m_end / 10.;
+				m_start = static_cast<T>(m_end / 10.0);
 			break;
 		case Scale::Log2:
 			if (m_end <= 0)
-				m_end = 2.;
+				m_end = static_cast<T>(2.0);
 			if (m_start <= 0)
-				m_start = m_end / 2.;
+				m_start = static_cast<T>(m_end / 2.0);
 			break;
 		case Scale::Ln:
 			if (m_end <= 0)
-				m_end = M_E;
+				m_end = static_cast<T>(M_E);
 			if (m_start <= 0)
-				m_start = m_end / M_E;
+				m_start = static_cast<T>(m_end / M_E);
 			break;
 		case Scale::Sqrt:
 		case Scale::Square:
 		case Scale::Inverse:
 			if (m_end <= 0) // end must be > 0 for start to be < end
-				m_end = 1.;
+				m_end = static_cast<T>(1.0);
 			if (m_start < 0)
-				m_start = 0.;
+				m_start = static_cast<T>(0.0);
 			break;
 		}
 	}
