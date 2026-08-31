@@ -10,6 +10,8 @@
 
 #include "NSLSFBasicTest.h"
 
+#include <cmath>
+
 #include "backend/nsl/nsl_sf_basic.h"
 
 // ##############################################################################
@@ -175,6 +177,17 @@ void NSLSFBasicTest::testlog2p1_int() {
 		for (int i = 1; i < 1e7; i++)
 			nsl_sf_log2p1_int(i);
 	}
+}
+
+void NSLSFBasicTest::testNaNInfHandling() {
+	QVERIFY(std::isnan(nsl_sf_exp10(INFINITY)));
+	QVERIFY(std::isnan(nsl_sf_exp10(NAN)));
+	QVERIFY(std::isnan(nsl_sf_sec(INFINITY)));
+	QVERIFY(std::isnan(nsl_sf_sec(NAN)));
+	QVERIFY(std::isnan(nsl_sf_voigt(INFINITY, 1.0, 0.5)));
+	QVERIFY(std::isnan(nsl_sf_voigt(0.0, INFINITY, 0.5)));
+	QVERIFY(std::isnan(nsl_sf_pseudovoigt(INFINITY, 0.5, 1.0, 0.5)));
+	QVERIFY(std::isnan(nsl_sf_pseudovoigt(0.0, 0.5, NAN, 0.5)));
 }
 
 QTEST_MAIN(NSLSFBasicTest)

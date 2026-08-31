@@ -81,6 +81,17 @@ void NSLSFWindowTest::testWindowTypes() {
 	}
 }
 
+void NSLSFWindowTest::testNaNInfHandling() {
+	double safe[] = {1.0, 2.0, 3.0};
+	QCOMPARE(nsl_sf_apply_window(safe, 3, nsl_sf_window_hann), 0);
+
+	double invalidInf[] = {1.0, INFINITY, 3.0};
+	QCOMPARE(nsl_sf_apply_window(invalidInf, 3, nsl_sf_window_hann), -1);
+
+	double invalidNaN[] = {1.0, NAN, 3.0};
+	QCOMPARE(nsl_sf_apply_window(invalidNaN, 3, nsl_sf_window_hann), -1);
+}
+
 // ##############################################################################
 // #################  performance
 // ##############################################################################

@@ -14,6 +14,12 @@
 #include <gsl/gsl_sf.h>
 #include <math.h>
 #include <stdlib.h>
+
+#define NSL_SF_CHECK_1(x) do { if (!isfinite(x)) return NAN; } while (0)
+#define NSL_SF_CHECK_2(x, y) do { if (!isfinite(x) || !isfinite(y)) return NAN; } while (0)
+#define NSL_SF_CHECK_3(x, y, z) do { if (!isfinite(x) || !isfinite(y) || !isfinite(z)) return NAN; } while (0)
+#define NSL_SF_CHECK_4(x, y, z, w) do { if (!isfinite(x) || !isfinite(y) || !isfinite(z) || !isfinite(w)) return NAN; } while (0)
+
 #ifdef HAVE_LIBCERF
 #include <cerf.h>
 #elif !defined(_MSC_VER)
@@ -49,6 +55,8 @@ double nsl_sf_drand(void) {
 #endif
 
 double nsl_sf_sgn(double x) {
+	if (!isfinite(x))
+		return NAN;
 #ifndef _WIN32
 	return copysign(1.0, x);
 #else
@@ -60,6 +68,8 @@ double nsl_sf_sgn(double x) {
 }
 
 double nsl_sf_theta(double x) {
+	if (!isfinite(x))
+		return NAN;
 	if (x >= 0)
 		return 1;
 	else
@@ -67,6 +77,7 @@ double nsl_sf_theta(double x) {
 }
 
 double nsl_sf_exp10(double x) {
+	NSL_SF_CHECK_1(x);
 #ifdef __linux__
 	return exp10(x);
 #else
@@ -218,46 +229,60 @@ int nsl_sf_log2_longlong(unsigned long long x) {
 }
 
 double nsl_sf_sec(double x) {
+	NSL_SF_CHECK_1(x);
 	return 1. / cos(x);
 }
 double nsl_sf_csc(double x) {
+	NSL_SF_CHECK_1(x);
 	return 1. / sin(x);
 }
 double nsl_sf_cot(double x) {
+	NSL_SF_CHECK_1(x);
 	return 1. / tan(x);
 }
 double nsl_sf_asec(double x) {
+	NSL_SF_CHECK_1(x);
 	return acos(1. / x);
 }
 double nsl_sf_acsc(double x) {
+	NSL_SF_CHECK_1(x);
 	return asin(1. / x);
 }
 double nsl_sf_acot(double x) {
+	NSL_SF_CHECK_1(x);
 	if (x > 0)
 		return atan(1. / x);
 	else
 		return atan(1. / x) + M_PI;
 }
 double nsl_sf_sech(double x) {
+	NSL_SF_CHECK_1(x);
 	return 1. / cosh(x);
 }
 double nsl_sf_csch(double x) {
+	NSL_SF_CHECK_1(x);
 	return 1. / sinh(x);
 }
 double nsl_sf_coth(double x) {
+	NSL_SF_CHECK_1(x);
 	return 1. / tanh(x);
 }
 double nsl_sf_asech(double x) {
+	NSL_SF_CHECK_1(x);
 	return gsl_acosh(1. / x);
 }
 double nsl_sf_acsch(double x) {
+	NSL_SF_CHECK_1(x);
 	return gsl_asinh(1. / x);
 }
 double nsl_sf_acoth(double x) {
+	NSL_SF_CHECK_1(x);
 	return gsl_atanh(1. / x);
 }
 
 double nsl_sf_harmonic(double x) {
+	if (!isfinite(x))
+		return NAN;
 	// check if x is a negative integer
 	if (x < 0 && !gsl_fcmp(round(x) - x, 0., 1.e-16))
 		return GSL_POSINF;
@@ -267,6 +292,7 @@ double nsl_sf_harmonic(double x) {
 
 /* error functions and related */
 double nsl_sf_erfcx(double x) {
+	NSL_SF_CHECK_1(x);
 #ifdef HAVE_LIBCERF
 	return erfcx(x);
 #elif defined(_MSC_VER)
@@ -277,6 +303,7 @@ double nsl_sf_erfcx(double x) {
 }
 
 double nsl_sf_erfi(double x) {
+	NSL_SF_CHECK_1(x);
 #ifdef HAVE_LIBCERF
 	return erfi(x);
 #elif defined(_MSC_VER)
@@ -287,6 +314,7 @@ double nsl_sf_erfi(double x) {
 }
 
 double nsl_sf_im_w_of_x(double x) {
+	NSL_SF_CHECK_1(x);
 #ifdef HAVE_LIBCERF
 	return im_w_of_x(x);
 #elif defined(_MSC_VER)
@@ -307,6 +335,7 @@ double nsl_sf_im_w_of_z(COMPLEX z) {
 #endif
 
 double nsl_sf_dawson(double x) {
+	NSL_SF_CHECK_1(x);
 #ifdef HAVE_LIBCERF
 	return dawson(x);
 #elif defined(_MSC_VER)
@@ -317,6 +346,7 @@ double nsl_sf_dawson(double x) {
 }
 
 double nsl_sf_voigt(double x, double sigma, double gamma) {
+	NSL_SF_CHECK_3(x, sigma, gamma);
 #ifdef HAVE_LIBCERF
 	return voigt(x, sigma, gamma);
 #elif defined(_MSC_VER)
@@ -328,6 +358,7 @@ double nsl_sf_voigt(double x, double sigma, double gamma) {
 }
 
 double nsl_sf_pseudovoigt(double x, double eta, double sigma, double gamma) {
+	NSL_SF_CHECK_4(x, eta, sigma, gamma);
 	if (sigma == 0 || gamma == 0)
 		return 0;
 	// TODO: what if eta < 0 or > 1?
@@ -336,6 +367,7 @@ double nsl_sf_pseudovoigt(double x, double eta, double sigma, double gamma) {
 }
 
 double nsl_sf_pseudovoigt1(double x, double eta, double w) {
+	NSL_SF_CHECK_3(x, eta, w);
 	// 2w - FWHM, sigma_G = w/sqrt(2ln(2))
 	return nsl_sf_pseudovoigt(x, eta, w / sqrt(2. * M_LN2), w);
 }
