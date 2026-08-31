@@ -41,6 +41,7 @@ private Q_SLOTS:
 	void testLinearWampler4_custom(); // using custom model
 	void testLinearWampler5();
 	void testLinearWampler5_custom(); // using custom model
+	void testFitDataNaNInfIgnored();
 
 	void testLinearWP_OLS();
 	void testLinearR_lm2();
