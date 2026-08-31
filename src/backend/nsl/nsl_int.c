@@ -15,12 +15,17 @@
 #include "nsl_int.h"
 #include "nsl_common.h"
 #include "nsl_sf_poly.h"
+#include <math.h>
 
 const char* nsl_int_method_name[] = {i18n("Rectangle (1-point)"), i18n("Trapezoid (2-point)"), i18n("Simpson's (3-point)"), i18n("Simpson's 3/8 (4-point)")};
 
 int nsl_int_rectangle(const double* x, double* y, const size_t n, int abs) {
-	if (n == 0)
+	if (n == 0 || x == NULL || y == NULL)
 		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return -1;
+	}
 
 	size_t i, j;
 	double sum = 0, xdata[2];
@@ -39,8 +44,12 @@ int nsl_int_rectangle(const double* x, double* y, const size_t n, int abs) {
 }
 
 int nsl_int_trapezoid(const double* x, double* y, const size_t n, int abs) {
-	if (n < 2)
+	if (n < 2 || x == NULL || y == NULL)
 		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return -1;
+	}
 
 	size_t i, j;
 	double sum = 0, xdata[2], ydata[2];
@@ -59,8 +68,12 @@ int nsl_int_trapezoid(const double* x, double* y, const size_t n, int abs) {
 }
 
 size_t nsl_int_simpson(double* x, double* y, const size_t n, int abs) {
-	if (n < 3)
+	if (n < 3 || x == NULL || y == NULL)
 		return 0;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return 0;
+	}
 	if (abs != 0) {
 		printf("absolute area Simpson rule not implemented yet.\n");
 		return 0;
@@ -94,9 +107,13 @@ size_t nsl_int_simpson(double* x, double* y, const size_t n, int abs) {
 }
 
 size_t nsl_int_simpson_3_8(double* x, double* y, const size_t n, int abs) {
-	if (n < 4) {
+	if (n < 4 || x == NULL || y == NULL) {
 		printf("minimum number of points is 4 (given %d).\n", (int)n);
 		return 0;
+	}
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return 0;
 	}
 	if (abs != 0) {
 		printf("absolute area Simpson 3/8 rule not implemented yet.\n");

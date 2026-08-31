@@ -21,6 +21,7 @@ private Q_SLOTS:
 	void testDist();
 	void testLineSim();
 	void testLineSimMorse();
+	void testNaNInfHandling();
 	// performance
 	// void testPerformance();
 private:

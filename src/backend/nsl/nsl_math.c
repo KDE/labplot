@@ -9,9 +9,12 @@
 
 #include "nsl_math.h"
 #include <gsl/gsl_math.h>
+#include <math.h>
 #include <stdio.h>
 
 bool nsl_math_approximately_equal(double a, double b) {
+	if (!isfinite(a) || !isfinite(b))
+		return false;
 	return nsl_math_approximately_equal_eps(a, b, 1.e-7);
 }
 
@@ -25,6 +28,8 @@ bool nsl_math_approximately_equal(double a, double b) {
  *   1.0 and 1.0 + 2e-7 → not equal (2e-7 > max(1.0, 1.0) * 1e-7)
  */
 bool nsl_math_approximately_equal_eps(double a, double b, double epsilon) {
+	if (!isfinite(a) || !isfinite(b) || !isfinite(epsilon))
+		return false;
 	const double difference = fabs(a - b);
 	const double scale = fabs(a) < fabs(b) ? fabs(b) : fabs(a);
 	const double threshold = scale < 1.0 ? 1.0 : scale;
@@ -32,30 +37,44 @@ bool nsl_math_approximately_equal_eps(double a, double b, double epsilon) {
 }
 
 bool nsl_math_essentially_equal(double a, double b) {
+	if (!isfinite(a) || !isfinite(b))
+		return false;
 	return nsl_math_essentially_equal_eps(a, b, 1.e-7);
 }
 
 bool nsl_math_essentially_equal_eps(double a, double b, double epsilon) {
+	if (!isfinite(a) || !isfinite(b) || !isfinite(epsilon))
+		return false;
 	return fabs(a - b) <= ((fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }
 
 bool nsl_math_definitely_greater_than(double a, double b) {
+	if (!isfinite(a) || !isfinite(b))
+		return false;
 	return nsl_math_definitely_greater_than_eps(a, b, 1.e-7);
 }
 
 bool nsl_math_definitely_greater_than_eps(double a, double b, double epsilon) {
+	if (!isfinite(a) || !isfinite(b) || !isfinite(epsilon))
+		return false;
 	return (a - b) > ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }
 
 bool nsl_math_definitely_less_than(double a, double b) {
+	if (!isfinite(a) || !isfinite(b))
+		return false;
 	return nsl_math_definitely_less_than_eps(a, b, 1.e-7);
 }
 
 bool nsl_math_definitely_less_than_eps(double a, double b, double epsilon) {
+	if (!isfinite(a) || !isfinite(b) || !isfinite(epsilon))
+		return false;
 	return (b - a) > ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }
 
 double nsl_math_frexp10(double x, int* e) {
+	if (!isfinite(x))
+		return NAN;
 	int expo = 0;
 	if (x != 0)
 		expo = (int)floor(log10(fabs(x)));
@@ -69,10 +88,14 @@ double nsl_math_frexp10(double x, int* e) {
 /* rounding methods */
 
 int nsl_math_decimal_places(double value) {
+	if (!isfinite(value))
+		return 0;
 	return -(int)floor(log10(fabs(value)));
 }
 
 int nsl_math_rounded_decimals(double value) {
+	if (!isfinite(value))
+		return 0;
 	int places = nsl_math_decimal_places(value);
 
 	// printf("places = %d, rv = %g\n", places, round(fabs(value) * pow(10, places)));
@@ -83,19 +106,29 @@ int nsl_math_rounded_decimals(double value) {
 }
 
 int nsl_math_rounded_decimals_max(double value, int max) {
+	if (!isfinite(value))
+		return 0;
 	return GSL_MIN_INT(max, nsl_math_rounded_decimals(value));
 }
 
 double nsl_math_round_places(double value, int n) {
+	if (!isfinite(value))
+		return NAN;
 	return nsl_math_places(value, n, 0);
 }
 double nsl_math_floor_places(double value, int n) {
+	if (!isfinite(value))
+		return NAN;
 	return nsl_math_places(value, n, 1);
 }
 double nsl_math_ceil_places(double value, int n) {
+	if (!isfinite(value))
+		return NAN;
 	return nsl_math_places(value, n, 2);
 }
 double nsl_math_trunc_places(double value, int n) {
+	if (!isfinite(value))
+		return NAN;
 	return nsl_math_places(value, n, 3);
 }
 
