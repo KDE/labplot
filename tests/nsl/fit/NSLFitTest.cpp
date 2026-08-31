@@ -10,6 +10,8 @@
 
 #include "NSLFitTest.h"
 
+#include <limits>
+
 extern "C" {
 #include "backend/nsl/nsl_fit.h"
 }
@@ -57,6 +59,19 @@ void NSLFitTest::testBounds() {
 		//		printf("%g -> %.15g\n", data_bound[i], x);
 		QCOMPARE(x, result_unbound[i]);
 	}
+}
+
+void NSLFitTest::testNaNInfHandling() {
+	QCOMPARE(nsl_fit_map_bound(NAN, -1.0, 2.0), DBL_MAX);
+	QCOMPARE(nsl_fit_map_bound(std::numeric_limits<double>::infinity(), -1.0, 2.0), DBL_MAX);
+	QCOMPARE(nsl_fit_map_bound(-std::numeric_limits<double>::infinity(), -1.0, 2.0), DBL_MAX);
+
+	QCOMPARE(nsl_fit_map_unbound(NAN, -1.0, 2.0), -DBL_MAX);
+	QCOMPARE(nsl_fit_map_unbound(std::numeric_limits<double>::infinity(), -1.0, 2.0), -DBL_MAX);
+	QCOMPARE(nsl_fit_map_unbound(-std::numeric_limits<double>::infinity(), -1.0, 2.0), -DBL_MAX);
+
+	QCOMPARE(nsl_fit_map_bound(0.0, -DBL_MAX, DBL_MAX), 0.0);
+	QCOMPARE(nsl_fit_map_unbound(0.0, -DBL_MAX, DBL_MAX), 0.0);
 }
 
 // ##############################################################################
