@@ -116,7 +116,8 @@ size_t nsl_changepoint_binary_segmentation(const double x[],
 	return count;
 }
 
-size_t nsl_changepoint_pelt(const double x[], const double y[], size_t n, double penalty, size_t min_segment_size, size_t changepoints[], size_t max_changepoints) {
+size_t
+nsl_changepoint_pelt(const double x[], const double y[], size_t n, double penalty, size_t min_segment_size, size_t changepoints[], size_t max_changepoints) {
 	if (!x || !y || n < 2 * min_segment_size || !changepoints || max_changepoints == 0)
 		return 0;
 

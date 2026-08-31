@@ -39,17 +39,7 @@ private Q_SLOTS:
 	void minSegmentSizeChanged();
 	void maxChangepointsChanged();
 	void changepointLinesEnabledChanged();
-	void autoRangeChanged();
-	void fitRangeMinChanged();
-	void fitRangeMaxChanged();
-	void autoEvalRangeChanged();
-	void evalRangeMinChanged();
-	void evalRangeMaxChanged();
-	void evaluatedPointsChanged();
 	void recalculateClicked() override;
-
-	void showOptions(bool);
-	void showResults(bool);
 
 	// SLOTs for changes triggered in XYPiecewiseLinearFitCurve
 	void curveFitDataChanged(const XYPiecewiseLinearFitCurve::FitData&);

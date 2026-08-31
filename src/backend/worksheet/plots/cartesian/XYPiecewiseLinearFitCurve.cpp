@@ -10,9 +10,6 @@
 #include "XYPiecewiseLinearFitCurve.h"
 #include "XYPiecewiseLinearFitCurvePrivate.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/XmlStreamReader.h"
-#include "backend/lib/commandtemplates.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 
 #include <KLocalizedString>
@@ -89,7 +86,7 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 	QVector<double> xData(n);
 	QVector<double> yData(n);
 
-	Range<double> xRange = fitData.autoRange ? Range<double>{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()} : fitData.fitRange;
+	Range<double> xRange = Range<double>{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
 
 	size_t validPoints = 0;
 	for (int i = 0; i < tmpXDataColumn->rowCount(); ++i) {
@@ -98,7 +95,7 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 
 		if (std::isnan(x) || std::isnan(y))
 			continue;
-		if (!fitData.autoRange && (x < xRange.start() || x > xRange.end()))
+		if (x < xRange.start() || x > xRange.end())
 			continue;
 
 		xData[validPoints] = x;
@@ -172,10 +169,7 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 	fitResult.sse = totalSSE;
 	fitResult.overallRsquare = (totalSST > 0.) ? (1. - totalSSE / totalSST) : 0.;
 
-	Range<double> evalRange = fitData.autoEvalRange ? xRange : fitData.evalRange;
-	size_t pointsPerSegment = fitData.evaluatedPoints / fitResult.numSegments;
-	if (pointsPerSegment < 2)
-		pointsPerSegment = 2;
+	const int pointsPerSegment = 2; // for lines 2 points are sufficient
 
 	// Total points = pointsPerSegment * numSegments + (numSegments - 1) NaN separators
 	size_t totalPoints = pointsPerSegment * fitResult.numSegments + (fitResult.numSegments - 1);
@@ -187,11 +181,11 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 		// Determine X range for this segment
 		double segXMin, segXMax;
 		if (seg == 0) {
-			segXMin = evalRange.start();
-			segXMax = (numChangepoints > 0) ? xData[changepoints[0]] : evalRange.end();
+			segXMin = xRange.start();
+			segXMax = (numChangepoints > 0) ? xData[changepoints[0]] : xRange.end();
 		} else if (seg == fitResult.numSegments - 1) {
 			segXMin = xData[changepoints[seg - 1]];
-			segXMax = evalRange.end();
+			segXMax = xRange.end();
 		} else {
 			segXMin = xData[changepoints[seg - 1]];
 			segXMax = xData[changepoints[seg]];
@@ -289,6 +283,7 @@ void XYPiecewiseLinearFitCurvePrivate::updateChangepointLines(const QVector<doub
 	for (size_t i = 0; i < numChangepoints; ++i) {
 		double xPos = xData[changepoints[i]];
 		auto* line = new ReferenceLine(plot, QStringLiteral("Changepoint %1").arg(i + 1), false);
+		line->setHidden(true);
 		line->setCoordinateSystemIndex(q->coordinateSystemIndex());
 		line->setOrientation(ReferenceLine::Orientation::Vertical);
 		line->setPositionLogical(QPointF(xPos, 0));
@@ -315,13 +310,6 @@ void XYPiecewiseLinearFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("minSegmentSize"), QString::number(d->fitData.minSegmentSize));
 	writer->writeAttribute(QStringLiteral("maxChangepoints"), QString::number(d->fitData.maxChangepoints));
 	writer->writeAttribute(QStringLiteral("changepointLinesEnabled"), QString::number(d->fitData.changepointLinesEnabled));
-	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->fitData.autoRange));
-	writer->writeAttribute(QStringLiteral("autoEvalRange"), QString::number(d->fitData.autoEvalRange));
-	writer->writeAttribute(QStringLiteral("fitRangeMin"), QString::number(d->fitData.fitRange.start()));
-	writer->writeAttribute(QStringLiteral("fitRangeMax"), QString::number(d->fitData.fitRange.end()));
-	writer->writeAttribute(QStringLiteral("evalRangeMin"), QString::number(d->fitData.evalRange.start()));
-	writer->writeAttribute(QStringLiteral("evalRangeMax"), QString::number(d->fitData.evalRange.end()));
-	writer->writeAttribute(QStringLiteral("evaluatedPoints"), QString::number(d->fitData.evaluatedPoints));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("fitResult"));
@@ -369,13 +357,6 @@ bool XYPiecewiseLinearFitCurve::load(XmlStreamReader* reader, bool preview) {
 			d->fitData.minSegmentSize = attribs.value(QStringLiteral("minSegmentSize")).toULongLong();
 			d->fitData.maxChangepoints = attribs.value(QStringLiteral("maxChangepoints")).toULongLong();
 			d->fitData.changepointLinesEnabled = attribs.value(QStringLiteral("changepointLinesEnabled")).toInt();
-			d->fitData.autoRange = attribs.value(QStringLiteral("autoRange")).toInt();
-			d->fitData.autoEvalRange = attribs.value(QStringLiteral("autoEvalRange")).toInt();
-			d->fitData.fitRange.setStart(attribs.value(QStringLiteral("fitRangeMin")).toDouble());
-			d->fitData.fitRange.setEnd(attribs.value(QStringLiteral("fitRangeMax")).toDouble());
-			d->fitData.evalRange.setStart(attribs.value(QStringLiteral("evalRangeMin")).toDouble());
-			d->fitData.evalRange.setEnd(attribs.value(QStringLiteral("evalRangeMax")).toDouble());
-			d->fitData.evaluatedPoints = attribs.value(QStringLiteral("evaluatedPoints")).toULongLong();
 		} else if (reader->name() == QLatin1String("fitResult")) {
 			attribs = reader->attributes();
 			d->fitResult.available = attribs.value(QStringLiteral("available")).toInt();

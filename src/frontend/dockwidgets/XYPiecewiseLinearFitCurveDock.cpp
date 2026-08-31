@@ -8,23 +8,8 @@
 */
 
 #include "XYPiecewiseLinearFitCurveDock.h"
-#include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.h"
 #include "frontend/widgets/TreeViewComboBox.h"
-
-#include <QCheckBox>
-#include <QComboBox>
-#include <QDoubleSpinBox>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QSpinBox>
-#include <QStandardItemModel>
-#include <QTextEdit>
-#include <QVBoxLayout>
 
 XYPiecewiseLinearFitCurveDock::XYPiecewiseLinearFitCurveDock(QWidget* parent)
 	: XYAnalysisCurveDock(parent) {
@@ -63,14 +48,7 @@ void XYPiecewiseLinearFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.sbPenalty, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::penaltyChanged);
 	connect(uiGeneralTab.sbMinSegmentSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::minSegmentSizeChanged);
 	connect(uiGeneralTab.sbMaxChangepoints, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::maxChangepointsChanged);
-	connect(uiGeneralTab.sbEvaluatedPoints, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::evaluatedPointsChanged);
 	connect(uiGeneralTab.chkChangepointLines, &QCheckBox::toggled, this, &XYPiecewiseLinearFitCurveDock::changepointLinesEnabledChanged);
-	connect(uiGeneralTab.cbAutoRange, &QCheckBox::toggled, this, &XYPiecewiseLinearFitCurveDock::autoRangeChanged);
-	connect(uiGeneralTab.leFitRangeMin, &QLineEdit::textChanged, this, &XYPiecewiseLinearFitCurveDock::fitRangeMinChanged);
-	connect(uiGeneralTab.leFitRangeMax, &QLineEdit::textChanged, this, &XYPiecewiseLinearFitCurveDock::fitRangeMaxChanged);
-	connect(uiGeneralTab.cbAutoEvalRange, &QCheckBox::toggled, this, &XYPiecewiseLinearFitCurveDock::autoEvalRangeChanged);
-	connect(uiGeneralTab.leEvalRangeMin, &QLineEdit::textChanged, this, &XYPiecewiseLinearFitCurveDock::evalRangeMinChanged);
-	connect(uiGeneralTab.leEvalRangeMax, &QLineEdit::textChanged, this, &XYPiecewiseLinearFitCurveDock::evalRangeMaxChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYPiecewiseLinearFitCurveDock::recalculateClicked);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYPiecewiseLinearFitCurveDock::dataSourceCurveChanged);
@@ -91,21 +69,18 @@ void XYPiecewiseLinearFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbPenalty->setValue(m_fitData.penalty);
 	uiGeneralTab.sbMinSegmentSize->setValue(m_fitData.minSegmentSize);
 	uiGeneralTab.sbMaxChangepoints->setValue(m_fitData.maxChangepoints);
-	uiGeneralTab.sbEvaluatedPoints->setValue(m_fitData.evaluatedPoints);
 	uiGeneralTab.chkChangepointLines->setChecked(m_fitData.changepointLinesEnabled);
-	uiGeneralTab.cbAutoRange->setChecked(m_fitData.autoRange);
-	uiGeneralTab.leFitRangeMin->setText(QString::number(m_fitData.fitRange.start()));
-	uiGeneralTab.leFitRangeMax->setText(QString::number(m_fitData.fitRange.end()));
-	uiGeneralTab.cbAutoEvalRange->setChecked(m_fitData.autoEvalRange);
-	uiGeneralTab.leEvalRangeMin->setText(QString::number(m_fitData.evalRange.start()));
-	uiGeneralTab.leEvalRangeMax->setText(QString::number(m_fitData.evalRange.end()));
-
-	uiGeneralTab.leFitRangeMin->setEnabled(!m_fitData.autoRange);
-	uiGeneralTab.leFitRangeMax->setEnabled(!m_fitData.autoRange);
-	uiGeneralTab.leEvalRangeMin->setEnabled(!m_fitData.autoEvalRange);
-	uiGeneralTab.leEvalRangeMax->setEnabled(!m_fitData.autoEvalRange);
 
 	showFitResult();
+
+	// Slots
+	connect(m_fitCurve, &XYPiecewiseLinearFitCurve::fitDataChanged, this, &XYPiecewiseLinearFitCurveDock::curveFitDataChanged);
+	connect(m_fitCurve, &XYPiecewiseLinearFitCurve::dataSourceTypeChanged, this, &XYPiecewiseLinearFitCurveDock::curveDataSourceTypeChanged);
+	connect(m_fitCurve, &XYPiecewiseLinearFitCurve::dataSourceCurveChanged, this, &XYPiecewiseLinearFitCurveDock::curveDataSourceCurveChanged);
+	connect(m_fitCurve, &XYPiecewiseLinearFitCurve::xDataColumnChanged, this, &XYPiecewiseLinearFitCurveDock::curveXDataColumnChanged);
+	connect(m_fitCurve, &XYPiecewiseLinearFitCurve::yDataColumnChanged, this, &XYPiecewiseLinearFitCurveDock::curveYDataColumnChanged);
+	connect(m_fitCurve, &XYPiecewiseLinearFitCurve::fitDataChanged, this, &XYPiecewiseLinearFitCurveDock::curveFitDataChanged);
+	connect(m_fitCurve, &XYPiecewiseLinearFitCurve::sourceDataChanged, this, &XYPiecewiseLinearFitCurveDock::enableRecalculate);
 }
 
 void XYPiecewiseLinearFitCurveDock::setCurves(QList<XYCurve*> list) {
@@ -122,7 +97,7 @@ void XYPiecewiseLinearFitCurveDock::setCurves(QList<XYCurve*> list) {
 	initTabs();
 	setSymbols(list);
 
-	connect(m_fitCurve, &XYPiecewiseLinearFitCurve::fitDataChanged, this, &XYPiecewiseLinearFitCurveDock::curveFitDataChanged);
+	updatePlotRangeList();
 }
 
 void XYPiecewiseLinearFitCurveDock::showFitResult() {
@@ -191,11 +166,7 @@ void XYPiecewiseLinearFitCurveDock::showFitResult() {
 
 	uiGeneralTab.teResults->setHtml(html);
 }
-/*
-bool XYPiecewiseLinearFitCurveDock::eventFilter(QObject* watched, QEvent* event) {
-	return XYCurveDock::eventFilter(watched, event);
-}
-*/
+
 // slots for changes triggered in XYPiecewiseLinearFitCurveDock
 void XYPiecewiseLinearFitCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
@@ -247,59 +218,9 @@ void XYPiecewiseLinearFitCurveDock::maxChangepointsChanged() {
 	enableRecalculate();
 }
 
-void XYPiecewiseLinearFitCurveDock::evaluatedPointsChanged() {
-	CONDITIONAL_LOCK_RETURN;
-	m_fitData.evaluatedPoints = uiGeneralTab.sbEvaluatedPoints->value();
-	enableRecalculate();
-}
-
 void XYPiecewiseLinearFitCurveDock::changepointLinesEnabledChanged() {
 	CONDITIONAL_LOCK_RETURN;
 	m_fitData.changepointLinesEnabled = uiGeneralTab.chkChangepointLines->isChecked();
-	enableRecalculate();
-}
-
-void XYPiecewiseLinearFitCurveDock::autoRangeChanged() {
-	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
-	m_fitData.autoRange = autoRange;
-
-	uiGeneralTab.leFitRangeMin->setEnabled(!autoRange);
-	uiGeneralTab.leFitRangeMax->setEnabled(!autoRange);
-
-	enableRecalculate();
-}
-
-void XYPiecewiseLinearFitCurveDock::fitRangeMinChanged() {
-	CONDITIONAL_LOCK_RETURN;
-	m_fitData.fitRange.setStart(uiGeneralTab.leFitRangeMin->text().toDouble());
-	enableRecalculate();
-}
-
-void XYPiecewiseLinearFitCurveDock::fitRangeMaxChanged() {
-	CONDITIONAL_LOCK_RETURN;
-	m_fitData.fitRange.setEnd(uiGeneralTab.leFitRangeMax->text().toDouble());
-	enableRecalculate();
-}
-
-void XYPiecewiseLinearFitCurveDock::autoEvalRangeChanged() {
-	bool autoEvalRange = uiGeneralTab.cbAutoEvalRange->isChecked();
-	m_fitData.autoEvalRange = autoEvalRange;
-
-	uiGeneralTab.leEvalRangeMin->setEnabled(!autoEvalRange);
-	uiGeneralTab.leEvalRangeMax->setEnabled(!autoEvalRange);
-
-	enableRecalculate();
-}
-
-void XYPiecewiseLinearFitCurveDock::evalRangeMinChanged() {
-	CONDITIONAL_LOCK_RETURN;
-	m_fitData.evalRange.setStart(uiGeneralTab.leEvalRangeMin->text().toDouble());
-	enableRecalculate();
-}
-
-void XYPiecewiseLinearFitCurveDock::evalRangeMaxChanged() {
-	CONDITIONAL_LOCK_RETURN;
-	m_fitData.evalRange.setEnd(uiGeneralTab.leEvalRangeMax->text().toDouble());
 	enableRecalculate();
 }
 
@@ -309,7 +230,13 @@ void XYPiecewiseLinearFitCurveDock::recalculateClicked() {
 }
 
 void XYPiecewiseLinearFitCurveDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
 	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbConnection->clear();
+	uiGeneralTab.cbConnection->addItem(i18n("Continuous"));
+	uiGeneralTab.cbConnection->addItem(i18n("Discontinuous"));
 
 	// tooltips
 	QString info = i18n("Method for detecting changepoints.");
@@ -320,14 +247,6 @@ void XYPiecewiseLinearFitCurveDock::retranslateUi() {
 
 	info = i18n("Cost for adding a changepoint. Must be exceeded by the fit improvement (SSE reduction) to justify splitting.\nLower values detect more changepoints, higher values detect fewer.\nScale with your data: ~1 for Y-values near 1, ~10-100 for large values, ~0.01-0.1 for small values.");
 	uiGeneralTab.sbPenalty->setToolTip(info);
-}
-
-void XYPiecewiseLinearFitCurveDock::showOptions(bool) {
-	// All options always visible in this simple implementation
-}
-
-void XYPiecewiseLinearFitCurveDock::showResults(bool) {
-	// Results always visible in this simple implementation
 }
 
 void XYPiecewiseLinearFitCurveDock::curveFitDataChanged(const XYPiecewiseLinearFitCurve::FitData& fitData) {

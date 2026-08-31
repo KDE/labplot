@@ -36,14 +36,7 @@ public:
 		double penalty{1.0}; // Penalty for adding changepoints - higher values = fewer segments
 		size_t minSegmentSize{2}; // Minimum number of points per segment
 		size_t maxChangepoints{1}; // Maximum number of changepoints to detect
-
 		bool changepointLinesEnabled{true}; // Show vertical reference lines at changepoints
-
-		bool autoRange{true};
-		bool autoEvalRange{true};
-		Range<double> fitRange{0., 0.};
-		Range<double> evalRange{0., 0.};
-		size_t evaluatedPoints{1000};
 	};
 
 	struct FitResult : public XYAnalysisCurve::Result {
