@@ -24,30 +24,30 @@ double nsl_stats_minimum(const double data[], const size_t n, size_t* index) {
 		return NAN;
 	}
 
-	// Find first non-NaN value
+	// Find first finite value
 	double min = NAN;
 	size_t min_idx = 0;
 	for (i = 0; i < n; i++) {
-		if (!isnan(data[i])) {
+		if (isfinite(data[i])) {
 			min = data[i];
 			min_idx = i;
 			break;
 		}
 	}
 
-	// All NaN case
-	if (isnan(min)) {
+	// All non-finite case
+	if (!isfinite(min)) {
 		if (index != NULL)
 			*index = 0;
 		return NAN;
 	}
 
-	// Find minimum, skipping NaN values
+	// Find minimum, skipping non-finite values
 	if (index != NULL)
 		*index = min_idx;
 
 	for (i = min_idx + 1; i < n; i++) {
-		if (!isnan(data[i]) && data[i] < min) {
+		if (isfinite(data[i]) && data[i] < min) {
 			min = data[i];
 			if (index != NULL)
 				*index = i;
@@ -67,30 +67,30 @@ double nsl_stats_maximum(const double data[], const size_t n, size_t* index) {
 		return NAN;
 	}
 
-	// Find first non-NaN value
+	// Find first finite value
 	double max = NAN;
 	size_t max_idx = 0;
 	for (i = 0; i < n; i++) {
-		if (!isnan(data[i])) {
+		if (isfinite(data[i])) {
 			max = data[i];
 			max_idx = i;
 			break;
 		}
 	}
 
-	// All NaN case
-	if (isnan(max)) {
+	// All non-finite case
+	if (!isfinite(max)) {
 		if (index != NULL)
 			*index = 0;
 		return NAN;
 	}
 
-	// Find maximum, skipping NaN values
+	// Find maximum, skipping non-finite values
 	if (index != NULL)
 		*index = max_idx;
 
 	for (i = max_idx + 1; i < n; i++) {
-		if (!isnan(data[i]) && data[i] > max) {
+		if (isfinite(data[i]) && data[i] > max) {
 			max = data[i];
 			if (index != NULL)
 				*index = i;
@@ -100,12 +100,54 @@ double nsl_stats_maximum(const double data[], const size_t n, size_t* index) {
 	return max;
 }
 
+static size_t nsl_stats_finite_count(const double data[], size_t n) {
+	size_t count = 0;
+	for (size_t i = 0; i < n; ++i) {
+		if (isfinite(data[i]))
+			++count;
+	}
+	return count;
+}
+
+static void nsl_stats_copy_finite(const double data[], size_t n, double out[]) {
+	size_t j = 0;
+	for (size_t i = 0; i < n; ++i) {
+		if (isfinite(data[i]))
+			out[j++] = data[i];
+	}
+}
+
 double nsl_stats_median(double data[], size_t stride, size_t n, nsl_stats_quantile_type type) {
-	gsl_sort(data, stride, n);
-	return nsl_stats_median_sorted(data, stride, n, type);
+	if (n == 0)
+		return NAN;
+
+	const size_t finite_count = nsl_stats_finite_count(data, n);
+	if (finite_count == 0)
+		return NAN;
+
+	if (finite_count == n) {
+		gsl_sort(data, stride, n);
+		return nsl_stats_median_sorted(data, stride, n, type);
+	}
+
+	double* filtered = (double*)malloc(finite_count * sizeof(*filtered));
+	if (filtered == NULL)
+		return NAN;
+
+	nsl_stats_copy_finite(data, n, filtered);
+	gsl_sort(filtered, stride, finite_count);
+	const double result = nsl_stats_median_sorted(filtered, stride, finite_count, type);
+	free(filtered);
+	return result;
 }
 
 double nsl_stats_median_sorted(const double sorted_data[], size_t stride, size_t n, nsl_stats_quantile_type type) {
+	if (n == 0)
+		return NAN;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(sorted_data[i * stride]))
+			return NAN;
+	}
 	return nsl_stats_quantile_sorted(sorted_data, stride, n, 0.5, type);
 }
 
@@ -115,11 +157,36 @@ double nsl_stats_median_from_sorted_data(const double sorted_data[], size_t stri
 }
 
 double nsl_stats_quantile(double data[], size_t stride, size_t n, double p, nsl_stats_quantile_type type) {
-	gsl_sort(data, stride, n);
-	return nsl_stats_quantile_sorted(data, stride, n, p, type);
+	if (n == 0 || !isfinite(p))
+		return NAN;
+
+	const size_t finite_count = nsl_stats_finite_count(data, n);
+	if (finite_count == 0)
+		return NAN;
+
+	if (finite_count == n) {
+		gsl_sort(data, stride, n);
+		return nsl_stats_quantile_sorted(data, stride, n, p, type);
+	}
+
+	double* filtered = (double*)malloc(finite_count * sizeof(*filtered));
+	if (filtered == NULL)
+		return NAN;
+
+	nsl_stats_copy_finite(data, n, filtered);
+	gsl_sort(filtered, stride, finite_count);
+	const double result = nsl_stats_quantile_sorted(filtered, stride, finite_count, p, type);
+	free(filtered);
+	return result;
 }
 
 double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, double p, nsl_stats_quantile_type type) {
+	if (n == 0 || !isfinite(p))
+		return NAN;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(d[i * stride]))
+			return NAN;
+	}
 	switch (type) {
 	case nsl_stats_quantile_type1: // h = Np + 1/2, x[ceil(h – 1/2)]
 		if (p == 0.0)
