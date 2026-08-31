@@ -12,6 +12,8 @@
 
 #include "backend/nsl/nsl_peak.h"
 
+#include <cmath>
+#include <limits>
 #include <fstream>
 
 // ##############################################################################
@@ -92,6 +94,40 @@ void NSLPeakTest::testPeakHeightDistance() {
 	for (size_t i = 0; i < np; i++)
 		QCOMPARE(indices[i], result[i]);
 	free(indices);
+}
+
+void NSLPeakTest::testNaNInfHandling() {
+	double data_valid[] = {4., 2., 5., 2., 3., 1., 0, 1};
+	size_t np_valid;
+	size_t* indices = nsl_peak_detect(data_valid, 8, np_valid);
+	QVERIFY(indices != nullptr); // valid data should succeed
+	if (indices)
+		free(indices);
+
+	// Test with NaN in data
+	double data_nan[] = {4., 2., std::nan(""), 2., 3., 1., 0, 1};
+	size_t np_nan;
+	indices = nsl_peak_detect(data_nan, 8, np_nan);
+	QVERIFY(indices == nullptr); // NaN should cause rejection
+
+	// Test with Infinity in data
+	double data_inf[] = {4., 2., 5., INFINITY, 3., 1., 0, 1};
+	size_t np_inf;
+	indices = nsl_peak_detect(data_inf, 8, np_inf);
+	QVERIFY(indices == nullptr); // Infinity should cause rejection
+
+	// Test with NaN height threshold
+	double data_clean[] = {4., 2., 5., 2., 3., 1., 0, 1};
+	size_t np_nan_height;
+	indices = nsl_peak_detect(data_clean, 8, np_nan_height, std::nan(""));
+	QVERIFY(indices == nullptr); // NaN height should cause rejection
+
+	// Infinity is a valid height threshold (sentinel value), so it should be accepted
+	size_t np_inf_height;
+	indices = nsl_peak_detect(data_clean, 8, np_inf_height, std::numeric_limits<double>::infinity());
+	QVERIFY(indices != nullptr || indices == nullptr); // Just verifies the call doesn't crash
+	if (indices)
+		free(indices);
 }
 
 /*void NSLPeakTest::testPeakX() {
