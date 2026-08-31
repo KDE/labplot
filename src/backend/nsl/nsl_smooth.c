@@ -35,8 +35,22 @@ const char* nsl_smooth_weight_type_name[] = {i18n("Uniform (Rectangular)"),
 											 i18n("Cosine")};
 double nsl_smooth_pad_constant_lvalue = 0.0, nsl_smooth_pad_constant_rvalue = 0.0;
 
+static int nsl_smooth_input_is_valid(const double* data, size_t n) {
+	if (data == NULL)
+		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(data[i]))
+			return -1;
+	}
+	return 0;
+}
+
 int nsl_smooth_moving_average(double* data, size_t n, size_t points, nsl_smooth_weight_type weight, nsl_smooth_pad_mode mode) {
 	if (n == 0 || points == 0)
+		return -1;
+	if (nsl_smooth_input_is_valid(data, n) != 0)
+		return -1;
+	if (!isfinite(nsl_smooth_pad_constant_lvalue) || !isfinite(nsl_smooth_pad_constant_rvalue))
 		return -1;
 
 	size_t i, j;
@@ -167,6 +181,10 @@ int nsl_smooth_moving_average(double* data, size_t n, size_t points, nsl_smooth_
 int nsl_smooth_moving_average_lagged(double* data, size_t n, size_t points, nsl_smooth_weight_type weight, nsl_smooth_pad_mode mode) {
 	if (n == 0 || points == 0)
 		return -1;
+	if (nsl_smooth_input_is_valid(data, n) != 0)
+		return -1;
+	if (!isfinite(nsl_smooth_pad_constant_lvalue) || !isfinite(nsl_smooth_pad_constant_rvalue))
+		return -1;
 
 	size_t i, j;
 	double* result = (double*)malloc(n * sizeof(double));
@@ -295,7 +313,11 @@ int nsl_smooth_moving_average_lagged(double* data, size_t n, size_t points, nsl_
 }
 
 int nsl_smooth_percentile(double* data, size_t n, size_t points, double percentile, nsl_smooth_pad_mode mode) {
-	if (n == 0 || points == 0)
+	if (n == 0 || points == 0 || !isfinite(percentile))
+		return -1;
+	if (nsl_smooth_input_is_valid(data, n) != 0)
+		return -1;
+	if (!isfinite(nsl_smooth_pad_constant_lvalue) || !isfinite(nsl_smooth_pad_constant_rvalue))
 		return -1;
 
 	size_t i, j;
@@ -418,6 +440,10 @@ int nsl_smooth_savgol(double* data, size_t n, size_t points, int order, nsl_smoo
 	int error = 0;
 	size_t half = (points - 1) / 2; /* n//2 */
 
+	if (nsl_smooth_input_is_valid(data, n) != 0)
+		return -1;
+	if (!isfinite(nsl_smooth_pad_constant_lvalue) || !isfinite(nsl_smooth_pad_constant_rvalue))
+		return -1;
 	if (points > n) {
 		printf("Tried to smooth over more points (points=%d) than given as input (%d).", (int)points, (int)n);
 		return -1;
@@ -648,7 +674,9 @@ static int nsl_smooth_lowess_fit(const double* x, const double* y, const double*
 }
 
 int nsl_smooth_lowess(const double* xdata, double* ydata, size_t n, double span, double delta, int iterations) {
-	if (n == 0 || span <= 0.0 || span > 1.0 || iterations < 0)
+	if (n == 0 || span <= 0.0 || span > 1.0 || iterations < 0 || !isfinite(span) || !isfinite(delta))
+		return -1;
+	if (nsl_smooth_input_is_valid(xdata, n) != 0 || nsl_smooth_input_is_valid(ydata, n) != 0)
 		return -1;
 
 	/* Calculate number of points in local neighborhood */
