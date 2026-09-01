@@ -33,6 +33,7 @@ public:
 
 private:
 	void fitSegment(const QVector<double>& x, const QVector<double>& y, double& slope, double& intercept, double& rsquare);
+	void fitSegmentConstrained(const QVector<double>& x, const QVector<double>& y, double x0, double y0, double& slope, double& intercept, double& rsquare);
 };
 
 #endif

@@ -48,6 +48,7 @@ void XYPiecewiseLinearFitCurveDock::setupGeneral() {
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYPiecewiseLinearFitCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYPiecewiseLinearFitCurveDock::methodChanged);
+	connect(uiGeneralTab.cbConnection, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYPiecewiseLinearFitCurveDock::connectionTypeChanged);
 	connect(uiGeneralTab.sbPenalty, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::penaltyChanged);
 	connect(uiGeneralTab.sbMinSegmentSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::minSegmentSizeChanged);
 	connect(uiGeneralTab.sbMaxChangepoints, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::maxChangepointsChanged);
@@ -69,6 +70,7 @@ void XYPiecewiseLinearFitCurveDock::initGeneralTab() {
 	cbYDataColumn->setAspect(m_fitCurve->yDataColumn(), m_fitCurve->yDataColumnPath());
 
 	uiGeneralTab.cbMethod->setCurrentIndex(static_cast<int>(m_fitData.changepointMethod));
+	uiGeneralTab.cbConnection->setCurrentIndex(static_cast<int>(m_fitData.connectionType));
 	uiGeneralTab.sbPenalty->setValue(m_fitData.penalty);
 	uiGeneralTab.sbMinSegmentSize->setValue(m_fitData.minSegmentSize);
 	uiGeneralTab.sbMaxChangepoints->setValue(m_fitData.maxChangepoints);
@@ -199,6 +201,12 @@ void XYPiecewiseLinearFitCurveDock::methodChanged(int index) {
 	enableRecalculate();
 }
 
+void XYPiecewiseLinearFitCurveDock::connectionTypeChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
+	m_fitData.connectionType = static_cast<XYPiecewiseLinearFitCurve::ConnectionType>(uiGeneralTab.cbConnection->currentData().toInt());
+	enableRecalculate();
+}
+
 void XYPiecewiseLinearFitCurveDock::penaltyChanged() {
 	CONDITIONAL_LOCK_RETURN;
 	m_fitData.penalty = uiGeneralTab.sbPenalty->value();
@@ -235,8 +243,8 @@ void XYPiecewiseLinearFitCurveDock::retranslateUi() {
 	XYAnalysisCurveDock::retranslateUi();
 
 	uiGeneralTab.cbConnection->clear();
-	uiGeneralTab.cbConnection->addItem(i18n("Continuous"));
-	uiGeneralTab.cbConnection->addItem(i18n("Discontinuous"));
+	uiGeneralTab.cbConnection->addItem(i18n("Continuous"), static_cast<int>(XYPiecewiseLinearFitCurve::ConnectionType::Continuous));
+	uiGeneralTab.cbConnection->addItem(i18n("Discontinuous"), static_cast<int>(XYPiecewiseLinearFitCurve::ConnectionType::Discontinuous));
 
 	// tooltips
 	QString info = i18n("Method for detecting changepoints.");

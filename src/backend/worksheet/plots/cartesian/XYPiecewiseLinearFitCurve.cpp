@@ -177,7 +177,16 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 		QVector<double> segY = yData.mid(segStart, segEnd - segStart);
 
 		double slope, intercept, rsq;
-		fitSegment(segX, segY, slope, intercept, rsq);
+
+		if (fitData.connectionType == XYPiecewiseLinearFitCurve::ConnectionType::Continuous && seg > 0) {
+			// Continuous: constrain fit so segment starts at previous endpoint
+			double xChangepoint = xData[segStart];
+			double yPrev = fitResult.slopes[seg - 1] * xChangepoint + fitResult.intercepts[seg - 1];
+			fitSegmentConstrained(segX, segY, xChangepoint, yPrev, slope, intercept, rsq);
+		} else {
+			// Discontinuous: independent fit
+			fitSegment(segX, segY, slope, intercept, rsq);
+		}
 
 		fitResult.slopes[seg] = slope;
 		fitResult.intercepts[seg] = intercept;
@@ -291,6 +300,59 @@ void XYPiecewiseLinearFitCurvePrivate::fitSegment(const QVector<double>& x, cons
 	rsquare = (sst > 0.) ? (1. - sse / sst) : 0.;
 }
 
+// Constrained linear regression: fit line through (x0, y0) with minimum squared error
+void XYPiecewiseLinearFitCurvePrivate::fitSegmentConstrained(const QVector<double>& x, const QVector<double>& y, double x0, double y0, double& slope, double& intercept, double& rsquare) {
+	size_t n = x.size();
+	if (n == 0) {
+		slope = 0.;
+		intercept = y0;
+		rsquare = 0.;
+		return;
+	}
+
+	// Given intercept b such that line passes through (x0, y0): y0 = m*x0 + b  =>  b = y0 - m*x0
+	// Minimize sum((y[i] - (m*x[i] + b))^2) = sum((y[i] - m*x[i] - (y0 - m*x0))^2)
+	//                                        = sum((y[i] - y0 - m*(x[i] - x0))^2)
+	// Take derivative wrt m and set to zero:
+	// -2 * sum((x[i] - x0) * (y[i] - y0 - m*(x[i] - x0))) = 0
+	// sum((x[i] - x0) * (y[i] - y0)) = m * sum((x[i] - x0)^2)
+	// m = sum((x[i] - x0) * (y[i] - y0)) / sum((x[i] - x0)^2)
+
+	double num = 0., denom = 0.;
+	for (size_t i = 0; i < n; ++i) {
+		double dx = x[i] - x0;
+		double dy = y[i] - y0;
+		num += dx * dy;
+		denom += dx * dx;
+	}
+
+	if (std::fabs(denom) < 1e-15) {
+		// All points at same X as constraint point
+		slope = 0.;
+		intercept = y0;
+		rsquare = 0.;
+		return;
+	}
+
+	slope = num / denom;
+	intercept = y0 - slope * x0;
+
+	// Calculate R²
+	double mean_y = 0.;
+	for (size_t i = 0; i < n; ++i)
+		mean_y += y[i];
+	mean_y /= n;
+
+	double sse = 0., sst = 0.;
+	for (size_t i = 0; i < n; ++i) {
+		double pred = slope * x[i] + intercept;
+		sse += (y[i] - pred) * (y[i] - pred);
+		sst += (y[i] - mean_y) * (y[i] - mean_y);
+	}
+
+	rsquare = (sst > 0.) ? (1. - sse / sst) : 0.;
+}
+
 void XYPiecewiseLinearFitCurvePrivate::updateChangepointLines() {
 	// Remove existing changepoint lines
 	auto existingLines = q->changepointLines();
@@ -334,6 +396,7 @@ void XYPiecewiseLinearFitCurve::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement(QStringLiteral("fitData"));
 	writer->writeAttribute(QStringLiteral("changepointMethod"), QString::number(d->fitData.changepointMethod));
+	writer->writeAttribute(QStringLiteral("connectionType"), QString::number(static_cast<int>(d->fitData.connectionType)));
 	writer->writeAttribute(QStringLiteral("penalty"), QString::number(d->fitData.penalty));
 	writer->writeAttribute(QStringLiteral("minSegmentSize"), QString::number(d->fitData.minSegmentSize));
 	writer->writeAttribute(QStringLiteral("maxChangepoints"), QString::number(d->fitData.maxChangepoints));
@@ -381,6 +444,7 @@ bool XYPiecewiseLinearFitCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == QLatin1String("fitData")) {
 			attribs = reader->attributes();
 			d->fitData.changepointMethod = static_cast<nsl_changepoint_method>(attribs.value(QStringLiteral("changepointMethod")).toInt());
+			d->fitData.connectionType = static_cast<ConnectionType>(attribs.value(QStringLiteral("connectionType")).toInt());
 			d->fitData.penalty = attribs.value(QStringLiteral("penalty")).toDouble();
 			d->fitData.minSegmentSize = attribs.value(QStringLiteral("minSegmentSize")).toULongLong();
 			d->fitData.maxChangepoints = attribs.value(QStringLiteral("maxChangepoints")).toULongLong();
