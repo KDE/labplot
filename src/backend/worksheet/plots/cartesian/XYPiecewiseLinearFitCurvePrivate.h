@@ -13,6 +13,7 @@
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.h"
 
+class Note;
 class XYPiecewiseLinearFitCurve;
 
 class XYPiecewiseLinearFitCurvePrivate : public XYAnalysisCurvePrivate {
@@ -24,16 +25,18 @@ public:
 	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
 	virtual void resetResults() override;
 	void updateChangepointLines();
+	void updateResultsNote();
 
 	XYPiecewiseLinearFitCurve::FitData fitData;
 	XYPiecewiseLinearFitCurve::FitResult fitResult;
 	bool changepointLinesEnabled{false};
+	Note* resultsNote{nullptr};
 
 	XYPiecewiseLinearFitCurve* const q;
 
 private:
-	void fitSegment(const QVector<double>& x, const QVector<double>& y, double& slope, double& intercept, double& rsquare);
-	void fitSegmentConstrained(const QVector<double>& x, const QVector<double>& y, double x0, double y0, double& slope, double& intercept, double& rsquare);
+	void fitSegment(const QVector<double>& x, const QVector<double>& y, size_t segmentIndex);
+	void fitSegmentConstrained(const QVector<double>& x, const QVector<double>& y, double x0, double y0, size_t segmentIndex);
 };
 
 #endif

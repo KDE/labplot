@@ -10,12 +10,17 @@
 #include "XYPiecewiseLinearFitCurve.h"
 #include "XYPiecewiseLinearFitCurvePrivate.h"
 #include "backend/core/column/Column.h"
+#include "backend/note/Note.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
+#include <QFontDatabase>
 #include <QIcon>
 #include <QThreadPool>
+
+#include <gsl/gsl_cdf.h>
+#include <gsl/gsl_math.h>
 
 XYPiecewiseLinearFitCurve::XYPiecewiseLinearFitCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYPiecewiseLinearFitCurvePrivate(this), AspectType::XYPiecewiseLinearFitCurve) {
@@ -79,10 +84,10 @@ XYPiecewiseLinearFitCurvePrivate::~XYPiecewiseLinearFitCurvePrivate() = default;
 
 void XYPiecewiseLinearFitCurvePrivate::retransform() {
 	XYAnalysisCurvePrivate::retransform();
+
 	const auto& lines = q->changepointLines();
 	for (auto* line : lines) {
 		line->retransform();
-		qDebug() << "retransforming changepoint line" << line->name();
 	}
 }
 
@@ -156,9 +161,7 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 		fitResult.changepoints[i] = xData[changepoints[i]]; // Store X-value, not index
 	}
 
-	fitResult.slopes.resize(fitResult.numSegments);
-	fitResult.intercepts.resize(fitResult.numSegments);
-	fitResult.rsquares.resize(fitResult.numSegments);
+	fitResult.segmentResults.resize(fitResult.numSegments);
 
 	size_t segStart = 0;
 	double totalSSE = 0., totalSST = 0.;
@@ -176,26 +179,17 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 		QVector<double> segX = xData.mid(segStart, segEnd - segStart);
 		QVector<double> segY = yData.mid(segStart, segEnd - segStart);
 
-		double slope, intercept, rsq;
-
 		if (fitData.connectionType == XYPiecewiseLinearFitCurve::ConnectionType::Continuous && seg > 0) {
 			// Continuous: constrain fit so segment starts at previous endpoint
 			double xChangepoint = xData[segStart];
-			double yPrev = fitResult.slopes[seg - 1] * xChangepoint + fitResult.intercepts[seg - 1];
-			fitSegmentConstrained(segX, segY, xChangepoint, yPrev, slope, intercept, rsq);
+			double yPrev = fitResult.segmentResults[seg - 1].paramValues.value(1) * xChangepoint + fitResult.segmentResults[seg - 1].paramValues.value(0);
+			fitSegmentConstrained(segX, segY, xChangepoint, yPrev, seg);
 		} else {
 			// Discontinuous: independent fit
-			fitSegment(segX, segY, slope, intercept, rsq);
+			fitSegment(segX, segY, seg);
 		}
 
-		fitResult.slopes[seg] = slope;
-		fitResult.intercepts[seg] = intercept;
-		fitResult.rsquares[seg] = rsq;
-
-		for (size_t i = segStart; i < segEnd; ++i) {
-			double pred = slope * xData[i] + intercept;
-			totalSSE += (yData[i] - pred) * (yData[i] - pred);
-		}
+		totalSSE += fitResult.segmentResults[seg].sse;
 
 		segStart = segEnd;
 	}
@@ -229,7 +223,7 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 		for (size_t i = 0; i < pointsPerSegment; ++i) {
 			double x = segXMin + i * step;
 			(*xVector)[outputIdx] = x;
-			(*yVector)[outputIdx] = fitResult.slopes[seg] * x + fitResult.intercepts[seg];
+			(*yVector)[outputIdx] = fitResult.segmentResults[seg].paramValues.value(1) * x + fitResult.segmentResults[seg].paramValues.value(0);
 			outputIdx++;
 		}
 
@@ -244,6 +238,15 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 	// Update changepoint reference lines
 	updateChangepointLines();
 
+	// Create and update results note
+	if (!resultsNote) {
+		resultsNote = new Note(i18n("Fit Results"));
+		resultsNote->setFixed(true);
+		resultsNote->setBackgroundColor(QColor(Qt::white));
+		resultsNote->setTextFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+		q->addChildFast(resultsNote);
+	}
+
 	delete[] changepoints;
 
 	xColumn->setValues(*xVector);
@@ -256,18 +259,27 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 	fitResult.valid = true;
 	fitResult.status = QStringLiteral("OK");
 
+	updateResultsNote();
+
 	return true;
 }
 
-void XYPiecewiseLinearFitCurvePrivate::fitSegment(const QVector<double>& x, const QVector<double>& y, double& slope, double& intercept, double& rsquare) {
+void XYPiecewiseLinearFitCurvePrivate::fitSegment(const QVector<double>& x, const QVector<double>& y, size_t seg) {
+	auto& result = fitResult.segmentResults[seg];
+	result.paramValues.resize(2);
+	result.errorValues.resize(2);
+	result.tdist_tValues.resize(2);
+	result.tdist_pValues.resize(2);
+
 	size_t n = x.size();
 	if (n < 2) {
-		slope = 0.;
-		intercept = (n == 1) ? y[0] : 0.;
-		rsquare = 0.;
+		// Reset to defaults
+		result.paramValues[0] = (n == 1) ? y[0] : 0.; // intercept
+		result.paramValues[1] = 0.; // slope
 		return;
 	}
 
+	// Compute slope and intercept using closed-form linear regression
 	double sum_x = 0., sum_y = 0., sum_xx = 0., sum_xy = 0.;
 	for (size_t i = 0; i < n; ++i) {
 		sum_x += x[i];
@@ -281,43 +293,93 @@ void XYPiecewiseLinearFitCurvePrivate::fitSegment(const QVector<double>& x, cons
 	double var_x = sum_xx / n - mean_x * mean_x;
 
 	if (std::fabs(var_x) < 1e-15) {
-		slope = 0.;
-		intercept = mean_y;
-		rsquare = 0.;
+		result.paramValues[1] = 0.; // slope
+		result.paramValues[0] = mean_y; // intercept
+		result.dof = n - 1;
 		return;
 	}
 
-	slope = (sum_xy / n - mean_x * mean_y) / var_x;
-	intercept = mean_y - slope * mean_x;
+	result.paramValues[1] = (sum_xy / n - mean_x * mean_y) / var_x; // slope
+	result.paramValues[0] = mean_y - result.paramValues[1] * mean_x; // intercept
 
-	double sse = 0., sst = 0.;
+	// Compute residuals and goodness metrics
+	double sse = 0., sst = 0., mae = 0.;
 	for (size_t i = 0; i < n; ++i) {
-		double pred = slope * x[i] + intercept;
-		sse += (y[i] - pred) * (y[i] - pred);
+		double pred = result.paramValues[1] * x[i] + result.paramValues[0];
+		double residual = y[i] - pred;
+		sse += residual * residual;
 		sst += (y[i] - mean_y) * (y[i] - mean_y);
+		mae += std::abs(residual);
 	}
 
-	rsquare = (sst > 0.) ? (1. - sse / sst) : 0.;
+	result.sse = sse;
+	result.sst = sst;
+	result.rsquare = (sst > 0.) ? (1. - sse / sst) : 0.;
+	result.dof = n - 2;
+
+	if (result.dof > 0) {
+		result.rms = std::sqrt(sse / result.dof);
+		result.rsd = result.rms;
+
+		double mse_val = sse / result.dof;
+		double Sxx = var_x * n;
+		result.errorValues[1] = std::sqrt(mse_val / Sxx); // slopeError
+		result.errorValues[0] = std::sqrt(mse_val * (1.0 / n + mean_x * mean_x / Sxx)); // interceptError
+
+		result.tdist_tValues[1] = result.paramValues[1] / result.errorValues[1]; // slope_t
+		result.tdist_pValues[1] = 2.0 * gsl_cdf_tdist_Q(std::abs(result.tdist_tValues[1]), result.dof); // slope_p
+		result.tdist_tValues[0] = result.paramValues[0] / result.errorValues[0]; // intercept_t
+		result.tdist_pValues[0] = 2.0 * gsl_cdf_tdist_Q(std::abs(result.tdist_tValues[0]), result.dof); // intercept_p
+
+		result.rsquareAdj = 1.0 - (sse / result.dof) / (sst / (n - 1));
+
+		result.chisq_p = gsl_cdf_chisq_Q(sse, result.dof);
+
+		double ssr = sst - sse;
+		result.fdist_F = (ssr / 1.0) / (sse / result.dof);
+		result.fdist_p = gsl_cdf_fdist_Q(result.fdist_F, 1, result.dof);
+	} else {
+		result.rms = result.rsd = 0.;
+		result.errorValues[0] = result.errorValues[1] = 0.;
+		result.rsquareAdj = 0.;
+		result.tdist_tValues[0] = result.tdist_tValues[1] = 0.;
+		result.tdist_pValues[0] = result.tdist_pValues[1] = 1.;
+		result.chisq_p = 1.;
+		result.fdist_F = 0.;
+		result.fdist_p = 1.;
+	}
+
+	result.mse = sse / n;
+	result.rmse = std::sqrt(result.mse);
+	result.mae = mae / n;
+
+	int k = 2;
+	if (sse > 0.) {
+		result.aic = n * std::log(sse / n) + 2 * k;
+		result.bic = n * std::log(sse / n) + k * std::log(n);
+	} else {
+		result.aic = -std::numeric_limits<double>::infinity();
+		result.bic = -std::numeric_limits<double>::infinity();
+	}
 }
 
 // Constrained linear regression: fit line through (x0, y0) with minimum squared error
-void XYPiecewiseLinearFitCurvePrivate::fitSegmentConstrained(const QVector<double>& x, const QVector<double>& y, double x0, double y0, double& slope, double& intercept, double& rsquare) {
+void XYPiecewiseLinearFitCurvePrivate::fitSegmentConstrained(const QVector<double>& x, const QVector<double>& y, double x0, double y0, size_t seg) {
+	auto& result = fitResult.segmentResults[seg];
+	result.paramValues.resize(2);
+	result.errorValues.resize(2);
+	result.tdist_tValues.resize(2);
+	result.tdist_pValues.resize(2);
+
 	size_t n = x.size();
 	if (n == 0) {
-		slope = 0.;
-		intercept = y0;
-		rsquare = 0.;
+		// Reset to defaults
+		result.paramValues[0] = y0; // intercept
+		result.paramValues[1] = 0.; // slope
 		return;
 	}
 
-	// Given intercept b such that line passes through (x0, y0): y0 = m*x0 + b  =>  b = y0 - m*x0
-	// Minimize sum((y[i] - (m*x[i] + b))^2) = sum((y[i] - m*x[i] - (y0 - m*x0))^2)
-	//                                        = sum((y[i] - y0 - m*(x[i] - x0))^2)
-	// Take derivative wrt m and set to zero:
-	// -2 * sum((x[i] - x0) * (y[i] - y0 - m*(x[i] - x0))) = 0
-	// sum((x[i] - x0) * (y[i] - y0)) = m * sum((x[i] - x0)^2)
 	// m = sum((x[i] - x0) * (y[i] - y0)) / sum((x[i] - x0)^2)
-
 	double num = 0., denom = 0.;
 	for (size_t i = 0; i < n; ++i) {
 		double dx = x[i] - x0;
@@ -327,30 +389,78 @@ void XYPiecewiseLinearFitCurvePrivate::fitSegmentConstrained(const QVector<doubl
 	}
 
 	if (std::fabs(denom) < 1e-15) {
-		// All points at same X as constraint point
-		slope = 0.;
-		intercept = y0;
-		rsquare = 0.;
+		result.paramValues[1] = 0.; // slope
+		result.paramValues[0] = y0; // intercept
+		result.dof = n - 1;
 		return;
 	}
 
-	slope = num / denom;
-	intercept = y0 - slope * x0;
+	result.paramValues[1] = num / denom; // slope
+	result.paramValues[0] = y0 - result.paramValues[1] * x0; // intercept
 
-	// Calculate R²
+	// Compute residuals
 	double mean_y = 0.;
 	for (size_t i = 0; i < n; ++i)
 		mean_y += y[i];
 	mean_y /= n;
 
-	double sse = 0., sst = 0.;
+	double sse = 0., sst = 0., mae = 0.;
 	for (size_t i = 0; i < n; ++i) {
-		double pred = slope * x[i] + intercept;
-		sse += (y[i] - pred) * (y[i] - pred);
+		double pred = result.paramValues[1] * x[i] + result.paramValues[0];
+		double residual = y[i] - pred;
+		sse += residual * residual;
 		sst += (y[i] - mean_y) * (y[i] - mean_y);
+		mae += std::abs(residual);
 	}
 
-	rsquare = (sst > 0.) ? (1. - sse / sst) : 0.;
+	result.sse = sse;
+	result.sst = sst;
+	result.rsquare = (sst > 0.) ? (1. - sse / sst) : 0.;
+	result.dof = n - 1; // Constrained fit: only 1 free parameter
+
+	if (result.dof > 0) {
+		result.rms = std::sqrt(sse / result.dof);
+		result.rsd = result.rms;
+
+		double mse_val = sse / result.dof;
+		result.errorValues[1] = std::sqrt(mse_val / denom); // slopeError
+		result.errorValues[0] = 0.; // interceptError - constrained
+
+		result.tdist_tValues[1] = result.paramValues[1] / result.errorValues[1]; // slope_t
+		result.tdist_pValues[1] = 2.0 * gsl_cdf_tdist_Q(std::abs(result.tdist_tValues[1]), result.dof); // slope_p
+		result.tdist_tValues[0] = 0.; // intercept_t - constrained
+		result.tdist_pValues[0] = 1.; // intercept_p - constrained
+
+		result.rsquareAdj = 1.0 - (sse / result.dof) / (sst / (n - 1));
+
+		result.chisq_p = gsl_cdf_chisq_Q(sse, result.dof);
+
+		double ssr = sst - sse;
+		result.fdist_F = (ssr / 1.0) / (sse / result.dof);
+		result.fdist_p = gsl_cdf_fdist_Q(result.fdist_F, 1, result.dof);
+	} else {
+		result.rms = result.rsd = 0.;
+		result.errorValues[0] = result.errorValues[1] = 0.;
+		result.rsquareAdj = 0.;
+		result.tdist_tValues[0] = result.tdist_tValues[1] = 0.;
+		result.tdist_pValues[0] = result.tdist_pValues[1] = 1.;
+		result.chisq_p = 1.;
+		result.fdist_F = 0.;
+		result.fdist_p = 1.;
+	}
+
+	result.mse = sse / n;
+	result.rmse = std::sqrt(result.mse);
+	result.mae = mae / n;
+
+	int k = 1; // Only slope is free
+	if (sse > 0.) {
+		result.aic = n * std::log(sse / n) + 2 * k;
+		result.bic = n * std::log(sse / n) + k * std::log(n);
+	} else {
+		result.aic = -std::numeric_limits<double>::infinity();
+		result.bic = -std::numeric_limits<double>::infinity();
+	}
 }
 
 void XYPiecewiseLinearFitCurvePrivate::updateChangepointLines() {
@@ -374,12 +484,94 @@ void XYPiecewiseLinearFitCurvePrivate::updateChangepointLines() {
 		line->setCoordinateSystemIndex(q->coordinateSystemIndex());
 		line->setOrientation(ReferenceLine::Orientation::Vertical);
 		line->setPositionLogical(QPointF(xPos, 0));
+		line->setParentGraphicsItem(q->graphicsItem());
 		q->addChildFast(line);
-		// the line is a child of the curve, not of the plot, so its graphics item
-		// has to be parented explicitly to make it appear in the scene
-		line->graphicsItem()->setParentItem(q->graphicsItem());
 		line->retransform();
 	}
+}
+
+void XYPiecewiseLinearFitCurvePrivate::updateResultsNote() {
+	if (!resultsNote)
+		return;
+
+	QString text;
+	text += i18n("Piecewise Linear Fit Results") + QStringLiteral("\n");
+	text += QStringLiteral("========================================\n\n");
+
+	if (!fitResult.available) {
+		text += i18n("No results available yet");
+		resultsNote->setText(text);
+		return;
+	}
+
+	if (!fitResult.valid) {
+		text += i18n("Status: %1", fitResult.status);
+		resultsNote->setText(text);
+		return;
+	}
+
+	// Overall summary
+	text += i18n("Status: %1", fitResult.status) + QStringLiteral("\n");
+	text += i18n("Number of Segments: %1", fitResult.numSegments) + QStringLiteral("\n");
+	text += i18n("Number of Changepoints: %1", fitResult.changepoints.size()) + QStringLiteral("\n");
+	text += i18n("Overall R²: %1", QString::number(fitResult.overallRsquare, 'f', 6)) + QStringLiteral("\n");
+	text += i18n("Overall SSE: %1", QString::number(fitResult.sse, 'g', 6)) + QStringLiteral("\n\n");
+
+	// Changepoints
+	if (!fitResult.changepoints.isEmpty()) {
+		text += i18n("Changepoint Positions (X-values)") + QStringLiteral(":\n");
+		for (int i = 0; i < fitResult.changepoints.size(); ++i)
+			text += QStringLiteral("  %1: %2\n").arg(i + 1).arg(fitResult.changepoints[i], 0, 'g', 6);
+		text += QStringLiteral("\n");
+	}
+
+	// Per-segment details
+	for (size_t seg = 0; seg < fitResult.numSegments; ++seg) {
+		const auto& segResult = fitResult.segmentResults[seg];
+		text += QStringLiteral("----------------------------------------\n");
+		text += i18n("Segment %1", seg + 1) + QStringLiteral("\n");
+		text += QStringLiteral("----------------------------------------\n");
+
+		// Parameters
+		text += i18n("Parameters:") + QStringLiteral("\n");
+		text += QStringLiteral("  Slope     = %1 ± %2\n").arg(segResult.paramValues.value(1), 0, 'g', 6).arg(segResult.errorValues.value(1), 0, 'g', 3);
+		text += QStringLiteral("  Intercept = %1 ± %2\n").arg(segResult.paramValues.value(0), 0, 'g', 6).arg(segResult.errorValues.value(0), 0, 'g', 3);
+
+		// Parameter statistics
+		text += QStringLiteral("\n");
+		text += i18n("Parameter Statistics (Slope):") + QStringLiteral("\n");
+		text += QStringLiteral("  t-value = %1\n").arg(segResult.tdist_tValues.value(1), 0, 'g', 4);
+		text += QStringLiteral("  p-value = %1\n").arg(segResult.tdist_pValues.value(1), 0, 'g', 4);
+
+		// Goodness of fit
+		text += QStringLiteral("\n");
+		text += i18n("Goodness of Fit:") + QStringLiteral("\n");
+		text += QStringLiteral("  R²           = %1\n").arg(segResult.rsquare, 0, 'f', 6);
+		text += QStringLiteral("  Adjusted R²  = %1\n").arg(segResult.rsquareAdj, 0, 'f', 6);
+		text += QStringLiteral("  SSE          = %1\n").arg(segResult.sse, 0, 'g', 6);
+		text += QStringLiteral("  RMS          = %1\n").arg(segResult.rms, 0, 'g', 6);
+		text += QStringLiteral("  MAE          = %1\n").arg(segResult.mae, 0, 'g', 6);
+		text += QStringLiteral("  DoF          = %1\n").arg(segResult.dof);
+
+		// Statistical tests
+		text += QStringLiteral("\n");
+		text += i18n("Statistical Tests:") + QStringLiteral("\n");
+		text += QStringLiteral("  χ² p-value   = %1\n").arg(segResult.chisq_p, 0, 'g', 4);
+		text += QStringLiteral("  F-statistic  = %1\n").arg(segResult.fdist_F, 0, 'g', 4);
+		text += QStringLiteral("  F p-value    = %1\n").arg(segResult.fdist_p, 0, 'g', 4);
+
+		// Information criteria
+		text += QStringLiteral("\n");
+		text += i18n("Information Criteria:") + QStringLiteral("\n");
+		text += QStringLiteral("  AIC          = %1\n").arg(segResult.aic, 0, 'g', 6);
+		text += QStringLiteral("  BIC          = %1\n").arg(segResult.bic, 0, 'g', 6);
+
+		text += QStringLiteral("\n");
+	}
+
+	resultsNote->setUndoAware(false);
+	resultsNote->setText(text);
+	resultsNote->setUndoAware(true);
 }
 
 // ##############################################################################
@@ -410,6 +602,37 @@ void XYPiecewiseLinearFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("numSegments"), QString::number(d->fitResult.numSegments));
 	writer->writeAttribute(QStringLiteral("overallRsquare"), QString::number(d->fitResult.overallRsquare));
 	writer->writeAttribute(QStringLiteral("sse"), QString::number(d->fitResult.sse));
+
+	// one <segment> element per fit segment, holding all per-segment values as attributes;
+	// changepoints has one entry less than the number of segments
+	for (size_t i = 0; i < d->fitResult.numSegments; ++i) {
+		const auto& segResult = d->fitResult.segmentResults[i];
+		writer->writeStartElement(QStringLiteral("segment"));
+		writer->writeAttribute(QStringLiteral("slope"), QString::number(segResult.paramValues.value(1), 'g', 15));
+		writer->writeAttribute(QStringLiteral("intercept"), QString::number(segResult.paramValues.value(0), 'g', 15));
+		writer->writeAttribute(QStringLiteral("slopeError"), QString::number(segResult.errorValues.value(1), 'g', 15));
+		writer->writeAttribute(QStringLiteral("interceptError"), QString::number(segResult.errorValues.value(0), 'g', 15));
+		writer->writeAttribute(QStringLiteral("rsquare"), QString::number(segResult.rsquare, 'g', 15));
+		writer->writeAttribute(QStringLiteral("rsquareAdj"), QString::number(segResult.rsquareAdj, 'g', 15));
+		writer->writeAttribute(QStringLiteral("sseValue"), QString::number(segResult.sse, 'g', 15));
+		writer->writeAttribute(QStringLiteral("sstValue"), QString::number(segResult.sst, 'g', 15));
+		writer->writeAttribute(QStringLiteral("rmsValue"), QString::number(segResult.rms, 'g', 15));
+		writer->writeAttribute(QStringLiteral("rsdValue"), QString::number(segResult.rsd, 'g', 15));
+		writer->writeAttribute(QStringLiteral("mseValue"), QString::number(segResult.mse, 'g', 15));
+		writer->writeAttribute(QStringLiteral("rmseValue"), QString::number(segResult.rmse, 'g', 15));
+		writer->writeAttribute(QStringLiteral("maeValue"), QString::number(segResult.mae, 'g', 15));
+		writer->writeAttribute(QStringLiteral("dofValue"), QString::number(segResult.dof));
+		writer->writeAttribute(QStringLiteral("chisqP"), QString::number(segResult.chisq_p, 'g', 15));
+		writer->writeAttribute(QStringLiteral("fdistF"), QString::number(segResult.fdist_F, 'g', 15));
+		writer->writeAttribute(QStringLiteral("fdistP"), QString::number(segResult.fdist_p, 'g', 15));
+		writer->writeAttribute(QStringLiteral("aicValue"), QString::number(segResult.aic, 'g', 15));
+		writer->writeAttribute(QStringLiteral("bicValue"), QString::number(segResult.bic, 'g', 15));
+		writer->writeAttribute(QStringLiteral("slopeT"), QString::number(segResult.tdist_tValues.value(1), 'g', 15));
+		writer->writeAttribute(QStringLiteral("slopeP"), QString::number(segResult.tdist_pValues.value(1), 'g', 15));
+		if (i < static_cast<size_t>(d->fitResult.changepoints.size()))
+			writer->writeAttribute(QStringLiteral("changepoint"), QString::number(d->fitResult.changepoints.at(i), 'g', 15));
+		writer->writeEndElement(); // segment
+	}
 	writer->writeEndElement();
 
 	// save calculated columns if available
@@ -457,6 +680,50 @@ bool XYPiecewiseLinearFitCurve::load(XmlStreamReader* reader, bool preview) {
 			d->fitResult.numSegments = attribs.value(QStringLiteral("numSegments")).toULongLong();
 			d->fitResult.overallRsquare = attribs.value(QStringLiteral("overallRsquare")).toDouble();
 			d->fitResult.sse = attribs.value(QStringLiteral("sse")).toDouble();
+		} else if (reader->name() == QLatin1String("segment")) {
+			attribs = reader->attributes();
+			XYFitCurve::FitResult segResult;
+			segResult.paramValues.resize(2);
+			segResult.errorValues.resize(2);
+			segResult.tdist_tValues.resize(2);
+			segResult.tdist_pValues.resize(2);
+
+			segResult.paramValues[1] = attribs.value(QStringLiteral("slope")).toDouble(); // slope
+			segResult.paramValues[0] = attribs.value(QStringLiteral("intercept")).toDouble(); // intercept
+			segResult.errorValues[1] = attribs.value(QStringLiteral("slopeError")).toDouble();
+			segResult.errorValues[0] = attribs.value(QStringLiteral("interceptError")).toDouble();
+			segResult.rsquare = attribs.value(QStringLiteral("rsquare")).toDouble();
+			segResult.rsquareAdj = attribs.value(QStringLiteral("rsquareAdj")).toDouble();
+			segResult.sse = attribs.value(QStringLiteral("sseValue")).toDouble();
+			segResult.sst = attribs.value(QStringLiteral("sstValue")).toDouble();
+			segResult.rms = attribs.value(QStringLiteral("rmsValue")).toDouble();
+			segResult.rsd = attribs.value(QStringLiteral("rsdValue")).toDouble();
+			segResult.mse = attribs.value(QStringLiteral("mseValue")).toDouble();
+			segResult.rmse = attribs.value(QStringLiteral("rmseValue")).toDouble();
+			segResult.mae = attribs.value(QStringLiteral("maeValue")).toDouble();
+			segResult.dof = attribs.value(QStringLiteral("dofValue")).toInt();
+			segResult.chisq_p = attribs.value(QStringLiteral("chisqP")).toDouble();
+			segResult.fdist_F = attribs.value(QStringLiteral("fdistF")).toDouble();
+			segResult.fdist_p = attribs.value(QStringLiteral("fdistP")).toDouble();
+			segResult.aic = attribs.value(QStringLiteral("aicValue")).toDouble();
+			segResult.bic = attribs.value(QStringLiteral("bicValue")).toDouble();
+			segResult.tdist_tValues[1] = attribs.value(QStringLiteral("slopeT")).toDouble();
+			segResult.tdist_pValues[1] = attribs.value(QStringLiteral("slopeP")).toDouble();
+			d->fitResult.segmentResults << segResult;
+			if (attribs.hasAttribute(QStringLiteral("changepoint")))
+				d->fitResult.changepoints << attribs.value(QStringLiteral("changepoint")).toDouble();
+		} else if (reader->name() == QLatin1String("column")) {
+			auto* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
+			if (!column->load(reader, preview)) {
+				delete column;
+				return false;
+			}
+			if (column->name() == QLatin1String("x"))
+				d->xColumn = column;
+			else if (column->name() == QLatin1String("y"))
+				d->yColumn = column;
+			else
+				delete column;
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
@@ -469,6 +736,13 @@ bool XYPiecewiseLinearFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();
+
+	// Add result note (not saved in projects, recreated on load)
+	d->resultsNote = new Note(i18n("Fit Results"));
+	d->resultsNote->setFixed(true);
+	d->resultsNote->setBackgroundColor(QColor(Qt::white));
+	d->resultsNote->setTextFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+	addChildFast(d->resultsNote);
 
 	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);

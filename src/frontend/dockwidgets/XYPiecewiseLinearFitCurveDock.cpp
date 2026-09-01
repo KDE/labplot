@@ -28,13 +28,13 @@ void XYPiecewiseLinearFitCurveDock::setupGeneral() {
 	gridLayout->setVerticalSpacing(2);
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbDataSourceCurve, 6, 2, 1, 2);
+	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 2);
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 7, 2, 1, 2);
+	gridLayout->addWidget(cbXDataColumn, 6, 2, 1, 2);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 8, 2, 1, 2);
+	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 2);
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -76,6 +76,9 @@ void XYPiecewiseLinearFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbMaxChangepoints->setValue(m_fitData.maxChangepoints);
 	uiGeneralTab.chkChangepointLines->setChecked(m_fitCurve->changepointLinesEnabled());
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
+	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
+
 	showFitResult();
 
 	// Slots
@@ -113,10 +116,10 @@ void XYPiecewiseLinearFitCurveDock::showFitResult() {
 		return;
 	}
 
-	QString html = QStringLiteral("<h3>Piecewise Linear Fit Results</h3>");
+	QString html;
 
 	if (!fitResult.valid) {
-		html += QStringLiteral("<p style='color:red;'>") + fitResult.status + QStringLiteral("</p>");
+		html = QStringLiteral("<p style='color:red;'>") + fitResult.status + QStringLiteral("</p>");
 		uiGeneralTab.teResults->setHtml(html);
 		return;
 	}
@@ -145,23 +148,61 @@ void XYPiecewiseLinearFitCurveDock::showFitResult() {
 	}
 
 	if (fitResult.numSegments > 0) {
-		html += QStringLiteral("<h4>Segments</h4>");
+		html += QStringLiteral("<h4>Segment Parameters</h4>");
 		html += QStringLiteral("<table border='1' cellpadding='3'>");
-		html += QStringLiteral("<tr><th>Segment</th><th>Slope</th><th>Intercept</th><th>R²</th></tr>");
-
+		html += QStringLiteral("<tr><th></th>");
 		for (size_t i = 0; i < fitResult.numSegments; ++i) {
-			if (i >= static_cast<size_t>(fitResult.slopes.size()) || i >= static_cast<size_t>(fitResult.intercepts.size()) 
-				|| i >= static_cast<size_t>(fitResult.rsquares.size())) {
-				DEBUG(Q_FUNC_INFO << ", invalid segment index: " << i);
-				break;
-			}
-			html += QStringLiteral("<tr>");
-			html += QStringLiteral("<td>") + QString::number(i + 1) + QStringLiteral("</td>");
-			html += QStringLiteral("<td>") + QString::number(fitResult.slopes[i], 'g', 4) + QStringLiteral("</td>");
-			html += QStringLiteral("<td>") + QString::number(fitResult.intercepts[i], 'g', 4) + QStringLiteral("</td>");
-			html += QStringLiteral("<td>") + QString::number(fitResult.rsquares[i], 'f', 4) + QStringLiteral("</td>");
-			html += QStringLiteral("</tr>");
+			html += QStringLiteral("<th>Segment %1</th>").arg(i + 1);
 		}
+		html += QStringLiteral("</tr>");
+
+		auto addParameterRow = [&html, &fitResult](const QString& label, const auto& value, char format, int precision) {
+			html += QStringLiteral("<tr><th>") + label + QStringLiteral("</th>");
+			for (const auto& segResult : fitResult.segmentResults)
+				html += QStringLiteral("<td>") + QString::number(static_cast<double>(value(segResult)), format, precision) + QStringLiteral("</td>");
+			html += QStringLiteral("</tr>");
+		};
+		addParameterRow(QStringLiteral("Slope"), [](const auto& result) { return result.paramValues.value(1); }, 'g', 4);
+		addParameterRow(QStringLiteral("SE(Slope)"), [](const auto& result) { return result.errorValues.value(1); }, 'g', 3);
+		addParameterRow(QStringLiteral("Intercept"), [](const auto& result) { return result.paramValues.value(0); }, 'g', 4);
+		addParameterRow(QStringLiteral("SE(Intercept)"), [](const auto& result) { return result.errorValues.value(0); }, 'g', 3);
+		addParameterRow(QStringLiteral("t (Slope)"), [](const auto& result) { return result.tdist_tValues.value(1); }, 'g', 3);
+
+		html += QStringLiteral("<tr><th>p (Slope)</th>");
+		for (const auto& segResult : fitResult.segmentResults) {
+			const double p = segResult.tdist_pValues.value(1);
+			const auto pColor = p > 0.05 ? QStringLiteral("color:gray;") : p > 0.01 ? QStringLiteral("color:darkgreen;")
+				: p > 0.001 ? QStringLiteral("color:darkcyan;") : p > 0.0001 ? QStringLiteral("color:blue;") : QStringLiteral("color:red;");
+			html += QStringLiteral("<td style='") + pColor + QStringLiteral("'>") + QString::number(p, 'g', 3) + QStringLiteral("</td>");
+		}
+		html += QStringLiteral("</tr>");
+		html += QStringLiteral("</table>");
+
+		html += QStringLiteral("<h4>Goodness of Fit</h4>");
+		html += QStringLiteral("<table border='1' cellpadding='3'>");
+		html += QStringLiteral("<tr><th></th>");
+		for (size_t i = 0; i < fitResult.numSegments; ++i) {
+			html += QStringLiteral("<th>Segment %1</th>").arg(i + 1);
+		}
+		html += QStringLiteral("</tr>");
+
+		auto addGoodnessRow = [&html, &fitResult](const QString& label, const auto& value, char format, int precision) {
+			html += QStringLiteral("<tr><th>") + label + QStringLiteral("</th>");
+			for (const auto& segResult : fitResult.segmentResults)
+				html += QStringLiteral("<td>") + QString::number(static_cast<double>(value(segResult)), format, precision) + QStringLiteral("</td>");
+			html += QStringLiteral("</tr>");
+		};
+		addGoodnessRow(QStringLiteral("R²"), [](const auto& result) { return result.rsquare; }, 'f', 4);
+		addGoodnessRow(QStringLiteral("Adj. R²"), [](const auto& result) { return result.rsquareAdj; }, 'f', 4);
+		addGoodnessRow(QStringLiteral("SSE"), [](const auto& result) { return result.sse; }, 'g', 4);
+		addGoodnessRow(QStringLiteral("RMS"), [](const auto& result) { return result.rms; }, 'g', 4);
+		addGoodnessRow(QStringLiteral("MAE"), [](const auto& result) { return result.mae; }, 'g', 4);
+		addGoodnessRow(QStringLiteral("DoF"), [](const auto& result) { return result.dof; }, 'g', 0);
+		addGoodnessRow(QStringLiteral("χ² p"), [](const auto& result) { return result.chisq_p; }, 'g', 3);
+		addGoodnessRow(QStringLiteral("F"), [](const auto& result) { return result.fdist_F; }, 'g', 4);
+		addGoodnessRow(QStringLiteral("F p"), [](const auto& result) { return result.fdist_p; }, 'g', 3);
+		addGoodnessRow(QStringLiteral("AIC"), [](const auto& result) { return result.aic; }, 'g', 4);
+		addGoodnessRow(QStringLiteral("BIC"), [](const auto& result) { return result.bic; }, 'g', 4);
 		html += QStringLiteral("</table>");
 	}
 
@@ -201,7 +242,7 @@ void XYPiecewiseLinearFitCurveDock::methodChanged(int index) {
 	enableRecalculate();
 }
 
-void XYPiecewiseLinearFitCurveDock::connectionTypeChanged(int index) {
+void XYPiecewiseLinearFitCurveDock::connectionTypeChanged(int) {
 	CONDITIONAL_LOCK_RETURN;
 	m_fitData.connectionType = static_cast<XYPiecewiseLinearFitCurve::ConnectionType>(uiGeneralTab.cbConnection->currentData().toInt());
 	enableRecalculate();
@@ -251,10 +292,16 @@ void XYPiecewiseLinearFitCurveDock::retranslateUi() {
 	uiGeneralTab.cbMethod->setToolTip(info);
 
 	info = i18n("Minimum number of data points in a segment. Segments with fewer data points are merged with neighboring segments.");
+	uiGeneralTab.lMinSegmentSize->setToolTip(info);
 	uiGeneralTab.sbMinSegmentSize->setToolTip(info);
 
 	info = i18n("Cost for adding a changepoint. Must be exceeded by the fit improvement (SSE reduction) to justify splitting.\nLower values detect more changepoints, higher values detect fewer.\nScale with your data: ~1 for Y-values near 1, ~10-100 for large values, ~0.01-0.1 for small values.");
+	uiGeneralTab.lPenalty->setToolTip(info);
 	uiGeneralTab.sbPenalty->setToolTip(info);
+
+	info = i18n("Determine if the fit should be continuous or discontinuous at the changepoints.");
+	uiGeneralTab.lConnection->setToolTip(info);
+	uiGeneralTab.cbConnection->setToolTip(info);
 }
 
 void XYPiecewiseLinearFitCurveDock::curveFitDataChanged(const XYPiecewiseLinearFitCurve::FitData& fitData) {

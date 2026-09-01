@@ -11,6 +11,7 @@
 #define XYPIECEWISELINEARFITCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
 extern "C" {
 #include "backend/nsl/nsl_changepoint.h"
@@ -50,9 +51,9 @@ public:
 
 		size_t numSegments{0};
 		QVector<double> changepoints; // X-values of changepoints
-		QVector<double> slopes;
-		QVector<double> intercepts;
-		QVector<double> rsquares;
+		QVector<XYFitCurve::FitResult> segmentResults; // One result per segment
+
+		// Overall metrics
 		double overallRsquare{0.};
 		double sse{0.};
 	};
