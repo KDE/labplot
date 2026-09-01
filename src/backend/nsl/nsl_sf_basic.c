@@ -15,10 +15,26 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define NSL_SF_CHECK_1(x) do { if (!isfinite(x)) return NAN; } while (0)
-#define NSL_SF_CHECK_2(x, y) do { if (!isfinite(x) || !isfinite(y)) return NAN; } while (0)
-#define NSL_SF_CHECK_3(x, y, z) do { if (!isfinite(x) || !isfinite(y) || !isfinite(z)) return NAN; } while (0)
-#define NSL_SF_CHECK_4(x, y, z, w) do { if (!isfinite(x) || !isfinite(y) || !isfinite(z) || !isfinite(w)) return NAN; } while (0)
+#define NSL_SF_CHECK_1(x)                                                                                                                                      \
+	do {                                                                                                                                                       \
+		if (!isfinite(x))                                                                                                                                      \
+			return NAN;                                                                                                                                        \
+	} while (0)
+#define NSL_SF_CHECK_2(x, y)                                                                                                                                   \
+	do {                                                                                                                                                       \
+		if (!isfinite(x) || !isfinite(y))                                                                                                                      \
+			return NAN;                                                                                                                                        \
+	} while (0)
+#define NSL_SF_CHECK_3(x, y, z)                                                                                                                                \
+	do {                                                                                                                                                       \
+		if (!isfinite(x) || !isfinite(y) || !isfinite(z))                                                                                                      \
+			return NAN;                                                                                                                                        \
+	} while (0)
+#define NSL_SF_CHECK_4(x, y, z, w)                                                                                                                             \
+	do {                                                                                                                                                       \
+		if (!isfinite(x) || !isfinite(y) || !isfinite(z) || !isfinite(w))                                                                                      \
+			return NAN;                                                                                                                                        \
+	} while (0)
 
 #ifdef HAVE_LIBCERF
 #include <cerf.h>

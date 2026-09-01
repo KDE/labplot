@@ -11,8 +11,16 @@
 #include <gsl/gsl_math.h>
 #include <math.h>
 
-#define NSL_GEOM_CHECK_2D(x1, y1, x2, y2) do { if (!isfinite(x1) || !isfinite(y1) || !isfinite(x2) || !isfinite(y2)) return NAN; } while (0)
-#define NSL_GEOM_CHECK_3D(x1, y1, z1, x2, y2, z2) do { if (!isfinite(x1) || !isfinite(y1) || !isfinite(z1) || !isfinite(x2) || !isfinite(y2) || !isfinite(z2)) return NAN; } while (0)
+#define NSL_GEOM_CHECK_2D(x1, y1, x2, y2)                                                                                                                      \
+	do {                                                                                                                                                       \
+		if (!isfinite(x1) || !isfinite(y1) || !isfinite(x2) || !isfinite(y2))                                                                                  \
+			return NAN;                                                                                                                                        \
+	} while (0)
+#define NSL_GEOM_CHECK_3D(x1, y1, z1, x2, y2, z2)                                                                                                              \
+	do {                                                                                                                                                       \
+		if (!isfinite(x1) || !isfinite(y1) || !isfinite(z1) || !isfinite(x2) || !isfinite(y2) || !isfinite(z2))                                                \
+			return NAN;                                                                                                                                        \
+	} while (0)
 
 double nsl_geom_point_point_dist(double x1, double y1, double x2, double y2) {
 	NSL_GEOM_CHECK_2D(x1, y1, x2, y2);

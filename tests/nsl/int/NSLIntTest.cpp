@@ -9,8 +9,8 @@
 */
 
 #include "NSLIntTest.h"
-#include <limits>
 #include <cmath>
+#include <limits>
 
 extern "C" {
 #include "backend/nsl/nsl_int.h"

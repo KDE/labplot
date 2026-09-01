@@ -9,8 +9,8 @@
 */
 
 #include "NSLMathTest.h"
-#include <limits>
 #include <cmath>
+#include <limits>
 
 extern "C" {
 #include "backend/nsl/nsl_math.h"
