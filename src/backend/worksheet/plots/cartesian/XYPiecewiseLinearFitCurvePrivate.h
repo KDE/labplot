@@ -20,17 +20,19 @@ public:
 	explicit XYPiecewiseLinearFitCurvePrivate(XYPiecewiseLinearFitCurve*);
 	~XYPiecewiseLinearFitCurvePrivate() override;
 
+	void retransform() override;
 	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
 	virtual void resetResults() override;
+	void updateChangepointLines();
 
 	XYPiecewiseLinearFitCurve::FitData fitData;
 	XYPiecewiseLinearFitCurve::FitResult fitResult;
+	bool changepointLinesEnabled{false};
 
 	XYPiecewiseLinearFitCurve* const q;
 
 private:
 	void fitSegment(const QVector<double>& x, const QVector<double>& y, double& slope, double& intercept, double& rsquare);
-	void updateChangepointLines(const QVector<double>& xData, size_t numChangepoints, const size_t* changepoints);
 };
 
 #endif

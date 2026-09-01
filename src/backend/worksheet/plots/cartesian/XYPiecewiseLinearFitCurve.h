@@ -36,7 +36,6 @@ public:
 		double penalty{1.0}; // Penalty for adding changepoints - higher values = fewer segments
 		size_t minSegmentSize{2}; // Minimum number of points per segment
 		size_t maxChangepoints{1}; // Maximum number of changepoints to detect
-		bool changepointLinesEnabled{true}; // Show vertical reference lines at changepoints
 	};
 
 	struct FitResult : public XYAnalysisCurve::Result {
@@ -44,7 +43,7 @@ public:
 		}
 
 		size_t numSegments{0};
-		QVector<size_t> changepoints;
+		QVector<double> changepoints; // X-values of changepoints
 		QVector<double> slopes;
 		QVector<double> intercepts;
 		QVector<double> rsquares;
@@ -64,6 +63,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(FitData, fitData, FitData)
 	const FitResult& fitResult() const;
 
+	BASIC_D_ACCESSOR_DECL(bool, changepointLinesEnabled, ChangepointLinesEnabled)
 	QVector<ReferenceLine*> changepointLines() const;
 
 	typedef XYPiecewiseLinearFitCurvePrivate Private;
@@ -76,6 +76,7 @@ private:
 
 Q_SIGNALS:
 	void fitDataChanged(const XYPiecewiseLinearFitCurve::FitData&);
+	void changepointLinesEnabledChanged(bool);
 };
 
 #endif

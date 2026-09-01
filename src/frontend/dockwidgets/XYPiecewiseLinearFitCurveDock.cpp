@@ -42,6 +42,9 @@ void XYPiecewiseLinearFitCurveDock::setupGeneral() {
 
 	retranslateUi();
 
+	// TODO: activate later, when the feature is implemented
+	uiGeneralTab.chkChangepointLines->hide();
+
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYPiecewiseLinearFitCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYPiecewiseLinearFitCurveDock::methodChanged);
@@ -69,7 +72,7 @@ void XYPiecewiseLinearFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbPenalty->setValue(m_fitData.penalty);
 	uiGeneralTab.sbMinSegmentSize->setValue(m_fitData.minSegmentSize);
 	uiGeneralTab.sbMaxChangepoints->setValue(m_fitData.maxChangepoints);
-	uiGeneralTab.chkChangepointLines->setChecked(m_fitData.changepointLinesEnabled);
+	uiGeneralTab.chkChangepointLines->setChecked(m_fitCurve->changepointLinesEnabled());
 
 	showFitResult();
 
@@ -127,17 +130,13 @@ void XYPiecewiseLinearFitCurveDock::showFitResult() {
 	if (!fitResult.changepoints.isEmpty()) {
 		html += QStringLiteral("<h4>Changepoints</h4>");
 		html += QStringLiteral("<table border='1' cellpadding='3'>");
-		html += QStringLiteral("<tr><th>Index</th><th>X-Position</th></tr>");
+		html += QStringLiteral("<tr><th>#</th><th>X-Position</th></tr>");
 
-		const auto* xColumn = m_fitCurve->xDataColumn();
 		for (int i = 0; i < fitResult.changepoints.size(); ++i) {
-			size_t idx = fitResult.changepoints[i];
+			double xPos = fitResult.changepoints[i];
 			html += QStringLiteral("<tr>");
-			html += QStringLiteral("<td>") + QString::number(idx) + QStringLiteral("</td>");
-			if (xColumn && idx < static_cast<size_t>(xColumn->rowCount()))
-				html += QStringLiteral("<td>") + QString::number(xColumn->valueAt(idx), 'g', 6) + QStringLiteral("</td>");
-			else
-				html += QStringLiteral("<td>-</td>");
+			html += QStringLiteral("<td>") + QString::number(i + 1) + QStringLiteral("</td>");
+			html += QStringLiteral("<td>") + QString::number(xPos, 'g', 6) + QStringLiteral("</td>");
 			html += QStringLiteral("</tr>");
 		}
 		html += QStringLiteral("</table>");
@@ -220,8 +219,9 @@ void XYPiecewiseLinearFitCurveDock::maxChangepointsChanged() {
 
 void XYPiecewiseLinearFitCurveDock::changepointLinesEnabledChanged() {
 	CONDITIONAL_LOCK_RETURN;
-	m_fitData.changepointLinesEnabled = uiGeneralTab.chkChangepointLines->isChecked();
-	enableRecalculate();
+	bool enabled = uiGeneralTab.chkChangepointLines->isChecked();
+	for (auto* curve : m_curvesList)
+		static_cast<XYPiecewiseLinearFitCurve*>(curve)->setChangepointLinesEnabled(enabled);
 }
 
 void XYPiecewiseLinearFitCurveDock::recalculateClicked() {

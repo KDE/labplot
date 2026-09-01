@@ -41,16 +41,30 @@ QIcon XYPiecewiseLinearFitCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve"));
 }
 
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_D_READER_IMPL(XYPiecewiseLinearFitCurve, XYPiecewiseLinearFitCurve::FitData, fitData, fitData)
+BASIC_D_READER_IMPL(XYPiecewiseLinearFitCurve, bool, changepointLinesEnabled, changepointLinesEnabled)
 
+QVector<ReferenceLine*> XYPiecewiseLinearFitCurve::changepointLines() const {
+	return children<ReferenceLine>(ChildIndexFlag::IncludeHidden);
+}
+
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYPiecewiseLinearFitCurve, SetFitData, XYPiecewiseLinearFitCurve::FitData, fitData, recalculate)
 void XYPiecewiseLinearFitCurve::setFitData(const XYPiecewiseLinearFitCurve::FitData& fitData) {
 	Q_D(XYPiecewiseLinearFitCurve);
 	exec(new XYPiecewiseLinearFitCurveSetFitDataCmd(d, fitData, ki18n("%1: set fit options and perform the fit")));
 }
 
-QVector<ReferenceLine*> XYPiecewiseLinearFitCurve::changepointLines() const {
-	return children<ReferenceLine>(ChildIndexFlag::IncludeHidden);
+STD_SETTER_CMD_IMPL_F_S(XYPiecewiseLinearFitCurve, SetChangepointLinesEnabled, bool, changepointLinesEnabled, updateChangepointLines)
+void XYPiecewiseLinearFitCurve::setChangepointLinesEnabled(bool enabled) {
+	Q_D(XYPiecewiseLinearFitCurve);
+	if (d->changepointLinesEnabled != enabled)
+		exec(new XYPiecewiseLinearFitCurveSetChangepointLinesEnabledCmd(d, enabled, ki18n("%1: toggle changepoint lines")));
 }
 
 // ##############################################################################
@@ -62,6 +76,15 @@ XYPiecewiseLinearFitCurvePrivate::XYPiecewiseLinearFitCurvePrivate(XYPiecewiseLi
 }
 
 XYPiecewiseLinearFitCurvePrivate::~XYPiecewiseLinearFitCurvePrivate() = default;
+
+void XYPiecewiseLinearFitCurvePrivate::retransform() {
+	XYAnalysisCurvePrivate::retransform();
+	const auto& lines = q->changepointLines();
+	for (auto* line : lines) {
+		line->retransform();
+		qDebug() << "retransforming changepoint line" << line->name();
+	}
+}
 
 void XYPiecewiseLinearFitCurvePrivate::resetResults() {
 	fitResult = XYPiecewiseLinearFitCurve::FitResult();
@@ -128,8 +151,10 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 
 	fitResult.numSegments = numChangepoints + 1;
 	fitResult.changepoints.resize(numChangepoints);
-	for (size_t i = 0; i < numChangepoints; ++i)
-		fitResult.changepoints[i] = changepoints[i];
+	for (size_t i = 0; i < numChangepoints; ++i) {
+		qDebug() << "Changepoint" << i << ":" << changepoints[i] << "x =" << xData[changepoints[i]];
+		fitResult.changepoints[i] = xData[changepoints[i]]; // Store X-value, not index
+	}
 
 	fitResult.slopes.resize(fitResult.numSegments);
 	fitResult.intercepts.resize(fitResult.numSegments);
@@ -207,8 +232,8 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 		}
 	}
 
-	// Update changepoint reference lines before deleting changepoints array
-	updateChangepointLines(xData, numChangepoints, changepoints);
+	// Update changepoint reference lines
+	updateChangepointLines();
 
 	delete[] changepoints;
 
@@ -266,28 +291,31 @@ void XYPiecewiseLinearFitCurvePrivate::fitSegment(const QVector<double>& x, cons
 	rsquare = (sst > 0.) ? (1. - sse / sst) : 0.;
 }
 
-void XYPiecewiseLinearFitCurvePrivate::updateChangepointLines(const QVector<double>& xData, size_t numChangepoints, const size_t* changepoints) {
+void XYPiecewiseLinearFitCurvePrivate::updateChangepointLines() {
 	// Remove existing changepoint lines
 	auto existingLines = q->changepointLines();
 	for (auto* line : existingLines)
 		q->removeChild(line);
 
 	// Create new lines if enabled
-	if (!fitData.changepointLinesEnabled || numChangepoints == 0)
+	if (!changepointLinesEnabled || fitResult.changepoints.isEmpty())
 		return;
 
 	auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
 	if (!plot)
 		return;
 
-	for (size_t i = 0; i < numChangepoints; ++i) {
-		double xPos = xData[changepoints[i]];
+	for (int i = 0; i < fitResult.changepoints.size(); ++i) {
+		double xPos = fitResult.changepoints[i]; // Already X-value, not index
 		auto* line = new ReferenceLine(plot, QStringLiteral("Changepoint %1").arg(i + 1), false);
 		line->setHidden(true);
 		line->setCoordinateSystemIndex(q->coordinateSystemIndex());
 		line->setOrientation(ReferenceLine::Orientation::Vertical);
 		line->setPositionLogical(QPointF(xPos, 0));
 		q->addChildFast(line);
+		// the line is a child of the curve, not of the plot, so its graphics item
+		// has to be parented explicitly to make it appear in the scene
+		line->graphicsItem()->setParentItem(q->graphicsItem());
 		line->retransform();
 	}
 }
@@ -309,7 +337,7 @@ void XYPiecewiseLinearFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("penalty"), QString::number(d->fitData.penalty));
 	writer->writeAttribute(QStringLiteral("minSegmentSize"), QString::number(d->fitData.minSegmentSize));
 	writer->writeAttribute(QStringLiteral("maxChangepoints"), QString::number(d->fitData.maxChangepoints));
-	writer->writeAttribute(QStringLiteral("changepointLinesEnabled"), QString::number(d->fitData.changepointLinesEnabled));
+	writer->writeAttribute(QStringLiteral("changepointLinesEnabled"), QString::number(d->changepointLinesEnabled));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("fitResult"));
@@ -356,7 +384,7 @@ bool XYPiecewiseLinearFitCurve::load(XmlStreamReader* reader, bool preview) {
 			d->fitData.penalty = attribs.value(QStringLiteral("penalty")).toDouble();
 			d->fitData.minSegmentSize = attribs.value(QStringLiteral("minSegmentSize")).toULongLong();
 			d->fitData.maxChangepoints = attribs.value(QStringLiteral("maxChangepoints")).toULongLong();
-			d->fitData.changepointLinesEnabled = attribs.value(QStringLiteral("changepointLinesEnabled")).toInt();
+			d->changepointLinesEnabled = attribs.value(QStringLiteral("changepointLinesEnabled")).toInt();
 		} else if (reader->name() == QLatin1String("fitResult")) {
 			attribs = reader->attributes();
 			d->fitResult.available = attribs.value(QStringLiteral("available")).toInt();
