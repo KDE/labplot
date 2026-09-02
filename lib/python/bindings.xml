@@ -1244,6 +1244,20 @@
             </modify-argument>
         </declare-function>
     </object-type>
+    <rejection class="XYPiecewiseLinearFitCurve" field-name="*"/>
+    <rejection class="XYPiecewiseLinearFitCurve" function-name="*"/>
+    <object-type name="XYPiecewiseLinearFitCurve" disable-wrapper="yes">
+        <value-type name="FitData" disable-wrapper="yes"/>
+        <value-type name="FitResult" disable-wrapper="yes"/>
+        <enum-type name="ConnectionType"/>
+        <declare-function signature="XYPiecewiseLinearFitCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="fitData()const" return-type="XYPiecewiseLinearFitCurve::FitData"/>
+        <declare-function signature="setFitData(const XYPiecewiseLinearFitCurve::FitData&amp;)" return-type="void"/>
+        <declare-function signature="fitResult()const" return-type="const XYPiecewiseLinearFitCurve::FitResult&amp;"/>
+        <declare-function signature="changepointLinesEnabled()const" return-type="bool"/>
+        <declare-function signature="setChangepointLinesEnabled(bool)" return-type="void"/>
+        <declare-function signature="changepointLines()const" return-type="QVector&lt;ReferenceLine*&gt;"/>
+    </object-type>
     <rejection class="XYFourierFilterCurve" field-name="*"/>
     <rejection class="XYFourierFilterCurve" function-name="*"/>
     <object-type name="XYFourierFilterCurve" disable-wrapper="yes">

@@ -93,6 +93,7 @@
 #include "src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.h"
 #include "src/backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 #include "src/backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
+#include "src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.h"
 #include "src/backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 
 // worksheet

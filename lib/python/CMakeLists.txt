@@ -186,6 +186,12 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfitcurve_fitdata_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfitcurve_fitresult_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfitcurve_fitresult_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_fitdata_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_fitdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_fitresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_fitresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_filterdata_wrapper.cpp
