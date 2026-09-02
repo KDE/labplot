@@ -745,6 +745,7 @@ bool XYPiecewiseLinearFitCurve::load(XmlStreamReader* reader, bool preview) {
 	d->resultsNote->setBackgroundColor(QColor(Qt::white));
 	d->resultsNote->setTextFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 	addChildFast(d->resultsNote);
+	d->updateResultsNote();
 
 	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);
