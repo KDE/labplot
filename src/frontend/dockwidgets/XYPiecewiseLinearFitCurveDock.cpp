@@ -128,7 +128,7 @@ void XYPiecewiseLinearFitCurveDock::showFitResult() {
 	html += QStringLiteral("<tr><td><b>Status:</b></td><td>") + fitResult.status + QStringLiteral("</td></tr>");
 	html += QStringLiteral("<tr><td><b>Segments:</b></td><td>") + QString::number(fitResult.numSegments) + QStringLiteral("</td></tr>");
 	html += QStringLiteral("<tr><td><b>Changepoints:</b></td><td>") + QString::number(fitResult.changepoints.size()) + QStringLiteral("</td></tr>");
-	html += QStringLiteral("<tr><td><b>Overall R²:</b></td><td>") + QString::number(fitResult.overallRsquare, 'f', 4) + QStringLiteral("</td></tr>");
+	html += QStringLiteral("<tr><td><b>R²:</b></td><td>") + QString::number(fitResult.rsquare, 'f', 4) + QStringLiteral("</td></tr>");
 	html += QStringLiteral("<tr><td><b>SSE:</b></td><td>") + QString::number(fitResult.sse, 'g', 4) + QStringLiteral("</td></tr>");
 	html += QStringLiteral("</table>");
 

@@ -12,6 +12,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/note/Note.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "backend/nsl/nsl_stats.h"
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
@@ -20,7 +21,52 @@
 #include <QThreadPool>
 
 #include <gsl/gsl_cdf.h>
-#include <gsl/gsl_math.h>
+
+namespace {
+void calculateFitMetrics(XYFitCurve::FitResult& result, size_t n, unsigned int np) {
+	if (n == 0)
+		return;
+
+	result.mse = result.sse / n;
+	result.rmse = std::sqrt(result.mse);
+	result.rsquare = (result.sst > 0.) ? 1. - result.sse / result.sst : 0.;
+
+	if (result.dof > 0) {
+		result.rms = result.sse / result.dof;
+		result.rsd = std::sqrt(result.rms);
+		result.chisq_p = nsl_stats_chisq_p(result.sse, result.dof);
+	} else {
+		result.rms = result.rsd = 0.;
+		result.chisq_p = 1.;
+	}
+
+	if (result.dof > 1 && result.sst > 0.)
+		result.rsquareAdj = 1. - (1. - result.rsquare) * (n - 1.) / (result.dof - 1.);
+	else
+		result.rsquareAdj = 0.;
+
+	if (result.dof > 0 && result.sst > 0.) {
+		if (result.sse > 0.) {
+			result.fdist_F = (result.sst - result.sse) / (result.sse / result.dof);
+			result.fdist_p = gsl_cdf_fdist_Q(result.fdist_F, np - 1, result.dof);
+		} else {
+			result.fdist_F = std::numeric_limits<double>::infinity();
+			result.fdist_p = 0.;
+		}
+	} else {
+		result.fdist_F = 0.;
+		result.fdist_p = 1.;
+	}
+
+	result.logLik = nsl_stats_logLik(result.sse, n);
+	if (result.sse > 0.) {
+		result.aic = nsl_stats_aic(result.sse, n, np, 1);
+		result.bic = nsl_stats_bic(result.sse, n, np, 1);
+	} else {
+		result.aic = result.bic = -std::numeric_limits<double>::infinity();
+	}
+}
+}
 
 XYPiecewiseLinearFitCurve::XYPiecewiseLinearFitCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYPiecewiseLinearFitCurvePrivate(this), AspectType::XYPiecewiseLinearFitCurve) {
@@ -195,7 +241,7 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 	}
 
 	fitResult.sse = totalSSE;
-	fitResult.overallRsquare = (totalSST > 0.) ? (1. - totalSSE / totalSST) : 0.;
+	fitResult.rsquare = (totalSST > 0.) ? (1. - totalSSE / totalSST) : 0.;
 
 	const int pointsPerSegment = 2; // for lines 2 points are sufficient
 
@@ -266,41 +312,46 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 
 void XYPiecewiseLinearFitCurvePrivate::fitSegment(const QVector<double>& x, const QVector<double>& y, size_t seg) {
 	auto& result = fitResult.segmentResults[seg];
+	result = XYFitCurve::FitResult();
 	result.paramValues.resize(2);
 	result.errorValues.resize(2);
 	result.tdist_tValues.resize(2);
 	result.tdist_pValues.resize(2);
+	result.tdist_pValues.fill(1.);
 
 	size_t n = x.size();
 	if (n < 2) {
 		// Reset to defaults
 		result.paramValues[0] = (n == 1) ? y[0] : 0.; // intercept
 		result.paramValues[1] = 0.; // slope
+		calculateFitMetrics(result, n, 1);
 		return;
 	}
 
-	// Compute slope and intercept using closed-form linear regression
-	double sum_x = 0., sum_y = 0., sum_xx = 0., sum_xy = 0.;
+	// Compute slope and intercept using centered sums for numerical stability.
+	double sum_x = 0., sum_y = 0.;
 	for (size_t i = 0; i < n; ++i) {
 		sum_x += x[i];
 		sum_y += y[i];
-		sum_xx += x[i] * x[i];
-		sum_xy += x[i] * y[i];
 	}
 
 	double mean_x = sum_x / n;
 	double mean_y = sum_y / n;
-	double var_x = sum_xx / n - mean_x * mean_x;
-
-	if (std::fabs(var_x) < 1e-15) {
-		result.paramValues[1] = 0.; // slope
-		result.paramValues[0] = mean_y; // intercept
-		result.dof = n - 1;
-		return;
+	double Sxx = 0., Sxy = 0.;
+	for (size_t i = 0; i < n; ++i) {
+		const double dx = x[i] - mean_x;
+		const double dy = y[i] - mean_y;
+		Sxx += dx * dx;
+		Sxy += dx * dy;
 	}
 
-	result.paramValues[1] = (sum_xy / n - mean_x * mean_y) / var_x; // slope
-	result.paramValues[0] = mean_y - result.paramValues[1] * mean_x; // intercept
+	if (Sxx > 1e-15) {
+		result.paramValues[1] = Sxy / Sxx; // slope
+		result.paramValues[0] = mean_y - result.paramValues[1] * mean_x; // intercept
+	} else {
+		result.paramValues[1] = 0.; // slope
+		result.paramValues[0] = mean_y; // intercept
+	}
 
 	// Compute residuals and goodness metrics
 	double sse = 0., sst = 0., mae = 0.;
@@ -314,62 +365,39 @@ void XYPiecewiseLinearFitCurvePrivate::fitSegment(const QVector<double>& x, cons
 
 	result.sse = sse;
 	result.sst = sst;
-	result.rsquare = (sst > 0.) ? (1. - sse / sst) : 0.;
-	result.dof = n - 2;
+	result.dof = (Sxx > 1e-15) ? n - 2 : n - 1;
 
 	if (result.dof > 0) {
-		result.rms = std::sqrt(sse / result.dof);
-		result.rsd = result.rms;
-
 		double mse_val = sse / result.dof;
-		double Sxx = var_x * n;
-		result.errorValues[1] = std::sqrt(mse_val / Sxx); // slopeError
-		result.errorValues[0] = std::sqrt(mse_val * (1.0 / n + mean_x * mean_x / Sxx)); // interceptError
-
-		result.tdist_tValues[1] = result.paramValues[1] / result.errorValues[1]; // slope_t
-		result.tdist_pValues[1] = 2.0 * gsl_cdf_tdist_Q(std::abs(result.tdist_tValues[1]), result.dof); // slope_p
-		result.tdist_tValues[0] = result.paramValues[0] / result.errorValues[0]; // intercept_t
-		result.tdist_pValues[0] = 2.0 * gsl_cdf_tdist_Q(std::abs(result.tdist_tValues[0]), result.dof); // intercept_p
-
-		result.rsquareAdj = 1.0 - (sse / result.dof) / (sst / (n - 1));
-
-		result.chisq_p = gsl_cdf_chisq_Q(sse, result.dof);
-
-		double ssr = sst - sse;
-		result.fdist_F = (ssr / 1.0) / (sse / result.dof);
-		result.fdist_p = gsl_cdf_fdist_Q(result.fdist_F, 1, result.dof);
+		if (Sxx > 1e-15) {
+			result.errorValues[1] = std::sqrt(mse_val / Sxx); // slopeError
+			result.errorValues[0] = std::sqrt(mse_val * (1.0 / n + mean_x * mean_x / Sxx)); // interceptError
+			if (result.errorValues[1] > 0.) {
+				result.tdist_tValues[1] = result.paramValues[1] / result.errorValues[1];
+				result.tdist_pValues[1] = nsl_stats_tdist_p(result.tdist_tValues[1], result.dof);
+			}
+			if (result.errorValues[0] > 0.) {
+				result.tdist_tValues[0] = result.paramValues[0] / result.errorValues[0];
+				result.tdist_pValues[0] = nsl_stats_tdist_p(result.tdist_tValues[0], result.dof);
+			}
+		}
 	} else {
-		result.rms = result.rsd = 0.;
-		result.errorValues[0] = result.errorValues[1] = 0.;
-		result.rsquareAdj = 0.;
-		result.tdist_tValues[0] = result.tdist_tValues[1] = 0.;
 		result.tdist_pValues[0] = result.tdist_pValues[1] = 1.;
-		result.chisq_p = 1.;
-		result.fdist_F = 0.;
-		result.fdist_p = 1.;
 	}
 
-	result.mse = sse / n;
-	result.rmse = std::sqrt(result.mse);
 	result.mae = mae / n;
-
-	int k = 2;
-	if (sse > 0.) {
-		result.aic = n * std::log(sse / n) + 2 * k;
-		result.bic = n * std::log(sse / n) + k * std::log(n);
-	} else {
-		result.aic = -std::numeric_limits<double>::infinity();
-		result.bic = -std::numeric_limits<double>::infinity();
-	}
+	calculateFitMetrics(result, n, Sxx > 1e-15 ? 2 : 1);
 }
 
 // Constrained linear regression: fit line through (x0, y0) with minimum squared error
 void XYPiecewiseLinearFitCurvePrivate::fitSegmentConstrained(const QVector<double>& x, const QVector<double>& y, double x0, double y0, size_t seg) {
 	auto& result = fitResult.segmentResults[seg];
+	result = XYFitCurve::FitResult();
 	result.paramValues.resize(2);
 	result.errorValues.resize(2);
 	result.tdist_tValues.resize(2);
 	result.tdist_pValues.resize(2);
+	result.tdist_pValues.fill(1.);
 
 	size_t n = x.size();
 	if (n == 0) {
@@ -388,15 +416,13 @@ void XYPiecewiseLinearFitCurvePrivate::fitSegmentConstrained(const QVector<doubl
 		denom += dx * dx;
 	}
 
-	if (std::fabs(denom) < 1e-15) {
+	if (denom > 1e-15) {
+		result.paramValues[1] = num / denom; // slope
+		result.paramValues[0] = y0 - result.paramValues[1] * x0; // intercept
+	} else {
 		result.paramValues[1] = 0.; // slope
 		result.paramValues[0] = y0; // intercept
-		result.dof = n - 1;
-		return;
 	}
-
-	result.paramValues[1] = num / denom; // slope
-	result.paramValues[0] = y0 - result.paramValues[1] * x0; // intercept
 
 	// Compute residuals
 	double mean_y = 0.;
@@ -415,52 +441,28 @@ void XYPiecewiseLinearFitCurvePrivate::fitSegmentConstrained(const QVector<doubl
 
 	result.sse = sse;
 	result.sst = sst;
-	result.rsquare = (sst > 0.) ? (1. - sse / sst) : 0.;
 	result.dof = n - 1; // Constrained fit: only 1 free parameter
 
 	if (result.dof > 0) {
-		result.rms = std::sqrt(sse / result.dof);
-		result.rsd = result.rms;
-
 		double mse_val = sse / result.dof;
-		result.errorValues[1] = std::sqrt(mse_val / denom); // slopeError
+		if (denom > 1e-15)
+			result.errorValues[1] = std::sqrt(mse_val / denom); // slopeError
 		result.errorValues[0] = 0.; // interceptError - constrained
 
-		result.tdist_tValues[1] = result.paramValues[1] / result.errorValues[1]; // slope_t
-		result.tdist_pValues[1] = 2.0 * gsl_cdf_tdist_Q(std::abs(result.tdist_tValues[1]), result.dof); // slope_p
+		if (result.errorValues[1] > 0.) {
+			result.tdist_tValues[1] = result.paramValues[1] / result.errorValues[1];
+			result.tdist_pValues[1] = nsl_stats_tdist_p(result.tdist_tValues[1], result.dof);
+		}
 		result.tdist_tValues[0] = 0.; // intercept_t - constrained
 		result.tdist_pValues[0] = 1.; // intercept_p - constrained
-
-		result.rsquareAdj = 1.0 - (sse / result.dof) / (sst / (n - 1));
-
-		result.chisq_p = gsl_cdf_chisq_Q(sse, result.dof);
-
-		double ssr = sst - sse;
-		result.fdist_F = (ssr / 1.0) / (sse / result.dof);
-		result.fdist_p = gsl_cdf_fdist_Q(result.fdist_F, 1, result.dof);
 	} else {
-		result.rms = result.rsd = 0.;
 		result.errorValues[0] = result.errorValues[1] = 0.;
-		result.rsquareAdj = 0.;
 		result.tdist_tValues[0] = result.tdist_tValues[1] = 0.;
 		result.tdist_pValues[0] = result.tdist_pValues[1] = 1.;
-		result.chisq_p = 1.;
-		result.fdist_F = 0.;
-		result.fdist_p = 1.;
 	}
 
-	result.mse = sse / n;
-	result.rmse = std::sqrt(result.mse);
 	result.mae = mae / n;
-
-	int k = 1; // Only slope is free
-	if (sse > 0.) {
-		result.aic = n * std::log(sse / n) + 2 * k;
-		result.bic = n * std::log(sse / n) + k * std::log(n);
-	} else {
-		result.aic = -std::numeric_limits<double>::infinity();
-		result.bic = -std::numeric_limits<double>::infinity();
-	}
+	calculateFitMetrics(result, n, 1);
 }
 
 void XYPiecewiseLinearFitCurvePrivate::updateChangepointLines() {
@@ -514,7 +516,7 @@ void XYPiecewiseLinearFitCurvePrivate::updateResultsNote() {
 	text += i18n("Status: %1", fitResult.status) + QStringLiteral("\n");
 	text += i18n("Number of Segments: %1", fitResult.numSegments) + QStringLiteral("\n");
 	text += i18n("Number of Changepoints: %1", fitResult.changepoints.size()) + QStringLiteral("\n");
-	text += i18n("Overall R²: %1", QString::number(fitResult.overallRsquare, 'f', 6)) + QStringLiteral("\n");
+	text += i18n("Overall R²: %1", QString::number(fitResult.rsquare, 'f', 6)) + QStringLiteral("\n");
 	text += i18n("Overall SSE: %1", QString::number(fitResult.sse, 'g', 6)) + QStringLiteral("\n\n");
 
 	// Changepoints
@@ -600,7 +602,7 @@ void XYPiecewiseLinearFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->fitResult.valid));
 	writer->writeAttribute(QStringLiteral("status"), d->fitResult.status);
 	writer->writeAttribute(QStringLiteral("numSegments"), QString::number(d->fitResult.numSegments));
-	writer->writeAttribute(QStringLiteral("overallRsquare"), QString::number(d->fitResult.overallRsquare));
+	writer->writeAttribute(QStringLiteral("rsquare"), QString::number(d->fitResult.rsquare));
 	writer->writeAttribute(QStringLiteral("sse"), QString::number(d->fitResult.sse));
 
 	// one <segment> element per fit segment, holding all per-segment values as attributes;
@@ -678,7 +680,7 @@ bool XYPiecewiseLinearFitCurve::load(XmlStreamReader* reader, bool preview) {
 			d->fitResult.valid = attribs.value(QStringLiteral("valid")).toInt();
 			d->fitResult.status = attribs.value(QStringLiteral("status")).toString();
 			d->fitResult.numSegments = attribs.value(QStringLiteral("numSegments")).toULongLong();
-			d->fitResult.overallRsquare = attribs.value(QStringLiteral("overallRsquare")).toDouble();
+			d->fitResult.rsquare = attribs.value(QStringLiteral("rsquare")).toDouble();
 			d->fitResult.sse = attribs.value(QStringLiteral("sse")).toDouble();
 		} else if (reader->name() == QLatin1String("segment")) {
 			attribs = reader->attributes();

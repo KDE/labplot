@@ -54,7 +54,7 @@ public:
 		QVector<XYFitCurve::FitResult> segmentResults; // One result per segment
 
 		// Overall metrics
-		double overallRsquare{0.};
+		double rsquare{0.};
 		double sse{0.};
 	};
 
