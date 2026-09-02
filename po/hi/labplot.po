@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-27 00:40+0000\n"
+"POT-Creation-Date: 2026-09-02 00:39+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -1230,7 +1230,7 @@ msgstr "समय-चिह्न"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1399
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
-#: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
+#: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
 #, kde-format
 msgid "Index"
 msgstr "अनुक्रमणिका"
@@ -2342,7 +2342,7 @@ msgstr "चाबी"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1884
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1894
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #: src/frontend/matrix/MatrixView.cpp:638
@@ -3293,7 +3293,7 @@ msgid "Energy 1 erg"
 msgstr "ऊर्जा 1 एर्ग"
 
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2139
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2149
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1294
 #, kde-format
 msgid "Success"
@@ -6776,63 +6776,63 @@ msgstr "निष्पक्ष"
 msgid "Coeff"
 msgstr "कोएफ़"
 
-#: src/backend/nsl/nsl_dft.c:18
+#: src/backend/nsl/nsl_dft.c:19
 #, kde-format
 msgid "Magnitude"
 msgstr "परिमाण"
 
-#: src/backend/nsl/nsl_dft.c:19
+#: src/backend/nsl/nsl_dft.c:20
 #, kde-format
 msgid "Amplitude"
 msgstr "आयाम"
 
-#: src/backend/nsl/nsl_dft.c:20
+#: src/backend/nsl/nsl_dft.c:21
 #, kde-format
 msgid "Real Part"
 msgstr "वास्तविक भाग"
 
-#: src/backend/nsl/nsl_dft.c:21 src/backend/nsl/nsl_hilbert.c:18
+#: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_hilbert.c:18
 #, kde-format
 msgid "Imaginary Part"
 msgstr "काल्पनिक भाग"
 
-#: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
+#: src/backend/nsl/nsl_dft.c:23 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
 #, kde-format
 msgid "Power"
 msgstr "शक्ति"
 
-#: src/backend/nsl/nsl_dft.c:23
+#: src/backend/nsl/nsl_dft.c:24
 #, kde-format
 msgid "Phase"
 msgstr "चरण"
 
-#: src/backend/nsl/nsl_dft.c:24
+#: src/backend/nsl/nsl_dft.c:25
 #, kde-format
 msgid "Amplitude in dB"
 msgstr "आयाम (डीबी में)"
 
-#: src/backend/nsl/nsl_dft.c:25
+#: src/backend/nsl/nsl_dft.c:26
 #, kde-format
 msgid "Normalized Amplitude in dB"
 msgstr "सामान्यीकृत आयाम (dB में)"
 
-#: src/backend/nsl/nsl_dft.c:26
+#: src/backend/nsl/nsl_dft.c:27
 #, kde-format
 msgid "Magnitude Squared"
 msgstr "परिमाण वर्ग"
 
-#: src/backend/nsl/nsl_dft.c:27
+#: src/backend/nsl/nsl_dft.c:28
 #, kde-format
 msgid "Amplitude Squared"
 msgstr "आयाम वर्ग"
 
-#: src/backend/nsl/nsl_dft.c:28
+#: src/backend/nsl/nsl_dft.c:29
 #, kde-format
 msgid "Raw"
 msgstr "कच्चा"
 
-#: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
+#: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2832
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1114
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:234
@@ -6844,92 +6844,92 @@ msgstr "कच्चा"
 msgid "Frequency"
 msgstr "आवृत्ति"
 
-#: src/backend/nsl/nsl_dft.c:29
+#: src/backend/nsl/nsl_dft.c:30
 #, kde-format
 msgid "Period"
 msgstr "अवधि"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "First"
 msgstr "पहला"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "Second"
 msgstr "दूसरा"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "Third"
 msgstr "तीसरा"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "Fourth"
 msgstr "चौथी"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "Fifth"
 msgstr "पांचवां"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "Sixth"
 msgstr "छठा"
 
-#: src/backend/nsl/nsl_filter.c:20
+#: src/backend/nsl/nsl_filter.c:21
 #, kde-format
 msgid "Low Pass"
 msgstr "कम उत्तीर्ण"
 
-#: src/backend/nsl/nsl_filter.c:20
+#: src/backend/nsl/nsl_filter.c:21
 #, kde-format
 msgid "High Pass"
 msgstr "उच्च दर्रा"
 
-#: src/backend/nsl/nsl_filter.c:20
+#: src/backend/nsl/nsl_filter.c:21
 #, kde-format
 msgid "Band Pass"
 msgstr "बैंड पास"
 
-#: src/backend/nsl/nsl_filter.c:20
+#: src/backend/nsl/nsl_filter.c:21
 #, kde-format
 msgid "Band Reject"
 msgstr "बैंड अस्वीकार"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Ideal"
 msgstr "आदर्श"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Butterworth"
 msgstr "बटरवर्थ"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Chebyshev Type I"
 msgstr "चेबीशेव प्रकार I"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Chebyshev Type II"
 msgstr "चेबीशेव प्रकार II"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Legendre (Optimum L)"
 msgstr "लीजेंड्रे (सर्वश्रेष्ठ एल)"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Bessel (Thomson)"
 msgstr "बेसेल (थॉमसन)"
 
-#: src/backend/nsl/nsl_filter.c:23
+#: src/backend/nsl/nsl_filter.c:24
 #, kde-format
 msgid "Fraction"
 msgstr "अंश"
@@ -6956,7 +6956,7 @@ msgstr "सांख्यिकी (वितरण)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:741
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/frontend/datasources/ImportFileWidget.cpp:1446
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
@@ -7120,22 +7120,22 @@ msgstr "अभी"
 msgid "Envelope"
 msgstr "लिफ़ाफ़ा"
 
-#: src/backend/nsl/nsl_int.c:19
+#: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Rectangle (1-point)"
 msgstr "आयत (1-बिंदु)"
 
-#: src/backend/nsl/nsl_int.c:19
+#: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Trapezoid (2-point)"
 msgstr "समलम्ब चतुर्भुज (2-बिंदु)"
 
-#: src/backend/nsl/nsl_int.c:19
+#: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Simpson's (3-point)"
 msgstr "सिम्पसन (3-पॉइंट)"
 
-#: src/backend/nsl/nsl_int.c:19
+#: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Simpson's 3/8 (4-point)"
 msgstr "सिम्पसन का 3/8 (4-पॉइंट)"
@@ -11245,97 +11245,97 @@ msgstr "%1: y-त्रुटि असाइन करें"
 msgid "%1: set fit options and perform the fit"
 msgstr "%1: फिट विकल्प सेट करें और फिट निष्पादित करें"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1820
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1830
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr "फिट परिणाम"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1846
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1856
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
 msgstr "X/Y डेटा के लिए नॉनलाइनियर फ़िट"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1862
 #, kde-format
 msgid "MODEL"
 msgstr "नमूना"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1856
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1866
 #, kde-format
 msgid "Degree"
 msgstr "डिग्री"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1861
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
 #, kde-format
 msgid "Peaks"
 msgstr "चोटियों"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
 #, kde-format
 msgid "PARAMETERS"
 msgstr "पैरामीटर"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1895
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #, kde-format
 msgid "Uncertainty"
 msgstr "अनिश्चितता"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1896
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #, kde-format
 msgid "Uncertainty, %"
 msgstr "अनिश्चितता, %"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1887
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
 #, kde-format
 msgid "t Statistic"
 msgstr "टी सांख्यिकी"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #, kde-format
 msgid "Lower"
 msgstr "निचला"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #, kde-format
 msgid "Upper"
 msgstr "अपर"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1952
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1962
 #, kde-format
 msgid "GOODNESS OF FIT"
 msgstr "स्वस्थ भलाई"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1954
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1964
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:986
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr "वर्ग अवशिष्टों का योग"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1955
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1965
 #, kde-format
 msgid "Residuals mean square"
 msgstr "अवशिष्ट माध्य वर्ग"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1956
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1966
 #, kde-format
 msgid "Root mean square deviation"
 msgstr "मूल माध्य वर्ग विचलन"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1957
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1967
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1016
 #, kde-format
 msgid "Coefficient of determination"
 msgstr "निर्धारण का गुणांक"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1958
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1968
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1026
 #, kde-format
 msgid "Adj. coefficient of determination"
@@ -11343,7 +11343,7 @@ msgstr "समायोजन निर्धारण गुणांक"
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1959
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1969
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:164
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
@@ -11351,43 +11351,43 @@ msgstr "समायोजन निर्धारण गुणांक"
 msgid "Test"
 msgstr "परीक्षा"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1960
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1970
 #, kde-format
 msgid "F-Test"
 msgstr "एफ टेस्ट"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1962
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1972
 #, kde-format
 msgid "Mean absolute error"
 msgstr "माध्य निरपेक्ष त्रुटि"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1963
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1973
 #, kde-format
 msgid "Akaike information criterion"
 msgstr "अकाइके सूचना मानदंड"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1964
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1974
 #, kde-format
 msgid "Bayesian information criterion"
 msgstr "बायेसियन सूचना मानदंड"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2325
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #, kde-format
 msgid "Model has no parameters!"
 msgstr "मॉडल में कोई पैरामीटर नहीं है!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2332
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
 #, kde-format
 msgid "Not sufficient weight data points provided!"
 msgstr "पर्याप्त वजन डेटा बिंदु उपलब्ध नहीं कराया गया!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2409
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2419
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
 msgid "No X data available!"
 msgstr "कोई एक्स डेटा उपलब्ध नहीं है!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2416
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
@@ -11395,12 +11395,12 @@ msgid ""
 msgstr ""
 "डेटा बिंदुओं की संख्या (%1) पैरामीटरों की संख्या (%2) से अधिक या उसके बराबर होनी चाहिए!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2423
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2433
 #, kde-format
 msgid "Fit model not specified!"
 msgstr "फिट मॉडल निर्दिष्ट नहीं!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3181
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3191
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-27 00:40+0000\n"
+"POT-Creation-Date: 2026-09-02 00:39+0000\n"
 "PO-Revision-Date: 2026-04-03 20:35+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -1244,7 +1244,7 @@ msgstr "Метка времени"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1399
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
-#: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
+#: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
 #, kde-format
 msgid "Index"
 msgstr "Индекс"
@@ -2372,7 +2372,7 @@ msgstr "Ключ"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1884
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1894
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #: src/frontend/matrix/MatrixView.cpp:638
@@ -3333,7 +3333,7 @@ msgid "Energy 1 erg"
 msgstr "Энергия в 1 эрг"
 
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2139
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2149
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1294
 #, kde-format
 msgid "Success"
@@ -6924,63 +6924,63 @@ msgstr "Несмещённое нормирование"
 msgid "Coeff"
 msgstr "Коэффициент"
 
-#: src/backend/nsl/nsl_dft.c:18
+#: src/backend/nsl/nsl_dft.c:19
 #, kde-format
 msgid "Magnitude"
 msgstr "Величина"
 
-#: src/backend/nsl/nsl_dft.c:19
+#: src/backend/nsl/nsl_dft.c:20
 #, kde-format
 msgid "Amplitude"
 msgstr "Амплитуда"
 
-#: src/backend/nsl/nsl_dft.c:20
+#: src/backend/nsl/nsl_dft.c:21
 #, kde-format
 msgid "Real Part"
 msgstr "Вещественная часть"
 
-#: src/backend/nsl/nsl_dft.c:21 src/backend/nsl/nsl_hilbert.c:18
+#: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_hilbert.c:18
 #, kde-format
 msgid "Imaginary Part"
 msgstr "Мнимая часть"
 
-#: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
+#: src/backend/nsl/nsl_dft.c:23 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
 #, kde-format
 msgid "Power"
 msgstr "Степенная"
 
-#: src/backend/nsl/nsl_dft.c:23
+#: src/backend/nsl/nsl_dft.c:24
 #, kde-format
 msgid "Phase"
 msgstr "Фаза"
 
-#: src/backend/nsl/nsl_dft.c:24
+#: src/backend/nsl/nsl_dft.c:25
 #, kde-format
 msgid "Amplitude in dB"
 msgstr "Амплитуда в дБ"
 
-#: src/backend/nsl/nsl_dft.c:25
+#: src/backend/nsl/nsl_dft.c:26
 #, kde-format
 msgid "Normalized Amplitude in dB"
 msgstr "Нормированная амплитуда в дБ"
 
-#: src/backend/nsl/nsl_dft.c:26
+#: src/backend/nsl/nsl_dft.c:27
 #, kde-format
 msgid "Magnitude Squared"
 msgstr "Квадрат величины"
 
-#: src/backend/nsl/nsl_dft.c:27
+#: src/backend/nsl/nsl_dft.c:28
 #, kde-format
 msgid "Amplitude Squared"
 msgstr "Квадрат амплитуды"
 
-#: src/backend/nsl/nsl_dft.c:28
+#: src/backend/nsl/nsl_dft.c:29
 #, kde-format
 msgid "Raw"
 msgstr "Необработанная величина"
 
-#: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
+#: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2832
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1114
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:234
@@ -6992,93 +6992,93 @@ msgstr "Необработанная величина"
 msgid "Frequency"
 msgstr "Частота"
 
-#: src/backend/nsl/nsl_dft.c:29
+#: src/backend/nsl/nsl_dft.c:30
 #, kde-format
 msgid "Period"
 msgstr "Период"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "First"
 msgstr "Первого порядка"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "Second"
 msgstr "Второго порядка"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "Third"
 msgstr "Третьего порядка"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "Fourth"
 msgstr "Четвёртого порядка"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "Fifth"
 msgstr "Пятого порядка"
 
-#: src/backend/nsl/nsl_diff.c:19
+#: src/backend/nsl/nsl_diff.c:20
 #, kde-format
 msgid "Sixth"
 msgstr "Шестого порядка"
 
-#: src/backend/nsl/nsl_filter.c:20
+#: src/backend/nsl/nsl_filter.c:21
 #, kde-format
 msgid "Low Pass"
 msgstr "Фильтр нижних частот"
 
-#: src/backend/nsl/nsl_filter.c:20
+#: src/backend/nsl/nsl_filter.c:21
 #, kde-format
 msgid "High Pass"
 msgstr "Фильтр верхних частот"
 
-#: src/backend/nsl/nsl_filter.c:20
+#: src/backend/nsl/nsl_filter.c:21
 #, kde-format
 msgid "Band Pass"
 msgstr "Полосовой частотный фильтр"
 
-#: src/backend/nsl/nsl_filter.c:20
+#: src/backend/nsl/nsl_filter.c:21
 #, kde-format
 msgid "Band Reject"
 msgstr "Полосно-заграждающий фильтр"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Ideal"
 msgstr "Идеальный фильтр"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Butterworth"
 msgstr "Фильтр Баттерворта"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Chebyshev Type I"
 msgstr "Фильтр Чебышева 1 рода"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Chebyshev Type II"
 msgstr "Фильтр Чебышева 2 рода"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Legendre (Optimum L)"
 msgstr "Фильтр Лежандра (Оптимальный фильтр «L»)"
 
-#: src/backend/nsl/nsl_filter.c:22
+#: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Bessel (Thomson)"
 msgstr "Фильтр Бесселя (Томсона)"
 
 # BUGME: please add context --aspotashev
-#: src/backend/nsl/nsl_filter.c:23
+#: src/backend/nsl/nsl_filter.c:24
 #, kde-format
 msgid "Fraction"
 msgstr "Доля"
@@ -7106,7 +7106,7 @@ msgstr "Статистика (распределение)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:741
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/frontend/datasources/ImportFileWidget.cpp:1446
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
@@ -7270,22 +7270,22 @@ msgstr "Алгоритм Ланга"
 msgid "Envelope"
 msgstr "Огибающая"
 
-#: src/backend/nsl/nsl_int.c:19
+#: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Rectangle (1-point)"
 msgstr "Метод прямоугольников (1 точка)"
 
-#: src/backend/nsl/nsl_int.c:19
+#: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Trapezoid (2-point)"
 msgstr "Метод трапеций (2 точки)"
 
-#: src/backend/nsl/nsl_int.c:19
+#: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Simpson's (3-point)"
 msgstr "Метод Симпсона (3 точки)"
 
-#: src/backend/nsl/nsl_int.c:19
+#: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Simpson's 3/8 (4-point)"
 msgstr "Метод Симпсона 3/8 (4 точки)"
@@ -11385,98 +11385,98 @@ msgstr "%1: назначение столбца пределов погрешн�
 msgid "%1: set fit options and perform the fit"
 msgstr "%1: задание параметров подбора и выполнение приближения"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1820
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1830
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr "Результаты подбора"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1846
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1856
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
 msgstr "Нелинейная подгонка по данным X/Y"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1862
 #, kde-format
 msgid "MODEL"
 msgstr "МОДЕЛЬ"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1856
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1866
 #, kde-format
 msgid "Degree"
 msgstr "Степень"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1861
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
 #, kde-format
 msgid "Peaks"
 msgstr "Пики"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
 #, kde-format
 msgid "PARAMETERS"
 msgstr "ПАРАМЕТРЫ"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1895
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #, kde-format
 msgid "Uncertainty"
 msgstr "Недостоверность"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1896
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #, kde-format
 msgid "Uncertainty, %"
 msgstr "Недостоверность, %"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1887
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
 #, kde-format
 msgid "t Statistic"
 msgstr "t-статистика"
 
 # BUGME: please add context --aspotashev
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #, kde-format
 msgid "Lower"
 msgstr "Нижнее"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #, kde-format
 msgid "Upper"
 msgstr "Верхнее"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1952
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1962
 #, kde-format
 msgid "GOODNESS OF FIT"
 msgstr "КАЧЕСТВО ПОДГОНКИ"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1954
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1964
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:986
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr "Сумма квадратов остатка"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1955
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1965
 #, kde-format
 msgid "Residuals mean square"
 msgstr "Средний квадрат остатков"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1956
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1966
 #, kde-format
 msgid "Root mean square deviation"
 msgstr "Среднеквадратичное отклонение"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1957
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1967
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1016
 #, kde-format
 msgid "Coefficient of determination"
 msgstr "Коэффициент детерминации"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1958
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1968
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1026
 #, kde-format
 msgid "Adj. coefficient of determination"
@@ -11484,7 +11484,7 @@ msgstr "Скорректированный коэффициент детерми
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1959
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1969
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:164
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
@@ -11492,43 +11492,43 @@ msgstr "Скорректированный коэффициент детерми
 msgid "Test"
 msgstr "Тест"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1960
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1970
 #, kde-format
 msgid "F-Test"
 msgstr "F-тест"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1962
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1972
 #, kde-format
 msgid "Mean absolute error"
 msgstr "Средняя абсолютная ошибка"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1963
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1973
 #, kde-format
 msgid "Akaike information criterion"
 msgstr "Информационный критерий Акаике (AIC)"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1964
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1974
 #, kde-format
 msgid "Bayesian information criterion"
 msgstr "Информационный критерий Байеса (BIC)"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2325
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #, kde-format
 msgid "Model has no parameters!"
 msgstr "У модели отсутствуют параметры."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2332
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
 #, kde-format
 msgid "Not sufficient weight data points provided!"
 msgstr "Предоставлено недостаточное количество весовых точек данных."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2409
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2419
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
 msgid "No X data available!"
 msgstr "Нет данных по оси X!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2416
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
@@ -11537,12 +11537,12 @@ msgstr ""
 "Количество точек данных (%1) должно быть больше или равно количеству "
 "параметров (%2)!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2423
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2433
 #, kde-format
 msgid "Fit model not specified!"
 msgstr "Не указана модель подбора."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3181
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3191
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
