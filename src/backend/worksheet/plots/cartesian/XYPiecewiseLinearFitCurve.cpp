@@ -11,8 +11,8 @@
 #include "XYPiecewiseLinearFitCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/note/Note.h"
-#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/nsl/nsl_stats.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
@@ -131,9 +131,9 @@ XYPiecewiseLinearFitCurvePrivate::~XYPiecewiseLinearFitCurvePrivate() = default;
 void XYPiecewiseLinearFitCurvePrivate::retransform() {
 	XYAnalysisCurvePrivate::retransform();
 
-	const auto& lines = q->changepointLines();
-	for (auto* line : lines) {
-		line->retransform();
+	const auto& refLines = q->changepointLines();
+	for (auto* refLine : refLines) {
+		refLine->retransform();
 	}
 }
 
@@ -467,9 +467,9 @@ void XYPiecewiseLinearFitCurvePrivate::fitSegmentConstrained(const QVector<doubl
 
 void XYPiecewiseLinearFitCurvePrivate::updateChangepointLines() {
 	// Remove existing changepoint lines
-	auto existingLines = q->changepointLines();
-	for (auto* line : existingLines)
-		q->removeChild(line);
+	auto refLines = q->changepointLines();
+	for (auto* refLine : refLines)
+		q->removeChild(refLine);
 
 	// Create new lines if enabled
 	if (!changepointLinesEnabled || fitResult.changepoints.isEmpty())
@@ -481,14 +481,14 @@ void XYPiecewiseLinearFitCurvePrivate::updateChangepointLines() {
 
 	for (int i = 0; i < fitResult.changepoints.size(); ++i) {
 		double xPos = fitResult.changepoints[i]; // Already X-value, not index
-		auto* line = new ReferenceLine(plot, QStringLiteral("Changepoint %1").arg(i + 1), false);
-		line->setHidden(true);
-		line->setCoordinateSystemIndex(q->coordinateSystemIndex());
-		line->setOrientation(ReferenceLine::Orientation::Vertical);
-		line->setPositionLogical(QPointF(xPos, 0));
-		line->setParentGraphicsItem(q->graphicsItem());
-		q->addChildFast(line);
-		line->retransform();
+		auto* refLine = new ReferenceLine(plot, QStringLiteral("Changepoint %1").arg(i + 1), false);
+		refLine->setHidden(true);
+		refLine->setCoordinateSystemIndex(q->coordinateSystemIndex());
+		refLine->setOrientation(ReferenceLine::Orientation::Vertical);
+		refLine->setPositionLogical(QPointF(xPos, 0));
+		refLine->setParentGraphicsItem(q->graphicsItem());
+		q->addChildFast(refLine);
+		refLine->retransform();
 	}
 }
 
@@ -528,7 +528,7 @@ void XYPiecewiseLinearFitCurvePrivate::updateResultsNote() {
 	}
 
 	// Per-segment details
-	for (size_t seg = 0; seg < fitResult.numSegments; ++seg) {
+	for (int seg = 0; seg < fitResult.segmentResults.size(); ++seg) {
 		const auto& segResult = fitResult.segmentResults[seg];
 		text += QStringLiteral("----------------------------------------\n");
 		text += i18n("Segment %1", seg + 1) + QStringLiteral("\n");
