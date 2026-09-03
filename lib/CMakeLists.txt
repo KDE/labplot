@@ -92,6 +92,7 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYIntegrationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
 )
 
