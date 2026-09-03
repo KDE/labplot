@@ -11,6 +11,7 @@
 #include "XYPiecewiseLinearFitCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/note/Note.h"
 #include "backend/nsl/nsl_stats.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
