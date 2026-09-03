@@ -120,6 +120,7 @@ set(SDK_SOURCES
 
 set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_baseline.cpp
+    ${BACKEND_DIR}/nsl/nsl_changepoint.c
     ${BACKEND_DIR}/nsl/nsl_conv.c
     ${BACKEND_DIR}/nsl/nsl_corr.c
     ${BACKEND_DIR}/nsl/nsl_dft.c
