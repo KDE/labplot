@@ -10,6 +10,7 @@
 #include "XYPiecewiseLinearFitCurve.h"
 #include "XYPiecewiseLinearFitCurvePrivate.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/note/Note.h"
 #include "backend/nsl/nsl_stats.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
@@ -247,8 +248,8 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 
 	// Total points = pointsPerSegment * numSegments + (numSegments - 1) NaN separators
 	size_t totalPoints = pointsPerSegment * fitResult.numSegments + (fitResult.numSegments - 1);
-	QVector<double>* xVector = new QVector<double>(totalPoints);
-	QVector<double>* yVector = new QVector<double>(totalPoints);
+	QVector<double>* xdataVector = new QVector<double>(totalPoints);
+	QVector<double>* ydataVector = new QVector<double>(totalPoints);
 
 	size_t outputIdx = 0;
 	for (size_t seg = 0; seg < fitResult.numSegments; ++seg) {
@@ -268,15 +269,15 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 		double step = (segXMax - segXMin) / (pointsPerSegment - 1);
 		for (size_t i = 0; i < pointsPerSegment; ++i) {
 			double x = segXMin + i * step;
-			(*xVector)[outputIdx] = x;
-			(*yVector)[outputIdx] = fitResult.segmentResults[seg].paramValues.value(1) * x + fitResult.segmentResults[seg].paramValues.value(0);
+			(*xdataVector)[outputIdx] = x;
+			(*ydataVector)[outputIdx] = fitResult.segmentResults[seg].paramValues.value(1) * x + fitResult.segmentResults[seg].paramValues.value(0);
 			outputIdx++;
 		}
 
 		// Add NaN separator between segments (except after last segment)
 		if (seg < fitResult.numSegments - 1) {
-			(*xVector)[outputIdx] = std::nan("");
-			(*yVector)[outputIdx] = std::nan("");
+			(*xdataVector)[outputIdx] = std::nan("");
+			(*ydataVector)[outputIdx] = std::nan("");
 			outputIdx++;
 		}
 	}
@@ -295,11 +296,11 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 
 	delete[] changepoints;
 
-	xColumn->setValues(*xVector);
-	yColumn->setValues(*yVector);
+	xColumn->setValues(*xdataVector);
+	yColumn->setValues(*ydataVector);
 
-	delete xVector;
-	delete yVector;
+	delete xdataVector;
+	delete ydataVector;
 
 	fitResult.available = true;
 	fitResult.valid = true;
