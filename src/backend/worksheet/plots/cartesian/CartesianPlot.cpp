@@ -2315,10 +2315,12 @@ void CartesianPlot::addBaselineCorrectionCurve() {
 }
 
 void CartesianPlot::addFitCurve(const QAction* action) {
-	if (!action)
-		return;
+	auto type = XYAnalysisCurve::AnalysisAction::FitLinear;
+	if (action)
+		type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
+	else
+		DEBUG(Q_FUNC_INFO << "WARNING: no action provided, using default linear fit")
 
-	const auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	const auto& selectedCurves = this->selectedCurves();
 	if (!selectedCurves.isEmpty()) {
 		for (const auto* curCurve : selectedCurves) {
