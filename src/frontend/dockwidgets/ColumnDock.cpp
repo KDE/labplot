@@ -593,21 +593,27 @@ void ColumnDock::loadFormula() {
  * */
 bool ColumnDock::validateVariableName(QLineEdit* le) {
 	bool isValid = false;
-	if (ExpressionParser::getInstance()->constants().indexOf(le->text()) != -1) {
+	const auto& name = le->text();
+	auto* parser = ExpressionParser::getInstance();
+	if (parser->constants().indexOf(name) != -1) {
 		SET_WARNING_STYLE(le)
-		le->setToolTip(i18n("Provided variable name is already reserved for a name of a constant. Please use another name."));
-	} else if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
+		le->setToolTip(i18n("The variable name '%1' is already reserved for the constant '%1' (%2). Please use another name.",
+							name,
+							parser->constantDescription(name)));
+	} else if (parser->functions().indexOf(name) != -1) {
 		SET_WARNING_STYLE(le)
-		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
-	} else if (le->text().compare(QLatin1String("i")) == 0) {
+		le->setToolTip(i18n("The variable name '%1' is already reserved for the function '%1' (%2). Please use another name.",
+							name,
+							parser->functionDescription(name)));
+	} else if (name.compare(QLatin1String("i")) == 0) {
 		SET_WARNING_STYLE(le)
-		le->setToolTip(i18n("The variable name 'i' is reserved for the index of the column row."));
-	} else if (le->text().contains(QRegularExpression(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
+		le->setToolTip(i18n("The variable name 'i' is reserved for the index of the column row. Please use another name."));
+	} else if (name.contains(QRegularExpression(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name starts with a digit or contains special character."));
 	} else {
 		le->setStyleSheet(QString());
-		le->setToolTip(QString());
+		le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 		isValid = true;
 	}
 	return isValid;
@@ -618,6 +624,20 @@ bool ColumnDock::validateVariableName(QLineEdit* le) {
  * and enables/disables the Ok-button accordingly.
  */
 void ColumnDock::validateFormula() {
+	// check the variable names first - a name colliding with the name of a function or of a constant
+	// invalidates the formula expression, too, and the user needs to be pointed to the actual reason
+	bool variableNamesValid = true;
+	for (auto* le : std::as_const(m_variableLineEdits)) {
+		if (!validateVariableName(le))
+			variableNamesValid = false;
+	}
+
+	if (!variableNamesValid) {
+		ui.pbApplyFormula->setToolTip(i18n("Invalid variable name provided"));
+		ui.pbApplyFormula->setEnabled(false);
+		return;
+	}
+
 	if (ui.teEquation->toPlainText().simplified().isEmpty()) {
 		ui.pbApplyFormula->setToolTip(i18n("Empty formula expression"));
 		ui.pbApplyFormula->setEnabled(false);
@@ -646,13 +666,6 @@ void ColumnDock::validateFormula() {
 			auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 			if (!aspect) {
 				ui.pbApplyFormula->setToolTip(i18n("Select a valid column"));
-				ui.pbApplyFormula->setEnabled(false);
-				return;
-			}
-
-			// check whether the variable name is correct
-			if (!validateVariableName(m_variableLineEdits.at(i))) {
-				ui.pbApplyFormula->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 				ui.pbApplyFormula->setEnabled(false);
 				return;
 			}
