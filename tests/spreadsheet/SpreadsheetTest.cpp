@@ -4315,4 +4315,130 @@ void SpreadsheetTest::testAutoConvertUndoRedo() {
 	QCOMPARE(col->textAt(0), QStringLiteral("hello"));
 }
 
+/*!
+ * verify statistics update when data changes
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetUpdateOnDataChange() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(3);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setValueAt(0, 1.0);
+	col->setValueAt(1, 2.0);
+	col->setValueAt(2, 3.0);
+
+	sheet->toggleStatisticsSpreadsheet(true);
+	auto* stats = sheet->children<StatisticsSpreadsheet>().constFirst();
+	auto* meanCol = stats->column(4); // ArithmeticMean is 5th default metric
+	QCOMPARE(meanCol->valueAt(0), 2.0);
+
+	// Change data
+	col->setValueAt(0, 10.0);
+	QCOMPARE(meanCol->valueAt(0), 5.0); // (10+2+3)/3
+}
+
+/*!
+ * verify statistics update when masking changes
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetUpdateOnMaskChange() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(3);
+
+	auto* col = sheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setValueAt(0, 1.0);
+	col->setValueAt(1, 2.0);
+	col->setValueAt(2, 3.0);
+
+	sheet->toggleStatisticsSpreadsheet(true);
+	auto* stats = sheet->children<StatisticsSpreadsheet>().constFirst();
+	auto* countCol = stats->column(1); // Count is 1st default metric
+	QCOMPARE(countCol->integerAt(0), 3);
+
+	// Mask first row
+	col->setMasked(0, true);
+	QCOMPARE(countCol->integerAt(0), 2);
+}
+
+/*!
+ * verify statistics update when columns are added/removed
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetUpdateOnColumnAddRemove() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(3);
+
+	sheet->toggleStatisticsSpreadsheet(true);
+	auto* stats = sheet->children<StatisticsSpreadsheet>().constFirst();
+	QCOMPARE(stats->rowCount(), 2);
+
+	// Add column
+	sheet->insertColumns(2, 1);
+	QCOMPARE(stats->rowCount(), 3);
+
+	// Remove column
+	sheet->removeColumns(1, 1);
+	QCOMPARE(stats->rowCount(), 2);
+}
+
+/*!
+ * verify statistics update after save/load (bug #525066)
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetSaveLoad() {
+	QString savePath;
+
+	// save
+	{
+		Project project;
+		auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+		project.addChild(sheet);
+		sheet->setColumnCount(1);
+		sheet->setRowCount(3);
+
+		auto* col = sheet->column(0);
+		col->setColumnMode(AbstractColumn::ColumnMode::Double);
+		col->setValueAt(0, 1.0);
+		col->setValueAt(1, 2.0);
+		col->setValueAt(2, 3.0);
+
+		sheet->toggleStatisticsSpreadsheet(true);
+		auto* stats = sheet->children<StatisticsSpreadsheet>().constFirst();
+		auto* meanCol = stats->column(4); // ArithmeticMean
+		QCOMPARE(meanCol->valueAt(0), 2.0);
+
+		SAVE_PROJECT("testStatisticsSpreadsheetSaveLoad");
+	}
+
+	// load and verify updates still work
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		auto* sheet = project.child<Spreadsheet>(0);
+		QVERIFY(sheet);
+		auto* stats = sheet->children<StatisticsSpreadsheet>().constFirst();
+		QVERIFY(stats);
+		auto* meanCol = stats->column(4); // ArithmeticMean
+		QCOMPARE(meanCol->valueAt(0), 2.0);
+
+		// Change data — this is the bug: statistics didn't update on load
+		auto* col = sheet->column(0);
+		col->setValueAt(0, 10.0);
+		QCOMPARE(meanCol->valueAt(0), 5.0); // (10+2+3)/3
+
+		// Mask a row
+		col->setMasked(1, true);
+		QCOMPARE(meanCol->valueAt(0), 6.5); // (10+3)/2
+	}
+}
+
 QTEST_MAIN(SpreadsheetTest)
