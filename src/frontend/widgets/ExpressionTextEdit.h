@@ -48,6 +48,7 @@ private:
 	QCompleter* m_completer;
 	bool m_isValid{false};
 	QString m_currentExpression;
+	QString m_errorMessage;
 
 Q_SIGNALS:
 	void expressionChanged();

@@ -293,6 +293,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	gsl_set_error_handler_off();
 
 	Parser parser(false);
+	ParserLastErrorMessage lock(parser, getInstance()->m_lastErrorMessage);
 	parser.setSkipSpecialFunctionEvaluation(true);
 
 	for (const auto& var : vars)
