@@ -1685,6 +1685,7 @@
     <enum-type name="round_method"/>
     <enum-type name="nsl_kernel_type"/>
     <enum-type name="nsl_kde_bandwidth_type"/>
+    <enum-type name="nsl_changepoint_method"/>
     <enum-type name="nsl_conv_direction_type"/>
     <enum-type name="nsl_conv_type_type"/>
     <enum-type name="nsl_conv_method_type"/>
