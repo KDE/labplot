@@ -847,13 +847,12 @@ void ColumnDock::deleteVariable() {
 void ColumnDock::variableNameChanged() {
 	QStringList vars;
 	QString argText;
-    for (int i = 0; i < m_variableLineEdits.size(); i++) {
+	for (int i = 0; i < m_variableLineEdits.size(); i++) {
 		QString name = m_variableLineEdits.at(i)->text().simplified();
 		if (!name.isEmpty()) {
-			// only add to the valid 'vars' list if the referenced column actually exists
-			auto* aspect = static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer());
-			if (aspect)
-				vars << name;
+			// pass all named variables to the parser, also if no column was selected for them yet -
+			// a missing column is handled separately in validateFormula() and shouldn't invalidate the expression
+			vars << name;
 
 			if (argText.isEmpty())
 				argText += name;
