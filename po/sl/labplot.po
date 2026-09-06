@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-05 00:40+0000\n"
-"PO-Revision-Date: 2026-08-20 06:51+0200\n"
+"POT-Creation-Date: 2026-09-06 00:40+0000\n"
+"PO-Revision-Date: 2026-09-05 15:57+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -1838,8 +1838,8 @@ msgstr "Število spremenljivk: "
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
-#: src/frontend/dockwidgets/ColumnDock.cpp:805
-#: src/frontend/dockwidgets/ColumnDock.cpp:830
+#: src/frontend/dockwidgets/ColumnDock.cpp:818
+#: src/frontend/dockwidgets/ColumnDock.cpp:843
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:98
@@ -3479,7 +3479,7 @@ msgid "Datetime Functions"
 msgstr "Datumske in časovne funkcije"
 
 #: src/backend/gsl/functions.cpp:70
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:29
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
 #, kde-format
 msgid "Column Statistics"
 msgstr "Statistika stolpca"
@@ -3839,7 +3839,7 @@ msgstr "Velikost"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbSum)
 #: src/backend/gsl/functions.cpp:264 src/backend/nsl/nsl_conv.c:22
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:64
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:42
 #, kde-format
@@ -3849,7 +3849,7 @@ msgstr "Vsota"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:49
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
@@ -3865,7 +3865,7 @@ msgstr "Najmanjše"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
 #: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/nsl/nsl_conv.c:23
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
@@ -3890,7 +3890,7 @@ msgstr "Aritmetična sredina"
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:49
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
@@ -3916,7 +3916,7 @@ msgstr "Standardni odklon"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
 #: src/backend/gsl/functions.cpp:270
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:170
 #: src/frontend/ui/mqttwillsettingswidget.ui:108
@@ -3953,7 +3953,7 @@ msgstr "Kontraharmonična srednja vrednost"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMode)
 #: src/backend/gsl/functions.cpp:274
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:71
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:100
 #, kde-format
@@ -4013,7 +4013,7 @@ msgstr "99. percentil"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
 #: src/backend/gsl/functions.cpp:284
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:75
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:128
 #, kde-format
@@ -4042,7 +4042,7 @@ msgstr "Absolutno odstopanje mediane"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
 #: src/backend/gsl/functions.cpp:288
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:246
 #: src/frontend/ui/mqttwillsettingswidget.ui:163
@@ -4053,7 +4053,7 @@ msgstr "Koeficient asimetrije"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
 #: src/backend/gsl/functions.cpp:289
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:91
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:253
 #: src/frontend/ui/mqttwillsettingswidget.ui:174
@@ -4064,7 +4064,7 @@ msgstr "Koeficient sploščenosti"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbEntropy)
 #: src/backend/gsl/functions.cpp:290
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:90
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:92
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:260
 #: src/frontend/ui/mqttwillsettingswidget.ui:185
@@ -7762,7 +7762,7 @@ msgid "%1: change column type and set value"
 msgstr "%1: spremeni zvrst stolpca in nastavi vrednost"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:61
 #: src/frontend/dockwidgets/HistogramDock.cpp:266
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:63
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:97
@@ -7772,96 +7772,96 @@ msgstr "%1: spremeni zvrst stolpca in nastavi vrednost"
 msgid "Count"
 msgstr "Števec"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #, kde-format
 msgid "ArithmeticMean"
 msgstr "Aritmetično povprečje"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
 #, kde-format
 msgid "GeometricMean"
 msgstr "Geometrijsko povprečje"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:68
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
 #, kde-format
 msgid "HarmonicMean"
 msgstr "Harmonično povprečje"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:68
 #, kde-format
 msgid "ContraharmonicMean"
 msgstr "Kontraharmonično povprečje"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
 #, kde-format
 msgid "FirstQuartile"
 msgstr "Prvi kvartil"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
 #, kde-format
 msgid "ThirdQuartile"
 msgstr "Tretji kvartil"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:85
 #, kde-format
 msgid "Interquartile Range"
 msgstr "Medkvartilni obseg"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
 #, kde-format
 msgid "Percentile1"
 msgstr "Percentil1"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
 #, kde-format
 msgid "Percentile5"
 msgstr "Percentil5"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
 #, kde-format
 msgid "Percentile10"
 msgstr "Percentil10"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
 #, kde-format
 msgid "Percentile90"
 msgstr "Percentil90"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:79
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
 #, kde-format
 msgid "Percentile95"
 msgstr "Percentil95"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:79
 #, kde-format
 msgid "Percentile99"
 msgstr "Percentil99"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbRange)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:163
 #, kde-format
 msgid "Range"
 msgstr "Obseg"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
 #, kde-format
 msgid "StandardDeviation"
 msgstr "Standardna deviacija"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
 #, kde-format
 msgid "MeanDeviation"
 msgstr "Deviacija povprečja"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
 #, kde-format
 msgid "MeanDeviationAroundMedian"
 msgstr "Povprečje deviacije okoli mediane"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
 #, kde-format
 msgid "MedianDeviation"
 msgstr "Mediana deviacije"
@@ -7870,7 +7870,7 @@ msgstr "Mediana deviacije"
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsNumber)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:173
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:189
 #: src/frontend/ui/dockwidgets/barplotdock.ui:290
 #: src/frontend/ui/dockwidgets/barplotdock.ui:450
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:370
@@ -9896,7 +9896,7 @@ msgstr "Paretov diagram"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
 #, kde-format
 msgid "Piecewise Linear"
-msgstr ""
+msgstr "Odsekoma linearno"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #, kde-format
@@ -11467,29 +11467,25 @@ msgid "%1: set options and perform the line simplification"
 msgstr "%1: nastavi možnosti in izvedi poenostavitev črte"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
-#, fuzzy, kde-format
-#| msgid "%1: set gluepoint index"
+#, kde-format
 msgid "%1: toggle changepoint lines"
-msgstr "%1: nastavite indeks točke lepljenja"
+msgstr "%1: preklopi črte točk sprememb"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:291
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:745
-#, fuzzy, kde-format
-#| msgctxt "Curve fitting"
-#| msgid "Fit Results"
+#, kde-format
 msgid "Fit Results"
 msgstr "Prilagodi rezultate"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:502
 #, kde-format
 msgid "Piecewise Linear Fit Results"
-msgstr ""
+msgstr "Rezultati odsekoma linearnega prilagajanja"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
-#, fuzzy, kde-format
-#| msgid "Test result is not available."
+#, kde-format
 msgid "No results available yet"
-msgstr "Rezultat testa ni na voljo."
+msgstr "Rezultat še niso na voljo"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:512
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:518
@@ -11499,37 +11495,34 @@ msgid "Status: %1"
 msgstr "Stanje: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:519
-#, fuzzy, kde-format
-#| msgid "Number of Objects: %1"
+#, kde-format
 msgid "Number of Segments: %1"
-msgstr "Število predmetov: %1"
+msgstr "Število odsekov: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:520
-#, fuzzy, kde-format
-#| msgid "number of points: %1"
+#, kde-format
 msgid "Number of Changepoints: %1"
-msgstr "število točk: %1"
+msgstr "število prehodnih točk: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:521
 #, kde-format
 msgid "Overall R²: %1"
-msgstr ""
+msgstr "Celotni R²: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
 #, kde-format
 msgid "Overall SSE: %1"
-msgstr ""
+msgstr "Celotni SSE: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
 #, kde-format
 msgid "Changepoint Positions (X-values)"
-msgstr ""
+msgstr "Položaji točk spremembe (vrednosti X)"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:536
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "Segment %1"
-msgstr "Segmenti"
+msgstr "Segment %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
@@ -11541,25 +11534,22 @@ msgstr "Parametri:"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:546
 #, kde-format
 msgid "Parameter Statistics (Slope):"
-msgstr ""
+msgstr "Statistika parametrov (naklon):"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:552
-#, fuzzy, kde-format
-#| msgid "Goodness of fit"
+#, kde-format
 msgid "Goodness of Fit:"
-msgstr "Uspešnost prileganja"
+msgstr "Uspešnost prileganja:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:562
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Tests:"
-msgstr "Statistični diagrami"
+msgstr "Statistični testi:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:569
-#, fuzzy, kde-format
-#| msgid "Akaike information criterion"
+#, kde-format
 msgid "Information Criteria:"
-msgstr "Akaikejev informacijski kriterij"
+msgstr "Iinformacijski kriterij:"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -15572,7 +15562,7 @@ msgstr "Samodejno (E)"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
-#: src/frontend/dockwidgets/ColumnDock.cpp:830
+#: src/frontend/dockwidgets/ColumnDock.cpp:843
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/columndock.ui:42
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
@@ -15668,52 +15658,46 @@ msgstr ""
 "Povezovanje preglednic je aktivno. Velikost ciljne preglednice nadzira "
 "povezana preglednica."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:598
-#, kde-format
+#: src/frontend/dockwidgets/ColumnDock.cpp:600
+#, fuzzy, kde-format
+#| msgid ""
+#| "Provided variable name is already reserved for a name of a constant. "
+#| "Please use another name."
 msgid ""
-"Provided variable name is already reserved for a name of a constant. Please "
-"use another name."
+"The variable name '%1' is already reserved for the constant '%1' (%2). "
+"Please use another name."
 msgstr ""
 "Podano ime spremenljivke je že rezervirano za ime konstante. Uporabite drugo "
 "ime."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:601
-#, kde-format
+#: src/frontend/dockwidgets/ColumnDock.cpp:605
+#, fuzzy, kde-format
+#| msgid ""
+#| "Provided variable name is already reserved for a name of a function. "
+#| "Please use another name."
 msgid ""
-"Provided variable name is already reserved for a name of a function. Please "
-"use another name."
+"The variable name '%1' is already reserved for the function '%1' (%2). "
+"Please use another name."
 msgstr ""
 "Podano ime spremenljivke je že rezervirano za ime funkcije. Uporabite drugo "
 "ime."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:604
-#, kde-format
-msgid "The variable name 'i' is reserved for the index of the column row."
+#: src/frontend/dockwidgets/ColumnDock.cpp:610
+#, fuzzy, kde-format
+#| msgid "The variable name 'i' is reserved for the index of the column row."
+msgid ""
+"The variable name 'i' is reserved for the index of the column row. Please "
+"use another name."
 msgstr "Ime spremenljivke 'i' je rezervirano za indeks vrstice stolpca."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:607
+#: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr "Podano ime spremenljivke se začne s števko ali vsebuje posebni znak."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:622
-#, kde-format
-msgid "Empty formula expression"
-msgstr "Prazen izraz formule"
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:629
-#, kde-format
-msgid "Incorrect formula syntax: "
-msgstr "Nepravilna skladnja formule: "
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:648
-#, kde-format
-msgid "Select a valid column"
-msgstr "Izberite veljavni stolpec"
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:655
-#: src/frontend/dockwidgets/ColumnDock.cpp:753
+#: src/frontend/dockwidgets/ColumnDock.cpp:616
+#: src/frontend/dockwidgets/ColumnDock.cpp:766
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:180
 #, kde-format
 msgid ""
@@ -15723,18 +15707,39 @@ msgstr ""
 "Ime spremenljivke lahko vsebuje črke, števke in samo '_' in se mora začeti s "
 "črko"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:662
+#: src/frontend/dockwidgets/ColumnDock.cpp:636
+#, fuzzy, kde-format
+#| msgid "No variable columns provided."
+msgid "Invalid variable name provided"
+msgstr "Ni na voljo nobenih stolpcev spremenljivk."
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:642
+#, kde-format
+msgid "Empty formula expression"
+msgstr "Prazen izraz formule"
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:649
+#, kde-format
+msgid "Incorrect formula syntax: "
+msgstr "Nepravilna skladnja formule: "
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:668
+#, kde-format
+msgid "Select a valid column"
+msgstr "Izberite veljavni stolpec"
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:675
 #, kde-format
 msgid "Apply Formula"
 msgstr "Uveljavi formulo"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:799
+#: src/frontend/dockwidgets/ColumnDock.cpp:812
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:214
 #, kde-format
 msgid "Delete variable"
 msgstr "Izbriši spremenljivko"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:877
+#: src/frontend/dockwidgets/ColumnDock.cpp:889
 #, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
@@ -17052,21 +17057,19 @@ msgid "area error: %1"
 msgstr "napaka področja: %1"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
-#, fuzzy, kde-format
-#| msgid "Continue"
+#, kde-format
 msgid "Continuous"
-msgstr "Nadaljuj"
+msgstr "Zvezno"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
-#, fuzzy, kde-format
-#| msgid "Discount"
+#, kde-format
 msgid "Discontinuous"
-msgstr "Discount"
+msgstr "Nezvezno"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
 #, kde-format
 msgid "Method for detecting changepoints."
-msgstr ""
+msgstr "Metoda za zaznavanje točk sprememb."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, kde-format
@@ -17074,6 +17077,8 @@ msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
 "are merged with neighboring segments."
 msgstr ""
+"Najmanjše število podatkovnih točk v odseku. Odseki z manj podatkovnimi "
+"točkami se združijo s sosednjimi odseki."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
@@ -17084,6 +17089,11 @@ msgid ""
 "Scale with your data: ~1 for Y-values near 1, ~10-100 for large values, "
 "~0.01-0.1 for small values."
 msgstr ""
+"Stroški dodajanja točke spremembe. Za utemeljitev delitve jih mora preseči "
+"izboljšanje prilagajanja (zmanjšanje SSE). Nižje vrednosti zaznajo več točk "
+"spremembe, višje vrednosti pa manj. Prilagodite svojim podatkom: ~1 za "
+"vrednosti Y blizu 1, ~10–100 za velike vrednosti, ~0,01–0,1 za majhne "
+"vrednosti."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
 #, kde-format
@@ -17091,6 +17101,8 @@ msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
 "changepoints."
 msgstr ""
+"Ugotovi, ali mora biti prileganje neprekinjeno ali prekinjeno na točkah "
+"spremembe."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
 #, kde-format
@@ -17303,12 +17315,10 @@ msgid "Properties: Fit"
 msgstr "Lastnosti: Prileganje"
 
 #: src/frontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Piecewise Linear Fit"
-msgstr "Lastnosti: Referenčna črta"
+msgstr "Lastnosti: Odsekoma linearno prilagajanje"
 
 #: src/frontend/GuiObserver.cpp:335
 #, kde-format
@@ -19977,11 +19987,10 @@ msgid "Plot Area %1"
 msgstr "Območje izrisa %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:841
-#, fuzzy, kde-format
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Piecewise Linear Fit to '%1'"
-msgstr "Prileganje porazdelitve na '%1'"
+msgstr "Odsekoma linearno prileganje '%1'"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:856
 #, kde-format
@@ -25666,43 +25675,39 @@ msgstr "Poenostavitev"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:92
-#, fuzzy, kde-format
-#| msgid "Quit Presentation"
+#, kde-format
 msgid "Binary Segmentation"
-msgstr "Zapri predstavitev"
+msgstr "Binarna segmentacija"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:97
 #, kde-format
 msgid "PELT"
-msgstr ""
+msgstr "PELT"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:141
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Changepoint Lines"
-msgstr "Križanje črt"
+msgstr "Črte točk sprememb"
 
 #. i18n: ectx: property (text), widget (QLabel, lPenalty)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:151
 #, kde-format
 msgid "Penalty:"
-msgstr ""
+msgstr "Kazen:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentSize)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:206
-#, fuzzy, kde-format
-#| msgid "2 Point Segment"
+#, kde-format
 msgid "Min Segment Size:"
-msgstr "2 točkovni segment"
+msgstr "Min velikost odseka:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxChangepoints)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:242
-#, fuzzy, kde-format
-#| msgid "Make Changes"
+#, kde-format
 msgid "Max Changepoints:"
-msgstr "Opravi spremembe"
+msgstr "Max točk sprememb:"
 
 #. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbDelta)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:27
@@ -27408,6 +27413,21 @@ msgstr "Vrednosti napake po meri, asimetrične"
 msgid "Data, +-:"
 msgstr "Podatki, +-:"
 
+#: src/frontend/widgets/ExpressionTextEdit.cpp:140
+#, kde-format
+msgid "Undefined variable: %2. Define it in the list of variables."
+msgid_plural "Undefined variables: %2. Define them in the list of variables."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: src/frontend/widgets/ExpressionTextEdit.cpp:148
+#, fuzzy, kde-format
+#| msgid "Invalid separator"
+msgid "Invalid expression"
+msgstr "Neveljaven ločilnik"
+
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Start Value"
@@ -28587,9 +28607,6 @@ msgstr "Ni mogoče odpreti datoteke:"
 
 #~ msgid "Separator detection not allowed"
 #~ msgstr "Zaznavanje ločilnika ni dovoljeno"
-
-#~ msgid "Invalid separator"
-#~ msgstr "Neveljaven ločilnik"
 
 #~ msgid "Serial device must be initialized before reading data from it"
 #~ msgstr ""

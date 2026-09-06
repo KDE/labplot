@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-05 00:40+0000\n"
+"POT-Creation-Date: 2026-09-06 00:40+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -1830,8 +1830,8 @@ msgstr "चरानाम् संख्या : "
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
-#: src/frontend/dockwidgets/ColumnDock.cpp:805
-#: src/frontend/dockwidgets/ColumnDock.cpp:830
+#: src/frontend/dockwidgets/ColumnDock.cpp:818
+#: src/frontend/dockwidgets/ColumnDock.cpp:843
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:98
@@ -3491,7 +3491,7 @@ msgid "Datetime Functions"
 msgstr "Mathieu कार्यम्"
 
 #: src/backend/gsl/functions.cpp:70
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:29
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
 #, kde-format
 msgid "Column Statistics"
 msgstr "स्तम्भ सांख्यिकी"
@@ -3851,7 +3851,7 @@ msgstr "आकृति"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbSum)
 #: src/backend/gsl/functions.cpp:264 src/backend/nsl/nsl_conv.c:22
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:64
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:42
 #, kde-format
@@ -3861,7 +3861,7 @@ msgstr "योग"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:49
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
@@ -3877,7 +3877,7 @@ msgstr "न्यूनतम"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
 #: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/nsl/nsl_conv.c:23
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
@@ -3902,7 +3902,7 @@ msgstr "अंकगणितीय माध्य"
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:49
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
@@ -3928,7 +3928,7 @@ msgstr "मानक विचलन"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
 #: src/backend/gsl/functions.cpp:270
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:170
 #: src/frontend/ui/mqttwillsettingswidget.ui:108
@@ -3965,7 +3965,7 @@ msgstr "विपर्ययार्थः"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMode)
 #: src/backend/gsl/functions.cpp:274
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:71
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:100
 #, kde-format
@@ -4025,7 +4025,7 @@ msgstr "९९ तमः प्रतिशतः"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
 #: src/backend/gsl/functions.cpp:284
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:75
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:128
 #, kde-format
@@ -4054,7 +4054,7 @@ msgstr "माध्यिका निरपेक्ष विचलन"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
 #: src/backend/gsl/functions.cpp:288
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:246
 #: src/frontend/ui/mqttwillsettingswidget.ui:163
@@ -4065,7 +4065,7 @@ msgstr "तिर्यक्त्वम्"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
 #: src/backend/gsl/functions.cpp:289
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:91
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:253
 #: src/frontend/ui/mqttwillsettingswidget.ui:174
@@ -4076,7 +4076,7 @@ msgstr "कुर्तोसिस्"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbEntropy)
 #: src/backend/gsl/functions.cpp:290
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:90
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:92
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:260
 #: src/frontend/ui/mqttwillsettingswidget.ui:185
@@ -7724,7 +7724,7 @@ msgid "%1: change column type and set value"
 msgstr "%1: स्तम्भप्रकारं परिवर्तयतु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:61
 #: src/frontend/dockwidgets/HistogramDock.cpp:266
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:63
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:97
@@ -7734,96 +7734,96 @@ msgstr "%1: स्तम्भप्रकारं परिवर्तयत�
 msgid "Count"
 msgstr "गणनां कारोतु"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #, kde-format
 msgid "ArithmeticMean"
 msgstr "अंकगणितमध्यम्"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
 #, kde-format
 msgid "GeometricMean"
 msgstr "ज्यामितीयमध्यम्"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:68
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
 #, kde-format
 msgid "HarmonicMean"
 msgstr "हार्मोनिकMean"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:68
 #, kde-format
 msgid "ContraharmonicMean"
 msgstr "ContraharmonicMean"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
 #, kde-format
 msgid "FirstQuartile"
 msgstr "प्रथमचतुर्थांश"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
 #, kde-format
 msgid "ThirdQuartile"
 msgstr "तृतीयचतुर्थांश"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:85
 #, kde-format
 msgid "Interquartile Range"
 msgstr "अन्तरचतुर्थांश श्रेणी"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
 #, kde-format
 msgid "Percentile1"
 msgstr "प्रतिशतं1"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
 #, kde-format
 msgid "Percentile5"
 msgstr "प्रतिशतं5"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
 #, kde-format
 msgid "Percentile10"
 msgstr "प्रतिशतं १०"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
 #, kde-format
 msgid "Percentile90"
 msgstr "प्रतिशतं90"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:79
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
 #, kde-format
 msgid "Percentile95"
 msgstr "प्रतिशतं95"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:79
 #, kde-format
 msgid "Percentile99"
 msgstr "प्रतिशतं99"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbRange)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:163
 #, kde-format
 msgid "Range"
 msgstr "पङ्क्तिः"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
 #, kde-format
 msgid "StandardDeviation"
 msgstr "मानकविचलन"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
 #, kde-format
 msgid "MeanDeviation"
 msgstr "मध्यमविचलन"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
 #, kde-format
 msgid "MeanDeviationAroundMedian"
 msgstr "MeanDeviationAroundमध्यम"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
 #, kde-format
 msgid "MedianDeviation"
 msgstr "मध्यमविचलन"
@@ -7832,7 +7832,7 @@ msgstr "मध्यमविचलन"
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsNumber)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:173
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:189
 #: src/frontend/ui/dockwidgets/barplotdock.ui:290
 #: src/frontend/ui/dockwidgets/barplotdock.ui:450
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:370
@@ -15587,7 +15587,7 @@ msgstr "स्वचालित (ई)"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
-#: src/frontend/dockwidgets/ColumnDock.cpp:830
+#: src/frontend/dockwidgets/ColumnDock.cpp:843
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/columndock.ui:42
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
@@ -15669,50 +15669,44 @@ msgstr ""
 "स्प्रेड्शीट् लिङ्किङ्ग् सक्रियम् अस्ति । लक्ष्यस्प्रेड्शीट् इत्यस्य आकारः लिङ्क्ड् स्प्रेड्शीट् इत्यनेन "
 "नियन्त्रितः भवति ।"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:598
-#, kde-format
+#: src/frontend/dockwidgets/ColumnDock.cpp:600
+#, fuzzy, kde-format
+#| msgid ""
+#| "Provided variable name is already reserved for a name of a constant. "
+#| "Please use another name."
 msgid ""
-"Provided variable name is already reserved for a name of a constant. Please "
-"use another name."
+"The variable name '%1' is already reserved for the constant '%1' (%2). "
+"Please use another name."
 msgstr ""
 "प्रदत्तं चरनाम पूर्वमेव नित्यस्य नामस्य कृते आरक्षितम् अस्ति । कृपया अन्यत् नाम प्रयोजयन्तु।"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:601
-#, kde-format
+#: src/frontend/dockwidgets/ColumnDock.cpp:605
+#, fuzzy, kde-format
+#| msgid ""
+#| "Provided variable name is already reserved for a name of a function. "
+#| "Please use another name."
 msgid ""
-"Provided variable name is already reserved for a name of a function. Please "
-"use another name."
+"The variable name '%1' is already reserved for the function '%1' (%2). "
+"Please use another name."
 msgstr ""
 "प्रदत्तं चरनाम पूर्वमेव फंक्शन् इत्यस्य नाम कृते आरक्षितम् अस्ति । कृपया अन्यत् नाम प्रयोजयन्तु।"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:604
-#, kde-format
-msgid "The variable name 'i' is reserved for the index of the column row."
+#: src/frontend/dockwidgets/ColumnDock.cpp:610
+#, fuzzy, kde-format
+#| msgid "The variable name 'i' is reserved for the index of the column row."
+msgid ""
+"The variable name 'i' is reserved for the index of the column row. Please "
+"use another name."
 msgstr "'i' इति चरनाम स्तम्भपङ्क्तौ अनुक्रमणिकायाः कृते आरक्षितम् अस्ति ।"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:607
+#: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr "प्रदत्तं चरनाम अङ्केन आरभ्यते अथवा विशेषवर्णं भवति ।"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:622
-#, kde-format
-msgid "Empty formula expression"
-msgstr "रिक्त सूत्र अभिव्यक्ति"
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:629
-#, kde-format
-msgid "Incorrect formula syntax: "
-msgstr "अशुद्धसूत्रवाक्यविन्यासः : "
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:648
-#, kde-format
-msgid "Select a valid column"
-msgstr "वैधस्तम्भं चिनोतु"
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:655
-#: src/frontend/dockwidgets/ColumnDock.cpp:753
+#: src/frontend/dockwidgets/ColumnDock.cpp:616
+#: src/frontend/dockwidgets/ColumnDock.cpp:766
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:180
 #, kde-format
 msgid ""
@@ -15720,19 +15714,40 @@ msgid ""
 "a letter"
 msgstr "चरनाम केवलं अक्षराणि, अङ्कानि, '_' च भवितुं शक्नोति, अक्षरेण आरभ्यत इति"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:662
+#: src/frontend/dockwidgets/ColumnDock.cpp:636
+#, fuzzy, kde-format
+#| msgid "No variable selected."
+msgid "Invalid variable name provided"
+msgstr "कोऽपि चरः चयनितः नास्ति।"
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:642
+#, kde-format
+msgid "Empty formula expression"
+msgstr "रिक्त सूत्र अभिव्यक्ति"
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:649
+#, kde-format
+msgid "Incorrect formula syntax: "
+msgstr "अशुद्धसूत्रवाक्यविन्यासः : "
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:668
+#, kde-format
+msgid "Select a valid column"
+msgstr "वैधस्तम्भं चिनोतु"
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:675
 #, fuzzy, kde-format
 #| msgid "Formula:"
 msgid "Apply Formula"
 msgstr "सूत्रम् :"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:799
+#: src/frontend/dockwidgets/ColumnDock.cpp:812
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:214
 #, kde-format
 msgid "Delete variable"
 msgstr "चरं विलोपयन्तु"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:877
+#: src/frontend/dockwidgets/ColumnDock.cpp:889
 #, fuzzy, kde-format
 #| msgid "%1: set cell formula"
 msgid "%1: apply column formula"
@@ -27394,6 +27409,19 @@ msgstr "कस्टम् त्रुटिमूल्यानि, असम
 msgid "Data, +-:"
 msgstr "दत्तांशः, +-: ."
 
+#: src/frontend/widgets/ExpressionTextEdit.cpp:140
+#, kde-format
+msgid "Undefined variable: %2. Define it in the list of variables."
+msgid_plural "Undefined variables: %2. Define them in the list of variables."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/frontend/widgets/ExpressionTextEdit.cpp:148
+#, fuzzy, kde-format
+#| msgid "Invalid separator"
+msgid "Invalid expression"
+msgstr "असिद्ध विभाजक"
+
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, fuzzy, kde-format
 #| msgid "Start Value:"
@@ -28453,9 +28481,6 @@ msgstr "सञ्चिकां उद्घाटयितुं असमर�
 
 #~ msgid "Separator detection not allowed"
 #~ msgstr "विभाजकस्य अन्वेषणस्य अनुमतिः नास्ति"
-
-#~ msgid "Invalid separator"
-#~ msgstr "असिद्ध विभाजक"
 
 #~ msgid "Wrong end column. Is it smaller than start column?"
 #~ msgstr "गलत् अन्त्यस्तम्भः। किं प्रारम्भस्तम्भात् लघुतरम् अस्ति ?"

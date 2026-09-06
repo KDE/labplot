@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-05 00:40+0000\n"
+"POT-Creation-Date: 2026-09-06 00:40+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1795,8 +1795,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
-#: src/frontend/dockwidgets/ColumnDock.cpp:805
-#: src/frontend/dockwidgets/ColumnDock.cpp:830
+#: src/frontend/dockwidgets/ColumnDock.cpp:818
+#: src/frontend/dockwidgets/ColumnDock.cpp:843
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:98
@@ -3436,7 +3436,7 @@ msgid "Datetime Functions"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:70
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:29
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
 #, kde-format
 msgid "Column Statistics"
 msgstr "列统计"
@@ -3796,7 +3796,7 @@ msgstr "大小"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbSum)
 #: src/backend/gsl/functions.cpp:264 src/backend/nsl/nsl_conv.c:22
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:64
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:42
 #, kde-format
@@ -3806,7 +3806,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:49
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
@@ -3822,7 +3822,7 @@ msgstr "最小值"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
 #: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/nsl/nsl_conv.c:23
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
@@ -3847,7 +3847,7 @@ msgstr "算术平均值"
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:49
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
@@ -3873,7 +3873,7 @@ msgstr "标准差"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
 #: src/backend/gsl/functions.cpp:270
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:170
 #: src/frontend/ui/mqttwillsettingswidget.ui:108
@@ -3910,7 +3910,7 @@ msgstr "逆调和平均值"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMode)
 #: src/backend/gsl/functions.cpp:274
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:71
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:100
 #, kde-format
@@ -3970,7 +3970,7 @@ msgstr "第 99 百分位数"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
 #: src/backend/gsl/functions.cpp:284
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:75
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:128
 #, kde-format
@@ -3999,7 +3999,7 @@ msgstr "绝对中位差"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
 #: src/backend/gsl/functions.cpp:288
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:246
 #: src/frontend/ui/mqttwillsettingswidget.ui:163
@@ -4010,7 +4010,7 @@ msgstr "偏度"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
 #: src/backend/gsl/functions.cpp:289
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:91
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:253
 #: src/frontend/ui/mqttwillsettingswidget.ui:174
@@ -4021,7 +4021,7 @@ msgstr "峰度"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbEntropy)
 #: src/backend/gsl/functions.cpp:290
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:90
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:92
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:260
 #: src/frontend/ui/mqttwillsettingswidget.ui:185
@@ -7634,7 +7634,7 @@ msgid "%1: change column type and set value"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:61
 #: src/frontend/dockwidgets/HistogramDock.cpp:266
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:63
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:97
@@ -7644,96 +7644,96 @@ msgstr ""
 msgid "Count"
 msgstr "数量"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #, kde-format
 msgid "ArithmeticMean"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
 #, kde-format
 msgid "GeometricMean"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:68
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
 #, kde-format
 msgid "HarmonicMean"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:68
 #, kde-format
 msgid "ContraharmonicMean"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
 #, kde-format
 msgid "FirstQuartile"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
 #, kde-format
 msgid "ThirdQuartile"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:85
 #, kde-format
 msgid "Interquartile Range"
 msgstr "四分位距"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
 #, kde-format
 msgid "Percentile1"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
 #, kde-format
 msgid "Percentile5"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
 #, kde-format
 msgid "Percentile10"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
 #, kde-format
 msgid "Percentile90"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:79
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
 #, kde-format
 msgid "Percentile95"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:79
 #, kde-format
 msgid "Percentile99"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbRange)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:163
 #, kde-format
 msgid "Range"
 msgstr "极差"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
 #, kde-format
 msgid "StandardDeviation"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
 #, kde-format
 msgid "MeanDeviation"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
 #, kde-format
 msgid "MeanDeviationAroundMedian"
 msgstr ""
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
 #, kde-format
 msgid "MedianDeviation"
 msgstr ""
@@ -7742,7 +7742,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsNumber)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:173
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:189
 #: src/frontend/ui/dockwidgets/barplotdock.ui:290
 #: src/frontend/ui/dockwidgets/barplotdock.ui:450
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:370
@@ -15251,7 +15251,7 @@ msgstr "自动 (E)"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
-#: src/frontend/dockwidgets/ColumnDock.cpp:830
+#: src/frontend/dockwidgets/ColumnDock.cpp:843
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/columndock.ui:42
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
@@ -15329,48 +15329,42 @@ msgid ""
 "controlled by the linked spreadsheet."
 msgstr "数据表链接处于打开状态。目标数据表的大小将由链接的数据表控制。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:598
-#, kde-format
+#: src/frontend/dockwidgets/ColumnDock.cpp:600
+#, fuzzy, kde-format
+#| msgid ""
+#| "Provided variable name is already reserved for a name of a constant. "
+#| "Please use another name."
 msgid ""
-"Provided variable name is already reserved for a name of a constant. Please "
-"use another name."
+"The variable name '%1' is already reserved for the constant '%1' (%2). "
+"Please use another name."
 msgstr "输入的变量名与内置常量冲突。请换一个名称。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:601
-#, kde-format
+#: src/frontend/dockwidgets/ColumnDock.cpp:605
+#, fuzzy, kde-format
+#| msgid ""
+#| "Provided variable name is already reserved for a name of a function. "
+#| "Please use another name."
 msgid ""
-"Provided variable name is already reserved for a name of a function. Please "
-"use another name."
+"The variable name '%1' is already reserved for the function '%1' (%2). "
+"Please use another name."
 msgstr "输入的变量名与内置函数冲突。请换一个名称。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:604
-#, kde-format
-msgid "The variable name 'i' is reserved for the index of the column row."
+#: src/frontend/dockwidgets/ColumnDock.cpp:610
+#, fuzzy, kde-format
+#| msgid "The variable name 'i' is reserved for the index of the column row."
+msgid ""
+"The variable name 'i' is reserved for the index of the column row. Please "
+"use another name."
 msgstr "'i' 用于表示行号，不能用作变量名。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:607
+#: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr "输入的变量名以数字开头或包含特殊字符。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:622
-#, kde-format
-msgid "Empty formula expression"
-msgstr "公式表达式为空"
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:629
-#, kde-format
-msgid "Incorrect formula syntax: "
-msgstr "公式语法错误："
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:648
-#, kde-format
-msgid "Select a valid column"
-msgstr "选择一个有效的列"
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:655
-#: src/frontend/dockwidgets/ColumnDock.cpp:753
+#: src/frontend/dockwidgets/ColumnDock.cpp:616
+#: src/frontend/dockwidgets/ColumnDock.cpp:766
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:180
 #, kde-format
 msgid ""
@@ -15378,18 +15372,38 @@ msgid ""
 "a letter"
 msgstr "变量名称只能包含字母、 数字和 '_' ，并应以字母开头。"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:662
+#: src/frontend/dockwidgets/ColumnDock.cpp:636
+#, kde-format
+msgid "Invalid variable name provided"
+msgstr ""
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:642
+#, kde-format
+msgid "Empty formula expression"
+msgstr "公式表达式为空"
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:649
+#, kde-format
+msgid "Incorrect formula syntax: "
+msgstr "公式语法错误："
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:668
+#, kde-format
+msgid "Select a valid column"
+msgstr "选择一个有效的列"
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:675
 #, kde-format
 msgid "Apply Formula"
 msgstr ""
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:799
+#: src/frontend/dockwidgets/ColumnDock.cpp:812
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:214
 #, kde-format
 msgid "Delete variable"
 msgstr "删除变量"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:877
+#: src/frontend/dockwidgets/ColumnDock.cpp:889
 #, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
@@ -26795,6 +26809,17 @@ msgstr "自定义误差值，不对称"
 #, kde-format
 msgid "Data, +-:"
 msgstr "数据 ±："
+
+#: src/frontend/widgets/ExpressionTextEdit.cpp:140
+#, kde-format
+msgid "Undefined variable: %2. Define it in the list of variables."
+msgid_plural "Undefined variables: %2. Define them in the list of variables."
+msgstr[0] ""
+
+#: src/frontend/widgets/ExpressionTextEdit.cpp:148
+#, kde-format
+msgid "Invalid expression"
+msgstr ""
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format

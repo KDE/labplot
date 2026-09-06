@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-05 00:40+0000\n"
-"PO-Revision-Date: 2026-08-21 19:39+0200\n"
+"POT-Creation-Date: 2026-09-06 00:40+0000\n"
+"PO-Revision-Date: 2026-09-05 07:29+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -1832,8 +1832,8 @@ msgstr "Antal variabler: "
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
-#: src/frontend/dockwidgets/ColumnDock.cpp:805
-#: src/frontend/dockwidgets/ColumnDock.cpp:830
+#: src/frontend/dockwidgets/ColumnDock.cpp:818
+#: src/frontend/dockwidgets/ColumnDock.cpp:843
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:98
@@ -3473,7 +3473,7 @@ msgid "Datetime Functions"
 msgstr "Datum- och tidfunktioner"
 
 #: src/backend/gsl/functions.cpp:70
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:29
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
 #, kde-format
 msgid "Column Statistics"
 msgstr "Kolumnstatistik"
@@ -3833,7 +3833,7 @@ msgstr "Storlek"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbSum)
 #: src/backend/gsl/functions.cpp:264 src/backend/nsl/nsl_conv.c:22
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:64
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:42
 #, kde-format
@@ -3843,7 +3843,7 @@ msgstr "Summa"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:265 src/backend/nsl/nsl_baseline.cpp:49
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
@@ -3859,7 +3859,7 @@ msgstr "Minimum"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
 #: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/nsl/nsl_conv.c:23
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
@@ -3884,7 +3884,7 @@ msgstr "Aritmetiskt medelvärde"
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:268 src/backend/nsl/nsl_baseline.cpp:49
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
@@ -3910,7 +3910,7 @@ msgstr "Standardavvikelse"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
 #: src/backend/gsl/functions.cpp:270
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:170
 #: src/frontend/ui/mqttwillsettingswidget.ui:108
@@ -3947,7 +3947,7 @@ msgstr "Kontraharmoniskt medelvärde"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMode)
 #: src/backend/gsl/functions.cpp:274
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:71
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:100
 #, kde-format
@@ -4007,7 +4007,7 @@ msgstr "99:e percentil"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
 #: src/backend/gsl/functions.cpp:284
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:75
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:128
 #, kde-format
@@ -4036,7 +4036,7 @@ msgstr "Medianens absoluta avvikelse"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
 #: src/backend/gsl/functions.cpp:288
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:246
 #: src/frontend/ui/mqttwillsettingswidget.ui:163
@@ -4047,7 +4047,7 @@ msgstr "Skevhet"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
 #: src/backend/gsl/functions.cpp:289
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:91
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:253
 #: src/frontend/ui/mqttwillsettingswidget.ui:174
@@ -4058,7 +4058,7 @@ msgstr "Kurtosis"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbEntropy)
 #: src/backend/gsl/functions.cpp:290
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:90
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:92
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:260
 #: src/frontend/ui/mqttwillsettingswidget.ui:185
@@ -7726,7 +7726,7 @@ msgid "%1: change column type and set value"
 msgstr "%1: ändra kolumntyp och ange värde"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:61
 #: src/frontend/dockwidgets/HistogramDock.cpp:266
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:63
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:97
@@ -7736,96 +7736,96 @@ msgstr "%1: ändra kolumntyp och ange värde"
 msgid "Count"
 msgstr "Antal"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #, kde-format
 msgid "ArithmeticMean"
 msgstr "Aritmetiskt medelvärde"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
 #, kde-format
 msgid "GeometricMean"
 msgstr "Geometriskt medelvärde"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:68
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
 #, kde-format
 msgid "HarmonicMean"
 msgstr "Harmoniskt medelvärde"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:68
 #, kde-format
 msgid "ContraharmonicMean"
 msgstr "Kontraharmoniskt medelvärde"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
 #, kde-format
 msgid "FirstQuartile"
 msgstr "Första kvartil"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
 #, kde-format
 msgid "ThirdQuartile"
 msgstr "Tredje kvartil"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:85
 #, kde-format
 msgid "Interquartile Range"
 msgstr "Interkvartilt intervall"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
 #, kde-format
 msgid "Percentile1"
 msgstr "Percentil 1"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
 #, kde-format
 msgid "Percentile5"
 msgstr "Percentil 5"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
 #, kde-format
 msgid "Percentile10"
 msgstr "Percentil 10"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
 #, kde-format
 msgid "Percentile90"
 msgstr "Percentil 90"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:79
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
 #, kde-format
 msgid "Percentile95"
 msgstr "Percentil 95"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:79
 #, kde-format
 msgid "Percentile99"
 msgstr "Percentil 99"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbRange)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:163
 #, kde-format
 msgid "Range"
 msgstr "Intervall"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
 #, kde-format
 msgid "StandardDeviation"
 msgstr "Standardavvikelse"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
 #, kde-format
 msgid "MeanDeviation"
 msgstr "Medelavvikelse"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
 #, kde-format
 msgid "MeanDeviationAroundMedian"
 msgstr "Medelvärdets avvikelse omkring medianen"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
 #, kde-format
 msgid "MedianDeviation"
 msgstr "Medianavvikelse"
@@ -7834,7 +7834,7 @@ msgstr "Medianavvikelse"
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsNumber)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:173
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:189
 #: src/frontend/ui/dockwidgets/barplotdock.ui:290
 #: src/frontend/ui/dockwidgets/barplotdock.ui:450
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:370
@@ -9858,7 +9858,7 @@ msgstr "Pareto-diagram"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
 #, kde-format
 msgid "Piecewise Linear"
-msgstr ""
+msgstr "Styckvis linjär"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #, kde-format
@@ -11426,29 +11426,25 @@ msgid "%1: set options and perform the line simplification"
 msgstr "%1: ställ in alternativ och utför linjeförenklingen"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
-#, fuzzy, kde-format
-#| msgid "%1: set gluepoint index"
+#, kde-format
 msgid "%1: toggle changepoint lines"
-msgstr "%1: ställ in fästpunkters index"
+msgstr "%1: ändra ändringspunktslinjer"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:291
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:745
-#, fuzzy, kde-format
-#| msgctxt "Curve fitting"
-#| msgid "Fit Results"
+#, kde-format
 msgid "Fit Results"
 msgstr "Anpassa resultat"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:502
 #, kde-format
 msgid "Piecewise Linear Fit Results"
-msgstr ""
+msgstr "Styckvis linjär anpassa resultat"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
-#, fuzzy, kde-format
-#| msgid "Test result is not available."
+#, kde-format
 msgid "No results available yet"
-msgstr "Testresultat är inte tillgängligt."
+msgstr "Inga resultat tillgängliga ännu"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:512
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:518
@@ -11458,37 +11454,34 @@ msgid "Status: %1"
 msgstr "Status: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:519
-#, fuzzy, kde-format
-#| msgid "Number of Objects: %1"
+#, kde-format
 msgid "Number of Segments: %1"
-msgstr "Antal objekt: %1"
+msgstr "Antal segment: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:520
-#, fuzzy, kde-format
-#| msgid "number of points: %1"
+#, kde-format
 msgid "Number of Changepoints: %1"
-msgstr "antal punkter: %1"
+msgstr "Antal ändringspunkter: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:521
 #, kde-format
 msgid "Overall R²: %1"
-msgstr ""
+msgstr "Total R²: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
 #, kde-format
 msgid "Overall SSE: %1"
-msgstr ""
+msgstr "Total SSE: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
 #, kde-format
 msgid "Changepoint Positions (X-values)"
-msgstr ""
+msgstr "Ändringspunkternas positioner (x-värden)"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:536
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "Segment %1"
-msgstr "Segment"
+msgstr "Segment %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
@@ -11500,25 +11493,22 @@ msgstr "Parametrar:"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:546
 #, kde-format
 msgid "Parameter Statistics (Slope):"
-msgstr ""
+msgstr "Parameterstatistik (lutning):"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:552
-#, fuzzy, kde-format
-#| msgid "Goodness of fit:"
+#, kde-format
 msgid "Goodness of Fit:"
-msgstr "Goodness of fit:"
+msgstr "Anpassningsgodhet:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:562
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Tests:"
-msgstr "Statistiska diagram"
+msgstr "Statistiska tester:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:569
-#, fuzzy, kde-format
-#| msgid "Akaike information criterion"
+#, kde-format
 msgid "Information Criteria:"
-msgstr "Akaike informationskriterium"
+msgstr "Informationskriterier:"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -15518,7 +15508,7 @@ msgstr "Automatisk (E)"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
-#: src/frontend/dockwidgets/ColumnDock.cpp:830
+#: src/frontend/dockwidgets/ColumnDock.cpp:843
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:246
 #: src/frontend/ui/dockwidgets/columndock.ui:42
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
@@ -15616,53 +15606,47 @@ msgstr ""
 "Länkning till kalkylark är aktiv. Målkalkylarkets storlek styrs av det "
 "länkade kalkylarket."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:598
-#, kde-format
+#: src/frontend/dockwidgets/ColumnDock.cpp:600
+#, fuzzy, kde-format
+#| msgid ""
+#| "Provided variable name is already reserved for a name of a constant. "
+#| "Please use another name."
 msgid ""
-"Provided variable name is already reserved for a name of a constant. Please "
-"use another name."
+"The variable name '%1' is already reserved for the constant '%1' (%2). "
+"Please use another name."
 msgstr ""
 "Angivet variabelnamn är redan reserverat som namn på en konstant. Använd ett "
 "annat namn."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:601
-#, kde-format
+#: src/frontend/dockwidgets/ColumnDock.cpp:605
+#, fuzzy, kde-format
+#| msgid ""
+#| "Provided variable name is already reserved for a name of a function. "
+#| "Please use another name."
 msgid ""
-"Provided variable name is already reserved for a name of a function. Please "
-"use another name."
+"The variable name '%1' is already reserved for the function '%1' (%2). "
+"Please use another name."
 msgstr ""
 "Angivet variabelnamn är redan reserverat som namn på en funktion. Använd ett "
 "annat namn."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:604
-#, kde-format
-msgid "The variable name 'i' is reserved for the index of the column row."
+#: src/frontend/dockwidgets/ColumnDock.cpp:610
+#, fuzzy, kde-format
+#| msgid "The variable name 'i' is reserved for the index of the column row."
+msgid ""
+"The variable name 'i' is reserved for the index of the column row. Please "
+"use another name."
 msgstr "Variabelnamnet 'i' är reserverat för kolumnradens index."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:607
+#: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr ""
 "Angivet variabelnamn börjar med en siffra eller innehåller ett specialtecken."
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:622
-#, kde-format
-msgid "Empty formula expression"
-msgstr "Tomt formeluttryck"
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:629
-#, kde-format
-msgid "Incorrect formula syntax: "
-msgstr "Felaktig formelsyntax: "
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:648
-#, kde-format
-msgid "Select a valid column"
-msgstr "Markera en giltig kolumn"
-
-#: src/frontend/dockwidgets/ColumnDock.cpp:655
-#: src/frontend/dockwidgets/ColumnDock.cpp:753
+#: src/frontend/dockwidgets/ColumnDock.cpp:616
+#: src/frontend/dockwidgets/ColumnDock.cpp:766
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:180
 #, kde-format
 msgid ""
@@ -15672,18 +15656,39 @@ msgstr ""
 "Variabelnamn kan bara innehålla bokstäver, siffror och '_' och ska börja med "
 "en bokstav"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:662
+#: src/frontend/dockwidgets/ColumnDock.cpp:636
+#, fuzzy, kde-format
+#| msgid "No variable columns provided."
+msgid "Invalid variable name provided"
+msgstr "Inga variabla kolumner tillhandahållna."
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:642
+#, kde-format
+msgid "Empty formula expression"
+msgstr "Tomt formeluttryck"
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:649
+#, kde-format
+msgid "Incorrect formula syntax: "
+msgstr "Felaktig formelsyntax: "
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:668
+#, kde-format
+msgid "Select a valid column"
+msgstr "Markera en giltig kolumn"
+
+#: src/frontend/dockwidgets/ColumnDock.cpp:675
 #, kde-format
 msgid "Apply Formula"
 msgstr "Använd formel"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:799
+#: src/frontend/dockwidgets/ColumnDock.cpp:812
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:214
 #, kde-format
 msgid "Delete variable"
 msgstr "Ta bort variabel"
 
-#: src/frontend/dockwidgets/ColumnDock.cpp:877
+#: src/frontend/dockwidgets/ColumnDock.cpp:889
 #, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
@@ -17001,21 +17006,19 @@ msgid "area error: %1"
 msgstr "areafel: %1"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
-#, fuzzy, kde-format
-#| msgid "Continue"
+#, kde-format
 msgid "Continuous"
-msgstr "Fortsätt"
+msgstr "Kontinuerlig"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
-#, fuzzy, kde-format
-#| msgid "Discount"
+#, kde-format
 msgid "Discontinuous"
-msgstr "Discount"
+msgstr "Diskontinuerlig"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
 #, kde-format
 msgid "Method for detecting changepoints."
-msgstr ""
+msgstr "Metod för att detektera ändringspunkter."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, kde-format
@@ -17023,6 +17026,8 @@ msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
 "are merged with neighboring segments."
 msgstr ""
+"Minimalt antal datapunkter i ett segment. Segment med färre datapunkter slås "
+"samman med angränsande segment."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
@@ -17033,6 +17038,12 @@ msgid ""
 "Scale with your data: ~1 for Y-values near 1, ~10-100 for large values, "
 "~0.01-0.1 for small values."
 msgstr ""
+"Kostnad för att lägga till en ändringspunkt. Måste överskridas av "
+"anpassningsförbättringen (SSE-reduktion) för att motivera delning.\n"
+"Lägre värden detekterar fler ändringspunkter, högre värden detekterar "
+"färre.\n"
+"Skala med data: ~1 för y-värden nära 1, ~10-100 för stora värden, ~0,01-0,1 "
+"för små värden."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
 #, kde-format
@@ -17040,6 +17051,7 @@ msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
 "changepoints."
 msgstr ""
+"Bestäm om anpassningen ska vara kontinuerlig eller inte vid ändringspunkterna"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
 #, kde-format
@@ -17255,12 +17267,10 @@ msgid "Properties: Fit"
 msgstr "Egenskaper: Anpassa"
 
 #: src/frontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Piecewise Linear Fit"
-msgstr "Egenskaper: Referenslinje"
+msgstr "Egenskaper: Styckvis linjär anpassning"
 
 #: src/frontend/GuiObserver.cpp:335
 #, kde-format
@@ -19923,11 +19933,10 @@ msgid "Plot Area %1"
 msgstr "Diagramområde %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:841
-#, fuzzy, kde-format
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Piecewise Linear Fit to '%1'"
-msgstr "Anpassa fördelning till '%1'"
+msgstr "Styckvis linjär anpassning till '%1'"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:856
 #, kde-format
@@ -25602,43 +25611,39 @@ msgstr "Förenkling"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:92
-#, fuzzy, kde-format
-#| msgid "Quit Presentation"
+#, kde-format
 msgid "Binary Segmentation"
-msgstr "Avsluta presentation"
+msgstr "Binär segmentering"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:97
 #, kde-format
 msgid "PELT"
-msgstr ""
+msgstr "PELT"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:141
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Changepoint Lines"
-msgstr "Korsande linjer"
+msgstr "Ändringspunktslinjer"
 
 #. i18n: ectx: property (text), widget (QLabel, lPenalty)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:151
 #, kde-format
 msgid "Penalty:"
-msgstr ""
+msgstr "Straff:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentSize)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:206
-#, fuzzy, kde-format
-#| msgid "2 Point Segment"
+#, kde-format
 msgid "Min Segment Size:"
-msgstr "Tvåpunktssegment"
+msgstr "Minimal segmentstorlek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxChangepoints)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:242
-#, fuzzy, kde-format
-#| msgid "Make Changes"
+#, kde-format
 msgid "Max Changepoints:"
-msgstr "Utför ändringar"
+msgstr "Maximalt antal ändringspunkter"
 
 #. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbDelta)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:27
@@ -27342,6 +27347,19 @@ msgstr "Egna felvärden, asymmetriska"
 msgid "Data, +-:"
 msgstr "Data, +-:"
 
+#: src/frontend/widgets/ExpressionTextEdit.cpp:140
+#, kde-format
+msgid "Undefined variable: %2. Define it in the list of variables."
+msgid_plural "Undefined variables: %2. Define them in the list of variables."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/frontend/widgets/ExpressionTextEdit.cpp:148
+#, fuzzy, kde-format
+#| msgid "Invalid separator"
+msgid "Invalid expression"
+msgstr "Ogiltig avskiljare"
+
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Start Value"
@@ -28515,9 +28533,6 @@ msgstr "Kan inte öppna fil:"
 
 #~ msgid "Separator detection not allowed"
 #~ msgstr "Detektering av avskiljare inte tillåten"
-
-#~ msgid "Invalid separator"
-#~ msgstr "Ogiltig avskiljare"
 
 #~ msgid "Serial device must be initialized before reading data from it"
 #~ msgstr "En seriell enhet måste initieras innan data läses från den"
