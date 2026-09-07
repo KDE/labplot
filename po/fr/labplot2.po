@@ -18106,7 +18106,7 @@ msgstr "Taille : "
 #: src/kdefrontend/ui/symbolwidget.ui:312
 #, kde-format
 msgid "Spinbox for numbers."
-msgstr "Boîte à cocher pour les nombres."
+msgstr "Boite à cocher pour les nombres."
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbSize)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbBorderWidth)
@@ -19925,7 +19925,7 @@ msgstr "Largeur de la variable :"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:256
 #, kde-format
 msgid "Box"
-msgstr "Boîte"
+msgstr "Boite"
 
 #. i18n: ectx: property (text), widget (QLabel, lMedianLine)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:348
@@ -22158,7 +22158,7 @@ msgstr "Aspect multicolore"
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:14
 #, kde-format
 msgid "Dialog"
-msgstr "Boîte de dialogue"
+msgstr "Boite de dialogue"
 
 #. i18n: ectx: property (text), widget (QLabel, lInstalledTemplates)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:33
@@ -23689,7 +23689,7 @@ msgstr "Presse-papier"
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:92
 #, kde-format
 msgid "Object's Bounding Box"
-msgstr "Boîte délimitant l'objet"
+msgstr "Boite délimitant l'objet"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:93
 #, kde-format
