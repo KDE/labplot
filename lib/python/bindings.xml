@@ -1256,7 +1256,7 @@
         <declare-function signature="fitResult()const" return-type="const XYPiecewiseLinearFitCurve::FitResult&amp;"/>
         <declare-function signature="changepointLinesEnabled()const" return-type="bool"/>
         <declare-function signature="setChangepointLinesEnabled(bool)" return-type="void"/>
-        <declare-function signature="changepointLines()const" return-type="QVector&lt;ReferenceLine*&gt;"/>
+        <declare-function signature="changepointLines()const" return-type="QList&lt;ReferenceLine*&gt;"/>
     </object-type>
     <rejection class="XYFourierFilterCurve" field-name="*"/>
     <rejection class="XYFourierFilterCurve" function-name="*"/>
