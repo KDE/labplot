@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-06 00:40+0000\n"
-"PO-Revision-Date: 2026-09-05 08:19+0200\n"
+"PO-Revision-Date: 2026-09-06 06:02+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -15641,36 +15641,28 @@ msgstr ""
 "იმართება."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:600
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the constant '%1' (%2). "
 "Please use another name."
 msgstr ""
-"შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც მუდმივის სახელი. გამოიყენეთ "
-"სხვა."
+"ცვლადის სახელი '%1' უკვე დაცულია კონსტანტისთვის '%1' (%2). გამოიყენეთ სხვა."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:605
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a function. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the function '%1' (%2). "
 "Please use another name."
 msgstr ""
-"შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც ფუნქციის სახელი. გამოიყენეთ "
-"სხვა."
+"ცვლადის სახელი '%1' უკვე დაცულია ფუნქციისთვის '%1' (%2). გამოიყენეთ სხვა."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:610
-#, fuzzy, kde-format
-#| msgid "The variable name 'i' is reserved for the index of the column row."
+#, kde-format
 msgid ""
 "The variable name 'i' is reserved for the index of the column row. Please "
 "use another name."
-msgstr "ცვლადის სახელი \"i\" დაცულია სვეტის მწკრივის ინდექსისთვის."
+msgstr ""
+"ცვლადის სახელი \"i\" დაცულია სვეტის მწკრივის ინდექსისთვის. გამოიყენეთ სხვა."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
@@ -15690,10 +15682,9 @@ msgstr ""
 "მაგრამ, მხოლოდ, ასოთი შეიძლება, იწყებოდეს"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:636
-#, fuzzy, kde-format
-#| msgid "No variable columns provided."
+#, kde-format
 msgid "Invalid variable name provided"
-msgstr "ცვლადის სვეტები მითითებული არაა."
+msgstr "მითითებული ცვლადის სახელი არასწორია"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:642
 #, kde-format
@@ -27392,14 +27383,13 @@ msgstr "მონაცემები, +-:"
 #, kde-format
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "აღუწერელი ცვლადი: %2. აღწერეთ ის ცვლადების სიაში."
+msgstr[1] "აღუწერელი ცვლადები: %2. აღწერეთ ისინი ცვლადების სიაში."
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:148
-#, fuzzy, kde-format
-#| msgid "Invalid pointer"
+#, kde-format
 msgid "Invalid expression"
-msgstr "არასწორი მაჩვენებელი"
+msgstr "არასწორი გამოსახულება"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format

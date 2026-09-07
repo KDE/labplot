@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-06 00:40+0000\n"
-"PO-Revision-Date: 2026-09-05 12:31+0200\n"
+"PO-Revision-Date: 2026-09-06 17:23+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -9089,7 +9089,7 @@ msgstr "%1: estableix l'amplada"
 #: src/backend/worksheet/Image.cpp:166
 #, kde-format
 msgid "%1: set height"
-msgstr "%1: estableix l'alçada"
+msgstr "%1: estableix l'altura"
 
 #: src/backend/worksheet/Image.cpp:173
 #, kde-format
@@ -13003,7 +13003,7 @@ msgstr "Mida original"
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
-msgstr "Ajusta a l'alçada"
+msgstr "Ajusta a l'altura"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:129
 #: src/frontend/worksheet/WorksheetView.cpp:176
@@ -15803,37 +15803,31 @@ msgstr ""
 "destinació està controlada pel full de càlcul enllaçat."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:600
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the constant '%1' (%2). "
 "Please use another name."
 msgstr ""
-"El nom de variable subministrat ja està reservat per al nom d'una funció. "
-"Useu un altre nom."
+"El nom de variable «%1» ja està reservat per a la constant «%1» (%2). Useu "
+"un altre nom."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:605
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a function. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the function '%1' (%2). "
 "Please use another name."
 msgstr ""
-"El nom de variable subministrat ja està reservat per al nom d'una constant "
-"Useu un altre nom."
+"El nom de variable «%1» ja està reservat per a la funció «%1» (%2). Useu un "
+"altre nom."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:610
-#, fuzzy, kde-format
-#| msgid "The variable name 'i' is reserved for the index of the column row."
+#, kde-format
 msgid ""
 "The variable name 'i' is reserved for the index of the column row. Please "
 "use another name."
 msgstr ""
-"El nom de variable «i» està reservat per a l'índex de la fila de columnes."
+"El nom de variable «i» està reservat per a l'índex de la fila de columnes. "
+"Useu un altre nom."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
@@ -15855,10 +15849,9 @@ msgstr ""
 "comenci amb una lletra"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:636
-#, fuzzy, kde-format
-#| msgid "No variable columns provided."
+#, kde-format
 msgid "Invalid variable name provided"
-msgstr "No s'ha proporcionat cap columna de variables."
+msgstr "S'ha proporcionat un nom de variable no vàlid"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:642
 #, kde-format
@@ -24139,7 +24132,7 @@ msgstr "Inferior:"
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:33
 #, kde-format
 msgid "Height:"
-msgstr "Alçada:"
+msgstr "Altura:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontalRight)
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
@@ -27622,14 +27615,13 @@ msgstr "Dades, +-:"
 #, kde-format
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Variable sense definir: %2. Definiu-la a la llista de variables."
+msgstr[1] "Variables sense definir: %2. Definiu-les a la llista de variables."
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:148
-#, fuzzy, kde-format
-#| msgid "Invalid separator"
+#, kde-format
 msgid "Invalid expression"
-msgstr "Separador no vàlid"
+msgstr "Expressió no vàlida"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format

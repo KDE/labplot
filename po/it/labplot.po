@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-06 00:40+0000\n"
-"PO-Revision-Date: 2026-08-20 10:11+0200\n"
+"PO-Revision-Date: 2026-09-06 10:13+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -9907,7 +9907,7 @@ msgstr "Grafico di Pareto"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
 #, kde-format
 msgid "Piecewise Linear"
-msgstr ""
+msgstr "Lineare a tratti"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #, kde-format
@@ -11480,29 +11480,25 @@ msgid "%1: set options and perform the line simplification"
 msgstr "%1: imposta le opzioni ad esegui la semplificazione della linea"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
-#, fuzzy, kde-format
-#| msgid "%1: set gluepoint index"
+#, kde-format
 msgid "%1: toggle changepoint lines"
-msgstr "%1: imposta l'indice del punto di adesione"
+msgstr "%1: attiva/disattiva le linee dei punti di cambiamento"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:291
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:745
-#, fuzzy, kde-format
-#| msgctxt "Curve fitting"
-#| msgid "Fit Results"
+#, kde-format
 msgid "Fit Results"
 msgstr "Risultati dell'adattamento"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:502
 #, kde-format
 msgid "Piecewise Linear Fit Results"
-msgstr ""
+msgstr "Risultati dell'adattamento lineare a tratti"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
-#, fuzzy, kde-format
-#| msgid "Test result is not available."
+#, kde-format
 msgid "No results available yet"
-msgstr "I risultati del test non sono disponibili."
+msgstr "Ancora nessun risultato disponibile"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:512
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:518
@@ -11512,37 +11508,34 @@ msgid "Status: %1"
 msgstr "Stato: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:519
-#, fuzzy, kde-format
-#| msgid "Number of Objects: %1"
+#, kde-format
 msgid "Number of Segments: %1"
-msgstr "Numero di oggetti: %1"
+msgstr "Numero di segmenti: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:520
-#, fuzzy, kde-format
-#| msgid "number of points: %1"
+#, kde-format
 msgid "Number of Changepoints: %1"
-msgstr "numero di punti: %1"
+msgstr "Numero di punti di cambiamento: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:521
 #, kde-format
 msgid "Overall R²: %1"
-msgstr ""
+msgstr "R² complessivo: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
 #, kde-format
 msgid "Overall SSE: %1"
-msgstr ""
+msgstr "SSE complessivo: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
 #, kde-format
 msgid "Changepoint Positions (X-values)"
-msgstr ""
+msgstr "Posizioni dei punti di cambiamento (valori X)"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:536
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "Segment %1"
-msgstr "Segmenti"
+msgstr "Segmento %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
@@ -11554,25 +11547,22 @@ msgstr "Parametri:"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:546
 #, kde-format
 msgid "Parameter Statistics (Slope):"
-msgstr ""
+msgstr "Statistiche del parametro (pendenza):"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:552
-#, fuzzy, kde-format
-#| msgid "Goodness of fit:"
+#, kde-format
 msgid "Goodness of Fit:"
 msgstr "Bontà di adattamento:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:562
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Tests:"
-msgstr "Grafici statistici"
+msgstr "Test statistici:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:569
-#, fuzzy, kde-format
-#| msgid "Akaike information criterion"
+#, kde-format
 msgid "Information Criteria:"
-msgstr "Criterio d'informazione di Akaike"
+msgstr "Criteri informativi:"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -17131,21 +17121,19 @@ msgid "area error: %1"
 msgstr "area di errore: %1"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
-#, fuzzy, kde-format
-#| msgid "Continue"
+#, kde-format
 msgid "Continuous"
-msgstr "Continua"
+msgstr "Continuo"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
-#, fuzzy, kde-format
-#| msgid "outliers count"
+#, kde-format
 msgid "Discontinuous"
-msgstr "i valori anomali contano"
+msgstr "Discontinuo"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
 #, kde-format
 msgid "Method for detecting changepoints."
-msgstr ""
+msgstr "Metodo per il rilevamento dei punti di cambiamento."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, kde-format
@@ -17153,6 +17141,8 @@ msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
 "are merged with neighboring segments."
 msgstr ""
+"Numero minimo di punti dati in un segmento. I segmenti con un numero "
+"inferiore di punti dati vengono uniti ai segmenti adiacenti."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
@@ -17163,6 +17153,13 @@ msgid ""
 "Scale with your data: ~1 for Y-values near 1, ~10-100 for large values, "
 "~0.01-0.1 for small values."
 msgstr ""
+"Costo dell'aggiunta di un punto di cambiamento. Il miglioramento "
+"dell'adattamento (riduzione dell'SSE) deve superare questo valore affinché "
+"la suddivisione sia giustificata.\n"
+"Valori più bassi rilevano un numero maggiore di punti di cambiamento, mentre "
+"valori più alti ne rilevano un numero inferiore.\n"
+"Adatta il valore alla scala dei tuoi dati: ~1 per valori Y prossimi a 1, ~10–"
+"100 per valori grandi, ~0,01–0,1 per valori piccoli."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
 #, kde-format
@@ -17170,6 +17167,8 @@ msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
 "changepoints."
 msgstr ""
+"Determina se l'adattamento deve essere continuo o discontinuo in "
+"corrispondenza dei punti di cambiamento."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
 #, kde-format
@@ -17389,12 +17388,10 @@ msgid "Properties: Fit"
 msgstr "Proprietà: adatta"
 
 #: src/frontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Piecewise Linear Fit"
-msgstr "Proprietà: linea di riferimento"
+msgstr "Proprietà: adattamento lineare a tratti"
 
 #: src/frontend/GuiObserver.cpp:335
 #, kde-format
@@ -20073,11 +20070,10 @@ msgid "Plot Area %1"
 msgstr "Area del grafico %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:841
-#, fuzzy, kde-format
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Piecewise Linear Fit to '%1'"
-msgstr "Adatta distribuzione a «%1»"
+msgstr "Adattamento lineare a tratti a «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:856
 #, kde-format
@@ -25757,43 +25753,39 @@ msgstr "Semplificazione"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:92
-#, fuzzy, kde-format
-#| msgid "Quit Presentation"
+#, kde-format
 msgid "Binary Segmentation"
-msgstr "Esci dalla presentazione"
+msgstr "Segmentazione binaria"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:97
 #, kde-format
 msgid "PELT"
-msgstr ""
+msgstr "PELT"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:141
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Changepoint Lines"
-msgstr "Linee incrociate"
+msgstr "Linee dei punti di cambiamento"
 
 #. i18n: ectx: property (text), widget (QLabel, lPenalty)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:151
 #, kde-format
 msgid "Penalty:"
-msgstr ""
+msgstr "Penalità:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentSize)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:206
-#, fuzzy, kde-format
-#| msgid "2 Point Segment"
+#, kde-format
 msgid "Min Segment Size:"
-msgstr "Segmento a 2 punti"
+msgstr "Dimensione minima del segmento:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxChangepoints)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:242
-#, fuzzy, kde-format
-#| msgid "Make Changes"
+#, kde-format
 msgid "Max Changepoints:"
-msgstr "Fai le modifiche"
+msgstr "Punti di cambiamento massimi:"
 
 #. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbDelta)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:27

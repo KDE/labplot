@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-06 00:40+0000\n"
-"PO-Revision-Date: 2026-09-05 19:51+0300\n"
+"PO-Revision-Date: 2026-09-06 18:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15582,36 +15582,31 @@ msgstr ""
 "bağlantılanan hesap tablosu tarafından denetlenir."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:600
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the constant '%1' (%2). "
 "Please use another name."
 msgstr ""
-"Sağlanan değişken adı, hâlihazırda bir sabit için ayrılıyor. Lütfen başka "
+"Değişken adı “%1”, hâlihazırda “%1” (%2) sabiti için ayrılmış. Lütfen başka "
 "bir ad kullanın."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:605
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a function. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the function '%1' (%2). "
 "Please use another name."
 msgstr ""
-"Sağlanan değişken adı, hâlihazırda bir işlev adı için ayrılıyor. Lütfen "
-"başka bir ad kullanın."
+"Değişken adı “%1”, hâlihazırda “%1” (%2) işlevi için ayrılmış. Lütfen başka "
+"bir ad kullanın."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:610
-#, fuzzy, kde-format
-#| msgid "The variable name 'i' is reserved for the index of the column row."
+#, kde-format
 msgid ""
 "The variable name 'i' is reserved for the index of the column row. Please "
 "use another name."
-msgstr "“i” değişkeni, sütun satırının indeksi için ayrılmıştır."
+msgstr ""
+"“i” değişkeni, sütun satırının indeksi için ayrılmış. Lütfen başka bir ad "
+"kullanın."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
@@ -15632,10 +15627,9 @@ msgstr ""
 "harfle başlamalıdır"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:636
-#, fuzzy, kde-format
-#| msgid "No variable columns provided."
+#, kde-format
 msgid "Invalid variable name provided"
-msgstr "Sağlanan değişken sütunlar yok."
+msgstr "Geçersiz değişken adı sağlandı."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:642
 #, kde-format
@@ -27327,14 +27321,14 @@ msgstr "Veri, +−:"
 #, kde-format
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
-msgstr[0] ""
+msgstr[0] "Tanımlanmamış değişken: %2. Onu değişkenler listesinde tanımlayın."
 msgstr[1] ""
+"Tanımlanmamış değişkenler: %2. Onları değişkenler listesinde tanımlayın."
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:148
-#, fuzzy, kde-format
-#| msgid "Invalid separator"
+#, kde-format
 msgid "Invalid expression"
-msgstr "Geçersiz ayırıcı"
+msgstr "Geçersiz ifade"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format

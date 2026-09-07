@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-06 00:40+0000\n"
-"PO-Revision-Date: 2026-09-05 15:57+0200\n"
+"PO-Revision-Date: 2026-09-06 08:04+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -15659,36 +15659,31 @@ msgstr ""
 "povezana preglednica."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:600
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the constant '%1' (%2). "
 "Please use another name."
 msgstr ""
-"Podano ime spremenljivke je že rezervirano za ime konstante. Uporabite drugo "
-"ime."
+"Ime spremenljivke '%1' je že rezervirano za konstanto '%1' (%2). Uporabite "
+"drugo ime."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:605
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a function. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the function '%1' (%2). "
 "Please use another name."
 msgstr ""
-"Podano ime spremenljivke je že rezervirano za ime funkcije. Uporabite drugo "
-"ime."
+"Ime spremenljivke '%1' je že rezervirano za funkcijo '%1' (%2). Uporabite "
+"drugo ime."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:610
-#, fuzzy, kde-format
-#| msgid "The variable name 'i' is reserved for the index of the column row."
+#, kde-format
 msgid ""
 "The variable name 'i' is reserved for the index of the column row. Please "
 "use another name."
-msgstr "Ime spremenljivke 'i' je rezervirano za indeks vrstice stolpca."
+msgstr ""
+"Ime spremenljivke 'i' je rezervirano za indeks vrstice stolpca. Uporabite "
+"drugo ime."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
@@ -15708,10 +15703,9 @@ msgstr ""
 "črko"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:636
-#, fuzzy, kde-format
-#| msgid "No variable columns provided."
+#, kde-format
 msgid "Invalid variable name provided"
-msgstr "Ni na voljo nobenih stolpcev spremenljivk."
+msgstr "Navedeno neveljavno ime spremenljivke"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:642
 #, kde-format
@@ -27418,15 +27412,18 @@ msgstr "Podatki, +-:"
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
 msgstr[0] ""
+"Nedefinirane spremenljivke: %2. Definirajte jih na seznamu spremenljivk."
 msgstr[1] ""
+"Nedefinirana spremenljivka: %2. Definirajte jo na seznamu spremenljivk."
 msgstr[2] ""
+"Nedefinirani spremenljivki: %2. Definirajte ju na seznamu spremenljivk."
 msgstr[3] ""
+"Nedefinirane spremenljivke: %2. Definirajte jih na seznamu spremenljivk."
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:148
-#, fuzzy, kde-format
-#| msgid "Invalid separator"
+#, kde-format
 msgid "Invalid expression"
-msgstr "Neveljaven ločilnik"
+msgstr "Neveljaven izraz"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format

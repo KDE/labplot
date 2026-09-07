@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-06 00:40+0000\n"
-"PO-Revision-Date: 2026-09-05 18:27+0300\n"
+"PO-Revision-Date: 2026-09-06 17:59+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -15715,36 +15715,31 @@ msgstr ""
 "керується пов'язаною із нею таблицею."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:600
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the constant '%1' (%2). "
 "Please use another name."
 msgstr ""
-"Вказану назву змінної вже зарезервовано як назву сталої. Будь ласка, "
+"Назву змінної «%1» вже зарезервовано як назву сталої «%1» (%2). Будь ласка, "
 "скористайтеся іншою назвою."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:605
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a function. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the function '%1' (%2). "
 "Please use another name."
 msgstr ""
-"Вказану назву змінної вже зарезервовано як назву функції. Будь ласка, "
+"Назву змінної «%1» вже зарезервовано як назву функції «%1» (%2). Будь ласка, "
 "скористайтеся іншою назвою."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:610
-#, fuzzy, kde-format
-#| msgid "The variable name 'i' is reserved for the index of the column row."
+#, kde-format
 msgid ""
 "The variable name 'i' is reserved for the index of the column row. Please "
 "use another name."
-msgstr "Назву змінної «i» зарезервовано для індексу рядка стовпчика."
+msgstr ""
+"Назву змінної «i» зарезервовано для індексу рядка стовпчика. Будь ласка, "
+"скористайтеся іншою назвою."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
@@ -15764,10 +15759,9 @@ msgstr ""
 "починатися з літери"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:636
-#, fuzzy, kde-format
-#| msgid "No variable columns provided."
+#, kde-format
 msgid "Invalid variable name provided"
-msgstr "Не надано стовпчиків змінних."
+msgstr "Надано некоректну назву змінної"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:642
 #, kde-format
@@ -27517,16 +27511,15 @@ msgstr "Дані, +-:"
 #, kde-format
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Невизначені змінні: %2. Визначте їх у списку змінних."
+msgstr[1] "Невизначені змінні: %2. Визначте їх у списку змінних."
+msgstr[2] "Невизначені змінні: %2. Визначте їх у списку змінних."
+msgstr[3] "Невизначена змінна: %2. Визначте її у списку змінних."
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:148
-#, fuzzy, kde-format
-#| msgid "Invalid separator"
+#, kde-format
 msgid "Invalid expression"
-msgstr "Некоректний роздільник"
+msgstr "Некоректний вираз"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
