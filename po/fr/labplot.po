@@ -19104,7 +19104,7 @@ msgstr "Taille : "
 #: src/frontend/ui/symbolwidget.ui:312
 #, kde-format
 msgid "Spinbox for numbers."
-msgstr "Boîte à cocher pour les nombres."
+msgstr "Boite à cocher pour les nombres."
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbSize)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbBorderWidth)
@@ -20162,7 +20162,7 @@ msgstr "Lier le fichier"
 #: src/frontend/ui/PlotTemplateDialog.ui:14
 #, kde-format
 msgid "Dialog"
-msgstr "Boîte de dialogue"
+msgstr "Boite de dialogue"
 
 #. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/frontend/ui/datasources/importoriginlayersdialog.ui:27
@@ -20997,7 +20997,7 @@ msgstr "Largeur de la variable :"
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:259
 #, kde-format
 msgid "Box"
-msgstr "Boîte"
+msgstr "Boite"
 
 #. i18n: ectx: property (text), widget (QLabel, lMedianLine)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:350
@@ -24869,7 +24869,7 @@ msgid ""
 "currently selected objects is exported</li><li>Worksheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
-"Spécifie la zone à exporter :<ul><li>Boîte de délimitation - La boite de "
+"Spécifie la zone à exporter :<ul><li>Boite de délimitation - La boite de "
 "délimitation de tous les objets de la feuille de calcul est exportée,</"
 "li><li>Sélection - La zone des objets actuellement sélectionnés est exportée,"
 "</li><li>Feuille de calcul - La totalité de la feuille de calcul est "
