@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-06 00:40+0000\n"
-"PO-Revision-Date: 2026-09-05 16:42+0200\n"
+"PO-Revision-Date: 2026-09-07 14:00+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15667,36 +15667,31 @@ msgstr ""
 "bestuurd door het gekoppelde rekenblad."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:600
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the constant '%1' (%2). "
 "Please use another name."
 msgstr ""
-"De opgegeven naam is al in gebruik voor een constante. Geef a.u.b. een "
-"andere naam op."
+"De variabelenaam '%1' is al in gebruik voor de constante '%1' (%2). Gebruik "
+"een andere naam."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:605
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a function. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the function '%1' (%2). "
 "Please use another name."
 msgstr ""
-"De opgegeven naam is al in gebruik voor een functie. Geef a.u.b. een andere "
-"naam op."
+"De variabelenaam '%1' is al in gebruik voor de functie '%1' (%2). Gebruik "
+"een andere naam."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:610
-#, fuzzy, kde-format
-#| msgid "The variable name 'i' is reserved for the index of the column row."
+#, kde-format
 msgid ""
 "The variable name 'i' is reserved for the index of the column row. Please "
 "use another name."
-msgstr "De variabelenaam 'i' is gereserveerd voor de index van de kolomrij."
+msgstr ""
+"De variabelenaam 'i' is gereserveerd voor de index van de kolomrij. Gebruik "
+"een andere naam."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
@@ -15718,10 +15713,9 @@ msgstr ""
 "moeten beginnen met een letter"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:636
-#, fuzzy, kde-format
-#| msgid "No variable columns provided."
+#, kde-format
 msgid "Invalid variable name provided"
-msgstr "Geen variabele kolommen geleverd."
+msgstr "Ongeldige variabelenaam geleverd"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:642
 #, kde-format
@@ -27448,13 +27442,14 @@ msgstr "Gegevens, +-:"
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
 msgstr[0] ""
+"Ongedefinieerde variabele: %2. Definieer deze in de lijst met variabelen."
 msgstr[1] ""
+"Ongedefinieerde variabelen: %2. Definieer deze in de lijst met variabelen."
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:148
-#, fuzzy, kde-format
-#| msgid "Invalid separator"
+#, kde-format
 msgid "Invalid expression"
-msgstr "Ongeldig scheidingsteken"
+msgstr "Ongeldige expressie"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
