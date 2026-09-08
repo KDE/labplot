@@ -13,6 +13,9 @@
 #include "backend/worksheet/Background.h"
 #include "ui_backgroundwidget.h"
 
+#include <QMetaObject>
+#include <QVector>
+
 class QShowEvent;
 #include <KConfigGroup>
 
@@ -34,6 +37,7 @@ private:
 	Ui::BackgroundWidget ui;
 	Background* m_background{nullptr};
 	QList<Background*> m_backgrounds;
+	QVector<QMetaObject::Connection> m_connections;
 	bool m_initializing{false};
 	QString m_prefix;
 

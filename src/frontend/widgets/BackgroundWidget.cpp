@@ -46,23 +46,27 @@ BackgroundWidget::BackgroundWidget(QWidget* parent)
 }
 
 void BackgroundWidget::setBackgrounds(const QList<Background*>& backgrounds) {
+	CONDITIONAL_LOCK_RETURN;
+	// disconnect the old connections from the previous aspect
+	while (!m_connections.isEmpty())
+		disconnect(m_connections.takeLast());
 	m_backgrounds = backgrounds;
 	m_background = m_backgrounds.first();
 	m_prefix = m_background->prefix();
 
-	CONDITIONAL_LOCK_RETURN;
 	load();
 
-	connect(m_background, &Background::enabledChanged, this, &BackgroundWidget::backgroundEnabledChanged);
-	connect(m_background, &Background::positionChanged, this, &BackgroundWidget::backgroundPositionChanged);
-	connect(m_background, &Background::typeChanged, this, &BackgroundWidget::backgroundTypeChanged);
-	connect(m_background, &Background::colorStyleChanged, this, &BackgroundWidget::backgroundColorStyleChanged);
-	connect(m_background, &Background::imageStyleChanged, this, &BackgroundWidget::backgroundImageStyleChanged);
-	connect(m_background, &Background::brushStyleChanged, this, &BackgroundWidget::backgroundBrushStyleChanged);
-	connect(m_background, &Background::firstColorChanged, this, &BackgroundWidget::backgroundFirstColorChanged);
-	connect(m_background, &Background::secondColorChanged, this, &BackgroundWidget::backgroundSecondColorChanged);
-	connect(m_background, &Background::fileNameChanged, this, &BackgroundWidget::backgroundFileNameChanged);
-	connect(m_background, &Background::opacityChanged, this, &BackgroundWidget::backgroundOpacityChanged);
+	// save the connections for the current aspect
+	m_connections << connect(m_background, &Background::enabledChanged, this, &BackgroundWidget::backgroundEnabledChanged);
+	m_connections << connect(m_background, &Background::positionChanged, this, &BackgroundWidget::backgroundPositionChanged);
+	m_connections << connect(m_background, &Background::typeChanged, this, &BackgroundWidget::backgroundTypeChanged);
+	m_connections << connect(m_background, &Background::colorStyleChanged, this, &BackgroundWidget::backgroundColorStyleChanged);
+	m_connections << connect(m_background, &Background::imageStyleChanged, this, &BackgroundWidget::backgroundImageStyleChanged);
+	m_connections << connect(m_background, &Background::brushStyleChanged, this, &BackgroundWidget::backgroundBrushStyleChanged);
+	m_connections << connect(m_background, &Background::firstColorChanged, this, &BackgroundWidget::backgroundFirstColorChanged);
+	m_connections << connect(m_background, &Background::secondColorChanged, this, &BackgroundWidget::backgroundSecondColorChanged);
+	m_connections << connect(m_background, &Background::fileNameChanged, this, &BackgroundWidget::backgroundFileNameChanged);
+	m_connections << connect(m_background, &Background::opacityChanged, this, &BackgroundWidget::backgroundOpacityChanged);
 }
 
 void BackgroundWidget::showEvent(QShowEvent* event) {
@@ -109,6 +113,12 @@ void BackgroundWidget::setEnabled(bool enabled) {
 
 void BackgroundWidget::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
+	// save the properties so we dont lose them when editing the widgets
+	const int position = m_background ? static_cast<int>(m_background->position()) : ui.cbPosition->currentIndex();
+	const int type = m_background ? static_cast<int>(m_background->type()) : ui.cbType->currentIndex();
+	const int colorStyle = m_background ? static_cast<int>(m_background->colorStyle()) : ui.cbColorStyle->currentIndex();
+	const int imageStyle = m_background ? static_cast<int>(m_background->imageStyle()) : ui.cbImageStyle->currentIndex();
+	const int brushStyle = m_background ? static_cast<int>(m_background->brushStyle()) : ui.cbBrushStyle->currentIndex();
 
 	ui.cbPosition->clear();
 	ui.cbPosition->addItem(i18n("None"));
@@ -139,6 +149,13 @@ void BackgroundWidget::retranslateUi() {
 	ui.cbImageStyle->addItem(i18n("Tiled"));
 	ui.cbImageStyle->addItem(i18n("Center Tiled"));
 	GuiTools::updateBrushStyles(ui.cbBrushStyle, Qt::SolidPattern);
+
+	// restore the properties lost when editing the widgets
+	ui.cbPosition->setCurrentIndex(position >= 0 ? position : 0);
+	ui.cbType->setCurrentIndex(type >= 0 ? type : 0);
+	ui.cbColorStyle->setCurrentIndex(colorStyle >= 0 ? colorStyle : 0);
+	ui.cbImageStyle->setCurrentIndex(imageStyle >= 0 ? imageStyle : 0);
+	ui.cbBrushStyle->setCurrentIndex(brushStyle >= 0 ? brushStyle : static_cast<int>(Qt::SolidPattern));
 }
 
 //*************************************************************
@@ -249,7 +266,10 @@ void BackgroundWidget::colorStyleChanged(int index) {
 		return;
 
 	auto style = (Background::ColorStyle)index;
-	if (style == Background::ColorStyle::SingleColor) {
+	if (static_cast<Background::Type>(ui.cbType->currentIndex()) != Background::Type::Color) {
+		ui.lSecondColor->hide();
+		ui.kcbSecondColor->hide();
+	} else if (style == Background::ColorStyle::SingleColor) {
 		ui.lFirstColor->setText(i18n("Color:"));
 		ui.lSecondColor->hide();
 		ui.kcbSecondColor->hide();
@@ -401,8 +421,10 @@ void BackgroundWidget::load() {
 	bool visible = m_background->enabledAvailable();
 	ui.lEnabled->setVisible(visible);
 	ui.chkEnabled->setVisible(visible);
-	if (visible)
+	if (visible) {
 		ui.chkEnabled->setChecked(m_background->enabled());
+		enabledChanged(m_background->enabled());
+	}
 
 	visible = m_background->positionAvailable();
 	ui.lPosition->setVisible(visible);
