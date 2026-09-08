@@ -15,6 +15,7 @@
 
 class BackgroundPrivate;
 class KConfigGroup;
+class QPainterPath;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -45,6 +46,7 @@ public:
 	void init(const KConfigGroup&);
 
 	void draw(QPainter*, const QPolygonF&, double radius = 0) const;
+	void draw(QPainter*, const QPainterPath&) const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
