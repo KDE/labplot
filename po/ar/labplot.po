@@ -11456,9 +11456,7 @@ msgstr "%1: اضبط فهرس نقطة التثبيت"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:291
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:745
-#, fuzzy, kde-format
-#| msgctxt "Curve fitting"
-#| msgid "Fit Results"
+#, kde-format
 msgid "Fit Results"
 msgstr "نتائج الملاءمة"
 

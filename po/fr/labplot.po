@@ -14658,7 +14658,7 @@ msgstr "Impossible d'exécuter la requête d'aperçu"
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:340
 #, kde-format
 msgid "Refresh the data preview of the selected table"
-msgstr "Rafraîchir l'aperçu des données de la table sélectionnée"
+msgstr "Rafraichir l'aperçu des données de la table sélectionnée"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:346
 #, kde-format
@@ -15171,7 +15171,7 @@ msgstr ""
 "Définit où positionner la première graduation majeure :</p><ul><li>Valeur "
 "absolue - la première graduation est positionnée à la valeur absolue "
 "indiquée ci-dessous,</li><li>Décalage - la première graduation est "
-"positionnée avec un décalage par rapport au début de la plage de l’axe.</"
+"positionnée avec un décalage par rapport au début de la plage de l'axe.</"
 "li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:356
@@ -15216,11 +15216,11 @@ msgid ""
 "Values - positions are determined by the values in the custom column "
 "provided below.</li></ul></ul>"
 msgstr ""
-"Définit comment et où positionner les graduations mineures sur l’axe :"
+"Définit comment et où positionner les graduations mineures sur l'axe :"
 "<ul><li>Nombre - les graduations sont placées à intervalles égaux, "
-"l’espacement entre elles étant déterminé par le nombre fixe de graduations "
+"l'espacement entre elles étant déterminé par le nombre fixe de graduations "
 "fourni,</li><li>Espacement - les graduations sont placées à intervalles "
-"égaux avec l’espacement fourni entre elles,</li><li>Valeurs de colonne "
+"égaux avec l'espacement fourni entre elles,</li><li>Valeurs de colonne "
 "personnalisées - les positions sont déterminées par les valeurs de la "
 "colonne personnalisée fournie ci-dessous.</li></ul>"
 
@@ -22797,7 +22797,7 @@ msgstr "Nombre de lignes à afficher :"
 #: src/frontend/ui/datasources/xlsxoptionswidget.ui:70
 #, kde-format
 msgid "Refresh"
-msgstr "Rafraîchir"
+msgstr "Rafraichir"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/hdf5optionswidget.ui:71
@@ -23065,7 +23065,7 @@ msgstr "Lit :"
 #: src/frontend/ui/datasources/importfilewidget.ui:778
 #, kde-format
 msgid "Update interval:"
-msgstr "Intervalle de rafraîchissement :"
+msgstr "Intervalle de rafraichissement :"
 
 #. i18n: ectx: property (text), widget (QLabel, lKeepNvalues)
 #. i18n: ectx: property (text), widget (QLabel, lKeepLastValues)
