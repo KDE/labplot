@@ -12258,7 +12258,7 @@ msgstr "Impossible d'exécuter la requête d'aperçu"
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
 msgid "Refresh the data preview of the selected table"
-msgstr "Rafraîchir l'aperçu des données de la table sélectionnée"
+msgstr "Rafraichir l'aperçu des données de la table sélectionnée"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:412
 #, kde-format
@@ -19845,7 +19845,7 @@ msgstr "Nombre de lignes à afficher :"
 #: src/frontend/ui/datasources/xlsxoptionswidget.ui:70
 #, kde-format
 msgid "Refresh"
-msgstr "Rafraîchir"
+msgstr "Rafraichir"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/hdf5optionswidget.ui:71
@@ -20112,7 +20112,7 @@ msgstr "Lit :"
 #: src/frontend/ui/datasources/importfilewidget.ui:778
 #, kde-format
 msgid "Update interval:"
-msgstr "Intervalle de rafraîchissement :"
+msgstr "Intervalle de rafraichissement :"
 
 #. i18n: ectx: property (text), widget (QLabel, lKeepNvalues)
 #. i18n: ectx: property (text), widget (QLabel, lKeepLastValues)
