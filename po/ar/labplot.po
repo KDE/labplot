@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-06 00:40+0000\n"
-"PO-Revision-Date: 2026-08-29 18:06+0400\n"
+"PO-Revision-Date: 2026-09-09 19:13+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -9884,7 +9884,7 @@ msgstr "مخطط باريتو"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
 #, kde-format
 msgid "Piecewise Linear"
-msgstr ""
+msgstr "خطي متعدد الأجزاء"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #, kde-format
@@ -11449,10 +11449,9 @@ msgid "%1: set options and perform the line simplification"
 msgstr "%1: اضبط الخيارات ونفِّذ تبسيط الخط"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
-#, fuzzy, kde-format
-#| msgid "%1: set gluepoint index"
+#, kde-format
 msgid "%1: toggle changepoint lines"
-msgstr "%1: اضبط فهرس نقطة التثبيت"
+msgstr "%1: بدّل خطوط نقاط التغيير"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:291
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:745
@@ -11463,13 +11462,12 @@ msgstr "نتائج الملاءمة"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:502
 #, kde-format
 msgid "Piecewise Linear Fit Results"
-msgstr ""
+msgstr "نتائج الملاءمة الخطية متعددة الأجزاء"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
-#, fuzzy, kde-format
-#| msgid "Test result is not available."
+#, kde-format
 msgid "No results available yet"
-msgstr "نتيجة الاختبار غير متاحة."
+msgstr "لا تتوفر نتائج بعد"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:512
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:518
@@ -11479,37 +11477,34 @@ msgid "Status: %1"
 msgstr "الحالة: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:519
-#, fuzzy, kde-format
-#| msgid "Number of Objects: %1"
+#, kde-format
 msgid "Number of Segments: %1"
-msgstr "عدد الكائنات: %1"
+msgstr "عدد الأجزاء: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:520
-#, fuzzy, kde-format
-#| msgid "number of points: %1"
+#, kde-format
 msgid "Number of Changepoints: %1"
-msgstr "عدد النقاط: %1"
+msgstr "عدد نقاط التغيير: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:521
 #, kde-format
 msgid "Overall R²: %1"
-msgstr ""
+msgstr "معامل التحديد الكلي R²: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
 #, kde-format
 msgid "Overall SSE: %1"
-msgstr ""
+msgstr "مجموع مربعات الأخطاء الكلي SSE: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
 #, kde-format
 msgid "Changepoint Positions (X-values)"
-msgstr ""
+msgstr "مواضع نقاط التغيير (قيم س)"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:536
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "Segment %1"
-msgstr "قطاعات"
+msgstr "الجزء %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
@@ -11521,25 +11516,22 @@ msgstr "المعاملات:"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:546
 #, kde-format
 msgid "Parameter Statistics (Slope):"
-msgstr ""
+msgstr "إحصاءات المعاملات (الميل):"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:552
-#, fuzzy, kde-format
-#| msgid "Goodness of fit"
+#, kde-format
 msgid "Goodness of Fit:"
-msgstr "جودة الملاءمة"
+msgstr "جودة الملاءمة:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:562
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Tests:"
-msgstr "رسوم بيانية إحصائية"
+msgstr "الاختبارات الإحصائية:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:569
-#, fuzzy, kde-format
-#| msgid "Akaike information criterion"
+#, kde-format
 msgid "Information Criteria:"
-msgstr "معيار أكايكي للمعلومات"
+msgstr "معايير المعلومات:"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -15603,32 +15595,27 @@ msgstr ""
 "ربط جدول البيانات نشط. يتحكَّم جدول البيانات المرتبط بحجم جدول البيانات الهدف."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:600
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the constant '%1' (%2). "
 "Please use another name."
-msgstr "اسم المتغير المُدخَل محجوز بالفعل لاسم ثابت. يرجى استخدام اسم آخر."
+msgstr ""
+"اسم المتغير '%1' محجوز مسبقًا للثابت '%1' (%2). استخدم اسمًا آخر من فضلك."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:605
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a function. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the function '%1' (%2). "
 "Please use another name."
-msgstr "اسم المتغير المُدخَل محجوز بالفعل لاسم دالة. يرجى استخدام اسم آخر."
+msgstr ""
+"اسم المتغير '%1' محجوز مسبقًا للدالة '%1' (%2). استخدم اسمًا آخر من فضلك."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:610
-#, fuzzy, kde-format
-#| msgid "The variable name 'i' is reserved for the index of the column row."
+#, kde-format
 msgid ""
 "The variable name 'i' is reserved for the index of the column row. Please "
 "use another name."
-msgstr "اسم المتغير 'i' محجوز لفهرس صف العمود."
+msgstr "اسم المتغير 'i' محجوز لفهرس صف العمود. استخدم اسمًا آخر من فضلك."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
@@ -15646,10 +15633,9 @@ msgid ""
 msgstr "يجب أن يحتوي اسم المتغير على أحرف وأرقام و '_' فقط، ويجب أن يبدأ بحرف"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:636
-#, fuzzy, kde-format
-#| msgid "No variable columns provided."
+#, kde-format
 msgid "Invalid variable name provided"
-msgstr "لم تقدم أعمدة متغيرة."
+msgstr "اسم متغير غير صالح"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:642
 #, kde-format
@@ -16969,21 +16955,19 @@ msgid "area error: %1"
 msgstr "خطأ المساحة: %1"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
-#, fuzzy, kde-format
-#| msgid "Continue"
+#, kde-format
 msgid "Continuous"
-msgstr "تابع"
+msgstr "مستمر"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
-#, fuzzy, kde-format
-#| msgid "Euler's constant"
+#, kde-format
 msgid "Discontinuous"
-msgstr "ثابتة أويلر-ماسكيروني"
+msgstr "غير مستمر"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
 #, kde-format
 msgid "Method for detecting changepoints."
-msgstr ""
+msgstr "طريقة كشف نقاط التغيير."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, kde-format
@@ -16991,6 +16975,8 @@ msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
 "are merged with neighboring segments."
 msgstr ""
+"الحد الأدنى لعدد نقاط البيانات في الجزء. الأجزاء التي تحتوي على نقاط بيانات "
+"أقل تُدمج مع الأجزاء المجاورة."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
@@ -17001,6 +16987,12 @@ msgid ""
 "Scale with your data: ~1 for Y-values near 1, ~10-100 for large values, "
 "~0.01-0.1 for small values."
 msgstr ""
+"تكلفة إضافة نقطة تغيير. يجب أن يتجاوزها تحسن الملاءمة (انخفاض SSE) لتبرير "
+"التقسيم.\n"
+"تؤدي القيم المنخفضة إلى اكتشاف المزيد من نقاط التغيير، بينما تؤدي القيم "
+"المرتفعة إلى اكتشاف عدد أقل منها.\n"
+"اضبط القيمة وفقًا لبياناتك: ~1 للقيم على المحور الصادي القريبة من 1، ~10-100 "
+"للقيم الكبيرة، ~0.01-0.1 للقيم الصغيرة."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
 #, kde-format
@@ -17008,6 +17000,7 @@ msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
 "changepoints."
 msgstr ""
+"حدد ما إذا كانت الملاءمة يجب أن تكون مستمرة أو غير مستمرة عند نقاط التغيير."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
 #, kde-format
@@ -17218,12 +17211,10 @@ msgid "Properties: Fit"
 msgstr "الخصائص: ملاءمة"
 
 #: src/frontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Piecewise Linear Fit"
-msgstr "الخصائص: خط مرجعي"
+msgstr "الخصائص: ملاءمة خطية متعددة الأجزاء"
 
 #: src/frontend/GuiObserver.cpp:335
 #, kde-format
@@ -19877,11 +19868,10 @@ msgid "Plot Area %1"
 msgstr "منطقة الرسم %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:841
-#, fuzzy, kde-format
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Piecewise Linear Fit to '%1'"
-msgstr "مطابقة التوزيع لـ «%1»"
+msgstr "ملاءمة خطية متعددة الأجزاء لـ'%1'"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:856
 #, kde-format
@@ -25575,43 +25565,39 @@ msgstr "تبسيط"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:92
-#, fuzzy, kde-format
-#| msgid "Quit Presentation"
+#, kde-format
 msgid "Binary Segmentation"
-msgstr "أقلع عن العرض التقديمي"
+msgstr "التقسيم الثنائي"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:97
 #, kde-format
 msgid "PELT"
-msgstr ""
+msgstr "PELT"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:141
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Changepoint Lines"
-msgstr "خطوط متقاطعة"
+msgstr "خطوط نقاط التغيير"
 
 #. i18n: ectx: property (text), widget (QLabel, lPenalty)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:151
 #, kde-format
 msgid "Penalty:"
-msgstr ""
+msgstr "العقوبة:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentSize)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:206
-#, fuzzy, kde-format
-#| msgid "2 Point Segment"
+#, kde-format
 msgid "Min Segment Size:"
-msgstr "مقطع نقطتين"
+msgstr "الحد الأدنى لحجم الجزء:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxChangepoints)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:242
-#, fuzzy, kde-format
-#| msgid "Make Changes"
+#, kde-format
 msgid "Max Changepoints:"
-msgstr "أجرِ التغييرات"
+msgstr "الحد الأقصى لنقاط التغيير:"
 
 #. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbDelta)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:27
@@ -27312,18 +27298,17 @@ msgstr "البيانات, +-:"
 #, kde-format
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "متغير غير مُعرَّف: %2. عرّفه في قائمة المتغيرات."
+msgstr[1] "المتغيرات غير مُعرَّفة: %2. عرّفه في قائمة المتغيرات."
+msgstr[2] "المتغيرات غير مُعرَّفة: %2. عرّفه في قائمة المتغيرات."
+msgstr[3] "المتغيرات غير مُعرَّفة: %2. عرّفه في قائمة المتغيرات."
+msgstr[4] "المتغيرات غير مُعرَّفة: %2. عرّفه في قائمة المتغيرات."
+msgstr[5] "المتغيرات غير مُعرَّفة: %2. عرّفه في قائمة المتغيرات."
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:148
-#, fuzzy, kde-format
-#| msgid "Start value"
+#, kde-format
 msgid "Invalid expression"
-msgstr "قيمة البداية"
+msgstr "تعبير غير صالح"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
