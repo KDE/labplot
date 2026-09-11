@@ -497,7 +497,7 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	if (!compiled) {
 		if (PyErr_Occurred()) {
 			m_errorLine = PythonScriptRuntime::getPyErrorLine(); // Get the line where the error occurred
-			PyErr_Print(); // Print the error to our output in ScriptEditor
+			printPyError(); // Print the error to our output in ScriptEditor
 			PyGILState_Release(gil);
 			return true; // This is ok
 		}
@@ -510,11 +510,12 @@ bool PythonScriptRuntime::exec(const QString& code) {
 
 	// Evaluate the python bytecode
 	auto* result = PyEval_EvalCode(compiled, m_localDict, m_localDict);
+
 	if (!result) {
 		Py_DECREF(compiled);
 		if (PyErr_Occurred()) {
 			m_errorLine = PythonScriptRuntime::getPyErrorLine(); // Get the line where the error occurred
-			PyErr_Print(); // Print the error to our output in ScriptEditor
+			printPyError(); // Print the error to our output in ScriptEditor
 			PyGILState_Release(gil);
 			return true; // this is ok
 		}
@@ -640,6 +641,46 @@ PyObject* PythonScriptRuntime::createLocalDict() {
 	Py_DECREF(mainDict);
 
 	return localDict;
+}
+
+/*!
+	Print the current python error to our output in the ScriptEditor, same as PyErr_Print(), except that
+	SystemExit (raised by sys.exit()) is handled without forwarding it to PyErr_Print(): CPython's default
+	handling of SystemExit calls Py_Exit()/exit(), which would terminate the whole host application instead
+	of just stopping the script. We need to handle SystemExit ourselves and print a message to the ScriptEditor's
+	output instead of terminating the whole application.
+*/
+void PythonScriptRuntime::printPyError() {
+	if (!PyErr_ExceptionMatches(PyExc_SystemExit)) {
+		PyErr_Print();
+		return;
+	}
+
+	PyObject *type, *value, *traceback;
+	PyErr_Fetch(&type, &value, &traceback);
+	PyErr_NormalizeException(&type, &value, &traceback);
+
+	QString message = QStringLiteral("SystemExit");
+	if (value) {
+		auto* codeObj = PyObject_GetAttrString(value, "code"); // new reference
+		if (codeObj && codeObj != Py_None) {
+			auto* codeRepr = PyObject_Str(codeObj); // new reference
+			if (codeRepr)
+				message += QStringLiteral(": ") + PythonScriptRuntime::pyUnicodeToQString(codeRepr);
+			Py_XDECREF(codeRepr);
+		}
+		Py_XDECREF(codeObj);
+	}
+	if (m_errorLine >= 0)
+		message += QStringLiteral("\n  File \"%1\", line %2").arg(m_name).arg(m_errorLine + 1); // m_errorLine is 0-based; format matches ScriptEditor's clickable line-link pattern
+
+	WARN(Q_FUNC_INFO << ", script called sys.exit(), " << message.toStdString())
+	Q_EMIT writeOutput(true, message + QStringLiteral("\n"));
+
+	Py_XDECREF(type);
+	Py_XDECREF(value);
+	Py_XDECREF(traceback);
+	PyErr_Clear();
 }
 
 // Get the line where the python error occurred
@@ -859,8 +900,11 @@ QString PythonScriptRuntime::pyUnicodeToQString(PyObject* obj) {
 		return {};
 	}
 
+	// convert before decref: charPtr points into bytes' internal buffer, freed once bytes is released,
+	// to avoid use-after-free issues
+	const QString result = QString::fromUtf8(charPtr);
 	Py_DECREF(bytes);
-	return QString::fromUtf8(charPtr);
+	return result;
 }
 
 // Global helper function for code completion (avoids Python.h in frontend)

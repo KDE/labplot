@@ -45,6 +45,7 @@ private:
 	bool unRedirectOutput();
 	bool populateVariableInfo();
 	PyObject* createLocalDict();
+	void printPyError();
 
 	// singleton methods (called once for all PythonScripts)
 	static bool initPython();
