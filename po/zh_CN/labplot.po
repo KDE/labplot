@@ -11300,11 +11300,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:291
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:745
-#, fuzzy, kde-format
-#| msgctxt "Curve fitting"
-#| msgid "Fit Results"
+#, kde-format
 msgid "Fit Results"
-msgstr "拟合结果"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:502
 #, kde-format
@@ -11324,16 +11322,14 @@ msgid "Status: %1"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:519
-#, fuzzy, kde-format
-#| msgid "Number of columns: %1"
+#, kde-format
 msgid "Number of Segments: %1"
-msgstr "列数：%1"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:520
-#, fuzzy, kde-format
-#| msgid "Number of lines: %1"
+#, kde-format
 msgid "Number of Changepoints: %1"
-msgstr "行数：%1"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:521
 #, kde-format
@@ -11351,10 +11347,9 @@ msgid "Changepoint Positions (X-values)"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:536
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "Segment %1"
-msgstr "片断"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
@@ -11374,10 +11369,9 @@ msgid "Goodness of Fit:"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:562
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Tests:"
-msgstr "统计图类"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:569
 #, kde-format
@@ -15330,32 +15324,25 @@ msgid ""
 msgstr "数据表链接处于打开状态。目标数据表的大小将由链接的数据表控制。"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:600
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the constant '%1' (%2). "
 "Please use another name."
-msgstr "输入的变量名与内置常量冲突。请换一个名称。"
+msgstr ""
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:605
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a function. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the function '%1' (%2). "
 "Please use another name."
-msgstr "输入的变量名与内置函数冲突。请换一个名称。"
+msgstr ""
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:610
-#, fuzzy, kde-format
-#| msgid "The variable name 'i' is reserved for the index of the column row."
+#, kde-format
 msgid ""
 "The variable name 'i' is reserved for the index of the column row. Please "
 "use another name."
-msgstr "'i' 用于表示行号，不能用作变量名。"
+msgstr ""
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
@@ -16594,10 +16581,9 @@ msgid "area error: %1"
 msgstr ""
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
-#, fuzzy, kde-format
-#| msgid "Continuously Fixed"
+#, kde-format
 msgid "Continuous"
-msgstr "固定量连续读取 (正向)"
+msgstr ""
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
 #, kde-format
@@ -16833,12 +16819,10 @@ msgid "Properties: Fit"
 msgstr "属性：拟合"
 
 #: src/frontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Piecewise Linear Fit"
-msgstr "属性：参考线"
+msgstr ""
 
 #: src/frontend/GuiObserver.cpp:335
 #, kde-format
@@ -19461,12 +19445,10 @@ msgid "Plot Area %1"
 msgstr "绘图区域 %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:841
-#, fuzzy, kde-format
-#| msgctxt "Curve fitting"
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Piecewise Linear Fit to '%1'"
-msgstr "'%1' 的分布拟合"
+msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:856
 #, kde-format
@@ -25117,10 +25099,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:92
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Binary Segmentation"
-msgstr "方向"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:97
@@ -25130,10 +25111,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:141
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Changepoint Lines"
-msgstr "十字线"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPenalty)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:151
@@ -25143,10 +25123,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentSize)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:206
-#, fuzzy, kde-format
-#| msgid "2 Point Segment"
+#, kde-format
 msgid "Min Segment Size:"
-msgstr "两点线段"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxChangepoints)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:242
