@@ -1991,7 +1991,7 @@ msgstr "UTF32"
 #: src/backend/datasources/filters/MatioFilter.cpp:444
 #, kde-format
 msgid "String"
-msgstr "Chaîne"
+msgstr "Chaine"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:450
 #, kde-format
@@ -19663,7 +19663,7 @@ msgstr "activer"
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:46
 #, kde-format
 msgid "Connection String:"
-msgstr "Chaîne de connexion :"
+msgstr "Chaine de connexion :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDriver)
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:66
@@ -19745,7 +19745,7 @@ msgstr "Caractère de commentaire :"
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:176
 #, kde-format
 msgid "Separating string:"
-msgstr "Chaîne de séparation :"
+msgstr "Chaine de séparation :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:93
