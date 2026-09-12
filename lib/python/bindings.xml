@@ -2,6 +2,10 @@
     <load-typesystem name="typesystem_core_common.xml" generate="no"/>
     <load-typesystem name="typesystem_widgets.xml" generate="no"/>
 
+    <!-- Types parsed through dependencies but owned by their respective modules. -->
+    <suppress-warning text="Enum 'CBLAS_*' does not have a type entry*"/>
+    <suppress-warning text="template baseclass 'QCborStreamReader::StringResult*' of '*' is not known"/>
+
     <!-- Global -->
     <enum-type name="AspectType">
         <reject-enum-value name="DatapickerCurve"/>
@@ -361,10 +365,14 @@
     <rejection class="^.*Filter$" function-name="save"/>
     <rejection class="^.*Filter$" function-name="load"/>
     <rejection class="^.*Filter$" function-name="^.*preview.*$"/>
-    <rejection class="^.*Filter$" function-name="parse"/>
+    <rejection class="^.*Filter$" function-name="^parse.*$"/>
     <rejection class="^.*Filter$" function-name="^.*Device.*$"/>
     <rejection class="^.*Filter$" function-name="fileInfoString"/>
+    <rejection class="FITSFilter" function-name="readChdu"/>
+    <rejection class="SpiceFilter" function-name="isSpiceFile"/>
+    <rejection class="XLSXFilter" function-name="sheets"/>
     <object-type name="AsciiFilter" disable-wrapper="yes">
+        <enum-type name="DataType"/>
         <value-type name="Properties" disable-wrapper="yes"/>
     </object-type>
     <object-type name="BinaryFilter" disable-wrapper="yes">
@@ -1013,6 +1021,7 @@
     <rejection class="ProcessBehaviorChart" function-name="*"/>
     <object-type name="ProcessBehaviorChart" disable-wrapper="yes">
         <enum-type name="Type"/>
+        <enum-type name="LimitsType"/>
         <enum-type name="LimitsMetric"/>
         <declare-function signature="ProcessBehaviorChart(const QString&amp;,bool)" return-type="void">
             <modify-argument index="2">
@@ -1443,6 +1452,7 @@
         <enum-type name="NavigationOperation"/>
         <enum-type name="RangeType"/>
         <enum-type name="RangeBreakStyle"/>
+        <enum-type name="PlotColorMode"/>
         <enum-type name="BorderTypeFlags" flags="yes"/>
         <value-type name="RangeBreak" disable-wrapper="yes"/>
         <value-type name="RangeBreaks" disable-wrapper="yes"/>
