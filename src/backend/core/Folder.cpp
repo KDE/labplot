@@ -86,6 +86,9 @@ QVector<AspectType> Folder::pasteTypes() const {
 							   AspectType::Datapicker,
 							   AspectType::LiveDataSource,
 							   AspectType::Note,
+#ifdef HAVE_SCRIPTING
+							   AspectType::Script,
+#endif
 							   AspectType::Notebook};
 }
 

@@ -25,6 +25,9 @@
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
 #endif
+#ifdef HAVE_SCRIPTING
+#include "backend/script/Script.h"
+#endif
 
 #include <KStandardAction>
 #include <QClipboard>
@@ -360,7 +363,7 @@ QMenu* AbstractAspect::createContextMenu() {
 	// 	menu->addAction( KStandardAction::cut(this) );
 
 	QAction* actionDuplicate = nullptr;
-	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::Notebook && m_type != AspectType::Script) {
+	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::Notebook) {
 		// copy action:
 		// don't allow to copy fixed aspects
 		auto* action = KStandardAction::copy(this);
@@ -822,6 +825,7 @@ void AbstractAspect::paste(bool duplicate, int index) {
 	WAIT_CURSOR_AUTO_RESET;
 
 	AbstractAspect* aspect = nullptr;
+	AspectType clipboardType{AspectType::AbstractAspect};
 	XmlStreamReader reader(xml);
 	while (!reader.atEnd()) {
 		reader.readNext();
@@ -831,10 +835,17 @@ void AbstractAspect::paste(bool duplicate, int index) {
 
 		if (reader.name() == QLatin1String("type")) {
 			auto attribs = reader.attributes();
-			auto type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
-			if (type != AspectType::AbstractAspect)
-				aspect = AspectFactory::createAspect(type, this);
+			clipboardType = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
+			if (clipboardType != AspectType::AbstractAspect && clipboardType != AspectType::Script)
+				aspect = AspectFactory::createAspect(clipboardType, this);
 		} else {
+			if (clipboardType == AspectType::Script && reader.name() == QLatin1String("script")) {
+#ifdef HAVE_SCRIPTING
+				const QString runtime = Script::readRuntime(&reader);
+				if (!runtime.isEmpty())
+					aspect = new Script(QString(), runtime);
+#endif
+			}
 			if (aspect) {
 				aspect->setPasted(true);
 				aspect->setIsLoading(true);
