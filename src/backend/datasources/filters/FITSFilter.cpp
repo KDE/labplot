@@ -43,7 +43,12 @@ FITSFilter::~FITSFilter() = default;
 
 void FITSFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	DEBUG(Q_FUNC_INFO)
-	if (!validateFileName(fileName))
+	// FITS supports selectors such as "file.fits[table]", which are not part of the physical filename.
+	QString physicalFileName = fileName;
+	const auto extensionSelector = physicalFileName.indexOf(QLatin1Char('['));
+	if (extensionSelector >= 0)
+		physicalFileName.truncate(extensionSelector);
+	if (!validateFileName(physicalFileName))
 		return;
 	d->readCHDU(fileName, dataSource, importMode);
 }
