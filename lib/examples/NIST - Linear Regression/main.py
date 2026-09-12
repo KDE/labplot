@@ -34,12 +34,10 @@ wsTextLabel.setHorizontalAlignment(WorksheetElement.HorizontalAlignment.Center)
 
 # wsTextLabel.position().point.setX(Worksheet.convertToSceneUnits(-0.3, Worksheet.Unit.Centimeter))
 # wsTextLabel.position().point.setY(Worksheet.convertToSceneUnits(9.5, Worksheet.Unit.Centimeter))
-# wsTextLabel.setPosition(wsTextLabel.position())
+# wsTextLabel.setPositionScene(wsTextLabel.position())
 
 
-position = WorksheetElement.PositionWrapper()
-position.point = QPointF(Worksheet.convertToSceneUnits(-0.3, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(9.5, Worksheet.Unit.Centimeter))
-wsTextLabel.setPosition(position)
+wsTextLabel.setPositionScene(QPointF(Worksheet.convertToSceneUnits(-0.3, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(9.5, Worksheet.Unit.Centimeter)))
 
 filter = AsciiFilter()
 
@@ -68,10 +66,7 @@ allFits.addChild(plotArea)
 plotArea.title().setText("Norris")
 plotArea.title().setVerticalAlignment(WorksheetElement.VerticalAlignment.Top)
 plotArea.title().setHorizontalAlignment(WorksheetElement.HorizontalAlignment.Center)
-position = WorksheetElement.PositionWrapper()
-position.point = QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-0.5, Worksheet.Unit.Centimeter))
-position.verticalPosition = WorksheetElement.VerticalPosition.Top
-plotArea.title().setPosition(position)
+plotArea.title().setPositionScene(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-0.5, Worksheet.Unit.Centimeter)))
 
 plot = XYCurve("Plot")
 plot.setLineType(XYCurve.LineType.NoLine)
@@ -137,10 +132,7 @@ allFits.addChild(plotArea2)
 plotArea2.title().setText("Pontius")
 plotArea2.title().setVerticalAlignment(WorksheetElement.VerticalAlignment.Top)
 plotArea2.title().setHorizontalAlignment(WorksheetElement.HorizontalAlignment.Center)
-position2 = WorksheetElement.PositionWrapper()
-position2.point = QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-0.5, Worksheet.Unit.Centimeter))
-position2.verticalPosition = WorksheetElement.VerticalPosition.Top
-plotArea2.title().setPosition(position2)
+plotArea2.title().setPositionScene(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-0.5, Worksheet.Unit.Centimeter)))
 
 plot2 = XYCurve("Plot")
 plot2.setLineType(XYCurve.LineType.NoLine)
@@ -204,11 +196,9 @@ wsTextLabel2.setHorizontalAlignment(WorksheetElement.HorizontalAlignment.Center)
 
 # wsTextLabel2.position().point.setX(Worksheet.convertToSceneUnits(-0.4, Worksheet.Unit.Centimeter))
 # wsTextLabel2.position().point.setY(Worksheet.convertToSceneUnits(9.5, Worksheet.Unit.Centimeter))
-# wsTextLabel2.setPosition(wsTextLabel2.position())
+# wsTextLabel2.setPositionScene(wsTextLabel2.position())
 
-position = WorksheetElement.PositionWrapper()
-position.point = QPointF(Worksheet.convertToSceneUnits(-0.4, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(9.5, Worksheet.Unit.Centimeter))
-wsTextLabel2.setPosition(position)
+wsTextLabel2.setPositionScene(QPointF(Worksheet.convertToSceneUnits(-0.4, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(9.5, Worksheet.Unit.Centimeter)))
 
 allFits2.addChild(wsTextLabel2)
 
@@ -240,10 +230,7 @@ allFits2.addChild(plotArea3)
 plotArea3.title().setText("NoInt1")
 plotArea3.title().setVerticalAlignment(WorksheetElement.VerticalAlignment.Top)
 plotArea3.title().setHorizontalAlignment(WorksheetElement.HorizontalAlignment.Center)
-position3 = WorksheetElement.PositionWrapper()
-position3.point = QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-0.5, Worksheet.Unit.Centimeter))
-position3.verticalPosition = WorksheetElement.VerticalPosition.Top
-plotArea3.title().setPosition(position3)
+plotArea3.title().setPositionScene(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-0.5, Worksheet.Unit.Centimeter)))
 
 plot3 = XYCurve("Plot3")
 plot3.setLineType(XYCurve.LineType.NoLine)
@@ -309,10 +296,7 @@ allFits2.addChild(plotArea4)
 plotArea4.title().setText("NoInt2")
 plotArea4.title().setVerticalAlignment(WorksheetElement.VerticalAlignment.Top)
 plotArea4.title().setHorizontalAlignment(WorksheetElement.HorizontalAlignment.Center)
-position4 = WorksheetElement.PositionWrapper()
-position4.point = QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-0.5, Worksheet.Unit.Centimeter))
-position4.verticalPosition = WorksheetElement.VerticalPosition.Top
-plotArea4.title().setPosition(position4)
+plotArea4.title().setPositionScene(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-0.5, Worksheet.Unit.Centimeter)))
 
 plot4 = XYCurve("Plot4")
 plot4.setLineType(XYCurve.LineType.NoLine)

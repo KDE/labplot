@@ -30,7 +30,6 @@ worksheet.setTheme("Solarized")
 plotArea = CartesianPlot("xy-plot")
 plotArea.setType(CartesianPlot.Type.FourAxes)
 
-border = plotArea.borderType()
 border = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea.setBorderType(border)
 
@@ -41,7 +40,7 @@ plotArea.setVerticalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Ce
 plotArea.title().setText("lin-lin")
 plotArea.title().setHorizontalAlignment(WorksheetElement.HorizontalAlignment.Center)
 plotArea.title().setVerticalAlignment(WorksheetElement.VerticalAlignment.Top)
-plotArea.title().setPosition(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter)))
+plotArea.title().setPositionScene(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter)))
 
 worksheet.addChild(plotArea)
 
@@ -97,7 +96,6 @@ plotArea.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY)
 plotArea1 = CartesianPlot("xy-plot 1")
 plotArea1.setType(CartesianPlot.Type.FourAxes)
 
-border1 = plotArea1.borderType()
 border1 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea1.setBorderType(border1)
 
@@ -108,7 +106,7 @@ plotArea1.setVerticalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.C
 plotArea1.title().setText("log-lin")
 plotArea1.title().setHorizontalAlignment(WorksheetElement.HorizontalAlignment.Center)
 plotArea1.title().setVerticalAlignment(WorksheetElement.VerticalAlignment.Top)
-plotArea1.title().setPosition(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter)))
+plotArea1.title().setPositionScene(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter)))
 
 worksheet.addChild(plotArea1)
 
@@ -165,7 +163,6 @@ plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
 plotArea2 = CartesianPlot("xy-plot 2")
 plotArea2.setType(CartesianPlot.Type.FourAxes)
 
-border2 = plotArea2.borderType()
 border2 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea2.setBorderType(border2)
 
@@ -176,7 +173,7 @@ plotArea2.setVerticalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.C
 plotArea2.title().setText("lin-log")
 plotArea2.title().setHorizontalAlignment(WorksheetElement.HorizontalAlignment.Center)
 plotArea2.title().setVerticalAlignment(WorksheetElement.VerticalAlignment.Top)
-plotArea2.title().setPosition(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter)))
+plotArea2.title().setPositionScene(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter)))
 
 worksheet.addChild(plotArea2)
 
@@ -233,7 +230,6 @@ plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY2)
 plotArea3 = CartesianPlot("xy-plot 3")
 plotArea3.setType(CartesianPlot.Type.FourAxes)
 
-border3 = plotArea3.borderType()
 border3 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea3.setBorderType(border3)
 
@@ -244,7 +240,7 @@ plotArea3.setVerticalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.C
 plotArea3.title().setText("log-log")
 plotArea3.title().setHorizontalAlignment(WorksheetElement.HorizontalAlignment.Center)
 plotArea3.title().setVerticalAlignment(WorksheetElement.VerticalAlignment.Top)
-plotArea3.title().setPosition(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter)))
+plotArea3.title().setPositionScene(QPointF(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter)))
 
 worksheet.addChild(plotArea3)
 

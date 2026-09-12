@@ -57,10 +57,9 @@ plotArea1.setSymmetricPadding(True)
 plotArea1.setHorizontalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 plotArea1.setVerticalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 
-border1 = plotArea1.borderType()
 border1 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea1.setBorderType(border1)
-plotArea1.borderLine().setWidth(0)
+line = plotArea1.borderLine(); line.setWidth(0)
 
 te10.setText("Signal with white noise")
 plotArea1.title().setText(te10.toHtml())
@@ -92,7 +91,7 @@ config11.setXColumn(spreadsheet.column(0))
 config11.setYColumn(spreadsheet.column(1))
 config11.setLineType(XYCurve.LineType.Line)
 config11.symbol().setStyle(Symbol.Style.NoSymbols)
-config11.setValuesType(XYCurve.ValuesType.NoValues)
+config11.value().setType(Value.Type.NoValues)
 config11.background().setPosition(Background.Position.No)
 
 ###################################################################################################################################################################
@@ -105,10 +104,9 @@ plotArea2.setSymmetricPadding(True)
 plotArea2.setHorizontalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 plotArea2.setVerticalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 
-border2 = plotArea2.borderType()
 border2 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea2.setBorderType(border2)
-plotArea2.borderLine().setWidth(0)
+line = plotArea2.borderLine(); line.setWidth(0)
 
 te10.setText("FFT")
 plotArea2.title().setText(te10.toHtml())
@@ -146,7 +144,7 @@ tData21.autoRange = True
 config21.setTransformData(tData21)
 config21.setLineInterpolationPointsCount(1)
 config21.symbol().setStyle(Symbol.Style.NoSymbols)
-config21.setValuesType(XYCurve.ValuesType.NoValues)
+config21.value().setType(Value.Type.NoValues)
 config21.background().setPosition(Background.Position.No)
 
 ###################################################################################################################################################################
@@ -159,10 +157,9 @@ plotArea3.setSymmetricPadding(True)
 plotArea3.setHorizontalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 plotArea3.setVerticalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 
-border3 = plotArea3.borderType()
 border3 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea3.setBorderType(border3)
-plotArea3.borderLine().setWidth(0)
+line = plotArea3.borderLine(); line.setWidth(0)
 
 te10.setText("Filtered signal")
 plotArea3.title().setText(te10.toHtml())
@@ -202,7 +199,7 @@ fData31.autoRange = True
 config31.setFilterData(fData31)
 config31.setLineInterpolationPointsCount(1)
 config31.symbol().setStyle(Symbol.Style.NoSymbols)
-config31.setValuesType(XYCurve.ValuesType.NoValues)
+config31.value().setType(Value.Type.NoValues)
 config31.background().setPosition(Background.Position.No)
 
 ###################################################################################################################################################################
@@ -234,19 +231,19 @@ te.setFontItalic(False)
 te.append("It creates a pulsed fixed frequency sine wave that spells out \"SOS\"\nin Morse code and adds random white noise so that the SNR is poor.")
 
 textLabel1.setText(te.toHtml())
-textLabel1.setPosition(QPointF(Worksheet.convertToSceneUnits(5.9, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(8, Worksheet.Unit.Centimeter)))
+textLabel1.setPositionScene(QPointF(Worksheet.convertToSceneUnits(5.9, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(8, Worksheet.Unit.Centimeter)))
 
 textLabel2 = TextLabel("Lower outer fence - label")
 worksheet.addChild(textLabel2)
 te8.setText("The white noise has a frequency spectrum that is spread out over<br>the entire range of frequencies. The signal itself is concentrated<br>mostly at a fixed frequency 0.05 but the presence of the Morse<br>Code pulses spreads out its spectrum.")
 textLabel2.setText(te8.toHtml())
-textLabel2.setPosition(QPointF(Worksheet.convertToSceneUnits(5.9, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter)))
+textLabel2.setPositionScene(QPointF(Worksheet.convertToSceneUnits(5.9, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0, Worksheet.Unit.Centimeter)))
 
 textLabel3 = TextLabel("Fourier Filter Info")
 worksheet.addChild(textLabel3)
 te8.setText("A Fourier bandpass filter tuned to the signal frequency isolates the<br>signal from the noise.<br><br>Try out different values for the width of the bandpass filter to see<br>how and when the signal starts emerging from the noise.")
 textLabel3.setText(te8.toHtml())
-textLabel3.setPosition(QPointF(Worksheet.convertToSceneUnits(5.9, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-8, Worksheet.Unit.Centimeter)))
+textLabel3.setPositionScene(QPointF(Worksheet.convertToSceneUnits(5.9, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-8, Worksheet.Unit.Centimeter)))
 
 ###################################################################################################################################################################
 ###################################################################################################################################################################

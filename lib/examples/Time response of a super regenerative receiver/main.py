@@ -108,7 +108,7 @@ config1.setXColumn(spreadsheet.column(0))
 config1.setYColumn(spreadsheet.column(1))
 config1.setLineType(XYCurve.LineType.Line)
 config1.symbol().setStyle(Symbol.Style.NoSymbols)
-config1.setValuesType(XYCurve.ValuesType.NoValues)
+config1.value().setType(Value.Type.NoValues)
 
 config2 = XYCurve("Response")
 plotArea.addChild(config2)
@@ -117,7 +117,7 @@ config2.setXColumn(spreadsheet.column(0))
 config2.setYColumn(spreadsheet.column(2))
 config2.setLineType(XYCurve.LineType.Line)
 config2.symbol().setStyle(Symbol.Style.NoSymbols)
-config2.setValuesType(XYCurve.ValuesType.NoValues)
+config2.value().setType(Value.Type.NoValues)
 
 config3 = XYHilbertTransformCurve("Envelope")
 plotArea.addChild(config3)
@@ -161,7 +161,7 @@ te1.setTextColor(rl1.line().color())
 
 te1.setPlainText("0,312 mV")
 textLabel1.setText(te1.toHtml())
-textLabel1.setPosition(QPointF(Worksheet.convertToSceneUnits(4.1, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(3.3, Worksheet.Unit.Centimeter)))
+textLabel1.setPositionScene(QPointF(Worksheet.convertToSceneUnits(4.1, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(3.3, Worksheet.Unit.Centimeter)))
 
 textLabel2 = TextLabel("MaxTimeText")
 worksheet.addChild(textLabel2)
@@ -174,7 +174,7 @@ te2.setTextColor(rl1.line().color())
 
 te2.setPlainText("3,355 ns")
 textLabel2.setText(te2.toHtml())
-textLabel2.setPosition(QPointF(Worksheet.convertToSceneUnits(1.3, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-3, Worksheet.Unit.Centimeter)))
+textLabel2.setPositionScene(QPointF(Worksheet.convertToSceneUnits(1.3, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-3, Worksheet.Unit.Centimeter)))
 
 plotArea.retransform()
 

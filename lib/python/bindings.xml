@@ -1443,6 +1443,7 @@
         <enum-type name="NavigationOperation"/>
         <enum-type name="RangeType"/>
         <enum-type name="RangeBreakStyle"/>
+        <enum-type name="BorderTypeFlags" flags="yes"/>
         <value-type name="RangeBreak" disable-wrapper="yes"/>
         <value-type name="RangeBreaks" disable-wrapper="yes"/>
         <declare-function signature="CartesianPlot(const QString&amp;,bool)" return-type="void">
@@ -1464,6 +1465,9 @@
         <declare-function signature="setRangeType(CartesianPlot::RangeType)" return-type="void"/>
         <declare-function signature="niceExtend()const" return-type="bool"/>
         <declare-function signature="setNiceExtend(bool)" return-type="void"/>
+        <declare-function signature="borderType()const" return-type="CartesianPlot::BorderType"/>
+        <declare-function signature="setBorderType(CartesianPlot::BorderType)" return-type="void"/>
+        <declare-function signature="borderLine()const" return-type="Line*"/>
         <declare-function signature="rangeFirstValues()const" return-type="int"/>
         <declare-function signature="setRangeFirstValues(int)" return-type="void"/>
         <declare-function signature="rangeLastValues()const" return-type="int"/>
