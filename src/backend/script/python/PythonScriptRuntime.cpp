@@ -672,7 +672,9 @@ void PythonScriptRuntime::printPyError() {
 		Py_XDECREF(codeObj);
 	}
 	if (m_errorLine >= 0)
-		message += QStringLiteral("\n  File \"%1\", line %2").arg(m_name).arg(m_errorLine + 1); // m_errorLine is 0-based; format matches ScriptEditor's clickable line-link pattern
+		message += QStringLiteral("\n  File \"%1\", line %2")
+					   .arg(m_name)
+					   .arg(m_errorLine + 1); // m_errorLine is 0-based; format matches ScriptEditor's clickable line-link pattern
 
 	WARN(Q_FUNC_INFO << ", script called sys.exit(), " << message.toStdString())
 	Q_EMIT writeOutput(true, message + QStringLiteral("\n"));
