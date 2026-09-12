@@ -2238,7 +2238,6 @@ void CartesianPlot::addLineSimplificationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYLineSimplificationCurve(i18n("Line Simplification")));
@@ -2252,7 +2251,6 @@ void CartesianPlot::addDifferentiationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYDifferentiationCurve(i18n("Differentiation")));
@@ -2266,7 +2264,6 @@ void CartesianPlot::addIntegrationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYIntegrationCurve(i18n("Integration")));
@@ -2280,7 +2277,6 @@ void CartesianPlot::addInterpolationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYInterpolationCurve(i18n("Interpolation")));
@@ -2294,7 +2290,6 @@ void CartesianPlot::addSmoothCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYSmoothCurve(i18n("Smooth")));
@@ -2308,7 +2303,6 @@ void CartesianPlot::addBaselineCorrectionCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYBaselineCorrectionCurve(i18n("Baseline Correction")));
@@ -2347,12 +2341,7 @@ void CartesianPlot::addFitCurve(const QAction* action) {
 				fitCurve->setDataSourceCurve(curCurve);
 			}
 
-			analysisCurve->recalculate();
-
-			// add the child after the fit was calculated so the dock widgets gets the fit results
-			// and call retransform() after this to calculate and to paint the data points of the fit-curve
 			this->addChild(analysisCurve);
-			analysisCurve->retransform();
 		}
 	} else {
 		if (type == XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear)
@@ -2373,7 +2362,6 @@ void CartesianPlot::addFourierFilterCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYFourierFilterCurve(i18n("Fourier Filter")));
@@ -2747,6 +2735,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 	if (isLoading())
 		return;
+
+	// call recalculate for analysis curves
+	auto analysisCurve = dynamic_cast<const XYAnalysisCurve*>(child);
+	if (analysisCurve)
+		const_cast<XYAnalysisCurve*>(analysisCurve)->recalculate();
 
 	auto rangeChanged = false;
 	if (checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
