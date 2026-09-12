@@ -198,7 +198,6 @@ private:
 	// script
 #ifdef HAVE_SCRIPTING
 	QAction* m_scriptRunAction{nullptr};
-	QAction* m_scriptClearAction{nullptr};
 #endif
 
 	// Menus

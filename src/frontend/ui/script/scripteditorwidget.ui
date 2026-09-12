@@ -63,7 +63,7 @@
       <property name="autoFillBackground">
        <bool>false</bool>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -80,40 +80,100 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QWidget" name="left" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>17</width>
-           <height>0</height>
-          </size>
+        <layout class="QHBoxLayout" name="outputLayout">
+         <property name="spacing">
+          <number>0</number>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>17</width>
-           <height>16777215</height>
-          </size>
+         <property name="leftMargin">
+          <number>0</number>
          </property>
-         <property name="contextMenuPolicy">
-          <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+         <property name="topMargin">
+          <number>0</number>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTextBrowser" name="output">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+         <property name="rightMargin">
+          <number>0</number>
          </property>
-         <property name="openLinks">
-          <bool>false</bool>
+         <property name="bottomMargin">
+          <number>0</number>
          </property>
-        </widget>
+         <item>
+          <widget class="QWidget" name="left" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>17</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>17</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextBrowser" name="teOutput">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="openLinks">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="outputToolbarLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbMinimizeOutput"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbMaximizeOutput"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbClearOutput"/>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

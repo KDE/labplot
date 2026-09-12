@@ -21,6 +21,7 @@
 
 #include <QMenu>
 #include <QClipboard>
+#include <QKeySequence>
 
 ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 	: QWidget(parent), m_script(script) {
@@ -35,8 +36,11 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 	// we dont manage default editor font or themes ourselves, so no need to check our config
 	setOutputFont(group.readEntry(QStringLiteral("OutputFont"), QFont(QStringLiteral("monospace"), 10)));
 	setSplitterState(group.readEntry(QStringLiteral("SplitterState"), splitterState())); // need reasonable default for splitter
+	const bool outputVisible = group.readEntry(QStringLiteral("OutputVisible"), true);
 
 	initActions();
+	setOutputVisible(outputVisible);
+	m_toggleOutputAction->setChecked(outputVisible);
 
 	connect(m_script, &Script::requestProjectContextMenu, this, &ScriptEditor::createContextMenu);
 	connect(m_script, &Script::viewPrint, [kTextEditorView = m_kTextEditorView] {
@@ -46,15 +50,11 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 			kTextEditorView->printPreview();
 		});
 
-	ui.output->setReadOnly(true);
-	ui.output->setOpenLinks(false);
+	ui.teOutput->setReadOnly(true);
+	ui.teOutput->setOpenLinks(false);
 
 	// Connect anchor click handler for line navigation
-	connect(ui.output, &QTextBrowser::anchorClicked, this, &ScriptEditor::handleAnchorClicked);
-
-	// Setup context menu for output
-	ui.output->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(ui.output, &QTextBrowser::customContextMenuRequested, this, &ScriptEditor::showOutputContextMenu);
+	connect(ui.teOutput, &QTextBrowser::anchorClicked, this, &ScriptEditor::handleAnchorClicked);
 
 	// Create and register code completion model in KTextEditor view
 	m_completionModel = new ScriptCompletionModel(this);
@@ -91,6 +91,7 @@ ScriptEditor::~ScriptEditor() {
 	// we dont manage default editor font or themes ourselves, so no need to save in our config
 	group.writeEntry(QStringLiteral("OutputFont"), outputFont());
 	group.writeEntry(QStringLiteral("SplitterState"), splitterState());
+	group.writeEntry(QStringLiteral("OutputVisible"), m_toggleOutputAction->isChecked());
 }
 
 bool ScriptEditor::isInitialized() const {
@@ -104,13 +105,7 @@ void ScriptEditor::createContextMenu(QMenu* menu) {
 	if (!m_script)
 		return;
 
-	if (!m_script->isInitialized()) {
-		m_runScriptAction->setEnabled(false);
-		m_clearOutputAction->setEnabled(false);
-	} else {
-		m_runScriptAction->setEnabled(true);
-		m_clearOutputAction->setEnabled(true);
-	}
+	m_runScriptAction->setEnabled(m_script->isInitialized());
 
 	QAction* firstAction = nullptr;
 
@@ -118,8 +113,6 @@ void ScriptEditor::createContextMenu(QMenu* menu) {
 		firstAction = menu->actions().at(1);
 
 	menu->insertAction(firstAction, m_runScriptAction);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, m_clearOutputAction);
 
 	if (firstAction)
 		menu->insertSeparator(firstAction);
@@ -134,17 +127,21 @@ void ScriptEditor::initActions() {
 	m_clearOutputAction->setWhatsThis(QStringLiteral("Clear the output of the script editor"));
 	connect(m_clearOutputAction, &QAction::triggered, this, &ScriptEditor::clearOutput);
 
-	m_copySelectedAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), QStringLiteral("Copy Selected"), this);
-	m_copySelectedAction->setWhatsThis(QStringLiteral("Copy selected text from output"));
-	connect(m_copySelectedAction, &QAction::triggered, [this]() {
-		QApplication::clipboard()->setText(ui.output->textCursor().selectedText());
-	});
+	m_toggleOutputAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), QStringLiteral("Toggle Output"), this);
+	m_toggleOutputAction->setCheckable(true);
+	m_toggleOutputAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_J));
+	m_toggleOutputAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+	m_toggleOutputAction->setWhatsThis(QStringLiteral("Show or hide the script output"));
+	connect(m_toggleOutputAction, &QAction::toggled, this, &ScriptEditor::setOutputVisible);
+	addAction(m_toggleOutputAction);
+	ui.tbMinimizeOutput->setDefaultAction(m_toggleOutputAction);
 
-	m_copyAllOutputAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), QStringLiteral("Copy All Output"), this);
-	m_copyAllOutputAction->setWhatsThis(QStringLiteral("Copy all output text"));
-	connect(m_copyAllOutputAction, &QAction::triggered, [this]() {
-		QApplication::clipboard()->setText(ui.output->toPlainText());
-	});
+	m_maximizeOutputAction = new QAction(QIcon::fromTheme(QStringLiteral("view-fullscreen")), QStringLiteral("Maximize Output"), this);
+	m_maximizeOutputAction->setCheckable(true);
+	m_maximizeOutputAction->setWhatsThis(QStringLiteral("Maximize or restore the script output"));
+	connect(m_maximizeOutputAction, &QAction::toggled, this, &ScriptEditor::setOutputMaximized);
+	ui.tbMaximizeOutput->setDefaultAction(m_maximizeOutputAction);
+	ui.tbClearOutput->setDefaultAction(m_clearOutputAction);
 
 	// Local search action to override global Ctrl+F and delegate to KTextEditor
 	auto* m_searchAction = new QAction(this);
@@ -167,17 +164,36 @@ void ScriptEditor::writeOutput(bool isErr, const QString& msg) {
 	QString processedHtml = processOutputText(isErr, msg);
 
 	// Insert formatted HTML at the end
-	auto cursor = ui.output->textCursor();
+	auto cursor = ui.teOutput->textCursor();
 	cursor.movePosition(QTextCursor::End);
-	ui.output->setTextCursor(cursor);
-	ui.output->insertHtml(processedHtml);
+	ui.teOutput->setTextCursor(cursor);
+	ui.teOutput->insertHtml(processedHtml);
 
 	// Ensure we scroll to the bottom
-	ui.output->ensureCursorVisible();
+	ui.teOutput->ensureCursorVisible();
 }
 
 void ScriptEditor::setSplitterState(const QByteArray& state) {
 	ui.splitter->restoreState(state);
+}
+
+void ScriptEditor::setOutputVisible(bool visible) {
+	if (!visible)
+		m_outputSplitterSizes = ui.splitter->sizes();
+
+	ui.tray->setVisible(visible);
+
+	if (visible && !m_outputSplitterSizes.isEmpty())
+		ui.splitter->setSizes(m_outputSplitterSizes);
+
+}
+
+void ScriptEditor::setOutputMaximized(bool maximized) {
+	if (maximized) {
+		m_maximizedOutputSplitterSizes = ui.splitter->sizes();
+		ui.splitter->setSizes({0, ui.splitter->height()});
+	} else if (!m_maximizedOutputSplitterSizes.isEmpty())
+		ui.splitter->setSizes(m_maximizedOutputSplitterSizes);
 }
 
 QByteArray ScriptEditor::splitterState() {
@@ -185,15 +201,15 @@ QByteArray ScriptEditor::splitterState() {
 }
 
 QString ScriptEditor::outputText() {
-	return ui.output->toPlainText();
+	return ui.teOutput->toPlainText();
 }
 
 void ScriptEditor::setOutputFont(const QFont& font) {
-	ui.output->setFont(font);
+	ui.teOutput->setFont(font);
 }
 
 QFont ScriptEditor::outputFont() {
-	return ui.output->font();
+	return ui.teOutput->font();
 }
 
 // ##############################################################################
@@ -208,8 +224,8 @@ void ScriptEditor::run() {
 void ScriptEditor::clearOutput() {
 	INFO(Q_FUNC_INFO)
 	QFont currentOutputFont = outputFont();
-	ui.output->clear();
-	ui.output->setReadOnly(true);
+	ui.teOutput->clear();
+	ui.teOutput->setReadOnly(true);
 	setOutputFont(currentOutputFont);
 }
 
@@ -346,18 +362,4 @@ void ScriptEditor::handleAnchorClicked(const QUrl& url) {
 			m_kTextEditorView->setFocus();
 		}
 	}
-}
-
-void ScriptEditor::showOutputContextMenu(const QPoint& pos) {
-	QMenu menu(this);
-
-	bool hasSelection = ui.output->textCursor().hasSelection();
-	m_copySelectedAction->setEnabled(hasSelection);
-
-	menu.addAction(m_copySelectedAction);
-	menu.addAction(m_copyAllOutputAction);
-	menu.addSeparator();
-	menu.addAction(m_clearOutputAction);
-
-	menu.exec(ui.output->mapToGlobal(pos));
 }
