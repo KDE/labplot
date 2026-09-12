@@ -51,23 +51,36 @@
 Script::Script(const QString& name, const QString& lang)
 	: AbstractPart(name, AspectType::Script)
 	, m_kTextEditorDocument(KTextEditor::Editor::instance()->createDocument(this)) {
-	if (!Script::languages.contains(lang, Qt::CaseInsensitive)) {
-		WARN("Unsupported scripting language: " << STDSTRING(lang))
-		m_initialized = false;
-		return;
+	if (!lang.isEmpty())
+		setRuntime(lang);
+}
+
+bool Script::setRuntime(const QString& runtime) {
+	if (m_initialized && m_language.compare(runtime, Qt::CaseInsensitive) == 0)
+		return true;
+
+	delete m_scriptRuntime;
+	m_scriptRuntime = nullptr;
+	m_language.clear();
+	m_initialized = false;
+
+	if (!Script::languages.contains(runtime, Qt::CaseInsensitive)) {
+		WARN("Unsupported scripting language: " << STDSTRING(runtime))
+		return false;
 	}
 
-	m_language = lang;
+	m_language = runtime;
 	m_scriptRuntime = Script::newScriptRuntime(m_language, this);
 	if (!m_scriptRuntime) {
 		WARN("Failed to initialize the " << STDSTRING(m_language) << " script runtime. Check that the interpreter is available.")
-		m_initialized = false;
-		return;
+		m_language.clear();
+		return false;
 	}
 
 	m_kTextEditorDocument->setMode(m_language);
 	m_initialized = true;
 	prepareDocument();
+	return true;
 }
 
 Script::~Script() {
@@ -147,13 +160,13 @@ void Script::save(QXmlStreamWriter* writer) const {
 }
 
 bool Script::load(XmlStreamReader* reader, bool preview) {
-	if (!m_initialized)
-		return false;
-
 	if (!reader->isStartElement() || reader->name() != QLatin1String("script")) {
 		reader->raiseError(i18n("no script element found"));
 		return false;
 	}
+	const QString runtime = readRuntime(reader);
+	if (runtime.isEmpty() || !setRuntime(runtime))
+		return false;
 
 	if (!readBasicAttributes(reader))
 		return false;

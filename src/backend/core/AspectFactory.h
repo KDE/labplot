@@ -30,6 +30,9 @@
 #include "backend/matrix/Matrix.h"
 // #include "backend/datasources/LiveDataSource.h"
 #include "backend/note/Note.h"
+#ifdef HAVE_SCRIPTING
+#include "backend/script/Script.h"
+#endif
 #endif
 
 class AspectFactory {
@@ -135,6 +138,8 @@ public:
 			return new Note(QString());
 		else if (type == AspectType::Workbook)
 			return new Workbook(QString());
+		else if (type == AspectType::Script)
+			return new Script(QString());
 #endif
 		return nullptr;
 	}

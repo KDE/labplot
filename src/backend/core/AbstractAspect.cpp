@@ -25,9 +25,6 @@
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
 #endif
-#ifdef HAVE_SCRIPTING
-#include "backend/script/Script.h"
-#endif
 
 #include <KStandardAction>
 #include <QClipboard>
@@ -825,7 +822,6 @@ void AbstractAspect::paste(bool duplicate, int index) {
 	WAIT_CURSOR_AUTO_RESET;
 
 	AbstractAspect* aspect = nullptr;
-	AspectType clipboardType{AspectType::AbstractAspect};
 	XmlStreamReader reader(xml);
 	while (!reader.atEnd()) {
 		reader.readNext();
@@ -835,17 +831,10 @@ void AbstractAspect::paste(bool duplicate, int index) {
 
 		if (reader.name() == QLatin1String("type")) {
 			auto attribs = reader.attributes();
-			clipboardType = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
-			if (clipboardType != AspectType::AbstractAspect && clipboardType != AspectType::Script)
-				aspect = AspectFactory::createAspect(clipboardType, this);
+			auto type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
+			if (type != AspectType::AbstractAspect)
+				aspect = AspectFactory::createAspect(type, this);
 		} else {
-			if (clipboardType == AspectType::Script && reader.name() == QLatin1String("script")) {
-#ifdef HAVE_SCRIPTING
-				const QString runtime = Script::readRuntime(&reader);
-				if (!runtime.isEmpty())
-					aspect = new Script(QString(), runtime);
-#endif
-			}
 			if (aspect) {
 				aspect->setPasted(true);
 				aspect->setIsLoading(true);

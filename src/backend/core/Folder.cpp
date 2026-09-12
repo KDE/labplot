@@ -366,11 +366,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 	} else if (element_name == QLatin1String("script")) {
 #ifndef SDK
 #ifdef HAVE_SCRIPTING
-		QString runtime = Script::readRuntime(reader);
-		if (runtime.isEmpty())
-			return false;
-
-		Script* script = new Script(QString(), runtime);
+		auto* script = new Script(QString());
 		if (!script->load(reader, preview)) {
 			delete script;
 			return false;

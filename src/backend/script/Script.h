@@ -24,7 +24,7 @@ class Script : public AbstractPart {
 	Q_OBJECT
 
 public:
-	explicit Script(const QString&, const QString&);
+	explicit Script(const QString&, const QString& = {});
 	~Script();
 
 	QWidget* view() const override;
@@ -43,6 +43,7 @@ public:
 	int scriptErrorLine() const;
 	KTextEditor::Document* kTextEditorDocument() const;
 	QString language() const;
+	bool setRuntime(const QString&);
 
 	bool isInitialized();
 

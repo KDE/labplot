@@ -825,9 +825,12 @@ endif()
 if(ENABLE_PYTHON_SCRIPTING #[[OR ENABLE_JULIA_SCRIPTING OR ENABLE_LUA_SCRIPTING ...]])
     find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS TextEditor) # KTextEditor is required for the script editor
     set(ENABLE_SCRIPTING ON) # at least one scripting runtime is enabled
-    add_definitions(-DHAVE_SCRIPTING)
 else()
     set(ENABLE_SCRIPTING OFF) # no scripting runtime is enabled
+endif()
+
+if(ENABLE_SCRIPTING)
+    list(APPEND LABPLOT_COMPILE_DEFINITIONS -DHAVE_SCRIPTING)
 endif()
 
 message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")
