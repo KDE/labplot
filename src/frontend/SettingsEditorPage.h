@@ -14,6 +14,7 @@
 
 class KPageWidgetItem;
 class KPageDialog;
+class QCheckBox;
 
 namespace KTextEditor {
 	class ConfigPage;
@@ -32,6 +33,7 @@ public:
 
 private:
 	bool m_changed{false};
+	QCheckBox* m_autoShowOutputCheckBox{nullptr};
 	QVector<KTextEditor::ConfigPage*> m_editorPages;
 
 private Q_SLOTS:

@@ -120,6 +120,9 @@ void ScriptEditor::createContextMenu(QMenu* menu) {
 
 void ScriptEditor::initActions() {
 	m_runScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), QStringLiteral("Run"), this);
+	m_runScriptAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
+	m_runScriptAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+	m_runScriptAction->setShortcutVisibleInContextMenu(true);
 	m_runScriptAction->setWhatsThis(QStringLiteral("Run the script"));
 	connect(m_runScriptAction, &QAction::triggered, this, &ScriptEditor::run);
 
@@ -129,7 +132,7 @@ void ScriptEditor::initActions() {
 
 	m_toggleOutputAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), QStringLiteral("Toggle Output"), this);
 	m_toggleOutputAction->setCheckable(true);
-	m_toggleOutputAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_J));
+	m_toggleOutputAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_J));
 	m_toggleOutputAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 	m_toggleOutputAction->setWhatsThis(QStringLiteral("Show or hide the script output"));
 	connect(m_toggleOutputAction, &QAction::toggled, this, &ScriptEditor::setOutputVisible);
@@ -159,6 +162,11 @@ void ScriptEditor::writeOutput(bool isErr, const QString& msg) {
 	DEBUG(Q_FUNC_INFO << ", text = '" << msg.toStdString() << "'")
 	if (msg.isEmpty())
 		return;
+
+	KConfig config;
+	const auto group = config.group(QStringLiteral("ScriptEditor"));
+	if (group.readEntry(QStringLiteral("AutoShowOutput"), true) && !ui.tray->isVisible())
+		m_toggleOutputAction->setChecked(true);
 
 	// Process the output text to add links and formatting
 	QString processedHtml = processOutputText(isErr, msg);
