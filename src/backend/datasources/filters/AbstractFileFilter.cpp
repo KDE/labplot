@@ -10,6 +10,7 @@
 */
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/datasources/filters/FilterStatus.h"
 #include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/lib/hostprocess.h"
@@ -18,6 +19,7 @@
 #include <KLocalizedString>
 
 #include <QDateTime>
+#include <QFileInfo>
 #include <QImageReader>
 #include <QLocale>
 #include <QProcess>
@@ -198,6 +200,14 @@ void AbstractFileFilter::setLastError(const QString& error) {
 
 void AbstractFileFilter::clearLastError() {
 	m_lastError.clear();
+}
+
+bool AbstractFileFilter::validateFileName(const QString& fileName) {
+	if (QFileInfo::exists(fileName))
+		return true;
+
+	setLastError(Status::UnableToOpenDevice().message());
+	return false;
 }
 
 /*!

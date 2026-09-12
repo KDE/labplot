@@ -43,6 +43,8 @@ FITSFilter::~FITSFilter() = default;
 
 void FITSFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	DEBUG(Q_FUNC_INFO)
+	if (!validateFileName(fileName))
+		return;
 	d->readCHDU(fileName, dataSource, importMode);
 }
 

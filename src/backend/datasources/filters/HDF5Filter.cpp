@@ -104,6 +104,8 @@ QVector<QStringList> HDF5Filter::readCurrentDataSet(const QString& fileName, Abs
   reads the content of the file \c fileName to the data source \c dataSource.
 */
 void HDF5Filter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
+	if (!validateFileName(fileName))
+		return;
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 

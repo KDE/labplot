@@ -92,6 +92,8 @@ bool XLSXFilter::isValidCellReference(const QString& cellRefString) {
 }
 
 void XLSXFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
+	if (!validateFileName(fileName))
+		return;
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 void XLSXFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
