@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-06 00:40+0000\n"
+"POT-Creation-Date: 2026-09-13 00:40+0000\n"
 "PO-Revision-Date: 2026-04-13 12:00+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -75,7 +75,7 @@ msgstr "Dole"
 #: src/backend/core/AbstractAspect.cpp:557
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:216
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2477
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2465
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1: pridať %2"
@@ -242,9 +242,9 @@ msgid "Y-Error -"
 msgstr "Y-chyba -"
 
 #: src/backend/core/AbstractColumn.cpp:224
-#: src/backend/datasources/filters/AsciiFilter.cpp:680
-#: src/backend/datasources/filters/MatioFilter.cpp:382
-#: src/backend/datasources/filters/MatioFilter.cpp:428
+#: src/backend/datasources/filters/AsciiFilter.cpp:684
+#: src/backend/datasources/filters/MatioFilter.cpp:384
+#: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
 msgid "Double"
 msgstr "Dvojité"
@@ -262,7 +262,7 @@ msgstr "Veľké celé číslo"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/backend/core/AbstractColumn.cpp:230
-#: src/backend/datasources/filters/AsciiFilter.cpp:681
+#: src/backend/datasources/filters/AsciiFilter.cpp:685
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/frontend/ActionsManager.cpp:555
 #: src/frontend/notebook/NotebookView.cpp:104
@@ -406,7 +406,7 @@ msgid "incompatible filter type"
 msgstr "nekompatibilný typ filtra"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:158 src/backend/core/Project.cpp:714
+#: src/backend/core/Folder.cpp:161 src/backend/core/Project.cpp:714
 #: src/backend/datasources/MQTTClient.cpp:1364
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
@@ -687,7 +687,7 @@ msgstr "%1: nastaviť desatinné číslice na %2"
 msgid "set decimal digits to %1"
 msgstr "nastaviť desatinné číslice na %1"
 
-#: src/backend/core/Folder.cpp:395
+#: src/backend/core/Folder.cpp:394
 #, kde-format
 msgid "unknown element '%1' found"
 msgstr "nájdený neznámy prvok '%1'"
@@ -1093,14 +1093,14 @@ msgstr ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:123
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:125
 #, kde-format
 msgid ""
 "This option determines how the imported strings have to be converted to "
 "numbers."
 msgstr "Táto voľba určuje, ako sa majú importované reťazce previesť na čísla."
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:128
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:130
 #, kde-format
 msgid ""
 "When point character is used for the decimal separator, the valid number "
@@ -1113,7 +1113,7 @@ msgstr ""
 "desatinný oddeľovač sú platné reprezentácie čísel:<ul><li>1234,56</"
 "li><li>1.234,56</li><li>atď.</li></ul>"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:144
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:146
 #, kde-format
 msgid ""
 "This option determines how the imported strings have to be converted to "
@@ -1123,7 +1123,7 @@ msgstr ""
 "Táto voľba určuje, ako sa majú importované reťazce previesť na kalendárny "
 "dátum."
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:150
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:152
 #, kde-format
 msgid ""
 "Expressions that may be used for the date part of format string:"
@@ -1166,122 +1166,122 @@ msgstr ""
 "časom. V prípade, že je zadaný výraz prázdny, formát bude automaticky "
 "detekovaný."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:224
+#: src/backend/datasources/filters/AsciiFilter.cpp:228
 #: src/backend/datasources/filters/ParquetFilter.cpp:76
 #: src/backend/datasources/filters/ParquetFilter.cpp:89
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Počet stĺpcov: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:226
+#: src/backend/datasources/filters/AsciiFilter.cpp:230
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Počet riadkov: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:581
-#: src/backend/datasources/filters/AsciiFilter.cpp:1368
-#: src/backend/datasources/filters/JsonFilter.cpp:246
+#: src/backend/datasources/filters/AsciiFilter.cpp:585
+#: src/backend/datasources/filters/AsciiFilter.cpp:1372
+#: src/backend/datasources/filters/JsonFilter.cpp:248
 #, kde-format
 msgid "Column %1"
 msgstr "Stĺpec %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:664
-#: src/backend/datasources/filters/AsciiFilter.cpp:1394
+#: src/backend/datasources/filters/AsciiFilter.cpp:668
+#: src/backend/datasources/filters/AsciiFilter.cpp:1398
 #, kde-format
 msgid "Timestamp"
 msgstr "Časová značka"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:669
-#: src/backend/datasources/filters/AsciiFilter.cpp:1399
-#: src/backend/datasources/filters/BinaryFilter.cpp:293
-#: src/backend/datasources/filters/BinaryFilter.cpp:436
+#: src/backend/datasources/filters/AsciiFilter.cpp:673
+#: src/backend/datasources/filters/AsciiFilter.cpp:1403
+#: src/backend/datasources/filters/BinaryFilter.cpp:295
+#: src/backend/datasources/filters/BinaryFilter.cpp:438
 #: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
 #, kde-format
 msgid "Index"
 msgstr "Index"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:682
+#: src/backend/datasources/filters/AsciiFilter.cpp:686
 #, kde-format
 msgid "DateTime"
 msgstr "DátumČas"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:683
+#: src/backend/datasources/filters/AsciiFilter.cpp:687
 #, kde-format
 msgid "Timestamp (Unix)"
 msgstr "Časová pečiatka (Unix)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:684
+#: src/backend/datasources/filters/AsciiFilter.cpp:688
 #, kde-format
 msgid "Timestamp (Windows)"
 msgstr "Časová pečiatka (Windows)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:685
+#: src/backend/datasources/filters/AsciiFilter.cpp:689
 #, kde-format
 msgid "Int"
 msgstr "Celé číslo"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:686
-#: src/backend/datasources/filters/MatioFilter.cpp:398
-#: src/backend/datasources/filters/MatioFilter.cpp:430
+#: src/backend/datasources/filters/AsciiFilter.cpp:690
+#: src/backend/datasources/filters/MatioFilter.cpp:400
+#: src/backend/datasources/filters/MatioFilter.cpp:432
 #, kde-format
 msgid "Int64"
 msgstr "Int64"
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:273
-#: src/backend/datasources/filters/JsonFilter.cpp:343
-#: src/backend/datasources/filters/SpiceFilter.cpp:127
-#: src/backend/datasources/filters/SpiceFilter.cpp:183
+#: src/backend/datasources/filters/BinaryFilter.cpp:275
+#: src/backend/datasources/filters/JsonFilter.cpp:345
+#: src/backend/datasources/filters/SpiceFilter.cpp:129
+#: src/backend/datasources/filters/SpiceFilter.cpp:185
 #, kde-format
 msgid "Failed to open the device/file."
 msgstr "Nepodarilo sa otvoriť zariadenie/súbor."
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:283
+#: src/backend/datasources/filters/BinaryFilter.cpp:285
 #, kde-format
 msgid "Data selection empty."
 msgstr "Výber dát je prázdny."
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:404
-#: src/backend/datasources/filters/McapFilter.cpp:197
+#: src/backend/datasources/filters/BinaryFilter.cpp:406
+#: src/backend/datasources/filters/McapFilter.cpp:199
 #, kde-format
 msgid "Failed to open the device/file or it's empty."
 msgstr "Nepodarilo sa otvoriť zariadenie/súbor alebo je prázdny."
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:444
-#: src/backend/datasources/filters/CANFilter.cpp:301
-#: src/backend/datasources/filters/FITSFilter.cpp:351
-#: src/backend/datasources/filters/FITSFilter.cpp:361
-#: src/backend/datasources/filters/FITSFilter.cpp:556
-#: src/backend/datasources/filters/HDF5Filter.cpp:1642
-#: src/backend/datasources/filters/HDF5Filter.cpp:1759
-#: src/backend/datasources/filters/HDF5Filter.cpp:1809
-#: src/backend/datasources/filters/HDF5Filter.cpp:1965
-#: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:520
-#: src/backend/datasources/filters/MatioFilter.cpp:890
-#: src/backend/datasources/filters/NetCDFFilter.cpp:758
-#: src/backend/datasources/filters/NetCDFFilter.cpp:869
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1001
-#: src/backend/datasources/filters/OdsFilter.cpp:400
-#: src/backend/datasources/filters/ParquetFilter.cpp:415
-#: src/backend/datasources/filters/ReadStatFilter.cpp:528
-#: src/backend/datasources/filters/ROOTFilter.cpp:235
-#: src/backend/datasources/filters/ROOTFilter.cpp:305
-#: src/backend/datasources/filters/SpiceFilter.cpp:206
+#: src/backend/datasources/filters/BinaryFilter.cpp:446
+#: src/backend/datasources/filters/CANFilter.cpp:303
+#: src/backend/datasources/filters/FITSFilter.cpp:358
+#: src/backend/datasources/filters/FITSFilter.cpp:368
+#: src/backend/datasources/filters/FITSFilter.cpp:563
+#: src/backend/datasources/filters/HDF5Filter.cpp:1644
+#: src/backend/datasources/filters/HDF5Filter.cpp:1761
+#: src/backend/datasources/filters/HDF5Filter.cpp:1811
+#: src/backend/datasources/filters/HDF5Filter.cpp:1967
+#: src/backend/datasources/filters/ImageFilter.cpp:167
+#: src/backend/datasources/filters/JsonFilter.cpp:522
+#: src/backend/datasources/filters/MatioFilter.cpp:892
+#: src/backend/datasources/filters/NetCDFFilter.cpp:760
+#: src/backend/datasources/filters/NetCDFFilter.cpp:871
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1003
+#: src/backend/datasources/filters/OdsFilter.cpp:402
+#: src/backend/datasources/filters/ParquetFilter.cpp:417
+#: src/backend/datasources/filters/ReadStatFilter.cpp:530
+#: src/backend/datasources/filters/ROOTFilter.cpp:237
+#: src/backend/datasources/filters/ROOTFilter.cpp:307
+#: src/backend/datasources/filters/SpiceFilter.cpp:208
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:341
-#: src/backend/datasources/filters/XLSXFilter.cpp:511
+#: src/backend/datasources/filters/XLSXFilter.cpp:513
 #, kde-format
 msgid "Not enough memory."
 msgstr "Nedostatok pamäte."
 
-#: src/backend/datasources/filters/CANFilter.cpp:220
-#: src/backend/datasources/filters/SpiceFilter.cpp:131
-#: src/backend/datasources/filters/SpiceFilter.cpp:187
+#: src/backend/datasources/filters/CANFilter.cpp:222
+#: src/backend/datasources/filters/SpiceFilter.cpp:133
+#: src/backend/datasources/filters/SpiceFilter.cpp:189
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:268
 #, kde-format
 msgid "Invalid file."
 msgstr "Neplatný súbor."
 
-#: src/backend/datasources/filters/CANFilter.cpp:226
+#: src/backend/datasources/filters/CANFilter.cpp:228
 #, kde-format
 msgid "No messages read."
 msgstr "Žiadne prečítané správy."
@@ -1297,378 +1297,378 @@ msgstr ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:239
+#: src/backend/datasources/filters/FITSFilter.cpp:246
 #, kde-format
 msgid "Images: %1"
 msgstr "Images: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:244
+#: src/backend/datasources/filters/FITSFilter.cpp:251
 #, kde-format
 msgid "Tables: %1"
 msgstr "Tables: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:281
-#: src/backend/datasources/filters/MatioFilter.cpp:647
+#: src/backend/datasources/filters/FITSFilter.cpp:288
+#: src/backend/datasources/filters/MatioFilter.cpp:649
 #, kde-format
 msgid "Failed to open the file."
 msgstr "Failed to open the file."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:288
-#: src/backend/datasources/filters/FITSFilter.cpp:368
+#: src/backend/datasources/filters/FITSFilter.cpp:295
+#: src/backend/datasources/filters/FITSFilter.cpp:375
 #, kde-format
 msgid "Failed to read the file."
 msgstr "Failed to read the file."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:310
+#: src/backend/datasources/filters/FITSFilter.cpp:317
 #, kde-format
 msgid "Zero dimensions."
 msgstr "Nulové rozmery."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1060
-#: src/backend/datasources/filters/FITSFilter.cpp:1580
+#: src/backend/datasources/filters/FITSFilter.cpp:1067
+#: src/backend/datasources/filters/FITSFilter.cpp:1587
 #: src/frontend/datasources/FITSOptionsWidget.cpp:40
 #: src/frontend/datasources/FITSOptionsWidget.cpp:73
 #, kde-format
 msgid "Primary header"
 msgstr "Primárna hlavička"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1062
+#: src/backend/datasources/filters/FITSFilter.cpp:1069
 #, kde-format
 msgid "IMAGE #%1"
 msgstr "IMAGE #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1065
+#: src/backend/datasources/filters/FITSFilter.cpp:1072
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr "ASCII_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1068
+#: src/backend/datasources/filters/FITSFilter.cpp:1075
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr "BINARY_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1573
+#: src/backend/datasources/filters/FITSFilter.cpp:1580
 #, kde-format
 msgid "Images"
 msgstr "Obrázky"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1599
+#: src/backend/datasources/filters/FITSFilter.cpp:1606
 #, kde-format
 msgid "Tables"
 msgstr "Tabuľky"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:170
+#: src/backend/datasources/filters/HDF5Filter.cpp:172
 #, kde-format
 msgid "Not a HDF5 file"
 msgstr "Nie je HDF5 súbor"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:174
+#: src/backend/datasources/filters/HDF5Filter.cpp:176
 #, kde-format
 msgid "Failed checking file"
 msgstr "Zlyhala kontrola súboru"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:182
+#: src/backend/datasources/filters/HDF5Filter.cpp:184
 #, kde-format
 msgid "Failed opening HDF5 file"
 msgstr "Nepodarilo sa otvoriť súbor HDF5"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:188
+#: src/backend/datasources/filters/HDF5Filter.cpp:190
 #, kde-format
 msgid "File size: %1 bytes"
 msgstr "File size: %1 bytes"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:193
+#: src/backend/datasources/filters/HDF5Filter.cpp:195
 #, kde-format
 msgid "Free space: %1 bytes"
 msgstr "Voľné miesto: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:199
+#: src/backend/datasources/filters/HDF5Filter.cpp:201
 #: src/frontend/datasources/ImportFileWidget.cpp:1836
 #, kde-format
 msgid "Number of files: %1"
 msgstr "Počet súborov: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:202
+#: src/backend/datasources/filters/HDF5Filter.cpp:204
 #, kde-format
 msgid "Number of data sets: %1"
 msgstr "Počet množín údajov: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:205
+#: src/backend/datasources/filters/HDF5Filter.cpp:207
 #, kde-format
 msgid "Number of groups: %1"
 msgstr "Number of groups: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:208
+#: src/backend/datasources/filters/HDF5Filter.cpp:210
 #, kde-format
 msgid "Number of named datatypes: %1"
 msgstr "Počet pomenovaných dátových typov: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:211
+#: src/backend/datasources/filters/HDF5Filter.cpp:213
 #, kde-format
 msgid "Number of attributes: %1"
 msgstr "Počet atribútov: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:214
+#: src/backend/datasources/filters/HDF5Filter.cpp:216
 #, kde-format
 msgid "Number of all objects: %1"
 msgstr "Počet všetkých objektov: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:222
+#: src/backend/datasources/filters/HDF5Filter.cpp:224
 #, kde-format
 msgid "Version of superblock: %1"
 msgstr "Verzia superbloku: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:224
+#: src/backend/datasources/filters/HDF5Filter.cpp:226
 #, kde-format
 msgid "Size of superblock: %1 bytes"
 msgstr "Veľkosť superbloku: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:226
-#: src/backend/datasources/filters/HDF5Filter.cpp:247
+#: src/backend/datasources/filters/HDF5Filter.cpp:228
+#: src/backend/datasources/filters/HDF5Filter.cpp:249
 #, kde-format
 msgid "Size of superblock extension: %1 bytes"
 msgstr "Veľkosť rozšírenia superbloku: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:228
+#: src/backend/datasources/filters/HDF5Filter.cpp:230
 #, kde-format
 msgid "Version of free-space manager: %1"
 msgstr "Verzia správcu voľného miesta: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:230
+#: src/backend/datasources/filters/HDF5Filter.cpp:232
 #, kde-format
 msgid "Size of free-space manager metadata: %1 bytes"
 msgstr "Veľkosť metadát správcu voľného miesta: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:232
+#: src/backend/datasources/filters/HDF5Filter.cpp:234
 #, kde-format
 msgid "Total size of free space: %1 bytes"
 msgstr "Celková veľkosť voľného miesta: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:234
+#: src/backend/datasources/filters/HDF5Filter.cpp:236
 #, kde-format
 msgid "Version of shared object header: %1"
 msgstr "Verzia hlavičky zdieľaného objektu: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:236
-#: src/backend/datasources/filters/HDF5Filter.cpp:249
+#: src/backend/datasources/filters/HDF5Filter.cpp:238
+#: src/backend/datasources/filters/HDF5Filter.cpp:251
 #, kde-format
 msgid "Size of shared object header: %1 bytes"
 msgstr "Veľkosť hlavičky zdieľaného objektu: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:238
-#: src/backend/datasources/filters/HDF5Filter.cpp:251
+#: src/backend/datasources/filters/HDF5Filter.cpp:240
+#: src/backend/datasources/filters/HDF5Filter.cpp:253
 #, kde-format
 msgid "Size of all shared object header indexes: %1 bytes"
 msgstr "Veľkosť všetkých indexov hlavičky zdieľaného objektu: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:240
-#: src/backend/datasources/filters/HDF5Filter.cpp:253
+#: src/backend/datasources/filters/HDF5Filter.cpp:242
+#: src/backend/datasources/filters/HDF5Filter.cpp:255
 #, kde-format
 msgid "Size of the heap: %1 bytes"
 msgstr "Veľkosť haldy: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:265
+#: src/backend/datasources/filters/HDF5Filter.cpp:267
 #, kde-format
 msgid "Cache config version: %1"
 msgstr "Verzia konfigurácie vyrovnávacej pamäte: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
+#: src/backend/datasources/filters/HDF5Filter.cpp:269
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
-#: src/backend/datasources/filters/MatioFilter.cpp:574
-#: src/backend/datasources/filters/MatioFilter.cpp:578
+#: src/backend/datasources/filters/HDF5Filter.cpp:311
+#: src/backend/datasources/filters/MatioFilter.cpp:576
+#: src/backend/datasources/filters/MatioFilter.cpp:580
 #, kde-format
 msgid "Yes"
 msgstr "Áno"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
+#: src/backend/datasources/filters/HDF5Filter.cpp:269
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
-#: src/backend/datasources/filters/MatioFilter.cpp:576
-#: src/backend/datasources/filters/MatioFilter.cpp:580
+#: src/backend/datasources/filters/HDF5Filter.cpp:311
+#: src/backend/datasources/filters/MatioFilter.cpp:578
+#: src/backend/datasources/filters/MatioFilter.cpp:582
 #, kde-format
 msgid "No"
 msgstr "Nie"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
+#: src/backend/datasources/filters/HDF5Filter.cpp:269
 #, kde-format
 msgid "Adaptive cache resize report function enabled: %1"
 msgstr ""
 "Funkcia správy o zmene veľkosti adaptívnej vyrovnávacej pamäte povolená: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:269
+#: src/backend/datasources/filters/HDF5Filter.cpp:271
 #, kde-format
 msgid "Cache initial maximum size: %1 bytes"
 msgstr "Počiatočná maximálna veľkosť vyrovnávacej pamäte: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:271
+#: src/backend/datasources/filters/HDF5Filter.cpp:273
 #, kde-format
 msgid "Adaptive cache maximum size: %1 bytes"
 msgstr "Maximálna veľkosť adaptívnej vyrovnávacej pamäte: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:273
+#: src/backend/datasources/filters/HDF5Filter.cpp:275
 #, kde-format
 msgid "Adaptive cache minimum size: %1 bytes"
 msgstr "Minimálna veľkosť adaptívnej vyrovnávacej pamäte: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:279
+#: src/backend/datasources/filters/HDF5Filter.cpp:281
 #, kde-format
 msgid "Metadata cache hit rate: %1"
 msgstr "Miera zásahov vyrovnávacej pamäte metadát: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:286
+#: src/backend/datasources/filters/HDF5Filter.cpp:288
 #, kde-format
 msgid "Current cache maximum size: %1 bytes"
 msgstr "Aktuálna maximálna veľkosť vyrovnávacej pamäte: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:288
+#: src/backend/datasources/filters/HDF5Filter.cpp:290
 #, kde-format
 msgid "Current cache minimum clean size: %1 bytes"
 msgstr "Aktuálna minimálna čistá veľkosť vyrovnávacej pamäte: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:290
+#: src/backend/datasources/filters/HDF5Filter.cpp:292
 #, kde-format
 msgid "Current cache size: %1 bytes"
 msgstr "Aktuálna veľkosť vyrovnávacej pamäte: %1 bajtov"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:292
+#: src/backend/datasources/filters/HDF5Filter.cpp:294
 #, kde-format
 msgid "Current number of entries in the cache: %1"
 msgstr "Aktuálny počet záznamov vo vyrovnávacej pamäti: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
+#: src/backend/datasources/filters/HDF5Filter.cpp:309
 #, kde-format
 msgid "Logging enabled: %1"
 msgstr "Logovanie povolené: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:309
+#: src/backend/datasources/filters/HDF5Filter.cpp:311
 #, kde-format
 msgid "Events are currently logged: %1"
 msgstr "Udalosti sú aktuálne logované: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:317
+#: src/backend/datasources/filters/HDF5Filter.cpp:319
 #, kde-format
 msgid "Metadata/raw data page buffer accesses: %1 %2"
 msgstr "Prístupy do vyrovnávacej pamäte stránok metadát/surových dát: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:319
+#: src/backend/datasources/filters/HDF5Filter.cpp:321
 #, kde-format
 msgid "Metadata/raw data page buffer hits: %1 %2"
 msgstr "Zásahy vyrovnávacej pamäte stránok metadát/surových dát: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:321
+#: src/backend/datasources/filters/HDF5Filter.cpp:323
 #, kde-format
 msgid "Metadata/raw data page buffer misses: %1 %2"
 msgstr "Minutia vyrovnávacej pamäte stránok metadát/surových dát: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:323
+#: src/backend/datasources/filters/HDF5Filter.cpp:325
 #, kde-format
 msgid "Metadata/raw data page buffer evictions: %1 %2"
 msgstr "Vyradenia vyrovnávacej pamäte stránok metadát/surových dát: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:325
+#: src/backend/datasources/filters/HDF5Filter.cpp:327
 #, kde-format
 msgid "Metadata/raw data accesses bypassing page buffer: %1 %2"
 msgstr ""
 "Prístupy k metadátam/surovým dátam obchádzajúce vyrovnávaciu pamäť stránok: "
 "%1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:328
+#: src/backend/datasources/filters/HDF5Filter.cpp:330
 #, kde-format
 msgid "Page buffer disabled"
 msgstr "Vyrovnávacia pamäť stránok zakázaná"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:350
+#: src/backend/datasources/filters/HDF5Filter.cpp:352
 #, kde-format
 msgid "h5dump not found."
 msgstr "h5dump sa nenašiel."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:358
-#: src/backend/datasources/filters/NetCDFFilter.cpp:268
+#: src/backend/datasources/filters/HDF5Filter.cpp:360
+#: src/backend/datasources/filters/NetCDFFilter.cpp:270
 #: src/frontend/datasources/ImportFileWidget.cpp:1715
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "<p>Čítanie zo súboru <b>%1</b> zlyhalo.</p>"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1311
+#: src/backend/datasources/filters/HDF5Filter.cpp:1313
 #, kde-format
 msgid "data type"
 msgstr "dátový typ"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1362
+#: src/backend/datasources/filters/HDF5Filter.cpp:1364
 #, kde-format
 msgid "rank %1 not supported yet"
 msgstr "rank %1 not supported yet"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1369
+#: src/backend/datasources/filters/HDF5Filter.cpp:1371
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:75
 #, kde-format
 msgid "data set"
 msgstr "data set"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1387
+#: src/backend/datasources/filters/HDF5Filter.cpp:1389
 #, kde-format
 msgid "symbolic link"
 msgstr "Symbolický odkaz"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1387
+#: src/backend/datasources/filters/HDF5Filter.cpp:1389
 #, kde-format
 msgid "link to %1"
 msgstr "Odkaz na %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1400
+#: src/backend/datasources/filters/HDF5Filter.cpp:1402
 #, kde-format
 msgid "hard link"
 msgstr "pevný odkaz"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1464
+#: src/backend/datasources/filters/HDF5Filter.cpp:1466
 #, kde-format
 msgid "unknown"
 msgstr "neznáme"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1524
-#: src/backend/datasources/filters/HDF5Filter.cpp:2151
+#: src/backend/datasources/filters/HDF5Filter.cpp:1526
+#: src/backend/datasources/filters/HDF5Filter.cpp:2153
 #, kde-format
 msgid "No data set selected."
 msgstr "Nie je vybraná žiadna množina dát."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1593
+#: src/backend/datasources/filters/HDF5Filter.cpp:1595
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
 msgstr "rank 0 not implemented yet for type %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1732
-#: src/backend/datasources/filters/HDF5Filter.cpp:1881
+#: src/backend/datasources/filters/HDF5Filter.cpp:1734
+#: src/backend/datasources/filters/HDF5Filter.cpp:1883
 #, kde-format
 msgid "unsupported integer type for rank 1"
 msgstr "nepodporovaný celočíselný typ pre rank 1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1745
+#: src/backend/datasources/filters/HDF5Filter.cpp:1747
 #, kde-format
 msgid "unsupported float type for rank 1"
 msgstr "nepodporovaný desatinný typ pre rank 1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1896
+#: src/backend/datasources/filters/HDF5Filter.cpp:1898
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
 msgstr "rank 1 not implemented yet for type %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2029
+#: src/backend/datasources/filters/HDF5Filter.cpp:2031
 #, kde-format
 msgid "unsupported integer type for rank 2"
 msgstr "nepodporovaný celočíselný typ pre rank 2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2042
+#: src/backend/datasources/filters/HDF5Filter.cpp:2044
 #, kde-format
 msgid "unsupported float type for rank 2"
 msgstr "nepodporovaný desatinný typ pre rank 2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2105
+#: src/backend/datasources/filters/HDF5Filter.cpp:2107
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
 msgstr "rank 2 not implemented yet for type %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2114
+#: src/backend/datasources/filters/HDF5Filter.cpp:2116
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
 msgstr "rank %1 not implemented yet for type %2"
@@ -1688,12 +1688,12 @@ msgstr "XYZ (odtiene šedej)"
 msgid "XYRGB"
 msgstr "XYRGB"
 
-#: src/backend/datasources/filters/ImageFilter.cpp:118
+#: src/backend/datasources/filters/ImageFilter.cpp:120
 #, kde-format
 msgid "Empty file or invalid or non-supported format."
 msgstr "Prázdny súbor alebo neplatný alebo nepodporovaný formát."
 
-#: src/backend/datasources/filters/ImageFilter.cpp:219
+#: src/backend/datasources/filters/ImageFilter.cpp:221
 #, kde-format
 msgid "numerical data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -1701,104 +1701,104 @@ msgstr[0] "numerické dáta, %1 prvok"
 msgstr[1] "numerické dáta, %1 prvky"
 msgstr[2] "numerické dáta, %1 prvkov"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:181
+#: src/backend/datasources/filters/JsonFilter.cpp:183
 #, kde-format
 msgid "Open device failed"
 msgstr "Otvorenie zariadenia zlyhalo"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:184
+#: src/backend/datasources/filters/JsonFilter.cpp:186
 #, kde-format
 msgid "Empty file"
 msgstr "Prázdny súbor"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:190
+#: src/backend/datasources/filters/JsonFilter.cpp:192
 #, kde-format
 msgid "Parse error: %1 at offset %2"
 msgstr "Parse error: %1 at offset %2"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:193
+#: src/backend/datasources/filters/JsonFilter.cpp:195
 #, kde-format
 msgid "Valid JSON document"
 msgstr "Platný JSON dokument"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:224
-#: src/backend/datasources/filters/McapFilter.cpp:296
+#: src/backend/datasources/filters/JsonFilter.cpp:226
+#: src/backend/datasources/filters/McapFilter.cpp:298
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
 msgstr "index"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:232
+#: src/backend/datasources/filters/JsonFilter.cpp:234
 #, kde-format
 msgid "timestamp"
 msgstr "Časové razítko"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:234
+#: src/backend/datasources/filters/JsonFilter.cpp:236
 #, kde-format
 msgid "month"
 msgstr "Opustiť kanál"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:236
+#: src/backend/datasources/filters/JsonFilter.cpp:238
 #, kde-format
 msgid "day"
 msgstr "dní"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:238
+#: src/backend/datasources/filters/JsonFilter.cpp:240
 #: src/frontend/CLIProcessor.cpp:271
 #, kde-format
 msgid "name"
 msgstr "meno"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:348
+#: src/backend/datasources/filters/JsonFilter.cpp:350
 #, kde-format
 msgid "Device/file is empty."
 msgstr "Zariadenie/súbor je prázdny."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:356
+#: src/backend/datasources/filters/JsonFilter.cpp:358
 #, kde-format
 msgid "JSON format error or document empty."
 msgstr "Chyba formátu JSON alebo prázdny dokument."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:503
+#: src/backend/datasources/filters/JsonFilter.cpp:505
 #, kde-format
 msgid "Empty file or invalid JSON document."
 msgstr "Prázdny súbor alebo neplatný dokument JSON."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:308
-#: src/backend/datasources/filters/NetCDFFilter.cpp:237
-#: src/backend/datasources/filters/ReadStatFilter.cpp:176
+#: src/backend/datasources/filters/MatioFilter.cpp:310
+#: src/backend/datasources/filters/NetCDFFilter.cpp:239
+#: src/backend/datasources/filters/ReadStatFilter.cpp:178
 #, kde-format
 msgid "Error getting file info"
 msgstr "Chyba pri získavaní informácií o súbore"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:317
+#: src/backend/datasources/filters/MatioFilter.cpp:319
 #, kde-format
 msgid "Matlab version 7.3"
 msgstr "Matlab verzia 7.3"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:320
+#: src/backend/datasources/filters/MatioFilter.cpp:322
 #, kde-format
 msgid "Matlab version 5"
 msgstr "Matlab verzia 5"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:323
+#: src/backend/datasources/filters/MatioFilter.cpp:325
 #, kde-format
 msgid "Matlab version 4"
 msgstr "Matlab verzia 4"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:326
+#: src/backend/datasources/filters/MatioFilter.cpp:328
 #, kde-format
 msgid "Matlab version undefined"
 msgstr "Verzia Matlab nedefinovaná"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:332
+#: src/backend/datasources/filters/MatioFilter.cpp:334
 #, kde-format
 msgid "Number of variables: "
 msgstr "Number of variables: "
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
-#: src/backend/datasources/filters/MatioFilter.cpp:335
+#: src/backend/datasources/filters/MatioFilter.cpp:337
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
 #: src/frontend/dockwidgets/ColumnDock.cpp:818
 #: src/frontend/dockwidgets/ColumnDock.cpp:843
@@ -1809,114 +1809,114 @@ msgstr "Number of variables: "
 msgid "Variables:"
 msgstr "Premenné:"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:370
-#: src/backend/datasources/filters/MatioFilter.cpp:740
+#: src/backend/datasources/filters/MatioFilter.cpp:372
+#: src/backend/datasources/filters/MatioFilter.cpp:742
 #, kde-format
 msgid "Empty"
 msgstr "Prázdne"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:372
-#: src/backend/datasources/filters/MatioFilter.cpp:446
+#: src/backend/datasources/filters/MatioFilter.cpp:374
+#: src/backend/datasources/filters/MatioFilter.cpp:448
 #, kde-format
 msgid "Cell"
 msgstr "Mobil"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:374
-#: src/backend/datasources/filters/MatioFilter.cpp:448
+#: src/backend/datasources/filters/MatioFilter.cpp:376
+#: src/backend/datasources/filters/MatioFilter.cpp:450
 #, kde-format
 msgid "Struct"
 msgstr "Štruktúra"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:376
+#: src/backend/datasources/filters/MatioFilter.cpp:378
 #, kde-format
 msgid "Object"
 msgstr "Objekt"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:378
+#: src/backend/datasources/filters/MatioFilter.cpp:380
 #, kde-format
 msgid "Char"
 msgstr "Znak"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:380
+#: src/backend/datasources/filters/MatioFilter.cpp:382
 #, kde-format
 msgid "Sparse"
 msgstr "Sparse"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:384
-#: src/backend/datasources/filters/MatioFilter.cpp:426
+#: src/backend/datasources/filters/MatioFilter.cpp:386
+#: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
 msgid "Single"
 msgstr "Jednoduchý"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:386
-#: src/backend/datasources/filters/MatioFilter.cpp:414
+#: src/backend/datasources/filters/MatioFilter.cpp:388
+#: src/backend/datasources/filters/MatioFilter.cpp:416
 #, kde-format
 msgid "Int8"
 msgstr "Int8"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:388
-#: src/backend/datasources/filters/MatioFilter.cpp:416
+#: src/backend/datasources/filters/MatioFilter.cpp:390
+#: src/backend/datasources/filters/MatioFilter.cpp:418
 #, kde-format
 msgid "UInt8"
 msgstr "UInt8"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:390
-#: src/backend/datasources/filters/MatioFilter.cpp:418
+#: src/backend/datasources/filters/MatioFilter.cpp:392
+#: src/backend/datasources/filters/MatioFilter.cpp:420
 #, kde-format
 msgid "Int16"
 msgstr "Int16"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:392
-#: src/backend/datasources/filters/MatioFilter.cpp:420
+#: src/backend/datasources/filters/MatioFilter.cpp:394
+#: src/backend/datasources/filters/MatioFilter.cpp:422
 #, kde-format
 msgid "UInt16"
 msgstr "UInt16"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:394
-#: src/backend/datasources/filters/MatioFilter.cpp:422
+#: src/backend/datasources/filters/MatioFilter.cpp:396
+#: src/backend/datasources/filters/MatioFilter.cpp:424
 #, kde-format
 msgid "Int32"
 msgstr "Int32"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:396
-#: src/backend/datasources/filters/MatioFilter.cpp:424
+#: src/backend/datasources/filters/MatioFilter.cpp:398
+#: src/backend/datasources/filters/MatioFilter.cpp:426
 #, kde-format
 msgid "UInt32"
 msgstr "UInt32"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:400
-#: src/backend/datasources/filters/MatioFilter.cpp:432
+#: src/backend/datasources/filters/MatioFilter.cpp:402
+#: src/backend/datasources/filters/MatioFilter.cpp:434
 #, kde-format
 msgid "UInt64"
 msgstr "UInt64"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:402
-#: src/backend/datasources/filters/MatioFilter.cpp:452
+#: src/backend/datasources/filters/MatioFilter.cpp:404
+#: src/backend/datasources/filters/MatioFilter.cpp:454
 #: src/backend/nsl/nsl_interp.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:807
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2391
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2379
 #, kde-format
 msgid "Function"
 msgstr "Funkcia"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:404
+#: src/backend/datasources/filters/MatioFilter.cpp:406
 #, kde-format
 msgid "Opaque"
 msgstr "Nepriehľadný"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:407
-#: src/backend/datasources/filters/MatioFilter.cpp:455
+#: src/backend/datasources/filters/MatioFilter.cpp:409
+#: src/backend/datasources/filters/MatioFilter.cpp:457
 #, kde-format
 msgid "Undefined"
 msgstr "Nedefinované"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:412
+#: src/backend/datasources/filters/MatioFilter.cpp:414
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:64
 #, kde-format
 msgid "Unknown"
 msgstr "Neznáme"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:434
+#: src/backend/datasources/filters/MatioFilter.cpp:436
 #: src/frontend/ActionsManager.cpp:240 src/frontend/MainWin.cpp:1264
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
@@ -1924,194 +1924,194 @@ msgstr "Neznáme"
 msgid "Matrix"
 msgstr "Matica"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:436
+#: src/backend/datasources/filters/MatioFilter.cpp:438
 #, kde-format
 msgid "Compressed"
 msgstr "Komprimovaný"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:438
+#: src/backend/datasources/filters/MatioFilter.cpp:440
 #, kde-format
 msgid "UTF8"
 msgstr "UTF8"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:440
+#: src/backend/datasources/filters/MatioFilter.cpp:442
 #, kde-format
 msgid "UTF16"
 msgstr "UTF16"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:442
+#: src/backend/datasources/filters/MatioFilter.cpp:444
 #, kde-format
 msgid "UTF32"
 msgstr "UTF32"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:444
+#: src/backend/datasources/filters/MatioFilter.cpp:446
 #, kde-format
 msgid "String"
 msgstr "Reťazec"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:450
+#: src/backend/datasources/filters/MatioFilter.cpp:452
 #, kde-format
 msgid "Array"
 msgstr "Pole"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:602
-#: src/backend/datasources/filters/MatioFilter.cpp:634
-#: src/backend/datasources/filters/MatioFilter.cpp:663
+#: src/backend/datasources/filters/MatioFilter.cpp:604
+#: src/backend/datasources/filters/MatioFilter.cpp:636
+#: src/backend/datasources/filters/MatioFilter.cpp:665
 #, kde-format
 msgid "No valid variable selected."
 msgstr "Nie je vybraná žiadna platná premenná."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:658
+#: src/backend/datasources/filters/MatioFilter.cpp:660
 #, kde-format
 msgid "Selected variable not found."
 msgstr "Vybraná premenná sa nenašla."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:799
+#: src/backend/datasources/filters/MatioFilter.cpp:801
 #, kde-format
 msgid "Struct contains no fields"
 msgstr "Štruktúra neobsahuje žiadne polia"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:881
+#: src/backend/datasources/filters/MatioFilter.cpp:883
 #, kde-format
 msgid "Support for this variable type not implemented yet."
 msgstr "Podpora pre tento typ premennej ešte nie je implementovaná."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:1228
+#: src/backend/datasources/filters/MatioFilter.cpp:1230
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
 msgstr "Premenné s rankom väčším ako 2 ešte nie sú podporované."
 
-#: src/backend/datasources/filters/McapFilter.cpp:205
+#: src/backend/datasources/filters/McapFilter.cpp:207
 #, kde-format
 msgid "Valid MCAP file"
 msgstr "Platný súbor MCAP"
 
-#: src/backend/datasources/filters/McapFilter.cpp:210
+#: src/backend/datasources/filters/McapFilter.cpp:212
 #, kde-format
 msgid "Message count: "
 msgstr "Počet správ: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:212
+#: src/backend/datasources/filters/McapFilter.cpp:214
 #, kde-format
 msgid "Schema count: "
 msgstr "Počet schém: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:214
+#: src/backend/datasources/filters/McapFilter.cpp:216
 #, kde-format
 msgid "Channel count: "
 msgstr "Počet kanálov: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:216
+#: src/backend/datasources/filters/McapFilter.cpp:218
 #, kde-format
 msgid "Attachment count: "
 msgstr "Počet príloh: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:218
+#: src/backend/datasources/filters/McapFilter.cpp:220
 #, kde-format
 msgid "Metadata count: "
 msgstr "Počet metadát: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:220
+#: src/backend/datasources/filters/McapFilter.cpp:222
 #, kde-format
 msgid "Message Start Time: "
 msgstr "Čas začiatku správy: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:222
+#: src/backend/datasources/filters/McapFilter.cpp:224
 #, kde-format
 msgid "Message End Time: "
 msgstr "Čas konca správy: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:224
+#: src/backend/datasources/filters/McapFilter.cpp:226
 #, kde-format
 msgid "No Statistics found."
 msgstr "Nebola nájdená žiadna štatistika."
 
-#: src/backend/datasources/filters/McapFilter.cpp:478
-#: src/backend/datasources/filters/McapFilter.cpp:1010
+#: src/backend/datasources/filters/McapFilter.cpp:480
+#: src/backend/datasources/filters/McapFilter.cpp:1012
 #, kde-format
 msgid "Failed to read the file. Reason: %1"
 msgstr "Nepodarilo sa prečítať súbor. Dôvod: %1"
 
-#: src/backend/datasources/filters/McapFilter.cpp:486
+#: src/backend/datasources/filters/McapFilter.cpp:488
 #, kde-format
 msgid "No JSON encoded topics found."
 msgstr "Nenašli sa žiadne témy zakódované v JSON."
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:213
+#: src/backend/datasources/filters/NetCDFFilter.cpp:215
 #, kde-format
 msgid "Error opening file"
 msgstr "Chyba pri otváraní súboru"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:222
+#: src/backend/datasources/filters/NetCDFFilter.cpp:224
 #, kde-format
 msgid "Number of global attributes: %1"
 msgstr "Počet globálnych atribútov: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:224
+#: src/backend/datasources/filters/NetCDFFilter.cpp:226
 #, kde-format
 msgid "Number of dimensions: %1"
 msgstr "Počet dimenzií: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:226
-#: src/backend/datasources/filters/ReadStatFilter.cpp:131
+#: src/backend/datasources/filters/NetCDFFilter.cpp:228
+#: src/backend/datasources/filters/ReadStatFilter.cpp:133
 #, kde-format
 msgid "Number of variables: %1"
 msgstr "Počet premenných: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:232
-#: src/backend/datasources/filters/ReadStatFilter.cpp:137
+#: src/backend/datasources/filters/NetCDFFilter.cpp:234
+#: src/backend/datasources/filters/ReadStatFilter.cpp:139
 #, kde-format
 msgid "Format version: %1"
 msgstr "Format version: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:235
+#: src/backend/datasources/filters/NetCDFFilter.cpp:237
 #, kde-format
 msgid "Using library version %1"
 msgstr "Používa sa verzia knižnice %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:260
+#: src/backend/datasources/filters/NetCDFFilter.cpp:262
 #, kde-format
 msgid "ncdump not found."
 msgstr "Súbor nenájdený"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:454
+#: src/backend/datasources/filters/NetCDFFilter.cpp:456
 #, kde-format
 msgid "global attribute"
 msgstr "Smer"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:458
+#: src/backend/datasources/filters/NetCDFFilter.cpp:460
 #, kde-format
 msgid "%1 attribute"
 msgstr "%1 attribute"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:486
+#: src/backend/datasources/filters/NetCDFFilter.cpp:488
 #, kde-format
 msgid "length"
 msgstr "dĺžka"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:489
+#: src/backend/datasources/filters/NetCDFFilter.cpp:491
 #, kde-format
 msgid "unlimited"
 msgstr "bez obmedzenia"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:490
+#: src/backend/datasources/filters/NetCDFFilter.cpp:492
 #, kde-format
 msgid "dimension"
 msgstr "rozmer"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:526
+#: src/backend/datasources/filters/NetCDFFilter.cpp:528
 #, kde-format
 msgid "variable"
 msgstr "premenná"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:619
+#: src/backend/datasources/filters/NetCDFFilter.cpp:621
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #, kde-format
 msgid "Attributes"
 msgstr "Atribúty"
 
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
-#: src/backend/datasources/filters/NetCDFFilter.cpp:625
+#: src/backend/datasources/filters/NetCDFFilter.cpp:627
 #: src/frontend/ui/dockwidgets/matrixdock.ui:87
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:48
 #, kde-format
@@ -2119,30 +2119,30 @@ msgid "Dimensions"
 msgstr "Rozmery"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tVariables)
-#: src/backend/datasources/filters/NetCDFFilter.cpp:631
+#: src/backend/datasources/filters/NetCDFFilter.cpp:633
 #: src/frontend/ui/dockwidgets/scriptdock.ui:120
 #, kde-format
 msgid "Variables"
 msgstr "Premenné"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:689
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1114
+#: src/backend/datasources/filters/NetCDFFilter.cpp:691
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1116
 #, kde-format
 msgid "No variable selected."
 msgstr "Žiadna premenná nie je vybraná."
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:700
+#: src/backend/datasources/filters/NetCDFFilter.cpp:702
 #, kde-format
 msgid "Failed to open the file or it's empty."
 msgstr "Failed to open the file or it's empty."
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:938
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1078
+#: src/backend/datasources/filters/NetCDFFilter.cpp:940
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1080
 #, kde-format
 msgid "Data type not supported yet."
 msgstr "Dátový typ zatiaľ nepodporovaný."
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1083
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1085
 #, kde-format
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "%1-rozmerné dáta typu %2 ešte nie sú podporované"
@@ -2153,33 +2153,33 @@ msgstr "%1-rozmerné dáta typu %2 ešte nie sú podporované"
 msgid "Sheet count: %1"
 msgstr "Počet hárkov: %1"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:628
+#: src/backend/datasources/filters/OdsFilter.cpp:227
+#: src/backend/datasources/filters/XLSXFilter.cpp:630
 #, kde-format
 msgid "No sheet selected."
 msgstr "Nie je vybraný žiaden hárok."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:260
+#: src/backend/datasources/filters/OdsFilter.cpp:262
 #, kde-format
 msgid "Selected sheet not found."
 msgstr "Vybraný hárok sa nenašiel."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:267
+#: src/backend/datasources/filters/OdsFilter.cpp:269
 #, kde-format
 msgid "Invalid sheet."
 msgstr "Neplatný hárok."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:329
+#: src/backend/datasources/filters/OdsFilter.cpp:331
 #, kde-format
 msgid "Formulas not supported yet."
 msgstr "Vzorce zatiaľ nepodporované."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:486
+#: src/backend/datasources/filters/OdsFilter.cpp:488
 #, kde-format
 msgid "Sheet not found."
 msgstr "Hárok sa nenašiel."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:493
+#: src/backend/datasources/filters/OdsFilter.cpp:495
 #, kde-format
 msgid "Invalid sheet index."
 msgstr "Neplatný index hárka."
@@ -2235,54 +2235,54 @@ msgstr "Formát: Apache ORC"
 msgid "Number of stripes: %1"
 msgstr "Počet pruhov: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:212
+#: src/backend/datasources/filters/ParquetFilter.cpp:214
 #, kde-format
 msgid "Could not open file: %1"
 msgstr "Nepodarilo sa otvoriť súbor: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:224
+#: src/backend/datasources/filters/ParquetFilter.cpp:226
 #, kde-format
 msgid "Failed to open Parquet file: %1"
 msgstr "Zlyhalo otvorenie súboru Parquet: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:235
-#: src/backend/datasources/filters/ParquetFilter.cpp:244
+#: src/backend/datasources/filters/ParquetFilter.cpp:237
+#: src/backend/datasources/filters/ParquetFilter.cpp:246
 #, kde-format
 msgid "Failed to read Parquet table: %1"
 msgstr "Zlyhalo čítanie tabuľky Parquet: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:254
+#: src/backend/datasources/filters/ParquetFilter.cpp:256
 #, kde-format
 msgid "Failed to open Arrow IPC file: %1"
 msgstr "Zlyhalo otvorenie súboru Arrow IPC: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:265
+#: src/backend/datasources/filters/ParquetFilter.cpp:267
 #, kde-format
 msgid "Failed to read record batch %1: %2"
 msgstr "Zlyhalo čítanie dávky záznamov %1: %2"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:272
+#: src/backend/datasources/filters/ParquetFilter.cpp:274
 #, kde-format
 msgid "Failed to assemble table: %1"
 msgstr "Zlyhalo zostavenie tabuľky: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:282
+#: src/backend/datasources/filters/ParquetFilter.cpp:284
 #, kde-format
 msgid "Failed to open ORC file: %1"
 msgstr "Zlyhalo otvorenie súboru ORC: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:292
-#: src/backend/datasources/filters/ParquetFilter.cpp:300
+#: src/backend/datasources/filters/ParquetFilter.cpp:294
+#: src/backend/datasources/filters/ParquetFilter.cpp:302
 #, kde-format
 msgid "Failed to read ORC table: %1"
 msgstr "Zlyhalo čítanie tabuľky ORC: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:309
+#: src/backend/datasources/filters/ParquetFilter.cpp:311
 #, kde-format
 msgid "Unsupported file format."
 msgstr "Nepodporovaný formát súboru."
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:398
+#: src/backend/datasources/filters/ParquetFilter.cpp:400
 #, kde-format
 msgid "The file has no data to import."
 msgstr "Súbor neobsahuje žiadne dáta na import."
@@ -2325,68 +2325,68 @@ msgstr "Nepodarilo sa načítať súbor JSON. Prázdny dokument JSON."
 msgid "Failed to load JSON document. Error: %1."
 msgstr "Failed to load JSON document. Error: %1."
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:124
+#: src/backend/datasources/filters/ReadStatFilter.cpp:126
 #, kde-format
 msgid "Unknown file extension"
 msgstr "Neznáma prípona súboru"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:129
+#: src/backend/datasources/filters/ReadStatFilter.cpp:131
 #, kde-format
 msgid "Number of records: %1"
 msgstr "Number of records: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:133
+#: src/backend/datasources/filters/ReadStatFilter.cpp:135
 #, kde-format
 msgid "Creation time: %1"
 msgstr "Creation time: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:135
+#: src/backend/datasources/filters/ReadStatFilter.cpp:137
 #, kde-format
 msgid "Modification time: %1"
 msgstr "Čas úpravy: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:151
+#: src/backend/datasources/filters/ReadStatFilter.cpp:153
 #, kde-format
 msgid "Compression: %1"
 msgstr "Compression: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:165
+#: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
 msgid "Endianness: %1"
 msgstr "Endianita: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:167
+#: src/backend/datasources/filters/ReadStatFilter.cpp:169
 #, kde-format
 msgid "Table name: %1"
 msgstr "Table name: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:169
+#: src/backend/datasources/filters/ReadStatFilter.cpp:171
 #, kde-format
 msgid "File label: %1"
 msgstr "File label: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:171
+#: src/backend/datasources/filters/ReadStatFilter.cpp:173
 #, kde-format
 msgid "File encoding: %1"
 msgstr "File encoding: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:173
+#: src/backend/datasources/filters/ReadStatFilter.cpp:175
 #, kde-format
 msgid "64bit: %1"
 msgstr "64bit: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:482
+#: src/backend/datasources/filters/ReadStatFilter.cpp:484
 #, kde-format
 msgid "Error reading file."
 msgstr "Chyba pri čítaní súboru."
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:512
-#: src/backend/datasources/filters/ReadStatFilter.cpp:535
+#: src/backend/datasources/filters/ReadStatFilter.cpp:514
+#: src/backend/datasources/filters/ReadStatFilter.cpp:537
 #, kde-format
 msgid "Failed to parse the file."
 msgstr "Failed to parse the file."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:113
+#: src/backend/datasources/filters/ROOTFilter.cpp:115
 #: src/backend/datasources/MQTTClient.cpp:1188
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
@@ -2395,52 +2395,52 @@ msgstr "Failed to parse the file."
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "Atribút '%1' chýba alebo je prázdny, použije sa predvolená hodnota"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:149
+#: src/backend/datasources/filters/ROOTFilter.cpp:151
 #, kde-format
 msgid "No column available"
 msgstr "Nie je k dispozícii žiaden stĺpec"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:163
+#: src/backend/datasources/filters/ROOTFilter.cpp:165
 #, kde-format
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "Nepodporovaný typ súboru, ani histogram ani strom."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1505
+#: src/backend/datasources/filters/ROOTFilter.cpp:1507
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "Nie je ROOT súbor"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1510
+#: src/backend/datasources/filters/ROOTFilter.cpp:1512
 #, kde-format
 msgid "File format version: %1"
 msgstr "File format version: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1518
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "Veľkosť voľného dátového záznamu: %1 bajtov"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1520
+#: src/backend/datasources/filters/ROOTFilter.cpp:1522
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Počet voľných dátových záznamov: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1522
+#: src/backend/datasources/filters/ROOTFilter.cpp:1524
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "Veľkosť TNamed: %1 bajtov"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1524
+#: src/backend/datasources/filters/ROOTFilter.cpp:1526
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Veľkosť ukazovateľov súborov: %1 bajtov"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1529
+#: src/backend/datasources/filters/ROOTFilter.cpp:1531
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Úroveň a algoritmus kompresie: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1534
+#: src/backend/datasources/filters/ROOTFilter.cpp:1536
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Veľkosť záznamu TStreamerInfo: %1 bajtov"
@@ -2540,7 +2540,7 @@ msgstr "Time_10µs"
 msgid "Sheets: "
 msgstr "Hárky: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:632
+#: src/backend/datasources/filters/XLSXFilter.cpp:634
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Zadaná neplatná oblasť."
@@ -6510,7 +6510,7 @@ msgstr "Tlačiť poznámku"
 msgid "Text file (*.txt)"
 msgstr "Textový súbor (*.txt)"
 
-#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:98
+#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:111
 #: src/backend/statistics/HypothesisTest.cpp:190
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6519,12 +6519,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exportovať do súboru"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:112
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:125
 #, kde-format
 msgid "Export failed"
 msgstr "Export zlyhal"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:112
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:125
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "„%1” sa nepodarilo otvoriť na zápis."
@@ -6824,7 +6824,7 @@ msgid "Raw"
 msgstr "Raw"
 
 #: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2851
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2844
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1117
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:234
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
@@ -7090,7 +7090,7 @@ msgstr "Radiálna vzdialenosť"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2286
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2282
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:455
 #, kde-format
 msgid "Interpolation"
@@ -7507,33 +7507,33 @@ msgstr "váhy"
 msgid "Tricube"
 msgstr "Trikubické"
 
-#: src/backend/script/Script.cpp:96
+#: src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Python file (*.py)"
 
-#: src/backend/script/Script.cpp:154 src/backend/script/Script.cpp:338
+#: src/backend/script/Script.cpp:164 src/backend/script/Script.cpp:351
 #, kde-format
 msgid "no script element found"
 msgstr "nenašiel sa žiaden prvok skriptu"
 
-#: src/backend/script/Script.cpp:212
+#: src/backend/script/Script.cpp:225
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: spustiť skript %2"
 
-#: src/backend/script/Script.cpp:318 src/backend/script/Script.cpp:323
+#: src/backend/script/Script.cpp:331 src/backend/script/Script.cpp:336
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Skripty"
 
-#: src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:331
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/script/Script.cpp:323
+#: src/backend/script/Script.cpp:336
 #, kde-format
 msgid "A script is already running."
 msgstr "Skript už beží."
@@ -9542,7 +9542,7 @@ msgstr "Vymazať premennú"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:143
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5670
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5663
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:623
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -9553,7 +9553,7 @@ msgstr "Nadpis"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2407
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2395
 #: src/frontend/ui/dockwidgets/barplotdock.ui:229
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:241
 #: src/frontend/ui/dockwidgets/histogramdock.ui:387
@@ -9594,7 +9594,7 @@ msgid "Vertical Axis"
 msgstr "vertikálna os"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2454
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2442
 #: src/frontend/ActionsManager.cpp:559
 #: src/frontend/datasources/ImportFileWidget.cpp:114
 #: src/frontend/matrix/MatrixView.cpp:133
@@ -9607,34 +9607,34 @@ msgid "Image"
 msgstr "Obrázok"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2430
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2418
 #, kde-format
 msgid "Info Element"
 msgstr "Informačný prvok"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:458
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2474
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2462
 #, kde-format
 msgid "Custom Point"
 msgstr "Vlastný bod"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2499
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2487
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:180
 #, kde-format
 msgid "Reference Line"
 msgstr "Referenčný riadok"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:460
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2558
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2546
 #, kde-format
 msgid "Reference Range"
 msgstr "Referenčný rozsah"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2518
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2540
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2506
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2528
 #, kde-format
 msgid "Inset Plot Area"
 msgstr "Vložená oblasť zákresu"
@@ -9645,7 +9645,7 @@ msgid "Inset Plot Area with Data"
 msgstr "Vložená oblasť zákresu s dátami"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
-#: src/frontend/ActionsManager.cpp:907
+#: src/frontend/ActionsManager.cpp:903
 #: src/frontend/notebook/NotebookView.cpp:175
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:442
@@ -9670,8 +9670,8 @@ msgstr "Analytické grafy"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:518
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:553
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2359
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2361
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2348
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2350
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:614
 #, kde-format
 msgctxt "Curve fitting"
@@ -9858,7 +9858,7 @@ msgstr "Chybová funkcia"
 
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:752
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2300
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2295
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:294
 #, kde-format
 msgid "Smooth"
@@ -9886,7 +9886,7 @@ msgid "Fourier Transform"
 msgstr "Fourierova transformácia"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:775
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2379
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2367
 #, kde-format
 msgid "Fourier Filter"
 msgstr "Fourierov filter"
@@ -9914,7 +9914,7 @@ msgid "Correct Baseline"
 msgstr "Opraviť základnú čiaru"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:801
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2244
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2243
 #, kde-format
 msgid "Line Simplification"
 msgstr "Zjednodušenie čiary"
@@ -10030,7 +10030,7 @@ msgid "%1: load default theme"
 msgstr "%1: load default theme"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6021
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6014
 #: src/backend/worksheet/Worksheet.cpp:896
 #, kde-format
 msgid "%1: set theme"
@@ -10081,81 +10081,81 @@ msgstr "Distribution Fit to '%1'"
 msgid "Simplification of '%1'"
 msgstr "Zjednodušenie '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2251
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2250
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:844
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Derivative of '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2258
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2256
 #: src/frontend/notebook/NotebookView.cpp:156
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:255
 #, kde-format
 msgid "Differentiation"
 msgstr "Derivovanie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2265
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2263
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:847
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Integral of '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2272
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2269
 #: src/frontend/notebook/NotebookView.cpp:162
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:424
 #, kde-format
 msgid "Integration"
 msgstr "Integrácia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2279
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2276
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:850
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Interpolation of '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2293
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2289
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:853
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Smoothing of '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2307
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2302
 #, kde-format
 msgid "Baseline correction for '%1'"
 msgstr "Korekcia základnej línie pre '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2314
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2308
 #, kde-format
 msgid "Baseline Correction"
 msgstr "Korekcia základnej čiary"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2329
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2344
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2323
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2338
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:837
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "Fit to '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2372
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2361
 #, kde-format
 msgid "Fourier filtering of '%1'"
 msgstr "Fourier filtering of '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2386
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2374
 #, kde-format
 msgid "Function of '%1'"
 msgstr "Funkcia '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2437
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2425
 #: src/frontend/worksheet/WorksheetView.cpp:1355
 #, kde-format
 msgid "Text Label"
 msgstr "Textové pole"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2438
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2426
 #: src/frontend/CLIProcessor.cpp:275 src/frontend/CLIProcessor.cpp:276
 #: src/frontend/CLIProcessor.cpp:277
 #: src/frontend/worksheet/WorksheetView.cpp:1356
@@ -10163,80 +10163,80 @@ msgstr "Textové pole"
 msgid "text"
 msgstr "text"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2517
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2505
 #, kde-format
 msgid "%1: add inset plot"
 msgstr "%1: pridať vložený graf"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2531
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2519
 #, kde-format
 msgid "%1: add inset plot with data"
 msgstr "%1: pridať vložený graf s dátami"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2857
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2850
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:635
 #, kde-format
 msgid "Cumulative Percentage"
 msgstr "Kumulatívne percento"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3473
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3466
 #, kde-format
 msgid "%1: zoom in"
 msgstr "%1: priblížiť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3488
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3481
 #, kde-format
 msgid "%1: zoom out"
 msgstr "%1: oddialiť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3519
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, kde-format
 msgid "in"
 msgstr "dnu"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3519
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, kde-format
 msgid "out"
 msgstr "von"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3519
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, kde-format
 msgid "%1: zoom %2 %3"
 msgstr "%1: priblíženie %2 %3"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4370
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4363
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Nie je vnútri ohraničujúceho obdĺžnika"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4494
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4515
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4487
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4508
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "od x=%1 do x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4502
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4528
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4495
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4521
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "od y=%1 do y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4547
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4540
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4565
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4558
 #, kde-format
 msgid "%1: pan"
 msgstr "%1: posun"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4643
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4636
 #, kde-format
 msgid "%1: zoom selection"
 msgstr "%1: priblížiť výber"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4766
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4759
 #, kde-format
 msgid "%1: wheel zoom"
 msgstr "%1: priblíženie kolieskom"
@@ -12109,8 +12109,8 @@ msgstr "Exportovať..."
 msgid "Export selected element"
 msgstr "Exportovať vybraný prvok"
 
-#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1438
-#: src/frontend/ActionsManager.cpp:1446
+#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1434
+#: src/frontend/ActionsManager.cpp:1442
 #, kde-format
 msgid "Share"
 msgstr "Zdieľať"
@@ -12493,7 +12493,7 @@ msgid "Sort the selected columns separately in descending order"
 msgstr "Vybrané stĺpce"
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1604
+#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1600
 #: src/frontend/dockwidgets/LiveDataDock.cpp:239
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
@@ -12578,49 +12578,49 @@ msgstr "Posunúť hore"
 msgid "Shift Down"
 msgstr "Posunúť dolu"
 
-#: src/frontend/ActionsManager.cpp:946
+#: src/frontend/ActionsManager.cpp:942
 #, kde-format
 msgid "Window Visibility"
 msgstr "Viditeľnosť okna"
 
-#: src/frontend/ActionsManager.cpp:963
+#: src/frontend/ActionsManager.cpp:959
 #, kde-format
 msgid "Color Scheme"
 msgstr "Farebná schéma"
 
-#: src/frontend/ActionsManager.cpp:1404
+#: src/frontend/ActionsManager.cpp:1400
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Vytvorí nový zápisník %1"
 
-#: src/frontend/ActionsManager.cpp:1438
+#: src/frontend/ActionsManager.cpp:1434
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Nastal problém so zdieľaním projektu: %1"
 
-#: src/frontend/ActionsManager.cpp:1442
+#: src/frontend/ActionsManager.cpp:1438
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Projekt úspešne zdieľaný"
 
-#: src/frontend/ActionsManager.cpp:1445
+#: src/frontend/ActionsManager.cpp:1441
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Zdieľaný projekt nájdete na: <a href=\"%1\">%1</a>"
 
-#: src/frontend/ActionsManager.cpp:1600
+#: src/frontend/ActionsManager.cpp:1596
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, kde-format
 msgid "Continue"
 msgstr "Pokračovať"
 
-#: src/frontend/ActionsManager.cpp:1601
+#: src/frontend/ActionsManager.cpp:1597
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
 msgstr "Pokračovať v čítaní"
 
-#: src/frontend/ActionsManager.cpp:1605
+#: src/frontend/ActionsManager.cpp:1601
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
 #, kde-format
 msgid "Pause Reading"
@@ -17947,87 +17947,87 @@ msgid "Script Toolbar"
 msgstr "Panel nástrojov skriptu"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
-#: src/frontend/labplotui.rc:102
+#: src/frontend/labplotui.rc:100
 #, kde-format
 msgid "Plot Area Toolbar"
 msgstr "Panel nástrojov oblasti zákresu"
 
 #. i18n: ectx: Menu (file)
-#: src/frontend/labplotui.rc:130
+#: src/frontend/labplotui.rc:128
 #, kde-format
 msgid "&File"
 msgstr "&Súbor"
 
 #. i18n: ectx: Menu (new)
-#: src/frontend/labplotui.rc:132
+#: src/frontend/labplotui.rc:130
 #, kde-format
 msgid "&Add New"
 msgstr "&Pridať nový"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/frontend/labplotui.rc:143 src/frontend/labplotui.rc:178
+#: src/frontend/labplotui.rc:141 src/frontend/labplotui.rc:176
 #, kde-format
 msgid "&Notebook"
 msgstr "Poznámky"
 
 #. i18n: ectx: Menu (new_script)
 #. i18n: ectx: Menu (script)
-#: src/frontend/labplotui.rc:149 src/frontend/labplotui.rc:181
+#: src/frontend/labplotui.rc:147 src/frontend/labplotui.rc:179
 #, kde-format
 msgid "&Script"
 msgstr "Skript"
 
 #. i18n: ectx: Menu (import)
-#: src/frontend/labplotui.rc:154
+#: src/frontend/labplotui.rc:152
 #, kde-format
 msgid "Import"
 msgstr "Importovať"
 
 #. i18n: ectx: Menu (edit)
-#: src/frontend/labplotui.rc:170
+#: src/frontend/labplotui.rc:168
 #, kde-format
 msgid "&Edit"
 msgstr "&Upraviť"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/frontend/labplotui.rc:175
+#: src/frontend/labplotui.rc:173
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "Tab&uľka"
 
 #. i18n: ectx: Menu (matrix)
-#: src/frontend/labplotui.rc:176
+#: src/frontend/labplotui.rc:174
 #, kde-format
 msgid "&Matrix"
 msgstr "&Matica"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/frontend/labplotui.rc:177
+#: src/frontend/labplotui.rc:175
 #, kde-format
 msgid "&Worksheet"
 msgstr "Pracovný list"
 
 #. i18n: ectx: Menu (data_extractor)
-#: src/frontend/labplotui.rc:179
+#: src/frontend/labplotui.rc:177
 #, kde-format
 msgid "&Data Extractor"
 msgstr "&Extráktor dát"
 
 #. i18n: ectx: Menu (drawing)
-#: src/frontend/labplotui.rc:180
+#: src/frontend/labplotui.rc:178
 #, kde-format
 msgid "&Drawing"
 msgstr "Kresba"
 
 #. i18n: ectx: Menu (tools)
-#: src/frontend/labplotui.rc:182
+#: src/frontend/labplotui.rc:180
 #, kde-format
 msgid "&Tools"
 msgstr "&Nástroje"
 
 #. i18n: ectx: Menu (windows)
-#: src/frontend/labplotui.rc:186
+#: src/frontend/labplotui.rc:184
 #, kde-format
 msgid "&Windows"
 msgstr "Okno(&W)"
@@ -18950,6 +18950,11 @@ msgstr "Všetky nastavenia sa obnovia na predvolené hodnoty. Chcete pokračova�
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
 msgstr "Predvoľby    [zmené]"
+
+#: src/frontend/SettingsEditorPage.cpp:24
+#, kde-format
+msgid "Automatically show output when a script produces output"
+msgstr ""
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format

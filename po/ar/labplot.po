@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-06 00:40+0000\n"
+"POT-Creation-Date: 2026-09-13 00:40+0000\n"
 "PO-Revision-Date: 2026-09-09 19:13+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -76,7 +76,7 @@ msgstr "لأسفل"
 #: src/backend/core/AbstractAspect.cpp:557
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:216
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2477
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2465
 #, kde-format
 msgid "%1: add %2"
 msgstr "‏%1: أضف %2"
@@ -243,9 +243,9 @@ msgid "Y-Error -"
 msgstr "خطأ ص -"
 
 #: src/backend/core/AbstractColumn.cpp:224
-#: src/backend/datasources/filters/AsciiFilter.cpp:680
-#: src/backend/datasources/filters/MatioFilter.cpp:382
-#: src/backend/datasources/filters/MatioFilter.cpp:428
+#: src/backend/datasources/filters/AsciiFilter.cpp:684
+#: src/backend/datasources/filters/MatioFilter.cpp:384
+#: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
 msgid "Double"
 msgstr "عدد مضاعف"
@@ -263,7 +263,7 @@ msgstr "عدد صحيح كبير"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/backend/core/AbstractColumn.cpp:230
-#: src/backend/datasources/filters/AsciiFilter.cpp:681
+#: src/backend/datasources/filters/AsciiFilter.cpp:685
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/frontend/ActionsManager.cpp:555
 #: src/frontend/notebook/NotebookView.cpp:104
@@ -413,7 +413,7 @@ msgid "incompatible filter type"
 msgstr "نوع مرشح غير متوافق"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:158 src/backend/core/Project.cpp:714
+#: src/backend/core/Folder.cpp:161 src/backend/core/Project.cpp:714
 #: src/backend/datasources/MQTTClient.cpp:1364
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
@@ -694,7 +694,7 @@ msgstr "‏%1: اضبط الخانات العشرية على %2"
 msgid "set decimal digits to %1"
 msgstr "اضبط الخانات العشرية على %1"
 
-#: src/backend/core/Folder.cpp:395
+#: src/backend/core/Folder.cpp:394
 #, kde-format
 msgid "unknown element '%1' found"
 msgstr "عثر على عنصر غير معروف '%1'"
@@ -1099,14 +1099,14 @@ msgstr ""
 "لَم أتمكن من فتح الملف %1 للكتابة.\n"
 "%2"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:123
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:125
 #, kde-format
 msgid ""
 "This option determines how the imported strings have to be converted to "
 "numbers."
 msgstr "يحدد هذا الخيار كيفية تحويل السلاسل المستوردة إلى أرقام."
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:128
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:130
 #, kde-format
 msgid ""
 "When point character is used for the decimal separator, the valid number "
@@ -1119,7 +1119,7 @@ msgstr ""
 "كفاصل عشري، تمثيلات الأرقام الصالحة هي:<ul><li>1234,56</li><li>1.234,56</"
 "li><li>إلخ.</li></ul>"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:144
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:146
 #, kde-format
 msgid ""
 "This option determines how the imported strings have to be converted to "
@@ -1129,7 +1129,7 @@ msgstr ""
 "يحدد هذا الخيار كيفية تحويل السلاسل المستوردة إلى تاريخ تقويمي، أي أرقام "
 "السنة والشهر واليوم في التقويم الغريغوري والوقت."
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:150
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:152
 #, kde-format
 msgid ""
 "Expressions that may be used for the date part of format string:"
@@ -1200,122 +1200,122 @@ msgstr ""
 "td></tr><tr><td>'The day is' dddd</td><td>The day is Sunday</td></tr></"
 "table><br><br>في حالة أن التعبير المقدم فارغ، سيكتشف التنسيق آليا."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:224
+#: src/backend/datasources/filters/AsciiFilter.cpp:228
 #: src/backend/datasources/filters/ParquetFilter.cpp:76
 #: src/backend/datasources/filters/ParquetFilter.cpp:89
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "عدد الأعمدة: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:226
+#: src/backend/datasources/filters/AsciiFilter.cpp:230
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "عدد الأسطر: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:581
-#: src/backend/datasources/filters/AsciiFilter.cpp:1368
-#: src/backend/datasources/filters/JsonFilter.cpp:246
+#: src/backend/datasources/filters/AsciiFilter.cpp:585
+#: src/backend/datasources/filters/AsciiFilter.cpp:1372
+#: src/backend/datasources/filters/JsonFilter.cpp:248
 #, kde-format
 msgid "Column %1"
 msgstr "العمود %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:664
-#: src/backend/datasources/filters/AsciiFilter.cpp:1394
+#: src/backend/datasources/filters/AsciiFilter.cpp:668
+#: src/backend/datasources/filters/AsciiFilter.cpp:1398
 #, kde-format
 msgid "Timestamp"
 msgstr "الختم الزمني"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:669
-#: src/backend/datasources/filters/AsciiFilter.cpp:1399
-#: src/backend/datasources/filters/BinaryFilter.cpp:293
-#: src/backend/datasources/filters/BinaryFilter.cpp:436
+#: src/backend/datasources/filters/AsciiFilter.cpp:673
+#: src/backend/datasources/filters/AsciiFilter.cpp:1403
+#: src/backend/datasources/filters/BinaryFilter.cpp:295
+#: src/backend/datasources/filters/BinaryFilter.cpp:438
 #: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
 #, kde-format
 msgid "Index"
 msgstr "المؤشر"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:682
+#: src/backend/datasources/filters/AsciiFilter.cpp:686
 #, kde-format
 msgid "DateTime"
 msgstr "التاريخ والوقت"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:683
+#: src/backend/datasources/filters/AsciiFilter.cpp:687
 #, kde-format
 msgid "Timestamp (Unix)"
 msgstr "الختم الزمني (يونكس)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:684
+#: src/backend/datasources/filters/AsciiFilter.cpp:688
 #, kde-format
 msgid "Timestamp (Windows)"
 msgstr "الختم الزمني (ويندوز)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:685
+#: src/backend/datasources/filters/AsciiFilter.cpp:689
 #, kde-format
 msgid "Int"
 msgstr "عدد صحيح"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:686
-#: src/backend/datasources/filters/MatioFilter.cpp:398
-#: src/backend/datasources/filters/MatioFilter.cpp:430
+#: src/backend/datasources/filters/AsciiFilter.cpp:690
+#: src/backend/datasources/filters/MatioFilter.cpp:400
+#: src/backend/datasources/filters/MatioFilter.cpp:432
 #, kde-format
 msgid "Int64"
 msgstr "صحيح64"
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:273
-#: src/backend/datasources/filters/JsonFilter.cpp:343
-#: src/backend/datasources/filters/SpiceFilter.cpp:127
-#: src/backend/datasources/filters/SpiceFilter.cpp:183
+#: src/backend/datasources/filters/BinaryFilter.cpp:275
+#: src/backend/datasources/filters/JsonFilter.cpp:345
+#: src/backend/datasources/filters/SpiceFilter.cpp:129
+#: src/backend/datasources/filters/SpiceFilter.cpp:185
 #, kde-format
 msgid "Failed to open the device/file."
 msgstr "فشل فتح الجهاز/الملف."
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:283
+#: src/backend/datasources/filters/BinaryFilter.cpp:285
 #, kde-format
 msgid "Data selection empty."
 msgstr "تحديد البيانات فارغ."
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:404
-#: src/backend/datasources/filters/McapFilter.cpp:197
+#: src/backend/datasources/filters/BinaryFilter.cpp:406
+#: src/backend/datasources/filters/McapFilter.cpp:199
 #, kde-format
 msgid "Failed to open the device/file or it's empty."
 msgstr "فشل فتح الجهاز/الملف أو أنه فارغ."
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:444
-#: src/backend/datasources/filters/CANFilter.cpp:301
-#: src/backend/datasources/filters/FITSFilter.cpp:351
-#: src/backend/datasources/filters/FITSFilter.cpp:361
-#: src/backend/datasources/filters/FITSFilter.cpp:556
-#: src/backend/datasources/filters/HDF5Filter.cpp:1642
-#: src/backend/datasources/filters/HDF5Filter.cpp:1759
-#: src/backend/datasources/filters/HDF5Filter.cpp:1809
-#: src/backend/datasources/filters/HDF5Filter.cpp:1965
-#: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:520
-#: src/backend/datasources/filters/MatioFilter.cpp:890
-#: src/backend/datasources/filters/NetCDFFilter.cpp:758
-#: src/backend/datasources/filters/NetCDFFilter.cpp:869
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1001
-#: src/backend/datasources/filters/OdsFilter.cpp:400
-#: src/backend/datasources/filters/ParquetFilter.cpp:415
-#: src/backend/datasources/filters/ReadStatFilter.cpp:528
-#: src/backend/datasources/filters/ROOTFilter.cpp:235
-#: src/backend/datasources/filters/ROOTFilter.cpp:305
-#: src/backend/datasources/filters/SpiceFilter.cpp:206
+#: src/backend/datasources/filters/BinaryFilter.cpp:446
+#: src/backend/datasources/filters/CANFilter.cpp:303
+#: src/backend/datasources/filters/FITSFilter.cpp:358
+#: src/backend/datasources/filters/FITSFilter.cpp:368
+#: src/backend/datasources/filters/FITSFilter.cpp:563
+#: src/backend/datasources/filters/HDF5Filter.cpp:1644
+#: src/backend/datasources/filters/HDF5Filter.cpp:1761
+#: src/backend/datasources/filters/HDF5Filter.cpp:1811
+#: src/backend/datasources/filters/HDF5Filter.cpp:1967
+#: src/backend/datasources/filters/ImageFilter.cpp:167
+#: src/backend/datasources/filters/JsonFilter.cpp:522
+#: src/backend/datasources/filters/MatioFilter.cpp:892
+#: src/backend/datasources/filters/NetCDFFilter.cpp:760
+#: src/backend/datasources/filters/NetCDFFilter.cpp:871
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1003
+#: src/backend/datasources/filters/OdsFilter.cpp:402
+#: src/backend/datasources/filters/ParquetFilter.cpp:417
+#: src/backend/datasources/filters/ReadStatFilter.cpp:530
+#: src/backend/datasources/filters/ROOTFilter.cpp:237
+#: src/backend/datasources/filters/ROOTFilter.cpp:307
+#: src/backend/datasources/filters/SpiceFilter.cpp:208
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:341
-#: src/backend/datasources/filters/XLSXFilter.cpp:511
+#: src/backend/datasources/filters/XLSXFilter.cpp:513
 #, kde-format
 msgid "Not enough memory."
 msgstr "ذاكرة غير كافية."
 
-#: src/backend/datasources/filters/CANFilter.cpp:220
-#: src/backend/datasources/filters/SpiceFilter.cpp:131
-#: src/backend/datasources/filters/SpiceFilter.cpp:187
+#: src/backend/datasources/filters/CANFilter.cpp:222
+#: src/backend/datasources/filters/SpiceFilter.cpp:133
+#: src/backend/datasources/filters/SpiceFilter.cpp:189
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:268
 #, kde-format
 msgid "Invalid file."
 msgstr "ملف غير صالح."
 
-#: src/backend/datasources/filters/CANFilter.cpp:226
+#: src/backend/datasources/filters/CANFilter.cpp:228
 #, kde-format
 msgid "No messages read."
 msgstr "لَم تقرأ رسائل."
@@ -1330,376 +1330,376 @@ msgstr ""
 "عدد أعمدة البيانات غير صالح. عدد أعمدة الصف الأول: %1. عدد أعمدة الصف %2 >= "
 "%3. تحقق من استخدام الفاصل الصحيح واحتواء البيانات على نفس العدد من الأعمدة."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:239
+#: src/backend/datasources/filters/FITSFilter.cpp:246
 #, kde-format
 msgid "Images: %1"
 msgstr "الصور: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:244
+#: src/backend/datasources/filters/FITSFilter.cpp:251
 #, kde-format
 msgid "Tables: %1"
 msgstr "الجداول: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:281
-#: src/backend/datasources/filters/MatioFilter.cpp:647
+#: src/backend/datasources/filters/FITSFilter.cpp:288
+#: src/backend/datasources/filters/MatioFilter.cpp:649
 #, kde-format
 msgid "Failed to open the file."
 msgstr "فشل فتح الملف."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:288
-#: src/backend/datasources/filters/FITSFilter.cpp:368
+#: src/backend/datasources/filters/FITSFilter.cpp:295
+#: src/backend/datasources/filters/FITSFilter.cpp:375
 #, kde-format
 msgid "Failed to read the file."
 msgstr "فشل قراءة الملف."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:310
+#: src/backend/datasources/filters/FITSFilter.cpp:317
 #, kde-format
 msgid "Zero dimensions."
 msgstr "أبعاد صفرية."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1060
-#: src/backend/datasources/filters/FITSFilter.cpp:1580
+#: src/backend/datasources/filters/FITSFilter.cpp:1067
+#: src/backend/datasources/filters/FITSFilter.cpp:1587
 #: src/frontend/datasources/FITSOptionsWidget.cpp:40
 #: src/frontend/datasources/FITSOptionsWidget.cpp:73
 #, kde-format
 msgid "Primary header"
 msgstr "ترويسة مبدئية"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1062
+#: src/backend/datasources/filters/FITSFilter.cpp:1069
 #, kde-format
 msgid "IMAGE #%1"
 msgstr "صورة #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1065
+#: src/backend/datasources/filters/FITSFilter.cpp:1072
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr "ASCII_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1068
+#: src/backend/datasources/filters/FITSFilter.cpp:1075
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr "BINARY_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1573
+#: src/backend/datasources/filters/FITSFilter.cpp:1580
 #, kde-format
 msgid "Images"
 msgstr "الصور"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1599
+#: src/backend/datasources/filters/FITSFilter.cpp:1606
 #, kde-format
 msgid "Tables"
 msgstr "الجداول"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:170
+#: src/backend/datasources/filters/HDF5Filter.cpp:172
 #, kde-format
 msgid "Not a HDF5 file"
 msgstr "ليس ملف HDF5"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:174
+#: src/backend/datasources/filters/HDF5Filter.cpp:176
 #, kde-format
 msgid "Failed checking file"
 msgstr "فشل التحقق من الملف"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:182
+#: src/backend/datasources/filters/HDF5Filter.cpp:184
 #, kde-format
 msgid "Failed opening HDF5 file"
 msgstr "فشل فتح ملف HDF5"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:188
+#: src/backend/datasources/filters/HDF5Filter.cpp:190
 #, kde-format
 msgid "File size: %1 bytes"
 msgstr "حجم الملفّ: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:193
+#: src/backend/datasources/filters/HDF5Filter.cpp:195
 #, kde-format
 msgid "Free space: %1 bytes"
 msgstr "المساحة المتبقية: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:199
+#: src/backend/datasources/filters/HDF5Filter.cpp:201
 #: src/frontend/datasources/ImportFileWidget.cpp:1836
 #, kde-format
 msgid "Number of files: %1"
 msgstr "عدد الملفات: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:202
+#: src/backend/datasources/filters/HDF5Filter.cpp:204
 #, kde-format
 msgid "Number of data sets: %1"
 msgstr "عدد مجموعات البيانات: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:205
+#: src/backend/datasources/filters/HDF5Filter.cpp:207
 #, kde-format
 msgid "Number of groups: %1"
 msgstr "عدد المجموعات: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:208
+#: src/backend/datasources/filters/HDF5Filter.cpp:210
 #, kde-format
 msgid "Number of named datatypes: %1"
 msgstr "عدد أنواع البيانات المسماة: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:211
+#: src/backend/datasources/filters/HDF5Filter.cpp:213
 #, kde-format
 msgid "Number of attributes: %1"
 msgstr "عدد السمات: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:214
+#: src/backend/datasources/filters/HDF5Filter.cpp:216
 #, kde-format
 msgid "Number of all objects: %1"
 msgstr "عدد كل الكائنات: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:222
+#: src/backend/datasources/filters/HDF5Filter.cpp:224
 #, kde-format
 msgid "Version of superblock: %1"
 msgstr "إصدار الكتلة الفائقة: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:224
+#: src/backend/datasources/filters/HDF5Filter.cpp:226
 #, kde-format
 msgid "Size of superblock: %1 bytes"
 msgstr "حجم الكتلة الفائقة: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:226
-#: src/backend/datasources/filters/HDF5Filter.cpp:247
+#: src/backend/datasources/filters/HDF5Filter.cpp:228
+#: src/backend/datasources/filters/HDF5Filter.cpp:249
 #, kde-format
 msgid "Size of superblock extension: %1 bytes"
 msgstr "حجم تمديد الكتلة الفائقة: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:228
+#: src/backend/datasources/filters/HDF5Filter.cpp:230
 #, kde-format
 msgid "Version of free-space manager: %1"
 msgstr "إصدار مدير المساحة الحرة: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:230
+#: src/backend/datasources/filters/HDF5Filter.cpp:232
 #, kde-format
 msgid "Size of free-space manager metadata: %1 bytes"
 msgstr "حجم البيانات الوصفية لمدير المساحة الحرة: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:232
+#: src/backend/datasources/filters/HDF5Filter.cpp:234
 #, kde-format
 msgid "Total size of free space: %1 bytes"
 msgstr "إجمالي حجم المساحة الحرة: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:234
+#: src/backend/datasources/filters/HDF5Filter.cpp:236
 #, kde-format
 msgid "Version of shared object header: %1"
 msgstr "إصدار ترويسة الكائن المشترك: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:236
-#: src/backend/datasources/filters/HDF5Filter.cpp:249
+#: src/backend/datasources/filters/HDF5Filter.cpp:238
+#: src/backend/datasources/filters/HDF5Filter.cpp:251
 #, kde-format
 msgid "Size of shared object header: %1 bytes"
 msgstr "حجم ترويسة الكائن المشترك: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:238
-#: src/backend/datasources/filters/HDF5Filter.cpp:251
+#: src/backend/datasources/filters/HDF5Filter.cpp:240
+#: src/backend/datasources/filters/HDF5Filter.cpp:253
 #, kde-format
 msgid "Size of all shared object header indexes: %1 bytes"
 msgstr "حجم جميع فهارس ترويسة الكائن المشترك: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:240
-#: src/backend/datasources/filters/HDF5Filter.cpp:253
+#: src/backend/datasources/filters/HDF5Filter.cpp:242
+#: src/backend/datasources/filters/HDF5Filter.cpp:255
 #, kde-format
 msgid "Size of the heap: %1 bytes"
 msgstr "حجم الكومة: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:265
+#: src/backend/datasources/filters/HDF5Filter.cpp:267
 #, kde-format
 msgid "Cache config version: %1"
 msgstr "إصدار تشكيلة خبيئة: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
+#: src/backend/datasources/filters/HDF5Filter.cpp:269
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
-#: src/backend/datasources/filters/MatioFilter.cpp:574
-#: src/backend/datasources/filters/MatioFilter.cpp:578
+#: src/backend/datasources/filters/HDF5Filter.cpp:311
+#: src/backend/datasources/filters/MatioFilter.cpp:576
+#: src/backend/datasources/filters/MatioFilter.cpp:580
 #, kde-format
 msgid "Yes"
 msgstr "نعم"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
+#: src/backend/datasources/filters/HDF5Filter.cpp:269
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
-#: src/backend/datasources/filters/MatioFilter.cpp:576
-#: src/backend/datasources/filters/MatioFilter.cpp:580
+#: src/backend/datasources/filters/HDF5Filter.cpp:311
+#: src/backend/datasources/filters/MatioFilter.cpp:578
+#: src/backend/datasources/filters/MatioFilter.cpp:582
 #, kde-format
 msgid "No"
 msgstr "لا"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
+#: src/backend/datasources/filters/HDF5Filter.cpp:269
 #, kde-format
 msgid "Adaptive cache resize report function enabled: %1"
 msgstr "وظيفة تقرير تغيير حجم الخبيئة التكيفية ممكّنة: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:269
+#: src/backend/datasources/filters/HDF5Filter.cpp:271
 #, kde-format
 msgid "Cache initial maximum size: %1 bytes"
 msgstr "الحد الأقصى الأولي لحجم الخبيئة: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:271
+#: src/backend/datasources/filters/HDF5Filter.cpp:273
 #, kde-format
 msgid "Adaptive cache maximum size: %1 bytes"
 msgstr "الحد الأقصى لحجم الخبيئة التكيفية: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:273
+#: src/backend/datasources/filters/HDF5Filter.cpp:275
 #, kde-format
 msgid "Adaptive cache minimum size: %1 bytes"
 msgstr "الحد الأدنى لحجم الخبيئة التكيفية: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:279
+#: src/backend/datasources/filters/HDF5Filter.cpp:281
 #, kde-format
 msgid "Metadata cache hit rate: %1"
 msgstr "معدل إصابة خبيئة البيانات الوصفية: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:286
+#: src/backend/datasources/filters/HDF5Filter.cpp:288
 #, kde-format
 msgid "Current cache maximum size: %1 bytes"
 msgstr "الحد الأقصى الحالي لحجم الخبيئة: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:288
+#: src/backend/datasources/filters/HDF5Filter.cpp:290
 #, kde-format
 msgid "Current cache minimum clean size: %1 bytes"
 msgstr "الحد الأدنى الحالي لحجم تنظيف الخبيئة: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:290
+#: src/backend/datasources/filters/HDF5Filter.cpp:292
 #, kde-format
 msgid "Current cache size: %1 bytes"
 msgstr "الحجم الحالي للخبيئة: %1 بايت"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:292
+#: src/backend/datasources/filters/HDF5Filter.cpp:294
 #, kde-format
 msgid "Current number of entries in the cache: %1"
 msgstr "العدد الحالي للمدخلات في الخبيئة: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
+#: src/backend/datasources/filters/HDF5Filter.cpp:309
 #, kde-format
 msgid "Logging enabled: %1"
 msgstr "التسجيل ممكن: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:309
+#: src/backend/datasources/filters/HDF5Filter.cpp:311
 #, kde-format
 msgid "Events are currently logged: %1"
 msgstr "الأحداث تسجل حاليا: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:317
+#: src/backend/datasources/filters/HDF5Filter.cpp:319
 #, kde-format
 msgid "Metadata/raw data page buffer accesses: %1 %2"
 msgstr "وصول مخزن صفحة البيانات الوصفية/البيانات الأولية المؤقت: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:319
+#: src/backend/datasources/filters/HDF5Filter.cpp:321
 #, kde-format
 msgid "Metadata/raw data page buffer hits: %1 %2"
 msgstr "إصابات مخزن صفحة البيانات الوصفية/البيانات الأولية المؤقت: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:321
+#: src/backend/datasources/filters/HDF5Filter.cpp:323
 #, kde-format
 msgid "Metadata/raw data page buffer misses: %1 %2"
 msgstr "إخفاقات مخزن صفحة البيانات الوصفية/البيانات الأولية المؤقت: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:323
+#: src/backend/datasources/filters/HDF5Filter.cpp:325
 #, kde-format
 msgid "Metadata/raw data page buffer evictions: %1 %2"
 msgstr "إزاحات مخزن صفحة البيانات الوصفية/البيانات الأولية المؤقت: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:325
+#: src/backend/datasources/filters/HDF5Filter.cpp:327
 #, kde-format
 msgid "Metadata/raw data accesses bypassing page buffer: %1 %2"
 msgstr ""
 "وصول البيانات الوصفية/البيانات الأولية يتجاوز مخزن الصفحة المؤقت: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:328
+#: src/backend/datasources/filters/HDF5Filter.cpp:330
 #, kde-format
 msgid "Page buffer disabled"
 msgstr "مخزن الصفحة المؤقت معطل"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:350
+#: src/backend/datasources/filters/HDF5Filter.cpp:352
 #, kde-format
 msgid "h5dump not found."
 msgstr "h5dump لَم يعثر عليه."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:358
-#: src/backend/datasources/filters/NetCDFFilter.cpp:268
+#: src/backend/datasources/filters/HDF5Filter.cpp:360
+#: src/backend/datasources/filters/NetCDFFilter.cpp:270
 #: src/frontend/datasources/ImportFileWidget.cpp:1715
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "فشلت القراءة من الملف %1."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1311
+#: src/backend/datasources/filters/HDF5Filter.cpp:1313
 #, kde-format
 msgid "data type"
 msgstr "نوع البيانات"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1362
+#: src/backend/datasources/filters/HDF5Filter.cpp:1364
 #, kde-format
 msgid "rank %1 not supported yet"
 msgstr "الرتبة %1 لَم تدعم بعد"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1369
+#: src/backend/datasources/filters/HDF5Filter.cpp:1371
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:75
 #, kde-format
 msgid "data set"
 msgstr "مجموعة بيانات"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1387
+#: src/backend/datasources/filters/HDF5Filter.cpp:1389
 #, kde-format
 msgid "symbolic link"
 msgstr "وصلة رمزية"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1387
+#: src/backend/datasources/filters/HDF5Filter.cpp:1389
 #, kde-format
 msgid "link to %1"
 msgstr "اربط إلى %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1400
+#: src/backend/datasources/filters/HDF5Filter.cpp:1402
 #, kde-format
 msgid "hard link"
 msgstr "وصلة صلبة"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1464
+#: src/backend/datasources/filters/HDF5Filter.cpp:1466
 #, kde-format
 msgid "unknown"
 msgstr "مجهول"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1524
-#: src/backend/datasources/filters/HDF5Filter.cpp:2151
+#: src/backend/datasources/filters/HDF5Filter.cpp:1526
+#: src/backend/datasources/filters/HDF5Filter.cpp:2153
 #, kde-format
 msgid "No data set selected."
 msgstr "لَم تختر مجموعة بيانات."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1593
+#: src/backend/datasources/filters/HDF5Filter.cpp:1595
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
 msgstr "الرتبة 0 لَم تنفذ بعد للنوع %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1732
-#: src/backend/datasources/filters/HDF5Filter.cpp:1881
+#: src/backend/datasources/filters/HDF5Filter.cpp:1734
+#: src/backend/datasources/filters/HDF5Filter.cpp:1883
 #, kde-format
 msgid "unsupported integer type for rank 1"
 msgstr "نوع عدد صحيح غير مدعوم للرتبة 1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1745
+#: src/backend/datasources/filters/HDF5Filter.cpp:1747
 #, kde-format
 msgid "unsupported float type for rank 1"
 msgstr "نوع فاصلة عائمة غير مدعوم للرتبة 1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1896
+#: src/backend/datasources/filters/HDF5Filter.cpp:1898
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
 msgstr "الرتبة 1 لَم تنفذ بعد للنوع %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2029
+#: src/backend/datasources/filters/HDF5Filter.cpp:2031
 #, kde-format
 msgid "unsupported integer type for rank 2"
 msgstr "نوع عدد صحيح غير مدعوم للرتبة 2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2042
+#: src/backend/datasources/filters/HDF5Filter.cpp:2044
 #, kde-format
 msgid "unsupported float type for rank 2"
 msgstr "نوع فاصلة عائمة غير مدعوم للرتبة 2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2105
+#: src/backend/datasources/filters/HDF5Filter.cpp:2107
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
 msgstr "الرتبة 2 لَم تنفذ بعد للنوع %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2114
+#: src/backend/datasources/filters/HDF5Filter.cpp:2116
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
 msgstr "الرتبة %1 لَم تنفذ بعد للنوع %2"
@@ -1719,12 +1719,12 @@ msgstr "س ص ع (تدرج رمادي)"
 msgid "XYRGB"
 msgstr "س ص أحمر أخضر أزرق"
 
-#: src/backend/datasources/filters/ImageFilter.cpp:118
+#: src/backend/datasources/filters/ImageFilter.cpp:120
 #, kde-format
 msgid "Empty file or invalid or non-supported format."
 msgstr "ملف فارغ أو تنسيق غير صالح أو غير مدعوم."
 
-#: src/backend/datasources/filters/ImageFilter.cpp:219
+#: src/backend/datasources/filters/ImageFilter.cpp:221
 #, kde-format
 msgid "numerical data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -1735,104 +1735,104 @@ msgstr[3] "بيانات رقمية، %1 عناصر"
 msgstr[4] "بيانات رقمية، %1 عنصرا"
 msgstr[5] "بيانات رقمية، %1 عنصرا"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:181
+#: src/backend/datasources/filters/JsonFilter.cpp:183
 #, kde-format
 msgid "Open device failed"
 msgstr "فشل فتح الجهاز"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:184
+#: src/backend/datasources/filters/JsonFilter.cpp:186
 #, kde-format
 msgid "Empty file"
 msgstr "ملفّ فارغ"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:190
+#: src/backend/datasources/filters/JsonFilter.cpp:192
 #, kde-format
 msgid "Parse error: %1 at offset %2"
 msgstr "خطأ تحليل: %1 عند الإزاحة %2"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:193
+#: src/backend/datasources/filters/JsonFilter.cpp:195
 #, kde-format
 msgid "Valid JSON document"
 msgstr "مستند JSON صالح"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:224
-#: src/backend/datasources/filters/McapFilter.cpp:296
+#: src/backend/datasources/filters/JsonFilter.cpp:226
+#: src/backend/datasources/filters/McapFilter.cpp:298
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
 msgstr "الدليل"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:232
+#: src/backend/datasources/filters/JsonFilter.cpp:234
 #, kde-format
 msgid "timestamp"
 msgstr "الختم الزمني"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:234
+#: src/backend/datasources/filters/JsonFilter.cpp:236
 #, kde-format
 msgid "month"
 msgstr "شهر"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:236
+#: src/backend/datasources/filters/JsonFilter.cpp:238
 #, kde-format
 msgid "day"
 msgstr "يوم"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:238
+#: src/backend/datasources/filters/JsonFilter.cpp:240
 #: src/frontend/CLIProcessor.cpp:271
 #, kde-format
 msgid "name"
 msgstr "اسم"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:348
+#: src/backend/datasources/filters/JsonFilter.cpp:350
 #, kde-format
 msgid "Device/file is empty."
 msgstr "الجهاز/الملف فارغ."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:356
+#: src/backend/datasources/filters/JsonFilter.cpp:358
 #, kde-format
 msgid "JSON format error or document empty."
 msgstr "خطأ تنسيق JSON أو المستند فارغ."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:503
+#: src/backend/datasources/filters/JsonFilter.cpp:505
 #, kde-format
 msgid "Empty file or invalid JSON document."
 msgstr "ملف فارغ أو مستند JSON غير صالح."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:308
-#: src/backend/datasources/filters/NetCDFFilter.cpp:237
-#: src/backend/datasources/filters/ReadStatFilter.cpp:176
+#: src/backend/datasources/filters/MatioFilter.cpp:310
+#: src/backend/datasources/filters/NetCDFFilter.cpp:239
+#: src/backend/datasources/filters/ReadStatFilter.cpp:178
 #, kde-format
 msgid "Error getting file info"
 msgstr "خطأ في الحصول على معلومات الملف"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:317
+#: src/backend/datasources/filters/MatioFilter.cpp:319
 #, kde-format
 msgid "Matlab version 7.3"
 msgstr "إصدار ماتلاب 7.3"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:320
+#: src/backend/datasources/filters/MatioFilter.cpp:322
 #, kde-format
 msgid "Matlab version 5"
 msgstr "إصدار ماتلاب 5"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:323
+#: src/backend/datasources/filters/MatioFilter.cpp:325
 #, kde-format
 msgid "Matlab version 4"
 msgstr "إصدار ماتلاب 4"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:326
+#: src/backend/datasources/filters/MatioFilter.cpp:328
 #, kde-format
 msgid "Matlab version undefined"
 msgstr "إصدار ماتلاب غير محدد"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:332
+#: src/backend/datasources/filters/MatioFilter.cpp:334
 #, kde-format
 msgid "Number of variables: "
 msgstr "عدد المتغيرات: "
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
-#: src/backend/datasources/filters/MatioFilter.cpp:335
+#: src/backend/datasources/filters/MatioFilter.cpp:337
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
 #: src/frontend/dockwidgets/ColumnDock.cpp:818
 #: src/frontend/dockwidgets/ColumnDock.cpp:843
@@ -1843,114 +1843,114 @@ msgstr "عدد المتغيرات: "
 msgid "Variables:"
 msgstr "المتغيّرات:"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:370
-#: src/backend/datasources/filters/MatioFilter.cpp:740
+#: src/backend/datasources/filters/MatioFilter.cpp:372
+#: src/backend/datasources/filters/MatioFilter.cpp:742
 #, kde-format
 msgid "Empty"
 msgstr "فارغ"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:372
-#: src/backend/datasources/filters/MatioFilter.cpp:446
+#: src/backend/datasources/filters/MatioFilter.cpp:374
+#: src/backend/datasources/filters/MatioFilter.cpp:448
 #, kde-format
 msgid "Cell"
 msgstr "خلية"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:374
-#: src/backend/datasources/filters/MatioFilter.cpp:448
+#: src/backend/datasources/filters/MatioFilter.cpp:376
+#: src/backend/datasources/filters/MatioFilter.cpp:450
 #, kde-format
 msgid "Struct"
 msgstr "بنية"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:376
+#: src/backend/datasources/filters/MatioFilter.cpp:378
 #, kde-format
 msgid "Object"
 msgstr "كائن"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:378
+#: src/backend/datasources/filters/MatioFilter.cpp:380
 #, kde-format
 msgid "Char"
 msgstr "محرف"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:380
+#: src/backend/datasources/filters/MatioFilter.cpp:382
 #, kde-format
 msgid "Sparse"
 msgstr "متناثر"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:384
-#: src/backend/datasources/filters/MatioFilter.cpp:426
+#: src/backend/datasources/filters/MatioFilter.cpp:386
+#: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
 msgid "Single"
 msgstr "مفرد"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:386
-#: src/backend/datasources/filters/MatioFilter.cpp:414
+#: src/backend/datasources/filters/MatioFilter.cpp:388
+#: src/backend/datasources/filters/MatioFilter.cpp:416
 #, kde-format
 msgid "Int8"
 msgstr "صحيح8"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:388
-#: src/backend/datasources/filters/MatioFilter.cpp:416
+#: src/backend/datasources/filters/MatioFilter.cpp:390
+#: src/backend/datasources/filters/MatioFilter.cpp:418
 #, kde-format
 msgid "UInt8"
 msgstr "UInt8"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:390
-#: src/backend/datasources/filters/MatioFilter.cpp:418
+#: src/backend/datasources/filters/MatioFilter.cpp:392
+#: src/backend/datasources/filters/MatioFilter.cpp:420
 #, kde-format
 msgid "Int16"
 msgstr "صحيح16"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:392
-#: src/backend/datasources/filters/MatioFilter.cpp:420
+#: src/backend/datasources/filters/MatioFilter.cpp:394
+#: src/backend/datasources/filters/MatioFilter.cpp:422
 #, kde-format
 msgid "UInt16"
 msgstr "UInt16"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:394
-#: src/backend/datasources/filters/MatioFilter.cpp:422
+#: src/backend/datasources/filters/MatioFilter.cpp:396
+#: src/backend/datasources/filters/MatioFilter.cpp:424
 #, kde-format
 msgid "Int32"
 msgstr "صحيح32"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:396
-#: src/backend/datasources/filters/MatioFilter.cpp:424
+#: src/backend/datasources/filters/MatioFilter.cpp:398
+#: src/backend/datasources/filters/MatioFilter.cpp:426
 #, kde-format
 msgid "UInt32"
 msgstr "UInt32"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:400
-#: src/backend/datasources/filters/MatioFilter.cpp:432
+#: src/backend/datasources/filters/MatioFilter.cpp:402
+#: src/backend/datasources/filters/MatioFilter.cpp:434
 #, kde-format
 msgid "UInt64"
 msgstr "UInt64"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:402
-#: src/backend/datasources/filters/MatioFilter.cpp:452
+#: src/backend/datasources/filters/MatioFilter.cpp:404
+#: src/backend/datasources/filters/MatioFilter.cpp:454
 #: src/backend/nsl/nsl_interp.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:807
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2391
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2379
 #, kde-format
 msgid "Function"
 msgstr "الدالة"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:404
+#: src/backend/datasources/filters/MatioFilter.cpp:406
 #, kde-format
 msgid "Opaque"
 msgstr "معتم"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:407
-#: src/backend/datasources/filters/MatioFilter.cpp:455
+#: src/backend/datasources/filters/MatioFilter.cpp:409
+#: src/backend/datasources/filters/MatioFilter.cpp:457
 #, kde-format
 msgid "Undefined"
 msgstr "غير معرّف"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:412
+#: src/backend/datasources/filters/MatioFilter.cpp:414
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:64
 #, kde-format
 msgid "Unknown"
 msgstr "مجهول"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:434
+#: src/backend/datasources/filters/MatioFilter.cpp:436
 #: src/frontend/ActionsManager.cpp:240 src/frontend/MainWin.cpp:1264
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
@@ -1958,194 +1958,194 @@ msgstr "مجهول"
 msgid "Matrix"
 msgstr "المصفوفة"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:436
+#: src/backend/datasources/filters/MatioFilter.cpp:438
 #, kde-format
 msgid "Compressed"
 msgstr "المضغوط"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:438
+#: src/backend/datasources/filters/MatioFilter.cpp:440
 #, kde-format
 msgid "UTF8"
 msgstr "UTF-8"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:440
+#: src/backend/datasources/filters/MatioFilter.cpp:442
 #, kde-format
 msgid "UTF16"
 msgstr "UTF16"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:442
+#: src/backend/datasources/filters/MatioFilter.cpp:444
 #, kde-format
 msgid "UTF32"
 msgstr "UTF32"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:444
+#: src/backend/datasources/filters/MatioFilter.cpp:446
 #, kde-format
 msgid "String"
 msgstr "نصّ"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:450
+#: src/backend/datasources/filters/MatioFilter.cpp:452
 #, kde-format
 msgid "Array"
 msgstr "مصفوفة"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:602
-#: src/backend/datasources/filters/MatioFilter.cpp:634
-#: src/backend/datasources/filters/MatioFilter.cpp:663
+#: src/backend/datasources/filters/MatioFilter.cpp:604
+#: src/backend/datasources/filters/MatioFilter.cpp:636
+#: src/backend/datasources/filters/MatioFilter.cpp:665
 #, kde-format
 msgid "No valid variable selected."
 msgstr "لَم يختر متغير صالح."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:658
+#: src/backend/datasources/filters/MatioFilter.cpp:660
 #, kde-format
 msgid "Selected variable not found."
 msgstr "لَم يعثر على المتغير المختار."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:799
+#: src/backend/datasources/filters/MatioFilter.cpp:801
 #, kde-format
 msgid "Struct contains no fields"
 msgstr "التركيب لا يحتوي على حقول"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:881
+#: src/backend/datasources/filters/MatioFilter.cpp:883
 #, kde-format
 msgid "Support for this variable type not implemented yet."
 msgstr "دعم نوع المتغير هذا لَم ينفذ بعد."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:1228
+#: src/backend/datasources/filters/MatioFilter.cpp:1230
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
 msgstr "المتغيرات ذات الرتبة الأكبر من 2 لَم تدعم بعد."
 
-#: src/backend/datasources/filters/McapFilter.cpp:205
+#: src/backend/datasources/filters/McapFilter.cpp:207
 #, kde-format
 msgid "Valid MCAP file"
 msgstr "ملف MCAP صالح"
 
-#: src/backend/datasources/filters/McapFilter.cpp:210
+#: src/backend/datasources/filters/McapFilter.cpp:212
 #, kde-format
 msgid "Message count: "
 msgstr "عدد الرسائل: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:212
+#: src/backend/datasources/filters/McapFilter.cpp:214
 #, kde-format
 msgid "Schema count: "
 msgstr "عدد المخططات: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:214
+#: src/backend/datasources/filters/McapFilter.cpp:216
 #, kde-format
 msgid "Channel count: "
 msgstr "عدد القنوات: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:216
+#: src/backend/datasources/filters/McapFilter.cpp:218
 #, kde-format
 msgid "Attachment count: "
 msgstr "عدد المرفقات: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:218
+#: src/backend/datasources/filters/McapFilter.cpp:220
 #, kde-format
 msgid "Metadata count: "
 msgstr "عدد البيانات الوصفية: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:220
+#: src/backend/datasources/filters/McapFilter.cpp:222
 #, kde-format
 msgid "Message Start Time: "
 msgstr "وقت بدء الرسالة: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:222
+#: src/backend/datasources/filters/McapFilter.cpp:224
 #, kde-format
 msgid "Message End Time: "
 msgstr "وقت نهاية الرسالة: "
 
-#: src/backend/datasources/filters/McapFilter.cpp:224
+#: src/backend/datasources/filters/McapFilter.cpp:226
 #, kde-format
 msgid "No Statistics found."
 msgstr "لم يتم العثور على إحصائيات."
 
-#: src/backend/datasources/filters/McapFilter.cpp:478
-#: src/backend/datasources/filters/McapFilter.cpp:1010
+#: src/backend/datasources/filters/McapFilter.cpp:480
+#: src/backend/datasources/filters/McapFilter.cpp:1012
 #, kde-format
 msgid "Failed to read the file. Reason: %1"
 msgstr "فشل قراءة الملف. السبب: %1"
 
-#: src/backend/datasources/filters/McapFilter.cpp:486
+#: src/backend/datasources/filters/McapFilter.cpp:488
 #, kde-format
 msgid "No JSON encoded topics found."
 msgstr "لم يتم العثور على أية مواضيع مشفَّرة بصيغة JSON."
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:213
+#: src/backend/datasources/filters/NetCDFFilter.cpp:215
 #, kde-format
 msgid "Error opening file"
 msgstr "خطأ في فتح الملفّ"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:222
+#: src/backend/datasources/filters/NetCDFFilter.cpp:224
 #, kde-format
 msgid "Number of global attributes: %1"
 msgstr "عدد السمات الشاملة: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:224
+#: src/backend/datasources/filters/NetCDFFilter.cpp:226
 #, kde-format
 msgid "Number of dimensions: %1"
 msgstr "عدد الأبعاد: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:226
-#: src/backend/datasources/filters/ReadStatFilter.cpp:131
+#: src/backend/datasources/filters/NetCDFFilter.cpp:228
+#: src/backend/datasources/filters/ReadStatFilter.cpp:133
 #, kde-format
 msgid "Number of variables: %1"
 msgstr "عدد المتغيرات: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:232
-#: src/backend/datasources/filters/ReadStatFilter.cpp:137
+#: src/backend/datasources/filters/NetCDFFilter.cpp:234
+#: src/backend/datasources/filters/ReadStatFilter.cpp:139
 #, kde-format
 msgid "Format version: %1"
 msgstr "نسخة التنسيق: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:235
+#: src/backend/datasources/filters/NetCDFFilter.cpp:237
 #, kde-format
 msgid "Using library version %1"
 msgstr "استعمال نسخة المكتبة %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:260
+#: src/backend/datasources/filters/NetCDFFilter.cpp:262
 #, kde-format
 msgid "ncdump not found."
 msgstr "لم يتم العثور على ncdump."
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:454
+#: src/backend/datasources/filters/NetCDFFilter.cpp:456
 #, kde-format
 msgid "global attribute"
 msgstr "سمة شاملة"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:458
+#: src/backend/datasources/filters/NetCDFFilter.cpp:460
 #, kde-format
 msgid "%1 attribute"
 msgstr "صفة %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:486
+#: src/backend/datasources/filters/NetCDFFilter.cpp:488
 #, kde-format
 msgid "length"
 msgstr "الطّول"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:489
+#: src/backend/datasources/filters/NetCDFFilter.cpp:491
 #, kde-format
 msgid "unlimited"
 msgstr "بلا حدّ"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:490
+#: src/backend/datasources/filters/NetCDFFilter.cpp:492
 #, kde-format
 msgid "dimension"
 msgstr "البعد"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:526
+#: src/backend/datasources/filters/NetCDFFilter.cpp:528
 #, kde-format
 msgid "variable"
 msgstr "متغير"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:619
+#: src/backend/datasources/filters/NetCDFFilter.cpp:621
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #, kde-format
 msgid "Attributes"
 msgstr "الصّفات"
 
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
-#: src/backend/datasources/filters/NetCDFFilter.cpp:625
+#: src/backend/datasources/filters/NetCDFFilter.cpp:627
 #: src/frontend/ui/dockwidgets/matrixdock.ui:87
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:48
 #, kde-format
@@ -2153,30 +2153,30 @@ msgid "Dimensions"
 msgstr "الأبعاد"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tVariables)
-#: src/backend/datasources/filters/NetCDFFilter.cpp:631
+#: src/backend/datasources/filters/NetCDFFilter.cpp:633
 #: src/frontend/ui/dockwidgets/scriptdock.ui:120
 #, kde-format
 msgid "Variables"
 msgstr "المتغيّرات"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:689
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1114
+#: src/backend/datasources/filters/NetCDFFilter.cpp:691
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1116
 #, kde-format
 msgid "No variable selected."
 msgstr "لم تختر متغيرًا."
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:700
+#: src/backend/datasources/filters/NetCDFFilter.cpp:702
 #, kde-format
 msgid "Failed to open the file or it's empty."
 msgstr "فشل فتح الملف أو الملف فارغ."
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:938
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1078
+#: src/backend/datasources/filters/NetCDFFilter.cpp:940
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1080
 #, kde-format
 msgid "Data type not supported yet."
 msgstr "نوع البيانات غير مدعوم بعد."
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1083
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1085
 #, kde-format
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "البيانات ذات الأبعاد %1 من النوع %2 غير مدعومة بعد"
@@ -2187,33 +2187,33 @@ msgstr "البيانات ذات الأبعاد %1 من النوع %2 غير مد
 msgid "Sheet count: %1"
 msgstr "عدد الأوراق: %1"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:628
+#: src/backend/datasources/filters/OdsFilter.cpp:227
+#: src/backend/datasources/filters/XLSXFilter.cpp:630
 #, kde-format
 msgid "No sheet selected."
 msgstr "لم تختر أي ورقة."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:260
+#: src/backend/datasources/filters/OdsFilter.cpp:262
 #, kde-format
 msgid "Selected sheet not found."
 msgstr "الورقة المختارة لم يتم العثور عليها."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:267
+#: src/backend/datasources/filters/OdsFilter.cpp:269
 #, kde-format
 msgid "Invalid sheet."
 msgstr "ورقة غير صالحة."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:329
+#: src/backend/datasources/filters/OdsFilter.cpp:331
 #, kde-format
 msgid "Formulas not supported yet."
 msgstr "الصيغ غير مدعومة بعد."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:486
+#: src/backend/datasources/filters/OdsFilter.cpp:488
 #, kde-format
 msgid "Sheet not found."
 msgstr "لم يتم العثور على الورقة."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:493
+#: src/backend/datasources/filters/OdsFilter.cpp:495
 #, kde-format
 msgid "Invalid sheet index."
 msgstr "فهرس ورقة غير صالح."
@@ -2269,54 +2269,54 @@ msgstr "الصيغة: أباتشي أورك"
 msgid "Number of stripes: %1"
 msgstr "عدد الأشرطة: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:212
+#: src/backend/datasources/filters/ParquetFilter.cpp:214
 #, kde-format
 msgid "Could not open file: %1"
 msgstr "تعذّر فتح الملف: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:224
+#: src/backend/datasources/filters/ParquetFilter.cpp:226
 #, kde-format
 msgid "Failed to open Parquet file: %1"
 msgstr "فشل فتح ملف باركيه: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:235
-#: src/backend/datasources/filters/ParquetFilter.cpp:244
+#: src/backend/datasources/filters/ParquetFilter.cpp:237
+#: src/backend/datasources/filters/ParquetFilter.cpp:246
 #, kde-format
 msgid "Failed to read Parquet table: %1"
 msgstr "فشل قراءة جدول باركيه: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:254
+#: src/backend/datasources/filters/ParquetFilter.cpp:256
 #, kde-format
 msgid "Failed to open Arrow IPC file: %1"
 msgstr "فشل فتح ملف أرو IPC: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:265
+#: src/backend/datasources/filters/ParquetFilter.cpp:267
 #, kde-format
 msgid "Failed to read record batch %1: %2"
 msgstr "فشل قراءة دفعة السجلات %1: %2"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:272
+#: src/backend/datasources/filters/ParquetFilter.cpp:274
 #, kde-format
 msgid "Failed to assemble table: %1"
 msgstr "فشل تجميع الجدول: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:282
+#: src/backend/datasources/filters/ParquetFilter.cpp:284
 #, kde-format
 msgid "Failed to open ORC file: %1"
 msgstr "فشل فتح ملف أورك: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:292
-#: src/backend/datasources/filters/ParquetFilter.cpp:300
+#: src/backend/datasources/filters/ParquetFilter.cpp:294
+#: src/backend/datasources/filters/ParquetFilter.cpp:302
 #, kde-format
 msgid "Failed to read ORC table: %1"
 msgstr "فشل قراءة جدول أورك: %1"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:309
+#: src/backend/datasources/filters/ParquetFilter.cpp:311
 #, kde-format
 msgid "Unsupported file format."
 msgstr "صيغة ملف غير مدعومة."
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:398
+#: src/backend/datasources/filters/ParquetFilter.cpp:400
 #, kde-format
 msgid "The file has no data to import."
 msgstr "الملف لا يحتوي على بيانات لاستيرادها."
@@ -2359,68 +2359,68 @@ msgstr "فشل تحميل ملف JSON. مستند JSON فارغ."
 msgid "Failed to load JSON document. Error: %1."
 msgstr "فشل تحميل مستند JSON. الخطأ: %1."
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:124
+#: src/backend/datasources/filters/ReadStatFilter.cpp:126
 #, kde-format
 msgid "Unknown file extension"
 msgstr "امتداد ملف غير معروف"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:129
+#: src/backend/datasources/filters/ReadStatFilter.cpp:131
 #, kde-format
 msgid "Number of records: %1"
 msgstr "عدد السجلات: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:133
+#: src/backend/datasources/filters/ReadStatFilter.cpp:135
 #, kde-format
 msgid "Creation time: %1"
 msgstr "وقت الإنشاء: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:135
+#: src/backend/datasources/filters/ReadStatFilter.cpp:137
 #, kde-format
 msgid "Modification time: %1"
 msgstr "وقت التعديل: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:151
+#: src/backend/datasources/filters/ReadStatFilter.cpp:153
 #, kde-format
 msgid "Compression: %1"
 msgstr "الضغط: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:165
+#: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
 msgid "Endianness: %1"
 msgstr "ترتيب البايتات: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:167
+#: src/backend/datasources/filters/ReadStatFilter.cpp:169
 #, kde-format
 msgid "Table name: %1"
 msgstr "اسم الجدول: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:169
+#: src/backend/datasources/filters/ReadStatFilter.cpp:171
 #, kde-format
 msgid "File label: %1"
 msgstr "تسمية الملف: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:171
+#: src/backend/datasources/filters/ReadStatFilter.cpp:173
 #, kde-format
 msgid "File encoding: %1"
 msgstr "ترميز الملف: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:173
+#: src/backend/datasources/filters/ReadStatFilter.cpp:175
 #, kde-format
 msgid "64bit: %1"
 msgstr "64بت: %1"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:482
+#: src/backend/datasources/filters/ReadStatFilter.cpp:484
 #, kde-format
 msgid "Error reading file."
 msgstr "خطأ في قراءة الملف."
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:512
-#: src/backend/datasources/filters/ReadStatFilter.cpp:535
+#: src/backend/datasources/filters/ReadStatFilter.cpp:514
+#: src/backend/datasources/filters/ReadStatFilter.cpp:537
 #, kde-format
 msgid "Failed to parse the file."
 msgstr "فشل تحليل الملف."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:113
+#: src/backend/datasources/filters/ROOTFilter.cpp:115
 #: src/backend/datasources/MQTTClient.cpp:1188
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
@@ -2429,52 +2429,52 @@ msgstr "فشل تحليل الملف."
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "السمة '%1' مفقودة أو فارغة، يُستعمل القيمة المبدئية"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:149
+#: src/backend/datasources/filters/ROOTFilter.cpp:151
 #, kde-format
 msgid "No column available"
 msgstr "لا يوجد عمود متاح"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:163
+#: src/backend/datasources/filters/ROOTFilter.cpp:165
 #, kde-format
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "نوع ملف غير مدعوم، لا هو مدرج تكراري ولا شجرة."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1505
+#: src/backend/datasources/filters/ROOTFilter.cpp:1507
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "ليس ملف ROOT"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1510
+#: src/backend/datasources/filters/ROOTFilter.cpp:1512
 #, kde-format
 msgid "File format version: %1"
 msgstr "نسخة تنسيق الملف: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1518
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "حجم سجل البيانات المجاني: %1 بايت"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1520
+#: src/backend/datasources/filters/ROOTFilter.cpp:1522
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "عدد سجلات البيانات المجانية: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1522
+#: src/backend/datasources/filters/ROOTFilter.cpp:1524
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "حجم TNamed: %1 بايت"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1524
+#: src/backend/datasources/filters/ROOTFilter.cpp:1526
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "حجم مؤشرات الملف: %1 بايت"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1529
+#: src/backend/datasources/filters/ROOTFilter.cpp:1531
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "مستوى وخوارزمية الضغط: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1534
+#: src/backend/datasources/filters/ROOTFilter.cpp:1536
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "حجم سجل TStreamerInfo: %1 بايت"
@@ -2574,7 +2574,7 @@ msgstr "Time_10µs"
 msgid "Sheets: "
 msgstr "الأوراق: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:632
+#: src/backend/datasources/filters/XLSXFilter.cpp:634
 #, kde-format
 msgid "Invalid region specified."
 msgstr "تم تحديد منطقة غير صالحة."
@@ -6546,7 +6546,7 @@ msgstr "اطبع المذكرة"
 msgid "Text file (*.txt)"
 msgstr "ملف نصي (*.txt)"
 
-#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:98
+#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:111
 #: src/backend/statistics/HypothesisTest.cpp:190
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6555,12 +6555,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "صدر إلى الملف"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:112
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:125
 #, kde-format
 msgid "Export failed"
 msgstr "فشل التصدير"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:112
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:125
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "فشل فتح '%1' للكتابة."
@@ -6860,7 +6860,7 @@ msgid "Raw"
 msgstr "خام"
 
 #: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2851
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2844
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1117
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:234
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
@@ -7126,7 +7126,7 @@ msgstr "المسافة نصف القطرية"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2286
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2282
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:455
 #, kde-format
 msgid "Interpolation"
@@ -7543,33 +7543,33 @@ msgstr "وزن ثلاثي"
 msgid "Tricube"
 msgstr "مكعب ثلاثي"
 
-#: src/backend/script/Script.cpp:96
+#: src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "ملف بايثون (*.py)"
 
-#: src/backend/script/Script.cpp:154 src/backend/script/Script.cpp:338
+#: src/backend/script/Script.cpp:164 src/backend/script/Script.cpp:351
 #, kde-format
 msgid "no script element found"
 msgstr "لا يوجد عنصر سكريبت"
 
-#: src/backend/script/Script.cpp:212
+#: src/backend/script/Script.cpp:225
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: نفذ سكريبت %2"
 
-#: src/backend/script/Script.cpp:318 src/backend/script/Script.cpp:323
+#: src/backend/script/Script.cpp:331 src/backend/script/Script.cpp:336
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "سكربت"
 
-#: src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:331
 #, kde-format
 msgid "Failed to run the script."
 msgstr "فشل تنفيذ السكريبت."
 
-#: src/backend/script/Script.cpp:323
+#: src/backend/script/Script.cpp:336
 #, kde-format
 msgid "A script is already running."
 msgstr "هناك سكريبت قيد التشغيل بالفعل."
@@ -9592,7 +9592,7 @@ msgstr "لا معلومات متوفرة"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:143
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5670
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5663
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:623
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -9603,7 +9603,7 @@ msgstr "العنوان"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2407
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2395
 #: src/frontend/ui/dockwidgets/barplotdock.ui:229
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:241
 #: src/frontend/ui/dockwidgets/histogramdock.ui:387
@@ -9644,7 +9644,7 @@ msgid "Vertical Axis"
 msgstr "المحور العمودي"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2454
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2442
 #: src/frontend/ActionsManager.cpp:559
 #: src/frontend/datasources/ImportFileWidget.cpp:114
 #: src/frontend/matrix/MatrixView.cpp:133
@@ -9657,34 +9657,34 @@ msgid "Image"
 msgstr "صورة"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2430
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2418
 #, kde-format
 msgid "Info Element"
 msgstr "عنصر المعلومات"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:458
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2474
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2462
 #, kde-format
 msgid "Custom Point"
 msgstr "نقطة مخصصة"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2499
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2487
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:180
 #, kde-format
 msgid "Reference Line"
 msgstr "خط مرجعي"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:460
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2558
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2546
 #, kde-format
 msgid "Reference Range"
 msgstr "نطاق مرجعي"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2518
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2540
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2506
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2528
 #, kde-format
 msgid "Inset Plot Area"
 msgstr "منطقة الرسم المدرجة"
@@ -9695,7 +9695,7 @@ msgid "Inset Plot Area with Data"
 msgstr "منطقة الرسم المدرجة مع البيانات"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
-#: src/frontend/ActionsManager.cpp:907
+#: src/frontend/ActionsManager.cpp:903
 #: src/frontend/notebook/NotebookView.cpp:175
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:442
@@ -9720,8 +9720,8 @@ msgstr "رسوم بيانية للتحليل"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:518
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:553
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2359
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2361
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2348
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2350
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:614
 #, kde-format
 msgctxt "Curve fitting"
@@ -9908,7 +9908,7 @@ msgstr "دالة الخطأ"
 
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:752
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2300
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2295
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:294
 #, kde-format
 msgid "Smooth"
@@ -9936,7 +9936,7 @@ msgid "Fourier Transform"
 msgstr "تحويل فورييه"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:775
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2379
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2367
 #, kde-format
 msgid "Fourier Filter"
 msgstr "مرشح فورييه"
@@ -9964,7 +9964,7 @@ msgid "Correct Baseline"
 msgstr "صحح خط الأساس"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:801
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2244
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2243
 #, kde-format
 msgid "Line Simplification"
 msgstr "تبسيط الخط"
@@ -10080,7 +10080,7 @@ msgid "%1: load default theme"
 msgstr "%1: حمّل السمة المبدئية"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6021
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6014
 #: src/backend/worksheet/Worksheet.cpp:896
 #, kde-format
 msgid "%1: set theme"
@@ -10131,81 +10131,81 @@ msgstr "مطابقة التوزيع لـ «%1»"
 msgid "Simplification of '%1'"
 msgstr "تبسيط '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2251
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2250
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:844
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "مشتقة «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2258
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2256
 #: src/frontend/notebook/NotebookView.cpp:156
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:255
 #, kde-format
 msgid "Differentiation"
 msgstr "تمايز"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2265
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2263
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:847
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "تكامل «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2272
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2269
 #: src/frontend/notebook/NotebookView.cpp:162
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:424
 #, kde-format
 msgid "Integration"
 msgstr "التكامل"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2279
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2276
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:850
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "استكمال «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2293
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2289
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:853
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "تنعيم «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2307
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2302
 #, kde-format
 msgid "Baseline correction for '%1'"
 msgstr "تصحيح خط الأساس لـ '%1'"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2314
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2308
 #, kde-format
 msgid "Baseline Correction"
 msgstr "تصحيح خط الأساس"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2329
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2344
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2323
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2338
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:837
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "طابق مع «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2372
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2361
 #, kde-format
 msgid "Fourier filtering of '%1'"
 msgstr "تصفية «%1» بمرشح فورييه"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2386
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2374
 #, kde-format
 msgid "Function of '%1'"
 msgstr "دالة لـ «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2437
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2425
 #: src/frontend/worksheet/WorksheetView.cpp:1355
 #, kde-format
 msgid "Text Label"
 msgstr "اللصيقة النصية"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2438
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2426
 #: src/frontend/CLIProcessor.cpp:275 src/frontend/CLIProcessor.cpp:276
 #: src/frontend/CLIProcessor.cpp:277
 #: src/frontend/worksheet/WorksheetView.cpp:1356
@@ -10213,80 +10213,80 @@ msgstr "اللصيقة النصية"
 msgid "text"
 msgstr "نص"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2517
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2505
 #, kde-format
 msgid "%1: add inset plot"
 msgstr "%1: أضف رسم بياني مدرج"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2531
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2519
 #, kde-format
 msgid "%1: add inset plot with data"
 msgstr "%1: أضف رسم بياني مدرج مع البيانات"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2857
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2850
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:635
 #, kde-format
 msgid "Cumulative Percentage"
 msgstr "النسبة المئوية التراكمية"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3473
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3466
 #, kde-format
 msgid "%1: zoom in"
 msgstr "%1: قرّب"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3488
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3481
 #, kde-format
 msgid "%1: zoom out"
 msgstr "%1: بعّد"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3519
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, kde-format
 msgid "in"
 msgstr "(تقريب)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3519
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, kde-format
 msgid "out"
 msgstr "(تبعيد)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3519
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, kde-format
 msgid "%1: zoom %2 %3"
 msgstr "‏%1: تغيير العرض %2 %3"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4370
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4363
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "ليس داخل المستطيل المحيط"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4494
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4515
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4487
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4508
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "من س=%1 إلى س=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4502
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4528
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4495
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4521
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "من ص=%1 إلى ص=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4547
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4540
 #, kde-format
 msgid "x=%1"
 msgstr "س=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4565
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4558
 #, kde-format
 msgid "%1: pan"
 msgstr "‏%1: تحرك"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4643
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4636
 #, kde-format
 msgid "%1: zoom selection"
 msgstr "%1: تكبير التحديد"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4766
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4759
 #, kde-format
 msgid "%1: wheel zoom"
 msgstr "%1: تكبير بالعجلة"
@@ -12149,8 +12149,8 @@ msgstr "صدّر..."
 msgid "Export selected element"
 msgstr "اِصدِر العنصر المُحدد"
 
-#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1438
-#: src/frontend/ActionsManager.cpp:1446
+#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1434
+#: src/frontend/ActionsManager.cpp:1442
 #, kde-format
 msgid "Share"
 msgstr "شارك"
@@ -12533,7 +12533,7 @@ msgid "Sort the selected columns separately in descending order"
 msgstr "افرز الأَعمدة المختارة على حدة بترتيب تنازليّ"
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1604
+#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1600
 #: src/frontend/dockwidgets/LiveDataDock.cpp:239
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
@@ -12618,49 +12618,49 @@ msgstr "أزح للأعلى"
 msgid "Shift Down"
 msgstr "أزح للأسفل"
 
-#: src/frontend/ActionsManager.cpp:946
+#: src/frontend/ActionsManager.cpp:942
 #, kde-format
 msgid "Window Visibility"
 msgstr "إظهار النّافذة"
 
-#: src/frontend/ActionsManager.cpp:963
+#: src/frontend/ActionsManager.cpp:959
 #, kde-format
 msgid "Color Scheme"
 msgstr "مخطّط الألوان"
 
-#: src/frontend/ActionsManager.cpp:1404
+#: src/frontend/ActionsManager.cpp:1400
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "ينشئ مفكرة %1 جديدة"
 
-#: src/frontend/ActionsManager.cpp:1438
+#: src/frontend/ActionsManager.cpp:1434
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "حدثت مشكلة أثناء مشاركة المشروع: %1"
 
-#: src/frontend/ActionsManager.cpp:1442
+#: src/frontend/ActionsManager.cpp:1438
 #, kde-format
 msgid "Project shared successfully"
 msgstr "شارك المشروع بنجاح"
 
-#: src/frontend/ActionsManager.cpp:1445
+#: src/frontend/ActionsManager.cpp:1441
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "بإمكانك إيجاد المشروع المُشارَك على: <a href=\"%1\">%1</a>"
 
-#: src/frontend/ActionsManager.cpp:1600
+#: src/frontend/ActionsManager.cpp:1596
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, kde-format
 msgid "Continue"
 msgstr "تابع"
 
-#: src/frontend/ActionsManager.cpp:1601
+#: src/frontend/ActionsManager.cpp:1597
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
 msgstr "استأنف القراءة"
 
-#: src/frontend/ActionsManager.cpp:1605
+#: src/frontend/ActionsManager.cpp:1601
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
 #, kde-format
 msgid "Pause Reading"
@@ -17918,87 +17918,87 @@ msgid "Script Toolbar"
 msgstr "شريط أدوات النصّ البرمجيّ"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
-#: src/frontend/labplotui.rc:102
+#: src/frontend/labplotui.rc:100
 #, kde-format
 msgid "Plot Area Toolbar"
 msgstr "شريط أدوات منطقة الرسم البياني"
 
 #. i18n: ectx: Menu (file)
-#: src/frontend/labplotui.rc:130
+#: src/frontend/labplotui.rc:128
 #, kde-format
 msgid "&File"
 msgstr "&ملف"
 
 #. i18n: ectx: Menu (new)
-#: src/frontend/labplotui.rc:132
+#: src/frontend/labplotui.rc:130
 #, kde-format
 msgid "&Add New"
 msgstr "أضف جديد"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/frontend/labplotui.rc:143 src/frontend/labplotui.rc:178
+#: src/frontend/labplotui.rc:141 src/frontend/labplotui.rc:176
 #, kde-format
 msgid "&Notebook"
 msgstr "&دفتر"
 
 #. i18n: ectx: Menu (new_script)
 #. i18n: ectx: Menu (script)
-#: src/frontend/labplotui.rc:149 src/frontend/labplotui.rc:181
+#: src/frontend/labplotui.rc:147 src/frontend/labplotui.rc:179
 #, kde-format
 msgid "&Script"
 msgstr "س&كربت"
 
 #. i18n: ectx: Menu (import)
-#: src/frontend/labplotui.rc:154
+#: src/frontend/labplotui.rc:152
 #, kde-format
 msgid "Import"
 msgstr "اِستورد"
 
 #. i18n: ectx: Menu (edit)
-#: src/frontend/labplotui.rc:170
+#: src/frontend/labplotui.rc:168
 #, kde-format
 msgid "&Edit"
 msgstr "ت&حرير"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/frontend/labplotui.rc:175
+#: src/frontend/labplotui.rc:173
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "ورقة &عمل"
 
 #. i18n: ectx: Menu (matrix)
-#: src/frontend/labplotui.rc:176
+#: src/frontend/labplotui.rc:174
 #, kde-format
 msgid "&Matrix"
 msgstr "&مصفوفة"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/frontend/labplotui.rc:177
+#: src/frontend/labplotui.rc:175
 #, kde-format
 msgid "&Worksheet"
 msgstr "&ورقة العمل"
 
 #. i18n: ectx: Menu (data_extractor)
-#: src/frontend/labplotui.rc:179
+#: src/frontend/labplotui.rc:177
 #, kde-format
 msgid "&Data Extractor"
 msgstr "مُستخرِج &البيانات"
 
 #. i18n: ectx: Menu (drawing)
-#: src/frontend/labplotui.rc:180
+#: src/frontend/labplotui.rc:178
 #, kde-format
 msgid "&Drawing"
 msgstr "&رسم"
 
 #. i18n: ectx: Menu (tools)
-#: src/frontend/labplotui.rc:182
+#: src/frontend/labplotui.rc:180
 #, kde-format
 msgid "&Tools"
 msgstr "أ&دوات"
 
 #. i18n: ectx: Menu (windows)
-#: src/frontend/labplotui.rc:186
+#: src/frontend/labplotui.rc:184
 #, kde-format
 msgid "&Windows"
 msgstr "ال&نوافذ"
@@ -18924,6 +18924,11 @@ msgstr "ستُعاد جميع الإعدادات إلى القيم المبدئ�
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
 msgstr "تفضيلات    [مُغيَّر]"
+
+#: src/frontend/SettingsEditorPage.cpp:24
+#, kde-format
+msgid "Automatically show output when a script produces output"
+msgstr ""
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format

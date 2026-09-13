@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-06 00:40+0000\n"
+"POT-Creation-Date: 2026-09-13 00:40+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -78,7 +78,7 @@ msgstr "往下"
 #: src/backend/core/AbstractAspect.cpp:557
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:216
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2477
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2465
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1：新增 %2"
@@ -248,9 +248,9 @@ msgid "Y-Error -"
 msgstr "格式"
 
 #: src/backend/core/AbstractColumn.cpp:224
-#: src/backend/datasources/filters/AsciiFilter.cpp:680
-#: src/backend/datasources/filters/MatioFilter.cpp:382
-#: src/backend/datasources/filters/MatioFilter.cpp:428
+#: src/backend/datasources/filters/AsciiFilter.cpp:684
+#: src/backend/datasources/filters/MatioFilter.cpp:384
+#: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
 msgid "Double"
 msgstr ""
@@ -270,7 +270,7 @@ msgstr "方向"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/backend/core/AbstractColumn.cpp:230
-#: src/backend/datasources/filters/AsciiFilter.cpp:681
+#: src/backend/datasources/filters/AsciiFilter.cpp:685
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/frontend/ActionsManager.cpp:555
 #: src/frontend/notebook/NotebookView.cpp:104
@@ -412,7 +412,7 @@ msgid "incompatible filter type"
 msgstr ""
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:158 src/backend/core/Project.cpp:714
+#: src/backend/core/Folder.cpp:161 src/backend/core/Project.cpp:714
 #: src/backend/datasources/MQTTClient.cpp:1364
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
@@ -699,7 +699,7 @@ msgstr ""
 msgid "set decimal digits to %1"
 msgstr ""
 
-#: src/backend/core/Folder.cpp:395
+#: src/backend/core/Folder.cpp:394
 #, kde-format
 msgid "unknown element '%1' found"
 msgstr ""
@@ -1122,14 +1122,14 @@ msgid ""
 "%2"
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:123
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:125
 #, kde-format
 msgid ""
 "This option determines how the imported strings have to be converted to "
 "numbers."
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:128
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:130
 #, kde-format
 msgid ""
 "When point character is used for the decimal separator, the valid number "
@@ -1138,7 +1138,7 @@ msgid ""
 "<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:144
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:146
 #, kde-format
 msgid ""
 "This option determines how the imported strings have to be converted to "
@@ -1146,7 +1146,7 @@ msgid ""
 "and to time."
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:150
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:152
 #, kde-format
 msgid ""
 "Expressions that may be used for the date part of format string:"
@@ -1186,128 +1186,128 @@ msgid ""
 "the format will be auto-detected."
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:224
+#: src/backend/datasources/filters/AsciiFilter.cpp:228
 #: src/backend/datasources/filters/ParquetFilter.cpp:76
 #: src/backend/datasources/filters/ParquetFilter.cpp:89
 #, fuzzy, kde-format
 msgid "Number of columns: %1"
 msgstr "欄數："
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:226
+#: src/backend/datasources/filters/AsciiFilter.cpp:230
 #, fuzzy, kde-format
 msgid "Number of lines: %1"
 msgstr "行數："
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:581
-#: src/backend/datasources/filters/AsciiFilter.cpp:1368
-#: src/backend/datasources/filters/JsonFilter.cpp:246
+#: src/backend/datasources/filters/AsciiFilter.cpp:585
+#: src/backend/datasources/filters/AsciiFilter.cpp:1372
+#: src/backend/datasources/filters/JsonFilter.cpp:248
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "Column %1"
 msgstr "欄"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:664
-#: src/backend/datasources/filters/AsciiFilter.cpp:1394
+#: src/backend/datasources/filters/AsciiFilter.cpp:668
+#: src/backend/datasources/filters/AsciiFilter.cpp:1398
 #, kde-format
 msgid "Timestamp"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:669
-#: src/backend/datasources/filters/AsciiFilter.cpp:1399
-#: src/backend/datasources/filters/BinaryFilter.cpp:293
-#: src/backend/datasources/filters/BinaryFilter.cpp:436
+#: src/backend/datasources/filters/AsciiFilter.cpp:673
+#: src/backend/datasources/filters/AsciiFilter.cpp:1403
+#: src/backend/datasources/filters/BinaryFilter.cpp:295
+#: src/backend/datasources/filters/BinaryFilter.cpp:438
 #: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
 #, kde-format
 msgid "Index"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:682
+#: src/backend/datasources/filters/AsciiFilter.cpp:686
 #, fuzzy, kde-format
 #| msgid "Date and time"
 msgid "DateTime"
 msgstr "日期和時間"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:683
+#: src/backend/datasources/filters/AsciiFilter.cpp:687
 #, fuzzy, kde-format
 #| msgid "End column:"
 msgid "Timestamp (Unix)"
 msgstr "結束欄："
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:684
+#: src/backend/datasources/filters/AsciiFilter.cpp:688
 #, kde-format
 msgid "Timestamp (Windows)"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:685
+#: src/backend/datasources/filters/AsciiFilter.cpp:689
 #, fuzzy, kde-format
 msgid "Int"
 msgstr "於："
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:686
-#: src/backend/datasources/filters/MatioFilter.cpp:398
-#: src/backend/datasources/filters/MatioFilter.cpp:430
+#: src/backend/datasources/filters/AsciiFilter.cpp:690
+#: src/backend/datasources/filters/MatioFilter.cpp:400
+#: src/backend/datasources/filters/MatioFilter.cpp:432
 #, kde-format
 msgid "Int64"
 msgstr ""
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:273
-#: src/backend/datasources/filters/JsonFilter.cpp:343
-#: src/backend/datasources/filters/SpiceFilter.cpp:127
-#: src/backend/datasources/filters/SpiceFilter.cpp:183
+#: src/backend/datasources/filters/BinaryFilter.cpp:275
+#: src/backend/datasources/filters/JsonFilter.cpp:345
+#: src/backend/datasources/filters/SpiceFilter.cpp:129
+#: src/backend/datasources/filters/SpiceFilter.cpp:185
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the device/file."
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:283
+#: src/backend/datasources/filters/BinaryFilter.cpp:285
 #, fuzzy, kde-format
 msgid "Data selection empty."
 msgstr "符合選擇區域"
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:404
-#: src/backend/datasources/filters/McapFilter.cpp:197
+#: src/backend/datasources/filters/BinaryFilter.cpp:406
+#: src/backend/datasources/filters/McapFilter.cpp:199
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the device/file or it's empty."
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:444
-#: src/backend/datasources/filters/CANFilter.cpp:301
-#: src/backend/datasources/filters/FITSFilter.cpp:351
-#: src/backend/datasources/filters/FITSFilter.cpp:361
-#: src/backend/datasources/filters/FITSFilter.cpp:556
-#: src/backend/datasources/filters/HDF5Filter.cpp:1642
-#: src/backend/datasources/filters/HDF5Filter.cpp:1759
-#: src/backend/datasources/filters/HDF5Filter.cpp:1809
-#: src/backend/datasources/filters/HDF5Filter.cpp:1965
-#: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:520
-#: src/backend/datasources/filters/MatioFilter.cpp:890
-#: src/backend/datasources/filters/NetCDFFilter.cpp:758
-#: src/backend/datasources/filters/NetCDFFilter.cpp:869
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1001
-#: src/backend/datasources/filters/OdsFilter.cpp:400
-#: src/backend/datasources/filters/ParquetFilter.cpp:415
-#: src/backend/datasources/filters/ReadStatFilter.cpp:528
-#: src/backend/datasources/filters/ROOTFilter.cpp:235
-#: src/backend/datasources/filters/ROOTFilter.cpp:305
-#: src/backend/datasources/filters/SpiceFilter.cpp:206
+#: src/backend/datasources/filters/BinaryFilter.cpp:446
+#: src/backend/datasources/filters/CANFilter.cpp:303
+#: src/backend/datasources/filters/FITSFilter.cpp:358
+#: src/backend/datasources/filters/FITSFilter.cpp:368
+#: src/backend/datasources/filters/FITSFilter.cpp:563
+#: src/backend/datasources/filters/HDF5Filter.cpp:1644
+#: src/backend/datasources/filters/HDF5Filter.cpp:1761
+#: src/backend/datasources/filters/HDF5Filter.cpp:1811
+#: src/backend/datasources/filters/HDF5Filter.cpp:1967
+#: src/backend/datasources/filters/ImageFilter.cpp:167
+#: src/backend/datasources/filters/JsonFilter.cpp:522
+#: src/backend/datasources/filters/MatioFilter.cpp:892
+#: src/backend/datasources/filters/NetCDFFilter.cpp:760
+#: src/backend/datasources/filters/NetCDFFilter.cpp:871
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1003
+#: src/backend/datasources/filters/OdsFilter.cpp:402
+#: src/backend/datasources/filters/ParquetFilter.cpp:417
+#: src/backend/datasources/filters/ReadStatFilter.cpp:530
+#: src/backend/datasources/filters/ROOTFilter.cpp:237
+#: src/backend/datasources/filters/ROOTFilter.cpp:307
+#: src/backend/datasources/filters/SpiceFilter.cpp:208
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:341
-#: src/backend/datasources/filters/XLSXFilter.cpp:511
+#: src/backend/datasources/filters/XLSXFilter.cpp:513
 #, fuzzy, kde-format
 msgid "Not enough memory."
 msgstr "數字"
 
-#: src/backend/datasources/filters/CANFilter.cpp:220
-#: src/backend/datasources/filters/SpiceFilter.cpp:131
-#: src/backend/datasources/filters/SpiceFilter.cpp:187
+#: src/backend/datasources/filters/CANFilter.cpp:222
+#: src/backend/datasources/filters/SpiceFilter.cpp:133
+#: src/backend/datasources/filters/SpiceFilter.cpp:189
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:268
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Invalid file."
 msgstr "匯出到檔案"
 
-#: src/backend/datasources/filters/CANFilter.cpp:226
+#: src/backend/datasources/filters/CANFilter.cpp:228
 #, kde-format
 msgid "No messages read."
 msgstr ""
@@ -1320,381 +1320,381 @@ msgid ""
 "same number of columns."
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:239
+#: src/backend/datasources/filters/FITSFilter.cpp:246
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "Images: %1"
 msgstr "影像"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:244
+#: src/backend/datasources/filters/FITSFilter.cpp:251
 #, fuzzy, kde-format
 msgid "Tables: %1"
 msgstr "可讀取："
 
-#: src/backend/datasources/filters/FITSFilter.cpp:281
-#: src/backend/datasources/filters/MatioFilter.cpp:647
+#: src/backend/datasources/filters/FITSFilter.cpp:288
+#: src/backend/datasources/filters/MatioFilter.cpp:649
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the file."
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:288
-#: src/backend/datasources/filters/FITSFilter.cpp:368
+#: src/backend/datasources/filters/FITSFilter.cpp:295
+#: src/backend/datasources/filters/FITSFilter.cpp:375
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read the file."
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:310
+#: src/backend/datasources/filters/FITSFilter.cpp:317
 #, fuzzy, kde-format
 msgid "Zero dimensions."
 msgstr "尺寸"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1060
-#: src/backend/datasources/filters/FITSFilter.cpp:1580
+#: src/backend/datasources/filters/FITSFilter.cpp:1067
+#: src/backend/datasources/filters/FITSFilter.cpp:1587
 #: src/frontend/datasources/FITSOptionsWidget.cpp:40
 #: src/frontend/datasources/FITSOptionsWidget.cpp:73
 #, kde-format
 msgid "Primary header"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1062
+#: src/backend/datasources/filters/FITSFilter.cpp:1069
 #, kde-format
 msgid "IMAGE #%1"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1065
+#: src/backend/datasources/filters/FITSFilter.cpp:1072
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1068
+#: src/backend/datasources/filters/FITSFilter.cpp:1075
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1573
+#: src/backend/datasources/filters/FITSFilter.cpp:1580
 #, kde-format
 msgid "Images"
 msgstr "影像"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1599
+#: src/backend/datasources/filters/FITSFilter.cpp:1606
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "Tables"
 msgstr "變異數"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:170
+#: src/backend/datasources/filters/HDF5Filter.cpp:172
 #, kde-format
 msgid "Not a HDF5 file"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:174
+#: src/backend/datasources/filters/HDF5Filter.cpp:176
 #, kde-format
 msgid "Failed checking file"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:182
+#: src/backend/datasources/filters/HDF5Filter.cpp:184
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed opening HDF5 file"
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:188
+#: src/backend/datasources/filters/HDF5Filter.cpp:190
 #, fuzzy, kde-format
 msgid "File size: %1 bytes"
 msgstr "檔案型態"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:193
+#: src/backend/datasources/filters/HDF5Filter.cpp:195
 #, kde-format
 msgid "Free space: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:199
+#: src/backend/datasources/filters/HDF5Filter.cpp:201
 #: src/frontend/datasources/ImportFileWidget.cpp:1836
 #, fuzzy, kde-format
 msgid "Number of files: %1"
 msgstr "行數："
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:202
+#: src/backend/datasources/filters/HDF5Filter.cpp:204
 #, fuzzy, kde-format
 msgid "Number of data sets: %1"
 msgstr "行數："
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:205
+#: src/backend/datasources/filters/HDF5Filter.cpp:207
 #, fuzzy, kde-format
 msgid "Number of groups: %1"
 msgstr "欄數："
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:208
+#: src/backend/datasources/filters/HDF5Filter.cpp:210
 #, fuzzy, kde-format
 msgid "Number of named datatypes: %1"
 msgstr "行數："
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:211
+#: src/backend/datasources/filters/HDF5Filter.cpp:213
 #, fuzzy, kde-format
 msgid "Number of attributes: %1"
 msgstr "行數："
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:214
+#: src/backend/datasources/filters/HDF5Filter.cpp:216
 #, fuzzy, kde-format
 msgid "Number of all objects: %1"
 msgstr "行數："
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:222
+#: src/backend/datasources/filters/HDF5Filter.cpp:224
 #, kde-format
 msgid "Version of superblock: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:224
+#: src/backend/datasources/filters/HDF5Filter.cpp:226
 #, kde-format
 msgid "Size of superblock: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:226
-#: src/backend/datasources/filters/HDF5Filter.cpp:247
+#: src/backend/datasources/filters/HDF5Filter.cpp:228
+#: src/backend/datasources/filters/HDF5Filter.cpp:249
 #, kde-format
 msgid "Size of superblock extension: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:228
+#: src/backend/datasources/filters/HDF5Filter.cpp:230
 #, kde-format
 msgid "Version of free-space manager: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:230
+#: src/backend/datasources/filters/HDF5Filter.cpp:232
 #, kde-format
 msgid "Size of free-space manager metadata: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:232
+#: src/backend/datasources/filters/HDF5Filter.cpp:234
 #, kde-format
 msgid "Total size of free space: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:234
+#: src/backend/datasources/filters/HDF5Filter.cpp:236
 #, kde-format
 msgid "Version of shared object header: %1"
-msgstr ""
-
-#: src/backend/datasources/filters/HDF5Filter.cpp:236
-#: src/backend/datasources/filters/HDF5Filter.cpp:249
-#, kde-format
-msgid "Size of shared object header: %1 bytes"
 msgstr ""
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:238
 #: src/backend/datasources/filters/HDF5Filter.cpp:251
 #, kde-format
-msgid "Size of all shared object header indexes: %1 bytes"
+msgid "Size of shared object header: %1 bytes"
 msgstr ""
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:240
 #: src/backend/datasources/filters/HDF5Filter.cpp:253
 #, kde-format
+msgid "Size of all shared object header indexes: %1 bytes"
+msgstr ""
+
+#: src/backend/datasources/filters/HDF5Filter.cpp:242
+#: src/backend/datasources/filters/HDF5Filter.cpp:255
+#, kde-format
 msgid "Size of the heap: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:265
+#: src/backend/datasources/filters/HDF5Filter.cpp:267
 #, kde-format
 msgid "Cache config version: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
+#: src/backend/datasources/filters/HDF5Filter.cpp:269
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
-#: src/backend/datasources/filters/MatioFilter.cpp:574
-#: src/backend/datasources/filters/MatioFilter.cpp:578
+#: src/backend/datasources/filters/HDF5Filter.cpp:311
+#: src/backend/datasources/filters/MatioFilter.cpp:576
+#: src/backend/datasources/filters/MatioFilter.cpp:580
 #, kde-format
 msgid "Yes"
 msgstr "是"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
+#: src/backend/datasources/filters/HDF5Filter.cpp:269
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
-#: src/backend/datasources/filters/MatioFilter.cpp:576
-#: src/backend/datasources/filters/MatioFilter.cpp:580
+#: src/backend/datasources/filters/HDF5Filter.cpp:311
+#: src/backend/datasources/filters/MatioFilter.cpp:578
+#: src/backend/datasources/filters/MatioFilter.cpp:582
 #, kde-format
 msgid "No"
 msgstr "否"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
+#: src/backend/datasources/filters/HDF5Filter.cpp:269
 #, kde-format
 msgid "Adaptive cache resize report function enabled: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:269
+#: src/backend/datasources/filters/HDF5Filter.cpp:271
 #, kde-format
 msgid "Cache initial maximum size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:271
+#: src/backend/datasources/filters/HDF5Filter.cpp:273
 #, kde-format
 msgid "Adaptive cache maximum size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:273
+#: src/backend/datasources/filters/HDF5Filter.cpp:275
 #, kde-format
 msgid "Adaptive cache minimum size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:279
+#: src/backend/datasources/filters/HDF5Filter.cpp:281
 #, kde-format
 msgid "Metadata cache hit rate: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:286
+#: src/backend/datasources/filters/HDF5Filter.cpp:288
 #, kde-format
 msgid "Current cache maximum size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:288
+#: src/backend/datasources/filters/HDF5Filter.cpp:290
 #, kde-format
 msgid "Current cache minimum clean size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:290
+#: src/backend/datasources/filters/HDF5Filter.cpp:292
 #, kde-format
 msgid "Current cache size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:292
+#: src/backend/datasources/filters/HDF5Filter.cpp:294
 #, kde-format
 msgid "Current number of entries in the cache: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
+#: src/backend/datasources/filters/HDF5Filter.cpp:309
 #, kde-format
 msgid "Logging enabled: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:309
+#: src/backend/datasources/filters/HDF5Filter.cpp:311
 #, kde-format
 msgid "Events are currently logged: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:317
+#: src/backend/datasources/filters/HDF5Filter.cpp:319
 #, kde-format
 msgid "Metadata/raw data page buffer accesses: %1 %2"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:319
+#: src/backend/datasources/filters/HDF5Filter.cpp:321
 #, kde-format
 msgid "Metadata/raw data page buffer hits: %1 %2"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:321
+#: src/backend/datasources/filters/HDF5Filter.cpp:323
 #, kde-format
 msgid "Metadata/raw data page buffer misses: %1 %2"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:323
+#: src/backend/datasources/filters/HDF5Filter.cpp:325
 #, kde-format
 msgid "Metadata/raw data page buffer evictions: %1 %2"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:325
+#: src/backend/datasources/filters/HDF5Filter.cpp:327
 #, kde-format
 msgid "Metadata/raw data accesses bypassing page buffer: %1 %2"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:328
+#: src/backend/datasources/filters/HDF5Filter.cpp:330
 #, kde-format
 msgid "Page buffer disabled"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:350
+#: src/backend/datasources/filters/HDF5Filter.cpp:352
 #, fuzzy, kde-format
 msgid "h5dump not found."
 msgstr "檔案資訊"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:358
-#: src/backend/datasources/filters/NetCDFFilter.cpp:268
+#: src/backend/datasources/filters/HDF5Filter.cpp:360
+#: src/backend/datasources/filters/NetCDFFilter.cpp:270
 #: src/frontend/datasources/ImportFileWidget.cpp:1715
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1311
+#: src/backend/datasources/filters/HDF5Filter.cpp:1313
 #, fuzzy, kde-format
 msgid "data type"
 msgstr "資料"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1362
+#: src/backend/datasources/filters/HDF5Filter.cpp:1364
 #, fuzzy, kde-format
 msgid "rank %1 not supported yet"
 msgstr "<b>尚未實作。</b>"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1369
+#: src/backend/datasources/filters/HDF5Filter.cpp:1371
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:75
 #, kde-format
 msgid "data set"
 msgstr "資料集"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1387
+#: src/backend/datasources/filters/HDF5Filter.cpp:1389
 #, kde-format
 msgid "symbolic link"
 msgstr "符號連結"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1387
+#: src/backend/datasources/filters/HDF5Filter.cpp:1389
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "link to %1"
 msgstr "方向"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1400
+#: src/backend/datasources/filters/HDF5Filter.cpp:1402
 #, kde-format
 msgid "hard link"
 msgstr "硬式連結"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1464
+#: src/backend/datasources/filters/HDF5Filter.cpp:1466
 #, kde-format
 msgid "unknown"
 msgstr "未知"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1524
-#: src/backend/datasources/filters/HDF5Filter.cpp:2151
+#: src/backend/datasources/filters/HDF5Filter.cpp:1526
+#: src/backend/datasources/filters/HDF5Filter.cpp:2153
 #, kde-format
 msgid "No data set selected."
 msgstr "未選取資料集。"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1593
+#: src/backend/datasources/filters/HDF5Filter.cpp:1595
 #, fuzzy, kde-format
 msgid "rank 0 not implemented yet for type %1"
 msgstr "<b>尚未實作。</b>"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1732
-#: src/backend/datasources/filters/HDF5Filter.cpp:1881
+#: src/backend/datasources/filters/HDF5Filter.cpp:1734
+#: src/backend/datasources/filters/HDF5Filter.cpp:1883
 #, kde-format
 msgid "unsupported integer type for rank 1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1745
+#: src/backend/datasources/filters/HDF5Filter.cpp:1747
 #, kde-format
 msgid "unsupported float type for rank 1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1896
+#: src/backend/datasources/filters/HDF5Filter.cpp:1898
 #, fuzzy, kde-format
 msgid "rank 1 not implemented yet for type %1"
 msgstr "<b>尚未實作。</b>"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2029
+#: src/backend/datasources/filters/HDF5Filter.cpp:2031
 #, kde-format
 msgid "unsupported integer type for rank 2"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2042
+#: src/backend/datasources/filters/HDF5Filter.cpp:2044
 #, kde-format
 msgid "unsupported float type for rank 2"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2105
+#: src/backend/datasources/filters/HDF5Filter.cpp:2107
 #, fuzzy, kde-format
 msgid "rank 2 not implemented yet for type %1"
 msgstr "<b>尚未實作。</b>"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2114
+#: src/backend/datasources/filters/HDF5Filter.cpp:2116
 #, fuzzy, kde-format
 msgid "rank %1 not implemented yet for type %2"
 msgstr "<b>尚未實作。</b>"
@@ -1714,119 +1714,119 @@ msgstr ""
 msgid "XYRGB"
 msgstr ""
 
-#: src/backend/datasources/filters/ImageFilter.cpp:118
+#: src/backend/datasources/filters/ImageFilter.cpp:120
 #, kde-format
 msgid "Empty file or invalid or non-supported format."
 msgstr ""
 
-#: src/backend/datasources/filters/ImageFilter.cpp:219
+#: src/backend/datasources/filters/ImageFilter.cpp:221
 #, kde-format
 msgid "numerical data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:181
+#: src/backend/datasources/filters/JsonFilter.cpp:183
 #, kde-format
 msgid "Open device failed"
 msgstr "開啟裝置失敗"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:184
+#: src/backend/datasources/filters/JsonFilter.cpp:186
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Empty file"
 msgstr "匯出到檔案"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:190
+#: src/backend/datasources/filters/JsonFilter.cpp:192
 #, fuzzy, kde-format
 #| msgid "Created: %1"
 msgid "Parse error: %1 at offset %2"
 msgstr "建立時間：%1"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:193
+#: src/backend/datasources/filters/JsonFilter.cpp:195
 #, kde-format
 msgid "Valid JSON document"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:224
-#: src/backend/datasources/filters/McapFilter.cpp:296
+#: src/backend/datasources/filters/JsonFilter.cpp:226
+#: src/backend/datasources/filters/McapFilter.cpp:298
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:232
+#: src/backend/datasources/filters/JsonFilter.cpp:234
 #, kde-format
 msgid "timestamp"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:234
+#: src/backend/datasources/filters/JsonFilter.cpp:236
 #, kde-format
 msgid "month"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:236
+#: src/backend/datasources/filters/JsonFilter.cpp:238
 #, kde-format
 msgid "day"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:238
+#: src/backend/datasources/filters/JsonFilter.cpp:240
 #: src/frontend/CLIProcessor.cpp:271
 #, fuzzy, kde-format
 #| msgid "Rename"
 msgid "name"
 msgstr "重新命名"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:348
+#: src/backend/datasources/filters/JsonFilter.cpp:350
 #, kde-format
 msgid "Device/file is empty."
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:356
+#: src/backend/datasources/filters/JsonFilter.cpp:358
 #, kde-format
 msgid "JSON format error or document empty."
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:503
+#: src/backend/datasources/filters/JsonFilter.cpp:505
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Empty file or invalid JSON document."
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:308
-#: src/backend/datasources/filters/NetCDFFilter.cpp:237
-#: src/backend/datasources/filters/ReadStatFilter.cpp:176
+#: src/backend/datasources/filters/MatioFilter.cpp:310
+#: src/backend/datasources/filters/NetCDFFilter.cpp:239
+#: src/backend/datasources/filters/ReadStatFilter.cpp:178
 #, kde-format
 msgid "Error getting file info"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:317
+#: src/backend/datasources/filters/MatioFilter.cpp:319
 #, fuzzy, kde-format
 msgid "Matlab version 7.3"
 msgstr "顯示選項(&H)"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:320
+#: src/backend/datasources/filters/MatioFilter.cpp:322
 #, fuzzy, kde-format
 msgid "Matlab version 5"
 msgstr "顯示選項(&H)"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:323
+#: src/backend/datasources/filters/MatioFilter.cpp:325
 #, fuzzy, kde-format
 msgid "Matlab version 4"
 msgstr "顯示選項(&H)"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:326
+#: src/backend/datasources/filters/MatioFilter.cpp:328
 #, kde-format
 msgid "Matlab version undefined"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:332
+#: src/backend/datasources/filters/MatioFilter.cpp:334
 #, fuzzy, kde-format
 msgid "Number of variables: "
 msgstr "行數："
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
-#: src/backend/datasources/filters/MatioFilter.cpp:335
+#: src/backend/datasources/filters/MatioFilter.cpp:337
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
 #: src/frontend/dockwidgets/ColumnDock.cpp:818
 #: src/frontend/dockwidgets/ColumnDock.cpp:843
@@ -1838,117 +1838,117 @@ msgstr "行數："
 msgid "Variables:"
 msgstr "變異數"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:370
-#: src/backend/datasources/filters/MatioFilter.cpp:740
+#: src/backend/datasources/filters/MatioFilter.cpp:372
+#: src/backend/datasources/filters/MatioFilter.cpp:742
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Empty"
 msgstr "匯出到檔案"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:372
-#: src/backend/datasources/filters/MatioFilter.cpp:446
+#: src/backend/datasources/filters/MatioFilter.cpp:374
+#: src/backend/datasources/filters/MatioFilter.cpp:448
 #, kde-format
 msgid "Cell"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:374
-#: src/backend/datasources/filters/MatioFilter.cpp:448
+#: src/backend/datasources/filters/MatioFilter.cpp:376
+#: src/backend/datasources/filters/MatioFilter.cpp:450
 #, kde-format
 msgid "Struct"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:376
+#: src/backend/datasources/filters/MatioFilter.cpp:378
 #, fuzzy, kde-format
 #| msgid "Project"
 msgid "Object"
 msgstr "專案"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:378
+#: src/backend/datasources/filters/MatioFilter.cpp:380
 #, fuzzy, kde-format
 #| msgid "char"
 msgid "Char"
 msgstr "字元"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:380
+#: src/backend/datasources/filters/MatioFilter.cpp:382
 #, kde-format
 msgid "Sparse"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:384
-#: src/backend/datasources/filters/MatioFilter.cpp:426
+#: src/backend/datasources/filters/MatioFilter.cpp:386
+#: src/backend/datasources/filters/MatioFilter.cpp:428
 #, fuzzy, kde-format
 msgid "Single"
 msgstr "單色"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:386
-#: src/backend/datasources/filters/MatioFilter.cpp:414
-#, kde-format
-msgid "Int8"
-msgstr ""
-
 #: src/backend/datasources/filters/MatioFilter.cpp:388
 #: src/backend/datasources/filters/MatioFilter.cpp:416
 #, kde-format
-msgid "UInt8"
+msgid "Int8"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:390
 #: src/backend/datasources/filters/MatioFilter.cpp:418
 #, kde-format
-msgid "Int16"
+msgid "UInt8"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:392
 #: src/backend/datasources/filters/MatioFilter.cpp:420
 #, kde-format
-msgid "UInt16"
+msgid "Int16"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:394
 #: src/backend/datasources/filters/MatioFilter.cpp:422
 #, kde-format
-msgid "Int32"
+msgid "UInt16"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:396
 #: src/backend/datasources/filters/MatioFilter.cpp:424
 #, kde-format
+msgid "Int32"
+msgstr ""
+
+#: src/backend/datasources/filters/MatioFilter.cpp:398
+#: src/backend/datasources/filters/MatioFilter.cpp:426
+#, kde-format
 msgid "UInt32"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:400
-#: src/backend/datasources/filters/MatioFilter.cpp:432
+#: src/backend/datasources/filters/MatioFilter.cpp:402
+#: src/backend/datasources/filters/MatioFilter.cpp:434
 #, kde-format
 msgid "UInt64"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:402
-#: src/backend/datasources/filters/MatioFilter.cpp:452
+#: src/backend/datasources/filters/MatioFilter.cpp:404
+#: src/backend/datasources/filters/MatioFilter.cpp:454
 #: src/backend/nsl/nsl_interp.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:807
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2391
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2379
 #, fuzzy, kde-format
 msgid "Function"
 msgstr "函式"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:404
+#: src/backend/datasources/filters/MatioFilter.cpp:406
 #, kde-format
 msgid "Opaque"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:407
-#: src/backend/datasources/filters/MatioFilter.cpp:455
+#: src/backend/datasources/filters/MatioFilter.cpp:409
+#: src/backend/datasources/filters/MatioFilter.cpp:457
 #, fuzzy, kde-format
 msgid "Undefined"
 msgstr "線條"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:412
+#: src/backend/datasources/filters/MatioFilter.cpp:414
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:64
 #, fuzzy, kde-format
 msgid "Unknown"
 msgstr "未知"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:434
+#: src/backend/datasources/filters/MatioFilter.cpp:436
 #: src/frontend/ActionsManager.cpp:240 src/frontend/MainWin.cpp:1264
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
@@ -1956,209 +1956,209 @@ msgstr "未知"
 msgid "Matrix"
 msgstr "矩陣"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:436
+#: src/backend/datasources/filters/MatioFilter.cpp:438
 #, fuzzy, kde-format
 msgid "Compressed"
 msgstr "顯示選項(&H)"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:438
+#: src/backend/datasources/filters/MatioFilter.cpp:440
 #, kde-format
 msgid "UTF8"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:440
+#: src/backend/datasources/filters/MatioFilter.cpp:442
 #, kde-format
 msgid "UTF16"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:442
+#: src/backend/datasources/filters/MatioFilter.cpp:444
 #, kde-format
 msgid "UTF32"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:444
+#: src/backend/datasources/filters/MatioFilter.cpp:446
 #, kde-format
 msgid "String"
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:450
+#: src/backend/datasources/filters/MatioFilter.cpp:452
 #, fuzzy, kde-format
 #| msgid "Original size"
 msgid "Array"
 msgstr "初始大小"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:602
-#: src/backend/datasources/filters/MatioFilter.cpp:634
-#: src/backend/datasources/filters/MatioFilter.cpp:663
+#: src/backend/datasources/filters/MatioFilter.cpp:604
+#: src/backend/datasources/filters/MatioFilter.cpp:636
+#: src/backend/datasources/filters/MatioFilter.cpp:665
 #, fuzzy, kde-format
 msgid "No valid variable selected."
 msgstr "清除選擇"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:658
+#: src/backend/datasources/filters/MatioFilter.cpp:660
 #, fuzzy, kde-format
 msgid "Selected variable not found."
 msgstr "檔案資訊"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:799
+#: src/backend/datasources/filters/MatioFilter.cpp:801
 #, fuzzy, kde-format
 msgid "Struct contains no fields"
 msgstr "檔案資訊"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:881
+#: src/backend/datasources/filters/MatioFilter.cpp:883
 #, kde-format
 msgid "Support for this variable type not implemented yet."
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:1228
+#: src/backend/datasources/filters/MatioFilter.cpp:1230
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
 msgstr ""
 
-#: src/backend/datasources/filters/McapFilter.cpp:205
+#: src/backend/datasources/filters/McapFilter.cpp:207
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Valid MCAP file"
 msgstr "匯出到檔案"
 
-#: src/backend/datasources/filters/McapFilter.cpp:210
+#: src/backend/datasources/filters/McapFilter.cpp:212
 #, fuzzy, kde-format
 msgid "Message count: "
 msgstr "資料"
 
-#: src/backend/datasources/filters/McapFilter.cpp:212
+#: src/backend/datasources/filters/McapFilter.cpp:214
 #, kde-format
 msgid "Schema count: "
 msgstr ""
 
-#: src/backend/datasources/filters/McapFilter.cpp:214
+#: src/backend/datasources/filters/McapFilter.cpp:216
 #, kde-format
 msgid "Channel count: "
 msgstr ""
 
-#: src/backend/datasources/filters/McapFilter.cpp:216
+#: src/backend/datasources/filters/McapFilter.cpp:218
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
 msgid "Attachment count: "
 msgstr "%1：插入 %2 欄"
 
-#: src/backend/datasources/filters/McapFilter.cpp:218
+#: src/backend/datasources/filters/McapFilter.cpp:220
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
 msgid "Metadata count: "
 msgstr "%1：插入 %2 欄"
 
-#: src/backend/datasources/filters/McapFilter.cpp:220
+#: src/backend/datasources/filters/McapFilter.cpp:222
 #, fuzzy, kde-format
 #| msgid "Start Time:"
 msgid "Message Start Time: "
 msgstr "開始時間："
 
-#: src/backend/datasources/filters/McapFilter.cpp:222
+#: src/backend/datasources/filters/McapFilter.cpp:224
 #, fuzzy, kde-format
 #| msgid "Date and time"
 msgid "Message End Time: "
 msgstr "日期和時間"
 
-#: src/backend/datasources/filters/McapFilter.cpp:224
+#: src/backend/datasources/filters/McapFilter.cpp:226
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "No Statistics found."
 msgstr "統計"
 
-#: src/backend/datasources/filters/McapFilter.cpp:478
-#: src/backend/datasources/filters/McapFilter.cpp:1010
+#: src/backend/datasources/filters/McapFilter.cpp:480
+#: src/backend/datasources/filters/McapFilter.cpp:1012
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read the file. Reason: %1"
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/McapFilter.cpp:486
+#: src/backend/datasources/filters/McapFilter.cpp:488
 #, kde-format
 msgid "No JSON encoded topics found."
 msgstr ""
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:213
+#: src/backend/datasources/filters/NetCDFFilter.cpp:215
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Error opening file"
 msgstr "開啟專案"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:222
+#: src/backend/datasources/filters/NetCDFFilter.cpp:224
 #, fuzzy, kde-format
 msgid "Number of global attributes: %1"
 msgstr "行數："
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:224
+#: src/backend/datasources/filters/NetCDFFilter.cpp:226
 #, fuzzy, kde-format
 msgid "Number of dimensions: %1"
 msgstr "行數："
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:226
-#: src/backend/datasources/filters/ReadStatFilter.cpp:131
+#: src/backend/datasources/filters/NetCDFFilter.cpp:228
+#: src/backend/datasources/filters/ReadStatFilter.cpp:133
 #, fuzzy, kde-format
 msgid "Number of variables: %1"
 msgstr "行數："
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:232
-#: src/backend/datasources/filters/ReadStatFilter.cpp:137
+#: src/backend/datasources/filters/NetCDFFilter.cpp:234
+#: src/backend/datasources/filters/ReadStatFilter.cpp:139
 #, fuzzy, kde-format
 msgid "Format version: %1"
 msgstr "顯示選項(&H)"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:235
+#: src/backend/datasources/filters/NetCDFFilter.cpp:237
 #, kde-format
 msgid "Using library version %1"
 msgstr ""
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:260
+#: src/backend/datasources/filters/NetCDFFilter.cpp:262
 #, fuzzy, kde-format
 msgid "ncdump not found."
 msgstr "檔案資訊"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:454
+#: src/backend/datasources/filters/NetCDFFilter.cpp:456
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "global attribute"
 msgstr "方向"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:458
+#: src/backend/datasources/filters/NetCDFFilter.cpp:460
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "%1 attribute"
 msgstr "方向"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:486
+#: src/backend/datasources/filters/NetCDFFilter.cpp:488
 #, fuzzy, kde-format
 #| msgid "Length"
 msgid "length"
 msgstr "長度"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:489
+#: src/backend/datasources/filters/NetCDFFilter.cpp:491
 #, kde-format
 msgid "unlimited"
 msgstr ""
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:490
+#: src/backend/datasources/filters/NetCDFFilter.cpp:492
 #, fuzzy, kde-format
 msgid "dimension"
 msgstr "尺寸"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:526
+#: src/backend/datasources/filters/NetCDFFilter.cpp:528
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "variable"
 msgstr "變異數"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:619
+#: src/backend/datasources/filters/NetCDFFilter.cpp:621
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #, kde-format
 msgid "Attributes"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
-#: src/backend/datasources/filters/NetCDFFilter.cpp:625
+#: src/backend/datasources/filters/NetCDFFilter.cpp:627
 #: src/frontend/ui/dockwidgets/matrixdock.ui:87
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:48
 #, fuzzy, kde-format
@@ -2166,32 +2166,32 @@ msgid "Dimensions"
 msgstr "尺寸"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tVariables)
-#: src/backend/datasources/filters/NetCDFFilter.cpp:631
+#: src/backend/datasources/filters/NetCDFFilter.cpp:633
 #: src/frontend/ui/dockwidgets/scriptdock.ui:120
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "Variables"
 msgstr "變異數"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:689
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1114
+#: src/backend/datasources/filters/NetCDFFilter.cpp:691
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1116
 #, fuzzy, kde-format
 msgid "No variable selected."
 msgstr "清除選擇"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:700
+#: src/backend/datasources/filters/NetCDFFilter.cpp:702
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the file or it's empty."
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:938
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1078
+#: src/backend/datasources/filters/NetCDFFilter.cpp:940
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1080
 #, fuzzy, kde-format
 msgid "Data type not supported yet."
 msgstr "<b>尚未實作。</b>"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1083
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1085
 #, kde-format
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr ""
@@ -2202,34 +2202,34 @@ msgstr ""
 msgid "Sheet count: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:628
+#: src/backend/datasources/filters/OdsFilter.cpp:227
+#: src/backend/datasources/filters/XLSXFilter.cpp:630
 #, fuzzy, kde-format
 msgid "No sheet selected."
 msgstr "清除選擇"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:260
+#: src/backend/datasources/filters/OdsFilter.cpp:262
 #, fuzzy, kde-format
 msgid "Selected sheet not found."
 msgstr "檔案資訊"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:267
+#: src/backend/datasources/filters/OdsFilter.cpp:269
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Invalid sheet."
 msgstr "匯出到檔案"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:329
+#: src/backend/datasources/filters/OdsFilter.cpp:331
 #, fuzzy, kde-format
 msgid "Formulas not supported yet."
 msgstr "<b>尚未實作。</b>"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:486
+#: src/backend/datasources/filters/OdsFilter.cpp:488
 #, fuzzy, kde-format
 msgid "Sheet not found."
 msgstr "檔案資訊"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:493
+#: src/backend/datasources/filters/OdsFilter.cpp:495
 #, fuzzy, kde-format
 msgid "Invalid sheet index."
 msgstr "數值"
@@ -2287,63 +2287,63 @@ msgstr "格式"
 msgid "Number of stripes: %1"
 msgstr "行數："
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:212
+#: src/backend/datasources/filters/ParquetFilter.cpp:214
 #, fuzzy, kde-format
 #| msgid "Couldn't open the file"
 msgid "Could not open file: %1"
 msgstr "無法開啟檔案"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:224
+#: src/backend/datasources/filters/ParquetFilter.cpp:226
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open Parquet file: %1"
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:235
-#: src/backend/datasources/filters/ParquetFilter.cpp:244
+#: src/backend/datasources/filters/ParquetFilter.cpp:237
+#: src/backend/datasources/filters/ParquetFilter.cpp:246
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read Parquet table: %1"
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:254
+#: src/backend/datasources/filters/ParquetFilter.cpp:256
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open Arrow IPC file: %1"
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:265
+#: src/backend/datasources/filters/ParquetFilter.cpp:267
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read record batch %1: %2"
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:272
+#: src/backend/datasources/filters/ParquetFilter.cpp:274
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to assemble table: %1"
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:282
+#: src/backend/datasources/filters/ParquetFilter.cpp:284
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open ORC file: %1"
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:292
-#: src/backend/datasources/filters/ParquetFilter.cpp:300
+#: src/backend/datasources/filters/ParquetFilter.cpp:294
+#: src/backend/datasources/filters/ParquetFilter.cpp:302
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read ORC table: %1"
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:309
+#: src/backend/datasources/filters/ParquetFilter.cpp:311
 #, fuzzy, kde-format
 #| msgid "Type of data source"
 msgid "Unsupported file format."
 msgstr "資料來源類型"
 
-#: src/backend/datasources/filters/ParquetFilter.cpp:398
+#: src/backend/datasources/filters/ParquetFilter.cpp:400
 #, kde-format
 msgid "The file has no data to import."
 msgstr ""
@@ -2388,72 +2388,72 @@ msgstr "開啟失敗"
 msgid "Failed to load JSON document. Error: %1."
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:124
+#: src/backend/datasources/filters/ReadStatFilter.cpp:126
 #, kde-format
 msgid "Unknown file extension"
 msgstr ""
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:129
+#: src/backend/datasources/filters/ReadStatFilter.cpp:131
 #, fuzzy, kde-format
 msgid "Number of records: %1"
 msgstr "欄數："
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:133
+#: src/backend/datasources/filters/ReadStatFilter.cpp:135
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "Creation time: %1"
 msgstr "方向"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:135
+#: src/backend/datasources/filters/ReadStatFilter.cpp:137
 #, kde-format
 msgid "Modification time: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:151
+#: src/backend/datasources/filters/ReadStatFilter.cpp:153
 #, fuzzy, kde-format
 msgid "Compression: %1"
 msgstr "顯示選項(&H)"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:165
+#: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "Endianness: %1"
 msgstr "影像"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:167
+#: src/backend/datasources/filters/ReadStatFilter.cpp:169
 #, fuzzy, kde-format
 msgid "Table name: %1"
 msgstr "可讀取："
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:169
+#: src/backend/datasources/filters/ReadStatFilter.cpp:171
 #, fuzzy, kde-format
 msgid "File label: %1"
 msgstr "檔案名稱"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:171
+#: src/backend/datasources/filters/ReadStatFilter.cpp:173
 #, fuzzy, kde-format
 msgid "File encoding: %1"
 msgstr "顯示選項(&H)"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:173
+#: src/backend/datasources/filters/ReadStatFilter.cpp:175
 #, kde-format
 msgid "64bit: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:482
+#: src/backend/datasources/filters/ReadStatFilter.cpp:484
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Error reading file."
 msgstr "開啟專案"
 
-#: src/backend/datasources/filters/ReadStatFilter.cpp:512
-#: src/backend/datasources/filters/ReadStatFilter.cpp:535
+#: src/backend/datasources/filters/ReadStatFilter.cpp:514
+#: src/backend/datasources/filters/ReadStatFilter.cpp:537
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to parse the file."
 msgstr "開啟失敗"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:113
+#: src/backend/datasources/filters/ROOTFilter.cpp:115
 #: src/backend/datasources/MQTTClient.cpp:1188
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
@@ -2462,52 +2462,52 @@ msgstr "開啟失敗"
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:149
+#: src/backend/datasources/filters/ROOTFilter.cpp:151
 #, fuzzy, kde-format
 msgid "No column available"
 msgstr "全部選取"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:163
+#: src/backend/datasources/filters/ROOTFilter.cpp:165
 #, kde-format
 msgid "Unsupported file type, neither histogram no tree."
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1505
+#: src/backend/datasources/filters/ROOTFilter.cpp:1507
 #, kde-format
 msgid "Not a ROOT file"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1510
+#: src/backend/datasources/filters/ROOTFilter.cpp:1512
 #, fuzzy, kde-format
 msgid "File format version: %1"
 msgstr "顯示選項(&H)"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1518
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, fuzzy, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "檔案型態"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1520
+#: src/backend/datasources/filters/ROOTFilter.cpp:1522
 #, fuzzy, kde-format
 msgid "Number of free data records: %1"
 msgstr "行數："
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1522
+#: src/backend/datasources/filters/ROOTFilter.cpp:1524
 #, fuzzy, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "檔案型態"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1524
+#: src/backend/datasources/filters/ROOTFilter.cpp:1526
 #, fuzzy, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "檔案型態"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1529
+#: src/backend/datasources/filters/ROOTFilter.cpp:1531
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1534
+#: src/backend/datasources/filters/ROOTFilter.cpp:1536
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr ""
@@ -2611,7 +2611,7 @@ msgstr ""
 msgid "Sheets: "
 msgstr ""
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:632
+#: src/backend/datasources/filters/XLSXFilter.cpp:634
 #, kde-format
 msgid "Invalid region specified."
 msgstr ""
@@ -6673,7 +6673,7 @@ msgstr "列印"
 msgid "Text file (*.txt)"
 msgstr ""
 
-#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:98
+#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:111
 #: src/backend/statistics/HypothesisTest.cpp:190
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6683,13 +6683,13 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "匯出到檔案"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:112
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:125
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Export failed"
 msgstr "匯出到檔案"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:112
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:125
 #, fuzzy, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "無法開啟檔案 %1 以讀取"
@@ -7000,7 +7000,7 @@ msgid "Raw"
 msgstr ""
 
 #: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2851
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2844
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1117
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:234
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
@@ -7274,7 +7274,7 @@ msgstr "輻射狀漸層"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2286
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2282
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:455
 #, fuzzy, kde-format
 #| msgid "Orientation"
@@ -7710,34 +7710,34 @@ msgstr "高度"
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/script/Script.cpp:96
+#: src/backend/script/Script.cpp:109
 #, kde-format
 msgid "Python file (*.py)"
 msgstr ""
 
-#: src/backend/script/Script.cpp:154 src/backend/script/Script.cpp:338
+#: src/backend/script/Script.cpp:164 src/backend/script/Script.cpp:351
 #, fuzzy, kde-format
 msgid "no script element found"
 msgstr "檔案資訊"
 
-#: src/backend/script/Script.cpp:212
+#: src/backend/script/Script.cpp:225
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:318 src/backend/script/Script.cpp:323
+#: src/backend/script/Script.cpp:331 src/backend/script/Script.cpp:336
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, fuzzy, kde-format
 msgid "Script"
 msgstr "文稿"
 
-#: src/backend/script/Script.cpp:318
+#: src/backend/script/Script.cpp:331
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to run the script."
 msgstr "開啟失敗"
 
-#: src/backend/script/Script.cpp:323
+#: src/backend/script/Script.cpp:336
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -9759,7 +9759,7 @@ msgstr "全部選取"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:143
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5670
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5663
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:623
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -9770,7 +9770,7 @@ msgstr "標題"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2407
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2395
 #: src/frontend/ui/dockwidgets/barplotdock.ui:229
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:241
 #: src/frontend/ui/dockwidgets/histogramdock.ui:387
@@ -9811,7 +9811,7 @@ msgid "Vertical Axis"
 msgstr "垂直軸："
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2454
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2442
 #: src/frontend/ActionsManager.cpp:559
 #: src/frontend/datasources/ImportFileWidget.cpp:114
 #: src/frontend/matrix/MatrixView.cpp:133
@@ -9825,35 +9825,35 @@ msgid "Image"
 msgstr "影像"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2430
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2418
 #, fuzzy, kde-format
 #| msgid "Increment"
 msgid "Info Element"
 msgstr "遞增"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:458
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2474
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2462
 #, fuzzy, kde-format
 msgid "Custom Point"
 msgstr "自訂"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2499
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2487
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:180
 #, fuzzy, kde-format
 msgid "Reference Line"
 msgstr "喜好設定"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:460
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2558
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2546
 #, fuzzy, kde-format
 msgid "Reference Range"
 msgstr "喜好設定"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2518
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2540
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2506
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2528
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Inset Plot Area"
@@ -9866,7 +9866,7 @@ msgid "Inset Plot Area with Data"
 msgstr "繪製區域"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
-#: src/frontend/ActionsManager.cpp:907
+#: src/frontend/ActionsManager.cpp:903
 #: src/frontend/notebook/NotebookView.cpp:175
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:442
@@ -9892,8 +9892,8 @@ msgstr "分析"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:518
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:553
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2359
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2361
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2348
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2350
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:614
 #, fuzzy, kde-format
 #| msgid "int"
@@ -10101,7 +10101,7 @@ msgstr "函式"
 
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:752
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2300
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2295
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:294
 #, kde-format
 msgid "Smooth"
@@ -10132,7 +10132,7 @@ msgid "Fourier Transform"
 msgstr "新增過濾器"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:775
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2379
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2367
 #, fuzzy, kde-format
 msgid "Fourier Filter"
 msgstr "新增過濾器"
@@ -10161,7 +10161,7 @@ msgid "Correct Baseline"
 msgstr "開始欄："
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:801
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2244
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2243
 #, fuzzy, kde-format
 #| msgid "implicit"
 msgid "Line Simplification"
@@ -10285,7 +10285,7 @@ msgid "%1: load default theme"
 msgstr "%1：新增 %2。"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6021
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6014
 #: src/backend/worksheet/Worksheet.cpp:896
 #, fuzzy, kde-format
 msgid "%1: set theme"
@@ -10339,7 +10339,7 @@ msgstr "方向"
 msgid "Simplification of '%1'"
 msgstr "隱式繪圖"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2251
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2250
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:844
 #, fuzzy, kde-format
 #| msgid "Orientation"
@@ -10347,7 +10347,7 @@ msgid "Derivative of '%1'"
 msgstr "方向"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2258
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2256
 #: src/frontend/notebook/NotebookView.cpp:156
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:255
 #, fuzzy, kde-format
@@ -10355,7 +10355,7 @@ msgstr "方向"
 msgid "Differentiation"
 msgstr "方向"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2265
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2263
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:847
 #, fuzzy, kde-format
 #| msgid "Orientation"
@@ -10363,7 +10363,7 @@ msgid "Integral of '%1'"
 msgstr "方向"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2272
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2269
 #: src/frontend/notebook/NotebookView.cpp:162
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:424
 #, fuzzy, kde-format
@@ -10371,31 +10371,31 @@ msgstr "方向"
 msgid "Integration"
 msgstr "方向"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2279
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2276
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:850
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "Interpolation of '%1'"
 msgstr "方向"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2293
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2289
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:853
 #, fuzzy, kde-format
 msgid "Smoothing of '%1'"
 msgstr "不做任何事"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2307
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2302
 #, kde-format
 msgid "Baseline correction for '%1'"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2314
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2308
 #, fuzzy, kde-format
 msgid "Baseline Correction"
 msgstr "連線"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2329
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2344
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2323
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2338
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:837
 #, fuzzy, kde-format
 #| msgid "Orientation"
@@ -10403,23 +10403,23 @@ msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "方向"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2372
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2361
 #, fuzzy, kde-format
 msgid "Fourier filtering of '%1'"
 msgstr "新增過濾器"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2386
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2374
 #, fuzzy, kde-format
 msgid "Function of '%1'"
 msgstr "不做任何事"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2437
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2425
 #: src/frontend/worksheet/WorksheetView.cpp:1355
 #, fuzzy, kde-format
 msgid "Text Label"
 msgstr "文字標籤"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2438
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2426
 #: src/frontend/CLIProcessor.cpp:275 src/frontend/CLIProcessor.cpp:276
 #: src/frontend/CLIProcessor.cpp:277
 #: src/frontend/worksheet/WorksheetView.cpp:1356
@@ -10427,82 +10427,82 @@ msgstr "文字標籤"
 msgid "text"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2517
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2505
 #, fuzzy, kde-format
 msgid "%1: add inset plot"
 msgstr "設定佈局"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2531
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2519
 #, fuzzy, kde-format
 msgid "%1: add inset plot with data"
 msgstr "設定字型"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2857
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2850
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:635
 #, kde-format
 msgid "Cumulative Percentage"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3473
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3466
 #, fuzzy, kde-format
 msgid "%1: zoom in"
 msgstr "設定不透明度"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3488
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3481
 #, fuzzy, kde-format
 msgid "%1: zoom out"
 msgstr "設定佈局"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3519
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, fuzzy, kde-format
 #| msgid "min."
 msgid "in"
 msgstr "分"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3519
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, fuzzy, kde-format
 msgid "out"
 msgstr "圓心"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3519
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, fuzzy, kde-format
 msgid "%1: zoom %2 %3"
 msgstr "移動到"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4370
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4363
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4494
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4515
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4487
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4508
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4502
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4528
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4495
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4521
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4547
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4540
 #, kde-format
 msgid "x=%1"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4565
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4558
 #, fuzzy, kde-format
 #| msgid "%1: pasted '%2'"
 msgid "%1: pan"
 msgstr "%1：已貼上「%2」"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4643
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4636
 #, fuzzy, kde-format
 msgid "%1: zoom selection"
 msgstr "設定字型"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4766
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4759
 #, kde-format
 msgid "%1: wheel zoom"
 msgstr ""
@@ -12417,8 +12417,8 @@ msgstr "匯出"
 msgid "Export selected element"
 msgstr "符合選擇區域"
 
-#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1438
-#: src/frontend/ActionsManager.cpp:1446
+#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1434
+#: src/frontend/ActionsManager.cpp:1442
 #, kde-format
 msgid "Share"
 msgstr ""
@@ -12814,7 +12814,7 @@ msgid "Sort the selected columns separately in descending order"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1604
+#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1600
 #: src/frontend/dockwidgets/LiveDataDock.cpp:239
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
@@ -12900,49 +12900,49 @@ msgstr ""
 msgid "Shift Down"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:946
+#: src/frontend/ActionsManager.cpp:942
 #, kde-format
 msgid "Window Visibility"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:963
+#: src/frontend/ActionsManager.cpp:959
 #, fuzzy, kde-format
 msgid "Color Scheme"
 msgstr "色彩映射"
 
-#: src/frontend/ActionsManager.cpp:1404
+#: src/frontend/ActionsManager.cpp:1400
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1438
+#: src/frontend/ActionsManager.cpp:1434
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1442
+#: src/frontend/ActionsManager.cpp:1438
 #, kde-format
 msgid "Project shared successfully"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1445
+#: src/frontend/ActionsManager.cpp:1441
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1600
+#: src/frontend/ActionsManager.cpp:1596
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, fuzzy, kde-format
 msgid "Continue"
 msgstr "密度"
 
-#: src/frontend/ActionsManager.cpp:1601
+#: src/frontend/ActionsManager.cpp:1597
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1605
+#: src/frontend/ActionsManager.cpp:1601
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
 #, kde-format
 msgid "Pause Reading"
@@ -18100,19 +18100,19 @@ msgid "Script Toolbar"
 msgstr "專案屬性"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
-#: src/frontend/labplotui.rc:102
+#: src/frontend/labplotui.rc:100
 #, fuzzy, kde-format
 msgid "Plot Area Toolbar"
 msgstr "從"
 
 #. i18n: ectx: Menu (file)
-#: src/frontend/labplotui.rc:130
+#: src/frontend/labplotui.rc:128
 #, fuzzy, kde-format
 msgid "&File"
 msgstr "檔案(&F)"
 
 #. i18n: ectx: Menu (new)
-#: src/frontend/labplotui.rc:132
+#: src/frontend/labplotui.rc:130
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "&Add New"
@@ -18120,68 +18120,68 @@ msgstr "新增"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/frontend/labplotui.rc:143 src/frontend/labplotui.rc:178
+#: src/frontend/labplotui.rc:141 src/frontend/labplotui.rc:176
 #, fuzzy, kde-format
 msgid "&Notebook"
 msgstr "備忘"
 
 #. i18n: ectx: Menu (new_script)
 #. i18n: ectx: Menu (script)
-#: src/frontend/labplotui.rc:149 src/frontend/labplotui.rc:181
+#: src/frontend/labplotui.rc:147 src/frontend/labplotui.rc:179
 #, fuzzy, kde-format
 msgid "&Script"
 msgstr "文稿"
 
 #. i18n: ectx: Menu (import)
-#: src/frontend/labplotui.rc:154
+#: src/frontend/labplotui.rc:152
 #, fuzzy, kde-format
 msgid "Import"
 msgstr "匯入"
 
 #. i18n: ectx: Menu (edit)
-#: src/frontend/labplotui.rc:170
+#: src/frontend/labplotui.rc:168
 #, kde-format
 msgid "&Edit"
 msgstr "編輯(&E)"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/frontend/labplotui.rc:175
+#: src/frontend/labplotui.rc:173
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "試算表(&S)"
 
 #. i18n: ectx: Menu (matrix)
-#: src/frontend/labplotui.rc:176
+#: src/frontend/labplotui.rc:174
 #, fuzzy, kde-format
 msgid "&Matrix"
 msgstr "矩陣"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/frontend/labplotui.rc:177
+#: src/frontend/labplotui.rc:175
 #, kde-format
 msgid "&Worksheet"
 msgstr "工作表(&W)"
 
 #. i18n: ectx: Menu (data_extractor)
-#: src/frontend/labplotui.rc:179
+#: src/frontend/labplotui.rc:177
 #, fuzzy, kde-format
 msgid "&Data Extractor"
 msgstr "資料格式"
 
 #. i18n: ectx: Menu (drawing)
-#: src/frontend/labplotui.rc:180
+#: src/frontend/labplotui.rc:178
 #, fuzzy, kde-format
 msgid "&Drawing"
 msgstr "繪圖"
 
 #. i18n: ectx: Menu (tools)
-#: src/frontend/labplotui.rc:182
+#: src/frontend/labplotui.rc:180
 #, kde-format
 msgid "&Tools"
 msgstr ""
 
 #. i18n: ectx: Menu (windows)
-#: src/frontend/labplotui.rc:186
+#: src/frontend/labplotui.rc:184
 #, kde-format
 msgid "&Windows"
 msgstr "視窗(&W)"
@@ -19120,6 +19120,11 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
 msgstr "（已改變）"
+
+#: src/frontend/SettingsEditorPage.cpp:24
+#, kde-format
+msgid "Automatically show output when a script produces output"
+msgstr ""
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, fuzzy, kde-format
