@@ -138,8 +138,11 @@ public:
 			return new Note(QString());
 		else if (type == AspectType::Workbook)
 			return new Workbook(QString());
+
+#ifdef HAVE_SCRIPTING
 		else if (type == AspectType::Script)
 			return new Script(QString());
+#endif
 #endif
 		return nullptr;
 	}
