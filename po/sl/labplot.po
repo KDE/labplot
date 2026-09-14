@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-13 00:40+0000\n"
-"PO-Revision-Date: 2026-09-06 08:04+0200\n"
+"PO-Revision-Date: 2026-09-13 07:24+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -19027,7 +19027,7 @@ msgstr "Nastavitve [spremenjeno]"
 #: src/frontend/SettingsEditorPage.cpp:24
 #, kde-format
 msgid "Automatically show output when a script produces output"
-msgstr ""
+msgstr "Samodejno prikaži izpis, ko skript ustvari izpis."
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format

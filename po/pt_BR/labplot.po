@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-13 00:40+0000\n"
-"PO-Revision-Date: 2026-09-06 10:25-0300\n"
+"PO-Revision-Date: 2026-09-13 07:07-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -19071,7 +19071,7 @@ msgstr "Preferências    [Alteradas]"
 #: src/frontend/SettingsEditorPage.cpp:24
 #, kde-format
 msgid "Automatically show output when a script produces output"
-msgstr ""
+msgstr "Mostrar automaticamente a saída quando um script gerar saída"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format

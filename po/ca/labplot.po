@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-13 00:40+0000\n"
-"PO-Revision-Date: 2026-09-06 17:23+0200\n"
+"PO-Revision-Date: 2026-09-13 09:27+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19195,7 +19195,7 @@ msgstr "Preferències [modificades]"
 #: src/frontend/SettingsEditorPage.cpp:24
 #, kde-format
 msgid "Automatically show output when a script produces output"
-msgstr ""
+msgstr "Mostra automàticament la sortida si un script genera sortida"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format

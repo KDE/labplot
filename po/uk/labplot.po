@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-13 00:40+0000\n"
-"PO-Revision-Date: 2026-09-06 17:59+0300\n"
+"PO-Revision-Date: 2026-09-13 13:05+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -19104,6 +19104,7 @@ msgstr "Налаштування      [Змінено]"
 #, kde-format
 msgid "Automatically show output when a script produces output"
 msgstr ""
+"Автоматично показувати виведене, якщо скрипт виводить якісь повідомлення"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format

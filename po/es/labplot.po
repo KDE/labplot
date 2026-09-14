@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-13 00:40+0000\n"
-"PO-Revision-Date: 2026-09-08 01:44+0100\n"
+"PO-Revision-Date: 2026-09-13 12:04+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -19089,7 +19089,7 @@ msgstr "Preferencias  [Modificadas]"
 #: src/frontend/SettingsEditorPage.cpp:24
 #, kde-format
 msgid "Automatically show output when a script produces output"
-msgstr ""
+msgstr "Mostrar la salida automáticamente cuando un guion genera salida"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format

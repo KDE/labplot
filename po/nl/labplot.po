@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-13 00:40+0000\n"
-"PO-Revision-Date: 2026-09-07 14:00+0200\n"
+"PO-Revision-Date: 2026-09-13 18:24+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -19059,7 +19059,7 @@ msgstr "Voorkeuren [Gewijzigd]"
 #: src/frontend/SettingsEditorPage.cpp:24
 #, kde-format
 msgid "Automatically show output when a script produces output"
-msgstr ""
+msgstr "Automatisch uitvoer tonen wanneer een script uitvoer produceert"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
