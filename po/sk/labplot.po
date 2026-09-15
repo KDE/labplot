@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-13 00:40+0000\n"
-"PO-Revision-Date: 2026-04-13 12:00+0200\n"
-"Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
+"PO-Revision-Date: 2026-09-14 20:10+0200\n"
+"Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -9834,7 +9834,7 @@ msgstr "Paretov diagram"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
 #, kde-format
 msgid "Piecewise Linear"
-msgstr ""
+msgstr "Po častiach lineárne"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #, kde-format
@@ -11401,29 +11401,25 @@ msgid "%1: set options and perform the line simplification"
 msgstr "%1: nastaviť písmo"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
-#, fuzzy, kde-format
-#| msgid "%1: set gluepoint index"
+#, kde-format
 msgid "%1: toggle changepoint lines"
-msgstr "%1: nastaviť index lepiaceho bodu"
+msgstr "%1: prepnúť čiary bodov zmeny"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:291
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:745
-#, fuzzy, kde-format
-#| msgctxt "Curve fitting"
-#| msgid "Fit Results"
+#, kde-format
 msgid "Fit Results"
 msgstr "Výsledky prispôsobenia"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:502
 #, kde-format
 msgid "Piecewise Linear Fit Results"
-msgstr ""
+msgstr "Výsledky po častiach lineárneho preloženia"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
-#, fuzzy, kde-format
-#| msgid "Test result is not available."
+#, kde-format
 msgid "No results available yet"
-msgstr "Výsledok testu nie je k dispozícii."
+msgstr "Zatiaľ nie sú k dispozícii žiadne výsledky"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:512
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:518
@@ -11433,37 +11429,34 @@ msgid "Status: %1"
 msgstr "Stav: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:519
-#, fuzzy, kde-format
-#| msgid "Number of Objects: %1"
+#, kde-format
 msgid "Number of Segments: %1"
-msgstr "Počet objektov: %1"
+msgstr "Počet segmentov: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:520
-#, fuzzy, kde-format
-#| msgid "number of points: %1"
+#, kde-format
 msgid "Number of Changepoints: %1"
-msgstr "number of points: %1"
+msgstr "Počet bodov zmeny: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:521
 #, kde-format
 msgid "Overall R²: %1"
-msgstr ""
+msgstr "Celkové R²: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
 #, kde-format
 msgid "Overall SSE: %1"
-msgstr ""
+msgstr "Celkové SSE: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
 #, kde-format
 msgid "Changepoint Positions (X-values)"
-msgstr ""
+msgstr "Polohy bodov zmeny (hodnoty X)"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:536
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "Segment %1"
-msgstr "Segmenty"
+msgstr "Segment %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
@@ -11475,25 +11468,22 @@ msgstr "Parametre:"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:546
 #, kde-format
 msgid "Parameter Statistics (Slope):"
-msgstr ""
+msgstr "Štatistika parametrov (smernica):"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:552
-#, fuzzy, kde-format
-#| msgid "Goodness of fit"
+#, kde-format
 msgid "Goodness of Fit:"
-msgstr "Kvalita preloženia"
+msgstr "Kvalita preloženia:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:562
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Tests:"
-msgstr "Štatistické grafy"
+msgstr "Štatistické testy:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:569
-#, fuzzy, kde-format
-#| msgid "Akaike information criterion"
+#, kde-format
 msgid "Information Criteria:"
-msgstr "Akaikeho informačné kritérium"
+msgstr "Informačné kritériá:"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -12627,44 +12617,40 @@ msgid "Pause Reading"
 msgstr "Pozastaviť čítanie"
 
 #: src/frontend/CLIProcessor.cpp:106
-#, fuzzy, kde-format
-#| msgid "Import Data"
+#, kde-format
 msgid "Imported Data"
-msgstr "Importovať dáta"
+msgstr "Importované dáta"
 
 #: src/frontend/CLIProcessor.cpp:144
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Template file"
-msgstr "Prázdny súbor"
+msgstr "Súbor šablóny"
 
 #: src/frontend/CLIProcessor.cpp:264
-#, fuzzy, kde-format
-#| msgid "Disable splash screen"
+#, kde-format
 msgid "Disable splash screen (GUI mode only)."
-msgstr "Nezobrazovať uvítaciu obrazovku"
+msgstr "Vypnúť uvítaciu obrazovku (iba v režime GUI)."
 
 #: src/frontend/CLIProcessor.cpp:265
-#, fuzzy, kde-format
-#| msgid "Start in the presenter mode"
+#, kde-format
 msgid "Start in presenter mode (GUI mode only)."
-msgstr "Spustiť v prezentačnom režime"
+msgstr "Spustiť v prezentačnom režime (iba v režime GUI)."
 
 #: src/frontend/CLIProcessor.cpp:266
 #, kde-format
 msgid "Input data file (CSV, HDF5, etc.) or project file (.lml)."
-msgstr ""
+msgstr "Vstupný dátový súbor (CSV, HDF5 atď.) alebo súbor projektu (.lml)."
 
 #: src/frontend/CLIProcessor.cpp:266 src/frontend/CLIProcessor.cpp:267
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "file"
-msgstr ""
+msgstr "súbor"
 
 #: src/frontend/CLIProcessor.cpp:267
 #, kde-format
 msgid "Output file for export (PDF, PNG, SVG, EPS)."
-msgstr ""
+msgstr "Výstupný súbor pre export (PDF, PNG, SVG, EPS)."
 
 #: src/frontend/CLIProcessor.cpp:268
 #, kde-format
@@ -12672,85 +12658,80 @@ msgid ""
 "Output format: pdf, png, svg, or eps (auto-detected from output extension if "
 "not specified)."
 msgstr ""
+"Výstupný formát: pdf, png, svg alebo eps (ak nie je zadaný, zistí sa z "
+"prípony výstupu)."
 
 #: src/frontend/CLIProcessor.cpp:268
-#, fuzzy, kde-format
-#| msgid "data type"
+#, kde-format
 msgid "type"
-msgstr "dátový typ"
+msgstr "typ"
 
 #: src/frontend/CLIProcessor.cpp:269
 #, kde-format
 msgid "Output resolution in DPI for raster formats (default: 300)."
-msgstr ""
+msgstr "Výstupné rozlíšenie v DPI pre rastrové formáty (predvolene: 300)."
 
 #: src/frontend/CLIProcessor.cpp:269
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "value"
-msgstr "Hodnota"
+msgstr "hodnota"
 
 #: src/frontend/CLIProcessor.cpp:270
 #, kde-format
 msgid "Run in headless mode without GUI, exit after operations complete."
-msgstr ""
+msgstr "Spustiť v bezhlavom režime bez GUI, po dokončení operácií ukončiť."
 
 #: src/frontend/CLIProcessor.cpp:271
 #, kde-format
 msgid "Export a specific worksheet by name."
-msgstr ""
+msgstr "Exportovať konkrétny pracovný hárok podľa názvu."
 
 #: src/frontend/CLIProcessor.cpp:272
 #, kde-format
 msgid "Export all worksheets and spreadsheets in the project."
-msgstr ""
+msgstr "Exportovať všetky pracovné hárky a tabuľky v projekte."
 
 #: src/frontend/CLIProcessor.cpp:273
 #, kde-format
 msgid "Output directory for multiple exported files (used with --export-all)."
 msgstr ""
+"Výstupný adresár pre viacero exportovaných súborov (používa sa s --export-"
+"all)."
 
 #: src/frontend/CLIProcessor.cpp:273
-#, fuzzy, kde-format
-#| msgid "Direct"
+#, kde-format
 msgid "directory"
-msgstr "Nasmerovať"
+msgstr "adresár"
 
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "Apply a plot style template file (.labplot_template)."
-msgstr ""
+msgstr "Použiť súbor so šablónou štýlu grafu (.labplot_template)."
 
 #: src/frontend/CLIProcessor.cpp:275
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the DBC file"
+#, kde-format
 msgid "Set the plot title."
-msgstr "Vybrať súbor DBC"
+msgstr "Nastaviť názov grafu."
 
 #: src/frontend/CLIProcessor.cpp:276
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the X-axis label."
-msgstr "Vzdialenosť k menovkám značiek osi"
+msgstr "Nastaviť popis osi X."
 
 #: src/frontend/CLIProcessor.cpp:277
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the Y-axis label."
-msgstr "Vzdialenosť k menovkám značiek osi"
+msgstr "Nastaviť popis osi Y."
 
 #: src/frontend/CLIProcessor.cpp:278
-#, fuzzy, kde-format
-#| msgid "The project file %1 is already opened."
+#, kde-format
 msgid "Input project file or data file to open."
-msgstr "Súbor projektu %1 je už otvorený."
+msgstr "Vstupný súbor projektu alebo dátový súbor na otvorenie."
 
 #: src/frontend/CLIProcessor.cpp:299
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Input file"
-msgstr "Prázdny súbor"
+msgstr "Vstupný súbor"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -15595,36 +15576,31 @@ msgstr ""
 "prepojenou tabuľkou."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:600
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the constant '%1' (%2). "
 "Please use another name."
 msgstr ""
-"Zadaný názov premennej je už rezervovaný pre názov konštanty. Použite prosím "
-"iný názov."
+"Názov premennej '%1' je už rezervovaný pre konštantu '%1' (%2). Použite, "
+"prosím, iný názov."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:605
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a function. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the function '%1' (%2). "
 "Please use another name."
 msgstr ""
-"Zadaný názov premennej je už rezervovaný pre názov funkcie. Použite prosím "
-"iný názov."
+"Názov premennej '%1' je už rezervovaný pre funkciu '%1' (%2). Použite, "
+"prosím, iný názov."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:610
-#, fuzzy, kde-format
-#| msgid "The variable name 'i' is reserved for the index of the column row."
+#, kde-format
 msgid ""
 "The variable name 'i' is reserved for the index of the column row. Please "
 "use another name."
-msgstr "Názov premennej 'i' je rezervovaný pre index riadka stĺpca."
+msgstr ""
+"Názov premennej 'i' je rezervovaný pre index riadka stĺpca. Použite, prosím, "
+"iný názov."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
@@ -15644,10 +15620,9 @@ msgstr ""
 "písmenom"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:636
-#, fuzzy, kde-format
-#| msgid "No variable columns provided."
+#, kde-format
 msgid "Invalid variable name provided"
-msgstr "Vyčistiť výber"
+msgstr "Zadaný neplatný názov premennej"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:642
 #, kde-format
@@ -16987,20 +16962,19 @@ msgid "area error: %1"
 msgstr "chyba oblasti: %1"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
-#, fuzzy, kde-format
-#| msgid "Continue"
+#, kde-format
 msgid "Continuous"
-msgstr "Pokračovať"
+msgstr "Prispievatelia"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
-#, fuzzy, kde-format
+#, kde-format
 msgid "Discontinuous"
-msgstr "Konštanty"
+msgstr "Nespojité"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
 #, kde-format
 msgid "Method for detecting changepoints."
-msgstr ""
+msgstr "Metóda na detekciu bodov zmeny."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, kde-format
@@ -17008,6 +16982,8 @@ msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
 "are merged with neighboring segments."
 msgstr ""
+"Minimálny počet dátových bodov v segmente. Segmenty s menším počtom dátových "
+"bodov sa zlúčia so susednými segmentmi."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
@@ -17018,13 +16994,18 @@ msgid ""
 "Scale with your data: ~1 for Y-values near 1, ~10-100 for large values, "
 "~0.01-0.1 for small values."
 msgstr ""
+"Cena za pridanie bodu zmeny. Aby bolo rozdelenie opodstatnené, musí ju "
+"prekonať zlepšenie preloženia (zníženie SSE).\n"
+"Nižšie hodnoty nájdu viac bodov zmeny, vyššie menej.\n"
+"Prispôsobte ju svojim dátam: ~1 pre hodnoty Y okolo 1, ~10 – 100 pre veľké "
+"hodnoty, ~0,01 – 0,1 pre malé hodnoty."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
 #, kde-format
 msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
 "changepoints."
-msgstr ""
+msgstr "Určuje, či má byť preloženie v bodoch zmeny spojité alebo nespojité."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
 #, kde-format
@@ -17237,12 +17218,10 @@ msgid "Properties: Fit"
 msgstr "Vlastnosti: Prispôsobenie"
 
 #: src/frontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Piecewise Linear Fit"
-msgstr "Vlastnosti: Referenčná čiara"
+msgstr "Vlastnosti: Po častiach lineárne preloženie"
 
 #: src/frontend/GuiObserver.cpp:335
 #, kde-format
@@ -18708,10 +18687,9 @@ msgid "Select template search path"
 msgstr "Vybrať cestu vyhľadávania šablón"
 
 #: src/frontend/PlotTemplateDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "No valid data provided."
+#, kde-format
 msgid "No template path provided."
-msgstr "Nie sú poskytnuté žiadne platné dáta."
+msgstr "Nebola zadaná žiadna cesta k šablóne."
 
 #: src/frontend/PlotTemplateDialog.cpp:150
 #, kde-format
@@ -18729,10 +18707,9 @@ msgstr "Unable to read the file"
 #: src/frontend/PlotTemplateDialog.cpp:193
 #: src/frontend/PlotTemplateDialog.cpp:205
 #: src/frontend/PlotTemplateDialog.cpp:214
-#, fuzzy, kde-format
-#| msgid "Failed to load the selected plot template"
+#, kde-format
 msgid "Failed to load the plot template"
-msgstr "Nepodarilo sa načítať vybranú šablónu grafu"
+msgstr "Nepodarilo sa načítať šablónu grafu"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71
@@ -18954,7 +18931,7 @@ msgstr "Predvoľby    [zmené]"
 #: src/frontend/SettingsEditorPage.cpp:24
 #, kde-format
 msgid "Automatically show output when a script produces output"
-msgstr ""
+msgstr "Automaticky zobraziť výstup, keď skript vytvorí výstup"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
@@ -19907,11 +19884,10 @@ msgid "Plot Area %1"
 msgstr "Plot Area %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:841
-#, fuzzy, kde-format
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Piecewise Linear Fit to '%1'"
-msgstr "Distribution Fit to '%1'"
+msgstr "Po častiach lineárne preloženie na '%1'"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:856
 #, kde-format
@@ -25589,43 +25565,39 @@ msgstr "Zjednodušenie"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:92
-#, fuzzy, kde-format
-#| msgid "Quit Presentation"
+#, kde-format
 msgid "Binary Segmentation"
-msgstr "Ukončiť prezentáciu"
+msgstr "Binárna segmentácia"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:97
 #, kde-format
 msgid "PELT"
-msgstr ""
+msgstr "PELT"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:141
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Changepoint Lines"
-msgstr "Krížené čiary"
+msgstr "Čiary bodov zmeny"
 
 #. i18n: ectx: property (text), widget (QLabel, lPenalty)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:151
 #, kde-format
 msgid "Penalty:"
-msgstr ""
+msgstr "Penalizácia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentSize)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:206
-#, fuzzy, kde-format
-#| msgid "2 Point Segment"
+#, kde-format
 msgid "Min Segment Size:"
-msgstr "2-bodový segment"
+msgstr "Min. veľkosť segmentu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxChangepoints)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:242
-#, fuzzy, kde-format
-#| msgid "Make Changes"
+#, kde-format
 msgid "Max Changepoints:"
-msgstr "Vykonať zmeny"
+msgstr "Max. počet bodov zmeny:"
 
 #. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbDelta)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:27
@@ -27329,14 +27301,14 @@ msgstr "Dáta, +-"
 #, kde-format
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Nedefinovaná premenná: %2. Definujte ju v zozname premenných."
+msgstr[1] "Nedefinované premenné: %2. Definujte ich v zozname premenných."
+msgstr[2] "Nedefinované premenné: %2. Definujte ich v zozname premenných."
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invalid expression"
-msgstr "Exportovať do súboru"
+msgstr "Neplatný výraz"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
