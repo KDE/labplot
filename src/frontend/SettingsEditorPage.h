@@ -34,6 +34,7 @@ public:
 private:
 	bool m_changed{false};
 	QCheckBox* m_autoShowOutputCheckBox{nullptr};
+	QCheckBox* m_saveOutputCheckBox{nullptr};
 	QVector<KTextEditor::ConfigPage*> m_editorPages;
 
 private Q_SLOTS:

@@ -36,6 +36,8 @@ public:
 
 	void writeOutput(bool, const QString&);
 	QString outputText();
+	QString outputHtml() const;
+	void setOutputHtml(const QString&);
 
 private Q_SLOTS:
 	void handleAnchorClicked(const QUrl&);

@@ -136,6 +136,8 @@ bool Script::exportView() const {
 QWidget* Script::view() const {
 	if (!m_partView) {
 		m_view = new ScriptEditor(const_cast<Script*>(this));
+		if (!m_outputHtml.isEmpty())
+			m_view->setOutputHtml(m_outputHtml);
 		m_partView = m_view;
 	}
 
@@ -155,6 +157,22 @@ void Script::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement(QStringLiteral("editor"));
 	writer->writeAttribute(QStringLiteral("text"), m_kTextEditorDocument->text());
 	writer->writeEndElement();
+
+	const auto group = Settings::group(QStringLiteral("ScriptEditor"));
+	if (group.readEntry(QStringLiteral("SaveOutput"), true)) {
+		QString outputHtml;
+		if (m_view) {
+			if (!m_view->outputText().isEmpty())
+				outputHtml = m_view->outputHtml();
+		} else {
+			outputHtml = m_outputHtml;
+		}
+		if (!outputHtml.isEmpty()) {
+			writer->writeStartElement(QStringLiteral("output"));
+			writer->writeCharacters(outputHtml);
+			writer->writeEndElement();
+		}
+	}
 
 	writer->writeEndElement(); // close "script" section
 }
@@ -189,6 +207,10 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 
 			// editor text
 			m_kTextEditorDocument->setText(attribs.value(QStringLiteral("text")).toString());
+		} else if (!preview && reader->name() == QLatin1String("output")) {
+			m_outputHtml = reader->readElementText(QXmlStreamReader::SkipChildElements);
+			if (m_view)
+				m_view->setOutputHtml(m_outputHtml);
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())

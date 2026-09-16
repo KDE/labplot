@@ -212,6 +212,14 @@ QString ScriptEditor::outputText() {
 	return ui.teOutput->toPlainText();
 }
 
+QString ScriptEditor::outputHtml() const {
+	return ui.teOutput->toHtml();
+}
+
+void ScriptEditor::setOutputHtml(const QString& html) {
+	ui.teOutput->setHtml(html);
+}
+
 void ScriptEditor::setOutputFont(const QFont& font) {
 	ui.teOutput->setFont(font);
 }

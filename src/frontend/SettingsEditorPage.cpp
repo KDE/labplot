@@ -25,6 +25,10 @@ SettingsEditorPage::SettingsEditorPage(QWidget* parent) : SettingsPage(parent) {
 	m_autoShowOutputCheckBox->setChecked(Settings::group(QStringLiteral("ScriptEditor")).readEntry(QStringLiteral("AutoShowOutput"), true));
 	connect(m_autoShowOutputCheckBox, &QCheckBox::toggled, this, &SettingsEditorPage::changed);
 	layout->addWidget(m_autoShowOutputCheckBox);
+	m_saveOutputCheckBox = new QCheckBox(i18n("Save script output in project files"), this);
+	m_saveOutputCheckBox->setChecked(Settings::group(QStringLiteral("ScriptEditor")).readEntry(QStringLiteral("SaveOutput"), true));
+	connect(m_saveOutputCheckBox, &QCheckBox::toggled, this, &SettingsEditorPage::changed);
+	layout->addWidget(m_saveOutputCheckBox);
 	layout->addStretch();
 }
 
@@ -47,7 +51,9 @@ QList<Settings::Type> SettingsEditorPage::applySettings() {
 
 	for (auto* page : m_editorPages)
 		page->apply();
-	Settings::group(QStringLiteral("ScriptEditor")).writeEntry(QStringLiteral("AutoShowOutput"), m_autoShowOutputCheckBox->isChecked());
+	auto group = Settings::group(QStringLiteral("ScriptEditor"));
+	group.writeEntry(QStringLiteral("AutoShowOutput"), m_autoShowOutputCheckBox->isChecked());
+	group.writeEntry(QStringLiteral("SaveOutput"), m_saveOutputCheckBox->isChecked());
 
 	return {Settings::Type::ScriptEditor};
 }
@@ -56,6 +62,7 @@ void SettingsEditorPage::restoreDefaults() {
 	for (auto* page : m_editorPages)
 		page->defaults();
 	m_autoShowOutputCheckBox->setChecked(true);
+	m_saveOutputCheckBox->setChecked(true);
 }
 
 void SettingsEditorPage::changed() {
