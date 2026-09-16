@@ -135,13 +135,20 @@ void XYPiecewiseLinearFitCurveDock::showFitResult() {
 	if (!fitResult.changepoints.isEmpty()) {
 		html += QStringLiteral("<h4>Changepoints</h4>");
 		html += QStringLiteral("<table border='1' cellpadding='3'>");
-		html += QStringLiteral("<tr><th>#</th><th>X-Position</th></tr>");
+		html += QStringLiteral("<tr><th>#</th><th>X-Position</th><th>Y-Position</th></tr>");
 
 		for (int i = 0; i < fitResult.changepoints.size(); ++i) {
 			double xPos = fitResult.changepoints[i];
+			// evaluate the fit of the segment ending at the changepoint to get the corresponding y-value
+			double yPos = 0.;
+			if (i < fitResult.segmentResults.size()) {
+				const auto& segResult = fitResult.segmentResults.at(i);
+				yPos = segResult.paramValues.value(0) + segResult.paramValues.value(1) * xPos;
+			}
 			html += QStringLiteral("<tr>");
 			html += QStringLiteral("<td>") + QString::number(i + 1) + QStringLiteral("</td>");
 			html += QStringLiteral("<td>") + QString::number(xPos, 'g', 6) + QStringLiteral("</td>");
+			html += QStringLiteral("<td>") + QString::number(yPos, 'g', 6) + QStringLiteral("</td>");
 			html += QStringLiteral("</tr>");
 		}
 		html += QStringLiteral("</table>");
@@ -288,7 +295,13 @@ void XYPiecewiseLinearFitCurveDock::retranslateUi() {
 	uiGeneralTab.cbConnection->addItem(i18n("Discontinuous"), static_cast<int>(XYPiecewiseLinearFitCurve::ConnectionType::Discontinuous));
 
 	// tooltips
-	QString info = i18n("Method for detecting changepoints.");
+	QString info = i18n("Method for detecting changepoints:"
+		"<ul>"
+		"<li>Binary Segmentation: recursively split the data into segments to detect changepoints.</li>"
+		"<li>PELT (Pruned Exact Linear Time): detection of changepoints with linear computational cost.</li>"
+		"</ul>"
+	);
+	uiGeneralTab.lMethod->setToolTip(info);
 	uiGeneralTab.cbMethod->setToolTip(info);
 
 	info = i18n("Minimum number of data points in a segment. Segments with fewer data points are merged with neighboring segments.");
