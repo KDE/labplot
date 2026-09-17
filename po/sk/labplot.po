@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-13 00:40+0000\n"
+"POT-Creation-Date: 2026-09-17 00:40+0000\n"
 "PO-Revision-Date: 2026-09-14 20:10+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -7512,28 +7512,28 @@ msgstr "Trikubické"
 msgid "Python file (*.py)"
 msgstr "Python file (*.py)"
 
-#: src/backend/script/Script.cpp:164 src/backend/script/Script.cpp:351
+#: src/backend/script/Script.cpp:182 src/backend/script/Script.cpp:373
 #, kde-format
 msgid "no script element found"
 msgstr "nenašiel sa žiaden prvok skriptu"
 
-#: src/backend/script/Script.cpp:225
+#: src/backend/script/Script.cpp:247
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: spustiť skript %2"
 
-#: src/backend/script/Script.cpp:331 src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:353 src/backend/script/Script.cpp:358
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Skripty"
 
-#: src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:353
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:358
 #, kde-format
 msgid "A script is already running."
 msgstr "Skript už beží."
@@ -16961,22 +16961,26 @@ msgstr "pozičná kvadratická chyba: %1"
 msgid "area error: %1"
 msgstr "chyba oblasti: %1"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, kde-format
 msgid "Continuous"
 msgstr "Prispievatelia"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:295
 #, kde-format
 msgid "Discontinuous"
 msgstr "Nespojité"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
-msgid "Method for detecting changepoints."
-msgstr "Metóda na detekciu bodov zmeny."
+msgid ""
+"Method for detecting changepoints:<ul><li>Binary Segmentation: recursively "
+"split the data into segments to detect changepoints.</li><li>PELT (Pruned "
+"Exact Linear Time): detection of changepoints with linear computational cost."
+"</li></ul>"
+msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
 msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
@@ -16985,7 +16989,7 @@ msgstr ""
 "Minimálny počet dátových bodov v segmente. Segmenty s menším počtom dátových "
 "bodov sa zlúčia so susednými segmentmi."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:311
 #, kde-format
 msgid ""
 "Cost for adding a changepoint. Must be exceeded by the fit improvement (SSE "
@@ -17000,7 +17004,7 @@ msgstr ""
 "Prispôsobte ju svojim dátam: ~1 pre hodnoty Y okolo 1, ~10 – 100 pre veľké "
 "hodnoty, ~0,01 – 0,1 pre malé hodnoty."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:315
 #, kde-format
 msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
@@ -18932,6 +18936,12 @@ msgstr "Predvoľby    [zmené]"
 #, kde-format
 msgid "Automatically show output when a script produces output"
 msgstr "Automaticky zobraziť výstup, keď skript vytvorí výstup"
+
+#: src/frontend/SettingsEditorPage.cpp:28
+#, fuzzy, kde-format
+#| msgid "Save Data in Project file:"
+msgid "Save script output in project files"
+msgstr "Uložiť dáta do projektového súboru:"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
@@ -28051,6 +28061,9 @@ msgstr "proces convert zlyhal, návratový kód ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Unable to open file:"
+
+#~ msgid "Method for detecting changepoints."
+#~ msgstr "Metóda na detekciu bodov zmeny."
 
 #~ msgid "Open a project file."
 #~ msgstr "Otvoriť projektový súbor."

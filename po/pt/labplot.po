@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-13 00:40+0000\n"
+"POT-Creation-Date: 2026-09-17 00:40+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -7827,31 +7827,31 @@ msgstr "Tri-Cúbico"
 msgid "Python file (*.py)"
 msgstr "Ficheiros de LaTeX (*.tex)"
 
-#: src/backend/script/Script.cpp:164 src/backend/script/Script.cpp:351
+#: src/backend/script/Script.cpp:182 src/backend/script/Script.cpp:373
 #, fuzzy, kde-format
 #| msgid "no note element found"
 msgid "no script element found"
 msgstr "não foi encontrado o elemento de notas"
 
-#: src/backend/script/Script.cpp:225
+#: src/backend/script/Script.cpp:247
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:331 src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:353 src/backend/script/Script.cpp:358
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
 msgstr "&Programa"
 
-#: src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:353
 #, fuzzy, kde-format
 #| msgid "Failed to open the file '%1'."
 msgid "Failed to run the script."
 msgstr "Não foi possível abrir o ficheiro '%1'."
 
-#: src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:358
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -17478,31 +17478,35 @@ msgstr "erro ao quadrado da posição: %1"
 msgid "area error: %1"
 msgstr "erro da área: %1"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, fuzzy, kde-format
 #| msgid "Contains"
 msgid "Continuous"
 msgstr "Contém"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:295
 #, fuzzy, kde-format
 #| msgid "outliers count"
 msgid "Discontinuous"
 msgstr "número de pontos fora da amostra"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
-msgid "Method for detecting changepoints."
+msgid ""
+"Method for detecting changepoints:<ul><li>Binary Segmentation: recursively "
+"split the data into segments to detect changepoints.</li><li>PELT (Pruned "
+"Exact Linear Time): detection of changepoints with linear computational cost."
+"</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
 msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
 "are merged with neighboring segments."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:311
 #, kde-format
 msgid ""
 "Cost for adding a changepoint. Must be exceeded by the fit improvement (SSE "
@@ -17512,7 +17516,7 @@ msgid ""
 "~0.01-0.1 for small values."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:315
 #, kde-format
 msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
@@ -19488,6 +19492,12 @@ msgstr "Preferências [Modificadas]"
 #, kde-format
 msgid "Automatically show output when a script produces output"
 msgstr ""
+
+#: src/frontend/SettingsEditorPage.cpp:28
+#, fuzzy, kde-format
+#| msgid "Open a project file."
+msgid "Save script output in project files"
+msgstr "Abrir um ficheiro de projecto."
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, fuzzy, kde-format

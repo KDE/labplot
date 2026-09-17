@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-13 00:40+0000\n"
+"POT-Creation-Date: 2026-09-17 00:40+0000\n"
 "PO-Revision-Date: 2026-09-13 05:08+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -7542,28 +7542,28 @@ msgstr "ტრიკუბიკური"
 msgid "Python file (*.py)"
 msgstr "Python-ის ფაილი (*.py)"
 
-#: src/backend/script/Script.cpp:164 src/backend/script/Script.cpp:351
+#: src/backend/script/Script.cpp:182 src/backend/script/Script.cpp:373
 #, kde-format
 msgid "no script element found"
 msgstr "სკრიპტის ელემენტი აღმოჩენილი არაა"
 
-#: src/backend/script/Script.cpp:225
+#: src/backend/script/Script.cpp:247
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: %2 სკრიპტის გაშვება"
 
-#: src/backend/script/Script.cpp:331 src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:353 src/backend/script/Script.cpp:358
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "სკრიპტი"
 
-#: src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:353
 #, kde-format
 msgid "Failed to run the script."
 msgstr "სკრიპტის გაშვება ჩავარდა."
 
-#: src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:358
 #, kde-format
 msgid "A script is already running."
 msgstr "სკრიპტი უკვე გაშვებულია."
@@ -17039,22 +17039,26 @@ msgstr "პოზიციური კვადრატის შეცდო�
 msgid "area error: %1"
 msgstr "შეცდომის ფართობი: %1"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, kde-format
 msgid "Continuous"
 msgstr "უწყვეტი"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:295
 #, kde-format
 msgid "Discontinuous"
 msgstr "წყვეტილი"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
-msgid "Method for detecting changepoints."
-msgstr "ცვლილების წერტილების დადგენის მეთოდი."
+msgid ""
+"Method for detecting changepoints:<ul><li>Binary Segmentation: recursively "
+"split the data into segments to detect changepoints.</li><li>PELT (Pruned "
+"Exact Linear Time): detection of changepoints with linear computational cost."
+"</li></ul>"
+msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
 msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
@@ -17063,7 +17067,7 @@ msgstr ""
 "მონაცემთა წერტილების მინიმალური რაოდენობა სეგმენტში. ნაკლები რაოდენობის "
 "შემცველი წერტილები გაერთიანდება მეზობელ სეგმენტებთან."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:311
 #, kde-format
 msgid ""
 "Cost for adding a changepoint. Must be exceeded by the fit improvement (SSE "
@@ -17078,7 +17082,7 @@ msgstr ""
 "შეცვალეთ მნიშვნელობა თქვენს მონაცემებთან ერთად: ~1 Y-ის მნიშვნელობებთან "
 "ახლოს, ~10-100 დიდი მნიშვნელობებისთვის, ~0.01-0.1 პატარა მნიშვნელობებისთვის."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:315
 #, kde-format
 msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
@@ -19011,6 +19015,12 @@ msgstr "მორგება    [შეცვლილია]"
 #, kde-format
 msgid "Automatically show output when a script produces output"
 msgstr "გამოტანის ავტომატური ჩვენება, როცა სკრიპტს რამე აქვს საჩვენებელი"
+
+#: src/frontend/SettingsEditorPage.cpp:28
+#, fuzzy, kde-format
+#| msgid "Save Data in Project file:"
+msgid "Save script output in project files"
+msgstr "მონაცემების შენახვა პროექტის ფაილში:"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
@@ -28139,6 +28149,9 @@ msgstr "გადაყვანის პროცესი ჩავარდ�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
+
+#~ msgid "Method for detecting changepoints."
+#~ msgstr "ცვლილების წერტილების დადგენის მეთოდი."
 
 #~ msgid "Open a project file."
 #~ msgstr "პროექტის ფაილის გახსნა."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-13 00:40+0000\n"
+"POT-Creation-Date: 2026-09-17 00:40+0000\n"
 "PO-Revision-Date: 2026-01-21 23:00+0100\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
@@ -7466,28 +7466,28 @@ msgstr ""
 msgid "Python file (*.py)"
 msgstr "Soubor Pythonu (*.py)"
 
-#: src/backend/script/Script.cpp:164 src/backend/script/Script.cpp:351
+#: src/backend/script/Script.cpp:182 src/backend/script/Script.cpp:373
 #, kde-format
 msgid "no script element found"
 msgstr "skriptový element nenalezen"
 
-#: src/backend/script/Script.cpp:225
+#: src/backend/script/Script.cpp:247
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: spustit skript %2"
 
-#: src/backend/script/Script.cpp:331 src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:353 src/backend/script/Script.cpp:358
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Skript"
 
-#: src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:353
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Spuštění skriptu selhalo."
 
-#: src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:358
 #, kde-format
 msgid "A script is already running."
 msgstr "Skript již běží."
@@ -16657,29 +16657,33 @@ msgstr ""
 msgid "area error: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, kde-format
 msgid "Continuous"
 msgstr "Průběžně"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:295
 #, kde-format
 msgid "Discontinuous"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
-msgid "Method for detecting changepoints."
+msgid ""
+"Method for detecting changepoints:<ul><li>Binary Segmentation: recursively "
+"split the data into segments to detect changepoints.</li><li>PELT (Pruned "
+"Exact Linear Time): detection of changepoints with linear computational cost."
+"</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
 msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
 "are merged with neighboring segments."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:311
 #, kde-format
 msgid ""
 "Cost for adding a changepoint. Must be exceeded by the fit improvement (SSE "
@@ -16689,7 +16693,7 @@ msgid ""
 "~0.01-0.1 for small values."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:315
 #, kde-format
 msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
@@ -18605,6 +18609,11 @@ msgstr ""
 #: src/frontend/SettingsEditorPage.cpp:24
 #, kde-format
 msgid "Automatically show output when a script produces output"
+msgstr ""
+
+#: src/frontend/SettingsEditorPage.cpp:28
+#, kde-format
+msgid "Save script output in project files"
 msgstr ""
 
 #: src/frontend/SettingsGeneralPage.cpp:27

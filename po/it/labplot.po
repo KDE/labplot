@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-13 00:40+0000\n"
+"POT-Creation-Date: 2026-09-17 00:40+0000\n"
 "PO-Revision-Date: 2026-09-13 09:36+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -7562,28 +7562,28 @@ msgstr "Tricubo"
 msgid "Python file (*.py)"
 msgstr "File Python (*.py)"
 
-#: src/backend/script/Script.cpp:164 src/backend/script/Script.cpp:351
+#: src/backend/script/Script.cpp:182 src/backend/script/Script.cpp:373
 #, kde-format
 msgid "no script element found"
 msgstr "Nessun elemento di script trovato"
 
-#: src/backend/script/Script.cpp:225
+#: src/backend/script/Script.cpp:247
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: esegui script %2"
 
-#: src/backend/script/Script.cpp:331 src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:353 src/backend/script/Script.cpp:358
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:353
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Impossibile eseguire lo script."
 
-#: src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:358
 #, kde-format
 msgid "A script is already running."
 msgstr "Uno script è già in esecuzione."
@@ -17114,22 +17114,26 @@ msgstr "errore di posizione quadratico: %1"
 msgid "area error: %1"
 msgstr "area di errore: %1"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, kde-format
 msgid "Continuous"
 msgstr "Continuo"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:295
 #, kde-format
 msgid "Discontinuous"
 msgstr "Discontinuo"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
-msgid "Method for detecting changepoints."
-msgstr "Metodo per il rilevamento dei punti di cambiamento."
+msgid ""
+"Method for detecting changepoints:<ul><li>Binary Segmentation: recursively "
+"split the data into segments to detect changepoints.</li><li>PELT (Pruned "
+"Exact Linear Time): detection of changepoints with linear computational cost."
+"</li></ul>"
+msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
 msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
@@ -17138,7 +17142,7 @@ msgstr ""
 "Numero minimo di punti dati in un segmento. I segmenti con un numero "
 "inferiore di punti dati vengono uniti ai segmenti adiacenti."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:311
 #, kde-format
 msgid ""
 "Cost for adding a changepoint. Must be exceeded by the fit improvement (SSE "
@@ -17155,7 +17159,7 @@ msgstr ""
 "Adatta il valore alla scala dei tuoi dati: ~1 per valori Y prossimi a 1, ~10–"
 "100 per valori grandi, ~0,01–0,1 per valori piccoli."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:315
 #, kde-format
 msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
@@ -19097,6 +19101,12 @@ msgstr "Preferenze    [Modificate]"
 #, kde-format
 msgid "Automatically show output when a script produces output"
 msgstr "Mostra automaticamente l'output quando uno script genera un output"
+
+#: src/frontend/SettingsEditorPage.cpp:28
+#, fuzzy, kde-format
+#| msgid "Save Data in Project file:"
+msgid "Save script output in project files"
+msgstr "Salva dati nel file di progetto:"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
@@ -28257,6 +28267,9 @@ msgstr "processo convert non riuscito, codice di uscita ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Impossibile aprire il file:"
+
+#~ msgid "Method for detecting changepoints."
+#~ msgstr "Metodo per il rilevamento dei punti di cambiamento."
 
 #~ msgid "Open a project file."
 #~ msgstr "Apri un file di progetto."

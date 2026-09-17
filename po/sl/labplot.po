@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-13 00:40+0000\n"
+"POT-Creation-Date: 2026-09-17 00:40+0000\n"
 "PO-Revision-Date: 2026-09-13 07:24+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -7554,28 +7554,28 @@ msgstr "Trikubično"
 msgid "Python file (*.py)"
 msgstr "Pythonova datoteka (*.py)"
 
-#: src/backend/script/Script.cpp:164 src/backend/script/Script.cpp:351
+#: src/backend/script/Script.cpp:182 src/backend/script/Script.cpp:373
 #, kde-format
 msgid "no script element found"
 msgstr "ni najdenega elementa skripta"
 
-#: src/backend/script/Script.cpp:225
+#: src/backend/script/Script.cpp:247
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: poženi %2 skript"
 
-#: src/backend/script/Script.cpp:331 src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:353 src/backend/script/Script.cpp:358
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Skript"
 
-#: src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:353
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Skripta ni bilo mogoče zagnati."
 
-#: src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:358
 #, kde-format
 msgid "A script is already running."
 msgstr "Skript se že izvaja."
@@ -17050,22 +17050,26 @@ msgstr "kvadratna napaka položaja: %1"
 msgid "area error: %1"
 msgstr "napaka področja: %1"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, kde-format
 msgid "Continuous"
 msgstr "Zvezno"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:295
 #, kde-format
 msgid "Discontinuous"
 msgstr "Nezvezno"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
-msgid "Method for detecting changepoints."
-msgstr "Metoda za zaznavanje točk sprememb."
+msgid ""
+"Method for detecting changepoints:<ul><li>Binary Segmentation: recursively "
+"split the data into segments to detect changepoints.</li><li>PELT (Pruned "
+"Exact Linear Time): detection of changepoints with linear computational cost."
+"</li></ul>"
+msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
 msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
@@ -17074,7 +17078,7 @@ msgstr ""
 "Najmanjše število podatkovnih točk v odseku. Odseki z manj podatkovnimi "
 "točkami se združijo s sosednjimi odseki."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:311
 #, kde-format
 msgid ""
 "Cost for adding a changepoint. Must be exceeded by the fit improvement (SSE "
@@ -17089,7 +17093,7 @@ msgstr ""
 "vrednosti Y blizu 1, ~10–100 za velike vrednosti, ~0,01–0,1 za majhne "
 "vrednosti."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:315
 #, kde-format
 msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
@@ -19028,6 +19032,12 @@ msgstr "Nastavitve [spremenjeno]"
 #, kde-format
 msgid "Automatically show output when a script produces output"
 msgstr "Samodejno prikaži izpis, ko skript ustvari izpis."
+
+#: src/frontend/SettingsEditorPage.cpp:28
+#, fuzzy, kde-format
+#| msgid "Save Data in Project file:"
+msgid "Save script output in project files"
+msgstr "Shrani podatke v projektno datoteko:"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
@@ -28170,6 +28180,9 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "Method for detecting changepoints."
+#~ msgstr "Metoda za zaznavanje točk sprememb."
 
 #~ msgid "Open a project file."
 #~ msgstr "Odprite projektno datoteko."

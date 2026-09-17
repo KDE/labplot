@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-13 00:40+0000\n"
+"POT-Creation-Date: 2026-09-17 00:40+0000\n"
 "PO-Revision-Date: 2026-09-13 19:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -7532,28 +7532,28 @@ msgstr "Üçlü Küp"
 msgid "Python file (*.py)"
 msgstr "Python dosyası (*.py)"
 
-#: src/backend/script/Script.cpp:164 src/backend/script/Script.cpp:351
+#: src/backend/script/Script.cpp:182 src/backend/script/Script.cpp:373
 #, kde-format
 msgid "no script element found"
 msgstr "Bulunan betik ögesi yok"
 
-#: src/backend/script/Script.cpp:225
+#: src/backend/script/Script.cpp:247
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: %2 betiğini çalıştır"
 
-#: src/backend/script/Script.cpp:331 src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:353 src/backend/script/Script.cpp:358
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Betik"
 
-#: src/backend/script/Script.cpp:331
+#: src/backend/script/Script.cpp:353
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Betik çalıştırılamadı."
 
-#: src/backend/script/Script.cpp:336
+#: src/backend/script/Script.cpp:358
 #, kde-format
 msgid "A script is already running."
 msgstr "Bir betik hâlihazırda çalışıyor."
@@ -16975,22 +16975,26 @@ msgstr "Konumsal karekök hatası: %1"
 msgid "area error: %1"
 msgstr "Alan hatası: %1"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:287
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
 #, kde-format
 msgid "Continuous"
 msgstr "Sürekli"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:288
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:295
 #, kde-format
 msgid "Discontinuous"
 msgstr "Süreksiz"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:291
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
 #, kde-format
-msgid "Method for detecting changepoints."
-msgstr "Değişim noktalarını algılama yöntemi"
+msgid ""
+"Method for detecting changepoints:<ul><li>Binary Segmentation: recursively "
+"split the data into segments to detect changepoints.</li><li>PELT (Pruned "
+"Exact Linear Time): detection of changepoints with linear computational cost."
+"</li></ul>"
+msgstr ""
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
 msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
@@ -16999,7 +17003,7 @@ msgstr ""
 "Bir bölütteki en az veri noktası sayısını belirtir. Daha az veri noktasına "
 "iye bölütler, komşu bölütlerle birleştirilirler."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:311
 #, kde-format
 msgid ""
 "Cost for adding a changepoint. Must be exceeded by the fit improvement (SSE "
@@ -17015,7 +17019,7 @@ msgstr ""
 "Verinizle ölçekleyin: 1 yakınındaki Y değerleri için ~1, büyük değerler için "
 "~10–100, küçük değerler için ~0,01–0,1 olarak kullanabilirsiniz."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:302
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:315
 #, kde-format
 msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
@@ -18948,6 +18952,12 @@ msgstr "Tercihler [Değiştirildi]"
 #, kde-format
 msgid "Automatically show output when a script produces output"
 msgstr "Bir betik çıktı ürettiğinde çıktıyı kendiliğinden göster"
+
+#: src/frontend/SettingsEditorPage.cpp:28
+#, fuzzy, kde-format
+#| msgid "Save Data in Project file:"
+msgid "Save script output in project files"
+msgstr "Veriyi proje dosyasına kaydet:"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
@@ -28077,6 +28087,9 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
+
+#~ msgid "Method for detecting changepoints."
+#~ msgstr "Değişim noktalarını algılama yöntemi"
 
 #~ msgid "Open a project file."
 #~ msgstr "Bir proje dosyası aç."
