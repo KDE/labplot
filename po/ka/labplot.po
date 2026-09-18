@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-17 00:40+0000\n"
-"PO-Revision-Date: 2026-09-13 05:08+0200\n"
+"PO-Revision-Date: 2026-09-17 04:46+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17057,6 +17057,10 @@ msgid ""
 "Exact Linear Time): detection of changepoints with linear computational cost."
 "</li></ul>"
 msgstr ""
+"ცვლილების წერტილების დადგენის მეთოდი<ul><li>ბინარული სეგმენტაცია: "
+"რეკურსიულად დაყოფს მონაცემებს სეგმენტებად ცვლილების წერტილების დასადგენად.</"
+"li><li>PELT (Pruned Exact Linear Time): ცვლილებების დადგენა წრფივი "
+"გამოთვლითი ღირებულებით.</li><ul>"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
@@ -19017,10 +19021,9 @@ msgid "Automatically show output when a script produces output"
 msgstr "გამოტანის ავტომატური ჩვენება, როცა სკრიპტს რამე აქვს საჩვენებელი"
 
 #: src/frontend/SettingsEditorPage.cpp:28
-#, fuzzy, kde-format
-#| msgid "Save Data in Project file:"
+#, kde-format
 msgid "Save script output in project files"
-msgstr "მონაცემების შენახვა პროექტის ფაილში:"
+msgstr "სკრიპტის გამოტანილი ინფორმაციის შენახვა პროექტის ფაილებში"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format

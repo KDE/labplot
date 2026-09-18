@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-17 00:40+0000\n"
-"PO-Revision-Date: 2026-09-13 09:27+0200\n"
+"PO-Revision-Date: 2026-09-17 12:26+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -17230,6 +17230,10 @@ msgid ""
 "Exact Linear Time): detection of changepoints with linear computational cost."
 "</li></ul>"
 msgstr ""
+"Mètode per detectar punts de canvi:<ul><li>Segmentació binària: divideix les "
+"dades recursivament en segments per a detectar punts de canvi.</li><li>PELT "
+"(«Pruned Exact Linear Time», en català «Temps de podat lineal exacte»): "
+"detecció de punts de canvi amb un cost computacional lineal.</li></ul>"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
@@ -19202,10 +19206,9 @@ msgid "Automatically show output when a script produces output"
 msgstr "Mostra automàticament la sortida si un script genera sortida"
 
 #: src/frontend/SettingsEditorPage.cpp:28
-#, fuzzy, kde-format
-#| msgid "Save Data in Project file:"
+#, kde-format
 msgid "Save script output in project files"
-msgstr "Desa les dades en el fitxer del projecte:"
+msgstr "Desa la sortida de l'script en el fitxer del projecte"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format

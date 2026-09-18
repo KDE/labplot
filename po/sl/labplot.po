@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-17 00:40+0000\n"
-"PO-Revision-Date: 2026-09-13 07:24+0200\n"
+"PO-Revision-Date: 2026-09-17 06:02+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17068,6 +17068,10 @@ msgid ""
 "Exact Linear Time): detection of changepoints with linear computational cost."
 "</li></ul>"
 msgstr ""
+"Metoda za zaznavanje točk spremembe:<ul><li>Binarna segmentacija: rekurzivna "
+"delitev podatkov na segmente za zaznavanje točk spremembe.</li><li>PELT "
+"(Pruned Exact Linear Time): zaznavanje točk spremembe z linearno računsko "
+"zahtevnostjo.</li></ul>"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
@@ -19034,10 +19038,9 @@ msgid "Automatically show output when a script produces output"
 msgstr "Samodejno prikaži izpis, ko skript ustvari izpis."
 
 #: src/frontend/SettingsEditorPage.cpp:28
-#, fuzzy, kde-format
-#| msgid "Save Data in Project file:"
+#, kde-format
 msgid "Save script output in project files"
-msgstr "Shrani podatke v projektno datoteko:"
+msgstr "Shrani izpis skripta v projektne datoteke"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format

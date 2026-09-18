@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-17 00:40+0000\n"
-"PO-Revision-Date: 2026-09-13 12:04+0100\n"
+"PO-Revision-Date: 2026-09-17 11:49+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -17130,6 +17130,10 @@ msgid ""
 "Exact Linear Time): detection of changepoints with linear computational cost."
 "</li></ul>"
 msgstr ""
+"Método de detección de puntos de cambio:<ul><li>Segmentación binaria: "
+"dividir los datos en segmentos de forma recursiva para detectar puntos de "
+"cambio.</li><li>PELT (tiempo lineal exacto podado): detección de puntos de "
+"cambio con coste computacional lineal.</li></ul>"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
@@ -17149,7 +17153,7 @@ msgid ""
 "Scale with your data: ~1 for Y-values near 1, ~10-100 for large values, "
 "~0.01-0.1 for small values."
 msgstr ""
-"Costo de añadir un punto de cambio. Debe ser superado por la mejora del "
+"Coste de añadir un punto de cambio. Debe ser superado por la mejora del "
 "ajuste (reducción del SSE) para justificar la división.\n"
 "Los valores más bajos detectan más puntos de cambio, mientras que los "
 "valores más altos detectan menos.\n"
@@ -19096,10 +19100,9 @@ msgid "Automatically show output when a script produces output"
 msgstr "Mostrar la salida automáticamente cuando un guion genera salida"
 
 #: src/frontend/SettingsEditorPage.cpp:28
-#, fuzzy, kde-format
-#| msgid "Save Data in Project file:"
+#, kde-format
 msgid "Save script output in project files"
-msgstr "Guardar datos en el archivo de proyecto:"
+msgstr "Guardar salida del guion en archivos de proyecto"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
@@ -28256,6 +28259,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "Method for detecting changepoints."
-#~ msgstr "Método para detectar puntos de cambio."

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-17 00:40+0000\n"
-"PO-Revision-Date: 2026-09-13 19:18+0300\n"
+"PO-Revision-Date: 2026-09-17 19:53+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16993,6 +16993,10 @@ msgid ""
 "Exact Linear Time): detection of changepoints with linear computational cost."
 "</li></ul>"
 msgstr ""
+"Değişim noktalarını algılama yöntemi:<ul><li>İkili Bölütleme: Değişim "
+"noktalarını tespit etmek amacıyla verinin özyineli olarak parçalara "
+"ayrılması</li><li>PELT (Pruned Exact Linear Time — Budanmış Kesin Doğrusal "
+"Zaman): Doğrusal hesaplama maliyetiyle değişim noktalarının tespiti</li></ul>"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
 #, kde-format
@@ -18954,10 +18958,9 @@ msgid "Automatically show output when a script produces output"
 msgstr "Bir betik çıktı ürettiğinde çıktıyı kendiliğinden göster"
 
 #: src/frontend/SettingsEditorPage.cpp:28
-#, fuzzy, kde-format
-#| msgid "Save Data in Project file:"
+#, kde-format
 msgid "Save script output in project files"
-msgstr "Veriyi proje dosyasına kaydet:"
+msgstr "Betik çıktısını proje dosyalarına kaydet"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
