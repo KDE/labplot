@@ -37,6 +37,9 @@ private Q_SLOTS:
 	void testContinuousFit();
 	void testDiscontinuousFit();
 
+	// Range filtering
+	void testFitRange();
+
 	// Statistical validation
 	void testRsquare();
 	void testSSE();

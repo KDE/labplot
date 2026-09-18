@@ -52,6 +52,9 @@ void XYPiecewiseLinearFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.sbPenalty, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::penaltyChanged);
 	connect(uiGeneralTab.sbMinSegmentSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::minSegmentSizeChanged);
 	connect(uiGeneralTab.sbMaxChangepoints, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYPiecewiseLinearFitCurveDock::maxChangepointsChanged);
+	connect(uiGeneralTab.chkAutoFitRange, &QCheckBox::toggled, this, &XYPiecewiseLinearFitCurveDock::autoFitRangeChanged);
+	connect(uiGeneralTab.leFitMin, &QLineEdit::textChanged, this, &XYPiecewiseLinearFitCurveDock::fitRangeMinChanged);
+	connect(uiGeneralTab.leFitMax, &QLineEdit::textChanged, this, &XYPiecewiseLinearFitCurveDock::fitRangeMaxChanged);
 	connect(uiGeneralTab.chkChangepointLines, &QCheckBox::toggled, this, &XYPiecewiseLinearFitCurveDock::changepointLinesEnabledChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYPiecewiseLinearFitCurveDock::recalculateClicked);
 
@@ -74,6 +77,10 @@ void XYPiecewiseLinearFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbPenalty->setValue(m_fitData.penalty);
 	uiGeneralTab.sbMinSegmentSize->setValue(m_fitData.minSegmentSize);
 	uiGeneralTab.sbMaxChangepoints->setValue(m_fitData.maxChangepoints);
+	uiGeneralTab.chkAutoFitRange->setChecked(m_fitData.autoRange);
+	uiGeneralTab.leFitMin->setText(QString::number(m_fitData.fitRange.start()));
+	uiGeneralTab.leFitMax->setText(QString::number(m_fitData.fitRange.end()));
+	autoFitRangeChanged(); // ponytail: update enable state
 	uiGeneralTab.chkChangepointLines->setChecked(m_fitCurve->changepointLinesEnabled());
 
 	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
@@ -278,6 +285,28 @@ void XYPiecewiseLinearFitCurveDock::changepointLinesEnabledChanged() {
 	bool enabled = uiGeneralTab.chkChangepointLines->isChecked();
 	for (auto* curve : m_curvesList)
 		static_cast<XYPiecewiseLinearFitCurve*>(curve)->setChangepointLinesEnabled(enabled);
+}
+
+void XYPiecewiseLinearFitCurveDock::autoFitRangeChanged() {
+	bool autoRange = uiGeneralTab.chkAutoFitRange->isChecked();
+	uiGeneralTab.leFitMin->setEnabled(!autoRange);
+	uiGeneralTab.leFitMax->setEnabled(!autoRange);
+
+	CONDITIONAL_LOCK_RETURN;
+	m_fitData.autoRange = autoRange;
+	enableRecalculate();
+}
+
+void XYPiecewiseLinearFitCurveDock::fitRangeMinChanged() {
+	CONDITIONAL_LOCK_RETURN;
+	m_fitData.fitRange.setStart(uiGeneralTab.leFitMin->text().toDouble());
+	enableRecalculate();
+}
+
+void XYPiecewiseLinearFitCurveDock::fitRangeMaxChanged() {
+	CONDITIONAL_LOCK_RETURN;
+	m_fitData.fitRange.setEnd(uiGeneralTab.leFitMax->text().toDouble());
+	enableRecalculate();
 }
 
 void XYPiecewiseLinearFitCurveDock::recalculateClicked() {

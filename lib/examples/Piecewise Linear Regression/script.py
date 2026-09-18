@@ -156,6 +156,8 @@ fit_data.connectionType = XYPiecewiseLinearFitCurve.ConnectionType.Continuous
 fit_data.penalty = 20.0  # Adjust to control number of segments (lower = more sensitive)
 fit_data.minSegmentSize = 10
 fit_data.maxChangepoints = 5
+fit_data.autoRange = True  # Use all data; set to False to specify custom range
+# fit_data.fitRange = Range_double(10.0, 60.0)  # Example: fit only data between x=10 and x=60
 fit_curve.setFitData(fit_data)
 
 # Add to plot

@@ -164,6 +164,10 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 
 	Range<double> xRange = Range<double>{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
 
+	// Apply user-specified range if not auto
+	if (!fitData.autoRange && !fitData.fitRange.isZero())
+		xRange = fitData.fitRange;
+
 	size_t validPoints = 0;
 	for (int i = 0; i < tmpXDataColumn->rowCount(); ++i) {
 		double x = tmpXDataColumn->valueAt(i);
@@ -596,6 +600,9 @@ void XYPiecewiseLinearFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("penalty"), QString::number(d->fitData.penalty));
 	writer->writeAttribute(QStringLiteral("minSegmentSize"), QString::number(d->fitData.minSegmentSize));
 	writer->writeAttribute(QStringLiteral("maxChangepoints"), QString::number(d->fitData.maxChangepoints));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->fitData.autoRange));
+	writer->writeAttribute(QStringLiteral("fitRangeMin"), QString::number(d->fitData.fitRange.start(), 'g', 15));
+	writer->writeAttribute(QStringLiteral("fitRangeMax"), QString::number(d->fitData.fitRange.end(), 'g', 15));
 	writer->writeAttribute(QStringLiteral("changepointLinesEnabled"), QString::number(d->changepointLinesEnabled));
 	writer->writeEndElement();
 
@@ -675,6 +682,9 @@ bool XYPiecewiseLinearFitCurve::load(XmlStreamReader* reader, bool preview) {
 			d->fitData.penalty = attribs.value(QStringLiteral("penalty")).toDouble();
 			d->fitData.minSegmentSize = attribs.value(QStringLiteral("minSegmentSize")).toULongLong();
 			d->fitData.maxChangepoints = attribs.value(QStringLiteral("maxChangepoints")).toULongLong();
+			d->fitData.autoRange = attribs.value(QStringLiteral("autoRange")).toInt();
+			d->fitData.fitRange.setStart(attribs.value(QStringLiteral("fitRangeMin")).toDouble());
+			d->fitData.fitRange.setEnd(attribs.value(QStringLiteral("fitRangeMax")).toDouble());
 			d->changepointLinesEnabled = attribs.value(QStringLiteral("changepointLinesEnabled")).toInt();
 		} else if (reader->name() == QLatin1String("fitResult")) {
 			attribs = reader->attributes();

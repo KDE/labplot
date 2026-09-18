@@ -741,4 +741,80 @@ void PiecewiseLinearFitTest::testSSE() {
 	QVERIFY(qAbs(result.sse - sumSSE) < 0.01 * result.sse);
 }
 
+void PiecewiseLinearFitTest::testFitRange() {
+	// Test fitting only a subset of the data
+	const int n = 150;
+
+	QVector<double> xData(n);
+	QVector<double> yData(n);
+
+	srand(42);
+
+	// Three segments: 0-50, 50-100, 100-150
+	for (int i = 0; i < n; ++i) {
+		xData[i] = i;
+		if (i < 50)
+			yData[i] = 1.0 * i + 5.0; // slope 1
+		else if (i < 100)
+			yData[i] = 3.0 * i - 95.0; // slope 3
+		else
+			yData[i] = 0.5 * i + 155.0; // slope 0.5
+
+		yData[i] += (rand() / (double)RAND_MAX - 0.5) * 3.0;
+	}
+
+	Column xCol(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+	xCol.replaceValues(0, xData);
+
+	Column yCol(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
+	yCol.replaceValues(0, yData);
+
+	// First: fit entire range (should detect 2 changepoints)
+	XYPiecewiseLinearFitCurve fitCurveAll(QStringLiteral("test_all"));
+	fitCurveAll.setXDataColumn(&xCol);
+	fitCurveAll.setYDataColumn(&yCol);
+
+	auto fitDataAll = fitCurveAll.fitData();
+	fitDataAll.changepointMethod = nsl_changepoint_method_binary_segmentation;
+	fitDataAll.penalty = 15.0;
+	fitDataAll.minSegmentSize = 10;
+	fitDataAll.maxChangepoints = 5;
+	fitDataAll.autoRange = true;
+	fitCurveAll.setFitData(fitDataAll);
+	fitCurveAll.recalculate();
+
+	const auto& resultAll = fitCurveAll.fitResult();
+	QCOMPARE(resultAll.available, true);
+	QCOMPARE(resultAll.valid, true);
+
+	// Second: fit only middle segment (50-100), should detect 0-1 changepoints
+	XYPiecewiseLinearFitCurve fitCurveRange(QStringLiteral("test_range"));
+	fitCurveRange.setXDataColumn(&xCol);
+	fitCurveRange.setYDataColumn(&yCol);
+
+	auto fitDataRange = fitCurveRange.fitData();
+	fitDataRange.changepointMethod = nsl_changepoint_method_binary_segmentation;
+	fitDataRange.penalty = 15.0;
+	fitDataRange.minSegmentSize = 10;
+	fitDataRange.maxChangepoints = 5;
+	fitDataRange.autoRange = false;
+	fitDataRange.fitRange.setStart(50.0);
+	fitDataRange.fitRange.setEnd(100.0);
+	fitCurveRange.setFitData(fitDataRange);
+	fitCurveRange.recalculate();
+
+	const auto& resultRange = fitCurveRange.fitResult();
+	QCOMPARE(resultRange.available, true);
+	QCOMPARE(resultRange.valid, true);
+
+	// Range fit should find fewer segments than full data (middle is mostly uniform)
+	QVERIFY(resultRange.numSegments <= resultAll.numSegments);
+
+	// All changepoints in range fit should be within specified range
+	for (const auto& cp : resultRange.changepoints) {
+		QVERIFY(cp >= 50.0);
+		QVERIFY(cp <= 100.0);
+	}
+}
+
 QTEST_MAIN(PiecewiseLinearFitTest)

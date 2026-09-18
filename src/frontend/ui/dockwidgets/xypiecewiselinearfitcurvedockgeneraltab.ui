@@ -285,6 +285,48 @@
      </property>
     </widget>
    </item>
+   <item row="15" column="0">
+    <widget class="QLabel" name="lFitRange">
+     <property name="text">
+      <string>Fit Range:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="2">
+    <widget class="QCheckBox" name="chkAutoFitRange">
+     <property name="text">
+      <string>Auto</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="16" column="0">
+    <widget class="QLabel" name="lFitMinMax">
+     <property name="text">
+      <string>Min / Max:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="16" column="2">
+    <layout class="QHBoxLayout" name="hLayoutFitRange">
+     <item>
+      <widget class="QLineEdit" name="leFitMin">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="leFitMax">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="19" column="0">
     <widget class="QLabel" name="lPlotRanges">
      <property name="text">

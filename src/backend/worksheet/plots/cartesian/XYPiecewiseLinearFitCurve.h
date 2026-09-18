@@ -10,6 +10,7 @@
 #ifndef XYPIECEWISELINEARFITCURVE_H
 #define XYPIECEWISELINEARFITCURVE_H
 
+#include "backend/lib/Range.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
@@ -43,6 +44,8 @@ public:
 		double penalty{1.0}; // Penalty for adding changepoints - higher values = fewer segments
 		size_t minSegmentSize{2}; // Minimum number of points per segment
 		size_t maxChangepoints{1}; // Maximum number of changepoints to detect
+		bool autoRange{true}; // use all data points
+		Range<double> fitRange{0., 0.}; // x range of data to fit
 	};
 
 	struct FitResult : public XYAnalysisCurve::Result {
