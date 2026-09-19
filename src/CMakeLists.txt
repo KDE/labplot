@@ -980,16 +980,16 @@ target_compile_definitions(labplot PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 # so the binary follows in-place Python upgrades (e.g., python.org installer updating
 # Python.framework/Versions/Current from 3.11 to 3.13). Without this, the binary
 # would be pinned to the specific minor version used at build time.
-if(APPLE AND ENABLE_PYTHON_SCRIPTING)
-    add_custom_command(TARGET labplot POST_BUILD
-        COMMAND install_name_tool -change
-            "@rpath/Python.framework/Versions/${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/Python"
-            "@rpath/Python.framework/Versions/Current/Python"
-            "$<TARGET_FILE:labplot>"
-        COMMENT "labplot: rewriting Python framework path ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR} -> Current for stable ABI"
-        VERBATIM
-    )
-endif()
+# if(APPLE AND ENABLE_PYTHON_SCRIPTING)
+#    add_custom_command(TARGET labplot POST_BUILD
+#        COMMAND install_name_tool -change
+#            "@rpath/Python.framework/Versions/${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/Python"
+#            "@rpath/Python.framework/Versions/Current/Python"
+#            "$<TARGET_FILE:labplot>"
+#        COMMENT "labplot: rewriting Python framework path ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR} -> Current for stable ABI"
+#        VERBATIM
+#    )
+#endif()
 
 # see more: https://github.com/python/cpython/issues/104612#issuecomment-1755544510
 #if (ENABLE_PYTHON_SCRIPTING AND UNIX AND NOT APPLE)
