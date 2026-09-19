@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-17 00:40+0000\n"
+"POT-Creation-Date: 2026-09-19 00:40+0000\n"
 "PO-Revision-Date: 2026-09-15 17:20+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -176,8 +176,8 @@ msgstr "أيام"
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:215
 #: src/frontend/dockwidgets/XYCurveDock.cpp:437 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
-#: src/frontend/widgets/BackgroundWidget.cpp:114
-#: src/frontend/widgets/LineWidget.cpp:112
+#: src/frontend/widgets/BackgroundWidget.cpp:124
+#: src/frontend/widgets/LineWidget.cpp:117
 #, kde-format
 msgid "None"
 msgstr "بلا"
@@ -7142,7 +7142,7 @@ msgstr "أوبهايم"
 msgid "Lang"
 msgstr "لانغ"
 
-#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:114
+#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:119
 #, kde-format
 msgid "Envelope"
 msgstr "ظرف بريدي"
@@ -8930,52 +8930,52 @@ msgstr "مكوِّن موسمي (الفترة: %1)"
 msgid "Seasonal, Period: %1"
 msgstr "موسمي، الفترة: %1"
 
-#: src/backend/worksheet/Background.cpp:202
+#: src/backend/worksheet/Background.cpp:218
 #, kde-format
 msgid "%1: filling changed"
 msgstr "%1: تغيرت التعبئة"
 
-#: src/backend/worksheet/Background.cpp:209
+#: src/backend/worksheet/Background.cpp:225
 #, kde-format
 msgid "%1: filling position changed"
 msgstr "%1: تغير موضع التعبئة"
 
-#: src/backend/worksheet/Background.cpp:216
+#: src/backend/worksheet/Background.cpp:232
 #, kde-format
 msgid "%1: background type changed"
 msgstr "%1: تغير نوع الخلفية"
 
-#: src/backend/worksheet/Background.cpp:223
+#: src/backend/worksheet/Background.cpp:239
 #, kde-format
 msgid "%1: background color style changed"
 msgstr "%1: تغير نمط لون الخلفية"
 
-#: src/backend/worksheet/Background.cpp:230
+#: src/backend/worksheet/Background.cpp:246
 #, kde-format
 msgid "%1: background image style changed"
 msgstr "%1: تغير نمط صورة الخلفية"
 
-#: src/backend/worksheet/Background.cpp:237
+#: src/backend/worksheet/Background.cpp:253
 #, kde-format
 msgid "%1: background brush style changed"
 msgstr "%1: تغير نمط فرشاة الخلفية"
 
-#: src/backend/worksheet/Background.cpp:244
+#: src/backend/worksheet/Background.cpp:260
 #, kde-format
 msgid "%1: set background first color"
 msgstr "%1: اضبط لون الخلفية الأول"
 
-#: src/backend/worksheet/Background.cpp:251
+#: src/backend/worksheet/Background.cpp:267
 #, kde-format
 msgid "%1: set background second color"
 msgstr "%1: اضبط لون الخلفية الثاني"
 
-#: src/backend/worksheet/Background.cpp:258
+#: src/backend/worksheet/Background.cpp:274
 #, kde-format
 msgid "%1: set background image"
 msgstr "%1: عيّن صورة الخلفية"
 
-#: src/backend/worksheet/Background.cpp:265
+#: src/backend/worksheet/Background.cpp:281
 #, kde-format
 msgid "%1: set background opacity"
 msgstr "%1: اضبط عتامة الخلفية"
@@ -9182,7 +9182,7 @@ msgstr "النّمط"
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
 #: src/frontend/dockwidgets/AxisDock.cpp:324
-#: src/frontend/widgets/BackgroundWidget.cpp:122
+#: src/frontend/widgets/BackgroundWidget.cpp:132
 #, kde-format
 msgid "Color"
 msgstr "اللون"
@@ -9649,7 +9649,7 @@ msgstr "المحور العمودي"
 #: src/frontend/datasources/ImportFileWidget.cpp:114
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:117
-#: src/frontend/widgets/BackgroundWidget.cpp:123
+#: src/frontend/widgets/BackgroundWidget.cpp:133
 #: src/frontend/worksheet/WorksheetView.cpp:242
 #: src/frontend/worksheet/WorksheetView.cpp:1361
 #, kde-format
@@ -14612,7 +14612,7 @@ msgid "Bottom"
 msgstr "الأسفل"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:227
-#: src/frontend/widgets/BackgroundWidget.cpp:138
+#: src/frontend/widgets/BackgroundWidget.cpp:148
 #, kde-format
 msgid "Centered"
 msgstr "موسّطة"
@@ -14696,7 +14696,7 @@ msgstr "نصف مملوء، كبير"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:139
 #: src/frontend/dockwidgets/ImageDock.cpp:182
 #: src/frontend/dockwidgets/ImageDock.cpp:192
-#: src/frontend/widgets/BackgroundWidget.cpp:118
+#: src/frontend/widgets/BackgroundWidget.cpp:128
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
 #: src/frontend/widgets/ValueWidget.cpp:138
@@ -14713,7 +14713,7 @@ msgstr "اليسار"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:141
 #: src/frontend/dockwidgets/ImageDock.cpp:184
 #: src/frontend/dockwidgets/ImageDock.cpp:194
-#: src/frontend/widgets/BackgroundWidget.cpp:119
+#: src/frontend/widgets/BackgroundWidget.cpp:129
 #: src/frontend/widgets/LabelWidget.cpp:489
 #: src/frontend/widgets/LabelWidget.cpp:501
 #: src/frontend/widgets/ValueWidget.cpp:139
@@ -21396,9 +21396,9 @@ msgstr "النمط:"
 #: src/frontend/ui/dockwidgets/linewidget.ui:92
 #: src/frontend/ui/dockwidgets/valuewidget.ui:320
 #: src/frontend/ui/symbolwidget.ui:194 src/frontend/ui/symbolwidget.ui:250
-#: src/frontend/widgets/BackgroundWidget.cpp:201
-#: src/frontend/widgets/BackgroundWidget.cpp:225
-#: src/frontend/widgets/BackgroundWidget.cpp:253
+#: src/frontend/widgets/BackgroundWidget.cpp:218
+#: src/frontend/widgets/BackgroundWidget.cpp:242
+#: src/frontend/widgets/BackgroundWidget.cpp:273
 #: src/frontend/worksheet/GridDialog.cpp:66
 #, kde-format
 msgid "Color:"
@@ -23330,8 +23330,8 @@ msgstr "ممكّن"
 
 #. i18n: ectx: property (text), widget (QLabel, lFirstColor)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:155
-#: src/frontend/widgets/BackgroundWidget.cpp:205
-#: src/frontend/widgets/BackgroundWidget.cpp:257
+#: src/frontend/widgets/BackgroundWidget.cpp:222
+#: src/frontend/widgets/BackgroundWidget.cpp:277
 #, kde-format
 msgid "First color:"
 msgstr "أوّل لون:"
@@ -23409,7 +23409,7 @@ msgstr "ص:"
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:164
 #: src/frontend/widgets/ErrorBarWidget.cpp:53
 #: src/frontend/widgets/ErrorBarWidget.cpp:214
-#: src/frontend/widgets/LineWidget.cpp:113
+#: src/frontend/widgets/LineWidget.cpp:118
 #, kde-format
 msgid "Bars"
 msgstr "شرائط"
@@ -27009,84 +27009,84 @@ msgstr ""
 "اطلع على سجل التغييرات الكامل لبرنامج معمل الرسم %1 على موقعنا <a href="
 "\"%2\"></a>."
 
-#: src/frontend/widgets/BackgroundWidget.cpp:115
+#: src/frontend/widgets/BackgroundWidget.cpp:125
 #: src/frontend/widgets/ValueWidget.cpp:136
 #, kde-format
 msgid "Above"
 msgstr "أعلى"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:116
+#: src/frontend/widgets/BackgroundWidget.cpp:126
 #: src/frontend/widgets/ValueWidget.cpp:137
 #, kde-format
 msgid "Below"
 msgstr "أسفل"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:117
+#: src/frontend/widgets/BackgroundWidget.cpp:127
 #, kde-format
 msgid "Zero Baseline"
 msgstr "خط أساس صفر"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:124
+#: src/frontend/widgets/BackgroundWidget.cpp:134
 #, kde-format
 msgid "Pattern"
 msgstr "النمط"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:127
+#: src/frontend/widgets/BackgroundWidget.cpp:137
 #, kde-format
 msgid "Single Color"
 msgstr "لون واحد"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:128
+#: src/frontend/widgets/BackgroundWidget.cpp:138
 #, kde-format
 msgid "Horizontal Gradient"
 msgstr "تدرج أفقي"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:129
+#: src/frontend/widgets/BackgroundWidget.cpp:139
 #, kde-format
 msgid "Vertical Gradient"
 msgstr "تدرج عمودي"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:130
+#: src/frontend/widgets/BackgroundWidget.cpp:140
 #, kde-format
 msgid "Diag. Gradient (From Top Left)"
 msgstr "تدرج قطري (من الأعلى اليسار)"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:131
+#: src/frontend/widgets/BackgroundWidget.cpp:141
 #, kde-format
 msgid "Diag. Gradient (From Bottom Left)"
 msgstr "تدرج قطري (من الأسفل اليسار)"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:132
+#: src/frontend/widgets/BackgroundWidget.cpp:142
 #, kde-format
 msgid "Radial Gradient"
 msgstr "تدرج شعاعي"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:135
+#: src/frontend/widgets/BackgroundWidget.cpp:145
 #, kde-format
 msgid "Scaled and Cropped"
 msgstr "مكبّرة ومقصوصة"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:136
+#: src/frontend/widgets/BackgroundWidget.cpp:146
 #, kde-format
 msgid "Scaled"
 msgstr "مكبّرة"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:137
+#: src/frontend/widgets/BackgroundWidget.cpp:147
 #, kde-format
 msgid "Scaled, Keep Proportions"
 msgstr "مكبّرة مع إبقاء النّسب"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:139
+#: src/frontend/widgets/BackgroundWidget.cpp:149
 #, kde-format
 msgid "Tiled"
 msgstr "مكرّرة"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:140
+#: src/frontend/widgets/BackgroundWidget.cpp:150
 #, kde-format
 msgid "Center Tiled"
 msgstr "مبلّط مركزي"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:266
+#: src/frontend/widgets/BackgroundWidget.cpp:286
 #, kde-format
 msgid "%1 elements: background color style changed"
 msgstr "%1 من العناصر: تغيّر نمط لون الخلفية"
@@ -27585,47 +27585,47 @@ msgstr "التاريخ"
 msgid "Date and Time"
 msgstr "التاريخ والوقت"
 
-#: src/frontend/widgets/LineWidget.cpp:115
+#: src/frontend/widgets/LineWidget.cpp:120
 #, kde-format
 msgid "Drop Lines"
 msgstr "إسقاط خطوط"
 
-#: src/frontend/widgets/LineWidget.cpp:116
+#: src/frontend/widgets/LineWidget.cpp:121
 #, kde-format
 msgid "Half-Bars"
 msgstr "نصف-أشرطة"
 
-#: src/frontend/widgets/LineWidget.cpp:121
+#: src/frontend/widgets/LineWidget.cpp:126
 #, kde-format
 msgid "No Drop Lines"
 msgstr "لا إسقاط خطوط"
 
-#: src/frontend/widgets/LineWidget.cpp:122
+#: src/frontend/widgets/LineWidget.cpp:127
 #, kde-format
 msgid "Drop Lines, X"
 msgstr "إسقاط خطوط، س"
 
-#: src/frontend/widgets/LineWidget.cpp:123
+#: src/frontend/widgets/LineWidget.cpp:128
 #, kde-format
 msgid "Drop Lines, Y"
 msgstr "إسقاط خطوط، ص"
 
-#: src/frontend/widgets/LineWidget.cpp:124
+#: src/frontend/widgets/LineWidget.cpp:129
 #, kde-format
 msgid "Drop Lines, XY"
 msgstr "إسقاط خطوط، س ص"
 
-#: src/frontend/widgets/LineWidget.cpp:125
+#: src/frontend/widgets/LineWidget.cpp:130
 #, kde-format
 msgid "Drop Lines, X, Zero Baseline"
 msgstr "إسقاط خطوط، س، خط أساس صفر"
 
-#: src/frontend/widgets/LineWidget.cpp:126
+#: src/frontend/widgets/LineWidget.cpp:131
 #, kde-format
 msgid "Drop Lines, X, Min Baseline"
 msgstr "إسقاط خطوط، س، خط أساس أصغري"
 
-#: src/frontend/widgets/LineWidget.cpp:127
+#: src/frontend/widgets/LineWidget.cpp:132
 #, kde-format
 msgid "Drop Lines, X, Max Baseline"
 msgstr "إسقاط خطوط، س، خط أساس أعظمي"

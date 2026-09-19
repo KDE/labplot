@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-17 00:40+0000\n"
+"POT-Creation-Date: 2026-09-19 00:40+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -193,8 +193,8 @@ msgstr ""
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:215
 #: src/frontend/dockwidgets/XYCurveDock.cpp:437 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
-#: src/frontend/widgets/BackgroundWidget.cpp:114
-#: src/frontend/widgets/LineWidget.cpp:112
+#: src/frontend/widgets/BackgroundWidget.cpp:124
+#: src/frontend/widgets/LineWidget.cpp:117
 #, kde-format
 msgid "None"
 msgstr ""
@@ -7579,7 +7579,7 @@ msgstr ""
 msgid "Lang"
 msgstr ""
 
-#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:114
+#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:119
 #, fuzzy, kde-format
 #| msgid "developer"
 msgid "Envelope"
@@ -9482,54 +9482,54 @@ msgstr ""
 msgid "Seasonal, Period: %1"
 msgstr ""
 
-#: src/backend/worksheet/Background.cpp:202
+#: src/backend/worksheet/Background.cpp:218
 #, fuzzy, kde-format
 #| msgid "%1: line type changed"
 msgid "%1: filling changed"
 msgstr "%1: tip linije promijenjen"
 
-#: src/backend/worksheet/Background.cpp:209
+#: src/backend/worksheet/Background.cpp:225
 #, fuzzy, kde-format
 #| msgid "%1: line type changed"
 msgid "%1: filling position changed"
 msgstr "%1: tip linije promijenjen"
 
-#: src/backend/worksheet/Background.cpp:216
+#: src/backend/worksheet/Background.cpp:232
 #, kde-format
 msgid "%1: background type changed"
 msgstr "%1: pozadinski tip promijenjen"
 
-#: src/backend/worksheet/Background.cpp:223
+#: src/backend/worksheet/Background.cpp:239
 #, kde-format
 msgid "%1: background color style changed"
 msgstr "%1: pozadinska boja promijenjena"
 
-#: src/backend/worksheet/Background.cpp:230
+#: src/backend/worksheet/Background.cpp:246
 #, kde-format
 msgid "%1: background image style changed"
 msgstr "%1: pozadinska slika promijenjena"
 
-#: src/backend/worksheet/Background.cpp:237
+#: src/backend/worksheet/Background.cpp:253
 #, kde-format
 msgid "%1: background brush style changed"
 msgstr "%1: pozadinski stil četke promijenjen"
 
-#: src/backend/worksheet/Background.cpp:244
+#: src/backend/worksheet/Background.cpp:260
 #, kde-format
 msgid "%1: set background first color"
 msgstr "%1: postavi prvu pozadinsku boju"
 
-#: src/backend/worksheet/Background.cpp:251
+#: src/backend/worksheet/Background.cpp:267
 #, kde-format
 msgid "%1: set background second color"
 msgstr "%1: postavi drugu pozadinsku boju"
 
-#: src/backend/worksheet/Background.cpp:258
+#: src/backend/worksheet/Background.cpp:274
 #, kde-format
 msgid "%1: set background image"
 msgstr "%1: postavi pozadinsku sliku"
 
-#: src/backend/worksheet/Background.cpp:265
+#: src/backend/worksheet/Background.cpp:281
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set background opacity"
@@ -9749,7 +9749,7 @@ msgstr "Stil"
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
 #: src/frontend/dockwidgets/AxisDock.cpp:324
-#: src/frontend/widgets/BackgroundWidget.cpp:122
+#: src/frontend/widgets/BackgroundWidget.cpp:132
 #, kde-format
 msgid "Color"
 msgstr "Boja"
@@ -10260,7 +10260,7 @@ msgstr "vertikalna oa"
 #: src/frontend/datasources/ImportFileWidget.cpp:114
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:117
-#: src/frontend/widgets/BackgroundWidget.cpp:123
+#: src/frontend/widgets/BackgroundWidget.cpp:133
 #: src/frontend/worksheet/WorksheetView.cpp:242
 #: src/frontend/worksheet/WorksheetView.cpp:1361
 #, fuzzy, kde-format
@@ -15644,7 +15644,7 @@ msgid "Bottom"
 msgstr "Dno"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:227
-#: src/frontend/widgets/BackgroundWidget.cpp:138
+#: src/frontend/widgets/BackgroundWidget.cpp:148
 #, fuzzy, kde-format
 #| msgid "centered"
 msgid "Centered"
@@ -15732,7 +15732,7 @@ msgstr "polu-popunjen, veliki"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:139
 #: src/frontend/dockwidgets/ImageDock.cpp:182
 #: src/frontend/dockwidgets/ImageDock.cpp:192
-#: src/frontend/widgets/BackgroundWidget.cpp:118
+#: src/frontend/widgets/BackgroundWidget.cpp:128
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
 #: src/frontend/widgets/ValueWidget.cpp:138
@@ -15749,7 +15749,7 @@ msgstr "Lijevo"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:141
 #: src/frontend/dockwidgets/ImageDock.cpp:184
 #: src/frontend/dockwidgets/ImageDock.cpp:194
-#: src/frontend/widgets/BackgroundWidget.cpp:119
+#: src/frontend/widgets/BackgroundWidget.cpp:129
 #: src/frontend/widgets/LabelWidget.cpp:489
 #: src/frontend/widgets/LabelWidget.cpp:501
 #: src/frontend/widgets/ValueWidget.cpp:139
@@ -22781,9 +22781,9 @@ msgstr "Stil"
 #: src/frontend/ui/dockwidgets/linewidget.ui:92
 #: src/frontend/ui/dockwidgets/valuewidget.ui:320
 #: src/frontend/ui/symbolwidget.ui:194 src/frontend/ui/symbolwidget.ui:250
-#: src/frontend/widgets/BackgroundWidget.cpp:201
-#: src/frontend/widgets/BackgroundWidget.cpp:225
-#: src/frontend/widgets/BackgroundWidget.cpp:253
+#: src/frontend/widgets/BackgroundWidget.cpp:218
+#: src/frontend/widgets/BackgroundWidget.cpp:242
+#: src/frontend/widgets/BackgroundWidget.cpp:273
 #: src/frontend/worksheet/GridDialog.cpp:66
 #, fuzzy, kde-format
 #| msgid "Color"
@@ -24853,8 +24853,8 @@ msgstr "Varijanca"
 
 #. i18n: ectx: property (text), widget (QLabel, lFirstColor)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:155
-#: src/frontend/widgets/BackgroundWidget.cpp:205
-#: src/frontend/widgets/BackgroundWidget.cpp:257
+#: src/frontend/widgets/BackgroundWidget.cpp:222
+#: src/frontend/widgets/BackgroundWidget.cpp:277
 #, fuzzy, kde-format
 #| msgid "First color"
 msgid "First color:"
@@ -24936,7 +24936,7 @@ msgstr "y"
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:164
 #: src/frontend/widgets/ErrorBarWidget.cpp:53
 #: src/frontend/widgets/ErrorBarWidget.cpp:214
-#: src/frontend/widgets/LineWidget.cpp:113
+#: src/frontend/widgets/LineWidget.cpp:118
 #, kde-format
 msgid "Bars"
 msgstr ""
@@ -28840,98 +28840,98 @@ msgid ""
 "See the full changelog for LabPlot %1 on our <a href=\"%2\">website</a>."
 msgstr ""
 
-#: src/frontend/widgets/BackgroundWidget.cpp:115
+#: src/frontend/widgets/BackgroundWidget.cpp:125
 #: src/frontend/widgets/ValueWidget.cpp:136
 #, fuzzy, kde-format
 #| msgid "above"
 msgid "Above"
 msgstr "iznad"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:116
+#: src/frontend/widgets/BackgroundWidget.cpp:126
 #: src/frontend/widgets/ValueWidget.cpp:137
 #, fuzzy, kde-format
 #| msgid "below"
 msgid "Below"
 msgstr "ispod"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:117
+#: src/frontend/widgets/BackgroundWidget.cpp:127
 #, fuzzy, kde-format
 #| msgid "drop lines, X, zero baseline"
 msgid "Zero Baseline"
 msgstr "ispusti linije, X, nulta bazna linija"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:124
+#: src/frontend/widgets/BackgroundWidget.cpp:134
 #, kde-format
 msgid "Pattern"
 msgstr "Uzorak"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:127
+#: src/frontend/widgets/BackgroundWidget.cpp:137
 #, fuzzy, kde-format
 #| msgid "single color"
 msgid "Single Color"
 msgstr "jedna boja"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:128
+#: src/frontend/widgets/BackgroundWidget.cpp:138
 #, fuzzy, kde-format
 #| msgid "horizontal linear gradient"
 msgid "Horizontal Gradient"
 msgstr "horizontalni linearni gradijent"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:129
+#: src/frontend/widgets/BackgroundWidget.cpp:139
 #, fuzzy, kde-format
 #| msgid "vertical linear gradient"
 msgid "Vertical Gradient"
 msgstr "vertikalni linearni gradijent"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:130
+#: src/frontend/widgets/BackgroundWidget.cpp:140
 #, fuzzy, kde-format
 #| msgid "diagonal linear gradient (start from top left)"
 msgid "Diag. Gradient (From Top Left)"
 msgstr "dijagonalni linearni gradijent (počinje od gornjeg lijevog ugla)"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:131
+#: src/frontend/widgets/BackgroundWidget.cpp:141
 #, fuzzy, kde-format
 #| msgid "diagonal linear gradient (start from bottom left)"
 msgid "Diag. Gradient (From Bottom Left)"
 msgstr "dijagonalni linearni gradijent (počinje sa lijevog donjeg ugla)"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:132
+#: src/frontend/widgets/BackgroundWidget.cpp:142
 #, fuzzy, kde-format
 #| msgid "radial gradient"
 msgid "Radial Gradient"
 msgstr "kružni(radijalni) gradijent"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:135
+#: src/frontend/widgets/BackgroundWidget.cpp:145
 #, fuzzy, kde-format
 #| msgid "scaled and cropped"
 msgid "Scaled and Cropped"
 msgstr "skaliran i izrezan"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:136
+#: src/frontend/widgets/BackgroundWidget.cpp:146
 #, fuzzy, kde-format
 #| msgid "Scale"
 msgid "Scaled"
 msgstr "Skala"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:137
+#: src/frontend/widgets/BackgroundWidget.cpp:147
 #, fuzzy, kde-format
 #| msgid "scaled, keep proportions"
 msgid "Scaled, Keep Proportions"
 msgstr "skaliran, zadrži proporcije"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:139
+#: src/frontend/widgets/BackgroundWidget.cpp:149
 #, fuzzy, kde-format
 #| msgid "tiled"
 msgid "Tiled"
 msgstr "popločan"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:140
+#: src/frontend/widgets/BackgroundWidget.cpp:150
 #, fuzzy, kde-format
 #| msgid "center tiled"
 msgid "Center Tiled"
 msgstr "centrirano popločan"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:266
+#: src/frontend/widgets/BackgroundWidget.cpp:286
 #, fuzzy, kde-format
 #| msgid "%1 worksheets: background color style changed"
 msgid "%1 elements: background color style changed"
@@ -29455,54 +29455,54 @@ msgstr "Datum"
 msgid "Date and Time"
 msgstr "Datum i vrijeme"
 
-#: src/frontend/widgets/LineWidget.cpp:115
+#: src/frontend/widgets/LineWidget.cpp:120
 #, fuzzy, kde-format
 #| msgid "Drop lines:"
 msgid "Drop Lines"
 msgstr "Padajuće linije:"
 
-#: src/frontend/widgets/LineWidget.cpp:116
+#: src/frontend/widgets/LineWidget.cpp:121
 #, kde-format
 msgid "Half-Bars"
 msgstr ""
 
-#: src/frontend/widgets/LineWidget.cpp:121
+#: src/frontend/widgets/LineWidget.cpp:126
 #, fuzzy, kde-format
 #| msgid "no drop lines"
 msgid "No Drop Lines"
 msgstr "nema pada linija"
 
-#: src/frontend/widgets/LineWidget.cpp:122
+#: src/frontend/widgets/LineWidget.cpp:127
 #, fuzzy, kde-format
 #| msgid "drop lines, X"
 msgid "Drop Lines, X"
 msgstr "ispusti linije, X"
 
-#: src/frontend/widgets/LineWidget.cpp:123
+#: src/frontend/widgets/LineWidget.cpp:128
 #, fuzzy, kde-format
 #| msgid "drop lines, Y"
 msgid "Drop Lines, Y"
 msgstr "ispusti linije, Y"
 
-#: src/frontend/widgets/LineWidget.cpp:124
+#: src/frontend/widgets/LineWidget.cpp:129
 #, fuzzy, kde-format
 #| msgid "drop lines, XY"
 msgid "Drop Lines, XY"
 msgstr "ispusti linije, XY"
 
-#: src/frontend/widgets/LineWidget.cpp:125
+#: src/frontend/widgets/LineWidget.cpp:130
 #, fuzzy, kde-format
 #| msgid "drop lines, X, zero baseline"
 msgid "Drop Lines, X, Zero Baseline"
 msgstr "ispusti linije, X, nulta bazna linija"
 
-#: src/frontend/widgets/LineWidget.cpp:126
+#: src/frontend/widgets/LineWidget.cpp:131
 #, fuzzy, kde-format
 #| msgid "drop lines, X, min baseline"
 msgid "Drop Lines, X, Min Baseline"
 msgstr "ispusti linije, X, minimalna bazna linnija"
 
-#: src/frontend/widgets/LineWidget.cpp:127
+#: src/frontend/widgets/LineWidget.cpp:132
 #, fuzzy, kde-format
 #| msgid "drop lines, X, max baseline"
 msgid "Drop Lines, X, Max Baseline"

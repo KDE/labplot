@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-17 00:40+0000\n"
+"POT-Creation-Date: 2026-09-19 00:40+0000\n"
 "PO-Revision-Date: 2026-09-17 12:24+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -180,8 +180,8 @@ msgstr "Дні"
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:215
 #: src/frontend/dockwidgets/XYCurveDock.cpp:437 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
-#: src/frontend/widgets/BackgroundWidget.cpp:114
-#: src/frontend/widgets/LineWidget.cpp:112
+#: src/frontend/widgets/BackgroundWidget.cpp:124
+#: src/frontend/widgets/LineWidget.cpp:117
 #, kde-format
 msgid "None"
 msgstr "Немає"
@@ -7184,7 +7184,7 @@ msgstr "Опгайма"
 msgid "Lang"
 msgstr "Ленґа"
 
-#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:114
+#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:119
 #, kde-format
 msgid "Envelope"
 msgstr "Обгортка"
@@ -8973,52 +8973,52 @@ msgstr "Сезонний компонент (період: %1)"
 msgid "Seasonal, Period: %1"
 msgstr "Сезонний, період: %1"
 
-#: src/backend/worksheet/Background.cpp:202
+#: src/backend/worksheet/Background.cpp:218
 #, kde-format
 msgid "%1: filling changed"
 msgstr "%1: змінено заповнення"
 
-#: src/backend/worksheet/Background.cpp:209
+#: src/backend/worksheet/Background.cpp:225
 #, kde-format
 msgid "%1: filling position changed"
 msgstr "%1: змінено розташування заповнення"
 
-#: src/backend/worksheet/Background.cpp:216
+#: src/backend/worksheet/Background.cpp:232
 #, kde-format
 msgid "%1: background type changed"
 msgstr "%1: змінено тип тла"
 
-#: src/backend/worksheet/Background.cpp:223
+#: src/backend/worksheet/Background.cpp:239
 #, kde-format
 msgid "%1: background color style changed"
 msgstr "%1: змінено стиль кольору тла"
 
-#: src/backend/worksheet/Background.cpp:230
+#: src/backend/worksheet/Background.cpp:246
 #, kde-format
 msgid "%1: background image style changed"
 msgstr "%1: змінено стиль зображення тла"
 
-#: src/backend/worksheet/Background.cpp:237
+#: src/backend/worksheet/Background.cpp:253
 #, kde-format
 msgid "%1: background brush style changed"
 msgstr "%1: змінено стиль пензля тла"
 
-#: src/backend/worksheet/Background.cpp:244
+#: src/backend/worksheet/Background.cpp:260
 #, kde-format
 msgid "%1: set background first color"
 msgstr "%1: встановити перший колір тла"
 
-#: src/backend/worksheet/Background.cpp:251
+#: src/backend/worksheet/Background.cpp:267
 #, kde-format
 msgid "%1: set background second color"
 msgstr "%1: встановити другий колір тла"
 
-#: src/backend/worksheet/Background.cpp:258
+#: src/backend/worksheet/Background.cpp:274
 #, kde-format
 msgid "%1: set background image"
 msgstr "%1: встановити зображення тла"
 
-#: src/backend/worksheet/Background.cpp:265
+#: src/backend/worksheet/Background.cpp:281
 #, kde-format
 msgid "%1: set background opacity"
 msgstr "%1: встановити непрозорість тла"
@@ -9225,7 +9225,7 @@ msgstr "Стиль"
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
 #: src/frontend/dockwidgets/AxisDock.cpp:324
-#: src/frontend/widgets/BackgroundWidget.cpp:122
+#: src/frontend/widgets/BackgroundWidget.cpp:132
 #, kde-format
 msgid "Color"
 msgstr "Колір"
@@ -9692,7 +9692,7 @@ msgstr "Вертикальної вісі"
 #: src/frontend/datasources/ImportFileWidget.cpp:114
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:117
-#: src/frontend/widgets/BackgroundWidget.cpp:123
+#: src/frontend/widgets/BackgroundWidget.cpp:133
 #: src/frontend/worksheet/WorksheetView.cpp:242
 #: src/frontend/worksheet/WorksheetView.cpp:1361
 #, kde-format
@@ -14706,7 +14706,7 @@ msgid "Bottom"
 msgstr "Низ"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:227
-#: src/frontend/widgets/BackgroundWidget.cpp:138
+#: src/frontend/widgets/BackgroundWidget.cpp:148
 #, kde-format
 msgid "Centered"
 msgstr "За центром"
@@ -14792,7 +14792,7 @@ msgstr "напівзаповнена, велика"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:139
 #: src/frontend/dockwidgets/ImageDock.cpp:182
 #: src/frontend/dockwidgets/ImageDock.cpp:192
-#: src/frontend/widgets/BackgroundWidget.cpp:118
+#: src/frontend/widgets/BackgroundWidget.cpp:128
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
 #: src/frontend/widgets/ValueWidget.cpp:138
@@ -14809,7 +14809,7 @@ msgstr "Ліворуч"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:141
 #: src/frontend/dockwidgets/ImageDock.cpp:184
 #: src/frontend/dockwidgets/ImageDock.cpp:194
-#: src/frontend/widgets/BackgroundWidget.cpp:119
+#: src/frontend/widgets/BackgroundWidget.cpp:129
 #: src/frontend/widgets/LabelWidget.cpp:489
 #: src/frontend/widgets/LabelWidget.cpp:501
 #: src/frontend/widgets/ValueWidget.cpp:139
@@ -21595,9 +21595,9 @@ msgstr "Стиль:"
 #: src/frontend/ui/dockwidgets/linewidget.ui:92
 #: src/frontend/ui/dockwidgets/valuewidget.ui:320
 #: src/frontend/ui/symbolwidget.ui:194 src/frontend/ui/symbolwidget.ui:250
-#: src/frontend/widgets/BackgroundWidget.cpp:201
-#: src/frontend/widgets/BackgroundWidget.cpp:225
-#: src/frontend/widgets/BackgroundWidget.cpp:253
+#: src/frontend/widgets/BackgroundWidget.cpp:218
+#: src/frontend/widgets/BackgroundWidget.cpp:242
+#: src/frontend/widgets/BackgroundWidget.cpp:273
 #: src/frontend/worksheet/GridDialog.cpp:66
 #, kde-format
 msgid "Color:"
@@ -23534,8 +23534,8 @@ msgstr "Увімкнено:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFirstColor)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:155
-#: src/frontend/widgets/BackgroundWidget.cpp:205
-#: src/frontend/widgets/BackgroundWidget.cpp:257
+#: src/frontend/widgets/BackgroundWidget.cpp:222
+#: src/frontend/widgets/BackgroundWidget.cpp:277
 #, kde-format
 msgid "First color:"
 msgstr "Перший колір:"
@@ -23613,7 +23613,7 @@ msgstr "y:"
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:164
 #: src/frontend/widgets/ErrorBarWidget.cpp:53
 #: src/frontend/widgets/ErrorBarWidget.cpp:214
-#: src/frontend/widgets/LineWidget.cpp:113
+#: src/frontend/widgets/LineWidget.cpp:118
 #, kde-format
 msgid "Bars"
 msgstr "риски"
@@ -27222,84 +27222,84 @@ msgid ""
 msgstr ""
 "Див. повний журнал змін у LabPlot %1 на нашому <a href=\"%2\">сайті</a>."
 
-#: src/frontend/widgets/BackgroundWidget.cpp:115
+#: src/frontend/widgets/BackgroundWidget.cpp:125
 #: src/frontend/widgets/ValueWidget.cpp:136
 #, kde-format
 msgid "Above"
 msgstr "Вище"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:116
+#: src/frontend/widgets/BackgroundWidget.cpp:126
 #: src/frontend/widgets/ValueWidget.cpp:137
 #, kde-format
 msgid "Below"
 msgstr "Нижче"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:117
+#: src/frontend/widgets/BackgroundWidget.cpp:127
 #, kde-format
 msgid "Zero Baseline"
 msgstr "нульова базова лінія"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:124
+#: src/frontend/widgets/BackgroundWidget.cpp:134
 #, kde-format
 msgid "Pattern"
 msgstr "візерунок"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:127
+#: src/frontend/widgets/BackgroundWidget.cpp:137
 #, kde-format
 msgid "Single Color"
 msgstr "простий колір"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:128
+#: src/frontend/widgets/BackgroundWidget.cpp:138
 #, kde-format
 msgid "Horizontal Gradient"
 msgstr "горизонтальний градієнт"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:129
+#: src/frontend/widgets/BackgroundWidget.cpp:139
 #, kde-format
 msgid "Vertical Gradient"
 msgstr "вертикальний градієнт"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:130
+#: src/frontend/widgets/BackgroundWidget.cpp:140
 #, kde-format
 msgid "Diag. Gradient (From Top Left)"
 msgstr "діаг. градієнт (з верхнього лівого кута)"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:131
+#: src/frontend/widgets/BackgroundWidget.cpp:141
 #, kde-format
 msgid "Diag. Gradient (From Bottom Left)"
 msgstr "діаг. градієнт (з нижнього лівого кута)"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:132
+#: src/frontend/widgets/BackgroundWidget.cpp:142
 #, kde-format
 msgid "Radial Gradient"
 msgstr "Радіальний градієнт"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:135
+#: src/frontend/widgets/BackgroundWidget.cpp:145
 #, kde-format
 msgid "Scaled and Cropped"
 msgstr "Масштабоване та обрізане"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:136
+#: src/frontend/widgets/BackgroundWidget.cpp:146
 #, kde-format
 msgid "Scaled"
 msgstr "Масштабоване"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:137
+#: src/frontend/widgets/BackgroundWidget.cpp:147
 #, kde-format
 msgid "Scaled, Keep Proportions"
 msgstr "Масштабоване, зі збереженням пропорцій"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:139
+#: src/frontend/widgets/BackgroundWidget.cpp:149
 #, kde-format
 msgid "Tiled"
 msgstr "Плиткою"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:140
+#: src/frontend/widgets/BackgroundWidget.cpp:150
 #, kde-format
 msgid "Center Tiled"
 msgstr "Плиткою за центром"
 
-#: src/frontend/widgets/BackgroundWidget.cpp:266
+#: src/frontend/widgets/BackgroundWidget.cpp:286
 #, kde-format
 msgid "%1 elements: background color style changed"
 msgstr "Елементи %1: змінено стиль кольору тла"
@@ -27802,47 +27802,47 @@ msgstr "Дата"
 msgid "Date and Time"
 msgstr "Дата і час"
 
-#: src/frontend/widgets/LineWidget.cpp:115
+#: src/frontend/widgets/LineWidget.cpp:120
 #, kde-format
 msgid "Drop Lines"
 msgstr "Тіні ліній"
 
-#: src/frontend/widgets/LineWidget.cpp:116
+#: src/frontend/widgets/LineWidget.cpp:121
 #, kde-format
 msgid "Half-Bars"
 msgstr "пів риски"
 
-#: src/frontend/widgets/LineWidget.cpp:121
+#: src/frontend/widgets/LineWidget.cpp:126
 #, kde-format
 msgid "No Drop Lines"
 msgstr "без тіней ліній"
 
-#: src/frontend/widgets/LineWidget.cpp:122
+#: src/frontend/widgets/LineWidget.cpp:127
 #, kde-format
 msgid "Drop Lines, X"
 msgstr "тіні ліній, X"
 
-#: src/frontend/widgets/LineWidget.cpp:123
+#: src/frontend/widgets/LineWidget.cpp:128
 #, kde-format
 msgid "Drop Lines, Y"
 msgstr "тіні ліній, Y"
 
-#: src/frontend/widgets/LineWidget.cpp:124
+#: src/frontend/widgets/LineWidget.cpp:129
 #, kde-format
 msgid "Drop Lines, XY"
 msgstr "тіні ліній, XY"
 
-#: src/frontend/widgets/LineWidget.cpp:125
+#: src/frontend/widgets/LineWidget.cpp:130
 #, kde-format
 msgid "Drop Lines, X, Zero Baseline"
 msgstr "тіні ліній, X, нульова базова лінія"
 
-#: src/frontend/widgets/LineWidget.cpp:126
+#: src/frontend/widgets/LineWidget.cpp:131
 #, kde-format
 msgid "Drop Lines, X, Min Baseline"
 msgstr "тіні ліній, X, мін. базова лінія"
 
-#: src/frontend/widgets/LineWidget.cpp:127
+#: src/frontend/widgets/LineWidget.cpp:132
 #, kde-format
 msgid "Drop Lines, X, Max Baseline"
 msgstr "тіні ліній, X, макс. базова лінія"
