@@ -63,6 +63,39 @@ void XYPiecewiseLinearFitCurveDock::setupGeneral() {
 	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYPiecewiseLinearFitCurveDock::yDataColumnChanged);
 }
 
+void XYPiecewiseLinearFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
+
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
+	for (auto* curve : m_curvesList)
+		static_cast<XYPiecewiseLinearFitCurve*>(curve)->setXDataColumn(column);
+
+	// Update fit range with data range
+	if (column && column->isNumeric()) {
+		const double xMin = column->minimum();
+		const double xMax = column->maximum();
+		uiGeneralTab.leFitMin->setText(QString::number(xMin));
+		uiGeneralTab.leFitMax->setText(QString::number(xMax));
+
+		if (m_fitData.autoRange) {
+			m_fitData.fitRange.setStart(xMin);
+			m_fitData.fitRange.setEnd(xMax);
+		}
+	}
+
+	enableRecalculate();
+}
+
+void XYPiecewiseLinearFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
+
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
+	for (auto* curve : m_curvesList)
+		static_cast<XYPiecewiseLinearFitCurve*>(curve)->setYDataColumn(column);
+
+	enableRecalculate();
+}
+
 void XYPiecewiseLinearFitCurveDock::initGeneralTab() {
 	// show the properties of the first curve
 	// data source
@@ -78,9 +111,41 @@ void XYPiecewiseLinearFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbMinSegmentSize->setValue(m_fitData.minSegmentSize);
 	uiGeneralTab.sbMaxChangepoints->setValue(m_fitData.maxChangepoints);
 	uiGeneralTab.chkAutoFitRange->setChecked(m_fitData.autoRange);
-	uiGeneralTab.leFitMin->setText(QString::number(m_fitData.fitRange.start()));
-	uiGeneralTab.leFitMax->setText(QString::number(m_fitData.fitRange.end()));
-	autoFitRangeChanged(); // ponytail: update enable state
+
+	// Initialize range fields with data range
+	const AbstractColumn* xCol = nullptr;
+	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+		xCol = m_fitCurve->xDataColumn();
+	} else if (m_fitCurve->dataSourceCurve()) {
+		xCol = m_fitCurve->dataSourceCurve()->xColumn();
+	}
+
+	DEBUG(Q_FUNC_INFO << ", xCol = " << xCol);
+	if (xCol) {
+		DEBUG(Q_FUNC_INFO << ", isNumeric = " << xCol->isNumeric() << ", rowCount = " << xCol->rowCount());
+		if (xCol->isNumeric() && xCol->rowCount() > 0) {
+			const double xMin = xCol->minimum();
+			const double xMax = xCol->maximum();
+			DEBUG(Q_FUNC_INFO << ", xMin = " << xMin << ", xMax = " << xMax);
+
+			// Always show data range in UI
+			uiGeneralTab.leFitMin->setText(QString::number(xMin));
+			uiGeneralTab.leFitMax->setText(QString::number(xMax));
+
+			// Update stored range if auto or if not set
+			if (m_fitData.autoRange || m_fitData.fitRange.isZero()) {
+				m_fitData.fitRange.setStart(xMin);
+				m_fitData.fitRange.setEnd(xMax);
+			}
+		}
+	} else if (!m_fitData.fitRange.isZero()) {
+		// No column data but we have stored range - show that
+		DEBUG(Q_FUNC_INFO << ", using stored range: " << m_fitData.fitRange.start() << " - " << m_fitData.fitRange.end());
+		uiGeneralTab.leFitMin->setText(QString::number(m_fitData.fitRange.start()));
+		uiGeneralTab.leFitMax->setText(QString::number(m_fitData.fitRange.end()));
+	}
+
+	autoFitRangeChanged(); // Update enable state
 	uiGeneralTab.chkChangepointLines->setChecked(m_fitCurve->changepointLinesEnabled());
 
 	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
@@ -344,6 +409,18 @@ void XYPiecewiseLinearFitCurveDock::retranslateUi() {
 	info = i18n("Determine if the fit should be continuous or discontinuous at the changepoints.");
 	uiGeneralTab.lConnection->setToolTip(info);
 	uiGeneralTab.cbConnection->setToolTip(info);
+
+	// data range for the fit
+	info = i18n("X-range of the data used for the fit. Only data points within this range are considered.");
+	uiGeneralTab.lFitRange->setToolTip(info);
+
+	info = i18n("If checked, the data range used for the fit is automatically determined from the data. A custom range can be specified otherwise.");
+	uiGeneralTab.chkAutoFitRange->setToolTip(info);
+
+	info = i18n("Minimum X-value of the data used for the fit.");
+	uiGeneralTab.leFitMin->setToolTip(info);
+	info = i18n("Maximum X-value of the data used for the fit.");
+	uiGeneralTab.leFitMax->setToolTip(info);
 }
 
 void XYPiecewiseLinearFitCurveDock::curveFitDataChanged(const XYPiecewiseLinearFitCurve::FitData& fitData) {

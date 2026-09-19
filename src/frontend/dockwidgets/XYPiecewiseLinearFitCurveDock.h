@@ -34,6 +34,8 @@ private:
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYPiecewiseLinearFitCurveDock
 	void dataSourceTypeChanged(int);
+	void xDataColumnChanged(const QModelIndex&);
+	void yDataColumnChanged(const QModelIndex&);
 	void methodChanged(int);
 	void connectionTypeChanged(int);
 	void penaltyChanged();
