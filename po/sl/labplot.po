@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-20 00:40+0000\n"
-"PO-Revision-Date: 2026-09-17 06:02+0200\n"
+"PO-Revision-Date: 2026-09-20 15:30+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17114,6 +17114,8 @@ msgid ""
 "X-range of the data used for the fit. Only data points within this range are "
 "considered."
 msgstr ""
+"Območje vrednosti X podatkov uporabljenih za prileganje. Upoštevajo se samo "
+"podatkovne točke znotraj tega območja."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:417
 #, kde-format
@@ -17121,18 +17123,18 @@ msgid ""
 "If checked, the data range used for the fit is automatically determined from "
 "the data. A custom range can be specified otherwise."
 msgstr ""
+"Če je možnost označena, se območje podatkov za prilagoditev samodejno določi "
+"na podlagi podatkov. V nasprotnem primeru lahko določite poljubno območje."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:420
-#, fuzzy, kde-format
-#| msgid "The fraction of the data used to perform the local fit."
+#, kde-format
 msgid "Minimum X-value of the data used for the fit."
-msgstr "Delež podatkov, uporabljenih za izvedbo lokalnega prilagajanja."
+msgstr "Najmanjša vrednost X podatkov, uporabljenih za prilagoditev."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:422
-#, fuzzy, kde-format
-#| msgid "The fraction of the data used to perform the local fit."
+#, kde-format
 msgid "Maximum X-value of the data used for the fit."
-msgstr "Delež podatkov, uporabljenih za izvedbo lokalnega prilagajanja."
+msgstr "Največja vrednost X podatkov, uporabljenih za prilagoditev."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
 #, kde-format
@@ -25758,10 +25760,9 @@ msgstr "Min velikost odseka:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFitRange)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:248
-#, fuzzy, kde-format
-#| msgid "Plot Range:"
+#, kde-format
 msgid "Fit Range:"
-msgstr "Obseg izrisa:"
+msgstr "Obseg prilagajanja:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:367
