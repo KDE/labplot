@@ -80,31 +80,32 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     TextWidgets
     WidgetsAddons
     XmlGui
-    NewStuffCore
-    NewStuff
+    # NewStuffCore
+    # NewStuff
     TextEditor
     SyntaxHighlighting
 OPTIONAL_COMPONENTS
     DocTools
-    Service
-    Parts
+    # Service
+    # Parts
     Purpose
 )
 
 # TODO: make NewStuff optional?
-if(KF${KF_MAJOR_VERSION}NewStuff_FOUND)
-    add_definitions(-DHAVE_KF_NEW_STUFF)
-else()
-    message(STATUS "KF NewStuff not found")
-endif()
+# if(KF${KF_MAJOR_VERSION}NewStuff_FOUND)
+#    add_definitions(-DHAVE_KF_NEW_STUFF)
+#else()
+#    message(STATUS "KF NewStuff not found")
+#endif()
+
 # TODO: service not used?
-if(NOT KF${KF_MAJOR_VERSION}Service_FOUND)
-    message(STATUS "KF Service not found")
-endif()
+# if(NOT KF${KF_MAJOR_VERSION}Service_FOUND)
+#    message(STATUS "KF Service not found")
+# endif()
 # TODO: parts not used?
-if(NOT KF${KF_MAJOR_VERSION}Parts_FOUND)
-    message(STATUS "KF Parts not found")
-endif()
+# if(NOT KF${KF_MAJOR_VERSION}Parts_FOUND)
+#    message(STATUS "KF Parts not found")
+# endif()
 
 if(KF${KF_MAJOR_VERSION}Purpose_FOUND)
     add_definitions(-DHAVE_PURPOSE)
