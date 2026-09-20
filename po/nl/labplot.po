@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-19 00:40+0000\n"
+"POT-Creation-Date: 2026-09-20 00:40+0000\n"
 "PO-Revision-Date: 2026-09-17 12:59+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -872,7 +872,7 @@ msgstr "onbekend element '%1' datapicker"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:122
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:145
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:133
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:84
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:345
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:68
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:23
 #, kde-format
@@ -6640,6 +6640,7 @@ msgstr "Cirkelvormig"
 #. i18n: ectx: property (text), widget (QCheckBox, cbNiceExtend)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoFitRange)
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoRecalculate)
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoRange)
 #. i18n: ectx: property (text), widget (QCheckBox, cbRangeScale)
@@ -6698,7 +6699,8 @@ msgstr "Cirkelvormig"
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:154
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:340
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:438
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:131
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:141
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:410
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:148
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:607
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:75
@@ -9621,7 +9623,7 @@ msgstr "Titel"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:110
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:282
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:114
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:158
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:333
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:536
 #, kde-format
 msgid "Legend"
@@ -11451,82 +11453,82 @@ msgstr "%1: stel opties in en doe de lijnvereenvoudiging"
 msgid "%1: toggle changepoint lines"
 msgstr "%1: wijzigingspuntlijnen omschakelen"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:291
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:745
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:295
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:755
 #, kde-format
 msgid "Fit Results"
 msgstr "Resultaten laten passen"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:502
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
 #, kde-format
 msgid "Piecewise Linear Fit Results"
 msgstr "Stuksgewijs lineair passende resultaten"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:510
 #, kde-format
 msgid "No results available yet"
 msgstr "Nog geen resultaten beschikbaar"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:512
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:518
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:516
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:571
 #, kde-format
 msgid "Status: %1"
 msgstr "Status: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:519
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:523
 #, kde-format
 msgid "Number of Segments: %1"
 msgstr "Aantal segmenten: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:520
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:524
 #, kde-format
 msgid "Number of Changepoints: %1"
 msgstr "Aantal wijzigingspunten: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:521
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:525
 #, kde-format
 msgid "Overall R²: %1"
 msgstr "Algehele R²: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
 #, kde-format
 msgid "Overall SSE: %1"
 msgstr "Algehele SSE: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:530
 #, kde-format
 msgid "Changepoint Positions (X-values)"
 msgstr "Wijzigingspuntenposities (X-waarden)"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:536
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
 #, kde-format
 msgid "Segment %1"
 msgstr "Segment %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:544
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:784
 #, kde-format
 msgid "Parameters:"
 msgstr "Parameters:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:546
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:550
 #, kde-format
 msgid "Parameter Statistics (Slope):"
 msgstr "Parameterstatistieken (helling):"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:552
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:556
 #, kde-format
 msgid "Goodness of Fit:"
 msgstr "Kwaliteit van passing:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:562
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:566
 #, kde-format
 msgid "Statistical Tests:"
 msgstr "Statistische testen:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:569
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:573
 #, kde-format
 msgid "Information Criteria:"
 msgstr "Informatiecriteria:"
@@ -11656,7 +11658,7 @@ msgstr "%1: ontgrendelen"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:56
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:81
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:220
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:288
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:549
 #: src/frontend/ui/labelwidget.ui:722
 #, kde-format
@@ -15313,7 +15315,7 @@ msgstr "Plotbereiken:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:247
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:248
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:192
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:291
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:326
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:158
 #, kde-format
 msgid "Plot Range:"
@@ -16756,7 +16758,7 @@ msgstr "t-statistiek"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:63
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:443
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:199
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:72
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:278
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:108
 #, kde-format
 msgid "Curve:"
@@ -17079,17 +17081,17 @@ msgstr "positionele kwadraat van fout: %1"
 msgid "area error: %1"
 msgstr "fout in gebied: %1"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:294
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:388
 #, kde-format
 msgid "Continuous"
 msgstr "Doorlopend"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:295
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:389
 #, kde-format
 msgid "Discontinuous"
 msgstr "Niet doorlopend"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:298
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:392
 #, kde-format
 msgid ""
 "Method for detecting changepoints:<ul><li>Binary Segmentation: recursively "
@@ -17102,7 +17104,7 @@ msgstr ""
 "veranderingspunten te detecteren.</li><li>PELT (Pruned Exact Linear Time): "
 "detectie van veranderingspunten met lineaire rekenkosten.</li></ul>"
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:307
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:401
 #, kde-format
 msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
@@ -17111,7 +17113,7 @@ msgstr ""
 "Minimumaantal datapunten in een segment. Segmenten met minder datapunten "
 "worden samengevoegd met aangrenzende segmenten."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:311
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:405
 #, kde-format
 msgid ""
 "Cost for adding a changepoint. Must be exceeded by the fit improvement (SSE "
@@ -17128,7 +17130,7 @@ msgstr ""
 "Schaal dit op uw gegevens: ~1 voor Y-waarden rond 1, ~10-100 voor grote "
 "waarden, ~0,01-0,1 voor kleine waarden."
 
-#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:315
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:409
 #, kde-format
 msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
@@ -17136,6 +17138,36 @@ msgid ""
 msgstr ""
 "Bepaal of de passing doorlopend of niet doorlopend moet zijn op de "
 "wijzigingspunten."
+
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:414
+#, kde-format
+msgid ""
+"X-range of the data used for the fit. Only data points within this range are "
+"considered."
+msgstr ""
+
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:417
+#, kde-format
+msgid ""
+"If checked, the data range used for the fit is automatically determined from "
+"the data. A custom range can be specified otherwise."
+msgstr ""
+
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:420
+#, fuzzy, kde-format
+#| msgid "The fraction of the data used to perform the local fit."
+msgid "Minimum X-value of the data used for the fit."
+msgstr ""
+"Het deel van de gegevens dat gebruikt wordt om de lokale passing uit te "
+"voeren."
+
+#: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:422
+#, fuzzy, kde-format
+#| msgid "The fraction of the data used to perform the local fit."
+msgid "Maximum X-value of the data used for the fit."
+msgstr ""
+"Het deel van de gegevens dat gebruikt wordt om de lokale passing uit te "
+"voeren."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
 #, kde-format
@@ -17853,7 +17885,7 @@ msgstr "Selecteer bestand om functiedefinitie op te slaan"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:93
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:238
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:104
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:55
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:220
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:668
 #: src/frontend/ui/fitsheadereditnewkeywordwidget.ui:27
 #: src/frontend/ui/labelwidget.ui:326
@@ -21457,7 +21489,7 @@ msgstr "Y-fouttype:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:39
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:123
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:356
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:192
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:63
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:454
 #: src/frontend/ui/labelwidget.ui:222
 #, kde-format
@@ -22512,7 +22544,7 @@ msgstr "Baudsnelheid:"
 #. i18n: ectx: property (text), widget (QLabel, lConnections)
 #: src/frontend/ui/datasources/importfilewidget.ui:57
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:35
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:199
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:102
 #, kde-format
 msgid "Connection:"
 msgstr "Verbinding:"
@@ -22603,7 +22635,7 @@ msgstr "Bestandsinformatie tonen"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:103
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:579
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:121
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:172
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:271
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:661
 #, kde-format
 msgid "Source:"
@@ -24333,7 +24365,7 @@ msgstr "In klassen indelen"
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:294
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:156
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:417
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:33
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:109
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:47
 #, kde-format
 msgid "Method:"
@@ -24425,7 +24457,7 @@ msgstr "Significantieniveau α:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:200
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:100
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:400
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:124
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:403
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:600
 #, kde-format
 msgid "Recalculate"
@@ -24911,7 +24943,7 @@ msgstr "Runtime:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:224
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:426
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:501
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:213
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:227
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:49
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:74
 #, kde-format
@@ -24930,7 +24962,7 @@ msgstr "X-gegevens:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:129
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:181
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:494
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:182
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:241
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:56
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:114
 #, kde-format
@@ -24944,7 +24976,7 @@ msgstr "Y-gegevens:"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:102
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:192
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:240
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:48
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:319
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:75
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:93
 #, kde-format
@@ -25161,7 +25193,7 @@ msgstr "Beëindigingsverhouding:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:390
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:591
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:38
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:232
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:357
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:635
 #, kde-format
 msgid "Results:"
@@ -25715,41 +25747,61 @@ msgstr "Optie:"
 msgid "Simplification"
 msgstr "Vereenvoudiging"
 
+#. i18n: ectx: property (text), widget (QLabel, lPenalty)
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:17
+#, kde-format
+msgid "Penalty:"
+msgstr "Strafpunten:"
+
+#. i18n: ectx: property (text), widget (QLabel, lMaxChangepoints)
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:24
+#, kde-format
+msgid "Max Changepoints:"
+msgstr "Max. wijzigingspunten:"
+
+#. i18n: ectx: property (text), widget (QLabel, lXRangeDateTime)
+#. i18n: ectx: property (text), widget (QLabel, lEvalRange)
+#. i18n: ectx: property (text), widget (QLabel, lEvalRangeDateTime)
+#. i18n: ectx: property (text), widget (QLabel, lXRange)
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:174
+#: src/frontend/ui/fitoptionswidget.ui:132
+#: src/frontend/ui/fitoptionswidget.ui:139
+#: src/frontend/ui/fitoptionswidget.ui:146
+#: src/frontend/ui/fitoptionswidget.ui:199
+#, kde-format
+msgid ".."
+msgstr ".."
+
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:92
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:191
 #, kde-format
 msgid "Binary Segmentation"
 msgstr "Binaire segmentatie"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:97
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:196
 #, kde-format
 msgid "PELT"
 msgstr "PELT"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:141
-#, kde-format
-msgid "Changepoint Lines"
-msgstr "Wijzigingspuntlijnen"
-
-#. i18n: ectx: property (text), widget (QLabel, lPenalty)
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:151
-#, kde-format
-msgid "Penalty:"
-msgstr "Strafpunten:"
-
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentSize)
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:206
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:234
 #, kde-format
 msgid "Min Segment Size:"
 msgstr "Min. segmentgrootte:"
 
-#. i18n: ectx: property (text), widget (QLabel, lMaxChangepoints)
-#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:242
+#. i18n: ectx: property (text), widget (QLabel, lFitRange)
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:248
+#, fuzzy, kde-format
+#| msgid "Plot Range:"
+msgid "Fit Range:"
+msgstr "Plotbereik"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
+#: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:367
 #, kde-format
-msgid "Max Changepoints:"
-msgstr "Max. wijzigingspunten:"
+msgid "Changepoint Lines"
+msgstr "Wijzigingspuntlijnen"
 
 #. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbDelta)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:27
@@ -25894,18 +25946,6 @@ msgstr "de aanpasfunctie tonen met de gegeven beginparameters"
 #, kde-format
 msgid "Preview fit function"
 msgstr "Preview aanpasfunctie"
-
-#. i18n: ectx: property (text), widget (QLabel, lXRangeDateTime)
-#. i18n: ectx: property (text), widget (QLabel, lEvalRange)
-#. i18n: ectx: property (text), widget (QLabel, lEvalRangeDateTime)
-#. i18n: ectx: property (text), widget (QLabel, lXRange)
-#: src/frontend/ui/fitoptionswidget.ui:132
-#: src/frontend/ui/fitoptionswidget.ui:139
-#: src/frontend/ui/fitoptionswidget.ui:146
-#: src/frontend/ui/fitoptionswidget.ui:199
-#, kde-format
-msgid ".."
-msgstr ".."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMaxIterations)
 #: src/frontend/ui/fitoptionswidget.ui:163
