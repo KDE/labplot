@@ -819,10 +819,15 @@ bool Column::hasValues() const {
 		break;
 	}
 	case ColumnMode::Integer:
-	case ColumnMode::BigInt:
-		// integer values are always valid
-		foundValues = true;
+	case ColumnMode::BigInt: {
+		for (int row = 0; row < rowCount(); ++row) {
+			if (isValid(row)) {
+				foundValues = true;
+				break;
+			}
+		}
 		break;
+	}
 	case ColumnMode::DateTime:
 	case ColumnMode::Month:
 	case ColumnMode::Day: {
@@ -857,8 +862,7 @@ bool Column::hasValueAt(int row) const {
 	}
 	case ColumnMode::Integer:
 	case ColumnMode::BigInt:
-		// integer values are always valid
-		foundValue = true;
+		foundValue = isValid(row);
 		break;
 	case ColumnMode::DateTime:
 	case ColumnMode::Month:
@@ -1352,16 +1356,26 @@ void Column::save(QXmlStreamWriter* writer) const {
 			writer->writeCharacters(QLatin1String(bytes.toBase64()));
 			break;
 		}
-		case ColumnMode::DateTime:
 		case ColumnMode::Month:
 		case ColumnMode::Day:
+		case ColumnMode::DateTime: {
+			// convert QDateTime values to milliseconds since epoch and serialize them using Base64 encoding
+			QByteArray bytes;
 			for (int i = 0; i < rowCount(); ++i) {
-				writer->writeStartElement(QStringLiteral("row"));
-				writer->writeAttribute(QStringLiteral("index"), QString::number(i));
-				writer->writeCharacters(dateTimeAt(i).toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
-				writer->writeEndElement();
+				qint64 msecs = dateTimeAt(i).toMSecsSinceEpoch();
+				bytes.append(reinterpret_cast<const char*>(&msecs), sizeof(qint64));
 			}
+			writer->writeCharacters(QLatin1String(bytes.toBase64()));
 			break;
+		}
+		}
+
+		// save per-cell validity bitmap for Integer/BigInt columns
+		if ((columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt) && !d->m_valid.isEmpty()) {
+			const QByteArray validBytes(reinterpret_cast<const char*>(d->m_valid.bits()), (d->m_valid.size() + 7) / 8);
+			writer->writeStartElement(QStringLiteral("valid"));
+			writer->writeCharacters(QLatin1String(validBytes.toBase64()));
+			writer->writeEndElement();
 		}
 	}
 
@@ -1371,9 +1385,10 @@ void Column::save(QXmlStreamWriter* writer) const {
 // TODO: extra header
 class DecodeColumnTask : public QRunnable {
 public:
-	DecodeColumnTask(ColumnPrivate* priv, const QString& content)
+	DecodeColumnTask(ColumnPrivate* priv, const QString& content, const QString& validContent)
 		: m_private(priv)
-		, m_content(content) { };
+		, m_content(content)
+		, m_validContent(validContent) { };
 	void run() override {
 		const auto bytes = QByteArray::fromBase64(m_content.toLatin1());
 		switch (m_private->columnMode()) {
@@ -1402,24 +1417,53 @@ public:
 			m_private->replaceTexts(-1, textVector);
 			break;
 		}
-		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day: {
-			// nothing to do here, the data are loaded row by row
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime: {
+			// deserialize QDateTime values from milliseconds since epoch
+			QVector<QDateTime> dateTimeVector;
+			for (int i = 0; i < bytes.size(); i += sizeof(qint64)) {
+				qint64 msecs;
+				memcpy(&msecs, bytes.data() + i, sizeof(qint64));
+				dateTimeVector.append(QDateTime::fromMSecsSinceEpoch(msecs));
+			}
+			m_private->replaceDateTimes(-1, dateTimeVector);
 			break;
 		}
+		}
+
+		// apply per-element validity bitmap for Integer/BigInt columns
+		if (AbstractColumnPrivate::needsValidityTracking(m_private->columnMode())) {
+			const int numRows = m_private->rowCount();
+			if (!m_validContent.isEmpty()) {
+				// restore saved validity bitmap
+				const auto validBytes = QByteArray::fromBase64(m_validContent.toLatin1());
+				m_private->m_valid = QBitArray(numRows);
+				const int byteCount = qMin(validBytes.size(), (numRows + 7) / 8);
+				const auto* bits = reinterpret_cast<const uchar*>(validBytes.constData());
+				for (int i = 0; i < numRows; ++i) {
+					if (i / 8 < byteCount && (bits[i / 8] & (1 << (i % 8))))
+						m_private->m_valid.setBit(i, true);
+				}
+			} else {
+				// backward compatibility: no validity element, mark all as valid
+				m_private->m_valid.resize(numRows);
+				m_private->m_valid.fill(true);
+			}
 		}
 	}
 
 private:
 	ColumnPrivate* m_private;
 	QString m_content;
+	QString m_validContent;
 };
 
 /**
  * \brief Load the column from XML
  */
 bool Column::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true); // set to false in Project::retransformElements() after everything was loaded
 	if (!readBasicAttributes(reader))
 		return false;
 
@@ -1452,6 +1496,8 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 
 	QVector<QDateTime> dateTimeVector;
 	QVector<QString> textVector;
+	QString pendingDecodeContent;
+	QString pendingValidContent;
 
 	// read child elements
 	while (!reader->atEnd()) {
@@ -1540,6 +1586,8 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 					addValueLabel(QDateTime::fromMSecsSinceEpoch(attribs.value(QLatin1String("value")).toLongLong(), QTimeZone::UTC), label);
 					break;
 				}
+			} else if (reader->name() == QLatin1String("valid")) {
+				pendingValidContent = reader->readElementText().trimmed();
 			} else if (reader->name() == QLatin1String("row")) {
 				// Assumption: the next elements are all rows
 				switch (columnMode()) {
@@ -1551,12 +1599,14 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				case Column::ColumnMode::DateTime:
 				case Column::ColumnMode::Month:
 				case Column::ColumnMode::Day: {
+					// old serialization format with row by row for xmlVersion < 20
 					dateTimeVector << QDateTime::fromString(reader->readElementText() + QStringLiteral("Z"),
 															QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt")); // timezone is important
 					break;
 				}
 				case Column::ColumnMode::Text: {
-					textVector << reader->readElementText(); // old serialization format with row by row for xmlVersion < 18
+					// old serialization format with row by row for xmlVersion < 18
+					textVector << reader->readElementText();
 					break;
 				}
 				}
@@ -1572,14 +1622,21 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		if (!preview) {
 			// Decode data
 			QString content = reader->text().toString().trimmed();
-			// Datetime and Text for xmlVersion < 18 are read row by row above,
+			// Text for xmlVersion < 18 and DateTime for xmlVersion < 20 are read row by row above,
 			// everything else is Base64 encoded and is decoded via DecodeColumnTask
 			const auto mode = columnMode();
-			if (!content.isEmpty() && (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::Text)) {
-				auto* task = new DecodeColumnTask(d, content);
-				QThreadPool::globalInstance()->start(task);
-			}
+			bool decode = mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt
+				|| (mode == ColumnMode::Text && Project::xmlVersion() >= 18)
+				|| ((mode == ColumnMode::DateTime || mode == ColumnMode::Month || mode == ColumnMode::Day) && Project::xmlVersion() >= 20);
+			if (!content.isEmpty() && decode)
+				pendingDecodeContent = content;
 		}
+	}
+
+	// start the decode task after all elements (including <valid>) have been parsed
+	if (!pendingDecodeContent.isEmpty()) {
+		auto* task = new DecodeColumnTask(d, pendingDecodeContent, pendingValidContent);
+		QThreadPool::globalInstance()->start(task);
 	}
 
 	switch (columnMode()) {
@@ -1588,10 +1645,11 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	case AbstractColumn::ColumnMode::Integer:
 		/* handled above in DecodeColumnTask */
 		break;
-	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
-		setDateTimes(dateTimeVector);
+	case AbstractColumn::ColumnMode::DateTime:
+		if (!dateTimeVector.isEmpty() && Project::xmlVersion() < 20) // old serialization format with row by row reading
+			setDateTimes(dateTimeVector);
 		break;
 	case AbstractColumn::ColumnMode::Text:
 		if (!textVector.isEmpty() && Project::xmlVersion() < 18) // old serialization format with row by row reading
@@ -1774,6 +1832,35 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
  */
 bool Column::isReadOnly() const {
 	return false;
+}
+
+bool Column::isValid(int row) const {
+	if (AbstractColumnPrivate::needsValidityTracking(columnMode())) {
+		if (row < 0 || row >= d->m_valid.size())
+			return false;
+		return d->m_valid.testBit(row);
+	}
+	return AbstractColumn::isValid(row);
+}
+void Column::setValid(int row, bool valid) {
+	if (columnMode() == AbstractColumn::ColumnMode::Integer || columnMode() == AbstractColumn::ColumnMode::BigInt) {
+		if (row >= d->m_valid.size())
+			d->m_valid.resize(row + 1);
+		d->m_valid.setBit(row, valid);
+	}
+}
+
+/*!
+ * \brief Set all rows as valid
+ *
+ * Has to be called when the data is written directly to the data vector without using setValueAt() etc.
+ * and thus bypassing the validity tracking in the setters.
+ */
+void Column::setAllValid() {
+	if (AbstractColumnPrivate::needsValidityTracking(columnMode())) {
+		d->m_valid.resize(rowCount());
+		d->m_valid.fill(true);
+	}
 }
 
 /**

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for time series decomposition
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -11,6 +11,7 @@
 #include "DecompositionTest.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/Worksheet.h"
@@ -18,8 +19,6 @@
 #include "backend/worksheet/WorksheetElementPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-
-#include <QUndoStack>
 
 // ##############################################################################
 // ####################### SeasonalDecomposition ################################

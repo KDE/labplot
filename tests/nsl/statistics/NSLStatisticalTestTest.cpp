@@ -4,6 +4,7 @@
 	Description          : NSL Tests for statistical functions
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -336,6 +337,272 @@ void NSLStatisticalTestTest::testChisqGoodnessOfFit() {
 
 	QVERIFY(std::abs(result.x2 - expected_x2) < epsilon);
 	QVERIFY(std::abs(result.p - expected_p) < epsilon);
+}
+
+/*!
+ * \brief Test Mann-Kendall trend test with two-tailed hypothesis on monotonically increasing data.
+ * The two-tailed test checks for any trend (upward or downward) without specifying direction.
+ */
+void NSLStatisticalTestTest::testMannKendall01() {
+	const double sample[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
+	size_t n = 10;
+
+	mann_kendall_test_result result = nsl_stats_mann_kendall(sample, n, nsl_stats_tail_type_two);
+
+	// printf("Mann-Kendall Test 01 (Two-tailed, positive trend):\n");
+	// printf("  S-statistic: %f\n", result.S);
+	// printf("  Tau: %f\n", result.tau);
+	// printf("  Z-score: %f\n", result.z);
+	// printf("  p-value: %f\n", result.p);
+
+	// Expected values for monotonically increasing data:
+	// S = 45 (all pairs are increasing)
+	// tau = S/n_pairs = 45/45 = 1.0
+	double expected_S = 45.0;
+	double expected_tau = 1.0;
+	double expected_z = 3.9355;
+	double expected_p = 0.0001;
+
+	const double epsilon = 1e-3;
+
+	QVERIFY(std::abs(result.S - expected_S) < epsilon);
+	QVERIFY(std::abs(result.tau - expected_tau) < epsilon);
+	QVERIFY(std::abs(result.z - expected_z) < epsilon);
+	QVERIFY(std::abs(result.p - expected_p) < epsilon);
+}
+
+/*!
+ * \brief Test Mann-Kendall trend test with two-tailed hypothesis on monotonically decreasing data.
+ * The two-tailed test checks for any trend (upward or downward) without specifying direction.
+ */
+void NSLStatisticalTestTest::testMannKendall02() {
+	const double sample[] = {10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0};
+	size_t n = 10;
+
+	mann_kendall_test_result result = nsl_stats_mann_kendall(sample, n, nsl_stats_tail_type_two);
+
+	// printf("Mann-Kendall Test 02 (Two-tailed, negative trend):\n");
+	// printf("  S-statistic: %f\n", result.S);
+	// printf("  Tau: %f\n", result.tau);
+	// printf("  Z-score: %f\n", result.z);
+	// printf("  p-value: %f\n", result.p);
+
+	// Expected values for monotonically decreasing data:
+	// S = -45 (all pairs are decreasing)
+	// tau = -1.0
+	double expected_S = -45.0;
+	double expected_tau = -1.0;
+	double expected_z = -3.9355;
+	double expected_p = 0.0001;
+
+	const double epsilon = 1e-3;
+
+	QVERIFY(std::abs(result.S - expected_S) < epsilon);
+	QVERIFY(std::abs(result.tau - expected_tau) < epsilon);
+	QVERIFY(std::abs(result.z - expected_z) < epsilon);
+	QVERIFY(std::abs(result.p - expected_p) < epsilon);
+}
+
+/*!
+ * \brief Test Mann-Kendall trend test with positive (right-tailed) hypothesis.
+ *
+ * Tests the Mann-Kendall test using monotonically increasing data with a positive tail test.
+ * The positive tail test specifically checks for an upward trend (H₁: trend > 0).
+ */
+void NSLStatisticalTestTest::testMannKendall03() {
+	const double sample[] = {1.2, 1.5, 1.8, 2.1, 2.3, 2.8, 3.0, 3.5, 3.9, 4.2};
+	size_t n = 10;
+
+	mann_kendall_test_result result = nsl_stats_mann_kendall(sample, n, nsl_stats_tail_type_positive);
+
+	// printf("Mann-Kendall Test 03 (Positive tail):\n");
+	// printf("  S-statistic: %f\n", result.S);
+	// printf("  Tau: %f\n", result.tau);
+	// printf("  Z-score: %f\n", result.z);
+	// printf("  p-value: %f\n", result.p);
+
+	// Positive trend should have small p-value for positive tail test
+	double expected_S = 45.0;
+	double expected_tau = 1.0;
+	double expected_z = 3.9355;
+	double expected_p = 0.00004; // P(Z > z)
+
+	const double epsilon = 1e-3;
+
+	QVERIFY(std::abs(result.S - expected_S) < epsilon);
+	QVERIFY(std::abs(result.tau - expected_tau) < epsilon);
+	QVERIFY(std::abs(result.z - expected_z) < epsilon);
+	QVERIFY(std::abs(result.p - expected_p) < epsilon);
+}
+
+/*!
+ * \brief Test Mann-Kendall trend test with negative (left-tailed) hypothesis.
+ *
+ * Tests the Mann-Kendall test using monotonically decreasing data with a negative tail test.
+ * The negative tail test specifically checks for a downward trend (H₁: trend < 0).
+ */
+void NSLStatisticalTestTest::testMannKendall04() {
+	const double sample[] = {4.2, 3.9, 3.5, 3.0, 2.8, 2.3, 2.1, 1.8, 1.5, 1.2};
+	size_t n = 10;
+
+	mann_kendall_test_result result = nsl_stats_mann_kendall(sample, n, nsl_stats_tail_type_negative);
+
+	// printf("Mann-Kendall Test 04 (Negative tail):\n");
+	// printf("  S-statistic: %f\n", result.S);
+	// printf("  Tau: %f\n", result.tau);
+	// printf("  Z-score: %f\n", result.z);
+	// printf("  p-value: %f\n", result.p);
+
+	// Negative trend should have small p-value for negative tail test
+	double expected_S = -45.0;
+	double expected_tau = -1.0;
+	double expected_z = -3.9355;
+	double expected_p = 0.00004; // P(Z < z)
+
+	const double epsilon = 1e-3;
+
+	QVERIFY(std::abs(result.S - expected_S) < epsilon);
+	QVERIFY(std::abs(result.tau - expected_tau) < epsilon);
+	QVERIFY(std::abs(result.z - expected_z) < epsilon);
+	QVERIFY(std::abs(result.p - expected_p) < epsilon);
+}
+
+/*!
+ * \brief Test Mann-Kendall trend test with no clear trend (mixed data).
+ *
+ * Tests the Mann-Kendall test using data without a clear monotonic trend.
+ * The data contains both increases and decreases in a non-systematic pattern.
+ * This test validates that the Mann-Kendall test correctly identifies the absence
+ * of a trend when the data does not follow a monotonic pattern.
+ */
+void NSLStatisticalTestTest::testMannKendall05() {
+	const double sample[] = {3.0, 2.0, 5.0, 4.0, 1.0, 7.0, 6.0, 9.0, 8.0, 10.0};
+	size_t n = 10;
+
+	mann_kendall_test_result result = nsl_stats_mann_kendall(sample, n, nsl_stats_tail_type_two);
+
+	// printf("Mann-Kendall Test 05 (No clear trend):\n");
+	// printf("  S-statistic: %f\n", result.S);
+	// printf("  Tau: %f\n", result.tau);
+	// printf("  Z-score: %f\n", result.z);
+	// printf("  p-value: %f\n", result.p);
+
+	// With mixed data, we expect:
+	// - S to be relatively small
+	// - tau to be moderate
+	// - p-value to indicate a weak positive trend
+	double expected_S = 29.0;
+	double expected_tau = 0.6444;
+	double expected_z = 2.5044;
+	double expected_p = 0.0123;
+
+	const double epsilon = 1e-3;
+
+	QVERIFY(std::abs(result.S - expected_S) < epsilon);
+	QVERIFY(std::abs(result.tau - expected_tau) < epsilon);
+	QVERIFY(std::abs(result.z - expected_z) < epsilon);
+	QVERIFY(std::abs(result.p - expected_p) < epsilon);
+}
+
+/*!
+ * \brief Test Wald-Wolfowitz runs test with a random sequence.
+ *
+ * Tests the Wald-Wolfowitz runs test using data that appears random.
+ * The sequence alternates moderately around the median without obvious clustering.
+ * This test validates that the Wald-Wolfowitz runs test correctly identifies randomness
+ * when the data does not show significant clustering or excessive alternation.
+ */
+void NSLStatisticalTestTest::testWaldWolfowitzRuns01() {
+	// Example data that should appear reasonably random
+	// Data with moderate number of runs around expected
+	const double sample[] = {5.0, 7.0, 3.0, 8.0, 9.0, 2.0, 6.0, 4.0, 10.0, 1.0};
+	size_t n = 10;
+
+	wald_wolfowitz_runs_test_result result = nsl_stats_wald_wolfowitz_runs(sample, n, nsl_stats_tail_type_two);
+
+	// Expected values for this dataset:
+	// Sorted: 1,2,3,4,5,6,7,8,9,10
+	// Median = (5+6)/2 = 5.5
+	// Above median (>5.5): 7, 8, 9, 6, 10 = 5 values
+	// Below median (<5.5): 5, 3, 2, 4, 1 = 5 values
+	// Sequence: B A B A A B A B A B (B=below, A=above)
+	// Number of runs: 9
+	// n1=5, n2=5
+	// Expected runs: (2*5*5)/(5+5) + 1 = 6.0
+	// Variance: (2*5*5*(2*5*5-10))/(100*9) = 2.222
+	// z-score = (9 - 0.5 - 6.0) / sqrt(2.222) ≈ 1.68
+	// p-value ≈ 0.09 (reasonably random)
+
+	QCOMPARE(result.runs, 9);
+	QCOMPARE(result.n, 10);
+	QVERIFY(result.z > 0.0 && result.z < 2.5); // z should be positive but moderate
+	QVERIFY(result.p > 0.05); // p-value should indicate randomness
+}
+
+/*!
+ * \brief Test Wald-Wolfowitz runs test with clustered data (too few runs).
+ *
+ * Tests the Wald-Wolfowitz runs test using data that shows clustering.
+ * The sequence has consecutive low values followed by consecutive high values,
+ * resulting in too few runs compared to random expectation.
+ * This test validates that the test correctly detects non-randomness due to clustering.
+ */
+void NSLStatisticalTestTest::testWaldWolfowitzRuns02() {
+	// Data showing clear clustering (low values then high values)
+	const double sample[] = {10.0, 11.0, 12.0, 13.0, 14.0, 20.0, 21.0, 22.0, 23.0, 24.0};
+	size_t n = 10;
+
+	wald_wolfowitz_runs_test_result result = nsl_stats_wald_wolfowitz_runs(sample, n, nsl_stats_tail_type_negative);
+
+	// Expected values for this dataset:
+	// Median = 17.0
+	// Below median (<17): 10, 11, 12, 13, 14 = 5 values
+	// Above median (>17): 20, 21, 22, 23, 24 = 5 values
+	// Sequence: B B B B B A A A A A (B=below, A=above)
+	// Number of runs: 2 (significantly fewer than expected)
+	// n1=5, n2=5
+	// Expected runs: (2*5*5)/(5+5) + 1 = 6.0
+	// Variance: (2*5*5*(2*5*5-10))/(100*9) = 2.222
+	// z-score = (2 + 0.5 - 6.0) / sqrt(2.222) ≈ -2.35 (negative z indicates clustering)
+	// p-value for left-tailed test should be small
+
+	QCOMPARE(result.runs, 2);
+	QCOMPARE(result.n, 10);
+	QVERIFY(result.z < -2.0); // z should be significantly negative
+	QVERIFY(result.p < 0.05); // p-value should be small (not random, clustered)
+}
+
+/*!
+ * \brief Test Wald-Wolfowitz runs test with alternating data (too many runs).
+ *
+ * Tests the Wald-Wolfowitz runs test using data that alternates excessively.
+ * The sequence switches between high and low values frequently,
+ * resulting in too many runs compared to random expectation.
+ * This test validates that the test correctly detects non-randomness due to excessive alternation.
+ */
+void NSLStatisticalTestTest::testWaldWolfowitzRuns03() {
+	// Data showing excessive alternation
+	const double sample[] = {10.0, 20.0, 11.0, 21.0, 12.0, 22.0, 13.0, 23.0, 14.0, 24.0};
+	size_t n = 10;
+
+	wald_wolfowitz_runs_test_result result = nsl_stats_wald_wolfowitz_runs(sample, n, nsl_stats_tail_type_positive);
+
+	// Expected values for this dataset:
+	// Median = 17.0
+	// Below median (<17): 10, 11, 12, 13, 14 = 5 values
+	// Above median (>17): 20, 21, 22, 23, 24 = 5 values
+	// Sequence: B A B A B A B A B A (alternating)
+	// Number of runs: 10 (maximum possible, excessive alternation)
+	// n1=5, n2=5
+	// Expected runs: (2*5*5)/(5+5) + 1 = 6.0
+	// Variance: (2*5*5*(2*5*5-10))/(100*9) = 2.222
+	// z-score = (10 - 0.5 - 6.0) / sqrt(2.222) ≈ 2.35 (positive z indicates alternation)
+	// p-value for right-tailed test should be small
+
+	QCOMPARE(result.runs, 10);
+	QCOMPARE(result.n, 10);
+	QVERIFY(result.z > 2.0); // z should be significantly positive
+	QVERIFY(result.p < 0.05); // p-value should be small (not random, alternating)
 }
 
 QTEST_MAIN(NSLStatisticalTestTest)

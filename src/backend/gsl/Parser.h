@@ -42,7 +42,7 @@ public:
 	double parse_with_vars(const char* str, const parser_var* vars, int nvars, const char* locale);
 
 	int parseErrors() const;
-	std::string lastErrorMessage() const;
+	const std::string& lastErrorMessage() const;
 	size_t variablesCounter() const;
 
 	void setSkipSpecialFunctionEvaluation(bool skip);

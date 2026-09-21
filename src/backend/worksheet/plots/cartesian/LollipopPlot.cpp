@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Lollipop Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -160,6 +160,7 @@ void LollipopPlot::updateLocale() {
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<QString>, dataColumnPaths, dataColumnPaths)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, LollipopPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QString, xColumnPath, xColumnPath)
@@ -180,12 +181,10 @@ Symbol* LollipopPlot::symbolAt(int index) const {
 		return nullptr;
 }
 
-QVector<QString>& LollipopPlot::dataColumnPaths() const {
-	D(LollipopPlot);
-	return d->dataColumnPaths;
-}
-
-bool LollipopPlot::indicesMinMax(const Dimension, double, double, int&, int&) const {
+bool LollipopPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	// The values are not important, because they are just passed to minMax() which does not consider the indices
+	start = 0;
+	end = 0;
 	return true;
 }
 
@@ -220,6 +219,13 @@ double LollipopPlot::maximum(const Dimension dim) const {
 bool LollipopPlot::hasData() const {
 	Q_D(const LollipopPlot);
 	return !d->dataColumns.isEmpty();
+}
+
+int LollipopPlot::dataCount(Dimension) const {
+	Q_D(const LollipopPlot);
+	if (!hasData())
+		return -1;
+	return d->dataColumns.count();
 }
 
 bool LollipopPlot::usingColumn(const AbstractColumn* column, bool) const {
@@ -431,7 +437,9 @@ void LollipopPlotPrivate::addValue(const KConfigGroup& group) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void LollipopPlotPrivate::retransform() {
-	if (suppressRetransform || !isVisible() || q->isLoading())
+	const bool suppressed = retransformSuppressed();
+	Q_EMIT trackRetransformCalled(suppressed);
+	if (suppressed)
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
@@ -511,17 +519,15 @@ void LollipopPlotPrivate::recalc() {
 	// this number is equal to the max number of non-empty
 	// values in the provided datasets
 	int barGroupsCount = 0;
-	int columnIndex = 0;
-	for (auto* column : std::as_const(dataColumns)) {
+	for (int i = 0; i < newSize; ++i) {
+		const auto* column = dataColumns.at(i);
 		if (!column)
 			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
-		m_barLines[columnIndex].resize(size);
-		m_symbolPoints[columnIndex].resize(size);
+		m_barLines[i].resize(size);
+		m_symbolPoints[i].resize(size);
 		if (size > barGroupsCount)
 			barGroupsCount = size;
-
-		++columnIndex;
 	}
 
 	// if an x-column was provided and it has less values than the count determined
@@ -1035,6 +1041,7 @@ void LollipopPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(LollipopPlot);
 
 	if (!readBasicAttributes(reader))

@@ -408,3 +408,10 @@ int SimpleFilterColumn::integerAt(int row) const {
 qint64 SimpleFilterColumn::bigIntAt(int row) const {
 	return m_owner->bigIntAt(row);
 }
+
+bool SimpleFilterColumn::isValid(int row) const {
+	const auto* input = m_owner->inputColumn();
+	if (input)
+		return input->isValid(row);
+	return false;
+}

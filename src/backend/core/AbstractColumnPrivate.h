@@ -28,6 +28,10 @@ public:
 		return m_owner->name();
 	}
 
+	static bool needsValidityTracking(AbstractColumn::ColumnMode mode) {
+		return mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt;
+	}
+
 	bool m_suppressDataChangedSignal{false};
 	IntervalAttribute<bool> m_masking;
 	AbstractColumn::HeatmapFormat* m_heatmapFormat{nullptr};

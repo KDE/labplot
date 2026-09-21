@@ -16,6 +16,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/IntervalAttribute.h"
 
+#include <QBitArray>
 #include <QMap>
 
 class Column;
@@ -75,6 +76,7 @@ public:
 	AbstractSimpleFilter* outputFilter() const;
 
 	void replaceModeData(AbstractColumn::ColumnMode, void* data, AbstractSimpleFilter* in, AbstractSimpleFilter* out);
+	void replaceModeData(AbstractColumn::ColumnMode, void* data, AbstractSimpleFilter* in, AbstractSimpleFilter* out, const QBitArray& valid);
 	void replaceData(void*);
 
 	IntervalAttribute<QString> formulaAttribute() const;
@@ -255,6 +257,8 @@ public:
 
 	Column* const q{nullptr};
 
+	QBitArray m_valid; // per-element validity bitmap for Integer/BigInt columns
+
 private:
 	AbstractColumn::ColumnMode m_columnMode; // type of column data
 	void* m_data{nullptr}; // pointer to the data container (QVector<T>)
@@ -294,6 +298,8 @@ private:
 			resizeTo(row + 1);
 
 		static_cast<QVector<T>*>(m_data)->replace(row, new_value);
+		if (AbstractColumnPrivate::needsValidityTracking(m_columnMode) && row < m_valid.size())
+			m_valid.setBit(row, true);
 		if (!m_suppressDataChangedSignal)
 			Q_EMIT q->dataChanged(q);
 	}
@@ -321,6 +327,18 @@ private:
 			T* ptr = static_cast<QVector<T>*>(m_data)->data();
 			for (int i = 0; i < num_rows; ++i)
 				ptr[first + i] = new_values.at(i);
+		}
+
+		if (AbstractColumnPrivate::needsValidityTracking(m_columnMode)) {
+			if (first < 0) {
+				m_valid.resize(new_values.size());
+				m_valid.fill(true);
+			} else {
+				for (int i = 0; i < new_values.size(); ++i) {
+					if (first + i < m_valid.size())
+						m_valid.setBit(first + i, true);
+				}
+			}
 		}
 
 		if (!m_suppressDataChangedSignal)

@@ -111,16 +111,10 @@ bool XYBaselineCorrectionCurvePrivate::recalculateSpecific(const AbstractColumn*
 		nsl_baseline_remove_median(ydata, n);
 		break;
 	case nsl_diff_baseline_correction_endpoints:
-		if (tmpXDataColumn)
-			status = nsl_baseline_remove_endpoints(xdataVector.data(), ydata, n);
-		else
-			status = -1;
+		status = nsl_baseline_remove_endpoints(xdataVector.data(), ydata, n);
 		break;
 	case nsl_diff_baseline_correction_linear_regression:
-		if (tmpXDataColumn)
-			status = nsl_baseline_remove_linreg(xdataVector.data(), ydata, n);
-		else
-			status = -1;
+		status = nsl_baseline_remove_linreg(xdataVector.data(), ydata, n);
 		break;
 	case nsl_diff_baseline_correction_arpls: {
 		const double p = baselineData.arPLSTerminationRatio;
@@ -182,6 +176,7 @@ void XYBaselineCorrectionCurve::save(QXmlStreamWriter* writer) const {
 }
 
 bool XYBaselineCorrectionCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYBaselineCorrectionCurve);
 
 	QXmlStreamAttributes attribs;

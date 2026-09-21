@@ -93,8 +93,6 @@ set(shiboken_scripting_generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/doublerange_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/doublerange_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/intrange_wrapper.cpp

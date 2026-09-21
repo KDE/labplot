@@ -40,6 +40,10 @@ public:
 	virtual int integerAt(int row) const;
 	virtual qint64 bigIntAt(int row) const;
 
+	const AbstractColumn* inputColumn() const {
+		return m_inputs.value(0);
+	}
+
 	void setNumberLocale(const QLocale& locale) {
 		m_numberLocale = locale;
 		m_useDefaultLocale = false;
@@ -108,6 +112,7 @@ public:
 	double valueAt(int row) const override;
 	int integerAt(int row) const override;
 	qint64 bigIntAt(int row) const override;
+	bool isValid(int row) const override;
 	void save(QXmlStreamWriter*) const override { };
 	bool load(XmlStreamReader*, bool preview) override {
 		Q_UNUSED(preview);

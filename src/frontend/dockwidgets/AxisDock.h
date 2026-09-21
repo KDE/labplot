@@ -59,6 +59,7 @@ private:
 	void loadConfig(KConfig&);
 	void updatePositionText(Axis::Orientation);
 	void updateLabelsPosition(Axis::LabelsPosition);
+	void updateLabelsFormatWidgets(Axis::LabelsFormat format);
 	void updateAxisColor();
 	void updateScale();
 

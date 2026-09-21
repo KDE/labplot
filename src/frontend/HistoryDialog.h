@@ -13,18 +13,18 @@
 
 #include <QDialog>
 
-class QUndoStack;
+class UndoStack;
 class QPushButton;
 
 class HistoryDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	HistoryDialog(QWidget*, QUndoStack*, const QString&);
+	HistoryDialog(QWidget*, UndoStack*, const QString&);
 	~HistoryDialog() override;
 
 private:
-	QUndoStack* m_undoStack;
+	UndoStack* m_undoStack;
 	QPushButton* m_okButton;
 	QPushButton* m_clearUndoStackButton{nullptr};
 

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Run Chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -192,7 +192,7 @@ Symbol* RunChart::dataSymbol() const {
 	return d->dataCurve->symbol();
 }
 
-bool RunChart::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+bool RunChart::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
 	start = 0;
 	end = xIndexCount() - 1;
 	return true;
@@ -216,6 +216,13 @@ double RunChart::maximum(const Dimension dim) const {
 bool RunChart::hasData() const {
 	Q_D(const RunChart);
 	return (d->dataColumn != nullptr);
+}
+
+int RunChart::dataCount(Dimension) const {
+	Q_D(const RunChart);
+	if (!d->dataColumn)
+		return -1;
+	return d->dataColumn->rowCount();
 }
 
 bool RunChart::usingColumn(const AbstractColumn* column, bool) const {
@@ -282,12 +289,12 @@ void RunChart::setCenterMetric(RunChart::CenterMetric centerMetric) {
 // #################################  SLOTS  ####################################
 // ##############################################################################
 void RunChart::retransform() {
-	D(RunChart);
+	Q_D(RunChart);
 	d->retransform();
 }
 
 void RunChart::recalc() {
-	D(RunChart);
+	Q_D(RunChart);
 	d->recalc();
 }
 
@@ -320,11 +327,7 @@ RunChartPrivate::~RunChartPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void RunChartPrivate::retransform() {
-	const bool suppressed = suppressRetransform || q->isLoading();
-	if (suppressed)
-		return;
-
-	if (!isVisible())
+	if (retransformSuppressed())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
@@ -360,8 +363,10 @@ void RunChartPrivate::recalc() {
 	for (int i = 0; i < count; ++i)
 		xColumn->setIntegerAt(i, i + 1);
 
+	dataCurve->setUndoAware(false);
 	dataCurve->setXColumn(xColumn);
 	dataCurve->setYColumn(dataColumn);
+	dataCurve->setUndoAware(true);
 
 	// min and max values for x
 	xCenterColumn->setIntegerAt(0, xMin);
@@ -439,6 +444,7 @@ void RunChart::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool RunChart::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(RunChart);
 
 	if (!readBasicAttributes(reader))

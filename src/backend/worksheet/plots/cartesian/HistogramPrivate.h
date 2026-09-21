@@ -45,9 +45,9 @@ public:
 	double yMinimum() const;
 	double yMaximum() const;
 
-	const AbstractColumn* bins();
-	const AbstractColumn* binValues();
-	const AbstractColumn* binPDValues();
+	const AbstractColumn* bins() const;
+	const AbstractColumn* binValues() const;
+	const AbstractColumn* binPDValues() const;
 
 	double getMaximumOccuranceofHistogram() const;
 
@@ -97,10 +97,10 @@ public:
 
 private:
 	gsl_histogram* m_histogram{nullptr};
-	size_t m_bins{0};
-	Column* m_binsColumn{nullptr}; // bin positions/edges
-	Column* m_binValuesColumn{nullptr}; // bin values
-	Column* m_binPDValuesColumn{nullptr}; // bin values in the probability density normalization
+	int m_bins{0};
+	mutable Column* m_binsColumn{nullptr}; // bin positions/edges
+	mutable Column* m_binValuesColumn{nullptr}; // bin values
+	mutable Column* m_binPDValuesColumn{nullptr}; // bin values in the probability density normalization
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 

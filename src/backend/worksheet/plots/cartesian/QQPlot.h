@@ -59,6 +59,7 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
+	int dataCount(Dimension) const override;
 	bool usingColumn(const AbstractColumn*, bool indirect) const override;
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	QColor color() const override;

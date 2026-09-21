@@ -250,6 +250,7 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYFourierTransformCurve);
 
 	QXmlStreamAttributes attribs;

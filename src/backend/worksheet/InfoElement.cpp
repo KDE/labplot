@@ -1294,6 +1294,7 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 }
 
 bool InfoElement::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	if (!readBasicAttributes(reader))
 		return false;
 
@@ -1335,7 +1336,6 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == QLatin1String("textLabel")) {
 			if (!m_title) {
 				m_title = new TextLabel(i18n("Label"), d->m_plot);
-				m_title->setIsLoading(true);
 				this->addChild(m_title);
 			}
 			if (!m_title->load(reader, preview))
@@ -1374,7 +1374,6 @@ void InfoElement::loadPoints(XmlStreamReader* reader, bool preview) {
 			break;
 
 		auto* point = new CustomPoint(d->m_plot, QString());
-		point->setIsLoading(true);
 		if (!point->load(reader, preview)) {
 			delete point;
 			return;

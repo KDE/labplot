@@ -251,6 +251,7 @@ void XYLineSimplificationCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYLineSimplificationCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYLineSimplificationCurve);
 
 	QXmlStreamAttributes attribs;

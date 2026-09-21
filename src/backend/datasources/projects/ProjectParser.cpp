@@ -42,7 +42,7 @@ const QString& ProjectParser::projectFileName() const {
 	return m_projectFileName;
 }
 
-QList<AspectType> ProjectParser::topLevelClasses() const {
+const QList<AspectType>& ProjectParser::topLevelClasses() const {
 	return m_topLevelClasses;
 }
 

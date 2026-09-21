@@ -278,18 +278,39 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 				return false;
 		}
 	} else {
-		if (column->asStringColumn()->textAt(row) == value.toString())
+		if (column->isValid(row) && column->asStringColumn()->textAt(row) == value.toString())
 			return false;
 	}
 
 	switch (role) {
-	case Qt::EditRole:
-		// remark: the validity of the cell is determined by the input filter
+	case Qt::EditRole: {
+		QString text = value.toString();
+
 		if (m_formula_mode)
-			column->setFormula(row, value.toString());
-		else
-			column->asStringColumn()->setTextAt(row, value.toString());
+			column->setFormula(row, text);
+		else {
+			column->asStringColumn()->setTextAt(row, text);
+
+			// check if the text is a valid number.
+			if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+				bool isValidNumber = true;
+
+				if (!text.isEmpty()) {
+					if (column->columnMode() == AbstractColumn::ColumnMode::Integer)
+						QLocale().toInt(text, &isValidNumber);
+					else
+						QLocale().toLongLong(text, &isValidNumber);
+				} else
+					isValidNumber = false; // empty strings are not valid
+
+				if (!isValidNumber) {
+					if (auto* col = dynamic_cast<Column*>(column))
+						col->setValid(row, false);
+				}
+			}
+		}
 		return true;
+	}
 	case static_cast<int>(CustomDataRole::MaskingRole):
 		m_spreadsheet->column(index.column())->setMasked(row, value.toBool());
 		return true;

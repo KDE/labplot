@@ -1185,7 +1185,7 @@ void RandomValuesDialog::generate() {
 	for (auto* col : m_columns) {
 		col->setRandomValuesData(randomValuesData);
 		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
+		col->setDataChanged();
 	}
 	m_spreadsheet->endMacro();
 

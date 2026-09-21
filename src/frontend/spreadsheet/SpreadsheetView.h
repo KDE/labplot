@@ -148,7 +148,6 @@ private:
 	QAction* action_fill_equidistant_datetime{nullptr};
 	QAction* action_fill_random_nonuniform{nullptr};
 	QAction* action_fill_const{nullptr};
-	QAction* action_fill_function{nullptr};
 
 	// spreadsheet related actions
 	QAction* action_toggle_comments{nullptr};
@@ -215,13 +214,6 @@ private:
 	// analysis and plot data menu actions
 	QActionGroup* plotDataActionGroup{nullptr};
 	QAction* addDataOperationAction{nullptr};
-	QAction* addLineSimplificationAction{nullptr};
-	QAction* addDifferentiationAction{nullptr};
-	QAction* addIntegrationAction{nullptr};
-	QAction* addInterpolationAction{nullptr};
-	QAction* addSmoothAction{nullptr};
-	QAction* addFourierFilterAction{nullptr};
-	QAction* addBaselineCorrectionAction{nullptr};
 	QActionGroup* addAnalysisActionGroup{nullptr};
 	QActionGroup* addFitActionGroup{nullptr};
 	QActionGroup* addDistributionFitActionGroup{nullptr};
@@ -307,7 +299,6 @@ private Q_SLOTS:
 	void fillWithRandomValues();
 	void fillWithEquidistantValues();
 	void fillWithEquidistantDateTimeValues();
-	void fillWithFunctionValues();
 	void fillSelectedCellsWithConstValues();
 
 	void insertRowsAbove();
@@ -343,6 +334,7 @@ private Q_SLOTS:
 	void updateHeaderGeometry(Qt::Orientation, int first, int last);
 
 	void columnClicked(int);
+	void navigateToSpreadsheetOnClick(const QModelIndex& index);
 	void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 	void advanceCell();
 };

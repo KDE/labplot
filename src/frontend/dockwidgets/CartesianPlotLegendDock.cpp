@@ -31,6 +31,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible);
+	ui.kfrLabelFont->setMaximumHeight(ui.leName->height());
 
 	//"Title"-tab
 	auto hboxLayout = new QHBoxLayout(ui.tabTitle);

@@ -23,7 +23,6 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElement.h"
-#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
@@ -1430,15 +1429,15 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	// background color
 	const auto& regColor = layer.backgroundColor;
 	if (regColor.type == Origin::Color::None)
-		plot->plotArea()->background()->setOpacity(0);
+		plot->background()->setOpacity(0);
 	else
-		plot->plotArea()->background()->setFirstColor(color(regColor));
+		plot->background()->setFirstColor(color(regColor));
 
 	// border
 	if (layer.borderType == Origin::BorderType::None)
-		plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
+		plot->borderLine()->setStyle(Qt::NoPen);
 	else
-		plot->plotArea()->borderLine()->setStyle(Qt::SolidLine);
+		plot->borderLine()->setStyle(Qt::SolidLine);
 
 	// ranges: swap axes when exchanged
 	const auto& originXAxis = layer.exchangedAxes ? layer.yAxis : layer.xAxis;
@@ -2966,6 +2965,8 @@ void OriginProjectParser::parseColumnInfo(const QString& info, QString& longName
 	if (info.isEmpty())
 		return;
 	auto infoList = info.split(QRegularExpression(QStringLiteral("[\r\n]")), Qt::SkipEmptyParts);
+	if (infoList.isEmpty())
+		return;
 
 	switch (infoList.size()) {
 	case 2: // long name, unit

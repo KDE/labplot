@@ -463,7 +463,7 @@ public:
 
 		m_column->setSuppressDataChangedSignal(false);
 		if (changed)
-			m_column->setChanged();
+			m_column->setDataChanged();
 	}
 
 private:
@@ -490,7 +490,7 @@ public:
 		int row = 0;
 		auto mode = m_column->columnMode();
 		if (mode == AbstractColumn::ColumnMode::Double) {
-			auto* data = static_cast<QVector<double>*>(m_column->data());
+			const auto* data = static_cast<QVector<double>*>(m_column->data());
 			QVector<double> new_data(*data);
 
 			switch (m_operator) {
@@ -500,8 +500,8 @@ public:
 						d = NAN;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::NotEqualTo:
@@ -510,8 +510,8 @@ public:
 						d = NAN;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::BetweenIncl:
@@ -520,8 +520,8 @@ public:
 						d = NAN;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::BetweenExcl:
@@ -530,8 +530,8 @@ public:
 						d = NAN;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::GreaterThan:
@@ -540,8 +540,8 @@ public:
 						d = NAN;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::GreaterThanEqualTo:
@@ -550,8 +550,8 @@ public:
 						d = NAN;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::LessThan:
@@ -560,8 +560,8 @@ public:
 						d = NAN;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::LessThanEqualTo:
@@ -570,15 +570,15 @@ public:
 						d = NAN;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 			}
 
 			if (changed)
 				m_column->setValues(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::Integer) {
-			auto* data = static_cast<QVector<int>*>(m_column->data());
+			const auto* data = static_cast<QVector<int>*>(m_column->data());
 			QVector<int> new_data(*data);
 
 			switch (m_operator) {
@@ -588,8 +588,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::NotEqualTo:
@@ -598,8 +598,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::BetweenIncl:
@@ -608,8 +608,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::BetweenExcl:
@@ -618,8 +618,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::GreaterThan:
@@ -628,8 +628,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::GreaterThanEqualTo:
@@ -638,8 +638,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::LessThan:
@@ -648,8 +648,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::LessThanEqualTo:
@@ -658,15 +658,15 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 			}
 
 			if (changed)
 				m_column->setIntegers(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::BigInt) {
-			auto* data = static_cast<QVector<qint64>*>(m_column->data());
+			const auto* data = static_cast<QVector<qint64>*>(m_column->data());
 			QVector<qint64> new_data(*data);
 
 			switch (m_operator) {
@@ -676,8 +676,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::NotEqualTo:
@@ -686,8 +686,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::BetweenIncl:
@@ -696,8 +696,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::BetweenExcl:
@@ -706,8 +706,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::GreaterThan:
@@ -716,8 +716,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::GreaterThanEqualTo:
@@ -726,8 +726,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::LessThan:
@@ -736,8 +736,8 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::LessThanEqualTo:
@@ -746,15 +746,15 @@ public:
 						d = 0;
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 			}
 
 			if (changed)
 				m_column->setBigInts(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::DateTime) {
-			auto* data = static_cast<QVector<QDateTime>*>(m_column->data());
+			const auto* data = static_cast<QVector<QDateTime>*>(m_column->data());
 			QVector<QDateTime> new_data(*data);
 
 			switch (m_operator) {
@@ -764,8 +764,8 @@ public:
 						d = QDateTime();
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::NotEqualTo:
@@ -774,8 +774,8 @@ public:
 						d = QDateTime();
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::BetweenIncl:
@@ -784,8 +784,8 @@ public:
 						d = QDateTime();
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::BetweenExcl:
@@ -804,8 +804,8 @@ public:
 						d = QDateTime();
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::GreaterThanEqualTo:
@@ -814,8 +814,8 @@ public:
 						d = QDateTime();
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::LessThan:
@@ -824,8 +824,8 @@ public:
 						d = QDateTime();
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 				break;
 			case Operator::LessThanEqualTo:
@@ -834,8 +834,8 @@ public:
 						d = QDateTime();
 						changed = true;
 						m_rows << row;
-						++row;
 					}
+					++row;
 				}
 			}
 
@@ -921,7 +921,7 @@ public:
 
 		m_column->setSuppressDataChangedSignal(false);
 		if (changed)
-			m_column->setChanged();
+			m_column->setDataChanged();
 	}
 
 private:
@@ -941,7 +941,7 @@ public:
 
 	void run() override {
 		bool changed = false;
-		auto* data = static_cast<QVector<QString>*>(m_column->data());
+		const auto* data = static_cast<QVector<QString>*>(m_column->data());
 		QVector<QString> new_data(*data);
 		int row = 0;
 

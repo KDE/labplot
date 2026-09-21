@@ -142,7 +142,7 @@ function(generate_shiboken_sources)
 	    PROPERTIES
 	        GENERATED TRUE
 		COMPILE_FLAGS
-		    "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wno-keyword-macro -Wno-shadow -Wno-zero-as-null-pointer-constant>"
+		    "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wno-keyword-macro -Wno-shadow -Wno-cast-function-type -Wno-zero-as-null-pointer-constant>"
     )
 
     # # Set the cpp files which will be used for the bindings library.

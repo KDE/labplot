@@ -58,7 +58,7 @@ QWidget* Workbook::view() const {
 }
 
 bool Workbook::exportView() const {
-	Spreadsheet* s = currentSpreadsheet();
+	auto* s = currentSpreadsheet();
 	bool ret = false;
 	if (s)
 		ret = s->exportView();
@@ -71,7 +71,7 @@ bool Workbook::exportView() const {
 }
 
 bool Workbook::printView() {
-	Spreadsheet* s = currentSpreadsheet();
+	auto* s = currentSpreadsheet();
 	bool ret = false;
 	if (s)
 		ret = s->printView();
@@ -84,7 +84,7 @@ bool Workbook::printView() {
 }
 
 bool Workbook::printPreview() const {
-	Spreadsheet* s = currentSpreadsheet();
+	auto* s = currentSpreadsheet();
 	bool ret = false;
 	if (s)
 		ret = s->printPreview();

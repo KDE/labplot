@@ -115,13 +115,33 @@ void ReferenceLineDock::updateWidgetsOrientation(ReferenceLine::Orientation orie
 //**********************************************************
 // Position
 void ReferenceLineDock::orientationChanged(int index) {
-	auto orientation{ReferenceLine::Orientation(index)};
-	updateWidgetsOrientation(orientation);
+	auto newOrientation{ReferenceLine::Orientation(index)};
+	updateWidgetsOrientation(newOrientation);
 
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* line : m_linesList)
-		line->setOrientation(orientation);
+	if (m_linesList.size() > 1)
+		m_line->beginMacro(i18n("%1 reference lines: orientation changed", m_linesList.size()));
+	else
+		m_line->beginMacro(i18n("%1: orientation changed", m_line->name()));
+
+	for (auto* line : m_linesList) {
+		auto positionLogical = line->positionLogical();
+		auto oldOrientation = line->orientation();
+
+		// grab the value from the currently active axis before switching
+		double activeValue = positionLogical.x();
+		if (oldOrientation == ReferenceLine::Orientation::Horizontal)
+			activeValue = positionLogical.y();
+
+		positionLogical.setX(activeValue);
+		positionLogical.setY(activeValue);
+
+		line->setPositionLogical(positionLogical);
+		line->setOrientation(newOrientation);
+	}
+
+	m_line->endMacro();
 
 	// call this slot to show the x or y value depending on the new orientation
 	linePositionLogicalChanged(m_line->positionLogical());

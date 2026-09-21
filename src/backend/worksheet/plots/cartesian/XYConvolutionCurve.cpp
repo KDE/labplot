@@ -268,6 +268,7 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYConvolutionCurve);
 
 	QXmlStreamAttributes attribs;

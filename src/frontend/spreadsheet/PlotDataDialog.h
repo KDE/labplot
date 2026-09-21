@@ -52,6 +52,7 @@ private:
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
 	AbstractAspect* m_lastAddedCurve{nullptr};
+	Column* m_tickLabelsColumn{nullptr};
 	Plot::PlotType m_plotType;
 	bool m_basicPlotType{false};
 
@@ -76,6 +77,7 @@ private:
 	Column* columnFromName(const QString&) const;
 	void adjustWorksheetSize(Worksheet*) const;
 	void setAxesTitles(CartesianPlot*, const QString& yColumnName = QString()) const;
+	void adjustPadding(CartesianPlot*, const QString& yColumnName, bool firstColumn = false, bool lastColumn = false) const;
 
 	void setAxesColumnLabels(CartesianPlot*, const QString& columnName);
 	void setAxesColumnLabels(CartesianPlot*, const Column*);

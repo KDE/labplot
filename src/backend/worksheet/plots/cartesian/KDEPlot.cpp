@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : KDE Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -171,7 +171,7 @@ XYCurve* KDEPlot::rugCurve() const {
 	return d->rugCurve;
 }
 
-bool KDEPlot::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+bool KDEPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
 	start = 0;
 	end = gridPointsCount() - 1;
 	return true;
@@ -207,6 +207,10 @@ double KDEPlot::maximum(const Dimension dim) const {
 bool KDEPlot::hasData() const {
 	Q_D(const KDEPlot);
 	return (d->dataColumn != nullptr);
+}
+
+int KDEPlot::dataCount(Dimension) const {
+	return gridPointsCount() - 1;
 }
 
 bool KDEPlot::usingColumn(const AbstractColumn* column, bool) const {
@@ -288,7 +292,7 @@ void KDEPlot::retransform() {
 }
 
 void KDEPlot::recalc() {
-	D(KDEPlot);
+	Q_D(KDEPlot);
 	d->recalc();
 }
 
@@ -321,11 +325,7 @@ KDEPlotPrivate::~KDEPlotPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void KDEPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || q->isLoading();
-	if (suppressed)
-		return;
-
-	if (!isVisible())
+	if (retransformSuppressed())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
@@ -340,8 +340,10 @@ void KDEPlotPrivate::retransform() {
 void KDEPlotPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
+	rugCurve->setUndoAware(false);
 	rugCurve->setXColumn(dataColumn);
 	rugCurve->setYColumn(dataColumn);
+	rugCurve->setUndoAware(true);
 
 	if (!dataColumn) {
 		xEstimationColumn->clear();
@@ -488,6 +490,7 @@ void KDEPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(KDEPlot);
 
 	if (!readBasicAttributes(reader))

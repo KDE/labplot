@@ -21,7 +21,6 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -515,7 +514,7 @@ void AddSubtractValueDialog::initPreview() {
 	const double padding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
-	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
+	plot->borderLine()->setStyle(Qt::NoPen);
 	m_previewPlotTitle = plot->title();
 
 	// x-axis

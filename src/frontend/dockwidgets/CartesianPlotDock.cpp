@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2024 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -1676,20 +1676,20 @@ void CartesianPlotDock::yBreakStyleChanged(int styleIndex) {
 void CartesianPlotDock::borderTypeChanged() {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto type = m_plot->plotArea()->borderType();
+	auto type = m_plot->borderType();
 	auto* tb = static_cast<QToolButton*>(QObject::sender());
 	bool checked = tb->isChecked();
 	if (tb == ui.tbBorderTypeLeft)
-		type.setFlag(PlotArea::BorderTypeFlags::BorderLeft, checked);
+		type.setFlag(CartesianPlot::BorderTypeFlags::BorderLeft, checked);
 	else if (tb == ui.tbBorderTypeTop)
-		type.setFlag(PlotArea::BorderTypeFlags::BorderTop, checked);
+		type.setFlag(CartesianPlot::BorderTypeFlags::BorderTop, checked);
 	else if (tb == ui.tbBorderTypeRight)
-		type.setFlag(PlotArea::BorderTypeFlags::BorderRight, checked);
+		type.setFlag(CartesianPlot::BorderTypeFlags::BorderRight, checked);
 	else if (tb == ui.tbBorderTypeBottom)
-		type.setFlag(PlotArea::BorderTypeFlags::BorderBottom, checked);
+		type.setFlag(CartesianPlot::BorderTypeFlags::BorderBottom, checked);
 
 	for (auto* plot : m_plotList)
-		plot->plotArea()->setBorderType(type);
+		plot->setBorderType(type);
 }
 
 void CartesianPlotDock::borderCornerRadiusChanged(double value) {
@@ -1697,7 +1697,7 @@ void CartesianPlotDock::borderCornerRadiusChanged(double value) {
 
 	const double radius = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* plot : m_plotList)
-		plot->plotArea()->setBorderCornerRadius(radius);
+		plot->setBorderCornerRadius(radius);
 }
 
 // "Stack"-tab
@@ -1899,12 +1899,12 @@ void CartesianPlotDock::plotSymmetricPaddingChanged(bool symmetric) {
 }
 
 // border
-void CartesianPlotDock::plotBorderTypeChanged(PlotArea::BorderType type) {
+void CartesianPlotDock::plotBorderTypeChanged(CartesianPlot::BorderType type) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
-	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
-	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
-	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
+	ui.tbBorderTypeLeft->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderLeft));
+	ui.tbBorderTypeRight->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderRight));
+	ui.tbBorderTypeTop->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderTop));
+	ui.tbBorderTypeBottom->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderBottom));
 }
 
 void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
@@ -1981,15 +1981,13 @@ void CartesianPlotDock::load() {
 	ui.cbYBreak->setCurrentIndex(0);
 
 	//"Plot Area"-tab
-	const auto* plotArea = m_plot->plotArea();
-
 	// Background, border and cursor Lines
 	QList<Background*> backgrounds;
 	QList<Line*> cursorLines;
 	QList<Line*> borderLines;
 	for (auto* plot : m_plotList) {
-		backgrounds << plot->plotArea()->background();
-		borderLines << plot->plotArea()->borderLine();
+		backgrounds << plot->background();
+		borderLines << plot->borderLine();
 		cursorLines << plot->cursorLine();
 	}
 
@@ -2011,11 +2009,11 @@ void CartesianPlotDock::load() {
 	ui.cbPaddingSymmetric->setChecked(m_plot->symmetricPadding());
 
 	// Border
-	ui.tbBorderTypeLeft->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderLeft));
-	ui.tbBorderTypeRight->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderRight));
-	ui.tbBorderTypeTop->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderTop));
-	ui.tbBorderTypeBottom->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderBottom));
-	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(plotArea->borderCornerRadius(), m_units), m_worksheetUnit));
+	ui.tbBorderTypeLeft->setChecked(m_plot->borderType().testFlag(CartesianPlot::BorderTypeFlags::BorderLeft));
+	ui.tbBorderTypeRight->setChecked(m_plot->borderType().testFlag(CartesianPlot::BorderTypeFlags::BorderRight));
+	ui.tbBorderTypeTop->setChecked(m_plot->borderType().testFlag(CartesianPlot::BorderTypeFlags::BorderTop));
+	ui.tbBorderTypeBottom->setChecked(m_plot->borderType().testFlag(CartesianPlot::BorderTypeFlags::BorderBottom));
+	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_plot->borderCornerRadius(), m_units), m_worksheetUnit));
 
 	// Stacking
 	ui.leStackYOffset->setText(QLocale().toString(m_plot->stackYOffset()));
@@ -2051,16 +2049,15 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	// Area
 	backgroundWidget->loadConfig(group);
 
-	const auto* plotArea = m_plot->plotArea();
-	auto type = static_cast<PlotArea::BorderType>(group.readEntry(QStringLiteral("BorderType"), static_cast<int>(plotArea->borderType())));
-	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
-	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
-	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
-	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
+	auto type = static_cast<CartesianPlot::BorderType>(group.readEntry(QStringLiteral("BorderType"), static_cast<int>(m_plot->borderType())));
+	ui.tbBorderTypeLeft->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderLeft));
+	ui.tbBorderTypeRight->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderRight));
+	ui.tbBorderTypeTop->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderTop));
+	ui.tbBorderTypeBottom->setChecked(type.testFlag(CartesianPlot::BorderTypeFlags::BorderBottom));
 
 	borderLineWidget->loadConfig(group);
 	ui.sbBorderCornerRadius->setValue(
-		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("BorderCornerRadius"), plotArea->borderCornerRadius()), m_units), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("BorderCornerRadius"), m_plot->borderCornerRadius()), m_units), m_worksheetUnit));
 }
 
 void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
@@ -2088,9 +2085,9 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	// Area
 	backgroundWidget->saveConfig(group);
-	group.writeEntry(QStringLiteral("BorderType"), static_cast<int>(m_plot->plotArea()->borderType()));
+	group.writeEntry(QStringLiteral("BorderType"), static_cast<int>(m_plot->borderType()));
 	borderLineWidget->saveConfig(group);
-	group.writeEntry(QStringLiteral("BorderCornerRadius"), m_plot->plotArea()->borderCornerRadius());
+	group.writeEntry(QStringLiteral("BorderCornerRadius"), m_plot->borderCornerRadius());
 
 	config.sync();
 }

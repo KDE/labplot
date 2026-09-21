@@ -98,6 +98,7 @@ private:
 	QTimer m_autoSaveTimer;
 	// bool m_showWelcomeScreen{false};
 	// bool m_saveWelcomeScreen{true};
+	bool m_showWhatsNew{false};
 	int undoStackIndexLastSave{0};
 	MemoryWidget* m_memoryInfoWidget{nullptr};
 	// QQuickWidget* m_welcomeWidget{nullptr};

@@ -47,6 +47,7 @@ public:
 
 protected:
 	void resizeEvent(QResizeEvent*) override;
+	void insertFromMimeData(const QMimeData*) override;
 
 private:
 	GrabBar* m_grabBar;

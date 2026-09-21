@@ -64,12 +64,12 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		QString remaining = text.right(text.length() - i);
 		bool found = false;
 
+		bool validStart = (i == 0) || !(text.at(i - 1).isLetterOrNumber() || text.at(i - 1) == QLatin1Char('_'));
+
 		// variables
 		for (const QString& var : m_variables) {
-			if (remaining.startsWith(var)) {
-				QString nextChar = remaining.mid(var.length(), 1);
-				if (nextChar == QLatin1Char(' ') || nextChar == QLatin1Char(')') || nextChar == QLatin1Char('+') || nextChar == QLatin1Char('-')
-					|| nextChar == QLatin1Char('*') || nextChar == QLatin1Char('/') || nextChar == QLatin1Char('^')) {
+			if (remaining.startsWith(var) && validStart) {
+				if (remaining.length() == var.length() || !(remaining.at(var.length()).isLetterOrNumber() || remaining.at(var.length()) == QLatin1Char('_'))) {
 					setFormat(i, var.length(), variable);
 					i += var.length() - 1;
 					found = true;
@@ -82,23 +82,27 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 
 		// functions
 		for (const QString& f : functions) {
-			if (remaining.startsWith(f)) {
-				setFormat(i, f.length(), function);
-				i += f.length() - 1;
-				found = true;
-				break;
+			if (remaining.startsWith(f) && validStart) {
+				if (remaining.length() == f.length() || !(remaining.at(f.length()).isLetterOrNumber() || remaining.at(f.length()) == QLatin1Char('_'))) {
+					setFormat(i, f.length(), function);
+					i += f.length() - 1;
+					found = true;
+					break;
+				}
 			}
 		}
 		if (found)
 			continue;
 
 		// constants
-		for (const QString& f : constants) {
-			if (remaining.startsWith(f)) {
-				setFormat(i, f.length(), function);
-				i += f.length() - 1;
-				found = true;
-				break;
+		for (const QString& c : constants) {
+			if (remaining.startsWith(c) && validStart) {
+				if (remaining.length() == c.length() || !(remaining.at(c.length()).isLetterOrNumber() || remaining.at(c.length()) == QLatin1Char('_'))) {
+					setFormat(i, c.length(), constant);
+					i += c.length() - 1;
+					found = true;
+					break;
+				}
 			}
 		}
 		if (found)

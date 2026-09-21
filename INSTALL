@@ -113,3 +113,7 @@ sudo dnf install extra-cmake-modules qt6-qtsvg-devel
 sudo dnf install kf6-kcoreaddons-devel kf6-kcrash-devel kf6-kdoctools-devel kf6-kiconthemes-devel kf6-ktextwidgets-devel kf6-kwidgetsaddons-devel kf6-kxmlgui-devel kf6-karchive-devel kf6-kcompletion-devel kf6-kio-devel kf6-knewstuff-devel kf6-kuserfeedback-devel qt6-qtbase-private-devel kf6-ktexteditor-devel
 sudo dnf install bison gsl-devel eigen3-devel
 
+Ubuntu dependencies
+sudo apt update && sudo apt install -y cmake extra-cmake-modules qt6-svg-dev libqt6svg6 libkf6coreaddons-dev libkf6crash-dev libkf6doctools-dev libkf6iconthemes-dev libkf6textwidgets-dev libkf6widgetsaddons-dev libkf6xmlgui-dev libkf6archive-dev libkf6completion-dev bison libgsl-dev libeigen3-dev libkf6newstuff-dev libkf6kio-dev python3-dev python3-pyside6.qtgui python3-build libkf6texteditor-dev libshiboken6-dev libpyside6-dev qt6-serialport-dev libreadstat-dev
+
+

@@ -38,6 +38,10 @@ private Q_SLOTS:
 	void testBarPlotInit();
 	void testBarPlotDuplicate();
 	void testBarPlotRange();
+	void testBarPlotColumnRemoved();
+
+	// Lollipop plot
+	void testLollipopPlotColumnRemoved();
 
 	// process behavior chart
 	void testPBChartInit();
@@ -67,6 +71,11 @@ private Q_SLOTS:
 	void testRunChartDuplicate();
 	void testRunChartCenterAverage();
 	void testRunChartCenterMedian();
+
+	// Pareto chart
+	void testParetoChartInit();
+	void testParetoChartDuplicate();
+	void testParetoChartRanges();
 };
 
 #endif

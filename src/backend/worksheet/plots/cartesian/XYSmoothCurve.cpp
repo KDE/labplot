@@ -259,6 +259,7 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(XYSmoothCurve);
 
 	QXmlStreamAttributes attribs;

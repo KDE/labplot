@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -20,6 +20,7 @@ class Background;
 class Line;
 class Symbol;
 class XYCurvePrivate;
+class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -36,7 +37,6 @@ public:
 	friend class XYCurveSetXErrorMinusColumnCmd;
 	friend class XYCurveSetYErrorPlusColumnCmd;
 	friend class XYCurveSetYErrorMinusColumnCmd;
-	friend class XYCurveSetValuesColumnCmd;
 
 	enum class LineType {
 		NoLine,
@@ -53,8 +53,6 @@ public:
 		SplineAkimaPeriodic
 	};
 	enum class DropLineType { NoDropLine, X, Y, XY, XZeroBaseline, XMinBaseline, XMaxBaseline };
-	enum class ValuesType { NoValues, X, Y, XY, XYBracketed, CustomColumn };
-	enum class ValuesPosition { Above, Under, Left, Right };
 
 	explicit XYCurve(const QString& name, AspectType type = AspectType::XYCurve, bool loading = false);
 	~XYCurve() override;
@@ -101,23 +99,9 @@ public:
 	Line* line() const;
 	Line* dropLine() const;
 
-	Symbol* symbol() const;
 	Background* background() const;
-
-	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
-	CLASS_D_ACCESSOR_DECL(QString, valuesColumnPath, ValuesColumnPath)
-	BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition)
-	BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
-	BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, valuesOpacity, ValuesOpacity)
-	BASIC_D_ACCESSOR_DECL(char, valuesNumericFormat, ValuesNumericFormat)
-	BASIC_D_ACCESSOR_DECL(int, valuesPrecision, ValuesPrecision)
-	CLASS_D_ACCESSOR_DECL(QString, valuesDateTimeFormat, ValuesDateTimeFormat)
-	CLASS_D_ACCESSOR_DECL(QString, valuesPrefix, ValuesPrefix)
-	CLASS_D_ACCESSOR_DECL(QString, valuesSuffix, ValuesSuffix)
-	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
-	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
+	Symbol* symbol() const;
+	Value* value() const;
 
 	ErrorBar* errorBar() const;
 
@@ -141,11 +125,10 @@ public:
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
 
 private Q_SLOTS:
-	void updateValues();
 	void updateErrorBars();
+	void updateValues();
 	void xColumnAboutToBeRemoved(const AbstractAspect*);
 	void yColumnAboutToBeRemoved(const AbstractAspect*);
-	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
 
 	// SLOTs for changes triggered via QActions in the context menu
 	void navigateTo();
@@ -160,16 +143,7 @@ private:
 	void initActions();
 	void connectXColumn(const AbstractColumn*);
 	void connectYColumn(const AbstractColumn*);
-	void connectValuesColumn(const AbstractColumn*);
 
-	// bool minMax(const AbstractColumn* column1,
-	// 			const AbstractColumn* column2,
-	// 			const ErrorBar::ErrorType errorType,
-	// 			const AbstractColumn* errorPlusColumn,
-	// 			const AbstractColumn* errorMinusColumn,
-	// 			const Range<int>& indexRange,
-	// 			Range<double>& yRange,
-	// 			bool includeErrorBars) const;
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
 
@@ -180,7 +154,6 @@ Q_SIGNALS:
 	// General-Tab
 	void xDataChanged();
 	void yDataChanged();
-	void valuesDataChanged();
 	void selected(double pos);
 
 	void xColumnChanged(const AbstractColumn*);
@@ -192,21 +165,6 @@ Q_SIGNALS:
 	void lineIncreasingXOnlyChanged(bool);
 	void lineInterpolationPointsCountChanged(int);
 	void dropLineTypeChanged(XYCurve::DropLineType);
-
-	// Values-Tab
-	void valuesTypeChanged(XYCurve::ValuesType);
-	void valuesColumnChanged(const AbstractColumn*);
-	void valuesPositionChanged(XYCurve::ValuesPosition);
-	void valuesDistanceChanged(qreal);
-	void valuesRotationAngleChanged(qreal);
-	void valuesOpacityChanged(qreal);
-	void valuesNumericFormatChanged(char);
-	void valuesPrecisionChanged(int);
-	void valuesDateTimeFormatChanged(QString);
-	void valuesPrefixChanged(QString);
-	void valuesSuffixChanged(QString);
-	void valuesFontChanged(QFont);
-	void valuesColorChanged(QColor);
 
 	// Margin Plots
 	void rugEnabledChanged(bool);

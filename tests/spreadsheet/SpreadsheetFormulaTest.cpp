@@ -16,6 +16,10 @@
 #include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <QClipboard>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QTimer>
+#include <cmath>
 
 #define INIT_SPREADSHEET                                                                                                                                       \
 	Spreadsheet sheet(QStringLiteral("test 2 cols"), false);                                                                                                   \
@@ -445,10 +449,16 @@ void SpreadsheetFormulaTest::formulasma() {
 	const int N = 4;
 	for (int i = 0; i < rows; i++) {
 		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
-		double value = 0.;
-		for (int index = std::max(0, i - N + 1); index <= i; index++)
-			value += sheet.column(0)->valueAt(index);
-		QCOMPARE(sheet.column(1)->valueAt(i), value / N);
+
+		if (i < N - 1) {
+			QVERIFY(std::isnan(sheet.column(1)->valueAt(i)));
+		} else {
+			double value = 0.;
+			for (int index = i - N + 1; index <= i; index++) {
+				value += sheet.column(0)->valueAt(index);
+			}
+			QCOMPARE(sheet.column(1)->valueAt(i), value / N);
+		}
 	}
 }
 /*!
@@ -519,6 +529,14 @@ void SpreadsheetFormulaTest::formulaUpdateAfterPaste() {
 	const QString str = QStringLiteral("10\n20\n30");
 	QApplication::clipboard()->setText(str);
 	SpreadsheetView viewToPaste(&sheet, false);
+	QTimer::singleShot(100, []() {
+		for (QWidget* widget : QApplication::topLevelWidgets()) {
+			if (auto* box = qobject_cast<QMessageBox*>(widget)) {
+				if (auto* btn = box->button(QMessageBox::No))
+					btn->click();
+			}
+		}
+	});
 	viewToPaste.pasteIntoSelection();
 
 	// check the first three rows

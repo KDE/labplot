@@ -19,6 +19,9 @@
 #include <sbkconverter.h>
 #include <sbkmodule.h>
 #include <sbkpython.h>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 11, 0)
+#include <basewrapper.h>
+#endif
 
 #include <codecvt>
 #include <string>
@@ -460,7 +463,7 @@ PyObject* PythonScriptRuntime::shibokenConvertToPyObject(PythonLogger* object) {
 // Returns the dictionary which contains the variables in module 'name'
 // returns owned reference
 PyObject* PythonScriptRuntime::getModuleDict(const QString& name) {
-	INFO(Q_FUNC_INFO)
+	INFO(Q_FUNC_INFO << ", name = " << name.toStdString())
 	// Python interpreter or pylabplot module is not initialized
 	if (!Py_IsInitialized() || !ready)
 		return nullptr;
@@ -562,7 +565,6 @@ int PythonScriptRuntime::getPyErrorLine() {
 }
 
 bool PythonScriptRuntime::populateVariableInfo() {
-	INFO(Q_FUNC_INFO)
 	auto* items = PyDict_Items(m_localDict);
 	if (!items)
 		return false;
@@ -570,6 +572,7 @@ bool PythonScriptRuntime::populateVariableInfo() {
 	QMap<QString, VariableInfo> variablesInfo;
 
 	auto size = PyList_Size(items);
+	INFO(Q_FUNC_INFO << ", items in local dictionary:" << size)
 
 	for (Py_ssize_t i = 0; i < size; ++i) {
 		auto* item = PySequence_GetItem(items, i);
@@ -585,7 +588,7 @@ bool PythonScriptRuntime::populateVariableInfo() {
 			return false;
 		}
 
-		const QString& key = PythonScriptRuntime::pyUnicodeToQString(keyObj); // TODO
+		const QString& key = PythonScriptRuntime::pyUnicodeToQString(keyObj);
 		if (key.isNull()) {
 			Py_DECREF(items);
 			Py_DECREF(item);
@@ -647,6 +650,7 @@ bool PythonScriptRuntime::populateVariableInfo() {
 			Py_DECREF(valueRepr);
 			return false;
 		}
+		// DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
 
 		Py_DECREF(valueRepr);
 
@@ -672,6 +676,7 @@ bool PythonScriptRuntime::populateVariableInfo() {
 			Py_DECREF(typeRepr);
 			return false;
 		}
+		// DEBUG(Q_FUNC_INFO << ", type = " << type.toStdString())
 
 		Py_DECREF(typeRepr);
 

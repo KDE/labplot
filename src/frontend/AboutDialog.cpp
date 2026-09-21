@@ -116,7 +116,7 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	linkCopyLayout->addWidget(copyCiteButton);
 	linkCopyLayout->addWidget(donateButton);
 
-	((QVBoxLayout *)layout())->insertLayout(1, linkCopyLayout);
+	static_cast<QVBoxLayout *>(layout())->insertLayout(1, linkCopyLayout);
 
 	// Find and hide the "Copy to Clipboard" button
 	auto buttons = findChildren<QPushButton *>();
@@ -152,8 +152,8 @@ QString AboutDialog::systemInfo() {
 	const QString buildType(i18n("Debug build") + QLatin1Char(' ') + QLatin1String(GIT_COMMIT));
 #endif
 
-	QLocale locale = QLocale();
-	const QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(", ") + QLocale::countryToString(locale.country());
+	//QLocale locale = QLocale();
+	// const QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(", ") + QLocale::countryToString(locale.country());
 
 	QLocale systemLocale = QLocale::system();
 	const QString systemLanguage = QLocale::languageToString(systemLocale.language()) + QStringLiteral(", ") + QLocale::countryToString(systemLocale.country());

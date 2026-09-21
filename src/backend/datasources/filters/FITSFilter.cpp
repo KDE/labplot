@@ -795,7 +795,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			for (int c = 0; c < spreadsheet->columnCount(); ++c) {
 				const auto* const col = spreadsheet->column(c);
 				int currMaxRoxIdx = -1;
-				for (int r = col->rowCount(); r >= 0; r--) {
+				for (int r = col->rowCount() - 1; r >= 0; r--) {
 					if (col->isValid(r)) {
 						currMaxRoxIdx = r;
 						break;
@@ -806,7 +806,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 					maxRowIdx = currMaxRoxIdx;
 			}
 			DEBUG(Q_FUNC_INFO << ", dim: " << spreadsheet->columnCount() << " " << maxRowIdx)
-			long naxes[2] = {spreadsheet->columnCount(), maxRowIdx};
+			long naxes[2] = {spreadsheet->columnCount(), maxRowIdx + 1};
 			if (fits_create_img(m_fitsFile, FLOAT_IMG, 2, naxes, &status)) {
 				printError(status);
 				status = 0;

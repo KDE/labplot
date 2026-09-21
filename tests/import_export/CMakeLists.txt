@@ -92,7 +92,7 @@ if(ENABLE_TEST_IMPORTEXPORT)
     endif()
 
     option(ENABLE_TEST_SERIAL_PORT "Enable Serial Port Tests" ON)
-    if(ENABLE_QTSERIALPORT AND ENABLE_TEST_SERIAL_PORT)
+    if(ENABLE_QTSERIALPORT AND Qt${QT_MAJOR_VERSION}SerialPort_FOUND AND ENABLE_TEST_SERIAL_PORT)
         add_subdirectory(SerialPort)
     endif()
 endif()

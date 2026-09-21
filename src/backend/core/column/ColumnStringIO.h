@@ -30,7 +30,7 @@ public:
 	QString textAt(int) const override;
 	int availableRowCount(int max = -1) const override;
 	void setTextAt(int, const QString&) override;
-	virtual bool isValid(int) const;
+	virtual bool isValid(int) const override;
 	bool copy(const AbstractColumn*) override;
 	bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) override;
 	void replaceTexts(int start_row, const QVector<QString>& texts) override;

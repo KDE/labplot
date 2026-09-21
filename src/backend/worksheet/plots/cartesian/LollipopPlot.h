@@ -41,7 +41,7 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	CLASS_D_ACCESSOR_DECL(QString, xColumnPath, XColumnPath)
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
-	QVector<QString>& dataColumnPaths() const;
+	CLASS_D_ACCESSOR_DECL(QVector<QString>, dataColumnPaths, DataColumnPaths)
 	BASIC_D_ACCESSOR_DECL(LollipopPlot::Orientation, orientation, Orientation)
 
 	Line* lineAt(int) const;
@@ -58,6 +58,7 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
+	int dataCount(Dimension) const override;
 	bool usingColumn(const AbstractColumn*, bool indirect) const override;
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	QColor color() const override;

@@ -59,9 +59,9 @@ plotArea1.setVerticalPadding(Worksheet.convertToSceneUnits(0.8, Worksheet.Unit.C
 plotArea1.setRightPadding(Worksheet.convertToSceneUnits(0.8, Worksheet.Unit.Centimeter))
 plotArea1.setBottomPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 
-border1 = plotArea1.plotArea().borderType()
-border1 = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
-plotArea1.plotArea().setBorderType(border1)
+border1 = plotArea1.borderType()
+border1 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
+plotArea1.setBorderType(border1)
 
 plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, True)
 
@@ -145,9 +145,9 @@ plotArea2.setVerticalPadding(Worksheet.convertToSceneUnits(0.8, Worksheet.Unit.C
 plotArea2.setRightPadding(Worksheet.convertToSceneUnits(0.8, Worksheet.Unit.Centimeter))
 plotArea2.setBottomPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 
-border2 = plotArea2.plotArea().borderType()
-border2 = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
-plotArea2.plotArea().setBorderType(border2)
+border2 = plotArea2.borderType()
+border2 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
+plotArea2.setBorderType(border2)
 
 plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, True)
 

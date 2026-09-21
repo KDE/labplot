@@ -83,6 +83,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	this->autoEvalRangeChanged();
 
 	ui.cbUseDataErrors->setChecked(m_fitData->useDataErrors);
+	ui.cbErrorScaling->setChecked(m_fitData->errorScaling);
 	ui.cbUseResults->setChecked(m_fitData->useResults);
 	ui.cbPreview->setChecked(m_fitData->previewEnabled);
 	ui.sbConfidenceInterval->setValue(m_fitData->confidenceInterval);
@@ -92,6 +93,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	connect(ui.leMaxIterations, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);
 	connect(ui.leEvaluatedPoints, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);
 	connect(ui.cbUseDataErrors, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
+	connect(ui.cbErrorScaling, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.cbUseResults, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.cbPreview, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.sbConfidenceInterval, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &FitOptionsWidget::changed);
@@ -233,6 +235,7 @@ void FitOptionsWidget::applyClicked() {
 	SET_INT_FROM_LE(m_fitData->evaluatedPoints, ui.leEvaluatedPoints);
 
 	m_fitData->useDataErrors = ui.cbUseDataErrors->isChecked();
+	m_fitData->errorScaling = ui.cbErrorScaling->isChecked();
 	m_fitData->useResults = ui.cbUseResults->isChecked();
 	m_fitData->previewEnabled = ui.cbPreview->isChecked();
 	m_fitData->confidenceInterval = ui.sbConfidenceInterval->value();

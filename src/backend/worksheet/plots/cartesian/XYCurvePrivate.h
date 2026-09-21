@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of XYCurve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -19,6 +19,7 @@ class Background;
 class CartesianPlot;
 class CartesianCoordinateSystem;
 class Symbol;
+class Value;
 class XYCurve;
 
 class XYCurvePrivate : public PlotPrivate {
@@ -76,8 +77,11 @@ public:
 	Line* line{nullptr};
 	Line* dropLine{nullptr};
 
-	// symbols
+	// common objects
+	Background* background{nullptr};
+	ErrorBar* errorBar{nullptr};
 	Symbol* symbol{nullptr};
+	Value* value{nullptr};
 
 	// rug
 	bool rugEnabled{false};
@@ -87,33 +91,8 @@ public:
 	double rugWidth{0.0};
 	QPainterPath rugPath;
 
-	// values
-	XYCurve::ValuesType valuesType{XYCurve::ValuesType::NoValues};
-	const AbstractColumn* valuesColumn{nullptr};
-	QString valuesColumnPath;
-	XYCurve::ValuesPosition valuesPosition{XYCurve::ValuesPosition::Above};
-	qreal valuesDistance{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
-	qreal valuesRotationAngle{0.0};
-	qreal valuesOpacity{1.0};
-	char valuesNumericFormat{'f'}; //'g', 'e', 'E', etc. for numeric values
-	int valuesPrecision{2}; // number of digits for numeric values
-	QString valuesDateTimeFormat;
-	QString valuesPrefix;
-	QString valuesSuffix;
-	QFont valuesFont;
-	QColor valuesColor;
-
-	// filling
-	Background* background{nullptr};
-
-	// error bars
-	ErrorBar* errorBar{nullptr};
-
 	XYCurve* const q;
 	friend class XYCurve;
-
-	//	CartesianPlot* plot{nullptr};
-	//	const CartesianCoordinateSystem* cSystem{nullptr};	//current cSystem
 
 private:
 	CartesianPlot* plot() const {

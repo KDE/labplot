@@ -67,6 +67,8 @@ private Q_SLOTS:
 	// drop/mask
 	void testRemoveRowsWithMissingValues();
 	void testMaskRowsWithMissingValues();
+	void testMaskingRowRemovalUndoRedo();
+	void testSortMasksSingleColumn();
 
 	// flattening
 	void testFlatten00();
@@ -121,13 +123,20 @@ private Q_SLOTS:
 	void testStatisticsSpreadsheetChildIndex();
 	void testStatisticsSpreadsheetChildIndexAfterUndoRedo();
 
+	// clearing and data input
+	void testClearColumns();
+	void testClearCellsValidity();
+	void testClearMixedCellsValidity();
+	void testClearWholeColumn();
+	void testInvalidNumericInput();
+	void testRealZeroInput();
+	void testUndoRedoCellClear();
+
 #ifdef HAVE_VECTOR_BLF
 	void testLinkSpreadSheetImportBLF();
 #endif // HAVE_VECTOR_BLF
 
 	void testNaming();
-
-	void testClearColumns();
 
 private:
 	Spreadsheet* createSearchReplaceSpreadsheet();

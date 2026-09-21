@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -18,6 +18,7 @@
 #include "backend/core/aspectcommands.h"
 #include "backend/lib/PropertyChangeCommand.h"
 #include "backend/lib/SignallingUndoCommand.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -320,6 +321,25 @@ bool AbstractAspect::isLoading() const {
 	return d->m_isLoading;
 }
 
+void AbstractAspect::setChanged(bool changed) {
+	if (d->m_changed == changed || d->m_isLoading)
+		return;
+
+	d->m_changed = changed;
+
+	// update the status for the parent aspect if the current aspect is hidden
+	// to properly show the changed status in the aspect tree model
+	if (d->m_hidden && changed)
+		if (auto* p = parentAspect())
+			p->setChanged(true);
+
+	Q_EMIT aspectChangedStatusChanged(this);
+}
+
+bool AbstractAspect::isChanged() const {
+	return d->m_changed;
+}
+
 /**
  * \brief Return an icon to be used for decorating my views.
  */
@@ -377,35 +397,38 @@ QMenu* AbstractAspect::createContextMenu() {
 	menu->addSeparator();
 
 	// action to create data spreadsheet based on the results of the calculations for types that support it
-	QAction* actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+	if (inherits<XYAnalysisCurve>() || m_type == AspectType::XYEquationCurve || m_type == AspectType::Histogram || m_type == AspectType::BoxPlot) {
+		auto* action = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
 
-	// handle types that support it
-	bool dataAvailable = false;
-	if (const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this)) {
-		if (analysisCurve->resultAvailable()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
-			dataAvailable = true;
+		// handle types that support it
+		bool dataAvailable = false;
+		if (const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this)) {
+			if (analysisCurve->resultAvailable()) {
+				connect(action, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
+				dataAvailable = true;
+			}
+		} else if (const auto* equationCurve = dynamic_cast<XYEquationCurve*>(this)) {
+			if (equationCurve->dataAvailable()) {
+				connect(action, &QAction::triggered, static_cast<XYEquationCurve*>(this), &XYEquationCurve::createDataSpreadsheet);
+				dataAvailable = true;
+			}
+		} else if (const auto* histogram = dynamic_cast<Histogram*>(this)) {
+			if (histogram->bins()) {
+				connect(action, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
+				dataAvailable = true;
+			}
+		} else if (const auto* boxPlot = dynamic_cast<BoxPlot*>(this)) {
+			if (!boxPlot->dataColumns().isEmpty()) {
+				connect(action, &QAction::triggered, static_cast<BoxPlot*>(this), &BoxPlot::createDataSpreadsheet);
+				dataAvailable = true;
+			}
 		}
-	} else if (const auto* equationCurve = dynamic_cast<XYEquationCurve*>(this)) {
-		if (equationCurve->dataAvailable()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYEquationCurve*>(this), &XYEquationCurve::createDataSpreadsheet);
-			dataAvailable = true;
-		}
-	} else if (const auto* histogram = dynamic_cast<Histogram*>(this)) {
-		if (histogram->bins()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
-			dataAvailable = true;
-		}
-	} else if (const auto* boxPlot = dynamic_cast<BoxPlot*>(this)) {
-		if (!boxPlot->dataColumns().isEmpty()) {
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<BoxPlot*>(this), &BoxPlot::createDataSpreadsheet);
-			dataAvailable = true;
-		}
-	}
 
-	if (dataAvailable) {
-		menu->addAction(actionDataSpreadsheet);
-		menu->addSeparator();
+		if (dataAvailable) {
+			menu->addAction(action);
+			menu->addSeparator();
+		} else
+			delete action; // no results available yet, no need to show in the menu
 	}
 
 	// don't allow to rename and delete fixed objects and
@@ -689,13 +712,13 @@ void AbstractAspect::remove() {
 
 void AbstractAspect::moveUp() {
 	auto* parent = parentAspect();
-	if (parent)
+	if (parent && parent->indexOfChild<AbstractAspect>(this) > 0)
 		parent->moveChild(this, -1);
 }
 
 void AbstractAspect::moveDown() {
 	auto* parent = parentAspect();
-	if (parent)
+	if (parent && parent->indexOfChild<AbstractAspect>(this) < parent->childCount<AbstractAspect>() - 1)
 		parent->moveChild(this, 1);
 }
 
@@ -1028,7 +1051,7 @@ bool AbstractAspect::isUndoAware() const {
  * The only requirement is that the root Aspect reimplements undoStack() to get the
  * undo stack from somewhere (the default implementation just delegates to parentAspect()).
  */
-QUndoStack* AbstractAspect::undoStack() const {
+UndoStack* AbstractAspect::undoStack() const {
 	return parentAspect() ? parentAspect()->undoStack() : nullptr;
 }
 
@@ -1052,6 +1075,8 @@ void AbstractAspect::exec(QUndoCommand* cmd) {
 		cmd->redo();
 		delete cmd;
 	}
+
+	setChanged(true);
 }
 
 /**
@@ -1111,6 +1136,17 @@ void AbstractAspect::endMacro() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ * this function is called when the selection in the UI view was changed.
+ * forwards the selection/deselection to the ProjectExplorer via emitting a signal
+ * and triggers the navigation to this aspect's path in the project tree.
+ */
+void AbstractAspect::setSelectedInView(bool selected) {
+	if (selected)
+		Q_EMIT childAspectSelectedInView(this);
+	else
+		Q_EMIT childAspectDeselectedInView(this);
+}
 
 /*!
  * this function is called when the selection in ProjectExplorer was changed.
@@ -1211,6 +1247,7 @@ QString AbstractAspect::uniqueNameFor(const QString& name, const QStringList& na
 void AbstractAspect::connectChild(AbstractAspect* child) {
 	connect(child, &AbstractAspect::aspectDescriptionAboutToChange, this, &AbstractAspect::aspectDescriptionAboutToChange);
 	connect(child, &AbstractAspect::aspectDescriptionChanged, this, &AbstractAspect::aspectDescriptionChanged);
+	connect(child, &AbstractAspect::aspectChangedStatusChanged, this, &AbstractAspect::aspectChangedStatusChanged);
 	connect(child,
 			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
 			this,

@@ -164,7 +164,7 @@ void NetCDFFilter::setCurrentVarName(const QString& ds) {
 	d->currentVarName = ds;
 }
 
-const QString NetCDFFilter::currentVarName() const {
+const QString& NetCDFFilter::currentVarName() const {
 	return d->currentVarName;
 }
 

@@ -14,7 +14,6 @@
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
-#include "backend/worksheet/plots/PlotArea.h"
 
 /**
  * \class AbstractPlot
@@ -40,10 +39,6 @@ void AbstractPlot::init() {
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
-}
-
-PlotArea* AbstractPlot::plotArea() {
-	return m_plotArea;
 }
 
 AbstractCoordinateSystem* AbstractPlot::coordinateSystem(const int index) const {

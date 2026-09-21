@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Box Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -322,6 +322,7 @@ void BoxPlot::createDataSpreadsheet() {
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<QString>, dataColumnPaths, dataColumnPaths)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Ordering, ordering, ordering)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, variableWidth, variableWidth)
@@ -409,12 +410,10 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugLength, rugLength)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugWidth, rugWidth)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugOffset, rugOffset)
 
-QVector<QString>& BoxPlot::dataColumnPaths() const {
-	D(BoxPlot);
-	return d->dataColumnPaths;
-}
-
-bool BoxPlot::indicesMinMax(const Dimension dim, double, double, int& start, int& end) const {
+bool BoxPlot::indicesMinMax(const Dimension, double, double, int& start, int& end) const {
+	// The values are not important, because they are just passed to minMax() which does not consider the indices
+	start = 0;
+	end = 0;
 	return true;
 }
 
@@ -449,6 +448,13 @@ double BoxPlot::maximum(const Dimension dim) const {
 bool BoxPlot::hasData() const {
 	Q_D(const BoxPlot);
 	return !d->dataColumns.isEmpty();
+}
+
+int BoxPlot::dataCount(Dimension) const {
+	Q_D(const BoxPlot);
+	if (!hasData())
+		return -1;
+	return d->dataColumns.count();
 }
 
 bool BoxPlot::usingColumn(const AbstractColumn* column, bool) const {
@@ -777,7 +783,7 @@ void BoxPlotPrivate::adjustPropertiesContainers() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void BoxPlotPrivate::retransform() {
-	const bool suppressed = suppressRetransform || !isVisible() || q->isLoading();
+	const bool suppressed = retransformSuppressed();
 	Q_EMIT trackRetransformCalled(suppressed);
 	if (suppressed)
 		return;
@@ -1808,6 +1814,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(BoxPlot);
 
 	if (!readBasicAttributes(reader))

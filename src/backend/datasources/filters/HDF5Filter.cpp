@@ -1781,9 +1781,9 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			hid_t memtype = H5Tvlen_create(base_type);
 			m_status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, rdata);
 
-			size_t maxLength = 0;
+			int maxLength = 0;
 			for (int c = startColumn - 1; c < endColumn; c++) // columns
-				maxLength = std::max(maxLength, rdata[c].len);
+				maxLength = std::max(maxLength, (int)rdata[c].len);
 			if (endRow == -1 || endRow > (int)maxLength)
 				endRow = maxLength;
 			actualRows = endRow - startRow + 1;
@@ -1812,7 +1812,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			}
 
 			for (int c = startColumn - 1; c < endColumn; c++) { // columns
-				int length = rdata[c].len;
+				int length = (int)rdata[c].len;
 				// DEBUG("length = " << length)
 				/*for (hsize_t j = 0; j < length; j++) {
 					printf (" %d", data[j]);

@@ -22,7 +22,7 @@ public:
 	explicit DatasetModel(const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>&);
 	~DatasetModel();
 
-	QStringList collections();
+	const QStringList& collections();
 	QStringList categories(const QString&);
 	QStringList subcategories(const QString&, const QString&);
 	QStringList datasets(const QString&, const QString&, const QString&);

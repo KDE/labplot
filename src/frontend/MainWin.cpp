@@ -4,7 +4,7 @@
 	Description          : Main window of the application
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -31,11 +31,13 @@
 #endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
+#include "frontend/datasources/MQTTErrorWidget.h"
 #endif
 
 #include "frontend/ActionsManager.h"
 #include "frontend/GuiObserver.h"
 #include "frontend/HistoryDialog.h"
+#include "frontend/WhatsNewDialog.h"
 #include "frontend/ProjectExplorer.h"
 #include "frontend/SettingsDialog.h"
 #include "frontend/colormaps/ColorMapsDialog.h"
@@ -75,7 +77,7 @@
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QTemporaryFile>
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 // #include <QtWidgets>
 // #include <QtQuickWidgets/QQuickWidget>
 // #include <QQuickItem>
@@ -305,6 +307,13 @@ void MainWin::initGUI(const QString& fileName) {
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
+
+	if (m_showWhatsNew) {
+		QTimer::singleShot(0, this, [this]() {
+			auto* dlg = new WhatsNewDialog(this);
+			dlg->exec();
+		});
+	}
 }
 
 /**
@@ -473,7 +482,7 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 	\return \c true if the project still needs to be saved ("cancel" clicked), \c false otherwise.
  */
 bool MainWin::warnModified() {
-	if (m_project->hasChanged()) {
+	if (m_project->isChanged()) {
 		int option = KMessageBox::warningTwoActionsCancel(this, i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
 				i18n("Save Project"), KStandardGuiItem::save(), KStandardGuiItem::dontSave());
 		switch (option) {
@@ -538,7 +547,7 @@ bool MainWin::newProject(bool createInitialContent) {
 	connect(m_project, &Project::childAspectRemoved, this, &MainWin::handleAspectRemoved);
 	connect(m_project, &Project::childAspectAboutToBeRemoved, this, &MainWin::handleAspectAboutToBeRemoved);
 	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
-	connect(m_project, &Project::changed, this, &MainWin::projectChanged);
+	connect(m_project, &Project::aspectChangedStatusChanged, this, &MainWin::projectChanged);
 	connect(m_project, &Project::requestProjectContextMenu, this, &MainWin::createContextMenu);
 	connect(m_project, &Project::requestFolderContextMenu, this, &MainWin::createFolderContextMenu);
 	connect(m_project, &Project::mdiWindowVisibilityChanged, this, &MainWin::updateDockWindowVisibility);
@@ -546,6 +555,7 @@ bool MainWin::newProject(bool createInitialContent) {
 
 	// depending on the settings, create the default project content (add a worksheet, etc.)
 	if (createInitialContent) {
+		m_project->setUndoAware(false);
 		const auto newProject = (NewProject)group.readEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithSpreadsheet));
 		switch (newProject) {
 		case NewProject::WithWorksheet:
@@ -568,11 +578,12 @@ bool MainWin::newProject(bool createInitialContent) {
 		}
 		}
 
-		m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
-
+		m_project->setUndoAware(true);
 		m_actionsManager->updateGUIOnProjectChanges();
 		m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	}
+
+	m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
 
 	return true;
 }
@@ -747,7 +758,7 @@ void MainWin::openProject() {
 bool MainWin::openProject(const QString& fileName) {
 	if (m_project && fileName == m_project->fileName()) {
 		KMessageBox::information(this, i18n("The project file %1 is already opened.", fileName), i18n("Open Project"));
-		return false;
+		return true; // open project "succeeded" (by virtue of it already being open), so no error is reported and no new project is created
 	}
 
 	// check whether the file can be opened for reading at all before closing the current project
@@ -983,6 +994,10 @@ bool MainWin::save(const QString& fileName) {
 	}
 
 	WAIT_CURSOR_AUTO_RESET;
+	statusBar()->showMessage(i18n("Saving %1...", fileName));
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	QElapsedTimer timer;
+	timer.start();
 	const QString& tempFileName = tempFile.fileName();
 	DEBUG("Using temporary file " << STDSTRING(tempFileName))
 	tempFile.close();
@@ -1087,6 +1102,7 @@ bool MainWin::save(const QString& fileName) {
 	m_actionsManager->fillShareMenu();
 #endif
 
+	statusBar()->showMessage(i18n("Project successfully saved (in %1 seconds).", (float)timer.elapsed() / 1000));
 	return ok;
 }
 
@@ -1096,7 +1112,7 @@ bool MainWin::save(const QString& fileName) {
 void MainWin::autoSaveProject() {
 	// don't auto save when there are no changes or the file name
 	// was not provided yet (the project was never explicitly saved yet).
-	if (!m_project->hasChanged() || m_project->fileName().isEmpty())
+	if (!m_project->isChanged() || m_project->fileName().isEmpty())
 		return;
 
 	this->saveProject();
@@ -1124,7 +1140,7 @@ void MainWin::updateTitleBar() {
 				title = m_project->fileName();
 		}
 
-		if (m_project->hasChanged())
+		if (m_project->isChanged())
 			title += QLatin1String("    [") + i18n("Changed") + QLatin1Char(']');
 	} else
 		title = QLatin1String("LabPlot");
@@ -1209,7 +1225,7 @@ void MainWin::newSpreadsheet() {
 #ifdef HAVE_SCRIPTING
 void MainWin::newScript() {
 	auto* action = static_cast<QAction*>(QObject::sender());
-	auto* script = new Script(i18n("%1", action->data().toString()), action->data().toString());
+	auto* script = new Script(i18n("Script"), action->data().toString());
 	this->addAspectToProject(script);
 }
 #endif
@@ -1326,6 +1342,15 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	} else if (aspect->type() == AspectType::Folder)
 		for (auto* child : aspect->children<AbstractAspect>())
 			handleAspectAdded(child);
+#ifdef HAVE_MQTT
+	if (aspect->type() == AspectType::MQTTClient) {
+		auto* client = const_cast<MQTTClient*>(static_cast<const MQTTClient*>(aspect));
+		connect(client, &MQTTClient::clientErrorOccurred, this, [client](QMqttClient::ClientError error) {
+			auto* errorWidget = new MQTTErrorWidget(error, client);
+			errorWidget->show();
+		});
+	}
+#endif
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* aspect) {
@@ -1672,6 +1697,14 @@ void MainWin::migrateSettings() {
 		// delete the old entry and write the new one
 		group.deleteEntry(QLatin1String("DecimalSeparatorLocale"));
 		group.writeEntry(QLatin1String("NumberFormat"), static_cast<int>(language));
+	}
+
+	// detect first run after a version upgrade and schedule the "What's New" dialog
+	const QString lastVersion = group.readEntry(QLatin1String("lastRunVersion"), QString());
+	if (lastVersion != QLatin1String(LVERSION)) {
+		m_showWhatsNew = true;
+		group.writeEntry(QLatin1String("lastRunVersion"), QString(QLatin1String(LVERSION)));
+		Settings::sync();
 	}
 }
 

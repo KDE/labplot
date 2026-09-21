@@ -557,7 +557,7 @@ bool Heatmap::usingColumn(const AbstractColumn* column, bool indirect) const {
 }
 
 void Heatmap::recalc() {
-	D(Heatmap);
+	Q_D(Heatmap);
 	d->recalc();
 }
 

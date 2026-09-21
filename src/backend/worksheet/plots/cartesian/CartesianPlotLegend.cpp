@@ -163,7 +163,7 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, lineSymbolWidth, lineSymb
 
 // Title
 TextLabel* CartesianPlotLegend::title() {
-	D(CartesianPlotLegend);
+	Q_D(CartesianPlotLegend);
 	return d->title;
 }
 
@@ -851,6 +851,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
+	setIsLoading(true);
 	Q_D(CartesianPlotLegend);
 
 	if (!readBasicAttributes(reader))
