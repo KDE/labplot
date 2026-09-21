@@ -63,7 +63,7 @@ enum class AspectType : quint64 {
 	BoxPlot,
 	QQPlot,
 	KDEPlot,
-	
+
 	Heatmap,
 
 	// continuous improvement plots
