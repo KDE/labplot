@@ -26,6 +26,9 @@ private Q_SLOTS:
 
 	// dock related tests
 	void testAsciiImportDockRowCountUpdate();
+
+	// model related tests
+	void testAsciiImportModelRowCountUpdate();
 };
 
 #endif
