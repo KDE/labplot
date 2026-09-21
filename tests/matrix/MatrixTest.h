@@ -23,6 +23,9 @@ private Q_SLOTS:
 
 	// formula related tests
 	void formula1();
+
+	// dock related tests
+	void testAsciiImportDockRowCountUpdate();
 };
 
 #endif

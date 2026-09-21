@@ -1483,6 +1483,11 @@ void Matrix::finalizeImport(size_t /*columnOffset*/,
 	d->rowHeights.clear();
 	d->rowHeights.reserve(d->rowCount());
 
+	// the number of rows was determined only while reading the data and the underlying
+	// data vectors were resized directly, bypassing insertRows()/removeRows() and thus
+	// not emitting rowCountChanged(). Notify dependent objects (e.g. MatrixDock) explicitly.
+	Q_EMIT rowCountChanged(d->rowCount());
+
 	setSuppressDataChangedSignal(false);
 	setChanged();
 	setUndoAware(true);

@@ -10,7 +10,9 @@
 
 #include "MatrixTest.h"
 #include "backend/core/Project.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/matrix/Matrix.h"
+#include "frontend/dockwidgets/MatrixDock.h"
 #include "frontend/matrix/MatrixView.h"
 
 void MatrixTest::testLoadSaveNoData() {
@@ -119,6 +121,56 @@ void MatrixTest::formula1() {
 			QCOMPARE(m.cell<double>(i, j), 0);
 		}
 	}
+}
+
+//**********************************************************
+//********** dock related tests *****************************
+//**********************************************************
+/*!
+ * \brief MatrixTest::testAsciiImportDockRowCountUpdate
+ * After importing ascii data into a matrix, the row count determined during the import is applied
+ * directly to the underlying data vectors, bypassing insertRows()/removeRows(). Because of that,
+ * the MatrixDock, which relies on Matrix::rowCountChanged() to keep its row count spinbox in sync,
+ * needs to be notified explicitly in Matrix::finalizeImport(). Otherwise, the dock would still show
+ * the row count that was set before the import (the default 10x10 dimensions for a freshly created matrix).
+ */
+void MatrixTest::testAsciiImportDockRowCountUpdate() {
+	Project project;
+	auto* matrix = new Matrix(QStringLiteral("test"), false);
+	project.addChild(matrix);
+
+	MatrixDock dock(nullptr);
+	dock.setMatrices({matrix});
+
+	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
+	QCOMPARE(dock.ui.sbRowCount->value(), matrix->rowCount());
+	QCOMPARE(dock.ui.sbColumnCount->value(), matrix->columnCount());
+
+	// matrix data only supports the Double column mode, so the values need a decimal point
+	// to be auto-detected as Double instead of Integer
+	QStringList fileContent = {
+		QStringLiteral("1.0 2.0 3.0"),
+		QStringLiteral("4.0 5.0 6.0"),
+		QStringLiteral("7.0 8.0 9.0"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = true;
+	p.separator = QStringLiteral(" ");
+	p.headerEnabled = false;
+	filter.setProperties(p);
+
+	filter.readDataFromFile(savePath, matrix, AbstractFileFilter::ImportMode::Replace);
+	QVERIFY(filter.lastError().isEmpty());
+
+	QCOMPARE(matrix->rowCount(), 3);
+	QCOMPARE(matrix->columnCount(), 3);
+
+	QCOMPARE(dock.ui.sbRowCount->value(), 3);
+	QCOMPARE(dock.ui.sbColumnCount->value(), 3);
 }
 
 QTEST_MAIN(MatrixTest)

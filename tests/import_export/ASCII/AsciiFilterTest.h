@@ -113,6 +113,8 @@ private Q_SLOTS:
 
 	// matrix import
 	void testMatrixHeader();
+	void testMatrixIntegerColumnModeRejected();
+	void testMatrixIntegerAsDouble();
 
 	void testAppendRows();
 	void keepLast();
