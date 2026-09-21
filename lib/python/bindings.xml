@@ -254,6 +254,11 @@
         <?if !scripting ?>
         <declare-function signature="Project()" return-type="void"/>
         <?endif?>
+        <declare-function signature="path()const" return-type="QString"/>
+        <declare-function signature="fileName()const" return-type="QString"/>
+        <declare-function signature="setFileName(const QString&amp;)" return-type="void"/>
+        <declare-function signature="author()const" return-type="QString"/>
+        <declare-function signature="setAuthor(const QString&amp;)" return-type="void"/>
     </object-type>
 
     <!-- Column -->
