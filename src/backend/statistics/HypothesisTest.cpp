@@ -24,6 +24,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QRegularExpression>
 #include <QtConcurrent/QtConcurrent>
 
 #include <KConfig>
@@ -45,6 +46,51 @@ HypothesisTest::~HypothesisTest() {
 QString HypothesisTest::resultHtml() const {
 	Q_D(const HypothesisTest);
 	return d->resultText;
+}
+
+QString HypothesisTest::resultText() const {
+	Q_D(const HypothesisTest);
+	QString text = d->resultText;
+
+	// Convert HTML to plain text
+	// Replace headers
+	text.replace(QRegularExpression(QStringLiteral("<h1>(.*?)</h1>")),
+				 QStringLiteral("\\1\n") + QString(QStringLiteral("=")).repeated(40) + QStringLiteral("\n"));
+	text.replace(QRegularExpression(QStringLiteral("<h2>(.*?)</h2>")),
+				 QStringLiteral("\n\\1\n") + QString(QStringLiteral("-")).repeated(40) + QStringLiteral("\n"));
+
+	// Replace bold tags
+	text.replace(QStringLiteral("<b>"), QString());
+	text.replace(QStringLiteral("</b>"), QString());
+
+	// Replace line breaks
+	text.replace(QStringLiteral("<br>"), QStringLiteral("\n"));
+
+	// Remove table tags and format as plain text
+	text.remove(QRegularExpression(QStringLiteral("</?table[^>]*>")));
+	text.remove(QRegularExpression(QStringLiteral("</?thead[^>]*>")));
+	text.remove(QRegularExpression(QStringLiteral("</?tbody[^>]*>")));
+	text.replace(QRegularExpression(QStringLiteral("<tr[^>]*>")), QString());
+	text.replace(QStringLiteral("</tr>"), QStringLiteral("\n"));
+	text.replace(QRegularExpression(QStringLiteral("<th[^>]*>")), QString());
+	text.replace(QStringLiteral("</th>"), QStringLiteral("\t"));
+	text.replace(QRegularExpression(QStringLiteral("<td[^>]*>")), QString());
+	text.replace(QStringLiteral("</td>"), QStringLiteral("\t"));
+
+	// Clean up any remaining HTML tags
+	text.remove(QRegularExpression(QStringLiteral("<[^>]*>")));
+
+	// Convert HTML entities
+	text.replace(QStringLiteral("&nbsp;"), QStringLiteral(" "));
+	text.replace(QStringLiteral("&lt;"), QStringLiteral("<"));
+	text.replace(QStringLiteral("&gt;"), QStringLiteral(">"));
+	text.replace(QStringLiteral("&amp;"), QStringLiteral("&"));
+
+	// Clean up excessive whitespace
+	text.replace(QRegularExpression(QStringLiteral("[ \\t]+\n")), QStringLiteral("\n")); // trailing spaces
+	text.replace(QRegularExpression(QStringLiteral("\n{3,}")), QStringLiteral("\n\n")); // multiple blank lines
+
+	return text.trimmed();
 }
 
 void HypothesisTest::setDataColumns(const QVector<const AbstractColumn*>& cols) {
@@ -580,8 +626,7 @@ QString HypothesisTestPrivate::emptyResultColumnStatistics() {
 QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 	bool hasDescriptiveStatistics = (test != HypothesisTest::Test::chisq_independence) && (test != HypothesisTest::Test::log_rank_test);
 	bool hasDegreesOfFreedom = (test != HypothesisTest::Test::mann_whitney_u_test) && (test != HypothesisTest::Test::wilcoxon_test)
-		&& (test != HypothesisTest::Test::mann_kendall_test) && (test != HypothesisTest::Test::wald_wolfowitz_runs_test)
-		&& (test != HypothesisTest::Test::ramirez_runger_test);
+		&& (test != HypothesisTest::Test::mann_kendall_test) && (test != HypothesisTest::Test::wald_wolfowitz_runs_test);
 
 	QString result = (addResultTitle(HypothesisTest::testName(test)) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
 					  + addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")));
@@ -596,6 +641,9 @@ QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 		} else if (test == HypothesisTest::Test::one_way_anova_repeated) {
 			result += (addResultLine(i18n("Degrees of Freedom Treatment"), QStringLiteral("%L6"))
 					   + addResultLine(i18n("Degrees of Freedom Residuals"), QStringLiteral("%L7")));
+		} else if (test == HypothesisTest::Test::ramirez_runger_test) {
+			result +=
+				(addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L6")) + addResultLine(i18n("Effective Degrees of Freedom"), QStringLiteral("%L7")));
 		} else {
 			result += addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L6"));
 		}
@@ -655,9 +703,8 @@ QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 		result += (addResultLine(i18n("Number of Runs"), QStringLiteral("%L20")) + addResultLine(i18n("z-Value"), QStringLiteral("%L21"))
 				   + addResultLine(i18n("Sample Size"), QStringLiteral("%L22")));
 	} else if (test == HypothesisTest::Test::ramirez_runger_test) {
-		result += (addResultLine(i18n("Stability Ratio"), QStringLiteral("%L20")) + addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L21"))
-				   + addResultLine(i18n("Effective Degrees of Freedom"), QStringLiteral("%L22"))
-				   + addResultLine(i18n("Average Successive Difference"), QStringLiteral("%L23")));
+		result +=
+			(addResultLine(i18n("Stability Ratio"), QStringLiteral("%L20")) + addResultLine(i18n("Average Successive Difference"), QStringLiteral("%L23")));
 	}
 
 	result += addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%99");
@@ -911,12 +958,25 @@ void HypothesisTestPrivate::resetResult() {
 						 .arg(notAvailable())
 						 .arg(notAvailable())
 						 .arg(notAvailable())
+						 .arg(notAvailable())
 						 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::wald_wolfowitz_runs_test) {
 		resultText = resultTemplate(test)
 						 .arg(notAvailable())
 						 .arg(notAvailable())
 						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(testResultNotAvailable());
+	} else if (test == HypothesisTest::Test::ramirez_runger_test) {
+		resultText = resultTemplate(test)
+						 .arg(notAvailable())
+						 .arg(notAvailable())
+						 .arg(emptyResultColumnStatistics())
+						 .arg(notAvailable())
 						 .arg(notAvailable())
 						 .arg(notAvailable())
 						 .arg(notAvailable())
@@ -1836,9 +1896,9 @@ void HypothesisTestPrivate::performRamirezRungerTest() {
 					 .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col})))
 					 .arg(significanceLevel)
 					 .arg(result.p)
-					 .arg(result.stability_ratio)
 					 .arg(result.dof)
 					 .arg(result.eff_dof)
+					 .arg(result.stability_ratio)
 					 .arg(result.mean_diff)
 					 .arg(conclusion);
 }

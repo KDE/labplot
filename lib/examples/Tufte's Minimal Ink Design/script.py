@@ -65,7 +65,7 @@ config1.setXColumn(spreadsheet.column(0))
 config1.setYColumn(spreadsheet.column(1))
 config1.symbol().setStyle(Symbol.Style.Circle)
 config1.symbol().setSize(Worksheet.convertToSceneUnits(4, Worksheet.Unit.Point))
-config1.setValuesType(XYCurve.ValuesType.NoValues)
+config1.value().setType(Value.Type.NoValues)
 
 plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
 rangeX1 = plotArea1.range(CartesianCoordinateSystem.Dimension.X, 0)
@@ -179,7 +179,7 @@ config4.setYColumn(spreadsheet.column(1))
 config4.symbol().setStyle(Symbol.Style.Circle)
 config4.symbol().setSize(Worksheet.convertToSceneUnits(4, Worksheet.Unit.Point))
 config4.symbol().setColor("black")
-config4.setValuesType(XYCurve.ValuesType.NoValues)
+config4.value().setType(Value.Type.NoValues)
 
 plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
 rangeX4 = plotArea1.range(CartesianCoordinateSystem.Dimension.X, 0)
@@ -278,12 +278,12 @@ for i in range(spreadsheet.columnCount()):
 textLabel1 = TextLabel("Tufte's Minimal Ink Design")
 textLabel1.setText("Tufte's Minimal Ink Design")
 worksheet.addChild(textLabel1)
-textLabel1.setPosition(QPointF(Worksheet.convertToSceneUnits(0.1, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-0.7, Worksheet.Unit.Centimeter)))
+textLabel1.setPositionScene(QPointF(Worksheet.convertToSceneUnits(0.1, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-0.7, Worksheet.Unit.Centimeter)))
 
 textLabel2 = TextLabel("Standard Design")
 textLabel2.setText("Standard Design")
 worksheet.addChild(textLabel2)
-textLabel2.setPosition(QPointF(Worksheet.convertToSceneUnits(0.1, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(6.8, Worksheet.Unit.Centimeter)))
+textLabel2.setPositionScene(QPointF(Worksheet.convertToSceneUnits(0.1, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(6.8, Worksheet.Unit.Centimeter)))
 
 ###################################################################################################################################################################
 ###################################################################################################################################################################

@@ -20,6 +20,7 @@ private Q_SLOTS:
 	void testPeakHeight();
 	void testPeakDistance();
 	void testPeakHeightDistance();
+	void testNaNInfHandling();
 	// performance
 	// void testPerformance();
 };

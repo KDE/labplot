@@ -21,6 +21,7 @@
 #include "backend/datasources/filters/McapFilter.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/OdsFilter.h"
+#include "backend/datasources/filters/ParquetFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/ReadStatFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"

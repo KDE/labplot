@@ -28,7 +28,6 @@
 #include <KConfigGroup>
 
 #include <QMenu>
-#include <QTimer>
 #include <QXmlStreamWriter>
 
 /*!
@@ -125,19 +124,19 @@ void Spreadsheet::initConnectionsRowCountChanges() {
 	}
 
 	// handle row insertions
-	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=](const AbstractColumn*, int before, int count) {
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=, this](const AbstractColumn*, int before, int count) {
 		Q_EMIT rowsAboutToBeInserted(before, before + count - 1);
 	});
-	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=](const AbstractColumn* sender, int, int) {
+	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=, this](const AbstractColumn* sender, int, int) {
 		Q_EMIT rowsInserted(sender->rowCount());
 		Q_EMIT rowCountChanged(sender->rowCount());
 	});
 
 	// handle row removals
-	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=](const AbstractColumn*, int first, int count) {
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=, this](const AbstractColumn*, int first, int count) {
 		Q_EMIT rowsAboutToBeRemoved(first, first + count - 1);
 	});
-	connect(d->firstColumn, &AbstractColumn::rowsRemoved, this, [=](const AbstractColumn* sender, int, int) {
+	connect(d->firstColumn, &AbstractColumn::rowsRemoved, this, [=, this](const AbstractColumn* sender, int, int) {
 		Q_EMIT rowsRemoved(sender->rowCount());
 		Q_EMIT rowCountChanged(sender->rowCount());
 	});
@@ -168,14 +167,6 @@ QWidget* Spreadsheet::view() const {
 		m_partView = m_view;
 		connect(this, &Spreadsheet::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
-		});
-
-		// navigate to the first cell and set the focus so the user can start directly entering new data
-		QTimer::singleShot(0, this, [=]() {
-			if (m_view) { // we're accessing m_view outside of the event loop, it can be already deleted, check for nulltpr
-				m_view->goToCell(0, 0);
-				m_view->setFocus();
-			}
 		});
 	}
 	return m_partView;
@@ -332,6 +323,9 @@ void Spreadsheet::updateLocale() {
  * @param new_size The new number of rows in the spreadsheet.
  */
 void Spreadsheet::setRowCount(int new_size) {
+	if (columnCount() == 0)
+		return;
+
 	int current_size = rowCount();
 	if (new_size > current_size)
 		insertRows(current_size, new_size - current_size);
@@ -686,7 +680,14 @@ void Spreadsheet::insertColumns(int before, int count) {
 
 	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
 	const int cols = columnCount();
-	const int rows = rowCount();
+	int rows = rowCount();
+
+	if (cols == 0) {
+		KConfig config;
+		KConfigGroup group = config.group(QLatin1String("Spreadsheet"));
+		rows = group.readEntry(QLatin1String("RowCount"), 100);
+	}
+
 	const int last = before + count - 1;
 	Q_EMIT aspectsAboutToBeInserted(before, last);
 	for (int i = 0; i < count; i++) {
@@ -918,7 +919,7 @@ QMenu* Spreadsheet::createContextMenu() {
 	else {
 		menu->addSeparator();
 		auto* action = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this);
-		connect(action, &QAction::triggered, this, [=]() {
+		connect(action, &QAction::triggered, this, [=, this]() {
 			auto* parentSpreadsheet = static_cast<Spreadsheet*>(parentAspect());
 			parentSpreadsheet->toggleStatisticsSpreadsheet(false);
 		});

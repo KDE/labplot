@@ -74,7 +74,7 @@ public:
 	bool setCoordinateBindingEnabled(bool);
 	bool coordinateBindingEnabled() const;
 	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)
-	void setPosition(QPointF);
+	BASIC_D_ACCESSOR_DECL(QPointF, positionScene, PositionScene)
 	void setPositionInvalid(bool);
 	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
 	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)

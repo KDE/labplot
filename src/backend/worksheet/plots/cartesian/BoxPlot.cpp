@@ -666,7 +666,7 @@ Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
 	if (!q->isLoading())
 		background->init(group);
 
-	q->connect(background, &Background::updateRequested, [=] {
+	q->connect(background, &Background::updateRequested, [=, this] {
 		updatePixmap();
 		// TODO: Q_EMIT q->updateLegendRequested();
 	});
@@ -684,12 +684,12 @@ Line* BoxPlotPrivate::addBorderLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		// Q_EMIT q->updateLegendRequested();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		// Q_EMIT q->updateLegendRequested();
 	});
@@ -707,12 +707,12 @@ Line* BoxPlotPrivate::addMedianLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		// Q_EMIT q->updateLegendRequested();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		// Q_EMIT q->updateLegendRequested();
 	});

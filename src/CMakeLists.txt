@@ -18,6 +18,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/GuiTools.cpp
     ${FRONTEND_DIR}/HistoryDialog.cpp
     ${FRONTEND_DIR}/MainWin.cpp
+    ${FRONTEND_DIR}/CLIProcessor.cpp
     ${FRONTEND_DIR}/WhatsNewDialog.cpp
     ${FRONTEND_DIR}/PlotTemplateDialog.cpp
     ${FRONTEND_DIR}/ProjectExplorer.cpp
@@ -68,6 +69,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
     ${FRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
     ${FRONTEND_DIR}/datasources/McapOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/ParquetOptionsWidget.cpp
     ${FRONTEND_DIR}/dockwidgets/BaseDock.cpp
     ${FRONTEND_DIR}/dockwidgets/AspectDock.cpp
     ${FRONTEND_DIR}/dockwidgets/AxisDock.cpp
@@ -108,6 +110,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/XYInterpolationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYSmoothCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYFourierFilterCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYFourierTransformCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYHilbertTransformCurveDock.cpp
@@ -186,7 +189,9 @@ if(ENABLE_SCRIPTING)
     list(APPEND GUI_SOURCES
         ${FRONTEND_DIR}/dockwidgets/ScriptDock.cpp
         ${FRONTEND_DIR}/script/ScriptEditor.cpp
-        ${FRONTEND_DIR}/SettingsEditorPage.cpp)
+        ${FRONTEND_DIR}/script/ScriptCompletionModel.cpp
+        ${FRONTEND_DIR}/SettingsEditorPage.cpp
+        ${FRONTEND_DIR}/SettingsScriptingPage.cpp)
 endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -218,6 +223,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/settingsgeneralpage.ui
     ${FRONTEND_DIR}/ui/settingsspreadsheetpage.ui
     ${FRONTEND_DIR}/ui/settingsworksheetpage.ui
+    ${FRONTEND_DIR}/ui/settingsscriptingpage.ui
 #     ${FRONTEND_DIR}/ui/settingswelcomepage.ui
     ${FRONTEND_DIR}/ui/settingsdatasetspage.ui
     ${FRONTEND_DIR}/ui/settingsprintingpage.ui
@@ -241,6 +247,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/mcapoptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/parquetoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/odsoptionswidget.ui
     ${FRONTEND_DIR}/ui/datasources/xlsxoptionswidget.ui
     ${FRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
@@ -283,6 +290,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui
@@ -320,7 +328,8 @@ set(UI_SOURCES
 if(ENABLE_SCRIPTING)
     list(APPEND UI_SOURCES
         ${FRONTEND_DIR}/ui/script/scripteditorwidget.ui
-        ${FRONTEND_DIR}/ui/dockwidgets/scriptdock.ui)
+        ${FRONTEND_DIR}/ui/dockwidgets/scriptdock.ui
+        ${FRONTEND_DIR}/ui/settingsscriptingpage.ui)
 endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -467,6 +476,7 @@ set(LABPLOT_WORKSHEET_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierTransformCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp
@@ -490,6 +500,7 @@ set(LABPLOT_DATASOURCES_SOURCES
     ${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
     ${BACKEND_DIR}/datasources/filters/McapFilter.cpp
     ${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/ParquetFilter.cpp
     ${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
     ${BACKEND_DIR}/datasources/filters/OdsFilter.cpp
     ${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
@@ -518,6 +529,11 @@ if(ENABLE_PYTHON_SCRIPTING)
     # the PCH built for labplot_core_obj.  Skip PCH for those files only.
     set_source_files_properties(${shiboken_scripting_generated_sources} ${python_scripting_backend_sources}
         PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+    # Suppress shiboken-generated code warnings
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+        set_source_files_properties(${shiboken_scripting_generated_sources}
+            PROPERTIES COMPILE_FLAGS "-Wno-keyword-macro -Wno-shadow")
+    endif()
 endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -537,6 +553,7 @@ endif()
 
 set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_baseline.cpp
+    ${BACKEND_DIR}/nsl/nsl_changepoint.c
     ${BACKEND_DIR}/nsl/nsl_conv.c
     ${BACKEND_DIR}/nsl/nsl_corr.c
     ${BACKEND_DIR}/nsl/nsl_dft.c
@@ -623,6 +640,7 @@ add_library(labplotbackendlib STATIC
     $<TARGET_OBJECTS:labplot_datasources_obj>
 )
 add_library(labplotlib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${FRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
+
 # Propagate include path to all OBJECT libs so AUTOMOC and compilation find NumberSpinBox.h, etc.
 foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj labplot_datasources_obj)
     target_include_directories(${_labplot_obj} PRIVATE ${FRONTEND_DIR}/widgets)
@@ -631,12 +649,12 @@ target_include_directories(labplotbackendlib PUBLIC ${FRONTEND_DIR}/widgets) # s
 target_include_directories(labplotlib PUBLIC ${FRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 
 # add system QADS include path
-# Note: ads::qt6advanceddocking is always available (either found as a system package
+# Note: ads::qtadvanceddocking-qt6 is always available (either found as a system package
 # or built as a bundled target via add_subdirectory(3rdparty)). When using the bundled
-# version, qt${QT_VERSION_MAJOR}advanceddocking_FOUND is FALSE, so we must NOT guard
+# version, qtadvanceddocking-qt${QT_VERSION_MAJOR}_FOUND is FALSE, so we must NOT guard
 # this with if(_FOUND). labplotbackendlib and labplotlib also link it unconditionally.
-if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
-    get_target_property(QADS_LIBRARIES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_LINK_LIBRARIES)
+if(qtadvanceddocking-qt${QT_VERSION_MAJOR}_FOUND)
+    get_target_property(QADS_LIBRARIES ads::qtadvanceddocking-qt${QT_VERSION_MAJOR} INTERFACE_LINK_LIBRARIES)
     message(STATUS "QADS Found: ${QADS_LIBRARIES}")
 endif()
 # Apply compile definitions and Qt/KF link targets (for include paths) to all OBJECT libs
@@ -656,7 +674,7 @@ foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj lab
         KF${KF_MAJOR_VERSION}::Archive
         KF${KF_MAJOR_VERSION}::TextWidgets
         KF${KF_MAJOR_VERSION}::CoreAddons
-        qt${QT_VERSION_MAJOR}advanceddocking
+        qtadvanceddocking-qt${QT_VERSION_MAJOR}
     )
 
     # Precompiled headers: parse common Qt/KF and LabPlot lib/ headers once per OBJECT lib.
@@ -727,8 +745,17 @@ target_link_libraries(labplotbackendlib
     ${LIBCERF_LIBRARIES}
     ${MATIO_LIBRARIES}
     ${READSTAT_LIBRARIES}
-    qt${QT_VERSION_MAJOR}advanceddocking
+    qtadvanceddocking-qt${QT_VERSION_MAJOR}
 )
+
+if(Arrow_FOUND AND Parquet_FOUND)
+    target_link_libraries(labplotbackendlib Arrow::arrow_shared Parquet::parquet_shared)
+    # Suppress -Wundef for Arrow/Parquet headers which use #if _WIN32 instead of #ifdef
+    set_source_files_properties(
+        ${CMAKE_CURRENT_SOURCE_DIR}/backend/datasources/filters/ParquetFilter.cpp
+        PROPERTIES COMPILE_OPTIONS "-Wno-undef"
+    )
+endif()
 
 if(ENABLE_SCRIPTING)
 target_link_libraries(labplot_core_obj PRIVATE KF${KF_MAJOR_VERSION}::TextEditor)
@@ -743,6 +770,9 @@ if(ENABLE_PYTHON_SCRIPTING)
 target_link_libraries(labplot_core_obj PRIVATE ${python_scripting_link_libraries})
 target_include_directories(labplot_core_obj PRIVATE ${python_scripting_includes})
 target_link_libraries(labplotbackendlib ${python_scripting_link_libraries})
+# SettingsScriptingPage.cpp uses Python C-API directly (Py_IsInitialized, etc.)
+set_property(SOURCE ${FRONTEND_DIR}/SettingsScriptingPage.cpp APPEND PROPERTY
+    INCLUDE_DIRECTORIES $<TARGET_PROPERTY:Python3::Python,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 target_link_libraries(labplotlib
@@ -762,7 +792,9 @@ target_link_libraries(labplotlib
     KF${KF_MAJOR_VERSION}::Archive    # KFilterDev
     KF${KF_MAJOR_VERSION}::TextWidgets    # KTextEdit
     ${Poppler_LIBRARIES}
-    qt${QT_VERSION_MAJOR}advanceddocking
+    qtadvanceddocking-qt${QT_VERSION_MAJOR}
+    KF${KF_MAJOR_VERSION}::TextEditor
+    KF${KF_MAJOR_VERSION}::SyntaxHighlighting
 )
 
 if(ENABLE_SCRIPTING)
@@ -947,6 +979,38 @@ target_link_libraries(labplot labplotbackendlib labplotlib labplotnsllib)
 #endif()
 target_compile_definitions(labplot PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
+# macOS: Rewrite the versioned Python framework reference to the "Current" symlink
+# so the binary follows in-place Python upgrades (e.g., python.org installer updating
+# Python.framework/Versions/Current from 3.11 to 3.13). Without this, the binary
+# would be pinned to the specific minor version used at build time.
+# if(APPLE AND ENABLE_PYTHON_SCRIPTING)
+#    add_custom_command(TARGET labplot POST_BUILD
+#        COMMAND install_name_tool -change
+#            "@rpath/Python.framework/Versions/${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/Python"
+#            "@rpath/Python.framework/Versions/Current/Python"
+#            "$<TARGET_FILE:labplot>"
+#        COMMENT "labplot: rewriting Python framework path ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR} -> Current for stable ABI"
+#        VERBATIM
+#    )
+#endif()
+
+# see more: https://github.com/python/cpython/issues/104612#issuecomment-1755544510
+#if (ENABLE_PYTHON_SCRIPTING AND UNIX AND NOT APPLE)
+#    find_program(PATCHELF_EXECUTABLE patchelf REQUIRED)
+#    find_program(GREP_EXECUTABLE grep REQUIRED)
+#    add_custom_command(
+#        TARGET labplot POST_BUILD
+#        COMMAND ${PATCHELF_EXECUTABLE}
+#                --replace-needed
+#                ${_python_soname}
+#                libpython3.so
+#                $<TARGET_FILE:labplot>
+#        COMMAND ${CMAKE_COMMAND} -E env sh -c "${PATCHELF_EXECUTABLE} --print-needed $<TARGET_FILE:labplot> | ${GREP_EXECUTABLE} -qx libpython3.so"
+#        COMMENT "labplot: replacing versioned Python soname ${_python_soname} -> libpython3.so"
+#        VERBATIM
+#    )
+#endif()
+
 if(APPLE) # Apple app package
     set_target_properties(labplot PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
     set_target_properties(labplot PROPERTIES
@@ -954,6 +1018,13 @@ if(APPLE) # Apple app package
     MACOSX_BUNDLE_LONG_VERSION_STRING "${labplot_VERSION}"
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${labplot_VERSION}"
     MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.labplot")
+
+    # Add entitlements for code signing to allow loading Python packages with different signatures.
+    # Required to be able to install user-specific packages (numpy, etc.) and not being blocked by the
+    # check for the TeamID created during the signing step.
+    set_target_properties(labplot PROPERTIES
+        XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${CMAKE_SOURCE_DIR}/labplot.entitlements"
+    )
 endif()
 
 ############## installation ################################

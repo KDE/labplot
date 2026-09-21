@@ -147,6 +147,10 @@ void AsciiFilter::setDataSource(AbstractDataSource* dataSource) {
 
 void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode columnImportMode) {
 	Q_D(AsciiFilter);
+
+	if (!validateFileName(fileName))
+		return;
+
 	d->fileNumberLines = lineCount(fileName);
 
 	KCompressionDevice file(fileName);

@@ -91,7 +91,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
 	// Signals/Slots
-	connect(m_cbFileName, &KUrlComboBox::urlActivated, this, [=](const QUrl& url) {
+	connect(m_cbFileName, &KUrlComboBox::urlActivated, this, [=, this](const QUrl& url) {
 		fileNameChanged(url.path());
 	});
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportProjectDialog::selectFile);

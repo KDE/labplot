@@ -51,16 +51,36 @@
 Script::Script(const QString& name, const QString& lang)
 	: AbstractPart(name, AspectType::Script)
 	, m_kTextEditorDocument(KTextEditor::Editor::instance()->createDocument(this)) {
-	if (!Script::languages.contains(lang, Qt::CaseInsensitive)) {
-		m_initialized = false;
-		return;
+	if (!lang.isEmpty())
+		setRuntime(lang);
+}
+
+bool Script::setRuntime(const QString& runtime) {
+	if (m_initialized && m_language.compare(runtime, Qt::CaseInsensitive) == 0)
+		return true;
+
+	delete m_scriptRuntime;
+	m_scriptRuntime = nullptr;
+	m_language.clear();
+	m_initialized = false;
+
+	if (!Script::languages.contains(runtime, Qt::CaseInsensitive)) {
+		WARN("Unsupported scripting language: " << STDSTRING(runtime))
+		return false;
 	}
 
-	m_language = lang;
+	m_language = runtime;
 	m_scriptRuntime = Script::newScriptRuntime(m_language, this);
+	if (!m_scriptRuntime) {
+		WARN("Failed to initialize the " << STDSTRING(m_language) << " script runtime. Check that the interpreter is available.")
+		m_language.clear();
+		return false;
+	}
+
 	m_kTextEditorDocument->setMode(m_language);
 	m_initialized = true;
 	prepareDocument();
+	return true;
 }
 
 Script::~Script() {
@@ -116,6 +136,8 @@ bool Script::exportView() const {
 QWidget* Script::view() const {
 	if (!m_partView) {
 		m_view = new ScriptEditor(const_cast<Script*>(this));
+		if (!m_outputHtml.isEmpty())
+			m_view->setOutputHtml(m_outputHtml);
 		m_partView = m_view;
 	}
 
@@ -136,17 +158,33 @@ void Script::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("text"), m_kTextEditorDocument->text());
 	writer->writeEndElement();
 
+	const auto group = Settings::group(QStringLiteral("ScriptEditor"));
+	if (group.readEntry(QStringLiteral("SaveOutput"), true)) {
+		QString outputHtml;
+		if (m_view) {
+			if (!m_view->outputText().isEmpty())
+				outputHtml = m_view->outputHtml();
+		} else {
+			outputHtml = m_outputHtml;
+		}
+		if (!outputHtml.isEmpty()) {
+			writer->writeStartElement(QStringLiteral("output"));
+			writer->writeCharacters(outputHtml);
+			writer->writeEndElement();
+		}
+	}
+
 	writer->writeEndElement(); // close "script" section
 }
 
 bool Script::load(XmlStreamReader* reader, bool preview) {
-	if (!m_initialized)
-		return false;
-
 	if (!reader->isStartElement() || reader->name() != QLatin1String("script")) {
 		reader->raiseError(i18n("no script element found"));
 		return false;
 	}
+	const QString runtime = readRuntime(reader);
+	if (runtime.isEmpty() || !setRuntime(runtime))
+		return false;
 
 	if (!readBasicAttributes(reader))
 		return false;
@@ -169,6 +207,10 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 
 			// editor text
 			m_kTextEditorDocument->setText(attribs.value(QStringLiteral("text")).toString());
+		} else if (!preview && reader->name() == QLatin1String("output")) {
+			m_outputHtml = reader->readElementText(QXmlStreamReader::SkipChildElements);
+			if (m_view)
+				m_view->setOutputHtml(m_outputHtml);
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
@@ -216,6 +258,8 @@ void Script::runScript() {
 }
 
 QAbstractItemModel* Script::variableModel() {
+	if (!m_scriptRuntime)
+		return nullptr;
 	return m_scriptRuntime->variableModel();
 }
 
@@ -268,14 +312,6 @@ QMenu* Script::createContextMenu() {
 	Q_ASSERT(menu);
 	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
-}
-
-void Script::registerShortcuts() {
-	static_cast<ScriptEditor*>(view())->registerShortcuts();
-}
-
-void Script::unregisterShortcuts() {
-	static_cast<ScriptEditor*>(view())->unregisterShortcuts();
 }
 
 // static data members

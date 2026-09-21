@@ -40,7 +40,7 @@ esac
 
 echo "BUILDDIR=$BUILDDIR"
 
-THREADS="${2:-6}"
+THREADS="${2:-32}"
 
 if [ ! -d $BUILDDIR ]; then
 	mkdir $BUILDDIR

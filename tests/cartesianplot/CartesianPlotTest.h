@@ -71,5 +71,8 @@ private Q_SLOTS:
 
 	// handling of z-values on changes in the child hierarchy
 	void zValueAfterAddMoveRemove();
+
+	// legend
+	void legendSingleInstance();
 };
 #endif

@@ -64,7 +64,7 @@ private:
 
 
 	void processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName);
-	void processColumnsForHistogram(const QStringList&);
+	void processColumnsForHistogram();
 
 	void addCurvesToPlot(CartesianPlot*);
 	void addCurvesToPlots(Worksheet*);
@@ -74,12 +74,13 @@ private:
 	void addSingleSourceColumnPlot(const Column* column, CartesianPlot*);
 	void addMultiSourceColumnsPlot(const QVector<const AbstractColumn*>&, CartesianPlot*);
 
-	Column* columnFromName(const QString&) const;
+	Column* columnFromComboBox(const QComboBox*) const;
+	void populateColumnComboBox(QComboBox*) const;
+	AbstractAspect* determineParentFolder() const;
 	void adjustWorksheetSize(Worksheet*) const;
 	void setAxesTitles(CartesianPlot*, const QString& yColumnName = QString()) const;
 	void adjustPadding(CartesianPlot*, const QString& yColumnName, bool firstColumn = false, bool lastColumn = false) const;
 
-	void setAxesColumnLabels(CartesianPlot*, const QString& columnName);
 	void setAxesColumnLabels(CartesianPlot*, const Column*);
 
 private Q_SLOTS:

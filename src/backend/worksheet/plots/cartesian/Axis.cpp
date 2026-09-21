@@ -117,7 +117,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->line->setHidden(true);
 	d->line->setCreateXmlElement(false); // line properties are written out together with arrow properties in Axis::save()
 	addChild(d->line);
-	connect(d->line, &Line::updatePixmapRequested, [=] {
+	connect(d->line, &Line::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});
@@ -142,7 +142,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->majorTicksLine->setPrefix(QStringLiteral("MajorTicks"));
 	d->majorTicksLine->setCreateXmlElement(false);
 	addChild(d->majorTicksLine);
-	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=] {
+	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});
@@ -156,7 +156,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->minorTicksLine->setPrefix(QStringLiteral("MinorTicks"));
 	d->minorTicksLine->setCreateXmlElement(false);
 	addChild(d->minorTicksLine);
-	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=] {
+	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});
@@ -169,7 +169,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->majorGridLine->setPrefix(QStringLiteral("MajorGrid"));
 	d->majorGridLine->setHidden(true);
 	addChild(d->majorGridLine);
-	connect(d->majorGridLine, &Line::updatePixmapRequested, [=] {
+	connect(d->majorGridLine, &Line::updatePixmapRequested, [=, this] {
 		d->updateGrid();
 		Q_EMIT changed();
 	});
@@ -182,7 +182,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->minorGridLine->setPrefix(QStringLiteral("MinorGrid"));
 	d->minorGridLine->setHidden(true);
 	addChild(d->minorGridLine);
-	connect(d->minorGridLine, &Line::updatePixmapRequested, [=] {
+	connect(d->minorGridLine, &Line::updatePixmapRequested, [=, this] {
 		d->updateGrid();
 		Q_EMIT changed();
 	});
@@ -1863,23 +1863,36 @@ void AxisPrivate::retransformTicks() {
 
 		int columnIndex = iMajor; // iMajor used if for the labels a custom column is used.
 		if (majorTicksType == Axis::TicksType::CustomColumn) {
+			const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 			if (tmpMajorTicksNumberLimited) {
 				// Do not use all values of the column, but just a portion of it
 				columnIndex = majorTicksColumn->indexForValue(majorTickPos, true);
 				Q_ASSERT(columnIndex >= 0);
-				majorTickPos = majorTicksColumn->valueAt(columnIndex);
+				if (c && c->columnMode() == AbstractColumn::ColumnMode::DateTime)
+					majorTickPos = c->dateTimeAt(columnIndex).toMSecsSinceEpoch();
+				else
+					majorTickPos = majorTicksColumn->valueAt(columnIndex);
 
 				const auto columnIndexNextMajor = majorTicksColumn->indexForValue(nextMajorTickPos, true);
 				Q_ASSERT(columnIndexNextMajor >= 0);
-				nextMajorTickPos = majorTicksColumn->valueAt(columnIndexNextMajor);
+				if (c && c->columnMode() == AbstractColumn::ColumnMode::DateTime)
+					nextMajorTickPos = c->dateTimeAt(columnIndexNextMajor).toMSecsSinceEpoch();
+				else
+					nextMajorTickPos = majorTicksColumn->valueAt(columnIndexNextMajor);
 				if (majorTickPos == nextMajorTickPos && iMajor + 1 < tmpMajorTicksNumber)
 					continue; // No need to draw majorTicksPos, because NextMajorTicksPos will completely overlap. Only for the last one
 			} else {
 				columnIndex = firstIndexCustomColumn + columnIndex;
-				majorTickPos = majorTicksColumn->valueAt(columnIndex);
-				if (majorTicksColumn->rowCount() > columnIndex + 1)
-					nextMajorTickPos = majorTicksColumn->valueAt(columnIndex + 1);
+				if (c && c->columnMode() == AbstractColumn::ColumnMode::DateTime)
+					majorTickPos = c->dateTimeAt(columnIndex).toMSecsSinceEpoch();
 				else
+					majorTickPos = majorTicksColumn->valueAt(columnIndex);
+				if (majorTicksColumn->rowCount() > columnIndex + 1) {
+					if (c && c->columnMode() == AbstractColumn::ColumnMode::DateTime)
+						nextMajorTickPos = c->dateTimeAt(columnIndex + 1).toMSecsSinceEpoch();
+					else
+						nextMajorTickPos = majorTicksColumn->valueAt(columnIndex + 1);
+				} else
 					nextMajorTickPos = majorTickPos;
 			}
 		} else if (majorTicksType == Axis::TicksType::CustomColumnLabels) {
@@ -1975,9 +1988,20 @@ void AxisPrivate::retransformTicks() {
 					}
 				} else {
 					switch (labelsTextType) {
-					case Axis::LabelsTextType::PositionValues:
-						tickLabelValues << value;
+					case Axis::LabelsTextType::PositionValues: {
+						// If the major ticks are taken from a DateTime column,
+						// use the actual QDateTime ms value for label generation
+						// (tickLabelStrings expects msecs since epoch for datetime).
+						const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
+						if (c && c->columnMode() == AbstractColumn::ColumnMode::DateTime) {
+							if (columnIndex >= 0 && columnIndex < c->rowCount())
+								tickLabelValues << c->dateTimeAt(columnIndex).toMSecsSinceEpoch();
+							else
+								tickLabelValues << value;
+						} else
+							tickLabelValues << value;
 						break;
+					}
 					case Axis::LabelsTextType::CustomValues: {
 						if (labelsTextColumn && columnIndex < labelsTextColumn->rowCount()) {
 							switch (labelsTextColumn->columnMode()) {
@@ -2946,12 +2970,12 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 				offsetY -= titleRect.height() * title->scale() / 2.;
 				if (labelsPosition == Axis::LabelsPosition::Out)
 					offsetY -= labelsOffset + tickLabelsPath.boundingRect().height();
-				title->setPosition(QPointF((rect.topLeft().x() + rect.topRight().x()) / 2. + titleOffsetX, rect.bottomLeft().y() - offsetY));
+				title->setPositionScene(QPointF((rect.topLeft().x() + rect.topRight().x()) / 2. + titleOffsetX, rect.bottomLeft().y() - offsetY));
 			} else {
 				offsetX -= titleRect.height() * title->scale() / 2.;
 				if (labelsPosition == Axis::LabelsPosition::Out)
 					offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
-				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
+				title->setPositionScene(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
 
 			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);

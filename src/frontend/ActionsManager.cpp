@@ -44,6 +44,7 @@
 #include <QJsonArray>
 #include <QMenuBar>
 #include <QStatusBar>
+#include <QWindow>
 
 #include <KActionCollection>
 #include <KActionMenu>
@@ -63,7 +64,6 @@
 #include <Purpose/AlternativesModel>
 #include <Purpose/Menu>
 #include <QMimeType>
-#include <purpose_version.h>
 #endif
 
 #ifdef HAVE_TOUCHBAR
@@ -146,6 +146,14 @@ void ActionsManager::init() {
 	// load recently used projects
 	m_recentProjectsAction->loadEntries(Settings::group(QStringLiteral("Recent Files")));
 
+	#ifdef Q_OS_MAC
+	if (auto* windowHandle = m_mainWindow->windowHandle()) {
+		connect(windowHandle, &QWindow::windowStateChanged, this, [this](Qt::WindowState state) {
+			m_fullScreenAction->setChecked(state == Qt::WindowFullScreen);
+		});
+	}
+	#endif
+
 	// show memory info
 	m_memoryInfoAction->setEnabled(m_mainWindow->statusBar()->isEnabled()); // disable/enable menu with statusbar
 	const auto& groupMainWin = Settings::group(QStringLiteral("MainWin"));
@@ -159,21 +167,6 @@ void ActionsManager::init() {
 	auto* donateAction = collection->action(QStringLiteral("help_donate"));
 	if (donateAction)
 		collection->removeAction(donateAction);
-
-	// custom about dialog
-	auto* aboutAction = collection->action(QStringLiteral("help_about_app"));
-	if (aboutAction) {
-		// set menu icon
-		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
-
-		// disconnect default slot
-		disconnect(aboutAction, &QAction::triggered, nullptr, nullptr);
-		connect(aboutAction, &QAction::triggered, this,
-		[=]() {
-			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
-			aboutDialog.exec();
-		});
-	}
 }
 
 ActionsManager::~ActionsManager() {
@@ -187,7 +180,7 @@ void ActionsManager::initActions() {
 	// add some standard actions
 	m_newProjectAction = KStandardAction::openNew(
 		this,
-		[=]() {
+		[=, this]() {
 			m_mainWindow->newProject(true);
 		},
 		collection);
@@ -205,12 +198,27 @@ void ActionsManager::initActions() {
 	collection->addAction(QStringLiteral("file_example_open"), openExample);
 	connect(openExample, &QAction::triggered, m_mainWindow, &MainWin::exampleProjectsDialog);
 
+	#ifdef Q_OS_MAC
+	m_fullScreenAction = new QAction(QIcon::fromTheme(QStringLiteral("view-fullscreen")), i18n("&Full Screen Mode"), collection);
+	m_fullScreenAction->setCheckable(true);
+	collection->setDefaultShortcuts(m_fullScreenAction, KStandardShortcut::shortcut(KStandardShortcut::FullScreen));
+	collection->addAction(KStandardAction::name(KStandardAction::FullScreen), m_fullScreenAction);
+	connect(m_fullScreenAction, &QAction::triggered, this, &ActionsManager::toggleFullScreen);
+	#else
 	m_fullScreenAction = KStandardAction::fullScreen(m_mainWindow, &ActionsManager::toggleFullScreen, m_mainWindow, collection);
+	#endif
 
-	// QDEBUG(Q_FUNC_INFO << ", preferences action name:" << KStandardAction::name(KStandardAction::Preferences))
 	KStandardAction::preferences(m_mainWindow, &MainWin::settingsDialog, collection);
-	// QAction* action = collection->action(KStandardAction::name(KStandardAction::Preferences)));
 	KStandardAction::quit(m_mainWindow, &MainWin::close, collection);
+
+	// custom about dialog
+	auto* aboutAction = KStandardAction::aboutApp(this,
+		[=, this]() {
+			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
+			aboutDialog.exec();
+		},
+		collection);
+	aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
 
 	// New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-workbook-new")), i18n("Workbook"), this);
@@ -242,7 +250,7 @@ void ActionsManager::initActions() {
 	connect(m_newWorksheetAction, &QAction::triggered, m_mainWindow, &MainWin::newWorksheet);
 
 #ifdef HAVE_SCRIPTING
-	m_newPythonScriptAction = new QAction(Script::icon(QStringLiteral("Python")), i18n("Script"), this);
+	m_newPythonScriptAction = new QAction(Script::icon(QStringLiteral("Python")), i18n("Python Script"), this);
 	m_newPythonScriptAction->setToolTip(i18n("Creates a new Python script"));
 	m_newPythonScriptAction->setData(QStringLiteral("Python"));
 	collection->addAction(QStringLiteral("new_python_script"), m_newPythonScriptAction);
@@ -282,14 +290,14 @@ void ActionsManager::initActions() {
 	collection->addAction(QStringLiteral("import_file"), m_importFileAction);
 	collection->setDefaultShortcut(m_importFileAction, Qt::CTRL | Qt::SHIFT | Qt::Key_I);
 	m_importFileAction->setToolTip(i18n("Import data from a regular file"));
-	connect(m_importFileAction, &QAction::triggered, this, [=]() {
+	connect(m_importFileAction, &QAction::triggered, this, [=, this]() {
 		m_mainWindow->importFileDialog();
 	});
 
 	m_importDirAction = new QAction(QIcon::fromTheme(QStringLiteral("document-import")), i18n("From Directory..."), this);
 	collection->addAction(QStringLiteral("import_dir"), m_importDirAction);
 	m_importDirAction->setToolTip(i18n("Import multiple files from a directory"));
-	connect(m_importDirAction, &QAction::triggered, this, [=]() {
+	connect(m_importDirAction, &QAction::triggered, this, [=, this]() {
 		m_mainWindow->importDirDialog();
 	});
 
@@ -366,7 +374,7 @@ void ActionsManager::initActions() {
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Color Maps Browser"), this);
 	action->setToolTip(i18n("Open dialog to browse through the available color maps."));
 	collection->addAction(QStringLiteral("color_maps"), action);
-	connect(action, &QAction::triggered, this, [=]() {
+	connect(action, &QAction::triggered, this, [=, this]() {
 		auto* dlg = new ColorMapsDialog(m_mainWindow);
 	 	dlg->exec();
 	 	delete dlg;
@@ -863,10 +871,6 @@ void ActionsManager::initScriptToolbarActions() {
 	m_scriptRunAction = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), QStringLiteral("Run"), this);
 	m_scriptRunAction->setToolTip(QStringLiteral("Run the script"));
 	collection->addAction(QStringLiteral("script_run"), m_scriptRunAction);
-
-	m_scriptClearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), QStringLiteral("Clear"), this);
-	m_scriptClearAction->setToolTip(QStringLiteral("Clear the output of the script editor"));
-	collection->addAction(QStringLiteral("script_clear"), m_scriptClearAction);
 }
 #endif
 
@@ -1335,11 +1339,14 @@ void ActionsManager::updateGUI() {
 		// deactivate the shortcuts for the undo/redo action so those shortcuts can be used in the text editor
 		m_undoAction->setShortcut(QKeySequence());
 		m_redoAction->setShortcut(QKeySequence());
+		// script editor has its own search, unregister the shortcut for the global search here
+		m_searchAction->setShortcut(QKeySequence());
 	} else {
 		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
 		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->setVisible(false);
 		m_undoAction->setShortcut(QKeySequence::Undo);
 		m_redoAction->setShortcut(QKeySequence::Redo);
+		m_searchAction->setShortcut(QKeySequence::Find);
 	}
 #endif
 
@@ -1462,7 +1469,7 @@ void ActionsManager::toggleMenuBar(bool checked) {
 }
 
 void ActionsManager::toggleFullScreen(bool t) {
-	m_fullScreenAction->setFullScreen(m_mainWindow, t);
+	KToggleFullScreenAction::setFullScreen(m_mainWindow, t);
 }
 
 void ActionsManager::toggleDockWidget(QAction* action) {
@@ -1654,11 +1661,7 @@ void ActionsManager::connectScriptToolbarActions(const ScriptEditor* view) {
 	disconnect(m_scriptRunAction, &QAction::triggered, nullptr, nullptr);
 	connect(m_scriptRunAction, &QAction::triggered, view, &ScriptEditor::run);
 
-	disconnect(m_scriptClearAction, &QAction::triggered, nullptr, nullptr);
-	connect(m_scriptClearAction, &QAction::triggered, view, &ScriptEditor::clearOutput);
-
 	const bool initialized = view->isInitialized();
-	m_scriptRunAction->setEnabled(initialized);
 	m_scriptRunAction->setEnabled(initialized);
 }
 #endif

@@ -31,7 +31,7 @@ public:
 	double teXImageScaleFactor{
 		Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH / QApplication::primaryScreen()->physicalDotsPerInchX(), Worksheet::Unit::Centimeter)};
 
-	TextLabel::TextWrapper textWrapper;
+	TextLabel::TextWrapper textWrapper; // contains text and mode (HTML, TeX, Markdown)
 	QFont teXFont{QStringLiteral("Computer Modern"), 12}; // font for TeX mode, reasonable default font and size
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
 	QColor backgroundColor{1, 1, 1, 0}; // white transparent

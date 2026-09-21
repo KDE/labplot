@@ -58,6 +58,9 @@ public:
 	KParts::ReadWritePart* part();
 	QList<Cantor::PanelPlugin*> getPlugins();
 
+public Q_SLOTS:
+	void updateSettings();
+
 private:
 	mutable NotebookView* m_view{nullptr};
 	QString m_backendName;

@@ -45,7 +45,6 @@ worksheet.setLayoutVerticalSpacing(ms)
 plotArea = CartesianPlot("xy-plot")
 plotArea.setType(CartesianPlot.Type.FourAxes)
 plotArea.title().setText("El Niño-Southern Oscillation")
-border = plotArea.borderType()
 border = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea.setBorderType(border)
 worksheet.addChild(plotArea)
@@ -83,11 +82,8 @@ fit.setXDataColumn(spreadsheet.column(1))
 
 fitData = fit.initStartValues(fitData)
 fit.setFitData(fitData)
-fit.recalculate()
 
 plotArea.addChild(fit)
-
-fit.recalculate()
 
 plotArea.addLegend()
 

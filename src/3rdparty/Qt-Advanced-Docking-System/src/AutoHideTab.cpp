@@ -139,7 +139,7 @@ struct AutoHideTabPrivate
 	IFloatingWidget* createFloatingWidget(T* Widget)
 	{
 		auto w = new CFloatingDragPreview(Widget);
-		_this->connect(w, &CFloatingDragPreview::draggingCanceled, [=]()
+		_this->connect(w, &CFloatingDragPreview::draggingCanceled, [this]()
 		{
 			DragState = DraggingInactive;
 		});
@@ -162,7 +162,7 @@ void AutoHideTabPrivate::updateOrientation()
 	bool IconOnly = CDockManager::testAutoHideConfigFlag(CDockManager::AutoHideSideBarsIconOnly);
 	if (IconOnly && !_this->icon().isNull())
 	{
-		_this->setText(QStringLiteral(""));
+		_this->setText(QString());
 		_this->setOrientation(Qt::Horizontal);
 	}
 	else

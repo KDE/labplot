@@ -31,6 +31,8 @@ private Q_SLOTS:
 	void testlog2_int3();
 	void testlog2p1_int();
 
+	void testNaNInfHandling();
+
 private:
 	QString m_dataDir;
 };

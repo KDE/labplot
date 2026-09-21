@@ -346,6 +346,16 @@ private:
 	QStaticText m_cursor0Text{QStringLiteral("1")};
 	QStaticText m_cursor1Text{QStringLiteral("2")};
 
+	// Wheel zoom undo grouping
+	bool m_wheelZoomMacroActive{false};
+	QTimer* m_wheelZoomTimer{nullptr};
+
+	// Panning undo grouping
+	QMap<QPair<Dimension, int>, Range<double>> m_panningInitialRanges;
+
+	// Zoom selection undo grouping
+	QMap<QPair<Dimension, int>, Range<double>> m_zoomSelectionInitialRanges;
+
 	friend class MultiRangeTest;
 	friend class CartesianPlotTest;
 };

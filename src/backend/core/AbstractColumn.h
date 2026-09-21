@@ -164,11 +164,10 @@ public:
 	virtual bool isValid(int row) const;
 
 	bool isMasked(int row) const;
-	bool isMasked(const Interval<int>& i) const;
-	QVector<Interval<int>> maskedIntervals() const;
+	bool hasMaskedCells() const;
 	void clearMasks();
-	void setMasked(const Interval<int>& i, bool mask = true);
 	void setMasked(int row, bool mask = true);
+	void setMaskedRange(int startRow, int endRow, bool mask = true); // Efficient bulk masking
 
 	virtual QString formula(int row) const;
 	virtual QVector<Interval<int>> formulaIntervals() const;
@@ -274,12 +273,15 @@ protected:
 	virtual void handleRowRemoval(int first, int count);
 
 private:
+	QVector<Interval<int>> maskedIntervals() const; // Only for internal use (XML serialization)
+
 	AbstractColumnPrivate* d;
 
 	friend class AbstractColumnRemoveRowsCmd;
 	friend class AbstractColumnInsertRowsCmd;
 	friend class AbstractColumnClearMasksCmd;
 	friend class AbstractColumnSetMaskedCmd;
+	friend class SpreadsheetClearMasksCmd;
 };
 
 #endif

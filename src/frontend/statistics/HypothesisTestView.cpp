@@ -30,7 +30,7 @@ HypothesisTestView::HypothesisTestView(HypothesisTest* test) : QWidget()
 
 	// show the initial/default result and connect to the changes to update it
 	m_textEdit->setText(m_test->resultHtml());
-	connect(m_test, &HypothesisTest::changed, [=]() {
+	connect(m_test, &HypothesisTest::changed, [=, this]() {
 		m_textEdit->setText(m_test->resultHtml());
 	});
 }

@@ -45,7 +45,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kwidgetsaddons_version.h>
 
 #include <QBuffer>
 #include <QDateTime>
@@ -70,7 +69,7 @@ namespace {
 // the project version will be compared with this.
 // if you make any incompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 21;
+int buildXmlVersion = 22;
 }
 
 /**
@@ -446,6 +445,11 @@ bool Project::isSupportedProject(const QString& fileName) {
 		QFileInfo fi(fileName);
 		open = (fi.completeSuffix() == QLatin1String("cws")) || (fi.completeSuffix() == QLatin1String("ipynb"));
 	}
+#endif
+
+#ifdef HAVE_SCRIPTING
+	if (!open)
+		open = fileName.endsWith(QLatin1String(".py"), Qt::CaseInsensitive);
 #endif
 
 	return open;

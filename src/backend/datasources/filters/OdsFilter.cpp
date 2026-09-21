@@ -84,6 +84,8 @@ QString OdsFilter::fileInfoString(const QString& fileName) {
 }
 
 void OdsFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
+	if (!validateFileName(fileName))
+		return;
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 void OdsFilter::write(const QString& fileName, AbstractDataSource* dataSource) {

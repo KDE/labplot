@@ -63,7 +63,7 @@ public:
 	void addAspectToProject(AbstractAspect*);
 
 	enum class LoadOnStart { NewProject, LastProject, WelcomeScreen };
-	enum class NewProject { WithSpreadsheet, WithWorksheet, WithSpreadsheetWorksheet, WithNotebook };
+	enum class NewProject { WithSpreadsheet, WithWorksheet, WithSpreadsheetWorksheet, WithNotebook, WithScript };
 	enum class TitleBarMode { ShowFilePath, ShowFileName, ShowProjectName };
 
 #ifdef HAVE_KUSERFEEDBACK

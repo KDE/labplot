@@ -188,6 +188,7 @@ void BoxPlotDock::setModel() {
  */
 void BoxPlotDock::updateLocale() {
 	ui.leWhiskersRangeParameter->setLocale(QLocale());
+	symbolWidget->updateLocale();
 	borderLineWidget->updateLocale();
 	medianLineWidget->updateLocale();
 	whiskersLineWidget->updateLocale();
@@ -216,6 +217,12 @@ void BoxPlotDock::retranslateUi() {
 	ui.cbOrdering->addItem(i18n("By Median, Descending"));
 	ui.cbOrdering->addItem(i18n("By Mean, Ascending"));
 	ui.cbOrdering->addItem(i18n("By Mean, Descending"));
+
+	backgroundWidget->retranslateUi();
+	borderLineWidget->retranslateUi();
+	medianLineWidget->retranslateUi();
+	whiskersLineWidget->retranslateUi();
+	whiskersCapLineWidget->retranslateUi();
 
 	// tooltip texts
 	QString msg = i18n("If multiple data sets are provided, define how they should be ordered or use 'None' to keep the original order.");

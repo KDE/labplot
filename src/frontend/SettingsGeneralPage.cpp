@@ -224,6 +224,9 @@ void SettingsGeneralPage::retranslateUi() {
 #ifdef HAVE_CANTOR_LIBS
 	ui.cbNewProject->addItem(i18n("With Notebook"), static_cast<int>(MainWin::NewProject::WithNotebook));
 #endif
+#ifdef HAVE_SCRIPTING
+	ui.cbNewProject->addItem(i18n("With Python Script"), static_cast<int>(MainWin::NewProject::WithScript));
+#endif
 
 	QString msg = i18n("Notebook type to create automatically on startup");
 	ui.lNewProjectNotebook->setToolTip(msg);

@@ -54,6 +54,23 @@ void NSLStatsTest::testQuantile() {
 	}
 }
 
+void NSLStatsTest::testNaNInfHandling() {
+	double min_data[] = {NAN, 3.0, INFINITY, -2.0, 1.0, -INFINITY, 4.0};
+	double max_data[] = {NAN, -INFINITY, 3.0, -2.0, 1.0, INFINITY, 4.0};
+	double median_data[] = {NAN, 3.0, INFINITY, 1.0, 2.0, -INFINITY, 4.0};
+
+	QCOMPARE(nsl_stats_minimum(min_data, 7, nullptr), -2.0);
+	QCOMPARE(nsl_stats_maximum(max_data, 7, nullptr), 4.0);
+	QCOMPARE(nsl_stats_median(median_data, 1, 7, nsl_stats_quantile_type7), 2.5);
+	QCOMPARE(nsl_stats_quantile(median_data, 1, 7, 0.5, nsl_stats_quantile_type7), 2.5);
+
+	double all_invalid[] = {NAN, INFINITY, -INFINITY};
+	QVERIFY(std::isnan(nsl_stats_minimum(all_invalid, 3, nullptr)));
+	QVERIFY(std::isnan(nsl_stats_maximum(all_invalid, 3, nullptr)));
+	QVERIFY(std::isnan(nsl_stats_median(all_invalid, 1, 3, nsl_stats_quantile_type7)));
+	QVERIFY(std::isnan(nsl_stats_quantile(all_invalid, 1, 3, 0.5, nsl_stats_quantile_type7)));
+}
+
 // ##############################################################################
 // #################  performance
 // ##############################################################################

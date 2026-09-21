@@ -396,7 +396,7 @@ Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
 	if (!q->isLoading())
 		background->init(group);
 
-	q->connect(background, &Background::updateRequested, [=] {
+	q->connect(background, &Background::updateRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -414,12 +414,12 @@ Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
 	if (!q->isLoading())
 		line->init(group);
 
-	q->connect(line, &Line::updatePixmapRequested, [=] {
+	q->connect(line, &Line::updatePixmapRequested, [=, this] {
 		updatePixmap();
 		Q_EMIT q->appearanceChanged();
 	});
 
-	q->connect(line, &Line::updateRequested, [=] {
+	q->connect(line, &Line::updateRequested, [=, this] {
 		recalcShapeAndBoundingRect();
 		Q_EMIT q->appearanceChanged();
 	});
@@ -437,11 +437,11 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 	if (!q->isLoading())
 		value->init(group);
 
-	q->connect(value, &Value::updatePixmapRequested, [=] {
+	q->connect(value, &Value::updatePixmapRequested, [=, this] {
 		updatePixmap();
 	});
 
-	q->connect(value, &Value::updateRequested, [=] {
+	q->connect(value, &Value::updateRequested, [=, this] {
 		updateValues();
 	});
 }
@@ -453,11 +453,11 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	if (!q->isLoading())
 		errorBar->init(group);
 
-	q->connect(errorBar, &ErrorBar::updatePixmapRequested, [=] {
+	q->connect(errorBar, &ErrorBar::updatePixmapRequested, [=, this] {
 		updatePixmap();
 	});
 
-	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
+	q->connect(errorBar, &ErrorBar::updateRequested, [=, this] {
 		const int index = errorBars.indexOf(errorBar);
 		if (index != -1)
 			updateErrorBars(index);
@@ -1112,7 +1112,7 @@ void BarPlotPrivate::updateValues() {
 	const auto& prefix = value->prefix();
 	const auto& suffix = value->suffix();
 	const auto numberLocale = QLocale();
-	if (value->type() == Value::BinEntries) {
+	if (value->type() == Value::Values) {
 		for (int i = 0; i < valuesPointsLogical.count(); ++i) {
 			if (!visiblePoints[i])
 				continue;
@@ -1122,12 +1122,12 @@ void BarPlotPrivate::updateValues() {
 				if (type == BarPlot::Type::Stacked_100_Percent)
 					m_valuesStrings << prefix + numberToString(point.y(), numberLocale, value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
-					m_valuesStrings << prefix + numberToString(point.y(), numberLocale) + suffix;
+					m_valuesStrings << prefix + numberToString(point.y(), numberLocale, value->numericFormat(), value->precision()) + suffix;
 			} else {
 				if (type == BarPlot::Type::Stacked_100_Percent)
 					m_valuesStrings << prefix + numberToString(point.x(), numberLocale, value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
-					m_valuesStrings << prefix + numberToString(point.x(), numberLocale) + suffix;
+					m_valuesStrings << prefix + numberToString(point.x(), numberLocale, value->numericFormat(), value->precision()) + suffix;
 			}
 		}
 	} else if (value->type() == Value::CustomColumn) {

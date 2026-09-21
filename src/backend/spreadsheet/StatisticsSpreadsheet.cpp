@@ -7,7 +7,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "StatisticsSpreadsheet.h"
-#include "SpreadsheetModel.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
@@ -89,13 +88,19 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 		i18n("Kurtosis"),
 		i18n("Entropy"),
 	} {
-	auto* model = m_spreadsheet->model();
-	connect(model, &SpreadsheetModel::dataChanged, this, &StatisticsSpreadsheet::update);
-	connect(model, &SpreadsheetModel::rowsRemoved, this, &StatisticsSpreadsheet::update);
-	connect(model, &SpreadsheetModel::rowsInserted, this, &StatisticsSpreadsheet::update);
-	connect(model, &SpreadsheetModel::columnsRemoved, this, &StatisticsSpreadsheet::update);
-	connect(model, &SpreadsheetModel::columnsInserted, this, &StatisticsSpreadsheet::update);
-	connect(model, &SpreadsheetModel::headerDataChanged, this, &StatisticsSpreadsheet::updateColumnNames);
+	// Connect to parent spreadsheet for structure changes
+	connect(m_spreadsheet, &Spreadsheet::childAspectAdded, this, &StatisticsSpreadsheet::handleColumnAdded);
+	connect(m_spreadsheet, &Spreadsheet::childAspectRemoved, this, [this](const AbstractAspect*, const AbstractAspect*, const AbstractAspect* child) {
+		handleColumnRemoved(child);
+	});
+
+	// Connect to existing columns for data changes
+	const auto& columns = m_spreadsheet->children<Column>();
+	for (auto* col : columns) {
+		connect(col, &Column::dataChanged, this, &StatisticsSpreadsheet::update);
+		connect(col, &Column::maskingChanged, this, &StatisticsSpreadsheet::update);
+		connect(col, &AbstractAspect::aspectDescriptionChanged, this, &StatisticsSpreadsheet::updateColumnNames);
+	}
 
 	setUndoAware(false);
 	setFixed(true);
@@ -149,6 +154,8 @@ void StatisticsSpreadsheet::init() {
  * called when the data in the parent spreadsheet was modified.
  */
 void StatisticsSpreadsheet::update() {
+	m_updateInProgress = true;
+
 	// determine the number of activated metrics and properly resize the spreadsheet
 	int colCount = 1; // first column for "column name"
 	for (const auto& metric : m_metricValues) {
@@ -160,6 +167,15 @@ void StatisticsSpreadsheet::update() {
 	setRowCount(m_spreadsheet->columnCount());
 	setColumnCount(colCount);
 	setUndoAware(true);
+
+	// Connect to any new columns
+	const auto& sourceColumns = m_spreadsheet->children<Column>();
+	for (auto* col : sourceColumns) {
+		disconnect(col, nullptr, this, nullptr);
+		connect(col, &Column::dataChanged, this, &StatisticsSpreadsheet::update);
+		connect(col, &Column::maskingChanged, this, &StatisticsSpreadsheet::update);
+		connect(col, &AbstractAspect::aspectDescriptionChanged, this, &StatisticsSpreadsheet::updateColumnNames);
+	}
 
 	// make all columns in this statistics spreadsheet undo unaware
 	const auto& statisticsColumns = children<Column>();
@@ -290,6 +306,32 @@ void StatisticsSpreadsheet::update() {
 		}
 		++metricIndex;
 	}
+
+	m_updateInProgress = false;
+}
+
+void StatisticsSpreadsheet::handleColumnAdded(const AbstractAspect* aspect) {
+	auto* col = dynamic_cast<Column*>(const_cast<AbstractAspect*>(aspect));
+	if (!col)
+		return;
+
+	connect(col, &Column::dataChanged, this, &StatisticsSpreadsheet::update);
+	connect(col, &Column::maskingChanged, this, &StatisticsSpreadsheet::update);
+	connect(col, &AbstractAspect::aspectDescriptionChanged, this, &StatisticsSpreadsheet::updateColumnNames);
+
+	if (!m_updateInProgress)
+		update();
+}
+
+void StatisticsSpreadsheet::handleColumnRemoved(const AbstractAspect* aspect) {
+	auto* col = dynamic_cast<Column*>(const_cast<AbstractAspect*>(aspect));
+	if (!col)
+		return;
+
+	disconnect(col, nullptr, this, nullptr);
+
+	if (!m_updateInProgress)
+		update();
 }
 
 /*!

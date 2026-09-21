@@ -289,7 +289,7 @@ public:
     /**
      * Virtual Destructor
      */
-    virtual ~CDockWidget();
+    ~CDockWidget() override;
 
     /**
      * We return a fixed minimum size hint or the size hint of the content
@@ -421,6 +421,22 @@ public:
      * an autohide dock widget
      */
     SideBarLocation autoHideLocation() const;
+
+    /**
+     * Sets the preferred auto-hide sidebar location for this dock widget.
+     * When set to a value other than SideBarNone, the pin button will place
+     * this widget in the specified sidebar instead of using geometry-based
+     * detection. When unpinning, widgets with the same preferred location
+     * will be merged as tabs in the same dock area.
+     * Set to SideBarNone (default) to use the original geometry-based behavior.
+     */
+    void setPreferredAutoHideSideBarLocation(SideBarLocation Location);
+
+    /**
+     * Returns the preferred auto-hide sidebar location, or SideBarNone
+     * if no preference is set (geometry-based detection will be used).
+     */
+    SideBarLocation preferredAutoHideSideBarLocation() const;
 
     /**
      * This property holds whether the dock widget is floating.

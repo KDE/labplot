@@ -175,25 +175,25 @@ void SearchReplaceWidget::initSearchWidget() {
 	uiSearch.tbMatchCase->setChecked(conf.readEntry(QLatin1String("SimpleMatchCase"), false));
 
 	// connections
-	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=, this]() {
 		findNextSimple(true);
 		addCurrentTextToHistory(uiSearch.cbFind);
 	});
-	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=]() {
+	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=, this]() {
 		m_patternFound = false;
 		findNextSimple(false);
 	});
 
-	connect(uiSearch.tbFindNext, &QToolButton::clicked, this, [=]() {
+	connect(uiSearch.tbFindNext, &QToolButton::clicked, this, [=, this]() {
 		findNextSimple(true);
 		addCurrentTextToHistory(uiSearch.cbFind);
 	});
-	connect(uiSearch.tbFindPrev, &QToolButton::clicked, this, [=]() {
+	connect(uiSearch.tbFindPrev, &QToolButton::clicked, this, [=, this]() {
 		findPreviousSimple(true);
 		addCurrentTextToHistory(uiSearch.cbFind);
 	});
 
-	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, [=]() {
+	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, [=, this]() {
 		findNextSimple(false);
 	});
 	connect(uiSearch.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
@@ -288,32 +288,32 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	connect(uiSearchReplace.cbDataType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::dataTypeChanged);
 
 	connect(uiSearchReplace.cbOperator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::operatorChanged);
-	connect(uiSearchReplace.cbOperatorText, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=]() {
+	connect(uiSearchReplace.cbOperatorText, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=, this]() {
 		findNext(true);
 	});
 	connect(uiSearchReplace.cbOperatorDateTime, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::operatorDateTimeChanged);
 
-	connect(uiSearchReplace.cbValue1->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+	connect(uiSearchReplace.cbValue1->lineEdit(), &QLineEdit::returnPressed, this, [=, this]() {
 		findNext(true);
 	});
-	connect(uiSearchReplace.cbValue2->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+	connect(uiSearchReplace.cbValue2->lineEdit(), &QLineEdit::returnPressed, this, [=, this]() {
 		findNext(true);
 	});
-	connect(uiSearchReplace.cbValueText->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+	connect(uiSearchReplace.cbValueText->lineEdit(), &QLineEdit::returnPressed, this, [=, this]() {
 		findNext(true);
 	});
-	connect(uiSearchReplace.dteValue1, &QDateTimeEdit::dateTimeChanged, this, [=]() {
+	connect(uiSearchReplace.dteValue1, &QDateTimeEdit::dateTimeChanged, this, [=, this]() {
 		m_patternFound = false;
 		findNext(false);
 	});
-	connect(uiSearchReplace.dteValue2, &QDateTimeEdit::dateTimeChanged, this, [=]() {
+	connect(uiSearchReplace.dteValue2, &QDateTimeEdit::dateTimeChanged, this, [=, this]() {
 		m_patternFound = false;
 		findNext(false);
 	});
-	connect(uiSearchReplace.tbFindNext, &QToolButton::clicked, this, [=]() {
+	connect(uiSearchReplace.tbFindNext, &QToolButton::clicked, this, [=, this]() {
 		findNext(true);
 	});
-	connect(uiSearchReplace.tbFindPrev, &QToolButton::clicked, this, [=]() {
+	connect(uiSearchReplace.tbFindPrev, &QToolButton::clicked, this, [=, this]() {
 		findPrevious(true);
 	});
 	connect(uiSearchReplace.bFindAll, &QPushButton::clicked, this, &SearchReplaceWidget::findAll);
@@ -321,7 +321,7 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	connect(uiSearchReplace.cbReplace->lineEdit(), &QLineEdit::returnPressed, this, &SearchReplaceWidget::replaceNext);
 	connect(uiSearchReplace.bReplaceNext, &QPushButton::clicked, this, &SearchReplaceWidget::replaceNext);
 	connect(uiSearchReplace.bReplaceAll, &QPushButton::clicked, this, &SearchReplaceWidget::replaceAll);
-	connect(uiSearchReplace.tbMatchCase, &QToolButton::toggled, this, [=]() {
+	connect(uiSearchReplace.tbMatchCase, &QToolButton::toggled, this, [=, this]() {
 		findNext(false);
 	});
 

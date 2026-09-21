@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : line settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,6 +12,9 @@
 
 #include "backend/worksheet/Line.h"
 #include "ui_linewidget.h"
+
+#include <QMetaObject>
+#include <QVector>
 
 class QShowEvent;
 class KConfigGroup;
@@ -25,6 +28,7 @@ public:
 	void setLines(const QList<Line*>&);
 	void setEnabled(bool);
 	void updateLocale();
+	void retranslateUi();
 
 	void load();
 	void loadConfig(const KConfigGroup&);
@@ -36,6 +40,7 @@ private:
 	Ui::LineWidget ui;
 	Line* m_line{nullptr};
 	QList<Line*> m_lines;
+	QVector<QMetaObject::Connection> m_connections;
 	bool m_initializing{false};
 	QString m_prefix;
 

@@ -1993,6 +1993,7 @@ void RetransformTest::xyFunctionCurve() {
 	auto* equationCurve = static_cast<XYEquationCurve*>(equationCurves.at(0));
 	XYEquationCurve::EquationData data;
 	data.count = 100;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x");
 	data.expression2 = QString();
 	data.min = QStringLiteral("1");

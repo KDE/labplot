@@ -86,6 +86,7 @@ enum class AspectType : quint64 {
 	XYLineSimplificationCurve,
 	XYDifferentiationCurve,
 	XYFitCurve,
+	XYPiecewiseLinearFitCurve,
 	XYFourierFilterCurve,
 	XYFourierTransformCurve,
 	XYInterpolationCurve,
@@ -215,6 +216,8 @@ public:
 			return std::string_view("XYBaselineCorrectionCurve");
 		case AspectType::XYFitCurve:
 			return std::string_view("XYFitCurve");
+		case AspectType::XYPiecewiseLinearFitCurve:
+			return std::string_view("XYPiecewiseLinearFitCurve");
 		case AspectType::XYFourierFilterCurve:
 			return std::string_view("XYFourierFilterCurve");
 		case AspectType::XYFourierTransformCurve:

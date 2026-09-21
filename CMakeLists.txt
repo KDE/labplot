@@ -14,7 +14,7 @@ endif()
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -80,30 +80,32 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     TextWidgets
     WidgetsAddons
     XmlGui
-    NewStuffCore
-    NewStuff
+    # NewStuffCore
+    # NewStuff
+    TextEditor
+    SyntaxHighlighting
 OPTIONAL_COMPONENTS
     DocTools
-    Service
-    Parts
+    # Service
+    # Parts
     Purpose
-    SyntaxHighlighting
 )
 
 # TODO: make NewStuff optional?
-if(KF${KF_MAJOR_VERSION}NewStuff_FOUND)
-    add_definitions(-DHAVE_KF_NEW_STUFF)
-else()
-    message(STATUS "KF NewStuff not found")
-endif()
+# if(KF${KF_MAJOR_VERSION}NewStuff_FOUND)
+#    add_definitions(-DHAVE_KF_NEW_STUFF)
+#else()
+#    message(STATUS "KF NewStuff not found")
+#endif()
+
 # TODO: service not used?
-if(NOT KF${KF_MAJOR_VERSION}Service_FOUND)
-    message(STATUS "KF Service not found")
-endif()
+# if(NOT KF${KF_MAJOR_VERSION}Service_FOUND)
+#    message(STATUS "KF Service not found")
+# endif()
 # TODO: parts not used?
-if(NOT KF${KF_MAJOR_VERSION}Parts_FOUND)
-    message(STATUS "KF Parts not found")
-endif()
+# if(NOT KF${KF_MAJOR_VERSION}Parts_FOUND)
+#    message(STATUS "KF Parts not found")
+# endif()
 
 if(KF${KF_MAJOR_VERSION}Purpose_FOUND)
     add_definitions(-DHAVE_PURPOSE)
@@ -320,6 +322,7 @@ option(ENABLE_XLSX "Build with XLSX (Excel) support" ON)
 option(ENABLE_MCAP "Build with MCAP support" ON)
 option(ENABLE_ORCUS "Build with Orcus support" ON)
 option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" ON)
+option(ENABLE_PARQUET "Build with Apache Parquet/Arrow IPC/ORC support" ON)
 option(ENABLE_EIGEN3 "Build with Eigen3 support" ON)
 if(APPLE)
     # touch bar is Qt5 only
@@ -334,13 +337,13 @@ option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_SDK "Build with SDK support" ON)
 option(ENABLE_SDK_EXAMPLES "Build SDK examples" OFF)
 if(ENABLE_SDK)
-if(WIN32 OR APPLE)
+if(WIN32)
 option(ENABLE_PYTHON_SDK "Build with Python SDK support" OFF)
 else()
 option(ENABLE_PYTHON_SDK "Build with Python SDK support" ON)
 endif()
 endif()
-if(WIN32 OR APPLE)
+if(WIN32)
 option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" OFF)
 else()
 option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" ON)
@@ -600,6 +603,28 @@ else()
     message(STATUS "MCAP DISABLED")
 endif()
 
+### Apache Arrow / Parquet / ORC (optional) #############################
+if(ENABLE_PARQUET)
+    find_package(Arrow QUIET)
+    find_package(Parquet QUIET)
+    if(Arrow_FOUND AND Parquet_FOUND)
+        add_definitions(-DHAVE_PARQUET)
+        message(STATUS "Found Apache Arrow (version \"${Arrow_VERSION}\") and Parquet")
+        # ORC support is optional — detect via Arrow's ORC adapter header
+        get_target_property(_arrow_include_dir Arrow::arrow_shared INTERFACE_INCLUDE_DIRECTORIES)
+        if(EXISTS "${_arrow_include_dir}/arrow/adapters/orc/adapter.h")
+            add_definitions(-DHAVE_ORC)
+            message(STATUS "Found Apache ORC support in Arrow")
+        else()
+            message(STATUS "Apache ORC support NOT FOUND (ORC import disabled)")
+        endif()
+    else()
+        message(STATUS "Apache Arrow/Parquet libraries NOT FOUND.")
+    endif()
+else()
+    message(STATUS "Apache Parquet/Arrow IPC/ORC support DISABLED")
+endif()
+
 ### ROOT (optional) #############################
 if(ENABLE_ROOT)
     if(ZLIB_FOUND AND LZ4_FOUND)
@@ -745,7 +770,11 @@ endif()
 
 ### Python3 (optional) #############################
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
-    find_package(Python3 COMPONENTS Development REQUIRED)
+    set(PYTHON_ABI_MAJOR_VERSION "3")
+    set(PYTHON_ABI_MINOR_VERSION "9")
+    set(PYTHON_ABI_VERSION "${PYTHON_ABI_MAJOR_VERSION}.${PYTHON_ABI_MINOR_VERSION}")
+    find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Development REQUIRED)
+    message(STATUS "Building with Python ${Python3_VERSION} (stable ABI minimum: ${PYTHON_ABI_VERSION})")
     find_package(PySide6 QUIET REQUIRED)
     if(PySide6_FOUND)
         message(STATUS "Found PySide6: ${PySide6_PATH}, ${PySide6_INCLUDE_DIRS}, ${PySide6_TYPESYSTEMS}, ${PySide6_ABI3_LIBRARY}")
@@ -757,12 +786,20 @@ if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     endif()
 endif()
 if(ENABLE_PYTHON_SDK)
-    find_package(Python3 COMPONENTS Interpreter REQUIRED)
+    find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Interpreter REQUIRED)
 endif()
 if(ENABLE_PYTHON_SCRIPTING)
-    find_package(Python3 COMPONENTS Development.Embed REQUIRED)
+    find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Development.Embed REQUIRED)
     add_definitions(-DHAVE_PYTHON_SCRIPTING)
-    add_definitions(-DPYTHON3_VERSION_STRING=\"${Python3_VERSION}\")
+    math(EXPR PYTHON_ABI_VERSION_HEX
+        "(((${PYTHON_ABI_MAJOR_VERSION}) & 0xff) << 24) |
+        (((${PYTHON_ABI_MINOR_VERSION}) & 0xff) << 16) |
+        (((0) & 0xff) << 8) |
+        (((0) & 0xf) << 4) |
+        (((0) & 0xf) << 0)"
+        OUTPUT_FORMAT HEXADECIMAL
+    )
+    add_definitions(-DPYTHON3_VERSION_STRING="${PYTHON_ABI_VERSION}")
 endif()
 
 # Qt Advanced Docking System (required) #####################
@@ -789,9 +826,12 @@ endif()
 if(ENABLE_PYTHON_SCRIPTING #[[OR ENABLE_JULIA_SCRIPTING OR ENABLE_LUA_SCRIPTING ...]])
     find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS TextEditor) # KTextEditor is required for the script editor
     set(ENABLE_SCRIPTING ON) # at least one scripting runtime is enabled
-    add_definitions(-DHAVE_SCRIPTING)
 else()
     set(ENABLE_SCRIPTING OFF) # no scripting runtime is enabled
+endif()
+
+if(ENABLE_SCRIPTING)
+    list(APPEND LABPLOT_COMPILE_DEFINITIONS -DHAVE_SCRIPTING)
 endif()
 
 message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")

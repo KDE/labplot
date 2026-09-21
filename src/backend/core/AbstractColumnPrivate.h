@@ -13,7 +13,7 @@
 #define ABSTRACT_COLUMN_PRIVATE_H
 
 #include "backend/core/AbstractColumn.h"
-#include "backend/lib/IntervalAttribute.h"
+#include <QBitArray>
 
 class AbstractColumnPrivate : public QObject {
 	Q_OBJECT
@@ -33,7 +33,7 @@ public:
 	}
 
 	bool m_suppressDataChangedSignal{false};
-	IntervalAttribute<bool> m_masking;
+	QBitArray m_masking; // One bit per row - O(1) operations, predictable memory
 	AbstractColumn::HeatmapFormat* m_heatmapFormat{nullptr};
 
 private:

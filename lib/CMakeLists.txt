@@ -93,7 +93,12 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYIntegrationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
+)
+
+set(STATISTICS_SOURCES
+    ${BACKEND_DIR}/statistics/HypothesisTest.cpp
 )
 
 set(TIME_SERIES_ANALYSIS_SOURCES
@@ -110,11 +115,13 @@ set(SDK_SOURCES
     ${WORKSHEET_ELEMENT_CONTAINER_SOURCES}
     ${PLOT_AREA_ELEMENT_SOURCES}
     ${PLOT_SOURCES}
+    ${STATISTICS_SOURCES}
     ${TIME_SERIES_ANALYSIS_SOURCES}
 )
 
 set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_baseline.cpp
+    ${BACKEND_DIR}/nsl/nsl_changepoint.c
     ${BACKEND_DIR}/nsl/nsl_conv.c
     ${BACKEND_DIR}/nsl/nsl_corr.c
     ${BACKEND_DIR}/nsl/nsl_dft.c
@@ -138,6 +145,7 @@ set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_sf_window.c
     ${BACKEND_DIR}/nsl/nsl_smooth.c
     ${BACKEND_DIR}/nsl/nsl_sort.c
+    ${BACKEND_DIR}/nsl/nsl_statistical_test.c
     ${BACKEND_DIR}/nsl/nsl_stats.c
 )
 
@@ -176,6 +184,7 @@ set(SDK_DEPENDENCY_SOURCES
 
 set(SDK_INTERNAL_SOURCES
     ${FRONTEND_DIR}/worksheet/WorksheetView.cpp
+    ${FRONTEND_DIR}/statistics/HypothesisTestView.cpp
     ${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
     ${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
     ${BACKEND_DIR}/core/datatypes/Double2IntegerFilter.h
@@ -306,6 +315,19 @@ if(WIN32)
 if(PSAPI)
     target_link_libraries(liblabplot PRIVATE ${PSAPI})
 endif()
+endif()
+
+# macOS: Make Python library path version-independent for stable ABI compatibility.
+# Same adjustment as for the labplot executable in src/CMakeLists.txt.
+if(APPLE AND ENABLE_PYTHON_SCRIPTING)
+    add_custom_command(TARGET liblabplot POST_BUILD
+        COMMAND install_name_tool -change
+            "@rpath/Python.framework/Versions/${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/Python"
+            "@rpath/Python.framework/Versions/Current/Python"
+            "$<TARGET_FILE:liblabplot>"
+        COMMENT "liblabplot: rewriting Python framework path ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR} -> Current for stable ABI"
+        VERBATIM
+    )
 endif()
 
 ############## installation ################################

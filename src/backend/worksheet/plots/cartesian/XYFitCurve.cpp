@@ -929,7 +929,7 @@ void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 		exec(new XYFitCurveSetXErrorColumnCmd(d, column, ki18n("%1: assign x-error")));
 		handleSourceDataChanged();
 		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, [=]() {
+			connect(column, &AbstractColumn::dataChanged, this, [=, this]() {
 				handleSourceDataChanged();
 			});
 			// TODO: disconnect on undo
@@ -944,7 +944,7 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 		exec(new XYFitCurveSetYErrorColumnCmd(d, column, ki18n("%1: assign y-error")));
 		handleSourceDataChanged();
 		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, [=]() {
+			connect(column, &AbstractColumn::dataChanged, this, [=, this]() {
 				handleSourceDataChanged();
 			});
 			// TODO: disconnect on undo
@@ -1055,6 +1055,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	// DEBUG(Q_FUNC_INFO);
 	const size_t n = ((struct data*)params)->n;
 	double* xVector = ((struct data*)params)->x;
+	double* yVector = ((struct data*)params)->y;
 	double* weight = ((struct data*)params)->weight;
 	auto modelCategory = ((struct data*)params)->modelCategory;
 	unsigned int modelType = ((struct data*)params)->modelType;
@@ -1070,11 +1071,20 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	// Y_i = model and the x_j are the parameters
 	double x;
 
+	for (size_t i = 0; i < n; ++i) {
+		if (!std::isfinite(xVector[i]) || !std::isfinite(yVector[i]) || !std::isfinite(weight[i])) {
+			for (unsigned int j = 0; j < (unsigned int)paramNames->size(); ++j)
+				gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
+		}
+	}
+
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
 		switch (modelType) {
 		case nsl_fit_model_polynomial: // Y(x) = c0 + c1*x + ... + cn*x^n
 			for (size_t i = 0; i < n; i++) {
+				if (!std::isfinite(xVector[i]) || !std::isfinite(yVector[i]) || !std::isfinite(weight[i]))
+					continue;
 				x = xVector[i];
 				for (unsigned int j = 0; j < (unsigned int)paramNames->size(); ++j) {
 					if (fixed[j])
@@ -2824,7 +2834,18 @@ bool XYFitCurvePrivate::evaluate(bool preview) {
 	if (preview) // results not available yet
 		paramValues = fitData.paramStartValues;
 
-	bool valid = parser->tryEvaluateCartesian(fitData.model, xRange, nrPoints, xVector, yVector, fitData.paramNames, paramValues);
+	// check the axis scale from the parent plot to enable logarithmic spacing, if needed
+	RangeT::Scale xScale = RangeT::Scale::Linear; // default to linear
+	auto* parentPlot = q->plot();
+	if (parentPlot) {
+		auto cs = parentPlot->coordinateSystem(q->coordinateSystemIndex());
+		if (cs) {
+			xScale = parentPlot->xRangeScale(cs->index(Dimension::X));
+			DEBUG(Q_FUNC_INFO << ", use x-axis scale = " << (int)xScale);
+		}
+	}
+
+	bool valid = parser->tryEvaluateCartesian(fitData.model, xRange, nrPoints, xVector, yVector, fitData.paramNames, paramValues, xScale);
 
 	if (!valid) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Parsing fit function failed")

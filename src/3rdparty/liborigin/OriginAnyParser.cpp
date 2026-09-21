@@ -3259,7 +3259,7 @@ void OriginAnyParser::outputProjectTree(std::ostream &out)
     out << "Origin project Tree" << endl;
 
     char cdsz[21];
-    for (tree<ProjectNode>::iterator it = projectTree.begin(projectTree.begin());
+    for (tree<ProjectNode>::sibling_iterator it = projectTree.begin(projectTree.begin());
          it != projectTree.end(projectTree.begin()); ++it) {
         strftime(cdsz, sizeof(cdsz), "%F %T", gmtime(&(*it).creationDate));
         out << string(projectTree.depth(it) - 1, ' ') << (*it).name.c_str() << "\t" << cdsz << endl;

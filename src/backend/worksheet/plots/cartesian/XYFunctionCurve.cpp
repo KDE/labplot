@@ -384,7 +384,7 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 		if (!validEval)
 			DEBUG(Q_FUNC_INFO << ", WARNING: failed parsing function!")
 	}
-	m_result.available = true;
+	m_result.available = valid; // available is only true if the calculation was valid and we really generated some data above
 	m_result.valid = valid;
 	m_result.status = status;
 	m_result.elapsedTime = timer.elapsed();

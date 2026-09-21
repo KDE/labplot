@@ -63,7 +63,7 @@ void CustomPoint::init(bool loading) {
 	connect(d->symbol, &Symbol::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
 	});
-	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
+	connect(d->symbol, &Symbol::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});

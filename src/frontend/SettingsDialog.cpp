@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : application settings dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,6 +16,7 @@
 #include "SettingsSpreadsheetPage.h"
 #include "SettingsWorksheetPage.h"
 #ifdef HAVE_SCRIPTING
+#include "SettingsScriptingPage.h"
 #include "SettingsEditorPage.h"
 #endif
 
@@ -96,8 +97,14 @@ SettingsDialog::SettingsDialog(QWidget* parent, const QLocale& locale)
 #endif
 
 #ifdef HAVE_SCRIPTING
+	// SettingsScirptingPage as the parent page for Scripting and SriptEditorPage as a subpage of it:
+	m_scriptingPage = new SettingsScriptingPage(this);
+	KPageWidgetItem* scriptingPageItem = addPage(m_scriptingPage, i18n("Scripting"));
+	scriptingPageItem->setIcon(QIcon::fromTheme(QLatin1String("applications-development")));
+	connect(m_scriptingPage, &SettingsScriptingPage::settingsChanged, this, &SettingsDialog::changed);
+
 	m_editorRootPage = new SettingsEditorPage(this);
-	m_editorRootItem = addPage(m_editorRootPage, i18n("Script Editor"));
+	m_editorRootItem = addSubPage(scriptingPageItem, m_editorRootPage, i18n("Editor"));
 	m_editorRootPage->addSubPages(m_editorRootItem, this);
 	m_editorRootItem->setIcon(QIcon::fromTheme(QLatin1String("accessories-text-editor")));
 	connect(m_editorRootPage, &SettingsEditorPage::settingsChanged, this, &SettingsDialog::changed);
@@ -186,6 +193,7 @@ void SettingsDialog::applySettings() {
 #endif
 	changes << m_datasetsPage->applySettings();
 #ifdef HAVE_SCRIPTING
+	changes << m_scriptingPage->applySettings();
 	changes << m_editorRootPage->applySettings();
 #endif
 
@@ -211,6 +219,7 @@ void SettingsDialog::restoreDefaults() {
 #endif
 	m_datasetsPage->restoreDefaults();
 #ifdef HAVE_SCRIPTING
+	m_scriptingPage->restoreDefaults();
 	m_editorRootPage->restoreDefaults();
 #endif
 }

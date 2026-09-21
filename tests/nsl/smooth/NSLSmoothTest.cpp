@@ -414,4 +414,64 @@ void NSLSmoothTest::testPerformance_periodic() {
 	}
 }
 
+// ##############################################################################
+// #################  LOWESS tests
+// ##############################################################################
+
+void NSLSmoothTest::testLOWESS_basic() {
+	// Test data: noisy parabola y = x^2 with some noise
+	const int l = 20;
+	double xdata[l];
+	double ydata[l];
+
+	// Generate test data
+	for (int i = 0; i < l; i++) {
+		xdata[i] = (double)i / 10.0; // 0.0, 0.1, 0.2, ..., 1.9
+		ydata[i] = xdata[i] * xdata[i]; // parabola
+	}
+
+	// Add some noise to middle points
+	ydata[8] += 0.1;
+	ydata[10] -= 0.1;
+
+	// Apply LOWESS smoothing
+	const double span = 0.5; // Use 50% of points for local regression
+	const double delta = 0.0; // No optimization
+	const int iterations = 2; // Two robustifying iterations
+
+	int status = nsl_smooth_lowess(xdata, ydata, l, span, delta, iterations);
+	QCOMPARE(status, 0);
+
+	// Verify that smoothed values are close to the original parabola
+	// (allowing some tolerance for the smoothing effect)
+	for (int i = 0; i < l; i++) {
+		double expected = xdata[i] * xdata[i];
+		double diff = fabs(ydata[i] - expected);
+		QVERIFY(diff < 0.15); // Smoothed value should be reasonably close
+	}
+
+	// Verify that the noisy points were smoothed
+	// (values should be closer to parabola than the noisy input)
+	QVERIFY(fabs(ydata[8] - xdata[8] * xdata[8]) < 0.1);
+	QVERIFY(fabs(ydata[10] - xdata[10] * xdata[10]) < 0.1);
+}
+
+void NSLSmoothTest::testNaNInfHandling() {
+	double ma_data[] = {1.0, NAN, 3.0, 4.0, 5.0};
+	QCOMPARE(nsl_smooth_moving_average(ma_data, 5, 3, nsl_smooth_weight_uniform, nsl_smooth_pad_none), -1);
+
+	double mal_data[] = {1.0, 2.0, INFINITY, 4.0, 5.0};
+	QCOMPARE(nsl_smooth_moving_average_lagged(mal_data, 5, 3, nsl_smooth_weight_uniform, nsl_smooth_pad_none), -1);
+
+	double pct_data[] = {1.0, 2.0, 3.0, NAN, 5.0};
+	QCOMPARE(nsl_smooth_percentile(pct_data, 5, 3, 0.5, nsl_smooth_pad_none), -1);
+
+	double sg_data[] = {1.0, 2.0, NAN, 4.0, 5.0};
+	QCOMPARE(nsl_smooth_savgol(sg_data, 5, 3, 1, nsl_smooth_pad_none), -1);
+
+	double xdata[] = {1.0, 2.0, 3.0, 4.0, 5.0};
+	double ydata[] = {1.0, 2.0, INFINITY, 4.0, 5.0};
+	QCOMPARE(nsl_smooth_lowess(xdata, ydata, 5, 0.6, 0.0, 1), -1);
+}
+
 QTEST_MAIN(NSLSmoothTest)

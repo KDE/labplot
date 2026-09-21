@@ -4,7 +4,7 @@
 	Description      : widget for editing properties of differentiation curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -31,7 +31,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbAutoRecalculate, uiGeneralTab.cbDataSourceType);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
@@ -46,15 +46,14 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
 
-	for (int i = 0; i < NSL_DIFF_DERIV_ORDER_COUNT; ++i)
-		uiGeneralTab.cbDerivOrder->addItem(i18n(nsl_diff_deriv_order_name[i]));
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDifferentiationCurveDock::dataSourceTypeChanged);
@@ -367,6 +366,7 @@ void XYDifferentiationCurveDock::accOrderChanged(int value) {
 }
 
 void XYDifferentiationCurveDock::recalculateClicked() {
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
 
@@ -394,4 +394,12 @@ void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDiffere
 	this->accOrderChanged(m_differentiationData.accOrder);
 
 	this->showDifferentiationResult();
+}
+
+void XYDifferentiationCurveDock::retranslateUi() {
+	XYAnalysisCurveDock::retranslateUi();
+
+	uiGeneralTab.cbDerivOrder->clear();
+	for (int i = 0; i < NSL_DIFF_DERIV_ORDER_COUNT; ++i)
+		uiGeneralTab.cbDerivOrder->addItem(i18n(nsl_diff_deriv_order_name[i]));
 }

@@ -254,20 +254,20 @@ void AddSubtractValueDialog::init() {
 	connect(btnBox, &QDialogButtonBox::rejected, this, &AddSubtractValueDialog::reject);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AddSubtractValueDialog::typeChanged);
 	connect(ui.chbPreview, &QCheckBox::clicked, this, &AddSubtractValueDialog::previewChanged);
-	connect(ui.leValue, &QLineEdit::textChanged, this, [=]() {
+	connect(ui.leValue, &QLineEdit::textChanged, this, [=, this]() {
 		m_okButton->setEnabled(!ui.leValue->text().isEmpty());
 		invalidatePreview();
 	});
-	connect(ui.leValueStart, &QLineEdit::textChanged, this, [=]() {
+	connect(ui.leValueStart, &QLineEdit::textChanged, this, [=, this]() {
 		m_okButton->setEnabled(!ui.leValueStart->text().isEmpty());
 		invalidatePreview();
 	});
-	connect(ui.leValueEnd, &QLineEdit::textChanged, this, [=]() {
+	connect(ui.leValueEnd, &QLineEdit::textChanged, this, [=, this]() {
 		m_okButton->setEnabled(!ui.leValueEnd->text().isEmpty());
 		invalidatePreview();
 	});
 	connect(ui.sbBaselineParameter1, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::invalidatePreview);
-	connect(ui.leBaselineParameter2, &QLineEdit::textChanged, this, [=]() {
+	connect(ui.leBaselineParameter2, &QLineEdit::textChanged, this, [=, this]() {
 		bool valid = false;
 		QLocale().toDouble(ui.leBaselineParameter2->text(), &valid);
 		valid = valid && !ui.leBaselineParameter2->text().isEmpty();
@@ -280,7 +280,7 @@ void AddSubtractValueDialog::init() {
 
 	// call typeChanged() to update the status of the widgets and of the preview
 	// after the dialog was completely shown
-	QTimer::singleShot(0, this, [=]() {
+	QTimer::singleShot(0, this, [=, this]() {
 		typeChanged(ui.cbType->currentIndex());
 	});
 }

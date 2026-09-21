@@ -167,6 +167,8 @@ void BarPlotDock::setModel() {
  */
 void BarPlotDock::updateLocale() {
 	lineWidget->updateLocale();
+	valueWidget->updateLocale();
+	errorBarWidget->updateLocale();
 }
 
 void BarPlotDock::retranslateUi() {
@@ -180,6 +182,11 @@ void BarPlotDock::retranslateUi() {
 	ui.cbOrientation->clear();
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
+
+	backgroundWidget->retranslateUi();
+	lineWidget->retranslateUi();
+	valueWidget->retranslateUi();
+	errorBarWidget->retranslateUi();
 
 	// tooltip texts
 	QString msg = i18n("Select the data column for which the properties should be shown and edited");

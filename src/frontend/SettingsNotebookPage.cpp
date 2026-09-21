@@ -13,11 +13,16 @@
 #include <KConfigGroup>
 #include <KPageDialog>
 #include <KPageWidgetItem>
+#include <KTextEditor/Editor>
+#include <KSyntaxHighlighting/Repository>
+#include <KSyntaxHighlighting/Theme>
 
 #ifdef HAVE_CANTOR_LIBS
 #include <KConfigSkeleton>
 #include <KCoreConfigSkeleton>
 #include <cantor/backend.h>
+#include <cantor/cantorlibs_version.h>
+#include <cantor/worksheetaccess.h>
 #endif
 
 /**
@@ -36,6 +41,24 @@ SettingsNotebookPage::SettingsNotebookPage(QWidget* parent)
 	ui.chkReevaluateEntries->setToolTip(i18n("Automatically re-evaluate all entries below the current one."));
 	ui.chkAskConfirmation->setToolTip(i18n("Ask for confirmation when restarting the backend system."));
 
+#ifdef HAVE_CANTOR_LIBS
+	#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
+	ui.cbTheme->clear();
+	ui.cbTheme->addItem(i18n("Default"), QString());
+
+	const auto& repository = KTextEditor::Editor::instance()->repository();
+	const auto themes = repository.themes();
+	for (const auto& theme : themes)
+		ui.cbTheme->addItem(theme.name(), theme.name());
+	#else
+	ui.lTheme->hide();
+	ui.cbTheme->hide();
+	#endif
+#else
+	ui.lTheme->hide();
+	ui.cbTheme->hide();
+#endif
+
 	loadSettings();
 
 	connect(ui.chkSyntaxHighlighting, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
@@ -45,6 +68,7 @@ SettingsNotebookPage::SettingsNotebookPage(QWidget* parent)
 	connect(ui.chkAnimations, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
 	connect(ui.chkReevaluateEntries, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
 	connect(ui.chkAskConfirmation, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
+	connect(ui.cbTheme, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsNotebookPage::changed);
 }
 
 QList<Settings::Type> SettingsNotebookPage::applySettings() {
@@ -60,7 +84,11 @@ QList<Settings::Type> SettingsNotebookPage::applySettings() {
 	group.writeEntry(QLatin1String("LineNumbers"), ui.chkLineNumbers->isChecked());
 	group.writeEntry(QLatin1String("LatexTypesetting"), ui.chkLatexTypesetting->isChecked());
 	group.writeEntry(QLatin1String("Animations"), ui.chkAnimations->isChecked());
-
+#ifdef HAVE_CANTOR_LIBS
+	#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
+	group.writeEntry(QLatin1String("Theme"), ui.cbTheme->currentData().toString());
+	#endif
+#endif
 	// Evaluation
 	group.writeEntry(QLatin1String("ReevaluateEntries"), ui.chkReevaluateEntries->isChecked());
 	group.writeEntry(QLatin1String("AskConfirmation"), ui.chkAskConfirmation->isChecked());
@@ -82,6 +110,11 @@ void SettingsNotebookPage::restoreDefaults() {
 	ui.chkLineNumbers->setChecked(false);
 	ui.chkLatexTypesetting->setChecked(true);
 	ui.chkAnimations->setChecked(true);
+#ifdef HAVE_CANTOR_LIBS
+	#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
+	ui.cbTheme->setCurrentIndex(0);
+	#endif
+#endif
 
 	// Evaluation
 	ui.chkReevaluateEntries->setChecked(false);
@@ -101,6 +134,16 @@ void SettingsNotebookPage::loadSettings() {
 	ui.chkLineNumbers->setChecked(group.readEntry(QLatin1String("LineNumbers"), false));
 	ui.chkLatexTypesetting->setChecked(group.readEntry(QLatin1String("LatexTypesetting"), true));
 	ui.chkAnimations->setChecked(group.readEntry(QLatin1String("Animations"), true));
+#ifdef HAVE_CANTOR_LIBS
+	#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
+	const QString theme = group.readEntry(QLatin1String("Theme"), QString());
+	int index = ui.cbTheme->findData(theme);
+	if (index != -1)
+		ui.cbTheme->setCurrentIndex(index);
+	else
+		ui.cbTheme->setCurrentIndex(0);
+	#endif
+#endif
 
 	// Evaluation
 	ui.chkReevaluateEntries->setChecked(group.readEntry(QLatin1String("ReevaluateEntries"), false));

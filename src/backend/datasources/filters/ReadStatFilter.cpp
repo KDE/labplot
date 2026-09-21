@@ -42,6 +42,8 @@ QVector<QStringList> ReadStatFilter::preview(const QString& fileName, int lines)
   reads the content of the file \c fileName to the data source \c dataSource.
 */
 void ReadStatFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
+	if (!validateFileName(fileName))
+		return;
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 

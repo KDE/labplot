@@ -26,6 +26,8 @@ class Note : public AbstractPart {
 	Q_OBJECT
 
 public:
+	enum class Mode { PlainText, Markdown };
+
 	explicit Note(const QString& name);
 	~Note() override;
 
@@ -40,6 +42,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QColor, backgroundColor, BackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QColor, textColor, TextColor)
 	CLASS_D_ACCESSOR_DECL(QFont, textFont, TextFont)
+	CLASS_D_ACCESSOR_DECL(Mode, mode, Mode)
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -51,6 +54,7 @@ Q_SIGNALS:
 	void backgroundColorChanged(const QColor&);
 	void textColorChanged(const QColor&);
 	void textFontChanged(const QFont&);
+	void modeChanged(Mode);
 
 private:
 	Q_DECLARE_PRIVATE(Note)

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : file I/O-filter related interface
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -31,7 +31,7 @@ class AbstractFileFilter : public QObject {
 	Q_OBJECT
 
 public:
-	enum class FileType { Ascii, Binary, XLSX, Ods, Image, HDF5, NETCDF, FITS, JSON, ROOT, Spice, READSTAT, MATIO, VECTOR_BLF, MCAP };
+	enum class FileType { Ascii, Binary, XLSX, Ods, Image, HDF5, NETCDF, FITS, JSON, ROOT, Spice, READSTAT, MATIO, VECTOR_BLF, MCAP, Parquet, ArrowIPC, ORC };
 	Q_ENUM(FileType)
 	enum class ImportMode { Append, Prepend, Replace };
 	Q_ENUM(ImportMode)
@@ -91,6 +91,8 @@ Q_SIGNALS:
 	void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process
 
 protected:
+	bool validateFileName(const QString& fileName);
+
 	const FileType m_type;
 	QString m_lastError;
 	QStringList m_lastWarnings;

@@ -37,7 +37,7 @@ PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool int
 
 	m_panel = new SlidingPanelTop(screenSize, worksheet->name(), this);
 	qApp->installEventFilter(this);
-	connect(m_panel->quitButton(), &QPushButton::clicked, this, [=]() {
+	connect(m_panel->quitButton(), &QPushButton::clicked, this, [=, this]() {
 		close();
 	});
 

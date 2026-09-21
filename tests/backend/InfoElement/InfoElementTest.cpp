@@ -39,6 +39,7 @@ void InfoElementTest::addPlot() {
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x");
 	curve->setEquationData(data);
 	curve->recalculate();
@@ -50,6 +51,7 @@ void InfoElementTest::addPlot() {
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x^2");
 	curve2->setEquationData(data);
 	curve2->recalculate();
@@ -104,6 +106,7 @@ void InfoElementTest::removeCurve() {
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x");
 	curve->setEquationData(data);
 	curve->recalculate();
@@ -115,6 +118,7 @@ void InfoElementTest::removeCurve() {
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x^2");
 	curve2->setEquationData(data);
 	curve2->recalculate();
@@ -433,6 +437,7 @@ void InfoElementTest::deleteCurveRenameAddedAutomatically() {
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x");
 	curve->setEquationData(data);
 	curve->recalculate();
@@ -444,6 +449,7 @@ void InfoElementTest::deleteCurveRenameAddedAutomatically() {
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x^2");
 	curve2->setEquationData(data);
 	curve2->recalculate();
@@ -561,6 +567,7 @@ void InfoElementTest::deleteCurveRenameAddedAutomaticallyCustomPointInvisible() 
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x");
 	curve->setEquationData(data);
 	curve->recalculate();
@@ -572,6 +579,7 @@ void InfoElementTest::deleteCurveRenameAddedAutomaticallyCustomPointInvisible() 
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x^2");
 	curve2->setEquationData(data);
 	curve2->recalculate();
@@ -789,6 +797,7 @@ void InfoElementTest::moveDuringMissingCurve() {
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x");
 	curve->setEquationData(data);
 	curve->recalculate();
@@ -799,6 +808,7 @@ void InfoElementTest::moveDuringMissingCurve() {
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x^2");
 	curve3->setEquationData(data);
 	curve3->recalculate();
@@ -854,6 +864,7 @@ void InfoElementTest::moveCurve() {
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x");
 	curve->setEquationData(data);
 	curve->recalculate();
@@ -865,6 +876,7 @@ void InfoElementTest::moveCurve() {
 	data.min = QStringLiteral("0");
 	data.max = QStringLiteral("10");
 	data.count = 11;
+	data.autoPointsCount = false;
 	data.expression1 = QStringLiteral("x^2");
 	curve2->setEquationData(data);
 	curve2->recalculate();
@@ -941,6 +953,7 @@ void InfoElementTest::saveLoad() {
 		data.min = QStringLiteral("0");
 		data.max = QStringLiteral("10");
 		data.count = 11;
+		data.autoPointsCount = false;
 		data.expression1 = QStringLiteral("x");
 		curve->setEquationData(data);
 		curve->recalculate();
@@ -952,6 +965,7 @@ void InfoElementTest::saveLoad() {
 		data.min = QStringLiteral("0");
 		data.max = QStringLiteral("10");
 		data.count = 11;
+		data.autoPointsCount = false;
 		data.expression1 = QStringLiteral("x^2");
 		curve2->setEquationData(data);
 		curve2->recalculate();
@@ -1035,6 +1049,7 @@ void InfoElementTest::saveLoadInvisiblePoint() {
 		data.min = QStringLiteral("0");
 		data.max = QStringLiteral("10");
 		data.count = 11;
+		data.autoPointsCount = false;
 		data.expression1 = QStringLiteral("x");
 		curve->setEquationData(data);
 		curve->recalculate();
@@ -1046,6 +1061,7 @@ void InfoElementTest::saveLoadInvisiblePoint() {
 		data.min = QStringLiteral("0");
 		data.max = QStringLiteral("10");
 		data.count = 11;
+		data.autoPointsCount = false;
 		data.expression1 = QStringLiteral("x^2");
 		curve2->setEquationData(data);
 		curve2->recalculate();

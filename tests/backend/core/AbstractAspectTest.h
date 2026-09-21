@@ -44,6 +44,8 @@ private Q_SLOTS:
 	void reparentToNestedFolder();
 	void reparentFolder();
 	void reparentPreservesOrder();
+
+	void loadExampleProjects();
 };
 
 #endif // ABSTRACTASPECTTEST_H

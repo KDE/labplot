@@ -87,14 +87,14 @@ void MCAPFilterTest::testArrayImport() {
 		QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
 
 		// Check Logging Times
-		QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
-		QCOMPARE(spreadsheet.column(1)->valueAt(1), 1 * 3600000);
-		QCOMPARE(spreadsheet.column(1)->valueAt(2), 2 * 3600000);
+		QCOMPARE(spreadsheet.column(1)->dateTimeAt(0).toMSecsSinceEpoch(), qint64(0));
+		QCOMPARE(spreadsheet.column(1)->dateTimeAt(1).toMSecsSinceEpoch(), qint64(1 * 3600000));
+		QCOMPARE(spreadsheet.column(1)->dateTimeAt(2).toMSecsSinceEpoch(), qint64(2 * 3600000));
 
-		// Check Logging Times
-		QCOMPARE(spreadsheet.column(2)->valueAt(0), 0);
-		QCOMPARE(spreadsheet.column(2)->valueAt(1), 1 * 3600000);
-		QCOMPARE(spreadsheet.column(2)->valueAt(2), 2 * 3600000);
+		// Check Publish Times
+		QCOMPARE(spreadsheet.column(2)->dateTimeAt(0).toMSecsSinceEpoch(), qint64(0));
+		QCOMPARE(spreadsheet.column(2)->dateTimeAt(1).toMSecsSinceEpoch(), qint64(1 * 3600000));
+		QCOMPARE(spreadsheet.column(2)->dateTimeAt(2).toMSecsSinceEpoch(), qint64(2 * 3600000));
 	}
 }
 

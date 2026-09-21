@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Custom about dialog
     --------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -70,6 +70,9 @@
 #endif
 #ifdef HAVE_MATIO
 #include <matio_pubconf.h>
+#endif
+#ifdef HAVE_PARQUET
+#include <arrow/util/config.h>
 #endif
 #ifdef HAVE_MCAP
 #ifdef __GNUC__
@@ -356,6 +359,12 @@ QVector<QStringList> AboutDialog::components() {
 	version = missing;
 #endif
 	components << (QStringList() << QLatin1String("Vector BLF") << i18n("Binary Log File (BLF) file support") << version << QStringLiteral("https://github.com/Technica-Engineering/vector_blf"));
+#ifdef HAVE_PARQUET
+	version = QLatin1String(ARROW_VERSION_STRING);
+#else
+	version = missing;
+#endif
+	components << (QStringList() << QLatin1String("Apache Parquet/Arrow") << i18n("Apache Parquet, Arrow IPC (Feather) and Apache ORC file support") << version << QStringLiteral("https://arrow.apache.org"));
 
 	// compiler info
 	components << (QStringList() << i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER_ID) << QLatin1String(CXX_COMPILER_VERSION) << QString() << QString());

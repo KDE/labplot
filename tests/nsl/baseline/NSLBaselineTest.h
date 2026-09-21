@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL Tests for baseline functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2023-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -31,7 +31,18 @@ private Q_SLOTS:
 	void testBaselineARPLS();
 	void testBaselineARPLSSpectrum();
 	void testBaselineARPLS_XRD();
+	void testBaselineARPLSEigen3();
+	void testBaselineARPLSEigen3Spectrum();
+	void testBaselineARPLSEigen3XRD();
+	void testBaselineARPLSGSL();
+	void testBaselineARPLSGSLSpectrum();
+	void testBaselineARPLSGSLXRD();
 	// performance
 	// void testPerformance();
+
+	void testBaselineEmptyData();
+	void testBaselineSingleElement();
+	void testBaselineNaNData();
+	void testBaselineInfinityData();
 };
 #endif

@@ -18,8 +18,6 @@
 #include <KConfigGroup>
 #include <KMessageBox>
 
-#include <kcoreaddons_version.h>
-
 #include <QContextMenuEvent>
 #include <QFileDialog>
 #include <QMenu>
@@ -273,16 +271,16 @@ void FITSHeaderEditWidget::initActions() {
  * \brief Connects signals of the actions to the appropriate slots.
  */
 void FITSHeaderEditWidget::connectActions() {
-	connect(m_actionAddKeyword, &QAction::triggered, this, [=]() {
+	connect(m_actionAddKeyword, &QAction::triggered, this, [=, this]() {
 		addKeyword();
 	});
-	connect(m_actionRemoveKeyword, &QAction::triggered, this, [=]() {
+	connect(m_actionRemoveKeyword, &QAction::triggered, this, [=, this]() {
 		removeKeyword();
 	});
-	connect(m_actionRemoveExtension, &QAction::triggered, this, [=]() {
+	connect(m_actionRemoveExtension, &QAction::triggered, this, [=, this]() {
 		removeExtension();
 	});
-	connect(m_actionAddmodifyUnit, &QAction::triggered, this, [=]() {
+	connect(m_actionAddmodifyUnit, &QAction::triggered, this, [=, this]() {
 		addModifyKeywordUnit();
 	});
 }

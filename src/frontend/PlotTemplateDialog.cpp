@@ -137,21 +137,23 @@ void PlotTemplateDialog::chooseTemplateSearchPath() {
 	ui->leCustomFolder->setText(path);
 }
 
-CartesianPlot* PlotTemplateDialog::generatePlot() {
-	const QString path = templatePath();
+CartesianPlot* PlotTemplateDialog::loadTemplate(const QString& path, QString* errorMessage) {
 	if (path.isEmpty()) {
-		updateErrorMessage(i18n("No templates found."));
+		if (errorMessage)
+			*errorMessage = i18n("No template path provided.");
 		return nullptr;
 	}
 
 	QFile file(path);
 	if (!file.exists()) {
-		updateErrorMessage(i18n("File does not exist."));
+		if (errorMessage)
+			*errorMessage = i18n("File does not exist.");
 		return nullptr;
 	}
 
 	if (!file.open(QIODevice::OpenModeFlag::ReadOnly)) {
-		updateErrorMessage(i18n("Unable to read the file"));
+		if (errorMessage)
+			*errorMessage = i18n("Unable to read the file");
 		return nullptr;
 	}
 
@@ -162,29 +164,33 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 
 	if (reader.atEnd()) {
 		DEBUG("XML error: No start document token found");
-		updateErrorMessage(i18n("Failed to load the selected plot template"));
+		if (errorMessage)
+			*errorMessage = i18n("Failed to load the plot template");
 		return nullptr;
 	}
 
 	reader.readNext();
 	if (!reader.isDTD()) {
 		DEBUG("XML error: No DTD token found");
-		updateErrorMessage(i18n("Failed to load the selected plot template"));
+		if (errorMessage)
+			*errorMessage = i18n("Failed to load the plot template");
 		return nullptr;
 	}
 
 	reader.readNext();
 	if (!reader.isStartElement() || reader.name() != QLatin1String("PlotTemplate")) {
 		DEBUG("XML error: No PlotTemplate found");
-		updateErrorMessage(i18n("Failed to load the selected plot template"));
+		if (errorMessage)
+			*errorMessage = i18n("Failed to load the plot template");
 		return nullptr;
 	}
 
 	bool ok;
 	int xmlVersion = reader.readAttributeInt(QLatin1String("xmlVersion"), &ok);
 	if (!ok) {
-		DEBUG("XML error: xmlVersion found");
-		updateErrorMessage(i18n("Failed to load the selected plot template"));
+		DEBUG("XML error: xmlVersion not found");
+		if (errorMessage)
+			*errorMessage = i18n("Failed to load the plot template");
 		return nullptr;
 	}
 	Project::setXmlVersion(xmlVersion);
@@ -194,16 +200,18 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 		reader.readNext();
 
 	if (reader.atEnd()) {
-		updateErrorMessage(i18n("XML error: No cartesianPlot found"));
-		updateErrorMessage(i18n("Failed to load the selected plot template"));
+		DEBUG("XML error: No cartesianPlot found");
+		if (errorMessage)
+			*errorMessage = i18n("Failed to load the plot template");
 		return nullptr;
 	}
 
 	auto* plot = new CartesianPlot(QLatin1String("plot"));
 	plot->setIsLoading(true);
 	if (!plot->load(&reader, false)) {
-		DEBUG("Failed to load the selected plot template" + reader.errorString().toStdString());
-		updateErrorMessage(i18n("Failed to load the selected plot template"));
+		DEBUG("Failed to load the plot template: " + reader.errorString().toStdString());
+		if (errorMessage)
+			*errorMessage = i18n("Failed to load the plot template");
 		delete plot;
 		return nullptr;
 	}
@@ -214,9 +222,18 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 		child->setIsLoading(false);
 
 	for (auto* equationCurve : plot->children<XYEquationCurve>())
-		static_cast<XYEquationCurve*>(equationCurve)->recalculate();
+		equationCurve->recalculate();
 
 	plot->retransform();
+	return plot;
+}
+
+CartesianPlot* PlotTemplateDialog::generatePlot() {
+	const QString path = templatePath();
+	QString errorMsg;
+	auto* plot = loadTemplate(path, &errorMsg);
+	if (!plot)
+		updateErrorMessage(errorMsg);
 	return plot;
 }
 

@@ -25,6 +25,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void retranslateUi() override;
 	void showTransformResult();
 
 	Ui::XYHilbertTransformCurveDockGeneralTab uiGeneralTab;

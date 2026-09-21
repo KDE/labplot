@@ -100,6 +100,8 @@
 #include "backend/notebook/Notebook.h"
 #include "frontend/notebook/NotebookView.h"
 #include <cantor/backend.h>
+#include <cantor/cantorlibs_version.h>
+#include <KParts/ReadWritePart>
 #endif
 
 
@@ -234,12 +236,12 @@ void MainWin::initGUI(const QString& fileName) {
 	if (!fileName.isEmpty()) {
 		initDocks();
 		if (Project::isSupportedProject(fileName)) {
-			QTimer::singleShot(0, this, [=]() {
+			QTimer::singleShot(0, this, [=, this]() {
 				openProject(fileName);
 			});
 		} else {
 			newProject();
-			QTimer::singleShot(0, this, [=]() {
+			QTimer::singleShot(0, this, [=, this]() {
 				importFileDialog(fileName);
 			});
 		}
@@ -528,7 +530,7 @@ bool MainWin::newProject(bool createInitialContent) {
 		m_actionsManager->m_visibilityAllAction->setChecked(true);
 
 	m_aspectTreeModel = new AspectTreeModel(m_project, this);
-	connect(m_aspectTreeModel, &AspectTreeModel::statusInfo, [=](const QString& text) {
+	connect(m_aspectTreeModel, &AspectTreeModel::statusInfo, [=, this](const QString& text) {
 		statusBar()->showMessage(text);
 	});
 
@@ -573,6 +575,12 @@ bool MainWin::newProject(bool createInitialContent) {
 			const auto& backend = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
 			if (Cantor::Backend::listAvailableBackends().indexOf(backend) != -1)
 				addAspectToProject(new Notebook(backend));
+#endif
+			break;
+		}
+		case NewProject::WithScript: {
+#ifdef HAVE_SCRIPTING
+			addAspectToProject(new Script(i18n("Script"), QStringLiteral("Python")));
 #endif
 			break;
 		}
@@ -731,6 +739,12 @@ void MainWin::openProject() {
 	supportOthers = true;
 #endif
 
+#ifdef HAVE_SCRIPTING
+	extensions += QLatin1String(";;") + i18n("Python Scripts (*.py)");
+	allExtensions += QLatin1String(" *.py");
+	supportOthers = true;
+#endif
+
 	// add an entry for "All supported files" if we support more than labplot
 	if (supportOthers)
 		extensions = i18n("All supported files (%1)", allExtensions) + QLatin1String(";;") + extensions;
@@ -818,6 +832,20 @@ bool MainWin::openProject(const QString& fileName) {
 	else if (fileName.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
 		WAIT_CURSOR_AUTO_RESET;
 		rc = m_project->loadNotebook(fileName);
+	}
+#endif
+
+#ifdef HAVE_SCRIPTING
+	else if (fileName.endsWith(QLatin1String(".py"), Qt::CaseInsensitive)) {
+		WAIT_CURSOR_AUTO_RESET;
+		auto* script = new Script(QFileInfo(fileName).fileName(), QStringLiteral("Python"));
+		if (script->isInitialized() && script->kTextEditorDocument()->openUrl(QUrl::fromLocalFile(fileName))) {
+			addAspectToProject(script);
+			rc = true;
+		} else {
+			delete script;
+			rc = false;
+		}
 	}
 #endif
 
@@ -1321,7 +1349,7 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 		// 		connect(part, &AbstractPart::importFromFileRequested, this, &MainWin::importFileDialog);
-		connect(part, &AbstractPart::importFromFileRequested, this, [=]() {
+		connect(part, &AbstractPart::importFromFileRequested, this, [=, this]() {
 			importFileDialog();
 		});
 		connect(part, &AbstractPart::importFromSQLDatabaseRequested, this, &MainWin::importSqlDialog);
@@ -1509,6 +1537,19 @@ void MainWin::createFolderContextMenu(const Folder*, QMenu* menu) const {
 }
 
 void MainWin::undo() {
+	#ifdef HAVE_CANTOR_LIBS
+	if (m_currentAspect && m_currentAspect->type() == AspectType::Notebook) {
+		auto* notebook = static_cast<Notebook*>(m_currentAspect);
+		QWidget* focusWidget = QApplication::focusWidget();
+		if (notebook->part() && focusWidget && notebook->part()->widget()->isAncestorOf(focusWidget)) {
+			if (auto* a = notebook->part()->action(QStringLiteral("edit_undo"))) {
+				a->trigger();
+				return;
+			}
+		}
+	}
+	#endif
+
 	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->undo();
 	m_actionsManager->m_redoAction->setEnabled(true);
@@ -1524,6 +1565,19 @@ void MainWin::undo() {
 }
 
 void MainWin::redo() {
+	#ifdef HAVE_CANTOR_LIBS
+	if (m_currentAspect && m_currentAspect->type() == AspectType::Notebook) {
+		auto* notebook = static_cast<Notebook*>(m_currentAspect);
+		QWidget* focusWidget = QApplication::focusWidget();
+		if (notebook->part() && focusWidget && notebook->part()->widget()->isAncestorOf(focusWidget)) {
+			if (auto* a = notebook->part()->action(QStringLiteral("edit_redo"))) {
+				a->trigger();
+				return;
+			}
+		}
+	}
+	#endif
+
 	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->redo();
 	m_actionsManager->m_undoAction->setEnabled(true);
@@ -1832,7 +1886,16 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 
 #ifdef HAVE_CANTOR_LIBS
 	if (changes.contains(Settings::Type::Notebook))
+	{
 		m_actionsManager->updateNotebookActions();
+		#if CANTOR_VERSION >= QT_VERSION_CHECK(26, 7, 70)
+		if (m_project) {
+			const auto& notebooks = m_project->children<Notebook>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* notebook : notebooks)
+				notebook->updateSettings();
+		}
+		#endif
+	}
 #else
 	Q_UNUSED(changes)
 #endif

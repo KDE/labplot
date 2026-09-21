@@ -57,6 +57,8 @@ QVector<QStringList> SpiceFilter::preview(const QString& fileName, int lines) {
   reads the content of the file \c fileName.
 */
 void SpiceFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
+	if (!validateFileName(fileName))
+		return;
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
@@ -188,7 +190,7 @@ void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 		return;
 	}
 
-	q->connect(&reader, &SpiceFileReader::processed, [=](double processed) {
+	q->connect(&reader, &SpiceFileReader::processed, [=, this](double processed) {
 		Q_EMIT q->completed(processed);
 	});
 

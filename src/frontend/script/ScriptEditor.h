@@ -4,6 +4,7 @@
 	Description          : Script editor
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -18,6 +19,8 @@ class QMenu;
 class Script;
 class QToolBar;
 class QToolButton;
+class ScriptCompletionModel;
+
 namespace KTextEditor{
 class View;
 }
@@ -33,9 +36,13 @@ public:
 
 	void writeOutput(bool, const QString&);
 	QString outputText();
+	QString outputHtml() const;
+	void setOutputHtml(const QString&);
 
-	void registerShortcuts();
-	void unregisterShortcuts();
+private Q_SLOTS:
+	void handleAnchorClicked(const QUrl&);
+	void setOutputVisible(bool);
+	void setOutputMaximized(bool);
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
@@ -48,6 +55,12 @@ private:
 	KTextEditor::View* m_kTextEditorView{nullptr};
 	QAction* m_runScriptAction{nullptr};
 	QAction* m_clearOutputAction{nullptr};
+	QAction* m_toggleOutputAction{nullptr};
+	QAction* m_maximizeOutputAction{nullptr};
+	QAction* m_codeCompletionAction{nullptr};
+	ScriptCompletionModel* m_completionModel{nullptr};
+	QList<int> m_outputSplitterSizes;
+	QList<int> m_maximizedOutputSplitterSizes;
 
 	void initActions();
 	void initMenus();
@@ -55,5 +68,8 @@ private:
 	QByteArray splitterState();
 	void setOutputFont(const QFont&);
 	QFont outputFont();
+
+	QString processOutputText(bool isErr, const QString& text);
+	void applyOutputFormatting(const QString& html, bool isErr);
 };
 #endif

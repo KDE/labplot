@@ -27,6 +27,10 @@ public:
 	virtual bool cancel() override;
 	virtual bool exec(const QString&) override;
 
+	// Static helpers for code completion
+	static QStringList getPylabplotSymbols();
+	static QString pyUnicodeToQString(PyObject*);
+
 private:
 	PythonLogger* m_loggerStdOut{nullptr}; // PythonLogger instance to replace sys.stdout in the python interpreter
 	PythonLogger* m_loggerStdErr{nullptr}; // PythonLogger instance to replace sys.stderr in the python interpreter
@@ -41,6 +45,7 @@ private:
 	bool unRedirectOutput();
 	bool populateVariableInfo();
 	PyObject* createLocalDict();
+	void printPyError();
 
 	// singleton methods (called once for all PythonScripts)
 	static bool initPython();
@@ -50,12 +55,12 @@ private:
 	static PyTypeObject* getPythonLoggerType();
 	static PyObject* shibokenConvertToPyObject(PythonLogger*);
 	static int getPyErrorLine();
-	static QString pyUnicodeToQString(PyObject*);
 
 	// singletons (shared between PythonScripts)
 	static bool ready;
 	static PyObject* sysStdOut;
 	static PyObject* sysStdErr;
+	static bool needsRestart;
 };
 
 #endif

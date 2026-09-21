@@ -148,6 +148,12 @@ class CommonTest : public QObject {
 
 protected Q_SLOTS:
 	virtual void initTestCase();
+	void init() {
+		runtimer.start();
+	}
+	void cleanup() {
+		DEBUG(QTest::currentTestFunction() << " took " << runtimer.elapsed() << " ms")
+	}
 
 protected:
 	// compare floats with given delta
@@ -175,5 +181,7 @@ protected:
 		QSignalSpy spy(sender, signal);
 		return spy.wait(timeout_ms);
 	}
+
+	QElapsedTimer runtimer;
 };
 #endif

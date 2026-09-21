@@ -13,6 +13,7 @@
 #define ABSTRACTCOLUMNCOMMANDS_H
 
 #include "AbstractColumnPrivate.h"
+#include <QBitArray>
 #include <QUndoCommand>
 
 class AbstractColumnClearMasksCmd : public QUndoCommand {
@@ -26,13 +27,13 @@ public:
 
 private:
 	AbstractColumnPrivate* m_col;
-	IntervalAttribute<bool> m_masking;
+	QBitArray m_masking;
 	bool m_copied;
 };
 
 class AbstractColumnSetMaskedCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnSetMaskedCmd(AbstractColumnPrivate*, const Interval<int>& interval, bool masked);
+	explicit AbstractColumnSetMaskedCmd(AbstractColumnPrivate*, int startRow, int endRow, bool masked);
 	~AbstractColumnSetMaskedCmd() override;
 
 	void redo() override;
@@ -40,9 +41,10 @@ public:
 
 private:
 	AbstractColumnPrivate* m_col;
-	Interval<int> m_interval;
+	int m_startRow;
+	int m_endRow;
 	bool m_masked;
-	IntervalAttribute<bool> m_masking;
+	QBitArray m_masking;
 	bool m_copied;
 };
 
@@ -72,7 +74,7 @@ protected:
 	AbstractColumnPrivate* m_col;
 	int m_first;
 	int m_count;
-	IntervalAttribute<bool> m_masking;
+	QBitArray m_masking;
 };
 
 class AbstractColumnSetHeatmapFormatCmd : public QUndoCommand {

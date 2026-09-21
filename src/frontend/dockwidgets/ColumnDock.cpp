@@ -181,10 +181,8 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	// show value labels of the first column if all selected columns have the same mode
 	if (sameMode)
 		showValueLabels();
-	else {
-		for (int i = 0; i < ui.twLabels->rowCount(); ++i)
-			ui.twLabels->removeRow(0);
-	}
+	else
+		ui.twLabels->clearContents();
 
 	// formula, available only for columns in a spreadsheet
 	m_spreadsheet = dynamic_cast<Spreadsheet*>(m_column->parentAspect());
@@ -257,8 +255,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 }
 
 void ColumnDock::showValueLabels() {
-	while (ui.twLabels->rowCount() > 0)
-		ui.twLabels->removeRow(0);
+	ui.twLabels->clearContents();
 
 	if (m_column->valueLabelsInitialized()) {
 		auto mode = m_column->labelsMode();
@@ -596,21 +593,27 @@ void ColumnDock::loadFormula() {
  * */
 bool ColumnDock::validateVariableName(QLineEdit* le) {
 	bool isValid = false;
-	if (ExpressionParser::getInstance()->constants().indexOf(le->text()) != -1) {
+	const auto& name = le->text();
+	auto* parser = ExpressionParser::getInstance();
+	if (parser->constants().indexOf(name) != -1) {
 		SET_WARNING_STYLE(le)
-		le->setToolTip(i18n("Provided variable name is already reserved for a name of a constant. Please use another name."));
-	} else if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
+		le->setToolTip(i18n("The variable name '%1' is already reserved for the constant '%1' (%2). Please use another name.",
+							name,
+							parser->constantDescription(name)));
+	} else if (parser->functions().indexOf(name) != -1) {
 		SET_WARNING_STYLE(le)
-		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
-	} else if (le->text().compare(QLatin1String("i")) == 0) {
+		le->setToolTip(i18n("The variable name '%1' is already reserved for the function '%1' (%2). Please use another name.",
+							name,
+							parser->functionDescription(name)));
+	} else if (name.compare(QLatin1String("i")) == 0) {
 		SET_WARNING_STYLE(le)
-		le->setToolTip(i18n("The variable name 'i' is reserved for the index of the column row."));
-	} else if (le->text().contains(QRegularExpression(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
+		le->setToolTip(i18n("The variable name 'i' is reserved for the index of the column row. Please use another name."));
+	} else if (name.contains(QRegularExpression(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name starts with a digit or contains special character."));
 	} else {
 		le->setStyleSheet(QString());
-		le->setToolTip(QString());
+		le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 		isValid = true;
 	}
 	return isValid;
@@ -621,6 +624,20 @@ bool ColumnDock::validateVariableName(QLineEdit* le) {
  * and enables/disables the Ok-button accordingly.
  */
 void ColumnDock::validateFormula() {
+	// check the variable names first - a name colliding with the name of a function or of a constant
+	// invalidates the formula expression, too, and the user needs to be pointed to the actual reason
+	bool variableNamesValid = true;
+	for (auto* le : std::as_const(m_variableLineEdits)) {
+		if (!validateVariableName(le))
+			variableNamesValid = false;
+	}
+
+	if (!variableNamesValid) {
+		ui.pbApplyFormula->setToolTip(i18n("Invalid variable name provided"));
+		ui.pbApplyFormula->setEnabled(false);
+		return;
+	}
+
 	if (ui.teEquation->toPlainText().simplified().isEmpty()) {
 		ui.pbApplyFormula->setToolTip(i18n("Empty formula expression"));
 		ui.pbApplyFormula->setEnabled(false);
@@ -649,13 +666,6 @@ void ColumnDock::validateFormula() {
 			auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 			if (!aspect) {
 				ui.pbApplyFormula->setToolTip(i18n("Select a valid column"));
-				ui.pbApplyFormula->setEnabled(false);
-				return;
-			}
-
-			// check whether the variable name is correct
-			if (!validateVariableName(m_variableLineEdits.at(i))) {
-				ui.pbApplyFormula->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 				ui.pbApplyFormula->setEnabled(false);
 				return;
 			}
@@ -773,7 +783,7 @@ void ColumnDock::addVariable() {
 
 	auto* model = aspectModel();
 	model->setSelectableAspects({AspectType::Column});
-	model->enableNumericColumnsOnly(true);
+	model->enablePlottableColumnsOnly(true); // Allow numeric (Double, Integer, BigInt) and DateTime columns
 	cb->setModel(model);
 	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 
@@ -837,9 +847,11 @@ void ColumnDock::deleteVariable() {
 void ColumnDock::variableNameChanged() {
 	QStringList vars;
 	QString argText;
-	for (auto* varName : m_variableLineEdits) {
-		QString name = varName->text().simplified();
+	for (int i = 0; i < m_variableLineEdits.size(); i++) {
+		QString name = m_variableLineEdits.at(i)->text().simplified();
 		if (!name.isEmpty()) {
+			// pass all named variables to the parser, also if no column was selected for them yet -
+			// a missing column is handled separately in validateFormula() and shouldn't invalidate the expression
 			vars << name;
 
 			if (argText.isEmpty())
@@ -869,7 +881,7 @@ void ColumnDock::variableColumnChanged(const QModelIndex& index) {
 			cb->setStyleSheet(QString());
 	}
 
-	validateFormula();
+	variableNameChanged();
 }
 
 void ColumnDock::applyFormula() {
@@ -895,7 +907,7 @@ void ColumnDock::applyFormula() {
 	bool autoUpdate{(ui.chkFormulaAutoUpdate->checkState() == Qt::Checked)};
 	bool autoResize{(ui.chkFormulaAutoResize->checkState() == Qt::Checked)};
 	for (auto* col : m_columns) {
-		col->setColumnMode(AbstractColumn::ColumnMode::Double);
+		// preserve the original column mode (e.g., DateTime) instead of forcing Double
 		col->setFormula(expression, variableNames, variableColumns, autoUpdate, autoResize);
 		col->updateFormula();
 	}

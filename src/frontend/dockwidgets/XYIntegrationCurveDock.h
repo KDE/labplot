@@ -25,6 +25,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void retranslateUi() override;
 	void updateSettings(const AbstractColumn*) override;
 	void showIntegrationResult();
 	virtual QString customText() const override;

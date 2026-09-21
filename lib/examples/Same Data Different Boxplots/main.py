@@ -535,7 +535,7 @@ te.setFontPointSize(14)
 te.append("Same Data, Different Boxplots")
 
 textLabel1.setText(te.toHtml())
-textLabel1.setPosition(QPointF(Worksheet.convertToSceneUnits(-0.3, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(9.2, Worksheet.Unit.Centimeter)))
+textLabel1.setPositionScene(QPointF(Worksheet.convertToSceneUnits(-0.3, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(9.2, Worksheet.Unit.Centimeter)))
 
 worksheet.view().show()
 

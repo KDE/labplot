@@ -76,7 +76,7 @@ StatisticsDialog::~StatisticsDialog() {
 
 void StatisticsDialog::showStatistics() {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
-	QTimer::singleShot(0, this, [=]() {
+	QTimer::singleShot(0, this, [=, this]() {
 		currentTabChanged(0);
 	});
 }

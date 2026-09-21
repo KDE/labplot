@@ -37,7 +37,7 @@ ConstantsWidget::ConstantsWidget(QWidget* parent)
 	connect(ui.lwConstants, &QListWidget::itemDoubleClicked, this, &ConstantsWidget::insertClicked);
 
 	// set the focus to the search field and select the first group after the widget is shown
-	QTimer::singleShot(0, this, [=]() {
+	QTimer::singleShot(0, this, [=, this]() {
 		ui.leFilter->setFocus();
 		this->groupChanged(0);
 	});

@@ -189,6 +189,8 @@ BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, XYAnalysisCurve::DataSourceType, dat
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const XYCurve*, dataSourceCurve, dataSourceCurve)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, QString, dataSourceCurvePath, dataSourceCurvePath)
 
+BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, bool, autoRecalculate, autoRecalculate)
+
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, xDataColumn, xDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, yDataColumn, yDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, y2DataColumn, y2DataColumn)
@@ -203,6 +205,13 @@ bool XYAnalysisCurve::saveCalculations() const {
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
+STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetAutoRecalculate, bool, autoRecalculate)
+void XYAnalysisCurve::setAutoRecalculate(bool value) {
+	Q_D(XYAnalysisCurve);
+	if (value != d->autoRecalculate)
+		exec(new XYAnalysisCurveSetAutoRecalculateCmd(d, value, ki18n("%1: auto recalculate changed")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(XYAnalysisCurve, SetDataSourceType, XYAnalysisCurve::DataSourceType, dataSourceType, sourceChanged)
 void XYAnalysisCurve::setDataSourceType(DataSourceType type) {
 	Q_D(XYAnalysisCurve);
@@ -605,6 +614,7 @@ void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 	// write data source specific information
 	writer->writeStartElement(QStringLiteral("dataSource"));
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->dataSourceType)));
+	writer->writeAttribute(QStringLiteral("autoRecalculate"), QString::number(static_cast<int>(d->autoRecalculate)));
 	WRITE_PATH(d->dataSourceCurve, dataSourceCurve);
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
@@ -635,6 +645,7 @@ bool XYAnalysisCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == QLatin1String("dataSource")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("type", dataSourceType, XYAnalysisCurve::DataSourceType);
+			READ_INT_VALUE("autoRecalculate", autoRecalculate, bool);
 			READ_PATH(dataSourceCurve);
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);

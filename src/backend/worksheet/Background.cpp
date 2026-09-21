@@ -23,6 +23,97 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <QPainter>
+#include <QPainterPath>
+
+namespace {
+// prepare the painter style and properties depending on what kind of background we are using
+void preparePainter(QPainter* painter, const BackgroundPrivate* background, const QRectF& rect) {
+	if (background->type == Background::Type::Color) {
+		switch (background->colorStyle) {
+		case Background::ColorStyle::SingleColor:
+			painter->setBrush(QBrush(background->firstColor));
+			break;
+		case Background::ColorStyle::HorizontalLinearGradient: {
+			QLinearGradient gradient(rect.topLeft(), rect.topRight());
+			gradient.setColorAt(0, background->firstColor);
+			gradient.setColorAt(1, background->secondColor);
+			painter->setBrush(QBrush(gradient));
+			break;
+		}
+		case Background::ColorStyle::VerticalLinearGradient: {
+			QLinearGradient gradient(rect.topLeft(), rect.bottomLeft());
+			gradient.setColorAt(0, background->firstColor);
+			gradient.setColorAt(1, background->secondColor);
+			painter->setBrush(QBrush(gradient));
+			break;
+		}
+		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
+			QLinearGradient gradient(rect.topLeft(), rect.bottomRight());
+			gradient.setColorAt(0, background->firstColor);
+			gradient.setColorAt(1, background->secondColor);
+			painter->setBrush(QBrush(gradient));
+			break;
+		}
+		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
+			QLinearGradient gradient(rect.bottomLeft(), rect.topRight());
+			gradient.setColorAt(0, background->firstColor);
+			gradient.setColorAt(1, background->secondColor);
+			painter->setBrush(QBrush(gradient));
+			break;
+		}
+		case Background::ColorStyle::RadialGradient: {
+			QRadialGradient gradient(rect.center(), rect.width() / 2.0);
+			gradient.setColorAt(0, background->firstColor);
+			gradient.setColorAt(1, background->secondColor);
+			painter->setBrush(QBrush(gradient));
+			break;
+		}
+		}
+	} else if (background->type == Background::Type::Image) {
+		if (!background->fileName.trimmed().isEmpty()) {
+			QPixmap pixmap(background->fileName);
+			switch (background->imageStyle) {
+			case Background::ImageStyle::ScaledCropped:
+				pixmap = pixmap.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+				painter->setBrush(QBrush(pixmap));
+				painter->setBrushOrigin(pixmap.size().width() / 2, pixmap.size().height() / 2);
+				break;
+			case Background::ImageStyle::Scaled:
+				pixmap = pixmap.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+				painter->setBrush(QBrush(pixmap));
+				painter->setBrushOrigin(pixmap.size().width() / 2, pixmap.size().height() / 2);
+				break;
+			case Background::ImageStyle::ScaledAspectRatio:
+				pixmap = pixmap.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+				painter->setBrush(QBrush(pixmap));
+				painter->setBrushOrigin(pixmap.size().width() / 2, pixmap.size().height() / 2);
+				break;
+			case Background::ImageStyle::Centered: {
+				QPixmap centeredPixmap(rect.size().toSize());
+				centeredPixmap.fill();
+				QPainter centeredPainter(&centeredPixmap);
+				centeredPainter.drawPixmap(QPointF(0, 0), pixmap);
+				centeredPainter.end();
+				painter->setBrush(QBrush(centeredPixmap));
+				painter->setBrushOrigin(-pixmap.size().width() / 2, -pixmap.size().height() / 2);
+				break;
+			}
+			case Background::ImageStyle::Tiled:
+				painter->setBrush(QBrush(pixmap));
+				break;
+			case Background::ImageStyle::CenterTiled:
+				painter->setBrush(QBrush(pixmap));
+				painter->setBrushOrigin(pixmap.size().width() / 2, pixmap.size().height() / 2);
+				break;
+			}
+		}
+	} else if (background->type == Background::Type::Pattern)
+		painter->setBrush(QBrush(background->firstColor, background->brushStyle));
+
+	painter->setOpacity(background->opacity);
+	painter->setPen(Qt::NoPen);
+}
+}
 
 Background::Background(const QString& name)
 	: AbstractAspect(name, AspectType::AbstractAspect)
@@ -72,97 +163,22 @@ void Background::draw(QPainter* painter, const QPolygonF& polygon, double radius
 	Q_D(const Background);
 	const QRectF& rect = polygon.boundingRect();
 
-	// brush
-	if (d->type == Background::Type::Color) {
-		switch (d->colorStyle) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(d->firstColor));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, d->firstColor);
-			linearGrad.setColorAt(1, d->secondColor);
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, d->firstColor);
-			linearGrad.setColorAt(1, d->secondColor);
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, d->firstColor);
-			linearGrad.setColorAt(1, d->secondColor);
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, d->firstColor);
-			linearGrad.setColorAt(1, d->secondColor);
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, d->firstColor);
-			radialGrad.setColorAt(1, d->secondColor);
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-		}
-	} else if (d->type == Background::Type::Image) {
-		if (!d->fileName.trimmed().isEmpty()) {
-			QPixmap pix(d->fileName);
-			switch (d->imageStyle) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Centered: {
-				QPixmap backpix(rect.size().toSize());
-				backpix.fill();
-				QPainter p(&backpix);
-				p.drawPixmap(QPointF(0, 0), pix);
-				p.end();
-				painter->setBrush(QBrush(backpix));
-				painter->setBrushOrigin(-pix.size().width() / 2, -pix.size().height() / 2);
-				break;
-			}
-			case Background::ImageStyle::Tiled:
-				painter->setBrush(QBrush(pix));
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-			}
-		}
-	} else if (d->type == Background::Type::Pattern)
-		painter->setBrush(QBrush(d->firstColor, d->brushStyle));
-
-	// pen and opacity
-	painter->setOpacity(d->opacity);
-	painter->setPen(Qt::NoPen);
+	// this draw function was too restrictive because it cannot accurately draw curved shapes.
+	// so the logic for preparing the painter depending on the background style was extracted to preparePainter,
+	// and a new overload of draw is created below which can accurately draw any shape.
+	preparePainter(painter, d, rect);
 
 	if (qFuzzyIsNull(radius))
 		painter->drawPolygon(polygon);
 	else
 		painter->drawRoundedRect(rect, radius, radius);
+}
+
+// this overload accepts a QPainterPath, which can express more shapes than a QPolygonF as in the overload above
+void Background::draw(QPainter* painter, const QPainterPath& path) const {
+	Q_D(const Background);
+	preparePainter(painter, d, path.boundingRect());
+	painter->drawPath(path);
 }
 
 // ##############################################################################

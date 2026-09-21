@@ -3,13 +3,14 @@
 	Project              : LabPlot
 	Description          : file I/O-filter related interface
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/datasources/filters/FilterStatus.h"
 #include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/lib/hostprocess.h"
@@ -18,6 +19,7 @@
 #include <KLocalizedString>
 
 #include <QDateTime>
+#include <QFileInfo>
 #include <QImageReader>
 #include <QLocale>
 #include <QProcess>
@@ -200,6 +202,14 @@ void AbstractFileFilter::clearLastError() {
 	m_lastError.clear();
 }
 
+bool AbstractFileFilter::validateFileName(const QString& fileName) {
+	if (QFileInfo::exists(fileName))
+		return true;
+
+	setLastError(Status::UnableToOpenDevice().message());
+	return false;
+}
+
 /*!
  * Returns the list of warnings that occurred during the last parse step.
  */
@@ -231,6 +241,9 @@ bool AbstractFileFilter::exclusiveFileType(const AbstractFileFilter::FileType ty
 	case FileType::MATIO:
 	case FileType::VECTOR_BLF:
 	case FileType::MCAP:
+	case FileType::Parquet:
+	case FileType::ArrowIPC:
+	case FileType::ORC:
 		return true;
 	case FileType::Ascii:
 	case FileType::Binary:
@@ -331,6 +344,16 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 #ifdef HAVE_MCAP
 	else if (fileInfo.contains(QLatin1String("mcap")) || fileName.endsWith(QLatin1String(".mcap")))
 		fileType = FileType::MCAP;
+#endif
+#ifdef HAVE_PARQUET
+	else if (fileInfo.contains(QLatin1String("Apache Parquet")) || fileName.endsWith(QLatin1String(".parquet"), Qt::CaseInsensitive)
+			 || fileName.endsWith(QLatin1String(".parq"), Qt::CaseInsensitive))
+		fileType = FileType::Parquet;
+	else if (fileName.endsWith(QLatin1String(".feather"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".arrow"), Qt::CaseInsensitive)
+			 || fileName.endsWith(QLatin1String(".ipc"), Qt::CaseInsensitive))
+		fileType = FileType::ArrowIPC;
+	else if (fileName.endsWith(QLatin1String(".orc"), Qt::CaseInsensitive))
+		fileType = FileType::ORC;
 #endif
 	else
 		fileType = FileType::Binary;

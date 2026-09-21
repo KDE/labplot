@@ -37,6 +37,7 @@ class McapOptionsWidget;
 class MatioOptionsWidget;
 class NetCDFOptionsWidget;
 class OdsOptionsWidget;
+class ParquetOptionsWidget;
 class ROOTOptionsWidget;
 class TemplateHandler;
 class ImportKaggleDatasetWidget;
@@ -78,6 +79,7 @@ public:
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedROOTNames() const;
 	const QStringList selectedMatioNames() const;
+	const QStringList selectedParquetColumnNames() const;
 	//	const QStringList selectedVectorBLFNames() const;
 
 	QString host() const;
@@ -116,6 +118,7 @@ private:
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	std::unique_ptr<JsonOptionsWidget> m_jsonOptionsWidget;
 	std::unique_ptr<McapOptionsWidget> m_mcapOptionsWidget;
+	std::unique_ptr<ParquetOptionsWidget> m_parquetOptionsWidget;
 
 	std::unique_ptr<ROOTOptionsWidget> m_rootOptionsWidget;
 
@@ -172,6 +175,7 @@ private Q_SLOTS:
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
 	friend class McapOptionsWidget;
+	friend class ParquetOptionsWidget; // to access refreshPreview()
 	friend class ROOTOptionsWidget; // to access refreshPreview() and others
 	friend class OdsOptionsWidget; // to access refreshPreview()
 	friend class XLSXOptionsWidget; // to access refreshPreview()

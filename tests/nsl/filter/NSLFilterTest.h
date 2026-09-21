@@ -19,6 +19,7 @@ private Q_SLOTS:
 	void initTestCase() override;
 
 	void testForm();
+	void testNaNInfHandling();
 	// performance
 	// void testPerformance();
 private:

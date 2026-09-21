@@ -20,37 +20,13 @@
 	\ingroup frontend
  */
 ValueWidget::ValueWidget(QWidget* parent, bool xy)
-	: QWidget(parent) {
+	: QWidget(parent), m_xy(xy) {
 	ui.setupUi(this);
-	ui.kfrFont->setMaximumHeight(ui.lColor->height());
+	ui.kfrFont->setFixedHeight(ui.lColor->sizeHint().height());
+
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	cbColumn = new TreeViewComboBox(this);
 	gridLayout->addWidget(cbColumn, 2, 2, 1, 1);
-
-	if (xy) {
-		ui.cbType->addItem(i18n("No Values"), static_cast<int>(Value::Type::NoValues));
-		ui.cbType->addItem(QStringLiteral("x"), static_cast<int>(Value::Type::X));
-		ui.cbType->addItem(QStringLiteral("y"), static_cast<int>(Value::Type::Y));
-		ui.cbType->addItem(QStringLiteral("x, y"), static_cast<int>(Value::Type::XY));
-		ui.cbType->addItem(QStringLiteral("(x, y)"), static_cast<int>(Value::Type::XYBracketed));
-		ui.cbType->addItem(i18n("Custom Column"), static_cast<int>(Value::Type::CustomColumn));
-	} else {
-		ui.cbType->addItem(i18n("No Values"), static_cast<int>(Value::Type::NoValues));
-		ui.cbType->addItem(i18n("Frequency"), static_cast<int>(Value::Type::BinEntries));
-		ui.cbType->addItem(i18n("Custom Column"), static_cast<int>(Value::Type::CustomColumn));
-	}
-
-	ui.cbPosition->addItem(i18n("Above"), static_cast<int>(Value::Position::Above));
-	ui.cbPosition->addItem(i18n("Below"), static_cast<int>(Value::Position::Under));
-	ui.cbPosition->addItem(i18n("Left"), static_cast<int>(Value::Position::Left));
-	ui.cbPosition->addItem(i18n("Right"), static_cast<int>(Value::Position::Right));
-
-	// add formats for numeric values
-	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
-	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
-	ui.cbNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
-	ui.cbNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
-	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 
 	// add format for date, time and datetime values
 	for (const auto& s : AbstractColumn::dateFormats())
@@ -89,8 +65,6 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	m_values = values;
 	m_value = m_values.first();
 
-	ui.sbDistance->setLocale(QLocale());
-
 	if (!m_aspectModel) {
 		m_aspectModel = new AspectTreeModel(m_value->project());
 		m_aspectModel->enablePlottableColumnsOnly(true);
@@ -98,9 +72,8 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	}
 
 	// add center value if position is available
-	if (m_value->centerPositionAvailable())
-		if (!ui.cbPosition->contains(i18n("Center")))
-			ui.cbPosition->addItem(i18n("Center"), static_cast<int>(Value::Position::Center));
+	if (m_value->centerPositionAvailable() && !ui.cbPosition->contains(i18n("Center")))
+		ui.cbPosition->addItem(i18n("Center"), static_cast<int>(Value::Position::Center));
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
@@ -139,6 +112,39 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 
 void ValueWidget::updateLocale() {
 	ui.sbDistance->setLocale(QLocale());
+}
+
+void ValueWidget::retranslateUi() {
+	ui.cbType->clear();
+	if (m_xy) { // xy-curve, pareto chart, set via the boolean in the constructor
+		ui.cbType->addItem(i18n("No Values"), static_cast<int>(Value::Type::NoValues));
+		ui.cbType->addItem(QStringLiteral("x"), static_cast<int>(Value::Type::X));
+		ui.cbType->addItem(QStringLiteral("y"), static_cast<int>(Value::Type::Y));
+		ui.cbType->addItem(QStringLiteral("x, y"), static_cast<int>(Value::Type::XY));
+		ui.cbType->addItem(QStringLiteral("(x, y)"), static_cast<int>(Value::Type::XYBracketed));
+		ui.cbType->addItem(i18n("Custom Column"), static_cast<int>(Value::Type::CustomColumn));
+	} else {
+		ui.cbType->addItem(i18n("No Values"), static_cast<int>(Value::Type::NoValues));
+		if (m_value && m_value->parentAspect()->type() == AspectType::Histogram)
+			ui.cbType->addItem(i18n("Frequency"), static_cast<int>(Value::Type::BinEntries));
+		else // bar plot, lollipop plot
+			ui.cbType->addItem(i18n("Values"), static_cast<int>(Value::Type::Values));
+		ui.cbType->addItem(i18n("Custom Column"), static_cast<int>(Value::Type::CustomColumn));
+	}
+
+	ui.cbPosition->clear();
+	ui.cbPosition->addItem(i18n("Above"), static_cast<int>(Value::Position::Above));
+	ui.cbPosition->addItem(i18n("Below"), static_cast<int>(Value::Position::Under));
+	ui.cbPosition->addItem(i18n("Left"), static_cast<int>(Value::Position::Left));
+	ui.cbPosition->addItem(i18n("Right"), static_cast<int>(Value::Position::Right));
+
+	// add formats for numeric values
+	ui.cbNumericFormat->clear();
+	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
+	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+	ui.cbNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+	ui.cbNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
+	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 }
 
 void ValueWidget::setXColumn(const AbstractColumn* column) {
@@ -205,9 +211,11 @@ void ValueWidget::updateWidgets() {
 		ui.lColumn->hide();
 		cbColumn->hide();
 
-		if (type == Value::Type::BinEntries)
+		if (type == Value::Type::BinEntries) // histogram, integer values for the bin entries only
 			hasInteger = true;
-		else {
+		else if (type == Value::Type::Values) // bar plots
+			hasNumeric = true; // TODO: always numeric or rather check if we have pure int values?
+		else { // xy-related types, determine the actual column mode of the provided columns
 			hasInteger = (m_xColumn && (m_xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || m_xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt))
 			|| (m_yColumn && (m_yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || m_yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt));
 
@@ -406,13 +414,21 @@ void ValueWidget::valueColorChanged(QColor color) {
 //**********************************************************
 void ValueWidget::load() {
 	CONDITIONAL_LOCK_RETURN;
+
+	retranslateUi(); // call this first to re-populate the combobox with the available value types
 	ui.cbType->setCurrentIndex(ui.cbType->findData((int)m_value->type()));
+	updateWidgets(); // call this to update the visibility of widgets dependinging on the selected type
+
 	ui.cbPosition->setCurrentIndex(ui.cbPosition->findData((int)m_value->position()));
 	ui.sbDistance->setValue(Worksheet::convertFromSceneUnits(m_value->distance(), Worksheet::Unit::Point));
 	ui.sbRotation->setValue(m_value->rotationAngle());
 	ui.sbOpacity->setValue(round(m_value->opacity()) * 100.0);
 	cbColumn->setAspect(m_value->column(), m_value->columnPath());
-	this->updateWidgets();
+
+	ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(m_value->numericFormat()));
+	ui.sbPrecision->setValue(m_value->precision());
+	ui.cbDateTimeFormat->setCurrentIndex(ui.cbNumericFormat->findData(m_value->dateTimeFormat()));
+
 	ui.lePrefix->setText(m_value->prefix());
 	ui.leSuffix->setText(m_value->suffix());
 	QFont font = m_value->font();
@@ -422,28 +438,40 @@ void ValueWidget::load() {
 }
 
 void ValueWidget::loadConfig(const KConfigGroup& group) {
-	ui.cbType->setCurrentIndex(ui.cbType->findData(group.readEntry("ValuesType", (int)m_value->type())));
-	ui.cbPosition->setCurrentIndex(ui.cbPosition->findData(group.readEntry("ValuesPosition", (int)m_value->position())));
-	ui.sbDistance->setValue(Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", m_value->distance()), Worksheet::Unit::Point));
-	ui.sbRotation->setValue(group.readEntry("ValuesRotation", m_value->rotationAngle()));
-	ui.sbOpacity->setValue(round(group.readEntry("ValuesOpacity", m_value->opacity()) * 100.0));
-	this->updateWidgets();
-	ui.lePrefix->setText(group.readEntry("ValuesPrefix", m_value->prefix()));
-	ui.leSuffix->setText(group.readEntry("ValuesSuffix", m_value->suffix()));
+	CONDITIONAL_LOCK_RETURN;
+
+	retranslateUi(); // call this first to re-populate the combobox with the available value types
+	ui.cbType->setCurrentIndex(ui.cbType->findData(group.readEntry("ValueType", (int)m_value->type())));
+	updateWidgets(); // call this to update the visibility of widgets dependinging on the selected type
+
+	ui.cbPosition->setCurrentIndex(ui.cbPosition->findData(group.readEntry("ValuePosition", (int)m_value->position())));
+	ui.sbDistance->setValue(Worksheet::convertFromSceneUnits(group.readEntry("ValueDistance", m_value->distance()), Worksheet::Unit::Point));
+	ui.sbRotation->setValue(group.readEntry("ValueRotation", m_value->rotationAngle()));
+	ui.sbOpacity->setValue(round(group.readEntry("ValueOpacity", m_value->opacity()) * 100.0));
+
+	ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(group.readEntry("ValueNumericFormat", "f").at(0).toLatin1()));
+	ui.sbPrecision->setValue(group.readEntry("ValuePrecision", m_value->precision()));
+	ui.cbDateTimeFormat->setCurrentIndex(ui.cbDateTimeFormat->findData(group.readEntry("ValueDateTimeFormat", m_value->dateTimeFormat())));
+
+	ui.lePrefix->setText(group.readEntry("ValuePrefix", m_value->prefix()));
+	ui.leSuffix->setText(group.readEntry("ValueSuffix", m_value->suffix()));
 	QFont font = m_value->font();
 	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
-	ui.kfrFont->setFont(group.readEntry("ValuesFont", font));
-	ui.kcbColor->setColor(group.readEntry("ValuesColor", m_value->color()));
+	ui.kfrFont->setFont(group.readEntry("ValueFont", font));
+	ui.kcbColor->setColor(group.readEntry("ValueColor", m_value->color()));
 }
 
 void ValueWidget::saveConfig(KConfigGroup& group) const {
-	group.writeEntry("ValuesType", ui.cbType->currentData().toInt());
-	group.writeEntry("ValuesPosition", ui.cbPosition->currentData().toInt());
-	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbDistance->value(), Worksheet::Unit::Point));
-	group.writeEntry("ValuesRotation", ui.sbRotation->value());
-	group.writeEntry("ValuesOpacity", ui.sbOpacity->value() / 100.0);
-	group.writeEntry("ValuesPrefix", ui.lePrefix->text());
-	group.writeEntry("ValuesSuffix", ui.leSuffix->text());
-	group.writeEntry("ValuesFont", ui.kfrFont->font());
-	group.writeEntry("ValuesColor", ui.kcbColor->color());
+	group.writeEntry("ValueType", ui.cbType->currentData().toInt());
+	group.writeEntry("ValuePosition", ui.cbPosition->currentData().toInt());
+	group.writeEntry("ValueDistance", Worksheet::convertToSceneUnits(ui.sbDistance->value(), Worksheet::Unit::Point));
+	group.writeEntry("ValueRotation", ui.sbRotation->value());
+	group.writeEntry("ValueOpacity", ui.sbOpacity->value() / 100.0);
+	group.writeEntry("ValueNumericFormat", ui.cbNumericFormat->currentData().toString());
+	group.writeEntry("ValuePrecision", ui.sbPrecision->value());
+	group.writeEntry("ValueDateTimeFormat", ui.cbDateTimeFormat->currentData().toString());
+	group.writeEntry("ValuePrefix", ui.lePrefix->text());
+	group.writeEntry("ValueSuffix", ui.leSuffix->text());
+	group.writeEntry("ValueFont", ui.kfrFont->font());
+	group.writeEntry("ValueColor", ui.kcbColor->color());
 }

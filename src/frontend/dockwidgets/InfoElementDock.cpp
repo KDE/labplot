@@ -164,6 +164,9 @@ void InfoElementDock::updateLocale() {
 }
 
 void InfoElementDock::retranslateUi() {
+	m_labelWidget->retranslateUi();
+	m_verticalLineWidget->retranslateUi();
+	m_connectionLineWidget->retranslateUi();
 }
 
 //*************************************************************

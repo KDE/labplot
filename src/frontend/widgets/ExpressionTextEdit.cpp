@@ -15,6 +15,8 @@
 #include "backend/gsl/ExpressionParser.h"
 #include "tools/EquationHighlighter.h"
 
+#include <KLocalizedString>
+
 #include <QAbstractItemView>
 #include <QCompleter>
 #include <QKeyEvent>
@@ -51,7 +53,7 @@ ExpressionTextEdit::ExpressionTextEdit(QWidget* parent)
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 
 	connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &ExpressionTextEdit::insertCompletion);
-	connect(this, &ExpressionTextEdit::textChanged, this, [=]() {
+	connect(this, &ExpressionTextEdit::textChanged, this, [=, this]() {
 		validateExpression();
 	});
 	connect(this, &ExpressionTextEdit::cursorPositionChanged, m_highlighter, &EquationHighlighter::rehighlight);
@@ -66,8 +68,7 @@ bool ExpressionTextEdit::isValid() const {
 }
 
 QString ExpressionTextEdit::errorMessage() const {
-	const auto parser = ExpressionParser::getInstance();
-	return parser->errorMessage();
+	return m_errorMessage;
 }
 
 void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
@@ -129,10 +130,27 @@ void ExpressionTextEdit::validateExpression(bool force) {
 	if (textChanged || force) {
 		auto parser = ExpressionParser::getInstance();
 		m_isValid = parser->isValid(text, m_variables);
-		if (!m_isValid) {
-			setToolTip(parser->errorMessage());
+		// only show warning style for non-empty invalid expressions
+		// empty expressions are valid but shouldn't show the warning color
+		if (!m_isValid && !text.isEmpty()) {
+			// point to the undefined names first, the plain syntax error of the parser doesn't tell the user much
+			auto undefined = parser->getParameter(text, m_variables);
+			undefined.removeAll(QStringLiteral("i")); // reserved for the row index
+			if (!undefined.isEmpty())
+				m_errorMessage = i18np("Undefined variable: %2. Define it in the list of variables.",
+									   "Undefined variables: %2. Define them in the list of variables.",
+									   undefined.size(),
+									   undefined.join(QLatin1String(", ")));
+			else
+				m_errorMessage = parser->errorMessage();
+
+			if (m_errorMessage.isEmpty())
+				m_errorMessage = i18n("Invalid expression");
+
+			setToolTip(m_errorMessage);
 			SET_WARNING_STYLE(this)
 		} else {
+			m_errorMessage.clear();
 			setToolTip(QStringLiteral(""));
 			setStyleSheet(QString());
 		}
@@ -201,7 +219,7 @@ void ExpressionTextEdit::mouseMoveEvent(QMouseEvent* e) {
 
 	const QString& token = tc.selectedText();
 	if (token.isEmpty()) {
-		setToolTip(QString());
+		setToolTip(m_errorMessage);
 		return;
 	}
 
@@ -222,8 +240,8 @@ void ExpressionTextEdit::mouseMoveEvent(QMouseEvent* e) {
 		if (index != -1) {
 			static const QStringList& names = ExpressionParser::getInstance()->functionsDescriptions();
 			setToolTip(functions.at(index) + QStringLiteral(" - ") + names.at(index));
-		} else
-			setToolTip(QString());
+		} else // no constant or function under the cursor, fall back to the reason for the invalid expression
+			setToolTip(m_errorMessage);
 	}
 
 	KTextEdit::mouseMoveEvent(e);

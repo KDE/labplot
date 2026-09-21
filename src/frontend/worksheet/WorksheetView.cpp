@@ -100,7 +100,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	connect(m_worksheet, &Worksheet::useViewSizeChanged, this, &WorksheetView::useViewSizeChanged);
 	connect(m_worksheet, &Worksheet::pageRectChanged, this, &WorksheetView::updateFit);
 	connect(m_worksheet, &Worksheet::layoutChanged, this, &WorksheetView::layoutChanged);
-	connect(m_worksheet, &Worksheet::changed, this, [=] {
+	connect(m_worksheet, &Worksheet::changed, this, [=, this] {
 		if (m_magnificationWindow && m_magnificationWindow->isVisible())
 			updateMagnificationWindow(mapToScene(mapFromGlobal(QCursor::pos())));
 	});
@@ -546,7 +546,7 @@ void WorksheetView::initMenus() {
 	m_themeMenu = new QMenu(i18n("Theme"), this);
 	m_themeMenu->setIcon(QIcon::fromTheme(QStringLiteral("color-management")));
 #ifndef SDK
-	connect(m_themeMenu, &QMenu::aboutToShow, this, [=]() {
+	connect(m_themeMenu, &QMenu::aboutToShow, this, [=, this]() {
 		if (!m_themeMenu->isEmpty())
 			return;
 		auto* themeWidget = new ThemesWidget(nullptr);

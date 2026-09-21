@@ -17,6 +17,7 @@ class NSLStatsTest : public NSLTest {
 
 private Q_SLOTS:
 	void testQuantile();
+	void testNaNInfHandling();
 	// performance
 	// void testPerformance();
 };

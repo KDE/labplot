@@ -114,6 +114,9 @@ void XYFitCurveDock::setupGeneral() {
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 
+	// use bigger height for better quality of the preview pixmap
+	uiGeneralTab.lFuncPic->setMinimumHeight(2 * uiGeneralTab.lModel->height());
+
 	// TODO: setting checked background color to unchecked color
 	//	p = uiGeneralTab.tbData->palette();
 	// QWidget::palette().color(QWidget::backgroundRole())
@@ -1033,23 +1036,10 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
-		QImage image = GuiTools::importPDFFile(file);
-
-		// use system palette for background
-		if (GuiTools::isDarkMode()) {
-			// invert image if in dark mode
-			image.invertPixels();
-
-			for (int i = 0; i < image.size().width(); i++)
-				for (int j = 0; j < image.size().height(); j++)
-					if (qGray(image.pixel(i, j)) < 64) // 0-255: 0-64 covers all dark pixel
-						image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
-		} else {
-			for (int i = 0; i < image.size().width(); i++)
-				for (int j = 0; j < image.size().height(); j++)
-					if (qGray(image.pixel(i, j)) > 192) // 0-255: 224-255 covers all light pixel
-						image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
-		}
+		const double previewScale = 2.0;
+		const double previewRenderDpi = 1200.0;
+		QImage image = GuiTools::importPDFFile(file, previewScale, previewRenderDpi);
+		image = GuiTools::recolorMonochromeImage(image, palette().color(QPalette::Text), palette().color(QPalette::Base));
 
 		if (image.isNull()) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: model image is null!")
@@ -1062,8 +1052,7 @@ void XYFitCurveDock::updateModelEquation() {
 			uiGeneralTab.lFuncPic->setAutoFillBackground(true);
 			uiGeneralTab.lFuncPic->setPalette(p);
 
-			uiGeneralTab.lFuncPic->setPixmap(QPixmap::fromImage(image));
-			uiGeneralTab.lFuncPic->show();
+			GuiTools::setPixmapFromImage(uiGeneralTab.lFuncPic, image);
 		}
 		uiGeneralTab.teEquation->hide();
 	}

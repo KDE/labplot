@@ -343,7 +343,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 
 	// for containers, connect to visilibity changes and update the layout accordingly
 	if (dynamic_cast<const WorksheetElementContainer*>(addedElement))
-		connect(addedElement, &WorksheetElement::visibleChanged, this, [=]() {
+		connect(addedElement, &WorksheetElement::visibleChanged, this, [=, this]() {
 			if (layout() != Worksheet::Layout::NoLayout)
 				updateLayout();
 		});

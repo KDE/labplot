@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : line settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -35,34 +35,17 @@ LineWidget::LineWidget(QWidget* parent)
 
 void LineWidget::setLines(const QList<Line*>& lines) {
 	CONDITIONAL_LOCK_RETURN;
+	// disconnect the old connections from the previous aspect
+	while (!m_connections.isEmpty())
+		disconnect(m_connections.takeLast());
 	m_lines = lines;
 	m_line = m_lines.first();
 	m_prefix = m_line->prefix();
 
-	if (m_line->histogramLineTypeAvailable()) {
+	if (m_line->histogramLineTypeAvailable() || m_prefix == QLatin1String("DropLine")) {
 		ui.lType->show();
 		ui.cbType->show();
-
-		if (ui.cbType->count() == 0) {
-			ui.cbType->addItem(i18n("None"));
-			ui.cbType->addItem(i18n("Bars"));
-			ui.cbType->addItem(i18n("Envelope"));
-			ui.cbType->addItem(i18n("Drop Lines"));
-			ui.cbType->addItem(i18n("Half-Bars"));
-		}
-	} else if (m_prefix == QLatin1String("DropLine")) {
-		ui.lType->show();
-		ui.cbType->show();
-
-		if (ui.cbType->count() == 0) {
-			ui.cbType->addItem(i18n("No Drop Lines"));
-			ui.cbType->addItem(i18n("Drop Lines, X"));
-			ui.cbType->addItem(i18n("Drop Lines, Y"));
-			ui.cbType->addItem(i18n("Drop Lines, XY"));
-			ui.cbType->addItem(i18n("Drop Lines, X, Zero Baseline"));
-			ui.cbType->addItem(i18n("Drop Lines, X, Min Baseline"));
-			ui.cbType->addItem(i18n("Drop Lines, X, Max Baseline"));
-		}
+		retranslateUi(); // call this to create combobox items
 	} else {
 		ui.lType->hide();
 		ui.cbType->hide();
@@ -70,12 +53,13 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 
 	load();
 
-	connect(m_line, &Line::histogramLineTypeChanged, this, &LineWidget::histogramLineTypeChanged);
-	connect(m_line, &Line::dropLineTypeChanged, this, &LineWidget::dropLineTypeChanged);
-	connect(m_line, &Line::styleChanged, this, &LineWidget::lineStyleChanged);
-	connect(m_line, &Line::colorChanged, this, &LineWidget::lineColorChanged);
-	connect(m_line, &Line::widthChanged, this, &LineWidget::lineWidthChanged);
-	connect(m_line, &Line::opacityChanged, this, &LineWidget::lineOpacityChanged);
+	// save the connections for the current aspect
+	m_connections << connect(m_line, &Line::histogramLineTypeChanged, this, &LineWidget::histogramLineTypeChanged);
+	m_connections << connect(m_line, &Line::dropLineTypeChanged, this, &LineWidget::dropLineTypeChanged);
+	m_connections << connect(m_line, &Line::styleChanged, this, &LineWidget::lineStyleChanged);
+	m_connections << connect(m_line, &Line::colorChanged, this, &LineWidget::lineColorChanged);
+	m_connections << connect(m_line, &Line::widthChanged, this, &LineWidget::lineWidthChanged);
+	m_connections << connect(m_line, &Line::opacityChanged, this, &LineWidget::lineOpacityChanged);
 }
 
 void LineWidget::showEvent(QShowEvent* event) {
@@ -122,7 +106,32 @@ void LineWidget::setEnabled(bool enabled) {
 }
 
 void LineWidget::updateLocale() {
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbWidth->setLocale(QLocale());
+}
+
+void LineWidget::retranslateUi() {
+	if (m_line && m_line->histogramLineTypeAvailable()) {
+		ui.cbType->clear();
+		if (ui.cbType->count() == 0) {
+			ui.cbType->addItem(i18n("None"));
+			ui.cbType->addItem(i18n("Bars"));
+			ui.cbType->addItem(i18n("Envelope"));
+			ui.cbType->addItem(i18n("Drop Lines"));
+			ui.cbType->addItem(i18n("Half-Bars"));
+		}
+	} else if (m_prefix == QLatin1String("DropLine")) {
+		ui.cbType->clear();
+		if (ui.cbType->count() == 0) {
+			ui.cbType->addItem(i18n("No Drop Lines"));
+			ui.cbType->addItem(i18n("Drop Lines, X"));
+			ui.cbType->addItem(i18n("Drop Lines, Y"));
+			ui.cbType->addItem(i18n("Drop Lines, XY"));
+			ui.cbType->addItem(i18n("Drop Lines, X, Zero Baseline"));
+			ui.cbType->addItem(i18n("Drop Lines, X, Min Baseline"));
+			ui.cbType->addItem(i18n("Drop Lines, X, Max Baseline"));
+		}
+	}
 }
 
 //*************************************************************
@@ -207,6 +216,8 @@ void LineWidget::lineColorChanged(const QColor& color) {
 
 	CONDITIONAL_LOCK_RETURN;
 	ui.kcbColor->setColor(color);
+	// update the line drawn in the line widget 'select line style' combobox
+	GuiTools::updatePenStyles(ui.cbStyle, color);
 }
 
 void LineWidget::lineWidthChanged(double width) {

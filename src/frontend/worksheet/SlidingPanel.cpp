@@ -131,7 +131,7 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	auto* pinAction = new QAction(QIcon::fromTheme(QStringLiteral("pin")), i18n("Pin the navigation panel"));
 	pinAction->setCheckable(true);
 	pinAction->setChecked(m_fixed);
-	connect(pinAction, &QAction::toggled, this, [=](bool toggled) {
+	connect(pinAction, &QAction::toggled, this, [=, this](bool toggled) {
 		m_fixed = toggled;
 	});
 	m_toolBar->addAction(pinAction);

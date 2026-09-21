@@ -134,6 +134,9 @@ function(generate_python_bindings)
 
     set(generated_sources_dependencies ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM})
 
+    message(STATUS "PySide6_TYPESYSTEMS: ${PySide6_TYPESYSTEMS}")
+    message(STATUS "Shiboken options: ${shiboken_options}")
+
     # Add custom target to run shiboken to generate the binding cpp files.
     add_custom_command(
         OUTPUT ${PB_GENERATED_SOURCES}

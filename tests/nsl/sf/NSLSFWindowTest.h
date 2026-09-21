@@ -17,6 +17,7 @@ class NSLSFWindowTest : public NSLTest {
 
 private Q_SLOTS:
 	void testWindowTypes();
+	void testNaNInfHandling();
 
 	void testPerformance_triangle();
 	void testPerformance_welch();

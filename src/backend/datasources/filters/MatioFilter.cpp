@@ -234,6 +234,8 @@ QVector<QStringList> MatioFilter::readCurrentVar(const QString& fileName, Abstra
   reads the content of the file \c fileName to the data source \c dataSource.
 */
 void MatioFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
+	if (!validateFileName(fileName))
+		return;
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 

@@ -89,4 +89,36 @@ void MatrixTest::testLoadSaveWithData() {
 	}
 }
 
+//**********************************************************
+//********** Check different formulas **********************
+//**********************************************************
+#define INIT_MATRIX                                                                                                                                            \
+	Matrix m(QStringLiteral("test matrix"), false);                                                                                                            \
+	QStringList variableNames;                                                                                                                                 \
+	variableNames << QStringLiteral("x") << QStringLiteral("y");
+
+/*!
+   formula "1"
+*/
+void MatrixTest::formula1() {
+	INIT_MATRIX
+
+	m.setFormula(QStringLiteral("1"));
+	// TODO: currently only via MatrixFunctionDialog
+	// m.updateFormula();
+
+	const int rows = 10;
+	const int cols = 10;
+
+	QCOMPARE(m.columnCount(), cols);
+	QCOMPARE(m.rowCount(), rows);
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			QCOMPARE(m.cell<double>(i, j), 0);
+		}
+	}
+}
+
 QTEST_MAIN(MatrixTest)

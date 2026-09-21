@@ -54,7 +54,7 @@ void ReferenceRange::init(bool loading) {
 	d->background->setEnabledAvailable(true);
 	addChild(d->background);
 	d->background->setHidden(true);
-	connect(d->background, &Background::updateRequested, [=] {
+	connect(d->background, &Background::updateRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});
@@ -63,7 +63,7 @@ void ReferenceRange::init(bool loading) {
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
-	connect(d->line, &Line::updatePixmapRequested, [=] {
+	connect(d->line, &Line::updatePixmapRequested, [=, this] {
 		d->update();
 		Q_EMIT changed();
 	});

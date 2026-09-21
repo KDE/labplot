@@ -23,6 +23,8 @@
 #include <QLabel>
 #include <QMenu>
 #include <QTimer>
+#include <QKeyEvent>
+#include <QKeySequence>
 
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
@@ -286,6 +288,33 @@ bool NotebookView::eventFilter(QObject* watched, QEvent* event) {
 		if (auto* w = qobject_cast<QWidget*>(watched))
 			w->setFocus();
 	}
+	else if (event->type() == QEvent::ShortcutOverride) {
+		auto* keyEvent = static_cast<QKeyEvent*>(event);
+
+		if (keyEvent->matches(QKeySequence::Copy)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_copy"))) a->trigger();
+				keyEvent->accept();
+			return true;
+		} else if (keyEvent->matches(QKeySequence::Paste)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_paste"))) a->trigger();
+				keyEvent->accept();
+			return true;
+		} else if (keyEvent->matches(QKeySequence::Cut)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_cut"))) a->trigger();
+				keyEvent->accept();
+			return true;
+		}
+		else if (keyEvent->matches(QKeySequence::Undo)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_undo"))) a->trigger();
+			keyEvent->accept();
+			return true;
+		} else if (keyEvent->matches(QKeySequence::Redo)) {
+			if (auto* a = m_part->action(QStringLiteral("edit_redo"))) a->trigger();
+			keyEvent->accept();
+			return true;
+		}
+	}
+
 	return QWidget::eventFilter(watched, event);
 }
 

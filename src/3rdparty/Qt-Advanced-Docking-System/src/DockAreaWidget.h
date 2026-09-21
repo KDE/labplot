@@ -166,6 +166,11 @@ protected:
 	void internalSetCurrentDockWidget(CDockWidget* DockWidget);
 
 	/**
+	 * Call this function to update the window title
+	 */
+	void updateWindowTitle();
+
+	/**
 	 * Marks tabs menu to update
 	 */
 	void markTitleBarMenuOutdated();
@@ -199,7 +204,7 @@ public:
 	/**
 	 * Virtual Destructor
 	 */
-	virtual ~CDockAreaWidget();
+	~CDockAreaWidget() override;
 
 	/**
 	 * Returns the dock manager object this dock area belongs to

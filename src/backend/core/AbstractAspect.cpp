@@ -360,7 +360,7 @@ QMenu* AbstractAspect::createContextMenu() {
 	// 	menu->addAction( KStandardAction::cut(this) );
 
 	QAction* actionDuplicate = nullptr;
-	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::Notebook && m_type != AspectType::Script) {
+	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::Notebook) {
 		// copy action:
 		// don't allow to copy fixed aspects
 		auto* action = KStandardAction::copy(this);
@@ -390,7 +390,7 @@ QMenu* AbstractAspect::createContextMenu() {
 			menu->insertAction(actionDuplicate, action);
 		else
 			menu->addAction(action);
-		connect(action, &QAction::triggered, [=]() {
+		connect(action, &QAction::triggered, [=, this]() {
 			paste();
 		});
 	}
@@ -460,11 +460,15 @@ QMenu* AbstractAspect::createContextMenu() {
 		if (count > 1) {
 			auto* moveMenu = new QMenu(i18n("Move"), menu);
 			moveMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
-			if (parent->indexOfChild<AbstractAspect>(this) != 0)
-				moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
+			if (parent->indexOfChild<AbstractAspect>(this) != 0) {
+				auto* action = moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
+				action->setShortcut(Qt::CTRL | Qt::Key_Up);
+			}
 
-			if (parent->indexOfChild<AbstractAspect>(this) != count - 1)
-				moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-down")), i18n("Down"), this, &AbstractAspect::moveDown);
+			if (parent->indexOfChild<AbstractAspect>(this) != count - 1) {
+				auto* action = moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-down")), i18n("Down"), this, &AbstractAspect::moveDown);
+				action->setShortcut(Qt::CTRL | Qt::Key_Down);
+			}
 			menu->addSeparator();
 			menu->addMenu(moveMenu);
 		}

@@ -48,6 +48,7 @@
 #include <QKeyEvent>
 #include <QMenu>
 #include <QPainter>
+#include <QTimer>
 #include <QWidgetAction>
 
 namespace {
@@ -140,6 +141,7 @@ CartesianPlot::~CartesianPlot() {
 void CartesianPlot::init(bool loading) {
 	// title
 	m_title = new TextLabel(this->name() + QLatin1String(" - ") + i18n("Title"), TextLabel::Type::PlotTitle);
+	m_title->setText(i18n("Title"));
 	addChild(m_title);
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(graphicsItem());
@@ -177,7 +179,7 @@ void CartesianPlot::init(bool loading) {
 	d->borderCornerRadius = group.readEntry(QStringLiteral("BorderCornerRadius"), 0.0);
 
 	// cursor line
-	d->cursorLine = new Line(QString());
+	d->cursorLine = new Line(QStringLiteral("cursorLine"));
 	d->cursorLine->setPrefix(QLatin1String("Cursor"));
 	d->cursorLine->setHidden(true);
 	addChild(d->cursorLine);
@@ -523,6 +525,7 @@ void CartesianPlot::initMenus() {
 
 	actionGroup = new QActionGroup(this);
 	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addAnalysisPlot);
+	addNewAnalysisMenu->addSeparator();
 	CartesianPlot::fillAnalysisMenu(addNewAnalysisMenu, actionGroup);
 	m_addNewMenu->addMenu(addNewAnalysisMenu);
 
@@ -557,13 +560,14 @@ void CartesianPlot::initMenus() {
 
 	actionGroup = new QActionGroup(this);
 	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addAnalysisPlot);
+	dataAnalysisMenu->addSeparator();
 	CartesianPlot::fillAnalysisMenu(dataAnalysisMenu, actionGroup);
 
 	// theme menu
 	themeMenu = new QMenu(i18n("Theme"));
 	themeMenu->setIcon(QIcon::fromTheme(QStringLiteral("color-management")));
 #ifndef SDK
-	connect(themeMenu, &QMenu::aboutToShow, this, [=]() {
+	connect(themeMenu, &QMenu::aboutToShow, this, [=, this]() {
 		if (!themeMenu->isEmpty())
 			return;
 		auto* themeWidget = new ThemesWidget(nullptr);
@@ -635,6 +639,19 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 	menu->addAction(action);
 	addNewPlotMenu->addMenu(menu);
 
+	// bar plots
+	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), addNewPlotMenu);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::BarPlot));
+	addNewBarPlotsMenu->addAction(action);
+
+	action = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LollipopPlot));
+	addNewBarPlotsMenu->addAction(action);
+
+	addNewPlotMenu->addMenu(addNewBarPlotsMenu);
+
 	// statistical plots
 	menu->addSeparator();
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), addNewPlotMenu);
@@ -656,19 +673,6 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 	addNewStatisticalPlotsMenu->addAction(action);
 
 	addNewPlotMenu->addMenu(addNewStatisticalPlotsMenu);
-
-	// bar plots
-	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), addNewPlotMenu);
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), actionGroup);
-	action->setData(static_cast<int>(Plot::PlotType::BarPlot));
-	addNewBarPlotsMenu->addAction(action);
-
-	action = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), actionGroup);
-	action->setData(static_cast<int>(Plot::PlotType::LollipopPlot));
-	addNewBarPlotsMenu->addAction(action);
-
-	addNewPlotMenu->addMenu(addNewBarPlotsMenu);
 
 	// continuous improvement plots
 	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), addNewPlotMenu);
@@ -695,6 +699,10 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 void CartesianPlot::fillFitMenu(QMenu* menu, QActionGroup* actionGroup) {
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Linear"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitLinear));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Piecewise Linear"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear));
 	menu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Power"), actionGroup);
@@ -745,7 +753,16 @@ void CartesianPlot::fillFitMenu(QMenu* menu, QActionGroup* actionGroup) {
 }
 
 void CartesianPlot::fillAnalysisMenu(QMenu* menu, QActionGroup* actionGroup) {
-	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), actionGroup);
+	// GROUP 1: Preprocessing & Basic Calculus (Most Common)
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Smoothing));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolate"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Interpolation));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Differentiation));
 	menu->addAction(action);
 
@@ -753,50 +770,41 @@ void CartesianPlot::fillAnalysisMenu(QMenu* menu, QActionGroup* actionGroup) {
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Integration));
 	menu->addAction(action);
 
+	// GROUP 2: Frequency Domain Analysis
 	menu->addSeparator();
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolate"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Interpolation));
-	menu->addAction(action);
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Smoothing));
-	menu->addAction(action);
-
-	menu->addSeparator();
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierFilter));
-	menu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierTransform));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierFilter));
 	menu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::HilbertTransform));
 	menu->addAction(action);
 
+	// GROUP 3: Correlation & Convolution
 	menu->addSeparator();
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Convolute/Deconvolute"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Convolution));
-	menu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Correlation));
 	menu->addAction(action);
 
-	menu->addSeparator();
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Line Simplification"), actionGroup);
-	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::LineSimplification));
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Convolute/Deconvolute"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Convolution));
 	menu->addAction(action);
 
+	// GROUP 4: Specialized Operations
 	menu->addSeparator();
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Correct Baseline"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::BaselineCorrection));
+	menu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Line Simplification"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::LineSimplification));
 	menu->addAction(action);
 
 	menu->addSeparator();
@@ -960,6 +968,21 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	}
 
 	if (op == NavigationOperation::ScaleAuto) {
+		bool createsUndoCommand = false;
+		if (!ics) { // all csystems
+			for (int i = 0; i < coordinateSystemCount(); i++) {
+				const auto* cs = coordinateSystem(i);
+				if (!autoScale(Dimension::X, cs->index(Dimension::X)) || !autoScale(Dimension::Y, cs->index(Dimension::Y))) {
+					createsUndoCommand = true;
+					break;
+				}
+			}
+		} else
+			createsUndoCommand = !autoScale(Dimension::X, xIndex) || !autoScale(Dimension::Y, yIndex);
+
+		if (createsUndoCommand)
+			beginMacro(i18n("%1: auto scale", name()));
+
 		if (!ics) { // all csystems
 			for (int i = 0; i < coordinateSystemCount(); i++) {
 				const auto* cs = coordinateSystem(i);
@@ -1000,6 +1023,9 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				scaleAuto(Dimension::Y, ics->index(Dimension::Y), true);
 			WorksheetElementContainer::retransform();
 		}
+
+		if (createsUndoCommand)
+			endMacro();
 	} else if (op == NavigationOperation::ScaleAutoX) {
 		bool update = rangeDirty(Dimension::X, xIndex);
 		if (!autoScale(Dimension::X, xIndex)) {
@@ -1471,10 +1497,11 @@ public:
 		, m_index(index)
 		, m_dimension(dim)
 		, m_otherValue(newValue) {
+		setText(i18n("%1: change %2-range %3", m_target->name(), CartesianCoordinateSystem::dimensionToString(dim), m_index + 1));
 	}
 	void redo() override {
 		m_target->setRangeDirty(m_dimension, m_index, true);
-		const auto& tmp = m_target->rangeConst(m_dimension, m_index);
+		const auto tmp = m_target->rangeConst(m_dimension, m_index); // Copy, not reference!
 		m_target->setRange(m_dimension, m_index, m_otherValue);
 		m_otherValue = tmp;
 		finalize();
@@ -1483,22 +1510,27 @@ public:
 		redo();
 	}
 	virtual void finalize() {
-		m_target->retransformScale(m_dimension, m_index, true);
-		Dimension dim_other = Dimension::Y;
-		if (m_dimension == Dimension::Y)
-			dim_other = Dimension::X;
+		if (!m_target->suppressRetransform) {
+			m_target->retransformScale(m_dimension, m_index, true);
+			Dimension dim_other = Dimension::Y;
+			if (m_dimension == Dimension::Y)
+				dim_other = Dimension::X;
 
-		QVector<int> scaledIndices;
-		for (int i = 0; i < m_target->q->coordinateSystemCount(); i++) {
-			auto cs = m_target->q->coordinateSystem(i);
-			auto index_other = cs->index(dim_other);
-			if (cs->index(m_dimension) == m_index && scaledIndices.indexOf(index_other) == -1) {
-				scaledIndices << index_other;
-				if (m_target->q->autoScale(dim_other, index_other) && m_target->q->scaleAuto(dim_other, index_other, false))
-					m_target->retransformScale(dim_other, index_other);
+			QVector<int> scaledIndices;
+			for (int i = 0; i < m_target->q->coordinateSystemCount(); i++) {
+				auto cs = m_target->q->coordinateSystem(i);
+				auto index_other = cs->index(dim_other);
+				if (cs->index(m_dimension) == m_index && scaledIndices.indexOf(index_other) == -1) {
+					scaledIndices << index_other;
+					if (m_target->q->autoScale(dim_other, index_other)) {
+						m_target->setRangeDirty(dim_other, index_other, true);
+						if (m_target->q->scaleAuto(dim_other, index_other, false))
+							m_target->retransformScale(dim_other, index_other);
+					}
+				}
 			}
+			m_target->q->WorksheetElementContainer::retransform();
 		}
-		m_target->q->WorksheetElementContainer::retransform();
 		Q_EMIT m_target->q->rangeChanged(m_dimension, m_index, m_target->rangeConst(m_dimension, m_index));
 	}
 
@@ -2026,6 +2058,7 @@ void CartesianPlot::addAnalysisPlot(const QAction* action) {
 	const auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	switch (type) {
 	case XYAnalysisCurve::AnalysisAction::FitLinear:
+	case XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear:
 	case XYAnalysisCurve::AnalysisAction::FitPower:
 	case XYAnalysisCurve::AnalysisAction::FitExp1:
 	case XYAnalysisCurve::AnalysisAction::FitExp2:
@@ -2213,7 +2246,6 @@ void CartesianPlot::addLineSimplificationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYLineSimplificationCurve(i18n("Line Simplification")));
@@ -2227,7 +2259,6 @@ void CartesianPlot::addDifferentiationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYDifferentiationCurve(i18n("Differentiation")));
@@ -2241,7 +2272,6 @@ void CartesianPlot::addIntegrationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYIntegrationCurve(i18n("Integration")));
@@ -2255,7 +2285,6 @@ void CartesianPlot::addInterpolationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYInterpolationCurve(i18n("Interpolation")));
@@ -2269,7 +2298,6 @@ void CartesianPlot::addSmoothCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYSmoothCurve(i18n("Smooth")));
@@ -2283,46 +2311,54 @@ void CartesianPlot::addBaselineCorrectionCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYBaselineCorrectionCurve(i18n("Baseline Correction")));
 }
 
 void CartesianPlot::addFitCurve(const QAction* action) {
+	auto type = XYAnalysisCurve::AnalysisAction::FitLinear;
+	if (action)
+		type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
+	else
+		DEBUG(Q_FUNC_INFO << "WARNING: no action provided, using default linear fit")
+
 	const auto& selectedCurves = this->selectedCurves();
 	if (!selectedCurves.isEmpty()) {
 		for (const auto* curCurve : selectedCurves) {
-			auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
-			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
-			curve->setDataSourceCurve(curCurve);
+			XYAnalysisCurve* analysisCurve = nullptr;
+			if (type != XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear) {
+				auto* fitCurve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
+				analysisCurve = fitCurve;
 
-			// set the fit model category and type
-			if (action) {
-				auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
-				curve->initFitData(type);
-			} else
-				DEBUG(Q_FUNC_INFO << "WARNING: no action found!")
+				fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+				fitCurve->setDataSourceCurve(curCurve);
+				fitCurve->initFitData(type); // set the fit model category and type
 
-			// fit with weights for y if the curve has error bars for y
-			if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
-				auto fitData = curve->fitData();
-				fitData.yWeightsType = nsl_fit_weight_instrumental;
-				curve->setFitData(fitData);
-				curve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
+				// fit with weights for y if the curve has error bars for y
+				if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
+					auto fitData = fitCurve->fitData();
+					fitData.yWeightsType = nsl_fit_weight_instrumental;
+					fitCurve->setFitData(fitData);
+					fitCurve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
+				}
+			} else {
+				auto* fitCurve = new XYPiecewiseLinearFitCurve(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
+				analysisCurve = fitCurve;
+				fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+				fitCurve->setDataSourceCurve(curCurve);
 			}
 
-			curve->recalculate();
-
-			// add the child after the fit was calculated so the dock widgets gets the fit results
-			// and call retransform() after this to calculate and to paint the data points of the fit-curve
-			this->addChild(curve);
-			curve->retransform();
+			this->addChild(analysisCurve);
 		}
 	} else {
-		auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
-		curve->initFitData(XYAnalysisCurve::AnalysisAction::FitLinear);
-		this->addChild(curve);
+		if (type == XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear)
+			this->addChild(new XYPiecewiseLinearFitCurve(i18nc("Curve fitting", "Fit")));
+		else {
+			auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
+			curve->initFitData(type);
+			this->addChild(curve);
+		}
 	}
 }
 
@@ -2334,7 +2370,6 @@ void CartesianPlot::addFourierFilterCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYFourierFilterCurve(i18n("Fourier Filter")));
@@ -2602,7 +2637,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else {
 		// hover events for plots are handled here in CartesianPlot, for other elements in WorksheetElement.
 		// in case a non-plot element like axis, etc. was hovered, unhover the plots
-		connect(elem, &WorksheetElement::hoveredChanged, [=](bool on) {
+		connect(elem, &WorksheetElement::hoveredChanged, [=, this](bool on) {
 			if (on) {
 				for (auto* childPlot : children<Plot>())
 					childPlot->setHover(false);
@@ -2720,6 +2755,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 	if (isLoading())
 		return;
+
+	// call recalculate for analysis curves
+	auto analysisCurve = dynamic_cast<const XYAnalysisCurve*>(child);
+	if (analysisCurve)
+		const_cast<XYAnalysisCurve*>(analysisCurve)->recalculate();
 
 	auto rangeChanged = false;
 	if (checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
@@ -3443,31 +3483,31 @@ void CartesianPlot::retransformScale(Dimension dim, int index) {
 // zoom
 
 void CartesianPlot::zoomIn(int xIndex, int yIndex, const QPointF& sceneRelPos) {
-	setUndoAware(false);
+	Q_D(CartesianPlot);
+	beginMacro(i18n("%1: zoom in", name()));
 	enableAutoScale(Dimension::X, xIndex, false);
 	enableAutoScale(Dimension::Y, yIndex, false);
-	setUndoAware(true);
-	setRangeDirty(Dimension::X, xIndex, true);
-	setRangeDirty(Dimension::Y, yIndex, true);
+	d->suppressRetransform = true;
 	zoom(xIndex, Dimension::X, true, sceneRelPos.x()); // zoom in x
 	zoom(yIndex, Dimension::Y, true, sceneRelPos.y()); // zoom in y
-
-	Q_D(CartesianPlot);
+	d->suppressRetransform = false;
+	endMacro();
+	// Manually retransform once at the end
 	d->retransformScales(xIndex, yIndex);
 	WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::zoomOut(int xIndex, int yIndex, const QPointF& sceneRelPos) {
-	setUndoAware(false);
+	Q_D(CartesianPlot);
+	beginMacro(i18n("%1: zoom out", name()));
 	enableAutoScale(Dimension::X, xIndex, false);
 	enableAutoScale(Dimension::Y, yIndex, false);
-	setUndoAware(true);
-	setRangeDirty(Dimension::X, xIndex, true);
-	setRangeDirty(Dimension::Y, yIndex, true);
+	d->suppressRetransform = true;
 	zoom(xIndex, Dimension::X, false, sceneRelPos.x()); // zoom out x
 	zoom(yIndex, Dimension::Y, false, sceneRelPos.y()); // zoom out y
-
-	Q_D(CartesianPlot);
+	d->suppressRetransform = false;
+	endMacro();
+	// Manually retransform once at the end
 	d->retransformScales(xIndex, yIndex);
 	WorksheetElementContainer::retransform();
 }
@@ -3489,15 +3529,20 @@ void CartesianPlot::zoomOutY(int index) {
 }
 
 void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool zoomIn, const double relScenePosRange) {
+	const QString dimStr = CartesianCoordinateSystem::dimensionToString(dim);
+	beginMacro(i18n("%1: zoom %2 %3", name(), zoomIn ? i18n("in") : i18n("out"), dimStr));
+
 	Dimension dim_other = Dimension::Y;
 	if (dim == Dimension::Y)
 		dim_other = Dimension::X;
 
-	setUndoAware(false);
+	Q_D(CartesianPlot);
 	enableAutoScale(dim, index, false);
-	setUndoAware(true);
 	setRangeDirty(dim_other, index, true);
+	d->suppressRetransform = true;
 	zoom(index, dim, zoomIn, relScenePosRange);
+	d->suppressRetransform = false;
+	endMacro();
 
 	bool retrans = false;
 	for (int i = 0; i < m_coordinateSystems.count(); i++) {
@@ -3509,7 +3554,6 @@ void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool z
 		}
 	}
 
-	Q_D(CartesianPlot);
 	if (retrans) {
 		// If the other dimension is autoScale it will be scaled and then
 		// retransformScale() will be called. So here we just have to do
@@ -3552,7 +3596,7 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in, const dou
 	range.zoom(factor, d->niceExtend, relPosSceneRange);
 
 	if (range.finite())
-		d->setRange(dim, index, range);
+		setRange(dim, index, range);
 }
 
 /*!
@@ -3632,7 +3676,7 @@ void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
 	}
 
 	if (range.finite())
-		d->setRange(dim, index, range);
+		setRange(dim, index, range);
 
 	d->retransformScale(dim, index);
 
@@ -3744,9 +3788,21 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot)
 
 	m_cursor0Text.prepare();
 	m_cursor1Text.prepare();
+
+	// Initialize wheel zoom timer (no parent, will be deleted in destructor)
+	m_wheelZoomTimer = new QTimer();
+	m_wheelZoomTimer->setSingleShot(true);
+	m_wheelZoomTimer->setInterval(1000); // 1000ms delay after last wheel event
+	QObject::connect(m_wheelZoomTimer, &QTimer::timeout, [this]() {
+		if (m_wheelZoomMacroActive) {
+			q->endMacro();
+			m_wheelZoomMacroActive = false;
+		}
+	});
 }
 
 CartesianPlotPrivate::~CartesianPlotPrivate() {
+	delete m_wheelZoomTimer;
 	delete plotAreaBackgroundItem;
 }
 
@@ -4184,6 +4240,15 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 			panningStarted = true;
 			m_panningStart = event->pos();
 			setCursor(Qt::ClosedHandCursor);
+			// Store initial ranges for undo
+			m_panningInitialRanges.clear();
+			for (int i = 0; i < q->m_coordinateSystems.count(); i++) {
+				auto cs = q->coordinateSystem(i);
+				int xIndex = cs->index(Dimension::X);
+				int yIndex = cs->index(Dimension::Y);
+				m_panningInitialRanges.insert(qMakePair(Dimension::X, xIndex), range(Dimension::X, xIndex));
+				m_panningInitialRanges.insert(qMakePair(Dimension::Y, yIndex), range(Dimension::Y, yIndex));
+			}
 		}
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomXSelection
 			   || mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
@@ -4340,7 +4405,6 @@ bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF&
 
 	if (translateY && logicalStart.y() - logicalEnd.y() != 0) {
 		translatedY = true;
-		// handle the change in y
 		range(Dimension::Y, yIndex).translate(logicalStart.y(), logicalEnd.y());
 	}
 
@@ -4502,6 +4566,35 @@ void CartesianPlotPrivate::mouseMoveCursorMode(int cursorNumber, QPointF logical
 void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
 		setCursor(Qt::ArrowCursor);
+
+		// create undo commands for panning if ranges changed
+		if (panningStarted && !m_panningInitialRanges.isEmpty()) {
+			// capture the final (panned) ranges first
+			QMap<QPair<Dimension, int>, Range<double>> finalRanges;
+			for (auto it = m_panningInitialRanges.constBegin(); it != m_panningInitialRanges.constEnd(); ++it) {
+				const auto key = it.key();
+				finalRanges.insert(key, range(key.first, key.second));
+			}
+
+			q->beginMacro(i18n("%1: pan", q->name()));
+			// restore to initial ranges without undo, then create commands to go to final ranges
+			q->setUndoAware(false);
+			for (auto it = m_panningInitialRanges.constBegin(); it != m_panningInitialRanges.constEnd(); ++it)
+				setRange(it.key().first, it.key().second, it.value());
+
+			// create undo-aware commands to set to final ranges
+			q->setUndoAware(true);
+			for (auto it = finalRanges.constBegin(); it != finalRanges.constEnd(); ++it) {
+				const auto key = it.key();
+				const auto& initialRange = m_panningInitialRanges.value(key);
+				const auto& finalRange = it.value();
+				if (initialRange != finalRange)
+					q->setRange(key.first, key.second, finalRange);
+			}
+			q->endMacro();
+			m_panningInitialRanges.clear();
+		}
+
 		panningStarted = false;
 
 		// TODO: why do we do this all the time?!?!
@@ -4540,10 +4633,48 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 
 	int xIndex = -1, yIndex = -1;
 	if (cSystemIndex == -1 || cSystemIndex >= q->m_coordinateSystems.count()) {
+		// Store initial ranges before zoom
+		m_zoomSelectionInitialRanges.clear();
+		for (int i = 0; i < q->m_coordinateSystems.count(); i++) {
+			auto cs = q->coordinateSystem(i);
+			int xIdx = cs->index(Dimension::X);
+			int yIdx = cs->index(Dimension::Y);
+			m_zoomSelectionInitialRanges.insert(qMakePair(Dimension::X, xIdx), range(Dimension::X, xIdx));
+			m_zoomSelectionInitialRanges.insert(qMakePair(Dimension::Y, yIdx), range(Dimension::Y, yIdx));
+		}
+
+		// Do the zoom (modifies ranges directly)
 		for (int i = 0; i < q->m_coordinateSystems.count(); i++)
 			mouseReleaseZoomSelectionMode(i, true);
+
+		// Create undo commands for changed ranges
+		if (!m_zoomSelectionInitialRanges.isEmpty()) {
+			// Capture final ranges
+			QMap<QPair<Dimension, int>, Range<double>> finalRanges;
+			for (auto it = m_zoomSelectionInitialRanges.constBegin(); it != m_zoomSelectionInitialRanges.constEnd(); ++it)
+				finalRanges.insert(it.key(), range(it.key().first, it.key().second));
+
+			q->beginMacro(i18n("%1: zoom selection", q->name()));
+			// Restore to initial ranges without undo
+			q->setUndoAware(false);
+			for (auto it = m_zoomSelectionInitialRanges.constBegin(); it != m_zoomSelectionInitialRanges.constEnd(); ++it)
+				setRange(it.key().first, it.key().second, it.value());
+			q->setUndoAware(true);
+			// Create undo-aware commands to set to final ranges (suppress retransform since we already did it)
+			suppressRetransform = true;
+			for (auto it = finalRanges.constBegin(); it != finalRanges.constEnd(); ++it) {
+				const auto key = it.key();
+				const Range<double>& initialRange = m_zoomSelectionInitialRanges.value(key);
+				const Range<double>& finalRange = it.value();
+				if (initialRange != finalRange)
+					q->setRange(key.first, key.second, finalRange);
+			}
+			suppressRetransform = false;
+			q->endMacro();
+			m_zoomSelectionInitialRanges.clear();
+		}
 	} else {
-		auto cSystem = coordinateSystem(cSystemIndex);
+		const auto cSystem = coordinateSystem(cSystemIndex);
 		xIndex = cSystem->index(Dimension::X);
 		yIndex = cSystem->index(Dimension::Y);
 
@@ -4576,18 +4707,24 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 			q->setRangeDirty(Dimension::X, xIndex, true);
 			q->setRangeDirty(Dimension::Y, yIndex, true);
+			q->setUndoAware(false);
 			q->enableAutoScale(Dimension::X, xIndex, false);
 			q->enableAutoScale(Dimension::Y, yIndex, false);
+			q->setUndoAware(true);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
 			q->setRangeDirty(Dimension::X, xIndex, true);
 			q->setRangeDirty(Dimension::Y, yIndex, true);
+			q->setUndoAware(false);
 			q->enableAutoScale(Dimension::X, xIndex, false);
+			q->setUndoAware(true);
 			if (q->autoScale(Dimension::Y, yIndex))
 				q->scaleAuto(Dimension::Y, yIndex, false, true);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 			q->setRangeDirty(Dimension::X, xIndex, true);
 			q->setRangeDirty(Dimension::Y, yIndex, true);
+			q->setUndoAware(false);
 			q->enableAutoScale(Dimension::Y, yIndex, false);
+			q->setUndoAware(true);
 			if (q->autoScale(Dimension::X, xIndex))
 				q->scaleAuto(Dimension::X, xIndex, false, true);
 		}
@@ -4638,6 +4775,13 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 }
 
 void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+	// Start or extend wheel zoom macro
+	if (!m_wheelZoomMacroActive) {
+		q->beginMacro(i18n("%1: wheel zoom", q->name()));
+		m_wheelZoomMacroActive = true;
+	}
+	m_wheelZoomTimer->start(); // Restart timer on each wheel event
+
 	if (considerDimension) {
 		// Only one dimension
 		switch (dim) {
@@ -4648,13 +4792,12 @@ void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int
 			q->zoomInOut(yIndex, dim, delta > 0, sceneRelPos.y());
 			break;
 		}
-		return;
+	} else {
+		if (delta > 0)
+			q->zoomIn(xIndex, yIndex, sceneRelPos);
+		else
+			q->zoomOut(xIndex, yIndex, sceneRelPos);
 	}
-
-	if (delta > 0)
-		q->zoomIn(xIndex, yIndex, sceneRelPos);
-	else
-		q->zoomOut(xIndex, yIndex, sceneRelPos);
 }
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
@@ -5725,6 +5868,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyCorrelationCurve")) {
 			auto* curve = new XYCorrelationCurve(QString());
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
+				delete curve;
+				return false;
+			}
+		} else if (reader->name() == QLatin1String("xyPiecewiseLinearFitCurve")) {
+			auto* curve = new XYPiecewiseLinearFitCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {

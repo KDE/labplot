@@ -26,7 +26,12 @@ extern "C" {
 #include "backend/nsl/nsl_statistical_test.h"
 }
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT HypothesisTest : public AbstractPart {
+#else
 class HypothesisTest : public AbstractPart {
+#endif
 	Q_OBJECT
 
 public:
@@ -66,6 +71,7 @@ public:
 	const QVector<QString>& dataColumnPaths() const;
 
 	QString resultHtml() const;
+	QString resultText() const;
 
 	void setTestMean(double);
 	double testMean() const;

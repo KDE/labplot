@@ -2,6 +2,10 @@
     <load-typesystem name="typesystem_core_common.xml" generate="no"/>
     <load-typesystem name="typesystem_widgets.xml" generate="no"/>
 
+    <!-- Types parsed through dependencies but owned by their respective modules. -->
+    <suppress-warning text="Enum 'CBLAS_*' does not have a type entry*"/>
+    <suppress-warning text="template baseclass 'QCborStreamReader::StringResult*' of '*' is not known"/>
+
     <!-- Global -->
     <enum-type name="AspectType">
         <reject-enum-value name="DatapickerCurve"/>
@@ -29,6 +33,7 @@
         <reject-enum-value name="AbstractAspect"/>
         <reject-enum-value name="Script"/>
         <reject-enum-value name="StatisticsSpreadsheet"/>
+        <reject-enum-value name="HypothesisTest"/>
     </enum-type>
     <?if scripting ?>
     <function signature="project()"/>
@@ -162,15 +167,14 @@
         <enum-type name="HorizontalAlignment"/>
         <enum-type name="VerticalAlignment"/>
         <enum-type name="PositionLimit"/>
-        <!-- fails finding QPointF for constructor with flatpak-builder -->
+        <!-- PositionWrapper cannot be bound - nested struct with QPointF causes shiboken issues -->
         <!-- <value-type name="PositionWrapper" disable-wrapper="yes"/> -->
-        <modify-function signature="position()" return-type="PositionWrapper"/>
-        <modify-function signature="setPosition(PositionWrapper)" return-type="void"/>
-        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
-        <modify-function signature="setPosition(QPointF)" return-type="void"/>
+        <!-- <declare-function signature="position()const" return-type="PositionWrapper"/> -->
+        <!-- <declare-function signature="setPosition(const PositionWrapper&amp;)" return-type="void"/> -->
         <declare-function signature="positionLogical()" return-type="QPointF"/>
-        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
-        <modify-function signature="setPositionLogical(QPointF)" return-type="void"/>
+        <declare-function signature="setPositionLogical(const QPointF)" return-type="void"/>
+        <declare-function signature="positionScene()" return-type="QPointF"/>
+        <declare-function signature="setPositionScene(const QPointF)" return-type="void"/>
         <declare-function signature="horizontalAlignment()" return-type="WorksheetElement::HorizontalAlignment"/>
         <declare-function signature="setHorizontalAlignment(WorksheetElement::HorizontalAlignment)" return-type="void"/>
         <declare-function signature="verticalAlignment()" return-type="WorksheetElement::VerticalAlignment"/>
@@ -195,8 +199,7 @@
     <object-type name="WorksheetElementContainer" force-abstract="yes" disable-wrapper="yes">
         <declare-function signature="retransform()" return-type="void"/>
         <declare-function signature="rect()const" return-type="QRectF"/>
-        <!-- Could not find a minimal constructor for type 'QRectF': Could not find class "QRectF" in the code model -->
-        <modify-function signature="setRect(QRectF)" return-type="void"/>
+        <declare-function signature="setRect(const QRectF&amp;)" return-type="void"/>
     </object-type>
     <rejection class="XYAnalysisCurve" field-name="*"/>
     <rejection class="XYAnalysisCurve" function-name="*"/>
@@ -362,10 +365,14 @@
     <rejection class="^.*Filter$" function-name="save"/>
     <rejection class="^.*Filter$" function-name="load"/>
     <rejection class="^.*Filter$" function-name="^.*preview.*$"/>
-    <rejection class="^.*Filter$" function-name="parse"/>
+    <rejection class="^.*Filter$" function-name="^parse.*$"/>
     <rejection class="^.*Filter$" function-name="^.*Device.*$"/>
     <rejection class="^.*Filter$" function-name="fileInfoString"/>
+    <rejection class="FITSFilter" function-name="readChdu"/>
+    <rejection class="SpiceFilter" function-name="isSpiceFile"/>
+    <rejection class="XLSXFilter" function-name="sheets"/>
     <object-type name="AsciiFilter" disable-wrapper="yes">
+        <enum-type name="DataType"/>
         <value-type name="Properties" disable-wrapper="yes"/>
     </object-type>
     <object-type name="BinaryFilter" disable-wrapper="yes">
@@ -502,6 +509,25 @@
         <declare-function signature="metrics()const" return-type="StatisticsSpreadsheet::Metrics"/>
         <declare-function signature="setMetrics(StatisticsSpreadsheet::Metrics)" return-type="void"/>
     </object-type>
+    <rejection class="HypothesisTest" field-name="*"/>
+    <rejection class="HypothesisTest" function-name="*"/>
+    <object-type name="HypothesisTest" disable-wrapper="yes">
+        <enum-type name="Test"/>
+        <declare-function signature="HypothesisTest(const QString&amp;)" return-type="void"/>
+        <declare-function signature="dataColumns()const" return-type="QList&lt;const AbstractColumn*&gt;"/>
+        <declare-function signature="setDataColumns(const QList&lt;const AbstractColumn*&gt;&amp;)" return-type="void"/>
+        <declare-function signature="resultHtml()const" return-type="QString"/>
+        <declare-function signature="resultText()const" return-type="QString"/>
+        <declare-function signature="setTestMean(double)" return-type="void"/>
+        <declare-function signature="testMean()const" return-type="double"/>
+        <declare-function signature="setSignificanceLevel(double)" return-type="void"/>
+        <declare-function signature="significanceLevel()const" return-type="double"/>
+        <declare-function signature="setTail(nsl_stats_tail_type)" return-type="void"/>
+        <declare-function signature="tail()const" return-type="nsl_stats_tail_type"/>
+        <declare-function signature="setTest(HypothesisTest::Test)" return-type="void"/>
+        <declare-function signature="test()const" return-type="HypothesisTest::Test"/>
+        <declare-function signature="recalculate()" return-type="void"/>
+    </object-type>
     <rejection class="Symbol" field-name="*"/>
     <rejection class="Symbol" function-name="*"/>
     <object-type name="Symbol" disable-wrapper="yes">
@@ -515,6 +541,10 @@
         <declare-function signature="setRotationAngle(qreal)" return-type="void"/>
         <declare-function signature="size()const" return-type="qreal"/>
         <declare-function signature="setSize(qreal)" return-type="void"/>
+        <declare-function signature="brush()const" return-type="QBrush"/>
+        <declare-function signature="setBrush(const QBrush&amp;)" return-type="void"/>
+        <declare-function signature="pen()const" return-type="QPen"/>
+        <declare-function signature="setPen(const QPen&amp;)" return-type="void"/>
     </object-type>
     <rejection class="Value" field-name="*"/>
     <rejection class="Value" function-name="*"/>
@@ -797,11 +827,9 @@
         <declare-function signature="background()const" return-type="Background*"/>
         <declare-function signature="line()const" return-type="Line*"/>
         <declare-function signature="positionLogicalStart()const" return-type="QPointF"/>
-        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
-        <modify-function signature="setPositionLogicalStart(QPointF)" return-type="void"/>
+        <declare-function signature="setPositionLogicalStart(const QPointF)" return-type="void"/>
         <declare-function signature="positionLogicalEnd()const" return-type="QPointF"/>
-        <!-- Could not find a minimal constructor for type 'QPointF': Could not find class "QPointF" in the code model -->
-        <modify-function signature="setPositionLogicalEnd(QPointF)" return-type="void"/>
+        <declare-function signature="setPositionLogicalEnd(const QPointF)" return-type="void"/>
         <declare-function signature="orientation()const" return-type="WorksheetElement::Orientation"/>
         <declare-function signature="setOrientation(WorksheetElement::Orientation)" return-type="void"/>
     </object-type>
@@ -993,6 +1021,7 @@
     <rejection class="ProcessBehaviorChart" function-name="*"/>
     <object-type name="ProcessBehaviorChart" disable-wrapper="yes">
         <enum-type name="Type"/>
+        <enum-type name="LimitsType"/>
         <enum-type name="LimitsMetric"/>
         <declare-function signature="ProcessBehaviorChart(const QString&amp;,bool)" return-type="void">
             <modify-argument index="2">
@@ -1224,6 +1253,20 @@
             </modify-argument>
         </declare-function>
     </object-type>
+    <rejection class="XYPiecewiseLinearFitCurve" field-name="*"/>
+    <rejection class="XYPiecewiseLinearFitCurve" function-name="*"/>
+    <object-type name="XYPiecewiseLinearFitCurve" disable-wrapper="yes">
+        <value-type name="FitData" disable-wrapper="yes"/>
+        <value-type name="FitResult" disable-wrapper="yes"/>
+        <enum-type name="ConnectionType"/>
+        <declare-function signature="XYPiecewiseLinearFitCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="fitData()const" return-type="XYPiecewiseLinearFitCurve::FitData"/>
+        <declare-function signature="setFitData(const XYPiecewiseLinearFitCurve::FitData&amp;)" return-type="void"/>
+        <declare-function signature="fitResult()const" return-type="const XYPiecewiseLinearFitCurve::FitResult&amp;"/>
+        <declare-function signature="changepointLinesEnabled()const" return-type="bool"/>
+        <declare-function signature="setChangepointLinesEnabled(bool)" return-type="void"/>
+        <declare-function signature="changepointLines()const" return-type="QList&lt;ReferenceLine*&gt;"/>
+    </object-type>
     <rejection class="XYFourierFilterCurve" field-name="*"/>
     <rejection class="XYFourierFilterCurve" function-name="*"/>
     <object-type name="XYFourierFilterCurve" disable-wrapper="yes">
@@ -1368,8 +1411,7 @@
             </modify-argument>
         </declare-function>
         <declare-function signature="pageRect()const" return-type="QRectF"/>
-        <!-- Could not find a minimal constructor for type 'QRectF': Could not find class "QRectF" in the code model -->
-        <modify-function signature="setPageRect(QRectF)" return-type="void"/>
+        <declare-function signature="setPageRect(const QRectF&amp;)" return-type="void"/>
         <declare-function signature="scaleContent()const" return-type="bool"/>
         <declare-function signature="setScaleContent(bool)" return-type="void"/>
         <declare-function signature="useViewSize()const" return-type="bool"/>
@@ -1410,6 +1452,8 @@
         <enum-type name="NavigationOperation"/>
         <enum-type name="RangeType"/>
         <enum-type name="RangeBreakStyle"/>
+        <enum-type name="PlotColorMode"/>
+        <enum-type name="BorderTypeFlags" flags="yes"/>
         <value-type name="RangeBreak" disable-wrapper="yes"/>
         <value-type name="RangeBreaks" disable-wrapper="yes"/>
         <declare-function signature="CartesianPlot(const QString&amp;,bool)" return-type="void">
@@ -1431,6 +1475,9 @@
         <declare-function signature="setRangeType(CartesianPlot::RangeType)" return-type="void"/>
         <declare-function signature="niceExtend()const" return-type="bool"/>
         <declare-function signature="setNiceExtend(bool)" return-type="void"/>
+        <declare-function signature="borderType()const" return-type="CartesianPlot::BorderType"/>
+        <declare-function signature="setBorderType(CartesianPlot::BorderType)" return-type="void"/>
+        <declare-function signature="borderLine()const" return-type="Line*"/>
         <declare-function signature="rangeFirstValues()const" return-type="int"/>
         <declare-function signature="setRangeFirstValues(int)" return-type="void"/>
         <declare-function signature="rangeLastValues()const" return-type="int"/>
@@ -1545,6 +1592,9 @@
                 <replace-default-expression with="-1"/>
             </modify-argument>
         </declare-function>
+
+        <declare-function signature="horizontalAxis()const" return-type="Axis*"/>
+        <declare-function signature="verticalAxis()const" return-type="Axis*"/>
     </object-type>
 
     <!-- Worksheet Elements -->
@@ -1649,6 +1699,7 @@
     <enum-type name="round_method"/>
     <enum-type name="nsl_kernel_type"/>
     <enum-type name="nsl_kde_bandwidth_type"/>
+    <enum-type name="nsl_changepoint_method"/>
     <enum-type name="nsl_conv_direction_type"/>
     <enum-type name="nsl_conv_type_type"/>
     <enum-type name="nsl_conv_method_type"/>
@@ -1677,4 +1728,5 @@
     <enum-type name="nsl_smooth_type"/>
     <enum-type name="nsl_smooth_pad_mode"/>
     <enum-type name="nsl_smooth_weight_type"/>
+    <enum-type name="nsl_stats_tail_type"/>
 </typesystem>

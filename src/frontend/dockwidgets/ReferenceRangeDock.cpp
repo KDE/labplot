@@ -87,6 +87,9 @@ void ReferenceRangeDock::retranslateUi(){
 	ui.cbOrientation->clear();
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
+
+	lineWidget->retranslateUi();;
+	backgroundWidget->retranslateUi();
 }
 
 //**********************************************************

@@ -17,6 +17,7 @@ class NSLFitTest : public NSLTest {
 
 private Q_SLOTS:
 	void testBounds();
+	void testNaNInfHandling();
 	// performance
 	// void testPerformance();
 private:
