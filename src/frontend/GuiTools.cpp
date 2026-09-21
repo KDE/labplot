@@ -19,12 +19,15 @@
 #include <KLineEdit>
 #include <KLocalizedString>
 #include <KUrlComboBox>
+#include <KWindowConfig>
 
 #include <QActionGroup>
 #include <QApplication>
 #include <QColor>
 #include <QComboBox>
+#include <QDir>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QImageReader>
 #include <QCheckBox>
 #include <QLabel>
@@ -517,7 +520,7 @@ QString GuiTools::loadFunction(ExpressionTextEdit* te, KComboBox* cbCategory, KC
 	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
 
 	//using KFileWidget to add custom widgets
-	auto* fileWidget = new KFileWidget(QUrl(dir), &dialog);
+	auto* fileWidget = new KFileWidget(dir.isEmpty() ? QUrl() : QUrl::fromLocalFile(dir), &dialog);
 	fileWidget->setOperationMode(KFileWidget::Opening);
 	fileWidget->setMode(KFile::File);
 
@@ -534,19 +537,30 @@ QString GuiTools::loadFunction(ExpressionTextEdit* te, KComboBox* cbCategory, KC
 	fileWidget->cancelButton()->show();
 	QObject::connect(fileWidget->okButton(), &QPushButton::clicked, &dialog, &QDialog::accept);
 	QObject::connect(fileWidget, &KFileWidget::selectionChanged, &dialog, [=]() {
-		QString fileName = fileWidget->locationEdit()->currentText();
-		auto currentDir = fileWidget->baseUrl().toLocalFile();
-		fileName.prepend(currentDir);
+		const QString fileName = QDir(fileWidget->baseUrl().toLocalFile()).absoluteFilePath(fileWidget->locationEdit()->currentText());
 		if (QFile::exists(fileName))
 			fileWidget->okButton()->setEnabled(true);
 	});
 	QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, &dialog, &QDialog::reject);
 	layout->addWidget(fileWidget);
 
-	if (dialog.exec() == QDialog::Accepted) {
-		QString fileName = fileWidget->locationEdit()->currentText();
-		auto currentDir = fileWidget->baseUrl().toLocalFile();
-		fileName.prepend(currentDir);
+	dialog.winId();
+	auto dialogGroup = Settings::group(QStringLiteral("LoadFunctionDialog"));
+	if (dialogGroup.exists()) {
+		KWindowConfig::restoreWindowSize(dialog.windowHandle(), dialogGroup);
+		dialog.resize(dialog.windowHandle()->size());
+	}
+
+	const int result = dialog.exec();
+	KWindowConfig::saveWindowSize(dialog.windowHandle(), dialogGroup);
+	if (result == QDialog::Accepted) {
+		fileWidget->slotOk();
+		QString fileName = fileWidget->selectedFile();
+		if (fileName.isEmpty())
+			fileName = QDir(fileWidget->baseUrl().toLocalFile()).absoluteFilePath(fileWidget->locationEdit()->currentText());
+		const QString currentDir = QFileInfo(fileName).absolutePath();
+		if (currentDir != dir)
+			mainGroup.writeEntry("LastOpenDir", currentDir);
 
 		//load config from file if accepted
 		QDEBUG(Q_FUNC_INFO << ", load function from file" << fileName)
