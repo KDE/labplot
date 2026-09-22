@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-20 00:40+0000\n"
+"POT-Creation-Date: 2026-09-22 00:40+0000\n"
 "PO-Revision-Date: 2026-09-13 09:36+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -176,7 +176,7 @@ msgstr "Giorni"
 #: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/AxisDock.cpp:275
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:215
-#: src/frontend/dockwidgets/XYCurveDock.cpp:437 src/frontend/GuiTools.cpp:159
+#: src/frontend/dockwidgets/XYCurveDock.cpp:437 src/frontend/GuiTools.cpp:162
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:124
 #: src/frontend/widgets/LineWidget.cpp:117
@@ -3293,7 +3293,7 @@ msgstr "Energia di un erg"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1294
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1299
 #, kde-format
 msgid "Success"
 msgstr "Successo"
@@ -12847,17 +12847,17 @@ msgstr "Inserisci la parola chiave da cercare"
 msgid "Search..."
 msgstr "Cerca..."
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:196
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:199
 #, kde-format
 msgid "Red"
 msgstr "Rosso"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:196
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:199
 #, kde-format
 msgid "Green"
 msgstr "Verde"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:197
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:200
 #, kde-format
 msgid "Blue"
 msgstr "Blu"
@@ -12889,18 +12889,18 @@ msgstr "Visualizza elenco con dettagli"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:308
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1424
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1430
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1436
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1429
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1435
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1441
 #, kde-format
 msgid "Copy Selection"
 msgstr "Copia la selezione"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:309
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1431
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1437
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1430
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1436
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1442
 #, kde-format
 msgid "Copy All"
 msgstr "Copia tutto"
@@ -16811,7 +16811,7 @@ msgid "Model:"
 msgstr "Modello:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:812
-#: src/frontend/GuiTools.cpp:619
+#: src/frontend/GuiTools.cpp:633
 #, kde-format
 msgid "Description:"
 msgstr "Descrizione:"
@@ -16833,23 +16833,23 @@ msgstr "Gradi:"
 msgid "Number of peaks:"
 msgstr "Numero di picchi:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1295
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1300
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Stato dell'adattamento: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1306
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1311
 #, kde-format
 msgid "No data source available!"
 msgstr "Nessun sorgente di dati disponibile."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1476
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1481
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % livello di confidenza inferiore"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1477
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1482
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % livello di confidenza superiore"
@@ -17624,250 +17624,250 @@ msgctxt "@title:window"
 msgid "Properties: Script"
 msgstr "Proprietà: script"
 
-#: src/frontend/GuiTools.cpp:79 src/frontend/GuiTools.cpp:105
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
 #, kde-format
 msgid "No Line"
 msgstr "Nessuna linea"
 
-#: src/frontend/GuiTools.cpp:79 src/frontend/GuiTools.cpp:105
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
 #, kde-format
 msgid "Solid Line"
 msgstr "Linea piena"
 
-#: src/frontend/GuiTools.cpp:79 src/frontend/GuiTools.cpp:105
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
 #, kde-format
 msgid "Dash Line"
 msgstr "Linea tratteggiata"
 
-#: src/frontend/GuiTools.cpp:79 src/frontend/GuiTools.cpp:105
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
 #, kde-format
 msgid "Dot Line"
 msgstr "Linea punteggiata"
 
-#: src/frontend/GuiTools.cpp:79 src/frontend/GuiTools.cpp:105
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
 #, kde-format
 msgid "Dash-dot Line"
 msgstr "Linea con punti e trattini alternati"
 
-#: src/frontend/GuiTools.cpp:79 src/frontend/GuiTools.cpp:105
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
 #, kde-format
 msgid "Dash-dot-dot Line"
 msgstr "Linea con sequenze trattino-punto-punto"
 
-#: src/frontend/GuiTools.cpp:160
+#: src/frontend/GuiTools.cpp:163
 #, kde-format
 msgid "Uniform"
 msgstr "Uniforme"
 
-#: src/frontend/GuiTools.cpp:161
+#: src/frontend/GuiTools.cpp:164
 #, kde-format
 msgid "Extremely Dense"
 msgstr "Estremamente fitta"
 
-#: src/frontend/GuiTools.cpp:162
+#: src/frontend/GuiTools.cpp:165
 #, kde-format
 msgid "Very Dense"
 msgstr "Molto fitta"
 
-#: src/frontend/GuiTools.cpp:163
+#: src/frontend/GuiTools.cpp:166
 #, kde-format
 msgid "Somewhat Dense"
 msgstr "Piuttosto fitta"
 
-#: src/frontend/GuiTools.cpp:164
+#: src/frontend/GuiTools.cpp:167
 #, kde-format
 msgid "Half Dense"
 msgstr "Parzialmente fitta"
 
-#: src/frontend/GuiTools.cpp:165
+#: src/frontend/GuiTools.cpp:168
 #, kde-format
 msgid "Somewhat Sparse"
 msgstr "Piuttosto rada"
 
-#: src/frontend/GuiTools.cpp:166
+#: src/frontend/GuiTools.cpp:169
 #, kde-format
 msgid "Very Sparse"
 msgstr "Molto rada"
 
-#: src/frontend/GuiTools.cpp:167
+#: src/frontend/GuiTools.cpp:170
 #, kde-format
 msgid "Extremely Sparse"
 msgstr "Estremamente rada"
 
-#: src/frontend/GuiTools.cpp:168
+#: src/frontend/GuiTools.cpp:171
 #, kde-format
 msgid "Horiz. Lines"
 msgstr "Linee orizz."
 
-#: src/frontend/GuiTools.cpp:169
+#: src/frontend/GuiTools.cpp:172
 #, kde-format
 msgid "Vert. Lines"
 msgstr "Linee vert."
 
-#: src/frontend/GuiTools.cpp:170
+#: src/frontend/GuiTools.cpp:173
 #, kde-format
 msgid "Crossing Lines"
 msgstr "Linee incrociate"
 
-#: src/frontend/GuiTools.cpp:171
+#: src/frontend/GuiTools.cpp:174
 #, kde-format
 msgid "Backward Diag. Lines"
 msgstr "Linee diagonali all'indietro"
 
-#: src/frontend/GuiTools.cpp:172
+#: src/frontend/GuiTools.cpp:175
 #, kde-format
 msgid "Forward Diag. Lines"
 msgstr "Linee diagonali in avanti"
 
-#: src/frontend/GuiTools.cpp:173
+#: src/frontend/GuiTools.cpp:176
 #, kde-format
 msgid "Crossing Diag. Lines"
 msgstr "Linee incrociate diagonali"
 
-#: src/frontend/GuiTools.cpp:196
+#: src/frontend/GuiTools.cpp:199
 #, kde-format
 msgid "White"
 msgstr "Bianco"
 
-#: src/frontend/GuiTools.cpp:196
+#: src/frontend/GuiTools.cpp:199
 #, kde-format
 msgid "Black"
 msgstr "Nero"
 
-#: src/frontend/GuiTools.cpp:196
+#: src/frontend/GuiTools.cpp:199
 #, kde-format
 msgid "Dark Red"
 msgstr "Rosso scuro"
 
-#: src/frontend/GuiTools.cpp:196
+#: src/frontend/GuiTools.cpp:199
 #, kde-format
 msgid "Light Red"
 msgstr "Rosso chiaro"
 
-#: src/frontend/GuiTools.cpp:196
+#: src/frontend/GuiTools.cpp:199
 #, kde-format
 msgid "Dark Green"
 msgstr "Verde scuro"
 
-#: src/frontend/GuiTools.cpp:197
+#: src/frontend/GuiTools.cpp:200
 #, kde-format
 msgid "Light Green"
 msgstr "Verde chiaro"
 
-#: src/frontend/GuiTools.cpp:197
+#: src/frontend/GuiTools.cpp:200
 #, kde-format
 msgid "Dark Blue"
 msgstr "Blu scuro"
 
-#: src/frontend/GuiTools.cpp:197
+#: src/frontend/GuiTools.cpp:200
 #, kde-format
 msgid "Light Blue"
 msgstr "Azzurro"
 
-#: src/frontend/GuiTools.cpp:197
+#: src/frontend/GuiTools.cpp:200
 #, kde-format
 msgid "Dark Yellow"
 msgstr "Giallo scuro"
 
-#: src/frontend/GuiTools.cpp:197
+#: src/frontend/GuiTools.cpp:200
 #, kde-format
 msgid "Yellow"
 msgstr "Giallo"
 
-#: src/frontend/GuiTools.cpp:197
+#: src/frontend/GuiTools.cpp:200
 #, kde-format
 msgid "Light Yellow"
 msgstr "Giallo chiaro"
 
-#: src/frontend/GuiTools.cpp:198
+#: src/frontend/GuiTools.cpp:201
 #, kde-format
 msgid "Dark Cyan"
 msgstr "Ciano scuro"
 
-#: src/frontend/GuiTools.cpp:198
+#: src/frontend/GuiTools.cpp:201
 #, kde-format
 msgid "Cyan"
 msgstr "Ciano"
 
-#: src/frontend/GuiTools.cpp:198
+#: src/frontend/GuiTools.cpp:201
 #, kde-format
 msgid "Light Cyan"
 msgstr "Ciano chiaro"
 
-#: src/frontend/GuiTools.cpp:198
+#: src/frontend/GuiTools.cpp:201
 #, kde-format
 msgid "Dark Magenta"
 msgstr "Magenta scuro"
 
-#: src/frontend/GuiTools.cpp:198
+#: src/frontend/GuiTools.cpp:201
 #, kde-format
 msgid "Magenta"
 msgstr "Magenta"
 
-#: src/frontend/GuiTools.cpp:198
+#: src/frontend/GuiTools.cpp:201
 #, kde-format
 msgid "Light Magenta"
 msgstr "Magenta chiaro"
 
-#: src/frontend/GuiTools.cpp:198
+#: src/frontend/GuiTools.cpp:201
 #, kde-format
 msgid "Dark Orange"
 msgstr "Arancione scuro"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:202
 #, kde-format
 msgid "Orange"
 msgstr "Arancione"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:202
 #, kde-format
 msgid "Light Orange"
 msgstr "Arancione chiaro"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:202
 #, kde-format
 msgid "Dark Grey"
 msgstr "Grigio scuro"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:202
 #, kde-format
 msgid "Grey"
 msgstr "Grigio"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:202
 #, kde-format
 msgid "Light Grey"
 msgstr "Grigio chiaro"
 
-#: src/frontend/GuiTools.cpp:319
+#: src/frontend/GuiTools.cpp:322
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Apri immagine"
 
-#: src/frontend/GuiTools.cpp:319
+#: src/frontend/GuiTools.cpp:322
 #, kde-format
 msgid "Images (%1)"
 msgstr "Immagini (%1)"
 
-#: src/frontend/GuiTools.cpp:512
+#: src/frontend/GuiTools.cpp:515
 #, kde-format
 msgid "Select file to load function definition"
 msgstr "Seleziona file per caricare la definizione della funzione"
 
-#: src/frontend/GuiTools.cpp:529 src/frontend/GuiTools.cpp:608
+#: src/frontend/GuiTools.cpp:532 src/frontend/GuiTools.cpp:622
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr "Definizione di funzione di LabPlot"
 
-#: src/frontend/GuiTools.cpp:592
+#: src/frontend/GuiTools.cpp:606
 #, kde-format
 msgid "Select file to save function definition"
 msgstr "Seleziona file per salvare la definizione della funzione"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:620 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:634 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
