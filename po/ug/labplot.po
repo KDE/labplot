@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-22 00:40+0000\n"
-"PO-Revision-Date: 2026-05-31 20:13-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
@@ -253,7 +253,7 @@ msgstr "قوش"
 #: src/backend/core/AbstractColumn.cpp:226
 #, kde-format
 msgid "Integer"
-msgstr ""
+msgstr "پۈتۈن سان"
 
 #: src/backend/core/AbstractColumn.cpp:228
 #, kde-format
@@ -753,6 +753,13 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
+"The project has content written with %1. Your installation of LabPlot lacks "
+"the support for it.\n"
+"\n"
+" You won't be able to see this part of the project. If you modify and save "
+"the project, the CAS content will be lost.\n"
+"\n"
+"Do you want to continue?"
 
 #: src/backend/core/Project.cpp:641
 #, kde-format
@@ -2154,10 +2161,9 @@ msgid "Invalid sheet index."
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:61
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file."
-msgstr "%1 نى ئاچالمىدى"
+msgstr "ھۆججەتنى ئاچقىلى بولمىدى."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:70
 #, kde-format
@@ -2165,16 +2171,14 @@ msgid "Format: Apache Parquet"
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:72
-#, fuzzy, kde-format
-#| msgid "Version:"
+#, kde-format
 msgid "Version: %1"
-msgstr "نەشرى:"
+msgstr "نەشرى: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:74
-#, fuzzy, kde-format
-#| msgid "Created:"
+#, kde-format
 msgid "Created by: %1"
-msgstr "قۇرغان ۋاقىت:"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:78
 #: src/backend/datasources/filters/ParquetFilter.cpp:101
@@ -2208,60 +2212,51 @@ msgid "Number of stripes: %1"
 msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:214
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file: %1"
-msgstr "%1 نى ئاچالمىدى"
+msgstr "ھۆججەتنى ئاچالمايدۇ: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:226
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#, kde-format
 msgid "Failed to open Parquet file: %1"
-msgstr "ھۆججەتنى ئاچالمىدى."
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:237
 #: src/backend/datasources/filters/ParquetFilter.cpp:246
-#, fuzzy, kde-format
-#| msgid "Failed to read the file. Reason: %1"
+#, kde-format
 msgid "Failed to read Parquet table: %1"
-msgstr "Failed to read the file. سەۋەب:%1"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:256
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#, kde-format
 msgid "Failed to open Arrow IPC file: %1"
-msgstr "ھۆججەتنى ئاچالمىدى."
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:267
-#, fuzzy, kde-format
-#| msgid "Failed to read the file. Reason: %1"
+#, kde-format
 msgid "Failed to read record batch %1: %2"
-msgstr "Failed to read the file. سەۋەب:%1"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:274
-#, fuzzy, kde-format
-#| msgid "Failed to read the file. Reason: %1"
+#, kde-format
 msgid "Failed to assemble table: %1"
-msgstr "Failed to read the file. سەۋەب:%1"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:284
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#, kde-format
 msgid "Failed to open ORC file: %1"
-msgstr "ھۆججەتنى ئاچالمىدى."
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:294
 #: src/backend/datasources/filters/ParquetFilter.cpp:302
-#, fuzzy, kde-format
-#| msgid "Failed to read the file. Reason: %1"
+#, kde-format
 msgid "Failed to read ORC table: %1"
-msgstr "Failed to read the file. سەۋەب:%1"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:311
-#, fuzzy, kde-format
-#| msgid "All supported files (%1)"
+#, kde-format
 msgid "Unsupported file format."
-msgstr "قوللايدىغان ھەممە ھۆججەت(%1)"
+msgstr ""
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:400
 #, kde-format
@@ -2574,7 +2569,7 @@ msgstr ""
 #: src/backend/datasources/MQTTTopic.cpp:45
 #, kde-format
 msgid "%1 %2"
-msgstr "%1 %2"
+msgstr ""
 
 #: src/backend/datasources/MQTTTopic.cpp:130
 #, kde-format
@@ -2700,7 +2695,7 @@ msgstr ""
 #: src/backend/gsl/constants.cpp:67
 #, kde-format
 msgid "Pi"
-msgstr "Pi"
+msgstr ""
 
 #: src/backend/gsl/constants.cpp:68
 #, kde-format
@@ -3417,10 +3412,9 @@ msgid "Logical Functions"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:68
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgid "Datetime Functions"
-msgstr "فۇنكسىيە"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:70
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -4193,13 +4187,12 @@ msgstr "ئەمەس"
 #: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "today"
-msgstr ""
+msgstr "بۈگۈن"
 
 #: src/backend/gsl/functions.cpp:351
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "now"
-msgstr "ياق"
+msgstr "ھازىر"
 
 #: src/backend/gsl/functions.cpp:352
 #, kde-format
@@ -4232,10 +4225,9 @@ msgid "year(date)"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:358
-#, fuzzy, kde-format
-#| msgid "month"
+#, kde-format
 msgid "month(date)"
-msgstr "ئاي"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:359
 #, kde-format
@@ -4248,10 +4240,9 @@ msgid "weeknum(date)"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:361
-#, fuzzy, kde-format
-#| msgid "DateTime"
+#, kde-format
 msgid "hour(dateTime)"
-msgstr "چېسلا ۋە ۋاقىت"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:362
 #, kde-format
@@ -6204,7 +6195,7 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:1206
 #, kde-format
 msgid "n"
-msgstr "n"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:1208
 #, kde-format
@@ -6219,7 +6210,7 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:1212 src/backend/gsl/functions.cpp:1220
 #, kde-format
 msgid "x"
-msgstr "x"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:1222
 #, kde-format
@@ -8128,7 +8119,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:680
 #, kde-format
 msgid "W"
-msgstr "W"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:681
 #, kde-format
@@ -10074,22 +10065,19 @@ msgid "%1: zoom in"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3481
-#, fuzzy, kde-format
-#| msgid "Zoom Out"
+#, kde-format
 msgid "%1: zoom out"
-msgstr "يىراقلات"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
-#, fuzzy, kde-format
-#| msgid "min"
+#, kde-format
 msgid "in"
-msgstr "مىنۇت"
+msgstr "ئىچىدە"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "out"
-msgstr "سانى"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, kde-format
@@ -11295,10 +11283,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:295
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:755
-#, fuzzy, kde-format
-#| msgid "Result"
+#, kde-format
 msgid "Fit Results"
-msgstr "نەتىجە"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
 #, kde-format
@@ -11343,10 +11330,9 @@ msgid "Changepoint Positions (X-values)"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "Segment %1"
-msgstr "بۆلەكلەش"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:544
@@ -11366,10 +11352,9 @@ msgid "Goodness of Fit:"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:566
-#, fuzzy, kde-format
-#| msgid "Statistical"
+#, kde-format
 msgid "Statistical Tests:"
-msgstr "ستاتىستىكىلىق"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:573
 #, kde-format
@@ -11803,7 +11788,7 @@ msgstr "بۆلەك:"
 #: src/frontend/AboutDialog.cpp:390
 #, kde-format
 msgid "Qt"
-msgstr "Qt"
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:391
 #, kde-format
@@ -11875,10 +11860,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:253
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgid "Python Script"
-msgstr "قوليازما"
+msgstr ""
 
 #: src/frontend/ActionsManager.cpp:254
 #, kde-format
@@ -12334,7 +12318,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:530
 #, kde-format
 msgid "&Sort..."
-msgstr ""
+msgstr "تەرتىپلە(&S)…"
 
 #: src/frontend/ActionsManager.cpp:747
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:531
@@ -12501,10 +12485,9 @@ msgid "Pause Reading"
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:106
-#, fuzzy, kde-format
-#| msgid "Import Data"
+#, kde-format
 msgid "Imported Data"
-msgstr "سانلىق مەلۇمات ئەكىر"
+msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:144
 #, kde-format
@@ -12530,7 +12513,7 @@ msgstr ""
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "file"
-msgstr ""
+msgstr "ھۆججەت"
 
 #: src/frontend/CLIProcessor.cpp:267
 #, kde-format
@@ -12547,7 +12530,7 @@ msgstr ""
 #: src/frontend/CLIProcessor.cpp:268
 #, kde-format
 msgid "type"
-msgstr ""
+msgstr "تۈرى"
 
 #: src/frontend/CLIProcessor.cpp:269
 #, kde-format
@@ -12555,10 +12538,9 @@ msgid "Output resolution in DPI for raster formats (default: 300)."
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:269
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "value"
-msgstr "قىممەت"
+msgstr "قىممىتى"
 
 #: src/frontend/CLIProcessor.cpp:270
 #, kde-format
@@ -12581,10 +12563,9 @@ msgid "Output directory for multiple exported files (used with --export-all)."
 msgstr ""
 
 #: src/frontend/CLIProcessor.cpp:273
-#, fuzzy, kde-format
-#| msgid "Direction:"
+#, kde-format
 msgid "directory"
-msgstr "يونۇلۇش:"
+msgstr "مۇندەرىجە"
 
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
@@ -12614,7 +12595,7 @@ msgstr ""
 #: src/frontend/CLIProcessor.cpp:299
 #, kde-format
 msgid "Input file"
-msgstr ""
+msgstr "كىرىش ھۆججىتى"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -15175,7 +15156,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the X position in %"
 msgid "%v%"
-msgstr "%v%"
+msgstr ""
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:407
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:630
@@ -15186,7 +15167,7 @@ msgstr "%v%"
 #, kde-format
 msgctxt "@label:spinbox Suffix for the Y position in %"
 msgid "%v%"
-msgstr "%v%"
+msgstr ""
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:812
 #, kde-format
@@ -15625,14 +15606,14 @@ msgstr ""
 #: src/frontend/dockwidgets/NoteDock.cpp:27
 #, kde-format
 msgid "Plain Text"
-msgstr ""
+msgstr "ساپ تېكىست"
 
 #: src/frontend/dockwidgets/NoteDock.cpp:28
 #: src/frontend/notebook/NotebookView.cpp:110
 #: src/frontend/widgets/LabelWidget.cpp:482
 #, kde-format
 msgid "Markdown"
-msgstr "Markdown"
+msgstr ""
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
 #, kde-format
@@ -16124,12 +16105,12 @@ msgstr ""
 #: src/frontend/dockwidgets/XYCurveDock.cpp:439
 #, kde-format
 msgid "Horiz. Start"
-msgstr "Horiz. باشلاش"
+msgstr "Horiz. باشلا"
 
 #: src/frontend/dockwidgets/XYCurveDock.cpp:440
 #, kde-format
 msgid "Vert. Start"
-msgstr "Vert. باشلاش"
+msgstr "Vert. باشلا"
 
 #: src/frontend/dockwidgets/XYCurveDock.cpp:441
 #, kde-format
@@ -16560,10 +16541,9 @@ msgid "area error: %1"
 msgstr ""
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:388
-#, fuzzy, kde-format
-#| msgid "Continue"
+#, kde-format
 msgid "Continuous"
-msgstr "داۋاملاشتۇر"
+msgstr ""
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:389
 #, kde-format
@@ -17680,10 +17660,9 @@ msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
 #: src/frontend/MainWin.cpp:743
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgid "Python Scripts (*.py)"
-msgstr "قوليازما"
+msgstr ""
 
 #: src/frontend/MainWin.cpp:750
 #, kde-format
@@ -18093,10 +18072,9 @@ msgid "%1: clear selected rows(s)"
 msgstr ""
 
 #: src/frontend/note/NoteView.cpp:96
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Edit"
-msgstr "تەھرىر(&E)"
+msgstr "تەھرىر"
 
 #: src/frontend/note/NoteView.cpp:100
 #, kde-format
@@ -18134,7 +18112,7 @@ msgstr "بۇيرۇق"
 #: src/frontend/widgets/LabelWidget.cpp:480
 #, kde-format
 msgid "LaTeX"
-msgstr "LaTeX"
+msgstr ""
 
 #: src/frontend/notebook/NotebookView.cpp:120
 #, kde-format
@@ -18301,10 +18279,9 @@ msgstr ""
 #: src/frontend/PlotTemplateDialog.cpp:193
 #: src/frontend/PlotTemplateDialog.cpp:205
 #: src/frontend/PlotTemplateDialog.cpp:214
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#, kde-format
 msgid "Failed to load the plot template"
-msgstr "ھۆججەتنى ئاچالمىدى."
+msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71
@@ -18565,10 +18542,9 @@ msgid "With Notebook"
 msgstr ""
 
 #: src/frontend/SettingsGeneralPage.cpp:228
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgid "With Python Script"
-msgstr "قوليازما"
+msgstr ""
 
 #: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format
@@ -18740,7 +18716,7 @@ msgstr ""
 #: src/frontend/SettingsScriptingPage.cpp:52
 #, kde-format
 msgid "System Default"
-msgstr ""
+msgstr "سىستېما كۆڭۈلدىكى"
 
 #: src/frontend/SettingsScriptingPage.cpp:60
 #, kde-format
@@ -19773,7 +19749,7 @@ msgstr "قۇر ئالماشتۇرۇش بەلگىسى"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1571
 #, kde-format
 msgid "Tab"
-msgstr "Tab"
+msgstr ""
 
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1574
 #, kde-format
@@ -20486,7 +20462,7 @@ msgstr " ، "
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
 #, kde-format
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3921
 #, kde-format
@@ -21196,7 +21172,7 @@ msgstr ""
 #: src/frontend/ui/datapickerimagewidget.ui:238
 #, kde-format
 msgid " px"
-msgstr " px"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
 #: src/frontend/ui/datapickerimagewidget.ui:155
@@ -21245,7 +21221,7 @@ msgstr "بۆلەكلەش"
 #: src/frontend/ui/labelwidget.ui:603 src/frontend/ui/symbolwidget.ui:101
 #, kde-format
 msgid "°"
-msgstr "°"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbMinSegmentLength)
 #. i18n: ectx: property (toolTip), widget (QLabel, lMinSegmentLength)
@@ -22163,7 +22139,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/livedatadock.ui:398
 #, kde-format
 msgid " ms"
-msgstr " ms"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLinkFile)
 #: src/frontend/ui/datasources/importfilewidget.ui:873
@@ -22384,10 +22360,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:109
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Deselect All"
-msgstr "ھەممىنى تاللا"
+msgstr "ھەممىنى تاللىما"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30
@@ -22439,7 +22414,7 @@ msgstr ""
 #: src/frontend/ui/mqttwillsettingswidget.ui:211
 #, kde-format
 msgid "1"
-msgstr "1"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbUnityRange)
 #: src/frontend/ui/dockwidgets/axisdock.ui:136
@@ -22788,7 +22763,7 @@ msgstr "فورمات:"
 #: src/frontend/ui/symbolwidget.ui:136 src/frontend/worksheet/GridDialog.cpp:81
 #, no-c-format, kde-format
 msgid " %"
-msgstr " %"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lPrefix)
@@ -22976,7 +22951,7 @@ msgstr "كەڭلىك"
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:402
 #, no-c-format, kde-format
 msgid "%"
-msgstr "%"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNotches)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:30
@@ -23461,7 +23436,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1506
 #, kde-format
 msgid "Stack"
-msgstr ""
+msgstr "دەستىلە"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:87
@@ -24006,7 +23981,7 @@ msgstr "قۇر:"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:161
 #, kde-format
 msgid "Mapping"
-msgstr ""
+msgstr "خەرىتە"
 
 #. i18n: ectx: property (text), widget (QLabel, lXStart)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:168
@@ -25124,10 +25099,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:191
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Binary Segmentation"
-msgstr "يۆنىلىش"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:196
@@ -25143,10 +25117,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFitRange)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:248
-#, fuzzy, kde-format
-#| msgid "Range"
+#, kde-format
 msgid "Fit Range:"
-msgstr "دائىرە"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:367
@@ -25205,17 +25178,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:493
-#, fuzzy, kde-format
-#| msgid "Padding"
+#, kde-format
 msgid "Padding:"
-msgstr "تولدۇرما"
+msgstr "يان ئارىلىقى:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
-#, fuzzy, kde-format
-#| msgid "Order:"
+#, kde-format
 msgid " Order:"
-msgstr "تەرتىپ:"
+msgstr " تەرتىپ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:556
@@ -25511,13 +25482,13 @@ msgstr ""
 #: src/frontend/ui/mqttwillsettingswidget.ui:206
 #, kde-format
 msgid "0"
-msgstr "0"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillQoS)
 #: src/frontend/ui/mqttwillsettingswidget.ui:216
 #, kde-format
 msgid "2"
-msgstr "2"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lWillOwnMessage)
 #: src/frontend/ui/mqttwillsettingswidget.ui:224
@@ -26168,7 +26139,7 @@ msgstr "قىسىش"
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:205
 #, kde-format
 msgid "LZ4"
-msgstr "LZ4"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbZSTD)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:212
@@ -26803,10 +26774,9 @@ msgid_plural "Undefined variables: %2. Define them in the list of variables."
 msgstr[0] ""
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:148
-#, fuzzy, kde-format
-#| msgid "Linear Regression"
+#, kde-format
 msgid "Invalid expression"
-msgstr "سىزىقلىق قايتىش"
+msgstr "ئىناۋەتسىز ئىپادە"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
