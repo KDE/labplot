@@ -47,6 +47,8 @@ private Q_SLOTS:
 	void testMatrixNumBins();
 
 	void rangeInverted();
+
+	void testActivatePlot();
 };
 
 #endif // HEATMAPTEST_H

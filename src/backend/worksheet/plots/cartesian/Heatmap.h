@@ -48,8 +48,6 @@ public:
 
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-	bool activatePlot(QPointF mouseScenePos, double maxDist = -1);
-
 	void recalc() override;
 
 	enum class DataSource {

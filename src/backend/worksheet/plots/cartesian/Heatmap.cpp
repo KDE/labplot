@@ -565,11 +565,6 @@ QColor Heatmap::color() const {
 	return QColor();
 }
 
-bool Heatmap::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_ASSERT(false); // Not yet implemented
-	return false;
-}
-
 void Heatmap::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Heatmap);
 	if (aspect == d->xColumn) {

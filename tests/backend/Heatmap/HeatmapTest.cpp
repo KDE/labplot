@@ -15,6 +15,7 @@
 #include "src/backend/matrix/Matrix.h"
 #include "src/backend/spreadsheet/Spreadsheet.h"
 #include "src/backend/worksheet/Worksheet.h"
+#include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "src/backend/worksheet/plots/cartesian/Heatmap.h"
 
 #include <QUndoStack>
@@ -2628,6 +2629,64 @@ void HeatmapTest::rangeInverted() {
 	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0);
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100);
+}
+
+// Heatmap used to have a custom Heatmap::activatePlot() override which was an unfinished
+// stub that unconditionally returned false. Since Plot::activatePlot() is not virtual, this
+// silently hid the working, inherited implementation (PlotPrivate::activatePlot(), which
+// checks m_shape.contains(...)) whenever activatePlot() was called through a Heatmap*
+// (rather than a Plot*) pointer. In the running application this meant clicking on a Heatmap
+// never selected it.
+void HeatmapTest::testActivatePlot() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	auto* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+	hm->setDataSource(Heatmap::DataSource::Matrix);
+
+	auto* matrix = new Matrix(5, 5, QStringLiteral("Matrix1"));
+	project.addChild(matrix);
+	matrix->setXStart(0);
+	matrix->setXEnd(10);
+	matrix->setYStart(0);
+	matrix->setYEnd(100);
+	for (int r = 0; r < 5; r++)
+		for (int c = 0; c < 5; c++)
+			matrix->setCell(r, c, (double)(r * 5 + c));
+
+	hm->setMatrix(matrix);
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(10.);
+		plot->setXRange(0, range);
+	}
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(100.);
+		plot->setYRange(0, range);
+	}
+
+	plot->retransform();
+
+	// a point at the center of the plotted data range must be reported as inside the heatmap ...
+	const auto* cSystem = plot->coordinateSystem(hm->coordinateSystemIndex());
+	QVector<QPointF> points{QPointF(5., 50.)};
+	cSystem->mapLogicalToSceneFast(points, AbstractCoordinateSystem::MappingFlag::Limit);
+	QVERIFY(hm->activatePlot(points.at(0)));
+
+	// ... while a point far away from the plot must not be
+	QVERIFY(!hm->activatePlot(QPointF(1.e6, 1.e6)));
 }
 
 QTEST_MAIN(HeatmapTest)
